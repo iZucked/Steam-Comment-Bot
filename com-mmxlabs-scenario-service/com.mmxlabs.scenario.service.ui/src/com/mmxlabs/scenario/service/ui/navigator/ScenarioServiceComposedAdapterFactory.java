@@ -40,7 +40,7 @@ public class ScenarioServiceComposedAdapterFactory {
 	}
 
 	public final static List<AdapterFactory> createFactoryList() {
-		final List<AdapterFactory> factories = new ArrayList<>();
+		final List<AdapterFactory> factories = new ArrayList<AdapterFactory>();
 		factories.add(new ResourceItemProviderAdapterFactory());
 		factories.add(new ScenarioServiceItemProviderAdapterFactory());
 		factories.add(new ReflectiveItemProviderAdapterFactory());

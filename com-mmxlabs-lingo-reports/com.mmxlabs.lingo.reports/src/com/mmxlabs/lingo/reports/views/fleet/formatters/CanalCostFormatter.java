@@ -4,28 +4,49 @@
  */
 package com.mmxlabs.lingo.reports.views.fleet.formatters;
 
+import java.util.List;
+
 import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
+import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Sequence;
 
 public class CanalCostFormatter extends CostFormatter {
 
-	public CanalCostFormatter(final Type type) {
+	public CanalCostFormatter(Type type) {
 		super(type);
 	}
-
+	
 	@Override
-	public Integer getIntValue(final Object object) {
+	public Integer getIntValue(Object object) {
 
-		return SequenceGrabber.applyToSequences(object, this::calculateCost);
+		if (object instanceof Row) {
+			object = ((Row) object).getSequence();
+		}
+		int cost = 0;
+		if (object instanceof Sequence) {
+			Sequence sequence = (Sequence) object;
+			cost += calculateCost(sequence);
+		} else if (object instanceof List) {
+			List objects = (List) object;
+			if (objects.size() > 0) {
+				for (Object o : objects) {
+					if (o instanceof Sequence) {
+						cost += calculateCost((Sequence) o);
+					}
+				}
+			}
+		}
+
+		return cost;
 	}
 
-	private int calculateCost(final Sequence sequence) {
+	private int calculateCost(Sequence sequence) {
 		int cost = 0;
-		for (final Event evt : sequence.getEvents()) {
+		for (Event evt : sequence.getEvents()) {
 			if (evt instanceof Journey) {
-				final Journey journey = (Journey) evt;
+				Journey journey = (Journey) evt;
 				cost += journey.getToll();
 			}
 		}

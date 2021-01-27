@@ -57,7 +57,7 @@ import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.properties.ScheduledEventPropertySourceProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
-import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.utils.PinDiffModeColumnManager;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -98,39 +98,37 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 
 	private final ColumnBlockManager blockManager = new ColumnBlockManager();
 
-	private ScenarioComparisonService selectedScenariosService;
+	private SelectedScenariosService selectedScenariosService;
 	private @NonNull TransformedSelectedDataProvider currentSelectedDataProvider = new TransformedSelectedDataProvider(null);
 
 	protected Image pinImage;
 
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
+
 		@Override
-		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others, final boolean block) {
 			final Runnable r = new Runnable() {
 				@Override
 				public void run() {
 					currentSelectedDataProvider = new TransformedSelectedDataProvider(selectedDataProvider);
 					// Add Difference/Change columns when in Pin/Diff mode
-					final boolean pinDiffMode = selectedDataProvider.inPinDiffMode();
-					final boolean isMultiple = selectedDataProvider.getAllScenarioResults().size() > 1;
-
+					final boolean pinDiffMode = !others.isEmpty() && pinned != null;
+					final int numberOfSchedules = others.size() + (pinned == null ? 0 : 1);
 					for (final ColumnBlock handler : getBlockManager().getBlocksInVisibleOrder()) {
 						if (handler != null) {
-							handler.setViewState(isMultiple, pinDiffMode);
+							handler.setViewState(numberOfSchedules > 1, pinDiffMode);
 						}
 					}
 
 					final List<Object> rowElements = new LinkedList<>();
 					final IScenarioInstanceElementCollector elementCollector = getElementCollector();
-
-					ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
 					elementCollector.beginCollecting(pinned != null);
 					if (pinned != null) {
 						final Collection<? extends Object> elements = elementCollector.collectElements(pinned, true);
 						rowElements.addAll(elements);
 					}
-					for (final ScenarioResult other : selectedDataProvider.getOtherScenarioResults()) {
+					for (final ScenarioResult other : others) {
 						final Collection<? extends Object> elements = elementCollector.collectElements(other, false);
 						rowElements.addAll(elements);
 					}
@@ -146,8 +144,8 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 	protected EMFReportView(final String helpContextId) {
 		this.helpContextId = helpContextId;
 	}
-
-	protected class PinnedScheduleFormatter extends BaseFormatter implements IImageProvider {
+	
+		protected class PinnedScheduleFormatter extends BaseFormatter implements IImageProvider {
 
 		@Override
 		public Image getImage(Object element) {
@@ -170,7 +168,7 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 		}
 
 	}
-
+	
 	protected final ICellRenderer containingScheduleFormatter = new PinnedScheduleFormatter();
 
 	/**
@@ -490,11 +488,11 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 			service.addPostSelectionListener(this);
 		}
 
-		selectedScenariosService = getSite().getService(ScenarioComparisonService.class);
+		selectedScenariosService = (SelectedScenariosService) getSite().getService(SelectedScenariosService.class);
 		selectedScenariosService.addListener(selectedScenariosServiceListener);
 		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 	}
-
+	
 	protected IColumnFactory getColumnFactory(final EObjectTableViewer viewer) {
 		return new EObjectTableViewerColumnFactory(viewer);
 	}

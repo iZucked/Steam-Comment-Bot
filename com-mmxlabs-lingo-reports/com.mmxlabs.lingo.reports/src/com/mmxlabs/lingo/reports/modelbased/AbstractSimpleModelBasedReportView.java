@@ -5,11 +5,16 @@
 package com.mmxlabs.lingo.reports.modelbased;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.BiConsumer;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
@@ -31,10 +36,12 @@ import org.eclipse.ui.views.properties.PropertySheet;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.modelbased.ColumnGenerator.ColumnInfo;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
+import com.mmxlabs.lingo.reports.services.IScenarioComparisonServiceListener;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
-import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
+import com.mmxlabs.lingo.reports.views.schedule.model.Table;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerFilterSupport;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
@@ -45,6 +52,7 @@ import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceNavigator;
 
 public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener {
@@ -65,7 +73,7 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 
 	private EObjectTableViewerFilterSupport filterSupport;
 	private FilterField filterField;
-
+	
 	protected ColumnInfo columnInfo;
 
 	public AbstractSimpleModelBasedReportView(final Class<M> modelClass) {
@@ -120,7 +128,7 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 		scenarioComparisonService = getSite().getService(ScenarioComparisonService.class);
 		scenarioComparisonService.addListener(scenarioComparisonServiceListener);
 
-		scenarioComparisonService.triggerListener(scenarioComparisonServiceListener, true);
+		scenarioComparisonService.triggerListener(scenarioComparisonServiceListener);
 		packColumnsAction.run();
 
 		final ESelectionService service = getSite().getService(ESelectionService.class);
@@ -142,10 +150,10 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 		if (enableFilter) {
 			getViewSite().getActionBars().getToolBarManager().add(filterField.getContribution());
 		}
-
+		
 		packColumnsAction = PackActionFactory.createPackColumnsAction(viewer);
 		copyTableAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), false, null, null);
-
+		
 		setCopyForegroundColours(true);
 		setCopyBackgroundColours(true);
 
@@ -158,16 +166,27 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 
 	}
 
-	private final ISelectedScenariosServiceListener scenarioComparisonServiceListener = new ISelectedScenariosServiceListener() {
+	private final IScenarioComparisonServiceListener scenarioComparisonServiceListener = new IScenarioComparisonServiceListener() {
 
 		@Override
-		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
+		public void compareDataUpdate(@NonNull final ISelectedDataProvider selectedDataProvider, @NonNull final ScenarioResult pin, @NonNull final ScenarioResult other, @NonNull final Table table,
+				@NonNull final List<LNGScenarioModel> rootObjects, @NonNull final Map<EObject, Set<EObject>> equivalancesMap) {
 
 			final TransformedSelectedDataProvider newSelectedDataProvider = new TransformedSelectedDataProvider(selectedDataProvider);
 
 			setCurrentSelectedDataProvider(newSelectedDataProvider);
 
-			ViewerHelper.setInput(viewer, block, transform(newSelectedDataProvider));
+			ViewerHelper.setInput(viewer, true, transform(newSelectedDataProvider));
+		}
+
+		@Override
+		public void multiDataUpdate(@NonNull final ISelectedDataProvider selectedDataProvider, @NonNull final Collection<ScenarioResult> others, @NonNull final Table table,
+				@NonNull final List<LNGScenarioModel> rootObjects) {
+			final TransformedSelectedDataProvider newSelectedDataProvider = new TransformedSelectedDataProvider(selectedDataProvider);
+
+			setCurrentSelectedDataProvider(newSelectedDataProvider);
+
+			ViewerHelper.setInput(viewer, true, new ArrayList<>(transform(newSelectedDataProvider)));
 		}
 
 		@Override
@@ -248,13 +267,12 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 
 		viewer.setSelection(selection, true);
 	}
-
+	
 	protected void setCopyForegroundColours(final boolean showForegroundColours) {
 		if (copyTableAction != null) {
 			copyTableAction.setShowForegroundColours(showForegroundColours);
 		}
 	}
-
 	protected void setCopyBackgroundColours(final boolean showBackgroundColours) {
 		if (copyTableAction != null) {
 			copyTableAction.setShowBackgroundColours(showBackgroundColours);

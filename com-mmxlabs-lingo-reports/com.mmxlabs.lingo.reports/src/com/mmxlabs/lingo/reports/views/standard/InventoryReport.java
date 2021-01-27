@@ -80,7 +80,7 @@ import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
-import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.views.standard.inventory.InventoryLevel;
 import com.mmxlabs.lingo.reports.views.standard.inventory.MullDailyInformation;
 import com.mmxlabs.lingo.reports.views.standard.inventory.MullInformation;
@@ -170,17 +170,20 @@ public class InventoryReport extends ViewPart {
 
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
-		public void selectedDataProviderChanged(ISelectedDataProvider selectedDataProvider, boolean block) {
+
+		@Override
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others, final boolean block) {
 			final Runnable r = () -> {
 
 				selectedInventory = null;
 
-				currentResult = selectedDataProvider.getPinnedScenarioResult();
-				if (currentResult == null) {
+				currentResult = pinned;
+				
+				pinnedResult = pinned;
+				otherResult = others.isEmpty() ? null : others.iterator().next();
 
-					if (!selectedDataProvider.getAllScenarioResults().isEmpty()) {
-						currentResult = selectedDataProvider.getAllScenarioResults().iterator().next();
-					}
+				if (currentResult == null && !others.isEmpty()) {
+					currentResult = others.iterator().next();
 				}
 
 				if (currentResult != null) {
@@ -218,7 +221,7 @@ public class InventoryReport extends ViewPart {
 		}
 	};
 
-	private ScenarioComparisonService selectedScenariosService;
+	private SelectedScenariosService selectedScenariosService;
 
 	private ComboViewer comboViewer;
 
@@ -245,7 +248,7 @@ public class InventoryReport extends ViewPart {
 			mullDailyTableFilterField = new FilterField(parent);
 		}
 
-		selectedScenariosService = getSite().getService(ScenarioComparisonService.class);
+		selectedScenariosService = getSite().getService(SelectedScenariosService.class);
 		parent.setLayout(new GridLayout(1, true));
 		{
 
@@ -943,8 +946,8 @@ public class InventoryReport extends ViewPart {
 									if (e.getSlotAllocation() != null) {
 										type = "Cargo";
 										final String vessel = e.getSlotAllocation().getCargoAllocation().getEvents().get(0).getSequence().getName();
-										final SlotAllocation dischargeAllocation = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream()
-												.filter(x -> x.getSlot() instanceof DischargeSlot).findFirst().get();
+										final SlotAllocation dischargeAllocation = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof DischargeSlot)
+												.findFirst().get();
 										final SlotAllocation loadAllocation = e.getSlotAllocation().getCargoAllocation().getSlotAllocations().stream().filter(x -> x.getSlot() instanceof LoadSlot)
 												.findFirst().get();
 										final String dischargeId = dischargeAllocation.getName();
@@ -961,7 +964,7 @@ public class InventoryReport extends ViewPart {
 										if (contract != null) {
 											purchaseContract = contract.getName();
 										}
-
+										
 										ZonedDateTime dischargeTime = dischargeAllocation.getSlotVisit().getStart();
 										ZonedDateTime loadTime = loadAllocation.getSlotVisit().getStart();
 										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), type, e.getChangeQuantity(), vessel, //
@@ -974,10 +977,12 @@ public class InventoryReport extends ViewPart {
 											lvl.volumeHigh = e.getEvent().getVolumeHigh();
 										}
 										// FM cargo out and in happens only when there's a vessel
-										if (inventory.getFacilityType() == InventoryFacilityType.DOWNSTREAM || inventory.getFacilityType() == InventoryFacilityType.HUB) {
+										if (inventory.getFacilityType() == InventoryFacilityType.DOWNSTREAM 
+												|| inventory.getFacilityType() == InventoryFacilityType.HUB) {
 											lvl.cargoIn = lvl.changeInM3;
 										}
-										if (inventory.getFacilityType() == InventoryFacilityType.UPSTREAM || inventory.getFacilityType() == InventoryFacilityType.HUB) {
+										if (inventory.getFacilityType() == InventoryFacilityType.UPSTREAM 
+												|| inventory.getFacilityType() == InventoryFacilityType.HUB){
 											lvl.cargoOut = lvl.changeInM3;
 										}
 										addToInventoryLevelList(tableLevels, lvl);
@@ -993,8 +998,7 @@ public class InventoryReport extends ViewPart {
 										setInventoryLevelFeed(lvl);
 										addToInventoryLevelList(tableLevels, lvl);
 									} else if (e.getEvent() != null) {
-										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), e.getEvent().getPeriod(), e.getChangeQuantity(), null, null, null, null, null, null,
-												null, null, null);
+										final InventoryLevel lvl = new InventoryLevel(e.getDate().toLocalDate(), e.getEvent().getPeriod(), e.getChangeQuantity(), null, null, null, null, null, null, null, null, null);
 										lvl.breach = e.isBreachedMin() || e.isBreachedMax();
 										if (e.getEvent() != null) {
 											lvl.volumeLow = e.getEvent().getVolumeLow();
@@ -1211,10 +1215,10 @@ public class InventoryReport extends ViewPart {
 			 * In the case, when the low/high forecast value is zero , we assume that's a wrong data! Hence we use the feedIn (actual volume) if it's also not zero. Maybe we need to fix that!
 			 */
 			final int vl = lvl.volumeLow == 0 ? lvl.feedIn == 0 ? 0 : lvl.feedIn : lvl.volumeLow;
-
+			
 			totalLow += vl - Math.abs(lvl.feedOut) - Math.abs(lvl.cargoOut) + Math.abs(lvl.cargoIn);
 			lvl.ttlLow = totalLow;
-
+			
 			final int vh = lvl.volumeHigh == 0 ? lvl.feedIn == 0 ? 0 : lvl.feedIn : lvl.volumeHigh;
 			totalHigh += vh - Math.abs(lvl.feedOut) - Math.abs(lvl.cargoOut) + Math.abs(lvl.cargoIn);
 			lvl.ttlHigh = totalHigh;

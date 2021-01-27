@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lingo.reports.views.fleet.formatters;
 
+import java.util.List;
+
 import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -14,20 +16,39 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 
 public class BaseFuelCostFormatter extends CostFormatter {
 
-	public BaseFuelCostFormatter(final Type type) {
+	public BaseFuelCostFormatter(Type type) {
 		super(type);
 	}
 
 	@Override
-	public Integer getIntValue(final Object object) {
-		return SequenceGrabber.applyToSequences(object, this::getCost);
+	public Integer getIntValue(Object object) {
+
+		if (object instanceof Row) {
+			object = ((Row) object).getSequence();
+		}
+		int cost = 0;
+		if (object instanceof Sequence) {
+			Sequence sequence = (Sequence) object;
+			cost += getCost(sequence);
+		} else if (object instanceof List) {
+			List objects = (List) object;
+			if (objects.size() > 0) {
+				for (Object o : objects) {
+					if (o instanceof Sequence) {
+						cost += getCost((Sequence) o);
+					}
+				}
+			}
+		}
+
+		return cost;
 	}
 
-	private int getCost(final Sequence sequence) {
+	private int getCost(Sequence sequence) {
 		int cost = 0;
-		for (final Event evt : sequence.getEvents()) {
+		for (Event evt : sequence.getEvents()) {
 			if (evt instanceof FuelUsage) {
-				final FuelUsage fuelUsage = (FuelUsage) evt;
+				FuelUsage fuelUsage = (FuelUsage) evt;
 				cost += getFuelCost(Fuel.BASE_FUEL, fuelUsage);
 				cost += getFuelCost(Fuel.PILOT_LIGHT, fuelUsage);
 			}
@@ -35,9 +56,9 @@ public class BaseFuelCostFormatter extends CostFormatter {
 		return cost;
 	}
 
-	private int getFuelCost(final Fuel fuel, final FuelUsage fuelUsage) {
+	private int getFuelCost(Fuel fuel, FuelUsage fuelUsage) {
 		int cost = 0;
-		for (final FuelQuantity fuelQuantity : fuelUsage.getFuels()) {
+		for (FuelQuantity fuelQuantity : fuelUsage.getFuels()) {
 			if (fuelQuantity.getFuel() == fuel) {
 				cost += fuelQuantity.getCost();
 			}

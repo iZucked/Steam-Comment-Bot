@@ -39,8 +39,10 @@ public class Activator extends AbstractUIPlugin {
 
 	private ServiceListener serviceListener;
 
+	private final @NonNull ScenarioServiceSelectionProvider scenarioServiceSelectionProvider = new ScenarioServiceSelectionProvider();
+
+	private ServiceRegistration<IScenarioServiceSelectionProvider> selectionProviderRegistration;;
 	private ServiceTracker<IEclipseJobManager, IEclipseJobManager> jobManagerTracker;
-	private ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider> scenarioServiceSelectionProviderTracker;
 
 	/**
 	 * The constructor
@@ -58,11 +60,8 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 
-		jobManagerTracker = new ServiceTracker<>(context, IEclipseJobManager.class, null);
+		jobManagerTracker = new ServiceTracker<IEclipseJobManager, IEclipseJobManager>(context, IEclipseJobManager.class, null);
 		jobManagerTracker.open();
-
-		scenarioServiceSelectionProviderTracker = new ServiceTracker<>(context, IScenarioServiceSelectionProvider.class, null);
-		scenarioServiceSelectionProviderTracker.open();
 
 		serviceListener = new ServiceListener() {
 
@@ -92,6 +91,9 @@ public class Activator extends AbstractUIPlugin {
 			final ServiceEvent event = new ServiceEvent(ServiceEvent.REGISTERED, ref);
 			serviceListener.serviceChanged(event);
 		}
+
+		// register selection provider
+		selectionProviderRegistration = context.registerService(IScenarioServiceSelectionProvider.class, scenarioServiceSelectionProvider, null);
 	}
 
 	/*
@@ -103,9 +105,9 @@ public class Activator extends AbstractUIPlugin {
 	public void stop(final BundleContext context) throws Exception {
 		context.removeServiceListener(serviceListener);
 		services.clear();
-		// scenarioServiceSelectionProvider.deselectAll(false);
+		scenarioServiceSelectionProvider.deselectAll();
 		jobManagerTracker.close();
-		scenarioServiceSelectionProviderTracker.close();
+		selectionProviderRegistration.unregister();
 		plugin = null;
 		super.stop(context);
 	}
@@ -123,8 +125,8 @@ public class Activator extends AbstractUIPlugin {
 		return plugin;
 	}
 
-	public IScenarioServiceSelectionProvider getScenarioServiceSelectionProvider() {
-		return scenarioServiceSelectionProviderTracker.getService();
+	public ScenarioServiceSelectionProvider getScenarioServiceSelectionProvider() {
+		return scenarioServiceSelectionProvider;
 	}
 
 	public IEclipseJobManager getEclipseJobManager() {
@@ -141,9 +143,8 @@ public class Activator extends AbstractUIPlugin {
 
 	public IScenarioService getServiceForComponentID(final String componentID) {
 		final WeakReference<IScenarioService> ref = services.get(componentID);
-		if (ref == null) {
+		if (ref == null)
 			return null;
-		}
 		return ref.get();
 	}
 }

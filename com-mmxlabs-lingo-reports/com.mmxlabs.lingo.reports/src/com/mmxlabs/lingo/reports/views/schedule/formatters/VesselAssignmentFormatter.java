@@ -104,7 +104,7 @@ public class VesselAssignmentFormatter extends BaseFormatter {
 			}
 		} else if (sequence.isSetVesselAvailability()) {
 			final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-			return AssignmentLabelProvider.getLabelFor(vesselAvailability, !useShortenedNames);// + " - " + vesselAvailability.getCharterNumber();
+			return AssignmentLabelProvider.getLabelFor(vesselAvailability, !useShortenedNames);
 		}
 		return sequence.getName();
 	}

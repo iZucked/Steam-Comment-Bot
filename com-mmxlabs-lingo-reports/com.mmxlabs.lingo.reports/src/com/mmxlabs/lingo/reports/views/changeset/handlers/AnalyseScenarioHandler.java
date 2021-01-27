@@ -119,7 +119,7 @@ public class AnalyseScenarioHandler {
 			try {
 
 				// No colon in id strings
-				IViewPart actionSetPart = activePage.showView(ReportsConstants.VIEW_COMPARE_SCENARIOS_ID, null, IWorkbenchPage.VIEW_ACTIVATE);
+				IViewPart actionSetPart = activePage.showView(ReportsConstants.VIEW_OPTIMISATIONS_ID, null, IWorkbenchPage.VIEW_ACTIVATE);
 				if (actionSetPart instanceof ChangeSetView) {
 					ChangeSetView changeSetView = (ChangeSetView) actionSetPart;
 

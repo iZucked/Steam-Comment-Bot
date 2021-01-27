@@ -989,11 +989,7 @@
       <FleetBasedColumn
             handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.fleet.number_cargoes">
-      </FleetBasedColumn>
-	  <FleetBasedColumn
-			handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
-			id="com.mmxlabs.lingo.reports.components.columns.fleet.gco">
-	  </FleetBasedColumn>      
+      </FleetBasedColumn>      
    </extension>
    <extension
          point="com.mmxlabs.lingo.reports.FleetBasedReportInitialState">

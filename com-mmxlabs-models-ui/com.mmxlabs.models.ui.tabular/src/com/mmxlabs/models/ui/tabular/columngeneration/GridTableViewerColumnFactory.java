@@ -16,7 +16,6 @@ import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 
-import com.mmxlabs.common.util.TriConsumer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerFilterSupport;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
@@ -30,20 +29,17 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 	private final GridTableViewer viewer;
 	private final EObjectTableViewerSortingSupport sortingSupport;
 	private final EObjectTableViewerFilterSupport filterSupport;
+	
 
-	private final TriConsumer<ViewerCell, ColumnHandler, Object> colourProvider;
-
-	public GridTableViewerColumnFactory(final GridTableViewer viewer, final EObjectTableViewerSortingSupport sortingSupport, final EObjectTableViewerFilterSupport filterSupport,
-			final TriConsumer<ViewerCell, ColumnHandler, Object> colourProvider) {
+	public GridTableViewerColumnFactory(final GridTableViewer viewer, final EObjectTableViewerSortingSupport sortingSupport, final EObjectTableViewerFilterSupport filterSupport) {
 		this.viewer = viewer;
 		this.sortingSupport = sortingSupport;
 		this.filterSupport = filterSupport;
-		this.colourProvider = colourProvider;
 	}
 
 	@Override
 	public GridViewerColumn createColumn(final ColumnHandler handler) {
-		final GridColumnGroup group = handler.block.getOrCreateColumnGroup(viewer.getGrid());
+		GridColumnGroup group = handler.block.getOrCreateColumnGroup(viewer.getGrid());
 
 		final String title = handler.title;
 		final ICellRenderer formatter = handler.getFormatter();
@@ -91,9 +87,6 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 				if (formatter instanceof IImageProvider) {
 					cell.setImage(((IImageProvider) formatter).getImage(cell.getElement()));
 				}
-				if (colourProvider != null) {
-					colourProvider.accept(cell, handler, element);
-				}
 			}
 		});
 
@@ -131,12 +124,12 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 		}
 	}
 
-	private void setRowSpan(final ICellRenderer formatter, final ViewerCell cell, final Object element) {
+	private void setRowSpan(final ICellRenderer formatter, final ViewerCell cell, Object element) {
 		if (formatter instanceof IRowSpanProvider) {
 			final IRowSpanProvider rowSpanProvider = (IRowSpanProvider) formatter;
 			final DataVisualizer dv = viewer.getGrid().getDataVisualizer();
 			// final GridItem item = (GridItem) cell.getItem();
-			final int rowSpan = rowSpanProvider.getRowSpan(cell, element);
+			int rowSpan = rowSpanProvider.getRowSpan(cell, element);
 			{
 				ViewerCell c = cell;
 				for (int i = 0; i < rowSpan; i++) {

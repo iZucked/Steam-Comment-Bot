@@ -4,464 +4,209 @@
  */
 package com.mmxlabs.lingo.reports.services;
 
-import java.lang.ref.WeakReference;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.EventObject;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.WeakHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
 
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
-import org.eclipse.e4.ui.workbench.modeling.ISelectionListener;
-import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.command.CommandStack;
-import org.eclipse.emf.common.command.CommandStackListener;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
+import org.ops4j.peaberry.Peaberry;
+import org.ops4j.peaberry.eclipse.EclipseRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
-import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.mmxlabs.lingo.reports.components.ReportComponentModule;
+import com.mmxlabs.lingo.reports.internal.Activator;
+import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
+import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandlerExtension;
+import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
-import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.rcp.common.RunnerHelper;
-import com.mmxlabs.rcp.common.SelectionHelper;
-import com.mmxlabs.rcp.common.locking.WellKnownTriggers;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
-public class ScenarioComparisonService implements IScenarioServiceSelectionProvider {
+public class ScenarioComparisonService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ScenarioComparisonService.class);
+	@Inject(optional = true)
+	private Iterable<ICustomRelatedSlotHandlerExtension> customRelatedSlotHandlerExtensions;
 
-	private final WeakHashMap<CommandStack, MyCommandStackListener> commandStacks = new WeakHashMap<>();
+	private static final Logger log = LoggerFactory.getLogger(ScenarioComparisonService.class);
 
-	private SelectedDataProviderImpl currentSelectedDataProvider = new SelectedDataProviderImpl();
+	private SelectedScenariosService selectedScenarioService;
+	private final Set<IScenarioComparisonServiceListener> listeners = new HashSet<>();
 
-	private final Collection<ISelectedScenariosServiceListener> listeners = new ConcurrentLinkedQueue<>();
-	private final Collection<IScenarioServiceSelectionChangedListener> selectedScenariosListeners = new ConcurrentLinkedQueue<>();
+	private final ScheduleDiffUtils scheduleDiffUtils = new ScheduleDiffUtils();
+
+	private DiffOptions diffOptions = ScheduleReportFactory.eINSTANCE.createDiffOptions();
 
 	/**
-	 * Special counter to avoid multiple update requests happening at once.
+	 * Special counter to try and avoid multiple update requests happening at once. TODO: What happens if we hit Integer.MAX_VALUE?
 	 */
-	private final AtomicInteger counter = new AtomicInteger();
+	private AtomicInteger counter = new AtomicInteger();
 
-	private AtomicBoolean inSelectionChanged = new AtomicBoolean(false);
+	@NonNull
+	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 
-	private final DiffOptions diffOptions = ScheduleReportFactory.eINSTANCE.createDiffOptions();
-
-	@Override
-	public void select(final ScenarioResult other, final boolean block) {
-		if (currentSelectedDataProvider.getAllScenarioResults().contains(other)) {
-			return;
+		@Override
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others, final boolean block) {
+			scheduleRebuildCompare(selectedDataProvider, pinned, others, block);
 		}
-
-		if (currentSelectedDataProvider.getPinnedScenarioResult() != null) {
-			scheduleRebuildCompare(currentSelectedDataProvider.getPinnedScenarioResult(), Collections.singleton(other), null, block);
-		} else {
-			final List<ScenarioResult> others = new LinkedList<>(currentSelectedDataProvider.getOtherScenarioResults());
-			others.add(other);
-			scheduleRebuildCompare(null, others, null, block);
-		}
-	}
-
-	public void select(final Collection<ScenarioResult> others, final boolean block) {
-		scheduleRebuildCompare(null, others, null, block);
-
-	}
-
-	@Override
-	public void setPinned(final ScenarioResult pin, final boolean block) {
-		final List<ScenarioResult> others = new LinkedList<>(currentSelectedDataProvider.getAllScenarioResults());
-		if (pin != null) {
-			others.remove(pin);
-		}
-
-		scheduleRebuildCompare(pin, others, null, block);
-
-	}
-
-	@Override
-	public void setPinnedPair(final ScenarioResult pin, final ScenarioResult other, final boolean block) {
-		scheduleRebuildCompare(pin, Collections.singleton(other), null, block);
-	}
-
-	public void setPinnedPair(final ScenarioResult pin, final ScenarioResult other, final ISelection selection, final boolean block) {
-		scheduleRebuildCompare(pin, Collections.singleton(other), selection, block);
-	}
-
-	@Override
-	public void deselect(final ScenarioResult other, final boolean block) {
-
-		final List<ScenarioResult> others = new LinkedList<>(currentSelectedDataProvider.getOtherScenarioResults());
-		if (currentSelectedDataProvider.getPinnedScenarioResult() == other) {
-			scheduleRebuildCompare(null, others, null, block);
-		} else {
-			if (others.contains(other)) {
-				others.remove(other);
-				scheduleRebuildCompare(currentSelectedDataProvider.getPinnedScenarioResult(), others, null, block);
-			}
-		}
-
-	}
-
-	@Override
-	public void deselect(final ScenarioInstance instance, final boolean block) {
-		final Set<ScenarioResult> toRemove = new HashSet<>();
-		for (final var r : currentSelectedDataProvider.getAllScenarioResults()) {
-			if (r.getScenarioInstance() == instance) {
-				toRemove.add(r);
-			}
-		}
-		if (!toRemove.isEmpty()) {
-			ScenarioResult pinned = currentSelectedDataProvider.getPinnedScenarioResult();
-			if (toRemove.contains(pinned)) {
-				pinned = null;
-			}
-			final List<ScenarioResult> others = new LinkedList<>(currentSelectedDataProvider.getOtherScenarioResults());
-			others.removeAll(toRemove);
-			scheduleRebuildCompare(pinned, others, null, block);
-		}
-	}
-
-	@Override
-	public void deselectAll(final boolean block) {
-		scheduleRebuildCompare(null, Collections.emptyList(), null, block);
-	}
-
-	@Override
-	public @NonNull Collection<@NonNull ScenarioResult> getSelection() {
-		return currentSelectedDataProvider.getAllScenarioResults();
-	}
-
-	@Override
-	public @Nullable ScenarioResult getPinned() {
-		return currentSelectedDataProvider.getPinnedScenarioResult();
-	}
-
-	@Override
-	public boolean isSelected(@NonNull final ScenarioResult scenarioResult) {
-		return currentSelectedDataProvider.getAllScenarioResults().contains(scenarioResult);
-	}
-
-	@Override
-	public boolean isSelected(@NonNull final ScenarioInstance instance) {
-
-		for (final var r : currentSelectedDataProvider.getAllScenarioResults()) {
-			if (r.getScenarioInstance() == instance) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	public boolean isPinned(@NonNull final ScenarioResult result) {
-		return currentSelectedDataProvider.getPinnedScenarioResult() == result;
-	}
-
-	@Override
-	public boolean isPinned(@NonNull final ScenarioInstance instance) {
-		final ScenarioResult pinned = currentSelectedDataProvider.getPinnedScenarioResult();
-		return pinned != null && pinned.getScenarioInstance() == instance;
-	}
-
-	@Override
-	public void addSelectionChangedListener(final IScenarioServiceSelectionChangedListener listener) {
-		selectedScenariosListeners.add(listener);
-	}
-
-	@Override
-	public void removeSelectionChangedListener(final IScenarioServiceSelectionChangedListener listener) {
-		selectedScenariosListeners.remove(listener);
-	}
-
-	private synchronized void scheduleRebuildCompare(final ScenarioResult pinned, final Collection<ScenarioResult> others, final ISelection selection, final boolean block) {
-
-		// If we have too many other scenarios, then deselect *all* the others. We could pick an arbitrary one,
-		// but that could lead to inconsistent UI behaviour
-
-		if (pinned != null && others.size() > 1) {
-			others.clear();
-		}
-
-		final int value = counter.incrementAndGet();
-		if (PlatformUI.isWorkbenchRunning()) {
-			RunnerHelper.exec(() -> doRebuildCompare(value, pinned, others, selection, block), block);
-		}
-	}
-
-	private synchronized void scheduleSelectionRefresh(final ISelection selection, final boolean block) {
-		final int value = counter.get();
-		if (PlatformUI.isWorkbenchRunning()) {
-			RunnerHelper.exec(() -> {
-				if (value != counter.get()) {
-					return;
-				}
-				if (inSelectionChanged.compareAndSet(false, true)) {
-					try {
-
-						currentSelectedDataProvider.setSelectedObjects(null, selection);
-
-						for (final ISelectedScenariosServiceListener l : listeners) {
-
-							try {
-								l.selectedObjectChanged(null, selection);
-							} catch (final Exception e) {
-								LOGGER.error(e.getMessage(), e);
-							}
-						}
-						PlatformUI.getWorkbench().getService(ESelectionService.class).setPostSelection(selection);
-					} catch (final Exception e) {
-						LOGGER.error(e.getMessage(), e);
-					} finally {
-						inSelectionChanged.set(false);
-					}
-				}
-			}, block);
-		}
-
-	}
-
-	private final Consumer<ScenarioResult> attachChangeListener = scenarioResult -> {
-		final CommandStack commandStack = scenarioResult.getScenarioDataProvider().getCommandStack();
-		synchronized (commandStacks) {
-			commandStacks.computeIfAbsent(commandStack, MyCommandStackListener::new).add(scenarioResult);
-		}
-
 	};
 
-	private void doRebuildCompare(final int value, //
-			final @Nullable ScenarioResult pinned, final Collection<ScenarioResult> others, //
-			final @Nullable ISelection selection, final boolean block) {
-		if (value != counter.get()) {
+	private ScenarioComparisonServiceTransformer.TransformResult lastResult;
+
+	// FIXME: This can retain elements from unloaded scenarios.
+	private Collection<Object> selectedElements = new LinkedList<>();
+
+	public ScenarioComparisonService() {
+		final Injector injector = Guice.createInjector(Peaberry.osgiModule(Activator.getDefault().getBundle().getBundleContext(), EclipseRegistry.eclipseRegistry()), new ReportComponentModule());
+		injector.injectMembers(this);
+	}
+
+	public void bindSelectedScenariosService(final SelectedScenariosService selectedScenariosService) {
+		if (this.selectedScenarioService != null) {
+			unbindSelectedScenariosService(this.selectedScenarioService);
+		}
+		this.selectedScenarioService = selectedScenariosService;
+
+		if (this.selectedScenarioService != null) {
+			selectedScenariosService.addListener(selectedScenariosServiceListener);
+		}
+	}
+
+	public void unbindSelectedScenariosService(final SelectedScenariosService selectedScenariosService) {
+		if (this.selectedScenarioService == null) {
 			return;
 		}
-		final SelectedDataProviderImpl selectedDataProvider = new SelectedDataProviderImpl();
-		if (pinned != null) {
-			selectedDataProvider.addScenario(pinned);
-			selectedDataProvider.setPinnedScenarioInstance(pinned);
-			attachChangeListener.accept(pinned);
-
+		if (this.selectedScenarioService == selectedScenariosService) {
+			selectedScenariosService.removeListener(selectedScenariosServiceListener);
+			this.selectedScenarioService = null;
 		}
-		others.forEach(sr -> {
-			attachChangeListener.accept(sr);
-			selectedDataProvider.addScenario(sr);
-		});
+	}
 
-		selectedDataProvider.setSelectedObjects(null, selection);
+	public void dispose() {
+		unbindSelectedScenariosService(this.selectedScenarioService);
 
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+	}
 
-			// Where to get this from?
-			final boolean diffToBase = false;
-			ChangeSetTableRoot root = null;
-			ChangeSetTableGroup set = null;
-			final List<ChangeSetTableRow> rows = new LinkedList<>();
+	private void scheduleRebuildCompare(@NonNull final ISelectedDataProvider selectedDataProvider, @Nullable final ScenarioResult pinned, @NonNull final Collection<ScenarioResult> others,
+			final boolean block) {
+		lastResult = null;
+		selectedElements.clear();
+		final int value = counter.incrementAndGet();
+		if (PlatformUI.isWorkbenchRunning()) {
 
-			final Iterator<?> itr = structuredSelection.iterator();
-			while (itr.hasNext()) {
-				Object o = itr.next();
-				if (o instanceof ChangeSetTableRow) {
-					final ChangeSetTableRow r = (ChangeSetTableRow) o;
-					rows.add(r);
-					o = r.eContainer();
+			Runnable r = new Runnable() {
+
+				@Override
+				public void run() {
+					// Mismatch, assume pending job
+					if (value != counter.get()) {
+						return;
+					}
+					doRebuildCompare(value, selectedDataProvider, pinned, others);
 				}
-				if (o instanceof ChangeSetTableGroup) {
-					final ChangeSetTableGroup s = (ChangeSetTableGroup) o;
-					set = s;
-					o = s.eContainer();
-				}
-				if (o instanceof ChangeSetTableRoot) {
-					final ChangeSetTableRoot r = (ChangeSetTableRoot) o;
-					root = r;
-				}
+			};
+			RunnerHelper.exec(r, block);
+		}
+
+	}
+
+	private void doRebuildCompare(final int value, @NonNull final ISelectedDataProvider selectedDataProvider, @Nullable final ScenarioResult pinned,
+			@NonNull final Collection<ScenarioResult> others) {
+
+		final List<ICustomRelatedSlotHandler> customRelatedSlotHandlers = new LinkedList<>();
+		if (customRelatedSlotHandlerExtensions != null) {
+			for (final ICustomRelatedSlotHandlerExtension h : customRelatedSlotHandlerExtensions) {
+				customRelatedSlotHandlers.add(h.getInstance());
 			}
-			selectedDataProvider.setDiffToBase(diffToBase);
-			selectedDataProvider.setChangeSetRoot(root);
-			selectedDataProvider.setChangeSet(set);
-			selectedDataProvider.setChangeSetRows(rows);
 		}
 
-		// TODO: Add in other data elements to
+		ScenarioComparisonServiceTransformer.TransformResult result = ScenarioComparisonServiceTransformer.transform(pinned, others, selectedDataProvider, scheduleDiffUtils, customRelatedSlotHandlers);
+		result.selectedDataProvider = selectedDataProvider;
+		final Table table = result.table;
 
-		if (value != counter.get()) {
-			return;
-		}
-		currentSelectedDataProvider = selectedDataProvider;
-		for (final IScenarioServiceSelectionChangedListener listener : selectedScenariosListeners) {
+		// Take a copy of current diff options
+		table.setOptions(EcoreUtil.copy(diffOptions));
+
+		for (final IScenarioComparisonServiceListener l : listeners) {
 			try {
-				listener.selectionChanged(pinned, others);
+				if (pinned != null) {
+					l.compareDataUpdate(selectedDataProvider, pinned, others.iterator().next(), table, result.rootObjects, result.equivalancesMap);
+				} else {
+					l.multiDataUpdate(selectedDataProvider, others, table, result.rootObjects);
+				}
 			} catch (final Exception e) {
-				LOGGER.error(e.getMessage(), e);
+				// Counter mismatch? data probably been changed, ignore exceptions in this case. However if counter matches, log the exception.
+				if (value == counter.get()) {
+					log.error(e.getMessage(), e);
+				}
 			}
 		}
 
-		for (final ISelectedScenariosServiceListener l : listeners) {
+		selectedElements.clear();
+		lastResult = result;
+	}
+
+	public void addListener(final IScenarioComparisonServiceListener listener) {
+		this.listeners.add(listener);
+	}
+
+	public void removeListener(final IScenarioComparisonServiceListener listener) {
+		this.listeners.remove(listener);
+	}
+
+	public void triggerListener(IScenarioComparisonServiceListener l) {
+		if (lastResult != null) {
 			try {
-				l.selectedDataProviderChanged(selectedDataProvider, block);
+				if (lastResult.pinned != null) {
+					l.compareDataUpdate(lastResult.selectedDataProvider, lastResult.pinned, lastResult.others.iterator().next(), lastResult.table, lastResult.rootObjects, lastResult.equivalancesMap);
+				} else {
+					l.multiDataUpdate(lastResult.selectedDataProvider, lastResult.others, lastResult.table, lastResult.rootObjects);
+				}
 			} catch (final Exception e) {
-				LOGGER.error(e.getMessage(), e);
+				log.error(e.getMessage(), e);
 			}
 		}
 	}
 
-	public void addListener(@NonNull final ISelectedScenariosServiceListener listener) {
-		listeners.add(listener);
-	}
-
-	public void removeListener(@NonNull final ISelectedScenariosServiceListener listener) {
-		listeners.remove(listener);
-	}
-
-	public void triggerListener(@NonNull final ISelectedScenariosServiceListener l, final boolean block) {
-		try {
-			l.selectedDataProviderChanged(currentSelectedDataProvider, block);
-		} catch (final Exception e) {
-			LOGGER.error(e.getMessage(), e);
+	public void toggleDiffOption(EDiffOption option) {
+		switch (option) {
+		case FILTER_SCHEDULE_CHART_BY_SELECTION:
+			diffOptions.setFilterSelectedSequences(!diffOptions.isFilterSelectedSequences());
+			break;
+		case FILTER_SCHEDULE_SUMMARY_BY_SELECTION:
+			diffOptions.setFilterSelectedElements(!diffOptions.isFilterSelectedElements());
+			break;
+		}
+		if (lastResult != null) {
+			scheduleRebuildCompare(lastResult.selectedDataProvider, lastResult.pinned, lastResult.others, false);
+		} else {
+			// Invalidate any existing jobs
+			counter.getAndIncrement();
 		}
 	}
 
-	public ISelectedDataProvider getCurrentSelectedDataProvider() {
-		return currentSelectedDataProvider;
-	}
-
-	public void setSelection(final ISelection newSelection) {
-		scheduleSelectionRefresh(newSelection, false);
-	}
-
+	@Deprecated
 	public DiffOptions getDiffOptions() {
 		return diffOptions;
 	}
 
-	public void toggleDiffOption(final EDiffOption option) {
-
-		boolean newValue = false;
-		if (option == EDiffOption.FILTER_SCHEDULE_CHART_BY_SELECTION) {
-			diffOptions.setFilterSelectedSequences(!diffOptions.isFilterSelectedSequences());
-			newValue = diffOptions.isFilterSelectedSequences();
-		}
-		if (option == EDiffOption.FILTER_SCHEDULE_SUMMARY_BY_SELECTION) {
-			diffOptions.setFilterSelectedElements(!diffOptions.isFilterSelectedElements());
-			newValue = diffOptions.isFilterSelectedElements();
-		}
-
-		for (final ISelectedScenariosServiceListener l : listeners) {
-			try {
-				l.diffOptionChanged(option, !newValue, newValue);
-			} catch (final Exception e) {
-				LOGGER.error(e.getMessage(), e);
-			}
-		}
+	public void setSelectedElements(Collection<Object> selectedElements) {
+		this.selectedElements.clear();
+		this.selectedElements.addAll(selectedElements);
 	}
 
-	/**
-	 * Command stack listener method, cause the linked viewer to refresh on command execution
-	 *
-	 */
-	private class MyCommandStackListener implements CommandStackListener {
-
-		private final List<WeakReference<ScenarioResult>> targets = new LinkedList<>();
-
-		public MyCommandStackListener(final CommandStack commandStack) {
-			commandStack.addCommandStackListener(this);
-		}
-
-		public void add(final ScenarioResult result) {
-			targets.add(new WeakReference<>(result));
-		}
-
-		@Override
-		public void commandStackChanged(final EventObject event) {
-
-			// Find target Schedule models which may have changed via a command. We only care about the top level objects as we don't expect to change a Schedule instance once attached to the scenario
-			final Set<Object> e = new HashSet<>();
-			for (final var ref : targets) {
-				final ScenarioResult sr = ref.get();
-				if (sr != null) {
-
-					final ScheduleModel scheduleModel = sr.getTypedResult(ScheduleModel.class);
-					e.add(scheduleModel);
-
-					final Schedule schedule = scheduleModel.getSchedule();
-
-					if (schedule != null) {
-						e.add(schedule);
-					}
-				}
-
-			}
-			// Quick prune of old entries...
-			targets.removeIf(ref -> ref.get() == null);
-
-			// No valid targets? return early
-			if (e.isEmpty()) {
-				return;
-			}
-
-			// Only react to changes involving the ScheduleModel
-			final CommandStack eventCommandStack = (CommandStack) event.getSource();
-			final Command mostRecentCommand = eventCommandStack.getMostRecentCommand();
-			if (mostRecentCommand != null) {
-				final Collection<?> commandResult = mostRecentCommand.getResult();
-				for (final Object o : commandResult) {
-					if (e.contains(o)) {
-						// We found at least one match, so trigger a rebuild.
-						// Note: We forget selection etc here
-						scheduleRebuildCompare(currentSelectedDataProvider.getPinnedScenarioResult(), currentSelectedDataProvider.getOtherScenarioResults(), null, false);
-						return;
-					}
-				}
-			}
-		}
-	}
-
-	private final ISelectionListener selectionListener = new ISelectionListener() {
-
-		@Override
-		public void selectionChanged(final MPart part, final Object selectedObject) {
-
-			// Avoid re-entrant selection changes.
-			if (inSelectionChanged.compareAndSet(false, true)) {
-				try {
-					final ISelection selection = SelectionHelper.adaptSelection(selectedObject);
-					setSelection(selection);
-				} finally {
-					inSelectionChanged.set(false);
-				}
-			}
-		}
-
-	};
-
-	public void start() {
-		WellKnownTriggers.WORKSPACE_STARTED.delayUntilTriggered(() -> {
-			final ESelectionService service = PlatformUI.getWorkbench().getService(ESelectionService.class);
-			service.addPostSelectionListener(selectionListener);
-		});
-	}
-
-	public void stop() {
-		final ESelectionService service = PlatformUI.getWorkbench().getService(ESelectionService.class);
-		service.removePostSelectionListener(selectionListener);
+	public Collection<Object> getSelectedElements() {
+		return selectedElements;
 	}
 }

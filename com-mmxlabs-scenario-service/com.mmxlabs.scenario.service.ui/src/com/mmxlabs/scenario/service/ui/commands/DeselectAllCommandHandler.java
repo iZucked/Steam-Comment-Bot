@@ -16,7 +16,7 @@ import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 public class DeselectAllCommandHandler extends AbstractHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		BusyIndicator.showWhile(HandlerUtil.getActiveShellChecked(event).getDisplay(), () -> ServiceHelper.withServiceConsumer(IScenarioServiceSelectionProvider.class, p -> p.deselectAll(true)));
+		BusyIndicator.showWhile(HandlerUtil.getActiveShellChecked(event).getDisplay(), () -> ServiceHelper.withServiceConsumer(IScenarioServiceSelectionProvider.class, p -> p.deselectAll()));
 
 		return null;
 	}

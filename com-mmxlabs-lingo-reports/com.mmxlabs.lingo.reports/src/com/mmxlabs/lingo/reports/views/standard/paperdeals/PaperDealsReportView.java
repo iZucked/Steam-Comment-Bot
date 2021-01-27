@@ -33,7 +33,7 @@ import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
-import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
@@ -55,7 +55,7 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener {
 
-	private ScenarioComparisonService selectedScenariosService;
+	private SelectedScenariosService selectedScenariosService;
 	private boolean expand = true;
 
 	@Override
@@ -141,7 +141,7 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 		final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
 		service.addPostSelectionListener(this);
 
-		selectedScenariosService = getSite().getService(ScenarioComparisonService.class);
+		selectedScenariosService = (SelectedScenariosService) getSite().getService(SelectedScenariosService.class);
 		selectedScenariosService.addListener(selectedScenariosServiceListener);
 
 		makeActions();
@@ -163,9 +163,9 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 				PaperDealsReportView.this.refresh();
 			}
 		};
-
+		
 		getViewSite().getActionBars().getToolBarManager().add(expandCollapseAll);
-
+		
 		final Action packColumnsAction = PackActionFactory.createPackColumnsAction(viewer);
 		final Action copyTableAction = new CopyGridToClipboardAction(viewer.getGrid());
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
@@ -263,21 +263,23 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
+
 		@Override
-		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others, final boolean block) {
 			final Runnable r = new Runnable() {
 				@Override
 				public void run() {
 
 					final List<PaperDealAllocation> slotAllocations = new LinkedList<>();
-					ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
+
 					if (pinned != null) {
-						final @Nullable ScheduleModel scheduleModel = pinned.getTypedResult(ScheduleModel.class);
+						@Nullable
+						final ScheduleModel scheduleModel = pinned.getTypedResult(ScheduleModel.class);
 						if (scheduleModel != null) {
 							final Schedule schedule = scheduleModel.getSchedule();
-
+							
 							if (schedule != null) {
-								for (final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
+								for(final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
 									final PaperDeal pd = paperDealAllocation.getPaperDeal();
 									if (!schedule.getGeneratedPaperDeals().contains(pd)) {
 										slotAllocations.add(paperDealAllocation);
@@ -286,18 +288,19 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 							}
 						}
 					}
-					for (final ScenarioResult other : selectedDataProvider.getOtherScenarioResults()) {
+					for (final ScenarioResult other : others) {
 						boolean showingOptiResult = false;
 						if (other != null && other.getResultRoot() != null && other.getResultRoot().eContainer() instanceof SolutionOption) {
 							slotAllocations.clear();
 							showingOptiResult = true;
 						}
-						final @Nullable ScheduleModel scheduleModel = other.getTypedResult(ScheduleModel.class);
+						@Nullable
+						final ScheduleModel scheduleModel = other.getTypedResult(ScheduleModel.class);
 						if (scheduleModel != null) {
 							final Schedule schedule = scheduleModel.getSchedule();
-
+							
 							if (schedule != null) {
-								for (final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
+								for(final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
 									final PaperDeal pd = paperDealAllocation.getPaperDeal();
 									if (!schedule.getGeneratedPaperDeals().contains(pd)) {
 										slotAllocations.add(paperDealAllocation);
@@ -340,7 +343,7 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 	public void setFocus() {
 		ViewerHelper.setFocus(viewer);
 	}
-
+	
 	protected void refresh() {
 		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 	}

@@ -6,7 +6,11 @@ package com.mmxlabs.lingo.reports.views.formatters;
 
 /**
  */
-public class CostFormatter extends IntegerFormatter implements ICostTypeFormatter {
+public class CostFormatter extends IntegerFormatter {
+
+	public enum Type {
+		COST, REVENUE, UNSET
+	}
 
 	private final boolean includeUnits;
 	private Type type = Type.UNSET;

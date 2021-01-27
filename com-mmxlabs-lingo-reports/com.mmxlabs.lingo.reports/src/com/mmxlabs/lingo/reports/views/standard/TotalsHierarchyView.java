@@ -6,7 +6,9 @@ package com.mmxlabs.lingo.reports.views.standard;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +35,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
-import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.models.lng.port.util.PortModelLabeller;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -75,7 +77,7 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 public class TotalsHierarchyView extends ViewPart {
 	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.TotalsHierarchyView";
 
-	private ScenarioComparisonService selectedScenariosService;
+	private SelectedScenariosService selectedScenariosService;
 
 	protected static final String TREE_DATA_KEY = "THVTreeData";
 
@@ -89,13 +91,16 @@ public class TotalsHierarchyView extends ViewPart {
 
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
-		@Override
-		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
 
+		@Override
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others, final boolean block) {
 			final Runnable r = new Runnable() {
 				@Override
 				public void run() {
-					List<ScenarioResult> instances = selectedDataProvider.getAllScenarioResults();
+					List<ScenarioResult> instances = new LinkedList<>(others);
+					if (pinned != null) {
+						instances.add(0, pinned);
+					}
 
 					final TreeData dummy = new TreeData("");
 					if (instances.size() == 1) {
@@ -352,7 +357,7 @@ public class TotalsHierarchyView extends ViewPart {
 	@Override
 	public void createPartControl(final Composite parent) {
 
-		selectedScenariosService = getSite().getService(ScenarioComparisonService.class);
+		selectedScenariosService = getSite().getService(SelectedScenariosService.class);
 
 		this.viewer = new TreeViewer(parent, SWT.FULL_SELECTION | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 
