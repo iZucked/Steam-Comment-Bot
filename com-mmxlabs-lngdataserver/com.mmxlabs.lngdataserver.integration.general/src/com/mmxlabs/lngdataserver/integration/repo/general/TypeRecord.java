@@ -19,8 +19,6 @@ public interface TypeRecord {
 
 	String getDeleteURL(String uuid);
 
-	String getVersionNotificationEndpoint();
-
 	Class<?> getMixin();
 
 	void writeHeader(OutputStream os) throws IOException;

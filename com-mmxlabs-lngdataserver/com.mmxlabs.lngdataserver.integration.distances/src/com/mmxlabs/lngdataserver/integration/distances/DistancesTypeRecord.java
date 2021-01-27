@@ -29,11 +29,6 @@ public class DistancesTypeRecord implements TypeRecord {
 	}
 
 	@Override
-	public String getVersionNotificationEndpoint() {
-		return "/distances/version_notification";
-	}
-
-	@Override
 	public String getUploadURL() {
 		return "/distances/sync/versions/";
 

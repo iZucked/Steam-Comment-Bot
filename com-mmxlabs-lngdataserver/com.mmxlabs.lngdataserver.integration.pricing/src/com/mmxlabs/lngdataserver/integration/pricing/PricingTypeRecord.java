@@ -29,11 +29,6 @@ public class PricingTypeRecord implements TypeRecord {
 	}
 
 	@Override
-	public String getVersionNotificationEndpoint() {
-		return "/pricing/version_notification";
-	}
-
-	@Override
 	public String getUploadURL() {
 		return "/pricing/sync/versions/";
 
