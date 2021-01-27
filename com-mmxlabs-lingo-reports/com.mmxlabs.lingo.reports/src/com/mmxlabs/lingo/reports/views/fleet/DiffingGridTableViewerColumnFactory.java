@@ -1,8 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2020
  * All rights reserved.
  */
-package com.mmxlabs.lingo.reports.components;
+package com.mmxlabs.lingo.reports.views.fleet;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -36,6 +36,7 @@ import com.mmxlabs.lingo.reports.views.fleet.formatters.CharterLengthDaysFormatt
 import com.mmxlabs.lingo.reports.views.fleet.formatters.GeneratedCharterDaysFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.GeneratedCharterRevenueFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.ICostTypeFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
@@ -59,13 +60,17 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 	private static final ImageDescriptor imageDescriptorGreenArrowUp = Activator.getPlugin().getImageDescriptor("icons/green_arrow_up.png");
 	private static final ImageDescriptor imageDescriptorRedArrowDown = Activator.getPlugin().getImageDescriptor("icons/red_arrow_down.png");
 	private static final ImageDescriptor imageDescriptorRedArrowUp = Activator.getPlugin().getImageDescriptor("icons/red_arrow_up.png");
+	private static final ImageDescriptor imageDescriptorDarkArrowDown = Activator.getPlugin().getImageDescriptor("icons/dark_arrow_down.png");
+	private static final ImageDescriptor imageDescriptorDarkArrowUp = Activator.getPlugin().getImageDescriptor("icons/dark_arrow_up.png");
 
 	private static final Image cellImageGreenArrowDown = imageDescriptorGreenArrowDown.createImage();
 	private static final Image cellImageGreenArrowUp = imageDescriptorGreenArrowUp.createImage();
 	private static final Image cellImageRedArrowDown = imageDescriptorRedArrowDown.createImage();
 	private static final Image cellImageRedArrowUp = imageDescriptorRedArrowUp.createImage();
+	private static final Image cellImageDarkArrowDown = imageDescriptorDarkArrowDown.createImage();
+	private static final Image cellImageDarkArrowUp = imageDescriptorDarkArrowUp.createImage();
 	private BooleanSupplier copyPasteMode;
-	
+
 	private final TriConsumer<ViewerCell, ColumnHandler, Object> colourProvider;
 
 	public DiffingGridTableViewerColumnFactory(final GridTableViewer viewer, final EObjectTableViewerSortingSupport sortingSupport, final EObjectTableViewerFilterSupport filterSupport,
@@ -77,117 +82,115 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 		this.colourProvider = colourProvider;
 	}
 
-	private Object computeCompositeRow(final CompositeRow element, final EMFPath[] path, final GridColumn col, final ICellRenderer formatter) {
+	private Object computeCompositeRow(final CompositeRow compositeRow, final EMFPath[] path, final GridColumn col, final ICellRenderer formatter) {
 
 		Object pinnedElement = null;
 		Object previousElement = null;
 
-		if (element instanceof CompositeRow) {
-			final Row pinnedRow = ((CompositeRow) element).getPinnedRow();
-			final Row previousRow = ((CompositeRow) element).getPreviousRow();
+		final Row pinnedRow = compositeRow.getPinnedRow();
+		final Row previousRow = compositeRow.getPreviousRow();
 
-			for (final EMFPath p : path) {
-				pinnedElement = p.get((EObject) pinnedRow);
-				if (pinnedElement != null) {
-					break;
-				}
-			}
-
-			for (final EMFPath p : path) {
-				previousElement = p.get((EObject) previousRow);
-				if (previousElement != null) {
-					break;
-				}
-			}
-
-			Object valuePinned = null;
-			Object valuePrevious = null;
-
+		for (final EMFPath p : path) {
+			pinnedElement = p.get((EObject) pinnedRow);
 			if (pinnedElement != null) {
-				valuePinned = formatter.getComparable(pinnedElement);
+				break;
 			}
+		}
 
+		for (final EMFPath p : path) {
+			previousElement = p.get((EObject) previousRow);
 			if (previousElement != null) {
-				valuePrevious = formatter.getComparable(previousElement);
+				break;
 			}
-			// Those formatters will also return -MAX_VALUE for the reference row
-			// Bug ?
-			if (formatter instanceof GeneratedCharterDaysFormatter) {
-				valuePinned = Double.valueOf(0.0);
+		}
+
+		Object valuePinned = null;
+		Object valuePrevious = null;
+
+		if (pinnedElement != null) {
+			valuePinned = formatter.getComparable(pinnedElement);
+		}
+
+		if (previousElement != null) {
+			valuePrevious = formatter.getComparable(previousElement);
+		}
+		// Those formatters will also return -MAX_VALUE for the reference row
+		// Bug ?
+		if (formatter instanceof GeneratedCharterDaysFormatter) {
+			valuePinned = Double.valueOf(0.0);
+		}
+
+		if (formatter instanceof GeneratedCharterRevenueFormatter) {
+			valuePinned = Integer.valueOf(0);
+		}
+
+		if (formatter instanceof CharterLengthDaysFormatter) {
+			valuePinned = Double.valueOf(0.0);
+		}
+
+		if (valuePrevious instanceof Integer || valuePinned instanceof Integer) {
+			int delta = 0;
+
+			if (valuePrevious != null && valuePinned != null) {
+				delta = ((int) valuePrevious) - ((int) valuePinned);
+			} else if (valuePrevious != null) {
+				delta = (int) valuePrevious;
+			} else if (valuePinned != null) {
+				delta = -((int) valuePinned);
+			}
+			return delta;
+		} else if (valuePrevious instanceof Long || valuePinned instanceof Long) {
+			long delta = 0L;
+			if (valuePrevious != null && valuePinned != null) {
+				delta = ((long) valuePrevious) - ((long) valuePinned);
+			} else if (valuePrevious != null) {
+				delta = (long) valuePrevious;
+			} else if (valuePinned != null) {
+				delta = -((long) valuePinned);
+			}
+			return delta;
+		} else if (valuePrevious instanceof Double || valuePinned instanceof Double) {
+			final double epsilon = 0.0001f;
+			double delta = 0.0f;
+
+			if (valuePrevious != null && valuePinned != null) {
+				delta = ((double) valuePrevious) - ((double) valuePinned);
+			} else if (valuePrevious != null) {
+				delta = (double) valuePrevious;
+			} else if (valuePinned != null) {
+				delta = -((double) valuePinned);
+			}
+			return delta;
+		} else if (valuePrevious instanceof String || valuePinned instanceof String) {
+			String deltaValue = null;
+			if (col.getText().compareTo("Scenario") == 0) {
+				deltaValue = " ";
 			}
 
-			if (formatter instanceof GeneratedCharterRevenueFormatter) {
-				valuePinned = Integer.valueOf(0);
+			if (col.getText().compareTo("Vessel") == 0) {
+				if (valuePinned != null) {
+					deltaValue = (String) valuePinned;
+				} else {
+					deltaValue = (String) valuePrevious;
+				}
 			}
-			
-			if (formatter instanceof CharterLengthDaysFormatter) {
-				valuePinned = Double.valueOf(0.0);
+
+			if (col.getText().compareTo("L-ID") == 0) {
+				if (valuePinned != null) {
+					deltaValue = (String) valuePinned;
+				} else {
+					deltaValue = (String) valuePrevious;
+				}
 			}
 
-			if (valuePrevious instanceof Integer || valuePinned instanceof Integer) {
-				int delta = 0;
-
-				if (valuePrevious != null && valuePinned != null) {
-					delta = ((int) valuePrevious) - ((int) valuePinned);
-				} else if (valuePrevious != null) {
-					delta = (int) valuePrevious;
-				} else if (valuePinned != null) {
-					delta = -((int) valuePinned);
+			if (col.getText().compareTo("D-ID") == 0) {
+				if (valuePinned != null) {
+					deltaValue = (String) valuePinned;
+				} else {
+					deltaValue = (String) valuePrevious;
 				}
-				return delta;
-			} else if (valuePrevious instanceof Long || valuePinned instanceof Long) {
-				long delta = 0L;
-				if (valuePrevious != null && valuePinned != null) {
-					delta = ((long) valuePrevious) - ((long) valuePinned);
-				} else if (valuePrevious != null) {
-					delta = (long) valuePrevious;
-				} else if (valuePinned != null) {
-					delta = -((long) valuePinned);
-				}
-				return delta;
-			} else if (valuePrevious instanceof Double || valuePinned instanceof Double) {
-				final double epsilon = 0.0001f;
-				double delta = 0.0f;
-
-				if (valuePrevious != null && valuePinned != null) {
-					delta = ((double) valuePrevious) - ((double) valuePinned);
-				} else if (valuePrevious != null) {
-					delta = (double) valuePrevious;
-				} else if (valuePinned != null) {
-					delta = -((double) valuePinned);
-				}
-				return delta;
-			} else if (valuePrevious instanceof String || valuePinned instanceof String) {
-				String deltaValue = null;
-				if (col.getText().compareTo("Scenario") == 0) {
-					deltaValue = " ";
-				}
-
-				if (col.getText().compareTo("Vessel") == 0) {
-					if (valuePinned != null) {
-						deltaValue = (String) valuePinned;
-					} else {
-						deltaValue = (String) valuePrevious;
-					}
-				}
-
-				if (col.getText().compareTo("L-ID") == 0) {
-					if (valuePinned != null) {
-						deltaValue = (String) valuePinned;
-					} else {
-						deltaValue = (String) valuePrevious;
-					}
-				}
-
-				if (col.getText().compareTo("D-ID") == 0) {
-					if (valuePinned != null) {
-						deltaValue = (String) valuePinned;
-					} else {
-						deltaValue = (String) valuePrevious;
-					}
-				}
-				return deltaValue;
 			}
+			return deltaValue;
 		}
 		return null;
 	}
@@ -217,9 +220,9 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 		column.setLabelProvider(new CellLabelProvider() {
 
 			public void setIndicationArrow(final ViewerCell cell, final ICellRenderer formatter, final boolean isNegative) {
-				if (formatter instanceof CostFormatter) {
-					final CostFormatter costFormatter = (CostFormatter) formatter;
-					final CostFormatter.Type typeFormatter = costFormatter.getType();
+				if (formatter instanceof ICostTypeFormatter) {
+					final ICostTypeFormatter costFormatter = (ICostTypeFormatter) formatter;
+					final ICostTypeFormatter.Type typeFormatter = costFormatter.getType();
 					final String formattedValue = cell.getText();
 
 					if (formattedValue != null) {
@@ -230,17 +233,23 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 						nullValues.add("0mmbtu");
 
 						if (!nullValues.contains(formattedValue.toLowerCase())) {
-							if (typeFormatter == CostFormatter.Type.COST) {
+							if (typeFormatter == ICostTypeFormatter.Type.COST) {
 								if (isNegative) {
 									cell.setImage(cellImageGreenArrowDown);
 								} else if (!formattedValue.contains("-")) {
 									cell.setImage(cellImageRedArrowUp);
 								}
-							} else if (typeFormatter == CostFormatter.Type.REVENUE) {
+							} else if (typeFormatter == ICostTypeFormatter.Type.REVENUE) {
 								if (isNegative) {
 									cell.setImage(cellImageRedArrowDown);
 								} else if (!formattedValue.contains("-")) {
 									cell.setImage(cellImageGreenArrowUp);
+								}
+							} else if (typeFormatter == ICostTypeFormatter.Type.OTHER) {
+								if (isNegative) {
+									cell.setImage(cellImageDarkArrowDown);
+								} else if (!formattedValue.contains("-")) {
+									cell.setImage(cellImageDarkArrowUp);
 								}
 							}
 						}
@@ -255,7 +264,7 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 
 				if (element instanceof List) {
 
-					if (((List<CompositeRow>) element).size() > 0) {
+					if (!((List<CompositeRow>) element).isEmpty()) {
 						// Fetch the first element of the list and pass it through the column formatter
 						// to get its type
 						final CompositeRow firstCompositeRow = ((List<CompositeRow>) element).get(0);
@@ -280,8 +289,8 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 								for (final CompositeRow compositeRow : compositeRows) {
 									boolean included = true;
 									for (final ViewerFilter viewerFilter : viewer.getFilters()) {
-										included &= viewerFilter.select(viewer, null, compositeRow.getPinnedRow());
-										included &= viewerFilter.select(viewer, null, compositeRow.getPreviousRow());
+										included &= viewerFilter.select(viewer, null, compositeRow);
+										included &= viewerFilter.select(viewer, null, compositeRow);
 									}
 
 									if (included) {
@@ -440,7 +449,7 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 						}
 					}
 				}
-				
+
 				if (colourProvider != null) {
 					colourProvider.accept(cell, handler, element);
 				}

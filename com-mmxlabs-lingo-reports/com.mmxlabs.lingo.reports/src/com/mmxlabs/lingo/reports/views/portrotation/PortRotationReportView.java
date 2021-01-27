@@ -6,7 +6,6 @@ package com.mmxlabs.lingo.reports.views.portrotation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -24,7 +23,7 @@ import com.mmxlabs.lingo.reports.ReportContents;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
-import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.views.AbstractConfigurableGridReportView;
@@ -66,21 +65,23 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 	private List<Object> elements;
 
 	@Inject
-	private SelectedScenariosService selectedScenariosService;
+	private ScenarioComparisonService selectedScenariosService;
 
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
-
-		@Override
-		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<@NonNull ScenarioResult> others, final boolean block) {
-
+@Override
+public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
+ 
 			ViewerHelper.setInput(viewer, block, () -> {
+				
+				ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
+				
 				elements.clear();
 				elementCollector.beginCollecting(pinned != null);
 				if (pinned != null) {
 					elementCollector.collectElements(pinned, true);
 				}
-				for (final ScenarioResult other : others) {
+				for (final ScenarioResult other : selectedDataProvider.getOtherScenarioResults()) {
 					elementCollector.collectElements(other, false);
 				}
 				elementCollector.endCollecting();

@@ -5,16 +5,17 @@
 package com.mmxlabs.lingo.reports.views.changeset;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -32,7 +33,6 @@ import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.UIEventTopic;
-import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
@@ -91,8 +91,8 @@ import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IReportContentsGenerator;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
-import com.mmxlabs.lingo.reports.services.IScenarioComparisonServiceListener;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.services.ScenarioNotEvaluatedException;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
@@ -109,7 +109,6 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
-import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
@@ -156,12 +155,19 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ChangeSetView extends ViewPart {
 
+	/**
+	 * This is used to lock the scenario when re-evaluating solutions
+	 */
 	private final ChangeSetViewSchedulingRule schedulingRule = new ChangeSetViewSchedulingRule(this);
+
+	/**
+	 * This is used to avoid the re-entrant code when we change the selected ScenarioResults in this view so it is not treated as a pin/diff update.
+	 */
+	private AtomicBoolean inChangingChangeSetSelection = new AtomicBoolean(false);
 
 	final class ChangeSetComparator extends ViewerComparator {
 
@@ -186,7 +192,7 @@ public class ChangeSetView extends ViewPart {
 					if (sortByVesselAndDate) {
 						final Pair<String, Integer> r1Vessel = getEmptyIfNull(getVesselNameAndCharterNumber(r1));
 						final Pair<String, Integer> r2Vessel = getEmptyIfNull(getVesselNameAndCharterNumber(r2));
-						
+
 						int diffVessel = r1Vessel.getFirst().compareTo(r2Vessel.getFirst());
 						if (diffVessel == 0)
 							diffVessel = r1Vessel.getSecond().compareTo(r2Vessel.getSecond());
@@ -239,7 +245,7 @@ public class ChangeSetView extends ViewPart {
 			} else if (row.getBeforeVesselName() != null && !row.getBeforeVesselName().isEmpty()) {
 				return Pair.of(row.getBeforeVesselName(), row.getBeforeVesselCharterNumber());
 			} else {
-				return Pair.of("",0);
+				return Pair.of("", 0);
 			}
 		}
 
@@ -312,46 +318,38 @@ public class ChangeSetView extends ViewPart {
 
 	private GridTreeViewer viewer;
 
-	private IScenarioServiceSelectionProvider scenarioSelectionProvider;
-
-	private ESelectionService eSelectionService;
-
 	private ScenarioComparisonService scenarioComparisonService;
 
 	private ChangeSetViewColumnHelper columnHelper;
 
-	private final IScenarioComparisonServiceListener listener = new IScenarioComparisonServiceListener() {
+	private final ISelectedScenariosServiceListener listener = new ISelectedScenariosServiceListener() {
 
 		@Override
-		public void multiDataUpdate(final ISelectedDataProvider selectedDataProvider, final Collection<ScenarioResult> others, final Table table, final List<LNGScenarioModel> rootObjects) {
-			if (!handleEvents) {
-				return;
-			}
-			if (ChangeSetView.this.viewMode == ViewMode.COMPARE) {
-				// columnHelper.cleanUpVesselColumns();
-				setEmptyData();
-			}
-		}
+		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
 
-		@Override
-		public void compareDataUpdate(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pin, final ScenarioResult other, final Table table,
-				final List<LNGScenarioModel> rootObjects, final Map<EObject, Set<EObject>> equivalancesMap) {
-			if (!handleEvents) {
-				return;
-			}
-			if (ChangeSetView.this.viewMode == ViewMode.COMPARE) {
-				final ScenarioResult target = pin == null ? other : pin;
-				setNewDataData(target, (monitor, targetSlotId) -> {
-					final PinDiffResultPlanTransformer transformer = new PinDiffResultPlanTransformer();
-					final ChangeSetRoot newRoot = transformer.createDataModel(pin, other, monitor);
-					return new ViewState(newRoot, SortMode.BY_GROUP);
-				}, null);
+			if (!inChangingChangeSetSelection.get()) {
+				setViewMode(ViewMode.COMPARE, false);
+				setPartName("Changes");
+
+				final ScenarioResult pin = selectedDataProvider.getPinnedScenarioResult();
+
+				if (pin == null || selectedDataProvider.getOtherScenarioResults().isEmpty()) {
+					setEmptyData();
+				} else {
+					final ScenarioResult other = selectedDataProvider.getOtherScenarioResults().get(0);
+					setNewDataData(pin, (monitor, targetSlotId) -> {
+						final PinDiffResultPlanTransformer transformer = new PinDiffResultPlanTransformer();
+						final ChangeSetRoot newRoot = transformer.createDataModel(pin, other, monitor);
+						return new ViewState(newRoot, SortMode.BY_GROUP);
+					}, null);
+
+				}
 			}
 		}
 
 		@Override
 		public void diffOptionChanged(final EDiffOption d, final Object oldValue, final Object newValue) {
-
+			// Nothing to do here
 		}
 	};
 
@@ -359,7 +357,7 @@ public class ChangeSetView extends ViewPart {
 	private IAdditionalAttributeProvider additionalAttributeProvider;
 
 	// flag to indicate whether or not to respond to data change events.
-	private boolean handleEvents;
+	// private boolean handleEvents;
 
 	private boolean canExportChangeSet;
 
@@ -385,8 +383,8 @@ public class ChangeSetView extends ViewPart {
 			}
 
 			// Reset selection
-			scenarioComparisonService.setSelectedElements(Collections.emptySet());
-			eSelectionService.setPostSelection(Collections.emptySet().toArray());
+			scenarioComparisonService.setSelection(new StructuredSelection());
+			// eSelectionService.setPostSelection(Collections.emptySet().toArray());
 
 			// TODO: Extract vessel columns and generate.
 
@@ -628,8 +626,8 @@ public class ChangeSetView extends ViewPart {
 	@Override
 	public void createPartControl(final Composite parent) {
 		scenarioComparisonService = PlatformUI.getWorkbench().getService(ScenarioComparisonService.class);
-		eSelectionService = PlatformUI.getWorkbench().getService(ESelectionService.class);
-		scenarioSelectionProvider = PlatformUI.getWorkbench().getService(IScenarioServiceSelectionProvider.class);
+		// eSelectionService = PlatformUI.getWorkbench().getService(ESelectionService.class);
+		// scenarioSelectionProvider = PlatformUI.getWorkbench().getService(IScenarioServiceSelectionProvider.class);
 		// Create table
 		viewer = new GridTreeViewer(parent, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 		GridViewerHelper.configureLookAndFeel(viewer);
@@ -657,20 +655,8 @@ public class ChangeSetView extends ViewPart {
 				final ISelection selection = event.getSelection();
 				if (selection instanceof IStructuredSelection) {
 					final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
-					if (viewMode != ViewMode.COMPARE) {
-						final Iterator<?> itr = iStructuredSelection.iterator();
-						while (itr.hasNext()) {
-							Object o = itr.next();
-							if (o instanceof ChangeSetTableRow) {
-								o = ((ChangeSetTableRow) o).eContainer();
-							}
-							if (o instanceof ChangeSetTableGroup) {
-								final ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) o;
-								scenarioSelectionProvider.setPinnedPair(changeSetTableGroup.getBaseScenario(), changeSetTableGroup.getCurrentScenario(), true);
-								break;
-							}
-						}
-					}
+
+					ISelection newSelection;
 					{
 
 						final Set<Object> selectedElements = new LinkedHashSet<>();
@@ -692,10 +678,35 @@ public class ChangeSetView extends ViewPart {
 						while (selectedElements.remove(null))
 							;
 
-						// Update selected elements
-						scenarioComparisonService.setSelectedElements(selectedElements);
+						newSelection = new StructuredSelection(new ArrayList<>(selectedElements));
+					}
 
-						eSelectionService.setPostSelection(new StructuredSelection(selectedElements.toArray()));
+					if (viewMode != ViewMode.COMPARE) {
+						final Iterator<?> itr = iStructuredSelection.iterator();
+						while (itr.hasNext()) {
+							Object o = itr.next();
+							if (o instanceof ChangeSetTableRow) {
+								o = ((ChangeSetTableRow) o).eContainer();
+							}
+							if (o instanceof ChangeSetTableGroup) {
+								final ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) o;
+
+								// Set the flag so we don't end up in compare mode.
+								if (inChangingChangeSetSelection.compareAndSet(false, true)) {
+									try {
+										// This is a bit inefficient if we are just changing selected row(s) rather than change set.
+										scenarioComparisonService.setSelection(newSelection);
+										scenarioComparisonService.setPinnedPair(changeSetTableGroup.getBaseScenario(), changeSetTableGroup.getCurrentScenario(), newSelection, true);
+									} finally {
+										inChangingChangeSetSelection.set(false);
+									}
+								}
+								break;
+							}
+						}
+					} else {
+						// Update selected elements
+						scenarioComparisonService.setSelection(newSelection);
 					}
 				}
 			}
@@ -890,7 +901,7 @@ public class ChangeSetView extends ViewPart {
 		final String secondaryId = getViewSite().getSecondaryId();
 		if (!"Dynamic".equals(secondaryId)) {
 			scenarioComparisonService.addListener(listener);
-			scenarioComparisonService.triggerListener(listener);
+			listener.selectedDataProviderChanged(scenarioComparisonService.getCurrentSelectedDataProvider(), false);
 		}
 		synchronized (postCreateActions) {
 			viewCreated = true;
@@ -1190,11 +1201,11 @@ public class ChangeSetView extends ViewPart {
 		}
 		this.currentViewState = null;
 
-		// The post selection from this view can be left in the e4 context somehow.
-		if (eSelectionService != null) {
-			eSelectionService.setPostSelection(new StructuredSelection());
-			eSelectionService = null;
-		}
+		// // The post selection from this view can be left in the e4 context somehow.
+		// if (eSelectionService != null) {
+		// eSelectionService.setPostSelection(new StructuredSelection());
+		// eSelectionService = null;
+		// }
 	}
 
 	@Override
@@ -1629,108 +1640,116 @@ public class ChangeSetView extends ViewPart {
 	private EventHandler eventHandlerCloseSolution;
 
 	public void openAnalyticsSolution(final AnalyticsSolution solution, @Nullable final String slotId) {
-		if (lastParent != null) {
-			lastParent.eAdapters().remove(adapter);
-		}
-		lastObject = null;
-		lastParent = null;
-		lastParentFeature = null;
 
-		this.viewMode = ViewMode.OLD_ACTION_SET;
+		// Set the flag so we do not end up in compare mode
+		inChangingChangeSetSelection.set(true);
+		try {
+			if (lastParent != null) {
+				lastParent.eAdapters().remove(adapter);
+			}
+			lastObject = null;
+			lastParent = null;
+			lastParentFeature = null;
 
-		final ScenarioInstance scenarioInstance = solution.getScenarioInstance();
-		final Object target = solution;
-		final EObject plan = solution.getSolution();
-		setPartName(solution.getTitle());
+			this.viewMode = ViewMode.OLD_ACTION_SET;
 
-		lastParent = plan.eContainer();
-		if (lastParent != null) {
-			lastObject = plan;
-			lastParentFeature = plan.eContainingFeature();
-			lastParent.eAdapters().add(adapter);
-		}
+			final ScenarioInstance scenarioInstance = solution.getScenarioInstance();
+			final Object target = solution;
+			final EObject plan = solution.getSolution();
+			setPartName(solution.getTitle());
 
-		// Do something?
-		if (plan instanceof OptimisationResult) {
-			setViewMode(ViewMode.GENERIC, false);
-			setNewDataData(target, (monitor, targetSlotId) -> {
-				final OptimisationResultPlanTransformer transformer = new OptimisationResultPlanTransformer();
-				// Sorting by Group as the label provider uses the provided ordering for
-				// indexing
-				final ViewState viewState = new ViewState(transformer.createDataModel(scenarioInstance, (OptimisationResult) plan, monitor), SortMode.BY_GROUP);
-				viewState.lastSolution = solution;
-				return viewState;
-			}, slotId);
-		} else if (plan instanceof SandboxResult) {
-			setViewMode(ViewMode.SANDBOX, ((SandboxResult) plan).isHasDualModeSolutions());
-			setNewDataData(target, (monitor, targetSlotId) -> {
-				final SandboxResultPlanTransformer transformer = new SandboxResultPlanTransformer();
-				insertionPlanFilter.setMaxComplexity(100);
+			lastParent = plan.eContainer();
+			if (lastParent != null) {
+				lastObject = plan;
+				lastParentFeature = plan.eContainingFeature();
+				lastParent.eAdapters().add(adapter);
+			}
 
-				final SandboxResult sandboxResult = (SandboxResult) plan;
-				// Sorting by Group as the label provider uses the provided ordering for
-				// indexing
-				final ViewState viewState = new ViewState(transformer.createDataModel(scenarioInstance, sandboxResult, monitor), SortMode.BY_PNL);
-				viewState.lastSolution = solution;
-				viewState.allTargetElements.clear();
-				// viewState.allTargetSlots.addAll(sandboxResult.getExtraSlots());
-				return viewState;
-			}, slotId);
-		} else if (plan instanceof ActionableSetPlan) {
-			setViewMode(ViewMode.NEW_ACTION_SET, false);
-			setNewDataData(target, (monitor, targetSlotId) -> {
-				final ActionableSetPlanTransformer transformer = new ActionableSetPlanTransformer();
-				final ViewState viewState = new ViewState(transformer.createDataModel(scenarioInstance, (ActionableSetPlan) plan, monitor), SortMode.BY_GROUP);
-				viewState.lastSolution = solution;
-				return viewState;
-			}, slotId);
-		} else if (plan instanceof SlotInsertionOptions) {
-			final SlotInsertionOptions slotInsertionOptions = (SlotInsertionOptions) plan;
-			setViewMode(ViewMode.INSERTIONS, slotInsertionOptions.isHasDualModeSolutions());
-			final int insertedObjects = slotInsertionOptions.getSlotsInserted().size() + slotInsertionOptions.getEventsInserted().size();
-			insertionPlanFilter.setMaxComplexity(2 + 2 * insertedObjects);
+			// Do something?
+			if (plan instanceof OptimisationResult) {
+				setViewMode(ViewMode.GENERIC, false);
+				setNewDataData(target, (monitor, targetSlotId) -> {
+					final OptimisationResultPlanTransformer transformer = new OptimisationResultPlanTransformer();
+					// Sorting by Group as the label provider uses the provided ordering for
+					// indexing
+					final ViewState viewState = new ViewState(transformer.createDataModel(scenarioInstance, (OptimisationResult) plan, monitor), SortMode.BY_GROUP);
+					viewState.lastSolution = solution;
+					return viewState;
+				}, slotId);
+			} else if (plan instanceof SandboxResult) {
+				setViewMode(ViewMode.SANDBOX, ((SandboxResult) plan).isHasDualModeSolutions());
+				setNewDataData(target, (monitor, targetSlotId) -> {
+					final SandboxResultPlanTransformer transformer = new SandboxResultPlanTransformer();
+					insertionPlanFilter.setMaxComplexity(100);
 
-			setNewDataData(target, (monitor, targetSlotId) -> {
+					final SandboxResult sandboxResult = (SandboxResult) plan;
+					// Sorting by Group as the label provider uses the provided ordering for
+					// indexing
+					final ViewState viewState = new ViewState(transformer.createDataModel(scenarioInstance, sandboxResult, monitor), SortMode.BY_PNL);
+					viewState.lastSolution = solution;
+					viewState.allTargetElements.clear();
+					// viewState.allTargetSlots.addAll(sandboxResult.getExtraSlots());
+					return viewState;
+				}, slotId);
+			} else if (plan instanceof ActionableSetPlan) {
+				setViewMode(ViewMode.NEW_ACTION_SET, false);
+				setNewDataData(target, (monitor, targetSlotId) -> {
+					final ActionableSetPlanTransformer transformer = new ActionableSetPlanTransformer();
+					final ViewState viewState = new ViewState(transformer.createDataModel(scenarioInstance, (ActionableSetPlan) plan, monitor), SortMode.BY_GROUP);
+					viewState.lastSolution = solution;
+					return viewState;
+				}, slotId);
+			} else if (plan instanceof SlotInsertionOptions) {
+				final SlotInsertionOptions slotInsertionOptions = (SlotInsertionOptions) plan;
+				setViewMode(ViewMode.INSERTIONS, slotInsertionOptions.isHasDualModeSolutions());
+				final int insertedObjects = slotInsertionOptions.getSlotsInserted().size() + slotInsertionOptions.getEventsInserted().size();
+				insertionPlanFilter.setMaxComplexity(2 + 2 * insertedObjects);
 
-				NamedObject pTargetSlot = null;
-				if (!slotInsertionOptions.getSlotsInserted().isEmpty()) {
-					Slot<?> targetSlot = slotInsertionOptions.getSlotsInserted().get(0);
-					if (slotId != null) {
-						for (final Slot<?> s : slotInsertionOptions.getSlotsInserted()) {
-							if (slotId.equals(s.getName())) {
-								targetSlot = s;
-								break;
+				setNewDataData(target, (monitor, targetSlotId) -> {
+
+					NamedObject pTargetSlot = null;
+					if (!slotInsertionOptions.getSlotsInserted().isEmpty()) {
+						Slot<?> targetSlot = slotInsertionOptions.getSlotsInserted().get(0);
+						if (slotId != null) {
+							for (final Slot<?> s : slotInsertionOptions.getSlotsInserted()) {
+								if (slotId.equals(s.getName())) {
+									targetSlot = s;
+									break;
+								}
 							}
 						}
-					}
-					pTargetSlot = targetSlot;
-				} else if (!slotInsertionOptions.getEventsInserted().isEmpty()) {
-					VesselEvent targetSlot = slotInsertionOptions.getEventsInserted().get(0);
-					if (slotId != null) {
-						for (final VesselEvent s : slotInsertionOptions.getEventsInserted()) {
-							if (slotId.equals(s.getName())) {
-								targetSlot = s;
-								break;
+						pTargetSlot = targetSlot;
+					} else if (!slotInsertionOptions.getEventsInserted().isEmpty()) {
+						VesselEvent targetSlot = slotInsertionOptions.getEventsInserted().get(0);
+						if (slotId != null) {
+							for (final VesselEvent s : slotInsertionOptions.getEventsInserted()) {
+								if (slotId.equals(s.getName())) {
+									targetSlot = s;
+									break;
+								}
 							}
 						}
+						pTargetSlot = targetSlot;
 					}
-					pTargetSlot = targetSlot;
-				}
-				final ViewState viewState = new ViewState(null, SortMode.BY_PNL_PER_CHANGE);
-				viewState.lastSolution = solution;
-				viewState.lastTargetElement = pTargetSlot;
-				viewState.allTargetElements.clear();
-				viewState.allTargetElements.addAll(slotInsertionOptions.getSlotsInserted());
-				viewState.allTargetElements.addAll(slotInsertionOptions.getEventsInserted());
+					final ViewState viewState = new ViewState(null, SortMode.BY_PNL_PER_CHANGE);
+					viewState.lastSolution = solution;
+					viewState.lastTargetElement = pTargetSlot;
+					viewState.allTargetElements.clear();
+					viewState.allTargetElements.addAll(slotInsertionOptions.getSlotsInserted());
+					viewState.allTargetElements.addAll(slotInsertionOptions.getEventsInserted());
 
-				final InsertionPlanTransformer transformer = new InsertionPlanTransformer();
-				final ChangeSetRoot newRoot = transformer.createDataModel(scenarioInstance, slotInsertionOptions, monitor, pTargetSlot);
+					final InsertionPlanTransformer transformer = new InsertionPlanTransformer();
+					final ChangeSetRoot newRoot = transformer.createDataModel(scenarioInstance, slotInsertionOptions, monitor, pTargetSlot);
 
-				viewState.postProcess = insertionPlanFilter.processChangeSetRoot(newRoot, pTargetSlot);
+					viewState.postProcess = insertionPlanFilter.processChangeSetRoot(newRoot, pTargetSlot);
 
-				viewState.root = newRoot;
-				return viewState;
-			}, slotId);
+					viewState.root = newRoot;
+					return viewState;
+				}, slotId);
+			}
+
+		} finally {
+			inChangingChangeSetSelection.set(false);
 		}
 	}
 
@@ -1754,11 +1773,13 @@ public class ChangeSetView extends ViewPart {
 		final ViewState viewState = currentViewState;
 		if (viewState != null && viewState.lastSolution != null //
 				&& ((viewState.lastSolution == solution) || (viewState.lastSolution.getSolution() == solution.getSolution()))) {
+			setViewMode(ViewMode.COMPARE, false);
+
 			setEmptyData();
-			// Close view if dynamic
-			if (viewMode != ViewMode.COMPARE) {
-				getSite().getPage().hideView(ChangeSetView.this);
-			}
+			// // Close view if dynamic
+			// if (viewMode != ViewMode.COMPARE) {
+			// getSite().getPage().hideView(ChangeSetView.this);
+			// }
 		}
 	}
 
@@ -1808,9 +1829,10 @@ public class ChangeSetView extends ViewPart {
 	}
 
 	private void setViewMode(final ViewMode viewMode, final boolean dualPNLMode) {
+
 		// Defaults
 		this.viewMode = viewMode;
-		handleEvents = false;
+		// handleEvents = false;
 		canExportChangeSet = true;
 		showNegativePNLChanges = true;
 		insertionPlanFilter.setInsertionModeActive(false);
@@ -1829,7 +1851,7 @@ public class ChangeSetView extends ViewPart {
 		switch (viewMode) {
 		case COMPARE:
 			showAlternativeChangeModel = false;
-			handleEvents = true;
+			// handleEvents = true;
 			canExportChangeSet = false;
 			break;
 		case INSERTIONS:

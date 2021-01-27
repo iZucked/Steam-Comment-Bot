@@ -16,9 +16,9 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
-import com.mmxlabs.scenario.service.ui.internal.ScenarioServiceSelectionProvider;
 
 /**
  * Command handler which sets/clears the pin on a scenario.
@@ -41,11 +41,11 @@ public class PinScenarioCommandHandler extends AbstractHandler {
 						final Object element = iterator.next();
 						if (element instanceof ScenarioInstance) {
 							final ScenarioInstance scenarioInstance = (ScenarioInstance) element;
-							ScenarioServiceSelectionProvider provider = Activator.getDefault().getScenarioServiceSelectionProvider();
+							IScenarioServiceSelectionProvider provider = Activator.getDefault().getScenarioServiceSelectionProvider();
 							if (provider.isPinned(scenarioInstance)) {
-								provider.setPinnedInstance((ScenarioResult) null);
+								provider.setPinned((ScenarioResult) null, false);
 							} else {
-								provider.setPinnedInstance(scenarioInstance);
+								provider.setPinned(new ScenarioResult(scenarioInstance), false);
 							}
 						}
 					}

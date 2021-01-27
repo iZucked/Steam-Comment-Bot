@@ -207,7 +207,6 @@ public class Application implements IApplication {
 							}
 						});
 					} else {
-
 						ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, p -> {
 							if (p != null) {
 								final Cipher sharedCipher = p.getSharedCipher();
@@ -223,7 +222,7 @@ public class Application implements IApplication {
 
 					// Data file manipulation complete, allow startup to continue.
 					WellKnownTriggers.WORKSPACE_DATA_ENCRYPTION_CHECK.fireTrigger();
-
+					
 					final int returnCode = PlatformUI.createAndRunWorkbench(display, new ApplicationWorkbenchAdvisor(processor));
 					if (returnCode == PlatformUI.RETURN_RESTART) {
 						return IApplication.EXIT_RESTART;

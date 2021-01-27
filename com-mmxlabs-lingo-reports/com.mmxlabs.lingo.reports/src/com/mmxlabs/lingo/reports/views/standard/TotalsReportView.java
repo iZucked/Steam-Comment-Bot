@@ -5,7 +5,6 @@
 package com.mmxlabs.lingo.reports.views.standard;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -49,7 +48,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
-import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.views.standard.TotalsTransformer.RowData;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -63,9 +62,9 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class TotalsReportView extends ViewPart {
 
-	private SelectedScenariosService selectedScenariosService;
+	private ScenarioComparisonService selectedScenariosService;
 
-	private final ArrayList<Integer> sortColumns = new ArrayList<Integer>(4);
+	private final ArrayList<Integer> sortColumns = new ArrayList<>(4);
 
 	private boolean inverseSort = false;
 	/**
@@ -84,11 +83,10 @@ public class TotalsReportView extends ViewPart {
 	private GridViewerColumn scheduleColumnViewer;
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
-
 		private final TotalsTransformer transformer = new TotalsTransformer();
 
 		@Override
-		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others, final boolean block) {
+		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
 
 			final Runnable r = new Runnable() {
 				@Override
@@ -96,6 +94,7 @@ public class TotalsReportView extends ViewPart {
 					final List<Object> rowElements = new LinkedList<>();
 					int numberOfSchedules = 0;
 					List<RowData> pinnedData = null;
+					ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
 					if (pinned != null) {
 						ScheduleModel scheduleModel = pinned.getTypedResult(ScheduleModel.class);
 						if (scheduleModel != null) {
@@ -107,7 +106,7 @@ public class TotalsReportView extends ViewPart {
 							}
 						}
 					}
-					for (final ScenarioResult other : others) {
+					for (final ScenarioResult other : selectedDataProvider.getOtherScenarioResults()) {
 						ScheduleModel scheduleModel = other.getTypedResult(ScheduleModel.class);
 						if (scheduleModel != null) {
 							final Schedule schedule = scheduleModel.getSchedule();
@@ -275,7 +274,7 @@ public class TotalsReportView extends ViewPart {
 	@Override
 	public void createPartControl(final Composite parent) {
 
-		selectedScenariosService = (SelectedScenariosService) getSite().getService(SelectedScenariosService.class);
+		selectedScenariosService = getSite().getService(ScenarioComparisonService.class);
 
 		viewer = new GridTableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		GridViewerHelper.configureLookAndFeel(viewer);

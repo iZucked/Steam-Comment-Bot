@@ -290,6 +290,9 @@ public class NominationsModelUtils {
 		if (cargoModel == null) {
 			return Collections.emptyList();
 		}
+		if (cargoModel != null) {
+			return Collections.emptyList();
+		}
 
 		// Generate the nominations.
 		final List<AbstractNomination> nominations = new ArrayList<>();
