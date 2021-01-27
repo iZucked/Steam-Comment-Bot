@@ -14,14 +14,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import org.eclipse.e4.core.contexts.IEclipseContext;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -37,13 +36,16 @@ import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IReportContentsGenerator;
+import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ReportContents;
 import com.mmxlabs.lingo.reports.components.GroupAlternatingRowCellRenderer;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
+import com.mmxlabs.lingo.reports.services.IScenarioComparisonServiceListener;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.views.AbstractConfigurableGridReportView;
@@ -57,15 +59,19 @@ import com.mmxlabs.lingo.reports.views.fleet.extpoint.IFleetBasedReportInitialSt
 import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
+import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
+import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
-import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
+import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * A customisable report for fleet based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available for
@@ -97,6 +103,9 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 
 	@Inject
 	private ScenarioComparisonService scenarioComparisonService;
+
+	@Inject
+	private SelectedScenariosService selectedScenariosService;
 
 	/*
 	 * Field to allow subclasses of specific reports to only include visible columns rather than everything
@@ -143,7 +152,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 					}
 
 					if (e1 instanceof CompositeRow) {
-						final CompositeRow tmp = ((CompositeRow) e1);
+						CompositeRow tmp = ((CompositeRow) e1);
 
 						if (tmp.getPreviousRow() != null) {
 							g1 = tmp.getPreviousRow().getRowGroup();
@@ -157,7 +166,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 					}
 
 					if (e2 instanceof CompositeRow) {
-						final CompositeRow tmp = ((CompositeRow) e2);
+						CompositeRow tmp = ((CompositeRow) e2);
 
 						if (tmp.getPreviousRow() != null) {
 							g2 = tmp.getPreviousRow().getRowGroup();
@@ -181,11 +190,11 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 					}
 
 					if (g1 == g2 && g1 != null) {
-						final int res = vc.compare(viewer, e1, e2);
+						int res = vc.compare(viewer, e1, e2);
 
 						if (e1 instanceof Row && e2 instanceof Row) {
-							final Row r1 = (Row) e1;
-							final Row r2 = (Row) e2;
+							Row r1 = (Row) e1;
+							Row r2 = (Row) e2;
 
 							if (!(r1.isReference() && r2.isReference())) {
 								if (r1.isReference()) {
@@ -215,17 +224,17 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 
 	}
 
-	public void setDiffMode(final boolean enabled) {
+	public void setDiffMode(boolean enabled) {
 
 		if (enabled) {
-			final GridColumn[] columns = viewer.getGrid().getColumns();
-			for (final GridColumn column : columns) {
+			GridColumn[] columns = viewer.getGrid().getColumns();
+			for (GridColumn column : columns) {
 				column.setCellRenderer(new GroupAlternatingRowCellRenderer());
 			}
 			viewer.setComparator(getGroupDeltaComparator());
 		} else {
-			final GridColumn[] columns = viewer.getGrid().getColumns();
-			for (final GridColumn column : columns) {
+			GridColumn[] columns = viewer.getGrid().getColumns();
+			for (GridColumn column : columns) {
 				column.setCellRenderer(new DefaultCellRenderer());
 				if (defaultViewerComparator != null) {
 					viewer.setComparator(defaultViewerComparator);
@@ -246,7 +255,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 
 				if (includeAllColumnsForITS) {
 					// Sort columns by ID
-					final List<String> blockIDOrder = new ArrayList<>(getBlockManager().getBlockIDOrder());
+					List<String> blockIDOrder = new ArrayList<>(getBlockManager().getBlockIDOrder());
 					Collections.sort(blockIDOrder);
 					getBlockManager().setBlockIDOrder(blockIDOrder);
 				}
@@ -275,7 +284,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 
 				if (includeAllColumnsForITS) {
 					// Sort columns by ID
-					final List<String> blockIDOrder = new ArrayList<>(getBlockManager().getBlockIDOrder());
+					List<String> blockIDOrder = new ArrayList<>(getBlockManager().getBlockIDOrder());
 					Collections.sort(blockIDOrder);
 					getBlockManager().setBlockIDOrder(blockIDOrder);
 				}
@@ -292,20 +301,20 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 					}
 				}
 			}
-			// return (T) new IReportContentsGenerator() {
-			// public String getStringContents(final ScenarioResult pin, final ScenarioResult other) {
-			//
-			// final ISelectedDataProvider provider = scenarioComparisonService.getCurrentSelectedDataProvider();
-			// if (provider != null) {
-			// scenarioComparisonServiceListener.compareDataUpdate(provider, pin, other, new ArrayList<LNGScenarioModel>());
-			// }
-			// final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
-			//
-			// final String contents = util.convert();
-			//
-			// return "<meta charset=\"UTF-8\"/>" + contents;
-			// }
-			// };
+			return (T) new IReportContentsGenerator() {
+				public String getStringContents(final ScenarioResult pin, final ScenarioResult other) {
+					
+					final ISelectedDataProvider provider = selectedScenariosService.getCurrentSelectedDataProvider();
+					if (provider != null) {
+						scenarioComparisonServiceListener.compareDataUpdate(provider, pin, other, table, new ArrayList<LNGScenarioModel>(), new HashMap<EObject, Set<EObject>>());
+					}
+					final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
+
+					final String contents = util.convert();
+					
+					return "<meta charset=\"UTF-8\"/>" + contents;
+				}
+			};
 		}
 
 		return super.getAdapter(adapter);
@@ -336,36 +345,18 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 		return true;
 	}
 
-	private final ISelectedScenariosServiceListener scenarioComparisonServiceListener = new ISelectedScenariosServiceListener() {
+	private final IScenarioComparisonServiceListener scenarioComparisonServiceListener = new IScenarioComparisonServiceListener() {
 
 		@Override
-		public void selectedDataProviderChanged(@NonNull final ISelectedDataProvider selectedDataProvider, final boolean block) {
+		public void compareDataUpdate(@NonNull final ISelectedDataProvider selectedDataProvider, @NonNull final ScenarioResult pin, @NonNull final ScenarioResult other, @NonNull final Table table,
+				@NonNull final List<LNGScenarioModel> rootObjects, @NonNull final Map<EObject, Set<EObject>> equivalancesMap) {
+			selectedScenariosServiceListener.selectionChanged(selectedDataProvider, pin, Collections.singleton(other), false);
+		}
 
-			final TransformedSelectedDataProvider newSelectedDataProvider = new TransformedSelectedDataProvider(selectedDataProvider);
-			final Runnable r = () -> {
-				setCurrentSelectedDataProvider(newSelectedDataProvider);
-
-				final boolean isMultiple = newSelectedDataProvider.getAllScenarioResults().size() > 1;
-				final boolean inPinDiffMode = newSelectedDataProvider.inPinDiffMode();
-
-				for (final ColumnBlock handler : builder.getBlockManager().getBlocksInVisibleOrder()) {
-					if (handler != null) {
-						handler.setViewState(isMultiple, inPinDiffMode);
-					}
-				}
-				final FleetReportTransformer transformer = new FleetReportTransformer(builder);
-				final List<Object> rows;
-				if (inPinDiffMode) {
-					rows = transformer.generatePinDiffRows(selectedDataProvider.getPinnedScenarioResult(), selectedDataProvider.getOtherScenarioResults().get(0));
-				} else {
-					rows = transformer.generateSimpleRows(selectedDataProvider.getAllScenarioResults());
-				}
-
-				setDiffMode(inPinDiffMode);
-				ViewerHelper.setInput(viewer, true, rows);
-			};
-
-			RunnerHelper.exec(r, false);
+		@Override
+		public void multiDataUpdate(@NonNull final ISelectedDataProvider selectedDataProvider, @NonNull final Collection<ScenarioResult> others, @NonNull final Table table,
+				@NonNull final List<LNGScenarioModel> rootObjects) {
+			selectedScenariosServiceListener.selectionChanged(selectedDataProvider, null, others, false);
 		}
 
 		@Override
@@ -373,27 +364,75 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 			ViewerHelper.refresh(viewer, true);
 		}
 
+	};
+
+	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
+
 		@Override
-		public void selectedObjectChanged(final MPart source, final ISelection selection) {
-			if (scenarioComparisonService.getDiffOptions().isFilterSelectedSequences()) {
-				ViewerHelper.refresh(viewer, false);
-			}
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others, final boolean block) {
+
+			final Runnable r = new Runnable() {
+				@Override
+				public void run() {
+					final Table table = ScheduleReportFactory.eINSTANCE.createTable();
+
+					final FleetReportTransformer transformer = new FleetReportTransformer(table, builder);
+					final IScenarioInstanceElementCollector elementCollector = transformer.getElementCollector(ConfigurableFleetReportView.this);
+
+					elementCollector.beginCollecting(pinned != null);
+					if (pinned != null) {
+						elementCollector.collectElements(pinned, true);
+					}
+					for (final ScenarioResult other : others) {
+						elementCollector.collectElements(other, false);
+					}
+					elementCollector.endCollecting();
+
+					setCurrentSelectedDataProvider(new TransformedSelectedDataProvider(selectedDataProvider));
+
+					int numberOfRow = table.getRows().size();
+					if (pinned != null) {
+						numberOfRow += table.getCompositeRows().size();// + 1; FM removed extra row
+					}
+
+					List<Object> rows = new ArrayList<>(numberOfRow);
+
+					if ((pinned != null && !diffMode) || (pinned == null)) {
+						rows.addAll(table.getRows());
+					}
+
+					if (pinned != null) {
+						List<CompositeRow> compositeRows = new ArrayList<>(table.getCompositeRowsWithPartials());
+
+						createDeltaRowGroup(compositeRows);
+
+						rows.addAll(compositeRows);
+						rows.add(compositeRows);
+
+						setDiffMode(!diffMode);
+					} else {
+						setDiffMode(false);
+					}
+
+					ViewerHelper.setInput(viewer, true, rows);
+				}
+			};
+
+			RunnerHelper.exec(r, block);
 		}
 	};
 
 	@Override
 	public void initPartControl(final Composite parent) {
 
-		final IEclipseContext e4Context = getSite().getService(IEclipseContext.class);
-		this.scenarioComparisonService = e4Context.getActive(ScenarioComparisonService.class);
-
 		super.initPartControl(parent);
 
 		scenarioComparisonService.addListener(scenarioComparisonServiceListener);
+
 		// Add diff button
-		final Action action = new DiffAction(viewer, this);
-		final IActionBars actionBars = getViewSite().getActionBars();
-		final IToolBarManager toolBar = actionBars.getToolBarManager();
+		Action action = new DiffAction(viewer, this);
+		IActionBars actionBars = getViewSite().getActionBars();
+		IToolBarManager toolBar = actionBars.getToolBarManager();
 		toolBar.add(action);
 
 		viewer.setContentProvider(new ArrayContentProvider());
@@ -404,69 +443,37 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 			@Override
 			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 
-				final Collection<Object> selectedElements = currentSelectedDataProvider.getSelectedObjects();
-
+				final Collection<Object> selectedElements = scenarioComparisonService.getSelectedElements();
 				if (scenarioComparisonService.getDiffOptions().isFilterSelectedSequences() && !selectedElements.isEmpty()) {
 
 					if (element instanceof CompositeRow) {
-						{
-							final Row row = ((CompositeRow) element).getPreviousRow();
-							if (row != null) {
-								final Sequence sequence = row.getSequence();
-								if (checkVesselNameAndCharterNumberEquality(sequence, selectedElements)) {
-									return true;
-								}
-
-								if (selectedElements.contains(sequence)) {
-									return true;
-								}
+						final Row row = ((CompositeRow) element).getPreviousRow();
+						if (row != null) {
+							final Sequence sequence = row.getSequence();
+							if (checkVesselNameAndCharterNumberEquality(sequence, selectedElements)) {
+								return true;
 							}
 
-						}
-						{
-							final Row row = ((CompositeRow) element).getPinnedRow();
-							if (row != null) {
-								final Sequence sequence = row.getSequence();
-								if (checkVesselNameAndCharterNumberEquality(sequence, selectedElements)) {
-									return true;
-								}
-
-								if (selectedElements.contains(sequence)) {
-									return true;
-								}
+							if (!selectedElements.contains(sequence)) {
+								return false;
 							}
-
 						}
-						return false;
 					} else if (element instanceof Row) {
 						final Row row = (Row) element;
-
-						if (diffMode) {
-							return false;
-						}
-						//
-
 						final Sequence sequence = row.getSequence();
-						//
+
 						if (checkVesselNameAndCharterNumberEquality(sequence, selectedElements)) {
 							return true;
 						}
 
-						if (selectedElements.contains(sequence)) {
-							return true;
+						if (!selectedElements.contains(sequence)) {
+							return false;
 						}
-
-						return false;
 					}
 				}
 
 				if (element instanceof Row) {
 					final Row row = (Row) element;
-					//
-					if (diffMode) {
-						return false;
-					}
-					//
 					// Filter out reference scenario if required
 					if (!builder.getDiffFilterInfo().contains(AbstractReportBuilder.DIFF_FILTER_PINNDED_SCENARIO.id)) {
 						if (row.isReference()) {
@@ -478,27 +485,14 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 				}
 
 				if (element instanceof CompositeRow) {
-					{
-						final Row row = ((CompositeRow) element).getPreviousRow();
-						if (row != null) {
-							final Sequence sequence = row.getSequence();
-							if (selectedElements.contains(sequence)) {
-								return true;
-							}
-						}
-					}
-					{
-						final Row row = ((CompositeRow) element).getPinnedRow();
-						if (row != null) {
-							final Sequence sequence = row.getSequence();
-							if (selectedElements.contains(sequence)) {
-								return true;
-							}
-						}
+					Row row = ((CompositeRow) element).getPreviousRow();
+					if (row == null) {
+						row = ((CompositeRow) element).getPinnedRow();
 					}
 
-					return false;
-
+					if (row != null) {
+						return true;
+					}
 				}
 
 				return true;
@@ -507,20 +501,20 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 
 		// Try and set initial selection. Do not abort on exceptions
 		try {
-
-			triggerSeletedScenariosServiceListener();
-		} catch (final Exception e) {
+			scenarioComparisonService.triggerListener(scenarioComparisonServiceListener);
+		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 		}
 	}
 
 	public void triggerSeletedScenariosServiceListener() {
-		scenarioComparisonService.triggerListener(scenarioComparisonServiceListener, false);
+		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 	}
 
 	@Override
 	public void dispose() {
 		scenarioComparisonService.removeListener(scenarioComparisonServiceListener);
+
 		super.dispose();
 	}
 
@@ -685,32 +679,33 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 		manager.addColumns(FleetBasedReportBuilder.FLEET_REPORT_TYPE_ID, getBlockManager());
 	}
 
-	// private void createDeltaRowGroup(List<CompositeRow> compositeRows) {
-	// for (CompositeRow compositeRow : compositeRows) {
-	// RowGroup rowGroup = ScheduleReportFactory.eINSTANCE.createRowGroup();
-	//
-	// Row previousRow = compositeRow.getPreviousRow();
-	// Row pinnedRow = compositeRow.getPinnedRow();
-	//
-	// if (previousRow != null) {
-	// previousRow.setRowGroup(rowGroup);
-	// }
-	//
-	// if (pinnedRow != null) {
-	// pinnedRow.setRowGroup(rowGroup);
-	// }
-	// }
-	// }
-	//
-	private boolean checkVesselNameAndCharterNumberEquality(final Sequence sequence, final Collection<Object> selectedElement) {
-		final Pair<String, Integer> v1 = getVesselNameAndCharterNumber(sequence);
+	private void createDeltaRowGroup(List<CompositeRow> compositeRows) {
+		for (CompositeRow compositeRow : compositeRows) {
+			RowGroup rowGroup = ScheduleReportFactory.eINSTANCE.createRowGroup();
+
+			Row previousRow = compositeRow.getPreviousRow();
+			Row pinnedRow = compositeRow.getPinnedRow();
+
+			if (previousRow != null) {
+				previousRow.setRowGroup(rowGroup);
+			}
+
+			if (pinnedRow != null) {
+				pinnedRow.setRowGroup(rowGroup);
+			}
+		}
+	}
+
+	private boolean checkVesselNameAndCharterNumberEquality(Sequence sequence, Collection<Object> selectedElement) {
+		Pair<String, Integer> v1 = getVesselNameAndCharterNumber(sequence);
 		if (v1 != null) {
-			for (final Object object : selectedElement) {
+			for (Object object : selectedElement) {
 				if (object instanceof Sequence) {
-					final Sequence selectedSequence = (Sequence) object;
-					final Pair<String, Integer> v2 = getVesselNameAndCharterNumber(selectedSequence);
+					Sequence selectedSequence = (Sequence) object;
+					Pair<String, Integer> v2 = getVesselNameAndCharterNumber(selectedSequence);
 					if (v2 != null) {
-						return v1.getFirst().equals(v2.getFirst()) && v1.getSecond().equals(v2.getSecond());
+						return v1.getFirst().equals(v2.getFirst())
+								&& v1.getSecond().equals(v2.getSecond());
 					}
 				}
 			}
@@ -718,7 +713,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 		return false;
 	}
 
-	private Pair<String, Integer> getVesselNameAndCharterNumber(final Sequence sequence) {
+	private Pair<String, Integer> getVesselNameAndCharterNumber(Sequence sequence) {
 		if (sequence != null) {
 			final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
 			if (vesselAvailability != null) {
@@ -726,23 +721,13 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 				if (vessel != null) {
 					return Pair.of(vessel.getName(), vesselAvailability.getCharterNumber());
 				}
-			} else {
-				final CharterInMarket charterInMarket = sequence.getCharterInMarket();
-				if (charterInMarket != null) {
-					return Pair.of(charterInMarket.getName(), sequence.getSpotIndex());
-				}
 			}
 		}
 		return null;
 	}
-
+	
 	@Override
 	protected boolean refreshOnSelectionChange() {
 		return true;
-	}
-
-	@Override
-	protected DiffingGridTableViewerColumnFactory createColumnFactory() {
-		return new DiffingGridTableViewerColumnFactory(viewer, sortingSupport, filterSupport, () -> copyPasteMode, this::applyColour);
 	}
 }

@@ -77,7 +77,6 @@ public class CompositeRowImpl extends MinimalEObjectImpl.Container implements Co
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Row getPreviousRow() {
 		if (previousRow != null && previousRow.eIsProxy()) {
 			InternalEObject oldPreviousRow = (InternalEObject)previousRow;
@@ -104,7 +103,6 @@ public class CompositeRowImpl extends MinimalEObjectImpl.Container implements Co
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setPreviousRow(Row newPreviousRow) {
 		Row oldPreviousRow = previousRow;
 		previousRow = newPreviousRow;
@@ -117,7 +115,6 @@ public class CompositeRowImpl extends MinimalEObjectImpl.Container implements Co
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public Row getPinnedRow() {
 		if (pinnedRow != null && pinnedRow.eIsProxy()) {
 			InternalEObject oldPinnedRow = (InternalEObject)pinnedRow;
@@ -144,7 +141,6 @@ public class CompositeRowImpl extends MinimalEObjectImpl.Container implements Co
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setPinnedRow(Row newPinnedRow) {
 		Row oldPinnedRow = pinnedRow;
 		pinnedRow = newPinnedRow;

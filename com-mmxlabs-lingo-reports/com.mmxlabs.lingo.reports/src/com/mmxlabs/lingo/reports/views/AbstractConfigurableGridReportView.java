@@ -13,6 +13,7 @@ import java.util.Optional;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
@@ -59,6 +60,7 @@ import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.mmxlabs.common.Equality;
+import com.mmxlabs.lingo.reports.components.DiffingGridTableViewerColumnFactory;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.preferences.PreferenceConstants;
 import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
@@ -68,6 +70,9 @@ import com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport;
 import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
+import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
+import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
+import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerFilterSupport;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
@@ -75,14 +80,13 @@ import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
-import com.mmxlabs.models.ui.tabular.columngeneration.GridTableViewerColumnFactory;
-import com.mmxlabs.models.ui.tabular.columngeneration.IColumnFactory;
 import com.mmxlabs.models.ui.tabular.columngeneration.IColumnInfoProvider;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
+import com.mmxlabs.rcp.common.ecore.SafeEContentAdapter;
 import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceNavigator;
 
@@ -180,9 +184,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 						} else if (tmp.getPinnedRow() != null) {
 							g1 = tmp.getPinnedRow().getRowGroup();
 							e1 = tmp.getPinnedRow();
-						}						
-						if (g1 == null && tmp.getPinnedRow() != null) {
-							g1 = tmp.getPinnedRow().getRowGroup();
 						}
 					}
 
@@ -195,9 +196,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 						} else if (tmp.getPinnedRow() != null) {
 							g2 = tmp.getPinnedRow().getRowGroup();
 							e2 = tmp.getPinnedRow();
-						}
-						if (g2 == null && tmp.getPinnedRow() != null) {
-							g2 = tmp.getPinnedRow().getRowGroup();
 						}
 					}
 					if (e1 instanceof List) {
@@ -279,7 +277,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 			getBlockManager().setGrid(viewer.getGrid());
 
-			getBlockManager().setColumnFactory(createColumnFactory());
+			getBlockManager().setColumnFactory(new DiffingGridTableViewerColumnFactory(viewer, sortingSupport, filterSupport, () -> copyPasteMode, this::applyColour));
 
 			viewer.getGrid().setLayoutData(new GridData(GridData.FILL_BOTH));
 
@@ -306,6 +304,25 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 			viewer.getGrid().setHeaderVisible(true);
 			viewer.getGrid().setLinesVisible(true);
+
+			// table = ScheduleReportFactory.eINSTANCE.createTable();
+			table = ScheduleReportFactory.eINSTANCE.createTable();
+			// Create default options
+			table.setOptions(ScheduleReportFactory.eINSTANCE.createDiffOptions());
+
+			table.eAdapters().add(new SafeEContentAdapter() {
+				@Override
+				public void safeNotifyChanged(final Notification notification) {
+					if (notification.getFeature() == ScheduleReportPackage.Literals.DIFF_OPTIONS__FILTER_SELECTED_ELEMENTS) {
+						viewer.refresh();
+					}
+					if (notification.getFeature() == ScheduleReportPackage.Literals.TABLE__SELECTED_ELEMENTS) {
+						if (table.getOptions().isFilterSelectedElements()) {
+							viewer.refresh();
+						}
+					}
+				}
+			});
 
 			for (final ColumnHandler handler : getBlockManager().getHandlersInOrder()) {
 				final GridColumn column = handler.createColumn().getColumn();
@@ -348,10 +365,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			}
 		}
 
-	}
-
-	protected IColumnFactory createColumnFactory() {
-		return new GridTableViewerColumnFactory(viewer, sortingSupport, filterSupport, this::applyColour);
 	}
 
 	protected abstract void registerReportColumns();
@@ -664,7 +677,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 	private final HashMap<Object, Object> equivalents = new HashMap<>();
 	private final HashSet<Object> contents = new HashSet<>();
-//	protected Table table;
+	protected Table table;
 	protected boolean copyPasteMode;
 
 	public void setInputEquivalents(final Object input, final Collection<? extends Object> objectEquivalents) {

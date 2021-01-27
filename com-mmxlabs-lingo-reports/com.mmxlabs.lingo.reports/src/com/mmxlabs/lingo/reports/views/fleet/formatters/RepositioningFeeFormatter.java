@@ -4,7 +4,10 @@
  */
 package com.mmxlabs.lingo.reports.views.fleet.formatters;
 
+import java.util.List;
+
 import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
+import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -13,28 +16,47 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
 public class RepositioningFeeFormatter extends CostFormatter {
 
-	public RepositioningFeeFormatter(final boolean includeUnits) {
+	public RepositioningFeeFormatter(boolean includeUnits) {
 		super(includeUnits);
 	}
 
-	public RepositioningFeeFormatter(final boolean includeUnits, final Type type) {
+	public RepositioningFeeFormatter(boolean includeUnits, Type type) {
 		super(includeUnits, type);
 	}
 
 	@Override
-	public Integer getIntValue(final Object object) {
-		return SequenceGrabber.applyToSequences(object, this::getRepositioningFee);
+	public Integer getIntValue(Object object) {
+
+		if (object instanceof Row) {
+			object = ((Row) object).getSequence();
+		}
+		int repositioningFee = 0;
+		if (object instanceof Sequence) {
+			Sequence sequence = (Sequence) object;
+			repositioningFee += getRepositioningFee(sequence);
+		} else if (object instanceof List) {
+			List objects = (List) object;
+			if (objects.size() > 0) {
+				for (Object o : objects) {
+					if (o instanceof Sequence) {
+						repositioningFee += getRepositioningFee((Sequence) o);
+					}
+				}
+			}
+		}
+
+		return repositioningFee;
 	}
 
-	private int getRepositioningFee(final Sequence sequence) {
+	private int getRepositioningFee(Sequence sequence) {
 		int repositioningFee = 0;
-		for (final Event evt : sequence.getEvents()) {
+		for (Event evt : sequence.getEvents()) {
 			if (evt instanceof StartEvent) {
-				final StartEvent startEvent = (StartEvent) evt;
+				StartEvent startEvent = (StartEvent) evt;
 				repositioningFee += startEvent.getRepositioningFee();
 			} else {
 				if (evt instanceof VesselEventVisit) {
-					final VesselEventVisit vesselEventVisit = (VesselEventVisit) evt;
+					VesselEventVisit vesselEventVisit = (VesselEventVisit) evt;
 					if (vesselEventVisit.getVesselEvent() instanceof CharterOutEvent) {
 						final CharterOutEvent charterOutEvent = (CharterOutEvent) vesselEventVisit.getVesselEvent();
 						repositioningFee -= charterOutEvent.getRepositioningFee();

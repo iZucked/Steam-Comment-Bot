@@ -6,6 +6,7 @@ package com.mmxlabs.lingo.its.tests.microcases.compare;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -26,17 +27,21 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
+import com.mmxlabs.lingo.reports.services.ScenarioComparisonServiceTransformer;
 import com.mmxlabs.lingo.reports.services.SelectedDataProviderImpl;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
+import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetToTableTransformer;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetToTableTransformer.SortMode;
-import com.mmxlabs.lingo.reports.views.changeset.PinDiffResultPlanTransformer;
+import com.mmxlabs.lingo.reports.views.changeset.ScenarioComparisonTransformer;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
+import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
+import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -660,8 +665,18 @@ public class CompareViewTests {
 					selectedDataProvider.addScenario(otherResult, ScenarioModelUtil.getScheduleModel(to).getSchedule(), getChildren.apply(to));
 					selectedDataProvider.setPinnedScenarioInstance(pinnedResult);
 
-					final PinDiffResultPlanTransformer transformer = new PinDiffResultPlanTransformer();
-					final ChangeSetRoot root = transformer.createDataModel(pinnedResult, otherResult, new NullProgressMonitor());
+					final ScheduleDiffUtils scheduleDiffUtils = new ScheduleDiffUtils();
+					final Collection<ScenarioResult> others = Collections.singleton(otherResult);
+					final ScenarioComparisonServiceTransformer.TransformResult result = ScenarioComparisonServiceTransformer.transform(pinnedResult, others, selectedDataProvider, scheduleDiffUtils,
+							customRelatedSlotHandlers);
+					final Table table = result.table;
+					table.setOptions(ScheduleReportFactory.eINSTANCE.createDiffOptions());
+
+					// Take a copy of current diff options
+					// table.setOptions(EcoreUtil.copy(diffOptions));
+					// selectedDataProvider, pinned, others.iterator().next(), table, result.rootObjects, result.equivalancesMap);
+					final ScenarioComparisonTransformer transformer = new ScenarioComparisonTransformer();
+					final ChangeSetRoot root = transformer.createDataModel(table, pinnedResult, otherResult, new NullProgressMonitor());
 
 					resultChecker.accept(root);
 

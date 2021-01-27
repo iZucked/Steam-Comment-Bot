@@ -10,13 +10,10 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-
-
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
-
 import com.mmxlabs.lingo.reports.modelbased.annotations.LingoEquivalents;
 
 public class DefaultModelBasedSelectionMapper<M> implements IModelBasedSelectionMapper<M> {

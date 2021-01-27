@@ -117,7 +117,7 @@ public class ChangeSetViewCreatorService {
 				final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 				try {
 					// No colon in id strings
-					final IViewPart part = activePage.showView(ReportsConstants.VIEW_COMPARE_SCENARIOS_ID, null, IWorkbenchPage.VIEW_VISIBLE);
+					final IViewPart part = activePage.showView(ReportsConstants.VIEW_OPTIMISATIONS_ID, null, IWorkbenchPage.VIEW_VISIBLE);
 					if (part instanceof ChangeSetView) {
 						final ChangeSetView changeSetView = (ChangeSetView) part;
 						changeSetView.openAnalyticsSolution(solution);

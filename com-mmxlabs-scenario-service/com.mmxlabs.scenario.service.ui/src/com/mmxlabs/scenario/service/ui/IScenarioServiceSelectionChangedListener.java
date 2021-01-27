@@ -16,20 +16,20 @@ import org.eclipse.jdt.annotation.Nullable;
  * 
  */
 public interface IScenarioServiceSelectionChangedListener {
-//	/**
-//	 * Notify listener of deselected set of scenarios. If block is true, do not return until UI is fully refreshed.
-//	 */
-//	void deselected( final Collection<ScenarioResult> deselected, boolean block);
-//
-//	/**
-//	 * Notify listener of selected set of scenarios. If block is true, do not return until UI is fully refreshed.
-//	 */
-//	void selected(  final Collection<ScenarioResult> selected, boolean block);
-//
-//	/**
-//	 * Notify listener of pinned scenario. If block is true, do not return until UI is fully refreshed.
-//	 */
-//	void pinned( final ScenarioResult oldPin, final ScenarioResult newPin, boolean block);
+	/**
+	 * Notify listener of deselected set of scenarios. If block is true, do not return until UI is fully refreshed.
+	 */
+	void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioResult> deselected, boolean block);
 
-	void selectionChanged(@Nullable ScenarioResult pinned, @NonNull Collection<ScenarioResult> others );
+	/**
+	 * Notify listener of selected set of scenarios. If block is true, do not return until UI is fully refreshed.
+	 */
+	void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioResult> selected, boolean block);
+
+	/**
+	 * Notify listener of pinned scenario. If block is true, do not return until UI is fully refreshed.
+	 */
+	void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioResult oldPin, final ScenarioResult newPin, boolean block);
+
+	void selectionChanged(@Nullable ScenarioResult pinned, @NonNull Collection<ScenarioResult> others, boolean block);
 }

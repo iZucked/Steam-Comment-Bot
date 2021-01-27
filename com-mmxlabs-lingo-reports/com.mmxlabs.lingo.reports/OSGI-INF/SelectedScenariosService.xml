@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2021
+    All rights reserved.
+
+-->
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" deactivate="dispose" name="com.mmxlabs.lingo.reports.services.SelectedScenariosService">
+   <implementation class="com.mmxlabs.lingo.reports.services.SelectedScenariosService"/>
+   <reference bind="bindScenarioServiceSelectionProvider" cardinality="1..1" interface="com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider" name="IScenarioServiceSelectionProvider" policy="dynamic" unbind="unbindScenarioServiceSelectionProvider"/>
+   <service>
+      <provide interface="com.mmxlabs.lingo.reports.services.SelectedScenariosService"/>
+   </service>
+</scr:component>

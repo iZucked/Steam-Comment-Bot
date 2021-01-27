@@ -93,7 +93,6 @@ public class DiffOptionsImpl extends MinimalEObjectImpl.Container implements Dif
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public boolean isFilterSelectedElements() {
 		return filterSelectedElements;
 	}
@@ -103,7 +102,6 @@ public class DiffOptionsImpl extends MinimalEObjectImpl.Container implements Dif
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setFilterSelectedElements(boolean newFilterSelectedElements) {
 		boolean oldFilterSelectedElements = filterSelectedElements;
 		filterSelectedElements = newFilterSelectedElements;
@@ -116,7 +114,6 @@ public class DiffOptionsImpl extends MinimalEObjectImpl.Container implements Dif
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public boolean isFilterSelectedSequences() {
 		return filterSelectedSequences;
 	}
@@ -126,7 +123,6 @@ public class DiffOptionsImpl extends MinimalEObjectImpl.Container implements Dif
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
 	public void setFilterSelectedSequences(boolean newFilterSelectedSequences) {
 		boolean oldFilterSelectedSequences = filterSelectedSequences;
 		filterSelectedSequences = newFilterSelectedSequences;
@@ -211,7 +207,7 @@ public class DiffOptionsImpl extends MinimalEObjectImpl.Container implements Dif
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuilder result = new StringBuilder(super.toString());
+		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (filterSelectedElements: ");
 		result.append(filterSelectedElements);
 		result.append(", filterSelectedSequences: ");

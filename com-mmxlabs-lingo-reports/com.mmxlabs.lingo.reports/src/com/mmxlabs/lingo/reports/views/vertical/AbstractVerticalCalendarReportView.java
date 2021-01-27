@@ -4,7 +4,8 @@
  */
 package com.mmxlabs.lingo.reports.views.vertical;
 
-import java.util.Date;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -23,7 +24,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
-import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.views.vertical.providers.EventProvider;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
@@ -66,16 +67,23 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 	public static final String ID = "com.mmxlabs.lingo.reports.verticalreport";
 
-	private ScenarioComparisonService selectedScenariosService;
+	private SelectedScenariosService selectedScenariosService;
 
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
-		public void selectedDataProviderChanged(ISelectedDataProvider selectedDataProvider, boolean block) {
+
+		@Override
+		public void selectionChanged(final @NonNull ISelectedDataProvider selectedDataProvider, final @Nullable ScenarioResult pinned, final @NonNull Collection<@NonNull ScenarioResult> others,
+				final boolean block) {
 
 			final Runnable r = new Runnable() {
 				@Override
 				public void run() {
-					final List<@NonNull ScenarioResult> scenarios = selectedDataProvider.getOtherScenarioResults();
+					final List<@NonNull ScenarioResult> scenarios = new LinkedList<>(others);
+					if (pinned != null) {
+						// Add to end, prefer the first "other"
+						scenarios.add(pinned);
+					}
 					if (!scenarios.isEmpty()) {
 						final ScenarioResult result = scenarios.get(0);
 						ViewerHelper.setInput(gridViewer, true, result);
@@ -108,7 +116,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	@Override
 	public void createPartControl(final Composite parent) {
 
-		selectedScenariosService =  getSite().getService(ScenarioComparisonService.class);
+		selectedScenariosService = (SelectedScenariosService) getSite().getService(SelectedScenariosService.class);
 
 		final Composite container = new Composite(parent, SWT.NONE);
 		final FillLayout layout = new FillLayout();

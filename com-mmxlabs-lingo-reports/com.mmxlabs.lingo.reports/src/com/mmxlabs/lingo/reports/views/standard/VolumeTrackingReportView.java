@@ -289,7 +289,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 			public List<ColumnManager<VolumeData>> getColumnManagers(@NonNull final ISelectedDataProvider selectedDataProvider) {
 				final ArrayList<ColumnManager<VolumeData>> result = new ArrayList<>();
 
-				if (selectedDataProvider.getAllScenarioResults().size() > 1) {
+				if (selectedDataProvider.getScenarioResults().size() > 1) {
 					result.add(new ColumnManager<VolumeData>("Scenario") {
 
 						@Override

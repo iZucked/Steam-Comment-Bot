@@ -19,12 +19,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
@@ -37,11 +34,10 @@ import org.osgi.service.event.EventHandler;
 
 import com.google.inject.Inject;
 import com.mmxlabs.lingo.reports.IReportContents;
-import com.mmxlabs.lingo.reports.ReportContents;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
+import com.mmxlabs.lingo.reports.services.IScenarioComparisonServiceListener;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
-import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
@@ -56,6 +52,7 @@ import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportIni
 import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportInitialStateExtension.InitialRowType;
 import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
+import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -111,10 +108,10 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 	public <T> T getAdapter(final Class<T> adapter) {
 
 		if (GridTableViewer.class.isAssignableFrom(adapter)) {
-			return adapter.cast(viewer);
+			return (T) viewer;
 		}
 		if (Grid.class.isAssignableFrom(adapter)) {
-			return adapter.cast(viewer.getGrid());
+			return (T) viewer.getGrid();
 		}
 
 		if (IReportContents.class.isAssignableFrom(adapter)) {
@@ -124,9 +121,10 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 						getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.schedule.id") //
 				};
 
+
 				if (includeAllColumnsForITS) {
 					// Sort columns by ID
-					final List<String> blockIDOrder = new ArrayList<>(getBlockManager().getBlockIDOrder());
+					List<String> blockIDOrder = new ArrayList<>(getBlockManager().getBlockIDOrder());
 					Collections.sort(blockIDOrder);
 					getBlockManager().setBlockIDOrder(blockIDOrder);
 				}
@@ -152,49 +150,88 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 			final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), includeAllColumnsForITS);
 			final String jsonContents = jsonUtil.convert();
 
-			return adapter.cast(ReportContents.make(htmlContents, jsonContents));
+			return (T) new IReportContents() {
+
+				@Override
+				public String getHTMLContents() {
+					return htmlContents;
+				}
+
+				@Override
+				public String getJSONContents() {
+					return jsonContents;
+				}
+			};
+
 		}
 		return super.getAdapter(adapter);
 	}
 
-	private final ISelectedScenariosServiceListener scenarioComparisonServiceListener = new ISelectedScenariosServiceListener() {
+	private Table table = null;
+
+	private void saveTable(final Table table) {
+		this.table = table;
+	}
+
+	public Table getTable() {
+		return this.table;
+	}
+
+	private final IScenarioComparisonServiceListener scenarioComparisonServiceListener = new IScenarioComparisonServiceListener() {
+	 
 		@Override
-		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
-
+		public void compareDataUpdate(@NonNull final ISelectedDataProvider selectedDataProvider, @NonNull final ScenarioResult pin, @NonNull final ScenarioResult other, @NonNull final Table table,
+				@NonNull final List<LNGScenarioModel> rootObjects, @NonNull final Map<EObject, Set<EObject>> equivalancesMap) {
 			clearInputEquivalents();
-
-			final TransformedSelectedDataProvider newSelectedDataProvider = new TransformedSelectedDataProvider(selectedDataProvider);
-			List<Row> rows = ScheduleReportTransformer.transform(selectedDataProvider.getPinnedScenarioResult(), selectedDataProvider.getOtherScenarioResults(), newSelectedDataProvider);
-			processInputs(rows, newSelectedDataProvider);
-
-			List<LNGScenarioModel> rootObjects = new LinkedList<>();
-			for (ScenarioResult sr : selectedDataProvider.getAllScenarioResults()) {
-				rootObjects.add(sr.getTypedRoot(LNGScenarioModel.class));
-			}
-
 			builder.refreshPNLColumns(rootObjects);
+
+			TransformedSelectedDataProvider newSelectedDataProvider = new TransformedSelectedDataProvider(selectedDataProvider);
+			processInputs(table.getRows(), newSelectedDataProvider);
+			processCompositeInputs(table.getCompositeRows());
+			saveTable(table);
 
 			for (final ColumnBlock handler : builder.getBlockManager().getBlocksInVisibleOrder()) {
 				if (handler != null) {
-					handler.setViewState(selectedDataProvider.getAllScenarioResults().size() > 1, selectedDataProvider.inPinDiffMode());
+					handler.setViewState(true, true);
 				}
 			}
 			setCurrentSelectedDataProvider(newSelectedDataProvider);
 
-			ViewerHelper.setInput(viewer, block, rows);
+			List<Object> rows = new ArrayList<>(table.getRows().size());
+			rows.addAll(table.getRows());
+
+			/* We don't need to diff the schedule summary for now */
+			// rows.addAll(table.getCompositeRows());
+
+			ViewerHelper.setInput(viewer, true, rows);
+		}
+
+		@Override
+		public void multiDataUpdate(@NonNull final ISelectedDataProvider selectedDataProvider, @NonNull final Collection<ScenarioResult> others, @NonNull final Table table,
+				@NonNull final List<LNGScenarioModel> rootObjects) {
+			clearInputEquivalents();
+
+			builder.refreshPNLColumns(rootObjects);
+			TransformedSelectedDataProvider newSelectedDataProvider = new TransformedSelectedDataProvider(selectedDataProvider);
+			processInputs(table.getRows(), newSelectedDataProvider);
+			saveTable(table);
+
+			final int numberOfSchedules = others.size();
+			for (final ColumnBlock handler : builder.getBlockManager().getBlocksInVisibleOrder()) {
+				if (handler != null) {
+					handler.setViewState(numberOfSchedules > 1, false);
+				}
+			}
+
+			setCurrentSelectedDataProvider(newSelectedDataProvider);
+			ViewerHelper.setInput(viewer, true, new ArrayList<>(table.getRows()));
 		}
 
 		@Override
 		public void diffOptionChanged(final EDiffOption d, final Object oldValue, final Object newValue) {
 			ViewerHelper.refresh(viewer, true);
 		}
-		
-		@Override
-		public void selectedObjectChanged(@Nullable MPart source, @NonNull ISelection selection) {
-			if (scenarioComparisonService.getDiffOptions().isFilterSelectedElements()) {
-				ViewerHelper.refresh(viewer, false);
-			}
-		}
+
 	};
 
 	@Override
@@ -205,15 +242,12 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 		scenarioComparisonService.addListener(scenarioComparisonServiceListener);
 
 		// Add a filter to only show certain rows.
-		viewer.setFilters(super.filterSupport.createViewerFilter(), new ViewerFilter() {
+		viewer.setFilters(new ViewerFilter[] { super.filterSupport.createViewerFilter(), new ViewerFilter() {
 
 			@Override
 			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
-
-				Collection<Object> selectedElements = currentSelectedDataProvider.getSelectedObjects();
-
-				if (scenarioComparisonService.getDiffOptions().isFilterSelectedElements() && !selectedElements.isEmpty()) {
-					if (!selectedElements.contains(element)) {
+				if (scenarioComparisonService.getDiffOptions().isFilterSelectedElements() && !scenarioComparisonService.getSelectedElements().isEmpty()) {
+					if (!scenarioComparisonService.getSelectedElements().contains(element)) {
 						if (element instanceof Row) {
 							final Row row = (Row) element;
 							final Set<EObject> elements = new HashSet<>();
@@ -224,7 +258,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 							elements.add(row.getOpenLoadSlotAllocation());
 							elements.add(row.getOpenDischargeSlotAllocation());
 							elements.addAll(row.getInputEquivalents());
-							elements.retainAll(selectedElements);
+							elements.retainAll(scenarioComparisonService.getSelectedElements());
 							if (elements.isEmpty()) {
 								return false;
 							}
@@ -253,17 +287,17 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 				}
 				return true;
 			}
-		});
+		} });
 
-		scenarioComparisonService.triggerListener(scenarioComparisonServiceListener, false);
+		scenarioComparisonService.triggerListener(scenarioComparisonServiceListener);
 
 		// Adding an event broker for the snap-to-date event todayHandler
-		final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+		IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 		this.todayHandler = event -> snapTo((LocalDate) event.getProperty(IEventBroker.DATA));
 		eventBroker.subscribe(TodayHandler.EVENT_SNAP_TO_DATE, this.todayHandler);
 	}
 
-	private void snapTo(final LocalDate date) {
+	private void snapTo(LocalDate date) {
 		if (viewer == null) {
 			return;
 		}
@@ -278,15 +312,15 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 
 		final GridItem[] items = grid.getItems();
 		int pos = -1;
-		for (final GridItem item : items) {
-			final Object oData = item.getData();
+		for (GridItem item : items) {
+			Object oData = item.getData();
 			if (oData instanceof Row) {
-				final Row r = (Row) oData;
-				final SlotAllocation sa = r.getLoadAllocation();
+				Row r = (Row) oData;
+				SlotAllocation sa = r.getLoadAllocation();
 				if (sa == null) {
 					break;
 				}
-				final SlotVisit sv = sa.getSlotVisit();
+				SlotVisit sv = sa.getSlotVisit();
 				if (sv == null) {
 					break;
 				}
@@ -307,7 +341,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 	public void dispose() {
 		scenarioComparisonService.removeListener(scenarioComparisonServiceListener);
 		if (this.todayHandler != null) {
-			final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+			IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 			eventBroker.unsubscribe(this.todayHandler);
 		}
 		super.dispose();
@@ -447,15 +481,26 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 		}
 	}
 
-	public void processInputs(final List<Row> result, final TransformedSelectedDataProvider currentSelectedDataProvider) {
+	public void processInputs(final List<Row> result, TransformedSelectedDataProvider currentSelectedDataProvider) {
 		clearInputEquivalents();
-		for (final Object obj : result) {
-			if (obj instanceof Row) {
-				final Row row = (Row) obj;
-				setInputEquivalents(row, row.getInputEquivalents());
-				final ScenarioResult scenarioResult = currentSelectedDataProvider.getScenarioResult(row.getSchedule());
-				if (scenarioResult != null) {
-					currentSelectedDataProvider.addExtraData(row, scenarioResult, row.getSchedule());
+		for (final Row row : result) {
+			setInputEquivalents(row, row.getInputEquivalents());
+			ScenarioResult scenarioResult = currentSelectedDataProvider.getScenarioResult(row.getSchedule());
+			if (scenarioResult != null) {
+				currentSelectedDataProvider.addExtraData(row, scenarioResult, row.getSchedule());
+			}
+		}
+	}
+
+	public void processCompositeInputs(final List<CompositeRow> result) {
+		for (final CompositeRow row : result) {
+			if (row != null) {
+				if (row.getPinnedRow() != null) {
+					setInputEquivalents(row, row.getPinnedRow().getInputEquivalents());
+				}
+
+				if (row.getPreviousRow() != null) {
+					setInputEquivalents(row, row.getPreviousRow().getInputEquivalents());
 				}
 			}
 		}
@@ -533,6 +578,6 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 
 	@Override
 	protected boolean refreshOnSelectionChange() {
-		return false;// (scenarioComparisonService.getDiffOptions().isFilterSelectedElements() && !scenarioComparisonService.getSelectedElements().isEmpty());
+		return (scenarioComparisonService.getDiffOptions().isFilterSelectedElements() && !scenarioComparisonService.getSelectedElements().isEmpty());
 	}
 }
