@@ -780,6 +780,11 @@ public class SchedulerView extends ViewPart implements
 			public boolean showMenuItemsOnRightClick() {
 				return true;
 			}
+			
+			@Override
+			public boolean showDefaultMenuItemsOnEventRightClick() {
+				return false;
+			}
 
 			@Override
 			public int getSelectionLineWidth() {

@@ -267,28 +267,6 @@
 		<para />
 	</section>
 	<section>
-		<title>
-			Add a Port
-		</title>
-		<orderedlist>
-			<listitem>
-				<para>Data Perspective -&gt; Port View</para>
-			</listitem>
-			<listitem>
-				<para>Create port.</para>
-			</listitem>
-			<listitem>
-				<para>Need to update distance matrix with new row/column per route
-					for all other ports.
-				</para>
-			</listitem>
-			<listitem>
-				<para>Best to do outside of application as </para>
-			</listitem>
-		</orderedlist>
-		<para />
-	</section>
-	<section>
 		<title>Compare Scenarios</title>
 		<orderedlist>
 			<listitem>

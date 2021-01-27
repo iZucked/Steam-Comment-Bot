@@ -37,6 +37,8 @@ import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
 
 public class GeneralDataUpdater {
 
+	private static final int POLL_INTERVAL_MILLISECONDS = 30_000;
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeneralDataUpdater.class);
 
 	private final DataServiceClient client;
@@ -174,35 +176,25 @@ public class GeneralDataUpdater {
 	}
 
 	private void createTypedUpdateThread(final TypeRecord typeRecord) {
-		final Thread updateThread = new Thread(() -> {
-			while (listenForNewUpstreamVersions) {
-				final CompletableFuture<Boolean> newVersionFuture = client.notifyOnNewVersion(typeRecord);
-				try {
-					if (newVersionFuture == null) {
-						return;
-					}
-
-					refreshType(typeRecord);
-					final Boolean versionAvailable = newVersionFuture.get();
-					if (Boolean.TRUE.equals(versionAvailable)) {
+		final Thread updateThread = new Thread() {
+			public void run() {
+				while (listenForNewUpstreamVersions) {
+					updateLock.lock();
+					try {
 						refreshType(typeRecord);
+					} finally {
+						updateLock.unlock();
 					}
-				} catch (final InterruptedException e) {
-					if (!listenForNewUpstreamVersions) {
+
+					try {
+						Thread.sleep(POLL_INTERVAL_MILLISECONDS);
+					} catch (final InterruptedException e) {
+						interrupt(); // preserve interruption status
 						return;
 					}
-				} catch (final ExecutionException e) {
-					LOGGER.error(e.getMessage());
-				}
-
-				// make sure not everything is blocked in case of consecutive failure
-				try {
-					Thread.sleep(5_000);
-				} catch (final InterruptedException e) {
-					throw new RuntimeException(e);
 				}
 			}
-		});
+		};
 		updateThread.setName("DataHub Upstream listener: " + getClass().getName());
 		updateThread.start();
 

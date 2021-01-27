@@ -45,10 +45,6 @@ public class DataServiceClient {
 
 	private static final OkHttpClient httpClient = HttpClientUtil.basicBuilder().build();//
 
-	protected static final OkHttpClient LONG_POLLING_CLIENT = HttpClientUtil.basicBuilder() //
-			.readTimeout(Integer.MAX_VALUE, TimeUnit.MILLISECONDS) //
-			.build();
-
 	private static final TypeReference<List<GeneralDataRecord>> TYPE_LIST = new TypeReference<List<GeneralDataRecord>>() {
 	};
 
@@ -183,33 +179,4 @@ public class DataServiceClient {
 		}
 		return null;
 	}
-
-	protected CompletableFuture<Boolean> notifyOnNewVersion(TypeRecord typeRecord) {
-
-		if (!DataHubServiceProvider.getInstance().isOnlineAndLoggedIn()) {
-			return null;
-		}
-
-		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(typeRecord.getVersionNotificationEndpoint());
-		if (requestBuilder == null) {
-			return null;
-		}
-
-		return CompletableFuture.supplyAsync(() -> {
-			final Request request = requestBuilder.build();
-			try (Response response = LONG_POLLING_CLIENT.newCall(request).execute()) {
-				if (response.isSuccessful()) {
-					return Boolean.TRUE;
-				}
-				return Boolean.FALSE;
-			} catch (final IOException e) {
-				// Silently ignore.
-
-				// LOG.error("Error waiting for new version");
-				// throw new RuntimeException("Error waiting for new version");
-				return Boolean.FALSE;
-			}
-		});
-	}
-
 }

@@ -29,11 +29,6 @@ public class PortsTypeRecord implements TypeRecord {
 	}
 
 	@Override
-	public String getVersionNotificationEndpoint() {
-		return "/ports/version_notification";
-	}
-
-	@Override
 	public String getUploadURL() {
 		return "/ports/sync/versions/";
 

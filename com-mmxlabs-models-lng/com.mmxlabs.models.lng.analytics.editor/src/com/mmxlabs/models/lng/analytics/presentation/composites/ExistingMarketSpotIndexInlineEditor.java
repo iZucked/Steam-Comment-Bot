@@ -14,8 +14,11 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.adp.ShippingOption;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.ValueListInlineEditor;
@@ -28,10 +31,20 @@ public class ExistingMarketSpotIndexInlineEditor extends ValueListInlineEditor {
 	public ExistingMarketSpotIndexInlineEditor(final EAttribute feature) {
 		super(feature, defaultValues);
 	}
+	
+	@Override
+	protected void updateDisplay(Object value) {
+		generateValuesAndUpdateCombo(input);
+		super.updateDisplay(value);
+	}
 
 	@Override
 	public void display(final IDialogEditingContext dialogContext, final MMXRootObject rootObject, final EObject input, final Collection<EObject> range) {
-
+		generateValuesAndUpdateCombo(input);
+		super.display(dialogContext, rootObject, input, range);
+	}
+	
+	private void generateValuesAndUpdateCombo(final EObject input) {
 		List<Pair<String, Object>> values = getDefaultValues();
 
 		if (input instanceof ExistingCharterMarketOption) {
@@ -40,8 +53,6 @@ public class ExistingMarketSpotIndexInlineEditor extends ValueListInlineEditor {
 			values = getValues(charterInMarket, option.getSpotIndex());
 		}
 		updateCombo(values);
-
-		super.display(dialogContext, rootObject, input, range);
 	}
 
 	private static @NonNull List<Pair<String, Object>> getDefaultValues() {
@@ -66,5 +77,9 @@ public class ExistingMarketSpotIndexInlineEditor extends ValueListInlineEditor {
 		}
 		return result;
 	}
-
+	
+	@Override
+	protected boolean updateOnChangeToFeature(Object changedFeature) {
+		return changedFeature == AnalyticsPackage.Literals.EXISTING_CHARTER_MARKET_OPTION__CHARTER_IN_MARKET || super.updateOnChangeToFeature(changedFeature);
+	}
 }
