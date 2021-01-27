@@ -1481,105 +1481,105 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 				new MenuItem(_rightClickMenu, SWT.SEPARATOR);
 			}
 		}
+		if (_settings.showDefaultMenuItemsOnEventRightClick()) {
+			if (_settings.enableZooming()) {
+				// new MenuItem(menu, SWT.SEPARATOR);
+				final MenuItem zoomIn = new MenuItem(_rightClickMenu, SWT.PUSH);
+				zoomIn.setText(_languageManager.getZoomInMenuText());
+				final MenuItem zoomOut = new MenuItem(_rightClickMenu, SWT.PUSH);
+				zoomOut.setText(_languageManager.getZoomOutMenuText());
+				final MenuItem zoomReset = new MenuItem(_rightClickMenu, SWT.PUSH);
+				zoomReset.setText(_languageManager.getZoomResetMenuText());
 
-		if (_settings.enableZooming()) {
-			// new MenuItem(menu, SWT.SEPARATOR);
-			final MenuItem zoomIn = new MenuItem(_rightClickMenu, SWT.PUSH);
-			zoomIn.setText(_languageManager.getZoomInMenuText());
-			final MenuItem zoomOut = new MenuItem(_rightClickMenu, SWT.PUSH);
-			zoomOut.setText(_languageManager.getZoomOutMenuText());
-			final MenuItem zoomReset = new MenuItem(_rightClickMenu, SWT.PUSH);
-			zoomReset.setText(_languageManager.getZoomResetMenuText());
+				zoomIn.addListener(SWT.Selection, new Listener() {
+					public void handleEvent(final Event event) {
+						zoomIn();
+					}
+				});
+				zoomOut.addListener(SWT.Selection, new Listener() {
+					public void handleEvent(final Event event) {
+						zoomOut();
+					}
+				});
+				zoomReset.addListener(SWT.Selection, new Listener() {
+					public void handleEvent(final Event event) {
+						resetZoom();
+					}
+				});
 
-			zoomIn.addListener(SWT.Selection, new Listener() {
+				new MenuItem(_rightClickMenu, SWT.SEPARATOR);
+			}
+
+			final MenuItem showPlaque = new MenuItem(_rightClickMenu, SWT.CHECK);
+			showPlaque.setText(_languageManager.getShowNumberOfDaysOnEventsMenuText());
+			showPlaque.setSelection(_showNumDays);
+			showPlaque.addListener(SWT.Selection, new Listener() {
 				public void handleEvent(final Event event) {
-					zoomIn();
-				}
-			});
-			zoomOut.addListener(SWT.Selection, new Listener() {
-				public void handleEvent(final Event event) {
-					zoomOut();
-				}
-			});
-			zoomReset.addListener(SWT.Selection, new Listener() {
-				public void handleEvent(final Event event) {
-					resetZoom();
+					_showNumDays = !_showNumDays; // NOPMD
+					showPlaque.setSelection(_showNumDays);
+					redraw();
 				}
 			});
 
 			new MenuItem(_rightClickMenu, SWT.SEPARATOR);
-		}
 
-		final MenuItem showPlaque = new MenuItem(_rightClickMenu, SWT.CHECK);
-		showPlaque.setText(_languageManager.getShowNumberOfDaysOnEventsMenuText());
-		showPlaque.setSelection(_showNumDays);
-		showPlaque.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(final Event event) {
-				_showNumDays = !_showNumDays; // NOPMD
-				showPlaque.setSelection(_showNumDays);
-				redraw();
-			}
-		});
+			final MenuItem showEsts = new MenuItem(_rightClickMenu, SWT.CHECK);
+			showEsts.setText(_languageManager.getShowPlannedDatesMenuText());
+			showEsts.setSelection(_showPlannedDates);
+			showEsts.addListener(SWT.Selection, new Listener() {
+				public void handleEvent(final Event event) {
+					setShowPlannedDates(!isShowingPlannedDates());
+					showEsts.setSelection(_showPlannedDates);
+					redraw();
+				}
+			});
 
-		new MenuItem(_rightClickMenu, SWT.SEPARATOR);
-
-		final MenuItem showEsts = new MenuItem(_rightClickMenu, SWT.CHECK);
-		showEsts.setText(_languageManager.getShowPlannedDatesMenuText());
-		showEsts.setSelection(_showPlannedDates);
-		showEsts.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(final Event event) {
-				setShowPlannedDates(!isShowingPlannedDates());
-				showEsts.setSelection(_showPlannedDates);
-				redraw();
-			}
-		});
-
-		new MenuItem(_rightClickMenu, SWT.SEPARATOR);
-
-		final MenuItem showThreeDee = new MenuItem(_rightClickMenu, SWT.CHECK);
-		showThreeDee.setText(_languageManager.get3DMenuText());
-		showThreeDee.setSelection(_threeDee);
-		showThreeDee.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(final Event event) {
-				_threeDee = !_threeDee; // NOPMD
-				redraw();
-			}
-		});
-
-		if (_settings.showDeleteMenuOption() && event != null) {
 			new MenuItem(_rightClickMenu, SWT.SEPARATOR);
 
-			final MenuItem delete = new MenuItem(_rightClickMenu, SWT.PUSH);
-			delete.setText(_languageManager.getDeleteMenuText());
-			delete.addListener(SWT.Selection, new Listener() {
-				public void handleEvent(final Event e) {
-					if (!_selectedEvents.isEmpty()) {
-						for (int i = 0; i < _eventListeners.size(); i++) {
-							final IGanttEventListener listener = (IGanttEventListener) _eventListeners.get(i);
-							listener.eventsDeleteRequest(_selectedEvents, me);
+			final MenuItem showThreeDee = new MenuItem(_rightClickMenu, SWT.CHECK);
+			showThreeDee.setText(_languageManager.get3DMenuText());
+			showThreeDee.setSelection(_threeDee);
+			showThreeDee.addListener(SWT.Selection, new Listener() {
+				public void handleEvent(final Event event) {
+					_threeDee = !_threeDee; // NOPMD
+					redraw();
+				}
+			});
+
+			if (_settings.showDeleteMenuOption() && event != null) {
+				new MenuItem(_rightClickMenu, SWT.SEPARATOR);
+
+				final MenuItem delete = new MenuItem(_rightClickMenu, SWT.PUSH);
+				delete.setText(_languageManager.getDeleteMenuText());
+				delete.addListener(SWT.Selection, new Listener() {
+					public void handleEvent(final Event e) {
+						if (!_selectedEvents.isEmpty()) {
+							for (int i = 0; i < _eventListeners.size(); i++) {
+								final IGanttEventListener listener = (IGanttEventListener) _eventListeners.get(i);
+								listener.eventsDeleteRequest(_selectedEvents, me);
+							}
 						}
 					}
-				}
-			});
-		}
+				});
+			}
 
-		if (_settings.showPropertiesMenuOption() && !_selectedEvents.isEmpty()) {
-			new MenuItem(_rightClickMenu, SWT.SEPARATOR);
+			if (_settings.showPropertiesMenuOption() && !_selectedEvents.isEmpty()) {
+				new MenuItem(_rightClickMenu, SWT.SEPARATOR);
 
-			final MenuItem properties = new MenuItem(_rightClickMenu, SWT.PUSH);
-			properties.setText(_languageManager.getPropertiesMenuText());
-			properties.addListener(SWT.Selection, new Listener() {
-				public void handleEvent(final Event event) {
-					if (!_selectedEvents.isEmpty()) {
-						for (int i = 0; i < _eventListeners.size(); i++) {
-							final IGanttEventListener listener = (IGanttEventListener) _eventListeners.get(i);
-							listener.eventPropertiesSelected(_selectedEvents);
+				final MenuItem properties = new MenuItem(_rightClickMenu, SWT.PUSH);
+				properties.setText(_languageManager.getPropertiesMenuText());
+				properties.addListener(SWT.Selection, new Listener() {
+					public void handleEvent(final Event event) {
+						if (!_selectedEvents.isEmpty()) {
+							for (int i = 0; i < _eventListeners.size(); i++) {
+								final IGanttEventListener listener = (IGanttEventListener) _eventListeners.get(i);
+								listener.eventPropertiesSelected(_selectedEvents);
+							}
 						}
 					}
-				}
-			});
+				});
+			}
 		}
-
 		_rightClickMenu.setLocation(x, y);
 		_rightClickMenu.setVisible(true);
 	}

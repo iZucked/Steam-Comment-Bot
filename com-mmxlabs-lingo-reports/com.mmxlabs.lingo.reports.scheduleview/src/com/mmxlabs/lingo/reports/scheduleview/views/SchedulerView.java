@@ -853,6 +853,11 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 			public boolean showMenuItemsOnRightClick() {
 				return true;
 			}
+			
+			@Override
+			public boolean showDefaultMenuItemsOnEventRightClick() {
+				return false;
+			}
 
 			@Override
 			public int getSelectionLineWidth() {
