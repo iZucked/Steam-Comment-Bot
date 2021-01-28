@@ -344,12 +344,12 @@ public class InventoryReport extends ViewPart {
 		inventoryTablePackAction = PackActionFactory.createPackColumnsAction(inventoryTableViewer);
 		inventoryTablePackActionContributionItem = new ActionContributionItem(inventoryTablePackAction);
 		getViewSite().getActionBars().getToolBarManager().add(inventoryTablePackActionContributionItem);
-		inventoryTablePackActionContributionItem.setVisible(folderSelection == 1);
+		inventoryTablePackActionContributionItem.setVisible(folderSelection == 2);
 
 		inventoryTableCopyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(inventoryTableViewer);
 		inventoryTableCopyActionContributionItem = new ActionContributionItem(inventoryTableCopyAction);
 		getViewSite().getActionBars().getToolBarManager().add(inventoryTableCopyActionContributionItem);
-		inventoryTableCopyActionContributionItem.setVisible(folderSelection == 1);
+		inventoryTableCopyActionContributionItem.setVisible(folderSelection == 2);
 
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
 			final CTabItem mullItem = new CTabItem(folder, SWT.NONE);
@@ -365,7 +365,7 @@ public class InventoryReport extends ViewPart {
 				mullMonthlyTableFilterField.setFilterSupport(mullMonthlyTableFilterSupport);
 				
 				getViewSite().getActionBars().getToolBarManager().add(mullMonthlyTableFilterField.getContribution());
-				mullMonthlyTableFilterField.getContribution().setVisible(folderSelection == 2);
+				mullMonthlyTableFilterField.getContribution().setVisible(folderSelection == 3);
 				
 				mullMonthlyTableViewer.setContentProvider(new ArrayContentProvider());
 				mullMonthlyTableViewer.getControl().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
@@ -390,12 +390,12 @@ public class InventoryReport extends ViewPart {
 			mullMonthlyTablePackAction = PackActionFactory.createPackColumnsAction(mullMonthlyTableViewer);
 			mullMonthlyTablePackActionContributionItem = new ActionContributionItem(mullMonthlyTablePackAction);
 			getViewSite().getActionBars().getToolBarManager().add(mullMonthlyTablePackActionContributionItem);
-			mullMonthlyTablePackActionContributionItem.setVisible(folder.getSelectionIndex() == 2);
+			mullMonthlyTablePackActionContributionItem.setVisible(folder.getSelectionIndex() == 3);
 			
 			mullMonthlyTableCopyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(mullMonthlyTableViewer);
 			mullMonthlyTableCopyActionContributionItem = new ActionContributionItem(mullMonthlyTableCopyAction);
 			getViewSite().getActionBars().getToolBarManager().add(mullMonthlyTableCopyActionContributionItem);
-			mullMonthlyTableCopyActionContributionItem.setVisible(folder.getSelectionIndex() == 2);
+			mullMonthlyTableCopyActionContributionItem.setVisible(folder.getSelectionIndex() == 3);
 			
 			final CTabItem mullDailyItem = new CTabItem(folder, SWT.NONE);
 
@@ -411,7 +411,7 @@ public class InventoryReport extends ViewPart {
 				mullDailyTableFilterField.setFilterSupport(mullDailyTableFilterSupport);
 				
 				getViewSite().getActionBars().getToolBarManager().add(mullDailyTableFilterField.getContribution());
-				mullDailyTableFilterField.getContribution().setVisible(folderSelection == 3);
+				mullDailyTableFilterField.getContribution().setVisible(folderSelection == 4);
 				
 				mullDailyTableViewer.setContentProvider(new ArrayContentProvider());
 				mullDailyTableViewer.getControl().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
@@ -435,12 +435,12 @@ public class InventoryReport extends ViewPart {
 			mullDailyTablePackAction = PackActionFactory.createPackColumnsAction(mullDailyTableViewer);
 			mullDailyTablePackActionContributionItem = new ActionContributionItem(mullDailyTablePackAction);
 			getViewSite().getActionBars().getToolBarManager().add(mullDailyTablePackActionContributionItem);
-			mullDailyTablePackActionContributionItem.setVisible(folder.getSelectionIndex() == 3);
+			mullDailyTablePackActionContributionItem.setVisible(folder.getSelectionIndex() == 4);
 			
 			mullDailyTableCopyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(mullDailyTableViewer);
 			mullDailyTableCopyActionContributionItem = new ActionContributionItem(mullDailyTableCopyAction);
 			getViewSite().getActionBars().getToolBarManager().add(mullDailyTableCopyActionContributionItem);
-			mullDailyTableCopyActionContributionItem.setVisible(folder.getSelectionIndex() == 3);
+			mullDailyTableCopyActionContributionItem.setVisible(folder.getSelectionIndex() == 4);
 			
 			final CTabItem chartItem2 = new CTabItem(folder, SWT.NONE);
 			chartItem2.setText("MULL Chart");
@@ -469,22 +469,22 @@ public class InventoryReport extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				final int currentTabSelection = folder.getSelectionIndex();
-				inventoryTableCopyActionContributionItem.setVisible(currentTabSelection == 1);
-				inventoryTablePackActionContributionItem.setVisible(currentTabSelection == 1);
+				inventoryTableCopyActionContributionItem.setVisible(currentTabSelection == 2);
+				inventoryTablePackActionContributionItem.setVisible(currentTabSelection == 2);
 				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
-					mullMonthlyTableCopyActionContributionItem.setVisible(currentTabSelection == 2);
-					mullMonthlyTablePackActionContributionItem.setVisible(currentTabSelection == 2);
+					mullMonthlyTableCopyActionContributionItem.setVisible(currentTabSelection == 3);
+					mullMonthlyTablePackActionContributionItem.setVisible(currentTabSelection == 3);
 					if (mullMonthlyTableFilterField.getContribution().getAction().isChecked()) {
 						mullMonthlyTableFilterField.toggleVisibility();
 					}
-					mullMonthlyTableFilterField.getContribution().setVisible(currentTabSelection == 2);
+					mullMonthlyTableFilterField.getContribution().setVisible(currentTabSelection == 3);
 					
-					mullDailyTableCopyActionContributionItem.setVisible(currentTabSelection == 3);
-					mullDailyTablePackActionContributionItem.setVisible(currentTabSelection == 3);
+					mullDailyTableCopyActionContributionItem.setVisible(currentTabSelection == 4);
+					mullDailyTablePackActionContributionItem.setVisible(currentTabSelection == 4);
 					if(mullDailyTableFilterField.getContribution().getAction().isChecked()) {
 						mullDailyTableFilterField.toggleVisibility();
 					}
-					mullDailyTableFilterField.getContribution().setVisible(currentTabSelection == 3);
+					mullDailyTableFilterField.getContribution().setVisible(currentTabSelection == 4);
 				}
 				getViewSite().getActionBars().getToolBarManager().update(true);
 			}
