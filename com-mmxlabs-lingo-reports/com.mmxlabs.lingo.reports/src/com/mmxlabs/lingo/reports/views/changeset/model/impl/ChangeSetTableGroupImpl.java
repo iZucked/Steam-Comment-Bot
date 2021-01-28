@@ -13,7 +13,8 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ScenarioResult;
+
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;

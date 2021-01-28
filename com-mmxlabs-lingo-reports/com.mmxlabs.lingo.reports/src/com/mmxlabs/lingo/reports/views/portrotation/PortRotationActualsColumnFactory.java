@@ -27,7 +27,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 public class PortRotationActualsColumnFactory implements IPortRotationColumnFactory {
 

@@ -66,7 +66,7 @@ import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
 import com.mmxlabs.rcp.common.handlers.TodayHandler;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 /**
  * A customisable report for schedule based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available

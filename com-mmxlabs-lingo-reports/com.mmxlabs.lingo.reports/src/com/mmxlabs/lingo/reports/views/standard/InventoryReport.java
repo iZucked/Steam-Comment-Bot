@@ -122,7 +122,7 @@ import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.rcp.common.handlers.TodayHandler;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 public class InventoryReport extends ViewPart {
 	public static final String ID = "com.mmxlabs.lingo.reports.views.standard.InventoryReport";

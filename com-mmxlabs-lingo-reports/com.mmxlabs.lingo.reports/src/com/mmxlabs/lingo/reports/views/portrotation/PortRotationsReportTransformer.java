@@ -13,7 +13,7 @@ import com.mmxlabs.lingo.reports.ScheduledEventCollector;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 public class PortRotationsReportTransformer {
 	private final PortRotationBasedReportBuilder builder;

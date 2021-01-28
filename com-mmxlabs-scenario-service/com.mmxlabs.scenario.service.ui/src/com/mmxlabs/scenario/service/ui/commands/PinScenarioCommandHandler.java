@@ -15,9 +15,10 @@ import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
 
 /**
@@ -45,7 +46,7 @@ public class PinScenarioCommandHandler extends AbstractHandler {
 							if (provider.isPinned(scenarioInstance)) {
 								provider.setPinned((ScenarioResult) null, false);
 							} else {
-								provider.setPinned(new ScenarioResult(scenarioInstance), false);
+								provider.setPinned(new ScenarioResultImpl(scenarioInstance), false);
 							}
 						}
 					}

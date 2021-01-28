@@ -20,7 +20,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 public class TransformedSelectedDataProvider implements ISelectedDataProvider {
 
@@ -101,7 +101,7 @@ public class TransformedSelectedDataProvider implements ISelectedDataProvider {
 	}
 
 	@Override
-	public @NonNull List<@NonNull ScenarioResult> getOtherScenarioResults() {
+	public @NonNull List<com.mmxlabs.scenario.service.ScenarioResult> getOtherScenarioResults() {
 		if (selectedDataProvider != null) {
 			return selectedDataProvider.getOtherScenarioResults();
 		}
@@ -109,7 +109,7 @@ public class TransformedSelectedDataProvider implements ISelectedDataProvider {
 	}
 
 	@Override
-	public @NonNull List<@NonNull ScenarioResult> getAllScenarioResults() {
+	public @NonNull List<com.mmxlabs.scenario.service.ScenarioResult> getAllScenarioResults() {
 		if (selectedDataProvider != null) {
 			return selectedDataProvider.getAllScenarioResults();
 		}

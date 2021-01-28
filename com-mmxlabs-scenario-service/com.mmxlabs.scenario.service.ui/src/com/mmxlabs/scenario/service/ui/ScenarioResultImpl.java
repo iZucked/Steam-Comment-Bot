@@ -12,13 +12,15 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.mmxcore.MMXResultRoot;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.rcp.common.ServiceHelper;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelRecordScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.ui.IDefaultScenarioResultProvider;
 
-public class ScenarioResult {
+public class ScenarioResultImpl implements ScenarioResult {
 
 	private final @NonNull ScenarioModelRecord modelRecord;
 	private final @NonNull IScenarioDataProvider scenarioDataProvider;
@@ -48,7 +50,7 @@ public class ScenarioResult {
 	 * @param modelRecord
 	 * @param resultRoot
 	 */
-	public ScenarioResult(final @NonNull ScenarioModelRecord modelRecord) {
+	public ScenarioResultImpl(final @NonNull ScenarioModelRecord modelRecord) {
 		this.modelRecord = modelRecord;
 		this.scenarioDataProvider = new ModelRecordScenarioDataProvider(modelRecord);
 		this.resultRoot = getDefaultRoot(modelRecord, this.scenarioDataProvider);
@@ -61,19 +63,19 @@ public class ScenarioResult {
 	 * @param modelRecord
 	 * @param resultRoot
 	 */
-	public ScenarioResult(final @NonNull ScenarioModelRecord modelRecord, @NonNull final MMXResultRoot resultRoot) {
+	public ScenarioResultImpl(final @NonNull ScenarioModelRecord modelRecord, @NonNull final MMXResultRoot resultRoot) {
 		this.modelRecord = modelRecord;
 		this.resultRoot = resultRoot;
 		this.hash = Objects.hash(modelRecord, resultRoot);
 		this.scenarioDataProvider = new ModelRecordScenarioDataProvider(modelRecord);
 	}
 
-	public ScenarioResult(final @NonNull ScenarioInstance instance, @NonNull final MMXResultRoot resultRoot) {
+	public ScenarioResultImpl(final @NonNull ScenarioInstance instance, @NonNull final MMXResultRoot resultRoot) {
 		this(SSDataManager.Instance.getModelRecord(instance), resultRoot);
 		this.scenarioInstance = instance;
 	}
 
-	public ScenarioResult(@NonNull final ScenarioInstance instance) {
+	public ScenarioResultImpl(@NonNull final ScenarioInstance instance) {
 		this(SSDataManager.Instance.getModelRecord(instance));
 		this.scenarioInstance = instance;
 	}
@@ -121,8 +123,8 @@ public class ScenarioResult {
 		if (obj == this) {
 			return true;
 		}
-		if (obj instanceof ScenarioResult) {
-			final ScenarioResult other = (ScenarioResult) obj;
+		if (obj instanceof ScenarioResultImpl) {
+			final ScenarioResultImpl other = (ScenarioResultImpl) obj;
 			// return Objects.equals(this.modelRecord, other.modelRecord) &&
 			// Objects.equals(this.resultRoot, other.resultRoot);
 			// FIXME: ScenarioInstance is optional, but should be part of equals. Some code

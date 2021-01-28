@@ -103,14 +103,15 @@ import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
+import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
 public class OptionModellerView extends ScenarioInstanceView implements CommandStackListener {
 
@@ -1010,7 +1011,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> {
 						if (m != null && m.getResults() != null) {
 
-							final ScenarioResult sr = new ScenarioResult(getScenarioInstance());
+							final ScenarioResult sr = new ScenarioResultImpl(getScenarioInstance());
 							ServiceHelper.withServiceConsumer(IScenarioServiceSelectionProvider.class, sp -> sp.deselect(sr, false));
 
 							final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);

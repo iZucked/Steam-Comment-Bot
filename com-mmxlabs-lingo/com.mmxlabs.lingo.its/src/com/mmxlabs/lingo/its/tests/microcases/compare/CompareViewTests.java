@@ -55,11 +55,12 @@ import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
 @ExtendWith(ShiroRunner.class)
 @RequireFeature(KnownFeatures.FEATURE_MODULE_DIFF_TOOLS)
@@ -654,8 +655,8 @@ public class CompareViewTests {
 						children.add(scenarioModel);
 						return children;
 					};
-					final ScenarioResult pinnedResult = new ScenarioResult(pinnedRecord);
-					final ScenarioResult otherResult = new ScenarioResult(otherRecord);
+					final ScenarioResult pinnedResult = new ScenarioResultImpl(pinnedRecord);
+					final ScenarioResult otherResult = new ScenarioResultImpl(otherRecord);
 					selectedDataProvider.addScenario(pinnedResult, ScenarioModelUtil.getScheduleModel(from).getSchedule(), getChildren.apply(from));
 					selectedDataProvider.addScenario(otherResult, ScenarioModelUtil.getScheduleModel(to).getSchedule(), getChildren.apply(to));
 					selectedDataProvider.setPinnedScenarioInstance(pinnedResult);

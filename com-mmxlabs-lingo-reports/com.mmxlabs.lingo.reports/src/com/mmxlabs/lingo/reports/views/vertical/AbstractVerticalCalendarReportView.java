@@ -32,7 +32,7 @@ import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 /**
  * New version of the vertical report, with a separate event per display cell.
@@ -75,7 +75,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 			final Runnable r = new Runnable() {
 				@Override
 				public void run() {
-					final List<@NonNull ScenarioResult> scenarios = selectedDataProvider.getOtherScenarioResults();
+					final List<com.mmxlabs.scenario.service.ScenarioResult> scenarios = selectedDataProvider.getOtherScenarioResults();
 					if (!scenarios.isEmpty()) {
 						final ScenarioResult result = scenarios.get(0);
 						ViewerHelper.setInput(gridViewer, true, result);

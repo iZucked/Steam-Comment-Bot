@@ -21,7 +21,7 @@ import org.osgi.util.tracker.ServiceTracker;
 
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.scenario.service.IScenarioService;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
+import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
 
 /**
  * The activator class controls the plug-in life cycle

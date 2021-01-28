@@ -41,9 +41,9 @@ import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
 import com.mmxlabs.models.ui.tabular.columngeneration.MultiObjectEmfBlockColumnFactory;
 import com.mmxlabs.models.ui.tabular.columngeneration.SimpleEmfBlockColumnFactory;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class StandardPortRotationColumnFactory implements IPortRotationColumnFactory {
 

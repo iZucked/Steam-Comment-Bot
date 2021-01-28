@@ -43,10 +43,10 @@ import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.locking.WellKnownTriggers;
+import com.mmxlabs.scenario.service.IScenarioServiceSelectionChangedListener;
+import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ScenarioComparisonService implements IScenarioServiceSelectionProvider {
 
@@ -67,6 +67,9 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 	private AtomicBoolean inSelectionChanged = new AtomicBoolean(false);
 
 	private final DiffOptions diffOptions = ScheduleReportFactory.eINSTANCE.createDiffOptions();
+
+	/** Keep reference to the selection service for the stop() method. */
+	private ESelectionService selectionService;
 
 	@Override
 	public void select(final ScenarioResult other, final boolean block) {
@@ -148,7 +151,7 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 	}
 
 	@Override
-	public @NonNull Collection<@NonNull ScenarioResult> getSelection() {
+	public Collection<ScenarioResult> getSelection() {
 		return currentSelectedDataProvider.getAllScenarioResults();
 	}
 
@@ -455,13 +458,17 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 
 	public void start() {
 		WellKnownTriggers.WORKSPACE_STARTED.delayUntilTriggered(() -> {
-			final ESelectionService service = PlatformUI.getWorkbench().getService(ESelectionService.class);
-			service.addPostSelectionListener(selectionListener);
+			// #stop() can be called before the workbench has been started. This can happen due to the automem workbench restart. This is a second vm instance so there is no danger of two copies of
+			// this service running at once due to *this* specific situation.
+			selectionService = PlatformUI.getWorkbench().getService(ESelectionService.class);
+			selectionService.addPostSelectionListener(selectionListener);
 		});
 	}
 
 	public void stop() {
-		final ESelectionService service = PlatformUI.getWorkbench().getService(ESelectionService.class);
-		service.removePostSelectionListener(selectionListener);
+		if (selectionService != null) {
+			selectionService.removePostSelectionListener(selectionListener);
+		}
+		selectionService = null;
 	}
 }

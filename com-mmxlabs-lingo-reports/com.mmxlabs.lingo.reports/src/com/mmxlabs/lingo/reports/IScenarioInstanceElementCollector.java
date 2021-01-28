@@ -7,7 +7,7 @@ package com.mmxlabs.lingo.reports;
 import java.util.Collection;
 
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 /**
  * Used to collect data elements from potentially multiple scenarios when compiling reports (collectElements(...) typically returns a list of RowData for each schedule instance).

@@ -21,7 +21,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.rcp.common.ecore.EMFCopier;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 public class ChangeSetToTableTransformer {
 

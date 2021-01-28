@@ -36,7 +36,7 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 public abstract class AbstractReportView extends ViewPart implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener {
 

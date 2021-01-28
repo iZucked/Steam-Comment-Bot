@@ -8,7 +8,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 public class PinDiffResultPlanTransformer {
 

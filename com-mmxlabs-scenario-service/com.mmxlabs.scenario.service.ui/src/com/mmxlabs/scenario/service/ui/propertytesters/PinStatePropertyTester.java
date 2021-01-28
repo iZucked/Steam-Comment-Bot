@@ -6,8 +6,8 @@ package com.mmxlabs.scenario.service.ui.propertytesters;
 
 import org.eclipse.core.expressions.PropertyTester;
 
+import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
 
 public class PinStatePropertyTester extends PropertyTester {

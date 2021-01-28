@@ -12,7 +12,7 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 public class IncomeStatementData {
 	public final ScenarioResult scenarioResult;

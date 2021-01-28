@@ -42,8 +42,8 @@ import com.mmxlabs.lingo.reports.views.standard.LatenessReportView;
 import com.mmxlabs.lingo.reports.views.standard.VolumeIssuesReportView;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 /**
  * Helper class to open up a view, set the scenario selection provider to the given instance and adapt the result to a {@link IReportContents} instance.

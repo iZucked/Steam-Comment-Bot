@@ -124,8 +124,8 @@ import com.mmxlabs.models.ui.tabular.TableColourPalette.TableItems;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class SchedulerView extends ViewPart implements
 		// org.eclipse.e4.ui.workbench.modeling.ISelectionListener,

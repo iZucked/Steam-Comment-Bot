@@ -55,7 +55,7 @@ import com.mmxlabs.models.ui.tabular.renderers.TopLeftRenderer;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 /**
  */

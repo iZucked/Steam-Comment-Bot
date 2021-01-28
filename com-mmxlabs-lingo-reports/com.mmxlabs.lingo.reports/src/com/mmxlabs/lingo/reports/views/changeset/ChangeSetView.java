@@ -151,11 +151,11 @@ import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 import com.mmxlabs.rcp.common.menus.SubLocalMenuHelper;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public class ChangeSetView extends ViewPart {
 

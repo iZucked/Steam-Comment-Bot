@@ -12,8 +12,9 @@ import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
 import com.mmxlabs.models.lng.analytics.ChangeDescription;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
 public class ActionableSetPlanTransformer {
 
@@ -30,14 +31,14 @@ public class ActionableSetPlanTransformer {
 
 			boolean first = true;
 			if (plan.getBaseOption() != null) {
-				base = new ScenarioResult(scenarioInstance, plan.getBaseOption().getScheduleModel());
+				base = new ScenarioResultImpl(scenarioInstance, plan.getBaseOption().getScheduleModel());
 				first = false;
 			}
 
 			// Assuming first option is the base.
 			ScenarioResult prev = base;
 			for (final SolutionOption option : plan.getOptions()) {
-				final ScenarioResult current = new ScenarioResult(scenarioInstance, option.getScheduleModel());
+				final ScenarioResult current = new ScenarioResultImpl(scenarioInstance, option.getScheduleModel());
 				if (first) {
 					base = current;
 					first = false;

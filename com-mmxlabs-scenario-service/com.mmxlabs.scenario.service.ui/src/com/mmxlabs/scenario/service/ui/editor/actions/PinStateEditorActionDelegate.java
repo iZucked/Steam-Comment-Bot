@@ -13,10 +13,11 @@ import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 
+import com.mmxlabs.scenario.service.IScenarioServiceSelectionChangedListener;
+import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
 
@@ -90,7 +91,7 @@ public class PinStateEditorActionDelegate implements IEditorActionDelegate, IAct
 				if (pinned != null && pinned.getScenarioInstance() == instance) {
 					selectionProvider.setPinned((ScenarioResult) null, false);
 				} else {
-					selectionProvider.setPinned(new ScenarioResult(instance), false);
+					selectionProvider.setPinned(new ScenarioResultImpl(instance), false);
 				}
 			}
 		}

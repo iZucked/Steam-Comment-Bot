@@ -11,7 +11,7 @@ import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.mmxlabs.rcp.common.ServiceHelper;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
+import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
 
 public class DeselectAllCommandHandler extends AbstractHandler {
 	@Override

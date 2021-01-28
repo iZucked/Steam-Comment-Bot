@@ -29,9 +29,9 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.ReportsConstants;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
+import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
 public class CompareScenariosHandler extends AbstractHandler {
 
@@ -94,7 +94,7 @@ public class CompareScenariosHandler extends AbstractHandler {
 						RunnerHelper.asyncExec(() -> {
 
 							ServiceHelper.withServiceConsumer(IScenarioServiceSelectionProvider.class,
-									(Consumer<IScenarioServiceSelectionProvider>) provider -> provider.setPinnedPair(new ScenarioResult(pin), new ScenarioResult(other), true));
+									(Consumer<IScenarioServiceSelectionProvider>) provider -> provider.setPinnedPair(new ScenarioResultImpl(pin), new ScenarioResultImpl(other), true));
 						});
 					}
 				}

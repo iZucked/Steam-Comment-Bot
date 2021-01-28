@@ -16,7 +16,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 public interface ISelectedDataProvider {
 
@@ -32,10 +32,10 @@ public interface ISelectedDataProvider {
 	boolean isPinnedObject(EObject eObject);
 
 	@NonNull
-	List<@NonNull ScenarioResult> getOtherScenarioResults();
+	List<com.mmxlabs.scenario.service.ScenarioResult> getOtherScenarioResults();
 
 	@NonNull
-	List<@NonNull ScenarioResult> getAllScenarioResults();
+	List<com.mmxlabs.scenario.service.ScenarioResult> getAllScenarioResults();
 
 	ScenarioResult getPinnedScenarioResult();
 

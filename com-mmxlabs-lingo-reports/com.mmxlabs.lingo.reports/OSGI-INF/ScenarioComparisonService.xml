@@ -5,10 +5,10 @@
     All rights reserved.
 
 -->
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="start" deactivate="dispose" immediate="true" name="com.mmxlabs.lingo.reports.services.ScenarioComparisonService">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="start" deactivate="stop" immediate="true" name="com.mmxlabs.lingo.reports.services.ScenarioComparisonService">
    <implementation class="com.mmxlabs.lingo.reports.services.ScenarioComparisonService"/>
    <service>
       <provide interface="com.mmxlabs.lingo.reports.services.ScenarioComparisonService"/>
-      <provide interface="com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider"/>
+      <provide interface="com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider"/>
    </service>
 </scr:component>

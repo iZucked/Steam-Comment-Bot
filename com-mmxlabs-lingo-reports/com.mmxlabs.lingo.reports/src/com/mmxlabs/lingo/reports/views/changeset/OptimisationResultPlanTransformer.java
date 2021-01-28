@@ -15,8 +15,9 @@ import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
 public class OptimisationResultPlanTransformer {
 
@@ -31,9 +32,9 @@ public class OptimisationResultPlanTransformer {
 			if (scenarioModel == null || scenarioModel.getScheduleModel().getSchedule() == null) {
 				throw new ScenarioNotEvaluatedException("Unable to perform comparison, scenario needs to be evaluated");
 			}
-			base = new ScenarioResult(scenarioInstance, scenarioModel.getScheduleModel());
+			base = new ScenarioResultImpl(scenarioInstance, scenarioModel.getScheduleModel());
 		} else {
-			base = new ScenarioResult(scenarioInstance, plan.getBaseOption().getScheduleModel());
+			base = new ScenarioResultImpl(scenarioInstance, plan.getBaseOption().getScheduleModel());
 		}
 
 		try {
@@ -43,7 +44,7 @@ public class OptimisationResultPlanTransformer {
 
 			for (final SolutionOption option : plan.getOptions()) {
 				final ChangeDescription changeDescription = option.getChangeDescription();
-				final ScenarioResult current = new ScenarioResult(scenarioInstance, option.getScheduleModel());
+				final ScenarioResult current = new ScenarioResultImpl(scenarioInstance, option.getScheduleModel());
 				root.getChangeSets().add(transformer.buildSingleChangeChangeSet(base, current, changeDescription, userSettings));
 				monitor.worked(1);
 			}

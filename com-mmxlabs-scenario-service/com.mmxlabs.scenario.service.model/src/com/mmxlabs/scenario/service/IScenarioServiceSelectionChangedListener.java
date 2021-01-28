@@ -2,12 +2,14 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
-package com.mmxlabs.scenario.service.ui;
+package com.mmxlabs.scenario.service;
 
 import java.util.Collection;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 /**
  * Listener which notifies on selection changed events.

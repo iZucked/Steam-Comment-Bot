@@ -6,10 +6,11 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset.model;
 
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
+
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 /**
  * <!-- begin-user-doc -->

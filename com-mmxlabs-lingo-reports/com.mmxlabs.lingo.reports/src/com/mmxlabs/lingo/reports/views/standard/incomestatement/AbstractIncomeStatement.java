@@ -43,8 +43,8 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils.ShippingCostType;
 import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView<IncomeStatementData> {
 
@@ -280,7 +280,7 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 					if (pinnedPair != null) {
 						output.addAll(createData(pinnedPair.getFirst(), pinnedPair.getSecond()));
 					}
-					for (final Pair<@NonNull Schedule, @NonNull ScenarioResult> p : otherPairs) {
+					for (final Pair<@NonNull Schedule, ScenarioResult> p : otherPairs) {
 						output.addAll(createData(p.getFirst(), p.getSecond()));
 					}
 				}
@@ -374,7 +374,7 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 	protected IncomeStatementData getIncomeByMonth(final ScenarioResult scenarioResult, final Schedule schedule, final LineItems lineItem) {
 		final CumulativeMap<YearMonth> result = new CumulativeMap<>();
 		final Map<T, CumulativeMap<YearMonth>> subTypeMap = new HashMap<>();
-		
+
 		for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
 
 			double total = 0.0;

@@ -34,7 +34,7 @@ import com.mmxlabs.models.lng.schedule.provider.ScheduleEditPlugin;
 import com.mmxlabs.models.lng.spotmarkets.provider.SpotMarketsEditPlugin;
 import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
 import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
+import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
 
 /**
  * This is the central singleton for the model edit plugin.
@@ -120,7 +120,6 @@ public final class Activator extends EMFPlugin {
 
 		public static final String IMAGE_PINNED_ROW = "pinned.row";
 
-		private ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider> scenarioServiceSelectionProviderTracker;
 		/**
 		 * Storage for preferences.
 		 */
@@ -183,9 +182,6 @@ public final class Activator extends EMFPlugin {
 
 			getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
 			
-			// close the service tracker
-			scenarioServiceSelectionProviderTracker.close();
-			scenarioServiceSelectionProviderTracker = null;
 
 			if (imageRegistry != null) {
 				imageRegistry.dispose();
@@ -197,9 +193,6 @@ public final class Activator extends EMFPlugin {
 
 		@Override
 		public void start(final BundleContext context) throws Exception {
-			scenarioServiceSelectionProviderTracker = new ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider>(context, IScenarioServiceSelectionProvider.class, null);
-			scenarioServiceSelectionProviderTracker.open();
-
 			super.start(context);
 
 			propertyChangeListener = new IPropertyChangeListener() {
@@ -236,10 +229,6 @@ public final class Activator extends EMFPlugin {
 		 */
 		public static ImageDescriptor getImageDescriptor(final String path) {
 			return AbstractUIPlugin.imageDescriptorFromPlugin(PLUGIN_ID, path);
-		}
-
-		public IScenarioServiceSelectionProvider getScenarioServiceSelectionProvider() {
-			return scenarioServiceSelectionProviderTracker.getService();
 		}
 
 		/**

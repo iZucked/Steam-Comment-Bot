@@ -47,12 +47,13 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.scenario.service.IScenarioServiceSelectionChangedListener;
+import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioModel;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
 
 public class ScenarioServiceNavigator extends CommonNavigator {
@@ -219,7 +220,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 									if (scenarioServiceSelectionProvider.getPinned() == instance) {
 										scenarioServiceSelectionProvider.setPinned((ScenarioResult) null, false);
 									} else {
-										scenarioServiceSelectionProvider.setPinned(new ScenarioResult(instance), false);
+										scenarioServiceSelectionProvider.setPinned(new ScenarioResultImpl(instance), false);
 									}
 								}
 							}
@@ -258,7 +259,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 									if (provider.isSelected(instance)) {
 										provider.deselect(instance, false);
 									} else {
-										provider.select(new ScenarioResult(instance), false);
+										provider.select(new ScenarioResultImpl(instance), false);
 									}
 								}
 							}
@@ -303,7 +304,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 								if (provider.isSelected(instance)) {
 									provider.deselect(instance, false);
 								} else {
-									provider.select(new ScenarioResult(instance), false);
+									provider.select(new ScenarioResultImpl(instance), false);
 								}
 							}
 						}

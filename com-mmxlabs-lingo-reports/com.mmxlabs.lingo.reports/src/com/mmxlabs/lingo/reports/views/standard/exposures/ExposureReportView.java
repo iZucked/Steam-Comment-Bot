@@ -68,9 +68,9 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  */
@@ -92,7 +92,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 	protected String selectedEntity;
 	protected int selectedFiscalYear = -1;
 	protected AssetType selectedAssetType = AssetType.NET;
-	
+
 	protected boolean showGenerated = false;
 
 	// -------------------------------------Transformer class
@@ -326,7 +326,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				// Pin/Diff mode
 				final List<IndexExposureData> ref = createData(pinnedPair.getFirst(), pinnedPair.getSecond());
 
-				final Pair<@NonNull Schedule, @NonNull ScenarioResult> p = otherPairs.get(0);
+				final Pair<@NonNull Schedule, com.mmxlabs.scenario.service.ScenarioResult> p = otherPairs.get(0);
 				final List<IndexExposureData> other = createData(p.getFirst(), p.getSecond());
 
 				LOOP_REF_DATA: for (final IndexExposureData refData : ref) {
@@ -349,7 +349,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				if (pinnedPair != null) {
 					output.addAll(createData(pinnedPair.getFirst(), pinnedPair.getSecond()));
 				}
-				for (final Pair<@NonNull Schedule, @NonNull ScenarioResult> p : otherPairs) {
+				for (final Pair<@NonNull Schedule, com.mmxlabs.scenario.service.ScenarioResult> p : otherPairs) {
 					output.addAll(createData(p.getFirst(), p.getSecond()));
 				}
 			}
@@ -390,7 +390,8 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		protected List<IndexExposureData> getExposuresByMonth(final Schedule schedule, final ScenarioResult scenarioResult, final YearMonth ymStart, final YearMonth ymEnd, List<Object> selected) {
 			final List<IndexExposureData> output = new LinkedList<>();
 			for (YearMonth cym = ymStart; cym.isBefore(ymEnd.plusMonths(1)); cym = cym.plusMonths(1)) {
-				IndexExposureData exposuresByMonth = ExposuresTransformer.getExposuresByMonth(scenarioResult, schedule, cym, mode, selected, selectedEntity, selectedFiscalYear, selectedAssetType, showGenerated);
+				IndexExposureData exposuresByMonth = ExposuresTransformer.getExposuresByMonth(scenarioResult, schedule, cym, mode, selected, selectedEntity, selectedFiscalYear, selectedAssetType,
+						showGenerated);
 				if (inspectChildrenAndExposures(exposuresByMonth)) {
 					output.add(exposuresByMonth);
 				}
@@ -586,7 +587,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 		final IndexExposureData modelData = pinData != null ? pinData : otherData;
 		assert modelData != null;
-		
+
 		final Map<String, Double> exposuresByMonth = new HashMap<>();
 
 		Collection<String> k = new LinkedHashSet<>();
@@ -653,7 +654,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			};
 			getViewSite().getActionBars().getToolBarManager().add(showGeneratedPaperDeals);
 		}
-		
+
 		final Action modeToggle = new Action("Units: currency", Action.AS_PUSH_BUTTON) {
 			@Override
 			public void run() {
@@ -861,7 +862,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 	protected YearMonth getEarliestExposureDate(final Schedule schedule) {
 		YearMonth result = YearMonth.now();
-		
+
 		if (schedule != null) {
 			for (final CargoAllocation ca : schedule.getCargoAllocations()) {
 				for (final SlotAllocation sa : ca.getSlotAllocations()) {
@@ -884,7 +885,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		}
 		return result;
 	}
-	
+
 	protected YearMonth getLatestExposureDate(final Schedule schedule) {
 		YearMonth result = YearMonth.now();
 
@@ -935,7 +936,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		}
 		return false;
 	}
-	
+
 	@Override
 	protected void applyExpansionOnNewElements(final Object[] expanded, final List<?> rowElements) {
 		final List<Object> newToExpand = new ArrayList<Object>();
@@ -945,7 +946,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					if (elem instanceof IndexExposureData) {
 						final IndexExposureData newE = (IndexExposureData) elem;
 						final IndexExposureData oldE = (IndexExposureData) e;
-						
+
 						if (newE.date.equals(oldE.date) && Objects.equals(newE.scenarioResult, oldE.scenarioResult)) {
 							newToExpand.add(newE);
 						}

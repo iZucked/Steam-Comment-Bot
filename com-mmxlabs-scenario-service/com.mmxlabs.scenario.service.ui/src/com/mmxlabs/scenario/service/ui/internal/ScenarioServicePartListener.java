@@ -9,9 +9,10 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
 public class ScenarioServicePartListener implements IPartListener {
 
@@ -68,7 +69,7 @@ public class ScenarioServicePartListener implements IPartListener {
 				if (!selectionProvider.isSelected(scenarioInstance)) {
 					try {
 						// This line may fail if model cannot be loaded. Wrap everything up in exception handler
-						final ScenarioResult scenarioResult = new ScenarioResult(scenarioInstance);
+						final ScenarioResult scenarioResult = new ScenarioResultImpl(scenarioInstance);
 						selectionProvider.select(scenarioResult, false);
 						lastAutoSelection = scenarioInstance;
 					} catch (final Exception e) {
@@ -100,7 +101,7 @@ public class ScenarioServicePartListener implements IPartListener {
 					if (!selectionProvider.isSelected(scenarioInstance)) {
 						try {
 							// This line may fail if model cannot be loaded. Wrap everything up in exception handler
-							final ScenarioResult scenarioResult = new ScenarioResult(scenarioInstance);
+							final ScenarioResult scenarioResult = new ScenarioResultImpl(scenarioInstance);
 							selectionProvider.select(scenarioResult, false);
 							lastAutoSelection = scenarioInstance;
 						} catch (final Exception e) {

@@ -30,10 +30,10 @@ import com.mmxlabs.models.lng.transformer.ui.parametermodes.impl.ParameterModesE
 import com.mmxlabs.models.ui.validation.ValidationPlugin;
 import com.mmxlabs.models.util.importer.registry.ExtensionConfigurationModule;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
+import com.mmxlabs.scenario.service.IScenarioServiceSelectionChangedListener;
+import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * The activator class controls the plug-in life cycle

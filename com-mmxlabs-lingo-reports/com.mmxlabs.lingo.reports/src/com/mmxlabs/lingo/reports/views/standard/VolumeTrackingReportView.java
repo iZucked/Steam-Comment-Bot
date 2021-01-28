@@ -38,8 +38,8 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocationType;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * Class to display a report describing the total volume of gas transactions for each contract (purchase & sales) for each gas year (with additional rows for "other purchase" and "other sales").
@@ -91,11 +91,11 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 	 * @param calendar
 	 * @return
 	 */
-	private Year getContractYear(SlotAllocation sa, final ZonedDateTime calendar) {
+	private Year getContractYear(final SlotAllocation sa, final ZonedDateTime calendar) {
 		final LocalDate utc = calendar.toLocalDate();
 
 		Month gasYearMonth = DEFAULT_MONTH;
-		Contract contract = sa.getContract();
+		final Contract contract = sa.getContract();
 		if (contract != null) {
 			gasYearMonth = Month.of(1 + contract.getContractYearStart());
 		}
@@ -106,10 +106,10 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 		return Year.of(utc.getYear() + yearOffset);
 	}
 
-	private Month getContractYearMonth(SlotAllocation sa) {
+	private Month getContractYearMonth(final SlotAllocation sa) {
 
 		Month gasYearMonth = DEFAULT_MONTH;
-		Contract contract = sa.getContract();
+		final Contract contract = sa.getContract();
 		if (contract != null) {
 			gasYearMonth = Month.of(1 + contract.getContractYearStart());
 		}
@@ -137,6 +137,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 			@Override
 			public @NonNull List<@NonNull VolumeData> createData(@Nullable final Pair<@NonNull Schedule, @NonNull ScenarioResult> pinnedPair,
 					@NonNull final List<@NonNull Pair<@NonNull Schedule, @NonNull ScenarioResult>> otherPairs) {
+
 				dateRange.setBoth(null, null);
 
 				final List<@NonNull VolumeData> output = new LinkedList<>();
@@ -145,7 +146,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 					// Pin/Diff mode
 					final List<VolumeData> ref = createData(pinnedPair.getFirst(), pinnedPair.getSecond());
 
-					final Pair<@NonNull Schedule, @NonNull ScenarioResult> p = otherPairs.get(0);
+					final Pair<@NonNull Schedule, ScenarioResult> p = otherPairs.get(0);
 					final List<VolumeData> other = createData(p.getFirst(), p.getSecond());
 
 					LOOP_REF_DATA: for (final VolumeData refData : ref) {
@@ -170,7 +171,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 					if (pinnedPair != null) {
 						output.addAll(createData(pinnedPair.getFirst(), pinnedPair.getSecond()));
 					}
-					for (final Pair<@NonNull Schedule, @NonNull ScenarioResult> p : otherPairs) {
+					for (final Pair<@NonNull Schedule, com.mmxlabs.scenario.service.ScenarioResult> p : otherPairs) {
 						output.addAll(createData(p.getFirst(), p.getSecond()));
 					}
 				}
