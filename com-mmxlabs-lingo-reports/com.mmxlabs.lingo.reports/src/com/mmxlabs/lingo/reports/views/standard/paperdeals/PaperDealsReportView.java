@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views.standard.paperdeals;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,6 +21,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -41,7 +43,6 @@ import com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.SelectionHelper;
@@ -61,11 +62,45 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 	@Override
 	public void createPartControl(final Composite parent) {
 
-		viewer = new GridTreeViewer(parent);
-		GridViewerHelper.configureLookAndFeel(viewer);
+		paperDealViewer = new GridTreeViewer(parent);
+		GridViewerHelper.configureLookAndFeel(paperDealViewer);
 
-		viewer.getGrid().setHeaderVisible(true);
-		viewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
+		paperDealViewer.getGrid().setHeaderVisible(true);
+		paperDealViewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
+		paperDealViewer.setComparator(new ViewerComparator() {
+			@Override
+			public int compare(final Viewer viewer, final Object e1, final Object e2) {
+				if (e1 instanceof PaperDealAllocation && e2 instanceof PaperDealAllocation) {
+					final PaperDealAllocation pda1 = (PaperDealAllocation) e1;
+					final PaperDealAllocation pda2 = (PaperDealAllocation) e2;
+					LocalDate earliestPDA1 = LocalDate.MAX;
+					if (!pda1.getEntries().isEmpty()) {
+						earliestPDA1 = pda1.getEntries().stream().map(PaperDealAllocationEntry::getDate).min(LocalDate::compareTo).get();
+					} else {
+						return -1;
+					}
+					LocalDate earliestPDA2 = LocalDate.MAX;
+					if (!pda2.getEntries().isEmpty()) {
+						earliestPDA2 = pda2.getEntries().stream().map(PaperDealAllocationEntry::getDate).min(LocalDate::compareTo).get();
+					} else {
+						return 1;
+					}
+					return earliestPDA1.compareTo(earliestPDA2);
+				}
+				if (e1 instanceof PaperDealAllocationEntry && e2 instanceof PaperDealAllocationEntry) {
+					final PaperDealAllocationEntry pdae1 = (PaperDealAllocationEntry) e1;
+					final PaperDealAllocationEntry pdae2 = (PaperDealAllocationEntry) e1;
+					return pdae1.getDate().compareTo(pdae2.getDate());
+				}
+				if (e1 instanceof PaperDealAllocation && e2 instanceof PaperDealAllocationEntry) {
+					return -1;
+				}
+				if (e1 instanceof PaperDealAllocationEntry && e2 instanceof PaperDealAllocation) {
+					return 1;
+				}
+				return super.compare(viewer, e1, e2);
+			}
+		});
 
 		final GridViewerColumn gvc1 = createColumn("Date", SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__DATE);
 		gvc1.getColumn().setTree(true);
@@ -74,81 +109,19 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 		final GridViewerColumn gvc4 = createColumn("Quantity", SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__QUANTITY);
 		final GridViewerColumn gvc5 = createColumn("Value", SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__VALUE);
 
-		viewer.setContentProvider(new ITreeContentProvider() {
+		paperDealViewer.setContentProvider(new PaperDealTreeContentProvider());
 
-			@Override
-			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void dispose() {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public boolean hasChildren(final Object element) {
-
-				if (element instanceof PaperDealAllocation) {
-					return true;
-				}
-				return false;
-			}
-
-			@Override
-			public Object getParent(final Object element) {
-				if (element instanceof PaperDealAllocationEntry) {
-					return ((PaperDealAllocationEntry) element).eContainer();
-				}
-				return null;
-			}
-
-			@Override
-			public Object[] getElements(final Object inputElement) {
-				if (inputElement instanceof Object[]) {
-					return (Object[]) inputElement;
-				}
-				if (inputElement instanceof Collection<?>) {
-					final Collection<?> collection = (Collection<?>) inputElement;
-					return collection.toArray();
-				}
-				if (inputElement instanceof SlotAllocation) {
-					final SlotAllocation slotAllocation = (SlotAllocation) inputElement;
-					return slotAllocation.getExposures().toArray();
-				}
-				return new Object[0];
-			}
-
-			@Override
-			public Object[] getChildren(final Object parentElement) {
-				if (parentElement instanceof Object[]) {
-					return (Object[]) parentElement;
-				}
-				if (parentElement instanceof Collection<?>) {
-					final Collection<?> collection = (Collection<?>) parentElement;
-					return collection.toArray();
-				}
-				if (parentElement instanceof PaperDealAllocation) {
-					final PaperDealAllocation slotAllocation = (PaperDealAllocation) parentElement;
-					return slotAllocation.getEntries().toArray();
-				}
-				return new Object[0];
-			}
-		});
-
-		final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
+		final ESelectionService service = getSite().getService(ESelectionService.class);
 		service.addPostSelectionListener(this);
 
-		selectedScenariosService = (SelectedScenariosService) getSite().getService(SelectedScenariosService.class);
+		selectedScenariosService = getSite().getService(SelectedScenariosService.class);
 		selectedScenariosService.addListener(selectedScenariosServiceListener);
 
 		makeActions();
 
 		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 
-		getSite().setSelectionProvider(viewer);
+		getSite().setSelectionProvider(paperDealViewer);
 
 	}
 
@@ -157,7 +130,7 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 			@Override
 			public void run() {
 				expand = !expand;
-				viewer.setAutoExpandLevel(expand ? AbstractTreeViewer.ALL_LEVELS : 0);
+				paperDealViewer.setAutoExpandLevel(expand ? AbstractTreeViewer.ALL_LEVELS : 0);
 				setText(expand ? "Collapse" : "Expand");
 				getViewSite().getActionBars().updateActionBars();
 				PaperDealsReportView.this.refresh();
@@ -166,27 +139,26 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 		
 		getViewSite().getActionBars().getToolBarManager().add(expandCollapseAll);
 		
-		final Action packColumnsAction = PackActionFactory.createPackColumnsAction(viewer);
-		final Action copyTableAction = new CopyGridToClipboardAction(viewer.getGrid());
+		final Action packColumnsAction = PackActionFactory.createPackColumnsAction(paperDealViewer);
+		final Action copyTableAction = new CopyGridToClipboardAction(paperDealViewer.getGrid());
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
 
 		getViewSite().getActionBars().getToolBarManager().add(packColumnsAction);
 		getViewSite().getActionBars().getToolBarManager().add(copyTableAction);
-
 		getViewSite().getActionBars().getToolBarManager().update(true);
 
 	}
 
 	private GridViewerColumn createColumn(final String title, final GridColumnGroup colGroup, final EStructuralFeature reference) {
 		final GridColumn column = new GridColumn(colGroup, SWT.NONE);
-		final GridViewerColumn col = new GridViewerColumn(viewer, column);
+		final GridViewerColumn col = new GridViewerColumn(paperDealViewer, column);
 		GridViewerHelper.configureLookAndFeel(col);
 
 		return createColumn(col, title, reference);
 	}
 
 	private GridColumnGroup createGroup(final String title) {
-		final GridColumnGroup group = new GridColumnGroup(viewer.getGrid(), SWT.NONE);
+		final GridColumnGroup group = new GridColumnGroup(paperDealViewer.getGrid(), SWT.NONE);
 		GridViewerHelper.configureLookAndFeel(group);
 
 		group.setText(title);
@@ -194,7 +166,7 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 	}
 
 	private GridViewerColumn createColumn(final String title, final EStructuralFeature reference) {
-		final GridViewerColumn col = new GridViewerColumn(viewer, SWT.NONE);
+		final GridViewerColumn col = new GridViewerColumn(paperDealViewer, SWT.NONE);
 		GridViewerHelper.configureLookAndFeel(col);
 		return createColumn(col, title, reference);
 	}
@@ -258,12 +230,43 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 	private ISelection selection;
 
 	public PaperDealsReportView() {
-		// super("com.mmxlabs.lingo.doc.Reports_IndexExposuresDetails");
+		selectedScenariosServiceListener = new PaperDealSelectedScenariosServiceListener();
 	}
 
 	@NonNull
-	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
+	protected ISelectedScenariosServiceListener selectedScenariosServiceListener;
+	
+	protected GridTreeViewer paperDealViewer;
 
+	@Override
+	public void selectionChanged(final MPart part, final Object selectionObject) {
+
+		final IWorkbenchPart e3Part = SelectionHelper.getE3Part(part);
+		if (e3Part != null) {
+			if (e3Part == this) {
+				return;
+			}
+			if (e3Part instanceof PropertySheet) {
+				return;
+			}
+		}
+		selection = SelectionHelper.adaptSelection(selectionObject);
+		// viewer.setSelection(selection, true);
+		ViewerHelper.refreshThen(paperDealViewer, true, () -> {
+			if (expand) paperDealViewer.expandAll();
+			});
+	}
+
+	@Override
+	public void setFocus() {
+		ViewerHelper.setFocus(paperDealViewer);
+	}
+	
+	protected void refresh() {
+		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
+	}
+	
+	protected final class PaperDealSelectedScenariosServiceListener implements ISelectedScenariosServiceListener {
 		@Override
 		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others, final boolean block) {
 			final Runnable r = new Runnable() {
@@ -313,39 +316,125 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 						}
 					}
 
-					ViewerHelper.setInput(viewer, true, slotAllocations);
+					ViewerHelper.setInput(paperDealViewer, true, slotAllocations);
 				}
 			};
 
 			RunnerHelper.exec(r, block);
 		}
-	};
-	private GridTreeViewer viewer;
-
-	@Override
-	public void selectionChanged(final MPart part, final Object selectionObject) {
-
-		final IWorkbenchPart e3Part = SelectionHelper.getE3Part(part);
-		if (e3Part != null) {
-			if (e3Part == this) {
-				return;
-			}
-			if (e3Part instanceof PropertySheet) {
-				return;
-			}
-		}
-		selection = SelectionHelper.adaptSelection(selectionObject);
-		// viewer.setSelection(selection, true);
-		ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
-	}
-
-	@Override
-	public void setFocus() {
-		ViewerHelper.setFocus(viewer);
 	}
 	
-	protected void refresh() {
-		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
+	public final class GeneratedPaperDealsSelectedScenariosServiceListener implements ISelectedScenariosServiceListener {
+		@Override
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others, final boolean block) {
+			final Runnable r = new Runnable() {
+				@Override
+				public void run() {
+
+					final List<PaperDealAllocation> paperDealAllocations = new LinkedList<>();
+
+					if (pinned != null) {
+						@Nullable
+						final ScheduleModel scheduleModel = pinned.getTypedResult(ScheduleModel.class);
+						if (scheduleModel != null) {
+							final Schedule schedule = scheduleModel.getSchedule();
+							if (schedule != null) {
+								for(final PaperDeal paperDeal : schedule.getGeneratedPaperDeals()) {
+									for(final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
+										if (paperDealAllocation.getPaperDeal().equals(paperDeal)) {
+											paperDealAllocations.add(paperDealAllocation);
+										}
+									}
+								}
+							}
+						}
+					}
+					for (final ScenarioResult other : others) {
+						boolean showingOptiResult = false;
+						if (other != null && other.getResultRoot() != null && other.getResultRoot().eContainer() instanceof SolutionOption) {
+							paperDealAllocations.clear();
+							showingOptiResult = true;
+						}
+						@Nullable
+						final ScheduleModel scheduleModel = other.getTypedResult(ScheduleModel.class);
+						if (scheduleModel != null) {
+							final Schedule schedule = scheduleModel.getSchedule();
+							if (schedule != null) {
+								for(final PaperDeal paperDeal : schedule.getGeneratedPaperDeals()) {
+									for(final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
+										if (paperDealAllocation.getPaperDeal().equals(paperDeal)) {
+											paperDealAllocations.add(paperDealAllocation);
+										}
+									}
+								}
+							}
+						}
+						if (showingOptiResult) {
+							break;
+						}
+					}
+
+					ViewerHelper.setInput(paperDealViewer, true, paperDealAllocations);
+				}
+			};
+
+			RunnerHelper.exec(r, block);
+		}
+	}
+
+	private final class PaperDealTreeContentProvider implements ITreeContentProvider {
+		@Override
+		public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+		}
+
+		@Override
+		public void dispose() {
+		}
+
+		@Override
+		public boolean hasChildren(final Object element) {
+
+			if (element instanceof PaperDealAllocation) {
+				return true;
+			}
+			return false;
+		}
+
+		@Override
+		public Object getParent(final Object element) {
+			if (element instanceof PaperDealAllocationEntry) {
+				return ((PaperDealAllocationEntry) element).eContainer();
+			}
+			return null;
+		}
+
+		@Override
+		public Object[] getElements(final Object inputElement) {
+			if (inputElement instanceof Object[]) {
+				return (Object[]) inputElement;
+			}
+			if (inputElement instanceof Collection<?>) {
+				final Collection<?> collection = (Collection<?>) inputElement;
+				return collection.toArray();
+			}
+			return new Object[0];
+		}
+
+		@Override
+		public Object[] getChildren(final Object parentElement) {
+			if (parentElement instanceof Object[]) {
+				return (Object[]) parentElement;
+			}
+			if (parentElement instanceof Collection<?>) {
+				final Collection<?> collection = (Collection<?>) parentElement;
+				return collection.toArray();
+			}
+			if (parentElement instanceof PaperDealAllocation) {
+				final PaperDealAllocation slotAllocation = (PaperDealAllocation) parentElement;
+				return slotAllocation.getEntries().toArray();
+			}
+			return new Object[0];
+		}
 	}
 
 }
