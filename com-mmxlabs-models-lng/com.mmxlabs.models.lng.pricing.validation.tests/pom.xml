@@ -88,18 +88,4 @@
 		</plugins>
 
 	</build>
-	<profiles>
-		<!-- Enable this profile to run the its test independently of the full 
-			build. -->
-		<profile>
-			<id>useSnapshotsRepo</id>
-			<repositories>
-				<repository>
-					<id>mmxlabs-p2-snapshots</id>
-					<url>https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/</url>
-					<layout>p2</layout>
-				</repository>
-			</repositories>
-		</profile>
-	</profiles>
 </project>
