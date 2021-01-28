@@ -4,48 +4,42 @@
  */
 package com.mmxlabs.lingo.reports.views.fleet.formatters;
 
-import java.util.List;
-
+import com.mmxlabs.lingo.reports.views.formatters.ICostTypeFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
-import com.mmxlabs.lingo.reports.views.schedule.model.Row;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 
-public class NOfCargoesFormatter extends IntegerFormatter  {
+public class NOfCargoesFormatter extends IntegerFormatter implements ICostTypeFormatter {
 
 	@Override
-	public Integer getIntValue(Object object) {
+	public Type getType() {
+		return Type.OTHER;
+	}
 
-		if (object instanceof Row) {
-			object = ((Row) object).getSequence();
-		}
+	@Override
+	public Integer getIntValue(final Object object) {
+		return SequenceGrabber.applyToSequences(object, this::getNOfCargoes);
+	}
+
+	private int getNOfCargoes(final Sequence sequence) {
 		int nOfCargoes = 0;
-		if (object instanceof Sequence) {
-			Sequence sequence = (Sequence) object;
-			nOfCargoes += getNOfCargoes(sequence);
-		} else if (object instanceof List) {
-			List<?> objects = (List<?>) object;
-			if (objects.size() > 0) {
-				for (Object o : objects) {
-					if (o instanceof Sequence) {
-						nOfCargoes += getNOfCargoes((Sequence) o);
+		CargoAllocation lastAllocation = null;
+		for (final Event evt : sequence.getEvents()) {
+			if (evt instanceof SlotVisit) {
+				final SlotVisit slotVisit = (SlotVisit) evt;
+				final SlotAllocation sa = slotVisit.getSlotAllocation();
+				if (sa != null) {
+					final CargoAllocation ca = sa.getCargoAllocation();
+					if (lastAllocation != ca) {
+						nOfCargoes++;
+						lastAllocation = ca;
 					}
 				}
 			}
 		}
-
 		return nOfCargoes;
-	}
-
-	private int getNOfCargoes(Sequence sequence) {
-		int nOfCargoes = 0;
-		for (Event evt : sequence.getEvents()) {
-			if (evt instanceof SlotVisit) {
-				nOfCargoes++;
-			}
-		}
-		//Divided by 2 as we have load slots and discharge slots.
-		return nOfCargoes / 2;
 	}
 }

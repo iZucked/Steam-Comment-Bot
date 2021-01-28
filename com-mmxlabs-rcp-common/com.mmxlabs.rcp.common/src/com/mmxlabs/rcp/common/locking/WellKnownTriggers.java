@@ -12,6 +12,9 @@ package com.mmxlabs.rcp.common.locking;
  */
 public final class WellKnownTriggers {
 
+	public static final SingleUseTrigger WORKSPACE_STARTED = new SingleUseTrigger();
+
+	
 	/**
 	 * A trigger point used to delay e.g. scenario services and hub data downloaders to wait until the re-encryption process completes
 	 */

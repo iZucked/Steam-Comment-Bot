@@ -101,7 +101,6 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 		layout.addShowViewShortcut(FitnessReportView.ID);
 		layout.addShowViewShortcut(VolumeIssuesReportView.ID);
 		layout.addShowViewShortcut(ReportsConstants.VIEW_COMPARE_SCENARIOS_ID);
-		layout.addShowViewShortcut(ReportsConstants.VIEW_OPTIMISATIONS_ID);
 
 		layout.addShowViewShortcut("org.eclipse.pde.runtime.LogView");
 

@@ -28,7 +28,7 @@ import org.eclipse.ui.views.properties.PropertySheet;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
-import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
@@ -40,7 +40,7 @@ import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 public abstract class AbstractReportView extends ViewPart implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener {
 
-	private SelectedScenariosService selectedScenariosService;
+	private ScenarioComparisonService selectedScenariosService;
 
 	protected abstract Object doSelectionChanged(final TransformedSelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others);
 
@@ -48,16 +48,17 @@ public abstract class AbstractReportView extends ViewPart implements org.eclipse
 
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
-
 		@Override
-		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others, final boolean block) {
+		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
+
 			final Runnable r = new Runnable() {
 				@Override
 				public void run() {
 					clearInputEquivalents();
 					currentSelectedDataProvider = new TransformedSelectedDataProvider(selectedDataProvider);
 
-					final Object newInput = doSelectionChanged(currentSelectedDataProvider, pinned, others);
+					final Object newInput = doSelectionChanged(currentSelectedDataProvider, currentSelectedDataProvider.getPinnedScenarioResult(),
+							currentSelectedDataProvider.getOtherScenarioResults());
 
 					ViewerHelper.setInput(getViewer(), true, newInput);
 				}
@@ -156,7 +157,7 @@ public abstract class AbstractReportView extends ViewPart implements org.eclipse
 			service.addPostSelectionListener(this);
 		}
 
-		selectedScenariosService = (SelectedScenariosService) getSite().getService(SelectedScenariosService.class);
+		selectedScenariosService = getSite().getService(ScenarioComparisonService.class);
 		selectedScenariosService.addListener(selectedScenariosServiceListener);
 		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 	}

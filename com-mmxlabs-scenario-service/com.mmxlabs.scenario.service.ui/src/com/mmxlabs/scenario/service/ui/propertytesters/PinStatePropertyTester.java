@@ -7,8 +7,8 @@ package com.mmxlabs.scenario.service.ui.propertytesters;
 import org.eclipse.core.expressions.PropertyTester;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
-import com.mmxlabs.scenario.service.ui.internal.ScenarioServiceSelectionProvider;
 
 public class PinStatePropertyTester extends PropertyTester {
 	@Override
@@ -16,7 +16,7 @@ public class PinStatePropertyTester extends PropertyTester {
 		if (receiver instanceof ScenarioInstance) {
 			ScenarioInstance scenarioInstance = (ScenarioInstance) receiver;
 			if (property.equals("pinned")) {
-				final ScenarioServiceSelectionProvider selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
+				final IScenarioServiceSelectionProvider selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
 				return selectionProvider.isPinned(scenarioInstance);
 			}
 		}

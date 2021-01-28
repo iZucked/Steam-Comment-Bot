@@ -30,7 +30,7 @@ import com.mmxlabs.ganttviewer.IGanttChartColourProvider;
 import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
 import com.mmxlabs.lingo.reports.scheduleview.internal.Activator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
-import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
@@ -100,12 +100,12 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	private final IMemento memento;
 
 	private boolean showCanals = false;
-	private final SelectedScenariosService selectedScenariosService;
+	private final ScenarioComparisonService selectedScenariosService;
 
 	private final VesselAssignmentFormatter vesselFormatter = new VesselAssignmentFormatter();
 	Image pinImage = null;
 
-	public EMFScheduleLabelProvider(final GanttChartViewer viewer, final IMemento memento, @NonNull final SelectedScenariosService selectedScenariosService) {
+	public EMFScheduleLabelProvider(final GanttChartViewer viewer, final IMemento memento, @NonNull final ScenarioComparisonService selectedScenariosService) {
 		this.viewer = viewer;
 		this.memento = memento;
 		this.selectedScenariosService = selectedScenariosService;
@@ -165,7 +165,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				if (collection.size() > 1) {
 					final ISelectedDataProvider selectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 					if (selectedDataProvider != null) {
-						if (selectedScenariosService.getPinnedScenario() != null) {
+						if (selectedScenariosService.getPinned() != null) {
 							// Do nothing now we have a pin icon
 						} else {
 							final ScenarioResult scenarioResult = selectedDataProvider.getScenarioResult(sequence);
@@ -197,7 +197,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				if (collection.size() > 1) {
 					final ISelectedDataProvider selectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
 					if (selectedDataProvider != null) {
-						if (selectedScenariosService.getPinnedScenario() != null) {
+						if (selectedScenariosService.getPinned() != null) {
 							// Do nothing now we have a pin icon
 						} else {
 							final ScenarioResult scenarioResult = selectedDataProvider.getScenarioResult(combinedSequence.getSequences().get(0));

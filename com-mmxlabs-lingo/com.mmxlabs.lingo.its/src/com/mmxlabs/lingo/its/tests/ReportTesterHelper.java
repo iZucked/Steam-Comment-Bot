@@ -108,7 +108,7 @@ public class ReportTesterHelper {
 	public static final String CHANGESET_REPORT_ID = ReportsConstants.VIEW_COMPARE_SCENARIOS_ID;
 	public static final String CHANGESET_REPORT_SHORTNAME = "ChangeSetReport";
 
-	public static final String ACTIONPLAN_REPORT_ID = ReportsConstants.VIEW_OPTIMISATIONS_ID;
+	public static final String ACTIONPLAN_REPORT_ID = ReportsConstants.VIEW_COMPARE_SCENARIOS_ID;
 	public static final String ACTIONPLAN_REPORT_SHORTNAME = "ActionPlanReport";
 
 	public static final String EXPOSURES_REPORT_ID = "com.mmxlabs.shiplingo.platform.reports.views.ExposureReportView";
@@ -224,10 +224,7 @@ public class ReportTesterHelper {
 	@Nullable
 	public IReportContents getReportContents(final @NonNull ScenarioResult pinScenario, @NonNull final ScenarioResult ref, final String reportID) throws InterruptedException {
 		return getReportContents(reportID, (v, p) -> {
-			p.deselectAll(true);
-			p.select(pinScenario, true);
-			p.setPinnedInstance(pinScenario, true);
-			p.select(ref, true);
+			p.setPinnedPair(pinScenario, ref, true);
 		}, (v, p) -> {
 			p.deselectAll(true);
 		});

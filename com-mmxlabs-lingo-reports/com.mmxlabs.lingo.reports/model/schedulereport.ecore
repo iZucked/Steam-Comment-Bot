@@ -2,33 +2,10 @@
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model" nsURI="http://www.mmxlabs.com/models/lingo/reports/schedule/1"
     nsPrefix="reports.schedule">
-  <eClassifiers xsi:type="ecore:EClass" name="Table">
-    <eOperations name="getCompositeRow" eType="#//CompositeRow"/>
-    <eOperations name="getCompositeRowsWithPartials" upperBound="-1" eType="#//CompositeRow"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="options" eType="#//DiffOptions"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//Row"
-        containment="true" eOpposite="#//Row/table"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="cycleGroups" upperBound="-1"
-        eType="#//CycleGroup" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rowGroups" upperBound="-1"
-        eType="#//RowGroup" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="scenarios" upperBound="-1"
-        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="pinnedScenario" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="userGroups" upperBound="-1"
-        eType="#//UserGroup" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="selectedElements" upperBound="-1"
-        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="compositeRows" upperBound="-1"
-        eType="#//CompositeRow" containment="true"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Row">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="scenarioName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="visible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         defaultValueLiteral="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="cycleGroup" eType="#//CycleGroup"
-        eOpposite="#//CycleGroup/rows"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputEquivalents" upperBound="-1"
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -48,36 +25,14 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="rhsLink" eType="#//Row"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rowGroup" eType="#//RowGroup"
         eOpposite="#//RowGroup/rows"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="table" eType="#//Table"
-        eOpposite="#//Table/rows"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="linkedSequences" upperBound="-1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//Sequence"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="scenarioDataProvider" eType="#//IScenarioDataProvider"
         transient="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="IScenarioDataProvider" instanceClassName="com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider"
       serializable="false"/>
-  <eClassifiers xsi:type="ecore:EClass" name="CycleGroup">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//Row"
-        eOpposite="#//Row/cycleGroup"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="index" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
-        unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="userGroup" eType="#//UserGroup"
-        eOpposite="#//UserGroup/groups"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="delta" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="changeType" eType="#//ChangeType"
-        defaultValueLiteral="PNL"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RowGroup">
     <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//Row"
         eOpposite="#//Row/rowGroup"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="UserGroup">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="groups" upperBound="-1"
-        eType="#//CycleGroup" containment="true" eOpposite="#//CycleGroup/userGroup"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="delta" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DiffOptions">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="filterSelectedElements"
