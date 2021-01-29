@@ -21,7 +21,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
-import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -43,7 +42,10 @@ import com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
+import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
+import com.mmxlabs.models.ui.tabular.IComparableProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
@@ -67,47 +69,76 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 
 		paperDealViewer.getGrid().setHeaderVisible(true);
 		paperDealViewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
-		paperDealViewer.setComparator(new ViewerComparator() {
+		
+		EObjectTableViewerSortingSupport sortingSupport = new EObjectTableViewerSortingSupport();
+		paperDealViewer.setComparator(sortingSupport.createViewerComparer());
+
+		final GridViewerColumn dateColumn = createColumn("Date", SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__DATE);
+		sortingSupport.addSortableColumn(paperDealViewer, dateColumn, dateColumn.getColumn());
+		dateColumn.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, new IComparableProvider() {
+			
 			@Override
-			public int compare(final Viewer viewer, final Object e1, final Object e2) {
-				if (e1 instanceof PaperDealAllocation && e2 instanceof PaperDealAllocation) {
-					final PaperDealAllocation pda1 = (PaperDealAllocation) e1;
-					final PaperDealAllocation pda2 = (PaperDealAllocation) e2;
-					LocalDate earliestPDA1 = LocalDate.MAX;
-					if (!pda1.getEntries().isEmpty()) {
-						earliestPDA1 = pda1.getEntries().stream().map(PaperDealAllocationEntry::getDate).min(LocalDate::compareTo).get();
-					} else {
-						return -1;
+			public Comparable getComparable(Object object) {
+				LocalDate earliestPDA = LocalDate.MAX;
+				if (object instanceof PaperDealAllocation) {
+					final PaperDealAllocation pda = (PaperDealAllocation) object;
+					if (!pda.getEntries().isEmpty()) {
+						earliestPDA = pda.getEntries().stream().map(PaperDealAllocationEntry::getDate).min(LocalDate::compareTo).get();
 					}
-					LocalDate earliestPDA2 = LocalDate.MAX;
-					if (!pda2.getEntries().isEmpty()) {
-						earliestPDA2 = pda2.getEntries().stream().map(PaperDealAllocationEntry::getDate).min(LocalDate::compareTo).get();
-					} else {
-						return 1;
-					}
-					return earliestPDA1.compareTo(earliestPDA2);
 				}
-				if (e1 instanceof PaperDealAllocationEntry && e2 instanceof PaperDealAllocationEntry) {
-					final PaperDealAllocationEntry pdae1 = (PaperDealAllocationEntry) e1;
-					final PaperDealAllocationEntry pdae2 = (PaperDealAllocationEntry) e1;
-					return pdae1.getDate().compareTo(pdae2.getDate());
-				}
-				if (e1 instanceof PaperDealAllocation && e2 instanceof PaperDealAllocationEntry) {
-					return -1;
-				}
-				if (e1 instanceof PaperDealAllocationEntry && e2 instanceof PaperDealAllocation) {
-					return 1;
-				}
-				return super.compare(viewer, e1, e2);
+				return earliestPDA;
 			}
 		});
-
-		final GridViewerColumn gvc1 = createColumn("Date", SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__DATE);
-		gvc1.getColumn().setTree(true);
-		final GridViewerColumn gvc2 = createColumn("Price", SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__PRICE);
+		dateColumn.getColumn().setTree(true);
+		final GridViewerColumn priceColumn = createColumn("Price", SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__PRICE);
+		sortingSupport.addSortableColumn(paperDealViewer, priceColumn, priceColumn.getColumn());
+		priceColumn.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, new IComparableProvider() {
+			
+			@Override
+			public Comparable getComparable(Object object) {
+				Double lowestPrice = Double.MIN_VALUE;
+				if (object instanceof PaperDealAllocation) {
+					final PaperDealAllocation pda = (PaperDealAllocation) object;
+					if (!pda.getEntries().isEmpty()) {
+						lowestPrice = pda.getEntries().stream().map(PaperDealAllocationEntry::getPrice).min(Double::compareTo).get();
+					}
+				}
+				return lowestPrice;
+			}
+		});
 		final GridViewerColumn gvc3 = createColumn("Settled", SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__SETTLED);
-		final GridViewerColumn gvc4 = createColumn("Quantity", SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__QUANTITY);
-		final GridViewerColumn gvc5 = createColumn("Value", SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__VALUE);
+		final GridViewerColumn quantityColumn = createColumn("Quantity", SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__QUANTITY);
+		sortingSupport.addSortableColumn(paperDealViewer, quantityColumn, quantityColumn.getColumn());
+		quantityColumn.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, new IComparableProvider() {
+			
+			@Override
+			public Comparable getComparable(Object object) {
+				Double lowestQuantity = Double.MIN_VALUE;
+				if (object instanceof PaperDealAllocation) {
+					final PaperDealAllocation pda = (PaperDealAllocation) object;
+					if (!pda.getEntries().isEmpty()) {
+						lowestQuantity = pda.getEntries().stream().map(PaperDealAllocationEntry::getQuantity).min(Double::compareTo).get();
+					}
+				}
+				return lowestQuantity;
+			}
+		});
+		final GridViewerColumn valueColumn = createColumn("Value", SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__VALUE);
+		sortingSupport.addSortableColumn(paperDealViewer, valueColumn, valueColumn.getColumn());
+		valueColumn.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, new IComparableProvider() {
+			
+			@Override
+			public Comparable getComparable(Object object) {
+				Double lowestValue = Double.MIN_VALUE;
+				if (object instanceof PaperDealAllocation) {
+					final PaperDealAllocation pda = (PaperDealAllocation) object;
+					if (!pda.getEntries().isEmpty()) {
+						lowestValue = pda.getEntries().stream().map(PaperDealAllocationEntry::getValue).min(Double::compareTo).get();
+					}
+				}
+				return lowestValue;
+			}
+		});
 
 		paperDealViewer.setContentProvider(new PaperDealTreeContentProvider());
 
@@ -130,10 +161,13 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 			@Override
 			public void run() {
 				expand = !expand;
-				paperDealViewer.setAutoExpandLevel(expand ? AbstractTreeViewer.ALL_LEVELS : 0);
+				if (expand) {
+					paperDealViewer.expandAll();
+				} else {
+					paperDealViewer.collapseAll();
+				}
 				setText(expand ? "Collapse" : "Expand");
 				getViewSite().getActionBars().updateActionBars();
-				PaperDealsReportView.this.refresh();
 			}
 		};
 
@@ -230,7 +264,7 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 	private ISelection selection;
 
 	public PaperDealsReportView() {
-		selectedScenariosServiceListener = new PaperDealSelectedScenariosServiceListener();
+		this.selectedScenariosServiceListener =  new PaperDealSelectedScenariosServiceListener();
 	}
 
 	@NonNull
@@ -251,9 +285,12 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 			}
 		}
 		selection = SelectionHelper.adaptSelection(selectionObject);
-		// viewer.setSelection(selection, true);
 		ViewerHelper.refreshThen(paperDealViewer, true, () -> {
-			if (expand) paperDealViewer.expandAll();
+			if (expand) {
+				paperDealViewer.expandAll();
+			} else {
+				paperDealViewer.collapseAll();
+			}
 			});
 	}
 	@Override
@@ -414,6 +451,10 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 				final Collection<?> collection = (Collection<?>) inputElement;
 				return collection.toArray();
 			}
+			if (inputElement instanceof PaperDealAllocation) {
+				final PaperDealAllocation pda = (PaperDealAllocation) inputElement;
+				return pda.getEntries().toArray();
+			}
 			return new Object[0];
 		}
 
@@ -427,8 +468,8 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 				return collection.toArray();
 			}
 			if (parentElement instanceof PaperDealAllocation) {
-				final PaperDealAllocation slotAllocation = (PaperDealAllocation) parentElement;
-				return slotAllocation.getEntries().toArray();
+				final PaperDealAllocation pda = (PaperDealAllocation) parentElement;
+				return pda.getEntries().toArray();
 			}
 			return new Object[0];
 		}
