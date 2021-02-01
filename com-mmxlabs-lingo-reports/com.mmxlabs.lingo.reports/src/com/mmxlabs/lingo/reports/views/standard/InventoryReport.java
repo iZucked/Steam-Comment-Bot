@@ -127,10 +127,10 @@ import com.mmxlabs.scenario.service.ScenarioResult;
 public class InventoryReport extends ViewPart {
 	public static final String ID = "com.mmxlabs.lingo.reports.views.standard.InventoryReport";
 
-	private Chart chartViewer;
+	private Chart inventoryInsAndOutChart;
 	private Chart inventoryDailyChartViewer;
-	private Chart chartViewer2;
-	private Chart chartViewer3;
+	private Chart mullMonthlyOverliftChart;
+	private Chart mullMonthlyCargoCountChart;
 	
 	private GridTableViewer inventoryTableViewer;
 	
@@ -176,6 +176,8 @@ public class InventoryReport extends ViewPart {
 				selectedInventory = null;
 
 				currentResult = selectedDataProvider.getPinnedScenarioResult();
+				pinnedResult = currentResult;
+				otherResult = selectedDataProvider.getOtherScenarioResults().isEmpty() ? null : selectedDataProvider.getOtherScenarioResults().iterator().next();
 				if (currentResult == null) {
 
 					if (!selectedDataProvider.getAllScenarioResults().isEmpty()) {
@@ -289,11 +291,11 @@ public class InventoryReport extends ViewPart {
 		final CTabItem tableItem = new CTabItem(folder, SWT.NONE);
 		tableItem.setText("Table");
 		{
-			chartViewer = new Chart(folder, SWT.NONE);
-			chartViewer.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+			inventoryInsAndOutChart = new Chart(folder, SWT.NONE);
+			inventoryInsAndOutChart.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 
-			chartViewer.getTitle().setVisible(false);
-			chartItem.setControl(chartViewer);
+			inventoryInsAndOutChart.getTitle().setVisible(false);
+			chartItem.setControl(inventoryInsAndOutChart);
 		}
 		{
 			inventoryDailyChartViewer = new Chart(folder,  SWT.None);
@@ -341,12 +343,12 @@ public class InventoryReport extends ViewPart {
 		inventoryTablePackAction = PackActionFactory.createPackColumnsAction(inventoryTableViewer);
 		inventoryTablePackActionContributionItem = new ActionContributionItem(inventoryTablePackAction);
 		getViewSite().getActionBars().getToolBarManager().add(inventoryTablePackActionContributionItem);
-		inventoryTablePackActionContributionItem.setVisible(folderSelection == 1);
+		inventoryTablePackActionContributionItem.setVisible(folderSelection == 2);
 
 		inventoryTableCopyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(inventoryTableViewer);
 		inventoryTableCopyActionContributionItem = new ActionContributionItem(inventoryTableCopyAction);
 		getViewSite().getActionBars().getToolBarManager().add(inventoryTableCopyActionContributionItem);
-		inventoryTableCopyActionContributionItem.setVisible(folderSelection == 1);
+		inventoryTableCopyActionContributionItem.setVisible(folderSelection == 2);
 
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
 			final CTabItem mullItem = new CTabItem(folder, SWT.NONE);
@@ -362,7 +364,7 @@ public class InventoryReport extends ViewPart {
 				mullMonthlyTableFilterField.setFilterSupport(mullMonthlyTableFilterSupport);
 				
 				getViewSite().getActionBars().getToolBarManager().add(mullMonthlyTableFilterField.getContribution());
-				mullMonthlyTableFilterField.getContribution().setVisible(folderSelection == 2);
+				mullMonthlyTableFilterField.getContribution().setVisible(folderSelection == 3);
 				
 				mullMonthlyTableViewer.setContentProvider(new ArrayContentProvider());
 				mullMonthlyTableViewer.getControl().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
@@ -387,12 +389,12 @@ public class InventoryReport extends ViewPart {
 			mullMonthlyTablePackAction = PackActionFactory.createPackColumnsAction(mullMonthlyTableViewer);
 			mullMonthlyTablePackActionContributionItem = new ActionContributionItem(mullMonthlyTablePackAction);
 			getViewSite().getActionBars().getToolBarManager().add(mullMonthlyTablePackActionContributionItem);
-			mullMonthlyTablePackActionContributionItem.setVisible(folder.getSelectionIndex() == 2);
+			mullMonthlyTablePackActionContributionItem.setVisible(folder.getSelectionIndex() == 3);
 			
 			mullMonthlyTableCopyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(mullMonthlyTableViewer);
 			mullMonthlyTableCopyActionContributionItem = new ActionContributionItem(mullMonthlyTableCopyAction);
 			getViewSite().getActionBars().getToolBarManager().add(mullMonthlyTableCopyActionContributionItem);
-			mullMonthlyTableCopyActionContributionItem.setVisible(folder.getSelectionIndex() == 2);
+			mullMonthlyTableCopyActionContributionItem.setVisible(folder.getSelectionIndex() == 3);
 			
 			final CTabItem mullDailyItem = new CTabItem(folder, SWT.NONE);
 
@@ -408,7 +410,7 @@ public class InventoryReport extends ViewPart {
 				mullDailyTableFilterField.setFilterSupport(mullDailyTableFilterSupport);
 				
 				getViewSite().getActionBars().getToolBarManager().add(mullDailyTableFilterField.getContribution());
-				mullDailyTableFilterField.getContribution().setVisible(folderSelection == 3);
+				mullDailyTableFilterField.getContribution().setVisible(folderSelection == 4);
 				
 				mullDailyTableViewer.setContentProvider(new ArrayContentProvider());
 				mullDailyTableViewer.getControl().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
@@ -432,29 +434,29 @@ public class InventoryReport extends ViewPart {
 			mullDailyTablePackAction = PackActionFactory.createPackColumnsAction(mullDailyTableViewer);
 			mullDailyTablePackActionContributionItem = new ActionContributionItem(mullDailyTablePackAction);
 			getViewSite().getActionBars().getToolBarManager().add(mullDailyTablePackActionContributionItem);
-			mullDailyTablePackActionContributionItem.setVisible(folder.getSelectionIndex() == 3);
+			mullDailyTablePackActionContributionItem.setVisible(folder.getSelectionIndex() == 4);
 			
 			mullDailyTableCopyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(mullDailyTableViewer);
 			mullDailyTableCopyActionContributionItem = new ActionContributionItem(mullDailyTableCopyAction);
 			getViewSite().getActionBars().getToolBarManager().add(mullDailyTableCopyActionContributionItem);
-			mullDailyTableCopyActionContributionItem.setVisible(folder.getSelectionIndex() == 3);
+			mullDailyTableCopyActionContributionItem.setVisible(folder.getSelectionIndex() == 4);
 			
 			final CTabItem chartItem2 = new CTabItem(folder, SWT.NONE);
 			chartItem2.setText("MULL Chart");
 			{
-				chartViewer2 = new Chart(folder, SWT.NONE);
-				chartViewer2.setLayoutData(GridDataFactory.fillDefaults().grab(true, true));
-				chartViewer2.getTitle().setVisible(false);
-				chartItem2.setControl(chartViewer2);
+				mullMonthlyOverliftChart = new Chart(folder, SWT.NONE);
+				mullMonthlyOverliftChart.setLayoutData(GridDataFactory.fillDefaults().grab(true, true));
+				mullMonthlyOverliftChart.getTitle().setVisible(false);
+				chartItem2.setControl(mullMonthlyOverliftChart);
 			}
 			
 			final CTabItem chartItem3 = new CTabItem(folder, SWT.NONE);
 			chartItem3.setText("# Cargo Chart");
 			{
-				chartViewer3 = new Chart(folder, SWT.NONE);
-				chartViewer3.setLayoutData(GridDataFactory.fillDefaults().grab(true, true));
-				chartViewer3.getTitle().setVisible(false);
-				chartItem3.setControl(chartViewer3);
+				mullMonthlyCargoCountChart = new Chart(folder, SWT.NONE);
+				mullMonthlyCargoCountChart.setLayoutData(GridDataFactory.fillDefaults().grab(true, true));
+				mullMonthlyCargoCountChart.getTitle().setVisible(false);
+				chartItem3.setControl(mullMonthlyCargoCountChart);
 			}
 		}
 		// Adding an event broker for the snap-to-date event todayHandler
@@ -466,22 +468,22 @@ public class InventoryReport extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				final int currentTabSelection = folder.getSelectionIndex();
-				inventoryTableCopyActionContributionItem.setVisible(currentTabSelection == 1);
-				inventoryTablePackActionContributionItem.setVisible(currentTabSelection == 1);
+				inventoryTableCopyActionContributionItem.setVisible(currentTabSelection == 2);
+				inventoryTablePackActionContributionItem.setVisible(currentTabSelection == 2);
 				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
-					mullMonthlyTableCopyActionContributionItem.setVisible(currentTabSelection == 2);
-					mullMonthlyTablePackActionContributionItem.setVisible(currentTabSelection == 2);
+					mullMonthlyTableCopyActionContributionItem.setVisible(currentTabSelection == 3);
+					mullMonthlyTablePackActionContributionItem.setVisible(currentTabSelection == 3);
 					if (mullMonthlyTableFilterField.getContribution().getAction().isChecked()) {
 						mullMonthlyTableFilterField.toggleVisibility();
 					}
-					mullMonthlyTableFilterField.getContribution().setVisible(currentTabSelection == 2);
+					mullMonthlyTableFilterField.getContribution().setVisible(currentTabSelection == 3);
 					
-					mullDailyTableCopyActionContributionItem.setVisible(currentTabSelection == 3);
-					mullDailyTablePackActionContributionItem.setVisible(currentTabSelection == 3);
+					mullDailyTableCopyActionContributionItem.setVisible(currentTabSelection == 4);
+					mullDailyTablePackActionContributionItem.setVisible(currentTabSelection == 4);
 					if(mullDailyTableFilterField.getContribution().getAction().isChecked()) {
 						mullDailyTableFilterField.toggleVisibility();
 					}
-					mullDailyTableFilterField.getContribution().setVisible(currentTabSelection == 3);
+					mullDailyTableFilterField.getContribution().setVisible(currentTabSelection == 4);
 				}
 				getViewSite().getActionBars().getToolBarManager().update(true);
 			}
@@ -494,7 +496,7 @@ public class InventoryReport extends ViewPart {
 	 */
 	@Override
 	public void setFocus() {
-		ViewerHelper.setFocus(chartViewer);
+		ViewerHelper.setFocus(inventoryInsAndOutChart);
 	}
 
 	@Override
@@ -513,36 +515,14 @@ public class InventoryReport extends ViewPart {
 
 	private void updatePlots(final Collection<Inventory> inventoryModels, final ScenarioResult toDisplay) {
 		final DateFormat dateFormat = new SimpleDateFormat("d MMM");
-		final ISeriesSet seriesSet = chartViewer.getSeriesSet();
+		final ISeriesSet seriesSet = inventoryInsAndOutChart.getSeriesSet();
 		final ISeriesSet inventoryDailyChartSeriesSet = inventoryDailyChartViewer.getSeriesSet();
 		
-		
 		// Delete existing data
-		{
-			final Set<String> names = new HashSet<>();
-			for (final ISeries s : seriesSet.getSeries()) {
-				names.add(s.getId());
-			}
-			names.forEach(seriesSet::deleteSeries);
-		}
-		
-		final ISeriesSet seriesSet2 = chartViewer2.getSeriesSet();
-		{
-			final Set<String> names = new HashSet<>();
-			for (final ISeries s : seriesSet2.getSeries()) {
-				names.add(s.getId());
-			}
-			names.forEach(seriesSet2::deleteSeries);
-		}
-		
-		final ISeriesSet seriesSet3 = chartViewer3.getSeriesSet();
-		{
-			final Set<String> names = new HashSet<>();
-			for (final ISeries s : seriesSet3.getSeries()) {
-				names.add(s.getId());
-			}
-			names.forEach(seriesSet3::deleteSeries);
-		}
+		clearChartData(seriesSet);
+		clearChartData(mullMonthlyOverliftChart.getSeriesSet());
+		clearChartData(mullMonthlyCargoCountChart.getSeriesSet());
+
 		LocalDate minDate = null;
 		LocalDate maxDate = null;
 
@@ -766,39 +746,21 @@ public class InventoryReport extends ViewPart {
 													}
 												}
 												
-												Map<BaseLegalEntity, List<Pair<Integer, Integer>>> barSeries = new HashMap<>();
-												for (BaseLegalEntity entity : entitiesOrdered) {
-													barSeries.put(entity, new LinkedList<>());
-												}
-												Map<BaseLegalEntity, List<Pair<Integer, Integer>>> cargoCountBarSeries = new HashMap<>();
-												for (BaseLegalEntity entity : entitiesOrdered) {
-													cargoCountBarSeries.put(entity, new LinkedList<>());
-												}
-												int i = 0;
-												int spacing = 15;
-												Iterator<Pair<MullInformation, MullInformation>> iterMullList = pairedMullList.iterator();
-												while (iterMullList.hasNext()) {
-													for (final BaseLegalEntity entity : entitiesOrdered) {
-														final MullInformation currMull = iterMullList.next().getFirst();
-														barSeries.get(entity).add(new Pair<>(i, currMull.overliftCF));
-														i += 2;
+												final List<YearMonth> monthsToDisplay = new LinkedList<>();
+												YearMonth currentSeen = null;
+												for (Pair<MullInformation, MullInformation> pair : pairedMullList) {
+													final YearMonth nextYearMonth = pair.getFirst().getYM();
+													if (!nextYearMonth.equals(currentSeen)) {
+														monthsToDisplay.add(nextYearMonth);
+														currentSeen = nextYearMonth;
 													}
-													i += spacing;
 												}
+												final DateTimeFormatter categoryFormatter = DateTimeFormatter.ofPattern("MMMyy");
+												final List<String> monthsList = monthsToDisplay.stream().map(ym -> ym.format(categoryFormatter)).collect(Collectors.toList());
+												final String[] temp = new String[0];
+												final String[] formattedMonthLabels = monthsList.toArray(temp);
 												
-												i = 0;
-												spacing = 15;
-												iterMullList = pairedMullList.iterator();
-												while (iterMullList.hasNext()) {
-													for (final BaseLegalEntity entity : entitiesOrdered) {
-														final MullInformation currMull = iterMullList.next().getFirst();
-														cargoCountBarSeries.get(entity).add(new Pair<>(i, currMull.cargoCount));
-														i += 2;
-													}
-													i += spacing;
-												}
-												
-												List<Integer> colours = new LinkedList<>();
+												final List<Integer> colours = new LinkedList<>();
 												colours.add(SWT.COLOR_BLUE);
 												colours.add(SWT.COLOR_GREEN);
 												colours.add(SWT.COLOR_RED);
@@ -806,25 +768,8 @@ public class InventoryReport extends ViewPart {
 												colours.add(SWT.COLOR_GRAY);
 												colours.add(SWT.COLOR_MAGENTA);
 												
-												Iterator<Integer> colIter = colours.iterator();
-												{
-													for (BaseLegalEntity entity : entitiesOrdered) {
-														final Integer currCol = colIter.next();
-														final IBarSeries series = createMULLBarSeries(seriesSet2, entity.getName(), barSeries.get(entity));
-														series.setBarWidth(20);
-														series.setBarColor(Display.getDefault().getSystemColor(currCol));
-														
-													}
-												}
-												Iterator<Integer> colIter2 = colours.iterator();
-												{
-													for (BaseLegalEntity entity : entitiesOrdered) {
-														final Integer currCol = colIter2.next();
-														final IBarSeries series = createCargoCountBarSeries(seriesSet3, entity.getName(), cargoCountBarSeries.get(entity));
-														series.setBarWidth(20);
-														series.setBarColor(Display.getDefault().getSystemColor(currCol));
-													}
-												}
+												setMULLChartData(mullMonthlyOverliftChart, formattedMonthLabels, entitiesOrdered, pairedMullList, MullInformation::getOverliftCF, colours);
+												setMULLChartData(mullMonthlyCargoCountChart, formattedMonthLabels, entitiesOrdered, pairedMullList, MullInformation::getCargoCount, colours);
 											}
 										}
 									}
@@ -1092,37 +1037,37 @@ public class InventoryReport extends ViewPart {
 				}
 			}
 		}
-		final IAxisSet axisSet = chartViewer.getAxisSet();
+		final IAxisSet axisSet = inventoryInsAndOutChart.getAxisSet();
 
-		chartViewer.getAxisSet().getXAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-		chartViewer.getAxisSet().getXAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-		chartViewer.getAxisSet().getXAxis(0).getTitle().setText("Date");
-		chartViewer.getAxisSet().getXAxis(0).getTick().setFormat(dateFormat);
+		inventoryInsAndOutChart.getAxisSet().getXAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		inventoryInsAndOutChart.getAxisSet().getXAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		inventoryInsAndOutChart.getAxisSet().getXAxis(0).getTitle().setText("Date");
+		inventoryInsAndOutChart.getAxisSet().getXAxis(0).getTick().setFormat(dateFormat);
 
-		chartViewer.getAxisSet().getYAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-		chartViewer.getAxisSet().getYAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-		chartViewer.getAxisSet().getYAxis(0).getTitle().setText("Volume");
+		inventoryInsAndOutChart.getAxisSet().getYAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		inventoryInsAndOutChart.getAxisSet().getYAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		inventoryInsAndOutChart.getAxisSet().getYAxis(0).getTitle().setText("Volume");
 		// 5. adjust the range for all axes.
 
 		// Auto adjust everything
 		axisSet.adjustRange();
 		// Month align the date range
 		if (minDate != null && maxDate != null) {
-			chartViewer.getAxisSet().getXAxis(0).setRange(new Range( //
+			inventoryInsAndOutChart.getAxisSet().getXAxis(0).setRange(new Range( //
 					1000.0 * minDate.withDayOfMonth(1).atStartOfDay().toEpochSecond(ZoneOffset.of("Z")),
 					1000.0 * maxDate.withDayOfMonth(1).atStartOfDay().plusMonths(1).toEpochSecond(ZoneOffset.of("Z"))));
 		} else {
-			chartViewer.getAxisSet().getXAxis(0).setRange(new Range( //
+			inventoryInsAndOutChart.getAxisSet().getXAxis(0).setRange(new Range( //
 					1000.0 * LocalDate.now().withDayOfMonth(1).atStartOfDay().toEpochSecond(ZoneOffset.of("Z")),
 					1000.0 * LocalDate.now().withDayOfMonth(1).atStartOfDay().plusMonths(1).toEpochSecond(ZoneOffset.of("Z"))));
 		}
 		// Try to force month labels
-		chartViewer.getAxisSet().getXAxis(0).getTick().setTickMarkStepHint((int) (15L));
-		chartViewer.getAxisSet().getXAxis(0).getTick().setTickLabelAngle(45);
+		inventoryInsAndOutChart.getAxisSet().getXAxis(0).getTick().setTickMarkStepHint((int) (15L));
+		inventoryInsAndOutChart.getAxisSet().getXAxis(0).getTick().setTickLabelAngle(45);
 
-		chartViewer.updateLayout();
+		inventoryInsAndOutChart.updateLayout();
 
-		chartViewer.redraw();
+		inventoryInsAndOutChart.redraw();
 		
 		final IAxisSet inventoryDailyChartAxisSet = inventoryDailyChartViewer.getAxisSet();
 
@@ -1153,47 +1098,11 @@ public class InventoryReport extends ViewPart {
 		inventoryDailyChartViewer.getAxisSet().getXAxis(0).getTick().setTickLabelAngle(45);
 
 		inventoryDailyChartViewer.updateLayout();
-
 		inventoryDailyChartViewer.redraw();
 		
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
-			final IAxisSet axisSet2 = chartViewer2.getAxisSet();
-			
-			axisSet2.getXAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-			axisSet2.getXAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-			axisSet2.getXAxis(0).getTitle().setText("Lifters");
-			// axisSet2.getXAxis(0).getTick().setTickMarkStepHint(6);
-			// axisSet2.getXAxis(0).
-			
-			axisSet2.getYAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-			axisSet2.getYAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-			axisSet2.getYAxis(0).getTitle().setText("Overlift");
-			
-			axisSet2.getXAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-			
-			axisSet2.adjustRange();
-			
-			chartViewer2.updateLayout();
-
-			chartViewer2.redraw();
-			
-			final IAxisSet axisSet3 = chartViewer3.getAxisSet();
-			
-			axisSet3.getXAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-			axisSet3.getXAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-			axisSet3.getXAxis(0).getTitle().setText("Month");
-			
-			axisSet3.getYAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-			axisSet3.getYAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-			axisSet3.getYAxis(0).getTitle().setText("# Cargoes Lifted");
-			
-			axisSet3.getXAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-			
-			axisSet3.adjustRange();
-			
-			chartViewer3.updateLayout();
-
-			chartViewer3.redraw();
+			finaliseMULLChart(mullMonthlyOverliftChart, "Month", "Overlift");
+			finaliseMULLChart(mullMonthlyCargoCountChart, "Month", "# Cargoes Lifted");
 		}
 
 		int total = 0;
@@ -1365,7 +1274,7 @@ public class InventoryReport extends ViewPart {
 			xVals[idx] = (double) xVal;
 			values[idx] = (double) p.getSecond();
 			idx++;
-			
+
 			xVals[idx] = (double) (xVal+1);
 			values[idx] = 0;
 			idx++;
@@ -1884,5 +1793,61 @@ public class InventoryReport extends ViewPart {
 		}
 		return entityEntityMap;
 	}
+
+	private void clearChartData(final ISeriesSet seriesSet) {
+		final Set<String> names = new HashSet<>();
+		for (final ISeries s : seriesSet.getSeries()) {
+			names.add(s.getId());
+		}
+		names.forEach(seriesSet::deleteSeries);
+	}
+
+	private void finaliseMULLChart(final Chart chart, final String xLabel, final String yLabel) {
+		final IAxisSet axisSet = chart.getAxisSet();
+		axisSet.getXAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		axisSet.getXAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		axisSet.getXAxis(0).getTitle().setText(xLabel);
+
+		axisSet.getYAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		axisSet.getYAxis(0).getTitle().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		axisSet.getYAxis(0).getTitle().setText(yLabel);
+
+		axisSet.adjustRange();
+		chart.updateLayout();
+		chart.redraw();
+	}
+
+	private void setMULLChartData(final Chart chart, final String[] xCategoryLabels, final List<BaseLegalEntity> entitiesOrdered, final List<Pair<MullInformation,MullInformation>> pairedMullList, final ToIntFunction<MullInformation> valueExtractor, final List<Integer> colours) {
+		chart.getAxisSet().getXAxis(0).enableCategory(true);
+		chart.getAxisSet().getXAxis(0).setCategorySeries(xCategoryLabels);
 	
+		final Map<BaseLegalEntity, List<Integer>> barSeriesData = new HashMap<>();
+		for (final BaseLegalEntity entity : entitiesOrdered) {
+			barSeriesData.put(entity, new LinkedList<>());
+		}
+
+		final Iterator<Pair<MullInformation, MullInformation>> iterMullList2 = pairedMullList.iterator();
+		while (iterMullList2.hasNext()) {
+			for (final BaseLegalEntity entity : entitiesOrdered) {
+				final MullInformation currMull = iterMullList2.next().getFirst();
+				barSeriesData.get(entity).add(valueExtractor.applyAsInt(currMull));
+			}
+		}
+
+		final Iterator<Integer> colIter = colours.iterator();
+		for (final BaseLegalEntity entity : entitiesOrdered) {
+			final List<Integer> intSeries = barSeriesData.get(entity);
+			final double[] doubleSeries = new double[intSeries.size()];
+			int ii = 0;
+			final Iterator<Integer> iterIntSeries = intSeries.iterator();
+			while(iterIntSeries.hasNext()) {
+				doubleSeries[ii] = iterIntSeries.next().doubleValue();
+				++ii;
+			}
+			IBarSeries currentEntitySeries = (IBarSeries) chart.getSeriesSet().createSeries(SeriesType.BAR, entity.getName());
+			currentEntitySeries.setYSeries(doubleSeries);
+			final Integer currentCol = colIter.next();
+			currentEntitySeries.setBarColor(Display.getDefault().getSystemColor(currentCol));
+		}
+	}
 }

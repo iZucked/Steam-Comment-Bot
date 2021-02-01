@@ -41,8 +41,10 @@ public class CargoBlueprint {
 	private final AllocationTracker dischargeAllocation;
 	private final int allocatedVolume;
 	private final BaseLegalEntity entity;
-	
-	public CargoBlueprint(final Inventory inventory, final PurchaseContract purchaseContract, final int loadCounter, final Vessel assignedVessel, final LocalDateTime windowStart, final int windowSizeHours, final AllocationTracker allocationTracker, final int allocatedVolume, final BaseLegalEntity entity) {
+	private final int volumeHigh;
+	private final int volumeLow;
+
+	public CargoBlueprint(final Inventory inventory, final PurchaseContract purchaseContract, final int loadCounter, final Vessel assignedVessel, final LocalDateTime windowStart, final int windowSizeHours, final AllocationTracker allocationTracker, final int allocatedVolume, final BaseLegalEntity entity, final int volumeHigh, final int volumeLow) {
 		this.inventory = inventory;
 		this.inventoryPurchaseContract = purchaseContract;
 		this.loadCounter = loadCounter;
@@ -54,21 +56,23 @@ public class CargoBlueprint {
 		final LocalDateTime lastDateTimeOfMonth = LocalDateTime.of(YearMonth.from(windowStart).atEndOfMonth(), LocalTime.of(23, 00));
 		this.windowSizeHours = lastDateTimeOfMonth.isBefore(endWindowDateTime) ? Hours.between(windowStart,lastDateTimeOfMonth) : windowSizeHours;
 		this.dischargeAllocation = allocationTracker;
+		this.volumeHigh = volumeHigh;
+		this.volumeLow = volumeLow;
 	}
-	
+
 	public void updateWindowSize(final int newWindowSizeHours) {
 		if (this.windowSizeHours > newWindowSizeHours) {
 			this.windowSizeHours = newWindowSizeHours;
 		}
 	}
-	
+
 	public LocalDateTime getWindowStart() {
 		return this.windowStart;
 	}
-	
+
 	public void constructCargoModelPopulationCommands(final CargoModel cargoModel, final CargoEditingCommands cec, @NonNull final EditingDomain editingDomain, final int volumeFlex, final IScenarioDataProvider sdp, final Map<Vessel, VesselAvailability> vesselToVA, final CompoundCommand compoundCommand) {
 		final List<Command> commands = new LinkedList<>();
-		
+
 		final LoadSlot loadSlot = this.createLoadSlot(cec, commands, cargoModel, volumeFlex);
 		final DischargeSlot dischargeSlot = this.dischargeAllocation.createDischargeSlot(cec, commands, cargoModel, sdp, loadSlot, this.assignedVessel);
 		final Cargo cargo = CargoEditingCommands.createNewCargo(editingDomain, commands, cargoModel, null, 0);
@@ -84,15 +88,14 @@ public class CargoBlueprint {
 		for (final Command command : commands)
 			compoundCommand.append(command);
 	}
-	
+
 	private LoadSlot createLoadSlot(final CargoEditingCommands cec, final List<Command> commands, final CargoModel cargoModel, final int volumeFlex) {
 		final LoadSlot loadSlot = cec.createNewLoad(commands, cargoModel, false);
 		loadSlot.setPort(this.inventory.getPort());
 		loadSlot.setContract(inventoryPurchaseContract);
 		loadSlot.setVolumeLimitsUnit(VolumeUnits.M3);
-		
-		loadSlot.setMinQuantity(this.allocatedVolume-volumeFlex);
-		loadSlot.setMaxQuantity(this.allocatedVolume+volumeFlex);
+		loadSlot.setMinQuantity(this.volumeLow);
+		loadSlot.setMaxQuantity(this.volumeHigh);
 		final String loadSlotName = String.format("%s-%03d", this.inventory.getName(), this.loadCounter);
 		loadSlot.setName(loadSlotName);
 		loadSlot.setWindowStart(this.windowStart.toLocalDate());
