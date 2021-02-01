@@ -27,7 +27,6 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  * <ul>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getScenarioName <em>Scenario Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#isVisible <em>Visible</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getCycleGroup <em>Cycle Group</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getInputEquivalents <em>Input Equivalents</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getName2 <em>Name2</em>}</li>
@@ -43,8 +42,6 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getLhsLink <em>Lhs Link</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getRhsLink <em>Rhs Link</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getRowGroup <em>Row Group</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getTable <em>Table</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getLinkedSequences <em>Linked Sequences</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getScenarioDataProvider <em>Scenario Data Provider</em>}</li>
  * </ul>
  *
@@ -105,34 +102,6 @@ public interface Row extends EObject {
 	 * @generated
 	 */
 	void setVisible(boolean value);
-
-	/**
-	 * Returns the value of the '<em><b>Cycle Group</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getRows <em>Rows</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Cycle Group</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Cycle Group</em>' reference.
-	 * @see #setCycleGroup(CycleGroup)
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getRow_CycleGroup()
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getRows
-	 * @model opposite="rows"
-	 * @generated
-	 */
-	CycleGroup getCycleGroup();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getCycleGroup <em>Cycle Group</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Cycle Group</em>' reference.
-	 * @see #getCycleGroup()
-	 * @generated
-	 */
-	void setCycleGroup(CycleGroup value);
 
 	/**
 	 * Returns the value of the '<em><b>Input Equivalents</b></em>' reference list.
@@ -439,10 +408,6 @@ public interface Row extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Lhs Link</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Lhs Link</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Lhs Link</em>' reference.
 	 * @see #setLhsLink(Row)
@@ -465,10 +430,6 @@ public interface Row extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Rhs Link</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Rhs Link</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Rhs Link</em>' reference.
 	 * @see #setRhsLink(Row)
@@ -515,50 +476,6 @@ public interface Row extends EObject {
 	 * @generated
 	 */
 	void setRowGroup(RowGroup value);
-
-	/**
-	 * Returns the value of the '<em><b>Table</b></em>' container reference.
-	 * It is bidirectional and its opposite is '{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getRows <em>Rows</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Table</em>' container reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Table</em>' container reference.
-	 * @see #setTable(Table)
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getRow_Table()
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Table#getRows
-	 * @model opposite="rows" transient="false"
-	 * @generated
-	 */
-	Table getTable();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getTable <em>Table</em>}' container reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Table</em>' container reference.
-	 * @see #getTable()
-	 * @generated
-	 */
-	void setTable(Table value);
-
-	/**
-	 * Returns the value of the '<em><b>Linked Sequences</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.schedule.Sequence}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Linked Sequences</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Linked Sequences</em>' reference list.
-	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getRow_LinkedSequences()
-	 * @model
-	 * @generated
-	 */
-	EList<Sequence> getLinkedSequences();
 
 	/**
 	 * Returns the value of the '<em><b>Scenario Data Provider</b></em>' attribute.

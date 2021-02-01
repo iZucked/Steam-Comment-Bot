@@ -75,6 +75,7 @@ import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
+import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
@@ -157,7 +158,7 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		inventoryTableComposite = toolkit.createComposite(this, style);
 		inventoryTableComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		inventoryTableComposite.setLayout(new GridLayout());
-		
+
 		this.viewer = getInventoryTableViewer(inventoryTableComposite);
 		this.entityTableViewer = getEntityTableViewer(inventoryTableComposite);
 		this.contractViewer = getContractTableViewer(inventoryTableComposite);
@@ -514,9 +515,9 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		eViewer.addTypicalColumn("Market", new ReadOnlyManipulatorWrapper<>(new SingleReferenceManipulator(ADPPackage.eINSTANCE.getDESSalesMarketAllocationRow_DesSalesMarket(), sel.getReferenceValueProviderCache(), sel.getEditingDomain())));
 		eViewer.addTypicalColumn("AACQ", new NumericAttributeManipulator(ADPPackage.eINSTANCE.getMullAllocationRow_Weight(), sel.getEditingDomain()));
 		eViewer.addTypicalColumn("Vessels", new MultipleReferenceManipulator(ADPPackage.eINSTANCE.getMullAllocationRow_Vessels(), sel.getReferenceValueProviderCache(), sel.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
-		
+
 		eViewer.setStatusProvider(statusProvider);
-		
+
 		eViewer.init(sel.getAdapterFactory(), sel.getModelReference(), ADPPackage.Literals.MULL_ENTITY_ROW__DES_SALES_MARKET_ALLOCATION_ROWS);
 		final GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gridData.heightHint = 120;

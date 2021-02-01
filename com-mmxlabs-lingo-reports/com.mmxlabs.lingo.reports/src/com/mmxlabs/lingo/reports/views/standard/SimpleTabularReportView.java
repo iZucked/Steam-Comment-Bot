@@ -5,12 +5,10 @@
 package com.mmxlabs.lingo.reports.views.standard;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuManager;
@@ -47,7 +45,7 @@ import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransform
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer.ColumnManager;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
-import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
@@ -57,13 +55,13 @@ import com.mmxlabs.models.ui.tabular.renderers.TopLeftRenderer;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 /**
  */
 public abstract class SimpleTabularReportView<T> extends ViewPart {
 
-	private SelectedScenariosService selectedScenariosService;
+	private ScenarioComparisonService selectedScenariosService;
 
 	private final ArrayList<ColumnManager<T>> sortColumns = new ArrayList<>();
 	protected final ArrayList<ColumnManager<T>> columnManagers = new ArrayList<>();
@@ -77,15 +75,13 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	private Action copyTableAction;
 
 	private final String helpContextId;
-	
+
 	protected boolean pinnedMode = false;
 
 	@NonNull
 	protected final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
-
 		@Override
-		public void selectionChanged(final @NonNull ISelectedDataProvider selectedDataProvider, final @Nullable ScenarioResult pinned, final Collection<@NonNull ScenarioResult> others,
-				final boolean block) {
+		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
 
 			final Runnable r = new Runnable() {
 				@Override
@@ -97,6 +93,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 					int numberOfSchedules = 0;
 					Pair<Schedule, ScenarioResult> pinnedPair = null;
 					List<Pair<Schedule, ScenarioResult>> otherPairs = new LinkedList<>();
+					ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
 					if (pinned != null) {
 						final ScheduleModel scheduleModel = pinned.getTypedResult(ScheduleModel.class);
 						if (scheduleModel != null) {
@@ -107,7 +104,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 							}
 						}
 					}
-					for (final ScenarioResult other : others) {
+					for (final ScenarioResult other : selectedDataProvider.getOtherScenarioResults()) {
 						final ScheduleModel scheduleModel = other.getTypedResult(ScheduleModel.class);
 						if (scheduleModel != null) {
 							final Schedule schedule = scheduleModel.getSchedule();
@@ -141,14 +138,15 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 			ViewerHelper.runIfViewerValid(viewer, block, r);
 		}
 	};
-	
+
 	/**
 	 * Allows to use array of previously expanded elements to expand the newly generated row elements
+	 * 
 	 * @param expanded
 	 * @param rowElements
 	 */
 	protected void applyExpansionOnNewElements(final Object[] expanded, final List<?> rowElements) {
-		
+
 	}
 
 	public class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, ITableFontProvider, ITableColorProvider {
@@ -246,7 +244,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	@Override
 	public void createPartControl(final Composite parent) {
 
-		selectedScenariosService = getSite().getService(SelectedScenariosService.class);
+		selectedScenariosService = getSite().getService(ScenarioComparisonService.class);
 
 		viewer = new GridTreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		viewer.getGrid().setRowHeaderRenderer(new RowHeaderRenderer());
@@ -343,10 +341,10 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 
 	protected void makeActions() {
 		packColumnsAction = new PackGridTreeColumnsAction(viewer);
-		copyTableAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), false , () -> setCopyPasteMode(true), () -> setCopyPasteMode(false));
+		copyTableAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), false, () -> setCopyPasteMode(true), () -> setCopyPasteMode(false));
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
 	}
-	
+
 	protected void setCopyPasteMode(boolean copyPasteMode) {
 		this.pinnedMode = copyPasteMode;
 		ViewerHelper.refresh(viewer, true);

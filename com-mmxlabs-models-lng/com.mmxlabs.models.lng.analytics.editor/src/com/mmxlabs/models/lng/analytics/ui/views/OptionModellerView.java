@@ -89,6 +89,7 @@ import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.BuyOptionsCo
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.SellOptionsComponent;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.ShippingOptionsComponent;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.VesselEventOptionsComponent;
+import com.mmxlabs.models.lng.analytics.util.SandboxModeConstants;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -102,14 +103,15 @@ import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
+import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
 public class OptionModellerView extends ScenarioInstanceView implements CommandStackListener {
 
@@ -333,9 +335,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			displayScenarioInstance(null, null, null);
 
 		} else {
-			ScenarioModelRecord mr = SSDataManager.Instance.getModelRecord(instance);
+			final ScenarioModelRecord mr = SSDataManager.Instance.getModelRecord(instance);
 			try (IScenarioDataProvider sdp = mr.aquireScenarioDataProvider("ScenarioInstanceView:1")) {
-				MMXRootObject ro = sdp.getTypedScenario(MMXRootObject.class);
+				final MMXRootObject ro = sdp.getTypedScenario(MMXRootObject.class);
 
 				if (Objects.equal(instance, this.scenarioInstance)) {
 					return;
@@ -858,14 +860,14 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private Composite createRunButton(final Composite parent) {
 		//
 		final ImageDescriptor generateDesc = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_generate.gif");
-		Image imageGenerate = generateDesc.createImage();
+		final Image imageGenerate = generateDesc.createImage();
 
 		final Composite generateComposite = new Composite(parent, SWT.NONE);
 		GridDataFactory.generate(generateComposite, 2, 1);
 
 		generateComposite.setLayout(new GridLayout(1, true));
 
-		Label generateButton = new Label(generateComposite, SWT.NONE);
+		final Label generateButton = new Label(generateComposite, SWT.NONE);
 		generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(false, false).create());
 		generateButton.setImage(imageGenerate);
 		generateButton.addMouseListener(new MouseAdapter() {
@@ -877,7 +879,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				}
 
 				{
-					ADPModel adpModel = ScenarioModelUtil.getADPModel(getScenarioDataProvider());
+					final ADPModel adpModel = ScenarioModelUtil.getADPModel(getScenarioDataProvider());
 					if (adpModel != null) {
 						MessageDialog.openError(getShell(), "Unable to evaluate", "Sandbox scenarios cannot be used with ADP scenarios");
 						// Cannot use sandbox with ADP
@@ -888,26 +890,32 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 				final OptionAnalysisModel m = currentModel;
 				if (m != null) {
-					int mode = m.getMode();
-					if (mode > 0 || partialCaseValid) {
-						BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> {
-							switch (mode) {
-							case 2:
-								WhatIfEvaluator.doOptimise(OptionModellerView.this, m, true);
-								break;
-							case 1:
-								WhatIfEvaluator.doOptimise(OptionModellerView.this, m, false);
-								break;
-							case 0:
-							default:
-								WhatIfEvaluator.evaluate(OptionModellerView.this, m);
-								break;
-							}
-							if (m != null && m.getResults() != null) {
-								final AnalyticsSolution data = new AnalyticsSolution(getScenarioInstance(), m.getResults(), m.getName());
-								data.open();
-							}
-						});
+					final int mode = m.getMode();
+					if (mode == SandboxModeConstants.MODE_OPTIMISE && !m.getBaseCase().isKeepExistingScenario()) {
+						// BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(),
+						MessageDialog.openError(PlatformUI.getWorkbench().getDisplay().getActiveShell(), "Error running sandbox", "Derive mode needs portfolio link enabled");
+					} else {
+
+						if (mode != SandboxModeConstants.MODE_DERIVE || partialCaseValid) {
+							BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> {
+								switch (mode) {
+								case SandboxModeConstants.MODE_OPTIONISE:
+									WhatIfEvaluator.doOptimise(OptionModellerView.this, m, true);
+									break;
+								case SandboxModeConstants.MODE_OPTIMISE:
+									WhatIfEvaluator.doOptimise(OptionModellerView.this, m, false);
+									break;
+								case SandboxModeConstants.MODE_DERIVE:
+								default:
+									WhatIfEvaluator.evaluate(OptionModellerView.this, m);
+									break;
+								}
+								if (m != null && m.getResults() != null) {
+									final AnalyticsSolution data = new AnalyticsSolution(getScenarioInstance(), m.getResults(), m.getName());
+									data.open();
+								}
+							});
+						}
 					}
 				}
 			}
@@ -930,14 +938,14 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private Composite createDisplayButton(final Composite parent) {
 		//
 		final ImageDescriptor generateDesc = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/console_view.gif");
-		Image imageGenerate = generateDesc.createImage();
+		final Image imageGenerate = generateDesc.createImage();
 
 		final Composite generateComposite = new Composite(parent, SWT.NONE);
 		GridDataFactory.generate(generateComposite, 2, 1);
 
 		generateComposite.setLayout(new GridLayout(1, true));
 
-		Label generateButton = new Label(generateComposite, SWT.NONE);
+		final Label generateButton = new Label(generateComposite, SWT.NONE);
 		generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(false, false).create());
 		generateButton.setImage(imageGenerate);
 
@@ -978,14 +986,14 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	private Composite createDeleteResultButton(final Composite parent) {
 		//
-		Image imageGenerate = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE);
+		final Image imageGenerate = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE);
 
 		final Composite generateComposite = new Composite(parent, SWT.NONE);
 		GridDataFactory.generate(generateComposite, 1, 1);
 
 		generateComposite.setLayout(new GridLayout(1, true));
 
-		Label generateButton = new Label(generateComposite, SWT.NONE);
+		final Label generateButton = new Label(generateComposite, SWT.NONE);
 		generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.RIGHT, SWT.CENTER).grab(false, false).create());
 		generateButton.setImage(imageGenerate);
 
@@ -1003,7 +1011,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> {
 						if (m != null && m.getResults() != null) {
 
-							ScenarioResult sr = new ScenarioResult(getScenarioInstance());
+							final ScenarioResult sr = new ScenarioResultImpl(getScenarioInstance());
 							ServiceHelper.withServiceConsumer(IScenarioServiceSelectionProvider.class, sp -> sp.deselect(sr, false));
 
 							final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
@@ -1033,7 +1041,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		gdM.horizontalSpan = 2;
 		matching.setLayoutData(gdM);
 		new Label(matching, SWT.NONE).setText("Mode:");
-		Combo combo = new Combo(matching, SWT.DROP_DOWN);
+		final Combo combo = new Combo(matching, SWT.DROP_DOWN);
 		// final Button matchingButton = new Button(matching, SWT.CHECK | SWT.LEFT);
 		combo.setItems("Define", "Optimise", "Optionise");
 
@@ -1047,7 +1055,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				}
 				final OptionAnalysisModel m = currentModel;
 				if (m != null) {
-					int mode = combo.getSelectionIndex();
+					final int mode = combo.getSelectionIndex();
 					partialCaseComponent.setVisible(mode == 0);
 					if (beModeToggle != null) {
 						beModeToggle.setVisible(mode != 1);
@@ -1068,12 +1076,12 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		inputWants.add(am -> {
 			if (am instanceof OptionAnalysisModel) {
-				OptionAnalysisModel optionAnalysisModel = (OptionAnalysisModel) am;
-				int mode = optionAnalysisModel.getMode();
+				final OptionAnalysisModel optionAnalysisModel = (OptionAnalysisModel) am;
+				final int mode = optionAnalysisModel.getMode();
 				combo.select(mode);
-				partialCaseComponent.setVisible(mode == 0);
+				partialCaseComponent.setVisible(mode == SandboxModeConstants.MODE_DERIVE);
 				if (beModeToggle != null) {
-					beModeToggle.setVisible(mode != 1);
+					beModeToggle.setVisible(mode != SandboxModeConstants.MODE_OPTIMISE);
 				}
 				refreshSections(true, EnumSet.of(SectionType.MIDDLE));
 			}
@@ -1102,7 +1110,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				final OptionAnalysisModel m = currentModel;
 				if (m != null) {
 
-					CompoundCommand cmd = new CompoundCommand();
+					final CompoundCommand cmd = new CompoundCommand();
 
 					cmd.append(SetCommand.create(getEditingDomain(), m.getBaseCase(), AnalyticsPackage.Literals.BASE_CASE__KEEP_EXISTING_SCENARIO, matchingButton.getSelection()));
 					cmd.append(SetCommand.create(getEditingDomain(), m.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__KEEP_EXISTING_SCENARIO, matchingButton.getSelection()));
@@ -1116,7 +1124,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		inputWants.add(am -> {
 			if (am instanceof OptionAnalysisModel) {
-				OptionAnalysisModel optionAnalysisModel = (OptionAnalysisModel) am;
+				final OptionAnalysisModel optionAnalysisModel = (OptionAnalysisModel) am;
 				matchingButton.setSelection(optionAnalysisModel.getBaseCase().isKeepExistingScenario());
 			}
 		});
@@ -1130,7 +1138,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		final GridData gdM = new GridData(SWT.LEFT, SWT.BEGINNING, false, false);
 		gdM.horizontalSpan = 2;
 		matching.setLayoutData(gdM);
-		Label l = new Label(matching, SWT.NONE);
+		final Label l = new Label(matching, SWT.NONE);
 		l.setText("Starting point P&&L B/E");
 		l.setToolTipText(
 				"When checked use the portfolio P&&L from the starting point scenario to calculate the B/E prices. Otherwise a point-to-point B/E is calculated. Does not apply when optimising.");
@@ -1160,7 +1168,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 		inputWants.add(am -> {
 			if (am instanceof OptionAnalysisModel) {
-				OptionAnalysisModel optionAnalysisModel = (OptionAnalysisModel) am;
+				final OptionAnalysisModel optionAnalysisModel = (OptionAnalysisModel) am;
 				matchingButton.setSelection(optionAnalysisModel.isUseTargetPNL());
 			}
 		});

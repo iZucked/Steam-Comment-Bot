@@ -4,224 +4,194 @@
  */
 package com.mmxlabs.lingo.reports.views.fleet;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
-import com.mmxlabs.lingo.reports.ScheduleElementCollector;
+import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
+import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
-import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 public class FleetReportTransformer {
 
-	/**
-	 * Map between {@link Schedule} model elements and {@link Row}s
-	 */
-	private final Map<EObject, Row> elementToRowMap = new HashMap<>();
-
-	/**
-	 * All the reference elements when in pin/diff mode.
-	 */
-	private List<EObject> referenceElements;
-
-	/**
-	 * Per scenario (index in order added, but with reference/pinned scenario at index 0) map of element key to elements
-	 */
-	private final List<Map<String, List<EObject>>> perScenarioElementsByKeyMap = new LinkedList<>();
-
-	private final FleetEquivalanceGroupBuilder equivalanceGroupBuilder = new FleetEquivalanceGroupBuilder();
-
 	private final FleetBasedReportBuilder builder;
 
-	private final Table table;
-
-	public FleetReportTransformer(final Table table, final FleetBasedReportBuilder builder) {
-		this.table = table;
+	public FleetReportTransformer(final FleetBasedReportBuilder builder) {
 		this.builder = builder;
 	}
 
-	public IScenarioInstanceElementCollector getElementCollector(final ConfigurableFleetReportView viewer) {
-		return new ScheduleElementCollector() {
+	public List<Object> generatePinDiffRows(final ScenarioResult pinned, final ScenarioResult other) {
 
-			private boolean isPinned = false;
-			private int numberOfSchedules;
-			private final List<LNGScenarioModel> rootObjects = new LinkedList<>();
+		final Map<Pair<Object, Integer>, Row> pinnedMap = new HashMap<>();
 
-			@Override
-			public void beginCollecting(final boolean pinDiffMode) {
-				super.beginCollecting(pinDiffMode);
-				numberOfSchedules = 0;
-				isPinned = false;
-				perScenarioElementsByKeyMap.clear();
-				elementToRowMap.clear();
-				rootObjects.clear();
+		final List<Row> rows = new LinkedList<>();
+		if (pinned != null) {
 
-				table.getRowGroups().clear();
-				table.getRows().clear();
-				table.getCycleGroups().clear();
-				table.getUserGroups().clear();
-				table.getScenarios().clear();
-				table.setPinnedScenario(null);
+			final ScenarioResult scenarioResult = pinned;
 
-			}
+			final Schedule schedule = scenarioResult.getTypedResult(ScheduleModel.class).getSchedule();
+			if (schedule != null) {
+				for (final Sequence sequence : schedule.getSequences()) {
+					if (builder.showEvent(sequence)) {
 
-			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioInstance, final LNGScenarioModel scenarioModel, final Schedule schedule, final boolean isPinned) {
-				this.isPinned |= isPinned;
+						final Pair<Object, Integer> key;
 
-				numberOfSchedules++;
+						final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
+						if (vesselAvailability != null) {
+							key = Pair.of(vesselAvailability.getVessel().getName(), vesselAvailability.getCharterNumber());
+						} else if (sequence.getSequenceType() == SequenceType.SPOT_VESSEL) {
+							key = Pair.of(sequence.getCharterInMarket().getName(), sequence.getSpotIndex());
+						} else {
+							continue;
+						}
 
-				rootObjects.add(scenarioModel);
+						final Row row = createRow(scenarioResult, schedule, sequence);
+						row.setReference(true);
 
-				if (isPinned) {
-					table.setPinnedScenario(scenarioModel);
-				}
-				table.getScenarios().add(scenarioModel);
+						rows.add(row);
+						pinnedMap.put(key, row);
 
-				return generateRows(table, scenarioInstance, schedule, isPinned);
-			}
-
-			@Override
-			public void endCollecting() {
-				// In Pin/Diff mode
-
-				final boolean pinDiffMode = numberOfSchedules > 1 && isPinned;
-				for (final ColumnBlock handler : builder.getBlockManager().getBlocksInVisibleOrder()) {
-					if (handler != null) {
-						handler.setViewState(numberOfSchedules > 1, pinDiffMode);
+						addInputEquivalents(row, sequence);
 					}
 				}
-
-				// Show all rows
-				for (final Row row : table.getRows()) {
-					row.setVisible(true);
-				}
-				if (!isPinned || numberOfSchedules == 1) {
-				} else {
-
-					// Pin Mode
-
-					// Hide all rows by default
-					final Map<EObject, Set<EObject>> equivalancesMap = new HashMap<>();
-					final List<EObject> uniqueElements = new LinkedList<>();
-					equivalanceGroupBuilder.populateEquivalenceGroups(perScenarioElementsByKeyMap, equivalancesMap, uniqueElements, elementToRowMap);
-				}
-				super.endCollecting();
-
-				viewer.processInputs(table.getRows());
 			}
+		}
+		if (other != null) {
+			final ScenarioResult scenarioResult = other;
+			final Schedule schedule = scenarioResult.getTypedResult(ScheduleModel.class).getSchedule();
+			if (schedule != null) {
+				for (final Sequence sequence : schedule.getSequences()) {
+					if (builder.showEvent(sequence)) {
 
-		};
-	}
+						final Pair<Object, Integer> key;
 
-	public List<Row> generateRows(final Table dataModelInstance, final ScenarioResult scenarioInstance, final Schedule schedule, final boolean isPinned) {
+						final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
+						if (vesselAvailability != null) {
+							key = Pair.of(vesselAvailability.getVessel().getName(), vesselAvailability.getCharterNumber());
+						} else if (sequence.getSequenceType() == SequenceType.SPOT_VESSEL) {
+							key = Pair.of(sequence.getCharterInMarket().getName(), sequence.getSpotIndex());
+						} else {
+							continue;
+						}
+						final Row row = createRow(scenarioResult, schedule, sequence);
 
-		final List<EObject> interestingEvents = new LinkedList<>();
-		final Set<EObject> allEvents = new HashSet<>();
-		final Set<Pair<Vessel, Integer>> seenVessels = new HashSet<>();
-		for (final Sequence sequence : schedule.getSequences()) {
-			if (builder.showEvent(sequence)) {
-				final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-				if (vesselAvailability != null) {
-					if (!seenVessels.contains(Pair.of(vesselAvailability.getVessel(),vesselAvailability.getCharterNumber()))) {
-						interestingEvents.add(sequence);
-						seenVessels.add(Pair.of(vesselAvailability.getVessel(),vesselAvailability.getCharterNumber()));
+						rows.add(row);
+						if (pinnedMap.containsKey(key)) {
+							final Row pinnedRow = pinnedMap.get(key);
+
+							row.setLhsLink(pinnedRow);
+							pinnedRow.setLhsLink(row);
+
+						}
+						addInputEquivalents(row, sequence);
 					}
-				} else if (sequence.getSequenceType() == SequenceType.SPOT_VESSEL) {
-					interestingEvents.add(sequence);
 				}
 			}
-			allEvents.add(sequence);
 		}
 
-		return generateRows(dataModelInstance, scenarioInstance, schedule, interestingEvents, allEvents, isPinned);
-	}
-
-	public List<Row> generateRows(final Table tableModelInstance, final ScenarioResult scenarioResult, final Schedule schedule, final List<EObject> interestingElements, final Set<EObject> allElements,
-			final boolean isReferenceSchedule) {
-		final List<Row> rows = new ArrayList<>(interestingElements.size());
-
-		if (isReferenceSchedule) {
-			this.referenceElements = new LinkedList<>();
-		}
-		for (final EObject element : interestingElements) {
-
-			if (element instanceof Sequence) {
-				final Sequence sequence = (Sequence) element;
-				final Row row = ScheduleReportFactory.eINSTANCE.createRow();
-				row.setTarget(sequence);
-				row.setName(sequence.getName());
-				row.setSequence(sequence);
-				final EList<Sequence> linkedSequences = row.getLinkedSequences();
-				if (sequence.getSequenceType() == SequenceType.SPOT_VESSEL || sequence.getSequenceType() == SequenceType.ROUND_TRIP) {
-					linkedSequences.add(sequence);
-				} else {
-					final List<Sequence> foundSequences = schedule.getSequences().stream().filter(s -> (s.getVesselAvailability() != null && s.getVesselAvailability().getVessel() != null
-							&& s.getVesselAvailability().getVessel().equals(sequence.getVesselAvailability().getVessel())) //
-							&& s.getVesselAvailability().getCharterNumber() == sequence.getVesselAvailability().getCharterNumber() ).collect(Collectors.toList());
-					linkedSequences.addAll(foundSequences);
-				}
-				rows.add(row);
-
-				elementToRowMap.put(sequence, row);
-				allElements.add(sequence);
-				if (isReferenceSchedule) {
-					this.referenceElements.add(sequence);
-				}
-				addInputEquivalents(row, sequence);
-			}
-
-		}
-		// If this is the reference schedule, then mark all rows as reference
-		if (isReferenceSchedule) {
+		final List<Object> finalRows = new LinkedList<>();
+		{
+			final List<CompositeRow> compositeRows = new LinkedList<>();
 			for (final Row row : rows) {
-				row.setReference(true);
+				if (row.isReference()) {
+
+					final Row lhs = row.getLhsLink();
+					if (lhs != null) {
+						final CompositeRow compositeRow = ScheduleReportFactory.eINSTANCE.createCompositeRow();
+
+						compositeRow.setPinnedRow(row);
+						compositeRow.setPreviousRow(lhs);
+
+						compositeRows.add(compositeRow);
+					} else {
+						// Case deleted from pinned
+						final CompositeRow compositeRow = ScheduleReportFactory.eINSTANCE.createCompositeRow();
+						compositeRow.setPinnedRow(row);
+						compositeRow.setPreviousRow(null);
+						compositeRows.add(compositeRow);
+					}
+				} else if (row.getLhsLink() == null && row.getRhsLink() == null) {
+					final CompositeRow compositeRow = ScheduleReportFactory.eINSTANCE.createCompositeRow();
+					compositeRow.setPinnedRow(null);
+					compositeRow.setPreviousRow(row);
+					compositeRows.add(compositeRow);
+				}
+			}
+
+			for (final CompositeRow compositeRow : compositeRows) {
+				final RowGroup rowGroup = ScheduleReportFactory.eINSTANCE.createRowGroup();
+
+				final Row previousRow = compositeRow.getPreviousRow();
+				final Row pinnedRow = compositeRow.getPinnedRow();
+
+				if (previousRow != null) {
+					previousRow.setRowGroup(rowGroup);
+				}
+
+				if (pinnedRow != null) {
+					pinnedRow.setRowGroup(rowGroup);
+				}
+
+			}
+
+			finalRows.addAll(rows);
+			finalRows.addAll(compositeRows);
+			finalRows.add(compositeRows);
+
+		}
+
+		return finalRows;
+	}
+
+	private @NonNull Row createRow(final ScenarioResult scenarioResult, final Schedule schedule, final Sequence sequence) {
+		final Row row = ScheduleReportFactory.eINSTANCE.createRow();
+		row.setTarget(sequence);
+		row.setName(sequence.getName());
+		row.setSequence(sequence);
+		row.setVisible(true);
+
+		row.setScenarioName(scenarioResult.getModelRecord().getName());
+		row.setSchedule(schedule);
+
+		return row;
+	}
+
+	public List<Object> generateSimpleRows(final Collection<ScenarioResult> others) {
+		final List<Object> rows = new LinkedList<>();
+
+		for (final ScenarioResult other : others) {
+			final ScenarioResult scenarioResult = other;
+			final Schedule schedule = scenarioResult.getTypedResult(ScheduleModel.class).getSchedule();
+			if (schedule != null) {
+				for (final Sequence sequence : schedule.getSequences()) {
+					if (builder.showEvent(sequence)) {
+						final Row row = createRow(scenarioResult, schedule, sequence);
+						rows.add(row);
+						addInputEquivalents(row, sequence);
+					}
+				}
 			}
 		}
-
-		for (final Row row : rows) {
-			row.setScenarioName(scenarioResult.getModelRecord().getName());
-			row.setSchedule(schedule);
-		}
-
-		// Generate the element by key map
-		final Map<String, List<EObject>> map = equivalanceGroupBuilder.generateElementNameGroups(allElements);
-		if (isReferenceSchedule) {
-			perScenarioElementsByKeyMap.add(0, map);
-		} else {
-			perScenarioElementsByKeyMap.add(map);
-		}
-
-		// Add rows to the table!
-		tableModelInstance.getRows().addAll(rows);
 
 		return rows;
 	}

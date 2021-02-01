@@ -5,14 +5,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.lingo.master</groupId>
 	<artifactId>com.mmxlabs.lingo.master.parent</artifactId>
-	<version>4.12.5-SNAPSHOT</version>
+	<version>4.12.12-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
 		<relativePath />
-		<version>45</version>
+		<version>46</version>
 	</parent>
 
 	<scm>

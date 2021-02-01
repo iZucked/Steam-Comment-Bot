@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -38,11 +40,13 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
+import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceIntervalProviderHelper;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
@@ -52,32 +56,33 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 
 @NonNullByDefault
 public class PNLBasedWindowTrimmerUtils {
+	public static final String ENABLE_BACKWARDS_NBO_CHECK = "ENABLE_BACKWARDS_NBO_CHECK";
 
 	public static class TimeChoice implements Comparable<TimeChoice> {
 		public int time;
 		public boolean important;
 
-		public TimeChoice(int time, boolean important) {
+		public TimeChoice(final int time, final boolean important) {
 			this.time = time;
 			this.important = important;
 		}
 
-		public static TimeChoice forImportant(int time) {
+		public static TimeChoice forImportant(final int time) {
 			return new TimeChoice(time, true);
 		}
 
-		public static TimeChoice forNormal(int time) {
+		public static TimeChoice forNormal(final int time) {
 			return new TimeChoice(time, false);
 		}
 
 		@Override
-		public boolean equals(@Nullable Object obj) {
+		public boolean equals(@Nullable final Object obj) {
 
 			if (obj == this) {
 				return true;
 			}
 			if (obj instanceof TimeChoice) {
-				TimeChoice other = (TimeChoice) obj;
+				final TimeChoice other = (TimeChoice) obj;
 				return this.time == other.time && this.important == other.important;
 			}
 
@@ -90,16 +95,27 @@ public class PNLBasedWindowTrimmerUtils {
 		}
 
 		@Override
-		public int compareTo(TimeChoice o) {
+		public int compareTo(final TimeChoice o) {
 			int c = Integer.compare(this.time, o.time);
 			if (c == 0) {
 				c = Boolean.compare(important, o.important);
 			}
 			return c;
 		}
-	}
 
-	public static final String ENABLE_BACKWARDS_NBO_CHECK = "ENABLE_BACKWARDS_NBO_CHECK";
+		/**
+		 * Filter out unimportant times if there exists the same time as an important option.
+		 */
+		public static void filter(final Collection<TimeChoice> times) {
+			final Collection<Integer> importantTimes = new TreeSet<>();
+			for (final TimeChoice t : times) {
+				if (t.important) {
+					importantTimes.add(t.time);
+				}
+			}
+			times.removeIf(t -> !t.important && importantTimes.contains(t.time));
+		}
+	}
 
 	@Inject
 	private IStartEndRequirementProvider startEndRequirementProvider;
@@ -122,13 +138,21 @@ public class PNLBasedWindowTrimmerUtils {
 	@Inject
 	private IVesselProvider vesselProvider;
 
+	@Inject
+	private ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
+
+	@Inject
+	@Named(SchedulerConstants.MIDNIGHT_ALIGNED_INTEGER_INTERVAL_CURVE)
+	private IIntegerIntervalCurve midnightIntervalsInHoursCurve;
+
 	// Compute best NBO based arrival time in initial interval computation
 	private static final boolean PRE_FORWARDS_NBO_TIME = true; // True fixes P case 1 issue (fixes 6k loss and gains 12k overall)
 
-	// Compute best NBO based departure time in initial interval computation (see next flags)
+	// Compute best NBO based departure time in initial interval computation (see
+	// next flags)
 	@Inject(optional = true)
 	@Named(ENABLE_BACKWARDS_NBO_CHECK)
-	private boolean PRE_BACKWARDS_NBO_TIME = true;
+	private final boolean PRE_BACKWARDS_NBO_TIME = true;
 
 	// If PRE_BACKWARDS_NBO_TIME is true, then compute for laden or ballast legs?
 	private static final boolean BACKWARDS_NBO_TIME_LADEN = true;
@@ -238,8 +262,8 @@ public class PNLBasedWindowTrimmerUtils {
 				priceIntervalProducer.getDischargeWindowBasedOnLoad(discharge, portTimeWindowRecord));
 	}
 
-	public void computeIntervalsForSlot(final IPortSlot slot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final PortTimesRecord _record,
-			final IPortTimeWindowsRecord ptwr, final List<IPortSlot> slots, final int slotIdx, final MinTravelTimeData minTimeData, final int lastSlotArrivalTime, final Set<TimeChoice> times) {
+	public void computeIntervalsForSlot(final IPortSlot slot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final PortTimesRecord _record, final IPortTimeWindowsRecord ptwr,
+			final List<IPortSlot> slots, final int slotIdx, final MinTravelTimeData minTimeData, final int lastSlotArrivalTime, final Set<TimeChoice> times) {
 		final IPortSlot lastSlot = slots.get(slotIdx - 1);
 		final int elementIndex = ptwr.getIndex(lastSlot);
 
@@ -267,7 +291,7 @@ public class PNLBasedWindowTrimmerUtils {
 
 				final List<@NonNull DistanceMatrixEntry> allDistanceValues = distanceProvider.getDistanceValues(lastSlot.getPort(), slot.getPort(), vessel, lastRouteChoices);
 
-				List<RouteCostRecord> extraTimes = new LinkedList<>();
+				final List<RouteCostRecord> extraTimes = new LinkedList<>();
 				for (final DistanceMatrixEntry dme : allDistanceValues) {
 					if (dme.getDistance() == Integer.MAX_VALUE) {
 						continue;
@@ -280,7 +304,7 @@ public class PNLBasedWindowTrimmerUtils {
 						int minSpeed = nboSpeed;// vessel.getMinSpeed();
 						// round min and max speeds to allow better speed stepping
 						minSpeed = roundUpToNearest(minSpeed, 100);
-						int maxSpeed = vessel.getMaxSpeed();
+						final int maxSpeed = vessel.getMaxSpeed();
 
 						// min speed needs to be bounded!
 						minSpeed = Math.min(minSpeed, maxSpeed);
@@ -288,23 +312,23 @@ public class PNLBasedWindowTrimmerUtils {
 						// loop through speeds and canals
 						int speed = minSpeed;
 
-						int baseTime = lastSlotArrivalTime + ptwr.getSlotDuration(lastSlot) //
+						final int baseTime = lastSlotArrivalTime + ptwr.getSlotDuration(lastSlot) //
 								+ ptwr.getSlotExtraIdleTime(lastSlot) //
 								+ routeCostProvider.getRouteTransitTime(dme.getRoute(), vessel);
 
 						// Window bounds will be taken care of later.
-						PortTimesRecord copy = _record.copy();
-						int[] baseFuelPrices = vesselBaseFuelCalculator.getBaseFuelPrices(vessel, copy.getFirstSlotTime());
+						final PortTimesRecord copy = _record.copy();
+						final int[] baseFuelPrices = vesselBaseFuelCalculator.getBaseFuelPrices(vessel, copy.getFirstSlotTime());
 						while (speed <= maxSpeed) {
-							int vesselTravelTimeInHours = Calculator.getTimeFromSpeedDistance(speed, dme.getDistance());
+							final int vesselTravelTimeInHours = Calculator.getTimeFromSpeedDistance(speed, dme.getDistance());
 							final int t = baseTime + vesselTravelTimeInHours;
 							copy.setSlotTime(lastSlot, t);
 
 							if (slotFeasibleTimeWindow.contains(t) && lastSlot instanceof IDischargeOption) {
 
-								IDischargeOption iDischargeOption = (IDischargeOption) lastSlot;
-								int p = iDischargeOption.getDischargePriceCalculator().estimateSalesUnitPrice(iDischargeOption, copy, null);
-								RouteCostRecord rr = new RouteCostRecord();
+								final IDischargeOption iDischargeOption = (IDischargeOption) lastSlot;
+								final int p = iDischargeOption.getDischargePriceCalculator().estimateSalesUnitPrice(iDischargeOption, copy, null);
+								final RouteCostRecord rr = new RouteCostRecord();
 								rr.time = t;
 								// Add in canal cost
 								rr.cost += routeCostProvider.getRouteCost(dme.getRoute(), vessel, lastSlotArrivalTime + ptwr.getSlotDuration(lastSlot), CostType.Ballast);
@@ -327,7 +351,7 @@ public class PNLBasedWindowTrimmerUtils {
 							}
 							if (slotFeasibleTimeWindow.contains(t)) {
 
-								RouteCostRecord rr = new RouteCostRecord();
+								final RouteCostRecord rr = new RouteCostRecord();
 								rr.time = t;
 								// Add in canal cost
 								rr.cost += routeCostProvider.getRouteCost(dme.getRoute(), vessel, lastSlotArrivalTime + ptwr.getSlotDuration(lastSlot), CostType.Ballast);
@@ -385,10 +409,10 @@ public class PNLBasedWindowTrimmerUtils {
 					extraTimes.sort((a, b) -> Long.compare(a.cost, b.cost));
 					// Filter out similar results.
 					RouteCostRecord last = null;
-					Iterator<RouteCostRecord> itr = extraTimes.iterator();
+					final Iterator<RouteCostRecord> itr = extraTimes.iterator();
 					while (itr.hasNext()) {
 
-						RouteCostRecord next = itr.next();
+						final RouteCostRecord next = itr.next();
 						if (last == null) {
 							last = next;
 							continue;
@@ -444,6 +468,7 @@ public class PNLBasedWindowTrimmerUtils {
 				}
 			}
 		}
+		alignTimeChoicesToMidnightLocalTime(times, 24, slot);
 
 		final int pTWStart = twStart;
 		final int pTWEnd = twEnd;
@@ -478,7 +503,8 @@ public class PNLBasedWindowTrimmerUtils {
 		final List<IPortSlot> slots = new LinkedList<>();
 		final Map<IPortSlot, IPortTimeWindowsRecord> slotToRecords = new HashMap<>();
 
-		// Forward loop. Collect basic arrival intervals and the NBO based speed to next slot (if within window)
+		// Forward loop. Collect basic arrival intervals and the NBO based speed to next
+		// slot (if within window)
 		for (final IPortTimeWindowsRecord record : records) {
 			int calculationCV = DEFAULT_CV;
 			if (roundTripCargo) {
@@ -557,11 +583,15 @@ public class PNLBasedWindowTrimmerUtils {
 			}
 		}
 
+		// Re-align to midnight, local time
+		intervalMap.entrySet().forEach(e -> alignTimeChoicesToMidnightLocalTime(e.getValue(), 0, e.getKey()));
+
 		if (!roundTripCargo && PRE_BACKWARDS_NBO_TIME) {
-			
+
 			final IStartRequirement startRequirement = startEndRequirementProvider.getStartRequirement(resource);
 
-			// Reverse pass, given each arrival time, work out when we would need to arrive at the previous slot if we wanted to use NBO speed.
+			// Reverse pass, given each arrival time, work out when we would need to arrive
+			// at the previous slot if we wanted to use NBO speed.
 			// Work backwards for NBO times
 			for (int i = slots.size() - 1; i > 0; --i) {
 
@@ -591,7 +621,7 @@ public class PNLBasedWindowTrimmerUtils {
 					// Remove the start time of 0 as it is typically a default value that is not
 					// much use
 					if (startRequirement != null && !startRequirement.hasTimeRequirement()) {
-						Collection<TimeChoice> choices = intervalMap.get(lastSlot);
+						final Collection<TimeChoice> choices = intervalMap.get(lastSlot);
 						if (choices.size() > 1) {
 							choices.removeIf(t -> t.time == 0);
 						}
@@ -618,6 +648,9 @@ public class PNLBasedWindowTrimmerUtils {
 				}
 			}
 		}
+
+		// Re-align to midnight, local time
+		intervalMap.entrySet().forEach(e -> alignTimeChoicesToMidnightLocalTime(e.getValue(), 0, e.getKey()));
 
 		if (!roundTripCargo) {
 
@@ -675,6 +708,7 @@ public class PNLBasedWindowTrimmerUtils {
 						collection.removeIf(t -> t.time > pNewStartTime);
 
 						// Update start window
+						// Sg: Is this a bug? Probably shouldn't be doing this?
 						final ITimeWindow tw = firstRecord.getFirstSlotFeasibleTimeWindow();
 						final MutableTimeWindow ftw = new MutableTimeWindow(Math.min(tw.getInclusiveStart(), pNewStartTime), Math.max(pNewStartTime + 1, tw.getExclusiveEnd()));
 						firstRecord.setSlotFeasibleTimeWindow(firstSlot, ftw);
@@ -682,6 +716,9 @@ public class PNLBasedWindowTrimmerUtils {
 				}
 			}
 		}
+
+		// Final re-alignment pass
+		intervalMap.entrySet().forEach(e -> alignTimeChoicesToMidnightLocalTime(e.getValue(), 0, e.getKey()));
 
 		return intervalMap;
 	}
@@ -692,8 +729,77 @@ public class PNLBasedWindowTrimmerUtils {
 		return vessel.getConsumptionRate(vesselState).getSpeed(nboProvidedInMT);
 	}
 
-	private static int roundUpToNearest(int input, int rounding) {
+	private static int roundUpToNearest(final int input, final int rounding) {
 		return ((input + (rounding - 1)) / rounding) * rounding;
+	}
+
+	/**
+	 * For each time option, add in midnight localtime before and after the option.
+	 * Important options are retained, otherwise discarded. The intention of this
+	 * code is to regularise arrival times (better for caching, better for users)
+	 * and avoid tring 1am, 2am, 3am etc.
+	 * 
+	 * @param input
+	 * @param x
+	 * @param port
+	 */
+	private void alignTimeChoicesToMidnightLocalTime(final Collection<TimeChoice> input, final int x, final @Nullable IPortSlot port) {
+		// Disabled for now as this typically will *increase* the number of intervals
+		// found, rather than reduce them. In practice (with current code) more often
+		// than not there are many options spread across the windows, but tend to be one
+		// option a day rather than many on the same day.
+		if (true) {
+			TimeChoice.filter(input);
+			return;
+		}
+
+		if (input.size() <= 2) {
+			return;
+		}
+
+		TimeChoice lowerBound = null;
+		TimeChoice upperBound = null;
+		final Collection<TimeChoice> output = new LinkedHashSet<>();
+		for (final TimeChoice tc : input) {
+
+			if (lowerBound == null || tc.time < lowerBound.time) {
+				lowerBound = tc;
+			}
+			if (upperBound == null || tc.time > upperBound.time) {
+				upperBound = tc;
+			}
+			final int independentTime = timeZoneToUtcOffsetProvider.UTC(tc.time, port);
+			try {
+				final int lowerTime = midnightIntervalsInHoursCurve.getPreviousInterval(independentTime);
+				final int localTime = timeZoneToUtcOffsetProvider.localTime(lowerTime, port);
+				// Check we still have a valid time.
+				if (localTime >= 0) {
+					output.add(TimeChoice.forNormal(localTime));
+				}
+			} catch (final NullPointerException e) {
+				// Ignore - assuming out of bounds
+			}
+			if (tc.important) {
+				output.add(tc);
+			}
+			try {
+				final int upperTime = midnightIntervalsInHoursCurve.getNextInterval(independentTime);
+				output.add(TimeChoice.forNormal(timeZoneToUtcOffsetProvider.localTime(upperTime, port)));
+			} catch (final NullPointerException e) {
+				// Ignore - assuming out of bounds
+			}
+		}
+
+		assert lowerBound != null;
+		assert upperBound != null;
+
+		input.clear();
+
+		input.add(lowerBound);
+		input.addAll(output);
+		input.add(upperBound);
+
+		TimeChoice.filter(input);
 	}
 
 }

@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jdt.annotation.Nullable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -42,6 +43,10 @@ public class SlotNameUniquenessTests extends AbstractMicroTestCase {
 		final IStatus status = ValidationTestUtil.validate(scenarioDataProvider, false, false);
 		Assertions.assertNotNull(status);
 
+		if (!status.isOK()) {
+			dumpStatusMessages(status);
+		}
+
 		Assertions.assertTrue(status.isOK());
 	}
 
@@ -72,5 +77,19 @@ public class SlotNameUniquenessTests extends AbstractMicroTestCase {
 
 		Assertions.assertTrue(foundL1);
 		Assertions.assertTrue(foundL2);
+	}
+
+	public static void dumpStatusMessages(@Nullable final IStatus status) {
+		if (status == null) {
+			return;
+		}
+		if (status.isMultiStatus()) {
+			for (final IStatus s : status.getChildren()) {
+				dumpStatusMessages(s);
+			}
+		}
+		if (!status.isOK()) {
+			System.out.println(status.getMessage());
+		}
 	}
 }

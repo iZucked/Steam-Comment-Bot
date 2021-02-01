@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.lingo.reports;
 
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 public interface IReportContentsGenerator {
 

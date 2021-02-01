@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.services;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -13,9 +14,13 @@ import java.util.Objects;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.ui.ISelectionListener;
 
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableGroup;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 public class TransformedSelectedDataProvider implements ISelectedDataProvider {
 
@@ -26,7 +31,6 @@ public class TransformedSelectedDataProvider implements ISelectedDataProvider {
 
 	public TransformedSelectedDataProvider(ISelectedDataProvider selectedDataProvider) {
 		this.selectedDataProvider = selectedDataProvider;
-
 	}
 
 	@Override
@@ -83,17 +87,88 @@ public class TransformedSelectedDataProvider implements ISelectedDataProvider {
 
 	}
 
-	@Override
-	public @NonNull List<ScenarioResult> getScenarioResults() {
-		if (selectedDataProvider != null) {
-			return selectedDataProvider.getScenarioResults();
-		} else {
-			return Collections.emptyList();
-		}
-	}
-
 	public void addExtraData(@NonNull Object obj, @NonNull final ScenarioResult scenarioResult, @Nullable final Schedule schedule) {
 		scenarioResultMap.put(obj, scenarioResult);
 		scheduleMap.put(obj, schedule);
+	}
+
+	@Override
+	public boolean inPinDiffMode() {
+		if (selectedDataProvider != null) {
+			return selectedDataProvider.inPinDiffMode();
+		}
+		return false;
+	}
+
+	@Override
+	public @NonNull List<com.mmxlabs.scenario.service.ScenarioResult> getOtherScenarioResults() {
+		if (selectedDataProvider != null) {
+			return selectedDataProvider.getOtherScenarioResults();
+		}
+		return Collections.emptyList();
+	}
+
+	@Override
+	public @NonNull List<com.mmxlabs.scenario.service.ScenarioResult> getAllScenarioResults() {
+		if (selectedDataProvider != null) {
+			return selectedDataProvider.getAllScenarioResults();
+		}
+		return Collections.emptyList();
+	}
+
+	@Override
+	public @Nullable Collection<ChangeSetTableRow> getSelectedChangeSetRows() {
+		if (selectedDataProvider != null) {
+			return selectedDataProvider.getSelectedChangeSetRows();
+		}
+		return null;
+	}
+
+	@Override
+	public @Nullable ChangeSetTableGroup getChangeSet() {
+		if (selectedDataProvider != null) {
+			return selectedDataProvider.getChangeSet();
+		}
+		return null;
+	}
+
+	@Override
+	public boolean isDiffToBase() {
+		if (selectedDataProvider != null) {
+			return selectedDataProvider.isDiffToBase();
+		}
+		return false;
+	}
+
+	@Override
+	public @Nullable ChangeSetTableRoot getChangeSetRoot() {
+		if (selectedDataProvider != null) {
+			return selectedDataProvider.getChangeSetRoot();
+		}
+		return null;
+	}
+
+	@Override
+	public void removeSelectionChangedListener(ISelectionListener l) {
+		if (selectedDataProvider != null) {
+			selectedDataProvider.removeSelectionChangedListener(l);
+		}
+
+	}
+
+	@Override
+	public void addSelectionChangedListener(ISelectionListener l) {
+		if (selectedDataProvider != null) {
+			selectedDataProvider.addSelectionChangedListener(l);
+		}
+
+	}
+
+	@Override
+	public Collection<Object> getSelectedObjects() {
+		if (selectedDataProvider != null) {
+			return selectedDataProvider.getSelectedObjects();
+		}
+		return Collections.emptySet();
 	}
 }

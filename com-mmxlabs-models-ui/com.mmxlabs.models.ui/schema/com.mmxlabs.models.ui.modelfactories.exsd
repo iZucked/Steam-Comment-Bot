@@ -115,6 +115,13 @@
                </appinfo>
             </annotation>
          </attribute>
+         <attribute name="licensedFeature" type="string">
+            <annotation>
+               <documentation>
+                  The license feature to look up in order to determine whether to turn on this feature.
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

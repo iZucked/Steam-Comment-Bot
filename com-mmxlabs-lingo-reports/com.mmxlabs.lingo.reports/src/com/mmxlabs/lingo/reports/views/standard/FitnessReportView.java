@@ -5,7 +5,6 @@
 package com.mmxlabs.lingo.reports.views.standard;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,8 +28,6 @@ import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -45,7 +42,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
-import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.views.standard.FitnessTransformer.RowData;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -55,14 +52,14 @@ import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 public class FitnessReportView extends ViewPart {
-	private final ArrayList<Integer> sortColumns = new ArrayList<Integer>(4);
+	private final ArrayList<Integer> sortColumns = new ArrayList<>(4);
 
 	private boolean inverseSort = false;
 
-	private SelectedScenariosService selectedScenariosService;
+	private ScenarioComparisonService selectedScenariosService;
 
 	protected void setSortColumn(final GridColumn column, final int value) {
 		if (sortColumns.get(0) == value) {
@@ -79,22 +76,15 @@ public class FitnessReportView extends ViewPart {
 	}
 
 	private void addSortSelectionListener(final GridColumn column, final int value) {
-		column.addSelectionListener(new SelectionAdapter() {
-			{
-				final SelectionAdapter self = this;
-				column.addDisposeListener(new DisposeListener() {
-					@Override
-					public void widgetDisposed(final DisposeEvent e) {
-						column.removeSelectionListener(self);
-					}
-				});
-			}
+		SelectionAdapter listener = new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				setSortColumn(column, value);
 			}
-		});
+		};
+		column.addSelectionListener(listener);
+		column.addDisposeListener(e -> column.removeSelectionListener(listener));
 	}
 
 	/**
@@ -114,11 +104,9 @@ public class FitnessReportView extends ViewPart {
 
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
+		private FitnessTransformer transformer = new FitnessTransformer();
 
-		FitnessTransformer transformer = new FitnessTransformer();
-
-		@Override
-		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others, final boolean block) {
+		public void selectedDataProviderChanged(ISelectedDataProvider selectedDataProvider, boolean block) {
 			final Runnable r = new Runnable() {
 				@Override
 				public void run() {
@@ -127,6 +115,7 @@ public class FitnessReportView extends ViewPart {
 
 					int numberOfSchedules = 0;
 					List<RowData> pinnedData = null;
+					ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
 					if (pinned != null) {
 						final ScheduleModel scheduleModel = pinned.getTypedResult(ScheduleModel.class);
 						if (scheduleModel != null) {
@@ -138,7 +127,7 @@ public class FitnessReportView extends ViewPart {
 							}
 						}
 					}
-					for (final ScenarioResult other : others) {
+					for (final ScenarioResult other : selectedDataProvider.getOtherScenarioResults()) {
 						final ScheduleModel scheduleModel = other.getTypedResult(ScheduleModel.class);
 						if (scheduleModel != null) {
 							final Schedule schedule = scheduleModel.getSchedule();
@@ -230,7 +219,7 @@ public class FitnessReportView extends ViewPart {
 	 */
 	@Override
 	public void createPartControl(final Composite parent) {
-		selectedScenariosService = (SelectedScenariosService) getSite().getService(SelectedScenariosService.class);
+		selectedScenariosService =  getSite().getService(ScenarioComparisonService.class);
 
 		viewer = new GridTableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		GridViewerHelper.configureLookAndFeel(viewer);

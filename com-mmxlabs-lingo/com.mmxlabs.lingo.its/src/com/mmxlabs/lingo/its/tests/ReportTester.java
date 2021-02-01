@@ -33,14 +33,17 @@ import com.mmxlabs.common.util.CheckedConsumer;
 import com.mmxlabs.lingo.its.tests.AbstractReportTester.ReportType;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IReportContentsGenerator;
+import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
 /**
  * Helper class to open up a view, set the scenario selection provider to the given instance and adapt the result to a {@link IReportContents} instance.
@@ -84,7 +87,7 @@ public class ReportTester {
 		});
 
 		final ReportTesterHelper reportTester = new ReportTesterHelper();
-		final ScenarioResult scenarioResult = new ScenarioResult(modelRecord, ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
+		final ScenarioResult scenarioResult = new ScenarioResultImpl(modelRecord, ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
 		final IReportContents reportContents = reportTester.getReportContents(scenarioResult, reportID);
 
 		Assertions.assertNotNull(reportContents);
@@ -114,7 +117,7 @@ public class ReportTester {
 		});
 
 		final ReportTesterHelper reportTester = new ReportTesterHelper();
-		final ScenarioResult scenarioResult = new ScenarioResult(modelRecord, ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
+		final ScenarioResult scenarioResult = new ScenarioResultImpl(modelRecord, ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
 		final IReportContents reportContents = reportTester.getReportContents(scenarioResult, reportID);
 
 		Assertions.assertNotNull(reportContents);
@@ -146,6 +149,15 @@ public class ReportTester {
 					if (elementID.equals(cargoAllocation.getName())) {
 						target = cargoAllocation;
 						break;
+					}
+				}
+				if (target == null) {
+					for (final PaperDealAllocation pda : schedule.getPaperDealAllocations()) {
+						final PaperDeal pd = pda.getPaperDeal();
+						if (pd != null && elementID.equals(pd.getName())){
+							target = pd;
+							break;
+						}
 					}
 				}
 			}
@@ -190,7 +202,7 @@ public class ReportTester {
 		}
 
 		final ReportTesterHelper reportTester = new ReportTesterHelper();
-		final ScenarioResult scenarioResult = new ScenarioResult(modelRecord, ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
+		final ScenarioResult scenarioResult = new ScenarioResultImpl(modelRecord, ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
 		final IReportContents reportContents = reportTester.getReportContents(scenarioResult, reportID);
 
 		Assertions.assertNotNull(reportContents);
@@ -271,9 +283,9 @@ public class ReportTester {
 		// A side-effect is the initial evaluation.
 
 		LNGScenarioRunnerCreator.withLegacyEvaluationRunner(pinModelDataProvider, true, pinRunner -> {
-			final ScenarioResult pinResult = new ScenarioResult(pinInstance, ScenarioModelUtil.getScheduleModel(pinRunner.getScenarioDataProvider()));
+			final ScenarioResult pinResult = new ScenarioResultImpl(pinInstance, ScenarioModelUtil.getScheduleModel(pinRunner.getScenarioDataProvider()));
 			LNGScenarioRunnerCreator.withLegacyEvaluationRunner(refModelDataProvider, true, refRunner -> {
-				final ScenarioResult refResult = new ScenarioResult(refInstance, ScenarioModelUtil.getScheduleModel(refRunner.getScenarioDataProvider()));
+				final ScenarioResult refResult = new ScenarioResultImpl(refInstance, ScenarioModelUtil.getScheduleModel(refRunner.getScenarioDataProvider()));
 
 				final ReportTesterHelper reportTester = new ReportTesterHelper();
 				final String result[] = new String[1];
@@ -404,7 +416,7 @@ public class ReportTester {
 			} catch (final Exception e) {
 				throw new RuntimeException(e);
 			}
-			final ScenarioResult result = new ScenarioResult(p.getFirst(), ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
+			final ScenarioResult result = new ScenarioResultImpl(p.getFirst(), ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
 			orderedResults.add(result);
 
 			b.accept(a + 1, b);

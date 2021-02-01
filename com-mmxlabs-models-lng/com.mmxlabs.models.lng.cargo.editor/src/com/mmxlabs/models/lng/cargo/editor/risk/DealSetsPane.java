@@ -24,6 +24,7 @@ import javax.inject.Inject;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
@@ -40,6 +41,7 @@ import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.widgets.formattedtext.LongFormatter;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
@@ -65,6 +67,9 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DealSet;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
@@ -78,11 +83,16 @@ import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
 import com.mmxlabs.models.lng.ui.actions.ScenarioModifyingAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
+import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
+import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -107,10 +117,12 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
 		super.init(path, adapterFactory, modelReference);
-		//final EditingDomain editingDomain = jointModelEditor.getEditingDomain();
 		
 		final GridViewerColumn gtc = addNameManipulator("Name");
 		gtc.getColumn().setTree(true);
+		
+		addColumn("Earliest Date", dealSetStartDateFormatter(), null);
+		addColumn("Estimated P&L", dealSetPNLEstimateFormatter(), null);
 		
 		{
 			final Transfer[] types = new Transfer[] { LocalSelectionTransfer.getTransfer() };
@@ -125,6 +137,116 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 		if (getScenarioViewer() != null) {
 			getScenarioViewer().setContentProvider(new SimpleTabularReportContentProvider<DealSet>());
 		}
+	}
+	
+	private ICellRenderer dealSetStartDateFormatter() {
+		return new ICellRenderer() {
+
+			@Override
+			public Comparable getComparable(Object object) {
+				return render(object);
+			}
+
+			@Override
+			public @Nullable String render(Object object) {
+				if (object instanceof DealSet) {
+					final DealSet ds = (DealSet) object;
+					LocalDate earliestSlot = LocalDate.MAX;
+					if (!ds.getSlots().isEmpty()) {
+						earliestSlot = ds.getSlots().stream().map(Slot::getWindowStart).min(LocalDate::compareTo).get();
+					}
+					LocalDate earliestPaper = LocalDate.MAX;
+					if (!ds.getPaperDeals().isEmpty()) {
+						earliestPaper = ds.getPaperDeals().stream().map(PaperDeal::getStartDate).min(LocalDate::compareTo).get();
+					}
+					final int res = earliestSlot.compareTo(earliestPaper);
+					final LocalDateTextFormatter formatter = new LocalDateTextFormatter();
+					if ((res == 0 && earliestSlot != LocalDate.MAX) || res < 0) {
+						formatter.setValue(earliestSlot);
+						return formatter.getDisplayString();
+					} else if (res > 0) {
+						formatter.setValue(earliestPaper);
+						return formatter.getDisplayString();
+					}
+				}
+				return "";
+			}
+
+			@Override
+			public boolean isValueUnset(Object object) {
+				return false;
+			}
+
+			@Override
+			public @Nullable Object getFilterValue(Object object) {
+				return null;
+			}
+
+			@Override
+			public @Nullable Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object) {
+				return null;
+			}
+		};
+	}
+	
+	private ICellRenderer dealSetPNLEstimateFormatter() {
+		return new ICellRenderer() {
+
+			@Override
+			public Comparable getComparable(Object object) {
+				return render(object);
+			}
+
+			@Override
+			public @Nullable String render(Object object) {
+				if (jointModelEditor != null) {
+					if (object instanceof DealSet) {
+						final DealSet ds = (DealSet) object;
+						final IScenarioDataProvider sdp = jointModelEditor.getScenarioDataProvider();
+						final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(sdp);
+						long totalPNL = 0;
+						if (!ds.getSlots().isEmpty()) {
+							final List<SlotAllocation> salist = scheduleModel.getSchedule().getSlotAllocations()
+									.stream().filter(sa -> ds.getSlots().contains(sa.getSlot())).collect(Collectors.toList());
+							for (final SlotAllocation sa : salist) {
+								if (sa.getSlot() instanceof LoadSlot) {
+									totalPNL -= sa.getVolumeValue();
+								}
+								if (sa.getSlot() instanceof DischargeSlot) {
+									totalPNL += sa.getVolumeValue();
+								}
+							}
+						}
+						if (!ds.getPaperDeals().isEmpty()) {
+							final List<PaperDealAllocation> pdalist = scheduleModel.getSchedule().getPaperDealAllocations()
+									.stream().filter(pda -> ds.getPaperDeals().contains(pda.getPaperDeal())).collect(Collectors.toList());
+							for(final PaperDealAllocation pda : pdalist) {
+								totalPNL += pda.getGroupProfitAndLoss().getProfitAndLoss();
+							}
+						}
+						final LongFormatter inner = new LongFormatter();
+						inner.setValue(totalPNL);
+						return inner.getDisplayString();
+					}
+				}
+				return "";
+			}
+
+			@Override
+			public boolean isValueUnset(Object object) {
+				return false;
+			}
+
+			@Override
+			public @Nullable Object getFilterValue(Object object) {
+				return null;
+			}
+
+			@Override
+			public @Nullable Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object) {
+				return null;
+			}
+		};
 	}
 	
 	public class SimpleTabularReportContentProvider<T> implements ITreeContentProvider {

@@ -738,6 +738,7 @@ public class ContractPage extends ADPComposite {
 		if (editorData != null && editorData.getScenarioModel() != null) {
 			if (previewViewer != null) {
 				if (target instanceof PurchaseContractProfile) {
+					rhsScrolledComposite.setVisible(true);
 					final PurchaseContractProfile purchaseContractProfile = (PurchaseContractProfile) target;
 					final List<Object> o = new LinkedList<>();
 					for (LoadSlot s : editorData.getScenarioModel().getCargoModel().getLoadSlots()) {
@@ -748,6 +749,7 @@ public class ContractPage extends ADPComposite {
 					previewViewer.setInput(o);
 					previewGroup.setVisible(true);
 				} else if (target instanceof SalesContractProfile) {
+					rhsScrolledComposite.setVisible(true);
 					final SalesContractProfile salesContractProfile = (SalesContractProfile) target;
 					final List<Object> o = new LinkedList<>();
 					for (DischargeSlot s : editorData.getScenarioModel().getCargoModel().getDischargeSlots()) {

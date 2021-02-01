@@ -23,7 +23,7 @@ import org.eclipse.nebula.widgets.grid.GridItem;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 /**
  * Class that makes the relevant API calls to the nebula Grid widget viewer framework.

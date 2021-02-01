@@ -26,15 +26,6 @@ public interface ScheduleReportFactory extends EFactory {
 	ScheduleReportFactory eINSTANCE = com.mmxlabs.lingo.reports.views.schedule.model.impl.ScheduleReportFactoryImpl.init();
 
 	/**
-	 * Returns a new object of class '<em>Table</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Table</em>'.
-	 * @generated
-	 */
-	Table createTable();
-
-	/**
 	 * Returns a new object of class '<em>Row</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -44,15 +35,6 @@ public interface ScheduleReportFactory extends EFactory {
 	Row createRow();
 
 	/**
-	 * Returns a new object of class '<em>Cycle Group</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Cycle Group</em>'.
-	 * @generated
-	 */
-	CycleGroup createCycleGroup();
-
-	/**
 	 * Returns a new object of class '<em>Row Group</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -60,15 +42,6 @@ public interface ScheduleReportFactory extends EFactory {
 	 * @generated
 	 */
 	RowGroup createRowGroup();
-
-	/**
-	 * Returns a new object of class '<em>User Group</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>User Group</em>'.
-	 * @generated
-	 */
-	UserGroup createUserGroup();
 
 	/**
 	 * Returns a new object of class '<em>Diff Options</em>'.

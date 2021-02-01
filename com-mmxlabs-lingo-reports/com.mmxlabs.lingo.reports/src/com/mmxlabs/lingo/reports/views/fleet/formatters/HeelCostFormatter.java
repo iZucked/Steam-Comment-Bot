@@ -4,10 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views.fleet.formatters;
 
-import java.util.List;
-
 import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
-import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -17,33 +14,15 @@ public class HeelCostFormatter extends CostFormatter {
 	public HeelCostFormatter(boolean includeUnits) {
 		super(includeUnits);
 	}
-	
-	public HeelCostFormatter(boolean includeUnits, Type type ) {
+
+	public HeelCostFormatter(boolean includeUnits, Type type) {
 		super(includeUnits, type);
 	}
-	
+
 	@Override
 	public Integer getIntValue(Object object) {
 
-		if (object instanceof Row) {
-			object = ((Row) object).getSequence();
-		}
-		int heelCost = 0;
-		if (object instanceof Sequence) {
-			Sequence sequence = (Sequence) object;
-			heelCost += getHeelCost(sequence);
-		} else if (object instanceof List) {
-			List objects = (List) object;
-			if (objects.size() > 0) {
-				for (Object o : objects) {
-					if (o instanceof Sequence) {
-					heelCost += getHeelCost((Sequence) o);
-					}
-				}
-			}
-		}
-
-		return heelCost;
+		return SequenceGrabber.applyToSequences(object, this::getHeelCost);
 	}
 
 	private int getHeelCost(Sequence sequence) {

@@ -17,8 +17,9 @@ import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
 public class InsertionPlanTransformer {
 
@@ -39,14 +40,14 @@ public class InsertionPlanTransformer {
 				if (scenarioModel == null || scenarioModel.getScheduleModel().getSchedule() == null) {
 					throw new ScenarioNotEvaluatedException("Unable to perform comparison, scenario needs to be evaluated");
 				}
-				base = new ScenarioResult(scenarioInstance, scenarioModel.getScheduleModel());
+				base = new ScenarioResultImpl(scenarioInstance, scenarioModel.getScheduleModel());
 			} else {
-				base = new ScenarioResult(scenarioInstance, plan.getBaseOption().getScheduleModel());
+				base = new ScenarioResultImpl(scenarioInstance, plan.getBaseOption().getScheduleModel());
 			}
 
 			for (final SolutionOption option : plan.getOptions()) {
 				ChangeDescription changeDescription = option.getChangeDescription();
-				final ScenarioResult current = new ScenarioResult(scenarioInstance, option.getScheduleModel());
+				final ScenarioResult current = new ScenarioResultImpl(scenarioInstance, option.getScheduleModel());
 
 				{
 
@@ -55,8 +56,8 @@ public class InsertionPlanTransformer {
 					if (option instanceof DualModeSolutionOption) {
 						final DualModeSolutionOption slotInsertionOption = (DualModeSolutionOption) option;
 						if (slotInsertionOption.getMicroBaseCase() != null && slotInsertionOption.getMicroTargetCase() != null) {
-							altBase = new ScenarioResult(scenarioInstance, slotInsertionOption.getMicroBaseCase().getScheduleModel());
-							altCurrent = new ScenarioResult(scenarioInstance, slotInsertionOption.getMicroTargetCase().getScheduleModel());
+							altBase = new ScenarioResultImpl(scenarioInstance, slotInsertionOption.getMicroBaseCase().getScheduleModel());
+							altCurrent = new ScenarioResultImpl(scenarioInstance, slotInsertionOption.getMicroTargetCase().getScheduleModel());
 						}
 					}
 					if (plan.isHasDualModeSolutions()) {

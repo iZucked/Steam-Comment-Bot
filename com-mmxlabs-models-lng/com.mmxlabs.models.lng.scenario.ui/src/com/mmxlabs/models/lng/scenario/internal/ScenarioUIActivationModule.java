@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.scenario.internal;
 
 import org.ops4j.peaberry.activation.util.PeaberryActivationModule;

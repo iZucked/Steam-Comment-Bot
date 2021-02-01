@@ -91,6 +91,8 @@ public final class KnownFeatures {
 	public static final String FEATURE_RE_EVALUATE_SOLUTIONS = "features:re-evaluate-solutions";
 
 	public static final String FEATURE_SANDBOX = "features:sandbox";
+	
+	public static final String FEATURE_SANDBOX_CHARTER_INS = "features:sandbox-charter-ins";
 
 	public static final String FEATURE_BREAK_EVEN_TABLE = "features:break-even-table";
 

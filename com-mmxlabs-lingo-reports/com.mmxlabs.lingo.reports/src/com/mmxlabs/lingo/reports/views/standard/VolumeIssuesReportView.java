@@ -49,7 +49,7 @@ import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
 import com.mmxlabs.models.ui.tabular.generic.GenericEMFTableDataModel;
 import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 /**
  * @author Simon Goodall

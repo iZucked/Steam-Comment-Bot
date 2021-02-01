@@ -29,9 +29,12 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.FullVesselCharterOption;
@@ -43,6 +46,8 @@ import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.ShippingOptionsContentProvider;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
@@ -156,6 +161,18 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent<Object, A
 							final ExistingVesselCharterOption opt = AnalyticsFactory.eINSTANCE.createExistingVesselCharterOption();
 							// opt.setVesselAvailability(CargoFactory.eINSTANCE.createVesselAvailability());
 							// AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
+							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
+									AddCommand.create(scenarioEditingLocation.getEditingDomain(), modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
+									modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+
+							DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(opt));
+						}));
+					}
+					if (portfolioMode && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_SANDBOX_CHARTER_INS)) {
+						helper.addAction(new RunnableAction("Existing Market Charter", () -> {
+							final ExistingCharterMarketOption opt = AnalyticsFactory.eINSTANCE.createExistingCharterMarketOption();
+							final CharterInMarket market = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
+							opt.setCharterInMarket(market);
 							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
 									AddCommand.create(scenarioEditingLocation.getEditingDomain(), modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES, opt),
 									modelProvider.get(), AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);

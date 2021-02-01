@@ -92,7 +92,7 @@ public class CustomPaperDealsPane extends ScenarioTableViewerPane {
 		super.init(path, adapterFactory, modelReference);
 
 		addNameManipulator("Name");
-		addColumn("Type", createPaperDealTypeFormatter(), null);
+		addColumn("Side", createPaperDealTypeFormatter(), null);
 		addTypicalColumn("Start Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_StartDate(), jointModelEditor.getEditingDomain()));
 		addTypicalColumn("End Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_EndDate(), jointModelEditor.getEditingDomain()));
 		addTypicalColumn("Price", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Price(), jointModelEditor.getEditingDomain()));

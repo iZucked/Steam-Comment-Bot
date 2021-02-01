@@ -9,8 +9,10 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
 public class ScenarioServicePartListener implements IPartListener {
 
@@ -32,13 +34,15 @@ public class ScenarioServicePartListener implements IPartListener {
 		if (part instanceof IEditorPart) {
 			final IEditorPart editorPart = (IEditorPart) part;
 			final IEditorInput editorInput = editorPart.getEditorInput();
-			final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
+			final ScenarioInstance scenarioInstance = editorInput.getAdapter(ScenarioInstance.class);
 			if (scenarioInstance != null) {
-				final ScenarioServiceSelectionProvider selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
+				final IScenarioServiceSelectionProvider selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
 				if (lastAutoSelection == scenarioInstance) {
 					lastAutoSelection = null;
-					if (selectionProvider.isSelected(scenarioInstance) && scenarioInstance != selectionProvider.getPinnedInstance()) {
-						selectionProvider.deselect(scenarioInstance);
+					ScenarioResult pinned = selectionProvider.getPinned();
+
+					if (selectionProvider.isSelected(scenarioInstance) && (pinned == null || scenarioInstance != pinned.getScenarioInstance())) {
+						selectionProvider.deselect(scenarioInstance, false);
 					}
 				}
 			}
@@ -53,19 +57,20 @@ public class ScenarioServicePartListener implements IPartListener {
 			final IEditorInput editorInput = editorPart.getEditorInput();
 			final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
 			if (scenarioInstance != null) {
-				final ScenarioServiceSelectionProvider selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
+				final IScenarioServiceSelectionProvider selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
 				final ScenarioInstance pLastAutoSelection = lastAutoSelection;
 				if (pLastAutoSelection != null && pLastAutoSelection != scenarioInstance) {
-					if (selectionProvider.isSelected(pLastAutoSelection) && selectionProvider.getPinnedInstance() != pLastAutoSelection) {
-						selectionProvider.deselect(pLastAutoSelection);
+					ScenarioResult pinned = selectionProvider.getPinned();
+					if (selectionProvider.isSelected(pLastAutoSelection) && (pinned == null || pinned.getScenarioInstance() != pLastAutoSelection)) {
+						selectionProvider.deselect(pLastAutoSelection, false);
 					}
 					lastAutoSelection = null;
 				}
 				if (!selectionProvider.isSelected(scenarioInstance)) {
 					try {
 						// This line may fail if model cannot be loaded. Wrap everything up in exception handler
-						final ScenarioResult scenarioResult = new ScenarioResult(scenarioInstance);
-						selectionProvider.select(scenarioResult);
+						final ScenarioResult scenarioResult = new ScenarioResultImpl(scenarioInstance);
+						selectionProvider.select(scenarioResult, false);
 						lastAutoSelection = scenarioInstance;
 					} catch (final Exception e) {
 						// I don't think we really care here...
@@ -81,24 +86,27 @@ public class ScenarioServicePartListener implements IPartListener {
 		if (part instanceof IEditorPart) {
 			final IEditorPart editorPart = (IEditorPart) part;
 			final IEditorInput editorInput = editorPart.getEditorInput();
-			final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
+			final ScenarioInstance scenarioInstance = editorInput.getAdapter(ScenarioInstance.class);
 			if (scenarioInstance != null) {
-				final ScenarioServiceSelectionProvider selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
-				final ScenarioInstance pLastAutoSelection = lastAutoSelection;
-				if (pLastAutoSelection != null && pLastAutoSelection != scenarioInstance) {
-					if (selectionProvider.isSelected(pLastAutoSelection) && selectionProvider.getPinnedInstance() != pLastAutoSelection) {
-						selectionProvider.deselect(pLastAutoSelection);
+				final IScenarioServiceSelectionProvider selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
+
+				if (selectionProvider != null) {
+					final ScenarioInstance pLastAutoSelection = lastAutoSelection;
+					if (pLastAutoSelection != null && pLastAutoSelection != scenarioInstance) {
+						if (selectionProvider.isSelected(pLastAutoSelection) && selectionProvider.getPinned() != pLastAutoSelection) {
+							selectionProvider.deselect(pLastAutoSelection, false);
+						}
+						lastAutoSelection = null;
 					}
-					lastAutoSelection = null;
-				}
-				if (!selectionProvider.isSelected(scenarioInstance)) {
-					try {
-						// This line may fail if model cannot be loaded. Wrap everything up in exception handler
-						final ScenarioResult scenarioResult = new ScenarioResult(scenarioInstance);
-						selectionProvider.select(scenarioResult);
-						lastAutoSelection = scenarioInstance;
-					} catch (final Exception e) {
-						// I don't think we really care here...
+					if (!selectionProvider.isSelected(scenarioInstance)) {
+						try {
+							// This line may fail if model cannot be loaded. Wrap everything up in exception handler
+							final ScenarioResult scenarioResult = new ScenarioResultImpl(scenarioInstance);
+							selectionProvider.select(scenarioResult, false);
+							lastAutoSelection = scenarioInstance;
+						} catch (final Exception e) {
+							// I don't think we really care here...
+						}
 					}
 				}
 			}

@@ -10,9 +10,10 @@ import java.util.List;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
 public class ActionSetTransformer {
 
@@ -30,13 +31,13 @@ public class ActionSetTransformer {
 				for (final Container cc : c.getElements()) {
 					if (!foundBase && (cc.getName().equals("base") || cc.getName().equalsIgnoreCase(String.format("ActionSet-base")))) {
 						if (cc instanceof ScenarioInstance) {
-							stages.add(0, new ScenarioResult((ScenarioInstance) cc));
+							stages.add(0, new ScenarioResultImpl((ScenarioInstance) cc));
 							foundBase = true;
 						}
 					}
 					if (cc.getName().equals(Integer.toString(i)) || cc.getName().equalsIgnoreCase(String.format("ActionSet-%d", i))) {
 						if (cc instanceof ScenarioInstance) {
-							stages.add(new ScenarioResult((ScenarioInstance) cc));
+							stages.add(new ScenarioResultImpl((ScenarioInstance) cc));
 							found = true;
 							i++;
 						}
@@ -57,14 +58,14 @@ public class ActionSetTransformer {
 				for (final Container cc : c.getElements()) {
 					if (!foundBase && (cc.getName().equals("base") || cc.getName().equalsIgnoreCase(String.format("ActionSet-base")))) {
 						if (cc instanceof ScenarioInstance) {
-							stages.add(0, new ScenarioResult((ScenarioInstance) cc));
+							stages.add(0, new ScenarioResultImpl((ScenarioInstance) cc));
 							foundBase = true;
 						}
 					}
 
 					if (cc.getName().equals(Integer.toString(i)) || cc.getName().equalsIgnoreCase(String.format("ActionSet-%d", i))) {
 						if (cc instanceof ScenarioInstance) {
-							stages.add(new ScenarioResult((ScenarioInstance) cc));
+							stages.add(new ScenarioResultImpl((ScenarioInstance) cc));
 							found = true;
 							i++;
 						}

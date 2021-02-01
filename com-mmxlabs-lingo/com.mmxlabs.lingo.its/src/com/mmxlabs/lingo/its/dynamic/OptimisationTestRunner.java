@@ -50,10 +50,11 @@ import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
 public class OptimisationTestRunner {
 	private OptimisationTestRunner() {
@@ -224,8 +225,8 @@ public class OptimisationTestRunner {
 		Assertions.assertFalse(analyticsModel.getOptimisations().isEmpty());
 		final AbstractSolutionSet solutionSet = analyticsModel.getOptimisations().get(0);
 
-		final ScenarioResult pinResult = new ScenarioResult(modelRecord, solutionSet.getBaseOption().getScheduleModel());
-		final ScenarioResult refResult = new ScenarioResult(modelRecord, solutionSet.getOptions().get(solutionSet.getOptions().size() - 1).getScheduleModel());
+		final ScenarioResult pinResult = new ScenarioResultImpl(modelRecord, solutionSet.getBaseOption().getScheduleModel());
+		final ScenarioResult refResult = new ScenarioResultImpl(modelRecord, solutionSet.getOptions().get(solutionSet.getOptions().size() - 1).getScheduleModel());
 
 		final String compareViewContent = ReportTester.generatePinDiffReport(ReportTesterHelper.CHANGESET_REPORT_ID, pinResult, refResult);
 		Assertions.assertNotNull(compareViewContent);

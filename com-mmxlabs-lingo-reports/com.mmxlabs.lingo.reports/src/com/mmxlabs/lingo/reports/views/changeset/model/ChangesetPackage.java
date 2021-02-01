@@ -1150,7 +1150,7 @@ public interface ChangesetPackage extends EPackage {
 	 * The meta object id for the '<em>Scenario Result</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.scenario.service.ui.ScenarioResult
+	 * @see com.mmxlabs.scenario.service.ScenarioResult
 	 * @see com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangesetPackageImpl#getScenarioResult()
 	 * @generated
 	 */
@@ -2258,11 +2258,11 @@ public interface ChangesetPackage extends EPackage {
 	EAttribute getChangeSetRowData_VesselType();
 
 	/**
-	 * Returns the meta object for data type '{@link com.mmxlabs.scenario.service.ui.ScenarioResult <em>Scenario Result</em>}'.
+	 * Returns the meta object for data type '{@link com.mmxlabs.scenario.service.ScenarioResult <em>Scenario Result</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for data type '<em>Scenario Result</em>'.
-	 * @see com.mmxlabs.scenario.service.ui.ScenarioResult
+	 * @see com.mmxlabs.scenario.service.ScenarioResult
 	 * @model instanceClass="com.mmxlabs.scenario.service.ui.ScenarioResult"
 	 * @generated
 	 */
@@ -3131,7 +3131,7 @@ public interface ChangesetPackage extends EPackage {
 		 * The meta object literal for the '<em>Scenario Result</em>' data type.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.scenario.service.ui.ScenarioResult
+		 * @see com.mmxlabs.scenario.service.ScenarioResult
 		 * @see com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangesetPackageImpl#getScenarioResult()
 		 * @generated
 		 */

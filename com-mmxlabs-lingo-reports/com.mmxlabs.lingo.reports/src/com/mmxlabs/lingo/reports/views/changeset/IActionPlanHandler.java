@@ -6,7 +6,7 @@ package com.mmxlabs.lingo.reports.views.changeset;
 
 import java.util.List;
 
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 public interface IActionPlanHandler {
 

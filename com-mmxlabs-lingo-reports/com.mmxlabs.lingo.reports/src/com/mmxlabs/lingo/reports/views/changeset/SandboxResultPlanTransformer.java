@@ -21,8 +21,9 @@ import com.mmxlabs.models.lng.analytics.SandboxResult;
 import com.mmxlabs.models.lng.analytics.SolutionOption;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
 public class SandboxResultPlanTransformer {
 
@@ -38,12 +39,12 @@ public class SandboxResultPlanTransformer {
 			if (scenarioModel.getScheduleModel().getSchedule() == null) {
 				throw new ScenarioNotEvaluatedException("Unable to perform comparison, scenario needs to be evaluated");
 			}
-			base = new ScenarioResult(scenarioInstance, scenarioModel.getScheduleModel());
+			base = new ScenarioResultImpl(scenarioInstance, scenarioModel.getScheduleModel());
 		} else {
 			if (plan.getBaseOption() == null) {
 				return root;
 			}
-			base = new ScenarioResult(scenarioInstance, plan.getBaseOption().getScheduleModel());
+			base = new ScenarioResultImpl(scenarioInstance, plan.getBaseOption().getScheduleModel());
 		}
 		try {
 			monitor.beginTask("Opening solutions", plan.getOptions().size());
@@ -53,15 +54,15 @@ public class SandboxResultPlanTransformer {
 			List<ChangeSet> changeSets = new LinkedList<>();
 			for (final SolutionOption option : plan.getOptions()) {
 				final ChangeDescription changeDescription = option.getChangeDescription();
-				final ScenarioResult current = new ScenarioResult(scenarioInstance, option.getScheduleModel());
+				final ScenarioResult current = new ScenarioResultImpl(scenarioInstance, option.getScheduleModel());
 
 				ScenarioResult altBase = null;
 				ScenarioResult altCurrent = null;
 				if (option instanceof DualModeSolutionOption) {
 					final DualModeSolutionOption slotInsertionOption = (DualModeSolutionOption) option;
 					if (slotInsertionOption.getMicroBaseCase() != null && slotInsertionOption.getMicroTargetCase() != null) {
-						altBase = new ScenarioResult(scenarioInstance, slotInsertionOption.getMicroBaseCase().getScheduleModel());
-						altCurrent = new ScenarioResult(scenarioInstance, slotInsertionOption.getMicroTargetCase().getScheduleModel());
+						altBase = new ScenarioResultImpl(scenarioInstance, slotInsertionOption.getMicroBaseCase().getScheduleModel());
+						altCurrent = new ScenarioResultImpl(scenarioInstance, slotInsertionOption.getMicroTargetCase().getScheduleModel());
 					}
 				}
 				if (plan.isHasDualModeSolutions()) {

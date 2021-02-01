@@ -30,10 +30,10 @@ import com.mmxlabs.models.lng.transformer.ui.parametermodes.impl.ParameterModesE
 import com.mmxlabs.models.ui.validation.ValidationPlugin;
 import com.mmxlabs.models.util.importer.registry.ExtensionConfigurationModule;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
+import com.mmxlabs.scenario.service.IScenarioServiceSelectionChangedListener;
+import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -58,48 +58,29 @@ public class Activator extends ValidationPlugin {
 	private final IScenarioServiceSelectionChangedListener scenarioServiceSelectionChangedListener = new IScenarioServiceSelectionChangedListener() {
 
 		@Override
-		public void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioResult> selected, boolean block) {
-
-			setJobProperty(selected, true);
-		}
-
-		@Override
-		public void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioResult> deselected, boolean block) {
-			setJobProperty(deselected, false);
-		}
-
-		private void setJobProperty(final Collection<ScenarioResult> selected, final boolean showInTaskbar) {
+		public void selectionChanged(ScenarioResult pinned, Collection<ScenarioResult> others) {
 			final IEclipseJobManager jobManager = jobManagerServiceTracker.getService();
 			if (jobManager != null) {
 
-				for (final ScenarioResult result : selected) {
-					if (result == null) {
-						continue;
-					}
-					ScenarioModelRecord instance = result.getModelRecord();
-
-					final String uuid = instance.getManifest().getUUID();
-
-					final IJobDescriptor job = jobManager.findJobForResource(uuid);
-					if (job == null) {
-						continue;
-					}
-
-					final IJobControl control = jobManager.getControlForJob(job);
-					if (control instanceof AbstractEclipseJobControl) {
-						((AbstractEclipseJobControl) control).setJobProperty(IProgressConstants2.SHOW_IN_TASKBAR_ICON_PROPERTY, showInTaskbar);
-					}
-				}
+//				for (final ScenarioResult result : others) {
+//					if (result == null) {
+//						continue;
+//					}
+//					ScenarioModelRecord instance = result.getModelRecord();
+//
+//					final String uuid = instance.getManifest().getUUID();
+//
+//					final IJobDescriptor job = jobManager.findJobForResource(uuid);
+//					if (job == null) {
+//						continue;
+//					}
+//
+//					final IJobControl control = jobManager.getControlForJob(job);
+//					if (control instanceof AbstractEclipseJobControl) {
+////						((AbstractEclipseJobControl) control).setJobProperty(IProgressConstants2.SHOW_IN_TASKBAR_ICON_PROPERTY, showInTaskbar);
+//					}
+//				}
 			}
-		}
-
-		@Override
-		public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioResult oldPin, final ScenarioResult newPin, boolean block) {
-		}
-
-		@Override
-		public void selectionChanged(ScenarioResult pinned, Collection<ScenarioResult> others, boolean block) {
-
 		}
 	};
 
@@ -141,8 +122,8 @@ public class Activator extends ValidationPlugin {
 		final Injector inj = Guice.createInjector(Peaberry.osgiModule(context, EclipseRegistry.eclipseRegistry()), new ParameterModesExtensionModule(), new ExtensionConfigurationModule(null));
 		inj.injectMembers(this);
 
-		 optioniserConsoleService = context.registerService(CommandProvider.class, optioniserConsole, null);
-		 optimiserConsoleService = context.registerService(CommandProvider.class, optimiserConsole, null);
+		optioniserConsoleService = context.registerService(CommandProvider.class, optioniserConsole, null);
+		optimiserConsoleService = context.registerService(CommandProvider.class, optimiserConsole, null);
 	}
 
 	/*

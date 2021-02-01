@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.scenario.service.ui.editor.actions;
 
-import java.util.Collection;
-
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
@@ -15,41 +13,20 @@ import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 
+import com.mmxlabs.scenario.service.IScenarioServiceSelectionChangedListener;
+import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
-import com.mmxlabs.scenario.service.ui.internal.ScenarioServiceSelectionProvider;
 
 public class PinStateEditorActionDelegate implements IEditorActionDelegate, IActionDelegate2 {
-	private ScenarioServiceSelectionProvider selectionProvider;
+	private IScenarioServiceSelectionProvider selectionProvider;
 	private IEditorPart targetEditor;
 	private IAction action;
 	@NonNull
-	private final IScenarioServiceSelectionChangedListener selectionChangedListener = new IScenarioServiceSelectionChangedListener() {
-
-		@Override
-		public void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioResult> selected, boolean block) {
-
-		}
-
-		@Override
-		public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioResult oldPin, final ScenarioResult newPin, boolean block) {
-
-		}
-
-		@Override
-		public void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioResult> deselected, boolean block) {
-
-		}
-
-		@Override
-		public void selectionChanged(ScenarioResult pinned, Collection<ScenarioResult> others, boolean block) {
-			updateActionState();
-		}
-	};
+	private final IScenarioServiceSelectionChangedListener selectionChangedListener = (a, b) -> updateActionState();
 
 	@Override
 	public void run(final IAction action) {
@@ -75,9 +52,10 @@ public class PinStateEditorActionDelegate implements IEditorActionDelegate, IAct
 			final IEditorInput input = targetEditor.getEditorInput();
 			if (input instanceof IScenarioServiceEditorInput) {
 				enabled = true;
-				if (selectionProvider.getPinnedInstance() != null) {
+				ScenarioResult pinned = selectionProvider.getPinned();
+				if (pinned != null) {
 					final ScenarioInstance instance = ((IScenarioServiceEditorInput) input).getScenarioInstance();
-					if (instance == selectionProvider.getPinnedInstance()) {
+					if (instance == pinned.getScenarioInstance()) {
 						toggled = true;
 					}
 				}
@@ -109,10 +87,11 @@ public class PinStateEditorActionDelegate implements IEditorActionDelegate, IAct
 			final IEditorInput input = targetEditor.getEditorInput();
 			if (input instanceof IScenarioServiceEditorInput) {
 				final ScenarioInstance instance = ((IScenarioServiceEditorInput) input).getScenarioInstance();
-				if (selectionProvider.getPinnedInstance() == instance) {
-					selectionProvider.setPinnedInstance((ScenarioResult) null);
+				ScenarioResult pinned = selectionProvider.getPinned();
+				if (pinned != null && pinned.getScenarioInstance() == instance) {
+					selectionProvider.setPinned((ScenarioResult) null, false);
 				} else {
-					selectionProvider.setPinnedInstance(instance);
+					selectionProvider.setPinned(new ScenarioResultImpl(instance), false);
 				}
 			}
 		}

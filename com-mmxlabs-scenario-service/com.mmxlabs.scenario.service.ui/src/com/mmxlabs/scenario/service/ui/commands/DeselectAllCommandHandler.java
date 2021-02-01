@@ -11,12 +11,12 @@ import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.mmxlabs.rcp.common.ServiceHelper;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
+import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
 
 public class DeselectAllCommandHandler extends AbstractHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		BusyIndicator.showWhile(HandlerUtil.getActiveShellChecked(event).getDisplay(), () -> ServiceHelper.withServiceConsumer(IScenarioServiceSelectionProvider.class, p -> p.deselectAll()));
+		BusyIndicator.showWhile(HandlerUtil.getActiveShellChecked(event).getDisplay(), () -> ServiceHelper.withServiceConsumer(IScenarioServiceSelectionProvider.class, p -> p.deselectAll(true)));
 
 		return null;
 	}

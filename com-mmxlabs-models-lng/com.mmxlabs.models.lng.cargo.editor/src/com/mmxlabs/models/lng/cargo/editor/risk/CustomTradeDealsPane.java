@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jdt.annotation.Nullable;
@@ -33,9 +34,12 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DealSet;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.GroupData;
@@ -101,6 +105,7 @@ public class CustomTradeDealsPane extends ScenarioTableViewerPane {
 
 		addNameManipulator("Name");
 		
+		addColumn("Side", createSlotTypeFormatter(), null);
 		addReadOnlyColumn("Window", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStart(), jointModelEditor.getEditingDomain()));
 		addReadOnlyColumn("Volume", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MinQuantity(), jointModelEditor.getEditingDomain()));
 		addReadOnlyColumn("Port", new SingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Port(), provider, jointModelEditor.getEditingDomain()));
@@ -229,5 +234,40 @@ public class CustomTradeDealsPane extends ScenarioTableViewerPane {
 	@Override
 	protected Action createDeleteAction(@Nullable final Function<Collection<?>, Collection<Object>> callback) {
 		return null;
+	}
+	
+	private ICellRenderer createSlotTypeFormatter() {
+		return new ICellRenderer() {
+
+			@Override
+			public Comparable getComparable(Object object) {
+				return render(object);
+			}
+
+			@Override
+			public @Nullable String render(Object object) {
+				if (object instanceof LoadSlot) {
+					return "Buy";
+				} else if (object instanceof DischargeSlot) {
+					return "Sell";
+				}
+				return "";
+			}
+
+			@Override
+			public boolean isValueUnset(Object object) {
+				return false;
+			}
+
+			@Override
+			public @Nullable Object getFilterValue(Object object) {
+				return null;
+			}
+
+			@Override
+			public @Nullable Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object) {
+				return null;
+			}
+		};
 	}
 }

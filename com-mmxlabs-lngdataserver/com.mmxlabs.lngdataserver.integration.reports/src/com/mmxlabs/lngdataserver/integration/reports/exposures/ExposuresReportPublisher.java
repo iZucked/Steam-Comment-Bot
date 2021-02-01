@@ -13,9 +13,10 @@ import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportCont
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportPublisherExtension;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.UnsupportedReportException;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
 public class ExposuresReportPublisher implements IReportPublisherExtension {
 
@@ -26,7 +27,7 @@ public class ExposuresReportPublisher implements IReportPublisherExtension {
 		final List<String> versions = supportedFormats.getVersionsFor(getReportType());
 
 		if (versions.isEmpty() || versions.contains("1")) {
-			final ScenarioResult sr = new ScenarioResult(scenarioInstance, scheduleModel);
+			final ScenarioResult sr = new ScenarioResultImpl(scenarioInstance, scheduleModel);
 
 			final List<ExposuresReportModel> models = ExposuresReportJSONGenerator.createReportData(scheduleModel, scenarioDataProvider, sr);
 

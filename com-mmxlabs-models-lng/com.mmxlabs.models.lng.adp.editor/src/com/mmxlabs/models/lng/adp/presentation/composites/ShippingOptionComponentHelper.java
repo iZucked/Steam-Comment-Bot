@@ -7,7 +7,7 @@
 package com.mmxlabs.models.lng.adp.presentation.composites;
 
 import com.mmxlabs.models.lng.adp.ADPPackage;
-import com.mmxlabs.models.lng.adp.presentation.editors.SpotIndexInlineEditor;
+import com.mmxlabs.models.lng.adp.presentation.editors.ADPSpotIndexInlineEditor;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -87,7 +87,7 @@ public class ShippingOptionComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_spotIndexEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 //		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.SHIPPING_OPTION__SPOT_INDEX));
-		detailComposite.addInlineEditor(new SpotIndexInlineEditor(ADPPackage.Literals.SHIPPING_OPTION__SPOT_INDEX));
+		detailComposite.addInlineEditor(new ADPSpotIndexInlineEditor(ADPPackage.Literals.SHIPPING_OPTION__SPOT_INDEX));
 	}
 	/**
 	 * Create the editor for the vessel feature on ShippingOption

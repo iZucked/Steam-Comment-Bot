@@ -39,7 +39,7 @@ import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
-import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -57,14 +57,14 @@ import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
-import com.mmxlabs.scenario.service.ui.ScenarioResult;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 /**
  */
 
 public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener {
 
-	private SelectedScenariosService selectedScenariosService;
+	private ScenarioComparisonService selectedScenariosService;
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -197,7 +197,7 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 		final ESelectionService service = getSite().getService(ESelectionService.class);
 		service.addPostSelectionListener(this);
 
-		selectedScenariosService = getSite().getService(SelectedScenariosService.class);
+		selectedScenariosService = getSite().getService(ScenarioComparisonService.class);
 		selectedScenariosService.addListener(selectedScenariosServiceListener);
 
 		makeActions();
@@ -337,18 +337,18 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
-
 		@Override
-		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioResult pinned, final Collection<ScenarioResult> others, final boolean block) {
+		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
+
 			final Runnable r = new Runnable() {
 				@Override
 				public void run() {
 
 					final List<EObject> slotAllocations = new LinkedList<>();
-
+					ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
 					if (pinned != null) {
-						@Nullable
-						final ScheduleModel scheduleModel = pinned.getTypedResult(ScheduleModel.class);
+
+						final @Nullable ScheduleModel scheduleModel = pinned.getTypedResult(ScheduleModel.class);
 						if (scheduleModel != null) {
 							final Schedule schedule = scheduleModel.getSchedule();
 							if (schedule != null) {
@@ -357,9 +357,9 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 							}
 						}
 					}
-					for (final ScenarioResult other : others) {
-						@Nullable
-						final ScheduleModel scheduleModel = other.getTypedResult(ScheduleModel.class);
+					for (final ScenarioResult other : selectedDataProvider.getOtherScenarioResults()) {
+
+						final @Nullable ScheduleModel scheduleModel = other.getTypedResult(ScheduleModel.class);
 						if (scheduleModel != null) {
 							final Schedule schedule = scheduleModel.getSchedule();
 							if (schedule != null) {

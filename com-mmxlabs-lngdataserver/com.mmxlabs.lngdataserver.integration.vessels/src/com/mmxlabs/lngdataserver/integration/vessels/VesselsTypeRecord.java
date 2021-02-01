@@ -29,11 +29,6 @@ public class VesselsTypeRecord implements TypeRecord {
 	}
 
 	@Override
-	public String getVersionNotificationEndpoint() {
-		return "/vessels/version_notification";
-	}
-
-	@Override
 	public String getUploadURL() {
 		return "/vessels/sync/versions/";
 
