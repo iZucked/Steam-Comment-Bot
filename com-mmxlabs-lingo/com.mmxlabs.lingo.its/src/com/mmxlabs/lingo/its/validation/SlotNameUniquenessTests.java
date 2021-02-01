@@ -5,9 +5,11 @@
 package com.mmxlabs.lingo.its.validation;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +17,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import com.mmxlabs.lingo.its.internal.Activator;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
@@ -22,6 +25,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.validation.SlotNameUniquenessConstraint;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.IDetailConstraintStatus;
 
 @ExtendWith(ShiroRunner.class)
 public class SlotNameUniquenessTests extends AbstractMicroTestCase {
@@ -40,11 +44,15 @@ public class SlotNameUniquenessTests extends AbstractMicroTestCase {
 		cargoModelBuilder.makeFOBPurchase("L2", LocalDate.of(2021, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", null) //
 				.build();
 
-		final IStatus status = ValidationTestUtil.validate(scenarioDataProvider, false, false);
-		Assertions.assertNotNull(status);
+		final IStatus statusOrig = ValidationTestUtil.validate(scenarioDataProvider, false, false);
+		Assertions.assertNotNull(statusOrig);
+
+		// Clear out other validation errors, e.g. validation constraints may fail and get disabled, so do not abort this test.
+		final IStatus status = ValidationTestUtil.retainDetailConstraintStatus(statusOrig);
 
 		if (!status.isOK()) {
-			dumpStatusMessages(status);
+			// Dump original status to include any extra useful info
+			ValidationTestUtil.dumpStatusMessages(statusOrig);
 		}
 
 		Assertions.assertTrue(status.isOK());
@@ -59,8 +67,12 @@ public class SlotNameUniquenessTests extends AbstractMicroTestCase {
 		final LoadSlot l2 = cargoModelBuilder.makeFOBPurchase("L1", LocalDate.of(2021, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", null) //
 				.build();
 
-		final IStatus status = ValidationTestUtil.validate(scenarioDataProvider, false, false);
-		Assertions.assertNotNull(status);
+		
+		final IStatus statusOrig = ValidationTestUtil.validate(scenarioDataProvider, false, false);
+		Assertions.assertNotNull(statusOrig);
+
+		// Clear out other validation errors, e.g. validation constraints may fail and get disabled, so do not abort this test.
+		final IStatus status = ValidationTestUtil.retainDetailConstraintStatus(statusOrig);
 
 		Assertions.assertFalse(status.isOK());
 
@@ -79,17 +91,4 @@ public class SlotNameUniquenessTests extends AbstractMicroTestCase {
 		Assertions.assertTrue(foundL2);
 	}
 
-	public static void dumpStatusMessages(@Nullable final IStatus status) {
-		if (status == null) {
-			return;
-		}
-		if (status.isMultiStatus()) {
-			for (final IStatus s : status.getChildren()) {
-				dumpStatusMessages(s);
-			}
-		}
-		if (!status.isOK()) {
-			System.out.println(status.getMessage());
-		}
-	}
 }

@@ -4,18 +4,21 @@
  */
 package com.mmxlabs.lingo.its.validation;
 
-import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.emf.validation.model.Category;
 import org.eclipse.emf.validation.model.EvaluationMode;
 import org.eclipse.emf.validation.service.IBatchValidator;
 import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.lingo.its.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -30,18 +33,28 @@ public class ValidationTestUtil {
 	 * Run the validation on the scenarios.
 	 * 
 	 * @param scenarioDataProvider
-	 * @param optimising           True to run the optimisation constraints, false
-	 *                             to run evaluation constraints.
-	 * @param relaxedValidation    True pretend this is a period optimisation
-	 *                             scenario and reduce the number of constraints.
+	 * @param optimising
+	 *            True to run the optimisation constraints, false to run evaluation constraints.
+	 * @param relaxedValidation
+	 *            True pretend this is a period optimisation scenario and reduce the number of constraints.
 	 * @return
 	 */
 	public static IStatus validate(final IScenarioDataProvider scenarioDataProvider, final boolean optimising, final boolean relaxedValidation) {
+		return validate(scenarioDataProvider, optimising, relaxedValidation, Collections.emptySet());
+	}
+
+	public static IStatus validate(final IScenarioDataProvider scenarioDataProvider, final boolean optimising, final boolean relaxedValidation, final Set<String> onlyConstraints) {
 
 		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
 		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
 
 		validator.addConstraintFilter((constraint, target) -> {
+
+			// If the set is populated, then we only want to target specific constraint ids.
+			if (!onlyConstraints.isEmpty() && !onlyConstraints.contains(constraint.getId())) {
+				return false;
+			}
+
 			for (final Category cat : constraint.getCategories()) {
 				if (cat.getId().endsWith(".base")) {
 					return true;
@@ -65,16 +78,15 @@ public class ValidationTestUtil {
 	}
 
 	/**
-	 * Recursively scan the IStatus for any DetailConstraintStatusDecorator instances
-	 * with the given key.
+	 * Recursively scan the IStatus for any DetailConstraintStatusDecorator instances with the given key.
 	 * 
 	 * @param status
 	 * @param constraintKey
 	 * @return
 	 */
-	public static List<DetailConstraintStatusDecorator> findStatus(@NonNull IStatus status, Object constraintKey) {
+	public static List<DetailConstraintStatusDecorator> findStatus(@NonNull final IStatus status, final Object constraintKey) {
 
-		List<DetailConstraintStatusDecorator> children = new LinkedList<>();
+		final List<DetailConstraintStatusDecorator> children = new LinkedList<>();
 
 		if (status.isMultiStatus()) {
 			findStatus(status, children, constraintKey);
@@ -89,19 +101,80 @@ public class ValidationTestUtil {
 	 * @param status
 	 * @return
 	 */
-	private static void findStatus(final IStatus status, List<DetailConstraintStatusDecorator> l, Object constraintKey) {
+	private static void findStatus(final IStatus status, final List<DetailConstraintStatusDecorator> l, final Object constraintKey) {
 		if (status.isMultiStatus()) {
 			final IStatus[] children = status.getChildren();
 			for (final IStatus element : children) {
 				findStatus(element, l, constraintKey);
 			}
 		}
+
 		if (status instanceof DetailConstraintStatusDecorator) {
 			final DetailConstraintStatusDecorator element = (DetailConstraintStatusDecorator) status;
 			if (element.getConstraintKey() == constraintKey) {
 				l.add(element);
 			}
-
 		}
 	}
+
+	/**
+	 * Clear out other validation errors, e.g. validation constraints may fail and get disabled, so do not abort this test. Note! This may mean a bug in the other validation constraints which is being
+	 * ignored.
+	 * 
+	 * @param status
+	 * @return
+	 */
+	public static IStatus retainDetailConstraintStatus(@Nullable final IStatus status) {
+		if (status == null) {
+			return null;
+		}
+		final List<IDetailConstraintStatus> childMessages = new LinkedList<>();
+		extractChildren(status, childMessages);
+
+		int code = IStatus.OK;
+		for (final IStatus s : childMessages) {
+			if (s.getSeverity() > code) {
+				code = s.getSeverity();
+			}
+		}
+		return new MultiStatus(Activator.PLUGIN_ID, code, childMessages.toArray(new IStatus[0]), "MultiError", null);
+	}
+
+	/**
+	 * Recurse through the IStatus object adding any IDetailConstraintStatus to the list
+	 * 
+	 * @param status
+	 * @param childMessages
+	 */
+	private static void extractChildren(final IStatus status, final List<IDetailConstraintStatus> childMessages) {
+
+		if (status.isMultiStatus()) {
+			for (final IStatus s : status.getChildren()) {
+				extractChildren(s, childMessages);
+			}
+		}
+		if (status instanceof IDetailConstraintStatus) {
+			childMessages.add((IDetailConstraintStatus) status);
+		}
+	}
+
+	/**
+	 * Dump all nested messages to the console.
+	 * 
+	 * @param status
+	 */
+	public static void dumpStatusMessages(@Nullable final IStatus status) {
+		if (status == null) {
+			return;
+		}
+		if (status.isMultiStatus()) {
+			for (final IStatus s : status.getChildren()) {
+				dumpStatusMessages(s);
+			}
+		}
+		if (!status.isOK()) {
+			System.out.println(status.getMessage());
+		}
+	}
+
 }
