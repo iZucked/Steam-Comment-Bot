@@ -11,7 +11,7 @@ import java.util.Map.Entry;
 
 public class RollingLoadWindow {
 	private final int loadDuration;
-	
+
 	private final LinkedList<InventoryDateTimeEvent> currentWindow = new LinkedList<>();
 	private int endWindowVolume = 0;
 	private int endWindowTankMin = 0;
@@ -27,8 +27,7 @@ public class RollingLoadWindow {
 			throw new IllegalStateException("Load duration cannot be zero");
 		}
 		this.remainingLoadHours = 0;
-		int i;
-		for (i = 0; i < this.loadDuration; i++) {
+		for (int i = 0; i < this.loadDuration; i++) {
 			if (entries.hasNext()) {
 				InventoryDateTimeEvent event = entries.next().getValue();
 				currentWindow.add(event);
@@ -40,7 +39,7 @@ public class RollingLoadWindow {
 		}
 		this.startDateTime = currentWindow.getFirst().getDateTime();
 	}
-	
+
 	public void stepForward(final InventoryDateTimeEvent newEvent) {
 		InventoryDateTimeEvent droppedEvent = currentWindow.removeFirst();
 		currentWindow.add(newEvent);
@@ -55,15 +54,15 @@ public class RollingLoadWindow {
 			remainingLoadHours--;
 		}
 	}
-	
+
 	public boolean isLoading() {
 		return this.remainingLoadHours > 0;
 	}
-	
+
 	public LocalDateTime getStartDateTime() {
 		return this.startDateTime;
 	}
-	
+
 	public boolean canLift(final int allocationDrop) {
 		if (this.endWindowVolume >= allocationDrop + this.endWindowTankMin) {
 			int localTankVolume = this.beforeWindowTankVolume;
@@ -88,14 +87,22 @@ public class RollingLoadWindow {
 		}
 		return false;
 	}
-	
+
 	public void startLoad(final int allocationDrop) {
 		this.tailLoadVolume = allocationDrop/this.loadDuration;
 		this.headLoadVolume = this.tailLoadVolume + (allocationDrop%this.loadDuration);
 		this.remainingLoadHours = this.loadDuration;
 	}
-	
+
 	public InventoryDateTimeEvent getCurrentEvent() {
 		return this.currentWindow.getFirst();
+	}
+
+	public int getEndWindowTankMin() {
+		return this.endWindowTankMin;
+	}
+
+	public int getEndWindowVolume() {
+		return this.endWindowVolume;
 	}
 }

@@ -248,7 +248,6 @@ public class ContractPage extends ADPComposite {
 			detailComposite = new EmbeddedDetailComposite(mainComposite, editorData);
 		}
 		{
-
 			rhsScrolledComposite = new ScrolledComposite(mainComposite, SWT.V_SCROLL);
 			rhsScrolledComposite.setLayoutData(GridDataFactory.fillDefaults()//
 					.grab(false, true)//
@@ -419,18 +418,20 @@ public class ContractPage extends ADPComposite {
 		final int fullCargoLotValue = profile.getFullCargoLotValue();
 		// Default value shouldn't be used
 		final int cargoVolume = 160_000;
-		
+
+		final boolean debugFlex = false;
+
 		final int loadWindowHours = loadWindow*24;
-		
+
 		final Map<Vessel, LocalDateTime> vesselToMostRecentUseDateTime = new HashMap<>();
 
 		final Set<BaseLegalEntity> firstPartyEntities = ScenarioModelUtil.getCommercialModel(sm).getEntities().stream() //
 				.filter(e -> !e.isThirdParty()) //
 				.collect(Collectors.toSet());
-		
+
 		final LocalDate dayBeforeADPStart = adpModel.getYearStart().atDay(1).minusDays(1);
 		final LocalDateTime dateTimeBeforeADPStart = dayBeforeADPStart.atStartOfDay();
-		
+
 		final Map<Inventory, MULLContainer> mullContainers = new HashMap<>();
 		
 		for (MullSubprofile subprofile : profile.getInventories()) {
@@ -444,14 +445,14 @@ public class ContractPage extends ADPComposite {
 				).forEach(vessel -> vesselToMostRecentUseDateTime.put(vessel, dateTimeBeforeADPStart));
 			}
 		}
-		
+
 		final Set<Vessel> firstPartyVessels = mullContainers.entrySet().stream() //
 				.flatMap(e -> e.getValue().getMUDContainers().stream()) //
 				.filter(mudContainer -> firstPartyEntities.contains(mudContainer.getEntity()))
 				.flatMap(mudContainer -> mudContainer.getAllocationTrackers().stream()) //
 				.flatMap(allocationTracker -> allocationTracker.getVessels().stream()) //
 				.collect(Collectors.toSet());
-		
+
 		mullContainers.entrySet().stream() //
 				.flatMap(e -> e.getValue().getMUDContainers().stream()) //
 				.flatMap(mudContainer -> mudContainer.getAllocationTrackers().stream()) //
@@ -467,13 +468,13 @@ public class ContractPage extends ADPComposite {
 		final Map<Vessel, VesselAvailability> vessToVA = sm.getCargoModel().getVesselAvailabilities().stream().filter(va -> expectedVessels.contains(va.getVessel())).collect(Collectors.toMap(VesselAvailability::getVessel, Function.identity()));
 
 		final LocalDate startDate = adpModel.getYearStart().atDay(1);
-		
+
 		final Map<Inventory, TreeMap<LocalDateTime, InventoryDateTimeEvent>> inventoryHourlyInsAndOuts = new HashMap<>();
 		for (final MullSubprofile sProfile : profile.getInventories()) {
 			final Inventory inventory = sProfile.getInventory();
 			inventoryHourlyInsAndOuts.put(inventory, getInventoryInsAndOutsHourly(inventory, sm));
 		}
-		
+
 		final LocalDateTime startDateTime = startDate.atStartOfDay();
 		for (final MullSubprofile sProfile : profile.getInventories()) {
 			int totalInventoryVolume = 0;
@@ -485,9 +486,9 @@ public class ContractPage extends ADPComposite {
 			}
 			currentInsAndOuts.firstEntry().getValue().addVolume(totalInventoryVolume);
 		}
-		
+
 		Map<Inventory, Set<LocalDate>> inventoryFlaggedDates = new HashMap<>();
-		
+
 		final LocalDate dayBeforeStart = startDate.minusDays(1);
 		for (final MullSubprofile sProfile : profile.getInventories()) {
 			final Port inventoryPort = sProfile.getInventory().getPort();
@@ -499,7 +500,7 @@ public class ContractPage extends ADPComposite {
 			existingLoads.stream().map(LoadSlot::getWindowStart).forEach(flaggedDates::add);
 			inventoryFlaggedDates.put(sProfile.getInventory(), flaggedDates);
 		}
-		
+
 		final Map<Inventory, LinkedList<CargoBlueprint>> cargoBlueprintsToGenerate = new HashMap<>();
 		
 		final Map<Inventory, Integer> inventorySlotCounters = new HashMap<>();
@@ -523,7 +524,7 @@ public class ContractPage extends ADPComposite {
 			cargoBlueprintsToGenerate.put(sProfile.getInventory(), new LinkedList<>());
 			inventoryRollingWindows.put(sProfile.getInventory(), new RollingLoadWindow(sProfile.getInventory().getPort().getLoadDuration(), hourlyIter));
 		}
-		
+
 		while (true) {
 			boolean enteredInnerLoop = false;
 			for (Pair<Inventory, Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>>> curr : newIterSwap) {
@@ -532,18 +533,18 @@ public class ContractPage extends ADPComposite {
 					continue;
 				}
 				enteredInnerLoop = true;
-				
+
 				final Inventory currentInventory = curr.getFirst();
 				final Entry<LocalDateTime, InventoryDateTimeEvent> newEndWindowEntry = currentIter.next();
 				final RollingLoadWindow currentLoadWindow = inventoryRollingWindows.get(currentInventory);
 				final InventoryDateTimeEvent currentEvent = currentLoadWindow.getCurrentEvent();
 				final InventoryDateTimeEvent newEndWindowEvent = newEndWindowEntry.getValue();
-				
+
 				final MULLContainer currentMULLContainer = mullContainers.get(currentInventory);
 				currentMULLContainer.updateRunningAllocation(currentEvent.getNetVolumeIn());
-				
+
 				final LocalDateTime currentDateTime = currentLoadWindow.getStartDateTime();
-				
+
 				if (currentDateTime.getDayOfMonth() == 1 && currentDateTime.getHour() == 0) {
 					final YearMonth currentYM = YearMonth.from(currentDateTime);
 					final int monthIn = inventoryHourlyInsAndOuts.get(currentInventory).entrySet().stream() //
@@ -569,9 +570,21 @@ public class ContractPage extends ADPComposite {
 						currentLoadWindow.startLoad(currentAllocationDrop);
 						mullMUDContainer.dropAllocation(currentAllocationDrop);
 						mudAllocationTracker.dropAllocation(currentAllocationDrop);
-						
+
 						final int nextLoadCount = inventorySlotCounters.get(currentInventory);
-						final CargoBlueprint currentCargoBlueprint = new CargoBlueprint(currentInventory, inventoryPurchaseContracts.get(currentInventory), nextLoadCount, assignedVessel, currentLoadWindow.getStartDateTime(), loadWindowHours, mudAllocationTracker, currentAllocationDrop, mullMUDContainer.getEntity());
+
+						final int volumeHigh;
+						final int volumeLow;
+						if (debugFlex) {
+							final int flexDifference = currentLoadWindow.getEndWindowVolume()-currentAllocationDrop - currentLoadWindow.getEndWindowTankMin();
+							assert flexDifference >= 0;
+							volumeHigh = currentAllocationDrop;
+							volumeLow = currentAllocationDrop - volumeFlex;
+						} else {
+							volumeHigh = currentAllocationDrop + volumeFlex;
+							volumeLow = currentAllocationDrop - volumeFlex;
+						}
+						final CargoBlueprint currentCargoBlueprint = new CargoBlueprint(currentInventory, inventoryPurchaseContracts.get(currentInventory), nextLoadCount, assignedVessel, currentLoadWindow.getStartDateTime(), loadWindowHours, mudAllocationTracker, currentAllocationDrop, mullMUDContainer.getEntity(), volumeHigh, volumeLow);
 						if (!cargoBlueprintsToGenerate.get(currentInventory).isEmpty()) {
 							final CargoBlueprint previousCargoBlueprint = cargoBlueprintsToGenerate.get(currentInventory).getLast();
 							final LocalDateTime earliestPreviousStart = currentLoadWindow.getStartDateTime().minusHours(currentInventory.getPort().getLoadDuration());
@@ -605,7 +618,7 @@ public class ContractPage extends ADPComposite {
 		}
 		return cmd;
 	}
-	
+
 	@Override
 	public void refresh() {
 		ViewerHelper.refresh(previewViewer, true);
@@ -734,6 +747,7 @@ public class ContractPage extends ADPComposite {
 						}
 					}
 					previewViewer.setInput(o);
+					previewGroup.setVisible(true);
 				} else if (target instanceof SalesContractProfile) {
 					rhsScrolledComposite.setVisible(true);
 					final SalesContractProfile salesContractProfile = (SalesContractProfile) target;
@@ -744,8 +758,9 @@ public class ContractPage extends ADPComposite {
 						}
 					}
 					previewViewer.setInput(o);
+					previewGroup.setVisible(true);
 				} else if (target instanceof MullProfile) {
-					rhsScrolledComposite.setVisible(false);
+					previewGroup.setVisible(false);
 				}
 			}
 		}
