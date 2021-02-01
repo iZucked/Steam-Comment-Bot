@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.lngdataserver.parent</artifactId>
 		<groupId>com.mmxlabs.lngdataserver</groupId>
-		<version>4.12.12.RELEASE</version>
+		<version>4.12.13-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.lngdataserver.data.distances</artifactId>
