@@ -454,7 +454,7 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		final IScenarioEditingLocation sel = dialogContext.getScenarioEditingLocation();
 
 		eViewer.addTypicalColumn("Contract", new ReadOnlyManipulatorWrapper<>(new SingleReferenceManipulator(ADPPackage.eINSTANCE.getSalesContractAllocationRow_Contract(), sel.getReferenceValueProviderCache(), sel.getEditingDomain())));
-		eViewer.addTypicalColumn("ACQ", new NumericAttributeManipulator(ADPPackage.eINSTANCE.getMullAllocationRow_Weight(), sel.getEditingDomain()));
+		eViewer.addTypicalColumn("AACQ", new NumericAttributeManipulator(ADPPackage.eINSTANCE.getMullAllocationRow_Weight(), sel.getEditingDomain()));
 		eViewer.addTypicalColumn("Vessels", new MultipleReferenceManipulator(ADPPackage.eINSTANCE.getMullAllocationRow_Vessels(), sel.getReferenceValueProviderCache(), sel.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 		
 		eViewer.setStatusProvider(statusProvider);
@@ -512,7 +512,7 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		final IScenarioEditingLocation sel = dialogContext.getScenarioEditingLocation();
 
 		eViewer.addTypicalColumn("Market", new ReadOnlyManipulatorWrapper<>(new SingleReferenceManipulator(ADPPackage.eINSTANCE.getDESSalesMarketAllocationRow_DesSalesMarket(), sel.getReferenceValueProviderCache(), sel.getEditingDomain())));
-		eViewer.addTypicalColumn("ACQ", new NumericAttributeManipulator(ADPPackage.eINSTANCE.getMullAllocationRow_Weight(), sel.getEditingDomain()));
+		eViewer.addTypicalColumn("AACQ", new NumericAttributeManipulator(ADPPackage.eINSTANCE.getMullAllocationRow_Weight(), sel.getEditingDomain()));
 		eViewer.addTypicalColumn("Vessels", new MultipleReferenceManipulator(ADPPackage.eINSTANCE.getMullAllocationRow_Vessels(), sel.getReferenceValueProviderCache(), sel.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 		
 		eViewer.setStatusProvider(statusProvider);

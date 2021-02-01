@@ -27,8 +27,7 @@ public class RollingLoadWindow {
 			throw new IllegalStateException("Load duration cannot be zero");
 		}
 		this.remainingLoadHours = 0;
-		int i;
-		for (i = 0; i < this.loadDuration; i++) {
+		for (int i = 0; i < this.loadDuration; i++) {
 			if (entries.hasNext()) {
 				InventoryDateTimeEvent event = entries.next().getValue();
 				currentWindow.add(event);
