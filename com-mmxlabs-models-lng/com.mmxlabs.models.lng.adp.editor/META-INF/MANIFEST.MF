@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.lng.adp.editor;singleton:=true
 Automatic-Module-Name: com.mmxlabs.models.lng.adp.editor
-Bundle-Version: 4.12.12.qualifier
+Bundle-Version: 4.12.12.RELEASE
 Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.models.lng.adp.presentation.ADPEditorPlugin$Implementation
 Bundle-Vendor: %providerName
