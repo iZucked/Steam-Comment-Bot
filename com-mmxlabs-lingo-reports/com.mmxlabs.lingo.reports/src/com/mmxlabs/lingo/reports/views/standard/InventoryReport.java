@@ -81,6 +81,7 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.lingo.reports.views.standard.inventory.ColourSequence;
 import com.mmxlabs.lingo.reports.views.standard.inventory.InventoryLevel;
 import com.mmxlabs.lingo.reports.views.standard.inventory.MullDailyInformation;
 import com.mmxlabs.lingo.reports.views.standard.inventory.MullInformation;
@@ -760,17 +761,9 @@ public class InventoryReport extends ViewPart {
 												final List<String> monthsList = monthsToDisplay.stream().map(ym -> ym.format(categoryFormatter)).collect(Collectors.toList());
 												final String[] temp = new String[0];
 												final String[] formattedMonthLabels = monthsList.toArray(temp);
-												
-												final List<Integer> colours = new LinkedList<>();
-												colours.add(SWT.COLOR_BLUE);
-												colours.add(SWT.COLOR_GREEN);
-												colours.add(SWT.COLOR_RED);
-												colours.add(SWT.COLOR_CYAN);
-												colours.add(SWT.COLOR_GRAY);
-												colours.add(SWT.COLOR_MAGENTA);
-												
-												setMULLChartData(mullMonthlyOverliftChart, formattedMonthLabels, entitiesOrdered, pairedMullList, MullInformation::getOverliftCF, colours);
-												setMULLChartData(mullMonthlyCargoCountChart, formattedMonthLabels, entitiesOrdered, pairedMullList, MullInformation::getCargoCount, colours);
+
+												setMULLChartData(mullMonthlyOverliftChart, formattedMonthLabels, entitiesOrdered, pairedMullList, MullInformation::getOverliftCF, ColourSequence.getColourSequence());
+												setMULLChartData(mullMonthlyCargoCountChart, formattedMonthLabels, entitiesOrdered, pairedMullList, MullInformation::getCargoCount, ColourSequence.getColourSequence());
 											}
 										}
 									}
@@ -1818,7 +1811,7 @@ public class InventoryReport extends ViewPart {
 		chart.redraw();
 	}
 
-	private void setMULLChartData(final Chart chart, final String[] xCategoryLabels, final List<BaseLegalEntity> entitiesOrdered, final List<Pair<MullInformation,MullInformation>> pairedMullList, final ToIntFunction<MullInformation> valueExtractor, final List<Integer> colours) {
+	private void setMULLChartData(final Chart chart, final String[] xCategoryLabels, final List<BaseLegalEntity> entitiesOrdered, final List<Pair<MullInformation,MullInformation>> pairedMullList, final ToIntFunction<MullInformation> valueExtractor, final int[] hexColours) {
 		chart.getAxisSet().getXAxis(0).enableCategory(true);
 		chart.getAxisSet().getXAxis(0).setCategorySeries(xCategoryLabels);
 	
@@ -1835,20 +1828,25 @@ public class InventoryReport extends ViewPart {
 			}
 		}
 
-		final Iterator<Integer> colIter = colours.iterator();
+		int colourIndex = 0;
 		for (final BaseLegalEntity entity : entitiesOrdered) {
 			final List<Integer> intSeries = barSeriesData.get(entity);
 			final double[] doubleSeries = new double[intSeries.size()];
-			int ii = 0;
+			int seriesIndex = 0;
 			final Iterator<Integer> iterIntSeries = intSeries.iterator();
 			while(iterIntSeries.hasNext()) {
-				doubleSeries[ii] = iterIntSeries.next().doubleValue();
-				++ii;
+				doubleSeries[seriesIndex] = iterIntSeries.next().doubleValue();
+				++seriesIndex;
 			}
 			IBarSeries currentEntitySeries = (IBarSeries) chart.getSeriesSet().createSeries(SeriesType.BAR, entity.getName());
 			currentEntitySeries.setYSeries(doubleSeries);
-			final Integer currentCol = colIter.next();
-			currentEntitySeries.setBarColor(Display.getDefault().getSystemColor(currentCol));
+			final int currentCol = hexColours[colourIndex];
+			final int r = (currentCol & 0xFF0000) >> 16;
+			final int g = (currentCol & 0xFF00) >> 8;
+			final int b = (currentCol & 0xFF);
+			currentEntitySeries.setBarColor(new Color(Display.getDefault(), r, g, b));
+			++colourIndex;
+			colourIndex %= hexColours.length;
 		}
 	}
 }
