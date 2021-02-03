@@ -2,12 +2,14 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.adp.presentation.views;
+package com.mmxlabs.models.lng.adp.mull;
 
 import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map.Entry;
+
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 
 public class RollingLoadWindow {
 	private final int loadDuration;

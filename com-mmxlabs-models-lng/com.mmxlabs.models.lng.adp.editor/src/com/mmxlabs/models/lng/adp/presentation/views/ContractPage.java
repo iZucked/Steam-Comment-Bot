@@ -79,6 +79,12 @@ import com.mmxlabs.models.lng.adp.MullSubprofile;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractAllocationRow;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
+import com.mmxlabs.models.lng.adp.mull.AllocationTracker;
+import com.mmxlabs.models.lng.adp.mull.CargoBlueprint;
+import com.mmxlabs.models.lng.adp.mull.InventoryDateTimeEvent;
+import com.mmxlabs.models.lng.adp.mull.MUDContainer;
+import com.mmxlabs.models.lng.adp.mull.MULLContainer;
+import com.mmxlabs.models.lng.adp.mull.RollingLoadWindow;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -419,7 +425,7 @@ public class ContractPage extends ADPComposite {
 		// Default value shouldn't be used
 		final int cargoVolume = 160_000;
 
-		final boolean debugFlex = false;
+		final boolean debugFlex = true;
 
 		final int loadWindowHours = loadWindow*24;
 
@@ -511,6 +517,7 @@ public class ContractPage extends ADPComposite {
 		final Map<Inventory, Integer> inventoryRunningVolume = new HashMap<>();
 		final Map<Inventory, PurchaseContract> inventoryPurchaseContracts = new HashMap<>();
 		final Map<Inventory, RollingLoadWindow> inventoryRollingWindows = new HashMap<>();
+		final Map<Inventory, Iterator<Entry<LocalDateTime, LoadSlot>>> inventoryExistingLoadSlots = new HashMap<>();
 		for (final MullSubprofile sProfile : profile.getInventories()) {
 			final Inventory inventory = sProfile.getInventory();
 			final Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>> hourlyIter = inventoryHourlyInsAndOuts.get(inventory).entrySet().iterator();
@@ -523,6 +530,15 @@ public class ContractPage extends ADPComposite {
 			inventorySlotCounters.put(sProfile.getInventory(), 0);
 			cargoBlueprintsToGenerate.put(sProfile.getInventory(), new LinkedList<>());
 			inventoryRollingWindows.put(sProfile.getInventory(), new RollingLoadWindow(sProfile.getInventory().getPort().getLoadDuration(), hourlyIter));
+			final Port inventoryPort = inventory.getPort();
+			final TreeMap<LocalDateTime, LoadSlot> existingLoadSlots = new TreeMap<>();
+			sm.getCargoModel().getLoadSlots().stream() //
+					.filter(s -> s.getPort().equals(inventoryPort)) //
+					.forEach(s -> {
+						final LocalDateTime loadStart = s.isSetWindowStartTime() ? s.getWindowStart().atTime(LocalTime.of(s.getWindowStartTime(), 0)) : s.getWindowStart().atStartOfDay();
+						existingLoadSlots.put(loadStart, s);
+					});
+			inventoryExistingLoadSlots.put(inventory, existingLoadSlots.entrySet().iterator());
 		}
 
 		while (true) {
@@ -592,7 +608,6 @@ public class ContractPage extends ADPComposite {
 							previousCargoBlueprint.updateWindowSize(newWindowHours);
 						}
 						cargoBlueprintsToGenerate.get(currentInventory).add(currentCargoBlueprint);
-						
 						inventorySlotCounters.put(currentInventory, nextLoadCount+1);
 						if (assignedVessel != null) {
 							vesselToMostRecentUseDateTime.put(assignedVessel, currentCargoBlueprint.getWindowStart());
