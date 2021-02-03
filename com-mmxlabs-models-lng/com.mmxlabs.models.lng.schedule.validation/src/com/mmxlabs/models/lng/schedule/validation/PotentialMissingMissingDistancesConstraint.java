@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.schedule.validation;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
@@ -78,17 +79,16 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 			}
 
 			// Lambda function to check two sets of distances
-			final BiFunction<Set<Port>, Set<Port>, Set<Pair<Port, Port>>> distanceChecker = (froms, tos) -> {
-				return froms.stream()//
-						.filter(from -> from != null) //
-						.flatMap(from -> tos.stream() //
-								.filter(to -> to != null) //
-								// Skip identity distance
-								.filter(to -> !from.equals(to)) //
-								.filter(to -> !modelDistanceProvider.hasDistance(from, to, RouteOption.DIRECT)) //
-								.map(to -> new Pair<Port, Port>(from, to))) //
-						.collect(Collectors.toSet());
-			};
+			final BiFunction<Set<Port>, Set<Port>, Set<Pair<Port, Port>>> distanceChecker = (froms, tos) -> froms.stream()//
+					.filter(Objects::nonNull) //
+					.flatMap(from -> tos.stream() //
+							.filter(Objects::nonNull) //
+							// Skip identity distance
+							.filter(to -> !from.equals(to)) //
+							.filter(to -> !modelDistanceProvider.hasDistance(from, to, RouteOption.DIRECT)) //
+							.map(to -> new Pair<Port, Port>(from, to))) //
+					.collect(Collectors.toSet());
+
 			final Set<Pair<Port, Port>> missingDistances = new HashSet<>();
 
 			final Set<Port> startPorts = new HashSet<>();
@@ -163,14 +163,14 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 							Set<Port> redeliveryPorts = SetUtils.getObjects(notionalJourneyBallastBonusContractLine.getRedeliveryPorts());
 							redeliveryPorts.retainAll(vaLikelyEndPorts);
 							int intialRedeliveryPortsSize = redeliveryPorts.size();
-							if (redeliveryPorts.size() == 0 && intialRedeliveryPortsSize > 0) {
+							if (redeliveryPorts.isEmpty() && intialRedeliveryPortsSize > 0) {
 								// Blanked out set, so re-initialise as it was probably important information
 								redeliveryPorts = SetUtils.getObjects(notionalJourneyBallastBonusContractLine.getRedeliveryPorts());
 							}
 							Set<Port> returnPorts = SetUtils.getObjects(notionalJourneyBallastBonusContractLine.getReturnPorts());
 							int intialReturnPortsSize = returnPorts.size();
 							returnPorts.retainAll(vaLikelyEndPorts);
-							if (returnPorts.size() == 0 && intialReturnPortsSize > 0) {
+							if (returnPorts.isEmpty() && intialReturnPortsSize > 0) {
 								// Blanked out set, so re-initialise as it was probably important information
 								returnPorts = SetUtils.getObjects(notionalJourneyBallastBonusContractLine.getReturnPorts());
 							}
@@ -189,7 +189,7 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 				tmp.removeAll(vaEndPorts);
 
 				// Again unique ports
-				vaEndPorts.remove(vaLikelyEndPorts);
+				vaEndPorts.removeAll(vaLikelyEndPorts);
 
 				missingDistances.addAll(distanceChecker.apply(vaEndPorts, tmp));
 			});

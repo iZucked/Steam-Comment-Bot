@@ -761,7 +761,6 @@ public class InventoryReport extends ViewPart {
 												final List<String> monthsList = monthsToDisplay.stream().map(ym -> ym.format(categoryFormatter)).collect(Collectors.toList());
 												final String[] temp = new String[0];
 												final String[] formattedMonthLabels = monthsList.toArray(temp);
-
 												setMULLChartData(mullMonthlyOverliftChart, formattedMonthLabels, entitiesOrdered, pairedMullList, MullInformation::getOverliftCF, ColourSequence.getColourSequence());
 												setMULLChartData(mullMonthlyCargoCountChart, formattedMonthLabels, entitiesOrdered, pairedMullList, MullInformation::getCargoCount, ColourSequence.getColourSequence());
 											}

@@ -65,7 +65,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 	 */
 	public static class ImportResults {
 		public final EObject importedObject;
-		private final LinkedList<EObject> createdExtraObjects = new LinkedList<EObject>();
+		private final LinkedList<EObject> createdExtraObjects = new LinkedList<>();
 
 		public ImportResults(final EObject object, final boolean created) {
 			importedObject = object;
@@ -106,7 +106,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 
 	@Override
 	public Collection<EObject> importObjects(final EClass importClass, @NonNull final CSVReader reader, @NonNull final IMMXImportContext context) {
-		final List<EObject> results = new ArrayList<EObject>();
+		final List<EObject> results = new ArrayList<>();
 		try {
 			try {
 				context.pushReader(reader);
@@ -270,7 +270,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 									context.addProblem(context.createProblem(String.format("Error parsing %s as an integer for %s field", countStr, reference.getName()), true, true, true));
 									continue;
 								}
-								final List<EObject> references = new LinkedList<EObject>();
+								final List<EObject> references = new LinkedList<>();
 								for (int i = 0; i < count; ++i) {
 									final IFieldMap childMap = subKeys.getSubMap(i + DOT);
 									final IClassImporter classImporter = importerRegistry.getClassImporter(reference.getEReferenceType());
@@ -447,7 +447,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 
 	@Override
 	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final IMMXExportContext context) {
-		final LinkedList<Map<String, String>> result = new LinkedList<Map<String, String>>();
+		final LinkedList<Map<String, String>> result = new LinkedList<>();
 
 		if (objects.isEmpty()) {
 			return result;
@@ -464,7 +464,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 	}
 
 	protected Map<String, String> exportObject(@NonNull final EObject object, @NonNull final IMMXExportContext context) {
-		final Map<String, String> result = new LinkedHashMap<String, String>();
+		final Map<String, String> result = new LinkedHashMap<>();
 
 		for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
 			assert attribute != null;
@@ -547,7 +547,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 				} else {
 					@SuppressWarnings("unchecked")
 					final List<? extends Object> values = (List<? extends Object>) object.eGet(reference);
-					final StringBuffer sb = new StringBuffer();
+					final StringBuilder sb = new StringBuilder();
 					boolean comma = false;
 					for (final Object o : values) {
 						if (o instanceof NamedObject) {

@@ -74,7 +74,7 @@ public final class KeyFileLoader {
 	 */
 	private static final String OID_MMXLABS_KEYFILE_REVISION = "2.0.1.0.1";
 	/**
-	 * Attribute indiciating which KeyFileVN to use with the key
+	 * Attribute indicating which KeyFileVN to use with the key
 	 */
 	private static final String OID_MMXLABS_KEYFILE_TYPE = "2.0.1.0.2";
 

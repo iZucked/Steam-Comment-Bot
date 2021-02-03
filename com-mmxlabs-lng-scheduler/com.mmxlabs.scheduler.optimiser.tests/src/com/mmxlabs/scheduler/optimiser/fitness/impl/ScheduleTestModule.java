@@ -50,6 +50,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.LatenessEvaluatedStateCh
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
+import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.curves.PriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
@@ -78,8 +79,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 
 public class ScheduleTestModule extends AbstractModule {
-
-	private final static int DEFAULT_VPO_CACHE_SIZE = 20000;
 
 	private final @NonNull IOptimisationData data;
 
@@ -117,7 +116,7 @@ public class ScheduleTestModule extends AbstractModule {
 		bind(LNGVoyageCalculator.class).in(Singleton.class);
 
 		bind(IVolumeAllocator.class).to(UnconstrainedVolumeAllocator.class).in(Singleton.class);
-		//bind(ICharterRateCalculator.class).to(VesselStartDateCharterRateCalculator.class);
+		// bind(ICharterRateCalculator.class).to(VesselStartDateCharterRateCalculator.class);
 
 		bind(IVoyagePlanner.class).to(VoyagePlanner.class);
 
@@ -140,7 +139,7 @@ public class ScheduleTestModule extends AbstractModule {
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePNLBasedWindowTrimming)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)).toInstance(Boolean.FALSE);
-		
+
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.OPTIMISE_PAPER_PNL)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_PAPER_PNL)).toInstance(Boolean.FALSE);
@@ -149,7 +148,7 @@ public class ScheduleTestModule extends AbstractModule {
 
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.SCENARIO_TYPE_ADP)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.SCENARIO_TYPE_LONG_TERM)).toInstance(Boolean.FALSE);
-		
+
 		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_ArrivalTimeCache)).toInstance(CacheMode.Off);
 		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VoyagePlanEvaluatorCache)).toInstance(CacheMode.Off);
 		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_PNLTrimmerCache)).toInstance(CacheMode.Off);
@@ -160,6 +159,8 @@ public class ScheduleTestModule extends AbstractModule {
 		bind(int.class).annotatedWith(Names.named(SchedulerConstants.COOLDOWN_MIN_IDLE_HOURS)).toInstance(Integer.MAX_VALUE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_SchedulePurges)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMMERCIAL_VOLUME_OVERCAPACITY)).toInstance(Boolean.FALSE);
+
+		bind(IIntegerIntervalCurve.class).annotatedWith(Names.named(SchedulerConstants.MIDNIGHT_ALIGNED_INTEGER_INTERVAL_CURVE)).toInstance(Mockito.mock(IIntegerIntervalCurve.class));
 
 		bind(IPanamaBookingsProvider.class).toInstance(Mockito.mock(IPanamaBookingsProvider.class));
 	}
@@ -277,7 +278,7 @@ public class ScheduleTestModule extends AbstractModule {
 	@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)
 	private ISequences provideInitialSequences(final IInitialSequenceBuilder sequenceBuilder) {
 
-		final ISequences sequences = sequenceBuilder.createInitialSequences(pData, null, null, Collections.<ISequenceElement, ISequenceElement>emptyMap());
+		final ISequences sequences = sequenceBuilder.createInitialSequences(pData, null, null, Collections.<ISequenceElement, ISequenceElement> emptyMap());
 
 		return sequences;
 	}
