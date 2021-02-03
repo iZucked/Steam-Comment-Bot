@@ -1987,9 +1987,8 @@ public class LNGScenarioTransformer {
 
 		buildDESPurchaseSpotMarket(builder, portAssociation, modelEntityMap, earliestDate, latestDate, spotMarketsModel.getDesPurchaseSpotMarket());
 		buildDESSalesSpotMarket(builder, portAssociation, modelEntityMap, earliestDate, latestDate, spotMarketsModel.getDesSalesSpotMarket(), vesselAssociation);
-		buildFOBPurchaseSpotMarket(builder, portAssociation, modelEntityMap, earliestDate, latestDate, spotMarketsModel.getFobPurchasesSpotMarket());
+		buildFOBPurchaseSpotMarket(builder, portAssociation, modelEntityMap, earliestDate, latestDate, spotMarketsModel.getFobPurchasesSpotMarket(), vesselAssociation);
 		buildFOBSalesSpotMarket(builder, portAssociation, modelEntityMap, earliestDate, latestDate, spotMarketsModel.getFobSalesSpotMarket());
-
 	}
 
 	private void buildDESPurchaseSpotMarket(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final ModelEntityMap modelEntityMap, final ZonedDateTime earliestDate,
@@ -2435,8 +2434,6 @@ public class LNGScenarioTransformer {
 
 								// Key piece of information
 								desSlot.setMarket(desSalesMarket);
-								desSlot.getRestrictedVessels().addAll(desSalesMarket.getRestrictedVessels());
-								desSlot.setRestrictedVesselsArePermissive(desSalesMarket.isRestrictedVesselsArePermissive());
 								modelEntityMap.addModelObject(desSlot, desSalesSlot);
 
 								desSalesSlot.setKey(String.format("DS-%s-%s", market.getName(), yearMonthString));
@@ -2450,7 +2447,7 @@ public class LNGScenarioTransformer {
 
 								registerSpotMarketSlot(modelEntityMap, desSlot, desSalesSlot);
 
-								applySlotVesselRestrictions(desSlot.getRestrictedVessels(), desSlot.isRestrictedVesselsArePermissive(), desSalesSlot, vesselAssociation);
+								applySlotVesselRestrictions(desSlot.getSlotOrDelegateVesselRestrictions(), desSlot.getSlotOrDelegateVesselRestrictionsArePermissive(), desSalesSlot, vesselAssociation);
 							}
 						}
 						builder.createSlotGroupCount(marketSlots, count);
@@ -2472,7 +2469,7 @@ public class LNGScenarioTransformer {
 	}
 
 	private void buildFOBPurchaseSpotMarket(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final ModelEntityMap modelEntityMap, final ZonedDateTime earliestDate,
-			final ZonedDateTime latestDate, final SpotMarketGroup fobPurchaseSpotMarket) {
+			final ZonedDateTime latestDate, final SpotMarketGroup fobPurchaseSpotMarket, final @NonNull Association<Vessel, IVessel> vesselAssociation) {
 		if (fobPurchaseSpotMarket != null) {
 
 			final SpotAvailability groupAvailability = fobPurchaseSpotMarket.getAvailability();
@@ -2589,6 +2586,8 @@ public class LNGScenarioTransformer {
 								marketGroupSlots.add(fobPurchaseSlot);
 
 								registerSpotMarketSlot(modelEntityMap, fobSlot, fobPurchaseSlot);
+								
+								applySlotVesselRestrictions(fobSlot.getSlotOrDelegateVesselRestrictions(), fobSlot.getSlotOrDelegateVesselRestrictionsArePermissive(), fobPurchaseSlot, vesselAssociation);
 							}
 						}
 						builder.createSlotGroupCount(marketSlots, count);

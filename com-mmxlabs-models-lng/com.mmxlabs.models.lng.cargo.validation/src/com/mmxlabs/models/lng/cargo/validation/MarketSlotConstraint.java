@@ -40,7 +40,13 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
-
+/**
+ * 
+ * @author SG
+ * 
+ * NOTE! Restricted elements constraint is in EmptyRestrictionsConstraint
+ *
+ */
 public class MarketSlotConstraint extends AbstractModelMultiConstraint {
 
 	@Override
