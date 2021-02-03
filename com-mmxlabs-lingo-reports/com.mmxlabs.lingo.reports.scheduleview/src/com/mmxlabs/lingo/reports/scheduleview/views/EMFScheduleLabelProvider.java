@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -383,9 +384,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				final Journey journey = (Journey) element;
 				eventText.append(" \n");
 				eventText.append(String.format("%.1f knots", journey.getSpeed()));
-				for (final FuelQuantity fq : journey.getFuels()) {
-					eventText.append(String.format(" | %s", mapFuel(fq.getFuel())));
-				}
+				eventText.append(" | ");
+				eventText.append(getFuelsString(journey));
 				final RouteOption routeOption = journey.getRouteOption();
 
 				if (routeOption != null && routeOption != RouteOption.DIRECT) {
@@ -479,15 +479,13 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					String contigencyTimeStr = convertHoursToDaysHoursString(idle.getContingencyHours());
 					eventText.append("\n(Contingency idle time: " + contigencyTimeStr + ")");
 				}
-				for (final FuelQuantity fq : idle.getFuels()) {
-					eventText.append(String.format("\n%s\n", mapFuel(fq.getFuel())));
-				}
+				eventText.append("\n");
+				eventText.append(getFuelsString(idle));
 			} else if (element instanceof CharterLengthEvent) {
 				final CharterLengthEvent idle = (CharterLengthEvent) element;
 				eventText.append("Duration: " + durationTime);
-				for (final FuelQuantity fq : idle.getFuels()) {
-					eventText.append(String.format("\n%s\n", mapFuel(fq.getFuel())));
-				}
+				eventText.append("\n");
+				eventText.append(getFuelsString(idle));
 			} else if (element instanceof GeneratedCharterOut) {
 				eventText.append(" \n");
 				eventText.append("Duration: " + durationTime);
@@ -522,6 +520,16 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		}
 		return null;
 
+	}
+
+	/**
+	 * Return a | separated string of sorted fuel names used in this event
+	 * 
+	 * @param event
+	 * @return
+	 */
+	private String getFuelsString(FuelUsage event) {
+		return event.getFuels().stream().map(FuelQuantity::getFuel).sorted(new FuelComparator()).map(EMFScheduleLabelProvider::mapFuel).collect(Collectors.joining(" | "));
 	}
 
 	/**
@@ -709,7 +717,31 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 	}
 
-	private String mapFuel(Fuel fuel) {
+	private static class FuelComparator implements java.util.Comparator<Fuel> {
+		private int[] lookupArray;
+
+		public FuelComparator() {
+
+			lookupArray = new int[4];
+
+			// Assertion in case new values added
+			assert lookupArray.length == Fuel.values().length;
+
+			// This is the sort order we want
+			lookupArray[Fuel.NBO.ordinal()] = 0;
+			lookupArray[Fuel.FBO.ordinal()] = 1;
+			lookupArray[Fuel.BASE_FUEL.ordinal()] = 2;
+			lookupArray[Fuel.PILOT_LIGHT.ordinal()] = 3;
+		}
+
+		@Override
+		public int compare(Fuel o1, Fuel o2) {
+			return lookupArray[o1.ordinal()] - lookupArray[o2.ordinal()];
+		}
+
+	}
+
+	private static String mapFuel(Fuel fuel) {
 		if (fuel == null) {
 			return "";
 		}
