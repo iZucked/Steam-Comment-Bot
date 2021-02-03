@@ -66,7 +66,7 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 
 				@NonNull
 				final Collection<@NonNull String> hints = new HashSet<>(dt.getHints());
-				LNGTransformerHelper.updatHintsFromUserSettings(userSettings, hints);
+				LNGTransformerHelper.updateHintsFromUserSettings(userSettings, hints);
 				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
 				final LNGActionSetTransformerUnit t = new LNGActionSetTransformerUnit(dt, phase, userSettings, stageSettings, executorService, initialSequences.getSequences(), inputState, hints);

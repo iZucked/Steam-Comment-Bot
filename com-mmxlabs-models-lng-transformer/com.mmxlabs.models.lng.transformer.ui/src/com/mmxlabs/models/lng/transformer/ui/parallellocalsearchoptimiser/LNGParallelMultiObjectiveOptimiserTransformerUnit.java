@@ -66,7 +66,7 @@ public class LNGParallelMultiObjectiveOptimiserTransformerUnit extends AbstractL
 			@Nullable final CleanableExecutorService executorService, final int progressTicks, final boolean singleSolution) {
 		@NonNull
 		final Collection<@NonNull String> hints = new HashSet<>(chainBuilder.getDataTransformer().getHints());
-		LNGTransformerHelper.updatHintsFromUserSettings(userSettings, hints);
+		LNGTransformerHelper.updateHintsFromUserSettings(userSettings, hints);
 		hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
 		return AbstractLNGOptimiserTransformerUnit.chain(chainBuilder, stage, userSettings, executorService, progressTicks, hints, (initialSequences, inputState, monitor) -> {
