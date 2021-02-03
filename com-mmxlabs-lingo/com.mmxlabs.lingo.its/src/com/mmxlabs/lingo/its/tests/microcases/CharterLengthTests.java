@@ -367,6 +367,24 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		throw new IllegalStateException();
 	}
 
+	private <T> @NonNull T findFirstEventOnSameSequence(final Slot<?> slot, final Schedule schedule, Class<T> cls) {
+		final Optional<Event> slotVisit = schedule.getSequences().stream() //
+				.flatMap(s -> s.getEvents().stream()) //
+				.filter(evt -> (evt instanceof SlotVisit && (((SlotVisit) evt).getSlotAllocation().getSlot() == slot))) //
+				.findFirst();
+
+		Assertions.assertTrue(slotVisit.isPresent());
+		Event evt = slotVisit.get();
+		for (Event e : evt.getSequence().getEvents()) {
+			if (cls.isInstance(e)) {
+				return cls.cast(e);
+			}
+		}
+
+		Assertions.fail("");
+		throw new IllegalStateException();
+	}
+
 	private @NonNull CargoAllocation findCargoAllocation(final Slot<?> slot, final Schedule schedule) {
 		final Optional<Event> discharge = schedule.getSequences().stream() //
 				.flatMap(s -> s.getEvents().stream()) //
@@ -454,6 +472,70 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		} finally {
 			runnerBuilder.dispose();
 		}
+	}
+
+	/**
+	 * Based on an extract from a P scenario where the charter length violated the heel constraints - which should never happen.
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testIdleAfterStart() throws Exception {
+
+		int safetyHeel = 500;
+
+		// Create the required basic elements
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+		vessel.setSafetyHeel(safetyHeel);
+
+		final VesselAvailability charter_1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+				.withStartWindow(LocalDateTime.of(2019, 12, 1, 0, 0, 0)) //
+				.withEndWindow(LocalDateTime.of(2020, 1, 23, 0, 0, 0), LocalDateTime.of(2020, 2, 9, 0, 0, 0)) //
+				.withStartHeel(4_450, 5_000, 23, "") //
+				.withEndHeel(0, 0, EVesselTankState.EITHER, "") //
+				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_HIMEJI)) //
+				.build();
+
+		// Construct the cargo scenario
+
+		// Create cargo 1
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2020, 1, 3), portFinder.findPortById(InternalDataConstants.PORT_ONSLOW), null, entity, "5") //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2020, 1, 13), portFinder.findPortById(InternalDataConstants.PORT_INCHEON), null, entity, "7") //
+				.build() //
+				.withVesselAssignment(charter_1, 1) //
+				.withAssignmentFlags(false, false) //
+				.build();
+
+		final BaseFuel testHFO = fleetModelBuilder.createBaseFuel("TestHFO", 40.0);
+		costModelBuilder.createOrUpdateBaseFuelCost(testHFO, "100");
+		vessel.setBaseFuel(testHFO);
+		vessel.setIdleBaseFuel(testHFO);
+
+		final Slot<?> slot = cargo1.getSlots().get(0);
+
+		// First evaluate without the charter length enabled
+		evaluate(false);
+		final Schedule withOutSchedule = ScenarioModelUtil.findSchedule(scenarioDataProvider);
+		Assertions.assertNotNull(withOutSchedule);
+		final Idle idle = findFirstEventOnSameSequence(slot, withOutSchedule, Idle.class);
+
+		// Then evaluate with the charter length enabled
+		evaluate(true);
+		final Schedule withSchedule = ScenarioModelUtil.findSchedule(scenarioDataProvider);
+		Assertions.assertNotNull(withSchedule);
+		final CharterLengthEvent charterLengthEvent = findFirstEventOnSameSequence(slot, withSchedule, CharterLengthEvent.class);
+
+		// Lets make sure everything matches up - the charter length should have replaced the idle
+		Assertions.assertEquals(idle.getHeelAtEnd(), charterLengthEvent.getHeelAtEnd());
+		Assertions.assertEquals(idle.getHeelAtStart(), charterLengthEvent.getHeelAtStart());
+
+		Assertions.assertEquals(idle.getDuration(), charterLengthEvent.getDuration());
+
+		// Previous buggy code would report a violation
+		Assertions.assertTrue(charterLengthEvent.getViolations().isEmpty());
 	}
 
 	private long getPNL(final Object obj) {
