@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Fleet Editor Tests
 Fragment-Host: com.mmxlabs.models.lng.fleet.editor
 Bundle-SymbolicName: com.mmxlabs.models.lng.fleet.editor.tests
-Bundle-Version: 4.12.13.qualifier
+Bundle-Version: 4.12.13.RELEASE
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.fleet;bundle-version="[4.12.13,5.0.0)",
