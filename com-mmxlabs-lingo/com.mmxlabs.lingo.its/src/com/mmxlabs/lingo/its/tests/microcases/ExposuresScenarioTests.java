@@ -89,6 +89,7 @@ public class ExposuresScenarioTests extends AbstractMicroTestCase {
 				.makeModule() //
 				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.OPTIMISE_PAPER_PNL)).toInstance(Boolean.TRUE)) //
 				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.RE_HEDGE_WITH_PAPERS)).toInstance(Boolean.TRUE)) //
+				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)).toInstance(Boolean.TRUE)) //
 				.buildOverride(ModuleType.Module_LNGTransformerModule)//
 				.make();
 		
