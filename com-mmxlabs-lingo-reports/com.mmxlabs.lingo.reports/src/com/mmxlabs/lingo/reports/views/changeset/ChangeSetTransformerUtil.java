@@ -37,7 +37,6 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
-import com.mmxlabs.lingo.reports.views.schedule.EquivalanceGroupBuilder;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -198,7 +197,7 @@ public final class ChangeSetTransformerUtil {
 
 			// NOTE: GCO ARE NEVER EQUIV, BREAKS CONSISTENT SORTING IN CHANGE SET VIEW
 
-			final String key = EquivalanceGroupBuilder.getElementKey(event);
+			final String key = ElementKeyUtil.getElementKey(event);
 			// TODO: Unique name?
 			mappingModel.lhsRowMap.put(key, row);
 
@@ -989,7 +988,7 @@ public final class ChangeSetTransformerUtil {
 			return null;
 		}
 		if (slot instanceof SpotSlot) {
-			final String key = EquivalanceGroupBuilder.getElementKey(slot);
+			final String key = ElementKeyUtil.getElementKey(slot);
 			final StringBuilder sb = new StringBuilder();
 			final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
 			if (cargoAllocation != null) {
