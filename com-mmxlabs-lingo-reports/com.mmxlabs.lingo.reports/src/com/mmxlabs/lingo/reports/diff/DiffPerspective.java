@@ -10,7 +10,7 @@ import org.eclipse.ui.IPerspectiveFactory;
 import org.eclipse.ui.IViewLayout;
 
 import com.mmxlabs.lingo.reports.ReportsConstants;
-import com.mmxlabs.lingo.reports.views.fleet.ConfigurableFleetReportView;
+import com.mmxlabs.lingo.reports.views.fleet.ConfigurableVesselSummaryReport;
 import com.mmxlabs.lingo.reports.views.headline.HeadlineReportView;
 import com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport;
 import com.mmxlabs.lingo.reports.views.standard.econs.CargoEconsReport;
@@ -32,12 +32,12 @@ public class DiffPerspective implements IPerspectiveFactory {
 		viewLayout.setMoveable(false);
 
 		final IFolderLayout changeSetArea = layout.createFolder("reportsArea", IPageLayout.TOP, 0.80f, IPageLayout.ID_EDITOR_AREA);
-		final IFolderLayout fleetReportArea = layout.createFolder("fleetReportsArea", IPageLayout.LEFT, 0.2f, "ganttArea");
+		final IFolderLayout vesselSummaryReportArea = layout.createFolder("fleetReportsArea", IPageLayout.LEFT, 0.2f, "ganttArea");
 		final IFolderLayout econsArea = layout.createFolder("econsArea", IPageLayout.RIGHT, 0.85f, "reportsArea");
 
 		diffArea.addView("com.mmxlabs.scenario.service.ui.navigator");
 		changeSetArea.addView(ReportsConstants.VIEW_COMPARE_SCENARIOS_ID);
-		fleetReportArea.addView(ConfigurableFleetReportView.ID);
+		vesselSummaryReportArea.addView(ConfigurableVesselSummaryReport.ID);
 
 		ganttArea.addView(ScheduleSummaryReport.ID);
 		ganttArea.addView("com.mmxlabs.scheduleview.views.SchedulerView");
@@ -50,7 +50,7 @@ public class DiffPerspective implements IPerspectiveFactory {
 
 		layout.addShowViewShortcut(HeadlineReportView.ID);
 		layout.addShowViewShortcut(ScheduleSummaryReport.ID);
-		layout.addShowViewShortcut(ConfigurableFleetReportView.ID);
+		layout.addShowViewShortcut(ConfigurableVesselSummaryReport.ID);
 		layout.addShowViewShortcut("com.mmxlabs.scheduleview.views.SchedulerView");
 		layout.addShowViewShortcut("com.mmxlabs.lingo.reports.diff.DiffGroupView");
 		layout.addShowViewShortcut("com.mmxlabs.scenario.service.ui.navigator");

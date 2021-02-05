@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views.fleet;
 
-import static com.mmxlabs.lingo.reports.views.fleet.FleetBasedReportBuilder.FLEET_REPORT_TYPE_ID;
+import static com.mmxlabs.lingo.reports.views.fleet.VesselSummaryReportBuilder.VESSEL_SUMMARY_REPORT_TYPE_ID;
 
 import org.eclipse.swt.graphics.Image;
 
@@ -39,89 +39,89 @@ import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
 import com.mmxlabs.models.ui.tabular.columngeneration.EmfBlockColumnFactory;
 import com.mmxlabs.models.ui.tabular.columngeneration.SimpleEmfBlockColumnFactory;
 
-public class StandardFleetColumnFactory implements IFleetColumnFactory {
+public class StandardVesselSummaryColumnFactory implements IVesselSummaryColumnFactory {
 
 	private static final String COLUMN_BLOCK_GCO_VESSEL = "com.mmxlabs.lingo.reports.components.columns.fleet.gco";
 
 	@Override
-	public void registerColumn(final String columnID, final EMFReportColumnManager columnManager, final FleetBasedReportBuilder builder) {
+	public void registerColumn(final String columnID, final EMFReportColumnManager columnManager, final VesselSummaryReportBuilder builder) {
 
 		final Image pinImage = Activator.getDefault().getImageRegistry().get(Activator.Implementation.IMAGE_PINNED_ROW);
 
 		switch (columnID) {
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.schedule":
 			final PinnedScheduleFormatter formatter = new PinnedScheduleFormatter(pinImage);
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Scenario", "The scenario name. Only shown when multiple scenarios are selected",
+			columnManager.registerColumn(VESSEL_SUMMARY_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Scenario", "The scenario name. Only shown when multiple scenarios are selected",
 					ColumnType.MULTIPLE, formatter, ScheduleReportPackage.Literals.ROW__SCENARIO_NAME));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.vessel":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID,
+			columnManager.registerColumn(VESSEL_SUMMARY_REPORT_TYPE_ID,
 					new SimpleEmfBlockColumnFactory(columnID, "Vessel", "Vessel name", ColumnType.NORMAL, new VesselAssignmentFormatter(), ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.canalcosts":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Route ($)", "Total route costs", ColumnType.NORMAL,
+			columnManager.registerColumn(VESSEL_SUMMARY_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Route ($)", "Total route costs", ColumnType.NORMAL,
 					new CanalCostFormatter(ICostTypeFormatter.Type.COST), ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.lngcosts":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "LNG ($)", "Total LNG BOG costs", ColumnType.NORMAL,
+			columnManager.registerColumn(VESSEL_SUMMARY_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "LNG ($)", "Total LNG BOG costs", ColumnType.NORMAL,
 					new LNGCostFormatter(ICostTypeFormatter.Type.COST), ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.basefuelcosts":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Base Fuel ($)", "Total base fuel costs", ColumnType.NORMAL,
+			columnManager.registerColumn(VESSEL_SUMMARY_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Base Fuel ($)", "Total base fuel costs", ColumnType.NORMAL,
 					new BaseFuelCostFormatter(ICostTypeFormatter.Type.COST), ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.portcosts":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Port ($)", "Total port costs", ColumnType.NORMAL,
+			columnManager.registerColumn(VESSEL_SUMMARY_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Port ($)", "Total port costs", ColumnType.NORMAL,
 					new PortCostFormatter(ICostTypeFormatter.Type.COST), ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.chartercosts":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Charter ($)", "Total chartering costs", ColumnType.NORMAL,
+			columnManager.registerColumn(VESSEL_SUMMARY_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Charter ($)", "Total chartering costs", ColumnType.NORMAL,
 					new CharterCostFormatter(false, CostFormatter.Type.COST), ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.heel_revenue":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Heel Revenue ($)", null, ColumnType.NORMAL,
+			columnManager.registerColumn(VESSEL_SUMMARY_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Heel Revenue ($)", null, ColumnType.NORMAL,
 					new HeelRevenueFormatter(false, ICostTypeFormatter.Type.REVENUE), ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.heel_cost":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Heel Cost ($)", null, ColumnType.NORMAL,
+			columnManager.registerColumn(VESSEL_SUMMARY_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Heel Cost ($)", null, ColumnType.NORMAL,
 					new HeelCostFormatter(false, ICostTypeFormatter.Type.COST), ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.ballast_bonus":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Ballast bonus ($)", null, ColumnType.NORMAL,
+			columnManager.registerColumn(VESSEL_SUMMARY_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Ballast bonus ($)", null, ColumnType.NORMAL,
 					new BallastBonusFormatter(false, CostFormatter.Type.REVENUE), ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.repositioning_fee":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Repositioning fee ($)", null, ColumnType.NORMAL,
+			columnManager.registerColumn(VESSEL_SUMMARY_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Repositioning fee ($)", null, ColumnType.NORMAL,
 					new RepositioningFeeFormatter(false, ICostTypeFormatter.Type.COST), ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.number_cargoes":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID,
+			columnManager.registerColumn(VESSEL_SUMMARY_REPORT_TYPE_ID,
 					new SimpleEmfBlockColumnFactory(columnID, "#Cargoes", null, ColumnType.NORMAL, new NOfCargoesFormatter(), ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.total_without_BOG":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sum - BOG($)", null, ColumnType.NORMAL,
+			columnManager.registerColumn(VESSEL_SUMMARY_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sum - BOG($)", null, ColumnType.NORMAL,
 					new TotalWithBOGFormatter(false, false, ICostTypeFormatter.Type.COST), ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break; // Was Total cost before
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.total_with_BOG":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sum ($)", null, ColumnType.NORMAL,
+			columnManager.registerColumn(VESSEL_SUMMARY_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sum ($)", null, ColumnType.NORMAL,
 					new TotalWithBOGFormatter(false, true, ICostTypeFormatter.Type.COST), ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break; // Was Total cost BOG
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.cooldowncosts":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Cooldown ($)", "Total cooldown costs", ColumnType.NORMAL, new CooldownCostFormatter(false),
+			columnManager.registerColumn(VESSEL_SUMMARY_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Cooldown ($)", "Total cooldown costs", ColumnType.NORMAL, new CooldownCostFormatter(false),
 					ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.charterlength":
 			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_CHARTER_LENGTH)) {
-				columnManager.registerColumn(FLEET_REPORT_TYPE_ID,
+				columnManager.registerColumn(VESSEL_SUMMARY_REPORT_TYPE_ID,
 						new SimpleEmfBlockColumnFactory(columnID, "Length", "Total Charter length in days", ColumnType.NORMAL, new CharterLengthDaysFormatter()));
 			}
 			break;
 		case COLUMN_BLOCK_GCO_VESSEL: {
 
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new EmfBlockColumnFactory() {
+			columnManager.registerColumn(VESSEL_SUMMARY_REPORT_TYPE_ID, new EmfBlockColumnFactory() {
 
 				@Override
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {

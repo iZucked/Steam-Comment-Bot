@@ -32,7 +32,7 @@ import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.ReportsConstants;
 import com.mmxlabs.lingo.reports.views.IProvideEditorInputScenario;
 import com.mmxlabs.lingo.reports.views.changeset.IActionPlanHandler;
-import com.mmxlabs.lingo.reports.views.fleet.ConfigurableFleetReportView;
+import com.mmxlabs.lingo.reports.views.fleet.ConfigurableVesselSummaryReport;
 import com.mmxlabs.lingo.reports.views.headline.HeadlineReportView;
 import com.mmxlabs.lingo.reports.views.portrotation.PortRotationReportView;
 import com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport;
@@ -84,7 +84,7 @@ public class ReportTesterHelper {
 	public static final String PORT_ROTATIONS_ID = PortRotationReportView.ID;
 	public static final String PORT_ROTATIONS_SHORTNAME = "PortRotations";
 
-	public static final String VESSEL_REPORT_ID = ConfigurableFleetReportView.ID;
+	public static final String VESSEL_REPORT_ID = ConfigurableVesselSummaryReport.ID;
 	public static final String VESSEL_REPORT_SHORTNAME = "VesselReport";
 
 	public static final String VERTICAL_REPORT_ID = "com.mmxlabs.lingo.reports.verticalreport";

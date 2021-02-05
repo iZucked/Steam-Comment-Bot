@@ -116,7 +116,7 @@
             name="Vessel Summary"
             icon="icons/cview16/exec_flow_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
-            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.fleet.ConfigurableFleetReportView"
+            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.fleet.ConfigurableVesselSummaryReport"
             restorable="true"
             id="com.mmxlabs.lingo.reports.views.fleet.ConfigurableFleetReportView">
       </view>
@@ -920,7 +920,7 @@
    <extension
          point="com.mmxlabs.lingo.reports.FleetBasedColumnFactory">
       <FleetBasedColumnFactory
-            factory="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
+            factory="com.mmxlabs.lingo.reports.views.fleet.StandardVesselSummaryColumnFactory"
             handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory">
       </FleetBasedColumnFactory>
    </extension>

@@ -10,9 +10,9 @@ import org.eclipse.jface.viewers.Viewer;
 
 public class DiffAction extends Action {
 	private final Viewer viewer;
-	private final ConfigurableFleetReportView reportView;
+	private final ConfigurableVesselSummaryReport reportView;
 	
-	public DiffAction(final Viewer viewer, ConfigurableFleetReportView reportView) {
+	public DiffAction(final Viewer viewer, ConfigurableVesselSummaryReport reportView) {
 		super("Show only diff");
 		this.viewer = viewer;
 		this.reportView = reportView;

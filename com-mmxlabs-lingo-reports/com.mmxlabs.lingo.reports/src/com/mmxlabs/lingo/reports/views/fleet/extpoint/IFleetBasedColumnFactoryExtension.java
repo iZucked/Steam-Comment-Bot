@@ -7,7 +7,7 @@ package com.mmxlabs.lingo.reports.views.fleet.extpoint;
 import org.ops4j.peaberry.eclipse.ExtensionBean;
 import org.ops4j.peaberry.eclipse.MapName;
 
-import com.mmxlabs.lingo.reports.views.fleet.IFleetColumnFactory;
+import com.mmxlabs.lingo.reports.views.fleet.IVesselSummaryColumnFactory;
 
 @ExtensionBean("com.mmxlabs.lingo.reports.FleetBasedColumnFactory")
 public interface IFleetBasedColumnFactoryExtension {
@@ -16,6 +16,6 @@ public interface IFleetBasedColumnFactoryExtension {
 	String getHandlerID();
 
 	@MapName("factory")
-	IFleetColumnFactory getFactory();
+	IVesselSummaryColumnFactory getFactory();
 
 }
