@@ -44,6 +44,7 @@ import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.lingo.reports.services.SelectedDataProviderImpl;
 import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.views.AbstractConfigurableGridReportView;
@@ -65,7 +66,9 @@ import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 /**
  * A customisable report for fleet based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available for
@@ -292,20 +295,25 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 					}
 				}
 			}
-			// return (T) new IReportContentsGenerator() {
-			// public String getStringContents(final ScenarioResult pin, final ScenarioResult other) {
-			//
-			// final ISelectedDataProvider provider = scenarioComparisonService.getCurrentSelectedDataProvider();
-			// if (provider != null) {
-			// scenarioComparisonServiceListener.compareDataUpdate(provider, pin, other, new ArrayList<LNGScenarioModel>());
-			// }
-			// final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
-			//
-			// final String contents = util.convert();
-			//
-			// return "<meta charset=\"UTF-8\"/>" + contents;
-			// }
-			// };
+			return adapter.cast(new IReportContentsGenerator() {
+				public String getStringContents(final ScenarioResult pin, final ScenarioResult other) {
+					final SelectedDataProviderImpl provider = new SelectedDataProviderImpl();
+					if (pin != null) {
+						provider.addScenario(pin);
+						provider.setPinnedScenarioInstance(pin);
+					}
+					if (other != null) {
+						provider.addScenario(other);
+					}
+					// Request a blocking update ...
+					scenarioComparisonServiceListener.selectedDataProviderChanged(provider, true);
+					// ... so the data is ready to be read here.
+					final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
+					final String contents = util.convert();
+
+					return "<meta charset=\"UTF-8\"/>" + contents;
+				}
+			});
 		}
 
 		return super.getAdapter(adapter);
@@ -365,7 +373,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 				ViewerHelper.setInput(viewer, true, rows);
 			};
 
-			RunnerHelper.exec(r, false);
+			RunnerHelper.exec(r, block);
 		}
 
 		@Override
