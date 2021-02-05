@@ -31,6 +31,7 @@ import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.MarketIndexImpl#getFlatCurve <em>Flat Curve</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.MarketIndexImpl#getBidCurve <em>Bid Curve</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.MarketIndexImpl#getOfferCurve <em>Offer Curve</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.MarketIndexImpl#isAutoHedgeEnabled <em>Auto Hedge Enabled</em>}</li>
  * </ul>
  *
  * @generated
@@ -85,6 +86,26 @@ public class MarketIndexImpl extends NamedObjectImpl implements MarketIndex {
 	 * @ordered
 	 */
 	protected CommodityCurve offerCurve;
+
+	/**
+	 * The default value of the '{@link #isAutoHedgeEnabled() <em>Auto Hedge Enabled</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isAutoHedgeEnabled()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean AUTO_HEDGE_ENABLED_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isAutoHedgeEnabled() <em>Auto Hedge Enabled</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isAutoHedgeEnabled()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean autoHedgeEnabled = AUTO_HEDGE_ENABLED_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -311,6 +332,29 @@ public class MarketIndexImpl extends NamedObjectImpl implements MarketIndex {
 	 * @generated
 	 */
 	@Override
+	public boolean isAutoHedgeEnabled() {
+		return autoHedgeEnabled;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setAutoHedgeEnabled(boolean newAutoHedgeEnabled) {
+		boolean oldAutoHedgeEnabled = autoHedgeEnabled;
+		autoHedgeEnabled = newAutoHedgeEnabled;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.MARKET_INDEX__AUTO_HEDGE_ENABLED, oldAutoHedgeEnabled, autoHedgeEnabled));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case PricingPackage.MARKET_INDEX__SETTLE_CALENDAR:
@@ -328,6 +372,8 @@ public class MarketIndexImpl extends NamedObjectImpl implements MarketIndex {
 			case PricingPackage.MARKET_INDEX__OFFER_CURVE:
 				if (resolve) return getOfferCurve();
 				return basicGetOfferCurve();
+			case PricingPackage.MARKET_INDEX__AUTO_HEDGE_ENABLED:
+				return isAutoHedgeEnabled();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -356,6 +402,9 @@ public class MarketIndexImpl extends NamedObjectImpl implements MarketIndex {
 			case PricingPackage.MARKET_INDEX__OFFER_CURVE:
 				setOfferCurve((CommodityCurve)newValue);
 				return;
+			case PricingPackage.MARKET_INDEX__AUTO_HEDGE_ENABLED:
+				setAutoHedgeEnabled((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -383,6 +432,9 @@ public class MarketIndexImpl extends NamedObjectImpl implements MarketIndex {
 			case PricingPackage.MARKET_INDEX__OFFER_CURVE:
 				setOfferCurve((CommodityCurve)null);
 				return;
+			case PricingPackage.MARKET_INDEX__AUTO_HEDGE_ENABLED:
+				setAutoHedgeEnabled(AUTO_HEDGE_ENABLED_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -405,8 +457,26 @@ public class MarketIndexImpl extends NamedObjectImpl implements MarketIndex {
 				return bidCurve != null;
 			case PricingPackage.MARKET_INDEX__OFFER_CURVE:
 				return offerCurve != null;
+			case PricingPackage.MARKET_INDEX__AUTO_HEDGE_ENABLED:
+				return autoHedgeEnabled != AUTO_HEDGE_ENABLED_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (autoHedgeEnabled: ");
+		result.append(autoHedgeEnabled);
+		result.append(')');
+		return result.toString();
 	}
 
 } //MarketIndexImpl

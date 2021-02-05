@@ -164,9 +164,14 @@
           propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//MarketIndex/settleCalendar"/>
       <genFeatures notify="false" createChild="false" propertyDescription="Pricing Calendar"
           propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//MarketIndex/pricingCalendar"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//MarketIndex/flatCurve"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//MarketIndex/bidCurve"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//MarketIndex/offerCurve"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Flat curve for auto-hedging"
+          propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//MarketIndex/flatCurve"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Bid curve for auto-hedging"
+          propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//MarketIndex/bidCurve"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Offer curve for auto-hedging"
+          propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//MarketIndex/offerCurve"/>
+      <genFeatures createChild="false" propertyDescription="Should the index be used for auto-hedging?"
+          ecoreFeature="ecore:EAttribute pricing.ecore#//MarketIndex/autoHedgeEnabled"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//PricingCalendarEntry">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//PricingCalendarEntry/comment"/>

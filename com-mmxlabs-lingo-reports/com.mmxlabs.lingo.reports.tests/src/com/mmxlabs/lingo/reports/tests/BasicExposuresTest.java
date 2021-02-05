@@ -395,7 +395,7 @@ public class BasicExposuresTest {
 		final LocalDate pricingLocalDate = LocalDate.of(pricingDate.getYear(), pricingDate.getMonthValue(), pricingDay);
 		final long volumeInMMBTU = OptimiserUnitConvertor.convertToInternalVolume(volume);
 		
-		final List<BasicExposureRecord> exposureRecords = calc.calculateExposures(volumeInMMBTU, expression, pricingLocalDate, isPurchase, exLookupData);
+		final List<BasicExposureRecord> exposureRecords = calc.calculateExposuresForITS(volumeInMMBTU, expression, pricingLocalDate, isPurchase, exLookupData);
 		//
 		
 		checker.validate(exposureRecords, expression, commodityParser);
@@ -455,7 +455,7 @@ public class BasicExposuresTest {
 		final LocalDate pricingLocalDate = LocalDate.of(pricingDate.getYear(), pricingDate.getMonthValue(), dayOfMonth);
 		final long volumeInMMBTU = OptimiserUnitConvertor.convertToInternalVolume(volume);
 
-		final List<BasicExposureRecord> exposureRecords = calc.calculateExposures(volumeInMMBTU, expression, pricingLocalDate, isPurchase, exLookupData);
+		final List<BasicExposureRecord> exposureRecords = calc.calculateExposuresForITS(volumeInMMBTU, expression, pricingLocalDate, isPurchase, exLookupData);
 		//
 
 		checker.validate(exposureRecords, expression, commodityParser);

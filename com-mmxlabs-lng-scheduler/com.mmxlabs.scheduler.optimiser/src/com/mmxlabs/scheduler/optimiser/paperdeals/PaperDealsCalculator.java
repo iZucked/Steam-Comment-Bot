@@ -173,7 +173,7 @@ public class PaperDealsCalculator {
 					// No hedging for physical positions
 					if (month == null)
 						continue;
-					if (indexName == null || indexName.equalsIgnoreCase("Physical"))
+					if (indexName == null || indexName.equalsIgnoreCase("Physical") || !lookupData.indicesToHedge.contains(indexName))
 						continue;
 
 					final Map<String, String> hedgeCurves = lookupData.hedgeCurves.get(indexName.toLowerCase());

@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -211,8 +212,16 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 
 	protected Action createAddAction(final EReference containment) {
 		final Action duplicateAction = createDuplicateAction();
-		final Action[] extraActions = duplicateAction == null ? new Action[0] : new Action[] { duplicateAction };
+		final List<Action> eal = new ArrayList<Action>();
+		if (duplicateAction != null) {
+			eal.add(duplicateAction);
+		}
+		addExtraAddActions(eal);
+		final Action[] extraActions = eal.toArray(new Action[eal.size()]);
 		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment), extraActions);
+	}
+	
+	protected void addExtraAddActions(final List<Action> extraActions) {
 	}
 
 	protected IAddContext getAddContext(final EReference containment) {
