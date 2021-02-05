@@ -30,8 +30,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.views.properties.PropertySheet;
 
+import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
@@ -157,20 +159,8 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 	}
 
 	private void makeActions() {
-		final Action expandCollapseAll = new Action("Collapse", Action.AS_PUSH_BUTTON) {
-			@Override
-			public void run() {
-				expand = !expand;
-				if (expand) {
-					paperDealViewer.expandAll();
-				} else {
-					paperDealViewer.collapseAll();
-				}
-				setText(expand ? "Collapse" : "Expand");
-				getViewSite().getActionBars().updateActionBars();
-			}
-		};
-
+		
+		final Action expandCollapseAll = createExpandButton();
 		getViewSite().getActionBars().getToolBarManager().add(expandCollapseAll);
 
 		final Action packColumnsAction = PackActionFactory.createPackColumnsAction(paperDealViewer);
@@ -180,7 +170,20 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 		getViewSite().getActionBars().getToolBarManager().add(packColumnsAction);
 		getViewSite().getActionBars().getToolBarManager().add(copyTableAction);
 		getViewSite().getActionBars().getToolBarManager().update(true);
+	}
 
+	private Action createExpandButton() {
+		return new Action("Collapse", AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/collapseall.gif")) {
+			@Override
+			public void run() {
+				expand = !expand;
+				processExpand();
+				setText(expand ? "Collapse" : "Expand");
+				setToolTipText(expand ? "Collapse" : "Expand");
+				setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, expand ? "icons/collapseall.gif" : "icons/expandall.gif"));
+				getViewSite().getActionBars().updateActionBars();
+			}
+		};
 	}
 
 	private GridViewerColumn createColumn(final String title, final GridColumnGroup colGroup, final EStructuralFeature reference) {
@@ -285,13 +288,7 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 			}
 		}
 		selection = SelectionHelper.adaptSelection(selectionObject);
-		ViewerHelper.refreshThen(paperDealViewer, true, () -> {
-			if (expand) {
-				paperDealViewer.expandAll();
-			} else {
-				paperDealViewer.collapseAll();
-			}
-			});
+		ViewerHelper.refreshThen(paperDealViewer, true, this::processExpand);
 	}
 	@Override
 	public void setFocus() {
@@ -309,7 +306,7 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 				@Override
 				public void run() {
 
-					final List<PaperDealAllocation> slotAllocations = new LinkedList<>();
+					final List<PaperDealAllocation> allocations = new LinkedList<>();
 					ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
 					if (pinned != null) {
 						final @Nullable ScheduleModel scheduleModel = pinned.getTypedResult(ScheduleModel.class);
@@ -320,7 +317,7 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 								for (final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
 									final PaperDeal pd = paperDealAllocation.getPaperDeal();
 									if (!schedule.getGeneratedPaperDeals().contains(pd)) {
-										slotAllocations.add(paperDealAllocation);
+										allocations.add(paperDealAllocation);
 									}
 								}
 							}
@@ -329,7 +326,7 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 					for (final ScenarioResult other : selectedDataProvider.getOtherScenarioResults()) {
 						boolean showingOptiResult = false;
 						if (other != null && other.getResultRoot() != null && other.getResultRoot().eContainer() instanceof SolutionOption) {
-							slotAllocations.clear();
+							allocations.clear();
 							showingOptiResult = true;
 						}
 						final @Nullable ScheduleModel scheduleModel = other.getTypedResult(ScheduleModel.class);
@@ -340,7 +337,7 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 								for (final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
 									final PaperDeal pd = paperDealAllocation.getPaperDeal();
 									if (!schedule.getGeneratedPaperDeals().contains(pd)) {
-										slotAllocations.add(paperDealAllocation);
+										allocations.add(paperDealAllocation);
 									}
 								}
 							}
@@ -350,7 +347,8 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 						}
 					}
 
-					ViewerHelper.setInput(paperDealViewer, true, slotAllocations);
+					ViewerHelper.setInput(paperDealViewer, true, allocations);
+					processExpand();
 				}
 			};
 
@@ -409,10 +407,19 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 					}
 
 					ViewerHelper.setInput(paperDealViewer, true, paperDealAllocations);
+					processExpand();
 				}
 			};
 
 			RunnerHelper.exec(r, block);
+		}
+	}
+	
+	private void processExpand() {
+		if (expand) {
+			paperDealViewer.expandAll();
+		} else {
+			paperDealViewer.collapseAll();
 		}
 	}
 

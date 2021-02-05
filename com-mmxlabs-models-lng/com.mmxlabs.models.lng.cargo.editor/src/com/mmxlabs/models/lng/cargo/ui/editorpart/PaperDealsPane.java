@@ -7,22 +7,30 @@ package com.mmxlabs.models.lng.cargo.ui.editorpart;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.BuyPaperDeal;
@@ -32,21 +40,27 @@ import com.mmxlabs.models.lng.cargo.SellPaperDeal;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CreatePaperStripDialog.StripType;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
+import com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.ui.ImageConstants;
 import com.mmxlabs.models.lng.ui.LngUIActivator;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.StringAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.YearMonthAttributeManipulator;
+import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
-public class PaperDealsPane extends ScenarioTableViewerPane {
+public class PaperDealsPane extends ScenarioTableViewerPane implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener {
 
 	private final IScenarioEditingLocation jointModelEditor;
 
@@ -70,10 +84,74 @@ public class PaperDealsPane extends ScenarioTableViewerPane {
 
 		setTitle("Paper", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 		
-		
 		final CreatePaperStripMenuAction cpsma = new CreatePaperStripMenuAction("Bulk add");
 		getToolBarManager().appendToGroup(VIEW_GROUP, cpsma);
 		getToolBarManager().update(true);
+		
+		final ESelectionService service = part.getSite().getService(ESelectionService.class);
+		service.addPostSelectionListener(this);
+	}
+	
+	@Override
+	protected void addExtraAddActions(final List<Action> extraActions) {
+		extraActions.add(new Action("Selected from generated", Action.AS_PUSH_BUTTON) {
+			@Override
+			public void run() {
+				if (gSelection instanceof IStructuredSelection) {
+					final IStructuredSelection ss = (IStructuredSelection) gSelection;
+					final StringBuilder sb = new StringBuilder();
+					processSelection(ss, sb);
+					if (sb.length() != 0) {
+						final MessageBox dialog = new MessageBox(jointModelEditor.getShell(), SWT.ICON_INFORMATION | SWT.OK);
+						dialog.setText("Adding the generated paper deals into the current portfolio");
+						dialog.setMessage(sb.toString());
+						dialog.open();
+					}
+				}
+			}
+		});
+	}
+	
+	private void processSelection(final IStructuredSelection ss, final StringBuilder sb) {
+		final Iterator iter = ss.iterator();
+		final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
+		if (rootObject instanceof LNGScenarioModel) {
+			final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
+			final Schedule schedule = scenarioModel.getScheduleModel().getSchedule();
+			if (schedule != null) {
+				final CompoundCommand cc = new CompoundCommand();
+				while(iter.hasNext()) {
+					final Object obj = iter.next();
+					if (obj instanceof PaperDealAllocation) {
+						processSelectedPaperDealAllocation(scenarioModel, schedule, cc, obj, sb);
+					} else if (obj instanceof PaperDealAllocationEntry) {
+						final PaperDealAllocationEntry pdae = (PaperDealAllocationEntry) obj;
+						processSelectedPaperDealAllocation(scenarioModel, schedule, cc, pdae.eContainer(), sb);
+					}
+				}
+				if (!cc.isEmpty()) {
+					getEditingDomain().getCommandStack().execute(cc);
+				}
+			}
+		}
+	}
+
+	private void processSelectedPaperDealAllocation(final LNGScenarioModel scenarioModel, final Schedule schedule, final CompoundCommand cc, final Object obj, final StringBuilder sb) {
+		if (obj instanceof PaperDealAllocation) {
+			final PaperDealAllocation pda = (PaperDealAllocation) obj;
+			final PaperDeal pd = pda.getPaperDeal();
+			if (pd.eContainmentFeature() == SchedulePackage.eINSTANCE.getSchedule_GeneratedPaperDeals()) {
+				if (pda.eContainer() != null && schedule == pda.eContainer()) {
+					cc.append(RemoveCommand.create(getEditingDomain(), schedule, SchedulePackage.eINSTANCE.getSchedule_GeneratedPaperDeals(), pd));
+					cc.append(AddCommand.create(getEditingDomain(), scenarioModel.getCargoModel(), CargoPackage.eINSTANCE.getCargoModel_PaperDeals(), pd));
+					sb.append(String.format("%s is added into paper deals list. Please re-evaluate the scenario!%n", pd.getName()));
+				} else {
+					sb.append(String.format("%s is not added since it is not from the current scenario!%n", pd.getName()));
+				}
+			} else {
+				sb.append(String.format("%s is not added since it is not a generated paper deal!%n", pd.getName()));
+			}
+		}
 	}
 	
 	private class CreatePaperStripMenuAction extends DefaultMenuCreatorAction{
@@ -194,5 +272,32 @@ public class PaperDealsPane extends ScenarioTableViewerPane {
 				return null;
 			}
 		};
+	}
+	
+	@Override
+	public void dispose() {
+		final ESelectionService service = part.getSite().getService(ESelectionService.class);
+		service.removePostSelectionListener(this);
+		
+		super.dispose();
+	}
+	
+	ISelection gSelection;
+	
+	@Override
+	public void selectionChanged(MPart part, Object selection) {
+		final IWorkbenchPart e3Part = SelectionHelper.getE3Part(part);
+		if (e3Part != null) {
+			if (e3Part == this) {
+				return;
+			}
+			if (e3Part instanceof PropertySheet) {
+				return;
+			}
+			if (e3Part instanceof JointModelEditorPart) {
+				return;
+			}
+		}
+		gSelection = SelectionHelper.adaptSelection(selection);
 	}
 }

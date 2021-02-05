@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.BooleanFlagAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -44,6 +45,7 @@ public class MarketIndexViewerPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Calendar", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getMarketIndex_PricingCalendar(), irvpp, getEditingDomain()));
 		addTypicalColumn("Holidays", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getMarketIndex_SettleCalendar(), irvpp, getEditingDomain()));
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GENERATED_PAPER_DEALS)) {
+			addTypicalColumn("Auto-Hedge", new BooleanFlagAttributeManipulator(PricingPackage.eINSTANCE.getMarketIndex_AutoHedgeEnabled(), getEditingDomain()));
 			addTypicalColumn("Flat curve", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getMarketIndex_FlatCurve(), irvpp, getEditingDomain()));
 			addTypicalColumn("Bid curve", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getMarketIndex_BidCurve(), irvpp, getEditingDomain()));
 			addTypicalColumn("Offer curve", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getMarketIndex_OfferCurve(), irvpp, getEditingDomain()));

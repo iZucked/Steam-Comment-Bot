@@ -67,13 +67,15 @@ public class MarketIndexComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editors for features on this class directly, and superclass' features.
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_settleCalendarEditor(detailComposite, topClass);
 		add_pricingCalendarEditor(detailComposite, topClass);
+		// rearranging the editor's order
+		add_autoHedgeEnabledEditor(detailComposite, topClass);
 		add_flatCurveEditor(detailComposite, topClass);
 		add_bidCurveEditor(detailComposite, topClass);
 		add_offerCurveEditor(detailComposite, topClass);
@@ -126,6 +128,17 @@ public class MarketIndexComponentHelper extends BaseComponentHelper {
 	protected void add_offerCurveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GENERATED_PAPER_DEALS)) {
 			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.MARKET_INDEX__OFFER_CURVE));
+		}
+	}
+
+	/**
+	 * Create the editor for the autoHedgeEnabled feature on MarketIndex
+	 *
+	 * @generated NOT
+	 */
+	protected void add_autoHedgeEnabledEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GENERATED_PAPER_DEALS)) {
+			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.MARKET_INDEX__AUTO_HEDGE_ENABLED));
 		}
 	}
 }

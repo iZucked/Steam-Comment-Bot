@@ -71,6 +71,10 @@ public class PaperDealDataTransformer implements ISlotTransformer {
 					final List<BasicPaperDealData> paperDeals = new ArrayList<>(cargoModel.getPaperDeals().size());
 					
 					for (final PaperDeal entry : cargoModel.getPaperDeals()) {
+						// do NOT even create optimiser representation of the paper deal in case it is third-party
+						if (entry.getEntity().isThirdParty()) {
+							continue;
+						}
 						String name = entry.getName();
 						boolean isBuy = false;
 						if (entry instanceof BuyPaperDeal) {
@@ -101,7 +105,7 @@ public class PaperDealDataTransformer implements ISlotTransformer {
 						modelEntityMap.addModelObject(entry, basicPaperDealData);
 					}
 					final PaperDealsLookupData lookupData = new PaperDealsLookupData(dataHandler.pricingCalendars, dataHandler.holidayCalendars, //
-							dataHandler.settledPrices, paperDeals, dataHandler.hedgeCurves, dataHandler.marketIndices);
+							dataHandler.settledPrices, paperDeals, dataHandler.hedgeCurves, dataHandler.marketIndices, dataHandler.indicesToHedge);
 					paperDealDataProviderEditor.addLookupData(lookupData);
 				}
 			}
@@ -121,6 +125,7 @@ public class PaperDealDataTransformer implements ISlotTransformer {
 		private Map<String, BasicInstrumentData> instruments = new HashMap<>();
 		private Map<String, Map<String, String>> hedgeCurves = new HashMap<>();
 		private Map<String, String> marketIndices = new HashMap<>();
+		private List<String> indicesToHedge = new ArrayList<>();
 		
 		public DataHandler(final @NonNull PricingModel pricingModel, final ModelMarketCurveProvider provider) {
 	
@@ -148,7 +153,6 @@ public class PaperDealDataTransformer implements ISlotTransformer {
 				if (marketIndex.getOfferCurve() != null) {
 					buySellCurves.put("offer", marketIndex.getOfferCurve().getName().toLowerCase());
 				}
-				//hedgeCurves.put(curveName, buySellCurves);
 				hedgeCurves.put(marketIndexName, buySellCurves);
 				if (provider != null) {
 					final Map<LocalDate, Double> settlePrices = provider.getSettledPrices(curveName);
@@ -162,6 +166,12 @@ public class PaperDealDataTransformer implements ISlotTransformer {
 				final BasicInstrumentData basicInstrumentData = new BasicInstrumentData(settleStrategy.getName().toLowerCase(), settleStrategy.getDayOfTheMonth(), settleStrategy.isLastDayOfTheMonth(), 
 						settleStrategy.getSettlePeriod(), settleStrategy.getSettlePeriodUnit().getLiteral(), settleStrategy.getSettleStartMonthsPrior());
 				instruments.putIfAbsent(settleStrategy.getName().toLowerCase(), basicInstrumentData);
+			}
+			
+			for (final MarketIndex marketIndex : pricingModel.getMarketIndices()) {
+				if (marketIndex.isAutoHedgeEnabled()) {
+					indicesToHedge.add(marketIndex.getName().toLowerCase());
+				}
 			}
 		}
 		
