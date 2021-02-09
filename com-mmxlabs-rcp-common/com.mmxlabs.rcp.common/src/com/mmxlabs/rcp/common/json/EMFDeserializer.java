@@ -125,7 +125,13 @@ public class EMFDeserializer<T extends EObject> extends StdDeserializer<T> {
 			}
 		}
 		if (ctx != null) {
-			ctx.registerType(result);
+			if (node.has(JSONConstants.LOOKUP_ID)) {
+				String lookupId = node.get(JSONConstants.LOOKUP_ID).asText();
+				ctx.registerType(lookupId, result);
+			}
+			else {
+				ctx.registerType(result);
+			}
 		}
 		return result;
 

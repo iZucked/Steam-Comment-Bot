@@ -52,7 +52,7 @@ public class JSONReference {
 	public void setGlobalId(final String globalId) {
 		this.globalId = globalId;
 	}
-
+	
 	public static JSONReference of(final EObject eObject) {
 		final EStructuralFeature nameFeature = eObject.eClass().getEStructuralFeature("name");
 		final EStructuralFeature mmxidFeature = eObject.eClass().getEStructuralFeature("mmxid");
@@ -103,5 +103,13 @@ public class JSONReference {
 		}
 		return new JSONReference(type, name, id);
 
+	}
+
+	public static JSONReference of(String lookupId, EObject eObject) {
+		JSONReference ref = of(eObject);
+		if (lookupId != null) {
+			ref.setName(lookupId);
+		}
+		return ref;
 	}
 }

@@ -72,7 +72,7 @@ public class MergeScenarioWizardVesselAvailabilityMapperPage extends MergeScenar
 			List<VesselAvailability> vas = sm.getCargoModel().getVesselAvailabilities();
 			for (var va : vas) {
 				if (va.getVessel() != null) {
-					names.add(va.getVessel().getName());
+					names.add(this.getName(va));
 				} else {
 					names.add("Unknown charter vessel.");
 				}
@@ -88,7 +88,7 @@ public class MergeScenarioWizardVesselAvailabilityMapperPage extends MergeScenar
 			if (va.getVessel() == null) {
 				return "Unknown";
 			} else {
-				return va.getVessel().getName() + ":" + Integer.toString(va.getCharterNumber());
+				return va.getVessel().getName() + "-" + Integer.toString(va.getCharterNumber());
 			}
 		} else {
 			return super.getName(o);

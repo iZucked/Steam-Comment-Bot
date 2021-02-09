@@ -59,6 +59,7 @@ public class EMFSerializer<T extends EObject> extends StdSerializer<T> {
 		jgen.writeStartObject();
 		if (value instanceof EObject) {
 			jgen.writeStringField(JSONConstants.ATTRIBUTE_CLASS, eClass.getName());
+			jgen.writeStringField(JSONConstants.LOOKUP_ID, JSONReference.of(value).getName());
 		}
 
 		for (final EStructuralFeature f : value.eClass().getEAllStructuralFeatures()) {
