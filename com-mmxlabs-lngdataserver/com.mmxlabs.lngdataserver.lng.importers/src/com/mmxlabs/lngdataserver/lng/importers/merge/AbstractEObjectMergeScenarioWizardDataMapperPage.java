@@ -12,8 +12,8 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 
 public abstract class AbstractEObjectMergeScenarioWizardDataMapperPage extends MergeScenarioWizardDataMapperPage {
 
-	protected AbstractEObjectMergeScenarioWizardDataMapperPage(String title, NamedObjectListGetter namedObjectGetter, ModelGetter modelGetter, EStructuralFeature feature) {
-		super(title, namedObjectGetter, modelGetter, feature);
+	protected AbstractEObjectMergeScenarioWizardDataMapperPage(String title, ModelGetter modelGetter, EStructuralFeature feature) {
+		super(title, null, modelGetter, feature);
 	}
 
 	private Pair<EObjectListGetter, List<MergeMapping>> getEObjectMergeMappings() {
@@ -34,9 +34,6 @@ public abstract class AbstractEObjectMergeScenarioWizardDataMapperPage extends M
 
 	@Override
 	protected abstract List<String> getItemNames(LNGScenarioModel sm, NamedObjectListGetter namedItemsGetter);
-
-	@Override
-	protected abstract String getName(Object o);
 
 	@Override
 	protected abstract List<? extends EObject> getEObjects(LNGScenarioModel sm);

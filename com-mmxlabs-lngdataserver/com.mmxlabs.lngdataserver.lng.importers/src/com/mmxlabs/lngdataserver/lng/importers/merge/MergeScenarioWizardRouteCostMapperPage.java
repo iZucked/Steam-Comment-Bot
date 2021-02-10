@@ -16,18 +16,10 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.types.AVesselSet;
 
-public class MergeScenarioWizardRouteCostMapperPage extends MergeScenarioWizardDataMapperPage {
+public class MergeScenarioWizardRouteCostMapperPage extends AbstractEObjectMergeScenarioWizardDataMapperPage {
 
 	public MergeScenarioWizardRouteCostMapperPage(String title) {
-		super(title, null, s -> ScenarioModelUtil.findReferenceModel(s).getCostModel(), PricingPackage.Literals.COST_MODEL__ROUTE_COSTS);
-	}
-
-	private Pair<EObjectListGetter, List<MergeMapping>> getMergeMappings() {
-		List<MergeMapping> mm = Collections.emptyList();
-		if (mergeTableViewer.getInput() instanceof List) {
-			mm = (List<MergeMapping>) mergeTableViewer.getInput();
-		}
-		return Pair.of(s -> ScenarioModelUtil.findReferenceModel(s).getCostModel().getRouteCosts(), mm);
+		super(title, s -> ScenarioModelUtil.findReferenceModel(s).getCostModel(), PricingPackage.Literals.COST_MODEL__ROUTE_COSTS);
 	}
 
 	@Override
@@ -80,13 +72,5 @@ public class MergeScenarioWizardRouteCostMapperPage extends MergeScenarioWizardD
 	protected List<? extends EObject> getEObjects(LNGScenarioModel sm) {
 		List<? extends EObject> emfObjects = ScenarioModelUtil.findReferenceModel(sm).getCostModel().getRouteCosts();
 		return emfObjects;
-	}
-	
-	@Override
-	public void merge(CompoundCommand cmd, MergeHelper mergeHelper) throws Exception {
-		Pair<EObjectListGetter, List<MergeMapping>> mapping = this.getMergeMappings();
-		ModelGetter mg = this.getModelGetter();
-		EStructuralFeature feature = this.getFeature();
-		mergeHelper.merge(cmd, mapping, eO -> getName(eO), mg, feature);
 	}
 }

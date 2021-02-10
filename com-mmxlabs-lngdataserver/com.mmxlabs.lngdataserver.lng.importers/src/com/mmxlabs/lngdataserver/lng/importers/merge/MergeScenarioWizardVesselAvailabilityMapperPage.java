@@ -24,11 +24,11 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 
-public class MergeScenarioWizardVesselAvailabilityMapperPage extends MergeScenarioWizardDataMapperPage {
+public class MergeScenarioWizardVesselAvailabilityMapperPage extends AbstractEObjectMergeScenarioWizardDataMapperPage {
 	Button checkBox;
 
 	public MergeScenarioWizardVesselAvailabilityMapperPage(String title) {
-		super(title, null, s -> ScenarioModelUtil.getCargoModel(s), CargoPackage.Literals.CARGO_MODEL__VESSEL_AVAILABILITIES);
+		super(title, s -> ScenarioModelUtil.getCargoModel(s), CargoPackage.Literals.CARGO_MODEL__VESSEL_AVAILABILITIES);
 	}
 
 	@Override
@@ -48,21 +48,10 @@ public class MergeScenarioWizardVesselAvailabilityMapperPage extends MergeScenar
 
 	@Override
 	public void merge(CompoundCommand cmd, MergeHelper mergeHelper) throws Exception {
-		Pair<EObjectListGetter, List<MergeMapping>> mapping = this.getMergeMappings();
-		ModelGetter mg = this.getModelGetter();
-		EStructuralFeature feature = this.getFeature();
-		mergeHelper.merge(cmd, mapping, eO -> getName(eO), mg, feature);
+		super.merge(cmd, mergeHelper);
 		if (checkBox.getSelection()) {
 			mergeHelper.updateVesselAvailabilityStartEndDates(cmd);
 		}
-	}
-
-	private Pair<EObjectListGetter, List<MergeMapping>> getMergeMappings() {
-		List<MergeMapping> mm = Collections.emptyList();
-		if (mergeTableViewer.getInput() instanceof List) {
-			mm = (List<MergeMapping>) mergeTableViewer.getInput();
-		}
-		return Pair.of(sm -> sm.getCargoModel().getVesselAvailabilities(), mm);
 	}
 
 	@Override

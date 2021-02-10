@@ -14,7 +14,7 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 public class MergeScenarioWizardBaseFuelCostMapperPage extends AbstractEObjectMergeScenarioWizardDataMapperPage {
 
 	protected MergeScenarioWizardBaseFuelCostMapperPage(String title) {
-		super(title, null, s -> ScenarioModelUtil.getCostModel(s), PricingPackage.Literals.COST_MODEL__BASE_FUEL_COSTS);
+		super(title, s -> ScenarioModelUtil.getCostModel(s), PricingPackage.Literals.COST_MODEL__BASE_FUEL_COSTS);
 	}
 
 	@Override
