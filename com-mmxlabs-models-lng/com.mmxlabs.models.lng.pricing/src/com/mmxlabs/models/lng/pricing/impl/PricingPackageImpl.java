@@ -1438,6 +1438,16 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getMarketIndex_AutoHedgeEnabled() {
+		return (EAttribute)marketIndexEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getPricingCalendarEntry() {
 		return pricingCalendarEntryEClass;
 	}
@@ -1795,6 +1805,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEReference(marketIndexEClass, MARKET_INDEX__FLAT_CURVE);
 		createEReference(marketIndexEClass, MARKET_INDEX__BID_CURVE);
 		createEReference(marketIndexEClass, MARKET_INDEX__OFFER_CURVE);
+		createEAttribute(marketIndexEClass, MARKET_INDEX__AUTO_HEDGE_ENABLED);
 
 		pricingCalendarEntryEClass = createEClass(PRICING_CALENDAR_ENTRY);
 		createEAttribute(pricingCalendarEntryEClass, PRICING_CALENDAR_ENTRY__COMMENT);
@@ -2066,6 +2077,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEReference(getMarketIndex_FlatCurve(), this.getCommodityCurve(), null, "flatCurve", null, 0, 1, MarketIndex.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMarketIndex_BidCurve(), this.getCommodityCurve(), null, "bidCurve", null, 0, 1, MarketIndex.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMarketIndex_OfferCurve(), this.getCommodityCurve(), null, "offerCurve", null, 0, 1, MarketIndex.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMarketIndex_AutoHedgeEnabled(), ecorePackage.getEBoolean(), "autoHedgeEnabled", null, 0, 1, MarketIndex.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(pricingCalendarEntryEClass, PricingCalendarEntry.class, "PricingCalendarEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPricingCalendarEntry_Comment(), ecorePackage.getEString(), "comment", null, 0, 1, PricingCalendarEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

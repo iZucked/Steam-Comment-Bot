@@ -1763,13 +1763,22 @@ public interface PricingPackage extends EPackage {
 	int MARKET_INDEX__OFFER_CURVE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Auto Hedge Enabled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_INDEX__AUTO_HEDGE_ENABLED = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Market Index</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKET_INDEX_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+	int MARKET_INDEX_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PricingCalendarEntryImpl <em>Calendar Entry</em>}' class.
@@ -3193,6 +3202,17 @@ public interface PricingPackage extends EPackage {
 	EReference getMarketIndex_OfferCurve();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.MarketIndex#isAutoHedgeEnabled <em>Auto Hedge Enabled</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Auto Hedge Enabled</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.MarketIndex#isAutoHedgeEnabled()
+	 * @see #getMarketIndex()
+	 * @generated
+	 */
+	EAttribute getMarketIndex_AutoHedgeEnabled();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PricingCalendarEntry <em>Calendar Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4334,6 +4354,14 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EReference MARKET_INDEX__OFFER_CURVE = eINSTANCE.getMarketIndex_OfferCurve();
+
+		/**
+		 * The meta object literal for the '<em><b>Auto Hedge Enabled</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MARKET_INDEX__AUTO_HEDGE_ENABLED = eINSTANCE.getMarketIndex_AutoHedgeEnabled();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.PricingCalendarEntryImpl <em>Calendar Entry</em>}' class.

@@ -44,7 +44,7 @@ public class ShippingTypeRequirementConstraintChecker extends AbstractPairwiseCo
 		final CargoDeliveryType requiredSalesSlotShippingType = shippingTypeRequirementProvider.getSalesSlotRequiredDeliveryType(second);
 		if (requiredSalesSlotShippingType != null && requiredSalesSlotShippingType != CargoDeliveryType.ANY) {
 			if (requiredSalesSlotShippingType != shippingType) {
-				messages.add(explain(first, second, resource));
+				messages.add(String.format("Required shipping delivery type of %s does not match purchase delivery type of %s.", requiredSalesSlotShippingType.getName(), shippingType.getName()));
 				return false;
 			}
 		}
@@ -52,7 +52,7 @@ public class ShippingTypeRequirementConstraintChecker extends AbstractPairwiseCo
 		final CargoDeliveryType requiredPurchaseSlotShippingType = shippingTypeRequirementProvider.getPurchaseSlotRequiredDeliveryType(first);
 		if (requiredPurchaseSlotShippingType != null && requiredPurchaseSlotShippingType != CargoDeliveryType.ANY) {
 			if (requiredPurchaseSlotShippingType != shippingType) {
-				messages.add(explain(first, second, resource));
+				messages.add(String.format("Required shipping delivery type of %s does not match sales delivery type of %s.", requiredPurchaseSlotShippingType.getName(), shippingType.getName()));
 				return false;
 			}
 		}

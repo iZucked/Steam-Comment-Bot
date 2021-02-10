@@ -111,7 +111,7 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 
 				@NonNull
 				final Collection<@NonNull String> hints = new HashSet<>(lDataTransformer.getHints());
-				LNGTransformerHelper.updatHintsFromUserSettings(userSettings, hints);
+				LNGTransformerHelper.updateHintsFromUserSettings(userSettings, hints);
 				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
 				monitor.beginTask("", 100 * seeds.length);
@@ -257,7 +257,7 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 
 				@NonNull
 				final Collection<@NonNull String> hints = new HashSet<>(lDataTransformer.getHints());
-				LNGTransformerHelper.updatHintsFromUserSettings(userSettings, hints);
+				LNGTransformerHelper.updateHintsFromUserSettings(userSettings, hints);
 				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
 				monitor.beginTask("", 100 * seeds.length);

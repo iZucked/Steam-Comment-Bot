@@ -4,7 +4,7 @@
   "Route ($)" : "519,542",
   "Charter ($)" : "23,774,996",
   "Cooldown ($)" : "0",
-  "Charter Out (virtual) delta (change set)" : {
+  "Charter Out (virtual)" : {
     "Days" : "0.0",
     "Revenue" : "0"
   },
@@ -24,7 +24,7 @@
   "Route ($)" : "495,840",
   "Charter ($)" : "0",
   "Cooldown ($)" : "231,198",
-  "Charter Out (virtual) delta (change set)" : {
+  "Charter Out (virtual)" : {
     "Days" : "0.0",
     "Revenue" : "0"
   },
@@ -44,7 +44,7 @@
   "Route ($)" : "30,000",
   "Charter ($)" : "0",
   "Cooldown ($)" : "231,424",
-  "Charter Out (virtual) delta (change set)" : {
+  "Charter Out (virtual)" : {
     "Days" : "0.0",
     "Revenue" : "0"
   },
@@ -64,7 +64,7 @@
   "Route ($)" : "80,000",
   "Charter ($)" : "0",
   "Cooldown ($)" : "231,198",
-  "Charter Out (virtual) delta (change set)" : {
+  "Charter Out (virtual)" : {
     "Days" : "0.0",
     "Revenue" : "0"
   },
@@ -84,7 +84,7 @@
   "Route ($)" : "30,000",
   "Charter ($)" : "0",
   "Cooldown ($)" : "0",
-  "Charter Out (virtual) delta (change set)" : {
+  "Charter Out (virtual)" : {
     "Days" : "0.0",
     "Revenue" : "0"
   },
@@ -104,9 +104,9 @@
   "Route ($)" : "493,280",
   "Charter ($)" : "24,599,996",
   "Cooldown ($)" : "0",
-  "Charter Out (virtual) delta (change set)" : {
-    "Days" : "0.0",
-    "Revenue" : "0"
+  "Charter Out (virtual)" : {
+    "Days" : "91.4",
+    "Revenue" : "9,137,499"
   },
   "Heel Cost ($)" : "0",
   "Heel Revenue ($)" : "0",
@@ -115,8 +115,8 @@
   "Port ($)" : "80,000",
   "Repositioning fee ($)" : "0",
   "Scenario" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
-  "Sum ($)" : "31,638,077",
-  "Sum - BOG($)" : "25,173,276",
+  "Sum ($)" : "22,500,578",
+  "Sum - BOG($)" : "16,035,777",
   "Vessel" : "Methane Princess (138k)"
 }, {
   "Ballast bonus ($)" : "0",
@@ -124,7 +124,7 @@
   "Route ($)" : "0",
   "Charter ($)" : "2,870,833",
   "Cooldown ($)" : "0",
-  "Charter Out (virtual) delta (change set)" : {
+  "Charter Out (virtual)" : {
     "Days" : "0.0",
     "Revenue" : "0"
   },

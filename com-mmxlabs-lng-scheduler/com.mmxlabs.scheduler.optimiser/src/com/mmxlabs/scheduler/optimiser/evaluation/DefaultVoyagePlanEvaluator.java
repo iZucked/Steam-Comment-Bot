@@ -127,7 +127,9 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 		// Populating exposures record
 		if (annotatedSolution != null) {
 			for (final IPortSlot portSlot : cargoValueAnnotation.getSlots()) {
-				vpr.addPortExposureRecord(portSlot, exposuresCalculator.calculateExposures(cargoValueAnnotation, portSlot));
+				if (!cargoValueAnnotation.getSlotEntity(portSlot).isThirdparty()) {
+					vpr.addPortExposureRecord(portSlot, exposuresCalculator.calculateExposures(cargoValueAnnotation, portSlot));
+				}
 			}
 		}
 
@@ -226,8 +228,9 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 					// Populating exposures record
 					if (annotatedSolution != null) {
 						for (final IPortSlot portSlot : cargoValueAnnotation.getSlots()) {
-							final List<BasicExposureRecord> records = exposuresCalculator.calculateExposures(cargoValueAnnotation, portSlot);
-							vpr.addPortExposureRecord(portSlot, records);
+							if (!cargoValueAnnotation.getSlotEntity(portSlot).isThirdparty()) {
+								vpr.addPortExposureRecord(portSlot, exposuresCalculator.calculateExposures(cargoValueAnnotation, portSlot));
+							}
 						}
 					}
 				}

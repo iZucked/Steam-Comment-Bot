@@ -44,7 +44,7 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 public class VesselReportTests extends AbstractOptimisationResultTester {
 	
 	@Test
-	@Tag(TestCategories.MICRO_TEST)
+	@Tag(TestCategories.REPORT_TEST)
 	public void testThreeFleetInstances() throws Exception {
 		runTest(maker -> {
 

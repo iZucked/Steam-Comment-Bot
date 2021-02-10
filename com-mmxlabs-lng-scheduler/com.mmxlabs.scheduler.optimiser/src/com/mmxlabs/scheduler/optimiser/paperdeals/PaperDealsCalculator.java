@@ -65,6 +65,10 @@ public class PaperDealsCalculator {
 	@Inject
 	@Named(SchedulerConstants.RE_HEDGE_WITH_PAPERS)
 	private boolean reHedgeWithPapers;
+	
+	@Inject
+	@Named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)
+	private boolean generatedPapersInPNL;
 
 	/**
 	 * Get the collection of paper deals allocation and create a map Map<Pair<Market index name, Month>, Volume> hedges
@@ -139,7 +143,7 @@ public class PaperDealsCalculator {
 	 */
 	private Map<Pair<String, YearMonth>, Long> getDeltaExposuresMap(final Map<Pair<String, YearMonth>, Long> exposures, final Map<Pair<String, YearMonth>, Long> hedges) {
 		final Map<Pair<String, YearMonth>, Long> delta = new HashMap<>(exposures);
-		if (reHedgeWithPapers) {
+		if (reHedgeWithPapers && generatedPapersInPNL) {
 			final PaperDealsLookupData lookupData = paperDealDataProvider.getPaperDealsLookupData();
 			for (final Pair<String, YearMonth> hedgePair : hedges.keySet()) {
 				delta.merge(hedgePair, hedges.get(hedgePair), Long::sum);
@@ -158,7 +162,7 @@ public class PaperDealsCalculator {
 	 */
 	private List<BasicPaperDealData> generateHedges(final Map<Pair<String, YearMonth>, Long> delta) {
 		final List<BasicPaperDealData> results = new LinkedList<>();
-		if (reHedgeWithPapers) {
+		if (reHedgeWithPapers && generatedPapersInPNL) {
 			final PaperDealsLookupData lookupData = paperDealDataProvider.getPaperDealsLookupData();
 			final ExposuresLookupData exposuresLookupData = exposureDataProvider.getExposuresLookupData();
 			for (final Pair<String, YearMonth> deltaPair : delta.keySet()) {
@@ -169,7 +173,7 @@ public class PaperDealsCalculator {
 					// No hedging for physical positions
 					if (month == null)
 						continue;
-					if (indexName == null || indexName.equalsIgnoreCase("Physical"))
+					if (indexName == null || indexName.equalsIgnoreCase("Physical") || !lookupData.indicesToHedge.contains(indexName))
 						continue;
 
 					final Map<String, String> hedgeCurves = lookupData.hedgeCurves.get(indexName.toLowerCase());

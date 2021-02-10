@@ -892,6 +892,9 @@ public final class OptimisationHelper {
 		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TRADER_BASED_INSERIONS)) {
 			copy.setDualMode(false);
 		}
+		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GENERATED_PAPER_DEALS)) {
+			copy.setGeneratedPapersInPNL(false);
+		}
 	}
 
 	/**

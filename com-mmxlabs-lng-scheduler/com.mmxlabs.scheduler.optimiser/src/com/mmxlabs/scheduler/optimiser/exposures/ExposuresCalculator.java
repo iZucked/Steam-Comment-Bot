@@ -64,7 +64,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IExternalDateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
- * Utility class to calculate schedule exposure to market indices. Provides static methods
+ * Utility class to calculate schedule exposure to market indices.
  * 
  * @author FM
  */
@@ -129,7 +129,7 @@ public class ExposuresCalculator {
 		}
 	}
 	
-	public List<BasicExposureRecord> calculateExposures(final long volumeMMBTU, final int pricePerMMBTU, final String priceExpression, 
+	private List<BasicExposureRecord> calculateExposures(final long volumeMMBTU, final int pricePerMMBTU, final String priceExpression, 
 			final LocalDate pricingDate, final boolean isLong, final ExposuresLookupData lookupData) {
 		
 		final List<BasicExposureRecord> result = new ArrayList<>();
@@ -147,7 +147,7 @@ public class ExposuresCalculator {
 	 * @param lookupData
 	 * @return
 	 */
-	public List<BasicExposureRecord> calculateExposures(final long volumeMMBTU, final String priceExpression, 
+	public List<BasicExposureRecord> calculateExposuresForITS(final long volumeMMBTU, final String priceExpression, 
 			final LocalDate pricingDate, final boolean isLong, final ExposuresLookupData lookupData) {
 		
 		final List<BasicExposureRecord> result = new ArrayList<>();

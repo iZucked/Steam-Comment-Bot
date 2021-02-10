@@ -8,11 +8,11 @@ import static org.ops4j.peaberry.Peaberry.service;
 import static org.ops4j.peaberry.util.TypeLiterals.iterable;
 
 import com.google.inject.AbstractModule;
-import com.mmxlabs.lingo.reports.views.fleet.ConfigurableFleetReportView;
-import com.mmxlabs.lingo.reports.views.fleet.FleetBasedReportBuilder;
+import com.mmxlabs.lingo.reports.views.fleet.ConfigurableVesselSummaryReport;
+import com.mmxlabs.lingo.reports.views.fleet.VesselSummaryReportBuilder;
 
 /**
- * A module to define extension points and other injectables for {@link ConfigurableFleetReportView} instances.
+ * A module to define extension points and other injectables for {@link ConfigurableVesselSummaryReport} instances.
  * 
  * @author Simon Goodall
  * 
@@ -22,7 +22,7 @@ public class FleetBasedReportModule extends AbstractModule {
 	@Override
 	protected void configure() {
 
-		bind(FleetBasedReportBuilder.class);
+		bind(VesselSummaryReportBuilder.class);
 
 		// Extension points
 		bind(iterable(IFleetBasedColumnFactoryExtension.class)).toProvider(service(IFleetBasedColumnFactoryExtension.class).multiple());

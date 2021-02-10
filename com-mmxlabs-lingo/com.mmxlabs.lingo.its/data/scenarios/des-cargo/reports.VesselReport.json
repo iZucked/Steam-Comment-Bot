@@ -4,7 +4,7 @@
   "Route ($)" : "0",
   "Charter ($)" : "23,774,996",
   "Cooldown ($)" : "0",
-  "Charter Out (virtual) delta (change set)" : {
+  "Charter Out (virtual)" : {
     "Days" : "0.0",
     "Revenue" : "0"
   },
@@ -24,7 +24,7 @@
   "Route ($)" : "0",
   "Charter ($)" : "0",
   "Cooldown ($)" : "0",
-  "Charter Out (virtual) delta (change set)" : {
+  "Charter Out (virtual)" : {
     "Days" : "0.0",
     "Revenue" : "0"
   },
@@ -44,7 +44,7 @@
   "Route ($)" : "30,000",
   "Charter ($)" : "0",
   "Cooldown ($)" : "429,780",
-  "Charter Out (virtual) delta (change set)" : {
+  "Charter Out (virtual)" : {
     "Days" : "0.0",
     "Revenue" : "0"
   },
@@ -64,7 +64,7 @@
   "Route ($)" : "30,000",
   "Charter ($)" : "0",
   "Cooldown ($)" : "226,176",
-  "Charter Out (virtual) delta (change set)" : {
+  "Charter Out (virtual)" : {
     "Days" : "0.0",
     "Revenue" : "0"
   },
@@ -84,7 +84,7 @@
   "Route ($)" : "50,000",
   "Charter ($)" : "0",
   "Cooldown ($)" : "0",
-  "Charter Out (virtual) delta (change set)" : {
+  "Charter Out (virtual)" : {
     "Days" : "0.0",
     "Revenue" : "0"
   },
@@ -104,7 +104,7 @@
   "Route ($)" : "50,000",
   "Charter ($)" : "24,599,996",
   "Cooldown ($)" : "0",
-  "Charter Out (virtual) delta (change set)" : {
+  "Charter Out (virtual)" : {
     "Days" : "0.0",
     "Revenue" : "0"
   },

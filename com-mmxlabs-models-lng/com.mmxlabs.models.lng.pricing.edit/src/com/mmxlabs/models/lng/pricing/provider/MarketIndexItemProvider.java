@@ -20,6 +20,8 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.MarketIndex} object.
@@ -54,6 +56,7 @@ public class MarketIndexItemProvider extends NamedObjectItemProvider {
 			addFlatCurvePropertyDescriptor(object);
 			addBidCurvePropertyDescriptor(object);
 			addOfferCurvePropertyDescriptor(object);
+			addAutoHedgeEnabledPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -114,7 +117,7 @@ public class MarketIndexItemProvider extends NamedObjectItemProvider {
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_MarketIndex_flatCurve_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_MarketIndex_flatCurve_feature", "_UI_MarketIndex_type"),
+				 getString("_UI_MarketIndex_flatCurve_description"),
 				 PricingPackage.Literals.MARKET_INDEX__FLAT_CURVE,
 				 true,
 				 false,
@@ -136,7 +139,7 @@ public class MarketIndexItemProvider extends NamedObjectItemProvider {
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_MarketIndex_bidCurve_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_MarketIndex_bidCurve_feature", "_UI_MarketIndex_type"),
+				 getString("_UI_MarketIndex_bidCurve_description"),
 				 PricingPackage.Literals.MARKET_INDEX__BID_CURVE,
 				 true,
 				 false,
@@ -158,12 +161,34 @@ public class MarketIndexItemProvider extends NamedObjectItemProvider {
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_MarketIndex_offerCurve_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_MarketIndex_offerCurve_feature", "_UI_MarketIndex_type"),
+				 getString("_UI_MarketIndex_offerCurve_description"),
 				 PricingPackage.Literals.MARKET_INDEX__OFFER_CURVE,
 				 true,
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Auto Hedge Enabled feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAutoHedgeEnabledPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_MarketIndex_autoHedgeEnabled_feature"),
+				 getString("_UI_MarketIndex_autoHedgeEnabled_description"),
+				 PricingPackage.Literals.MARKET_INDEX__AUTO_HEDGE_ENABLED,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -204,6 +229,12 @@ public class MarketIndexItemProvider extends NamedObjectItemProvider {
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(MarketIndex.class)) {
+			case PricingPackage.MARKET_INDEX__AUTO_HEDGE_ENABLED:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 

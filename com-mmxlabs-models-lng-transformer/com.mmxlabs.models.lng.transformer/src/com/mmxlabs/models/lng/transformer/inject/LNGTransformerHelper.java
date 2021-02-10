@@ -237,7 +237,7 @@ public class LNGTransformerHelper {
 	}
 
 	@NonNullByDefault
-	public static void updatHintsFromUserSettings(UserSettings userSettings, Collection<String> hints) {
+	public static void updateHintsFromUserSettings(UserSettings userSettings, Collection<String> hints) {
 
 		if (userSettings.isGenerateCharterOuts()) {
 			hints.add(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS);
@@ -248,6 +248,15 @@ public class LNGTransformerHelper {
 			hints.add(LNGTransformerHelper.HINT_CHARTER_LENGTH);
 		} else {
 			hints.remove(LNGTransformerHelper.HINT_CHARTER_LENGTH);
+		}
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GENERATED_PAPER_DEALS)) {
+			if (userSettings.isGeneratedPapersInPNL()) {
+				hints.add(LNGTransformerHelper.HINT_GENERATED_PAPERS_PNL);
+			} else {
+				hints.remove(LNGTransformerHelper.HINT_GENERATED_PAPERS_PNL);
+			}
+		} else {
+			hints.remove(LNGTransformerHelper.HINT_GENERATED_PAPERS_PNL);
 		}
 	}
 

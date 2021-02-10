@@ -4,7 +4,7 @@
   "Route ($)" : "80,000",
   "Charter ($)" : "23,774,996",
   "Cooldown ($)" : "0",
-  "Charter Out (virtual) delta (change set)" : {
+  "Charter Out (virtual)" : {
     "Days" : "0.0",
     "Revenue" : "0"
   },
@@ -24,7 +24,7 @@
   "Route ($)" : "80,000",
   "Charter ($)" : "42,037,500",
   "Cooldown ($)" : "0",
-  "Charter Out (virtual) delta (change set)" : {
+  "Charter Out (virtual)" : {
     "Days" : "0.0",
     "Revenue" : "0"
   },
@@ -44,7 +44,7 @@
   "Route ($)" : "0",
   "Charter ($)" : "0",
   "Cooldown ($)" : "0",
-  "Charter Out (virtual) delta (change set)" : {
+  "Charter Out (virtual)" : {
     "Days" : "0.0",
     "Revenue" : "0"
   },
@@ -64,7 +64,7 @@
   "Route ($)" : "30,000",
   "Charter ($)" : "0",
   "Cooldown ($)" : "231,424",
-  "Charter Out (virtual) delta (change set)" : {
+  "Charter Out (virtual)" : {
     "Days" : "0.0",
     "Revenue" : "0"
   },
@@ -84,7 +84,7 @@
   "Route ($)" : "0",
   "Charter ($)" : "0",
   "Cooldown ($)" : "0",
-  "Charter Out (virtual) delta (change set)" : {
+  "Charter Out (virtual)" : {
     "Days" : "0.0",
     "Revenue" : "0"
   },
@@ -104,7 +104,7 @@
   "Route ($)" : "530,962",
   "Charter ($)" : "0",
   "Cooldown ($)" : "0",
-  "Charter Out (virtual) delta (change set)" : {
+  "Charter Out (virtual)" : {
     "Days" : "0.0",
     "Revenue" : "0"
   },
@@ -124,9 +124,9 @@
   "Route ($)" : "30,000",
   "Charter ($)" : "26,929,162",
   "Cooldown ($)" : "0",
-  "Charter Out (virtual) delta (change set)" : {
-    "Days" : "0.0",
-    "Revenue" : "0"
+  "Charter Out (virtual)" : {
+    "Days" : "113.8",
+    "Revenue" : "11,379,165"
   },
   "Heel Cost ($)" : "0",
   "Heel Revenue ($)" : "0",
@@ -135,7 +135,7 @@
   "Port ($)" : "80,000",
   "Repositioning fee ($)" : "0",
   "Scenario" : "0 Bonny",
-  "Sum ($)" : "32,786,663",
-  "Sum - BOG($)" : "27,039,162",
+  "Sum ($)" : "21,407,498",
+  "Sum - BOG($)" : "15,659,997",
   "Vessel" : "Methane Princess (138k)"
 } ]

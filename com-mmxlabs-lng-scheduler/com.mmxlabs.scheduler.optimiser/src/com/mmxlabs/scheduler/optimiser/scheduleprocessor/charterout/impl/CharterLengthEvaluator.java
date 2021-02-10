@@ -10,7 +10,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -18,11 +17,7 @@ import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
-import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterLengthEvent;
-import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplierPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IHeelPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterLengthEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -69,7 +64,7 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 	@Inject
 	private IVesselBaseFuelCalculator vesselBaseFuelCalculator;
 
-	// See default binding in LNGEvaluationModule
+	// See default binding in LNGEvaluationModule - typically 2 weeks
 	@Inject
 	@Named(SchedulerConstants.CHARTER_LENGTH_MIN_IDLE_HOURS)
 	private int minIdleTimeInHours;
@@ -77,13 +72,15 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 	@Override
 	public @Nullable List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(final long[] startHeelVolumeRangeInM3, final IVesselAvailability vesselAvailability, final VoyagePlan vp,
 			final IPortTimesRecord portTimesRecord, @Nullable IAnnotatedSolution annotatedSolution) {
+
+		// Only apply to "real" vessels. Exclude nominal/round-trip vessels.
 		if (!(vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET //
 				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER //
 				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
 			return null;
 		}
 
-		// First step, find a ballast leg which is long enough to split out.
+		// First step, find the final ballast leg and then see if it is long enough to convert to a charter length event.
 		final Object[] currentSequence = vp.getSequence();
 		int ballastIdx = -1;
 		int ballastStartTime = -1;
@@ -107,144 +104,194 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 
 		assert ((ballastIdx < 0) == (ballastStartTime < 0));
 		if (firstDetails == null || ballastIdx == -1 || ballastStartTime == -1 || ballastDetails == null) {
-
 			// no ballast leg?
 			return null;
 		}
 
-		// Check idle length
-		// TODO: May based on notional speed.
+		// Check idle length. Note: This is idle based on current speed. While we could speed up the vessel to get more idle time, this is not what we want to do.
 		if (ballastDetails.getIdleTime() < minIdleTimeInHours) {
 			return null;
 		}
 
-		return generateNewVoyagePlans(vesselAvailability, vp, portTimesRecord, currentSequence, ballastIdx, ballastStartTime, annotatedSolution);
+		// We have a candidate voyage plan with enough time, pass into the method to split into two plans and recompute values.
+		List<Pair<VoyagePlan, IPortTimesRecord>> r = generateNewVoyagePlansWithCharterLength(vesselAvailability, vp, portTimesRecord, currentSequence, ballastIdx, ballastStartTime, annotatedSolution);
+
+		// Sanity checking of heel info
+		if (r.size() > 1) {
+			// Assuming two plans
+			VoyagePlan p1 = r.get(0).getFirst();
+			VoyagePlan p2 = r.get(1).getFirst();
+
+			{
+				long startHeel = p1.getStartingHeelInM3();
+				long bog = p1.getLNGFuelVolume();
+				long endHeel = p1.getRemainingHeelInM3();
+
+				// assert endHeel == startHeel - bog;
+			}
+			// Check the start heel - bog == end heel is correct
+			{
+				long startHeel = p2.getStartingHeelInM3();
+				long bog = p2.getLNGFuelVolume();
+				long endHeel = p2.getRemainingHeelInM3();
+
+				assert endHeel == startHeel - bog;
+			}
+			// Check heel between events matches.
+			assert p1.getRemainingHeelInM3() == p2.getStartingHeelInM3();
+			IGeneratedCharterLengthEventPortSlot eventSlot = (IGeneratedCharterLengthEventPortSlot) ((PortDetails) p2.getSequence()[0]).getOptions().getPortSlot();
+			assert p2.getStartingHeelInM3() == eventSlot.getHeelOptionsConsumer().getMinimumHeelAcceptedInM3();
+			assert p2.getStartingHeelInM3() == eventSlot.getHeelOptionsConsumer().getMaximumHeelAcceptedInM3();
+			assert p2.getStartingHeelInM3() == eventSlot.getHeelOptionsSupplier().getMinimumHeelAvailableInM3();
+			assert p2.getStartingHeelInM3() == eventSlot.getHeelOptionsSupplier().getMaximumHeelAvailableInM3();
+		}
+
+		return r;
 	}
 
 	/**
-	 * Produces a new large sequence including a generated charter out and a ballast to and from the charter out port
+	 * Produces a new large sequence with the original voyage and a charter length event inserted after the final ballast travel to replace the idle time.
 	 * 
-	 * @param currentSequence
-	 * @param charterOutOption
-	 * @param portTimesRecord
-	 * @param ballastIdx
-	 * @param ballastStartTime
-	 * @return
 	 */
-	private List<Pair<VoyagePlan, IPortTimesRecord>> generateNewVoyagePlans(final @NonNull IVesselAvailability vesselAvailability, final VoyagePlan originalPlan,
+	private List<Pair<VoyagePlan, IPortTimesRecord>> generateNewVoyagePlansWithCharterLength(final IVesselAvailability vesselAvailability, final VoyagePlan originalPlan,
 			final IPortTimesRecord originalPortTimesRecord, final Object[] currentSequence, final int ballastIdx, final int ballastStartTime, @Nullable IAnnotatedSolution annotatedSolution) {
 
-		// Now insert elements from the charter out option
+		final IVessel vessel = vesselAvailability.getVessel();
+		final int[] baseFuelPricesPerMT = vesselBaseFuelCalculator.getBaseFuelPrices(vessel, originalPortTimesRecord);
+
+		// Grab the target ballast leg we want to convert.
 		final VoyageDetails originalBallast = (VoyageDetails) currentSequence[ballastIdx];
 
-		// These will be updated later on
-		final HeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(0, Long.MAX_VALUE, VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0), false);
-		final HeelOptionSupplier heelOptionSupplier = new HeelOptionSupplier(0, 0, originalBallast.getOptions().getCargoCVValue(), new ConstantHeelPriceCalculator(0));
+		// Calculate how much heel we need to keep to cover charter length event idle and heel for next event. This is the original end heel + idle BOG.
+		final long idleBOGInM3 = originalBallast.getFuelConsumption(LNGFuelKeys.IdleNBO_In_m3);
+		long charterLengthHeelInM3 = originalPlan.getRemainingHeelInM3() + idleBOGInM3;
 
-		// now update port slot
+		// Set explicit values as we already know what the heel should be at the switch over point.
+		final HeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(charterLengthHeelInM3, charterLengthHeelInM3, idleBOGInM3 > 0 ? VesselTankState.MUST_BE_COLD : VesselTankState.EITHER,
+				new ConstantHeelPriceCalculator(0), false);
+		final HeelOptionSupplier heelOptionSupplier = new HeelOptionSupplier(charterLengthHeelInM3, charterLengthHeelInM3, originalBallast.getOptions().getCargoCVValue(),
+				new ConstantHeelPriceCalculator(0));
+
+		// Dynamically create the charter length port slot.
 		final GeneratedCharterLengthPortSlot charterLengthPortSlot = new GeneratedCharterLengthPortSlot(
-				/* ID */ String.format("charterlength-%s-%s", originalBallast.getOptions().getFromPortSlot().getId(), originalBallast.getOptions().getToPortSlot().getId()), //
-				/* Time window - set later */ null, /* Start / End Port */ originalBallast.getOptions().getToPortSlot().getPort(), //
-				heelOptionConsumer, heelOptionSupplier //
+				/* ID based on from-to ids */ String.format("charterlength-%s-%s", originalBallast.getOptions().getFromPortSlot().getId(), originalBallast.getOptions().getToPortSlot().getId()), //
+				/* Time window - set later */ null, //
+				/* Charter length will be at destination port */ originalBallast.getOptions().getToPortSlot().getPort(), //
+				heelOptionConsumer, //
+				heelOptionSupplier //
 		);
 
-		// (1) ballast to charter out
+		// Now we start to construct the new voyage plans
 
-		final VoyageOptions dischargeToCharterPortVoyageOptions = originalBallast.getOptions().copy();
-		dischargeToCharterPortVoyageOptions.setAvailableTime(originalBallast.getTravelTime());
-		dischargeToCharterPortVoyageOptions.setToPortSlot(charterLengthPortSlot);
+		// (1) ballast to charter length event
+		final VoyageOptions ballastStartToCharterLengthPortVoyageOptions = originalBallast.getOptions().copy();
+		// Change the available time to just include travel time. Idle time will be moved into a new voyage.
+		ballastStartToCharterLengthPortVoyageOptions.setAvailableTime(originalBallast.getTravelTime());
+		// Replace the return port with the charget length
+		ballastStartToCharterLengthPortVoyageOptions.setToPortSlot(charterLengthPortSlot);
 
 		if (originalBallast.isCooldownPerformed()) {
 			// May need to tweak these
-			dischargeToCharterPortVoyageOptions.setShouldBeCold(VesselTankState.EITHER);
+			ballastStartToCharterLengthPortVoyageOptions.setShouldBeCold(VesselTankState.EITHER);
 			// dischargeToCharterPortVoyageOptions.setWarm(originalBallast.getOptions().isWarm());
 			// dischargeToCharterPortVoyageOptions.setAllowCooldown(false);
 		}
-		// (2) charter out
 
+		// (2) New charter length port visit
 		final PortOptions generatedCharterPortOptions = new PortOptions(charterLengthPortSlot);
 		generatedCharterPortOptions.setVessel(originalBallast.getOptions().getVessel());
 		generatedCharterPortOptions.setVisitDuration(0);
 		generatedCharterPortOptions.setCargoCVValue(originalBallast.getOptions().getCargoCVValue());
 
-		// (3) ballast to return port
+		// (3) New charter lenth IDLE to return port
 		final VoyageOptions charterToReturnPortVoyageOptions = originalBallast.getOptions().copy();
+		// Exclude the orignal travel time and just include the idle/purge time.
 		charterToReturnPortVoyageOptions.setAvailableTime(originalBallast.getIdleTime() + originalBallast.getPurgeDuration());
+		// Update the origin port to the charter length
 		charterToReturnPortVoyageOptions.setFromPortSlot(charterLengthPortSlot);
+		// No distance or costs to apply
 		charterToReturnPortVoyageOptions.setRoute(originalBallast.getOptions().getRoute(), 0, 0);
 
-		final IVessel vessel = vesselAvailability.getVessel();
+		// Manually construct the voyage details based on previous data.
 
-		final VoyageDetails newTravel = originalBallast.clone();
-
+		// This leg is just the travel values, so clear out any idle portion.
+		final VoyageDetails newTravelToCharterLength = originalBallast.clone();
 		{
-			newTravel.setOptions(dischargeToCharterPortVoyageOptions);
-			newTravel.setCooldownPerformed(false);
-			newTravel.setPurgePerformed(false);
-			newTravel.setPurgeDuration(0);
+			newTravelToCharterLength.setOptions(ballastStartToCharterLengthPortVoyageOptions);
+			newTravelToCharterLength.setCooldownPerformed(false);
+			newTravelToCharterLength.setPurgePerformed(false);
+			newTravelToCharterLength.setPurgeDuration(0);
 			// Clear Idle values
-			newTravel.setIdleTime(0);
-			newTravel.setIdleNBOHours(0);
+			newTravelToCharterLength.setIdleTime(0);
+			newTravelToCharterLength.setIdleNBOHours(0);
 
-			newTravel.setFuelConsumption(vessel.getIdleBaseFuelInMT(), 0);
-			newTravel.setFuelConsumption(vessel.getIdlePilotLightFuelInMT(), 0);
-			newTravel.setFuelConsumption(LNGFuelKeys.Cooldown_In_m3, 0);
+			newTravelToCharterLength.setFuelConsumption(vessel.getIdleBaseFuelInMT(), 0);
+			newTravelToCharterLength.setFuelConsumption(vessel.getIdlePilotLightFuelInMT(), 0);
+			newTravelToCharterLength.setFuelConsumption(LNGFuelKeys.Cooldown_In_m3, 0);
 			for (final FuelKey fk : LNGFuelKeys.Idle_LNG) {
-				newTravel.setFuelConsumption(fk, 0);
+				newTravelToCharterLength.setFuelConsumption(fk, 0);
 			}
 		}
 
-		final VoyageDetails newIdle = originalBallast.clone();
+		// This leg is the idle time that will become the charter length, so clear out any travel elements
+		final VoyageDetails newIdleFromCharterLength = originalBallast.clone();
 		{
-			newIdle.setOptions(charterToReturnPortVoyageOptions);
+			newIdleFromCharterLength.setOptions(charterToReturnPortVoyageOptions);
 			// Clear Travel values
-			newIdle.setTravelTime(0);
-			newIdle.setTravelNBOHours(0);
-			newIdle.setSpeed(0);
+			newIdleFromCharterLength.setTravelTime(0);
+			newIdleFromCharterLength.setTravelNBOHours(0);
+			newIdleFromCharterLength.setSpeed(0);
 			for (final FuelKey fk : vessel.getTravelFuelKeys()) {
-				newIdle.setFuelConsumption(fk, 0);
-				newIdle.setRouteAdditionalConsumption(fk, 0);
+				newIdleFromCharterLength.setFuelConsumption(fk, 0);
+				newIdleFromCharterLength.setRouteAdditionalConsumption(fk, 0);
 			}
 			for (final FuelKey fk : LNGFuelKeys.Travel_LNG) {
-				newIdle.setFuelConsumption(fk, 0);
-				newIdle.setRouteAdditionalConsumption(fk, 0);
+				newIdleFromCharterLength.setFuelConsumption(fk, 0);
+				newIdleFromCharterLength.setRouteAdditionalConsumption(fk, 0);
 			}
 		}
 
-		final List<IDetailsSequenceElement> newRawSequence1 = new LinkedList<>();
+		// Sanity checks
+		assert newIdleFromCharterLength.isCooldownPerformed() == originalBallast.isCooldownPerformed();
+		assert newIdleFromCharterLength.isPurgePerformed() == originalBallast.isPurgePerformed();
 
-		// build new sequence up to and not including last ballast leg
+		final List<IDetailsSequenceElement> partialSequenceUpToCharterLength = new LinkedList<>();
+
+		// build new sequence up to and not including last ballast leg from original data.
 		for (int i = 0; i < ballastIdx; i++) {
 			final Object o = currentSequence[i];
 			if (o instanceof PortDetails) {
-				newRawSequence1.add(((PortDetails) o).clone());
+				partialSequenceUpToCharterLength.add(((PortDetails) o).clone());
 			} else if (o instanceof VoyageDetails) {
 				final VoyageDetails voyageDetails = (VoyageDetails) o;
-				newRawSequence1.add(voyageDetails.clone());
+				partialSequenceUpToCharterLength.add(voyageDetails.clone());
 			}
 		}
+		// Now add in new travel leg and final charter length event
 		final PortDetails portDetails = new PortDetails(generatedCharterPortOptions);
-		newRawSequence1.add(newTravel);
-		newRawSequence1.add(portDetails);
+		partialSequenceUpToCharterLength.add(newTravelToCharterLength);
+		partialSequenceUpToCharterLength.add(portDetails);
 
-		final List<IDetailsSequenceElement> newRawSequence2 = new LinkedList<>();
-		newRawSequence2.add(portDetails);
-		newRawSequence2.add(newIdle);
+		// build new sequence from the new charter length event to the return port using the newly created port and voyage details.
+		final List<IDetailsSequenceElement> partialSequenceFromCharterLength = new LinkedList<>();
+		partialSequenceFromCharterLength.add(portDetails);
+		partialSequenceFromCharterLength.add(newIdleFromCharterLength);
+		// Include any pre-existing data from the original sequence that happened after the target ballast leg (including final port details)
 		for (int i = ballastIdx + 1; i < currentSequence.length; i++) {
 			final Object o = currentSequence[i];
 			if (o instanceof PortDetails) {
-				newRawSequence2.add(((PortDetails) o).clone());
+				partialSequenceFromCharterLength.add(((PortDetails) o).clone());
 			} else if (o instanceof VoyageDetails) {
 				final VoyageDetails voyageDetails = (VoyageDetails) o;
-				newRawSequence2.add(voyageDetails.clone());
+				partialSequenceFromCharterLength.add(voyageDetails.clone());
 			}
 		}
 
 		final List<Pair<VoyagePlan, IPortTimesRecord>> charterPlans = new LinkedList<>();
 
-		final int[] baseFuelPricesPerMT = vesselBaseFuelCalculator.getBaseFuelPrices(vessel, originalPortTimesRecord);
+		// Calculate pre-charter length voyage plan
 
-		// calculate pre-charter plan
+		// Use the original heel value as the range.
 		final long[] startHeelRangeInM3 = new long[2];
 		startHeelRangeInM3[0] = originalPlan.getStartingHeelInM3();
 		startHeelRangeInM3[1] = originalPlan.getStartingHeelInM3();
@@ -252,11 +299,13 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 		{
 			final PortTimesRecord portTimesRecord1 = new PortTimesRecord();
 
-			// existing
+			// Clone all the existing data
 			for (int i = 0; i < originalPortTimesRecord.getSlots().size(); i++) {
-				portTimesRecord1.setSlotTime(originalPortTimesRecord.getSlots().get(i), originalPortTimesRecord.getSlotTime(originalPortTimesRecord.getSlots().get(i)));
-				portTimesRecord1.setSlotDuration(originalPortTimesRecord.getSlots().get(i), originalPortTimesRecord.getSlotDuration(originalPortTimesRecord.getSlots().get(i)));
-				portTimesRecord1.setSlotExtraIdleTime(originalPortTimesRecord.getSlots().get(i), originalPortTimesRecord.getSlotExtraIdleTime(originalPortTimesRecord.getSlots().get(i)));
+				final IPortSlot portSlot = originalPortTimesRecord.getSlots().get(i);
+				portTimesRecord1.setSlotTime(portSlot, originalPortTimesRecord.getSlotTime(portSlot));
+				portTimesRecord1.setSlotDuration(portSlot, originalPortTimesRecord.getSlotDuration(portSlot));
+				portTimesRecord1.setSlotExtraIdleTime(portSlot, originalPortTimesRecord.getSlotExtraIdleTime(portSlot));
+				portTimesRecord1.setSlotNextVoyageOptions(portSlot, originalPortTimesRecord.getSlotNextVoyageOptions(portSlot), originalPortTimesRecord.getSlotNextVoyagePanamaPeriod(portSlot));
 			}
 			portTimesRecord1.setReturnSlotTime(charterLengthPortSlot, ballastStartTime + originalBallast.getTravelTime());
 
@@ -266,32 +315,39 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 
 			// Calculate voyage plan
 			final int violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselAvailability.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricesPerMT,
-					portTimesRecord1, newRawSequence1.toArray(new IDetailsSequenceElement[0]));
+					portTimesRecord1, partialSequenceUpToCharterLength.toArray(new IDetailsSequenceElement[0]));
 			assert violationCount != Integer.MAX_VALUE;
 
-			// Re-add the idle BOG
-			final long idleBOGInM3 = originalBallast.getFuelConsumption(LNGFuelKeys.IdleNBO_In_m3);
-			long remainingHeelInM3 = originalPlan.getRemainingHeelInM3();
-			long remainingHeelInM32 = remainingHeelInM3 + idleBOGInM3;
-			currentPlan.setRemainingHeelInM3(remainingHeelInM32);
+			// Make sure this is still the same
+			assert currentPlan.getStartingHeelInM3() == originalPlan.getStartingHeelInM3();
 
+			currentPlan.setRemainingHeelInM3(charterLengthHeelInM3);
+
+			// Recompute the volume (and P&L) for the reduced voyage plan
 			final IAllocationAnnotation allocation = volumeAllocator.get().allocate(vesselAvailability, currentPlan, portTimesRecord1, annotatedSolution);
-			if (allocation == null) {
-				charterPlans.add(new Pair<VoyagePlan, IPortTimesRecord>(currentPlan, portTimesRecord1));
-				startHeelRangeInM3[0] = remainingHeelInM3;
-				startHeelRangeInM3[1] = remainingHeelInM3;
-				currentPlan.setIgnoreEnd(true);
+			if (allocation != null) {
+				charterPlans.add(Pair.of(currentPlan, allocation));
 
-				setHeelOptions(charterLengthPortSlot.getVesselEvent(), portTimesRecord1, currentPlan.getSequence(), remainingHeelInM3);
-			} else {
-				charterPlans.add(new Pair<VoyagePlan, IPortTimesRecord>(currentPlan, allocation));
+				// We don't expect this to change....
+				assert allocation.getRemainingHeelVolumeInM3() == charterLengthHeelInM3;
+
+				// Update the starting heel range ready for second voyage plan
 				startHeelRangeInM3[0] = allocation.getRemainingHeelVolumeInM3();
 				startHeelRangeInM3[1] = allocation.getRemainingHeelVolumeInM3();
-				currentPlan.setIgnoreEnd(true);
+			} else {
+				// Null because the voyage plan was not a cargo.
+				charterPlans.add(Pair.of(currentPlan, portTimesRecord1));
 
-				setHeelOptions(charterLengthPortSlot.getVesselEvent(), portTimesRecord1, currentPlan.getSequence(), allocation.getRemainingHeelVolumeInM3());
+				// Update the starting heel range ready for second voyage plan
+				startHeelRangeInM3[0] = currentPlan.getRemainingHeelInM3();
+				startHeelRangeInM3[1] = currentPlan.getRemainingHeelInM3();
+
 			}
+			// Ensure this flag is still set correctly
+			currentPlan.setIgnoreEnd(true);
 		}
+
+		// New voyage plan representing the charter length (here the zero length event plus idle time to roll in during export).
 		{
 
 			final PortTimesRecord portTimesRecord2 = new PortTimesRecord();
@@ -310,57 +366,21 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 
 			// Calculate voyage plan
 			final int violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselAvailability.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricesPerMT,
-					portTimesRecord2, newRawSequence2.toArray(new IDetailsSequenceElement[0]));
+					portTimesRecord2, partialSequenceFromCharterLength.toArray(new IDetailsSequenceElement[0]));
 			assert violationCount != Integer.MAX_VALUE;
-			charterPlans.add(new Pair<VoyagePlan, IPortTimesRecord>(currentPlan, portTimesRecord2));
+
+			charterPlans.add(Pair.of(currentPlan, portTimesRecord2));
+
+			// Make sure we retain the original plan value
 			currentPlan.setIgnoreEnd(originalPlan.isIgnoreEnd());
+
+			// These should match
+			assert currentPlan.getStartingHeelInM3() == charterLengthHeelInM3;
+			assert currentPlan.getRemainingHeelInM3() == originalPlan.getRemainingHeelInM3();
+
 		}
 		return charterPlans;
 
 	}
 
-	/**
-	 * Loop through the first voyage plan (up to the GCO) and find an element to extract heel options information
-	 * 
-	 * @param generatedEvent
-	 * @param sequence
-	 * @param heelVolume
-	 * @param portTimesRecord
-	 * @return
-	 */
-	private void setHeelOptions(final IGeneratedCharterLengthEvent generatedEvent, final IPortTimesRecord portTimesRecord, final IDetailsSequenceElement[] sequence, final long heelVolume) {
-		IHeelPriceCalculator heelPriceCalculator = null;
-		int cv = 0;
-
-		final IDetailsSequenceElement startOfSequence = sequence[0];
-		if (startOfSequence instanceof PortDetails) {
-			final IPortSlot portSlot = ((PortDetails) startOfSequence).getOptions().getPortSlot();
-			if (portSlot instanceof IHeelOptionSupplierPortSlot) {
-				heelPriceCalculator = ((IHeelOptionSupplierPortSlot) portSlot).getHeelOptionsSupplier().getHeelPriceCalculator();
-				cv = ((IHeelOptionSupplierPortSlot) portSlot).getHeelOptionsSupplier().getHeelCVValue();
-			} else if (portSlot instanceof ILoadSlot) {
-				IDischargeSlot discharge = null;
-				for (int i = sequence.length - 1; i >= 0; i--) {
-					if (sequence[i] instanceof PortDetails) {
-						if (((PortDetails) sequence[i]).getOptions().getPortSlot() instanceof IDischargeSlot) {
-							discharge = (IDischargeSlot) ((PortDetails) sequence[i]).getOptions().getPortSlot();
-							break;
-						}
-					}
-				}
-				if (discharge != null) {
-					heelPriceCalculator = new ConstantHeelPriceCalculator(discharge.getDischargePriceCalculator().estimateSalesUnitPrice(discharge, portTimesRecord, null));
-				}
-				cv = ((ILoadSlot) portSlot).getCargoCVValue();
-			} else {
-				heelPriceCalculator = new ConstantHeelPriceCalculator(0);
-			}
-		}
-		assert heelPriceCalculator != null;
-		final HeelOptionConsumer heelConsumer = new HeelOptionConsumer(heelVolume, heelVolume, heelVolume > 0 ? VesselTankState.MUST_BE_COLD : VesselTankState.MUST_BE_WARM, heelPriceCalculator,
-				false);
-		final HeelOptionSupplier heelSupplier = new HeelOptionSupplier(heelVolume, heelVolume, cv, heelPriceCalculator);
-		generatedEvent.setHeelConsumer(heelConsumer);
-		generatedEvent.setHeelSupplier(heelSupplier);
-	}
 }

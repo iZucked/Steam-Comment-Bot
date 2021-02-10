@@ -44,6 +44,7 @@ import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.lingo.reports.services.SelectedDataProviderImpl;
 import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.views.AbstractConfigurableGridReportView;
@@ -65,22 +66,24 @@ import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
+import com.mmxlabs.scenario.service.ScenarioResult;
 
 /**
  * A customisable report for fleet based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available for
  * the user to change the default settings.
  */
-public class ConfigurableFleetReportView extends AbstractConfigurableGridReportView {
+public class ConfigurableVesselSummaryReport extends AbstractConfigurableGridReportView {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ConfigurableFleetReportView.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ConfigurableVesselSummaryReport.class);
 
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
 	public static final String ID = "com.mmxlabs.lingo.reports.views.fleet.ConfigurableFleetReportView";
 
-	private final FleetBasedReportBuilder builder;
+	private final VesselSummaryReportBuilder builder;
 
 	private boolean diffMode = false;
 
@@ -104,7 +107,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 	protected boolean includeAllColumnsForITS = true;
 
 	@Inject
-	public ConfigurableFleetReportView(final FleetBasedReportBuilder builder) {
+	public ConfigurableVesselSummaryReport(final VesselSummaryReportBuilder builder) {
 		super("com.mmxlabs.lingo.doc.Reports_VesselSummary");
 
 		// Setup the builder hooks.
@@ -292,20 +295,25 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 					}
 				}
 			}
-			// return (T) new IReportContentsGenerator() {
-			// public String getStringContents(final ScenarioResult pin, final ScenarioResult other) {
-			//
-			// final ISelectedDataProvider provider = scenarioComparisonService.getCurrentSelectedDataProvider();
-			// if (provider != null) {
-			// scenarioComparisonServiceListener.compareDataUpdate(provider, pin, other, new ArrayList<LNGScenarioModel>());
-			// }
-			// final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
-			//
-			// final String contents = util.convert();
-			//
-			// return "<meta charset=\"UTF-8\"/>" + contents;
-			// }
-			// };
+			return adapter.cast(new IReportContentsGenerator() {
+				public String getStringContents(final ScenarioResult pin, final ScenarioResult other) {
+					final SelectedDataProviderImpl provider = new SelectedDataProviderImpl();
+					if (pin != null) {
+						provider.addScenario(pin);
+						provider.setPinnedScenarioInstance(pin);
+					}
+					if (other != null) {
+						provider.addScenario(other);
+					}
+					// Request a blocking update ...
+					scenarioComparisonServiceListener.selectedDataProviderChanged(provider, true);
+					// ... so the data is ready to be read here.
+					final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
+					final String contents = util.convert();
+
+					return "<meta charset=\"UTF-8\"/>" + contents;
+				}
+			});
 		}
 
 		return super.getAdapter(adapter);
@@ -353,7 +361,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 						handler.setViewState(isMultiple, inPinDiffMode);
 					}
 				}
-				final FleetReportTransformer transformer = new FleetReportTransformer(builder);
+				final VesselSummaryReportTransformer transformer = new VesselSummaryReportTransformer(builder);
 				final List<Object> rows;
 				if (inPinDiffMode) {
 					rows = transformer.generatePinDiffRows(selectedDataProvider.getPinnedScenarioResult(), selectedDataProvider.getOtherScenarioResults().get(0));
@@ -365,7 +373,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 				ViewerHelper.setInput(viewer, true, rows);
 			};
 
-			RunnerHelper.exec(r, false);
+			RunnerHelper.exec(r, block);
 		}
 
 		@Override
@@ -579,13 +587,13 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 
 								switch (row.getRowType()) {
 								case "timecharter":
-									rowFilter.add(FleetBasedReportBuilder.ROW_FILTER_TIME_CHARTERS.id);
+									rowFilter.add(VesselSummaryReportBuilder.ROW_FILTER_TIME_CHARTERS.id);
 									break;
 								case "spotcharter":
-									rowFilter.add(FleetBasedReportBuilder.ROW_FILTER_SPOT_CHARTER_INS.id);
+									rowFilter.add(VesselSummaryReportBuilder.ROW_FILTER_SPOT_CHARTER_INS.id);
 									break;
 								case "owned":
-									rowFilter.add(FleetBasedReportBuilder.ROW_FILTER_OWNED.id);
+									rowFilter.add(VesselSummaryReportBuilder.ROW_FILTER_OWNED.id);
 									break;
 								}
 							}
@@ -657,7 +665,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 		final EMFReportColumnManager manager = new EMFReportColumnManager();
 
 		// Find any shared column factories and install.
-		final Map<String, IFleetColumnFactory> handlerMap = new HashMap<>();
+		final Map<String, IVesselSummaryColumnFactory> handlerMap = new HashMap<>();
 		if (columnFactoryExtensions != null) {
 			for (final IFleetBasedColumnFactoryExtension ext : columnFactoryExtensions) {
 				final String handlerID = ext.getHandlerID();
@@ -669,7 +677,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 		if (columnExtensions != null) {
 
 			for (final IFleetBasedColumnExtension ext : columnExtensions) {
-				IFleetColumnFactory factory;
+				IVesselSummaryColumnFactory factory;
 				if (ext.getHandlerID() != null) {
 					factory = handlerMap.get(ext.getHandlerID());
 				} else {
@@ -682,7 +690,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 		}
 
 		// Create the actual columns instances.
-		manager.addColumns(FleetBasedReportBuilder.FLEET_REPORT_TYPE_ID, getBlockManager());
+		manager.addColumns(VesselSummaryReportBuilder.VESSEL_SUMMARY_REPORT_TYPE_ID, getBlockManager());
 	}
 
 	// private void createDeltaRowGroup(List<CompositeRow> compositeRows) {

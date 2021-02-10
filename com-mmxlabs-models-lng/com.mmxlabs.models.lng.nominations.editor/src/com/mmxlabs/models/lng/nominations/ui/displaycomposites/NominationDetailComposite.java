@@ -42,7 +42,7 @@ public class NominationDetailComposite extends NominationSpecsDetailComposite im
 					if (label != null) {
 						if (value instanceof AbstractNomination) {
 							AbstractNomination n = (AbstractNomination)value;
-							if (n.getType().toLowerCase().contains("window")) {
+							if (n.getType() != null && n.getType().toLowerCase().contains("window")) {
 								label.setToolTipText("Window nominated values should be in format DD/MM/YYYY +XX[d,h,m] where XX is window size, d = days, h = hours, m = months.");
 							}
 						}

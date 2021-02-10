@@ -17,17 +17,17 @@ import com.mmxlabs.models.lng.schedule.Sequence;
  * @author Simon Goodall
  * 
  */
-public class FleetBasedReportBuilder extends AbstractReportBuilder {
-	public static final String FLEET_REPORT_TYPE_ID = "FLEET_REPORT_TYPE_ID";
+public class VesselSummaryReportBuilder extends AbstractReportBuilder {
+	public static final String VESSEL_SUMMARY_REPORT_TYPE_ID = "FLEET_REPORT_TYPE_ID";
 
 	public static final OptionInfo ROW_FILTER_SPOT_CHARTER_INS = new OptionInfo("ROW_FILTER_SPOT_CHARTER_INS", "Spot", "spotcharter");
 	public static final OptionInfo ROW_FILTER_TIME_CHARTERS = new OptionInfo("ROW_FILTER_TIME_CHARTERS", "Charted", "timecharter");
 	public static final OptionInfo ROW_FILTER_OWNED = new OptionInfo("ROW_FILTER_OWNED", "Owned", "owned");
 
-	/** All filters (note this order is also used in the {@link ConfigurableFleetReportView} dialog */
-	public FleetBasedReportBuilder() {
+	/** All filters (note this order is also used in the {@link ConfigurableVesselSummaryReport} dialog */
+	public VesselSummaryReportBuilder() {
 		ROW_FILTER_ALL = new OptionInfo[] { ROW_FILTER_OWNED, ROW_FILTER_TIME_CHARTERS, ROW_FILTER_SPOT_CHARTER_INS };
-		/** All filters (note this order is also used in the {@link ConfigurableFleetReportView} dialog */
+		/** All filters (note this order is also used in the {@link ConfigurableVesselSummaryReport} dialog */
 		DIFF_FILTER_ALL = new OptionInfo[] { DIFF_FILTER_PINNDED_SCENARIO };
 	}
 

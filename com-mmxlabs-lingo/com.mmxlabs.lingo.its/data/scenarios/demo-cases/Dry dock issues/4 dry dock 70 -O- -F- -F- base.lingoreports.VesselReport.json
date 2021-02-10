@@ -4,7 +4,7 @@
   "Route ($)" : "80,000",
   "Charter ($)" : "23,774,996",
   "Cooldown ($)" : "0",
-  "Charter Out (virtual) delta (change set)" : {
+  "Charter Out (virtual)" : {
     "Days" : "0.0",
     "Revenue" : "0"
   },
@@ -24,7 +24,7 @@
   "Route ($)" : "30,000",
   "Charter ($)" : "0",
   "Cooldown ($)" : "231,198",
-  "Charter Out (virtual) delta (change set)" : {
+  "Charter Out (virtual)" : {
     "Days" : "0.0",
     "Revenue" : "0"
   },
@@ -44,7 +44,7 @@
   "Route ($)" : "30,000",
   "Charter ($)" : "0",
   "Cooldown ($)" : "231,424",
-  "Charter Out (virtual) delta (change set)" : {
+  "Charter Out (virtual)" : {
     "Days" : "0.0",
     "Revenue" : "0"
   },
@@ -64,7 +64,7 @@
   "Route ($)" : "80,000",
   "Charter ($)" : "0",
   "Cooldown ($)" : "231,198",
-  "Charter Out (virtual) delta (change set)" : {
+  "Charter Out (virtual)" : {
     "Days" : "0.0",
     "Revenue" : "0"
   },
@@ -84,7 +84,7 @@
   "Route ($)" : "530,962",
   "Charter ($)" : "0",
   "Cooldown ($)" : "0",
-  "Charter Out (virtual) delta (change set)" : {
+  "Charter Out (virtual)" : {
     "Days" : "0.0",
     "Revenue" : "0"
   },
@@ -104,9 +104,9 @@
   "Route ($)" : "0",
   "Charter ($)" : "24,599,995",
   "Cooldown ($)" : "0",
-  "Charter Out (virtual) delta (change set)" : {
-    "Days" : "0.0",
-    "Revenue" : "0"
+  "Charter Out (virtual)" : {
+    "Days" : "79.4",
+    "Revenue" : "7,941,666"
   },
   "Heel Cost ($)" : "0",
   "Heel Revenue ($)" : "0",
@@ -115,7 +115,7 @@
   "Port ($)" : "80,000",
   "Repositioning fee ($)" : "0",
   "Scenario" : "4 dry dock 70 -O- -F- -F- base",
-  "Sum ($)" : "30,871,464",
-  "Sum - BOG($)" : "24,679,995",
+  "Sum ($)" : "22,929,798",
+  "Sum - BOG($)" : "16,738,329",
   "Vessel" : "Methane Princess (138k)"
 } ]

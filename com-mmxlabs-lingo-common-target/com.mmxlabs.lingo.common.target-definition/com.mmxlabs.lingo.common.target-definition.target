@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><?pde version="3.8"?><target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="69">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><?pde version="3.8"?><target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="70">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.equinox.compendium.sdk.feature.group" version="0.0.0"/>
@@ -108,12 +108,12 @@
 <repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/nebula/widgets/p2/repository/com.mmxlabs.nebula.widgets.p2/1.1.1/com.mmxlabs.nebula.widgets.p2-1.1.1-p2-repo.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.fasterxml.jackson.core.jackson-annotations" version="2.10.0"/>
-<unit id="com.fasterxml.jackson.core.jackson-core" version="2.10.0"/>
-<unit id="com.fasterxml.jackson.core.jackson-databind" version="2.10.0"/>
-<unit id="com.fasterxml.jackson.datatype.jackson-datatype-jsr310" version="2.10.0"/>
-<unit id="com.fasterxml.jackson.datatype.jackson-datatype-jdk8" version="2.10.0"/>
-<unit id="com.fasterxml.jackson.dataformat.jackson-dataformat-csv" version="2.10.0"/>
+<unit id="com.fasterxml.jackson.core.jackson-annotations" version="2.10.5"/>
+<unit id="com.fasterxml.jackson.core.jackson-core" version="2.10.5"/>
+<unit id="com.fasterxml.jackson.core.jackson-databind" version="2.10.5.1"/>
+<unit id="com.fasterxml.jackson.datatype.jackson-datatype-jsr310" version="2.10.5"/>
+<unit id="com.fasterxml.jackson.datatype.jackson-datatype-jdk8" version="2.10.5"/>
+<unit id="com.fasterxml.jackson.dataformat.jackson-dataformat-csv" version="2.10.5"/>
 <unit id="com.google.inject" version="4.2.2"/>
 <unit id="com.googlecode.json-simple" version="1.1.1"/>
 <unit id="com.googlecode.json-simple.source" version="1.1.1.R2"/>
@@ -139,7 +139,7 @@
 <unit id="com.google.guava" version="25.1.0.jre"/>
 <unit id="org.apache.servicemix.bundles.poi" version="0.0.0"/>
 <unit id="org.apache.servicemix.bundles.xmlbeans" version="0.0.0"/>
-<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-external/1.0.31/mmxlabs-external-1.0.31-p2-repo.zip-unzip/"/>
+<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-external/1.0.32/mmxlabs-external-1.0.32-p2-repo.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.models.datetime.feature.feature.group" version="0.0.0"/>

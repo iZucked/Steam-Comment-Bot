@@ -32,11 +32,11 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.scenario.service.ScenarioResult;
 
-public class FleetReportTransformer {
+public class VesselSummaryReportTransformer {
 
-	private final FleetBasedReportBuilder builder;
+	private final VesselSummaryReportBuilder builder;
 
-	public FleetReportTransformer(final FleetBasedReportBuilder builder) {
+	public VesselSummaryReportTransformer(final VesselSummaryReportBuilder builder) {
 		this.builder = builder;
 	}
 

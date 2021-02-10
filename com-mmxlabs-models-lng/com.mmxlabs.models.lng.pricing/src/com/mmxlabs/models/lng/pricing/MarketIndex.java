@@ -22,6 +22,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *   <li>{@link com.mmxlabs.models.lng.pricing.MarketIndex#getFlatCurve <em>Flat Curve</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.MarketIndex#getBidCurve <em>Bid Curve</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.MarketIndex#getOfferCurve <em>Offer Curve</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.MarketIndex#isAutoHedgeEnabled <em>Auto Hedge Enabled</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getMarketIndex()
@@ -150,5 +151,27 @@ public interface MarketIndex extends NamedObject {
 	 * @generated
 	 */
 	void setOfferCurve(CommodityCurve value);
+
+	/**
+	 * Returns the value of the '<em><b>Auto Hedge Enabled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Auto Hedge Enabled</em>' attribute.
+	 * @see #setAutoHedgeEnabled(boolean)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getMarketIndex_AutoHedgeEnabled()
+	 * @model
+	 * @generated
+	 */
+	boolean isAutoHedgeEnabled();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.MarketIndex#isAutoHedgeEnabled <em>Auto Hedge Enabled</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Auto Hedge Enabled</em>' attribute.
+	 * @see #isAutoHedgeEnabled()
+	 * @generated
+	 */
+	void setAutoHedgeEnabled(boolean value);
 
 } // MarketIndex

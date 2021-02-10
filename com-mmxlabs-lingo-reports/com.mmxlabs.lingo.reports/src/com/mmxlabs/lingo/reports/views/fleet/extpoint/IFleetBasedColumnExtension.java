@@ -7,7 +7,7 @@ package com.mmxlabs.lingo.reports.views.fleet.extpoint;
 import org.ops4j.peaberry.eclipse.ExtensionBean;
 import org.ops4j.peaberry.eclipse.MapName;
 
-import com.mmxlabs.lingo.reports.views.fleet.IFleetColumnFactory;
+import com.mmxlabs.lingo.reports.views.fleet.IVesselSummaryColumnFactory;
 
 @ExtensionBean("com.mmxlabs.lingo.reports.FleetBasedColumn")
 public interface IFleetBasedColumnExtension {
@@ -21,6 +21,6 @@ public interface IFleetBasedColumnExtension {
 	// TODO: This does not work, returns null. Peaberry does not seem to hit creation code.
 
 	@MapName("class")
-	IFleetColumnFactory createFactory();
+	IVesselSummaryColumnFactory createFactory();
 
 }
