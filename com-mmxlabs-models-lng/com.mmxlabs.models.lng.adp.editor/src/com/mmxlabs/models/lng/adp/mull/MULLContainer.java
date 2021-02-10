@@ -12,22 +12,23 @@ import java.util.stream.Collectors;
 
 import com.mmxlabs.models.lng.adp.MullEntityRow;
 import com.mmxlabs.models.lng.adp.MullSubprofile;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.fleet.Vessel;
 
 public class MULLContainer {
 	private Inventory inventory;
 	private final int fullCargoLotValue;
-	
+
 	private final List<MUDContainer> mudContainerList;
-	
+
 	public MULLContainer(final MullSubprofile subprofile, final int fullCargoLotValue) {
 		this.inventory = subprofile.getInventory();
 		this.fullCargoLotValue = fullCargoLotValue;
 		final double totalWeight = subprofile.getEntityTable().stream().mapToDouble(MullEntityRow::getRelativeEntitlement).sum();
 		mudContainerList = subprofile.getEntityTable().stream().map(row -> new MUDContainer(row, totalWeight)).collect(Collectors.toList());
 	}
-	
+
 	public MUDContainer calculateMULL(final Map<Vessel, LocalDateTime> vesselToMostRecentUseDateTime, final int defaultAllocationDrop) {
 		return this.mudContainerList.stream().max((Comparator<MUDContainer>) (mc0, mc1) -> {
 				final Long allocation0 = mc0.getRunningAllocation();
@@ -38,7 +39,7 @@ public class MULLContainer {
 				final int beforeDrop1 = mc1.getCurrentMonthAbsoluteEntitlement();
 				final int afterDrop0 = beforeDrop0 - expectedAllocationDrop0;
 				final int afterDrop1 = beforeDrop1 - expectedAllocationDrop1;
-				
+
 				final boolean belowLower0 = afterDrop0 < -fullCargoLotValue;
 				final boolean belowLower1 = afterDrop1 < -fullCargoLotValue;
 				final boolean aboveUpper0 = afterDrop0 > fullCargoLotValue;
@@ -94,16 +95,28 @@ public class MULLContainer {
 				}
 			}).get();
 	}
-	
+
 	public void updateRunningAllocation(final int volumeIn) {
 		this.mudContainerList.stream().forEach(mc -> mc.updateRunningAllocation((long) volumeIn));
 	}
-	
-	public void updateCurrentMonthAbsoluteEntitlement2(final int totalMonthIn) {
+
+	public void updateCurrentMonthAbsoluteEntitlement(final int totalMonthIn) {
 		this.mudContainerList.stream().forEach(mc -> mc.updateCurrentMonthAbsoluteEntitlement(totalMonthIn));
 	}
-	
+
 	public List<MUDContainer> getMUDContainers() {
 		return this.mudContainerList;
+	}
+
+	public void undo(final CargoBlueprint cargoBlueprint) {
+		for (final MUDContainer mudContainer : mudContainerList) {
+			mudContainer.undo(cargoBlueprint);
+		}
+	}
+
+	public void dropFixedLoad(final Cargo cargo) {
+		for (final MUDContainer mudContainer : this.mudContainerList) {
+			mudContainer.dropFixedLoad(cargo);
+		}
 	}
 }

@@ -11,9 +11,12 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.adp.SalesContractAllocationRow;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditingCommands;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -54,5 +57,16 @@ public class SalesContractTracker extends AllocationTracker {
 		dischargeSlot.setName(id);
 		
 		return dischargeSlot;
+	}
+
+	@Override
+	public void dropFixedLoad(Cargo cargo) {
+		final Slot<?> dischargeSlot = cargo.getSlots().get(1);
+		if (!(dischargeSlot instanceof SpotDischargeSlot)) {
+			if (this.salesContract.equals(dischargeSlot.getContract())) {
+				final int expectedVolumeLoaded = cargo.getSlots().get(0).getSlotOrDelegateMaxQuantity();
+				this.runningAllocation -= expectedVolumeLoaded;
+			}
+		}
 	}
 }

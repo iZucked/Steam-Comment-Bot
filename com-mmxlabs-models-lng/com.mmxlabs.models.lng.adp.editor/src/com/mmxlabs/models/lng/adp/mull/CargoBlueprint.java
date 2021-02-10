@@ -113,4 +113,16 @@ public class CargoBlueprint {
 	public int getAllocatedVolume() {
 		return this.allocatedVolume;
 	}
+
+	public BaseLegalEntity getEntity() {
+		return this.entity;
+	}
+
+	public AllocationTracker getAllocationTracker() {
+		return this.dischargeAllocation;
+	}
+
+	public int getLoadCounter() {
+		return this.loadCounter;
+	}
 }
