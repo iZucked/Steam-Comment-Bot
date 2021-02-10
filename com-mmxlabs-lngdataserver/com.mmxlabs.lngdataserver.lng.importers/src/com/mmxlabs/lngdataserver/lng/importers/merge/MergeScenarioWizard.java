@@ -39,6 +39,7 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 	private MergeScenarioWizardDataMapperPage salesContractMapperPage;
 	private MergeScenarioWizardDataMapperPage vesselMapperPage;
 	private MergeScenarioWizardDataMapperPage vesselGroupsMapperPage;
+	private MergeScenarioWizardDataMapperPage routeCostsMapperPage;
 	private MergeScenarioWizardDataMapperPage fobBuySpotMarketsMapperPage;
 	private MergeScenarioWizardDataMapperPage fobSellSpotMarketsMapperPage;
 	private MergeScenarioWizardDataMapperPage desBuySpotMarketsMapperPage;
@@ -98,6 +99,8 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 				s -> ScenarioModelUtil.findReferenceModel(s).getFleetModel().getVesselGroups(), s -> ScenarioModelUtil.getFleetModel(s), 
 				FleetPackage.Literals.FLEET_MODEL__VESSEL_GROUPS); 
 		
+		routeCostsMapperPage = new MergeScenarioWizardRouteCostMapperPage("Map route costs to target");
+		
 		//Vessel charter page.
 		vesselCharterMapperPage = new MergeScenarioWizardVesselAvailabilityMapperPage("Map fleet charters to target");
 		
@@ -148,6 +151,7 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 		
 		addPage(vesselMapperPage);
 		addPage(vesselGroupsMapperPage);
+		addPage(routeCostsMapperPage);
 		addPage(vesselCharterMapperPage);
 		
 		addPage(fobBuySpotMarketsMapperPage);
