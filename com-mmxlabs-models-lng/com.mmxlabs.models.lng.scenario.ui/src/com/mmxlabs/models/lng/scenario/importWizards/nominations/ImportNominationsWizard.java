@@ -41,11 +41,17 @@ public class ImportNominationsWizard extends AbstractImportWizard {
 		else {
 			sb.append("There were problems with the import (perhaps a wrong delimiter character was used): \n");
 			for (final String problem : allProblems) {
-				sb.append("\n- ");
-				sb.append(problem);
+				if (!problem.contains("AddCommand")) {
+					sb.append("- ");
+					sb.append(problem);
+					sb.append("\n");
+				}
+				else {
+					sb.append("- Check file format is correct.\n");
+				}
 			}
 		}
-		sb.append("\nPlease check the error log for more details.");
+		sb.append("\nPlease check the error log for more details.\n");
 		MessageDialog.openWarning(getShell(), "Import Problems", sb.toString());
 	}
 }
