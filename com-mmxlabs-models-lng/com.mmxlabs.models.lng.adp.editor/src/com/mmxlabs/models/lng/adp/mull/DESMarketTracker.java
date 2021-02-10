@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.adp.presentation.views;
+package com.mmxlabs.models.lng.adp.mull;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -10,9 +10,12 @@ import java.util.List;
 import org.eclipse.emf.common.command.Command;
 
 import com.mmxlabs.models.lng.adp.DESSalesMarketAllocationRow;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditingCommands;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
@@ -22,17 +25,17 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class DESMarketTracker extends AllocationTracker {
 	final DESSalesMarket salesMarket;
-	
+
 	public DESMarketTracker(final DESSalesMarketAllocationRow allocationRow, final double totalWeight) {
 		super(allocationRow.getWeight()/totalWeight, allocationRow.getVessels());
 		this.salesMarket = allocationRow.getDesSalesMarket();
 	}
-	
+
 	@Override
 	public int calculateExpectedBoiloff(final Vessel vessel, final int loadDuration) {
 		return this.sharesVessels ? super.calculateExpectedBoiloff(vessel, loadDuration) : 0;
 	}
-	
+
 	@Override
 	public DischargeSlot createDischargeSlot(final CargoEditingCommands cec, List<Command> setCommands, final CargoModel cargoModel, final IScenarioDataProvider sdp, final LoadSlot loadSlot, final Vessel vessel) {
 		final DischargeSlot dischargeSlot;
@@ -59,7 +62,6 @@ public class DESMarketTracker extends AllocationTracker {
 			dischargeSlot.setWindowStartTime(0);
 			dischargeSlot.setWindowSize(1);
 			dischargeSlot.setWindowSizeUnits(TimePeriod.MONTHS);
-			
 			final String id = String.format("fob-sale-%s", loadSlot.getName());
 			dischargeSlot.setName(id);
 			dischargeSlot.setPriceExpression("JKM");
@@ -71,5 +73,17 @@ public class DESMarketTracker extends AllocationTracker {
 				dischargeSlot.setNominatedVessel(vessel);
 		}
 		return dischargeSlot;
+	}
+
+	@Override
+	public void dropFixedLoad(final Cargo cargo) {
+		final Slot<?> dischargeSlot = cargo.getSlots().get(1);
+		if (dischargeSlot instanceof SpotDischargeSlot) {
+			final SpotDischargeSlot spotDischargeSlot = (SpotDischargeSlot) dischargeSlot;
+			if (salesMarket.equals(spotDischargeSlot.getMarket())) {
+				final int expectedVolumeLoaded = cargo.getSlots().get(0).getSlotOrDelegateMaxQuantity();
+				this.runningAllocation -= expectedVolumeLoaded;
+			}
+		}
 	}
 }

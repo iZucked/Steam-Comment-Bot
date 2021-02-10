@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.adp.presentation.views;
+package com.mmxlabs.models.lng.adp.mull;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -112,5 +112,17 @@ public class CargoBlueprint {
 
 	public int getAllocatedVolume() {
 		return this.allocatedVolume;
+	}
+
+	public BaseLegalEntity getEntity() {
+		return this.entity;
+	}
+
+	public AllocationTracker getAllocationTracker() {
+		return this.dischargeAllocation;
+	}
+
+	public int getLoadCounter() {
+		return this.loadCounter;
 	}
 }

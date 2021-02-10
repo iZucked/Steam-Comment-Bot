@@ -81,6 +81,7 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.lingo.reports.views.standard.inventory.ColourSequence;
 import com.mmxlabs.lingo.reports.views.standard.inventory.InventoryLevel;
 import com.mmxlabs.lingo.reports.views.standard.inventory.MullDailyInformation;
 import com.mmxlabs.lingo.reports.views.standard.inventory.MullInformation;
@@ -612,49 +613,50 @@ public class InventoryReport extends ViewPart {
 																	}
 																});
 													}
-													final ScheduleModel otherScheduleModel = otherResult.getTypedResult(ScheduleModel.class);
-													final Schedule otherSchedule = otherScheduleModel.getSchedule();
 													final List<MullInformation> otherMullList = new LinkedList<>();
 													final List<MullDailyInformation> otherMullDailyList = new LinkedList<>();
-													if (otherSchedule != null) {
-														final LNGScenarioModel otherLngScenarioModel = (LNGScenarioModel) otherResult.getRootObject();
-														final ADPModel otherADPModel = otherLngScenarioModel.getAdpModel();
-														final Inventory otherInventory = otherLngScenarioModel.getCargoModel().getInventoryModels().stream().filter(i -> i.getName().equals(inventory.getName())).findAny().get();
-														
-														final MullSubprofile otherSProfile = otherADPModel.getMullProfile().getInventories().stream().filter(s -> s.getInventory().equals(otherInventory)).findAny().get();
-														final Port otherInventoryLoadPort = otherInventory.getPort();
-														
-														final List<CargoAllocation> otherCargoAllocations = otherSchedule.getCargoAllocations();
-														
-														fillMullInformationList(adpStart, adpEnd, entitiesOrdered, otherSProfile, monthlyProduction, otherInventoryLoadPort, otherCargoAllocations, otherMullList, otherLngScenarioModel);
-														
-														final List<CargoAllocation> sortedOtherCargoAllocations = otherCargoAllocations.stream() //
-																.filter(c->c.getSlotAllocations().get(0).getPort().equals(otherInventoryLoadPort)) //
-																.sorted((c1, c2) -> c1.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate().compareTo(c2.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate())) //
-																.collect(Collectors.toList());
-														
-														final Map<BaseLegalEntity, Integer> initialAllocation = calculateInitialAllocation(otherSProfile);
-														
-														final Map<BaseLegalEntity, BaseLegalEntity> entityEntityMap = buildEntityEntityMap(otherLngScenarioModel, entitiesOrdered);
-														final Map<BaseLegalEntity, BaseLegalEntity> reverseEntityEntityMap = new HashMap<>();
-														for (final Entry<BaseLegalEntity, BaseLegalEntity> entry : entityEntityMap.entrySet()) {
-															reverseEntityEntityMap.put(entry.getValue(), entry.getKey());
-														}
-														final Map<LocalDate, Map<BaseLegalEntity, Integer>> otherAllocatedEntitlement = calculateDailyAllocatedEntitlement(insAndOuts, relativeEntitlements, entityEntityMap, reverseEntityEntityMap);
-														final List<BaseLegalEntity> otherEntities = otherSProfile.getEntityTable().stream().map(MullEntityRow::getEntity).collect(Collectors.toList());
-														final Map<LocalDate, Map<BaseLegalEntity, Integer>> otherActualEntitlement = calculateDailyActualEntitlement(otherEntities, sortedOtherCargoAllocations, insAndOuts, otherAllocatedEntitlement, initialAllocation);
-														boolean grey = false;
-														for (final Entry<LocalDate, InventoryDailyEvent> e : insAndOuts.entrySet()) {
-															for (BaseLegalEntity entity : entitiesOrdered) {
-																final MullDailyInformation currRow = new MullDailyInformation();
-																currRow.date = e.getKey();
-																currRow.entity = entity;
-																currRow.allocatedEntitlement = otherAllocatedEntitlement.get(currRow.getDate()).get(entityEntityMap.get(entity));
-																currRow.actualEntitlement = otherActualEntitlement.get(currRow.getDate()).get(entityEntityMap.get(entity));
-																currRow.grey = grey;
-																otherMullDailyList.add(currRow);
+													if (otherResult != null) {
+														final ScheduleModel otherScheduleModel = otherResult.getTypedResult(ScheduleModel.class);
+														final Schedule otherSchedule = otherScheduleModel.getSchedule();
+														if (otherSchedule != null) {
+															final LNGScenarioModel otherLngScenarioModel = (LNGScenarioModel) otherResult.getRootObject();
+															final ADPModel otherADPModel = otherLngScenarioModel.getAdpModel();
+															final Inventory otherInventory = otherLngScenarioModel.getCargoModel().getInventoryModels().stream().filter(i -> i.getName().equals(inventory.getName())).findAny().get();
+
+															final MullSubprofile otherSProfile = otherADPModel.getMullProfile().getInventories().stream().filter(s -> s.getInventory().equals(otherInventory)).findAny().get();
+															final Port otherInventoryLoadPort = otherInventory.getPort();
+
+															final List<CargoAllocation> otherCargoAllocations = otherSchedule.getCargoAllocations();
+															fillMullInformationList(adpStart, adpEnd, entitiesOrdered, otherSProfile, monthlyProduction, otherInventoryLoadPort, otherCargoAllocations, otherMullList, otherLngScenarioModel);
+
+															final List<CargoAllocation> sortedOtherCargoAllocations = otherCargoAllocations.stream() //
+																	.filter(c->c.getSlotAllocations().get(0).getPort().equals(otherInventoryLoadPort)) //
+																	.sorted((c1, c2) -> c1.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate().compareTo(c2.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate())) //
+																	.collect(Collectors.toList());
+
+															final Map<BaseLegalEntity, Integer> initialAllocation = calculateInitialAllocation(otherSProfile);
+
+															final Map<BaseLegalEntity, BaseLegalEntity> entityEntityMap = buildEntityEntityMap(otherLngScenarioModel, entitiesOrdered);
+															final Map<BaseLegalEntity, BaseLegalEntity> reverseEntityEntityMap = new HashMap<>();
+															for (final Entry<BaseLegalEntity, BaseLegalEntity> entry : entityEntityMap.entrySet()) {
+																reverseEntityEntityMap.put(entry.getValue(), entry.getKey());
 															}
-															grey = !grey;
+															final Map<LocalDate, Map<BaseLegalEntity, Integer>> otherAllocatedEntitlement = calculateDailyAllocatedEntitlement(insAndOuts, relativeEntitlements, entityEntityMap, reverseEntityEntityMap);
+															final List<BaseLegalEntity> otherEntities = otherSProfile.getEntityTable().stream().map(MullEntityRow::getEntity).collect(Collectors.toList());
+															final Map<LocalDate, Map<BaseLegalEntity, Integer>> otherActualEntitlement = calculateDailyActualEntitlement(otherEntities, sortedOtherCargoAllocations, insAndOuts, otherAllocatedEntitlement, initialAllocation);
+															boolean grey = false;
+															for (final Entry<LocalDate, InventoryDailyEvent> e : insAndOuts.entrySet()) {
+																for (BaseLegalEntity entity : entitiesOrdered) {
+																	final MullDailyInformation currRow = new MullDailyInformation();
+																	currRow.date = e.getKey();
+																	currRow.entity = entity;
+																	currRow.allocatedEntitlement = otherAllocatedEntitlement.get(currRow.getDate()).get(entityEntityMap.get(entity));
+																	currRow.actualEntitlement = otherActualEntitlement.get(currRow.getDate()).get(entityEntityMap.get(entity));
+																	currRow.grey = grey;
+																	otherMullDailyList.add(currRow);
+																}
+																grey = !grey;
+															}
 														}
 													}
 													
@@ -759,17 +761,8 @@ public class InventoryReport extends ViewPart {
 												final List<String> monthsList = monthsToDisplay.stream().map(ym -> ym.format(categoryFormatter)).collect(Collectors.toList());
 												final String[] temp = new String[0];
 												final String[] formattedMonthLabels = monthsList.toArray(temp);
-												
-												final List<Integer> colours = new LinkedList<>();
-												colours.add(SWT.COLOR_BLUE);
-												colours.add(SWT.COLOR_GREEN);
-												colours.add(SWT.COLOR_RED);
-												colours.add(SWT.COLOR_CYAN);
-												colours.add(SWT.COLOR_GRAY);
-												colours.add(SWT.COLOR_MAGENTA);
-												
-												setMULLChartData(mullMonthlyOverliftChart, formattedMonthLabels, entitiesOrdered, pairedMullList, MullInformation::getOverliftCF, colours);
-												setMULLChartData(mullMonthlyCargoCountChart, formattedMonthLabels, entitiesOrdered, pairedMullList, MullInformation::getCargoCount, colours);
+												setMULLChartData(mullMonthlyOverliftChart, formattedMonthLabels, entitiesOrdered, pairedMullList, MullInformation::getOverliftCF, ColourSequence.getColourSequence());
+												setMULLChartData(mullMonthlyCargoCountChart, formattedMonthLabels, entitiesOrdered, pairedMullList, MullInformation::getCargoCount, ColourSequence.getColourSequence());
 											}
 										}
 									}
@@ -1817,7 +1810,7 @@ public class InventoryReport extends ViewPart {
 		chart.redraw();
 	}
 
-	private void setMULLChartData(final Chart chart, final String[] xCategoryLabels, final List<BaseLegalEntity> entitiesOrdered, final List<Pair<MullInformation,MullInformation>> pairedMullList, final ToIntFunction<MullInformation> valueExtractor, final List<Integer> colours) {
+	private void setMULLChartData(final Chart chart, final String[] xCategoryLabels, final List<BaseLegalEntity> entitiesOrdered, final List<Pair<MullInformation,MullInformation>> pairedMullList, final ToIntFunction<MullInformation> valueExtractor, final int[] hexColours) {
 		chart.getAxisSet().getXAxis(0).enableCategory(true);
 		chart.getAxisSet().getXAxis(0).setCategorySeries(xCategoryLabels);
 	
@@ -1834,20 +1827,25 @@ public class InventoryReport extends ViewPart {
 			}
 		}
 
-		final Iterator<Integer> colIter = colours.iterator();
+		int colourIndex = 0;
 		for (final BaseLegalEntity entity : entitiesOrdered) {
 			final List<Integer> intSeries = barSeriesData.get(entity);
 			final double[] doubleSeries = new double[intSeries.size()];
-			int ii = 0;
+			int seriesIndex = 0;
 			final Iterator<Integer> iterIntSeries = intSeries.iterator();
 			while(iterIntSeries.hasNext()) {
-				doubleSeries[ii] = iterIntSeries.next().doubleValue();
-				++ii;
+				doubleSeries[seriesIndex] = iterIntSeries.next().doubleValue();
+				++seriesIndex;
 			}
 			IBarSeries currentEntitySeries = (IBarSeries) chart.getSeriesSet().createSeries(SeriesType.BAR, entity.getName());
 			currentEntitySeries.setYSeries(doubleSeries);
-			final Integer currentCol = colIter.next();
-			currentEntitySeries.setBarColor(Display.getDefault().getSystemColor(currentCol));
+			final int currentCol = hexColours[colourIndex];
+			final int r = (currentCol & 0xFF0000) >> 16;
+			final int g = (currentCol & 0xFF00) >> 8;
+			final int b = (currentCol & 0xFF);
+			currentEntitySeries.setBarColor(new Color(Display.getDefault(), r, g, b));
+			++colourIndex;
+			colourIndex %= hexColours.length;
 		}
 	}
 }
