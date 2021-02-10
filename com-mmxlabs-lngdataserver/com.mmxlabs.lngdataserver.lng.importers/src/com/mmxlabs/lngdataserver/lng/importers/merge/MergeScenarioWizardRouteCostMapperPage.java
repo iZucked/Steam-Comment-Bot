@@ -23,22 +23,6 @@ public class MergeScenarioWizardRouteCostMapperPage extends AbstractEObjectMerge
 	}
 
 	@Override
-	protected List<String> getItemNames(LNGScenarioModel sm, NamedObjectListGetter namedItemsGetter) {
-		List<String> names = new ArrayList<>();
-		if (sm != null) {
-			List<RouteCost> routeCosts = ScenarioModelUtil.findReferenceModel(sm).getCostModel().getRouteCosts();
-			for (var rc : routeCosts) {
-				if (rc.getRouteOption() != null || rc.getVessels() != null) {
-					names.add(this.getName(rc));
-				} else {
-					names.add("Unknown route cost.");
-				}
-			}
-		}
-		return names;
-	}
-
-	@Override
 	protected String getName(Object o) {
 		if (o instanceof RouteCost) {
 			var rc = (RouteCost) o;

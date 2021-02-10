@@ -1,5 +1,6 @@
 package com.mmxlabs.lngdataserver.lng.importers.merge;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,8 +34,20 @@ public abstract class AbstractEObjectMergeScenarioWizardDataMapperPage extends M
 	}
 
 	@Override
-	protected abstract List<String> getItemNames(LNGScenarioModel sm, NamedObjectListGetter namedItemsGetter);
+	protected List<String> getItemNames(LNGScenarioModel sm, NamedObjectListGetter namedItemsGetter) {
+		List<? extends EObject> objects = this.getEObjects(sm);
+		List<String> names = new ArrayList<>();
+		
+		for (EObject eObj : objects) {
+			String name = getName(eObj);
+			names.add(name);
+		}
+		
+		return names;
+	}
 
+	//Also override String getName(Object) - not added as an abstract method so you can still call super.getName(Object).
+	
 	@Override
 	protected abstract List<? extends EObject> getEObjects(LNGScenarioModel sm);
 }

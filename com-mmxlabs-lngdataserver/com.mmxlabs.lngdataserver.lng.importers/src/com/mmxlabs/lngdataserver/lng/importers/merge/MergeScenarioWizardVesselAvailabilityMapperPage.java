@@ -55,22 +55,6 @@ public class MergeScenarioWizardVesselAvailabilityMapperPage extends AbstractEOb
 	}
 
 	@Override
-	protected List<String> getItemNames(LNGScenarioModel sm, NamedObjectListGetter namedItemsGetter) {
-		List<String> names = new ArrayList<>();
-		if (sm != null) {
-			List<VesselAvailability> vas = sm.getCargoModel().getVesselAvailabilities();
-			for (var va : vas) {
-				if (va.getVessel() != null) {
-					names.add(this.getName(va));
-				} else {
-					names.add("Unknown charter vessel.");
-				}
-			}
-		}
-		return names;
-	}
-
-	@Override
 	protected String getName(Object o) {
 		if (o instanceof VesselAvailability) {
 			var va = (VesselAvailability) o;

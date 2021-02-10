@@ -1,10 +1,8 @@
 package com.mmxlabs.lngdataserver.lng.importers.merge;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -15,19 +13,6 @@ public class MergeScenarioWizardBaseFuelCostMapperPage extends AbstractEObjectMe
 
 	protected MergeScenarioWizardBaseFuelCostMapperPage(String title) {
 		super(title, s -> ScenarioModelUtil.getCostModel(s), PricingPackage.Literals.COST_MODEL__BASE_FUEL_COSTS);
-	}
-
-	@Override
-	protected List<String> getItemNames(LNGScenarioModel sm, NamedObjectListGetter namedItemsGetter) {
-		List<? extends EObject> objects = this.getEObjects(sm);
-		List<String> names = new ArrayList<>();
-		
-		for (EObject eObj : objects) {
-			String name = getName(eObj);
-			names.add(name);
-		}
-		
-		return names;
 	}
 
 	@Override
@@ -45,5 +30,4 @@ public class MergeScenarioWizardBaseFuelCostMapperPage extends AbstractEObjectMe
 	protected List<? extends EObject> getEObjects(LNGScenarioModel sm) {
 		return sm.getReferenceModel().getCostModel().getBaseFuelCosts();
 	}
-
 }
