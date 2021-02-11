@@ -6,6 +6,7 @@ package com.mmxlabs.lngdataserver.lng.importers.merge;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -248,27 +249,33 @@ public class MergeHelper implements Closeable {
 		for (VesselAvailability v : sourceVas) {
 			Optional<VesselAvailability> tva = targetVas.stream().filter(va -> va.getVessel().getName().equals(v.getVessel().getName())).findFirst();
 
+			LocalDateTime endBy, endAfter, startBy, startAfter;
+			
 			if (tva.isPresent()) {
 				//Check end by is latest one.
 				if (tva.get().isSetEndBy() && v.isSetEndBy() && tva.get().getEndBy().isBefore(v.getEndBy())) {
 					if (v.isSetEndBy()) {
 						cmd.append(SetCommand.create(editingDomain, tva.get(), CargoPackage.Literals.VESSEL_AVAILABILITY__END_BY, v.getEndBy()));
+						endBy = v.getEndBy();
 					}
 				}
 				if (tva.get().isSetEndAfter() && v.isSetEndAfter() && tva.get().getEndAfter().isBefore(v.getEndAfter())) {
 					if (v.isSetEndAfter()) {
 						cmd.append(SetCommand.create(editingDomain, tva.get(), CargoPackage.Literals.VESSEL_AVAILABILITY__END_AFTER, v.getEndAfter()));
+						endAfter = v.getEndAfter();
 					}
 				}
 				//Check start after 
 				if (tva.get().isSetStartBy() && v.isSetStartBy() && tva.get().getStartBy().isAfter(v.getStartBy())) {
 					if (v.isSetStartBy()) {
 						cmd.append(SetCommand.create(editingDomain, tva.get(), CargoPackage.Literals.VESSEL_AVAILABILITY__START_BY, v.getStartBy()));
+						startBy = v.getStartBy();
 					}
 				}
 				if (tva.get().isSetStartAfter() && v.isSetStartAfter() && tva.get().getStartAfter().isAfter(v.getStartAfter())) {
 					if (v.isSetStartAfter()) {
 						cmd.append(SetCommand.create(editingDomain, tva.get(), CargoPackage.Literals.VESSEL_AVAILABILITY__START_AFTER, v.getStartAfter()));
+						startAfter = v.getStartAfter();
 					}
 				}
 			}
