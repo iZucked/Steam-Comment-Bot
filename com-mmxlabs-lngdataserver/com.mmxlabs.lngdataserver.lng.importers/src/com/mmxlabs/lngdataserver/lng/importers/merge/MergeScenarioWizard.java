@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
@@ -41,6 +42,7 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 	private MergeScenarioWizardDataMapperPage baseFuelCostMapperPage;
 	private MergeScenarioWizardDataMapperPage vesselGroupsMapperPage;
 	private MergeScenarioWizardDataMapperPage routeCostsMapperPage;
+	private MergeScenarioWizardDataMapperPage portsMapperPage;
 	private MergeScenarioWizardDataMapperPage fobBuySpotMarketsMapperPage;
 	private MergeScenarioWizardDataMapperPage fobSellSpotMarketsMapperPage;
 	private MergeScenarioWizardDataMapperPage desBuySpotMarketsMapperPage;
@@ -103,6 +105,12 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 		
 		routeCostsMapperPage = new MergeScenarioWizardRouteCostMapperPage("Map route costs to target");
 		
+		//Ports mapper page
+		portsMapperPage = new MergeScenarioWizardDataMapperPage("Map ports to target", 
+				s -> ScenarioModelUtil.findReferenceModel(s).getPortModel().getPorts(), s -> ScenarioModelUtil.getPortModel(s), 
+				PortPackage.Literals.PORT_MODEL__PORTS); 
+		//TODO Port groups etc
+		
 		//Vessel charter page.
 		vesselCharterMapperPage = new MergeScenarioWizardVesselAvailabilityMapperPage("Map fleet charters to target");
 		
@@ -155,6 +163,7 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 		addPage(baseFuelCostMapperPage);
 		addPage(vesselGroupsMapperPage);
 		addPage(routeCostsMapperPage);
+		addPage(portsMapperPage);
 		addPage(vesselCharterMapperPage);
 		
 		addPage(fobBuySpotMarketsMapperPage);
