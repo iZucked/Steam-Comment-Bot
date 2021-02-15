@@ -11,31 +11,10 @@ import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.SupportedReportFor
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.DefaultReportContent;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportContent;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.IReportPublisherExtension;
-import com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions.UnsupportedReportException;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
-import com.mmxlabs.scenario.service.ScenarioResult;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
 public class ExposuresReportPublisher implements IReportPublisherExtension {
-
-	@Override
-	public IReportContent publishReport(final SupportedReportFormats supportedFormats, final ScenarioInstance scenarioInstance, final IScenarioDataProvider scenarioDataProvider,
-			final ScheduleModel scheduleModel) throws Exception {
-
-		final List<String> versions = supportedFormats.getVersionsFor(getReportType());
-
-		if (versions.isEmpty() || versions.contains("1")) {
-
-			final List<ExposuresReportModel> models = ExposuresReportJSONGenerator.createReportData(scheduleModel, scenarioDataProvider);
-
-			final ObjectMapper objectMapper = new ObjectMapper();
-			final String content = objectMapper.writeValueAsString(models);
-			return new DefaultReportContent(getReportType(), "1", content);
-		}
-		throw new UnsupportedReportException();
-	}
 
 	@Override
 	public String getReportType() {
