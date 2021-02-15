@@ -27,9 +27,8 @@ public class ExposuresReportPublisher implements IReportPublisherExtension {
 		final List<String> versions = supportedFormats.getVersionsFor(getReportType());
 
 		if (versions.isEmpty() || versions.contains("1")) {
-			final ScenarioResult sr = new ScenarioResultImpl(scenarioInstance, scheduleModel);
 
-			final List<ExposuresReportModel> models = ExposuresReportJSONGenerator.createReportData(scheduleModel, scenarioDataProvider, sr);
+			final List<ExposuresReportModel> models = ExposuresReportJSONGenerator.createReportData(scheduleModel, scenarioDataProvider);
 
 			final ObjectMapper objectMapper = new ObjectMapper();
 			final String content = objectMapper.writeValueAsString(models);
@@ -45,6 +44,17 @@ public class ExposuresReportPublisher implements IReportPublisherExtension {
 
 	@Override
 	public IReportContent publishReport(final SupportedReportFormats supportedFormats, final IScenarioDataProvider scenarioDataProvider, final ScheduleModel scheduleModel) throws Exception {
+		final List<String> versions = supportedFormats.getVersionsFor(getReportType());
+
+		if (versions.isEmpty() || versions.contains("1")) {
+
+			final List<ExposuresReportModel> models = ExposuresReportJSONGenerator.createReportData(scheduleModel, scenarioDataProvider);
+
+			final ObjectMapper objectMapper = new ObjectMapper();
+			final String content = objectMapper.writeValueAsString(models);
+			return new DefaultReportContent(getReportType(), "1", content);
+		}
+		
 		throw new UnsupportedOperationException();
 	}
 }

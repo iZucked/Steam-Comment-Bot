@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.exposures.ExposureEnumerations.AggregationMode;
 import com.mmxlabs.common.exposures.ExposureEnumerations.ValueMode;
@@ -49,14 +50,14 @@ public class ExposuresTransformer {
 	 * @param filterOn
 	 * @return
 	 */
-	public static IndexExposureData getExposuresByMonth(ScenarioResult scenarioResult, final @NonNull Schedule schedule, final @NonNull YearMonth date, final ValueMode mode,
+	public static IndexExposureData getExposuresByMonth(final @Nullable ScenarioResult scenarioResult, final @NonNull IScenarioDataProvider scenarioDataProvider, final @NonNull Schedule schedule, // 
+			final @NonNull YearMonth date, final ValueMode mode, //
 			final Collection<Object> filterOn, final String selectedEntity, final int selectedFiscalYear, final AssetType selectedAssetType, final boolean showGenerated) {
 
 		final Map<String, Double> result = new HashMap<>();
 		final Map<String, Map<String, Double>> dealMap = new HashMap<>();
 
-		final IScenarioDataProvider sdp = scenarioResult.getScenarioDataProvider();
-		final PricingModel pm = ScenarioModelUtil.getPricingModel(sdp);
+		final PricingModel pm = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
 		if (selectedAssetType != AssetType.PAPER && selectedAssetType != AssetType.FINANCIAL) {
 			for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
 				for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
@@ -195,7 +196,7 @@ public class ExposuresTransformer {
 				}
 			}
 		}
-		return addDealSetData(new IndexExposureData(scenarioResult, schedule, date, result, dealMap), scenarioResult);
+		return addDealSetData(new IndexExposureData(scenarioResult, schedule, date, result, dealMap), scenarioDataProvider);
 	}
 
 	public static List<IndexExposureData> aggregateBy(final AggregationMode viewMode, final List<IndexExposureData> data, final @NonNull ScenarioResult scenarioResult) {
@@ -215,9 +216,8 @@ public class ExposuresTransformer {
 		}
 	}
 
-	protected static IndexExposureData addDealSetData(final IndexExposureData ied, final @NonNull ScenarioResult scenarioResult) {
-		final IScenarioDataProvider sdp = scenarioResult.getScenarioDataProvider();
-		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
+	protected static IndexExposureData addDealSetData(final IndexExposureData ied, final @NonNull IScenarioDataProvider scenarioDataProvider) {
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
 		final List<DealSet> dealSets = cargoModel.getDealSets();
 
 		if (ied.children == null) {
