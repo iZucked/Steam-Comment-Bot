@@ -59,7 +59,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 
 	private static final Logger log = LoggerFactory.getLogger(BasicAttributeInlineEditor.class);
 
-	private final Set<IInlineEditorExternalNotificationListener> listeners = new HashSet<IInlineEditorExternalNotificationListener>();
+	private final Set<IInlineEditorExternalNotificationListener> listeners = new HashSet<>();
 
 	/**
 	 * Adapter factory instance. This contains all factories registered in the global registry.
@@ -373,7 +373,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	 * @param status
 	 * @return
 	 */
-	private int checkStatus(final IStatus status, int currentSeverity, final StringBuilder sb) {
+	protected int checkStatus(final IStatus status, int currentSeverity, final StringBuilder sb) {
 		if (status.isMultiStatus()) {
 			final IStatus[] children = status.getChildren();
 			for (final IStatus element : children) {
