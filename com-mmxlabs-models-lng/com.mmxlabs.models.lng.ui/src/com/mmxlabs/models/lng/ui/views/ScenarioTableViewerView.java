@@ -11,6 +11,7 @@ import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.action.RedoAction;
 import org.eclipse.emf.edit.ui.action.UndoAction;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.ToolBarManager;
@@ -61,20 +62,20 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 		listenToScenarioSelection();
 	}
 
-	protected abstract T createViewerPane();
+	protected abstract @NonNull T createViewerPane();
 
 	protected abstract void initViewerPane(T pane);
 
 	@Override
-	protected void displayScenarioInstance(final ScenarioInstance instance, @Nullable MMXRootObject rootObject, @Nullable Object targetObject) {
+	protected void displayScenarioInstance(final ScenarioInstance instance, @Nullable final MMXRootObject rootObject, @Nullable final Object targetObject) {
 
 		// Clear existing settings
 		updateActions(null);
 		if (instance != getScenarioInstance()) {
 			cleanUpInstance(instance);
+
 			// Pin the reference
-			@Nullable
-			final T nViewerPane = viewerPane;
+			final @Nullable T nViewerPane = viewerPane;
 			if (nViewerPane != null) {
 				getSite().setSelectionProvider(null);
 				nViewerPane.dispose();
@@ -136,8 +137,7 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 
 	@Override
 	public void setFocus() {
-		@Nullable
-		T pViewerPane = viewerPane;
+		final @Nullable T pViewerPane = viewerPane;
 		if (pViewerPane != null) {
 			pViewerPane.setFocus();
 		} else if (childComposite != null) {
@@ -148,8 +148,7 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 
 	@Override
 	public void setLocked(final boolean locked) {
-		@Nullable
-		T pViewerPane = viewerPane;
+		final @Nullable T pViewerPane = viewerPane;
 		if (pViewerPane != null) {
 			pViewerPane.setLocked(locked);
 		}
@@ -170,8 +169,7 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 	 * @see org.eclipse.jface.viewers.Viewer#setSelection(org.eclipse.jface.viewers.ISelection, boolean)
 	 */
 	protected void setSelection(final ISelection selection, final boolean reveal) {
-		@Nullable
-		T pViewerPane = viewerPane;
+		final @Nullable T pViewerPane = viewerPane;
 		if (pViewerPane != null) {
 			pViewerPane.getScenarioViewer().setSelection(selection, reveal);
 		}
@@ -185,7 +183,7 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 
 	@Override
 	public void dispose() {
-		CommandStack pCurrentCommandStack = currentCommandStack;
+		final CommandStack pCurrentCommandStack = currentCommandStack;
 		if (pCurrentCommandStack != null) {
 			pCurrentCommandStack.removeCommandStackListener(this);
 			currentCommandStack = null;

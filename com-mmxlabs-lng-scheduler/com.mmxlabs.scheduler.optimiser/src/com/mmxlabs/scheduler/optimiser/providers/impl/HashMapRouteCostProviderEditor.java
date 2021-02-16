@@ -9,27 +9,35 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ILongCurve;
+import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProviderEditor;
 
+@NonNullByDefault
 public class HashMapRouteCostProviderEditor implements IRouteCostProviderEditor {
 
-	private final Map<ERouteOption, Map<IVessel, EnumMap<CostType, ILongCurve>>> pricesByRouteClassAndState = new HashMap<>();
+	private final Map<ERouteOption, Map<IVessel, EnumMap<CostType, ILongCurve>>> pricesByRouteClassAndState = new EnumMap<>(ERouteOption.class);
 
-	private final Map<ERouteOption, ILongCurve> defaultPrices = new HashMap<>();
+	private final Map<ERouteOption, ILongCurve> defaultPrices = new EnumMap<>(ERouteOption.class);
 
-	private final Map<ERouteOption, Map<IVessel, Integer>> travelTimesByRouteAndClass = new HashMap<>();
-	private final Map<ERouteOption, Map<IVessel, EnumMap<VesselState, Long>>> baseFuelByRouteAndClass = new HashMap<>();
-	private final Map<ERouteOption, Map<IVessel, EnumMap<VesselState, Long>>> nboRateByRouteAndClass = new HashMap<>();
+	private final Map<ERouteOption, Map<IVessel, Integer>> travelTimesByRouteAndClass = new EnumMap<>(ERouteOption.class);
+	private final Map<ERouteOption, Map<IVessel, EnumMap<VesselState, Long>>> baseFuelByRouteAndClass = new EnumMap<>(ERouteOption.class);
+	private final Map<ERouteOption, Map<IVessel, EnumMap<VesselState, Long>>> nboRateByRouteAndClass = new EnumMap<>(ERouteOption.class);
+
+	private final Map<Pair<IPort, IPort>, Long> suezRouteRebate = new HashMap<>();
 
 	/**
 	 */
 	@Override
-	public long getRouteCost(final @NonNull ERouteOption route, final @NonNull IVessel vessel, final int voyageStartTime, final @NonNull CostType vesselState) {
+	public long getRouteCost(final ERouteOption route, final IPort from, final IPort to, final IVessel vessel, final int voyageStartTime, final CostType vesselState) {
 
 		// Special case DIRECT
 		if (route == ERouteOption.DIRECT) {
@@ -43,7 +51,18 @@ public class HashMapRouteCostProviderEditor implements IRouteCostProviderEditor 
 
 		}
 		if (cost != null) {
-			return cost.getValueAtPoint(voyageStartTime);
+			final long canalCost = cost.getValueAtPoint(voyageStartTime);
+
+			// Apply Suez voyage based rebate factor if present for port pair.
+			if (route == ERouteOption.SUEZ) {
+				final Long rebatePercentage = suezRouteRebate.get(Pair.of(from, to));
+				if (rebatePercentage != null) {
+					long rebate = Calculator.getShareOfValue(rebatePercentage, canalCost);
+					return canalCost - rebate;
+				}
+			}
+
+			return canalCost;
 		}
 		return 0L;
 	}
@@ -106,7 +125,7 @@ public class HashMapRouteCostProviderEditor implements IRouteCostProviderEditor 
 	private <T, U extends Enum<U>> void set(final Map<ERouteOption, Map<IVessel, EnumMap<U, T>>> map, final @NonNull ERouteOption route, final @NonNull IVessel vessel, final @NonNull U vesselState,
 			final T value, final Class<U> enumClass) {
 		if (!map.containsKey(route)) {
-			final EnumMap<U, T> single = new EnumMap<U, T>(enumClass);
+			final EnumMap<U, T> single = new EnumMap<>(enumClass);
 			single.put(vesselState, value);
 			final HashMap<IVessel, EnumMap<U, T>> byV = new HashMap<>();
 			byV.put(vessel, single);
@@ -116,15 +135,15 @@ public class HashMapRouteCostProviderEditor implements IRouteCostProviderEditor 
 			if (byV.containsKey(vessel)) {
 				byV.get(vessel).put(vesselState, value);
 			} else {
-				final EnumMap<U, T> single = new EnumMap<U, T>(enumClass);
+				final EnumMap<U, T> single = new EnumMap<>(enumClass);
 				single.put(vesselState, value);
 				byV.put(vessel, single);
 			}
 		}
 	}
 
-	private <T, U extends Enum<U>> T get(final Map<ERouteOption, Map<IVessel, EnumMap<U, T>>> map, final @NonNull ERouteOption route, final @NonNull IVessel vessel, final @NonNull U vesselState,
-			final T defaultValue) {
+	private <T, U extends Enum<U>> @Nullable T get(final Map<ERouteOption, Map<IVessel, EnumMap<U, T>>> map, final ERouteOption route, final IVessel vessel, final @NonNull U vesselState,
+			final @Nullable T defaultValue) {
 		{
 			final Map<IVessel, EnumMap<U, T>> byVessel = map.get(route);
 			if (byVessel != null) {
@@ -140,5 +159,12 @@ public class HashMapRouteCostProviderEditor implements IRouteCostProviderEditor 
 			}
 		}
 		return defaultValue;
+	}
+
+	/**
+	 */
+	@Override
+	public void setSuezRouteRebateFactor(final @NonNull IPort from, final @NonNull IPort to, long factor) {
+		suezRouteRebate.put(Pair.of(from, to), factor);
 	}
 }

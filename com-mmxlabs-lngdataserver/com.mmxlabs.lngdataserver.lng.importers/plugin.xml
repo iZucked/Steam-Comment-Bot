@@ -148,6 +148,10 @@
             </and>
          </enabledWhen>
       </handler>
+      <handler
+            class="com.mmxlabs.lngdataserver.lng.importers.canalcosts.SuezRebateUpdateCommandHandler"
+            commandId="com.mmxlabs.datahub.update.suezRebate">
+      </handler>
 </extension>          
 <extension
       point="org.eclipse.ui.menus">
@@ -315,7 +319,12 @@
       </command>
       <command
             commandId="com.mmxlabs.datahub.update.canalCosts"
-            label="Update Canal Costs"
+            label="Reset Canal Costs"
+            style="push">
+      </command>
+      <command
+            commandId="com.mmxlabs.datahub.update.suezRebate"
+            label="Reset Suez Rebates"
             style="push">
       </command>
    </menuContribution>

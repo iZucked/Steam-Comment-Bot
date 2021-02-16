@@ -1,0 +1,40 @@
+{
+	"@class": "SuezCanalTariff",
+	"routeRebates": [{
+			"@class": "SuezCanalRouteRebate",
+			"from": [{
+				"classType": "http://www.mmxlabs.com/models/lng/port/1//PortGroup",
+				"name": "SZ: US Gulf"
+			}],
+			"to": [{
+				"classType": "http://www.mmxlabs.com/models/lng/port/1//PortGroup",
+				"name": "SZ: To Kochi"
+			}],
+			"rebate": 0.35
+		}, {
+			"@class": "SuezCanalRouteRebate",
+			"from": [{
+				"classType": "http://www.mmxlabs.com/models/lng/port/1//PortGroup",
+				"name": "SZ: US Gulf"
+			}],
+			"to": [{
+				"classType": "http://www.mmxlabs.com/models/lng/port/1//PortGroup",
+				"name": "SZ: To Singapore"
+			}],
+			"rebate": 0.55
+		},
+		{
+			"@class": "SuezCanalRouteRebate",
+			"from": [{
+				"classType": "http://www.mmxlabs.com/models/lng/port/1//PortGroup",
+				"name": "SZ: US Gulf"
+			}],
+			"to": [{
+				"classType": "http://www.mmxlabs.com/models/lng/port/1//PortGroup",
+				"name": "SZ: Far East"
+			}],
+			"rebate": 0.75
+		}
+	]
+
+}

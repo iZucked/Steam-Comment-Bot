@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.pricing.SuezCanalRouteRebate;
 import com.mmxlabs.models.lng.pricing.SuezCanalTariff;
 import com.mmxlabs.models.lng.pricing.SuezCanalTariffBand;
 import com.mmxlabs.models.lng.pricing.SuezCanalTugBand;
@@ -135,6 +136,9 @@ public class CostModelImporter implements ISubmodelImporter {
 				} else if (o instanceof SuezCanalTugBand) {
 					final SuezCanalTugBand band = (SuezCanalTugBand) o;
 					suezCanalTariff.getTugBands().add(band);
+				} else if (o instanceof SuezCanalRouteRebate) {
+					final SuezCanalRouteRebate rebate = (SuezCanalRouteRebate) o;
+					suezCanalTariff.getRouteRebates().add(rebate);
 				} else if (o instanceof ExtraData) {
 					final ExtraData data = (ExtraData) o;
 					suezCanalTariff.eSet(data.feature, data.value);

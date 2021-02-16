@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getBands <em>Bands</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getTugBands <em>Tug Bands</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getRouteRebates <em>Route Rebates</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getTugCost <em>Tug Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getFixedCosts <em>Fixed Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getDiscountFactor <em>Discount Factor</em>}</li>
@@ -63,6 +64,18 @@ public interface SuezCanalTariff extends EObject {
 	 * @generated
 	 */
 	EList<SuezCanalTugBand> getTugBands();
+
+	/**
+	 * Returns the value of the '<em><b>Route Rebates</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.SuezCanalRouteRebate}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Route Rebates</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getSuezCanalTariff_RouteRebates()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<SuezCanalRouteRebate> getRouteRebates();
 
 	/**
 	 * Returns the value of the '<em><b>Tug Cost</b></em>' attribute.

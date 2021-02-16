@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.pricing.impl;
 
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.SuezCanalRouteRebate;
 import com.mmxlabs.models.lng.pricing.SuezCanalTariff;
 import com.mmxlabs.models.lng.pricing.SuezCanalTariffBand;
 import com.mmxlabs.models.lng.pricing.SuezCanalTugBand;
@@ -37,6 +38,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SuezCanalTariffImpl#getBands <em>Bands</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SuezCanalTariffImpl#getTugBands <em>Tug Bands</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SuezCanalTariffImpl#getRouteRebates <em>Route Rebates</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SuezCanalTariffImpl#getTugCost <em>Tug Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SuezCanalTariffImpl#getFixedCosts <em>Fixed Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SuezCanalTariffImpl#getDiscountFactor <em>Discount Factor</em>}</li>
@@ -65,6 +67,16 @@ public class SuezCanalTariffImpl extends EObjectImpl implements SuezCanalTariff 
 	 * @ordered
 	 */
 	protected EList<SuezCanalTugBand> tugBands;
+
+	/**
+	 * The cached value of the '{@link #getRouteRebates() <em>Route Rebates</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRouteRebates()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<SuezCanalRouteRebate> routeRebates;
 
 	/**
 	 * The default value of the '{@link #getTugCost() <em>Tug Cost</em>}' attribute.
@@ -197,6 +209,19 @@ public class SuezCanalTariffImpl extends EObjectImpl implements SuezCanalTariff 
 	 * @generated
 	 */
 	@Override
+	public EList<SuezCanalRouteRebate> getRouteRebates() {
+		if (routeRebates == null) {
+			routeRebates = new EObjectContainmentEList<SuezCanalRouteRebate>(SuezCanalRouteRebate.class, this, PricingPackage.SUEZ_CANAL_TARIFF__ROUTE_REBATES);
+		}
+		return routeRebates;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public double getTugCost() {
 		return tugCost;
 	}
@@ -295,6 +320,8 @@ public class SuezCanalTariffImpl extends EObjectImpl implements SuezCanalTariff 
 				return ((InternalEList<?>)getBands()).basicRemove(otherEnd, msgs);
 			case PricingPackage.SUEZ_CANAL_TARIFF__TUG_BANDS:
 				return ((InternalEList<?>)getTugBands()).basicRemove(otherEnd, msgs);
+			case PricingPackage.SUEZ_CANAL_TARIFF__ROUTE_REBATES:
+				return ((InternalEList<?>)getRouteRebates()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -311,6 +338,8 @@ public class SuezCanalTariffImpl extends EObjectImpl implements SuezCanalTariff 
 				return getBands();
 			case PricingPackage.SUEZ_CANAL_TARIFF__TUG_BANDS:
 				return getTugBands();
+			case PricingPackage.SUEZ_CANAL_TARIFF__ROUTE_REBATES:
+				return getRouteRebates();
 			case PricingPackage.SUEZ_CANAL_TARIFF__TUG_COST:
 				return getTugCost();
 			case PricingPackage.SUEZ_CANAL_TARIFF__FIXED_COSTS:
@@ -339,6 +368,10 @@ public class SuezCanalTariffImpl extends EObjectImpl implements SuezCanalTariff 
 			case PricingPackage.SUEZ_CANAL_TARIFF__TUG_BANDS:
 				getTugBands().clear();
 				getTugBands().addAll((Collection<? extends SuezCanalTugBand>)newValue);
+				return;
+			case PricingPackage.SUEZ_CANAL_TARIFF__ROUTE_REBATES:
+				getRouteRebates().clear();
+				getRouteRebates().addAll((Collection<? extends SuezCanalRouteRebate>)newValue);
 				return;
 			case PricingPackage.SUEZ_CANAL_TARIFF__TUG_COST:
 				setTugCost((Double)newValue);
@@ -370,6 +403,9 @@ public class SuezCanalTariffImpl extends EObjectImpl implements SuezCanalTariff 
 			case PricingPackage.SUEZ_CANAL_TARIFF__TUG_BANDS:
 				getTugBands().clear();
 				return;
+			case PricingPackage.SUEZ_CANAL_TARIFF__ROUTE_REBATES:
+				getRouteRebates().clear();
+				return;
 			case PricingPackage.SUEZ_CANAL_TARIFF__TUG_COST:
 				setTugCost(TUG_COST_EDEFAULT);
 				return;
@@ -398,6 +434,8 @@ public class SuezCanalTariffImpl extends EObjectImpl implements SuezCanalTariff 
 				return bands != null && !bands.isEmpty();
 			case PricingPackage.SUEZ_CANAL_TARIFF__TUG_BANDS:
 				return tugBands != null && !tugBands.isEmpty();
+			case PricingPackage.SUEZ_CANAL_TARIFF__ROUTE_REBATES:
+				return routeRebates != null && !routeRebates.isEmpty();
 			case PricingPackage.SUEZ_CANAL_TARIFF__TUG_COST:
 				return tugCost != TUG_COST_EDEFAULT;
 			case PricingPackage.SUEZ_CANAL_TARIFF__FIXED_COSTS:

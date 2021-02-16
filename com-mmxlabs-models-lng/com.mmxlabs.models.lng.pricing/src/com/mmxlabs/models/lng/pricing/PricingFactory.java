@@ -177,6 +177,15 @@ public interface PricingFactory extends EFactory {
 	SuezCanalTariffBand createSuezCanalTariffBand();
 
 	/**
+	 * Returns a new object of class '<em>Suez Canal Route Rebate</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Suez Canal Route Rebate</em>'.
+	 * @generated
+	 */
+	SuezCanalRouteRebate createSuezCanalRouteRebate();
+
+	/**
 	 * Returns a new object of class '<em>Unit Conversion</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

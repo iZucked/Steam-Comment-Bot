@@ -57,9 +57,8 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 			return new TravelRouteData[] { new TravelRouteData(0, 0, 0, 0, 0) };
 		}
 
-		if (isConstrainedPanamaVoyage && (distanceProvider.getRouteOptionDirection(from, ERouteOption.PANAMA) == RouteOptionDirection.NORTHBOUND
-				||
-				PanamaBookingHelper.isSouthboundIdleTimeRuleEnabled())) {
+		if (isConstrainedPanamaVoyage
+				&& (distanceProvider.getRouteOptionDirection(from, ERouteOption.PANAMA) == RouteOptionDirection.NORTHBOUND || PanamaBookingHelper.isSouthboundIdleTimeRuleEnabled())) {
 			final int toCanal = panamaBookingHelper.getTravelTimeToCanal(vessel, from, true);
 			if (toCanal != Integer.MAX_VALUE) {
 				int estimatedCanalArrival = voyageStartTime + toCanal;
@@ -89,23 +88,25 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 		Collections.sort(allDistanceValues, new Comparator<DistanceMatrixEntry>() {
 			@Override
 			public int compare(final DistanceMatrixEntry o1, final DistanceMatrixEntry o2) {
-				if (routeCostProvider.getRouteCost(o1.getRoute(), vessel, voyageStartTime, costType) == routeCostProvider.getRouteCost(o2.getRoute(), vessel, voyageStartTime, costType)) {
+				if (routeCostProvider.getRouteCost(o1.getRoute(), from, to, vessel, voyageStartTime, costType) == routeCostProvider.getRouteCost(o2.getRoute(), from, to, vessel, voyageStartTime,
+						costType)) {
 					return Integer.compare(
 							Calculator.getTimeFromSpeedDistance(vessel.getMaxSpeed(), o1.getDistance())
 									+ getProcessedRouteTransitTime(o1.getRoute(), vessel, isConstrainedPanamaVoyage, finalAdditionalPanamaIdleHours),
 							Calculator.getTimeFromSpeedDistance(vessel.getMaxSpeed(), o2.getDistance())
 									+ getProcessedRouteTransitTime(o2.getRoute(), vessel, isConstrainedPanamaVoyage, finalAdditionalPanamaIdleHours));
 				} else {
-					return Long.compare(routeCostProvider.getRouteCost(o1.getRoute(), vessel, voyageStartTime, costType),
-							routeCostProvider.getRouteCost(o2.getRoute(), vessel, voyageStartTime, costType));
+					return Long.compare(routeCostProvider.getRouteCost(o1.getRoute(), from, to, vessel, voyageStartTime, costType),
+							routeCostProvider.getRouteCost(o2.getRoute(), from, to, vessel, voyageStartTime, costType));
 				}
 			}
 		});
 
 		// remove dominated distances
 		for (int i = allDistanceValues.size() - 1; i > 0; i--) {
-			if ((routeCostProvider.getRouteCost(allDistanceValues.get(i).getRoute(), vessel, voyageStartTime, costType) >= routeCostProvider.getRouteCost(allDistanceValues.get(i - 1).getRoute(),
-					vessel, voyageStartTime, costType)) && allDistanceValues.get(i).getDistance() > allDistanceValues.get(i - 1).getDistance()) {
+			if ((routeCostProvider.getRouteCost(allDistanceValues.get(i).getRoute(), from, to, vessel, voyageStartTime, costType) >= routeCostProvider
+					.getRouteCost(allDistanceValues.get(i - 1).getRoute(), from, to, vessel, voyageStartTime, costType))
+					&& allDistanceValues.get(i).getDistance() > allDistanceValues.get(i - 1).getDistance()) {
 				allDistanceValues.remove(i);
 			}
 		}
@@ -120,8 +121,8 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 			final int nboSpeed = Math.min(Math.max(getNBOSpeed(vessel, vesselState, calculationCV), vessel.getMinSpeed()), vessel.getMaxSpeed());
 			final int nbotravelTime = Calculator.getTimeFromSpeedDistance(nboSpeed, d.getDistance());
 			final int transitTime = getProcessedRouteTransitTime(d.getRoute(), vessel, isConstrainedPanamaVoyage, finalAdditionalPanamaIdleHours);
-			times[i] = new TravelRouteData(mintravelTime + transitTime, nbotravelTime + transitTime, routeCostProvider.getRouteCost(d.getRoute(), vessel, voyageStartTime, costType), d.getDistance(),
-					transitTime);
+			times[i] = new TravelRouteData(mintravelTime + transitTime, nbotravelTime + transitTime,
+					routeCostProvider.getRouteCost(d.getRoute(), d.getFrom(), d.getTo(), vessel, voyageStartTime, costType), d.getDistance(), transitTime);
 			i++;
 		}
 		return times;
