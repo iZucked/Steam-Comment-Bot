@@ -35,6 +35,11 @@ public class WorkbenchChangeProcessor {
 		//        name="Port Groups">
 		//  </view>
   		E4ModelHelper.removeViewPart("com.mmxlabs.models.lng.port.editor.views.PortGroupView", application, modelService);
+  		
+  		
+  		if (!LicenseFeatures.isPermitted("features:fitness-view")) {
+  			E4ModelHelper.removeViewPart("com.mmxlabs.shiplingo.platform.reports.views.FitnessReportView", application, modelService);
+  		}
 		
 		// Added for 3.8.x to 3.9.0 changes
 		// Rename Diff Tools Perspective to Compare
