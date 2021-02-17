@@ -6,6 +6,7 @@ package com.mmxlabs.rcp.common.actions;
 
 import java.io.StringWriter;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -391,6 +392,12 @@ public class CopyGridToExcelMLStringUtil {
 						// text = Long.toString(dt.atStartOfDay().toEpochSecond(ZoneOffset.ofHours(0)));
 						text = v.toString();
 						type = Number.class;
+					} else if (v instanceof LocalDateTime) {
+						typeString = String.format(" ss:Type=\"DateTime\" ");
+						LocalDateTime dt = (LocalDateTime) v;
+						// text = Long.toString(dt.atStartOfDay().toEpochSecond(ZoneOffset.ofHours(0)));
+						text = String.format("%4d-%02d-%02dT%02d:%02d:%02d.000", dt.getYear(), dt.getMonthValue(), dt.getDayOfMonth(), dt.getHour(), dt.getMinute(), dt.getSecond());
+						type = ZonedDateTime.class;
 					}
 				}
 

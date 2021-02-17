@@ -44,6 +44,7 @@ import com.mmxlabs.models.ui.tabular.IFilterProvider;
 
 public class ColumnGenerator {
 
+	private static final String COLUMN_DATA_FIELD = "field";
 	private static Set<Class<?>> numericTypes = Sets.newHashSet(short.class, int.class, long.class, float.class, double.class, Short.class, Integer.class, Long.class, Float.class, Double.class,
 			Number.class);
 	private static Set<Class<?>> dateTypes = Sets.newHashSet(LocalDate.class, LocalDateTime.class);
@@ -86,6 +87,7 @@ public class ColumnGenerator {
 				continue;
 			}
 			GridViewerHelper.configureLookAndFeel(col);
+			col.getColumn().setData(COLUMN_DATA_FIELD, f);
 			mapOfFields.put(++counter, f);
 			mapOfFieldColumns.put(f, col);
 
