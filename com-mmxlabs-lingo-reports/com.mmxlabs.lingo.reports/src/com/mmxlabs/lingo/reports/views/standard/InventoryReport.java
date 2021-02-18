@@ -6,9 +6,9 @@ package com.mmxlabs.lingo.reports.views.standard;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -809,15 +809,33 @@ public class InventoryReport extends ViewPart {
 								for (final InventoryChangeEvent event : inventoryEvents.getEvents()) {
 									final InventoryEventRow eventRow = event.getEvent();
 									if (eventRow != null) {
-										final int delta = eventRow.getVolume() / 24;
-										final int firstAmount = delta + (eventRow.getVolume() % 24);
-										LocalDateTime currentDateTime = LocalDateTime.of(eventRow.getStartDate(), LocalTime.of(0, 0));
-										hourlyLevels.compute(currentDateTime, (k,v) -> v == null ? firstAmount: v + firstAmount);
-										for (int hour = 1; hour < 24; hour++) {
-											currentDateTime = currentDateTime.plusHours(1);
-											hourlyLevels.compute(currentDateTime, (k,v) -> v == null ? delta: v + delta);
+										if (eventRow.getPeriod() == InventoryFrequency.LEVEL) {
+											hourlyLevels.compute(event.getDate(), (k, v) -> v == null ? event.getChangeQuantity() : v + event.getChangeQuantity());
+										} else if (eventRow.getPeriod() == InventoryFrequency.CARGO) {
+											hourlyLevels.compute(event.getDate(), (k, v) -> v == null ? event.getChangeQuantity() : v + event.getChangeQuantity());
+										} else if (eventRow.getPeriod() == InventoryFrequency.HOURLY) {
+											hourlyLevels.compute(event.getDate(), (k, v) -> v == null ? event.getChangeQuantity() : v + event.getChangeQuantity());
+										} else if (eventRow.getPeriod() == InventoryFrequency.DAILY) {
+											final int delta = event.getChangeQuantity() / 24;
+											final int firstAmount = delta + (event.getChangeQuantity() % 24);
+											LocalDateTime currentDateTime = event.getDate();
+											hourlyLevels.compute(currentDateTime, (k,v) -> v == null ? firstAmount: v + firstAmount);
+											for (int hour = 1; hour < 24; hour++) {
+												currentDateTime = currentDateTime.plusHours(1);
+												hourlyLevels.compute(currentDateTime, (k,v) -> v == null ? delta: v + delta);
+											}
+										} else if (eventRow.getPeriod() == InventoryFrequency.MONTHLY) {
+											final Duration dur = Duration.between(event.getDate(), event.getDate().plusMonths(1));
+											final int numHours = (int) dur.toHours();
+											final int delta = event.getChangeQuantity() / numHours;
+											final int firstAmount = delta + (event.getChangeQuantity() % numHours);
+											LocalDateTime currentDateTime = event.getDate();
+											hourlyLevels.compute(currentDateTime, (k,v) -> v == null ? firstAmount: v + firstAmount);
+											for (int hour = 1; hour < numHours; ++hour) {
+												currentDateTime = currentDateTime.plusHours(1);
+												hourlyLevels.compute(currentDateTime, (k,v) -> v == null ? delta: v + delta);
+											}
 										}
-										
 									} else if (event.getSlotAllocation() != null) {
 										final SlotAllocation loadAllocation = event.getSlotAllocation().getCargoAllocation().getSlotAllocations().get(0);
 										final int volumeLoaded = loadAllocation.getVolumeTransferred();
