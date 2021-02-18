@@ -276,8 +276,6 @@ public class InventoryReport extends ViewPart {
 				updatePlots(Collections.singleton(selectedInventory), currentResult);
 			});
 		}
-		
-		
 
 		final CTabFolder folder = new CTabFolder(parent, SWT.BOTTOM);
 		folder.setLayout(new GridLayout(1, true));
@@ -521,8 +519,10 @@ public class InventoryReport extends ViewPart {
 		
 		// Delete existing data
 		clearChartData(seriesSet);
-		clearChartData(mullMonthlyOverliftChart.getSeriesSet());
-		clearChartData(mullMonthlyCargoCountChart.getSeriesSet());
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
+			clearChartData(mullMonthlyOverliftChart.getSeriesSet());
+			clearChartData(mullMonthlyCargoCountChart.getSeriesSet());
+		}
 
 		LocalDate minDate = null;
 		LocalDate maxDate = null;
@@ -1063,7 +1063,7 @@ public class InventoryReport extends ViewPart {
 		inventoryInsAndOutChart.updateLayout();
 
 		inventoryInsAndOutChart.redraw();
-		
+
 		final IAxisSet inventoryDailyChartAxisSet = inventoryDailyChartViewer.getAxisSet();
 
 		inventoryDailyChartViewer.getAxisSet().getXAxis(0).getTick().setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
