@@ -50,6 +50,7 @@ import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentPr
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.SelectionServiceUtils;
 import com.mmxlabs.lingo.reports.views.standard.SimpleTabularReportView;
 import com.mmxlabs.lingo.reports.views.standard.exposures.IndexExposureData.IndexExposureType;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -785,17 +786,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 	@Override
 	public void selectionChanged(final MPart part, final Object selectionObject) {
-		if (selectionMode) {
-			final IWorkbenchPart e3Part = SelectionHelper.getE3Part(part);
-			if (e3Part != null) {
-				if (e3Part == this) {
-					return;
-				}
-				if (e3Part instanceof PropertySheet) {
-					return;
-				}
-			}
-
+		if (selectionMode && SelectionServiceUtils.isSelectionValid(part, selectionObject)) {
 			selection = SelectionHelper.adaptSelection(selectionObject);
 			ExposureReportView.this.refresh();
 		}

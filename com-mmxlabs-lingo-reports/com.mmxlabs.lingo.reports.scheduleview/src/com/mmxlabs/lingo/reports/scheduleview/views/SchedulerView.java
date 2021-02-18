@@ -228,7 +228,6 @@ public class SchedulerView extends ViewPart implements
 
 			@Override
 			protected void setSelectionToWidget(@SuppressWarnings("rawtypes") final List providedSelection, final boolean reveal) {
-
 				// Take a copy of the array so we can modify it later if it was empty
 				final List<Object> l = new LinkedList<>(providedSelection);
 				final boolean emptyInput = providedSelection.isEmpty();

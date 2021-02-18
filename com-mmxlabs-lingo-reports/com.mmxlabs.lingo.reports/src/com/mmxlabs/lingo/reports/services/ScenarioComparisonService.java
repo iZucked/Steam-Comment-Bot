@@ -29,7 +29,9 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.views.properties.PropertySheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -442,14 +444,15 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 
 		@Override
 		public void selectionChanged(final MPart part, final Object selectedObject) {
-
-			// Avoid re-entrant selection changes.
-			if (inSelectionChanged.compareAndSet(false, true)) {
-				try {
-					final ISelection selection = SelectionHelper.adaptSelection(selectedObject);
-					setSelection(selection);
-				} finally {
-					inSelectionChanged.set(false);
+			if (SelectionServiceUtils.isSelectionValid(part, selectedObject)) {
+				// Avoid re-entrant selection changes.
+				if (inSelectionChanged.compareAndSet(false, true)) {
+					try {
+						final ISelection selection = SelectionHelper.adaptSelection(selectedObject);
+						setSelection(selection);
+					} finally {
+						inSelectionChanged.set(false);
+					}
 				}
 			}
 		}
