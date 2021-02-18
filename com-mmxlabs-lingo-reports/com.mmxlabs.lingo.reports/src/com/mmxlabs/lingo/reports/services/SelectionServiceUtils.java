@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * All rights reserved.
+ */
 package com.mmxlabs.lingo.reports.services;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
