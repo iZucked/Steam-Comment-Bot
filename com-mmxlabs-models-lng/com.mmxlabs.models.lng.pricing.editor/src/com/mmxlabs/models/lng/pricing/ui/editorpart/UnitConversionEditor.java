@@ -23,6 +23,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.IShellProvider;
+import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -123,6 +124,9 @@ public class UnitConversionEditor extends Dialog {
 		@NonNull
 		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel((LNGScenarioModel) scenarioEditingLocation.getRootObject());
 		viewer.setInput(pricingModel);
+		for (final GridColumn c : viewer.getGrid().getColumns()) {
+			c.pack();
+		}
 
 		final Composite buttons = new Composite(parent, SWT.NONE);
 
