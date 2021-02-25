@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: MMXLabs Hub Support
 Bundle-SymbolicName: com.mmxlabs.hub;singleton:=true
-Bundle-Version: 4.12.16.qualifier
+Bundle-Version: 4.12.16.RELEASE
 Bundle-ClassPath: .,
  lib/okhttp-3.14.2.jar,
  lib/okio-1.17.4.jar,
