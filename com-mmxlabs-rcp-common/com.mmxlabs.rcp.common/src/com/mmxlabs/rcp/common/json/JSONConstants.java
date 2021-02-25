@@ -10,4 +10,5 @@ public final class JSONConstants {
 	}
 
 	public static final String ATTRIBUTE_CLASS = "@class";
+	public static final String LOOKUP_ID = "@lookupID";
 }

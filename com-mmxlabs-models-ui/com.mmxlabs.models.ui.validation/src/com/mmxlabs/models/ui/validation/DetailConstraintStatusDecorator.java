@@ -141,6 +141,7 @@ public class DetailConstraintStatusDecorator implements IDetailConstraintStatus 
 		return name;
 	}
 
+	@Override
 	public String getBaseMessage() {
 		if (baseMessage == null) {
 			return getMessage();

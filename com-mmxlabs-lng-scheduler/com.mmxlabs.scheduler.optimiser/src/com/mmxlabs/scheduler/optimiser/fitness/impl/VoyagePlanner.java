@@ -355,7 +355,7 @@ public class VoyagePlanner implements IVoyagePlanner {
 				costType = CostType.Ballast;
 			}
 
-			options.setRoute(d.getRoute(), d.getDistance(), routeCostProvider.getRouteCost(d.getRoute(), vessel, voyageStartTime, costType));
+			options.setRoute(d.getRoute(), d.getDistance(), routeCostProvider.getRouteCost(d.getRoute(), d.getFrom(), d.getTo(), vessel, voyageStartTime, costType));
 		} else {
 			vpoChoices.add(new RouteVoyagePlanChoice(previousOptions, options, distances, vessel, voyageStartTime, routeCostProvider));
 		}

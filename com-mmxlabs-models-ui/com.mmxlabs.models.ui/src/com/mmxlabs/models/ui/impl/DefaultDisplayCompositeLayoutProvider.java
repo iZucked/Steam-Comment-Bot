@@ -5,6 +5,7 @@
 package com.mmxlabs.models.ui.impl;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -41,7 +42,13 @@ public class DefaultDisplayCompositeLayoutProvider implements IDisplayCompositeL
 	public Object createEditorLayoutData(final MMXRootObject root, final EObject value, final IInlineEditor editor, final Control control) {
 		final Object result = editor.createLayoutData(root, value, control);
 		if (result == null) {
-			return new GridData(SWT.FILL, SWT.CENTER, true, false);
+			
+			GridDataFactory factory = GridDataFactory.fillDefaults().grab(true, false).align(SWT.FILL, SWT.CENTER);
+			if (editor.needsFullWidth()) {
+				factory.span(2,  1);
+			}
+			
+			return factory.create();
 		} else {
 			return result;
 		}

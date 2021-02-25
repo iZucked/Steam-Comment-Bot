@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.ResourceLocator;
@@ -76,6 +77,17 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 		}
 	}
 
+	public void registerType(final String lookupId, final Object value) {
+
+		if (value instanceof EObject) {
+			final EObject eObject = (EObject) value;
+
+			final JSONReference ref = JSONReference.of(lookupId, eObject);
+
+			registerType(ref.getClassType(), ref.getGlobalId(), ref.getName(), eObject);
+		}
+	}
+	
 	public void registerType(final String type, final String id, final String name, final Object value) {
 		if (name != null) {
 			state.nameMap.put(new Pair<>(type, name), value);
@@ -87,6 +99,8 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 
 	public Object lookupType(final JSONReference ref) {
 		final Object idValue = state.idMap.get(new Pair<>(ref.getClassType(), ref.getGlobalId()));
+		List<Object> vas = state.idMap.values().stream().filter(p -> p.getClass().getSimpleName().contains("VesselAvailability")).collect(Collectors.toList());
+		
 		if (idValue != null) {
 			return idValue;
 		}

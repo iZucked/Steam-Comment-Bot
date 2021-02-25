@@ -89,9 +89,13 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 		setDefaultHelpContext(object);
 
 		for (final IInlineEditor editor : editors) {
+			Label label = null;
 
-			final Label label = layoutProvider.showLabelFor(root, object, editor) ? new Label(this, SWT.NONE) : null;
-			editor.setLabel(label);
+			if (!editor.needsFullWidth()) {
+				label = layoutProvider.showLabelFor(root, object, editor) ? new Label(this, SWT.NONE) : null;
+				editor.setLabel(label);
+			}
+
 			final Control control = editor.createControl(this, dbc, toolkit);
 			dialogContext.registerEditorControl(object, editor.getFeature(), control);
 

@@ -59,12 +59,12 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 
 	private IModelBasedSelectionMapper<M> selectionMapper;
 
-	private PackGridTableColumnsAction packColumnsAction;
+	protected PackGridTableColumnsAction packColumnsAction;
 
 	protected CopyGridToHtmlClipboardAction copyTableAction;
 
 	private EObjectTableViewerFilterSupport filterSupport;
-	private FilterField filterField;
+	protected FilterField filterField;
 
 	protected ColumnInfo columnInfo;
 
@@ -77,7 +77,7 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 	protected abstract List<M> transform(final ISelectedDataProvider selectedDataProvider);
 
 	private final boolean enableSorting = true;
-	private final boolean enableFilter = true;
+	protected final boolean enableFilter = true;
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -155,7 +155,6 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 		getViewSite().getActionBars().getToolBarManager().add(copyTableAction);
 
 		getViewSite().getActionBars().updateActionBars();
-
 	}
 
 	private final ISelectedScenariosServiceListener scenarioComparisonServiceListener = new ISelectedScenariosServiceListener() {

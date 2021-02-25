@@ -1880,4 +1880,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		allowedVesselProviderEditor.setPermittedVesselAndClasses(portSlot, allowedVessels);
 		// }
 	}
+	
+	@Override
+	public void setSuezRouteRebate(@NonNull IPort from, @NonNull IPort to, long rebateFactor) {
+		routeCostProvider.setSuezRouteRebateFactor(from, to, rebateFactor);
+	}
 }

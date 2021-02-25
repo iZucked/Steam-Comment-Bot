@@ -73,7 +73,7 @@ public class DefaultNotionalJourneyBallastBonusContractRule extends BallastBonus
 			} else { // canal time not included.
 				hireTime = journeyTravelTime;
 			}
-			final long canalCost = routeCostProvider.getRouteCost(route, vesselAvailability.getVessel(), voyageStartTime, CostType.Ballast);
+			final long canalCost = routeCostProvider.getRouteCost(route, lastSlot.getPort(), returnPort, vesselAvailability.getVessel(), voyageStartTime, CostType.Ballast);
 			final long hireCost = (charterRateCurve.getValueAtPoint(voyageStartTime) * hireTime) / 24L;
 			final long fuelCost = Calculator.costFromConsumption(fuelUsedJourney + fuelUsedCanal, fuelPriceCurve.getValueAtPoint(voyageStartTime));
 			final long cost = lumpSum + fuelCost + (includeCanalFees ? canalCost : 0L) + hireCost;
@@ -116,7 +116,7 @@ public class DefaultNotionalJourneyBallastBonusContractRule extends BallastBonus
 			} else {
 				hireTime = journeyTravelTime;
 			}
-			final long canalCost = routeCostProvider.getRouteCost(route, vesselAvailability.getVessel(), voyageStartTime, CostType.Ballast);
+			final long canalCost = routeCostProvider.getRouteCost(route, lastSlot.getPort(), returnPort, vesselAvailability.getVessel(), voyageStartTime, CostType.Ballast);
 			final long hireCost = (charterRateCurve.getValueAtPoint(voyageStartTime) * hireTime) / 24L;
 			final long fuelCost = Calculator.costFromConsumption(fuelUsedJourney + fuelUsedCanal, fuelPriceCurve.getValueAtPoint(voyageStartTime));
 			final long cost = lumpSum + fuelCost + (includeCanalFees ? canalCost : 0L) + hireCost;

@@ -479,6 +479,29 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.SuezCanalRouteRebate} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SuezCanalRouteRebateItemProvider suezCanalRouteRebateItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.SuezCanalRouteRebate}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSuezCanalRouteRebateAdapter() {
+		if (suezCanalRouteRebateItemProvider == null) {
+			suezCanalRouteRebateItemProvider = new SuezCanalRouteRebateItemProvider(this);
+		}
+
+		return suezCanalRouteRebateItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.UnitConversion} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -966,6 +989,7 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (suezCanalTugBandItemProvider != null) suezCanalTugBandItemProvider.dispose();
 		if (suezCanalTariffItemProvider != null) suezCanalTariffItemProvider.dispose();
 		if (suezCanalTariffBandItemProvider != null) suezCanalTariffBandItemProvider.dispose();
+		if (suezCanalRouteRebateItemProvider != null) suezCanalRouteRebateItemProvider.dispose();
 		if (unitConversionItemProvider != null) unitConversionItemProvider.dispose();
 		if (datePointContainerItemProvider != null) datePointContainerItemProvider.dispose();
 		if (datePointItemProvider != null) datePointItemProvider.dispose();

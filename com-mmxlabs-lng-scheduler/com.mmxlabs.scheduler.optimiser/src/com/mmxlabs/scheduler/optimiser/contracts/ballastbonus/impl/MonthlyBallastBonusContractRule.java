@@ -38,15 +38,15 @@ public class MonthlyBallastBonusContractRule extends BallastBonusContractRule im
 	int monthEndExclusive;
 	long pctCharterRate;
 	long pctFuelRate;
-	
+
 	@Inject
 	private IDistanceProvider distanceProvider;
 
 	@Inject
 	private IRouteCostProvider routeCostProvider;
 
-	public MonthlyBallastBonusContractRule(int oYMStartInclusive, int oYMEndExclusive, long pctCharterRate, long pctFuelRate, Set<IPort> redeliveryPorts, ILongCurve lumpSumCurve, ICurve fuelPriceCurve, ILongCurve charterRateCurve, Set<IPort> returnPorts, boolean includeCanalFees,
-			boolean includeCanalTime, int speedInKnots) {
+	public MonthlyBallastBonusContractRule(int oYMStartInclusive, int oYMEndExclusive, long pctCharterRate, long pctFuelRate, Set<IPort> redeliveryPorts, ILongCurve lumpSumCurve,
+			ICurve fuelPriceCurve, ILongCurve charterRateCurve, Set<IPort> returnPorts, boolean includeCanalFees, boolean includeCanalTime, int speedInKnots) {
 		super(redeliveryPorts);
 
 		this.lumpSumCurve = lumpSumCurve;
@@ -56,7 +56,7 @@ public class MonthlyBallastBonusContractRule extends BallastBonusContractRule im
 		this.includeCanalFees = includeCanalFees;
 		this.includeCanalTime = includeCanalTime;
 		this.speedInKnots = speedInKnots;
-		
+
 		this.monthStartInclusive = oYMStartInclusive;
 		this.monthEndExclusive = oYMEndExclusive;
 		this.pctCharterRate = pctCharterRate;
@@ -85,7 +85,7 @@ public class MonthlyBallastBonusContractRule extends BallastBonusContractRule im
 			} else { // canal time not included.
 				hireTime = journeyTravelTime;
 			}
-			final long canalCost = routeCostProvider.getRouteCost(route, vesselAvailability.getVessel(), voyageStartTime, CostType.Ballast);
+			final long canalCost = routeCostProvider.getRouteCost(route, lastSlot.getPort(), returnPort, vesselAvailability.getVessel(), voyageStartTime, CostType.Ballast);
 			final long hireCost = Calculator.percentageLow(this.pctCharterRate, (charterRateCurve.getValueAtPoint(voyageStartTime) * hireTime) / 24L);
 			final long fuelCost = Calculator.percentageLow(this.pctFuelRate, Calculator.costFromConsumption(fuelUsedJourney + fuelUsedCanal, fuelPriceCurve.getValueAtPoint(voyageStartTime)));
 			final long cost = lumpSum + fuelCost + (includeCanalFees ? canalCost : 0L) + hireCost;
@@ -93,14 +93,15 @@ public class MonthlyBallastBonusContractRule extends BallastBonusContractRule im
 		}
 		return minCost;
 	}
-	
+
 	private long computeLumpSum(final int time) {
 		final long lumpSum = (lumpSumCurve != null ? lumpSumCurve.getValueAtPoint(time) : 0);
 		return lumpSum;
 	}
 
 	@Override
-	public NotionalJourneyBallastBonusRuleAnnotation annotate(final IPort firstLoad, final IPortSlot lastSlot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {
+	public NotionalJourneyBallastBonusRuleAnnotation annotate(final IPort firstLoad, final IPortSlot lastSlot, final IVesselAvailability vesselAvailability, final int vesselStartTime,
+			final int vesselEndTime) {
 
 		final int voyageStartTime = vesselEndTime;
 
@@ -128,9 +129,9 @@ public class MonthlyBallastBonusContractRule extends BallastBonusContractRule im
 			} else {
 				hireTime = journeyTravelTime;
 			}
-			final long canalCost = routeCostProvider.getRouteCost(route, vesselAvailability.getVessel(), voyageStartTime, CostType.Ballast);
-			final long hireCost = Calculator.percentageLow(this.pctCharterRate,(charterRateCurve.getValueAtPoint(voyageStartTime) * hireTime) / 24L);
-			final long fuelCost = Calculator.percentageLow(this.pctFuelRate,Calculator.costFromConsumption(fuelUsedJourney + fuelUsedCanal, fuelPriceCurve.getValueAtPoint(voyageStartTime)));
+			final long canalCost = routeCostProvider.getRouteCost(route, lastSlot.getPort(), returnPort, vesselAvailability.getVessel(), voyageStartTime, CostType.Ballast);
+			final long hireCost = Calculator.percentageLow(this.pctCharterRate, (charterRateCurve.getValueAtPoint(voyageStartTime) * hireTime) / 24L);
+			final long fuelCost = Calculator.percentageLow(this.pctFuelRate, Calculator.costFromConsumption(fuelUsedJourney + fuelUsedCanal, fuelPriceCurve.getValueAtPoint(voyageStartTime)));
 			final long cost = lumpSum + fuelCost + (includeCanalFees ? canalCost : 0L) + hireCost;
 			if (cost < minTotalCost) {
 				minTotalCost = cost;
@@ -154,7 +155,7 @@ public class MonthlyBallastBonusContractRule extends BallastBonusContractRule im
 			notionalJourneyBallastBonusRuleAnnotation.distance = distanceProvider.getDistance(minTravel.getFirst(), lastSlot.getPort(), minReturnPort, vesselAvailability.getVessel());
 			notionalJourneyBallastBonusRuleAnnotation.totalTimeInHours = minTravel.getSecond();
 			notionalJourneyBallastBonusRuleAnnotation.totalFuelUsed = minfuelUsed;
-			notionalJourneyBallastBonusRuleAnnotation.fuelPrice = (int)Calculator.percentageLow(this.pctFuelRate, (long)fuelPriceCurve.getValueAtPoint(voyageStartTime));
+			notionalJourneyBallastBonusRuleAnnotation.fuelPrice = (int) Calculator.percentageLow(this.pctFuelRate, (long) fuelPriceCurve.getValueAtPoint(voyageStartTime));
 			notionalJourneyBallastBonusRuleAnnotation.totalFuelCost = minFuelCost;
 			notionalJourneyBallastBonusRuleAnnotation.hireRate = Calculator.percentageLow(this.pctCharterRate, charterRateCurve.getValueAtPoint(voyageStartTime));
 			notionalJourneyBallastBonusRuleAnnotation.totalHireCost = minHireCost;
@@ -167,8 +168,7 @@ public class MonthlyBallastBonusContractRule extends BallastBonusContractRule im
 	private Set<IPort> getReturnPorts(IPort firstLoad) {
 		if (this.getReturnPorts() == null) {
 			return Collections.singleton(firstLoad);
-		}
-		else {
+		} else {
 			return getReturnPorts();
 		}
 	}
@@ -177,8 +177,7 @@ public class MonthlyBallastBonusContractRule extends BallastBonusContractRule im
 	public boolean match(final IPortSlot slot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {
 		if (monthStartInclusive <= vesselStartTime && vesselStartTime < monthEndExclusive) {
 			return getRedeliveryPorts().contains(slot.getPort()) || getRedeliveryPorts().isEmpty();
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
@@ -186,22 +185,22 @@ public class MonthlyBallastBonusContractRule extends BallastBonusContractRule im
 	public boolean matchWithoutDates(IPortSlot lastSlot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {
 		return getRedeliveryPorts().contains(lastSlot.getPort()) || getRedeliveryPorts().isEmpty();
 	}
-	
+
 	public int getMonthStartInclusive() {
 		return this.monthStartInclusive;
 	}
-	
+
 	public int getMonthEndExclusive() {
 		return this.monthEndExclusive;
 	}
-	
+
 	public Set<IPort> getReturnPorts() {
 		return returnPorts;
 	}
 
 	@Override
 	public long calculateBallastBonus(IPortSlot lastSlot, IVesselAvailability vesselAvailability, int vesselStartTime, int vesselEndTime) {
-		throw new IllegalArgumentException("Use new API passing lastSlot into calculateBallastBonus.");	
+		throw new IllegalArgumentException("Use new API passing lastSlot into calculateBallastBonus.");
 	}
 
 	@Override

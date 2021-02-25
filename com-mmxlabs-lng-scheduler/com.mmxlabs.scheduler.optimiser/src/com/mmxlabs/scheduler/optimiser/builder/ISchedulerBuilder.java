@@ -353,9 +353,9 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	ILoadSlot createLoadSlot(@NonNull String id, @NonNull IPort port, @NonNull ITimeWindow window, long minVolume, long maxVolume, boolean counterPartyVolume, @NonNull ILoadPriceCalculator priceCalculator, int cargoCVValue,
-			int durationHours, boolean cooldownSet, boolean cooldownForbidden, boolean purgeScheduled, int pricingDate, @NonNull PricingEventType pricingEvent, boolean slotIsOptional,
-			boolean slotIsLocked, boolean isSpotMarketSlot, boolean isVolumeLimitInM3, boolean isCancelled);
+	ILoadSlot createLoadSlot(@NonNull String id, @NonNull IPort port, @NonNull ITimeWindow window, long minVolume, long maxVolume, boolean counterPartyVolume,
+			@NonNull ILoadPriceCalculator priceCalculator, int cargoCVValue, int durationHours, boolean cooldownSet, boolean cooldownForbidden, boolean purgeScheduled, int pricingDate,
+			@NonNull PricingEventType pricingEvent, boolean slotIsOptional, boolean slotIsLocked, boolean isSpotMarketSlot, boolean isVolumeLimitInM3, boolean isCancelled);
 
 	/**
 	 */
@@ -666,5 +666,7 @@ public interface ISchedulerBuilder {
 	 * @param inaccessibleRoutes
 	 */
 	void setVesselInaccessibleRoutes(@NonNull IVessel vessel, Set<ERouteOption> inaccessibleRoutes);
+
+	void setSuezRouteRebate(@NonNull IPort from, @NonNull IPort to, long discountFactor);
 
 }

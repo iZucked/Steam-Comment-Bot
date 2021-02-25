@@ -11,8 +11,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 /**
- * Extended version of {@link IConstraintStatus} adding additional details about
- * which {@link EObject}s and {@link EStructuralFeature}s the status refers to.
+ * Extended version of {@link IConstraintStatus} adding additional details about which {@link EObject}s and {@link EStructuralFeature}s the status refers to.
  * 
  * @author Simon Goodall
  * 
@@ -27,14 +26,19 @@ public interface IDetailConstraintStatus extends IConstraintStatus {
 	Collection<EObject> getObjects();
 
 	/**
-	 * Returns the {@link Collection} if {@link EStructuralFeature} related to
-	 * the {@link EObject}. This should be an {@link EObject} instance returned
-	 * from {@link #getObjects()}
+	 * Returns the {@link Collection} if {@link EStructuralFeature} related to the {@link EObject}. This should be an {@link EObject} instance returned from {@link #getObjects()}
 	 * 
 	 * @return
 	 */
 	Collection<EStructuralFeature> getFeaturesForEObject(EObject object);
 
 	ValidationGroup getTag();
+
+	/**
+	 * Returns a simplier version of the message without the object name prefix, if available, otherwise delegates to getMessage();
+	 * 
+	 * @return
+	 */
+	String getBaseMessage();
 
 }

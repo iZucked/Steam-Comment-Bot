@@ -225,6 +225,22 @@
                       class="MarketIndex">
                 </target>
              </constraint>
+             <constraint
+                   class="com.mmxlabs.models.lng.pricing.validation.SuezTariffConstraint"
+                   id="com.mmxlabs.models.lng.pricing.validation.SuezTariffConstraint"
+                   isEnabledByDefault="true"
+                   lang="java"
+                   mode="Batch"
+                   name="SuezTariffConstraint"
+                   severity="ERROR"
+                   statusCode="1">
+                <message>
+                   {0}
+                </message>
+                <target
+                      class="SuezCanalTariff">
+                </target>
+             </constraint>
          </constraints>
       </constraintProvider>
    </extension>

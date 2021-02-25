@@ -122,7 +122,7 @@ public class SimpleCargoToCargoCostCalculator implements ICargoToCargoCostCalcul
 
 		assert legFuelCosts != null;
 
-		return legFuelCosts.getTotalCost() + routeCostProvider.getRouteCost(quickestTravelTimeAToB.getFirst(), vessel.getVessel(), endA, CostType.RoundTripBallast);
+		return legFuelCosts.getTotalCost() + routeCostProvider.getRouteCost(quickestTravelTimeAToB.getFirst(), endAPort, startSlotB.getPort(), vessel.getVessel(), endA, CostType.RoundTripBallast);
 	}
 
 	private IPort getEndPort(final IDischargeSlot dischargeA, final IPortSlot vesselEventA) {

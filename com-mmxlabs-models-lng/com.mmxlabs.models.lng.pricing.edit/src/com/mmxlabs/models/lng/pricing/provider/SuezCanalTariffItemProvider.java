@@ -178,6 +178,7 @@ public class SuezCanalTariffItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(PricingPackage.Literals.SUEZ_CANAL_TARIFF__BANDS);
 			childrenFeatures.add(PricingPackage.Literals.SUEZ_CANAL_TARIFF__TUG_BANDS);
+			childrenFeatures.add(PricingPackage.Literals.SUEZ_CANAL_TARIFF__ROUTE_REBATES);
 		}
 		return childrenFeatures;
 	}
@@ -239,6 +240,7 @@ public class SuezCanalTariffItemProvider
 				return;
 			case PricingPackage.SUEZ_CANAL_TARIFF__BANDS:
 			case PricingPackage.SUEZ_CANAL_TARIFF__TUG_BANDS:
+			case PricingPackage.SUEZ_CANAL_TARIFF__ROUTE_REBATES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -265,6 +267,11 @@ public class SuezCanalTariffItemProvider
 			(createChildParameter
 				(PricingPackage.Literals.SUEZ_CANAL_TARIFF__TUG_BANDS,
 				 PricingFactory.eINSTANCE.createSuezCanalTugBand()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PricingPackage.Literals.SUEZ_CANAL_TARIFF__ROUTE_REBATES,
+				 PricingFactory.eINSTANCE.createSuezCanalRouteRebate()));
 	}
 
 	/**

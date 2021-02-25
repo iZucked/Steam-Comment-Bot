@@ -46,6 +46,7 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.pricing.SettleStrategy;
+import com.mmxlabs.models.lng.pricing.SuezCanalRouteRebate;
 import com.mmxlabs.models.lng.pricing.SuezCanalTariff;
 import com.mmxlabs.models.lng.pricing.SuezCanalTariffBand;
 import com.mmxlabs.models.lng.pricing.SuezCanalTugBand;
@@ -187,6 +188,13 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	private EClass suezCanalTariffBandEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass suezCanalRouteRebateEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1058,8 +1066,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSuezCanalTariff_TugCost() {
-		return (EAttribute)suezCanalTariffEClass.getEStructuralFeatures().get(2);
+	public EReference getSuezCanalTariff_RouteRebates() {
+		return (EReference)suezCanalTariffEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1068,7 +1076,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSuezCanalTariff_FixedCosts() {
+	public EAttribute getSuezCanalTariff_TugCost() {
 		return (EAttribute)suezCanalTariffEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -1078,7 +1086,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSuezCanalTariff_DiscountFactor() {
+	public EAttribute getSuezCanalTariff_FixedCosts() {
 		return (EAttribute)suezCanalTariffEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -1088,8 +1096,18 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSuezCanalTariff_SdrToUSD() {
+	public EAttribute getSuezCanalTariff_DiscountFactor() {
 		return (EAttribute)suezCanalTariffEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSuezCanalTariff_SdrToUSD() {
+		return (EAttribute)suezCanalTariffEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -1140,6 +1158,46 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	@Override
 	public EAttribute getSuezCanalTariffBand_BandEnd() {
 		return (EAttribute)suezCanalTariffBandEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSuezCanalRouteRebate() {
+		return suezCanalRouteRebateEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSuezCanalRouteRebate_From() {
+		return (EReference)suezCanalRouteRebateEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSuezCanalRouteRebate_To() {
+		return (EReference)suezCanalRouteRebateEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSuezCanalRouteRebate_Rebate() {
+		return (EAttribute)suezCanalRouteRebateEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1755,6 +1813,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		suezCanalTariffEClass = createEClass(SUEZ_CANAL_TARIFF);
 		createEReference(suezCanalTariffEClass, SUEZ_CANAL_TARIFF__BANDS);
 		createEReference(suezCanalTariffEClass, SUEZ_CANAL_TARIFF__TUG_BANDS);
+		createEReference(suezCanalTariffEClass, SUEZ_CANAL_TARIFF__ROUTE_REBATES);
 		createEAttribute(suezCanalTariffEClass, SUEZ_CANAL_TARIFF__TUG_COST);
 		createEAttribute(suezCanalTariffEClass, SUEZ_CANAL_TARIFF__FIXED_COSTS);
 		createEAttribute(suezCanalTariffEClass, SUEZ_CANAL_TARIFF__DISCOUNT_FACTOR);
@@ -1765,6 +1824,11 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEAttribute(suezCanalTariffBandEClass, SUEZ_CANAL_TARIFF_BAND__BALLAST_TARIFF);
 		createEAttribute(suezCanalTariffBandEClass, SUEZ_CANAL_TARIFF_BAND__BAND_START);
 		createEAttribute(suezCanalTariffBandEClass, SUEZ_CANAL_TARIFF_BAND__BAND_END);
+
+		suezCanalRouteRebateEClass = createEClass(SUEZ_CANAL_ROUTE_REBATE);
+		createEReference(suezCanalRouteRebateEClass, SUEZ_CANAL_ROUTE_REBATE__FROM);
+		createEReference(suezCanalRouteRebateEClass, SUEZ_CANAL_ROUTE_REBATE__TO);
+		createEAttribute(suezCanalRouteRebateEClass, SUEZ_CANAL_ROUTE_REBATE__REBATE);
 
 		unitConversionEClass = createEClass(UNIT_CONVERSION);
 		createEAttribute(unitConversionEClass, UNIT_CONVERSION__FROM);
@@ -2024,6 +2088,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEClass(suezCanalTariffEClass, SuezCanalTariff.class, "SuezCanalTariff", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSuezCanalTariff_Bands(), this.getSuezCanalTariffBand(), null, "bands", null, 0, -1, SuezCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSuezCanalTariff_TugBands(), this.getSuezCanalTugBand(), null, "tugBands", null, 0, -1, SuezCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSuezCanalTariff_RouteRebates(), this.getSuezCanalRouteRebate(), null, "routeRebates", null, 0, -1, SuezCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSuezCanalTariff_TugCost(), ecorePackage.getEDouble(), "tugCost", null, 0, 1, SuezCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSuezCanalTariff_FixedCosts(), ecorePackage.getEDouble(), "fixedCosts", null, 0, 1, SuezCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSuezCanalTariff_DiscountFactor(), ecorePackage.getEDouble(), "discountFactor", null, 0, 1, SuezCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2034,6 +2099,17 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEAttribute(getSuezCanalTariffBand_BallastTariff(), ecorePackage.getEDouble(), "ballastTariff", null, 0, 1, SuezCanalTariffBand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSuezCanalTariffBand_BandStart(), ecorePackage.getEInt(), "bandStart", null, 0, 1, SuezCanalTariffBand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSuezCanalTariffBand_BandEnd(), ecorePackage.getEInt(), "bandEnd", null, 0, 1, SuezCanalTariffBand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(suezCanalRouteRebateEClass, SuezCanalRouteRebate.class, "SuezCanalRouteRebate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		g1 = createEGenericType(theTypesPackage.getAPortSet());
+		g2 = createEGenericType(thePortPackage.getPort());
+		g1.getETypeArguments().add(g2);
+		initEReference(getSuezCanalRouteRebate_From(), g1, null, "from", null, 0, -1, SuezCanalRouteRebate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(theTypesPackage.getAPortSet());
+		g2 = createEGenericType(thePortPackage.getPort());
+		g1.getETypeArguments().add(g2);
+		initEReference(getSuezCanalRouteRebate_To(), g1, null, "to", null, 0, -1, SuezCanalRouteRebate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSuezCanalRouteRebate_Rebate(), ecorePackage.getEDouble(), "rebate", null, 0, 1, SuezCanalRouteRebate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(unitConversionEClass, UnitConversion.class, "UnitConversion", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getUnitConversion_From(), ecorePackage.getEString(), "from", null, 0, 1, UnitConversion.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2263,6 +2339,14 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		   new String[] {
 			   "unitSuffix", "m3\r\n",
 			   "formatString", "##,###,##0"
+		   });
+		addAnnotation
+		  (getSuezCanalRouteRebate_Rebate(),
+		   source,
+		   new String[] {
+			   "scale", "100",
+			   "formatString", "##0.#",
+			   "unit", "%"
 		   });
 		addAnnotation
 		  (getUnitConversion_Factor(),
