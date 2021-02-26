@@ -42,8 +42,18 @@ public class LookupData {
 		pricingModel.getCurrencyCurves().stream().filter(idx -> idx.getName() != null).forEach(idx -> lookupData.currencyMap.put(idx.getName().toLowerCase(), idx));
 		pricingModel.getCharterCurves().stream().filter(idx -> idx.getName() != null).forEach(idx -> lookupData.charterMap.put(idx.getName().toLowerCase(), idx));
 		pricingModel.getBunkerFuelCurves().stream().filter(idx -> idx.getName() != null).forEach(idx -> lookupData.baseFuelMap.put(idx.getName().toLowerCase(), idx));
-		pricingModel.getConversionFactors().forEach(f -> lookupData.conversionMap.put(PriceIndexUtils.createConversionFactorName(f).toLowerCase(), f));
-		pricingModel.getConversionFactors().forEach(f -> lookupData.reverseConversionMap.put(PriceIndexUtils.createReverseConversionFactorName(f).toLowerCase(), f));
+		pricingModel.getConversionFactors().forEach(f -> {
+			final String conversionFactorName = PriceIndexUtils.createConversionFactorName(f);
+			if (conversionFactorName != null) {
+				lookupData.conversionMap.put(conversionFactorName.toLowerCase(), f);
+			}
+		});
+		pricingModel.getConversionFactors().forEach(f -> {
+			final String conversionFactorName = PriceIndexUtils.createReverseConversionFactorName(f);
+			if (conversionFactorName != null) {
+				lookupData.reverseConversionMap.put(conversionFactorName.toLowerCase(), f);
+			}
+		});
 
 		return lookupData;
 
