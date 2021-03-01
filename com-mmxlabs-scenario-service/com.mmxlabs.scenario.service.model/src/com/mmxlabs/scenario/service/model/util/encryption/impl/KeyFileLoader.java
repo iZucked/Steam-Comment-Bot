@@ -353,11 +353,22 @@ public final class KeyFileLoader {
 	}
 
 	public static void main(final String[] args) throws Exception {
-		generate("c:/temp/lingo.pks");
 
-		// final String source = "C:/users/sg/mmxlabs/keyfiles/p/lingo.data";
-		// final String dest = "C:/users/sg/mmxlabs/keyfiles/p/lingo.pks";
-		// convert(source, dest, ppLegacyValue);
+		// Sample code to convert legacy file and generate a new v2 key
+
+		// Local users keystore and client code.
+		final String pathRoot = "C:/users/sg/mmxlabs/keyfiles/v/";
+
+		// Old keystore
+		final String source = pathRoot + "lingo.data";
+		// New keystore
+		final String dest = pathRoot + "lingo.pks";
+
+		// Convert Copy legacy key into new style keystore (Only need to do this once per client)
+		convert(source, dest, ppLegacyValue);
+
+		// Generate a new key into the new store. Can repeat this to generate a new key for a client.
+		generate(dest);
 	}
 
 	public static void generate(String out) {

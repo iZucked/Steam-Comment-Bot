@@ -92,7 +92,6 @@ import com.mmxlabs.models.lng.adp.MullSubprofile;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Inventory;
-import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
 import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 import com.mmxlabs.models.lng.cargo.InventoryFacilityType;
 import com.mmxlabs.models.lng.cargo.InventoryFrequency;
@@ -126,7 +125,10 @@ import com.mmxlabs.rcp.common.handlers.TodayHandler;
 import com.mmxlabs.scenario.service.ScenarioResult;
 
 public class InventoryReport extends ViewPart {
+
 	public static final String ID = "com.mmxlabs.lingo.reports.views.standard.InventoryReport";
+
+	private static final String MULL_YEAR_MONTH_FORMAT = "MMM yy";
 
 	private Chart inventoryInsAndOutChart;
 	private Chart inventoryDailyChartViewer;
@@ -136,24 +138,30 @@ public class InventoryReport extends ViewPart {
 	private GridTableViewer inventoryTableViewer;
 	
 	private GridTableViewer mullMonthlyTableViewer;
+	private GridTableViewer mullMonthlyCumulativeTableViewer;
 	private GridTableViewer mullDailyTableViewer;
 	
 	private FilterField mullMonthlyTableFilterField;
 	private EObjectTableViewerFilterSupport mullMonthlyTableFilterSupport;
-//	private ActionContributionItem mullTableActionContributionItem;
-	
+
+	private FilterField mullMonthlyCumulativeFilterField;
+	private EObjectTableViewerFilterSupport mullMonthlyCumulativeTableFilterSupport;
+
 	private FilterField mullDailyTableFilterField;
 	private EObjectTableViewerFilterSupport mullDailyTableFilterSupport;
-	
+
 	private EObjectTableViewerSortingSupport mullMonthlyTableSortingSupport;
+	private EObjectTableViewerSortingSupport mullMonthlyCumulativeTableSortingSupport;
 	private EObjectTableViewerSortingSupport mullDailySortingSupport;
-	
+
 	private int previousTabSelection;
 	
 	private ActionContributionItem inventoryTableCopyActionContributionItem;
 	private ActionContributionItem inventoryTablePackActionContributionItem;
 	private ActionContributionItem mullMonthlyTableCopyActionContributionItem;
 	private ActionContributionItem mullMonthlyTablePackActionContributionItem;
+	private ActionContributionItem mullMonthlyCumulativeTableCopyActionContributionItem;
+	private ActionContributionItem mullMonthlyCumulativeTablePackActionContributionItem;
 	private ActionContributionItem mullDailyTableCopyActionContributionItem;
 	private ActionContributionItem mullDailyTablePackActionContributionItem;
 
@@ -227,13 +235,6 @@ public class InventoryReport extends ViewPart {
 
 	private String lastFacility = null;
 
-	private PackGridTableColumnsAction inventoryTablePackAction;
-	private CopyGridToClipboardAction inventoryTableCopyAction;
-	private PackGridTableColumnsAction mullMonthlyTablePackAction;
-	private CopyGridToClipboardAction mullMonthlyTableCopyAction;
-	private PackGridTableColumnsAction mullDailyTablePackAction;
-	private CopyGridToClipboardAction mullDailyTableCopyAction;
-
 	/**
 	 * This is a callback that will allow us to create the viewer and initialise it.
 	 */
@@ -242,9 +243,10 @@ public class InventoryReport extends ViewPart {
 
 		colorOrange = new Color(PlatformUI.getWorkbench().getDisplay(), new RGB(255, 200, 15));
 		colorLightGrey = new Color(PlatformUI.getWorkbench().getDisplay(), new RGB(230, 230, 230));
-		mullMonthlyTableFilterField = new FilterField(parent);
-		
+
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
+			mullMonthlyTableFilterField = new FilterField(parent);
+			mullMonthlyCumulativeFilterField = new FilterField(parent);
 			mullDailyTableFilterField = new FilterField(parent);
 		}
 
@@ -339,12 +341,12 @@ public class InventoryReport extends ViewPart {
 		selectedScenariosService.addListener(selectedScenariosServiceListener);
 		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 
-		inventoryTablePackAction = PackActionFactory.createPackColumnsAction(inventoryTableViewer);
+		final PackGridTableColumnsAction inventoryTablePackAction = PackActionFactory.createPackColumnsAction(inventoryTableViewer);
 		inventoryTablePackActionContributionItem = new ActionContributionItem(inventoryTablePackAction);
 		getViewSite().getActionBars().getToolBarManager().add(inventoryTablePackActionContributionItem);
 		inventoryTablePackActionContributionItem.setVisible(folderSelection == 2);
 
-		inventoryTableCopyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(inventoryTableViewer);
+		final CopyGridToClipboardAction inventoryTableCopyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(inventoryTableViewer);
 		inventoryTableCopyActionContributionItem = new ActionContributionItem(inventoryTableCopyAction);
 		getViewSite().getActionBars().getToolBarManager().add(inventoryTableCopyActionContributionItem);
 		inventoryTableCopyActionContributionItem.setVisible(folderSelection == 2);
@@ -371,30 +373,82 @@ public class InventoryReport extends ViewPart {
 				GridViewerHelper.configureLookAndFeel(mullMonthlyTableViewer);
 				mullMonthlyTableViewer.getGrid().setTreeLinesVisible(true);
 				mullMonthlyTableViewer.getGrid().setHeaderVisible(true);
-				
+
 				{
-					createMullColumn("Month", 150, o -> String.format("%d-%d", o.getFirst().ym.getMonthValue(), o.getFirst().ym.getYear()), o -> o.getFirst().getYM());
+					createMullColumn("Month", 150, o -> o.getFirst().ym.format(DateTimeFormatter.ofPattern(MULL_YEAR_MONTH_FORMAT)), o -> o.getFirst().getYM());
 					createMullColumn("Entity", 150, o -> o.getFirst().entity.getName(), o -> o.getFirst().entity.getName());
-					createMullColumn("Overlift", 150, o-> generateDiffString(o, MullInformation::getOverliftCF), o-> generateSortValue(o, MullInformation::getOverliftCF));
-					createMullColumn("Total lifted", 150, o -> generateDiffString(o, MullInformation::getLifted), o-> generateSortValue(o, MullInformation::getLifted));
-					createMullColumn("# Cargo", 150, o -> generateDiffString(o, MullInformation::getCargoCount), o -> generateSortValue(o, MullInformation::getCargoCount));
-					createMullColumn("Monthly entitlement", 150, o -> generateDiffString(o, MullInformation::getMonthlyRE), o -> generateSortValue(o, MullInformation::getMonthlyRE));
-					createMullColumn("Carried entitlement", 150, o -> generateDiffString(o, MullInformation::getCarriedEntitlement), o -> generateSortValue(o, MullInformation::getCarriedEntitlement));
+					createMullColumn("Monthly Entitlement", 150, o -> generateDiffString(o, MullInformation::getMonthlyRE), o -> generateSortValue(o, MullInformation::getMonthlyRE));
+					createMullColumn("Monthly lifted", 150, o -> generateDiffString(o, MullInformation::getLifted), o-> generateSortValue(o, MullInformation::getLifted));
+					createMullColumn("Delta", 150, o -> generateDiffString(o, MullInformation::getDelta), o -> generateSortValue(o, MullInformation::getDelta));
+					createMullColumn("Cumulative Delta", 150, o -> generateDiffString(o, MullInformation::getCumulativeDelta), o -> generateSortValue(o, MullInformation::getCumulativeDelta));
+					createMullColumn("# Cargoes", 150, o -> generateDiffString(o, MullInformation::getCargoCount), o -> generateSortValue(o, MullInformation::getCargoCount));
 					
 					mullItem.setControl(mullMonthlyTableViewer.getControl());
 				}
 			}
 			
-			mullMonthlyTablePackAction = PackActionFactory.createPackColumnsAction(mullMonthlyTableViewer);
+			final PackGridTableColumnsAction mullMonthlyTablePackAction = PackActionFactory.createPackColumnsAction(mullMonthlyTableViewer);
 			mullMonthlyTablePackActionContributionItem = new ActionContributionItem(mullMonthlyTablePackAction);
 			getViewSite().getActionBars().getToolBarManager().add(mullMonthlyTablePackActionContributionItem);
 			mullMonthlyTablePackActionContributionItem.setVisible(folder.getSelectionIndex() == 3);
 			
-			mullMonthlyTableCopyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(mullMonthlyTableViewer);
+			final CopyGridToClipboardAction mullMonthlyTableCopyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(mullMonthlyTableViewer);
 			mullMonthlyTableCopyActionContributionItem = new ActionContributionItem(mullMonthlyTableCopyAction);
 			getViewSite().getActionBars().getToolBarManager().add(mullMonthlyTableCopyActionContributionItem);
 			mullMonthlyTableCopyActionContributionItem.setVisible(folder.getSelectionIndex() == 3);
+
+			final CTabItem mullMonthlyCumulativeItem = new CTabItem(folder, SWT.NONE);
+			mullMonthlyCumulativeItem.setText("MULL Monthly Cumulative");
+			{
+				mullMonthlyCumulativeTableViewer = new GridTableViewer(folder, SWT.V_SCROLL | SWT.H_SCROLL);
+				
+				this.mullMonthlyCumulativeTableFilterSupport = new EObjectTableViewerFilterSupport(mullMonthlyCumulativeTableViewer, mullMonthlyCumulativeTableViewer.getGrid());
+				this.mullMonthlyCumulativeTableSortingSupport = new EObjectTableViewerSortingSupport();
+				mullMonthlyCumulativeTableViewer.setComparator(mullMonthlyCumulativeTableSortingSupport.createViewerComparer());
+				
+				mullMonthlyCumulativeTableViewer.addFilter(mullMonthlyCumulativeTableFilterSupport.createViewerFilter());
+				mullMonthlyCumulativeFilterField.setFilterSupport(mullMonthlyCumulativeTableFilterSupport);
+				
+				getViewSite().getActionBars().getToolBarManager().add(mullMonthlyCumulativeFilterField.getContribution());
+				mullMonthlyCumulativeFilterField.getContribution().setVisible(folderSelection == 4);
+				
+				mullMonthlyCumulativeTableViewer.setContentProvider(new ArrayContentProvider());
+				mullMonthlyCumulativeTableViewer.getControl().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
+				
+				GridViewerHelper.configureLookAndFeel(mullMonthlyCumulativeTableViewer);
+				mullMonthlyCumulativeTableViewer.getGrid().setTreeLinesVisible(true);
+				mullMonthlyCumulativeTableViewer.getGrid().setHeaderVisible(true);
+				
+				{
+					createMullCumulativeColumn("Period", 150, o -> {
+						final YearMonth adpStart = o.getFirst().adpStart;
+						final YearMonth ym = o.getFirst().ym;
+						if (ym.equals(adpStart)) {
+							return ym.format(DateTimeFormatter.ofPattern(MULL_YEAR_MONTH_FORMAT));
+						} else {
+							return String.format("%s - %s", adpStart.format(DateTimeFormatter.ofPattern(MULL_YEAR_MONTH_FORMAT)), ym.format(DateTimeFormatter.ofPattern(MULL_YEAR_MONTH_FORMAT)));
+						}
+					}, o -> o.getFirst().getYM());
+					createMullCumulativeColumn("Entity", 150, o -> o.getFirst().entity.getName(), o -> o.getFirst().entity.getName());
+					createMullCumulativeColumn("Reference Entitlement", 150, o -> generateDiffString(o, MullInformation::getMonthlyRE), o -> generateSortValue(o, MullInformation::getMonthlyRE));
+					createMullCumulativeColumn("Lifted", 150, o -> generateDiffString(o, MullInformation::getLifted), o-> generateSortValue(o, MullInformation::getLifted));
+					createMullCumulativeColumn("Delta", 150, o -> generateDiffString(o, m -> m.monthlyRE - m.lifted), o -> generateSortValue(o, m -> m.monthlyRE - m.lifted));
+					createMullCumulativeColumn("# Cargoes", 150, o -> generateDiffString(o, MullInformation::getCargoCount), o -> generateSortValue(o, MullInformation::getCargoCount));
+					
+					mullMonthlyCumulativeItem.setControl(mullMonthlyCumulativeTableViewer.getControl());
+				}
+			}
 			
+			final PackGridTableColumnsAction mullMonthlyCumulativeTablePackAction = PackActionFactory.createPackColumnsAction(mullMonthlyCumulativeTableViewer);
+			mullMonthlyCumulativeTablePackActionContributionItem = new ActionContributionItem(mullMonthlyCumulativeTablePackAction);
+			getViewSite().getActionBars().getToolBarManager().add(mullMonthlyCumulativeTablePackActionContributionItem);
+			mullMonthlyCumulativeTablePackActionContributionItem.setVisible(folder.getSelectionIndex() == 4);
+
+			final CopyGridToClipboardAction mullMonthlyCumulativeTableCopyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(mullMonthlyCumulativeTableViewer);
+			mullMonthlyCumulativeTableCopyActionContributionItem = new ActionContributionItem(mullMonthlyCumulativeTableCopyAction);
+			getViewSite().getActionBars().getToolBarManager().add(mullMonthlyCumulativeTableCopyActionContributionItem);
+			mullMonthlyCumulativeTableCopyActionContributionItem.setVisible(folder.getSelectionIndex() == 4);
+
 			final CTabItem mullDailyItem = new CTabItem(folder, SWT.NONE);
 
 			mullDailyItem.setText("MULL Daily");
@@ -404,12 +458,12 @@ public class InventoryReport extends ViewPart {
 				this.mullDailyTableFilterSupport = new EObjectTableViewerFilterSupport(mullDailyTableViewer, mullDailyTableViewer.getGrid());
 				this.mullDailySortingSupport = new EObjectTableViewerSortingSupport();
 				mullDailyTableViewer.setComparator(mullDailySortingSupport.createViewerComparer());
-				
+
 				mullDailyTableViewer.addFilter(mullDailyTableFilterSupport.createViewerFilter());
 				mullDailyTableFilterField.setFilterSupport(mullDailyTableFilterSupport);
-				
+
 				getViewSite().getActionBars().getToolBarManager().add(mullDailyTableFilterField.getContribution());
-				mullDailyTableFilterField.getContribution().setVisible(folderSelection == 4);
+				mullDailyTableFilterField.getContribution().setVisible(folderSelection == 5);
 				
 				mullDailyTableViewer.setContentProvider(new ArrayContentProvider());
 				mullDailyTableViewer.getControl().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
@@ -427,19 +481,18 @@ public class InventoryReport extends ViewPart {
 					createMullDailyColumn("Running entitlement", 150, o -> generateDailyDiffString(o, MullDailyInformation::getActualEntitlement), o -> generateDailySortValue(o, MullDailyInformation::getActualEntitlement));
 					mullDailyItem.setControl(mullDailyTableViewer.getControl());
 				}
-				
 			}
-			
-			mullDailyTablePackAction = PackActionFactory.createPackColumnsAction(mullDailyTableViewer);
+
+			final PackGridTableColumnsAction mullDailyTablePackAction = PackActionFactory.createPackColumnsAction(mullDailyTableViewer);
 			mullDailyTablePackActionContributionItem = new ActionContributionItem(mullDailyTablePackAction);
 			getViewSite().getActionBars().getToolBarManager().add(mullDailyTablePackActionContributionItem);
-			mullDailyTablePackActionContributionItem.setVisible(folder.getSelectionIndex() == 4);
-			
-			mullDailyTableCopyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(mullDailyTableViewer);
+			mullDailyTablePackActionContributionItem.setVisible(folder.getSelectionIndex() == 5);
+
+			final CopyGridToClipboardAction mullDailyTableCopyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(mullDailyTableViewer);
 			mullDailyTableCopyActionContributionItem = new ActionContributionItem(mullDailyTableCopyAction);
 			getViewSite().getActionBars().getToolBarManager().add(mullDailyTableCopyActionContributionItem);
-			mullDailyTableCopyActionContributionItem.setVisible(folder.getSelectionIndex() == 4);
-			
+			mullDailyTableCopyActionContributionItem.setVisible(folder.getSelectionIndex() == 5);
+
 			final CTabItem chartItem2 = new CTabItem(folder, SWT.NONE);
 			chartItem2.setText("MULL Chart");
 			{
@@ -448,7 +501,7 @@ public class InventoryReport extends ViewPart {
 				mullMonthlyOverliftChart.getTitle().setVisible(false);
 				chartItem2.setControl(mullMonthlyOverliftChart);
 			}
-			
+
 			final CTabItem chartItem3 = new CTabItem(folder, SWT.NONE);
 			chartItem3.setText("# Cargo Chart");
 			{
@@ -476,13 +529,20 @@ public class InventoryReport extends ViewPart {
 						mullMonthlyTableFilterField.toggleVisibility();
 					}
 					mullMonthlyTableFilterField.getContribution().setVisible(currentTabSelection == 3);
-					
-					mullDailyTableCopyActionContributionItem.setVisible(currentTabSelection == 4);
-					mullDailyTablePackActionContributionItem.setVisible(currentTabSelection == 4);
+
+					mullMonthlyCumulativeTableCopyActionContributionItem.setVisible(currentTabSelection == 4);
+					mullMonthlyCumulativeTablePackActionContributionItem.setVisible(currentTabSelection == 4);
+					if (mullMonthlyCumulativeFilterField.getContribution().getAction().isChecked()) {
+						mullMonthlyCumulativeFilterField.toggleVisibility();
+					}
+					mullMonthlyCumulativeFilterField.getContribution().setVisible(currentTabSelection == 4);
+
+					mullDailyTableCopyActionContributionItem.setVisible(currentTabSelection == 5);
+					mullDailyTablePackActionContributionItem.setVisible(currentTabSelection == 5);
 					if(mullDailyTableFilterField.getContribution().getAction().isChecked()) {
 						mullDailyTableFilterField.toggleVisibility();
 					}
-					mullDailyTableFilterField.getContribution().setVisible(currentTabSelection == 4);
+					mullDailyTableFilterField.getContribution().setVisible(currentTabSelection == 5);
 				}
 				getViewSite().getActionBars().getToolBarManager().update(true);
 			}
@@ -508,7 +568,6 @@ public class InventoryReport extends ViewPart {
 			IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 			eventBroker.unsubscribe(this.todayHandler);
 		}
-
 		super.dispose();
 	}
 
@@ -516,7 +575,7 @@ public class InventoryReport extends ViewPart {
 		final DateFormat dateFormat = new SimpleDateFormat("d MMM");
 		final ISeriesSet seriesSet = inventoryInsAndOutChart.getSeriesSet();
 		final ISeriesSet inventoryDailyChartSeriesSet = inventoryDailyChartViewer.getSeriesSet();
-		
+
 		// Delete existing data
 		clearChartData(seriesSet);
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
@@ -530,12 +589,12 @@ public class InventoryReport extends ViewPart {
 		final List<InventoryLevel> tableLevels = new LinkedList<>();
 		
 		final List<Pair<MullInformation,MullInformation>> pairedMullList = new LinkedList<>();
+		final List<Pair<MullInformation,MullInformation>> pairedCumulativeMullList = new LinkedList<>();
 		final List<Pair<MullDailyInformation, MullDailyInformation>> pairedDailyMullList = new LinkedList<>();
 
 		Optional<InventoryChangeEvent> firstInventoryData = Optional.empty();
 
 		if (toDisplay != null) {
-			
 			final ScheduleModel scheduleModel = toDisplay.getTypedResult(ScheduleModel.class);
 			if (scheduleModel != null) {
 				final Schedule schedule = scheduleModel.getSchedule();
@@ -559,7 +618,7 @@ public class InventoryReport extends ViewPart {
 									final YearMonth adpStart = adpModel.getYearStart();
 									final YearMonth adpEnd = adpModel.getYearEnd();
 									final LocalDate startDate = adpStart.atDay(1);
-									TreeMap<LocalDate, InventoryDailyEvent> insAndOuts = getInventoryInsAndOuts(inventory, lngScenarioModel);
+									TreeMap<LocalDate, InventoryDailyEvent> insAndOuts = getInventoryInsAndOuts(inventory);
 									int totalInventoryVolume = 0;
 									while (!insAndOuts.isEmpty() && insAndOuts.firstKey().isBefore(startDate)) {
 										final InventoryDailyEvent event = insAndOuts.remove(insAndOuts.firstKey());
@@ -581,12 +640,33 @@ public class InventoryReport extends ViewPart {
 													final Schedule pinnedSchedule = pinnedScheduleModel.getSchedule();
 													final LNGScenarioModel pinnedLNGScenarioModel = (LNGScenarioModel) pinnedResult.getRootObject();
 													final List<MullInformation> pinnedMullList = new LinkedList<>();
+													final List<MullInformation> pinnedMullCumulativeList = new LinkedList<>();
 													final List<MullDailyInformation> pinnedMullDailyList = new LinkedList<>();
 													if (pinnedSchedule != null) {
 														final List<CargoAllocation> pinnedCargoAllocations = pinnedSchedule.getCargoAllocations();
-														
-														fillMullInformationList(adpStart, adpEnd, entitiesOrdered, sProfile, monthlyProduction, expectedLoadPort, pinnedCargoAllocations, pinnedMullList, pinnedLNGScenarioModel);
-														
+
+														fillMullInformationList(adpStart, adpEnd, entitiesOrdered, sProfile, monthlyProduction, expectedLoadPort, pinnedCargoAllocations, pinnedMullList, pinnedLNGScenarioModel, mullProfile.getFullCargoLotValue());
+														final Map<BaseLegalEntity, MullInformation> previousCumulativeInformationMap = new HashMap<>();
+														for (final MullInformation currentMullInfo : pinnedMullList) {
+															final MullInformation prevMullInfo = previousCumulativeInformationMap.get(currentMullInfo.entity);
+															final MullInformation nextCumulativeMullInformation = new MullInformation();
+															nextCumulativeMullInformation.ym = currentMullInfo.getYM();
+															nextCumulativeMullInformation.entity = currentMullInfo.getEntity();
+															nextCumulativeMullInformation.adpStart = adpStart;
+															nextCumulativeMullInformation.cumulativeDeltaViolatesFCL = currentMullInfo.cumulativeDeltaViolatesFCL;
+															if (prevMullInfo == null) {
+																nextCumulativeMullInformation.cargoCount = currentMullInfo.getCargoCount();
+																nextCumulativeMullInformation.monthlyRE = currentMullInfo.getMonthlyRE();
+																nextCumulativeMullInformation.lifted = currentMullInfo.getLifted();
+															} else {
+																nextCumulativeMullInformation.cargoCount = currentMullInfo.getCargoCount() + prevMullInfo.getCargoCount();
+																nextCumulativeMullInformation.monthlyRE = currentMullInfo.getMonthlyRE() + prevMullInfo.getMonthlyRE();
+																nextCumulativeMullInformation.lifted = currentMullInfo.getLifted() + prevMullInfo.getLifted();
+															}
+															previousCumulativeInformationMap.put(nextCumulativeMullInformation.getEntity(), nextCumulativeMullInformation);
+															pinnedMullCumulativeList.add(nextCumulativeMullInformation);
+														}
+
 														final List<CargoAllocation> sortedPinnedCargoAllocations = pinnedCargoAllocations.stream() //
 																.filter(c->c.getSlotAllocations().get(0).getPort().equals(expectedLoadPort)) //
 																.sorted((c1, c2) -> c1.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate().compareTo(c2.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate())) //
@@ -598,7 +678,7 @@ public class InventoryReport extends ViewPart {
 														for (final Entry<BaseLegalEntity, BaseLegalEntity> entry : entityEntityMap.entrySet()) {
 															reverseEntityEntityMap.put(entry.getValue(), entry.getKey());
 														}
-														final Map<LocalDate, Map<BaseLegalEntity, Integer>> pinnedAllocatedEntitlement = calculateDailyAllocatedEntitlement(insAndOuts, relativeEntitlements, entityEntityMap, reverseEntityEntityMap);
+														final Map<LocalDate, Map<BaseLegalEntity, Integer>> pinnedAllocatedEntitlement = calculateDailyAllocatedEntitlement(insAndOuts, relativeEntitlements, entityEntityMap);
 														final List<BaseLegalEntity> otherEntities = sProfile.getEntityTable().stream().map(MullEntityRow::getEntity).collect(Collectors.toList());
 														final Map<LocalDate, Map<BaseLegalEntity, Integer>> pinnedActualEntitlement = calculateDailyActualEntitlement(otherEntities, sortedPinnedCargoAllocations, insAndOuts, pinnedAllocatedEntitlement, initialAllocation);
 														insAndOuts.entrySet().stream() //
@@ -614,6 +694,7 @@ public class InventoryReport extends ViewPart {
 																});
 													}
 													final List<MullInformation> otherMullList = new LinkedList<>();
+													final List<MullInformation> otherMullCumulativeList = new LinkedList<>();
 													final List<MullDailyInformation> otherMullDailyList = new LinkedList<>();
 													if (otherResult != null) {
 														final ScheduleModel otherScheduleModel = otherResult.getTypedResult(ScheduleModel.class);
@@ -628,7 +709,29 @@ public class InventoryReport extends ViewPart {
 																final Port otherInventoryLoadPort = otherInventory.getPort();
 
 																final List<CargoAllocation> otherCargoAllocations = otherSchedule.getCargoAllocations();
-																fillMullInformationList(adpStart, adpEnd, entitiesOrdered, otherSProfile, monthlyProduction, otherInventoryLoadPort, otherCargoAllocations, otherMullList, otherLngScenarioModel);
+
+																fillMullInformationList(adpStart, adpEnd, entitiesOrdered, otherSProfile, monthlyProduction, otherInventoryLoadPort, otherCargoAllocations, otherMullList, otherLngScenarioModel, mullProfile.getFullCargoLotValue());
+
+																final Map<BaseLegalEntity, MullInformation> previousCumulativeInformationMap = new HashMap<>();
+																for (final MullInformation currentMullInfo : otherMullList) {
+																	final MullInformation prevMullInfo = previousCumulativeInformationMap.get(currentMullInfo.entity);
+																	final MullInformation nextCumulativeMullInformation = new MullInformation();
+																	nextCumulativeMullInformation.ym = currentMullInfo.getYM();
+																	nextCumulativeMullInformation.entity = currentMullInfo.getEntity();
+																	nextCumulativeMullInformation.adpStart = adpStart;
+																	nextCumulativeMullInformation.cumulativeDeltaViolatesFCL = currentMullInfo.cumulativeDeltaViolatesFCL;
+																	if (prevMullInfo == null) {
+																		nextCumulativeMullInformation.cargoCount = currentMullInfo.getCargoCount();
+																		nextCumulativeMullInformation.monthlyRE = currentMullInfo.getMonthlyRE();
+																		nextCumulativeMullInformation.lifted = currentMullInfo.getLifted();
+																	} else {
+																		nextCumulativeMullInformation.cargoCount = currentMullInfo.getCargoCount() + prevMullInfo.getCargoCount();
+																		nextCumulativeMullInformation.monthlyRE = currentMullInfo.getMonthlyRE() + prevMullInfo.getMonthlyRE();
+																		nextCumulativeMullInformation.lifted = currentMullInfo.getLifted() + prevMullInfo.getLifted();
+																	}
+																	previousCumulativeInformationMap.put(nextCumulativeMullInformation.getEntity(), nextCumulativeMullInformation);
+																	otherMullCumulativeList.add(nextCumulativeMullInformation);
+																}
 
 																final List<CargoAllocation> sortedOtherCargoAllocations = otherCargoAllocations.stream() //
 																		.filter(c->c.getSlotAllocations().get(0).getPort().equals(otherInventoryLoadPort)) //
@@ -642,7 +745,8 @@ public class InventoryReport extends ViewPart {
 																for (final Entry<BaseLegalEntity, BaseLegalEntity> entry : entityEntityMap.entrySet()) {
 																	reverseEntityEntityMap.put(entry.getValue(), entry.getKey());
 																}
-																final Map<LocalDate, Map<BaseLegalEntity, Integer>> otherAllocatedEntitlement = calculateDailyAllocatedEntitlement(insAndOuts, relativeEntitlements, entityEntityMap, reverseEntityEntityMap);
+
+																final Map<LocalDate, Map<BaseLegalEntity, Integer>> otherAllocatedEntitlement = calculateDailyAllocatedEntitlement(insAndOuts, relativeEntitlements, entityEntityMap);
 																final List<BaseLegalEntity> otherEntities = otherSProfile.getEntityTable().stream().map(MullEntityRow::getEntity).collect(Collectors.toList());
 																final Map<LocalDate, Map<BaseLegalEntity, Integer>> otherActualEntitlement = calculateDailyActualEntitlement(otherEntities, sortedOtherCargoAllocations, insAndOuts, otherAllocatedEntitlement, initialAllocation);
 																boolean grey = false;
@@ -661,7 +765,6 @@ public class InventoryReport extends ViewPart {
 															}
 														}
 													}
-													
 													if (pinnedMullList.isEmpty() && !otherMullList.isEmpty()) {
 														final Iterator<MullInformation> otherIter = otherMullList.iterator();
 														while (otherIter.hasNext()) {
@@ -682,7 +785,28 @@ public class InventoryReport extends ViewPart {
 														}
 														assert !pinnedIter.hasNext() && !otherIter.hasNext();
 													}
-													
+
+													if (pinnedMullCumulativeList.isEmpty() && !otherMullCumulativeList.isEmpty()) {
+														final Iterator<MullInformation> otherIter = otherMullCumulativeList.iterator();
+														while (otherIter.hasNext()) {
+															pairedCumulativeMullList.add(new Pair<>(otherIter.next(), null));
+														}
+													} else if (!pinnedMullCumulativeList.isEmpty() && otherMullCumulativeList.isEmpty()) {
+														final Iterator<MullInformation> pinnedIter = pinnedMullCumulativeList.iterator();
+														while (pinnedIter.hasNext()) {
+															pairedCumulativeMullList.add(new Pair<>(pinnedIter.next(), null));
+														}
+													} else if (!pinnedMullCumulativeList.isEmpty() && !otherMullCumulativeList.isEmpty()) {
+														final Iterator<MullInformation> pinnedIter = pinnedMullCumulativeList.iterator();
+														final Iterator<MullInformation> otherIter = otherMullCumulativeList.iterator();
+														while (pinnedIter.hasNext() && otherIter.hasNext()) {
+															final MullInformation currPin = pinnedIter.next();
+															final MullInformation currOth = otherIter.next();
+															pairedCumulativeMullList.add(new Pair<>(currPin, currOth));
+														}
+														assert !pinnedIter.hasNext() && !otherIter.hasNext();
+													}
+
 													if (pinnedMullDailyList.isEmpty() && !otherMullDailyList.isEmpty()) {
 														final Iterator<MullDailyInformation> otherIter = otherMullDailyList.iterator();
 														while (otherIter.hasNext()) {
@@ -703,17 +827,38 @@ public class InventoryReport extends ViewPart {
 														}
 														assert !pinnedIter.hasNext() && !otherIter.hasNext();
 													}
-													
 												} else if (otherResult != null) {
 													final ScheduleModel otherScheduleModel = otherResult.getTypedResult(ScheduleModel.class);
 													final Schedule otherSchedule = otherScheduleModel.getSchedule();
 													if (otherSchedule != null) {
 														final List<CargoAllocation> otherCargoAllocations = otherSchedule.getCargoAllocations();
 														final List<MullInformation> otherMullList = new LinkedList<>();
+														final List<MullInformation> otherMullCumulativeList = new LinkedList<>();
 														final List<MullDailyInformation> otherMullDailyList = new LinkedList<>();
-														
-														fillMullInformationList(adpStart, adpEnd, entitiesOrdered, sProfile, monthlyProduction, expectedLoadPort, otherCargoAllocations, otherMullList, lngScenarioModel);
+
+														fillMullInformationList(adpStart, adpEnd, entitiesOrdered, sProfile, monthlyProduction, expectedLoadPort, otherCargoAllocations, otherMullList, lngScenarioModel, mullProfile.getFullCargoLotValue());
+
 														final Map<BaseLegalEntity, Integer> initialAllocation = calculateInitialAllocation(sProfile);
+														final Map<BaseLegalEntity, MullInformation> previousCumulativeInformationMap = new HashMap<>();
+														for (final MullInformation currentMullInfo : otherMullList) {
+															final MullInformation prevMullInfo = previousCumulativeInformationMap.get(currentMullInfo.entity);
+															final MullInformation nextCumulativeMullInformation = new MullInformation();
+															nextCumulativeMullInformation.ym = currentMullInfo.getYM();
+															nextCumulativeMullInformation.entity = currentMullInfo.getEntity();
+															nextCumulativeMullInformation.adpStart = adpStart;
+															nextCumulativeMullInformation.cumulativeDeltaViolatesFCL = currentMullInfo.cumulativeDeltaViolatesFCL;
+															if (prevMullInfo == null) {
+																nextCumulativeMullInformation.cargoCount = currentMullInfo.getCargoCount();
+																nextCumulativeMullInformation.monthlyRE = currentMullInfo.getMonthlyRE();
+																nextCumulativeMullInformation.lifted = currentMullInfo.getLifted();
+															} else {
+																nextCumulativeMullInformation.cargoCount = currentMullInfo.getCargoCount() + prevMullInfo.getCargoCount();
+																nextCumulativeMullInformation.monthlyRE = currentMullInfo.getMonthlyRE() + prevMullInfo.getMonthlyRE();
+																nextCumulativeMullInformation.lifted = currentMullInfo.getLifted() + prevMullInfo.getLifted();
+															}
+															previousCumulativeInformationMap.put(nextCumulativeMullInformation.getEntity(), nextCumulativeMullInformation);
+															otherMullCumulativeList.add(nextCumulativeMullInformation);
+														}
 														final List<CargoAllocation> sortedOtherCargoAllocations = otherCargoAllocations.stream() //
 																.filter(c->c.getSlotAllocations().get(0).getPort().equals(expectedLoadPort)) //
 																.sorted((c1, c2) -> c1.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate().compareTo(c2.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate())) //
@@ -724,7 +869,7 @@ public class InventoryReport extends ViewPart {
 														for (final Entry<BaseLegalEntity, BaseLegalEntity> entry : entityEntityMap.entrySet()) {
 															reverseEntityEntityMap.put(entry.getValue(), entry.getKey());
 														}
-														final Map<LocalDate, Map<BaseLegalEntity, Integer>> otherAllocatedEntitlement = calculateDailyAllocatedEntitlement(insAndOuts, relativeEntitlements, entityEntityMap, reverseEntityEntityMap);
+														final Map<LocalDate, Map<BaseLegalEntity, Integer>> otherAllocatedEntitlement = calculateDailyAllocatedEntitlement(insAndOuts, relativeEntitlements, entityEntityMap);
 														final Map<LocalDate, Map<BaseLegalEntity, Integer>> otherActualEntitlement = calculateDailyActualEntitlement(entitiesOrdered, sortedOtherCargoAllocations, insAndOuts, otherAllocatedEntitlement, initialAllocation);
 														boolean grey = false;
 														for (final Entry<LocalDate, InventoryDailyEvent> e : insAndOuts.entrySet()) {
@@ -739,17 +884,12 @@ public class InventoryReport extends ViewPart {
 															}
 															grey = !grey;
 														}
-														final Iterator<MullInformation> otherIter = otherMullList.iterator();
-														while (otherIter.hasNext()) {
-															pairedMullList.add(new Pair<>(otherIter.next(), null));
-														}
-														final Iterator<MullDailyInformation> otherDailyIter = otherMullDailyList.iterator();
-														while (otherDailyIter.hasNext()) {
-															pairedDailyMullList.add(new Pair<>(otherDailyIter.next(), null));
-														}
+														otherMullList.forEach(m -> pairedMullList.add(Pair.of(m, null)));
+														otherMullCumulativeList.forEach(m -> pairedCumulativeMullList.add(Pair.of(m, null)));
+														otherMullDailyList.forEach(m -> pairedDailyMullList.add(Pair.of(m, null)));
 													}
 												}
-												
+
 												final List<YearMonth> monthsToDisplay = new LinkedList<>();
 												YearMonth currentSeen = null;
 												for (Pair<MullInformation, MullInformation> pair : pairedMullList) {
@@ -797,8 +937,7 @@ public class InventoryReport extends ViewPart {
 									.entrySet().stream() //
 									.filter(x -> {
 										if (latestLoad.isPresent() && firstInventoryDataFinal.isPresent()) {
-											boolean res = !x.getKey().isAfter(latestLoad.get()) && x.getKey().isAfter(firstInventoryDataFinal.get().getDate());
-											return res;
+											return !x.getKey().isAfter(latestLoad.get()) && x.getKey().isAfter(firstInventoryDataFinal.get().getDate());
 										}
 										return false;
 									})//
@@ -1112,7 +1251,7 @@ public class InventoryReport extends ViewPart {
 
 		inventoryDailyChartViewer.updateLayout();
 		inventoryDailyChartViewer.redraw();
-		
+
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
 			finaliseMULLChart(mullMonthlyOverliftChart, "Month", "Overlift");
 			finaliseMULLChart(mullMonthlyCargoCountChart, "Month", "# Cargoes Lifted");
@@ -1146,12 +1285,13 @@ public class InventoryReport extends ViewPart {
 		inventoryTableViewer.setInput(tableLevels);
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
 			mullMonthlyTableViewer.setInput(pairedMullList);
+			mullMonthlyCumulativeTableViewer.setInput(pairedCumulativeMullList);
 			mullDailyTableViewer.setInput(pairedDailyMullList);
 		}
 	}
 
 	private Map<LocalDate, Map<BaseLegalEntity, Integer>> calculateDailyAllocatedEntitlement(TreeMap<LocalDate, InventoryDailyEvent> insAndOuts,
-			List<Pair<BaseLegalEntity, Double>> relativeEntitlements, Map<BaseLegalEntity, BaseLegalEntity> entityEntityMap, Map<BaseLegalEntity, BaseLegalEntity> reverseEntityEntityMap) {
+			List<Pair<BaseLegalEntity, Double>> relativeEntitlements, Map<BaseLegalEntity, BaseLegalEntity> entityEntityMap) {
 		Map<LocalDate, Map<BaseLegalEntity, Integer>> ret = new HashMap<>();
 		for (Entry<LocalDate, InventoryDailyEvent> e : insAndOuts.entrySet()) {
 			int vol = e.getValue().netVolumeIn;
@@ -1254,49 +1394,6 @@ public class InventoryReport extends ViewPart {
 		series.setYSeries(values);
 		return series;
 	}
-	
-	private IBarSeries createCargoCountBarSeries(final ISeriesSet seriesSet, final String name, final List<Pair<Integer, Integer>> mullPairs) {
-		final double[] xVals = new double[2*mullPairs.size()];
-		final double[] values = new double[2*mullPairs.size()];
-		int idx = 0;
-		
-		for (final Pair<Integer, Integer> p : mullPairs) {
-			int xVal = p.getFirst();
-			xVals[idx] = (double) xVal;
-			values[idx] = (double) p.getSecond();
-			idx++;
-			
-			xVals[idx] = (double) (xVal+1);
-			values[idx] = 0;
-			idx++;
-		}
-		final IBarSeries series = (IBarSeries) seriesSet.createSeries(SeriesType.BAR, name);
-		series.setXSeries(xVals);
-		series.setYSeries(values);
-		return series;
-	}
-	
-	private IBarSeries createMULLBarSeries(final ISeriesSet seriesSet, final String name, final List<Pair<Integer, Integer>> mullPairs) {
-		
-		final double[] xVals = new double[2*mullPairs.size()];
-		final double[] values = new double[2*mullPairs.size()];
-		int idx = 0;
-		
-		for (final Pair<Integer, Integer> p : mullPairs) {
-			int xVal = p.getFirst();
-			xVals[idx] = (double) xVal;
-			values[idx] = (double) p.getSecond();
-			idx++;
-
-			xVals[idx] = (double) (xVal+1);
-			values[idx] = 0;
-			idx++;
-		}
-		final IBarSeries series = (IBarSeries) seriesSet.createSeries(SeriesType.BAR, name);
-		series.setXSeries(xVals);
-		series.setYSeries(values);
-		return series;
-	}
 
 	private GridViewerColumn createColumn(final String title, final int width, final Function<InventoryLevel, String> labelProvider) {
 		final GridViewerColumn column = new GridViewerColumn(inventoryTableViewer, SWT.NONE);
@@ -1379,8 +1476,17 @@ public class InventoryReport extends ViewPart {
 				if (element.getFirst().ym.getMonthValue() % 2 == 1) {
 					cell.setBackground(colorLightGrey);
 				}
-				if (!title.equals("Month") && !title.equals("Entity") && element.getSecond() != null && cellText.length() > 0 && !cellText.equals("0")) {
-					cell.setForeground(colourRed);
+				if (!title.equals("Month") && !title.equals("Entity")) {
+					if (element.getSecond() == null) {
+						if ((element.getFirst().deltaViolatesFCL && title.equals("Delta"))
+								|| (element.getFirst().cumulativeDeltaViolatesFCL && title.equals("Cumulative Delta"))) {
+							cell.setForeground(colourRed);
+						}
+					} else {
+						if (cellText.length() > 0 && !cellText.equals("0")) {
+							cell.setForeground(colourRed);
+						}
+					}
 				}
 			}
 		});
@@ -1404,6 +1510,60 @@ public class InventoryReport extends ViewPart {
 		column.getColumn().setData(EObjectTableViewer.COLUMN_FILTER, filterProvider);
 		
 		this.mullMonthlyTableSortingSupport.addSortableColumn(mullMonthlyTableViewer, column, column.getColumn());
+		final IComparableProvider sortingProvider = m -> sortingFetcher.apply((Pair<MullInformation, MullInformation>) m);
+		
+		column.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, sortingProvider);
+		return column;
+	}
+
+	private GridViewerColumn createMullCumulativeColumn(final String title, final int width, Function<Pair<MullInformation,MullInformation>, String> labelProvider, Function<Pair<MullInformation, MullInformation>, Comparable<?>> sortingFetcher) {
+		final GridViewerColumn column = new GridViewerColumn(mullMonthlyCumulativeTableViewer, SWT.NONE);
+		GridViewerHelper.configureLookAndFeel(column);
+		column.getColumn().setText(title);
+		column.getColumn().setWidth(width);
+		column.setLabelProvider(new CellLabelProvider() {
+			
+			@Override
+			public void update(ViewerCell cell) {
+				final Pair<MullInformation, MullInformation> element = (Pair<MullInformation, MullInformation>) cell.getElement();
+				final String cellText = labelProvider.apply(element);
+				cell.setText(cellText);
+				if (element.getFirst().ym.getMonthValue() % 2 == 1) {
+					cell.setBackground(colorLightGrey);
+				}
+				if (!title.equals("Period") && !title.equals("Entity")) {
+					if (element.getSecond() == null) {
+						if (element.getFirst().cumulativeDeltaViolatesFCL && title.equals("Delta")) {
+							cell.setForeground(colourRed);
+						}
+					} else {
+						if (cellText.length() > 0 && !cellText.equals("0")) {
+							cell.setForeground(colourRed);
+						}
+					}
+				}
+			}
+		});
+
+		this.mullMonthlyCumulativeTableFilterSupport.createColumnMnemonics(column.getColumn(), column.getColumn().getText());
+		final IFilterProvider filterProvider = new IFilterProvider() {
+			@Override
+			public @Nullable String render(final Object object) {
+				if (object instanceof Pair<?, ?>) {
+					return labelProvider.apply((Pair<MullInformation, MullInformation>) object);
+				}
+				return null;
+			}
+
+			@Override
+			public Object getFilterValue(final Object object) {
+				return labelProvider.apply((Pair<MullInformation,MullInformation>) object);
+			}
+		};
+
+		column.getColumn().setData(EObjectTableViewer.COLUMN_FILTER, filterProvider);
+		
+		this.mullMonthlyCumulativeTableSortingSupport.addSortableColumn(mullMonthlyCumulativeTableViewer, column, column.getColumn());
 		final IComparableProvider sortingProvider = m -> sortingFetcher.apply((Pair<MullInformation, MullInformation>) m);
 		
 		column.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, sortingProvider);
@@ -1604,7 +1764,7 @@ public class InventoryReport extends ViewPart {
 				return String.format("%,d", difference);
 			}
 		} else {
-			return String.format("%,d", pinnedVal);
+			return pinnedVal == 0 ? "-" : String.format("%,d", pinnedVal);
 		}
 	}
 	
@@ -1655,26 +1815,30 @@ public class InventoryReport extends ViewPart {
 			prev.put(curr.entity, curr);
 		}
 	}
-	
-	private TreeMap<LocalDate, InventoryDailyEvent> getInventoryInsAndOuts(Inventory inventory, LNGScenarioModel scenarioModel) {
-		List<InventoryCapacityRow> capacities = inventory.getCapacities();
-		
-		TreeMap<LocalDate, InventoryCapacityRow> capcityTreeMap = 
-				capacities.stream()
-				.collect(Collectors.toMap(InventoryCapacityRow::getDate,
-							c -> c,
-							(oldValue, newValue) -> newValue,
-							TreeMap::new));
-		
+
+	private void calculateCumulativeDelta(List<MullInformation> mullList, YearMonth adpStart, int fclValue) {
+		final Map<BaseLegalEntity, MullInformation> prev = new HashMap<>();
+		for (MullInformation curr : mullList) {
+			if (curr.ym.equals(adpStart)) {
+				curr.cumulativeDelta = curr.getDelta();
+			} else {
+				curr.cumulativeDelta = prev.get(curr.entity).getCumulativeDelta() + curr.getDelta();
+			}
+			curr.cumulativeDeltaViolatesFCL = curr.cumulativeDelta < -fclValue || curr.cumulativeDelta > fclValue;
+			prev.put(curr.entity, curr);
+		}
+	}
+
+	private TreeMap<LocalDate, InventoryDailyEvent> getInventoryInsAndOuts(Inventory inventory) {
 		TreeMap<LocalDate, InventoryDailyEvent> insAndOuts = new TreeMap<>();
-		
+
 		// add all feeds to map
-		addNetVolumes(inventory.getFeeds(), capcityTreeMap, insAndOuts, IntUnaryOperator.identity());
-		addNetVolumes(inventory.getOfftakes(), capcityTreeMap, insAndOuts, a -> -a);
+		addNetVolumes(inventory.getFeeds(), insAndOuts, IntUnaryOperator.identity());
+		addNetVolumes(inventory.getOfftakes(), insAndOuts, a -> -a);
 		return insAndOuts;
 	}
 	
-	private void addNetVolumes(List<InventoryEventRow> events, TreeMap<LocalDate, InventoryCapacityRow> capcityTreeMap, TreeMap<LocalDate, InventoryDailyEvent> insAndOuts, IntUnaryOperator volumeFunction) {
+	private void addNetVolumes(List<InventoryEventRow> events, TreeMap<LocalDate, InventoryDailyEvent> insAndOuts, IntUnaryOperator volumeFunction) {
 		for (InventoryEventRow inventoryEventRow : events) {
 			if (inventoryEventRow.getStartDate() != null) {
 				InventoryDailyEvent inventoryDailyEvent = insAndOuts.get(inventoryEventRow.getStartDate());
@@ -1682,11 +1846,6 @@ public class InventoryReport extends ViewPart {
 					inventoryDailyEvent = new InventoryDailyEvent();
 					inventoryDailyEvent.date = inventoryEventRow.getStartDate();
 					
-//					InventoryCapacityRow capacityRow = capcityTreeMap.get(inventoryDailyEvent.date) == null //
-//							? capcityTreeMap.lowerEntry(inventoryDailyEvent.date).getValue() //
-//							: capcityTreeMap.get(inventoryDailyEvent.date);
-//					inventoryDailyEvent.minVolume = capacityRow.getMinVolume();
-//					inventoryDailyEvent.maxVolume = capacityRow.getMaxVolume();
 					insAndOuts.put(inventoryEventRow.getStartDate(), inventoryDailyEvent);
 				}
 				inventoryDailyEvent.addVolume(volumeFunction.applyAsInt(inventoryEventRow.getReliableVolume()));
@@ -1715,7 +1874,7 @@ public class InventoryReport extends ViewPart {
 		}
 	}
 	
-	private void fillMullInformationList(final YearMonth adpStart, final YearMonth adpEnd, final List<BaseLegalEntity> entitiesOrdered, final MullSubprofile sProfile, final Map<YearMonth, Integer> monthlyProduction, final Port inventoryLoadPort, final List<CargoAllocation> cargoAllocations, final List<MullInformation> list, final LNGScenarioModel lngScenarioModel) {
+	private void fillMullInformationList(final YearMonth adpStart, final YearMonth adpEnd, final List<BaseLegalEntity> entitiesOrdered, final MullSubprofile sProfile, final Map<YearMonth, Integer> monthlyProduction, final Port inventoryLoadPort, final List<CargoAllocation> cargoAllocations, final List<MullInformation> list, final LNGScenarioModel lngScenarioModel, final int fclValue) {
 		final Map<YearMonth, Map<BaseLegalEntity, Integer>> monthlyRE = calculateMonthlyRE(adpStart, adpEnd, sProfile, monthlyProduction);
 		final Map<YearMonth, Map<BaseLegalEntity, Integer>> actualLift = calculateActualLift(adpStart, adpEnd, sProfile, cargoAllocations, inventoryLoadPort);
 		final Map<YearMonth, Map<BaseLegalEntity, Integer>> cargoCount = calculateCargoCount(adpStart, adpEnd, sProfile, cargoAllocations, inventoryLoadPort);
@@ -1737,11 +1896,14 @@ public class InventoryReport extends ViewPart {
 				currRow.overlift = actualLift.get(ym).get(entityMirrorObject) - monthlyRE.get(ym).get(entityMirrorObject);
 				currRow.monthlyRE = monthlyRE.get(ym).get(entityMirrorObject);
 				currRow.cargoCount = cargoCount.get(ym).get(entityMirrorObject);
+				currRow.delta = currRow.monthlyRE - currRow.lifted;
+				currRow.deltaViolatesFCL = currRow.delta > fclValue || currRow.delta < -fclValue;
 				list.add(currRow);
 			}
 		}
 		calculateMonthEndEntitlement(list, adpStart);
 		calculateOverliftCF(list, adpStart);
+		calculateCumulativeDelta(list, adpStart, fclValue);
 		final Map<BaseLegalEntity, Integer> mappedInitialAllocation = new HashMap<>();
 		entitiesOrdered.stream().forEach(e -> mappedInitialAllocation.put(e, initialAllocation.get(entityEntityMap.get(e))));
 		calculateCarriedEntitlement(list, adpStart, mappedInitialAllocation);

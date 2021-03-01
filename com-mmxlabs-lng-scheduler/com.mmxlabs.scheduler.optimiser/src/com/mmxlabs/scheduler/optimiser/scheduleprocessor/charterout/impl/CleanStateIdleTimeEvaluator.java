@@ -381,7 +381,12 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		if (ladenRoute == charterOutOption.getToCharterPort().getSecond()) {
 			dischargeToCharterPortCostType = CostType.RoundTripBallast;
 		}
-		final long dischargeToCharterPortRouteCosts = routeCostProvider.getRouteCost(charterOutOption.getToCharterPort().getSecond(), vessel, ballastStartTime, CostType.Ballast);
+		final long dischargeToCharterPortRouteCosts = routeCostProvider.getRouteCost(charterOutOption.getToCharterPort().getSecond(), //
+				originalBallast.getOptions().getFromPortSlot().getPort(), //
+				charterOutPortSlot.getPort(), //
+				vessel, //
+				ballastStartTime, //
+				CostType.Ballast);
 
 		final VoyageOptions dischargeToCharterPortVoyageOptions = new VoyageOptions(originalBallast.getOptions().getFromPortSlot(), charterOutPortSlot);
 		dischargeToCharterPortVoyageOptions.setRoute(charterOutOption.getToCharterPort().getSecond(), charterOutOption.getToCharterPort().getFirst(), dischargeToCharterPortRouteCosts);
@@ -417,7 +422,12 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		charterOutOption.setPortOptions(generatedCharterPortOptions);
 		// (3) ballast to return port
 		final int startOfPostCharterVoyage = charterOutOption.getCharterStartTime() + charterOutOption.getCharterDuration();
-		final long charterToReturnPortRouteCosts = routeCostProvider.getRouteCost(charterOutOption.getFromCharterPort().getSecond(), vessel, startOfPostCharterVoyage, CostType.Ballast);
+		final long charterToReturnPortRouteCosts = routeCostProvider.getRouteCost(charterOutOption.getFromCharterPort().getSecond(), //
+				charterOutPortSlot.getPort(), //
+				originalBallast.getOptions().getToPortSlot().getPort(), //
+				vessel, //
+				startOfPostCharterVoyage, //
+				CostType.Ballast);
 
 		final VoyageOptions charterToReturnPortVoyageOptions = new VoyageOptions(charterOutPortSlot, originalBallast.getOptions().getToPortSlot());
 		charterToReturnPortVoyageOptions.setRoute(charterOutOption.getFromCharterPort().getSecond(), charterOutOption.getFromCharterPort().getFirst(), charterToReturnPortRouteCosts);

@@ -88,7 +88,7 @@ public class DetailConstraintStatusFactory {
 	}
 	
 	public DetailConstraintStatusFactory withConstraintKey(@Nullable final Object key) {
-		this.constraintKey = constraintKey;
+		this.constraintKey = key;
 		return this;
 	}
 

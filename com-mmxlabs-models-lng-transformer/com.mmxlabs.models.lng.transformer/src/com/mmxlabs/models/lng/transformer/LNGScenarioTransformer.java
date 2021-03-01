@@ -100,6 +100,7 @@ import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.pricing.SuezCanalRouteRebate;
 import com.mmxlabs.models.lng.pricing.SuezCanalTariff;
 import com.mmxlabs.models.lng.pricing.SuezCanalTariffBand;
 import com.mmxlabs.models.lng.pricing.SuezCanalTugBand;
@@ -861,7 +862,7 @@ public class LNGScenarioTransformer {
 			}
 		}
 
-		buildDistances(builder, vesselAssociation, modelEntityMap);
+		buildDistances(builder, vesselAssociation, portAssociation, modelEntityMap);
 
 		registerSpotCargoMarkets(modelEntityMap);
 
@@ -879,7 +880,7 @@ public class LNGScenarioTransformer {
 		buildRouteEntryPoints(portModel, portAssociation);
 
 		buildCanalDistances(portModel);
-		
+
 		// freeze any frozen assignments
 		freezeAssignmentModel(builder, modelEntityMap);
 
@@ -2586,8 +2587,9 @@ public class LNGScenarioTransformer {
 								marketGroupSlots.add(fobPurchaseSlot);
 
 								registerSpotMarketSlot(modelEntityMap, fobSlot, fobPurchaseSlot);
-								
-								applySlotVesselRestrictions(fobSlot.getSlotOrDelegateVesselRestrictions(), fobSlot.getSlotOrDelegateVesselRestrictionsArePermissive(), fobPurchaseSlot, vesselAssociation);
+
+								applySlotVesselRestrictions(fobSlot.getSlotOrDelegateVesselRestrictions(), fobSlot.getSlotOrDelegateVesselRestrictionsArePermissive(), fobPurchaseSlot,
+										vesselAssociation);
 							}
 						}
 						builder.createSlotGroupCount(marketSlots, count);
@@ -2794,7 +2796,8 @@ public class LNGScenarioTransformer {
 	 * @param vesselAssociation
 	 * @throws IncompleteScenarioException
 	 */
-	private void buildDistances(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final ModelEntityMap modelEntityMap) {
+	private void buildDistances(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final Association<Port, IPort> portAssociation,
+			@NonNull final ModelEntityMap modelEntityMap) {
 
 		// set canal route consumptions and toll info
 		final PortModel portModel = ScenarioModelUtil.getPortModel(rootObject);
@@ -2847,7 +2850,7 @@ public class LNGScenarioTransformer {
 
 		final SuezCanalTariff suezCanalTariff = costModel.getSuezCanalTariff();
 		if (suezCanalTariff != null) {
-			buildSuezCosts(builder, vesselAssociation, optimiserVessels, suezCanalTariff, currencyIndices, dateHelper);
+			buildSuezCosts(builder, vesselAssociation, portAssociation, optimiserVessels, suezCanalTariff, currencyIndices, dateHelper);
 		}
 
 		/*
@@ -2956,8 +2959,8 @@ public class LNGScenarioTransformer {
 		}
 	}
 
-	public static void buildSuezCosts(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Vessel, IVessel> vesselAssociation, final Collection<IVessel> vesselAvailabilities,
-			@NonNull final SuezCanalTariff suezCanalTariff, final @NonNull SeriesParser currencyIndices, final @NonNull DateAndCurveHelper dateHelper) {
+	public static void buildSuezCosts(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final Association<Port, IPort> portAssociation,
+			final Collection<IVessel> vesselAvailabilities, @NonNull final SuezCanalTariff suezCanalTariff, final @NonNull SeriesParser currencyIndices, final @NonNull DateAndCurveHelper dateHelper) {
 
 		// Extract band information into a sorted list
 		final List<Pair<Integer, SuezCanalTariffBand>> bands = new LinkedList<>();
@@ -3032,6 +3035,30 @@ public class LNGScenarioTransformer {
 			assert ballastCostCurve != null;
 			builder.setVesselRouteCost(ERouteOption.SUEZ, oVessel, CostType.Ballast, ballastCostCurve);
 			builder.setVesselRouteCost(ERouteOption.SUEZ, oVessel, CostType.RoundTripBallast, ballastCostCurve);
+
+			for (final SuezCanalRouteRebate rebate : suezCanalTariff.getRouteRebates()) {
+				final Set<Port> fromPorts = SetUtils.getObjects(rebate.getFrom());
+				if (fromPorts.isEmpty()) {
+					continue;
+				}
+
+				final Set<Port> toPorts = SetUtils.getObjects(rebate.getTo());
+				if (toPorts.isEmpty()) {
+					continue;
+				}
+
+				final long oFactor = OptimiserUnitConvertor.convertToInternalPercentage(rebate.getRebate());
+
+				for (final Port from : fromPorts) {
+					final IPort oFrom = portAssociation.lookupNullChecked(from);
+					for (final Port to : toPorts) {
+						final IPort oTo = portAssociation.lookupNullChecked(to);
+						builder.setSuezRouteRebate(oFrom, oTo, oFactor);
+						builder.setSuezRouteRebate(oTo, oFrom, oFactor);
+					}
+				}
+
+			}
 		}
 	}
 
@@ -3045,7 +3072,7 @@ public class LNGScenarioTransformer {
 	 * @param modelEntityMap
 	 * @return
 	 */
-	private Association<Vessel, IVessel> buildFleet(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @NonNull final ModelEntityMap modelEntityMap) {
+	private @NonNull Association<Vessel, IVessel> buildFleet(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @NonNull final ModelEntityMap modelEntityMap) {
 
 		/*
 		 * Build the fleet model - first we must create the vessels from the model
@@ -3444,9 +3471,9 @@ public class LNGScenarioTransformer {
 				}
 
 				if (eCharterOutMarket.getCharterOutRate() != null) {
-					
+
 					final DefaultSpotCharterOutMarket iCharterOutMarket = new DefaultSpotCharterOutMarket(eCharterOutMarket.getName());
-					
+
 					modelEntityMap.addModelObject(eCharterOutMarket, iCharterOutMarket);
 					final ILongCurve charterOutCurve = dateHelper.generateLongExpressionCurve(eCharterOutMarket.getCharterOutRate(), charterIndices);
 					assert charterOutCurve != null;
@@ -3819,15 +3846,15 @@ public class LNGScenarioTransformer {
 				final Port southPort = r.getSouthEntrance().getPort();
 				if (northPort != null && southPort != null) {
 					distanceProviderEditor.setEntryPointsForRouteOption(mapRouteOption(r), portAssociation.lookupNullChecked(northPort), portAssociation.lookupNullChecked(southPort));
-					distanceProviderEditor.setCanalDistance(mapRouteOption(r), (int)r.getDistance());
+					distanceProviderEditor.setCanalDistance(mapRouteOption(r), (int) r.getDistance());
 				}
 			}
 		});
 	}
-	
+
 	private void buildCanalDistances(final PortModel portModel) {
 		portModel.getRoutes().forEach(r -> {
-			distanceProviderEditor.setCanalDistance(mapRouteOption(r), (int)r.getDistance());
-			});
+			distanceProviderEditor.setCanalDistance(mapRouteOption(r), (int) r.getDistance());
+		});
 	}
 }

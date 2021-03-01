@@ -20,21 +20,20 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 /**
  */
-public class ImportCanalCostsWizard extends Wizard implements IImportWizard{
-	
+public class ImportCanalCostsWizard extends Wizard implements IImportWizard {
+
 	private final ScenarioInstance currentScenario;
 	private ImportCanalCostsPage importPage;
 	private final BiConsumer<CompoundCommand, IScenarioDataProvider> panamaCostsUpdater;
 	private final BiConsumer<CompoundCommand, IScenarioDataProvider> suezCostsUpdater;
 
-	public ImportCanalCostsWizard(final ScenarioInstance scenarioInstance, final String windowTitle, 
-			final BiConsumer<CompoundCommand, IScenarioDataProvider> panamaCostsUpdater,
+	public ImportCanalCostsWizard(final ScenarioInstance scenarioInstance, final String windowTitle, final BiConsumer<CompoundCommand, IScenarioDataProvider> panamaCostsUpdater,
 			final BiConsumer<CompoundCommand, IScenarioDataProvider> suezCostsUpdater) {
 		this.suezCostsUpdater = suezCostsUpdater;
 		this.panamaCostsUpdater = panamaCostsUpdater;
 		this.currentScenario = scenarioInstance;
 		setWindowTitle(windowTitle);
-		
+
 	}
 
 	@Override
@@ -46,16 +45,16 @@ public class ImportCanalCostsWizard extends Wizard implements IImportWizard{
 
 	@Override
 	public boolean performFinish() {
-		
+
 		final List<ScenarioInstance> scenarios = importPage.getSelectedScenarios();
 
 		for (final ScenarioInstance scenarioInstance : scenarios) {
 			doImport(scenarioInstance);
 		}
-		
+
 		return true;
 	}
-	
+
 	@Override
 	public void addPages() {
 		super.addPages();
@@ -65,17 +64,17 @@ public class ImportCanalCostsWizard extends Wizard implements IImportWizard{
 	private void doImport(final ScenarioInstance scenarioInstance) {
 		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 		final IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioDataProvider:1");
-		{	
+
+		{
 			final CompoundCommand command = new CompoundCommand();
 			suezCostsUpdater.accept(command, scenarioDataProvider);
-			command.execute();
+			scenarioDataProvider.getCommandStack().execute(command);
 		}
 		{
 			final CompoundCommand command = new CompoundCommand();
 			panamaCostsUpdater.accept(command, scenarioDataProvider);
-			command.execute();
+			scenarioDataProvider.getCommandStack().execute(command);
 		}
 	}
-	
 
 }

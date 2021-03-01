@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.providers;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.curves.ILongCurve;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 
@@ -64,4 +65,9 @@ public interface IRouteCostProviderEditor extends IRouteCostProvider {
 	 *            the amount of extra travel time required to get through the canal, in hours.
 	 */
 	void setRouteTransitTime(@NonNull ERouteOption routeName, @NonNull IVessel vessel, int transitTimeInHours);
+
+	/**
+	 * Set the discount factor (% in high scale factor) to apply to the Suez tariff for the given port to port voyage 
+	 */
+	void setSuezRouteRebateFactor(@NonNull IPort from, @NonNull IPort to, long factor);
 }

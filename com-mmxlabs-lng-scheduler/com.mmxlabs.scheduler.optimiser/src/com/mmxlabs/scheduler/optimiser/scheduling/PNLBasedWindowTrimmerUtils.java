@@ -331,7 +331,8 @@ public class PNLBasedWindowTrimmerUtils {
 								final RouteCostRecord rr = new RouteCostRecord();
 								rr.time = t;
 								// Add in canal cost
-								rr.cost += routeCostProvider.getRouteCost(dme.getRoute(), vessel, lastSlotArrivalTime + ptwr.getSlotDuration(lastSlot), CostType.Ballast);
+								rr.cost += routeCostProvider.getRouteCost(dme.getRoute(), lastSlot.getPort(), slot.getPort(), vessel, lastSlotArrivalTime + ptwr.getSlotDuration(lastSlot),
+										CostType.Ballast);
 
 								// Add charter cost
 								rr.cost += vesselAvailability.getCharterCostCalculator().getCharterCost(lastSlotArrivalTime, lastSlotArrivalTime, t - lastSlotArrivalTime);
@@ -354,7 +355,8 @@ public class PNLBasedWindowTrimmerUtils {
 								final RouteCostRecord rr = new RouteCostRecord();
 								rr.time = t;
 								// Add in canal cost
-								rr.cost += routeCostProvider.getRouteCost(dme.getRoute(), vessel, lastSlotArrivalTime + ptwr.getSlotDuration(lastSlot), CostType.Ballast);
+								rr.cost += routeCostProvider.getRouteCost(dme.getRoute(), lastSlot.getPort(), slot.getPort(), vessel, lastSlotArrivalTime + ptwr.getSlotDuration(lastSlot),
+										CostType.Ballast);
 
 								// Add charter cost
 								rr.cost += vesselAvailability.getCharterCostCalculator().getCharterCost(copy.getFirstSlotTime(), lastSlotArrivalTime, t - lastSlotArrivalTime);
@@ -734,10 +736,8 @@ public class PNLBasedWindowTrimmerUtils {
 	}
 
 	/**
-	 * For each time option, add in midnight localtime before and after the option.
-	 * Important options are retained, otherwise discarded. The intention of this
-	 * code is to regularise arrival times (better for caching, better for users)
-	 * and avoid tring 1am, 2am, 3am etc.
+	 * For each time option, add in midnight localtime before and after the option. Important options are retained, otherwise discarded. The intention of this code is to regularise arrival times
+	 * (better for caching, better for users) and avoid tring 1am, 2am, 3am etc.
 	 * 
 	 * @param input
 	 * @param x
