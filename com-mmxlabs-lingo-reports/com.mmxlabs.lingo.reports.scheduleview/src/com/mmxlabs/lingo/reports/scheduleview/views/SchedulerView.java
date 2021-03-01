@@ -314,7 +314,7 @@ public class SchedulerView extends ViewPart implements
 				if (l != null) {
 					// Use the internalMap to obtain the list of events we are selecting
 					selectedEvents = new ArrayList<>(l.size());
-					if (!l.isEmpty() && currentSelectedDataProvider != null && currentSelectedDataProvider.getSelectedChangeSetRows() != null) {
+					if (!l.isEmpty() && currentSelectedDataProvider != null && (currentSelectedDataProvider.getSelectedChangeSetRows() != null || !currentSelectedDataProvider.inPinDiffMode())) {
 						for (final Object ge : ganttChart.getGanttComposite().getEvents()) {
 							final GanttEvent ganttEvent = (GanttEvent) ge;
 							final Event evt = (Event) ganttEvent.getData();
