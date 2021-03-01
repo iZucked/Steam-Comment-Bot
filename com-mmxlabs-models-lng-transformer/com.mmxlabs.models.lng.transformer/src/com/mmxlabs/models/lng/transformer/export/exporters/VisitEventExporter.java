@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
@@ -46,6 +47,7 @@ import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterLengthEventPo
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IMaintenanceVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil;
@@ -193,7 +195,12 @@ public class VisitEventExporter {
 				final CharterLengthEvent charterLengthEvent = ScheduleFactory.eINSTANCE.createCharterLengthEvent();
 				portVisit = charterLengthEvent;
 				portSlotEventProvider.addEventToPortSlot(slot, CharterLengthEvent.class, charterLengthEvent);
-
+			} else if (slot instanceof IMaintenanceVesselEventPortSlot) {
+				final MaintenanceEvent event = modelEntityMap.getModelObject(((IMaintenanceVesselEventPortSlot) slot).getFormerPortSlot(), MaintenanceEvent.class);
+				assert event != null;
+				final VesselEventVisit vev = ScheduleFactory.eINSTANCE.createVesselEventVisit();
+				vev.setVesselEvent(event);
+				portVisit = vev;
 			} else {
 				final VesselEvent event = modelEntityMap.getModelObject(slot, VesselEvent.class);
 				if (event == null)

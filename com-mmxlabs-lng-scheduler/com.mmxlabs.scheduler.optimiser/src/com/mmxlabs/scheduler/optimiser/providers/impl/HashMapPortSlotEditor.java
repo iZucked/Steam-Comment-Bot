@@ -46,7 +46,9 @@ public final class HashMapPortSlotEditor implements IPortSlotProviderEditor {
 			return elementMap.get(portSlot);
 		}
 
-		if (portSlot.getPortType() == PortType.GeneratedCharterOut || portSlot.getPortType() == PortType.GeneratedCharterLength) {
+		if (portSlot.getPortType() == PortType.GeneratedCharterOut
+				|| portSlot.getPortType() == PortType.GeneratedCharterLength
+				|| portSlot.getPortType() == PortType.Maintenance) {
 			return new WrappedSequenceElement(portSlot);
 		}
 

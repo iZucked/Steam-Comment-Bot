@@ -55,6 +55,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterLengthEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.maintenance.IMaintenanceEvaluator;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
@@ -102,6 +103,9 @@ public class VoyagePlanner implements IVoyagePlanner {
 
 	@com.google.inject.Inject(optional = true)
 	private @Nullable IGeneratedCharterLengthEvaluator generatedCharterLengthEvaluator;
+
+	@Inject
+	private IMaintenanceEvaluator maintenanceEvaluator;
 
 	@Inject
 	private INominatedVesselProvider nominatedVesselProvider;
@@ -172,14 +176,14 @@ public class VoyagePlanner implements IVoyagePlanner {
 			cargoCV = loadOption.getCargoCVValue();
 		} else if (prevPortType == PortType.Virtual || prevPortType == PortType.Other) {
 			cargoCV = 0;
-		} else if (prevPortType == PortType.DryDock || prevPortType == PortType.Maintenance) {
+		} else if (prevPortType == PortType.DryDock) {
 			cargoCV = 0;
 		} else {
 			assert previousOptions != null;
 			cargoCV = previousOptions.getCargoCVValue();
 		}
 
-		if ((prevPortType == PortType.DryDock) || (prevPortType == PortType.Maintenance)) {
+		if (prevPortType == PortType.DryDock) {
 			options.setWarm(true);
 		} else {
 			options.setWarm(false);
@@ -232,6 +236,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 		} else if (thisPortSlot.getPortType() == PortType.Discharge) {
 			options.setShouldBeCold(VesselTankState.MUST_BE_COLD);
 			options.setAllowCooldown(false);
+		} else if (thisPortSlot.getPortType() == PortType.Maintenance) {
+			options.setShouldBeCold(VesselTankState.EITHER);
 		} else if (thisPortSlot instanceof IHeelOptionConsumerPortSlot) {
 			final IHeelOptionConsumerPortSlot heelOptionsPortSlot = (IHeelOptionConsumerPortSlot) thisPortSlot;
 			options.setShouldBeCold(heelOptionsPortSlot.getHeelOptionsConsumer().getExpectedTankState());
@@ -239,7 +245,7 @@ public class VoyagePlanner implements IVoyagePlanner {
 		} else if (thisPortSlot.getPortType() == PortType.Round_Trip_Cargo_End) {
 			options.setShouldBeCold(VesselTankState.MUST_BE_COLD);
 			options.setAllowCooldown(false);
-		} else if (thisPortSlot.getPortType() == PortType.DryDock || thisPortSlot.getPortType() == PortType.Maintenance) {
+		} else if (thisPortSlot.getPortType() == PortType.DryDock) {
 			options.setShouldBeCold(VesselTankState.MUST_BE_WARM);
 		} else {
 			options.setShouldBeCold(VesselTankState.MUST_BE_WARM);
@@ -625,6 +631,31 @@ public class VoyagePlanner implements IVoyagePlanner {
 		assert heelVolumeRangeInM3[0] >= 0;
 		assert heelVolumeRangeInM3[1] >= 0;
 		boolean planSet = false;
+
+		if (maintenanceEvaluator != null) {
+			final List<@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord>> lp = maintenanceEvaluator.processSchedule(heelVolumeRangeInM3, vesselAvailability, plan, portTimesRecord, annotatedSolution);
+			if (lp != null) {
+				for (final Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord> p : lp) {
+					final PlanEvaluationData evalData = new PlanEvaluationData(portTimesRecord, p.getFirst());
+					voyagePlansList.add(evalData.plan);
+					if (p.getSecond() instanceof IAllocationAnnotation) {
+						evalData.allocation = (IAllocationAnnotation) p.getSecond();
+					}
+					evalData.portTimesRecord = p.getSecond();
+					if (evalData.allocation != null) {
+						evalData.endHeelVolumeInM3 = evalData.allocation.getRemainingHeelVolumeInM3();
+						evalData.startHeelVolumeInM3 = evalData.allocation.getStartHeelVolumeInM3();
+					} else {
+						evalData.endHeelVolumeInM3 = evalData.plan.getRemainingHeelInM3();
+						evalData.startHeelVolumeInM3 = evalData.plan.getStartingHeelInM3();
+					}
+					plans.add(evalData);
+					evalData.setIgnoreEndSet(true);
+				}
+				planSet = true;
+			}
+		}
+
 		if (generatedCharterOutEvaluator != null) {
 			final List<@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord>> lp = generatedCharterOutEvaluator.processSchedule(heelVolumeRangeInM3, vesselAvailability, plan, portTimesRecord,
 					annotatedSolution);

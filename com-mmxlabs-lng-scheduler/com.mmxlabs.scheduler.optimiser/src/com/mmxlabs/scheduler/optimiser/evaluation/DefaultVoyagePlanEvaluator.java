@@ -17,7 +17,6 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.exposures.BasicExposureRecord;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterLengthEventPortSlot;

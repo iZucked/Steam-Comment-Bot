@@ -50,6 +50,8 @@ import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCh
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.CharterLengthEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.CleanStateIdleTimeEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.DefaultGeneratedCharterOutEvaluator;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.maintenance.IMaintenanceEvaluator;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.maintenance.impl.MaintenanceEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduling.IArrivalTimeScheduler;
 import com.mmxlabs.scheduler.optimiser.scheduling.PNLBasedWindowTrimmer;
 import com.mmxlabs.scheduler.optimiser.scheduling.PNLBasedWindowTrimmerUtils;
@@ -123,6 +125,8 @@ public class LNGEvaluationModule extends AbstractModule {
 				// See LNGTransformerModule for parameters
 				bind(IGeneratedCharterLengthEvaluator.class).to(CharterLengthEvaluator.class);
 			}
+
+			bind(IMaintenanceEvaluator.class).to(MaintenanceEvaluator.class);
 		}
 
 		// Needed for LegalSequencingChecker
