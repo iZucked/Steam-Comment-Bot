@@ -61,13 +61,8 @@ public class VesselBasedOnValueProviderFactory implements IReferenceValueProvide
 
 						for (final Pair<String, EObject> p : delegateValue) {
 							if (p.getSecond() instanceof Vessel) {
-								Vessel vessel = (Vessel) p.getSecond();
-								if (vessel == target) {
-									continue;
-								}
-								if (vessel.getReference() == null) {
-									filteredList.add(p);
-								} else if (((Vessel) target).getReference() == vessel) {
+								final Vessel vessel = (Vessel) p.getSecond();
+								if (vessel.isReferenceVessel() && !vessel.getUuid().equals(((Vessel) target).getUuid())) {
 									filteredList.add(p);
 								}
 							}

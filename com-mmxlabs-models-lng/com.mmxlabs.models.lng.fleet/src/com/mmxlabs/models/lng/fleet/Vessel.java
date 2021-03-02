@@ -52,6 +52,8 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isHasReliqCapability <em>Has Reliq Capability</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getMmxId <em>Mmx Id</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isReferenceVessel <em>Reference Vessel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#isMmxReference <em>Mmx Reference</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel()
@@ -1052,6 +1054,50 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @generated
 	 */
 	void setMmxId(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Reference Vessel</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Reference Vessel</em>' attribute.
+	 * @see #setReferenceVessel(boolean)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_ReferenceVessel()
+	 * @model
+	 * @generated
+	 */
+	boolean isReferenceVessel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#isReferenceVessel <em>Reference Vessel</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Reference Vessel</em>' attribute.
+	 * @see #isReferenceVessel()
+	 * @generated
+	 */
+	void setReferenceVessel(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Mmx Reference</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Mmx Reference</em>' attribute.
+	 * @see #setMmxReference(boolean)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_MmxReference()
+	 * @model
+	 * @generated
+	 */
+	boolean isMmxReference();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#isMmxReference <em>Mmx Reference</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Mmx Reference</em>' attribute.
+	 * @see #isMmxReference()
+	 * @generated
+	 */
+	void setMmxReference(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Scnt</b></em>' attribute.

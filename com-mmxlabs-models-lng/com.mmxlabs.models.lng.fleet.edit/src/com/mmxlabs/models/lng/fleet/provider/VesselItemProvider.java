@@ -81,6 +81,8 @@ public class VesselItemProvider
 			addHasReliqCapabilityPropertyDescriptor(object);
 			addNotesPropertyDescriptor(object);
 			addMmxIdPropertyDescriptor(object);
+			addReferenceVesselPropertyDescriptor(object);
+			addMmxReferencePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -614,6 +616,50 @@ public class VesselItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Reference Vessel feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addReferenceVesselPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_referenceVessel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_referenceVessel_feature", "_UI_Vessel_type"),
+				 FleetPackage.Literals.VESSEL__REFERENCE_VESSEL,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Mmx Reference feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMmxReferencePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Vessel_mmxReference_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_mmxReference_feature", "_UI_Vessel_type"),
+				 FleetPackage.Literals.VESSEL__MMX_REFERENCE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Scnt feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -860,6 +906,8 @@ public class VesselItemProvider
 			case FleetPackage.VESSEL__HAS_RELIQ_CAPABILITY:
 			case FleetPackage.VESSEL__NOTES:
 			case FleetPackage.VESSEL__MMX_ID:
+			case FleetPackage.VESSEL__REFERENCE_VESSEL:
+			case FleetPackage.VESSEL__MMX_REFERENCE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case FleetPackage.VESSEL__LADEN_ATTRIBUTES:
