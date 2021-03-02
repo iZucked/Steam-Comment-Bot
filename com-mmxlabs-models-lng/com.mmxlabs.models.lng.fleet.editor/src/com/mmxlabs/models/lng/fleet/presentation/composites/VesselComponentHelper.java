@@ -20,6 +20,7 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.MultiTextInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.YesNoInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
@@ -73,6 +74,7 @@ public class VesselComponentHelper extends BaseComponentHelper {
 		add_IMOEditor(detailComposite, topClass);
 		add_typeEditor(detailComposite, topClass);
 		add_referenceEditor(detailComposite, topClass);
+		add_referenceVesselEditor(detailComposite, topClass);
 		add_capacityEditor(detailComposite, topClass);
 		add_fillCapacityEditor(detailComposite, topClass);
 		add_fillVolumeReadOnlyEditor(detailComposite, topClass);
@@ -138,7 +140,8 @@ public class VesselComponentHelper extends BaseComponentHelper {
 	 * @generated
 	 */
 	protected void add_referenceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__REFERENCE));
+		final IInlineEditor wrapped = new ReferenceVesselInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__REFERENCE));
+		detailComposite.addInlineEditor(wrapped);
 	}
 
 	/**
@@ -356,6 +359,24 @@ public class VesselComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_mmxIdEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 //		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__MMX_ID));
+	}
+
+	/**
+	 * Create the editor for the referenceVessel feature on Vessel
+	 *
+	 * @generated
+	 */
+	protected void add_referenceVesselEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__REFERENCE_VESSEL));
+	}
+
+	/**
+	 * Create the editor for the mmxReference feature on Vessel
+	 *
+	 * @generated NOT
+	 */
+	protected void add_mmxReferenceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		// detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__MMX_REFERENCE));
 	}
 
 	/**

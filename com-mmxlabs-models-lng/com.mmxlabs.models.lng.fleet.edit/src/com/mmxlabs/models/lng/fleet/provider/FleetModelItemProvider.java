@@ -13,6 +13,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import com.mmxlabs.models.lng.fleet.FleetFactory;
@@ -52,6 +53,7 @@ public class FleetModelItemProvider
 			addFleetVersionRecordPropertyDescriptor(object);
 			addVesselGroupVersionRecordPropertyDescriptor(object);
 			addBunkerFuelsVersionRecordPropertyDescriptor(object);
+			addMMXVesselDBVersionPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -118,6 +120,28 @@ public class FleetModelItemProvider
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the MMX Vessel DB Version feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMMXVesselDBVersionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_FleetModel_MMXVesselDBVersion_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_FleetModel_MMXVesselDBVersion_feature", "_UI_FleetModel_type"),
+				 FleetPackage.Literals.FLEET_MODEL__MMX_VESSEL_DB_VERSION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -191,6 +215,9 @@ public class FleetModelItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(FleetModel.class)) {
+			case FleetPackage.FLEET_MODEL__MMX_VESSEL_DB_VERSION:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
 			case FleetPackage.FLEET_MODEL__VESSELS:
 			case FleetPackage.FLEET_MODEL__BASE_FUELS:
 			case FleetPackage.FLEET_MODEL__VESSEL_GROUPS:

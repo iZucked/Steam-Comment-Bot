@@ -436,6 +436,12 @@ public class ScenarioBuilder {
 				final VesselsVersion v = mapper.readValue(inputStream, VesselsVersion.class);
 				final Command command = VesselsToScenarioCopier.getUpdateCommand(editingDomain, fleetModel, portModel, v);
 				command.execute();
+				for (final Vessel vessel : fleetModel.getVessels()) {
+					if (vessel.getReference() != null) {
+						assert vessel.getReference().getReference() == null;
+						vessel.getReference().setReferenceVessel(true);
+					}
+				}
 			}
 		}
 		return this;
