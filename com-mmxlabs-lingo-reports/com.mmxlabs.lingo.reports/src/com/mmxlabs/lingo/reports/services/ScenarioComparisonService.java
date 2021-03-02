@@ -29,9 +29,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.views.properties.PropertySheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +47,7 @@ import com.mmxlabs.scenario.service.IScenarioServiceSelectionChangedListener;
 import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
 public class ScenarioComparisonService implements IScenarioServiceSelectionProvider {
 
@@ -473,5 +472,33 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 			selectionService.removePostSelectionListener(selectionListener);
 		}
 		selectionService = null;
+	}
+
+	public synchronized void updateActiveEditorScenario(@Nullable ScenarioInstance newInstance, @Nullable ScenarioInstance oldInstance, boolean block) {
+
+		// Same instance? No need to update
+		if (oldInstance == newInstance) {
+			return;
+		}
+
+		final List<ScenarioResult> others = new LinkedList<>(currentSelectedDataProvider.getOtherScenarioResults());
+
+		if (oldInstance != null) {
+			others.removeIf(r -> r.getScenarioInstance() == oldInstance);
+		}
+
+		if (newInstance != null) {
+			try {
+				// This line may fail if model cannot be loaded. Wrap everything up in exception handler
+				final ScenarioResult scenarioResult = new ScenarioResultImpl(newInstance);
+				if (!others.contains(scenarioResult)) {
+					others.add(scenarioResult);
+				}
+			} catch (final Exception e) {
+				// We don't care here, load failures will be reported elsewhere
+			}
+		}
+
+		scheduleRebuildCompare(currentSelectedDataProvider.getPinnedScenarioResult(), others, null, block);
 	}
 }
