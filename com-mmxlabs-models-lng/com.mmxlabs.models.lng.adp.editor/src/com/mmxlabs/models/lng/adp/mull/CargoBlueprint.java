@@ -27,6 +27,8 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditingCommands;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -70,7 +72,7 @@ public class CargoBlueprint {
 		return this.windowStart;
 	}
 
-	public void constructCargoModelPopulationCommands(final CargoModel cargoModel, final CargoEditingCommands cec, @NonNull final EditingDomain editingDomain, final int volumeFlex, final IScenarioDataProvider sdp, final Map<Vessel, VesselAvailability> vesselToVA, final CompoundCommand compoundCommand) {
+	public void constructCargoModelPopulationCommands(final CargoModel cargoModel, final CargoEditingCommands cec, @NonNull final EditingDomain editingDomain, final int volumeFlex, final IScenarioDataProvider sdp, final Map<Vessel, VesselAvailability> vesselToVA, final CharterInMarket adpNominalMarket, final CompoundCommand compoundCommand) {
 		final List<Command> commands = new LinkedList<>();
 
 		final LoadSlot loadSlot = this.createLoadSlot(cec, commands, cargoModel, volumeFlex);
@@ -83,6 +85,15 @@ public class CargoBlueprint {
 			final VesselAvailability vesselAvailability = vesselToVA.get(this.assignedVessel);
 			if (vesselAvailability != null) {
 				cargo.setVesselAssignmentType(vesselAvailability);
+			}
+			if (adpNominalMarket != null) {
+				final Vessel adpNominalVessel = adpNominalMarket.getVessel();
+				if (adpNominalVessel != null && dischargeSlot.isRestrictedVesselsOverride()) {
+					final List<AVesselSet<Vessel>> restrictedVessels = dischargeSlot.getRestrictedVessels();
+					if (!restrictedVessels.contains(adpNominalVessel)) {
+						restrictedVessels.add(adpNominalVessel);
+					}
+				}
 			}
 		}
 		for (final Command command : commands)
