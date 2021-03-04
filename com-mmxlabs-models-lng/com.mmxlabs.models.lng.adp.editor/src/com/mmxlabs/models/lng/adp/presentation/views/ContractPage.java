@@ -1010,8 +1010,10 @@ public class ContractPage extends ADPComposite {
 						(oldVal, newVal) -> newVal,
 						TreeMap::new));
 		final TreeMap<LocalDateTime, InventoryDateTimeEvent> insAndOuts = new TreeMap<>();
-		final List<InventoryEventRow> filteredFeeds = inventory.getFeeds().stream().filter(f -> !f.getStartDate().isBefore(startDateTimeInclusive.toLocalDate()) || f.getPeriod() == InventoryFrequency.LEVEL).collect(Collectors.toList());
-		addHourlyNetVolumes(filteredFeeds, capacityTreeMap, insAndOuts, IntUnaryOperator.identity());
+//		final List<InventoryEventRow> filteredFeeds = inventory.getFeeds().stream() //
+//				.filter(f -> !f.getStartDate().isBefore(startDateTimeInclusive.toLocalDate()) || f.getPeriod() == InventoryFrequency.LEVEL) //
+//				.collect(Collectors.toList());
+		addHourlyNetVolumes(inventory.getFeeds(), capacityTreeMap, insAndOuts, IntUnaryOperator.identity());
 		addHourlyNetVolumes(inventory.getOfftakes(), capacityTreeMap, insAndOuts, a -> -a);
 
 		for (LocalDateTime currentDateTime = startDateTimeInclusive; currentDateTime.isBefore(endDateTimeExclusive); currentDateTime = currentDateTime.plusHours(1)) {
@@ -1039,7 +1041,7 @@ public class ContractPage extends ADPComposite {
 					final int firstAmount = delta + inventoryEventRow.getReliableVolume() % 24;
 					final LocalDateTime firstDateTime = LocalDateTime.of(eventStart, LocalTime.of(0, 0));
 					addSingleVolume(capacityTreeMap, insAndOuts, volumeFunction, firstDateTime, firstAmount);
-					for (int hour = 1; hour < 24; ++ hour) {
+					for (int hour = 1; hour < 24; ++hour) {
 						final LocalDateTime expectedDateTime = LocalDateTime.of(eventStart, LocalTime.of(hour, 0));
 						addSingleVolume(capacityTreeMap, insAndOuts, volumeFunction, expectedDateTime, delta);
 					}
