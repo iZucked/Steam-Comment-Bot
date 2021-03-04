@@ -153,13 +153,22 @@ public interface FleetPackage extends EPackage {
 	int FLEET_MODEL__BUNKER_FUELS_VERSION_RECORD = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>MMX Vessel DB Version</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL__MMX_VESSEL_DB_VERSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int FLEET_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl <em>Base Fuel</em>}' class.
@@ -541,13 +550,31 @@ public interface FleetPackage extends EPackage {
 	int VESSEL__MMX_ID = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 32;
 
 	/**
+	 * The feature id for the '<em><b>Reference Vessel</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__REFERENCE_VESSEL = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 33;
+
+	/**
+	 * The feature id for the '<em><b>Mmx Reference</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__MMX_REFERENCE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 34;
+
+	/**
 	 * The number of structural features of the '<em>Vessel</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 33;
+	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 35;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl <em>Vessel State Attributes</em>}' class.
@@ -1121,6 +1148,28 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVessel_MmxId();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#isReferenceVessel <em>Reference Vessel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Reference Vessel</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#isReferenceVessel()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_ReferenceVessel();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#isMmxReference <em>Mmx Reference</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Mmx Reference</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.Vessel#isMmxReference()
+	 * @see #getVessel()
+	 * @generated
+	 */
+	EAttribute getVessel_MmxReference();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getScnt <em>Scnt</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1272,6 +1321,17 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getFleetModel_BunkerFuelsVersionRecord();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.FleetModel#getMMXVesselDBVersion <em>MMX Vessel DB Version</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>MMX Vessel DB Version</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.FleetModel#getMMXVesselDBVersion()
+	 * @see #getFleetModel()
+	 * @generated
+	 */
+	EAttribute getFleetModel_MMXVesselDBVersion();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.BaseFuel <em>Base Fuel</em>}'.
@@ -1762,6 +1822,22 @@ public interface FleetPackage extends EPackage {
 		EAttribute VESSEL__MMX_ID = eINSTANCE.getVessel_MmxId();
 
 		/**
+		 * The meta object literal for the '<em><b>Reference Vessel</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__REFERENCE_VESSEL = eINSTANCE.getVessel_ReferenceVessel();
+
+		/**
+		 * The meta object literal for the '<em><b>Mmx Reference</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL__MMX_REFERENCE = eINSTANCE.getVessel_MmxReference();
+
+		/**
 		 * The meta object literal for the '<em><b>Scnt</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1874,6 +1950,14 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference FLEET_MODEL__BUNKER_FUELS_VERSION_RECORD = eINSTANCE.getFleetModel_BunkerFuelsVersionRecord();
+
+		/**
+		 * The meta object literal for the '<em><b>MMX Vessel DB Version</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FLEET_MODEL__MMX_VESSEL_DB_VERSION = eINSTANCE.getFleetModel_MMXVesselDBVersion();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl <em>Base Fuel</em>}' class.

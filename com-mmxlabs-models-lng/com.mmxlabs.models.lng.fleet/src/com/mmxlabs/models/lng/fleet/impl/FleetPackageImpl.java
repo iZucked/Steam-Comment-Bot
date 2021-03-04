@@ -426,6 +426,26 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getVessel_ReferenceVessel() {
+		return (EAttribute)vesselEClass.getEStructuralFeatures().get(33);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getVessel_MmxReference() {
+		return (EAttribute)vesselEClass.getEStructuralFeatures().get(34);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EAttribute getVessel_Scnt() {
 		return (EAttribute)vesselEClass.getEStructuralFeatures().get(6);
 	}
@@ -558,6 +578,16 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	@Override
 	public EReference getFleetModel_BunkerFuelsVersionRecord() {
 		return (EReference)fleetModelEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getFleetModel_MMXVesselDBVersion() {
+		return (EAttribute)fleetModelEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -826,6 +856,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		createEReference(fleetModelEClass, FLEET_MODEL__FLEET_VERSION_RECORD);
 		createEReference(fleetModelEClass, FLEET_MODEL__VESSEL_GROUP_VERSION_RECORD);
 		createEReference(fleetModelEClass, FLEET_MODEL__BUNKER_FUELS_VERSION_RECORD);
+		createEAttribute(fleetModelEClass, FLEET_MODEL__MMX_VESSEL_DB_VERSION);
 
 		baseFuelEClass = createEClass(BASE_FUEL);
 		createEAttribute(baseFuelEClass, BASE_FUEL__EQUIVALENCE_FACTOR);
@@ -864,6 +895,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		createEAttribute(vesselEClass, VESSEL__HAS_RELIQ_CAPABILITY);
 		createEAttribute(vesselEClass, VESSEL__NOTES);
 		createEAttribute(vesselEClass, VESSEL__MMX_ID);
+		createEAttribute(vesselEClass, VESSEL__REFERENCE_VESSEL);
+		createEAttribute(vesselEClass, VESSEL__MMX_REFERENCE);
 
 		vesselGroupEClass = createEClass(VESSEL_GROUP);
 		createEReference(vesselGroupEClass, VESSEL_GROUP__VESSELS);
@@ -946,6 +979,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEReference(getFleetModel_FleetVersionRecord(), theMMXCorePackage.getVersionRecord(), null, "fleetVersionRecord", null, 0, 1, FleetModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getFleetModel_VesselGroupVersionRecord(), theMMXCorePackage.getVersionRecord(), null, "vesselGroupVersionRecord", null, 0, 1, FleetModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getFleetModel_BunkerFuelsVersionRecord(), theMMXCorePackage.getVersionRecord(), null, "bunkerFuelsVersionRecord", null, 0, 1, FleetModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getFleetModel_MMXVesselDBVersion(), ecorePackage.getEString(), "MMXVesselDBVersion", null, 0, 1, FleetModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(baseFuelEClass, BaseFuel.class, "BaseFuel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getBaseFuel_EquivalenceFactor(), ecorePackage.getEDouble(), "equivalenceFactor", null, 1, 1, BaseFuel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -987,6 +1021,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEAttribute(getVessel_HasReliqCapability(), ecorePackage.getEBoolean(), "hasReliqCapability", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVessel_Notes(), ecorePackage.getEString(), "notes", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVessel_MmxId(), ecorePackage.getEString(), "mmxId", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVessel_ReferenceVessel(), ecorePackage.getEBoolean(), "referenceVessel", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVessel_MmxReference(), ecorePackage.getEBoolean(), "mmxReference", null, 0, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(vesselEClass, ecorePackage.getEString(), "getShortenedName", 0, 1, IS_UNIQUE, IS_ORDERED);
 

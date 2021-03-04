@@ -23,6 +23,7 @@ import com.mmxlabs.models.mmxcore.VersionRecord;
  *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getFleetVersionRecord <em>Fleet Version Record</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getVesselGroupVersionRecord <em>Vessel Group Version Record</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getBunkerFuelsVersionRecord <em>Bunker Fuels Version Record</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getMMXVesselDBVersion <em>MMX Vessel DB Version</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.fleet.FleetPackage#getFleetModel()
@@ -155,6 +156,28 @@ public interface FleetModel extends UUIDObject {
 	 * @generated
 	 */
 	void setBunkerFuelsVersionRecord(VersionRecord value);
+
+	/**
+	 * Returns the value of the '<em><b>MMX Vessel DB Version</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>MMX Vessel DB Version</em>' attribute.
+	 * @see #setMMXVesselDBVersion(String)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getFleetModel_MMXVesselDBVersion()
+	 * @model
+	 * @generated
+	 */
+	String getMMXVesselDBVersion();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.FleetModel#getMMXVesselDBVersion <em>MMX Vessel DB Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>MMX Vessel DB Version</em>' attribute.
+	 * @see #getMMXVesselDBVersion()
+	 * @generated
+	 */
+	void setMMXVesselDBVersion(String value);
 
 } // end of  FleetModel
 
