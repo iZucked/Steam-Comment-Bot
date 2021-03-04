@@ -59,6 +59,7 @@ public final class KnownFeatures {
 	 * Enable Exposures calculations
 	 */
 	public static final String FEATURE_EXPOSURES = "features:exposures";
+	public static final String FEATURE_EXPOSURES_IGNORE_ENERGY_CONVERSION = "features:exposures-ignore-energy-conversion";
 
 	public static final String FEATURE_INVENTORY_MODEL = "features:inventory-model";
 	

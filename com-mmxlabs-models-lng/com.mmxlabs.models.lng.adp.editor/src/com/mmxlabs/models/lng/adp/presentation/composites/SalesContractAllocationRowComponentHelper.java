@@ -12,7 +12,8 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
-
+import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.ReadOnlyInlineEditorWrapper;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 import java.util.ArrayList;
@@ -76,6 +77,7 @@ public class SalesContractAllocationRowComponentHelper extends BaseComponentHelp
 	 * @generated
 	 */
 	protected void add_contractEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.SALES_CONTRACT_ALLOCATION_ROW__CONTRACT));
+		IInlineEditor wrapped = ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.SALES_CONTRACT_ALLOCATION_ROW__CONTRACT);
+		detailComposite.addInlineEditor(new ReadOnlyInlineEditorWrapper(wrapped));
 	}
 }

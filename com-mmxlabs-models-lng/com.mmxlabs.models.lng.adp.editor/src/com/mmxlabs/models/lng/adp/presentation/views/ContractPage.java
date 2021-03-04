@@ -112,6 +112,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.VolumeUnits;
@@ -589,6 +590,7 @@ public class ContractPage extends ADPComposite {
 			}
 		}
 
+		final CharterInMarket adpNominalMarket = adpModel.getFleetProfile().getDefaultNominalMarket();
 		for (LocalDateTime currentDateTime2 = startDateTime; currentDateTime2.isBefore(endDateTimeExclusive); currentDateTime2 = currentDateTime2.plusHours(1)) {
 			for (Pair<Inventory, Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>>> curr : newIterSwap) {
 				final Inventory currentInventory = curr.getFirst();
@@ -719,7 +721,7 @@ public class ContractPage extends ADPComposite {
 			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sm);
 			cargoBlueprintsToGenerate.values().stream() //
 					.flatMap(List::stream) //
-					.forEach(cargoBlueprint -> cargoBlueprint.constructCargoModelPopulationCommands(cargoModel, cec, editingDomain, volumeFlex, sdp, vessToVA, cmd));
+					.forEach(cargoBlueprint -> cargoBlueprint.constructCargoModelPopulationCommands(cargoModel, cec, editingDomain, volumeFlex, sdp, vessToVA, adpNominalMarket, cmd));
 			editorData.getDefaultCommandHandler().handleCommand(cmd, profile, null);
 		} else if (cmd.isEmpty()) {
 			return IdentityCommand.INSTANCE;
@@ -1008,8 +1010,10 @@ public class ContractPage extends ADPComposite {
 						(oldVal, newVal) -> newVal,
 						TreeMap::new));
 		final TreeMap<LocalDateTime, InventoryDateTimeEvent> insAndOuts = new TreeMap<>();
-		final List<InventoryEventRow> filteredFeeds = inventory.getFeeds().stream().filter(f -> !f.getStartDate().isBefore(startDateTimeInclusive.toLocalDate()) || f.getPeriod() == InventoryFrequency.LEVEL).collect(Collectors.toList());
-		addHourlyNetVolumes(filteredFeeds, capacityTreeMap, insAndOuts, IntUnaryOperator.identity());
+//		final List<InventoryEventRow> filteredFeeds = inventory.getFeeds().stream() //
+//				.filter(f -> !f.getStartDate().isBefore(startDateTimeInclusive.toLocalDate()) || f.getPeriod() == InventoryFrequency.LEVEL) //
+//				.collect(Collectors.toList());
+		addHourlyNetVolumes(inventory.getFeeds(), capacityTreeMap, insAndOuts, IntUnaryOperator.identity());
 		addHourlyNetVolumes(inventory.getOfftakes(), capacityTreeMap, insAndOuts, a -> -a);
 
 		for (LocalDateTime currentDateTime = startDateTimeInclusive; currentDateTime.isBefore(endDateTimeExclusive); currentDateTime = currentDateTime.plusHours(1)) {
@@ -1037,7 +1041,7 @@ public class ContractPage extends ADPComposite {
 					final int firstAmount = delta + inventoryEventRow.getReliableVolume() % 24;
 					final LocalDateTime firstDateTime = LocalDateTime.of(eventStart, LocalTime.of(0, 0));
 					addSingleVolume(capacityTreeMap, insAndOuts, volumeFunction, firstDateTime, firstAmount);
-					for (int hour = 1; hour < 24; ++ hour) {
+					for (int hour = 1; hour < 24; ++hour) {
 						final LocalDateTime expectedDateTime = LocalDateTime.of(eventStart, LocalTime.of(hour, 0));
 						addSingleVolume(capacityTreeMap, insAndOuts, volumeFunction, expectedDateTime, delta);
 					}

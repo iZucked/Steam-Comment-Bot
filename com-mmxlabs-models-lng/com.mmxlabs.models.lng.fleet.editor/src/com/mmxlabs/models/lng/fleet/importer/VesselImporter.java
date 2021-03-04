@@ -4,15 +4,20 @@
  */
 package com.mmxlabs.models.lng.fleet.importer;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
+import com.google.common.collect.Sets;
 import com.mmxlabs.common.csv.FieldMap;
 import com.mmxlabs.common.csv.IFieldMap;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -38,6 +43,7 @@ public class VesselImporter extends DefaultClassImporter {
 
 	private IClassImporter parameterImporter;
 
+	private static final Set<String> filteredColumns = Sets.newHashSet("mmxReference");
 	/**
 	 */
 	public VesselImporter() {
@@ -60,6 +66,7 @@ public class VesselImporter extends DefaultClassImporter {
 	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IMMXImportContext context) {
 		final ImportResults result = super.importObject(parent, eClass, row, context);
 		final Vessel vessel = (Vessel) result.importedObject;
+		vessel.setMmxReference(false);
 		final HashSet<String> parameterisedCanals = new HashSet<>();
 		for (final String key : row.keySet()) {
 			final String[] parts = key.split("\\.");
@@ -104,6 +111,12 @@ public class VesselImporter extends DefaultClassImporter {
 	}
 
 	@Override
+	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final IMMXExportContext context) {
+		final Collection<? extends EObject> filteredObjects = objects.stream().filter(Objects::nonNull).filter(o -> !((Vessel) o).isMmxReference()).collect(Collectors.toList());
+		return super.exportObjects(filteredObjects, context);
+	}
+
+	@Override
 	protected Map<String, String> exportObject(final EObject object, final IMMXExportContext context) {
 		final Vessel vessel = (Vessel) object;
 		final Map<String, String> result = super.exportObject(object, context);
@@ -116,6 +129,10 @@ public class VesselImporter extends DefaultClassImporter {
 			for (final Map.Entry<String, String> e : exportedParameters.entrySet()) {
 				result.put(prefix + e.getKey(), e.getValue());
 			}
+		}
+
+		for (final String filteredKey : filteredColumns) {
+			result.remove(filteredKey);
 		}
 
 		return result;

@@ -36,6 +36,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getFleetVersionRecord <em>Fleet Version Record</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getVesselGroupVersionRecord <em>Vessel Group Version Record</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getBunkerFuelsVersionRecord <em>Bunker Fuels Version Record</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getMMXVesselDBVersion <em>MMX Vessel DB Version</em>}</li>
  * </ul>
  *
  * @generated
@@ -100,6 +101,26 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	 * @ordered
 	 */
 	protected VersionRecord bunkerFuelsVersionRecord;
+
+	/**
+	 * The default value of the '{@link #getMMXVesselDBVersion() <em>MMX Vessel DB Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMMXVesselDBVersion()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String MMX_VESSEL_DB_VERSION_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getMMXVesselDBVersion() <em>MMX Vessel DB Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMMXVesselDBVersion()
+	 * @generated
+	 * @ordered
+	 */
+	protected String mmxVesselDBVersion = MMX_VESSEL_DB_VERSION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -300,6 +321,29 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	 * @generated
 	 */
 	@Override
+	public String getMMXVesselDBVersion() {
+		return mmxVesselDBVersion;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setMMXVesselDBVersion(String newMMXVesselDBVersion) {
+		String oldMMXVesselDBVersion = mmxVesselDBVersion;
+		mmxVesselDBVersion = newMMXVesselDBVersion;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.FLEET_MODEL__MMX_VESSEL_DB_VERSION, oldMMXVesselDBVersion, mmxVesselDBVersion));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case FleetPackage.FLEET_MODEL__VESSELS:
@@ -338,6 +382,8 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 				return getVesselGroupVersionRecord();
 			case FleetPackage.FLEET_MODEL__BUNKER_FUELS_VERSION_RECORD:
 				return getBunkerFuelsVersionRecord();
+			case FleetPackage.FLEET_MODEL__MMX_VESSEL_DB_VERSION:
+				return getMMXVesselDBVersion();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -372,6 +418,9 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 			case FleetPackage.FLEET_MODEL__BUNKER_FUELS_VERSION_RECORD:
 				setBunkerFuelsVersionRecord((VersionRecord)newValue);
 				return;
+			case FleetPackage.FLEET_MODEL__MMX_VESSEL_DB_VERSION:
+				setMMXVesselDBVersion((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -402,6 +451,9 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 			case FleetPackage.FLEET_MODEL__BUNKER_FUELS_VERSION_RECORD:
 				setBunkerFuelsVersionRecord((VersionRecord)null);
 				return;
+			case FleetPackage.FLEET_MODEL__MMX_VESSEL_DB_VERSION:
+				setMMXVesselDBVersion(MMX_VESSEL_DB_VERSION_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -426,8 +478,26 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 				return vesselGroupVersionRecord != null;
 			case FleetPackage.FLEET_MODEL__BUNKER_FUELS_VERSION_RECORD:
 				return bunkerFuelsVersionRecord != null;
+			case FleetPackage.FLEET_MODEL__MMX_VESSEL_DB_VERSION:
+				return MMX_VESSEL_DB_VERSION_EDEFAULT == null ? mmxVesselDBVersion != null : !MMX_VESSEL_DB_VERSION_EDEFAULT.equals(mmxVesselDBVersion);
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (MMXVesselDBVersion: ");
+		result.append(mmxVesselDBVersion);
+		result.append(')');
+		return result.toString();
 	}
 
 } // end of FleetModelImpl

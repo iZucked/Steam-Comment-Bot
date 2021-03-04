@@ -70,6 +70,7 @@ public class FleetModelComponentHelper extends BaseComponentHelper {
 		add_fleetVersionRecordEditor(detailComposite, topClass);
 		add_vesselGroupVersionRecordEditor(detailComposite, topClass);
 		add_bunkerFuelsVersionRecordEditor(detailComposite, topClass);
+		add_MMXVesselDBVersionEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the vessels feature on FleetModel
@@ -122,5 +123,14 @@ public class FleetModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_bunkerFuelsVersionRecordEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.FLEET_MODEL__BUNKER_FUELS_VERSION_RECORD));
+	}
+
+	/**
+	 * Create the editor for the MMXVesselDBVersion feature on FleetModel
+	 *
+	 * @generated
+	 */
+	protected void add_MMXVesselDBVersionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.FLEET_MODEL__MMX_VESSEL_DB_VERSION));
 	}
 }
