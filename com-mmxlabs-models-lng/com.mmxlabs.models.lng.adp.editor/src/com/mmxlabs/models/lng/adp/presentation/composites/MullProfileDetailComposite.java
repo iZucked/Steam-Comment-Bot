@@ -74,8 +74,8 @@ import com.mmxlabs.models.ui.editors.DetailToolbarManager;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
-import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
@@ -115,6 +115,8 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 	private Action entityTablePackAction;
 	private Action contractTablePackAction;
 	private Action marketTablePackAction;
+
+	private Color systemWhite;
 
 	protected DefaultStatusProvider statusProvider = new DefaultStatusProvider() {
 		
@@ -158,6 +160,8 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		inventoryTableComposite = toolkit.createComposite(this, style);
 		inventoryTableComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		inventoryTableComposite.setLayout(new GridLayout());
+
+		this.systemWhite = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
 
 		this.viewer = getInventoryTableViewer(inventoryTableComposite);
 		this.entityTableViewer = getEntityTableViewer(inventoryTableComposite);
@@ -217,13 +221,7 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 	}
 
 	private EObjectTableViewer getInventoryTableViewer(final Composite parent) {
-		Group inventoryTableGroup = new Group(parent, SWT.NONE);
-		inventoryTableGroup.setLayout(new GridLayout(1, false));
-		
-		final Color systemWhite = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
-		inventoryTableGroup.setBackground(systemWhite);
-		inventoryTableGroup.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_BOTH));
-		inventoryTableGroup.setText("Inventory Table");
+		final Group inventoryTableGroup = buildTableGroup(parent, "Inventory Table");
 
 		final DetailToolbarManager buttonManager = new DetailToolbarManager(inventoryTableGroup, SWT.TOP);
 		final EObjectTableViewer eViewer = new EObjectTableViewer(inventoryTableGroup, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
@@ -298,15 +296,7 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 	}
 
 	private EObjectTableViewer getEntityTableViewer(final Composite parent) {
-		entityTableGroup = new Group(parent, SWT.NONE);
-		entityTableGroup.setLayout(new GridLayout(1, false));
-
-		final Color systemWhite = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
-		entityTableGroup.setLayout(new GridLayout(1, false));
-		entityTableGroup.setBackground(systemWhite);
-
-		entityTableGroup.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_BOTH));
-		entityTableGroup.setText("Entity Table");
+		entityTableGroup = buildTableGroup(parent, "Entity Table");
 
 		final DetailToolbarManager buttonManager = new DetailToolbarManager(entityTableGroup, SWT.TOP);
 		final EObjectTableViewer eViewer = new EObjectTableViewer(entityTableGroup, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
@@ -416,12 +406,7 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 	}
 
 	private EObjectTableViewer getContractTableViewer(final Composite parent) {
-		contractTableGroup = new Group(parent, SWT.NONE);
-		contractTableGroup.setLayout(new GridLayout(1, false));
-		final Color systemWhite = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
-		contractTableGroup.setBackground(systemWhite);
-		contractTableGroup.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_BOTH));
-		contractTableGroup.setText("Contract allocations");
+		contractTableGroup = buildTableGroup(parent, "Contract allocations");
 		contractTableGroup.setVisible(false);
 
 		final DetailToolbarManager buttonManager = new DetailToolbarManager(contractTableGroup, SWT.TOP);
@@ -468,17 +453,27 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 		
-		eViewer.addSelectionChangedListener(event -> deleteContractRows.setEnabled(!event.getSelection().isEmpty()));
+		eViewer.addSelectionChangedListener(event -> {
+			final ISelection iSelection = event.getSelection();
+			deleteContractRows.setEnabled(!iSelection.isEmpty());
+			if (!iSelection.isEmpty() && !marketViewer.getSelection().isEmpty()) {
+				marketViewer.getGrid().deselectAll();
+			}
+		});
+		eViewer.addOpenListener(event -> {
+			final ISelection selection = eViewer.getSelection();
+			if (selection instanceof IStructuredSelection) {
+				final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+				if (!structuredSelection.isEmpty()) {
+					DetailCompositeDialogUtil.editSelection(sel, structuredSelection);
+				}
+			}
+		});
 		return eViewer;
 	}
 
 	private EObjectTableViewer getMarketTableViewer(final Composite parent) {
-		marketTableGroup = new Group(parent, SWT.NONE);
-		marketTableGroup.setLayout(new GridLayout(1, false));
-		final Color systemWhite = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
-		marketTableGroup.setBackground(systemWhite);
-		marketTableGroup.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_BOTH));
-		marketTableGroup.setText("Market allocations");
+		marketTableGroup = buildTableGroup(parent, "Market allocations");
 		marketTableGroup.setVisible(false);
 
 		final DetailToolbarManager buttonManager = new DetailToolbarManager(marketTableGroup, SWT.TOP);
@@ -526,7 +521,22 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 
-		eViewer.addSelectionChangedListener(event -> deleteMarketRows.setEnabled(!event.getSelection().isEmpty()));
+		eViewer.addSelectionChangedListener(event -> {
+			final ISelection iSelection = event.getSelection();
+			deleteMarketRows.setEnabled(!iSelection.isEmpty());
+			if (!iSelection.isEmpty() && !contractViewer.getSelection().isEmpty()) {
+				contractViewer.getGrid().deselectAll();
+			}
+		});
+		eViewer.addOpenListener(event -> {
+			final ISelection selection = eViewer.getSelection();
+			if (selection instanceof IStructuredSelection) {
+				final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+				if (!structuredSelection.isEmpty()) {
+					DetailCompositeDialogUtil.editSelection(sel, structuredSelection);
+				}
+			}
+		});
 		return eViewer;
 	}
 
@@ -621,5 +631,14 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 				}
 			}
 		};
+	}
+
+	private @NonNull Group buildTableGroup(final Composite parent, final String groupName) {
+		final Group group = new Group(parent, SWT.NONE);
+		group.setLayout(new GridLayout(1, false));
+		group.setBackground(systemWhite);
+		group.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING | GridData.FILL_BOTH));
+		group.setText(groupName);
+		return group;
 	}
 }

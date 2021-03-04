@@ -12,7 +12,8 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
-
+import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.ReadOnlyInlineEditorWrapper;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 import java.util.ArrayList;
@@ -76,6 +77,7 @@ public class DESSalesMarketAllocationRowComponentHelper extends BaseComponentHel
 	 * @generated
 	 */
 	protected void add_desSalesMarketEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.DES_SALES_MARKET_ALLOCATION_ROW__DES_SALES_MARKET));
+		IInlineEditor wrapped = ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.DES_SALES_MARKET_ALLOCATION_ROW__DES_SALES_MARKET);
+		detailComposite.addInlineEditor(new ReadOnlyInlineEditorWrapper(wrapped));
 	}
 }
