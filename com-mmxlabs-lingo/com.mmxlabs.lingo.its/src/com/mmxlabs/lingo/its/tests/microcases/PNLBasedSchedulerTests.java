@@ -295,7 +295,7 @@ public class PNLBasedSchedulerTests extends AbstractMicroTestCase {
 				Collections.singletonList(barrowIsland));
 
 		final BallastBonusCharterContract charterContract = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
-		charterContract.setBallastBonusContract(charterContractDetails);
+		charterContract.setCharterContract(charterContractDetails);
 
 		final CharterInMarket charter = spotMarketsModelBuilder.createCharterInMarket("SpotCharter", vessel, entity, "80000", 1);
 		charter.setMinDuration(12);

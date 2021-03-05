@@ -899,7 +899,7 @@ public class LNGScenarioTransformer {
 				// This can be null if the availability is generated from a Spot option
 				@Nullable
 				final IBallastBonusContract ballastBonusContract = ballastBonusContractTransformer.createBallastBonusContract(eBallastBonusContract);
-				vesselAvailability.setBallastBonusContract(ballastBonusContract);
+				vesselAvailability.setCharterContract(ballastBonusContract);
 			}
 		}
 	}
@@ -3296,8 +3296,8 @@ public class LNGScenarioTransformer {
 					final BallastBonusCharterContract charterContract = (BallastBonusCharterContract) charterInMarket.getCharterContract();
 					repositioningFee = charterContract.getRepositioningFee();
 
-					if (charterContract.getBallastBonusContract() != null) {
-						ballastBonusContract = createAndGetBallastBonusContract(charterContract.getBallastBonusContract());
+					if (charterContract.getCharterContract() != null) {
+						ballastBonusContract = createAndGetBallastBonusContract(charterContract.getCharterContract());
 						if (ballastBonusContract != null) {
 							// Note: this is a default assumption, that all spot charter ins with a ballast bonus can end at any discharge port
 							charterInEndRule = createDefaultCharterInEndRequirement(builder, portAssociation, modelEntityMap, oVessel);
@@ -3373,7 +3373,7 @@ public class LNGScenarioTransformer {
 				IBallastBonusContract ballastBonusContract = null;
 
 				if (charterInMarketOverride.isIncludeBallastBonus()) {
-					ballastBonusContract = spotCharterInMarket.getBallastBonusContract();
+					ballastBonusContract = spotCharterInMarket.getCharterContract();
 				}
 
 				{

@@ -142,7 +142,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 
 		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI),
 				TEST_CHARTER_CURVE_NAME);
-		vesselAvailability.setBallastBonusContract(ballastBonusContract);
+		vesselAvailability.setCharterContract(ballastBonusContract);
 		evaluateTest(null, null, scenarioRunner -> {
 
 			final @Nullable Schedule schedule = scenarioRunner.getSchedule();
@@ -190,7 +190,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo.setVesselAssignmentType(vesselAvailability);
 		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), "1000000");
-		vesselAvailability.setBallastBonusContract(ballastBonusContract);
+		vesselAvailability.setCharterContract(ballastBonusContract);
 		evaluateTest(null, null, scenarioRunner -> {
 
 			final @Nullable Schedule schedule = scenarioRunner.getSchedule();
@@ -254,7 +254,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleNotionalJourneyBallastBonusContract(
 				Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))), 20.0, "20000", "100", true, false,
 				Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY)));
-		vesselAvailability.setBallastBonusContract(ballastBonusContract);
+		vesselAvailability.setCharterContract(ballastBonusContract);
 		evaluateTest(null, null, scenarioRunner -> {
 
 			final @Nullable Schedule schedule = scenarioRunner.getSchedule();
@@ -331,7 +331,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleNotionalJourneyBallastBonusContract(
 				Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))), 20.0, "20000", "100", false, true,
 				Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY)));
-		vesselAvailability.setBallastBonusContract(ballastBonusContract);
+		vesselAvailability.setCharterContract(ballastBonusContract);
 		evaluateTest(null, null, scenarioRunner -> {
 
 			final EndEvent end = getEndEvent(vesselAvailability);
@@ -408,7 +408,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleNotionalJourneyBallastBonusContract(
 				Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))), 20.0, "20000", "100", true, false,
 				Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY), portFinder.findPortById(InternalDataConstants.PORT_YUNG_AN)));
-		vesselAvailability.setBallastBonusContract(ballastBonusContract);
+		vesselAvailability.setCharterContract(ballastBonusContract);
 		evaluateTest(null, null, scenarioRunner -> {
 
 			final @Nullable Schedule schedule = scenarioRunner.getSchedule();
@@ -449,7 +449,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		cargo.setVesselAssignmentType(charterInMarket_1);
 		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "2000000");
 		SimpleBallastBonusCharterContract s = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
-		s.setBallastBonusContract(ballastBonusContract);
+		s.setCharterContract(ballastBonusContract);
 		charterInMarket_1.setCharterContract(s);
 		evaluateTest(null, null, scenarioRunner -> {
 
@@ -492,7 +492,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		cargo.setVesselAssignmentType(charterInMarket_1);
 		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), "2000000");
 		SimpleBallastBonusCharterContract s = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
-		s.setBallastBonusContract(ballastBonusContract);
+		s.setCharterContract(ballastBonusContract);
 		charterInMarket_1.setCharterContract(s);
 		evaluateTest(null, null, scenarioRunner -> {
 
@@ -536,7 +536,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		cargo.setVesselAssignmentType(vesselAvailability);
 		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "2000000");
 		SimpleBallastBonusCharterContract s = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
-		s.setBallastBonusContract(ballastBonusContract);
+		s.setCharterContract(ballastBonusContract);
 		vesselAvailability.setCharterContract(s);
 		evaluateTest(null, null, scenarioRunner -> {
 
@@ -580,7 +580,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		cargo.setVesselAssignmentType(vesselAvailability);
 		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), "2000000");
 		SimpleBallastBonusCharterContract s = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
-		s.setBallastBonusContract(ballastBonusContract);
+		s.setCharterContract(ballastBonusContract);
 		vesselAvailability.setCharterContract(s);
 		evaluateTest(null, null, scenarioRunner -> {
 			final @Nullable Schedule schedule = scenarioRunner.getSchedule();
@@ -619,7 +619,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		@NonNull
 		final BallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "2000000");
 		SimpleBallastBonusCharterContract s = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
-		s.setBallastBonusContract(ballastBonusContract);
+		s.setCharterContract(ballastBonusContract);
 		charterInMarket_1.setCharterContract(s);
 		optimiseWithLSOTest(scenarioRunner -> {
 			final List<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();

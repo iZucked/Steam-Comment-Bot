@@ -8,6 +8,7 @@ package com.mmxlabs.models.lng.spotmarkets;
 
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CharterContract;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
@@ -367,12 +368,12 @@ public interface CharterInMarket extends SpotCharterMarket, VesselAssignmentType
 	 * @return the value of the '<em>Charter Contract</em>' reference.
 	 * @see #isSetCharterContract()
 	 * @see #unsetCharterContract()
-	 * @see #setCharterContract(CharterContract)
+	 * @see #setCharterContract(GenericCharterContract)
 	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket_CharterContract()
 	 * @model unsettable="true"
 	 * @generated
 	 */
-	CharterContract getCharterContract();
+	GenericCharterContract getCharterContract();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterContract <em>Charter Contract</em>}' reference.
@@ -384,7 +385,7 @@ public interface CharterInMarket extends SpotCharterMarket, VesselAssignmentType
 	 * @see #getCharterContract()
 	 * @generated
 	 */
-	void setCharterContract(CharterContract value);
+	void setCharterContract(GenericCharterContract value);
 
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterContract <em>Charter Contract</em>}' reference.
@@ -392,7 +393,7 @@ public interface CharterInMarket extends SpotCharterMarket, VesselAssignmentType
 	 * <!-- end-user-doc -->
 	 * @see #isSetCharterContract()
 	 * @see #getCharterContract()
-	 * @see #setCharterContract(CharterContract)
+	 * @see #setCharterContract(GenericCharterContract)
 	 * @generated
 	 */
 	void unsetCharterContract();
@@ -404,7 +405,7 @@ public interface CharterInMarket extends SpotCharterMarket, VesselAssignmentType
 	 * @return whether the value of the '<em>Charter Contract</em>' reference is set.
 	 * @see #unsetCharterContract()
 	 * @see #getCharterContract()
-	 * @see #setCharterContract(CharterContract)
+	 * @see #setCharterContract(GenericCharterContract)
 	 * @generated
 	 */
 	boolean isSetCharterContract();

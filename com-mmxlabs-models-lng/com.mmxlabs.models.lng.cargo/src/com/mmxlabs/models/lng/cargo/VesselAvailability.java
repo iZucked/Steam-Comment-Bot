@@ -6,14 +6,13 @@
  */
 package com.mmxlabs.models.lng.cargo;
 
-import com.mmxlabs.models.lng.commercial.BallastBonusContract;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.commercial.CharterContract;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
@@ -44,11 +43,11 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartHeel <em>Start Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEndHeel <em>End Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isForceHireCostOnlyEndRule <em>Force Hire Cost Only End Rule</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getRepositioningFee <em>Repositioning Fee</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getBallastBonusContract <em>Ballast Bonus Contract</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getContainedCharterContract <em>Contained Charter Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterContract <em>Charter Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getMinDuration <em>Min Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getMaxDuration <em>Max Duration</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isCharterContractOverride <em>Charter Contract Override</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability()
@@ -496,6 +495,28 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	void setForceHireCostOnlyEndRule(boolean value);
 
 	/**
+	 * Returns the value of the '<em><b>Contained Charter Contract</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Contained Charter Contract</em>' containment reference.
+	 * @see #setContainedCharterContract(GenericCharterContract)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_ContainedCharterContract()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	GenericCharterContract getContainedCharterContract();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getContainedCharterContract <em>Contained Charter Contract</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Contained Charter Contract</em>' containment reference.
+	 * @see #getContainedCharterContract()
+	 * @generated
+	 */
+	void setContainedCharterContract(GenericCharterContract value);
+
+	/**
 	 * Returns the value of the '<em><b>Optional</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -522,87 +543,6 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	void setOptional(boolean value);
 
 	/**
-	 * Returns the value of the '<em><b>Repositioning Fee</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Repositioning Fee</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Repositioning Fee</em>' attribute.
-	 * @see #isSetRepositioningFee()
-	 * @see #unsetRepositioningFee()
-	 * @see #setRepositioningFee(String)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_RepositioningFee()
-	 * @model unsettable="true" required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$/day'"
-	 *        annotation="http://www.mmxlabs.com/models/pricing/expressionType type='charter'"
-	 * @generated
-	 */
-	String getRepositioningFee();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getRepositioningFee <em>Repositioning Fee</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Repositioning Fee</em>' attribute.
-	 * @see #isSetRepositioningFee()
-	 * @see #unsetRepositioningFee()
-	 * @see #getRepositioningFee()
-	 * @generated
-	 */
-	void setRepositioningFee(String value);
-
-	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getRepositioningFee <em>Repositioning Fee</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetRepositioningFee()
-	 * @see #getRepositioningFee()
-	 * @see #setRepositioningFee(String)
-	 * @generated
-	 */
-	void unsetRepositioningFee();
-
-	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getRepositioningFee <em>Repositioning Fee</em>}' attribute is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Repositioning Fee</em>' attribute is set.
-	 * @see #unsetRepositioningFee()
-	 * @see #getRepositioningFee()
-	 * @see #setRepositioningFee(String)
-	 * @generated
-	 */
-	boolean isSetRepositioningFee();
-
-	/**
-	 * Returns the value of the '<em><b>Ballast Bonus Contract</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Ballast Bonus Contract</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Ballast Bonus Contract</em>' containment reference.
-	 * @see #setBallastBonusContract(BallastBonusContract)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_BallastBonusContract()
-	 * @model containment="true" resolveProxies="true"
-	 * @generated
-	 */
-	BallastBonusContract getBallastBonusContract();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getBallastBonusContract <em>Ballast Bonus Contract</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Ballast Bonus Contract</em>' containment reference.
-	 * @see #getBallastBonusContract()
-	 * @generated
-	 */
-	void setBallastBonusContract(BallastBonusContract value);
-
-	/**
 	 * Returns the value of the '<em><b>Charter Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -613,12 +553,24 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @return the value of the '<em>Charter Contract</em>' reference.
 	 * @see #isSetCharterContract()
 	 * @see #unsetCharterContract()
-	 * @see #setCharterContract(CharterContract)
+	 * @see #setCharterContract(GenericCharterContract)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_CharterContract()
 	 * @model unsettable="true"
 	 * @generated
 	 */
-	CharterContract getCharterContract();
+	GenericCharterContract getCharterContract();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterContract <em>Charter Contract</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Charter Contract</em>' reference.
+	 * @see #isSetCharterContract()
+	 * @see #unsetCharterContract()
+	 * @see #getCharterContract()
+	 * @generated
+	 */
+	void setCharterContract(GenericCharterContract value);
 
 	/**
 	 * Returns the value of the '<em><b>Charter Number</b></em>' attribute.
@@ -639,24 +591,12 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	int getCharterNumber();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterContract <em>Charter Contract</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Charter Contract</em>' reference.
-	 * @see #isSetCharterContract()
-	 * @see #unsetCharterContract()
-	 * @see #getCharterContract()
-	 * @generated
-	 */
-	void setCharterContract(CharterContract value);
-
-	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterContract <em>Charter Contract</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #isSetCharterContract()
 	 * @see #getCharterContract()
-	 * @see #setCharterContract(CharterContract)
+	 * @see #setCharterContract(GenericCharterContract)
 	 * @generated
 	 */
 	void unsetCharterContract();
@@ -668,7 +608,7 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @return whether the value of the '<em>Charter Contract</em>' reference is set.
 	 * @see #unsetCharterContract()
 	 * @see #getCharterContract()
-	 * @see #setCharterContract(CharterContract)
+	 * @see #setCharterContract(GenericCharterContract)
 	 * @generated
 	 */
 	boolean isSetCharterContract();
@@ -782,6 +722,28 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	boolean isSetMaxDuration();
 
 	/**
+	 * Returns the value of the '<em><b>Charter Contract Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Charter Contract Override</em>' attribute.
+	 * @see #setCharterContractOverride(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_CharterContractOverride()
+	 * @model
+	 * @generated
+	 */
+	boolean isCharterContractOverride();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isCharterContractOverride <em>Charter Contract Override</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Charter Contract Override</em>' attribute.
+	 * @see #isCharterContractOverride()
+	 * @generated
+	 */
+	void setCharterContractOverride(boolean value);
+
+	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterNumber <em>Charter Number</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -826,14 +788,6 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation" required="true"
-	 * @generated
-	 */
-	BallastBonusContract getCharterOrDelegateBallastBonusContract();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
 	 * @model kind="operation"
 	 * @generated
 	 */
@@ -858,18 +812,18 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation"
-	 * @generated
-	 */
-	String getCharterOrDelegateRepositioningFee();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
 	 * @model
 	 * @generated
 	 */
 	String jsonid();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	GenericCharterContract getCharterOrDelegateCharterContract();
 
 	/**
 	 * Returns the value of the '<em><b>Entity</b></em>' reference.

@@ -54,7 +54,7 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 
 		@NonNull
 		RuleBasedBallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "1000000");
-		vesselAvailability.setBallastBonusContract(ballastBonusContract);
+		vesselAvailability.setCharterContract(ballastBonusContract);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2017, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
@@ -102,7 +102,7 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 			Assertions.assertEquals("7", va.getEndHeel().getPriceExpression());
 			Assertions.assertEquals(4000.0, va.getEndHeel().getMinimumEndHeel(), 0.0001);
 			Assertions.assertEquals(5000.0, va.getEndHeel().getMaximumEndHeel(), 0.0001);
-			Assertions.assertNotNull(va.getBallastBonusContract());
+			Assertions.assertNotNull(va.getCharterContract());
 		}, null);
 	}
 
@@ -126,7 +126,7 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 
 		@NonNull
 		RuleBasedBallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "1000000");
-		vesselAvailability.setBallastBonusContract(ballastBonusContract);
+		vesselAvailability.setCharterContract(ballastBonusContract);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2017, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
@@ -174,7 +174,7 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 			Assertions.assertEquals("7", va.getEndHeel().getPriceExpression());
 			Assertions.assertEquals(4000.0, va.getEndHeel().getMinimumEndHeel(), 0.0001);
 			Assertions.assertEquals(5000.0, va.getEndHeel().getMaximumEndHeel(), 0.0001);
-			Assertions.assertNotNull(va.getBallastBonusContract());
+			Assertions.assertNotNull(va.getCharterContract());
 		}, null);
 	}
 
@@ -198,7 +198,7 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 
 		@NonNull
 		RuleBasedBallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "1000000");
-		vesselAvailability.setBallastBonusContract(ballastBonusContract);
+		vesselAvailability.setCharterContract(ballastBonusContract);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2017, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
@@ -257,7 +257,7 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 			Assertions.assertEquals("7", va.getEndHeel().getPriceExpression());
 			Assertions.assertEquals(4000.0, va.getEndHeel().getMinimumEndHeel(), 0.0001);
 			Assertions.assertEquals(5000.0, va.getEndHeel().getMaximumEndHeel(), 0.0001);
-			Assertions.assertNotNull(va.getBallastBonusContract());
+			Assertions.assertNotNull(va.getCharterContract());
 		}, null);
 	}
 
@@ -281,7 +281,7 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 
 		@NonNull
 		RuleBasedBallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "1000000");
-		vesselAvailability.setBallastBonusContract(ballastBonusContract);
+		vesselAvailability.setCharterContract(ballastBonusContract);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2017, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
@@ -334,7 +334,7 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 			Assertions.assertEquals("", va.getEndHeel().getPriceExpression());
 			Assertions.assertEquals(500.0, va.getEndHeel().getMinimumEndHeel(), 0.0001);
 			Assertions.assertEquals(500.0, va.getEndHeel().getMaximumEndHeel(), 0.0001);
-			Assertions.assertNull(va.getBallastBonusContract());
+			Assertions.assertNull(va.getCharterContract());
 		}, null);
 	}
 }

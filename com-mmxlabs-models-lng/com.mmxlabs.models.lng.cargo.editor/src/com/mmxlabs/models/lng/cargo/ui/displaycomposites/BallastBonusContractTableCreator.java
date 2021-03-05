@@ -26,6 +26,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
@@ -46,7 +47,7 @@ import com.mmxlabs.rcp.common.RunnerHelper;
 
 public class BallastBonusContractTableCreator {
 	public static EObjectTableViewer createBallastBonusTable(final Composite parent, final FormToolkit toolkit, final IDialogEditingContext dialogContext, final ICommandHandler commandHandler,
-			final RuleBasedBallastBonusContract ruleBasedBallastBonusContract, final IStatusProvider statusProvider, final Runnable sizeChangedAction) {
+			final GenericCharterContract charterContract, final IStatusProvider statusProvider, final Runnable sizeChangedAction) {
 		final IScenarioEditingLocation sel = dialogContext.getScenarioEditingLocation();
 		final EObjectTableViewer eViewer = new EObjectTableViewer(parent, SWT.FULL_SELECTION);
 		eViewer.setStatusProvider(statusProvider);
@@ -402,9 +403,9 @@ public class BallastBonusContractTableCreator {
 		eViewer.getSortingSupport().clearColumnSortOrder();
 		eViewer.getGrid().recalculateHeader();
 
-		eViewer.init(sel.getAdapterFactory(), sel.getModelReference(), CommercialPackage.eINSTANCE.getRuleBasedBallastBonusContract_Rules());
+		eViewer.init(sel.getAdapterFactory(), sel.getModelReference(), CommercialPackage.eINSTANCE.getGenericCharterContract_Terms());
 
-		eViewer.setInput(ruleBasedBallastBonusContract);
+		eViewer.setInput(charterContract);
 
 		final GridData gridData = GridDataFactory.fillDefaults().grab(true, true).create();
 		gridData.minimumHeight = 150;
@@ -429,8 +430,8 @@ public class BallastBonusContractTableCreator {
 			public void widgetSelected(final SelectionEvent e) {
 				final LumpSumBallastBonusContractLine newLine = CommercialFactory.eINSTANCE.createLumpSumBallastBonusContractLine();
 				commandHandler.handleCommand(
-						AddCommand.create(commandHandler.getEditingDomain(), ruleBasedBallastBonusContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES, newLine),
-						ruleBasedBallastBonusContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES);
+						AddCommand.create(commandHandler.getEditingDomain(), charterContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES, newLine),
+						charterContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES);
 				eViewer.setSelection(new StructuredSelection(newLine));
 				eViewer.refresh();
 				RunnerHelper.asyncExec(sizeChangedAction);
@@ -445,8 +446,8 @@ public class BallastBonusContractTableCreator {
 			public void widgetSelected(final SelectionEvent e) {
 				final NotionalJourneyBallastBonusContractLine newLine = CommercialFactory.eINSTANCE.createNotionalJourneyBallastBonusContractLine();
 				commandHandler.handleCommand(
-						AddCommand.create(commandHandler.getEditingDomain(), ruleBasedBallastBonusContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES, newLine),
-						ruleBasedBallastBonusContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES);
+						AddCommand.create(commandHandler.getEditingDomain(), charterContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES, newLine),
+						charterContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES);
 				eViewer.setSelection(new StructuredSelection(newLine));
 				
 				
@@ -470,8 +471,8 @@ public class BallastBonusContractTableCreator {
 					final Object selection = ((IStructuredSelection) sel).getFirstElement();
 					if (selection instanceof BallastBonusContractLine) {
 						commandHandler.handleCommand(
-								RemoveCommand.create(commandHandler.getEditingDomain(), ruleBasedBallastBonusContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES, selection),
-								ruleBasedBallastBonusContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES);
+								RemoveCommand.create(commandHandler.getEditingDomain(), charterContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES, selection),
+								charterContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES);
 					}
 				}
 				eViewer.refresh();

@@ -9,6 +9,7 @@ package com.mmxlabs.models.lng.spotmarkets.impl;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CharterContract;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.RouteOption;
 import java.util.Collection;
@@ -176,7 +177,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * @generated
 	 * @ordered
 	 */
-	protected CharterContract charterContract;
+	protected GenericCharterContract charterContract;
 
 	/**
 	 * This is true if the Charter Contract reference has been set.
@@ -660,10 +661,10 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * @generated
 	 */
 	@Override
-	public CharterContract getCharterContract() {
+	public GenericCharterContract getCharterContract() {
 		if (charterContract != null && charterContract.eIsProxy()) {
 			InternalEObject oldCharterContract = (InternalEObject)charterContract;
-			charterContract = (CharterContract)eResolveProxy(oldCharterContract);
+			charterContract = (GenericCharterContract)eResolveProxy(oldCharterContract);
 			if (charterContract != oldCharterContract) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_CONTRACT, oldCharterContract, charterContract));
@@ -677,7 +678,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CharterContract basicGetCharterContract() {
+	public GenericCharterContract basicGetCharterContract() {
 		return charterContract;
 	}
 
@@ -687,8 +688,8 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * @generated
 	 */
 	@Override
-	public void setCharterContract(CharterContract newCharterContract) {
-		CharterContract oldCharterContract = charterContract;
+	public void setCharterContract(GenericCharterContract newCharterContract) {
+		GenericCharterContract oldCharterContract = charterContract;
 		charterContract = newCharterContract;
 		boolean oldCharterContractESet = charterContractESet;
 		charterContractESet = true;
@@ -703,7 +704,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 */
 	@Override
 	public void unsetCharterContract() {
-		CharterContract oldCharterContract = charterContract;
+		GenericCharterContract oldCharterContract = charterContract;
 		boolean oldCharterContractESet = charterContractESet;
 		charterContract = null;
 		charterContractESet = false;
@@ -870,7 +871,7 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 				getInaccessibleRoutes().addAll((Collection<? extends RouteOption>)newValue);
 				return;
 			case SpotMarketsPackage.CHARTER_IN_MARKET__CHARTER_CONTRACT:
-				setCharterContract((CharterContract)newValue);
+				setCharterContract((GenericCharterContract)newValue);
 				return;
 			case SpotMarketsPackage.CHARTER_IN_MARKET__NOMINAL:
 				setNominal((Boolean)newValue);

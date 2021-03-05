@@ -44,6 +44,7 @@ import com.mmxlabs.optimiser.core.scenario.impl.OptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
+import com.mmxlabs.scheduler.optimiser.chartercontracts.ICharterContract;
 import com.mmxlabs.scheduler.optimiser.components.DefaultSpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
@@ -102,7 +103,6 @@ import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.CharterRateToCharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
@@ -728,7 +728,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		// End cold already enforced in VoyagePlanner#getVoyageOptionsAndSetVpoChoices
 		final IVesselAvailability spotAvailability = createVesselAvailability(vessel, dailyCharterInPrice, VesselInstanceType.SPOT_CHARTER, start, end, spotCharterInMarket,
-				spotCharterInMarket.getBallastBonusContract(), spotIndex, spotCharterInMarket.getRepositioningFee(), true);
+				spotCharterInMarket.getCharterContract(), spotIndex, spotCharterInMarket.getRepositioningFee(), true);
 		spotCharterInMarketProviderEditor.addSpotMarketAvailability(spotAvailability, spotCharterInMarket, spotIndex);
 
 		return spotAvailability;
@@ -748,24 +748,24 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	@NonNull
 	public IVesselAvailability createVesselAvailability(@NonNull final IVessel vessel, final ILongCurve dailyCharterInRate, final VesselInstanceType vesselInstanceType, final IStartRequirement start,
-			final IEndRequirement end, IBallastBonusContract ballastBonusContract, final ILongCurve repositioningFee, final boolean isOptional) {
-		return createVesselAvailability(vessel, dailyCharterInRate, vesselInstanceType, start, end, null, ballastBonusContract, -1, repositioningFee, isOptional);
+			final IEndRequirement end, ICharterContract charterContract, final ILongCurve repositioningFee, final boolean isOptional) {
+		return createVesselAvailability(vessel, dailyCharterInRate, vesselInstanceType, start, end, null, charterContract, -1, repositioningFee, isOptional);
 	}
 
 	private IVesselAvailability createVesselAvailability(@NonNull final IVessel vessel, String name, final ILongCurve dailyCharterInRate, final VesselInstanceType vesselInstanceType,
-			final IStartRequirement start, final IEndRequirement end, IBallastBonusContract ballastBonusContract, final ILongCurve repositioningFee, final boolean isOptional) {
-		return createVesselAvailability(vessel, name, dailyCharterInRate, vesselInstanceType, start, end, null, ballastBonusContract, -1, repositioningFee, isOptional);
+			final IStartRequirement start, final IEndRequirement end, ICharterContract charterContract, final ILongCurve repositioningFee, final boolean isOptional) {
+		return createVesselAvailability(vessel, name, dailyCharterInRate, vesselInstanceType, start, end, null, charterContract, -1, repositioningFee, isOptional);
 	}
 
 	@NonNull
 	private IVesselAvailability createVesselAvailability(@NonNull final IVessel vessel, final ILongCurve dailyCharterInRate, @NonNull final VesselInstanceType vesselInstanceType,
-			@NonNull final IStartRequirement start, @NonNull final IEndRequirement end, @Nullable final ISpotCharterInMarket spotCharterInMarket, IBallastBonusContract ballastBonusContract,
+			@NonNull final IStartRequirement start, @NonNull final IEndRequirement end, @Nullable final ISpotCharterInMarket spotCharterInMarket, ICharterContract charterContract,
 			final int spotIndex, final ILongCurve positioningFee, final boolean isOptional) {
-		return createVesselAvailability(vessel, vessel.getName(), dailyCharterInRate, vesselInstanceType, start, end, spotCharterInMarket, ballastBonusContract, spotIndex, positioningFee, isOptional);
+		return createVesselAvailability(vessel, vessel.getName(), dailyCharterInRate, vesselInstanceType, start, end, spotCharterInMarket, charterContract, spotIndex, positioningFee, isOptional);
 	}
 
 	private IVesselAvailability createVesselAvailability(@NonNull final IVessel vessel, String name, final ILongCurve dailyCharterInRate, @NonNull final VesselInstanceType vesselInstanceType,
-			@NonNull final IStartRequirement start, @NonNull final IEndRequirement end, @Nullable final ISpotCharterInMarket spotCharterInMarket, IBallastBonusContract ballastBonusContract,
+			@NonNull final IStartRequirement start, @NonNull final IEndRequirement end, @Nullable final ISpotCharterInMarket spotCharterInMarket, ICharterContract charterContract,
 			final int spotIndex, final ILongCurve positioningFee, final boolean isOptional) {
 		if (!vessels.contains(vessel)) {
 			throw new IllegalArgumentException("IVessel was not created using this builder");
@@ -864,7 +864,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vesselAvailability.setOptional(isOptional);
 		vesselAvailability.setRepositioningFee(positioningFee);
 
-		vesselAvailability.setBallastBonusContract(ballastBonusContract);
+		vesselAvailability.setCharterContract(charterContract);
 		return vesselAvailability;
 	}
 
@@ -1822,8 +1822,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	@NonNull
 	public ISpotCharterInMarket createSpotCharterInMarket(@NonNull final String name, @NonNull final IVessel vessel, @NonNull final ILongCurve dailyCharterInRateCurve, final int availabilityCount,
-			@Nullable IEndRequirement endRequirement, @Nullable IBallastBonusContract ballastBonusContract, final ILongCurve repositioningFee) {
-		return new DefaultSpotCharterInMarket(name, vessel, dailyCharterInRateCurve, availabilityCount, endRequirement, ballastBonusContract, repositioningFee);
+			@Nullable IEndRequirement endRequirement, @Nullable ICharterContract charterContract, final ILongCurve repositioningFee) {
+		return new DefaultSpotCharterInMarket(name, vessel, dailyCharterInRateCurve, availabilityCount, endRequirement, charterContract, repositioningFee);
 	}
 
 	@Override

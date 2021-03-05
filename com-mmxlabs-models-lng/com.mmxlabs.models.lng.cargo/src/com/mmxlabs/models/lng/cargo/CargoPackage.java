@@ -4426,22 +4426,13 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
 
 	/**
-	 * The feature id for the '<em><b>Repositioning Fee</b></em>' attribute.
+	 * The feature id for the '<em><b>Contained Charter Contract</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__REPOSITIONING_FEE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
-
-	/**
-	 * The feature id for the '<em><b>Ballast Bonus Contract</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
+	int VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
 
 	/**
 	 * The feature id for the '<em><b>Charter Contract</b></em>' reference.
@@ -4450,7 +4441,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__CHARTER_CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
+	int VESSEL_AVAILABILITY__CHARTER_CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
 
 	/**
 	 * The feature id for the '<em><b>Min Duration</b></em>' attribute.
@@ -4459,7 +4450,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__MIN_DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
+	int VESSEL_AVAILABILITY__MIN_DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
 
 	/**
 	 * The feature id for the '<em><b>Max Duration</b></em>' attribute.
@@ -4468,7 +4459,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__MAX_DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 19;
+	int VESSEL_AVAILABILITY__MAX_DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
+
+	/**
+	 * The feature id for the '<em><b>Charter Contract Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 19;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Availability</em>' class.
@@ -4543,22 +4543,13 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_AVAILABILITY___GET_END_AFTER_AS_DATE_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 3;
 
 	/**
-	 * The operation id for the '<em>Get Charter Or Delegate Ballast Bonus Contract</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_BALLAST_BONUS_CONTRACT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 4;
-
-	/**
 	 * The operation id for the '<em>Get Charter Or Delegate Min Duration</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_MIN_DURATION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 5;
+	int VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_MIN_DURATION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Get Charter Or Delegate Max Duration</em>' operation.
@@ -4567,7 +4558,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_MAX_DURATION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 6;
+	int VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_MAX_DURATION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Charter Or Delegate Entity</em>' operation.
@@ -4576,16 +4567,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_ENTITY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 7;
-
-	/**
-	 * The operation id for the '<em>Get Charter Or Delegate Repositioning Fee</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_REPOSITIONING_FEE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 8;
+	int VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_ENTITY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Jsonid</em>' operation.
@@ -4594,7 +4576,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY___JSONID = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 9;
+	int VESSEL_AVAILABILITY___JSONID = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 7;
+
+	/**
+	 * The operation id for the '<em>Get Charter Or Delegate Charter Contract</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_CHARTER_CONTRACT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 8;
 
 	/**
 	 * The number of operations of the '<em>Vessel Availability</em>' class.
@@ -4603,7 +4594,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 10;
+	int VESSEL_AVAILABILITY_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -8762,6 +8753,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getVesselAvailability_ForceHireCostOnlyEndRule();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getContainedCharterContract <em>Contained Charter Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Contained Charter Contract</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getContainedCharterContract()
+	 * @see #getVesselAvailability()
+	 * @generated
+	 */
+	EReference getVesselAvailability_ContainedCharterContract();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isOptional <em>Optional</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8771,28 +8773,6 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getVesselAvailability_Optional();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getRepositioningFee <em>Repositioning Fee</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Repositioning Fee</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getRepositioningFee()
-	 * @see #getVesselAvailability()
-	 * @generated
-	 */
-	EAttribute getVesselAvailability_RepositioningFee();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getBallastBonusContract <em>Ballast Bonus Contract</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Ballast Bonus Contract</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getBallastBonusContract()
-	 * @see #getVesselAvailability()
-	 * @generated
-	 */
-	EReference getVesselAvailability_BallastBonusContract();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterNumber <em>Charter Number</em>}'.
@@ -8839,6 +8819,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getVesselAvailability_MaxDuration();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isCharterContractOverride <em>Charter Contract Override</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Charter Contract Override</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#isCharterContractOverride()
+	 * @see #getVesselAvailability()
+	 * @generated
+	 */
+	EAttribute getVesselAvailability_CharterContractOverride();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartByAsDateTime() <em>Get Start By As Date Time</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8879,16 +8870,6 @@ public interface CargoPackage extends EPackage {
 	EOperation getVesselAvailability__GetEndAfterAsDateTime();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterOrDelegateBallastBonusContract() <em>Get Charter Or Delegate Ballast Bonus Contract</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Charter Or Delegate Ballast Bonus Contract</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterOrDelegateBallastBonusContract()
-	 * @generated
-	 */
-	EOperation getVesselAvailability__GetCharterOrDelegateBallastBonusContract();
-
-	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterOrDelegateMinDuration() <em>Get Charter Or Delegate Min Duration</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8919,16 +8900,6 @@ public interface CargoPackage extends EPackage {
 	EOperation getVesselAvailability__GetCharterOrDelegateEntity();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterOrDelegateRepositioningFee() <em>Get Charter Or Delegate Repositioning Fee</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Charter Or Delegate Repositioning Fee</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterOrDelegateRepositioningFee()
-	 * @generated
-	 */
-	EOperation getVesselAvailability__GetCharterOrDelegateRepositioningFee();
-
-	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#jsonid() <em>Jsonid</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8937,6 +8908,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getVesselAvailability__Jsonid();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterOrDelegateCharterContract() <em>Get Charter Or Delegate Charter Contract</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Charter Or Delegate Charter Contract</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterOrDelegateCharterContract()
+	 * @generated
+	 */
+	EOperation getVesselAvailability__GetCharterOrDelegateCharterContract();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEntity <em>Entity</em>}'.
@@ -11369,28 +11350,20 @@ public interface CargoPackage extends EPackage {
 		EAttribute VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE = eINSTANCE.getVesselAvailability_ForceHireCostOnlyEndRule();
 
 		/**
+		 * The meta object literal for the '<em><b>Contained Charter Contract</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT = eINSTANCE.getVesselAvailability_ContainedCharterContract();
+
+		/**
 		 * The meta object literal for the '<em><b>Optional</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute VESSEL_AVAILABILITY__OPTIONAL = eINSTANCE.getVesselAvailability_Optional();
-
-		/**
-		 * The meta object literal for the '<em><b>Repositioning Fee</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL_AVAILABILITY__REPOSITIONING_FEE = eINSTANCE.getVesselAvailability_RepositioningFee();
-
-		/**
-		 * The meta object literal for the '<em><b>Ballast Bonus Contract</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT = eINSTANCE.getVesselAvailability_BallastBonusContract();
 
 		/**
 		 * The meta object literal for the '<em><b>Charter Number</b></em>' attribute feature.
@@ -11425,6 +11398,14 @@ public interface CargoPackage extends EPackage {
 		EAttribute VESSEL_AVAILABILITY__MAX_DURATION = eINSTANCE.getVesselAvailability_MaxDuration();
 
 		/**
+		 * The meta object literal for the '<em><b>Charter Contract Override</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE = eINSTANCE.getVesselAvailability_CharterContractOverride();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Start By As Date Time</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -11457,14 +11438,6 @@ public interface CargoPackage extends EPackage {
 		EOperation VESSEL_AVAILABILITY___GET_END_AFTER_AS_DATE_TIME = eINSTANCE.getVesselAvailability__GetEndAfterAsDateTime();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Charter Or Delegate Ballast Bonus Contract</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_BALLAST_BONUS_CONTRACT = eINSTANCE.getVesselAvailability__GetCharterOrDelegateBallastBonusContract();
-
-		/**
 		 * The meta object literal for the '<em><b>Get Charter Or Delegate Min Duration</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -11489,20 +11462,20 @@ public interface CargoPackage extends EPackage {
 		EOperation VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_ENTITY = eINSTANCE.getVesselAvailability__GetCharterOrDelegateEntity();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Charter Or Delegate Repositioning Fee</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_REPOSITIONING_FEE = eINSTANCE.getVesselAvailability__GetCharterOrDelegateRepositioningFee();
-
-		/**
 		 * The meta object literal for the '<em><b>Jsonid</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EOperation VESSEL_AVAILABILITY___JSONID = eINSTANCE.getVesselAvailability__Jsonid();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Charter Or Delegate Charter Contract</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_CHARTER_CONTRACT = eINSTANCE.getVesselAvailability__GetCharterOrDelegateCharterContract();
 
 		/**
 		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.

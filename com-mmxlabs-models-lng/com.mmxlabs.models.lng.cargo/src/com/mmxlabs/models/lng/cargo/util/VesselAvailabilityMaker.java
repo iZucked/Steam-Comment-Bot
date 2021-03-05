@@ -14,6 +14,9 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
+import com.mmxlabs.models.lng.commercial.LumpSumRepositioningFeeTerm;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
@@ -102,11 +105,23 @@ public class VesselAvailabilityMaker {
 		return this;
 	}
 
+	/**
+	 * Does nothing if fee is empty!
+	 * If fee is not empty the repositioning fee lump sum term is added to charter contract
+	 * If charter contract is null, new contained charter contract is created
+	 * @param fee
+	 * @return
+	 */
 	public VesselAvailabilityMaker withRepositioning(final String fee) {
 		if (fee != null) {
-			vesselAvailability.setRepositioningFee(fee);
-		} else {
-			vesselAvailability.setRepositioningFee("");
+			GenericCharterContract gcc = vesselAvailability.getCharterOrDelegateCharterContract();
+			if (gcc == null) {
+				gcc = CommercialFactory.eINSTANCE.createGenericCharterContract();
+				vesselAvailability.setContainedCharterContract(gcc);
+			}
+			final LumpSumRepositioningFeeTerm term = CommercialFactory.eINSTANCE.createLumpSumRepositioningFeeTerm();
+			term.setPriceExpression(fee);
+			gcc.getTerms().add(term);
 		}
 		return this;
 	}

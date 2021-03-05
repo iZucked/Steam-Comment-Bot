@@ -49,21 +49,6 @@ public class VesselCharterViewerPane_Editor extends ScenarioTableViewerPane {
 
 		addTypicalColumn("Charter", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_TimeCharterRate(), scenarioEditingLocation.getEditingDomain()));
 
-		addTypicalColumn("Repositioning Fee", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_RepositioningFee(), scenarioEditingLocation.getEditingDomain()) {
-			@Override
-			public boolean canEdit(Object object) {
-				if (object instanceof VesselAvailability) {
-					if (!((VesselAvailability) object).isFleet()) {
-						return true;
-					} else {
-						return false;
-					}
-				} else {
-					return super.canEdit(object);
-				}
-			}
-		});
-
 		addTypicalColumn("Start Port", new SingleReferenceManipulator(CargoPackage.eINSTANCE.getVesselAvailability_StartAt(), scenarioEditingLocation.getReferenceValueProviderCache(),
 				scenarioEditingLocation.getEditingDomain()));
 

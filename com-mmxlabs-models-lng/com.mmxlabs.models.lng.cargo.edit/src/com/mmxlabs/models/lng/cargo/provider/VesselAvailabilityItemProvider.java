@@ -71,10 +71,10 @@ public class VesselAvailabilityItemProvider
 			addStartHeelPropertyDescriptor(object);
 			addEndHeelPropertyDescriptor(object);
 			addForceHireCostOnlyEndRulePropertyDescriptor(object);
-			addRepositioningFeePropertyDescriptor(object);
 			addCharterContractPropertyDescriptor(object);
 			addMinDurationPropertyDescriptor(object);
 			addMaxDurationPropertyDescriptor(object);
+			addCharterContractOverridePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -366,28 +366,6 @@ public class VesselAvailabilityItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Repositioning Fee feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addRepositioningFeePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_VesselAvailability_repositioningFee_feature"),
-				 getString("_UI_VesselAvailability_repositioningFee_description"),
-				 CargoPackage.Literals.VESSEL_AVAILABILITY__REPOSITIONING_FEE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Charter Contract feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -453,6 +431,28 @@ public class VesselAvailabilityItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Charter Contract Override feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCharterContractOverridePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselAvailability_charterContractOverride_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailability_charterContractOverride_feature", "_UI_VesselAvailability_type"),
+				 CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Charter Number feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -510,7 +510,7 @@ public class VesselAvailabilityItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL);
 			childrenFeatures.add(CargoPackage.Literals.VESSEL_AVAILABILITY__END_HEEL);
-			childrenFeatures.add(CargoPackage.Literals.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT);
+			childrenFeatures.add(CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT);
 		}
 		return childrenFeatures;
 	}
@@ -586,14 +586,14 @@ public class VesselAvailabilityItemProvider
 			case CargoPackage.VESSEL_AVAILABILITY__END_AFTER:
 			case CargoPackage.VESSEL_AVAILABILITY__END_BY:
 			case CargoPackage.VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE:
-			case CargoPackage.VESSEL_AVAILABILITY__REPOSITIONING_FEE:
 			case CargoPackage.VESSEL_AVAILABILITY__MIN_DURATION:
 			case CargoPackage.VESSEL_AVAILABILITY__MAX_DURATION:
+			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__START_HEEL:
 			case CargoPackage.VESSEL_AVAILABILITY__END_HEEL:
-			case CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT:
+			case CargoPackage.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -623,8 +623,8 @@ public class VesselAvailabilityItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(CargoPackage.Literals.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT,
-				 CommercialFactory.eINSTANCE.createRuleBasedBallastBonusContract()));
+				(CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT,
+				 CommercialFactory.eINSTANCE.createGenericCharterContract()));
 	}
 
 }

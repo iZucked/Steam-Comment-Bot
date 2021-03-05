@@ -8,6 +8,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.curves.ILongCurve;
+import com.mmxlabs.scheduler.optimiser.chartercontracts.ICharterContract;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
@@ -15,7 +16,6 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
 
 /**
  * Default implementation of {@link IVessel}.
@@ -48,7 +48,7 @@ public final class DefaultVesselAvailability implements IVesselAvailability {
 	
 	private boolean optional;
 	
-	private IBallastBonusContract ballastBonusContract;
+	private ICharterContract charterContract;
 
 	public DefaultVesselAvailability(@NonNull final IVessel vessel, @NonNull final VesselInstanceType vesselInstanceType) {
 		this.vessel = vessel;
@@ -147,13 +147,13 @@ public final class DefaultVesselAvailability implements IVesselAvailability {
 	}
 
 	@Override
-	public void setBallastBonusContract(IBallastBonusContract contract) {
-		ballastBonusContract = contract;
+	public void setCharterContract(ICharterContract contract) {
+		charterContract = contract;
 	}
 
 	@Override
 	@Nullable
-	public IBallastBonusContract getBallastBonusContract() {
-		return ballastBonusContract;
+	public ICharterContract getCharterContract() {
+		return charterContract;
 	}
 }

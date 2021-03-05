@@ -77,7 +77,7 @@ public interface CommercialModel extends UUIDObject {
 
 	/**
 	 * Returns the value of the '<em><b>Chartering Contracts</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.commercial.CharterContract}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.commercial.GenericCharterContract}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Chartering Contracts</em>' containment reference list isn't clear,
@@ -89,7 +89,7 @@ public interface CommercialModel extends UUIDObject {
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<CharterContract> getCharteringContracts();
+	EList<GenericCharterContract> getCharteringContracts();
 
 } // end of  CommercialModel
 

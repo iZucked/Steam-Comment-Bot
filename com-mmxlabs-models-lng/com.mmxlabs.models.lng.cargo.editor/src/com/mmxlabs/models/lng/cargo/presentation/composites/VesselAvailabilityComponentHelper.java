@@ -15,7 +15,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.editor.VesselAvailabilityDetailWrapper;
 import com.mmxlabs.models.lng.fleet.ui.inlineeditors.TextualVesselReferenceInlineEditor;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -87,11 +86,11 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 		add_startHeelEditor(detailComposite, topClass);
 		add_endHeelEditor(detailComposite, topClass);
 		add_forceHireCostOnlyEndRuleEditor(detailComposite, topClass);
-		add_repositioningFeeEditor(detailComposite, topClass);
-		add_ballastBonusContractEditor(detailComposite, topClass);
+		add_containedCharterContractEditor(detailComposite, topClass);
 		add_charterContractEditor(detailComposite, topClass);
 		add_minDurationEditor(detailComposite, topClass);
 		add_maxDurationEditor(detailComposite, topClass);
+		add_charterContractOverrideEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the fleet feature on VesselAvailability
@@ -216,39 +215,21 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
+	 * Create the editor for the containedCharterContract feature on VesselAvailability
+	 *
+	 * @generated NOT
+	 */
+	protected void add_containedCharterContractEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		//detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT));
+	}
+
+	/**
 	 * Create the editor for the optional feature on VesselAvailability
 	 *
 	 * @generated
 	 */
 	protected void add_optionalEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__OPTIONAL));
-	}
-
-	/**
-	 * Create the editor for the repositioningFee feature on VesselAvailability
-	 *
-	 * @generated NOT
-	 */
-	protected void add_repositioningFeeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(new VesselAvailabilityDetailWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__REPOSITIONING_FEE)));
-	}
-
-	/**
-	 * Create the editor for the ballastBonus feature on VesselAvailability
-	 *
-	 * @generated NOT
-	 */
-	protected void add_ballastBonusEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-//		detailComposite.addInlineEditor(new VesselAvailabilityDetailWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__BALLAST_BONUS)));
-	}
-
-	/**
-	 * Create the editor for the ballastBonusContract feature on VesselAvailability
-	 *
-	 * @generated NOT
-	 */
-	protected void add_ballastBonusContractEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT));
 	}
 
 	/**
@@ -285,6 +266,15 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_maxDurationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__MAX_DURATION));
+	}
+
+	/**
+	 * Create the editor for the charterContractOverride feature on VesselAvailability
+	 *
+	 * @generated
+	 */
+	protected void add_charterContractOverrideEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE));
 	}
 
 	/**

@@ -109,13 +109,13 @@ public class MonthlyBallastBonusCharterContractDetailComposite extends DefaultDe
 	}
 
 	protected MonthlyBallastBonusContract getBallastBonus(BallastBonusCharterContract bbcc) {
-		if (bbcc.getBallastBonusContract() == null) {
+		if (bbcc.getCharterContract() == null) {
 			MonthlyBallastBonusContract  ballastBonusContract = CommercialFactory.eINSTANCE.createMonthlyBallastBonusContract();
 			commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), bbcc, CommercialPackage.Literals.BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT, ballastBonusContract), bbcc,
 					CommercialPackage.Literals.BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT);
 			return ballastBonusContract;
 		} else {
-			return (MonthlyBallastBonusContract ) bbcc.getBallastBonusContract();
+			return (MonthlyBallastBonusContract ) bbcc.getCharterContract();
 		}
 	}
 

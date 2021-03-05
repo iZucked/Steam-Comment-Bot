@@ -1570,14 +1570,14 @@ public interface CommercialPackage extends EPackage {
 	int DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS_FEATURE_COUNT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 3;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.BallastBonusContract <em>Ballast Bonus Contract</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.GenericCharterContractImpl <em>Generic Charter Contract</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.commercial.BallastBonusContract
-	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getBallastBonusContract()
+	 * @see com.mmxlabs.models.lng.commercial.impl.GenericCharterContractImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getGenericCharterContract()
 	 * @generated
 	 */
-	int BALLAST_BONUS_CONTRACT = 15;
+	int GENERIC_CHARTER_CONTRACT = 15;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1586,7 +1586,16 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BALLAST_BONUS_CONTRACT__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+	int GENERIC_CHARTER_CONTRACT__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERIC_CHARTER_CONTRACT__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -1595,246 +1604,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BALLAST_BONUS_CONTRACT__UUID = MMXCorePackage.UUID_OBJECT__UUID;
-
-	/**
-	 * The number of structural features of the '<em>Ballast Bonus Contract</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BALLAST_BONUS_CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.RuleBasedBallastBonusContractImpl <em>Rule Based Ballast Bonus Contract</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.commercial.impl.RuleBasedBallastBonusContractImpl
-	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getRuleBasedBallastBonusContract()
-	 * @generated
-	 */
-	int RULE_BASED_BALLAST_BONUS_CONTRACT = 16;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RULE_BASED_BALLAST_BONUS_CONTRACT__EXTENSIONS = BALLAST_BONUS_CONTRACT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RULE_BASED_BALLAST_BONUS_CONTRACT__UUID = BALLAST_BONUS_CONTRACT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Rules</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RULE_BASED_BALLAST_BONUS_CONTRACT__RULES = BALLAST_BONUS_CONTRACT_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Rule Based Ballast Bonus Contract</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RULE_BASED_BALLAST_BONUS_CONTRACT_FEATURE_COUNT = BALLAST_BONUS_CONTRACT_FEATURE_COUNT + 1;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.BallastBonusContractLineImpl <em>Ballast Bonus Contract Line</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.commercial.impl.BallastBonusContractLineImpl
-	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getBallastBonusContractLine()
-	 * @generated
-	 */
-	int BALLAST_BONUS_CONTRACT_LINE = 17;
-
-	/**
-	 * The feature id for the '<em><b>Redelivery Ports</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BALLAST_BONUS_CONTRACT_LINE__REDELIVERY_PORTS = 0;
-
-	/**
-	 * The number of structural features of the '<em>Ballast Bonus Contract Line</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT = 1;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.LumpSumBallastBonusContractLineImpl <em>Lump Sum Ballast Bonus Contract Line</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.commercial.impl.LumpSumBallastBonusContractLineImpl
-	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getLumpSumBallastBonusContractLine()
-	 * @generated
-	 */
-	int LUMP_SUM_BALLAST_BONUS_CONTRACT_LINE = 18;
-
-	/**
-	 * The feature id for the '<em><b>Redelivery Ports</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LUMP_SUM_BALLAST_BONUS_CONTRACT_LINE__REDELIVERY_PORTS = BALLAST_BONUS_CONTRACT_LINE__REDELIVERY_PORTS;
-
-	/**
-	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LUMP_SUM_BALLAST_BONUS_CONTRACT_LINE__PRICE_EXPRESSION = BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Lump Sum Ballast Bonus Contract Line</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LUMP_SUM_BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT = BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT + 1;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.NotionalJourneyBallastBonusContractLineImpl <em>Notional Journey Ballast Bonus Contract Line</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.commercial.impl.NotionalJourneyBallastBonusContractLineImpl
-	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getNotionalJourneyBallastBonusContractLine()
-	 * @generated
-	 */
-	int NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE = 19;
-
-	/**
-	 * The feature id for the '<em><b>Redelivery Ports</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__REDELIVERY_PORTS = BALLAST_BONUS_CONTRACT_LINE__REDELIVERY_PORTS;
-
-	/**
-	 * The feature id for the '<em><b>Speed</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__SPEED = BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Fuel Price Expression</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__FUEL_PRICE_EXPRESSION = BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Hire Price Expression</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__HIRE_PRICE_EXPRESSION = BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Return Ports</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__RETURN_PORTS = BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Include Canal</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL = BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT + 4;
-
-	/**
-	 * The feature id for the '<em><b>Include Canal Time</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL_TIME = BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT + 5;
-
-	/**
-	 * The feature id for the '<em><b>Lump Sum Price Expression</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__LUMP_SUM_PRICE_EXPRESSION = BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT + 6;
-
-	/**
-	 * The number of structural features of the '<em>Notional Journey Ballast Bonus Contract Line</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT = BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT + 7;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.CharterContract <em>Charter Contract</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.commercial.CharterContract
-	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getCharterContract()
-	 * @generated
-	 */
-	int CHARTER_CONTRACT = 20;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_CONTRACT__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHARTER_CONTRACT__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
+	int GENERIC_CHARTER_CONTRACT__UUID = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Min Duration</b></em>' attribute.
@@ -1843,7 +1613,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_CONTRACT__MIN_DURATION = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+	int GENERIC_CHARTER_CONTRACT__MIN_DURATION = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Max Duration</b></em>' attribute.
@@ -1852,381 +1622,16 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_CONTRACT__MAX_DURATION = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+	int GENERIC_CHARTER_CONTRACT__MAX_DURATION = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The number of structural features of the '<em>Charter Contract</em>' class.
+	 * The feature id for the '<em><b>Terms</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_CONTRACT_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SimpleCharterContractImpl <em>Simple Charter Contract</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.commercial.impl.SimpleCharterContractImpl
-	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getSimpleCharterContract()
-	 * @generated
-	 */
-	int SIMPLE_CHARTER_CONTRACT = 21;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SIMPLE_CHARTER_CONTRACT__EXTENSIONS = CHARTER_CONTRACT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SIMPLE_CHARTER_CONTRACT__NAME = CHARTER_CONTRACT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Min Duration</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SIMPLE_CHARTER_CONTRACT__MIN_DURATION = CHARTER_CONTRACT__MIN_DURATION;
-
-	/**
-	 * The feature id for the '<em><b>Max Duration</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SIMPLE_CHARTER_CONTRACT__MAX_DURATION = CHARTER_CONTRACT__MAX_DURATION;
-
-	/**
-	 * The number of structural features of the '<em>Simple Charter Contract</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SIMPLE_CHARTER_CONTRACT_FEATURE_COUNT = CHARTER_CONTRACT_FEATURE_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.BallastBonusCharterContract <em>Ballast Bonus Charter Contract</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.commercial.BallastBonusCharterContract
-	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getBallastBonusCharterContract()
-	 * @generated
-	 */
-	int BALLAST_BONUS_CHARTER_CONTRACT = 22;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BALLAST_BONUS_CHARTER_CONTRACT__EXTENSIONS = CHARTER_CONTRACT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BALLAST_BONUS_CHARTER_CONTRACT__NAME = CHARTER_CONTRACT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Min Duration</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BALLAST_BONUS_CHARTER_CONTRACT__MIN_DURATION = CHARTER_CONTRACT__MIN_DURATION;
-
-	/**
-	 * The feature id for the '<em><b>Max Duration</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BALLAST_BONUS_CHARTER_CONTRACT__MAX_DURATION = CHARTER_CONTRACT__MAX_DURATION;
-
-	/**
-	 * The feature id for the '<em><b>Ballast Bonus Contract</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT = CHARTER_CONTRACT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Repositioning Fee</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BALLAST_BONUS_CHARTER_CONTRACT__REPOSITIONING_FEE = CHARTER_CONTRACT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>Ballast Bonus Charter Contract</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BALLAST_BONUS_CHARTER_CONTRACT_FEATURE_COUNT = CHARTER_CONTRACT_FEATURE_COUNT + 2;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SimpleBallastBonusCharterContractImpl <em>Simple Ballast Bonus Charter Contract</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.commercial.impl.SimpleBallastBonusCharterContractImpl
-	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getSimpleBallastBonusCharterContract()
-	 * @generated
-	 */
-	int SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT = 23;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__EXTENSIONS = BALLAST_BONUS_CHARTER_CONTRACT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__NAME = BALLAST_BONUS_CHARTER_CONTRACT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Min Duration</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__MIN_DURATION = BALLAST_BONUS_CHARTER_CONTRACT__MIN_DURATION;
-
-	/**
-	 * The feature id for the '<em><b>Max Duration</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__MAX_DURATION = BALLAST_BONUS_CHARTER_CONTRACT__MAX_DURATION;
-
-	/**
-	 * The feature id for the '<em><b>Ballast Bonus Contract</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT = BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT;
-
-	/**
-	 * The feature id for the '<em><b>Repositioning Fee</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__REPOSITIONING_FEE = BALLAST_BONUS_CHARTER_CONTRACT__REPOSITIONING_FEE;
-
-	/**
-	 * The number of structural features of the '<em>Simple Ballast Bonus Charter Contract</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT_FEATURE_COUNT = BALLAST_BONUS_CHARTER_CONTRACT_FEATURE_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusContractLineImpl <em>Monthly Ballast Bonus Contract Line</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusContractLineImpl
-	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getMonthlyBallastBonusContractLine()
-	 * @generated
-	 */
-	int MONTHLY_BALLAST_BONUS_CONTRACT_LINE = 24;
-
-	/**
-	 * The feature id for the '<em><b>Redelivery Ports</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MONTHLY_BALLAST_BONUS_CONTRACT_LINE__REDELIVERY_PORTS = NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__REDELIVERY_PORTS;
-
-	/**
-	 * The feature id for the '<em><b>Speed</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MONTHLY_BALLAST_BONUS_CONTRACT_LINE__SPEED = NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__SPEED;
-
-	/**
-	 * The feature id for the '<em><b>Fuel Price Expression</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MONTHLY_BALLAST_BONUS_CONTRACT_LINE__FUEL_PRICE_EXPRESSION = NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__FUEL_PRICE_EXPRESSION;
-
-	/**
-	 * The feature id for the '<em><b>Hire Price Expression</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MONTHLY_BALLAST_BONUS_CONTRACT_LINE__HIRE_PRICE_EXPRESSION = NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__HIRE_PRICE_EXPRESSION;
-
-	/**
-	 * The feature id for the '<em><b>Return Ports</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MONTHLY_BALLAST_BONUS_CONTRACT_LINE__RETURN_PORTS = NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__RETURN_PORTS;
-
-	/**
-	 * The feature id for the '<em><b>Include Canal</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MONTHLY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL = NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL;
-
-	/**
-	 * The feature id for the '<em><b>Include Canal Time</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MONTHLY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL_TIME = NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL_TIME;
-
-	/**
-	 * The feature id for the '<em><b>Lump Sum Price Expression</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MONTHLY_BALLAST_BONUS_CONTRACT_LINE__LUMP_SUM_PRICE_EXPRESSION = NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__LUMP_SUM_PRICE_EXPRESSION;
-
-	/**
-	 * The feature id for the '<em><b>Month</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MONTHLY_BALLAST_BONUS_CONTRACT_LINE__MONTH = NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Ballast Bonus To</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MONTHLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_TO = NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Ballast Bonus Pct Fuel</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MONTHLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_FUEL = NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Ballast Bonus Pct Charter</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MONTHLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_CHARTER = NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT + 3;
-
-	/**
-	 * The number of structural features of the '<em>Monthly Ballast Bonus Contract Line</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MONTHLY_BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT = NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE_FEATURE_COUNT + 4;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusContractImpl <em>Monthly Ballast Bonus Contract</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusContractImpl
-	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getMonthlyBallastBonusContract()
-	 * @generated
-	 */
-	int MONTHLY_BALLAST_BONUS_CONTRACT = 25;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MONTHLY_BALLAST_BONUS_CONTRACT__EXTENSIONS = RULE_BASED_BALLAST_BONUS_CONTRACT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MONTHLY_BALLAST_BONUS_CONTRACT__UUID = RULE_BASED_BALLAST_BONUS_CONTRACT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Rules</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MONTHLY_BALLAST_BONUS_CONTRACT__RULES = RULE_BASED_BALLAST_BONUS_CONTRACT__RULES;
+	int GENERIC_CHARTER_CONTRACT__TERMS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Hubs</b></em>' reference list.
@@ -2235,89 +1640,566 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MONTHLY_BALLAST_BONUS_CONTRACT__HUBS = RULE_BASED_BALLAST_BONUS_CONTRACT_FEATURE_COUNT + 0;
+	int GENERIC_CHARTER_CONTRACT__HUBS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
-	 * The number of structural features of the '<em>Monthly Ballast Bonus Contract</em>' class.
+	 * The number of structural features of the '<em>Generic Charter Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MONTHLY_BALLAST_BONUS_CONTRACT_FEATURE_COUNT = RULE_BASED_BALLAST_BONUS_CONTRACT_FEATURE_COUNT + 1;
+	int GENERIC_CHARTER_CONTRACT_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusCharterContractImpl <em>Monthly Ballast Bonus Charter Contract</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.CharterContractTermImpl <em>Charter Contract Term</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusCharterContractImpl
-	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getMonthlyBallastBonusCharterContract()
+	 * @see com.mmxlabs.models.lng.commercial.impl.CharterContractTermImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getCharterContractTerm()
 	 * @generated
 	 */
-	int MONTHLY_BALLAST_BONUS_CHARTER_CONTRACT = 26;
+	int CHARTER_CONTRACT_TERM = 16;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MONTHLY_BALLAST_BONUS_CHARTER_CONTRACT__EXTENSIONS = SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * The number of structural features of the '<em>Charter Contract Term</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MONTHLY_BALLAST_BONUS_CHARTER_CONTRACT__NAME = SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__NAME;
+	int CHARTER_CONTRACT_TERM_FEATURE_COUNT = 0;
 
 	/**
-	 * The feature id for the '<em><b>Min Duration</b></em>' attribute.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.LumpSumTermImpl <em>Lump Sum Term</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.LumpSumTermImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getLumpSumTerm()
+	 * @generated
+	 */
+	int LUMP_SUM_TERM = 17;
+
+	/**
+	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MONTHLY_BALLAST_BONUS_CHARTER_CONTRACT__MIN_DURATION = SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__MIN_DURATION;
+	int LUMP_SUM_TERM__PRICE_EXPRESSION = 0;
 
 	/**
-	 * The feature id for the '<em><b>Max Duration</b></em>' attribute.
+	 * The number of structural features of the '<em>Lump Sum Term</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MONTHLY_BALLAST_BONUS_CHARTER_CONTRACT__MAX_DURATION = SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__MAX_DURATION;
+	int LUMP_SUM_TERM_FEATURE_COUNT = 1;
 
 	/**
-	 * The feature id for the '<em><b>Ballast Bonus Contract</b></em>' containment reference.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.NotionalJourneyTermImpl <em>Notional Journey Term</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.NotionalJourneyTermImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getNotionalJourneyTerm()
+	 * @generated
+	 */
+	int NOTIONAL_JOURNEY_TERM = 18;
+
+	/**
+	 * The feature id for the '<em><b>Speed</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MONTHLY_BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT = SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT;
+	int NOTIONAL_JOURNEY_TERM__SPEED = 0;
 
 	/**
-	 * The feature id for the '<em><b>Repositioning Fee</b></em>' attribute.
+	 * The feature id for the '<em><b>Fuel Price Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MONTHLY_BALLAST_BONUS_CHARTER_CONTRACT__REPOSITIONING_FEE = SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT__REPOSITIONING_FEE;
+	int NOTIONAL_JOURNEY_TERM__FUEL_PRICE_EXPRESSION = 1;
 
 	/**
-	 * The number of structural features of the '<em>Monthly Ballast Bonus Charter Contract</em>' class.
+	 * The feature id for the '<em><b>Hire Price Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MONTHLY_BALLAST_BONUS_CHARTER_CONTRACT_FEATURE_COUNT = SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT_FEATURE_COUNT + 0;
+	int NOTIONAL_JOURNEY_TERM__HIRE_PRICE_EXPRESSION = 2;
+
+	/**
+	 * The feature id for the '<em><b>Include Canal</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_JOURNEY_TERM__INCLUDE_CANAL = 3;
+
+	/**
+	 * The feature id for the '<em><b>Include Canal Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_JOURNEY_TERM__INCLUDE_CANAL_TIME = 4;
+
+	/**
+	 * The feature id for the '<em><b>Lump Sum Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_JOURNEY_TERM__LUMP_SUM_PRICE_EXPRESSION = 5;
+
+	/**
+	 * The number of structural features of the '<em>Notional Journey Term</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_JOURNEY_TERM_FEATURE_COUNT = 6;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.BallastBonusTermImpl <em>Ballast Bonus Term</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.BallastBonusTermImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getBallastBonusTerm()
+	 * @generated
+	 */
+	int BALLAST_BONUS_TERM = 19;
+
+	/**
+	 * The feature id for the '<em><b>Redelivery Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BALLAST_BONUS_TERM__REDELIVERY_PORTS = CHARTER_CONTRACT_TERM_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Ballast Bonus Term</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BALLAST_BONUS_TERM_FEATURE_COUNT = CHARTER_CONTRACT_TERM_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.LumpSumBallastBonusTermImpl <em>Lump Sum Ballast Bonus Term</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.LumpSumBallastBonusTermImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getLumpSumBallastBonusTerm()
+	 * @generated
+	 */
+	int LUMP_SUM_BALLAST_BONUS_TERM = 20;
+
+	/**
+	 * The feature id for the '<em><b>Redelivery Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LUMP_SUM_BALLAST_BONUS_TERM__REDELIVERY_PORTS = BALLAST_BONUS_TERM__REDELIVERY_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LUMP_SUM_BALLAST_BONUS_TERM__PRICE_EXPRESSION = BALLAST_BONUS_TERM_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Lump Sum Ballast Bonus Term</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LUMP_SUM_BALLAST_BONUS_TERM_FEATURE_COUNT = BALLAST_BONUS_TERM_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.NotionalJourneyBallastBonusTermImpl <em>Notional Journey Ballast Bonus Term</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.NotionalJourneyBallastBonusTermImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getNotionalJourneyBallastBonusTerm()
+	 * @generated
+	 */
+	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM = 21;
+
+	/**
+	 * The feature id for the '<em><b>Redelivery Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__REDELIVERY_PORTS = BALLAST_BONUS_TERM__REDELIVERY_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Speed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__SPEED = BALLAST_BONUS_TERM_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Fuel Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__FUEL_PRICE_EXPRESSION = BALLAST_BONUS_TERM_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Hire Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__HIRE_PRICE_EXPRESSION = BALLAST_BONUS_TERM_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Include Canal</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__INCLUDE_CANAL = BALLAST_BONUS_TERM_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Include Canal Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__INCLUDE_CANAL_TIME = BALLAST_BONUS_TERM_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Lump Sum Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__LUMP_SUM_PRICE_EXPRESSION = BALLAST_BONUS_TERM_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Return Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__RETURN_PORTS = BALLAST_BONUS_TERM_FEATURE_COUNT + 6;
+
+	/**
+	 * The number of structural features of the '<em>Notional Journey Ballast Bonus Term</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM_FEATURE_COUNT = BALLAST_BONUS_TERM_FEATURE_COUNT + 7;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusTermImpl <em>Monthly Ballast Bonus Term</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusTermImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getMonthlyBallastBonusTerm()
+	 * @generated
+	 */
+	int MONTHLY_BALLAST_BONUS_TERM = 22;
+
+	/**
+	 * The feature id for the '<em><b>Redelivery Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MONTHLY_BALLAST_BONUS_TERM__REDELIVERY_PORTS = NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__REDELIVERY_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Speed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MONTHLY_BALLAST_BONUS_TERM__SPEED = NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__SPEED;
+
+	/**
+	 * The feature id for the '<em><b>Fuel Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MONTHLY_BALLAST_BONUS_TERM__FUEL_PRICE_EXPRESSION = NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__FUEL_PRICE_EXPRESSION;
+
+	/**
+	 * The feature id for the '<em><b>Hire Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MONTHLY_BALLAST_BONUS_TERM__HIRE_PRICE_EXPRESSION = NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__HIRE_PRICE_EXPRESSION;
+
+	/**
+	 * The feature id for the '<em><b>Include Canal</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MONTHLY_BALLAST_BONUS_TERM__INCLUDE_CANAL = NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__INCLUDE_CANAL;
+
+	/**
+	 * The feature id for the '<em><b>Include Canal Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MONTHLY_BALLAST_BONUS_TERM__INCLUDE_CANAL_TIME = NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__INCLUDE_CANAL_TIME;
+
+	/**
+	 * The feature id for the '<em><b>Lump Sum Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MONTHLY_BALLAST_BONUS_TERM__LUMP_SUM_PRICE_EXPRESSION = NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__LUMP_SUM_PRICE_EXPRESSION;
+
+	/**
+	 * The feature id for the '<em><b>Return Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MONTHLY_BALLAST_BONUS_TERM__RETURN_PORTS = NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__RETURN_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Month</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MONTHLY_BALLAST_BONUS_TERM__MONTH = NOTIONAL_JOURNEY_BALLAST_BONUS_TERM_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Bonus To</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MONTHLY_BALLAST_BONUS_TERM__BALLAST_BONUS_TO = NOTIONAL_JOURNEY_BALLAST_BONUS_TERM_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Bonus Pct Fuel</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MONTHLY_BALLAST_BONUS_TERM__BALLAST_BONUS_PCT_FUEL = NOTIONAL_JOURNEY_BALLAST_BONUS_TERM_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Bonus Pct Charter</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MONTHLY_BALLAST_BONUS_TERM__BALLAST_BONUS_PCT_CHARTER = NOTIONAL_JOURNEY_BALLAST_BONUS_TERM_FEATURE_COUNT + 3;
+
+	/**
+	 * The number of structural features of the '<em>Monthly Ballast Bonus Term</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MONTHLY_BALLAST_BONUS_TERM_FEATURE_COUNT = NOTIONAL_JOURNEY_BALLAST_BONUS_TERM_FEATURE_COUNT + 4;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.RepositioningFeeTermImpl <em>Repositioning Fee Term</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.RepositioningFeeTermImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getRepositioningFeeTerm()
+	 * @generated
+	 */
+	int REPOSITIONING_FEE_TERM = 23;
+
+	/**
+	 * The feature id for the '<em><b>Origin Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REPOSITIONING_FEE_TERM__ORIGIN_PORT = CHARTER_CONTRACT_TERM_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Repositioning Fee Term</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REPOSITIONING_FEE_TERM_FEATURE_COUNT = CHARTER_CONTRACT_TERM_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.LumpSumRepositioningFeeTermImpl <em>Lump Sum Repositioning Fee Term</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.LumpSumRepositioningFeeTermImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getLumpSumRepositioningFeeTerm()
+	 * @generated
+	 */
+	int LUMP_SUM_REPOSITIONING_FEE_TERM = 24;
+
+	/**
+	 * The feature id for the '<em><b>Origin Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LUMP_SUM_REPOSITIONING_FEE_TERM__ORIGIN_PORT = REPOSITIONING_FEE_TERM__ORIGIN_PORT;
+
+	/**
+	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LUMP_SUM_REPOSITIONING_FEE_TERM__PRICE_EXPRESSION = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Lump Sum Repositioning Fee Term</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LUMP_SUM_REPOSITIONING_FEE_TERM_FEATURE_COUNT = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.OriginPortRepositioningFeeImpl <em>Origin Port Repositioning Fee</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.OriginPortRepositioningFeeImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getOriginPortRepositioningFee()
+	 * @generated
+	 */
+	int ORIGIN_PORT_REPOSITIONING_FEE = 25;
+
+	/**
+	 * The feature id for the '<em><b>Origin Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORIGIN_PORT_REPOSITIONING_FEE__ORIGIN_PORT = REPOSITIONING_FEE_TERM__ORIGIN_PORT;
+
+	/**
+	 * The feature id for the '<em><b>Speed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORIGIN_PORT_REPOSITIONING_FEE__SPEED = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Fuel Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORIGIN_PORT_REPOSITIONING_FEE__FUEL_PRICE_EXPRESSION = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Hire Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORIGIN_PORT_REPOSITIONING_FEE__HIRE_PRICE_EXPRESSION = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Include Canal</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORIGIN_PORT_REPOSITIONING_FEE__INCLUDE_CANAL = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Include Canal Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORIGIN_PORT_REPOSITIONING_FEE__INCLUDE_CANAL_TIME = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Lump Sum Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORIGIN_PORT_REPOSITIONING_FEE__LUMP_SUM_PRICE_EXPRESSION = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 5;
+
+	/**
+	 * The number of structural features of the '<em>Origin Port Repositioning Fee</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORIGIN_PORT_REPOSITIONING_FEE_FEATURE_COUNT = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
@@ -2327,7 +2209,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContractType()
 	 * @generated
 	 */
-	int CONTRACT_TYPE = 27;
+	int CONTRACT_TYPE = 26;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.PricingEvent <em>Pricing Event</em>}' enum.
@@ -2337,7 +2219,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getPricingEvent()
 	 * @generated
 	 */
-	int PRICING_EVENT = 28;
+	int PRICING_EVENT = 27;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.NextPortType <em>Next Port Type</em>}' enum.
@@ -2347,7 +2229,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getNextPortType()
 	 * @generated
 	 */
-	int NEXT_PORT_TYPE = 29;
+	int NEXT_PORT_TYPE = 28;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CommercialModel <em>Model</em>}'.
@@ -3050,333 +2932,312 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getDateShiftExpressionPriceParameters_Value();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.BallastBonusContract <em>Ballast Bonus Contract</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.GenericCharterContract <em>Generic Charter Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Ballast Bonus Contract</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.BallastBonusContract
+	 * @return the meta object for class '<em>Generic Charter Contract</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.GenericCharterContract
 	 * @generated
 	 */
-	EClass getBallastBonusContract();
+	EClass getGenericCharterContract();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract <em>Rule Based Ballast Bonus Contract</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Rule Based Ballast Bonus Contract</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract
-	 * @generated
-	 */
-	EClass getRuleBasedBallastBonusContract();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract#getRules <em>Rules</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Rules</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract#getRules()
-	 * @see #getRuleBasedBallastBonusContract()
-	 * @generated
-	 */
-	EReference getRuleBasedBallastBonusContract_Rules();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.BallastBonusContractLine <em>Ballast Bonus Contract Line</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Ballast Bonus Contract Line</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.BallastBonusContractLine
-	 * @generated
-	 */
-	EClass getBallastBonusContractLine();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.BallastBonusContractLine#getRedeliveryPorts <em>Redelivery Ports</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Redelivery Ports</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.BallastBonusContractLine#getRedeliveryPorts()
-	 * @see #getBallastBonusContractLine()
-	 * @generated
-	 */
-	EReference getBallastBonusContractLine_RedeliveryPorts();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine <em>Lump Sum Ballast Bonus Contract Line</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Lump Sum Ballast Bonus Contract Line</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine
-	 * @generated
-	 */
-	EClass getLumpSumBallastBonusContractLine();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine#getPriceExpression <em>Price Expression</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Price Expression</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine#getPriceExpression()
-	 * @see #getLumpSumBallastBonusContractLine()
-	 * @generated
-	 */
-	EAttribute getLumpSumBallastBonusContractLine_PriceExpression();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine <em>Notional Journey Ballast Bonus Contract Line</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Notional Journey Ballast Bonus Contract Line</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine
-	 * @generated
-	 */
-	EClass getNotionalJourneyBallastBonusContractLine();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine#getSpeed <em>Speed</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Speed</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine#getSpeed()
-	 * @see #getNotionalJourneyBallastBonusContractLine()
-	 * @generated
-	 */
-	EAttribute getNotionalJourneyBallastBonusContractLine_Speed();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine#getFuelPriceExpression <em>Fuel Price Expression</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Fuel Price Expression</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine#getFuelPriceExpression()
-	 * @see #getNotionalJourneyBallastBonusContractLine()
-	 * @generated
-	 */
-	EAttribute getNotionalJourneyBallastBonusContractLine_FuelPriceExpression();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine#getHirePriceExpression <em>Hire Price Expression</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Hire Price Expression</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine#getHirePriceExpression()
-	 * @see #getNotionalJourneyBallastBonusContractLine()
-	 * @generated
-	 */
-	EAttribute getNotionalJourneyBallastBonusContractLine_HirePriceExpression();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine#getReturnPorts <em>Return Ports</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Return Ports</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine#getReturnPorts()
-	 * @see #getNotionalJourneyBallastBonusContractLine()
-	 * @generated
-	 */
-	EReference getNotionalJourneyBallastBonusContractLine_ReturnPorts();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine#isIncludeCanal <em>Include Canal</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Include Canal</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine#isIncludeCanal()
-	 * @see #getNotionalJourneyBallastBonusContractLine()
-	 * @generated
-	 */
-	EAttribute getNotionalJourneyBallastBonusContractLine_IncludeCanal();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine#isIncludeCanalTime <em>Include Canal Time</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Include Canal Time</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine#isIncludeCanalTime()
-	 * @see #getNotionalJourneyBallastBonusContractLine()
-	 * @generated
-	 */
-	EAttribute getNotionalJourneyBallastBonusContractLine_IncludeCanalTime();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine#getLumpSumPriceExpression <em>Lump Sum Price Expression</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Lump Sum Price Expression</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine#getLumpSumPriceExpression()
-	 * @see #getNotionalJourneyBallastBonusContractLine()
-	 * @generated
-	 */
-	EAttribute getNotionalJourneyBallastBonusContractLine_LumpSumPriceExpression();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CharterContract <em>Charter Contract</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Charter Contract</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.CharterContract
-	 * @generated
-	 */
-	EClass getCharterContract();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.CharterContract#getMinDuration <em>Min Duration</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.GenericCharterContract#getMinDuration <em>Min Duration</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Min Duration</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.CharterContract#getMinDuration()
-	 * @see #getCharterContract()
+	 * @see com.mmxlabs.models.lng.commercial.GenericCharterContract#getMinDuration()
+	 * @see #getGenericCharterContract()
 	 * @generated
 	 */
-	EAttribute getCharterContract_MinDuration();
+	EAttribute getGenericCharterContract_MinDuration();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.CharterContract#getMaxDuration <em>Max Duration</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.GenericCharterContract#getMaxDuration <em>Max Duration</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Max Duration</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.CharterContract#getMaxDuration()
-	 * @see #getCharterContract()
+	 * @see com.mmxlabs.models.lng.commercial.GenericCharterContract#getMaxDuration()
+	 * @see #getGenericCharterContract()
 	 * @generated
 	 */
-	EAttribute getCharterContract_MaxDuration();
+	EAttribute getGenericCharterContract_MaxDuration();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SimpleCharterContract <em>Simple Charter Contract</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.GenericCharterContract#getTerms <em>Terms</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Simple Charter Contract</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.SimpleCharterContract
+	 * @return the meta object for the containment reference list '<em>Terms</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.GenericCharterContract#getTerms()
+	 * @see #getGenericCharterContract()
 	 * @generated
 	 */
-	EClass getSimpleCharterContract();
+	EReference getGenericCharterContract_Terms();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.BallastBonusCharterContract <em>Ballast Bonus Charter Contract</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Ballast Bonus Charter Contract</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.BallastBonusCharterContract
-	 * @generated
-	 */
-	EClass getBallastBonusCharterContract();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.commercial.BallastBonusCharterContract#getBallastBonusContract <em>Ballast Bonus Contract</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Ballast Bonus Contract</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.BallastBonusCharterContract#getBallastBonusContract()
-	 * @see #getBallastBonusCharterContract()
-	 * @generated
-	 */
-	EReference getBallastBonusCharterContract_BallastBonusContract();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.BallastBonusCharterContract#getRepositioningFee <em>Repositioning Fee</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Repositioning Fee</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.BallastBonusCharterContract#getRepositioningFee()
-	 * @see #getBallastBonusCharterContract()
-	 * @generated
-	 */
-	EAttribute getBallastBonusCharterContract_RepositioningFee();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SimpleBallastBonusCharterContract <em>Simple Ballast Bonus Charter Contract</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Simple Ballast Bonus Charter Contract</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.SimpleBallastBonusCharterContract
-	 * @generated
-	 */
-	EClass getSimpleBallastBonusCharterContract();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine <em>Monthly Ballast Bonus Contract Line</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Monthly Ballast Bonus Contract Line</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine
-	 * @generated
-	 */
-	EClass getMonthlyBallastBonusContractLine();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine#getMonth <em>Month</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Month</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine#getMonth()
-	 * @see #getMonthlyBallastBonusContractLine()
-	 * @generated
-	 */
-	EAttribute getMonthlyBallastBonusContractLine_Month();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine#getBallastBonusTo <em>Ballast Bonus To</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Ballast Bonus To</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine#getBallastBonusTo()
-	 * @see #getMonthlyBallastBonusContractLine()
-	 * @generated
-	 */
-	EAttribute getMonthlyBallastBonusContractLine_BallastBonusTo();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine#getBallastBonusPctFuel <em>Ballast Bonus Pct Fuel</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Ballast Bonus Pct Fuel</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine#getBallastBonusPctFuel()
-	 * @see #getMonthlyBallastBonusContractLine()
-	 * @generated
-	 */
-	EAttribute getMonthlyBallastBonusContractLine_BallastBonusPctFuel();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine#getBallastBonusPctCharter <em>Ballast Bonus Pct Charter</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Ballast Bonus Pct Charter</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine#getBallastBonusPctCharter()
-	 * @see #getMonthlyBallastBonusContractLine()
-	 * @generated
-	 */
-	EAttribute getMonthlyBallastBonusContractLine_BallastBonusPctCharter();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContract <em>Monthly Ballast Bonus Contract</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Monthly Ballast Bonus Contract</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContract
-	 * @generated
-	 */
-	EClass getMonthlyBallastBonusContract();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContract#getHubs <em>Hubs</em>}'.
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.GenericCharterContract#getHubs <em>Hubs</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Hubs</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContract#getHubs()
-	 * @see #getMonthlyBallastBonusContract()
+	 * @see com.mmxlabs.models.lng.commercial.GenericCharterContract#getHubs()
+	 * @see #getGenericCharterContract()
 	 * @generated
 	 */
-	EReference getMonthlyBallastBonusContract_Hubs();
+	EReference getGenericCharterContract_Hubs();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusCharterContract <em>Monthly Ballast Bonus Charter Contract</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CharterContractTerm <em>Charter Contract Term</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Monthly Ballast Bonus Charter Contract</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.MonthlyBallastBonusCharterContract
+	 * @return the meta object for class '<em>Charter Contract Term</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.CharterContractTerm
 	 * @generated
 	 */
-	EClass getMonthlyBallastBonusCharterContract();
+	EClass getCharterContractTerm();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.LumpSumTerm <em>Lump Sum Term</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Lump Sum Term</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.LumpSumTerm
+	 * @generated
+	 */
+	EClass getLumpSumTerm();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.LumpSumTerm#getPriceExpression <em>Price Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Price Expression</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.LumpSumTerm#getPriceExpression()
+	 * @see #getLumpSumTerm()
+	 * @generated
+	 */
+	EAttribute getLumpSumTerm_PriceExpression();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyTerm <em>Notional Journey Term</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Notional Journey Term</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NotionalJourneyTerm
+	 * @generated
+	 */
+	EClass getNotionalJourneyTerm();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyTerm#getSpeed <em>Speed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Speed</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NotionalJourneyTerm#getSpeed()
+	 * @see #getNotionalJourneyTerm()
+	 * @generated
+	 */
+	EAttribute getNotionalJourneyTerm_Speed();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyTerm#getFuelPriceExpression <em>Fuel Price Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Fuel Price Expression</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NotionalJourneyTerm#getFuelPriceExpression()
+	 * @see #getNotionalJourneyTerm()
+	 * @generated
+	 */
+	EAttribute getNotionalJourneyTerm_FuelPriceExpression();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyTerm#getHirePriceExpression <em>Hire Price Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hire Price Expression</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NotionalJourneyTerm#getHirePriceExpression()
+	 * @see #getNotionalJourneyTerm()
+	 * @generated
+	 */
+	EAttribute getNotionalJourneyTerm_HirePriceExpression();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyTerm#isIncludeCanal <em>Include Canal</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Include Canal</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NotionalJourneyTerm#isIncludeCanal()
+	 * @see #getNotionalJourneyTerm()
+	 * @generated
+	 */
+	EAttribute getNotionalJourneyTerm_IncludeCanal();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyTerm#isIncludeCanalTime <em>Include Canal Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Include Canal Time</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NotionalJourneyTerm#isIncludeCanalTime()
+	 * @see #getNotionalJourneyTerm()
+	 * @generated
+	 */
+	EAttribute getNotionalJourneyTerm_IncludeCanalTime();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyTerm#getLumpSumPriceExpression <em>Lump Sum Price Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Lump Sum Price Expression</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NotionalJourneyTerm#getLumpSumPriceExpression()
+	 * @see #getNotionalJourneyTerm()
+	 * @generated
+	 */
+	EAttribute getNotionalJourneyTerm_LumpSumPriceExpression();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.BallastBonusTerm <em>Ballast Bonus Term</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Ballast Bonus Term</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.BallastBonusTerm
+	 * @generated
+	 */
+	EClass getBallastBonusTerm();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.BallastBonusTerm#getRedeliveryPorts <em>Redelivery Ports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Redelivery Ports</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.BallastBonusTerm#getRedeliveryPorts()
+	 * @see #getBallastBonusTerm()
+	 * @generated
+	 */
+	EReference getBallastBonusTerm_RedeliveryPorts();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.LumpSumBallastBonusTerm <em>Lump Sum Ballast Bonus Term</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Lump Sum Ballast Bonus Term</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.LumpSumBallastBonusTerm
+	 * @generated
+	 */
+	EClass getLumpSumBallastBonusTerm();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusTerm <em>Notional Journey Ballast Bonus Term</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Notional Journey Ballast Bonus Term</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusTerm
+	 * @generated
+	 */
+	EClass getNotionalJourneyBallastBonusTerm();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusTerm#getReturnPorts <em>Return Ports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Return Ports</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusTerm#getReturnPorts()
+	 * @see #getNotionalJourneyBallastBonusTerm()
+	 * @generated
+	 */
+	EReference getNotionalJourneyBallastBonusTerm_ReturnPorts();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusTerm <em>Monthly Ballast Bonus Term</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Monthly Ballast Bonus Term</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.MonthlyBallastBonusTerm
+	 * @generated
+	 */
+	EClass getMonthlyBallastBonusTerm();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusTerm#getMonth <em>Month</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Month</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.MonthlyBallastBonusTerm#getMonth()
+	 * @see #getMonthlyBallastBonusTerm()
+	 * @generated
+	 */
+	EAttribute getMonthlyBallastBonusTerm_Month();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusTerm#getBallastBonusTo <em>Ballast Bonus To</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ballast Bonus To</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.MonthlyBallastBonusTerm#getBallastBonusTo()
+	 * @see #getMonthlyBallastBonusTerm()
+	 * @generated
+	 */
+	EAttribute getMonthlyBallastBonusTerm_BallastBonusTo();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusTerm#getBallastBonusPctFuel <em>Ballast Bonus Pct Fuel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ballast Bonus Pct Fuel</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.MonthlyBallastBonusTerm#getBallastBonusPctFuel()
+	 * @see #getMonthlyBallastBonusTerm()
+	 * @generated
+	 */
+	EAttribute getMonthlyBallastBonusTerm_BallastBonusPctFuel();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusTerm#getBallastBonusPctCharter <em>Ballast Bonus Pct Charter</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ballast Bonus Pct Charter</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.MonthlyBallastBonusTerm#getBallastBonusPctCharter()
+	 * @see #getMonthlyBallastBonusTerm()
+	 * @generated
+	 */
+	EAttribute getMonthlyBallastBonusTerm_BallastBonusPctCharter();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.RepositioningFeeTerm <em>Repositioning Fee Term</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Repositioning Fee Term</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RepositioningFeeTerm
+	 * @generated
+	 */
+	EClass getRepositioningFeeTerm();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.RepositioningFeeTerm#getOriginPort <em>Origin Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Origin Port</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RepositioningFeeTerm#getOriginPort()
+	 * @see #getRepositioningFeeTerm()
+	 * @generated
+	 */
+	EReference getRepositioningFeeTerm_OriginPort();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.LumpSumRepositioningFeeTerm <em>Lump Sum Repositioning Fee Term</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Lump Sum Repositioning Fee Term</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.LumpSumRepositioningFeeTerm
+	 * @generated
+	 */
+	EClass getLumpSumRepositioningFeeTerm();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.OriginPortRepositioningFee <em>Origin Port Repositioning Fee</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Origin Port Repositioning Fee</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.OriginPortRepositioningFee
+	 * @generated
+	 */
+	EClass getOriginPortRepositioningFee();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}'.
@@ -3981,144 +3842,14 @@ public interface CommercialPackage extends EPackage {
 		EAttribute DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS__VALUE = eINSTANCE.getDateShiftExpressionPriceParameters_Value();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.BallastBonusContract <em>Ballast Bonus Contract</em>}' class.
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.GenericCharterContractImpl <em>Generic Charter Contract</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.commercial.BallastBonusContract
-		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getBallastBonusContract()
+		 * @see com.mmxlabs.models.lng.commercial.impl.GenericCharterContractImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getGenericCharterContract()
 		 * @generated
 		 */
-		EClass BALLAST_BONUS_CONTRACT = eINSTANCE.getBallastBonusContract();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.RuleBasedBallastBonusContractImpl <em>Rule Based Ballast Bonus Contract</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.commercial.impl.RuleBasedBallastBonusContractImpl
-		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getRuleBasedBallastBonusContract()
-		 * @generated
-		 */
-		EClass RULE_BASED_BALLAST_BONUS_CONTRACT = eINSTANCE.getRuleBasedBallastBonusContract();
-
-		/**
-		 * The meta object literal for the '<em><b>Rules</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference RULE_BASED_BALLAST_BONUS_CONTRACT__RULES = eINSTANCE.getRuleBasedBallastBonusContract_Rules();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.BallastBonusContractLineImpl <em>Ballast Bonus Contract Line</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.commercial.impl.BallastBonusContractLineImpl
-		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getBallastBonusContractLine()
-		 * @generated
-		 */
-		EClass BALLAST_BONUS_CONTRACT_LINE = eINSTANCE.getBallastBonusContractLine();
-
-		/**
-		 * The meta object literal for the '<em><b>Redelivery Ports</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference BALLAST_BONUS_CONTRACT_LINE__REDELIVERY_PORTS = eINSTANCE.getBallastBonusContractLine_RedeliveryPorts();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.LumpSumBallastBonusContractLineImpl <em>Lump Sum Ballast Bonus Contract Line</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.commercial.impl.LumpSumBallastBonusContractLineImpl
-		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getLumpSumBallastBonusContractLine()
-		 * @generated
-		 */
-		EClass LUMP_SUM_BALLAST_BONUS_CONTRACT_LINE = eINSTANCE.getLumpSumBallastBonusContractLine();
-
-		/**
-		 * The meta object literal for the '<em><b>Price Expression</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute LUMP_SUM_BALLAST_BONUS_CONTRACT_LINE__PRICE_EXPRESSION = eINSTANCE.getLumpSumBallastBonusContractLine_PriceExpression();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.NotionalJourneyBallastBonusContractLineImpl <em>Notional Journey Ballast Bonus Contract Line</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.commercial.impl.NotionalJourneyBallastBonusContractLineImpl
-		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getNotionalJourneyBallastBonusContractLine()
-		 * @generated
-		 */
-		EClass NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE = eINSTANCE.getNotionalJourneyBallastBonusContractLine();
-
-		/**
-		 * The meta object literal for the '<em><b>Speed</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__SPEED = eINSTANCE.getNotionalJourneyBallastBonusContractLine_Speed();
-
-		/**
-		 * The meta object literal for the '<em><b>Fuel Price Expression</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__FUEL_PRICE_EXPRESSION = eINSTANCE.getNotionalJourneyBallastBonusContractLine_FuelPriceExpression();
-
-		/**
-		 * The meta object literal for the '<em><b>Hire Price Expression</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__HIRE_PRICE_EXPRESSION = eINSTANCE.getNotionalJourneyBallastBonusContractLine_HirePriceExpression();
-
-		/**
-		 * The meta object literal for the '<em><b>Return Ports</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__RETURN_PORTS = eINSTANCE.getNotionalJourneyBallastBonusContractLine_ReturnPorts();
-
-		/**
-		 * The meta object literal for the '<em><b>Include Canal</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL = eINSTANCE.getNotionalJourneyBallastBonusContractLine_IncludeCanal();
-
-		/**
-		 * The meta object literal for the '<em><b>Include Canal Time</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__INCLUDE_CANAL_TIME = eINSTANCE.getNotionalJourneyBallastBonusContractLine_IncludeCanalTime();
-
-		/**
-		 * The meta object literal for the '<em><b>Lump Sum Price Expression</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__LUMP_SUM_PRICE_EXPRESSION = eINSTANCE.getNotionalJourneyBallastBonusContractLine_LumpSumPriceExpression();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.CharterContract <em>Charter Contract</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.commercial.CharterContract
-		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getCharterContract()
-		 * @generated
-		 */
-		EClass CHARTER_CONTRACT = eINSTANCE.getCharterContract();
+		EClass GENERIC_CHARTER_CONTRACT = eINSTANCE.getGenericCharterContract();
 
 		/**
 		 * The meta object literal for the '<em><b>Min Duration</b></em>' attribute feature.
@@ -4126,7 +3857,7 @@ public interface CommercialPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute CHARTER_CONTRACT__MIN_DURATION = eINSTANCE.getCharterContract_MinDuration();
+		EAttribute GENERIC_CHARTER_CONTRACT__MIN_DURATION = eINSTANCE.getGenericCharterContract_MinDuration();
 
 		/**
 		 * The meta object literal for the '<em><b>Max Duration</b></em>' attribute feature.
@@ -4134,105 +3865,15 @@ public interface CommercialPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute CHARTER_CONTRACT__MAX_DURATION = eINSTANCE.getCharterContract_MaxDuration();
+		EAttribute GENERIC_CHARTER_CONTRACT__MAX_DURATION = eINSTANCE.getGenericCharterContract_MaxDuration();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.SimpleCharterContractImpl <em>Simple Charter Contract</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.commercial.impl.SimpleCharterContractImpl
-		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getSimpleCharterContract()
-		 * @generated
-		 */
-		EClass SIMPLE_CHARTER_CONTRACT = eINSTANCE.getSimpleCharterContract();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.BallastBonusCharterContract <em>Ballast Bonus Charter Contract</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.commercial.BallastBonusCharterContract
-		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getBallastBonusCharterContract()
-		 * @generated
-		 */
-		EClass BALLAST_BONUS_CHARTER_CONTRACT = eINSTANCE.getBallastBonusCharterContract();
-
-		/**
-		 * The meta object literal for the '<em><b>Ballast Bonus Contract</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Terms</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT = eINSTANCE.getBallastBonusCharterContract_BallastBonusContract();
-
-		/**
-		 * The meta object literal for the '<em><b>Repositioning Fee</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute BALLAST_BONUS_CHARTER_CONTRACT__REPOSITIONING_FEE = eINSTANCE.getBallastBonusCharterContract_RepositioningFee();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.SimpleBallastBonusCharterContractImpl <em>Simple Ballast Bonus Charter Contract</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.commercial.impl.SimpleBallastBonusCharterContractImpl
-		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getSimpleBallastBonusCharterContract()
-		 * @generated
-		 */
-		EClass SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT = eINSTANCE.getSimpleBallastBonusCharterContract();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusContractLineImpl <em>Monthly Ballast Bonus Contract Line</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusContractLineImpl
-		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getMonthlyBallastBonusContractLine()
-		 * @generated
-		 */
-		EClass MONTHLY_BALLAST_BONUS_CONTRACT_LINE = eINSTANCE.getMonthlyBallastBonusContractLine();
-
-		/**
-		 * The meta object literal for the '<em><b>Month</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute MONTHLY_BALLAST_BONUS_CONTRACT_LINE__MONTH = eINSTANCE.getMonthlyBallastBonusContractLine_Month();
-
-		/**
-		 * The meta object literal for the '<em><b>Ballast Bonus To</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute MONTHLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_TO = eINSTANCE.getMonthlyBallastBonusContractLine_BallastBonusTo();
-
-		/**
-		 * The meta object literal for the '<em><b>Ballast Bonus Pct Fuel</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute MONTHLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_FUEL = eINSTANCE.getMonthlyBallastBonusContractLine_BallastBonusPctFuel();
-
-		/**
-		 * The meta object literal for the '<em><b>Ballast Bonus Pct Charter</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute MONTHLY_BALLAST_BONUS_CONTRACT_LINE__BALLAST_BONUS_PCT_CHARTER = eINSTANCE.getMonthlyBallastBonusContractLine_BallastBonusPctCharter();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusContractImpl <em>Monthly Ballast Bonus Contract</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusContractImpl
-		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getMonthlyBallastBonusContract()
-		 * @generated
-		 */
-		EClass MONTHLY_BALLAST_BONUS_CONTRACT = eINSTANCE.getMonthlyBallastBonusContract();
+		EReference GENERIC_CHARTER_CONTRACT__TERMS = eINSTANCE.getGenericCharterContract_Terms();
 
 		/**
 		 * The meta object literal for the '<em><b>Hubs</b></em>' reference list feature.
@@ -4240,17 +3881,219 @@ public interface CommercialPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference MONTHLY_BALLAST_BONUS_CONTRACT__HUBS = eINSTANCE.getMonthlyBallastBonusContract_Hubs();
+		EReference GENERIC_CHARTER_CONTRACT__HUBS = eINSTANCE.getGenericCharterContract_Hubs();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusCharterContractImpl <em>Monthly Ballast Bonus Charter Contract</em>}' class.
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.CharterContractTermImpl <em>Charter Contract Term</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusCharterContractImpl
-		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getMonthlyBallastBonusCharterContract()
+		 * @see com.mmxlabs.models.lng.commercial.impl.CharterContractTermImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getCharterContractTerm()
 		 * @generated
 		 */
-		EClass MONTHLY_BALLAST_BONUS_CHARTER_CONTRACT = eINSTANCE.getMonthlyBallastBonusCharterContract();
+		EClass CHARTER_CONTRACT_TERM = eINSTANCE.getCharterContractTerm();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.LumpSumTermImpl <em>Lump Sum Term</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.LumpSumTermImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getLumpSumTerm()
+		 * @generated
+		 */
+		EClass LUMP_SUM_TERM = eINSTANCE.getLumpSumTerm();
+
+		/**
+		 * The meta object literal for the '<em><b>Price Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LUMP_SUM_TERM__PRICE_EXPRESSION = eINSTANCE.getLumpSumTerm_PriceExpression();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.NotionalJourneyTermImpl <em>Notional Journey Term</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.NotionalJourneyTermImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getNotionalJourneyTerm()
+		 * @generated
+		 */
+		EClass NOTIONAL_JOURNEY_TERM = eINSTANCE.getNotionalJourneyTerm();
+
+		/**
+		 * The meta object literal for the '<em><b>Speed</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NOTIONAL_JOURNEY_TERM__SPEED = eINSTANCE.getNotionalJourneyTerm_Speed();
+
+		/**
+		 * The meta object literal for the '<em><b>Fuel Price Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NOTIONAL_JOURNEY_TERM__FUEL_PRICE_EXPRESSION = eINSTANCE.getNotionalJourneyTerm_FuelPriceExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Hire Price Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NOTIONAL_JOURNEY_TERM__HIRE_PRICE_EXPRESSION = eINSTANCE.getNotionalJourneyTerm_HirePriceExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Include Canal</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NOTIONAL_JOURNEY_TERM__INCLUDE_CANAL = eINSTANCE.getNotionalJourneyTerm_IncludeCanal();
+
+		/**
+		 * The meta object literal for the '<em><b>Include Canal Time</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NOTIONAL_JOURNEY_TERM__INCLUDE_CANAL_TIME = eINSTANCE.getNotionalJourneyTerm_IncludeCanalTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Lump Sum Price Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NOTIONAL_JOURNEY_TERM__LUMP_SUM_PRICE_EXPRESSION = eINSTANCE.getNotionalJourneyTerm_LumpSumPriceExpression();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.BallastBonusTermImpl <em>Ballast Bonus Term</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.BallastBonusTermImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getBallastBonusTerm()
+		 * @generated
+		 */
+		EClass BALLAST_BONUS_TERM = eINSTANCE.getBallastBonusTerm();
+
+		/**
+		 * The meta object literal for the '<em><b>Redelivery Ports</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BALLAST_BONUS_TERM__REDELIVERY_PORTS = eINSTANCE.getBallastBonusTerm_RedeliveryPorts();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.LumpSumBallastBonusTermImpl <em>Lump Sum Ballast Bonus Term</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.LumpSumBallastBonusTermImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getLumpSumBallastBonusTerm()
+		 * @generated
+		 */
+		EClass LUMP_SUM_BALLAST_BONUS_TERM = eINSTANCE.getLumpSumBallastBonusTerm();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.NotionalJourneyBallastBonusTermImpl <em>Notional Journey Ballast Bonus Term</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.NotionalJourneyBallastBonusTermImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getNotionalJourneyBallastBonusTerm()
+		 * @generated
+		 */
+		EClass NOTIONAL_JOURNEY_BALLAST_BONUS_TERM = eINSTANCE.getNotionalJourneyBallastBonusTerm();
+
+		/**
+		 * The meta object literal for the '<em><b>Return Ports</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference NOTIONAL_JOURNEY_BALLAST_BONUS_TERM__RETURN_PORTS = eINSTANCE.getNotionalJourneyBallastBonusTerm_ReturnPorts();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusTermImpl <em>Monthly Ballast Bonus Term</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusTermImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getMonthlyBallastBonusTerm()
+		 * @generated
+		 */
+		EClass MONTHLY_BALLAST_BONUS_TERM = eINSTANCE.getMonthlyBallastBonusTerm();
+
+		/**
+		 * The meta object literal for the '<em><b>Month</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MONTHLY_BALLAST_BONUS_TERM__MONTH = eINSTANCE.getMonthlyBallastBonusTerm_Month();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Bonus To</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MONTHLY_BALLAST_BONUS_TERM__BALLAST_BONUS_TO = eINSTANCE.getMonthlyBallastBonusTerm_BallastBonusTo();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Bonus Pct Fuel</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MONTHLY_BALLAST_BONUS_TERM__BALLAST_BONUS_PCT_FUEL = eINSTANCE.getMonthlyBallastBonusTerm_BallastBonusPctFuel();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Bonus Pct Charter</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MONTHLY_BALLAST_BONUS_TERM__BALLAST_BONUS_PCT_CHARTER = eINSTANCE.getMonthlyBallastBonusTerm_BallastBonusPctCharter();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.RepositioningFeeTermImpl <em>Repositioning Fee Term</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.RepositioningFeeTermImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getRepositioningFeeTerm()
+		 * @generated
+		 */
+		EClass REPOSITIONING_FEE_TERM = eINSTANCE.getRepositioningFeeTerm();
+
+		/**
+		 * The meta object literal for the '<em><b>Origin Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference REPOSITIONING_FEE_TERM__ORIGIN_PORT = eINSTANCE.getRepositioningFeeTerm_OriginPort();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.LumpSumRepositioningFeeTermImpl <em>Lump Sum Repositioning Fee Term</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.LumpSumRepositioningFeeTermImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getLumpSumRepositioningFeeTerm()
+		 * @generated
+		 */
+		EClass LUMP_SUM_REPOSITIONING_FEE_TERM = eINSTANCE.getLumpSumRepositioningFeeTerm();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.OriginPortRepositioningFeeImpl <em>Origin Port Repositioning Fee</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.OriginPortRepositioningFeeImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getOriginPortRepositioningFee()
+		 * @generated
+		 */
+		EClass ORIGIN_PORT_REPOSITIONING_FEE = eINSTANCE.getOriginPortRepositioningFee();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.

@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CharterContract;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
@@ -75,7 +76,7 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<CharterContract> charteringContracts;
+	protected EList<GenericCharterContract> charteringContracts;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -141,9 +142,9 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 	 * @generated
 	 */
 	@Override
-	public EList<CharterContract> getCharteringContracts() {
+	public EList<GenericCharterContract> getCharteringContracts() {
 		if (charteringContracts == null) {
-			charteringContracts = new EObjectContainmentEList<CharterContract>(CharterContract.class, this, CommercialPackage.COMMERCIAL_MODEL__CHARTERING_CONTRACTS);
+			charteringContracts = new EObjectContainmentEList<GenericCharterContract>(GenericCharterContract.class, this, CommercialPackage.COMMERCIAL_MODEL__CHARTERING_CONTRACTS);
 		}
 		return charteringContracts;
 	}
@@ -211,7 +212,7 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 				return;
 			case CommercialPackage.COMMERCIAL_MODEL__CHARTERING_CONTRACTS:
 				getCharteringContracts().clear();
-				getCharteringContracts().addAll((Collection<? extends CharterContract>)newValue);
+				getCharteringContracts().addAll((Collection<? extends GenericCharterContract>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

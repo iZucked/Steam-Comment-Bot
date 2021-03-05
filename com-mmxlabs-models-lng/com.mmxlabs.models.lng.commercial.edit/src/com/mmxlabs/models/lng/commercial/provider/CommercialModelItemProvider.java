@@ -161,17 +161,7 @@ public class CommercialModelItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTERING_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createSimpleCharterContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTERING_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTERING_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createMonthlyBallastBonusCharterContract()));
+				 CommercialFactory.eINSTANCE.createGenericCharterContract()));
 	}
 
 }

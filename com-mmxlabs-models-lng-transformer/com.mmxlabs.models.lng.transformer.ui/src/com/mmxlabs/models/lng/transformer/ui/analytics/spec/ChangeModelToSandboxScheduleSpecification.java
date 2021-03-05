@@ -243,8 +243,8 @@ public class ChangeModelToSandboxScheduleSpecification {
 		newAvailability.getEndAt().addAll(oldAvailability.getEndAt());
 		newAvailability.setEndHeel(EMFCopier.copy(oldAvailability.getEndHeel()));
 
-		if (oldAvailability.getBallastBonusContract() != null) {
-			newAvailability.setBallastBonusContract(EMFCopier.copy(oldAvailability.getBallastBonusContract()));
+		if (oldAvailability.getCharterContract() != null) {
+			newAvailability.setCharterContract(EMFCopier.copy(oldAvailability.getCharterContract()));
 		}
 		if (oldAvailability.getCharterContract() != null) {
 			newAvailability.setCharterContract(oldAvailability.getCharterContract());

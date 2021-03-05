@@ -1419,7 +1419,7 @@ public class PeriodTransformer {
 				vesselAvailability.getEndHeel().setPriceExpression("");
 				vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_WARM);
 			}
-			vesselAvailability.setBallastBonusContract(null);
+			vesselAvailability.setCharterContract(null);
 		}
 	}
 

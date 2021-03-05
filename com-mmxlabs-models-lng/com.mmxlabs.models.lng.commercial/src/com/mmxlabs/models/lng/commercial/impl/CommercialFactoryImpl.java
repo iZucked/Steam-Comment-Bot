@@ -80,14 +80,17 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.CONTRACT_EXPRESSION_MAP_ENTRY: return createContractExpressionMapEntry();
 			case CommercialPackage.SIMPLE_ENTITY_BOOK: return createSimpleEntityBook();
 			case CommercialPackage.DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS: return createDateShiftExpressionPriceParameters();
-			case CommercialPackage.RULE_BASED_BALLAST_BONUS_CONTRACT: return createRuleBasedBallastBonusContract();
-			case CommercialPackage.LUMP_SUM_BALLAST_BONUS_CONTRACT_LINE: return createLumpSumBallastBonusContractLine();
-			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE: return createNotionalJourneyBallastBonusContractLine();
-			case CommercialPackage.SIMPLE_CHARTER_CONTRACT: return createSimpleCharterContract();
-			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT: return createSimpleBallastBonusCharterContract();
-			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT_LINE: return createMonthlyBallastBonusContractLine();
-			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT: return createMonthlyBallastBonusContract();
-			case CommercialPackage.MONTHLY_BALLAST_BONUS_CHARTER_CONTRACT: return createMonthlyBallastBonusCharterContract();
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT: return createGenericCharterContract();
+			case CommercialPackage.CHARTER_CONTRACT_TERM: return createCharterContractTerm();
+			case CommercialPackage.LUMP_SUM_TERM: return createLumpSumTerm();
+			case CommercialPackage.NOTIONAL_JOURNEY_TERM: return createNotionalJourneyTerm();
+			case CommercialPackage.BALLAST_BONUS_TERM: return createBallastBonusTerm();
+			case CommercialPackage.LUMP_SUM_BALLAST_BONUS_TERM: return createLumpSumBallastBonusTerm();
+			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM: return createNotionalJourneyBallastBonusTerm();
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_TERM: return createMonthlyBallastBonusTerm();
+			case CommercialPackage.REPOSITIONING_FEE_TERM: return createRepositioningFeeTerm();
+			case CommercialPackage.LUMP_SUM_REPOSITIONING_FEE_TERM: return createLumpSumRepositioningFeeTerm();
+			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE: return createOriginPortRepositioningFee();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -247,9 +250,9 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * @generated
 	 */
 	@Override
-	public RuleBasedBallastBonusContract createRuleBasedBallastBonusContract() {
-		RuleBasedBallastBonusContractImpl ruleBasedBallastBonusContract = new RuleBasedBallastBonusContractImpl();
-		return ruleBasedBallastBonusContract;
+	public GenericCharterContract createGenericCharterContract() {
+		GenericCharterContractImpl genericCharterContract = new GenericCharterContractImpl();
+		return genericCharterContract;
 	}
 
 	/**
@@ -258,9 +261,9 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * @generated
 	 */
 	@Override
-	public LumpSumBallastBonusContractLine createLumpSumBallastBonusContractLine() {
-		LumpSumBallastBonusContractLineImpl lumpSumBallastBonusContractLine = new LumpSumBallastBonusContractLineImpl();
-		return lumpSumBallastBonusContractLine;
+	public CharterContractTerm createCharterContractTerm() {
+		CharterContractTermImpl charterContractTerm = new CharterContractTermImpl();
+		return charterContractTerm;
 	}
 
 	/**
@@ -269,9 +272,9 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * @generated
 	 */
 	@Override
-	public NotionalJourneyBallastBonusContractLine createNotionalJourneyBallastBonusContractLine() {
-		NotionalJourneyBallastBonusContractLineImpl notionalJourneyBallastBonusContractLine = new NotionalJourneyBallastBonusContractLineImpl();
-		return notionalJourneyBallastBonusContractLine;
+	public LumpSumTerm createLumpSumTerm() {
+		LumpSumTermImpl lumpSumTerm = new LumpSumTermImpl();
+		return lumpSumTerm;
 	}
 
 	/**
@@ -280,9 +283,9 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * @generated
 	 */
 	@Override
-	public SimpleCharterContract createSimpleCharterContract() {
-		SimpleCharterContractImpl simpleCharterContract = new SimpleCharterContractImpl();
-		return simpleCharterContract;
+	public NotionalJourneyTerm createNotionalJourneyTerm() {
+		NotionalJourneyTermImpl notionalJourneyTerm = new NotionalJourneyTermImpl();
+		return notionalJourneyTerm;
 	}
 
 	/**
@@ -291,9 +294,9 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * @generated
 	 */
 	@Override
-	public SimpleBallastBonusCharterContract createSimpleBallastBonusCharterContract() {
-		SimpleBallastBonusCharterContractImpl simpleBallastBonusCharterContract = new SimpleBallastBonusCharterContractImpl();
-		return simpleBallastBonusCharterContract;
+	public BallastBonusTerm createBallastBonusTerm() {
+		BallastBonusTermImpl ballastBonusTerm = new BallastBonusTermImpl();
+		return ballastBonusTerm;
 	}
 
 	/**
@@ -302,9 +305,9 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * @generated
 	 */
 	@Override
-	public MonthlyBallastBonusContractLine createMonthlyBallastBonusContractLine() {
-		MonthlyBallastBonusContractLineImpl monthlyBallastBonusContractLine = new MonthlyBallastBonusContractLineImpl();
-		return monthlyBallastBonusContractLine;
+	public LumpSumBallastBonusTerm createLumpSumBallastBonusTerm() {
+		LumpSumBallastBonusTermImpl lumpSumBallastBonusTerm = new LumpSumBallastBonusTermImpl();
+		return lumpSumBallastBonusTerm;
 	}
 
 	/**
@@ -313,9 +316,9 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * @generated
 	 */
 	@Override
-	public MonthlyBallastBonusContract createMonthlyBallastBonusContract() {
-		MonthlyBallastBonusContractImpl monthlyBallastBonusContract = new MonthlyBallastBonusContractImpl();
-		return monthlyBallastBonusContract;
+	public NotionalJourneyBallastBonusTerm createNotionalJourneyBallastBonusTerm() {
+		NotionalJourneyBallastBonusTermImpl notionalJourneyBallastBonusTerm = new NotionalJourneyBallastBonusTermImpl();
+		return notionalJourneyBallastBonusTerm;
 	}
 
 	/**
@@ -324,9 +327,42 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * @generated
 	 */
 	@Override
-	public MonthlyBallastBonusCharterContract createMonthlyBallastBonusCharterContract() {
-		MonthlyBallastBonusCharterContractImpl monthlyBallastBonusCharterContract = new MonthlyBallastBonusCharterContractImpl();
-		return monthlyBallastBonusCharterContract;
+	public MonthlyBallastBonusTerm createMonthlyBallastBonusTerm() {
+		MonthlyBallastBonusTermImpl monthlyBallastBonusTerm = new MonthlyBallastBonusTermImpl();
+		return monthlyBallastBonusTerm;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public RepositioningFeeTerm createRepositioningFeeTerm() {
+		RepositioningFeeTermImpl repositioningFeeTerm = new RepositioningFeeTermImpl();
+		return repositioningFeeTerm;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public LumpSumRepositioningFeeTerm createLumpSumRepositioningFeeTerm() {
+		LumpSumRepositioningFeeTermImpl lumpSumRepositioningFeeTerm = new LumpSumRepositioningFeeTermImpl();
+		return lumpSumRepositioningFeeTerm;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public OriginPortRepositioningFee createOriginPortRepositioningFee() {
+		OriginPortRepositioningFeeImpl originPortRepositioningFee = new OriginPortRepositioningFeeImpl();
+		return originPortRepositioningFee;
 	}
 
 	/**

@@ -130,7 +130,7 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 
 	@Override
 	protected boolean shouldDisplay(final EReference ref) {
-		return ref.isContainment() && !ref.isMany() && ref != CargoPackage.eINSTANCE.getVesselAvailability_BallastBonusContract();
+		return ref.isContainment() && !ref.isMany() && ref != CargoPackage.eINSTANCE.getVesselAvailability_ContainedCharterContract();
 	}
 
 }

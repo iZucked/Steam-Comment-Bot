@@ -235,11 +235,11 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 		if (target instanceof VesselAvailability) {
 			final VesselAvailability va = (VesselAvailability) target;
 
-			final BallastBonusContract vaBallastBonusContract = va.getBallastBonusContract();
+			final BallastBonusContract vaBallastBonusContract = va.getCharterContract();
 			final CharterContract charterContract = va.getCharterContract();
 			BallastBonusContract charterBallastBonusContract = null;
 			if (charterContract != null && charterContract instanceof BallastBonusCharterContract) {
-				charterBallastBonusContract = ((BallastBonusCharterContract) charterContract).getBallastBonusContract();
+				charterBallastBonusContract = ((BallastBonusCharterContract) charterContract).getCharterContract();
 			}
 			final BallastBonusContract ballastBonusContract = vaBallastBonusContract != null ? vaBallastBonusContract : charterBallastBonusContract;
 			if (ballastBonusContract != null) {
@@ -337,7 +337,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 		if (!fuelResult.isOk()) {
 			failures.add(baseFactory.copyName() //
 					.withObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL) //
-					.withObjectAndFeature(va.getBallastBonusContract(), CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES) //
+					.withObjectAndFeature(va.getCharterContract(), CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES) //
 					.withObjectAndFeature(line, CommercialPackage.Literals.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__FUEL_PRICE_EXPRESSION) //
 					.withMessage(String.format("Ballast bonus: fuel price is invalid - %s", fuelResult.getErrorDetails())) //
 					.make(ctx));
@@ -349,7 +349,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 
 			failures.add(baseFactory.copyName() //
 					.withObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL) //
-					.withObjectAndFeature(va.getBallastBonusContract(), CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES) //
+					.withObjectAndFeature(va.getCharterContract(), CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES) //
 					.withObjectAndFeature(line, CommercialPackage.Literals.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__HIRE_PRICE_EXPRESSION) //
 					.withMessage(String.format("Ballast bonus: hire price is invalid - %s", hireResult.getErrorDetails())) //
 					.make(ctx));
@@ -359,7 +359,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 			// need ports
 			failures.add(baseFactory.copyName() //
 					.withObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL) //
-					.withObjectAndFeature(va.getBallastBonusContract(), CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES) //
+					.withObjectAndFeature(va.getCharterContract(), CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES) //
 					.withObjectAndFeature(line, CommercialPackage.Literals.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__RETURN_PORTS) //
 					.withMessage(String.format("Ballast bonus: return ports are needed on a notional journey")) //
 					.make(ctx));
@@ -400,7 +400,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 
 			failures.add(baseFactory.copyName() //
 					.withObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL) //
-					.withObjectAndFeature(va.getBallastBonusContract(), CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES) //
+					.withObjectAndFeature(va.getCharterContract(), CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES) //
 					.withObjectAndFeature(line, CommercialPackage.Literals.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE__SPEED) //
 					.withMessage(String.format("Ballast bonus: speed must be between %.01f and %.01f knots on a notional journey", minSpeed, maxSpeed)) //
 					.make(ctx));

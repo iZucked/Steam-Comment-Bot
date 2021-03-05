@@ -93,14 +93,14 @@ public class CharterContractBallastBonusContractDetailComposite extends DefaultD
 	}
 
 	protected RuleBasedBallastBonusContract addBallastBonus(BallastBonusCharterContract bbcc) {
-		if (bbcc.getBallastBonusContract() == null) {
+		if (bbcc.getCharterContract() == null) {
 			RuleBasedBallastBonusContract ballastBonusContract = CommercialFactory.eINSTANCE.createRuleBasedBallastBonusContract();
 			commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), bbcc, CommercialPackage.Literals.BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT, ballastBonusContract), bbcc,
 					CommercialPackage.Literals.BALLAST_BONUS_CHARTER_CONTRACT__BALLAST_BONUS_CONTRACT);
 			return ballastBonusContract;
 		} else {
 			// TODO: make more generic
-			return (RuleBasedBallastBonusContract) bbcc.getBallastBonusContract();
+			return (RuleBasedBallastBonusContract) bbcc.getCharterContract();
 		}
 	}
 
@@ -120,8 +120,8 @@ public class CharterContractBallastBonusContractDetailComposite extends DefaultD
 		this.dialogContext = dialogContext;
 		oldValue = (BallastBonusCharterContract) value;
 
-		if (oldValue.getBallastBonusContract() != null) {
-			createBallastBonusComposite(owner, toolkit, (RuleBasedBallastBonusContract) oldValue.getBallastBonusContract());
+		if (oldValue.getCharterContract() != null) {
+			createBallastBonusComposite(owner, toolkit, (RuleBasedBallastBonusContract) oldValue.getCharterContract());
 //			dialogContext.getDialogController().rebuild(true);
 //			resizeAction.run();
 		} else {

@@ -7,7 +7,7 @@ package com.mmxlabs.scheduler.optimiser.components;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.curves.ILongCurve;
-import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
+import com.mmxlabs.scheduler.optimiser.chartercontracts.ICharterContract;
 
 public final class DefaultSpotCharterInMarket implements ISpotCharterInMarket {
 
@@ -15,18 +15,18 @@ public final class DefaultSpotCharterInMarket implements ISpotCharterInMarket {
 	private final @NonNull IVessel vessel;
 	private final @NonNull ILongCurve dailyCharterInRateCurve;
 	private final int availabilityCount;
-	private final IBallastBonusContract ballastBonusContract;
+	private final ICharterContract charterContract;
 	private final IEndRequirement end;
 	private final ILongCurve repositioningFee;
 	
 	public DefaultSpotCharterInMarket(@NonNull final String name, @NonNull final IVessel vessel, @NonNull final ILongCurve dailyCharterInRateCurve, final int availabilityCount, IEndRequirement end,
-			IBallastBonusContract ballastBonusContract, final ILongCurve repositioningFee) {
+			ICharterContract charterContract, final ILongCurve repositioningFee) {
 		this.name = name;
 		this.vessel = vessel;
 		this.dailyCharterInRateCurve = dailyCharterInRateCurve;
 		this.availabilityCount = availabilityCount;
 		this.end = end;
-		this.ballastBonusContract = ballastBonusContract;
+		this.charterContract = charterContract;
 		this.repositioningFee = repositioningFee;
 	}
 
@@ -54,8 +54,8 @@ public final class DefaultSpotCharterInMarket implements ISpotCharterInMarket {
 	}
 
 	@Override
-	public IBallastBonusContract getBallastBonusContract() {
-		return ballastBonusContract;
+	public ICharterContract getCharterContract() {
+		return charterContract;
 	}
 
 	@Override

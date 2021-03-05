@@ -61,7 +61,7 @@ public class CharterContractBallastBonusImporter extends DefaultClassImporter {
 					CharterContract targetCharterContract = (CharterContract) context.getNamedObject(contractName, CommercialPackage.Literals.CHARTER_CONTRACT);
 					if (targetCharterContract instanceof BallastBonusCharterContract) {
 						BallastBonusCharterContract ballastBonusCharterContract = (BallastBonusCharterContract) targetCharterContract;
-						BallastBonusContract contract = ballastBonusCharterContract.getBallastBonusContract();
+						BallastBonusContract contract = ballastBonusCharterContract.getCharterContract();
 						if (contract == null) {
 							RuleBasedBallastBonusContract ruleBasedBallastBonusContract = CommercialFactory.eINSTANCE.createRuleBasedBallastBonusContract();
 							ballastBonusCharterContract.setBallastBonusContract(ruleBasedBallastBonusContract);

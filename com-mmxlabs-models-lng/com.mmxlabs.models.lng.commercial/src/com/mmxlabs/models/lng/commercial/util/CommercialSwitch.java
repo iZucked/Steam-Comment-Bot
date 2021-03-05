@@ -211,105 +211,90 @@ public class CommercialSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case CommercialPackage.BALLAST_BONUS_CONTRACT: {
-				BallastBonusContract ballastBonusContract = (BallastBonusContract)theEObject;
-				T result = caseBallastBonusContract(ballastBonusContract);
-				if (result == null) result = caseUUIDObject(ballastBonusContract);
-				if (result == null) result = caseMMXObject(ballastBonusContract);
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT: {
+				GenericCharterContract genericCharterContract = (GenericCharterContract)theEObject;
+				T result = caseGenericCharterContract(genericCharterContract);
+				if (result == null) result = caseNamedObject(genericCharterContract);
+				if (result == null) result = caseUUIDObject(genericCharterContract);
+				if (result == null) result = caseMMXObject(genericCharterContract);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case CommercialPackage.RULE_BASED_BALLAST_BONUS_CONTRACT: {
-				RuleBasedBallastBonusContract ruleBasedBallastBonusContract = (RuleBasedBallastBonusContract)theEObject;
-				T result = caseRuleBasedBallastBonusContract(ruleBasedBallastBonusContract);
-				if (result == null) result = caseBallastBonusContract(ruleBasedBallastBonusContract);
-				if (result == null) result = caseUUIDObject(ruleBasedBallastBonusContract);
-				if (result == null) result = caseMMXObject(ruleBasedBallastBonusContract);
+			case CommercialPackage.CHARTER_CONTRACT_TERM: {
+				CharterContractTerm charterContractTerm = (CharterContractTerm)theEObject;
+				T result = caseCharterContractTerm(charterContractTerm);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case CommercialPackage.BALLAST_BONUS_CONTRACT_LINE: {
-				BallastBonusContractLine ballastBonusContractLine = (BallastBonusContractLine)theEObject;
-				T result = caseBallastBonusContractLine(ballastBonusContractLine);
+			case CommercialPackage.LUMP_SUM_TERM: {
+				LumpSumTerm lumpSumTerm = (LumpSumTerm)theEObject;
+				T result = caseLumpSumTerm(lumpSumTerm);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case CommercialPackage.LUMP_SUM_BALLAST_BONUS_CONTRACT_LINE: {
-				LumpSumBallastBonusContractLine lumpSumBallastBonusContractLine = (LumpSumBallastBonusContractLine)theEObject;
-				T result = caseLumpSumBallastBonusContractLine(lumpSumBallastBonusContractLine);
-				if (result == null) result = caseBallastBonusContractLine(lumpSumBallastBonusContractLine);
+			case CommercialPackage.NOTIONAL_JOURNEY_TERM: {
+				NotionalJourneyTerm notionalJourneyTerm = (NotionalJourneyTerm)theEObject;
+				T result = caseNotionalJourneyTerm(notionalJourneyTerm);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE: {
-				NotionalJourneyBallastBonusContractLine notionalJourneyBallastBonusContractLine = (NotionalJourneyBallastBonusContractLine)theEObject;
-				T result = caseNotionalJourneyBallastBonusContractLine(notionalJourneyBallastBonusContractLine);
-				if (result == null) result = caseBallastBonusContractLine(notionalJourneyBallastBonusContractLine);
+			case CommercialPackage.BALLAST_BONUS_TERM: {
+				BallastBonusTerm ballastBonusTerm = (BallastBonusTerm)theEObject;
+				T result = caseBallastBonusTerm(ballastBonusTerm);
+				if (result == null) result = caseCharterContractTerm(ballastBonusTerm);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case CommercialPackage.CHARTER_CONTRACT: {
-				CharterContract charterContract = (CharterContract)theEObject;
-				T result = caseCharterContract(charterContract);
-				if (result == null) result = caseNamedObject(charterContract);
-				if (result == null) result = caseMMXObject(charterContract);
+			case CommercialPackage.LUMP_SUM_BALLAST_BONUS_TERM: {
+				LumpSumBallastBonusTerm lumpSumBallastBonusTerm = (LumpSumBallastBonusTerm)theEObject;
+				T result = caseLumpSumBallastBonusTerm(lumpSumBallastBonusTerm);
+				if (result == null) result = caseBallastBonusTerm(lumpSumBallastBonusTerm);
+				if (result == null) result = caseLumpSumTerm(lumpSumBallastBonusTerm);
+				if (result == null) result = caseCharterContractTerm(lumpSumBallastBonusTerm);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case CommercialPackage.SIMPLE_CHARTER_CONTRACT: {
-				SimpleCharterContract simpleCharterContract = (SimpleCharterContract)theEObject;
-				T result = caseSimpleCharterContract(simpleCharterContract);
-				if (result == null) result = caseCharterContract(simpleCharterContract);
-				if (result == null) result = caseNamedObject(simpleCharterContract);
-				if (result == null) result = caseMMXObject(simpleCharterContract);
+			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM: {
+				NotionalJourneyBallastBonusTerm notionalJourneyBallastBonusTerm = (NotionalJourneyBallastBonusTerm)theEObject;
+				T result = caseNotionalJourneyBallastBonusTerm(notionalJourneyBallastBonusTerm);
+				if (result == null) result = caseBallastBonusTerm(notionalJourneyBallastBonusTerm);
+				if (result == null) result = caseNotionalJourneyTerm(notionalJourneyBallastBonusTerm);
+				if (result == null) result = caseCharterContractTerm(notionalJourneyBallastBonusTerm);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case CommercialPackage.BALLAST_BONUS_CHARTER_CONTRACT: {
-				BallastBonusCharterContract ballastBonusCharterContract = (BallastBonusCharterContract)theEObject;
-				T result = caseBallastBonusCharterContract(ballastBonusCharterContract);
-				if (result == null) result = caseCharterContract(ballastBonusCharterContract);
-				if (result == null) result = caseNamedObject(ballastBonusCharterContract);
-				if (result == null) result = caseMMXObject(ballastBonusCharterContract);
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_TERM: {
+				MonthlyBallastBonusTerm monthlyBallastBonusTerm = (MonthlyBallastBonusTerm)theEObject;
+				T result = caseMonthlyBallastBonusTerm(monthlyBallastBonusTerm);
+				if (result == null) result = caseNotionalJourneyBallastBonusTerm(monthlyBallastBonusTerm);
+				if (result == null) result = caseBallastBonusTerm(monthlyBallastBonusTerm);
+				if (result == null) result = caseNotionalJourneyTerm(monthlyBallastBonusTerm);
+				if (result == null) result = caseCharterContractTerm(monthlyBallastBonusTerm);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT: {
-				SimpleBallastBonusCharterContract simpleBallastBonusCharterContract = (SimpleBallastBonusCharterContract)theEObject;
-				T result = caseSimpleBallastBonusCharterContract(simpleBallastBonusCharterContract);
-				if (result == null) result = caseBallastBonusCharterContract(simpleBallastBonusCharterContract);
-				if (result == null) result = caseCharterContract(simpleBallastBonusCharterContract);
-				if (result == null) result = caseNamedObject(simpleBallastBonusCharterContract);
-				if (result == null) result = caseMMXObject(simpleBallastBonusCharterContract);
+			case CommercialPackage.REPOSITIONING_FEE_TERM: {
+				RepositioningFeeTerm repositioningFeeTerm = (RepositioningFeeTerm)theEObject;
+				T result = caseRepositioningFeeTerm(repositioningFeeTerm);
+				if (result == null) result = caseCharterContractTerm(repositioningFeeTerm);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT_LINE: {
-				MonthlyBallastBonusContractLine monthlyBallastBonusContractLine = (MonthlyBallastBonusContractLine)theEObject;
-				T result = caseMonthlyBallastBonusContractLine(monthlyBallastBonusContractLine);
-				if (result == null) result = caseNotionalJourneyBallastBonusContractLine(monthlyBallastBonusContractLine);
-				if (result == null) result = caseBallastBonusContractLine(monthlyBallastBonusContractLine);
+			case CommercialPackage.LUMP_SUM_REPOSITIONING_FEE_TERM: {
+				LumpSumRepositioningFeeTerm lumpSumRepositioningFeeTerm = (LumpSumRepositioningFeeTerm)theEObject;
+				T result = caseLumpSumRepositioningFeeTerm(lumpSumRepositioningFeeTerm);
+				if (result == null) result = caseRepositioningFeeTerm(lumpSumRepositioningFeeTerm);
+				if (result == null) result = caseLumpSumTerm(lumpSumRepositioningFeeTerm);
+				if (result == null) result = caseCharterContractTerm(lumpSumRepositioningFeeTerm);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT: {
-				MonthlyBallastBonusContract monthlyBallastBonusContract = (MonthlyBallastBonusContract)theEObject;
-				T result = caseMonthlyBallastBonusContract(monthlyBallastBonusContract);
-				if (result == null) result = caseRuleBasedBallastBonusContract(monthlyBallastBonusContract);
-				if (result == null) result = caseBallastBonusContract(monthlyBallastBonusContract);
-				if (result == null) result = caseUUIDObject(monthlyBallastBonusContract);
-				if (result == null) result = caseMMXObject(monthlyBallastBonusContract);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case CommercialPackage.MONTHLY_BALLAST_BONUS_CHARTER_CONTRACT: {
-				MonthlyBallastBonusCharterContract monthlyBallastBonusCharterContract = (MonthlyBallastBonusCharterContract)theEObject;
-				T result = caseMonthlyBallastBonusCharterContract(monthlyBallastBonusCharterContract);
-				if (result == null) result = caseSimpleBallastBonusCharterContract(monthlyBallastBonusCharterContract);
-				if (result == null) result = caseBallastBonusCharterContract(monthlyBallastBonusCharterContract);
-				if (result == null) result = caseCharterContract(monthlyBallastBonusCharterContract);
-				if (result == null) result = caseNamedObject(monthlyBallastBonusCharterContract);
-				if (result == null) result = caseMMXObject(monthlyBallastBonusCharterContract);
+			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE: {
+				OriginPortRepositioningFee originPortRepositioningFee = (OriginPortRepositioningFee)theEObject;
+				T result = caseOriginPortRepositioningFee(originPortRepositioningFee);
+				if (result == null) result = caseRepositioningFeeTerm(originPortRepositioningFee);
+				if (result == null) result = caseNotionalJourneyTerm(originPortRepositioningFee);
+				if (result == null) result = caseCharterContractTerm(originPortRepositioningFee);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -543,182 +528,167 @@ public class CommercialSwitch<@Nullable T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Ballast Bonus Contract</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Generic Charter Contract</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Ballast Bonus Contract</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Generic Charter Contract</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseBallastBonusContract(BallastBonusContract object) {
+	public T caseGenericCharterContract(GenericCharterContract object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Rule Based Ballast Bonus Contract</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Charter Contract Term</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Rule Based Ballast Bonus Contract</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Charter Contract Term</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseRuleBasedBallastBonusContract(RuleBasedBallastBonusContract object) {
+	public T caseCharterContractTerm(CharterContractTerm object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Ballast Bonus Contract Line</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Lump Sum Term</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Ballast Bonus Contract Line</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Lump Sum Term</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseBallastBonusContractLine(BallastBonusContractLine object) {
+	public T caseLumpSumTerm(LumpSumTerm object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Lump Sum Ballast Bonus Contract Line</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Notional Journey Term</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Lump Sum Ballast Bonus Contract Line</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Notional Journey Term</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseLumpSumBallastBonusContractLine(LumpSumBallastBonusContractLine object) {
+	public T caseNotionalJourneyTerm(NotionalJourneyTerm object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Notional Journey Ballast Bonus Contract Line</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Ballast Bonus Term</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Notional Journey Ballast Bonus Contract Line</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Ballast Bonus Term</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseNotionalJourneyBallastBonusContractLine(NotionalJourneyBallastBonusContractLine object) {
+	public T caseBallastBonusTerm(BallastBonusTerm object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Charter Contract</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Lump Sum Ballast Bonus Term</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Charter Contract</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Lump Sum Ballast Bonus Term</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseCharterContract(CharterContract object) {
+	public T caseLumpSumBallastBonusTerm(LumpSumBallastBonusTerm object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Simple Charter Contract</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Notional Journey Ballast Bonus Term</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Simple Charter Contract</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Notional Journey Ballast Bonus Term</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseSimpleCharterContract(SimpleCharterContract object) {
+	public T caseNotionalJourneyBallastBonusTerm(NotionalJourneyBallastBonusTerm object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Ballast Bonus Charter Contract</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Monthly Ballast Bonus Term</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Ballast Bonus Charter Contract</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Monthly Ballast Bonus Term</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseBallastBonusCharterContract(BallastBonusCharterContract object) {
+	public T caseMonthlyBallastBonusTerm(MonthlyBallastBonusTerm object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Simple Ballast Bonus Charter Contract</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Repositioning Fee Term</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Simple Ballast Bonus Charter Contract</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Repositioning Fee Term</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseSimpleBallastBonusCharterContract(SimpleBallastBonusCharterContract object) {
+	public T caseRepositioningFeeTerm(RepositioningFeeTerm object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Monthly Ballast Bonus Contract Line</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Lump Sum Repositioning Fee Term</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Monthly Ballast Bonus Contract Line</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Lump Sum Repositioning Fee Term</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseMonthlyBallastBonusContractLine(MonthlyBallastBonusContractLine object) {
+	public T caseLumpSumRepositioningFeeTerm(LumpSumRepositioningFeeTerm object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Monthly Ballast Bonus Contract</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Origin Port Repositioning Fee</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Monthly Ballast Bonus Contract</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Origin Port Repositioning Fee</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseMonthlyBallastBonusContract(MonthlyBallastBonusContract object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Monthly Ballast Bonus Charter Contract</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Monthly Ballast Bonus Charter Contract</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseMonthlyBallastBonusCharterContract(MonthlyBallastBonusCharterContract object) {
+	public T caseOriginPortRepositioningFee(OriginPortRepositioningFee object) {
 		return null;
 	}
 
