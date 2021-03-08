@@ -19,12 +19,14 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 
-import org.eclipse.emf.ecore.resource.impl.AESCipherImpl;
+import org.bouncycastle.crypto.engines.AESEngine;
 import org.bouncycastle.crypto.io.CipherInputStream;
 
 import org.bouncycastle.crypto.modes.GCMBlockCipher;
 import org.bouncycastle.crypto.params.AEADParameters;
 import org.bouncycastle.crypto.params.KeyParameter;
+import org.eclipse.emf.ecore.resource.impl.AESCipherImpl;
+
 import com.mmxlabs.scenario.service.model.util.encryption.impl.IKeyFile;
 import com.mmxlabs.scenario.service.model.util.encryption.impl.KeyFileUtil;
 
@@ -137,13 +139,10 @@ public final class KeyFileV2 implements IKeyFile {
 		final byte[] flags = KeyFileUtil.readBytes(1, in);
 		final byte[] encryptionIV = KeyFileUtil.readBytes(16, in);
 
-		
-		 GCMBlockCipher cipher = new GCMBlockCipher(new org.bouncycastle.crypto.engines.AESFastEngine());
-		 cipher.init(false, new AEADParameters(new KeyParameter(key.getEncoded()), 128, encryptionIV, null));
-		
-		// now create the decrypt cipher
-//		final Cipher cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);
-//		cipher.init(Cipher.DECRYPT_MODE, getKey(), new GCMParameterSpec(128, encryptionIV));
+		// create the decryption cipher
+		GCMBlockCipher cipher = new GCMBlockCipher(new AESEngine());
+		cipher.init(false, new AEADParameters(new KeyParameter(key.getEncoded()), 128, encryptionIV, null));
+
 		in = new CipherInputStream(in, cipher) {
 
 			@Override
