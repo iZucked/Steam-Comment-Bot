@@ -13,13 +13,10 @@ import java.util.Map;
 import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.common.csv.CSVReader;
-import com.mmxlabs.models.lng.commercial.BallastBonusCharterContract;
-import com.mmxlabs.models.lng.commercial.BallastBonusContract;
-import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
-import com.mmxlabs.models.lng.commercial.CharterContract;
+import com.mmxlabs.models.lng.commercial.CharterContractTerm;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -54,7 +51,7 @@ public class CharterContractBallastBonusImporterExtraImporter implements IExtraM
 
 			final CSVReader reader = inputs.get(BALLASTBONUS_KEY);
 			if (reader != null) {
-				final Collection<EObject> importObjects = extraImporter.importObjects(CommercialPackage.Literals.BALLAST_BONUS_CONTRACT_LINE, reader, context);
+				final Collection<EObject> importObjects = extraImporter.importObjects(CommercialPackage.Literals.CHARTER_CONTRACT_TERM, reader, context);
 			}
 		}
 	}
@@ -65,16 +62,10 @@ public class CharterContractBallastBonusImporterExtraImporter implements IExtraM
 		if (rootObject instanceof LNGScenarioModel) {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 			final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(lngScenarioModel);
-			List<BallastBonusContractLine> exports = new ArrayList<>();
+			List<CharterContractTerm> exports = new ArrayList<>();
 
-			for (final CharterContract charterContract : commercialModel.getCharteringContracts()) {
-				if (charterContract instanceof BallastBonusCharterContract) {
-					BallastBonusCharterContract simpleCharterContract = (BallastBonusCharterContract) charterContract;
-					BallastBonusContract ballastBonus = simpleCharterContract.getCharterContract();
-					if (ballastBonus instanceof RuleBasedBallastBonusContract) {
-						exports.addAll(((RuleBasedBallastBonusContract) ballastBonus).getRules());
-					}
-				}
+			for (final GenericCharterContract charterContract : commercialModel.getCharteringContracts()) {
+				exports.addAll(charterContract.getTerms());
 			}
 			output.put(BALLASTBONUS_KEY, extraImporter.exportObjects(exports, context));
 		}

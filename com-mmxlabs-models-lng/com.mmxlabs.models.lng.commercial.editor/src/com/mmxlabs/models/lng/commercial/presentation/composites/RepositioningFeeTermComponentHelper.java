@@ -47,7 +47,6 @@ public class RepositioningFeeTermComponentHelper extends BaseComponentHelper {
 	 */
 	public RepositioningFeeTermComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(CommercialPackage.Literals.CHARTER_CONTRACT_TERM));
 	}
 	
 	/**

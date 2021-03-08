@@ -22,8 +22,8 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.GenericCharterContract#getMinDuration <em>Min Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.GenericCharterContract#getMaxDuration <em>Max Duration</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.GenericCharterContract#getTerms <em>Terms</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.GenericCharterContract#getHubs <em>Hubs</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.GenericCharterContract#getRepositioningFeeTerms <em>Repositioning Fee Terms</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.GenericCharterContract#getBallastBonusTerms <em>Ballast Bonus Terms</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getGenericCharterContract()
@@ -132,27 +132,47 @@ public interface GenericCharterContract extends NamedObject, UUIDObject {
 	boolean isSetMaxDuration();
 
 	/**
-	 * Returns the value of the '<em><b>Terms</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.commercial.CharterContractTerm}.
+	 * Returns the value of the '<em><b>Repositioning Fee Terms</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Terms</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getGenericCharterContract_Terms()
+	 * @return the value of the '<em>Repositioning Fee Terms</em>' containment reference.
+	 * @see #setRepositioningFeeTerms(IRepositioningFee)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getGenericCharterContract_RepositioningFeeTerms()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<CharterContractTerm> getTerms();
+	IRepositioningFee getRepositioningFeeTerms();
 
 	/**
-	 * Returns the value of the '<em><b>Hubs</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}<code>&lt;com.mmxlabs.models.lng.port.Port&gt;</code>.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.GenericCharterContract#getRepositioningFeeTerms <em>Repositioning Fee Terms</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Hubs</em>' reference list.
-	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getGenericCharterContract_Hubs()
-	 * @model
+	 * @param value the new value of the '<em>Repositioning Fee Terms</em>' containment reference.
+	 * @see #getRepositioningFeeTerms()
 	 * @generated
 	 */
-	EList<APortSet<Port>> getHubs();
+	void setRepositioningFeeTerms(IRepositioningFee value);
+
+	/**
+	 * Returns the value of the '<em><b>Ballast Bonus Terms</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Ballast Bonus Terms</em>' containment reference.
+	 * @see #setBallastBonusTerms(IBallastBonus)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getGenericCharterContract_BallastBonusTerms()
+	 * @model containment="true"
+	 * @generated
+	 */
+	IBallastBonus getBallastBonusTerms();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.GenericCharterContract#getBallastBonusTerms <em>Ballast Bonus Terms</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Ballast Bonus Terms</em>' containment reference.
+	 * @see #getBallastBonusTerms()
+	 * @generated
+	 */
+	void setBallastBonusTerms(IBallastBonus value);
 
 } // GenericCharterContract

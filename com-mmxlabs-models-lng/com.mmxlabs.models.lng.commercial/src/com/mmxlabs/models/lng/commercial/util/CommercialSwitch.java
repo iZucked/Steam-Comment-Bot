@@ -220,9 +220,36 @@ public class CommercialSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case CommercialPackage.CHARTER_CONTRACT_TERM: {
-				CharterContractTerm charterContractTerm = (CharterContractTerm)theEObject;
-				T result = caseCharterContractTerm(charterContractTerm);
+			case CommercialPackage.IREPOSITIONING_FEE: {
+				IRepositioningFee iRepositioningFee = (IRepositioningFee)theEObject;
+				T result = caseIRepositioningFee(iRepositioningFee);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.SIMPLE_REPOSITIONING_FEE_CONTAINER: {
+				SimpleRepositioningFeeContainer simpleRepositioningFeeContainer = (SimpleRepositioningFeeContainer)theEObject;
+				T result = caseSimpleRepositioningFeeContainer(simpleRepositioningFeeContainer);
+				if (result == null) result = caseIRepositioningFee(simpleRepositioningFeeContainer);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.IBALLAST_BONUS: {
+				IBallastBonus iBallastBonus = (IBallastBonus)theEObject;
+				T result = caseIBallastBonus(iBallastBonus);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.SIMPLE_BALLAST_BONUS_CONTAINER: {
+				SimpleBallastBonusContainer simpleBallastBonusContainer = (SimpleBallastBonusContainer)theEObject;
+				T result = caseSimpleBallastBonusContainer(simpleBallastBonusContainer);
+				if (result == null) result = caseIBallastBonus(simpleBallastBonusContainer);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTAINER: {
+				MonthlyBallastBonusContainer monthlyBallastBonusContainer = (MonthlyBallastBonusContainer)theEObject;
+				T result = caseMonthlyBallastBonusContainer(monthlyBallastBonusContainer);
+				if (result == null) result = caseIBallastBonus(monthlyBallastBonusContainer);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -241,7 +268,6 @@ public class CommercialSwitch<@Nullable T> extends Switch<T> {
 			case CommercialPackage.BALLAST_BONUS_TERM: {
 				BallastBonusTerm ballastBonusTerm = (BallastBonusTerm)theEObject;
 				T result = caseBallastBonusTerm(ballastBonusTerm);
-				if (result == null) result = caseCharterContractTerm(ballastBonusTerm);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -250,7 +276,6 @@ public class CommercialSwitch<@Nullable T> extends Switch<T> {
 				T result = caseLumpSumBallastBonusTerm(lumpSumBallastBonusTerm);
 				if (result == null) result = caseBallastBonusTerm(lumpSumBallastBonusTerm);
 				if (result == null) result = caseLumpSumTerm(lumpSumBallastBonusTerm);
-				if (result == null) result = caseCharterContractTerm(lumpSumBallastBonusTerm);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -259,7 +284,6 @@ public class CommercialSwitch<@Nullable T> extends Switch<T> {
 				T result = caseNotionalJourneyBallastBonusTerm(notionalJourneyBallastBonusTerm);
 				if (result == null) result = caseBallastBonusTerm(notionalJourneyBallastBonusTerm);
 				if (result == null) result = caseNotionalJourneyTerm(notionalJourneyBallastBonusTerm);
-				if (result == null) result = caseCharterContractTerm(notionalJourneyBallastBonusTerm);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -269,14 +293,12 @@ public class CommercialSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = caseNotionalJourneyBallastBonusTerm(monthlyBallastBonusTerm);
 				if (result == null) result = caseBallastBonusTerm(monthlyBallastBonusTerm);
 				if (result == null) result = caseNotionalJourneyTerm(monthlyBallastBonusTerm);
-				if (result == null) result = caseCharterContractTerm(monthlyBallastBonusTerm);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case CommercialPackage.REPOSITIONING_FEE_TERM: {
 				RepositioningFeeTerm repositioningFeeTerm = (RepositioningFeeTerm)theEObject;
 				T result = caseRepositioningFeeTerm(repositioningFeeTerm);
-				if (result == null) result = caseCharterContractTerm(repositioningFeeTerm);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -285,16 +307,14 @@ public class CommercialSwitch<@Nullable T> extends Switch<T> {
 				T result = caseLumpSumRepositioningFeeTerm(lumpSumRepositioningFeeTerm);
 				if (result == null) result = caseRepositioningFeeTerm(lumpSumRepositioningFeeTerm);
 				if (result == null) result = caseLumpSumTerm(lumpSumRepositioningFeeTerm);
-				if (result == null) result = caseCharterContractTerm(lumpSumRepositioningFeeTerm);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE: {
-				OriginPortRepositioningFee originPortRepositioningFee = (OriginPortRepositioningFee)theEObject;
-				T result = caseOriginPortRepositioningFee(originPortRepositioningFee);
-				if (result == null) result = caseRepositioningFeeTerm(originPortRepositioningFee);
-				if (result == null) result = caseNotionalJourneyTerm(originPortRepositioningFee);
-				if (result == null) result = caseCharterContractTerm(originPortRepositioningFee);
+			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM: {
+				OriginPortRepositioningFeeTerm originPortRepositioningFeeTerm = (OriginPortRepositioningFeeTerm)theEObject;
+				T result = caseOriginPortRepositioningFeeTerm(originPortRepositioningFeeTerm);
+				if (result == null) result = caseRepositioningFeeTerm(originPortRepositioningFeeTerm);
+				if (result == null) result = caseNotionalJourneyTerm(originPortRepositioningFeeTerm);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -543,17 +563,77 @@ public class CommercialSwitch<@Nullable T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Charter Contract Term</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>IRepositioning Fee</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Charter Contract Term</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>IRepositioning Fee</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseCharterContractTerm(CharterContractTerm object) {
+	public T caseIRepositioningFee(IRepositioningFee object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Simple Repositioning Fee Container</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Simple Repositioning Fee Container</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSimpleRepositioningFeeContainer(SimpleRepositioningFeeContainer object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>IBallast Bonus</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>IBallast Bonus</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseIBallastBonus(IBallastBonus object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Simple Ballast Bonus Container</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Simple Ballast Bonus Container</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSimpleBallastBonusContainer(SimpleBallastBonusContainer object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Monthly Ballast Bonus Container</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Monthly Ballast Bonus Container</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMonthlyBallastBonusContainer(MonthlyBallastBonusContainer object) {
 		return null;
 	}
 
@@ -678,17 +758,17 @@ public class CommercialSwitch<@Nullable T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Origin Port Repositioning Fee</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Origin Port Repositioning Fee Term</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Origin Port Repositioning Fee</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Origin Port Repositioning Fee Term</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseOriginPortRepositioningFee(OriginPortRepositioningFee object) {
+	public T caseOriginPortRepositioningFeeTerm(OriginPortRepositioningFeeTerm object) {
 		return null;
 	}
 

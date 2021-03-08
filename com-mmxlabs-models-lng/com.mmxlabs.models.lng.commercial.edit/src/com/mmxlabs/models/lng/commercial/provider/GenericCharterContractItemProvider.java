@@ -55,7 +55,6 @@ public class GenericCharterContractItemProvider extends NamedObjectItemProvider 
 			addUuidPropertyDescriptor(object);
 			addMinDurationPropertyDescriptor(object);
 			addMaxDurationPropertyDescriptor(object);
-			addHubsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -127,28 +126,6 @@ public class GenericCharterContractItemProvider extends NamedObjectItemProvider 
 	}
 
 	/**
-	 * This adds a property descriptor for the Hubs feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addHubsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_GenericCharterContract_hubs_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_GenericCharterContract_hubs_feature", "_UI_GenericCharterContract_type"),
-				 CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__HUBS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -160,7 +137,8 @@ public class GenericCharterContractItemProvider extends NamedObjectItemProvider 
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__TERMS);
+			childrenFeatures.add(CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__REPOSITIONING_FEE_TERMS);
+			childrenFeatures.add(CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS);
 		}
 		return childrenFeatures;
 	}
@@ -221,7 +199,8 @@ public class GenericCharterContractItemProvider extends NamedObjectItemProvider 
 			case CommercialPackage.GENERIC_CHARTER_CONTRACT__MAX_DURATION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case CommercialPackage.GENERIC_CHARTER_CONTRACT__TERMS:
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT__REPOSITIONING_FEE_TERMS:
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -241,43 +220,18 @@ public class GenericCharterContractItemProvider extends NamedObjectItemProvider 
 
 		newChildDescriptors.add
 			(createChildParameter
-				(CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__TERMS,
-				 CommercialFactory.eINSTANCE.createCharterContractTerm()));
+				(CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__REPOSITIONING_FEE_TERMS,
+				 CommercialFactory.eINSTANCE.createSimpleRepositioningFeeContainer()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__TERMS,
-				 CommercialFactory.eINSTANCE.createBallastBonusTerm()));
+				(CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS,
+				 CommercialFactory.eINSTANCE.createSimpleBallastBonusContainer()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__TERMS,
-				 CommercialFactory.eINSTANCE.createLumpSumBallastBonusTerm()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__TERMS,
-				 CommercialFactory.eINSTANCE.createNotionalJourneyBallastBonusTerm()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__TERMS,
-				 CommercialFactory.eINSTANCE.createMonthlyBallastBonusTerm()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__TERMS,
-				 CommercialFactory.eINSTANCE.createRepositioningFeeTerm()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__TERMS,
-				 CommercialFactory.eINSTANCE.createLumpSumRepositioningFeeTerm()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__TERMS,
-				 CommercialFactory.eINSTANCE.createOriginPortRepositioningFee()));
+				(CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS,
+				 CommercialFactory.eINSTANCE.createMonthlyBallastBonusContainer()));
 	}
 
 }

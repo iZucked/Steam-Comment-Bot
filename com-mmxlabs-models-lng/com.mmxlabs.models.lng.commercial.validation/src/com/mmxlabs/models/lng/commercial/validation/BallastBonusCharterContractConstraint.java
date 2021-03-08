@@ -35,15 +35,15 @@ public class BallastBonusCharterContractConstraint extends AbstractModelMultiCon
 	protected String validate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof BallastBonusCharterContract) {
-			final BallastBonusCharterContract contract = (BallastBonusCharterContract) target;
-			BallastBonusContract ballastBonusContract = contract.getBallastBonusContract();
-			EStructuralFeature feature = CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTERING_CONTRACTS;
-			String message = String.format("Charter contract | %s", contract.getName());
-			if (ballastBonusContract instanceof RuleBasedBallastBonusContract) {
-				ruleBasedballastBonusValidation(ctx, extraContext, statuses, (RuleBasedBallastBonusContract) ballastBonusContract, ballastBonusContract, feature, message);
-			}
-		}
+//		if (target instanceof BallastBonusCharterContract) {
+//			final BallastBonusCharterContract contract = (BallastBonusCharterContract) target;
+//			BallastBonusContract ballastBonusContract = contract.getBallastBonusContract();
+//			EStructuralFeature feature = CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTERING_CONTRACTS;
+//			String message = String.format("Charter contract | %s", contract.getName());
+//			if (ballastBonusContract instanceof RuleBasedBallastBonusContract) {
+//				ruleBasedballastBonusValidation(ctx, extraContext, statuses, (RuleBasedBallastBonusContract) ballastBonusContract, ballastBonusContract, feature, message);
+//			}
+//		}
 		return Activator.PLUGIN_ID;
 	}
 

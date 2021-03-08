@@ -14,14 +14,9 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import com.mmxlabs.models.datetime.DateTimePackage;
-import com.mmxlabs.models.lng.commercial.BallastBonusCharterContract;
-import com.mmxlabs.models.lng.commercial.BallastBonusContract;
-import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.BallastBonusTerm;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.commercial.CharterContract;
-import com.mmxlabs.models.lng.commercial.CharterContractTerm;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -31,29 +26,26 @@ import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
+import com.mmxlabs.models.lng.commercial.IBallastBonus;
+import com.mmxlabs.models.lng.commercial.IRepositioningFee;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
-import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusTerm;
 import com.mmxlabs.models.lng.commercial.LumpSumRepositioningFeeTerm;
 import com.mmxlabs.models.lng.commercial.LumpSumTerm;
-import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusCharterContract;
-import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContract;
-import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine;
+import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContainer;
 import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusTerm;
 import com.mmxlabs.models.lng.commercial.NextPortType;
-import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusTerm;
 import com.mmxlabs.models.lng.commercial.NotionalJourneyTerm;
-import com.mmxlabs.models.lng.commercial.OriginPortRepositioningFee;
+import com.mmxlabs.models.lng.commercial.OriginPortRepositioningFeeTerm;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.RepositioningFeeTerm;
-import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
-import com.mmxlabs.models.lng.commercial.SimpleBallastBonusCharterContract;
-import com.mmxlabs.models.lng.commercial.SimpleCharterContract;
+import com.mmxlabs.models.lng.commercial.SimpleBallastBonusContainer;
 import com.mmxlabs.models.lng.commercial.SimpleEntityBook;
+import com.mmxlabs.models.lng.commercial.SimpleRepositioningFeeContainer;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.lng.commercial.VolumeParams;
@@ -186,7 +178,35 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass charterContractTermEClass = null;
+	private EClass iRepositioningFeeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass simpleRepositioningFeeContainerEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass iBallastBonusEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass simpleBallastBonusContainerEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass monthlyBallastBonusContainerEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -249,7 +269,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass originPortRepositioningFeeEClass = null;
+	private EClass originPortRepositioningFeeTermEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1026,7 +1046,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
-	public EReference getGenericCharterContract_Terms() {
+	public EReference getGenericCharterContract_RepositioningFeeTerms() {
 		return (EReference)genericCharterContractEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -1036,7 +1056,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
-	public EReference getGenericCharterContract_Hubs() {
+	public EReference getGenericCharterContract_BallastBonusTerms() {
 		return (EReference)genericCharterContractEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -1046,8 +1066,88 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
-	public EClass getCharterContractTerm() {
-		return charterContractTermEClass;
+	public EClass getIRepositioningFee() {
+		return iRepositioningFeeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSimpleRepositioningFeeContainer() {
+		return simpleRepositioningFeeContainerEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSimpleRepositioningFeeContainer_Terms() {
+		return (EReference)simpleRepositioningFeeContainerEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getIBallastBonus() {
+		return iBallastBonusEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSimpleBallastBonusContainer() {
+		return simpleBallastBonusContainerEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSimpleBallastBonusContainer_Terms() {
+		return (EReference)simpleBallastBonusContainerEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getMonthlyBallastBonusContainer() {
+		return monthlyBallastBonusContainerEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getMonthlyBallastBonusContainer_Hubs() {
+		return (EReference)monthlyBallastBonusContainerEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getMonthlyBallastBonusContainer_Terms() {
+		return (EReference)monthlyBallastBonusContainerEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1276,8 +1376,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
-	public EClass getOriginPortRepositioningFee() {
-		return originPortRepositioningFeeEClass;
+	public EClass getOriginPortRepositioningFeeTerm() {
+		return originPortRepositioningFeeTermEClass;
 	}
 
 	/**
@@ -1422,10 +1522,22 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		genericCharterContractEClass = createEClass(GENERIC_CHARTER_CONTRACT);
 		createEAttribute(genericCharterContractEClass, GENERIC_CHARTER_CONTRACT__MIN_DURATION);
 		createEAttribute(genericCharterContractEClass, GENERIC_CHARTER_CONTRACT__MAX_DURATION);
-		createEReference(genericCharterContractEClass, GENERIC_CHARTER_CONTRACT__TERMS);
-		createEReference(genericCharterContractEClass, GENERIC_CHARTER_CONTRACT__HUBS);
+		createEReference(genericCharterContractEClass, GENERIC_CHARTER_CONTRACT__REPOSITIONING_FEE_TERMS);
+		createEReference(genericCharterContractEClass, GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS);
 
-		charterContractTermEClass = createEClass(CHARTER_CONTRACT_TERM);
+		iRepositioningFeeEClass = createEClass(IREPOSITIONING_FEE);
+
+		simpleRepositioningFeeContainerEClass = createEClass(SIMPLE_REPOSITIONING_FEE_CONTAINER);
+		createEReference(simpleRepositioningFeeContainerEClass, SIMPLE_REPOSITIONING_FEE_CONTAINER__TERMS);
+
+		iBallastBonusEClass = createEClass(IBALLAST_BONUS);
+
+		simpleBallastBonusContainerEClass = createEClass(SIMPLE_BALLAST_BONUS_CONTAINER);
+		createEReference(simpleBallastBonusContainerEClass, SIMPLE_BALLAST_BONUS_CONTAINER__TERMS);
+
+		monthlyBallastBonusContainerEClass = createEClass(MONTHLY_BALLAST_BONUS_CONTAINER);
+		createEReference(monthlyBallastBonusContainerEClass, MONTHLY_BALLAST_BONUS_CONTAINER__HUBS);
+		createEReference(monthlyBallastBonusContainerEClass, MONTHLY_BALLAST_BONUS_CONTAINER__TERMS);
 
 		lumpSumTermEClass = createEClass(LUMP_SUM_TERM);
 		createEAttribute(lumpSumTermEClass, LUMP_SUM_TERM__PRICE_EXPRESSION);
@@ -1457,7 +1569,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		lumpSumRepositioningFeeTermEClass = createEClass(LUMP_SUM_REPOSITIONING_FEE_TERM);
 
-		originPortRepositioningFeeEClass = createEClass(ORIGIN_PORT_REPOSITIONING_FEE);
+		originPortRepositioningFeeTermEClass = createEClass(ORIGIN_PORT_REPOSITIONING_FEE_TERM);
 
 		// Create enums
 		contractTypeEEnum = createEEnum(CONTRACT_TYPE);
@@ -1516,17 +1628,18 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		dateShiftExpressionPriceParametersEClass.getESuperTypes().add(this.getLNGPriceCalculatorParameters());
 		genericCharterContractEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		genericCharterContractEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
-		ballastBonusTermEClass.getESuperTypes().add(this.getCharterContractTerm());
+		simpleRepositioningFeeContainerEClass.getESuperTypes().add(this.getIRepositioningFee());
+		simpleBallastBonusContainerEClass.getESuperTypes().add(this.getIBallastBonus());
+		monthlyBallastBonusContainerEClass.getESuperTypes().add(this.getIBallastBonus());
 		lumpSumBallastBonusTermEClass.getESuperTypes().add(this.getBallastBonusTerm());
 		lumpSumBallastBonusTermEClass.getESuperTypes().add(this.getLumpSumTerm());
 		notionalJourneyBallastBonusTermEClass.getESuperTypes().add(this.getBallastBonusTerm());
 		notionalJourneyBallastBonusTermEClass.getESuperTypes().add(this.getNotionalJourneyTerm());
 		monthlyBallastBonusTermEClass.getESuperTypes().add(this.getNotionalJourneyBallastBonusTerm());
-		repositioningFeeTermEClass.getESuperTypes().add(this.getCharterContractTerm());
 		lumpSumRepositioningFeeTermEClass.getESuperTypes().add(this.getRepositioningFeeTerm());
 		lumpSumRepositioningFeeTermEClass.getESuperTypes().add(this.getLumpSumTerm());
-		originPortRepositioningFeeEClass.getESuperTypes().add(this.getRepositioningFeeTerm());
-		originPortRepositioningFeeEClass.getESuperTypes().add(this.getNotionalJourneyTerm());
+		originPortRepositioningFeeTermEClass.getESuperTypes().add(this.getRepositioningFeeTerm());
+		originPortRepositioningFeeTermEClass.getESuperTypes().add(this.getNotionalJourneyTerm());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(commercialModelEClass, CommercialModel.class, "CommercialModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1621,13 +1734,25 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEClass(genericCharterContractEClass, GenericCharterContract.class, "GenericCharterContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getGenericCharterContract_MinDuration(), ecorePackage.getEInt(), "minDuration", null, 1, 1, GenericCharterContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getGenericCharterContract_MaxDuration(), ecorePackage.getEInt(), "maxDuration", null, 1, 1, GenericCharterContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getGenericCharterContract_Terms(), this.getCharterContractTerm(), null, "terms", null, 0, -1, GenericCharterContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getGenericCharterContract_RepositioningFeeTerms(), this.getIRepositioningFee(), null, "repositioningFeeTerms", null, 0, 1, GenericCharterContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getGenericCharterContract_BallastBonusTerms(), this.getIBallastBonus(), null, "ballastBonusTerms", null, 0, 1, GenericCharterContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(iRepositioningFeeEClass, IRepositioningFee.class, "IRepositioningFee", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(simpleRepositioningFeeContainerEClass, SimpleRepositioningFeeContainer.class, "SimpleRepositioningFeeContainer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSimpleRepositioningFeeContainer_Terms(), this.getRepositioningFeeTerm(), null, "terms", null, 0, -1, SimpleRepositioningFeeContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(iBallastBonusEClass, IBallastBonus.class, "IBallastBonus", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(simpleBallastBonusContainerEClass, SimpleBallastBonusContainer.class, "SimpleBallastBonusContainer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSimpleBallastBonusContainer_Terms(), this.getBallastBonusTerm(), null, "terms", null, 0, -1, SimpleBallastBonusContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(monthlyBallastBonusContainerEClass, MonthlyBallastBonusContainer.class, "MonthlyBallastBonusContainer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
 		g2 = createEGenericType(thePortPackage.getPort());
 		g1.getETypeArguments().add(g2);
-		initEReference(getGenericCharterContract_Hubs(), g1, null, "hubs", null, 0, -1, GenericCharterContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(charterContractTermEClass, CharterContractTerm.class, "CharterContractTerm", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getMonthlyBallastBonusContainer_Hubs(), g1, null, "hubs", null, 0, -1, MonthlyBallastBonusContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMonthlyBallastBonusContainer_Terms(), this.getMonthlyBallastBonusTerm(), null, "terms", null, 0, -1, MonthlyBallastBonusContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(lumpSumTermEClass, LumpSumTerm.class, "LumpSumTerm", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLumpSumTerm_PriceExpression(), ecorePackage.getEString(), "priceExpression", "", 1, 1, LumpSumTerm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1665,7 +1790,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		initEClass(lumpSumRepositioningFeeTermEClass, LumpSumRepositioningFeeTerm.class, "LumpSumRepositioningFeeTerm", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(originPortRepositioningFeeEClass, OriginPortRepositioningFee.class, "OriginPortRepositioningFee", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(originPortRepositioningFeeTermEClass, OriginPortRepositioningFeeTerm.class, "OriginPortRepositioningFeeTerm", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Initialize enums and add enum literals
 		initEEnum(contractTypeEEnum, ContractType.class, "ContractType");

@@ -41,6 +41,7 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 	 */
 	private Composite right;
 	private IDisplayComposite ballastBonusComposite;
+	private IDisplayComposite repositioningFeeComposite;
 
 	public VesselAvailabilityTopLevelComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, FormToolkit toolkit) {
 		super(parent, style, dialogContext, toolkit);
@@ -101,7 +102,7 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 		containerComposite.setLayout(new GridLayout(2, true));
 
 		Composite bottomComposite = toolkit.createComposite(this, SWT.NONE);
-		bottomComposite.setLayout(new FillLayout());
+		bottomComposite.setLayout(new GridLayout(1, true));
 		bottomComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		final Group g2 = new Group(bottomComposite, SWT.NONE);
@@ -111,13 +112,28 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 		g2.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
 		
-		ballastBonusComposite = new BallastBonusContractDetailComposite(g2, SWT.NONE, toolkit, () -> {
+		ballastBonusComposite = new BallastBonusTermsDetailComposite(g2, SWT.NONE, toolkit, () -> {
 			if (!VesselAvailabilityTopLevelComposite.this.isDisposed()) {
 				VesselAvailabilityTopLevelComposite.this.layout(true, true);
 			}
-		}, (VesselAvailability) object);
+		});
 		ballastBonusComposite.setCommandHandler(commandHandler);
 		ballastBonusComposite.display(dialogContext, root, object, range, dbc);
+		
+		final Group g3 = new Group(bottomComposite, SWT.DOWN);
+		toolkit.adapt(g3);
+		g3.setText("Repositioning Fee");
+		g3.setLayout(new GridLayout());
+		g3.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+
+		
+		repositioningFeeComposite = new RepositioningFeeTermsDetailComposite(g3, SWT.NONE, toolkit, () -> {
+			if (!VesselAvailabilityTopLevelComposite.this.isDisposed()) {
+				VesselAvailabilityTopLevelComposite.this.layout(true, true);
+			}
+		});
+		repositioningFeeComposite.setCommandHandler(commandHandler);
+		repositioningFeeComposite.display(dialogContext, root, object, range, dbc);
 
 		this.setLayout(new GridLayout(1, true));
 	}
@@ -126,6 +142,7 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 	public void displayValidationStatus(IStatus status) {
 		super.displayValidationStatus(status);
 		ballastBonusComposite.displayValidationStatus(status);
+		repositioningFeeComposite.displayValidationStatus(status);
 	}
 
 	@Override

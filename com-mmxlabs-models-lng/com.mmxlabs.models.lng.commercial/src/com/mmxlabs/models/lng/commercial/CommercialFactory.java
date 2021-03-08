@@ -123,13 +123,31 @@ public interface CommercialFactory extends EFactory {
 	GenericCharterContract createGenericCharterContract();
 
 	/**
-	 * Returns a new object of class '<em>Charter Contract Term</em>'.
+	 * Returns a new object of class '<em>Simple Repositioning Fee Container</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Charter Contract Term</em>'.
+	 * @return a new object of class '<em>Simple Repositioning Fee Container</em>'.
 	 * @generated
 	 */
-	CharterContractTerm createCharterContractTerm();
+	SimpleRepositioningFeeContainer createSimpleRepositioningFeeContainer();
+
+	/**
+	 * Returns a new object of class '<em>Simple Ballast Bonus Container</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Simple Ballast Bonus Container</em>'.
+	 * @generated
+	 */
+	SimpleBallastBonusContainer createSimpleBallastBonusContainer();
+
+	/**
+	 * Returns a new object of class '<em>Monthly Ballast Bonus Container</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Monthly Ballast Bonus Container</em>'.
+	 * @generated
+	 */
+	MonthlyBallastBonusContainer createMonthlyBallastBonusContainer();
 
 	/**
 	 * Returns a new object of class '<em>Lump Sum Term</em>'.
@@ -204,13 +222,13 @@ public interface CommercialFactory extends EFactory {
 	LumpSumRepositioningFeeTerm createLumpSumRepositioningFeeTerm();
 
 	/**
-	 * Returns a new object of class '<em>Origin Port Repositioning Fee</em>'.
+	 * Returns a new object of class '<em>Origin Port Repositioning Fee Term</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Origin Port Repositioning Fee</em>'.
+	 * @return a new object of class '<em>Origin Port Repositioning Fee Term</em>'.
 	 * @generated
 	 */
-	OriginPortRepositioningFee createOriginPortRepositioningFee();
+	OriginPortRepositioningFeeTerm createOriginPortRepositioningFeeTerm();
 
 	/**
 	 * Returns the package supported by this factory.

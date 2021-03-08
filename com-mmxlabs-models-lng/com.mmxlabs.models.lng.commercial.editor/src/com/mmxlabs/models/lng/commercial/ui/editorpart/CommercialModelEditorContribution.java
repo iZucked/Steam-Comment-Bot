@@ -16,10 +16,10 @@ import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.commercial.CharterContract;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -92,7 +92,7 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 				return true;
 			} else if (dcsd.getTarget() instanceof SalesContract) {
 				return true;
-			} else if (dcsd.getTarget() instanceof CharterContract) {
+			} else if (dcsd.getTarget() instanceof GenericCharterContract) {
 				return true;
 			} else if (dcsd.getTarget() instanceof LNGPriceCalculatorParameters) {
 				final LNGPriceCalculatorParameters expressionPriceParameters = (LNGPriceCalculatorParameters) dcsd.getTarget();
@@ -128,7 +128,7 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 				purchaseContractEditorPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);
 			} else if (target instanceof SalesContract) {
 				salesContractEditorPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);
-			} else if (target instanceof CharterContract) {
+			} else if (target instanceof GenericCharterContract) {
 				salesContractEditorPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);
 			}
 		}

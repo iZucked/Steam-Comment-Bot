@@ -1485,13 +1485,22 @@ public interface SpotMarketsPackage extends EPackage {
 	int CHARTER_IN_MARKET__ENTITY = SPOT_CHARTER_MARKET_FEATURE_COUNT + 12;
 
 	/**
+	 * The feature id for the '<em><b>Start At</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET__START_AT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 13;
+
+	/**
 	 * The number of structural features of the '<em>Charter In Market</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET_FEATURE_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 13;
+	int CHARTER_IN_MARKET_FEATURE_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 14;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketParametersImpl <em>Charter Out Market Parameters</em>}' class.
@@ -2148,6 +2157,17 @@ public interface SpotMarketsPackage extends EPackage {
 	EReference getCharterInMarket_Entity();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getStartAt <em>Start At</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Start At</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getStartAt()
+	 * @see #getCharterInMarket()
+	 * @generated
+	 */
+	EReference getCharterInMarket_StartAt();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket <em>Spot Charter Market</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2754,6 +2774,14 @@ public interface SpotMarketsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CHARTER_IN_MARKET__ENTITY = eINSTANCE.getCharterInMarket_Entity();
+
+		/**
+		 * The meta object literal for the '<em><b>Start At</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHARTER_IN_MARKET__START_AT = eINSTANCE.getCharterInMarket_StartAt();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotCharterMarketImpl <em>Spot Charter Market</em>}' class.

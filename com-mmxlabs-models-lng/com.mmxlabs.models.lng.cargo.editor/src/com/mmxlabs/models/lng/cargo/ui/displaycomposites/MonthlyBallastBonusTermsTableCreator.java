@@ -23,14 +23,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
+import com.mmxlabs.models.lng.commercial.BallastBonusTerm;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
-import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine;
-import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine;
-import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine;
-import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
+import com.mmxlabs.models.lng.commercial.IBallastBonus;
+import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusTerm;
+import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusTerm;
 import com.mmxlabs.models.lng.port.ui.editorpart.MultiplePortReferenceManipulator;
 import com.mmxlabs.models.lng.pricing.ui.autocomplete.PriceAttributeManipulator;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -47,7 +46,7 @@ import com.mmxlabs.models.ui.tabular.renderers.WrappingColumnHeaderRenderer;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
-public class MonthlyBallastBonusContractTableCreator {	
+public class MonthlyBallastBonusTermsTableCreator {	
 	public static EObjectTableViewer createMonthlyBallastBonusTable(final Composite parent, final FormToolkit toolkit, final IDialogEditingContext dialogContext, final ICommandHandler commandHandler,
 			final GenericCharterContract charterContract, final IStatusProvider statusProvider, final Runnable sizeChangedAction) {
 		
@@ -57,7 +56,7 @@ public class MonthlyBallastBonusContractTableCreator {
 		eViewer.setAutoResizeable(false);
 		eViewer.setSorter(null);
 
-		eViewer.addTypicalColumn("Month", new YearMonthAttributeManipulator(CommercialPackage.eINSTANCE.getMonthlyBallastBonusContractLine_Month(), 
+		eViewer.addTypicalColumn("Month", new YearMonthAttributeManipulator(CommercialPackage.eINSTANCE.getMonthlyBallastBonusTerm_Month(), 
 				sel.getEditingDomain()) {
 
 			@Override
@@ -69,7 +68,7 @@ public class MonthlyBallastBonusContractTableCreator {
 			}
 		});
 		
-		eViewer.addTypicalColumn("Redelivery ports", new MultiplePortReferenceManipulator(CommercialPackage.eINSTANCE.getBallastBonusContractLine_RedeliveryPorts(), sel.getReferenceValueProviderCache(),
+		eViewer.addTypicalColumn("Redelivery ports", new MultiplePortReferenceManipulator(CommercialPackage.eINSTANCE.getBallastBonusTerm_RedeliveryPorts(), sel.getReferenceValueProviderCache(),
 				sel.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
 
 			@Override
@@ -82,15 +81,12 @@ public class MonthlyBallastBonusContractTableCreator {
 		});
 
 		eViewer.addTypicalColumn("Lump sum ($)", new PriceAttributeManipulator(
-				CommercialPackage.eINSTANCE.getLumpSumBallastBonusContractLine_PriceExpression(),
+				CommercialPackage.eINSTANCE.getLumpSumTerm_PriceExpression(),
 				sel.getEditingDomain()) {
 
 			protected EAttribute getAttribute(Object object) {
-				if (object instanceof LumpSumBallastBonusContractLine) {
-					return CommercialPackage.eINSTANCE.getLumpSumBallastBonusContractLine_PriceExpression();
-				}
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
-					return CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_LumpSumPriceExpression();
+				if (object instanceof NotionalJourneyBallastBonusTerm) {
+					return CommercialPackage.eINSTANCE.getNotionalJourneyTerm_LumpSumPriceExpression();
 				}
 				return super.getAttribute(object);
 			}
@@ -104,10 +100,7 @@ public class MonthlyBallastBonusContractTableCreator {
 
 			@Override
 			public @Nullable String render(final Object object) {
-				if (object instanceof LumpSumBallastBonusContractLine) {
-					return super.render(object);
-				} 
-				else if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof NotionalJourneyBallastBonusTerm) {
 					return super.render(object);
 				}
 				else {
@@ -116,11 +109,11 @@ public class MonthlyBallastBonusContractTableCreator {
 			}
 		});
 
-		eViewer.addTypicalColumn("Speed", new NumericAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_Speed(), sel.getEditingDomain()) {
+		eViewer.addTypicalColumn("Speed", new NumericAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_Speed(), sel.getEditingDomain()) {
 
 			@Override
 			public void runSetCommand(final Object object, final Object value) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof NotionalJourneyBallastBonusTerm) {
 					super.runSetCommand(object, value);
 
 					dialogContext.getDialogController().validate();
@@ -130,7 +123,7 @@ public class MonthlyBallastBonusContractTableCreator {
 
 			@Override
 			public boolean canEdit(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof NotionalJourneyBallastBonusTerm) {
 					return super.canEdit(object);
 				} else {
 					return false;
@@ -139,7 +132,7 @@ public class MonthlyBallastBonusContractTableCreator {
 
 			@Override
 			public Object getValue(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof NotionalJourneyBallastBonusTerm) {
 					return super.getValue(object);
 				} else {
 					return null;
@@ -148,7 +141,7 @@ public class MonthlyBallastBonusContractTableCreator {
 
 			@Override
 			public Comparable getComparable(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof NotionalJourneyBallastBonusTerm) {
 					return super.getComparable(object);
 				}
 				return -Integer.MAX_VALUE;
@@ -156,7 +149,7 @@ public class MonthlyBallastBonusContractTableCreator {
 
 			@Override
 			public @Nullable String render(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof NotionalJourneyBallastBonusTerm) {
 					return super.render(object);
 				} else {
 					return "-";
@@ -165,12 +158,12 @@ public class MonthlyBallastBonusContractTableCreator {
 
 		});
 
-		eViewer.addTypicalColumn("Ballast To", new EnumAttributeManipulator(CommercialPackage.eINSTANCE.getMonthlyBallastBonusContractLine_BallastBonusTo(),
+		eViewer.addTypicalColumn("Ballast To", new EnumAttributeManipulator(CommercialPackage.eINSTANCE.getMonthlyBallastBonusTerm_BallastBonusTo(),
 				sel.getEditingDomain()) {
 
 			@Override
 			public void runSetCommand(final Object object, final Object value) {
-				if (object instanceof MonthlyBallastBonusContractLine) {
+				if (object instanceof MonthlyBallastBonusTerm) {
 					super.runSetCommand(object, value);
 
 					dialogContext.getDialogController().validate();
@@ -180,7 +173,7 @@ public class MonthlyBallastBonusContractTableCreator {
 
 			@Override
 			public boolean canEdit(final Object object) {
-				if (object instanceof MonthlyBallastBonusContractLine) {
+				if (object instanceof MonthlyBallastBonusTerm) {
 					return super.canEdit(object);
 				} else {
 					return false;
@@ -189,7 +182,7 @@ public class MonthlyBallastBonusContractTableCreator {
 
 			@Override
 			public Object getValue(final Object object) {
-				if (object instanceof MonthlyBallastBonusContractLine) {
+				if (object instanceof MonthlyBallastBonusTerm) {
 					return super.getValue(object);
 				} else {
 					return null;
@@ -198,7 +191,7 @@ public class MonthlyBallastBonusContractTableCreator {
 
 			@Override
 			public @Nullable String render(final Object object) {
-				if (object instanceof MonthlyBallastBonusContractLine) {
+				if (object instanceof MonthlyBallastBonusTerm) {
 					return super.render(object);
 				} else {
 					return "-";
@@ -208,11 +201,11 @@ public class MonthlyBallastBonusContractTableCreator {
 		});
 
 		eViewer.addTypicalColumn("% Fuel",
-				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getMonthlyBallastBonusContractLine_BallastBonusPctFuel(), sel.getEditingDomain()) {
+				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getMonthlyBallastBonusTerm_BallastBonusPctFuel(), sel.getEditingDomain()) {
 
 					@Override
 					public void runSetCommand(final Object object, final Object value) {
-						if (object instanceof MonthlyBallastBonusContractLine) {
+						if (object instanceof MonthlyBallastBonusTerm) {
 							super.runSetCommand(object, value);
 
 							dialogContext.getDialogController().validate();
@@ -222,7 +215,7 @@ public class MonthlyBallastBonusContractTableCreator {
 
 					@Override
 					public boolean canEdit(final Object object) {
-						if (object instanceof MonthlyBallastBonusContractLine) {
+						if (object instanceof MonthlyBallastBonusTerm) {
 							return super.canEdit(object);
 						} else {
 							return false;
@@ -231,7 +224,7 @@ public class MonthlyBallastBonusContractTableCreator {
 
 					@Override
 					public Object getValue(final Object object) {
-						if (object instanceof MonthlyBallastBonusContractLine) {
+						if (object instanceof MonthlyBallastBonusTerm) {
 							return super.getValue(object);
 						} else {
 							return null;
@@ -240,7 +233,7 @@ public class MonthlyBallastBonusContractTableCreator {
 
 					@Override
 					public @Nullable String render(final Object object) {
-						if (object instanceof MonthlyBallastBonusContractLine) {
+						if (object instanceof MonthlyBallastBonusTerm) {
 							return super.render(object);
 						} else {
 							return "-";
@@ -251,11 +244,11 @@ public class MonthlyBallastBonusContractTableCreator {
 
 		
 		eViewer.addTypicalColumn("Fuel Cost ($/MT)",
-				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_FuelPriceExpression(), sel.getEditingDomain()) {
+				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_FuelPriceExpression(), sel.getEditingDomain()) {
 
 					@Override
 					public void runSetCommand(final Object object, final Object value) {
-						if (object instanceof NotionalJourneyBallastBonusContractLine) {
+						if (object instanceof NotionalJourneyBallastBonusTerm) {
 							super.runSetCommand(object, value);
 
 							dialogContext.getDialogController().validate();
@@ -265,7 +258,7 @@ public class MonthlyBallastBonusContractTableCreator {
 
 					@Override
 					public boolean canEdit(final Object object) {
-						if (object instanceof NotionalJourneyBallastBonusContractLine) {
+						if (object instanceof NotionalJourneyBallastBonusTerm) {
 							return super.canEdit(object);
 						} else {
 							return false;
@@ -274,7 +267,7 @@ public class MonthlyBallastBonusContractTableCreator {
 
 					@Override
 					public Object getValue(final Object object) {
-						if (object instanceof NotionalJourneyBallastBonusContractLine) {
+						if (object instanceof NotionalJourneyBallastBonusTerm) {
 							return super.getValue(object);
 						} else {
 							return null;
@@ -283,7 +276,7 @@ public class MonthlyBallastBonusContractTableCreator {
 
 					@Override
 					public @Nullable String render(final Object object) {
-						if (object instanceof NotionalJourneyBallastBonusContractLine) {
+						if (object instanceof NotionalJourneyBallastBonusTerm) {
 							return super.render(object);
 						} else {
 							return "-";
@@ -293,11 +286,11 @@ public class MonthlyBallastBonusContractTableCreator {
 				});
 
 		eViewer.addTypicalColumn("% Hire Cost",
-				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getMonthlyBallastBonusContractLine_BallastBonusPctCharter(), sel.getEditingDomain()) {
+				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getMonthlyBallastBonusTerm_BallastBonusPctCharter(), sel.getEditingDomain()) {
 
 					@Override
 					public void runSetCommand(final Object object, final Object value) {
-						if (object instanceof MonthlyBallastBonusContractLine) {
+						if (object instanceof MonthlyBallastBonusTerm) {
 							super.runSetCommand(object, value);
 
 							dialogContext.getDialogController().validate();
@@ -307,7 +300,7 @@ public class MonthlyBallastBonusContractTableCreator {
 
 					@Override
 					public boolean canEdit(final Object object) {
-						if (object instanceof MonthlyBallastBonusContractLine) {
+						if (object instanceof MonthlyBallastBonusTerm) {
 							return super.canEdit(object);
 						} else {
 							return false;
@@ -316,7 +309,7 @@ public class MonthlyBallastBonusContractTableCreator {
 
 					@Override
 					public Object getValue(final Object object) {
-						if (object instanceof MonthlyBallastBonusContractLine) {
+						if (object instanceof MonthlyBallastBonusTerm) {
 							return super.getValue(object);
 						} else {
 							return null;
@@ -325,7 +318,7 @@ public class MonthlyBallastBonusContractTableCreator {
 
 					@Override
 					public @Nullable String render(final Object object) {
-						if (object instanceof MonthlyBallastBonusContractLine) {
+						if (object instanceof MonthlyBallastBonusTerm) {
 							return super.render(object);
 						} else {
 							return "-";
@@ -335,11 +328,11 @@ public class MonthlyBallastBonusContractTableCreator {
 				});
 		
 		eViewer.addTypicalColumn("Hire Cost ($/day)",
-				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_HirePriceExpression(), sel.getEditingDomain()) {
+				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_HirePriceExpression(), sel.getEditingDomain()) {
 
 					@Override
 					public void runSetCommand(final Object object, final Object value) {
-						if (object instanceof NotionalJourneyBallastBonusContractLine) {
+						if (object instanceof NotionalJourneyBallastBonusTerm) {
 							super.runSetCommand(object, value);
 
 							dialogContext.getDialogController().validate();
@@ -349,7 +342,7 @@ public class MonthlyBallastBonusContractTableCreator {
 
 					@Override
 					public boolean canEdit(final Object object) {
-						if (object instanceof NotionalJourneyBallastBonusContractLine) {
+						if (object instanceof NotionalJourneyBallastBonusTerm) {
 							return super.canEdit(object);
 						} else {
 							return false;
@@ -358,7 +351,7 @@ public class MonthlyBallastBonusContractTableCreator {
 
 					@Override
 					public Object getValue(final Object object) {
-						if (object instanceof NotionalJourneyBallastBonusContractLine) {
+						if (object instanceof NotionalJourneyBallastBonusTerm) {
 							return super.getValue(object);
 						} else {
 							return null;
@@ -367,7 +360,7 @@ public class MonthlyBallastBonusContractTableCreator {
 
 					@Override
 					public @Nullable String render(final Object object) {
-						if (object instanceof NotionalJourneyBallastBonusContractLine) {
+						if (object instanceof NotionalJourneyBallastBonusTerm) {
 							return super.render(object);
 						} else {
 							return "-";
@@ -376,11 +369,11 @@ public class MonthlyBallastBonusContractTableCreator {
 
 				});
 
-		eViewer.addTypicalColumn("Include canal fees", new BooleanAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_IncludeCanal(), sel.getEditingDomain()) {
+		eViewer.addTypicalColumn("Include canal fees", new BooleanAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_IncludeCanal(), sel.getEditingDomain()) {
 
 			@Override
 			public void runSetCommand(final Object object, final Object value) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof NotionalJourneyBallastBonusTerm) {
 					super.runSetCommand(object, value);
 
 					dialogContext.getDialogController().validate();
@@ -390,7 +383,7 @@ public class MonthlyBallastBonusContractTableCreator {
 
 			@Override
 			public boolean canEdit(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof NotionalJourneyBallastBonusTerm) {
 					return super.canEdit(object);
 				} else {
 					return false;
@@ -399,7 +392,7 @@ public class MonthlyBallastBonusContractTableCreator {
 
 			@Override
 			public Object getValue(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof NotionalJourneyBallastBonusTerm) {
 					return super.getValue(object);
 				} else {
 					return "";
@@ -408,7 +401,7 @@ public class MonthlyBallastBonusContractTableCreator {
 
 			@Override
 			public @Nullable String render(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof NotionalJourneyBallastBonusTerm) {
 					return super.render(object);
 				} else {
 					return "-";
@@ -418,11 +411,11 @@ public class MonthlyBallastBonusContractTableCreator {
 		});
 
 
-		eViewer.addTypicalColumn("Include canal time", new BooleanAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_IncludeCanalTime(), sel.getEditingDomain()) {
+		eViewer.addTypicalColumn("Include canal time", new BooleanAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_IncludeCanalTime(), sel.getEditingDomain()) {
 
 			@Override
 			public void runSetCommand(final Object object, final Object value) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof NotionalJourneyBallastBonusTerm) {
 					super.runSetCommand(object, value);
 
 					dialogContext.getDialogController().validate();
@@ -432,7 +425,7 @@ public class MonthlyBallastBonusContractTableCreator {
 
 			@Override
 			public boolean canEdit(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof NotionalJourneyBallastBonusTerm) {
 					return super.canEdit(object);
 				} else {
 					return false;
@@ -441,7 +434,7 @@ public class MonthlyBallastBonusContractTableCreator {
 
 			@Override
 			public Object getValue(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof NotionalJourneyBallastBonusTerm) {
 					return super.getValue(object);
 				} else {
 					return "";
@@ -450,7 +443,7 @@ public class MonthlyBallastBonusContractTableCreator {
 
 			@Override
 			public @Nullable String render(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof NotionalJourneyBallastBonusTerm) {
 					return super.render(object);
 				} else {
 					return "-";
@@ -482,10 +475,8 @@ public class MonthlyBallastBonusContractTableCreator {
 
 			@Override
 			public @Nullable String render(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof NotionalJourneyBallastBonusTerm) {
 					return "Journey";
-				} else if (object instanceof LumpSumBallastBonusContractLine) {
-					return "Lump sum";
 				} else {
 					return "";
 				}
@@ -503,9 +494,8 @@ public class MonthlyBallastBonusContractTableCreator {
 		eViewer.getSortingSupport().clearColumnSortOrder();
 		eViewer.getGrid().recalculateHeader();
 
-		eViewer.init(sel.getAdapterFactory(), sel.getModelReference(), CommercialPackage.eINSTANCE.getRuleBasedBallastBonusContract_Rules());
-
-		eViewer.setInput(charterContract);
+		eViewer.init(sel.getAdapterFactory(), sel.getModelReference(), CommercialPackage.eINSTANCE.getMonthlyBallastBonusContainer_Terms());
+		eViewer.setInput(getBallastBonusContainer(commandHandler, charterContract));
 
 		final GridData gridData = GridDataFactory.fillDefaults().grab(true, true).create();
 		gridData.minimumHeight = 150;
@@ -528,10 +518,11 @@ public class MonthlyBallastBonusContractTableCreator {
 		addMonthlyRuleBtn.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				final MonthlyBallastBonusContractLine newLine = CommercialFactory.eINSTANCE.createMonthlyBallastBonusContractLine();
+				IBallastBonus ballastBonus = getBallastBonusContainer(commandHandler, charterContract);
+				final MonthlyBallastBonusTerm newLine = CommercialFactory.eINSTANCE.createMonthlyBallastBonusTerm();
 				commandHandler.handleCommand(
-						AddCommand.create(commandHandler.getEditingDomain(), charterContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES, newLine),
-						charterContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES);
+						AddCommand.create(commandHandler.getEditingDomain(), ballastBonus, CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTAINER__TERMS, newLine),
+						ballastBonus, CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTAINER__TERMS);
 				eViewer.setSelection(new StructuredSelection(newLine));
 				eViewer.refresh();
 				RunnerHelper.asyncExec(sizeChangedAction);
@@ -551,10 +542,13 @@ public class MonthlyBallastBonusContractTableCreator {
 				}
 				if (sel instanceof IStructuredSelection) {
 					final Object selection = ((IStructuredSelection) sel).getFirstElement();
-					if (selection instanceof BallastBonusContractLine) {
+					if (selection instanceof BallastBonusTerm) {
+						
+						final BallastBonusTerm ballastBonusTerm = (BallastBonusTerm) selection;
+						final IBallastBonus ballastBonus = (IBallastBonus) ballastBonusTerm.eContainer();
 						commandHandler.handleCommand(
-								RemoveCommand.create(commandHandler.getEditingDomain(), charterContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES, selection),
-								charterContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES);
+								RemoveCommand.create(commandHandler.getEditingDomain(), ballastBonus, CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTAINER__TERMS, selection),
+								ballastBonus, CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTAINER__TERMS);
 					}
 				}
 				eViewer.refresh();
@@ -565,5 +559,16 @@ public class MonthlyBallastBonusContractTableCreator {
 		eViewer.refresh();
 		sizeChangedAction.run();
 		return eViewer;
+	}
+	
+	private static IBallastBonus getBallastBonusContainer(final ICommandHandler commandHandler, final GenericCharterContract charterContract) {
+		IBallastBonus ballastBonus = charterContract.getBallastBonusTerms();
+		if (ballastBonus == null) {
+			ballastBonus = CommercialFactory.eINSTANCE.createMonthlyBallastBonusContainer();
+			commandHandler.handleCommand(
+					AddCommand.create(commandHandler.getEditingDomain(), charterContract, CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS, ballastBonus),
+					charterContract, CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS);
+		}
+		return ballastBonus;
 	}
 }

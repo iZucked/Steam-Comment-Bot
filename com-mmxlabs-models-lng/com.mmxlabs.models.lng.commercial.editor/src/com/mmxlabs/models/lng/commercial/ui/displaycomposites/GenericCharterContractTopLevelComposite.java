@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.commercial.ui.displaycomposites;
 
 import java.util.Collection;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
@@ -22,22 +23,23 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
+import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
 
 /**
- * A display composite for the {@link SimpleBallastBonusContractTopLevelComposite} to add complex ballast bonus UI
+ * A display composite for the {@link GenericCharterContractTopLevelComposite} to add complex ballast bonus UI
  * @author achurchill
  * 
  */
-public class SimpleBallastBonusContractTopLevelComposite extends DefaultTopLevelComposite {
+public class GenericCharterContractTopLevelComposite extends DefaultTopLevelComposite {
 
 	/**
 	 * {@link Composite} to contain the heel editors
 	 */
-	private Composite right;
 	private IDisplayComposite ballastBonusComposite;
-
-	public SimpleBallastBonusContractTopLevelComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, FormToolkit toolkit) {
+	private IDisplayComposite repositioningFeeComposite;
+	
+	public GenericCharterContractTopLevelComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, FormToolkit toolkit) {
 		super(parent, style, dialogContext, toolkit);
 	}
 
@@ -55,28 +57,18 @@ public class SimpleBallastBonusContractTopLevelComposite extends DefaultTopLevel
 		toolkit.adapt(g);
 
 		g.setText("Charter terms");
-		g.setLayout(new FillLayout());
+		g.setLayout(new GridLayout());
 		g.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		g.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
-		topLevel = new SimpleBallastBonusContractDetailComposite(g, SWT.NONE, toolkit);
+		topLevel = new DefaultDetailComposite(g, SWT.NONE, toolkit);
 		topLevel.setCommandHandler(commandHandler);
 		topLevel.setEditorWrapper(editorWrapper);
 
 		topLevel.display(dialogContext, root, object, range, dbc);
 
-//		final Iterator<IDisplayComposite> children = childComposites.iterator();
-//		final Iterator<EObject> childObjectsItr = childObjects.iterator();
-//
-//		while (childObjectsItr.hasNext()) {
-//			EObject next = childObjectsItr.next();
-//			if (!(next instanceof BallastBonusContract)) {
-//				children.next().display(dialogContext, root, next, range, dbc);
-//			}
-//		}
-
 		Composite bottomComposite = toolkit.createComposite(this, SWT.NONE);
-		bottomComposite.setLayout(new FillLayout());
+		bottomComposite.setLayout(new GridLayout());
 		bottomComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		final Group g2 = new Group(bottomComposite, SWT.NONE);
@@ -85,26 +77,48 @@ public class SimpleBallastBonusContractTopLevelComposite extends DefaultTopLevel
 		g2.setLayout(new GridLayout());
 		g2.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
-		ballastBonusComposite = new CharterContractBallastBonusContractDetailComposite(g2, SWT.NONE, toolkit, () -> {
-			if (!SimpleBallastBonusContractTopLevelComposite.this.isDisposed()) {
-				SimpleBallastBonusContractTopLevelComposite.this.layout(true, true);
+		ballastBonusComposite = new BallastBonusDetailComposite(g2, SWT.NONE, toolkit, () -> {
+			if (!GenericCharterContractTopLevelComposite.this.isDisposed()) {
+				GenericCharterContractTopLevelComposite.this.layout(true, true);
 			}
 		});
 		ballastBonusComposite.setCommandHandler(commandHandler);
 		ballastBonusComposite.display(dialogContext, root, object, range, dbc);
 
+		final Group g3 = new Group(bottomComposite, SWT.DOWN);
+		toolkit.adapt(g3);
+		g3.setText("Repositioning Fee");
+		g3.setLayout(new GridLayout());
+		g3.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		
+		repositioningFeeComposite = new RepositioningFeeDetailComposite(g3, SWT.NONE, toolkit, () -> {
+			if (!GenericCharterContractTopLevelComposite.this.isDisposed()) {
+				GenericCharterContractTopLevelComposite.this.layout(true, true);
+			}
+		});
+		repositioningFeeComposite.setCommandHandler(commandHandler);
+		repositioningFeeComposite.display(dialogContext, root, object, range, dbc);
+		
 		this.setLayout(new GridLayout(1, true));
+	}
+
+	private Runnable defaultResizeMethod() {
+		return () -> {
+			if (!GenericCharterContractTopLevelComposite.this.isDisposed()) {
+				GenericCharterContractTopLevelComposite.this.layout(true, true);
+			}
+		};
 	}
 
 	@Override
 	public void displayValidationStatus(IStatus status) {
 		super.displayValidationStatus(status);
 		ballastBonusComposite.displayValidationStatus(status);
+		repositioningFeeComposite.displayValidationStatus(status);
 	}
 	
 	@Override
 	protected boolean shouldDisplay(final EReference ref) {
-//		return ref.isContainment() && !ref.isMany() && ref != CargoPackage.eINSTANCE.getVesselAvailability_BallastBonusContract();
 		return true;
 	}
 

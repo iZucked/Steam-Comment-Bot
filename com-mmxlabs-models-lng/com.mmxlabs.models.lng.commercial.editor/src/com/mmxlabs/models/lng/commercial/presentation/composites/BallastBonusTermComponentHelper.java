@@ -47,7 +47,6 @@ public class BallastBonusTermComponentHelper extends BaseComponentHelper {
 	 */
 	public BallastBonusTermComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(CommercialPackage.Literals.CHARTER_CONTRACT_TERM));
 	}
 	
 	/**

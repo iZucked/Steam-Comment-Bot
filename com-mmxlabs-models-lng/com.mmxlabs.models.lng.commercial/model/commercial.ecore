@@ -217,15 +217,30 @@
         <details key="formatString" value="##0"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="repositioningFeeTerms"
+        eType="#//IRepositioningFee" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ballastBonusTerms" eType="#//IBallastBonus"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IRepositioningFee" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleRepositioningFeeContainer" eSuperTypes="#//IRepositioningFee">
     <eStructuralFeatures xsi:type="ecore:EReference" name="terms" upperBound="-1"
-        eType="#//CharterContractTerm" containment="true"/>
+        eType="#//RepositioningFeeTerm" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IBallastBonus" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleBallastBonusContainer" eSuperTypes="#//IBallastBonus">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="terms" upperBound="-1"
+        eType="#//BallastBonusTerm" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MonthlyBallastBonusContainer" eSuperTypes="#//IBallastBonus">
     <eStructuralFeatures xsi:type="ecore:EReference" name="hubs" upperBound="-1">
       <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
         <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
       </eGenericType>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="terms" upperBound="-1"
+        eType="#//MonthlyBallastBonusTerm" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CharterContractTerm"/>
   <eClassifiers xsi:type="ecore:EClass" name="LumpSumTerm">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceExpression" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="">
@@ -266,7 +281,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="BallastBonusTerm" eSuperTypes="#//CharterContractTerm">
+  <eClassifiers xsi:type="ecore:EClass" name="BallastBonusTerm">
     <eStructuralFeatures xsi:type="ecore:EReference" name="redeliveryPorts" upperBound="-1">
       <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
         <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
@@ -288,9 +303,9 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ballastBonusPctCharter"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="RepositioningFeeTerm" eSuperTypes="#//CharterContractTerm">
+  <eClassifiers xsi:type="ecore:EClass" name="RepositioningFeeTerm">
     <eStructuralFeatures xsi:type="ecore:EReference" name="originPort" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LumpSumRepositioningFeeTerm" eSuperTypes="#//RepositioningFeeTerm #//LumpSumTerm"/>
-  <eClassifiers xsi:type="ecore:EClass" name="OriginPortRepositioningFee" eSuperTypes="#//RepositioningFeeTerm #//NotionalJourneyTerm"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OriginPortRepositioningFeeTerm" eSuperTypes="#//RepositioningFeeTerm #//NotionalJourneyTerm"/>
 </ecore:EPackage>

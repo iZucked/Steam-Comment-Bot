@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -27,7 +28,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public class RepositioningFeeTermImpl extends CharterContractTermImpl implements RepositioningFeeTerm {
+public class RepositioningFeeTermImpl extends EObjectImpl implements RepositioningFeeTerm {
 	/**
 	 * The cached value of the '{@link #getOriginPort() <em>Origin Port</em>}' reference.
 	 * <!-- begin-user-doc -->

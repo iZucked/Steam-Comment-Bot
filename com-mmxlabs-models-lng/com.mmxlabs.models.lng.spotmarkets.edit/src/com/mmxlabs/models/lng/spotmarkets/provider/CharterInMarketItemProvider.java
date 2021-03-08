@@ -64,6 +64,7 @@ public class CharterInMarketItemProvider
 			addMaxDurationPropertyDescriptor(object);
 			addMtmPropertyDescriptor(object);
 			addEntityPropertyDescriptor(object);
+			addStartAtPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -236,6 +237,28 @@ public class CharterInMarketItemProvider
 				 getString("_UI_CharterInMarket_entity_feature"),
 				 getString("_UI_CharterInMarket_entity_description"),
 				 SpotMarketsPackage.Literals.CHARTER_IN_MARKET__ENTITY,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Start At feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addStartAtPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterInMarket_startAt_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterInMarket_startAt_feature", "_UI_CharterInMarket_type"),
+				 SpotMarketsPackage.Literals.CHARTER_IN_MARKET__START_AT,
 				 true,
 				 false,
 				 true,

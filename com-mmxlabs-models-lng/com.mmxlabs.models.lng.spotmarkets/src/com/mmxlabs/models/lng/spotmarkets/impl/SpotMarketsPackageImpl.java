@@ -769,6 +769,16 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * @generated
 	 */
 	@Override
+	public EReference getCharterInMarket_StartAt() {
+		return (EReference)charterInMarketEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getSpotCharterMarket() {
 		return spotCharterMarketEClass;
 	}
@@ -972,6 +982,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		createEAttribute(charterInMarketEClass, CHARTER_IN_MARKET__MAX_DURATION);
 		createEAttribute(charterInMarketEClass, CHARTER_IN_MARKET__MTM);
 		createEReference(charterInMarketEClass, CHARTER_IN_MARKET__ENTITY);
+		createEReference(charterInMarketEClass, CHARTER_IN_MARKET__START_AT);
 
 		spotCharterMarketEClass = createEClass(SPOT_CHARTER_MARKET);
 		createEAttribute(spotCharterMarketEClass, SPOT_CHARTER_MARKET__ENABLED);
@@ -1130,6 +1141,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		initEAttribute(getCharterInMarket_MaxDuration(), ecorePackage.getEInt(), "maxDuration", null, 1, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterInMarket_Mtm(), ecorePackage.getEBoolean(), "mtm", null, 0, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCharterInMarket_Entity(), theCommercialPackage.getBaseLegalEntity(), null, "entity", null, 0, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCharterInMarket_StartAt(), thePortPackage.getPort(), null, "startAt", null, 0, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(charterInMarketEClass, ecorePackage.getEInt(), "getMarketOrContractMinDuration", 0, 1, IS_UNIQUE, IS_ORDERED);
 

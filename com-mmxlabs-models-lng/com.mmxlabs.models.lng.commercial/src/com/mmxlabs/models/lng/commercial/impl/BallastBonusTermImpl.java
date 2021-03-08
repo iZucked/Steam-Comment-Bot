@@ -15,6 +15,7 @@ import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 /**
@@ -30,7 +31,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  *
  * @generated
  */
-public class BallastBonusTermImpl extends CharterContractTermImpl implements BallastBonusTerm {
+public class BallastBonusTermImpl extends EObjectImpl implements BallastBonusTerm {
 	/**
 	 * The cached value of the '{@link #getRedeliveryPorts() <em>Redelivery Ports</em>}' reference list.
 	 * <!-- begin-user-doc -->

@@ -16,7 +16,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
 import com.mmxlabs.models.ui.valueproviders.SimpleReferenceValueProvider;
 
-public class CharterContractValueProviderFactory implements IReferenceValueProviderFactory {
+public class GenericCharterContractValueProviderFactory implements IReferenceValueProviderFactory {
 	
 	@Override
 	public IReferenceValueProvider createReferenceValueProvider(final EClass owner, final EReference reference, final MMXRootObject rootObject) {
@@ -27,7 +27,7 @@ public class CharterContractValueProviderFactory implements IReferenceValueProvi
 			final CommercialModel model = ScenarioModelUtil.getCommercialModel(lngScenarioModel);
 			final EClass referenceClass = reference.getEReferenceType();
 
-			if (referenceClass == CommercialPackage.eINSTANCE.getCharterContract()) {
+			if (referenceClass == CommercialPackage.eINSTANCE.getGenericCharterContract()) {
 				return new SimpleReferenceValueProvider(model, CommercialPackage.eINSTANCE.getCommercialModel_CharteringContracts());
 			}
 		}

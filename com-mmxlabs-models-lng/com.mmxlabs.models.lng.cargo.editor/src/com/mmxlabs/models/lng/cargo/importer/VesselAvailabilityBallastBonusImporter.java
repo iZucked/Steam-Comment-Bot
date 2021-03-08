@@ -15,7 +15,9 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BallastBonusContract;
 import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
+import com.mmxlabs.models.lng.commercial.BallastBonusTerm;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -34,9 +36,9 @@ public class VesselAvailabilityBallastBonusImporter extends DefaultClassImporter
 	protected Map<String, String> exportObject(final EObject object, final IMMXExportContext context) {
 		final Map<String, String> result = super.exportObject(object, context);
 
-		if (object instanceof BallastBonusContractLine) {
+		if (object instanceof BallastBonusTerm) {
 			EObject parent = object.eContainer();
-			if (parent instanceof RuleBasedBallastBonusContract) {
+			if (parent instanceof GenericCharterContract) {
 				EObject parentParent = parent.eContainer();
 				if (parentParent instanceof VesselAvailability) {
 					VesselAvailability vesselAvailability = (VesselAvailability) parentParent;
@@ -49,7 +51,7 @@ public class VesselAvailabilityBallastBonusImporter extends DefaultClassImporter
 			}
 		}
 
-		if (object instanceof RuleBasedBallastBonusContract) {
+		if (object instanceof GenericCharterContract) {
 			EObject parentParent = object.eContainer();
 			if (parentParent instanceof VesselAvailability) {
 				VesselAvailability vesselAvailability = (VesselAvailability) parentParent;
@@ -77,7 +79,7 @@ public class VesselAvailabilityBallastBonusImporter extends DefaultClassImporter
 
 		final EObject object = result.importedObject;
 
-		if (object instanceof BallastBonusContract && vesselName != null) {
+		if (object instanceof BallastBonusTerm && vesselName != null) {
 			context.doLater(new IDeferment() {
 				@Override
 				public void run(final IImportContext importContext) {
@@ -90,45 +92,7 @@ public class VesselAvailabilityBallastBonusImporter extends DefaultClassImporter
 						for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
 							if (vesselAvailability.getVessel() == targetVessel) {
 								if (vesselAvailability.getCharterNumber() == pCharterNo) {
-									BallastBonusContract contract = (BallastBonusContract)object;
-									if (vesselAvailability.getBallastBonusContract() != null && vesselAvailability.getBallastBonusContract() instanceof RuleBasedBallastBonusContract) {
-										RuleBasedBallastBonusContract ruleBasedBB = (RuleBasedBallastBonusContract)vesselAvailability.getBallastBonusContract();
-										if (contract instanceof RuleBasedBallastBonusContract) {
-											//Add any rules already read in.
-											((RuleBasedBallastBonusContract) contract).getRules().addAll(ruleBasedBB.getRules());
-										}
-									}
-									vesselAvailability.setBallastBonusContract(contract);
-									break;
-								}
-							}
-						}
-					}
-				}
-
-				@Override
-				public int getStage() {
-					return IMMXImportContext.STAGE_MODIFY_SUBMODELS;
-				}
-
-			});
-		}
-
-		
-		if (object instanceof BallastBonusContractLine && vesselName != null) {
-			context.doLater(new IDeferment() {
-				@Override
-				public void run(final IImportContext importContext) {
-					final IMMXImportContext context = (IMMXImportContext) importContext;
-					MMXRootObject rootObject = context.getRootObject();
-					if (rootObject instanceof LNGScenarioModel) {
-						LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
-						CargoModel cargoModel = scenarioModel.getCargoModel();
-						Vessel targetVessel = (Vessel) context.getNamedObject(vesselName, FleetPackage.Literals.VESSEL);
-						for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
-							if (vesselAvailability.getVessel() == targetVessel) {
-								if (vesselAvailability.getCharterNumber() == pCharterNo) {
-									BallastBonusContract contract = vesselAvailability.getBallastBonusContract();
+									GenericCharterContract contract = vesselAvailability.getContainedCharterContract();
 									if (contract == null) {
 										RuleBasedBallastBonusContract ruleBasedBallastBonusContract = null;
 										if (object instanceof MonthlyBallastBonusContractLine) {

@@ -14,15 +14,15 @@ import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeFactory;
 
 /**
- * Factory for {@link SimpleBallastBonusContractTopLevelComposite}.
+ * Factory for {@link GenericCharterContractTopLevelComposite}.
  * 
- * @author alex
+ * @author alex, FM
  * 
  */
-public class SimpleBallastBonusContractCompositeFactory extends DefaultDisplayCompositeFactory {
+public class GenericCharterContractCompositeFactory extends DefaultDisplayCompositeFactory {
 
 	@Override
 	public IDisplayComposite createToplevelComposite(final Composite composite, final EClass eClass, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
-		return new SimpleBallastBonusContractTopLevelComposite(composite, SWT.NONE, dialogContext, toolkit);
+		return new GenericCharterContractTopLevelComposite(composite, SWT.NONE, dialogContext, toolkit);
 	}
 }

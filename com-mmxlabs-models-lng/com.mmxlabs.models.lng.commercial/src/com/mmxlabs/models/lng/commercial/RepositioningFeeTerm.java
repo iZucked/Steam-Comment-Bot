@@ -3,6 +3,7 @@
 package com.mmxlabs.models.lng.commercial;
 
 import com.mmxlabs.models.lng.port.Port;
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -20,7 +21,7 @@ import com.mmxlabs.models.lng.port.Port;
  * @model
  * @generated
  */
-public interface RepositioningFeeTerm extends CharterContractTerm {
+public interface RepositioningFeeTerm extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Origin Port</b></em>' reference.
 	 * <!-- begin-user-doc -->

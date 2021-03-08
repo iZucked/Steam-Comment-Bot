@@ -6,12 +6,6 @@
  */
 package com.mmxlabs.models.lng.spotmarkets.impl;
 
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.commercial.CharterContract;
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.GenericCharterContract;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.port.RouteOption;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -26,6 +20,12 @@ import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
@@ -54,6 +54,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getMaxDuration <em>Max Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#isMtm <em>Mtm</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getEntity <em>Entity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getStartAt <em>Start At</em>}</li>
  * </ul>
  *
  * @generated
@@ -295,6 +296,16 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * @ordered
 	 */
 	protected BaseLegalEntity entity;
+
+	/**
+	 * The cached value of the '{@link #getStartAt() <em>Start At</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getStartAt()
+	 * @generated
+	 * @ordered
+	 */
+	protected Port startAt;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -580,6 +591,46 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 /**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Port getStartAt() {
+		if (startAt != null && startAt.eIsProxy()) {
+			InternalEObject oldStartAt = (InternalEObject)startAt;
+			startAt = (Port)eResolveProxy(oldStartAt);
+			if (startAt != oldStartAt) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SpotMarketsPackage.CHARTER_IN_MARKET__START_AT, oldStartAt, startAt));
+			}
+		}
+		return startAt;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Port basicGetStartAt() {
+		return startAt;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setStartAt(Port newStartAt) {
+		Port oldStartAt = startAt;
+		startAt = newStartAt;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_IN_MARKET__START_AT, oldStartAt, startAt));
+	}
+
+/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public int getMarketOrContractMinDuration() {
@@ -834,6 +885,9 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 			case SpotMarketsPackage.CHARTER_IN_MARKET__ENTITY:
 				if (resolve) return getEntity();
 				return basicGetEntity();
+			case SpotMarketsPackage.CHARTER_IN_MARKET__START_AT:
+				if (resolve) return getStartAt();
+				return basicGetStartAt();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -888,6 +942,9 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 			case SpotMarketsPackage.CHARTER_IN_MARKET__ENTITY:
 				setEntity((BaseLegalEntity)newValue);
 				return;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__START_AT:
+				setStartAt((Port)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -939,6 +996,9 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 			case SpotMarketsPackage.CHARTER_IN_MARKET__ENTITY:
 				setEntity((BaseLegalEntity)null);
 				return;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__START_AT:
+				setStartAt((Port)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -977,6 +1037,8 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 				return mtm != MTM_EDEFAULT;
 			case SpotMarketsPackage.CHARTER_IN_MARKET__ENTITY:
 				return entity != null;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__START_AT:
+				return startAt != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1072,9 +1134,9 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 		SpotMarketsPackage marketsPackage = SpotMarketsPackage.eINSTANCE;
 		CommercialPackage commercial = CommercialPackage.eINSTANCE;
 		if (marketsPackage.getCharterInMarket_MinDuration() == feature) {
-			return new DelegateInformation(marketsPackage.getCharterInMarket_CharterContract(), commercial.getCharterContract_MinDuration(), (Integer) 0);
+			return new DelegateInformation(marketsPackage.getCharterInMarket_CharterContract(), commercial.getGenericCharterContract_MinDuration(), (Integer) 0);
 		} else if (marketsPackage.getCharterInMarket_MaxDuration() == feature) {
-			return new DelegateInformation(marketsPackage.getCharterInMarket_CharterContract(), commercial.getCharterContract_MaxDuration(), (Integer) 0);
+			return new DelegateInformation(marketsPackage.getCharterInMarket_CharterContract(), commercial.getGenericCharterContract_MaxDuration(), (Integer) 0);
 		}
 		
 		return new DelegateInformation(null, null, null);

@@ -341,26 +341,72 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.CharterContractTerm} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.SimpleRepositioningFeeContainer} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected CharterContractTermItemProvider charterContractTermItemProvider;
+	protected SimpleRepositioningFeeContainerItemProvider simpleRepositioningFeeContainerItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.CharterContractTerm}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.SimpleRepositioningFeeContainer}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createCharterContractTermAdapter() {
-		if (charterContractTermItemProvider == null) {
-			charterContractTermItemProvider = new CharterContractTermItemProvider(this);
+	public Adapter createSimpleRepositioningFeeContainerAdapter() {
+		if (simpleRepositioningFeeContainerItemProvider == null) {
+			simpleRepositioningFeeContainerItemProvider = new SimpleRepositioningFeeContainerItemProvider(this);
 		}
 
-		return charterContractTermItemProvider;
+		return simpleRepositioningFeeContainerItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.SimpleBallastBonusContainer} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SimpleBallastBonusContainerItemProvider simpleBallastBonusContainerItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.SimpleBallastBonusContainer}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSimpleBallastBonusContainerAdapter() {
+		if (simpleBallastBonusContainerItemProvider == null) {
+			simpleBallastBonusContainerItemProvider = new SimpleBallastBonusContainerItemProvider(this);
+		}
+
+		return simpleBallastBonusContainerItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContainer} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MonthlyBallastBonusContainerItemProvider monthlyBallastBonusContainerItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContainer}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMonthlyBallastBonusContainerAdapter() {
+		if (monthlyBallastBonusContainerItemProvider == null) {
+			monthlyBallastBonusContainerItemProvider = new MonthlyBallastBonusContainerItemProvider(this);
+		}
+
+		return monthlyBallastBonusContainerItemProvider;
 	}
 
 	/**
@@ -548,26 +594,26 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.OriginPortRepositioningFee} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.OriginPortRepositioningFeeTerm} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected OriginPortRepositioningFeeItemProvider originPortRepositioningFeeItemProvider;
+	protected OriginPortRepositioningFeeTermItemProvider originPortRepositioningFeeTermItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.OriginPortRepositioningFee}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.OriginPortRepositioningFeeTerm}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createOriginPortRepositioningFeeAdapter() {
-		if (originPortRepositioningFeeItemProvider == null) {
-			originPortRepositioningFeeItemProvider = new OriginPortRepositioningFeeItemProvider(this);
+	public Adapter createOriginPortRepositioningFeeTermAdapter() {
+		if (originPortRepositioningFeeTermItemProvider == null) {
+			originPortRepositioningFeeTermItemProvider = new OriginPortRepositioningFeeTermItemProvider(this);
 		}
 
-		return originPortRepositioningFeeItemProvider;
+		return originPortRepositioningFeeTermItemProvider;
 	}
 
 	/**
@@ -707,7 +753,9 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (simpleEntityBookItemProvider != null) simpleEntityBookItemProvider.dispose();
 		if (dateShiftExpressionPriceParametersItemProvider != null) dateShiftExpressionPriceParametersItemProvider.dispose();
 		if (genericCharterContractItemProvider != null) genericCharterContractItemProvider.dispose();
-		if (charterContractTermItemProvider != null) charterContractTermItemProvider.dispose();
+		if (simpleRepositioningFeeContainerItemProvider != null) simpleRepositioningFeeContainerItemProvider.dispose();
+		if (simpleBallastBonusContainerItemProvider != null) simpleBallastBonusContainerItemProvider.dispose();
+		if (monthlyBallastBonusContainerItemProvider != null) monthlyBallastBonusContainerItemProvider.dispose();
 		if (lumpSumTermItemProvider != null) lumpSumTermItemProvider.dispose();
 		if (notionalJourneyTermItemProvider != null) notionalJourneyTermItemProvider.dispose();
 		if (ballastBonusTermItemProvider != null) ballastBonusTermItemProvider.dispose();
@@ -716,7 +764,7 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (monthlyBallastBonusTermItemProvider != null) monthlyBallastBonusTermItemProvider.dispose();
 		if (repositioningFeeTermItemProvider != null) repositioningFeeTermItemProvider.dispose();
 		if (lumpSumRepositioningFeeTermItemProvider != null) lumpSumRepositioningFeeTermItemProvider.dispose();
-		if (originPortRepositioningFeeItemProvider != null) originPortRepositioningFeeItemProvider.dispose();
+		if (originPortRepositioningFeeTermItemProvider != null) originPortRepositioningFeeTermItemProvider.dispose();
 	}
 
 }

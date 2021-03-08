@@ -7,6 +7,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,7 +25,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface BallastBonusTerm extends CharterContractTerm {
+public interface BallastBonusTerm extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Redelivery Ports</b></em>' reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}<code>&lt;com.mmxlabs.models.lng.port.Port&gt;</code>.

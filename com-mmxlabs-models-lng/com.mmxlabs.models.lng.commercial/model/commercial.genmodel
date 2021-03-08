@@ -118,10 +118,21 @@
     <genClasses ecoreClass="commercial.ecore#//GenericCharterContract">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//GenericCharterContract/minDuration"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//GenericCharterContract/maxDuration"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//GenericCharterContract/terms"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//GenericCharterContract/hubs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//GenericCharterContract/repositioningFeeTerms"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//GenericCharterContract/ballastBonusTerms"/>
     </genClasses>
-    <genClasses ecoreClass="commercial.ecore#//CharterContractTerm"/>
+    <genClasses image="false" ecoreClass="commercial.ecore#//IRepositioningFee"/>
+    <genClasses ecoreClass="commercial.ecore#//SimpleRepositioningFeeContainer">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//SimpleRepositioningFeeContainer/terms"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="commercial.ecore#//IBallastBonus"/>
+    <genClasses ecoreClass="commercial.ecore#//SimpleBallastBonusContainer">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//SimpleBallastBonusContainer/terms"/>
+    </genClasses>
+    <genClasses ecoreClass="commercial.ecore#//MonthlyBallastBonusContainer">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//MonthlyBallastBonusContainer/hubs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//MonthlyBallastBonusContainer/terms"/>
+    </genClasses>
     <genClasses ecoreClass="commercial.ecore#//LumpSumTerm">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//LumpSumTerm/priceExpression"/>
     </genClasses>
@@ -150,6 +161,6 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//RepositioningFeeTerm/originPort"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//LumpSumRepositioningFeeTerm"/>
-    <genClasses ecoreClass="commercial.ecore#//OriginPortRepositioningFee"/>
+    <genClasses ecoreClass="commercial.ecore#//OriginPortRepositioningFeeTerm"/>
   </genPackages>
 </genmodel:GenModel>

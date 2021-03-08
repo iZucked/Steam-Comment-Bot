@@ -39,9 +39,9 @@ public class RepositioningFeeConstraint extends AbstractModelMultiConstraint {
 			final Vessel vessel = vesselAvailability.getVessel();
 			final String vesselName = vessel == null ? "<Unknown>" : vessel.getName();// if (vesselAvailability.isSetTimeCharterRate()) {
 
-			if (vesselAvailability.isSetRepositioningFee() && vesselAvailability.getRepositioningFee() != null && !vesselAvailability.getRepositioningFee().isEmpty()) {
-				addErrors(vesselAvailability, vesselName, CargoPackage.eINSTANCE.getVesselAvailability_RepositioningFee(), "repositioning", ctx, failures);
-			}
+//			if (vesselAvailability.isSetRepositioningFee() && vesselAvailability.getRepositioningFee() != null && !vesselAvailability.getRepositioningFee().isEmpty()) {
+//				addErrors(vesselAvailability, vesselName, CargoPackage.eINSTANCE.getVesselAvailability_RepositioningFee(), "repositioning", ctx, failures);
+//			}
 		}
 		return Activator.PLUGIN_ID;
 	}

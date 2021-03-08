@@ -6,14 +6,15 @@
  */
 package com.mmxlabs.models.lng.spotmarkets;
 
+import org.eclipse.emf.common.util.EList;
+
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.commercial.CharterContract;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.NamedObject;
-import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -35,6 +36,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getMaxDuration <em>Max Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#isMtm <em>Mtm</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getEntity <em>Entity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getStartAt <em>Start At</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket()
@@ -270,6 +272,28 @@ public interface CharterInMarket extends SpotCharterMarket, VesselAssignmentType
 	 * @generated
 	 */
 	void setEntity(BaseLegalEntity value);
+
+	/**
+	 * Returns the value of the '<em><b>Start At</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Start At</em>' reference.
+	 * @see #setStartAt(Port)
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket_StartAt()
+	 * @model
+	 * @generated
+	 */
+	Port getStartAt();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getStartAt <em>Start At</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Start At</em>' reference.
+	 * @see #getStartAt()
+	 * @generated
+	 */
+	void setStartAt(Port value);
 
 	/**
 	 * <!-- begin-user-doc -->

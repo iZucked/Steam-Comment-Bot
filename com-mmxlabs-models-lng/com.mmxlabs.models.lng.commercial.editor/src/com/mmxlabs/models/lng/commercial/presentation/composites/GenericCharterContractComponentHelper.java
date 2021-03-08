@@ -73,8 +73,8 @@ public class GenericCharterContractComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_minDurationEditor(detailComposite, topClass);
 		add_maxDurationEditor(detailComposite, topClass);
-		add_termsEditor(detailComposite, topClass);
-		add_hubsEditor(detailComposite, topClass);
+		add_repositioningFeeTermsEditor(detailComposite, topClass);
+		add_ballastBonusTermsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the minDuration feature on GenericCharterContract
@@ -93,19 +93,20 @@ public class GenericCharterContractComponentHelper extends BaseComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__MAX_DURATION));
 	}
 	/**
-	 * Create the editor for the terms feature on GenericCharterContract
+	 * Create the editor for the repositioningFeeTerms feature on GenericCharterContract
 	 *
 	 * @generated
 	 */
-	protected void add_termsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__TERMS));
+	protected void add_repositioningFeeTermsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__REPOSITIONING_FEE_TERMS));
 	}
+
 	/**
-	 * Create the editor for the hubs feature on GenericCharterContract
+	 * Create the editor for the ballastBonusTerms feature on GenericCharterContract
 	 *
 	 * @generated
 	 */
-	protected void add_hubsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__HUBS));
+	protected void add_ballastBonusTermsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS));
 	}
 }

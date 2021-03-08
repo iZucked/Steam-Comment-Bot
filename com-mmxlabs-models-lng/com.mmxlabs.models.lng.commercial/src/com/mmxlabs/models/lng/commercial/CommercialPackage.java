@@ -1625,22 +1625,22 @@ public interface CommercialPackage extends EPackage {
 	int GENERIC_CHARTER_CONTRACT__MAX_DURATION = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Terms</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Repositioning Fee Terms</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int GENERIC_CHARTER_CONTRACT__TERMS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+	int GENERIC_CHARTER_CONTRACT__REPOSITIONING_FEE_TERMS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Hubs</b></em>' reference list.
+	 * The feature id for the '<em><b>Ballast Bonus Terms</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int GENERIC_CHARTER_CONTRACT__HUBS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
+	int GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Generic Charter Contract</em>' class.
@@ -1652,23 +1652,135 @@ public interface CommercialPackage extends EPackage {
 	int GENERIC_CHARTER_CONTRACT_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.CharterContractTermImpl <em>Charter Contract Term</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.IRepositioningFee <em>IRepositioning Fee</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.commercial.impl.CharterContractTermImpl
-	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getCharterContractTerm()
+	 * @see com.mmxlabs.models.lng.commercial.IRepositioningFee
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getIRepositioningFee()
 	 * @generated
 	 */
-	int CHARTER_CONTRACT_TERM = 16;
+	int IREPOSITIONING_FEE = 16;
 
 	/**
-	 * The number of structural features of the '<em>Charter Contract Term</em>' class.
+	 * The number of structural features of the '<em>IRepositioning Fee</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_CONTRACT_TERM_FEATURE_COUNT = 0;
+	int IREPOSITIONING_FEE_FEATURE_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SimpleRepositioningFeeContainerImpl <em>Simple Repositioning Fee Container</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.SimpleRepositioningFeeContainerImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getSimpleRepositioningFeeContainer()
+	 * @generated
+	 */
+	int SIMPLE_REPOSITIONING_FEE_CONTAINER = 17;
+
+	/**
+	 * The feature id for the '<em><b>Terms</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_REPOSITIONING_FEE_CONTAINER__TERMS = IREPOSITIONING_FEE_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Simple Repositioning Fee Container</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_REPOSITIONING_FEE_CONTAINER_FEATURE_COUNT = IREPOSITIONING_FEE_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.IBallastBonus <em>IBallast Bonus</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.IBallastBonus
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getIBallastBonus()
+	 * @generated
+	 */
+	int IBALLAST_BONUS = 18;
+
+	/**
+	 * The number of structural features of the '<em>IBallast Bonus</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IBALLAST_BONUS_FEATURE_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SimpleBallastBonusContainerImpl <em>Simple Ballast Bonus Container</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.SimpleBallastBonusContainerImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getSimpleBallastBonusContainer()
+	 * @generated
+	 */
+	int SIMPLE_BALLAST_BONUS_CONTAINER = 19;
+
+	/**
+	 * The feature id for the '<em><b>Terms</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_BALLAST_BONUS_CONTAINER__TERMS = IBALLAST_BONUS_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Simple Ballast Bonus Container</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_BALLAST_BONUS_CONTAINER_FEATURE_COUNT = IBALLAST_BONUS_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusContainerImpl <em>Monthly Ballast Bonus Container</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusContainerImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getMonthlyBallastBonusContainer()
+	 * @generated
+	 */
+	int MONTHLY_BALLAST_BONUS_CONTAINER = 20;
+
+	/**
+	 * The feature id for the '<em><b>Hubs</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MONTHLY_BALLAST_BONUS_CONTAINER__HUBS = IBALLAST_BONUS_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Terms</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MONTHLY_BALLAST_BONUS_CONTAINER__TERMS = IBALLAST_BONUS_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Monthly Ballast Bonus Container</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MONTHLY_BALLAST_BONUS_CONTAINER_FEATURE_COUNT = IBALLAST_BONUS_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.LumpSumTermImpl <em>Lump Sum Term</em>}' class.
@@ -1678,7 +1790,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getLumpSumTerm()
 	 * @generated
 	 */
-	int LUMP_SUM_TERM = 17;
+	int LUMP_SUM_TERM = 21;
 
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
@@ -1706,7 +1818,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getNotionalJourneyTerm()
 	 * @generated
 	 */
-	int NOTIONAL_JOURNEY_TERM = 18;
+	int NOTIONAL_JOURNEY_TERM = 22;
 
 	/**
 	 * The feature id for the '<em><b>Speed</b></em>' attribute.
@@ -1779,7 +1891,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getBallastBonusTerm()
 	 * @generated
 	 */
-	int BALLAST_BONUS_TERM = 19;
+	int BALLAST_BONUS_TERM = 23;
 
 	/**
 	 * The feature id for the '<em><b>Redelivery Ports</b></em>' reference list.
@@ -1788,7 +1900,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BALLAST_BONUS_TERM__REDELIVERY_PORTS = CHARTER_CONTRACT_TERM_FEATURE_COUNT + 0;
+	int BALLAST_BONUS_TERM__REDELIVERY_PORTS = 0;
 
 	/**
 	 * The number of structural features of the '<em>Ballast Bonus Term</em>' class.
@@ -1797,7 +1909,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BALLAST_BONUS_TERM_FEATURE_COUNT = CHARTER_CONTRACT_TERM_FEATURE_COUNT + 1;
+	int BALLAST_BONUS_TERM_FEATURE_COUNT = 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.LumpSumBallastBonusTermImpl <em>Lump Sum Ballast Bonus Term</em>}' class.
@@ -1807,7 +1919,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getLumpSumBallastBonusTerm()
 	 * @generated
 	 */
-	int LUMP_SUM_BALLAST_BONUS_TERM = 20;
+	int LUMP_SUM_BALLAST_BONUS_TERM = 24;
 
 	/**
 	 * The feature id for the '<em><b>Redelivery Ports</b></em>' reference list.
@@ -1844,7 +1956,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getNotionalJourneyBallastBonusTerm()
 	 * @generated
 	 */
-	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM = 21;
+	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM = 25;
 
 	/**
 	 * The feature id for the '<em><b>Redelivery Ports</b></em>' reference list.
@@ -1935,7 +2047,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getMonthlyBallastBonusTerm()
 	 * @generated
 	 */
-	int MONTHLY_BALLAST_BONUS_TERM = 22;
+	int MONTHLY_BALLAST_BONUS_TERM = 26;
 
 	/**
 	 * The feature id for the '<em><b>Redelivery Ports</b></em>' reference list.
@@ -2062,7 +2174,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getRepositioningFeeTerm()
 	 * @generated
 	 */
-	int REPOSITIONING_FEE_TERM = 23;
+	int REPOSITIONING_FEE_TERM = 27;
 
 	/**
 	 * The feature id for the '<em><b>Origin Port</b></em>' reference.
@@ -2071,7 +2183,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int REPOSITIONING_FEE_TERM__ORIGIN_PORT = CHARTER_CONTRACT_TERM_FEATURE_COUNT + 0;
+	int REPOSITIONING_FEE_TERM__ORIGIN_PORT = 0;
 
 	/**
 	 * The number of structural features of the '<em>Repositioning Fee Term</em>' class.
@@ -2080,7 +2192,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int REPOSITIONING_FEE_TERM_FEATURE_COUNT = CHARTER_CONTRACT_TERM_FEATURE_COUNT + 1;
+	int REPOSITIONING_FEE_TERM_FEATURE_COUNT = 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.LumpSumRepositioningFeeTermImpl <em>Lump Sum Repositioning Fee Term</em>}' class.
@@ -2090,7 +2202,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getLumpSumRepositioningFeeTerm()
 	 * @generated
 	 */
-	int LUMP_SUM_REPOSITIONING_FEE_TERM = 24;
+	int LUMP_SUM_REPOSITIONING_FEE_TERM = 28;
 
 	/**
 	 * The feature id for the '<em><b>Origin Port</b></em>' reference.
@@ -2120,14 +2232,14 @@ public interface CommercialPackage extends EPackage {
 	int LUMP_SUM_REPOSITIONING_FEE_TERM_FEATURE_COUNT = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.OriginPortRepositioningFeeImpl <em>Origin Port Repositioning Fee</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.OriginPortRepositioningFeeTermImpl <em>Origin Port Repositioning Fee Term</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.commercial.impl.OriginPortRepositioningFeeImpl
-	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getOriginPortRepositioningFee()
+	 * @see com.mmxlabs.models.lng.commercial.impl.OriginPortRepositioningFeeTermImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getOriginPortRepositioningFeeTerm()
 	 * @generated
 	 */
-	int ORIGIN_PORT_REPOSITIONING_FEE = 25;
+	int ORIGIN_PORT_REPOSITIONING_FEE_TERM = 29;
 
 	/**
 	 * The feature id for the '<em><b>Origin Port</b></em>' reference.
@@ -2136,7 +2248,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ORIGIN_PORT_REPOSITIONING_FEE__ORIGIN_PORT = REPOSITIONING_FEE_TERM__ORIGIN_PORT;
+	int ORIGIN_PORT_REPOSITIONING_FEE_TERM__ORIGIN_PORT = REPOSITIONING_FEE_TERM__ORIGIN_PORT;
 
 	/**
 	 * The feature id for the '<em><b>Speed</b></em>' attribute.
@@ -2145,7 +2257,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ORIGIN_PORT_REPOSITIONING_FEE__SPEED = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 0;
+	int ORIGIN_PORT_REPOSITIONING_FEE_TERM__SPEED = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Fuel Price Expression</b></em>' attribute.
@@ -2154,7 +2266,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ORIGIN_PORT_REPOSITIONING_FEE__FUEL_PRICE_EXPRESSION = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 1;
+	int ORIGIN_PORT_REPOSITIONING_FEE_TERM__FUEL_PRICE_EXPRESSION = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Hire Price Expression</b></em>' attribute.
@@ -2163,7 +2275,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ORIGIN_PORT_REPOSITIONING_FEE__HIRE_PRICE_EXPRESSION = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 2;
+	int ORIGIN_PORT_REPOSITIONING_FEE_TERM__HIRE_PRICE_EXPRESSION = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Include Canal</b></em>' attribute.
@@ -2172,7 +2284,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ORIGIN_PORT_REPOSITIONING_FEE__INCLUDE_CANAL = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 3;
+	int ORIGIN_PORT_REPOSITIONING_FEE_TERM__INCLUDE_CANAL = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Include Canal Time</b></em>' attribute.
@@ -2181,7 +2293,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ORIGIN_PORT_REPOSITIONING_FEE__INCLUDE_CANAL_TIME = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 4;
+	int ORIGIN_PORT_REPOSITIONING_FEE_TERM__INCLUDE_CANAL_TIME = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Lump Sum Price Expression</b></em>' attribute.
@@ -2190,16 +2302,16 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ORIGIN_PORT_REPOSITIONING_FEE__LUMP_SUM_PRICE_EXPRESSION = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 5;
+	int ORIGIN_PORT_REPOSITIONING_FEE_TERM__LUMP_SUM_PRICE_EXPRESSION = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 5;
 
 	/**
-	 * The number of structural features of the '<em>Origin Port Repositioning Fee</em>' class.
+	 * The number of structural features of the '<em>Origin Port Repositioning Fee Term</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ORIGIN_PORT_REPOSITIONING_FEE_FEATURE_COUNT = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 6;
+	int ORIGIN_PORT_REPOSITIONING_FEE_TERM_FEATURE_COUNT = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
@@ -2209,7 +2321,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContractType()
 	 * @generated
 	 */
-	int CONTRACT_TYPE = 26;
+	int CONTRACT_TYPE = 30;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.PricingEvent <em>Pricing Event</em>}' enum.
@@ -2219,7 +2331,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getPricingEvent()
 	 * @generated
 	 */
-	int PRICING_EVENT = 27;
+	int PRICING_EVENT = 31;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.NextPortType <em>Next Port Type</em>}' enum.
@@ -2229,7 +2341,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getNextPortType()
 	 * @generated
 	 */
-	int NEXT_PORT_TYPE = 28;
+	int NEXT_PORT_TYPE = 32;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CommercialModel <em>Model</em>}'.
@@ -2964,36 +3076,120 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getGenericCharterContract_MaxDuration();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.GenericCharterContract#getTerms <em>Terms</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.commercial.GenericCharterContract#getRepositioningFeeTerms <em>Repositioning Fee Terms</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Repositioning Fee Terms</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.GenericCharterContract#getRepositioningFeeTerms()
+	 * @see #getGenericCharterContract()
+	 * @generated
+	 */
+	EReference getGenericCharterContract_RepositioningFeeTerms();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.commercial.GenericCharterContract#getBallastBonusTerms <em>Ballast Bonus Terms</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Ballast Bonus Terms</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.GenericCharterContract#getBallastBonusTerms()
+	 * @see #getGenericCharterContract()
+	 * @generated
+	 */
+	EReference getGenericCharterContract_BallastBonusTerms();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.IRepositioningFee <em>IRepositioning Fee</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>IRepositioning Fee</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.IRepositioningFee
+	 * @generated
+	 */
+	EClass getIRepositioningFee();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SimpleRepositioningFeeContainer <em>Simple Repositioning Fee Container</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Simple Repositioning Fee Container</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.SimpleRepositioningFeeContainer
+	 * @generated
+	 */
+	EClass getSimpleRepositioningFeeContainer();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.SimpleRepositioningFeeContainer#getTerms <em>Terms</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Terms</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.GenericCharterContract#getTerms()
-	 * @see #getGenericCharterContract()
+	 * @see com.mmxlabs.models.lng.commercial.SimpleRepositioningFeeContainer#getTerms()
+	 * @see #getSimpleRepositioningFeeContainer()
 	 * @generated
 	 */
-	EReference getGenericCharterContract_Terms();
+	EReference getSimpleRepositioningFeeContainer_Terms();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.GenericCharterContract#getHubs <em>Hubs</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.IBallastBonus <em>IBallast Bonus</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>IBallast Bonus</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.IBallastBonus
+	 * @generated
+	 */
+	EClass getIBallastBonus();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SimpleBallastBonusContainer <em>Simple Ballast Bonus Container</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Simple Ballast Bonus Container</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.SimpleBallastBonusContainer
+	 * @generated
+	 */
+	EClass getSimpleBallastBonusContainer();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.SimpleBallastBonusContainer#getTerms <em>Terms</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Terms</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.SimpleBallastBonusContainer#getTerms()
+	 * @see #getSimpleBallastBonusContainer()
+	 * @generated
+	 */
+	EReference getSimpleBallastBonusContainer_Terms();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContainer <em>Monthly Ballast Bonus Container</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Monthly Ballast Bonus Container</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContainer
+	 * @generated
+	 */
+	EClass getMonthlyBallastBonusContainer();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContainer#getHubs <em>Hubs</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Hubs</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.GenericCharterContract#getHubs()
-	 * @see #getGenericCharterContract()
+	 * @see com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContainer#getHubs()
+	 * @see #getMonthlyBallastBonusContainer()
 	 * @generated
 	 */
-	EReference getGenericCharterContract_Hubs();
+	EReference getMonthlyBallastBonusContainer_Hubs();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CharterContractTerm <em>Charter Contract Term</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContainer#getTerms <em>Terms</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Charter Contract Term</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.CharterContractTerm
+	 * @return the meta object for the containment reference list '<em>Terms</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContainer#getTerms()
+	 * @see #getMonthlyBallastBonusContainer()
 	 * @generated
 	 */
-	EClass getCharterContractTerm();
+	EReference getMonthlyBallastBonusContainer_Terms();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.LumpSumTerm <em>Lump Sum Term</em>}'.
@@ -3230,14 +3426,14 @@ public interface CommercialPackage extends EPackage {
 	EClass getLumpSumRepositioningFeeTerm();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.OriginPortRepositioningFee <em>Origin Port Repositioning Fee</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.OriginPortRepositioningFeeTerm <em>Origin Port Repositioning Fee Term</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Origin Port Repositioning Fee</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.OriginPortRepositioningFee
+	 * @return the meta object for class '<em>Origin Port Repositioning Fee Term</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.OriginPortRepositioningFeeTerm
 	 * @generated
 	 */
-	EClass getOriginPortRepositioningFee();
+	EClass getOriginPortRepositioningFeeTerm();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}'.
@@ -3868,12 +4064,86 @@ public interface CommercialPackage extends EPackage {
 		EAttribute GENERIC_CHARTER_CONTRACT__MAX_DURATION = eINSTANCE.getGenericCharterContract_MaxDuration();
 
 		/**
+		 * The meta object literal for the '<em><b>Repositioning Fee Terms</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference GENERIC_CHARTER_CONTRACT__REPOSITIONING_FEE_TERMS = eINSTANCE.getGenericCharterContract_RepositioningFeeTerms();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Bonus Terms</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS = eINSTANCE.getGenericCharterContract_BallastBonusTerms();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.IRepositioningFee <em>IRepositioning Fee</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.IRepositioningFee
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getIRepositioningFee()
+		 * @generated
+		 */
+		EClass IREPOSITIONING_FEE = eINSTANCE.getIRepositioningFee();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.SimpleRepositioningFeeContainerImpl <em>Simple Repositioning Fee Container</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.SimpleRepositioningFeeContainerImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getSimpleRepositioningFeeContainer()
+		 * @generated
+		 */
+		EClass SIMPLE_REPOSITIONING_FEE_CONTAINER = eINSTANCE.getSimpleRepositioningFeeContainer();
+
+		/**
 		 * The meta object literal for the '<em><b>Terms</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference GENERIC_CHARTER_CONTRACT__TERMS = eINSTANCE.getGenericCharterContract_Terms();
+		EReference SIMPLE_REPOSITIONING_FEE_CONTAINER__TERMS = eINSTANCE.getSimpleRepositioningFeeContainer_Terms();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.IBallastBonus <em>IBallast Bonus</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.IBallastBonus
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getIBallastBonus()
+		 * @generated
+		 */
+		EClass IBALLAST_BONUS = eINSTANCE.getIBallastBonus();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.SimpleBallastBonusContainerImpl <em>Simple Ballast Bonus Container</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.SimpleBallastBonusContainerImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getSimpleBallastBonusContainer()
+		 * @generated
+		 */
+		EClass SIMPLE_BALLAST_BONUS_CONTAINER = eINSTANCE.getSimpleBallastBonusContainer();
+
+		/**
+		 * The meta object literal for the '<em><b>Terms</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SIMPLE_BALLAST_BONUS_CONTAINER__TERMS = eINSTANCE.getSimpleBallastBonusContainer_Terms();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusContainerImpl <em>Monthly Ballast Bonus Container</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.MonthlyBallastBonusContainerImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getMonthlyBallastBonusContainer()
+		 * @generated
+		 */
+		EClass MONTHLY_BALLAST_BONUS_CONTAINER = eINSTANCE.getMonthlyBallastBonusContainer();
 
 		/**
 		 * The meta object literal for the '<em><b>Hubs</b></em>' reference list feature.
@@ -3881,17 +4151,15 @@ public interface CommercialPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference GENERIC_CHARTER_CONTRACT__HUBS = eINSTANCE.getGenericCharterContract_Hubs();
+		EReference MONTHLY_BALLAST_BONUS_CONTAINER__HUBS = eINSTANCE.getMonthlyBallastBonusContainer_Hubs();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.CharterContractTermImpl <em>Charter Contract Term</em>}' class.
+		 * The meta object literal for the '<em><b>Terms</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.commercial.impl.CharterContractTermImpl
-		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getCharterContractTerm()
 		 * @generated
 		 */
-		EClass CHARTER_CONTRACT_TERM = eINSTANCE.getCharterContractTerm();
+		EReference MONTHLY_BALLAST_BONUS_CONTAINER__TERMS = eINSTANCE.getMonthlyBallastBonusContainer_Terms();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.LumpSumTermImpl <em>Lump Sum Term</em>}' class.
@@ -4086,14 +4354,14 @@ public interface CommercialPackage extends EPackage {
 		EClass LUMP_SUM_REPOSITIONING_FEE_TERM = eINSTANCE.getLumpSumRepositioningFeeTerm();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.OriginPortRepositioningFeeImpl <em>Origin Port Repositioning Fee</em>}' class.
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.OriginPortRepositioningFeeTermImpl <em>Origin Port Repositioning Fee Term</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.commercial.impl.OriginPortRepositioningFeeImpl
-		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getOriginPortRepositioningFee()
+		 * @see com.mmxlabs.models.lng.commercial.impl.OriginPortRepositioningFeeTermImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getOriginPortRepositioningFeeTerm()
 		 * @generated
 		 */
-		EClass ORIGIN_PORT_REPOSITIONING_FEE = eINSTANCE.getOriginPortRepositioningFee();
+		EClass ORIGIN_PORT_REPOSITIONING_FEE_TERM = eINSTANCE.getOriginPortRepositioningFeeTerm();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.

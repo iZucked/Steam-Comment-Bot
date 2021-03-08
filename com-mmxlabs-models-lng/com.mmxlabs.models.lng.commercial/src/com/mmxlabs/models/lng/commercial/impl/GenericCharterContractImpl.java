@@ -2,34 +2,19 @@
  */
 package com.mmxlabs.models.lng.commercial.impl;
 
-import com.mmxlabs.models.lng.commercial.CharterContractTerm;
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.GenericCharterContract;
-
-import com.mmxlabs.models.lng.port.Port;
-
-import com.mmxlabs.models.lng.types.APortSet;
-
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.mmxcore.UUIDObject;
-
-import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
-
-import java.util.Collection;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
-import org.eclipse.emf.ecore.util.InternalEList;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
+import com.mmxlabs.models.lng.commercial.IBallastBonus;
+import com.mmxlabs.models.lng.commercial.IRepositioningFee;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -42,8 +27,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.GenericCharterContractImpl#getUuid <em>Uuid</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.GenericCharterContractImpl#getMinDuration <em>Min Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.GenericCharterContractImpl#getMaxDuration <em>Max Duration</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.GenericCharterContractImpl#getTerms <em>Terms</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.GenericCharterContractImpl#getHubs <em>Hubs</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.GenericCharterContractImpl#getRepositioningFeeTerms <em>Repositioning Fee Terms</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.GenericCharterContractImpl#getBallastBonusTerms <em>Ballast Bonus Terms</em>}</li>
  * </ul>
  *
  * @generated
@@ -128,24 +113,24 @@ public class GenericCharterContractImpl extends NamedObjectImpl implements Gener
 	protected boolean maxDurationESet;
 
 	/**
-	 * The cached value of the '{@link #getTerms() <em>Terms</em>}' containment reference list.
+	 * The cached value of the '{@link #getRepositioningFeeTerms() <em>Repositioning Fee Terms</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getTerms()
+	 * @see #getRepositioningFeeTerms()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<CharterContractTerm> terms;
+	protected IRepositioningFee repositioningFeeTerms;
 
 	/**
-	 * The cached value of the '{@link #getHubs() <em>Hubs</em>}' reference list.
+	 * The cached value of the '{@link #getBallastBonusTerms() <em>Ballast Bonus Terms</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getHubs()
+	 * @see #getBallastBonusTerms()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<APortSet<Port>> hubs;
+	protected IBallastBonus ballastBonusTerms;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -294,11 +279,23 @@ public class GenericCharterContractImpl extends NamedObjectImpl implements Gener
 	 * @generated
 	 */
 	@Override
-	public EList<CharterContractTerm> getTerms() {
-		if (terms == null) {
-			terms = new EObjectContainmentEList<CharterContractTerm>(CharterContractTerm.class, this, CommercialPackage.GENERIC_CHARTER_CONTRACT__TERMS);
+	public IRepositioningFee getRepositioningFeeTerms() {
+		return repositioningFeeTerms;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetRepositioningFeeTerms(IRepositioningFee newRepositioningFeeTerms, NotificationChain msgs) {
+		IRepositioningFee oldRepositioningFeeTerms = repositioningFeeTerms;
+		repositioningFeeTerms = newRepositioningFeeTerms;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CommercialPackage.GENERIC_CHARTER_CONTRACT__REPOSITIONING_FEE_TERMS, oldRepositioningFeeTerms, newRepositioningFeeTerms);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
-		return terms;
+		return msgs;
 	}
 
 	/**
@@ -307,11 +304,63 @@ public class GenericCharterContractImpl extends NamedObjectImpl implements Gener
 	 * @generated
 	 */
 	@Override
-	public EList<APortSet<Port>> getHubs() {
-		if (hubs == null) {
-			hubs = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, CommercialPackage.GENERIC_CHARTER_CONTRACT__HUBS);
+	public void setRepositioningFeeTerms(IRepositioningFee newRepositioningFeeTerms) {
+		if (newRepositioningFeeTerms != repositioningFeeTerms) {
+			NotificationChain msgs = null;
+			if (repositioningFeeTerms != null)
+				msgs = ((InternalEObject)repositioningFeeTerms).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CommercialPackage.GENERIC_CHARTER_CONTRACT__REPOSITIONING_FEE_TERMS, null, msgs);
+			if (newRepositioningFeeTerms != null)
+				msgs = ((InternalEObject)newRepositioningFeeTerms).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CommercialPackage.GENERIC_CHARTER_CONTRACT__REPOSITIONING_FEE_TERMS, null, msgs);
+			msgs = basicSetRepositioningFeeTerms(newRepositioningFeeTerms, msgs);
+			if (msgs != null) msgs.dispatch();
 		}
-		return hubs;
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.GENERIC_CHARTER_CONTRACT__REPOSITIONING_FEE_TERMS, newRepositioningFeeTerms, newRepositioningFeeTerms));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public IBallastBonus getBallastBonusTerms() {
+		return ballastBonusTerms;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetBallastBonusTerms(IBallastBonus newBallastBonusTerms, NotificationChain msgs) {
+		IBallastBonus oldBallastBonusTerms = ballastBonusTerms;
+		ballastBonusTerms = newBallastBonusTerms;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CommercialPackage.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS, oldBallastBonusTerms, newBallastBonusTerms);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setBallastBonusTerms(IBallastBonus newBallastBonusTerms) {
+		if (newBallastBonusTerms != ballastBonusTerms) {
+			NotificationChain msgs = null;
+			if (ballastBonusTerms != null)
+				msgs = ((InternalEObject)ballastBonusTerms).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CommercialPackage.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS, null, msgs);
+			if (newBallastBonusTerms != null)
+				msgs = ((InternalEObject)newBallastBonusTerms).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CommercialPackage.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS, null, msgs);
+			msgs = basicSetBallastBonusTerms(newBallastBonusTerms, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS, newBallastBonusTerms, newBallastBonusTerms));
 	}
 
 	/**
@@ -322,8 +371,10 @@ public class GenericCharterContractImpl extends NamedObjectImpl implements Gener
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case CommercialPackage.GENERIC_CHARTER_CONTRACT__TERMS:
-				return ((InternalEList<?>)getTerms()).basicRemove(otherEnd, msgs);
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT__REPOSITIONING_FEE_TERMS:
+				return basicSetRepositioningFeeTerms(null, msgs);
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS:
+				return basicSetBallastBonusTerms(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -342,10 +393,10 @@ public class GenericCharterContractImpl extends NamedObjectImpl implements Gener
 				return getMinDuration();
 			case CommercialPackage.GENERIC_CHARTER_CONTRACT__MAX_DURATION:
 				return getMaxDuration();
-			case CommercialPackage.GENERIC_CHARTER_CONTRACT__TERMS:
-				return getTerms();
-			case CommercialPackage.GENERIC_CHARTER_CONTRACT__HUBS:
-				return getHubs();
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT__REPOSITIONING_FEE_TERMS:
+				return getRepositioningFeeTerms();
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS:
+				return getBallastBonusTerms();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -368,13 +419,11 @@ public class GenericCharterContractImpl extends NamedObjectImpl implements Gener
 			case CommercialPackage.GENERIC_CHARTER_CONTRACT__MAX_DURATION:
 				setMaxDuration((Integer)newValue);
 				return;
-			case CommercialPackage.GENERIC_CHARTER_CONTRACT__TERMS:
-				getTerms().clear();
-				getTerms().addAll((Collection<? extends CharterContractTerm>)newValue);
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT__REPOSITIONING_FEE_TERMS:
+				setRepositioningFeeTerms((IRepositioningFee)newValue);
 				return;
-			case CommercialPackage.GENERIC_CHARTER_CONTRACT__HUBS:
-				getHubs().clear();
-				getHubs().addAll((Collection<? extends APortSet<Port>>)newValue);
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS:
+				setBallastBonusTerms((IBallastBonus)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -397,11 +446,11 @@ public class GenericCharterContractImpl extends NamedObjectImpl implements Gener
 			case CommercialPackage.GENERIC_CHARTER_CONTRACT__MAX_DURATION:
 				unsetMaxDuration();
 				return;
-			case CommercialPackage.GENERIC_CHARTER_CONTRACT__TERMS:
-				getTerms().clear();
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT__REPOSITIONING_FEE_TERMS:
+				setRepositioningFeeTerms((IRepositioningFee)null);
 				return;
-			case CommercialPackage.GENERIC_CHARTER_CONTRACT__HUBS:
-				getHubs().clear();
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS:
+				setBallastBonusTerms((IBallastBonus)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -421,10 +470,10 @@ public class GenericCharterContractImpl extends NamedObjectImpl implements Gener
 				return isSetMinDuration();
 			case CommercialPackage.GENERIC_CHARTER_CONTRACT__MAX_DURATION:
 				return isSetMaxDuration();
-			case CommercialPackage.GENERIC_CHARTER_CONTRACT__TERMS:
-				return terms != null && !terms.isEmpty();
-			case CommercialPackage.GENERIC_CHARTER_CONTRACT__HUBS:
-				return hubs != null && !hubs.isEmpty();
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT__REPOSITIONING_FEE_TERMS:
+				return repositioningFeeTerms != null;
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS:
+				return ballastBonusTerms != null;
 		}
 		return super.eIsSet(featureID);
 	}

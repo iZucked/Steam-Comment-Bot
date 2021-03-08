@@ -9,9 +9,15 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.viewers.ColumnViewerEditor;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.nebula.jface.gridviewer.GridViewerEditor;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
@@ -23,30 +29,29 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
-import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine;
-import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine;
-import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
-import com.mmxlabs.models.lng.port.ui.editorpart.MultiplePortReferenceManipulator;
+import com.mmxlabs.models.lng.commercial.IRepositioningFee;
+import com.mmxlabs.models.lng.commercial.LumpSumRepositioningFeeTerm;
+import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusTerm;
+import com.mmxlabs.models.lng.commercial.OriginPortRepositioningFeeTerm;
+import com.mmxlabs.models.lng.commercial.RepositioningFeeTerm;
+import com.mmxlabs.models.lng.port.ui.editorpart.TextualPortSingleReferenceManipulatorExtension;
 import com.mmxlabs.models.lng.pricing.ui.autocomplete.PriceAttributeManipulator;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.BooleanAttributeManipulator;
-import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.renderers.WrappingColumnHeaderRenderer;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
-public class BallastBonusContractTableCreator {
-	public static EObjectTableViewer createBallastBonusTable(final Composite parent, final FormToolkit toolkit, final IDialogEditingContext dialogContext, final ICommandHandler commandHandler,
+public class RepositioningFeeTermsTableCreator {
+	public static EObjectTableViewer createRepositioningFeeTable(final Composite parent, final FormToolkit toolkit, final IDialogEditingContext dialogContext, final ICommandHandler commandHandler,
 			final GenericCharterContract charterContract, final IStatusProvider statusProvider, final Runnable sizeChangedAction) {
 		final IScenarioEditingLocation sel = dialogContext.getScenarioEditingLocation();
 		final EObjectTableViewer eViewer = new EObjectTableViewer(parent, SWT.FULL_SELECTION);
@@ -54,28 +59,49 @@ public class BallastBonusContractTableCreator {
 		eViewer.setAutoResizeable(false);
 		eViewer.setSorter(null);
 		
-		eViewer.addTypicalColumn("Redelivery ports", new MultiplePortReferenceManipulator(CommercialPackage.eINSTANCE.getBallastBonusContractLine_RedeliveryPorts(), sel.getReferenceValueProviderCache(),
-				sel.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
+		final ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(eViewer) {
+			@Override
+			protected boolean isEditorActivationEvent(final ColumnViewerEditorActivationEvent event) {
+				return event.eventType == ColumnViewerEditorActivationEvent.TRAVERSAL || event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION
+						|| event.eventType == ColumnViewerEditorActivationEvent.PROGRAMMATIC;
+			}
+		};
+
+		GridViewerEditor.create(eViewer, actSupport, ColumnViewerEditor.KEYBOARD_ACTIVATION | GridViewerEditor.SELECTION_FOLLOWS_EDITOR |
+		// ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK |
+				ColumnViewerEditor.TABBING_HORIZONTAL | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL | ColumnViewerEditor.KEYBOARD_ACTIVATION);
+		
+		eViewer.addTypicalColumn("Notional origin port", new TextualPortSingleReferenceManipulatorExtension(CommercialPackage.eINSTANCE.getRepositioningFeeTerm_OriginPort(), sel.getReferenceValueProviderCache(),
+				sel.getEditingDomain()) {
 
 			@Override
 			public void runSetCommand(final Object object, final Object value) {
 				super.runSetCommand(object, value);
-
 				dialogContext.getDialogController().validate();
 				eViewer.refresh();
+			}
+			
+			@Override
+			public @Nullable String render(final Object object) {
+				if (object instanceof OriginPortRepositioningFeeTerm) {
+					return super.render(object);
+				} else if (object instanceof LumpSumRepositioningFeeTerm) {
+					return super.render(object);
+				} else {
+					return "-";
+				}
 			}
 		});
 
 		eViewer.addTypicalColumn("Lump sum ($)", new PriceAttributeManipulator(
-				CommercialPackage.eINSTANCE.getLumpSumBallastBonusContractLine_PriceExpression(),
+				CommercialPackage.eINSTANCE.getNotionalJourneyTerm_LumpSumPriceExpression(),
 				sel.getEditingDomain()) {
 
 			protected EAttribute getAttribute(Object object) {
-				if (object instanceof LumpSumBallastBonusContractLine) {
-					return CommercialPackage.eINSTANCE.getLumpSumBallastBonusContractLine_PriceExpression();
-				}
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
-					return CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_LumpSumPriceExpression();
+				if (object instanceof OriginPortRepositioningFeeTerm) {
+					return CommercialPackage.eINSTANCE.getNotionalJourneyTerm_LumpSumPriceExpression();
+				} else if (object instanceof LumpSumRepositioningFeeTerm) {
+					return CommercialPackage.eINSTANCE.getLumpSumTerm_PriceExpression();
 				}
 				return super.getAttribute(object);
 			}
@@ -89,23 +115,22 @@ public class BallastBonusContractTableCreator {
 
 			@Override
 			public @Nullable String render(final Object object) {
-				if (object instanceof LumpSumBallastBonusContractLine) {
+				if (object instanceof OriginPortRepositioningFeeTerm) {
 					return super.render(object);
-				} 
-				else if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				} else if (object instanceof LumpSumRepositioningFeeTerm) {
 					return super.render(object);
-				}
-				else {
+				} else {
 					return "-";
 				}
 			}
 		});
 
-		eViewer.addTypicalColumn("Speed", new NumericAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_Speed(), sel.getEditingDomain()) {
+		eViewer.addTypicalColumn("Speed", new NumericAttributeManipulator(
+				CommercialPackage.eINSTANCE.getNotionalJourneyTerm_Speed(), sel.getEditingDomain()) {
 
 			@Override
 			public void runSetCommand(final Object object, final Object value) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof OriginPortRepositioningFeeTerm) {
 					super.runSetCommand(object, value);
 
 					dialogContext.getDialogController().validate();
@@ -115,7 +140,7 @@ public class BallastBonusContractTableCreator {
 
 			@Override
 			public boolean canEdit(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof OriginPortRepositioningFeeTerm) {
 					return super.canEdit(object);
 				} else {
 					return false;
@@ -124,7 +149,7 @@ public class BallastBonusContractTableCreator {
 
 			@Override
 			public Object getValue(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof OriginPortRepositioningFeeTerm) {
 					return super.getValue(object);
 				} else {
 					return null;
@@ -133,7 +158,7 @@ public class BallastBonusContractTableCreator {
 
 			@Override
 			public Comparable getComparable(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof OriginPortRepositioningFeeTerm) {
 					return super.getComparable(object);
 				}
 				return -Integer.MAX_VALUE;
@@ -141,49 +166,7 @@ public class BallastBonusContractTableCreator {
 
 			@Override
 			public @Nullable String render(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
-					return super.render(object);
-				} else {
-					return "-";
-				}
-			}
-
-		});
-
-		eViewer.addTypicalColumn("Notional return ports", new MultipleReferenceManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_ReturnPorts(),
-				sel.getReferenceValueProviderCache(), sel.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
-
-			@Override
-			public void runSetCommand(final Object object, final Object value) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
-					super.runSetCommand(object, value);
-
-					dialogContext.getDialogController().validate();
-					eViewer.refresh();
-				}
-			}
-
-			@Override
-			public boolean canEdit(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
-					return super.canEdit(object);
-				} else {
-					return false;
-				}
-			}
-
-			@Override
-			public Object getValue(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
-					return super.getValue(object);
-				} else {
-					return null;
-				}
-			}
-
-			@Override
-			public @Nullable String render(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof OriginPortRepositioningFeeTerm) {
 					return super.render(object);
 				} else {
 					return "-";
@@ -193,11 +176,11 @@ public class BallastBonusContractTableCreator {
 		});
 
 		eViewer.addTypicalColumn("Fuel Cost ($/MT)",
-				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_FuelPriceExpression(), sel.getEditingDomain()) {
+				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_FuelPriceExpression(), sel.getEditingDomain()) {
 
 					@Override
 					public void runSetCommand(final Object object, final Object value) {
-						if (object instanceof NotionalJourneyBallastBonusContractLine) {
+						if (object instanceof OriginPortRepositioningFeeTerm) {
 							super.runSetCommand(object, value);
 
 							dialogContext.getDialogController().validate();
@@ -207,7 +190,7 @@ public class BallastBonusContractTableCreator {
 
 					@Override
 					public boolean canEdit(final Object object) {
-						if (object instanceof NotionalJourneyBallastBonusContractLine) {
+						if (object instanceof OriginPortRepositioningFeeTerm) {
 							return super.canEdit(object);
 						} else {
 							return false;
@@ -216,7 +199,7 @@ public class BallastBonusContractTableCreator {
 
 					@Override
 					public Object getValue(final Object object) {
-						if (object instanceof NotionalJourneyBallastBonusContractLine) {
+						if (object instanceof OriginPortRepositioningFeeTerm) {
 							return super.getValue(object);
 						} else {
 							return null;
@@ -225,7 +208,7 @@ public class BallastBonusContractTableCreator {
 
 					@Override
 					public @Nullable String render(final Object object) {
-						if (object instanceof NotionalJourneyBallastBonusContractLine) {
+						if (object instanceof OriginPortRepositioningFeeTerm) {
 							return super.render(object);
 						} else {
 							return "-";
@@ -235,11 +218,11 @@ public class BallastBonusContractTableCreator {
 				});
 
 		eViewer.addTypicalColumn("Hire Cost ($/day)",
-				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_HirePriceExpression(), sel.getEditingDomain()) {
+				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_HirePriceExpression(), sel.getEditingDomain()) {
 
 					@Override
 					public void runSetCommand(final Object object, final Object value) {
-						if (object instanceof NotionalJourneyBallastBonusContractLine) {
+						if (object instanceof OriginPortRepositioningFeeTerm) {
 							super.runSetCommand(object, value);
 
 							dialogContext.getDialogController().validate();
@@ -249,7 +232,7 @@ public class BallastBonusContractTableCreator {
 
 					@Override
 					public boolean canEdit(final Object object) {
-						if (object instanceof NotionalJourneyBallastBonusContractLine) {
+						if (object instanceof OriginPortRepositioningFeeTerm) {
 							return super.canEdit(object);
 						} else {
 							return false;
@@ -258,7 +241,7 @@ public class BallastBonusContractTableCreator {
 
 					@Override
 					public Object getValue(final Object object) {
-						if (object instanceof NotionalJourneyBallastBonusContractLine) {
+						if (object instanceof OriginPortRepositioningFeeTerm) {
 							return super.getValue(object);
 						} else {
 							return null;
@@ -267,7 +250,7 @@ public class BallastBonusContractTableCreator {
 
 					@Override
 					public @Nullable String render(final Object object) {
-						if (object instanceof NotionalJourneyBallastBonusContractLine) {
+						if (object instanceof OriginPortRepositioningFeeTerm) {
 							return super.render(object);
 						} else {
 							return "-";
@@ -276,11 +259,12 @@ public class BallastBonusContractTableCreator {
 
 				});
 
-		eViewer.addTypicalColumn("Include canal fees", new BooleanAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_IncludeCanal(), sel.getEditingDomain()) {
+		eViewer.addTypicalColumn("Include canal fees", new BooleanAttributeManipulator(
+				CommercialPackage.eINSTANCE.getNotionalJourneyTerm_IncludeCanal(), sel.getEditingDomain()) {
 
 			@Override
 			public void runSetCommand(final Object object, final Object value) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof OriginPortRepositioningFeeTerm) {
 					super.runSetCommand(object, value);
 
 					dialogContext.getDialogController().validate();
@@ -290,7 +274,7 @@ public class BallastBonusContractTableCreator {
 
 			@Override
 			public boolean canEdit(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof OriginPortRepositioningFeeTerm) {
 					return super.canEdit(object);
 				} else {
 					return false;
@@ -299,7 +283,7 @@ public class BallastBonusContractTableCreator {
 
 			@Override
 			public Object getValue(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof OriginPortRepositioningFeeTerm) {
 					return super.getValue(object);
 				} else {
 					return "";
@@ -308,7 +292,7 @@ public class BallastBonusContractTableCreator {
 
 			@Override
 			public @Nullable String render(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof OriginPortRepositioningFeeTerm) {
 					return super.render(object);
 				} else {
 					return "-";
@@ -318,11 +302,12 @@ public class BallastBonusContractTableCreator {
 		});
 
 
-		eViewer.addTypicalColumn("Include canal time", new BooleanAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_IncludeCanalTime(), sel.getEditingDomain()) {
+		eViewer.addTypicalColumn("Include canal time", new BooleanAttributeManipulator(
+				CommercialPackage.eINSTANCE.getNotionalJourneyTerm_IncludeCanalTime(), sel.getEditingDomain()) {
 
 			@Override
 			public void runSetCommand(final Object object, final Object value) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof OriginPortRepositioningFeeTerm) {
 					super.runSetCommand(object, value);
 
 					dialogContext.getDialogController().validate();
@@ -332,7 +317,7 @@ public class BallastBonusContractTableCreator {
 
 			@Override
 			public boolean canEdit(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof OriginPortRepositioningFeeTerm) {
 					return super.canEdit(object);
 				} else {
 					return false;
@@ -341,7 +326,7 @@ public class BallastBonusContractTableCreator {
 
 			@Override
 			public Object getValue(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof OriginPortRepositioningFeeTerm) {
 					return super.getValue(object);
 				} else {
 					return "";
@@ -350,7 +335,7 @@ public class BallastBonusContractTableCreator {
 
 			@Override
 			public @Nullable String render(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
+				if (object instanceof OriginPortRepositioningFeeTerm) {
 					return super.render(object);
 				} else {
 					return "-";
@@ -358,39 +343,6 @@ public class BallastBonusContractTableCreator {
 			}
 		});
 
-		
-		eViewer.addTypicalColumn("Type", new BasicAttributeManipulator(null, sel.getEditingDomain()) {
-
-			@Override
-			public void runSetCommand(final Object object, final Object value) {
-			}
-
-			@Override
-			public boolean canEdit(final Object object) {
-				return false;
-			}
-
-			@Override
-			public Object getValue(final Object object) {
-				return null;
-			}
-
-			@Override
-			public boolean isValueUnset(final Object object) {
-				return true;
-			}
-
-			@Override
-			public @Nullable String render(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusContractLine) {
-					return "Journey";
-				} else if (object instanceof LumpSumBallastBonusContractLine) {
-					return "Lump sum";
-				} else {
-					return "";
-				}
-			}
-		});
 		final WrappingColumnHeaderRenderer chr = new WrappingColumnHeaderRenderer();
 		chr.setWordWrap(true);
 		for (final GridColumn gridColumn : eViewer.getGrid().getColumns()) {
@@ -403,9 +355,8 @@ public class BallastBonusContractTableCreator {
 		eViewer.getSortingSupport().clearColumnSortOrder();
 		eViewer.getGrid().recalculateHeader();
 
-		eViewer.init(sel.getAdapterFactory(), sel.getModelReference(), CommercialPackage.eINSTANCE.getGenericCharterContract_Terms());
-
-		eViewer.setInput(charterContract);
+		eViewer.init(sel.getAdapterFactory(), sel.getModelReference(), CommercialPackage.eINSTANCE.getSimpleRepositioningFeeContainer_Terms());
+		eViewer.setInput(getRepositioningFeeContainer(commandHandler, charterContract));
 
 		final GridData gridData = GridDataFactory.fillDefaults().grab(true, true).create();
 		gridData.minimumHeight = 150;
@@ -422,36 +373,36 @@ public class BallastBonusContractTableCreator {
 		buttonLayout.marginHeight = 0;
 		buttonLayout.marginWidth = 0;
 
-		final Button addLumpSum = toolkit.createButton(buttons, "Add lump sum rule", SWT.NONE);
-		addLumpSum.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
+		final Button addLumpSumRule = toolkit.createButton(buttons, "Add lump sume rule", SWT.NONE);
+		addLumpSumRule.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 
-		addLumpSum.addSelectionListener(new SelectionAdapter() {
+		addLumpSumRule.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				final LumpSumBallastBonusContractLine newLine = CommercialFactory.eINSTANCE.createLumpSumBallastBonusContractLine();
+				IRepositioningFee repositioningFee = getRepositioningFeeContainer(commandHandler, charterContract);
+				
+				final LumpSumRepositioningFeeTerm newLine = CommercialFactory.eINSTANCE.createLumpSumRepositioningFeeTerm();
 				commandHandler.handleCommand(
-						AddCommand.create(commandHandler.getEditingDomain(), charterContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES, newLine),
-						charterContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES);
+						AddCommand.create(commandHandler.getEditingDomain(), repositioningFee, CommercialPackage.Literals.SIMPLE_REPOSITIONING_FEE_CONTAINER__TERMS, newLine),
+						repositioningFee, CommercialPackage.Literals.SIMPLE_REPOSITIONING_FEE_CONTAINER__TERMS);
 				eViewer.setSelection(new StructuredSelection(newLine));
 				eViewer.refresh();
 				RunnerHelper.asyncExec(sizeChangedAction);
 			}
 		});
+		
+		final Button addOriginPortRule = toolkit.createButton(buttons, "Add origin port rule", SWT.NONE);
+		addOriginPortRule.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 
-		final Button addNotional = toolkit.createButton(buttons, "Add notional journey rule", SWT.NONE);
-		addNotional.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
-
-		addNotional.addSelectionListener(new SelectionAdapter() {
+		addOriginPortRule.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				final NotionalJourneyBallastBonusContractLine newLine = CommercialFactory.eINSTANCE.createNotionalJourneyBallastBonusContractLine();
+				IRepositioningFee repositioningFee = getRepositioningFeeContainer(commandHandler, charterContract);
+				final OriginPortRepositioningFeeTerm newLine = CommercialFactory.eINSTANCE.createOriginPortRepositioningFeeTerm();
 				commandHandler.handleCommand(
-						AddCommand.create(commandHandler.getEditingDomain(), charterContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES, newLine),
-						charterContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES);
+						AddCommand.create(commandHandler.getEditingDomain(), repositioningFee, CommercialPackage.Literals.SIMPLE_REPOSITIONING_FEE_CONTAINER__TERMS, newLine),
+						repositioningFee, CommercialPackage.Literals.SIMPLE_REPOSITIONING_FEE_CONTAINER__TERMS);
 				eViewer.setSelection(new StructuredSelection(newLine));
-				
-				
-				
 				eViewer.refresh();
 				RunnerHelper.asyncExec(sizeChangedAction);
 			}
@@ -469,10 +420,12 @@ public class BallastBonusContractTableCreator {
 				}
 				if (sel instanceof IStructuredSelection) {
 					final Object selection = ((IStructuredSelection) sel).getFirstElement();
-					if (selection instanceof BallastBonusContractLine) {
+					if (selection instanceof RepositioningFeeTerm) {
+						RepositioningFeeTerm repositioningFeeTerm = (RepositioningFeeTerm) selection;
+						IRepositioningFee repositioningFee = (IRepositioningFee) repositioningFeeTerm.eContainer();
 						commandHandler.handleCommand(
-								RemoveCommand.create(commandHandler.getEditingDomain(), charterContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES, selection),
-								charterContract, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES);
+								RemoveCommand.create(commandHandler.getEditingDomain(), repositioningFee, CommercialPackage.Literals.SIMPLE_REPOSITIONING_FEE_CONTAINER__TERMS, selection),
+								repositioningFee, CommercialPackage.Literals.SIMPLE_REPOSITIONING_FEE_CONTAINER__TERMS);
 					}
 				}
 				eViewer.refresh();
@@ -483,5 +436,12 @@ public class BallastBonusContractTableCreator {
 		eViewer.refresh();
 		sizeChangedAction.run();
 		return eViewer;
-	}	
+	}
+	
+	private static IRepositioningFee getRepositioningFeeContainer(final ICommandHandler commandHandler, final GenericCharterContract charterContract) {
+		if (charterContract.getRepositioningFeeTerms() == null) {
+			charterContract.setRepositioningFeeTerms(CommercialFactory.eINSTANCE.createSimpleRepositioningFeeContainer());
+		}
+		return charterContract.getRepositioningFeeTerms();
+	}
 }

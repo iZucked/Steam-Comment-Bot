@@ -4,7 +4,7 @@ package com.mmxlabs.models.lng.commercial.provider;
 
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.OriginPortRepositioningFee;
+import com.mmxlabs.models.lng.commercial.OriginPortRepositioningFeeTerm;
 
 import java.util.Collection;
 import java.util.List;
@@ -18,19 +18,19 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.OriginPortRepositioningFee} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.OriginPortRepositioningFeeTerm} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class OriginPortRepositioningFeeItemProvider extends RepositioningFeeTermItemProvider {
+public class OriginPortRepositioningFeeTermItemProvider extends RepositioningFeeTermItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public OriginPortRepositioningFeeItemProvider(AdapterFactory adapterFactory) {
+	public OriginPortRepositioningFeeTermItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -188,14 +188,14 @@ public class OriginPortRepositioningFeeItemProvider extends RepositioningFeeTerm
 	}
 
 	/**
-	 * This returns OriginPortRepositioningFee.gif.
+	 * This returns OriginPortRepositioningFeeTerm.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/OriginPortRepositioningFee"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/OriginPortRepositioningFeeTerm"));
 	}
 
 	/**
@@ -206,8 +206,8 @@ public class OriginPortRepositioningFeeItemProvider extends RepositioningFeeTerm
 	 */
 	@Override
 	public String getText(Object object) {
-		OriginPortRepositioningFee originPortRepositioningFee = (OriginPortRepositioningFee)object;
-		return getString("_UI_OriginPortRepositioningFee_type") + " " + originPortRepositioningFee.getSpeed();
+		OriginPortRepositioningFeeTerm originPortRepositioningFeeTerm = (OriginPortRepositioningFeeTerm)object;
+		return getString("_UI_OriginPortRepositioningFeeTerm_type") + " " + originPortRepositioningFeeTerm.getSpeed();
 	}
 
 
@@ -222,13 +222,13 @@ public class OriginPortRepositioningFeeItemProvider extends RepositioningFeeTerm
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(OriginPortRepositioningFee.class)) {
-			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE__SPEED:
-			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE__FUEL_PRICE_EXPRESSION:
-			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE__HIRE_PRICE_EXPRESSION:
-			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE__INCLUDE_CANAL:
-			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE__INCLUDE_CANAL_TIME:
-			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE__LUMP_SUM_PRICE_EXPRESSION:
+		switch (notification.getFeatureID(OriginPortRepositioningFeeTerm.class)) {
+			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__SPEED:
+			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__FUEL_PRICE_EXPRESSION:
+			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__HIRE_PRICE_EXPRESSION:
+			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__INCLUDE_CANAL:
+			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__INCLUDE_CANAL_TIME:
+			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__LUMP_SUM_PRICE_EXPRESSION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

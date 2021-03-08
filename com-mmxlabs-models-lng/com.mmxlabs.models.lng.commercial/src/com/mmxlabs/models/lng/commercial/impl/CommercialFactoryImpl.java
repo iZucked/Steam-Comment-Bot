@@ -81,7 +81,9 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.SIMPLE_ENTITY_BOOK: return createSimpleEntityBook();
 			case CommercialPackage.DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS: return createDateShiftExpressionPriceParameters();
 			case CommercialPackage.GENERIC_CHARTER_CONTRACT: return createGenericCharterContract();
-			case CommercialPackage.CHARTER_CONTRACT_TERM: return createCharterContractTerm();
+			case CommercialPackage.SIMPLE_REPOSITIONING_FEE_CONTAINER: return createSimpleRepositioningFeeContainer();
+			case CommercialPackage.SIMPLE_BALLAST_BONUS_CONTAINER: return createSimpleBallastBonusContainer();
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTAINER: return createMonthlyBallastBonusContainer();
 			case CommercialPackage.LUMP_SUM_TERM: return createLumpSumTerm();
 			case CommercialPackage.NOTIONAL_JOURNEY_TERM: return createNotionalJourneyTerm();
 			case CommercialPackage.BALLAST_BONUS_TERM: return createBallastBonusTerm();
@@ -90,7 +92,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.MONTHLY_BALLAST_BONUS_TERM: return createMonthlyBallastBonusTerm();
 			case CommercialPackage.REPOSITIONING_FEE_TERM: return createRepositioningFeeTerm();
 			case CommercialPackage.LUMP_SUM_REPOSITIONING_FEE_TERM: return createLumpSumRepositioningFeeTerm();
-			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE: return createOriginPortRepositioningFee();
+			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM: return createOriginPortRepositioningFeeTerm();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -261,9 +263,31 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * @generated
 	 */
 	@Override
-	public CharterContractTerm createCharterContractTerm() {
-		CharterContractTermImpl charterContractTerm = new CharterContractTermImpl();
-		return charterContractTerm;
+	public SimpleRepositioningFeeContainer createSimpleRepositioningFeeContainer() {
+		SimpleRepositioningFeeContainerImpl simpleRepositioningFeeContainer = new SimpleRepositioningFeeContainerImpl();
+		return simpleRepositioningFeeContainer;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SimpleBallastBonusContainer createSimpleBallastBonusContainer() {
+		SimpleBallastBonusContainerImpl simpleBallastBonusContainer = new SimpleBallastBonusContainerImpl();
+		return simpleBallastBonusContainer;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public MonthlyBallastBonusContainer createMonthlyBallastBonusContainer() {
+		MonthlyBallastBonusContainerImpl monthlyBallastBonusContainer = new MonthlyBallastBonusContainerImpl();
+		return monthlyBallastBonusContainer;
 	}
 
 	/**
@@ -360,9 +384,9 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * @generated
 	 */
 	@Override
-	public OriginPortRepositioningFee createOriginPortRepositioningFee() {
-		OriginPortRepositioningFeeImpl originPortRepositioningFee = new OriginPortRepositioningFeeImpl();
-		return originPortRepositioningFee;
+	public OriginPortRepositioningFeeTerm createOriginPortRepositioningFeeTerm() {
+		OriginPortRepositioningFeeTermImpl originPortRepositioningFeeTerm = new OriginPortRepositioningFeeTermImpl();
+		return originPortRepositioningFeeTerm;
 	}
 
 	/**

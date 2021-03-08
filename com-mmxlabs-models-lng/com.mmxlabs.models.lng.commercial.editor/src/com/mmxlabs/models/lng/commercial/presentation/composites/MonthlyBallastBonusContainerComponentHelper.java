@@ -24,11 +24,11 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 /**
- * A component helper for CharterContractTerm instances
+ * A component helper for MonthlyBallastBonusContainer instances
  *
  * @generated
  */
-public class CharterContractTermComponentHelper extends BaseComponentHelper {
+public class MonthlyBallastBonusContainerComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -36,7 +36,7 @@ public class CharterContractTermComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public CharterContractTermComponentHelper() {
+	public MonthlyBallastBonusContainerComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
@@ -45,18 +45,19 @@ public class CharterContractTermComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public CharterContractTermComponentHelper(IAdapterManager adapterManager) {
+	public MonthlyBallastBonusContainerComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
+		superClassesHelpers.addAll(registry.getComponentHelpers(CommercialPackage.Literals.IBALLAST_BONUS));
 	}
 	
 	/**
-	 * add editors to a composite, using CharterContractTerm as the supertype
+	 * add editors to a composite, using MonthlyBallastBonusContainer as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CommercialPackage.Literals.CHARTER_CONTRACT_TERM);	
+		addEditorsToComposite(detailComposite, CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTAINER);	
 	}
 	
 	/**
@@ -67,5 +68,23 @@ public class CharterContractTermComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_hubsEditor(detailComposite, topClass);
+		add_termsEditor(detailComposite, topClass);
+	}
+	/**
+	 * Create the editor for the hubs feature on MonthlyBallastBonusContainer
+	 *
+	 * @generated
+	 */
+	protected void add_hubsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTAINER__HUBS));
+	}
+	/**
+	 * Create the editor for the terms feature on MonthlyBallastBonusContainer
+	 *
+	 * @generated
+	 */
+	protected void add_termsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTAINER__TERMS));
 	}
 }

@@ -29,16 +29,16 @@ public class CharterInMarketConstraint extends AbstractModelConstraint {
 
 		if (target instanceof CharterInMarket) {
 			final CharterInMarket spotMarket = (CharterInMarket) target;
-			if (spotMarket.getCharterContract() != null && spotMarket.getCharterContract() instanceof BallastBonusCharterContract) {
-				BallastBonusCharterContract ballastBonusCharterContract = (BallastBonusCharterContract) spotMarket.getCharterContract();
-				if (spotMarket.isNominal()) {
-					// nominals
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx
-							.createFailureStatus(String.format("[Charter in market vessel | %s] has nominals enabled and a ballast bonus chartering contract.", spotMarket.getName())));
-					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterInMarkets());
-					failures.add(dsd);
-				}
-			}
+//			if (spotMarket.getCharterContract() != null && spotMarket.getCharterContract() instanceof BallastBonusCharterContract) {
+//				BallastBonusCharterContract ballastBonusCharterContract = (BallastBonusCharterContract) spotMarket.getCharterContract();
+//				if (spotMarket.isNominal()) {
+//					// nominals
+//					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx
+//							.createFailureStatus(String.format("[Charter in market vessel | %s] has nominals enabled and a ballast bonus chartering contract.", spotMarket.getName())));
+//					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterInMarkets());
+//					failures.add(dsd);
+//				}
+//			}
 
 			if (spotMarket.getEntity() == null) {
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx

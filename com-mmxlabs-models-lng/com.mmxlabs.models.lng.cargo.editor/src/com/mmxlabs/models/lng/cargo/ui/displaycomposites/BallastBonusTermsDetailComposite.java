@@ -12,6 +12,7 @@ import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -32,6 +33,7 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
+import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContainer;
 import com.mmxlabs.models.lng.port.ui.editors.PortMultiReferenceInlineEditor;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.DefaultStatusProvider;
@@ -45,24 +47,24 @@ import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 /**
  * Detail composite for vessel state attributes; adds an additional bit to the bottom of the composite which contains a fuel curve table.
  * 
- * @author hinton
+ * @author hinton, FM
  * 
  */
-public class BallastBonusContractDetailComposite extends DefaultDetailComposite implements IDisplayComposite {
+public class BallastBonusTermsDetailComposite extends DefaultDetailComposite implements IDisplayComposite {
 	private static final String MONTHLY = "Monthly";
 	private static final String NOTIONAL_JOURNEY = "Notional journey";
 	private ICommandHandler commandHandler;
-	private IDialogEditingContext dialogContext;
-	private VesselAvailability oldValue = null;
+	protected IDialogEditingContext dialogContext;
+	private VesselAvailability oldVesselAvailability = null;
 	private Composite owner = this;
 
-	private Button ballastBonusCheckbox;
+	protected Button ballastBonusCheckbox;
 	private Combo ballastBonusCombobox;
+	
 	private FormToolkit toolkit;
 	private GridData gridData;
 	private IStatus status;
-	
-	private EObjectTableViewer ballastBonusTable;
+	private PortMultiReferenceInlineEditor portEditor;
 	
 	private DefaultStatusProvider statusProvider = new DefaultStatusProvider() {
 		@Override
@@ -72,8 +74,7 @@ public class BallastBonusContractDetailComposite extends DefaultDetailComposite 
 	};
 	private Runnable resizeAction;
 
-	public BallastBonusContractDetailComposite(final Composite parent, final int style, final FormToolkit toolkit, Runnable resizeAction,
-			VesselAvailability va) {
+	public BallastBonusTermsDetailComposite(final Composite parent, final int style, final FormToolkit toolkit, Runnable resizeAction) {
 		super(parent, style, toolkit);
 		this.toolkit = toolkit;
 		this.resizeAction = resizeAction;
@@ -99,11 +100,12 @@ public class BallastBonusContractDetailComposite extends DefaultDetailComposite 
 		ballastBonusCheckbox.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				boolean selection = ballastBonusCheckbox.getSelection();
-				if (selection == true) {
-					changeBallastBonusType();
+				if (ballastBonusCheckbox.getSelection()) {
+					if (!changeBallastBonusType()) {
+						ballastBonusCheckbox.setSelection(false);
+					}
 				} else {
-					oldValue.setContainedCharterContract(null);
+					doCheck();
 					dialogContext.getDialogController().rebuild(true);
 					resizeAction.run();
 				}
@@ -130,10 +132,28 @@ public class BallastBonusContractDetailComposite extends DefaultDetailComposite 
 			ballastBonusCombobox.setEnabled(false);
 		}
 	}
+	
+	protected void doCheck() {
+		checkContract(oldVesselAvailability);
+	}
+	
+	private void checkContract(VesselAvailability va) {
+		if (oldVesselAvailability.getContainedCharterContract().getRepositioningFeeTerms() == null) {
+			commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), va, CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT, null), va,
+					CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT);
+			commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), va, CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE, Boolean.FALSE), va,
+					CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE);
+		}
+	}
 
-	private void changeBallastBonusType() {
-		oldValue.setContainedCharterContract(null);
-		GenericCharterContract charterContract = addCharterContract(oldValue);
+	protected boolean changeBallastBonusType() {
+		return changeBallastBonusType(getCharterContract(oldVesselAvailability));
+	}
+	
+	protected boolean changeBallastBonusType(GenericCharterContract charterContract) {
+		if (charterContract == null) {
+			return false;
+		}
 		switch (this.ballastBonusCombobox.getText()) {
 		case MONTHLY:
 			createMonthlyBallastBonusComposite(owner, toolkit, charterContract);
@@ -145,23 +165,43 @@ public class BallastBonusContractDetailComposite extends DefaultDetailComposite 
 		}			
 		dialogContext.getDialogController().rebuild(true);
 		resizeAction.run();
+		return true;
 	}
 	
-	protected GenericCharterContract addCharterContract(VesselAvailability va) {
-		GenericCharterContract charterContract = CommercialFactory.eINSTANCE.createGenericCharterContract();
-		commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), va, CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT, charterContract), va,
-				CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT);
+	private GenericCharterContract getCharterContract(VesselAvailability va) {
+		GenericCharterContract charterContract = null;
+		if (va.getContainedCharterContract() == null) {
+			charterContract = CommercialFactory.eINSTANCE.createGenericCharterContract();
+			String name = validateOrOfferName("ballast_bonus_terms", va);
+			if (name == null) {
+				return null;
+			}
+			charterContract.setName(name);
+			commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), va, CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT, charterContract), va,
+					CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT);
+			commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), va, CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE, Boolean.TRUE), va,
+					CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE);
+		} else {
+			charterContract = va.getContainedCharterContract();
+		}
 		return charterContract;
 	}
 
+	private String validateOrOfferName(final String type, final VesselAvailability va) {
+		if (va.getVessel() == null) {
+			MessageDialog.openInformation(getShell(), "ERROR", "Vessel must be set before creating the ballast bonus contract!");
+			return null;
+		}
+		return String.format("%s_%s_%d", type, va.getVessel().getName(), va.getCharterNumber());
+	}
 
-	private void createMonthlyBallastBonusComposite(Composite parent, FormToolkit toolkit, GenericCharterContract ruleBasedBallastBonusContract) {
-		ballastBonusTable = MonthlyBallastBonusContractTableCreator.createMonthlyBallastBonusTable(parent, toolkit, dialogContext, commandHandler, ruleBasedBallastBonusContract,
+	protected void createMonthlyBallastBonusComposite(Composite parent, FormToolkit toolkit, GenericCharterContract charterContract) {
+		final EObjectTableViewer ballastBonusTable = MonthlyBallastBonusTermsTableCreator.createMonthlyBallastBonusTable(parent, toolkit, dialogContext, commandHandler, charterContract,
 				statusProvider, resizeAction);
 	}
 	
-	private void createBallastBonusComposite(Composite parent, FormToolkit toolkit, GenericCharterContract ruleBasedBallastBonusContract) {
-		ballastBonusTable = BallastBonusContractTableCreator.createBallastBonusTable(parent, toolkit, dialogContext, commandHandler, ruleBasedBallastBonusContract,
+	protected void createBallastBonusComposite(Composite parent, FormToolkit toolkit, GenericCharterContract charterContract) {
+		final EObjectTableViewer ballastBonusTable = BallastBonusTermsTableCreator.createBallastBonusTable(parent, toolkit, dialogContext, commandHandler, charterContract,
 				statusProvider, resizeAction);
 	}
 	
@@ -173,31 +213,43 @@ public class BallastBonusContractDetailComposite extends DefaultDetailComposite 
 	@Override
 	public void display(IDialogEditingContext dialogContext, MMXRootObject root, EObject value, Collection<EObject> range, EMFDataBindingContext dbc) {
 		this.dialogContext = dialogContext;
-		oldValue = (VesselAvailability) value;
+		oldVesselAvailability = (VesselAvailability) value;
+		final GenericCharterContract gcc = oldVesselAvailability.getContainedCharterContract();
+		doDisplay(dialogContext, root, dbc, gcc);
+	}
 
-		if (ballastBonusCheckbox != null && oldValue.getContainedCharterContract() != null) {
+	protected void doDisplay(IDialogEditingContext dialogContext, MMXRootObject root, EMFDataBindingContext dbc, final GenericCharterContract gcc) {
+		if (ballastBonusCheckbox != null && gcc != null) {
 			ballastBonusCheckbox.setSelection(true);
 		
-			if (oldValue.getContainedCharterContract() instanceof GenericCharterContract) {
+			switch (this.ballastBonusCombobox.getText()) {
+			case MONTHLY:
 				
-				GenericCharterContract bbc = (GenericCharterContract)oldValue.getContainedCharterContract();
-				Composite hubsComp = toolkit.createComposite(owner);
-				hubsComp.setLayout(new FillLayout());
-				hubsComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+				if (gcc.getBallastBonusTerms() != null && gcc.getBallastBonusTerms() instanceof MonthlyBallastBonusContainer) {
+				
+					final MonthlyBallastBonusContainer mbbc = (MonthlyBallastBonusContainer) gcc.getBallastBonusTerms();
+					Composite hubsComp = toolkit.createComposite(owner);
+					hubsComp.setLayout(new FillLayout());
+					hubsComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-				Label lbl = new Label(hubsComp, SWT.LEFT);
-				lbl.setBackground(owner.getBackground());
-				lbl.setText("Hubs: ");
-				
-				PortMultiReferenceInlineEditor portEditor = new PortMultiReferenceInlineEditor(CommercialPackage.eINSTANCE.getGenericCharterContract_Hubs());
-				portEditor.setCommandHandler(commandHandler);
-				portEditor.createControl(hubsComp, dbc, toolkit);
-				portEditor.display(dialogContext, root, bbc, Collections.singleton(bbc));
-				
-				createMonthlyBallastBonusComposite(owner, toolkit, (GenericCharterContract) oldValue.getContainedCharterContract());
-			}
-			else {
-				createBallastBonusComposite(owner, toolkit, (GenericCharterContract) oldValue.getContainedCharterContract());
+					Label lbl = new Label(hubsComp, SWT.LEFT);
+					lbl.setBackground(owner.getBackground());
+					lbl.setText("Hubs: ");
+
+					portEditor = new PortMultiReferenceInlineEditor(CommercialPackage.eINSTANCE.getMonthlyBallastBonusContainer_Hubs());
+					portEditor.setCommandHandler(commandHandler);
+					portEditor.createControl(hubsComp, dbc, toolkit);
+					portEditor.display(dialogContext, root, mbbc, Collections.singleton(mbbc));
+
+					createMonthlyBallastBonusComposite(owner, toolkit, gcc);
+				} else {
+					throw new IllegalStateException(String.format("Charter contract [%s] - monthly ballast bonus terms contain foreign definitions!", gcc.getName()));
+				}
+				break;
+			case NOTIONAL_JOURNEY:
+			default:
+				createBallastBonusComposite(owner, toolkit, gcc);
+				break;
 			}
 		}
 	}
@@ -208,8 +260,8 @@ public class BallastBonusContractDetailComposite extends DefaultDetailComposite 
 	}
 
 	void removeAdapter() {
-		if (oldValue != null) {
-			oldValue = null;
+		if (oldVesselAvailability != null) {
+			oldVesselAvailability = null;
 		}
 	}
 

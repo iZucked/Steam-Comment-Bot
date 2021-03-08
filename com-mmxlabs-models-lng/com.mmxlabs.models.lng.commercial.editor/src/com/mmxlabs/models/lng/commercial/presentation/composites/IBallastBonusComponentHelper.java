@@ -24,11 +24,11 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 /**
- * A component helper for OriginPortRepositioningFee instances
+ * A component helper for IBallastBonus instances
  *
  * @generated
  */
-public class OriginPortRepositioningFeeComponentHelper extends BaseComponentHelper {
+public class IBallastBonusComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -36,7 +36,7 @@ public class OriginPortRepositioningFeeComponentHelper extends BaseComponentHelp
 	 *
 	 * @generated
 	 */
-	public OriginPortRepositioningFeeComponentHelper() {
+	public IBallastBonusComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
@@ -45,20 +45,18 @@ public class OriginPortRepositioningFeeComponentHelper extends BaseComponentHelp
 	 *
 	 * @generated
 	 */
-	public OriginPortRepositioningFeeComponentHelper(IAdapterManager adapterManager) {
+	public IBallastBonusComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(CommercialPackage.Literals.REPOSITIONING_FEE_TERM));
-		superClassesHelpers.addAll(registry.getComponentHelpers(CommercialPackage.Literals.NOTIONAL_JOURNEY_TERM));
 	}
 	
 	/**
-	 * add editors to a composite, using OriginPortRepositioningFee as the supertype
+	 * add editors to a composite, using IBallastBonus as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CommercialPackage.Literals.ORIGIN_PORT_REPOSITIONING_FEE);	
+		addEditorsToComposite(detailComposite, CommercialPackage.Literals.IBALLAST_BONUS);	
 	}
 	
 	/**

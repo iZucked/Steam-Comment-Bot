@@ -15,10 +15,10 @@ import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.commercial.CharterContract;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -66,7 +66,7 @@ public class CommercialModelImporter implements ISubmodelImporter {
 			entityImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getLegalEntity());
 			purchaseImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getPurchaseContract());
 			salesImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getSalesContract());
-			charterImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getCharterContract());
+			charterImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getGenericCharterContract());
 		}
 	}
 
@@ -122,7 +122,7 @@ public class CommercialModelImporter implements ISubmodelImporter {
 		}
 		if (inputs.containsKey(CHARTER_CON_KEY)) {
 			commercial.getCharteringContracts()
-					.addAll((Collection<? extends CharterContract>) charterImporter.importObjects(CommercialPackage.eINSTANCE.getCharterContract(), inputs.get(CHARTER_CON_KEY), context));
+					.addAll((Collection<? extends GenericCharterContract>) charterImporter.importObjects(CommercialPackage.eINSTANCE.getGenericCharterContract(), inputs.get(CHARTER_CON_KEY), context));
 		}
 		return commercial;
 	}

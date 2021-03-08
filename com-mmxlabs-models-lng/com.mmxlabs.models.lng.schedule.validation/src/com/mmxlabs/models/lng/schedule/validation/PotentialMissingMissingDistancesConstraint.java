@@ -153,35 +153,35 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 				if (vaEndPorts != null) {
 					vaLikelyEndPorts.retainAll(vaEndPorts);
 				}
-				BallastBonusContract contract = va.getBallastBonusContract();
-				if (contract instanceof RuleBasedBallastBonusContract) {
-					RuleBasedBallastBonusContract ruleBasedBallastBonusContract = (RuleBasedBallastBonusContract) contract;
-					for (BallastBonusContractLine line : ruleBasedBallastBonusContract.getRules()) {
-						if (line instanceof NotionalJourneyBallastBonusContractLine) {
-							NotionalJourneyBallastBonusContractLine notionalJourneyBallastBonusContractLine = (NotionalJourneyBallastBonusContractLine) line;
-							// This is a specific check to do this here, rather than add to main list
-							Set<Port> redeliveryPorts = SetUtils.getObjects(notionalJourneyBallastBonusContractLine.getRedeliveryPorts());
-							redeliveryPorts.retainAll(vaLikelyEndPorts);
-							int intialRedeliveryPortsSize = redeliveryPorts.size();
-							if (redeliveryPorts.isEmpty() && intialRedeliveryPortsSize > 0) {
-								// Blanked out set, so re-initialise as it was probably important information
-								redeliveryPorts = SetUtils.getObjects(notionalJourneyBallastBonusContractLine.getRedeliveryPorts());
-							}
-							Set<Port> returnPorts = SetUtils.getObjects(notionalJourneyBallastBonusContractLine.getReturnPorts());
-							int intialReturnPortsSize = returnPorts.size();
-							returnPorts.retainAll(vaLikelyEndPorts);
-							if (returnPorts.isEmpty() && intialReturnPortsSize > 0) {
-								// Blanked out set, so re-initialise as it was probably important information
-								returnPorts = SetUtils.getObjects(notionalJourneyBallastBonusContractLine.getReturnPorts());
-							}
-							missingDistances.addAll(distanceChecker.apply(redeliveryPorts, returnPorts));
-
-						} else if (line instanceof LumpSumBallastBonusContractLine) {
-							LumpSumBallastBonusContractLine lumpSumBallastBonusContractLine = (LumpSumBallastBonusContractLine) line;
-						}
-
-					}
-				}
+//				BallastBonusContract contract = va.getBallastBonusContract();
+//				if (contract instanceof RuleBasedBallastBonusContract) {
+//					RuleBasedBallastBonusContract ruleBasedBallastBonusContract = (RuleBasedBallastBonusContract) contract;
+//					for (BallastBonusContractLine line : ruleBasedBallastBonusContract.getRules()) {
+//						if (line instanceof NotionalJourneyBallastBonusContractLine) {
+//							NotionalJourneyBallastBonusContractLine notionalJourneyBallastBonusContractLine = (NotionalJourneyBallastBonusContractLine) line;
+//							// This is a specific check to do this here, rather than add to main list
+//							Set<Port> redeliveryPorts = SetUtils.getObjects(notionalJourneyBallastBonusContractLine.getRedeliveryPorts());
+//							redeliveryPorts.retainAll(vaLikelyEndPorts);
+//							int intialRedeliveryPortsSize = redeliveryPorts.size();
+//							if (redeliveryPorts.isEmpty() && intialRedeliveryPortsSize > 0) {
+//								// Blanked out set, so re-initialise as it was probably important information
+//								redeliveryPorts = SetUtils.getObjects(notionalJourneyBallastBonusContractLine.getRedeliveryPorts());
+//							}
+//							Set<Port> returnPorts = SetUtils.getObjects(notionalJourneyBallastBonusContractLine.getReturnPorts());
+//							int intialReturnPortsSize = returnPorts.size();
+//							returnPorts.retainAll(vaLikelyEndPorts);
+//							if (returnPorts.isEmpty() && intialReturnPortsSize > 0) {
+//								// Blanked out set, so re-initialise as it was probably important information
+//								returnPorts = SetUtils.getObjects(notionalJourneyBallastBonusContractLine.getReturnPorts());
+//							}
+//							missingDistances.addAll(distanceChecker.apply(redeliveryPorts, returnPorts));
+//
+//						} else if (line instanceof LumpSumBallastBonusContractLine) {
+//							LumpSumBallastBonusContractLine lumpSumBallastBonusContractLine = (LumpSumBallastBonusContractLine) line;
+//						}
+//
+//					}
+//				}
 
 				// Remove common ports from group as we will pick the common port and not travels
 				// Tmp has unique end ports.
