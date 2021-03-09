@@ -25,7 +25,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public class LumpSumTermImpl extends EObjectImpl implements LumpSumTerm {
+public abstract class LumpSumTermImpl extends EObjectImpl implements LumpSumTerm {
 	/**
 	 * The default value of the '{@link #getPriceExpression() <em>Price Expression</em>}' attribute.
 	 * <!-- begin-user-doc -->

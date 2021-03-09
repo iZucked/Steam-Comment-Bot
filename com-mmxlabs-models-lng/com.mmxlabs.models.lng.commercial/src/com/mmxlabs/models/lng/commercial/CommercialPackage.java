@@ -1643,13 +1643,31 @@ public interface CommercialPackage extends EPackage {
 	int GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Start Heel</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERIC_CHARTER_CONTRACT__START_HEEL = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>End Heel</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERIC_CHARTER_CONTRACT__END_HEEL = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Generic Charter Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int GENERIC_CHARTER_CONTRACT_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+	int GENERIC_CHARTER_CONTRACT_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.IRepositioningFee <em>IRepositioning Fee</em>}' class.
@@ -2314,6 +2332,134 @@ public interface CommercialPackage extends EPackage {
 	int ORIGIN_PORT_REPOSITIONING_FEE_TERM_FEATURE_COUNT = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 6;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.EndHeelOptionsImpl <em>End Heel Options</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.EndHeelOptionsImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getEndHeelOptions()
+	 * @generated
+	 */
+	int END_HEEL_OPTIONS = 30;
+
+	/**
+	 * The feature id for the '<em><b>Tank State</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END_HEEL_OPTIONS__TANK_STATE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Minimum End Heel</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END_HEEL_OPTIONS__MINIMUM_END_HEEL = 1;
+
+	/**
+	 * The feature id for the '<em><b>Maximum End Heel</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END_HEEL_OPTIONS__MAXIMUM_END_HEEL = 2;
+
+	/**
+	 * The feature id for the '<em><b>Use Last Heel Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END_HEEL_OPTIONS__USE_LAST_HEEL_PRICE = 3;
+
+	/**
+	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END_HEEL_OPTIONS__PRICE_EXPRESSION = 4;
+
+	/**
+	 * The number of structural features of the '<em>End Heel Options</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END_HEEL_OPTIONS_FEATURE_COUNT = 5;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.StartHeelOptionsImpl <em>Start Heel Options</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.StartHeelOptionsImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getStartHeelOptions()
+	 * @generated
+	 */
+	int START_HEEL_OPTIONS = 31;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START_HEEL_OPTIONS__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Cv Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START_HEEL_OPTIONS__CV_VALUE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Min Volume Available</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START_HEEL_OPTIONS__MIN_VOLUME_AVAILABLE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Max Volume Available</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START_HEEL_OPTIONS__PRICE_EXPRESSION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The number of structural features of the '<em>Start Heel Options</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START_HEEL_OPTIONS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2321,7 +2467,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContractType()
 	 * @generated
 	 */
-	int CONTRACT_TYPE = 30;
+	int CONTRACT_TYPE = 32;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.PricingEvent <em>Pricing Event</em>}' enum.
@@ -2331,7 +2477,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getPricingEvent()
 	 * @generated
 	 */
-	int PRICING_EVENT = 31;
+	int PRICING_EVENT = 33;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.NextPortType <em>Next Port Type</em>}' enum.
@@ -2341,7 +2487,17 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getNextPortType()
 	 * @generated
 	 */
-	int NEXT_PORT_TYPE = 32;
+	int NEXT_PORT_TYPE = 34;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.EVesselTankState <em>EVessel Tank State</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.EVesselTankState
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getEVesselTankState()
+	 * @generated
+	 */
+	int EVESSEL_TANK_STATE = 35;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CommercialModel <em>Model</em>}'.
@@ -3098,6 +3254,28 @@ public interface CommercialPackage extends EPackage {
 	EReference getGenericCharterContract_BallastBonusTerms();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.commercial.GenericCharterContract#getStartHeel <em>Start Heel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Start Heel</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.GenericCharterContract#getStartHeel()
+	 * @see #getGenericCharterContract()
+	 * @generated
+	 */
+	EReference getGenericCharterContract_StartHeel();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.commercial.GenericCharterContract#getEndHeel <em>End Heel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>End Heel</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.GenericCharterContract#getEndHeel()
+	 * @see #getGenericCharterContract()
+	 * @generated
+	 */
+	EReference getGenericCharterContract_EndHeel();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.IRepositioningFee <em>IRepositioning Fee</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3436,6 +3614,125 @@ public interface CommercialPackage extends EPackage {
 	EClass getOriginPortRepositioningFeeTerm();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.EndHeelOptions <em>End Heel Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>End Heel Options</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.EndHeelOptions
+	 * @generated
+	 */
+	EClass getEndHeelOptions();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.EndHeelOptions#getTankState <em>Tank State</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Tank State</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.EndHeelOptions#getTankState()
+	 * @see #getEndHeelOptions()
+	 * @generated
+	 */
+	EAttribute getEndHeelOptions_TankState();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.EndHeelOptions#getMinimumEndHeel <em>Minimum End Heel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Minimum End Heel</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.EndHeelOptions#getMinimumEndHeel()
+	 * @see #getEndHeelOptions()
+	 * @generated
+	 */
+	EAttribute getEndHeelOptions_MinimumEndHeel();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.EndHeelOptions#getMaximumEndHeel <em>Maximum End Heel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Maximum End Heel</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.EndHeelOptions#getMaximumEndHeel()
+	 * @see #getEndHeelOptions()
+	 * @generated
+	 */
+	EAttribute getEndHeelOptions_MaximumEndHeel();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.EndHeelOptions#isUseLastHeelPrice <em>Use Last Heel Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Use Last Heel Price</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.EndHeelOptions#isUseLastHeelPrice()
+	 * @see #getEndHeelOptions()
+	 * @generated
+	 */
+	EAttribute getEndHeelOptions_UseLastHeelPrice();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.EndHeelOptions#getPriceExpression <em>Price Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Price Expression</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.EndHeelOptions#getPriceExpression()
+	 * @see #getEndHeelOptions()
+	 * @generated
+	 */
+	EAttribute getEndHeelOptions_PriceExpression();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.StartHeelOptions <em>Start Heel Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Start Heel Options</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.StartHeelOptions
+	 * @generated
+	 */
+	EClass getStartHeelOptions();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.StartHeelOptions#getCvValue <em>Cv Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cv Value</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.StartHeelOptions#getCvValue()
+	 * @see #getStartHeelOptions()
+	 * @generated
+	 */
+	EAttribute getStartHeelOptions_CvValue();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.StartHeelOptions#getMinVolumeAvailable <em>Min Volume Available</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Volume Available</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.StartHeelOptions#getMinVolumeAvailable()
+	 * @see #getStartHeelOptions()
+	 * @generated
+	 */
+	EAttribute getStartHeelOptions_MinVolumeAvailable();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.StartHeelOptions#getMaxVolumeAvailable <em>Max Volume Available</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Max Volume Available</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.StartHeelOptions#getMaxVolumeAvailable()
+	 * @see #getStartHeelOptions()
+	 * @generated
+	 */
+	EAttribute getStartHeelOptions_MaxVolumeAvailable();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.StartHeelOptions#getPriceExpression <em>Price Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Price Expression</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.StartHeelOptions#getPriceExpression()
+	 * @see #getStartHeelOptions()
+	 * @generated
+	 */
+	EAttribute getStartHeelOptions_PriceExpression();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3464,6 +3761,16 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getNextPortType();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.commercial.EVesselTankState <em>EVessel Tank State</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>EVessel Tank State</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.EVesselTankState
+	 * @generated
+	 */
+	EEnum getEVesselTankState();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -4080,6 +4387,22 @@ public interface CommercialPackage extends EPackage {
 		EReference GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS = eINSTANCE.getGenericCharterContract_BallastBonusTerms();
 
 		/**
+		 * The meta object literal for the '<em><b>Start Heel</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference GENERIC_CHARTER_CONTRACT__START_HEEL = eINSTANCE.getGenericCharterContract_StartHeel();
+
+		/**
+		 * The meta object literal for the '<em><b>End Heel</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference GENERIC_CHARTER_CONTRACT__END_HEEL = eINSTANCE.getGenericCharterContract_EndHeel();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.IRepositioningFee <em>IRepositioning Fee</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -4364,6 +4687,98 @@ public interface CommercialPackage extends EPackage {
 		EClass ORIGIN_PORT_REPOSITIONING_FEE_TERM = eINSTANCE.getOriginPortRepositioningFeeTerm();
 
 		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.EndHeelOptionsImpl <em>End Heel Options</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.EndHeelOptionsImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getEndHeelOptions()
+		 * @generated
+		 */
+		EClass END_HEEL_OPTIONS = eINSTANCE.getEndHeelOptions();
+
+		/**
+		 * The meta object literal for the '<em><b>Tank State</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute END_HEEL_OPTIONS__TANK_STATE = eINSTANCE.getEndHeelOptions_TankState();
+
+		/**
+		 * The meta object literal for the '<em><b>Minimum End Heel</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute END_HEEL_OPTIONS__MINIMUM_END_HEEL = eINSTANCE.getEndHeelOptions_MinimumEndHeel();
+
+		/**
+		 * The meta object literal for the '<em><b>Maximum End Heel</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute END_HEEL_OPTIONS__MAXIMUM_END_HEEL = eINSTANCE.getEndHeelOptions_MaximumEndHeel();
+
+		/**
+		 * The meta object literal for the '<em><b>Use Last Heel Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute END_HEEL_OPTIONS__USE_LAST_HEEL_PRICE = eINSTANCE.getEndHeelOptions_UseLastHeelPrice();
+
+		/**
+		 * The meta object literal for the '<em><b>Price Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute END_HEEL_OPTIONS__PRICE_EXPRESSION = eINSTANCE.getEndHeelOptions_PriceExpression();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.StartHeelOptionsImpl <em>Start Heel Options</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.StartHeelOptionsImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getStartHeelOptions()
+		 * @generated
+		 */
+		EClass START_HEEL_OPTIONS = eINSTANCE.getStartHeelOptions();
+
+		/**
+		 * The meta object literal for the '<em><b>Cv Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute START_HEEL_OPTIONS__CV_VALUE = eINSTANCE.getStartHeelOptions_CvValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Volume Available</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute START_HEEL_OPTIONS__MIN_VOLUME_AVAILABLE = eINSTANCE.getStartHeelOptions_MinVolumeAvailable();
+
+		/**
+		 * The meta object literal for the '<em><b>Max Volume Available</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE = eINSTANCE.getStartHeelOptions_MaxVolumeAvailable();
+
+		/**
+		 * The meta object literal for the '<em><b>Price Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute START_HEEL_OPTIONS__PRICE_EXPRESSION = eINSTANCE.getStartHeelOptions_PriceExpression();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -4392,6 +4807,16 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum NEXT_PORT_TYPE = eINSTANCE.getNextPortType();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.EVesselTankState <em>EVessel Tank State</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.EVesselTankState
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getEVesselTankState()
+		 * @generated
+		 */
+		EEnum EVESSEL_TANK_STATE = eINSTANCE.getEVesselTankState();
 
 	}
 

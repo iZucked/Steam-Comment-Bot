@@ -318,6 +318,19 @@ public class CommercialSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CommercialPackage.END_HEEL_OPTIONS: {
+				EndHeelOptions endHeelOptions = (EndHeelOptions)theEObject;
+				T result = caseEndHeelOptions(endHeelOptions);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.START_HEEL_OPTIONS: {
+				StartHeelOptions startHeelOptions = (StartHeelOptions)theEObject;
+				T result = caseStartHeelOptions(startHeelOptions);
+				if (result == null) result = caseMMXObject(startHeelOptions);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -769,6 +782,36 @@ public class CommercialSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseOriginPortRepositioningFeeTerm(OriginPortRepositioningFeeTerm object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>End Heel Options</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>End Heel Options</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseEndHeelOptions(EndHeelOptions object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Start Heel Options</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Start Heel Options</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseStartHeelOptions(StartHeelOptions object) {
 		return null;
 	}
 

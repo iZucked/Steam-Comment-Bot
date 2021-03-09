@@ -84,8 +84,6 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.SIMPLE_REPOSITIONING_FEE_CONTAINER: return createSimpleRepositioningFeeContainer();
 			case CommercialPackage.SIMPLE_BALLAST_BONUS_CONTAINER: return createSimpleBallastBonusContainer();
 			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTAINER: return createMonthlyBallastBonusContainer();
-			case CommercialPackage.LUMP_SUM_TERM: return createLumpSumTerm();
-			case CommercialPackage.NOTIONAL_JOURNEY_TERM: return createNotionalJourneyTerm();
 			case CommercialPackage.BALLAST_BONUS_TERM: return createBallastBonusTerm();
 			case CommercialPackage.LUMP_SUM_BALLAST_BONUS_TERM: return createLumpSumBallastBonusTerm();
 			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM: return createNotionalJourneyBallastBonusTerm();
@@ -93,6 +91,8 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.REPOSITIONING_FEE_TERM: return createRepositioningFeeTerm();
 			case CommercialPackage.LUMP_SUM_REPOSITIONING_FEE_TERM: return createLumpSumRepositioningFeeTerm();
 			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM: return createOriginPortRepositioningFeeTerm();
+			case CommercialPackage.END_HEEL_OPTIONS: return createEndHeelOptions();
+			case CommercialPackage.START_HEEL_OPTIONS: return createStartHeelOptions();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -112,6 +112,8 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 				return createPricingEventFromString(eDataType, initialValue);
 			case CommercialPackage.NEXT_PORT_TYPE:
 				return createNextPortTypeFromString(eDataType, initialValue);
+			case CommercialPackage.EVESSEL_TANK_STATE:
+				return createEVesselTankStateFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -131,6 +133,8 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 				return convertPricingEventToString(eDataType, instanceValue);
 			case CommercialPackage.NEXT_PORT_TYPE:
 				return convertNextPortTypeToString(eDataType, instanceValue);
+			case CommercialPackage.EVESSEL_TANK_STATE:
+				return convertEVesselTankStateToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -296,28 +300,6 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * @generated
 	 */
 	@Override
-	public LumpSumTerm createLumpSumTerm() {
-		LumpSumTermImpl lumpSumTerm = new LumpSumTermImpl();
-		return lumpSumTerm;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NotionalJourneyTerm createNotionalJourneyTerm() {
-		NotionalJourneyTermImpl notionalJourneyTerm = new NotionalJourneyTermImpl();
-		return notionalJourneyTerm;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public BallastBonusTerm createBallastBonusTerm() {
 		BallastBonusTermImpl ballastBonusTerm = new BallastBonusTermImpl();
 		return ballastBonusTerm;
@@ -394,6 +376,28 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public EndHeelOptions createEndHeelOptions() {
+		EndHeelOptionsImpl endHeelOptions = new EndHeelOptionsImpl();
+		return endHeelOptions;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public StartHeelOptions createStartHeelOptions() {
+		StartHeelOptionsImpl startHeelOptions = new StartHeelOptionsImpl();
+		return startHeelOptions;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ContractType createContractTypeFromString(EDataType eDataType, String initialValue) {
 		ContractType result = ContractType.get(initialValue);
 		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
@@ -446,6 +450,26 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * @generated
 	 */
 	public String convertNextPortTypeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EVesselTankState createEVesselTankStateFromString(EDataType eDataType, String initialValue) {
+		EVesselTankState result = EVesselTankState.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertEVesselTankStateToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

@@ -17,7 +17,7 @@ import org.eclipse.emf.ecore.EObject;
  * </ul>
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getLumpSumTerm()
- * @model
+ * @model abstract="true"
  * @generated
  */
 public interface LumpSumTerm extends EObject {

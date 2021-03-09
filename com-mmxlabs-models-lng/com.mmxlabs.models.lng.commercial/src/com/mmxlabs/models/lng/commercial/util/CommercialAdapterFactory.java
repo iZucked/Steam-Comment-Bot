@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.commercial.util;
 
+import com.mmxlabs.models.lng.commercial.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
@@ -220,6 +221,14 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseOriginPortRepositioningFeeTerm(OriginPortRepositioningFeeTerm object) {
 				return createOriginPortRepositioningFeeTermAdapter();
+			}
+			@Override
+			public Adapter caseEndHeelOptions(EndHeelOptions object) {
+				return createEndHeelOptionsAdapter();
+			}
+			@Override
+			public Adapter caseStartHeelOptions(StartHeelOptions object) {
+				return createStartHeelOptionsAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -670,6 +679,34 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createOriginPortRepositioningFeeTermAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.EndHeelOptions <em>End Heel Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.EndHeelOptions
+	 * @generated
+	 */
+	public Adapter createEndHeelOptionsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.StartHeelOptions <em>Start Heel Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.StartHeelOptions
+	 * @generated
+	 */
+	public Adapter createStartHeelOptionsAdapter() {
 		return null;
 	}
 

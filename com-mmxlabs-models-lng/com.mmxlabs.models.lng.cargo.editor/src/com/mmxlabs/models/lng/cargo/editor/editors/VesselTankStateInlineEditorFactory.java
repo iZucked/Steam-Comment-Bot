@@ -10,7 +10,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import com.mmxlabs.models.lng.cargo.EVesselTankState;
+import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorFactory;
 import com.mmxlabs.models.ui.editors.impl.EENumInlineEditor;

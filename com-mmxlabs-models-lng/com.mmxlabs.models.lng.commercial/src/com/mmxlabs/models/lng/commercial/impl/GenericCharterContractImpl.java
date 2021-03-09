@@ -9,9 +9,11 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.EndHeelOptions;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.commercial.IBallastBonus;
 import com.mmxlabs.models.lng.commercial.IRepositioningFee;
+import com.mmxlabs.models.lng.commercial.StartHeelOptions;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
@@ -29,6 +31,8 @@ import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.GenericCharterContractImpl#getMaxDuration <em>Max Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.GenericCharterContractImpl#getRepositioningFeeTerms <em>Repositioning Fee Terms</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.GenericCharterContractImpl#getBallastBonusTerms <em>Ballast Bonus Terms</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.GenericCharterContractImpl#getStartHeel <em>Start Heel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.GenericCharterContractImpl#getEndHeel <em>End Heel</em>}</li>
  * </ul>
  *
  * @generated
@@ -131,6 +135,26 @@ public class GenericCharterContractImpl extends NamedObjectImpl implements Gener
 	 * @ordered
 	 */
 	protected IBallastBonus ballastBonusTerms;
+
+	/**
+	 * The cached value of the '{@link #getStartHeel() <em>Start Heel</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getStartHeel()
+	 * @generated
+	 * @ordered
+	 */
+	protected StartHeelOptions startHeel;
+
+	/**
+	 * The cached value of the '{@link #getEndHeel() <em>End Heel</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEndHeel()
+	 * @generated
+	 * @ordered
+	 */
+	protected EndHeelOptions endHeel;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -369,12 +393,106 @@ public class GenericCharterContractImpl extends NamedObjectImpl implements Gener
 	 * @generated
 	 */
 	@Override
+	public StartHeelOptions getStartHeel() {
+		return startHeel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetStartHeel(StartHeelOptions newStartHeel, NotificationChain msgs) {
+		StartHeelOptions oldStartHeel = startHeel;
+		startHeel = newStartHeel;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CommercialPackage.GENERIC_CHARTER_CONTRACT__START_HEEL, oldStartHeel, newStartHeel);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setStartHeel(StartHeelOptions newStartHeel) {
+		if (newStartHeel != startHeel) {
+			NotificationChain msgs = null;
+			if (startHeel != null)
+				msgs = ((InternalEObject)startHeel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CommercialPackage.GENERIC_CHARTER_CONTRACT__START_HEEL, null, msgs);
+			if (newStartHeel != null)
+				msgs = ((InternalEObject)newStartHeel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CommercialPackage.GENERIC_CHARTER_CONTRACT__START_HEEL, null, msgs);
+			msgs = basicSetStartHeel(newStartHeel, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.GENERIC_CHARTER_CONTRACT__START_HEEL, newStartHeel, newStartHeel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EndHeelOptions getEndHeel() {
+		return endHeel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetEndHeel(EndHeelOptions newEndHeel, NotificationChain msgs) {
+		EndHeelOptions oldEndHeel = endHeel;
+		endHeel = newEndHeel;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CommercialPackage.GENERIC_CHARTER_CONTRACT__END_HEEL, oldEndHeel, newEndHeel);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setEndHeel(EndHeelOptions newEndHeel) {
+		if (newEndHeel != endHeel) {
+			NotificationChain msgs = null;
+			if (endHeel != null)
+				msgs = ((InternalEObject)endHeel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CommercialPackage.GENERIC_CHARTER_CONTRACT__END_HEEL, null, msgs);
+			if (newEndHeel != null)
+				msgs = ((InternalEObject)newEndHeel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CommercialPackage.GENERIC_CHARTER_CONTRACT__END_HEEL, null, msgs);
+			msgs = basicSetEndHeel(newEndHeel, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.GENERIC_CHARTER_CONTRACT__END_HEEL, newEndHeel, newEndHeel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case CommercialPackage.GENERIC_CHARTER_CONTRACT__REPOSITIONING_FEE_TERMS:
 				return basicSetRepositioningFeeTerms(null, msgs);
 			case CommercialPackage.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS:
 				return basicSetBallastBonusTerms(null, msgs);
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT__START_HEEL:
+				return basicSetStartHeel(null, msgs);
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT__END_HEEL:
+				return basicSetEndHeel(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -397,6 +515,10 @@ public class GenericCharterContractImpl extends NamedObjectImpl implements Gener
 				return getRepositioningFeeTerms();
 			case CommercialPackage.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS:
 				return getBallastBonusTerms();
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT__START_HEEL:
+				return getStartHeel();
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT__END_HEEL:
+				return getEndHeel();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -425,6 +547,12 @@ public class GenericCharterContractImpl extends NamedObjectImpl implements Gener
 			case CommercialPackage.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS:
 				setBallastBonusTerms((IBallastBonus)newValue);
 				return;
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT__START_HEEL:
+				setStartHeel((StartHeelOptions)newValue);
+				return;
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT__END_HEEL:
+				setEndHeel((EndHeelOptions)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -452,6 +580,12 @@ public class GenericCharterContractImpl extends NamedObjectImpl implements Gener
 			case CommercialPackage.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS:
 				setBallastBonusTerms((IBallastBonus)null);
 				return;
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT__START_HEEL:
+				setStartHeel((StartHeelOptions)null);
+				return;
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT__END_HEEL:
+				setEndHeel((EndHeelOptions)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -474,6 +608,10 @@ public class GenericCharterContractImpl extends NamedObjectImpl implements Gener
 				return repositioningFeeTerms != null;
 			case CommercialPackage.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS:
 				return ballastBonusTerms != null;
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT__START_HEEL:
+				return startHeel != null;
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT__END_HEEL:
+				return endHeel != null;
 		}
 		return super.eIsSet(featureID);
 	}

@@ -24,6 +24,8 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.commercial.GenericCharterContract#getMaxDuration <em>Max Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.GenericCharterContract#getRepositioningFeeTerms <em>Repositioning Fee Terms</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.GenericCharterContract#getBallastBonusTerms <em>Ballast Bonus Terms</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.GenericCharterContract#getStartHeel <em>Start Heel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.GenericCharterContract#getEndHeel <em>End Heel</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getGenericCharterContract()
@@ -174,5 +176,49 @@ public interface GenericCharterContract extends NamedObject, UUIDObject {
 	 * @generated
 	 */
 	void setBallastBonusTerms(IBallastBonus value);
+
+	/**
+	 * Returns the value of the '<em><b>Start Heel</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Start Heel</em>' containment reference.
+	 * @see #setStartHeel(StartHeelOptions)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getGenericCharterContract_StartHeel()
+	 * @model containment="true" required="true"
+	 * @generated
+	 */
+	StartHeelOptions getStartHeel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.GenericCharterContract#getStartHeel <em>Start Heel</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Start Heel</em>' containment reference.
+	 * @see #getStartHeel()
+	 * @generated
+	 */
+	void setStartHeel(StartHeelOptions value);
+
+	/**
+	 * Returns the value of the '<em><b>End Heel</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>End Heel</em>' containment reference.
+	 * @see #setEndHeel(EndHeelOptions)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getGenericCharterContract_EndHeel()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EndHeelOptions getEndHeel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.GenericCharterContract#getEndHeel <em>End Heel</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>End Heel</em>' containment reference.
+	 * @see #getEndHeel()
+	 * @generated
+	 */
+	void setEndHeel(EndHeelOptions value);
 
 } // GenericCharterContract

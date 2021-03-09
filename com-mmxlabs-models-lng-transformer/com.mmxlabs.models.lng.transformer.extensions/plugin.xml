@@ -10,9 +10,9 @@
    <extension
          point="com.mmxlabs.models.ui.properties.DetailPropertyFactory">
       <DetailPropertyFactory
-            EClass="com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails"
+            EClass="com.mmxlabs.models.lng.schedule.CharterContractFeeDetails"
             category="pnl"
-            factory="com.mmxlabs.models.lng.transformer.extensions.contracts.ballastbonus.BallastBonusFeeDetailProperties">
+            factory="com.mmxlabs.models.lng.transformer.extensions.contracts.ballastbonus.CharterContractDetailProperties">
       </DetailPropertyFactory>
    </extension>
    <extension

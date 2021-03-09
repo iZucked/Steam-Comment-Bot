@@ -22,7 +22,7 @@ import org.eclipse.emf.ecore.EObject;
  * </ul>
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getNotionalJourneyTerm()
- * @model
+ * @model abstract="true"
  * @generated
  */
 public interface NotionalJourneyTerm extends EObject {

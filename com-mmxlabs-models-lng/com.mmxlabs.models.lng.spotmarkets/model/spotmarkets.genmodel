@@ -96,6 +96,7 @@
       <genFeatures notify="false" createChild="false" propertyDescription="Default commercial entity to assign PnL to"
           propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterInMarket/entity"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterInMarket/startAt"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterInMarket/endAt"/>
       <genOperations ecoreOperation="spotmarkets.ecore#//CharterInMarket/getMarketOrContractMinDuration"/>
       <genOperations ecoreOperation="spotmarkets.ecore#//CharterInMarket/getMarketOrContractMaxDuration"/>
     </genClasses>

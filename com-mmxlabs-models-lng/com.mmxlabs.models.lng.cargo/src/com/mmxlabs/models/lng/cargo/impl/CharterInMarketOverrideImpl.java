@@ -6,29 +6,25 @@
  */
 package com.mmxlabs.models.lng.cargo.impl;
 
-import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
-import com.mmxlabs.models.lng.cargo.EndHeelOptions;
-import com.mmxlabs.models.lng.cargo.StartHeelOptions;
-import com.mmxlabs.models.lng.port.Port;
-
-import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
-import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -91,7 +87,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * @generated
 	 * @ordered
 	 */
-	protected StartHeelOptions startHeel;
+	protected com.mmxlabs.models.lng.commercial.StartHeelOptions startHeel;
 
 	/**
 	 * This is true if the Start Heel containment reference has been set.
@@ -187,7 +183,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * @generated
 	 * @ordered
 	 */
-	protected EndHeelOptions endHeel;
+	protected com.mmxlabs.models.lng.commercial.EndHeelOptions endHeel;
 
 	/**
 	 * This is true if the End Heel containment reference has been set.
@@ -364,10 +360,10 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * @generated
 	 */
 	@Override
-	public StartHeelOptions getStartHeel() {
+	public com.mmxlabs.models.lng.commercial.StartHeelOptions getStartHeel() {
 		if (startHeel != null && startHeel.eIsProxy()) {
 			InternalEObject oldStartHeel = (InternalEObject)startHeel;
-			startHeel = (StartHeelOptions)eResolveProxy(oldStartHeel);
+			startHeel = (com.mmxlabs.models.lng.commercial.StartHeelOptions)eResolveProxy(oldStartHeel);
 			if (startHeel != oldStartHeel) {
 				InternalEObject newStartHeel = (InternalEObject)startHeel;
 				NotificationChain msgs = oldStartHeel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CHARTER_IN_MARKET_OVERRIDE__START_HEEL, null, null);
@@ -387,7 +383,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public StartHeelOptions basicGetStartHeel() {
+	public com.mmxlabs.models.lng.commercial.StartHeelOptions basicGetStartHeel() {
 		return startHeel;
 	}
 
@@ -396,8 +392,8 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetStartHeel(StartHeelOptions newStartHeel, NotificationChain msgs) {
-		StartHeelOptions oldStartHeel = startHeel;
+	public NotificationChain basicSetStartHeel(com.mmxlabs.models.lng.commercial.StartHeelOptions newStartHeel, NotificationChain msgs) {
+		com.mmxlabs.models.lng.commercial.StartHeelOptions oldStartHeel = startHeel;
 		startHeel = newStartHeel;
 		boolean oldStartHeelESet = startHeelESet;
 		startHeelESet = true;
@@ -414,7 +410,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * @generated
 	 */
 	@Override
-	public void setStartHeel(StartHeelOptions newStartHeel) {
+	public void setStartHeel(com.mmxlabs.models.lng.commercial.StartHeelOptions newStartHeel) {
 		if (newStartHeel != startHeel) {
 			NotificationChain msgs = null;
 			if (startHeel != null)
@@ -438,7 +434,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * @generated
 	 */
 	public NotificationChain basicUnsetStartHeel(NotificationChain msgs) {
-		StartHeelOptions oldStartHeel = startHeel;
+		com.mmxlabs.models.lng.commercial.StartHeelOptions oldStartHeel = startHeel;
 		startHeel = null;
 		boolean oldStartHeelESet = startHeelESet;
 		startHeelESet = false;
@@ -653,10 +649,10 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * @generated
 	 */
 	@Override
-	public EndHeelOptions getEndHeel() {
+	public com.mmxlabs.models.lng.commercial.EndHeelOptions getEndHeel() {
 		if (endHeel != null && endHeel.eIsProxy()) {
 			InternalEObject oldEndHeel = (InternalEObject)endHeel;
-			endHeel = (EndHeelOptions)eResolveProxy(oldEndHeel);
+			endHeel = (com.mmxlabs.models.lng.commercial.EndHeelOptions)eResolveProxy(oldEndHeel);
 			if (endHeel != oldEndHeel) {
 				InternalEObject newEndHeel = (InternalEObject)endHeel;
 				NotificationChain msgs = oldEndHeel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.CHARTER_IN_MARKET_OVERRIDE__END_HEEL, null, null);
@@ -676,7 +672,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EndHeelOptions basicGetEndHeel() {
+	public com.mmxlabs.models.lng.commercial.EndHeelOptions basicGetEndHeel() {
 		return endHeel;
 	}
 
@@ -685,8 +681,8 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetEndHeel(EndHeelOptions newEndHeel, NotificationChain msgs) {
-		EndHeelOptions oldEndHeel = endHeel;
+	public NotificationChain basicSetEndHeel(com.mmxlabs.models.lng.commercial.EndHeelOptions newEndHeel, NotificationChain msgs) {
+		com.mmxlabs.models.lng.commercial.EndHeelOptions oldEndHeel = endHeel;
 		endHeel = newEndHeel;
 		boolean oldEndHeelESet = endHeelESet;
 		endHeelESet = true;
@@ -703,7 +699,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * @generated
 	 */
 	@Override
-	public void setEndHeel(EndHeelOptions newEndHeel) {
+	public void setEndHeel(com.mmxlabs.models.lng.commercial.EndHeelOptions newEndHeel) {
 		if (newEndHeel != endHeel) {
 			NotificationChain msgs = null;
 			if (endHeel != null)
@@ -727,7 +723,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 	 * @generated
 	 */
 	public NotificationChain basicUnsetEndHeel(NotificationChain msgs) {
-		EndHeelOptions oldEndHeel = endHeel;
+		com.mmxlabs.models.lng.commercial.EndHeelOptions oldEndHeel = endHeel;
 		endHeel = null;
 		boolean oldEndHeelESet = endHeelESet;
 		endHeelESet = false;
@@ -1009,7 +1005,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 				setSpotIndex((Integer)newValue);
 				return;
 			case CargoPackage.CHARTER_IN_MARKET_OVERRIDE__START_HEEL:
-				setStartHeel((StartHeelOptions)newValue);
+				setStartHeel((com.mmxlabs.models.lng.commercial.StartHeelOptions)newValue);
 				return;
 			case CargoPackage.CHARTER_IN_MARKET_OVERRIDE__START_DATE:
 				setStartDate((LocalDateTime)newValue);
@@ -1021,7 +1017,7 @@ public class CharterInMarketOverrideImpl extends MMXObjectImpl implements Charte
 				setEndDate((LocalDateTime)newValue);
 				return;
 			case CargoPackage.CHARTER_IN_MARKET_OVERRIDE__END_HEEL:
-				setEndHeel((EndHeelOptions)newValue);
+				setEndHeel((com.mmxlabs.models.lng.commercial.EndHeelOptions)newValue);
 				return;
 			case CargoPackage.CHARTER_IN_MARKET_OVERRIDE__INCLUDE_BALLAST_BONUS:
 				setIncludeBallastBonus((Boolean)newValue);

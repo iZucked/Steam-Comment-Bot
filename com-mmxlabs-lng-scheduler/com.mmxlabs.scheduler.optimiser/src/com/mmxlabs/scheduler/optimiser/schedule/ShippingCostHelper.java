@@ -11,7 +11,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.detailtree.DetailTree;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.chartercontracts.CharterContractContstants;
+import com.mmxlabs.scheduler.optimiser.chartercontracts.CharterContractConstants;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.ICharterContract;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.ICharterContractAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -226,7 +226,7 @@ public class ShippingCostHelper {
 			ICharterContract charterContract = vesselAvailability.getCharterContract();
 			if (charterContract != null) {
 				ICharterContractAnnotation annotation = charterContract.annotate(firstLoadPort, portSlot, vesselAvailability, vesselStartTime, vesselEndTime);
-				shippingDetails.addChild(bb ? CharterContractContstants.BALLAST_BONUS_KEY : CharterContractContstants.REPOSITIONING_FEE_KEY, annotation);
+				shippingDetails.addChild(bb ? CharterContractConstants.BALLAST_BONUS_KEY : CharterContractConstants.REPOSITIONING_FEE_KEY, annotation);
 			}
 		}
 	}

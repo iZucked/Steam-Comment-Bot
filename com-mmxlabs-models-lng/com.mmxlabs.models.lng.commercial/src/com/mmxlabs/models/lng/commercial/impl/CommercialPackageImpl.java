@@ -24,6 +24,8 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractExpressionMapEntry;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters;
+import com.mmxlabs.models.lng.commercial.EVesselTankState;
+import com.mmxlabs.models.lng.commercial.EndHeelOptions;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.commercial.IBallastBonus;
@@ -47,6 +49,7 @@ import com.mmxlabs.models.lng.commercial.SimpleBallastBonusContainer;
 import com.mmxlabs.models.lng.commercial.SimpleEntityBook;
 import com.mmxlabs.models.lng.commercial.SimpleRepositioningFeeContainer;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
+import com.mmxlabs.models.lng.commercial.StartHeelOptions;
 import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.lng.commercial.VolumeParams;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -276,6 +279,20 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass endHeelOptionsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass startHeelOptionsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EEnum contractTypeEEnum = null;
 
 	/**
@@ -291,6 +308,13 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	private EEnum nextPortTypeEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum eVesselTankStateEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -1066,6 +1090,26 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
+	public EReference getGenericCharterContract_StartHeel() {
+		return (EReference)genericCharterContractEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getGenericCharterContract_EndHeel() {
+		return (EReference)genericCharterContractEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getIRepositioningFee() {
 		return iRepositioningFeeEClass;
 	}
@@ -1386,6 +1430,116 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
+	public EClass getEndHeelOptions() {
+		return endHeelOptionsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getEndHeelOptions_TankState() {
+		return (EAttribute)endHeelOptionsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getEndHeelOptions_MinimumEndHeel() {
+		return (EAttribute)endHeelOptionsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getEndHeelOptions_MaximumEndHeel() {
+		return (EAttribute)endHeelOptionsEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getEndHeelOptions_UseLastHeelPrice() {
+		return (EAttribute)endHeelOptionsEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getEndHeelOptions_PriceExpression() {
+		return (EAttribute)endHeelOptionsEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getStartHeelOptions() {
+		return startHeelOptionsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getStartHeelOptions_CvValue() {
+		return (EAttribute)startHeelOptionsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getStartHeelOptions_MinVolumeAvailable() {
+		return (EAttribute)startHeelOptionsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getStartHeelOptions_MaxVolumeAvailable() {
+		return (EAttribute)startHeelOptionsEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getStartHeelOptions_PriceExpression() {
+		return (EAttribute)startHeelOptionsEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getContractType() {
 		return contractTypeEEnum;
 	}
@@ -1408,6 +1562,16 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	@Override
 	public EEnum getNextPortType() {
 		return nextPortTypeEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EEnum getEVesselTankState() {
+		return eVesselTankStateEEnum;
 	}
 
 	/**
@@ -1524,6 +1688,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEAttribute(genericCharterContractEClass, GENERIC_CHARTER_CONTRACT__MAX_DURATION);
 		createEReference(genericCharterContractEClass, GENERIC_CHARTER_CONTRACT__REPOSITIONING_FEE_TERMS);
 		createEReference(genericCharterContractEClass, GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS);
+		createEReference(genericCharterContractEClass, GENERIC_CHARTER_CONTRACT__START_HEEL);
+		createEReference(genericCharterContractEClass, GENERIC_CHARTER_CONTRACT__END_HEEL);
 
 		iRepositioningFeeEClass = createEClass(IREPOSITIONING_FEE);
 
@@ -1571,10 +1737,24 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		originPortRepositioningFeeTermEClass = createEClass(ORIGIN_PORT_REPOSITIONING_FEE_TERM);
 
+		endHeelOptionsEClass = createEClass(END_HEEL_OPTIONS);
+		createEAttribute(endHeelOptionsEClass, END_HEEL_OPTIONS__TANK_STATE);
+		createEAttribute(endHeelOptionsEClass, END_HEEL_OPTIONS__MINIMUM_END_HEEL);
+		createEAttribute(endHeelOptionsEClass, END_HEEL_OPTIONS__MAXIMUM_END_HEEL);
+		createEAttribute(endHeelOptionsEClass, END_HEEL_OPTIONS__USE_LAST_HEEL_PRICE);
+		createEAttribute(endHeelOptionsEClass, END_HEEL_OPTIONS__PRICE_EXPRESSION);
+
+		startHeelOptionsEClass = createEClass(START_HEEL_OPTIONS);
+		createEAttribute(startHeelOptionsEClass, START_HEEL_OPTIONS__CV_VALUE);
+		createEAttribute(startHeelOptionsEClass, START_HEEL_OPTIONS__MIN_VOLUME_AVAILABLE);
+		createEAttribute(startHeelOptionsEClass, START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE);
+		createEAttribute(startHeelOptionsEClass, START_HEEL_OPTIONS__PRICE_EXPRESSION);
+
 		// Create enums
 		contractTypeEEnum = createEEnum(CONTRACT_TYPE);
 		pricingEventEEnum = createEEnum(PRICING_EVENT);
 		nextPortTypeEEnum = createEEnum(NEXT_PORT_TYPE);
+		eVesselTankStateEEnum = createEEnum(EVESSEL_TANK_STATE);
 	}
 
 	/**
@@ -1640,6 +1820,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		lumpSumRepositioningFeeTermEClass.getESuperTypes().add(this.getLumpSumTerm());
 		originPortRepositioningFeeTermEClass.getESuperTypes().add(this.getRepositioningFeeTerm());
 		originPortRepositioningFeeTermEClass.getESuperTypes().add(this.getNotionalJourneyTerm());
+		startHeelOptionsEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(commercialModelEClass, CommercialModel.class, "CommercialModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1736,6 +1917,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getGenericCharterContract_MaxDuration(), ecorePackage.getEInt(), "maxDuration", null, 1, 1, GenericCharterContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getGenericCharterContract_RepositioningFeeTerms(), this.getIRepositioningFee(), null, "repositioningFeeTerms", null, 0, 1, GenericCharterContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getGenericCharterContract_BallastBonusTerms(), this.getIBallastBonus(), null, "ballastBonusTerms", null, 0, 1, GenericCharterContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getGenericCharterContract_StartHeel(), this.getStartHeelOptions(), null, "startHeel", null, 1, 1, GenericCharterContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getGenericCharterContract_EndHeel(), this.getEndHeelOptions(), null, "endHeel", null, 0, 1, GenericCharterContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(iRepositioningFeeEClass, IRepositioningFee.class, "IRepositioningFee", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -1754,10 +1937,10 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEReference(getMonthlyBallastBonusContainer_Hubs(), g1, null, "hubs", null, 0, -1, MonthlyBallastBonusContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMonthlyBallastBonusContainer_Terms(), this.getMonthlyBallastBonusTerm(), null, "terms", null, 0, -1, MonthlyBallastBonusContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(lumpSumTermEClass, LumpSumTerm.class, "LumpSumTerm", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(lumpSumTermEClass, LumpSumTerm.class, "LumpSumTerm", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLumpSumTerm_PriceExpression(), ecorePackage.getEString(), "priceExpression", "", 1, 1, LumpSumTerm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(notionalJourneyTermEClass, NotionalJourneyTerm.class, "NotionalJourneyTerm", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(notionalJourneyTermEClass, NotionalJourneyTerm.class, "NotionalJourneyTerm", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getNotionalJourneyTerm_Speed(), ecorePackage.getEDouble(), "speed", "0", 1, 1, NotionalJourneyTerm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNotionalJourneyTerm_FuelPriceExpression(), ecorePackage.getEString(), "fuelPriceExpression", "", 1, 1, NotionalJourneyTerm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNotionalJourneyTerm_HirePriceExpression(), ecorePackage.getEString(), "hirePriceExpression", "", 1, 1, NotionalJourneyTerm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1792,6 +1975,19 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		initEClass(originPortRepositioningFeeTermEClass, OriginPortRepositioningFeeTerm.class, "OriginPortRepositioningFeeTerm", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
+		initEClass(endHeelOptionsEClass, EndHeelOptions.class, "EndHeelOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getEndHeelOptions_TankState(), this.getEVesselTankState(), "tankState", null, 0, 1, EndHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getEndHeelOptions_MinimumEndHeel(), ecorePackage.getEInt(), "minimumEndHeel", null, 0, 1, EndHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getEndHeelOptions_MaximumEndHeel(), ecorePackage.getEInt(), "maximumEndHeel", null, 0, 1, EndHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getEndHeelOptions_UseLastHeelPrice(), ecorePackage.getEBoolean(), "useLastHeelPrice", null, 0, 1, EndHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getEndHeelOptions_PriceExpression(), ecorePackage.getEString(), "priceExpression", null, 0, 1, EndHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(startHeelOptionsEClass, StartHeelOptions.class, "StartHeelOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getStartHeelOptions_CvValue(), ecorePackage.getEDouble(), "cvValue", null, 1, 1, StartHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getStartHeelOptions_MinVolumeAvailable(), ecorePackage.getEDouble(), "minVolumeAvailable", null, 1, 1, StartHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getStartHeelOptions_MaxVolumeAvailable(), ecorePackage.getEDouble(), "maxVolumeAvailable", null, 1, 1, StartHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getStartHeelOptions_PriceExpression(), ecorePackage.getEString(), "priceExpression", null, 0, 1, StartHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		// Initialize enums and add enum literals
 		initEEnum(contractTypeEEnum, ContractType.class, "ContractType");
 		addEEnumLiteral(contractTypeEEnum, ContractType.BOTH);
@@ -1807,6 +2003,11 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEEnum(nextPortTypeEEnum, NextPortType.class, "NextPortType");
 		addEEnumLiteral(nextPortTypeEEnum, NextPortType.LOAD_PORT);
 		addEEnumLiteral(nextPortTypeEEnum, NextPortType.NEAREST_HUB);
+
+		initEEnum(eVesselTankStateEEnum, EVesselTankState.class, "EVesselTankState");
+		addEEnumLiteral(eVesselTankStateEEnum, EVesselTankState.EITHER);
+		addEEnumLiteral(eVesselTankStateEEnum, EVesselTankState.MUST_BE_COLD);
+		addEEnumLiteral(eVesselTankStateEEnum, EVesselTankState.MUST_BE_WARM);
 
 		// Create resource
 		createResource(eNS_URI);
@@ -1913,6 +2114,41 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		   new String[] {
 			   "unit", "$/day"
 		   });
+		addAnnotation
+		  (getEndHeelOptions_MinimumEndHeel(),
+		   source,
+		   new String[] {
+			   "unit", "m\u00b3",
+			   "formatString", "###,##0.###"
+		   });
+		addAnnotation
+		  (getEndHeelOptions_MaximumEndHeel(),
+		   source,
+		   new String[] {
+			   "unit", "m\u00b3",
+			   "formatString", "###,##0.###"
+		   });
+		addAnnotation
+		  (getStartHeelOptions_CvValue(),
+		   source,
+		   new String[] {
+			   "unit", "mmBtu/m\u00b3",
+			   "formatString", "#0.######"
+		   });
+		addAnnotation
+		  (getStartHeelOptions_MinVolumeAvailable(),
+		   source,
+		   new String[] {
+			   "unit", "m\u00b3",
+			   "formatString", "###,##0.###"
+		   });
+		addAnnotation
+		  (getStartHeelOptions_MaxVolumeAvailable(),
+		   source,
+		   new String[] {
+			   "unit", "m\u00b3",
+			   "formatString", "###,##0.###"
+		   });
 	}
 
 	/**
@@ -1986,6 +2222,18 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		   source,
 		   new String[] {
 			   "type", "charter"
+		   });
+		addAnnotation
+		  (getEndHeelOptions_PriceExpression(),
+		   source,
+		   new String[] {
+			   "type", "commodity"
+		   });
+		addAnnotation
+		  (getStartHeelOptions_PriceExpression(),
+		   source,
+		   new String[] {
+			   "type", "commodity"
 		   });
 	}
 

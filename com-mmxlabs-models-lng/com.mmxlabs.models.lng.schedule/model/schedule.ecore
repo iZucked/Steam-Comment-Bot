@@ -416,7 +416,14 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LumpSumBallastBonusTermDetails" eSuperTypes="#//LumpSumDetails"/>
   <eClassifiers xsi:type="ecore:EClass" name="LumpSumRepositioningFeeTermDetails"
-      eSuperTypes="#//LumpSumDetails"/>
+      eSuperTypes="#//LumpSumDetails">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="originPort" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="">
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="basefuel"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="NotionalJourneyDetails" eSuperTypes="#//MatchingContractDetails">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="distance" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="0"/>

@@ -13,7 +13,6 @@ import com.mmxlabs.common.csv.IDeferment;
 import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.commercial.BallastBonusContract;
 import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.BallastBonusTerm;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;

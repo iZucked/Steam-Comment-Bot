@@ -30,7 +30,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public class NotionalJourneyTermImpl extends EObjectImpl implements NotionalJourneyTerm {
+public abstract class NotionalJourneyTermImpl extends EObjectImpl implements NotionalJourneyTerm {
 	/**
 	 * The default value of the '{@link #getSpeed() <em>Speed</em>}' attribute.
 	 * <!-- begin-user-doc -->

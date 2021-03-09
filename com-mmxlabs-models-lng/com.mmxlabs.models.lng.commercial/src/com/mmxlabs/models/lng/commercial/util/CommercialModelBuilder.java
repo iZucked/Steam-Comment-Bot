@@ -11,21 +11,22 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.models.lng.commercial.BallastBonusCharterContract;
-import com.mmxlabs.models.lng.commercial.BallastBonusContract;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
-import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine;
-import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine;
+import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusTerm;
+import com.mmxlabs.models.lng.commercial.LumpSumRepositioningFeeTerm;
+import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusTerm;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
-import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.commercial.SimpleBallastBonusContainer;
+import com.mmxlabs.models.lng.commercial.SimpleRepositioningFeeContainer;
 import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
@@ -174,35 +175,39 @@ public class CommercialModelBuilder {
 		setTaxRate(entity.getUpstreamBook(), EMFCopier.copy(rate));
 	}
 
-	public @NonNull RuleBasedBallastBonusContract createSimpleLumpSumBallastBonusContract(@NonNull final Port redeliveryPort, @NonNull final String priceExpression) {
+	public @NonNull GenericCharterContract createSimpleLumpSumBallastBonusContract(@NonNull final Port redeliveryPort, @NonNull final String priceExpression) {
 
-		final LumpSumBallastBonusContractLine lumpSumBallastBonusContractLine = CommercialFactory.eINSTANCE.createLumpSumBallastBonusContractLine();
-		lumpSumBallastBonusContractLine.getRedeliveryPorts().add(redeliveryPort);
-		lumpSumBallastBonusContractLine.setPriceExpression(priceExpression);
+		final LumpSumBallastBonusTerm lumpSumBallastBonus = CommercialFactory.eINSTANCE.createLumpSumBallastBonusTerm();
+		lumpSumBallastBonus.getRedeliveryPorts().add(redeliveryPort);
+		lumpSumBallastBonus.setPriceExpression(priceExpression);
+		
+		final SimpleBallastBonusContainer ballastBonus = CommercialFactory.eINSTANCE.createSimpleBallastBonusContainer();
+		ballastBonus.getTerms().add(lumpSumBallastBonus);
 
-		final RuleBasedBallastBonusContract ballastBonusContract = CommercialFactory.eINSTANCE.createRuleBasedBallastBonusContract();
-		ballastBonusContract.getRules().add(lumpSumBallastBonusContractLine);
+		final GenericCharterContract charterContract = CommercialFactory.eINSTANCE.createGenericCharterContract();
+		charterContract.setBallastBonusTerms(ballastBonus);
 
-		return ballastBonusContract;
+		return charterContract;
 	}
 
-	public @NonNull BallastBonusCharterContract createLumpSumBallastBonusCharterContract(@NonNull final Port redeliveryPort, @NonNull final String priceExpression,
+	public @NonNull GenericCharterContract createLumpSumBallastBonusCharterContract(@NonNull final Port redeliveryPort, @NonNull final String priceExpression,
 			@NonNull final String repositioningFee) {
-
-		final BallastBonusContract ballastBonusContract = createSimpleLumpSumBallastBonusContract(redeliveryPort, priceExpression);
-
-		final BallastBonusCharterContract ballastBonusCharterContract = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
-		ballastBonusCharterContract.setRepositioningFee(repositioningFee);
-		ballastBonusCharterContract.setBallastBonusContract(ballastBonusContract);
+		final LumpSumRepositioningFeeTerm lumpSumRepositioiningFee = CommercialFactory.eINSTANCE.createLumpSumRepositioningFeeTerm();
+		lumpSumRepositioiningFee.setPriceExpression(repositioningFee);
+		
+		final SimpleRepositioningFeeContainer repositioningFeeContainer = CommercialFactory.eINSTANCE.createSimpleRepositioningFeeContainer();
+		repositioningFeeContainer.getTerms().add(lumpSumRepositioiningFee);
+		final GenericCharterContract ballastBonusCharterContract = createSimpleLumpSumBallastBonusContract(redeliveryPort, priceExpression);
+		ballastBonusCharterContract.setRepositioningFeeTerms(repositioningFeeContainer);
 
 		return ballastBonusCharterContract;
 	}
 
-	public @NonNull RuleBasedBallastBonusContract createSimpleNotionalJourneyBallastBonusContract(final @NonNull Collection<@NonNull APortSet<Port>> redeliveryPorts, final double speed,
+	public @NonNull GenericCharterContract createSimpleNotionalJourneyBallastBonusContract(final @NonNull Collection<@NonNull APortSet<Port>> redeliveryPorts, final double speed,
 			final @NonNull String hireExpression, final @NonNull String fuelExpression, final boolean includeCanalFees, final boolean includeCanalTime,
 			final @NonNull Collection<@NonNull APortSet<Port>> returnPorts) {
 
-		final NotionalJourneyBallastBonusContractLine notionalJourneyBallastBonusContractLine = CommercialFactory.eINSTANCE.createNotionalJourneyBallastBonusContractLine();
+		final NotionalJourneyBallastBonusTerm notionalJourneyBallastBonusContractLine = CommercialFactory.eINSTANCE.createNotionalJourneyBallastBonusTerm();
 		notionalJourneyBallastBonusContractLine.getRedeliveryPorts().addAll(redeliveryPorts);
 		notionalJourneyBallastBonusContractLine.getReturnPorts().addAll(returnPorts);
 		notionalJourneyBallastBonusContractLine.setFuelPriceExpression(fuelExpression);
@@ -210,9 +215,12 @@ public class CommercialModelBuilder {
 		notionalJourneyBallastBonusContractLine.setIncludeCanal(includeCanalFees);
 		notionalJourneyBallastBonusContractLine.setIncludeCanalTime(includeCanalTime);
 		notionalJourneyBallastBonusContractLine.setSpeed(speed);
+		
+		final SimpleBallastBonusContainer ballastBonus = CommercialFactory.eINSTANCE.createSimpleBallastBonusContainer();
+		ballastBonus.getTerms().add(notionalJourneyBallastBonusContractLine);
 
-		final RuleBasedBallastBonusContract ballastBonusContract = CommercialFactory.eINSTANCE.createRuleBasedBallastBonusContract();
-		ballastBonusContract.getRules().add(notionalJourneyBallastBonusContractLine);
+		final GenericCharterContract ballastBonusContract = CommercialFactory.eINSTANCE.createGenericCharterContract();
+		ballastBonusContract.setBallastBonusTerms(ballastBonus);
 
 		return ballastBonusContract;
 	}

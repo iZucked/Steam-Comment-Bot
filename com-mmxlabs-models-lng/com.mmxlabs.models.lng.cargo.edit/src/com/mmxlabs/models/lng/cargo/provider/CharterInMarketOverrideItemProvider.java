@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 import java.util.Collection;
 import java.util.List;
@@ -339,12 +340,12 @@ public class CharterInMarketOverrideItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(CargoPackage.Literals.CHARTER_IN_MARKET_OVERRIDE__START_HEEL,
-				 CargoFactory.eINSTANCE.createStartHeelOptions()));
+				 CommercialFactory.eINSTANCE.createStartHeelOptions()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(CargoPackage.Literals.CHARTER_IN_MARKET_OVERRIDE__END_HEEL,
-				 CargoFactory.eINSTANCE.createEndHeelOptions()));
+				 CommercialFactory.eINSTANCE.createEndHeelOptions()));
 	}
 
 }

@@ -45,7 +45,6 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.ICharterContract;
-import com.mmxlabs.scheduler.optimiser.components.DefaultSpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.ICharterOutVesselEventPortSlot;
@@ -77,6 +76,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.Cargo;
 import com.mmxlabs.scheduler.optimiser.components.impl.CharterOutVesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.impl.CharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.components.impl.DefaultSpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.impl.DefaultVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
@@ -1821,9 +1821,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	@NonNull
-	public ISpotCharterInMarket createSpotCharterInMarket(@NonNull final String name, @NonNull final IVessel vessel, @NonNull final ILongCurve dailyCharterInRateCurve, final int availabilityCount,
-			@Nullable IEndRequirement endRequirement, @Nullable ICharterContract charterContract, final ILongCurve repositioningFee) {
-		return new DefaultSpotCharterInMarket(name, vessel, dailyCharterInRateCurve, availabilityCount, endRequirement, charterContract, repositioningFee);
+	public ISpotCharterInMarket createSpotCharterInMarket(@NonNull final String name, @NonNull final IVessel vessel, @NonNull final ILongCurve dailyCharterInRateCurve, //
+			final int availabilityCount, @Nullable IStartRequirement startRequirement, @Nullable IEndRequirement endRequirement, //
+			@Nullable ICharterContract charterContract, final ILongCurve repositioningFee) {
+		return new DefaultSpotCharterInMarket(name, vessel, dailyCharterInRateCurve, availabilityCount, startRequirement, endRequirement, charterContract, repositioningFee);
 	}
 
 	@Override

@@ -23,6 +23,11 @@
       <genEnumLiterals ecoreEnumLiteral="commercial.ecore#//NextPortType/LoadPort"/>
       <genEnumLiterals ecoreEnumLiteral="commercial.ecore#//NextPortType/NearestHub"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="commercial.ecore#//EVesselTankState">
+      <genEnumLiterals ecoreEnumLiteral="commercial.ecore#//EVesselTankState/EITHER"/>
+      <genEnumLiterals ecoreEnumLiteral="commercial.ecore#//EVesselTankState/MUST_BE_COLD"/>
+      <genEnumLiterals ecoreEnumLiteral="commercial.ecore#//EVesselTankState/MUST_BE_WARM"/>
+    </genEnums>
     <genClasses ecoreClass="commercial.ecore#//CommercialModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//CommercialModel/entities"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//CommercialModel/salesContracts"/>
@@ -120,6 +125,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//GenericCharterContract/maxDuration"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//GenericCharterContract/repositioningFeeTerms"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//GenericCharterContract/ballastBonusTerms"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//GenericCharterContract/startHeel"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//GenericCharterContract/endHeel"/>
     </genClasses>
     <genClasses image="false" ecoreClass="commercial.ecore#//IRepositioningFee"/>
     <genClasses ecoreClass="commercial.ecore#//SimpleRepositioningFeeContainer">
@@ -162,5 +169,18 @@
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//LumpSumRepositioningFeeTerm"/>
     <genClasses ecoreClass="commercial.ecore#//OriginPortRepositioningFeeTerm"/>
+    <genClasses ecoreClass="commercial.ecore#//EndHeelOptions">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//EndHeelOptions/tankState"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//EndHeelOptions/minimumEndHeel"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//EndHeelOptions/maximumEndHeel"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//EndHeelOptions/useLastHeelPrice"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//EndHeelOptions/priceExpression"/>
+    </genClasses>
+    <genClasses ecoreClass="commercial.ecore#//StartHeelOptions">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//StartHeelOptions/cvValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//StartHeelOptions/minVolumeAvailable"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//StartHeelOptions/maxVolumeAvailable"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//StartHeelOptions/priceExpression"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

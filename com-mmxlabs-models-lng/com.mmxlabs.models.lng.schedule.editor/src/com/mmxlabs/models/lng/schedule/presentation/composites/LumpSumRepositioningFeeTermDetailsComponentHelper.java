@@ -68,5 +68,15 @@ public class LumpSumRepositioningFeeTermDetailsComponentHelper extends BaseCompo
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_originPortEditor(detailComposite, topClass);
+	}
+
+	/**
+	 * Create the editor for the originPort feature on LumpSumRepositioningFeeTermDetails
+	 *
+	 * @generated
+	 */
+	protected void add_originPortEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.LUMP_SUM_REPOSITIONING_FEE_TERM_DETAILS__ORIGIN_PORT));
 	}
 }

@@ -65,6 +65,7 @@ public class CharterInMarketItemProvider
 			addMtmPropertyDescriptor(object);
 			addEntityPropertyDescriptor(object);
 			addStartAtPropertyDescriptor(object);
+			addEndAtPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -259,6 +260,28 @@ public class CharterInMarketItemProvider
 				 getString("_UI_CharterInMarket_startAt_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_CharterInMarket_startAt_feature", "_UI_CharterInMarket_type"),
 				 SpotMarketsPackage.Literals.CHARTER_IN_MARKET__START_AT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the End At feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addEndAtPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterInMarket_endAt_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterInMarket_endAt_feature", "_UI_CharterInMarket_type"),
+				 SpotMarketsPackage.Literals.CHARTER_IN_MARKET__END_AT,
 				 true,
 				 false,
 				 true,

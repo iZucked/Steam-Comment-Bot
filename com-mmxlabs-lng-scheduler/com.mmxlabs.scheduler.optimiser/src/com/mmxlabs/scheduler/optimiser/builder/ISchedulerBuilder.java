@@ -218,11 +218,8 @@ public interface ISchedulerBuilder {
 	 * @param start
 	 * @param end
 	 * @param ballastBonusContract
-	 *            TODO
 	 * @param repositioningFee
-	 *            TODO
 	 * @param isOptional
-	 *            TODO
 	 * @return
 	 */
 	@NonNull
@@ -625,8 +622,8 @@ public interface ISchedulerBuilder {
 	void setGeneratedCharterOutEndTime(int charterOutEndTime);
 
 	@NonNull
-	ISpotCharterInMarket createSpotCharterInMarket(@NonNull String name, @NonNull IVessel oVessel, @NonNull ILongCurve charterInCurve, int charterCount, IEndRequirement endRequiremenbt,
-			ICharterContract charterContract, ILongCurve repositioningFee);
+	ISpotCharterInMarket createSpotCharterInMarket(@NonNull String name, @NonNull IVessel oVessel, @NonNull ILongCurve charterInCurve, int charterCount, //
+			IStartRequirement startRequirement, IEndRequirement endRequirement, ICharterContract charterContract, ILongCurve repositioningFee);
 
 	/***
 	 * Create a sequence element

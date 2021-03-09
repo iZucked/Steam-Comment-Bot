@@ -139,6 +139,8 @@ public class GenericCharterContractItemProvider extends NamedObjectItemProvider 
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__REPOSITIONING_FEE_TERMS);
 			childrenFeatures.add(CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS);
+			childrenFeatures.add(CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__START_HEEL);
+			childrenFeatures.add(CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__END_HEEL);
 		}
 		return childrenFeatures;
 	}
@@ -201,6 +203,8 @@ public class GenericCharterContractItemProvider extends NamedObjectItemProvider 
 				return;
 			case CommercialPackage.GENERIC_CHARTER_CONTRACT__REPOSITIONING_FEE_TERMS:
 			case CommercialPackage.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS:
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT__START_HEEL:
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT__END_HEEL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -232,6 +236,16 @@ public class GenericCharterContractItemProvider extends NamedObjectItemProvider 
 			(createChildParameter
 				(CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS,
 				 CommercialFactory.eINSTANCE.createMonthlyBallastBonusContainer()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__START_HEEL,
+				 CommercialFactory.eINSTANCE.createStartHeelOptions()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__END_HEEL,
+				 CommercialFactory.eINSTANCE.createEndHeelOptions()));
 	}
 
 }

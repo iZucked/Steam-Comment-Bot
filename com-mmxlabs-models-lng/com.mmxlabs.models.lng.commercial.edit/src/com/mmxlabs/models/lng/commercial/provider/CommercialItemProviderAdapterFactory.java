@@ -410,52 +410,6 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.LumpSumTerm} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected LumpSumTermItemProvider lumpSumTermItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.LumpSumTerm}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createLumpSumTermAdapter() {
-		if (lumpSumTermItemProvider == null) {
-			lumpSumTermItemProvider = new LumpSumTermItemProvider(this);
-		}
-
-		return lumpSumTermItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.NotionalJourneyTerm} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected NotionalJourneyTermItemProvider notionalJourneyTermItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.NotionalJourneyTerm}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createNotionalJourneyTermAdapter() {
-		if (notionalJourneyTermItemProvider == null) {
-			notionalJourneyTermItemProvider = new NotionalJourneyTermItemProvider(this);
-		}
-
-		return notionalJourneyTermItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.BallastBonusTerm} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -617,6 +571,52 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.EndHeelOptions} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected EndHeelOptionsItemProvider endHeelOptionsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.EndHeelOptions}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createEndHeelOptionsAdapter() {
+		if (endHeelOptionsItemProvider == null) {
+			endHeelOptionsItemProvider = new EndHeelOptionsItemProvider(this);
+		}
+
+		return endHeelOptionsItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.StartHeelOptions} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected StartHeelOptionsItemProvider startHeelOptionsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.StartHeelOptions}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createStartHeelOptionsAdapter() {
+		if (startHeelOptionsItemProvider == null) {
+			startHeelOptionsItemProvider = new StartHeelOptionsItemProvider(this);
+		}
+
+		return startHeelOptionsItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -756,8 +756,6 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (simpleRepositioningFeeContainerItemProvider != null) simpleRepositioningFeeContainerItemProvider.dispose();
 		if (simpleBallastBonusContainerItemProvider != null) simpleBallastBonusContainerItemProvider.dispose();
 		if (monthlyBallastBonusContainerItemProvider != null) monthlyBallastBonusContainerItemProvider.dispose();
-		if (lumpSumTermItemProvider != null) lumpSumTermItemProvider.dispose();
-		if (notionalJourneyTermItemProvider != null) notionalJourneyTermItemProvider.dispose();
 		if (ballastBonusTermItemProvider != null) ballastBonusTermItemProvider.dispose();
 		if (lumpSumBallastBonusTermItemProvider != null) lumpSumBallastBonusTermItemProvider.dispose();
 		if (notionalJourneyBallastBonusTermItemProvider != null) notionalJourneyBallastBonusTermItemProvider.dispose();
@@ -765,6 +763,8 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (repositioningFeeTermItemProvider != null) repositioningFeeTermItemProvider.dispose();
 		if (lumpSumRepositioningFeeTermItemProvider != null) lumpSumRepositioningFeeTermItemProvider.dispose();
 		if (originPortRepositioningFeeTermItemProvider != null) originPortRepositioningFeeTermItemProvider.dispose();
+		if (endHeelOptionsItemProvider != null) endHeelOptionsItemProvider.dispose();
+		if (startHeelOptionsItemProvider != null) startHeelOptionsItemProvider.dispose();
 	}
 
 }

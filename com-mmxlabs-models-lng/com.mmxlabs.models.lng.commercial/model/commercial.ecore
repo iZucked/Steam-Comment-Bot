@@ -221,6 +221,10 @@
         eType="#//IRepositioningFee" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ballastBonusTerms" eType="#//IBallastBonus"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="startHeel" lowerBound="1"
+        eType="#//StartHeelOptions" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="endHeel" eType="#//EndHeelOptions"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IRepositioningFee" abstract="true" interface="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="SimpleRepositioningFeeContainer" eSuperTypes="#//IRepositioningFee">
@@ -241,7 +245,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="terms" upperBound="-1"
         eType="#//MonthlyBallastBonusTerm" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="LumpSumTerm">
+  <eClassifiers xsi:type="ecore:EClass" name="LumpSumTerm" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceExpression" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="">
       <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
@@ -249,7 +253,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="NotionalJourneyTerm">
+  <eClassifiers xsi:type="ecore:EClass" name="NotionalJourneyTerm" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="speed" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
         defaultValueLiteral="0">
       <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
@@ -308,4 +312,58 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LumpSumRepositioningFeeTerm" eSuperTypes="#//RepositioningFeeTerm #//LumpSumTerm"/>
   <eClassifiers xsi:type="ecore:EClass" name="OriginPortRepositioningFeeTerm" eSuperTypes="#//RepositioningFeeTerm #//NotionalJourneyTerm"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EndHeelOptions">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tankState" eType="#//EVesselTankState"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minimumEndHeel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="m³"/>
+        <details key="formatString" value="###,##0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maximumEndHeel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="m³"/>
+        <details key="formatString" value="###,##0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="useLastHeelPrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="commodity"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EVesselTankState">
+    <eLiterals name="EITHER"/>
+    <eLiterals name="MUST_BE_COLD" value="1"/>
+    <eLiterals name="MUST_BE_WARM" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StartHeelOptions" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cvValue" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="mmBtu/m³"/>
+        <details key="formatString" value="#0.######"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minVolumeAvailable" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="m³"/>
+        <details key="formatString" value="###,##0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxVolumeAvailable" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="m³"/>
+        <details key="formatString" value="###,##0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="commodity"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
 </ecore:EPackage>

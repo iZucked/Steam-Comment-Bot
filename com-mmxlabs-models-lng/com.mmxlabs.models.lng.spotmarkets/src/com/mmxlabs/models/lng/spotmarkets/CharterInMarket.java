@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.NamedObject;
 
@@ -37,6 +38,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#isMtm <em>Mtm</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getStartAt <em>Start At</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getEndAt <em>End At</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket()
@@ -294,6 +296,18 @@ public interface CharterInMarket extends SpotCharterMarket, VesselAssignmentType
 	 * @generated
 	 */
 	void setStartAt(Port value);
+
+	/**
+	 * Returns the value of the '<em><b>End At</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}<code>&lt;com.mmxlabs.models.lng.port.Port&gt;</code>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>End At</em>' reference list.
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket_EndAt()
+	 * @model
+	 * @generated
+	 */
+	EList<APortSet<Port>> getEndAt();
 
 	/**
 	 * <!-- begin-user-doc -->

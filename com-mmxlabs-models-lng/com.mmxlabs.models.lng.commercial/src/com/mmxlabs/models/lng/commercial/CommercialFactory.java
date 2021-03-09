@@ -150,24 +150,6 @@ public interface CommercialFactory extends EFactory {
 	MonthlyBallastBonusContainer createMonthlyBallastBonusContainer();
 
 	/**
-	 * Returns a new object of class '<em>Lump Sum Term</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Lump Sum Term</em>'.
-	 * @generated
-	 */
-	LumpSumTerm createLumpSumTerm();
-
-	/**
-	 * Returns a new object of class '<em>Notional Journey Term</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Notional Journey Term</em>'.
-	 * @generated
-	 */
-	NotionalJourneyTerm createNotionalJourneyTerm();
-
-	/**
 	 * Returns a new object of class '<em>Ballast Bonus Term</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -229,6 +211,24 @@ public interface CommercialFactory extends EFactory {
 	 * @generated
 	 */
 	OriginPortRepositioningFeeTerm createOriginPortRepositioningFeeTerm();
+
+	/**
+	 * Returns a new object of class '<em>End Heel Options</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>End Heel Options</em>'.
+	 * @generated
+	 */
+	EndHeelOptions createEndHeelOptions();
+
+	/**
+	 * Returns a new object of class '<em>Start Heel Options</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Start Heel Options</em>'.
+	 * @generated
+	 */
+	StartHeelOptions createStartHeelOptions();
 
 	/**
 	 * Returns the package supported by this factory.

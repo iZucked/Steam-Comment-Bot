@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.spotmarkets.validation;
 
 import java.util.LinkedList;
 import java.util.List;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.emf.ecore.EObject;
@@ -13,7 +14,6 @@ import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.models.lng.commercial.BallastBonusCharterContract;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.spotmarkets.validation.internal.Activator;

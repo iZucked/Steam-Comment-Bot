@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
@@ -39,7 +39,7 @@ public class EndHeelOptionsDetailComposite extends DefaultDetailComposite {
 
 				{
 					final EStructuralFeature feature = editor.getFeature();
-					if (feature == CargoPackage.Literals.END_HEEL_OPTIONS__PRICE_EXPRESSION || feature == CargoPackage.Literals.END_HEEL_OPTIONS__USE_LAST_HEEL_PRICE) {
+					if (feature == CommercialPackage.Literals.END_HEEL_OPTIONS__PRICE_EXPRESSION || feature == CommercialPackage.Literals.END_HEEL_OPTIONS__USE_LAST_HEEL_PRICE) {
 						return super.createEditorLayoutData(root, value, editor, control);
 					}
 				}

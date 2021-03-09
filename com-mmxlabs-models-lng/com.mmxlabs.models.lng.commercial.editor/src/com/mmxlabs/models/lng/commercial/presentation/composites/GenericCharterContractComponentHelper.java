@@ -75,6 +75,8 @@ public class GenericCharterContractComponentHelper extends BaseComponentHelper {
 		add_maxDurationEditor(detailComposite, topClass);
 		add_repositioningFeeTermsEditor(detailComposite, topClass);
 		add_ballastBonusTermsEditor(detailComposite, topClass);
+		add_startHeelEditor(detailComposite, topClass);
+		add_endHeelEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the minDuration feature on GenericCharterContract
@@ -108,5 +110,23 @@ public class GenericCharterContractComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_ballastBonusTermsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS));
+	}
+
+	/**
+	 * Create the editor for the startHeel feature on GenericCharterContract
+	 *
+	 * @generated
+	 */
+	protected void add_startHeelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__START_HEEL));
+	}
+
+	/**
+	 * Create the editor for the endHeel feature on GenericCharterContract
+	 *
+	 * @generated
+	 */
+	protected void add_endHeelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__END_HEEL));
 	}
 }

@@ -614,12 +614,12 @@ public class VesselAvailabilityItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL,
-				 CargoFactory.eINSTANCE.createStartHeelOptions()));
+				 CommercialFactory.eINSTANCE.createStartHeelOptions()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(CargoPackage.Literals.VESSEL_AVAILABILITY__END_HEEL,
-				 CargoFactory.eINSTANCE.createEndHeelOptions()));
+				 CommercialFactory.eINSTANCE.createEndHeelOptions()));
 
 		newChildDescriptors.add
 			(createChildParameter

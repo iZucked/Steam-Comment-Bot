@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
@@ -28,6 +29,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
@@ -55,6 +57,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#isMtm <em>Mtm</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getStartAt <em>Start At</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getEndAt <em>End At</em>}</li>
  * </ul>
  *
  * @generated
@@ -306,6 +309,16 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * @ordered
 	 */
 	protected Port startAt;
+
+	/**
+	 * The cached value of the '{@link #getEndAt() <em>End At</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEndAt()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<APortSet<Port>> endAt;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -631,6 +644,19 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 /**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<APortSet<Port>> getEndAt() {
+		if (endAt == null) {
+			endAt = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, SpotMarketsPackage.CHARTER_IN_MARKET__END_AT);
+		}
+		return endAt;
+	}
+
+/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public int getMarketOrContractMinDuration() {
@@ -888,6 +914,8 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 			case SpotMarketsPackage.CHARTER_IN_MARKET__START_AT:
 				if (resolve) return getStartAt();
 				return basicGetStartAt();
+			case SpotMarketsPackage.CHARTER_IN_MARKET__END_AT:
+				return getEndAt();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -945,6 +973,10 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 			case SpotMarketsPackage.CHARTER_IN_MARKET__START_AT:
 				setStartAt((Port)newValue);
 				return;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__END_AT:
+				getEndAt().clear();
+				getEndAt().addAll((Collection<? extends APortSet<Port>>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -999,6 +1031,9 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 			case SpotMarketsPackage.CHARTER_IN_MARKET__START_AT:
 				setStartAt((Port)null);
 				return;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__END_AT:
+				getEndAt().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1039,6 +1074,8 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 				return entity != null;
 			case SpotMarketsPackage.CHARTER_IN_MARKET__START_AT:
 				return startAt != null;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__END_AT:
+				return endAt != null && !endAt.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

@@ -12,7 +12,9 @@ import java.time.ZonedDateTime;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.EndHeelOptions;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
+import com.mmxlabs.models.lng.commercial.StartHeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;

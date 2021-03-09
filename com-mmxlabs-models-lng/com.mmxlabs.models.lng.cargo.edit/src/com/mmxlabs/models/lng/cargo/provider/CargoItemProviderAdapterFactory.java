@@ -364,52 +364,6 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.EndHeelOptions} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected EndHeelOptionsItemProvider endHeelOptionsItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.EndHeelOptions}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createEndHeelOptionsAdapter() {
-		if (endHeelOptionsItemProvider == null) {
-			endHeelOptionsItemProvider = new EndHeelOptionsItemProvider(this);
-		}
-
-		return endHeelOptionsItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.StartHeelOptions} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected StartHeelOptionsItemProvider startHeelOptionsItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.StartHeelOptions}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createStartHeelOptionsAdapter() {
-		if (startHeelOptionsItemProvider == null) {
-			startHeelOptionsItemProvider = new StartHeelOptionsItemProvider(this);
-		}
-
-		return startHeelOptionsItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.InventoryEventRow} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -915,8 +869,6 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 		if (dryDockEventItemProvider != null) dryDockEventItemProvider.dispose();
 		if (charterOutEventItemProvider != null) charterOutEventItemProvider.dispose();
 		if (vesselTypeGroupItemProvider != null) vesselTypeGroupItemProvider.dispose();
-		if (endHeelOptionsItemProvider != null) endHeelOptionsItemProvider.dispose();
-		if (startHeelOptionsItemProvider != null) startHeelOptionsItemProvider.dispose();
 		if (inventoryEventRowItemProvider != null) inventoryEventRowItemProvider.dispose();
 		if (inventoryCapacityRowItemProvider != null) inventoryCapacityRowItemProvider.dispose();
 		if (inventoryItemProvider != null) inventoryItemProvider.dispose();

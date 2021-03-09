@@ -4,31 +4,46 @@
  */
 package com.mmxlabs.models.lng.cargo.util;
 
-import com.mmxlabs.models.lng.cargo.*;
-import com.mmxlabs.models.lng.commercial.Contract;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.AssignableElement;
+import com.mmxlabs.models.lng.cargo.BuyPaperDeal;
+import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
+import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoGroup;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
+import com.mmxlabs.models.lng.cargo.DealSet;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
-import com.mmxlabs.models.lng.cargo.EndHeelOptions;
+import com.mmxlabs.models.lng.cargo.Inventory;
+import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
+import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
+import com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification;
+import com.mmxlabs.models.lng.cargo.PaperDeal;
+import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
+import com.mmxlabs.models.lng.cargo.ScheduleSpecificationEvent;
+import com.mmxlabs.models.lng.cargo.SellPaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SlotSpecification;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.VesselEventSpecification;
+import com.mmxlabs.models.lng.cargo.VesselScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.VesselTypeGroup;
+import com.mmxlabs.models.lng.cargo.VoyageSpecification;
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.types.ObjectSet;
@@ -254,19 +269,6 @@ public class CargoSwitch<@Nullable T1> extends Switch<T1> {
 				if (result == null) result = caseUUIDObject(vesselTypeGroup);
 				if (result == null) result = caseNamedObject(vesselTypeGroup);
 				if (result == null) result = caseMMXObject(vesselTypeGroup);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case CargoPackage.END_HEEL_OPTIONS: {
-				EndHeelOptions endHeelOptions = (EndHeelOptions)theEObject;
-				T1 result = caseEndHeelOptions(endHeelOptions);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case CargoPackage.START_HEEL_OPTIONS: {
-				StartHeelOptions startHeelOptions = (StartHeelOptions)theEObject;
-				T1 result = caseStartHeelOptions(startHeelOptions);
-				if (result == null) result = caseMMXObject(startHeelOptions);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -632,36 +634,6 @@ public class CargoSwitch<@Nullable T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseVesselTypeGroup(VesselTypeGroup object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>End Heel Options</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>End Heel Options</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseEndHeelOptions(EndHeelOptions object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Start Heel Options</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Start Heel Options</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseStartHeelOptions(StartHeelOptions object) {
 		return null;
 	}
 

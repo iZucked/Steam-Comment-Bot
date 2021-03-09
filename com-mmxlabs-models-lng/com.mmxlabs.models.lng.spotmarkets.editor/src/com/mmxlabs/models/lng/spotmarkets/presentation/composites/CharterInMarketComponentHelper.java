@@ -82,6 +82,7 @@ public class CharterInMarketComponentHelper extends BaseComponentHelper {
 		add_mtmEditor(detailComposite, topClass);
 		add_entityEditor(detailComposite, topClass);
 		add_startAtEditor(detailComposite, topClass);
+		add_endAtEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the vessel feature on CharterInMarket
@@ -146,6 +147,15 @@ public class CharterInMarketComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_startAtEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__START_AT));
+	}
+
+	/**
+	 * Create the editor for the endAt feature on CharterInMarket
+	 *
+	 * @generated
+	 */
+	protected void add_endAtEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__END_AT));
 	}
 
 	/**

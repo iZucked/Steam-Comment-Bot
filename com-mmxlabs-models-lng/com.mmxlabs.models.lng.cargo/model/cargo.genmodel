@@ -19,11 +19,6 @@
       <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//VesselType/Owned"/>
       <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//VesselType/Time_Chartered"/>
     </genEnums>
-    <genEnums typeSafeEnumCompatible="false" ecoreEnum="cargo.ecore#//EVesselTankState">
-      <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//EVesselTankState/EITHER"/>
-      <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//EVesselTankState/MUST_BE_COLD"/>
-      <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//EVesselTankState/MUST_BE_WARM"/>
-    </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="cargo.ecore#//InventoryFacilityType">
       <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//InventoryFacilityType/Upstream"/>
       <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//InventoryFacilityType/Hub"/>
@@ -284,28 +279,6 @@
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//VesselTypeGroup">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselTypeGroup/vesselType"/>
-    </genClasses>
-    <genClasses ecoreClass="cargo.ecore#//EndHeelOptions">
-      <genFeatures createChild="false" propertyDescription="The required state of the vessel tanks"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//EndHeelOptions/tankState"/>
-      <genFeatures createChild="false" propertyDescription="If the vessel arrives cold, the minimum heel required"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//EndHeelOptions/minimumEndHeel"/>
-      <genFeatures createChild="false" propertyDescription="If the vessel arrives cold, the maximum heel required"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//EndHeelOptions/maximumEndHeel"/>
-      <genFeatures createChild="false" propertyDescription="Price heel sold on the last cargo sales price or the price use to buy the heel"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//EndHeelOptions/useLastHeelPrice"/>
-      <genFeatures createChild="false" propertyDescription="The sale price of the heel (up to maximum quantity). Over delivery is not priced."
-          ecoreFeature="ecore:EAttribute cargo.ecore#//EndHeelOptions/priceExpression"/>
-    </genClasses>
-    <genClasses ecoreClass="cargo.ecore#//StartHeelOptions">
-      <genFeatures createChild="false" propertyDescription="The CV of the available heel"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//StartHeelOptions/cvValue"/>
-      <genFeatures createChild="false" propertyDescription="The minimum quantity of heel available"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//StartHeelOptions/minVolumeAvailable"/>
-      <genFeatures createChild="false" propertyDescription="The maximum quantity of heel available"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//StartHeelOptions/maxVolumeAvailable"/>
-      <genFeatures createChild="false" propertyDescription="Purchase price per unit of heel."
-          ecoreFeature="ecore:EAttribute cargo.ecore#//StartHeelOptions/priceExpression"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//InventoryEventRow">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//InventoryEventRow/startDate"/>

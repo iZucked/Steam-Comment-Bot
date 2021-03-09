@@ -21,6 +21,8 @@ public interface ISpotCharterInMarket {
 	ILongCurve getDailyCharterInRateCurve();
 
 	int getAvailabilityCount();
+	
+	IStartRequirement getStartRequirement();
 
 	IEndRequirement getEndRequirement();
 
