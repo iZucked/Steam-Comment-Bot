@@ -716,7 +716,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@NonNull
 	public IVesselAvailability createSpotVessel(final String name, final int spotIndex, @NonNull final ISpotCharterInMarket spotCharterInMarket) {
 		final IVessel vessel = spotCharterInMarket.getVessel();
-		final IStartRequirement start = createStartRequirement(ANYWHERE, false, null, createHeelSupplier(vessel.getSafetyHeel(), vessel.getSafetyHeel(), 0, new ConstantHeelPriceCalculator(0)));
+		final IStartRequirement start;
+		if (spotCharterInMarket.getStartRequirement() != null) {
+			start = spotCharterInMarket.getStartRequirement();
+		} else {
+			start = createStartRequirement(ANYWHERE, false, null, createHeelSupplier(vessel.getSafetyHeel(), vessel.getSafetyHeel(), 0, new ConstantHeelPriceCalculator(0)));
+		}
 		final IEndRequirement end;
 		if (spotCharterInMarket.getEndRequirement() != null) {
 			end = spotCharterInMarket.getEndRequirement();
@@ -1838,15 +1843,24 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	public IVesselAvailability createRoundTripCargoVessel(@NonNull final String name, @NonNull final ISpotCharterInMarket spotCharterInMarket) {
 
 		final IVessel roundTripCargoVessel = spotCharterInMarket.getVessel();
+		final IStartRequirement start;
+		if (spotCharterInMarket.getStartRequirement() != null) {
+			start = spotCharterInMarket.getStartRequirement();
+		} else {
+			start = createStartRequirement(ANYWHERE, false, null, //
+					createHeelSupplier(roundTripCargoVessel.getSafetyHeel(), roundTripCargoVessel.getSafetyHeel(), 0, new ConstantHeelPriceCalculator(0)));
+		}
+		final IEndRequirement end;
+		if (spotCharterInMarket.getEndRequirement() != null) {
+			end = spotCharterInMarket.getEndRequirement();
+		} else {
+			end = createEndRequirement(Collections.singletonList(ANYWHERE), false, new TimeWindow(0, Integer.MAX_VALUE),//
+					createHeelConsumer(roundTripCargoVessel.getSafetyHeel(), roundTripCargoVessel.getSafetyHeel(), //
+							VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0), false), false);
+		}
 
-		final IStartRequirement start = createStartRequirement(ANYWHERE, false, null,
-				createHeelSupplier(roundTripCargoVessel.getSafetyHeel(), roundTripCargoVessel.getSafetyHeel(), 0, new ConstantHeelPriceCalculator(0)));
-
-		final IEndRequirement end = createEndRequirement(Collections.singletonList(ANYWHERE), false, new TimeWindow(0, Integer.MAX_VALUE),
-				createHeelConsumer(roundTripCargoVessel.getSafetyHeel(), roundTripCargoVessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0), false), false);
-
-		final IVesselAvailability vesselAvailability = createVesselAvailability(roundTripCargoVessel, spotCharterInMarket.getDailyCharterInRateCurve(), VesselInstanceType.ROUND_TRIP, start, end,
-				spotCharterInMarket, null, -1, new ZeroLongCurve(), true);
+		final IVesselAvailability vesselAvailability = createVesselAvailability(roundTripCargoVessel, spotCharterInMarket.getDailyCharterInRateCurve(), //
+				VesselInstanceType.ROUND_TRIP, start, end, spotCharterInMarket, null, -1, new ZeroLongCurve(), true);
 
 		spotCharterInMarketProviderEditor.addSpotMarketAvailability(vesselAvailability, spotCharterInMarket, -1);
 		return vesselAvailability;
