@@ -11,6 +11,7 @@ import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -36,6 +37,7 @@ public class GenericCharterContractTopLevelComposite extends DefaultTopLevelComp
 	/**
 	 * {@link Composite} to contain the heel editors
 	 */
+	private Composite right;
 	private IDisplayComposite ballastBonusComposite;
 	private IDisplayComposite repositioningFeeComposite;
 	
@@ -64,8 +66,22 @@ public class GenericCharterContractTopLevelComposite extends DefaultTopLevelComp
 		topLevel = new DefaultDetailComposite(g, SWT.NONE, toolkit);
 		topLevel.setCommandHandler(commandHandler);
 		topLevel.setEditorWrapper(editorWrapper);
+		
+		right = toolkit.createComposite(containerComposite);
+		// Single column
+		final GridLayout layout = GridLayoutFactory.swtDefaults() //
+				.numColumns(1) //
+				.equalWidth(true) //
+				.margins(0, 0) //
+				.extendedMargins(0, 0, 0, 0) //
+				.create();
+		right.setLayout(layout);
+		right.setLayoutData(new GridData(GridData.FILL_BOTH));
+		right.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
 		topLevel.display(dialogContext, root, object, range, dbc);
+		
+		createDefaultChildCompositeSection(dialogContext, root, object, range, dbc, eClass, right);
 
 		Composite bottomComposite = toolkit.createComposite(this, SWT.NONE);
 		bottomComposite.setLayout(new GridLayout());

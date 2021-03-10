@@ -12,7 +12,7 @@
       <DetailPropertyFactory
             EClass="com.mmxlabs.models.lng.schedule.CharterContractFeeDetails"
             category="pnl"
-            factory="com.mmxlabs.models.lng.transformer.extensions.contracts.ballastbonus.CharterContractDetailProperties">
+            factory="com.mmxlabs.models.lng.transformer.extensions.contracts.charter.CharterContractDetailProperties">
       </DetailPropertyFactory>
    </extension>
    <extension

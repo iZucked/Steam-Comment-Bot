@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.extensions.contracts.ballastbonus;
+package com.mmxlabs.models.lng.transformer.extensions.contracts.charter;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;

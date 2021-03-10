@@ -86,6 +86,18 @@
        inheritable="true"
        modelClass="com.mmxlabs.models.lng.commercial.GenericCharterContract">
  </componentHelper>
+          <componentHelper
+               helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.EndHeelOptionsComponentHelper"
+               id="com.mmxlabs.models.lng.commercial.presentation.composites.EndHeelOptionsComponentHelper"
+               inheritable="true"
+               modelClass="com.mmxlabs.models.lng.commercial.EndHeelOptions">
+         </componentHelper>
+         <componentHelper
+               helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.StartHeelOptionsComponentHelper"
+               id="com.mmxlabs.models.lng.commercial.presentation.composites.StartHeelOptionsComponentHelper"
+               inheritable="true"
+               modelClass="com.mmxlabs.models.lng.commercial.StartHeelOptions">
+         </componentHelper>
 	</extension>
  <extension
        point="com.mmxlabs.models.ui.valueproviders">
@@ -158,7 +170,7 @@
     <factory
           ID="com.mmxlabs.models.lng.commercial.editor.genericCharterContractFactory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Ballast Bonus Contract"
+          label="Charter Contract"
           targetEClass="com.mmxlabs.models.lng.commercial.GenericCharterContract"
           outputEClass="com.mmxlabs.models.lng.commercial.GenericCharterContract">
     </factory>

@@ -3216,14 +3216,6 @@ public class LNGScenarioTransformer {
 			}
 			assert dailyCharterInCurve != null;
 
-			//final ILongCurve repositioningFeeCurve;
-//			if (eVesselAvailability.getCharterOrDelegateRepositioningFee() != null && !eVesselAvailability.getCharterOrDelegateRepositioningFee().isEmpty()) {
-//				repositioningFeeCurve = dateHelper.generateLongExpressionCurve(eVesselAvailability.getCharterOrDelegateRepositioningFee(), charterIndices);
-//			} else {
-//				repositioningFeeCurve = new ConstantValueLongCurve(0);
-//			}
-//			assert repositioningFeeCurve != null;
-
 			final IVessel vessel = vesselAssociation.lookupNullChecked(eVessel);
 
 			final GenericCharterContract eBallastBonusContract = eVesselAvailability.getCharterOrDelegateCharterContract();
@@ -3359,7 +3351,6 @@ public class LNGScenarioTransformer {
 				}
 			}
 
-			// TODO : discuss what to do with charter contract heel here
 			final List<CharterInMarketOverride> overrides = new LinkedList<>();
 			overrides.addAll(cargoModel.getCharterInMarketOverrides());
 			overrides.addAll(extraCharterInMarketOverrides);
@@ -3395,12 +3386,14 @@ public class LNGScenarioTransformer {
 							heelOptions = builder.createHeelSupplier(oVessel.getSafetyHeel(), oVessel.getSafetyHeel(), 0, new ConstantHeelPriceCalculator(0));
 						}
 						start = builder.createStartRequirement(null, tw != null, tw, heelOptions);
+					} else if (spotCharterInMarket.getStartRequirement() != null) {
+						start = spotCharterInMarket.getStartRequirement();
 					} else {
 						final IHeelOptionSupplier heelOptions = builder.createHeelSupplier(oVessel.getSafetyHeel(), oVessel.getSafetyHeel(), 0, new ConstantHeelPriceCalculator(0));
 						start = builder.createStartRequirement(null, false, null, heelOptions);
 					}
 
-					IEndRequirement end;
+					final IEndRequirement end;
 					if (charterInMarketOverride.getEndPort() != null || charterInMarketOverride.getEndDate() != null || charterInMarketOverride.getEndHeel() != null) {
 						ITimeWindow tw;
 						if (charterInMarketOverride.getEndDate() != null) {
@@ -3422,10 +3415,9 @@ public class LNGScenarioTransformer {
 							portSet = spotCharterInMarket.getEndRequirement().getLocations();
 						}
 						end = builder.createEndRequirement(portSet, tw.getExclusiveEnd() != Integer.MAX_VALUE, tw, heelOptions, tw.getExclusiveEnd() == Integer.MAX_VALUE);
-					} else {
+					} else if (spotCharterInMarket.getEndRequirement() != null){
 						end = spotCharterInMarket.getEndRequirement();
-					}
-					if (end == null) {
+					} else {
 						final IHeelOptionConsumer heelConsumer = builder.createHeelConsumer(oVessel.getSafetyHeel(), oVessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD,
 								new ConstantHeelPriceCalculator(0), false);
 						end = createSpotEndRequirement(builder, portAssociation, Collections.emptySet(), heelConsumer);
