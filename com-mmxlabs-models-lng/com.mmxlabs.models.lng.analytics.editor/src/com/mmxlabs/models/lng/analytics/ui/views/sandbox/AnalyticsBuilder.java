@@ -63,7 +63,6 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
@@ -72,7 +71,16 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.CargoTravelTimeUtils;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.EVesselTankState;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
+import com.mmxlabs.models.lng.commercial.IBallastBonus;
+import com.mmxlabs.models.lng.commercial.IRepositioningFee;
+import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusTerm;
+import com.mmxlabs.models.lng.commercial.LumpSumRepositioningFeeTerm;
+import com.mmxlabs.models.lng.commercial.SimpleBallastBonusContainer;
+import com.mmxlabs.models.lng.commercial.SimpleRepositioningFeeContainer;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.util.TravelTimeUtils;
 import com.mmxlabs.models.lng.port.Port;
@@ -1742,8 +1750,8 @@ public class AnalyticsBuilder {
 			event.setStartAfter(opportunity.getDate().atStartOfDay());
 			event.setStartBy(opportunity.getDate().plusDays(1).atStartOfDay());
 
-			event.setAvailableHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
-			event.setRequiredHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+			event.setAvailableHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+			event.setRequiredHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 			event.getRequiredHeel().setTankState(EVesselTankState.EITHER);
 
 			return event;
@@ -1770,6 +1778,25 @@ public class AnalyticsBuilder {
 			return true;
 		}
 		return false;
+	}
+	
+	public static GenericCharterContract createCharterTerms(final String sRepositioningFee, final String sBallastBonus) {
+		GenericCharterContract gcc = CommercialFactory.eINSTANCE.createGenericCharterContract();
+		if (sRepositioningFee != null) {
+			final IRepositioningFee repositioningFee = CommercialFactory.eINSTANCE.createSimpleRepositioningFeeContainer();
+			final LumpSumRepositioningFeeTerm term = CommercialFactory.eINSTANCE.createLumpSumRepositioningFeeTerm();
+			term.setPriceExpression(sRepositioningFee);
+			((SimpleRepositioningFeeContainer) repositioningFee).getTerms().add(term);
+			gcc.setRepositioningFeeTerms(repositioningFee);
+		}
+		if (sBallastBonus != null) {
+			final IBallastBonus ballastBonus = CommercialFactory.eINSTANCE.createSimpleBallastBonusContainer();
+			final LumpSumBallastBonusTerm term = CommercialFactory.eINSTANCE.createLumpSumBallastBonusTerm();
+			term.setPriceExpression(sBallastBonus);
+			((SimpleBallastBonusContainer)ballastBonus).getTerms().add(term);
+			gcc.setBallastBonusTerms(ballastBonus);
+		}
+		return gcc;
 	}
 
 }

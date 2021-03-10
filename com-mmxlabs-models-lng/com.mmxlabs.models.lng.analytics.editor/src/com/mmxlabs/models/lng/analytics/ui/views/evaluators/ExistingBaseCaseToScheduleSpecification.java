@@ -54,7 +54,6 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
@@ -69,6 +68,8 @@ import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
 import com.mmxlabs.models.lng.cargo.util.scheduling.FakeCargo;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
+import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -319,8 +320,8 @@ public class ExistingBaseCaseToScheduleSpecification {
 							vesselAvailability.setVessel(vessel);
 							vesselAvailability.setEntity(optionalAvailabilityShippingOption.getEntity());
 
-							vesselAvailability.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
-							vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+							vesselAvailability.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+							vesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 							if (optionalAvailabilityShippingOption.isUseSafetyHeel()) {
 								vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getSafetyHeel());
 								vesselAvailability.getStartHeel().setCvValue(22.8);
@@ -337,7 +338,8 @@ public class ExistingBaseCaseToScheduleSpecification {
 							vesselAvailability.setEndBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
 							vesselAvailability.setOptional(true);
 							vesselAvailability.setFleet(false);
-							vesselAvailability.setRepositioningFee(optionalAvailabilityShippingOption.getRepositioningFee());
+							vesselAvailability.setContainedCharterContract(AnalyticsBuilder.createCharterTerms(optionalAvailabilityShippingOption.getRepositioningFee(),//
+									optionalAvailabilityShippingOption.getBallastBonus()));
 							if (optionalAvailabilityShippingOption.getStartPort() != null) {
 								vesselAvailability.setStartAt(optionalAvailabilityShippingOption.getStartPort());
 							}
@@ -369,8 +371,8 @@ public class ExistingBaseCaseToScheduleSpecification {
 							vesselAvailability.setVessel(vessel);
 							vesselAvailability.setEntity(fleetShippingOption.getEntity());
 
-							vesselAvailability.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
-							vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+							vesselAvailability.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+							vesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 
 							if (fleetShippingOption.isUseSafetyHeel()) {
 								vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getSafetyHeel());

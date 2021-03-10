@@ -31,11 +31,12 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.StartHeelOptions;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.StartHeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -189,7 +190,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 
 										final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
 										failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL);
-										failure.addEObjectAndFeature(startHeel, CargoPackage.Literals.START_HEEL_OPTIONS__CV_VALUE);
+										failure.addEObjectAndFeature(startHeel, CommercialPackage.Literals.START_HEEL_OPTIONS__CV_VALUE);
 										failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.SLOT_ACTUALS__CV);
 
 										statuses.add(failure);
@@ -204,8 +205,8 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 
 									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
 									failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL);
-									failure.addEObjectAndFeature(startHeel, CargoPackage.Literals.START_HEEL_OPTIONS__MIN_VOLUME_AVAILABLE);
-									failure.addEObjectAndFeature(startHeel, CargoPackage.Literals.START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE);
+									failure.addEObjectAndFeature(startHeel, CommercialPackage.Literals.START_HEEL_OPTIONS__MIN_VOLUME_AVAILABLE);
+									failure.addEObjectAndFeature(startHeel, CommercialPackage.Literals.START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE);
 									failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.LOAD_ACTUALS__STARTING_HEEL_M3);
 
 									statuses.add(failure);
