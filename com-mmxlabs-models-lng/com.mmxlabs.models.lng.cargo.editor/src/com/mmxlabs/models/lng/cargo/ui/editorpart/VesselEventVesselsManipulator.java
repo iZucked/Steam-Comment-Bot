@@ -11,9 +11,9 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.domain.EditingDomain;
 
 import com.mmxlabs.common.Equality;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
@@ -21,12 +21,12 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 
 public class VesselEventVesselsManipulator extends MultipleReferenceManipulator {
 
-	public VesselEventVesselsManipulator(final EStructuralFeature field, final EditingDomain editingDomain, final IReferenceValueProvider valueProvider, final EAttribute nameAttribute) {
-		super(field, editingDomain, valueProvider, nameAttribute);
+	public VesselEventVesselsManipulator(final EStructuralFeature field, final ICommandHandler commandHandler, final IReferenceValueProvider valueProvider, final EAttribute nameAttribute) {
+		super(field, commandHandler, valueProvider, nameAttribute);
 	}
 
-	public VesselEventVesselsManipulator(final EStructuralFeature field, final IReferenceValueProviderProvider providerProvider, final EditingDomain editingDomain, final EAttribute nameAttribute) {
-		super(field, editingDomain, providerProvider.getReferenceValueProvider(field.getEContainingClass(), (EReference) field), nameAttribute);
+	public VesselEventVesselsManipulator(final EStructuralFeature field, final IReferenceValueProviderProvider providerProvider, final ICommandHandler commandHandler, final EAttribute nameAttribute) {
+		super(field, commandHandler, providerProvider.getReferenceValueProvider(field.getEContainingClass(), (EReference) field), nameAttribute);
 	}
 
 	@Override
@@ -39,8 +39,8 @@ public class VesselEventVesselsManipulator extends MultipleReferenceManipulator 
 
 		final CompoundCommand cmd = new CompoundCommand("Set event vessels");
 		final Collection<?> collection = (Collection<?>) value;
-		cmd.append(CommandUtil.createMultipleAttributeSetter(editingDomain, (EObject) object, field, collection));
+		cmd.append(CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), (EObject) object, field, collection));
 
-		editingDomain.getCommandStack().execute(cmd);
+		commandHandler.handleCommand(cmd, (EObject) object, field);
 	}
 }

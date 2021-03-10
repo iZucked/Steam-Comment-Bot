@@ -16,8 +16,8 @@ import com.mmxlabs.models.ui.tabular.manipulators.ValueListAttributeManipulator;
 
 public class FOBSaleDealTypeManipulator extends ValueListAttributeManipulator<FOBSaleDealType> {
 
-	public FOBSaleDealTypeManipulator(final EAttribute field, final EditingDomain editingDomain) {
-		super(field, editingDomain, getValues());
+	public FOBSaleDealTypeManipulator(final EAttribute field, final ICommandHandler commandHandler) {
+		super(field, commandHandler, getValues());
 	}
 
 	private static List<Pair<String, FOBSaleDealType>> getValues() {

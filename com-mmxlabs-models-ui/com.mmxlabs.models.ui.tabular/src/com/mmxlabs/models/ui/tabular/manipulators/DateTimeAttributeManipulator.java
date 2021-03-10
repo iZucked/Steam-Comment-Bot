@@ -9,25 +9,24 @@ import java.time.ZonedDateTime;
 import java.time.chrono.ChronoLocalDate;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DateTime;
 
 import com.mmxlabs.models.ui.date.LocalDateTextFormatter;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 
 /**
- * A {@link LocalDate} attribute manipulator which uses the
- * {@link FormattedTextCellEditor} from nebula.
+ * A {@link LocalDate} attribute manipulator which uses the {@link FormattedTextCellEditor} from nebula.
  * 
  * @author Simon Goodall
  * 
  */
 public class DateTimeAttributeManipulator extends BasicAttributeManipulator {
 
-	public DateTimeAttributeManipulator(final EStructuralFeature field, final EditingDomain editingDomain) {
-		super(field, editingDomain);
+	public DateTimeAttributeManipulator(final EStructuralFeature field, final ICommandHandler commandHandler) {
+		super(field, commandHandler);
 	}
 
 	@Override

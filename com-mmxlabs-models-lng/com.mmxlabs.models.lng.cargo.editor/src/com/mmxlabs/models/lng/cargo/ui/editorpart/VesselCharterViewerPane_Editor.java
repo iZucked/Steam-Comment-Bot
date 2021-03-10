@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.port.ui.editorpart.MultiplePortReferenceManipulato
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.BooleanAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateTimeAttributeManipulator;
@@ -37,19 +38,19 @@ public class VesselCharterViewerPane_Editor extends ScenarioTableViewerPane {
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
 		super.init(path, adapterFactory, modelReference);
-		final EditingDomain editingDomain = scenarioEditingLocation.getEditingDomain();
+		final ICommandHandler commandHandler = scenarioEditingLocation.getDefaultCommandHandler();
 		ReadOnlyManipulatorWrapper<BasicAttributeManipulator> nameManipulator = new ReadOnlyManipulatorWrapper<>(
-				new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain));
+				new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), commandHandler));
 
 		addTypicalColumn("Name", nameManipulator, CargoPackage.eINSTANCE.getVesselAvailability_Vessel());
 
-		addTypicalColumn("Fleet", new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_Fleet(), editingDomain));
+		addTypicalColumn("Fleet", new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_Fleet(), commandHandler));
 
-		addTypicalColumn("Optional", new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_Optional(), editingDomain));
+		addTypicalColumn("Optional", new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_Optional(), commandHandler));
 
-		addTypicalColumn("Charter", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_TimeCharterRate(), scenarioEditingLocation.getEditingDomain()));
+		addTypicalColumn("Charter", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_TimeCharterRate(), commandHandler));
 
-		addTypicalColumn("Repositioning Fee", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_RepositioningFee(), scenarioEditingLocation.getEditingDomain()) {
+		addTypicalColumn("Repositioning Fee", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_RepositioningFee(), commandHandler) {
 			@Override
 			public boolean canEdit(Object object) {
 				if (object instanceof VesselAvailability) {
@@ -65,18 +66,18 @@ public class VesselCharterViewerPane_Editor extends ScenarioTableViewerPane {
 		});
 
 		addTypicalColumn("Start Port", new SingleReferenceManipulator(CargoPackage.eINSTANCE.getVesselAvailability_StartAt(), scenarioEditingLocation.getReferenceValueProviderCache(),
-				scenarioEditingLocation.getEditingDomain()));
+				commandHandler));
 
-		addTypicalColumn("Start After", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_StartAfter(), scenarioEditingLocation.getEditingDomain()));
+		addTypicalColumn("Start After", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_StartAfter(), commandHandler));
 
-		addTypicalColumn("Start By", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_StartBy(), scenarioEditingLocation.getEditingDomain()));
+		addTypicalColumn("Start By", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_StartBy(), commandHandler));
 
 		addTypicalColumn("End Port", new MultiplePortReferenceManipulator(CargoPackage.eINSTANCE.getVesselAvailability_EndAt(), scenarioEditingLocation.getReferenceValueProviderCache(),
-				scenarioEditingLocation.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
+				commandHandler, MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 
-		addTypicalColumn("End After", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_EndAfter(), scenarioEditingLocation.getEditingDomain()));
+		addTypicalColumn("End After", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_EndAfter(), commandHandler));
 
-		addTypicalColumn("End By", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_EndBy(), scenarioEditingLocation.getEditingDomain()));
+		addTypicalColumn("End By", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_EndBy(), commandHandler));
 
 		setTitle("Vessel Charters", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}

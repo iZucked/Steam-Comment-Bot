@@ -13,6 +13,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.InventoryFrequency;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.tabular.manipulators.ValueListAttributeManipulator;
 
 /**
@@ -21,8 +22,8 @@ import com.mmxlabs.models.ui.tabular.manipulators.ValueListAttributeManipulator;
  * @author hinton
  */
 public class InventoryPeriodEnumAttributeManipulator extends ValueListAttributeManipulator {
-	public InventoryPeriodEnumAttributeManipulator(final EAttribute field, final EditingDomain editingDomain) {
-		super(field, editingDomain, getValues((EEnum) field.getEAttributeType()));
+	public InventoryPeriodEnumAttributeManipulator(final EAttribute field, final ICommandHandler commandHandler) {
+		super(field, commandHandler, getValues((EEnum) field.getEAttributeType()));
 	}
 
 	private static List<Pair<String, Object>> getValues(final EEnum eenum) {

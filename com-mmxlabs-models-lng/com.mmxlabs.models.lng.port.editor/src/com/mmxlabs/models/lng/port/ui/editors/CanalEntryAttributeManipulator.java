@@ -8,7 +8,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.widgets.Composite;
@@ -19,12 +18,13 @@ import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.port.util.PortModelLabeller;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.tabular.manipulators.ValueListAttributeManipulator;
 
 public class CanalEntryAttributeManipulator extends ValueListAttributeManipulator {
 	PortModel portModel;
-	public CanalEntryAttributeManipulator(PortModel portModel, final EAttribute field, final EditingDomain editingDomain) {
-		super(field, editingDomain, getValues());
+	public CanalEntryAttributeManipulator(PortModel portModel, final EAttribute field, final ICommandHandler commandHandler) {
+		super(field, commandHandler, getValues());
 		this.portModel = portModel;
 	}
 

@@ -33,10 +33,10 @@ public class ContractEditorPane extends ScenarioTableViewerPane {
 		super.init(path, adapterFactory, modelReference);
 		addNameManipulator("Name");
 
-		addTypicalColumn("Entity", new SingleReferenceManipulator(CommercialPackage.eINSTANCE.getContract_Entity(), getReferenceValueProviderCache(), getEditingDomain()));
-		addTypicalColumn("Type", new ContractTypeEnumAttributeManipulator(CommercialPackage.eINSTANCE.getContract_ContractType(), getEditingDomain()));
-		addTypicalColumn("Volume", new VolumeAttributeManipulator(CommercialPackage.eINSTANCE.getContract_MaxQuantity(), getEditingDomain()));
-		addTypicalColumn("Price", new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getExpressionPriceParameters_PriceExpression(), getEditingDomain()) {
+		addTypicalColumn("Entity", new SingleReferenceManipulator(CommercialPackage.eINSTANCE.getContract_Entity(), getReferenceValueProviderCache(), getCommandHandler()));
+		addTypicalColumn("Type", new ContractTypeEnumAttributeManipulator(CommercialPackage.eINSTANCE.getContract_ContractType(), getCommandHandler()));
+		addTypicalColumn("Volume", new VolumeAttributeManipulator(CommercialPackage.eINSTANCE.getContract_MaxQuantity(), getCommandHandler()));
+		addTypicalColumn("Price", new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getExpressionPriceParameters_PriceExpression(), getCommandHandler()) {
 			@Override
 			public @Nullable String render(Object object) {
 				if (!(object instanceof ExpressionPriceParameters)) {

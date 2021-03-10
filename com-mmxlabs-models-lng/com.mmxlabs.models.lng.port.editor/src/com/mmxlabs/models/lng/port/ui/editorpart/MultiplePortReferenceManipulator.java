@@ -14,12 +14,12 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.widgets.Control;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.port.ui.editors.PortMultiReferenceInlineEditor;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.models.ui.tabular.manipulators.DialogFeatureManipulator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
@@ -39,14 +39,15 @@ public class MultiplePortReferenceManipulator extends DialogFeatureManipulator {
 	private final com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider valueProvider;
 	private final EAttribute nameAttribute;
 
-	public MultiplePortReferenceManipulator(final EStructuralFeature field, final EditingDomain editingDomain, final IReferenceValueProvider valueProvider, final EAttribute nameAttribute) {
-		super(field, editingDomain);
+	public MultiplePortReferenceManipulator(final EStructuralFeature field, final ICommandHandler commandHandler, final IReferenceValueProvider valueProvider, final EAttribute nameAttribute) {
+		super(field, commandHandler);
 		this.valueProvider = valueProvider;
 		this.nameAttribute = nameAttribute;
 	}
 
-	public MultiplePortReferenceManipulator(final EStructuralFeature field, final IReferenceValueProviderProvider providerProvider, final EditingDomain editingDomain, final EAttribute nameAttribute) {
-		this(field, editingDomain, providerProvider.getReferenceValueProvider(field.getEContainingClass(), (EReference) field), nameAttribute);
+	public MultiplePortReferenceManipulator(final EStructuralFeature field, final IReferenceValueProviderProvider providerProvider, final ICommandHandler commandHandler,
+			final EAttribute nameAttribute) {
+		this(field, commandHandler, providerProvider.getReferenceValueProvider(field.getEContainingClass(), (EReference) field), nameAttribute);
 	}
 
 	@Override
@@ -79,7 +80,7 @@ public class MultiplePortReferenceManipulator extends DialogFeatureManipulator {
 		if (Equality.isEqual(currentValue, value)) {
 			return;
 		}
-		editingDomain.getCommandStack().execute(CommandUtil.createMultipleAttributeSetter(editingDomain, (EObject) object, field, (Collection) value));
+		commandHandler.handleCommand(CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), (EObject) object, field, (Collection) value), (EObject)object, field);
 	}
 
 	@SuppressWarnings("unchecked")
