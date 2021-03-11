@@ -8,10 +8,8 @@ import java.util.Collection;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -29,7 +27,7 @@ import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
 
 /**
  * A display composite for the {@link GenericCharterContractTopLevelComposite} to add complex ballast bonus UI
- * @author achurchill
+ * @author achurchill, FM
  * 
  */
 public class GenericCharterContractTopLevelComposite extends DefaultTopLevelComposite {
@@ -66,19 +64,6 @@ public class GenericCharterContractTopLevelComposite extends DefaultTopLevelComp
 		topLevel.setEditorWrapper(editorWrapper);
 		topLevel.display(dialogContext, root, object, range, dbc);
 		
-//		right = toolkit.createComposite(containerComposite);
-//		// Single column
-//		final GridLayout layout = GridLayoutFactory.swtDefaults() //
-//				.numColumns(1) //
-//				.equalWidth(true) //
-//				.margins(0, 0) //
-//				.extendedMargins(0, 0, 0, 0) //
-//				.create();
-//		right.setLayout(layout);
-//		right.setLayoutData(new GridData(GridData.FILL_BOTH));
-//		right.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-//		createDefaultChildCompositeSection(dialogContext, root, object, range, dbc, object.eClass(), right);
-		
 		Composite midComposite = toolkit.createComposite(this, SWT.NONE);
 		midComposite.setLayout(new GridLayout());
 		midComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -89,11 +74,7 @@ public class GenericCharterContractTopLevelComposite extends DefaultTopLevelComp
 		g2.setLayout(new GridLayout());
 		g2.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 		
-		repositioningFeeComposite = new RepositioningFeeDetailComposite(g2, SWT.NONE, dialogContext, toolkit, () -> {
-			if (!GenericCharterContractTopLevelComposite.this.isDisposed()) {
-				GenericCharterContractTopLevelComposite.this.layout(true, true);
-			}
-		});
+		repositioningFeeComposite = new RepositioningFeeDetailComposite(g2, SWT.NONE, dialogContext, toolkit, defaultResizeMethod());
 		repositioningFeeComposite.setCommandHandler(commandHandler);
 		repositioningFeeComposite.display(dialogContext, root, object, range, dbc);
 		
@@ -107,11 +88,7 @@ public class GenericCharterContractTopLevelComposite extends DefaultTopLevelComp
 		g3.setLayout(new GridLayout());
 		g3.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
-		ballastBonusComposite = new BallastBonusDetailComposite(g3, SWT.NONE, dialogContext, toolkit, () -> {
-			if (!GenericCharterContractTopLevelComposite.this.isDisposed()) {
-				GenericCharterContractTopLevelComposite.this.layout(true, true);
-			}
-		});
+		ballastBonusComposite = new BallastBonusDetailComposite(g3, SWT.NONE, dialogContext, toolkit, defaultResizeMethod());
 		ballastBonusComposite.setCommandHandler(commandHandler);
 		ballastBonusComposite.display(dialogContext, root, object, range, dbc);
 		
