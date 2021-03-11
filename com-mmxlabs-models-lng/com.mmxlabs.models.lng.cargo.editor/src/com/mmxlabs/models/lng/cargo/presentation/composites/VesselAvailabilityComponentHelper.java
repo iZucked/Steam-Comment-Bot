@@ -191,18 +191,18 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the startHeel feature on VesselAvailability
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_startHeelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL));
+		//detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL));
 	}
 	/**
 	 * Create the editor for the endHeel feature on VesselAvailability
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_endHeelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__END_HEEL));
+		//detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__END_HEEL));
 	}
 
 	/**

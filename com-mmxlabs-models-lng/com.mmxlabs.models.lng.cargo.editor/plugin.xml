@@ -525,16 +525,6 @@
        </OwnerAnyOf>
     </editorFactory>
     <editorFactory
-          factoryClass="com.mmxlabs.models.lng.cargo.editor.editors.VesselTankStateInlineEditorFactory"
-          id="com.mmxlabs.models.lng.cargo.editor.editors.VesselTankStateInlineEditorFactory">
-       <FeatureAnyOf>
-          <EDataTypeIs
-                EDataTypeName="EVesselTankState"
-                EDataTypeURI="http://www.mmxlabs.com/models/lng/cargo/1/">
-          </EDataTypeIs>
-       </FeatureAnyOf>
-    </editorFactory>
-    <editorFactory
           factoryClass="com.mmxlabs.models.lng.cargo.editor.editors.InventoryPeriodInlineEditorFactory"
           id="com.mmxlabs.models.lng.cargo.editor.editors.InventoryPeriodInlineEditorFactory">
        <FeatureAnyOf>

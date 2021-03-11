@@ -9,9 +9,10 @@ import java.util.Collection;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.SetCommand;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -30,9 +31,8 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.DefaultStatusProvider;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
-import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
-import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
+import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 
 /**
@@ -40,14 +40,13 @@ import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
  * @author FM based on Hinton
  * 
  */
-public class RepositioningFeeTermsDetailComposite extends DefaultDetailComposite implements IDisplayComposite {
+public class RepositioningFeeTermsDetailComposite extends DefaultTopLevelComposite implements IDisplayComposite {
 	private ICommandHandler commandHandler;
-	protected IDialogEditingContext dialogContext;
 	private VesselAvailability oldVesselAvailability = null;
 	private Composite owner = this;
 
 	protected Button repositioningFeeCheckbox;
-	private FormToolkit toolkit;
+	protected Composite startHeelComposite;
 	private GridData gridData;
 	private IStatus status;
 	
@@ -59,9 +58,8 @@ public class RepositioningFeeTermsDetailComposite extends DefaultDetailComposite
 	};
 	private Runnable resizeAction;
 
-	public RepositioningFeeTermsDetailComposite(final Composite parent, final int style, final FormToolkit toolkit, Runnable resizeAction) {
-		super(parent, style, toolkit);
-		this.toolkit = toolkit;
+	public RepositioningFeeTermsDetailComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, final FormToolkit toolkit, Runnable resizeAction) {
+		super(parent, style, dialogContext, toolkit);
 		this.resizeAction = resizeAction;
 
 		addDisposeListener(e -> removeAdapter());
@@ -71,6 +69,17 @@ public class RepositioningFeeTermsDetailComposite extends DefaultDetailComposite
 
 		setLayoutData(gridData);
 		setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		
+		startHeelComposite = toolkit.createComposite(this, SWT.NONE);
+		final GridLayout layout = GridLayoutFactory.swtDefaults() //
+				.numColumns(1) //
+				.equalWidth(true) //
+				.margins(0, 0) //
+				.extendedMargins(0, 0, 0, 0) //
+				.create();
+		startHeelComposite.setLayout(layout);
+		startHeelComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		startHeelComposite.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
 		Composite repoCheckbox = toolkit.createComposite(this, SWT.NONE);
 		GridLayout gridLayoutCheckbox = new GridLayout(3, false);
@@ -105,11 +114,9 @@ public class RepositioningFeeTermsDetailComposite extends DefaultDetailComposite
 		if (charterContract == null) {
 			return false;
 		}
-		if (charterContract != null) {
-			createRepositioningFeeComposite(owner, toolkit, charterContract);
-			dialogContext.getDialogController().rebuild(true);
-			resizeAction.run();
-		}
+		createRepositioningFeeComposite(owner, toolkit, charterContract);
+		dialogContext.getDialogController().rebuild(true);
+		resizeAction.run();
 		return true;
 	}
 	
@@ -141,7 +148,7 @@ public class RepositioningFeeTermsDetailComposite extends DefaultDetailComposite
 	}
 	
 	protected void createRepositioningFeeComposite(Composite parent, FormToolkit toolkit, GenericCharterContract originPortRepositioningContract) {
-		EObjectTableViewer repositioningFeeTable = RepositioningFeeTermsTableCreator.createRepositioningFeeTable(parent, toolkit, dialogContext, commandHandler, originPortRepositioningContract,
+		/* EObjectTableViewer repositioningFeeTable =*/ RepositioningFeeTermsTableCreator.createRepositioningFeeTable(parent, toolkit, dialogContext, commandHandler, originPortRepositioningContract,
 				statusProvider, resizeAction);
 	}
 	
@@ -155,6 +162,11 @@ public class RepositioningFeeTermsDetailComposite extends DefaultDetailComposite
 		this.dialogContext = dialogContext;
 		oldVesselAvailability = (VesselAvailability) value;
 		final GenericCharterContract gcc = oldVesselAvailability.getContainedCharterContract();
+		
+		if (oldVesselAvailability != null) {
+			createDefaultChildCompositeSection(dialogContext, root, oldVesselAvailability, range, dbc, oldVesselAvailability.eClass(), startHeelComposite);
+		}
+		
 		doDisplay(gcc);
 	}
 
@@ -177,15 +189,16 @@ public class RepositioningFeeTermsDetailComposite extends DefaultDetailComposite
 	}
 
 	@Override
-	public @Nullable IInlineEditor addInlineEditor(IInlineEditor editor) {
-		return null;
-	}
-
-	@Override
 	public void displayValidationStatus(IStatus status) {
 		super.displayValidationStatus(status);
 		this.status = status;
 		statusProvider.fireStatusChanged(status);
+	}
+	
+	@Override
+	protected boolean shouldDisplay(final EReference ref) {
+		return ref.isContainment() && !ref.isMany() && ref != CargoPackage.eINSTANCE.getVesselAvailability_ContainedCharterContract()
+				&& ref != CargoPackage.eINSTANCE.getVesselAvailability_EndHeel();
 	}
 
 }

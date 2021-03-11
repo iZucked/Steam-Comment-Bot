@@ -256,6 +256,16 @@
           </EDataTypeIs>
        </FeatureAnyOf>
     </editorFactory>
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.commercial.editorfactories.VesselTankStateInlineEditorFactory"
+          id="com.mmxlabs.models.lng.commercial.editor.editors.VesselTankStateInlineEditorFactory">
+       <FeatureAnyOf>
+          <EDataTypeIs
+                EDataTypeName="EVesselTankState"
+                EDataTypeURI="http://www.mmxlabs.com/models/lng/commercial/1/">
+          </EDataTypeIs>
+       </FeatureAnyOf>
+    </editorFactory>
  </extension>
    <extension point="org.eclipse.ui.editors">
       <!-- @generated commercial -->

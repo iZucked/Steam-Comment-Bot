@@ -8,10 +8,17 @@ import java.util.Collection;
 
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.cargo.ui.displaycomposites.BallastBonusTermsDetailComposite;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
@@ -25,8 +32,8 @@ import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 public class BallastBonusDetailComposite extends BallastBonusTermsDetailComposite {
 	protected GenericCharterContract oldContract = null;
 
-	public BallastBonusDetailComposite(final Composite parent, final int style, final FormToolkit toolkit, Runnable resizeAction) {
-		super(parent, style, toolkit, resizeAction);
+	public BallastBonusDetailComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, final FormToolkit toolkit, Runnable resizeAction) {
+		super(parent, style, dialogContext, toolkit, resizeAction);
 		ballastBonusCheckbox.setVisible(false);
 	}
 	
@@ -43,7 +50,17 @@ public class BallastBonusDetailComposite extends BallastBonusTermsDetailComposit
 	public void display(IDialogEditingContext dialogContext, MMXRootObject root, EObject value, Collection<EObject> range, EMFDataBindingContext dbc) {
 		this.dialogContext = dialogContext;
 		oldContract = (GenericCharterContract) value;
+		
+		if (oldContract != null) {
+			createDefaultChildCompositeSection(dialogContext, root, oldContract, range, dbc, oldContract.eClass(), endHeelComposite);
+		}
 		doDisplay(dialogContext, root, dbc, oldContract);
+	}
+	
+	@Override
+	protected boolean shouldDisplay(final EReference ref) {
+		return ref.isContainment() && !ref.isMany() && ref != CommercialPackage.eINSTANCE.getGenericCharterContract_StartHeel() 
+				&& ref != CommercialPackage.eINSTANCE.getGenericCharterContract_RepositioningFeeTerms();
 	}
 
 }

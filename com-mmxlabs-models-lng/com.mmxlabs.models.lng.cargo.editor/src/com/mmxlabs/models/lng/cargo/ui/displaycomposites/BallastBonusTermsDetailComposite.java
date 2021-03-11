@@ -10,9 +10,10 @@ import java.util.Collections;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.SetCommand;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -39,10 +40,8 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.DefaultStatusProvider;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
-import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
-import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
-import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
+import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
 
 /**
  * Detail composite for vessel state attributes; adds an additional bit to the bottom of the composite which contains a fuel curve table.
@@ -50,18 +49,16 @@ import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
  * @author hinton, FM
  * 
  */
-public class BallastBonusTermsDetailComposite extends DefaultDetailComposite implements IDisplayComposite {
+public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite implements IDisplayComposite {
 	private static final String MONTHLY = "Monthly";
 	private static final String NOTIONAL_JOURNEY = "Notional journey";
-	private ICommandHandler commandHandler;
-	protected IDialogEditingContext dialogContext;
 	private VesselAvailability oldVesselAvailability = null;
 	private Composite owner = this;
 
 	protected Button ballastBonusCheckbox;
 	private Combo ballastBonusCombobox;
+	protected Composite endHeelComposite;
 	
-	private FormToolkit toolkit;
 	private GridData gridData;
 	private IStatus status;
 	private PortMultiReferenceInlineEditor portEditor;
@@ -74,9 +71,8 @@ public class BallastBonusTermsDetailComposite extends DefaultDetailComposite imp
 	};
 	private Runnable resizeAction;
 
-	public BallastBonusTermsDetailComposite(final Composite parent, final int style, final FormToolkit toolkit, Runnable resizeAction) {
-		super(parent, style, toolkit);
-		this.toolkit = toolkit;
+	public BallastBonusTermsDetailComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, final FormToolkit toolkit, Runnable resizeAction) {
+		super(parent, style, dialogContext, toolkit);
 		this.resizeAction = resizeAction;
 
 		addDisposeListener(e -> removeAdapter());
@@ -86,6 +82,17 @@ public class BallastBonusTermsDetailComposite extends DefaultDetailComposite imp
 
 		setLayoutData(gridData);
 		setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		
+		endHeelComposite = toolkit.createComposite(this, SWT.NONE);
+		final GridLayout layout = GridLayoutFactory.swtDefaults() //
+				.numColumns(1) //
+				.equalWidth(true) //
+				.margins(0, 0) //
+				.extendedMargins(0, 0, 0, 0) //
+				.create();
+		endHeelComposite.setLayout(layout);
+		endHeelComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		endHeelComposite.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
 		Composite ballastCheckbox = toolkit.createComposite(this, SWT.NONE);
 		GridLayout gridLayoutCheckbox = new GridLayout(3, false);
@@ -196,12 +203,12 @@ public class BallastBonusTermsDetailComposite extends DefaultDetailComposite imp
 	}
 
 	protected void createMonthlyBallastBonusComposite(Composite parent, FormToolkit toolkit, GenericCharterContract charterContract) {
-		final EObjectTableViewer ballastBonusTable = MonthlyBallastBonusTermsTableCreator.createMonthlyBallastBonusTable(parent, toolkit, dialogContext, commandHandler, charterContract,
+		/*final EObjectTableViewer ballastBonusTable =*/ MonthlyBallastBonusTermsTableCreator.createMonthlyBallastBonusTable(parent, toolkit, dialogContext, commandHandler, charterContract,
 				statusProvider, resizeAction);
 	}
 	
 	protected void createBallastBonusComposite(Composite parent, FormToolkit toolkit, GenericCharterContract charterContract) {
-		final EObjectTableViewer ballastBonusTable = BallastBonusTermsTableCreator.createBallastBonusTable(parent, toolkit, dialogContext, commandHandler, charterContract,
+		/*final EObjectTableViewer ballastBonusTable =*/ BallastBonusTermsTableCreator.createBallastBonusTable(parent, toolkit, dialogContext, commandHandler, charterContract,
 				statusProvider, resizeAction);
 	}
 	
@@ -215,6 +222,10 @@ public class BallastBonusTermsDetailComposite extends DefaultDetailComposite imp
 		this.dialogContext = dialogContext;
 		oldVesselAvailability = (VesselAvailability) value;
 		final GenericCharterContract gcc = oldVesselAvailability.getContainedCharterContract();
+		
+		if (oldVesselAvailability != null) {
+			createDefaultChildCompositeSection(dialogContext, root, oldVesselAvailability, range, dbc, oldVesselAvailability.eClass(), endHeelComposite);
+		}
 		doDisplay(dialogContext, root, dbc, gcc);
 	}
 
@@ -225,7 +236,7 @@ public class BallastBonusTermsDetailComposite extends DefaultDetailComposite imp
 			switch (this.ballastBonusCombobox.getText()) {
 			case MONTHLY:
 				
-				if (gcc.getBallastBonusTerms() != null && gcc.getBallastBonusTerms() instanceof MonthlyBallastBonusContainer) {
+				if (gcc.getBallastBonusTerms() instanceof MonthlyBallastBonusContainer) {
 				
 					final MonthlyBallastBonusContainer mbbc = (MonthlyBallastBonusContainer) gcc.getBallastBonusTerms();
 					Composite hubsComp = toolkit.createComposite(owner);
@@ -266,15 +277,15 @@ public class BallastBonusTermsDetailComposite extends DefaultDetailComposite imp
 	}
 
 	@Override
-	public @Nullable IInlineEditor addInlineEditor(IInlineEditor editor) {
-		return null;
-	}
-
-	@Override
 	public void displayValidationStatus(IStatus status) {
 		super.displayValidationStatus(status);
 		this.status = status;
 		statusProvider.fireStatusChanged(status);
 	}
 
+	@Override
+	protected boolean shouldDisplay(final EReference ref) {
+		return ref.isContainment() && !ref.isMany() && ref != CargoPackage.eINSTANCE.getVesselAvailability_ContainedCharterContract()
+				&& ref != CargoPackage.eINSTANCE.getVesselAvailability_StartHeel();
+	}
 }

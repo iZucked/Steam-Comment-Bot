@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Layout;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
@@ -24,14 +25,54 @@ import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeLayoutProvider;
 /**
  * Detail composite for vessel state attributes; adds an additional bit to the bottom of the composite which contains a fuel curve table.
  * 
- * @author alex
+ * @author alex, FM
  * 
  */
 public class VesselAvailabilityDetailComposite extends DefaultDetailComposite {
+	
+	private final VesselAvailabilityDetailGroup detailGroup;
 
-	public VesselAvailabilityDetailComposite(Composite parent, int style, FormToolkit toolkit) {
+	public enum VesselAvailabilityDetailGroup{
+		GENERAL, START, END;
+	}
+	
+	public VesselAvailabilityDetailComposite(Composite parent, int style, FormToolkit toolkit, VesselAvailabilityDetailGroup detailGroup) {
 		super(parent, style, toolkit);
+		this.detailGroup = detailGroup;
 	}	
+	
+	@Override
+	public IInlineEditor addInlineEditor(final IInlineEditor editor) {
+		
+		if (editor == null) {
+			return null;
+		}
+
+		// By default all elements are in the main tab
+		VesselAvailabilityDetailGroup cdg = VesselAvailabilityDetailGroup.GENERAL;
+
+		// Here the exceptions are listed for the elements which should go into the middle composite
+		if (editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_StartAt()
+				|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_StartAfter()
+				|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_StartBy()) {
+			cdg = VesselAvailabilityDetailGroup.START;
+		}
+		
+		// Here the exceptions are listed for the elements which should go into the bottom
+		if (editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_EndAt()
+				|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_EndAfter()
+				|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_EndBy()) {
+			cdg = VesselAvailabilityDetailGroup.END;
+		}
+	
+		// Do not add elements if they are for the wrong section.
+		if (detailGroup != cdg){
+			// Rejected...
+			return null;
+		}
+
+		return super.addInlineEditor(editor);
+	}
 
 	protected IDisplayCompositeLayoutProvider createLayoutProvider() {
 		return new DefaultDisplayCompositeLayoutProvider() {
@@ -43,7 +84,7 @@ public class VesselAvailabilityDetailComposite extends DefaultDetailComposite {
 
 				// TODO: replace this with a GridBagLayout or GroupLayout; for editors without a label,
 				// we want the editor to take up two cells rather than one.
-				return new GridLayout(4, false);
+				return new GridLayout(8, false);
 			}
 
 			@Override
@@ -52,6 +93,7 @@ public class VesselAvailabilityDetailComposite extends DefaultDetailComposite {
 				final EStructuralFeature feature = editor.getFeature();
 				if (feature == CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL || feature == CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_NUMBER) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					gd.widthHint = 64;
 
 					if (feature == CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL) {
 						final Label label = editor.getLabel();
