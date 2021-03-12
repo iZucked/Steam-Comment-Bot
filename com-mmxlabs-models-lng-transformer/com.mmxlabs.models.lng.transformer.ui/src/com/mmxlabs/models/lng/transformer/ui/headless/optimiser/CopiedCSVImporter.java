@@ -164,7 +164,7 @@ public class CopiedCSVImporter {
 		dataMap.put(CargoModelImporter.VESSEL_AVAILABILITY_KEY, createURI(uriRoot, "Vessel Availability.csv"));
 		dataMap.put(AssignmentModelImporter.ASSIGNMENTS, createURI(uriRoot, "Assignments.csv"));
 		dataMap.put(CargoModelImporter.CANAL_BOOKINGS_KEY, createURI(uriRoot, "Canal Bookings.csv"));
-		dataMap.put(VesselAvailabilityBallastBonusImporterExtraImporter.BALLASTBONUS_KEY, createURI(uriRoot, "Vessel Availability--Ballast Bonus.csv"));
+		dataMap.put(VesselAvailabilityBallastBonusImporterExtraImporter.BALLAST_BONUS_KEY, createURI(uriRoot, "Vessel Availability--Ballast Bonus.csv"));
 		dataMap.put(InventoryExtraImporter.INVENTORY_KEY, createURI(uriRoot, "Inventories.csv"));
 	}
 
