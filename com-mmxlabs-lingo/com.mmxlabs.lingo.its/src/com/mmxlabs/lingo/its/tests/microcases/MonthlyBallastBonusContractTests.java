@@ -25,12 +25,11 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.commercial.BallastBonusContract;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
-import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContract;
-import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
+import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContainer;
+import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusTerm;
 import com.mmxlabs.models.lng.commercial.NextPortType;
-import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -58,9 +57,9 @@ import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
+import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
-import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -141,7 +140,7 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 		NextPortType[] nextPortTypes = new NextPortType[] { NextPortType.NEAREST_HUB, NextPortType.NEAREST_HUB, NextPortType.NEAREST_HUB };
 		String[] pctFuelRates = new String[] { "10", "75", "0" };
 		String[] pctCharterRates = new String[] { "25", "0", "95" };
-		final BallastBonusContract ballastBonusContract = this.createMonthlyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))),
+		final GenericCharterContract ballastBonusContract = this.createMonthlyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))),
 				20.0, "20000", "100", true, false, Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY), portFinder.findPortById(InternalDataConstants.PORT_YUNG_AN)),
 				 yms, nextPortTypes, pctFuelRates, pctCharterRates);
 		vesselAvailability.setCharterContract(ballastBonusContract);
@@ -226,7 +225,7 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 		NextPortType[] nextPortTypes = new NextPortType[] { NextPortType.LOAD_PORT, NextPortType.LOAD_PORT, NextPortType.LOAD_PORT, NextPortType.LOAD_PORT };
 		String[] pctFuelRates = new String[] { "100", "10", "75", "0" };
 		String[] pctCharterRates = new String[] { "100", "25", "0", "95" };
-		final BallastBonusContract ballastBonusContract = this.createMonthlyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))),
+		final GenericCharterContract ballastBonusContract = this.createMonthlyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))),
 				20.0, "20000", "100", true, false, Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY), portFinder.findPortById(InternalDataConstants.PORT_YUNG_AN)),
 				 yms, nextPortTypes, pctFuelRates, pctCharterRates);
 		vesselAvailability.setCharterContract(ballastBonusContract);
@@ -345,7 +344,7 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 		NextPortType[] nextPortTypes = new NextPortType[] { NextPortType.LOAD_PORT, NextPortType.LOAD_PORT, NextPortType.LOAD_PORT, NextPortType.LOAD_PORT };
 		String[] pctFuelRates = new String[] { "100", "10", "75", "0" };
 		String[] pctCharterRates = new String[] { "100", "25", "0", "95" };
-		final BallastBonusContract ballastBonusContract = this.createMonthlyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))),
+		final GenericCharterContract ballastBonusContract = this.createMonthlyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))),
 				20.0, "20000", "100", true, false, Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY), portFinder.findPortById(InternalDataConstants.PORT_YUNG_AN)),
 				 yms, nextPortTypes, pctFuelRates, pctCharterRates);
 		vesselAvailability.setCharterContract(ballastBonusContract);
@@ -419,7 +418,7 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 		NextPortType[] nextPortTypes = new NextPortType[] { NextPortType.NEAREST_HUB, NextPortType.NEAREST_HUB, NextPortType.NEAREST_HUB };
 		String[] pctFuelRates = new String[] { "10", "75", "100" };
 		String[] pctCharterRates = new String[] { "25", "0", "100" };
-		final BallastBonusContract ballastBonusContract = this.createMonthlyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))),
+		final GenericCharterContract ballastBonusContract = this.createMonthlyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))),
 				20.0, "20000", "100", true, false, Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY), portFinder.findPortById(InternalDataConstants.PORT_YUNG_AN)),
 				yms, nextPortTypes, pctFuelRates, pctCharterRates);
 		vesselAvailability.setCharterContract(ballastBonusContract);
@@ -445,15 +444,16 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 	}
 
 	
-	public @NonNull RuleBasedBallastBonusContract createMonthlyBallastBonusContract(final @NonNull Collection<@NonNull APortSet<Port>> redeliveryPorts, final double speed,
+	public @NonNull GenericCharterContract createMonthlyBallastBonusContract(final @NonNull Collection<@NonNull APortSet<Port>> redeliveryPorts, final double speed,
 			final @NonNull String hireExpression, final @NonNull String fuelExpression, final boolean includeCanalFees, final boolean includeCanalTime,
 			final @NonNull Collection<@NonNull APortSet<Port>> returnPorts,
 			YearMonth[] months, NextPortType[] nextPortTypes, String[] pctFuelRates, String[] pctCharterRates) {
-		final MonthlyBallastBonusContract ballastBonusContract = CommercialFactory.eINSTANCE.createMonthlyBallastBonusContract();
-		ballastBonusContract.getHubs().addAll(returnPorts);
+		final GenericCharterContract ballastBonusContract = CommercialFactory.eINSTANCE.createGenericCharterContract();
+		final MonthlyBallastBonusContainer container = CommercialFactory.eINSTANCE.createMonthlyBallastBonusContainer();
+		container.getHubs().addAll(returnPorts);
 		
 		for (int i = 0; i < months.length; i++) {
-			final MonthlyBallastBonusContractLine monthlyBBLine = CommercialFactory.eINSTANCE.createMonthlyBallastBonusContractLine();
+			final MonthlyBallastBonusTerm monthlyBBLine = CommercialFactory.eINSTANCE.createMonthlyBallastBonusTerm();
 			YearMonth ym = months[i];
 			NextPortType nextPortType = nextPortTypes[i];
 			String pctFuelRate = pctFuelRates[i];
@@ -471,7 +471,7 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 			monthlyBBLine.setIncludeCanalTime(includeCanalTime);
 			monthlyBBLine.setSpeed(speed);
 			
-			ballastBonusContract.getRules().add(monthlyBBLine);
+			container.getTerms().add(monthlyBBLine);
 		}
 
 		return ballastBonusContract;
@@ -525,7 +525,7 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 		NextPortType[] nextPortTypes = new NextPortType[] { NextPortType.LOAD_PORT, NextPortType.LOAD_PORT, NextPortType.LOAD_PORT };
 		String[] pctFuelRates = new String[] { "10", "75", "100" };
 		String[] pctCharterRates = new String[] { "25", "0", "100" };
-		final BallastBonusContract ballastBonusContract = this.createMonthlyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))),
+		final GenericCharterContract ballastBonusContract = this.createMonthlyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))),
 				20.0, "20000", "100", true, false, Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY), portFinder.findPortById(InternalDataConstants.PORT_YUNG_AN)),
 				 yms, nextPortTypes, pctFuelRates, pctCharterRates);
 		vesselAvailability.setCharterContract(ballastBonusContract);
@@ -597,7 +597,7 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 		NextPortType[] nextPortTypes = new NextPortType[] { NextPortType.LOAD_PORT, NextPortType.LOAD_PORT, NextPortType.NEAREST_HUB };
 		String[] pctFuelRates = new String[] { "10", "75", "100" };
 		String[] pctCharterRates = new String[] { "25", "0", "100" };
-		final BallastBonusContract ballastBonusContract = this.createMonthlyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))),
+		final GenericCharterContract ballastBonusContract = this.createMonthlyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))),
 				20.0, "20000", "100", true, false, Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY), portFinder.findPortById(InternalDataConstants.PORT_YUNG_AN)),
 				 yms, nextPortTypes, pctFuelRates, pctCharterRates);
 		vesselAvailability.setCharterContract(ballastBonusContract);

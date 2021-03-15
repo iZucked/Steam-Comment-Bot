@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -679,8 +680,8 @@ public class DefaultScenarioCreator {
 			event.setHireRate(hireRate);
 			event.setRelocateTo(endPort);
 
-			event.setAvailableHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
-			event.setRequiredHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+			event.setAvailableHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+			event.setRequiredHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 
 			return event;
 		}

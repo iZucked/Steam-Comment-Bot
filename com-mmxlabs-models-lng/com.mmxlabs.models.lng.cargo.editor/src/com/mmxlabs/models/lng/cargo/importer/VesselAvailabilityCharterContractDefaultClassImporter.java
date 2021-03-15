@@ -35,7 +35,7 @@ import com.mmxlabs.models.util.importer.IMMXExportContext;
 import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 
-public class VesselAvailabilityCharterContractImporter extends DefaultClassImporter {
+public class VesselAvailabilityCharterContractDefaultClassImporter extends DefaultClassImporter {
 	static final String VESSEL_NAME_FIELD = "vessel";
 	static final String CHARTER_NUMBER_FIELD = "charterno";
 	

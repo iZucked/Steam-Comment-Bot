@@ -20,7 +20,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.EVesselTankState;
-import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
@@ -53,7 +53,7 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 				.build();
 
 		@NonNull
-		RuleBasedBallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "1000000");
+		GenericCharterContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "1000000");
 		vesselAvailability.setCharterContract(ballastBonusContract);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
@@ -90,7 +90,6 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 
 			Assertions.assertEquals(LocalDateTime.of(2017, 2, 1, 0, 0), va.getStartAfter());
 			Assertions.assertEquals(LocalDateTime.of(2017, 2, 1, 0, 0), va.getStartBy());
-			Assertions.assertEquals("1000000", va.getCharterOrDelegateRepositioningFee());
 			Assertions.assertEquals("5", va.getStartHeel().getPriceExpression());
 			Assertions.assertEquals(1000.0, va.getStartHeel().getMinVolumeAvailable(), 0.0001);
 			Assertions.assertEquals(3000.0, va.getStartHeel().getMaxVolumeAvailable(), 0.0001);
@@ -98,7 +97,6 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 
 			Assertions.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndAfter());
 			Assertions.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndBy());
-			Assertions.assertEquals("1000000", va.getCharterOrDelegateRepositioningFee());
 			Assertions.assertEquals("7", va.getEndHeel().getPriceExpression());
 			Assertions.assertEquals(4000.0, va.getEndHeel().getMinimumEndHeel(), 0.0001);
 			Assertions.assertEquals(5000.0, va.getEndHeel().getMaximumEndHeel(), 0.0001);
@@ -125,7 +123,7 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 				.build();
 
 		@NonNull
-		RuleBasedBallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "1000000");
+		GenericCharterContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "1000000");
 		vesselAvailability.setCharterContract(ballastBonusContract);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
@@ -162,7 +160,6 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 
 			Assertions.assertEquals(LocalDateTime.of(2017, 2, 1, 0, 0), va.getStartAfter());
 			Assertions.assertEquals(LocalDateTime.of(2017, 2, 1, 0, 0), va.getStartBy());
-			Assertions.assertEquals("1000000", va.getCharterOrDelegateRepositioningFee());
 			Assertions.assertEquals("5", va.getStartHeel().getPriceExpression());
 			Assertions.assertEquals(1000.0, va.getStartHeel().getMinVolumeAvailable(), 0.0001);
 			Assertions.assertEquals(3000.0, va.getStartHeel().getMaxVolumeAvailable(), 0.0001);
@@ -170,7 +167,6 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 
 			Assertions.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndAfter());
 			Assertions.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndBy());
-			Assertions.assertEquals("1000000", va.getCharterOrDelegateRepositioningFee());
 			Assertions.assertEquals("7", va.getEndHeel().getPriceExpression());
 			Assertions.assertEquals(4000.0, va.getEndHeel().getMinimumEndHeel(), 0.0001);
 			Assertions.assertEquals(5000.0, va.getEndHeel().getMaximumEndHeel(), 0.0001);
@@ -197,7 +193,7 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 				.build();
 
 		@NonNull
-		RuleBasedBallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "1000000");
+		GenericCharterContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "1000000");
 		vesselAvailability.setCharterContract(ballastBonusContract);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
@@ -240,7 +236,6 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 
 			Assertions.assertEquals(LocalDateTime.of(2017, 4, 1, 11, 0), va.getStartAfter());
 			Assertions.assertEquals(LocalDateTime.of(2017, 4, 1, 11, 0), va.getStartBy());
-			Assertions.assertEquals("", va.getCharterOrDelegateRepositioningFee());
 			Assertions.assertEquals("", va.getStartHeel().getPriceExpression());
 			Assertions.assertEquals(500.0, va.getStartHeel().getMinVolumeAvailable(), 0.0001);
 			Assertions.assertEquals(500.0, va.getStartHeel().getMaxVolumeAvailable(), 0.0001);
@@ -253,7 +248,6 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 			Assertions.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0), va.getEndBy());
 
 			// Expect repositioning fee to be cleared
-			Assertions.assertEquals("", va.getCharterOrDelegateRepositioningFee());
 			Assertions.assertEquals("7", va.getEndHeel().getPriceExpression());
 			Assertions.assertEquals(4000.0, va.getEndHeel().getMinimumEndHeel(), 0.0001);
 			Assertions.assertEquals(5000.0, va.getEndHeel().getMaximumEndHeel(), 0.0001);
@@ -280,7 +274,7 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 				.build();
 
 		@NonNull
-		RuleBasedBallastBonusContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "1000000");
+		GenericCharterContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "1000000");
 		vesselAvailability.setCharterContract(ballastBonusContract);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
@@ -322,7 +316,6 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 
 			Assertions.assertEquals(LocalDateTime.of(2017, 2, 1, 0, 0), va.getStartAfter());
 			Assertions.assertEquals(LocalDateTime.of(2017, 2, 1, 0, 0), va.getStartBy());
-			Assertions.assertEquals("1000000", va.getCharterOrDelegateRepositioningFee());
 			Assertions.assertEquals("5", va.getStartHeel().getPriceExpression());
 			Assertions.assertEquals(1000.0, va.getStartHeel().getMinVolumeAvailable(), 0.0001);
 			Assertions.assertEquals(3000.0, va.getStartHeel().getMaxVolumeAvailable(), 0.0001);
@@ -330,7 +323,6 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 
 			Assertions.assertEquals(LocalDateTime.of(2017, 4, 1, 11, 0), va.getEndAfter());
 			Assertions.assertEquals(LocalDateTime.of(2017, 4, 1, 11, 0), va.getEndBy());
-			Assertions.assertEquals("1000000", va.getCharterOrDelegateRepositioningFee());
 			Assertions.assertEquals("", va.getEndHeel().getPriceExpression());
 			Assertions.assertEquals(500.0, va.getEndHeel().getMinimumEndHeel(), 0.0001);
 			Assertions.assertEquals(500.0, va.getEndHeel().getMaximumEndHeel(), 0.0001);

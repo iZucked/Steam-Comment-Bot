@@ -18,7 +18,6 @@ import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -36,7 +35,6 @@ public class CommercialModelImporter implements ISubmodelImporter {
 	public static final String ENTITY_BOOKS_KEY = "ENTITYBOOKS";
 	public static final String SALES_CON_KEY = "SALES";
 	public static final String PURCHASE_CON_KEY = "PURCHASE";
-	public static final String CHARTER_CON_KEY = "CHARTER";
 
 	@Inject
 	private IImporterRegistry importerRegistry;
@@ -45,7 +43,6 @@ public class CommercialModelImporter implements ISubmodelImporter {
 	private LegalEntityBookImporter entityBookImporter;
 	private IClassImporter purchaseImporter;
 	private IClassImporter salesImporter;
-	private IClassImporter charterImporter;
 
 	/**
 	 */
@@ -66,7 +63,6 @@ public class CommercialModelImporter implements ISubmodelImporter {
 			entityImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getLegalEntity());
 			purchaseImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getPurchaseContract());
 			salesImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getSalesContract());
-			charterImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getGenericCharterContract());
 		}
 	}
 
@@ -78,7 +74,6 @@ public class CommercialModelImporter implements ISubmodelImporter {
 		inputs.put(ENTITY_BOOKS_KEY, "Entity Books");
 		inputs.put(PURCHASE_CON_KEY, "Purchase Contracts");
 		inputs.put(SALES_CON_KEY, "Sales Contracts");
-		inputs.put(CHARTER_CON_KEY, "Charter Contracts");
 
 		return inputs;
 	}
@@ -120,10 +115,6 @@ public class CommercialModelImporter implements ISubmodelImporter {
 			commercial.getPurchaseContracts()
 					.addAll((Collection<? extends PurchaseContract>) purchaseImporter.importObjects(CommercialPackage.eINSTANCE.getPurchaseContract(), inputs.get(PURCHASE_CON_KEY), context));
 		}
-		if (inputs.containsKey(CHARTER_CON_KEY)) {
-			commercial.getCharteringContracts()
-					.addAll((Collection<? extends GenericCharterContract>) charterImporter.importObjects(CommercialPackage.eINSTANCE.getGenericCharterContract(), inputs.get(CHARTER_CON_KEY), context));
-		}
 		return commercial;
 	}
 
@@ -134,7 +125,6 @@ public class CommercialModelImporter implements ISubmodelImporter {
 		output.put(ENTITY_BOOKS_KEY, entityBookImporter.exportObjects(cm.getEntities(), context));
 		output.put(SALES_CON_KEY, salesImporter.exportObjects(cm.getSalesContracts(), context));
 		output.put(PURCHASE_CON_KEY, purchaseImporter.exportObjects(cm.getPurchaseContracts(), context));
-		output.put(CHARTER_CON_KEY, charterImporter.exportObjects(cm.getCharteringContracts(), context));
 	}
 
 	@Override

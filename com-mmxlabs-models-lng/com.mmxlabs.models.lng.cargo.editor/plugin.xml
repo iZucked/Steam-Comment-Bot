@@ -341,7 +341,7 @@
             class="com.mmxlabs.models.lng.cargo.importer.AssignmentModelImporter">
       </extramodelimporter>
       <extramodelimporter
-            class="com.mmxlabs.models.lng.cargo.importer.VesselAvailabilityBallastBonusImporterExtraImporter">
+            class="com.mmxlabs.models.lng.cargo.importer.VesselAvailabilityCharterContractIExtraModelImporter">
       </extramodelimporter>
       <extramodelimporter
             class="com.mmxlabs.models.lng.cargo.importer.InventoryExtraImporter">

@@ -330,7 +330,7 @@
    <extension
          point="com.mmxlabs.models.util.import.extramodelimporters">
       <extramodelimporter
-            class="com.mmxlabs.models.lng.commercial.importer.CharterContractBallastBonusImporterExtraImporter">
+            class="com.mmxlabs.models.lng.commercial.importer.CharterContractIExtraModelImporter">
       </extramodelimporter>
    </extension>
    <!--<extension

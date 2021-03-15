@@ -17,11 +17,10 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusCharterContract;
-import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContract;
-import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
+import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContainer;
+import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusTerm;
 import com.mmxlabs.models.lng.commercial.validation.internal.Activator;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -35,51 +34,45 @@ public class MonthlyCharterContractConstraint extends AbstractModelMultiConstrai
 		final EObject target = ctx.getTarget();
 		final EObject rootObject = extraContext.getRootObject();
 
-//		if (target instanceof MonthlyBallastBonusCharterContract && rootObject instanceof LNGScenarioModel) {
-//			final MonthlyBallastBonusCharterContract contract = (MonthlyBallastBonusCharterContract) target;
-//			final LNGScenarioModel scenario = (LNGScenarioModel) rootObject;
-//			final LocalDate scheduleStart = getStartOfSchedule(scenario);
-//
-//			if (scheduleStart != LocalDate.MAX) {
-//
-//				if (contract.getBallastBonusContract() instanceof MonthlyBallastBonusContract) {
-//					final MonthlyBallastBonusContract bbContract = (MonthlyBallastBonusContract) contract.getBallastBonusContract();
-//
-//					LocalDate earliestRule = LocalDate.MAX;
-//					for (BallastBonusContractLine rule : bbContract.getRules()) {
-//						if (rule instanceof MonthlyBallastBonusContractLine) {
-//							MonthlyBallastBonusContractLine monthlyRule = (MonthlyBallastBonusContractLine) rule;
-//							YearMonth ym = monthlyRule.getMonth();
-//							if (ym != null) {
-//								LocalDate ymStart = LocalDate.of(ym.getYear(), ym.getMonthValue(), 1);
-//								if (ymStart.isBefore(earliestRule)) {
-//									earliestRule = ymStart;
-//								}
-//							}
-//							else {
-//								addValidationError(ctx, statuses, contract, "Month not set on monthly rule.", CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES);			
-//							}
-//						} else {
-//							// If not a monthly rule, in case we allow in the future, covers all dates.
-//							earliestRule = LocalDate.MIN;
-//						}
-//					}
-//
-//					if (scheduleStart.isBefore(earliestRule)) {
-//						String earliestRuleStr = (earliestRule != LocalDate.MAX) ? ", "+earliestRule.toString()+")" : ",]";
-//						addValidationError(ctx, statuses, contract, "Monthly range does not cover [" + scheduleStart.toString() + earliestRuleStr, CommercialPackage.Literals.RULE_BASED_BALLAST_BONUS_CONTRACT__RULES);
-//					}
-//				}
-//			}
-//		}
+		if (target instanceof GenericCharterContract && rootObject instanceof LNGScenarioModel) {
+			final GenericCharterContract contract = (GenericCharterContract) target;
+			final LNGScenarioModel scenario = (LNGScenarioModel) rootObject;
+			final LocalDate scheduleStart = getStartOfSchedule(scenario);
+
+			if (scheduleStart != LocalDate.MAX) {
+
+				if (contract.getBallastBonusTerms() instanceof MonthlyBallastBonusContainer) {
+					final MonthlyBallastBonusContainer bbContract = (MonthlyBallastBonusContainer) contract.getBallastBonusTerms();
+
+					LocalDate earliestRule = LocalDate.MAX;
+					for (final MonthlyBallastBonusTerm monthlyRule : bbContract.getTerms()) {
+						YearMonth ym = monthlyRule.getMonth();
+						if (ym != null) {
+							LocalDate ymStart = LocalDate.of(ym.getYear(), ym.getMonthValue(), 1);
+							if (ymStart.isBefore(earliestRule)) {
+								earliestRule = ymStart;
+							}
+						}
+						else {
+							addValidationError(ctx, statuses, contract, "Month not set on monthly rule.", CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTAINER__TERMS);			
+						}
+					}
+
+					if (scheduleStart.isBefore(earliestRule)) {
+						String earliestRuleStr = (earliestRule != LocalDate.MAX) ? ", "+earliestRule.toString()+")" : ",]";
+						addValidationError(ctx, statuses, contract, "Monthly range does not cover [" + scheduleStart.toString() + earliestRuleStr, CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTAINER__TERMS);
+					}
+				}
+			}
+		}
 
 		return Activator.PLUGIN_ID;
 	}
 
-	private void addValidationError(final IValidationContext ctx, final List<IStatus> statuses, final MonthlyBallastBonusCharterContract contract, final String errorMsg,
+	private void addValidationError(final IValidationContext ctx, final List<IStatus> statuses, final GenericCharterContract contract, final String errorMsg,
 			EStructuralFeature... features) {
 		final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-				(IConstraintStatus) ctx.createFailureStatus(String.format("[Monthly Ballast Bonus Charter Contract] %s", errorMsg)));
+				(IConstraintStatus) ctx.createFailureStatus(String.format("[Charter contract] - monthly ballast bonus term has the following issue: %s", errorMsg)));
 		for (EStructuralFeature feature : features) {
 			dcsd.addEObjectAndFeature(contract, feature);
 		}
