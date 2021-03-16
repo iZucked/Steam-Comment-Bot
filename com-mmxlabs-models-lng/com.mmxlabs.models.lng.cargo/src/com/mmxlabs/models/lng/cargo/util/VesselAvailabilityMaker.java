@@ -115,7 +115,7 @@ public class VesselAvailabilityMaker {
 	 * @return
 	 */
 	public VesselAvailabilityMaker withRepositioning(final String fee) {
-		if (fee != null) {
+		if (fee != null && !fee.isEmpty()) {
 			GenericCharterContract gcc = vesselAvailability.getCharterOrDelegateCharterContract();
 			if (gcc == null) {
 				gcc = CommercialFactory.eINSTANCE.createGenericCharterContract();
