@@ -13,6 +13,7 @@ import com.mmxlabs.scheduler.optimiser.chartercontracts.termannotations.LumpSumR
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class DefaultLumpSumRepositioningFeeContractTerm extends RepositioningFeeContractTerm{
 	private final @NonNull ILongCurve lumpSumCurve;
@@ -37,6 +38,7 @@ public class DefaultLumpSumRepositioningFeeContractTerm extends RepositioningFee
 
 	@Override
 	public boolean match(final IPort loadPort, IPortSlot slot, IVesselAvailability vesselAvailability, int vesselStartTime, int vesselEndTime) {
-		return true; //getOriginPort() == loadPort;
+		return slot.getPortType() == PortType.Start;
+		/* maybe also check that origin ports match? getOriginPort() == loadPort; */
 	}
 }

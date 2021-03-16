@@ -21,6 +21,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
@@ -107,7 +108,7 @@ public class DefaultOriginPortRepositioningFeeContractTerm extends Repositioning
 
 	@Override
 	public boolean match(final IPort loadPort, IPortSlot slot, IVesselAvailability vesselAvailability, int vesselStartTime, int vesselEndTime) {
-		return true; //getOriginPort() == loadPort;
+		return slot.getPortType() == PortType.Start;
 	}
 
 	@Override

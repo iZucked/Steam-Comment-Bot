@@ -15,6 +15,7 @@ import com.mmxlabs.scheduler.optimiser.chartercontracts.termannotations.LumpSumB
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class DefaultLumpSumBallastBonusContractTerm extends BallastBonusContractTerm{
 	private final @NonNull ILongCurve lumpSumCurve;
@@ -26,7 +27,7 @@ public class DefaultLumpSumBallastBonusContractTerm extends BallastBonusContract
 
 	@Override
 	public boolean match(final IPort loadPort, final IPortSlot slot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {
-		return getRedeliveryPorts().contains(slot.getPort()) || getRedeliveryPorts().isEmpty();
+		return slot.getPortType() == PortType.End && (getRedeliveryPorts().contains(slot.getPort()) || getRedeliveryPorts().isEmpty());
 	}
 
 	@Override

@@ -24,6 +24,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
@@ -177,11 +178,12 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 
 	@Override
 	public boolean match(final IPort loadPort, final IPortSlot slot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {
-		if (monthStartInclusive <= vesselStartTime && vesselStartTime < monthEndExclusive) {
-			return getRedeliveryPorts().contains(slot.getPort()) || getRedeliveryPorts().isEmpty();
-		} else {
-			return false;
+		if (slot.getPortType() == PortType.End) {
+			if (monthStartInclusive <= vesselStartTime && vesselStartTime < monthEndExclusive) {
+				return getRedeliveryPorts().contains(slot.getPort()) || getRedeliveryPorts().isEmpty();
+			}
 		}
+		return false;
 	}
 
 	public boolean matchWithoutDates(IPortSlot lastSlot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {
