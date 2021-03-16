@@ -1293,10 +1293,13 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public boolean isCharterContractOverride() {
+		if (getContainedCharterContract() != null) {
+			return true;
+		}
 		return charterContractOverride;
 	}
 

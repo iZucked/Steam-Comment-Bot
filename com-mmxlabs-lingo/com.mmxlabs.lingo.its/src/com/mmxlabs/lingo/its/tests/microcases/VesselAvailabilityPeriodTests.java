@@ -126,7 +126,8 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 		GenericCharterContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "1000000");
 		vesselAvailability.setCharterContract(ballastBonusContract);
 
-		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+		/*final Cargo cargo1 =*/ 
+		cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2017, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
 				.makeDESSale("D1", LocalDate.of(2017, 3, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
@@ -135,7 +136,8 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 				.withAssignmentFlags(false, false) //
 				.build();
 
-		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
+		/*final Cargo cargo2 =*/ 
+		cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L2", LocalDate.of(2017, 4, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
 				.makeDESSale("D2", LocalDate.of(2017, 5, 1), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
@@ -275,7 +277,7 @@ public class VesselAvailabilityPeriodTests extends AbstractLegacyMicroTestCase {
 
 		@NonNull
 		GenericCharterContract ballastBonusContract = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "1000000");
-		vesselAvailability.setCharterContract(ballastBonusContract);
+		vesselAvailability.setContainedCharterContract(ballastBonusContract);
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2017, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
