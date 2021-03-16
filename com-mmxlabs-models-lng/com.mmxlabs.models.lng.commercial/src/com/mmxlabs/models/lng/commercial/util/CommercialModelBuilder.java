@@ -192,14 +192,16 @@ public class CommercialModelBuilder {
 
 	public @NonNull GenericCharterContract createLumpSumBallastBonusCharterContract(@NonNull final Port redeliveryPort, @NonNull final String priceExpression,
 			@NonNull final String repositioningFee) {
-		final LumpSumRepositioningFeeTerm lumpSumRepositioiningFee = CommercialFactory.eINSTANCE.createLumpSumRepositioningFeeTerm();
-		lumpSumRepositioiningFee.setPriceExpression(repositioningFee);
-		
-		final SimpleRepositioningFeeContainer repositioningFeeContainer = CommercialFactory.eINSTANCE.createSimpleRepositioningFeeContainer();
-		repositioningFeeContainer.getTerms().add(lumpSumRepositioiningFee);
 		final GenericCharterContract ballastBonusCharterContract = createSimpleLumpSumBallastBonusContract(redeliveryPort, priceExpression);
-		ballastBonusCharterContract.setRepositioningFeeTerms(repositioningFeeContainer);
-
+		
+		if (!repositioningFee.isEmpty()) {
+			final LumpSumRepositioningFeeTerm lumpSumRepositioiningFee = CommercialFactory.eINSTANCE.createLumpSumRepositioningFeeTerm();
+			lumpSumRepositioiningFee.setPriceExpression(repositioningFee);
+			final SimpleRepositioningFeeContainer repositioningFeeContainer = CommercialFactory.eINSTANCE.createSimpleRepositioningFeeContainer();
+			repositioningFeeContainer.getTerms().add(lumpSumRepositioiningFee);
+			ballastBonusCharterContract.setRepositioningFeeTerms(repositioningFeeContainer);
+		}
+		
 		return ballastBonusCharterContract;
 	}
 

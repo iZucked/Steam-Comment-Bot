@@ -28,6 +28,8 @@ import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.commercial.BallastBonusTerm;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
+import com.mmxlabs.models.lng.commercial.IBallastBonus;
+import com.mmxlabs.models.lng.commercial.IRepositioningFee;
 import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusTerm;
 import com.mmxlabs.models.lng.commercial.LumpSumRepositioningFeeTerm;
 import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContainer;
@@ -60,6 +62,7 @@ import com.mmxlabs.scheduler.optimiser.chartercontracts.terms.DefaultOriginPortR
 import com.mmxlabs.scheduler.optimiser.chartercontracts.terms.MonthlyBallastBonusContractTerm;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
+import com.mmxlabs.scheduler.optimiser.shared.port.IPortProvider;
 
 /**
  * 
@@ -86,6 +89,9 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 	@Inject
 	@Named(SchedulerConstants.Parser_Charter)
 	private SeriesParser charterIndices;
+	
+	@Inject
+	private IPortProvider portProvider;
 
 	@Inject
 	private DateAndCurveHelper dateHelper;
@@ -119,18 +125,24 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 		}
 		
 		final List<ICharterContractTerm> terms = new LinkedList<>();
-		if (eCharterContract.getBallastBonusTerms() instanceof MonthlyBallastBonusContainer) {
-			terms.addAll(processMonthlyBallastBonus(eCharterContract));
-		} else if (eCharterContract.getBallastBonusTerms() instanceof SimpleBallastBonusContainer) {
-			terms.addAll(processSimpleBallastBonus(eCharterContract));
-		} else {
-			throw new IllegalArgumentException("Not implemented yet. Please contact Minimax Labs support.");
+		final IBallastBonus ballastBonus = eCharterContract.getBallastBonusTerms();
+		if (ballastBonus != null) {
+			if (eCharterContract.getBallastBonusTerms() instanceof MonthlyBallastBonusContainer) {
+				terms.addAll(processMonthlyBallastBonus(eCharterContract));
+			} else if (eCharterContract.getBallastBonusTerms() instanceof SimpleBallastBonusContainer) {
+				terms.addAll(processSimpleBallastBonus(eCharterContract));
+			} else {
+				throw new IllegalArgumentException("Not implemented yet. Please contact Minimax Labs support.");
+			}
 		}
 
-		if (eCharterContract.getRepositioningFeeTerms() instanceof SimpleRepositioningFeeContainer) {
-			terms.addAll(processSimpleRepositioningFee(eCharterContract));
-		} else {
-			throw new IllegalArgumentException("Not implemented yet. Please contact Minimax Labs support.");
+		final IRepositioningFee repositioningFee = eCharterContract.getRepositioningFeeTerms();
+		if (repositioningFee != null) {
+			if (eCharterContract.getRepositioningFeeTerms() instanceof SimpleRepositioningFeeContainer) {
+				terms.addAll(processSimpleRepositioningFee(eCharterContract));
+			} else {
+				throw new IllegalArgumentException("Not implemented yet. Please contact Minimax Labs support.");
+			}
 		}
 
 		if (eCharterContract.getBallastBonusTerms() instanceof MonthlyBallastBonusContainer) {
@@ -272,6 +284,9 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 	}
 	
 	private @NonNull IPort transformPort(Port originPort) {
+		if (originPort == null) {
+			return portProvider.getAnywherePort();
+		}
 		return modelEntityMap.getOptimiserObjectNullChecked(originPort, IPort.class);
 	}
 

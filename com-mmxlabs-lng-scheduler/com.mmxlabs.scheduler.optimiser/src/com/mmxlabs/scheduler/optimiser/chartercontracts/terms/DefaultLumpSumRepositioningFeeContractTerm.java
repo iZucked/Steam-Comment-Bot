@@ -37,6 +37,6 @@ public class DefaultLumpSumRepositioningFeeContractTerm extends RepositioningFee
 
 	@Override
 	public boolean match(final IPort loadPort, IPortSlot slot, IVesselAvailability vesselAvailability, int vesselStartTime, int vesselEndTime) {
-		return getOriginPort() == loadPort;
+		return true; //getOriginPort() == loadPort;
 	}
 }

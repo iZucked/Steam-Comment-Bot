@@ -25,7 +25,7 @@ public class DefaultCharterContract implements ICharterContract {
 	@Override
 	public long calculateCost(IPort firstLoad, IPortSlot lastSlot, IVesselAvailability vesselAvailability, int vesselStartTime, int vesselEndTime) {
 		for (final ICharterContractTerm term : terms) {
-			if (lastSlot.getPortType() == PortType.Start || term.match(firstLoad, lastSlot, vesselAvailability, vesselStartTime, vesselEndTime)) {
+			if (term.match(firstLoad, lastSlot, vesselAvailability, vesselStartTime, vesselEndTime)) {
 				return term.calculateCost(firstLoad, lastSlot, vesselAvailability, vesselStartTime, vesselEndTime);
 			}
 		}
