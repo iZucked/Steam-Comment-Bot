@@ -100,7 +100,6 @@ import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scenario.service.model.manager.ClonedScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
@@ -1372,7 +1371,9 @@ public class PeriodTransformer {
 				contained = true;
 			} else {
 				if (vesselAvailability.getCharterContract() != null) {
-					gcc = EMFCopier.copy(vesselAvailability.getCharterContract());
+					final Copier copier = new Copier();
+					gcc = (GenericCharterContract) copier.copy(vesselAvailability.getCharterContract());
+					mapping.createMappings(copier);
 				}
 			}
 			if (gcc != null) {
@@ -1445,7 +1446,9 @@ public class PeriodTransformer {
 				contained = true;
 			} else {
 				if (vesselAvailability.getCharterContract() != null) {
-					gcc = EMFCopier.copy(vesselAvailability.getCharterContract());
+					final Copier copier = new Copier();
+					gcc = (GenericCharterContract) copier.copy(vesselAvailability.getCharterContract());
+					mapping.createMappings(copier);
 				}
 			}
 			if (gcc != null) {
