@@ -1371,7 +1371,9 @@ public class PeriodTransformer {
 				gcc = vesselAvailability.getContainedCharterContract();
 				contained = true;
 			} else {
-				gcc = EMFCopier.copy(vesselAvailability.getCharterContract());
+				if (vesselAvailability.getCharterContract() != null) {
+					gcc = EMFCopier.copy(vesselAvailability.getCharterContract());
+				}
 			}
 			if (gcc != null) {
 				gcc.setRepositioningFeeTerms(null);
@@ -1442,7 +1444,9 @@ public class PeriodTransformer {
 				gcc = vesselAvailability.getContainedCharterContract();
 				contained = true;
 			} else {
-				gcc = EMFCopier.copy(vesselAvailability.getCharterContract());
+				if (vesselAvailability.getCharterContract() != null) {
+					gcc = EMFCopier.copy(vesselAvailability.getCharterContract());
+				}
 			}
 			if (gcc != null) {
 				gcc.setBallastBonusTerms(null);
