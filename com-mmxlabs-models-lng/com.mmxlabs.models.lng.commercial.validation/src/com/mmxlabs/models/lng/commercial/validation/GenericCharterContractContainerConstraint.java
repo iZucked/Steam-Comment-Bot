@@ -60,14 +60,14 @@ public class GenericCharterContractContainerConstraint extends AbstractModelMult
 	private void simpleBallastBonusValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures,
 			final SimpleBallastBonusContainer ballastBonusContainer, final EObject topLevelEObject, final EStructuralFeature topFeature, String topFeatureMessage) {
 		boolean atLeastOneProblem = false;
-		if (ballastBonusContainer.getTerms().isEmpty()) {
-			// need rules
-			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-					(IConstraintStatus) ctx.createFailureStatus("[Ballast Bonus] Must have rules"));
-			dcsd.addEObjectAndFeature(ballastBonusContainer, CommercialPackage.Literals.SIMPLE_BALLAST_BONUS_CONTAINER__TERMS);
-			failures.add(dcsd);
-			atLeastOneProblem = true;
-		}
+//		if (ballastBonusContainer.getTerms().isEmpty()) {
+//			// need rules
+//			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
+//					(IConstraintStatus) ctx.createFailureStatus("[Ballast Bonus] Must have rules"));
+//			dcsd.addEObjectAndFeature(ballastBonusContainer, CommercialPackage.Literals.SIMPLE_BALLAST_BONUS_CONTAINER__TERMS);
+//			failures.add(dcsd);
+//			atLeastOneProblem = true;
+//		}
 		for (final BallastBonusTerm ballastBonusTerm : ballastBonusContainer.getTerms()) {
 			if (ballastBonusTerm instanceof LumpSumTerm) {
 				if (!lumpSumValidation(ctx, extraContext, failures, (LumpSumTerm) ballastBonusTerm)) {
@@ -173,14 +173,14 @@ public class GenericCharterContractContainerConstraint extends AbstractModelMult
 	private void simpleRepositioningFeeValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures,
 			final SimpleRepositioningFeeContainer repositioningFeeContainer, final EObject topLevelEObject, final EStructuralFeature topFeature, String topFeatureMessage) {
 		boolean atLeastOneProblem = false;
-		if (repositioningFeeContainer.getTerms().isEmpty()) {
-			// need rules
-			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-					(IConstraintStatus) ctx.createFailureStatus("[Repostioining fee] Must have rules"));
-			dcsd.addEObjectAndFeature(repositioningFeeContainer, CommercialPackage.Literals.SIMPLE_BALLAST_BONUS_CONTAINER__TERMS);
-			failures.add(dcsd);
-			atLeastOneProblem = true;
-		}
+//		if (repositioningFeeContainer.getTerms().isEmpty()) {
+//			// need rules
+//			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
+//					(IConstraintStatus) ctx.createFailureStatus("[Repostioining fee] Must have rules"));
+//			dcsd.addEObjectAndFeature(repositioningFeeContainer, CommercialPackage.Literals.SIMPLE_BALLAST_BONUS_CONTAINER__TERMS);
+//			failures.add(dcsd);
+//			atLeastOneProblem = true;
+//		}
 		for (final RepositioningFeeTerm repositioningFeeTerm : repositioningFeeContainer.getTerms()) {
 			if (repositioningFeeTerm instanceof LumpSumTerm) {
 				if (!lumpSumValidation(ctx, extraContext, failures, (LumpSumTerm) repositioningFeeTerm)) {

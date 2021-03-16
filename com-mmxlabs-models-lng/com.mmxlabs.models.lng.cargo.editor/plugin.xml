@@ -321,6 +321,12 @@
           inheritable="true">
     </displayCompositeFactory>
     <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.commercial.StartHeelOptions"
+          factory="com.mmxlabs.models.lng.cargo.ui.displaycomposites.StartHeelOptionsCompositeFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.displaycomposites.StartHeelOptionsCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
+    <displayCompositeFactory
           eClass="com.mmxlabs.models.lng.cargo.PaperDeal"
           factory="com.mmxlabs.models.lng.cargo.ui.displaycomposites.PaperCompositeFactory"
           id="com.mmxlabs.models.lng.cargo.ui.displaycomposites.PaperCompositeFactory"

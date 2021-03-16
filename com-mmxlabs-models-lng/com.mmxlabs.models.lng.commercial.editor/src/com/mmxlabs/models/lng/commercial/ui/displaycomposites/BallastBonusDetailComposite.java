@@ -9,12 +9,7 @@ import java.util.Collection;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.cargo.ui.displaycomposites.BallastBonusTermsDetailComposite;
@@ -34,11 +29,6 @@ public class BallastBonusDetailComposite extends BallastBonusTermsDetailComposit
 
 	public BallastBonusDetailComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, final FormToolkit toolkit, Runnable resizeAction) {
 		super(parent, style, dialogContext, toolkit, resizeAction);
-		ballastBonusCheckbox.setVisible(false);
-	}
-	
-	@Override
-	protected void doCheck() {
 	}
 
 	@Override

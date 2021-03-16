@@ -9,12 +9,7 @@ import java.util.Collection;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.cargo.ui.displaycomposites.RepositioningFeeTermsDetailComposite;
@@ -33,11 +28,6 @@ public class RepositioningFeeDetailComposite extends RepositioningFeeTermsDetail
 
 	public RepositioningFeeDetailComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, final FormToolkit toolkit, Runnable resizeAction) {
 		super(parent, style, dialogContext, toolkit, resizeAction);
-		repositioningFeeCheckbox.setVisible(false);
-	}
-	
-	protected boolean createComposite() {
-		return createComposite(oldContract);
 	}
 
 	@Override

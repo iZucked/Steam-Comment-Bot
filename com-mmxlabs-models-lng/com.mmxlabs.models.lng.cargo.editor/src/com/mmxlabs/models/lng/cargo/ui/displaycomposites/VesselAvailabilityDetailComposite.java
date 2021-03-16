@@ -33,7 +33,7 @@ public class VesselAvailabilityDetailComposite extends DefaultDetailComposite {
 	private final VesselAvailabilityDetailGroup detailGroup;
 
 	public enum VesselAvailabilityDetailGroup{
-		GENERAL, START, END;
+		TOP_LEFT, TOP_LEFT_EXTRA, TOP_RIGHT, TOP_RIGHT_EXTRA, GENERAL, START, END;
 	}
 	
 	public VesselAvailabilityDetailComposite(Composite parent, int style, FormToolkit toolkit, VesselAvailabilityDetailGroup detailGroup) {
@@ -50,6 +50,25 @@ public class VesselAvailabilityDetailComposite extends DefaultDetailComposite {
 
 		// By default all elements are in the main tab
 		VesselAvailabilityDetailGroup cdg = VesselAvailabilityDetailGroup.GENERAL;
+		
+		if (editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_Fleet()
+				|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_Vessel()
+				|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_CharterNumber()
+				|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_TimeCharterRate()
+				|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_MinDuration()
+				|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_MaxDuration()) {
+			cdg = VesselAvailabilityDetailGroup.TOP_LEFT;
+		}
+		
+		if (editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_Optional()
+				|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_Entity()
+				|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_TimeCharterRate()) {
+			cdg = VesselAvailabilityDetailGroup.TOP_RIGHT;
+		}
+		
+		if (editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_CharterContract()) {
+			cdg = VesselAvailabilityDetailGroup.TOP_RIGHT_EXTRA;
+		}
 
 		// Here the exceptions are listed for the elements which should go into the middle composite
 		if (editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_StartAt()
@@ -84,7 +103,7 @@ public class VesselAvailabilityDetailComposite extends DefaultDetailComposite {
 
 				// TODO: replace this with a GridBagLayout or GroupLayout; for editors without a label,
 				// we want the editor to take up two cells rather than one.
-				return new GridLayout(8, false);
+				return new GridLayout(4, false);
 			}
 
 			@Override

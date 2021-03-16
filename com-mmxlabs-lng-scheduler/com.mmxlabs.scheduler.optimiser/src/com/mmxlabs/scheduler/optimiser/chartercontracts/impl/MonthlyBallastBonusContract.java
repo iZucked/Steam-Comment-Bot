@@ -13,6 +13,7 @@ import com.mmxlabs.scheduler.optimiser.chartercontracts.terms.MonthlyBallastBonu
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class MonthlyBallastBonusContract extends DefaultCharterContract {
 
@@ -22,9 +23,11 @@ public class MonthlyBallastBonusContract extends DefaultCharterContract {
 	
 	@Override
 	public long calculateCost(final IPort loadPort, final IPortSlot lastSlot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {
-		ICharterContractTerm matchingRule = getMatchingRule(loadPort, lastSlot, vesselAvailability, vesselStartTime, vesselEndTime);
-		if (matchingRule != null) {
-			return matchingRule.calculateCost(loadPort, lastSlot, vesselAvailability, vesselStartTime, vesselEndTime);
+		if (lastSlot.getPortType() == PortType.End) {
+			ICharterContractTerm matchingRule = getMatchingRule(loadPort, lastSlot, vesselAvailability, vesselStartTime, vesselEndTime);
+			if (matchingRule != null) {
+				return matchingRule.calculateCost(loadPort, lastSlot, vesselAvailability, vesselStartTime, vesselEndTime);
+			}
 		}
 		return 0L;
 	}
@@ -56,14 +59,17 @@ public class MonthlyBallastBonusContract extends DefaultCharterContract {
 	
 	@Override
 	public ICharterContractAnnotation annotate(final IPort firstLoadPort, final IPortSlot lastSlot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {
+
 		final CharterContractAnnotation ballastBonusAnnotation = new CharterContractAnnotation();
-		ICharterContractTerm rule = getMatchingRule(firstLoadPort, lastSlot, vesselAvailability, vesselStartTime, vesselEndTime);
-		if (rule == null) {
-			throw new UserFeedbackException("Missing matching monthly ballast bonus contract rule.");
+		if (lastSlot.getPortType() == PortType.End) {
+			ICharterContractTerm rule = getMatchingRule(firstLoadPort, lastSlot, vesselAvailability, vesselStartTime, vesselEndTime);
+			if (rule == null) {
+				throw new UserFeedbackException("Missing matching monthly ballast bonus contract rule.");
+			}
+			ballastBonusAnnotation.cost = rule.calculateCost(firstLoadPort, lastSlot, vesselAvailability, vesselStartTime, vesselEndTime);
+			ballastBonusAnnotation.matchedPort = lastSlot.getPort();
+			ballastBonusAnnotation.termAnnotation = rule.annotate(firstLoadPort, lastSlot, vesselAvailability, vesselStartTime, vesselEndTime);
 		}
-		ballastBonusAnnotation.cost = rule.calculateCost(firstLoadPort, lastSlot, vesselAvailability, vesselStartTime, vesselEndTime);
-		ballastBonusAnnotation.matchedPort = lastSlot.getPort();
-		ballastBonusAnnotation.termAnnotation = rule.annotate(firstLoadPort, lastSlot, vesselAvailability, vesselStartTime, vesselEndTime);
 		return ballastBonusAnnotation;
 	}
 }

@@ -177,11 +177,9 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 	}
 
 	@Override
-	public boolean match(final IPort loadPort, final IPortSlot slot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {
-		if (slot.getPortType() == PortType.End) {
-			if (monthStartInclusive <= vesselStartTime && vesselStartTime < monthEndExclusive) {
-				return getRedeliveryPorts().contains(slot.getPort()) || getRedeliveryPorts().isEmpty();
-			}
+	public boolean match(final IPort loadPort, final IPortSlot slot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {	
+		if (monthStartInclusive <= vesselStartTime && vesselStartTime < monthEndExclusive) {
+			return getRedeliveryPorts().contains(slot.getPort()) || getRedeliveryPorts().isEmpty();
 		}
 		return false;
 	}

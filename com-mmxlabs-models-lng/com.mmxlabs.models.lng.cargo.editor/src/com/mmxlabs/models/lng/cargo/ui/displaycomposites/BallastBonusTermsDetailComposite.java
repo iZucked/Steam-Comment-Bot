@@ -12,16 +12,13 @@ import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.SetCommand;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -55,13 +52,14 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 	private VesselAvailability oldVesselAvailability = null;
 	private Composite owner = this;
 
-	protected Button ballastBonusCheckbox;
 	private Combo ballastBonusCombobox;
 	protected Composite endHeelComposite;
 	
 	private GridData gridData;
 	private IStatus status;
 	private PortMultiReferenceInlineEditor portEditor;
+	
+	public IDialogEditingContext dialogContext;
 	
 	private DefaultStatusProvider statusProvider = new DefaultStatusProvider() {
 		@Override
@@ -74,6 +72,7 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 	public BallastBonusTermsDetailComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, final FormToolkit toolkit, Runnable resizeAction) {
 		super(parent, style, dialogContext, toolkit);
 		this.resizeAction = resizeAction;
+		this.dialogContext = dialogContext;
 
 		addDisposeListener(e -> removeAdapter());
 		toolkit.adapt(this);
@@ -94,32 +93,14 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 		endHeelComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		endHeelComposite.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
-		Composite ballastCheckbox = toolkit.createComposite(this, SWT.NONE);
+		Composite bottomComposite = toolkit.createComposite(this, SWT.NONE);
 		GridLayout gridLayoutCheckbox = new GridLayout(3, false);
-		ballastCheckbox.setLayout(gridLayoutCheckbox);
+		bottomComposite.setLayout(gridLayoutCheckbox);
 		GridData gridDataCheckbox = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
 		gridDataCheckbox.horizontalSpan = 2;
-		ballastCheckbox.setLayoutData(gridDataCheckbox);
-		toolkit.createLabel(ballastCheckbox, "Set ballast bonus");
+		bottomComposite.setLayoutData(gridDataCheckbox);
 		
-		ballastBonusCheckbox = toolkit.createButton(ballastCheckbox, null, SWT.CHECK | SWT.LEFT);
-		ballastBonusCheckbox.setSelection(false);
-		ballastBonusCheckbox.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if (ballastBonusCheckbox.getSelection()) {
-					if (!changeBallastBonusType()) {
-						ballastBonusCheckbox.setSelection(false);
-					}
-				} else {
-					doCheck();
-					dialogContext.getDialogController().rebuild(true);
-					resizeAction.run();
-				}
-			}
-		});
-		
-		ballastBonusCombobox = new Combo(ballastCheckbox, SWT.NONE);
+		ballastBonusCombobox = new Combo(bottomComposite, SWT.NONE);
 		ballastBonusCombobox.setItems(MONTHLY, NOTIONAL_JOURNEY);
 		ballastBonusCombobox.setText("Change Type...");
 		ballastBonusCombobox.addSelectionListener(new SelectionListener() {
@@ -137,19 +118,6 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 		if (!LicenseFeatures.isPermitted("features:monthly-ballast-bonus")) {
 			ballastBonusCombobox.setVisible(false);
 			ballastBonusCombobox.setEnabled(false);
-		}
-	}
-	
-	protected void doCheck() {
-		checkContract(oldVesselAvailability);
-	}
-	
-	private void checkContract(VesselAvailability va) {
-		if (oldVesselAvailability.getContainedCharterContract().getRepositioningFeeTerms() == null) {
-			commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), va, CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT, null), va,
-					CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT);
-			commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), va, CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE, Boolean.FALSE), va,
-					CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE);
 		}
 	}
 
@@ -179,11 +147,7 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 		GenericCharterContract charterContract = null;
 		if (va.getContainedCharterContract() == null) {
 			charterContract = CommercialFactory.eINSTANCE.createGenericCharterContract();
-			String name = validateOrOfferName("ballast_bonus_terms", va);
-			if (name == null) {
-				return null;
-			}
-			charterContract.setName(name);
+			charterContract.setName(validateOrOfferName("ballast_bonus_terms", va));
 			commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), va, CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT, charterContract), va,
 					CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT);
 			commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), va, CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE, Boolean.TRUE), va,
@@ -196,25 +160,19 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 
 	private String validateOrOfferName(final String type, final VesselAvailability va) {
 		if (va.getVessel() == null) {
-			MessageDialog.openInformation(getShell(), "ERROR", "Vessel must be set before creating the ballast bonus contract!");
-			return null;
+			return String.format("%s_%s", type, va.getUuid());
 		}
 		return String.format("%s_%s_%d", type, va.getVessel().getName(), va.getCharterNumber());
 	}
 
 	protected void createMonthlyBallastBonusComposite(Composite parent, FormToolkit toolkit, GenericCharterContract charterContract) {
-		/*final EObjectTableViewer ballastBonusTable =*/ MonthlyBallastBonusTermsTableCreator.createMonthlyBallastBonusTable(parent, toolkit, dialogContext, commandHandler, charterContract,
+		MonthlyBallastBonusTermsTableCreator.createMonthlyBallastBonusTable(parent, toolkit, dialogContext, commandHandler, charterContract,
 				statusProvider, resizeAction);
 	}
 	
 	protected void createBallastBonusComposite(Composite parent, FormToolkit toolkit, GenericCharterContract charterContract) {
-		/*final EObjectTableViewer ballastBonusTable =*/ BallastBonusTermsTableCreator.createBallastBonusTable(parent, toolkit, dialogContext, commandHandler, charterContract,
+		BallastBonusTermsTableCreator.createBallastBonusTable(parent, toolkit, dialogContext, commandHandler, charterContract,
 				statusProvider, resizeAction);
-	}
-	
-	@Override
-	public Composite getComposite() {
-		return this;
 	}
 
 	@Override
@@ -230,8 +188,7 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 	}
 
 	protected void doDisplay(IDialogEditingContext dialogContext, MMXRootObject root, EMFDataBindingContext dbc, final GenericCharterContract gcc) {
-		if (ballastBonusCheckbox != null && gcc != null) {
-			ballastBonusCheckbox.setSelection(true);
+		if (gcc != null) {
 		
 			switch (this.ballastBonusCombobox.getText()) {
 			case MONTHLY:

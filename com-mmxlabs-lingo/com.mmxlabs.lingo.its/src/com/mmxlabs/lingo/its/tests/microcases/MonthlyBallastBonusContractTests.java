@@ -219,7 +219,6 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 
 		cargo.setVesselAssignmentType(vesselAvailability);
 		cargo2.setVesselAssignmentType(vesselAvailability);
-		Port portSakai = portFinder.findPortById(InternalDataConstants.PORT_SAKAI);
 		
 		YearMonth[] yms = new YearMonth[] { YearMonth.of(2015, 11), YearMonth.of(2015, 12), YearMonth.of(2016, 1), YearMonth.of(2016, 2) };
 		NextPortType[] nextPortTypes = new NextPortType[] { NextPortType.LOAD_PORT, NextPortType.LOAD_PORT, NextPortType.LOAD_PORT, NextPortType.LOAD_PORT };
@@ -276,7 +275,7 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 			final long endEventPNL = -62_499;
 			final long actualPnL = end.getGroupProfitAndLoss().getProfitAndLoss();
 
-			System.out.println("Actual PnL period opti = "+actualPnL);
+			System.out.println("Actual PnL period opti = " + actualPnL);
 			Assertions.assertEquals(endEventPNL, actualPnL);
 			Assertions.assertEquals(cargoPNL + endEventPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 		} finally {
@@ -473,6 +472,7 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 			
 			container.getTerms().add(monthlyBBLine);
 		}
+		ballastBonusContract.setBallastBonusTerms(container);
 
 		return ballastBonusContract;
 	}

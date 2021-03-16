@@ -1415,7 +1415,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 */
 	@Override
 	public GenericCharterContract getCharterOrDelegateCharterContract() {
-		if (this.isCharterContractOverride() && this.getContainedCharterContract() != null) {
+		if (this.isCharterContractOverride()) {
 			return this.getContainedCharterContract();
 		} else if (this.isSetCharterContract() && this.getCharterContract() != null) {
 			return this.getCharterContract();
