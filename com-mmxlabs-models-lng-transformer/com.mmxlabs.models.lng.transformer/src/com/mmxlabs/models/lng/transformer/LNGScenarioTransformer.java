@@ -176,6 +176,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.DefaultVesselAvailability
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.ExpressionHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionConsumer;
+import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionSupplier;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadOption;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -3292,6 +3293,9 @@ public class LNGScenarioTransformer {
 					if (endHeel != null) {
 						heelConsumer = createHeelConsumer(endHeel);
 					}
+				}
+				if (heelSupplier == null) {
+					heelSupplier = new HeelOptionSupplier(oVessel.getSafetyHeel(), oVessel.getSafetyHeel(), 0, new ConstantHeelPriceCalculator(0));
 				}
 				if (heelConsumer == null) {
 					heelConsumer = new HeelOptionConsumer(oVessel.getSafetyHeel(), oVessel.getSafetyHeel(), 
