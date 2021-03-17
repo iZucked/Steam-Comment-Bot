@@ -327,7 +327,6 @@ public class CommercialSwitch<@Nullable T> extends Switch<T> {
 			case CommercialPackage.START_HEEL_OPTIONS: {
 				StartHeelOptions startHeelOptions = (StartHeelOptions)theEObject;
 				T result = caseStartHeelOptions(startHeelOptions);
-				if (result == null) result = caseMMXObject(startHeelOptions);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}

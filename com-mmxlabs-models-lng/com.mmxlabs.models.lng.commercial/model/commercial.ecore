@@ -338,7 +338,7 @@
     <eLiterals name="MUST_BE_COLD" value="1"/>
     <eLiterals name="MUST_BE_WARM" value="2"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="StartHeelOptions" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
+  <eClassifiers xsi:type="ecore:EClass" name="StartHeelOptions">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cvValue" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">

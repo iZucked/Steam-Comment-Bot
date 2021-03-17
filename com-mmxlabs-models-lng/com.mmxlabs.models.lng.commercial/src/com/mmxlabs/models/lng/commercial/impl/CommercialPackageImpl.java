@@ -1820,7 +1820,6 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		lumpSumRepositioningFeeTermEClass.getESuperTypes().add(this.getLumpSumTerm());
 		originPortRepositioningFeeTermEClass.getESuperTypes().add(this.getRepositioningFeeTerm());
 		originPortRepositioningFeeTermEClass.getESuperTypes().add(this.getNotionalJourneyTerm());
-		startHeelOptionsEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(commercialModelEClass, CommercialModel.class, "CommercialModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

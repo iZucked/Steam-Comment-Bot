@@ -34,14 +34,15 @@ import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
  * 
  */
 public class RepositioningFeeTermsDetailComposite extends DefaultTopLevelComposite implements IDisplayComposite {
-	private ICommandHandler commandHandler;
 	private VesselAvailability oldVesselAvailability = null;
 	private Composite owner = this;
 
 	protected Composite startHeelComposite;
 	private GridData gridData;
 	private IStatus status;
-	public IDialogEditingContext dialogContext;
+	public IDialogEditingContext getDialogContext() {
+		return dialogContext;
+	}
 	
 	private DefaultStatusProvider statusProvider = new DefaultStatusProvider() {
 		@Override
@@ -54,7 +55,6 @@ public class RepositioningFeeTermsDetailComposite extends DefaultTopLevelComposi
 	public RepositioningFeeTermsDetailComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, final FormToolkit toolkit, Runnable resizeAction) {
 		super(parent, style, dialogContext, toolkit);
 		this.resizeAction = resizeAction;
-		this.dialogContext = dialogContext;
 
 		addDisposeListener(e -> removeAdapter());
 		toolkit.adapt(this);
@@ -102,11 +102,6 @@ public class RepositioningFeeTermsDetailComposite extends DefaultTopLevelComposi
 		}
 		
 		resizeAction.run();
-	}
-
-	@Override
-	public void setCommandHandler(final ICommandHandler commandHandler) {
-		this.commandHandler = commandHandler;
 	}
 
 	protected void removeAdapter() {

@@ -3,6 +3,7 @@
 package com.mmxlabs.models.lng.commercial;
 
 import com.mmxlabs.models.mmxcore.MMXObject;
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -23,7 +24,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * @model
  * @generated
  */
-public interface StartHeelOptions extends MMXObject {
+public interface StartHeelOptions extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Cv Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->

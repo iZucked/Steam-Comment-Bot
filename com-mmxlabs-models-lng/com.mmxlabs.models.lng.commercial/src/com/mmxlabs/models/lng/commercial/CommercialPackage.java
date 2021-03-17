@@ -2406,22 +2406,13 @@ public interface CommercialPackage extends EPackage {
 	int START_HEEL_OPTIONS = 31;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_HEEL_OPTIONS__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
 	 * The feature id for the '<em><b>Cv Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int START_HEEL_OPTIONS__CV_VALUE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+	int START_HEEL_OPTIONS__CV_VALUE = 0;
 
 	/**
 	 * The feature id for the '<em><b>Min Volume Available</b></em>' attribute.
@@ -2430,7 +2421,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_HEEL_OPTIONS__MIN_VOLUME_AVAILABLE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+	int START_HEEL_OPTIONS__MIN_VOLUME_AVAILABLE = 1;
 
 	/**
 	 * The feature id for the '<em><b>Max Volume Available</b></em>' attribute.
@@ -2439,7 +2430,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE = 2;
 
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
@@ -2448,7 +2439,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_HEEL_OPTIONS__PRICE_EXPRESSION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int START_HEEL_OPTIONS__PRICE_EXPRESSION = 3;
 
 	/**
 	 * The number of structural features of the '<em>Start Heel Options</em>' class.
@@ -2457,7 +2448,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_HEEL_OPTIONS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int START_HEEL_OPTIONS_FEATURE_COUNT = 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.

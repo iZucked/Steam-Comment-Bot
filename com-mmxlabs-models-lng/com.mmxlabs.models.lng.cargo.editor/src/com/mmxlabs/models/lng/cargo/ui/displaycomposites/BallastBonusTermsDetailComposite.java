@@ -59,7 +59,9 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 	private IStatus status;
 	private PortMultiReferenceInlineEditor portEditor;
 	
-	public IDialogEditingContext dialogContext;
+	public IDialogEditingContext getDialogContext() {
+		return dialogContext;
+	}
 	
 	private DefaultStatusProvider statusProvider = new DefaultStatusProvider() {
 		@Override
@@ -72,7 +74,6 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 	public BallastBonusTermsDetailComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, final FormToolkit toolkit, Runnable resizeAction) {
 		super(parent, style, dialogContext, toolkit);
 		this.resizeAction = resizeAction;
-		this.dialogContext = dialogContext;
 
 		addDisposeListener(e -> removeAdapter());
 		toolkit.adapt(this);
@@ -220,11 +221,6 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 				break;
 			}
 		}
-	}
-
-	@Override
-	public void setCommandHandler(final ICommandHandler commandHandler) {
-		this.commandHandler = commandHandler;
 	}
 
 	void removeAdapter() {

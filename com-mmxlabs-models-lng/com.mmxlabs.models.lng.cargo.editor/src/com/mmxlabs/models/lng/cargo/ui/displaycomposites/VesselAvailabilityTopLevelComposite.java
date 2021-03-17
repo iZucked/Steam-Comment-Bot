@@ -181,10 +181,10 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 				boolean needRebuilding = true;
 				if (repositioningFeeComposite != null && needRebuilding) {
 					needRebuilding = false;
-					repositioningFeeComposite.dialogContext.getDialogController().rebuild(true);
+					repositioningFeeComposite.getDialogContext().getDialogController().rebuild(true);
 				}
 				if (ballastBonusComposite != null && needRebuilding) {
-					ballastBonusComposite.dialogContext.getDialogController().rebuild(true);
+					ballastBonusComposite.getDialogContext().getDialogController().rebuild(true);
 				}
 			}
 		}

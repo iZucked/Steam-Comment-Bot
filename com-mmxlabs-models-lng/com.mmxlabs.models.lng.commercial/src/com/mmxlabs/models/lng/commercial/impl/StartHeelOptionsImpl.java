@@ -12,6 +12,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,7 +30,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public class StartHeelOptionsImpl extends MMXObjectImpl implements StartHeelOptions {
+public class StartHeelOptionsImpl extends EObjectImpl implements StartHeelOptions {
 	/**
 	 * The default value of the '{@link #getCvValue() <em>Cv Value</em>}' attribute.
 	 * <!-- begin-user-doc -->

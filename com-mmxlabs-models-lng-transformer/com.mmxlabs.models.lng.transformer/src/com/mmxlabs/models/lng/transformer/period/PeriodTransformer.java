@@ -1373,7 +1373,6 @@ public class PeriodTransformer {
 				if (vesselAvailability.getCharterContract() != null) {
 					final Copier copier = new Copier();
 					gcc = (GenericCharterContract) copier.copy(vesselAvailability.getCharterContract());
-					mapping.createMappings(copier);
 				}
 			}
 			if (gcc != null) {
@@ -1448,7 +1447,6 @@ public class PeriodTransformer {
 				if (vesselAvailability.getCharterContract() != null) {
 					final Copier copier = new Copier();
 					gcc = (GenericCharterContract) copier.copy(vesselAvailability.getCharterContract());
-					mapping.createMappings(copier);
 				}
 			}
 			if (gcc != null) {

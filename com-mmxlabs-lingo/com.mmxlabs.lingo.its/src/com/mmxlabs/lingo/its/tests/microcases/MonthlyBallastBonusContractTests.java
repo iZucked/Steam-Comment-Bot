@@ -227,7 +227,7 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 		final GenericCharterContract ballastBonusContract = this.createMonthlyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))),
 				20.0, "20000", "100", true, false, Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY), portFinder.findPortById(InternalDataConstants.PORT_YUNG_AN)),
 				 yms, nextPortTypes, pctFuelRates, pctCharterRates);
-		vesselAvailability.setCharterContract(ballastBonusContract);
+		vesselAvailability.setContainedCharterContract(ballastBonusContract);
 
 		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
