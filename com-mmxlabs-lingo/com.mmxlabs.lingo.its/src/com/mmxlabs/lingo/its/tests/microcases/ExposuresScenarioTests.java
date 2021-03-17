@@ -120,13 +120,13 @@ public class ExposuresScenarioTests extends AbstractMicroTestCase {
 				}
 			}
 			Assertions.assertNotNull(brentBuyJan);
-			Assertions.assertEquals(brentBuyJan.getQuantity(), 42724.0, delta);
+			Assertions.assertEquals(42724.0, brentBuyJan.getQuantity(),delta);
 			Assertions.assertNotNull(brentSellFeb);
-			Assertions.assertEquals(brentSellFeb.getQuantity(), 108321.0, delta);
+			Assertions.assertEquals(117185.0, brentSellFeb.getQuantity(), delta);
 			Assertions.assertNotNull(jkmBuyJan);
-			Assertions.assertEquals(jkmBuyJan.getQuantity(), 3826848.0, delta);
+			Assertions.assertEquals(3826848.0, jkmBuyJan.getQuantity(), delta);
 			Assertions.assertNotNull(jkmSellFeb);
-			Assertions.assertEquals(jkmSellFeb.getQuantity(), 3789894.0, delta);
+			Assertions.assertEquals(3789894.0, jkmSellFeb.getQuantity(), delta);
 		});
 	}
 	
@@ -176,9 +176,9 @@ public class ExposuresScenarioTests extends AbstractMicroTestCase {
 				}
 			}
 			Assertions.assertNotNull(brentBuyFeb);
-			Assertions.assertEquals(brentBuyFeb.getQuantity(), 493007.0, delta);
+			Assertions.assertEquals(484143.0, brentBuyFeb.getQuantity(), delta);
 			Assertions.assertNotNull(jkmSellFeb);
-			Assertions.assertEquals(jkmSellFeb.getQuantity(), 3789894.0, delta);
+			Assertions.assertEquals(3789894.0, jkmSellFeb.getQuantity(), delta);
 		});
 	}
 	
