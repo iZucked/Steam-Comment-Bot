@@ -373,7 +373,7 @@ public class RepositioningFeeTermsTableCreator {
 		buttonLayout.marginHeight = 0;
 		buttonLayout.marginWidth = 0;
 
-		final Button addLumpSumRule = toolkit.createButton(buttons, "Add lump sume rule", SWT.NONE);
+		final Button addLumpSumRule = toolkit.createButton(buttons, "Add lump sum rule", SWT.NONE);
 		addLumpSumRule.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 
 		addLumpSumRule.addSelectionListener(new SelectionAdapter() {
