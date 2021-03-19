@@ -1152,11 +1152,11 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		initEAttribute(getCharterInMarket_MaxDuration(), ecorePackage.getEInt(), "maxDuration", null, 1, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterInMarket_Mtm(), ecorePackage.getEBoolean(), "mtm", null, 0, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCharterInMarket_Entity(), theCommercialPackage.getBaseLegalEntity(), null, "entity", null, 0, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCharterInMarket_StartAt(), thePortPackage.getPort(), null, "startAt", null, 0, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCharterInMarket_StartAt(), thePortPackage.getPort(), null, "startAt", null, 0, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
 		g2 = createEGenericType(thePortPackage.getPort());
 		g1.getETypeArguments().add(g2);
-		initEReference(getCharterInMarket_EndAt(), g1, null, "endAt", null, 0, -1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCharterInMarket_EndAt(), g1, null, "endAt", null, 0, -1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(charterInMarketEClass, ecorePackage.getEInt(), "getMarketOrContractMinDuration", 0, 1, IS_UNIQUE, IS_ORDERED);
 

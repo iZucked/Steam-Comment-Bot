@@ -188,8 +188,10 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="mtm" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="entity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="startAt" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="endAt" upperBound="-1">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="startAt" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="endAt" upperBound="-1"
+        unsettable="true">
       <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
         <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
       </eGenericType>

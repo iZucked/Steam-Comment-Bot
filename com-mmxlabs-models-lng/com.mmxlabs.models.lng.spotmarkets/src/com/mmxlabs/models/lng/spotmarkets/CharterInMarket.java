@@ -280,9 +280,11 @@ public interface CharterInMarket extends SpotCharterMarket, VesselAssignmentType
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Start At</em>' reference.
+	 * @see #isSetStartAt()
+	 * @see #unsetStartAt()
 	 * @see #setStartAt(Port)
 	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket_StartAt()
-	 * @model
+	 * @model unsettable="true"
 	 * @generated
 	 */
 	Port getStartAt();
@@ -292,10 +294,35 @@ public interface CharterInMarket extends SpotCharterMarket, VesselAssignmentType
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Start At</em>' reference.
+	 * @see #isSetStartAt()
+	 * @see #unsetStartAt()
 	 * @see #getStartAt()
 	 * @generated
 	 */
 	void setStartAt(Port value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getStartAt <em>Start At</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetStartAt()
+	 * @see #getStartAt()
+	 * @see #setStartAt(Port)
+	 * @generated
+	 */
+	void unsetStartAt();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getStartAt <em>Start At</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Start At</em>' reference is set.
+	 * @see #unsetStartAt()
+	 * @see #getStartAt()
+	 * @see #setStartAt(Port)
+	 * @generated
+	 */
+	boolean isSetStartAt();
 
 	/**
 	 * Returns the value of the '<em><b>End At</b></em>' reference list.
@@ -303,11 +330,34 @@ public interface CharterInMarket extends SpotCharterMarket, VesselAssignmentType
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>End At</em>' reference list.
+	 * @see #isSetEndAt()
+	 * @see #unsetEndAt()
 	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket_EndAt()
-	 * @model
+	 * @model unsettable="true"
 	 * @generated
 	 */
 	EList<APortSet<Port>> getEndAt();
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getEndAt <em>End At</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetEndAt()
+	 * @see #getEndAt()
+	 * @generated
+	 */
+	void unsetEndAt();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getEndAt <em>End At</em>}' reference list is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>End At</em>' reference list is set.
+	 * @see #unsetEndAt()
+	 * @see #getEndAt()
+	 * @generated
+	 */
+	boolean isSetEndAt();
 
 	/**
 	 * <!-- begin-user-doc -->

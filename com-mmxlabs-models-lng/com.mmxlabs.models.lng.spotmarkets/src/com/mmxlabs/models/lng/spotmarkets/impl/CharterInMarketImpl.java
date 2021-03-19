@@ -311,6 +311,15 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	protected Port startAt;
 
 	/**
+	 * This is true if the Start At reference has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean startAtESet;
+
+	/**
 	 * The cached value of the '{@link #getEndAt() <em>End At</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -637,8 +646,35 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	public void setStartAt(Port newStartAt) {
 		Port oldStartAt = startAt;
 		startAt = newStartAt;
+		boolean oldStartAtESet = startAtESet;
+		startAtESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_IN_MARKET__START_AT, oldStartAt, startAt));
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_IN_MARKET__START_AT, oldStartAt, startAt, !oldStartAtESet));
+	}
+
+/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetStartAt() {
+		Port oldStartAt = startAt;
+		boolean oldStartAtESet = startAtESet;
+		startAt = null;
+		startAtESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, SpotMarketsPackage.CHARTER_IN_MARKET__START_AT, oldStartAt, null, oldStartAtESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetStartAt() {
+		return startAtESet;
 	}
 
 /**
@@ -649,9 +685,29 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	@Override
 	public EList<APortSet<Port>> getEndAt() {
 		if (endAt == null) {
-			endAt = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, SpotMarketsPackage.CHARTER_IN_MARKET__END_AT);
+			endAt = new EObjectResolvingEList.Unsettable<APortSet<Port>>(APortSet.class, this, SpotMarketsPackage.CHARTER_IN_MARKET__END_AT);
 		}
 		return endAt;
+	}
+
+/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetEndAt() {
+		if (endAt != null) ((InternalEList.Unsettable<?>)endAt).unset();
+	}
+
+/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetEndAt() {
+		return endAt != null && ((InternalEList.Unsettable<?>)endAt).isSet();
 	}
 
 /**
@@ -1029,10 +1085,10 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 				setEntity((BaseLegalEntity)null);
 				return;
 			case SpotMarketsPackage.CHARTER_IN_MARKET__START_AT:
-				setStartAt((Port)null);
+				unsetStartAt();
 				return;
 			case SpotMarketsPackage.CHARTER_IN_MARKET__END_AT:
-				getEndAt().clear();
+				unsetEndAt();
 				return;
 		}
 		super.eUnset(featureID);
@@ -1073,9 +1129,9 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 			case SpotMarketsPackage.CHARTER_IN_MARKET__ENTITY:
 				return entity != null;
 			case SpotMarketsPackage.CHARTER_IN_MARKET__START_AT:
-				return startAt != null;
+				return isSetStartAt();
 			case SpotMarketsPackage.CHARTER_IN_MARKET__END_AT:
-				return endAt != null && !endAt.isEmpty();
+				return isSetEndAt();
 		}
 		return super.eIsSet(featureID);
 	}
