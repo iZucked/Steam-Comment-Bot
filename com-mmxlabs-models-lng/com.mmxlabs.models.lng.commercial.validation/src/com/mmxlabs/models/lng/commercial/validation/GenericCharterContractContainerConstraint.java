@@ -174,9 +174,6 @@ public class GenericCharterContractContainerConstraint extends AbstractModelMult
 				if (!notionalJourneyTermsValidation(ctx, extraContext, failures, (NotionalJourneyTerm) repositioningFeeTerm)) {
 					atLeastOneProblem = true;
 				}
-				if (!originPortValidation(ctx, extraContext, failures, repositioningFeeTerm)) {
-					atLeastOneProblem = true;
-				}
 			}
 		}
 		
