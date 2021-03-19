@@ -325,9 +325,11 @@
     <eOperations name="getStartAfterAsDateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
     <eOperations name="getEndByAsDateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
     <eOperations name="getEndAfterAsDateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
+    <eOperations name="getCharterOrDelegateBallastBonusContract" lowerBound="1" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BallastBonusContract"/>
     <eOperations name="getCharterOrDelegateMinDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eOperations name="getCharterOrDelegateMaxDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eOperations name="getCharterOrDelegateEntity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
+    <eOperations name="getCharterOrDelegateRepositioningFee" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eOperations name="jsonid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eOperations name="getCharterOrDelegateCharterContract" lowerBound="1" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//GenericCharterContract"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="fleet" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
@@ -365,16 +367,23 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="endBy" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="startHeel" lowerBound="1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//StartHeelOptions"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="endHeel" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//EndHeelOptions"
+        eType="#//StartHeelOptions" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="endHeel" eType="#//EndHeelOptions"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="forceHireCostOnlyEndRule"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="containedCharterContract"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//GenericCharterContract"
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repositioningFee" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="$/day"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="charter"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ballastBonusContract" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BallastBonusContract"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="charterContract" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//GenericCharterContract"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="charterContract" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//CharterContract"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minDuration" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true">
@@ -390,6 +399,14 @@
         <details key="formatString" value="##0"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="startHeel" lowerBound="1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//StartHeelOptions"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="endHeel" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//EndHeelOptions"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containedCharterContract"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//GenericCharterContract"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="charterContractOverride"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
@@ -445,11 +462,9 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="requiredHeel" lowerBound="1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//EndHeelOptions"
-        containment="true"/>
+        eType="#//EndHeelOptions" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="availableHeel" lowerBound="1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//StartHeelOptions"
-        containment="true"/>
+        eType="#//StartHeelOptions" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AssignableElement" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="sequenceHint" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
@@ -467,6 +482,60 @@
     <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet">
       <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
     </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EndHeelOptions">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tankState" eType="#//EVesselTankState"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minimumEndHeel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="m³"/>
+        <details key="formatString" value="###,##0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maximumEndHeel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="m³"/>
+        <details key="formatString" value="###,##0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="useLastHeelPrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="commodity"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EVesselTankState">
+    <eLiterals name="EITHER"/>
+    <eLiterals name="MUST_BE_COLD" value="1"/>
+    <eLiterals name="MUST_BE_WARM" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StartHeelOptions" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cvValue" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="mmBtu/m³"/>
+        <details key="formatString" value="#0.######"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minVolumeAvailable" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="m³"/>
+        <details key="formatString" value="###,##0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxVolumeAvailable" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="m³"/>
+        <details key="formatString" value="###,##0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
+        <details key="type" value="commodity"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="InventoryEventRow">
     <eOperations name="getReliableVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
@@ -571,15 +640,14 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="charterInMarket" eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//CharterInMarket"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="spotIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="startHeel" lowerBound="1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//StartHeelOptions"
-        unsettable="true" containment="true"/>
+        eType="#//StartHeelOptions" unsettable="true" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="startDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="endPort" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="endDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"
         unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="endHeel" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//EndHeelOptions"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="endHeel" eType="#//EndHeelOptions"
         unsettable="true" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="includeBallastBonus" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minDuration" lowerBound="1"

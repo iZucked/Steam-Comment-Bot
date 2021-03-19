@@ -72,7 +72,7 @@ public class RepositioningFeeTermsTableCreator {
 				ColumnViewerEditor.TABBING_HORIZONTAL | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL | ColumnViewerEditor.KEYBOARD_ACTIVATION);
 		
 		eViewer.addTypicalColumn("Notional origin port", new TextualPortSingleReferenceManipulatorExtension(CommercialPackage.eINSTANCE.getRepositioningFeeTerm_OriginPort(), sel.getReferenceValueProviderCache(),
-				sel.getEditingDomain()) {
+				commandHandler) {
 
 			@Override
 			public void runSetCommand(final Object object, final Object value) {
@@ -95,7 +95,7 @@ public class RepositioningFeeTermsTableCreator {
 
 		eViewer.addTypicalColumn("Lump sum ($)", new PriceAttributeManipulator(
 				CommercialPackage.eINSTANCE.getNotionalJourneyTerm_LumpSumPriceExpression(),
-				sel.getEditingDomain()) {
+				commandHandler) {
 
 			protected EAttribute getAttribute(Object object) {
 				if (object instanceof OriginPortRepositioningFeeTerm) {
@@ -126,7 +126,7 @@ public class RepositioningFeeTermsTableCreator {
 		});
 
 		eViewer.addTypicalColumn("Speed", new NumericAttributeManipulator(
-				CommercialPackage.eINSTANCE.getNotionalJourneyTerm_Speed(), sel.getEditingDomain()) {
+				CommercialPackage.eINSTANCE.getNotionalJourneyTerm_Speed(), commandHandler) {
 
 			@Override
 			public void runSetCommand(final Object object, final Object value) {
@@ -176,7 +176,7 @@ public class RepositioningFeeTermsTableCreator {
 		});
 
 		eViewer.addTypicalColumn("Fuel Cost ($/MT)",
-				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_FuelPriceExpression(), sel.getEditingDomain()) {
+				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_FuelPriceExpression(), commandHandler) {
 
 					@Override
 					public void runSetCommand(final Object object, final Object value) {
@@ -218,7 +218,7 @@ public class RepositioningFeeTermsTableCreator {
 				});
 
 		eViewer.addTypicalColumn("Hire Cost ($/day)",
-				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_HirePriceExpression(), sel.getEditingDomain()) {
+				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_HirePriceExpression(), commandHandler) {
 
 					@Override
 					public void runSetCommand(final Object object, final Object value) {
@@ -260,7 +260,7 @@ public class RepositioningFeeTermsTableCreator {
 				});
 
 		eViewer.addTypicalColumn("Include canal fees", new BooleanAttributeManipulator(
-				CommercialPackage.eINSTANCE.getNotionalJourneyTerm_IncludeCanal(), sel.getEditingDomain()) {
+				CommercialPackage.eINSTANCE.getNotionalJourneyTerm_IncludeCanal(), commandHandler) {
 
 			@Override
 			public void runSetCommand(final Object object, final Object value) {
@@ -303,7 +303,7 @@ public class RepositioningFeeTermsTableCreator {
 
 
 		eViewer.addTypicalColumn("Include canal time", new BooleanAttributeManipulator(
-				CommercialPackage.eINSTANCE.getNotionalJourneyTerm_IncludeCanalTime(), sel.getEditingDomain()) {
+				CommercialPackage.eINSTANCE.getNotionalJourneyTerm_IncludeCanalTime(), commandHandler) {
 
 			@Override
 			public void runSetCommand(final Object object, final Object value) {

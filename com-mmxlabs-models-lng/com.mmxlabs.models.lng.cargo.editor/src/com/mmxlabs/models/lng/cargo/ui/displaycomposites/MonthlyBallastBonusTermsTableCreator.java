@@ -57,7 +57,7 @@ public class MonthlyBallastBonusTermsTableCreator {
 		eViewer.setSorter(null);
 
 		eViewer.addTypicalColumn("Month", new YearMonthAttributeManipulator(CommercialPackage.eINSTANCE.getMonthlyBallastBonusTerm_Month(), 
-				sel.getEditingDomain()) {
+				commandHandler) {
 
 			@Override
 			public void runSetCommand(final Object object, final Object value) {
@@ -69,7 +69,7 @@ public class MonthlyBallastBonusTermsTableCreator {
 		});
 		
 		eViewer.addTypicalColumn("Redelivery ports", new MultiplePortReferenceManipulator(CommercialPackage.eINSTANCE.getBallastBonusTerm_RedeliveryPorts(), sel.getReferenceValueProviderCache(),
-				sel.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
+				commandHandler, MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
 
 			@Override
 			public void runSetCommand(final Object object, final Object value) {
@@ -82,7 +82,7 @@ public class MonthlyBallastBonusTermsTableCreator {
 
 		eViewer.addTypicalColumn("Lump sum ($)", new PriceAttributeManipulator(
 				CommercialPackage.eINSTANCE.getLumpSumTerm_PriceExpression(),
-				sel.getEditingDomain()) {
+				commandHandler) {
 
 			protected EAttribute getAttribute(Object object) {
 				if (object instanceof NotionalJourneyBallastBonusTerm) {
@@ -109,7 +109,7 @@ public class MonthlyBallastBonusTermsTableCreator {
 			}
 		});
 
-		eViewer.addTypicalColumn("Speed", new NumericAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_Speed(), sel.getEditingDomain()) {
+		eViewer.addTypicalColumn("Speed", new NumericAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_Speed(), commandHandler) {
 
 			@Override
 			public void runSetCommand(final Object object, final Object value) {
@@ -159,7 +159,7 @@ public class MonthlyBallastBonusTermsTableCreator {
 		});
 
 		eViewer.addTypicalColumn("Ballast To", new EnumAttributeManipulator(CommercialPackage.eINSTANCE.getMonthlyBallastBonusTerm_BallastBonusTo(),
-				sel.getEditingDomain()) {
+				commandHandler) {
 
 			@Override
 			public void runSetCommand(final Object object, final Object value) {
@@ -201,7 +201,7 @@ public class MonthlyBallastBonusTermsTableCreator {
 		});
 
 		eViewer.addTypicalColumn("% Fuel",
-				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getMonthlyBallastBonusTerm_BallastBonusPctFuel(), sel.getEditingDomain()) {
+				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getMonthlyBallastBonusTerm_BallastBonusPctFuel(), commandHandler) {
 
 					@Override
 					public void runSetCommand(final Object object, final Object value) {
@@ -244,7 +244,7 @@ public class MonthlyBallastBonusTermsTableCreator {
 
 		
 		eViewer.addTypicalColumn("Fuel Cost ($/MT)",
-				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_FuelPriceExpression(), sel.getEditingDomain()) {
+				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_FuelPriceExpression(), commandHandler) {
 
 					@Override
 					public void runSetCommand(final Object object, final Object value) {
@@ -286,7 +286,7 @@ public class MonthlyBallastBonusTermsTableCreator {
 				});
 
 		eViewer.addTypicalColumn("% Hire Cost",
-				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getMonthlyBallastBonusTerm_BallastBonusPctCharter(), sel.getEditingDomain()) {
+				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getMonthlyBallastBonusTerm_BallastBonusPctCharter(), commandHandler) {
 
 					@Override
 					public void runSetCommand(final Object object, final Object value) {
@@ -328,7 +328,7 @@ public class MonthlyBallastBonusTermsTableCreator {
 				});
 		
 		eViewer.addTypicalColumn("Hire Cost ($/day)",
-				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_HirePriceExpression(), sel.getEditingDomain()) {
+				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_HirePriceExpression(), commandHandler) {
 
 					@Override
 					public void runSetCommand(final Object object, final Object value) {
@@ -369,7 +369,7 @@ public class MonthlyBallastBonusTermsTableCreator {
 
 				});
 
-		eViewer.addTypicalColumn("Include canal fees", new BooleanAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_IncludeCanal(), sel.getEditingDomain()) {
+		eViewer.addTypicalColumn("Include canal fees", new BooleanAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_IncludeCanal(), commandHandler) {
 
 			@Override
 			public void runSetCommand(final Object object, final Object value) {
@@ -411,7 +411,7 @@ public class MonthlyBallastBonusTermsTableCreator {
 		});
 
 
-		eViewer.addTypicalColumn("Include canal time", new BooleanAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_IncludeCanalTime(), sel.getEditingDomain()) {
+		eViewer.addTypicalColumn("Include canal time", new BooleanAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyTerm_IncludeCanalTime(), commandHandler) {
 
 			@Override
 			public void runSetCommand(final Object object, final Object value) {
@@ -452,7 +452,7 @@ public class MonthlyBallastBonusTermsTableCreator {
 		});
 
 		
-		eViewer.addTypicalColumn("Type", new BasicAttributeManipulator(null, sel.getEditingDomain()) {
+		eViewer.addTypicalColumn("Type", new BasicAttributeManipulator(null, commandHandler) {
 
 			@Override
 			public void runSetCommand(final Object object, final Object value) {

@@ -25,7 +25,9 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.EndHeelOptions;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
+import com.mmxlabs.models.lng.commercial.StartHeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
@@ -327,7 +329,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * @generated
 	 * @ordered
 	 */
-	protected com.mmxlabs.models.lng.commercial.StartHeelOptions startHeel;
+	protected StartHeelOptions startHeel;
 
 	/**
 	 * The cached value of the '{@link #getEndHeel() <em>End Heel</em>}' containment reference.
@@ -337,7 +339,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * @generated
 	 * @ordered
 	 */
-	protected com.mmxlabs.models.lng.commercial.EndHeelOptions endHeel;
+	protected EndHeelOptions endHeel;
 
 	/**
 	 * The default value of the '{@link #isForceHireCostOnlyEndRule() <em>Force Hire Cost Only End Rule</em>}' attribute.
@@ -857,10 +859,10 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * @generated
 	 */
 	@Override
-	public com.mmxlabs.models.lng.commercial.StartHeelOptions getStartHeel() {
+	public StartHeelOptions getStartHeel() {
 		if (startHeel != null && startHeel.eIsProxy()) {
 			InternalEObject oldStartHeel = (InternalEObject)startHeel;
-			startHeel = (com.mmxlabs.models.lng.commercial.StartHeelOptions)eResolveProxy(oldStartHeel);
+			startHeel = (StartHeelOptions)eResolveProxy(oldStartHeel);
 			if (startHeel != oldStartHeel) {
 				InternalEObject newStartHeel = (InternalEObject)startHeel;
 				NotificationChain msgs = oldStartHeel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_AVAILABILITY__START_HEEL, null, null);
@@ -880,7 +882,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public com.mmxlabs.models.lng.commercial.StartHeelOptions basicGetStartHeel() {
+	public StartHeelOptions basicGetStartHeel() {
 		return startHeel;
 	}
 
@@ -889,8 +891,8 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetStartHeel(com.mmxlabs.models.lng.commercial.StartHeelOptions newStartHeel, NotificationChain msgs) {
-		com.mmxlabs.models.lng.commercial.StartHeelOptions oldStartHeel = startHeel;
+	public NotificationChain basicSetStartHeel(StartHeelOptions newStartHeel, NotificationChain msgs) {
+		StartHeelOptions oldStartHeel = startHeel;
 		startHeel = newStartHeel;
 		if (eNotificationRequired()) {
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__START_HEEL, oldStartHeel, newStartHeel);
@@ -905,7 +907,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * @generated
 	 */
 	@Override
-	public void setStartHeel(com.mmxlabs.models.lng.commercial.StartHeelOptions newStartHeel) {
+	public void setStartHeel(StartHeelOptions newStartHeel) {
 		if (newStartHeel != startHeel) {
 			NotificationChain msgs = null;
 			if (startHeel != null)
@@ -925,10 +927,10 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * @generated
 	 */
 	@Override
-	public com.mmxlabs.models.lng.commercial.EndHeelOptions getEndHeel() {
+	public EndHeelOptions getEndHeel() {
 		if (endHeel != null && endHeel.eIsProxy()) {
 			InternalEObject oldEndHeel = (InternalEObject)endHeel;
-			endHeel = (com.mmxlabs.models.lng.commercial.EndHeelOptions)eResolveProxy(oldEndHeel);
+			endHeel = (EndHeelOptions)eResolveProxy(oldEndHeel);
 			if (endHeel != oldEndHeel) {
 				InternalEObject newEndHeel = (InternalEObject)endHeel;
 				NotificationChain msgs = oldEndHeel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_AVAILABILITY__END_HEEL, null, null);
@@ -948,7 +950,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public com.mmxlabs.models.lng.commercial.EndHeelOptions basicGetEndHeel() {
+	public EndHeelOptions basicGetEndHeel() {
 		return endHeel;
 	}
 
@@ -957,8 +959,8 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetEndHeel(com.mmxlabs.models.lng.commercial.EndHeelOptions newEndHeel, NotificationChain msgs) {
-		com.mmxlabs.models.lng.commercial.EndHeelOptions oldEndHeel = endHeel;
+	public NotificationChain basicSetEndHeel(EndHeelOptions newEndHeel, NotificationChain msgs) {
+		EndHeelOptions oldEndHeel = endHeel;
 		endHeel = newEndHeel;
 		if (eNotificationRequired()) {
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__END_HEEL, oldEndHeel, newEndHeel);
@@ -973,7 +975,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * @generated
 	 */
 	@Override
-	public void setEndHeel(com.mmxlabs.models.lng.commercial.EndHeelOptions newEndHeel) {
+	public void setEndHeel(EndHeelOptions newEndHeel) {
 		if (newEndHeel != endHeel) {
 			NotificationChain msgs = null;
 			if (endHeel != null)
@@ -1623,10 +1625,10 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 				setEndBy((LocalDateTime)newValue);
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__START_HEEL:
-				setStartHeel((com.mmxlabs.models.lng.commercial.StartHeelOptions)newValue);
+				setStartHeel((StartHeelOptions)newValue);
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__END_HEEL:
-				setEndHeel((com.mmxlabs.models.lng.commercial.EndHeelOptions)newValue);
+				setEndHeel((EndHeelOptions)newValue);
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE:
 				setForceHireCostOnlyEndRule((Boolean)newValue);
@@ -1695,10 +1697,10 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 				unsetEndBy();
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__START_HEEL:
-				setStartHeel((com.mmxlabs.models.lng.commercial.StartHeelOptions)null);
+				setStartHeel((StartHeelOptions)null);
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__END_HEEL:
-				setEndHeel((com.mmxlabs.models.lng.commercial.EndHeelOptions)null);
+				setEndHeel((EndHeelOptions)null);
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE:
 				setForceHireCostOnlyEndRule(FORCE_HIRE_COST_ONLY_END_RULE_EDEFAULT);
