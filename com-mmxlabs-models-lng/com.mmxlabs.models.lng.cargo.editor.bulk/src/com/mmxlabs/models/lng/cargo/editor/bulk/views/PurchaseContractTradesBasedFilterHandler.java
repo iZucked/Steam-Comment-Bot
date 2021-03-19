@@ -30,7 +30,7 @@ public class PurchaseContractTradesBasedFilterHandler implements ITradesBasedFil
 		DefaultMenuCreatorAction action = new DefaultMenuCreatorAction("Purchase contracts") {
 			@Override
 			protected void populate(Menu menu) {
-					CargoModel cargoModel = ScenarioModelUtil.getCargoModel(viewer.getJointModelEditorPart().getScenarioDataProvider());
+					CargoModel cargoModel = ScenarioModelUtil.getCargoModel(viewer.getScenarioEditingLocation().getScenarioDataProvider());
 				
 				List<Contract> contracts = new LinkedList<>();
 				for (Slot s : cargoModel.getLoadSlots()) {

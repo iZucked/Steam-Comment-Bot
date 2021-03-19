@@ -9,6 +9,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.widgets.Composite;
 
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.rcp.common.celleditors.SpinnerCellEditor;
 
 /**
@@ -18,8 +19,8 @@ import com.mmxlabs.rcp.common.celleditors.SpinnerCellEditor;
  * 
  */
 public class PercentageAttributeManipulator extends NumericAttributeManipulator {
-	public PercentageAttributeManipulator(final EStructuralFeature field, final EditingDomain editingDomain) {
-		super(field, editingDomain);
+	public PercentageAttributeManipulator(final EStructuralFeature field, final ICommandHandler commandHandler) {
+		super(field, commandHandler);
 	}
 
 	@Override

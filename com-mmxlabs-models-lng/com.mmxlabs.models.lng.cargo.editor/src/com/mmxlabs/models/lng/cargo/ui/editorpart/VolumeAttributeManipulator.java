@@ -28,6 +28,7 @@ import com.mmxlabs.models.ui.NumberFormatterFactory.ExtendedDoubleFormatter;
 import com.mmxlabs.models.ui.NumberFormatterFactory.ExtendedFloatFormatter;
 import com.mmxlabs.models.ui.NumberFormatterFactory.ExtendedIntegerFormatter;
 import com.mmxlabs.models.ui.NumberFormatterFactory.ExtendedLongFormatter;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 
 /**
@@ -42,8 +43,8 @@ public class VolumeAttributeManipulator extends BasicAttributeManipulator {
 	private NumberFormatter formatter;
 	private Object input;
 
-	public VolumeAttributeManipulator(final EStructuralFeature feature, final EditingDomain editingDomain) {
-		super(feature, editingDomain);
+	public VolumeAttributeManipulator(final EStructuralFeature feature, final ICommandHandler commandHandler) {
+		super(feature, commandHandler);
 		type = (EDataType) feature.getEType();
 
 		final EAnnotation annotation = feature.getEAnnotation("http://www.mmxlabs.com/models/ui/numberFormat");
@@ -146,17 +147,17 @@ public class VolumeAttributeManipulator extends BasicAttributeManipulator {
 			}
 			final double n = number.doubleValue();
 			String unit = "k";
-//			if (container instanceof Slot) {
-//				unit = ((Slot)container).getSlotOrContractVolumeLimitsUnit() == VolumeUnits.M3 ? "k" : "K";
-//			} else if (container instanceof Contract) {
-//				unit = ((Contract)container).getVolumeLimitsUnit() == VolumeUnits.M3 ? "k" : "K";
-//			}
+			// if (container instanceof Slot) {
+			// unit = ((Slot)container).getSlotOrContractVolumeLimitsUnit() == VolumeUnits.M3 ? "k" : "K";
+			// } else if (container instanceof Contract) {
+			// unit = ((Contract)container).getVolumeLimitsUnit() == VolumeUnits.M3 ? "k" : "K";
+			// }
 			return String.format("%s%s", super.renderSetValue(container, (int) Math.round(n / 1000.0)), unit);
 		}
 
 		return super.renderSetValue(container, setValue);
 	}
-	
+
 	@Override
 	protected CellEditor createCellEditor(final Composite c, final Object object) {
 		final FormattedTextCellEditor editor = new FormattedTextCellEditor(c);
@@ -165,5 +166,4 @@ public class VolumeAttributeManipulator extends BasicAttributeManipulator {
 		return editor;
 	}
 
-	
 }

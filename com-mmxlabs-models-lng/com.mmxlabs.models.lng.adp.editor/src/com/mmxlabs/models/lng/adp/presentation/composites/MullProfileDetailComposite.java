@@ -119,7 +119,7 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 	private Color systemWhite;
 
 	protected DefaultStatusProvider statusProvider = new DefaultStatusProvider() {
-		
+
 		@Override
 		public IStatus getStatus() {
 			return status;
@@ -127,7 +127,7 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 	};
 
 	private final Adapter adapter = new MMXContentAdapter() {
-		
+
 		@Override
 		public void reallyNotifyChanged(Notification notification) {
 			if (notification.getEventType() == Notification.REMOVING_ADAPTER) {
@@ -199,7 +199,7 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 	public void setCommandHandler(ICommandHandler commandHandler) {
 		delegate.setCommandHandler(commandHandler);
 		this.commandHandler = commandHandler;
-		
+
 	}
 
 	@Override
@@ -212,7 +212,7 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		this.status = status;
 		delegate.displayValidationStatus(status);
 		statusProvider.fireStatusChanged(status);
-		
+
 	}
 
 	@Override
@@ -231,13 +231,15 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		final Action addInventorySubprofileRows = new Action("Add") {
 			@Override
 			public void run() {
-				final List<Inventory> selectedInventories = openSelectionDialogBox(parent, oldValue, MullProfile::getInventories, MullSubprofile::getInventory, ADPPackage.Literals.MULL_SUBPROFILE, ADPPackage.Literals.MULL_SUBPROFILE__INVENTORY, "Inventory");
-				updateStateWithSelection(selectedInventories, oldValue, MullProfile::getInventories, MullSubprofile::getInventory, "Inventories", ADPPackage.Literals.MULL_PROFILE__INVENTORIES, ADPFactory.eINSTANCE::createMullSubprofile, MullSubprofile::setInventory);
+				final List<Inventory> selectedInventories = openSelectionDialogBox(parent, oldValue, MullProfile::getInventories, MullSubprofile::getInventory, ADPPackage.Literals.MULL_SUBPROFILE,
+						ADPPackage.Literals.MULL_SUBPROFILE__INVENTORY, "Inventory");
+				updateStateWithSelection(selectedInventories, oldValue, MullProfile::getInventories, MullSubprofile::getInventory, "Inventories", ADPPackage.Literals.MULL_PROFILE__INVENTORIES,
+						ADPFactory.eINSTANCE::createMullSubprofile, MullSubprofile::setInventory);
 			}
 		};
 		addInventorySubprofileRows.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
 		buttonManager.getToolbarManager().add(addInventorySubprofileRows);
-		
+
 		final Action deleteInventorySubprofileRows = createDeleteTableRowsAction(eViewer, "Inventory Rows");
 		deleteInventorySubprofileRows.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE));
 		deleteInventorySubprofileRows.setEnabled(false);
@@ -247,13 +249,14 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		buttonManager.getToolbarManager().add(new ActionContributionItem(inventoryTablePackAction));
 
 		buttonManager.getToolbarManager().update(true);
-		
+
 		final IScenarioEditingLocation sel = dialogContext.getScenarioEditingLocation();
-		
-		eViewer.addTypicalColumn("Inventory", new ReadOnlyManipulatorWrapper<>(new SingleReferenceManipulator(ADPPackage.eINSTANCE.getMullSubprofile_Inventory(), sel.getReferenceValueProviderCache(), sel.getEditingDomain())));
+
+		eViewer.addTypicalColumn("Inventory", new ReadOnlyManipulatorWrapper<>(
+				new SingleReferenceManipulator(ADPPackage.eINSTANCE.getMullSubprofile_Inventory(), sel.getReferenceValueProviderCache(), sel.getDefaultCommandHandler())));
 
 		eViewer.setStatusProvider(statusProvider);
-		
+
 		eViewer.init(sel.getAdapterFactory(), sel.getModelReference(), ADPPackage.Literals.MULL_PROFILE__INVENTORIES);
 		final GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gridData.heightHint = 60;
@@ -319,9 +322,10 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 
 		final IScenarioEditingLocation sel = dialogContext.getScenarioEditingLocation();
 
-		eViewer.addTypicalColumn("Entity", new ReadOnlyManipulatorWrapper<>(new SingleReferenceManipulator(ADPPackage.eINSTANCE.getMullEntityRow_Entity(), sel.getReferenceValueProviderCache(), sel.getEditingDomain())));
-		eViewer.addTypicalColumn("Initial Allocation", new BasicAttributeManipulator(ADPPackage.eINSTANCE.getMullEntityRow_InitialAllocation(), sel.getEditingDomain()));
-		eViewer.addTypicalColumn("Reference Entitlement", new NumericAttributeManipulator(ADPPackage.eINSTANCE.getMullEntityRow_RelativeEntitlement(), sel.getEditingDomain()));
+		eViewer.addTypicalColumn("Entity",
+				new ReadOnlyManipulatorWrapper<>(new SingleReferenceManipulator(ADPPackage.eINSTANCE.getMullEntityRow_Entity(), sel.getReferenceValueProviderCache(), sel.getDefaultCommandHandler())));
+		eViewer.addTypicalColumn("Initial Allocation", new BasicAttributeManipulator(ADPPackage.eINSTANCE.getMullEntityRow_InitialAllocation(), sel.getDefaultCommandHandler()));
+		eViewer.addTypicalColumn("Reference Entitlement", new NumericAttributeManipulator(ADPPackage.eINSTANCE.getMullEntityRow_RelativeEntitlement(), sel.getDefaultCommandHandler()));
 
 		eViewer.setStatusProvider(statusProvider);
 
@@ -332,12 +336,12 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		table.setLayoutData(gridData);
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
-		
+
 		eViewer.addSelectionChangedListener(event -> {
 			deleteEntityRows.setEnabled(!event.getSelection().isEmpty());
 			if (event.getStructuredSelection().size() == 1) {
 				final Object selection = event.getStructuredSelection().getFirstElement();
-				if (selection  instanceof MullEntityRow) {
+				if (selection instanceof MullEntityRow) {
 					final MullEntityRow selectedRow = (MullEntityRow) selection;
 					final BaseLegalEntity selectedEntity = selectedRow.getEntity();
 					if (selectedEntity != null) {
@@ -373,6 +377,7 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 
 	private class AddAction extends DefaultMenuCreatorAction {
 		final Composite parent;
+
 		public AddAction(final String label, Composite parent) {
 			super(label);
 			this.parent = parent;
@@ -385,8 +390,10 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 					Object selection = viewer.getStructuredSelection().getFirstElement();
 					if (selection instanceof MullSubprofile) {
 						final MullSubprofile selectedRow = (MullSubprofile) selection;
-						final List<BaseLegalEntity> selectedEntities = openSelectionDialogBox(parent, selectedRow, MullSubprofile::getEntityTable, MullEntityRow::getEntity, ADPPackage.Literals.MULL_ENTITY_ROW, ADPPackage.Literals.MULL_ENTITY_ROW__ENTITY, "Entity");
-						updateStateWithSelection(selectedEntities, selectedRow, MullSubprofile::getEntityTable, MullEntityRow::getEntity, "Entities", ADPPackage.Literals.MULL_SUBPROFILE__ENTITY_TABLE, ADPFactory.eINSTANCE::createMullEntityRow, MullEntityRow::setEntity);
+						final List<BaseLegalEntity> selectedEntities = openSelectionDialogBox(parent, selectedRow, MullSubprofile::getEntityTable, MullEntityRow::getEntity,
+								ADPPackage.Literals.MULL_ENTITY_ROW, ADPPackage.Literals.MULL_ENTITY_ROW__ENTITY, "Entity");
+						updateStateWithSelection(selectedEntities, selectedRow, MullSubprofile::getEntityTable, MullEntityRow::getEntity, "Entities", ADPPackage.Literals.MULL_SUBPROFILE__ENTITY_TABLE,
+								ADPFactory.eINSTANCE::createMullEntityRow, MullEntityRow::setEntity);
 					}
 				}
 			};
@@ -419,8 +426,10 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 				Object selection = entityTableViewer.getStructuredSelection().getFirstElement();
 				if (selection instanceof MullEntityRow) {
 					final MullEntityRow selectedRow = (MullEntityRow) selection;
-					final List<SalesContract> selectedSalesContracts = openSelectionDialogBox(parent, selectedRow, MullEntityRow::getSalesContractAllocationRows, SalesContractAllocationRow::getContract, ADPPackage.Literals.SALES_CONTRACT_ALLOCATION_ROW, ADPPackage.Literals.SALES_CONTRACT_ALLOCATION_ROW__CONTRACT, "Sales Contract");
-					updateStateWithSelection(selectedSalesContracts, selectedRow, MullEntityRow::getSalesContractAllocationRows, SalesContractAllocationRow::getContract, "Sales Contracts", ADPPackage.Literals.MULL_ENTITY_ROW__SALES_CONTRACT_ALLOCATION_ROWS, ADPFactory.eINSTANCE::createSalesContractAllocationRow, SalesContractAllocationRow::setContract);
+					final List<SalesContract> selectedSalesContracts = openSelectionDialogBox(parent, selectedRow, MullEntityRow::getSalesContractAllocationRows,
+							SalesContractAllocationRow::getContract, ADPPackage.Literals.SALES_CONTRACT_ALLOCATION_ROW, ADPPackage.Literals.SALES_CONTRACT_ALLOCATION_ROW__CONTRACT, "Sales Contract");
+					updateStateWithSelection(selectedSalesContracts, selectedRow, MullEntityRow::getSalesContractAllocationRows, SalesContractAllocationRow::getContract, "Sales Contracts",
+							ADPPackage.Literals.MULL_ENTITY_ROW__SALES_CONTRACT_ALLOCATION_ROWS, ADPFactory.eINSTANCE::createSalesContractAllocationRow, SalesContractAllocationRow::setContract);
 				}
 			}
 		};
@@ -436,15 +445,17 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		buttonManager.getToolbarManager().add(new ActionContributionItem(contractTablePackAction));
 
 		buttonManager.getToolbarManager().update(true);
-		
+
 		final IScenarioEditingLocation sel = dialogContext.getScenarioEditingLocation();
 
-		eViewer.addTypicalColumn("Contract", new ReadOnlyManipulatorWrapper<>(new SingleReferenceManipulator(ADPPackage.eINSTANCE.getSalesContractAllocationRow_Contract(), sel.getReferenceValueProviderCache(), sel.getEditingDomain())));
-		eViewer.addTypicalColumn("AACQ", new NumericAttributeManipulator(ADPPackage.eINSTANCE.getMullAllocationRow_Weight(), sel.getEditingDomain()));
-		eViewer.addTypicalColumn("Vessels", new MultipleReferenceManipulator(ADPPackage.eINSTANCE.getMullAllocationRow_Vessels(), sel.getReferenceValueProviderCache(), sel.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
-		
+		eViewer.addTypicalColumn("Contract", new ReadOnlyManipulatorWrapper<>(
+				new SingleReferenceManipulator(ADPPackage.eINSTANCE.getSalesContractAllocationRow_Contract(), sel.getReferenceValueProviderCache(), sel.getDefaultCommandHandler())));
+		eViewer.addTypicalColumn("AACQ", new NumericAttributeManipulator(ADPPackage.eINSTANCE.getMullAllocationRow_Weight(), sel.getDefaultCommandHandler()));
+		eViewer.addTypicalColumn("Vessels", new MultipleReferenceManipulator(ADPPackage.eINSTANCE.getMullAllocationRow_Vessels(), sel.getReferenceValueProviderCache(), sel.getDefaultCommandHandler(),
+				MMXCorePackage.eINSTANCE.getNamedObject_Name()));
+
 		eViewer.setStatusProvider(statusProvider);
-	
+
 		eViewer.init(sel.getAdapterFactory(), sel.getModelReference(), ADPPackage.Literals.MULL_ENTITY_ROW__SALES_CONTRACT_ALLOCATION_ROWS);
 		final GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gridData.heightHint = 120;
@@ -452,7 +463,7 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		table.setLayoutData(gridData);
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
-		
+
 		eViewer.addSelectionChangedListener(event -> {
 			final ISelection iSelection = event.getSelection();
 			deleteContractRows.setEnabled(!iSelection.isEmpty());
@@ -487,14 +498,18 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 				Object selection = entityTableViewer.getStructuredSelection().getFirstElement();
 				if (selection instanceof MullEntityRow) {
 					final MullEntityRow selectedRow = (MullEntityRow) selection;
-					final List<DESSalesMarket> selectedDesSalesMarkets = openSelectionDialogBox(parent, selectedRow, MullEntityRow::getDesSalesMarketAllocationRows, DESSalesMarketAllocationRow::getDesSalesMarket, ADPPackage.Literals.DES_SALES_MARKET_ALLOCATION_ROW, ADPPackage.Literals.DES_SALES_MARKET_ALLOCATION_ROW__DES_SALES_MARKET, "DES Sales Market");
-					updateStateWithSelection(selectedDesSalesMarkets, selectedRow, MullEntityRow::getDesSalesMarketAllocationRows, DESSalesMarketAllocationRow::getDesSalesMarket, "DES Sales Markets", ADPPackage.Literals.MULL_ENTITY_ROW__DES_SALES_MARKET_ALLOCATION_ROWS, ADPFactory.eINSTANCE::createDESSalesMarketAllocationRow, DESSalesMarketAllocationRow::setDesSalesMarket);
+					final List<DESSalesMarket> selectedDesSalesMarkets = openSelectionDialogBox(parent, selectedRow, MullEntityRow::getDesSalesMarketAllocationRows,
+							DESSalesMarketAllocationRow::getDesSalesMarket, ADPPackage.Literals.DES_SALES_MARKET_ALLOCATION_ROW, ADPPackage.Literals.DES_SALES_MARKET_ALLOCATION_ROW__DES_SALES_MARKET,
+							"DES Sales Market");
+					updateStateWithSelection(selectedDesSalesMarkets, selectedRow, MullEntityRow::getDesSalesMarketAllocationRows, DESSalesMarketAllocationRow::getDesSalesMarket, "DES Sales Markets",
+							ADPPackage.Literals.MULL_ENTITY_ROW__DES_SALES_MARKET_ALLOCATION_ROWS, ADPFactory.eINSTANCE::createDESSalesMarketAllocationRow,
+							DESSalesMarketAllocationRow::setDesSalesMarket);
 				}
 			}
 		};
 		addMarketRows.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
 		buttonManager.getToolbarManager().add(addMarketRows);
-		
+
 		final Action deleteMarketRows = createDeleteTableRowsAction(eViewer, "DES Sales Market Rows");
 		deleteMarketRows.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE));
 		deleteMarketRows.setEnabled(false);
@@ -504,12 +519,14 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		buttonManager.getToolbarManager().add(new ActionContributionItem(marketTablePackAction));
 
 		buttonManager.getToolbarManager().update(true);
-		
+
 		final IScenarioEditingLocation sel = dialogContext.getScenarioEditingLocation();
 
-		eViewer.addTypicalColumn("Market", new ReadOnlyManipulatorWrapper<>(new SingleReferenceManipulator(ADPPackage.eINSTANCE.getDESSalesMarketAllocationRow_DesSalesMarket(), sel.getReferenceValueProviderCache(), sel.getEditingDomain())));
-		eViewer.addTypicalColumn("AACQ", new NumericAttributeManipulator(ADPPackage.eINSTANCE.getMullAllocationRow_Weight(), sel.getEditingDomain()));
-		eViewer.addTypicalColumn("Vessels", new MultipleReferenceManipulator(ADPPackage.eINSTANCE.getMullAllocationRow_Vessels(), sel.getReferenceValueProviderCache(), sel.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
+		eViewer.addTypicalColumn("Market", new ReadOnlyManipulatorWrapper<>(
+				new SingleReferenceManipulator(ADPPackage.eINSTANCE.getDESSalesMarketAllocationRow_DesSalesMarket(), sel.getReferenceValueProviderCache(), sel.getDefaultCommandHandler())));
+		eViewer.addTypicalColumn("AACQ", new NumericAttributeManipulator(ADPPackage.eINSTANCE.getMullAllocationRow_Weight(), sel.getDefaultCommandHandler()));
+		eViewer.addTypicalColumn("Vessels", new MultipleReferenceManipulator(ADPPackage.eINSTANCE.getMullAllocationRow_Vessels(), sel.getReferenceValueProviderCache(), sel.getDefaultCommandHandler(),
+				MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 
 		eViewer.setStatusProvider(statusProvider);
 
@@ -540,7 +557,8 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		return eViewer;
 	}
 
-	private <R extends EObject, S extends EObject, T extends EObject> List<T> openSelectionDialogBox(final Control cellEditorWindow, final S target, final Function<S, List<R>> rowsExtractor, final Function<R, T> valueExtractor, final EClass owner, final EReference field, @NonNull final String selectionLabel) {
+	private <R extends EObject, S extends EObject, T extends EObject> List<T> openSelectionDialogBox(final Control cellEditorWindow, final S target, final Function<S, List<R>> rowsExtractor,
+			final Function<R, T> valueExtractor, final EClass owner, final EReference field, @NonNull final String selectionLabel) {
 		final IReferenceValueProvider valueProvider = commandHandler.getReferenceValueProviderProvider().getReferenceValueProvider(owner, field);
 		final List<Pair<String, EObject>> options = valueProvider.getAllowedValues(target, field);
 		final ListSelectionDialog dlg = new ListSelectionDialog(cellEditorWindow.getShell(), options.toArray(), new ArrayContentProvider(), new LabelProvider() {
@@ -579,7 +597,8 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		return null;
 	}
 
-	private<R extends EObject, S extends EObject, T extends EObject> void updateStateWithSelection(final List<T> selectedValues, final S selectedRow, final Function<S, List<R>> rowsExtractor, final Function<R, T> valueExtractor, final String elementString, final EReference feature, final Supplier<R> rowCreator, final BiConsumer<R, T> valueSetter) {
+	private <R extends EObject, S extends EObject, T extends EObject> void updateStateWithSelection(final List<T> selectedValues, final S selectedRow, final Function<S, List<R>> rowsExtractor,
+			final Function<R, T> valueExtractor, final String elementString, final EReference feature, final Supplier<R> rowCreator, final BiConsumer<R, T> valueSetter) {
 		if (selectedValues != null) {
 			final Set<T> afterSelectionSet = new HashSet<>(selectedValues);
 			final List<R> rowsToRemove = new LinkedList<>();

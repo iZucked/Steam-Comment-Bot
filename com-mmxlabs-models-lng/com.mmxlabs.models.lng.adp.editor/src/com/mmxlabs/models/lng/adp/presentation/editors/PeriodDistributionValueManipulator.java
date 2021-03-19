@@ -15,6 +15,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.adp.PeriodDistribution;
 import com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.tabular.manipulators.ValueListAttributeManipulator;
 
 /**
@@ -24,8 +25,8 @@ import com.mmxlabs.models.ui.tabular.manipulators.ValueListAttributeManipulator;
 public class PeriodDistributionValueManipulator extends ValueListAttributeManipulator<YearMonth> {
 	private static @NonNull List<Pair<String, YearMonth>> defaultValues = getDefaultValues();
 
-	public PeriodDistributionValueManipulator(final EAttribute feature, EditingDomain editingDomain) {
-		super(feature, editingDomain, defaultValues);
+	public PeriodDistributionValueManipulator(final EAttribute feature, ICommandHandler commandHandler) {
+		super(feature, commandHandler, defaultValues);
 	}
 
 	@Override
@@ -35,33 +36,33 @@ public class PeriodDistributionValueManipulator extends ValueListAttributeManipu
 		if (input instanceof PeriodDistribution) {
 			final PeriodDistribution distribution = (PeriodDistribution) input;
 			if (distribution.eContainer() instanceof PeriodDistributionProfileConstraint) {
-//				final PeriodDistributionModel periodDistributionModel = (PeriodDistributionModel) distribution.eContainer();
-//
-//				final List<Pair<String, YearMonth>> result = new ArrayList<>();
-//				switch (periodDistributionModel.getPeriodType()) {
-//				case YEARLY: {
-//					for (int i = 0; i < 4; ++i) {
-//						YearMonth ym = YearMonth.now().withMonth(1).plusYears(i);
-//						result.add(new Pair<>(String.format("%s", ym), ym));
-//					}
-//					break;
-//				}
-//				case MONTHLY: {
-//					for (int i = 1; i <= 12; ++i) {
-//						YearMonth ym = YearMonth.now().withMonth(i);
-//						result.add(new Pair<>(String.format("%s", ym), ym));
-//					}
-//					break;
-//				}
-//				case QUARTERLY: {
-//					for (int i = 0; i < 4; ++i) {
-//						YearMonth ym = YearMonth.now().withMonth(1+ 4 * i);
-//						result.add(new Pair<>(String.format("%s", ym), ym));
-//					}
-//					break;
-//				}
-//				}
-//				values = result;
+				// final PeriodDistributionModel periodDistributionModel = (PeriodDistributionModel) distribution.eContainer();
+				//
+				// final List<Pair<String, YearMonth>> result = new ArrayList<>();
+				// switch (periodDistributionModel.getPeriodType()) {
+				// case YEARLY: {
+				// for (int i = 0; i < 4; ++i) {
+				// YearMonth ym = YearMonth.now().withMonth(1).plusYears(i);
+				// result.add(new Pair<>(String.format("%s", ym), ym));
+				// }
+				// break;
+				// }
+				// case MONTHLY: {
+				// for (int i = 1; i <= 12; ++i) {
+				// YearMonth ym = YearMonth.now().withMonth(i);
+				// result.add(new Pair<>(String.format("%s", ym), ym));
+				// }
+				// break;
+				// }
+				// case QUARTERLY: {
+				// for (int i = 0; i < 4; ++i) {
+				// YearMonth ym = YearMonth.now().withMonth(1+ 4 * i);
+				// result.add(new Pair<>(String.format("%s", ym), ym));
+				// }
+				// break;
+				// }
+				// }
+				// values = result;
 			}
 		}
 		names.clear();

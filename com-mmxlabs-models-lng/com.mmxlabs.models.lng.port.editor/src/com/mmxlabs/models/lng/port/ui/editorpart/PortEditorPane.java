@@ -65,13 +65,13 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 		addNameManipulator("Name");
 
-		addTypicalColumn("Country", new BasicAttributeManipulator(PortPackage.eINSTANCE.getLocation_Country(), getEditingDomain()), PortPackage.eINSTANCE.getPort_Location());
-		// addTypicalColumn("MMX ID ", new BasicAttributeManipulator(PortPackage.eINSTANCE.getLocation_MmxId(), getEditingDomain()), PortPackage.eINSTANCE.getPort_Location());
+		addTypicalColumn("Country", new BasicAttributeManipulator(PortPackage.eINSTANCE.getLocation_Country(), getCommandHandler()), PortPackage.eINSTANCE.getPort_Location());
+		// addTypicalColumn("MMX ID ", new BasicAttributeManipulator(PortPackage.eINSTANCE.getLocation_MmxId(), getCommandHandler()), PortPackage.eINSTANCE.getPort_Location());
 
-		addTypicalColumn(PortCapability.LOAD.getName(), new CapabilityManipulator(PortCapability.LOAD, getJointModelEditorPart().getEditingDomain()));
-		addTypicalColumn(PortCapability.DISCHARGE.getName(), new CapabilityManipulator(PortCapability.DISCHARGE, getJointModelEditorPart().getEditingDomain()));
+		addTypicalColumn(PortCapability.LOAD.getName(), new CapabilityManipulator(PortCapability.LOAD, getCommandHandler()));
+		addTypicalColumn(PortCapability.DISCHARGE.getName(), new CapabilityManipulator(PortCapability.DISCHARGE,getCommandHandler()));
 		addTypicalColumn("Other Names",
-				new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getOtherNamesObject_OtherNames(), getEditingDomain())),
+				new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getOtherNamesObject_OtherNames(), getCommandHandler())),
 				PortPackage.eINSTANCE.getPort_Location());
 
 		// addTypicalColumn("Timezone", new BasicAttributeManipulator(PortPackage.eINSTANCE.getPort_TimeZone(), getJointModelEditorPart().getEditingDomain()));
@@ -87,12 +87,12 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 			@Override
 			public void run() {
-				final DetailCompositeDialog dcd = new DetailCompositeDialog(PortEditorPane.this.getJointModelEditorPart().getShell(),
-						PortEditorPane.this.getJointModelEditorPart().getDefaultCommandHandler());
-				final MMXRootObject rootObject = getJointModelEditorPart().getRootObject();
+				final DetailCompositeDialog dcd = new DetailCompositeDialog(PortEditorPane.this.getScenarioEditingLocation().getShell(),
+						PortEditorPane.this.getScenarioEditingLocation().getDefaultCommandHandler());
+				final MMXRootObject rootObject = getScenarioEditingLocation().getRootObject();
 				if (rootObject instanceof LNGScenarioModel) {
 					final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-					dcd.open(getJointModelEditorPart(), rootObject, lngScenarioModel.getReferenceModel().getPortModel(), PortPackage.eINSTANCE.getPortModel_PortGroups());
+					dcd.open(getScenarioEditingLocation(), rootObject, lngScenarioModel.getReferenceModel().getPortModel(), PortPackage.eINSTANCE.getPortModel_PortGroups());
 				}
 			}
 		});
@@ -112,7 +112,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 		@Override
 		protected void populate(final Menu menu) {
-			final MMXRootObject rootObject = getJointModelEditorPart().getRootObject();
+			final MMXRootObject rootObject = getScenarioEditingLocation().getRootObject();
 			if (rootObject instanceof LNGScenarioModel) {
 				final PortModel portModel = ((LNGScenarioModel) rootObject).getReferenceModel().getPortModel();
 				for (final Route canal : portModel.getRoutes()) {
@@ -145,8 +145,8 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 											});
 									if (input.open() == Window.OK) {
 										final String newName = input.getValue();
-										getJointModelEditorPart().getEditingDomain().getCommandStack()
-												.execute(SetCommand.create(getJointModelEditorPart().getEditingDomain(), canal, MMXCorePackage.eINSTANCE.getNamedObject_Name(), newName));
+										getScenarioEditingLocation().getEditingDomain().getCommandStack()
+												.execute(SetCommand.create(getScenarioEditingLocation().getEditingDomain(), canal, MMXCorePackage.eINSTANCE.getNamedObject_Name(), newName));
 									}
 								}
 							};
@@ -166,7 +166,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 		return new LockableAction("Edit distances...") {
 			@Override
 			public void run() {
-				DetailCompositeDialogUtil.editSingleObject(PortEditorPane.this.getJointModelEditorPart(), distanceModel);
+				DetailCompositeDialogUtil.editSingleObject(PortEditorPane.this.getScenarioEditingLocation(), distanceModel);
 			}
 		};
 	}
@@ -191,9 +191,9 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 				final CompoundCommand cmd = new CompoundCommand("Create contingency matrix");
 				final ContingencyMatrix matrix = PortFactory.eINSTANCE.createContingencyMatrix();
 				cmd.append(SetCommand.create(getEditingDomain(), portModel, PortPackage.Literals.PORT_MODEL__CONTINGENCY_MATRIX, matrix));
-				DetailCompositeDialogUtil.editNewObjectWithUndoOnCancel(getJointModelEditorPart(), matrix, cmd);
+				DetailCompositeDialogUtil.editNewObjectWithUndoOnCancel(getScenarioEditingLocation(), matrix, cmd);
 			} else {
-				DetailCompositeDialogUtil.editSingleObject(PortEditorPane.this.getJointModelEditorPart(), portModel.getContingencyMatrix());
+				DetailCompositeDialogUtil.editSingleObject(PortEditorPane.this.getScenarioEditingLocation(), portModel.getContingencyMatrix());
 			}
 		}
 	}

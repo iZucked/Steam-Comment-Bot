@@ -126,7 +126,7 @@ public class SettledPricesPane extends ScenarioTableViewerPane {
 	@Override
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
 		// Add in Check for Tree
-		final ScenarioTableViewer result = new IndexTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart());
+		final ScenarioTableViewer result = new IndexTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getScenarioEditingLocation());
 		result.getGrid().setTreeLinesVisible(true);
 		return result;
 	}
@@ -135,7 +135,7 @@ public class SettledPricesPane extends ScenarioTableViewerPane {
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
 		super.init(path, adapterFactory, modelReference);
 
-		nameViewerColumn = addTypicalColumn("Name", new ReadOnlyManipulatorWrapper<>(new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getEditingDomain()) {
+		nameViewerColumn = addTypicalColumn("Name", new ReadOnlyManipulatorWrapper<>(new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getCommandHandler()) {
 			@Override
 			public boolean canEdit(final Object object) {
 				// Skip tree model elements

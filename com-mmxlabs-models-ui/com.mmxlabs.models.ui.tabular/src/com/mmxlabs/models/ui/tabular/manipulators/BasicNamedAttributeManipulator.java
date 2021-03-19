@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
@@ -32,14 +33,14 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
  */
 public class BasicNamedAttributeManipulator implements ICellManipulator, ICellRenderer {
 	protected final String fieldName;
-	protected final EditingDomain editingDomain;
+	protected final ICommandHandler commandHandler;
 	private IExtraCommandsHook extraCommandsHook;
 	private Object parent;
 
-	public BasicNamedAttributeManipulator(final String fieldName, final EditingDomain editingDomain) {
+	public BasicNamedAttributeManipulator(final String fieldName, final ICommandHandler commandHandler) {
 		super();
 		this.fieldName = fieldName;
-		this.editingDomain = editingDomain;
+		this.commandHandler = commandHandler;
 	}
 
 	@Override
@@ -106,13 +107,15 @@ public class BasicNamedAttributeManipulator implements ICellManipulator, ICellRe
 
 		final EStructuralFeature field = getNamedField(object);
 
+		EditingDomain editingDomain = commandHandler.getEditingDomain();
+
 		CompoundCommand cmd = new CompoundCommand();
 		final Command command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, field, value));
 		cmd.append(command);
 		if (extraCommandsHook != null) {
 			extraCommandsHook.applyExtraCommands(editingDomain, cmd, parent, object, value);
 		}
-		editingDomain.getCommandStack().execute(cmd);
+		commandHandler.handleCommand(cmd, (EObject) object, field);
 	}
 
 	public void doSetValue(final Object object, final Object value) {

@@ -23,8 +23,8 @@ import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 /**
- * The {@link HolidayCalendarsViewerPane} displays data for various indices in a tree format. The {@link IndexTreeTransformer} is used to combine the different indices into an internal dynamic EObject tree
- * datastructure.
+ * The {@link HolidayCalendarsViewerPane} displays data for various indices in a tree format. The {@link IndexTreeTransformer} is used to combine the different indices into an internal dynamic EObject
+ * tree datastructure.
  * 
  * Note - call {@link #setInput(HolidayCalendar)} on {@link HolidayCalendarsViewerPane} rather than the {@link Viewer}.
  * 
@@ -36,22 +36,22 @@ public class HolidayCalendarsViewerPane extends ScenarioTableViewerPane {
 	public HolidayCalendarsViewerPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location, IActionBars actionBars) {
 		super(page, part, location, actionBars);
 	}
-	
+
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
 		super.init(path, adapterFactory, modelReference);
-		
-		final EditingDomain editingDomain = getEditingDomain();
-		
-		addTypicalColumn("Date", new LocalDateAttributeManipulator(PricingPackage.eINSTANCE.getHolidayCalendarEntry_Date(), editingDomain));
-		addTypicalColumn("Comment", new BasicAttributeManipulator(PricingPackage.eINSTANCE.getHolidayCalendarEntry_Comment(), editingDomain));
-		
-		//setTitle("Holiday Calendar", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
+
+		addTypicalColumn("Date", new LocalDateAttributeManipulator(PricingPackage.eINSTANCE.getHolidayCalendarEntry_Date(), getCommandHandler()));
+		addTypicalColumn("Comment", new BasicAttributeManipulator(PricingPackage.eINSTANCE.getHolidayCalendarEntry_Comment(), getCommandHandler()));
+
+		// setTitle("Holiday Calendar", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}
 
 	public void setInput(final HolidayCalendar data) {
-		if (data == null) return;
+		if (data == null) {
+			return;
+		}
 		viewer.setInput(data);
 	}
-	
+
 }

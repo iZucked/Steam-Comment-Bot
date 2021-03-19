@@ -62,11 +62,8 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 public class PaperDealsPane extends ScenarioTableViewerPane implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener {
 
-	private final IScenarioEditingLocation jointModelEditor;
-
 	public PaperDealsPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
-		this.jointModelEditor = location;
 	}
 
 	@Override
@@ -75,23 +72,23 @@ public class PaperDealsPane extends ScenarioTableViewerPane implements org.eclip
 
 		addNameManipulator("Name");
 		addColumn("Type", createPaperDealTypeFormatter(), null);
-		addTypicalColumn("Start Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_StartDate(), jointModelEditor.getEditingDomain()));
-		addTypicalColumn("End Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_EndDate(), jointModelEditor.getEditingDomain()));
-		addTypicalColumn("Month", new YearMonthAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_PricingMonth(), jointModelEditor.getEditingDomain()));
-		addTypicalColumn("Price", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Price(), jointModelEditor.getEditingDomain()));
-		addTypicalColumn("MtM curve", new StringAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Index(), jointModelEditor.getEditingDomain()));
-		addTypicalColumn("Quantity", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Quantity(), jointModelEditor.getEditingDomain()));
+		addTypicalColumn("Start Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_StartDate(), getCommandHandler()));
+		addTypicalColumn("End Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_EndDate(), getCommandHandler()));
+		addTypicalColumn("Month", new YearMonthAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_PricingMonth(), getCommandHandler()));
+		addTypicalColumn("Price", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Price(), getCommandHandler()));
+		addTypicalColumn("MtM curve", new StringAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Index(), getCommandHandler()));
+		addTypicalColumn("Quantity", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Quantity(), getCommandHandler()));
 
 		setTitle("Paper", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
-		
+
 		final CreatePaperStripMenuAction cpsma = new CreatePaperStripMenuAction("Bulk add");
 		getToolBarManager().appendToGroup(VIEW_GROUP, cpsma);
 		getToolBarManager().update(true);
-		
+
 		final ESelectionService service = part.getSite().getService(ESelectionService.class);
 		service.addPostSelectionListener(this);
 	}
-	
+
 	@Override
 	protected void addExtraAddActions(final List<Action> extraActions) {
 		extraActions.add(new Action("Selected from generated", Action.AS_PUSH_BUTTON) {
@@ -102,7 +99,7 @@ public class PaperDealsPane extends ScenarioTableViewerPane implements org.eclip
 					final StringBuilder sb = new StringBuilder();
 					processSelection(ss, sb);
 					if (sb.length() != 0) {
-						final MessageBox dialog = new MessageBox(jointModelEditor.getShell(), SWT.ICON_INFORMATION | SWT.OK);
+						final MessageBox dialog = new MessageBox(scenarioEditingLocation.getShell(), SWT.ICON_INFORMATION | SWT.OK);
 						dialog.setText("Adding the generated paper deals into the current portfolio");
 						dialog.setMessage(sb.toString());
 						dialog.open();
@@ -111,7 +108,7 @@ public class PaperDealsPane extends ScenarioTableViewerPane implements org.eclip
 			}
 		});
 	}
-	
+
 	private void processSelection(final IStructuredSelection ss, final StringBuilder sb) {
 		final Iterator iter = ss.iterator();
 		final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
@@ -120,7 +117,7 @@ public class PaperDealsPane extends ScenarioTableViewerPane implements org.eclip
 			final Schedule schedule = scenarioModel.getScheduleModel().getSchedule();
 			if (schedule != null) {
 				final CompoundCommand cc = new CompoundCommand();
-				while(iter.hasNext()) {
+				while (iter.hasNext()) {
 					final Object obj = iter.next();
 					if (obj instanceof PaperDealAllocation) {
 						processSelectedPaperDealAllocation(scenarioModel, schedule, cc, obj, sb);
@@ -153,8 +150,8 @@ public class PaperDealsPane extends ScenarioTableViewerPane implements org.eclip
 			}
 		}
 	}
-	
-	private class CreatePaperStripMenuAction extends DefaultMenuCreatorAction{
+
+	private class CreatePaperStripMenuAction extends DefaultMenuCreatorAction {
 
 		public CreatePaperStripMenuAction(String label) {
 			super(label);
@@ -169,7 +166,7 @@ public class PaperDealsPane extends ScenarioTableViewerPane implements org.eclip
 			addActionToMenu(csasp, menu);
 		}
 	}
-	
+
 	private class CreateStripAction extends LockableAction {
 
 		private final StripType stripType;
@@ -273,17 +270,17 @@ public class PaperDealsPane extends ScenarioTableViewerPane implements org.eclip
 			}
 		};
 	}
-	
+
 	@Override
 	public void dispose() {
 		final ESelectionService service = part.getSite().getService(ESelectionService.class);
 		service.removePostSelectionListener(this);
-		
+
 		super.dispose();
 	}
-	
+
 	ISelection gSelection;
-	
+
 	@Override
 	public void selectionChanged(MPart part, Object selection) {
 		final IWorkbenchPart e3Part = SelectionHelper.getE3Part(part);

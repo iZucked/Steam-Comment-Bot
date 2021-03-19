@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><?pde version="3.8"?><target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="70">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><?pde version="3.8"?><target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="71">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.equinox.compendium.sdk.feature.group" version="0.0.0"/>
@@ -100,6 +100,9 @@
 	<unit id="org.junit.vintage.engine" version="0.0.0"/>
 	<unit id="com.sun.jna" version="4.5.1.v20190425-1842"/>	
 	<unit id="com.sun.jna.platform" version="4.5.1.v20190425-1842"/>
+	<unit id="org.bouncycastle.bcpg" version="0.0.0"/>
+	<unit id="org.bouncycastle.bcpkix" version="0.0.0"/>
+	<unit id="org.bouncycastle.bcprov" version="0.0.0"/>
 <repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/orbit/orbit-buildrepo/R20191126223242/orbit-buildrepo-R20191126223242.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">

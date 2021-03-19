@@ -28,29 +28,26 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class MarketIndexViewerPane extends ScenarioTableViewerPane {
 
-	private final IScenarioEditingLocation jointModelEditor;
-
 	public MarketIndexViewerPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
-		this.jointModelEditor = location;
 	}
 
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
 		super.init(path, adapterFactory, modelReference);
 
-		addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), jointModelEditor.getEditingDomain()));
-		
+		addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getCommandHandler()));
+
 		final IReferenceValueProviderProvider irvpp = getReferenceValueProviderCache();
-		addTypicalColumn("Calendar", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getMarketIndex_PricingCalendar(), irvpp, getEditingDomain()));
-		addTypicalColumn("Holidays", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getMarketIndex_SettleCalendar(), irvpp, getEditingDomain()));
+		addTypicalColumn("Calendar", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getMarketIndex_PricingCalendar(), irvpp, getCommandHandler()));
+		addTypicalColumn("Holidays", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getMarketIndex_SettleCalendar(), irvpp, getCommandHandler()));
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GENERATED_PAPER_DEALS)) {
-			addTypicalColumn("Auto-Hedge", new BooleanFlagAttributeManipulator(PricingPackage.eINSTANCE.getMarketIndex_AutoHedgeEnabled(), getEditingDomain()));
-			addTypicalColumn("Flat curve", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getMarketIndex_FlatCurve(), irvpp, getEditingDomain()));
-			addTypicalColumn("Bid curve", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getMarketIndex_BidCurve(), irvpp, getEditingDomain()));
-			addTypicalColumn("Offer curve", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getMarketIndex_OfferCurve(), irvpp, getEditingDomain()));
+			addTypicalColumn("Auto-Hedge", new BooleanFlagAttributeManipulator(PricingPackage.eINSTANCE.getMarketIndex_AutoHedgeEnabled(), getCommandHandler()));
+			addTypicalColumn("Flat curve", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getMarketIndex_FlatCurve(), irvpp, getCommandHandler()));
+			addTypicalColumn("Bid curve", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getMarketIndex_BidCurve(), irvpp, getCommandHandler()));
+			addTypicalColumn("Offer curve", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getMarketIndex_OfferCurve(), irvpp, getCommandHandler()));
 		}
-		
+
 		setTitle("Indices", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}
 }
