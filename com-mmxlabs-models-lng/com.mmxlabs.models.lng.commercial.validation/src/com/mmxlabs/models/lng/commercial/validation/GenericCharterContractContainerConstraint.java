@@ -44,7 +44,7 @@ public class GenericCharterContractContainerConstraint extends AbstractModelMult
 		if (target instanceof GenericCharterContract) {
 			final GenericCharterContract contract = (GenericCharterContract) target;
 			final IBallastBonus ballastBonusContract = contract.getBallastBonusTerms();
-			EStructuralFeature feature = CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTERING_CONTRACTS;
+			EStructuralFeature feature = CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTER_CONTRACTS;
 			String message = String.format("Charter contract | %s", contract.getName());
 			if (ballastBonusContract instanceof SimpleBallastBonusContainer) {
 				simpleBallastBonusValidation(ctx, extraContext, statuses, (SimpleBallastBonusContainer) ballastBonusContract, contract, feature, message);

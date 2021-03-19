@@ -362,7 +362,7 @@ public final class SharedScenarioDataUtils {
 						fm.getVesselGroups().forEach(ctx::registerType);
 
 						final CommercialModel cm = ScenarioModelUtil.getCommercialModel(target);
-						cm.getCharteringContracts().forEach(ctx::registerType);
+						cm.getCharterContracts().forEach(ctx::registerType);
 
 						final ObjectMapper mapper = new ObjectMapper(null, null, ctx);
 						mapper.registerModule(new EMFJacksonModule());
@@ -1068,10 +1068,10 @@ public final class SharedScenarioDataUtils {
 
 		{
 			final List<EObject> newContracts = new LinkedList<>();
-			for (final GenericCharterContract newContract : newCM.getCharteringContracts()) {
+			for (final GenericCharterContract newContract : newCM.getCharterContracts()) {
 				boolean found = false;
 
-				for (final GenericCharterContract oldContract : oldCM.getCharteringContracts()) {
+				for (final GenericCharterContract oldContract : oldCM.getCharterContracts()) {
 					if (Objects.equals(newContract.getName(), oldContract.getName())) {
 						found = true;
 						mapOldToNew.put(oldContract, newContract);
@@ -1082,7 +1082,7 @@ public final class SharedScenarioDataUtils {
 					newContracts.add(newContract);
 				}
 			}
-			cmd.appendAndExecute(AddCommand.create(target.getEditingDomain(), oldCM, CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTERING_CONTRACTS, newContracts));
+			cmd.appendAndExecute(AddCommand.create(target.getEditingDomain(), oldCM, CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTER_CONTRACTS, newContracts));
 		}
 	}
 

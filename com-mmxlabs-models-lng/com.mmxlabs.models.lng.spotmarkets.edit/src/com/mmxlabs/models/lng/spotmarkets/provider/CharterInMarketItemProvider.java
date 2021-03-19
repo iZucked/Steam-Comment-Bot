@@ -58,7 +58,7 @@ public class CharterInMarketItemProvider
 			addSpotCharterCountPropertyDescriptor(object);
 			addOverrideInaccessibleRoutesPropertyDescriptor(object);
 			addInaccessibleRoutesPropertyDescriptor(object);
-			addCharterContractPropertyDescriptor(object);
+			addGenericCharterContractPropertyDescriptor(object);
 			addNominalPropertyDescriptor(object);
 			addMinDurationPropertyDescriptor(object);
 			addMaxDurationPropertyDescriptor(object);
@@ -357,19 +357,19 @@ public class CharterInMarketItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Charter Contract feature.
+	 * This adds a property descriptor for the Generic Charter Contract feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addCharterContractPropertyDescriptor(Object object) {
+	protected void addGenericCharterContractPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CharterInMarket_charterContract_feature"),
-				 getString("_UI_CharterInMarket_charterContract_description"),
-				 SpotMarketsPackage.Literals.CHARTER_IN_MARKET__CHARTER_CONTRACT,
+				 getString("_UI_CharterInMarket_genericCharterContract_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterInMarket_genericCharterContract_feature", "_UI_CharterInMarket_type"),
+				 SpotMarketsPackage.Literals.CHARTER_IN_MARKET__GENERIC_CHARTER_CONTRACT,
 				 true,
 				 false,
 				 true,

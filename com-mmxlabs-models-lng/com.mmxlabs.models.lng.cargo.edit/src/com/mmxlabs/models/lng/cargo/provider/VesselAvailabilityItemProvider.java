@@ -71,7 +71,7 @@ public class VesselAvailabilityItemProvider
 			addStartHeelPropertyDescriptor(object);
 			addEndHeelPropertyDescriptor(object);
 			addForceHireCostOnlyEndRulePropertyDescriptor(object);
-			addCharterContractPropertyDescriptor(object);
+			addGenericCharterContractPropertyDescriptor(object);
 			addMinDurationPropertyDescriptor(object);
 			addMaxDurationPropertyDescriptor(object);
 			addCharterContractOverridePropertyDescriptor(object);
@@ -344,6 +344,28 @@ public class VesselAvailabilityItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Generic Charter Contract feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addGenericCharterContractPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselAvailability_genericCharterContract_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailability_genericCharterContract_feature", "_UI_VesselAvailability_type"),
+				 CargoPackage.Literals.VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Optional feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -365,27 +387,6 @@ public class VesselAvailabilityItemProvider
 				 null));
 	}
 
-	/**
-	 * This adds a property descriptor for the Charter Contract feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addCharterContractPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_VesselAvailability_charterContract_feature"),
-				 getString("_UI_VesselAvailability_charterContract_description"),
-				 CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
 	/**
 	 * This adds a property descriptor for the Min Duration feature.
 	 * <!-- begin-user-doc -->

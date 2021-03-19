@@ -82,7 +82,7 @@ public class CharterInVesselPositioningFeeTests extends AbstractMicroTestCase {
 
 		// Create the required basic elements
 		final CharterInMarket charterInMarket_1 = createChartInMarket();
-		charterInMarket_1.setCharterContract(ballastBonusCharterContract);
+		charterInMarket_1.setGenericCharterContract(ballastBonusCharterContract);
 
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
@@ -113,7 +113,7 @@ public class CharterInVesselPositioningFeeTests extends AbstractMicroTestCase {
 		// Create Ballast Bonus Charter Contract with entity, repositioningFee, and lump sum bonus.
 		final GenericCharterContract ballastBonusCharterContract2 = createBallastBonusCharterContract(port1, POSITIONING_FEE);
 
-		charterInMarket_1.setCharterContract(ballastBonusCharterContract2);
+		charterInMarket_1.setGenericCharterContract(ballastBonusCharterContract2);
 
 		evaluateTest(null, null, scenarioRunner -> {
 			validateStartIdleLoadEvents(scenarioRunner);
@@ -207,7 +207,7 @@ public class CharterInVesselPositioningFeeTests extends AbstractMicroTestCase {
 
 		// Create Ballast Bonus Charter Contract with entity, repositioningFee, and lump sum bonus.
 		final GenericCharterContract ballastBonusCharterContract2 = createBallastBonusCharterContract(port1, POSITIONING_FEE);
-		charterInMarket.setCharterContract(ballastBonusCharterContract2);
+		charterInMarket.setGenericCharterContract(ballastBonusCharterContract2);
 
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);

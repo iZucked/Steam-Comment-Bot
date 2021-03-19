@@ -294,7 +294,7 @@ public class PNLBasedSchedulerTests extends AbstractMicroTestCase {
 
 		final CharterInMarket charter = spotMarketsModelBuilder.createCharterInMarket("SpotCharter", vessel, entity, "80000", 1);
 		charter.setMinDuration(12);
-		charter.setCharterContract(charterContract);
+		charter.setGenericCharterContract(charterContract);
 
 		final String sellExpression = "10";
 

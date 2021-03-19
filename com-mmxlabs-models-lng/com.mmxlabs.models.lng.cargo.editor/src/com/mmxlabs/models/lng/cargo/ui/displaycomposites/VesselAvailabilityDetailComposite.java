@@ -66,7 +66,7 @@ public class VesselAvailabilityDetailComposite extends DefaultDetailComposite {
 			cdg = VesselAvailabilityDetailGroup.TOP_RIGHT;
 		}
 		
-		if (editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_CharterContract()) {
+		if (editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_GenericCharterContract()) {
 			cdg = VesselAvailabilityDetailGroup.TOP_RIGHT_EXTRA;
 		}
 

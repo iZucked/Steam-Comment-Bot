@@ -1431,13 +1431,13 @@ public interface SpotMarketsPackage extends EPackage {
 	int CHARTER_IN_MARKET__INACCESSIBLE_ROUTES = SPOT_CHARTER_MARKET_FEATURE_COUNT + 6;
 
 	/**
-	 * The feature id for the '<em><b>Charter Contract</b></em>' reference.
+	 * The feature id for the '<em><b>Generic Charter Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET__CHARTER_CONTRACT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 7;
+	int CHARTER_IN_MARKET__GENERIC_CHARTER_CONTRACT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Nominal</b></em>' attribute.
@@ -2274,15 +2274,15 @@ public interface SpotMarketsPackage extends EPackage {
 	EAttribute getCharterInMarket_InaccessibleRoutes();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterContract <em>Charter Contract</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getGenericCharterContract <em>Generic Charter Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Charter Contract</em>'.
-	 * @see com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterContract()
+	 * @return the meta object for the reference '<em>Generic Charter Contract</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getGenericCharterContract()
 	 * @see #getCharterInMarket()
 	 * @generated
 	 */
-	EReference getCharterInMarket_CharterContract();
+	EReference getCharterInMarket_GenericCharterContract();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterInRate <em>Charter In Rate</em>}'.
@@ -2880,12 +2880,12 @@ public interface SpotMarketsPackage extends EPackage {
 		EAttribute CHARTER_IN_MARKET__INACCESSIBLE_ROUTES = eINSTANCE.getCharterInMarket_InaccessibleRoutes();
 
 		/**
-		 * The meta object literal for the '<em><b>Charter Contract</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Generic Charter Contract</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference CHARTER_IN_MARKET__CHARTER_CONTRACT = eINSTANCE.getCharterInMarket_CharterContract();
+		EReference CHARTER_IN_MARKET__GENERIC_CHARTER_CONTRACT = eINSTANCE.getCharterInMarket_GenericCharterContract();
 
 		/**
 		 * The meta object literal for the '<em><b>Charter In Rate</b></em>' attribute feature.

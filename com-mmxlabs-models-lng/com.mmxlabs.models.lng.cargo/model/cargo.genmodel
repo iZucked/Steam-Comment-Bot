@@ -228,8 +228,7 @@
       <genFeatures property="Readonly" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/endHeel"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/forceHireCostOnlyEndRule"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/containedCharterContract"/>
-      <genFeatures notify="false" createChild="false" propertyDescription="Shared terms for this charter"
-          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/charterContract"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/genericCharterContract"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/minDuration"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/maxDuration"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/charterContractOverride"/>

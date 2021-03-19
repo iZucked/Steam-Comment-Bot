@@ -50,7 +50,7 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 		entityEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_Entities()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 		purchaseContractEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 		salesContractEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_SalesContracts()), editorPart.getAdapterFactory(), editorPart.getModelReference());
-		charterMarketEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_CharteringContracts()), editorPart.getAdapterFactory(), editorPart.getModelReference());
+		charterMarketEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_CharterContracts()), editorPart.getAdapterFactory(), editorPart.getModelReference());
 
 		
 		entityEditorPane.getViewer().setInput(modelObject);

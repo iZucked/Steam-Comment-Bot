@@ -11,6 +11,8 @@
         eType="#//PurchaseContract" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="charteringContracts" upperBound="-1"
         eType="#//CharterContract" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="charterContracts" upperBound="-1"
+        eType="ecore:EClass commercial.ecore#//GenericCharterContract" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BaseLegalEntity" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="shippingBook" eType="#//BaseEntityBook"

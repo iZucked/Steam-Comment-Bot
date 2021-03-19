@@ -46,7 +46,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEndHeel <em>End Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isForceHireCostOnlyEndRule <em>Force Hire Cost Only End Rule</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getContainedCharterContract <em>Contained Charter Contract</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterContract <em>Charter Contract</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getGenericCharterContract <em>Generic Charter Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getMinDuration <em>Min Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getMaxDuration <em>Max Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isCharterContractOverride <em>Charter Contract Override</em>}</li>
@@ -545,34 +545,57 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	void setOptional(boolean value);
 
 	/**
-	 * Returns the value of the '<em><b>Charter Contract</b></em>' reference.
+	 * Returns the value of the '<em><b>Generic Charter Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Charter Contract</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Charter Contract</em>' reference.
-	 * @see #isSetCharterContract()
-	 * @see #unsetCharterContract()
-	 * @see #setCharterContract(GenericCharterContract)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_CharterContract()
+	 * @return the value of the '<em>Generic Charter Contract</em>' reference.
+	 * @see #isSetGenericCharterContract()
+	 * @see #unsetGenericCharterContract()
+	 * @see #setGenericCharterContract(GenericCharterContract)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_GenericCharterContract()
 	 * @model unsettable="true"
 	 * @generated
 	 */
-	GenericCharterContract getCharterContract();
+	GenericCharterContract getGenericCharterContract();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterContract <em>Charter Contract</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getGenericCharterContract <em>Generic Charter Contract</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Charter Contract</em>' reference.
-	 * @see #isSetCharterContract()
-	 * @see #unsetCharterContract()
-	 * @see #getCharterContract()
+	 * @param value the new value of the '<em>Generic Charter Contract</em>' reference.
+	 * @see #isSetGenericCharterContract()
+	 * @see #unsetGenericCharterContract()
+	 * @see #getGenericCharterContract()
 	 * @generated
 	 */
-	void setCharterContract(GenericCharterContract value);
+	void setGenericCharterContract(GenericCharterContract value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getGenericCharterContract <em>Generic Charter Contract</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetGenericCharterContract()
+	 * @see #getGenericCharterContract()
+	 * @see #setGenericCharterContract(GenericCharterContract)
+	 * @generated
+	 */
+	void unsetGenericCharterContract();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getGenericCharterContract <em>Generic Charter Contract</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Generic Charter Contract</em>' reference is set.
+	 * @see #unsetGenericCharterContract()
+	 * @see #getGenericCharterContract()
+	 * @see #setGenericCharterContract(GenericCharterContract)
+	 * @generated
+	 */
+	boolean isSetGenericCharterContract();
 
 	/**
 	 * Returns the value of the '<em><b>Charter Number</b></em>' attribute.
@@ -591,29 +614,6 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @generated
 	 */
 	int getCharterNumber();
-
-	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterContract <em>Charter Contract</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetCharterContract()
-	 * @see #getCharterContract()
-	 * @see #setCharterContract(GenericCharterContract)
-	 * @generated
-	 */
-	void unsetCharterContract();
-
-	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterContract <em>Charter Contract</em>}' reference is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Charter Contract</em>' reference is set.
-	 * @see #unsetCharterContract()
-	 * @see #getCharterContract()
-	 * @see #setCharterContract(GenericCharterContract)
-	 * @generated
-	 */
-	boolean isSetCharterContract();
 
 	/**
 	 * Returns the value of the '<em><b>Min Duration</b></em>' attribute.

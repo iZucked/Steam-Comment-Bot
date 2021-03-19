@@ -374,7 +374,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="containedCharterContract"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//GenericCharterContract"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="charterContract" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//GenericCharterContract"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="genericCharterContract"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//GenericCharterContract"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minDuration" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true">

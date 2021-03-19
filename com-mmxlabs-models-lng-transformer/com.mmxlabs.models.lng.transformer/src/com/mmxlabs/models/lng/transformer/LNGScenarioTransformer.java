@@ -3276,7 +3276,7 @@ public class LNGScenarioTransformer {
 
 				assert charterInCurve != null;
 				final int charterCount = charterInMarket.getSpotCharterCount();
-				final GenericCharterContract eCharterContract = charterInMarket.getCharterContract();
+				final GenericCharterContract eCharterContract = charterInMarket.getGenericCharterContract();
 				final @Nullable ICharterContract oCharterContract = createAndGetCharterContract(eCharterContract);;
 				final Port startingPort = charterInMarket.getStartAt();
 				

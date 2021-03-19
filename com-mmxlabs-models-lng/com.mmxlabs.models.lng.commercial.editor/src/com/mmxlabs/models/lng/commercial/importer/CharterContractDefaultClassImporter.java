@@ -90,7 +90,7 @@ public class CharterContractDefaultClassImporter extends DefaultClassImporter {
 				final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(scenarioModel);
 				GenericCharterContract targetCharterContract = (GenericCharterContract) context.getNamedObject(contractName, CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT);
 
-				for (final GenericCharterContract contract : commercialModel.getCharteringContracts()) {
+				for (final GenericCharterContract contract : commercialModel.getCharterContracts()) {
 					if (contract == targetCharterContract) {
 
 						if (object instanceof IBallastBonus) {

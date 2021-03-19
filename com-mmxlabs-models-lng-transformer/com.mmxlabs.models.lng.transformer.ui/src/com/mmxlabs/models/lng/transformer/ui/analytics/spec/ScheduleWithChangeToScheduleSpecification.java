@@ -244,11 +244,11 @@ public class ScheduleWithChangeToScheduleSpecification {
 		newAvailability.getEndAt().addAll(oldAvailability.getEndAt());
 		newAvailability.setEndHeel(EMFCopier.copy(oldAvailability.getEndHeel()));
 
-		if (oldAvailability.getCharterContract() != null) {
-			newAvailability.setCharterContract(EMFCopier.copy(oldAvailability.getCharterContract()));
+		if (oldAvailability.getGenericCharterContract() != null) {
+			newAvailability.setGenericCharterContract(EMFCopier.copy(oldAvailability.getGenericCharterContract()));
 		}
-		if (oldAvailability.getCharterContract() != null) {
-			newAvailability.setCharterContract(oldAvailability.getCharterContract());
+		if (oldAvailability.getGenericCharterContract() != null) {
+			newAvailability.setGenericCharterContract(oldAvailability.getGenericCharterContract());
 		}
 
 		if (oldAvailability.getCharterOrDelegateMinDuration() != 0 || oldAvailability.getCharterOrDelegateMaxDuration() != 0) {

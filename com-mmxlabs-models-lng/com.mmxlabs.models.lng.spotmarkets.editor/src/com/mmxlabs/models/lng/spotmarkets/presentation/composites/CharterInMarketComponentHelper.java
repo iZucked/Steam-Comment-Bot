@@ -75,7 +75,7 @@ public class CharterInMarketComponentHelper extends BaseComponentHelper {
 		add_spotCharterCountEditor(detailComposite, topClass);
 		add_overrideInaccessibleRoutesEditor(detailComposite, topClass);
 		add_inaccessibleRoutesEditor(detailComposite, topClass);
-		add_charterContractEditor(detailComposite, topClass);
+		add_genericCharterContractEditor(detailComposite, topClass);
 		add_nominalEditor(detailComposite, topClass);
 		add_minDurationEditor(detailComposite, topClass);
 		add_maxDurationEditor(detailComposite, topClass);
@@ -186,12 +186,12 @@ public class CharterInMarketComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
-	 * Create the editor for the charterContract feature on CharterInMarket
+	 * Create the editor for the genericCharterContract feature on CharterInMarket
 	 *
 	 * @generated
 	 */
-	protected void add_charterContractEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__CHARTER_CONTRACT));
+	protected void add_genericCharterContractEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__GENERIC_CHARTER_CONTRACT));
 	}
 
 	/**

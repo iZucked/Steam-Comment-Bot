@@ -28,7 +28,7 @@ public class GenericCharterContractValueProviderFactory implements IReferenceVal
 			final EClass referenceClass = reference.getEReferenceType();
 
 			if (referenceClass == CommercialPackage.eINSTANCE.getGenericCharterContract()) {
-				return new SimpleReferenceValueProvider(model, CommercialPackage.eINSTANCE.getCommercialModel_CharteringContracts());
+				return new SimpleReferenceValueProvider(model, CommercialPackage.eINSTANCE.getCommercialModel_CharterContracts());
 			}
 		}
 

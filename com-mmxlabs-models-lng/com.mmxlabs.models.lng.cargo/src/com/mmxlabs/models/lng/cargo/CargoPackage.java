@@ -4435,13 +4435,13 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
 
 	/**
-	 * The feature id for the '<em><b>Charter Contract</b></em>' reference.
+	 * The feature id for the '<em><b>Generic Charter Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__CHARTER_CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
+	int VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
 
 	/**
 	 * The feature id for the '<em><b>Min Duration</b></em>' attribute.
@@ -8602,15 +8602,15 @@ public interface CargoPackage extends EPackage {
 	EAttribute getVesselAvailability_CharterNumber();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterContract <em>Charter Contract</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getGenericCharterContract <em>Generic Charter Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Charter Contract</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterContract()
+	 * @return the meta object for the reference '<em>Generic Charter Contract</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getGenericCharterContract()
 	 * @see #getVesselAvailability()
 	 * @generated
 	 */
-	EReference getVesselAvailability_CharterContract();
+	EReference getVesselAvailability_GenericCharterContract();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getMinDuration <em>Min Duration</em>}'.
@@ -11061,12 +11061,12 @@ public interface CargoPackage extends EPackage {
 		EAttribute VESSEL_AVAILABILITY__CHARTER_NUMBER = eINSTANCE.getVesselAvailability_CharterNumber();
 
 		/**
-		 * The meta object literal for the '<em><b>Charter Contract</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Generic Charter Contract</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference VESSEL_AVAILABILITY__CHARTER_CONTRACT = eINSTANCE.getVesselAvailability_CharterContract();
+		EReference VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT = eINSTANCE.getVesselAvailability_GenericCharterContract();
 
 		/**
 		 * The meta object literal for the '<em><b>Min Duration</b></em>' attribute feature.

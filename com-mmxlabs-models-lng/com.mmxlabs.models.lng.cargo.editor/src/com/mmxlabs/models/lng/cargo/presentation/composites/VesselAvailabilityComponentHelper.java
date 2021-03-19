@@ -87,7 +87,7 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 		add_endHeelEditor(detailComposite, topClass);
 		add_forceHireCostOnlyEndRuleEditor(detailComposite, topClass);
 		add_containedCharterContractEditor(detailComposite, topClass);
-		add_charterContractEditor(detailComposite, topClass);
+		add_genericCharterContractEditor(detailComposite, topClass);
 		add_minDurationEditor(detailComposite, topClass);
 		add_maxDurationEditor(detailComposite, topClass);
 		add_charterContractOverrideEditor(detailComposite, topClass);
@@ -224,6 +224,15 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 	}
 
 	/**
+	 * Create the editor for the genericCharterContract feature on VesselAvailability
+	 *
+	 * @generated
+	 */
+	protected void add_genericCharterContractEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT));
+	}
+
+	/**
 	 * Create the editor for the optional feature on VesselAvailability
 	 *
 	 * @generated
@@ -239,15 +248,6 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_charterNumberEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_NUMBER));
-	}
-
-	/**
-	 * Create the editor for the charterContract feature on VesselAvailability
-	 *
-	 * @generated
-	 */
-	protected void add_charterContractEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT));
 	}
 
 	/**

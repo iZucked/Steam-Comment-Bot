@@ -28,7 +28,7 @@ public class VesselAvailabilityOverrideTests {
 		le.setName(TEST_ENTITY);
 		va.setEntity(le);
 		GenericCharterContract bbc = CommercialFactory.eINSTANCE.createGenericCharterContract();
-		va.setCharterContract(bbc);
+		va.setGenericCharterContract(bbc);
 		assertEquals(TEST_ENTITY, va.getCharterOrDelegateEntity().getName());
 	}
 

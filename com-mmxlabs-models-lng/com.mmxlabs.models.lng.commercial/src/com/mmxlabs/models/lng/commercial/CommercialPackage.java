@@ -116,13 +116,13 @@ public interface CommercialPackage extends EPackage {
 	int COMMERCIAL_MODEL__PURCHASE_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Chartering Contracts</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Charter Contracts</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMMERCIAL_MODEL__CHARTERING_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int COMMERCIAL_MODEL__CHARTER_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -2534,15 +2534,15 @@ public interface CommercialPackage extends EPackage {
 	EReference getCommercialModel_PurchaseContracts();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.CommercialModel#getCharteringContracts <em>Chartering Contracts</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.CommercialModel#getCharterContracts <em>Charter Contracts</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Chartering Contracts</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.CommercialModel#getCharteringContracts()
+	 * @return the meta object for the containment reference list '<em>Charter Contracts</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.CommercialModel#getCharterContracts()
 	 * @see #getCommercialModel()
 	 * @generated
 	 */
-	EReference getCommercialModel_CharteringContracts();
+	EReference getCommercialModel_CharterContracts();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity <em>Base Legal Entity</em>}'.
@@ -3820,12 +3820,12 @@ public interface CommercialPackage extends EPackage {
 		EReference COMMERCIAL_MODEL__PURCHASE_CONTRACTS = eINSTANCE.getCommercialModel_PurchaseContracts();
 
 		/**
-		 * The meta object literal for the '<em><b>Chartering Contracts</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Charter Contracts</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference COMMERCIAL_MODEL__CHARTERING_CONTRACTS = eINSTANCE.getCommercialModel_CharteringContracts();
+		EReference COMMERCIAL_MODEL__CHARTER_CONTRACTS = eINSTANCE.getCommercialModel_CharterContracts();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.BaseLegalEntityImpl <em>Base Legal Entity</em>}' class.

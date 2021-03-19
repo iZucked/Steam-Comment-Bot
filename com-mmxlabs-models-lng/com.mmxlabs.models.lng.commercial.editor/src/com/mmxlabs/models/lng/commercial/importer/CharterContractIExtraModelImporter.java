@@ -89,7 +89,7 @@ public class CharterContractIExtraModelImporter implements IExtraModelImporter {
 			List<RepositioningFeeTerm> rfExports = new ArrayList<>();
 			List<GenericCharterContract> ccList = new ArrayList<>();
 
-			for (final GenericCharterContract gcc : commercialModel.getCharteringContracts()) {
+			for (final GenericCharterContract gcc : commercialModel.getCharterContracts()) {
 				if (gcc != null) {
 					ccList.add(gcc);
 					IBallastBonus bb = gcc.getBallastBonusTerms();

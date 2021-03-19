@@ -31,7 +31,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getSpotCharterCount <em>Spot Charter Count</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#isOverrideInaccessibleRoutes <em>Override Inaccessible Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterContract <em>Charter Contract</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getGenericCharterContract <em>Generic Charter Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#isNominal <em>Nominal</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getMinDuration <em>Min Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getMaxDuration <em>Max Duration</em>}</li>
@@ -446,57 +446,57 @@ public interface CharterInMarket extends SpotCharterMarket, VesselAssignmentType
 	EList<RouteOption> getInaccessibleRoutes();
 
 	/**
-	 * Returns the value of the '<em><b>Charter Contract</b></em>' reference.
+	 * Returns the value of the '<em><b>Generic Charter Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Charter Contract</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Charter Contract</em>' reference.
-	 * @see #isSetCharterContract()
-	 * @see #unsetCharterContract()
-	 * @see #setCharterContract(GenericCharterContract)
-	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket_CharterContract()
+	 * @return the value of the '<em>Generic Charter Contract</em>' reference.
+	 * @see #isSetGenericCharterContract()
+	 * @see #unsetGenericCharterContract()
+	 * @see #setGenericCharterContract(GenericCharterContract)
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket_GenericCharterContract()
 	 * @model unsettable="true"
 	 * @generated
 	 */
-	GenericCharterContract getCharterContract();
+	GenericCharterContract getGenericCharterContract();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterContract <em>Charter Contract</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getGenericCharterContract <em>Generic Charter Contract</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Charter Contract</em>' reference.
-	 * @see #isSetCharterContract()
-	 * @see #unsetCharterContract()
-	 * @see #getCharterContract()
+	 * @param value the new value of the '<em>Generic Charter Contract</em>' reference.
+	 * @see #isSetGenericCharterContract()
+	 * @see #unsetGenericCharterContract()
+	 * @see #getGenericCharterContract()
 	 * @generated
 	 */
-	void setCharterContract(GenericCharterContract value);
+	void setGenericCharterContract(GenericCharterContract value);
 
 	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterContract <em>Charter Contract</em>}' reference.
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getGenericCharterContract <em>Generic Charter Contract</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isSetCharterContract()
-	 * @see #getCharterContract()
-	 * @see #setCharterContract(GenericCharterContract)
+	 * @see #isSetGenericCharterContract()
+	 * @see #getGenericCharterContract()
+	 * @see #setGenericCharterContract(GenericCharterContract)
 	 * @generated
 	 */
-	void unsetCharterContract();
+	void unsetGenericCharterContract();
 
 	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterContract <em>Charter Contract</em>}' reference is set.
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getGenericCharterContract <em>Generic Charter Contract</em>}' reference is set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Charter Contract</em>' reference is set.
-	 * @see #unsetCharterContract()
-	 * @see #getCharterContract()
-	 * @see #setCharterContract(GenericCharterContract)
+	 * @return whether the value of the '<em>Generic Charter Contract</em>' reference is set.
+	 * @see #unsetGenericCharterContract()
+	 * @see #getGenericCharterContract()
+	 * @see #setGenericCharterContract(GenericCharterContract)
 	 * @generated
 	 */
-	boolean isSetCharterContract();
+	boolean isSetGenericCharterContract();
 
 	/**
 	 * Returns the value of the '<em><b>Charter In Rate</b></em>' attribute.
