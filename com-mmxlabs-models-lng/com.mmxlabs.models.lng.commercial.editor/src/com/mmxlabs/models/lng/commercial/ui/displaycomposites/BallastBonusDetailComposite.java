@@ -50,6 +50,7 @@ public class BallastBonusDetailComposite extends BallastBonusTermsDetailComposit
 	@Override
 	protected boolean shouldDisplay(final EReference ref) {
 		return ref.isContainment() && !ref.isMany() && ref != CommercialPackage.eINSTANCE.getGenericCharterContract_StartHeel() 
+				&& ref != CommercialPackage.eINSTANCE.getGenericCharterContract_BallastBonusTerms() 
 				&& ref != CommercialPackage.eINSTANCE.getGenericCharterContract_RepositioningFeeTerms();
 	}
 
