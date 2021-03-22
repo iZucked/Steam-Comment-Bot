@@ -8,16 +8,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.edit.domain.EditingDomain;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.port.util.PortModelLabeller;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.tabular.manipulators.ValueListAttributeManipulator;
 
 public class RouteOptionAttributeManipulator extends ValueListAttributeManipulator {
-	public RouteOptionAttributeManipulator(final EAttribute field, final EditingDomain editingDomain) {
-		super(field, editingDomain, getValues());
+	public RouteOptionAttributeManipulator(final EAttribute field, final ICommandHandler commandHandler) {
+		super(field, commandHandler, getValues());
 	}
 
 	private static List<Pair<String, Object>> getValues() {

@@ -35,7 +35,7 @@ public class VesselsTradesBasedFilterHandler implements ITradesBasedFilterHandle
 			@Override
 			protected void populate(Menu menu) {
 				
-				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(viewer.getJointModelEditorPart().getScenarioDataProvider());
+				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(viewer.getScenarioEditingLocation().getScenarioDataProvider());
 				
 				List<Vessel> vessels = new LinkedList<>();
 				for (final Cargo c : cargoModel.getCargoes()) {

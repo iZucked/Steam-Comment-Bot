@@ -54,7 +54,7 @@ public class BallastBonusContractTableCreator {
 		eViewer.setSorter(null);
 		
 		eViewer.addTypicalColumn("Redelivery ports", new MultiplePortReferenceManipulator(CommercialPackage.eINSTANCE.getBallastBonusContractLine_RedeliveryPorts(), sel.getReferenceValueProviderCache(),
-				sel.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
+				commandHandler, MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
 
 			@Override
 			public void runSetCommand(final Object object, final Object value) {
@@ -67,7 +67,7 @@ public class BallastBonusContractTableCreator {
 
 		eViewer.addTypicalColumn("Lump sum ($)", new PriceAttributeManipulator(
 				CommercialPackage.eINSTANCE.getLumpSumBallastBonusContractLine_PriceExpression(),
-				sel.getEditingDomain()) {
+				commandHandler) {
 
 			protected EAttribute getAttribute(Object object) {
 				if (object instanceof LumpSumBallastBonusContractLine) {
@@ -100,7 +100,7 @@ public class BallastBonusContractTableCreator {
 			}
 		});
 
-		eViewer.addTypicalColumn("Speed", new NumericAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_Speed(), sel.getEditingDomain()) {
+		eViewer.addTypicalColumn("Speed", new NumericAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_Speed(), commandHandler) {
 
 			@Override
 			public void runSetCommand(final Object object, final Object value) {
@@ -150,7 +150,7 @@ public class BallastBonusContractTableCreator {
 		});
 
 		eViewer.addTypicalColumn("Notional return ports", new MultipleReferenceManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_ReturnPorts(),
-				sel.getReferenceValueProviderCache(), sel.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
+				sel.getReferenceValueProviderCache(), commandHandler, MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
 
 			@Override
 			public void runSetCommand(final Object object, final Object value) {
@@ -192,7 +192,7 @@ public class BallastBonusContractTableCreator {
 		});
 
 		eViewer.addTypicalColumn("Fuel Cost ($/MT)",
-				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_FuelPriceExpression(), sel.getEditingDomain()) {
+				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_FuelPriceExpression(), commandHandler) {
 
 					@Override
 					public void runSetCommand(final Object object, final Object value) {
@@ -234,7 +234,7 @@ public class BallastBonusContractTableCreator {
 				});
 
 		eViewer.addTypicalColumn("Hire Cost ($/day)",
-				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_HirePriceExpression(), sel.getEditingDomain()) {
+				new BasicAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_HirePriceExpression(), commandHandler) {
 
 					@Override
 					public void runSetCommand(final Object object, final Object value) {
@@ -275,7 +275,7 @@ public class BallastBonusContractTableCreator {
 
 				});
 
-		eViewer.addTypicalColumn("Include canal fees", new BooleanAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_IncludeCanal(), sel.getEditingDomain()) {
+		eViewer.addTypicalColumn("Include canal fees", new BooleanAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_IncludeCanal(), commandHandler) {
 
 			@Override
 			public void runSetCommand(final Object object, final Object value) {
@@ -317,7 +317,7 @@ public class BallastBonusContractTableCreator {
 		});
 
 
-		eViewer.addTypicalColumn("Include canal time", new BooleanAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_IncludeCanalTime(), sel.getEditingDomain()) {
+		eViewer.addTypicalColumn("Include canal time", new BooleanAttributeManipulator(CommercialPackage.eINSTANCE.getNotionalJourneyBallastBonusContractLine_IncludeCanalTime(), commandHandler) {
 
 			@Override
 			public void runSetCommand(final Object object, final Object value) {
@@ -358,7 +358,7 @@ public class BallastBonusContractTableCreator {
 		});
 
 		
-		eViewer.addTypicalColumn("Type", new BasicAttributeManipulator(null, sel.getEditingDomain()) {
+		eViewer.addTypicalColumn("Type", new BasicAttributeManipulator(null, commandHandler) {
 
 			@Override
 			public void runSetCommand(final Object object, final Object value) {

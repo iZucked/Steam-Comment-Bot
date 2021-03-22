@@ -31,7 +31,7 @@ public class LoadPortTradesBasedFilterHandler implements ITradesBasedFilterHandl
 			@Override
 			protected void populate(Menu menu) {
 
-				CargoModel cargoModel = ScenarioModelUtil.getCargoModel(viewer.getJointModelEditorPart().getScenarioDataProvider());
+				CargoModel cargoModel = ScenarioModelUtil.getCargoModel(viewer.getScenarioEditingLocation().getScenarioDataProvider());
 				
 				List<Port> actualLoads = new LinkedList<>();
 				for (Slot s : cargoModel.getLoadSlots()) {

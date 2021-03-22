@@ -39,6 +39,28 @@ public interface IRouteCostProvider extends IDataComponentProvider {
 	long getRouteCost(ERouteOption route, IPort from, IPort to, IVessel vessel, int voyageStartTime, CostType costType);
 
 	/**
+	 * Gets the cost in dollars incurred by vessels travelling via {@code route}
+	 * 
+	 * @param vessel
+	 *            the travelling vessel
+	 * @param costType
+	 *            the type of cost required
+	 * @return toll in dollars
+	 */
+	long getSuezRouteCost(IPort from, IPort to, IVessel vessel, int voyageStartTime, CostType costType);
+	
+	/**
+	 * Gets the cost in dollars incurred by vessels travelling via {@code route}
+	 * 
+	 * @param vessel
+	 *            the travelling vessel
+	 * @param costType
+	 *            the type of cost required
+	 * @return toll in dollars
+	 */
+	long getPanamaRouteCost(IVessel vessel, int voyageStartTime, CostType costType);
+
+	/**
 	 * Gets the extra fuel usage, in base-fuel-equivalent scaled MT per hour (see {@link Calculator#ScaleFactor}), required for vessels of class {@code vesselClass} to travel via {@code route} for the
 	 * given {@link VesselState}. The total fuel used is then this value multiplied by {@link #getRouteTransitTime(String, IVesselClass)}.
 	 * 

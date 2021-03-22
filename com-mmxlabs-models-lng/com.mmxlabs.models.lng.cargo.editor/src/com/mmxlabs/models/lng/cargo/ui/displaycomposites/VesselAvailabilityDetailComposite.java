@@ -73,7 +73,7 @@ public class VesselAvailabilityDetailComposite extends DefaultDetailComposite {
 					if (feature == CargoPackage.Literals.VESSEL_AVAILABILITY__START_AFTER) {
 						final Label label = editor.getLabel();
 						if (label != null) {
-							label.setText("After");
+							label.setText("After (UTC)");
 						}
 						editor.setLabel(null);
 					} else {
@@ -92,7 +92,7 @@ public class VesselAvailabilityDetailComposite extends DefaultDetailComposite {
 					if (feature == CargoPackage.Literals.VESSEL_AVAILABILITY__END_AFTER) {
 						final Label label = editor.getLabel();
 						if (label != null) {
-							label.setText("After");
+							label.setText("After (UTC)");
 						}
 						editor.setLabel(null);
 					} else {

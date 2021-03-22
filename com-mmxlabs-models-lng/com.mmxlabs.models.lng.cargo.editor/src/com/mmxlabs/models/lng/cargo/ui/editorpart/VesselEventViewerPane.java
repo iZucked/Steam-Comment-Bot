@@ -51,12 +51,10 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class VesselEventViewerPane extends ScenarioTableViewerPane {
 
-	private final IScenarioEditingLocation jointModelEditor;
 	private Iterable<IVesselEventsTableContextMenuExtension> contextMenuExtensions;
 
 	public VesselEventViewerPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
-		this.jointModelEditor = location;
 	}
 
 	@Override
@@ -78,14 +76,15 @@ public class VesselEventViewerPane extends ScenarioTableViewerPane {
 			}
 		});
 
-		addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), jointModelEditor.getEditingDomain()));
-		addTypicalColumn("Start after", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselEvent_StartAfter(), jointModelEditor.getEditingDomain()));
-		addTypicalColumn("Start by", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselEvent_StartBy(), jointModelEditor.getEditingDomain()));
-		addTypicalColumn("Port", new SingleReferenceManipulator(CargoPackage.eINSTANCE.getVesselEvent_Port(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain()));
-		addTypicalColumn("Duration", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getVesselEvent_DurationInDays(), jointModelEditor.getEditingDomain()));
-		addTypicalColumn("Vessel", new AssignmentManipulator(jointModelEditor));
-		addTypicalColumn("Allowed Vessels", new VesselEventVesselsManipulator(CargoPackage.eINSTANCE.getVesselEvent_AllowedVessels(), jointModelEditor.getReferenceValueProviderCache(),
-				jointModelEditor.getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
+		addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getCommandHandler()));
+		addTypicalColumn("Start after", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselEvent_StartAfter(), getCommandHandler()));
+		addTypicalColumn("Start by", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselEvent_StartBy(), getCommandHandler()));
+		addTypicalColumn("Port", new SingleReferenceManipulator(CargoPackage.eINSTANCE.getVesselEvent_Port(), getReferenceValueProviderCache(), getCommandHandler()));
+		addTypicalColumn("Duration", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getVesselEvent_DurationInDays(), getCommandHandler()));
+		addTypicalColumn("Vessel", new AssignmentManipulator(getScenarioEditingLocation()));
+		addTypicalColumn("Allowed Vessels", new VesselEventVesselsManipulator(CargoPackage.eINSTANCE.getVesselEvent_AllowedVessels(), getReferenceValueProviderCache(), getCommandHandler(),
+				MMXCorePackage.eINSTANCE.getNamedObject_Name()));
+
 		setTitle("Vessel Events", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 
 		final MenuManager mgr = new MenuManager();

@@ -55,13 +55,11 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class CustomPaperDealsPane extends ScenarioTableViewerPane {
 
-	private final IScenarioEditingLocation jointModelEditor;
 	private final SafeMMXContentAdapter dealSetsContentAdapter;
 	private final Set<PaperDeal> usedPaperDeals = new HashSet<>();
 
 	public CustomPaperDealsPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
-		this.jointModelEditor = location;
 		updatePaperDeals();
 		dealSetsContentAdapter = new SafeMMXContentAdapter() {
 
@@ -80,7 +78,7 @@ public class CustomPaperDealsPane extends ScenarioTableViewerPane {
 
 	public void updatePaperDeals() {
 		usedPaperDeals.clear();
-		final IScenarioDataProvider sdp = jointModelEditor.getScenarioDataProvider();
+		final IScenarioDataProvider sdp = scenarioEditingLocation.getScenarioDataProvider();
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
 		for (final DealSet dealSet : cargoModel.getDealSets()) {
 			usedPaperDeals.addAll(dealSet.getPaperDeals());
@@ -93,11 +91,11 @@ public class CustomPaperDealsPane extends ScenarioTableViewerPane {
 
 		addNameManipulator("Name");
 		addColumn("Side", createPaperDealTypeFormatter(), null);
-		addTypicalColumn("Start Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_StartDate(), jointModelEditor.getEditingDomain()));
-		addTypicalColumn("End Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_EndDate(), jointModelEditor.getEditingDomain()));
-		addTypicalColumn("Price", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Price(), jointModelEditor.getEditingDomain()));
-		addTypicalColumn("Index", new StringAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Index(), jointModelEditor.getEditingDomain()));
-		addTypicalColumn("Quantity", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Quantity(), jointModelEditor.getEditingDomain()));
+		addTypicalColumn("Start Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_StartDate(), getCommandHandler()));
+		addTypicalColumn("End Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_EndDate(), getCommandHandler()));
+		addTypicalColumn("Price", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Price(), getCommandHandler()));
+		addTypicalColumn("Index", new StringAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Index(), getCommandHandler()));
+		addTypicalColumn("Quantity", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getPaperDeal_Quantity(), getCommandHandler()));
 
 		setTitle("Paper", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 

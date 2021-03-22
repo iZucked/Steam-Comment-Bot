@@ -344,7 +344,7 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 						final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
 						editorLock.lock();
 						try {
-							getJointModelEditorPart().setDisableUpdates(true);
+							getScenarioEditingLocation().setDisableUpdates(true);
 							
 							if (getLastSelection() instanceof TreeSelection) {
 								final TreeSelection ts = (TreeSelection) getLastSelection();
@@ -384,7 +384,7 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 							}
 						} finally {
 							editorLock.unlock();
-							getJointModelEditorPart().setDisableUpdates(false);
+							getScenarioEditingLocation().setDisableUpdates(false);
 						}
 					}
 

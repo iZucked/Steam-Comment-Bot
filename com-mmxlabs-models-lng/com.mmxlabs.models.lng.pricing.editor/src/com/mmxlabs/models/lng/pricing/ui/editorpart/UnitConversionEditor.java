@@ -88,8 +88,8 @@ public class UnitConversionEditor extends Dialog {
 		viewer.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 		viewer.getGrid().setHeaderVisible(true);
 
-		viewer.addTypicalColumn("", new NumericAttributeManipulator(PricingPackage.Literals.UNIT_CONVERSION__FACTOR, scenarioEditingLocation.getEditingDomain()));
-		viewer.addTypicalColumn("", new BasicAttributeManipulator(PricingPackage.Literals.UNIT_CONVERSION__FROM, scenarioEditingLocation.getEditingDomain()));
+		viewer.addTypicalColumn("", new NumericAttributeManipulator(PricingPackage.Literals.UNIT_CONVERSION__FACTOR, scenarioEditingLocation.getDefaultCommandHandler()));
+		viewer.addTypicalColumn("", new BasicAttributeManipulator(PricingPackage.Literals.UNIT_CONVERSION__FROM, scenarioEditingLocation.getDefaultCommandHandler()));
 		viewer.addColumn("", new ICellRenderer() {
 
 			@Override
@@ -117,7 +117,7 @@ public class UnitConversionEditor extends Dialog {
 				return null;
 			}
 		}, null);
-		viewer.addTypicalColumn("", new BasicAttributeManipulator(PricingPackage.Literals.UNIT_CONVERSION__TO, scenarioEditingLocation.getEditingDomain()));
+		viewer.addTypicalColumn("", new BasicAttributeManipulator(PricingPackage.Literals.UNIT_CONVERSION__TO, scenarioEditingLocation.getDefaultCommandHandler()));
 
 		viewer.init(scenarioEditingLocation.getAdapterFactory(), scenarioEditingLocation.getModelReference(), PricingPackage.Literals.PRICING_MODEL__CONVERSION_FACTORS);
 

@@ -9,10 +9,10 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EEnum;
-import org.eclipse.emf.edit.domain.EditingDomain;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.commercial.ContractType;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.tabular.manipulators.ValueListAttributeManipulator;
 
 /**
@@ -21,8 +21,8 @@ import com.mmxlabs.models.ui.tabular.manipulators.ValueListAttributeManipulator;
  * @author hinton
  */
 public class ContractTypeEnumAttributeManipulator extends ValueListAttributeManipulator {
-	public ContractTypeEnumAttributeManipulator(final EAttribute field, final EditingDomain editingDomain) {
-		super(field, editingDomain, getValues((EEnum) field.getEAttributeType()));
+	public ContractTypeEnumAttributeManipulator(final EAttribute field, final ICommandHandler commandHandler) {
+		super(field, commandHandler, getValues((EEnum) field.getEAttributeType()));
 	}
 
 	private static List<Pair<String, Object>> getValues(final EEnum eenum) {

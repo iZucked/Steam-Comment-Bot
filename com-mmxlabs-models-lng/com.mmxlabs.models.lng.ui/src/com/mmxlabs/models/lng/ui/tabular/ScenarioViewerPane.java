@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.ui.EMFViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.rcp.common.SelectionHelper;
@@ -210,6 +211,10 @@ public abstract class ScenarioViewerPane extends EMFViewerPane {
 		return scenarioEditingLocation.getEditingDomain();
 	}
 
+	public ICommandHandler getCommandHandler() {
+		return scenarioEditingLocation.getDefaultCommandHandler();
+	}
+
 	public @NonNull AdapterFactory getAdapterFactory() {
 		return scenarioEditingLocation.getAdapterFactory();
 	}
@@ -218,7 +223,7 @@ public abstract class ScenarioViewerPane extends EMFViewerPane {
 		return scenarioEditingLocation.getReferenceValueProviderCache();
 	}
 
-	public @NonNull IScenarioEditingLocation getJointModelEditorPart() {
+	public @NonNull IScenarioEditingLocation getScenarioEditingLocation() {
 		return scenarioEditingLocation;
 	}
 

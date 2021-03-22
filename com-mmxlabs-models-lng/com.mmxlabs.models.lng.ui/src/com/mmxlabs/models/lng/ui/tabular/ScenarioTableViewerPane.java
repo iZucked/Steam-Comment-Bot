@@ -10,7 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -92,7 +91,7 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 					final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
 					editorLock.lock();
 					try {
-						getJointModelEditorPart().setDisableUpdates(true);
+						getScenarioEditingLocation().setDisableUpdates(true);
 						final ISelection sel = getLastSelection();
 						if (sel instanceof IStructuredSelection) {
 							final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
@@ -119,7 +118,7 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 						}
 					} finally {
 						editorLock.unlock();
-						getJointModelEditorPart().setDisableUpdates(false);
+						getScenarioEditingLocation().setDisableUpdates(false);
 					}
 				}
 
@@ -207,7 +206,7 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 	}
 
 	protected GridViewerColumn addNameManipulator(final String nameName) {
-		return addTypicalColumn(nameName, new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getEditingDomain()));
+		return addTypicalColumn(nameName, new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getCommandHandler()));
 	}
 
 	protected Action createAddAction(final EReference containment) {
@@ -262,7 +261,7 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 	 */
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
 		scenarioViewer.init(adapterFactory, modelReference, path.toArray(new EReference[path.size()]));
-		scenarioViewer.setStatusProvider(getJointModelEditorPart().getStatusProvider());
+		scenarioViewer.setStatusProvider(getScenarioEditingLocation().getStatusProvider());
 
 		final Grid table = scenarioViewer.getGrid();
 
@@ -317,7 +316,7 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 	 * @return
 	 */
 	protected @Nullable Action createDuplicateAction() {
-		final DuplicateAction result = new DuplicateAction(getJointModelEditorPart());
+		final DuplicateAction result = new DuplicateAction(getScenarioEditingLocation());
 		scenarioViewer.addSelectionChangedListener(result);
 		return result;
 	}

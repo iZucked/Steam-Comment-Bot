@@ -32,7 +32,7 @@ public interface ITradesColumnFactory {
 	public static final String DISCHARGE_WINDOW_GROUP = "TradesBasedColumnFactory.DISCHARGE_WINDOW_GROUP";
 	public static final String DISCHARGE_EXTRA_GROUP = "TradesBasedColumnFactory.DISCHARGE_EXTRA_GROUP";
 	public static final String DISCHARGE_END_GROUP = "TradesBasedColumnFactory.DISCHARGE_END_GROUP";
-	
+
 	public static final String CARGO_START_GROUP = "TradesBasedColumnFactory.CARGO_START_GROUP";
 	public static final String CARGO_END_GROUP = "TradesBasedColumnFactory.CARGO_END_GROUP";
 
@@ -74,6 +74,7 @@ public interface ITradesColumnFactory {
 		}
 		return false;
 	}
+
 	public static boolean isVesselColumn(String colname) {
 		return "com.mmxlabs.models.lng.cargo.editor.bulk.columns.TradesBasedColumnFactory.assignment".equals(colname);
 	}
@@ -83,6 +84,5 @@ public interface ITradesColumnFactory {
 	 * @param report
 	 *            TODO
 	 */
-	void registerColumn(final String columnID, final EMFReportColumnManager columnManager, IReferenceValueProviderProvider referenceValueProvider, EditingDomain editingDomain,
-			IScenarioEditingLocation editingLocation, EClass eclass, IAdaptable report);
+	void registerColumn(final String columnID, final EMFReportColumnManager columnManager, IScenarioEditingLocation editingLocation, EClass eclass, IAdaptable report);
 }

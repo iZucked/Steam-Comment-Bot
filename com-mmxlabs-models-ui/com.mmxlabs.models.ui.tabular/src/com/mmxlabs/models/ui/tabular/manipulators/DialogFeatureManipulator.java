@@ -5,12 +5,12 @@
 package com.mmxlabs.models.ui.tabular.manipulators;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
 /**
@@ -22,8 +22,8 @@ public abstract class DialogFeatureManipulator extends BasicAttributeManipulator
 	 * @param field
 	 * @param editingDomain
 	 */
-	public DialogFeatureManipulator(final EStructuralFeature field, final EditingDomain editingDomain) {
-		super(field, editingDomain);
+	public DialogFeatureManipulator(final EStructuralFeature field, final ICommandHandler commandHandler) {
+		super(field, commandHandler);
 	}
 
 	@Override

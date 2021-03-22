@@ -76,21 +76,28 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 			int lateness = getLateness(portModel, partialCaseRow, modelDistanceProvider);
 			if (lateness < 0) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
-						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row will create a late cargo", viewName)), IConstraintStatus.WARNING);
+						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row will create a late cargo", viewName)), IStatus.WARNING);
+				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
+				statuses.add(deco);
+			}
+			int voyageDuration = getVoyageDuration(portModel, partialCaseRow, modelDistanceProvider);
+			if ((voyageDuration / 24) > 60) {
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row has a large travel time", viewName)), IStatus.WARNING);
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 				statuses.add(deco);
 			}
 			boolean volume = getVolumeValid(partialCaseRow);
 			if (!volume) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
-						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row has mismatching volume limits", viewName)), IConstraintStatus.WARNING);
+						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row has mismatching volume limits", viewName)), IStatus.WARNING);
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 				statuses.add(deco);
 			}
 			boolean cv = getCVValid(partialCaseRow);
 			if (!cv) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
-						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row has mismatching cv limits", viewName)), IConstraintStatus.WARNING);
+						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row has mismatching cv limits", viewName)), IStatus.WARNING);
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 				statuses.add(deco);
 			}
@@ -98,15 +105,14 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 			if (!vesselPorts) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
 						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row uses a vessel that cannot visit the specified ports", viewName)),
-						IConstraintStatus.WARNING);
+						IStatus.WARNING);
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 				statuses.add(deco);
 			}
 			boolean ports = getPortRestrictionsValid(partialCaseRow);
 			if (!ports) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
-						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row has incompatible port restrictions", viewName)),
-						IConstraintStatus.WARNING);
+						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row has incompatible port restrictions", viewName)), IStatus.WARNING);
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS);
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS);
@@ -117,7 +123,7 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 			if (!vessels) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
 						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row uses a vessel that is restricted by the load slot", viewName)),
-						IConstraintStatus.WARNING);
+						IStatus.WARNING);
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 				statuses.add(deco);
 			}
@@ -143,6 +149,22 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 						if (lateness < 0) {
 							return lateness;
 						}
+					}
+				}
+			}
+		}
+		return 0;
+	}
+
+	private int getVoyageDuration(PortModel portModel, PartialCaseRow row, ModelDistanceProvider modelDistanceProvider) {
+		for (BuyOption buyOption : row.getBuyOptions()) {
+			for (SellOption sellOption : row.getSellOptions()) {
+				for (ShippingOption option : row.getShipping()) {
+					// test shipping only
+					if (AnalyticsBuilder.isFOBPurchase().test(buyOption) && AnalyticsBuilder.isDESSale().test(sellOption) && AnalyticsBuilder.isShipped(option)) {
+
+						return AnalyticsBuilder.calculateVoyageDurationInHours(buyOption, sellOption, portModel, AnalyticsBuilder.getVessel(option), modelDistanceProvider);
+
 					}
 				}
 			}

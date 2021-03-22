@@ -882,7 +882,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 					factory = ext.getFactory();
 				}
 				if (factory != null) {
-					factory.registerColumn(ext.getColumnID(), columnManager, getReferenceValueProviderCache(), getEditingDomain(), getJointModelEditorPart(), eclass, this);
+					factory.registerColumn(ext.getColumnID(), columnManager, getScenarioEditingLocation(), eclass, this);
 				}
 			}
 		}
@@ -1641,7 +1641,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 		 */
 		protected void populate(final Menu menu) {
 			{
-				final DuplicateAction result = new DuplicateAction(getJointModelEditorPart());
+				final DuplicateAction result = new DuplicateAction(getScenarioEditingLocation());
 				// Translate into real objects, not just row object!
 				final List<Object> selectedObjects = new LinkedList<>();
 				if (scenarioViewer.getSelection() instanceof IStructuredSelection) {
@@ -1724,7 +1724,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 						setCommands.forEach(c -> cmd.append(c));
 
 						commandStack.execute(cmd);
-						DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(getJointModelEditorPart(), newLoad, commandStack.getMostRecentCommand());
+						DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(getScenarioEditingLocation(), newLoad, commandStack.getMostRecentCommand());
 					}
 				};
 				addActionToMenu(newLoad, menu);
@@ -1741,7 +1741,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 						final CompoundCommand cmd = new CompoundCommand("DES Purchase");
 						setCommands.forEach(c -> cmd.append(c));
 						commandStack.execute(cmd);
-						DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(getJointModelEditorPart(), newLoad, commandStack.getMostRecentCommand());
+						DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(getScenarioEditingLocation(), newLoad, commandStack.getMostRecentCommand());
 					}
 				};
 				addActionToMenu(newDESPurchase, menu);
@@ -1759,7 +1759,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 						setCommands.forEach(c -> cmd.append(c));
 
 						commandStack.execute(cmd);
-						DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(getJointModelEditorPart(), newDischarge, commandStack.getMostRecentCommand());
+						DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(getScenarioEditingLocation(), newDischarge, commandStack.getMostRecentCommand());
 					}
 				};
 
@@ -1767,7 +1767,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 			}
 			{
 				final Action newFOBSale = new Action("FOB Sale") {
-					
+
 					@Override
 					public void run() {
 
@@ -1780,7 +1780,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 						setCommands.forEach(cmd::append);
 
 						commandStack.execute(cmd);
-						DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(getJointModelEditorPart(), newDischarge, commandStack.getMostRecentCommand());
+						DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(getScenarioEditingLocation(), newDischarge, commandStack.getMostRecentCommand());
 					}
 				};
 				addActionToMenu(newFOBSale, menu);

@@ -9,13 +9,13 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.edit.command.SetCommand;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 
 /**
  * Analog to {@link com.mmxlabs.shiplingo.ui.detailview.editors.ValueListInlineEditor}, but in column form.
@@ -29,8 +29,8 @@ public class ValueListAttributeManipulator<T> extends BasicAttributeManipulator 
 	protected final ArrayList<T> valueList;
 	protected final ArrayList<String> names;
 
-	public ValueListAttributeManipulator(final EAttribute field, final EditingDomain editingDomain, final List<Pair<String, T>> values) {
-		super(field, editingDomain);
+	public ValueListAttributeManipulator(final EAttribute field, final ICommandHandler commandHandler, final List<Pair<String, T>> values) {
+		super(field, commandHandler);
 		names = new ArrayList<>(values.size());
 		this.valueList = new ArrayList<>(values.size());
 		for (final Pair<String, T> pair : values) {

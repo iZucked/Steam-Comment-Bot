@@ -473,6 +473,27 @@ public class AnalyticsBuilder {
 		}
 		return 0;
 	}
+	
+	public static int calculateVoyageDurationInHours(final @Nullable BuyOption buyOption, final @Nullable SellOption sellOption, final PortModel portModel, final @Nullable Vessel vessel,
+			ModelDistanceProvider modelDistanceProvider) {
+		if (buyOption == null || sellOption == null) {
+			return 0;
+		}
+		final Port fromPort = AnalyticsBuilder.getPort(buyOption);
+		final Port toPort = AnalyticsBuilder.getPort(sellOption);
+		if (fromPort != null && toPort != null && vessel != null) {
+			
+			final ZonedDateTime windowStartDate = AnalyticsBuilder.getWindowStartDate(buyOption);
+			final ZonedDateTime windowEndDate = AnalyticsBuilder.getWindowEndDate(sellOption);
+			
+			if (windowStartDate != null && windowEndDate != null) {
+				int loadDuration = AnalyticsBuilder.getDuration(buyOption);
+				final int availableTime = Hours.between(windowStartDate, windowEndDate) - loadDuration;
+				return availableTime;
+			}
+ 		}
+		return 0;
+	}
 
 	public static ShippingType isNonShipped(@NonNull final PartialCaseRow row) {
 		if (row.getBuyOptions().isEmpty() || row.getSellOptions().isEmpty()) {

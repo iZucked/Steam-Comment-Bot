@@ -10,7 +10,6 @@ import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
-import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
