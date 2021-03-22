@@ -65,7 +65,7 @@ public class SellOptionsComponent extends AbstractSandboxComponent<Object, Abstr
 			}
 
 			final Label addSellButton = new Label(expandableComposite, SWT.NONE);
-			addSellButton.setImage(image_grey_add);
+			addSellButton.setImage(sandboxUIHelper.image_grey_add);
 			expandableComposite.setTextClient(addSellButton);
 			addSellButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).grab(true, false).create());
 			addSellButton.addMouseTrackListener(new MouseTrackListener() {
@@ -77,7 +77,7 @@ public class SellOptionsComponent extends AbstractSandboxComponent<Object, Abstr
 
 				@Override
 				public void mouseExit(final MouseEvent e) {
-					addSellButton.setImage(image_grey_add);
+					addSellButton.setImage(sandboxUIHelper.image_grey_add);
 				}
 
 				@Override
@@ -104,7 +104,7 @@ public class SellOptionsComponent extends AbstractSandboxComponent<Object, Abstr
 		GridViewerHelper.configureLookAndFeel(sellOptionsViewer);
 		sellOptionsViewer.getGrid().setHeaderVisible(false);
 
-		CellFormatterLabelProvider labelProvider = new BuysSellsLabelProvider(new SellOptionDescriptionFormatter(), validationErrors, "Sell");
+		CellFormatterLabelProvider labelProvider = new BuysSellsLabelProvider(sandboxUIHelper, new SellOptionDescriptionFormatter(), validationErrors, "Sell");
 		createColumn(sellOptionsViewer, labelProvider, "Sell", new SellOptionDescriptionFormatter(), false);
 
 		sellOptionsViewer.setContentProvider(new OptionsViewerContentProvider(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SELLS));

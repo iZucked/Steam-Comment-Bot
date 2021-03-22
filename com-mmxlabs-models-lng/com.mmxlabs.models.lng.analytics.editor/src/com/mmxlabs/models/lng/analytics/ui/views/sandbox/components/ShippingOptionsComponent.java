@@ -81,14 +81,14 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent<Object, A
 
 			final Label addShipping = new Label(expandableCompo, SWT.NONE);
 			expandableCompo.setTextClient(addShipping);
-			addShipping.setImage(image_grey_add);
+			addShipping.setImage(sandboxUIHelper.image_grey_add);
 
 			addShipping.setLayoutData(GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.BOTTOM).grab(true, false).create());
 			addShipping.addMouseTrackListener(new MouseTrackAdapter() {
 
 				@Override
 				public void mouseExit(final MouseEvent e) {
-					addShipping.setImage(image_grey_add);
+					addShipping.setImage(sandboxUIHelper.image_grey_add);
 				}
 
 				@Override
