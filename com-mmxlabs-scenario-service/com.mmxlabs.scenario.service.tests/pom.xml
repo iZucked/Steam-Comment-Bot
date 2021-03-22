@@ -6,11 +6,11 @@
 	<parent>
 		<artifactId>com.mmxlabs.scenario.service.parent</artifactId>
 		<groupId>com.mmxlabs.scenario.service</groupId>
-		<version>4.12.19-SNAPSHOT</version>
+		<version>4.12.19.RELEASE</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.scenario.service.tests</artifactId>
-	<version>4.12.19-SNAPSHOT</version>
+	<version>4.12.19.RELEASE</version>
 	<packaging>eclipse-test-plugin</packaging>
 	
 	<properties>
