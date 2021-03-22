@@ -19,12 +19,12 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
 
 public class VesselEventLabelProvider extends DefaultSandboxLabelProvider {
 
-	public VesselEventLabelProvider(final ICellRenderer renderer, Map<Object, IStatus> validationErrors, String name, final ETypedElement... pathObjects) {
-		super(renderer, validationErrors, name, pathObjects);
+	public VesselEventLabelProvider(SandboxUIHelper sandboxUIHelper, final ICellRenderer renderer, Map<Object, IStatus> validationErrors, String name, final ETypedElement... pathObjects) {
+		super(sandboxUIHelper, renderer, validationErrors, name, pathObjects);
 	}
 
-	public VesselEventLabelProvider(ICellRenderer renderer, Map<Object, IStatus> validationErrors, String name, @Nullable EMFPath path) {
-		super(renderer, validationErrors, name, path);
+	public VesselEventLabelProvider(SandboxUIHelper sandboxUIHelper, ICellRenderer renderer, Map<Object, IStatus> validationErrors, String name, @Nullable EMFPath path) {
+		super(sandboxUIHelper, renderer, validationErrors, name, path);
 	}
 
 	@Override
@@ -32,16 +32,9 @@ public class VesselEventLabelProvider extends DefaultSandboxLabelProvider {
 
 		if (validationErrors.containsKey(element)) {
 			final IStatus status = validationErrors.get(element);
-			if (!status.isOK()) {
-				if (status.matches(IStatus.ERROR)) {
-					return imgError;
-				}
-				if (status.matches(IStatus.WARNING)) {
-					return imgWarn;
-				}
-				if (status.matches(IStatus.INFO)) {
-					return imgWarn;
-				}
+			final Image img = sandboxUIHelper.getValidationImageForStatus(status);
+			if (img != null) {
+				return img;
 			}
 		}
 		return null;

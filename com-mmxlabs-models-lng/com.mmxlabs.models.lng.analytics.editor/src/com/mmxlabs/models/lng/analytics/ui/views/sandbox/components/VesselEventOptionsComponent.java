@@ -65,13 +65,13 @@ public class VesselEventOptionsComponent extends AbstractSandboxComponent<Object
 
 			final Label c = new Label(expandableComposite, SWT.NONE);
 			expandableComposite.setTextClient(c);
-			c.setImage(image_grey_add);
+			c.setImage(sandboxUIHelper.image_grey_add);
 			c.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).hint(16, 16).grab(true, false).create());
 			c.addMouseTrackListener(new MouseTrackAdapter() {
 
 				@Override
 				public void mouseExit(final MouseEvent e) {
-					c.setImage(image_grey_add);
+					c.setImage(sandboxUIHelper.image_grey_add);
 				}
 
 				@Override
@@ -97,7 +97,7 @@ public class VesselEventOptionsComponent extends AbstractSandboxComponent<Object
 
 		GridViewerHelper.configureLookAndFeel(optionsViewer);
 		optionsViewer.getGrid().setHeaderVisible(false);
-		CellFormatterLabelProvider labelProvider = new VesselEventLabelProvider(new VesselEventOptionDescriptionFormatter(), validationErrors, "Events");
+		CellFormatterLabelProvider labelProvider = new VesselEventLabelProvider(sandboxUIHelper, new VesselEventOptionDescriptionFormatter(), validationErrors, "Events");
 		createColumn(optionsViewer, labelProvider, "Events", new VesselEventOptionDescriptionFormatter(), false);
 
 		optionsViewer.setContentProvider(new OptionsViewerContentProvider(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__VESSEL_EVENTS));
