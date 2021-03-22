@@ -35,7 +35,7 @@ import com.mmxlabs.models.ui.NumberFormatterFactory.ExtendedLongFormatter;
 public class NumericAttributeManipulator extends BasicAttributeManipulator {
 
 	private final EDataType type;
-	private Object defaultValue;
+	protected Object defaultValue;
 
 	private NumberFormatter formatter;
 	private int scale = 1;

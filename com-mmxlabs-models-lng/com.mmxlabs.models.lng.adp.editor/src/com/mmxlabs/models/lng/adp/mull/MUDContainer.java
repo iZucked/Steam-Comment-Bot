@@ -18,23 +18,22 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.fleet.Vessel;
 
-
 public class MUDContainer {
 	private final BaseLegalEntity entity;
 	private long runningAllocation;
+	private final long initialAllocation;
 	private final double relativeEntitlement;
 	private int currentMonthAbsoluteEntitlement;
 	private final List<AllocationTracker> allocationTrackers = new LinkedList<>();
 
 	public MUDContainer(final MullEntityRow entityRow, final double allEntitiesWeight) {
-		this.relativeEntitlement = entityRow.getRelativeEntitlement()/allEntitiesWeight;
-		this.runningAllocation = Long.parseLong(entityRow.getInitialAllocation());
+		this.relativeEntitlement = entityRow.getRelativeEntitlement() / allEntitiesWeight;
+		this.initialAllocation = Long.parseLong(entityRow.getInitialAllocation());
+		this.runningAllocation = this.initialAllocation;
 		this.currentMonthAbsoluteEntitlement = (int) this.runningAllocation;
 		this.entity = entityRow.getEntity();
-		double totalWeight = IntStream.concat(
-				entityRow.getSalesContractAllocationRows().stream().mapToInt(SalesContractAllocationRow::getWeight),
-				entityRow.getDesSalesMarketAllocationRows().stream().mapToInt(DESSalesMarketAllocationRow::getWeight)
-			).sum();
+		double totalWeight = IntStream.concat(entityRow.getSalesContractAllocationRows().stream().mapToInt(SalesContractAllocationRow::getWeight),
+				entityRow.getDesSalesMarketAllocationRows().stream().mapToInt(DESSalesMarketAllocationRow::getWeight)).sum();
 		entityRow.getSalesContractAllocationRows().forEach(row -> allocationTrackers.add(new SalesContractTracker(row, totalWeight)));
 		entityRow.getDesSalesMarketAllocationRows().forEach(row -> allocationTrackers.add(new DESMarketTracker(row, totalWeight)));
 	}
@@ -43,14 +42,22 @@ public class MUDContainer {
 		return this.entity;
 	}
 
+	public double getRelativeEntitlement() {
+		return this.relativeEntitlement;
+	}
+
+	public long getInitialAllocation() {
+		return this.initialAllocation;
+	}
+
 	public void updateRunningAllocation(final Long additionalAllocation) {
-		final long localAbsoluteEntitlement = ((Double) (this.relativeEntitlement*additionalAllocation)).longValue();
+		final long localAbsoluteEntitlement = ((Double) (this.relativeEntitlement * additionalAllocation)).longValue();
 		this.runningAllocation += localAbsoluteEntitlement;
 		this.allocationTrackers.forEach(tracker -> tracker.updateRunningAllocation(localAbsoluteEntitlement));
 	}
 
 	public void updateCurrentMonthAbsoluteEntitlement(final int monthInToShare) {
-		this.currentMonthAbsoluteEntitlement += ((Double) (monthInToShare*this.relativeEntitlement)).intValue();
+		this.currentMonthAbsoluteEntitlement += ((Double) (monthInToShare * this.relativeEntitlement)).intValue();
 	}
 
 	public AllocationTracker calculateMUDAllocationTracker() {

@@ -74,7 +74,7 @@ public class DESSalesMarketAllocationRowComponentHelper extends BaseComponentHel
 	/**
 	 * Create the editor for the desSalesMarket feature on DESSalesMarketAllocationRow
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_desSalesMarketEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		IInlineEditor wrapped = ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.DES_SALES_MARKET_ALLOCATION_ROW__DES_SALES_MARKET);

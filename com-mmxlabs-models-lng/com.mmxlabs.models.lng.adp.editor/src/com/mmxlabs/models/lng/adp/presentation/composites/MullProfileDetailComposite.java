@@ -16,6 +16,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
@@ -24,7 +25,9 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.RemoveCommand;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
@@ -66,6 +69,7 @@ import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.editorpart.DefaultStatusProvider;
@@ -321,7 +325,16 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 
 		eViewer.addTypicalColumn("Entity", new ReadOnlyManipulatorWrapper<>(new SingleReferenceManipulator(ADPPackage.eINSTANCE.getMullEntityRow_Entity(), sel.getReferenceValueProviderCache(), sel.getEditingDomain())));
 		eViewer.addTypicalColumn("Initial Allocation", new BasicAttributeManipulator(ADPPackage.eINSTANCE.getMullEntityRow_InitialAllocation(), sel.getEditingDomain()));
-		eViewer.addTypicalColumn("Reference Entitlement", new NumericAttributeManipulator(ADPPackage.eINSTANCE.getMullEntityRow_RelativeEntitlement(), sel.getEditingDomain()));
+		eViewer.addTypicalColumn("Reference Entitlement", new NumericAttributeManipulator(ADPPackage.eINSTANCE.getMullEntityRow_RelativeEntitlement(), sel.getEditingDomain()) {
+			@Override
+			public void runSetCommand(final Object object, final Object value) {
+				if (value == null) {
+					super.runSetCommand(object, defaultValue);
+				} else {
+					super.runSetCommand(object, value);
+				}
+			}
+		});
 
 		eViewer.setStatusProvider(statusProvider);
 
