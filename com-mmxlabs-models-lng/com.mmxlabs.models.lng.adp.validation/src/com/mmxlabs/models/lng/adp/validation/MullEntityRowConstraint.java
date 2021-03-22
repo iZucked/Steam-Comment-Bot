@@ -59,10 +59,10 @@ public class MullEntityRowConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 			
-			if (mullEntityRow.getRelativeEntitlement() <= 0) {
+			if (mullEntityRow.getRelativeEntitlement() < 0) {
 				factory.copyName() //
 				.withObjectAndFeature(mullEntityRow, ADPPackage.Literals.MULL_ENTITY_ROW__RELATIVE_ENTITLEMENT) //
-				.withMessage("Reference entitlement must be greater than zero") //
+				.withMessage("Reference entitlement must be nonnegative") //
 				.make(ctx, statuses);
 			}
 			

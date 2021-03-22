@@ -74,7 +74,7 @@ public class SalesContractAllocationRowComponentHelper extends BaseComponentHelp
 	/**
 	 * Create the editor for the contract feature on SalesContractAllocationRow
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_contractEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		IInlineEditor wrapped = ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.SALES_CONTRACT_ALLOCATION_ROW__CONTRACT);
