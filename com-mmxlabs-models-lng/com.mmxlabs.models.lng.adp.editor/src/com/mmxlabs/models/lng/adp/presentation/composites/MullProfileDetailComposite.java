@@ -325,7 +325,16 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		eViewer.addTypicalColumn("Entity",
 				new ReadOnlyManipulatorWrapper<>(new SingleReferenceManipulator(ADPPackage.eINSTANCE.getMullEntityRow_Entity(), sel.getReferenceValueProviderCache(), sel.getDefaultCommandHandler())));
 		eViewer.addTypicalColumn("Initial Allocation", new BasicAttributeManipulator(ADPPackage.eINSTANCE.getMullEntityRow_InitialAllocation(), sel.getDefaultCommandHandler()));
-		eViewer.addTypicalColumn("Reference Entitlement", new NumericAttributeManipulator(ADPPackage.eINSTANCE.getMullEntityRow_RelativeEntitlement(), sel.getDefaultCommandHandler()));
+		eViewer.addTypicalColumn("Reference Entitlement", new NumericAttributeManipulator(ADPPackage.eINSTANCE.getMullEntityRow_RelativeEntitlement(), sel.getDefaultCommandHandler()) {
+			@Override
+			public void runSetCommand(final Object object, final Object value) {
+				if (value == null) {
+					super.runSetCommand(object, defaultValue);
+				} else {
+					super.runSetCommand(object, value);
+				}
+			}
+		});
 
 		eViewer.setStatusProvider(statusProvider);
 

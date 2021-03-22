@@ -92,7 +92,7 @@ public class RollingLoadWindow {
 	public boolean canLift(final int allocationDrop) {
 		if (this.endWindowVolume >= allocationDrop + this.endWindowTankMin) {
 			int localTankVolume = this.beforeWindowTankVolume;
-			final int localTailLoad = allocationDrop/this.loadDuration;
+			final int localTailLoad = allocationDrop / this.loadDuration;
 			final int localHeadLoad = localTailLoad + (allocationDrop % this.loadDuration);
 			final Iterator<InventoryDateTimeEvent> iter = this.frontWindow.iterator();
 			InventoryDateTimeEvent currentEvent = iter.next();
@@ -115,8 +115,8 @@ public class RollingLoadWindow {
 	}
 
 	private void startLoad(final int allocationDrop, final int duration) {
-		this.tailLoadVolume = allocationDrop/duration;
-		this.headLoadVolume = this.tailLoadVolume + (allocationDrop%duration);
+		this.tailLoadVolume = allocationDrop / duration;
+		this.headLoadVolume = this.tailLoadVolume + (allocationDrop % duration);
 		this.remainingLoadHours = duration;
 		this.currentLoadTime = duration;
 	}
@@ -129,7 +129,7 @@ public class RollingLoadWindow {
 		// Undo any partially active load unless it is a fixed load
 		final List<CargoBlueprint> cargoBluePrintsToUndo = new LinkedList<>();
 		if (!this.isLoadingExisting && this.remainingLoadHours > 0) {
-			final int volumeToRestore = this.headLoadVolume + (this.loadDuration - this.remainingLoadHours - 1)*this.tailLoadVolume;
+			final int volumeToRestore = this.headLoadVolume + (this.loadDuration - this.remainingLoadHours - 1) * this.tailLoadVolume;
 			cargoBluePrintsToUndo.add(generatedCargoBlueprints.removeLast());
 			this.beforeWindowTankVolume += volumeToRestore;
 			this.endWindowVolume += volumeToRestore;
@@ -143,11 +143,11 @@ public class RollingLoadWindow {
 		isLoadingExisting = true;
 
 		// Undo any generated cargoes that conflict with current fixed load
-		final int localTailLoad = expectedLoadAmount/duration;
+		final int localTailLoad = expectedLoadAmount / duration;
 		final int localHeadLoad = localTailLoad + (expectedLoadAmount % duration);
 		final int frontHourCount = Math.min(duration, this.loadDuration);
 		final int backHourCount = Math.max(0, duration - this.loadDuration);
-		while(!generatedCargoBlueprints.isEmpty() && !canHourlyLift(expectedLoadAmount, frontHourCount, backHourCount, localHeadLoad, localTailLoad)) {
+		while (!generatedCargoBlueprints.isEmpty() && !canHourlyLift(expectedLoadAmount, frontHourCount, backHourCount, localHeadLoad, localTailLoad)) {
 			final CargoBlueprint nextUndo = generatedCargoBlueprints.removeLast();
 			cargoBluePrintsToUndo.add(nextUndo);
 			final int volumeToRestore = nextUndo.getAllocatedVolume();

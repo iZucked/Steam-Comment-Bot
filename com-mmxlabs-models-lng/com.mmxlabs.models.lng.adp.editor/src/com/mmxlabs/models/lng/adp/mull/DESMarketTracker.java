@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.adp.mull;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.emf.common.command.Command;
 
@@ -16,8 +17,10 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditingCommands;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.TimePeriod;
@@ -27,7 +30,7 @@ public class DESMarketTracker extends AllocationTracker {
 	final DESSalesMarket salesMarket;
 
 	public DESMarketTracker(final DESSalesMarketAllocationRow allocationRow, final double totalWeight) {
-		super(allocationRow.getWeight()/totalWeight, allocationRow.getVessels());
+		super(allocationRow, totalWeight);
 		this.salesMarket = allocationRow.getDesSalesMarket();
 	}
 
@@ -36,12 +39,17 @@ public class DESMarketTracker extends AllocationTracker {
 		return this.sharesVessels ? super.calculateExpectedBoiloff(vessel, loadDuration) : 0;
 	}
 
+	public DESSalesMarket getDESSalesMarket() {
+		return this.salesMarket;
+	}
+
 	@Override
-	public DischargeSlot createDischargeSlot(final CargoEditingCommands cec, List<Command> setCommands, final CargoModel cargoModel, final IScenarioDataProvider sdp, final LoadSlot loadSlot, final Vessel vessel) {
+	public DischargeSlot createDischargeSlot(final CargoEditingCommands cec, List<Command> setCommands, final CargoModel cargoModel, final IScenarioDataProvider sdp, final LoadSlot loadSlot,
+			final Vessel vessel, final Map<Vessel, VesselAvailability> vesselToVA, final LNGScenarioModel sm) {
 		final DischargeSlot dischargeSlot;
 		if (this.sharesVessels) {
 			dischargeSlot = cec.createNewSpotDischarge(setCommands, cargoModel, this.salesMarket);
-			final LocalDate dischargeDate = AllocationTracker.calculateDischargeDate(loadSlot, dischargeSlot, vessel, sdp);
+			final LocalDate dischargeDate = AllocationTracker.calculateDischargeDate(loadSlot, dischargeSlot, vessel, sdp, vesselToVA, sm);
 			dischargeSlot.setWindowStart(dischargeDate);
 			dischargeSlot.setWindowStartTime(0);
 			dischargeSlot.setWindowSize(1);
