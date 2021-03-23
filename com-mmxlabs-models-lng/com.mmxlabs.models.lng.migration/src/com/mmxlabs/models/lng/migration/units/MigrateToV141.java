@@ -57,7 +57,6 @@ public class MigrateToV141 extends AbstractMigrationUnit {
 		processVesselAvailabilities(commercialPackage, cargoModel, charterContracts);
 		clearUpCommercialModel(commercialPackage, commercialModel);
 		clearUpScheduleModel(scheduleModel, schedulePackage);
-				
 	}
 
 
