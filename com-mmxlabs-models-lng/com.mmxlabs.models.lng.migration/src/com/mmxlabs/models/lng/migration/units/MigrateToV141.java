@@ -55,40 +55,12 @@ public class MigrateToV141 extends AbstractMigrationUnit {
 		final Map<EObjectWrapper, EObjectWrapper> charterContracts = migrateCharterContracts(commercialPackage, commercialModel);
 		processCharterMarkets(spotMarketModel, charterContracts);
 		processVesselAvailabilities(commercialPackage, cargoModel, charterContracts);
-		unsetOldCharterContracts(commercialPackage, commercialModel);
-		
-		{
-			final EClass class_ProfitAndLossContainer = MetamodelUtils.getEClass(schedulePackage, "ProfitAndLossContainer");
-			final EClass class_BallastBonusFeeDetails = MetamodelUtils.getEClass(schedulePackage, "BallastBonusFeeDetails");
-			
-			final EObjectWrapper schedule = scheduleModel.getRef("schedule");
-			if (schedule != null) {
-				final List<EObjectWrapper> sequences = schedule.getRefAsList("sequences");
-				if (sequences != null) {
-					for (final EObjectWrapper sequence : sequences) {
-						final List<EObjectWrapper> events = sequence.getRefAsList("events");
-						if (events != null) {
-							for (final EObjectWrapper event : events) {
-								if(class_ProfitAndLossContainer.isInstance(event)) {
-									final List<EObjectWrapper> generalPNLDetails = event.getRefAsList("generalPNLDetails");
-									if (generalPNLDetails != null) {
-										final Iterator iter = generalPNLDetails.iterator();
-										while(iter.hasNext()) {
-											final Object eo = iter.next();
-											if (class_BallastBonusFeeDetails.isInstance(eo)) {
-												iter.remove();
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
+		clearUpCommercialModel(commercialPackage, commercialModel);
+		clearUpScheduleModel(scheduleModel, schedulePackage);
 				
 	}
+
+
 	
 	private Map<EObjectWrapper, EObjectWrapper> migrateCharterContracts(final EPackage commercialPackage, final EObjectWrapper commercialModel) {
 		final Map<EObjectWrapper, EObjectWrapper> map = new HashMap<>();
@@ -113,7 +85,7 @@ public class MigrateToV141 extends AbstractMigrationUnit {
 		return map;
 	}
 	
-	private void unsetOldCharterContracts(final EPackage commercialPackage, final EObjectWrapper commercialModel) {
+	private void clearUpCommercialModel(final EPackage commercialPackage, final EObjectWrapper commercialModel) {
 		final EClass class_BallastBonusCharterContract = MetamodelUtils.getEClass(commercialPackage, "BallastBonusCharterContract");
 		final List<EObjectWrapper> oldCharteringContracts = commercialModel.getRefAsList("charteringContracts");
 
@@ -128,6 +100,37 @@ public class MigrateToV141 extends AbstractMigrationUnit {
 		}
 		
 		commercialModel.unsetFeature("charteringContracts");
+	}
+	
+	private void clearUpScheduleModel(final EObjectWrapper scheduleModel, final EPackage schedulePackage) {
+		final EClass class_ProfitAndLossContainer = MetamodelUtils.getEClass(schedulePackage, "ProfitAndLossContainer");
+		final EClass class_BallastBonusFeeDetails = MetamodelUtils.getEClass(schedulePackage, "BallastBonusFeeDetails");
+
+		final EObjectWrapper schedule = scheduleModel.getRef("schedule");
+		if (schedule != null) {
+			final List<EObjectWrapper> sequences = schedule.getRefAsList("sequences");
+			if (sequences != null) {
+				for (final EObjectWrapper sequence : sequences) {
+					final List<EObjectWrapper> events = sequence.getRefAsList("events");
+					if (events != null) {
+						for (final EObjectWrapper event : events) {
+							if(class_ProfitAndLossContainer.isInstance(event)) {
+								final List<EObjectWrapper> generalPNLDetails = event.getRefAsList("generalPNLDetails");
+								if (generalPNLDetails != null) {
+									final Iterator iter = generalPNLDetails.iterator();
+									while(iter.hasNext()) {
+										final Object eo = iter.next();
+										if (class_BallastBonusFeeDetails.isInstance(eo)) {
+											iter.remove();
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	private EObjectWrapper createCharterContract(final EObjectWrapper oldCharterContract, final EPackage commercialPackage) {
