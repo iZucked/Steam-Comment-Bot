@@ -936,22 +936,6 @@
                   </target>
                </constraint>
                <constraint
-                     class="com.mmxlabs.models.lng.cargo.validation.RepositioningFeeConstraint"
-                     id="com.mmxlabs.models.lng.cargo.validation.RepositioningFeeConstraint"
-                     isEnabledByDefault="true"
-                     lang="java"
-                     mode="Batch"
-                     name="RepositioningFeeConstraint"
-                     severity="ERROR"
-                     statusCode="1">
-                  <message>
-                     {0}
-                  </message>
-                  <target
-                        class="VesselAvailability">
-                  </target>
-               </constraint>
-               <constraint
                      class="com.mmxlabs.models.lng.cargo.validation.SlotNameUniquenessConstraint"
                      id="com.mmxlabs.models.lng.cargo.validation.SlotNameUniquenessConstraint"
                      isEnabledByDefault="true"

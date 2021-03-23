@@ -20,4 +20,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.models.lng.commercial.validation
 Automatic-Module-Name: com.mmxlabs.models.lng.commercial.validation
-Import-Package: com.mmxlabs.models.lng.scenario.model
+Import-Package: com.mmxlabs.models.lng.scenario.model,
+ com.mmxlabs.models.lng.scenario.model.util
