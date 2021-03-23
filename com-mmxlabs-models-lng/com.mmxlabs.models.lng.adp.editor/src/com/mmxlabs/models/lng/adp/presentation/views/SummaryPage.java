@@ -57,6 +57,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 
 public class SummaryPage extends ADPComposite {
@@ -131,20 +132,20 @@ public class SummaryPage extends ADPComposite {
 						profiles.add(null);
 						Object[] profileObjects = profiles.toArray();
 						profiles.removeLast();
-						profileObjects[profileObjects.length-1] = profiles;
+						profileObjects[profileObjects.length - 1] = profiles;
 						return profileObjects;
 					}
 					return super.getElements(inputElement);
 				}
 			});
-			
+
 			createColumn(purchasesViewer, "Contract", (profile) -> profile.getContract() == null ? "<unknown>" : profile.getContract().getName());
 			createColumn(purchasesViewer, "Generated cargoes", (profile) -> {
-					final long generatedCargoes = editorData.getScenarioModel().getCargoModel().getLoadSlots().stream() //
-							.filter(s -> profile.getContract() == s.getContract()).count();
-					return Long.toString(generatedCargoes);
-				});
-			
+				final long generatedCargoes = editorData.getScenarioModel().getCargoModel().getLoadSlots().stream() //
+						.filter(s -> profile.getContract() == s.getContract()).count();
+				return Long.toString(generatedCargoes);
+			});
+
 			createColumn(purchasesViewer, "Max cargoes", (profile) -> {
 				final List<LoadSlot> slots = editorData.getScenarioModel().getCargoModel().getLoadSlots();
 				final PurchaseContractProfile purchaseProfile = (PurchaseContractProfile) profile;
@@ -176,7 +177,7 @@ public class SummaryPage extends ADPComposite {
 						profiles.add(null);
 						Object[] profileObjects = profiles.toArray();
 						profiles.removeLast();
-						profileObjects[profileObjects.length-1] = profiles;
+						profileObjects[profileObjects.length - 1] = profiles;
 						return profileObjects;
 					}
 					return super.getElements(inputElement);
@@ -188,7 +189,7 @@ public class SummaryPage extends ADPComposite {
 				final long generatedCargoes = editorData.getScenarioModel().getCargoModel().getDischargeSlots().stream() //
 						.filter(s -> profile.getContract() == s.getContract()).count();
 				return Long.toString(generatedCargoes);
-				});
+			});
 			createColumn(salesViewer, "Max cargoes", (profile) -> {
 				final List<DischargeSlot> slots = editorData.getScenarioModel().getCargoModel().getDischargeSlots();
 				final SalesContractProfile salesProfile = (SalesContractProfile) profile;
@@ -240,7 +241,7 @@ public class SummaryPage extends ADPComposite {
 						if (currentBound == null) {
 							variableBounds.put(ym, 1L);
 						} else {
-							variableBounds.put(ym, currentBound+1L);
+							variableBounds.put(ym, currentBound + 1L);
 						}
 					});
 			final Long solverBound = calculateConstrainedProfileBound(variableBounds, constraints);
@@ -253,7 +254,7 @@ public class SummaryPage extends ADPComposite {
 		}
 		return maxCargoes;
 	}
-	
+
 	private long calculateNaiveSummaryBound(final Map<YearMonth, Long> variableBounds, final List<ProfileConstraint> constraints, final ADPPeriod adpPeriod) {
 		Long fullCoverBound = Long.MAX_VALUE;
 		for (final ProfileConstraint constraint : constraints) {
@@ -298,12 +299,8 @@ public class SummaryPage extends ADPComposite {
 
 	@Override
 	public void refresh() {
-		if (purchasesViewer != null) {
-			purchasesViewer.refresh();
-		}
-		if (salesViewer != null) {
-			salesViewer.refresh();
-		}
+		ViewerHelper.refresh(purchasesViewer, false);
+		ViewerHelper.refresh(salesViewer, false);
 	}
 
 	@Override
@@ -369,8 +366,8 @@ public class SummaryPage extends ADPComposite {
 						if (profiles.isEmpty())
 							return "0";
 						if (name.equals("Generated cargoes")) {
-							final Set<Contract> contractsOfInterest = profiles.stream().map(p-> (ContractProfile<?,?>) p).map(ContractProfile::getContract).collect(Collectors.toSet());
-							final ContractProfile<?,?> firstProfile = (ContractProfile<?,?>) profiles.get(0);
+							final Set<Contract> contractsOfInterest = profiles.stream().map(p -> (ContractProfile<?, ?>) p).map(ContractProfile::getContract).collect(Collectors.toSet());
+							final ContractProfile<?, ?> firstProfile = (ContractProfile<?, ?>) profiles.get(0);
 							final long generatedCargoes;
 							if (firstProfile instanceof PurchaseContractProfile) {
 								generatedCargoes = editorData.getScenarioModel().getCargoModel().getLoadSlots().stream() //
@@ -381,7 +378,7 @@ public class SummaryPage extends ADPComposite {
 							}
 							return Long.toString(generatedCargoes);
 						} else {
-							final ContractProfile<?,?> firstProfile = (ContractProfile<?,?>) profiles.get(0);
+							final ContractProfile<?, ?> firstProfile = (ContractProfile<?, ?>) profiles.get(0);
 							final Long maxCargoesTotal;
 							if (firstProfile instanceof PurchaseContractProfile) {
 								final List<LoadSlot> slots = editorData.getScenarioModel().getCargoModel().getLoadSlots();
@@ -400,7 +397,7 @@ public class SummaryPage extends ADPComposite {
 		col.getColumn().setWidth(100);
 		col.getColumn().setText(name);
 	}
-	
+
 	private Long calculateConstrainedProfileBound(final Map<YearMonth, Long> variableBounds, final List<ProfileConstraint> constraints) {
 		Object solver = createSolver();
 		if (solver != null) {
@@ -429,7 +426,7 @@ public class SummaryPage extends ADPComposite {
 		}
 		return null;
 	}
-	
+
 	private void buildProblem(MPSolver solver, Map<YearMonth, Long> variableBounds, final List<ProfileConstraint> constraints) {
 		final HashMap<YearMonth, MPVariable> dateToMPVarMap = new HashMap<>();
 		MPObjective obj = solver.objective();
@@ -439,7 +436,7 @@ public class SummaryPage extends ADPComposite {
 			dateToMPVarMap.put(ym, mpVar);
 			obj.setCoefficient(mpVar, 1);
 		});
-		
+
 		for (final ProfileConstraint constraint : constraints) {
 			if (constraint instanceof PeriodDistributionProfileConstraint) {
 				((PeriodDistributionProfileConstraint) constraint).getDistributions().stream() //
@@ -501,7 +498,7 @@ public class SummaryPage extends ADPComposite {
 			this.adpStart = adpModel.getYearStart();
 			final YearMonth adpEnd = adpModel.getYearEnd();
 			Period p = Period.between(this.adpStart.atDay(1), adpEnd.atDay(1));
-			this.monthCount = 12*p.getYears() + p.getMonths();
+			this.monthCount = 12 * p.getYears() + p.getMonths();
 			this.adpInclusiveEnd = adpEnd.minusMonths(1);
 		}
 
