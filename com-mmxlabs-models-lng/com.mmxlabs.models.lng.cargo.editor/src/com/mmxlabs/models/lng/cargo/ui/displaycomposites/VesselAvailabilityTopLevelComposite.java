@@ -101,7 +101,6 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 		repositioningFeeComposite.setCommandHandler(commandHandler);
 		repositioningFeeComposite.display(dialogContext, root, object, range, dbc);
 		
-		
 		Composite bottomComposite = toolkit.createComposite(this, SWT.NONE);
 		bottomComposite.setLayout(new GridLayout(1, true));
 		bottomComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -194,12 +193,6 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 			}
 			return String.format("%s_%s_%d", type, va.getVessel().getName(), va.getCharterNumber());
 		}
-	}
-	
-	@Override
-	public void dispose() {
-		
-		super.dispose();
 	}
 	
 }
