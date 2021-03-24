@@ -186,9 +186,7 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 							}
 							missingDistances.addAll(distanceChecker.apply(redeliveryPorts, returnPorts));
 						}
-
 					}
-					
 				}
 
 				// Remove common ports from group as we will pick the common port and not travels

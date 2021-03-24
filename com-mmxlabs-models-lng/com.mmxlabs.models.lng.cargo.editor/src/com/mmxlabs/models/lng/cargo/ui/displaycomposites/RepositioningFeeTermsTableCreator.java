@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
+import java.awt.Graphics;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
@@ -15,18 +17,20 @@ import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.nebula.jface.gridviewer.GridViewerEditor;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
@@ -34,7 +38,6 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.commercial.IRepositioningFee;
 import com.mmxlabs.models.lng.commercial.LumpSumRepositioningFeeTerm;
-import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusTerm;
 import com.mmxlabs.models.lng.commercial.OriginPortRepositioningFeeTerm;
 import com.mmxlabs.models.lng.commercial.RepositioningFeeTerm;
 import com.mmxlabs.models.lng.port.ui.editorpart.TextualPortSingleReferenceManipulatorExtension;
@@ -54,6 +57,10 @@ public class RepositioningFeeTermsTableCreator {
 	public static EObjectTableViewer createRepositioningFeeTable(final Composite parent, final FormToolkit toolkit, final IDialogEditingContext dialogContext, final ICommandHandler commandHandler,
 			final GenericCharterContract charterContract, final IStatusProvider statusProvider, final Runnable sizeChangedAction) {
 		final IScenarioEditingLocation sel = dialogContext.getScenarioEditingLocation();
+		
+		final Label label = toolkit.createLabel(parent, "Repositioning Fee");
+		label.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
+		
 		final EObjectTableViewer eViewer = new EObjectTableViewer(parent, SWT.FULL_SELECTION);
 		eViewer.setStatusProvider(statusProvider);
 		eViewer.setAutoResizeable(false);
@@ -364,16 +371,19 @@ public class RepositioningFeeTermsTableCreator {
 		table.setLayoutData(gridData);
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
+		
+		final Composite bottomOne = toolkit.createComposite(parent);
+		final GridData bottomOneGridData = GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).create();
+		bottomOne.setLayoutData(bottomOneGridData);
+		final GridLayout bottomOneLayout = new GridLayout(4, false);
+		bottomOne.setLayout(bottomOneLayout);
+		bottomOneLayout.marginHeight = 0;
+		bottomOneLayout.marginWidth = 0;
+		
+		final Label addRuleLabel = toolkit.createLabel(bottomOne, "Add rule: ");
+		addRuleLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
 
-		final Composite buttons = toolkit.createComposite(parent);
-
-		buttons.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, false, false));
-		final GridLayout buttonLayout = new GridLayout(3, false);
-		buttons.setLayout(buttonLayout);
-		buttonLayout.marginHeight = 0;
-		buttonLayout.marginWidth = 0;
-
-		final Button addLumpSumRule = toolkit.createButton(buttons, "Add lump sum rule", SWT.NONE);
+		final Button addLumpSumRule = toolkit.createButton(bottomOne, "Lump sum", SWT.NONE);
 		addLumpSumRule.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 
 		addLumpSumRule.addSelectionListener(new SelectionAdapter() {
@@ -391,7 +401,7 @@ public class RepositioningFeeTermsTableCreator {
 			}
 		});
 		
-		final Button addOriginPortRule = toolkit.createButton(buttons, "Add origin port rule", SWT.NONE);
+		final Button addOriginPortRule = toolkit.createButton(bottomOne, "Notional journey", SWT.NONE);
 		addOriginPortRule.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 
 		addOriginPortRule.addSelectionListener(new SelectionAdapter() {
@@ -408,9 +418,8 @@ public class RepositioningFeeTermsTableCreator {
 			}
 		});
 		
-		final Button remove = toolkit.createButton(buttons, "Remove", SWT.NONE);
-		remove.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
-
+		final Button remove = toolkit.createButton(bottomOne, "Remove", SWT.NONE);
+		remove.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, true, false));
 		remove.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {

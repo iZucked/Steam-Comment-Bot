@@ -64,13 +64,13 @@ public class StartHeelOptionsComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editors for features on this class directly, and superclass' features.
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_cvValueEditor(detailComposite, topClass);
 		add_minVolumeAvailableEditor(detailComposite, topClass);
+		add_cvValueEditor(detailComposite, topClass);
 		add_maxVolumeAvailableEditor(detailComposite, topClass);
 		add_priceExpressionEditor(detailComposite, topClass);
 	}

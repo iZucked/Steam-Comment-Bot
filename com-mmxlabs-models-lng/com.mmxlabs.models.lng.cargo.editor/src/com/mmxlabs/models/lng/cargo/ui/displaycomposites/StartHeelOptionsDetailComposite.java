@@ -31,7 +31,24 @@ public class StartHeelOptionsDetailComposite extends DefaultDetailComposite {
 
 			@Override
 			public Layout createDetailLayout(final MMXRootObject root, final EObject value) {
-				return new GridLayout(2, false);
+				return new GridLayout(7, false);
+			}
+			
+			@Override
+			public Object createEditorLayoutData(final MMXRootObject root, final EObject value, final IInlineEditor editor, final Control control) {
+				
+				final EStructuralFeature feature = editor.getFeature();
+				if (feature == CommercialPackage.Literals.START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE 
+						|| feature == CommercialPackage.Literals.START_HEEL_OPTIONS__MIN_VOLUME_AVAILABLE) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					gd.minimumWidth = 64;
+					gd.horizontalSpan = 3;
+					return gd;
+				}
+				
+				GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+				gd.horizontalSpan = 2;
+				return gd;
 			}
 		};
 	}

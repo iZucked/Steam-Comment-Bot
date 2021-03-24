@@ -74,18 +74,13 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 		topLevel.setEditorWrapper(editorWrapper);
 		topLevel.display(dialogContext, root, object, range, dbc);
 		
-		final Button bbButton = toolkit.createButton(topLevel.getComposite(), "Override Charter Contract", SWT.CENTER);
-		bbButton.addMouseListener(new CharterContractMouseListener(object));
-		
 		IDisplayComposite topRight = new VesselAvailabilityDetailComposite(g, SWT.NONE, toolkit, VesselAvailabilityDetailGroup.TOP_RIGHT);
 		topRight.setCommandHandler(commandHandler);
 		topRight.setEditorWrapper(editorWrapper);
 		topRight.display(dialogContext, root, object, range, dbc);
 		
-		IDisplayComposite topRightExtra = new VesselAvailabilityDetailComposite(topRight.getComposite(), SWT.NONE, toolkit, VesselAvailabilityDetailGroup.TOP_RIGHT_EXTRA);
-		topRightExtra.setCommandHandler(commandHandler);
-		topRightExtra.setEditorWrapper(editorWrapper);
-		topRightExtra.display(dialogContext, root, object, range, dbc);
+		final Button bbButton = toolkit.createButton(topRight.getComposite(), "Override", SWT.CENTER);
+		bbButton.addMouseListener(new CharterContractMouseListener(object));
 
 		Composite midComposite = toolkit.createComposite(this, SWT.NONE);
 		midComposite.setLayout(new GridLayout(1, true));
@@ -200,4 +195,11 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 			return String.format("%s_%s_%d", type, va.getVessel().getName(), va.getCharterNumber());
 		}
 	}
+	
+	@Override
+	public void dispose() {
+		
+		super.dispose();
+	}
+	
 }

@@ -67,7 +67,7 @@ public class VesselAvailabilityDetailComposite extends DefaultDetailComposite {
 		}
 		
 		if (editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_GenericCharterContract()) {
-			cdg = VesselAvailabilityDetailGroup.TOP_RIGHT_EXTRA;
+			cdg = VesselAvailabilityDetailGroup.TOP_LEFT;
 		}
 
 		// Here the exceptions are listed for the elements which should go into the middle composite
@@ -167,7 +167,7 @@ public class VesselAvailabilityDetailComposite extends DefaultDetailComposite {
 					return gd;
 				}
 
-				if (feature == CargoPackage.Literals.VESSEL_AVAILABILITY__MIN_DURATION|| feature == CargoPackage.Literals.VESSEL_AVAILABILITY__MAX_DURATION) {
+				if (feature == CargoPackage.Literals.VESSEL_AVAILABILITY__MIN_DURATION || feature == CargoPackage.Literals.VESSEL_AVAILABILITY__MAX_DURATION) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 
 					if (feature == CargoPackage.Literals.VESSEL_AVAILABILITY__MIN_DURATION) {
@@ -187,7 +187,18 @@ public class VesselAvailabilityDetailComposite extends DefaultDetailComposite {
 					return gd;
 				}
 
-				
+//				if (feature == CargoPackage.Literals.VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT) {
+//					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+//
+//					if (feature == CargoPackage.Literals.VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT) {
+//						final Label label = editor.getLabel();
+//						if (label != null) {
+//							label.setText("Charter contract");
+//						}
+//						editor.setLabel(null);
+//					}
+//					return gd;
+//				}
 				
 				// Anything else needs to fill the space.
 				GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);

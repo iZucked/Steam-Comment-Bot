@@ -62,13 +62,13 @@ public class EndHeelOptionsComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editors for features on this class directly, and superclass' features.
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_tankStateEditor(detailComposite, topClass);
 		add_minimumEndHeelEditor(detailComposite, topClass);
+		add_tankStateEditor(detailComposite, topClass);
 		add_maximumEndHeelEditor(detailComposite, topClass);
 		add_useLastHeelPriceEditor(detailComposite, topClass);
 		add_priceExpressionEditor(detailComposite, topClass);

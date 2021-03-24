@@ -32,10 +32,10 @@ import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContainer;
+import com.mmxlabs.models.lng.commercial.SimpleBallastBonusContainer;
 import com.mmxlabs.models.lng.port.ui.editors.PortMultiReferenceInlineEditor;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.DefaultStatusProvider;
-import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
@@ -93,32 +93,29 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 		endHeelComposite.setLayout(layout);
 		endHeelComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		endHeelComposite.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-
-		Composite bottomComposite = toolkit.createComposite(this, SWT.NONE);
-		GridLayout gridLayoutCheckbox = new GridLayout(3, false);
-		bottomComposite.setLayout(gridLayoutCheckbox);
-		GridData gridDataCheckbox = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
-		gridDataCheckbox.horizontalSpan = 2;
-		bottomComposite.setLayoutData(gridDataCheckbox);
 		
-		ballastBonusCombobox = new Combo(bottomComposite, SWT.NONE);
-		ballastBonusCombobox.setItems(MONTHLY, NOTIONAL_JOURNEY);
-		ballastBonusCombobox.setText("Change Type...");
-		ballastBonusCombobox.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				changeBallastBonusType();
-			}
+		if (LicenseFeatures.isPermitted("features:monthly-ballast-bonus")) {
+			Composite bottomComposite = toolkit.createComposite(this, SWT.NONE);
+			GridLayout gridLayoutCheckbox = new GridLayout(3, false);
+			bottomComposite.setLayout(gridLayoutCheckbox);
+			GridData gridDataCheckbox = new GridData(SWT.FILL, SWT.BEGINNING, true, false);
+			gridDataCheckbox.horizontalSpan = 2;
+			bottomComposite.setLayoutData(gridDataCheckbox);
 
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				//Do nothing.
-			}
-		});
-		
-		if (!LicenseFeatures.isPermitted("features:monthly-ballast-bonus")) {
-			ballastBonusCombobox.setVisible(false);
-			ballastBonusCombobox.setEnabled(false);
+			ballastBonusCombobox = new Combo(bottomComposite, SWT.NONE);
+			ballastBonusCombobox.setItems(MONTHLY, NOTIONAL_JOURNEY);
+			ballastBonusCombobox.setText("Change Type...");
+			ballastBonusCombobox.addSelectionListener(new SelectionListener() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					changeBallastBonusType();
+				}
+
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {
+					//Do nothing.
+				}
+			});
 		}
 	}
 
@@ -130,15 +127,19 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 		if (charterContract == null) {
 			return false;
 		}
-		switch (this.ballastBonusCombobox.getText()) {
-		case MONTHLY:
-			createMonthlyBallastBonusComposite(owner, toolkit, charterContract);
-			break;
-		case NOTIONAL_JOURNEY:
-		default:
+		if (this.ballastBonusCombobox != null) {
+			switch (this.ballastBonusCombobox.getText()) {
+			case MONTHLY:
+				createMonthlyBallastBonusComposite(owner, toolkit, charterContract);
+				break;
+			case NOTIONAL_JOURNEY:
+			default:
+				createBallastBonusComposite(owner, toolkit, charterContract);
+				break;
+			}			
+		} else {
 			createBallastBonusComposite(owner, toolkit, charterContract);
-			break;
-		}			
+		}
 		dialogContext.getDialogController().rebuild(true);
 		resizeAction.run();
 		return true;
@@ -149,9 +150,11 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 		if (va.getContainedCharterContract() == null) {
 			charterContract = CommercialFactory.eINSTANCE.createGenericCharterContract();
 			charterContract.setName(validateOrOfferName("ballast_bonus_terms", va));
-			commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), va, CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT, charterContract), va,
+			commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), va, //
+					CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT, charterContract), va,//
 					CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT);
-			commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), va, CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE, Boolean.TRUE), va,
+			commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), va, //
+					CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE, Boolean.TRUE), va,//
 					CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE);
 		} else {
 			charterContract = va.getContainedCharterContract();
@@ -167,11 +170,27 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 	}
 
 	protected void createMonthlyBallastBonusComposite(Composite parent, FormToolkit toolkit, GenericCharterContract charterContract) {
+		if (charterContract != null) {
+			if (!(charterContract.getBallastBonusTerms() instanceof MonthlyBallastBonusContainer)) {
+				final MonthlyBallastBonusContainer emptyContainer = CommercialFactory.eINSTANCE.createMonthlyBallastBonusContainer();
+				commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), charterContract, //
+						CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS, emptyContainer), charterContract,//
+						CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS);
+			}
+		}
 		MonthlyBallastBonusTermsTableCreator.createMonthlyBallastBonusTable(parent, toolkit, dialogContext, commandHandler, charterContract,
 				statusProvider, resizeAction);
 	}
 	
 	protected void createBallastBonusComposite(Composite parent, FormToolkit toolkit, GenericCharterContract charterContract) {
+		if (charterContract != null) {
+			if (!(charterContract.getBallastBonusTerms() instanceof SimpleBallastBonusContainer)) {
+				final SimpleBallastBonusContainer emptyContainer = CommercialFactory.eINSTANCE.createSimpleBallastBonusContainer();
+				commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), charterContract, //
+						CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS, emptyContainer), charterContract,//
+						CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT__BALLAST_BONUS_TERMS);
+			}
+		}
 		BallastBonusTermsTableCreator.createBallastBonusTable(parent, toolkit, dialogContext, commandHandler, charterContract,
 				statusProvider, resizeAction);
 	}
@@ -190,35 +209,24 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 
 	protected void doDisplay(IDialogEditingContext dialogContext, MMXRootObject root, EMFDataBindingContext dbc, final GenericCharterContract gcc) {
 		if (gcc != null) {
-		
-			switch (this.ballastBonusCombobox.getText()) {
-			case MONTHLY:
-				
-				if (gcc.getBallastBonusTerms() instanceof MonthlyBallastBonusContainer) {
-				
-					final MonthlyBallastBonusContainer mbbc = (MonthlyBallastBonusContainer) gcc.getBallastBonusTerms();
-					Composite hubsComp = toolkit.createComposite(owner);
-					hubsComp.setLayout(new FillLayout());
-					hubsComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			if (gcc.getBallastBonusTerms() instanceof MonthlyBallastBonusContainer) {
+				final MonthlyBallastBonusContainer mbbc = (MonthlyBallastBonusContainer) gcc.getBallastBonusTerms();
+				Composite hubsComp = toolkit.createComposite(owner);
+				hubsComp.setLayout(new FillLayout());
+				hubsComp.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-					Label lbl = new Label(hubsComp, SWT.LEFT);
-					lbl.setBackground(owner.getBackground());
-					lbl.setText("Hubs: ");
+				Label lbl = new Label(hubsComp, SWT.LEFT);
+				lbl.setBackground(owner.getBackground());
+				lbl.setText("Hubs: ");
 
-					portEditor = new PortMultiReferenceInlineEditor(CommercialPackage.eINSTANCE.getMonthlyBallastBonusContainer_Hubs());
-					portEditor.setCommandHandler(commandHandler);
-					portEditor.createControl(hubsComp, dbc, toolkit);
-					portEditor.display(dialogContext, root, mbbc, Collections.singleton(mbbc));
+				portEditor = new PortMultiReferenceInlineEditor(CommercialPackage.eINSTANCE.getMonthlyBallastBonusContainer_Hubs());
+				portEditor.setCommandHandler(commandHandler);
+				portEditor.createControl(hubsComp, dbc, toolkit);
+				portEditor.display(dialogContext, root, mbbc, Collections.singleton(mbbc));
 
-					createMonthlyBallastBonusComposite(owner, toolkit, gcc);
-				} else {
-					throw new IllegalStateException(String.format("Charter contract [%s] - monthly ballast bonus terms contain foreign definitions!", gcc.getName()));
-				}
-				break;
-			case NOTIONAL_JOURNEY:
-			default:
+				createMonthlyBallastBonusComposite(owner, toolkit, gcc);
+			} else {
 				createBallastBonusComposite(owner, toolkit, gcc);
-				break;
 			}
 		}
 	}

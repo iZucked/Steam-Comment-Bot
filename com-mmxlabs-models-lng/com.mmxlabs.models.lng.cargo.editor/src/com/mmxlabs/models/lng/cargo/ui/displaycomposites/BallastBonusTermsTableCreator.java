@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
-import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ISelection;
@@ -22,6 +21,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.commercial.BallastBonusTerm;
@@ -50,6 +50,10 @@ public class BallastBonusTermsTableCreator {
 	public static EObjectTableViewer createBallastBonusTable(final Composite parent, final FormToolkit toolkit, final IDialogEditingContext dialogContext, final ICommandHandler commandHandler,
 			final GenericCharterContract charterContract, final IStatusProvider statusProvider, final Runnable sizeChangedAction) {
 		final IScenarioEditingLocation sel = dialogContext.getScenarioEditingLocation();
+		
+		final Label label = toolkit.createLabel(parent, "Ballast Bonus");
+		label.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
+		
 		final EObjectTableViewer eViewer = new EObjectTableViewer(parent, SWT.FULL_SELECTION);
 		eViewer.setStatusProvider(statusProvider);
 		eViewer.setAutoResizeable(false);
@@ -358,40 +362,6 @@ public class BallastBonusTermsTableCreator {
 				}
 			}
 		});
-
-		
-		eViewer.addTypicalColumn("Type", new BasicAttributeManipulator(null, commandHandler) {
-
-			@Override
-			public void runSetCommand(final Object object, final Object value) {
-			}
-
-			@Override
-			public boolean canEdit(final Object object) {
-				return false;
-			}
-
-			@Override
-			public Object getValue(final Object object) {
-				return null;
-			}
-
-			@Override
-			public boolean isValueUnset(final Object object) {
-				return true;
-			}
-
-			@Override
-			public @Nullable String render(final Object object) {
-				if (object instanceof NotionalJourneyBallastBonusTerm) {
-					return "Journey";
-				} else if (object instanceof LumpSumBallastBonusTerm) {
-					return "Lump sum";
-				} else {
-					return "";
-				}
-			}
-		});
 		final WrappingColumnHeaderRenderer chr = new WrappingColumnHeaderRenderer();
 		chr.setWordWrap(true);
 		for (final GridColumn gridColumn : eViewer.getGrid().getColumns()) {
@@ -414,15 +384,18 @@ public class BallastBonusTermsTableCreator {
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 
-		final Composite buttons = toolkit.createComposite(parent);
+		final Composite bottomOne = toolkit.createComposite(parent);
+		final GridData bottomOneGridData = GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).create();
+		bottomOne.setLayoutData(bottomOneGridData);
+		final GridLayout bottomOneLayout = new GridLayout(4, false);
+		bottomOne.setLayout(bottomOneLayout);
+		bottomOneLayout.marginHeight = 0;
+		bottomOneLayout.marginWidth = 0;
+		
+		final Label labelRule = toolkit.createLabel(bottomOne, "Add rule: ");
+		labelRule.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
 
-		buttons.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, false, false));
-		final GridLayout buttonLayout = new GridLayout(3, false);
-		buttons.setLayout(buttonLayout);
-		buttonLayout.marginHeight = 0;
-		buttonLayout.marginWidth = 0;
-
-		final Button addLumpSum = toolkit.createButton(buttons, "Add lump sum rule", SWT.NONE);
+		final Button addLumpSum = toolkit.createButton(bottomOne, "Lump sum", SWT.NONE);
 		addLumpSum.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 
 		addLumpSum.addSelectionListener(new SelectionAdapter() {
@@ -440,7 +413,7 @@ public class BallastBonusTermsTableCreator {
 			}
 		});
 
-		final Button addNotional = toolkit.createButton(buttons, "Add notional journey rule", SWT.NONE);
+		final Button addNotional = toolkit.createButton(bottomOne, "Notional journey", SWT.NONE);
 		addNotional.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 
 		addNotional.addSelectionListener(new SelectionAdapter() {
@@ -453,16 +426,13 @@ public class BallastBonusTermsTableCreator {
 						AddCommand.create(commandHandler.getEditingDomain(), ballastBonus, CommercialPackage.Literals.SIMPLE_BALLAST_BONUS_CONTAINER__TERMS, newLine),
 						ballastBonus, CommercialPackage.Literals.SIMPLE_BALLAST_BONUS_CONTAINER__TERMS);
 				eViewer.setSelection(new StructuredSelection(newLine));
-				
-				
-				
 				eViewer.refresh();
 				RunnerHelper.asyncExec(sizeChangedAction);
 			}
 		});
 		
-		final Button remove = toolkit.createButton(buttons, "Remove", SWT.NONE);
-		remove.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
+		final Button remove = toolkit.createButton(bottomOne, "Remove", SWT.NONE);
+		remove.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, true, false));
 
 		remove.addSelectionListener(new SelectionAdapter() {
 			@Override

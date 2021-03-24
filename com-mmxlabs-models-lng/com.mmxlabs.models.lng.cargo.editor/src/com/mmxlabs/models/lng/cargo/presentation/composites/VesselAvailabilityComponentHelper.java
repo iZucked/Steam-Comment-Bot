@@ -66,7 +66,7 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editors for features on this class directly, and superclass' features.
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
@@ -87,10 +87,10 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 		add_endHeelEditor(detailComposite, topClass);
 		add_forceHireCostOnlyEndRuleEditor(detailComposite, topClass);
 		add_containedCharterContractEditor(detailComposite, topClass);
-		add_genericCharterContractEditor(detailComposite, topClass);
 		add_minDurationEditor(detailComposite, topClass);
 		add_maxDurationEditor(detailComposite, topClass);
 		add_charterContractOverrideEditor(detailComposite, topClass);
+		add_genericCharterContractEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the fleet feature on VesselAvailability
