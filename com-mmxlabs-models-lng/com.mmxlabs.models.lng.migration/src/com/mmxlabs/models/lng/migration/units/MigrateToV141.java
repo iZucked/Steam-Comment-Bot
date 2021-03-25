@@ -37,6 +37,8 @@ public class MigrateToV141 extends AbstractMigrationUnit {
 	public int getScenarioDestinationVersion() {
 		return 141;
 	}
+	
+	private EPackage schedulePackage;
 
 	@Override
 	protected void doMigration(@NonNull final MigrationModelRecord modelRecord) {
@@ -45,21 +47,24 @@ public class MigrateToV141 extends AbstractMigrationUnit {
 		final @NonNull EObjectWrapper referenceModel = scenarioModel.getRef("referenceModel");
 		
 		final EObjectWrapper cargoModel = scenarioModel.getRef("cargoModel");
+		final EObjectWrapper analyticsModel = scenarioModel.getRef("analyticsModel");
 		final EObjectWrapper commercialModel = referenceModel.getRef("commercialModel");
 		final EObjectWrapper spotMarketModel = referenceModel.getRef("spotMarketsModel");
 		final EObjectWrapper scheduleModel = scenarioModel.getRef("scheduleModel");
 		
 		final EPackage commercialPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_CommercialModel);
-		final EPackage schedulePackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScheduleModel);
+		schedulePackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScheduleModel);
+		final EPackage analyticsPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_AnalyticsModel);
 		
 		final Map<EObjectWrapper, EObjectWrapper> charterContracts = migrateCharterContracts(commercialPackage, commercialModel);
 		processCharterMarkets(spotMarketModel, charterContracts);
 		processVesselAvailabilities(commercialPackage, cargoModel, charterContracts);
 		clearUpCommercialModel(commercialPackage, commercialModel);
-		clearUpScheduleModel(scheduleModel, schedulePackage);
+		clearUpScheduleModel(scheduleModel);
+		clearUpAnalyticsModel(analyticsModel, analyticsPackage);
 	}
 
-
+	
 	
 	private Map<EObjectWrapper, EObjectWrapper> migrateCharterContracts(final EPackage commercialPackage, final EObjectWrapper commercialModel) {
 		final Map<EObjectWrapper, EObjectWrapper> map = new HashMap<>();
@@ -101,26 +106,28 @@ public class MigrateToV141 extends AbstractMigrationUnit {
 		commercialModel.unsetFeature("charteringContracts");
 	}
 	
-	private void clearUpScheduleModel(final EObjectWrapper scheduleModel, final EPackage schedulePackage) {
-		final EClass class_ProfitAndLossContainer = MetamodelUtils.getEClass(schedulePackage, "ProfitAndLossContainer");
-		final EClass class_BallastBonusFeeDetails = MetamodelUtils.getEClass(schedulePackage, "BallastBonusFeeDetails");
+	private void clearUpScheduleModel(final EObjectWrapper scheduleModel) {
+		if (scheduleModel != null) {
+			final EClass class_ProfitAndLossContainer = MetamodelUtils.getEClass(schedulePackage, "ProfitAndLossContainer");
+			final EClass class_BallastBonusFeeDetails = MetamodelUtils.getEClass(schedulePackage, "BallastBonusFeeDetails");
 
-		final EObjectWrapper schedule = scheduleModel.getRef("schedule");
-		if (schedule != null) {
-			final List<EObjectWrapper> sequences = schedule.getRefAsList("sequences");
-			if (sequences != null) {
-				for (final EObjectWrapper sequence : sequences) {
-					final List<EObjectWrapper> events = sequence.getRefAsList("events");
-					if (events != null) {
-						for (final EObjectWrapper event : events) {
-							if(class_ProfitAndLossContainer.isInstance(event)) {
-								final List<EObjectWrapper> generalPNLDetails = event.getRefAsList("generalPNLDetails");
-								if (generalPNLDetails != null) {
-									final Iterator iter = generalPNLDetails.iterator();
-									while(iter.hasNext()) {
-										final Object eo = iter.next();
-										if (class_BallastBonusFeeDetails.isInstance(eo)) {
-											iter.remove();
+			final EObjectWrapper schedule = scheduleModel.getRef("schedule");
+			if (schedule != null) {
+				final List<EObjectWrapper> sequences = schedule.getRefAsList("sequences");
+				if (sequences != null) {
+					for (final EObjectWrapper sequence : sequences) {
+						final List<EObjectWrapper> events = sequence.getRefAsList("events");
+						if (events != null) {
+							for (final EObjectWrapper event : events) {
+								if(class_ProfitAndLossContainer.isInstance(event)) {
+									final List<EObjectWrapper> generalPNLDetails = event.getRefAsList("generalPNLDetails");
+									if (generalPNLDetails != null) {
+										final Iterator iter = generalPNLDetails.iterator();
+										while(iter.hasNext()) {
+											final Object eo = iter.next();
+											if (class_BallastBonusFeeDetails.isInstance(eo)) {
+												iter.remove();
+											}
 										}
 									}
 								}
@@ -129,6 +136,43 @@ public class MigrateToV141 extends AbstractMigrationUnit {
 					}
 				}
 			}
+		}
+	}
+	
+	private void clearUpAnalyticsModel(final EObjectWrapper analyticsModel, final EPackage analyticsPackage) {
+		if (analyticsModel != null) {
+			final List<EObjectWrapper> optionModels = analyticsModel.getRefAsList("optionModels");
+			if (optionModels != null) {
+				for(final EObjectWrapper optionModel : optionModels) {
+					clearUpAbstractSolutionSet(optionModel.getRef("results"));
+				}
+			}
+			final List<EObjectWrapper> optimisations = analyticsModel.getRefAsList("optimisations");
+			if (optimisations != null) {
+				for(final EObjectWrapper optimisation : optimisations) {
+					clearUpAbstractSolutionSet(optimisation);
+				}
+			}
+			final EClass class_AbstractSolutionSet = MetamodelUtils.getEClass(analyticsPackage, "AbstractSolutionSet");
+		}
+	}
+	
+	private void clearUpAbstractSolutionSet(final EObjectWrapper abstractSolutionSet) {
+		if (abstractSolutionSet != null) {
+			clearUpSolutionOption(abstractSolutionSet.getRef("baseOption"));
+			final List<EObjectWrapper> options = abstractSolutionSet.getRefAsList("options");
+			if (options != null) {
+				for(final EObjectWrapper option : options) {
+					clearUpSolutionOption(option);
+				}
+			}
+		}
+	}
+	
+	private void clearUpSolutionOption(final EObjectWrapper option) {
+		if (option != null) {
+			final EObjectWrapper scheduleModel = option.getRef("scheduleModel");
+			clearUpScheduleModel(scheduleModel);
 		}
 	}
 	
