@@ -108,7 +108,7 @@ public class DefaultOriginPortRepositioningFeeContractTerm extends Repositioning
 
 	@Override
 	public boolean match(final IPort loadPort, IPortSlot slot, IVesselAvailability vesselAvailability, int vesselStartTime, int vesselEndTime) {
-		return slot.getPortType() == PortType.Start && getOriginPort() != slot.getPort();
+		return slot.getPortType() == PortType.Start && (getOriginPort() != slot.getPort() || "ANYWHERE".equalsIgnoreCase(getOriginPort().getName()));
 	}
 
 	@Override
