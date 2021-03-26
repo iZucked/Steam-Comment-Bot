@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * All rights reserved.
+ */
 package com.mmxlabs.models.ui.editorpart;
 
 import org.eclipse.emf.common.command.Command;

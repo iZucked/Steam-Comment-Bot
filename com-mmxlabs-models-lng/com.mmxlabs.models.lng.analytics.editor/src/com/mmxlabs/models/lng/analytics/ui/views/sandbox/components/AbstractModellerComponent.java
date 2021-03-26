@@ -20,7 +20,6 @@ import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
@@ -37,26 +36,18 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.google.common.collect.Sets;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
-import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
+import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.ui.views.EditObjectMouseListener;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.CellFormatterLabelProvider;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -72,33 +63,15 @@ public abstract class AbstractModellerComponent<T, U> {
 	protected final @NonNull Supplier<U> modelProvider;
 	protected final @NonNull List<Consumer<U>> inputWants = new LinkedList<>();
 
-	protected final Image image_grey_add;
-
-	protected final Font boldFont;
 	protected boolean locked;
 	protected Collection<Consumer<Boolean>> lockedListeners = Sets.newConcurrentHashSet();
 
-	protected AbstractModellerComponent(final @NonNull IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors, @NonNull Supplier<U> modelProvider) {
+	protected SandboxUIHelper sandboxUIHelper;
+
+	protected AbstractModellerComponent(final @NonNull IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors, @NonNull final Supplier<U> modelProvider) {
 		this.scenarioEditingLocation = scenarioEditingLocation;
 		this.validationErrors = validationErrors;
 		this.modelProvider = modelProvider;
-
-		final ImageDescriptor baseAdd = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD);
-		image_grey_add = ImageDescriptor.createWithFlags(baseAdd, SWT.IMAGE_GRAY).createImage();
-
-		final Font systemFont = Display.getDefault().getSystemFont();
-		// Clone the font data
-		final FontData fd = new FontData(systemFont.getFontData()[0].toString());
-		// Set the bold bit.
-		// fd.setStyle(fd.getStyle() | SWT.BOLD);
-		fd.setHeight(fd.getHeight() + 2);
-
-		this.boldFont = new Font(Display.getDefault(), fd);
-	}
-
-	public void dispose() {
-		image_grey_add.dispose();
-		boldFont.dispose();
 	}
 
 	protected ExpandableComposite wrapInExpandable(final Composite composite, final String name, final Function<Composite, Control> s) {
@@ -106,7 +79,10 @@ public abstract class AbstractModellerComponent<T, U> {
 	}
 
 	protected ExpandableComposite wrapInExpandable(final Composite composite, final String name, final Function<Composite, Control> s, @Nullable final Consumer<ExpandableComposite> customiser,
-			boolean expand) {
+			final boolean expand) {
+
+		sandboxUIHelper = new SandboxUIHelper(composite);
+
 		final ExpandableComposite expandableCompo;
 		if (!expand) {
 			expandableCompo = new ExpandableComposite(composite, SWT.NONE, 0);
@@ -115,7 +91,7 @@ public abstract class AbstractModellerComponent<T, U> {
 		}
 
 		expandableCompo.setText(name);
-		expandableCompo.setFont(boldFont);
+		expandableCompo.setFont(sandboxUIHelper.largeFont);
 		expandableCompo.setLayout(new GridLayout(1, false));
 
 		final Control client = s.apply(expandableCompo);
@@ -159,7 +135,7 @@ public abstract class AbstractModellerComponent<T, U> {
 		return createColumn(viewer, createLabelProvider(name, renderer, pathObjects), name, renderer, isTree, pathObjects);
 	}
 
-	protected GridViewerColumn createColumn(final GridTreeViewer viewer, CellFormatterLabelProvider labelProvider, final String name, final ICellRenderer renderer, final boolean isTree,
+	protected GridViewerColumn createColumn(final GridTreeViewer viewer, final CellFormatterLabelProvider labelProvider, final String name, final ICellRenderer renderer, final boolean isTree,
 			final ETypedElement... pathObjects) {
 
 		final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER | SWT.WRAP);
@@ -176,38 +152,20 @@ public abstract class AbstractModellerComponent<T, U> {
 	private CellFormatterLabelProvider createLabelProvider(final String name, final ICellRenderer renderer, final ETypedElement... pathObjects) {
 		return new CellFormatterLabelProvider(renderer, pathObjects) {
 
-			Image imgError = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/error.gif").createImage();
-			Image imgWarn = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/warning.gif").createImage();
-			Image imgInfo = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/information.gif").createImage();
-			Image imgShippingRoundTrip = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/roundtrip.png").createImage();
-			Image imgShippingFleet = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/fleet.png").createImage();
-
-			Color colour_error = new Color(Display.getDefault(), new RGB(255, 100, 100));
-			Color colour_warn = new Color(Display.getDefault(), new RGB(255, 255, 200));
-			Color colour_info = new Color(Display.getDefault(), new RGB(200, 240, 240));
-
 			@Override
 			protected @Nullable Image getImage(@NonNull final ViewerCell cell, @Nullable final Object element) {
 
 				if (validationErrors.containsKey(element)) {
 					final IStatus status = validationErrors.get(element);
-					if (!status.isOK()) {
-						if (status.matches(IStatus.ERROR)) {
-							return imgError;
-						}
-						if (status.matches(IStatus.WARNING)) {
-							return imgWarn;
-						}
-						if (status.matches(IStatus.INFO)) {
-							return imgWarn;
-						}
+					final Image img = sandboxUIHelper.getValidationImageForStatus(status);
+					if (img != null) {
+						return img;
 					}
-				} else {
-					if (element instanceof RoundTripShippingOption) {
-						return imgShippingRoundTrip;
-					} else if (element instanceof SimpleVesselCharterOption) {
-						return imgShippingFleet;
-					}
+				}
+				if (element instanceof RoundTripShippingOption) {
+					return sandboxUIHelper.imgShippingRoundTrip;
+				} else if (element instanceof SimpleVesselCharterOption) {
+					return sandboxUIHelper.imgShippingFleet;
 				}
 				return null;
 			}
@@ -259,47 +217,25 @@ public abstract class AbstractModellerComponent<T, U> {
 				}
 				if (!s.isOK()) {
 					if (s.matches(IStatus.ERROR)) {
-						cell.setBackground(colour_error);
-						item.setBackground(colour_error);
+						cell.setBackground(sandboxUIHelper.colourError);
+						item.setBackground(sandboxUIHelper.colourError);
 					} else if (s.matches(IStatus.WARNING)) {
-						cell.setBackground(colour_warn);
-						item.setBackground(colour_warn);
+						cell.setBackground(sandboxUIHelper.colourWarn);
+						item.setBackground(sandboxUIHelper.colourWarn);
 					} else if (s.matches(IStatus.INFO)) {
-						cell.setBackground(colour_info);
-						item.setBackground(colour_info);
+						cell.setBackground(sandboxUIHelper.colourInfo);
+						item.setBackground(sandboxUIHelper.colourInfo);
 					}
 				}
 
 				if (element instanceof BaseCaseRow || element instanceof PartialCaseRow) {
 					if (validationErrors.containsKey(element)) {
 						final IStatus status = validationErrors.get(element);
-						if (!status.isOK()) {
-							if (status.matches(IStatus.ERROR)) {
-								item.setHeaderImage(imgError);
-							} else if (status.matches(IStatus.WARNING)) {
-								item.setHeaderImage(imgWarn);
-							} else if (status.matches(IStatus.INFO)) {
-								item.setHeaderImage(imgInfo);
-							}
-						}
+						final Image img = sandboxUIHelper.getValidationImageForStatus(status);
+						item.setHeaderImage(img);
 					}
 				}
 			}
-
-			@Override
-			public void dispose() {
-				imgError.dispose();
-				imgWarn.dispose();
-				imgInfo.dispose();
-				imgShippingRoundTrip.dispose();
-				imgShippingFleet.dispose();
-
-				colour_error.dispose();
-				colour_info.dispose();
-				colour_warn.dispose();
-				super.dispose();
-			}
-
 		};
 	}
 
@@ -307,31 +243,14 @@ public abstract class AbstractModellerComponent<T, U> {
 
 		return new CellLabelProvider() {
 
-			Image imgError = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/error.gif").createImage();
-			Image imgWarn = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/warning.gif").createImage();
-			Image imgInfo = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/information.gif").createImage();
-
-			Color colour_error = new Color(Display.getDefault(), new RGB(255, 100, 100));
-			Color colour_warn = new Color(Display.getDefault(), new RGB(255, 255, 200));
-			Color colour_info = new Color(Display.getDefault(), new RGB(200, 240, 240));
-
 			@Override
 			public String getToolTipText(final Object element) {
 
 				final Set<Object> targetElements = getTargetElementsForWiringProvider(element);
 
 				final StringBuilder sb = new StringBuilder();
-				for (final Object target : targetElements) {
-					if (validationErrors.containsKey(target)) {
-						final IStatus status = validationErrors.get(target);
-						if (!status.isOK()) {
-							if (sb.length() > 0) {
-								sb.append("\n");
-							}
-							sb.append(status.getMessage());
-						}
-					}
-				}
+				sandboxUIHelper.extractValidationMessages(sb, targetElements, validationErrors);
+
 				if (sb.length() > 0) {
 					return sb.toString();
 				}
@@ -345,59 +264,19 @@ public abstract class AbstractModellerComponent<T, U> {
 				item.setHeaderText("");
 				item.setHeaderImage(null);
 				cell.setBackground(null);
+
 				final Object element = cell.getElement();
 
 				final Set<Object> targetElements = getTargetElementsForWiringProvider(element);
-				IStatus s = org.eclipse.core.runtime.Status.OK_STATUS;
-				for (final Object e : targetElements) {
-					if (validationErrors.containsKey(e)) {
-						final IStatus status = validationErrors.get(e);
-						if (!status.isOK()) {
-							if (status.getSeverity() > s.getSeverity()) {
-								s = status;
-							}
-						}
-					}
-				}
-				if (!s.isOK()) {
-					if (s.matches(IStatus.ERROR)) {
-						cell.setBackground(colour_error);
-						item.setBackground(colour_error);
-					} else if (s.matches(IStatus.WARNING)) {
-						cell.setBackground(colour_warn);
-						item.setBackground(colour_warn);
-					} else if (s.matches(IStatus.INFO)) {
-						cell.setBackground(colour_info);
-						item.setBackground(colour_info);
-					}
-				}
+				final IStatus s = sandboxUIHelper.getWorstStatus(targetElements, validationErrors);
+				sandboxUIHelper.updateGridItem(cell, s);
 
 				if (element instanceof BaseCaseRow || element instanceof PartialCaseRow) {
 					if (validationErrors.containsKey(element)) {
 						final IStatus status = validationErrors.get(element);
-						if (!status.isOK()) {
-							if (status.matches(IStatus.ERROR)) {
-								item.setHeaderImage(imgError);
-							} else if (status.matches(IStatus.WARNING)) {
-								item.setHeaderImage(imgWarn);
-							} else if (status.matches(IStatus.INFO)) {
-								item.setHeaderImage(imgInfo);
-							}
-						}
+						sandboxUIHelper.updateGridHeaderItem(cell, status);
 					}
 				}
-			}
-
-			@Override
-			public void dispose() {
-				imgError.dispose();
-				imgWarn.dispose();
-				imgInfo.dispose();
-
-				colour_error.dispose();
-				colour_info.dispose();
-				colour_warn.dispose();
-				super.dispose();
 			}
 
 		};
@@ -461,7 +340,7 @@ public abstract class AbstractModellerComponent<T, U> {
 
 	protected abstract Set<Object> getTargetElementsForWiringProvider(final Object element);
 
-	protected MouseListener hookMaximiseListener(Control source) {
+	protected MouseListener hookMaximiseListener(final Control source) {
 		return new MouseAdapter() {
 
 			@Override
@@ -493,21 +372,25 @@ public abstract class AbstractModellerComponent<T, U> {
 		return locked;
 	}
 
-	public void setLocked(boolean locked) {
+	public void setLocked(final boolean locked) {
 		this.locked = locked;
 		lockedListeners.forEach(e -> e.accept(locked));
 		doSetLocked(locked);
 	}
 
-	protected void doSetLocked(boolean locked) {
+	protected void doSetLocked(final boolean locked) {
 		// Subclasses should override this method to react to new locked state (or use the locked listeners).
 	}
 
-	protected void addLockedListener(Consumer<Boolean> l) {
+	protected void addLockedListener(final Consumer<Boolean> l) {
 		lockedListeners.add(l);
 	}
 
-	protected void removeLockedListener(Consumer<Boolean> l) {
+	protected void removeLockedListener(final Consumer<Boolean> l) {
 		lockedListeners.remove(l);
+	}
+
+	public void dispose() {
+		// Sub-classes can override this method
 	}
 }

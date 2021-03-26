@@ -22,85 +22,71 @@ import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.DefaultSandboxLabelProvider;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.SandboxUIHelper;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
 public class OptionsTreeViewerLabelProvider extends DefaultSandboxLabelProvider implements IFontProvider {
-	private OptionModellerView optionModellerView;
-	Font boldFont = createFont(true);
-	Font normalFont = createFont(false);
-	
+	private final OptionModellerView optionModellerView;
+	// Font boldFont = createFont(true);
+	// Font normalFont = createFont(false);
 
-	public OptionsTreeViewerLabelProvider(final ICellRenderer renderer, Map<Object, IStatus> validationErrors, String name, OptionModellerView optionModellerView, final ETypedElement... pathObjects) {
-		super(renderer, validationErrors, name, pathObjects);
+	public OptionsTreeViewerLabelProvider(final SandboxUIHelper sandboxUIHelper, final ICellRenderer renderer, final Map<Object, IStatus> validationErrors, final String name,
+			final OptionModellerView optionModellerView, final ETypedElement... pathObjects) {
+		super(sandboxUIHelper, renderer, validationErrors, name, pathObjects);
 		this.optionModellerView = optionModellerView;
 	}
-	
-	private Font createFont(boolean bold) {
-		final Font systemFont = Display.getDefault().getSystemFont();
-		// Clone the font data
-		final FontData fd = new FontData(systemFont.getFontData()[0].toString());
-		// Set the bold bit.
-		if (bold) {
-		fd.setStyle(fd.getStyle() | SWT.BOLD);
-		} else {
-			fd.setStyle(fd.getStyle());
-		}
-		return new Font(Display.getDefault(), fd);
-	}
 
-	public OptionsTreeViewerLabelProvider(ICellRenderer renderer, Map<Object, IStatus> validationErrors, String name, OptionModellerView optionModellerView, @Nullable EMFPath path) {
-		super(renderer, validationErrors, name, path);
+	// private Font createFont(boolean bold) {
+	// final Font systemFont = Display.getDefault().getSystemFont();
+	// // Clone the font data
+	// final FontData fd = new FontData(systemFont.getFontData()[0].toString());
+	// // Set the bold bit.
+	// if (bold) {
+	// fd.setStyle(fd.getStyle() | SWT.BOLD);
+	// } else {
+	// fd.setStyle(fd.getStyle());
+	// }
+	// return new Font(Display.getDefault(), fd);
+	// }
+
+	public OptionsTreeViewerLabelProvider(final SandboxUIHelper sandboxUIHelper, final ICellRenderer renderer, final Map<Object, IStatus> validationErrors, final String name,
+			final OptionModellerView optionModellerView, @Nullable final EMFPath path) {
+		super(sandboxUIHelper, renderer, validationErrors, name, path);
 		this.optionModellerView = optionModellerView;
 	}
 
 	@Override
-	public Font getFont(Object object) {
+	public Font getFont(final Object object) {
 		if (object instanceof OptionAnalysisModel) {
-			return (object == optionModellerView.getModel() ? boldFont : normalFont);
+			return (object == optionModellerView.getModel() ? sandboxUIHelper.boldFont : sandboxUIHelper.normalFont);
 		}
-		return normalFont;
+		return sandboxUIHelper.normalFont;
 	}
-	
+
 	@Override
 	protected @Nullable Image getImage(@NonNull final ViewerCell cell, @Nullable final Object element) {
 
 		if (validationErrors.containsKey(element)) {
 			final IStatus status = validationErrors.get(element);
-			if (!status.isOK()) {
-				if (status.matches(IStatus.ERROR)) {
-					return imgError;
-				}
-				if (status.matches(IStatus.WARNING)) {
-					return imgWarn;
-				}
-				if (status.matches(IStatus.INFO)) {
-					return imgWarn;
-				}
+			final Image img = sandboxUIHelper.getValidationImageForStatus(status);
+			if (img != null) {
+				return img;
 			}
-		} else {
-			if (element instanceof RoundTripShippingOption) {
-				return imgShippingRoundTrip;
-			} else if (element instanceof SimpleVesselCharterOption) {
-				return imgShippingFleet;
-			} else if (element instanceof OptionAnalysisModel && element == optionModellerView.getModel()) {
-				return imgModel;
-			}
+		}
+		if (element instanceof RoundTripShippingOption) {
+			return sandboxUIHelper.imgShippingRoundTrip;
+		} else if (element instanceof SimpleVesselCharterOption) {
+			return sandboxUIHelper.imgShippingFleet;
+		} else if (element instanceof OptionAnalysisModel && element == optionModellerView.getModel()) {
+			return sandboxUIHelper.imgModel;
 		}
 		return null;
 	}
 
-	
 	@Override
-	protected void setFont(ViewerCell cell, Object element) {
+	protected void setFont(final ViewerCell cell, final Object element) {
 		cell.setFont(getFont(element));
-	}
-	
-	@Override
-	public void dispose() {
-		super.dispose();
-		normalFont.dispose();
-		boldFont.dispose();
 	}
 
 }

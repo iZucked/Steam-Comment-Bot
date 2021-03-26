@@ -64,13 +64,13 @@ public class BuyOptionsComponent extends AbstractSandboxComponent<Object, Abstra
 
 			final Label c = new Label(expandableComposite, SWT.NONE);
 			expandableComposite.setTextClient(c);
-			c.setImage(image_grey_add);
+			c.setImage(sandboxUIHelper.image_grey_add);
 			c.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).hint(16, 16).grab(true, false).create());
 			c.addMouseTrackListener(new MouseTrackAdapter() {
 
 				@Override
 				public void mouseExit(final MouseEvent e) {
-					c.setImage(image_grey_add);
+					c.setImage(sandboxUIHelper.image_grey_add);
 				}
 
 				@Override
@@ -96,7 +96,7 @@ public class BuyOptionsComponent extends AbstractSandboxComponent<Object, Abstra
 
 		GridViewerHelper.configureLookAndFeel(buyOptionsViewer);
 		buyOptionsViewer.getGrid().setHeaderVisible(false);
-		CellFormatterLabelProvider labelProvider = new BuysSellsLabelProvider(new BuyOptionDescriptionFormatter(), validationErrors, "Buy");
+		CellFormatterLabelProvider labelProvider = new BuysSellsLabelProvider(sandboxUIHelper, new BuyOptionDescriptionFormatter(), validationErrors, "Buy");
 		createColumn(buyOptionsViewer, labelProvider, "Buy", new BuyOptionDescriptionFormatter(), false);
 
 		buyOptionsViewer.setContentProvider(new OptionsViewerContentProvider(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__BUYS));

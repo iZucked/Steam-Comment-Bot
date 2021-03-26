@@ -33,4 +33,8 @@ public abstract class AbstractBreakEvenComponent extends AbstractModellerCompone
 	protected Set<Object> getTargetElementsForWiringProvider(Object element) {
 		return Collections.singleton(element);
 	}
+
+	public void dispose() {
+		// For sub-classes to override
+	}
 }
