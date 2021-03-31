@@ -246,17 +246,27 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 			return "";
 		final List<AnonymisationRecord> filtered = records.stream().filter(r -> r.type == type && oldName.equalsIgnoreCase(r.oldName)).collect(Collectors.toList());
 		if (!filtered.isEmpty()) {
-			return filtered.get(0).newName;
+			final AnonymisationRecord result = filtered.get(0);
+			if (result != null && result.newName != null) {
+				return result.newName;
+			} else {
+				return "";
+			}
 		}
 		return "";
 	}
 	
-	private static String getOldName(final List<AnonymisationRecord> records, final String newName, final AnonymisationRecordType type) {
+	private static @NonNull String getOldName(final List<AnonymisationRecord> records, final String newName, final AnonymisationRecordType type) {
 		if (newName == null || type == null || records == null || records.isEmpty())
 			return "";
 		final List<AnonymisationRecord> filtered = records.stream().filter(r -> r.type == type && newName.equalsIgnoreCase(r.newName)).collect(Collectors.toList());
 		if (!filtered.isEmpty()) {
-			return filtered.get(0).oldName;
+			final AnonymisationRecord result = filtered.get(0);
+			if (result != null && result.oldName != null) {
+				return result.oldName;
+			} else {
+				return "";
+			}
 		}
 		return "";
 	}
