@@ -125,4 +125,8 @@ public abstract class AllocationTracker {
 			final LoadSlot loadSlot, final Vessel vessel, final Map<Vessel, VesselAvailability> vesselToVA, final LNGScenarioModel sm);
 
 	public abstract void dropFixedLoad(final Cargo cargo);
+
+	public void dropFixedLoad(final int volumeLoaded) {
+		this.runningAllocation -= volumeLoaded;
+	}
 }
