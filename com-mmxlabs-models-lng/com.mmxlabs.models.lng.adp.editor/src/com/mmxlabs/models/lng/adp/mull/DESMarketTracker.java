@@ -54,14 +54,14 @@ public class DESMarketTracker extends AllocationTracker {
 			dischargeSlot.setWindowStartTime(0);
 			dischargeSlot.setWindowSize(1);
 			dischargeSlot.setWindowSizeUnits(TimePeriod.MONTHS);
-			if (!this.vesselList.isEmpty()) {
-				dischargeSlot.setRestrictedVesselsArePermissive(true);
-				dischargeSlot.setRestrictedVesselsOverride(true);
-				dischargeSlot.getRestrictedVessels().addAll(this.vesselList);
-			}
-			dischargeSlot.setRestrictedPortsArePermissive(true);
-			dischargeSlot.setRestrictedPortsOverride(true);
-			dischargeSlot.getRestrictedPorts().add(loadSlot.getPort());
+//			if (!this.vesselList.isEmpty()) {
+//				dischargeSlot.setRestrictedVesselsArePermissive(true);
+//				dischargeSlot.setRestrictedVesselsOverride(true);
+//				dischargeSlot.getRestrictedVessels().addAll(this.vesselList);
+//			}
+//			dischargeSlot.setRestrictedPortsArePermissive(true);
+//			dischargeSlot.setRestrictedPortsOverride(true);
+//			dischargeSlot.getRestrictedPorts().add(loadSlot.getPort());
 			final String id = String.format("market-%s", loadSlot.getName());
 			dischargeSlot.setName(id);
 		} else {
