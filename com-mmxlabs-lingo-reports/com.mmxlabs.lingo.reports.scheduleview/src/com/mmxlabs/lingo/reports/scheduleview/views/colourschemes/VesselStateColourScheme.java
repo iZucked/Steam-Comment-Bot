@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.schedule.CanalBookingEvent;
 import com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent;
@@ -67,6 +68,8 @@ public class VesselStateColourScheme extends ColourScheme {
 			}
 			if (vev.getVesselEvent() instanceof DryDockEvent) {
 				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_DryDock, ColourElements.Background);
+			} else if (vev.getVesselEvent() instanceof MaintenanceEvent) {
+				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_Maintenance, ColourElements.Background);
 			} else if (vev.getVesselEvent() instanceof CharterOutEvent) {
 				return ColourPalette.getInstance().getColourFor(ColourPaletteItems.Event_CharterOut, ColourElements.Background);
 			}

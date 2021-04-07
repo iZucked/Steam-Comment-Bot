@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.lngdataserver.parent</artifactId>
 		<groupId>com.mmxlabs.lngdataserver</groupId>
-		<version>4.12.20-SNAPSHOT</version>
+		<version>4.12.21-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.lngdataserver.commons</artifactId>

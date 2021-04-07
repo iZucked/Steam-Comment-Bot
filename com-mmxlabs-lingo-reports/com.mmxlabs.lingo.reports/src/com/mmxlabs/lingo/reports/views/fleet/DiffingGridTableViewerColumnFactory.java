@@ -32,10 +32,6 @@ import org.eclipse.swt.graphics.Image;
 
 import com.mmxlabs.common.util.TriConsumer;
 import com.mmxlabs.lingo.reports.internal.Activator;
-import com.mmxlabs.lingo.reports.views.fleet.formatters.CharterLengthDaysFormatter;
-import com.mmxlabs.lingo.reports.views.fleet.formatters.GeneratedCharterDaysFormatter;
-import com.mmxlabs.lingo.reports.views.fleet.formatters.GeneratedCharterRevenueFormatter;
-import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.ICostTypeFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.CompositeRow;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
@@ -113,19 +109,6 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 
 		if (previousElement != null) {
 			valuePrevious = formatter.getComparable(previousElement);
-		}
-		// Those formatters will also return -MAX_VALUE for the reference row
-		// Bug ?
-		if (formatter instanceof GeneratedCharterDaysFormatter) {
-			valuePinned = Double.valueOf(0.0);
-		}
-
-		if (formatter instanceof GeneratedCharterRevenueFormatter) {
-			valuePinned = Integer.valueOf(0);
-		}
-
-		if (formatter instanceof CharterLengthDaysFormatter) {
-			valuePinned = Double.valueOf(0.0);
 		}
 
 		if (valuePrevious instanceof Integer || valuePinned instanceof Integer) {
@@ -261,7 +244,6 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 			public void update(final ViewerCell cell) {
 
 				Object element = cell.getElement();
-
 				if (element instanceof List) {
 
 					if (!((List<CompositeRow>) element).isEmpty()) {
@@ -556,7 +538,6 @@ public class DiffingGridTableViewerColumnFactory implements IColumnFactory {
 
 	@Override
 	public void destroy(final GridViewerColumn gvc) {
-		// filterSupport.removeColum(column);
 
 		if (gvc != null) {
 			if (sortingSupport != null) {

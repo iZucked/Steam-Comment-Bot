@@ -107,4 +107,9 @@ public class MUDContainer {
 			}
 		}
 	}
+
+	public void dropFixedLoad(final int loadedVolume) {
+		this.runningAllocation -= loadedVolume;
+		this.currentMonthAbsoluteEntitlement -= loadedVolume;
+	}
 }
