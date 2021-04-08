@@ -109,7 +109,7 @@ public class AuthenticationManager {
 	}
 
 	public static Request.Builder buildRequestWithoutAuthentication() {
-		return new Request.Builder().header("cache-control", "no-cache");
+		return new Request.Builder().header("Cache-Control", "no-store, max-age=0");
 	}
 
 	public Request.Builder buildRequest() {
