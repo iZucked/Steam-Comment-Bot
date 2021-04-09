@@ -90,6 +90,7 @@ public class MergeScenarioWizardDataMapperPage extends WizardPage implements ISc
 	@Override
 	public void update(String targetName, String sourceName, LNGScenarioModel target, LNGScenarioModel source) {
 		if (source != null && target != null) {
+			List<? extends EObject> sourceObjects = getEObjects(source);
 			List<String> sourceContracts = getItemNames(source, this.namedObjectGetter);
 			List<String> targetContracts = getItemNames(target, this.namedObjectGetter);
 			List<String> infos = getDiff(source, target, this.namedObjectGetter);
@@ -240,14 +241,15 @@ public class MergeScenarioWizardDataMapperPage extends WizardPage implements ISc
 				
 			});
 			
-			mergeTableViewer.setInput(createModel(sourceContracts, targetContracts, infos));
+			mergeTableViewer.setInput(createModel(sourceObjects,sourceContracts, targetContracts, infos));
 		}
 	}
 
-	private List<MergeMapping> createModel(List<String> sourceContracts, List<String> targetContracts, List<String> infos) {
+	private List<MergeMapping> createModel(List<? extends EObject> sourceObjects, List<String> sourceContracts, List<String> targetContracts, List<String> infos) {
 		List<MergeMapping> cms = new ArrayList<>();
 		for (int i = 0; i < sourceContracts.size(); i++) {
 			MergeMapping cm = new MergeMapping();
+			cm.sourceObject = sourceObjects.get(i);
 			cm.sourceName = sourceContracts.get(i);
 			if (contains(targetContracts, cm)) {
 				cm.targetName = getNameInList(targetContracts, cm);
