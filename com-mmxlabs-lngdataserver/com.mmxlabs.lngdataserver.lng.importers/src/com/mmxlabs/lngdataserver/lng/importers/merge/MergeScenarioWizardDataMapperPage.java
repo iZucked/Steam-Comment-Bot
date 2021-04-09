@@ -330,32 +330,32 @@ public class MergeScenarioWizardDataMapperPage extends WizardPage implements ISc
 	private boolean isJSONEqual(EObject o1, EObject o2) {
 		try {
 			String o1Str = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(o1);
-
+			o1Str = filterIDs(o1Str);
 			String o2Str = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(o2);
-
+			o2Str = filterIDs(o2Str);
 			boolean equal = o1Str.equals(o2Str);
 			
-//			if (!equal) {
-//				System.out.println("o1Str = "+o1.toString()+"o2Str = "+o2.toString());
-//				String[] o1Lines = o1Str.split("\n");
-//				String[] o2Lines = o2Str.split("\n");
-//				if (o1Lines.length != o2Lines.length) {
-//					System.out.println("o1 lines = "+o1Lines.length+" o2 lines = "+o2Lines.length);
-//				}
-//
-//				for (int i = 0; i < Math.max(o1Lines.length, o2Lines.length); i++) {	
-//					if (i < o1Lines.length) {
-//						if (!o2Str.contains(o1Lines[i])) {
-//							System.out.println("Diff "+i+"(1):\t"+o1Lines[i]);
-//						}
-//					}
-//					if (i < o2Lines.length) {
-//						if (!o1Str.contains(o2Lines[i])) {
-//							System.out.println("Diff "+i+"(2):\t"+o2Lines[i]);
-//						}
-//					}
-//				}
-//			}
+			if (!equal) {
+				System.out.println("o1Str = "+o1.toString()+"o2Str = "+o2.toString());
+				String[] o1Lines = o1Str.split("\n");
+				String[] o2Lines = o2Str.split("\n");
+				if (o1Lines.length != o2Lines.length) {
+					System.out.println("o1 lines = "+o1Lines.length+" o2 lines = "+o2Lines.length);
+				}
+
+				for (int i = 0; i < Math.max(o1Lines.length, o2Lines.length); i++) {	
+					if (i < o1Lines.length) {
+						if (!o2Str.contains(o1Lines[i])) {
+							System.out.println("Diff "+i+"(1):\t"+o1Lines[i]);
+						}
+					}
+					if (i < o2Lines.length) {
+						if (!o1Str.contains(o2Lines[i])) {
+							System.out.println("Diff "+i+"(2):\t"+o2Lines[i]);
+						}
+					}
+				}
+			}
 			return equal; 
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
@@ -364,6 +364,20 @@ public class MergeScenarioWizardDataMapperPage extends WizardPage implements ISc
 		return false;
 	}
 	
+	private String filterIDs(String o1Str) {
+		StringBuilder filtered = new StringBuilder();
+		String[] lines = o1Str.split(",");
+		for (String line : lines) {
+			if (line.contains("\"uuid\"") || line.contains("@lookupID") || line.contains("globalId")) {
+				System.out.println("Filtered line: "+line);
+			}
+			else {
+				filtered.append(line);
+			}
+		}
+		return filtered.toString();
+	}
+
 	protected List<String> getItemNames(LNGScenarioModel sm, NamedObjectListGetter namedItemsGetter) {
 		List<String> names = new ArrayList<>();
 		if (sm != null) {
