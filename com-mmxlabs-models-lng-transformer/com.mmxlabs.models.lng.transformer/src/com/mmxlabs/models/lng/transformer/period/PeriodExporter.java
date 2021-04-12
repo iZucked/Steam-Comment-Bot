@@ -77,7 +77,7 @@ public class PeriodExporter {
 	}
 
 	private void initSequencesMapping(final ISequences completeSequences, final ISequences periodSequences) {
-		final Map<String, Pair<IResource, Integer>> completeLookup = new HashMap<>();
+		final Map<String, Pair<@Nullable IResource, Integer>> completeLookup = new HashMap<>();
 
 		// First part, build a mapping between the name of the original elements and the elements so we can lookup it up as the equivalent from the period sceario.
 		{
