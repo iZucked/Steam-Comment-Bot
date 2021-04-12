@@ -50,13 +50,13 @@ import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 public class PeriodExporter {
 
 	private static class OffsetRecord {
-		public OffsetRecord(final IResource first, final int offset, final int size) {
+		public OffsetRecord(@Nullable final IResource first, final int offset, final int size) {
 			this.resource = first;
 			this.offset = offset;
 			this.size = size;
 		}
 
-		final IResource resource;
+		@Nullable final IResource resource;
 		final int offset; // offset - starting index of segment
 		final int size; // size - number of elements in the segment
 	}
@@ -148,7 +148,7 @@ public class PeriodExporter {
 							final ISequenceElement e = s.get(1);
 							assert e != null;
 
-							final Pair<IResource, Integer> pair = completeLookup.get(e.getName());
+							final Pair<@Nullable IResource, Integer> pair = completeLookup.get(e.getName());
 							assert pair != null;
 							assert pair.getFirst() != null;
 
@@ -169,7 +169,7 @@ public class PeriodExporter {
 							final ISequenceElement e = s.get(1);
 							assert e != null;
 
-							final Pair<IResource, Integer> pair = completeLookup.get(e.getName());
+							final Pair<@Nullable IResource, Integer> pair = completeLookup.get(e.getName());
 							assert pair != null;
 							assert pair.getFirst() != null;
 
@@ -328,7 +328,7 @@ public class PeriodExporter {
 							final ISequenceElement e = s.get(1);
 							assert e != null;
 
-							final Pair<IResource, Integer> pair = completeLookup.get(e.getName());
+							final Pair<@Nullable IResource, Integer> pair = completeLookup.get(e.getName());
 							assert pair != null;
 							assert pair.getFirst() != null;
 
