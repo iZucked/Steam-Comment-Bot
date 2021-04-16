@@ -677,7 +677,7 @@ public class PeriodTransformer {
 				removed = true;
 			}
 			// DryDockEvent and MaintenanceEvent do not have a start or end heel. Include the preceeding cargo which does have heel to allow for some change.
-			if (removed == false && (event instanceof DryDockEvent || event instanceof MaintenanceEvent)) {
+			if (removed == false && (event instanceof DryDockEvent || event instanceof MaintenanceEvent || event instanceof CharterOutEvent)) {
 				final Pair<Set<Cargo>, Set<VesselEvent>> eventsAndCargoesToKeep = getDependenciesForEvent(schedule, event);
 				if (eventsAndCargoesToKeep != null) {
 					cargoesToKeep.addAll(eventsAndCargoesToKeep.getFirst());
