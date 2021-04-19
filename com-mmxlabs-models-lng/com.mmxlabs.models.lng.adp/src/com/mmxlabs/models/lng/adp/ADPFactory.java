@@ -307,6 +307,15 @@ public interface ADPFactory extends EFactory {
 	MullSubprofile createMullSubprofile();
 
 	/**
+	 * Returns a new object of class '<em>Mull Cargo Wrapper</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Mull Cargo Wrapper</em>'.
+	 * @generated
+	 */
+	MullCargoWrapper createMullCargoWrapper();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

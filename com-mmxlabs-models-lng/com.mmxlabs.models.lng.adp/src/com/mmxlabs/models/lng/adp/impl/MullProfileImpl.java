@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.adp.impl;
 
 import com.mmxlabs.models.lng.adp.ADPPackage;
+import com.mmxlabs.models.lng.adp.MullCargoWrapper;
 import com.mmxlabs.models.lng.adp.MullProfile;
 import com.mmxlabs.models.lng.adp.MullSubprofile;
 
@@ -38,6 +39,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.MullProfileImpl#getVolumeFlex <em>Volume Flex</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.MullProfileImpl#getInventories <em>Inventories</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.MullProfileImpl#getFullCargoLotValue <em>Full Cargo Lot Value</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.impl.MullProfileImpl#getCargoesToKeep <em>Cargoes To Keep</em>}</li>
  * </ul>
  *
  * @generated
@@ -112,6 +114,16 @@ public class MullProfileImpl extends EObjectImpl implements MullProfile {
 	 * @ordered
 	 */
 	protected int fullCargoLotValue = FULL_CARGO_LOT_VALUE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getCargoesToKeep() <em>Cargoes To Keep</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCargoesToKeep()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<MullCargoWrapper> cargoesToKeep;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -220,10 +232,25 @@ public class MullProfileImpl extends EObjectImpl implements MullProfile {
 	 * @generated
 	 */
 	@Override
+	public EList<MullCargoWrapper> getCargoesToKeep() {
+		if (cargoesToKeep == null) {
+			cargoesToKeep = new EObjectContainmentEList.Resolving<MullCargoWrapper>(MullCargoWrapper.class, this, ADPPackage.MULL_PROFILE__CARGOES_TO_KEEP);
+		}
+		return cargoesToKeep;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case ADPPackage.MULL_PROFILE__INVENTORIES:
 				return ((InternalEList<?>)getInventories()).basicRemove(otherEnd, msgs);
+			case ADPPackage.MULL_PROFILE__CARGOES_TO_KEEP:
+				return ((InternalEList<?>)getCargoesToKeep()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -244,6 +271,8 @@ public class MullProfileImpl extends EObjectImpl implements MullProfile {
 				return getInventories();
 			case ADPPackage.MULL_PROFILE__FULL_CARGO_LOT_VALUE:
 				return getFullCargoLotValue();
+			case ADPPackage.MULL_PROFILE__CARGOES_TO_KEEP:
+				return getCargoesToKeep();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -270,6 +299,10 @@ public class MullProfileImpl extends EObjectImpl implements MullProfile {
 			case ADPPackage.MULL_PROFILE__FULL_CARGO_LOT_VALUE:
 				setFullCargoLotValue((Integer)newValue);
 				return;
+			case ADPPackage.MULL_PROFILE__CARGOES_TO_KEEP:
+				getCargoesToKeep().clear();
+				getCargoesToKeep().addAll((Collection<? extends MullCargoWrapper>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -294,6 +327,9 @@ public class MullProfileImpl extends EObjectImpl implements MullProfile {
 			case ADPPackage.MULL_PROFILE__FULL_CARGO_LOT_VALUE:
 				setFullCargoLotValue(FULL_CARGO_LOT_VALUE_EDEFAULT);
 				return;
+			case ADPPackage.MULL_PROFILE__CARGOES_TO_KEEP:
+				getCargoesToKeep().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -314,6 +350,8 @@ public class MullProfileImpl extends EObjectImpl implements MullProfile {
 				return inventories != null && !inventories.isEmpty();
 			case ADPPackage.MULL_PROFILE__FULL_CARGO_LOT_VALUE:
 				return fullCargoLotValue != FULL_CARGO_LOT_VALUE_EDEFAULT;
+			case ADPPackage.MULL_PROFILE__CARGOES_TO_KEEP:
+				return cargoesToKeep != null && !cargoesToKeep.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

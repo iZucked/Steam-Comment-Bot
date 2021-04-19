@@ -71,7 +71,6 @@ public class MullEntityRowItemProvider
 			addEntityPropertyDescriptor(object);
 			addInitialAllocationPropertyDescriptor(object);
 			addRelativeEntitlementPropertyDescriptor(object);
-			addPortsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -138,28 +137,6 @@ public class MullEntityRowItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Ports feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addPortsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_MullEntityRow_ports_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_MullEntityRow_ports_feature", "_UI_MullEntityRow_type"),
-				 ADPPackage.Literals.MULL_ENTITY_ROW__PORTS,
-				 true,
-				 false,
-				 true,
-				 null,
 				 null,
 				 null));
 	}

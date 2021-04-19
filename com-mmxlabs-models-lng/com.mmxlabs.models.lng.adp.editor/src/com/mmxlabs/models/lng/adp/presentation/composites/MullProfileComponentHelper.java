@@ -7,12 +7,12 @@
 package com.mmxlabs.models.lng.adp.presentation.composites;
 
 import com.mmxlabs.models.lng.adp.ADPPackage;
-
+import com.mmxlabs.models.lng.adp.ui.inlineeditors.MullCargoWrapperInlineEditor;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
-
+import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 import java.util.ArrayList;
@@ -71,6 +71,7 @@ public class MullProfileComponentHelper extends BaseComponentHelper {
 		add_volumeFlexEditor(detailComposite, topClass);
 		add_inventoriesEditor(detailComposite, topClass);
 		add_fullCargoLotValueEditor(detailComposite, topClass);
+		add_cargoesToKeepEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the windowSize feature on MullProfile
@@ -103,5 +104,16 @@ public class MullProfileComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_fullCargoLotValueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.MULL_PROFILE__FULL_CARGO_LOT_VALUE));
+	}
+
+	/**
+	 * Create the editor for the cargoesToKeep feature on MullProfile
+	 *
+	 * @generated NOT
+	 */
+	protected void add_cargoesToKeepEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.MULL_PROFILE__CARGOES_TO_KEEP));
+		IInlineEditor editor = new MullCargoWrapperInlineEditor(ADPPackage.Literals.MULL_PROFILE__CARGOES_TO_KEEP);
+		detailComposite.addInlineEditor(editor);
 	}
 }

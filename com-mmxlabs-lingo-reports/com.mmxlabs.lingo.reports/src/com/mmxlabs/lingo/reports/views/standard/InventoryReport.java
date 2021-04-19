@@ -78,6 +78,7 @@ import org.swtchart.LineStyle;
 import org.swtchart.Range;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.time.Months;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
@@ -627,23 +628,24 @@ public class InventoryReport extends ViewPart {
 							if (adpModel != null) {
 								final MullProfile mullProfile = adpModel.getMullProfile();
 								if (mullProfile != null) {
-									final YearMonth adpStart = adpModel.getYearStart();
-									final YearMonth adpEnd = adpModel.getYearEnd();
-									final LocalDate startDate = adpStart.atDay(1);
-									TreeMap<LocalDate, InventoryDailyEvent> insAndOuts = getInventoryInsAndOuts(inventory);
-									int totalInventoryVolume = 0;
-									while (!insAndOuts.isEmpty() && insAndOuts.firstKey().isBefore(startDate)) {
-										final InventoryDailyEvent event = insAndOuts.remove(insAndOuts.firstKey());
-										totalInventoryVolume += event.netVolumeIn;
-									}
-									if (!insAndOuts.isEmpty()) {
-										insAndOuts.firstEntry().getValue().addVolume(totalInventoryVolume);
-										final Map<YearMonth, Integer> monthlyProduction = calculateMonthlyProduction(inventory, adpStart);
-										final Optional<MullSubprofile> sProfileOpt = mullProfile.getInventories().stream().filter(s -> s.getInventory() != null && s.getInventory().equals(inventory))
-												.findAny();
-										if (sProfileOpt.isPresent()) {
-											final MullSubprofile sProfile = sProfileOpt.get();
-											if (!sProfile.getEntityTable().isEmpty() && isValidMullSubProfile(sProfile)) {
+									final Optional<MullSubprofile> sProfileOpt = mullProfile.getInventories().stream().filter(s -> s.getInventory() != null && s.getInventory().equals(inventory))
+											.findAny();
+									if (sProfileOpt.isPresent()) {
+										final MullSubprofile sProfile = sProfileOpt.get();
+										if (!sProfile.getEntityTable().isEmpty() && isValidADPDateRange(adpModel) && isValidMullSubProfile(sProfile)) {
+
+											final YearMonth adpStart = adpModel.getYearStart();
+											final YearMonth adpEnd = adpModel.getYearEnd();
+											final LocalDate startDate = adpStart.atDay(1);
+											TreeMap<LocalDate, InventoryDailyEvent> insAndOuts = getInventoryInsAndOuts(inventory);
+											int totalInventoryVolume = 0;
+											while (!insAndOuts.isEmpty() && insAndOuts.firstKey().isBefore(startDate)) {
+												final InventoryDailyEvent event = insAndOuts.remove(insAndOuts.firstKey());
+												totalInventoryVolume += event.netVolumeIn;
+											}
+											if (!insAndOuts.isEmpty()) {
+												insAndOuts.firstEntry().getValue().addVolume(totalInventoryVolume);
+												final Map<YearMonth, Integer> monthlyProduction = calculateMonthlyProduction(inventory, adpStart);
 												final List<BaseLegalEntity> entitiesOrdered = calculateEntityOrder(sProfile);
 												final List<Pair<BaseLegalEntity, Double>> relativeEntitlements = sProfile.getEntityTable().stream() //
 														.map(row -> new Pair<BaseLegalEntity, Double>(row.getEntity(), row.getRelativeEntitlement())) //
@@ -1632,6 +1634,12 @@ public class InventoryReport extends ViewPart {
 			grid.select(pos);
 			grid.showSelection();
 		}
+	}
+
+	private boolean isValidADPDateRange(@NonNull final ADPModel adpModel) {
+		final YearMonth start = adpModel.getYearStart();
+		final YearMonth end = adpModel.getYearEnd();
+		return start != null && end != null && start.isBefore(end) && Months.between(start, end) == 12;
 	}
 
 	private boolean isValidMullSubProfile(final MullSubprofile subProfile) {

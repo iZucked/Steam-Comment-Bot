@@ -226,6 +226,10 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 				return createMullAllocationRowAdapter();
 			}
 			@Override
+			public Adapter caseMullCargoWrapper(MullCargoWrapper object) {
+				return createMullCargoWrapperAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -768,6 +772,20 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createMullAllocationRowAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.MullCargoWrapper <em>Mull Cargo Wrapper</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.MullCargoWrapper
+	 * @generated
+	 */
+	public Adapter createMullCargoWrapperAdapter() {
 		return null;
 	}
 
