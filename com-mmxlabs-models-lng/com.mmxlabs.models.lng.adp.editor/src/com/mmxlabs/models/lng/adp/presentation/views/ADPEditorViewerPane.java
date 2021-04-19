@@ -125,12 +125,12 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 						@Override
 						public void widgetSelected(final SelectionEvent e) {
 							if (editorData.adpModel != null) {
-								if (MessageDialog.openConfirm(getJointModelEditorPart().getShell(), "Delete ADP", "Are you sure you want to delete the current ADP model?")) {
+								if (MessageDialog.openConfirm(getScenarioEditingLocation().getShell(), "Delete ADP", "Are you sure you want to delete the current ADP model?")) {
 
 									final CompoundCommand cmd = new CompoundCommand("Delete current ADP");
 									cmd.append(DeleteCommand.create(getEditingDomain(), editorData.adpModel));
 									getEditingDomain().getCommandStack().execute(cmd);
-									doDisplayScenarioInstance(getJointModelEditorPart().getScenarioInstance(), getJointModelEditorPart().getRootObject(), null);
+									doDisplayScenarioInstance(getScenarioEditingLocation().getScenarioInstance(), getScenarioEditingLocation().getRootObject(), null);
 								}
 							}
 						}
@@ -177,7 +177,7 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 		// makeUndoActions();
 
 		// listenToScenarioSelection();
-		doDisplayScenarioInstance(getJointModelEditorPart().getScenarioInstance(), getJointModelEditorPart().getRootObject(), null);
+		doDisplayScenarioInstance(getScenarioEditingLocation().getScenarioInstance(), getScenarioEditingLocation().getRootObject(), null);
 
 		// Create dummy viewer instance
 		return new Viewer() {
@@ -191,7 +191,7 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 			@Override
 			public void setInput(Object input) {
 				// TODO Auto-generated method stub
-				doDisplayScenarioInstance(getJointModelEditorPart().getScenarioInstance(), getJointModelEditorPart().getRootObject(), null);
+				doDisplayScenarioInstance(getScenarioEditingLocation().getScenarioInstance(), getScenarioEditingLocation().getRootObject(), null);
 			}
 
 			@Override

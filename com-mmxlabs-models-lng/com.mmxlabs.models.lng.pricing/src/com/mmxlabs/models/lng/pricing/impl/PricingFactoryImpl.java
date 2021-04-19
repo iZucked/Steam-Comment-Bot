@@ -86,6 +86,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.SUEZ_CANAL_TUG_BAND: return createSuezCanalTugBand();
 			case PricingPackage.SUEZ_CANAL_TARIFF: return createSuezCanalTariff();
 			case PricingPackage.SUEZ_CANAL_TARIFF_BAND: return createSuezCanalTariffBand();
+			case PricingPackage.SUEZ_CANAL_ROUTE_REBATE: return createSuezCanalRouteRebate();
 			case PricingPackage.UNIT_CONVERSION: return createUnitConversion();
 			case PricingPackage.DATE_POINT_CONTAINER: return createDatePointContainer();
 			case PricingPackage.DATE_POINT: return createDatePoint();
@@ -291,6 +292,17 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public SuezCanalTariffBand createSuezCanalTariffBand() {
 		SuezCanalTariffBandImpl suezCanalTariffBand = new SuezCanalTariffBandImpl();
 		return suezCanalTariffBand;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SuezCanalRouteRebate createSuezCanalRouteRebate() {
+		SuezCanalRouteRebateImpl suezCanalRouteRebate = new SuezCanalRouteRebateImpl();
+		return suezCanalRouteRebate;
 	}
 
 	/**

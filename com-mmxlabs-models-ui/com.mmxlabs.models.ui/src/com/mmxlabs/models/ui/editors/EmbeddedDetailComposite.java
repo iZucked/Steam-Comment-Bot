@@ -100,6 +100,8 @@ public class EmbeddedDetailComposite {
 
 		mainCompositeScrolled = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL);
 		mainCompositeScrolled.setExpandVertical(true);
+		mainCompositeScrolled.setExpandHorizontal(true);
+		
 		mainCompositeScrolled.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
 		mainCompositeScrolled.setLayoutData(GridDataFactory.fillDefaults()//

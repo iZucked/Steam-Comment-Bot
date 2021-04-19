@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -63,6 +64,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
@@ -521,82 +523,85 @@ public class CargoEconsReport extends ViewPart {
 
 			for (final Object obj : selectedObjects) {
 				if (obj != null && (obj instanceof Cargo || obj instanceof Slot || obj instanceof VesselEvent || obj instanceof PaperDeal)) {
-					final Schedule schedule = ScenarioModelUtil.findScenarioModel((EObject) obj).getScheduleModel().getSchedule();
-					Cargo cargo = null;
-					Slot<?> slot = null;
-					VesselEvent event = null;
-					if (obj instanceof VesselEvent) {
-						event = (VesselEvent) obj;
-					} else if (obj instanceof Cargo) {
-						cargo = (Cargo) obj;
-					}  else if (obj instanceof PaperDeal) {
-						final PaperDeal paperDeal = (PaperDeal) obj;
-						if (schedule != null) {
-							if (paperDealMap == null) {
-								paperDealMap = schedule.getPaperDealAllocations().stream() //
-										.collect(Collectors.toMap(PaperDealAllocation::getPaperDeal, Functions.identity()));
-							}
-							final PaperDealAllocation pda = paperDealMap.get(paperDeal);
-							if (pda != null) {
-								validObjects.add(pda);
-							}
-						}
-					} else {
-						// Must be a slot
-						assert obj instanceof Slot;
-						if (obj instanceof LoadSlot) {
-							cargo = ((LoadSlot) obj).getCargo();
-							slot = (LoadSlot) obj;
-						} else if (obj instanceof DischargeSlot) {
-							cargo = ((DischargeSlot) obj).getCargo();
-							slot = (DischargeSlot) obj;
-						}
-					}
-					
-
-					if (cargo != null && schedule != null) {
-						if (cargoMap == null) {
-							cargoMap = new HashMap<>();
-							for (final CargoAllocation ca : schedule.getCargoAllocations()) {
-								final Set<Slot<?>> key = new HashSet<>();
-								for (final SlotAllocation sa : ca.getSlotAllocations()) {
-									final Slot<?> s = sa.getSlot();
-									if (s != null) {
-										key.add(s);
-									}
+					final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel((EObject) obj);
+					if (scenarioModel != null && scenarioModel.getScheduleModel() != null && scenarioModel.getScheduleModel().getSchedule() != null) {
+						final Schedule schedule = scenarioModel.getScheduleModel().getSchedule();
+						Cargo cargo = null;
+						Slot<?> slot = null;
+						VesselEvent event = null;
+						if (obj instanceof VesselEvent) {
+							event = (VesselEvent) obj;
+						} else if (obj instanceof Cargo) {
+							cargo = (Cargo) obj;
+						}  else if (obj instanceof PaperDeal) {
+							final PaperDeal paperDeal = (PaperDeal) obj;
+							if (schedule != null) {
+								if (paperDealMap == null) {
+									paperDealMap = schedule.getPaperDealAllocations().stream() //
+											.collect(Collectors.toMap(PaperDealAllocation::getPaperDeal, Functions.identity()));
 								}
-								cargoMap.put(key, ca);
+								final PaperDealAllocation pda = paperDealMap.get(paperDeal);
+								if (pda != null) {
+									validObjects.add(pda);
+								}
+							}
+						} else {
+							// Must be a slot
+							assert obj instanceof Slot;
+							if (obj instanceof LoadSlot) {
+								cargo = ((LoadSlot) obj).getCargo();
+								slot = (LoadSlot) obj;
+							} else if (obj instanceof DischargeSlot) {
+								cargo = ((DischargeSlot) obj).getCargo();
+								slot = (DischargeSlot) obj;
 							}
 						}
-						final CargoAllocation cargoAllocation = cargoMap.get(new HashSet<>(cargo.getSlots()));
-						if (cargoAllocation != null) {
-							validObjects.add(cargoAllocation);
-						}
-					} else if (slot != null && schedule != null) {
-						for (final MarketAllocation marketAllocation : schedule.getMarketAllocations()) {
-							if (slot == marketAllocation.getSlot()) {
-								validObjects.add(marketAllocation);
-								break;
+
+
+						if (cargo != null && schedule != null) {
+							if (cargoMap == null) {
+								cargoMap = new HashMap<>();
+								for (final CargoAllocation ca : schedule.getCargoAllocations()) {
+									final Set<Slot<?>> key = new HashSet<>();
+									for (final SlotAllocation sa : ca.getSlotAllocations()) {
+										final Slot<?> s = sa.getSlot();
+										if (s != null) {
+											key.add(s);
+										}
+									}
+									cargoMap.put(key, ca);
+								}
+							}
+							final CargoAllocation cargoAllocation = cargoMap.get(new HashSet<>(cargo.getSlots()));
+							if (cargoAllocation != null) {
+								validObjects.add(cargoAllocation);
+							}
+						} else if (slot != null && schedule != null) {
+							for (final MarketAllocation marketAllocation : schedule.getMarketAllocations()) {
+								if (slot == marketAllocation.getSlot()) {
+									validObjects.add(marketAllocation);
+									break;
+								}
+							}
+							for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
+								if (slot == openSlotAllocation.getSlot()) {
+									validObjects.add(openSlotAllocation);
+									break;
+								}
+							}
+						} else if (event != null && schedule != null) {
+							if (vesselEventMap == null) {
+								vesselEventMap = schedule.getSequences().stream().flatMap(s -> s.getEvents().stream()) //
+										.filter(VesselEventVisit.class::isInstance) //
+										.map(VesselEventVisit.class::cast) //
+										.collect(Collectors.toMap(VesselEventVisit::getVesselEvent, Functions.identity()));
+							}
+							final VesselEventVisit vesselEventVisit = vesselEventMap.get(event);
+							if (vesselEventVisit != null) {
+								validObjects.add(vesselEventVisit);
 							}
 						}
-						for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
-							if (slot == openSlotAllocation.getSlot()) {
-								validObjects.add(openSlotAllocation);
-								break;
-							}
-						}
-					} else if (event != null && schedule != null) {
-						if (vesselEventMap == null) {
-							vesselEventMap = schedule.getSequences().stream().flatMap(s -> s.getEvents().stream()) //
-									.filter(VesselEventVisit.class::isInstance) //
-									.map(VesselEventVisit.class::cast) //
-									.collect(Collectors.toMap(VesselEventVisit::getVesselEvent, Functions.identity()));
-						}
-						final VesselEventVisit vesselEventVisit = vesselEventMap.get(event);
-						if (vesselEventVisit != null) {
-							validObjects.add(vesselEventVisit);
-						}
-					}
+					}					
 				}
 			}
 		}

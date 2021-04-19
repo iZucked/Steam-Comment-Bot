@@ -326,7 +326,6 @@ public class ChangeSetView extends ViewPart {
 
 		@Override
 		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
-
 			if (!inChangingChangeSetSelection.get()) {
 				setViewMode(ViewMode.COMPARE, false);
 				setPartName("Changes");
@@ -356,9 +355,6 @@ public class ChangeSetView extends ViewPart {
 	private ViewMode viewMode = ViewMode.COMPARE;
 	private IAdditionalAttributeProvider additionalAttributeProvider;
 
-	// flag to indicate whether or not to respond to data change events.
-	// private boolean handleEvents;
-
 	private boolean canExportChangeSet;
 
 	private InsertionPlanGrouperAndFilter insertionPlanFilter;
@@ -384,9 +380,8 @@ public class ChangeSetView extends ViewPart {
 
 			// Reset selection
 			scenarioComparisonService.setSelection(new StructuredSelection());
-			// eSelectionService.setPostSelection(Collections.emptySet().toArray());
 
-			// TODO: Extract vessel columns and generate.
+			// Extract vessel columns and generate.
 
 			final Set<VesselData> vesselnames = new LinkedHashSet<>();
 
@@ -521,8 +516,6 @@ public class ChangeSetView extends ViewPart {
 
 					@Override
 					public void displayActionPlan(final List<ScenarioResult> scenarios) {
-						// columnHelper.cleanUpVesselColumns();
-
 						final ViewState newViewState = new ViewState(null, SortMode.BY_GROUP);
 						final ChangeSetRoot newRoot = new ScheduleResultListTransformer().createDataModel(scenarios, new NullProgressMonitor());
 						final ChangeSetToTableTransformer changeSetToTableTransformer = new ChangeSetToTableTransformer();
@@ -609,7 +602,6 @@ public class ChangeSetView extends ViewPart {
 	}
 
 	private final Queue<Runnable> postCreateActions = new ConcurrentLinkedQueue<>();
-	private boolean viewCreated = false;
 
 	private boolean showAlternativeChangeModel = false; // Is the alt P&L base mode active?
 	protected boolean showToggleAltPNLBaseAction = false; // Is the alt P&L button active/visible?
@@ -626,8 +618,7 @@ public class ChangeSetView extends ViewPart {
 	@Override
 	public void createPartControl(final Composite parent) {
 		scenarioComparisonService = PlatformUI.getWorkbench().getService(ScenarioComparisonService.class);
-		// eSelectionService = PlatformUI.getWorkbench().getService(ESelectionService.class);
-		// scenarioSelectionProvider = PlatformUI.getWorkbench().getService(IScenarioServiceSelectionProvider.class);
+
 		// Create table
 		viewer = new GridTreeViewer(parent, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 		GridViewerHelper.configureLookAndFeel(viewer);
@@ -656,9 +647,9 @@ public class ChangeSetView extends ViewPart {
 				if (selection instanceof IStructuredSelection) {
 					final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
 
+					// Extract out the selected ChangeSet, ChangeSet group and explicitly selected rows
 					ISelection newSelection;
 					{
-
 						final Set<Object> selectedElements = new LinkedHashSet<>();
 						final Iterator<?> itr = iStructuredSelection.iterator();
 						while (itr.hasNext()) {
@@ -706,7 +697,7 @@ public class ChangeSetView extends ViewPart {
 						}
 					} else {
 						// Update selected elements
-						scenarioComparisonService.setSelection(newSelection);
+						scenarioComparisonService.setSelectionWithChangeSet(newSelection);
 					}
 				}
 			}
@@ -904,7 +895,6 @@ public class ChangeSetView extends ViewPart {
 			listener.selectedDataProviderChanged(scenarioComparisonService.getCurrentSelectedDataProvider(), false);
 		}
 		synchronized (postCreateActions) {
-			viewCreated = true;
 			while (!postCreateActions.isEmpty()) {
 				final Runnable r = postCreateActions.poll();
 				if (r != null) {
@@ -1111,7 +1101,6 @@ public class ChangeSetView extends ViewPart {
 		} else {
 			final Display display = PlatformUI.getWorkbench().getDisplay();
 			final Shell activeShell = display.getActiveShell();
-
 			final ICoreRunnable runnable = (monitor) -> {
 				try {
 					final ViewState newViewState = action.apply(monitor, targetSlotId);

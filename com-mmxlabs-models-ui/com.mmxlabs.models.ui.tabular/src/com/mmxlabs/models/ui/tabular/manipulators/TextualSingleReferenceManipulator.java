@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.autocomplete.AutoCompleteHelper;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
@@ -59,14 +60,14 @@ public class TextualSingleReferenceManipulator extends BasicAttributeManipulator
 	 * @param editingDomain
 	 *            editing domain for setting
 	 */
-	public TextualSingleReferenceManipulator(final EReference field, final IReferenceValueProvider valueProvider, final EditingDomain editingDomain) {
-		super(field, editingDomain);
+	public TextualSingleReferenceManipulator(final EReference field, final IReferenceValueProvider valueProvider, final ICommandHandler commandHandler) {
+		super(field, commandHandler);
 
 		this.valueProvider = valueProvider;
 	}
 
-	public TextualSingleReferenceManipulator(final EReference field, final IReferenceValueProviderProvider valueProviderProvider, final EditingDomain editingDomain) {
-		this(field, valueProviderProvider.getReferenceValueProvider(field.getEContainingClass(), field), editingDomain);
+	public TextualSingleReferenceManipulator(final EReference field, final IReferenceValueProviderProvider valueProviderProvider, final ICommandHandler commandHandler) {
+		this(field, valueProviderProvider.getReferenceValueProvider(field.getEContainingClass(), field), commandHandler);
 	}
 
 	@Override

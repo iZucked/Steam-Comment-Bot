@@ -12,12 +12,12 @@ import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -37,6 +37,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
+
 import com.google.common.base.Joiner;
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.common.csv.IFieldMap;
@@ -46,6 +47,8 @@ import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.PreDefinedDate;
 import com.mmxlabs.models.lng.adp.PreDefinedDistributionModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.editors.DefaultCommandHandler;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -57,7 +60,7 @@ public class PreDefinedDatesInlineEditorDialog extends Dialog {
 	private EReference containment;
 
 	private AdapterFactory adapterFactory;
-	private EditingDomain editingDomain;
+	private ICommandHandler commandHandler;
 	private ModelReference modelReference;
 
 	public PreDefinedDatesInlineEditorDialog(final Shell parentShell) {
@@ -81,7 +84,7 @@ public class PreDefinedDatesInlineEditorDialog extends Dialog {
 		table.setLinesVisible(true);
 		// table.setRowHeaderVisible(true);
 
-		final GridViewerColumn dateCol = tableViewer.addTypicalColumn("Date", new LocalDateAttributeManipulator(ADPPackage.Literals.PRE_DEFINED_DATE__DATE, editingDomain));
+		final GridViewerColumn dateCol = tableViewer.addTypicalColumn("Date", new LocalDateAttributeManipulator(ADPPackage.Literals.PRE_DEFINED_DATE__DATE, commandHandler));
 
 		tableViewer.setInput(container);
 
@@ -205,7 +208,7 @@ public class PreDefinedDatesInlineEditorDialog extends Dialog {
 		this.containment = containment;
 
 		this.modelReference = modelReference;
-		this.editingDomain = modelReference.getEditingDomain();
+		this.commandHandler = new DefaultCommandHandler(modelReference, null);
 		this.adapterFactory = adapterFactory;
 
 		return super.open();

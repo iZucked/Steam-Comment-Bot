@@ -348,9 +348,11 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		if (pda.eContainer() instanceof Schedule) {
 			final Schedule schedule = (Schedule) pda.eContainer();
 			if (schedule.getGeneratedPaperDeals().contains(pda.getPaperDeal())) {
-				price = pda.getPaperDeal().getPrice();
+				if (pda.getPaperDeal() != null)
+					price = pda.getPaperDeal().getPrice();
 			} else {
-				price = pda.getEntries().get(0).getPrice();
+				if (pda.getEntries() != null && !pda.getEntries().isEmpty())
+					price = pda.getEntries().get(0).getPrice();
 			}
 		}
 		return price;
@@ -361,9 +363,11 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		if (pda.eContainer() instanceof Schedule) {
 			final Schedule schedule = (Schedule) pda.eContainer();
 			if (!schedule.getGeneratedPaperDeals().contains(pda.getPaperDeal())) {
-				price = pda.getPaperDeal().getPrice();
+				if (pda.getPaperDeal() != null)
+					price = pda.getPaperDeal().getPrice();
 			} else {
-				price = pda.getEntries().get(0).getPrice();
+				if (pda.getEntries() != null && !pda.getEntries().isEmpty())
+					price = pda.getEntries().get(0).getPrice();
 			}
 		}
 		return price;

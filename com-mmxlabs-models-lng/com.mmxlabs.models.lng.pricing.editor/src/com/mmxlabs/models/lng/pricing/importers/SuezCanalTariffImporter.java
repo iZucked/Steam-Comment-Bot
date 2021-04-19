@@ -78,6 +78,7 @@ public class SuezCanalTariffImporter extends DefaultClassImporter {
 		final Collection<Map<String, String>> exportObjects = new LinkedList<>();
 		exportObjects.addAll(exportObjects(tariff.getBands(), context));
 		exportObjects.addAll(exportObjects(tariff.getTugBands(), context));
+		exportObjects.addAll(exportObjects(tariff.getRouteRebates(), context));
 
 		exportObjects.add(CollectionsUtil.<String, String>makeHashMap(TUG_COST_KEY, String.format("%.2f", tariff.getTugCost())));
 		exportObjects.add(CollectionsUtil.<String, String>makeHashMap(FIXED_COST_KEY, String.format("%.2f", tariff.getFixedCosts())));

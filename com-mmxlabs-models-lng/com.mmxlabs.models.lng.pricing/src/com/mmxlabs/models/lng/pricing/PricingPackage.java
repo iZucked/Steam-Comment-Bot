@@ -941,13 +941,22 @@ public interface PricingPackage extends EPackage {
 	int SUEZ_CANAL_TARIFF__TUG_BANDS = 1;
 
 	/**
+	 * The feature id for the '<em><b>Route Rebates</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUEZ_CANAL_TARIFF__ROUTE_REBATES = 2;
+
+	/**
 	 * The feature id for the '<em><b>Tug Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SUEZ_CANAL_TARIFF__TUG_COST = 2;
+	int SUEZ_CANAL_TARIFF__TUG_COST = 3;
 
 	/**
 	 * The feature id for the '<em><b>Fixed Costs</b></em>' attribute.
@@ -956,7 +965,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SUEZ_CANAL_TARIFF__FIXED_COSTS = 3;
+	int SUEZ_CANAL_TARIFF__FIXED_COSTS = 4;
 
 	/**
 	 * The feature id for the '<em><b>Discount Factor</b></em>' attribute.
@@ -965,7 +974,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SUEZ_CANAL_TARIFF__DISCOUNT_FACTOR = 4;
+	int SUEZ_CANAL_TARIFF__DISCOUNT_FACTOR = 5;
 
 	/**
 	 * The feature id for the '<em><b>Sdr To USD</b></em>' attribute.
@@ -974,7 +983,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SUEZ_CANAL_TARIFF__SDR_TO_USD = 5;
+	int SUEZ_CANAL_TARIFF__SDR_TO_USD = 6;
 
 	/**
 	 * The number of structural features of the '<em>Suez Canal Tariff</em>' class.
@@ -983,7 +992,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SUEZ_CANAL_TARIFF_FEATURE_COUNT = 6;
+	int SUEZ_CANAL_TARIFF_FEATURE_COUNT = 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.SuezCanalTariffBandImpl <em>Suez Canal Tariff Band</em>}' class.
@@ -1041,6 +1050,52 @@ public interface PricingPackage extends EPackage {
 	int SUEZ_CANAL_TARIFF_BAND_FEATURE_COUNT = 4;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.SuezCanalRouteRebateImpl <em>Suez Canal Route Rebate</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.SuezCanalRouteRebateImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSuezCanalRouteRebate()
+	 * @generated
+	 */
+	int SUEZ_CANAL_ROUTE_REBATE = 18;
+
+	/**
+	 * The feature id for the '<em><b>From</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUEZ_CANAL_ROUTE_REBATE__FROM = 0;
+
+	/**
+	 * The feature id for the '<em><b>To</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUEZ_CANAL_ROUTE_REBATE__TO = 1;
+
+	/**
+	 * The feature id for the '<em><b>Rebate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUEZ_CANAL_ROUTE_REBATE__REBATE = 2;
+
+	/**
+	 * The number of structural features of the '<em>Suez Canal Route Rebate</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUEZ_CANAL_ROUTE_REBATE_FEATURE_COUNT = 3;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.UnitConversionImpl <em>Unit Conversion</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1048,7 +1103,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getUnitConversion()
 	 * @generated
 	 */
-	int UNIT_CONVERSION = 18;
+	int UNIT_CONVERSION = 19;
 
 	/**
 	 * The feature id for the '<em><b>From</b></em>' attribute.
@@ -1094,7 +1149,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getDatePointContainer()
 	 * @generated
 	 */
-	int DATE_POINT_CONTAINER = 19;
+	int DATE_POINT_CONTAINER = 20;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1149,7 +1204,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getDatePoint()
 	 * @generated
 	 */
-	int DATE_POINT = 20;
+	int DATE_POINT = 21;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -1186,7 +1241,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getYearMonthPointContainer()
 	 * @generated
 	 */
-	int YEAR_MONTH_POINT_CONTAINER = 21;
+	int YEAR_MONTH_POINT_CONTAINER = 22;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1241,7 +1296,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getYearMonthPoint()
 	 * @generated
 	 */
-	int YEAR_MONTH_POINT = 22;
+	int YEAR_MONTH_POINT = 23;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -1278,7 +1333,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getAbstractYearMonthCurve()
 	 * @generated
 	 */
-	int ABSTRACT_YEAR_MONTH_CURVE = 23;
+	int ABSTRACT_YEAR_MONTH_CURVE = 24;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1360,7 +1415,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCommodityCurve()
 	 * @generated
 	 */
-	int COMMODITY_CURVE = 24;
+	int COMMODITY_CURVE = 25;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1451,7 +1506,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCharterCurve()
 	 * @generated
 	 */
-	int CHARTER_CURVE = 25;
+	int CHARTER_CURVE = 26;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1533,7 +1588,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getBunkerFuelCurve()
 	 * @generated
 	 */
-	int BUNKER_FUEL_CURVE = 26;
+	int BUNKER_FUEL_CURVE = 27;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1615,7 +1670,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCurrencyCurve()
 	 * @generated
 	 */
-	int CURRENCY_CURVE = 27;
+	int CURRENCY_CURVE = 28;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1697,7 +1752,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getMarketIndex()
 	 * @generated
 	 */
-	int MARKET_INDEX = 28;
+	int MARKET_INDEX = 29;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1788,7 +1843,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPricingCalendarEntry()
 	 * @generated
 	 */
-	int PRICING_CALENDAR_ENTRY = 29;
+	int PRICING_CALENDAR_ENTRY = 30;
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
@@ -1843,7 +1898,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPricingCalendar()
 	 * @generated
 	 */
-	int PRICING_CALENDAR = 30;
+	int PRICING_CALENDAR = 31;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1898,7 +1953,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getHolidayCalendarEntry()
 	 * @generated
 	 */
-	int HOLIDAY_CALENDAR_ENTRY = 31;
+	int HOLIDAY_CALENDAR_ENTRY = 32;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -1935,7 +1990,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getHolidayCalendar()
 	 * @generated
 	 */
-	int HOLIDAY_CALENDAR = 32;
+	int HOLIDAY_CALENDAR = 33;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1990,7 +2045,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSettleStrategy()
 	 * @generated
 	 */
-	int SETTLE_STRATEGY = 33;
+	int SETTLE_STRATEGY = 34;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2796,6 +2851,17 @@ public interface PricingPackage extends EPackage {
 	EReference getSuezCanalTariff_TugBands();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getRouteRebates <em>Route Rebates</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Route Rebates</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalTariff#getRouteRebates()
+	 * @see #getSuezCanalTariff()
+	 * @generated
+	 */
+	EReference getSuezCanalTariff_RouteRebates();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SuezCanalTariff#getTugCost <em>Tug Cost</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2892,6 +2958,49 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getSuezCanalTariffBand_BandEnd();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.SuezCanalRouteRebate <em>Suez Canal Route Rebate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Suez Canal Route Rebate</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalRouteRebate
+	 * @generated
+	 */
+	EClass getSuezCanalRouteRebate();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.pricing.SuezCanalRouteRebate#getFrom <em>From</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>From</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalRouteRebate#getFrom()
+	 * @see #getSuezCanalRouteRebate()
+	 * @generated
+	 */
+	EReference getSuezCanalRouteRebate_From();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.pricing.SuezCanalRouteRebate#getTo <em>To</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>To</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalRouteRebate#getTo()
+	 * @see #getSuezCanalRouteRebate()
+	 * @generated
+	 */
+	EReference getSuezCanalRouteRebate_To();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SuezCanalRouteRebate#getRebate <em>Rebate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Rebate</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalRouteRebate#getRebate()
+	 * @see #getSuezCanalRouteRebate()
+	 * @generated
+	 */
+	EAttribute getSuezCanalRouteRebate_Rebate();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.UnitConversion <em>Unit Conversion</em>}'.
@@ -4028,6 +4137,14 @@ public interface PricingPackage extends EPackage {
 		EReference SUEZ_CANAL_TARIFF__TUG_BANDS = eINSTANCE.getSuezCanalTariff_TugBands();
 
 		/**
+		 * The meta object literal for the '<em><b>Route Rebates</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SUEZ_CANAL_TARIFF__ROUTE_REBATES = eINSTANCE.getSuezCanalTariff_RouteRebates();
+
+		/**
 		 * The meta object literal for the '<em><b>Tug Cost</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -4100,6 +4217,40 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SUEZ_CANAL_TARIFF_BAND__BAND_END = eINSTANCE.getSuezCanalTariffBand_BandEnd();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.SuezCanalRouteRebateImpl <em>Suez Canal Route Rebate</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.SuezCanalRouteRebateImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSuezCanalRouteRebate()
+		 * @generated
+		 */
+		EClass SUEZ_CANAL_ROUTE_REBATE = eINSTANCE.getSuezCanalRouteRebate();
+
+		/**
+		 * The meta object literal for the '<em><b>From</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SUEZ_CANAL_ROUTE_REBATE__FROM = eINSTANCE.getSuezCanalRouteRebate_From();
+
+		/**
+		 * The meta object literal for the '<em><b>To</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SUEZ_CANAL_ROUTE_REBATE__TO = eINSTANCE.getSuezCanalRouteRebate_To();
+
+		/**
+		 * The meta object literal for the '<em><b>Rebate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SUEZ_CANAL_ROUTE_REBATE__REBATE = eINSTANCE.getSuezCanalRouteRebate_Rebate();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.UnitConversionImpl <em>Unit Conversion</em>}' class.

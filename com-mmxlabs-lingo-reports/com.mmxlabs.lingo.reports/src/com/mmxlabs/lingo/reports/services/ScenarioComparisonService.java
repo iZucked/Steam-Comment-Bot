@@ -47,6 +47,7 @@ import com.mmxlabs.scenario.service.IScenarioServiceSelectionChangedListener;
 import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
 public class ScenarioComparisonService implements IScenarioServiceSelectionProvider {
 
@@ -54,7 +55,7 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 
 	private final WeakHashMap<CommandStack, MyCommandStackListener> commandStacks = new WeakHashMap<>();
 
-	private SelectedDataProviderImpl currentSelectedDataProvider = new SelectedDataProviderImpl();
+	private @NonNull SelectedDataProviderImpl currentSelectedDataProvider = new SelectedDataProviderImpl();
 
 	private final Collection<ISelectedScenariosServiceListener> listeners = new ConcurrentLinkedQueue<>();
 	private final Collection<IScenarioServiceSelectionChangedListener> selectedScenariosListeners = new ConcurrentLinkedQueue<>();
@@ -212,7 +213,7 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 		}
 	}
 
-	private synchronized void scheduleSelectionRefresh(final ISelection selection, final boolean block) {
+	private synchronized void scheduleSelectionRefresh(final ISelection selection, boolean withChangeSets, final boolean block) {
 		final int value = counter.get();
 		if (PlatformUI.isWorkbenchRunning()) {
 			RunnerHelper.exec(() -> {
@@ -222,6 +223,10 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 				if (inSelectionChanged.compareAndSet(false, true)) {
 					try {
 
+						// Selection object is expected to have ChangeSet info, so extract and update the information
+						if (withChangeSets) {
+							updateChangeSetFromSelection(selection, currentSelectedDataProvider);
+						}
 						currentSelectedDataProvider.setSelectedObjects(null, selection);
 
 						for (final ISelectedScenariosServiceListener l : listeners) {
@@ -272,6 +277,32 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 
 		selectedDataProvider.setSelectedObjects(null, selection);
 
+		updateChangeSetFromSelection(selection, selectedDataProvider);
+
+		// TODO: Add in other data elements to
+
+		if (value != counter.get()) {
+			return;
+		}
+		currentSelectedDataProvider = selectedDataProvider;
+		for (final IScenarioServiceSelectionChangedListener listener : selectedScenariosListeners) {
+			try {
+				listener.selectionChanged(pinned, others);
+			} catch (final Exception e) {
+				LOGGER.error(e.getMessage(), e);
+			}
+		}
+
+		for (final ISelectedScenariosServiceListener l : listeners) {
+			try {
+				l.selectedDataProviderChanged(selectedDataProvider, block);
+			} catch (final Exception e) {
+				LOGGER.error(e.getMessage(), e);
+			}
+		}
+	}
+
+	private void updateChangeSetFromSelection(final ISelection selection, final SelectedDataProviderImpl selectedDataProvider) {
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
 
@@ -304,28 +335,6 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 			selectedDataProvider.setChangeSet(set);
 			selectedDataProvider.setChangeSetRows(rows);
 		}
-
-		// TODO: Add in other data elements to
-
-		if (value != counter.get()) {
-			return;
-		}
-		currentSelectedDataProvider = selectedDataProvider;
-		for (final IScenarioServiceSelectionChangedListener listener : selectedScenariosListeners) {
-			try {
-				listener.selectionChanged(pinned, others);
-			} catch (final Exception e) {
-				LOGGER.error(e.getMessage(), e);
-			}
-		}
-
-		for (final ISelectedScenariosServiceListener l : listeners) {
-			try {
-				l.selectedDataProviderChanged(selectedDataProvider, block);
-			} catch (final Exception e) {
-				LOGGER.error(e.getMessage(), e);
-			}
-		}
 	}
 
 	public void addListener(@NonNull final ISelectedScenariosServiceListener listener) {
@@ -348,8 +357,22 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 		return currentSelectedDataProvider;
 	}
 
+	/**
+	 * Update the current Selection. Note this will not update selected ChangeSet information.
+	 * 
+	 * @param newSelection
+	 */
 	public void setSelection(final ISelection newSelection) {
-		scheduleSelectionRefresh(newSelection, false);
+		scheduleSelectionRefresh(newSelection, false, false);
+	}
+
+	/**
+	 * Update the current Selection and selected ChangeSet information based on ChangeSet objects in the ISelection
+	 * 
+	 * @param newSelection
+	 */
+	public void setSelectionWithChangeSet(final ISelection newSelection) {
+		scheduleSelectionRefresh(newSelection, true, false);
 	}
 
 	public DiffOptions getDiffOptions() {
@@ -442,14 +465,15 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 
 		@Override
 		public void selectionChanged(final MPart part, final Object selectedObject) {
-
-			// Avoid re-entrant selection changes.
-			if (inSelectionChanged.compareAndSet(false, true)) {
-				try {
-					final ISelection selection = SelectionHelper.adaptSelection(selectedObject);
-					setSelection(selection);
-				} finally {
-					inSelectionChanged.set(false);
+			if (SelectionServiceUtils.isSelectionValid(part, selectedObject)) {
+				// Avoid re-entrant selection changes.
+				if (inSelectionChanged.compareAndSet(false, true)) {
+					try {
+						final ISelection selection = SelectionHelper.adaptSelection(selectedObject);
+						setSelection(selection);
+					} finally {
+						inSelectionChanged.set(false);
+					}
 				}
 			}
 		}
@@ -470,5 +494,33 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 			selectionService.removePostSelectionListener(selectionListener);
 		}
 		selectionService = null;
+	}
+
+	public synchronized void updateActiveEditorScenario(@Nullable ScenarioInstance newInstance, @Nullable ScenarioInstance oldInstance, boolean block) {
+
+		// Same instance? No need to update
+		if (oldInstance == newInstance) {
+			return;
+		}
+
+		final List<ScenarioResult> others = new LinkedList<>(currentSelectedDataProvider.getOtherScenarioResults());
+
+		if (oldInstance != null) {
+			others.removeIf(r -> r.getScenarioInstance() == oldInstance);
+		}
+
+		if (newInstance != null) {
+			try {
+				// This line may fail if model cannot be loaded. Wrap everything up in exception handler
+				final ScenarioResult scenarioResult = new ScenarioResultImpl(newInstance);
+				if (!others.contains(scenarioResult)) {
+					others.add(scenarioResult);
+				}
+			} catch (final Exception e) {
+				// We don't care here, load failures will be reported elsewhere
+			}
+		}
+
+		scheduleRebuildCompare(currentSelectedDataProvider.getPinnedScenarioResult(), others, null, block);
 	}
 }

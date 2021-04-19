@@ -95,4 +95,8 @@ public interface IInlineEditor {
 	default @Nullable Object createLayoutData(MMXRootObject root, EObject value, Control control) {
 		return null;
 	}
+	
+	default boolean needsFullWidth() {
+		return false;
+	}
 }

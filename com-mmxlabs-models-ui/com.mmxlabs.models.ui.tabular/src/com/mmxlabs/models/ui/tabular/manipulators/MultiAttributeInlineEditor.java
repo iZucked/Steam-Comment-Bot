@@ -14,7 +14,6 @@ import java.util.function.Supplier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.SetCommand;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -23,6 +22,7 @@ import org.eclipse.swt.widgets.Control;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
 
@@ -33,8 +33,8 @@ public class MultiAttributeInlineEditor extends DialogFeatureManipulator {
 	private static final int MAX_DISPLAY_LENGTH = 32;
 	private static final int MIN_DISPLAY_NAMES = 2;
 
-	public MultiAttributeInlineEditor(final EStructuralFeature feature, EditingDomain editingDomain, Function<Object, String> labelProvider, Supplier<List<Object>> valuesSupplier) {
-		super(feature, editingDomain);
+	public MultiAttributeInlineEditor(final EStructuralFeature feature, ICommandHandler commandHandler, Function<Object, String> labelProvider, Supplier<List<Object>> valuesSupplier) {
+		super(feature, commandHandler);
 		this.labelProvider = labelProvider;
 		this.valuesSupplier = valuesSupplier;
 	}
@@ -70,7 +70,7 @@ public class MultiAttributeInlineEditor extends DialogFeatureManipulator {
 		if (Equality.isEqual(currentValue, value)) {
 			return;
 		}
-		editingDomain.getCommandStack().execute(CommandUtil.createMultipleAttributeSetter(editingDomain, (EObject) object, field, (Collection<?>) value));
+		commandHandler.handleCommand(CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), (EObject) object, field, (Collection<?>) value), (EObject) object, field);
 	}
 
 	@SuppressWarnings("unchecked")

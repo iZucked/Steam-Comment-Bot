@@ -410,7 +410,8 @@ public final class OptimisationHelper {
 		if (!forEvaluation) {
 			createIdleDaysOption(defaultSettings, editingDomain, dialog, copy, optionsAdded);
 			createSimilarityModeOption(defaultSettings, editingDomain, dialog, copy, optionsAdded);
-			createActionSetsOption(defaultSettings, editingDomain, dialog, copy, optionsAdded);
+			//Removed action sets option as no longer used....
+			//createActionSetsOption(defaultSettings, editingDomain, dialog, copy, optionsAdded);
 		}
 
 		final boolean optionAdded = optionsAdded[IDX_OPTION_ADDED];

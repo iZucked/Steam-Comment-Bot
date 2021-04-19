@@ -204,29 +204,31 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 						final DealSet ds = (DealSet) object;
 						final IScenarioDataProvider sdp = jointModelEditor.getScenarioDataProvider();
 						final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(sdp);
-						long totalPNL = 0;
-						if (!ds.getSlots().isEmpty()) {
-							final List<SlotAllocation> salist = scheduleModel.getSchedule().getSlotAllocations()
-									.stream().filter(sa -> ds.getSlots().contains(sa.getSlot())).collect(Collectors.toList());
-							for (final SlotAllocation sa : salist) {
-								if (sa.getSlot() instanceof LoadSlot) {
-									totalPNL -= sa.getVolumeValue();
-								}
-								if (sa.getSlot() instanceof DischargeSlot) {
-									totalPNL += sa.getVolumeValue();
+						if (scheduleModel != null && scheduleModel.getSchedule() != null && scheduleModel.getSchedule().getSlotAllocations() != null) {
+							long totalPNL = 0;
+							if (!ds.getSlots().isEmpty()) {
+								final List<SlotAllocation> salist = scheduleModel.getSchedule().getSlotAllocations()
+										.stream().filter(sa -> ds.getSlots().contains(sa.getSlot())).collect(Collectors.toList());
+								for (final SlotAllocation sa : salist) {
+									if (sa.getSlot() instanceof LoadSlot) {
+										totalPNL -= sa.getVolumeValue();
+									}
+									if (sa.getSlot() instanceof DischargeSlot) {
+										totalPNL += sa.getVolumeValue();
+									}
 								}
 							}
-						}
-						if (!ds.getPaperDeals().isEmpty()) {
-							final List<PaperDealAllocation> pdalist = scheduleModel.getSchedule().getPaperDealAllocations()
-									.stream().filter(pda -> ds.getPaperDeals().contains(pda.getPaperDeal())).collect(Collectors.toList());
-							for(final PaperDealAllocation pda : pdalist) {
-								totalPNL += pda.getGroupProfitAndLoss().getProfitAndLoss();
+							if (!ds.getPaperDeals().isEmpty()) {
+								final List<PaperDealAllocation> pdalist = scheduleModel.getSchedule().getPaperDealAllocations()
+										.stream().filter(pda -> ds.getPaperDeals().contains(pda.getPaperDeal())).collect(Collectors.toList());
+								for(final PaperDealAllocation pda : pdalist) {
+									totalPNL += pda.getGroupProfitAndLoss().getProfitAndLoss();
+								}
 							}
+							final LongFormatter inner = new LongFormatter();
+							inner.setValue(totalPNL);
+							return inner.getDisplayString();
 						}
-						final LongFormatter inner = new LongFormatter();
-						inner.setValue(totalPNL);
-						return inner.getDisplayString();
 					}
 				}
 				return "";
@@ -342,7 +344,7 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 						final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
 						editorLock.lock();
 						try {
-							getJointModelEditorPart().setDisableUpdates(true);
+							getScenarioEditingLocation().setDisableUpdates(true);
 							
 							if (getLastSelection() instanceof TreeSelection) {
 								final TreeSelection ts = (TreeSelection) getLastSelection();
@@ -382,7 +384,7 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 							}
 						} finally {
 							editorLock.unlock();
-							getJointModelEditorPart().setDisableUpdates(false);
+							getScenarioEditingLocation().setDisableUpdates(false);
 						}
 					}
 

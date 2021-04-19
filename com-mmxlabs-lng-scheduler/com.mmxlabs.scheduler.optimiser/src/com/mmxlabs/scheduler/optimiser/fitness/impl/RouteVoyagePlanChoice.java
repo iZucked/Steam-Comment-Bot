@@ -102,7 +102,7 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 			}
 		}
 
-		final long routeCost = routeCostProvider.getRouteCost(entry.getRoute(), vessel, voyageStartTime, costType);
+		final long routeCost = routeCostProvider.getRouteCost(entry.getRoute(), options.getFromPortSlot().getPort(), options.getToPortSlot().getPort(), vessel, voyageStartTime, costType);
 
 		options.setRoute(entry.getRoute(), entry.getDistance(), routeCost);
 

@@ -58,29 +58,29 @@ public class SpotMarketGroupPane extends ScenarioTableViewerPane {
 
 		final IReferenceValueProviderProvider provider = getReferenceValueProviderCache();
 
-		addTypicalColumn("Name", new BasicAttributeManipulator(mmx.getNamedObject_Name(), getEditingDomain()));
-		addTypicalColumn("Active", new BooleanAttributeManipulator(pp.getSpotMarket_Enabled(), getEditingDomain()));
+		addTypicalColumn("Name", new BasicAttributeManipulator(mmx.getNamedObject_Name(), getCommandHandler()));
+		addTypicalColumn("Active", new BooleanAttributeManipulator(pp.getSpotMarket_Enabled(), getCommandHandler()));
 		switch (spotType) {
 		case DES_PURCHASE:
-			addTypicalColumn("Count", new NumericAttributeManipulator(pp.getSpotAvailability_Constant(), getEditingDomain()), pp.getSpotMarket_Availability());
-			addTypicalColumn("CV", new BasicAttributeManipulator(pp.getDESPurchaseMarket_Cv(), getEditingDomain()));
-			addTypicalColumn("Price", new BasicAttributeManipulator(ppp.getDateShiftExpressionPriceParameters_PriceExpression(), getEditingDomain()), pp.getSpotMarket_PriceInfo());
+			addTypicalColumn("Count", new NumericAttributeManipulator(pp.getSpotAvailability_Constant(), getCommandHandler()), pp.getSpotMarket_Availability());
+			addTypicalColumn("CV", new BasicAttributeManipulator(pp.getDESPurchaseMarket_Cv(), getCommandHandler()));
+			addTypicalColumn("Price", new BasicAttributeManipulator(ppp.getDateShiftExpressionPriceParameters_PriceExpression(), getCommandHandler()), pp.getSpotMarket_PriceInfo());
 			break;
 		case DES_SALE:
-			addTypicalColumn("Price", new BasicAttributeManipulator(ppp.getDateShiftExpressionPriceParameters_PriceExpression(), getEditingDomain()), pp.getSpotMarket_PriceInfo());
-			addTypicalColumn("Count", new NumericAttributeManipulator(pp.getSpotAvailability_Constant(), getEditingDomain()), pp.getSpotMarket_Availability());
-			addTypicalColumn("Port", new SingleReferenceManipulator(pp.getDESSalesMarket_NotionalPort(), provider, getEditingDomain()));
+			addTypicalColumn("Price", new BasicAttributeManipulator(ppp.getDateShiftExpressionPriceParameters_PriceExpression(), getCommandHandler()), pp.getSpotMarket_PriceInfo());
+			addTypicalColumn("Count", new NumericAttributeManipulator(pp.getSpotAvailability_Constant(), getCommandHandler()), pp.getSpotMarket_Availability());
+			addTypicalColumn("Port", new SingleReferenceManipulator(pp.getDESSalesMarket_NotionalPort(), provider, getCommandHandler()));
 			break;
 		case FOB_PURCHASE:
-			addTypicalColumn("Count", new NumericAttributeManipulator(pp.getSpotAvailability_Constant(), getEditingDomain()), pp.getSpotMarket_Availability());
-			addTypicalColumn("Price", new BasicAttributeManipulator(ppp.getDateShiftExpressionPriceParameters_PriceExpression(), getEditingDomain()), pp.getSpotMarket_PriceInfo());
-			addTypicalColumn("CV", new NumericAttributeManipulator(pp.getFOBPurchasesMarket_Cv(), getEditingDomain()));
-			addTypicalColumn("Port", new SingleReferenceManipulator(pp.getFOBPurchasesMarket_NotionalPort(), provider, getEditingDomain()));
+			addTypicalColumn("Count", new NumericAttributeManipulator(pp.getSpotAvailability_Constant(), getCommandHandler()), pp.getSpotMarket_Availability());
+			addTypicalColumn("Price", new BasicAttributeManipulator(ppp.getDateShiftExpressionPriceParameters_PriceExpression(), getCommandHandler()), pp.getSpotMarket_PriceInfo());
+			addTypicalColumn("CV", new NumericAttributeManipulator(pp.getFOBPurchasesMarket_Cv(), getCommandHandler()));
+			addTypicalColumn("Port", new SingleReferenceManipulator(pp.getFOBPurchasesMarket_NotionalPort(), provider, getCommandHandler()));
 			break;
 		case FOB_SALE:
-			addTypicalColumn("Price", new BasicAttributeManipulator(ppp.getDateShiftExpressionPriceParameters_PriceExpression(), getEditingDomain()), pp.getSpotMarket_PriceInfo());
-			addTypicalColumn("Count", new NumericAttributeManipulator(pp.getSpotAvailability_Constant(), getEditingDomain()), pp.getSpotMarket_Availability());
-			addTypicalColumn("Ports", new MultipleReferenceManipulator(pp.getFOBSalesMarket_OriginPorts(), provider, getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
+			addTypicalColumn("Price", new BasicAttributeManipulator(ppp.getDateShiftExpressionPriceParameters_PriceExpression(), getCommandHandler()), pp.getSpotMarket_PriceInfo());
+			addTypicalColumn("Count", new NumericAttributeManipulator(pp.getSpotAvailability_Constant(), getCommandHandler()), pp.getSpotMarket_Availability());
+			addTypicalColumn("Ports", new MultipleReferenceManipulator(pp.getFOBSalesMarket_OriginPorts(), provider, getCommandHandler(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 			break;
 		}
 

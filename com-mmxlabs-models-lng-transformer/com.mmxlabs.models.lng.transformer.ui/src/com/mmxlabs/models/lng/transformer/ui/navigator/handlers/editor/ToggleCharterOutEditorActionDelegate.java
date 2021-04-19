@@ -73,13 +73,14 @@ public class ToggleCharterOutEditorActionDelegate extends ActionDelegate impleme
 			if (editorInput instanceof IScenarioServiceEditorInput) {
 				final IScenarioServiceEditorInput iScenarioServiceEditorInput = (IScenarioServiceEditorInput) editorInput;
 				final ScenarioInstance instance = iScenarioServiceEditorInput.getScenarioInstance();
-				
-				final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+				if (instance != null) {
+					final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 
-				try (final IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("ToggleCharterOutEditorActionDelegate")) {
-					this.currentModel = sdp.getTypedScenario(LNGScenarioModel.class);
-					this.currentSettings = currentModel.getUserSettings();
-					this.editingDomain = sdp.getEditingDomain();
+					try (final IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("ToggleCharterOutEditorActionDelegate")) {
+						this.currentModel = sdp.getTypedScenario(LNGScenarioModel.class);
+						this.currentSettings = currentModel.getUserSettings();
+						this.editingDomain = sdp.getEditingDomain();
+					}
 				}
 			}
 		}

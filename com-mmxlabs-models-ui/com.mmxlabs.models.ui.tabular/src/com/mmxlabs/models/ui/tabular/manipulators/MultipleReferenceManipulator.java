@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.EList;
@@ -26,6 +25,7 @@ import org.eclipse.swt.widgets.Control;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
@@ -44,14 +44,14 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 	private final com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider valueProvider;
 	private final EAttribute nameAttribute;
 
-	public MultipleReferenceManipulator(final EStructuralFeature field, final EditingDomain editingDomain, final IReferenceValueProvider valueProvider, final EAttribute nameAttribute) {
-		super(field, editingDomain);
+	public MultipleReferenceManipulator(final EStructuralFeature field, final ICommandHandler commandHandler, final IReferenceValueProvider valueProvider, final EAttribute nameAttribute) {
+		super(field, commandHandler);
 		this.valueProvider = valueProvider;
 		this.nameAttribute = nameAttribute;
 	}
 
-	public MultipleReferenceManipulator(final EStructuralFeature field, final IReferenceValueProviderProvider providerProvider, final EditingDomain editingDomain, final EAttribute nameAttribute) {
-		this(field, editingDomain, providerProvider.getReferenceValueProvider(field.getEContainingClass(), (EReference) field), nameAttribute);
+	public MultipleReferenceManipulator(final EStructuralFeature field, final IReferenceValueProviderProvider providerProvider, final ICommandHandler commandHandler, final EAttribute nameAttribute) {
+		this(field, commandHandler, providerProvider.getReferenceValueProvider(field.getEContainingClass(), (EReference) field), nameAttribute);
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 		if (Equality.isEqual(currentValue, value)) {
 			return;
 		}
-		editingDomain.getCommandStack().execute(CommandUtil.createMultipleAttributeSetter(editingDomain, (EObject) object, field, (Collection<?>) value));
+		commandHandler.handleCommand(CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), (EObject) object, field, (Collection<?>) value), (EObject) object, field);
 	}
 
 	@SuppressWarnings("unchecked")

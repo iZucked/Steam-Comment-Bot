@@ -11,6 +11,8 @@ import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
+import com.mmxlabs.models.ui.editors.ICommandHandler;
+
 /**
  * 
  * An implementation of {@link BasicAttributeManipulator} to handle boolean objects. By default this will show a Y/N choice, but this can changed using the alternative constructor,
@@ -22,12 +24,12 @@ public class BooleanFlagAttributeManipulator extends BasicAttributeManipulator {
 	private final String trueString;
 	private final String falseString;
 
-	public BooleanFlagAttributeManipulator(final EStructuralFeature field, final EditingDomain editingDomain) {
-		this(field, editingDomain, "\u2713", "");
+	public BooleanFlagAttributeManipulator(final EStructuralFeature field, final ICommandHandler commandHandler) {
+		this(field, commandHandler, "\u2713", "");
 	}
 
-	public BooleanFlagAttributeManipulator(final EStructuralFeature field, final EditingDomain editingDomain, final String trueString, final String falseString) {
-		super(field, editingDomain);
+	public BooleanFlagAttributeManipulator(final EStructuralFeature field, final ICommandHandler commandHandler, final String trueString, final String falseString) {
+		super(field, commandHandler);
 		this.trueString = trueString;
 		this.falseString = falseString;
 	}

@@ -27,11 +27,8 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class NominationSpecsViewerPane extends AbstractNominationsViewerPane {
 
-	private final IScenarioEditingLocation jointModelEditor;
-	
 	public NominationSpecsViewerPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
-		this.jointModelEditor = location;
 	}
 
 	@Override
@@ -40,16 +37,16 @@ public class NominationSpecsViewerPane extends AbstractNominationsViewerPane {
 
 		setMinToolbarHeight(30);
 				
-		addTypicalColumn("Type", new BasicAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_Type(), jointModelEditor.getEditingDomain()));
-		addTypicalColumn("Side", new TextualEnumAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_Side(), jointModelEditor.getEditingDomain(), e -> NominationsModelUtils.mapName((Side) e)));
-		addTypicalColumn("Contract", new BasicAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_RefererId(), jointModelEditor.getEditingDomain()));
-		addTypicalColumn("Day of month", new NumericAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_DayOfMonth(), jointModelEditor.getEditingDomain()));
-		addTypicalColumn("C/P", new BooleanFlagAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_Counterparty(), jointModelEditor.getEditingDomain()));
-		addTypicalColumn("Period", new NumericAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_Size(), jointModelEditor.getEditingDomain()));
-		addTypicalColumn("Units", new TextualEnumAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_SizeUnits(), jointModelEditor.getEditingDomain(), e -> NominationsModelUtils.mapName((DatePeriodPrior) e)));
-		addTypicalColumn("Alert", new NumericAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_AlertSize(), jointModelEditor.getEditingDomain()));
-		addTypicalColumn("Units", new TextualEnumAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_AlertSizeUnits(), jointModelEditor.getEditingDomain(), e -> NominationsModelUtils.mapName((DatePeriodPrior) e)));
-		addTypicalColumn("Remark", new BasicAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_Remark(), jointModelEditor.getEditingDomain()));
+		addTypicalColumn("Type", new BasicAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_Type(), getCommandHandler()));
+		addTypicalColumn("Side", new TextualEnumAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_Side(), getCommandHandler(), e -> NominationsModelUtils.mapName((Side) e)));
+		addTypicalColumn("Contract", new BasicAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_RefererId(), getCommandHandler()));
+		addTypicalColumn("Day of month", new NumericAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_DayOfMonth(), getCommandHandler()));
+		addTypicalColumn("C/P", new BooleanFlagAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_Counterparty(), getCommandHandler()));
+		addTypicalColumn("Period", new NumericAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_Size(), getCommandHandler()));
+		addTypicalColumn("Units", new TextualEnumAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_SizeUnits(), getCommandHandler(), e -> NominationsModelUtils.mapName((DatePeriodPrior) e)));
+		addTypicalColumn("Alert", new NumericAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_AlertSize(), getCommandHandler()));
+		addTypicalColumn("Units", new TextualEnumAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_AlertSizeUnits(), getCommandHandler(), e -> NominationsModelUtils.mapName((DatePeriodPrior) e)));
+		addTypicalColumn("Remark", new BasicAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_Remark(), getCommandHandler()));
 
 		setTitle("Nomination Specifications", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}

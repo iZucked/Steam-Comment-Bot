@@ -23,6 +23,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.IShellProvider;
+import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -87,8 +88,8 @@ public class UnitConversionEditor extends Dialog {
 		viewer.getGrid().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 		viewer.getGrid().setHeaderVisible(true);
 
-		viewer.addTypicalColumn("", new NumericAttributeManipulator(PricingPackage.Literals.UNIT_CONVERSION__FACTOR, scenarioEditingLocation.getEditingDomain()));
-		viewer.addTypicalColumn("", new BasicAttributeManipulator(PricingPackage.Literals.UNIT_CONVERSION__FROM, scenarioEditingLocation.getEditingDomain()));
+		viewer.addTypicalColumn("", new NumericAttributeManipulator(PricingPackage.Literals.UNIT_CONVERSION__FACTOR, scenarioEditingLocation.getDefaultCommandHandler()));
+		viewer.addTypicalColumn("", new BasicAttributeManipulator(PricingPackage.Literals.UNIT_CONVERSION__FROM, scenarioEditingLocation.getDefaultCommandHandler()));
 		viewer.addColumn("", new ICellRenderer() {
 
 			@Override
@@ -116,13 +117,16 @@ public class UnitConversionEditor extends Dialog {
 				return null;
 			}
 		}, null);
-		viewer.addTypicalColumn("", new BasicAttributeManipulator(PricingPackage.Literals.UNIT_CONVERSION__TO, scenarioEditingLocation.getEditingDomain()));
+		viewer.addTypicalColumn("", new BasicAttributeManipulator(PricingPackage.Literals.UNIT_CONVERSION__TO, scenarioEditingLocation.getDefaultCommandHandler()));
 
 		viewer.init(scenarioEditingLocation.getAdapterFactory(), scenarioEditingLocation.getModelReference(), PricingPackage.Literals.PRICING_MODEL__CONVERSION_FACTORS);
 
 		@NonNull
 		final PricingModel pricingModel = ScenarioModelUtil.getPricingModel((LNGScenarioModel) scenarioEditingLocation.getRootObject());
 		viewer.setInput(pricingModel);
+		for (final GridColumn c : viewer.getGrid().getColumns()) {
+			c.pack();
+		}
 
 		final Composite buttons = new Composite(parent, SWT.NONE);
 

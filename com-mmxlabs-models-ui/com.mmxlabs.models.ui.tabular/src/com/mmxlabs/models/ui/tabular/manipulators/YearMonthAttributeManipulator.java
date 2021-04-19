@@ -14,6 +14,7 @@ import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
 import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.models.ui.date.YearMonthTextFormatter;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 
 /**
  * A {@link LocalDate} attribute manipulator which uses the {@link FormattedTextCellEditor} from nebula.
@@ -23,13 +24,13 @@ import com.mmxlabs.models.ui.date.YearMonthTextFormatter;
  */
 public class YearMonthAttributeManipulator extends BasicAttributeManipulator {
 
-	public YearMonthAttributeManipulator(final EStructuralFeature field, final EditingDomain editingDomain) {
-		super(field, editingDomain);
+	public YearMonthAttributeManipulator(final EStructuralFeature field, final ICommandHandler commandHandler) {
+		super(field, commandHandler);
 	}
 
 	@Override
 	public CellEditor createCellEditor(final Composite c, final Object object) {
-		final FormattedTextCellEditor editor = new FormattedTextCellEditor(c){
+		final FormattedTextCellEditor editor = new FormattedTextCellEditor(c) {
 			@Override
 			protected Object doGetValue() {
 				final Object superValue = super.doGetValue();
@@ -59,9 +60,4 @@ public class YearMonthAttributeManipulator extends BasicAttributeManipulator {
 			return null;
 		}
 	}
-	
-
-//	 
-
-
 }

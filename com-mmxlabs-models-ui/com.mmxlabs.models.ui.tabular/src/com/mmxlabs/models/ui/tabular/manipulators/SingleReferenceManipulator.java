@@ -11,7 +11,6 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.SetCommand;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.SWT;
@@ -19,6 +18,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 
@@ -36,7 +36,6 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 	final List<String> names = new ArrayList<>();
 
 	final IReferenceValueProvider valueProvider;
-	final EditingDomain editingDomain;
 
 	private ComboBoxCellEditor editor;
 
@@ -50,15 +49,13 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 	 * @param editingDomain
 	 *            editing domain for setting
 	 */
-	public SingleReferenceManipulator(final EReference field, final IReferenceValueProvider valueProvider, final EditingDomain editingDomain) {
-		super(field, editingDomain);
-
+	public SingleReferenceManipulator(final EReference field, final IReferenceValueProvider valueProvider, final ICommandHandler commandHandler) {
+		super(field, commandHandler);
 		this.valueProvider = valueProvider;
-		this.editingDomain = editingDomain;
 	}
 
-	public SingleReferenceManipulator(final EReference field, final IReferenceValueProviderProvider valueProviderProvider, final EditingDomain editingDomain) {
-		this(field, valueProviderProvider.getReferenceValueProvider(field.getEContainingClass(), field), editingDomain);
+	public SingleReferenceManipulator(final EReference field, final IReferenceValueProviderProvider valueProviderProvider, final ICommandHandler commandHandler) {
+		this(field, valueProviderProvider.getReferenceValueProvider(field.getEContainingClass(), field), commandHandler);
 	}
 
 	@Override

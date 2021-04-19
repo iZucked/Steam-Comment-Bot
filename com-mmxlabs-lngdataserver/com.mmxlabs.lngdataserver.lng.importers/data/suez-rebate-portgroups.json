@@ -1,0 +1,66 @@
+[{
+		"name": "SZ: US Gulf",
+		"entries": [
+			"Port:L_US_Elba",
+			"Port:L_US_Brown",
+			"Port:L_US_Camer",
+			"Port:L_US_Corpu",
+			"Port:L_US_Freep",
+			"Port:L_US_Golde",
+			"Port:L_US_LakeC",
+			"Port:L_US_Pasca",
+			"Port:L_US_Plaqu",
+			"Port:L_BR_RioGr",
+			"Port:L_BR_RioGr",
+			"Port:L_US_Sabin"
+		]
+	},
+	{
+		"name": "SZ: To Kochi",
+		"entries": [
+			"PortCountry:Jordan",
+			"PortCountry:Kuwait",
+			"PortCountry:United Arab Emirates",
+			"PortCountry:Bahrain",
+			"PortCountry:Pakistan",
+			"Port:L_EG_AinSo",
+			"Port:L_IN_Dahej",
+			"Port:L_IN_Hazir",
+			"Port:L_IN_Mundr",
+			"Port:L_IN_Dabho",
+			"Port:L_IN_Karwa",
+			"Port:L_IN_Kochi",
+			"Port:L_IN_Pipav",
+			"Port:L_OM_Qalha",
+			"Port:L_YE_BalHa",
+			"Port:L_IN_Pipav"
+		]
+	}, {
+		"name": "SZ: To Singapore",
+		"entries": [
+			"PortCountry:Bangladesh",
+			"Port:L_IN_Haldi",
+			"Port:L_IN_Ennor",
+			"Port:L_IN_Ganga",
+			"Port:L_IN_Kakin",
+			"Port:L_MY_Malac",
+			"Port:L_MY_Johor",
+			"Port:L_MY_Sunga"
+		]
+	}, {
+		"name": "SZ: Far East",
+		"entries": [
+			"PortCountry:Japan",
+			"PortCountry:Taiwan",
+			"PortCountry:South Korea",
+			"PortCountry:China",
+			"PortCountry:Thailand",
+			"PortCountry:Philippines",
+			"PortCountry:Indonesia",
+			"PortCountry:Australia",
+			"PortCountry:Vietnam",
+			"PortCountry:Brunei Darussalam",
+			"Port:L_MY_Bintu"
+		]
+	}
+]

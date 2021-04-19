@@ -9,6 +9,7 @@ import java.time.YearMonth;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 
 public class MullInformation {
+	public YearMonth adpStart;
 	public YearMonth ym;
 	public BaseLegalEntity entity;
 	public int overlift;
@@ -19,6 +20,10 @@ public class MullInformation {
 	public int cargoCount;
 	public int overliftCF;
 	public int carriedEntitlement;
+	public int delta;
+	public boolean deltaViolatesFCL;
+	public int cumulativeDelta;
+	public boolean cumulativeDeltaViolatesFCL;
 	
 	public YearMonth getYM() {
 		return this.ym;
@@ -54,5 +59,13 @@ public class MullInformation {
 	
 	public int getCarriedEntitlement() {
 		return this.carriedEntitlement;
+	}
+
+	public int getDelta() {
+		return this.delta;
+	}
+
+	public int getCumulativeDelta() {
+		return this.cumulativeDelta;
 	}
 }

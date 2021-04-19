@@ -44,7 +44,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.MullEntityRowImpl#getInitialAllocation <em>Initial Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.MullEntityRowImpl#getRelativeEntitlement <em>Relative Entitlement</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.MullEntityRowImpl#getDesSalesMarketAllocationRows <em>Des Sales Market Allocation Rows</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.adp.impl.MullEntityRowImpl#getPorts <em>Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.MullEntityRowImpl#getSalesContractAllocationRows <em>Sales Contract Allocation Rows</em>}</li>
  * </ul>
  *
@@ -110,16 +109,6 @@ public class MullEntityRowImpl extends EObjectImpl implements MullEntityRow {
 	 * @ordered
 	 */
 	protected EList<DESSalesMarketAllocationRow> desSalesMarketAllocationRows;
-
-	/**
-	 * The cached value of the '{@link #getPorts() <em>Ports</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPorts()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<Port> ports;
 
 	/**
 	 * The cached value of the '{@link #getSalesContractAllocationRows() <em>Sales Contract Allocation Rows</em>}' containment reference list.
@@ -255,19 +244,6 @@ public class MullEntityRowImpl extends EObjectImpl implements MullEntityRow {
 	 * @generated
 	 */
 	@Override
-	public EList<Port> getPorts() {
-		if (ports == null) {
-			ports = new EObjectResolvingEList<Port>(Port.class, this, ADPPackage.MULL_ENTITY_ROW__PORTS);
-		}
-		return ports;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EList<SalesContractAllocationRow> getSalesContractAllocationRows() {
 		if (salesContractAllocationRows == null) {
 			salesContractAllocationRows = new EObjectContainmentEList.Resolving<SalesContractAllocationRow>(SalesContractAllocationRow.class, this, ADPPackage.MULL_ENTITY_ROW__SALES_CONTRACT_ALLOCATION_ROWS);
@@ -308,8 +284,6 @@ public class MullEntityRowImpl extends EObjectImpl implements MullEntityRow {
 				return getRelativeEntitlement();
 			case ADPPackage.MULL_ENTITY_ROW__DES_SALES_MARKET_ALLOCATION_ROWS:
 				return getDesSalesMarketAllocationRows();
-			case ADPPackage.MULL_ENTITY_ROW__PORTS:
-				return getPorts();
 			case ADPPackage.MULL_ENTITY_ROW__SALES_CONTRACT_ALLOCATION_ROWS:
 				return getSalesContractAllocationRows();
 		}
@@ -337,10 +311,6 @@ public class MullEntityRowImpl extends EObjectImpl implements MullEntityRow {
 			case ADPPackage.MULL_ENTITY_ROW__DES_SALES_MARKET_ALLOCATION_ROWS:
 				getDesSalesMarketAllocationRows().clear();
 				getDesSalesMarketAllocationRows().addAll((Collection<? extends DESSalesMarketAllocationRow>)newValue);
-				return;
-			case ADPPackage.MULL_ENTITY_ROW__PORTS:
-				getPorts().clear();
-				getPorts().addAll((Collection<? extends Port>)newValue);
 				return;
 			case ADPPackage.MULL_ENTITY_ROW__SALES_CONTRACT_ALLOCATION_ROWS:
 				getSalesContractAllocationRows().clear();
@@ -370,9 +340,6 @@ public class MullEntityRowImpl extends EObjectImpl implements MullEntityRow {
 			case ADPPackage.MULL_ENTITY_ROW__DES_SALES_MARKET_ALLOCATION_ROWS:
 				getDesSalesMarketAllocationRows().clear();
 				return;
-			case ADPPackage.MULL_ENTITY_ROW__PORTS:
-				getPorts().clear();
-				return;
 			case ADPPackage.MULL_ENTITY_ROW__SALES_CONTRACT_ALLOCATION_ROWS:
 				getSalesContractAllocationRows().clear();
 				return;
@@ -396,8 +363,6 @@ public class MullEntityRowImpl extends EObjectImpl implements MullEntityRow {
 				return relativeEntitlement != RELATIVE_ENTITLEMENT_EDEFAULT;
 			case ADPPackage.MULL_ENTITY_ROW__DES_SALES_MARKET_ALLOCATION_ROWS:
 				return desSalesMarketAllocationRows != null && !desSalesMarketAllocationRows.isEmpty();
-			case ADPPackage.MULL_ENTITY_ROW__PORTS:
-				return ports != null && !ports.isEmpty();
 			case ADPPackage.MULL_ENTITY_ROW__SALES_CONTRACT_ALLOCATION_ROWS:
 				return salesContractAllocationRows != null && !salesContractAllocationRows.isEmpty();
 		}

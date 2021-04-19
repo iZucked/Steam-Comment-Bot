@@ -32,10 +32,11 @@ public abstract class AbstractGeneralDataRepository<T> implements IDataRepositor
 	protected boolean listenForNewLocalVersions;
 	protected final List<Runnable> newLocalVersionCallbacks = new LinkedList<>();
 
-	public AbstractGeneralDataRepository(final @NonNull TypeRecord type) {
+	protected AbstractGeneralDataRepository(final @NonNull TypeRecord type) {
 		this.type = type;
 	}
 
+	// Note: ConcurrentModificationException seen here
 	private final GeneralDataRepository.IUpdateListener updateListener = () -> newLocalVersionCallbacks.forEach(Runnable::run);
 
 	protected void startListenForNewLocalVersions() {

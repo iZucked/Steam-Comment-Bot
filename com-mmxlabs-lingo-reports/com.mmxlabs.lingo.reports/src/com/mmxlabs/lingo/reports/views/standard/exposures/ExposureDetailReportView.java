@@ -40,6 +40,7 @@ import org.eclipse.ui.views.properties.PropertySheet;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.lingo.reports.services.SelectionServiceUtils;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -381,19 +382,10 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 
 	@Override
 	public void selectionChanged(final MPart part, final Object selectionObject) {
-
-		final IWorkbenchPart e3Part = SelectionHelper.getE3Part(part);
-		if (e3Part != null) {
-			if (e3Part == this) {
-				return;
-			}
-			if (e3Part instanceof PropertySheet) {
-				return;
-			}
+		if (SelectionServiceUtils.isSelectionValid(part, selectionObject)) {
+			selection = SelectionHelper.adaptSelection(selectionObject);
+			ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 		}
-		selection = SelectionHelper.adaptSelection(selectionObject);
-		// viewer.setSelection(selection, true);
-		ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
 	}
 
 	@Override

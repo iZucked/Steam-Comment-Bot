@@ -71,6 +71,8 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isHasReliqCapability <em>Has Reliq Capability</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getMmxId <em>Mmx Id</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isReferenceVessel <em>Reference Vessel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#isMmxReference <em>Mmx Reference</em>}</li>
  * </ul>
  *
  * @generated
@@ -787,6 +789,46 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @ordered
 	 */
 	protected String mmxId = MMX_ID_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isReferenceVessel() <em>Reference Vessel</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isReferenceVessel()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean REFERENCE_VESSEL_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isReferenceVessel() <em>Reference Vessel</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isReferenceVessel()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean referenceVessel = REFERENCE_VESSEL_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isMmxReference() <em>Mmx Reference</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isMmxReference()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean MMX_REFERENCE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isMmxReference() <em>Mmx Reference</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isMmxReference()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean mmxReference = MMX_REFERENCE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -1977,6 +2019,52 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	 * @generated
 	 */
 	@Override
+	public boolean isReferenceVessel() {
+		return referenceVessel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setReferenceVessel(boolean newReferenceVessel) {
+		boolean oldReferenceVessel = referenceVessel;
+		referenceVessel = newReferenceVessel;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__REFERENCE_VESSEL, oldReferenceVessel, referenceVessel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isMmxReference() {
+		return mmxReference;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setMmxReference(boolean newMmxReference) {
+		boolean oldMmxReference = mmxReference;
+		mmxReference = newMmxReference;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL__MMX_REFERENCE, oldMmxReference, mmxReference));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public int getScnt() {
 		return scnt;
 	}
@@ -2521,6 +2609,10 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return getNotes();
 			case FleetPackage.VESSEL__MMX_ID:
 				return getMmxId();
+			case FleetPackage.VESSEL__REFERENCE_VESSEL:
+				return isReferenceVessel();
+			case FleetPackage.VESSEL__MMX_REFERENCE:
+				return isMmxReference();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -2635,6 +2727,12 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__MMX_ID:
 				setMmxId((String)newValue);
 				return;
+			case FleetPackage.VESSEL__REFERENCE_VESSEL:
+				setReferenceVessel((Boolean)newValue);
+				return;
+			case FleetPackage.VESSEL__MMX_REFERENCE:
+				setMmxReference((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -2745,6 +2843,12 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 			case FleetPackage.VESSEL__MMX_ID:
 				setMmxId(MMX_ID_EDEFAULT);
 				return;
+			case FleetPackage.VESSEL__REFERENCE_VESSEL:
+				setReferenceVessel(REFERENCE_VESSEL_EDEFAULT);
+				return;
+			case FleetPackage.VESSEL__MMX_REFERENCE:
+				setMmxReference(MMX_REFERENCE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -2822,6 +2926,10 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
 			case FleetPackage.VESSEL__MMX_ID:
 				return MMX_ID_EDEFAULT == null ? mmxId != null : !MMX_ID_EDEFAULT.equals(mmxId);
+			case FleetPackage.VESSEL__REFERENCE_VESSEL:
+				return referenceVessel != REFERENCE_VESSEL_EDEFAULT;
+			case FleetPackage.VESSEL__MMX_REFERENCE:
+				return mmxReference != MMX_REFERENCE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -2883,6 +2991,10 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 		result.append(notes);
 		result.append(", mmxId: ");
 		result.append(mmxId);
+		result.append(", referenceVessel: ");
+		result.append(referenceVessel);
+		result.append(", mmxReference: ");
+		result.append(mmxReference);
 		result.append(')');
 		return result.toString();
 	}

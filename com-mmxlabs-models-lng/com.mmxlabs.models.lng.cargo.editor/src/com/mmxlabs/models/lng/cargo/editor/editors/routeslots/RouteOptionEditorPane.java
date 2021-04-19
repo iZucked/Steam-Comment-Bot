@@ -359,11 +359,11 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 		super.init(path, adapterFactory, modelReference);
 		final LNGScenarioModel scenarioModel = (LNGScenarioModel) modelReference.getInstance();
 		PortModel portModel = scenarioModel.getReferenceModel().getPortModel();
-		addTypicalColumn("Entry Point", new CanalEntryAttributeManipulator(portModel, CargoPackage.eINSTANCE.getCanalBookingSlot_CanalEntrance(), getEditingDomain()));
-		addTypicalColumn("Canal", new PanamaOnlyRouteOptionAttributeManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_RouteOption(), getEditingDomain()));
-		addTypicalColumn("Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_BookingDate(), getEditingDomain()));
-		addTypicalColumn("Slot", new SingleReferenceManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_Slot(), scenarioEditingLocation.getReferenceValueProviderCache(), getEditingDomain()));
-		addTypicalColumn("Notes", new ReadOnlyManipulatorWrapper<>(new BasicAttributeManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_Notes(), getEditingDomain())));
+		addTypicalColumn("Entry Point", new CanalEntryAttributeManipulator(portModel, CargoPackage.eINSTANCE.getCanalBookingSlot_CanalEntrance(), getCommandHandler()));
+		addTypicalColumn("Canal", new PanamaOnlyRouteOptionAttributeManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_RouteOption(), getCommandHandler()));
+		addTypicalColumn("Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_BookingDate(), getCommandHandler()));
+		addTypicalColumn("Slot", new SingleReferenceManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_Slot(), scenarioEditingLocation.getReferenceValueProviderCache(), getCommandHandler()));
+		addTypicalColumn("Notes", new ReadOnlyManipulatorWrapper<>(new BasicAttributeManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_Notes(), getCommandHandler())));
 
 		defaultSetTitle("Canal Bookings");
 

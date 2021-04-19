@@ -53,9 +53,9 @@ public class PortCostPane extends ScenarioTableViewerPane {
 		super.init(path, adapterFactory, modelReference);
 
 		addTypicalColumn("Ports",
-				new MultipleReferenceManipulator(PricingPackage.eINSTANCE.getPortCost_Ports(), getReferenceValueProviderCache(), getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
+				new MultipleReferenceManipulator(PricingPackage.eINSTANCE.getPortCost_Ports(), getReferenceValueProviderCache(), getCommandHandler(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 
-		addTypicalColumn("Reference Capacity", new NumericAttributeManipulator(PricingPackage.eINSTANCE.getPortCost_ReferenceCapacity(), getEditingDomain()));
+		addTypicalColumn("Reference Capacity", new NumericAttributeManipulator(PricingPackage.eINSTANCE.getPortCost_ReferenceCapacity(), getCommandHandler()));
 
 		addTypicalColumn("Loading Fee", new PortCostManipulator(PortCapability.LOAD));
 		addTypicalColumn("Discharging Fee", new PortCostManipulator(PortCapability.DISCHARGE));
@@ -123,7 +123,7 @@ public class PortCostPane extends ScenarioTableViewerPane {
 		public boolean isValueUnset(Object object) {
 			return false;
 		}
-		
+
 		@Override
 		public String render(Object object) {
 			return String.format("$%,d", getValue(object));
@@ -147,13 +147,13 @@ public class PortCostPane extends ScenarioTableViewerPane {
 		@Override
 		public void setParent(Object parent, Object object) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void setExtraCommandsHook(IExtraCommandsHook extraCommandsHook) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 	}

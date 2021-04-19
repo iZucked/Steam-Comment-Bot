@@ -6,8 +6,10 @@ package com.mmxlabs.scenario.service.ui.internal;
 
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IPartService;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
@@ -23,15 +25,19 @@ public class ScenarioServiceStartupExtension implements IStartup {
 	@Override
 	public void earlyStartup() {
 
-		Display.getDefault().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				final IWorkbench workbench = PlatformUI.getWorkbench();
-				final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
+		Display.getDefault().asyncExec(() -> {
+			final IWorkbench workbench = PlatformUI.getWorkbench();
+			final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
+			if (activeWorkbenchWindow != null) {
 				final ScenarioServicePartListener partListener = new ScenarioServicePartListener();
-				activeWorkbenchWindow.getPartService().addPartListener(partListener);
-				partListener.partActivated(activeWorkbenchWindow.getActivePage().getActiveEditor());
+				final IPartService partService = activeWorkbenchWindow.getPartService();
+				if (partService != null) {
+					partService.addPartListener(partListener);
+					final IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
+					if (activePage != null) {
+						partListener.partActivated(activePage.getActiveEditor());
+					}
+				}
 			}
 		});
 	}

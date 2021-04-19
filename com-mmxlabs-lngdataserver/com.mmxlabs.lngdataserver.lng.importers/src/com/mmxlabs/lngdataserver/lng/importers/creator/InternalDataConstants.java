@@ -36,11 +36,13 @@ public class InternalDataConstants {
 	public static final String PORT_MINA_AL_AHMADI = "L_KW_MinaA";
 	public static final String PORT_RAS_LAFFAN = "L_QA_RasLa";
 	public static final String PORT_IDKU = "L_EG_Idku";
+	public static final String PORT_DAMIETTA = "L_EG_Damie";
 	public static final String PORT_TANNGUH = "L_ID_Tangg";
 	public static final String PORT_PECEM = "L_BR_Pecem";
 	public static final String PORT_DUNKIRK = "L_FR_Dunki";
 	public static final String PORT_ZEEBRUGGE = "L_BE_Zeebr";
 	public static final String PORT_DAS_ISLAND = "L_AE_AbuDh";
+	public static final String PORT_QALHAT = "L_OM_Qalha";
 	
 	public static final String PORT_ISLE_OF_GRAIN = "L_GB_Isleo";
 	public static final String PORT_DRAGON = "L_GB_Drago";

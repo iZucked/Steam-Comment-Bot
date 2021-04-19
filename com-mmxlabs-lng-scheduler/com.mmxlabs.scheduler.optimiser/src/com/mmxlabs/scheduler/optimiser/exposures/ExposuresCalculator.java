@@ -51,6 +51,8 @@ import com.mmxlabs.common.parser.nodes.SplitNode;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.time.Hours;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -519,11 +521,15 @@ public class ExposuresCalculator {
 			long nativeVolume = inputRecord.volumeInMMBTU * 10;
 
 			// Perform units conversion.
-			final String u = commodityNode.getVolumeUnit();
 			for (final BasicUnitConversionData factor : lookupData.conversionMap.values()) {
 				if (factor.getTo().equalsIgnoreCase(MMBTU)) {
-					if (factor.getFrom().equalsIgnoreCase(u)) {
-						nativeVolume *= factor.getFactor();
+					if (factor.getFrom().equalsIgnoreCase(commodityNode.getVolumeUnit())) {
+						if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EXPOSURES_IGNORE_ENERGY_CONVERSION)) {
+							// If we are in this situation, that means, that volume is *ACTUALLY* in native units
+							inputRecord.volumeInMMBTU /= factor.getFactor();
+						} else {
+							nativeVolume += factor.getFactor();
+						}
 						break;
 					}
 				}

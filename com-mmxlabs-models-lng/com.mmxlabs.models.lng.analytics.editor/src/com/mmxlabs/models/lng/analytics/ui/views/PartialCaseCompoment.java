@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.analytics.ui.views;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Supplier;
 
 import org.eclipse.core.runtime.IStatus;
@@ -17,6 +18,7 @@ import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
@@ -27,13 +29,17 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
+import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
+import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.SellOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.VesselEventOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.AbstractSandboxComponent;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.SandboxUIHelper;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.PartialCaseContentProvider;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
@@ -48,6 +54,8 @@ public class PartialCaseCompoment extends AbstractSandboxComponent<OptionModelle
 	private boolean partialCaseValid = true;
 	private ExpandableComposite expandable;
 
+	private SandboxUIHelper sandboxHelper;
+
 	protected PartialCaseCompoment(@NonNull final IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors,
 			@NonNull final Supplier<OptionAnalysisModel> modelProvider) {
 		super(scenarioEditingLocation, validationErrors, modelProvider);
@@ -55,6 +63,7 @@ public class PartialCaseCompoment extends AbstractSandboxComponent<OptionModelle
 
 	@Override
 	public void createControls(final Composite parent, final boolean expanded, final IExpansionListener expansionListener, final OptionModellerView optionModellerView) {
+		sandboxHelper = new SandboxUIHelper(parent);
 		{
 			expandable = wrapInExpandable(parent, "Options", this::createPartialCaseViewer, expandableCompo -> {
 
@@ -105,6 +114,25 @@ public class PartialCaseCompoment extends AbstractSandboxComponent<OptionModelle
 				@Override
 				public void update(final ViewerCell cell) {
 
+					final GridItem item = (GridItem) cell.getItem();
+					item.setHeaderText("");
+					item.setHeaderImage(null);
+					cell.setBackground(null);
+
+					final Object element = cell.getElement();
+
+					final Set<Object> targetElements = getTargetElementsForWiringProvider(element);
+					IStatus s = sandboxHelper.getWorstStatus(targetElements, validationErrors);
+					sandboxHelper.updateGridItem(cell, s);
+					cell.setImage(sandboxHelper.getValidationImageForStatus(s));
+
+					if (element instanceof BaseCaseRow || element instanceof PartialCaseRow) {
+						if (validationErrors.containsKey(element)) {
+							final IStatus status = validationErrors.get(element);
+							sandboxHelper.updateGridHeaderItem(cell, status);
+						}
+					}
+
 					if (cell.getElement() instanceof PartialCaseRow) {
 						final PartialCaseRow row = (PartialCaseRow) cell.getElement();
 						String lbl = "";
@@ -122,7 +150,22 @@ public class PartialCaseCompoment extends AbstractSandboxComponent<OptionModelle
 						cell.setText("");
 					}
 				}
+
+				@Override
+				public String getToolTipText(final Object element) {
+					// Should really be "Buy/Event" in the name field
+					final Set<Object> targetElements = getTargetElementsForLabelProvider("Buy", element);
+
+					final StringBuilder sb = new StringBuilder();
+					sandboxHelper.extractValidationMessages(sb, targetElements, validationErrors);
+
+					if (sb.length() > 0) {
+						return sb.toString();
+					}
+					return super.getToolTipText(element);
+				}
 			});
+
 		}
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(partialCaseViewer, SWT.CENTER);

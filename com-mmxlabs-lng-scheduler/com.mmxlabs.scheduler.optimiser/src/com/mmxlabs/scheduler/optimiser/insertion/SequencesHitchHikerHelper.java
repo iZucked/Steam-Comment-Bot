@@ -78,6 +78,8 @@ public class SequencesHitchHikerHelper {
 
 		while (!queue.isEmpty()) {
 			final ISequenceElement e = queue.remove(0);
+			assert e != null;
+
 			seen.add(e);
 
 			// 2017-08-22 - SG - Disable this check as is can cause spot slot to be used
@@ -92,8 +94,7 @@ public class SequencesHitchHikerHelper {
 			// }
 
 			// Find original position of element
-			@Nullable
-			final Pair<@Nullable IResource, Integer> a = sourceLookup.lookup(e);
+			final @Nullable Pair<@Nullable IResource, Integer> a = sourceLookup.lookup(e);
 
 			// Is the element in the sequence?
 			if (a != null && a.getFirst() != null) {
@@ -177,10 +178,10 @@ public class SequencesHitchHikerHelper {
 
 			// Remove existing evicted elements (should all be nominals).
 			for (final ISequenceElement e : evictedElements) {
-				@Nullable
-				final Pair<@Nullable IResource, @NonNull Integer> p = sourceLookup.lookup(e);
-				@Nullable
-				final IResource r = p.getFirst();
+				assert e != null;
+
+				final @Nullable Pair<@Nullable IResource, @NonNull Integer> p = sourceLookup.lookup(e);
+				final @Nullable IResource r = p.getFirst();
 				if (p != null && r != null) {
 					revertedSeq.getModifiableSequence(r).remove(e);
 				}
@@ -220,6 +221,8 @@ public class SequencesHitchHikerHelper {
 		for (int i = 0; i < 4; ++i) {
 			final List<ISequenceElement> recheck = new LinkedList<>();
 			for (final ISequenceElement slot : revertedSeq.getUnusedElements()) {
+				assert slot != null;
+				
 				if (phaseOptimisationData.isElementRequired(slot) || phaseOptimisationData.getSoftRequiredElements().contains(slot)) {
 					if (!target.getUnusedElements().contains(slot)) {
 						recheck.add(slot);
@@ -238,8 +241,7 @@ public class SequencesHitchHikerHelper {
 	}
 
 	/**
-	 * Checks to ensure each element exists only once in the sequences. Multiple
-	 * occurrences indicates an error in the creation of the sequences.
+	 * Checks to ensure each element exists only once in the sequences. Multiple occurrences indicates an error in the creation of the sequences.
 	 * 
 	 * @param sequences
 	 */
@@ -247,14 +249,24 @@ public class SequencesHitchHikerHelper {
 		final Set<ISequenceElement> seenElements = new HashSet<>();
 
 		for (final IResource r : sequences.getResources()) {
+			if (r == null) {
+				return false;
+			}
 			final ISequence s = sequences.getSequence(r);
 			for (final ISequenceElement element : s) {
+				if (element == null) {
+					return false;
+				}
+
 				if (!seenElements.add(element)) {
 					return false;
 				}
 			}
 		}
 		for (final ISequenceElement e : sequences.getUnusedElements()) {
+			if (e == null) {
+				return false;
+			}
 			if (!seenElements.add(e)) {
 				return false;
 			}
@@ -264,17 +276,13 @@ public class SequencesHitchHikerHelper {
 
 	private boolean isNominalResource(final IResource resource) {
 
-		@NonNull
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-
+		final @NonNull IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		return vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
 	}
 
 	private boolean isSpotCharterResource(final IResource resource) {
 
-		@NonNull
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-
+		final @NonNull IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		return vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER;
 	}
 

@@ -220,8 +220,6 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="desSalesMarketAllocationRows"
         upperBound="-1" eType="#//DESSalesMarketAllocationRow" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="salesContractAllocationRows"
         upperBound="-1" eType="#//SalesContractAllocationRow" containment="true"/>
   </eClassifiers>
@@ -237,6 +235,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="inventories" upperBound="-1"
         eType="#//MullSubprofile" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="fullCargoLotValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cargoesToKeep" upperBound="-1"
+        eType="#//MullCargoWrapper" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MullSubprofile">
     <eStructuralFeatures xsi:type="ecore:EReference" name="inventory" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Inventory"/>
@@ -247,5 +247,9 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vessels" upperBound="-1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MullCargoWrapper">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlot" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//LoadSlot"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlot" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//DischargeSlot"/>
   </eClassifiers>
 </ecore:EPackage>

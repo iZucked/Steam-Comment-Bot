@@ -157,6 +157,10 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 				return createSuezCanalTariffBandAdapter();
 			}
 			@Override
+			public Adapter caseSuezCanalRouteRebate(SuezCanalRouteRebate object) {
+				return createSuezCanalRouteRebateAdapter();
+			}
+			@Override
 			public Adapter caseUnitConversion(UnitConversion object) {
 				return createUnitConversionAdapter();
 			}
@@ -501,6 +505,20 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSuezCanalTariffBandAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.SuezCanalRouteRebate <em>Suez Canal Route Rebate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.SuezCanalRouteRebate
+	 * @generated
+	 */
+	public Adapter createSuezCanalRouteRebateAdapter() {
 		return null;
 	}
 

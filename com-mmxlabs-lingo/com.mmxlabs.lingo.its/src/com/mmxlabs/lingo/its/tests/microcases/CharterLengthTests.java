@@ -345,7 +345,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 
 	}
 
-	private @NonNull CharterLengthEvent findCharterLengthEvent(final Slot<?> slot, final Schedule schedule) {
+	public static @NonNull CharterLengthEvent findCharterLengthEvent(final Slot<?> slot, final Schedule schedule) {
 		final Optional<Event> discharge = schedule.getSequences().stream() //
 				.flatMap(s -> s.getEvents().stream()) //
 				.filter(evt -> (evt instanceof SlotVisit && (((SlotVisit) evt).getSlotAllocation().getSlot() == slot))) //

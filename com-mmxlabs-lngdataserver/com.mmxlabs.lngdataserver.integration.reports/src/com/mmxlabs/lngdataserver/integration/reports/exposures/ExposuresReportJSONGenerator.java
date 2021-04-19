@@ -26,23 +26,20 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
-import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class ExposuresReportJSONGenerator {
 
-	public static List<ExposuresReportModel> createReportData(final @NonNull ScheduleModel scheduleModel, final @NonNull IScenarioDataProvider scenarioDataProvider, //
-			final ScenarioResult scenarioResult) {
+	public static List<ExposuresReportModel> createReportData(final @NonNull ScheduleModel scheduleModel, final @NonNull IScenarioDataProvider scenarioDataProvider) {
 
 		Schedule schedule = scheduleModel.getSchedule();
 		if (schedule == null) {
 			return null;
 		}
-		return createTransformedData(schedule, scenarioDataProvider, scenarioResult);
+		return createTransformedData(schedule, scenarioDataProvider);
 	}
 
-	public static List<ExposuresReportModel> createTransformedData(final @NonNull Schedule schedule, final @NonNull IScenarioDataProvider scenarioDataProvider, //
-			final ScenarioResult scenarioResult) {
+	public static List<ExposuresReportModel> createTransformedData(final @NonNull Schedule schedule, final @NonNull IScenarioDataProvider scenarioDataProvider) {
 
 		final PricingModel pm = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
 		final List<CommodityCurve> indices = pm.getCommodityCurves();
@@ -54,7 +51,7 @@ public class ExposuresReportJSONGenerator {
 		for (YearMonth cym = ymStart; cym.isBefore(ymEnd); cym = cym.plusMonths(1)) {
 
 			IndexExposureData exposuresByMonth = 
-					ExposuresTransformer.getExposuresByMonth(scenarioResult, schedule, cym, ValueMode.VOLUME_MMBTU,  Collections.emptyList(), null, -1, AssetType.NET, false);
+					ExposuresTransformer.getExposuresByMonth(null, scenarioDataProvider, schedule, cym, ValueMode.VOLUME_MMBTU,  Collections.emptyList(), null, -1, AssetType.NET, false);
 
 			if (exposuresByMonth.exposures.size() != 0.0) {
 				temp.add(exposuresByMonth);

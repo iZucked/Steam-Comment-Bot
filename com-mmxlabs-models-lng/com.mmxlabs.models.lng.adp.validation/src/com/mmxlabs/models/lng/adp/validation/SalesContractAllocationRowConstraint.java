@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.types.util.ValidationConstants;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -44,9 +45,8 @@ public class SalesContractAllocationRowConstraint extends AbstractModelMultiCons
 				.withMessage("No sales contract selected") //
 				.make(ctx, statuses);
 			}
-			
-			final ADPModel adpModel = ADPModelUtil.getADPModel(salesContractAllocationRow);
-			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) adpModel.eContainer();
+
+			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) extraContext.getRootObject();
 			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
 			final Set<Vessel> fleetVessels = cargoModel.getVesselAvailabilities().stream().map(VesselAvailability::getVessel).collect(Collectors.toSet());
 			final List<Vessel> vessels = salesContractAllocationRow.getVessels();

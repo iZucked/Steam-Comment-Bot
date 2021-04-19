@@ -42,8 +42,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
-import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -56,7 +54,6 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -103,14 +100,14 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsViewerPane implements ISelectionListener {
 
-	private static final @NonNull Logger logger =  LoggerFactory.getLogger(RelativeDateRangeNominationsViewerPane.class);
-	
-	private final static int doubleClickInterval = (Integer)java.awt.Toolkit.getDefaultToolkit().getDesktopProperty("awt.multiClickInterval");
-	
+	private static final @NonNull Logger logger = LoggerFactory.getLogger(RelativeDateRangeNominationsViewerPane.class);
+
+	private static final int doubleClickInterval = (Integer) java.awt.Toolkit.getDefaultToolkit().getDesktopProperty("awt.multiClickInterval");
+
 	private final Set<String> nominationTypeFilter = new TreeSet<>();
-	
+
 	private Timer doubleClickDoneTimer = null;
-	
+
 	private class FilterMenuAction extends DefaultMenuCreatorAction {
 
 		public FilterMenuAction(final String label) {
@@ -141,10 +138,9 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 								if (!nominationTypeFilter.contains(e)) {
 									nominationTypeFilter.add(e);
 									this.setChecked(true);
-								}
-								else {
+								} else {
 									nominationTypeFilter.remove(e);
-									this.setChecked(false);			
+									this.setChecked(false);
 								}
 								refresh();
 							}
@@ -152,58 +148,56 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 						if (nominationTypeFilter.contains(e)) {
 							nominationTypeAction.setChecked(true);
 						}
-						addActionToMenu(nominationTypeAction, subMenu);	
+						addActionToMenu(nominationTypeAction, subMenu);
 					}
 				}
-				
+
 			};
 			addActionToMenu(nominationType, menu);
 		}
 	}
-	
+
 	final class NominationsScenarioTableViewer extends ScenarioTableViewer {
-		
+
 		NominationsScenarioTableViewer(Composite parent, int style, IScenarioEditingLocation part) {
 			super(parent, style, part);
 		}
-		
+
 		/**
 		 * @param Set
 		 *            to true if editing should be disabled on this table.
 		 */
 		public void setLocked(final boolean lockedForEditing) {
 			this.lockedForEditing = lockedForEditing;
-			//Refreshing at this point, seems to cause issues when deleting a nomination, with selection not being set correctly in preserveSelection.
-			//if (!getControl().isDisposed()) {
-			//	refresh(true);
-			//}
+			// Refreshing at this point, seems to cause issues when deleting a nomination, with selection not being set correctly in preserveSelection.
+			// if (!getControl().isDisposed()) {
+			// refresh(true);
+			// }
 			ViewerHelper.refresh(viewer, false);
 		}
 
 		/**
-		 * Callback to convert the raw data coming out of the table into something usable externally. 
-		 * This is useful when the table data model is custom for the table rather from the real data model.
+		 * Callback to convert the raw data coming out of the table into something usable externally. This is useful when the table data model is custom for the table rather from the real data model.
 		 */
 		protected List<?> adaptSelectionFromWidget(final List<?> selection) {
-			
+
 			if (!RelativeDateRangeNominationsViewerPane.this.viewSelected) {
 
-				//Ensures Cargo in Trades view gets selected when relevant nomination is selected.
+				// Ensures Cargo in Trades view gets selected when relevant nomination is selected.
 				List<Object> equivalentObjects = new LinkedList<>();
 
-				final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(jointModelEditor.getScenarioDataProvider());
+				final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(scenarioEditingLocation.getScenarioDataProvider());
 
 				if (scenarioModel != null) {
 					for (final Object e : selection) {
 						equivalentObjects.add(e);
 						if (e instanceof SlotNomination) {
-							Slot<?> slot = NominationsModelUtils.findSlot(scenarioModel, (SlotNomination)e);
+							Slot<?> slot = NominationsModelUtils.findSlot(scenarioModel, (SlotNomination) e);
 							if (slot != null) {
 								equivalentObjects.add(slot);
 							}
-						}
-						else if (e instanceof ContractNomination) {
-							Contract contract = NominationsModelUtils.findContract(scenarioModel, (ContractNomination)e);
+						} else if (e instanceof ContractNomination) {
+							Contract contract = NominationsModelUtils.findContract(scenarioModel, (ContractNomination) e);
 							if (contract != null) {
 								equivalentObjects.add(contract);
 							}
@@ -212,12 +206,11 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				}
 
 				return equivalentObjects;
-			}
-			else {
+			} else {
 				return selection;
 			}
 		}
-	
+
 		@Override
 		public void setSelection(ISelection selection, boolean reveal) {
 			if (selection instanceof IStructuredSelection && !RelativeDateRangeNominationsViewerPane.this.viewSelected) {
@@ -238,7 +231,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				super.setSelection(selection, reveal);
 			}
 		}
-		
+
 		/**
 		 * Modify @link {AbstractTreeViewer#getTreePathFromItem(Item)} to adapt items before returning selection object.
 		 */
@@ -254,7 +247,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 
 			return new TreePath(l.toArray());
 		}
-	
+
 		public ISelection getOriginalSelection() {
 			Control control = getControl();
 			if (control == null || control.isDisposed()) {
@@ -273,12 +266,12 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 		@Override
 		public void init(final AdapterFactory adapterFactory, final ModelReference modelReference, final EReference... path) {
 			super.init(adapterFactory, modelReference, path);
-			
+
 			this.addFilter(new ViewerFilter() {
 				@Override
 				public boolean select(Viewer viewer, Object parentElement, Object element) {
 					if (element instanceof AbstractNomination) {
-						AbstractNomination n = (AbstractNomination)element;
+						AbstractNomination n = (AbstractNomination) element;
 						if (nominationTypeFilter.isEmpty() || nominationTypeFilter.contains(n.getType())) {
 							return true;
 						}
@@ -286,7 +279,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 					return false;
 				}
 			});
-			
+
 			init(new ITreeContentProvider() {
 
 				@Override
@@ -314,25 +307,23 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 					final LocalDate endDate = getEndDate();
 					final Object[] result;
 
-					elements.addAll(NominationsModelUtils.getGeneratedNominations(jointModelEditor, startDate, endDate));
+					elements.addAll(NominationsModelUtils.getGeneratedNominations(scenarioEditingLocation, startDate, endDate));
 					if (RelativeDateRangeNominationsViewerPane.this.viewSelected && !RelativeDateRangeNominationsViewerPane.this.selectedSlots.isEmpty()) {
 						result = elements.stream().filter(n -> n.getNomineeId() != null && isSelectedSlot(n.getNomineeId())).toArray();
-					}
-					else {
+					} else {
 						result = elements.toArray();
 					}
 
-					final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(jointModelEditor.getScenarioDataProvider());
+					final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(scenarioEditingLocation.getScenarioDataProvider());
 
 					if (scenarioModel != null) {
 						for (final Object e : result) {
 
 							if (e instanceof SlotNomination) {
-								Slot<?> slot = NominationsModelUtils.findSlot(scenarioModel, (SlotNomination)e);
+								Slot<?> slot = NominationsModelUtils.findSlot(scenarioModel, (SlotNomination) e);
 								setInputEquivalents(e, Collections.singleton(slot));
-							}
-							else if (e instanceof ContractNomination) {
-								Contract contract = NominationsModelUtils.findContract(scenarioModel, (ContractNomination)e);
+							} else if (e instanceof ContractNomination) {
+								Contract contract = NominationsModelUtils.findContract(scenarioModel, (ContractNomination) e);
 								setInputEquivalents(e, Collections.singleton(contract));
 							}
 						}
@@ -378,14 +369,11 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 			ViewerHelper.refresh(this, true);
 		}
 	}
-		
+
 	private static final String PLUGIN_ID = "com.mmxlabs.models.lng.nominations.editor";
-	
-	@NonNull 
-	private final IScenarioEditingLocation jointModelEditor;
-	
+
 	private NominationDatesToolbarEditor nominationDatesToolbarEditor;
-	
+
 	private boolean includeDone = false;
 	private boolean viewSelected = false;
 	private final List<Slot<?>> selectedSlots = new ArrayList<>();
@@ -393,16 +381,15 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 	private final Color colourPink = new Color(Display.getDefault(), 254, 127, 156);
 	private final Color colourGreen = new Color(Display.getDefault(), 80, 220, 100);
 	private final Color colourLightYellow = new Color(Display.getDefault(), 254, 254, 200);
-	
+
 	private final Map<Object, HashSet<Object>> equivalents = new HashMap<>();
 	private final Set<Object> contents = new HashSet<>();
-	
+
 	private GridViewerColumn nomineeIdColumn;
 	private GridViewerColumn dueDateColumn;
-	
+
 	public RelativeDateRangeNominationsViewerPane(final IWorkbenchPage page, final IWorkbenchPart part, @NonNull final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
-		this.jointModelEditor = location;
 		final ESelectionService service = PlatformUI.getWorkbench().getService(ESelectionService.class);
 		service.addPostSelectionListener(this);
 	}
@@ -420,19 +407,19 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 	 * @return
 	 */
 	protected @Nullable Action createDuplicateAction() {
-		final DuplicateAction result = new DuplicateAction(getJointModelEditorPart()) {
+		final DuplicateAction result = new DuplicateAction(getScenarioEditingLocation()) {
 			@Override
 			public void run() {
 				final ISelection selection = getLastSelection();
-				
-				//The below code fixes an issue to do with the fact that both the nomination and the slot are selected at the same time.
-				//Below we get back to the nomination when duplicate selection is selected from the Nominations view.
+
+				// The below code fixes an issue to do with the fact that both the nomination and the slot are selected at the same time.
+				// Below we get back to the nomination when duplicate selection is selected from the Nominations view.
 				ArrayList<EObject> nominations = new ArrayList<>();
-				
+
 				if (selection instanceof TreeSelection) {
-					TreeSelection treeSelection = (TreeSelection)selection;
+					TreeSelection treeSelection = (TreeSelection) selection;
 					Iterator<?> it = treeSelection.iterator();
-					
+
 					while (it.hasNext()) {
 						Object element = it.next();
 						TreePath[] paths = treeSelection.getPathsFor(element);
@@ -440,67 +427,64 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 							for (int i = 0; i < path.getSegmentCount(); i++) {
 								Object obj = path.getSegment(i);
 								if (obj instanceof AbstractNomination) {
-									nominations.add((AbstractNomination)obj);
+									nominations.add((AbstractNomination) obj);
 								}
 							}
 						}
 					}
 				}
-				
-				//In case somehow we select nothing and manage to duplicate somehow.
-				if (nominations.isEmpty()) return;
-					
-				//Create new UIDs and if generated nomination, null out specUUId for generated nominations.
+
+				// In case somehow we select nothing and manage to duplicate somehow.
+				if (nominations.isEmpty())
+					return;
+
+				// Create new UIDs and if generated nomination, null out specUUId for generated nominations.
 				Collection<EObject> duplicatedNoms = NominationsModelUtils.duplicateNominations(nominations);
-				
-				//Create the add command.
+
+				// Create the add command.
 				EditingDomain domain = part.getDefaultCommandHandler().getEditingDomain();
-				NominationsModel owner = NominationsModelUtils.getNominationsModel(jointModelEditor);
+				NominationsModel owner = NominationsModelUtils.getNominationsModel(scenarioEditingLocation);
 				EStructuralFeature nominationsListFeature = NominationsPackage.eINSTANCE.getNominationsModel_Nominations();
-				//Object nominationsListFeature = NominationsPackage.NOMINATIONS_MODEL__NOMINATIONS;
+				// Object nominationsListFeature = NominationsPackage.NOMINATIONS_MODEL__NOMINATIONS;
 				Command addCmd = AddCommand.create(domain, owner, nominationsListFeature, duplicatedNoms);
-				
-				try {		
-					//addCmd.execute();
+
+				try {
+					// addCmd.execute();
 					DetailCompositeDialogUtil.editNewMultiObjectWithUndoOnCancel(part, duplicatedNoms, addCmd);
-				
-					//printNominations();
-				}
-				catch (Throwable e) {
-					logger.error("There was a problem duplicating the selection:", e);	
+
+					// printNominations();
+				} catch (Throwable e) {
+					logger.error("There was a problem duplicating the selection:", e);
 				}
 			}
 
 			protected void printNominations() {
-				//Print out nominations.
-				NominationsModel nm = NominationsModelUtils.getNominationsModel(jointModelEditor);
-				LNGScenarioModel sm = ScenarioModelUtil.findScenarioModel(jointModelEditor.getScenarioDataProvider());
+				// Print out nominations.
+				NominationsModel nm = NominationsModelUtils.getNominationsModel(scenarioEditingLocation);
+				LNGScenarioModel sm = ScenarioModelUtil.findScenarioModel(scenarioEditingLocation.getScenarioDataProvider());
 				EList<AbstractNomination> noms = nm.getNominations();
-				int i = 0; 
+				int i = 0;
 				for (AbstractNomination n : noms) {
-					System.out.println("Nomination: "+(i++)+" "+NominationsModelUtils.toStringSummary(sm, n));
+					System.out.println("Nomination: " + (i++) + " " + NominationsModelUtils.toStringSummary(sm, n));
 				}
 			}
 		};
 		scenarioViewer.addSelectionChangedListener(result);
 		return result;
 	}
-	
-	
-	
+
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
 		super.init(path, adapterFactory, modelReference);
 
 		final ToolBarManager toolbar = getToolBarManager();
 
-		nominationDatesToolbarEditor = new NominationDatesToolbarEditor("nomination_dates_toolbar",
-				scenarioEditingLocation.getEditingDomain(), jointModelEditor);
+		nominationDatesToolbarEditor = new NominationDatesToolbarEditor("nomination_dates_toolbar", scenarioEditingLocation.getEditingDomain(), scenarioEditingLocation);
 		toolbar.appendToGroup(EDIT_GROUP, nominationDatesToolbarEditor);
-		
-		RelativeDateRangeToolbarEditor relativeDateToolbarEditor = new RelativeDateRangeToolbarEditor(this, "nomination_relative_date_toolbar", jointModelEditor);
+
+		RelativeDateRangeToolbarEditor relativeDateToolbarEditor = new RelativeDateRangeToolbarEditor(this, "nomination_relative_date_toolbar", scenarioEditingLocation);
 		toolbar.appendToGroup(EDIT_GROUP, relativeDateToolbarEditor);
-		
+
 		final Action refreshButton = new Action("Refresh", Action.AS_PUSH_BUTTON) {
 			@Override
 			public void run() {
@@ -508,7 +492,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				viewer.refresh();
 			}
 		};
-	   
+
 		final ImageDescriptor refreshImage = AbstractUIPlugin.imageDescriptorFromPlugin(PLUGIN_ID, "/icons/iu_update_obj.gif");
 		refreshButton.setImageDescriptor(refreshImage);
 		toolbar.appendToGroup(EDIT_GROUP, refreshButton);
@@ -524,31 +508,31 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 		};
 		includeDoneToggle.setChecked(this.includeDone);
 		this.getMenuManager().add(includeDoneToggle);
-		
+
 		final Action viewSelectedToggle = new Action("View selected", Action.AS_CHECK_BOX) {
 			@Override
 			public void run() {
 				RelativeDateRangeNominationsViewerPane.this.viewSelected = !RelativeDateRangeNominationsViewerPane.this.viewSelected;
 				this.setChecked(RelativeDateRangeNominationsViewerPane.this.viewSelected);
 				viewer.refresh();
-			}			
+			}
 		};
 		viewSelectedToggle.setChecked(this.viewSelected);
 		this.getMenuManager().add(viewSelectedToggle);
-		
-		//Remove default filter.
+
+		// Remove default filter.
 		toolbar.remove(this.filterField.getContribution());
-		
-		//Add new filter for nomination type.
+
+		// Add new filter for nomination type.
 		final FilterMenuAction filterAction = new FilterMenuAction("Filters");
 		filterAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.tabular", "/icons/filter.gif"));
 		toolbar.add(filterAction);
-		
+
 		this.getMenuManager().update(true);
-		
-		nomineeIdColumn = addTypicalColumn("Nominee Id", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(
-				new BasicAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNomination_NomineeId(), jointModelEditor.getEditingDomain())));
-		addTypicalColumn("From", new StringAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNomination_NomineeId(), jointModelEditor.getEditingDomain()) {
+
+		nomineeIdColumn = addTypicalColumn("Nominee Id",
+				new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNomination_NomineeId(), getCommandHandler())));
+		addTypicalColumn("From", new StringAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNomination_NomineeId(), getCommandHandler()) {
 			@Override
 			public boolean canEdit(final Object object) {
 				return false;
@@ -559,7 +543,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				return NominationsModelUtils.getFrom(getScenarioModel(), (AbstractNomination) object);
 			}
 		});
-		addTypicalColumn("To", new StringAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNomination_NomineeId(), jointModelEditor.getEditingDomain()) {
+		addTypicalColumn("To", new StringAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNomination_NomineeId(), getCommandHandler()) {
 			@Override
 			public boolean canEdit(final Object object) {
 				return false;
@@ -570,7 +554,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				return NominationsModelUtils.getTo(getScenarioModel(), (AbstractNomination) object);
 			}
 		});
-		addTypicalColumn("Cn", new StringAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNomination_NomineeId(), jointModelEditor.getEditingDomain()) {
+		addTypicalColumn("Cn", new StringAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNomination_NomineeId(), getCommandHandler()) {
 			@Override
 			public boolean canEdit(final Object object) {
 				return false;
@@ -581,7 +565,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				return NominationsModelUtils.getCN(getScenarioModel(), (AbstractNomination) object);
 			}
 		});
-		addTypicalColumn("Side", new StringAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNomination_NomineeId(), jointModelEditor.getEditingDomain()) {
+		addTypicalColumn("Side", new StringAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNomination_NomineeId(), getCommandHandler()) {
 			@Override
 			public boolean canEdit(final Object object) {
 				return false;
@@ -592,18 +576,18 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				return NominationsModelUtils.getSide((AbstractNomination) object);
 			}
 		});
-		final GridViewerColumn gcvCP = addTypicalColumn("C/P", new BooleanFlagAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_Counterparty(), jointModelEditor.getEditingDomain()) {
+		final GridViewerColumn gcvCP = addTypicalColumn("C/P", new BooleanFlagAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_Counterparty(), getCommandHandler()) {
 			@Override
 			public void doSetValue(Object object, Object value) {
-				final AbstractNomination nomination = (AbstractNomination)object;
+				final AbstractNomination nomination = (AbstractNomination) object;
 				if (nomination.eContainer() == null) {
-					addNomination(nomination);	
+					addNomination(nomination);
 				}
 				super.doSetValue(object, value);
 			}
 		});
-		gcvCP.getColumn().setAlignment(SWT.CENTER);	
-		addTypicalColumn("Date", new DateTimeAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNomination_NomineeId(), jointModelEditor.getEditingDomain()) {
+		gcvCP.getColumn().setAlignment(SWT.CENTER);
+		addTypicalColumn("Date", new DateTimeAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNomination_NomineeId(), getCommandHandler()) {
 			@Override
 			public boolean canEdit(final Object object) {
 				return false;
@@ -627,9 +611,9 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				}
 			}
 		});
-		addTypicalColumn("Nomination Type", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(
-				new BasicAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_Type(), jointModelEditor.getEditingDomain())));
-		dueDateColumn = addTypicalColumn("Due Date", new DateTimeAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNomination_DueDate(), jointModelEditor.getEditingDomain()) {
+		addTypicalColumn("Nomination Type",
+				new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_Type(), getCommandHandler())));
+		dueDateColumn = addTypicalColumn("Due Date", new DateTimeAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNomination_DueDate(), getCommandHandler()) {
 			@Override
 			public boolean canEdit(final Object object) {
 				return false;
@@ -658,24 +642,24 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				}
 			}
 		});
-		final GridViewerColumn gcvDone = addTypicalColumn("Done", new BooleanFlagAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNomination_Done(), jointModelEditor.getEditingDomain()) {
+		final GridViewerColumn gcvDone = addTypicalColumn("Done", new BooleanFlagAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNomination_Done(), getCommandHandler()) {
 			@Override
 			public void doSetValue(Object object, Object value) {
-				//Create timer on the display thread.
+				// Create timer on the display thread.
 				doubleClickDoneTimer = new Timer();
 				doubleClickDoneTimer.schedule(new TimerTask() {
 					@Override
 					public void run() {
 						Display.getDefault().syncExec(new Runnable() {
-							//Setting of EMF stuff must be done on the display thread.
+							// Setting of EMF stuff must be done on the display thread.
 							@Override
 							public void run() {
-								//Cancel and destroy timer on the display thread.
+								// Cancel and destroy timer on the display thread.
 								doubleClickDoneTimer.cancel();
 								doubleClickDoneTimer = null;
-								final AbstractNomination nomination = (AbstractNomination)object;
+								final AbstractNomination nomination = (AbstractNomination) object;
 								if (nomination.eContainer() == null) {
-									addNomination(nomination);	
+									addNomination(nomination);
 								}
 								RelativeDateRangeNominationsViewerPane.this.previousNominations.add(nomination.getUuid());
 								superDoSetValue(object, value);
@@ -684,19 +668,19 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 					}
 				}, RelativeDateRangeNominationsViewerPane.this.doubleClickInterval);
 			}
-			
+
 			public void superDoSetValue(Object object, Object value) {
 				super.doSetValue(object, value);
 			}
-			
+
 			@Override
 			public boolean canEdit(final Object object) {
 				return true;
-			}			
+			}
 		});
-		gcvDone.getColumn().setAlignment(SWT.CENTER);	
-		
-		addTypicalColumn("Remark", new StringAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_Remark(), jointModelEditor.getEditingDomain()) {
+		gcvDone.getColumn().setAlignment(SWT.CENTER);
+
+		addTypicalColumn("Remark", new StringAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_Remark(), getCommandHandler()) {
 			@Override
 			public boolean canEdit(final Object object) {
 				return false;
@@ -708,7 +692,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 			}
 		});
 
-		addTypicalColumn("Nominated Value", new StringAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_Remark(), jointModelEditor.getEditingDomain()) {
+		addTypicalColumn("Nominated Value", new StringAttributeManipulator(NominationsPackage.eINSTANCE.getAbstractNominationSpec_Remark(), getCommandHandler()) {
 			@Override
 			public boolean canEdit(final Object object) {
 				return false;
@@ -720,45 +704,43 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 			}
 		});
 
-		
 		ScenarioTableViewer stv = this.getScenarioViewer();
 		stv.getSortingSupport().sortColumnsBy(nomineeIdColumn.getColumn());
 		stv.getSortingSupport().sortColumnsBy(dueDateColumn.getColumn());
 	}
 
 	/**
-	 * Modified createDeletaAction, so that we disallow deletion of generated nominations or
-	 * overridden generated nomination (those eContainer() == null or with specIds set, respectively).
+	 * Modified createDeletaAction, so that we disallow deletion of generated nominations or overridden generated nomination (those eContainer() == null or with specIds set, respectively).
 	 */
 	@Override
 	protected Action createDeleteAction(@Nullable final Function<Collection<?>, Collection<Object>> callback) {
 		return new ScenarioTableViewerDeleteAction(callback) {
 			@Override
 			protected boolean isApplicableToSelection(final ISelection selection) {
-				//Allow deletion of overridden nominations generated from specs (otherwise no way to get rid of them).
-//				if (selection instanceof IStructuredSelection) {
-//					final IStructuredSelection s = (IStructuredSelection)selection;
-//					final Iterator<?> it = s.iterator();
-//					while (it.hasNext()) {
-//						final Object o = it.next();
-//						if (o instanceof AbstractNomination) {
-//							final AbstractNomination n = (AbstractNomination)o;
-//							if (n.isSetSpecUuid()) {
-//								return false;
-//							}
-//						}
-//					}
-//				}
+				// Allow deletion of overridden nominations generated from specs (otherwise no way to get rid of them).
+				// if (selection instanceof IStructuredSelection) {
+				// final IStructuredSelection s = (IStructuredSelection)selection;
+				// final Iterator<?> it = s.iterator();
+				// while (it.hasNext()) {
+				// final Object o = it.next();
+				// if (o instanceof AbstractNomination) {
+				// final AbstractNomination n = (AbstractNomination)o;
+				// if (n.isSetSpecUuid()) {
+				// return false;
+				// }
+				// }
+				// }
+				// }
 				return selection.isEmpty() == false && selection instanceof IStructuredSelection;
 			}
-			
+
 			@Override
 			protected ISelection getLastSelection() {
-				return ((NominationsScenarioTableViewer)RelativeDateRangeNominationsViewerPane.this.viewer).getOriginalSelection();
+				return ((NominationsScenarioTableViewer) RelativeDateRangeNominationsViewerPane.this.viewer).getOriginalSelection();
 			}
 		};
 	}
-	
+
 	/**
 	 * Subclasses can override this to filter out object from deletion. Each dummmy UI objects that are in the selection.
 	 * 
@@ -768,30 +750,30 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 		List<AbstractNomination> toFilter = new ArrayList<>();
 		for (Object o : uniqueObjects) {
 			if (o instanceof AbstractNomination) {
-				final AbstractNomination n = (AbstractNomination)o;
+				final AbstractNomination n = (AbstractNomination) o;
 				if (n.isSetSpecUuid()) {
 					toFilter.add(n);
 				}
 			}
 		}
-		
+
 		if (!toFilter.isEmpty()) {
 			CompoundCommand cmd = new CompoundCommand();
-			EditingDomain editingDomain = jointModelEditor.getEditingDomain();
+			EditingDomain editingDomain = getCommandHandler().getEditingDomain();
 
 			for (AbstractNomination n : toFilter) {
 				if (n.isSetSpecUuid()) {
 					uniqueObjects.remove(n);
 					if (n.eContainer() == null) {
-						addNomination(n);	
+						addNomination(n);
 					}
 					final Command set = createSetCommand(editingDomain, n, NominationsPackage.eINSTANCE.getAbstractNomination_Deleted(), Boolean.TRUE);
 					cmd.append(set);
-				}	
+				}
 			}
-			
+
 			if (!cmd.isEmpty()) {
-				editingDomain.getCommandStack().execute(cmd);
+				getCommandHandler().handleCommand(cmd);
 			}
 		}
 	}
@@ -800,11 +782,11 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 		final Command command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, field, value));
 		return command;
 	}
-	
+
 	protected LNGScenarioModel getScenarioModel() {
-		return (LNGScenarioModel)this.jointModelEditor.getRootObject();
+		return (LNGScenarioModel) this.scenarioEditingLocation.getRootObject();
 	}
-	
+
 	protected void pruneNominationsMarkedAsDone() {
 		this.previousNominations.clear();
 	}
@@ -837,7 +819,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 		});
 		return gvColumn;
 	}
-	
+
 	public void setInputEquivalents(final Object input, final Collection<? extends Object> objectEquivalents) {
 		for (final Object o : objectEquivalents) {
 			HashSet<Object> inputs = equivalents.get(o);
@@ -858,7 +840,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 	@Override
 	public ScenarioTableViewer createViewer(final Composite parent) {
 		final ScenarioTableViewer viewer = super.createViewer(parent);
-		
+
 		viewer.addFilter(new ViewerFilter() {
 			/**
 			 * @return true, if we wish to display, false, otherwise.
@@ -882,40 +864,40 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				return true;
 			}
 		});
-						
+
 		return viewer;
 	}
-	
+
 	public LocalDate getStartDate() {
 		return this.nominationDatesToolbarEditor.getStartDate();
 	}
-	
+
 	public LocalDate getEndDate() {
 		return this.nominationDatesToolbarEditor.getEndDate();
 	}
-		
+
 	@Override
 	protected void enableOpenListener() {
 		scenarioViewer.addOpenListener(event -> {
 			long currentTimeMillis = System.currentTimeMillis();
-			final ISelection selection = ((NominationsScenarioTableViewer)scenarioViewer).getOriginalSelection();
+			final ISelection selection = ((NominationsScenarioTableViewer) scenarioViewer).getOriginalSelection();
 			if (selection instanceof IStructuredSelection) {
 				IStructuredSelection structuredSelection = (IStructuredSelection) selection;
 				if (((IStructuredSelection) selection).getFirstElement() instanceof AbstractNomination) {
 					final AbstractNomination sn = (AbstractNomination) ((IStructuredSelection) selection).getFirstElement();
-					//If double click event detected within 0.5 seconds done click change, then:
-//					if (this.lastDoneChange.get(sn) >= currentTimeMillis-500) {
-//						//Undo the done change by first click.
-//						doneManipulator.doSetValue(sn, !sn.isDone());
-//					}
-					//Cancel if timer is running.
+					// If double click event detected within 0.5 seconds done click change, then:
+					// if (this.lastDoneChange.get(sn) >= currentTimeMillis-500) {
+					// //Undo the done change by first click.
+					// doneManipulator.doSetValue(sn, !sn.isDone());
+					// }
+					// Cancel if timer is running.
 					if (doubleClickDoneTimer != null) {
 						doubleClickDoneTimer.cancel();
 						doubleClickDoneTimer = null;
 					}
 				}
 				if (DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, structuredSelection) == Window.OK) {
-					//Add the edited slot nomination to the nominations model. 
+					// Add the edited slot nomination to the nominations model.
 					if (((IStructuredSelection) selection).getFirstElement() instanceof AbstractNomination) {
 						final AbstractNomination sn = (AbstractNomination) ((IStructuredSelection) selection).getFirstElement();
 						addNomination(sn);
@@ -932,13 +914,13 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 		if (!nominationsModel.getNominations().contains(sn)) {
 			final Command cmd = AddCommand.create(ed, nominationsModel, NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATIONS, sn);
 			if (cmd.canExecute()) {
-				jointModelEditor.getDefaultCommandHandler().handleCommand(cmd, null, null);
+				scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd, nominationsModel, NominationsPackage.Literals.NOMINATIONS_MODEL__NOMINATIONS);
 			}
 		}
 	}
-	
+
 	private NominationsModel getNominationsModel() {
-		final LNGScenarioModel scenarioModel = (LNGScenarioModel) jointModelEditor.getRootObject();
+		final LNGScenarioModel scenarioModel = (LNGScenarioModel) scenarioEditingLocation.getRootObject();
 		return scenarioModel.getNominationsModel();
 	}
 
@@ -950,7 +932,7 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 	@Override
 	public void selectionChanged(MPart part, Object selection) {
 		if (selection instanceof StructuredSelection) {
-			final StructuredSelection s = (StructuredSelection)selection;
+			final StructuredSelection s = (StructuredSelection) selection;
 			this.selectedSlots.clear();
 			for (final Object o : s.toArray()) {
 				if (o instanceof Slot) {
@@ -959,17 +941,17 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 				}
 			}
 			if (this.viewSelected) {
-				//Only refresh if viewSelected on.
+				// Only refresh if viewSelected on.
 				refresh();
 			}
 		}
 	}
-	
+
 	@Override
 	public void refresh() {
-		ViewerHelper.refresh(this.getViewer(), true);	
+		ViewerHelper.refresh(this.getViewer(), true);
 	}
-	
+
 	@Override
 	public void dispose() {
 		colourGreen.dispose();

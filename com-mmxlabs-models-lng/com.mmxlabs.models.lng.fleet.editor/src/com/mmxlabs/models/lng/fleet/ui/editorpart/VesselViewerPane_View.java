@@ -77,16 +77,16 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 		getToolBarManager().appendToGroup("edit", new BaseFuelEditorAction());
 		getToolBarManager().update(true);
 
-		final EditingDomain editingDomain = scenarioEditingLocation.getEditingDomain();
-		addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain));
+		final ICommandHandler commandHandler = scenarioEditingLocation.getDefaultCommandHandler();
+		addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), commandHandler));
 
-		addTypicalColumn("Capacity (m³)", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVessel_Capacity(), editingDomain));
-		addTypicalColumn("Shortname", new BasicAttributeManipulator(FleetPackage.eINSTANCE.getVessel_ShortName(), editingDomain));
-		addTypicalColumn("Type", new BasicAttributeManipulator(FleetPackage.eINSTANCE.getVessel_Type(), editingDomain));
-		addTypicalColumn("Reference vessel", new SingleReferenceManipulator(FleetPackage.eINSTANCE.getVessel_Reference(), scenarioEditingLocation.getReferenceValueProviderCache(), editingDomain));
+		addTypicalColumn("Capacity (m³)", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVessel_Capacity(), commandHandler));
+		addTypicalColumn("Shortname", new BasicAttributeManipulator(FleetPackage.eINSTANCE.getVessel_ShortName(), commandHandler));
+		addTypicalColumn("Type", new BasicAttributeManipulator(FleetPackage.eINSTANCE.getVessel_Type(), commandHandler));
+		addTypicalColumn("Reference vessel", new SingleReferenceManipulator(FleetPackage.eINSTANCE.getVessel_Reference(), scenarioEditingLocation.getReferenceValueProviderCache(), commandHandler));
 		addTypicalColumn("Inaccessible Ports", new MultipleReferenceManipulator(FleetPackage.eINSTANCE.getVessel_InaccessiblePorts(), scenarioEditingLocation.getReferenceValueProviderCache(),
-				editingDomain, MMXCorePackage.eINSTANCE.getNamedObject_Name()));
-		addTypicalColumn("Max Speed", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVessel_MaxSpeed(), editingDomain));
+				commandHandler, MMXCorePackage.eINSTANCE.getNamedObject_Name()));
+		addTypicalColumn("Max Speed", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVessel_MaxSpeed(), commandHandler));
 		// getToolBarManager().appendToGroup(EDIT_GROUP, new BaseFuelEditorAction());
 		/*
 		 * getToolBarManager().appendToGroup(EDIT_GROUP, new Action("VC") {
@@ -111,9 +111,9 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 					final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 					final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(lngScenarioModel);
 
-					final DetailCompositeDialog dcd = new DetailCompositeDialog(VesselViewerPane_View.this.getJointModelEditorPart().getShell(),
-							VesselViewerPane_View.this.getJointModelEditorPart().getDefaultCommandHandler());
-					dcd.open(getJointModelEditorPart(), getJointModelEditorPart().getRootObject(), fleetModel, FleetPackage.eINSTANCE.getFleetModel_VesselGroups());
+					final DetailCompositeDialog dcd = new DetailCompositeDialog(VesselViewerPane_View.this.getScenarioEditingLocation().getShell(),
+							VesselViewerPane_View.this.getScenarioEditingLocation().getDefaultCommandHandler());
+					dcd.open(getScenarioEditingLocation(), getScenarioEditingLocation().getRootObject(), fleetModel, FleetPackage.eINSTANCE.getFleetModel_VesselGroups());
 				}
 			}
 		});
@@ -157,11 +157,11 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 					vessel.setBallastAttributes(FleetFactory.eINSTANCE.createVesselStateAttributes());
 					vessel.setReference(reference);
 					final CompoundCommand cmd = new CompoundCommand("New vessel");
-					cmd.append(AddCommand.create(getEditingDomain(), ScenarioModelUtil.getFleetModel(getJointModelEditorPart().getScenarioDataProvider()), FleetPackage.Literals.FLEET_MODEL__VESSELS,
-							Collections.singleton(vessel)));
+					cmd.append(AddCommand.create(getEditingDomain(), ScenarioModelUtil.getFleetModel(getScenarioEditingLocation().getScenarioDataProvider()),
+							FleetPackage.Literals.FLEET_MODEL__VESSELS, Collections.singleton(vessel)));
 					final CommandStack commandStack = getEditingDomain().getCommandStack();
 					commandStack.execute(cmd);
-					DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(getJointModelEditorPart(), vessel, commandStack.getMostRecentCommand());
+					DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(getScenarioEditingLocation(), vessel, commandStack.getMostRecentCommand());
 				}
 			}
 		});
@@ -186,9 +186,9 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 			if (rootObject instanceof LNGScenarioModel) {
 				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 				final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(lngScenarioModel);
-				final DetailCompositeDialog dcd = new DetailCompositeDialog(VesselViewerPane_View.this.getJointModelEditorPart().getShell(),
-						VesselViewerPane_View.this.getJointModelEditorPart().getDefaultCommandHandler());
-				dcd.open(getJointModelEditorPart(), getJointModelEditorPart().getRootObject(), fleetModel, FleetPackage.eINSTANCE.getFleetModel_BaseFuels());
+				final DetailCompositeDialog dcd = new DetailCompositeDialog(VesselViewerPane_View.this.getScenarioEditingLocation().getShell(),
+						VesselViewerPane_View.this.getScenarioEditingLocation().getDefaultCommandHandler());
+				dcd.open(getScenarioEditingLocation(), getScenarioEditingLocation().getRootObject(), fleetModel, FleetPackage.eINSTANCE.getFleetModel_BaseFuels());
 			}
 		}
 
@@ -206,7 +206,7 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 							final LockableAction edit = new LockableAction("Edit...") {
 								public void run() {
 									final DetailCompositeDialog dcd = new DetailCompositeDialog(scenarioEditingLocation.getShell(), scenarioEditingLocation.getDefaultCommandHandler());
-									dcd.open(getJointModelEditorPart(), scenarioEditingLocation.getRootObject(), Collections.singletonList((EObject) baseFuel));
+									dcd.open(getScenarioEditingLocation(), scenarioEditingLocation.getRootObject(), Collections.singletonList((EObject) baseFuel));
 								}
 							};
 							addActionToMenu(edit, submenu);

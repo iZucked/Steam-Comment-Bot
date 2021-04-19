@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Composite;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 
 /**
@@ -27,8 +28,8 @@ public class SpotIndexAttributeManipulator extends BasicAttributeManipulator {
 	private int[] optionValues;
 	private String[] options;
 
-	public SpotIndexAttributeManipulator(final EStructuralFeature field, final EditingDomain editingDomain) {
-		super(field, editingDomain);
+	public SpotIndexAttributeManipulator(final EStructuralFeature field, final ICommandHandler commandHandler) {
+		super(field, commandHandler);
 	}
 
 	@Override

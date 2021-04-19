@@ -113,6 +113,7 @@
     <genClasses ecoreClass="pricing.ecore#//SuezCanalTariff">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//SuezCanalTariff/bands"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//SuezCanalTariff/tugBands"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//SuezCanalTariff/routeRebates"/>
       <genFeatures createChild="false" propertyDescription="Cost per tug" ecoreFeature="ecore:EAttribute pricing.ecore#//SuezCanalTariff/tugCost"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SuezCanalTariff/fixedCosts"/>
       <genFeatures createChild="false" propertyDescription="LNG vessel discount factor"
@@ -124,6 +125,11 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SuezCanalTariffBand/ballastTariff"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SuezCanalTariffBand/bandStart"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SuezCanalTariffBand/bandEnd"/>
+    </genClasses>
+    <genClasses ecoreClass="pricing.ecore#//SuezCanalRouteRebate">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//SuezCanalRouteRebate/from"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//SuezCanalRouteRebate/to"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SuezCanalRouteRebate/rebate"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//UnitConversion">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//UnitConversion/from"/>

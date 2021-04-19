@@ -50,6 +50,7 @@ import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentPr
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.SelectionServiceUtils;
 import com.mmxlabs.lingo.reports.views.standard.SimpleTabularReportView;
 import com.mmxlabs.lingo.reports.views.standard.exposures.IndexExposureData.IndexExposureType;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -382,16 +383,15 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			selected = selected.stream().filter(s -> s instanceof Slot || s instanceof SlotAllocation || s instanceof Cargo || s instanceof CargoAllocation || s instanceof PaperDeal)
 					.collect(Collectors.toList());
 
-			final List<IndexExposureData> output = getExposuresByMonth(schedule, scenarioResult, ymStart, ymEnd, selected);
-
-			return output;
+			return getExposuresByMonth(schedule, scenarioResult, ymStart, ymEnd, selected);
 		}
 
 		protected List<IndexExposureData> getExposuresByMonth(final Schedule schedule, final ScenarioResult scenarioResult, final YearMonth ymStart, final YearMonth ymEnd, List<Object> selected) {
 			final List<IndexExposureData> output = new LinkedList<>();
+			final IScenarioDataProvider sdp = scenarioResult.getScenarioDataProvider();
 			for (YearMonth cym = ymStart; cym.isBefore(ymEnd.plusMonths(1)); cym = cym.plusMonths(1)) {
-				IndexExposureData exposuresByMonth = ExposuresTransformer.getExposuresByMonth(scenarioResult, schedule, cym, mode, selected, selectedEntity, selectedFiscalYear, selectedAssetType,
-						showGenerated);
+				IndexExposureData exposuresByMonth = ExposuresTransformer.getExposuresByMonth(scenarioResult, sdp, schedule, cym, mode, selected, 
+						selectedEntity, selectedFiscalYear, selectedAssetType, showGenerated);
 				if (inspectChildrenAndExposures(exposuresByMonth)) {
 					output.add(exposuresByMonth);
 				}
@@ -786,17 +786,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 	@Override
 	public void selectionChanged(final MPart part, final Object selectionObject) {
-		if (selectionMode) {
-			final IWorkbenchPart e3Part = SelectionHelper.getE3Part(part);
-			if (e3Part != null) {
-				if (e3Part == this) {
-					return;
-				}
-				if (e3Part instanceof PropertySheet) {
-					return;
-				}
-			}
-
+		if (selectionMode && SelectionServiceUtils.isSelectionValid(part, selectionObject)) {
 			selection = SelectionHelper.adaptSelection(selectionObject);
 			ExposureReportView.this.refresh();
 		}
