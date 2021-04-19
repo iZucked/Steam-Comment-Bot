@@ -532,8 +532,9 @@ public class ContractPage extends ADPComposite {
 				final LocalDateTime loadStart = loadSlot.isSetWindowStartTime() ? loadSlot.getWindowStart().atTime(LocalTime.of(loadSlot.getWindowStartTime(), 00))
 						: loadSlot.getWindowStart().atStartOfDay();
 				knownLoadIDs.add(loadSlot.getName());
-				assert loadSlot.getCargo() != null;
-				existingCargoes.put(loadStart, loadSlot.getCargo());
+				if (loadSlot.getCargo() != null) {
+					existingCargoes.put(loadStart, loadSlot.getCargo());
+				}
 			});
 			if (!existingCargoes.isEmpty()) {
 				LocalDateTime currentFirst = existingCargoes.firstKey();

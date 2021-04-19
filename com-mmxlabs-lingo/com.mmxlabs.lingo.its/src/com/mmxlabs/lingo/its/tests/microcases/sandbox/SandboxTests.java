@@ -6,6 +6,8 @@ package com.mmxlabs.lingo.its.tests.microcases.sandbox;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
@@ -13,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.lingo.its.tests.microcases.CharterLengthTests;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.lngdataserver.lng.importers.creator.ScenarioBuilder;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
@@ -30,7 +33,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.cargo.util.CargoEditorFilterUtils.CargoFilterOption;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -39,20 +41,26 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.its.RequireFeature;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
+import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.util.ScheduleSpecificationTransformer;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 @ExtendWith(ShiroRunner.class)
-@RequireFeature({ KnownFeatures.FEATURE_SANDBOX })
+@RequireFeature({ KnownFeatures.FEATURE_SANDBOX, KnownFeatures.FEATURE_CHARTER_LENGTH })
 public class SandboxTests extends AbstractSandboxTestCase {
 
 	@Override
@@ -716,4 +724,179 @@ public class SandboxTests extends AbstractSandboxTestCase {
 		Assertions.assertNotNull(result);
 	}
 
+	@Test
+	public void testBEWithCharterLength() {
+		final SandboxModelBuilder sandboxBuilder = SandboxModelBuilder.createSandbox(ScenarioModelUtil.getAnalyticsModel(scenarioDataProvider));
+
+		sandboxBuilder.setPortfolioMode(false);
+		sandboxBuilder.setPortfolioBreakevenMode(false);
+		sandboxBuilder.setManualSandboxMode();
+
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
+
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_BONNY);
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_FUTTSU);
+
+		final BuyOption buy1 = sandboxBuilder.makeBuyOpportunity(false, port1, entity, "?") //
+				.withDate(LocalDate.of(2021, 1, 1)) //
+				.withCV(22.5) //
+				.build();
+
+		DESSalesMarket market1 = spotMarketsModelBuilder.makeDESSaleMarket("Market1", port2, entity, "7").withVolumeLimits(0, 4_000_000, VolumeUnits.MMBTU) //
+				.build();
+
+		final SellOption sell1 = sandboxBuilder.createSellMarketOption(market1);
+
+		ShippingOption ship1 = sandboxBuilder.makeOptionalSimpleCharter(vessel, entity) //
+				.withHireCosts("80000") //
+				.with(option -> {
+					option.setStart(LocalDate.of(2021, 1, 1));
+					option.setEnd(LocalDate.of(2021, 6, 1));
+				}).build();
+
+		sandboxBuilder.makePartialCaseRow().withBuyOptions(buy1) //
+				.withSellOptions(sell1) //
+				.withShippingOptions(ship1) //
+				.build();
+
+		// We really need to pass through settings in API, but code will fall back to here otherwise.
+		UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
+		userSettings.setWithCharterLength(true);
+		scenarioDataProvider.getTypedScenario(LNGScenarioModel.class).setUserSettings(userSettings);
+
+		evaluateSandbox(sandboxBuilder.getOptionAnalysisModel());
+
+		final AbstractSolutionSet result = sandboxBuilder.getOptionAnalysisModel().getResults();
+		Assertions.assertNotNull(result);
+
+		// Check expected results size
+		Assertions.assertNotNull(result.getBaseOption());
+		Assertions.assertEquals(1, result.getOptions().size());
+
+		// Check expected extra data items
+		Assertions.assertEquals(2, result.getExtraSlots().size()); // buy option plus 2x market slots
+		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
+		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
+		Assertions.assertEquals(1, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
+
+		{ // Target state (use price expression as pairing indicator)
+			final SolutionOption option = result.getOptions().get(0);
+			final CargoAllocation cargoAllocation = option.getScheduleModel().getSchedule().getCargoAllocations().get(0);
+
+			// Make sure there is a price - zero indicate b/e did not run
+			Assertions.assertNotEquals(0, cargoAllocation.getSlotAllocations().get(0).getPrice());
+			// We could have a rounding error of a couple of dollars
+			Assertions.assertEquals(0.0, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss(), 2.0);
+
+			CharterLengthEvent charterLength = CharterLengthTests.findCharterLengthEvent(cargoAllocation.getSlotAllocations().get(1).getSlot(), option.getScheduleModel().getSchedule());
+			Assertions.assertNotNull(charterLength);
+		}
+	}
+
+	@Test
+	public void testBEWithGCO() {
+		final SandboxModelBuilder sandboxBuilder = SandboxModelBuilder.createSandbox(ScenarioModelUtil.getAnalyticsModel(scenarioDataProvider));
+
+		sandboxBuilder.setPortfolioMode(false);
+		sandboxBuilder.setPortfolioBreakevenMode(false);
+		sandboxBuilder.setManualSandboxMode();
+
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_138);
+
+		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_BONNY);
+		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_FUTTSU);
+
+		final BuyOption buy1 = sandboxBuilder.makeBuyOpportunity(false, port1, entity, "?") //
+				.withDate(LocalDate.of(2021, 1, 1)) //
+				.withCV(22.5) //
+				.build();
+		final BuyOption buy2 = sandboxBuilder.makeBuyOpportunity(false, port1, entity, "5") //
+				.withDate(LocalDate.of(2021, 1, 1)) //
+				.withCV(22.5) //
+				.build();
+
+		DESSalesMarket market1 = spotMarketsModelBuilder.makeDESSaleMarket("Market1", port2, entity, "8") //
+				.withVolumeLimits(0, 4_000_000, VolumeUnits.MMBTU) //
+				.build();
+
+		final SellOption sell1 = sandboxBuilder.createSellMarketOption(market1);
+
+		ShippingOption ship1 = sandboxBuilder.makeOptionalSimpleCharter(vessel, entity) //
+				.withHireCosts("80000") //
+				.with(option -> {
+					option.setStart(LocalDate.of(2021, 1, 1));
+					option.setEnd(LocalDate.of(2021, 6, 1));
+				}).build();
+
+		sandboxBuilder.makePartialCaseRow() //
+				.withBuyOptions(buy1, buy2) //
+				.withSellOptions(sell1) //
+				.withShippingOptions(ship1) //
+				.build();
+
+		CharterOutMarket gcoMarket = spotMarketsModelBuilder.createCharterOutMarket("GCO", vessel, "80000", 30);
+		gcoMarket.setEnabled(true);
+
+		// We really need to pass through settings in API, but code will fall back to here otherwise.
+		UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
+		userSettings.setGenerateCharterOuts(true);
+		scenarioDataProvider.getTypedScenario(LNGScenarioModel.class).setUserSettings(userSettings);
+
+		evaluateSandbox(sandboxBuilder.getOptionAnalysisModel());
+
+		final AbstractSolutionSet result = sandboxBuilder.getOptionAnalysisModel().getResults();
+		Assertions.assertNotNull(result);
+
+		// Check expected results size
+		Assertions.assertNotNull(result.getBaseOption());
+		Assertions.assertEquals(2, result.getOptions().size());
+
+		// Check expected extra data items
+		Assertions.assertEquals(3, result.getExtraSlots().size()); // buy option plus 2x market slots
+		Assertions.assertEquals(0, result.getExtraCharterInMarkets().size());
+		Assertions.assertEquals(0, result.getCharterInMarketOverrides().size());
+		Assertions.assertEquals(1, result.getExtraVesselAvailabilities().size());
+		Assertions.assertEquals(0, result.getExtraVesselEvents().size());
+
+		{ // B/E case - B/E should not have run
+			final SolutionOption option = result.getOptions().get(0);
+
+			// We do not expect a GCO - should be disabled with B/E
+			List<GeneratedCharterOut> findGCOEvents = findGCOEvents(option.getScheduleModel().getSchedule().getSequences().get(0));
+			Assertions.assertEquals(0, findGCOEvents.size());
+
+			final CargoAllocation cargoAllocation = option.getScheduleModel().getSchedule().getCargoAllocations().get(0);
+
+			// Make sure there is a price - zero indicate b/e did not run
+			Assertions.assertNotEquals(0, cargoAllocation.getSlotAllocations().get(0).getPrice());
+			// We could have a rounding error of a couple of dollars
+			Assertions.assertEquals(0.0, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss(), 2.0);
+
+		}
+		{ // Non-b/e case - expect GCo to be able to run
+			final SolutionOption option = result.getOptions().get(1);
+			final CargoAllocation cargoAllocation = option.getScheduleModel().getSchedule().getCargoAllocations().get(0);
+
+			// We do expect to GCO run here
+			List<GeneratedCharterOut> findGCOEvents = findGCOEvents(option.getScheduleModel().getSchedule().getSequences().get(0));
+			Assertions.assertEquals(1, findGCOEvents.size());
+
+			// Make sure there is a price - zero indicate b/e did not run
+			Assertions.assertEquals(5, cargoAllocation.getSlotAllocations().get(0).getPrice());
+			// Expect some kind of P&L
+			Assertions.assertNotEquals(0.0, cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss());
+
+		}
+	}
+
+	private List<GeneratedCharterOut> findGCOEvents(Sequence sequence) {
+		List<GeneratedCharterOut> charterOuts = new ArrayList<>();
+		for (Event e : sequence.getEvents()) {
+			if (e instanceof GeneratedCharterOut) {
+				charterOuts.add((GeneratedCharterOut) e);
+			}
+		}
+		return charterOuts;
+	}
 }

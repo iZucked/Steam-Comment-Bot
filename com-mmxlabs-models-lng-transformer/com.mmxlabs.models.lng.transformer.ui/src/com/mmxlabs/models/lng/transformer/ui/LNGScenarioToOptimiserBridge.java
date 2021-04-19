@@ -84,8 +84,7 @@ public class LNGScenarioToOptimiserBridge {
 	@NonNull
 	private EditingDomain optimiserEditingDomain;
 
-	@Nullable
-	private final IScenarioEntityMapping periodMapping;
+	private final @Nullable IScenarioEntityMapping periodMapping;
 
 	@NonNull
 	private final Collection<@NonNull String> hints;
@@ -149,7 +148,8 @@ public class LNGScenarioToOptimiserBridge {
 			this.periodMapping = null;
 		}
 		// If we are in a period optimisation, then create a LNGDataTransformer for the period data
-		if (this.periodMapping != null) {
+		IScenarioEntityMapping pPeriodMapping = this.periodMapping;
+		if (pPeriodMapping != null) {
 
 			// Create a stub command here so match the initial evaluation command update for undo() calls later
 			final CompoundCommand wrapper = LNGSchedulerJobUtils.createBlankCommand(0);
@@ -161,7 +161,7 @@ public class LNGScenarioToOptimiserBridge {
 			optimiserDataTransformer = new LNGDataTransformer(this.optimiserScenarioDataProvider, optimiserExtraDataProvider, userSettings, solutionBuilderSettings, concurrencyLevel, periodHints,
 					services);
 
-			periodExporter = new PeriodExporter(originalDataTransformer, optimiserDataTransformer, periodMapping);
+			periodExporter = new PeriodExporter(originalDataTransformer, optimiserDataTransformer, pPeriodMapping);
 		}
 
 		// Reset flag as calls to #overwrite will have set this to false, but these should not have invalidated the internal state

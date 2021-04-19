@@ -67,7 +67,7 @@ public class BasicAuthenticationManager extends AbstractAuthenticationManager {
 
 		// @formatter:off
 		final Request loginRequest = new Request.Builder().header("Authorization", Credentials.basic(username, password)) //
-				.header("cache-control", "no-cache") //
+				.header("Cache-Control", "no-store, max-age=0") //
 				.url(url + UpstreamUrlProvider.BASIC_LOGIN_PATH) //
 				.build();
 		// @formatter:on
@@ -108,7 +108,7 @@ public class BasicAuthenticationManager extends AbstractAuthenticationManager {
 					.header("Authorization", Credentials.basic( //
 							username.get(), //
 							password.get())) //
-					.header("cache-control", "no-cache")); //
+					.header("Cache-Control", "no-store, max-age=0")); //
 			// @formatter:on
 		} else {
 			builder = Optional.empty();

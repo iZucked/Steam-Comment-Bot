@@ -140,9 +140,14 @@ public class SandboxModelBuilder {
 		final CharterOutOpportunityMaker maker = new CharterOutOpportunityMaker(this);
 		return maker.create(port, date, duration);
 	}
-	
+
 	public SimpleCharterOptionMaker makeSimpleCharter(final Vessel vessel, final BaseLegalEntity entity) {
 		final SimpleCharterOptionMaker maker = new SimpleCharterOptionMaker(this);
+		return maker.create(vessel, entity);
+	}
+
+	public OptionalSimpleCharterOptionMaker makeOptionalSimpleCharter(final Vessel vessel, final BaseLegalEntity entity) {
+		final OptionalSimpleCharterOptionMaker maker = new OptionalSimpleCharterOptionMaker(this);
 		return maker.create(vessel, entity);
 	}
 
@@ -151,9 +156,9 @@ public class SandboxModelBuilder {
 		option.setEntity(entity);
 		option.setVessel(vessel);
 		option.setHireCost(hireCost);
-		
+
 		optionAnalysisModel.getShippingTemplates().add(option);
-		
+
 		return option;
 	}
 
@@ -222,5 +227,4 @@ public class SandboxModelBuilder {
 	public PartialCaseRowMaker makePartialCaseRow() {
 		return new PartialCaseRowMaker(this);
 	}
-
 }
