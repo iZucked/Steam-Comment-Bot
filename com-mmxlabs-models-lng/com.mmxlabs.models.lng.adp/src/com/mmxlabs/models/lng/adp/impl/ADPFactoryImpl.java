@@ -94,6 +94,7 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 			case ADPPackage.SALES_CONTRACT_ALLOCATION_ROW: return createSalesContractAllocationRow();
 			case ADPPackage.MULL_PROFILE: return createMullProfile();
 			case ADPPackage.MULL_SUBPROFILE: return createMullSubprofile();
+			case ADPPackage.MULL_CARGO_WRAPPER: return createMullCargoWrapper();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -472,6 +473,17 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	public MullSubprofile createMullSubprofile() {
 		MullSubprofileImpl mullSubprofile = new MullSubprofileImpl();
 		return mullSubprofile;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public MullCargoWrapper createMullCargoWrapper() {
+		MullCargoWrapperImpl mullCargoWrapper = new MullCargoWrapperImpl();
+		return mullCargoWrapper;
 	}
 
 	/**

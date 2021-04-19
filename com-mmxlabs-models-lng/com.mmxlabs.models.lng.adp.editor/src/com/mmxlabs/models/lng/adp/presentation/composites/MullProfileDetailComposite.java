@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.adp.presentation.composites;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,9 +17,11 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -53,17 +56,26 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.adp.ADPFactory;
+import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.DESSalesMarketAllocationRow;
+import com.mmxlabs.models.lng.adp.MullCargoWrapper;
 import com.mmxlabs.models.lng.adp.MullEntityRow;
 import com.mmxlabs.models.lng.adp.MullProfile;
 import com.mmxlabs.models.lng.adp.MullSubprofile;
 import com.mmxlabs.models.lng.adp.SalesContractAllocationRow;
 import com.mmxlabs.models.lng.adp.utils.IMullRelativeEntitlementImportCommandProvider;
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Inventory;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -86,6 +98,7 @@ import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
+import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 
 public class MullProfileDetailComposite extends Composite implements IDisplayComposite {
 
@@ -116,6 +129,8 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 	private Action contractTablePackAction;
 	private Action marketTablePackAction;
 
+	private Runnable releaseAdaptersRunnable = null;
+
 	private Color systemWhite;
 
 	protected DefaultStatusProvider statusProvider = new DefaultStatusProvider() {
@@ -144,7 +159,47 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 					dialogContext.getDialogController().validate();
 			} else {
 				MullProfileDetailComposite.this.removeAdapter();
+				if (releaseAdaptersRunnable != null) {
+					releaseAdaptersRunnable.run();
+					releaseAdaptersRunnable = null;
+				}
 			}
+		}
+	};
+	
+	private final AdapterImpl cargoAdapter = new SafeAdapterImpl() {
+		
+		@Override
+		protected void safeNotifyChanged(Notification msg) {
+			if (msg.isTouch() || oldValue == null || oldValue.getCargoesToKeep().isEmpty()) {
+				return;
+			}
+			if (msg.getFeature() == CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS) {
+				if (msg.getOldValue() != null) {
+					final LoadSlot loadSlot = (LoadSlot) msg.getOldValue();
+					oldValue.getCargoesToKeep().stream().filter(wrapper -> wrapper.getLoadSlot() == loadSlot).findFirst().ifPresent(wrapper -> {
+						final Command cmd = RemoveCommand.create(dialogContext.getScenarioEditingLocation().getEditingDomain(), oldValue, ADPPackage.Literals.MULL_PROFILE__CARGOES_TO_KEEP, Collections.singletonList(wrapper));
+						dialogContext.getScenarioEditingLocation().getEditingDomain().getCommandStack().execute(cmd);
+					});
+				}
+			} else if (msg.getFeature() == CargoPackage.Literals.CARGO_MODEL__DISCHARGE_SLOTS) {
+				if (msg.getOldValue() != null) {
+					final DischargeSlot dischargeSlot = (DischargeSlot) msg.getOldValue();
+					oldValue.getCargoesToKeep().stream().filter(wrapper -> wrapper.getDischargeSlot() == dischargeSlot).findFirst().ifPresent(wrapper -> {
+						final Command cmd = RemoveCommand.create(dialogContext.getScenarioEditingLocation().getEditingDomain(), oldValue, ADPPackage.Literals.MULL_PROFILE__CARGOES_TO_KEEP, Collections.singletonList(wrapper));
+						dialogContext.getScenarioEditingLocation().getEditingDomain().getCommandStack().execute(cmd);
+					});
+				}
+			} else if (msg.getFeature() == CargoPackage.Literals.CARGO_MODEL__CARGOES) {
+				if (msg.getOldValue() != null) {
+					final Cargo cargo = (Cargo) msg.getOldValue();
+					oldValue.getCargoesToKeep().stream().filter(wrapper -> wrapper.getLoadSlot().getCargo() == cargo).findFirst().ifPresent(wrapper -> {
+						final Command cmd = RemoveCommand.create(dialogContext.getScenarioEditingLocation().getEditingDomain(), oldValue, ADPPackage.Literals.MULL_PROFILE__CARGOES_TO_KEEP, Collections.singletonList(wrapper));
+						dialogContext.getScenarioEditingLocation().getEditingDomain().getCommandStack().execute(cmd);
+					});
+				}
+			}
+			
 		}
 	};
 
@@ -178,9 +233,44 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 
 	@Override
 	public void display(IDialogEditingContext dialogContext, MMXRootObject root, EObject value, Collection<EObject> range, EMFDataBindingContext dbc) {
+		if (value != null) {
+			final MullProfile mullProfile = (MullProfile) value;
+			final List<MullCargoWrapper> cargoesToKeep = mullProfile.getCargoesToKeep();
+			if (!cargoesToKeep.isEmpty()) {
+				final List<MullCargoWrapper> cargoWrappersToDelete = cargoesToKeep.stream()
+				.filter(cargoWrapper -> {
+					if (cargoWrapper.getLoadSlot() == null) {
+						return true;
+					}
+					if (cargoWrapper.getDischargeSlot() == null) {
+						return true;
+					}
+					if (cargoWrapper.getLoadSlot().getCargo() == null) {
+						return true;
+					}
+					if (cargoWrapper.getLoadSlot().getCargo().getSlots().get(1) != cargoWrapper.getDischargeSlot()) {
+						return true;
+					}
+					return false;
+				})
+				.collect(Collectors.toList());
+				if (!cargoWrappersToDelete.isEmpty()) {
+					final EditingDomain ed = dialogContext.getScenarioEditingLocation().getEditingDomain();
+					final Command deleteCommand = RemoveCommand.create(ed, mullProfile, ADPPackage.Literals.MULL_PROFILE__CARGOES_TO_KEEP, cargoWrappersToDelete);
+					ed.getCommandStack().execute(deleteCommand);
+				}
+			}
+		}
 		delegate.display(dialogContext, root, value, range, dbc);
 		removeAdapter();
 		oldValue = (MullProfile) value;
+		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel((LNGScenarioModel) root);
+		if (releaseAdaptersRunnable != null) {
+			releaseAdaptersRunnable.run();
+			releaseAdaptersRunnable = null;
+		}
+		releaseAdaptersRunnable = () -> cargoModel.eAdapters().remove(cargoAdapter);
+		cargoModel.eAdapters().add(cargoAdapter);
 		viewer.setInput(value);
 		inventoryTablePackAction.run();
 		entityTableGroup.setVisible(viewer.getStructuredSelection().size() == 1);

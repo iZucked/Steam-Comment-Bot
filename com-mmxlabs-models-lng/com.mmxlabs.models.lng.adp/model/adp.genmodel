@@ -190,6 +190,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//MullProfile/volumeFlex"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//MullProfile/inventories"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//MullProfile/fullCargoLotValue"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//MullProfile/cargoesToKeep"/>
     </genClasses>
     <genClasses ecoreClass="adp.ecore#//MullSubprofile">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//MullSubprofile/inventory"/>
@@ -198,6 +199,10 @@
     <genClasses image="false" ecoreClass="adp.ecore#//MullAllocationRow">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//MullAllocationRow/weight"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//MullAllocationRow/vessels"/>
+    </genClasses>
+    <genClasses ecoreClass="adp.ecore#//MullCargoWrapper">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//MullCargoWrapper/loadSlot"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//MullCargoWrapper/dischargeSlot"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

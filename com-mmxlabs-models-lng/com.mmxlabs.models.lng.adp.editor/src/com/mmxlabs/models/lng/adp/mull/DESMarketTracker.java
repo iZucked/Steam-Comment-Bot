@@ -94,4 +94,14 @@ public class DESMarketTracker extends AllocationTracker {
 			}
 		}
 	}
+
+	@Override
+	public boolean satisfiedAACQ() {
+		return true;
+	}
+
+	@Override
+	public void phase1DropFixedLoad(Cargo cargo) {
+		dropFixedLoad(cargo);
+	}
 }

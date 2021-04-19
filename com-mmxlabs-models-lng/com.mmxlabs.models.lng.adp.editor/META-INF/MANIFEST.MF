@@ -55,7 +55,8 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.models.ui.validation,
  com.mmxlabs.optimiser.optimiser-core,
  org.eclipse.core.expressions,
- org.slf4j.api;bundle-version="1.7.10"
+ org.slf4j.api;bundle-version="1.7.10",
+ org.eclipse.emf.ecore
 Bundle-ActivationPolicy: lazy
 Bundle-Module: com.mmxlabs.models.lng.adp.editor.internal.ADPActivatorModule
 Import-Package: com.google.ortools.linearsolver
