@@ -1435,18 +1435,8 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getMullEntityRow_Ports() {
-		return (EReference)mullEntityRowEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getMullEntityRow_SalesContractAllocationRows() {
-		return (EReference)mullEntityRowEClass.getEStructuralFeatures().get(5);
+		return (EReference)mullEntityRowEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -1819,7 +1809,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		createEAttribute(mullEntityRowEClass, MULL_ENTITY_ROW__INITIAL_ALLOCATION);
 		createEAttribute(mullEntityRowEClass, MULL_ENTITY_ROW__RELATIVE_ENTITLEMENT);
 		createEReference(mullEntityRowEClass, MULL_ENTITY_ROW__DES_SALES_MARKET_ALLOCATION_ROWS);
-		createEReference(mullEntityRowEClass, MULL_ENTITY_ROW__PORTS);
 		createEReference(mullEntityRowEClass, MULL_ENTITY_ROW__SALES_CONTRACT_ALLOCATION_ROWS);
 
 		desSalesMarketAllocationRowEClass = createEClass(DES_SALES_MARKET_ALLOCATION_ROW);
@@ -2091,7 +2080,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		initEAttribute(getMullEntityRow_InitialAllocation(), ecorePackage.getEString(), "initialAllocation", null, 0, 1, MullEntityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMullEntityRow_RelativeEntitlement(), ecorePackage.getEDouble(), "relativeEntitlement", null, 0, 1, MullEntityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMullEntityRow_DesSalesMarketAllocationRows(), this.getDESSalesMarketAllocationRow(), null, "desSalesMarketAllocationRows", null, 0, -1, MullEntityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getMullEntityRow_Ports(), thePortPackage.getPort(), null, "ports", null, 0, -1, MullEntityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMullEntityRow_SalesContractAllocationRows(), this.getSalesContractAllocationRow(), null, "salesContractAllocationRows", null, 0, -1, MullEntityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(desSalesMarketAllocationRowEClass, DESSalesMarketAllocationRow.class, "DESSalesMarketAllocationRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

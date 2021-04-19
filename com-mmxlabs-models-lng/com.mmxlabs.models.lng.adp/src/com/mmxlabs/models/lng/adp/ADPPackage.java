@@ -2141,22 +2141,13 @@ public interface ADPPackage extends EPackage {
 	int MULL_ENTITY_ROW__DES_SALES_MARKET_ALLOCATION_ROWS = 3;
 
 	/**
-	 * The feature id for the '<em><b>Ports</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MULL_ENTITY_ROW__PORTS = 4;
-
-	/**
 	 * The feature id for the '<em><b>Sales Contract Allocation Rows</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MULL_ENTITY_ROW__SALES_CONTRACT_ALLOCATION_ROWS = 5;
+	int MULL_ENTITY_ROW__SALES_CONTRACT_ALLOCATION_ROWS = 4;
 
 	/**
 	 * The number of structural features of the '<em>Mull Entity Row</em>' class.
@@ -2165,7 +2156,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MULL_ENTITY_ROW_FEATURE_COUNT = 6;
+	int MULL_ENTITY_ROW_FEATURE_COUNT = 5;
 
 	/**
 	 * The number of operations of the '<em>Mull Entity Row</em>' class.
@@ -3585,17 +3576,6 @@ public interface ADPPackage extends EPackage {
 	EReference getMullEntityRow_DesSalesMarketAllocationRows();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.adp.MullEntityRow#getPorts <em>Ports</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Ports</em>'.
-	 * @see com.mmxlabs.models.lng.adp.MullEntityRow#getPorts()
-	 * @see #getMullEntityRow()
-	 * @generated
-	 */
-	EReference getMullEntityRow_Ports();
-
-	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.adp.MullEntityRow#getSalesContractAllocationRows <em>Sales Contract Allocation Rows</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4715,14 +4695,6 @@ public interface ADPPackage extends EPackage {
 		 * @generated
 		 */
 		EReference MULL_ENTITY_ROW__DES_SALES_MARKET_ALLOCATION_ROWS = eINSTANCE.getMullEntityRow_DesSalesMarketAllocationRows();
-
-		/**
-		 * The meta object literal for the '<em><b>Ports</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference MULL_ENTITY_ROW__PORTS = eINSTANCE.getMullEntityRow_Ports();
 
 		/**
 		 * The meta object literal for the '<em><b>Sales Contract Allocation Rows</b></em>' containment reference list feature.
