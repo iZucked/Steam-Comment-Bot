@@ -71,7 +71,6 @@ public class MullEntityRowComponentHelper extends BaseComponentHelper {
 		add_initialAllocationEditor(detailComposite, topClass);
 		add_relativeEntitlementEditor(detailComposite, topClass);
 		add_desSalesMarketAllocationRowsEditor(detailComposite, topClass);
-		add_portsEditor(detailComposite, topClass);
 		add_salesContractAllocationRowsEditor(detailComposite, topClass);
 	}
 	/**
@@ -105,14 +104,6 @@ public class MullEntityRowComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_desSalesMarketAllocationRowsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.MULL_ENTITY_ROW__DES_SALES_MARKET_ALLOCATION_ROWS));
-	}
-	/**
-	 * Create the editor for the ports feature on MullEntityRow
-	 *
-	 * @generated
-	 */
-	protected void add_portsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.MULL_ENTITY_ROW__PORTS));
 	}
 	/**
 	 * Create the editor for the salesContractAllocationRows feature on MullEntityRow

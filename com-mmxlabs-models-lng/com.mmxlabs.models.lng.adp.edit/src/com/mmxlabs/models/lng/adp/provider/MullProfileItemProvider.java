@@ -154,6 +154,7 @@ public class MullProfileItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(ADPPackage.Literals.MULL_PROFILE__INVENTORIES);
+			childrenFeatures.add(ADPPackage.Literals.MULL_PROFILE__CARGOES_TO_KEEP);
 		}
 		return childrenFeatures;
 	}
@@ -213,6 +214,7 @@ public class MullProfileItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case ADPPackage.MULL_PROFILE__INVENTORIES:
+			case ADPPackage.MULL_PROFILE__CARGOES_TO_KEEP:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -234,6 +236,11 @@ public class MullProfileItemProvider
 			(createChildParameter
 				(ADPPackage.Literals.MULL_PROFILE__INVENTORIES,
 				 ADPFactory.eINSTANCE.createMullSubprofile()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ADPPackage.Literals.MULL_PROFILE__CARGOES_TO_KEEP,
+				 ADPFactory.eINSTANCE.createMullCargoWrapper()));
 	}
 
 	/**

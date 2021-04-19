@@ -27,7 +27,6 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.adp.MullEntityRow#getInitialAllocation <em>Initial Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.MullEntityRow#getRelativeEntitlement <em>Relative Entitlement</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.MullEntityRow#getDesSalesMarketAllocationRows <em>Des Sales Market Allocation Rows</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.adp.MullEntityRow#getPorts <em>Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.MullEntityRow#getSalesContractAllocationRows <em>Sales Contract Allocation Rows</em>}</li>
  * </ul>
  *
@@ -113,18 +112,6 @@ public interface MullEntityRow extends EObject {
 	 * @generated
 	 */
 	EList<DESSalesMarketAllocationRow> getDesSalesMarketAllocationRows();
-
-	/**
-	 * Returns the value of the '<em><b>Ports</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.port.Port}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Ports</em>' reference list.
-	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getMullEntityRow_Ports()
-	 * @model
-	 * @generated
-	 */
-	EList<Port> getPorts();
 
 	/**
 	 * Returns the value of the '<em><b>Sales Contract Allocation Rows</b></em>' containment reference list.
