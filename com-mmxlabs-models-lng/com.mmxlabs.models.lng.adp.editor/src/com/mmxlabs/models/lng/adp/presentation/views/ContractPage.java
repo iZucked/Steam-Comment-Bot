@@ -71,7 +71,6 @@ import org.eclipse.ui.actions.ActionFactory;
 import com.google.common.collect.Lists;
 import com.google.ortools.linearsolver.MPSolver;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
@@ -849,30 +848,6 @@ public class ContractPage extends ADPComposite {
 				throw new IllegalStateException("MULL profile should contain a first party entry.");
 			}
 			final MUDContainer firstPartyMudContainer = optMudContainer.get();
-			final List<Triple<MUDContainer, List<Pair<AllocationTracker, AllocationTracker>>, List<AllocationTracker>>> thirdPartyRemappings = new LinkedList<>();
-			for (final MUDContainer thirdPartyMUDContainer : finalPhaseMullContainer.getMUDContainers()) {
-				if (thirdPartyMUDContainer.getEntity().isThirdParty()) {
-					final List<Pair<AllocationTracker, AllocationTracker>> allocationTrackersToCombine = new LinkedList<>();
-					final List<AllocationTracker> finalPhaseNonVesselSharingAllocationTrackers = new LinkedList<>();
-					for (final AllocationTracker thirdPartyAllocationTracker : thirdPartyMUDContainer.getAllocationTrackers()) {
-						if (thirdPartyAllocationTracker.isSharingVessels()) {
-							final Optional<AllocationTracker> optAllocationTracker = firstPartyMudContainer.getAllocationTrackers().stream() //
-									.filter(a -> {
-										final HashSet<Vessel> firstVessSet = new HashSet<>(a.getVessels());
-										return thirdPartyAllocationTracker.getVessels().stream().allMatch(firstVessSet::contains);
-									}).findAny();
-							if (optAllocationTracker.isEmpty()) {
-								throw new IllegalStateException("Shared vessels should be entirely shared.");
-							}
-							final AllocationTracker firstPartyAllocationTracker = optAllocationTracker.get();
-							allocationTrackersToCombine.add(Pair.of(thirdPartyAllocationTracker, firstPartyAllocationTracker));
-						} else {
-							finalPhaseNonVesselSharingAllocationTrackers.add(thirdPartyAllocationTracker);
-						}
-					}
-					thirdPartyRemappings.add(Triple.of(thirdPartyMUDContainer, allocationTrackersToCombine, finalPhaseNonVesselSharingAllocationTrackers));
-				}
-			}
 
 			// Map of <entity, allocation tracker pair> to List of <entity, allocation
 			// tracker> that it combines with (using first party as sink)
@@ -885,12 +860,17 @@ public class ContractPage extends ADPComposite {
 							final Optional<AllocationTracker> optAllocationTracker = firstPartyMudContainer.getAllocationTrackers().stream() //
 									.filter(a -> {
 										final HashSet<Vessel> firstVessSet = new HashSet<>(a.getVessels());
-										return thirdPartyAllocationTracker.getVessels().stream().allMatch(firstVessSet::contains);
+										final List<Vessel> thirdPartyVessels = thirdPartyAllocationTracker.getVessels();
+										return firstVessSet.size() == thirdPartyVessels.size() && thirdPartyVessels.stream().allMatch(firstVessSet::contains);
 									}).findAny();
 							if (optAllocationTracker.isEmpty()) {
-								throw new IllegalStateException("Shared vessels should be entirely shared.");
+								// Shares vessels but first party does not have a tracker with the same vessel
+								// set (not all vessels are shared)
+								final Pair<MUDContainer, AllocationTracker> p = Pair.of(thirdPartyMudContainer, thirdPartyAllocationTracker);
+								newCombinations.put(p, new LinkedList<>(Collections.singleton(p)));
+							} else {
+								newCombinations.get(Pair.of(firstPartyMudContainer, optAllocationTracker.get())).add(Pair.of(thirdPartyMudContainer, thirdPartyAllocationTracker));
 							}
-							newCombinations.get(Pair.of(firstPartyMudContainer, optAllocationTracker.get())).add(Pair.of(thirdPartyMudContainer, thirdPartyAllocationTracker));
 						} else {
 							final Pair<MUDContainer, AllocationTracker> p = Pair.of(thirdPartyMudContainer, thirdPartyAllocationTracker);
 							newCombinations.put(p, new LinkedList<>(Collections.singleton(p)));
@@ -932,8 +912,12 @@ public class ContractPage extends ADPComposite {
 			// Populate the rearranged profile
 			nonMovingElements.forEach(p -> rearrangedProfile.get(p.getFirst()).getFirst().add(p.getSecond()));
 			for (final Entry<Pair<MUDContainer, AllocationTracker>, List<Pair<MUDContainer, AllocationTracker>>> entry : movingElements.entrySet()) {
-				final Pair<MUDContainer, AllocationTracker> minorLifter = entry.getValue().stream()
-						.min((p1, p2) -> Double.compare(p1.getFirst().getRelativeEntitlement(), p2.getFirst().getRelativeEntitlement())).get();
+				final MUDContainer minorMud = entry.getValue().stream().map(Pair::getFirst).min((mud1, mud2) -> Double.compare(mud1.getRelativeEntitlement(), mud2.getRelativeEntitlement())).get();
+				// If we have the option of using DESMarketTracker as sink, use it (otherwise throws an IllegalStateException later on)
+				final List<Pair<MUDContainer, AllocationTracker>> minorLifterPairCandidates = entry.getValue().stream().filter(p -> p.getFirst() == minorMud).collect(Collectors.toList());
+				final Optional<Pair<MUDContainer, AllocationTracker>> optDesMinorLifterPair = minorLifterPairCandidates.stream().filter(p -> p.getSecond() instanceof DESMarketTracker).findAny();
+				final Pair<MUDContainer, AllocationTracker> minorLifter = optDesMinorLifterPair.isPresent() ? optDesMinorLifterPair.get() : minorLifterPairCandidates.get(0);
+
 				final List<Pair<MUDContainer, AllocationTracker>> sharedCombinations = entry.getValue().stream().filter(p -> p != minorLifter).collect(Collectors.toList());
 				for (final Pair<MUDContainer, AllocationTracker> lifterToAbsorb : sharedCombinations) {
 					if (lifterToAbsorb.getFirst() != minorLifter.getFirst()) {

@@ -35,12 +35,6 @@ public class MullAllocationRowConstraint extends AbstractModelMultiConstraint {
 				.withMessage("No vessels selected") //
 				.make(ctx, statuses);
 			}
-			if (mullAllocationRow.getWeight() < 1) {
-				factory.copyName() //
-				.withObjectAndFeature(mullAllocationRow, ADPPackage.Literals.MULL_ALLOCATION_ROW__WEIGHT) //
-				.withMessage("ACQ must be larger than zero") //
-				.make(ctx, statuses);
-			}
 		}
 	}
 }
