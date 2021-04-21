@@ -5,7 +5,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-SymbolicName: com.mmxlabs.common.common-util.tests
 Automatic-Module-Name: com.mmxlabs.common.common-util.tests
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 4.12.24.qualifier
+Bundle-Version: 4.12.25.qualifier
 Fragment-Host: com.mmxlabs.common.common-util
 Require-Bundle: org.mockito.mockito-core;bundle-version="1.9.5",
  ch.qos.logback.classic;bundle-version="1.0.0",
