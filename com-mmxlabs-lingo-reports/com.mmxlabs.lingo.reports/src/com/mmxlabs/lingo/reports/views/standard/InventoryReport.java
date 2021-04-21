@@ -1656,7 +1656,7 @@ public class InventoryReport extends ViewPart {
 
 	private Map<YearMonth, Integer> calculateMonthlyProduction(final Inventory inventory, final YearMonth adpStart) {
 		final Map<YearMonth, Integer> monthlyProduction = new HashMap<>();
-		inventory.getFeeds().stream().forEach(row -> {
+		inventory.getFeeds().stream().filter(event -> event.getStartDate() != null && event.getEndDate() != null).forEach(row -> {
 			final YearMonth currYM = YearMonth.from(row.getStartDate());
 			final Integer currVal = monthlyProduction.get(currYM);
 			if (currVal == null) {
@@ -1665,7 +1665,7 @@ public class InventoryReport extends ViewPart {
 				monthlyProduction.put(currYM, currVal + row.getVolume());
 			}
 		});
-		inventory.getOfftakes().stream().forEach(row -> {
+		inventory.getOfftakes().stream().filter(event -> event.getStartDate() != null && event.getEndDate() != null).forEach(row -> {
 			final YearMonth currYM = YearMonth.from(row.getStartDate());
 			final Integer currVal = monthlyProduction.get(currYM);
 			if (currVal == null) {
