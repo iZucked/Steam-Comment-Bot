@@ -58,6 +58,10 @@ public class SubLocalMenuHelper {
 		this.title = title;
 	}
 
+	public String getTitle() {
+		return this.title;
+	}
+
 	public boolean hasActions() {
 		return !menuActions.isEmpty();
 	}
