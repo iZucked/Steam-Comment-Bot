@@ -1648,8 +1648,6 @@ public class InventoryReport extends ViewPart {
 				return false;
 			if (row.getInitialAllocation() == null || !row.getInitialAllocation().matches("-?\\d+"))
 				return false;
-			if (row.getRelativeEntitlement() <= 0.0)
-				return false;
 			return true;
 		});
 	}

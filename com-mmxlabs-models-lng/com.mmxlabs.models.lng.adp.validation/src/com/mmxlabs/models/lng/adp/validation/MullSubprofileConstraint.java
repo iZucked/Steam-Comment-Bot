@@ -31,7 +31,7 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class MullSubprofileConstraint extends AbstractModelMultiConstraint {
 
-	private static final double EPSILON_DOUBLE = 0.00001;
+	private static final double EPSILON_DOUBLE = 0.001;
 
 	@Override
 	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
