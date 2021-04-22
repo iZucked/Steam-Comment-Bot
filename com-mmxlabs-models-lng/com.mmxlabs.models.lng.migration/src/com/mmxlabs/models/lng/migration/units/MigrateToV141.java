@@ -9,8 +9,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EEnumLiteral;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -282,9 +285,13 @@ public class MigrateToV141 extends AbstractMigrationUnit {
 		final EClass class_monthlyBallastBonusContractLine = MetamodelUtils.getEClass(commercialPackage, "MonthlyBallastBonusContractLine");
 		// NEW
 		final EClass class_monthlyBallastBonusTerm = MetamodelUtils.getEClass(commercialPackage, "MonthlyBallastBonusTerm");
+
+		final EEnum enum_nextPortType = MetamodelUtils.getEEnum(commercialPackage, "NextPortType");
+		final EEnumLiteral nextPortType_loadPort = MetamodelUtils.getEEnum_Literal(enum_nextPortType, "LoadPort");
+		final EEnumLiteral nextPortType_nearestHub = MetamodelUtils.getEEnum_Literal(enum_nextPortType, "NearestHub");
 		
-		final EObjectWrapper ballastBonusContrainer = (EObjectWrapper) commercialPackage.getEFactoryInstance().create(class_MonthlyBallastBonusContainer);
-		ballastBonusContrainer.setRef("hubs", oldBallastBonusContract.getRefAsList("hubs"));
+		final EObjectWrapper ballastBonusContainer = (EObjectWrapper) commercialPackage.getEFactoryInstance().create(class_MonthlyBallastBonusContainer);
+		ballastBonusContainer.setRef("hubs", oldBallastBonusContract.getRefAsList("hubs"));
 		
 		final List<EObjectWrapper> rules = oldBallastBonusContract.getRefAsList("rules");
 		final List<EObjectWrapper> terms = new ArrayList<>();
@@ -302,7 +309,13 @@ public class MigrateToV141 extends AbstractMigrationUnit {
 					term.setAttrib("includeCanalTime", rule.getAttrib("includeCanalTime"));
 					term.setAttrib("lumpSumPriceExpression", rule.getAttrib("lumpSumPriceExpression"));
 					term.setAttrib("month", rule.getAttrib("month"));
-					term.setAttrib("ballastBonusTo", rule.getAttrib("ballastBonusTo"));
+//					Object ballastBonusTo = rule.getAttrib("ballastBonusTo");
+//					if (Objects.deepEquals(nextPortType_loadPort, ballastBonusTo)) {
+//						Object bbt = commercialPackage.getEFactoryInstance().createFromString(enum_nextPortType, "LoadPort");
+//						term.setAttrib("ballastBonusTo", ((EEnumLiteral) bbt).getEEnum());
+//					} else if (nextPortType_nearestHub.equals(ballastBonusTo)) {
+//						term.setAttrib("ballastBonusTo", nextPortType_nearestHub);
+//					}
 					term.setAttrib("ballastBonusPctFuel", rule.getAttrib("ballastBonusPctFuel"));
 					term.setAttrib("ballastBonusPctCharter", rule.getAttrib("ballastBonusPctCharter"));
 				}
@@ -313,9 +326,9 @@ public class MigrateToV141 extends AbstractMigrationUnit {
 			
 		}
 		if (!terms.isEmpty()) {
-			ballastBonusContrainer.setRef("terms", terms);
+			ballastBonusContainer.setRef("terms", terms);
 		}
-		return ballastBonusContrainer;
+		return ballastBonusContainer;
 	}
 	
 	private void processCharterMarkets(final EObjectWrapper spotMarketModel, final Map<EObjectWrapper, EObjectWrapper> charterContracts) {

@@ -2,6 +2,7 @@ package com.mmxlabs.models.lng.commercial.validation;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -48,9 +49,13 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class CharterContractValidationUtils {
-	public static void validateMonthlyBallastBonus(final IValidationContext ctx, final List<IStatus> statuses, final GenericCharterContract contract, final LocalDate scheduleStart,
-			final MonthlyBallastBonusContainer bbContract) {
+	public static void validateMonthlyBallastBonus(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures, 
+			final GenericCharterContract contract, final LocalDate scheduleStart, final MonthlyBallastBonusContainer bbContract, String topFeatureMessage) {
 		LocalDate earliestRule = LocalDate.MAX;
+		if (bbContract.getHubs().isEmpty()) {
+			addValidationError(ctx, failures, contract, String.format("%s - %s", topFeatureMessage, "Hubs list should not be empty!"), 
+					CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTAINER__HUBS);
+		}
 		for (final MonthlyBallastBonusTerm monthlyRule : bbContract.getTerms()) {
 			YearMonth ym = monthlyRule.getMonth();
 			if (ym != null) {
@@ -58,15 +63,16 @@ public class CharterContractValidationUtils {
 				if (ymStart.isBefore(earliestRule)) {
 					earliestRule = ymStart;
 				}
+			} else {
+				addValidationError(ctx, failures, contract, "Month not set on monthly rule.", CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTAINER__TERMS);			
 			}
-			else {
-				addValidationError(ctx, statuses, contract, "Month not set on monthly rule.", CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTAINER__TERMS);			
-			}
+			String mbbMessage = String.format("%s - %s:", topFeatureMessage, ym.format(DateTimeFormatter.ofPattern("yyyy-MMM")));
+			monthlyBallastBonusTermsValidation(ctx, extraContext, failures, mbbMessage, monthlyRule);
 		}
 
 		if (scheduleStart.isBefore(earliestRule)) {
 			String earliestRuleStr = (earliestRule != LocalDate.MAX) ? ", "+earliestRule.toString()+")" : ",]";
-			addValidationError(ctx, statuses, contract, "Monthly range does not cover [" + scheduleStart.toString() + earliestRuleStr, CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTAINER__TERMS);
+			addValidationError(ctx, failures, contract, "Monthly range does not cover [" + scheduleStart.toString() + earliestRuleStr, CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTAINER__TERMS);
 		}
 	}
 
@@ -110,14 +116,14 @@ public class CharterContractValidationUtils {
 		return scheduleStartDate;
 	}
 	
-	public static void monthlyBallastBonusValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses, final GenericCharterContract contract,
-			final IBallastBonus ballastBonusContract) {
+	public static void monthlyBallastBonusValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses, 
+			final GenericCharterContract contract, final IBallastBonus ballastBonusContract, String topFeatureMessage) {
 		final EObject rootObject = extraContext.getRootObject();
 		final LNGScenarioModel scenario = (LNGScenarioModel) rootObject;
 		final LocalDate scheduleStart = getStartOfSchedule(scenario);
 
 		if (scheduleStart != LocalDate.MAX) {
-			validateMonthlyBallastBonus(ctx, statuses, contract, scheduleStart, (MonthlyBallastBonusContainer) ballastBonusContract);
+			validateMonthlyBallastBonus(ctx, extraContext, statuses, contract, scheduleStart, (MonthlyBallastBonusContainer) ballastBonusContract, topFeatureMessage);
 		}
 	}
 
@@ -271,6 +277,29 @@ public class CharterContractValidationUtils {
 			valid = false;
 		}
 
+		return valid;
+	}
+	
+	private static boolean monthlyBallastBonusTermsValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures, 
+			String topFeatureMessage, final MonthlyBallastBonusTerm term) {
+		notionalJourneyTermsValidation(ctx, extraContext, failures, topFeatureMessage, (NotionalJourneyTerm) term);
+		
+		boolean valid = true;
+
+		if (term.getBallastBonusPctCharter().isEmpty()) {
+			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
+					(IConstraintStatus) ctx.createFailureStatus(String.format("[%s]: Charter rate percentage is required!", topFeatureMessage)));
+			dcsd.addEObjectAndFeature(term, CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTAINER__TERMS);
+			failures.add(dcsd);
+			valid = false;
+		}
+		if (term.getBallastBonusPctFuel().isEmpty()) {
+			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
+					(IConstraintStatus) ctx.createFailureStatus(String.format("[%s]: Fuel percentage is required!", topFeatureMessage)));
+			dcsd.addEObjectAndFeature(term, CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTAINER__TERMS);
+			failures.add(dcsd);
+			valid = false;
+		}
 		return valid;
 	}
 	

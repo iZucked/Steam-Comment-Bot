@@ -232,17 +232,15 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 			if (contract != null) {
 				final IBallastBonus ballastBonusContract = contract.getBallastBonusTerms();
 				EStructuralFeature feature = CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTER_CONTRACTS;
-				
+				String message = String.format("Charter %s end terms: ", va.getVessel().getName());
 				if (ballastBonusContract instanceof SimpleBallastBonusContainer) {
-					String message = String.format("Charter %s end terms: ", va.getVessel().getName());
 					CharterContractValidationUtils.simpleBallastBonusValidation(ctx, extraContext, failures, (SimpleBallastBonusContainer) ballastBonusContract, contract, feature, message);
 					CharterContractValidationUtils.ballastBonusCheckPortGroups(ctx, extraContext, baseFactory, failures, va, (SimpleBallastBonusContainer) ballastBonusContract);
 				} else if (ballastBonusContract instanceof MonthlyBallastBonusContainer) {
-					CharterContractValidationUtils.monthlyBallastBonusValidation(ctx, extraContext, failures, contract, ballastBonusContract);
+					CharterContractValidationUtils.monthlyBallastBonusValidation(ctx, extraContext, failures, contract, ballastBonusContract, message);
 				}
 				final IRepositioningFee repositioningFee = contract.getRepositioningFeeTerms();
 				if (repositioningFee instanceof SimpleRepositioningFeeContainer) {
-					String message = String.format("Charter %s start terms: ", va.getVessel().getName());
 					CharterContractValidationUtils.simpleRepositioningFeeValidation(ctx, extraContext, failures, (SimpleRepositioningFeeContainer) repositioningFee, contract, feature, message, earliestDate);
 				}
 				

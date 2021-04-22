@@ -39,7 +39,7 @@ public class GenericCharterContractContainerConstraint extends AbstractModelMult
 			if (ballastBonusContract instanceof SimpleBallastBonusContainer) {
 				CharterContractValidationUtils.simpleBallastBonusValidation(ctx, extraContext, statuses, (SimpleBallastBonusContainer) ballastBonusContract, contract, feature, message);
 			} else if (ballastBonusContract instanceof MonthlyBallastBonusContainer) {
-				CharterContractValidationUtils.monthlyBallastBonusValidation(ctx, extraContext, statuses, contract, ballastBonusContract);
+				CharterContractValidationUtils.monthlyBallastBonusValidation(ctx, extraContext, statuses, contract, ballastBonusContract, message);
 			}
 			final IRepositioningFee repositioningFee = contract.getRepositioningFeeTerms();
 			if (repositioningFee instanceof SimpleRepositioningFeeContainer) {
