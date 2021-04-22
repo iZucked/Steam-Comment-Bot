@@ -286,14 +286,14 @@ public class CharterContractValidationUtils {
 		
 		boolean valid = true;
 
-		if (term.getBallastBonusPctCharter().isEmpty()) {
+		if (term.getBallastBonusPctCharter() == null || term.getBallastBonusPctCharter().isEmpty()) {
 			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
 					(IConstraintStatus) ctx.createFailureStatus(String.format("[%s]: Charter rate percentage is required!", topFeatureMessage)));
 			dcsd.addEObjectAndFeature(term, CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTAINER__TERMS);
 			failures.add(dcsd);
 			valid = false;
 		}
-		if (term.getBallastBonusPctFuel().isEmpty()) {
+		if (term.getBallastBonusPctFuel() == null || term.getBallastBonusPctFuel().isEmpty()) {
 			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
 					(IConstraintStatus) ctx.createFailureStatus(String.format("[%s]: Fuel percentage is required!", topFeatureMessage)));
 			dcsd.addEObjectAndFeature(term, CommercialPackage.Literals.MONTHLY_BALLAST_BONUS_CONTAINER__TERMS);

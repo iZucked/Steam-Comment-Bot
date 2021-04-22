@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -287,7 +286,6 @@ public class MigrateToV141 extends AbstractMigrationUnit {
 		final EClass class_monthlyBallastBonusTerm = MetamodelUtils.getEClass(commercialPackage, "MonthlyBallastBonusTerm");
 
 		final EEnum enum_nextPortType = MetamodelUtils.getEEnum(commercialPackage, "NextPortType");
-		final EEnumLiteral nextPortType_loadPort = MetamodelUtils.getEEnum_Literal(enum_nextPortType, "LoadPort");
 		final EEnumLiteral nextPortType_nearestHub = MetamodelUtils.getEEnum_Literal(enum_nextPortType, "NearestHub");
 		
 		final EObjectWrapper ballastBonusContainer = (EObjectWrapper) commercialPackage.getEFactoryInstance().create(class_MonthlyBallastBonusContainer);
@@ -309,13 +307,14 @@ public class MigrateToV141 extends AbstractMigrationUnit {
 					term.setAttrib("includeCanalTime", rule.getAttrib("includeCanalTime"));
 					term.setAttrib("lumpSumPriceExpression", rule.getAttrib("lumpSumPriceExpression"));
 					term.setAttrib("month", rule.getAttrib("month"));
-//					Object ballastBonusTo = rule.getAttrib("ballastBonusTo");
-//					if (Objects.deepEquals(nextPortType_loadPort, ballastBonusTo)) {
-//						Object bbt = commercialPackage.getEFactoryInstance().createFromString(enum_nextPortType, "LoadPort");
-//						term.setAttrib("ballastBonusTo", ((EEnumLiteral) bbt).getEEnum());
-//					} else if (nextPortType_nearestHub.equals(ballastBonusTo)) {
-//						term.setAttrib("ballastBonusTo", nextPortType_nearestHub);
-//					}
+					Object ballastBonusTo = rule.getAttrib("ballastBonusTo");
+					// FIXME: this is a hack, but I have no idea how to avoid it
+					final EEnumLiteral newLoadPortLiteral = term.getAttrib("ballastBonusTo");
+					final EEnum newNPT = newLoadPortLiteral.getEEnum();
+					final EEnumLiteral newNearestHubLiteral = newNPT.getEEnumLiteral("NearestHub");
+					if (nextPortType_nearestHub.equals(ballastBonusTo)) {
+						term.setAttrib("ballastBonusTo", newNearestHubLiteral);
+					}
 					term.setAttrib("ballastBonusPctFuel", rule.getAttrib("ballastBonusPctFuel"));
 					term.setAttrib("ballastBonusPctCharter", rule.getAttrib("ballastBonusPctCharter"));
 				}
