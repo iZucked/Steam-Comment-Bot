@@ -59,7 +59,7 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 	protected EditingDomain editingDomain;
 	private static final Set<String> usedIDStrings = new HashSet<>();
 	
-	private static final String VesselID = "Vessel";
+	private static final String VesselID = "Charter";
 	private static final String VesselShortID = "VSL";
 	private static final String BuyID = "Purchase";
 	private static final String SellID = "Sale";
