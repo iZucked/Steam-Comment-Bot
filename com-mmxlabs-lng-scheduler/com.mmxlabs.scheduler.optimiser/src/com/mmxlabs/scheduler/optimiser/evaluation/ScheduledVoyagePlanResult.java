@@ -5,26 +5,35 @@
 package com.mmxlabs.scheduler.optimiser.evaluation;
 
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+
+import org.eclipse.jdt.annotation.NonNull;
+
+import com.google.common.collect.ImmutableList;
 import com.mmxlabs.scheduler.optimiser.moves.util.MetricType;
 
-public class ScheduledVoyagePlanResult {
+public final class ScheduledVoyagePlanResult {
 	// Information needed to pass into the next voyage plan
-	public int lastHeelPricePerMMBTU = 0;
-	public int lastCV = 0;
-	public long lastHeelVolumeInM3;
-	public boolean forcedCooldown;
+	public final PreviousHeelRecord endHeelState;
 
 	// Actual times used
-	public List<Integer> arrivalTimes;
-	public int returnTime;
+	public final ImmutableList<Integer> arrivalTimes;
+	public final int returnTime;
 
 	// Metrics, e.g. P&L
-	public long[] metrics;
+	public final long[] metrics;
 
 	// The internal data calculated.
-	public List<VoyagePlanRecord> voyagePlans = new LinkedList<>();
+	public final ImmutableList<VoyagePlanRecord> voyagePlans;
+
+	public ScheduledVoyagePlanResult(@NonNull ImmutableList<@NonNull Integer> arrivalTimes,
+			int returnTime, @NonNull ImmutableList<VoyagePlanRecord> voyagePlans, long[] metrics,
+			@NonNull PreviousHeelRecord endHeelState) {
+		this.arrivalTimes = arrivalTimes;
+		this.returnTime = returnTime;
+		this.voyagePlans = voyagePlans;
+		this.metrics = metrics;
+		this.endHeelState = endHeelState;
+	}
 
 	/**
 	 * Equals method for cache test equality. Avoiding overriding {@link #equals(Object)} unless we really need it.
@@ -39,22 +48,13 @@ public class ScheduledVoyagePlanResult {
 		}
 
 		// Simple fields
-		if (forcedCooldown != other.forcedCooldown) {
-			return false;
-		}
-		if (lastHeelPricePerMMBTU != other.lastHeelPricePerMMBTU) {
-			return false;
-		}
-		if (lastCV != other.lastCV) {
-			return false;
-		}
-		if (lastHeelVolumeInM3 != other.lastHeelVolumeInM3) {
-			return false;
-		}
 		if (returnTime != other.returnTime) {
 			return false;
 		}
 
+		if (!endHeelState.equals(other.endHeelState)) {
+			return false;
+		}
 		// Arrays
 		if (!Arrays.equals(metrics, other.metrics)) {
 			return false;
@@ -65,13 +65,6 @@ public class ScheduledVoyagePlanResult {
 
 		// Complex data
 		if (!voyagePlans.equals(other.voyagePlans)) {
-			if (voyagePlans.size() != other.voyagePlans.size()) {
-				//
-				int ii = 0;
-			}
-			int ii = 0;
-
-			voyagePlans.equals(other.voyagePlans);
 			return false;
 		}
 

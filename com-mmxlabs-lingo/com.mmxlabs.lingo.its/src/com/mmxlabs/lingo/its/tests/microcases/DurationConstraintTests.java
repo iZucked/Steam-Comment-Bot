@@ -522,7 +522,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 
 		final Cargo cargo = createFobDesCargo(vesselAvailability, port1, port2, loadDate, dischargeDate);
 
-		cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JUNE, 7), cargo.getSortedSlots().get(0));
+		cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JUNE, 7), vesselAvailability.getVessel());
 
 		evaluateWithLSOTest(scenarioRunner -> {
 

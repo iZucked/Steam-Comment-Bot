@@ -4,35 +4,41 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
-import java.util.Optional;
+import java.util.Collections;
+import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 
+/**
+ * Immutable RoutOptionBooking class.
+ * @author Patrick
+ */
 @NonNullByDefault
 public class RouteOptionBooking implements IRouteOptionBooking {
 
 	private final int bookingDate;
 	private final ECanalEntry entryPoint;
 	private final ERouteOption routeOption;
-	private Optional<IPortSlot> portSlot = Optional.empty();
+	private final Set<IVessel> vessels;
 
 	public RouteOptionBooking(final int slotDate, final ECanalEntry entryPoint, final ERouteOption routeOption) {
 		this.bookingDate = slotDate;
 		this.entryPoint = entryPoint;
 		this.routeOption = routeOption;
+		this.vessels = Collections.emptySet();
 	}
 
-	public RouteOptionBooking(final int slotDate, final ECanalEntry entryPoint, final ERouteOption routeOption, final IPortSlot slot) {
+	public RouteOptionBooking(final int slotDate, final ECanalEntry entryPoint, final ERouteOption routeOption, final Set<IVessel> vessels) {
 		this.bookingDate = slotDate;
 		this.entryPoint = entryPoint;
 		this.routeOption = routeOption;
-		this.portSlot = Optional.of(slot);
+		this.vessels = vessels;
 	}
 
 	@Override
@@ -51,12 +57,12 @@ public class RouteOptionBooking implements IRouteOptionBooking {
 	}
 
 	@Override
-	public Optional<IPortSlot> getPortSlot() {
-		return portSlot;
+	public Set<IVessel> getVessels() {
+		return vessels;
 	}
 
 	@Override
-	public int compareTo(@NonNull final IRouteOptionBooking o) {
-		return Integer.valueOf(this.getBookingDate()).compareTo(((IRouteOptionBooking) o).getBookingDate());
+	public int compareTo(@NonNull final IRouteOptionBooking other) {
+		return Integer.valueOf(this.getBookingDate()).compareTo(other.getBookingDate());
 	}
 }

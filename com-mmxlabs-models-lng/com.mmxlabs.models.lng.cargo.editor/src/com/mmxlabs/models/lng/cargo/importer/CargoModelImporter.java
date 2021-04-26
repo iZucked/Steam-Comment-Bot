@@ -6,9 +6,11 @@ package com.mmxlabs.models.lng.cargo.importer;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -33,6 +35,7 @@ import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters;
 import com.mmxlabs.models.lng.cargo.VesselType;
 import com.mmxlabs.models.lng.cargo.VesselTypeGroup;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
@@ -202,12 +205,19 @@ public class CargoModelImporter implements ISubmodelImporter {
 		cargoModel.setCanalBookings(canalBookings);
 		if (inputs.containsKey(CANAL_BOOKINGS_KEY)) {
 			final CSVReader reader = inputs.get(CANAL_BOOKINGS_KEY);
-			final Collection<?> importObjects = canalBookingsImporter.importObjects(CargoPackage.eINSTANCE.getCanalBookingSlot(), reader, context);
+			final Collection<EObject> importObjects = canalBookingsImporter.importObjects(CargoPackage.eINSTANCE.getCanalBookingSlot(), reader, context);
+			
 			// See if we have imported a replacement object with params.
 			for (final Object o : importObjects) {
 				if (o instanceof CanalBookings) {
 					canalBookings = (CanalBookings) o;
 					cargoModel.setCanalBookings(canalBookings);
+				}
+			}
+			for (final Object o : importObjects) {
+				if (o instanceof VesselGroupCanalParameters) {
+					final VesselGroupCanalParameters vesselGroupCanalParameters = (VesselGroupCanalParameters) o;
+					canalBookings.getVesselGroupCanalParameters().add(vesselGroupCanalParameters);
 				}
 			}
 			for (final Object o : importObjects) {
@@ -232,6 +242,7 @@ public class CargoModelImporter implements ISubmodelImporter {
 		if (canalBookings != null) {
 			final List<EObject> l = new LinkedList<>();
 			l.add(canalBookings);
+			l.addAll(canalBookings.getVesselGroupCanalParameters());
 			l.addAll(canalBookings.getCanalBookingSlots());
 			output.put(CANAL_BOOKINGS_KEY, canalBookingsImporter.exportObjects(l, context));
 		}

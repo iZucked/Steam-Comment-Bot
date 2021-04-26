@@ -19,6 +19,7 @@ public class InternalDataConstants {
 	// Reference vessels
 	public static final String REF_VESSEL_STEAM_138 = "Steam_138";
 	public static final String REF_VESSEL_STEAM_145 = "Steam_145";
+	public static final String REF_VESSEL_STEAM_150 = "Steam_150";
 	public static final String REF_VESSEL_TFDE_160 = "TFDE_160";
 
 	// Ports
@@ -43,6 +44,7 @@ public class InternalDataConstants {
 	public static final String PORT_ZEEBRUGGE = "L_BE_Zeebr";
 	public static final String PORT_DAS_ISLAND = "L_AE_AbuDh";
 	public static final String PORT_QALHAT = "L_OM_Qalha";
+	public static final String PORT_BORYEONG = "L_KR_Borye";
 	
 	public static final String PORT_ISLE_OF_GRAIN = "L_GB_Isleo";
 	public static final String PORT_DRAGON = "L_GB_Drago";

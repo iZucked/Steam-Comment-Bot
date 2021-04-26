@@ -366,6 +366,7 @@ public class JourneyItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(SchedulePackage.Literals.FUEL_USAGE__FUELS);
+			childrenFeatures.add(SchedulePackage.Literals.JOURNEY__CANAL_JOURNEY_EVENT);
 		}
 		return childrenFeatures;
 	}
@@ -434,6 +435,7 @@ public class JourneyItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SchedulePackage.JOURNEY__FUELS:
+			case SchedulePackage.JOURNEY__CANAL_JOURNEY_EVENT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -455,6 +457,11 @@ public class JourneyItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.FUEL_USAGE__FUELS,
 				 ScheduleFactory.eINSTANCE.createFuelQuantity()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.JOURNEY__CANAL_JOURNEY_EVENT,
+				 ScheduleFactory.eINSTANCE.createCanalJourneyEvent()));
 	}
 
 }

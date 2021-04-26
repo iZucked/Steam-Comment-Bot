@@ -9,6 +9,7 @@ package com.mmxlabs.models.lng.cargo.presentation.composites;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 
 import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 

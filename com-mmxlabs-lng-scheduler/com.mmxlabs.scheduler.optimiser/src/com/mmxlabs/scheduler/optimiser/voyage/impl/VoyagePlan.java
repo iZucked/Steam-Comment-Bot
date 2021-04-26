@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+import com.mmxlabs.scheduler.optimiser.cache.AbstractWriteLockable;
 
 /**
  * Implementation of {@link VoyagePlan}. A {@link VoyagePlan} is a collections of elements - {@link PortDetails} and {@link VoyageDetails} representing a related set of voyages. For example a
@@ -20,8 +21,7 @@ import com.google.common.base.Objects;
  * @author Simon Goodall
  * 
  */
-public final class VoyagePlan implements Cloneable {
-	private boolean locked = false;
+public final class VoyagePlan extends AbstractWriteLockable implements Cloneable {
 
 	private IDetailsSequenceElement[] sequence;
 	private long lngFuelVolume;
@@ -41,8 +41,8 @@ public final class VoyagePlan implements Cloneable {
 		ignoreEnd = true;
 	}
 
-	protected VoyagePlan(final IDetailsSequenceElement[] sequence, final long fuelVolume, final int violationsCount, final boolean ignoreEnd,
-			final long startingHeelInM3, final long remainingHeelInM3) {
+	protected VoyagePlan(final IDetailsSequenceElement[] sequence, final long fuelVolume, final int violationsCount, final boolean ignoreEnd, final long startingHeelInM3,
+			final long remainingHeelInM3) {
 		super();
 		this.sequence = sequence;
 		this.lngFuelVolume = fuelVolume;
@@ -70,13 +70,13 @@ public final class VoyagePlan implements Cloneable {
 		}
 		return charterCost;
 	}
-	
+
 	public long getLngFuelCost() {
 		return lngFuelCost;
 	}
 
 	public void setLngFuelCost(final long lngFuelCost) {
-		assert !locked;
+		checkWritable();
 
 		this.lngFuelCost = lngFuelCost;
 	}
@@ -86,7 +86,7 @@ public final class VoyagePlan implements Cloneable {
 	}
 
 	public void setCooldownCost(final long cooldownCost) {
-		assert !locked;
+		checkWritable();
 		this.cooldownCost = cooldownCost;
 	}
 
@@ -95,7 +95,7 @@ public final class VoyagePlan implements Cloneable {
 	}
 
 	public void setBaseFuelCost(final long baseFuelCost) {
-		assert !locked;
+		checkWritable();
 		this.baseFuelCost = baseFuelCost;
 	}
 
@@ -108,7 +108,7 @@ public final class VoyagePlan implements Cloneable {
 	/**
 	 */
 	public final void setViolationsCount(final int violationsCount) {
-		assert !locked;
+		checkWritable();
 		this.violationsCount = violationsCount;
 	}
 
@@ -121,7 +121,7 @@ public final class VoyagePlan implements Cloneable {
 	/**
 	 */
 	public final void setSequence(final IDetailsSequenceElement[] sequence) {
-		assert !locked;
+		checkWritable();
 		this.sequence = sequence;
 	}
 
@@ -197,7 +197,7 @@ public final class VoyagePlan implements Cloneable {
 	 * @param lngConsumed
 	 */
 	public void setLNGFuelVolume(final long lngConsumed) {
-		assert !locked;
+		checkWritable();
 		this.lngFuelVolume = lngConsumed;
 	}
 
@@ -209,7 +209,7 @@ public final class VoyagePlan implements Cloneable {
 	}
 
 	public void setTotalRouteCost(final long routeCost) {
-		assert !locked;
+		checkWritable();
 		totalRouteCost = routeCost;
 	}
 
@@ -227,7 +227,7 @@ public final class VoyagePlan implements Cloneable {
 	}
 
 	public void setIgnoreEnd(final boolean ignoreEnd) {
-		// assert !locked;
+		checkWritable();
 		this.ignoreEnd = ignoreEnd;
 	}
 
@@ -243,7 +243,7 @@ public final class VoyagePlan implements Cloneable {
 	 * @param remainingHeelInM3
 	 */
 	public void setRemainingHeelInM3(final long remainingHeelInM3) {
-		assert !locked;
+		checkWritable();
 		this.remainingHeelInM3 = remainingHeelInM3;
 	}
 
@@ -252,12 +252,12 @@ public final class VoyagePlan implements Cloneable {
 	}
 
 	public void setStartingHeelInM3(final long startingHeelInM3) {
-		assert !locked;
+		checkWritable();
 		this.startingHeelInM3 = startingHeelInM3;
 	}
 
 	public void setStartHeelCost(long startHeelCost) {
-		assert !locked;
+		checkWritable();
 		this.startHeelCost = startHeelCost;
 	}
 
@@ -268,14 +268,5 @@ public final class VoyagePlan implements Cloneable {
 	 */
 	public long getStartHeelCost() {
 		return startHeelCost;
-	}
-
-	public boolean isCacheLocked() {
-		return locked;
-	}
-
-	public void setCacheLocked(boolean locked) {
-		assert !this.locked;
-		this.locked = locked;
 	}
 }

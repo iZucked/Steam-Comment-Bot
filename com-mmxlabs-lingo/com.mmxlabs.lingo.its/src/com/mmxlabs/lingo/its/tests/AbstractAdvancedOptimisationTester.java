@@ -282,8 +282,8 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 						protected void configure() {
 							// Default bindings for caches
 							bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VoyagePlanEvaluatorCache)).toInstance(voyageEvaluatorCache);
-							bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_ArrivalTimeCache)).toInstance(timeWindowCache);
-							bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_PNLTrimmerCache)).toInstance(pnlTrimmerCache);
+							bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_TimeWindowSchedulerCache)).toInstance(timeWindowCache);
+							bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_PNLBasedWindowTrimmerCache)).toInstance(pnlTrimmerCache);
 						}
 					});
 				}

@@ -4,10 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation;
 
-import java.util.List;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
-import org.eclipse.jdt.annotation.NonNull;
-
+import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -19,11 +18,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
  * @author hinton
  * 
  */
-public interface IAllocationAnnotation extends IPortTimesRecord {
-
-	@Override
-	@NonNull
-	List<@NonNull IPortSlot> getSlots();
+@NonNullByDefault
+public interface IAllocationAnnotation extends IPortTimesRecord, IElementAnnotation {
 
 	/**
 	 * Returns the total LNG in m3 used as fuel during this cargo.
@@ -46,22 +42,13 @@ public interface IAllocationAnnotation extends IPortTimesRecord {
 	 * 
 	 * @return
 	 */
-	long getCommercialSlotVolumeInM3(@NonNull IPortSlot slot);
-	long getPhysicalSlotVolumeInM3(@NonNull IPortSlot slot);
+	long getCommercialSlotVolumeInM3(IPortSlot slot);
 
-	/**
-	 * Returns the time a load or discharge began
-	 * 
-	 * @return
-	 */
-	@Override
-	int getSlotTime(@NonNull IPortSlot slot);
+	long getPhysicalSlotVolumeInM3(IPortSlot slot);
 
-	@Override
-	int getSlotDuration(@NonNull IPortSlot slot);
+	long getCommercialSlotVolumeInMMBTu(IPortSlot slot);
 
-	long getCommercialSlotVolumeInMMBTu(@NonNull IPortSlot slot);
-	long getPhysicalSlotVolumeInMMBTu(@NonNull IPortSlot slot);
+	long getPhysicalSlotVolumeInMMBTu(IPortSlot slot);
 
 	/**
 	 * Returns the CV valid for this slot. Typically this will be the load CV, but for actualised cargoes discharge CV may be different to load CV
@@ -69,11 +56,5 @@ public interface IAllocationAnnotation extends IPortTimesRecord {
 	 * @param slot
 	 * @return
 	 */
-	int getSlotCargoCV(@NonNull IPortSlot slot);
-	
-
-	boolean isCacheLocked();
-	
-	void setCacheLocked(boolean locked);
-	 
+	int getSlotCargoCV(IPortSlot slot);
 }

@@ -208,6 +208,11 @@ public abstract class AbstractMicroTestCase {
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
+		evaluateTestWith(userSettings, s);
+	}
+
+	public void evaluateTestWith(UserSettings userSettings, IOptimiserInjectorService s) {
+
 		LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
 				.withUserSettings(userSettings) //
 				.withOptimiserInjectorService(s) //

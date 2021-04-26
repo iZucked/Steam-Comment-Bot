@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -180,7 +180,7 @@ public class TestPriceExpressionContract {
 		when(curve.getValueAtPoint(pricingDate)).thenReturn(priceAtPricingDate);
 
 		final ILoadSlot loadSlot = mock(ILoadSlot.class);
-		
+
 		final IPort port = mock(IPort.class);
 		final IDischargeSlot dischargeSlotWithPricingDate = mock(IDischargeSlot.class);
 		when(dischargeSlotWithPricingDate.getPort()).thenReturn(port);
@@ -192,7 +192,7 @@ public class TestPriceExpressionContract {
 		when(dischargeSlotNoPricingDate.getPricingDate()).thenReturn(IPortSlot.NO_PRICING_DATE);
 
 		final IPortTimesRecord portTimesRecord1 = mock(IPortTimesRecord.class);
-		when(portTimesRecord1.getSlots()).thenReturn(Lists.newArrayList(loadSlot, dischargeSlotWithPricingDate));
+		when(portTimesRecord1.getSlots()).thenReturn(ImmutableList.of(loadSlot, dischargeSlotWithPricingDate));
 		when(portTimesRecord1.getSlotTime(dischargeSlotWithPricingDate)).thenReturn(dischargeTime);
 
 		when(dischargeSlotNoPricingDate.getPricingEvent()).thenReturn(PricingEventType.START_OF_DISCHARGE);
@@ -202,7 +202,7 @@ public class TestPriceExpressionContract {
 
 		final IPortTimesRecord portTimesRecord2 = mock(IPortTimesRecord.class);
 		when(portTimesRecord2.getSlotTime(dischargeSlotNoPricingDate)).thenReturn(dischargeTime);
-		when(portTimesRecord2.getSlots()).thenReturn(Lists.newArrayList(loadSlot, dischargeSlotNoPricingDate));
+		when(portTimesRecord2.getSlots()).thenReturn(ImmutableList.of(loadSlot, dischargeSlotNoPricingDate));
 
 		final int salesPriceNoPricingDate = contract.estimateSalesUnitPrice(dischargeSlotNoPricingDate, portTimesRecord2, null);
 

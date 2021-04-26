@@ -1,13 +1,12 @@
 [ {
   "Schedule" : "0 Bonny",
-  "Pre-booked" : "No",
-  "Canal" : "PANAMA",
-  "Canal Entry" : "Northside",
   "Date" : "11/02/11",
+  "Entry" : "Northside",
+  "Vessel" : "Methane Lydon Volney",
   "Event" : "load-cargo-48",
-  "Next Slot" : "discharge-cargo-48 15/03/11",
-  "Next Slot Port" : "Pyeongtaek",
-  "Next Slot Window Start" : "15/03/11",
-  "Next Slot Window End" : "15/03/11",
-  "Period" : "Open"
+  "Next Event" : "discharge-cargo-48",
+  "Next Port" : "Pyeongtaek",
+  "Next Window Start" : "15/03/11",
+  "Next Window End" : "15/03/11",
+  "Type" : "Wait (0d)"
 } ]

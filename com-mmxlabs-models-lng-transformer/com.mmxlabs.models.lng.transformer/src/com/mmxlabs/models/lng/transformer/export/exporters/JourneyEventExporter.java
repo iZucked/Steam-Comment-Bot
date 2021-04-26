@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.export.exporters;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -11,16 +12,21 @@ import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PanamaBookingPeriod;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.ExporterExtensionUtils;
 import com.mmxlabs.models.lng.transformer.export.FuelExportHelper;
+import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -32,12 +38,10 @@ import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider.RouteOptionDirection;
-import com.mmxlabs.scheduler.optimiser.schedule.PanamaBookingHelper;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.PanamaPeriod;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
@@ -107,22 +111,10 @@ public class JourneyEventExporter {
 				if (vesselProvider.getVesselAvailability(volumeAllocatedSequence.getResource()).getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 					exportPeriod = PanamaBookingPeriod.NOMINAL;
 				} else {
-					PanamaPeriod period = portTimesRecord.getSlotNextVoyagePanamaPeriod(voyageDetails.getOptions().getFromPortSlot());
-					if (period != null) {
-						switch (period) {
-						case Beyond:
-							exportPeriod = PanamaBookingPeriod.BEYOND;
-							break;
-						case Relaxed:
+					//PanamaPeriod period = portTimesRecord.getSlotNextVoyagePanamaPeriod(voyageDetails.getOptions().getFromPortSlot());
+					//if (period != null) {
+						//Only relaxed period now, others removed.
 							exportPeriod = PanamaBookingPeriod.RELAXED;
-							break;
-						case Strict:
-							exportPeriod = PanamaBookingPeriod.STRICT;
-							break;
-						default:
-							break;
-						}
-					}
 				}
 				journey.setCanalBookingPeriod(exportPeriod);
 			}
@@ -152,15 +144,7 @@ public class JourneyEventExporter {
 
 				boolean southBound = distanceProvider.getRouteOptionDirection(options.getFromPortSlot().getPort(), ERouteOption.PANAMA) == RouteOptionDirection.SOUTHBOUND;
 				ZonedDateTime latestCanalEntry;
-				if (southBound && !PanamaBookingHelper.isSouthboundIdleTimeRuleEnabled()) {
-					//Old southbound rule code.
-					latestCanalEntry = endTime.minusHours(fromCanalEntry).minusHours(marginHours);
-					journey.setLatestPossibleCanalDateTime(latestCanalEntry.toLocalDateTime());
-					if (latestCanalEntry.toLocalDateTime().getHour() > CanalBookingSlot.BOOKING_HOURS_OFFSET && journey.getRouteOption() == RouteOption.PANAMA) {
-						// slot can't be reached that day, set to previous day
-						journey.setLatestPossibleCanalDateTime(latestCanalEntry.toLocalDateTime().withHour(CanalBookingSlot.BOOKING_HOURS_OFFSET));
-					}
-				} else {
+				{
 					latestCanalEntry = endTime.minusHours(fromCanalEntry);
 					journey.setLatestPossibleCanalDateTime(latestCanalEntry.toLocalDateTime());
 				}
@@ -197,7 +181,7 @@ public class JourneyEventExporter {
 			journey.setCanalBooking(canalBookingSlot);
 			journey.setCanalEntrance(canalBookingSlot.getCanalEntrance());
 			journey.setCanalEntrancePort(eCanalPort);
-			journey.setCanalDateTime(canalBookingSlot.getBookingDate().atTime(CanalBookingSlot.BOOKING_HOURS_OFFSET, 0));
+			journey.setCanalDateTime(canalBookingSlot.getBookingDate().atTime(CanalBookingSlot.BOOKING_HOURS_OFFSET, 0));	
 		} else if (journey.getRouteOption() != RouteOption.DIRECT) {
 			final ECanalEntry canalEntry = distanceProvider.getRouteOptionCanalEntrance(fromPortSlot.getPort(), voyageDetails.getOptions().getRoute());
 			if (canalEntry != null) {
@@ -215,11 +199,49 @@ public class JourneyEventExporter {
 				}
 			}
 		}
+		
+		if (journey.getRouteOption() != RouteOption.DIRECT) {
+			final CanalJourneyEvent canalJourneyEvent = generateCanalJourneyEvent(journey, routeOptionBooking, options, portTimesRecord, fromPortSlot);
+			journey.setCanalJourneyEvent(canalJourneyEvent);
+		}
+
 		return journey;
 	}
 
-	private List<FuelQuantity> exportFuelData(final VoyageDetails details) {
+	private CanalJourneyEvent generateCanalJourneyEvent(Journey journey, IRouteOptionBooking routeOptionBooking, 
+			final VoyageOptions options, final IPortTimesRecord ptr, final IPortSlot fromPortSlot) {
+		if (journey.getCanalDateTime() != null) {
+			if (journey.getRouteOption() == RouteOption.PANAMA) {
+				//Can we replace this check for charter in or spot vessel some other way?
+				//At any rate, seems irrelevant, if there is a panama crossing we need a booking or we need to wait.
+				//if (sequence.getCharterInMarket() == null || sequence.getSpotIndex() != -1) {
+					final CanalJourneyEvent canal = ScheduleFactory.eINSTANCE.createCanalJourneyEvent();
+					canal.setLinkedSequence(journey.getSequence());
+					canal.setLinkedJourney(journey);
+					canal.setStart(journey.getCanalDateTime().atZone(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE_TIME))));
+					canal.setEnd(canal.getStart().plusDays(1));
+					if (journey.getCanalBooking() == null) {
+						if (journey.getLatestPossibleCanalDateTime() != null) {
+							ZonedDateTime atStartOfDay = journey.getLatestPossibleCanalDateTime()
+									.atZone(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE_TIME)));
+							int hours = Math.max(1, Hours.between(canal.getStart(), atStartOfDay));
+							canal.setEnd(canal.getStart().plusHours(hours));
+						}
+					}
 
+					canal.setPort(journey.getCanalEntrancePort());
+					canal.setPanamaWaitingTimeHours(ptr.getSlotAdditionaPanamaIdleHours(fromPortSlot));
+					canal.setMaxAvailablePanamaWaitingTimeHours(ptr.getSlotMaxAdditionaPanamaIdleHours(fromPortSlot));
+					
+					return canal;
+				//}
+
+			}
+		}
+		return null;
+	}
+	
+	private List<FuelQuantity> exportFuelData(final VoyageDetails details) {
 		return FuelExportHelper.exportFuelData(details, details.getOptions().getVessel(), FuelExportHelper.travelFuelComponentNames,
 				(d, fk) -> d.getFuelConsumption(fk) + d.getRouteAdditionalConsumption(fk), VoyageDetails::getFuelUnitPrice, modelEntityMap);
 	}

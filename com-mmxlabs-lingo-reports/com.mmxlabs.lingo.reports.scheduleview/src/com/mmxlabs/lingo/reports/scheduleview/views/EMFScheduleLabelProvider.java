@@ -34,6 +34,7 @@ import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
+import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Inventory;
@@ -47,7 +48,7 @@ import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.port.util.PortModelLabeller;
-import com.mmxlabs.models.lng.schedule.CanalBookingEvent;
+import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent;
 import com.mmxlabs.models.lng.schedule.CharterAvailableToEvent;
@@ -401,7 +402,10 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 						}
 						if (canalBooking != null) {
 							eventText.append(String.format("Canal booking: %s %s\n", dateToString(journey.getCanalDateTime(), DATE_UNKNOWN), direction));
-						} else {
+						//TODO } else if (isPanamaExemptVessel(this.toggleShowCanals();journey)) {
+						//	eventText.append(String.format("Panama free pass for %s: %s %s\n", getVessel(journey), dateToString(journey.getCanalDateTime(), DATE_UNKNOWN), direction));
+						}	
+						else {
 							if (journey.getCanalDateTime() != null && journey.getCanalDateTime().equals(journey.getLatestPossibleCanalDateTime())) {
 								eventText.append(String.format("Booking required: %s %s\n", dateToString(journey.getCanalDateTime(), DATE_UNKNOWN), direction));
 							} else if (journey.getCanalDateTime() != null && journey.getLatestPossibleCanalDateTime() != null
@@ -412,11 +416,16 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 								eventText.append(String.format("Booking required between: %s and %s %s\n", dateToString(journey.getCanalDateTime(), DATE_UNKNOWN),
 										dateToString(journey.getLatestPossibleCanalDateTime(), DATE_UNKNOWN), direction));
 							}
+							if (journey.getCanalJourneyEvent() != null) {
+								eventText.append(String.format("Wait %dd (of %dd)\n", 
+										journey.getCanalJourneyEvent().getPanamaWaitingTimeHours()/24,
+										journey.getCanalJourneyEvent().getMaxAvailablePanamaWaitingTimeHours()/24));
+							}
 						}
 					}
 				}
-			} else if (element instanceof CanalBookingEvent) {
-				final CanalBookingEvent canalBookingEvent = (CanalBookingEvent) element;
+			} else if (element instanceof CanalJourneyEvent) {
+				final CanalJourneyEvent canalBookingEvent = (CanalJourneyEvent) element;
 				final Journey journey = canalBookingEvent.getLinkedJourney();
 
 				final CanalBookingSlot canalBooking = journey.getCanalBooking();
@@ -520,6 +529,19 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		}
 		return null;
 
+	}
+
+	private Vessel getVessel(Journey journey) {
+		if (journey.getSequence() != null && journey.getSequence().getVesselAvailability() != null) {
+			return journey.getSequence().getVesselAvailability().getVessel();
+		}
+		else {
+			return null;
+		}
+	}
+
+	private boolean isPanamaExemptVessel(CanalBookings bookings, Journey journey) {
+		return bookings.getBookingExemptVessels().contains(getVessel(journey));
 	}
 
 	/**

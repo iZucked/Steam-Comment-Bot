@@ -63,12 +63,10 @@ import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 public class LNGEvaluationModule extends AbstractModule {
 
 	public static final @NonNull String HINT_PORTFOLIO_BREAKEVEN = "LNGEvaluationModule-hint-portfolio-breakeven";
-	@NonNull
-	private final Collection<String> hints;
+
+	private final @NonNull Collection<String> hints;
 
 	private final boolean hintEnableCache;
-
-	private static final int DEFAULT_VPE_CACHE_SIZE = 5_000_000;
 
 	public LNGEvaluationModule(@NonNull final Collection<String> hints) {
 		this.hints = hints;
@@ -149,7 +147,7 @@ public class LNGEvaluationModule extends AbstractModule {
 		if (cacheMode == CacheMode.Off || !hintEnableCache) {
 			return delegate;
 		} else {
-			final CachingVoyagePlanEvaluator cache = new CachingVoyagePlanEvaluator(delegate, DEFAULT_VPE_CACHE_SIZE, concurrencyLevel);
+			final CachingVoyagePlanEvaluator cache = new CachingVoyagePlanEvaluator(delegate, concurrencyLevel);
 			injector.injectMembers(cache);
 			if (cacheMode == CacheMode.On) {
 				return cache;

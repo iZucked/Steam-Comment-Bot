@@ -4,33 +4,31 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.mmxlabs.scheduler.optimiser.cache.AbstractWriteLockable;
+import com.mmxlabs.scheduler.optimiser.cache.IWriteLockable;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.PanamaPeriod;
 
 /**
- * Implementation of {@link ICargoValueAnnotation} wrapping a pre-existing
- * {@link IAllocationAnnotation} instance adding on the
- * {@link ICargoValueAnnotation} specific data items. Internally very similar to
- * {@link AllocationAnnotation}.
+ * Implementation of {@link ICargoValueAnnotation} wrapping a pre-existing {@link IAllocationAnnotation} instance adding on the {@link ICargoValueAnnotation} specific data items. Internally very
+ * similar to {@link AllocationAnnotation}.
  * 
  * @author Simon Goodall.
  * 
  */
-public final class CargoValueAnnotation implements ICargoValueAnnotation {
+@NonNullByDefault
+public final class CargoValueAnnotation extends AbstractWriteLockable implements ICargoValueAnnotation {
 
-	private boolean locked;
 	private final IAllocationAnnotation allocationAnnotation;
 	private long totalProfitAndLoss;
 
@@ -41,10 +39,10 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 		public long additionalShippingPNL;
 		public long upstreamPNL;
 		public int pricePerMMBTu;
-		public IEntity entity;
+		public @Nullable IEntity entity;
 
 		@Override
-		public boolean equals(final Object obj) {
+		public boolean equals(final @Nullable Object obj) {
 
 			if (obj == this) {
 				return true;
@@ -65,18 +63,20 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 		}
 	}
 
-	private final Map<IPortSlot, SlotAllocationAnnotation> slotAllocations = new HashMap<IPortSlot, SlotAllocationAnnotation>();
+	private ImmutableMap<IPortSlot, SlotAllocationAnnotation> slotAllocations = ImmutableMap.of();
 
-	public CargoValueAnnotation(@NonNull final IAllocationAnnotation allocationAnnotation) {
+	public CargoValueAnnotation(final IAllocationAnnotation allocationAnnotation) {
 		this.allocationAnnotation = allocationAnnotation;
+		IWriteLockable.writeLock(allocationAnnotation);
 	}
 
 	private SlotAllocationAnnotation getOrCreateSlotAllocation(final IPortSlot slot) {
 		SlotAllocationAnnotation allocation = slotAllocations.get(slot);
 		if (allocation == null) {
-			assert !locked;
+			checkWritable();
 			allocation = new SlotAllocationAnnotation();
-			slotAllocations.put(slot, allocation);
+			slotAllocations = ImmutableMap.<IPortSlot, SlotAllocationAnnotation> builder().putAll(slotAllocations).put(slot, allocation).build();
+
 		}
 		return allocation;
 	}
@@ -91,7 +91,7 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	}
 
 	public void setSlotPricePerMMBTu(final IPortSlot slot, final int price) {
-		assert !locked;
+		checkWritable();
 		getOrCreateSlotAllocation(slot).pricePerMMBTu = price;
 	}
 
@@ -107,7 +107,7 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	}
 
 	public void setSlotAdditionalOtherPNL(final IPortSlot slot, final long additionalOtherPNL) {
-		assert !locked;
+		checkWritable();
 		getOrCreateSlotAllocation(slot).additionalOtherPNL = additionalOtherPNL;
 	}
 
@@ -123,7 +123,7 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	}
 
 	public void setSlotAdditionalShippingPNL(final IPortSlot slot, final long additionalShippingPNL) {
-		assert !locked;
+		checkWritable();
 		getOrCreateSlotAllocation(slot).additionalShippingPNL = additionalShippingPNL;
 	}
 
@@ -139,7 +139,7 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	}
 
 	public void setSlotUpstreamPNL(final IPortSlot slot, final long upstreamPNL) {
-		assert !locked;
+		checkWritable();
 		getOrCreateSlotAllocation(slot).upstreamPNL = upstreamPNL;
 	}
 
@@ -155,7 +155,7 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	}
 
 	public void setSlotAdditionalUpsidePNL(final IPortSlot slot, final long additionalUpsidePNL) {
-		assert !locked;
+		checkWritable();
 		getOrCreateSlotAllocation(slot).additionalUpsidePNL = additionalUpsidePNL;
 	}
 
@@ -171,28 +171,27 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	}
 
 	public void setSlotValue(final IPortSlot slot, final long value) {
-		assert !locked;
+		checkWritable();
 		getOrCreateSlotAllocation(slot).value = value;
 	}
 
 	public void setSlotEntity(final IPortSlot slot, final IEntity entity) {
-		assert !locked;
+		checkWritable();
 		getOrCreateSlotAllocation(slot).entity = entity;
 	}
 
 	@Override
-	public IEntity getSlotEntity(final IPortSlot slot) {
+	public @Nullable IEntity getSlotEntity(final IPortSlot slot) {
 		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
 		if (allocation != null) {
 			return allocation.entity;
 		}
 
 		return null;
-
 	}
 
 	@Override
-	public List<@NonNull IPortSlot> getSlots() {
+	public ImmutableList<IPortSlot> getSlots() {
 		return allocationAnnotation.getSlots();
 	}
 
@@ -243,21 +242,18 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 
 	@Override
 	public void setSlotTime(final IPortSlot slot, final int time) {
-		assert !locked;
-		allocationAnnotation.setSlotTime(slot, time);
+		throwNotChangableException();
 
 	}
 
 	@Override
 	public void setSlotDuration(final IPortSlot slot, final int duration) {
-		assert !locked;
-		allocationAnnotation.setSlotDuration(slot, duration);
+		throwNotChangableException();
 	}
 
 	@Override
 	public void setSlotExtraIdleTime(final IPortSlot slot, final int extraIdleTime) {
-		assert !locked;
-		allocationAnnotation.setSlotExtraIdleTime(slot, extraIdleTime);
+		throwNotChangableException();
 	}
 
 	@Override
@@ -271,12 +267,12 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	}
 
 	@Override
-	public IPortSlot getReturnSlot() {
+	public @Nullable IPortSlot getReturnSlot() {
 		return allocationAnnotation.getReturnSlot();
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public boolean equals(final @Nullable Object obj) {
 		if (obj == this) {
 			return true;
 		}
@@ -295,7 +291,7 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	}
 
 	public void setTotalProfitAndLoss(long totalProfitAndLoss) {
-		assert !locked;
+		checkWritable();
 
 		this.totalProfitAndLoss = totalProfitAndLoss;
 	}
@@ -311,24 +307,13 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	}
 
 	@Override
-	public boolean isCacheLocked() {
-		return locked;
-	}
-
-	@Override
-	public void setCacheLocked(final boolean locked) {
-		assert !this.locked;
-		this.locked = locked;
-	}
-
-	@Override
 	public @Nullable IRouteOptionBooking getRouteOptionBooking(IPortSlot slot) {
 		return allocationAnnotation.getRouteOptionBooking(slot);
 	}
 
 	@Override
-	public void setRouteOptionBooking(IPortSlot slot, IRouteOptionBooking routeOptionBooking) {
-		allocationAnnotation.setRouteOptionBooking(slot, routeOptionBooking);
+	public void setRouteOptionBooking(IPortSlot slot, @Nullable IRouteOptionBooking routeOptionBooking) {
+		throwNotChangableException();
 	}
 
 	@Override
@@ -337,12 +322,31 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	}
 
 	@Override
-	public void setSlotNextVoyageOptions(@NonNull IPortSlot slot, @NonNull AvailableRouteChoices nextVoyageRoute, PanamaPeriod panamaPeriod) {
-		allocationAnnotation.setSlotNextVoyageOptions(slot, nextVoyageRoute, panamaPeriod);
+	public void setSlotNextVoyageOptions(@NonNull IPortSlot slot, @NonNull AvailableRouteChoices nextVoyageRoute) {
+		throwNotChangableException();
 	}
 
 	@Override
-	public PanamaPeriod getSlotNextVoyagePanamaPeriod(IPortSlot slot) {
-		return allocationAnnotation.getSlotNextVoyagePanamaPeriod(slot);
+	public int getSlotAdditionaPanamaIdleHours(@NonNull IPortSlot slot) {
+		return allocationAnnotation.getSlotAdditionaPanamaIdleHours(slot);
+	}
+
+	@Override
+	public int getSlotMaxAdditionaPanamaIdleHours(@NonNull IPortSlot slot) {
+		return allocationAnnotation.getSlotMaxAdditionaPanamaIdleHours(slot);
+	}
+
+	@Override
+	public void setSlotMaxAvailablePanamaIdleHours(@NonNull IPortSlot from, int maxIdleTimeAvailable) {
+		throwNotChangableException();
+	}
+
+	@Override
+	public void setSlotAdditionalPanamaIdleHours(@NonNull IPortSlot from, int additionalPanamaTime) {
+		throwNotChangableException();
+	}
+
+	private void throwNotChangableException() {
+		throw new IllegalArgumentException("Should not be changing by this stage.");
 	}
 }

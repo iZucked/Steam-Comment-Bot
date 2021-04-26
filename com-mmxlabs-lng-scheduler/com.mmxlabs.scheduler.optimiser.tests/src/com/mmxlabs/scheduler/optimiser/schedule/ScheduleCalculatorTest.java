@@ -200,7 +200,7 @@ public class ScheduleCalculatorTest {
 				bind(IRouteExclusionProvider.class).toInstance(routeExclusionProvider);
 
 				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_VoyagePlanEvaluatorCache)).toInstance(Boolean.FALSE);
-				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_ArrivalTimeCache)).toInstance(Boolean.FALSE);
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_TimeWindowSchedulerCache)).toInstance(Boolean.FALSE);
 			}
 		}
 		final Injector injector = Guice.createInjector(new TestModule());

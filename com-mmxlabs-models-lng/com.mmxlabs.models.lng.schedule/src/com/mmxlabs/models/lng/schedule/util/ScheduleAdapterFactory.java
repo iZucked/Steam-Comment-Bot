@@ -273,8 +273,8 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createCharterAvailableToEventAdapter();
 			}
 			@Override
-			public Adapter caseCanalBookingEvent(CanalBookingEvent object) {
-				return createCanalBookingEventAdapter();
+			public Adapter caseCanalJourneyEvent(CanalJourneyEvent object) {
+				return createCanalJourneyEventAdapter();
 			}
 			@Override
 			public Adapter caseCharterAvailableFromEvent(CharterAvailableFromEvent object) {
@@ -915,6 +915,20 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.CanalJourneyEvent <em>Canal Journey Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.CanalJourneyEvent
+	 * @generated
+	 */
+	public Adapter createCanalJourneyEventAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent <em>Charter Available From Event</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -939,20 +953,6 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createGroupedCharterLengthEventAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.CanalBookingEvent <em>Canal Booking Event</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.schedule.CanalBookingEvent
-	 * @generated
-	 */
-	public Adapter createCanalBookingEventAdapter() {
 		return null;
 	}
 
