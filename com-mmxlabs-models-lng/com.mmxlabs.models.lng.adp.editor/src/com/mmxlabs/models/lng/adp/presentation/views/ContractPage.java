@@ -913,7 +913,9 @@ public class ContractPage extends ADPComposite {
 			nonMovingElements.forEach(p -> rearrangedProfile.get(p.getFirst()).getFirst().add(p.getSecond()));
 			for (final Entry<Pair<MUDContainer, AllocationTracker>, List<Pair<MUDContainer, AllocationTracker>>> entry : movingElements.entrySet()) {
 				final MUDContainer minorMud = entry.getValue().stream().map(Pair::getFirst).min((mud1, mud2) -> Double.compare(mud1.getRelativeEntitlement(), mud2.getRelativeEntitlement())).get();
-				// If we have the option of using DESMarketTracker as sink, use it (otherwise throws an IllegalStateException later on)
+
+				// If we have the option of using DESMarketTracker as sink, use it (otherwise
+				// throws an IllegalStateException later on)
 				final List<Pair<MUDContainer, AllocationTracker>> minorLifterPairCandidates = entry.getValue().stream().filter(p -> p.getFirst() == minorMud).collect(Collectors.toList());
 				final Optional<Pair<MUDContainer, AllocationTracker>> optDesMinorLifterPair = minorLifterPairCandidates.stream().filter(p -> p.getSecond() instanceof DESMarketTracker).findAny();
 				final Pair<MUDContainer, AllocationTracker> minorLifter = optDesMinorLifterPair.isPresent() ? optDesMinorLifterPair.get() : minorLifterPairCandidates.get(0);
@@ -1466,9 +1468,9 @@ public class ContractPage extends ADPComposite {
 					}
 					final Iterator<Entry<LocalDateTime, Cargo>> nextFixedCargoesIter = newInventoryExistingCargoes.get(currentInventory);
 					if (nextFixedCargoesIter.hasNext()) {
-						nextFixedCargoes.put(currentInventory, nextFixedCargoesIter.next());
+						newNextFixedCargoes.put(currentInventory, nextFixedCargoesIter.next());
 					} else {
-						nextFixedCargoes.remove(currentInventory);
+						newNextFixedCargoes.remove(currentInventory);
 					}
 				}
 				if (!currentLoadWindow.isLoading()) {
@@ -2038,9 +2040,11 @@ public class ContractPage extends ADPComposite {
 			}
 		}
 		if (!cargoesToDelete.isEmpty()) {
-			cmd.append(RemoveCommand.create(editingDomain, ScenarioModelUtil.getCargoModel(sdp), CargoPackage.Literals.CARGO_MODEL__CARGOES, cargoesToDelete));
-			cmd.append(RemoveCommand.create(editingDomain, ScenarioModelUtil.getCargoModel(sdp), CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS, loadSlotsToDelete));
-			cmd.append(RemoveCommand.create(editingDomain, ScenarioModelUtil.getCargoModel(sdp), CargoPackage.Literals.CARGO_MODEL__DISCHARGE_SLOTS, dischargeSlotsToDelete));
+			final List<EObject> objectsToDelete = new ArrayList<>(cargoesToDelete.size() + loadSlotsToDelete.size() + dischargeSlotsToDelete.size());
+			objectsToDelete.addAll(cargoesToDelete);
+			objectsToDelete.addAll(loadSlotsToDelete);
+			objectsToDelete.addAll(dischargeSlotsToDelete);
+			cmd.append(DeleteCommand.create(editingDomain, objectsToDelete));
 		}
 
 		if (secondPassCargoBlueprints.values().stream().anyMatch(arr -> arr.length > 0)) {
