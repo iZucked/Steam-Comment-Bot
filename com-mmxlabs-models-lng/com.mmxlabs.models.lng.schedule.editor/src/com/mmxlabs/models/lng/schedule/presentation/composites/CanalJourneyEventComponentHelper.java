@@ -24,11 +24,11 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 /**
- * A component helper for CanalBookingEvent instances
+ * A component helper for CanalJourneyEvent instances
  *
  * @generated
  */
-public class CanalBookingEventComponentHelper extends BaseComponentHelper {
+public class CanalJourneyEventComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -36,7 +36,7 @@ public class CanalBookingEventComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public CanalBookingEventComponentHelper() {
+	public CanalJourneyEventComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
@@ -45,19 +45,19 @@ public class CanalBookingEventComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public CanalBookingEventComponentHelper(IAdapterManager adapterManager) {
+	public CanalJourneyEventComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.EVENT));
 	}
 	
 	/**
-	 * add editors to a composite, using CanalBookingEvent as the supertype
+	 * add editors to a composite, using CanalJourneyEvent as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, SchedulePackage.Literals.CANAL_BOOKING_EVENT);	
+		addEditorsToComposite(detailComposite, SchedulePackage.Literals.CANAL_JOURNEY_EVENT);	
 	}
 	
 	/**
@@ -70,21 +70,41 @@ public class CanalBookingEventComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_linkedSequenceEditor(detailComposite, topClass);
 		add_linkedJourneyEditor(detailComposite, topClass);
+		add_panamaWaitingTimeHoursEditor(detailComposite, topClass);
+		add_maxAvailablePanamaWaitingTimeHoursEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the linkedSequence feature on CanalBookingEvent
+	 * Create the editor for the linkedSequence feature on CanalJourneyEvent
 	 *
 	 * @generated
 	 */
 	protected void add_linkedSequenceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CANAL_BOOKING_EVENT__LINKED_SEQUENCE));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CANAL_JOURNEY_EVENT__LINKED_SEQUENCE));
 	}
 	/**
-	 * Create the editor for the linkedJourney feature on CanalBookingEvent
+	 * Create the editor for the linkedJourney feature on CanalJourneyEvent
 	 *
 	 * @generated
 	 */
 	protected void add_linkedJourneyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CANAL_BOOKING_EVENT__LINKED_JOURNEY));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CANAL_JOURNEY_EVENT__LINKED_JOURNEY));
+	}
+
+	/**
+	 * Create the editor for the panamaWaitingTimeHours feature on CanalJourneyEvent
+	 *
+	 * @generated
+	 */
+	protected void add_panamaWaitingTimeHoursEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CANAL_JOURNEY_EVENT__PANAMA_WAITING_TIME_HOURS));
+	}
+
+	/**
+	 * Create the editor for the maxAvailablePanamaWaitingTimeHours feature on CanalJourneyEvent
+	 *
+	 * @generated
+	 */
+	protected void add_maxAvailablePanamaWaitingTimeHoursEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CANAL_JOURNEY_EVENT__MAX_AVAILABLE_PANAMA_WAITING_TIME_HOURS));
 	}
 }

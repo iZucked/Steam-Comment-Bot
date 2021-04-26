@@ -4,8 +4,10 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
@@ -18,9 +20,10 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
  * @author Simon Goodall.
  * 
  */
-public interface ICargoValueAnnotation extends IAllocationAnnotation {
+@NonNullByDefault
+public interface ICargoValueAnnotation extends IAllocationAnnotation, IElementAnnotation {
 
-	int getSlotPricePerMMBTu(@NonNull IPortSlot slot);
+	int getSlotPricePerMMBTu(IPortSlot slot);
 
 	/**
 	 * Value of the slot, equals to volume in mmbtu * slot price
@@ -28,17 +31,18 @@ public interface ICargoValueAnnotation extends IAllocationAnnotation {
 	 * @param portSlot
 	 * @return
 	 */
-	long getSlotValue(@NonNull IPortSlot portSlot);
+	long getSlotValue(IPortSlot portSlot);
 
-	long getSlotAdditionalShippingPNL(@NonNull IPortSlot slot);
+	long getSlotAdditionalShippingPNL(IPortSlot slot);
 
-	long getSlotAdditionalUpsidePNL(@NonNull IPortSlot slot);
+	long getSlotAdditionalUpsidePNL(IPortSlot slot);
 
-	long getSlotAdditionalOtherPNL(@NonNull IPortSlot slot);
+	long getSlotAdditionalOtherPNL(IPortSlot slot);
 
-	long getSlotUpstreamPNL(@NonNull IPortSlot slot);
+	long getSlotUpstreamPNL(IPortSlot slot);
 
-	IEntity getSlotEntity(@NonNull IPortSlot slot);
+	@Nullable
+	IEntity getSlotEntity(IPortSlot slot);
 
 	long getTotalProfitAndLoss();
 }

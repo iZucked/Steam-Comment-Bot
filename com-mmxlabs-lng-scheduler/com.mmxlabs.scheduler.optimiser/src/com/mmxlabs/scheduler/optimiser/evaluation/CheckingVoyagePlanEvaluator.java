@@ -5,13 +5,13 @@
 package com.mmxlabs.scheduler.optimiser.evaluation;
 
 import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.ImmutableList;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -44,23 +44,23 @@ public class CheckingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 	}
 
 	@Override
-	public @NonNull List<@NonNull ScheduledVoyagePlanResult> evaluateRoundTrip(@NonNull IResource resource, @NonNull IVesselAvailability vesselAvailability,
+	public @NonNull ImmutableList<@NonNull ScheduledVoyagePlanResult> evaluateRoundTrip(@NonNull IResource resource, @NonNull IVesselAvailability vesselAvailability,
 			@NonNull ICharterCostCalculator charterCostCalculator, @NonNull IPortTimesRecord portTimesRecord, boolean returnAll, boolean keepDetails, @Nullable IAnnotatedSolution annotatedSolution) {
 
 		return delegate.evaluateRoundTrip(resource, vesselAvailability, charterCostCalculator, portTimesRecord, returnAll, keepDetails, annotatedSolution);
 	}
 
 	@Override
-	public @NonNull List<@NonNull ScheduledVoyagePlanResult> evaluateShipped(@NonNull IResource resource, @NonNull IVesselAvailability vesselAvailability, ICharterCostCalculator charterCostCalculator,
+	public @NonNull ImmutableList<@NonNull ScheduledVoyagePlanResult> evaluateShipped(@NonNull IResource resource, @NonNull IVesselAvailability vesselAvailability, ICharterCostCalculator charterCostCalculator,
 			int vesselStartTime, IPort firstLoadPort, @NonNull PreviousHeelRecord previousHeelRecord, @NonNull IPortTimesRecord portTimesRecord, boolean lastPlan, boolean returnAll, boolean keepDetails,
 			@Nullable IAnnotatedSolution annotatedSolution) {
 
 		long a = System.currentTimeMillis();
-		final List<ScheduledVoyagePlanResult> value_d = delegate.evaluateShipped(resource, vesselAvailability, charterCostCalculator, vesselStartTime, 
+		final ImmutableList<ScheduledVoyagePlanResult> value_d = delegate.evaluateShipped(resource, vesselAvailability, charterCostCalculator, vesselStartTime, 
 				firstLoadPort, previousHeelRecord, portTimesRecord, lastPlan,
 				returnAll, keepDetails, annotatedSolution);
 		long b = System.currentTimeMillis();
-		final List<ScheduledVoyagePlanResult> value_r = reference.evaluateShipped(resource, vesselAvailability, charterCostCalculator, vesselStartTime,
+		final ImmutableList<ScheduledVoyagePlanResult> value_r = reference.evaluateShipped(resource, vesselAvailability, charterCostCalculator, vesselStartTime,
 				firstLoadPort, previousHeelRecord, portTimesRecord, lastPlan,
 				returnAll, keepDetails, annotatedSolution);
 		long c = System.currentTimeMillis();

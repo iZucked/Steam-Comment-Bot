@@ -38,6 +38,7 @@ import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.PortCapability;
@@ -372,16 +373,17 @@ public class CargoModelBuilder {
 	public @NonNull SlotMaker<SpotDischargeSlot> makeSpotFOBSale(String name, @NonNull YearMonth windowStart, @NonNull FOBSalesMarket market, @NonNull Port port) {
 		return new SlotMaker<SpotDischargeSlot>(this).withMarketFOBSale(name, market, windowStart, port);
 	}
-
-	public @NonNull CanalBookingSlot makeCanalBooking(final @NonNull RouteOption routeOption, final @NonNull CanalEntry canalEntrance, final @NonNull LocalDate date, @Nullable Slot slot) {
+	
+	public @NonNull CanalBookingSlot makeCanalBooking(final @NonNull RouteOption routeOption, final @NonNull CanalEntry canalEntrance, final @NonNull LocalDate date, @Nullable AVesselSet<Vessel> vessel) {
 		final CanalBookingSlot booking = CargoFactory.eINSTANCE.createCanalBookingSlot();
 		booking.setRouteOption(routeOption);
 		booking.setCanalEntrance(canalEntrance);
 		booking.setBookingDate(date);
-		if (slot != null) {
-			booking.setSlot(slot);
+		
+		if (vessel != null) {
+			booking.setVessel(vessel);
 		}
-
+		
 		if (cargoModel.getCanalBookings() == null) {
 			cargoModel.setCanalBookings(CargoFactory.eINSTANCE.createCanalBookings());
 		}

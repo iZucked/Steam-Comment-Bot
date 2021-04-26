@@ -14,7 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -74,7 +74,7 @@ public class TestPricingEventHelper {
 
 		final PricingEventHelper pricingEventHelper = createInstance(tzProvider);
 
-		when(portTimesRecord.getSlots()).thenReturn(Lists.newArrayList(loadOption, dischargeOption));
+		when(portTimesRecord.getSlots()).thenReturn(ImmutableList.of(loadOption, dischargeOption));
 
 		when(portTimesRecord.getSlotTime(loadOption)).thenReturn(10);
 		when(portTimesRecord.getSlotTime(dischargeOption)).thenReturn(20);
@@ -142,7 +142,7 @@ public class TestPricingEventHelper {
 		});
 
 		final PricingEventHelper pricingEventHelper = createInstance(tzProvider);
-		when(portTimesRecord.getSlots()).thenReturn(Lists.newArrayList(loadOption, dischargeOption));
+		when(portTimesRecord.getSlots()).thenReturn(ImmutableList.of(loadOption, dischargeOption));
 
 		when(portTimesRecord.getSlotTime(loadOption)).thenReturn(10);
 		when(portTimesRecord.getSlotTime(dischargeOption)).thenReturn(20);

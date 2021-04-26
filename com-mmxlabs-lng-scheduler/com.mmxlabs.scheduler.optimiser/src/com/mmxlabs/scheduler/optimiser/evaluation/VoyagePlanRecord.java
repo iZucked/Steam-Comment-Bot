@@ -6,17 +6,18 @@ package com.mmxlabs.scheduler.optimiser.evaluation;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.mmxlabs.common.exposures.BasicExposureRecord;
+import com.mmxlabs.scheduler.optimiser.cache.AbstractWriteLockable;
+import com.mmxlabs.scheduler.optimiser.cache.IWriteLockable;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.exposures.OptimiserExposureRecords;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
@@ -29,7 +30,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 @NonNullByDefault
-public class VoyagePlanRecord {
+public class VoyagePlanRecord extends AbstractWriteLockable {
 
 	private final boolean isCargo;
 
@@ -38,19 +39,17 @@ public class VoyagePlanRecord {
 
 	private @Nullable IAllocationAnnotation allocationAnnotation;
 	private @Nullable ICargoValueAnnotation cargoValueAnnotation;
-	private @Nullable Map<IPortSlot, HeelValueRecord> heelValueRecords = new HashMap<>();
-	private Map<IPortSlot, SlotHeelVolumeRecord> heelVolumeRecords = new HashMap<>();
-	private final Map<IPortSlot, OptimiserExposureRecords> exposureRecords = new HashMap<>();
+	private @Nullable ImmutableMap<IPortSlot, HeelValueRecord> heelValueRecords = ImmutableMap.of();
+	private ImmutableMap<IPortSlot, SlotHeelVolumeRecord> heelVolumeRecords = ImmutableMap.of();
+	private ImmutableMap<IPortSlot, OptimiserExposureRecords> exposureRecords = ImmutableMap.of();
 
-	// TODO: This should be linked
-	private final Map<IPortSlot, CapacityRecord> capacityRecords = new HashMap<>();
-	private final Map<IPortSlot, LatenessRecord> latenessRecords = new HashMap<>();
-	private final Map<IPortSlot, IdleRecord> idleRecords = new HashMap<>();
-	private final Set<IPortSlot> lateSlots = new HashSet<>();
+	// TODO: These should be linked
+	private ImmutableMap<IPortSlot, CapacityRecord> capacityRecords = ImmutableMap.of();
+	private ImmutableMap<IPortSlot, LatenessRecord> latenessRecords = ImmutableMap.of();
+	private ImmutableMap<IPortSlot, IdleRecord> idleRecords = ImmutableMap.of();
+	private ImmutableSet<IPortSlot> lateSlots = ImmutableSet.of();
 
 	private long profitAndLoss;
-
-	public boolean forcedCooldown;
 
 	public static class LatenessRecord {
 
@@ -111,9 +110,12 @@ public class VoyagePlanRecord {
 	public VoyagePlanRecord(final VoyagePlan voyagePlan, final IPortTimesRecord ptr, final Map<IPortSlot, HeelValueRecord> heelValueRecords, final long profitAndLoss) {
 		this.voyagePlan = voyagePlan;
 		this.portTimesRecord = ptr;
-		this.heelValueRecords = heelValueRecords;
+		this.heelValueRecords = ImmutableMap.copyOf(heelValueRecords);
 		this.profitAndLoss = profitAndLoss;
 		this.isCargo = false;
+
+		IWriteLockable.writeLock(voyagePlan);
+		IWriteLockable.writeLock(ptr);
 	}
 
 	public VoyagePlanRecord(final VoyagePlan voyagePlan, final IPortTimesRecord ptr) {
@@ -127,6 +129,10 @@ public class VoyagePlanRecord {
 			this.profitAndLoss = cargoValueAnnotation.getTotalProfitAndLoss();
 		}
 		this.isCargo = true;
+
+		IWriteLockable.writeLock(voyagePlan);
+		IWriteLockable.writeLock(ptr);
+
 	}
 
 	public VoyagePlan getVoyagePlan() {
@@ -144,13 +150,10 @@ public class VoyagePlanRecord {
 	public @Nullable ICargoValueAnnotation getCargoValueAnnotation() {
 		return cargoValueAnnotation;
 	}
-	//
-	// public @Nullable Map<IPortSlot, HeelValueRecord> getHeelValueRecords() {
-	// return heelValueRecords;
-	// }
 
 	public HeelValueRecord getHeelValueRecord(final IPortSlot slot) {
-		return heelValueRecords.getOrDefault(slot, new HeelValueRecord(0, 0, 0, 0));
+
+		 return heelValueRecords.getOrDefault(slot, new HeelValueRecord(0, 0, 0, 0));
 	}
 
 	public long getProfitAndLoss() {
@@ -178,7 +181,9 @@ public class VoyagePlanRecord {
 	}
 
 	public void setHeelVolumeRecords(final Map<IPortSlot, SlotHeelVolumeRecord> heelVolumeRecords) {
-		this.heelVolumeRecords = heelVolumeRecords;
+		checkWritable();
+
+		this.heelVolumeRecords = ImmutableMap.copyOf(heelVolumeRecords);
 	}
 
 	@Override
@@ -230,23 +235,29 @@ public class VoyagePlanRecord {
 	 * @param latenessWithoutFlex
 	 */
 	public void addLateness(final IPortSlot portSlot, final long weightedLateness, final Interval interval, final int latenessWithFlex, final int latenessWithoutFlex) {
-
+		checkWritable();
 		final LatenessRecord record = new LatenessRecord();
 		record.weightedLateness = weightedLateness;
 		record.latenessWithFlex = latenessWithFlex;
 		record.latenessWithoutFlex = latenessWithoutFlex;
 		record.interval = interval;
 
-		latenessRecords.put(portSlot, record);
+		latenessRecords = ImmutableMap.<IPortSlot, LatenessRecord> builder().putAll(latenessRecords).put(portSlot, record).build();
 
 		if (latenessWithFlex > 0) {
-			lateSlots.add(portSlot);
+			lateSlots = ImmutableSet.<IPortSlot> builder().addAll(lateSlots).add(portSlot).build();
+
 		}
 	}
 
 	public void addCapacityViolation(final IPortSlot portSlot, final CapacityViolationType cvt, final long volume) {
+		checkWritable();
 
-		final CapacityRecord record = capacityRecords.computeIfAbsent(portSlot, s -> new CapacityRecord());
+		if (!capacityRecords.containsKey(portSlot)) {
+			capacityRecords = ImmutableMap.<IPortSlot, CapacityRecord> builder().putAll(capacityRecords).put(portSlot, new CapacityRecord()).build();
+		}
+
+		final CapacityRecord record = capacityRecords.get(portSlot);
 		record.capacityViolations.add(cvt);
 		record.capacityViolationVolumes.put(cvt, volume);
 	}
@@ -282,12 +293,18 @@ public class VoyagePlanRecord {
 		return latenessRecords.get(slot);
 	}
 
-	public Set<IPortSlot> getLateSlotsSet() {
+	public ImmutableSet<IPortSlot> getLateSlotsSet() {
 		return lateSlots;
 	}
 
 	public void addIdleHoursViolation(final IPortSlot portSlot, final int violatingHours) {
-		idleRecords.computeIfAbsent(portSlot, s -> new IdleRecord()).violatingIdleHours = violatingHours;
+		checkWritable();
+
+		if (!idleRecords.containsKey(portSlot)) {
+			idleRecords = ImmutableMap.<IPortSlot, IdleRecord> builder().putAll(idleRecords).put(portSlot, new IdleRecord()).build();
+		}
+
+		idleRecords.get(portSlot).violatingIdleHours = violatingHours;
 	}
 
 	public long getIdleTimeViolationHours(final IPortSlot portSlot) {
@@ -295,7 +312,13 @@ public class VoyagePlanRecord {
 	}
 
 	public void addIdleWeightedCost(final IPortSlot portSlot, final long cost) {
-		idleRecords.computeIfAbsent(portSlot, s -> new IdleRecord()).weightedIdleCost = cost;
+		checkWritable();
+
+		if (!idleRecords.containsKey(portSlot)) {
+			idleRecords = ImmutableMap.<IPortSlot, IdleRecord> builder().putAll(idleRecords).put(portSlot, new IdleRecord()).build();
+		}
+
+		idleRecords.get(portSlot).weightedIdleCost = cost;
 	}
 
 	public long getIdleWeightedCost(final IPortSlot portSlot) {
@@ -315,13 +338,16 @@ public class VoyagePlanRecord {
 	}
 
 	public void addPortExposureRecord(final IPortSlot slot, final List<BasicExposureRecord> records) {
+
+		checkWritable();
+
 		if (exposureRecords.get(slot) != null) {
 			final OptimiserExposureRecords existingRecords = exposureRecords.get(slot);
 			existingRecords.records.addAll(records);
 		} else {
 			final OptimiserExposureRecords newRecords = new OptimiserExposureRecords();
 			newRecords.records.addAll(records);
-			exposureRecords.put(slot, newRecords);
+			exposureRecords = ImmutableMap.<IPortSlot, OptimiserExposureRecords> builder().putAll(exposureRecords).put(slot, newRecords).build();
 		}
 	}
 
@@ -329,8 +355,7 @@ public class VoyagePlanRecord {
 		return exposureRecords.get(slot);
 	}
 
-	public Map<IPortSlot, OptimiserExposureRecords> getPortExposureRecords() {
+	public ImmutableMap<IPortSlot, OptimiserExposureRecords> getPortExposureRecords() {
 		return exposureRecords;
 	}
-
 }

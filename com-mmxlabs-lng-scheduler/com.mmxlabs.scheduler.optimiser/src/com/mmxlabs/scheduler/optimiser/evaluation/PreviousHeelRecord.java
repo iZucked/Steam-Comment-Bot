@@ -6,21 +6,44 @@ package com.mmxlabs.scheduler.optimiser.evaluation;
 
 import com.google.common.base.Objects;
 
-public class PreviousHeelRecord {
-	public long heelVolumeInM3;
-	public int lastHeelPricePerMMBTU = 0;
-	public int lastCV = 0;
-	public boolean forcedCooldown;
+public final class PreviousHeelRecord {
+	public final long heelVolumeInM3;
+	public final int lastHeelPricePerMMBTU;
+	public final int lastCV;
+	public final boolean forcedCooldown;
+
+	/**
+	 * Default constructor - more suitable for unit tests
+	 */
+	public PreviousHeelRecord() {
+		this(0, 0, 0, false);
+	}
+
+	public PreviousHeelRecord(final long heelVolumeInM3, final int lastHeelPricePerMMBTU, final int lastCV, final boolean forcedCooldown) {
+		this.heelVolumeInM3 = heelVolumeInM3;
+		this.lastHeelPricePerMMBTU = lastHeelPricePerMMBTU;
+		this.lastCV = lastCV;
+		this.forcedCooldown = forcedCooldown;
+	}
+	
+	public PreviousHeelRecord(final PreviousHeelRecord other) {
+		this.heelVolumeInM3 = other.heelVolumeInM3;
+		this.lastHeelPricePerMMBTU = other.lastHeelPricePerMMBTU;
+		this.lastCV = other.lastCV;
+		this.forcedCooldown = other.forcedCooldown;
+	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (obj == this) {
 			return true;
 		}
 		if (obj instanceof PreviousHeelRecord) {
-			PreviousHeelRecord other = (PreviousHeelRecord) obj;
-			return forcedCooldown == other.forcedCooldown && lastCV == other.lastCV //
-					&& heelVolumeInM3 == other.heelVolumeInM3 && lastHeelPricePerMMBTU == other.lastHeelPricePerMMBTU;
+			final PreviousHeelRecord other = (PreviousHeelRecord) obj;
+			return forcedCooldown == other.forcedCooldown //
+					&& lastCV == other.lastCV //
+					&& heelVolumeInM3 == other.heelVolumeInM3 //
+					&& lastHeelPricePerMMBTU == other.lastHeelPricePerMMBTU;
 
 		}
 		return false;

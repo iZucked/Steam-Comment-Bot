@@ -457,12 +457,12 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case SchedulePackage.CANAL_BOOKING_EVENT: {
-				CanalBookingEvent canalBookingEvent = (CanalBookingEvent)theEObject;
-				T result = caseCanalBookingEvent(canalBookingEvent);
-				if (result == null) result = caseEvent(canalBookingEvent);
-				if (result == null) result = caseMMXObject(canalBookingEvent);
-				if (result == null) result = caseITimezoneProvider(canalBookingEvent);
+			case SchedulePackage.CANAL_JOURNEY_EVENT: {
+				CanalJourneyEvent canalJourneyEvent = (CanalJourneyEvent)theEObject;
+				T result = caseCanalJourneyEvent(canalJourneyEvent);
+				if (result == null) result = caseEvent(canalJourneyEvent);
+				if (result == null) result = caseMMXObject(canalJourneyEvent);
+				if (result == null) result = caseITimezoneProvider(canalJourneyEvent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1132,6 +1132,21 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Canal Journey Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Canal Journey Event</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCanalJourneyEvent(CanalJourneyEvent object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Charter Available From Event</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -1158,21 +1173,6 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseGroupedCharterLengthEvent(GroupedCharterLengthEvent object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Canal Booking Event</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Canal Booking Event</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseCanalBookingEvent(CanalBookingEvent object) {
 		return null;
 	}
 

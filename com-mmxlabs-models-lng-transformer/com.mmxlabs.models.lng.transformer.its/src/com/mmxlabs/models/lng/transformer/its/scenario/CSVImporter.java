@@ -124,7 +124,6 @@ public class CSVImporter {
 		dataMap.put(CommercialModelImporter.SALES_CON_KEY, createURL(urlRoot, "Sales Contracts.csv"));
 		dataMap.put(CommercialModelImporter.CHARTER_CON_KEY, createURL(urlRoot, "Charter Contracts.csv"));
 		dataMap.put(CharterContractBallastBonusImporterExtraImporter.BALLASTBONUS_KEY, createURL(urlRoot, "Charter Contracts--Ballast Bonus.csv"));
-
 	}
 
 	public void importMarketData(@NonNull final String urlRoot) throws MalformedURLException {
