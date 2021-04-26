@@ -137,7 +137,7 @@ public class VesselComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the reference feature on Vessel
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_referenceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		final IInlineEditor wrapped = new ReferenceVesselInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__REFERENCE));

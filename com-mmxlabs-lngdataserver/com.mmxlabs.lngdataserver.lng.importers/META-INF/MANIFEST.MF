@@ -56,10 +56,16 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.models.lng.pricing.editor,
  com.mmxlabs.models.util,
  com.mmxlabs.models.lng.cargo.editor,
- com.mmxlabs.models.lng.cargo
+ com.mmxlabs.models.lng.cargo,
+ com.mmxlabs.models.ui,
+ com.mmxlabs.models.ui.tabular,
+ org.ops4j.peaberry;bundle-version="1.3.0",
+ org.ops4j.peaberry.activation,
+ org.ops4j.peaberry.eclipse;bundle-version="1.3.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Import-Package: org.slf4j
 Bundle-ActivationPolicy: lazy
+Bundle-Module: com.mmxlabs.lngdataserver.lng.importers.internal.DataserverImportersActivationModule
 Bundle-Vendor: Minimax Labs Ltd.
 Automatic-Module-Name: com.mmxlabs.lngdataserver.lng.importers
 Service-Component: OSGI-INF/*.xml

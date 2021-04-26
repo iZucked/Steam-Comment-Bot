@@ -17,11 +17,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -37,6 +39,7 @@ import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.lngdataserver.integration.models.bunkerfuels.BunkerFuelsVersion;
 import com.mmxlabs.lngdataserver.integration.models.portgroups.PortGroupDefinition;
 import com.mmxlabs.lngdataserver.integration.models.portgroups.PortTypeConstants;
+import com.mmxlabs.lngdataserver.integration.vessels.VesselsIOConstants;
 import com.mmxlabs.lngdataserver.integration.vessels.model.VesselsVersion;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.DistancesLinesToScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.LocationsToScenarioCopier;
@@ -68,7 +71,9 @@ import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.util.VesselConstants;
 import com.mmxlabs.models.lng.migration.ModelsLNGVersionMaker;
 import com.mmxlabs.models.lng.port.CapabilityGroup;
 import com.mmxlabs.models.lng.port.Port;
@@ -108,6 +113,7 @@ import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
+import com.mmxlabs.models.util.importer.impl.EncoderUtil;
 import com.mmxlabs.rcp.common.versions.VersionsUtil;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
@@ -432,16 +438,24 @@ public class ScenarioBuilder {
 			}
 		}
 		{
-			try (InputStream inputStream = ScenarioBuilder.class.getResourceAsStream("/vessels.json")) {
-				final VesselsVersion v = mapper.readValue(inputStream, VesselsVersion.class);
-				final Command command = VesselsToScenarioCopier.getUpdateCommand(editingDomain, fleetModel, portModel, v);
-				command.execute();
-				for (final Vessel vessel : fleetModel.getVessels()) {
-					if (vessel.getReference() != null) {
-						assert vessel.getReference().getReference() == null;
-						vessel.getReference().setReferenceVessel(true);
+			try (InputStream inputStream = ScenarioBuilder.class.getResourceAsStream(String.format("/%s", VesselsIOConstants.JSON_VESSELS_REFERENCE))) {
+				final VesselsVersion vesselsVersion = mapper.readValue(inputStream, VesselsVersion.class);
+				vesselsVersion.getVessels().stream().forEach(vessel -> {
+					vessel.setName(VesselConstants.convertMMXReferenceNameToInternalName(EncoderUtil.decode(vessel.getName())));
+					vessel.setIsReference(Optional.of(Boolean.TRUE));
+					vessel.setMmxReference(Optional.of(Boolean.TRUE));
+				});
+				final Command command = VesselsToScenarioCopier.getUpdateCommand(editingDomain, fleetModel, portModel, vesselsVersion);
+				if (command instanceof CompoundCommand) {
+					final CompoundCommand cmd = (CompoundCommand) command;
+					final String versionId = vesselsVersion.getIdentifier();
+					if (versionId != null && !versionId.isBlank()) {
+						cmd.append(SetCommand.create(editingDomain, fleetModel, FleetPackage.Literals.FLEET_MODEL__MMX_VESSEL_DB_VERSION, vesselsVersion.getIdentifier()));
+					} else {
+						throw new IllegalStateException("Vessels version identifier must be present and non-blank.");
 					}
 				}
+				command.execute();
 			}
 		}
 		return this;
