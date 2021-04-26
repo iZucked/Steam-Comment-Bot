@@ -6,6 +6,8 @@ package com.mmxlabs.models.lng.adp.mull;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,6 +18,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.models.lng.adp.MullAllocationRow;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SchedulingTimeWindow;
@@ -129,7 +132,12 @@ public abstract class AllocationTracker {
 			final Integer minTime = CargoTravelTimeUtils.getFobMinTimeInHours(loadSlot, dischargeSlot, loadSlot.getWindowStart(), vesselAvailability, ScenarioModelUtil.getPortModel(sm),
 					vesselMaxSpeedKnots, modelDistanceProvider);
 			final SchedulingTimeWindow loadSTW = loadSlot.getSchedulingTimeWindow();
-			return loadSTW.getStart().plusHours(minTime + (long) loadSTW.getDuration()).withDayOfMonth(1).withHour(0).toLocalDate();
+			final ZonedDateTime loadTimeZoneDischargeArrival = loadSTW.getStart().plusHours(minTime + (long) loadSTW.getDuration());
+			final ZonedDateTime dischargeTimeZoneDischargeArrival = loadTimeZoneDischargeArrival
+					.withZoneSameInstant(ZoneId.of(dischargeSlot.getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
+			final LocalDateTime localDischargeArrival = dischargeTimeZoneDischargeArrival.toLocalDateTime();
+
+			return localDischargeArrival.withDayOfMonth(1).withHour(0).toLocalDate();
 		}
 	}
 
