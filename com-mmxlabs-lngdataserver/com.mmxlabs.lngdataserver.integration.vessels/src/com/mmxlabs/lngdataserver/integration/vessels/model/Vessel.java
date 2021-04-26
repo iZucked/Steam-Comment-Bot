@@ -56,6 +56,8 @@ public class Vessel {
 	private OptionalInt coolingVolume = OptionalInt.empty();
 	private OptionalDouble pilotLightRate = OptionalDouble.empty();
 	private Optional<Boolean> hasReliqCapacity = Optional.empty();
+	private Optional<Boolean> isReference = Optional.empty();
+	private Optional<Boolean> mmxReference = Optional.empty();
 
 	public String getMmxId() {
 		return mmxId;
@@ -252,7 +254,7 @@ public class Vessel {
 	public OptionalInt getPurgeTime() {
 		return purgeTime;
 	}
-	
+
 	public void setPurgeTime(OptionalInt purgeTime) {
 		this.purgeTime = purgeTime;
 	}
@@ -287,5 +289,21 @@ public class Vessel {
 
 	public void setRouteParameters(Optional<List<VesselRouteParameters>> routeParameters) {
 		this.routeParameters = routeParameters;
+	}
+
+	public Optional<Boolean> getIsReference() {
+		return this.isReference;
+	}
+
+	public void setIsReference(final Optional<Boolean> isReference) {
+		this.isReference = isReference;
+	}
+
+	public Optional<Boolean> getMmxReference() {
+		return this.mmxReference;
+	}
+
+	public void setMmxReference(final Optional<Boolean> mmxReference) {
+		this.mmxReference = mmxReference;
 	}
 }

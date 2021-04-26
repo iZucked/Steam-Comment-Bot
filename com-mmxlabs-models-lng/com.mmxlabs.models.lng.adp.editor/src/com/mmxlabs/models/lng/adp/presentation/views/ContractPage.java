@@ -913,6 +913,7 @@ public class ContractPage extends ADPComposite {
 			nonMovingElements.forEach(p -> rearrangedProfile.get(p.getFirst()).getFirst().add(p.getSecond()));
 			for (final Entry<Pair<MUDContainer, AllocationTracker>, List<Pair<MUDContainer, AllocationTracker>>> entry : movingElements.entrySet()) {
 				final MUDContainer minorMud = entry.getValue().stream().map(Pair::getFirst).min((mud1, mud2) -> Double.compare(mud1.getRelativeEntitlement(), mud2.getRelativeEntitlement())).get();
+
 				// If we have the option of using DESMarketTracker as sink, use it (otherwise
 				// throws an IllegalStateException later on)
 				final List<Pair<MUDContainer, AllocationTracker>> minorLifterPairCandidates = entry.getValue().stream().filter(p -> p.getFirst() == minorMud).collect(Collectors.toList());
@@ -2044,7 +2045,6 @@ public class ContractPage extends ADPComposite {
 			objectsToDelete.addAll(loadSlotsToDelete);
 			objectsToDelete.addAll(dischargeSlotsToDelete);
 			cmd.append(DeleteCommand.create(editingDomain, objectsToDelete));
-
 		}
 
 		if (secondPassCargoBlueprints.values().stream().anyMatch(arr -> arr.length > 0)) {

@@ -146,12 +146,14 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	private final DialogEcoreCopier dialogEcoreCopier = new DialogEcoreCopier();
 
 	/**
-	 * Contains elements which have been removed from {@link #inputs}, which will be deleted if the dialog is OKed.
+	 * Contains elements which have been removed from {@link #inputs}, which will be
+	 * deleted if the dialog is OKed.
 	 */
 	private final List<EObject> deletedInputs = new ArrayList<>();
 
 	/**
-	 * Contains elements which have been added (these will actually be added into the model, so they must be deleted on cancel)
+	 * Contains elements which have been added (these will actually be added into
+	 * the model, so they must be deleted on cancel)
 	 */
 	private final List<Triple<@NonNull EObject, @NonNull EObject, @NonNull EReference>> addedInputs = new ArrayList<>();
 
@@ -218,7 +220,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	}
 
 	/**
-	 * Get the duplicate object (for editing) corresponding to the given input object.
+	 * Get the duplicate object (for editing) corresponding to the given input
+	 * object.
 	 * 
 	 * @param input
 	 * @param displayComposite
@@ -248,7 +251,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 					iterator.remove();
 					alreadyDuplicated.add(new Pair<Integer, EObject>(index, o));
 				}
-				// Check to see if we have a containment ref to another root - thus will be automatically copied
+				// Check to see if we have a containment ref to another root - thus will be
+				// automatically copied
 				EObject container = o.eContainer();
 				while (container != null) {
 					if (range.contains(container)) {
@@ -314,8 +318,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	/**
 	 * Construct a new detail composite dialog, with style.
 	 * 
-	 * @param style
-	 *                  - turns style bits on or off (since "&"ed with current); e.g. "~SWT.MAX" removes min/max button.
+	 * @param style - turns style bits on or off (since "&"ed with current); e.g.
+	 *              "~SWT.MAX" removes min/max button.
 	 */
 	public DetailCompositeDialog(final Shell parentShell, final ICommandHandler commandHandler, final int style) {
 		this(parentShell, commandHandler);
@@ -385,14 +389,18 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	public void create() {
 		super.create();
 
-		// Create the display composite factory and perform duplicate here rather than in doCreateFormContent as previously to that when we change objects in the sidebar, we do not loose changes when
+		// Create the display composite factory and perform duplicate here rather than
+		// in doCreateFormContent as previously to that when we change objects in the
+		// sidebar, we do not loose changes when
 		// we press OK. Calls to dialogECopier.record() reset the change state.
 		{
 			if (inputs != null) {
 
 				for (final EObject object : inputs) {
 					if (displayCompositeFactory == null) {
-						// Note, now that we do this here rather than in doCreateFormContent we may show the wrong factory for an object *should* the input be of mixed type. (This is not a currently
+						// Note, now that we do this here rather than in doCreateFormContent we may show
+						// the wrong factory for an object *should* the input be of mixed type. (This is
+						// not a currently
 						// expected behaviour - 2015-03-23)
 						displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(object.eClass());
 					}
@@ -412,7 +420,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	}
 
 	private void checkButtonEnablement(final boolean enabled) {
-		getButton(IDialogConstants.OK_ID).setEnabled(enabled && !lockedForEditing);
+		getButton(IDialogConstants.OK_ID).setEnabled(enabled && !lockedForEditing && !readOnly);
 	}
 
 	private void updateEditor() {
@@ -427,7 +435,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		this.dbc = new EMFDataBindingContext();
 		this.observablesManager = new ObservablesManager();
 
-		// This call means we do not need to manually manage our databinding objects lifecycle manually.
+		// This call means we do not need to manually manage our databinding objects
+		// lifecycle manually.
 		observablesManager.runAndCollect(this::doCreateFormContent);
 
 		getShell().layout(true, true);
@@ -500,7 +509,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		// handle enablement
 		validate();
 
-		if (location.getScenarioInstance().isReadonly()) {
+		if (location.getScenarioInstance().isReadonly() || readOnly) {
 			final String text2 = getShell().getText();
 			getShell().setText(text2 + " (Read-only)");
 			disableControls(displayComposite.getComposite());
@@ -662,7 +671,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 					return;
 				}
 
-				// add.append(AddCommand.create(commandHandler.getEditingDomain(), setting.getContainer(), setting.getContainment(), setting.getInstance()));
+				// add.append(AddCommand.create(commandHandler.getEditingDomain(),
+				// setting.getContainer(), setting.getContainment(), setting.getInstance()));
 				// }
 				// add.execute();
 				final EObject newInstance = settings.iterator().next().getInstance();
@@ -675,7 +685,9 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 				if (inputs.size() == 1) {
 					if (displayCompositeFactory == null) {
-						// Note, now that we do this here rather than in doCreateFormContent we may show the wrong factory for an object *should* the input be of mixed type. (This is not a currently
+						// Note, now that we do this here rather than in doCreateFormContent we may show
+						// the wrong factory for an object *should* the input be of mixed type. (This is
+						// not a currently
 						// expected behaviour - 2015-03-23)
 						displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(newInstance.eClass());
 					}
@@ -700,7 +712,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	}
 
 	/**
-	 * When the sidebar is displayed, this method is invoked to add actions to the toolbar above it.
+	 * When the sidebar is displayed, this method is invoked to add actions to the
+	 * toolbar above it.
 	 * 
 	 * @param barManager
 	 */
@@ -825,6 +838,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 	private boolean lockedForEditing = false;
 
+	private boolean readOnly = false;
+
 	private MMXRootObject rootObject;
 
 	private EReference sidebarContainment;
@@ -836,7 +851,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	private DefaultDialogEditingContext dialogContext;
 
 	/**
-	 * This version of the open method also displays the sidebar and allows for creation and deletion of objects in the sidebar.
+	 * This version of the open method also displays the sidebar and allows for
+	 * creation and deletion of objects in the sidebar.
 	 * 
 	 * @param part
 	 * @param rootObject
@@ -960,7 +976,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 						final EObject eContainer = original.eContainer();
 						if (originalToDuplicate.containsKey(eContainer)) {
-							// Already part of another duplicated object - skip as container will be parented
+							// Already part of another duplicated object - skip as container will be
+							// parented
 							continue;
 						}
 
@@ -1037,6 +1054,11 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		}
 	}
 
+	public int open(final IScenarioEditingLocation location, final MMXRootObject rootObject, final Collection<EObject> objects, final boolean locked, final boolean readOnly) {
+		this.readOnly = readOnly;
+		return open(location, rootObject, objects, locked);
+	}
+
 	private void executeFinalCommand(final Command cc) {
 		commandHandler.getEditingDomain().getCommandStack().execute(cc);
 	}
@@ -1082,7 +1104,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	public boolean close() {
 
 		if (displayComposite != null) {
-			// displayComposite.display(new DefaultDialogEditingContext(dialogController, location), null, null, null, dbc);
+			// displayComposite.display(new DefaultDialogEditingContext(dialogController,
+			// location), null, null, null, dbc);
 			displayComposite.getComposite().dispose();
 			displayComposite = null;
 		}
