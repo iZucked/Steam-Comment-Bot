@@ -124,11 +124,12 @@ public class ExposuresCalculator {
 			}
 			final LocalDate pricingDate = externalDateProvider.getDateFromHours(pricingTime, portSlot.getPort()).toLocalDate();
 			final ExposuresLookupData lookupData = exposureDataProvider.getExposuresLookupData();
-			
-			return calculateExposures(volumeMMBTU, pricePerMMBTU, priceExpression, pricingDate, isLong, lookupData);
-		} else {
-			return Collections.emptyList();
+			if (pricingDate.isAfter(lookupData.cutoffDate)) {
+				return calculateExposures(volumeMMBTU, pricePerMMBTU, priceExpression, pricingDate, isLong, lookupData);
+			}
 		}
+		
+		return Collections.emptyList();
 	}
 	
 	private List<BasicExposureRecord> calculateExposures(final long volumeMMBTU, final int pricePerMMBTU, final String priceExpression, 

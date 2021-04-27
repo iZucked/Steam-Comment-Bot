@@ -58,6 +58,10 @@ public class PaperDealDataTransformer implements ISlotTransformer {
 	@Named(SchedulerConstants.COMPUTE_PAPER_PNL)
 	private boolean paperPnLEnabled;
 	
+	@Inject
+	@Named(SchedulerConstants.RE_HEDGE_CUTOFF_AT_PROMPT_START)
+	private boolean cutoffAtPromptStart;
+	
 	@Override
 	public void startTransforming(LNGScenarioModel lngScenarioModel, ModelEntityMap modelEntityMap, ISchedulerBuilder builder) {
 		if (paperPnLEnabled) {
@@ -106,6 +110,9 @@ public class PaperDealDataTransformer implements ISlotTransformer {
 					}
 					final PaperDealsLookupData lookupData = new PaperDealsLookupData(dataHandler.pricingCalendars, dataHandler.holidayCalendars, //
 							dataHandler.settledPrices, paperDeals, dataHandler.hedgeCurves, dataHandler.marketIndices, dataHandler.indicesToHedge);
+					if (lngScenarioModel.getPromptPeriodStart() != null && cutoffAtPromptStart) {
+						lookupData.cutoffMonth = YearMonth.from(lngScenarioModel.getPromptPeriodStart()).minusMonths(1);
+					}
 					paperDealDataProviderEditor.addLookupData(lookupData);
 				}
 			}
