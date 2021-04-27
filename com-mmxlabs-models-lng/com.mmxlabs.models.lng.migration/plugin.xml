@@ -1032,7 +1032,7 @@
              to="140">
        </MigrationUnit>
        <MigrationUnit
-             class="com.mmxlabs.models.lng.migration.units.MigrateToV141"
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV143"
              context="com.mmxlabs.lingo"
              from="140"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV141"

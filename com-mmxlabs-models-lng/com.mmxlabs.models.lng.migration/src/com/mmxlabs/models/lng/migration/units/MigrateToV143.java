@@ -23,7 +23,7 @@ import com.mmxlabs.models.migration.utils.EObjectWrapper;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
 
-public class MigrateToV141 extends AbstractMigrationUnit {
+public class MigrateToV143 extends AbstractMigrationUnit {
 
 	@Override
 	public String getScenarioContext() {
