@@ -276,6 +276,15 @@ public interface CargoFactory extends EFactory {
 	DealSet createDealSet();
 
 	/**
+	 * Returns a new object of class '<em>Vessel Group Canal Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Vessel Group Canal Parameters</em>'.
+	 * @generated
+	 */
+	VesselGroupCanalParameters createVesselGroupCanalParameters();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

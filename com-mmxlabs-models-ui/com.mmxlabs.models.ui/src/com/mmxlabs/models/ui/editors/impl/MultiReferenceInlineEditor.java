@@ -50,7 +50,7 @@ import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
  * 
  */
 public class MultiReferenceInlineEditor extends UnsettableInlineEditor {
-	private IReferenceValueProvider valueProvider;
+	protected IReferenceValueProvider valueProvider;
 	private Label theLabel;
 	private Button button;
 

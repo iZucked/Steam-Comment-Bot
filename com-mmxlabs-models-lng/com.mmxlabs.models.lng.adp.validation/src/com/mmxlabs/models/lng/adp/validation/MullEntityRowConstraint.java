@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
@@ -17,6 +19,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.DESSalesMarketAllocationRow;
+import com.mmxlabs.models.lng.adp.MullAllocationRow;
 import com.mmxlabs.models.lng.adp.MullEntityRow;
 import com.mmxlabs.models.lng.adp.SalesContractAllocationRow;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -33,57 +36,69 @@ public class MullEntityRowConstraint extends AbstractModelMultiConstraint {
 
 		if (target instanceof MullEntityRow) {
 			final MullEntityRow mullEntityRow = (MullEntityRow) target;
-			
+
 			final DetailConstraintStatusFactory factory = DetailConstraintStatusFactory.makeStatus() //
 					.withTypedName("ADP profile", "MULL Generation") //
 					.withTag(ValidationConstants.TAG_ADP);
-			
+
 			if (mullEntityRow.getEntity() == null) {
 				factory.copyName() //
-				.withObjectAndFeature(mullEntityRow, ADPPackage.Literals.MULL_ENTITY_ROW__ENTITY) //
-				.withMessage("No entity selected") //
-				.make(ctx, statuses);
+						.withObjectAndFeature(mullEntityRow, ADPPackage.Literals.MULL_ENTITY_ROW__ENTITY) //
+						.withMessage("No entity selected") //
+						.make(ctx, statuses);
 			}
-			
+
 			if (mullEntityRow.getInitialAllocation() == null) {
 				factory.copyName() //
-				.withObjectAndFeature(mullEntityRow, ADPPackage.Literals.MULL_ENTITY_ROW__INITIAL_ALLOCATION) //
-				.withMessage("A value must be provided for the initial allocation") //
-				.make(ctx, statuses);
+						.withObjectAndFeature(mullEntityRow, ADPPackage.Literals.MULL_ENTITY_ROW__INITIAL_ALLOCATION) //
+						.withMessage("A value must be provided for the initial allocation") //
+						.make(ctx, statuses);
 			} else {
 				if (!mullEntityRow.getInitialAllocation().matches("-?\\d+")) {
 					factory.copyName() //
-					.withObjectAndFeature(mullEntityRow, ADPPackage.Literals.MULL_ENTITY_ROW__INITIAL_ALLOCATION) //
-					.withMessage("The initial allocation must be a whole number") //
-					.make(ctx, statuses);
+							.withObjectAndFeature(mullEntityRow, ADPPackage.Literals.MULL_ENTITY_ROW__INITIAL_ALLOCATION) //
+							.withMessage("The initial allocation must be a whole number") //
+							.make(ctx, statuses);
 				}
 			}
-			
+
 			if (mullEntityRow.getRelativeEntitlement() < 0) {
 				factory.copyName() //
-				.withObjectAndFeature(mullEntityRow, ADPPackage.Literals.MULL_ENTITY_ROW__RELATIVE_ENTITLEMENT) //
-				.withMessage("Reference entitlement must be nonnegative") //
-				.make(ctx, statuses);
-			}
-			
-			if (mullEntityRow.getSalesContractAllocationRows().isEmpty() && mullEntityRow.getDesSalesMarketAllocationRows().isEmpty()) {
-				factory.copyName() //
-				.withObjectAndFeature(mullEntityRow, ADPPackage.Literals.MULL_ENTITY_ROW__SALES_CONTRACT_ALLOCATION_ROWS) //
-				.withObjectAndFeature(mullEntityRow, ADPPackage.Literals.MULL_ENTITY_ROW__DES_SALES_MARKET_ALLOCATION_ROWS) //
-				.withMessage("Entity allocation must have sales contract or DES sales market allocations") //
-				.make(ctx, statuses);
-			} else {
-				if (!mullEntityRow.getSalesContractAllocationRows().isEmpty()) {
-					validateDuplicateSalesAllocationRows(factory, mullEntityRow, ctx, statuses);
+						.withObjectAndFeature(mullEntityRow, ADPPackage.Literals.MULL_ENTITY_ROW__RELATIVE_ENTITLEMENT) //
+						.withMessage("Reference entitlement must be nonnegative") //
+						.make(ctx, statuses);
+			} else if (mullEntityRow.getRelativeEntitlement() == 0.0) {
+				final List<MullAllocationRow> nonzeroAACQMullAllocations = Stream.concat(mullEntityRow.getSalesContractAllocationRows().stream().map(MullAllocationRow.class::cast),
+						mullEntityRow.getDesSalesMarketAllocationRows().stream().map(MullAllocationRow.class::cast)).filter(row -> row.getWeight() > 0).collect(Collectors.toList());
+				if (!nonzeroAACQMullAllocations.isEmpty()) {
+					factory.copyName().withObjectAndFeature(mullEntityRow, ADPPackage.Literals.MULL_ENTITY_ROW__RELATIVE_ENTITLEMENT);
+					for (final MullAllocationRow mullAllocationRow : nonzeroAACQMullAllocations) {
+						factory.withObjectAndFeature(mullAllocationRow, ADPPackage.Literals.MULL_ALLOCATION_ROW__WEIGHT);
+					}
+					factory.withMessage("Entity with relative entitlement equal to zero must not have allocations with non-zero AACQ") //
+							.make(ctx, statuses);
 				}
-				if (!mullEntityRow.getDesSalesMarketAllocationRows().isEmpty()) {
-					validateDuplicateDESMarketAllocationRows(factory, mullEntityRow, ctx, statuses);
+			} else {
+				if (mullEntityRow.getSalesContractAllocationRows().isEmpty() && mullEntityRow.getDesSalesMarketAllocationRows().isEmpty()) {
+					factory.copyName() //
+							.withObjectAndFeature(mullEntityRow, ADPPackage.Literals.MULL_ENTITY_ROW__SALES_CONTRACT_ALLOCATION_ROWS) //
+							.withObjectAndFeature(mullEntityRow, ADPPackage.Literals.MULL_ENTITY_ROW__DES_SALES_MARKET_ALLOCATION_ROWS) //
+							.withMessage("Entity allocation must have sales contract or DES sales market allocations") //
+							.make(ctx, statuses);
+				} else {
+					if (!mullEntityRow.getSalesContractAllocationRows().isEmpty()) {
+						validateDuplicateSalesAllocationRows(factory, mullEntityRow, ctx, statuses);
+					}
+					if (!mullEntityRow.getDesSalesMarketAllocationRows().isEmpty()) {
+						validateDuplicateDESMarketAllocationRows(factory, mullEntityRow, ctx, statuses);
+					}
 				}
 			}
 		}
 	}
-	
-	private void validateDuplicateSalesAllocationRows(@NonNull final DetailConstraintStatusFactory factory, final MullEntityRow mullEntityRow, final IValidationContext ctx, final List<IStatus> statuses) {
+
+	private void validateDuplicateSalesAllocationRows(@NonNull final DetailConstraintStatusFactory factory, final MullEntityRow mullEntityRow, final IValidationContext ctx,
+			final List<IStatus> statuses) {
 		final Map<SalesContract, List<SalesContractAllocationRow>> salesContractAllocationRows = new HashMap<>();
 		for (final SalesContractAllocationRow salesContractAllocationRow : mullEntityRow.getSalesContractAllocationRows()) {
 			if (salesContractAllocationRow.getContract() == null) {
@@ -106,8 +121,9 @@ public class MullEntityRowConstraint extends AbstractModelMultiConstraint {
 					}
 				});
 	}
-	
-	private void validateDuplicateDESMarketAllocationRows(@NonNull final DetailConstraintStatusFactory factory, final MullEntityRow mullEntityRow, final IValidationContext ctx, final List<IStatus> statuses) {
+
+	private void validateDuplicateDESMarketAllocationRows(@NonNull final DetailConstraintStatusFactory factory, final MullEntityRow mullEntityRow, final IValidationContext ctx,
+			final List<IStatus> statuses) {
 		final Map<DESSalesMarket, List<DESSalesMarketAllocationRow>> desSalesMarketAllocationRows = new HashMap<>();
 		for (final DESSalesMarketAllocationRow desSalesMarketAllocationRow : mullEntityRow.getDesSalesMarketAllocationRows()) {
 			if (desSalesMarketAllocationRow.getDesSalesMarket() == null) {

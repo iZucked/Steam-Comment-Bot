@@ -6,8 +6,13 @@
  */
 package com.mmxlabs.models.lng.cargo.presentation.composites;
 
+import com.mmxlabs.models.lng.cargo.CanalBookings;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-
+import com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters;
+import com.mmxlabs.models.lng.port.ui.editorpart.MultiplePortReferenceManipulator;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
@@ -15,14 +20,24 @@ import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
+import com.mmxlabs.models.ui.tabular.TabularDataInlineEditor;
+import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.StringAttributeManipulator;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
-
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 
 /**
  * A component helper for CanalBookings instances
@@ -64,19 +79,14 @@ public class CanalBookingsComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editors for features on this class directly, and superclass' features.
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_canalBookingSlotsEditor(detailComposite, topClass);
-		add_strictBoundaryOffsetDaysEditor(detailComposite, topClass);
-		add_relaxedBoundaryOffsetDaysEditor(detailComposite, topClass);
 		add_arrivalMarginHoursEditor(detailComposite, topClass);
-		add_flexibleBookingAmountNorthboundEditor(detailComposite, topClass);
-		add_flexibleBookingAmountSouthboundEditor(detailComposite, topClass);
-		add_northboundMaxIdleDaysEditor(detailComposite, topClass);
-		add_southboundMaxIdleDaysEditor(detailComposite, topClass);
+		add_vesselGroupCanalParametersEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the canalBookingSlots feature on CanalBookings
@@ -145,5 +155,81 @@ public class CanalBookingsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_southboundMaxIdleDaysEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKINGS__SOUTHBOUND_MAX_IDLE_DAYS));
+	}
+
+	/**
+	 * Create the editor for the bookingExemptVessels feature on CanalBookings
+	 *
+	 * @generated
+	 */
+	protected void add_bookingExemptVesselsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKINGS__BOOKING_EXEMPT_VESSELS));
+	}
+
+	/**
+	 * Create the editor for the vesselGroupCanalParameters feature on CanalBookings
+	 *
+	 * @generated NOT
+	 */
+	protected void add_vesselGroupCanalParametersEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		//detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS));
+		TabularDataInlineEditor.Builder b = new TabularDataInlineEditor.Builder();
+		b.withShowHeaders(true);
+		b.withLabel("Waiting Days");
+		b.withContentProvider(new ArrayContentProvider());
+		b.withHeightHint(100);
+
+		addTextColumn(b, "Booking Code", MMXCorePackage.Literals.NAMED_OBJECT__NAME);
+	
+		addNumericColumn(b, "Northbound", CargoPackage.Literals.VESSEL_GROUP_CANAL_PARAMETERS__NORTHBOUND_WAITING_DAYS);
+		
+		addNumericColumn(b, "Southbound", CargoPackage.Literals.VESSEL_GROUP_CANAL_PARAMETERS__SOUTHBOUND_WAITING_DAYS);
+
+		addColumn(b, "Vessel Group", CargoPackage.eINSTANCE.getVesselGroupCanalParameters(), CargoPackage.Literals.VESSEL_GROUP_CANAL_PARAMETERS__VESSEL_GROUP);
+
+		b.withAction("Add", (ch, sel) -> {
+			CanalBookings canalBookings = ScenarioModelUtil.getCargoModel((LNGScenarioModel) ch.getModelReference().getInstance()).getCanalBookings();
+			VesselGroupCanalParameters vgcp = CargoFactory.eINSTANCE.createVesselGroupCanalParameters();
+			Command c = AddCommand.create(ch.getEditingDomain(), canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS, vgcp);
+			ch.handleCommand(c, vgcp, CargoPackage.Literals.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS);
+
+		});
+		b.withAction("Delete", (ch, sel) -> {
+
+			if (sel instanceof IStructuredSelection) {
+				IStructuredSelection ss = (IStructuredSelection) sel;
+				if (!ss.isEmpty()) {
+					CanalBookings canalBookings = ScenarioModelUtil.getCargoModel((LNGScenarioModel) ch.getModelReference().getInstance()).getCanalBookings();
+					Command c = RemoveCommand.create(ch.getEditingDomain(), canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS, ss.toList());
+					ch.handleCommand(c, canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS);
+				}
+			}
+		}, false, (btn, sel) -> btn.setEnabled(!sel.isEmpty()));
+
+		detailComposite.addInlineEditor(b.build(CargoPackage.Literals.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS));
+	}
+
+	private void addTextColumn(TabularDataInlineEditor.Builder b, String columnName, EAttribute feature) {
+		b.buildColumn(columnName, feature) //
+		.withWidth(120) //
+		.withRMMaker((ed, rvp) -> new StringAttributeManipulator(feature, ed)) //
+		.build();
+	}
+	
+	private void addColumn(TabularDataInlineEditor.Builder b, String name, EClass owner, EReference reference) {
+		b.buildColumn(name, reference)
+		.withRMMaker((ed, rvp) -> new MultipleReferenceManipulator(reference, ed,
+				rvp.getReferenceValueProvider(owner, 
+						reference),
+				MMXCorePackage.eINSTANCE.getNamedObject_Name())) //
+		.withWidth(100)//
+		.build();
+	}
+	
+	private void addNumericColumn(TabularDataInlineEditor.Builder b, String columnName, EAttribute feature) {
+		b.buildColumn(columnName, feature) //
+		.withWidth(120) //
+		.withRMMaker((ed, rvp) -> new NumericAttributeManipulator(feature, ed)) //
+		.build();
 	}
 }

@@ -6,6 +6,8 @@ package com.mmxlabs.models.lng.adp.mull;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,6 +18,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.models.lng.adp.MullAllocationRow;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SchedulingTimeWindow;
@@ -39,8 +42,10 @@ public abstract class AllocationTracker {
 
 	protected AllocationTracker(final MullAllocationRow row, final double totalWeight) {
 		this.aacq = row.getWeight();
-		this.relativeEntitlement = this.aacq / totalWeight;
 		this.vesselList = row.getVessels();
+//		this.relativeEntitlement = this.aacq / totalWeight;
+		final double averageVesselSize = row.getVessels().stream().mapToInt(Vessel::getVesselOrDelegateCapacity).sum() / ((double) row.getVessels().size());
+		this.relativeEntitlement = this.aacq * averageVesselSize / totalWeight;
 	}
 
 	public int getAACQ() {
@@ -57,6 +62,10 @@ public abstract class AllocationTracker {
 
 	public void dropAllocation(final long allocationDrop) {
 		this.runningAllocation -= allocationDrop;
+	}
+
+	public void phase1DropAllocation(final long allocationDrop) {
+		dropAllocation(allocationDrop);
 	}
 
 	public int calculateExpectedAllocationDrop(final Map<Vessel, LocalDateTime> vesselToMostRecentUseDateTime, final int defaultAllocationDrop, final int loadDuration) {
@@ -100,13 +109,18 @@ public abstract class AllocationTracker {
 		}
 	}
 
-	public static LocalDate calculateDischargeDate(@NonNull final LoadSlot loadSlot, @NonNull DischargeSlot dischargeSlot, final Vessel vessel, @NonNull final IScenarioDataProvider sdp, final Map<Vessel, VesselAvailability> vesselToVA, final LNGScenarioModel sm) {
+	public void phase1Undo(final CargoBlueprint cargoBlueprint) {
+		undo(cargoBlueprint);
+	}
+
+	public static LocalDate calculateDischargeDate(@NonNull final LoadSlot loadSlot, @NonNull DischargeSlot dischargeSlot, final Vessel vessel, @NonNull final IScenarioDataProvider sdp,
+			final Map<Vessel, VesselAvailability> vesselToVA, final LNGScenarioModel sm) {
 		final VesselAvailability vesselAvailability = vesselToVA.get(vessel);
 		if (vesselAvailability == null) {
 			final int travelTime = CargoEditorMenuHelper.getTravelTime(loadSlot, dischargeSlot, vessel, sdp);
 			if (travelTime == Integer.MAX_VALUE) {
-				final String message = String.format("Cannot determine travel time between %s and %s.%n Travel time cannot be %d hours.", loadSlot.getPort().getName(), dischargeSlot.getPort().getName(),
-						travelTime);
+				final String message = String.format("Cannot determine travel time between %s and %s.%n Travel time cannot be %d hours.", loadSlot.getPort().getName(),
+						dischargeSlot.getPort().getName(), travelTime);
 				throw new RuntimeException(message);
 			}
 			final SchedulingTimeWindow loadSTW = loadSlot.getSchedulingTimeWindow();
@@ -115,9 +129,15 @@ public abstract class AllocationTracker {
 			final double vesselMaxSpeedKnots = Math.max(vessel.getVesselOrDelegateMaxSpeed(), 0.0);
 			@NonNull
 			final ModelDistanceProvider modelDistanceProvider = sdp.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
-			final Integer minTime = CargoTravelTimeUtils.getFobMinTimeInHours(loadSlot, dischargeSlot, loadSlot.getWindowStart(), vesselAvailability, ScenarioModelUtil.getPortModel(sm), vesselMaxSpeedKnots, modelDistanceProvider);
+			final Integer minTime = CargoTravelTimeUtils.getFobMinTimeInHours(loadSlot, dischargeSlot, loadSlot.getWindowStart(), vesselAvailability, ScenarioModelUtil.getPortModel(sm),
+					vesselMaxSpeedKnots, modelDistanceProvider);
 			final SchedulingTimeWindow loadSTW = loadSlot.getSchedulingTimeWindow();
-			return loadSTW.getStart().plusHours(minTime + (long) loadSTW.getDuration()).withDayOfMonth(1).withHour(0).toLocalDate();
+			final ZonedDateTime loadTimeZoneDischargeArrival = loadSTW.getStart().plusHours(minTime + (long) loadSTW.getDuration());
+			final ZonedDateTime dischargeTimeZoneDischargeArrival = loadTimeZoneDischargeArrival
+					.withZoneSameInstant(ZoneId.of(dischargeSlot.getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
+			final LocalDateTime localDischargeArrival = dischargeTimeZoneDischargeArrival.toLocalDateTime();
+
+			return localDischargeArrival.withDayOfMonth(1).withHour(0).toLocalDate();
 		}
 	}
 
@@ -126,7 +146,12 @@ public abstract class AllocationTracker {
 
 	public abstract void dropFixedLoad(final Cargo cargo);
 
+	public abstract void phase1DropFixedLoad(final Cargo cargo);
+
 	public void dropFixedLoad(final int volumeLoaded) {
 		this.runningAllocation -= volumeLoaded;
 	}
+
+	public abstract boolean satisfiedAACQ();
+
 }

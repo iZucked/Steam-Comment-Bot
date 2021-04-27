@@ -161,6 +161,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="canalArrivalTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="canalBookingPeriod" eType="#//PanamaBookingPeriod"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="canalEntrancePort" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="canalJourneyEvent" eType="#//CanalJourneyEvent"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Idle" eSuperTypes="#//Event #//FuelUsage">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="laden" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
@@ -365,9 +367,13 @@
   <eClassifiers xsi:type="ecore:EClass" name="CharterAvailableToEvent" eSuperTypes="#//Event">
     <eStructuralFeatures xsi:type="ecore:EReference" name="linkedSequence" eType="#//Sequence"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CanalBookingEvent" eSuperTypes="#//Event">
+  <eClassifiers xsi:type="ecore:EClass" name="CanalJourneyEvent" eSuperTypes="#//Event">
     <eStructuralFeatures xsi:type="ecore:EReference" name="linkedSequence" eType="#//Sequence"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="linkedJourney" eType="#//Journey"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="panamaWaitingTimeHours"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxAvailablePanamaWaitingTimeHours"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CharterAvailableFromEvent" eSuperTypes="#//Event">
     <eStructuralFeatures xsi:type="ecore:EReference" name="linkedSequence" eType="#//Sequence"/>

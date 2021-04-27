@@ -10,8 +10,12 @@ import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 
+import com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 import java.time.LocalDate;
 import org.eclipse.emf.common.notify.Notification;
@@ -34,6 +38,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getBookingDate <em>Booking Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getSlot <em>Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getNotes <em>Notes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getVessel <em>Vessel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingSlotImpl#getBookingCode <em>Booking Code</em>}</li>
  * </ul>
  *
  * @generated
@@ -47,7 +53,7 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	 * @generated
 	 * @ordered
 	 */
-	protected static final RouteOption ROUTE_OPTION_EDEFAULT = RouteOption.DIRECT;
+	protected static final RouteOption ROUTE_OPTION_EDEFAULT = RouteOption.PANAMA;
 
 	/**
 	 * The cached value of the '{@link #getRouteOption() <em>Route Option</em>}' attribute.
@@ -128,6 +134,26 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	 * @ordered
 	 */
 	protected String notes = NOTES_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getVessel() <em>Vessel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVessel()
+	 * @generated
+	 * @ordered
+	 */
+	protected AVesselSet<Vessel> vessel;
+
+	/**
+	 * The cached value of the '{@link #getBookingCode() <em>Booking Code</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBookingCode()
+	 * @generated
+	 * @ordered
+	 */
+	protected VesselGroupCanalParameters bookingCode;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -285,6 +311,87 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public AVesselSet<Vessel> getVessel() {
+		if (vessel != null && vessel.eIsProxy()) {
+			InternalEObject oldVessel = (InternalEObject)vessel;
+			vessel = (AVesselSet<Vessel>)eResolveProxy(oldVessel);
+			if (vessel != oldVessel) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.CANAL_BOOKING_SLOT__VESSEL, oldVessel, vessel));
+			}
+		}
+		return vessel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AVesselSet<Vessel> basicGetVessel() {
+		return vessel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setVessel(AVesselSet<Vessel> newVessel) {
+		AVesselSet<Vessel> oldVessel = vessel;
+		vessel = newVessel;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKING_SLOT__VESSEL, oldVessel, vessel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public VesselGroupCanalParameters getBookingCode() {
+		if (bookingCode != null && bookingCode.eIsProxy()) {
+			InternalEObject oldBookingCode = (InternalEObject)bookingCode;
+			bookingCode = (VesselGroupCanalParameters)eResolveProxy(oldBookingCode);
+			if (bookingCode != oldBookingCode) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.CANAL_BOOKING_SLOT__BOOKING_CODE, oldBookingCode, bookingCode));
+			}
+		}
+		return bookingCode;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VesselGroupCanalParameters basicGetBookingCode() {
+		return bookingCode;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setBookingCode(VesselGroupCanalParameters newBookingCode) {
+		VesselGroupCanalParameters oldBookingCode = bookingCode;
+		bookingCode = newBookingCode;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKING_SLOT__BOOKING_CODE, oldBookingCode, bookingCode));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -299,6 +406,12 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 				return basicGetSlot();
 			case CargoPackage.CANAL_BOOKING_SLOT__NOTES:
 				return getNotes();
+			case CargoPackage.CANAL_BOOKING_SLOT__VESSEL:
+				if (resolve) return getVessel();
+				return basicGetVessel();
+			case CargoPackage.CANAL_BOOKING_SLOT__BOOKING_CODE:
+				if (resolve) return getBookingCode();
+				return basicGetBookingCode();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -308,6 +421,7 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -325,6 +439,12 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 				return;
 			case CargoPackage.CANAL_BOOKING_SLOT__NOTES:
 				setNotes((String)newValue);
+				return;
+			case CargoPackage.CANAL_BOOKING_SLOT__VESSEL:
+				setVessel((AVesselSet<Vessel>)newValue);
+				return;
+			case CargoPackage.CANAL_BOOKING_SLOT__BOOKING_CODE:
+				setBookingCode((VesselGroupCanalParameters)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -353,6 +473,12 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 			case CargoPackage.CANAL_BOOKING_SLOT__NOTES:
 				setNotes(NOTES_EDEFAULT);
 				return;
+			case CargoPackage.CANAL_BOOKING_SLOT__VESSEL:
+				setVessel((AVesselSet<Vessel>)null);
+				return;
+			case CargoPackage.CANAL_BOOKING_SLOT__BOOKING_CODE:
+				setBookingCode((VesselGroupCanalParameters)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -375,6 +501,10 @@ public class CanalBookingSlotImpl extends MMXObjectImpl implements CanalBookingS
 				return slot != null;
 			case CargoPackage.CANAL_BOOKING_SLOT__NOTES:
 				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
+			case CargoPackage.CANAL_BOOKING_SLOT__VESSEL:
+				return vessel != null;
+			case CargoPackage.CANAL_BOOKING_SLOT__BOOKING_CODE:
+				return bookingCode != null;
 		}
 		return super.eIsSet(featureID);
 	}

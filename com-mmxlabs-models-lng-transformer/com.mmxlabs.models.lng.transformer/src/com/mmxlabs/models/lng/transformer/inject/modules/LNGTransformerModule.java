@@ -233,8 +233,8 @@ public class LNGTransformerModule extends AbstractModule {
 		// Default bindings for caches
 		final CacheMode mode = hints.contains(LNGTransformerHelper.HINT_TESTING_IGNORE_CACHE_SETTINGS) ? CacheMode.Off : CacheMode.On;
 
-		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_ArrivalTimeCache)).toInstance(mode);
-		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_PNLTrimmerCache)).toInstance(mode);
+		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_TimeWindowSchedulerCache)).toInstance(mode);
+		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_PNLBasedWindowTrimmerCache)).toInstance(mode);
 		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VoyagePlanEvaluatorCache)).toInstance(mode);
 
 		// Default two weeks idle time.

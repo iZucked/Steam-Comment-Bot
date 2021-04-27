@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.views.sandbox;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,6 +18,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -196,20 +198,26 @@ public class OptionMenuHelper {
 								.collect(Collectors.groupingBy(Slot::getPort));
 						final SubLocalMenuHelper subHelper = new SubLocalMenuHelper("By port");
 
+						final List<SubLocalMenuHelper> menus = new ArrayList<>(slotsByPort.size());
 						for (final Map.Entry<Port, List<T>> ee : slotsByPort.entrySet()) {
 							final Port p = ee.getKey();
 							assert p != null;
 							final SubLocalMenuHelper portMenuHelper = new SubLocalMenuHelper(p.getName());
+
+							final List<IAction> actions = new ArrayList<>(ee.getValue().size());
 							for (final T s : ee.getValue()) {
 								final EObject row = referenceFactory.apply(s);
-								portMenuHelper.addAction(new RunnableAction(f.render(row), () -> {
+								actions.add(new RunnableAction(f.render(row), () -> {
 									scenarioEditingLocation.getDefaultCommandHandler().handleCommand(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, containerFeature, row), model,
 											containerFeature);
-									// DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, row);
 								}));
 							}
-							subHelper.addSubMenu(portMenuHelper);
+							actions.sort((a, b) -> a.getText().compareTo(b.getText()));
+							actions.forEach(portMenuHelper::addAction);
+							menus.add(portMenuHelper);
 						}
+						menus.sort((a, b) -> a.getTitle().compareTo(b.getTitle()));
+						menus.forEach(subHelper::addSubMenu);
 						existinMenuHelper.addSubMenu(subHelper);
 					}
 					{
@@ -222,28 +230,37 @@ public class OptionMenuHelper {
 								.collect(Collectors.toList());
 
 						final SubLocalMenuHelper subHelper = new SubLocalMenuHelper("By contract");
+						final List<SubLocalMenuHelper> menus = new ArrayList<>(slotsByContract.size());
 						for (final Map.Entry<Contract, List<T>> ee : slotsByContract.entrySet()) {
 							final Contract p = ee.getKey();
 							assert p != null;
 							final SubLocalMenuHelper portMenuHelper = new SubLocalMenuHelper(p.getName());
+							final List<IAction> actions = new ArrayList<>(ee.getValue().size());
 							for (final T s : ee.getValue()) {
 								final EObject row = referenceFactory.apply(s);
-								portMenuHelper.addAction(new RunnableAction(f.render(row), () -> {
+								actions.add(new RunnableAction(f.render(row), () -> {
 									scenarioEditingLocation.getDefaultCommandHandler().handleCommand(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, containerFeature, row), model,
 											containerFeature);
 								}));
 							}
-							subHelper.addSubMenu(portMenuHelper);
+							actions.sort((a, b) -> a.getText().compareTo(b.getText()));
+							actions.forEach(portMenuHelper::addAction);
+							menus.add(portMenuHelper);
 						}
+						menus.sort((a, b) -> a.getTitle().compareTo(b.getTitle()));
+						menus.forEach(subHelper::addSubMenu);
 						{
 							final SubLocalMenuHelper portMenuHelper = new SubLocalMenuHelper("Spot");
+							final List<IAction> actions = new ArrayList<>(noContractSlots.size());
 							for (final T s : noContractSlots) {
 								final EObject row = referenceFactory.apply(s);
-								portMenuHelper.addAction(new RunnableAction(f.render(row), () -> {
+								actions.add(new RunnableAction(f.render(row), () -> {
 									scenarioEditingLocation.getDefaultCommandHandler().handleCommand(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, containerFeature, row), model,
 											containerFeature);
 								}));
 							}
+							actions.sort((a, b) -> a.getText().compareTo(b.getText()));
+							actions.forEach(portMenuHelper::addAction);
 							subHelper.addSubMenu(portMenuHelper);
 						}
 						existinMenuHelper.addSubMenu(subHelper);
@@ -253,14 +270,17 @@ public class OptionMenuHelper {
 					final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(((LNGScenarioModel) scenarioEditingLocation.getRootObject()));
 
 					final BiConsumer<SubLocalMenuHelper, SpotMarketGroup> menuMaker = (menuHelper, group) -> {
+						final List<IAction> actions = new ArrayList<>(group.getMarkets().size());
 						for (final SpotMarket market : group.getMarkets()) {
-							menuHelper.addAction(new RunnableAction(market.getName(), () -> {
+							actions.add(new RunnableAction(market.getName(), () -> {
 
 								final EObject row = marketFactory.apply(market);
 								scenarioEditingLocation.getDefaultCommandHandler().handleCommand(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, containerFeature, row), model,
 										containerFeature);
 							}));
 						}
+						actions.sort((a, b) -> a.getText().compareTo(b.getText()));
+						actions.forEach(menuHelper::addAction);
 					};
 
 					if (purchase) {
@@ -373,14 +393,16 @@ public class OptionMenuHelper {
 							final EClass p = ee.getKey();
 							assert getEventName(p) != null;
 							final SubLocalMenuHelper portMenuHelper = new SubLocalMenuHelper(getEventName(p));
+							final List<IAction> actions = new ArrayList<>(ee.getValue().size());
 							for (final VesselEvent s : ee.getValue()) {
 								final EObject row = referenceFactory.apply(s);
-								portMenuHelper.addAction(new RunnableAction(f.render(row), () -> {
+								actions.add(new RunnableAction(f.render(row), () -> {
 									scenarioEditingLocation.getDefaultCommandHandler().handleCommand(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, containerFeature, row), model,
 											containerFeature);
-									// DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, row);
 								}));
 							}
+							actions.sort((a, b) -> a.getText().compareTo(b.getText()));
+							actions.forEach(portMenuHelper::addAction);
 							existinMenuHelper.addSubMenu(portMenuHelper);
 						}
 					}
@@ -390,7 +412,8 @@ public class OptionMenuHelper {
 					//// for (final T s : noContractSlots) {
 					//// final EObject row = referenceFactory.apply(s);
 					//// portMenuHelper.addAction(new RunnableAction(f.render(row), () -> {
-					//// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(AddCommand.create(scenarioEditingLocation.getEditingDomain(), model, containerFeature, row), model,
+					//// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(AddCommand.create(scenarioEditingLocation.getEditingDomain(),
+					// model, containerFeature, row), model,
 					//// containerFeature);
 					//// }));
 					//// }

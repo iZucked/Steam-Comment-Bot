@@ -169,6 +169,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Journey/canalArrivalTime"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Journey/canalBookingPeriod"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//Journey/canalEntrancePort"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//Journey/canalJourneyEvent"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//Idle">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Idle/laden"/>
@@ -289,9 +290,11 @@
     <genClasses ecoreClass="schedule.ecore#//CharterAvailableToEvent">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//CharterAvailableToEvent/linkedSequence"/>
     </genClasses>
-    <genClasses ecoreClass="schedule.ecore#//CanalBookingEvent">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//CanalBookingEvent/linkedSequence"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//CanalBookingEvent/linkedJourney"/>
+    <genClasses ecoreClass="schedule.ecore#//CanalJourneyEvent">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//CanalJourneyEvent/linkedSequence"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//CanalJourneyEvent/linkedJourney"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//CanalJourneyEvent/panamaWaitingTimeHours"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//CanalJourneyEvent/maxAvailablePanamaWaitingTimeHours"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//CharterAvailableFromEvent">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//CharterAvailableFromEvent/linkedSequence"/>

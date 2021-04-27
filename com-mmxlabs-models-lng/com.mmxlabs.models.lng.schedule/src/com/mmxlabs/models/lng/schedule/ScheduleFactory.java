@@ -348,6 +348,15 @@ public interface ScheduleFactory extends EFactory {
 	CharterAvailableToEvent createCharterAvailableToEvent();
 
 	/**
+	 * Returns a new object of class '<em>Canal Journey Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Canal Journey Event</em>'.
+	 * @generated
+	 */
+	CanalJourneyEvent createCanalJourneyEvent();
+
+	/**
 	 * Returns a new object of class '<em>Charter Available From Event</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -364,15 +373,6 @@ public interface ScheduleFactory extends EFactory {
 	 * @generated
 	 */
 	GroupedCharterLengthEvent createGroupedCharterLengthEvent();
-
-	/**
-	 * Returns a new object of class '<em>Canal Booking Event</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Canal Booking Event</em>'.
-	 * @generated
-	 */
-	CanalBookingEvent createCanalBookingEvent();
 
 	/**
 	 * Returns a new object of class '<em>Inventory Events</em>'.

@@ -14,8 +14,12 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
+import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
@@ -29,6 +33,7 @@ import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
@@ -43,19 +48,21 @@ public class CanalBookingsReportTransformer {
 		public final boolean preBooked;
 		public final String scheduleName;
 		public final @Nullable LocalDateTime bookingDate;
+		public final @Nullable String bookingCode;
 		public final @Nullable String entryPointName;
 		public final @Nullable PortVisit event;
 		public final RouteOption routeOption;
 		public final CanalBookingSlot booking;
-		public final String period;
+		public final String type;
 		public final Slot nextSlot;
 		public final String notes;
 		public boolean warn;
 		public boolean pinned;
+		public final @Nullable String vessel;
 
 		public RowData(final @NonNull String scheduleName, boolean pinned, final boolean preBooked, final CanalBookingSlot booking, final RouteOption routeOption,
-				final @NonNull LocalDateTime bookingDate, final @NonNull String entryPointName, final @Nullable PortVisit usedSlot, final String period, final @Nullable Slot nextSlot,
-				@Nullable final String notes) {
+				final @NonNull LocalDateTime bookingDate, final @NonNull String entryPointName, final @Nullable PortVisit usedSlot, final String type, final @Nullable Slot nextSlot,
+				@Nullable final String notes, @Nullable final String bookingCode, @Nullable final String vessel) {
 			super();
 			this.scheduleName = scheduleName;
 			this.pinned = pinned;
@@ -65,9 +72,12 @@ public class CanalBookingsReportTransformer {
 			this.bookingDate = bookingDate;
 			this.entryPointName = entryPointName;
 			this.event = usedSlot;
-			this.period = period;
+			this.type = type;
 			this.nextSlot = nextSlot;
 			this.notes = notes == null ? "" : notes;
+			this.bookingCode = bookingCode == null ? "" : bookingCode;
+			this.vessel = vessel == null ? "" : vessel;
+			
 			this.warn = false;
 
 			this.dummy = false;
@@ -83,10 +93,12 @@ public class CanalBookingsReportTransformer {
 			this.event = null;
 			this.routeOption = null;
 			this.preBooked = false;
-			this.period = "";
+			this.type = "";
 			this.nextSlot = null;
 			this.warn = false;
 			this.notes = "";
+			this.bookingCode = "";
+			this.vessel = "";
 			this.dummy = true;
 		}
 	}
@@ -119,38 +131,26 @@ public class CanalBookingsReportTransformer {
 				if (evt instanceof Journey) {
 					final Journey journey = (Journey) evt;
 
-					String period = "";
+					String type = "";
 
 					switch (journey.getCanalBookingPeriod()) {
-					case BEYOND:
-						period = "Open";
-						break;
 					case NOMINAL:
-						period = "Nominal";
-						break;
-					case RELAXED:
-						period = "Relaxed";
-						break;
-					case STRICT:
-						period = "Strict";
+						type = "Nominal";
 						break;
 					default:
-						period = "Open";
+						if (journey.getCanalBooking() != null) {
+							type = "Booked";
+						}
+						else {
+							if (journey.getCanalJourneyEvent() != null) {
+								type = "Wait ("+(journey.getCanalJourneyEvent().getPanamaWaitingTimeHours()/24)+"d)";
+							}
+							else {
+								type = "Wait";
+							}
+						}
 						break;
-
 					}
-					//
-					// if (evt.getSequence() != null && evt.getSequence().getSequenceType() == SequenceType.ROUND_TRIP) {
-					// period = "Nominal";
-					// } else if (relaxedDate == null || strictDate == null || journey.getStart() == null) {
-					// period = "Open";
-					// } else if (journey.getStart().isAfter(relaxedDate.atStartOfDay(ZoneId.of("UTC")))) {
-					// period = "Open";
-					// } else if (journey.getStart().isAfter(strictDate.atStartOfDay(ZoneId.of("UTC")))) {
-					// period = "Relaxed";
-					// } else {
-					// period = "Strict";
-					// }
 
 					Event nextEvent = evt.getNextEvent();
 					Slot nextSlot = null;
@@ -170,13 +170,14 @@ public class CanalBookingsReportTransformer {
 						final CanalBookingSlot booking = journey.getCanalBooking();
 						final String entryPointName = modelDistanceProvider.getCanalEntranceName(journey.getRouteOption(), booking.getCanalEntrance());
 						result.add(new RowData(modelRecord.getName(), pinned, true, booking, journey.getRouteOption(), booking.getBookingDate().atTime(3, 0), entryPointName,
-								(PortVisit) journey.getPreviousEvent(), period, nextSlot, booking.getNotes()));
+								(PortVisit) journey.getPreviousEvent(), type, nextSlot, booking.getNotes(), getBookingCode(booking, cargoModel.getCanalBookings()), getVessel(booking, cargoModel.getCanalBookings())));
 						existingBookings.remove(booking);
 					} else if (journey.getRouteOption() == RouteOption.PANAMA) {
 						final String entryPointName = modelDistanceProvider.getCanalEntranceName(journey.getRouteOption(), journey.getCanalEntrance());
-
+						final String vesselName = getVesselName(journey);
+						final String bookingCode = getVesselBookingCode(journey, cargoModel.getCanalBookings());
 						final RowData rowData = new RowData(modelRecord.getName(), pinned, false, null, journey.getRouteOption(), journey.getCanalDateTime(), entryPointName,
-								(PortVisit) journey.getPreviousEvent(), period, nextSlot, "");
+								(PortVisit) journey.getPreviousEvent(), type, nextSlot, "", bookingCode, vesselName);
 						if (journey.getCanalBookingPeriod() == PanamaBookingPeriod.RELAXED) {
 							if (journey.getCanalEntrance() == CanalEntry.NORTHSIDE) {
 								relaxedSouthbound.add(rowData);
@@ -189,21 +190,66 @@ public class CanalBookingsReportTransformer {
 				}
 			}
 		}
-		if (cargoModel.getCanalBookings() != null) {
-			// if (relaxedNorthbound.size() > cargoModel.getCanalBookings().getFlexibleBookingAmountNorthbound()) {
-			// relaxedNorthbound.forEach(d -> d.warn = true);
-			// }
-			if (relaxedSouthbound.size() > cargoModel.getCanalBookings().getFlexibleBookingAmountSouthbound()) {
-				relaxedSouthbound.forEach(d -> d.warn = true);
-			}
-		}
+
 		// unused options
 		for (final CanalBookingSlot booking : existingBookings) {
 			final String entryPointName = modelDistanceProvider.getCanalEntranceName(booking.getRouteOption(), booking.getCanalEntrance());
-			result.add(new RowData(modelRecord.getName(), pinned, true, booking, booking.getRouteOption(), booking.getBookingDate().atTime(3, 0), entryPointName, null, "Unused", null,
-					booking.getNotes()));
+			if (booking.getBookingDate() != null) {
+				result.add(new RowData(modelRecord.getName(), pinned, true, booking, booking.getRouteOption(), booking.getBookingDate().atTime(3, 0), entryPointName, null, "Unused", null,
+					booking.getNotes(), getBookingCode(booking, cargoModel.getCanalBookings()), getVessel(booking, cargoModel.getCanalBookings())));
+			}
 		}
 
 		return result;
+	}
+	
+	private String getVesselBookingCode(Journey journey, CanalBookings canalBookings) {
+		if (journey.getSequence() != null && journey.getSequence().getVesselAvailability() != null && 
+				journey.getSequence().getVesselAvailability().getVessel() != null) {
+			Vessel vessel = journey.getSequence().getVesselAvailability().getVessel();
+			String defaultGroupName = "";
+			if (canalBookings != null) {
+				for (var vgp : canalBookings.getVesselGroupCanalParameters()) {
+					if (vgp.getVesselGroup() == null || vgp.getVesselGroup().isEmpty()) {
+						defaultGroupName = vgp.getName();
+					}
+					final Set<Vessel> vgvs = SetUtils.getObjects(vgp.getVesselGroup());
+					if (vgvs.contains(vessel)) {
+						return vgp.getName();
+					}
+				}
+			}
+			return defaultGroupName;
+		}
+		
+		//Unknown, shouldn't happen, but...
+		return "";
+	}
+
+	String getVesselName(final Journey journey) {
+		if (journey.getSequence() != null && journey.getSequence().getVesselAvailability() != null && 
+			journey.getSequence().getVesselAvailability().getVessel() != null) {
+			return journey.getSequence().getVesselAvailability().getVessel().getName();
+		}
+		//Else we don't know yet?
+		return "";
+	}
+	
+	String getVessel(final CanalBookingSlot booking, final CanalBookings bookings) {
+		if (booking.getVessel() instanceof Vessel || booking.getVessel() instanceof VesselGroup) {
+			return booking.getVessel().getName();
+		}
+		else {
+			return "";
+		}
+	}
+	
+	String getBookingCode(final CanalBookingSlot booking, final CanalBookings bookings) {
+		if (booking.getBookingCode() != null && booking.getBookingCode().getName() != null) {
+			return booking.getBookingCode().getName();
+		}
+		else {
+			return "";
+		}
 	}
 }

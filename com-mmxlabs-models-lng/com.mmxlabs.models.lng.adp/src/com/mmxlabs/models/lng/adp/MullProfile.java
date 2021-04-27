@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.adp.MullProfile#getVolumeFlex <em>Volume Flex</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.MullProfile#getInventories <em>Inventories</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.MullProfile#getFullCargoLotValue <em>Full Cargo Lot Value</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.adp.MullProfile#getCargoesToKeep <em>Cargoes To Keep</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.adp.ADPPackage#getMullProfile()
@@ -107,5 +108,17 @@ public interface MullProfile extends EObject {
 	 * @generated
 	 */
 	void setFullCargoLotValue(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Cargoes To Keep</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.adp.MullCargoWrapper}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cargoes To Keep</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getMullProfile_CargoesToKeep()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	EList<MullCargoWrapper> getCargoesToKeep();
 
 } // MullProfile

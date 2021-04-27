@@ -237,7 +237,7 @@ public class LNGScenarioRunnerCreator {
 						protected void configure() {
 							// Default bindings for caches
 							bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VoyagePlanEvaluatorCache)).toInstance(CacheMode.On);
-							bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_ArrivalTimeCache)).toInstance(CacheMode.On);
+							bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_TimeWindowSchedulerCache)).toInstance(CacheMode.On);
 						}
 					});
 				}

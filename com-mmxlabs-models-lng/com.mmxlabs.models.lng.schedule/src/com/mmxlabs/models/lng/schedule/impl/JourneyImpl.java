@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
@@ -55,6 +56,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalArrivalTime <em>Canal Arrival Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalBookingPeriod <em>Canal Booking Period</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalEntrancePort <em>Canal Entrance Port</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl#getCanalJourneyEvent <em>Canal Journey Event</em>}</li>
  * </ul>
  *
  * @generated
@@ -299,6 +301,16 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * @ordered
 	 */
 	protected Port canalEntrancePort;
+
+	/**
+	 * The cached value of the '{@link #getCanalJourneyEvent() <em>Canal Journey Event</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCanalJourneyEvent()
+	 * @generated
+	 * @ordered
+	 */
+	protected CanalJourneyEvent canalJourneyEvent;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -685,6 +697,51 @@ public class JourneyImpl extends EventImpl implements Journey {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public CanalJourneyEvent getCanalJourneyEvent() {
+		return canalJourneyEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetCanalJourneyEvent(CanalJourneyEvent newCanalJourneyEvent, NotificationChain msgs) {
+		CanalJourneyEvent oldCanalJourneyEvent = canalJourneyEvent;
+		canalJourneyEvent = newCanalJourneyEvent;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.JOURNEY__CANAL_JOURNEY_EVENT, oldCanalJourneyEvent, newCanalJourneyEvent);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCanalJourneyEvent(CanalJourneyEvent newCanalJourneyEvent) {
+		if (newCanalJourneyEvent != canalJourneyEvent) {
+			NotificationChain msgs = null;
+			if (canalJourneyEvent != null)
+				msgs = ((InternalEObject)canalJourneyEvent).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.JOURNEY__CANAL_JOURNEY_EVENT, null, msgs);
+			if (newCanalJourneyEvent != null)
+				msgs = ((InternalEObject)newCanalJourneyEvent).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.JOURNEY__CANAL_JOURNEY_EVENT, null, msgs);
+			msgs = basicSetCanalJourneyEvent(newCanalJourneyEvent, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.JOURNEY__CANAL_JOURNEY_EVENT, newCanalJourneyEvent, newCanalJourneyEvent));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public double getFuelCost() {
@@ -705,6 +762,8 @@ public class JourneyImpl extends EventImpl implements Journey {
 		switch (featureID) {
 			case SchedulePackage.JOURNEY__FUELS:
 				return ((InternalEList<?>)getFuels()).basicRemove(otherEnd, msgs);
+			case SchedulePackage.JOURNEY__CANAL_JOURNEY_EVENT:
+				return basicSetCanalJourneyEvent(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -748,6 +807,8 @@ public class JourneyImpl extends EventImpl implements Journey {
 			case SchedulePackage.JOURNEY__CANAL_ENTRANCE_PORT:
 				if (resolve) return getCanalEntrancePort();
 				return basicGetCanalEntrancePort();
+			case SchedulePackage.JOURNEY__CANAL_JOURNEY_EVENT:
+				return getCanalJourneyEvent();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -804,6 +865,9 @@ public class JourneyImpl extends EventImpl implements Journey {
 			case SchedulePackage.JOURNEY__CANAL_ENTRANCE_PORT:
 				setCanalEntrancePort((Port)newValue);
 				return;
+			case SchedulePackage.JOURNEY__CANAL_JOURNEY_EVENT:
+				setCanalJourneyEvent((CanalJourneyEvent)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -858,6 +922,9 @@ public class JourneyImpl extends EventImpl implements Journey {
 			case SchedulePackage.JOURNEY__CANAL_ENTRANCE_PORT:
 				setCanalEntrancePort((Port)null);
 				return;
+			case SchedulePackage.JOURNEY__CANAL_JOURNEY_EVENT:
+				setCanalJourneyEvent((CanalJourneyEvent)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -898,6 +965,8 @@ public class JourneyImpl extends EventImpl implements Journey {
 				return canalBookingPeriod != CANAL_BOOKING_PERIOD_EDEFAULT;
 			case SchedulePackage.JOURNEY__CANAL_ENTRANCE_PORT:
 				return canalEntrancePort != null;
+			case SchedulePackage.JOURNEY__CANAL_JOURNEY_EVENT:
+				return canalJourneyEvent != null;
 		}
 		return super.eIsSet(featureID);
 	}

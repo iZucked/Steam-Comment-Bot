@@ -183,6 +183,37 @@ public class ExistingBaseCaseToScheduleSpecification {
 				}
 			};
 
+			// Find any slots which are not in the start options but their other side is 
+			final Collection<LoadSlot> orphanedLoadSlots = new LinkedHashSet<>();
+			final Collection<DischargeSlot> orphanedDischargeSlots = new LinkedHashSet<>();
+			for (final BaseCaseRow row : baseCase.getBaseCase()) {
+				LoadSlot ls = null;
+				DischargeSlot ds = null;
+				
+				if (row.getBuyOption() != null) {
+					ls = getOrCreate(row.getBuyOption());
+				} else if (row.getSellOption() != null) {
+					ds = getOrCreate(row.getSellOption());
+				}
+				if (ls != null && ls.getCargo() != null) {
+					orphanedLoadSlots.remove(ls);
+					Slot<?> slot = ls.getCargo().getSortedSlots().get(1);
+					if (!slot.equals(ds)) {
+						orphanedDischargeSlots.add((DischargeSlot) slot);
+					}
+				}
+				if (ds != null && ds.getCargo() != null) {
+					orphanedDischargeSlots.remove(ds);
+					Slot<?> slot = ds.getCargo().getSortedSlots().get(0);
+					if (!slot.equals(ls)) {
+						orphanedLoadSlots.add((LoadSlot) slot);
+					}
+				}
+			}
+			
+			unusedLoads.addAll(orphanedLoadSlots);
+			unusedDischarges.addAll(orphanedDischargeSlots);
+			
 			for (final BaseCaseRow row : baseCase.getBaseCase()) {
 				// This row has a single open buy or sell position on it.
 				if (row.getVesselEventOption() == null

@@ -4,11 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.scheduling;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -23,9 +21,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
-import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
@@ -35,7 +31,6 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.RoundTripCargoEnd;
-import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.util.SequenceEvaluationUtils;
 import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
@@ -53,39 +48,32 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.schedule.PanamaBookingHelper;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.PanamaPeriod;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimeWindowsRecord;
 
 /**
- * A sequence scheduler which enumerates possible combinations of arrival times
- * explicitly, rather than using the GA byte array decoding method. This should
- * be subclassable into a random sequence scheduler as well, with reduced
- * decoding overhead
+ * A sequence scheduler which enumerates possible combinations of arrival times explicitly, rather than using the GA byte array decoding method. This should be subclassable into a random sequence
+ * scheduler as well, with reduced decoding overhead
  * 
  * @author hinton
  * 
  */
 public class FeasibleTimeWindowTrimmer {
-	
+
 	@Inject
 	@Named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)
 	private boolean checkPanamaCanalBookings = false;
 
 	/**
-	 * How long to let empty time windows be. Since these mostly happen at the end
-	 * of sequences we make this zero.
+	 * How long to let empty time windows be. Since these mostly happen at the end of sequences we make this zero.
 	 */
 	private static final int EMPTY_WINDOW_SIZE = 0;
 
 	/**
-	 * Flag indicating a round trip end element. The next element should be
-	 * considered to be the start of a sequence. (E.g. for the
-	 * DirectRandomSequenceScheduler it should reset the seed).
+	 * Flag indicating a round trip end element. The next element should be considered to be the start of a sequence. (E.g. for the DirectRandomSequenceScheduler it should reset the seed).
 	 */
 	private boolean[] isRoundTripEnd;
 	/**
-	 * The start times of each window, appropriately `clipped' to deal with
-	 * infeasible choices or null time windows.
+	 * The start times of each window, appropriately `clipped' to deal with infeasible choices or null time windows.
 	 */
 	private int[] windowStartTime;
 	/**
@@ -98,23 +86,17 @@ public class FeasibleTimeWindowTrimmer {
 	private PortTimeWindowsRecord[] recordsByIndex;
 
 	/**
-	 * Whether or not the {@link PortType} of any {@link PortSlot} associated with
-	 * each sequence element has {@link PortType} Virtual. If a sequence element is
-	 * virtual, the travel times should be held at zero and the virtual element and
-	 * its neighbors should have the same time window.
+	 * Whether or not the {@link PortType} of any {@link PortSlot} associated with each sequence element has {@link PortType} Virtual. If a sequence element is virtual, the travel times should be held
+	 * at zero and the virtual element and its neighbors should have the same time window.
 	 * 
-	 * Thus if we see A -> virtual -> B, the arrival time at B should be clamped to
-	 * the arrival time at A. This is done by checks in the
-	 * {@link #getMinArrivalTime(int, int)} and {@link #getMaxArrivalTime(int, int)}
-	 * methods.
+	 * Thus if we see A -> virtual -> B, the arrival time at B should be clamped to the arrival time at A. This is done by checks in the {@link #getMinArrivalTime(int, int)} and
+	 * {@link #getMaxArrivalTime(int, int)} methods.
 	 */
 	private boolean[] isVirtual;
 
 	/**
-	 * A flag to indicate that we should just use the timewindow rather than include
-	 * the previous journey time. Intended for use with the cargo shorts where each
-	 * cargo is indepenedent of the others on the route. Also used for actuals where
-	 * forcast travel time is irrelevant.
+	 * A flag to indicate that we should just use the timewindow rather than include the previous journey time. Intended for use with the cargo shorts where each cargo is indepenedent of the others on
+	 * the route. Also used for actuals where forcast travel time is irrelevant.
 	 */
 	private boolean[] useTimeWindow;
 	/**
@@ -193,9 +175,7 @@ public class FeasibleTimeWindowTrimmer {
 	}
 
 	/**
-	 * Returns an array of boolean values indicating whether, for each index of the
-	 * vessel location sequence, a sequence break occurs at that location
-	 * (separating one cargo from the next one).
+	 * Returns an array of boolean values indicating whether, for each index of the vessel location sequence, a sequence break occurs at that location (separating one cargo from the next one).
 	 * 
 	 * @param sequence
 	 * @return
@@ -524,7 +504,7 @@ public class FeasibleTimeWindowTrimmer {
 			// No shipping
 			return;
 		}
-		
+
 		final int size = sequence.size();
 		// filters out solutions with less than 2 elements (i.e. spot charters, etc.)
 		if (SequenceEvaluationUtils.shouldIgnoreSequence(sequence, vesselAvailability)) {
@@ -533,7 +513,7 @@ public class FeasibleTimeWindowTrimmer {
 
 		final boolean isRoundTripSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
 		if (isRoundTripSequence) {
-			// No panama bookings.
+			// No Panama bookings.
 			return;
 		}
 
@@ -543,435 +523,408 @@ public class FeasibleTimeWindowTrimmer {
 			return;
 		}
 
-		final int vesselMinSpeed = vessel.getMinSpeed();
 		boolean changed = false;
-		// Two passes - pass 0 allocate required panama voyages.
-		// - pass 1 force direct/suez where possible
-		for (int pass = 0; pass < 2; ++pass) {
+		// Two phases
+		// - Phase 0 allocate required Panama voyages. Allocated boooking and voyages where Panama (with booking or idle time) is faster.
+		// - Phase 1 force direct/suez where possible
+		for (int phase = 0; phase < 2; ++phase) {
 			if (changed) {
-				// Keep in the current pass until we stop changing stuff.
-				--pass;
+				// Keep in the current phase until we stop changing stuff.
+				--phase;
 				changed = false;
 			}
-			int index = 0;
-			ISequenceElement prevElement = null;
-			IPortSlot prevPortSlot = null;
 
-			// first pass, collecting start time windows
-			for (final ISequenceElement element : sequence) {
+			changed |= trimPanamaForwardsPass(sequence, travelTimeData, currentBookings, isRoundTripSequence, vessel, phase);
+			changed |= trimPanamaBackwardsPass(resource, sequence, travelTimeData, currentBookings, size, isRoundTripSequence, vessel);
+		}
 
-				final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
-				final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
+	}
 
-				if (index > 0 && !isRoundTripEnd[index] && !useTimeWindow[index]) {
-					assert prevElement != null;
-					assert prevPortSlot != null;
-					windowStartTime[index] = Math.max(windowStartTime[index], windowStartTime[index - 1] + travelTimeData.getMinTravelTime(index - 1));
+	private boolean trimPanamaForwardsPass(final ISequence sequence, final MinTravelTimeData travelTimeData, final CurrentBookingData currentBookings, final boolean isRoundTripSequence,
+			final @NonNull IVessel vessel, final int phase) {
 
-					if (!isRoundTripSequence && checkPanamaCanalBookings) {
+		boolean changed = false;
+		int index = 0;
+		ISequenceElement fromElement = null;
+		IPortSlot fromPortSlot = null;
 
-						final PortTimeWindowsRecord currentPortTimeWindowsRecord = recordsByIndex[index - 1];
+		// first pass, collecting start time windows
+		for (final ISequenceElement toElement : sequence) {
 
-						// Already processed?
-						if (currentPortTimeWindowsRecord.getSlotNextVoyageOptions(prevPortSlot) != AvailableRouteChoices.OPTIMAL
-								|| currentPortTimeWindowsRecord.getSlotIsNextVoyageConstrainedPanama(prevPortSlot)) {
+			final IPortSlot toPortSlot = portSlotProvider.getPortSlot(toElement);
 
-							windowStartTime[index] = Math.max(windowStartTime[index], windowStartTime[index - 1] + travelTimeData.getMinTravelTime(index - 1));
-							windowEndTime[index] = Math.max(windowEndTime[index], windowStartTime[index] + 1);
+			final int fromElementIndex = index - 1;
+			final int toElementIndex = index;
 
-							// Choice already allocation, skip
-							index++;
-							prevElement = element;
-							prevPortSlot = thisPortSlot;
+			if (toElementIndex > 0 && !isRoundTripEnd[toElementIndex] && !useTimeWindow[toElementIndex]) {
+				assert fromElement != null;
+				assert fromPortSlot != null;
 
-							continue;
-						}
+				windowStartTime[toElementIndex] = Math.max(windowStartTime[toElementIndex], windowStartTime[fromElementIndex] + travelTimeData.getMinTravelTime(fromElementIndex));
 
-						final IPortSlot p_prevPortSlot = prevPortSlot;
-						final int directTravelTime = travelTimeData.getTravelTime(ERouteOption.DIRECT, index - 1);
-						final int suezTravelTime = travelTimeData.getTravelTime(ERouteOption.SUEZ, index - 1);
-						final int panamaTravelTime = travelTimeData.getTravelTime(ERouteOption.PANAMA, index - 1);
+				if (!isRoundTripSequence && checkPanamaCanalBookings) {
 
-						if (panamaTravelTime == Integer.MAX_VALUE) {
-							// No Panama route, so an easy decision
-							travelTimeData.setMinTravelTime(index - 1, Math.min(suezTravelTime, directTravelTime));
-							currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.EXCLUDE_PANAMA, PanamaPeriod.Beyond);
-							changed = true;
-						} else {
-							@Nullable
-							final ECanalEntry routeOptionEntry = distanceProvider.getRouteOptionCanalEntrance(prevPortSlot.getPort(), ERouteOption.PANAMA);
-							if (routeOptionEntry != null) {
+					final PortTimeWindowsRecord currentPortTimeWindowsRecord = recordsByIndex[fromElementIndex];
 
-								final int toCanal = visitDuration[index - 1] + panamaBookingsHelper.getTravelTimeToCanal(vessel, prevPortSlot.getPort(), true);
-								final int fromEntryPoint = panamaBookingsHelper.getTravelTimeFromCanalEntry(vessel, routeOptionEntry, portSlot.getPort());
-									
-								final boolean northbound = distanceProvider.getRouteOptionDirection(prevPortSlot.getPort(), ERouteOption.PANAMA) == IDistanceProvider.RouteOptionDirection.NORTHBOUND;
+					// Already processed?
+					AvailableRouteChoices currentRouteOptions = currentPortTimeWindowsRecord.getSlotNextVoyageOptions(fromPortSlot);
+					if (currentRouteOptions != AvailableRouteChoices.OPTIMAL || currentPortTimeWindowsRecord.getSlotIsNextVoyageConstrainedPanama(fromPortSlot)) {
 
-								int endTime = windowEndTime[index];
-								if (endTime == Integer.MAX_VALUE) {
-									// No window end, so estimate one. At worst we will travel at min speed.
-									int slowPanamaTime = distanceProvider.getTravelTime(ERouteOption.PANAMA, vessel, prevPortSlot.getPort(), portSlot.getPort(), vesselMinSpeed);
+						windowStartTime[toElementIndex] = Math.max(windowStartTime[toElementIndex], windowStartTime[fromElementIndex] + travelTimeData.getMinTravelTime(fromElementIndex));
+						windowEndTime[toElementIndex] = Math.max(windowEndTime[toElementIndex], windowStartTime[toElementIndex] + 1);
 
-									if (northbound || this.panamaBookingsHelper.isSouthboundIdleTimeRuleEnabled()) {
-										slowPanamaTime += getMaxIdleDays(northbound) * 24;
-									} else {
-										slowPanamaTime += panamaBookingsProvider.getMarginInHours();
-									}
-									endTime = windowEndTime[index - 1] + visitDuration[index - 1] + slowPanamaTime;
+						// Choice already allocation, skip
+						index++;
+						fromElement = toElement;
+						fromPortSlot = toPortSlot;
+
+						continue;
+					}
+
+					final int directTravelTime = travelTimeData.getTravelTime(ERouteOption.DIRECT, fromElementIndex);
+					final int suezTravelTime = travelTimeData.getTravelTime(ERouteOption.SUEZ, fromElementIndex);
+					final int panamaTravelTime = travelTimeData.getTravelTime(ERouteOption.PANAMA, fromElementIndex);
+
+					if (!travelTimeData.isRouteValid(ERouteOption.PANAMA, fromElementIndex, currentRouteOptions)) {
+						// No Panama route, so an easy decision
+						travelTimeData.setMinTravelTime(fromElementIndex, Math.min(suezTravelTime, directTravelTime));
+						currentPortTimeWindowsRecord.setSlotNextVoyageOptions(fromPortSlot, AvailableRouteChoices.EXCLUDE_PANAMA);
+						currentPortTimeWindowsRecord.setSlotAdditionalPanamaDetails(fromPortSlot, false, 0);
+						changed = true;
+					} else {
+						final @Nullable ECanalEntry routeOptionEntry = distanceProvider.getRouteOptionCanalEntrance(fromPortSlot.getPort(), ERouteOption.PANAMA);
+						if (routeOptionEntry != null) {
+
+							final PanamaSegments panamaSegments = getPanamaTravelSegments(toElementIndex, vessel, fromPortSlot, toPortSlot);
+
+							final ECanalEntry panamaEntry = routeOptionEntry;
+							boolean bookingAllocated = false;
+							// TODO: Is this still a valid decision?
+							// Only check for actual bookings once.
+							if (phase == 0) {
+								// Only apply bookings is Panama is normally the faster option.
+								if (isBetterThroughPanama(windowStartTime[fromElementIndex], windowStartTime[toElementIndex], panamaTravelTime, Math.min(directTravelTime, suezTravelTime))) {
+
+									final List<IRouteOptionBooking> vesselBookings = currentBookings.getUnusedBookingsForSpecificVessel(vessel, panamaEntry);
+									bookingAllocated = applyFirstFeasibleBooking(travelTimeData, currentBookings, fromPortSlot, fromElementIndex, toElementIndex, currentPortTimeWindowsRecord,
+
+											panamaSegments, windowEndTime[toElementIndex], vesselBookings);
 								}
-								final int latestPanamaTime = endTime - fromEntryPoint
-										- ((northbound || this.panamaBookingsHelper.isSouthboundIdleTimeRuleEnabled()) ? getMaxIdleDays(northbound) * 24 : panamaBookingsProvider.getMarginInHours()); // Include
-								// 3am?
+							}
 
-								PanamaPeriod panamaPeriod;
-								if (panamaBookingsProvider.getRelaxedBoundary() == 0 && panamaBookingsProvider.getStrictBoundary() == 0) {
-									panamaPeriod = PanamaPeriod.Beyond;
-								} else {
-									if (latestPanamaTime > panamaBookingsProvider.getRelaxedBoundary()) {
-										panamaPeriod = PanamaPeriod.Beyond;
-										// For windows crossing boundaries we need to ensure the northbound idle days
-										// are taken into account but are not enforced yet.
-										// The price based trimmer (which we expect to be used with panama) will refine
-										// this further later on
-										if (windowStartTime[index - 1] + toCanal <= panamaBookingsProvider.getRelaxedBoundary()) {
-											// Reclassify southbound voyages as relaxed. Northbound we leave for the price
-											// based trimmer
-											if (northbound || this.panamaBookingsHelper.isSouthboundIdleTimeRuleEnabled()) {
-												final int panamaIdleTime = getMaxIdleDays(northbound) * 24;
-												currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.OPTIMAL, PanamaPeriod.Beyond);
-												// Notify price based trimmer of variable choice
-												currentPortTimeWindowsRecord.setSlotAdditionalPanamaDetails(p_prevPortSlot, true, panamaIdleTime);
-											} else {
-												// Voyage could start in the relaxed period, so assume relaxed.
-												panamaPeriod = PanamaPeriod.Relaxed;
+							if (bookingAllocated) {
+								// Booking allocated, time windows should have been updated, no need to check for other bookings or idle times.
+								changed = true;
+							} else if (windowStartTime[fromElementIndex] + directTravelTime < windowEndTime[toElementIndex] //
+									|| (windowStartTime[fromElementIndex] + suezTravelTime < windowEndTime[toElementIndex] && suezTravelTime != Integer.MAX_VALUE) //
+									|| directTravelTime <= panamaTravelTime) {
+
+								if (phase != 0) {
+									// In the first phase, do not set the voyage choice as this may cause problems
+									// further down the line (however, northbound Panama may be allowed)
+
+									final int panamaIdleTime = getMaxIdleHours(vessel, panamaSegments.isNorthbound);
+									travelTimeData.setMinTravelTime(fromElementIndex, Math.min(Math.min(suezTravelTime, directTravelTime), panamaTravelTime + panamaIdleTime));
+									currentPortTimeWindowsRecord.setSlotNextVoyageOptions(fromPortSlot, AvailableRouteChoices.OPTIMAL);
+									currentPortTimeWindowsRecord.setSlotAdditionalPanamaDetails(fromPortSlot, true, panamaIdleTime);
+
+									changed = true;
+								}
+
+								// TODO: We could perform an additional pass and allocate a spare booking slot
+								// and set the route choice to optimal and let the schedule determine best
+								// route.
+								// TODO: Note this would require the MinTravelTimeData object to be passed
+								// around for time calculations rather than use the distance provider to get
+								// non-booking
+								// time.
+								// TODO: Or we could re-calculate the travel time using the booking. (Maybe add
+								// API to distance provider to get travel time via booking?).
+							} else {
+								// go through panama, figure out if there is an unassigned booking
+								// TODO: this is a bit optimistic in case there is no booking ;-)
+								travelTimeData.setMinTravelTime(fromElementIndex, panamaTravelTime);
+								changed = true;
+
+								boolean foundBooking = false;
+								assert fromElement != null;
+
+								// Check flexible bookings for a match.
+								final List<IRouteOptionBooking> flexibleBookings = currentBookings.getUnusedBookingsForMultipleVessels(vessel, panamaEntry);
+								foundBooking = applyFirstFeasibleBooking(travelTimeData, currentBookings, fromPortSlot, fromElementIndex, toElementIndex, currentPortTimeWindowsRecord, panamaSegments,
+										windowEndTime[toElementIndex], flexibleBookings);
+
+								if (!foundBooking) {
+									// No feasible match. Windows are initially trimmed based on distance/max_speed. However if we cannot find a booking, then Panama will have the waiting days added.
+									// If Panama + wait days is still faster and it would delay the next event, lets recheck the bookings with the new upper bound. We may be able to use a booking now
+									// with less lateness than we would have if we just used wait days.
+									final int delayedPanamaTravelTime = panamaTravelTime + getMaxIdleHours(vessel, panamaSegments.isNorthbound);
+									if (delayedPanamaTravelTime < Math.min(directTravelTime, suezTravelTime)) {
+										int earliestArrivalAtTo = windowStartTime[fromElementIndex] + delayedPanamaTravelTime;
+										if (earliestArrivalAtTo >= windowEndTime[toElementIndex]) {
+											// We will be late either way, so recheck bookings
+											{
+												// Re-check the specific bookings first
+												final List<IRouteOptionBooking> vesselBookings = currentBookings.getUnusedBookingsForSpecificVessel(vessel, panamaEntry);
+												foundBooking = applyFirstFeasibleBooking(travelTimeData, currentBookings, fromPortSlot, fromElementIndex, toElementIndex, currentPortTimeWindowsRecord,
+														panamaSegments, earliestArrivalAtTo + 1, vesselBookings);
 											}
-
-										} else {
+											if (!foundBooking) {
+												// ... then recheck the flexible bookings
+												foundBooking = applyFirstFeasibleBooking(travelTimeData, currentBookings, fromPortSlot, fromElementIndex, toElementIndex, currentPortTimeWindowsRecord,
+														panamaSegments, earliestArrivalAtTo + 1, flexibleBookings);
+											}
 										}
-									} else if (latestPanamaTime > panamaBookingsProvider.getStrictBoundary()) {
-										panamaPeriod = PanamaPeriod.Relaxed;
-									} else {
-										panamaPeriod = PanamaPeriod.Strict;
+
 									}
 								}
-								final ECanalEntry panamaEntry = routeOptionEntry;
-								boolean bookingAllocated = false;
-								if (pass == 0) {
-									// Only check for actual bookings once	
-									Optional<IRouteOptionBooking> potentialBooking = currentBookings.assignedBookings.computeIfAbsent(panamaEntry, k -> new ArrayList<>()).stream().filter(e -> {
-										return e.getPortSlot().isPresent() && e.getPortSlot().get().equals(getMatchingPanamaSlot(thisPortSlot, p_prevPortSlot));
-									}).findFirst();
 
-									if (potentialBooking.isPresent()
-											&& isBetterThroughPanama(windowStartTime[index - 1], windowStartTime[index], panamaTravelTime, Math.min(directTravelTime, suezTravelTime))) {
-										// window has a booking
-										// currentPortTimeRecord.setRouteOptionBooking(prevPortSlot,
-										// potentialBooking.get());
+								if (!foundBooking) {
+									changed |= updateRouteOptionsAndMinTravelTimesBasedOnNoBookingFound(vessel, travelTimeData, fromElementIndex, fromPortSlot, currentPortTimeWindowsRecord,
+											directTravelTime, suezTravelTime, panamaTravelTime, panamaSegments.isNorthbound);
+								} else {
+									// Booking has been applied, mark as changed.
+									changed = true;
+								}
+							}
+						}
+					}
+				}
+				windowStartTime[toElementIndex] = Math.max(windowStartTime[toElementIndex], windowStartTime[fromElementIndex] + travelTimeData.getMinTravelTime(fromElementIndex));
+				windowEndTime[toElementIndex] = Math.max(windowEndTime[toElementIndex], windowStartTime[toElementIndex] + 1);
+			}
+			index++;
+			fromElement = toElement;
+			fromPortSlot = toPortSlot;
+		}
+		return changed;
+	}
 
-										// check if it can be reached in time
-										if (windowStartTime[index - 1] + toCanal <= potentialBooking.get().getBookingDate()
-												&& potentialBooking.get().getBookingDate() + fromEntryPoint < windowEndTime[index]) {
-											currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.PANAMA_ONLY, panamaPeriod);
-											currentPortTimeWindowsRecord.setRouteOptionBooking(prevPortSlot, potentialBooking.get());
+	private boolean applyFirstFeasibleBooking(final MinTravelTimeData travelTimeData, final CurrentBookingData currentBookings, IPortSlot fromPortSlot, final int fromElementIndex,
+			final int toElementIndex, final PortTimeWindowsRecord currentPortTimeWindowsRecord, final PanamaSegments panamaSegments, int toWindowEndTime,
+			final List<IRouteOptionBooking> vesselBookings) {
 
-											// Visit duration should implicitly be included in this calculation.
+		boolean foundBooking = false;
+		for (final IRouteOptionBooking potentialBooking : vesselBookings) {
 
-											final int travelTime = toCanal + fromEntryPoint;
-											travelTimeData.setMinTravelTime(index - 1, travelTime);
+			if (currentBookings.isBookingFeasible(potentialBooking, windowStartTime[fromElementIndex], toWindowEndTime, panamaSegments)) {
 
-											// Adjust origin window end
-											windowEndTime[index - 1] = Math.min(potentialBooking.get().getBookingDate() + 1 - toCanal, windowEndTime[index - 1]);
-											assert windowStartTime[index - 1] < windowEndTime[index - 1];
+				trimWindowsForBooking(travelTimeData, currentBookings, toElementIndex, fromPortSlot, currentPortTimeWindowsRecord, panamaSegments, potentialBooking);
 
-											// Adjust destination window start
-											windowStartTime[index] = Math.max(windowStartTime[index], potentialBooking.get().getBookingDate() + fromEntryPoint);
-											assert windowStartTime[index] < windowEndTime[index];
+				foundBooking = true;
+				break; // No need to look further, as found a match.
+			}
+		}
+		return foundBooking;
+	}
 
-											bookingAllocated = true;
-											changed = true;
-										} else {
-											// // Booking can't be reached in time. Set to optimal time through panama and
-											// don't include slot.
-											// No allocation is set, try and find an alternative.
+	private boolean trimPanamaBackwardsPass(final IResource resource, final ISequence sequence, final MinTravelTimeData travelTimeData, final CurrentBookingData currentBookings, final int size,
+			final boolean isRoundTripSequence, final IVessel vessel) {
+
+		boolean changed = false;
+
+		ISequenceElement fromElement;
+		IPortSlot fromPortSlot;
+		// Do this bit twice, first time to correctly align the start/end boundaries of
+		// the time windows, then to run again after max duration trimming
+		for (int end_pass = 0; end_pass < 2; ++end_pass) {
+			// now perform reverse-pass to trim any overly late end times
+			// (that is end times which would make us late at the next element)
+			for (int index = size - 2; index >= 0; index--) {
+
+				int fromElementIndex = index;
+				int toElementIndex = index + 1;
+
+				// int index = toIndex - 1;
+
+				// Trim window ends taking into account potential delays for using the panama
+				// canal. E.g. Northbound may introduce 5 day delay.
+				// Consider voyage A then voyage B. Neither voyage needs panama from the windows
+				// alone. If A goes via panama, B could go direct or via panama with booking.
+				// However going direct on
+				// voyage A can force B to go via panama miss the booking and pick up 5 day
+				// delay.
+				// We can't easily manipulate the min travel time array as travel time is
+				// dependent on the actual departure time. Instead we can adjust the upper bound
+				// of departure time to take
+				// delays
+				// into account.
+
+				if (!isRoundTripSequence) { // Not for nominals
+					// first pass, collecting start time windows
+					fromElement = sequence.get(fromElementIndex);
+					fromPortSlot = portSlotProvider.getPortSlot(fromElement);
+
+					final ISequenceElement toElement = sequence.get(toElementIndex);
+					final IPortSlot toPortSlot = portSlotProvider.getPortSlot(toElement);
+					final PortTimeWindowsRecord currentPortTimeWindowsRecord = recordsByIndex[fromElementIndex];
+
+					// If we have already picked the route choice, travel time should have been
+					// updated.
+					final AvailableRouteChoices slotNextVoyageOptions = currentPortTimeWindowsRecord.getSlotNextVoyageOptions(fromPortSlot);
+					if (slotNextVoyageOptions == AvailableRouteChoices.OPTIMAL && !useTimeWindow[toElementIndex]) {
+						assert fromElement != null;
+
+						final int directTravelTime = travelTimeData.getTravelTime(ERouteOption.DIRECT, fromElementIndex);
+						final int suezTravelTime = travelTimeData.getTravelTime(ERouteOption.SUEZ, fromElementIndex);
+
+						if (travelTimeData.isRouteValid(ERouteOption.PANAMA, fromElementIndex, slotNextVoyageOptions)) {
+							final PanamaSegments panamaSegments = getPanamaTravelSegments(toElementIndex, vessel, fromPortSlot, toPortSlot);
+							final int endTime = windowEndTime[toElementIndex];
+
+							if (endTime != Integer.MAX_VALUE && panamaSegments.travelTimeFromCanal != Integer.MAX_VALUE) {
+								// Calculate latest Panama arrival time. This includes excess delays. Can be
+								// overwritten later if there is a suitable booking
+								int latestPanamaTime = endTime - panamaSegments.travelTimeFromCanal;
+								latestPanamaTime -= getMaxIdleHours(vessel, panamaSegments.isNorthbound);
+
+								// (for reverse pass)
+								// Next pass should allocate the booking during the forward trimming phase, if suitable one available.
+								final List<IRouteOptionBooking> set = currentBookings.getUnusedBookingsForMultipleVessels(vessel, panamaSegments.canalEntranceUsed);
+
+								for (final IRouteOptionBooking booking : set) {
+
+									if (currentBookings.isBookingFeasible(booking, windowStartTime[fromElementIndex], endTime, panamaSegments)) {
+										final int time = booking.getBookingDate() - panamaBookingsProvider.getMarginInHours();
+										// // Find the latest possible booking date.
+										if (time > latestPanamaTime) {
+											latestPanamaTime = time;
 										}
 									}
 								}
-								if (bookingAllocated) {
-									// No further checks.
-								} else if (panamaPeriod == PanamaPeriod.Beyond) {
-									// assume a Panama booking because it's far enough in the future
-									currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.OPTIMAL, panamaPeriod);
-									// changed = true;
-								} else if (windowStartTime[index - 1] + directTravelTime < windowEndTime[index] //
-										|| (windowStartTime[index - 1] + suezTravelTime < windowEndTime[index] && suezTravelTime != Integer.MAX_VALUE) //
-										|| directTravelTime <= panamaTravelTime) {
-
-									if (pass != 0) {
-										// In the first pass, do not set the voyage choice as this may cause problems
-										// further down the line (however, northbound Panama may be allowed)
-										if (northbound || this.panamaBookingsHelper.isSouthboundIdleTimeRuleEnabled()) {
-											// if northbound or southbound idle rule turned on also, allow Panama
-											final int panamaIdleTime = getMaxIdleDays(northbound) * 24;
-											travelTimeData.setMinTravelTime(index - 1, Math.min(Math.min(suezTravelTime, directTravelTime), panamaTravelTime + panamaIdleTime));
-											currentPortTimeWindowsRecord.setSlotNextVoyageOptions(p_prevPortSlot, AvailableRouteChoices.OPTIMAL, panamaPeriod);
-											currentPortTimeWindowsRecord.setSlotAdditionalPanamaDetails(p_prevPortSlot, true, panamaIdleTime);
-										} else { //OLD southbound rule:
-											// journey can be made direct (or it does not go across Panama)
-											travelTimeData.setMinTravelTime(index - 1, Math.min(suezTravelTime, directTravelTime));
-											currentPortTimeWindowsRecord.setSlotNextVoyageOptions(p_prevPortSlot, AvailableRouteChoices.EXCLUDE_PANAMA, panamaPeriod);
-										}
+								// If the new panama time is the fastest, update the window.
+								final int newPanamaTime = endTime - (latestPanamaTime - panamaSegments.travelTimeToCanalWithoutMargin);
+								if (newPanamaTime < Math.min(directTravelTime, suezTravelTime)) {
+									if (endTime - newPanamaTime < windowEndTime[fromElementIndex]) {
+										windowEndTime[fromElementIndex] = endTime - newPanamaTime;
+										// Mark current pass as changed. If pass 0 then we may have caused more forced
+										// voyages.
 										changed = true;
 									}
-
-									// TODO: We could perform an additional pass and allocate a spare booking slot
-									// and set the rouce choice to optimal and let the schedule determine best
-									// route.
-									// TODO: Note this would require the MinTravelTimeData object to be passed
-									// around for time calculations rather than use the distance provider to get
-									// non-booking
-									// time.
-									// TODO: Or we could re-calculate the travel time using the booking. (Maybe add
-									// API to distance provider to get travel time via booking?).
-								} else {
-									// go through panama, figure out if there is an unassigned booking
-									currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.PANAMA_ONLY, panamaPeriod);
-									// TODO: this is a bit optimistic in case there is no booking ;-)
-									travelTimeData.setMinTravelTime(index - 1, panamaTravelTime);
-									changed = true;
-
-									boolean foundBooking = false;
-									assert prevElement != null;
-									final List<IRouteOptionBooking> set = currentBookings.unassignedBookings.get(panamaEntry);
-									if (set != null) {
-										for (final IRouteOptionBooking booking : set) {
-											final int canalTime = windowStartTime[index - 1] + toCanal;
-											if (canalTime > booking.getBookingDate()) {
-												// booking can't be reached. All following bookings are later and can't be
-												// reached either
-												continue;
-											}
-											final int travelTime = toCanal + fromEntryPoint;
-
-											if (booking.getBookingDate() + fromEntryPoint < windowEndTime[index]) {
-												// destination can be reached from slot
-												assert windowStartTime[index - 1] < windowEndTime[index - 1];
-												windowEndTime[index - 1] = Math.min(booking.getBookingDate() + 1 - toCanal, windowEndTime[index - 1]);
-												assert windowStartTime[index - 1] < windowEndTime[index - 1];
-												windowStartTime[index] = Math.max(windowStartTime[index], booking.getBookingDate() + fromEntryPoint);
-												assert windowStartTime[index] < windowEndTime[index];
-												travelTimeData.setMinTravelTime(index - 1, travelTime);
-												currentPortTimeWindowsRecord.setRouteOptionBooking(prevPortSlot, booking);
-												currentBookings.assignedBookings.get(panamaEntry).add(booking);
-												set.remove(booking);
-												foundBooking = true;
-												changed = true;
-												break;
-											}
-										}
-									}
-
-									if (!foundBooking) {
-
-										final int delayedPanamaTravelTime = panamaTravelTime + getMaxIdleDays(northbound) * 24;
-
-										if (!this.panamaBookingsHelper.isSouthboundIdleTimeRuleEnabled()) {
-											//OLD southbound rule:
-											//If no booking was assigned and we are within the strict boundary, set time to direct
-											if (!northbound && panamaPeriod == PanamaPeriod.Strict) {
-												travelTimeData.setMinTravelTime(index - 1, Math.min(suezTravelTime, directTravelTime));
-												currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.EXCLUDE_PANAMA, panamaPeriod);
-												changed = true;
-											}																		
-										}
-										
-										if ((northbound || this.panamaBookingsHelper.isSouthboundIdleTimeRuleEnabled()) && delayedPanamaTravelTime < Math.min(directTravelTime, suezTravelTime)) {
-											travelTimeData.setMinTravelTime(index - 1, delayedPanamaTravelTime);
-											currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.PANAMA_ONLY, panamaPeriod);
-											changed = true;
-										} else if (northbound || this.panamaBookingsHelper.isSouthboundIdleTimeRuleEnabled()) {
-											travelTimeData.setMinTravelTime(index - 1, Math.min(directTravelTime, suezTravelTime));
-											currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.EXCLUDE_PANAMA, panamaPeriod);
-											changed = true;
-										}
-									}
 								}
 							}
 						}
 					}
-					windowStartTime[index] = Math.max(windowStartTime[index], windowStartTime[index - 1] + travelTimeData.getMinTravelTime(index - 1));
-					windowEndTime[index] = Math.max(windowEndTime[index], windowStartTime[index] + 1);
 				}
-				index++;
-				prevElement = element;
-				prevPortSlot = thisPortSlot;
+
+				// trim the end of this time window so that the next element is
+				// reachable without lateness
+				// (but never so that the end time is before the start time)
+				if (actualisedTimeWindow[fromElementIndex] && actualisedTimeWindow[toElementIndex]) {
+					// Skip, windows should already match.
+				} else if (actualisedTimeWindow[toElementIndex] && !actualisedTimeWindow[fromElementIndex]) {
+					// Current window if flexible, next window is fixed, bring end window back
+					windowEndTime[fromElementIndex] = windowEndTime[toElementIndex] - travelTimeData.getMinTravelTime(fromElementIndex);
+				} else if (!useTimeWindow[toElementIndex]) {
+					windowEndTime[fromElementIndex] = Math.max(windowStartTime[fromElementIndex] + 1,
+							Math.min(windowEndTime[fromElementIndex], windowEndTime[toElementIndex] - travelTimeData.getMinTravelTime(fromElementIndex)));
+				}
+
+				// Make sure end if >= start - this may shift the end forward again violating
+				// min travel time.
+				windowEndTime[fromElementIndex] = Math.max(windowStartTime[fromElementIndex] + 1, windowEndTime[fromElementIndex]);
 			}
-
-			// Do this bit twice, first time to correctly align the start/end boundaries of
-			// the time windows, then to run again after max duration trimming
-			for (int end_pass = 0; end_pass < 2; ++end_pass) {
-				// now perform reverse-pass to trim any overly late end times
-				// (that is end times which would make us late at the next element)
-				for (index = size - 2; index >= 0; index--) {
-
-					// Trim window ends taking into account potential delays for using the panama
-					// canal. E.g. Northbound may introduce 5 day delay.
-					// Consider voyage A then voyage B. Neither voyage needs panama from the windows
-					// alone. If A goes via panama, B could go direct or via panama with booking.
-					// However going direct on
-					// voyage A can force B to go via panama miss the booking and pick up 5 day
-					// delay.
-					// We can't easily manipulate the min travel time array as travel time is
-					// dependent on the actual departure time. Instead we can adjust the upper bound
-					// of departure time to take
-					// delays
-					// into account.
-
-					if (!isRoundTripSequence) { // Not for nominals
-						// first pass, collecting start time windows
-						prevElement = sequence.get(index);
-						prevPortSlot = portSlotProvider.getPortSlot(prevElement);
-
-						final ISequenceElement element = sequence.get(index + 1);
-						final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
-						final PortTimeWindowsRecord currentPortTimeWindowsRecord = recordsByIndex[index];
-
-						// If we have already picked the route choice, travel time should have been
-						// updated.
-						final AvailableRouteChoices slotNextVoyageOptions = currentPortTimeWindowsRecord.getSlotNextVoyageOptions(prevPortSlot);
-						if (slotNextVoyageOptions == AvailableRouteChoices.OPTIMAL && !useTimeWindow[index + 1]) {
-							assert prevElement != null;
-
-							final int directTravelTime = travelTimeData.getTravelTime(ERouteOption.DIRECT, index);
-							final int suezTravelTime = travelTimeData.getTravelTime(ERouteOption.SUEZ, index);
-							final int panamaTravelTime = travelTimeData.getTravelTime(ERouteOption.PANAMA, index);
-
-							if (panamaTravelTime != Integer.MAX_VALUE) {
-
-								@Nullable
-								final ECanalEntry panamaEntry = distanceProvider.getRouteOptionCanalEntrance(prevPortSlot.getPort(), ERouteOption.PANAMA);
-								if (panamaEntry != null) {
-									final boolean northbound = distanceProvider.getRouteOptionDirection(prevPortSlot.getPort(),
-											ERouteOption.PANAMA) == IDistanceProvider.RouteOptionDirection.NORTHBOUND;
-									//
-									final int toCanal = visitDuration[index] + panamaBookingsHelper.getTravelTimeToCanal(vessel, prevPortSlot.getPort(), true);
-
-									final int fromEntryPoint = panamaBookingsHelper.getTravelTimeFromCanalEntry(vessel, panamaEntry, thisPortSlot.getPort());
-									
-									final int endTime = windowEndTime[index + 1];
-
-									if (endTime != Integer.MAX_VALUE && fromEntryPoint != Integer.MAX_VALUE) {
-										// Calculate latest panama arrival time. This includes excess delays. Will be
-										// adjusted based on available bookings later
-										int latestPanamaTime = endTime - fromEntryPoint;
-										if (northbound || this.panamaBookingsHelper.isSouthboundIdleTimeRuleEnabled()) {
-											latestPanamaTime -= getMaxIdleDays(northbound) * 24;
-										} else {
-											latestPanamaTime -= panamaBookingsProvider.getMarginInHours();
-										}
-
-										// Compute panama period (for reverse pass)
-										final PanamaPeriod panamaPeriod = panamaBookingsHelper.getPanamaPeriod(latestPanamaTime);
-										if (panamaPeriod != PanamaPeriod.Beyond) {
-											final List<IRouteOptionBooking> set = currentBookings.unassignedBookings.get(panamaEntry);
-											if (set != null) {
-												for (final IRouteOptionBooking booking : set) {
-													final int canalTime = windowStartTime[index] + toCanal;
-													if (canalTime > booking.getBookingDate()) {
-														// booking can't be reached.
-														continue;
-													}
-
-													// Find the latest possible booking date.
-													if (booking.getBookingDate() + fromEntryPoint < endTime) {
-														final int time = booking.getBookingDate() - panamaBookingsProvider.getMarginInHours();
-														if (time > latestPanamaTime) {
-															latestPanamaTime = time;
-														}
-													}
-												}
-											}
-											// If the new panama time is the fastest, update the window.
-											final int newPanamaTime = endTime - (latestPanamaTime - toCanal);
-											if (newPanamaTime < Math.min(directTravelTime, suezTravelTime)) {
-												if (endTime - newPanamaTime < windowEndTime[index]) {
-													windowEndTime[index] = endTime - newPanamaTime;
-													// Mark current pass as changed. If pass 0 then we may have caused more forced
-													// voyages.
-													changed = true;
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-
-					// trim the end of this time window so that the next element is
-					// reachable without lateness
-					// (but never so that the end time is before the start time)
-					if (actualisedTimeWindow[index] && actualisedTimeWindow[index + 1]) {
-						// Skip, windows should already match.
-					} else if (actualisedTimeWindow[index + 1] && !actualisedTimeWindow[index]) {
-						// Current window if flexible, next window is fixed, bring end window back
-						windowEndTime[index] = windowEndTime[index + 1] - travelTimeData.getMinTravelTime(index);
-					} else if (!useTimeWindow[index + 1]) {
-						windowEndTime[index] = Math.max(windowStartTime[index] + 1, Math.min(windowEndTime[index], windowEndTime[index + 1] - travelTimeData.getMinTravelTime(index)));
-					}
-
-					// Make sure end if >= start - this may shift the end forward again violating
-					// min travel time.
-					windowEndTime[index] = Math.max(windowStartTime[index] + 1, windowEndTime[index]);
-				}
-				if (end_pass == 0) {
-					if (sequence.size() > 0) {
-						// Apply max duration cutoff to the last element of the sequence
-						trimBasedOnMaxDuration(resource, size - 1);
-						// Try to trim down the start event upper bound given the minimal duration if it
-						// is set
-						trimBasedOnMinDuration(resource, size - 1);
-					}
-				}
-			}
-			// For charter outs where event, virtual, other, copy the event window forward
-			for (index = 1; index < size; ++index) {
-				if (isVirtual[index] || isVirtual[index - 1]) {
-					windowStartTime[index] = windowStartTime[index - 1];
-					windowEndTime[index] = windowEndTime[index - 1];
+			if (end_pass == 0) {
+				if (sequence.size() > 0) {
+					// Apply max duration cutoff to the last element of the sequence
+					trimBasedOnMaxDuration(resource, size - 1);
+					// Try to trim down the start event upper bound given the minimal duration if it
+					// is set
+					trimBasedOnMinDuration(resource, size - 1);
 				}
 			}
 		}
-
+		// For charter outs where event, virtual, other, copy the event window forward
+		for (int toIndex = 1; toIndex < size; ++toIndex) {
+			if (isVirtual[toIndex] || isVirtual[toIndex - 1]) {
+				windowStartTime[toIndex] = windowStartTime[toIndex - 1];
+				windowEndTime[toIndex] = windowEndTime[toIndex - 1];
+			}
+		}
+		return changed;
 	}
 
-	protected IPortSlot getMatchingPanamaSlot(final IPortSlot thisPortSlot, final IPortSlot prevPortSlot) {
-		//If we have a slot id, for the previous slot, then use that for matching the booking.
-		if (prevPortSlot instanceof ILoadOption || prevPortSlot instanceof IDischargeOption) {
-			return prevPortSlot;
-		}
-		else {
-			//Otherwise:
-			//If previous slot type does not, have a slot id, e.g. StartEvent, CharterOut, DryDock etc, allow current/next slot id to be used instead.
-			//..we should consider allowing bookings to just be assigned directly to vessels, since this more correctly models the actual business
-			//case and has the additional benefit of allowing the optimiser more freedom to switch cargoes in/out of the schedule using an existing
-			//Panama booking.
-			return thisPortSlot;
-		}
+	private void trimWindowsBasedOnMatchedPanamaBooking(final IRouteOptionBooking potentialBooking, final int toElementIndex, final int toCanal, final int fromEntryPoint) {
+
+		int fromElementIndex = toElementIndex - 1;
+		assert fromElementIndex >= 0;
+
+		// Adjust origin window end
+		windowEndTime[fromElementIndex] = Math.min(potentialBooking.getBookingDate() + 1 - toCanal, windowEndTime[fromElementIndex]);
+		assert windowStartTime[fromElementIndex] < windowEndTime[fromElementIndex];
+
+		// Adjust destination window start
+		windowStartTime[toElementIndex] = Math.max(windowStartTime[toElementIndex], potentialBooking.getBookingDate() + fromEntryPoint);
+		// It is possible we introduce lateness by using a booking (as initial mintime is based on simple panama distance/time logic)
+		windowEndTime[toElementIndex] = Math.max(windowEndTime[toElementIndex], windowStartTime[toElementIndex] + 1);
 	}
 
-	private int getMaxIdleDays(boolean northbound) {
-		if (northbound) {
-			return panamaBookingsProvider.getNorthboundMaxIdleDays();
-		}
-		else {
-			return panamaBookingsProvider.getSouthboundMaxIdleDays();
-		}
-	}
-	
 	/**
-	 * Check whether we should go through Panama if we've made a booking. For
-	 * example, we shouldn't go through if we will be late through Panama and can
-	 * arrive on time direct or suez.
+	 * Update the time windows based on the given booking. This will trim both the earliest arrival at the destination but ALSO the latest departure from the origin. Elements prior to the origin will
+	 * need to be re-checked after this method has been called.
+	 * 
+	 * @param travelTimeData
+	 * @param currentBookings
+	 * @param toElementIndex
+	 * @param fromPortSlot
+	 * @param currentPortTimeWindowsRecord
+	 * @param segments
+	 * @param booking
+	 */
+	private void trimWindowsForBooking(final MinTravelTimeData travelTimeData, final CurrentBookingData currentBookings, final int toElementIndex, final IPortSlot fromPortSlot,
+			final PortTimeWindowsRecord currentPortTimeWindowsRecord, final PanamaSegments segments, final IRouteOptionBooking booking) {
+		int fromElementIndex = toElementIndex - 1;
+		assert fromElementIndex >= 0;
+		// destination can be reached from slot
+		assert windowStartTime[fromElementIndex] < windowEndTime[toElementIndex - 1];
+
+		currentPortTimeWindowsRecord.setSlotNextVoyageOptions(fromPortSlot, AvailableRouteChoices.PANAMA_ONLY);
+		currentPortTimeWindowsRecord.setRouteOptionBooking(fromPortSlot, booking);
+		currentPortTimeWindowsRecord.setSlotAdditionalPanamaDetails(fromPortSlot, true, 0);
+
+		trimWindowsBasedOnMatchedPanamaBooking(booking, toElementIndex, segments.travelTimeToCanalWithMargin, segments.travelTimeFromCanal);
+
+		final int travelTime = segments.travelTimeToCanalWithMargin + segments.travelTimeFromCanal;
+		// TODO: This is probably a better time to use....
+		// final int travelTime = windowStartTime[toElementIndex] - (windowEndTime[fromElementIndex] - 1);
+		// assert travelTime >= segments.travelTimeToCanalWithMargin + segments.travelTimeFromCanal;
+
+		travelTimeData.setMinTravelTime(fromElementIndex, travelTime);
+
+		currentBookings.setUsed(segments.canalEntranceUsed, booking);
+	}
+
+	private boolean updateRouteOptionsAndMinTravelTimesBasedOnNoBookingFound(final IVessel vessel, final MinTravelTimeData travelTimeData, final int fromElementIndex, final IPortSlot prevPortSlot,
+			final PortTimeWindowsRecord currentPortTimeWindowsRecord, final int directTravelTime, final int suezTravelTime, final int panamaTravelTime, final boolean northbound) {
+		boolean changed = false;
+
+		// Note: panamaTravelTime include any previous extra idle time and does not need to be re-added here, unlike in the booking code path
+		final int waitingTime = getMaxIdleHours(vessel, northbound);
+		final int delayedPanamaTravelTime = panamaTravelTime + waitingTime;
+		if (delayedPanamaTravelTime < Math.min(directTravelTime, suezTravelTime)) {
+			travelTimeData.setMinTravelTime(fromElementIndex, delayedPanamaTravelTime);
+			currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.PANAMA_ONLY);
+			currentPortTimeWindowsRecord.setSlotAdditionalPanamaDetails(prevPortSlot, true, waitingTime);
+			changed = true;
+		} else {
+			travelTimeData.setMinTravelTime(fromElementIndex, Math.min(directTravelTime, suezTravelTime));
+			currentPortTimeWindowsRecord.setSlotNextVoyageOptions(prevPortSlot, AvailableRouteChoices.EXCLUDE_PANAMA);
+			currentPortTimeWindowsRecord.setSlotAdditionalPanamaDetails(prevPortSlot, false, 0);
+			changed = true;
+		}
+		return changed;
+	}
+
+	private int getMaxIdleHours(final IVessel vessel, final boolean northbound) {
+		if (northbound) {
+			return panamaBookingsProvider.getNorthboundMaxIdleDays(vessel) * 24;
+		} else {
+			return panamaBookingsProvider.getSouthboundMaxIdleDays(vessel) * 24;
+		}
+	}
+
+	/**
+	 * Check whether we should go through Panama if we've made a booking. For example, we shouldn't go through if we will be late through Panama and can arrive on time direct or suez.
 	 * 
 	 * @param start
 	 * @param end
@@ -1047,8 +1000,7 @@ public class FeasibleTimeWindowTrimmer {
 	}
 
 	/**
-	 * For round trip (nominal) cargoes, we don't care what else has happened on
-	 * this vessel
+	 * For round trip (nominal) cargoes, we don't care what else has happened on this vessel
 	 * 
 	 * @param resource
 	 * 
@@ -1072,7 +1024,7 @@ public class FeasibleTimeWindowTrimmer {
 							prevFeasibleWindowStart + travelTimeData.getMinTravelTime(portTimeWindowsRecord.getIndex(portSlot) - 1));
 					feasibleWindowEnd = Math.max(windowEndTime[portTimeWindowsRecord.getIndex(portSlot)], feasibleWindowStart + 1);
 					timeWindow = new TimeWindow(feasibleWindowStart, feasibleWindowEnd);
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					feasibleWindowStart = Math.max(windowStartTime[portTimeWindowsRecord.getIndex(portSlot)],
 							prevFeasibleWindowStart + travelTimeData.getMinTravelTime(portTimeWindowsRecord.getIndex(portSlot) - 1));
 					feasibleWindowEnd = Math.max(windowEndTime[portTimeWindowsRecord.getIndex(portSlot)], feasibleWindowStart + 1);
@@ -1093,7 +1045,7 @@ public class FeasibleTimeWindowTrimmer {
 						prevFeasibleWindowStart + travelTimeData.getMinTravelTime(portTimeWindowsRecord.getIndex(portSlot) - 1));
 				feasibleWindowEnd = Math.max(windowEndTime[portTimeWindowsRecord.getIndex(portSlot)], feasibleWindowStart + 1);
 				timeWindow = new TimeWindow(feasibleWindowStart, feasibleWindowEnd);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				feasibleWindowStart = Math.max(windowStartTime[portTimeWindowsRecord.getIndex(portSlot)],
 						prevFeasibleWindowStart + travelTimeData.getMinTravelTime(portTimeWindowsRecord.getIndex(portSlot) - 1));
 				feasibleWindowEnd = Math.max(windowEndTime[portTimeWindowsRecord.getIndex(portSlot)], feasibleWindowStart + 1);
@@ -1104,8 +1056,7 @@ public class FeasibleTimeWindowTrimmer {
 	}
 
 	/**
-	 * The previous cargo will have changed the constraints on the time windows, so
-	 * we must find the new feasible time windows before choosing an arrival time
+	 * The previous cargo will have changed the constraints on the time windows, so we must find the new feasible time windows before choosing an arrival time
 	 * 
 	 * @param portTimeWindowsRecord
 	 * @param seqIndex
@@ -1154,6 +1105,7 @@ public class FeasibleTimeWindowTrimmer {
 		}
 		if (isLast && portTimeWindowsRecord.getReturnSlot() != null) {
 			final IPortSlot portSlot = portTimeWindowsRecord.getReturnSlot();
+			assert portSlot != null;
 			int feasibleWindowStart;
 			int feasibleWindowEnd;
 			if (prevFeasibleWindowStart == Integer.MIN_VALUE) {
@@ -1230,6 +1182,35 @@ public class FeasibleTimeWindowTrimmer {
 		lowerBound = Math.max(lowerBound, minLowerBound);
 
 		return lowerBound;
+	}
+
+	/**
+	 * Internal "record" class to hold panama travel time calcs
+	 */
+	class PanamaSegments {
+		int travelTimeToCanalWithMargin; // Includes visit duration. For use with a booking
+		int travelTimeToCanalWithoutMargin; // Includes visit duration. For use with the idle days padding.
+		int travelTimeFromCanal;
+		boolean isNorthbound;
+		ECanalEntry canalEntranceUsed;
+	}
+
+	/**
+	 * Compute and store the different the panama canal travel segments needed in various stages of the logic.
+	 */
+	private PanamaSegments getPanamaTravelSegments(final int toElementIndex, final IVessel vessel, final IPortSlot fromPortSlot, final IPortSlot toPortSlot) {
+
+		final PanamaSegments segments = new PanamaSegments();
+		segments.isNorthbound = distanceProvider.getRouteOptionDirection(fromPortSlot.getPort(), ERouteOption.PANAMA) == IDistanceProvider.RouteOptionDirection.NORTHBOUND;
+
+		segments.canalEntranceUsed = distanceProvider.getRouteOptionCanalEntrance(fromPortSlot.getPort(), ERouteOption.PANAMA);
+
+		segments.travelTimeToCanalWithMargin = visitDuration[toElementIndex - 1] + panamaBookingsHelper.getTravelTimeToCanal(vessel, fromPortSlot.getPort(), true);
+		segments.travelTimeToCanalWithoutMargin = visitDuration[toElementIndex - 1] + panamaBookingsHelper.getTravelTimeToCanal(vessel, fromPortSlot.getPort(), false);
+		segments.travelTimeFromCanal = panamaBookingsHelper.getTravelTimeFromCanalEntry(vessel, segments.canalEntranceUsed, toPortSlot.getPort()) //
+				+ extraIdleTime[toElementIndex - 1]; // make sure purge, contingency, spot market idle time etc is still included.
+
+		return segments;
 	}
 
 }

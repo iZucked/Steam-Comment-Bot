@@ -378,7 +378,7 @@ public class PeriodTransformer {
 
 		output.getCargoModel().getVesselAvailabilities().addAll(newVesselAvailabilities);
 
-		trimSpotMarketCurves(periodRecord, output);
+		trimSpotMarketCurves(periodRecord, output, wholeScenarioDataProvider.getTypedScenario(LNGScenarioModel.class));
 
 		// Remove schedule model
 		output.getScheduleModel().setSchedule(null);
@@ -642,8 +642,7 @@ public class PeriodTransformer {
 
 				final CharterOutEvent charterOutEvent = (CharterOutEvent) event;
 				@NonNull
-				final
-				NonNullPair<InclusionType, Position> p = inclusionChecker.getObjectInclusionType(event, scheduledEventMap, periodRecord);
+				final NonNullPair<InclusionType, Position> p = inclusionChecker.getObjectInclusionType(event, scheduledEventMap, periodRecord);
 				if (p.getFirst() != InclusionType.In) {
 					charterOutEvent.getAllowedVessels().clear();
 					final VesselAvailability vesselAvailability = ((VesselAvailability) charterOutEvent.getVesselAssignmentType());
@@ -680,7 +679,7 @@ public class PeriodTransformer {
 				removed = true;
 			}
 			// DryDockEvent and MaintenanceEvent do not have a start or end heel. Include the preceeding cargo which does have heel to allow for some change.
-			if (removed == false && (event instanceof DryDockEvent || event instanceof MaintenanceEvent)) {
+			if (removed == false && (event instanceof DryDockEvent || event instanceof MaintenanceEvent || event instanceof CharterOutEvent)) {
 				final Pair<Set<Cargo>, Set<VesselEvent>> eventsAndCargoesToKeep = getDependenciesForEvent(schedule, event);
 				if (eventsAndCargoesToKeep != null) {
 					cargoesToKeep.addAll(eventsAndCargoesToKeep.getFirst());
@@ -782,7 +781,7 @@ public class PeriodTransformer {
 	 * @param endConditionMap
 	 * @param slotAllocationMap
 	 * @param lockedCargoes
-	 *                                    TODO
+	 *            TODO
 	 */
 	public void checkIfRemovedSlotsAreStillNeeded(final @NonNull Set<Slot<?>> seenSlots, final @NonNull Collection<Slot<?>> slotsToRemove, final @NonNull Collection<Cargo> cargoesToRemove,
 			final @NonNull List<VesselAvailability> newVesselAvailabilities, final @NonNull Map<AssignableElement, PortVisit> startConditionMap,
@@ -1539,7 +1538,7 @@ public class PeriodTransformer {
 		}
 	}
 
-	public void trimSpotMarketCurves(@NonNull final PeriodRecord periodRecord, @NonNull final LNGScenarioModel scenario) {
+	public void trimSpotMarketCurves(@NonNull final PeriodRecord periodRecord, @NonNull final LNGScenarioModel scenario, LNGScenarioModel wholeScenario) {
 		final SpotMarketsModel spotMarketsModel = scenario.getReferenceModel().getSpotMarketsModel();
 		ZonedDateTime earliestDate = periodRecord.lowerBoundary;
 		ZonedDateTime latestDate = periodRecord.upperBoundary;
@@ -1552,7 +1551,26 @@ public class PeriodTransformer {
 				latestDate = earliestAndLatestTimes.getSecond();
 			}
 		}
-
+		
+		if (earliestDate == null) {
+			throw new IllegalStateException("Unable to find earliest scenario date");
+		}
+		if (latestDate == null) {
+			throw new IllegalStateException("Unable to find latest scenario date");
+		}
+		
+		if (wholeScenario != null) {
+			final Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTimesForWholeScenario = LNGScenarioUtils.findEarliestAndLatestTimes(wholeScenario);
+			// Make sure the spot markets do no start any earlier than in the parent scenario
+			if (earliestAndLatestTimesForWholeScenario.getFirst().isAfter(earliestDate)) {
+				earliestDate = earliestAndLatestTimesForWholeScenario.getFirst();
+			}
+			// Make sure the spot markets do no finish any later than in the parent scenario
+			if (earliestAndLatestTimesForWholeScenario.getSecond().isBefore(latestDate)) {
+				latestDate = earliestAndLatestTimesForWholeScenario.getSecond();
+			}
+		}
+		// Sanity re-check!
 		if (earliestDate == null) {
 			throw new IllegalStateException("Unable to find earliest scenario date");
 		}

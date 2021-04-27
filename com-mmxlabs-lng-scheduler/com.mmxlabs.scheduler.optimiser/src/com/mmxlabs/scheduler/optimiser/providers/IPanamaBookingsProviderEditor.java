@@ -4,10 +4,11 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
 
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 
 /**
  * An editor interface for {@link IPanamaBookingsProvider}
@@ -16,41 +17,17 @@ import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
  */
 public interface IPanamaBookingsProviderEditor extends IPanamaBookingsProvider {
 	/**
-	 * Sets the bookings, overwriting existing ones.
+	 * Sets the bookings, overwriting existing ones. Bookings assumed to be time sorted
 	 */
-	void setBookings(Map<ECanalEntry, SortedSet<IRouteOptionBooking>> bookings);
+	void setBookings(Map<ECanalEntry, List<IRouteOptionBooking>> bookings);
 
-	/**
-	 * All dates before this boundary strictly need a Panama booking. Exclusive
-	 * 
-	 * @param boundary
-	 */
-	void setStrictBoundary(int boundary);
-
-	/**
-	 * Between the {@link #getStrictBoundary()} and {@link #getRelaxedBoundary()}, there can be some relaxation, i.e. not all journeys through Panama need a booking.
-	 * 
-	 * @return
-	 */
-	void setRelaxedBookingCountNorthbound(int bookingCount);
-
-	/**
-	 * Between the {@link #getStrictBoundary()} and {@link #getRelaxedBoundary()}, there can be some relaxation, i.e. not all journeys through Panama need a booking.
-	 * 
-	 * @return
-	 */
-	void setRelaxedBookingCountSouthbound(int bookingCount);
+	void setArrivalMargin(int margin);
 	
 	void setNorthboundMaxIdleDays(int maxIdleDays);
 
-	/**
-	 * All dates after this boundary don't need a Panama booking. Inclusive
-	 * 
-	 * @return
-	 */
-	void setRelaxedBoundary(int boundary);
-
-	void setArrivalMargin(int margin);
-
 	void setSouthboundMaxIdleDays(int maxIdleDays);
+	
+	void setNorthboundMaxIdleDays(IVessel vessel, int maxIdleDays);
+
+	void setSouthboundMaxIdleDays(IVessel vessel, int maxIdleDays);
 }

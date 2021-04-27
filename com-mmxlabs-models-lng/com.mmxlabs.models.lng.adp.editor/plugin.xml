@@ -159,6 +159,12 @@
          inheritable="true"
          modelClass="com.mmxlabs.models.lng.adp.MullAllocationRow">
    </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.MullCargoWrapperComponentHelper"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.MullCargoWrapperComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.adp.MullCargoWrapper">
+   </componentHelper>
 </extension>
 <extension
       point="com.mmxlabs.models.ui.displaycompositefactories">
@@ -240,6 +246,11 @@
           id="com.mmxlabs.models.lng.adp.presentation.valueproviders.SubContractProfilePortValueProviderFactory"
           ownerEClass="com.mmxlabs.models.lng.adp.SubContractProfile"
           referenceEClass="com.mmxlabs.models.lng.port.Port">
+   </valueProvider>
+   <valueProvider
+          factory="com.mmxlabs.models.lng.adp.presentation.valueproviders.MullCargoWrapperValueProviderFactory"
+          id="com.mmxlabs.models.lng.adp.presentation.valueproviders.MullCargoWrapperValueProviderFactory"
+          referenceEClass="com.mmxlabs.models.lng.adp.MullCargoWrapper">
    </valueProvider>
 </extension>
 <extension

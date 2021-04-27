@@ -4,13 +4,14 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.panamaslots;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -19,6 +20,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -31,14 +34,15 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
+import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
 
 /**
  * @author robert
@@ -49,9 +53,6 @@ public class PanamaSlotsTransformer implements ITransformerExtension {
 	private IPanamaBookingsProviderEditor panamaBookingsProviderEditor;
 
 	@Inject
-	private IPromptPeriodProvider promptPeriodProvider;
-
-	@Inject
 	private DateAndCurveHelper dateAndCurveHelper;
 
 	@Inject
@@ -60,14 +61,7 @@ public class PanamaSlotsTransformer implements ITransformerExtension {
 	@Inject
 	private IScenarioDataProvider scenarioDataProvider;
 
-	private final List<CanalBookingSlot> providedPanamaBookings = new ArrayList<>();
-	private int relaxedBoundaryOffsetDays;
-	private int relaxedBookingsCountNorthbound;
-	private int northBoundMaxIdleDays;
-	private int southBoundMaxIdleDays;
-	private int relaxedBookingsCountSouthbound;
-	private int strictBoundaryOffsetDays;
-	private int arrivalMargin;
+	private CanalBookings canalBookings;
 
 	@Override
 	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap modelEntityMap, final ISchedulerBuilder builder) {
@@ -78,63 +72,97 @@ public class PanamaSlotsTransformer implements ITransformerExtension {
 		}
 
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(rootObject);
-		final CanalBookings canalBookings = cargoModel.getCanalBookings();
-		if (canalBookings == null) {
-			return;
-		}
-		this.providedPanamaBookings.addAll(canalBookings.getCanalBookingSlots());
-
-		strictBoundaryOffsetDays = canalBookings.getStrictBoundaryOffsetDays();
-		relaxedBoundaryOffsetDays = canalBookings.getRelaxedBoundaryOffsetDays();
-		relaxedBookingsCountNorthbound = canalBookings.getFlexibleBookingAmountNorthbound();
-		northBoundMaxIdleDays = canalBookings.getNorthboundMaxIdleDays();
-		southBoundMaxIdleDays = canalBookings.getSouthboundMaxIdleDays();
-		relaxedBookingsCountSouthbound = canalBookings.getFlexibleBookingAmountSouthbound();
-		arrivalMargin = canalBookings.getArrivalMarginHours();
+		canalBookings = cargoModel.getCanalBookings();
 	}
 
 	@Override
 	public void finishTransforming() {
-		ModelDistanceProvider modelDistanceProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
+		final ModelDistanceProvider modelDistanceProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 
-		final Map<ECanalEntry, SortedSet<IRouteOptionBooking>> panamaSlots = new HashMap<>();
-		providedPanamaBookings.forEach(eBooking -> {
+		final Map<ECanalEntry, List<IRouteOptionBooking>> panamaSlots = new HashMap<>();
 
-			Port port = modelDistanceProvider.getCanalPort(RouteOption.PANAMA, eBooking.getCanalEntrance());
+		if (canalBookings != null) {
 
-			//No need to worry about change of daylight savings for Panama ports, so using atStartOfDay should be ok:
-			//"In Central America, the countries from Guatemala to Costa Rica use Central Standard Time UTC−06:00 year-round, but Panama uses Eastern Standard Time (UTC−05:00) year-round."
-			final int date = dateAndCurveHelper.convertTime(eBooking.getBookingDate().atStartOfDay(port.getZoneId()).plusHours(CanalBookingSlot.BOOKING_HOURS_OFFSET));
-			
-			final IRouteOptionBooking oBooking;
-			@NonNull
-			ECanalEntry oCanalEntrance = mapCanalEntry(eBooking.getCanalEntrance());
-			if (eBooking.getSlot() != null) {
-				oBooking = IRouteOptionBooking.of(date, oCanalEntrance, ERouteOption.PANAMA, modelEntityMap.getOptimiserObjectNullChecked(eBooking.getSlot(), IPortSlot.class));
-			} else {
-				oBooking = IRouteOptionBooking.of(date, oCanalEntrance, ERouteOption.PANAMA);
+			for (final CanalBookingSlot eBooking : this.canalBookings.getCanalBookingSlots()) {
+
+				final Port port = modelDistanceProvider.getCanalPort(RouteOption.PANAMA, eBooking.getCanalEntrance());
+
+				// No need to worry about change of daylight savings for Panama ports, so using atStartOfDay should be ok:
+				// "In Central America, the countries from Guatemala to Costa Rica use Central Standard Time UTC−06:00 year-round, but Panama uses Eastern Standard Time (UTC−05:00) year-round."
+				final int date = dateAndCurveHelper.convertTime(eBooking.getBookingDate().atStartOfDay(port.getZoneId()).plusHours(CanalBookingSlot.BOOKING_HOURS_OFFSET));
+
+				final IRouteOptionBooking oBooking;
+				Set<Vessel> eVessels;
+				Set<IVessel> oVessels;
+				if (eBooking.getVessel() != null) {
+					eVessels = SetUtils.getObjects(eBooking.getVessel());
+					oVessels = getOptimiserVessels(eVessels);
+				}
+				else if (eBooking.getBookingCode() != null) {
+					eVessels = SetUtils.getObjects(eBooking.getBookingCode().getVesselGroup());
+					oVessels = getOptimiserVessels(eVessels);
+				}
+				else {
+					//Otherwise empty set, indicating booking can be used for any vessel.
+					oVessels = Collections.emptySet();
+				}
+
+				final @NonNull ECanalEntry oCanalEntrance = mapCanalEntry(eBooking.getCanalEntrance());
+
+				if (oVessels != null && oVessels.size() > 0) {
+					oBooking = IRouteOptionBooking.of(date, oCanalEntrance, ERouteOption.PANAMA, oVessels);
+				} else {
+					oBooking = IRouteOptionBooking.of(date, oCanalEntrance, ERouteOption.PANAMA);
+				}
+				panamaSlots.computeIfAbsent(oCanalEntrance, key -> new LinkedList<>()).add(oBooking);
+
+				modelEntityMap.addModelObject(eBooking, oBooking);
 			}
-			panamaSlots.computeIfAbsent(oCanalEntrance, key -> new TreeSet<>()).add(oBooking);
 
-			modelEntityMap.addModelObject(eBooking, oBooking);
-		});
+			// Sort bookings by date.
+			for (final ECanalEntry entry : ECanalEntry.values()) {
+				final List<IRouteOptionBooking> list = panamaSlots.get(entry);
+				if (list != null) {
+					Collections.sort(list);
+				}
+			}
 
-		panamaBookingsProviderEditor.setBookings(panamaSlots);
+			panamaBookingsProviderEditor.setBookings(panamaSlots);
+			panamaBookingsProviderEditor.setArrivalMargin(canalBookings.getArrivalMarginHours());
 
-		if (strictBoundaryOffsetDays != 0) {
-			panamaBookingsProviderEditor.setStrictBoundary(promptPeriodProvider.getStartOfPromptPeriod() + strictBoundaryOffsetDays * 24);
+			for (final VesselGroupCanalParameters vesselGroupsMaxIdles : this.canalBookings.getVesselGroupCanalParameters()) {
+				final Set<Vessel> vessels = SetUtils.getObjects(vesselGroupsMaxIdles.getVesselGroup());
+
+				// Note: There is a difference between vessels.size() == 0 and vesselGroupsMaxIdles.getVesselGroup().size() == 0.
+				// The first means there are no vessels belonging to the assigned groups. The latter means there were no vessels or groups set.
+
+				if (vesselGroupsMaxIdles.getVesselGroup().isEmpty()) {
+					// Default if vessels list is empty.
+					panamaBookingsProviderEditor.setNorthboundMaxIdleDays(vesselGroupsMaxIdles.getNorthboundWaitingDays());
+					panamaBookingsProviderEditor.setSouthboundMaxIdleDays(vesselGroupsMaxIdles.getSouthboundWaitingDays());
+				} else {
+					// Specific vessels group.
+					for (final Vessel vessel : vessels) {
+						final IVessel oVessel = modelEntityMap.getOptimiserObject(vessel, IVessel.class);
+						panamaBookingsProviderEditor.setNorthboundMaxIdleDays(oVessel, vesselGroupsMaxIdles.getNorthboundWaitingDays());
+						panamaBookingsProviderEditor.setSouthboundMaxIdleDays(oVessel, vesselGroupsMaxIdles.getSouthboundWaitingDays());
+					}
+				}
+			}
+
 		}
-		if (relaxedBoundaryOffsetDays != 0) {
-			panamaBookingsProviderEditor.setRelaxedBoundary(promptPeriodProvider.getStartOfPromptPeriod() + relaxedBoundaryOffsetDays * 24);
-		}
-		panamaBookingsProviderEditor.setRelaxedBookingCountNorthbound(relaxedBookingsCountNorthbound);
-		panamaBookingsProviderEditor.setNorthboundMaxIdleDays(northBoundMaxIdleDays);
-		panamaBookingsProviderEditor.setRelaxedBookingCountSouthbound(relaxedBookingsCountSouthbound);
-		panamaBookingsProviderEditor.setSouthboundMaxIdleDays(southBoundMaxIdleDays);
-		panamaBookingsProviderEditor.setArrivalMargin(arrivalMargin);
 	}
 
-	private @NonNull ECanalEntry mapCanalEntry(CanalEntry canalEntrance) {
+	private Set<IVessel> getOptimiserVessels(final Set<Vessel> eVessels) {
+		final Set<IVessel> oVessels = new HashSet<>();
+		for (final Vessel vessel : eVessels) {
+			final IVessel oVessel = modelEntityMap.getOptimiserObject(vessel, IVessel.class);
+			oVessels.add(oVessel);
+		}
+		return oVessels;
+	}
+
+	private @NonNull ECanalEntry mapCanalEntry(final CanalEntry canalEntrance) {
 		switch (canalEntrance) {
 		case NORTHSIDE:
 			return ECanalEntry.NorthSide;

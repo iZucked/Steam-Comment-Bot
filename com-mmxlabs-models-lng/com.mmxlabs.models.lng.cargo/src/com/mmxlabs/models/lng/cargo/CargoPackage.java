@@ -5898,13 +5898,31 @@ public interface CargoPackage extends EPackage {
 	int CANAL_BOOKING_SLOT__NOTES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Vessel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_SLOT__VESSEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Booking Code</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKING_SLOT__BOOKING_CODE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Canal Booking Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_BOOKING_SLOT_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int CANAL_BOOKING_SLOT_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -6034,13 +6052,31 @@ public interface CargoPackage extends EPackage {
 	int CANAL_BOOKINGS__SOUTHBOUND_MAX_IDLE_DAYS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
 
 	/**
+	 * The feature id for the '<em><b>Booking Exempt Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKINGS__BOOKING_EXEMPT_VESSELS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Group Canal Parameters</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
+
+	/**
 	 * The number of structural features of the '<em>Canal Bookings</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_BOOKINGS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
+	int CANAL_BOOKINGS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -7153,6 +7189,106 @@ public interface CargoPackage extends EPackage {
 	int DEAL_SET_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselGroupCanalParametersImpl <em>Vessel Group Canal Parameters</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.VesselGroupCanalParametersImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselGroupCanalParameters()
+	 * @generated
+	 */
+	int VESSEL_GROUP_CANAL_PARAMETERS = 33;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_GROUP_CANAL_PARAMETERS__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_GROUP_CANAL_PARAMETERS__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Northbound Waiting Days</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_GROUP_CANAL_PARAMETERS__NORTHBOUND_WAITING_DAYS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Southbound Waiting Days</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_GROUP_CANAL_PARAMETERS__SOUTHBOUND_WAITING_DAYS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Group</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_GROUP_CANAL_PARAMETERS__VESSEL_GROUP = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Vessel Group Canal Parameters</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_GROUP_CANAL_PARAMETERS_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_GROUP_CANAL_PARAMETERS___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.NAMED_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_GROUP_CANAL_PARAMETERS___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.NAMED_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_GROUP_CANAL_PARAMETERS___ECONTAINER_OP = MMXCorePackage.NAMED_OBJECT___ECONTAINER_OP;
+
+	/**
+	 * The number of operations of the '<em>Vessel Group Canal Parameters</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_GROUP_CANAL_PARAMETERS_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7160,7 +7296,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCargoType()
 	 * @generated
 	 */
-	int CARGO_TYPE = 33;
+	int CARGO_TYPE = 34;
 
 
 	/**
@@ -7171,7 +7307,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselType()
 	 * @generated
 	 */
-	int VESSEL_TYPE = 34;
+	int VESSEL_TYPE = 35;
 
 
 	/**
@@ -7182,7 +7318,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryFacilityType()
 	 * @generated
 	 */
-	int INVENTORY_FACILITY_TYPE = 35;
+	int INVENTORY_FACILITY_TYPE = 36;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.InventoryFrequency <em>Inventory Frequency</em>}' enum.
@@ -7192,7 +7328,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryFrequency()
 	 * @generated
 	 */
-	int INVENTORY_FREQUENCY = 36;
+	int INVENTORY_FREQUENCY = 37;
 
 
 	/**
@@ -7203,7 +7339,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getPaperPricingType()
 	 * @generated
 	 */
-	int PAPER_PRICING_TYPE = 37;
+	int PAPER_PRICING_TYPE = 38;
 
 	/**
 	 * The meta object id for the '<em>Scheduling Time Window</em>' data type.
@@ -7213,7 +7349,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSchedulingTimeWindow()
 	 * @generated
 	 */
-	int SCHEDULING_TIME_WINDOW = 38;
+	int SCHEDULING_TIME_WINDOW = 39;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.Cargo <em>Cargo</em>}'.
@@ -9316,6 +9452,28 @@ public interface CargoPackage extends EPackage {
 	EAttribute getCanalBookingSlot_Notes();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getVessel <em>Vessel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Vessel</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookingSlot#getVessel()
+	 * @see #getCanalBookingSlot()
+	 * @generated
+	 */
+	EReference getCanalBookingSlot_Vessel();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.CanalBookingSlot#getBookingCode <em>Booking Code</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Booking Code</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookingSlot#getBookingCode()
+	 * @see #getCanalBookingSlot()
+	 * @generated
+	 */
+	EReference getCanalBookingSlot_BookingCode();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CanalBookings <em>Canal Bookings</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9412,6 +9570,28 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getCanalBookings_SouthboundMaxIdleDays();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getBookingExemptVessels <em>Booking Exempt Vessels</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Booking Exempt Vessels</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookings#getBookingExemptVessels()
+	 * @see #getCanalBookings()
+	 * @generated
+	 */
+	EReference getCanalBookings_BookingExemptVessels();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getVesselGroupCanalParameters <em>Vessel Group Canal Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Vessel Group Canal Parameters</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookings#getVesselGroupCanalParameters()
+	 * @see #getCanalBookings()
+	 * @generated
+	 */
+	EReference getCanalBookings_VesselGroupCanalParameters();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.ScheduleSpecification <em>Schedule Specification</em>}'.
@@ -9924,6 +10104,49 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getDealSet_PaperDeals();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters <em>Vessel Group Canal Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Vessel Group Canal Parameters</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters
+	 * @generated
+	 */
+	EClass getVesselGroupCanalParameters();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters#getNorthboundWaitingDays <em>Northbound Waiting Days</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Northbound Waiting Days</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters#getNorthboundWaitingDays()
+	 * @see #getVesselGroupCanalParameters()
+	 * @generated
+	 */
+	EAttribute getVesselGroupCanalParameters_NorthboundWaitingDays();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters#getSouthboundWaitingDays <em>Southbound Waiting Days</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Southbound Waiting Days</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters#getSouthboundWaitingDays()
+	 * @see #getVesselGroupCanalParameters()
+	 * @generated
+	 */
+	EAttribute getVesselGroupCanalParameters_SouthboundWaitingDays();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters#getVesselGroup <em>Vessel Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Vessel Group</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters#getVesselGroup()
+	 * @see #getVesselGroupCanalParameters()
+	 * @generated
+	 */
+	EReference getVesselGroupCanalParameters_VesselGroup();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}'.
@@ -11617,6 +11840,22 @@ public interface CargoPackage extends EPackage {
 		EAttribute CANAL_BOOKING_SLOT__NOTES = eINSTANCE.getCanalBookingSlot_Notes();
 
 		/**
+		 * The meta object literal for the '<em><b>Vessel</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CANAL_BOOKING_SLOT__VESSEL = eINSTANCE.getCanalBookingSlot_Vessel();
+
+		/**
+		 * The meta object literal for the '<em><b>Booking Code</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CANAL_BOOKING_SLOT__BOOKING_CODE = eINSTANCE.getCanalBookingSlot_BookingCode();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl <em>Canal Bookings</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -11689,6 +11928,22 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CANAL_BOOKINGS__SOUTHBOUND_MAX_IDLE_DAYS = eINSTANCE.getCanalBookings_SouthboundMaxIdleDays();
+
+		/**
+		 * The meta object literal for the '<em><b>Booking Exempt Vessels</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CANAL_BOOKINGS__BOOKING_EXEMPT_VESSELS = eINSTANCE.getCanalBookings_BookingExemptVessels();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Group Canal Parameters</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS = eINSTANCE.getCanalBookings_VesselGroupCanalParameters();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.ScheduleSpecificationImpl <em>Schedule Specification</em>}' class.
@@ -12097,6 +12352,40 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference DEAL_SET__PAPER_DEALS = eINSTANCE.getDealSet_PaperDeals();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselGroupCanalParametersImpl <em>Vessel Group Canal Parameters</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.VesselGroupCanalParametersImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselGroupCanalParameters()
+		 * @generated
+		 */
+		EClass VESSEL_GROUP_CANAL_PARAMETERS = eINSTANCE.getVesselGroupCanalParameters();
+
+		/**
+		 * The meta object literal for the '<em><b>Northbound Waiting Days</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_GROUP_CANAL_PARAMETERS__NORTHBOUND_WAITING_DAYS = eINSTANCE.getVesselGroupCanalParameters_NorthboundWaitingDays();
+
+		/**
+		 * The meta object literal for the '<em><b>Southbound Waiting Days</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_GROUP_CANAL_PARAMETERS__SOUTHBOUND_WAITING_DAYS = eINSTANCE.getVesselGroupCanalParameters_SouthboundWaitingDays();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Group</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_GROUP_CANAL_PARAMETERS__VESSEL_GROUP = eINSTANCE.getVesselGroupCanalParameters_VesselGroup();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.

@@ -4,13 +4,10 @@
  */
 /**
  */
-package com.mmxlabs.models.lng.schedule.provider;
+package com.mmxlabs.models.lng.adp.provider;
 
 
-import com.mmxlabs.models.lng.schedule.CanalBookingEvent;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
-
-import java.time.ZonedDateTime;
+import com.mmxlabs.models.lng.adp.ADPPackage;
 
 import java.util.Collection;
 import java.util.List;
@@ -18,23 +15,39 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.ResourceLocator;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+import org.eclipse.emf.edit.provider.IChildCreationExtender;
+import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
+import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.IItemPropertySource;
+import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
+import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.schedule.CanalBookingEvent} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.adp.MullCargoWrapper} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class CanalBookingEventItemProvider extends EventItemProvider {
+public class MullCargoWrapperItemProvider 
+	extends ItemProviderAdapter
+	implements
+		IEditingDomainItemProvider,
+		IStructuredItemContentProvider,
+		ITreeItemContentProvider,
+		IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CanalBookingEventItemProvider(AdapterFactory adapterFactory) {
+	public MullCargoWrapperItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -49,26 +62,26 @@ public class CanalBookingEventItemProvider extends EventItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addLinkedSequencePropertyDescriptor(object);
-			addLinkedJourneyPropertyDescriptor(object);
+			addLoadSlotPropertyDescriptor(object);
+			addDischargeSlotPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Linked Sequence feature.
+	 * This adds a property descriptor for the Load Slot feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addLinkedSequencePropertyDescriptor(Object object) {
+	protected void addLoadSlotPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CanalBookingEvent_linkedSequence_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CanalBookingEvent_linkedSequence_feature", "_UI_CanalBookingEvent_type"),
-				 SchedulePackage.Literals.CANAL_BOOKING_EVENT__LINKED_SEQUENCE,
+				 getString("_UI_MullCargoWrapper_loadSlot_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_MullCargoWrapper_loadSlot_feature", "_UI_MullCargoWrapper_type"),
+				 ADPPackage.Literals.MULL_CARGO_WRAPPER__LOAD_SLOT,
 				 true,
 				 false,
 				 true,
@@ -78,19 +91,19 @@ public class CanalBookingEventItemProvider extends EventItemProvider {
 	}
 
 	/**
-	 * This adds a property descriptor for the Linked Journey feature.
+	 * This adds a property descriptor for the Discharge Slot feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addLinkedJourneyPropertyDescriptor(Object object) {
+	protected void addDischargeSlotPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CanalBookingEvent_linkedJourney_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CanalBookingEvent_linkedJourney_feature", "_UI_CanalBookingEvent_type"),
-				 SchedulePackage.Literals.CANAL_BOOKING_EVENT__LINKED_JOURNEY,
+				 getString("_UI_MullCargoWrapper_dischargeSlot_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_MullCargoWrapper_dischargeSlot_feature", "_UI_MullCargoWrapper_type"),
+				 ADPPackage.Literals.MULL_CARGO_WRAPPER__DISCHARGE_SLOT,
 				 true,
 				 false,
 				 true,
@@ -100,14 +113,14 @@ public class CanalBookingEventItemProvider extends EventItemProvider {
 	}
 
 	/**
-	 * This returns CanalBookingEvent.gif.
+	 * This returns MullCargoWrapper.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/CanalBookingEvent"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/MullCargoWrapper"));
 	}
 
 	/**
@@ -118,13 +131,9 @@ public class CanalBookingEventItemProvider extends EventItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		ZonedDateTime labelValue = ((CanalBookingEvent)object).getStart();
-		String label = labelValue == null ? null : labelValue.toString();
-		return label == null || label.length() == 0 ?
-			getString("_UI_CanalBookingEvent_type") :
-			getString("_UI_CanalBookingEvent_type") + " " + label;
+		return getString("_UI_MullCargoWrapper_type");
 	}
-	
+
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached
@@ -149,6 +158,17 @@ public class CanalBookingEventItemProvider extends EventItemProvider {
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+	}
+
+	/**
+	 * Return the resource locator for this item provider's resources.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ResourceLocator getResourceLocator() {
+		return ((IChildCreationExtender)adapterFactory).getResourceLocator();
 	}
 
 }

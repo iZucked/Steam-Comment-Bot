@@ -20,7 +20,11 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
@@ -33,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.port.ContingencyMatrix;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
@@ -46,6 +51,7 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.BooleanAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.rcp.common.actions.AbstractMenuLockableAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
@@ -63,19 +69,56 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
 		super.init(path, adapterFactory, modelReference);
 
-		addNameManipulator("Name");
+		addTypicalColumn("Name", new ReadOnlyManipulatorWrapper<>(new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getCommandHandler())));
 
-		addTypicalColumn("Country", new BasicAttributeManipulator(PortPackage.eINSTANCE.getLocation_Country(), getCommandHandler()), PortPackage.eINSTANCE.getPort_Location());
-		// addTypicalColumn("MMX ID ", new BasicAttributeManipulator(PortPackage.eINSTANCE.getLocation_MmxId(), getCommandHandler()), PortPackage.eINSTANCE.getPort_Location());
+		addTypicalColumn("Country", new ReadOnlyManipulatorWrapper<>(new BasicAttributeManipulator(PortPackage.eINSTANCE.getLocation_Country(), getCommandHandler())),
+				PortPackage.eINSTANCE.getPort_Location());
+		// addTypicalColumn("MMX ID ", new
+		// BasicAttributeManipulator(PortPackage.eINSTANCE.getLocation_MmxId(),
+		// getCommandHandler()), PortPackage.eINSTANCE.getPort_Location());
 
-		addTypicalColumn(PortCapability.LOAD.getName(), new CapabilityManipulator(PortCapability.LOAD, getCommandHandler()));
-		addTypicalColumn(PortCapability.DISCHARGE.getName(), new CapabilityManipulator(PortCapability.DISCHARGE,getCommandHandler()));
+		addTypicalColumn("Load", new ReadOnlyManipulatorWrapper<>(new CapabilityManipulator(PortCapability.LOAD, getCommandHandler()) {
+			@Override
+			public CellEditor getCellEditor(final Composite parent, final Object object) {
+				return new ComboBoxCellEditor(parent, new String[] { "Yes", "No" });
+			}
+
+			@Override
+			public String render(final Object object) {
+				return ((Integer) getValue(object)) == 0 ? "Yes" : "No";
+			}
+		}));
+		addTypicalColumn("Discharge", new ReadOnlyManipulatorWrapper<>(new CapabilityManipulator(PortCapability.DISCHARGE, getCommandHandler()) {
+			@Override
+			public CellEditor getCellEditor(final Composite parent, final Object object) {
+				return new ComboBoxCellEditor(parent, new String[] { "Yes", "No" });
+			}
+
+			@Override
+			public String render(final Object object) {
+				return ((Integer) getValue(object)) == 0 ? "Yes" : "No";
+			}
+		}));
+		addTypicalColumn("Cooldown?", new ReadOnlyManipulatorWrapper<>(new BooleanAttributeManipulator(PortPackage.eINSTANCE.getPort_AllowCooldown(), getCommandHandler(), "Yes", "No") {
+			@Override
+			protected CellEditor createCellEditor(final Composite parent, final Object object) {
+				return new ComboBoxCellEditor(parent, new String[] { "Yes", "No" }, SWT.READ_ONLY | SWT.FLAT | SWT.BORDER);
+			}
+
+			@Override
+			public boolean canEdit(final Object object) {
+				return ((Port) object).getCapabilities().contains(PortCapability.LOAD);
+			}
+		}));
 		addTypicalColumn("Other Names",
 				new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getOtherNamesObject_OtherNames(), getCommandHandler())),
 				PortPackage.eINSTANCE.getPort_Location());
-
-		// addTypicalColumn("Timezone", new BasicAttributeManipulator(PortPackage.eINSTANCE.getPort_TimeZone(), getJointModelEditorPart().getEditingDomain()));
-		// addTypicalColumn("Port Code", new BasicAttributeManipulator(PortPackage.eINSTANCE.getPort_PortCode(), getJointModelEditorPart().getEditingDomain()));
+		// addTypicalColumn("Timezone", new
+		// BasicAttributeManipulator(PortPackage.eINSTANCE.getPort_TimeZone(),
+		// getJointModelEditorPart().getEditingDomain()));
+		// addTypicalColumn("Port Code", new
+		// BasicAttributeManipulator(PortPackage.eINSTANCE.getPort_PortCode(),
+		// getJointModelEditorPart().getEditingDomain()));
 
 		final DistanceMatrixEditorAction dmaAction = new DistanceMatrixEditorAction();
 		getToolBarManager().appendToGroup(EDIT_GROUP, dmaAction);

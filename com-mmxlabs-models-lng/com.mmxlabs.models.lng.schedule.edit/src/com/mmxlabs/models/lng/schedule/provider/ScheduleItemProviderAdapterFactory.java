@@ -939,6 +939,29 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.CanalJourneyEvent} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CanalJourneyEventItemProvider canalJourneyEventItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.CanalJourneyEvent}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCanalJourneyEventAdapter() {
+		if (canalJourneyEventItemProvider == null) {
+			canalJourneyEventItemProvider = new CanalJourneyEventItemProvider(this);
+		}
+
+		return canalJourneyEventItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -982,29 +1005,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		}
 
 		return groupedCharterLengthEventItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.CanalBookingEvent} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected CanalBookingEventItemProvider canalBookingEventItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.CanalBookingEvent}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createCanalBookingEventAdapter() {
-		if (canalBookingEventItemProvider == null) {
-			canalBookingEventItemProvider = new CanalBookingEventItemProvider(this);
-		}
-
-		return canalBookingEventItemProvider;
 	}
 
 	/**
@@ -1400,7 +1400,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (exposureDetailItemProvider != null) exposureDetailItemProvider.dispose();
 		if (charterContractFeeDetailsItemProvider != null) charterContractFeeDetailsItemProvider.dispose();
 		if (charterAvailableToEventItemProvider != null) charterAvailableToEventItemProvider.dispose();
-		if (canalBookingEventItemProvider != null) canalBookingEventItemProvider.dispose();
+		if (canalJourneyEventItemProvider != null) canalJourneyEventItemProvider.dispose();
 		if (charterAvailableFromEventItemProvider != null) charterAvailableFromEventItemProvider.dispose();
 		if (groupedCharterLengthEventItemProvider != null) groupedCharterLengthEventItemProvider.dispose();
 		if (inventoryEventsItemProvider != null) inventoryEventsItemProvider.dispose();

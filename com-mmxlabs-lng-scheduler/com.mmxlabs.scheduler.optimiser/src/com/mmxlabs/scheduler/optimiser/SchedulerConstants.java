@@ -35,8 +35,8 @@ public final class SchedulerConstants {
 	
 	// Caching constants - used in injection framework
 	public static final String Key_VoyagePlanEvaluatorCache = "cache-voyage-plan-evaluator";
-	public static final String Key_ArrivalTimeCache = "cache-arrival-times";
-	public static final String Key_PNLTrimmerCache = "cache-pnl-trimmer-times";
+	public static final String Key_TimeWindowSchedulerCache = "cache-arrival-times";
+	public static final String Key_PNLBasedWindowTrimmerCache = "cache-pnl-trimmer-times";
 
 	// Additional Info keys
 	public static final String AI_volumeAllocationInfo = "info-volume-allocation";

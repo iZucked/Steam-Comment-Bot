@@ -161,7 +161,13 @@
                id="com.mmxlabs.models.lng.cargo.presentation.composites.SellPaperDealComponentHelper"
                inheritable="true"
                modelClass="com.mmxlabs.models.lng.cargo.SellPaperDeal">
-         </componentHelper>        
+         </componentHelper>
+         <componentHelper
+               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.CanalBookingsComponentHelper"
+               id="com.mmxlabs.models.lng.cargo.presentation.composites.CanalBookingsComponentHelper"
+               inheritable="true"
+               modelClass="com.mmxlabs.models.lng.cargo.CanalBookings">
+         </componentHelper>   
 	</extension>
  <extension
        point="com.mmxlabs.models.ui.jointmodeleditors">
@@ -286,6 +292,18 @@
            id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CanalBookingSlotValueProviderFactory_Slot"
            ownerEClass="com.mmxlabs.models.lng.cargo.CanalBookingSlot"
            referenceEClass="com.mmxlabs.models.lng.cargo.Slot">
+     </valueProvider>
+     <valueProvider
+           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CanalBookingBookingCodeValueProviderFactory"
+           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CanalBookingBookingCodeValueProviderFactory_BookingCode"
+           ownerEClass="com.mmxlabs.models.lng.cargo.CanalBookingSlot"
+           referenceEClass="com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters">
+     </valueProvider>
+     <valueProvider
+           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CanalBookingVesselValueProviderFactory"
+           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CanalBookingVesselValueProviderFactory_Vessel"
+           ownerEClass="com.mmxlabs.models.lng.cargo.CanalBookingSlot"
+           referenceEClass="com.mmxlabs.models.lng.types.AVesselSet">
      </valueProvider>
  </extension>
  <extension

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.its.tests.microcases;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -342,5 +343,12 @@ public abstract class AbstractLegacyMicroTestCase {
 
 	protected int getThreadCount() {
 		return 1;
+	}
+	
+	protected void saveToLiNGOFile(LNGScenarioRunner scenarioRunner, String filenameStem) throws IOException {
+		//Save to base case.
+		scenarioRunner.getScenarioDataProvider().getManifest().setClientScenarioVersion(2);
+		scenarioRunner.getScenarioDataProvider().getManifest().setClientVersionContext("com.mmxlabs.lingo.vanilla");
+		MicroCaseUtils.storeToFile(scenarioRunner.getScenarioDataProvider(), filenameStem);
 	}
 }

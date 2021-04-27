@@ -732,6 +732,29 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected VesselGroupCanalParametersItemProvider vesselGroupCanalParametersItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createVesselGroupCanalParametersAdapter() {
+		if (vesselGroupCanalParametersItemProvider == null) {
+			vesselGroupCanalParametersItemProvider = new VesselGroupCanalParametersItemProvider(this);
+		}
+
+		return vesselGroupCanalParametersItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -885,6 +908,7 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 		if (buyPaperDealItemProvider != null) buyPaperDealItemProvider.dispose();
 		if (sellPaperDealItemProvider != null) sellPaperDealItemProvider.dispose();
 		if (dealSetItemProvider != null) dealSetItemProvider.dispose();
+		if (vesselGroupCanalParametersItemProvider != null) vesselGroupCanalParametersItemProvider.dispose();
 	}
 
 }
