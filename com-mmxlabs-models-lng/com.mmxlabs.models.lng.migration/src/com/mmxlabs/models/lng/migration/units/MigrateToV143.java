@@ -32,12 +32,12 @@ public class MigrateToV143 extends AbstractMigrationUnit {
 
 	@Override
 	public int getScenarioSourceVersion() {
-		return 140;
+		return 142;
 	}
 
 	@Override
 	public int getScenarioDestinationVersion() {
-		return 141;
+		return 143;
 	}
 	
 	private EPackage schedulePackage;
