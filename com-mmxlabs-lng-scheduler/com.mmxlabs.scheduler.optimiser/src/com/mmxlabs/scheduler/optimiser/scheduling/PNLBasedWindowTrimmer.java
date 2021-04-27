@@ -68,8 +68,14 @@ public class PNLBasedWindowTrimmer {
 	public static final int SIZE_OF_POOL = 80; // Maximum number of solutions to keep in the pool for the next iteration
 
 	/**
-	 * Trim out solutions which are equivalent. E.g. start sequence start and current end time, retain the best solution so far and discard the rest. Assumes there is no interaction with the future
-	 * sections that would change the current metrics.
+	 * <<<<<<< HEAD Trim out solutions which are equivalent. E.g. start sequence
+	 * start and current end time, retain the best solution so far and discard the
+	 * rest. Assumes there is no interaction with the future sections that would
+	 * change the current metrics. ======= Trim out solutions which are equivalent.
+	 * E.g. start sequence start and current end time, retain the best solution so
+	 * far and discard the rest. Assumes there is no interaction with the future
+	 * sections that would change the current metrics. >>>>>>>
+	 * refs/remotes/origin/master
 	 * 
 	 */
 	public static final boolean TRIM_EQUIV = true;
@@ -164,7 +170,7 @@ public class PNLBasedWindowTrimmer {
 		}
 
 		IWriteLockable.writeLock(trimmedWindowRecords);
-		
+
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
 		final ImmutableMap<IPortSlot, ImmutableList<TimeChoice>> intervalMap = trimmerUtils.computeDefaultIntervals(trimmedWindowRecords, resource, travelTimeData);
@@ -188,14 +194,22 @@ public class PNLBasedWindowTrimmer {
 			Collections.sort(results, ScheduledVoyagePlanResult::compareTo);
 
 			final ScheduledVoyagePlanResult newPrev = results.get(0);
+			IPortTimeWindowsRecord copy = null;
+
 			for (int i = 0; i < portTimeWindowsRecord.getSlots().size(); ++i) {
 				final IPortSlot slot = portTimeWindowsRecord.getSlots().get(i);
 
 				final int t = newPrev.arrivalTimes.get(i);
 
-				IPortTimeWindowsRecord copy = new PortTimeWindowsRecord(portTimeWindowsRecord);
-				trimmedWindowRecords.set(idx, copy);
-				
+				// Only create the copy once - if we rest on the assumption that
+				// portTimeWindowsRecord.getSlots() is never empty then code inside if-block
+				// below should be moved outside this for loop - can probably move outside for
+				// loop anyway (worst case we create a copy for a PTWR that has no slots)
+				if (copy == null) {
+					copy = new PortTimeWindowsRecord(portTimeWindowsRecord);
+					trimmedWindowRecords.set(idx, copy);
+				}
+
 				final MutableTimeWindow feasibleTimeWindow = new MutableTimeWindow(t, t + 1);
 				copy.setSlotFeasibleTimeWindow(slot, feasibleTimeWindow);
 			}
@@ -248,15 +262,15 @@ public class PNLBasedWindowTrimmer {
 			}
 		}
 
-
-		// Compute the initial set of arrival times for each slot. This is based on pricing change points and max speed/NBO based travel times.
+		// Compute the initial set of arrival times for each slot. This is based on
+		// pricing change points and max speed/NBO based travel times.
 		// This will be further refined later depending on previous voyages.
 		// Note this can change some of the time window records.
 		final ImmutableMap<IPortSlot, ImmutableList<TimeChoice>> intervalMap = trimmerUtils.computeDefaultIntervals(trimmedWindowRecords, resource, travelTimeData);
 
 		// Disallow further changes to the records
 		IWriteLockable.writeLock(trimmedWindowRecords);
-		
+
 		List<ScheduledRecord> currentHeads = new LinkedList<>();
 		for (int idx = 0; idx < trimmedWindowRecords.size(); idx++) {
 
@@ -350,7 +364,8 @@ public class PNLBasedWindowTrimmer {
 					if (!a.getFirst().equals(e.getFirst())) {
 						throw new CacheVerificationFailedException();
 					}
-					// Note: our isEqual method rather than equals as we don't want to implement hashCode/equals.
+					// Note: our isEqual method rather than equals as we don't want to implement
+					// hashCode/equals.
 					if (!a.getSecond().isEqual(e.getSecond())) {
 						throw new CacheVerificationFailedException();
 					}
@@ -445,7 +460,8 @@ public class PNLBasedWindowTrimmer {
 				scheduledRecords.addAll(evaluatorResults.stream().map(res -> {
 					final PreviousHeelRecord pp = (res == null) ? new PreviousHeelRecord() : res.getSecond().endHeelState;
 
-					// As this is the first voyage, we need to set up the min/max durations in the first ScheduledRecord of the list
+					// As this is the first voyage, we need to set up the min/max durations in the
+					// first ScheduledRecord of the list
 					int minDuration = 0;
 					int maxDuration = Integer.MAX_VALUE;
 					final IEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
