@@ -65,8 +65,6 @@ public class MigrateToV141 extends AbstractMigrationUnit {
 		clearUpScheduleModel(scheduleModel);
 		clearUpAnalyticsModel(analyticsModel, analyticsPackage);
 	}
-
-	
 	
 	private Map<EObjectWrapper, EObjectWrapper> migrateCharterContracts(final EPackage commercialPackage, final EObjectWrapper commercialModel) {
 		final Map<EObjectWrapper, EObjectWrapper> map = new HashMap<>();
