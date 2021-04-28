@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * All rights reserved.
+ */
 package com.mmxlabs.lngdataserver.lng.importers.internal;
 
 import org.ops4j.peaberry.activation.util.PeaberryActivationModule;
