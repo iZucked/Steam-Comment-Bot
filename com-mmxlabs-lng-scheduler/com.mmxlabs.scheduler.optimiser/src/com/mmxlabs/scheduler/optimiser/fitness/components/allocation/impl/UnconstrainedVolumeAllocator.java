@@ -95,25 +95,13 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 
 	protected AllocationAnnotation calculateActualsTransferMode(final AllocationRecord allocationRecord, final List<IPortSlot> slots) {
 
-		final AllocationAnnotation annotation = new AllocationAnnotation();
+		final AllocationAnnotation annotation = new AllocationAnnotation(allocationRecord.portTimesRecord);
 
-		// Second slot - assume the DES Sale
-		final IPortSlot salesSlot = allocationRecord.slots.get(1);
 		for (int i = 0; i < slots.size(); i++) {
 			final IPortSlot slot = allocationRecord.slots.get(i);
 			if (actualsDataProvider.hasActuals(slot) == false) {
 				throw new IllegalStateException("Actuals Volume Mode, but no actuals specified");
 			}
-			annotation.getSlots().add(slot);
-
-			// TODO: This is keyed to E DES sale actuals requirements. Needs further
-			// customisability...
-			// Actuals mode, take values directly from sale
-			annotation.setSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(salesSlot));
-			annotation.setSlotDuration(slot, 0);
-			annotation.setSlotExtraIdleTime(slot, 0);
-			annotation.setRouteOptionBooking(slot, allocationRecord.portTimesRecord.getRouteOptionBooking(slot));
-			annotation.setSlotNextVoyageOptions(slot, allocationRecord.portTimesRecord.getSlotNextVoyageOptions(slot), allocationRecord.portTimesRecord.getSlotNextVoyagePanamaPeriod(slot));
 
 			annotation.setCommercialSlotVolumeInM3(slot, allocationRecord.maxVolumesInM3.get(i));
 			annotation.setPhysicalSlotVolumeInM3(slot, allocationRecord.maxVolumesInM3.get(i));
@@ -121,19 +109,13 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			annotation.setPhysicalSlotVolumeInMMBTu(slot, allocationRecord.maxVolumesInMMBtu.get(i));
 			annotation.setSlotCargoCV(slot, allocationRecord.slotCV.get(i));
 		}
-		// Copy over the return slot time if present
-		{
-			final IPortSlot slot = allocationRecord.portTimesRecord.getReturnSlot();
-			if (slot != null) {
-				annotation.setReturnSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
-			}
-		}
+
 		return annotation;
 	}
 
 	protected AllocationAnnotation calculateActualsShippedMode(final AllocationRecord allocationRecord, final List<IPortSlot> slots, final IVessel vessel) {
 
-		final AllocationAnnotation annotation = new AllocationAnnotation();
+		final AllocationAnnotation annotation = new AllocationAnnotation(allocationRecord.portTimesRecord);
 
 		// Work out used fuel volume - adjust for heel positions and transfer volumes
 		// Actuals data will give us;
@@ -156,16 +138,9 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 				throw new IllegalStateException("Actuals Volume Mode, but no actuals specified");
 			}
 
-			annotation.getSlots().add(slot);
-
 			// Scheduler should have made this happen, but lets make sure here
 			assert isFOBOrDES || (allocationRecord.portTimesRecord.getSlotTime(slot) == actualsDataProvider.getArrivalTime(slot));
 			assert allocationRecord.portTimesRecord.getSlotDuration(slot) == (isFOBOrDES ? 0 : actualsDataProvider.getVisitDuration(slot));
-			annotation.setSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
-			annotation.setSlotDuration(slot, allocationRecord.portTimesRecord.getSlotDuration(slot));
-			annotation.setSlotExtraIdleTime(slot, allocationRecord.portTimesRecord.getSlotExtraIdleTime(slot));
-			annotation.setRouteOptionBooking(slot, allocationRecord.portTimesRecord.getRouteOptionBooking(slot));
-			annotation.setSlotNextVoyageOptions(slot, allocationRecord.portTimesRecord.getSlotNextVoyageOptions(slot), allocationRecord.portTimesRecord.getSlotNextVoyagePanamaPeriod(slot));
 
 			// Actuals mode, take values directly
 			annotation.setCommercialSlotVolumeInM3(slot, allocationRecord.maxVolumesInM3.get(i));
@@ -207,13 +182,6 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		annotation.setRemainingHeelVolumeInM3(returnSlotHeelInM3);
 		annotation.setFuelVolumeInM3(usedFuelVolume);
 
-		// Copy over the return slot time if present
-		{
-			final IPortSlot slot = allocationRecord.portTimesRecord.getReturnSlot();
-			if (slot != null) {
-				annotation.setReturnSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
-			}
-		}
 		return annotation;
 	}
 
@@ -534,7 +502,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 	}
 
 	protected AllocationAnnotation createNewAnnotation(final AllocationRecord allocationRecord, final List<IPortSlot> slots) {
-		final AllocationAnnotation annotation = new AllocationAnnotation();
+		final AllocationAnnotation annotation = new AllocationAnnotation(allocationRecord.portTimesRecord);
 		final ILoadOption loadSlot = (ILoadOption) slots.get(0);
 		// Assuming a single cargo CV!
 		final int defaultCargoCVValue = loadSlot.getCargoCVValue();
@@ -542,12 +510,6 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		// Copy across slot time information
 		for (int i = 0; i < slots.size(); i++) {
 			final IPortSlot slot = allocationRecord.slots.get(i);
-			annotation.getSlots().add(slot);
-			annotation.setSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
-			annotation.setSlotDuration(slot, allocationRecord.portTimesRecord.getSlotDuration(slot));
-			annotation.setSlotExtraIdleTime(slot, allocationRecord.portTimesRecord.getSlotExtraIdleTime(slot));
-			annotation.setRouteOptionBooking(slot, allocationRecord.portTimesRecord.getRouteOptionBooking(slot));
-			annotation.setSlotNextVoyageOptions(slot, allocationRecord.portTimesRecord.getSlotNextVoyageOptions(slot), allocationRecord.portTimesRecord.getSlotNextVoyagePanamaPeriod(slot));
 
 			if (actualsDataProvider.hasActuals(slot)) {
 				annotation.setSlotCargoCV(slot, actualsDataProvider.getCVValue(slot));
@@ -555,13 +517,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 				annotation.setSlotCargoCV(slot, defaultCargoCVValue);
 			}
 		}
-		// Copy over the return slot time if present
-		{
-			final IPortSlot slot = allocationRecord.portTimesRecord.getReturnSlot();
-			if (slot != null) {
-				annotation.setReturnSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
-			}
-		}
+
 		return annotation;
 
 	}

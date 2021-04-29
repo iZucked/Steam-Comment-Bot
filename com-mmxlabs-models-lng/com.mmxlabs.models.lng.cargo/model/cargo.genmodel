@@ -339,16 +339,23 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookingSlot/bookingDate"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CanalBookingSlot/slot"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookingSlot/notes"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CanalBookingSlot/vessel"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CanalBookingSlot/bookingCode"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//CanalBookings">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CanalBookings/canalBookingSlots"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/strictBoundaryOffsetDays"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/relaxedBoundaryOffsetDays"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/arrivalMarginHours"/>
+      <genFeatures documentation="Number of hours arrival margin prior Panama booking date or expected crossing time."
+          createChild="false" propertyDescription="Number of hours arrival margin prior Panama booking date or expected crossing time."
+          ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/arrivalMarginHours"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/flexibleBookingAmountNorthbound"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/flexibleBookingAmountSouthbound"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/northboundMaxIdleDays"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/southboundMaxIdleDays"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CanalBookings/bookingExemptVessels"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Number of hours arrival margin prior Panama booking date or expected crossing time."
+          propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CanalBookings/vesselGroupCanalParameters"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//ScheduleSpecification">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//ScheduleSpecification/vesselScheduleSpecifications"/>
@@ -405,6 +412,11 @@
     <genClasses ecoreClass="cargo.ecore#//DealSet">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//DealSet/slots"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//DealSet/paperDeals"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//VesselGroupCanalParameters">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselGroupCanalParameters/northboundWaitingDays"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselGroupCanalParameters/southboundWaitingDays"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselGroupCanalParameters/vesselGroup"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

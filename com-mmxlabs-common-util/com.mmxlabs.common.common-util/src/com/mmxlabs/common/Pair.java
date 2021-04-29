@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.common;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /**
  * A class for holding a pair of heterogenous items
  * 
@@ -110,7 +112,7 @@ public class Pair<A, B> {
 		return true;
 	}
 
-	public static <A, B> Pair<A, B> of(A a, B b) {
+	public static <A, B> @NonNull Pair<A, B> of(A a, B b) {
 		return new Pair<>(a, b);
 	}
 }

@@ -625,6 +625,11 @@ public class VesselAvailabilityItemProvider
 			(createChildParameter
 				(CargoPackage.Literals.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT,
 				 CommercialFactory.eINSTANCE.createRuleBasedBallastBonusContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CargoPackage.Literals.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT,
+				 CommercialFactory.eINSTANCE.createMonthlyBallastBonusContract()));
 	}
 
 }

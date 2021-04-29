@@ -138,7 +138,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.LUMP_SUM_CONTRACT_DETAILS: return createLumpSumContractDetails();
 			case SchedulePackage.NOTIONAL_JOURNEY_CONTRACT_DETAILS: return createNotionalJourneyContractDetails();
 			case SchedulePackage.CHARTER_AVAILABLE_TO_EVENT: return createCharterAvailableToEvent();
-			case SchedulePackage.CANAL_BOOKING_EVENT: return createCanalBookingEvent();
+			case SchedulePackage.CANAL_JOURNEY_EVENT: return createCanalJourneyEvent();
 			case SchedulePackage.CHARTER_AVAILABLE_FROM_EVENT: return createCharterAvailableFromEvent();
 			case SchedulePackage.GROUPED_CHARTER_LENGTH_EVENT: return createGroupedCharterLengthEvent();
 			case SchedulePackage.INVENTORY_EVENTS: return createInventoryEvents();
@@ -650,6 +650,17 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * @generated
 	 */
 	@Override
+	public CanalJourneyEvent createCanalJourneyEvent() {
+		CanalJourneyEventImpl canalJourneyEvent = new CanalJourneyEventImpl();
+		return canalJourneyEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public CharterAvailableFromEvent createCharterAvailableFromEvent() {
 		CharterAvailableFromEventImpl charterAvailableFromEvent = new CharterAvailableFromEventImpl();
 		return charterAvailableFromEvent;
@@ -664,17 +675,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public GroupedCharterLengthEvent createGroupedCharterLengthEvent() {
 		GroupedCharterLengthEventImpl groupedCharterLengthEvent = new GroupedCharterLengthEventImpl();
 		return groupedCharterLengthEvent;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public CanalBookingEvent createCanalBookingEvent() {
-		CanalBookingEventImpl canalBookingEvent = new CanalBookingEventImpl();
-		return canalBookingEvent;
 	}
 
 	/**

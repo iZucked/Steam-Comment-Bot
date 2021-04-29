@@ -60,6 +60,7 @@ public final class KnownFeatures {
 	 */
 	public static final String FEATURE_EXPOSURES = "features:exposures";
 	public static final String FEATURE_EXPOSURES_IGNORE_ENERGY_CONVERSION = "features:exposures-ignore-energy-conversion";
+	public static final String FEATURE_EXPOSURES_CUTOFF_AT_PROMPT_START = "features:exposures-cutoff-at-prompt-start";
 
 	public static final String FEATURE_INVENTORY_MODEL = "features:inventory-model";
 	
@@ -68,6 +69,7 @@ public final class KnownFeatures {
 	public static final String FEATURE_PAPER_DEALS = "features:paperdeals";
 
 	public static final String FEATURE_GENERATED_PAPER_DEALS = "features:generated-papers";
+	public static final String FEATURE_RE_HEDGE_CUTOFF_AT_PROMPT_START = "features:re-hedge-cutoff-at-prompt-start";
 
 	public static final String FEATURE_DEAL_SETS_GENERATE_FROM_CARGOES = "features:deal-sets-generate-from-cargoes";
 

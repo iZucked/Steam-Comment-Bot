@@ -5,6 +5,7 @@
 package com.mmxlabs.common.paperdeals;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +34,8 @@ public class PaperDealsLookupData {
 	public Map<String, String> marketIndices = new HashMap<>();
 	// Keeps a list of indices to hedge
 	public List<String> indicesToHedge = new ArrayList<>();
+	
+	public YearMonth cutoffMonth = YearMonth.of(1970, 1);
 	
 	public PaperDealsLookupData(final Map<String, BasicPricingCalendar> pricingCalendars, final Map<String, BasicHolidayCalendar> holidayCalendars, final Map<String, Map<LocalDate, Double>> settledPrices, //
 			final List<BasicPaperDealData> paperDeals, final Map<String, Map<String, String>> hedgeCurves, final Map<String, String> marketIndices, final List<String> indicesToHedge) {

@@ -6,24 +6,22 @@
  */
 package com.mmxlabs.models.lng.cargo.presentation.composites;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.ecore.EClass;
+
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.port.ui.editors.RouteOptionInlineEditorFactory;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.editors.impl.MultiTextInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
-
-import org.eclipse.emf.ecore.EClass;
 
 /**
  * A component helper for CanalBookingSlot instances
@@ -65,15 +63,16 @@ public class CanalBookingSlotComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editors for features on this class directly, and superclass' features.
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_routeOptionEditor(detailComposite, topClass);
-		add_canalEntranceEditor(detailComposite, topClass);
+		//add_routeOptionEditor(detailComposite, topClass);
 		add_bookingDateEditor(detailComposite, topClass);
-		add_slotEditor(detailComposite, topClass);
+		add_canalEntranceEditor(detailComposite, topClass);
+		add_vesselEditor(detailComposite, topClass);
+		add_bookingCodeEditor(detailComposite, topClass);
 		add_notesEditor(detailComposite, topClass);
 	}
 	/**
@@ -119,5 +118,23 @@ public class CanalBookingSlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_notesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(new MultiTextInlineEditor(CargoPackage.Literals.CANAL_BOOKING_SLOT__NOTES));
+	}
+
+	/**
+	 * Create the editor for the vessel feature on CanalBookingSlot
+	 *
+	 * @generated
+	 */
+	protected void add_vesselEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKING_SLOT__VESSEL));
+	}
+
+	/**
+	 * Create the editor for the bookingCode feature on CanalBookingSlot
+	 *
+	 * @generated
+	 */
+	protected void add_bookingCodeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CANAL_BOOKING_SLOT__BOOKING_CODE));
 	}
 }

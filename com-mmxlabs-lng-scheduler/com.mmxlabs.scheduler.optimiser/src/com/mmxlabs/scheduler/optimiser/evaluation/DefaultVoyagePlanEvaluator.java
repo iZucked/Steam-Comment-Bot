@@ -16,10 +16,11 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.common.collect.ImmutableList;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.exposures.BasicExposureRecord;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.scheduler.optimiser.cache.IWriteLockable;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterLengthEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumerPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionSupplierPortSlot;
@@ -104,17 +105,15 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 		final VoyagePlanRecord vpr = new VoyagePlanRecord(vp, cargoValueAnnotation);
 		vpr.setHeelVolumeRecords(new HashMap<>());
 
-		final ScheduledVoyagePlanResult result = new ScheduledVoyagePlanResult();
-
 		final List<Integer> times = new LinkedList<>();
 		for (final IPortSlot s : portTimesRecord.getSlots()) {
 			times.add(portTimesRecord.getSlotTime(s));
 		}
 
-		result.arrivalTimes = times;
-		IPortSlot returnSlot = portTimesRecord.getReturnSlot();
+		int returnTime = 0;
+		final IPortSlot returnSlot = portTimesRecord.getReturnSlot();
 		if (returnSlot != null) {
-			result.returnTime = portTimesRecord.getSlotTime(returnSlot);
+			returnTime = portTimesRecord.getSlotTime(returnSlot);
 		}
 
 		latenessChecker.calculateLateness(resource, vpr, annotatedSolution);
@@ -133,17 +132,20 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 			}
 		}
 
-		result.metrics = metrics;
+		IWriteLockable.writeLock(vpr);
 
-		if (keepDetails) {
-			result.voyagePlans.add(vpr);
-		}
+		final ScheduledVoyagePlanResult result = new ScheduledVoyagePlanResult(ImmutableList.copyOf(times), // arrival times
+				returnTime, //
+				keepDetails ? ImmutableList.of(vpr) : ImmutableList.of(), //
+				metrics, //
+				new PreviousHeelRecord() //
+		);
 
 		return result;
 	}
 
 	@Override
-	public List<ScheduledVoyagePlanResult> evaluateRoundTrip(final IResource resource, //
+	public ImmutableList<ScheduledVoyagePlanResult> evaluateRoundTrip(final IResource resource, //
 			final IVesselAvailability vesselAvailability, //
 			final ICharterCostCalculator charterCostCalculator, //
 			final IPortTimesRecord initialPortTimesRecord, //
@@ -153,24 +155,27 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 
 		// Some defaults for a round trip
 		final int vesselStartTime = 0;
-		final PreviousHeelRecord previousHeelRecord = new PreviousHeelRecord();
+		final PreviousHeelRecord previousHeelRecord = new PreviousHeelRecord(0, 0, 0, false);
 		final boolean lastPlan = true;
 
-		return evaluateShipped(resource, vesselAvailability, charterCostCalculator, vesselStartTime, null, previousHeelRecord, initialPortTimesRecord, lastPlan, returnAll, keepDetails, annotatedSolution);
+		return evaluateShipped(resource, vesselAvailability, charterCostCalculator, vesselStartTime, null, previousHeelRecord, initialPortTimesRecord, lastPlan, returnAll, keepDetails,
+				annotatedSolution);
 	}
 
 	@Override
-	public List<ScheduledVoyagePlanResult> evaluateShipped(final IResource resource, //
+	public ImmutableList<ScheduledVoyagePlanResult> evaluateShipped(final IResource resource, //
 			final IVesselAvailability vesselAvailability, //
 			final ICharterCostCalculator charterCostCalculator, //
 			final int vesselStartTime, //
-			@Nullable IPort firstLoadPort, 
+			final @Nullable IPort firstLoadPort, //
 			final PreviousHeelRecord previousHeelRecord, //
 			final IPortTimesRecord initialPortTimesRecord, //
 			final boolean lastPlan, //
 			final boolean returnAll, //
 			final boolean keepDetails, //
 			@Nullable final IAnnotatedSolution annotatedSolution) {
+
+		IWriteLockable.writeLock(initialPortTimesRecord);
 
 		// Only expect a single result here
 		final List<ScheduledVoyagePlanResult> results = new LinkedList<>();
@@ -179,13 +184,18 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 
 			final long[] metrics = new long[MetricType.values().length];
 
-			final ScheduledVoyagePlanResult result = new ScheduledVoyagePlanResult();
-
 			final Pair<VoyagePlan, IPortTimesRecord> lastPP = vpList.get(vpList.size() - 1);
 
 			// Rolling values, updated with each voyage plan
-			int lastHeelPrice = previousHeelRecord.lastHeelPricePerMMBTU;
+			int lastHeelPricePerMMBTU = previousHeelRecord.lastHeelPricePerMMBTU;
+			int lastCV = 0;
+			long lastHeelVolumeInM3 = 0;
+			boolean forcedCooldown = false;
 			PreviousHeelRecord planPreviousHeelRecord = previousHeelRecord;
+			int returnTime = 0;
+
+			final List<VoyagePlanRecord> voyagePlanRecords = new LinkedList<>();
+
 			for (final Pair<VoyagePlan, IPortTimesRecord> pp : vpList) {
 				final VoyagePlan vp = pp.getFirst();
 				final IPortTimesRecord ptr = pp.getSecond();
@@ -212,17 +222,18 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 					cargoValueAnnotation = p.getFirst();
 				}
 
+				IWriteLockable.writeLock(vp);
+
 				VoyagePlanRecord vpr = null;
 				if (cargoValueAnnotation != null) {
 					metrics[MetricType.PNL.ordinal()] += cargoValueAnnotation.getTotalProfitAndLoss();
 					pp.setSecond(cargoValueAnnotation);
 					final int numSlots = cargoValueAnnotation.getSlots().size();
 					final IPortSlot lastSlot = cargoValueAnnotation.getSlots().get(numSlots - 1);
-					result.lastCV = cargoValueAnnotation.getSlotCargoCV(lastSlot);
+					lastCV = cargoValueAnnotation.getSlotCargoCV(lastSlot);
 
-					result.lastHeelPricePerMMBTU = cargoValueAnnotation.getSlotPricePerMMBTu(lastSlot);
-					lastHeelPrice = result.lastHeelPricePerMMBTU;
-					result.lastHeelVolumeInM3 = cargoValueAnnotation.getRemainingHeelVolumeInM3();
+					lastHeelPricePerMMBTU = cargoValueAnnotation.getSlotPricePerMMBTu(lastSlot);
+					lastHeelVolumeInM3 = cargoValueAnnotation.getRemainingHeelVolumeInM3();
 					vpr = new VoyagePlanRecord(vp, cargoValueAnnotation);
 
 					// Populating exposures record
@@ -239,64 +250,44 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 				final boolean recordHeel = !(vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE
 						|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE);
 
-				final boolean endedWithForcedCooldown = computeHeelVolumeRecords(planPreviousHeelRecord, vp, allocationAnnotation, heelVolumeRecords, recordHeel);
+				forcedCooldown = computeHeelVolumeRecords(planPreviousHeelRecord, vp, allocationAnnotation, heelVolumeRecords, recordHeel);
 
 				// Non-cargo codepath
 				if (allocationAnnotation == null) {
 					assert vpr == null;
 					final Pair<Map<IPortSlot, HeelValueRecord>, @NonNull Long> p = entityValueCalculator.evaluateNonCargoPlan(vp, ptr, vesselAvailability, vesselStartTime, ptr.getFirstSlotTime(),
-							 firstLoadPort, lastHeelPrice, heelVolumeRecords, annotatedSolution);
+							firstLoadPort, lastHeelPricePerMMBTU, heelVolumeRecords, annotatedSolution);
 
-					result.lastHeelVolumeInM3 = vp.getRemainingHeelInM3();
+					lastHeelVolumeInM3 = vp.getRemainingHeelInM3();
 					metrics[MetricType.PNL.ordinal()] += p.getSecond();
 
 					// Lookup last heel price
 					for (final IPortSlot slot : ptr.getSlots()) {
 						if (slot instanceof IHeelOptionConsumerPortSlot) {
 							// Heel consumed, so reset the price
-							result.lastHeelPricePerMMBTU = 0;
-							result.lastCV = 0;
+							lastHeelPricePerMMBTU = 0;
+							lastCV = 0;
 						}
 						if (slot instanceof IHeelOptionSupplierPortSlot) {
 							final IHeelOptionSupplierPortSlot iHeelOptionSupplierPortSlot = (IHeelOptionSupplierPortSlot) slot;
 							final Map<IPortSlot, HeelValueRecord> first = p.getFirst();
 							final HeelValueRecord heelValueRecord = first.get(slot);
 							if (heelValueRecord != null) {
-								result.lastHeelPricePerMMBTU = heelValueRecord.getCostUnitPrice();
+								lastHeelPricePerMMBTU = heelValueRecord.getCostUnitPrice();
 							}
-							result.lastCV = iHeelOptionSupplierPortSlot.getHeelOptionsSupplier().getHeelCVValue();
+							lastCV = iHeelOptionSupplierPortSlot.getHeelOptionsSupplier().getHeelCVValue();
 						}
 					}
-					lastHeelPrice = result.lastHeelPricePerMMBTU;
 					vpr = new VoyagePlanRecord(vp, ptr, p.getFirst(), p.getSecond());
 				}
-				result.forcedCooldown = endedWithForcedCooldown;
-				vpr.forcedCooldown = endedWithForcedCooldown;
 				vpr.setHeelVolumeRecords(heelVolumeRecords);
-				result.voyagePlans.add(vpr);
+
+				voyagePlanRecords.add(vpr);
 
 				metrics[MetricType.CAPACITY.ordinal()] += vp.getViolationsCount();
 				metrics[MetricType.COMPULSARY_SLOT.ordinal()] = 0; // Always zero
 
-				final List<Integer> times = new LinkedList<>();
-				for (final IPortSlot s : initialPortTimesRecord.getSlots()) {
-					times.add(initialPortTimesRecord.getSlotTime(s));
-				}
-
-				result.arrivalTimes = times;
-				IPortSlot returnSlot = initialPortTimesRecord.getReturnSlot();
-				if (returnSlot != null) {
-					result.returnTime = initialPortTimesRecord.getSlotTime(returnSlot);
-				} else {
-					IPortSlot s = initialPortTimesRecord.getSlots().get(initialPortTimesRecord.getSlots().size() - 1);
-					result.returnTime = initialPortTimesRecord.getSlotTime(s);
-				}
-
-				final PreviousHeelRecord planHeelRecord = new PreviousHeelRecord();
-				planHeelRecord.heelVolumeInM3 = result.lastHeelVolumeInM3;
-				planHeelRecord.lastHeelPricePerMMBTU = result.lastHeelPricePerMMBTU;
-				planHeelRecord.lastCV = result.lastCV;
-				planHeelRecord.forcedCooldown = endedWithForcedCooldown;
+				final PreviousHeelRecord planHeelRecord = new PreviousHeelRecord(lastHeelVolumeInM3, lastHeelPricePerMMBTU, lastCV, forcedCooldown);
 
 				planPreviousHeelRecord = planHeelRecord;
 
@@ -308,14 +299,28 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 				capacityChecker.calculateCapacityViolations(resource, vpr);
 				idleTimeChecker.calculateIdleTime(vpr, annotatedSolution);
 
+				IWriteLockable.writeLock(vpr);
 			}
 
-			result.metrics = metrics;
-
-			if (!keepDetails) {
-				result.voyagePlans.clear();
-
+			final List<Integer> times = new LinkedList<>();
+			for (final IPortSlot s : initialPortTimesRecord.getSlots()) {
+				times.add(initialPortTimesRecord.getSlotTime(s));
 			}
+
+			final IPortSlot returnSlot = initialPortTimesRecord.getReturnSlot();
+			if (returnSlot != null) {
+				returnTime = initialPortTimesRecord.getSlotTime(returnSlot);
+			} else {
+				final IPortSlot s = initialPortTimesRecord.getSlots().get(initialPortTimesRecord.getSlots().size() - 1);
+				returnTime = initialPortTimesRecord.getSlotTime(s);
+			}
+
+			final ScheduledVoyagePlanResult result = new ScheduledVoyagePlanResult( //
+					ImmutableList.copyOf(times), returnTime, //
+					keepDetails ? ImmutableList.copyOf(voyagePlanRecords) : ImmutableList.of(), //
+					metrics, //
+					new PreviousHeelRecord(lastHeelVolumeInM3, lastHeelPricePerMMBTU, lastCV, forcedCooldown) //
+			);
 
 			results.add(result);
 		};
@@ -345,7 +350,7 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 		voyagePlanner.makeShippedVoyagePlans(resource, charterCostCalculator, initialPortTimesRecord, heelVolumeRangeInM3, previousHeelRecord.lastCV, lastPlan, returnAll, true, hook,
 				annotatedSolution);
 
-		return results;
+		return ImmutableList.copyOf(results);
 
 	}
 

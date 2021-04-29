@@ -35,7 +35,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -522,6 +521,17 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 					return currentSeverity;
 				}
 			}
+			
+			if (objects.contains(input.eContainer())) {
+				if (element.getFeaturesForEObject(input.eContainer()).contains(attribute)) {
+					// Is severity worse, then note it
+					if (element.getSeverity() > currentSeverity) {
+						currentSeverity = element.getSeverity();
+					}
+
+					return currentSeverity;
+				}				
+			}
 		}
 
 		return currentSeverity;
@@ -546,6 +556,15 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 					}
 					sb.append(element.getBaseMessage());
 				}
+			}
+			
+			if (objects.contains(input.eContainer())) {
+				if (element.getFeaturesForEObject(input.eContainer()).contains(attribute)) {
+					if (sb.length() > 0) {
+						sb.append("\n");
+					}
+					sb.append(element.getBaseMessage());			
+				}				
 			}
 		}
 	}

@@ -104,6 +104,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 			case CargoPackage.BUY_PAPER_DEAL: return createBuyPaperDeal();
 			case CargoPackage.SELL_PAPER_DEAL: return createSellPaperDeal();
 			case CargoPackage.DEAL_SET: return createDealSet();
+			case CargoPackage.VESSEL_GROUP_CANAL_PARAMETERS: return createVesselGroupCanalParameters();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -491,6 +492,17 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	public DealSet createDealSet() {
 		DealSetImpl dealSet = new DealSetImpl();
 		return dealSet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public VesselGroupCanalParameters createVesselGroupCanalParameters() {
+		VesselGroupCanalParametersImpl vesselGroupCanalParameters = new VesselGroupCanalParametersImpl();
+		return vesselGroupCanalParameters;
 	}
 
 	/**

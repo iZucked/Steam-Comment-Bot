@@ -30,7 +30,7 @@ public class CanalBookingSlotConstraint extends AbstractModelMultiConstraint {
 		if (target instanceof CanalBookingSlot) {
 			final CanalBookingSlot canalBookingSlot = (CanalBookingSlot) target;
 
-			final DetailConstraintStatusFactory baseFactory = DetailConstraintStatusFactory.makeStatus().withName(ScenarioElementNameHelper.getTypeName(canalBookingSlot));
+			final DetailConstraintStatusFactory baseFactory = DetailConstraintStatusFactory.makeStatus().withName("Panama canal bookings");
 
 			if (canalBookingSlot.getRouteOption() == null) {
 				statuses.add(baseFactory.copyName() //
@@ -44,10 +44,8 @@ public class CanalBookingSlotConstraint extends AbstractModelMultiConstraint {
 						.withObjectAndFeature(canalBookingSlot, CargoPackage.Literals.CANAL_BOOKING_SLOT__BOOKING_DATE) //
 						.withMessage("Date must be specified.") //
 						.make(ctx));
-			} else {
-				// TODO: fill in
 			}
-
+			
 			if (canalBookingSlot.getCanalEntrance() == null) {
 				statuses.add(baseFactory.copyName() //
 						.withObjectAndFeature(canalBookingSlot, CargoPackage.Literals.CANAL_BOOKING_SLOT__CANAL_ENTRANCE) //

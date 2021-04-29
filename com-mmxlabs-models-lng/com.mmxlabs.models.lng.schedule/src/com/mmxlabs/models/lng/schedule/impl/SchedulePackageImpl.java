@@ -24,7 +24,7 @@ import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
-import com.mmxlabs.models.lng.schedule.CanalBookingEvent;
+import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -382,6 +382,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass canalJourneyEventEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass charterAvailableFromEventEClass = null;
 
 	/**
@@ -390,13 +397,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EClass groupedCharterLengthEventEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass canalBookingEventEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1914,6 +1914,16 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
+	public EReference getJourney_CanalJourneyEvent() {
+		return (EReference)journeyEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getCapacityViolationsHolder() {
 		return capacityViolationsHolderEClass;
 	}
@@ -2595,6 +2605,56 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
+	public EClass getCanalJourneyEvent() {
+		return canalJourneyEventEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getCanalJourneyEvent_LinkedSequence() {
+		return (EReference)canalJourneyEventEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getCanalJourneyEvent_LinkedJourney() {
+		return (EReference)canalJourneyEventEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCanalJourneyEvent_PanamaWaitingTimeHours() {
+		return (EAttribute)canalJourneyEventEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCanalJourneyEvent_MaxAvailablePanamaWaitingTimeHours() {
+		return (EAttribute)canalJourneyEventEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getCharterAvailableFromEvent() {
 		return charterAvailableFromEventEClass;
 	}
@@ -2627,36 +2687,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	@Override
 	public EReference getGroupedCharterLengthEvent_LinkedSequence() {
 		return (EReference)groupedCharterLengthEventEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getCanalBookingEvent() {
-		return canalBookingEventEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getCanalBookingEvent_LinkedSequence() {
-		return (EReference)canalBookingEventEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getCanalBookingEvent_LinkedJourney() {
-		return (EReference)canalBookingEventEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -3136,6 +3166,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(journeyEClass, JOURNEY__CANAL_ARRIVAL_TIME);
 		createEAttribute(journeyEClass, JOURNEY__CANAL_BOOKING_PERIOD);
 		createEReference(journeyEClass, JOURNEY__CANAL_ENTRANCE_PORT);
+		createEReference(journeyEClass, JOURNEY__CANAL_JOURNEY_EVENT);
 
 		idleEClass = createEClass(IDLE);
 		createEAttribute(idleEClass, IDLE__LADEN);
@@ -3271,9 +3302,11 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		charterAvailableToEventEClass = createEClass(CHARTER_AVAILABLE_TO_EVENT);
 		createEReference(charterAvailableToEventEClass, CHARTER_AVAILABLE_TO_EVENT__LINKED_SEQUENCE);
 
-		canalBookingEventEClass = createEClass(CANAL_BOOKING_EVENT);
-		createEReference(canalBookingEventEClass, CANAL_BOOKING_EVENT__LINKED_SEQUENCE);
-		createEReference(canalBookingEventEClass, CANAL_BOOKING_EVENT__LINKED_JOURNEY);
+		canalJourneyEventEClass = createEClass(CANAL_JOURNEY_EVENT);
+		createEReference(canalJourneyEventEClass, CANAL_JOURNEY_EVENT__LINKED_SEQUENCE);
+		createEReference(canalJourneyEventEClass, CANAL_JOURNEY_EVENT__LINKED_JOURNEY);
+		createEAttribute(canalJourneyEventEClass, CANAL_JOURNEY_EVENT__PANAMA_WAITING_TIME_HOURS);
+		createEAttribute(canalJourneyEventEClass, CANAL_JOURNEY_EVENT__MAX_AVAILABLE_PANAMA_WAITING_TIME_HOURS);
 
 		charterAvailableFromEventEClass = createEClass(CHARTER_AVAILABLE_FROM_EVENT);
 		createEReference(charterAvailableFromEventEClass, CHARTER_AVAILABLE_FROM_EVENT__LINKED_SEQUENCE);
@@ -3423,7 +3456,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		lumpSumContractDetailsEClass.getESuperTypes().add(this.getMatchingContractDetails());
 		notionalJourneyContractDetailsEClass.getESuperTypes().add(this.getMatchingContractDetails());
 		charterAvailableToEventEClass.getESuperTypes().add(this.getEvent());
-		canalBookingEventEClass.getESuperTypes().add(this.getEvent());
+		canalJourneyEventEClass.getESuperTypes().add(this.getEvent());
 		charterAvailableFromEventEClass.getESuperTypes().add(this.getEvent());
 		groupedCharterLengthEventEClass.getESuperTypes().add(this.getEvent());
 		groupedCharterLengthEventEClass.getESuperTypes().add(this.getEventGrouping());
@@ -3550,6 +3583,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getJourney_CanalArrivalTime(), theDateTimePackage.getLocalDateTime(), "canalArrivalTime", null, 0, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getJourney_CanalBookingPeriod(), this.getPanamaBookingPeriod(), "canalBookingPeriod", null, 0, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getJourney_CanalEntrancePort(), thePortPackage.getPort(), null, "canalEntrancePort", null, 0, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getJourney_CanalJourneyEvent(), this.getCanalJourneyEvent(), null, "canalJourneyEvent", null, 0, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(idleEClass, Idle.class, "Idle", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getIdle_Laden(), ecorePackage.getEBoolean(), "laden", null, 1, 1, Idle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3686,9 +3720,11 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEClass(charterAvailableToEventEClass, CharterAvailableToEvent.class, "CharterAvailableToEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCharterAvailableToEvent_LinkedSequence(), this.getSequence(), null, "linkedSequence", null, 0, 1, CharterAvailableToEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(canalBookingEventEClass, CanalBookingEvent.class, "CanalBookingEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getCanalBookingEvent_LinkedSequence(), this.getSequence(), null, "linkedSequence", null, 0, 1, CanalBookingEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCanalBookingEvent_LinkedJourney(), this.getJourney(), null, "linkedJourney", null, 0, 1, CanalBookingEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(canalJourneyEventEClass, CanalJourneyEvent.class, "CanalJourneyEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCanalJourneyEvent_LinkedSequence(), this.getSequence(), null, "linkedSequence", null, 0, 1, CanalJourneyEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCanalJourneyEvent_LinkedJourney(), this.getJourney(), null, "linkedJourney", null, 0, 1, CanalJourneyEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCanalJourneyEvent_PanamaWaitingTimeHours(), ecorePackage.getEInt(), "panamaWaitingTimeHours", null, 0, 1, CanalJourneyEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCanalJourneyEvent_MaxAvailablePanamaWaitingTimeHours(), ecorePackage.getEInt(), "maxAvailablePanamaWaitingTimeHours", null, 0, 1, CanalJourneyEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(charterAvailableFromEventEClass, CharterAvailableFromEvent.class, "CharterAvailableFromEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCharterAvailableFromEvent_LinkedSequence(), this.getSequence(), null, "linkedSequence", null, 0, 1, CharterAvailableFromEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

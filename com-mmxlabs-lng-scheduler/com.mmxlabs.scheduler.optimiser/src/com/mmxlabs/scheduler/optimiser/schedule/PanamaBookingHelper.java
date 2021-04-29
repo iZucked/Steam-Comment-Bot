@@ -14,7 +14,6 @@ import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.PanamaPeriod;
 
 @NonNullByDefault
 public class PanamaBookingHelper {
@@ -54,18 +53,5 @@ public class PanamaBookingHelper {
 		final int fromEntryPoint = distanceProvider.getTravelTimeViaCanal(ERouteOption.PANAMA, vessel, routeOptionEntryPort, destinationPort, vesselMaxSpeed);
 
 		return fromEntryPoint;
-	}
-
-	public PanamaPeriod getPanamaPeriod(int estimatedCanalArrival) {
-		if (panamaBookingsProvider.getRelaxedBoundary() == 0 && panamaBookingsProvider.getStrictBoundary() == 0) {
-			return PanamaPeriod.Beyond;
-		}
-		if (estimatedCanalArrival > panamaBookingsProvider.getRelaxedBoundary()) {
-			return PanamaPeriod.Beyond;
-		} else if (estimatedCanalArrival > panamaBookingsProvider.getStrictBoundary()) {
-			return PanamaPeriod.Relaxed;
-		} else {
-			return PanamaPeriod.Strict;
-		}
 	}
 }

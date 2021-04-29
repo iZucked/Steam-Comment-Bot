@@ -10,14 +10,13 @@ package com.mmxlabs.license.features;
  * a switch to turn on legacy code, until we decide that it is safe to remove the legacy code from the code base.
  */
 public class NonLicenseFeatures {
-
-	private static boolean southboundIdleTimeRuleEnabled = true;
 	
-	public static void setSouthboundIdleTimeRuleEnabled(boolean enabled) {
-		southboundIdleTimeRuleEnabled = enabled;
-	}
-	
+	/**
+	 * Is now removed.
+	 * @return
+	 * @deprecated Southbound non idle rule mode no longer exists.
+	 */
 	public static boolean isSouthboundIdleTimeRuleEnabled() {
-		return southboundIdleTimeRuleEnabled; 
+		return false; 
 	}
 }

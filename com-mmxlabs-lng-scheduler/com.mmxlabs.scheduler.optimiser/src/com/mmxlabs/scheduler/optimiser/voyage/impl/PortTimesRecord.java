@@ -4,49 +4,45 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.mmxlabs.scheduler.optimiser.cache.AbstractWriteLockable;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 /**
- * A small class storing the port arrival time and visit duration for a
- * {@link VoyagePlan}. This class may or may not include the times for the last
- * element in the plan depending on how it is created. For scheduling purposes
- * the end element should be included. Often for pricing purposes the end
- * element can be ignored.
+ * A small class storing the port arrival time and visit duration for a {@link VoyagePlan}. This class may or may not include the times for the last element in the plan depending on how it is created.
+ * For scheduling purposes the end element should be included. Often for pricing purposes the end element can be ignored.
  * 
- * Note, the order slots are added is important. They should be added in
- * scheduled order. The calls to {@link #getFirstSlotTime()} and
- * {@link #getFirstSlot()} are expected to be bound the first slot added to the
- * instance.
+ * Note, the order slots are added is important. They should be added in scheduled order. The calls to {@link #getFirstSlotTime()} and {@link #getFirstSlot()} are expected to be bound the first slot
+ * added to the instance.
  * 
  * @author Simon Goodall
  * 
  */
-public final class PortTimesRecord implements IPortTimesRecord {
+@NonNullByDefault
+public final class PortTimesRecord extends AbstractWriteLockable implements IPortTimesRecord {
 
 	private static final String UNKNOWN_PORT_SLOT = "Unknown port slot";
 
 	private static final class SlotVoyageRecord {
-		public int startTime;
-		public int duration;
-		public int extraIdleTime;
-		private IRouteOptionBooking routeOptionBooking;
-
-		public AvailableRouteChoices nextVoyageRoute = AvailableRouteChoices.OPTIMAL;
-		public PanamaPeriod panamaPeriod;
+		private int startTime;
+		private int duration;
+		private int extraIdleTime;
+		private AvailableRouteChoices nextVoyageRoute = AvailableRouteChoices.OPTIMAL;
+		private int additionalPanamaIdleTime;
+		private int maxAdditionalPanamaIdleTime;
+		private @Nullable IRouteOptionBooking routeOptionBooking;
 
 		@Override
-		public boolean equals(final Object obj) {
+		public boolean equals(final @Nullable Object obj) {
 			if (obj == this) {
 				return true;
 			} else if (obj instanceof SlotVoyageRecord) {
@@ -55,7 +51,8 @@ public final class PortTimesRecord implements IPortTimesRecord {
 						&& duration == other.duration //
 						&& extraIdleTime == other.extraIdleTime //
 						&& nextVoyageRoute == other.nextVoyageRoute //
-						&& panamaPeriod == other.panamaPeriod //
+						&& additionalPanamaIdleTime == other.additionalPanamaIdleTime //
+						&& maxAdditionalPanamaIdleTime == other.maxAdditionalPanamaIdleTime //
 						&& Objects.equals(routeOptionBooking, other.routeOptionBooking);
 			}
 			return false;
@@ -63,21 +60,15 @@ public final class PortTimesRecord implements IPortTimesRecord {
 
 		@Override
 		public int hashCode() {
-
 			return Objects.hash(startTime, duration, extraIdleTime, nextVoyageRoute);
 		}
 	}
 
-	// Most voyages are load, discharge, next. DES/FOB cargoes have a start, load,
-	// discharge end sequence. 4 elements is a good starting point, although LDD etc
-	// style cargoes could start to push this
-	// up.
-	private static final int INITIAL_CAPACITY = 4;
-	private final @NonNull Map<IPortSlot, SlotVoyageRecord> slotRecords = new HashMap<>(INITIAL_CAPACITY);
-	private final @NonNull List<@NonNull IPortSlot> slots = new ArrayList<>(INITIAL_CAPACITY);
+	private ImmutableMap<IPortSlot, SlotVoyageRecord> slotRecords = ImmutableMap.of();
+	private ImmutableList<IPortSlot> slots = ImmutableList.of();
 	private int firstSlotTime = Integer.MAX_VALUE;
-	private IPortSlot firstPortSlot = null;
-	private IPortSlot returnSlot;
+	private @Nullable IPortSlot firstPortSlot = null;
+	private @Nullable IPortSlot returnSlot;
 
 	public PortTimesRecord() {
 
@@ -88,16 +79,22 @@ public final class PortTimesRecord implements IPortTimesRecord {
 	 * 
 	 * @param other
 	 */
-	public PortTimesRecord(final @NonNull IPortTimesRecord other) {
+	public PortTimesRecord(final IPortTimesRecord other) {
 		for (final IPortSlot slot : other.getSlots()) {
 			this.setSlotTime(slot, other.getSlotTime(slot));
 			this.setSlotDuration(slot, other.getSlotDuration(slot));
 			this.setSlotExtraIdleTime(slot, other.getSlotExtraIdleTime(slot));
+			this.setSlotAdditionalPanamaIdleHours(slot, other.getSlotAdditionaPanamaIdleHours(slot));
+			this.setSlotMaxAvailablePanamaIdleHours(slot, other.getSlotMaxAdditionaPanamaIdleHours(slot));
+			this.setRouteOptionBooking(slot, other.getRouteOptionBooking(slot));
+			this.setSlotNextVoyageOptions(slot, other.getSlotNextVoyageOptions(slot));
 		}
 		final IPortSlot otherReturnSlot = other.getReturnSlot();
 		if (otherReturnSlot != null) {
 			this.setReturnSlotTime(otherReturnSlot, other.getSlotTime(otherReturnSlot));
 		}
+
+		assert other.equals(this);
 	}
 
 	@Override
@@ -127,18 +124,18 @@ public final class PortTimesRecord implements IPortTimesRecord {
 	}
 
 	@Override
-	public List<@NonNull IPortSlot> getSlots() {
+	public ImmutableList<IPortSlot> getSlots() {
 		return slots;
 	}
 
-	@NonNull
-	private SlotVoyageRecord getOrCreateSlotRecord(final @NonNull IPortSlot slot) {
+	private SlotVoyageRecord getOrCreateSlotRecord(final IPortSlot slot) {
 		assert slot != null;
 		SlotVoyageRecord allocation = slotRecords.get(slot);
 		if (allocation == null) {
+			checkWritable();
 			allocation = new SlotVoyageRecord();
-			slotRecords.put(slot, allocation);
-			slots.add(slot);
+			slots = ImmutableList.<IPortSlot> builder().addAll(slots).add(slot).build();
+			slotRecords = ImmutableMap.<IPortSlot, SlotVoyageRecord> builder().putAll(slotRecords).put(slot, allocation).build();
 		}
 		return allocation;
 	}
@@ -152,15 +149,22 @@ public final class PortTimesRecord implements IPortTimesRecord {
 		throw new IllegalArgumentException(UNKNOWN_PORT_SLOT);
 	}
 
-	public void setReturnSlotTime(final @NonNull IPortSlot slot, final int time) {
+	public void setReturnSlotTime(final IPortSlot slot, final int time) {
+
+		checkWritable();
 		setSlotTime(slot, time);
 		// Return slot should not be in list
-		slots.remove(slot);
+		if (slots.contains(slot)) {
+			slots = ImmutableList.<IPortSlot> builder().addAll(slots.stream().filter(s -> s != slot).iterator()).build();
+		}
 		this.returnSlot = slot;
 	}
 
 	@Override
 	public void setSlotTime(final IPortSlot slot, final int time) {
+
+		checkWritable();
+
 		assert time != Integer.MAX_VALUE; // Check for max value
 		assert time < Integer.MAX_VALUE - 100_000; // Check we are not near max value
 
@@ -193,18 +197,26 @@ public final class PortTimesRecord implements IPortTimesRecord {
 
 	@Override
 	public void setSlotDuration(final IPortSlot slot, final int duration) {
+
+		checkWritable();
+
 		getOrCreateSlotRecord(slot).duration = duration;
 	}
 
 	@Override
 	public void setSlotExtraIdleTime(final IPortSlot slot, final int extraIdleTime) {
+
+		checkWritable();
+
 		getOrCreateSlotRecord(slot).extraIdleTime = extraIdleTime;
 	}
 
 	@Override
-	public void setSlotNextVoyageOptions(final IPortSlot slot, final AvailableRouteChoices nextVoyageRoute, PanamaPeriod panamaPeriod) {
+	public void setSlotNextVoyageOptions(final IPortSlot slot, final AvailableRouteChoices nextVoyageRoute) {
+
+		checkWritable();
+
 		getOrCreateSlotRecord(slot).nextVoyageRoute = nextVoyageRoute;
-		getOrCreateSlotRecord(slot).panamaPeriod = panamaPeriod;
 	}
 
 	@Override
@@ -217,7 +229,7 @@ public final class PortTimesRecord implements IPortTimesRecord {
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public boolean equals(final @Nullable Object obj) {
 		if (obj == this) {
 			return true;
 		} else if (obj instanceof PortTimesRecord) {
@@ -247,12 +259,12 @@ public final class PortTimesRecord implements IPortTimesRecord {
 	}
 
 	@Override
-	public IPortSlot getReturnSlot() {
+	public @Nullable IPortSlot getReturnSlot() {
 		return returnSlot;
 	}
 
 	@Override
-	public @Nullable IRouteOptionBooking getRouteOptionBooking(IPortSlot slot) {
+	public @Nullable IRouteOptionBooking getRouteOptionBooking(final IPortSlot slot) {
 		final SlotVoyageRecord allocation = slotRecords.get(slot);
 		if (allocation != null) {
 			return allocation.routeOptionBooking;
@@ -261,20 +273,35 @@ public final class PortTimesRecord implements IPortTimesRecord {
 	}
 
 	@Override
-	public void setRouteOptionBooking(IPortSlot slot, IRouteOptionBooking routeOptionBooking) {
+	public void setRouteOptionBooking(final IPortSlot slot, @Nullable final IRouteOptionBooking routeOptionBooking) {
+		checkWritable();
+
 		getOrCreateSlotRecord(slot).routeOptionBooking = routeOptionBooking;
 	}
 
-	@Override
-	public PanamaPeriod getSlotNextVoyagePanamaPeriod(IPortSlot slot) {
-		final SlotVoyageRecord allocation = slotRecords.get(slot);
-		if (allocation != null) {
-			return allocation.panamaPeriod;
-		}
-		throw new IllegalArgumentException(UNKNOWN_PORT_SLOT);
+	public PortTimesRecord copy() {
+		return new PortTimesRecord(this);
 	}
 
-	public @NonNull PortTimesRecord copy() {
-		return new PortTimesRecord(this);
+	@Override
+	public void setSlotMaxAvailablePanamaIdleHours(final IPortSlot from, final int maxIdleTimeAvailable) {
+		checkWritable();
+		getOrCreateSlotRecord(from).maxAdditionalPanamaIdleTime = maxIdleTimeAvailable;
+	}
+
+	@Override
+	public void setSlotAdditionalPanamaIdleHours(final IPortSlot from, final int additionalPanamaTime) {
+		checkWritable();
+		getOrCreateSlotRecord(from).additionalPanamaIdleTime = additionalPanamaTime;
+	}
+
+	@Override
+	public int getSlotAdditionaPanamaIdleHours(@NonNull final IPortSlot slot) {
+		return getOrCreateSlotRecord(slot).additionalPanamaIdleTime;
+	}
+
+	@Override
+	public int getSlotMaxAdditionaPanamaIdleHours(@NonNull final IPortSlot slot) {
+		return getOrCreateSlotRecord(slot).maxAdditionalPanamaIdleTime;
 	}
 }

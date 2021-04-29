@@ -6,6 +6,7 @@ package com.mmxlabs.models.ui.tabular.manipulators;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -129,7 +130,10 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 
 	public void runSetCommand(final Object object, final Object value) {
 		final Object currentValue = reallyGetValue(object);
-		if (((currentValue == null) && (value == null)) || (((currentValue != null) && (value != null)) && currentValue.equals(value))) {
+		if (Objects.equals(currentValue, value)) {
+			return;
+		}
+		if (value == null) {
 			return;
 		}
 		CompoundCommand cmd = new CompoundCommand();
