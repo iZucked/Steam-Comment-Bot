@@ -1,0 +1,14 @@
+ladenTariff,ballastTariff,bandStart,bandEnd,kind,tugs,tugcost,fixedcosts,discountfactor,sdrtousd
+7.88,6.7,,5000,SuezCanalTariffBand,,,,,
+6.13,5.21,5000,10000,SuezCanalTariffBand,,,,,
+5.3,4.51,10000,20000,SuezCanalTariffBand,,,,,
+4.1,3.49,20000,40000,SuezCanalTariffBand,,,,,
+3.8,3.23,40000,70000,SuezCanalTariffBand,,,,,
+3.63,3.09,70000,120000,SuezCanalTariffBand,,,,,
+3.53,3,120000,,SuezCanalTariffBand,,,,,
+,,,90000,SuezCanalTugBand,1,,,,
+,,90000,,SuezCanalTugBand,2,,,,
+,,,,,,"13,778.780000",,,
+,,,,,,,"16,358.620000",,
+,,,,,,,,0.000000,
+,,,,,,,,,1.38

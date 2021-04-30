@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.lingo.its.tests.microcases.adp.AbstractADPAndLightWeightTests;
 import com.mmxlabs.lingo.its.tests.microcases.adp.OptimisationEMFTestUtils;
-import com.mmxlabs.lingo.its.tests.microcases.adp.TrainingCaseConstants;
 import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.adp.IntervalType;
@@ -42,6 +41,10 @@ import com.mmxlabs.optimiser.core.exceptions.InfeasibleSolutionException;
 public class ADPConstraintCheckerTests extends AbstractADPAndLightWeightTests {
 
 	public static final String CONSTRAINT_CHECKER_TEST_NAME = "CONSTRAINT_CHECKER_TEST";
+
+	public static final String VESSEL_SMALL_SHIP = InternalDataConstants.REF_VESSEL_STEAM_138;
+	public static final String VESSEL_MEDIUM_SHIP = InternalDataConstants.REF_VESSEL_STEAM_145;
+	public static final String VESSEL_LARGE_SHIP = InternalDataConstants.REF_VESSEL_TFDE_160;
 
 	@Test
 	public void testFeasible() {
@@ -88,7 +91,7 @@ public class ADPConstraintCheckerTests extends AbstractADPAndLightWeightTests {
 	 */
 	private void test12Cargoes2Vessels(int minLoads, int maxLoads, int minSales, int maxSales, String... inExpectedMessageStr) {
 
-		String targetVessel = TrainingCaseConstants.VESSEL_LARGE_SHIP;
+		String targetVessel = VESSEL_LARGE_SHIP;
 
 		// set up special curve for testing
 		makeCommodityCurveForQuarters();
@@ -188,9 +191,9 @@ public class ADPConstraintCheckerTests extends AbstractADPAndLightWeightTests {
 	}
 
 	private CharterInMarket setDefaultVesselsAndContracts() {
-		final Vessel vesselMedium = fleetModelFinder.findVessel(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
-		final Vessel vesselSmall = fleetModelFinder.findVessel(TrainingCaseConstants.VESSEL_SMALL_SHIP);
-		final Vessel vesselLarge = fleetModelFinder.findVessel(TrainingCaseConstants.VESSEL_LARGE_SHIP);
+		final Vessel vesselMedium = fleetModelFinder.findVessel(VESSEL_MEDIUM_SHIP);
+		final Vessel vesselSmall = fleetModelFinder.findVessel(VESSEL_SMALL_SHIP);
+		final Vessel vesselLarge = fleetModelFinder.findVessel(VESSEL_LARGE_SHIP);
 		Port pluto = portFinder.findPortById(InternalDataConstants.PORT_DARWIN);
 		Port himeji = portFinder.findPortById(InternalDataConstants.PORT_HIMEJI);
 		final CharterInMarket defaultCharterInMarket = spotMarketsModelBuilder.createCharterInMarket("ADP Default", vesselMedium, entity, "50000", 0);

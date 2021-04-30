@@ -1,0 +1,2 @@
+referenceCapacity,ports,LOADCost,DISCHARGECost,DRYDOCKCost,MAINTENANCECost,TRANSFERCost,kind
+,"CapGroup:All DISCHARGE Ports,CapGroup:All LOAD Ports",140000,140000,0,0,0,PortCost

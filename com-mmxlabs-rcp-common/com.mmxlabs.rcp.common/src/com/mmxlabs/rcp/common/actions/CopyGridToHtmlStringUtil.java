@@ -368,7 +368,7 @@ public class CopyGridToHtmlStringUtil {
 		return text //
 				.replace("&", "&amp;") //
 				.replace(">", "&gt;") //
-				.replace("<", "&gt;") //
+				.replace("<", "&lt;") //
 				.replace("\"", "&quot;") //
 				.replace("'", "&#39;") //
 		;

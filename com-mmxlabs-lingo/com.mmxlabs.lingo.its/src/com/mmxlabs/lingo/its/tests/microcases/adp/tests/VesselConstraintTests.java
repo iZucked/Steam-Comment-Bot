@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.lingo.its.tests.microcases.adp.AbstractADPAndLightWeightTests;
 import com.mmxlabs.lingo.its.tests.microcases.adp.OptimisationEMFTestUtils;
-import com.mmxlabs.lingo.its.tests.microcases.adp.TrainingCaseConstants;
 import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.adp.IntervalType;
@@ -39,9 +38,13 @@ import com.mmxlabs.optimiser.core.IMultiStateResult;
 public class VesselConstraintTests extends AbstractADPAndLightWeightTests {
 	public static final String SALES_TEST_NAME = "SALES_TEST";
 
+	private static final String VESSEL_LARGE_SHIP = InternalDataConstants.REF_VESSEL_TFDE_160;
+	private static final String VESSEL_MEDIUM_SHIP = InternalDataConstants.REF_VESSEL_STEAM_145;
+	private static final String VESSEL_SMALL_SHIP = InternalDataConstants.REF_VESSEL_STEAM_138;
+
 	@Test
 	public void testTargetVesselWithNoWeight() {
-		test12Cargoes2Vessels(0, TrainingCaseConstants.VESSEL_LARGE_SHIP);
+		test12Cargoes2Vessels(0, VESSEL_LARGE_SHIP);
 	}
 
 	// @Test
@@ -132,9 +135,9 @@ public class VesselConstraintTests extends AbstractADPAndLightWeightTests {
 	}
 
 	private CharterInMarket setDefaultVesselsAndContracts() {
-		final Vessel vesselMedium = fleetModelFinder.findVessel(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
-		final Vessel vesselSmall = fleetModelFinder.findVessel(TrainingCaseConstants.VESSEL_SMALL_SHIP);
-		final Vessel vesselLarge = fleetModelFinder.findVessel(TrainingCaseConstants.VESSEL_LARGE_SHIP);
+		final Vessel vesselMedium = fleetModelFinder.findVessel(VESSEL_MEDIUM_SHIP);
+		final Vessel vesselSmall = fleetModelFinder.findVessel(VESSEL_SMALL_SHIP);
+		final Vessel vesselLarge = fleetModelFinder.findVessel(VESSEL_LARGE_SHIP);
 		Port pluto = portFinder.findPortById(InternalDataConstants.PORT_DARWIN);
 		Port himeji = portFinder.findPortById(InternalDataConstants.PORT_HIMEJI);
 		final CharterInMarket defaultCharterInMarket = spotMarketsModelBuilder.createCharterInMarket("ADP Default", vesselMedium, entity, "50000", 0);
