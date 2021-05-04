@@ -68,19 +68,19 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 		ScenarioBuilder sb = ScenarioBuilder.initialiseBasicScenario();
 		sb.loadDefaultData();
 
-		try (InputStream is = TrainingShippingITests.class.getResourceAsStream("/trainingcases/Shipping_I/Commodity Curves.csv")) {
+		try (InputStream is = TrainingShippingITests.class.getResourceAsStream("/trainingcases/Shipping_I_mmx_maintained/Commodity Curves.csv")) {
 			sb.importCommodityCurves(is);
 		}
-		try (InputStream is = TrainingShippingITests.class.getResourceAsStream("/trainingcases/Shipping_I/Vessel Availability.csv")) {
+		try (InputStream is = TrainingShippingITests.class.getResourceAsStream("/trainingcases/Shipping_I_mmx_maintained/Vessel Availability.csv")) {
 			sb.importVesselCharters(is);
 		}
-//		try (InputStream is = TrainingShippingITests.class.getResourceAsStream("/trainingcases/Shipping_I/Spot Cargo Markets.csv")) {
+//		try (InputStream is = TrainingShippingITests.class.getResourceAsStream("/trainingcases/Shipping_I_mmx_maintained/Spot Cargo Markets.csv")) {
 //			sb.importCargoes(is);
 //		}
-		try (InputStream is = TrainingShippingITests.class.getResourceAsStream("/trainingcases/Shipping_I/Cargoes.csv")) {
+		try (InputStream is = TrainingShippingITests.class.getResourceAsStream("/trainingcases/Shipping_I_mmx_maintained/Cargoes.csv")) {
 			sb.importCargoes(is);
 		}
-		try (InputStream is = TrainingShippingITests.class.getResourceAsStream("/trainingcases/Shipping_I/Assignments.csv")) {
+		try (InputStream is = TrainingShippingITests.class.getResourceAsStream("/trainingcases/Shipping_I_mmx_maintained/Assignments.csv")) {
 			sb.importAssignments(is);
 		}
 		return sb.getScenarioDataProvider();

@@ -20,7 +20,10 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
+import com.mmxlabs.models.lng.fleet.FleetFactory;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -61,7 +64,7 @@ public class PNLBasedSchedulerTests extends AbstractMicroTestCase {
 	@Test
 	public void testSplitMonthReturnEarlyOverHigherPrice() {
 
-		final Vessel vessel = fleetModelFinder.findVessel("TFDE_165");
+		final Vessel vessel = fleetModelFinder.findVessel("<TFDE_165>");
 		costModelBuilder.createOrUpdateBaseFuelCost(vessel.getVesselOrDelegateBaseFuel(), "400");
 
 		final CharterInMarket charter = spotMarketsModelBuilder.createCharterInMarket("SpotCharter", vessel, entity, "105000", 1);
@@ -140,7 +143,7 @@ public class PNLBasedSchedulerTests extends AbstractMicroTestCase {
 	@Test
 	public void testSplitMonthReturnEarlyOverHigherPrice_Case2() {
 
-		final Vessel vessel = fleetModelFinder.findVessel("TFDE_165");
+		final Vessel vessel = fleetModelFinder.findVessel("<TFDE_165>");
 		costModelBuilder.createOrUpdateBaseFuelCost(vessel.getVesselOrDelegateBaseFuel(), "400");
 
 		final CharterInMarket charter = spotMarketsModelBuilder.createCharterInMarket("SpotCharter", vessel, entity, "105000", 1);
@@ -240,7 +243,14 @@ public class PNLBasedSchedulerTests extends AbstractMicroTestCase {
 		costModelBuilder.createOrUpdateBaseFuelCost(bf, "650");
 
 		// Replicate similar attribs to real vessel
-		final Vessel vessel = fleetModelFinder.findVessel("Asia Endeavour");
+		final String newVesselName = "Asia Endeavour";
+
+		final boolean vesselAlreadyExists = fleetModelFinder.getFleetModel().getVessels().stream().anyMatch(v -> v.getName().equalsIgnoreCase(newVesselName));
+		Assertions.assertFalse(vesselAlreadyExists);
+
+		final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
+		fleetModelFinder.getFleetModel().getVessels().add(vessel);
+		vessel.setName(newVesselName);
 		vessel.setReference(null);
 
 		vessel.setCapacity(173590);
@@ -258,6 +268,8 @@ public class PNLBasedSchedulerTests extends AbstractMicroTestCase {
 
 		vessel.setPilotLightRate(5);
 
+		final VesselStateAttributes ladenAttributes = FleetFactory.eINSTANCE.createVesselStateAttributes();
+		vessel.setLadenAttributes(ladenAttributes);
 		vessel.getLadenAttributes().setInPortBaseRate(21);
 		vessel.getLadenAttributes().setInPortNBORate(130);
 		vessel.getLadenAttributes().setNboRate(130);
@@ -265,6 +277,8 @@ public class PNLBasedSchedulerTests extends AbstractMicroTestCase {
 		vessel.getLadenAttributes().setIdleBaseRate(12);
 		vessel.getLadenAttributes().getFuelConsumption().clear();
 
+		final VesselStateAttributes ballastAttributes = FleetFactory.eINSTANCE.createVesselStateAttributes();
+		vessel.setBallastAttributes(ballastAttributes);
 		vessel.getBallastAttributes().setInPortBaseRate(34);
 		vessel.getBallastAttributes().setInPortNBORate(95);
 		vessel.getBallastAttributes().setNboRate(95);
@@ -367,7 +381,14 @@ public class PNLBasedSchedulerTests extends AbstractMicroTestCase {
 		costModelBuilder.createOrUpdateBaseFuelCost(bf2, "400");
 
 		// Replicate similar attribs to real vessel
-		final Vessel vessel = fleetModelFinder.findVessel("Asia Endeavour");
+		final String newVesselName = "Asia Endeavour";
+
+		final boolean vesselAlreadyExists = fleetModelFinder.getFleetModel().getVessels().stream().anyMatch(v -> v.getName().equalsIgnoreCase(newVesselName));
+		Assertions.assertFalse(vesselAlreadyExists);
+
+		final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
+		fleetModelFinder.getFleetModel().getVessels().add(vessel);
+		vessel.setName(newVesselName);
 		vessel.setReference(null);
 
 		vessel.setCapacity(159867);
@@ -385,6 +406,8 @@ public class PNLBasedSchedulerTests extends AbstractMicroTestCase {
 
 		vessel.setPilotLightRate(1);
 
+		final VesselStateAttributes ladenAttributes = FleetFactory.eINSTANCE.createVesselStateAttributes();
+		vessel.setLadenAttributes(ladenAttributes);
 		vessel.getLadenAttributes().setInPortBaseRate(0);
 		vessel.getLadenAttributes().setInPortNBORate(0);
 		vessel.getLadenAttributes().setNboRate(70);
@@ -392,6 +415,8 @@ public class PNLBasedSchedulerTests extends AbstractMicroTestCase {
 		vessel.getLadenAttributes().setIdleBaseRate(20);
 		vessel.getLadenAttributes().getFuelConsumption().clear();
 
+		final VesselStateAttributes ballastAttributes = FleetFactory.eINSTANCE.createVesselStateAttributes();
+		vessel.setBallastAttributes(ballastAttributes);
 		vessel.getBallastAttributes().setInPortBaseRate(0);
 		vessel.getBallastAttributes().setInPortNBORate(0);
 		vessel.getBallastAttributes().setNboRate(50);
@@ -478,7 +503,7 @@ public class PNLBasedSchedulerTests extends AbstractMicroTestCase {
 	@Test
 	public void testKBallastSpeedIssue() {
 
-		final Vessel vessel = fleetModelFinder.findVessel("TFDE_165");
+		final Vessel vessel = fleetModelFinder.findVessel("<TFDE_165>");
 		costModelBuilder.createOrUpdateBaseFuelCost(vessel.getVesselOrDelegateBaseFuel(), "400");
 
 		final CharterInMarket charter = spotMarketsModelBuilder.createCharterInMarket("SpotCharter", vessel, entity, "105000", 1);

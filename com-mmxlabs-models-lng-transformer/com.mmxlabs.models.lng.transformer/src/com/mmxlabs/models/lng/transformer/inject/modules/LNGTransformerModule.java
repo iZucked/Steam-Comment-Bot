@@ -213,7 +213,11 @@ public class LNGTransformerModule extends AbstractModule {
 
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.OPTIMISE_PAPER_PNL)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_EXPOSURES)).toInstance(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EXPOSURES));
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.EXPOSURES_CUTOFF_AT_PROMPT_START)).toInstance(//
+				LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EXPOSURES_CUTOFF_AT_PROMPT_START));
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_PAPER_PNL)).toInstance(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PAPER_DEALS));
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.RE_HEDGE_CUTOFF_AT_PROMPT_START)).toInstance(//
+				LicenseFeatures.isPermitted(KnownFeatures.FEATURE_RE_HEDGE_CUTOFF_AT_PROMPT_START));
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.RE_HEDGE_WITH_PAPERS)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)).toInstance(withFlatCurve);
 
