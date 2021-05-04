@@ -5,10 +5,7 @@
 package com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -48,7 +45,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.BeanDeserializerFactory;
-import com.google.common.io.CharStreams;
 import com.mmxlabs.common.util.ToBooleanBiFunction;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.integration.distances.model.DistancesVersion;
@@ -61,7 +57,6 @@ import com.mmxlabs.lngdataserver.integration.models.vesselgroups.VesselGroupsVer
 import com.mmxlabs.lngdataserver.integration.ports.model.PortsVersion;
 import com.mmxlabs.lngdataserver.integration.pricing.model.PricingVersion;
 import com.mmxlabs.lngdataserver.integration.vessels.model.VesselsVersion;
-import com.mmxlabs.lngdataserver.lng.importers.creator.ScenarioBuilder;
 import com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard.ImportFromBaseSelectionPage.DataOptionGroup;
 import com.mmxlabs.lngdataserver.lng.io.bunkerfuels.BunkerFuelsFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.bunkerfuels.BunkerFuelsToScenarioImporter;
@@ -71,7 +66,6 @@ import com.mmxlabs.lngdataserver.lng.io.financial.SettledPricesFromScenarioCopie
 import com.mmxlabs.lngdataserver.lng.io.financial.SettledPricesToScenarioImporter;
 import com.mmxlabs.lngdataserver.lng.io.port.PortFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.port.PortsToScenarioCopier;
-import com.mmxlabs.lngdataserver.lng.io.port.ui.PortsSelectionPage;
 import com.mmxlabs.lngdataserver.lng.io.portgroups.PortGroupsFromScenarioCopier;
 import com.mmxlabs.lngdataserver.lng.io.portgroups.PortGroupsToScenarioImporter;
 import com.mmxlabs.lngdataserver.lng.io.pricing.PricingFromScenarioCopier;
@@ -91,9 +85,9 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.commercial.CharterContract;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -368,7 +362,7 @@ public final class SharedScenarioDataUtils {
 						fm.getVesselGroups().forEach(ctx::registerType);
 
 						final CommercialModel cm = ScenarioModelUtil.getCommercialModel(target);
-						cm.getCharteringContracts().forEach(ctx::registerType);
+						cm.getCharterContracts().forEach(ctx::registerType);
 
 						final ObjectMapper mapper = new ObjectMapper(null, null, ctx);
 						mapper.registerModule(new EMFJacksonModule());
@@ -1074,10 +1068,10 @@ public final class SharedScenarioDataUtils {
 
 		{
 			final List<EObject> newContracts = new LinkedList<>();
-			for (final CharterContract newContract : newCM.getCharteringContracts()) {
+			for (final GenericCharterContract newContract : newCM.getCharterContracts()) {
 				boolean found = false;
 
-				for (final CharterContract oldContract : oldCM.getCharteringContracts()) {
+				for (final GenericCharterContract oldContract : oldCM.getCharterContracts()) {
 					if (Objects.equals(newContract.getName(), oldContract.getName())) {
 						found = true;
 						mapOldToNew.put(oldContract, newContract);
@@ -1088,7 +1082,7 @@ public final class SharedScenarioDataUtils {
 					newContracts.add(newContract);
 				}
 			}
-			cmd.appendAndExecute(AddCommand.create(target.getEditingDomain(), oldCM, CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTERING_CONTRACTS, newContracts));
+			cmd.appendAndExecute(AddCommand.create(target.getEditingDomain(), oldCM, CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTER_CONTRACTS, newContracts));
 		}
 	}
 

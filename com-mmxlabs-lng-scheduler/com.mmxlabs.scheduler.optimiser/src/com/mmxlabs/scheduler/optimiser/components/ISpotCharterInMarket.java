@@ -7,7 +7,7 @@ package com.mmxlabs.scheduler.optimiser.components;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.curves.ILongCurve;
-import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
+import com.mmxlabs.scheduler.optimiser.chartercontracts.ICharterContract;
 
 public interface ISpotCharterInMarket {
 
@@ -21,10 +21,12 @@ public interface ISpotCharterInMarket {
 	ILongCurve getDailyCharterInRateCurve();
 
 	int getAvailabilityCount();
+	
+	IStartRequirement getStartRequirement();
 
 	IEndRequirement getEndRequirement();
 
-	IBallastBonusContract getBallastBonusContract();
+	ICharterContract getCharterContract();
 
 	/**
 	 * Returns the repositioning fee of the vessel.

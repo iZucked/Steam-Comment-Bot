@@ -17,8 +17,6 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.EVesselTankState;
-import com.mmxlabs.models.lng.cargo.EndHeelOptions;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
@@ -26,7 +24,10 @@ import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.EVesselTankState;
+import com.mmxlabs.models.lng.commercial.EndHeelOptions;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -61,7 +62,7 @@ public class CargoModelBuilder {
 	}
 
 	public @NonNull EndHeelOptions createEndHeelOptions(int minVolumeInM3, int maxVolumeInM3, @NonNull EVesselTankState state) {
-		final EndHeelOptions result = CargoFactory.eINSTANCE.createEndHeelOptions();
+		final EndHeelOptions result = CommercialFactory.eINSTANCE.createEndHeelOptions();
 
 		if (minVolumeInM3 < 0) {
 			throw new IllegalArgumentException();

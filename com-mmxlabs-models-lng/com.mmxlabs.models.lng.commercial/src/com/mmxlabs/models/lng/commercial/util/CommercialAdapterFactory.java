@@ -11,29 +11,34 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.models.lng.commercial.BallastBonusCharterContract;
-import com.mmxlabs.models.lng.commercial.BallastBonusContract;
-import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
+import com.mmxlabs.models.lng.commercial.BallastBonusTerm;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.commercial.CharterContract;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractExpressionMapEntry;
 import com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
+import com.mmxlabs.models.lng.commercial.IBallastBonus;
+import com.mmxlabs.models.lng.commercial.IRepositioningFee;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
-import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine;
-import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine;
-import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine;
+import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusTerm;
+import com.mmxlabs.models.lng.commercial.LumpSumRepositioningFeeTerm;
+import com.mmxlabs.models.lng.commercial.LumpSumTerm;
+import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContainer;
+import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusTerm;
+import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusTerm;
+import com.mmxlabs.models.lng.commercial.NotionalJourneyTerm;
+import com.mmxlabs.models.lng.commercial.OriginPortRepositioningFeeTerm;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
-import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
+import com.mmxlabs.models.lng.commercial.RepositioningFeeTerm;
 import com.mmxlabs.models.lng.commercial.SalesContract;
-import com.mmxlabs.models.lng.commercial.SimpleBallastBonusCharterContract;
-import com.mmxlabs.models.lng.commercial.SimpleCharterContract;
+import com.mmxlabs.models.lng.commercial.SimpleBallastBonusContainer;
 import com.mmxlabs.models.lng.commercial.SimpleEntityBook;
+import com.mmxlabs.models.lng.commercial.SimpleRepositioningFeeContainer;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.lng.commercial.VolumeParams;
@@ -158,52 +163,72 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 				return createDateShiftExpressionPriceParametersAdapter();
 			}
 			@Override
-			public Adapter caseBallastBonusContract(BallastBonusContract object) {
-				return createBallastBonusContractAdapter();
+			public Adapter caseGenericCharterContract(GenericCharterContract object) {
+				return createGenericCharterContractAdapter();
 			}
 			@Override
-			public Adapter caseRuleBasedBallastBonusContract(RuleBasedBallastBonusContract object) {
-				return createRuleBasedBallastBonusContractAdapter();
+			public Adapter caseIRepositioningFee(IRepositioningFee object) {
+				return createIRepositioningFeeAdapter();
 			}
 			@Override
-			public Adapter caseBallastBonusContractLine(BallastBonusContractLine object) {
-				return createBallastBonusContractLineAdapter();
+			public Adapter caseSimpleRepositioningFeeContainer(SimpleRepositioningFeeContainer object) {
+				return createSimpleRepositioningFeeContainerAdapter();
 			}
 			@Override
-			public Adapter caseLumpSumBallastBonusContractLine(LumpSumBallastBonusContractLine object) {
-				return createLumpSumBallastBonusContractLineAdapter();
+			public Adapter caseIBallastBonus(IBallastBonus object) {
+				return createIBallastBonusAdapter();
 			}
 			@Override
-			public Adapter caseNotionalJourneyBallastBonusContractLine(NotionalJourneyBallastBonusContractLine object) {
-				return createNotionalJourneyBallastBonusContractLineAdapter();
+			public Adapter caseSimpleBallastBonusContainer(SimpleBallastBonusContainer object) {
+				return createSimpleBallastBonusContainerAdapter();
 			}
 			@Override
-			public Adapter caseCharterContract(CharterContract object) {
-				return createCharterContractAdapter();
+			public Adapter caseMonthlyBallastBonusContainer(MonthlyBallastBonusContainer object) {
+				return createMonthlyBallastBonusContainerAdapter();
 			}
 			@Override
-			public Adapter caseSimpleCharterContract(SimpleCharterContract object) {
-				return createSimpleCharterContractAdapter();
+			public Adapter caseLumpSumTerm(LumpSumTerm object) {
+				return createLumpSumTermAdapter();
 			}
 			@Override
-			public Adapter caseBallastBonusCharterContract(BallastBonusCharterContract object) {
-				return createBallastBonusCharterContractAdapter();
+			public Adapter caseNotionalJourneyTerm(NotionalJourneyTerm object) {
+				return createNotionalJourneyTermAdapter();
 			}
 			@Override
-			public Adapter caseSimpleBallastBonusCharterContract(SimpleBallastBonusCharterContract object) {
-				return createSimpleBallastBonusCharterContractAdapter();
+			public Adapter caseBallastBonusTerm(BallastBonusTerm object) {
+				return createBallastBonusTermAdapter();
 			}
 			@Override
-			public Adapter caseMonthlyBallastBonusContractLine(MonthlyBallastBonusContractLine object) {
-				return createMonthlyBallastBonusContractLineAdapter();
+			public Adapter caseLumpSumBallastBonusTerm(LumpSumBallastBonusTerm object) {
+				return createLumpSumBallastBonusTermAdapter();
 			}
 			@Override
-			public Adapter caseMonthlyBallastBonusContract(MonthlyBallastBonusContract object) {
-				return createMonthlyBallastBonusContractAdapter();
+			public Adapter caseNotionalJourneyBallastBonusTerm(NotionalJourneyBallastBonusTerm object) {
+				return createNotionalJourneyBallastBonusTermAdapter();
 			}
 			@Override
-			public Adapter caseMonthlyBallastBonusCharterContract(MonthlyBallastBonusCharterContract object) {
-				return createMonthlyBallastBonusCharterContractAdapter();
+			public Adapter caseMonthlyBallastBonusTerm(MonthlyBallastBonusTerm object) {
+				return createMonthlyBallastBonusTermAdapter();
+			}
+			@Override
+			public Adapter caseRepositioningFeeTerm(RepositioningFeeTerm object) {
+				return createRepositioningFeeTermAdapter();
+			}
+			@Override
+			public Adapter caseLumpSumRepositioningFeeTerm(LumpSumRepositioningFeeTerm object) {
+				return createLumpSumRepositioningFeeTermAdapter();
+			}
+			@Override
+			public Adapter caseOriginPortRepositioningFeeTerm(OriginPortRepositioningFeeTerm object) {
+				return createOriginPortRepositioningFeeTermAdapter();
+			}
+			@Override
+			public Adapter caseEndHeelOptions(EndHeelOptions object) {
+				return createEndHeelOptionsAdapter();
+			}
+			@Override
+			public Adapter caseStartHeelOptions(StartHeelOptions object) {
+				return createStartHeelOptionsAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -448,170 +473,240 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.BallastBonusContract <em>Ballast Bonus Contract</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.GenericCharterContract <em>Generic Charter Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.commercial.BallastBonusContract
+	 * @see com.mmxlabs.models.lng.commercial.GenericCharterContract
 	 * @generated
 	 */
-	public Adapter createBallastBonusContractAdapter() {
+	public Adapter createGenericCharterContractAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract <em>Rule Based Ballast Bonus Contract</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.IRepositioningFee <em>IRepositioning Fee</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract
+	 * @see com.mmxlabs.models.lng.commercial.IRepositioningFee
 	 * @generated
 	 */
-	public Adapter createRuleBasedBallastBonusContractAdapter() {
+	public Adapter createIRepositioningFeeAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.BallastBonusContractLine <em>Ballast Bonus Contract Line</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.SimpleRepositioningFeeContainer <em>Simple Repositioning Fee Container</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.commercial.BallastBonusContractLine
+	 * @see com.mmxlabs.models.lng.commercial.SimpleRepositioningFeeContainer
 	 * @generated
 	 */
-	public Adapter createBallastBonusContractLineAdapter() {
+	public Adapter createSimpleRepositioningFeeContainerAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine <em>Lump Sum Ballast Bonus Contract Line</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.IBallastBonus <em>IBallast Bonus</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine
+	 * @see com.mmxlabs.models.lng.commercial.IBallastBonus
 	 * @generated
 	 */
-	public Adapter createLumpSumBallastBonusContractLineAdapter() {
+	public Adapter createIBallastBonusAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine <em>Notional Journey Ballast Bonus Contract Line</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.SimpleBallastBonusContainer <em>Simple Ballast Bonus Container</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine
+	 * @see com.mmxlabs.models.lng.commercial.SimpleBallastBonusContainer
 	 * @generated
 	 */
-	public Adapter createNotionalJourneyBallastBonusContractLineAdapter() {
+	public Adapter createSimpleBallastBonusContainerAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.CharterContract <em>Charter Contract</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContainer <em>Monthly Ballast Bonus Container</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.commercial.CharterContract
+	 * @see com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContainer
 	 * @generated
 	 */
-	public Adapter createCharterContractAdapter() {
+	public Adapter createMonthlyBallastBonusContainerAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.SimpleCharterContract <em>Simple Charter Contract</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.LumpSumTerm <em>Lump Sum Term</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.commercial.SimpleCharterContract
+	 * @see com.mmxlabs.models.lng.commercial.LumpSumTerm
 	 * @generated
 	 */
-	public Adapter createSimpleCharterContractAdapter() {
+	public Adapter createLumpSumTermAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.BallastBonusCharterContract <em>Ballast Bonus Charter Contract</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyTerm <em>Notional Journey Term</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.commercial.BallastBonusCharterContract
+	 * @see com.mmxlabs.models.lng.commercial.NotionalJourneyTerm
 	 * @generated
 	 */
-	public Adapter createBallastBonusCharterContractAdapter() {
+	public Adapter createNotionalJourneyTermAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.SimpleBallastBonusCharterContract <em>Simple Ballast Bonus Charter Contract</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.BallastBonusTerm <em>Ballast Bonus Term</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.commercial.SimpleBallastBonusCharterContract
+	 * @see com.mmxlabs.models.lng.commercial.BallastBonusTerm
 	 * @generated
 	 */
-	public Adapter createSimpleBallastBonusCharterContractAdapter() {
+	public Adapter createBallastBonusTermAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine <em>Monthly Ballast Bonus Contract Line</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.LumpSumBallastBonusTerm <em>Lump Sum Ballast Bonus Term</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine
+	 * @see com.mmxlabs.models.lng.commercial.LumpSumBallastBonusTerm
 	 * @generated
 	 */
-	public Adapter createMonthlyBallastBonusContractLineAdapter() {
+	public Adapter createLumpSumBallastBonusTermAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContract <em>Monthly Ballast Bonus Contract</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusTerm <em>Notional Journey Ballast Bonus Term</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContract
+	 * @see com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusTerm
 	 * @generated
 	 */
-	public Adapter createMonthlyBallastBonusContractAdapter() {
+	public Adapter createNotionalJourneyBallastBonusTermAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusCharterContract <em>Monthly Ballast Bonus Charter Contract</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusTerm <em>Monthly Ballast Bonus Term</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.commercial.MonthlyBallastBonusCharterContract
+	 * @see com.mmxlabs.models.lng.commercial.MonthlyBallastBonusTerm
 	 * @generated
 	 */
-	public Adapter createMonthlyBallastBonusCharterContractAdapter() {
+	public Adapter createMonthlyBallastBonusTermAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.RepositioningFeeTerm <em>Repositioning Fee Term</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.RepositioningFeeTerm
+	 * @generated
+	 */
+	public Adapter createRepositioningFeeTermAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.LumpSumRepositioningFeeTerm <em>Lump Sum Repositioning Fee Term</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.LumpSumRepositioningFeeTerm
+	 * @generated
+	 */
+	public Adapter createLumpSumRepositioningFeeTermAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.OriginPortRepositioningFeeTerm <em>Origin Port Repositioning Fee Term</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.OriginPortRepositioningFeeTerm
+	 * @generated
+	 */
+	public Adapter createOriginPortRepositioningFeeTermAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.EndHeelOptions <em>End Heel Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.EndHeelOptions
+	 * @generated
+	 */
+	public Adapter createEndHeelOptionsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.StartHeelOptions <em>Start Heel Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.StartHeelOptions
+	 * @generated
+	 */
+	public Adapter createStartHeelOptionsAdapter() {
 		return null;
 	}
 

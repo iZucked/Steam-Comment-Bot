@@ -179,51 +179,19 @@
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.commercial.validation.BallastBonusCharterContractConstraint"
-                  id="com.mmxlabs.models.lng.commercial.validation.BallastBonusCharterContractConstraint"
+                  class="com.mmxlabs.models.lng.commercial.validation.GenericCharterContractContainerConstraint"
+                  id="com.mmxlabs.models.lng.commercial.validation.GenericCharterContractContainerConstraint"
                   isEnabledByDefault="true"
                   lang="java"
                   mode="Batch"
-                  name="BallastBonusCharterContractConstraint"
+                  name="GenericCharterContractContainerConstraint"
                   severity="ERROR"
                   statusCode="1">
                <message>
                   {0}
                </message>
                <target
-                     class="CharterContract">
-               </target>
-            </constraint>
-            <constraint
-                  class="com.mmxlabs.models.lng.commercial.validation.CharterContractConstraint"
-                  id="com.mmxlabs.models.lng.commercial.validation.CharterContractConstraint"
-                  isEnabledByDefault="true"
-                  lang="java"
-                  mode="Batch"
-                  name="CharterContract"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  {0}
-               </message>
-               <target
-                     class="CharterContract">
-               </target>
-            </constraint>
-            <constraint
-                  class="com.mmxlabs.models.lng.commercial.validation.MonthlyCharterContractConstraint"
-                  id="com.mmxlabs.models.lng.commercial.validation.MonthlyCharterContractConstraint"
-                  isEnabledByDefault="true"
-                  lang="java"
-                  mode="Batch"
-                  name="MonthlyCharterContract"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  {0}
-               </message>
-               <target
-                     class="CharterContract">
+                     class="GenericCharterContract">
                </target>
             </constraint>
             <constraint
@@ -242,6 +210,38 @@
                      class="Contract">
                </target>
             </constraint>
+            <constraint
+                     class="com.mmxlabs.models.lng.commercial.validation.StartHeelOptionsConstraint"
+                     id="com.mmxlabs.models.lng.commercial.validation.StartHeelOptionsConstraint"
+                     isEnabledByDefault="true"
+                     lang="java"
+                     mode="Batch"
+                     name="StartHeelOptionsConstraint"
+                     severity="ERROR"
+                     statusCode="1">
+                  <message>
+                     {0}
+                  </message>
+                  <target
+                        class="StartHeelOptions">
+                  </target>
+               </constraint>
+               <constraint
+                     class="com.mmxlabs.models.lng.commercial.validation.EndHeelOptionsConstraint"
+                     id="com.mmxlabs.models.lng.commercial.validation.EndHeelOptionsConstraint"
+                     isEnabledByDefault="true"
+                     lang="java"
+                     mode="Batch"
+                     name="EndHeelOptionsConstraint"
+                     severity="ERROR"
+                     statusCode="1">
+                  <message>
+                     {0}
+                  </message>
+                  <target
+                        class="EndHeelOptions">
+                  </target>
+               </constraint>
          </constraints>
       </constraintProvider>
    </extension>

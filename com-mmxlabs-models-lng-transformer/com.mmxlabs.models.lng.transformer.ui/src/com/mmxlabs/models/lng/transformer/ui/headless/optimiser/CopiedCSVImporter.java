@@ -43,11 +43,12 @@ import com.mmxlabs.models.lng.cargo.importer.CargoModelImporter;
 import com.mmxlabs.models.lng.cargo.importer.DischargeSlotImporter;
 import com.mmxlabs.models.lng.cargo.importer.InventoryExtraImporter;
 import com.mmxlabs.models.lng.cargo.importer.LoadSlotImporter;
-import com.mmxlabs.models.lng.cargo.importer.VesselAvailabilityBallastBonusImporterExtraImporter;
+import com.mmxlabs.models.lng.cargo.importer.VesselAvailabilityCharterContractIExtraModelImporter;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.importer.CharterContractBallastBonusImporterExtraImporter;
+import com.mmxlabs.models.lng.commercial.importer.CharterContractIExtraModelImporter;
 import com.mmxlabs.models.lng.commercial.importer.CommercialModelImporter;
+import com.mmxlabs.models.lng.commercial.util.CharterContractConstants;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.importer.BaseFuelImporter;
@@ -124,9 +125,18 @@ public class CopiedCSVImporter {
 	public void importContractData(@NonNull final String uriRoot) throws MalformedURLException {
 		dataMap.put(CommercialModelImporter.PURCHASE_CON_KEY, createURI(uriRoot, "Purchase Contracts.csv"));
 		dataMap.put(CommercialModelImporter.SALES_CON_KEY, createURI(uriRoot, "Sales Contracts.csv"));
-		dataMap.put(CommercialModelImporter.CHARTER_CON_KEY, createURI(uriRoot, "Charter Contracts.csv"));
-		dataMap.put(CharterContractBallastBonusImporterExtraImporter.BALLASTBONUS_KEY, createURI(uriRoot, "Charter Contracts--Ballast Bonus.csv"));
-
+		//dataMap.put(CommercialModelImporter.CHARTER_CON_KEY, createURI(uriRoot, "Charter Contracts.csv"));
+		
+		dataMap.put(CharterContractConstants.CHARTER_CONTRACT_KEY, 
+				createURI(uriRoot, String.format("%s.%s",CharterContractConstants.CHARTER_CONTRACT_CHARTER_CONTRACT_DEFAULT_NAME, "csv")));
+		dataMap.put(CharterContractConstants.BALLAST_BONUS_CONTAINER_KEY, 
+				createURI(uriRoot, String.format("%s.%s",CharterContractConstants.CHARTER_CONTRACT_BALLAST_BONUS_CONTAINER_DEFAULT_NAME, "csv")));
+		dataMap.put(CharterContractConstants.BALLAST_BONUS_KEY, 
+				createURI(uriRoot, String.format("%s.%s",CharterContractConstants.CHARTER_CONTRACT_BALLAST_BONUS_DEFAULT_NAME, "csv")));
+		dataMap.put(CharterContractConstants.REPOSITIONING_FEE_CONTAINER_KEY, 
+				createURI(uriRoot, String.format("%s.%s",CharterContractConstants.CHARTER_CONTRACT_REPOSITIONING_FEE_CONTAINER_DEFAULT_NAME, "csv")));
+		dataMap.put(CharterContractConstants.REPOSITIONING_FEE_KEY, 
+				createURI(uriRoot, String.format("%s.%s",CharterContractConstants.CHARTER_CONTRACT_REPOSITIONING_FEE_DEFAULT_NAME, "csv")));
 	}
 
 	public void importMarketData(@NonNull final String uriRoot) throws MalformedURLException {
@@ -164,7 +174,16 @@ public class CopiedCSVImporter {
 		dataMap.put(CargoModelImporter.VESSEL_AVAILABILITY_KEY, createURI(uriRoot, "Vessel Availability.csv"));
 		dataMap.put(AssignmentModelImporter.ASSIGNMENTS, createURI(uriRoot, "Assignments.csv"));
 		dataMap.put(CargoModelImporter.CANAL_BOOKINGS_KEY, createURI(uriRoot, "Canal Bookings.csv"));
-		dataMap.put(VesselAvailabilityBallastBonusImporterExtraImporter.BALLASTBONUS_KEY, createURI(uriRoot, "Vessel Availability--Ballast Bonus.csv"));
+		dataMap.put(CharterContractConstants.CHARTER_CONTRACT_KEY, 
+				createURI(uriRoot, String.format("%s.%s",CharterContractConstants.VESSEL_AVAILAVILITY_CHARTER_CONTRACT_DEFAULT_NAME, "csv")));
+		dataMap.put(CharterContractConstants.BALLAST_BONUS_CONTAINER_KEY, 
+				createURI(uriRoot, String.format("%s.%s",CharterContractConstants.VESSEL_AVAILAVILITY_BALLAST_BONUS_CONTAINER_DEFAULT_NAME, "csv")));
+		dataMap.put(CharterContractConstants.BALLAST_BONUS_KEY, 
+				createURI(uriRoot, String.format("%s.%s",CharterContractConstants.VESSEL_AVAILAVILITY_BALLAST_BONUS_DEFAULT_NAME, "csv")));
+		dataMap.put(CharterContractConstants.REPOSITIONING_FEE_CONTAINER_KEY, 
+				createURI(uriRoot, String.format("%s.%s",CharterContractConstants.VESSEL_AVAILAVILITY_REPOSITIONING_FEE_CONTAINER_DEFAULT_NAME, "csv")));
+		dataMap.put(CharterContractConstants.REPOSITIONING_FEE_KEY, 
+				createURI(uriRoot, String.format("%s.%s",CharterContractConstants.VESSEL_AVAILAVILITY_REPOSITIONING_FEE_DEFAULT_NAME, "csv")));
 		dataMap.put(InventoryExtraImporter.INVENTORY_KEY, createURI(uriRoot, "Inventories.csv"));
 	}
 
@@ -331,7 +350,7 @@ public class CopiedCSVImporter {
 					final List<IPostModelImporter> portModelImporters = new ArrayList<>();
 					final List<IExtraModelImporter> extraModelImporters = new ArrayList<>();
 					extraModelImporters.add(new ActualsModelExtraImporter());
-					extraModelImporters.add(new VesselAvailabilityBallastBonusImporterExtraImporter());
+					extraModelImporters.add(new VesselAvailabilityCharterContractIExtraModelImporter());
 
 					final DefaultClassImporter defaultClassImporter = new DefaultClassImporter();
 					final DefaultAttributeImporter defaultAttributeImporter = new DefaultAttributeImporter();

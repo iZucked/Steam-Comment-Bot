@@ -364,16 +364,12 @@ public class VoyagePlanner implements IVoyagePlanner {
 			// The SchedulerBuilder should set options to trigger these values to be set
 			// above
 			assert !options.getAllowCooldown();
-			assert options.shouldBeCold() == VesselTankState.MUST_BE_COLD;
 			options.setAllowCooldown(false);
-			options.setShouldBeCold(VesselTankState.MUST_BE_COLD);
 		} else if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP && thisPortSlot.getPortType() == PortType.Round_Trip_Cargo_End) {
 			// The SchedulerBuilder should set options to trigger these values to be set
 			// above
 			assert !options.getAllowCooldown();
-			assert options.shouldBeCold() == VesselTankState.MUST_BE_COLD;
 			options.setAllowCooldown(false);
-			options.setShouldBeCold(VesselTankState.MUST_BE_COLD);
 		}
 
 		return options;

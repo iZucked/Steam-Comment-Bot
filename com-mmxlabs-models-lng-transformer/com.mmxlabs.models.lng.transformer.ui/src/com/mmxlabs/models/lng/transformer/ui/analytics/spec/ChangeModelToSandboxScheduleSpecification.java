@@ -38,19 +38,20 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
-import com.mmxlabs.models.lng.cargo.EVesselTankState;
-import com.mmxlabs.models.lng.cargo.EndHeelOptions;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SlotSpecification;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.StartHeelOptions;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.VesselEventSpecification;
 import com.mmxlabs.models.lng.cargo.VesselScheduleSpecification;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
+import com.mmxlabs.models.lng.commercial.EVesselTankState;
+import com.mmxlabs.models.lng.commercial.EndHeelOptions;
+import com.mmxlabs.models.lng.commercial.StartHeelOptions;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -82,8 +83,8 @@ public class ChangeModelToSandboxScheduleSpecification {
 	private final UnaryOperator<VesselAvailability> buildVesselAvailability = (oldAvailability) -> {
 		final VesselAvailability newAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
 
-		newAvailability.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
-		newAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+		newAvailability.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+		newAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 
 		newAvailability.setVessel(oldAvailability.getVessel());
 		newAvailability.setEntity(oldAvailability.getEntity());
@@ -99,7 +100,7 @@ public class ChangeModelToSandboxScheduleSpecification {
 	private final BiConsumer<CharterInMarketOverride, PortVisit> processFirstEvent_MarketAvailability = (newAvailability, visit) -> {
 		newAvailability.setStartDate(visit.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
 		// newAvailability.setStartAt(visit.getPort());
-		final StartHeelOptions startHeelOptions = CargoFactory.eINSTANCE.createStartHeelOptions();
+		final StartHeelOptions startHeelOptions = CommercialFactory.eINSTANCE.createStartHeelOptions();
 		newAvailability.setStartHeel(startHeelOptions);
 		newAvailability.getStartHeel().setMinVolumeAvailable(visit.getHeelAtStart());
 		newAvailability.getStartHeel().setMaxVolumeAvailable(visit.getHeelAtStart());
@@ -118,7 +119,7 @@ public class ChangeModelToSandboxScheduleSpecification {
 	private final BiConsumer<CharterInMarketOverride, PortVisit> processLastSegmentEvent_MarketAvailability = (newAvailability, visit) -> {
 		newAvailability.setEndDate(visit.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
 		newAvailability.setEndPort(visit.getPort());
-		final EndHeelOptions endHeelOptions = CargoFactory.eINSTANCE.createEndHeelOptions();
+		final EndHeelOptions endHeelOptions = CommercialFactory.eINSTANCE.createEndHeelOptions();
 		newAvailability.setEndHeel(endHeelOptions);
 		newAvailability.getEndHeel().setMinimumEndHeel(visit.getHeelAtStart());
 		newAvailability.getEndHeel().setMaximumEndHeel(visit.getHeelAtStart());
@@ -243,11 +244,11 @@ public class ChangeModelToSandboxScheduleSpecification {
 		newAvailability.getEndAt().addAll(oldAvailability.getEndAt());
 		newAvailability.setEndHeel(EMFCopier.copy(oldAvailability.getEndHeel()));
 
-		if (oldAvailability.getBallastBonusContract() != null) {
-			newAvailability.setBallastBonusContract(EMFCopier.copy(oldAvailability.getBallastBonusContract()));
+		if (oldAvailability.getGenericCharterContract() != null) {
+			newAvailability.setGenericCharterContract(EMFCopier.copy(oldAvailability.getGenericCharterContract()));
 		}
-		if (oldAvailability.getCharterContract() != null) {
-			newAvailability.setCharterContract(oldAvailability.getCharterContract());
+		if (oldAvailability.getGenericCharterContract() != null) {
+			newAvailability.setGenericCharterContract(oldAvailability.getGenericCharterContract());
 		}
 
 		if (oldAvailability.getCharterOrDelegateMinDuration() != 0 || oldAvailability.getCharterOrDelegateMaxDuration() != 0) {

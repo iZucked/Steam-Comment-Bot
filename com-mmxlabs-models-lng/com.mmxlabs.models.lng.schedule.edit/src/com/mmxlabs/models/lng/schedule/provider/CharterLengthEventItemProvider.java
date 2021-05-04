@@ -267,7 +267,7 @@ public class CharterLengthEventItemProvider extends PortVisitItemProvider {
 		newChildDescriptors.add
 			(createChildParameter
 				(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS,
-				 ScheduleFactory.eINSTANCE.createBallastBonusFeeDetails()));
+				 ScheduleFactory.eINSTANCE.createCharterContractFeeDetails()));
 
 		newChildDescriptors.add
 			(createChildParameter

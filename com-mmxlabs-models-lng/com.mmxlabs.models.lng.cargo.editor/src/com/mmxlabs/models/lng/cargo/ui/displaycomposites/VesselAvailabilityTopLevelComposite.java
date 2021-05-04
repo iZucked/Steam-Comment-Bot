@@ -5,16 +5,18 @@
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
 import java.util.Collection;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
@@ -22,6 +24,9 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.ui.displaycomposites.VesselAvailabilityDetailComposite.VesselAvailabilityDetailGroup;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
@@ -36,11 +41,12 @@ import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
  */
 public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposite {
 
+
 	/**
 	 * {@link Composite} to contain the heel editors
 	 */
-	private Composite right;
-	private IDisplayComposite ballastBonusComposite;
+	private BallastBonusTermsDetailComposite ballastBonusComposite;
+	private RepositioningFeeTermsDetailComposite repositioningFeeComposite;
 
 	public VesselAvailabilityTopLevelComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, FormToolkit toolkit) {
 		super(parent, style, dialogContext, toolkit);
@@ -52,85 +58,141 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 	@Override
 	public void display(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
 
-		final EClass eClass = object.eClass();
 		Composite containerComposite = toolkit.createComposite(this, SWT.NONE);
-		// This next line breaks multi-edit.
-		// containerComposite.setLayout(new FillLayout());
+		containerComposite.setLayout(new GridLayout(1, true));
+		
 		final Group g = new Group(containerComposite, SWT.NONE);
 		toolkit.adapt(g);
 
 		g.setText(EditorUtils.unmangle(object));
-		g.setLayout(new FillLayout());
+		g.setLayout(new GridLayout(2, true));
 		g.setLayoutData(layoutProvider.createTopLayoutData(root, object, object));
 		g.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-
-		// topLevel = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(eClass).createSublevelComposite(g, eClass, dialogContext, toolkit);
-		topLevel = new VesselAvailabilityDetailComposite(g, SWT.NONE, toolkit);
+		
+		topLevel = new VesselAvailabilityDetailComposite(g, SWT.NONE, toolkit, VesselAvailabilityDetailGroup.TOP_LEFT);
 		topLevel.setCommandHandler(commandHandler);
 		topLevel.setEditorWrapper(editorWrapper);
-
-		// // START CUSTOM SECTION
-		// Initialise right composite
-		right = toolkit.createComposite(containerComposite);
-		// Single column
-		final GridLayout layout = GridLayoutFactory.swtDefaults() //
-				.numColumns(1) //
-				.equalWidth(true) //
-				.margins(0, 0) //
-				.extendedMargins(0, 0, 0, 0) //
-				.create();
-		right.setLayout(layout);
-		right.setLayoutData(new GridData(GridData.FILL_BOTH));
-		right.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-
 		topLevel.display(dialogContext, root, object, range, dbc);
+		
+		IDisplayComposite topRight = new VesselAvailabilityDetailComposite(g, SWT.NONE, toolkit, VesselAvailabilityDetailGroup.TOP_RIGHT);
+		topRight.setCommandHandler(commandHandler);
+		topRight.setEditorWrapper(editorWrapper);
+		topRight.display(dialogContext, root, object, range, dbc);
+		
+		final Button bbButton = toolkit.createButton(topRight.getComposite(), "Override", SWT.CENTER);
+		bbButton.addMouseListener(new CharterContractMouseListener(object));
 
-		createDefaultChildCompositeSection(dialogContext, root, object, range, dbc, eClass, right);
-		// int numChildren = createChildComposites(root, object, eClass, right);
-		// final Iterator<IDisplayComposite> children = childComposites.iterator();
-		// final Iterator<EObject> childObjectsItr = childObjects.iterator();
-		//
-		// while (childObjectsItr.hasNext()) {
-		// EObject next = childObjectsItr.next();
-		// if (!(next instanceof BallastBonusContract)) {
-		// children.next().display(dialogContext, root, next, range, dbc);
-		// }
-		// }
-		//
-		// // Overrides default layout factory so we get two columns columns
-		containerComposite.setLayout(new GridLayout(2, true));
-
-		Composite bottomComposite = toolkit.createComposite(this, SWT.NONE);
-		bottomComposite.setLayout(new FillLayout());
-		bottomComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		final Group g2 = new Group(bottomComposite, SWT.NONE);
+		Composite midComposite = toolkit.createComposite(this, SWT.NONE);
+		midComposite.setLayout(new GridLayout(1, true));
+		midComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		final Group g2 = new Group(midComposite, SWT.DOWN);
 		toolkit.adapt(g2);
-		g2.setText("Ballast Bonus");
+		g2.setText("Start conditions");
 		g2.setLayout(new GridLayout());
 		g2.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-
 		
-		ballastBonusComposite = new BallastBonusContractDetailComposite(g2, SWT.NONE, toolkit, () -> {
-			if (!VesselAvailabilityTopLevelComposite.this.isDisposed()) {
-				VesselAvailabilityTopLevelComposite.this.layout(true, true);
-			}
-		}, (VesselAvailability) object);
+		IDisplayComposite startStuff = new VesselAvailabilityDetailComposite(g2, SWT.NONE, toolkit, VesselAvailabilityDetailGroup.START);
+		startStuff.setCommandHandler(commandHandler);
+		startStuff.setEditorWrapper(editorWrapper);
+		startStuff.display(dialogContext, root, object, range, dbc);
+		
+		repositioningFeeComposite = new RepositioningFeeTermsDetailComposite(g2, SWT.NONE, dialogContext, toolkit, defaultResizeAction());
+		repositioningFeeComposite.setCommandHandler(commandHandler);
+		repositioningFeeComposite.display(dialogContext, root, object, range, dbc);
+		
+		Composite bottomComposite = toolkit.createComposite(this, SWT.NONE);
+		bottomComposite.setLayout(new GridLayout(1, true));
+		bottomComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+
+		final Group g3 = new Group(bottomComposite, SWT.NONE);
+		toolkit.adapt(g3);
+		g3.setText("End conditions");
+		g3.setLayout(new GridLayout());
+		g3.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		
+		IDisplayComposite endStuff = new VesselAvailabilityDetailComposite(g3, SWT.NONE, toolkit, VesselAvailabilityDetailGroup.END);
+		endStuff.setCommandHandler(commandHandler);
+		endStuff.setEditorWrapper(editorWrapper);
+		endStuff.display(dialogContext, root, object, range, dbc);
+		
+		ballastBonusComposite = new BallastBonusTermsDetailComposite(g3, SWT.NONE, dialogContext, toolkit, defaultResizeAction());
 		ballastBonusComposite.setCommandHandler(commandHandler);
 		ballastBonusComposite.display(dialogContext, root, object, range, dbc);
 
 		this.setLayout(new GridLayout(1, true));
 	}
 
+	private Runnable defaultResizeAction() {
+		return () -> {
+			if (!VesselAvailabilityTopLevelComposite.this.isDisposed()) {
+				VesselAvailabilityTopLevelComposite.this.layout(true, true);
+			}
+		};
+	}
+
 	@Override
 	public void displayValidationStatus(IStatus status) {
 		super.displayValidationStatus(status);
 		ballastBonusComposite.displayValidationStatus(status);
+		repositioningFeeComposite.displayValidationStatus(status);
 	}
 
 	@Override
 	protected boolean shouldDisplay(final EReference ref) {
-		return ref.isContainment() && !ref.isMany() && ref != CargoPackage.eINSTANCE.getVesselAvailability_BallastBonusContract();
+		return ref.isContainment() && !ref.isMany() && ref != CargoPackage.eINSTANCE.getVesselAvailability_ContainedCharterContract()
+				&& ref != CargoPackage.eINSTANCE.getVesselAvailability_StartAt();
 	}
 
+	private class CharterContractMouseListener implements MouseListener {
+		private final EObject object;
+
+		private CharterContractMouseListener(EObject object) {
+			this.object = object;
+		}
+
+		@Override
+		public void mouseUp(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseDown(MouseEvent e) {
+			if (object instanceof VesselAvailability) {
+				final VesselAvailability va = (VesselAvailability) object;
+				if (va.getContainedCharterContract() != null) {
+					commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), va, CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT, null), va,
+							CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT);
+					commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), va, CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE, Boolean.FALSE), va,
+							CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE);
+				} else {
+					GenericCharterContract gcc = CommercialFactory.eINSTANCE.createGenericCharterContract();
+					gcc.setName(validateOrOfferName("ballast_bonus_terms", va));
+					commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), va, CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT, gcc), va,
+							CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT);
+					commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), va, CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE, Boolean.TRUE), va,
+							CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE);
+				}
+				boolean needRebuilding = true;
+				if (repositioningFeeComposite != null && needRebuilding) {
+					needRebuilding = false;
+					repositioningFeeComposite.getDialogContext().getDialogController().rebuild(true);
+				}
+				if (ballastBonusComposite != null && needRebuilding) {
+					ballastBonusComposite.getDialogContext().getDialogController().rebuild(true);
+				}
+			}
+		}
+
+		@Override
+		public void mouseDoubleClick(MouseEvent e) {
+		}
+		
+		private String validateOrOfferName(final String type, final VesselAvailability va) {
+			if (va.getVessel() == null) {
+				return String.format("%s_%s", type, va.getUuid());
+			}
+			return String.format("%s_%s_%d", type, va.getVessel().getName(), va.getCharterNumber());
+		}
+	}
+	
 }

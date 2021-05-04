@@ -23,11 +23,16 @@
       <genEnumLiterals ecoreEnumLiteral="commercial.ecore#//NextPortType/LoadPort"/>
       <genEnumLiterals ecoreEnumLiteral="commercial.ecore#//NextPortType/NearestHub"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="commercial.ecore#//EVesselTankState">
+      <genEnumLiterals ecoreEnumLiteral="commercial.ecore#//EVesselTankState/EITHER"/>
+      <genEnumLiterals ecoreEnumLiteral="commercial.ecore#//EVesselTankState/MUST_BE_COLD"/>
+      <genEnumLiterals ecoreEnumLiteral="commercial.ecore#//EVesselTankState/MUST_BE_WARM"/>
+    </genEnums>
     <genClasses ecoreClass="commercial.ecore#//CommercialModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//CommercialModel/entities"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//CommercialModel/salesContracts"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//CommercialModel/purchaseContracts"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//CommercialModel/charteringContracts"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//CommercialModel/charterContracts"/>
     </genClasses>
     <genClasses image="false" ecoreClass="commercial.ecore#//BaseLegalEntity">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//BaseLegalEntity/shippingBook"/>
@@ -115,46 +120,67 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//DateShiftExpressionPriceParameters/specificDay"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//DateShiftExpressionPriceParameters/value"/>
     </genClasses>
-    <genClasses image="false" ecoreClass="commercial.ecore#//BallastBonusContract"/>
-    <genClasses ecoreClass="commercial.ecore#//RuleBasedBallastBonusContract">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//RuleBasedBallastBonusContract/rules"/>
+    <genClasses ecoreClass="commercial.ecore#//GenericCharterContract">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//GenericCharterContract/minDuration"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//GenericCharterContract/maxDuration"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//GenericCharterContract/repositioningFeeTerms"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//GenericCharterContract/ballastBonusTerms"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//GenericCharterContract/startHeel"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//GenericCharterContract/endHeel"/>
     </genClasses>
-    <genClasses image="false" ecoreClass="commercial.ecore#//BallastBonusContractLine">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//BallastBonusContractLine/redeliveryPorts"/>
+    <genClasses image="false" ecoreClass="commercial.ecore#//IRepositioningFee"/>
+    <genClasses ecoreClass="commercial.ecore#//SimpleRepositioningFeeContainer">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//SimpleRepositioningFeeContainer/terms"/>
     </genClasses>
-    <genClasses ecoreClass="commercial.ecore#//LumpSumBallastBonusContractLine">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//LumpSumBallastBonusContractLine/priceExpression"/>
+    <genClasses image="false" ecoreClass="commercial.ecore#//IBallastBonus"/>
+    <genClasses ecoreClass="commercial.ecore#//SimpleBallastBonusContainer">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//SimpleBallastBonusContainer/terms"/>
     </genClasses>
-    <genClasses ecoreClass="commercial.ecore#//NotionalJourneyBallastBonusContractLine">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyBallastBonusContractLine/speed"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyBallastBonusContractLine/fuelPriceExpression"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyBallastBonusContractLine/hirePriceExpression"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//NotionalJourneyBallastBonusContractLine/returnPorts"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyBallastBonusContractLine/includeCanal"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyBallastBonusContractLine/includeCanalTime"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyBallastBonusContractLine/lumpSumPriceExpression"/>
+    <genClasses ecoreClass="commercial.ecore#//MonthlyBallastBonusContainer">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//MonthlyBallastBonusContainer/hubs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//MonthlyBallastBonusContainer/terms"/>
     </genClasses>
-    <genClasses image="false" ecoreClass="commercial.ecore#//CharterContract">
-      <genFeatures createChild="false" propertyDescription="Minimum duration in days charters must be taken on for"
-          ecoreFeature="ecore:EAttribute commercial.ecore#//CharterContract/minDuration"/>
-      <genFeatures createChild="false" propertyDescription="Maximum duration in days charters can be taken on for"
-          ecoreFeature="ecore:EAttribute commercial.ecore#//CharterContract/maxDuration"/>
+    <genClasses ecoreClass="commercial.ecore#//LumpSumTerm">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//LumpSumTerm/priceExpression"/>
     </genClasses>
-    <genClasses ecoreClass="commercial.ecore#//SimpleCharterContract"/>
-    <genClasses image="false" ecoreClass="commercial.ecore#//BallastBonusCharterContract">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//BallastBonusCharterContract/ballastBonusContract"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//BallastBonusCharterContract/repositioningFee"/>
+    <genClasses ecoreClass="commercial.ecore#//NotionalJourneyTerm">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyTerm/speed"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyTerm/fuelPriceExpression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyTerm/hirePriceExpression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyTerm/includeCanal"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyTerm/includeCanalTime"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalJourneyTerm/lumpSumPriceExpression"/>
     </genClasses>
-    <genClasses ecoreClass="commercial.ecore#//SimpleBallastBonusCharterContract"/>
-    <genClasses ecoreClass="commercial.ecore#//MonthlyBallastBonusContractLine">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//MonthlyBallastBonusContractLine/month"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//MonthlyBallastBonusContractLine/ballastBonusTo"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//MonthlyBallastBonusContractLine/ballastBonusPctFuel"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//MonthlyBallastBonusContractLine/ballastBonusPctCharter"/>
+    <genClasses ecoreClass="commercial.ecore#//BallastBonusTerm">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//BallastBonusTerm/redeliveryPorts"/>
     </genClasses>
-    <genClasses ecoreClass="commercial.ecore#//MonthlyBallastBonusContract">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//MonthlyBallastBonusContract/hubs"/>
+    <genClasses ecoreClass="commercial.ecore#//LumpSumBallastBonusTerm"/>
+    <genClasses ecoreClass="commercial.ecore#//NotionalJourneyBallastBonusTerm">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//NotionalJourneyBallastBonusTerm/returnPorts"/>
     </genClasses>
-    <genClasses ecoreClass="commercial.ecore#//MonthlyBallastBonusCharterContract"/>
+    <genClasses ecoreClass="commercial.ecore#//MonthlyBallastBonusTerm">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//MonthlyBallastBonusTerm/month"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//MonthlyBallastBonusTerm/ballastBonusTo"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//MonthlyBallastBonusTerm/ballastBonusPctFuel"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//MonthlyBallastBonusTerm/ballastBonusPctCharter"/>
+    </genClasses>
+    <genClasses ecoreClass="commercial.ecore#//RepositioningFeeTerm">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//RepositioningFeeTerm/originPort"/>
+    </genClasses>
+    <genClasses ecoreClass="commercial.ecore#//LumpSumRepositioningFeeTerm"/>
+    <genClasses ecoreClass="commercial.ecore#//OriginPortRepositioningFeeTerm"/>
+    <genClasses ecoreClass="commercial.ecore#//EndHeelOptions">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//EndHeelOptions/tankState"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//EndHeelOptions/minimumEndHeel"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//EndHeelOptions/maximumEndHeel"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//EndHeelOptions/useLastHeelPrice"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//EndHeelOptions/priceExpression"/>
+    </genClasses>
+    <genClasses ecoreClass="commercial.ecore#//StartHeelOptions">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//StartHeelOptions/cvValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//StartHeelOptions/minVolumeAvailable"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//StartHeelOptions/maxVolumeAvailable"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//StartHeelOptions/priceExpression"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

@@ -20,7 +20,6 @@ import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
-import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.FullVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
@@ -29,13 +28,13 @@ import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
+import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.VesselEventOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ShippingType;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.SlotMode;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
@@ -46,6 +45,8 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.VesselEventSpecification;
 import com.mmxlabs.models.lng.cargo.VesselScheduleSpecification;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
+import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -161,8 +162,8 @@ public class BaseCaseToScheduleSpecification {
 						vesselAvailability.setVessel(vessel);
 						vesselAvailability.setEntity(optionalAvailabilityShippingOption.getEntity());
 
-						vesselAvailability.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
-						vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+						vesselAvailability.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+						vesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 						if (optionalAvailabilityShippingOption.isUseSafetyHeel()) {
 							vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getSafetyHeel());
 							vesselAvailability.getStartHeel().setCvValue(22.8);
@@ -179,7 +180,8 @@ public class BaseCaseToScheduleSpecification {
 						vesselAvailability.setEndBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
 						vesselAvailability.setOptional(true);
 						vesselAvailability.setFleet(false);
-						vesselAvailability.setRepositioningFee(optionalAvailabilityShippingOption.getRepositioningFee());
+						vesselAvailability.setContainedCharterContract(AnalyticsBuilder.createCharterTerms(optionalAvailabilityShippingOption.getRepositioningFee(),//
+								optionalAvailabilityShippingOption.getBallastBonus()));
 						if (optionalAvailabilityShippingOption.getStartPort() != null) {
 							vesselAvailability.setStartAt(optionalAvailabilityShippingOption.getStartPort());
 						}
@@ -202,8 +204,8 @@ public class BaseCaseToScheduleSpecification {
 						vesselAvailability.setVessel(vessel);
 						vesselAvailability.setEntity(fleetShippingOption.getEntity());
 
-						vesselAvailability.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
-						vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+						vesselAvailability.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+						vesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 
 						if (fleetShippingOption.isUseSafetyHeel()) {
 							vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getSafetyHeel());

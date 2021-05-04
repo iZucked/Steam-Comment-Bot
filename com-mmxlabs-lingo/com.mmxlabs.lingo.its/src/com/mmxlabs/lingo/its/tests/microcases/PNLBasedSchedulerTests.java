@@ -17,10 +17,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.mmxlabs.lngdataserver.lng.importers.creator.ScenarioBuilder;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.commercial.BallastBonusCharterContract;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.commercial.CommercialFactory;
-import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -305,15 +303,12 @@ public class PNLBasedSchedulerTests extends AbstractMicroTestCase {
 		fleetModelBuilder.setRouteParameters(vessel, RouteOption.SUEZ, rate, rate, rate, rate, 24);
 		fleetModelBuilder.setRouteParameters(vessel, RouteOption.PANAMA, rate, rate, rate, rate, 24);
 
-		RuleBasedBallastBonusContract charterContractDetails = commercialModelBuilder.createSimpleNotionalJourneyBallastBonusContract(Collections.emptyList(), 16.0, "80000", "650", false, true,
+		GenericCharterContract charterContract = commercialModelBuilder.createSimpleNotionalJourneyBallastBonusContract(Collections.emptyList(), 16.0, "80000", "650", false, true,
 				Collections.singletonList(barrowIsland));
-
-		final BallastBonusCharterContract charterContract = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
-		charterContract.setBallastBonusContract(charterContractDetails);
 
 		final CharterInMarket charter = spotMarketsModelBuilder.createCharterInMarket("SpotCharter", vessel, entity, "80000", 1);
 		charter.setMinDuration(12);
-		charter.setCharterContract(charterContract);
+		charter.setGenericCharterContract(charterContract);
 
 		final String sellExpression = "10";
 
