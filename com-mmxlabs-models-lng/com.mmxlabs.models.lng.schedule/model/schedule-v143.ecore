@@ -161,6 +161,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="canalArrivalTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="canalBookingPeriod" eType="#//PanamaBookingPeriod"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="canalEntrancePort" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="canalJourneyEvent" eType="#//CanalJourneyEvent"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Idle" eSuperTypes="#//Event #//FuelUsage">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="laden" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
@@ -405,9 +407,13 @@
   <eClassifiers xsi:type="ecore:EClass" name="CharterAvailableToEvent" eSuperTypes="#//Event">
     <eStructuralFeatures xsi:type="ecore:EReference" name="linkedSequence" eType="#//Sequence"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CanalBookingEvent" eSuperTypes="#//Event">
+  <eClassifiers xsi:type="ecore:EClass" name="CanalJourneyEvent" eSuperTypes="#//Event">
     <eStructuralFeatures xsi:type="ecore:EReference" name="linkedSequence" eType="#//Sequence"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="linkedJourney" eType="#//Journey"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="panamaWaitingTimeHours"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxAvailablePanamaWaitingTimeHours"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CharterAvailableFromEvent" eSuperTypes="#//Event">
     <eStructuralFeatures xsi:type="ecore:EReference" name="linkedSequence" eType="#//Sequence"/>
@@ -446,7 +452,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="exposures" upperBound="-1"
         eType="#//ExposureDetail" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CharterContractFeeDetails" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject schedule-ext.ecore#//GeneralPNLDetails">
+  <eClassifiers xsi:type="ecore:EClass" name="CharterContractFeeDetails" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject schedule.ecore#//GeneralPNLDetails">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="fee" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         defaultValueLiteral="0">
       <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
@@ -454,9 +460,9 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="matchingContractDetails"
-        eType="ecore:EClass schedule-ext.ecore#//MatchingContractDetails" containment="true"/>
+        eType="ecore:EClass schedule.ecore#//MatchingContractDetails" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="LumpSumDetails" eSuperTypes="schedule-ext.ecore#//MatchingContractDetails">
+  <eClassifiers xsi:type="ecore:EClass" name="LumpSumDetails" eSuperTypes="schedule.ecore#//MatchingContractDetails">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="lumpSum" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="0">
       <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
@@ -474,7 +480,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="NotionalJourneyDetails" eSuperTypes="schedule-ext.ecore#//MatchingContractDetails">
+  <eClassifiers xsi:type="ecore:EClass" name="NotionalJourneyDetails" eSuperTypes="schedule.ecore#//MatchingContractDetails">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="distance" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="0"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="totalTimeInDays" lowerBound="1"
