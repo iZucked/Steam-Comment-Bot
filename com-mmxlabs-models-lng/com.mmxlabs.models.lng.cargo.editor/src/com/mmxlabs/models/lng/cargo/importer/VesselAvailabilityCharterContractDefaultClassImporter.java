@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.importer;
 
+import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EClass;
@@ -12,6 +13,7 @@ import org.eclipse.emf.ecore.EObject;
 import com.mmxlabs.common.csv.IDeferment;
 import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BallastBonusTerm;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
@@ -31,6 +33,7 @@ import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.importer.IMMXExportContext;
 import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
@@ -110,6 +113,7 @@ public class VesselAvailabilityCharterContractDefaultClassImporter extends Defau
 				LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
 				CargoModel cargoModel = scenarioModel.getCargoModel();
 				Vessel targetVessel = (Vessel) context.getNamedObject(vesselName, FleetPackage.Literals.VESSEL);
+				
 				for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
 					if (vesselAvailability.getVessel() == targetVessel) {
 						if (vesselAvailability.getCharterNumber() == pCharterNumber) {
@@ -123,11 +127,6 @@ public class VesselAvailabilityCharterContractDefaultClassImporter extends Defau
 								contract = CommercialFactory.eINSTANCE.createGenericCharterContract();
 							}
 							
-							if (object instanceof IBallastBonus) {
-								contract.setBallastBonusTerms((IBallastBonus) object);
-							} else if (object instanceof IRepositioningFee) {
-								contract.setRepositioningFeeTerms((IRepositioningFee) object);
-							}
 							if (object instanceof MonthlyBallastBonusTerm) {
 								final MonthlyBallastBonusContainer mbbContainer;
 								if (contract.getBallastBonusTerms() instanceof MonthlyBallastBonusContainer) {

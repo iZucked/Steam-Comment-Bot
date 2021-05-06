@@ -21,11 +21,15 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.commercial.IBallastBonus;
 import com.mmxlabs.models.lng.commercial.IRepositioningFee;
+import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContainer;
 import com.mmxlabs.models.lng.commercial.RepositioningFeeTerm;
 import com.mmxlabs.models.lng.commercial.SimpleBallastBonusContainer;
 import com.mmxlabs.models.lng.commercial.SimpleRepositioningFeeContainer;
 import com.mmxlabs.models.lng.commercial.util.CharterContractConstants;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IExtraModelImporter;
@@ -83,6 +87,7 @@ public class VesselAvailabilityCharterContractIExtraModelImporter implements IEx
 			if (cargoModel != null) {
 				List<IBallastBonus> bbExportContainers = new ArrayList<>();
 				List<BallastBonusTerm> bbExports = new ArrayList<>();
+				List<APortSet<Port>> mbbExports = new ArrayList<>();
 				List<IRepositioningFee> rfExportContainers = new ArrayList<>();
 				List<RepositioningFeeTerm> rfExports = new ArrayList<>();
 				List<GenericCharterContract> ccList = new ArrayList<>();
@@ -98,6 +103,9 @@ public class VesselAvailabilityCharterContractIExtraModelImporter implements IEx
 								bbExportContainers.add(bb);
 								if (bb instanceof SimpleBallastBonusContainer) {
 									bbExports.addAll(((SimpleBallastBonusContainer) bb).getTerms());
+								} else if (bb instanceof MonthlyBallastBonusContainer) {
+									bbExports.addAll(((MonthlyBallastBonusContainer) bb).getTerms());
+									mbbExports.addAll(((MonthlyBallastBonusContainer) bb).getHubs());
 								}
 							}
 							IRepositioningFee rf = gcc.getRepositioningFeeTerms();

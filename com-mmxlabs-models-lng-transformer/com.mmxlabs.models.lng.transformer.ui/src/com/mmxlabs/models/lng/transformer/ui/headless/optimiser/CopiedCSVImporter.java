@@ -351,6 +351,7 @@ public class CopiedCSVImporter {
 					final List<IExtraModelImporter> extraModelImporters = new ArrayList<>();
 					extraModelImporters.add(new ActualsModelExtraImporter());
 					extraModelImporters.add(new VesselAvailabilityCharterContractIExtraModelImporter());
+					extraModelImporters.add(new CharterContractIExtraModelImporter());
 
 					final DefaultClassImporter defaultClassImporter = new DefaultClassImporter();
 					final DefaultAttributeImporter defaultAttributeImporter = new DefaultAttributeImporter();
