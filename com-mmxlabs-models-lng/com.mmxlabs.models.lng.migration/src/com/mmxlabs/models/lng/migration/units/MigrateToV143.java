@@ -282,9 +282,6 @@ public class MigrateToV143 extends AbstractMigrationUnit {
 		final EClass class_monthlyBallastBonusContractLine = MetamodelUtils.getEClass(commercialPackage, "MonthlyBallastBonusContractLine");
 		// NEW
 		final EClass class_monthlyBallastBonusTerm = MetamodelUtils.getEClass(commercialPackage, "MonthlyBallastBonusTerm");
-
-		final EEnum enum_nextPortType = MetamodelUtils.getEEnum(commercialPackage, "NextPortType");
-		final EEnumLiteral nextPortType_nearestHub = MetamodelUtils.getEEnum_Literal(enum_nextPortType, "NearestHub");
 		
 		final EObjectWrapper ballastBonusContainer = (EObjectWrapper) commercialPackage.getEFactoryInstance().create(class_MonthlyBallastBonusContainer);
 		ballastBonusContainer.setRef("hubs", oldBallastBonusContract.getRefAsList("hubs"));
@@ -305,14 +302,7 @@ public class MigrateToV143 extends AbstractMigrationUnit {
 					term.setAttrib("includeCanalTime", rule.getAttrib("includeCanalTime"));
 					term.setAttrib("lumpSumPriceExpression", rule.getAttrib("lumpSumPriceExpression"));
 					term.setAttrib("month", rule.getAttrib("month"));
-					Object ballastBonusTo = rule.getAttrib("ballastBonusTo");
-					// FIXME: this is a hack, but I have no idea how to avoid it
-					final EEnumLiteral newLoadPortLiteral = term.getAttrib("ballastBonusTo");
-					final EEnum newNPT = newLoadPortLiteral.getEEnum();
-					final EEnumLiteral newNearestHubLiteral = newNPT.getEEnumLiteral("NearestHub");
-					if (nextPortType_nearestHub.equals(ballastBonusTo)) {
-						term.setAttrib("ballastBonusTo", newNearestHubLiteral);
-					}
+					//FIXME: we can't migrate ballastTo, since it is different enum in different ecores
 					term.setAttrib("ballastBonusPctFuel", rule.getAttrib("ballastBonusPctFuel"));
 					term.setAttrib("ballastBonusPctCharter", rule.getAttrib("ballastBonusPctCharter"));
 				}
