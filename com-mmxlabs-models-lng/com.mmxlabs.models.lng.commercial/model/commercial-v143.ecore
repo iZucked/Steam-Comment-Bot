@@ -412,7 +412,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MonthlyBallastBonusTerm" eSuperTypes="#//NotionalJourneyBallastBonusTerm">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="month" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ballastBonusTo" eType="ecore:EEnum commercial-ext.ecore#//NextPortType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ballastBonusTo" eType="#//NextPortType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ballastBonusPctFuel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ballastBonusPctCharter"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

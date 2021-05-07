@@ -253,12 +253,16 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createExposureDetailAdapter();
 			}
 			@Override
-			public Adapter caseCharterContractFeeDetails(CharterContractFeeDetails object) {
-				return createCharterContractFeeDetailsAdapter();
-			}
-			@Override
 			public Adapter caseMatchingContractDetails(MatchingContractDetails object) {
 				return createMatchingContractDetailsAdapter();
+			}
+			@Override
+			public Adapter caseLumpSumContractDetails(LumpSumContractDetails object) {
+				return createLumpSumContractDetailsAdapter();
+			}
+			@Override
+			public Adapter caseNotionalJourneyContractDetails(NotionalJourneyContractDetails object) {
+				return createNotionalJourneyContractDetailsAdapter();
 			}
 			@Override
 			public Adapter caseCharterAvailableToEvent(CharterAvailableToEvent object) {
@@ -291,6 +295,10 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter casePaperDealAllocationEntry(PaperDealAllocationEntry object) {
 				return createPaperDealAllocationEntryAdapter();
+			}
+			@Override
+			public Adapter caseCharterContractFeeDetails(CharterContractFeeDetails object) {
+				return createCharterContractFeeDetailsAdapter();
 			}
 			@Override
 			public Adapter caseLumpSumDetails(LumpSumDetails object) {
@@ -885,6 +893,34 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createMatchingContractDetailsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.LumpSumContractDetails <em>Lump Sum Contract Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.LumpSumContractDetails
+	 * @generated
+	 */
+	public Adapter createLumpSumContractDetailsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails <em>Notional Journey Contract Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.NotionalJourneyContractDetails
+	 * @generated
+	 */
+	public Adapter createNotionalJourneyContractDetailsAdapter() {
 		return null;
 	}
 

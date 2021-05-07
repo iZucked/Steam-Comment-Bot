@@ -452,7 +452,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="exposures" upperBound="-1"
         eType="#//ExposureDetail" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CharterContractFeeDetails" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject schedule.ecore#//GeneralPNLDetails">
+  <eClassifiers xsi:type="ecore:EClass" name="CharterContractFeeDetails" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//GeneralPNLDetails">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="fee" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         defaultValueLiteral="0">
       <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
@@ -460,9 +460,9 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="matchingContractDetails"
-        eType="ecore:EClass schedule.ecore#//MatchingContractDetails" containment="true"/>
+        eType="#//MatchingContractDetails" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="LumpSumDetails" eSuperTypes="schedule.ecore#//MatchingContractDetails">
+  <eClassifiers xsi:type="ecore:EClass" name="LumpSumDetails" eSuperTypes="#//MatchingContractDetails">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="lumpSum" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="0">
       <eAnnotations source="http://www.mmxlabs.com/models/pricing/expressionType">
@@ -480,7 +480,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="NotionalJourneyDetails" eSuperTypes="schedule.ecore#//MatchingContractDetails">
+  <eClassifiers xsi:type="ecore:EClass" name="NotionalJourneyDetails" eSuperTypes="#//MatchingContractDetails">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="distance" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="0"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="totalTimeInDays" lowerBound="1"

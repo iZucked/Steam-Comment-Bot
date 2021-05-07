@@ -585,7 +585,8 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CanalBookingSlot" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="routeOption" lowerBound="1"
-        eType="ecore:EEnum ../../com.mmxlabs.models.lng.port/model/port.ecore#//RouteOption"/>
+        eType="ecore:EEnum ../../com.mmxlabs.models.lng.port/model/port.ecore#//RouteOption"
+        defaultValueLiteral="PANAMA"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="canalEntrance" eType="ecore:EEnum ../../com.mmxlabs.models.lng.port/model/port.ecore#//CanalEntry"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="bookingDate" lowerBound="1"
         eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
@@ -596,7 +597,7 @@
         <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
       </eGenericType>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="bookingCode" eType="ecore:EClass cargo-v142.ecore#//VesselGroupCanalParameters"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bookingCode" eType="#//VesselGroupCanalParameters"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CanalBookings" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="canalBookingSlots" upperBound="-1"
@@ -605,7 +606,11 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="relaxedBoundaryOffsetDays"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="arrivalMarginHours" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="arrivalMarginHours" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="hours"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="flexibleBookingAmountNorthbound"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="flexibleBookingAmountSouthbound"
@@ -617,8 +622,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="bookingExemptVessels" upperBound="-1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselGroupCanalParameters"
-        upperBound="-1" eType="ecore:EClass cargo-v142.ecore#//VesselGroupCanalParameters"
-        containment="true"/>
+        upperBound="-1" eType="#//VesselGroupCanalParameters" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ScheduleSpecification">
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselScheduleSpecifications"

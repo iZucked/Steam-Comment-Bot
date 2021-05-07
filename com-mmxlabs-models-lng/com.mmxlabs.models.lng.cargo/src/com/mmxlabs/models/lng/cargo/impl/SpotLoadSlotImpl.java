@@ -122,12 +122,6 @@ public class SpotLoadSlotImpl extends LoadSlotImpl implements SpotLoadSlot {
 			case CargoPackage.SPOT_LOAD_SLOT__MARKET:
 				if (resolve) return getMarket();
 				return basicGetMarket();
-			case CargoPackage.SPOT_LOAD_SLOT__RESTRICTED_VESSELS:
-				if (resolve) return (Object) getVesselRestrictions();
-			case CargoPackage.SPOT_LOAD_SLOT__RESTRICTED_CONTRACTS:
-				if (resolve) return (Object) getContractRestrictions();
-			case CargoPackage.SPOT_LOAD_SLOT__RESTRICTED_PORTS:
-				if (resolve) return (Object) getPortRestrictions();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}

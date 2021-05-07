@@ -280,12 +280,24 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//ExposureDetail/currencyUnit"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//ExposureDetail/dealType"/>
     </genClasses>
-    <genClasses ecoreClass="schedule.ecore#//CharterContractFeeDetails">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//CharterContractFeeDetails/fee"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//CharterContractFeeDetails/matchingContractDetails"/>
-    </genClasses>
     <genClasses image="false" ecoreClass="schedule.ecore#//MatchingContractDetails">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//MatchingContractDetails/matchedPort"/>
+    </genClasses>
+    <genClasses ecoreClass="schedule.ecore#//LumpSumContractDetails">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//LumpSumContractDetails/lumpSum"/>
+    </genClasses>
+    <genClasses ecoreClass="schedule.ecore#//NotionalJourneyContractDetails">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NotionalJourneyContractDetails/returnPort"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NotionalJourneyContractDetails/distance"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NotionalJourneyContractDetails/totalTimeInDays"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NotionalJourneyContractDetails/totalFuelUsed"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NotionalJourneyContractDetails/fuelPrice"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NotionalJourneyContractDetails/totalFuelCost"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NotionalJourneyContractDetails/hireRate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NotionalJourneyContractDetails/hireCost"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NotionalJourneyContractDetails/routeTaken"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NotionalJourneyContractDetails/canalCost"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NotionalJourneyContractDetails/lumpSum"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//CharterAvailableToEvent">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//CharterAvailableToEvent/linkedSequence"/>
@@ -329,6 +341,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//PaperDealAllocationEntry/value"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//PaperDealAllocationEntry/settled"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//PaperDealAllocationEntry/exposures"/>
+    </genClasses>
+    <genClasses ecoreClass="schedule.ecore#//CharterContractFeeDetails">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//CharterContractFeeDetails/fee"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//CharterContractFeeDetails/matchingContractDetails"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//LumpSumDetails">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//LumpSumDetails/lumpSum"/>

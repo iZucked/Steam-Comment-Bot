@@ -302,7 +302,7 @@ public class MigrateToV143 extends AbstractMigrationUnit {
 					term.setAttrib("includeCanalTime", rule.getAttrib("includeCanalTime"));
 					term.setAttrib("lumpSumPriceExpression", rule.getAttrib("lumpSumPriceExpression"));
 					term.setAttrib("month", rule.getAttrib("month"));
-					//FIXME: we can't migrate ballastTo, since it is different enum in different ecores
+					term.setAttrib("ballastBonusTo", rule.getAttrib("ballastBonusTo"));
 					term.setAttrib("ballastBonusPctFuel", rule.getAttrib("ballastBonusPctFuel"));
 					term.setAttrib("ballastBonusPctCharter", rule.getAttrib("ballastBonusPctCharter"));
 				}
