@@ -113,6 +113,31 @@ public class VesselConstraint extends AbstractModelMultiConstraint {
 							.make(ctx, statuses);
 				}
 			}
+			final List<VesselClassRouteParameters> nonDelegateRouteParameters = vessel.getRouteParameters();
+			for (final VesselClassRouteParameters routeParameter : nonDelegateRouteParameters) {
+				final String canalName;
+				if (routeParameter.getRouteOption() == RouteOption.SUEZ) {
+					canalName = "Suez";
+				} else if (routeParameter.getRouteOption() == RouteOption.PANAMA) {
+					canalName = "Panama";
+				} else {
+					canalName = routeParameter.getRouteOption().getName();
+				}
+				if (routeParameter.getBallastConsumptionRate() >= routeParameter.getBallastNBORate()) {
+					baseFactory.copyName() //
+						.withMessage(String.format("%s ballast base fuel rate should be less than ballast NBO rate.", canalName)) //
+						.withObjectAndFeature(routeParameter, FleetPackage.eINSTANCE.getVesselClassRouteParameters_BallastConsumptionRate()) //
+						.withObjectAndFeature(routeParameter, FleetPackage.eINSTANCE.getVesselClassRouteParameters_BallastNBORate()) //
+						.make(ctx, statuses);
+				}
+				if (routeParameter.getLadenConsumptionRate() >= routeParameter.getLadenNBORate()) {
+					baseFactory.copyName() //
+						.withMessage(String.format("%s laden base fuel rate should be less than laden NBO rate.", canalName)) //
+						.withObjectAndFeature(routeParameter, FleetPackage.eINSTANCE.getVesselClassRouteParameters_LadenConsumptionRate()) //
+						.withObjectAndFeature(routeParameter, FleetPackage.eINSTANCE.getVesselClassRouteParameters_LadenNBORate()) //
+						.make(ctx, statuses);
+				}
+			}
 		}
 
 		return Activator.PLUGIN_ID;
