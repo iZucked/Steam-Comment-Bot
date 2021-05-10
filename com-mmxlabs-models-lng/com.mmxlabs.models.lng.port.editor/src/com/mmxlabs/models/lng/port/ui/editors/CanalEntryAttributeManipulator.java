@@ -50,7 +50,6 @@ public class CanalEntryAttributeManipulator extends ValueListAttributeManipulato
 			int n = 0;
 			for (final CanalEntry literal : CanalEntry.values()) {
 				names[n] = nameProvider.apply(literal);
-//				names[n] = ModelDistanceProvider.getCanalEntranceName(portModel, canalBookingSlot.getRouteOption(), literal);
 				n++;
 			}
 			return new ComboBoxCellEditor(c, names);
@@ -67,7 +66,6 @@ public class CanalEntryAttributeManipulator extends ValueListAttributeManipulato
 			String[] names = new String[CanalEntry.values().length];
 			int n = 0;
 			for (final CanalEntry literal : CanalEntry.values()) {
-//				names[n] = ModelDistanceProvider.getCanalEntranceName(portModel, canalBookingSlot.getRouteOption(), literal);
 				names[n] = nameProvider.apply(literal);
 				n++;
 			}
