@@ -578,6 +578,21 @@
           </EDataTypeIs>
        </FeatureAnyOf>
     </editorFactory>
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.cargo.ui.inlineeditors.PanamaDirectionInlineEditorFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.inlineeditors.PanamaDirectionInlineEditorFactory">
+       <OwnerAnyOf>
+          <EClassExtends
+                EClass="com.mmxlabs.models.lng.cargo.CanalBookingSlot">
+          </EClassExtends>
+       </OwnerAnyOf>
+       <FeatureAnyOf>
+          <EDataTypeIs
+                EDataTypeName="CanalEntry"
+                EDataTypeURI="http://www.mmxlabs.com/models/lng/port/1/">
+          </EDataTypeIs>
+       </FeatureAnyOf>
+    </editorFactory>
  </extension>
  <extension
        point="com.mmxlabs.models.common.modelcommandprovider">

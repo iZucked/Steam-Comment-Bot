@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.port.CanalEntry;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
+import com.mmxlabs.models.lng.port.util.PortModelLabeller;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -168,15 +169,15 @@ public class CanalBookingsReportTransformer {
 
 					if (journey.getCanalBooking() != null) {
 						final CanalBookingSlot booking = journey.getCanalBooking();
-						final String entryPointName = modelDistanceProvider.getCanalEntranceName(journey.getRouteOption(), booking.getCanalEntrance());
-						result.add(new RowData(modelRecord.getName(), pinned, true, booking, journey.getRouteOption(), booking.getBookingDate().atTime(3, 0), entryPointName,
+						final String canalTravelDirection = PortModelLabeller.getDirection(booking.getCanalEntrance());
+						result.add(new RowData(modelRecord.getName(), pinned, true, booking, journey.getRouteOption(), booking.getBookingDate().atTime(3, 0), canalTravelDirection,
 								(PortVisit) journey.getPreviousEvent(), type, nextSlot, booking.getNotes(), getBookingCode(booking, cargoModel.getCanalBookings()), getVessel(booking, cargoModel.getCanalBookings())));
 						existingBookings.remove(booking);
 					} else if (journey.getRouteOption() == RouteOption.PANAMA) {
-						final String entryPointName = modelDistanceProvider.getCanalEntranceName(journey.getRouteOption(), journey.getCanalEntrance());
+						final String canalTravelDirection = PortModelLabeller.getDirection(journey.getCanalEntrance());
 						final String vesselName = getVesselName(journey);
 						final String bookingCode = getVesselBookingCode(journey, cargoModel.getCanalBookings());
-						final RowData rowData = new RowData(modelRecord.getName(), pinned, false, null, journey.getRouteOption(), journey.getCanalDateTime(), entryPointName,
+						final RowData rowData = new RowData(modelRecord.getName(), pinned, false, null, journey.getRouteOption(), journey.getCanalDateTime(), canalTravelDirection,
 								(PortVisit) journey.getPreviousEvent(), type, nextSlot, "", bookingCode, vesselName);
 						if (journey.getCanalBookingPeriod() == PanamaBookingPeriod.RELAXED) {
 							if (journey.getCanalEntrance() == CanalEntry.NORTHSIDE) {
@@ -193,9 +194,9 @@ public class CanalBookingsReportTransformer {
 
 		// unused options
 		for (final CanalBookingSlot booking : existingBookings) {
-			final String entryPointName = modelDistanceProvider.getCanalEntranceName(booking.getRouteOption(), booking.getCanalEntrance());
+			final String canalTravelDirection = PortModelLabeller.getDirection(booking.getCanalEntrance());
 			if (booking.getBookingDate() != null) {
-				result.add(new RowData(modelRecord.getName(), pinned, true, booking, booking.getRouteOption(), booking.getBookingDate().atTime(3, 0), entryPointName, null, "Unused", null,
+				result.add(new RowData(modelRecord.getName(), pinned, true, booking, booking.getRouteOption(), booking.getBookingDate().atTime(3, 0), canalTravelDirection, null, "Unused", null,
 					booking.getNotes(), getBookingCode(booking, cargoModel.getCanalBookings()), getVessel(booking, cargoModel.getCanalBookings())));
 			}
 		}
