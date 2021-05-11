@@ -11,6 +11,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IResource;
@@ -227,7 +228,8 @@ public class PortTimesRecordMaker {
 
 		// If non-null, set the return slot time to the next calculated slot and time.
 		PortTimesRecord recordToUpdateReturnTime = null;
-		IPortTimeWindowsRecord prevTWR = null;
+
+		Pair<IPortTimeWindowsRecord, PortTimesRecord> recordPairToUpdateWithPanama = null;
 
 		boolean updateFirstRecordStartTime = false;
 		for (final IPortTimeWindowsRecord record : trimmedWindows) {
@@ -253,15 +255,16 @@ public class PortTimesRecordMaker {
 				// What is the next travel time?
 				lastNextExpectedArrivalTime = arrivalTime + /* visitDuration already included in min travel time + */travelTimeData.getMinTravelTime(record.getIndex(slot));
 
+				// These parts update records from the previous iteration on the first slot only.
 				if (recordToUpdateReturnTime != null) {
 					recordToUpdateReturnTime.setReturnSlotTime(slot, arrivalTime);
-					// Make sure we do after return time updated.
-					if (prevTWR != null) {
-						updatePortTimesRecordWithPanamaRestrictions(distanceProvider, vesselAvailability.getVessel(), prevTWR, recordToUpdateReturnTime);
-					}
-
 					recordToUpdateReturnTime = null;
 				}
+				// Make sure we do after return time updated.
+				if (recordPairToUpdateWithPanama != null) {
+					updatePortTimesRecordWithPanamaRestrictions(distanceProvider, vesselAvailability.getVessel(), recordPairToUpdateWithPanama.getFirst(), recordPairToUpdateWithPanama.getSecond());
+				}
+				recordPairToUpdateWithPanama = null;
 			}
 
 			if (updateFirstRecordStartTime) {
@@ -336,16 +339,21 @@ public class PortTimesRecordMaker {
 					// We need to update the start time after the end event is scheduled, to make
 					// the min/max duration adjustments
 					updateRecord(isRoundTripSequence, vesselAvailability, portTimesRecords, trimmedWindows, travelTimeData);
+
+					// We need to update panama information this record
+					recordPairToUpdateWithPanama = Pair.of(record, portTimesRecord);
 				} else {
+					// We need to update the return time of this record
 					recordToUpdateReturnTime = portTimesRecord;
-					prevTWR = record;
+					// We need to update panama information this record
+					recordPairToUpdateWithPanama = Pair.of(record, portTimesRecord);
 				}
 			}
 		}
 
-		// In case something changes and the end event has a journey on it in the future.
-		if (recordToUpdateReturnTime != null && prevTWR != null) {
-			updatePortTimesRecordWithPanamaRestrictions(distanceProvider, vesselAvailability.getVessel(), prevTWR, recordToUpdateReturnTime);
+		// Update the final record with panama information
+		if (recordPairToUpdateWithPanama != null) {
+			updatePortTimesRecordWithPanamaRestrictions(distanceProvider, vesselAvailability.getVessel(), recordPairToUpdateWithPanama.getFirst(), recordPairToUpdateWithPanama.getSecond());
 		}
 
 		IWriteLockable.writeLock(portTimesRecords);
@@ -472,7 +480,8 @@ public class PortTimesRecordMaker {
 
 		// If non-null, set the return slot time to the next calculated slot and time.
 		PortTimesRecord recordToUpdateReturnTime = null;
-		IPortTimeWindowsRecord prevRecord = null;
+
+		Pair<IPortTimeWindowsRecord, PortTimesRecord> recordPairToUpdateWithPanama = null;
 
 		for (final IPortTimeWindowsRecord record : trimmedWindows) {
 			// Create and add record to the list.
@@ -495,13 +504,17 @@ public class PortTimesRecordMaker {
 				portTimesRecord.setSlotDuration(slot, visitDuration);
 				portTimesRecord.setSlotExtraIdleTime(slot, extraIdleTime);
 				// What is the next travel time?
+				
+				
 				if (recordToUpdateReturnTime != null) {
 					recordToUpdateReturnTime.setReturnSlotTime(slot, arrivalTime);
-					if (prevRecord != null) {
-						this.updatePortTimesRecordWithPanamaRestrictions(distanceProvider, vesselAvailability.getVessel(), prevRecord, recordToUpdateReturnTime);
-					}
 					recordToUpdateReturnTime = null;
 				}
+
+				if (recordPairToUpdateWithPanama != null) {
+					updatePortTimesRecordWithPanamaRestrictions(distanceProvider, vesselAvailability.getVessel(), recordPairToUpdateWithPanama.getFirst(), recordPairToUpdateWithPanama.getSecond());
+				}
+				recordPairToUpdateWithPanama = null;
 			}
 
 			final IPortSlot returnSlot = record.getReturnSlot();
@@ -521,15 +534,17 @@ public class PortTimesRecordMaker {
 
 					portTimesRecord.setReturnSlotTime(returnSlot, roundTripReturnArrivalTime);
 				} else {
+					// We need to update the return time of this record
 					recordToUpdateReturnTime = portTimesRecord;
-					prevRecord = record;
+					// We need to update panama information this record
+					recordPairToUpdateWithPanama = Pair.of(record, portTimesRecord);
 				}
 			}
 		}
 
 		// In case something changes and the end event has a journey on it in the future.
-		if (recordToUpdateReturnTime != null && prevRecord != null) {
-			updatePortTimesRecordWithPanamaRestrictions(distanceProvider, vesselAvailability.getVessel(), prevRecord, recordToUpdateReturnTime);
+		if (recordPairToUpdateWithPanama != null) {
+			updatePortTimesRecordWithPanamaRestrictions(distanceProvider, vesselAvailability.getVessel(), recordPairToUpdateWithPanama.getFirst(), recordPairToUpdateWithPanama.getSecond());
 		}
 
 		IWriteLockable.writeLock(portTimesRecords);
@@ -539,12 +554,14 @@ public class PortTimesRecordMaker {
 
 	/**
 	 * Excludes Panama in the case where it is not fast enough to reach destination, now that we have assigned a start time for the journey.
+	 * 
 	 * @param distanceProvider
 	 * @param vessel
 	 * @param portTimeWindowsRecord
 	 * @param recordCopy
 	 */
-	public static void updatePortTimesRecordWithPanamaRestrictions(final IDistanceProvider distanceProvider, final IVessel vessel, final IPortTimeWindowsRecord portTimeWindowsRecord, final PortTimesRecord recordCopy) {
+	public static void updatePortTimesRecordWithPanamaRestrictions(final IDistanceProvider distanceProvider, final IVessel vessel, final IPortTimeWindowsRecord portTimeWindowsRecord,
+			final PortTimesRecord recordCopy) {
 		final List<IPortSlot> allSlots = new LinkedList<>(recordCopy.getSlots());
 		// returnSlot was null in recordCopy so get from PortTimeWindowsRecord instead, as seems more reliable.
 		if (recordCopy.getReturnSlot() != null) {
@@ -581,9 +598,8 @@ public class PortTimesRecordMaker {
 							// It has all gone wrong if we hit this assert
 							assert recordCopy.getSlotNextVoyageOptions(from) != AvailableRouteChoices.PANAMA_ONLY;
 							recordCopy.setSlotNextVoyageOptions(from, AvailableRouteChoices.EXCLUDE_PANAMA);
-						}
-						else {
-							//System.out.println("For "+from.getId()+" additionalPanamaTime = "+additionalPanamaTime+" max available = "+(availableTravelTime - (panamaTime - additionalPanamaTime)));
+						} else {
+							// System.out.println("For "+from.getId()+" additionalPanamaTime = "+additionalPanamaTime+" max available = "+(availableTravelTime - (panamaTime - additionalPanamaTime)));
 							recordCopy.setSlotAdditionalPanamaIdleHours(from, additionalPanamaTime);
 							recordCopy.setSlotMaxAvailablePanamaIdleHours(from, availableTravelTime - (panamaTime - additionalPanamaTime));
 						}
