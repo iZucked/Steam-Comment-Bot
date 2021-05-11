@@ -658,14 +658,14 @@ public class ContractPage extends ADPComposite {
 					}
 				}
 				if (!currentLoadWindow.isLoading()) {
-					final MUDContainer mullMUDContainer = currentMULLContainer.phase1CalculateMULL(phase1VesselToMostRecentUseDateTime, cargoVolume);
+					final MUDContainer mullMUDContainer = currentMULLContainer.phase1CalculateMULL(phase1VesselToMostRecentUseDateTime, cargoVolume, phase1FirstPartyVessels);
 					final AllocationTracker mudAllocationTracker = mullMUDContainer.phase1CalculateMUDAllocationTracker();
 					final List<Vessel> mudVesselRestrictions = mudAllocationTracker.getVessels();
 					final int currentAllocationDrop;
 					final Vessel assignedVessel;
 					if (!mudVesselRestrictions.isEmpty()) {
 						assignedVessel = mudVesselRestrictions.stream().min((v1, v2) -> phase1VesselToMostRecentUseDateTime.get(v1).compareTo(phase1VesselToMostRecentUseDateTime.get(v2))).get();
-						currentAllocationDrop = mudAllocationTracker.calculateExpectedAllocationDrop(assignedVessel, currentInventory.getPort().getLoadDuration());
+						currentAllocationDrop = mudAllocationTracker.calculateExpectedAllocationDrop(assignedVessel, currentInventory.getPort().getLoadDuration(), phase1FirstPartyVessels.contains(assignedVessel));
 					} else {
 						assignedVessel = null;
 						currentAllocationDrop = cargoVolume;
@@ -934,7 +934,7 @@ public class ContractPage extends ADPComposite {
 							runningInitialAllocation.put(mudToAbsorb, 0L);
 						} else {
 							final int averageVolumeLifted = allocToAbsorb.getVessels().stream() //
-									.mapToInt(v -> allocToAbsorb.calculateExpectedAllocationDrop(v, finalPhaseMullContainer.getInventory().getPort().getLoadDuration())) //
+									.mapToInt(v -> allocToAbsorb.calculateExpectedAllocationDrop(v, finalPhaseMullContainer.getInventory().getPort().getLoadDuration(), true)) //
 									.sum() / allocToAbsorb.getVessels().size();
 							final int totalProd = yearlyProductions.get(finalPhaseMullContainer.getInventory());
 							final double allocatedProduction = totalProd * lifterToAbsorb.getFirst().getRelativeEntitlement();
@@ -1474,14 +1474,14 @@ public class ContractPage extends ADPComposite {
 					}
 				}
 				if (!currentLoadWindow.isLoading()) {
-					final MUDContainer mullMUDContainer = currentMULLContainer.calculateMULL(phase2VesselToMostRecentUseDateTime, cargoVolume);
+					final MUDContainer mullMUDContainer = currentMULLContainer.calculateMULL(phase2VesselToMostRecentUseDateTime, cargoVolume, firstPartyVessels);
 					final AllocationTracker mudAllocationTracker = mullMUDContainer.calculateMUDAllocationTracker();
 					final List<Vessel> mudVesselRestrictions = mudAllocationTracker.getVessels();
 					final int currentAllocationDrop;
 					final Vessel assignedVessel;
 					if (!mudVesselRestrictions.isEmpty()) {
 						assignedVessel = mudVesselRestrictions.stream().min((v1, v2) -> phase2VesselToMostRecentUseDateTime.get(v1).compareTo(phase2VesselToMostRecentUseDateTime.get(v2))).get();
-						currentAllocationDrop = mudAllocationTracker.calculateExpectedAllocationDrop(assignedVessel, currentInventory.getPort().getLoadDuration());
+						currentAllocationDrop = mudAllocationTracker.calculateExpectedAllocationDrop(assignedVessel, currentInventory.getPort().getLoadDuration(), firstPartyVessels.contains(assignedVessel));
 					} else {
 						assignedVessel = null;
 						currentAllocationDrop = cargoVolume;
@@ -1797,6 +1797,9 @@ public class ContractPage extends ADPComposite {
 
 				if (nextCargoBlueprint != null) {
 					for (Entry<LocalDateTime, InventoryDateTimeEvent> entry : currentPersistedContainerEntry.getValue()) {
+						if (entry.getKey().equals(LocalDateTime.of(LocalDate.of(2021, 7, 31), LocalTime.of(11, 0)))) {
+							int i = 0;
+						}
 //						currentMULLContainer = mullContainers.get(currentInventory);
 						final InventoryDateTimeEvent currentEvent = entry.getValue();
 						currentMULLContainer.updateRunningAllocation(currentEvent.getNetVolumeIn());
@@ -2051,7 +2054,7 @@ public class ContractPage extends ADPComposite {
 			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sm);
 			secondPassCargoBlueprints.values().forEach(arr -> {
 				for (final CargoBlueprint cargoBlueprint : arr) {
-					cargoBlueprint.constructCargoModelPopulationCommands(sm, cargoModel, cec, editingDomain, volumeFlex, sdp, vessToVA, adpNominalMarket, cmd);
+					cargoBlueprint.constructCargoModelPopulationCommands(sm, cargoModel, cec, editingDomain, volumeFlex, sdp, vessToVA, adpNominalMarket, cmd, firstPartyVessels);
 				}
 			});
 		}
