@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import com.mmxlabs.models.lng.adp.MullAllocationRow;
@@ -98,14 +99,14 @@ public class MUDContainer {
 		this.metAllHardAACQs = allocationTrackers.stream().allMatch(AllocationTracker::satisfiedAACQ);
 	}
 
-	public int calculateExpectedAllocationDrop(final Map<Vessel, LocalDateTime> vesselToMostRecentUseDateTime, final int defaultAllocationDrop, final int loadDuration) {
+	public int calculateExpectedAllocationDrop(final Map<Vessel, LocalDateTime> vesselToMostRecentUseDateTime, final int defaultAllocationDrop, final int loadDuration, final Set<Vessel> firstPartyVessels) {
 		final AllocationTracker mudTracker = this.calculateMUDAllocationTracker();
-		return mudTracker.calculateExpectedAllocationDrop(vesselToMostRecentUseDateTime, defaultAllocationDrop, loadDuration);
+		return mudTracker.calculateExpectedAllocationDrop(vesselToMostRecentUseDateTime, defaultAllocationDrop, loadDuration, firstPartyVessels);
 	}
 
-	public int phase1CalculateExpectedAllocationDrop(final Map<Vessel, LocalDateTime> vesselToMostRecentUseDateTime, final int defaultAllocationDrop, final int loadDuration) {
+	public int phase1CalculateExpectedAllocationDrop(final Map<Vessel, LocalDateTime> vesselToMostRecentUseDateTime, final int defaultAllocationDrop, final int loadDuration, final Set<Vessel> firstPartyVessels) {
 		final AllocationTracker mudTracker = this.phase1CalculateMUDAllocationTracker();
-		return mudTracker.calculateExpectedAllocationDrop(vesselToMostRecentUseDateTime, defaultAllocationDrop, loadDuration);
+		return mudTracker.calculateExpectedAllocationDrop(vesselToMostRecentUseDateTime, defaultAllocationDrop, loadDuration, firstPartyVessels);
 	}
 
 	public List<AllocationTracker> getAllocationTrackers() {
