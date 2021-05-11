@@ -81,30 +81,23 @@
        modelClass="com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters">
  </componentHelper>
  <componentHelper
-       helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.BallastBonusCharterContractComponentHelper"
-       id="com.mmxlabs.models.lng.commercial.presentation.composites.BallastBonusCharterContractComponentHelper"
+       helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.GenericCharterContractComponentHelper"
+       id="com.mmxlabs.models.lng.commercial.presentation.composites.GenericCharterContractComponentHelper"
        inheritable="true"
-       modelClass="com.mmxlabs.models.lng.commercial.BallastBonusCharterContract">
+       modelClass="com.mmxlabs.models.lng.commercial.GenericCharterContract">
  </componentHelper>
- <componentHelper
-       helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.CharterContractComponentHelper"
-       id="com.mmxlabs.models.lng.commercial.presentation.composites.CharterContractComponentHelper"
-       inheritable="true"
-       modelClass="com.mmxlabs.models.lng.commercial.CharterContract">
- </componentHelper>
- 
- <componentHelper
-       helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.SimpleBallastBonusCharterContractComponentHelper"
-       id="com.mmxlabs.models.lng.commercial.presentation.composites.SimpleBallastBonusCharterContractComponentHelper"
-       inheritable="true"
-       modelClass="com.mmxlabs.models.lng.commercial.SimpleBallastBonusCharterContract">
- </componentHelper>
- <componentHelper
-       helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.MonthlyBallastBonusCharterContractComponentHelper"
-       id="com.mmxlabs.models.lng.commercial.presentation.composites.MonthlyBallastBonusCharterContractComponentHelper"
-       inheritable="true"
-       modelClass="com.mmxlabs.models.lng.commercial.MonthlyBallastBonusCharterContract">
- </componentHelper>
+          <componentHelper
+               helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.EndHeelOptionsComponentHelper"
+               id="com.mmxlabs.models.lng.commercial.presentation.composites.EndHeelOptionsComponentHelper"
+               inheritable="true"
+               modelClass="com.mmxlabs.models.lng.commercial.EndHeelOptions">
+         </componentHelper>
+         <componentHelper
+               helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.StartHeelOptionsComponentHelper"
+               id="com.mmxlabs.models.lng.commercial.presentation.composites.StartHeelOptionsComponentHelper"
+               inheritable="true"
+               modelClass="com.mmxlabs.models.lng.commercial.StartHeelOptions">
+         </componentHelper>
 	</extension>
  <extension
        point="com.mmxlabs.models.ui.valueproviders">
@@ -125,9 +118,9 @@
           referenceEClass="com.mmxlabs.models.lng.commercial.BaseLegalEntity">
     </valueProvider>
     <valueProvider
-          factory="com.mmxlabs.models.lng.commercial.ui.valueproviders.CharterContractValueProviderFactory"
-          id="com.mmxlabs.models.lng.commercial.ui.valueproviders.CharterContractValueProviderFactory"
-          referenceEClass="com.mmxlabs.models.lng.commercial.CharterContract">
+          factory="com.mmxlabs.models.lng.commercial.ui.valueproviders.GenericCharterContractValueProviderFactory"
+          id="com.mmxlabs.models.lng.commercial.ui.valueproviders.GenericCharterContractValueProviderFactory"
+          referenceEClass="com.mmxlabs.models.lng.commercial.GenericCharterContract">
     </valueProvider>
  </extension>
  <extension
@@ -175,19 +168,11 @@
           
     </factory>
     <factory
-          ID="com.mmxlabs.models.lng.commercial.editor.simpleBallastBonusCharterContractFactory"
+          ID="com.mmxlabs.models.lng.commercial.editor.genericCharterContractFactory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Ballast Bonus Contract"
-          targetEClass="com.mmxlabs.models.lng.commercial.CharterContract"
-          outputEClass="com.mmxlabs.models.lng.commercial.SimpleBallastBonusCharterContract">
-    </factory>
-    <factory
-          ID="com.mmxlabs.models.lng.commercial.editor.monthlyBallastBonusCharterContractFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Monthly Ballast Bonus Contract"
-          licensedFeature="features:monthly-ballast-bonus"
-          targetEClass="com.mmxlabs.models.lng.commercial.CharterContract"
-          outputEClass="com.mmxlabs.models.lng.commercial.MonthlyBallastBonusCharterContract">
+          label="Charter Contract"
+          targetEClass="com.mmxlabs.models.lng.commercial.GenericCharterContract"
+          outputEClass="com.mmxlabs.models.lng.commercial.GenericCharterContract">
     </factory>
  </extension>
  <extension
@@ -205,15 +190,9 @@
           inheritable="true">
     </displayCompositeFactory>
     <displayCompositeFactory
-          eClass="com.mmxlabs.models.lng.commercial.SimpleBallastBonusCharterContract"
-          factory="com.mmxlabs.models.lng.commercial.ui.displaycomposites.SimpleBallastBonusContractCompositeFactory"
-          id="com.mmxlabs.models.lng.commercial.ui.displaycomposites.SimpleBallastBonusContractCompositeFactory"
-          inheritable="true">
-    </displayCompositeFactory>
-    <displayCompositeFactory
-          eClass="com.mmxlabs.models.lng.commercial.MonthlyBallastBonusCharterContract"
-          factory="com.mmxlabs.models.lng.commercial.ui.displaycomposites.MonthlyBallastBonusContractCompositeFactory"
-          id="com.mmxlabs.models.lng.commercial.ui.displaycomposites.MonthlyBallastBonusContractCompositeFactory"
+          eClass="com.mmxlabs.models.lng.commercial.GenericCharterContract"
+          factory="com.mmxlabs.models.lng.commercial.ui.displaycomposites.GenericCharterContractCompositeFactory"
+          id="com.mmxlabs.models.lng.commercial.ui.displaycomposites.GenericCharterContractCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
  </extension>
@@ -277,6 +256,16 @@
           </EDataTypeIs>
        </FeatureAnyOf>
     </editorFactory>
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.commercial.editorfactories.VesselTankStateInlineEditorFactory"
+          id="com.mmxlabs.models.lng.commercial.editor.editors.VesselTankStateInlineEditorFactory">
+       <FeatureAnyOf>
+          <EDataTypeIs
+                EDataTypeName="EVesselTankState"
+                EDataTypeURI="http://www.mmxlabs.com/models/lng/commercial/1/">
+          </EDataTypeIs>
+       </FeatureAnyOf>
+    </editorFactory>
  </extension>
    <extension point="org.eclipse.ui.editors">
       <!-- @generated commercial -->
@@ -333,7 +322,7 @@
       <classImporter
             ID="com.mmxlabs.models.lng.commercial.importer.CharterContractImporter"
             classImporterClass="com.mmxlabs.models.lng.commercial.importer.CharterContractImporter"
-            eClassName="com.mmxlabs.models.lng.commercial.CharterContract"
+            eClassName="com.mmxlabs.models.lng.commercial.GenericCharterContract"
             inheritable="true">
       </classImporter>
 
@@ -341,7 +330,7 @@
    <extension
          point="com.mmxlabs.models.util.import.extramodelimporters">
       <extramodelimporter
-            class="com.mmxlabs.models.lng.commercial.importer.CharterContractBallastBonusImporterExtraImporter">
+            class="com.mmxlabs.models.lng.commercial.importer.CharterContractIExtraModelImporter">
       </extramodelimporter>
    </extension>
    <!--<extension

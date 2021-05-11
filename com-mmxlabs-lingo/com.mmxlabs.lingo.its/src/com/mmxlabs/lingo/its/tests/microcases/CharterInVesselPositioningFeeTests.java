@@ -20,8 +20,8 @@ import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.lngdataserver.lng.importers.creator.ScenarioBuilder;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.commercial.BallastBonusCharterContract;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -78,11 +78,11 @@ public class CharterInVesselPositioningFeeTests extends AbstractMicroTestCase {
 		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT);
 
 		// Create Ballast Bonus Charter Contract with entity, no repositioningFee, and lump sum bonus.
-		final BallastBonusCharterContract ballastBonusCharterContract = createBallastBonusCharterContract(port1, "");
+		final GenericCharterContract ballastBonusCharterContract = createBallastBonusCharterContract(port1, "");
 
 		// Create the required basic elements
 		final CharterInMarket charterInMarket_1 = createChartInMarket();
-		charterInMarket_1.setCharterContract(ballastBonusCharterContract);
+		charterInMarket_1.setGenericCharterContract(ballastBonusCharterContract);
 
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);
@@ -111,9 +111,9 @@ public class CharterInVesselPositioningFeeTests extends AbstractMicroTestCase {
 		});
 
 		// Create Ballast Bonus Charter Contract with entity, repositioningFee, and lump sum bonus.
-		final BallastBonusCharterContract ballastBonusCharterContract2 = createBallastBonusCharterContract(port1, POSITIONING_FEE);
+		final GenericCharterContract ballastBonusCharterContract2 = createBallastBonusCharterContract(port1, POSITIONING_FEE);
 
-		charterInMarket_1.setCharterContract(ballastBonusCharterContract2);
+		charterInMarket_1.setGenericCharterContract(ballastBonusCharterContract2);
 
 		evaluateTest(null, null, scenarioRunner -> {
 			validateStartIdleLoadEvents(scenarioRunner);
@@ -154,8 +154,8 @@ public class CharterInVesselPositioningFeeTests extends AbstractMicroTestCase {
 		assertEquals(-expectedPosFee, startEvent.getGroupProfitAndLoss().getProfitAndLossPreTax());
 	}
 
-	private BallastBonusCharterContract createBallastBonusCharterContract(Port port, String positioningFee) {
-		final BallastBonusCharterContract ballastBonusCharterContract = commercialModelBuilder.createLumpSumBallastBonusCharterContract(port, BALLAST_BONUS_LUMP_SUM, positioningFee);
+	private GenericCharterContract createBallastBonusCharterContract(Port port, String positioningFee) {
+		final GenericCharterContract ballastBonusCharterContract = commercialModelBuilder.createLumpSumBallastBonusCharterContract(port, BALLAST_BONUS_LUMP_SUM, positioningFee);
 		return ballastBonusCharterContract;
 	}
 
@@ -206,8 +206,8 @@ public class CharterInVesselPositioningFeeTests extends AbstractMicroTestCase {
 		charterInMarket.setCharterInRate("10000");
 
 		// Create Ballast Bonus Charter Contract with entity, repositioningFee, and lump sum bonus.
-		final BallastBonusCharterContract ballastBonusCharterContract2 = createBallastBonusCharterContract(port1, POSITIONING_FEE);
-		charterInMarket.setCharterContract(ballastBonusCharterContract2);
+		final GenericCharterContract ballastBonusCharterContract2 = createBallastBonusCharterContract(port1, POSITIONING_FEE);
+		charterInMarket.setGenericCharterContract(ballastBonusCharterContract2);
 
 		// Set distance and speed to exact multiple -- quickest travel time is 100 hours
 		scenarioModelBuilder.getDistanceModelBuilder().setPortToPortDistance(port1, port2, 1500, 2000, 2000, true);

@@ -177,7 +177,7 @@ public class SlotPNLDetailsItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(SchedulePackage.Literals.SLOT_PNL_DETAILS__GENERAL_PNL_DETAILS,
-				 ScheduleFactory.eINSTANCE.createBallastBonusFeeDetails()));
+				 ScheduleFactory.eINSTANCE.createCharterContractFeeDetails()));
 	}
 
 }

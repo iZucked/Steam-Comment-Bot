@@ -80,14 +80,19 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.CONTRACT_EXPRESSION_MAP_ENTRY: return createContractExpressionMapEntry();
 			case CommercialPackage.SIMPLE_ENTITY_BOOK: return createSimpleEntityBook();
 			case CommercialPackage.DATE_SHIFT_EXPRESSION_PRICE_PARAMETERS: return createDateShiftExpressionPriceParameters();
-			case CommercialPackage.RULE_BASED_BALLAST_BONUS_CONTRACT: return createRuleBasedBallastBonusContract();
-			case CommercialPackage.LUMP_SUM_BALLAST_BONUS_CONTRACT_LINE: return createLumpSumBallastBonusContractLine();
-			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_CONTRACT_LINE: return createNotionalJourneyBallastBonusContractLine();
-			case CommercialPackage.SIMPLE_CHARTER_CONTRACT: return createSimpleCharterContract();
-			case CommercialPackage.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT: return createSimpleBallastBonusCharterContract();
-			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT_LINE: return createMonthlyBallastBonusContractLine();
-			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTRACT: return createMonthlyBallastBonusContract();
-			case CommercialPackage.MONTHLY_BALLAST_BONUS_CHARTER_CONTRACT: return createMonthlyBallastBonusCharterContract();
+			case CommercialPackage.GENERIC_CHARTER_CONTRACT: return createGenericCharterContract();
+			case CommercialPackage.SIMPLE_REPOSITIONING_FEE_CONTAINER: return createSimpleRepositioningFeeContainer();
+			case CommercialPackage.SIMPLE_BALLAST_BONUS_CONTAINER: return createSimpleBallastBonusContainer();
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_CONTAINER: return createMonthlyBallastBonusContainer();
+			case CommercialPackage.BALLAST_BONUS_TERM: return createBallastBonusTerm();
+			case CommercialPackage.LUMP_SUM_BALLAST_BONUS_TERM: return createLumpSumBallastBonusTerm();
+			case CommercialPackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM: return createNotionalJourneyBallastBonusTerm();
+			case CommercialPackage.MONTHLY_BALLAST_BONUS_TERM: return createMonthlyBallastBonusTerm();
+			case CommercialPackage.REPOSITIONING_FEE_TERM: return createRepositioningFeeTerm();
+			case CommercialPackage.LUMP_SUM_REPOSITIONING_FEE_TERM: return createLumpSumRepositioningFeeTerm();
+			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM: return createOriginPortRepositioningFeeTerm();
+			case CommercialPackage.END_HEEL_OPTIONS: return createEndHeelOptions();
+			case CommercialPackage.START_HEEL_OPTIONS: return createStartHeelOptions();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -107,6 +112,8 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 				return createPricingEventFromString(eDataType, initialValue);
 			case CommercialPackage.NEXT_PORT_TYPE:
 				return createNextPortTypeFromString(eDataType, initialValue);
+			case CommercialPackage.EVESSEL_TANK_STATE:
+				return createEVesselTankStateFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -126,6 +133,8 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 				return convertPricingEventToString(eDataType, instanceValue);
 			case CommercialPackage.NEXT_PORT_TYPE:
 				return convertNextPortTypeToString(eDataType, instanceValue);
+			case CommercialPackage.EVESSEL_TANK_STATE:
+				return convertEVesselTankStateToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -247,9 +256,9 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * @generated
 	 */
 	@Override
-	public RuleBasedBallastBonusContract createRuleBasedBallastBonusContract() {
-		RuleBasedBallastBonusContractImpl ruleBasedBallastBonusContract = new RuleBasedBallastBonusContractImpl();
-		return ruleBasedBallastBonusContract;
+	public GenericCharterContract createGenericCharterContract() {
+		GenericCharterContractImpl genericCharterContract = new GenericCharterContractImpl();
+		return genericCharterContract;
 	}
 
 	/**
@@ -258,9 +267,9 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * @generated
 	 */
 	@Override
-	public LumpSumBallastBonusContractLine createLumpSumBallastBonusContractLine() {
-		LumpSumBallastBonusContractLineImpl lumpSumBallastBonusContractLine = new LumpSumBallastBonusContractLineImpl();
-		return lumpSumBallastBonusContractLine;
+	public SimpleRepositioningFeeContainer createSimpleRepositioningFeeContainer() {
+		SimpleRepositioningFeeContainerImpl simpleRepositioningFeeContainer = new SimpleRepositioningFeeContainerImpl();
+		return simpleRepositioningFeeContainer;
 	}
 
 	/**
@@ -269,9 +278,9 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * @generated
 	 */
 	@Override
-	public NotionalJourneyBallastBonusContractLine createNotionalJourneyBallastBonusContractLine() {
-		NotionalJourneyBallastBonusContractLineImpl notionalJourneyBallastBonusContractLine = new NotionalJourneyBallastBonusContractLineImpl();
-		return notionalJourneyBallastBonusContractLine;
+	public SimpleBallastBonusContainer createSimpleBallastBonusContainer() {
+		SimpleBallastBonusContainerImpl simpleBallastBonusContainer = new SimpleBallastBonusContainerImpl();
+		return simpleBallastBonusContainer;
 	}
 
 	/**
@@ -280,9 +289,9 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * @generated
 	 */
 	@Override
-	public SimpleCharterContract createSimpleCharterContract() {
-		SimpleCharterContractImpl simpleCharterContract = new SimpleCharterContractImpl();
-		return simpleCharterContract;
+	public MonthlyBallastBonusContainer createMonthlyBallastBonusContainer() {
+		MonthlyBallastBonusContainerImpl monthlyBallastBonusContainer = new MonthlyBallastBonusContainerImpl();
+		return monthlyBallastBonusContainer;
 	}
 
 	/**
@@ -291,9 +300,9 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * @generated
 	 */
 	@Override
-	public SimpleBallastBonusCharterContract createSimpleBallastBonusCharterContract() {
-		SimpleBallastBonusCharterContractImpl simpleBallastBonusCharterContract = new SimpleBallastBonusCharterContractImpl();
-		return simpleBallastBonusCharterContract;
+	public BallastBonusTerm createBallastBonusTerm() {
+		BallastBonusTermImpl ballastBonusTerm = new BallastBonusTermImpl();
+		return ballastBonusTerm;
 	}
 
 	/**
@@ -302,9 +311,9 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * @generated
 	 */
 	@Override
-	public MonthlyBallastBonusContractLine createMonthlyBallastBonusContractLine() {
-		MonthlyBallastBonusContractLineImpl monthlyBallastBonusContractLine = new MonthlyBallastBonusContractLineImpl();
-		return monthlyBallastBonusContractLine;
+	public LumpSumBallastBonusTerm createLumpSumBallastBonusTerm() {
+		LumpSumBallastBonusTermImpl lumpSumBallastBonusTerm = new LumpSumBallastBonusTermImpl();
+		return lumpSumBallastBonusTerm;
 	}
 
 	/**
@@ -313,9 +322,9 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * @generated
 	 */
 	@Override
-	public MonthlyBallastBonusContract createMonthlyBallastBonusContract() {
-		MonthlyBallastBonusContractImpl monthlyBallastBonusContract = new MonthlyBallastBonusContractImpl();
-		return monthlyBallastBonusContract;
+	public NotionalJourneyBallastBonusTerm createNotionalJourneyBallastBonusTerm() {
+		NotionalJourneyBallastBonusTermImpl notionalJourneyBallastBonusTerm = new NotionalJourneyBallastBonusTermImpl();
+		return notionalJourneyBallastBonusTerm;
 	}
 
 	/**
@@ -324,9 +333,64 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * @generated
 	 */
 	@Override
-	public MonthlyBallastBonusCharterContract createMonthlyBallastBonusCharterContract() {
-		MonthlyBallastBonusCharterContractImpl monthlyBallastBonusCharterContract = new MonthlyBallastBonusCharterContractImpl();
-		return monthlyBallastBonusCharterContract;
+	public MonthlyBallastBonusTerm createMonthlyBallastBonusTerm() {
+		MonthlyBallastBonusTermImpl monthlyBallastBonusTerm = new MonthlyBallastBonusTermImpl();
+		return monthlyBallastBonusTerm;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public RepositioningFeeTerm createRepositioningFeeTerm() {
+		RepositioningFeeTermImpl repositioningFeeTerm = new RepositioningFeeTermImpl();
+		return repositioningFeeTerm;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public LumpSumRepositioningFeeTerm createLumpSumRepositioningFeeTerm() {
+		LumpSumRepositioningFeeTermImpl lumpSumRepositioningFeeTerm = new LumpSumRepositioningFeeTermImpl();
+		return lumpSumRepositioningFeeTerm;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public OriginPortRepositioningFeeTerm createOriginPortRepositioningFeeTerm() {
+		OriginPortRepositioningFeeTermImpl originPortRepositioningFeeTerm = new OriginPortRepositioningFeeTermImpl();
+		return originPortRepositioningFeeTerm;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EndHeelOptions createEndHeelOptions() {
+		EndHeelOptionsImpl endHeelOptions = new EndHeelOptionsImpl();
+		return endHeelOptions;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public StartHeelOptions createStartHeelOptions() {
+		StartHeelOptionsImpl startHeelOptions = new StartHeelOptionsImpl();
+		return startHeelOptions;
 	}
 
 	/**
@@ -386,6 +450,26 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * @generated
 	 */
 	public String convertNextPortTypeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EVesselTankState createEVesselTankStateFromString(EDataType eDataType, String initialValue) {
+		EVesselTankState result = EVesselTankState.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertEVesselTankStateToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

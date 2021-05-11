@@ -1,8 +1,4 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
- * All rights reserved.
- */
-/**
  */
 package com.mmxlabs.models.lng.schedule;
 
@@ -28,10 +24,6 @@ public interface LumpSumContractDetails extends MatchingContractDetails {
 	 * Returns the value of the '<em><b>Lump Sum</b></em>' attribute.
 	 * The default value is <code>"0"</code>.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Lump Sum</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Lump Sum</em>' attribute.
 	 * @see #setLumpSum(int)

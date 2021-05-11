@@ -134,7 +134,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.EVENT_GROUPING: return createEventGrouping();
 			case SchedulePackage.PORT_VISIT_LATENESS: return createPortVisitLateness();
 			case SchedulePackage.EXPOSURE_DETAIL: return createExposureDetail();
-			case SchedulePackage.BALLAST_BONUS_FEE_DETAILS: return createBallastBonusFeeDetails();
 			case SchedulePackage.LUMP_SUM_CONTRACT_DETAILS: return createLumpSumContractDetails();
 			case SchedulePackage.NOTIONAL_JOURNEY_CONTRACT_DETAILS: return createNotionalJourneyContractDetails();
 			case SchedulePackage.CHARTER_AVAILABLE_TO_EVENT: return createCharterAvailableToEvent();
@@ -145,6 +144,13 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.INVENTORY_CHANGE_EVENT: return createInventoryChangeEvent();
 			case SchedulePackage.PAPER_DEAL_ALLOCATION: return createPaperDealAllocation();
 			case SchedulePackage.PAPER_DEAL_ALLOCATION_ENTRY: return createPaperDealAllocationEntry();
+			case SchedulePackage.CHARTER_CONTRACT_FEE_DETAILS: return createCharterContractFeeDetails();
+			case SchedulePackage.LUMP_SUM_DETAILS: return createLumpSumDetails();
+			case SchedulePackage.LUMP_SUM_BALLAST_BONUS_TERM_DETAILS: return createLumpSumBallastBonusTermDetails();
+			case SchedulePackage.LUMP_SUM_REPOSITIONING_FEE_TERM_DETAILS: return createLumpSumRepositioningFeeTermDetails();
+			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS: return createNotionalJourneyDetails();
+			case SchedulePackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM_DETAILS: return createNotionalJourneyBallastBonusTermDetails();
+			case SchedulePackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM_DETAILS: return createOriginPortRepositioningFeeTermDetails();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -606,17 +612,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * @generated
 	 */
 	@Override
-	public BallastBonusFeeDetails createBallastBonusFeeDetails() {
-		BallastBonusFeeDetailsImpl ballastBonusFeeDetails = new BallastBonusFeeDetailsImpl();
-		return ballastBonusFeeDetails;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public LumpSumContractDetails createLumpSumContractDetails() {
 		LumpSumContractDetailsImpl lumpSumContractDetails = new LumpSumContractDetailsImpl();
 		return lumpSumContractDetails;
@@ -631,6 +626,17 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public NotionalJourneyContractDetails createNotionalJourneyContractDetails() {
 		NotionalJourneyContractDetailsImpl notionalJourneyContractDetails = new NotionalJourneyContractDetailsImpl();
 		return notionalJourneyContractDetails;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public CharterContractFeeDetails createCharterContractFeeDetails() {
+		CharterContractFeeDetailsImpl charterContractFeeDetails = new CharterContractFeeDetailsImpl();
+		return charterContractFeeDetails;
 	}
 
 	/**
@@ -719,6 +725,72 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public PaperDealAllocationEntry createPaperDealAllocationEntry() {
 		PaperDealAllocationEntryImpl paperDealAllocationEntry = new PaperDealAllocationEntryImpl();
 		return paperDealAllocationEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public LumpSumDetails createLumpSumDetails() {
+		LumpSumDetailsImpl lumpSumDetails = new LumpSumDetailsImpl();
+		return lumpSumDetails;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public LumpSumBallastBonusTermDetails createLumpSumBallastBonusTermDetails() {
+		LumpSumBallastBonusTermDetailsImpl lumpSumBallastBonusTermDetails = new LumpSumBallastBonusTermDetailsImpl();
+		return lumpSumBallastBonusTermDetails;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public LumpSumRepositioningFeeTermDetails createLumpSumRepositioningFeeTermDetails() {
+		LumpSumRepositioningFeeTermDetailsImpl lumpSumRepositioningFeeTermDetails = new LumpSumRepositioningFeeTermDetailsImpl();
+		return lumpSumRepositioningFeeTermDetails;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotionalJourneyDetails createNotionalJourneyDetails() {
+		NotionalJourneyDetailsImpl notionalJourneyDetails = new NotionalJourneyDetailsImpl();
+		return notionalJourneyDetails;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotionalJourneyBallastBonusTermDetails createNotionalJourneyBallastBonusTermDetails() {
+		NotionalJourneyBallastBonusTermDetailsImpl notionalJourneyBallastBonusTermDetails = new NotionalJourneyBallastBonusTermDetailsImpl();
+		return notionalJourneyBallastBonusTermDetails;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public OriginPortRepositioningFeeTermDetails createOriginPortRepositioningFeeTermDetails() {
+		OriginPortRepositioningFeeTermDetailsImpl originPortRepositioningFeeTermDetails = new OriginPortRepositioningFeeTermDetailsImpl();
+		return originPortRepositioningFeeTermDetails;
 	}
 
 	/**

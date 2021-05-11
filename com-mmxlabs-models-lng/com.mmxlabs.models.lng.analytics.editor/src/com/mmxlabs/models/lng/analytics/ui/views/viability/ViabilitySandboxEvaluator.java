@@ -36,9 +36,10 @@ import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.SlotMode;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
+import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
@@ -220,8 +221,8 @@ public class ViabilitySandboxEvaluator {
 				vesselAvailability.setVessel(vessel);
 				vesselAvailability.setEntity(optionalAvailabilityShippingOption.getEntity());
 
-				vesselAvailability.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
-				vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+				vesselAvailability.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+				vesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 
 				if (optionalAvailabilityShippingOption.isUseSafetyHeel()) {
 					vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getSafetyHeel());
@@ -239,7 +240,8 @@ public class ViabilitySandboxEvaluator {
 				vesselAvailability.setEndBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
 				vesselAvailability.setOptional(true);
 				vesselAvailability.setFleet(false);
-				vesselAvailability.setRepositioningFee(optionalAvailabilityShippingOption.getRepositioningFee());
+				vesselAvailability.setContainedCharterContract(AnalyticsBuilder.createCharterTerms(optionalAvailabilityShippingOption.getRepositioningFee(),//
+						optionalAvailabilityShippingOption.getBallastBonus()));
 				if (optionalAvailabilityShippingOption.getStartPort() != null) {
 					vesselAvailability.setStartAt(optionalAvailabilityShippingOption.getStartPort());
 				}
@@ -263,8 +265,8 @@ public class ViabilitySandboxEvaluator {
 				vesselAvailability.setVessel(vessel);
 				vesselAvailability.setEntity(fleetShippingOption.getEntity());
 
-				vesselAvailability.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
-				vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+				vesselAvailability.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+				vesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 
 				if (fleetShippingOption.isUseSafetyHeel()) {
 					vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getSafetyHeel());

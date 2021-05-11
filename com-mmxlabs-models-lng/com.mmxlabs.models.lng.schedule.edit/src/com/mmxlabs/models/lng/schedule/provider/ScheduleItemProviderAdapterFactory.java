@@ -893,29 +893,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected BallastBonusFeeDetailsItemProvider ballastBonusFeeDetailsItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createBallastBonusFeeDetailsAdapter() {
-		if (ballastBonusFeeDetailsItemProvider == null) {
-			ballastBonusFeeDetailsItemProvider = new BallastBonusFeeDetailsItemProvider(this);
-		}
-
-		return ballastBonusFeeDetailsItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.LumpSumContractDetails} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -959,6 +936,29 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		}
 
 		return notionalJourneyContractDetailsItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.CharterContractFeeDetails} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CharterContractFeeDetailsItemProvider charterContractFeeDetailsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.CharterContractFeeDetails}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCharterContractFeeDetailsAdapter() {
+		if (charterContractFeeDetailsItemProvider == null) {
+			charterContractFeeDetailsItemProvider = new CharterContractFeeDetailsItemProvider(this);
+		}
+
+		return charterContractFeeDetailsItemProvider;
 	}
 
 	/**
@@ -1146,6 +1146,144 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.LumpSumDetails} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected LumpSumDetailsItemProvider lumpSumDetailsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.LumpSumDetails}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createLumpSumDetailsAdapter() {
+		if (lumpSumDetailsItemProvider == null) {
+			lumpSumDetailsItemProvider = new LumpSumDetailsItemProvider(this);
+		}
+
+		return lumpSumDetailsItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.LumpSumBallastBonusTermDetails} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected LumpSumBallastBonusTermDetailsItemProvider lumpSumBallastBonusTermDetailsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.LumpSumBallastBonusTermDetails}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createLumpSumBallastBonusTermDetailsAdapter() {
+		if (lumpSumBallastBonusTermDetailsItemProvider == null) {
+			lumpSumBallastBonusTermDetailsItemProvider = new LumpSumBallastBonusTermDetailsItemProvider(this);
+		}
+
+		return lumpSumBallastBonusTermDetailsItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.LumpSumRepositioningFeeTermDetails} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected LumpSumRepositioningFeeTermDetailsItemProvider lumpSumRepositioningFeeTermDetailsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.LumpSumRepositioningFeeTermDetails}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createLumpSumRepositioningFeeTermDetailsAdapter() {
+		if (lumpSumRepositioningFeeTermDetailsItemProvider == null) {
+			lumpSumRepositioningFeeTermDetailsItemProvider = new LumpSumRepositioningFeeTermDetailsItemProvider(this);
+		}
+
+		return lumpSumRepositioningFeeTermDetailsItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.NotionalJourneyDetails} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected NotionalJourneyDetailsItemProvider notionalJourneyDetailsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.NotionalJourneyDetails}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createNotionalJourneyDetailsAdapter() {
+		if (notionalJourneyDetailsItemProvider == null) {
+			notionalJourneyDetailsItemProvider = new NotionalJourneyDetailsItemProvider(this);
+		}
+
+		return notionalJourneyDetailsItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.NotionalJourneyBallastBonusTermDetails} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected NotionalJourneyBallastBonusTermDetailsItemProvider notionalJourneyBallastBonusTermDetailsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.NotionalJourneyBallastBonusTermDetails}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createNotionalJourneyBallastBonusTermDetailsAdapter() {
+		if (notionalJourneyBallastBonusTermDetailsItemProvider == null) {
+			notionalJourneyBallastBonusTermDetailsItemProvider = new NotionalJourneyBallastBonusTermDetailsItemProvider(this);
+		}
+
+		return notionalJourneyBallastBonusTermDetailsItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.OriginPortRepositioningFeeTermDetails} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected OriginPortRepositioningFeeTermDetailsItemProvider originPortRepositioningFeeTermDetailsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.OriginPortRepositioningFeeTermDetails}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createOriginPortRepositioningFeeTermDetailsAdapter() {
+		if (originPortRepositioningFeeTermDetailsItemProvider == null) {
+			originPortRepositioningFeeTermDetailsItemProvider = new OriginPortRepositioningFeeTermDetailsItemProvider(this);
+		}
+
+		return originPortRepositioningFeeTermDetailsItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1306,7 +1444,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (eventGroupingItemProvider != null) eventGroupingItemProvider.dispose();
 		if (portVisitLatenessItemProvider != null) portVisitLatenessItemProvider.dispose();
 		if (exposureDetailItemProvider != null) exposureDetailItemProvider.dispose();
-		if (ballastBonusFeeDetailsItemProvider != null) ballastBonusFeeDetailsItemProvider.dispose();
 		if (lumpSumContractDetailsItemProvider != null) lumpSumContractDetailsItemProvider.dispose();
 		if (notionalJourneyContractDetailsItemProvider != null) notionalJourneyContractDetailsItemProvider.dispose();
 		if (charterAvailableToEventItemProvider != null) charterAvailableToEventItemProvider.dispose();
@@ -1317,6 +1454,13 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (inventoryChangeEventItemProvider != null) inventoryChangeEventItemProvider.dispose();
 		if (paperDealAllocationItemProvider != null) paperDealAllocationItemProvider.dispose();
 		if (paperDealAllocationEntryItemProvider != null) paperDealAllocationEntryItemProvider.dispose();
+		if (charterContractFeeDetailsItemProvider != null) charterContractFeeDetailsItemProvider.dispose();
+		if (lumpSumDetailsItemProvider != null) lumpSumDetailsItemProvider.dispose();
+		if (lumpSumBallastBonusTermDetailsItemProvider != null) lumpSumBallastBonusTermDetailsItemProvider.dispose();
+		if (lumpSumRepositioningFeeTermDetailsItemProvider != null) lumpSumRepositioningFeeTermDetailsItemProvider.dispose();
+		if (notionalJourneyDetailsItemProvider != null) notionalJourneyDetailsItemProvider.dispose();
+		if (notionalJourneyBallastBonusTermDetailsItemProvider != null) notionalJourneyBallastBonusTermDetailsItemProvider.dispose();
+		if (originPortRepositioningFeeTermDetailsItemProvider != null) originPortRepositioningFeeTermDetailsItemProvider.dispose();
 	}
 
 }

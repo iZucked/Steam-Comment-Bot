@@ -9,6 +9,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.curves.ConstantValueLongCurve;
 import com.mmxlabs.common.curves.ILongCurve;
+import com.mmxlabs.scheduler.optimiser.chartercontracts.ICharterContract;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -20,7 +21,6 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedCharterInRateCharterCostCalculator;
 
 /**
@@ -136,12 +136,12 @@ public class MarkToMarketVesselAvailability implements IVesselAvailability {
 	}
 
 	@Override
-	public void setBallastBonusContract(@Nullable IBallastBonusContract contract) {
+	public void setCharterContract(@Nullable ICharterContract contract) {
 		throw new java.lang.UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
-	public @Nullable IBallastBonusContract getBallastBonusContract() {
+	public @Nullable ICharterContract getCharterContract() {
 		throw new java.lang.UnsupportedOperationException("Not supported yet.");
 	}
 

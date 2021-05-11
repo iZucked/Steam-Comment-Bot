@@ -4426,31 +4426,22 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
 
 	/**
-	 * The feature id for the '<em><b>Repositioning Fee</b></em>' attribute.
+	 * The feature id for the '<em><b>Contained Charter Contract</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__REPOSITIONING_FEE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
+	int VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
 
 	/**
-	 * The feature id for the '<em><b>Ballast Bonus Contract</b></em>' containment reference.
+	 * The feature id for the '<em><b>Generic Charter Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
-
-	/**
-	 * The feature id for the '<em><b>Charter Contract</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_AVAILABILITY__CHARTER_CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
+	int VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
 
 	/**
 	 * The feature id for the '<em><b>Min Duration</b></em>' attribute.
@@ -4459,7 +4450,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__MIN_DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
+	int VESSEL_AVAILABILITY__MIN_DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
 
 	/**
 	 * The feature id for the '<em><b>Max Duration</b></em>' attribute.
@@ -4468,7 +4459,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__MAX_DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 19;
+	int VESSEL_AVAILABILITY__MAX_DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
+
+	/**
+	 * The feature id for the '<em><b>Charter Contract Override</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 19;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Availability</em>' class.
@@ -4543,22 +4543,13 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_AVAILABILITY___GET_END_AFTER_AS_DATE_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 3;
 
 	/**
-	 * The operation id for the '<em>Get Charter Or Delegate Ballast Bonus Contract</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_BALLAST_BONUS_CONTRACT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 4;
-
-	/**
 	 * The operation id for the '<em>Get Charter Or Delegate Min Duration</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_MIN_DURATION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 5;
+	int VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_MIN_DURATION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Get Charter Or Delegate Max Duration</em>' operation.
@@ -4567,7 +4558,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_MAX_DURATION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 6;
+	int VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_MAX_DURATION = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Charter Or Delegate Entity</em>' operation.
@@ -4576,16 +4567,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_ENTITY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 7;
-
-	/**
-	 * The operation id for the '<em>Get Charter Or Delegate Repositioning Fee</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_REPOSITIONING_FEE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 8;
+	int VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_ENTITY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Jsonid</em>' operation.
@@ -4594,7 +4576,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY___JSONID = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 9;
+	int VESSEL_AVAILABILITY___JSONID = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 7;
+
+	/**
+	 * The operation id for the '<em>Get Charter Or Delegate Charter Contract</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_CHARTER_CONTRACT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 8;
 
 	/**
 	 * The number of operations of the '<em>Vessel Availability</em>' class.
@@ -4603,7 +4594,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 10;
+	int VESSEL_AVAILABILITY_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -5552,179 +5543,6 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_TYPE_GROUP_OPERATION_COUNT = TypesPackage.AVESSEL_SET_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.EndHeelOptionsImpl <em>End Heel Options</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.impl.EndHeelOptionsImpl
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getEndHeelOptions()
-	 * @generated
-	 */
-	int END_HEEL_OPTIONS = 16;
-
-	/**
-	 * The feature id for the '<em><b>Tank State</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END_HEEL_OPTIONS__TANK_STATE = 0;
-
-	/**
-	 * The feature id for the '<em><b>Minimum End Heel</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END_HEEL_OPTIONS__MINIMUM_END_HEEL = 1;
-
-	/**
-	 * The feature id for the '<em><b>Maximum End Heel</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END_HEEL_OPTIONS__MAXIMUM_END_HEEL = 2;
-
-	/**
-	 * The feature id for the '<em><b>Use Last Heel Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END_HEEL_OPTIONS__USE_LAST_HEEL_PRICE = 3;
-
-	/**
-	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END_HEEL_OPTIONS__PRICE_EXPRESSION = 4;
-
-	/**
-	 * The number of structural features of the '<em>End Heel Options</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END_HEEL_OPTIONS_FEATURE_COUNT = 5;
-
-	/**
-	 * The number of operations of the '<em>End Heel Options</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END_HEEL_OPTIONS_OPERATION_COUNT = 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.StartHeelOptionsImpl <em>Start Heel Options</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.impl.StartHeelOptionsImpl
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getStartHeelOptions()
-	 * @generated
-	 */
-	int START_HEEL_OPTIONS = 17;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_HEEL_OPTIONS__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Cv Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_HEEL_OPTIONS__CV_VALUE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Min Volume Available</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_HEEL_OPTIONS__MIN_VOLUME_AVAILABLE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Max Volume Available</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_HEEL_OPTIONS__PRICE_EXPRESSION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
-
-	/**
-	 * The number of structural features of the '<em>Start Heel Options</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_HEEL_OPTIONS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_HEEL_OPTIONS___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_HEEL_OPTIONS___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_HEEL_OPTIONS___ECONTAINER_OP = MMXCorePackage.MMX_OBJECT___ECONTAINER_OP;
-
-	/**
-	 * The number of operations of the '<em>Start Heel Options</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_HEEL_OPTIONS_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.InventoryEventRowImpl <em>Inventory Event Row</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5732,7 +5550,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryEventRow()
 	 * @generated
 	 */
-	int INVENTORY_EVENT_ROW = 18;
+	int INVENTORY_EVENT_ROW = 16;
 
 	/**
 	 * The feature id for the '<em><b>Start Date</b></em>' attribute.
@@ -5850,7 +5668,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryCapacityRow()
 	 * @generated
 	 */
-	int INVENTORY_CAPACITY_ROW = 19;
+	int INVENTORY_CAPACITY_ROW = 17;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -5905,7 +5723,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventory()
 	 * @generated
 	 */
-	int INVENTORY = 20;
+	int INVENTORY = 18;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -6023,7 +5841,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCanalBookingSlot()
 	 * @generated
 	 */
-	int CANAL_BOOKING_SLOT = 21;
+	int CANAL_BOOKING_SLOT = 19;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -6150,7 +5968,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCanalBookings()
 	 * @generated
 	 */
-	int CANAL_BOOKINGS = 22;
+	int CANAL_BOOKINGS = 20;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -6304,7 +6122,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getScheduleSpecification()
 	 * @generated
 	 */
-	int SCHEDULE_SPECIFICATION = 23;
+	int SCHEDULE_SPECIFICATION = 21;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Schedule Specifications</b></em>' containment reference list.
@@ -6359,7 +6177,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getNonShippedCargoSpecification()
 	 * @generated
 	 */
-	int NON_SHIPPED_CARGO_SPECIFICATION = 24;
+	int NON_SHIPPED_CARGO_SPECIFICATION = 22;
 
 	/**
 	 * The feature id for the '<em><b>Slot Specifications</b></em>' containment reference list.
@@ -6396,7 +6214,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselScheduleSpecification()
 	 * @generated
 	 */
-	int VESSEL_SCHEDULE_SPECIFICATION = 25;
+	int VESSEL_SCHEDULE_SPECIFICATION = 23;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Allocation</b></em>' reference.
@@ -6451,7 +6269,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getScheduleSpecificationEvent()
 	 * @generated
 	 */
-	int SCHEDULE_SPECIFICATION_EVENT = 26;
+	int SCHEDULE_SPECIFICATION_EVENT = 24;
 
 	/**
 	 * The number of structural features of the '<em>Schedule Specification Event</em>' class.
@@ -6479,7 +6297,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselEventSpecification()
 	 * @generated
 	 */
-	int VESSEL_EVENT_SPECIFICATION = 27;
+	int VESSEL_EVENT_SPECIFICATION = 25;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Event</b></em>' reference.
@@ -6516,7 +6334,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVoyageSpecification()
 	 * @generated
 	 */
-	int VOYAGE_SPECIFICATION = 28;
+	int VOYAGE_SPECIFICATION = 26;
 
 	/**
 	 * The number of structural features of the '<em>Voyage Specification</em>' class.
@@ -6544,7 +6362,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSlotSpecification()
 	 * @generated
 	 */
-	int SLOT_SPECIFICATION = 29;
+	int SLOT_SPECIFICATION = 27;
 
 	/**
 	 * The feature id for the '<em><b>Slot</b></em>' reference.
@@ -6581,7 +6399,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCharterInMarketOverride()
 	 * @generated
 	 */
-	int CHARTER_IN_MARKET_OVERRIDE = 30;
+	int CHARTER_IN_MARKET_OVERRIDE = 28;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -6771,7 +6589,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getPaperDeal()
 	 * @generated
 	 */
-	int PAPER_DEAL = 31;
+	int PAPER_DEAL = 29;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -6943,7 +6761,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getBuyPaperDeal()
 	 * @generated
 	 */
-	int BUY_PAPER_DEAL = 32;
+	int BUY_PAPER_DEAL = 30;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7115,7 +6933,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSellPaperDeal()
 	 * @generated
 	 */
-	int SELL_PAPER_DEAL = 33;
+	int SELL_PAPER_DEAL = 31;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7287,7 +7105,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getDealSet()
 	 * @generated
 	 */
-	int DEAL_SET = 34;
+	int DEAL_SET = 32;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7378,7 +7196,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselGroupCanalParameters()
 	 * @generated
 	 */
-	int VESSEL_GROUP_CANAL_PARAMETERS = 35;
+	int VESSEL_GROUP_CANAL_PARAMETERS = 33;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7478,7 +7296,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCargoType()
 	 * @generated
 	 */
-	int CARGO_TYPE = 36;
+	int CARGO_TYPE = 34;
 
 
 	/**
@@ -7489,18 +7307,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselType()
 	 * @generated
 	 */
-	int VESSEL_TYPE = 37;
-
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.EVesselTankState <em>EVessel Tank State</em>}' enum.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.cargo.EVesselTankState
-	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getEVesselTankState()
-	 * @generated
-	 */
-	int EVESSEL_TANK_STATE = 38;
+	int VESSEL_TYPE = 35;
 
 
 	/**
@@ -7511,7 +7318,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryFacilityType()
 	 * @generated
 	 */
-	int INVENTORY_FACILITY_TYPE = 39;
+	int INVENTORY_FACILITY_TYPE = 36;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.InventoryFrequency <em>Inventory Frequency</em>}' enum.
@@ -7521,7 +7328,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryFrequency()
 	 * @generated
 	 */
-	int INVENTORY_FREQUENCY = 40;
+	int INVENTORY_FREQUENCY = 37;
 
 
 	/**
@@ -7532,7 +7339,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getPaperPricingType()
 	 * @generated
 	 */
-	int PAPER_PRICING_TYPE = 41;
+	int PAPER_PRICING_TYPE = 38;
 
 	/**
 	 * The meta object id for the '<em>Scheduling Time Window</em>' data type.
@@ -7542,7 +7349,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSchedulingTimeWindow()
 	 * @generated
 	 */
-	int SCHEDULING_TIME_WINDOW = 42;
+	int SCHEDULING_TIME_WINDOW = 39;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.Cargo <em>Cargo</em>}'.
@@ -8898,6 +8705,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getVesselAvailability_ForceHireCostOnlyEndRule();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getContainedCharterContract <em>Contained Charter Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Contained Charter Contract</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getContainedCharterContract()
+	 * @see #getVesselAvailability()
+	 * @generated
+	 */
+	EReference getVesselAvailability_ContainedCharterContract();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isOptional <em>Optional</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8907,28 +8725,6 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getVesselAvailability_Optional();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getRepositioningFee <em>Repositioning Fee</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Repositioning Fee</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getRepositioningFee()
-	 * @see #getVesselAvailability()
-	 * @generated
-	 */
-	EAttribute getVesselAvailability_RepositioningFee();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getBallastBonusContract <em>Ballast Bonus Contract</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Ballast Bonus Contract</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getBallastBonusContract()
-	 * @see #getVesselAvailability()
-	 * @generated
-	 */
-	EReference getVesselAvailability_BallastBonusContract();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterNumber <em>Charter Number</em>}'.
@@ -8942,15 +8738,15 @@ public interface CargoPackage extends EPackage {
 	EAttribute getVesselAvailability_CharterNumber();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterContract <em>Charter Contract</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getGenericCharterContract <em>Generic Charter Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Charter Contract</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterContract()
+	 * @return the meta object for the reference '<em>Generic Charter Contract</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getGenericCharterContract()
 	 * @see #getVesselAvailability()
 	 * @generated
 	 */
-	EReference getVesselAvailability_CharterContract();
+	EReference getVesselAvailability_GenericCharterContract();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getMinDuration <em>Min Duration</em>}'.
@@ -8973,6 +8769,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getVesselAvailability_MaxDuration();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isCharterContractOverride <em>Charter Contract Override</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Charter Contract Override</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#isCharterContractOverride()
+	 * @see #getVesselAvailability()
+	 * @generated
+	 */
+	EAttribute getVesselAvailability_CharterContractOverride();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartByAsDateTime() <em>Get Start By As Date Time</em>}' operation.
@@ -9015,16 +8822,6 @@ public interface CargoPackage extends EPackage {
 	EOperation getVesselAvailability__GetEndAfterAsDateTime();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterOrDelegateBallastBonusContract() <em>Get Charter Or Delegate Ballast Bonus Contract</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Charter Or Delegate Ballast Bonus Contract</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterOrDelegateBallastBonusContract()
-	 * @generated
-	 */
-	EOperation getVesselAvailability__GetCharterOrDelegateBallastBonusContract();
-
-	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterOrDelegateMinDuration() <em>Get Charter Or Delegate Min Duration</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9055,16 +8852,6 @@ public interface CargoPackage extends EPackage {
 	EOperation getVesselAvailability__GetCharterOrDelegateEntity();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterOrDelegateRepositioningFee() <em>Get Charter Or Delegate Repositioning Fee</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Charter Or Delegate Repositioning Fee</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterOrDelegateRepositioningFee()
-	 * @generated
-	 */
-	EOperation getVesselAvailability__GetCharterOrDelegateRepositioningFee();
-
-	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#jsonid() <em>Jsonid</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9073,6 +8860,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getVesselAvailability__Jsonid();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterOrDelegateCharterContract() <em>Get Charter Or Delegate Charter Contract</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Charter Or Delegate Charter Contract</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterOrDelegateCharterContract()
+	 * @generated
+	 */
+	EOperation getVesselAvailability__GetCharterOrDelegateCharterContract();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEntity <em>Entity</em>}'.
@@ -9361,125 +9158,6 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getVesselTypeGroup_VesselType();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.EndHeelOptions <em>End Heel Options</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>End Heel Options</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.EndHeelOptions
-	 * @generated
-	 */
-	EClass getEndHeelOptions();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#getTankState <em>Tank State</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Tank State</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.EndHeelOptions#getTankState()
-	 * @see #getEndHeelOptions()
-	 * @generated
-	 */
-	EAttribute getEndHeelOptions_TankState();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#getMinimumEndHeel <em>Minimum End Heel</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Minimum End Heel</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.EndHeelOptions#getMinimumEndHeel()
-	 * @see #getEndHeelOptions()
-	 * @generated
-	 */
-	EAttribute getEndHeelOptions_MinimumEndHeel();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#getMaximumEndHeel <em>Maximum End Heel</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Maximum End Heel</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.EndHeelOptions#getMaximumEndHeel()
-	 * @see #getEndHeelOptions()
-	 * @generated
-	 */
-	EAttribute getEndHeelOptions_MaximumEndHeel();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#isUseLastHeelPrice <em>Use Last Heel Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Use Last Heel Price</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.EndHeelOptions#isUseLastHeelPrice()
-	 * @see #getEndHeelOptions()
-	 * @generated
-	 */
-	EAttribute getEndHeelOptions_UseLastHeelPrice();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#getPriceExpression <em>Price Expression</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Price Expression</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.EndHeelOptions#getPriceExpression()
-	 * @see #getEndHeelOptions()
-	 * @generated
-	 */
-	EAttribute getEndHeelOptions_PriceExpression();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.StartHeelOptions <em>Start Heel Options</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Start Heel Options</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.StartHeelOptions
-	 * @generated
-	 */
-	EClass getStartHeelOptions();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.StartHeelOptions#getCvValue <em>Cv Value</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Cv Value</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.StartHeelOptions#getCvValue()
-	 * @see #getStartHeelOptions()
-	 * @generated
-	 */
-	EAttribute getStartHeelOptions_CvValue();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.StartHeelOptions#getMinVolumeAvailable <em>Min Volume Available</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Min Volume Available</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.StartHeelOptions#getMinVolumeAvailable()
-	 * @see #getStartHeelOptions()
-	 * @generated
-	 */
-	EAttribute getStartHeelOptions_MinVolumeAvailable();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.StartHeelOptions#getMaxVolumeAvailable <em>Max Volume Available</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Max Volume Available</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.StartHeelOptions#getMaxVolumeAvailable()
-	 * @see #getStartHeelOptions()
-	 * @generated
-	 */
-	EAttribute getStartHeelOptions_MaxVolumeAvailable();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.StartHeelOptions#getPriceExpression <em>Price Expression</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Price Expression</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.StartHeelOptions#getPriceExpression()
-	 * @see #getStartHeelOptions()
-	 * @generated
-	 */
-	EAttribute getStartHeelOptions_PriceExpression();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.InventoryEventRow <em>Inventory Event Row</em>}'.
@@ -10489,16 +10167,6 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getVesselType();
-
-	/**
-	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.cargo.EVesselTankState <em>EVessel Tank State</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for enum '<em>EVessel Tank State</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.EVesselTankState
-	 * @generated
-	 */
-	EEnum getEVesselTankState();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.cargo.InventoryFacilityType <em>Inventory Facility Type</em>}'.
@@ -11592,28 +11260,20 @@ public interface CargoPackage extends EPackage {
 		EAttribute VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE = eINSTANCE.getVesselAvailability_ForceHireCostOnlyEndRule();
 
 		/**
+		 * The meta object literal for the '<em><b>Contained Charter Contract</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT = eINSTANCE.getVesselAvailability_ContainedCharterContract();
+
+		/**
 		 * The meta object literal for the '<em><b>Optional</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute VESSEL_AVAILABILITY__OPTIONAL = eINSTANCE.getVesselAvailability_Optional();
-
-		/**
-		 * The meta object literal for the '<em><b>Repositioning Fee</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL_AVAILABILITY__REPOSITIONING_FEE = eINSTANCE.getVesselAvailability_RepositioningFee();
-
-		/**
-		 * The meta object literal for the '<em><b>Ballast Bonus Contract</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT = eINSTANCE.getVesselAvailability_BallastBonusContract();
 
 		/**
 		 * The meta object literal for the '<em><b>Charter Number</b></em>' attribute feature.
@@ -11624,12 +11284,12 @@ public interface CargoPackage extends EPackage {
 		EAttribute VESSEL_AVAILABILITY__CHARTER_NUMBER = eINSTANCE.getVesselAvailability_CharterNumber();
 
 		/**
-		 * The meta object literal for the '<em><b>Charter Contract</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Generic Charter Contract</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference VESSEL_AVAILABILITY__CHARTER_CONTRACT = eINSTANCE.getVesselAvailability_CharterContract();
+		EReference VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT = eINSTANCE.getVesselAvailability_GenericCharterContract();
 
 		/**
 		 * The meta object literal for the '<em><b>Min Duration</b></em>' attribute feature.
@@ -11646,6 +11306,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL_AVAILABILITY__MAX_DURATION = eINSTANCE.getVesselAvailability_MaxDuration();
+
+		/**
+		 * The meta object literal for the '<em><b>Charter Contract Override</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE = eINSTANCE.getVesselAvailability_CharterContractOverride();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Start By As Date Time</b></em>' operation.
@@ -11680,14 +11348,6 @@ public interface CargoPackage extends EPackage {
 		EOperation VESSEL_AVAILABILITY___GET_END_AFTER_AS_DATE_TIME = eINSTANCE.getVesselAvailability__GetEndAfterAsDateTime();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Charter Or Delegate Ballast Bonus Contract</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_BALLAST_BONUS_CONTRACT = eINSTANCE.getVesselAvailability__GetCharterOrDelegateBallastBonusContract();
-
-		/**
 		 * The meta object literal for the '<em><b>Get Charter Or Delegate Min Duration</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -11712,20 +11372,20 @@ public interface CargoPackage extends EPackage {
 		EOperation VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_ENTITY = eINSTANCE.getVesselAvailability__GetCharterOrDelegateEntity();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Charter Or Delegate Repositioning Fee</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_REPOSITIONING_FEE = eINSTANCE.getVesselAvailability__GetCharterOrDelegateRepositioningFee();
-
-		/**
 		 * The meta object literal for the '<em><b>Jsonid</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EOperation VESSEL_AVAILABILITY___JSONID = eINSTANCE.getVesselAvailability__Jsonid();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Charter Or Delegate Charter Contract</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_CHARTER_CONTRACT = eINSTANCE.getVesselAvailability__GetCharterOrDelegateCharterContract();
 
 		/**
 		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.
@@ -11954,98 +11614,6 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL_TYPE_GROUP__VESSEL_TYPE = eINSTANCE.getVesselTypeGroup_VesselType();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.EndHeelOptionsImpl <em>End Heel Options</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.cargo.impl.EndHeelOptionsImpl
-		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getEndHeelOptions()
-		 * @generated
-		 */
-		EClass END_HEEL_OPTIONS = eINSTANCE.getEndHeelOptions();
-
-		/**
-		 * The meta object literal for the '<em><b>Tank State</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute END_HEEL_OPTIONS__TANK_STATE = eINSTANCE.getEndHeelOptions_TankState();
-
-		/**
-		 * The meta object literal for the '<em><b>Minimum End Heel</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute END_HEEL_OPTIONS__MINIMUM_END_HEEL = eINSTANCE.getEndHeelOptions_MinimumEndHeel();
-
-		/**
-		 * The meta object literal for the '<em><b>Maximum End Heel</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute END_HEEL_OPTIONS__MAXIMUM_END_HEEL = eINSTANCE.getEndHeelOptions_MaximumEndHeel();
-
-		/**
-		 * The meta object literal for the '<em><b>Use Last Heel Price</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute END_HEEL_OPTIONS__USE_LAST_HEEL_PRICE = eINSTANCE.getEndHeelOptions_UseLastHeelPrice();
-
-		/**
-		 * The meta object literal for the '<em><b>Price Expression</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute END_HEEL_OPTIONS__PRICE_EXPRESSION = eINSTANCE.getEndHeelOptions_PriceExpression();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.StartHeelOptionsImpl <em>Start Heel Options</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.cargo.impl.StartHeelOptionsImpl
-		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getStartHeelOptions()
-		 * @generated
-		 */
-		EClass START_HEEL_OPTIONS = eINSTANCE.getStartHeelOptions();
-
-		/**
-		 * The meta object literal for the '<em><b>Cv Value</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute START_HEEL_OPTIONS__CV_VALUE = eINSTANCE.getStartHeelOptions_CvValue();
-
-		/**
-		 * The meta object literal for the '<em><b>Min Volume Available</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute START_HEEL_OPTIONS__MIN_VOLUME_AVAILABLE = eINSTANCE.getStartHeelOptions_MinVolumeAvailable();
-
-		/**
-		 * The meta object literal for the '<em><b>Max Volume Available</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute START_HEEL_OPTIONS__MAX_VOLUME_AVAILABLE = eINSTANCE.getStartHeelOptions_MaxVolumeAvailable();
-
-		/**
-		 * The meta object literal for the '<em><b>Price Expression</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute START_HEEL_OPTIONS__PRICE_EXPRESSION = eINSTANCE.getStartHeelOptions_PriceExpression();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.InventoryEventRowImpl <em>Inventory Event Row</em>}' class.
@@ -12838,16 +12406,6 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum VESSEL_TYPE = eINSTANCE.getVesselType();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.EVesselTankState <em>EVessel Tank State</em>}' enum.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.cargo.EVesselTankState
-		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getEVesselTankState()
-		 * @generated
-		 */
-		EEnum EVESSEL_TANK_STATE = eINSTANCE.getEVesselTankState();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.InventoryFacilityType <em>Inventory Facility Type</em>}' enum.

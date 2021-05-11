@@ -12,23 +12,42 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
+import com.mmxlabs.models.lng.cargo.BuyPaperDeal;
+import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
+import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoGroup;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
+import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
+import com.mmxlabs.models.lng.cargo.DealSet;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
-import com.mmxlabs.models.lng.cargo.EndHeelOptions;
+import com.mmxlabs.models.lng.cargo.Inventory;
+import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
+import com.mmxlabs.models.lng.cargo.InventoryEventRow;
+import com.mmxlabs.models.lng.cargo.InventoryFacilityType;
+import com.mmxlabs.models.lng.cargo.InventoryFrequency;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
+import com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification;
+import com.mmxlabs.models.lng.cargo.PaperPricingType;
+import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
+import com.mmxlabs.models.lng.cargo.ScheduleSpecificationEvent;
+import com.mmxlabs.models.lng.cargo.SchedulingTimeWindow;
+import com.mmxlabs.models.lng.cargo.SellPaperDeal;
+import com.mmxlabs.models.lng.cargo.SlotSpecification;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselEventSpecification;
+import com.mmxlabs.models.lng.cargo.VesselScheduleSpecification;
 import com.mmxlabs.models.lng.cargo.VesselType;
 import com.mmxlabs.models.lng.cargo.VesselTypeGroup;
+import com.mmxlabs.models.lng.cargo.VoyageSpecification;
 
 /**
  * <!-- begin-user-doc -->
@@ -86,8 +105,6 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 			case CargoPackage.DRY_DOCK_EVENT: return createDryDockEvent();
 			case CargoPackage.CHARTER_OUT_EVENT: return createCharterOutEvent();
 			case CargoPackage.VESSEL_TYPE_GROUP: return createVesselTypeGroup();
-			case CargoPackage.END_HEEL_OPTIONS: return createEndHeelOptions();
-			case CargoPackage.START_HEEL_OPTIONS: return createStartHeelOptions();
 			case CargoPackage.INVENTORY_EVENT_ROW: return createInventoryEventRow();
 			case CargoPackage.INVENTORY_CAPACITY_ROW: return createInventoryCapacityRow();
 			case CargoPackage.INVENTORY: return createInventory();
@@ -122,8 +139,6 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 				return createCargoTypeFromString(eDataType, initialValue);
 			case CargoPackage.VESSEL_TYPE:
 				return createVesselTypeFromString(eDataType, initialValue);
-			case CargoPackage.EVESSEL_TANK_STATE:
-				return createEVesselTankStateFromString(eDataType, initialValue);
 			case CargoPackage.INVENTORY_FACILITY_TYPE:
 				return createInventoryFacilityTypeFromString(eDataType, initialValue);
 			case CargoPackage.INVENTORY_FREQUENCY:
@@ -149,8 +164,6 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 				return convertCargoTypeToString(eDataType, instanceValue);
 			case CargoPackage.VESSEL_TYPE:
 				return convertVesselTypeToString(eDataType, instanceValue);
-			case CargoPackage.EVESSEL_TANK_STATE:
-				return convertEVesselTankStateToString(eDataType, instanceValue);
 			case CargoPackage.INVENTORY_FACILITY_TYPE:
 				return convertInventoryFacilityTypeToString(eDataType, instanceValue);
 			case CargoPackage.INVENTORY_FREQUENCY:
@@ -294,28 +307,6 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	public VesselTypeGroup createVesselTypeGroup() {
 		VesselTypeGroupImpl vesselTypeGroup = new VesselTypeGroupImpl();
 		return vesselTypeGroup;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EndHeelOptions createEndHeelOptions() {
-		EndHeelOptionsImpl endHeelOptions = new EndHeelOptionsImpl();
-		return endHeelOptions;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public StartHeelOptions createStartHeelOptions() {
-		StartHeelOptionsImpl startHeelOptions = new StartHeelOptionsImpl();
-		return startHeelOptions;
 	}
 
 	/**
@@ -542,26 +533,6 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * @generated
 	 */
 	public String convertVesselTypeToString(EDataType eDataType, Object instanceValue) {
-		return instanceValue == null ? null : instanceValue.toString();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EVesselTankState createEVesselTankStateFromString(EDataType eDataType, String initialValue) {
-		EVesselTankState result = EVesselTankState.get(initialValue);
-		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
-		return result;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String convertEVesselTankStateToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

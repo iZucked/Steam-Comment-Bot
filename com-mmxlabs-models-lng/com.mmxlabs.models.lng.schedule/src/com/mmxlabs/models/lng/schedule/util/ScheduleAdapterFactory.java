@@ -253,10 +253,6 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createExposureDetailAdapter();
 			}
 			@Override
-			public Adapter caseBallastBonusFeeDetails(BallastBonusFeeDetails object) {
-				return createBallastBonusFeeDetailsAdapter();
-			}
-			@Override
 			public Adapter caseMatchingContractDetails(MatchingContractDetails object) {
 				return createMatchingContractDetailsAdapter();
 			}
@@ -299,6 +295,34 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter casePaperDealAllocationEntry(PaperDealAllocationEntry object) {
 				return createPaperDealAllocationEntryAdapter();
+			}
+			@Override
+			public Adapter caseCharterContractFeeDetails(CharterContractFeeDetails object) {
+				return createCharterContractFeeDetailsAdapter();
+			}
+			@Override
+			public Adapter caseLumpSumDetails(LumpSumDetails object) {
+				return createLumpSumDetailsAdapter();
+			}
+			@Override
+			public Adapter caseLumpSumBallastBonusTermDetails(LumpSumBallastBonusTermDetails object) {
+				return createLumpSumBallastBonusTermDetailsAdapter();
+			}
+			@Override
+			public Adapter caseLumpSumRepositioningFeeTermDetails(LumpSumRepositioningFeeTermDetails object) {
+				return createLumpSumRepositioningFeeTermDetailsAdapter();
+			}
+			@Override
+			public Adapter caseNotionalJourneyDetails(NotionalJourneyDetails object) {
+				return createNotionalJourneyDetailsAdapter();
+			}
+			@Override
+			public Adapter caseNotionalJourneyBallastBonusTermDetails(NotionalJourneyBallastBonusTermDetails object) {
+				return createNotionalJourneyBallastBonusTermDetailsAdapter();
+			}
+			@Override
+			public Adapter caseOriginPortRepositioningFeeTermDetails(OriginPortRepositioningFeeTermDetails object) {
+				return createOriginPortRepositioningFeeTermDetailsAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -845,16 +869,16 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails <em>Ballast Bonus Fee Details</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.CharterContractFeeDetails <em>Charter Contract Fee Details</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.schedule.BallastBonusFeeDetails
+	 * @see com.mmxlabs.models.lng.schedule.CharterContractFeeDetails
 	 * @generated
 	 */
-	public Adapter createBallastBonusFeeDetailsAdapter() {
+	public Adapter createCharterContractFeeDetailsAdapter() {
 		return null;
 	}
 
@@ -1009,6 +1033,90 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPaperDealAllocationEntryAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.LumpSumDetails <em>Lump Sum Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.LumpSumDetails
+	 * @generated
+	 */
+	public Adapter createLumpSumDetailsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.LumpSumBallastBonusTermDetails <em>Lump Sum Ballast Bonus Term Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.LumpSumBallastBonusTermDetails
+	 * @generated
+	 */
+	public Adapter createLumpSumBallastBonusTermDetailsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.LumpSumRepositioningFeeTermDetails <em>Lump Sum Repositioning Fee Term Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.LumpSumRepositioningFeeTermDetails
+	 * @generated
+	 */
+	public Adapter createLumpSumRepositioningFeeTermDetailsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.NotionalJourneyDetails <em>Notional Journey Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.NotionalJourneyDetails
+	 * @generated
+	 */
+	public Adapter createNotionalJourneyDetailsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.NotionalJourneyBallastBonusTermDetails <em>Notional Journey Ballast Bonus Term Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.NotionalJourneyBallastBonusTermDetails
+	 * @generated
+	 */
+	public Adapter createNotionalJourneyBallastBonusTermDetailsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.OriginPortRepositioningFeeTermDetails <em>Origin Port Repositioning Fee Term Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.OriginPortRepositioningFeeTermDetails
+	 * @generated
+	 */
+	public Adapter createOriginPortRepositioningFeeTermDetailsAdapter() {
 		return null;
 	}
 

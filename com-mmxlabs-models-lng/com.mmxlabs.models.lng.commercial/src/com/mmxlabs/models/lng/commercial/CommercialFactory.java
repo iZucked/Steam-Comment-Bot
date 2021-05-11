@@ -114,76 +114,121 @@ public interface CommercialFactory extends EFactory {
 	DateShiftExpressionPriceParameters createDateShiftExpressionPriceParameters();
 
 	/**
-	 * Returns a new object of class '<em>Rule Based Ballast Bonus Contract</em>'.
+	 * Returns a new object of class '<em>Generic Charter Contract</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Rule Based Ballast Bonus Contract</em>'.
+	 * @return a new object of class '<em>Generic Charter Contract</em>'.
 	 * @generated
 	 */
-	RuleBasedBallastBonusContract createRuleBasedBallastBonusContract();
+	GenericCharterContract createGenericCharterContract();
 
 	/**
-	 * Returns a new object of class '<em>Lump Sum Ballast Bonus Contract Line</em>'.
+	 * Returns a new object of class '<em>Simple Repositioning Fee Container</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Lump Sum Ballast Bonus Contract Line</em>'.
+	 * @return a new object of class '<em>Simple Repositioning Fee Container</em>'.
 	 * @generated
 	 */
-	LumpSumBallastBonusContractLine createLumpSumBallastBonusContractLine();
+	SimpleRepositioningFeeContainer createSimpleRepositioningFeeContainer();
 
 	/**
-	 * Returns a new object of class '<em>Notional Journey Ballast Bonus Contract Line</em>'.
+	 * Returns a new object of class '<em>Simple Ballast Bonus Container</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Notional Journey Ballast Bonus Contract Line</em>'.
+	 * @return a new object of class '<em>Simple Ballast Bonus Container</em>'.
 	 * @generated
 	 */
-	NotionalJourneyBallastBonusContractLine createNotionalJourneyBallastBonusContractLine();
+	SimpleBallastBonusContainer createSimpleBallastBonusContainer();
 
 	/**
-	 * Returns a new object of class '<em>Simple Charter Contract</em>'.
+	 * Returns a new object of class '<em>Monthly Ballast Bonus Container</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Simple Charter Contract</em>'.
+	 * @return a new object of class '<em>Monthly Ballast Bonus Container</em>'.
 	 * @generated
 	 */
-	SimpleCharterContract createSimpleCharterContract();
+	MonthlyBallastBonusContainer createMonthlyBallastBonusContainer();
 
 	/**
-	 * Returns a new object of class '<em>Simple Ballast Bonus Charter Contract</em>'.
+	 * Returns a new object of class '<em>Ballast Bonus Term</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Simple Ballast Bonus Charter Contract</em>'.
+	 * @return a new object of class '<em>Ballast Bonus Term</em>'.
 	 * @generated
 	 */
-	SimpleBallastBonusCharterContract createSimpleBallastBonusCharterContract();
+	BallastBonusTerm createBallastBonusTerm();
 
 	/**
-	 * Returns a new object of class '<em>Monthly Ballast Bonus Contract Line</em>'.
+	 * Returns a new object of class '<em>Lump Sum Ballast Bonus Term</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Monthly Ballast Bonus Contract Line</em>'.
+	 * @return a new object of class '<em>Lump Sum Ballast Bonus Term</em>'.
 	 * @generated
 	 */
-	MonthlyBallastBonusContractLine createMonthlyBallastBonusContractLine();
+	LumpSumBallastBonusTerm createLumpSumBallastBonusTerm();
 
 	/**
-	 * Returns a new object of class '<em>Monthly Ballast Bonus Contract</em>'.
+	 * Returns a new object of class '<em>Notional Journey Ballast Bonus Term</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Monthly Ballast Bonus Contract</em>'.
+	 * @return a new object of class '<em>Notional Journey Ballast Bonus Term</em>'.
 	 * @generated
 	 */
-	MonthlyBallastBonusContract createMonthlyBallastBonusContract();
+	NotionalJourneyBallastBonusTerm createNotionalJourneyBallastBonusTerm();
 
 	/**
-	 * Returns a new object of class '<em>Monthly Ballast Bonus Charter Contract</em>'.
+	 * Returns a new object of class '<em>Monthly Ballast Bonus Term</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Monthly Ballast Bonus Charter Contract</em>'.
+	 * @return a new object of class '<em>Monthly Ballast Bonus Term</em>'.
 	 * @generated
 	 */
-	MonthlyBallastBonusCharterContract createMonthlyBallastBonusCharterContract();
+	MonthlyBallastBonusTerm createMonthlyBallastBonusTerm();
+
+	/**
+	 * Returns a new object of class '<em>Repositioning Fee Term</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Repositioning Fee Term</em>'.
+	 * @generated
+	 */
+	RepositioningFeeTerm createRepositioningFeeTerm();
+
+	/**
+	 * Returns a new object of class '<em>Lump Sum Repositioning Fee Term</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Lump Sum Repositioning Fee Term</em>'.
+	 * @generated
+	 */
+	LumpSumRepositioningFeeTerm createLumpSumRepositioningFeeTerm();
+
+	/**
+	 * Returns a new object of class '<em>Origin Port Repositioning Fee Term</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Origin Port Repositioning Fee Term</em>'.
+	 * @generated
+	 */
+	OriginPortRepositioningFeeTerm createOriginPortRepositioningFeeTerm();
+
+	/**
+	 * Returns a new object of class '<em>End Heel Options</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>End Heel Options</em>'.
+	 * @generated
+	 */
+	EndHeelOptions createEndHeelOptions();
+
+	/**
+	 * Returns a new object of class '<em>Start Heel Options</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Start Heel Options</em>'.
+	 * @generated
+	 */
+	StartHeelOptions createStartHeelOptions();
 
 	/**
 	 * Returns the package supported by this factory.

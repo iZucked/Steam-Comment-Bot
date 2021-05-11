@@ -13,7 +13,6 @@ import org.eclipse.emf.validation.IValidationContext;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioElementNameHelper;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;

@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.its.microcases.priceexpression;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
@@ -20,9 +21,9 @@ import com.mmxlabs.lingo.its.tests.microcases.TimeWindowsTestsUtils;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;

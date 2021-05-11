@@ -3,9 +3,8 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.impl;
-import java.util.Collections;
-
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -15,12 +14,17 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 
@@ -300,58 +304,11 @@ public class SpotLoadSlotImpl extends LoadSlotImpl implements SpotLoadSlot {
 		} else if (CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS == feature) {
 			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Port (), PortPackage.eINSTANCE.getPort_DefaultWindowSizeUnits(), TimePeriod.MONTHS);
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS) {
-			return new DelegateInformation(null, null, null) {
-				public boolean delegatesTo(final Object changedFeature) {
-					return (changedFeature == CargoPackage.Literals.SPOT_SLOT__MARKET);
-				}
-				
-				public Object getValue(final EObject object) {
-					Object result = Collections.EMPTY_LIST;
-					final SpotMarket market = (SpotMarket) getMarket();
-					if (!isRestrictedVesselsOverride() && market != null) {
-						if (market.eIsSet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_CONTRACTS)) {
-							result = market.eGet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_CONTRACTS);
-						}
-					}
-					return result;
-					
-				}				
-			};
+			return new DelegateInformation(CargoPackage.Literals.SPOT_SLOT__MARKET, SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_CONTRACTS, null);
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS) {
-			return new DelegateInformation(null, null, null) {
-				public boolean delegatesTo(final Object changedFeature) {
-					return (changedFeature == CargoPackage.Literals.SPOT_SLOT__MARKET);
-				}
-				
-				public Object getValue(final EObject object) {
-					Object result = Collections.EMPTY_LIST;
-					final SpotMarket market = (SpotMarket) getMarket();
-					if (!isRestrictedVesselsOverride() && market != null) {
-						if (market.eIsSet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_PORTS)) {
-							result = market.eGet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_PORTS);
-						}
-					}
-					return result;
-				}				
-			};
+			return new DelegateInformation(CargoPackage.Literals.SPOT_SLOT__MARKET, SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_PORTS, null);
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS) {
-			return new DelegateInformation(null, null, null) {
-				public boolean delegatesTo(final Object changedFeature) {
-					return (changedFeature == CargoPackage.Literals.SPOT_SLOT__MARKET);
-				}
-				
-				public Object getValue(final EObject object) {
-					Object result = Collections.EMPTY_LIST;
-					final SpotMarket market = (SpotMarket) getMarket();
-					if (!isRestrictedVesselsOverride() && market != null) {
-						if (market.eIsSet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_VESSELS)) {
-							result = market.eGet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_VESSELS);
-						}
-					}
-					return result;
-					
-				}				
-			};
+			return new DelegateInformation(CargoPackage.Literals.SPOT_SLOT__MARKET, SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_VESSELS, null);
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE) {
 			return new DelegateInformation(CargoPackage.Literals.SPOT_SLOT__MARKET, SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_CONTRACTS_ARE_PERMISSIVE, Boolean.FALSE);
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE) {
@@ -360,6 +317,64 @@ public class SpotLoadSlotImpl extends LoadSlotImpl implements SpotLoadSlot {
 			return new DelegateInformation(CargoPackage.Literals.SPOT_SLOT__MARKET, SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_VESSELS_ARE_PERMISSIVE, Boolean.FALSE);
 		}
 		return super.getUnsetValueOrDelegate(feature);
+	}
+	
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<AVesselSet<Vessel>> getSlotOrDelegateVesselRestrictions() {
+		return getVesselRestrictions();
+	}
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public EList<AVesselSet<Vessel>> getVesselRestrictions() {
+		if (getMarket() == null) return super.getRestrictedVessels();
+		return getMarket().getRestrictedVessels();
+	}
+	
+	//return getSlotOrDelegatePortRestrictions();
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<Contract> getSlotOrDelegateContractRestrictions() {
+		return getContractRestrictions();
+	}
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public EList<Contract> getContractRestrictions() {
+		if (getMarket() == null) return super.getRestrictedContracts();
+		return getMarket().getRestrictedContracts();
+	}
+	
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<APortSet<Port>> getSlotOrDelegatePortRestrictions() {
+		return getPortRestrictions();
+	}
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public EList<APortSet<Port>> getPortRestrictions() {
+		if (getMarket() == null) return super.getRestrictedPorts();
+		return getMarket().getRestrictedPorts();
 	}
 
 } // end of SpotLoadSlotImpl

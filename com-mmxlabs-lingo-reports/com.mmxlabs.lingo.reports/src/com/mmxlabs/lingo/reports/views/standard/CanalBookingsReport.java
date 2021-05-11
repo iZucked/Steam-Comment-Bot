@@ -184,7 +184,7 @@ public class CanalBookingsReport extends AbstractReportView {
 
 		createColumn(sortingSupport, "Date", rowData -> Formatters.asLocalDateFormatter.render(rowData.bookingDate), rowData -> rowData.bookingDate);
 
-		createColumn(sortingSupport, "Entry", rowData -> (rowData.entryPointName == null) ? "" : rowData.entryPointName,
+		createColumn(sortingSupport, "Direction", rowData -> (rowData.entryPointName == null) ? "" : rowData.entryPointName,
 				rowData -> (rowData.entryPointName == null) ? "" : rowData.entryPointName);
 
 		createColumn(sortingSupport, "Vessel", rowData -> ((rowData.vessel == null) ? "" : rowData.vessel), rowData -> ((rowData.vessel == null) ? "" : rowData.vessel));

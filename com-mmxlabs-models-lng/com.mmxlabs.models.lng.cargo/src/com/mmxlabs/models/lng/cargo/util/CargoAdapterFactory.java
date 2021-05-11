@@ -20,7 +20,6 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
-import com.mmxlabs.models.lng.cargo.EndHeelOptions;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -157,14 +156,6 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseVesselTypeGroup(VesselTypeGroup object) {
 				return createVesselTypeGroupAdapter();
-			}
-			@Override
-			public Adapter caseEndHeelOptions(EndHeelOptions object) {
-				return createEndHeelOptionsAdapter();
-			}
-			@Override
-			public Adapter caseStartHeelOptions(StartHeelOptions object) {
-				return createStartHeelOptionsAdapter();
 			}
 			@Override
 			public Adapter caseInventoryEventRow(InventoryEventRow object) {
@@ -549,34 +540,6 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createVesselTypeGroupAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.EndHeelOptions <em>End Heel Options</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.cargo.EndHeelOptions
-	 * @generated
-	 */
-	public Adapter createEndHeelOptionsAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.StartHeelOptions <em>Start Heel Options</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.cargo.StartHeelOptions
-	 * @generated
-	 */
-	public Adapter createStartHeelOptionsAdapter() {
 		return null;
 	}
 

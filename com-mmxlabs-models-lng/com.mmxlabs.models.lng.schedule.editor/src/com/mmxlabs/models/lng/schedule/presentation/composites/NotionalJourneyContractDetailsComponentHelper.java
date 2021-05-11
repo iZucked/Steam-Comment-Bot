@@ -160,7 +160,6 @@ public class NotionalJourneyContractDetailsComponentHelper extends BaseComponent
 	protected void add_canalCostEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.NOTIONAL_JOURNEY_CONTRACT_DETAILS__CANAL_COST));
 	}
-
 	/**
 	 * Create the editor for the lumpSum feature on NotionalJourneyContractDetails
 	 *

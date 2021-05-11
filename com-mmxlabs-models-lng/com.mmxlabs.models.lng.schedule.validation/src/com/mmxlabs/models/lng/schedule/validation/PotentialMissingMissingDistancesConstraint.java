@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.schedule.validation;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -24,11 +25,12 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
-import com.mmxlabs.models.lng.commercial.BallastBonusContract;
-import com.mmxlabs.models.lng.commercial.BallastBonusContractLine;
-import com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine;
-import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine;
-import com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract;
+import com.mmxlabs.models.lng.commercial.BallastBonusTerm;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
+import com.mmxlabs.models.lng.commercial.IBallastBonus;
+import com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContainer;
+import com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusTerm;
+import com.mmxlabs.models.lng.commercial.SimpleBallastBonusContainer;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.RouteOption;
@@ -153,12 +155,20 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 				if (vaEndPorts != null) {
 					vaLikelyEndPorts.retainAll(vaEndPorts);
 				}
-				BallastBonusContract contract = va.getBallastBonusContract();
-				if (contract instanceof RuleBasedBallastBonusContract) {
-					RuleBasedBallastBonusContract ruleBasedBallastBonusContract = (RuleBasedBallastBonusContract) contract;
-					for (BallastBonusContractLine line : ruleBasedBallastBonusContract.getRules()) {
-						if (line instanceof NotionalJourneyBallastBonusContractLine) {
-							NotionalJourneyBallastBonusContractLine notionalJourneyBallastBonusContractLine = (NotionalJourneyBallastBonusContractLine) line;
+				if(va.getContainedCharterContract() != null){
+					GenericCharterContract contract = va.getContainedCharterContract();
+					
+					final List<BallastBonusTerm> terms = new LinkedList<>();
+					final IBallastBonus ballastBonus = contract.getBallastBonusTerms();
+					if (ballastBonus instanceof SimpleBallastBonusContainer) {
+						terms.addAll(((SimpleBallastBonusContainer) ballastBonus).getTerms());
+					} else if (ballastBonus instanceof MonthlyBallastBonusContainer) {
+						terms.addAll(((MonthlyBallastBonusContainer) ballastBonus).getTerms());
+					}
+					
+					for (final BallastBonusTerm line : terms) {
+						if (line instanceof NotionalJourneyBallastBonusTerm) {
+							NotionalJourneyBallastBonusTerm notionalJourneyBallastBonusContractLine = (NotionalJourneyBallastBonusTerm) line;
 							// This is a specific check to do this here, rather than add to main list
 							Set<Port> redeliveryPorts = SetUtils.getObjects(notionalJourneyBallastBonusContractLine.getRedeliveryPorts());
 							redeliveryPorts.retainAll(vaLikelyEndPorts);
@@ -175,11 +185,7 @@ public class PotentialMissingMissingDistancesConstraint extends AbstractModelMul
 								returnPorts = SetUtils.getObjects(notionalJourneyBallastBonusContractLine.getReturnPorts());
 							}
 							missingDistances.addAll(distanceChecker.apply(redeliveryPorts, returnPorts));
-
-						} else if (line instanceof LumpSumBallastBonusContractLine) {
-							LumpSumBallastBonusContractLine lumpSumBallastBonusContractLine = (LumpSumBallastBonusContractLine) line;
 						}
-
 					}
 				}
 

@@ -6,6 +6,8 @@
  */
 package com.mmxlabs.models.lng.cargo;
 
+import com.mmxlabs.models.lng.commercial.EndHeelOptions;
+import com.mmxlabs.models.lng.commercial.StartHeelOptions;
 import com.mmxlabs.models.lng.port.Port;
 
 /**

@@ -33,6 +33,7 @@ import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.ui.editors.CanalEntryAttributeManipulator;
+import com.mmxlabs.models.lng.port.util.PortModelLabeller;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
@@ -185,7 +186,7 @@ public class RouteOptionEditorPane extends ScenarioTableViewerPane {
 		PortModel portModel = scenarioModel.getReferenceModel().getPortModel();
 
 		addTypicalColumn("Date", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_BookingDate(), getCommandHandler()));
-		addTypicalColumn("Entry", new CanalEntryAttributeManipulator(portModel, CargoPackage.eINSTANCE.getCanalBookingSlot_CanalEntrance(), getCommandHandler()));
+		addTypicalColumn("Direction", new CanalEntryAttributeManipulator(portModel, CargoPackage.eINSTANCE.getCanalBookingSlot_CanalEntrance(), getCommandHandler(), PortModelLabeller::getDirection));
 		addTypicalColumn("Vessel", new SingleReferenceManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_Vessel(), scenarioEditingLocation.getReferenceValueProviderCache(), getCommandHandler()));
 		addTypicalColumn("Booking Code",
 				new SingleReferenceManipulator(CargoPackage.eINSTANCE.getCanalBookingSlot_BookingCode(), scenarioEditingLocation.getReferenceValueProviderCache(), getCommandHandler()));

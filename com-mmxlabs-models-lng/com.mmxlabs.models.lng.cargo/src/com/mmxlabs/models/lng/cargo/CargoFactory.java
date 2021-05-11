@@ -132,24 +132,6 @@ public interface CargoFactory extends EFactory {
 	VesselTypeGroup createVesselTypeGroup();
 
 	/**
-	 * Returns a new object of class '<em>End Heel Options</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>End Heel Options</em>'.
-	 * @generated
-	 */
-	EndHeelOptions createEndHeelOptions();
-
-	/**
-	 * Returns a new object of class '<em>Start Heel Options</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Start Heel Options</em>'.
-	 * @generated
-	 */
-	StartHeelOptions createStartHeelOptions();
-
-	/**
 	 * Returns a new object of class '<em>Inventory Event Row</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -15,7 +15,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
-import com.mmxlabs.models.lng.cargo.EVesselTankState;
+import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.types.VolumeUnits;

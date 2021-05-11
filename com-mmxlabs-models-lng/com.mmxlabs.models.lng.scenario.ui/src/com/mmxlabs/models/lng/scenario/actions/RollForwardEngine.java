@@ -27,10 +27,11 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.StartHeelOptions;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.CargoUtils;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
+import com.mmxlabs.models.lng.commercial.StartHeelOptions;
 import com.mmxlabs.models.lng.scenario.actions.impl.FixSlotWindowChange;
 import com.mmxlabs.models.lng.scenario.actions.impl.FixVesselEventWindowChange;
 import com.mmxlabs.models.lng.scenario.actions.impl.FreezeCargoChange;
@@ -139,7 +140,7 @@ public class RollForwardEngine {
 			final EObject eObject = e.getValue();
 			// Dummy heel options. Should be derived from left over heel etc..
 			// Enough to generally avoid arriving warm.
-			final StartHeelOptions heelOptions = CargoFactory.eINSTANCE.createStartHeelOptions();
+			final StartHeelOptions heelOptions = CommercialFactory.eINSTANCE.createStartHeelOptions();
 			heelOptions.setCvValue(22.8);
 			heelOptions.setMaxVolumeAvailable(500);
 			heelOptions.setMinVolumeAvailable(0);
@@ -585,7 +586,7 @@ public class RollForwardEngine {
 			final EObject eObject = e.getValue();
 			// Dummy heel options. Should be derived from left over heel etc..
 			// Enough to generally avoid arriving warm.
-			final StartHeelOptions heelOptions = CargoFactory.eINSTANCE.createStartHeelOptions();
+			final StartHeelOptions heelOptions = CommercialFactory.eINSTANCE.createStartHeelOptions();
 			heelOptions.setCvValue(22.8);
 			heelOptions.setMaxVolumeAvailable(500);
 			heelOptions.setMinVolumeAvailable(0);

@@ -17,11 +17,11 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.StartHeelOptions;
 import com.mmxlabs.models.lng.cargo.SchedulingTimeWindow;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.commercial.StartHeelOptions;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.actions.IRollForwardChange;
 import com.mmxlabs.models.lng.schedule.SlotVisit;

@@ -14,14 +14,14 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 public class CharterContractImporter extends DefaultClassImporter {
 
 	protected boolean shouldImportReference(final EReference reference) {
-		return reference != CommercialPackage.Literals.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT && super.shouldImportReference(reference);
+		return reference != CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT && super.shouldImportReference(reference);
 	}
 
 	protected boolean shouldExportFeature(final EReference reference) {
-		return reference != CommercialPackage.Literals.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT && super.shouldExportFeature(reference);
+		return reference != CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT && super.shouldExportFeature(reference);
 	}
 	
 	protected boolean shouldFlattenReference(final EReference reference) {
-		return reference != CommercialPackage.Literals.SIMPLE_BALLAST_BONUS_CHARTER_CONTRACT && super.shouldFlattenReference(reference);
+		return reference != CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT && super.shouldFlattenReference(reference);
 	}
 }

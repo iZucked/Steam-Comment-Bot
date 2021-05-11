@@ -1,0 +1,6 @@
+ladenTariff,ballastTariff,ballastRoundtripTariff,bandStart,bandEnd,kind,markuprate
+3.12,2.79,2.58,,60000,PanamaCanalTariffBand,
+2.68,2.35,2.17,60000,90000,PanamaCanalTariffBand,
+2.58,2.26,1.99,90000,120000,PanamaCanalTariffBand,
+2.44,2.15,1.87,120000,,PanamaCanalTariffBand,
+,,,,,,0.200000

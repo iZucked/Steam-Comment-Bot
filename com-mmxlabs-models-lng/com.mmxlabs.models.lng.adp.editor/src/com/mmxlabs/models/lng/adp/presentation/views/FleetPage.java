@@ -51,14 +51,15 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
-import com.mmxlabs.models.lng.cargo.EVesselTankState;
-import com.mmxlabs.models.lng.cargo.EndHeelOptions;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
-import com.mmxlabs.models.lng.cargo.StartHeelOptions;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.AssignmentManipulator;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.VesselEventVesselsManipulator;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.EVesselTankState;
+import com.mmxlabs.models.lng.commercial.EndHeelOptions;
+import com.mmxlabs.models.lng.commercial.StartHeelOptions;
 import com.mmxlabs.models.lng.port.ui.editorpart.MultiplePortReferenceManipulator;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -153,14 +154,14 @@ public class FleetPage extends ADPComposite {
 						final CompoundCommand cmd = new CompoundCommand("Re-generate ADP fleet");
 						{
 							for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
-								final StartHeelOptions startOptions = CargoFactory.eINSTANCE.createStartHeelOptions();
+								final StartHeelOptions startOptions = CommercialFactory.eINSTANCE.createStartHeelOptions();
 								startOptions.setMinVolumeAvailable(0);
 								startOptions.setMaxVolumeAvailable(vesselAvailability.getVessel().getSafetyHeel());
 								startOptions.setCvValue(22.8);
 								startOptions.setPriceExpression("0.0");
 								cmd.append(SetCommand.create(editorData.getEditingDomain(), vesselAvailability, CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL, startOptions));
 
-								final EndHeelOptions endOptions = CargoFactory.eINSTANCE.createEndHeelOptions();
+								final EndHeelOptions endOptions = CommercialFactory.eINSTANCE.createEndHeelOptions();
 								endOptions.setMinimumEndHeel(vesselAvailability.getVessel().getSafetyHeel());
 								endOptions.setMaximumEndHeel(vesselAvailability.getVessel().getSafetyHeel());
 								endOptions.setTankState(EVesselTankState.EITHER);
@@ -250,13 +251,13 @@ public class FleetPage extends ADPComposite {
 							public void run() {
 								final VesselAvailability availability = CargoFactory.eINSTANCE.createVesselAvailability();
 
-								final StartHeelOptions startOptions = CargoFactory.eINSTANCE.createStartHeelOptions();
+								final StartHeelOptions startOptions = CommercialFactory.eINSTANCE.createStartHeelOptions();
 								startOptions.setMinVolumeAvailable(0);
 								startOptions.setCvValue(22.8);
 								startOptions.setPriceExpression("0.0");
 								availability.setStartHeel(startOptions);
 
-								final EndHeelOptions endOptions = CargoFactory.eINSTANCE.createEndHeelOptions();
+								final EndHeelOptions endOptions = CommercialFactory.eINSTANCE.createEndHeelOptions();
 								endOptions.setTankState(EVesselTankState.EITHER);
 								endOptions.setPriceExpression("0.0");
 								availability.setEndHeel(endOptions);
@@ -371,8 +372,8 @@ public class FleetPage extends ADPComposite {
 										@Override
 										public void run() {
 											final CharterOutEvent event = CargoFactory.eINSTANCE.createCharterOutEvent();
-											event.setAvailableHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
-											event.setRequiredHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+											event.setAvailableHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+											event.setRequiredHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 
 											final Command c = AddCommand.create(editorData.getEditingDomain(), editorData.getScenarioModel().getCargoModel(),
 													CargoPackage.Literals.CARGO_MODEL__VESSEL_EVENTS, event);
