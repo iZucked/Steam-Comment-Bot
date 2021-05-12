@@ -37,7 +37,6 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
@@ -3616,11 +3615,65 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		} else if (CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS == feature) {
 			return new DelegateInformation(cargo.getSlot_Port(), port.getPort_DefaultWindowSizeUnits(), TimePeriod.HOURS);
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS) {
-			return new DelegateInformation(CargoPackage.Literals.SLOT__CONTRACT, CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS, null);
+			return new DelegateInformation(null, null, null) {
+				@Override
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
+				}
+				
+				@Override
+				public Object getValue(final EObject object) {
+					Object result = Collections.EMPTY_LIST;
+					final Contract contract = getContract();
+					if (!isRestrictedContractsOverride() && contract != null) {
+						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS)) {
+							result = contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS);
+						}
+					}
+					return result;
+					
+				}				
+			};
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS) {
-			return new DelegateInformation(CargoPackage.Literals.SLOT__CONTRACT, CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS, null);
+			return new DelegateInformation(null, null, null) {
+				@Override
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
+				}
+				
+				@Override
+				public Object getValue(final EObject object) {
+					Object result = Collections.EMPTY_LIST;
+					final Contract contract = getContract();
+					if (!isRestrictedPortsOverride() && contract != null) {
+						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS)) {
+							result = contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS);
+						}
+					}
+					return result;
+					
+				}				
+			};
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS) {
-			return new DelegateInformation(CargoPackage.Literals.SLOT__CONTRACT, CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS, null);
+			return new DelegateInformation(null, null, null) {
+				@Override
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
+				}
+				
+				@Override
+				public Object getValue(final EObject object) {
+					Object result = Collections.EMPTY_LIST;
+					final Contract contract = getContract();
+					if (!isRestrictedVesselsOverride() && contract != null) {
+						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS)) {
+							result = contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS);
+						}
+					}
+					return result;
+					
+				}				
+			};
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_RestrictedContractsArePermissive(), Boolean.FALSE);
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS_ARE_PERMISSIVE) {
