@@ -1,7 +1,7 @@
 [ {
   "Schedule" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
   "Date" : "11/02/11",
-  "Entry" : "Northside",
+  "Direction" : "Southbound",
   "Vessel" : "Bluesky",
   "Booking Code" : "default",
   "Event" : "load-cargo-48",
@@ -13,7 +13,7 @@
 }, {
   "Schedule" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
   "Date" : "31/05/11",
-  "Entry" : "Southside",
+  "Direction" : "Northbound",
   "Vessel" : "Methane Becki Anne",
   "Booking Code" : "default",
   "Event" : "discharge-cargo-9",
@@ -25,7 +25,7 @@
 }, {
   "Schedule" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
   "Date" : "15/06/11",
-  "Entry" : "Southside",
+  "Direction" : "Northbound",
   "Vessel" : "Methane Princess",
   "Booking Code" : "default",
   "Event" : "discharge-cargo-28",

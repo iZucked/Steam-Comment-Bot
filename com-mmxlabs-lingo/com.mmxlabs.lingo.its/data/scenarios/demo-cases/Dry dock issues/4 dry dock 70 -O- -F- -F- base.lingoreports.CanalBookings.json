@@ -1,7 +1,7 @@
 [ {
   "Schedule" : "4 dry dock 70 -O- -F- -F- base",
   "Date" : "11/02/11",
-  "Entry" : "Northside",
+  "Direction" : "Southbound",
   "Vessel" : "Methane Lydon Volney",
   "Event" : "load-cargo-48",
   "Next Event" : "discharge-cargo-48",

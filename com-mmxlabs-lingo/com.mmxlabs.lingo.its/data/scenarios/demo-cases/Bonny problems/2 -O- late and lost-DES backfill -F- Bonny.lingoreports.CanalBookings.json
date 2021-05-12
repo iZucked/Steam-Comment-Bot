@@ -1,7 +1,7 @@
 [ {
   "Schedule" : "2 -O- late and lost-DES backfill -F- Bonny",
   "Date" : "11/02/11",
-  "Entry" : "Northside",
+  "Direction" : "Southbound",
   "Vessel" : "Methane Lydon Volney",
   "Event" : "load-cargo-48",
   "Next Event" : "discharge-cargo-48",

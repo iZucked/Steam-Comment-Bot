@@ -1,7 +1,7 @@
 [ {
   "Schedule" : "0 Bonny",
   "Date" : "11/02/11",
-  "Entry" : "Northside",
+  "Direction" : "Southbound",
   "Vessel" : "Methane Lydon Volney",
   "Event" : "load-cargo-48",
   "Next Event" : "discharge-cargo-48",

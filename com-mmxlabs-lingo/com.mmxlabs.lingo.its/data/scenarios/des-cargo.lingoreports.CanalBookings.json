@@ -1,7 +1,7 @@
 [ {
   "Schedule" : "des-cargo",
   "Date" : "03/02/11",
-  "Entry" : "Southside",
+  "Direction" : "Northbound",
   "Vessel" : "Methane Becki Anne",
   "Event" : "discharge-cargo-70",
   "Next Event" : "load-cargo-48",
@@ -12,7 +12,7 @@
 }, {
   "Schedule" : "des-cargo",
   "Date" : "27/03/11",
-  "Entry" : "Southside",
+  "Direction" : "Northbound",
   "Vessel" : "Methane Lydon Volney",
   "Event" : "discharge-cargo-22",
   "Next Event" : "load-cargo-12",

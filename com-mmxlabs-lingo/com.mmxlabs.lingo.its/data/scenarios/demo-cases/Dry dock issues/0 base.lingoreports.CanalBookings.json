@@ -1,7 +1,7 @@
 [ {
   "Schedule" : "0 base",
   "Date" : "11/02/11",
-  "Entry" : "Northside",
+  "Direction" : "Southbound",
   "Vessel" : "Methane Princess",
   "Event" : "load-cargo-48",
   "Next Event" : "discharge-cargo-48",
@@ -12,7 +12,7 @@
 }, {
   "Schedule" : "0 base",
   "Date" : "05/07/11",
-  "Entry" : "Southside",
+  "Direction" : "Northbound",
   "Vessel" : "Methane Princess",
   "Event" : "discharge-cargo-60",
   "Type" : "Wait (0d)"
