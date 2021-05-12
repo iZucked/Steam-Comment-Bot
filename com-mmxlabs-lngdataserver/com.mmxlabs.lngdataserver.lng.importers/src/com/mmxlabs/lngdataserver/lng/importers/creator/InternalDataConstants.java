@@ -21,6 +21,7 @@ public class InternalDataConstants {
 	public static final String REF_VESSEL_STEAM_145 = "<Steam_145>";
 	public static final String REF_VESSEL_STEAM_150 = "<Steam_150>";
 	public static final String REF_VESSEL_TFDE_160 = "<TFDE_160>";
+	public static final String REF_VESSEL_MEGI_176 = "<MEGI_176>";
 
 	// Ports
 	public static final String PORT_POINT_FORTIN = "L_TT_Point2";

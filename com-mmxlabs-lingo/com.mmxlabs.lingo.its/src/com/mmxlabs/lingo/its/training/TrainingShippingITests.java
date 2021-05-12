@@ -27,6 +27,8 @@ import com.mmxlabs.lingo.its.verifier.OptimiserResultVerifier;
 import com.mmxlabs.lingo.its.verifier.SolutionData;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.lngdataserver.lng.importers.creator.ScenarioBuilder;
+import com.mmxlabs.models.lng.cargo.CanalBookings;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -149,6 +151,9 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
+		final CanalBookings canalBookings = CargoFactory.eINSTANCE.createCanalBookings();
+		cargoModelFinder.getCargoModel().setCanalBookings(canalBookings);
+
 		final UserSettings userSettings = createUserSettings();
 
 		try (final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
@@ -208,6 +213,9 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 		cargoModelFinder.findVesselAvailability(LARGE_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_GLADSTONE));
 		cargoModelFinder.findVesselAvailability(MEDIUM_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_BARCELONA));
 		cargoModelFinder.findVesselAvailability(SMALL_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS));
+
+		final CanalBookings canalBookings = CargoFactory.eINSTANCE.createCanalBookings();
+		cargoModelFinder.getCargoModel().setCanalBookings(canalBookings);
 
 		final UserSettings userSettings = createUserSettings();
 
@@ -290,6 +298,9 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 		cargoModelFinder.findVesselAvailability(LARGE_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_GLADSTONE));
 		cargoModelFinder.findVesselAvailability(MEDIUM_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_BARCELONA));
 		cargoModelFinder.findVesselAvailability(SMALL_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS));
+
+		final CanalBookings canalBookings = CargoFactory.eINSTANCE.createCanalBookings();
+		cargoModelFinder.getCargoModel().setCanalBookings(canalBookings);
 
 		spotMarketsModelBuilder.getSpotMarketsModel().getCharterInMarkets().clear();
 		final CharterInMarket charterMarket = spotMarketsModelBuilder.createCharterInMarket("CI_10", fleetModelFinder.findVessel(SMALL_SHIP), entity, "21750", 1);
@@ -384,6 +395,9 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 		cargoModelFinder.findVesselAvailability(LARGE_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_GLADSTONE));
 		cargoModelFinder.findVesselAvailability(MEDIUM_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_BARCELONA));
 		cargoModelFinder.findVesselAvailability(SMALL_SHIP).setStartAt(portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS));
+
+		final CanalBookings canalBookings = CargoFactory.eINSTANCE.createCanalBookings();
+		cargoModelFinder.getCargoModel().setCanalBookings(canalBookings);
 
 		cargoModelFinder.findLoadSlot("S_3").setArriveCold(false);
 
