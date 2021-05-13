@@ -1,14 +1,11 @@
 package com.mmxlabs.lingo.its.tests.maintenance;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.hamcrest.core.IsInstanceOf;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -721,6 +718,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 
 		// All events should start and end with heel
 		boolean foundMaintenance = false;
+		boolean usedPanama = false;
 		for (final Event event : events) {
 			Assertions.assertTrue(event.getHeelAtStart() > 0);
 			Assertions.assertTrue(event.getHeelAtEnd() > 0);
@@ -745,12 +743,13 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 				final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
 				Assertions.assertTrue(hasLngBoiloff);
 				Assertions.assertFalse(hasBunkerUse);
-				// All journeys should be using the Panama canal
-				Assertions.assertNotNull(journey.getCanalDateTime());
-				Assertions.assertEquals(RouteOption.PANAMA, journey.getRouteOption());
+				if (journey.getRouteOption() == RouteOption.PANAMA) {
+					usedPanama = true;
+				}
 			}
 		}
 		Assertions.assertTrue(foundMaintenance);
+		Assertions.assertTrue(usedPanama);
 	}
 
 	/**
@@ -799,6 +798,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 		checkFuelSequence(events);
 
 		boolean foundMaintenance = false;
+		boolean usedPanama = false;
 		for (final Event event : events) {
 			if (event instanceof Idle) {
 				if (!event.getStart().equals(event.getEnd())) {
@@ -839,12 +839,13 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 					Assertions.assertTrue(hasLngBoiloff);
 					Assertions.assertTrue(hasBunkerUse);
 				}
-				// All journeys should be using the Panama canal
-				Assertions.assertNotNull(journey.getCanalDateTime());
-				Assertions.assertEquals(RouteOption.PANAMA, journey.getRouteOption());
+				if (journey.getRouteOption() == RouteOption.PANAMA) {
+					usedPanama = true;
+				}
 			}
 		}
 		Assertions.assertTrue(foundMaintenance);
+		Assertions.assertTrue(usedPanama);
 	}
 
 	/**
@@ -893,6 +894,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 		checkFuelSequence(events);
 
 		boolean foundMaintenance = false;
+		boolean usedPanama = false;
 		for (final Event event : events) {
 			if (event instanceof Idle) {
 				if (!event.getStart().equals(event.getEnd())) {
@@ -932,14 +934,15 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 					Assertions.assertTrue(hasLngBoiloff);
 					Assertions.assertFalse(hasBunkerUse);
 				}
-				// All journeys should be using the Panama canal
-				Assertions.assertNotNull(journey.getCanalDateTime());
-				Assertions.assertEquals(RouteOption.PANAMA, journey.getRouteOption());
+				if (journey.getRouteOption() == RouteOption.PANAMA) {
+					usedPanama = true;
+				}
 			} else if (event instanceof EndEvent) {
 				Assertions.assertEquals(0, event.getHeelAtStart());
 			}
 		}
 		Assertions.assertTrue(foundMaintenance);
+		Assertions.assertTrue(usedPanama);
 	}
 
 	/**
@@ -989,6 +992,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 
 		// All events should start and end with heel
 		boolean foundMaintenance = false;
+		boolean usedSuez = false;
 		for (final Event event : events) {
 			Assertions.assertTrue(event.getHeelAtStart() > 0);
 			Assertions.assertTrue(event.getHeelAtEnd() > 0);
@@ -1013,16 +1017,12 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 				final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
 				Assertions.assertTrue(hasLngBoiloff);
 				Assertions.assertFalse(hasBunkerUse);
-				// Only the last journey should be using Suez
-				if (foundMaintenance) {
-					Assertions.assertNotNull(journey.getCanalDateTime());
-					Assertions.assertEquals(RouteOption.SUEZ, journey.getRouteOption());
-				} else {
-					Assertions.assertNull(journey.getCanalDateTime());
-					Assertions.assertEquals(RouteOption.DIRECT, journey.getRouteOption());
+				if (journey.getRouteOption() == RouteOption.SUEZ) {
+					usedSuez = true;
 				}
 			}
 		}
 		Assertions.assertTrue(foundMaintenance);
+		Assertions.assertTrue(usedSuez);
 	}
 }
