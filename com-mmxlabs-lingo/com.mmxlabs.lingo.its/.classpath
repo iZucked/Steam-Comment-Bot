@@ -12,9 +12,5 @@
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="data" sourcepath="data"/>
 	<classpathentry kind="src" path="src/"/>
-	<classpathentry exported="true" kind="lib" path="junit-jupiter-1.14.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="testcontainers-1.14.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="duct-tape-1.0.8.jar"/>
-	<classpathentry exported="true" kind="lib" path="visible-assertions-2.1.2.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
