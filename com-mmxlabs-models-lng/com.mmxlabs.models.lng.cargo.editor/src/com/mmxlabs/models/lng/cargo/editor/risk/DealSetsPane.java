@@ -264,7 +264,9 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 				final LNGScenarioModel scenarioModel = (LNGScenarioModel) inputElement;
 				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
 				final List<DealSet> dealSets = cargoModel.getDealSets();
-				return dealSets.toArray();
+				if (dealSets != null) {
+					return dealSets.toArray();
+				}
 			}
 			return new Object[0];
 		}
