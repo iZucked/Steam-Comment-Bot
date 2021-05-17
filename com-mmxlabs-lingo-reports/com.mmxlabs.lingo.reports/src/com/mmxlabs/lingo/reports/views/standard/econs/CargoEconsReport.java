@@ -32,6 +32,7 @@ import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
@@ -52,11 +53,13 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.google.common.base.Functions;
 import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.IReportContentsGenerator;
 import com.mmxlabs.lingo.reports.ReportContents;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.lingo.reports.services.SelectedDataProviderImpl;
 import com.mmxlabs.lingo.reports.views.standard.econs.EconsOptions.MarginBy;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -85,6 +88,8 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.IImageProvider;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.renderers.CenteringColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
@@ -92,10 +97,12 @@ import com.mmxlabs.models.ui.tabular.renderers.ColumnImageCenterHeaderRenderer;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToExcelMSClipboardAction;
+import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.CopyTransposedGridToJSONUtil;
 import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
@@ -699,7 +706,34 @@ public class CargoEconsReport extends ViewPart {
 		if (Grid.class.isAssignableFrom(adapter)) {
 			return adapter.cast(viewer.getGrid());
 		}
+		if (IReportContentsGenerator.class.isAssignableFrom(adapter)) {
+			dummyDataCol.getColumn().dispose();
 
+			
+			return adapter.cast(new IReportContentsGenerator() {
+				public IReportContents getReportContents(final ScenarioResult pin, final ScenarioResult other, final @Nullable  List<Object> selectedObjects) {
+					final SelectedDataProviderImpl provider = new SelectedDataProviderImpl();
+					if (pin != null) {
+						provider.addScenario(pin);
+						provider.setPinnedScenarioInstance(pin);
+					}
+					if (other != null) {
+						provider.addScenario(other);
+					}
+					
+					if (selectedObjects != null) {
+						provider.setSelectedObjects(null, new StructuredSelection(selectedObjects));
+					}
+					
+					// Request a blocking update ...
+					listener.selectedDataProviderChanged(provider, true);
+					// ... so the data is ready to be read here.
+					final CopyTransposedGridToJSONUtil jsonUtil = new CopyTransposedGridToJSONUtil(viewer.getGrid(), true);
+					final String jsonContents = jsonUtil.convert();
+					return ReportContents.makeJSON(jsonContents);
+				}
+			});
+		}
 		if (IReportContents.class.isAssignableFrom(adapter)) {
 			dummyDataCol.getColumn().dispose();
 			if (IReportContents.class.isAssignableFrom(adapter)) {

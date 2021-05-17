@@ -89,6 +89,7 @@ import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IReportContentsGenerator;
+import com.mmxlabs.lingo.reports.ReportContents;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
@@ -550,7 +551,7 @@ public class ChangeSetView extends ViewPart {
 		if (IReportContentsGenerator.class.isAssignableFrom(adapter)) {
 			return (T) new IReportContentsGenerator() {
 
-				public String getStringContents(final ScenarioResult pin, final ScenarioResult other) {
+				public IReportContents getReportContents(final ScenarioResult pin, final ScenarioResult other, @Nullable List<Object> selectedObjects) {
 					try {
 						columnHelper.setTextualVesselMarkers(true);
 
@@ -567,7 +568,7 @@ public class ChangeSetView extends ViewPart {
 
 						ChangeSetView.this.setEmptyData();
 						// Prefix this header for rendering purposes
-						return "<meta charset=\"UTF-8\"/>" + contents;
+						return ReportContents.makeHTML("<meta charset=\"UTF-8\"/>" + contents);
 
 					} finally {
 						columnHelper.setTextualVesselMarkers(false);
