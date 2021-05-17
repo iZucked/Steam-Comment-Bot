@@ -6,10 +6,12 @@ package com.mmxlabs.scheduler.optimiser.scheduling;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -31,17 +33,20 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
+import com.mmxlabs.scheduler.optimiser.cache.CacheVerificationFailedException;
+import com.mmxlabs.scheduler.optimiser.cache.GeneralCacheSettings;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 public class TimeWindowScheduler implements IArrivalTimeScheduler {
+
+	private final Random randomForVerification = new Random(0);
 
 	@Inject
 	private PortTimesRecordMaker portTimesRecordMaker;
@@ -85,69 +90,25 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 	private boolean useCanalBasedWindowTrimming = false;
 
 	@Inject
-	@Named(SchedulerConstants.Key_ArrivalTimeCache)
+	@Named(SchedulerConstants.Key_TimeWindowSchedulerCache)
 	private CacheMode cacheMode;
 
 	@Inject
 	@Named("hint-lngtransformer-disable-caches")
 	private boolean hintEnableCache;
 
-	private static class CacheKey {
-
-		private final IResource resource;
-		private final ISequence sequence;
-		// This data is used as the key
-		private final Map<ECanalEntry, List<IRouteOptionBooking>> unassignedBookings;
-		// This data will be modified by the scheduler
-		private transient CurrentBookingData currentBookingData;
-
-		public CacheKey(final IResource resource, final ISequence sequence, final CurrentBookingData _currentBookingData) {
-			this.resource = resource;
-			this.sequence = sequence;
-			// Copy unassigned elements for use in key
-			this.unassignedBookings = new HashMap<>();
-			if (_currentBookingData.unassignedBookings != null) {
-				for (final Map.Entry<ECanalEntry, List<IRouteOptionBooking>> e : _currentBookingData.unassignedBookings.entrySet()) {
-					this.unassignedBookings.put(e.getKey(), new ArrayList<>(e.getValue()));
-				}
-			}
-			// used to evaluate
-			this.currentBookingData = _currentBookingData;
-		}
-
-		@Override
-		public int hashCode() {
-			return Objects.hash(resource, sequence, unassignedBookings);
-		}
-
-		@Override
-		public boolean equals(final Object obj) {
-			if (obj == this) {
-				return true;
-			}
-			if (obj instanceof CacheKey) {
-				final CacheKey other = (CacheKey) obj;
-				return resource == other.resource //
-						&& Objects.equals(sequence, other.sequence) //
-						&& Objects.equals(unassignedBookings, other.unassignedBookings);
-
-			}
-			return false;
-		}
-	};
-
-	private final boolean recordStats = false;
-
 	private final @NonNull LoadingCache<CacheKey, Pair<List<IPortTimeWindowsRecord>, MinTravelTimeData>> cache;
 
 	@Inject
-	public TimeWindowScheduler(@Named(SchedulerConstants.CONCURRENCY_LEVEL) int concurrencyLevel) {
-		int cacheSize = 100_000;
+	public TimeWindowScheduler(@Named(SchedulerConstants.CONCURRENCY_LEVEL) final int concurrencyLevel) {
+
+		final int cacheSize = GeneralCacheSettings.TimeWindowScheduler_Default_CacheSize;
+
 		CacheBuilder<Object, Object> builder = CacheBuilder.newBuilder() //
 				.concurrencyLevel(concurrencyLevel) //
 				.maximumSize(cacheSize);
 
-		if (recordStats) {
+		if (GeneralCacheSettings.TimeWindowScheduler_RecordStats) {
 			builder = builder.recordStats();
 		}
 		this.cache = builder //
@@ -164,21 +125,17 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 
 	public ScheduledTimeWindows calculateTrimmedWindows(final @NonNull ISequences sequences) {
 		final Map<IResource, MinTravelTimeData> travelTimeDataMap = new HashMap<>();
-
 		final Map<IResource, List<IPortTimeWindowsRecord>> trimmedWindows = new HashMap<>();
 
 		// Construct new bookings data object
 		final CurrentBookingData data = new CurrentBookingData();
-		data.assignedBookings = new HashMap<>();
-		data.unassignedBookings = new HashMap<>();
 
 		if (useCanalBasedWindowTrimming) {
-			panamaSlotsProvider.getAssignedBookings().entrySet().forEach(e -> {
-				data.assignedBookings.put(e.getKey(), new ArrayList<>(e.getValue()));
-			});
-			panamaSlotsProvider.getUnassignedBookings().entrySet().forEach(e -> {
-				data.unassignedBookings.put(e.getKey(), new ArrayList<>(e.getValue()));
-			});
+			for (final var entrance : this.panamaSlotsProvider.getAllBookings().keySet()) {
+				for (final var booking : this.panamaSlotsProvider.getAllBookings().get(entrance)) {
+					data.addBooking(booking);
+				}
+			}
 		}
 
 		for (final IResource resource : sequences.getResources()) {
@@ -198,16 +155,14 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 				}
 
 				// VERIFY
-				if (cacheMode == CacheMode.Verify) {
+				if (cacheMode == CacheMode.Verify || (GeneralCacheSettings.ENABLE_RANDOM_VERIFICATION && randomForVerification.nextDouble() < GeneralCacheSettings.VERIFICATION_CHANCE)) {
 					final Pair<List<IPortTimeWindowsRecord>, MinTravelTimeData> p2 = doTrimming(resource, sequence, data);
 					final List<IPortTimeWindowsRecord> list2 = p2.getFirst();
 
 					if (list != null) {
-						if (false) {
-							// For more detailed debugging.
-							doDetailedBookingVerification(data, resource, list, sequence, list2);
+						if (!Objects.equals(list, list2)) {
+							throw new CacheVerificationFailedException();
 						}
-						assert Objects.equals(list, list2);
 					}
 				}
 			} else {
@@ -221,19 +176,49 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 			// We copy the booking data as we don't know whether or not cache will hit or
 			// miss.
 			// Modify the original to remove used bookings
+			// The reason for the below code appears to be in case of a cache hit, the booking data passed in won't have been updated with used bookings
+			// and unassigned bookings utilised moves to assigned bookings etc. Sometimes it will already be updated, sometimes not.
 			if (list != null) {
 				for (final IPortTimeWindowsRecord rr : list) {
 					for (final IPortSlot slot : rr.getSlots()) {
 						final IRouteOptionBooking booking = rr.getRouteOptionBooking(slot);
 						if (booking != null) {
-							data.unassignedBookings.get(booking.getEntryPoint()).remove(booking);
+							if (!data.isUsed(booking.getEntryPoint(), booking)) {
+								data.setUsed(booking.getEntryPoint(), booking);
+							}
 						}
 					}
 				}
 			}
 		}
 
+		// validateBookingsUsedOnce(trimmedWindows);
+
 		return new ScheduledTimeWindows(travelTimeDataMap, trimmedWindows);
+	}
+
+	private void validateBookingsUsedOnce(final Map<IResource, List<IPortTimeWindowsRecord>> trimmedWindows) {
+		// Check used bookings.
+		final Set<IRouteOptionBooking> usedBookings = new HashSet<>();
+		for (final IResource r : trimmedWindows.keySet()) {
+			final var list = trimmedWindows.get(r);
+			if (list != null) {
+				for (final IPortTimeWindowsRecord rr : list) {
+					for (final IPortSlot slot : rr.getSlots()) {
+						final IRouteOptionBooking booking = rr.getRouteOptionBooking(slot);
+						if (booking != null) {
+
+							if (!usedBookings.contains(booking)) {
+								usedBookings.add(booking);
+							} else {
+								// Problem, booking must have been used twice.
+								assert false;
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	@Override
@@ -272,63 +257,6 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 		return portTimeRecords;
 	}
 
-	private void doDetailedBookingVerification(final CurrentBookingData data, final IResource resource, List<IPortTimeWindowsRecord> list, final ISequence sequence,
-			final List<IPortTimeWindowsRecord> list2) {
-		if (false) {
-			// DEBUG - Verify used bookings were are in the unassigned list. Note assumes
-			// not assignedbooking exists
-			final List<IRouteOptionBooking> l1 = new ArrayList<IRouteOptionBooking>();
-			for (final IPortTimeWindowsRecord rr : list) {
-				for (final IPortSlot slot : rr.getSlots()) {
-					final IRouteOptionBooking booking = rr.getRouteOptionBooking(slot);
-					if (booking != null) {
-						l1.add(booking);
-
-						final List<IRouteOptionBooking> treeSet = data.unassignedBookings.get(booking.getEntryPoint());
-						if (!treeSet.contains(booking)) {
-							final int ii = 0;
-						}
-					}
-				}
-			}
-
-			final List<IRouteOptionBooking> l2 = new ArrayList<IRouteOptionBooking>();
-			for (final IPortTimeWindowsRecord rr : list2) {
-				for (final IPortSlot slot : rr.getSlots()) {
-					final IRouteOptionBooking booking = rr.getRouteOptionBooking(slot);
-					if (booking != null) {
-						l2.add(booking);
-
-						if (!data.unassignedBookings.get(booking.getEntryPoint()).contains(booking)) {
-							final int ii = 0;
-						}
-					}
-				}
-			}
-		}
-
-		if (false) {
-			// DEBUG - See which record fails
-			if (!Objects.equals(list, list2)) {
-				final Iterator<IPortTimeWindowsRecord> e1 = list.iterator();
-				final Iterator<IPortTimeWindowsRecord> e2 = list2.iterator();
-				while (e1.hasNext() && e2.hasNext()) {
-					final IPortTimeWindowsRecord o1 = e1.next();
-					final IPortTimeWindowsRecord o2 = e2.next();
-					if (!(o1.equals(o2))) {
-						// DEBUG BREAKPOINT HERE
-						o1.equals(o2);
-						final MinTravelTimeData minTimeData2 = new MinTravelTimeData(resource, sequence);
-						final List<IPortTimeWindowsRecord> list3 = timeWindowTrimmerProvider.get().generateTrimmedWindows(resource, sequence, minTimeData2, data.copy());
-
-					}
-					// return false;
-				}
-				final boolean r = !(e1.hasNext() || e2.hasNext());
-			}
-		}
-	}
-
 	public boolean isUsePriceBasedWindowTrimming() {
 		return usePriceBasedWindowTrimming;
 	}
@@ -357,7 +285,7 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 
 	private Pair<List<IPortTimeWindowsRecord>, MinTravelTimeData> doTrimming(final IResource resource, final ISequence sequence, final CurrentBookingData data) {
 
-		FeasibleTimeWindowTrimmer feasibleTimeWindowTrimmer = timeWindowTrimmerProvider.get();
+		final FeasibleTimeWindowTrimmer feasibleTimeWindowTrimmer = timeWindowTrimmerProvider.get();
 		feasibleTimeWindowTrimmer.setTrimByPanamaCanalBookings(useCanalBasedWindowTrimming);
 		final MinTravelTimeData minTimeData = new MinTravelTimeData(resource, sequence);
 		final List<IPortTimeWindowsRecord> list = feasibleTimeWindowTrimmer.generateTrimmedWindows(resource, sequence, minTimeData, data);
@@ -387,7 +315,7 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 
 	@Subscribe
 	public void endPhase(final OptimisationPhaseEndEvent event) {
-		if (recordStats) {
+		if (GeneralCacheSettings.TimeWindowScheduler_RecordStats) {
 			System.out.println("Time Scheduler: " + this);
 			System.out.println("Time Scheduler: " + cache.stats());
 		}

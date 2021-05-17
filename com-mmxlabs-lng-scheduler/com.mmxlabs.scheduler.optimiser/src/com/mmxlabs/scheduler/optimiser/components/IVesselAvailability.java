@@ -8,8 +8,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.curves.ILongCurve;
+import com.mmxlabs.scheduler.optimiser.chartercontracts.ICharterContract;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
 
 /**
  * A {@link IVesselAvailability} is a period of time in which an IVessel is available for use.
@@ -55,7 +55,7 @@ public interface IVesselAvailability {
 	 * Sets the ballast bonus contract of the vessel availability.
 	 * 
 	 */
-	void setBallastBonusContract(@Nullable IBallastBonusContract contract);
+	void setCharterContract(@Nullable ICharterContract contract);
 
 	/**
 	 * Returns the ballast bonus contract of the vessel availability.
@@ -63,7 +63,7 @@ public interface IVesselAvailability {
 	 * @return ballast bonus
 	 */
 	@Nullable
-	IBallastBonusContract getBallastBonusContract();
+	ICharterContract getCharterContract();
 
 	/**
 	 * Returns charter in cost calculator for this vessel.

@@ -6,7 +6,8 @@ package com.mmxlabs.models.ui.tabular.manipulators;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.SetCommand;
-import org.eclipse.emf.edit.domain.EditingDomain;
+
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 
 /**
  * Sub class of {@link BasicAttributeManipulator} for editing overridable strings.
@@ -15,12 +16,12 @@ import org.eclipse.emf.edit.domain.EditingDomain;
  *
  */
 public class StringAttributeManipulator extends BasicAttributeManipulator {
-	public StringAttributeManipulator(EStructuralFeature field, EditingDomain editingDomain) {
-		super(field, editingDomain);
+	public StringAttributeManipulator(final EStructuralFeature field, final ICommandHandler commandHandler) {
+		super(field, commandHandler);
 	}
 
 	@Override
-	public void doSetValue(Object object, Object value) {
+	public void doSetValue(final Object object, Object value) {
 		if ("".equals(value)) {
 			value = SetCommand.UNSET_VALUE;
 		}
@@ -28,8 +29,8 @@ public class StringAttributeManipulator extends BasicAttributeManipulator {
 	}
 
 	@Override
-	public Object getValue(Object object) {
-		Object v = super.getValue(object);
+	public Object getValue(final Object object) {
+		final Object v = super.getValue(object);
 		if (v == null || v == SetCommand.UNSET_VALUE) {
 			return "";
 		}

@@ -28,7 +28,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.schedule.PanamaBookingHelper;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.PanamaPeriod;
 
 public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSchedulingCanalDistanceProvider {
 
@@ -55,17 +54,6 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 		if (from == to) {
 			// shortcut for same port
 			return new TravelRouteData[] { new TravelRouteData(0, 0, 0, 0, 0) };
-		}
-
-		if (isConstrainedPanamaVoyage
-				&& (distanceProvider.getRouteOptionDirection(from, ERouteOption.PANAMA) == RouteOptionDirection.NORTHBOUND || PanamaBookingHelper.isSouthboundIdleTimeRuleEnabled())) {
-			final int toCanal = panamaBookingHelper.getTravelTimeToCanal(vessel, from, true);
-			if (toCanal != Integer.MAX_VALUE) {
-				int estimatedCanalArrival = voyageStartTime + toCanal;
-				if (panamaBookingHelper.getPanamaPeriod(estimatedCanalArrival) == PanamaPeriod.Beyond) {
-					additionalPanamaIdleHours = 0;
-				}
-			}
 		}
 
 		final int finalAdditionalPanamaIdleHours = additionalPanamaIdleHours;

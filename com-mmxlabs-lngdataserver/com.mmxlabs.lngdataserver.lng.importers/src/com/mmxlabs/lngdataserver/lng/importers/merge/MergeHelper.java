@@ -6,6 +6,7 @@ package com.mmxlabs.lngdataserver.lng.importers.merge;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -122,6 +123,7 @@ public class MergeHelper implements Closeable {
 		fm.getVesselGroups().forEach(ctx::registerType);
 
 		final CommercialModel targetScenarioDataProviderCM = ScenarioModelUtil.getCommercialModel(targetScenarioDataProvider);
+		targetScenarioDataProviderCM.getCharterContracts().forEach(ctx::registerType);
 		targetScenarioDataProviderCM.getPurchaseContracts().forEach(ctx::registerType);
 		targetScenarioDataProviderCM.getSalesContracts().forEach(ctx::registerType);
 		targetScenarioDataProviderCM.getEntities().forEach(ctx::registerType);
@@ -153,17 +155,23 @@ public class MergeHelper implements Closeable {
 		//this.jsonReader = createJSONReader();
 		
 		EObjectListGetter eObjectGetter = mapping.getFirst();
-		Map<String, MergeAction> mergeActions = getActions(mapping.getSecond());
+		
 		List<? extends EObject> eObjects = eObjectGetter.getEObjects(this.sourceLNGScenario);
+		for (int i = 0; i < eObjects.size(); i++) {
+			//Update source object in case references changed earlier, so name hopefully correct if object swapped.
+			mapping.getSecond().get(i).setSourceObject(eObjects.get(i));
+		}
+		Map<String, MergeAction> mergeActions = getActions(mapping.getSecond(), ng);
+		
 		Map<String, EObject> nameToEObjects = getNamedObjectMap(this.targetLNGScenario, eObjectGetter, ng);
 		List<Object> toAdd = new LinkedList<>();
 		List<Pair<Object,Object>> toReplace = new LinkedList<>();
 
 		for (EObject eo : eObjects) {
-			String name = ng.getName(eo);
-			MergeAction ma = mergeActions.get(name);
-			if (ma != null) {
-				switch (ma.getMergeType()) {
+			String name = ng.getName(eo); //name = "LNG Jupiter-1" => is target name, after vessel replaced in va earlier.
+			MergeAction ma = mergeActions.get(name); //returns null, since mapping is from old name "Lng Jupiter-1" prior to replacement.
+			if (ma != null) {                       //MergeMapping.sourcObject vessel availability, not updated with new vessel object
+				switch (ma.getMergeType()) {        //eObjects contains eObject with vessel availability, with different vessel.
 				case Add:
 					toAdd.add(cloneEObject(eo));
 					
@@ -194,7 +202,6 @@ public class MergeHelper implements Closeable {
 					
 				case Map:
 					//FIXME: A bit flaky perhaps, but seems to work and needs to be like this in case source does not have target object in it.
-					EObject oldObject = eo;
 					EObject newObjectInTarget = cloneEObject(nameToEObjects.get(ma.getTargetName()));
 					updateReferencesViaSet(this.sourceLNGScenario, eo, newObjectInTarget);
 					break;
@@ -248,27 +255,33 @@ public class MergeHelper implements Closeable {
 		for (VesselAvailability v : sourceVas) {
 			Optional<VesselAvailability> tva = targetVas.stream().filter(va -> va.getVessel().getName().equals(v.getVessel().getName())).findFirst();
 
+			LocalDateTime endBy, endAfter, startBy, startAfter;
+			
 			if (tva.isPresent()) {
 				//Check end by is latest one.
 				if (tva.get().isSetEndBy() && v.isSetEndBy() && tva.get().getEndBy().isBefore(v.getEndBy())) {
 					if (v.isSetEndBy()) {
 						cmd.append(SetCommand.create(editingDomain, tva.get(), CargoPackage.Literals.VESSEL_AVAILABILITY__END_BY, v.getEndBy()));
+						endBy = v.getEndBy();
 					}
 				}
 				if (tva.get().isSetEndAfter() && v.isSetEndAfter() && tva.get().getEndAfter().isBefore(v.getEndAfter())) {
 					if (v.isSetEndAfter()) {
 						cmd.append(SetCommand.create(editingDomain, tva.get(), CargoPackage.Literals.VESSEL_AVAILABILITY__END_AFTER, v.getEndAfter()));
+						endAfter = v.getEndAfter();
 					}
 				}
 				//Check start after 
 				if (tva.get().isSetStartBy() && v.isSetStartBy() && tva.get().getStartBy().isAfter(v.getStartBy())) {
 					if (v.isSetStartBy()) {
 						cmd.append(SetCommand.create(editingDomain, tva.get(), CargoPackage.Literals.VESSEL_AVAILABILITY__START_BY, v.getStartBy()));
+						startBy = v.getStartBy();
 					}
 				}
 				if (tva.get().isSetStartAfter() && v.isSetStartAfter() && tva.get().getStartAfter().isAfter(v.getStartAfter())) {
 					if (v.isSetStartAfter()) {
 						cmd.append(SetCommand.create(editingDomain, tva.get(), CargoPackage.Literals.VESSEL_AVAILABILITY__START_AFTER, v.getStartAfter()));
+						startAfter = v.getStartAfter();
 					}
 				}
 			}
@@ -569,7 +582,7 @@ public class MergeHelper implements Closeable {
 		this.targetScenarioDataProvider.close();
 	}
 	
-	private Map<String, MergeAction> getActions(List<MergeMapping> mappings) {
+	private Map<String, MergeAction> getActions(List<MergeMapping> mappings, EObjectNameGetter ng) {
 		Map<String, MergeAction> sourceToAction = new HashMap<>();
 		for (MergeMapping cm : mappings) {
 			MergeType mt = MergeType.Map;
@@ -583,15 +596,16 @@ public class MergeHelper implements Closeable {
 				}
 			}
 			if (!cm.getSourceName().equals(cm.getTargetName())) {
+				String name = ng.getName(cm.getSourceObject());
 				switch (mt) {
 				case Overwrite:
-					sourceToAction.put(cm.getSourceName(), new MergeAction(mt, cm.getSourceName(), cm.getSourceName()));										
+					sourceToAction.put(name, new MergeAction(mt, cm.getSourceName(), cm.getSourceName()));										
 					break;
 				case Add:
-					sourceToAction.put(cm.getSourceName(), new MergeAction(mt, cm.getSourceName(), cm.getSourceName()));					
+					sourceToAction.put(name, new MergeAction(mt, cm.getSourceName(), cm.getSourceName()));					
 					break;
 				case Map:
-					sourceToAction.put(cm.getSourceName(), new MergeAction(mt, cm.getSourceName(), cm.getTargetName()));
+					sourceToAction.put(name, new MergeAction(mt, cm.getSourceName(), cm.getTargetName()));
 					break;
 				case Ignore:
 					//Do nothing as should not be present in target.

@@ -8,7 +8,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.edit.domain.EditingDomain;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
@@ -16,8 +15,8 @@ import com.mmxlabs.models.ui.tabular.manipulators.ValueListAttributeManipulator;
 
 public class DESPurchaseDealTypeManipulator extends ValueListAttributeManipulator<DESPurchaseDealType> {
 
-	public DESPurchaseDealTypeManipulator(final EAttribute field, final EditingDomain editingDomain) {
-		super(field, editingDomain, getValues());
+	public DESPurchaseDealTypeManipulator(final EAttribute field, final ICommandHandler commandHandler) {
+		super(field, commandHandler, getValues());
 	}
 
 	private static List<Pair<String, DESPurchaseDealType>> getValues() {

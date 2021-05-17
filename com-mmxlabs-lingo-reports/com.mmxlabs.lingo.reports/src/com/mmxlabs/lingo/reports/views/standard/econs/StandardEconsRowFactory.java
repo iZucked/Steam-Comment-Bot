@@ -129,6 +129,13 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			rows.add(createRow(20, "    Price", true, "$", "", createBuyPrice(options, RowType.COST)));
 			rows.add(createRow(30, "    Volume", true, "", "", createBuyVolumeMMBTuPrice(options, RowType.COST)));
 		}
+		if (containsCharterOut || containsGeneratedCharterOut) {
+			rows.add(createRow(32, "Charter Revenue", true, "$", "", createShippingCharterRevenue(options, RowType.REVENUE)));
+			rows.add(createRow(34, "    Hire Rate", true, "$", "/day", createMeanCharterRatePerDay(options, RowType.REVENUE)));
+			rows.add(createRow(36, "    Charter Duration", true, "", "", createCharterDays(options, RowType.REVENUE)));
+			rows.add(createRow(38, "Repositioning", true, "$", "", createShippingRepositioning(options, RowType.COST)));
+			rows.add(createRow(39, "Ballast bonus", true, "$", "", createShippingBallastBonus(options, RowType.REVENUE)));
+		}		
 		if (containsCargo || containsCharterOut || containsCooldown || containsGeneratedCharterOut || containsOpenSlot || containsPurge || containsStartEvent || containsVesselEvent) {
 			rows.add(createRow(40, "Shipping", true, "$", "", createShippingCosts(options, RowType.COST)));
 			rows.add(createRow(50, "    Bunkers", true, "$", "", createShippingBunkersTotal(options, RowType.COST)));
@@ -157,12 +164,6 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		}
 		if (containsCooldown) {
 			rows.add(createRow(93, "    Cooldown Cost", true, "$", "", createShippingCooldownCosts(options, RowType.COST)));
-		}
-		if (containsCharterOut) {
-			rows.add(createRow(100, "Charter Revenue", true, "$", "", createShippingCharterRevenue(options, RowType.REVENUE)));
-			rows.add(createRow(110, "Repositioning", true, "$", "", createShippingRepositioning(options, RowType.COST)));
-			rows.add(createRow(120, "Ballast bonus", true, "$", "", createShippingBallastBonus(options, RowType.REVENUE)));
-			rows.add(createRow(130, "Charter Duration", true, "", "", createCharterDays(options, RowType.REVENUE)));
 		}
 		if (containsCargo) {
 			rows.add(createRow(140, "Sale", true, "$", "", createSellValuePrice(options, RowType.REVENUE)));
@@ -347,9 +348,11 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		if (pda.eContainer() instanceof Schedule) {
 			final Schedule schedule = (Schedule) pda.eContainer();
 			if (schedule.getGeneratedPaperDeals().contains(pda.getPaperDeal())) {
-				price = pda.getPaperDeal().getPrice();
+				if (pda.getPaperDeal() != null)
+					price = pda.getPaperDeal().getPrice();
 			} else {
-				price = pda.getEntries().get(0).getPrice();
+				if (pda.getEntries() != null && !pda.getEntries().isEmpty())
+					price = pda.getEntries().get(0).getPrice();
 			}
 		}
 		return price;
@@ -360,9 +363,11 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		if (pda.eContainer() instanceof Schedule) {
 			final Schedule schedule = (Schedule) pda.eContainer();
 			if (!schedule.getGeneratedPaperDeals().contains(pda.getPaperDeal())) {
-				price = pda.getPaperDeal().getPrice();
+				if (pda.getPaperDeal() != null)
+					price = pda.getPaperDeal().getPrice();
 			} else {
-				price = pda.getEntries().get(0).getPrice();
+				if (pda.getEntries() != null && !pda.getEntries().isEmpty())
+					price = pda.getEntries().get(0).getPrice();
 			}
 		}
 		return price;
@@ -384,7 +389,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		int totalDuration = getOrZero(visit, Event::getDuration) + getOrZero(travel, Event::getDuration) + getOrZero(idle, Event::getDuration);
 		return totalDuration == 0.0 ? 0 : (int) ((double) totalCharterCost * 24.0 / (double) totalDuration);
 	}
-
+	
 	private @Nullable IColorProvider createBOGColourProvider(final EconsOptions options) {
 
 		return new IColorProvider() {
@@ -909,6 +914,18 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 	private @NonNull ICellRenderer createShippingBallastBonus(final EconsOptions options, final RowType rowType) {
 		return createBasicFormatter(options, rowType, Long.class, DollarsFormat::format, createMappingFunction(Long.class, StandardEconsRowFactory::vesselEventVisitShippingBallastBonusHelper));
 	}
+	
+	private static int vesselEventVisitAverageCharterRateHelper(final Object object) {
+		int durationInHours = vesselEventVisitCharterDurationInHoursHelper(object);
+		int charterRevenue = vesselEventVisitShippingCharterRevenueHelper(object);
+		if (durationInHours > 0) {
+			return (charterRevenue * 24) / durationInHours;
+		}
+		else {
+			// Avoid divide by zero, if zero duration, there is effectively no charter out, so no charter rate.
+			return 0;
+		}
+	}
 
 	private static int vesselEventVisitCharterDurationInHoursHelper(final Object object) {
 		int durationInHours = 0;
@@ -926,11 +943,16 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		}
 		return durationInHours;
 	}
-
+	
 	private @NonNull ICellRenderer createCharterDays(final EconsOptions options, final RowType rowType) {
 		return createIntegerDaysFromHoursFormatter(options, rowType, createMappingFunction(Integer.class, StandardEconsRowFactory::vesselEventVisitCharterDurationInHoursHelper));
 	}
 
+	private @NonNull ICellRenderer createMeanCharterRatePerDay(final EconsOptions options, final RowType rowType) {
+		return createBasicFormatter(options, rowType, Integer.class, DollarsFormat::format,
+				createMappingFunction(Integer.class,  StandardEconsRowFactory::vesselEventVisitAverageCharterRateHelper));
+	}
+	
 	private static int vesselEventVisitShippingRepositioningHelper(final Object object) {
 		int revenue = 0;
 

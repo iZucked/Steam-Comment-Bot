@@ -58,12 +58,14 @@ public class CharterInMarketItemProvider
 			addSpotCharterCountPropertyDescriptor(object);
 			addOverrideInaccessibleRoutesPropertyDescriptor(object);
 			addInaccessibleRoutesPropertyDescriptor(object);
-			addCharterContractPropertyDescriptor(object);
+			addGenericCharterContractPropertyDescriptor(object);
 			addNominalPropertyDescriptor(object);
 			addMinDurationPropertyDescriptor(object);
 			addMaxDurationPropertyDescriptor(object);
 			addMtmPropertyDescriptor(object);
 			addEntityPropertyDescriptor(object);
+			addStartAtPropertyDescriptor(object);
+			addEndAtPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -245,6 +247,50 @@ public class CharterInMarketItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Start At feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addStartAtPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterInMarket_startAt_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterInMarket_startAt_feature", "_UI_CharterInMarket_type"),
+				 SpotMarketsPackage.Literals.CHARTER_IN_MARKET__START_AT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the End At feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addEndAtPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterInMarket_endAt_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterInMarket_endAt_feature", "_UI_CharterInMarket_type"),
+				 SpotMarketsPackage.Literals.CHARTER_IN_MARKET__END_AT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Spot Charter Count feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -311,19 +357,19 @@ public class CharterInMarketItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Charter Contract feature.
+	 * This adds a property descriptor for the Generic Charter Contract feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addCharterContractPropertyDescriptor(Object object) {
+	protected void addGenericCharterContractPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CharterInMarket_charterContract_feature"),
-				 getString("_UI_CharterInMarket_charterContract_description"),
-				 SpotMarketsPackage.Literals.CHARTER_IN_MARKET__CHARTER_CONTRACT,
+				 getString("_UI_CharterInMarket_genericCharterContract_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterInMarket_genericCharterContract_feature", "_UI_CharterInMarket_type"),
+				 SpotMarketsPackage.Literals.CHARTER_IN_MARKET__GENERIC_CHARTER_CONTRACT,
 				 true,
 				 false,
 				 true,

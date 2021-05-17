@@ -25,7 +25,6 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
-
 public class MergeScenarioWizard extends Wizard implements IExportWizard {
 
 	private static final Logger log = LoggerFactory.getLogger(MergeScenarioWizard.class);
@@ -36,6 +35,7 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 	private MergeScenarioWizardDataMapperPage charteringCurvesMapperPage;
 	private MergeScenarioWizardDataMapperPage commodityCurvesMapperPage;
 	private MergeScenarioWizardDataMapperPage currencyCurvesMapperPage;
+	private MergeScenarioWizardDataMapperPage charterTermsMapperPage;
 	private MergeScenarioWizardDataMapperPage purchaseContractMapperPage;
 	private MergeScenarioWizardDataMapperPage salesContractMapperPage;
 	private MergeScenarioWizardDataMapperPage vesselMapperPage;
@@ -83,6 +83,11 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 		currencyCurvesMapperPage = new MergeScenarioWizardDataMapperPage("Map currency curves to target",
 				s -> ScenarioModelUtil.getPricingModel(s).getCurrencyCurves(), s -> ScenarioModelUtil.getPricingModel(s),
 				PricingPackage.Literals.PRICING_MODEL__CURRENCY_CURVES);
+		
+		//Charter terms.
+		charterTermsMapperPage = new MergeScenarioWizardDataMapperPage("Map charter terms to target", 
+				s ->  ScenarioModelUtil.getCommercialModel(s).getCharterContracts(), s ->  ScenarioModelUtil.getCommercialModel(s), 
+				CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTER_CONTRACTS);
 		
 		//Contracts.
 		purchaseContractMapperPage = new MergeScenarioWizardDataMapperPage("Map purchase contracts of cargoes to target", 
@@ -155,7 +160,8 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 		addPage(charteringCurvesMapperPage);
 		addPage(commodityCurvesMapperPage);
 		addPage(currencyCurvesMapperPage);
-		
+
+		addPage(charterTermsMapperPage);
 		addPage(purchaseContractMapperPage);
 		addPage(salesContractMapperPage);
 		

@@ -16,7 +16,6 @@ import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EEnumLiteral;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.SetCommand;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.fieldassist.ContentProposal;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
@@ -33,6 +32,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.autocomplete.AutoCompleteHelper;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 
@@ -50,8 +50,6 @@ public class TextualEnumAttributeManipulator extends BasicAttributeManipulator {
 	protected final List<String> names = new ArrayList<>();
 	protected final List<String> lowerNames = new ArrayList<>();
 	protected final HashSet<Integer> disallowedValues;
-
-	protected final EditingDomain editingDomain;
 
 	private TextCellEditor editor;
 
@@ -95,16 +93,15 @@ public class TextualEnumAttributeManipulator extends BasicAttributeManipulator {
 	 * Create a manipulator for the given field in the target object, taking values from the given valueProvider and creating set commands in the provided editingDomain.
 	 * 
 	 * @param field
-	 *                          the field to set
+	 *            the field to set
 	 * @param valueProvider
-	 *                          provides the names & values for the field
+	 *            provides the names & values for the field
 	 * @param editingDomain
-	 *                          editing domain for setting
+	 *            editing domain for setting
 	 */
-	public TextualEnumAttributeManipulator(final EAttribute field, final EditingDomain editingDomain, @Nullable Function<Enumerator, String> nameMapper) {
-		super(field, editingDomain);
+	public TextualEnumAttributeManipulator(final EAttribute field, final ICommandHandler commandHandler, @Nullable Function<Enumerator, String> nameMapper) {
+		super(field, commandHandler);
 
-		this.editingDomain = editingDomain;
 		this.nameMapper = nameMapper;
 		this.disallowedValues = null;
 	}
@@ -113,18 +110,17 @@ public class TextualEnumAttributeManipulator extends BasicAttributeManipulator {
 	 * Create a manipulator for the given field in the target object, taking values from the given valueProvider and creating set commands in the provided editingDomain.
 	 * 
 	 * @param field
-	 *                             the field to set
+	 *            the field to set
 	 * @param valueProvider
-	 *                             provides the names & values for the field
+	 *            provides the names & values for the field
 	 * @param editingDomain
-	 *                             editing domain for setting
+	 *            editing domain for setting
 	 * @param disallowedValues
-	 *                             enumeration values to filter out of the editor
+	 *            enumeration values to filter out of the editor
 	 */
-	public TextualEnumAttributeManipulator(final EAttribute field, final EditingDomain editingDomain, @Nullable Function<Enumerator, String> nameMapper, int[] disallowedValues) {
-		super(field, editingDomain);
+	public TextualEnumAttributeManipulator(final EAttribute field, final ICommandHandler commandHandler, @Nullable Function<Enumerator, String> nameMapper, int[] disallowedValues) {
+		super(field, commandHandler);
 
-		this.editingDomain = editingDomain;
 		this.nameMapper = nameMapper;
 		this.disallowedValues = new HashSet<>();
 		for (final int dav : disallowedValues) {

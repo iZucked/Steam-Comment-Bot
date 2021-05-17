@@ -314,7 +314,7 @@ public class SchedulerView extends ViewPart implements
 				if (l != null) {
 					// Use the internalMap to obtain the list of events we are selecting
 					selectedEvents = new ArrayList<>(l.size());
-					if (!l.isEmpty() && currentSelectedDataProvider != null && currentSelectedDataProvider.getSelectedChangeSetRows() != null) {
+					if (!l.isEmpty() && currentSelectedDataProvider != null && (currentSelectedDataProvider.getSelectedChangeSetRows() != null || !currentSelectedDataProvider.inPinDiffMode())) {
 						for (final Object ge : ganttChart.getGanttComposite().getEvents()) {
 							final GanttEvent ganttEvent = (GanttEvent) ge;
 							final Event evt = (Event) ganttEvent.getData();
@@ -843,6 +843,7 @@ public class SchedulerView extends ViewPart implements
 		manager.add(zoomOutAction);
 		manager.add(saveFullImageAction);
 		manager.add(toggleLegend);
+		manager.add(toggleShowDaysOnEvents);
 	}
 
 	private void fillContextMenu(final IMenuManager manager) {
@@ -883,6 +884,13 @@ public class SchedulerView extends ViewPart implements
 		});
 		toggleLegend.setChecked(viewer.getGanttChart().getGanttComposite().isShowLegend());
 
+		toggleShowDaysOnEvents = new RunnableAction("Show days on events", SWT.CHECK, () -> {
+			final boolean b = viewer.getGanttChart().getGanttComposite().isShowingDaysOnEvents();
+			viewer.getGanttChart().getGanttComposite().setShowDaysOnEvents(!b);
+			viewer.getGanttChart().getGanttComposite().redraw();
+		});
+		toggleShowDaysOnEvents.setChecked(viewer.getGanttChart().getGanttComposite().isShowingDaysOnEvents());
+
 		sortModeAction = new SortModeAction(this, viewer, (EMFScheduleLabelProvider) viewer.getLabelProvider(), viewerComparator);
 
 		packAction = new PackAction(viewer.getGanttChart());
@@ -890,6 +898,9 @@ public class SchedulerView extends ViewPart implements
 		saveFullImageAction = new SaveFullImageAction(viewer.getGanttChart());
 
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.SAVE_AS.getId(), saveFullImageAction);
+
+	
+		
 	}
 
 	/**
@@ -1193,4 +1204,5 @@ public class SchedulerView extends ViewPart implements
 	};
 
 	private RunnableAction toggleLegend;
+	private RunnableAction toggleShowDaysOnEvents;
 }

@@ -32,9 +32,9 @@ import com.mmxlabs.rcp.common.handlers.TodayHandler;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class InventoryFeedPane extends ScenarioTableViewerPane {
-	
+
 	private EventHandler todayHandler;
-	
+
 	public InventoryFeedPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
 	}
@@ -42,29 +42,30 @@ public class InventoryFeedPane extends ScenarioTableViewerPane {
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
 		super.init(path, adapterFactory, modelReference);
-		final EditingDomain editingDomain = getEditingDomain();
-		
-		addTypicalColumn("Start", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_StartDate(), editingDomain));
-		addTypicalColumn("End", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_EndDate(), editingDomain));
-		addTypicalColumn("Volume (m³)", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_Volume(), editingDomain));
-		
-		addTypicalColumn("Volume High (m³)", new ReadOnlyManipulatorWrapper<NumericAttributeManipulator>(new NumericAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_VolumeHigh(), editingDomain)));
-		addTypicalColumn("Volume Low (m³)", new ReadOnlyManipulatorWrapper<NumericAttributeManipulator>(new NumericAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_VolumeLow(), editingDomain)));
-		addTypicalColumn("Forecast", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_ForecastDate(), editingDomain));
-		
-		addTypicalColumn("Reliability (%)", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_Reliability(), editingDomain));
-		addTypicalColumn("Frequency", new InventoryPeriodEnumAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_Period(), editingDomain));
-		addTypicalColumn("Counterparty", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_CounterParty(), editingDomain));
-		
+
+		addTypicalColumn("Start", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_StartDate(), getCommandHandler()));
+		addTypicalColumn("End", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_EndDate(), getCommandHandler()));
+		addTypicalColumn("Volume (m³)", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_Volume(), getCommandHandler()));
+
+		addTypicalColumn("Volume High (m³)",
+				new ReadOnlyManipulatorWrapper<NumericAttributeManipulator>(new NumericAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_VolumeHigh(), getCommandHandler())));
+		addTypicalColumn("Volume Low (m³)",
+				new ReadOnlyManipulatorWrapper<NumericAttributeManipulator>(new NumericAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_VolumeLow(), getCommandHandler())));
+		addTypicalColumn("Forecast", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_ForecastDate(), getCommandHandler()));
+
+		addTypicalColumn("Reliability (%)", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_Reliability(), getCommandHandler()));
+		addTypicalColumn("Frequency", new InventoryPeriodEnumAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_Period(), getCommandHandler()));
+		addTypicalColumn("Counterparty", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getInventoryEventRow_CounterParty(), getCommandHandler()));
+
 		setTitle("In");
-		
-		//Adding an event broker for the snap-to-date event todayHandler
+
+		// Adding an event broker for the snap-to-date event todayHandler
 		IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
-		this.todayHandler = event -> snapTo((LocalDate)  event.getProperty(IEventBroker.DATA));
-	    eventBroker.subscribe(TodayHandler.EVENT_SNAP_TO_DATE, this.todayHandler);
-		
+		this.todayHandler = event -> snapTo((LocalDate) event.getProperty(IEventBroker.DATA));
+		eventBroker.subscribe(TodayHandler.EVENT_SNAP_TO_DATE, this.todayHandler);
+
 	}
-	
+
 	private void snapTo(LocalDate property) {
 		if (scenarioViewer == null) {
 			return;
@@ -77,7 +78,7 @@ public class InventoryFeedPane extends ScenarioTableViewerPane {
 		if (count <= 0) {
 			return;
 		}
-		
+
 		final GridItem[] items = grid.getItems();
 		int pos = -1;
 		for (GridItem item : items) {

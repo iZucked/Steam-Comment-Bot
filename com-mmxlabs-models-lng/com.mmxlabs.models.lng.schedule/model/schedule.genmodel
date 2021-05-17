@@ -169,6 +169,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Journey/canalArrivalTime"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Journey/canalBookingPeriod"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//Journey/canalEntrancePort"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//Journey/canalJourneyEvent"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//Idle">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Idle/laden"/>
@@ -279,10 +280,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//ExposureDetail/currencyUnit"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//ExposureDetail/dealType"/>
     </genClasses>
-    <genClasses ecoreClass="schedule.ecore#//BallastBonusFeeDetails">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//BallastBonusFeeDetails/fee"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//BallastBonusFeeDetails/matchingBallastBonusContractDetails"/>
-    </genClasses>
     <genClasses image="false" ecoreClass="schedule.ecore#//MatchingContractDetails">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//MatchingContractDetails/matchedPort"/>
     </genClasses>
@@ -305,9 +302,11 @@
     <genClasses ecoreClass="schedule.ecore#//CharterAvailableToEvent">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//CharterAvailableToEvent/linkedSequence"/>
     </genClasses>
-    <genClasses ecoreClass="schedule.ecore#//CanalBookingEvent">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//CanalBookingEvent/linkedSequence"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//CanalBookingEvent/linkedJourney"/>
+    <genClasses ecoreClass="schedule.ecore#//CanalJourneyEvent">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//CanalJourneyEvent/linkedSequence"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//CanalJourneyEvent/linkedJourney"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//CanalJourneyEvent/panamaWaitingTimeHours"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//CanalJourneyEvent/maxAvailablePanamaWaitingTimeHours"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//CharterAvailableFromEvent">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//CharterAvailableFromEvent/linkedSequence"/>
@@ -342,6 +341,35 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//PaperDealAllocationEntry/value"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//PaperDealAllocationEntry/settled"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//PaperDealAllocationEntry/exposures"/>
+    </genClasses>
+    <genClasses ecoreClass="schedule.ecore#//CharterContractFeeDetails">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//CharterContractFeeDetails/fee"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//CharterContractFeeDetails/matchingContractDetails"/>
+    </genClasses>
+    <genClasses ecoreClass="schedule.ecore#//LumpSumDetails">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//LumpSumDetails/lumpSum"/>
+    </genClasses>
+    <genClasses ecoreClass="schedule.ecore#//LumpSumBallastBonusTermDetails"/>
+    <genClasses ecoreClass="schedule.ecore#//LumpSumRepositioningFeeTermDetails">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//LumpSumRepositioningFeeTermDetails/originPort"/>
+    </genClasses>
+    <genClasses ecoreClass="schedule.ecore#//NotionalJourneyDetails">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NotionalJourneyDetails/distance"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NotionalJourneyDetails/totalTimeInDays"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NotionalJourneyDetails/totalFuelUsed"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NotionalJourneyDetails/fuelPrice"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NotionalJourneyDetails/totalFuelCost"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NotionalJourneyDetails/hireRate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NotionalJourneyDetails/hireCost"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NotionalJourneyDetails/routeTaken"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NotionalJourneyDetails/canalCost"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NotionalJourneyDetails/lumpSum"/>
+    </genClasses>
+    <genClasses ecoreClass="schedule.ecore#//NotionalJourneyBallastBonusTermDetails">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NotionalJourneyBallastBonusTermDetails/returnPort"/>
+    </genClasses>
+    <genClasses ecoreClass="schedule.ecore#//OriginPortRepositioningFeeTermDetails">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//OriginPortRepositioningFeeTermDetails/originPort"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

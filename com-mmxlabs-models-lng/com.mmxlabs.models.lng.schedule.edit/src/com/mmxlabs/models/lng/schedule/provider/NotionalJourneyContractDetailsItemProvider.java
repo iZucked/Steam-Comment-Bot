@@ -1,8 +1,4 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
- * All rights reserved.
- */
-/**
  */
 package com.mmxlabs.models.lng.schedule.provider;
 
@@ -330,7 +326,7 @@ public class NotionalJourneyContractDetailsItemProvider extends MatchingContract
 			getString("_UI_NotionalJourneyContractDetails_type") :
 			getString("_UI_NotionalJourneyContractDetails_type") + " " + label;
 	}
-	
+
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached

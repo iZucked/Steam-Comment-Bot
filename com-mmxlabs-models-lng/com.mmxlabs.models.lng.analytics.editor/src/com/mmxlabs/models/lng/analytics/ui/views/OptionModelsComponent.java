@@ -76,7 +76,7 @@ public class OptionModelsComponent extends AbstractSandboxComponent<OptionModell
 		// optionsTreeViewer.getGrid().setHeaderVisible(true);
 		optionsTreeViewer.setAutoExpandLevel(TreeViewer.ALL_LEVELS);
 
-		CellFormatterLabelProvider labelProvider = new OptionsTreeViewerLabelProvider(new OptionTreeViewerFormatter(optionModellerView), validationErrors, "Option Models", optionModellerView);
+		CellFormatterLabelProvider labelProvider = new OptionsTreeViewerLabelProvider(sandboxUIHelper,  new OptionTreeViewerFormatter(optionModellerView), validationErrors, "Option Models", optionModellerView);
 		createColumn(optionsTreeViewer, labelProvider, "Option Models", new OptionTreeViewerFormatter(optionModellerView), true);
 
 		mgr = new MenuManager();
@@ -101,10 +101,8 @@ public class OptionModelsComponent extends AbstractSandboxComponent<OptionModell
 		optionsTreeViewer.expandAll();
 	}
 
-	@Override
 	public void dispose() {
 		mgr.dispose();
-		super.dispose();
 	}
 
 	public void setInput(Set<@NonNull Object> emptySet) {

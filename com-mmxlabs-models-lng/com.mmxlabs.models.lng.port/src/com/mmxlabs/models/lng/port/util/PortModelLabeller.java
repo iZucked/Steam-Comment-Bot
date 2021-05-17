@@ -35,6 +35,18 @@ public class PortModelLabeller {
 		throw new IllegalStateException();
 	}
 
+	// Returns directions labels (opposite to entry point, i.e. northbound direction
+	// is southside entry)
+	public static @NonNull String getDirection(@NonNull final CanalEntry canalEntry) {
+		switch (canalEntry) {
+		case NORTHSIDE:
+			return "Southbound";
+		case SOUTHSIDE:
+			return "Northbound";
+		}
+		throw new IllegalStateException();
+	}
+
 	public static @NonNull String getUserName(@NonNull RouteOption routeOption, @NonNull CanalEntry canalEntry, @NonNull PortModel portModel) {
 		for (Route route : portModel.getRoutes()) {
 			if (route.getRouteOption() == routeOption) {

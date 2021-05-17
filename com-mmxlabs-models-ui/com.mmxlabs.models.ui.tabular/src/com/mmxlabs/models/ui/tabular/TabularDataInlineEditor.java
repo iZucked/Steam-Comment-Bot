@@ -35,7 +35,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -86,7 +85,7 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 		/**
 		 * A call back function used when creating the table as e.g. manipulators require the EditingDomain which is not available at builder time.
 		 */
-		private BiFunction<EditingDomain, IReferenceValueProviderProvider, Object> rmMaker;
+		private BiFunction<ICommandHandler, IReferenceValueProviderProvider, Object> rmMaker;
 
 		/**
 		 * A post creation callback fopr further column customisation outside the builder API.
@@ -160,8 +159,8 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 		 * @param rm
 		 * @return
 		 */
-		public <T extends ICellRenderer & ICellManipulator> ColDefBuilder withRMMaker(final BiFunction<EditingDomain, IReferenceValueProviderProvider, T> rm) {
-			def.rmMaker = (BiFunction<EditingDomain, IReferenceValueProviderProvider, Object>) rm;
+		public <T extends ICellRenderer & ICellManipulator> ColDefBuilder withRMMaker(final BiFunction<ICommandHandler, IReferenceValueProviderProvider, T> rm) {
+			def.rmMaker = (BiFunction<ICommandHandler, IReferenceValueProviderProvider, Object>) rm;
 			return this;
 		}
 	}
@@ -319,7 +318,7 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 			ICellRenderer r = def.renderer;
 			ICellManipulator m = def.manipulator;
 			if (def.rmMaker != null) {
-				final Object t = def.rmMaker.apply(commandHandler.getEditingDomain(), commandHandler.getReferenceValueProviderProvider());
+				final Object t = def.rmMaker.apply(commandHandler, commandHandler.getReferenceValueProviderProvider());
 				if (r == null && t instanceof ICellRenderer) {
 					r = (ICellRenderer) t;
 				}
@@ -522,6 +521,17 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 					return currentSeverity;
 				}
 			}
+			
+			if (objects.contains(input.eContainer())) {
+				if (element.getFeaturesForEObject(input.eContainer()).contains(attribute)) {
+					// Is severity worse, then note it
+					if (element.getSeverity() > currentSeverity) {
+						currentSeverity = element.getSeverity();
+					}
+
+					return currentSeverity;
+				}				
+			}
 		}
 
 		return currentSeverity;
@@ -546,6 +556,15 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 					}
 					sb.append(element.getBaseMessage());
 				}
+			}
+			
+			if (objects.contains(input.eContainer())) {
+				if (element.getFeaturesForEObject(input.eContainer()).contains(attribute)) {
+					if (sb.length() > 0) {
+						sb.append("\n");
+					}
+					sb.append(element.getBaseMessage());			
+				}				
 			}
 		}
 	}

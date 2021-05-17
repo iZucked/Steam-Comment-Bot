@@ -6,6 +6,7 @@ package com.mmxlabs.models.ui.tabular.manipulators;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -24,6 +25,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
@@ -34,17 +36,17 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
  */
 public class BasicAttributeManipulator implements ICellManipulator, ICellRenderer {
 	protected final EStructuralFeature field;
-	protected final EditingDomain editingDomain;
+	protected final ICommandHandler commandHandler;
 	protected boolean isOverridable;
 	protected final EAnnotation overrideAnnotation;
 	protected EStructuralFeature overrideToggleFeature;
 	private IExtraCommandsHook extraCommandsHook;
 	private Object parent;
 
-	public BasicAttributeManipulator(final EStructuralFeature field, final EditingDomain editingDomain) {
+	public BasicAttributeManipulator(final EStructuralFeature field, final ICommandHandler commandHandler) {
 		super();
 		this.field = field;
-		this.editingDomain = editingDomain;
+		this.commandHandler = commandHandler;
 
 		overrideAnnotation = field == null ? null : field.getEContainingClass().getEAnnotation("http://www.mmxlabs.com/models/featureOverride");
 		if (overrideAnnotation != null) {
@@ -128,17 +130,21 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 
 	public void runSetCommand(final Object object, final Object value) {
 		final Object currentValue = reallyGetValue(object);
-		if (((currentValue == null) && (value == null)) || (((currentValue != null) && (value != null)) && currentValue.equals(value))) {
+		if (Objects.equals(currentValue, value)) {
+			return;
+		}
+		if (value == null) {
 			return;
 		}
 		CompoundCommand cmd = new CompoundCommand();
+		EditingDomain editingDomain = commandHandler.getEditingDomain();
 		final Command command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, field, value));
 		cmd.append(command);
 		if (extraCommandsHook != null) {
 			extraCommandsHook.applyExtraCommands(editingDomain, cmd, parent, object, value);
 		}
 		// command.setLabel("Set " + field.getName() + " to " + (value == null ? "null" : value.toString()));
-		editingDomain.getCommandStack().execute(cmd);
+		commandHandler.handleCommand(cmd, (EObject) object, field);
 	}
 
 	public void doSetValue(final Object object, final Object value) {

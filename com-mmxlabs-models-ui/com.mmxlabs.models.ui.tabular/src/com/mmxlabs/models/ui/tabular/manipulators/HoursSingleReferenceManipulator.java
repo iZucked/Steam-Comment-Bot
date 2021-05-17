@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.autocomplete.AutoCompleteHelper;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 
@@ -58,8 +59,8 @@ public class HoursSingleReferenceManipulator extends BasicAttributeManipulator {
 	 * @param editingDomain
 	 *            editing domain for setting
 	 */
-	public HoursSingleReferenceManipulator(final EAttribute field, final EditingDomain editingDomain) {
-		super(field, editingDomain);
+	public HoursSingleReferenceManipulator(final EAttribute field, final ICommandHandler commandHandler) {
+		super(field, commandHandler);
 	}
 
 	@Override

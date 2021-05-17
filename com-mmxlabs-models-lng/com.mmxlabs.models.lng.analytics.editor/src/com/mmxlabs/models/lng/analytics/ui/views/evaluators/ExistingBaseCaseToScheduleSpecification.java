@@ -54,7 +54,6 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
@@ -69,6 +68,8 @@ import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
 import com.mmxlabs.models.lng.cargo.util.scheduling.FakeCargo;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
+import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -182,6 +183,37 @@ public class ExistingBaseCaseToScheduleSpecification {
 				}
 			};
 
+			// Find any slots which are not in the start options but their other side is 
+			final Collection<LoadSlot> orphanedLoadSlots = new LinkedHashSet<>();
+			final Collection<DischargeSlot> orphanedDischargeSlots = new LinkedHashSet<>();
+			for (final BaseCaseRow row : baseCase.getBaseCase()) {
+				LoadSlot ls = null;
+				DischargeSlot ds = null;
+				
+				if (row.getBuyOption() != null) {
+					ls = getOrCreate(row.getBuyOption());
+				} else if (row.getSellOption() != null) {
+					ds = getOrCreate(row.getSellOption());
+				}
+				if (ls != null && ls.getCargo() != null) {
+					orphanedLoadSlots.remove(ls);
+					Slot<?> slot = ls.getCargo().getSortedSlots().get(1);
+					if (!slot.equals(ds)) {
+						orphanedDischargeSlots.add((DischargeSlot) slot);
+					}
+				}
+				if (ds != null && ds.getCargo() != null) {
+					orphanedDischargeSlots.remove(ds);
+					Slot<?> slot = ds.getCargo().getSortedSlots().get(0);
+					if (!slot.equals(ls)) {
+						orphanedLoadSlots.add((LoadSlot) slot);
+					}
+				}
+			}
+			
+			unusedLoads.addAll(orphanedLoadSlots);
+			unusedDischarges.addAll(orphanedDischargeSlots);
+			
 			for (final BaseCaseRow row : baseCase.getBaseCase()) {
 				// This row has a single open buy or sell position on it.
 				if (row.getVesselEventOption() == null
@@ -319,8 +351,8 @@ public class ExistingBaseCaseToScheduleSpecification {
 							vesselAvailability.setVessel(vessel);
 							vesselAvailability.setEntity(optionalAvailabilityShippingOption.getEntity());
 
-							vesselAvailability.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
-							vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+							vesselAvailability.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+							vesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 							if (optionalAvailabilityShippingOption.isUseSafetyHeel()) {
 								vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getSafetyHeel());
 								vesselAvailability.getStartHeel().setCvValue(22.8);
@@ -337,7 +369,8 @@ public class ExistingBaseCaseToScheduleSpecification {
 							vesselAvailability.setEndBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
 							vesselAvailability.setOptional(true);
 							vesselAvailability.setFleet(false);
-							vesselAvailability.setRepositioningFee(optionalAvailabilityShippingOption.getRepositioningFee());
+							vesselAvailability.setContainedCharterContract(AnalyticsBuilder.createCharterTerms(optionalAvailabilityShippingOption.getRepositioningFee(),//
+									optionalAvailabilityShippingOption.getBallastBonus()));
 							if (optionalAvailabilityShippingOption.getStartPort() != null) {
 								vesselAvailability.setStartAt(optionalAvailabilityShippingOption.getStartPort());
 							}
@@ -369,8 +402,8 @@ public class ExistingBaseCaseToScheduleSpecification {
 							vesselAvailability.setVessel(vessel);
 							vesselAvailability.setEntity(fleetShippingOption.getEntity());
 
-							vesselAvailability.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
-							vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+							vesselAvailability.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+							vesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 
 							if (fleetShippingOption.isUseSafetyHeel()) {
 								vesselAvailability.getStartHeel().setMaxVolumeAvailable(vessel.getSafetyHeel());

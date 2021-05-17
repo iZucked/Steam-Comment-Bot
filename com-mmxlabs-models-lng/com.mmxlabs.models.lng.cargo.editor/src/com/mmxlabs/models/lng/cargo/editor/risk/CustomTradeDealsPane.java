@@ -65,13 +65,11 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
 
 public class CustomTradeDealsPane extends ScenarioTableViewerPane {
 
-	private final IScenarioEditingLocation jointModelEditor;
 	private final SafeMMXContentAdapter dealSetsContentAdapter;
 	private final Set<Slot> usedSlots = new HashSet< >();
 
 	public CustomTradeDealsPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
-		this.jointModelEditor = location;
 		updateSlots();
 		dealSetsContentAdapter = new SafeMMXContentAdapter() {
 			
@@ -90,7 +88,7 @@ public class CustomTradeDealsPane extends ScenarioTableViewerPane {
 	
 	public void updateSlots() {
 		usedSlots.clear();
-		final IScenarioDataProvider sdp = jointModelEditor.getScenarioDataProvider();
+		final IScenarioDataProvider sdp = scenarioEditingLocation.getScenarioDataProvider();
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
 		for (final DealSet dealSet : cargoModel.getDealSets()) {
 			usedSlots.addAll(dealSet.getSlots());
@@ -106,11 +104,11 @@ public class CustomTradeDealsPane extends ScenarioTableViewerPane {
 		addNameManipulator("Name");
 		
 		addColumn("Side", createSlotTypeFormatter(), null);
-		addReadOnlyColumn("Window", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStart(), jointModelEditor.getEditingDomain()));
-		addReadOnlyColumn("Volume", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MinQuantity(), jointModelEditor.getEditingDomain()));
-		addReadOnlyColumn("Port", new SingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Port(), provider, jointModelEditor.getEditingDomain()));
-		addReadOnlyColumn("Contract", new ContractManipulator(provider, jointModelEditor.getEditingDomain()));
-		addReadOnlyColumn("Conterparty", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Counterparty(), jointModelEditor.getEditingDomain()));
+		addReadOnlyColumn("Window", new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStart(), getCommandHandler()));
+		addReadOnlyColumn("Volume", new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MinQuantity(), getCommandHandler()));
+		addReadOnlyColumn("Port", new SingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Port(), provider, getCommandHandler()));
+		addReadOnlyColumn("Contract", new ContractManipulator(provider, getCommandHandler()));
+		addReadOnlyColumn("Conterparty", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Counterparty(), getCommandHandler()));
 
 		setTitle("Physical", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 		

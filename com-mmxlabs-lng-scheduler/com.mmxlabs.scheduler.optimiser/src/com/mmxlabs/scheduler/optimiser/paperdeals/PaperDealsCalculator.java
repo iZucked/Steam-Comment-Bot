@@ -171,7 +171,7 @@ public class PaperDealsCalculator {
 					final YearMonth month = deltaPair.getSecond();
 					final String indexName = deltaPair.getFirst();
 					// No hedging for physical positions
-					if (month == null)
+					if (month == null || month.isBefore(lookupData.cutoffMonth))
 						continue;
 					if (indexName == null || indexName.equalsIgnoreCase("Physical") || !lookupData.indicesToHedge.contains(indexName))
 						continue;

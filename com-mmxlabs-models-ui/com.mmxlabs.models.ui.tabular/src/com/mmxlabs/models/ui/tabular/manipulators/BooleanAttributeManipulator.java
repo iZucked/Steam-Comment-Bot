@@ -5,29 +5,32 @@
 package com.mmxlabs.models.ui.tabular.manipulators;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
+import com.mmxlabs.models.ui.editors.ICommandHandler;
+
 /**
  * 
- * An implementation of {@link BasicAttributeManipulator} to handle boolean objects. By default this will show a Y/N choice, but this can changed using the alternative constructor,
+ * An implementation of {@link BasicAttributeManipulator} to handle boolean
+ * objects. By default this will show a Y/N choice, but this can changed using
+ * the alternative constructor,
  * 
  * @author Simon Goodall
  */
 public class BooleanAttributeManipulator extends BasicAttributeManipulator {
 
-	private final String trueString;
-	private final String falseString;
+	protected final String trueString;
+	protected final String falseString;
 
-	public BooleanAttributeManipulator(final EStructuralFeature field, final EditingDomain editingDomain) {
-		this(field, editingDomain, "Y", "N");
+	public BooleanAttributeManipulator(final EStructuralFeature field, final ICommandHandler commandHandler) {
+		this(field, commandHandler, "Y", "N");
 	}
 
-	public BooleanAttributeManipulator(final EStructuralFeature field, final EditingDomain editingDomain, final String trueString, final String falseString) {
-		super(field, editingDomain);
+	public BooleanAttributeManipulator(final EStructuralFeature field, final ICommandHandler commandHandler, final String trueString, final String falseString) {
+		super(field, commandHandler);
 		this.trueString = trueString;
 		this.falseString = falseString;
 	}

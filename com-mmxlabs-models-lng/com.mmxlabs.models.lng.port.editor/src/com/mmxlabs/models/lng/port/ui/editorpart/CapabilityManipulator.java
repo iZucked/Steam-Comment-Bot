@@ -10,7 +10,6 @@ import java.util.List;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.widgets.Composite;
@@ -19,6 +18,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.PortCapability;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
@@ -29,13 +29,13 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
  */
 class CapabilityManipulator implements ICellRenderer, ICellManipulator {
 	private final PortCapability capability;
-	private final EditingDomain editingDomain;
+	private final ICommandHandler commandHandler;
 	private IExtraCommandsHook extraCommandsHook;
 	private Object parent;
 
-	public CapabilityManipulator(final PortCapability capability, final EditingDomain editingDomain) {
+	public CapabilityManipulator(final PortCapability capability, final ICommandHandler commandHandler) {
 		this.capability = capability;
-		this.editingDomain = editingDomain;
+		this.commandHandler = commandHandler;
 	}
 
 	@Override
@@ -44,11 +44,13 @@ class CapabilityManipulator implements ICellRenderer, ICellManipulator {
 		final Port p = (Port) object;
 		if ((Integer) value == 0) {
 			if (!p.getCapabilities().contains(capability)) {
-				editingDomain.getCommandStack().execute(AddCommand.create(editingDomain, p, PortPackage.eINSTANCE.getPort_Capabilities(), capability));
+				commandHandler.handleCommand(AddCommand.create(commandHandler.getEditingDomain(), p, PortPackage.eINSTANCE.getPort_Capabilities(), capability), p,
+						PortPackage.eINSTANCE.getPort_Capabilities());
 			}
 		} else {
 			if (p.getCapabilities().contains(capability)) {
-				editingDomain.getCommandStack().execute(RemoveCommand.create(editingDomain, p, PortPackage.eINSTANCE.getPort_Capabilities(), capability));
+				commandHandler.handleCommand(RemoveCommand.create(commandHandler.getEditingDomain(), p, PortPackage.eINSTANCE.getPort_Capabilities(), capability), p,
+						PortPackage.eINSTANCE.getPort_Capabilities());
 			}
 		}
 	}
@@ -83,7 +85,7 @@ class CapabilityManipulator implements ICellRenderer, ICellManipulator {
 	public boolean isValueUnset(Object object) {
 		return false;
 	}
-	
+
 	@Override
 	public Object getFilterValue(final Object object) {
 		return getComparable(object);
@@ -97,7 +99,7 @@ class CapabilityManipulator implements ICellRenderer, ICellManipulator {
 	@Override
 	public void setParent(Object parent, Object object) {
 		this.parent = parent;
-		
+
 	}
 
 	@Override

@@ -330,15 +330,6 @@ public interface ScheduleFactory extends EFactory {
 	ExposureDetail createExposureDetail();
 
 	/**
-	 * Returns a new object of class '<em>Ballast Bonus Fee Details</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Ballast Bonus Fee Details</em>'.
-	 * @generated
-	 */
-	BallastBonusFeeDetails createBallastBonusFeeDetails();
-
-	/**
 	 * Returns a new object of class '<em>Lump Sum Contract Details</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -357,6 +348,15 @@ public interface ScheduleFactory extends EFactory {
 	NotionalJourneyContractDetails createNotionalJourneyContractDetails();
 
 	/**
+	 * Returns a new object of class '<em>Charter Contract Fee Details</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Charter Contract Fee Details</em>'.
+	 * @generated
+	 */
+	CharterContractFeeDetails createCharterContractFeeDetails();
+
+	/**
 	 * Returns a new object of class '<em>Charter Available To Event</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -364,6 +364,15 @@ public interface ScheduleFactory extends EFactory {
 	 * @generated
 	 */
 	CharterAvailableToEvent createCharterAvailableToEvent();
+
+	/**
+	 * Returns a new object of class '<em>Canal Journey Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Canal Journey Event</em>'.
+	 * @generated
+	 */
+	CanalJourneyEvent createCanalJourneyEvent();
 
 	/**
 	 * Returns a new object of class '<em>Charter Available From Event</em>'.
@@ -382,15 +391,6 @@ public interface ScheduleFactory extends EFactory {
 	 * @generated
 	 */
 	GroupedCharterLengthEvent createGroupedCharterLengthEvent();
-
-	/**
-	 * Returns a new object of class '<em>Canal Booking Event</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Canal Booking Event</em>'.
-	 * @generated
-	 */
-	CanalBookingEvent createCanalBookingEvent();
 
 	/**
 	 * Returns a new object of class '<em>Inventory Events</em>'.
@@ -427,6 +427,60 @@ public interface ScheduleFactory extends EFactory {
 	 * @generated
 	 */
 	PaperDealAllocationEntry createPaperDealAllocationEntry();
+
+	/**
+	 * Returns a new object of class '<em>Lump Sum Details</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Lump Sum Details</em>'.
+	 * @generated
+	 */
+	LumpSumDetails createLumpSumDetails();
+
+	/**
+	 * Returns a new object of class '<em>Lump Sum Ballast Bonus Term Details</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Lump Sum Ballast Bonus Term Details</em>'.
+	 * @generated
+	 */
+	LumpSumBallastBonusTermDetails createLumpSumBallastBonusTermDetails();
+
+	/**
+	 * Returns a new object of class '<em>Lump Sum Repositioning Fee Term Details</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Lump Sum Repositioning Fee Term Details</em>'.
+	 * @generated
+	 */
+	LumpSumRepositioningFeeTermDetails createLumpSumRepositioningFeeTermDetails();
+
+	/**
+	 * Returns a new object of class '<em>Notional Journey Details</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Notional Journey Details</em>'.
+	 * @generated
+	 */
+	NotionalJourneyDetails createNotionalJourneyDetails();
+
+	/**
+	 * Returns a new object of class '<em>Notional Journey Ballast Bonus Term Details</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Notional Journey Ballast Bonus Term Details</em>'.
+	 * @generated
+	 */
+	NotionalJourneyBallastBonusTermDetails createNotionalJourneyBallastBonusTermDetails();
+
+	/**
+	 * Returns a new object of class '<em>Origin Port Repositioning Fee Term Details</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Origin Port Repositioning Fee Term Details</em>'.
+	 * @generated
+	 */
+	OriginPortRepositioningFeeTermDetails createOriginPortRepositioningFeeTermDetails();
 
 	/**
 	 * Returns the package supported by this factory.

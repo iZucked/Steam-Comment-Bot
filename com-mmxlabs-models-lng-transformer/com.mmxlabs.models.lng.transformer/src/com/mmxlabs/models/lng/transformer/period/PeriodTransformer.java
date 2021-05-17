@@ -54,7 +54,6 @@ import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
-import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -62,6 +61,9 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
+import com.mmxlabs.models.lng.commercial.EVesselTankState;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.Port;
@@ -376,7 +378,7 @@ public class PeriodTransformer {
 
 		output.getCargoModel().getVesselAvailabilities().addAll(newVesselAvailabilities);
 
-		trimSpotMarketCurves(periodRecord, output);
+		trimSpotMarketCurves(periodRecord, output, wholeScenarioDataProvider.getTypedScenario(LNGScenarioModel.class));
 
 		// Remove schedule model
 		output.getScheduleModel().setSchedule(null);
@@ -640,8 +642,7 @@ public class PeriodTransformer {
 
 				final CharterOutEvent charterOutEvent = (CharterOutEvent) event;
 				@NonNull
-				final
-				NonNullPair<InclusionType, Position> p = inclusionChecker.getObjectInclusionType(event, scheduledEventMap, periodRecord);
+				final NonNullPair<InclusionType, Position> p = inclusionChecker.getObjectInclusionType(event, scheduledEventMap, periodRecord);
 				if (p.getFirst() != InclusionType.In) {
 					charterOutEvent.getAllowedVessels().clear();
 					final VesselAvailability vesselAvailability = ((VesselAvailability) charterOutEvent.getVesselAssignmentType());
@@ -678,7 +679,7 @@ public class PeriodTransformer {
 				removed = true;
 			}
 			// DryDockEvent and MaintenanceEvent do not have a start or end heel. Include the preceeding cargo which does have heel to allow for some change.
-			if (removed == false && (event instanceof DryDockEvent || event instanceof MaintenanceEvent)) {
+			if (removed == false && (event instanceof DryDockEvent || event instanceof MaintenanceEvent || event instanceof CharterOutEvent)) {
 				final Pair<Set<Cargo>, Set<VesselEvent>> eventsAndCargoesToKeep = getDependenciesForEvent(schedule, event);
 				if (eventsAndCargoesToKeep != null) {
 					cargoesToKeep.addAll(eventsAndCargoesToKeep.getFirst());
@@ -780,7 +781,7 @@ public class PeriodTransformer {
 	 * @param endConditionMap
 	 * @param slotAllocationMap
 	 * @param lockedCargoes
-	 *                                    TODO
+	 *            TODO
 	 */
 	public void checkIfRemovedSlotsAreStillNeeded(final @NonNull Set<Slot<?>> seenSlots, final @NonNull Collection<Slot<?>> slotsToRemove, final @NonNull Collection<Cargo> cargoesToRemove,
 			final @NonNull List<VesselAvailability> newVesselAvailabilities, final @NonNull Map<AssignableElement, PortVisit> startConditionMap,
@@ -815,8 +816,8 @@ public class PeriodTransformer {
 						if (vesselAssignmentType instanceof VesselAvailability) {
 							final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
 							final VesselAvailability newVesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-							newVesselAvailability.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
-							newVesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+							newVesselAvailability.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+							newVesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 							newVesselAvailability.setVessel(vesselAvailability.getVessel());
 							newVesselAvailability.setCharterNumber(vesselAvailability.getCharterNumber());
 
@@ -1355,14 +1356,31 @@ public class PeriodTransformer {
 				vesselAvailability.getStartHeel().setMaxVolumeAvailable(0);
 				vesselAvailability.getStartHeel().setCvValue(0.0);
 				vesselAvailability.getStartHeel().setPriceExpression("");
-				vesselAvailability.setRepositioningFee("");
 			} else {
 				vesselAvailability.getStartHeel().setMinVolumeAvailable(heelAtStart);
 				vesselAvailability.getStartHeel().setMaxVolumeAvailable(heelAtStart);
 				vesselAvailability.getStartHeel().setCvValue(22.8);
 				vesselAvailability.getStartHeel().setPriceExpression("");
-				vesselAvailability.setRepositioningFee("");
 			}
+			
+			GenericCharterContract gcc = null;
+			boolean contained = false;
+			if (vesselAvailability.isCharterContractOverride()) {
+				gcc = vesselAvailability.getContainedCharterContract();
+				contained = true;
+			} else {
+				if (vesselAvailability.getGenericCharterContract() != null) {
+					final Copier copier = new Copier();
+					gcc = (GenericCharterContract) copier.copy(vesselAvailability.getGenericCharterContract());
+				}
+			}
+			if (gcc != null) {
+				gcc.setRepositioningFeeTerms(null);
+				if (!contained) {
+					vesselAvailability.setGenericCharterContract(gcc);
+				}
+			}
+			
 		}
 	}
 
@@ -1398,7 +1416,7 @@ public class PeriodTransformer {
 			vesselAvailability.setForceHireCostOnlyEndRule(false);
 
 			if (vesselAvailability.getEndHeel() == null) {
-				vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+				vesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 			}
 
 			// Set must arrive cold with target heel volume
@@ -1419,7 +1437,23 @@ public class PeriodTransformer {
 				vesselAvailability.getEndHeel().setPriceExpression("");
 				vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_WARM);
 			}
-			vesselAvailability.setBallastBonusContract(null);
+			GenericCharterContract gcc = null;
+			boolean contained = false;
+			if (vesselAvailability.isCharterContractOverride()) {
+				gcc = vesselAvailability.getContainedCharterContract();
+				contained = true;
+			} else {
+				if (vesselAvailability.getGenericCharterContract() != null) {
+					final Copier copier = new Copier();
+					gcc = (GenericCharterContract) copier.copy(vesselAvailability.getGenericCharterContract());
+				}
+			}
+			if (gcc != null) {
+				gcc.setBallastBonusTerms(null);
+				if (!contained) {
+					vesselAvailability.setGenericCharterContract(gcc);
+				}
+			}
 		}
 	}
 
@@ -1488,14 +1522,14 @@ public class PeriodTransformer {
 			final int heel = portVisit.getHeelAtStart();
 			if (heel > 0 || portVisit.getPreviousEvent() instanceof Cooldown) {
 				if (vesselAvailability.getEndHeel() == null) {
-					vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+					vesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 				}
 				vesselAvailability.getEndHeel().setMinimumEndHeel(heel);
 				vesselAvailability.getEndHeel().setMaximumEndHeel(heel);
 				vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
 			} else {
 				if (vesselAvailability.getEndHeel() == null) {
-					vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+					vesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 				}
 				vesselAvailability.getEndHeel().setMinimumEndHeel(0);
 				vesselAvailability.getEndHeel().setMaximumEndHeel(0);
@@ -1504,7 +1538,7 @@ public class PeriodTransformer {
 		}
 	}
 
-	public void trimSpotMarketCurves(@NonNull final PeriodRecord periodRecord, @NonNull final LNGScenarioModel scenario) {
+	public void trimSpotMarketCurves(@NonNull final PeriodRecord periodRecord, @NonNull final LNGScenarioModel scenario, LNGScenarioModel wholeScenario) {
 		final SpotMarketsModel spotMarketsModel = scenario.getReferenceModel().getSpotMarketsModel();
 		ZonedDateTime earliestDate = periodRecord.lowerBoundary;
 		ZonedDateTime latestDate = periodRecord.upperBoundary;
@@ -1517,7 +1551,26 @@ public class PeriodTransformer {
 				latestDate = earliestAndLatestTimes.getSecond();
 			}
 		}
-
+		
+		if (earliestDate == null) {
+			throw new IllegalStateException("Unable to find earliest scenario date");
+		}
+		if (latestDate == null) {
+			throw new IllegalStateException("Unable to find latest scenario date");
+		}
+		
+		if (wholeScenario != null) {
+			final Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTimesForWholeScenario = LNGScenarioUtils.findEarliestAndLatestTimes(wholeScenario);
+			// Make sure the spot markets do no start any earlier than in the parent scenario
+			if (earliestAndLatestTimesForWholeScenario.getFirst().isAfter(earliestDate)) {
+				earliestDate = earliestAndLatestTimesForWholeScenario.getFirst();
+			}
+			// Make sure the spot markets do no finish any later than in the parent scenario
+			if (earliestAndLatestTimesForWholeScenario.getSecond().isBefore(latestDate)) {
+				latestDate = earliestAndLatestTimesForWholeScenario.getSecond();
+			}
+		}
+		// Sanity re-check!
 		if (earliestDate == null) {
 			throw new IllegalStateException("Unable to find earliest scenario date");
 		}

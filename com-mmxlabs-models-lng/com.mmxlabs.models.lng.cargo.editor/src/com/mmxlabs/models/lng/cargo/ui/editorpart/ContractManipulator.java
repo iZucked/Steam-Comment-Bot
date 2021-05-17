@@ -34,6 +34,7 @@ import com.mmxlabs.models.lng.pricing.ui.autocomplete.ExpressionAnnotationConsta
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.autocomplete.AutoCompleteHelper;
 import com.mmxlabs.models.ui.editors.autocomplete.IMMXContentProposalProvider;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
@@ -53,7 +54,7 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 
 	private static final String NONE = "<None>";
 
-	private final EditingDomain editingDomain;
+	private final ICommandHandler commandHandler;
 
 	private final IReferenceValueProvider valueProvider;
 
@@ -76,10 +77,10 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 	 * @param editingDomain
 	 *            editing domain for setting
 	 */
-	public ContractManipulator(final IReferenceValueProviderProvider valueProvider, final EditingDomain editingDomain) {
+	public ContractManipulator(final IReferenceValueProviderProvider valueProvider, final ICommandHandler commandHandler) {
 
 		this.valueProvider = valueProvider.getReferenceValueProvider(CargoPackage.eINSTANCE.getSlot(), CargoPackage.eINSTANCE.getSlot_Contract());
-		this.editingDomain = editingDomain;
+		this.commandHandler = commandHandler;
 		labelProvider = new LabelProvider() {
 			@Override
 			public String getText(final Object element) {
@@ -149,6 +150,7 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 			protected Control createControl(Composite parent) {
 				Control control = super.createControl(parent);
 				this.proposalHelper = AutoCompleteHelper.createControlProposalAdapter(control, ExpressionAnnotationConstants.TYPE_COMMODITY);
+				EditingDomain editingDomain = commandHandler.getEditingDomain();
 				for (Resource r : editingDomain.getResourceSet().getResources()) {
 					for (EObject o : r.getContents()) {
 						if (o instanceof MMXRootObject) {
@@ -279,6 +281,8 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 		if (((currentValue == null) && (value == null)) || (((currentValue != null) && (value != null)) && currentValue.equals(value))) {
 			return;
 		}
+
+		EditingDomain editingDomain = commandHandler.getEditingDomain();
 		final Command command;
 		if (value == null) {
 			command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, CargoPackage.eINSTANCE.getSpotSlot_Market(), SetCommand.UNSET_VALUE));
@@ -291,7 +295,7 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 		if (extraCommandsHook != null) {
 			extraCommandsHook.applyExtraCommands(editingDomain, cmd, parent, object, value);
 		}
-		editingDomain.getCommandStack().execute(cmd);
+		commandHandler.handleCommand(cmd, (EObject) object, CargoPackage.eINSTANCE.getSpotSlot_Market());
 	}
 
 	private void runSetCommand(final Object object, final Contract value) {
@@ -299,6 +303,7 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 		if (((currentValue == null) && (value == null)) || (((currentValue != null) && (value != null)) && currentValue.equals(value))) {
 			return;
 		}
+		EditingDomain editingDomain = commandHandler.getEditingDomain();
 		final Command command;
 		if (value == null) {
 			command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, CargoPackage.eINSTANCE.getSlot_Contract(), SetCommand.UNSET_VALUE));
@@ -311,7 +316,7 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 		if (extraCommandsHook != null) {
 			extraCommandsHook.applyExtraCommands(editingDomain, cmd, parent, object, value);
 		}
-		editingDomain.getCommandStack().execute(cmd);
+		commandHandler.handleCommand(cmd, (EObject) object, CargoPackage.eINSTANCE.getSlot_Contract());
 	}
 
 	public void runSetCommand(final Object object, final String value) {
@@ -319,6 +324,8 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 		if (((currentValue == null) && (value == null)) || (((currentValue != null) && (value != null)) && currentValue.equals(value))) {
 			return;
 		}
+		EditingDomain editingDomain = commandHandler.getEditingDomain();
+
 		final Command command;
 		if (value != null && !value.isEmpty()) {
 			command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, CargoPackage.eINSTANCE.getSlot_PriceExpression(), value));
@@ -331,7 +338,7 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 		if (extraCommandsHook != null) {
 			extraCommandsHook.applyExtraCommands(editingDomain, cmd, parent, object, value);
 		}
-		editingDomain.getCommandStack().execute(cmd);
+		commandHandler.handleCommand(cmd, (EObject) object, CargoPackage.eINSTANCE.getSlot_PriceExpression());
 	}
 
 	@Override

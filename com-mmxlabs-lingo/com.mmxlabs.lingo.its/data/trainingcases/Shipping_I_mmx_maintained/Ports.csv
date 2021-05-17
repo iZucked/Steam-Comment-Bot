@@ -1,0 +1,265 @@
+name,shortName,capabilities,loadDuration,dischargeDuration,berths,cvValue,defaultStartTime,allowCooldown,defaultWindowSize,defaultWindowSizeUnits,minCvValue,maxCvValue,minVesselSize,maxVesselSize,location.name,location.otherNames,location.mmxId,location.timeZone,location.country,location.lat,location.lon,location.kind,kind
+Abu Dhabi,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Das Island,Das Island,L_AE_AbuDh,Asia/Dubai,United Arab Emirates,25.16,52.898,Location,Port
+Acajutla,,,0,0,1,0,7,false,24,HOURS,,,,,Acajutla,,L_SV_Acaju,America/El_Salvador,El Salvador,13.563,-89.842,Location,Port
+Ain Sokhna,,DISCHARGE,0,24,1,0,0,false,24,HOURS,,,,,Ain Sokhna,Ain Sukhna,L_EG_AinSo,Africa/Cairo,Egypt,29.575,32.408,Location,Port
+Aliaga,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Aliaga,Aliaga,L_TR_Aliag,Europe/Istanbul,Turkey,38.825,26.913,Location,Port
+Altamira,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Altamira,Altamira&#38;#44; Mexico,L_MX_Altam,America/Mexico_City,Mexico,22.48,-97.887,Location,Port
+Ambon,,,0,0,1,0,7,false,24,HOURS,,,,,Ambon,,L_ID_Ambon,Asia/Jayapura,Indonesia,-3.692,128.162,Location,Port
+Aqaba,,,0,0,1,0,7,false,24,HOURS,,,,,Aqaba,,L_JO_Aqaba,Asia/Amman,Jordan,29.507,34.988,Location,Port
+Arun,,,0,0,1,0,7,false,24,HOURS,,,,,Arun,"Arun LNG,Arun LNG Terminal",L_ID_Arun,Asia/Jakarta,Indonesia,5.219,97.1,Location,Port
+Arzew,,,0,0,1,0,7,false,24,HOURS,,,,,Arzew,,L_DZ_Arzew,Africa/Algiers,Algeria,35.85,-0.293,Location,Port
+Ashdod,,,0,0,1,0,7,false,24,HOURS,,,,,Ashdod,,L_IL_Ashdo,Asia/Jerusalem,Israel,31.827,34.638,Location,Port
+Bahia Blanca,,DISCHARGE,0,24,1,22.61,7,false,24,HOURS,,,,,Bahia Blanca,Bahia Blanca LNG Terminal,L_AR_Bahia,America/Buenos_Aires,Argentina,-38.788,-62.289,Location,Port
+Bahrain,,,0,0,1,0,7,false,24,HOURS,,,,,Bahrain,,L_BH_Bahra,Asia/Bahrain,Bahrain,26.167,50.682,Location,Port
+Bal Haf,,LOAD,24,0,1,22.8,7,false,24,HOURS,,,,,Bal Haf,Balhaf,L_YE_BalHa,Asia/Aden,Yemen,13.957,48.167,Location,Port
+Barcelona,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Barcelona,Barcelona LNG Terminal,L_ES_Barce,Europe/Madrid,Spain,41.342,2.163,Location,Port
+Batangas,,,0,0,1,0,7,false,24,HOURS,,,,,Batangas,,L_PH_Batan,Asia/Manila,Philippines,13.721,121.054,Location,Port
+Bethioua,,,0,0,1,0,7,false,24,HOURS,,,,,Bethioua,,L_DZ_Bethi,Africa/Algiers,Algeria,35.822,-0.25,Location,Port
+Bilbao,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Bilbao,"Bilbao LNG,Bilbao - LNG Terminal",L_ES_Bilba,Europe/Madrid,Spain,43.365,-3.095,Location,Port
+Bonny,,LOAD,24,0,1,23.47,7,false,24,HOURS,,,,,Bonny,"Bonny,Bonny Island LNG Terminal",L_NG_Bonny,Africa/Lagos,Nigeria,4.417,7.133,Location,Port
+Bontang,,LOAD,24,0,1,22.8,7,false,24,HOURS,,,,,Bontang,Bontang LNG,L_ID_Bonta,Asia/Makassar,Indonesia,0.097,117.48,Location,Port
+Brass,,,0,0,1,0,7,false,24,HOURS,,,,,Brass,Brass Terminal,L_NG_Brass,Africa/Lagos,Nigeria,4.093,6.325,Location,Port
+Brownsville,,,0,0,1,0,7,false,24,HOURS,,,,,Brownsville,,L_US_Brown,America/Chicago,United States,25.96,-97.377,Location,Port
+Cai Mep,,,0,0,1,0,7,false,24,HOURS,,,,,Cai Mep,,L_VN_CaiMe,Asia/Ho_Chi_Minh,Vietnam,10.532,107.024,Location,Port
+Cameron,,,0,0,1,0,7,false,24,HOURS,,,,,Cameron,Cameron LNG,L_US_Camer,America/Chicago,United States,30.038,-93.332,Location,Port
+Heibei,,,0,0,1,0,7,false,24,HOURS,,,,,Heibei,,L_CN_Heibe,Asia/Chongqing,China,38.917,118.55,Location,Port
+Cartagena,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Cartagena,"Cartagena LNG Terminal,Spain",L_ES_Carta,Europe/Madrid,Spain,37.573,-0.965,Location,Port
+Caucedo,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,AES Andres,AES Andres,L_DO_AESAn,America/Santo_Domingo,Dominican Republic,18.4,-69.615,Location,Port
+Chita,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Chita,Chita LNG,L_JP_Chita,Asia/Tokyo,Japan,34.972,136.818,Location,Port
+Chittagong,,,0,0,1,0,7,false,24,HOURS,,,,,Chittagong,,L_BD_Chitt,Asia/Dhaka,Bangladesh,22.308,91.805,Location,Port
+Chiwan,,,0,0,1,0,7,false,24,HOURS,,,,,Chiwan,,L_CN_Chiwa,Asia/Shanghai,China,22.462,113.882,Location,Port
+Coega,,,0,0,1,0,7,false,24,HOURS,,,,,Coega,,L_ZA_Coega,Africa/Johannesburg,South Africa,-33.803,25.692,Location,Port
+Colon&#44; Panama,,,0,0,1,0,7,false,24,HOURS,,,,,Colon,,L_CP_Colon,America/Panama,Panama,9.388,-79.919,Location,Port
+Coos Bay,,,0,0,1,0,7,false,24,HOURS,,,,,Coos Bay,,L_US_CoosB,America/Los_Angeles,United States,43.377,-124.3,Location,Port
+Corpus Christi,,,0,0,1,0,7,false,24,HOURS,,,,,Corpus Christi,,L_US_Corpu,America/Chicago,United States,27.813,-97.403,Location,Port
+Costa Azul,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Costa Azul,Costa Azul LNG Terminal,L_MX_Costa,America/Mexico_City,Mexico,31.988,-116.858,Location,Port
+Cove Point,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Cove Point,Dominion Cove Point LNG,L_US_CoveP,America/New_York,United States,38.405,-76.38,Location,Port
+Dabhol,,DISCHARGE,0,24,1,23.37,7,false,24,HOURS,,,,,Dabhol,Dabhol LNG,L_IN_Dabho,Asia/Calcutta,India,17.527,73.138,Location,Port
+Dahej,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Dahej,,L_IN_Dahej,Asia/Calcutta,India,21.673,72.5,Location,Port
+Dampier,,,0,0,1,0,7,false,24,HOURS,,,,,Dampier,,L_AU_Dampi,Australia/Perth,Australia,-20.648,116.673,Location,Port
+Dalian,,,0,0,1,23.21,7,false,24,HOURS,,,,,Dalian,Dalian - LNG Terminal,L_CN_Dalia,Asia/Chongqing,China,38.956,121.887,Location,Port
+Dangjin,,,0,0,1,0,7,false,24,HOURS,,,,,Dangjin,,L_KR_Dangj,Asia/Seoul,South Korea,36.915,126.235,Location,Port
+Dar-es-Salaam,,,0,0,1,0,7,false,24,HOURS,,,,,Dar-es-Salaam,,L_TZ_Dar-e,Africa/Dar_es_Salaam,Tanzania,-6.843,39.3,Location,Port
+Dili,,,0,0,1,0,7,false,24,HOURS,,,,,Dili,,L_TP_Dili,Asia/Dili,East Timor,-8.551,125.576,Location,Port
+Donghae,,,0,0,1,0,7,false,24,HOURS,,,,,Donghae,,L_KR_Dongh,Asia/Seoul,South Korea,37.495,129.14,Location,Port
+Dragon,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Dragon,Dragon LNG,L_GB_Drago,Europe/London,United Kingdom,51.699,-4.998,Location,Port
+Drovyanoy,,,0,0,1,0,7,false,24,HOURS,,,,,Drovyanoy,,L_RU_Drovy,Europe/Moscow,Russian Federation,72.4,72.846,Location,Port
+Dunkirk,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Dunkirk,Dunkirk&#38;#44; France,L_FR_Dunki,Europe/Paris,France,51.038,2.187,Location,Port
+Ennore,,,0,0,1,0,7,false,24,HOURS,,,,,Ennore,,L_IN_Ennor,Asia/Kolkata,India,13.262,80.342,Location,Port
+Escobar,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Escobar,Escobar LNG Terminal,L_AR_Escob,America/Cordoba,Argentina,-34.237,-58.763,Location,Port
+Everett,,,0,0,1,0,7,false,24,HOURS,,,,,Everett,"Everett Marine Terminal,Everett&#38;#44; Massachusetts&#38;#44; U.S.A.",L_US_Evere,America/New_York,United States,42.388,-71.062,Location,Port
+Teesport,,,0,0,1,0,7,false,24,HOURS,,,,,Teeside,"Excelerate LNG Terminal - Teesport,Teeside",L_GB_Teesi,Europe/London,United Kingdom,54.612,-1.155,Location,Port
+Falconara,,,0,0,1,0,7,false,24,HOURS,,,,,Falconara,,L_IT_Falco,Europe/Rome,Italy,43.65,13.4,Location,Port
+Ferrol,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,El Ferrol,El Ferrol,L_ES_ElFer,Europe/Madrid,Spain,43.472,-8.25,Location,Port
+Fort de France,,,0,0,1,0,7,false,24,HOURS,,,,,Fort de France,,L_MQ_Fortd,America/Martinique,Martinique,14.598,-61.073,Location,Port
+Fos - Cavaou,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Fos,Fos - Cavaou LNG Terminal,L_FR_FosCa,Europe/Paris,France,43.413,4.898,Location,Port
+Freeport,,,0,0,1,0,7,false,24,HOURS,,,,,Freeport,"Freeport LNG,Freeport LNG Terminal&#38;#44; Texas&#38;#44; U.S.A.",L_US_Freep,America/New_York,United States,28.939,-95.307,Location,Port
+Fujairah,,,0,0,1,0,7,false,24,HOURS,,,,,Fujairah,,L_AE_Fujai,Asia/Dubai,United Arab Emirates,25.18,56.362,Location,Port
+Fujian,,,0,0,1,0,7,false,24,HOURS,,,,,Fujian,Fujian LNG Terminal,L_CN_Fujia,Asia/Shanghai,China,25.211,118.997,Location,Port
+Futtsu,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Futtsu,,L_JP_Futts,Asia/Tokyo,Japan,35.342,139.82,Location,Port
+Gangavaram,,,0,0,1,0,7,false,24,HOURS,,,,,Gangavaram,,L_IN_Ganga,Asia/Kolkata,India,17.623,83.237,Location,Port
+Gioia Tauro,,,0,0,1,0,7,false,24,HOURS,,,,,Gioia Tauro,,L_IT_Gioia,Europe/Rome,Italy,38.442,15.898,Location,Port
+Gladstone,,LOAD,24,0,1,22.67,7,false,24,HOURS,,,,,Gladstone,"Gladstone GLNG Terminal,Gladstone LNG Terminal",L_AU_Glads,Australia/Brisbane,Australia,-23.806,151.218,Location,Port
+Golden Pass,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Golden Pass,Golden Pass LNG,L_US_Golde,America/Chicago,United States,29.765,-93.925,Location,Port
+Guanabara,,,0,0,1,23.89,7,false,24,HOURS,,,,,Guanabara,"Petrobras Guanabara LNG,Guanabara LNG Terminal",L_BR_Guana,America/Sao_Paulo,Brazil,-22.783,-43.133,Location,Port
+Guangdong,,,0,0,1,0,7,false,24,HOURS,,,,,Guangdong,Guangdong LNG Terminal,L_CN_Guang,Asia/Chongqing,China,22.574,114.43,Location,Port
+Guayama,,,0,0,1,0,7,false,24,HOURS,,,,,Guayama,,L_PR_Guaya,America/Puerto_Rico,Puerto Rico,17.908,-66.153,Location,Port
+Guayanilla,,,0,0,1,0,7,false,24,HOURS,,,,,Guayanilla,"Panuelas,Guayanilla LNG Terminal",L_PR_Penue,America/Puerto_Rico,Puerto Rico,17.973,-66.762,Location,Port
+Gwangyang,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Gwangyang,Gwangyang - LNG Terminal,L_KR_Gwang,Asia/Seoul,South Korea,34.883,127.795,Location,Port
+Hachinohe,,,0,0,1,0,7,false,24,HOURS,,,,,Hachinohe,,L_JP_Hachi,Asia/Tokyo,Japan,40.552,141.525,Location,Port
+Haikou,,,0,0,1,0,7,false,24,HOURS,,,,,Haikou,,L_CN_Haiko,Asia/Chongqing,China,20.027,110.278,Location,Port
+Halifax,,,0,0,1,0,7,false,24,HOURS,,,,,Halifax,,L_CA_Halif,America/Halifax,Canada,44.637,-63.542,Location,Port
+Hammerfest,,LOAD,24,0,1,22.8,7,false,24,HOURS,,,,,Hammerfest,"Hammerfest LNG,Hammerfest LNG Terminal - Melkoya Island",L_NO_Hamme,Europe/Oslo,Norway,70.683,23.6,Location,Port
+Hatsukaichi,,,0,0,1,0,7,false,24,HOURS,,,,,Hatsukaichi,,L_JP_Hatsu,Asia/Tokyo,Japan,34.342,132.357,Location,Port
+Hazira,,,0,0,1,0,7,false,24,HOURS,,,,,Hazira,Hazira - LNG Terminal,L_IN_Hazir,Asia/Calcutta,India,21.147,72.564,Location,Port
+Higashi-Ogishima,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Higashi-Ogishima,,L_JP_Higas,Asia/Tokyo,Japan,35.503,139.75,Location,Port
+Himeji,,DISCHARGE,0,24,1,23.45,7,false,24,HOURS,,,,,Himeji,,L_JP_Himej,Asia/Tokyo,Japan,34.764,134.686,Location,Port
+Hitachi,,,0,0,1,0,7,false,24,HOURS,,,,,Hitachi,,L_JP_Hitac,Asia/Tokyo,Japan,36.484,140.625,Location,Port
+Ho Chi Min City,,,0,0,1,0,7,false,24,HOURS,,,,,Ho Chi Min City,Ho Chi Min City (formerly Saigon),L_VN_HoChi,Asia/Ho_Chi_Minh,Vietnam,10.753,106.785,Location,Port
+Holyhead,,,0,0,1,0,7,false,24,HOURS,,,,,Holyhead,,L_GB_Holyh,Europe/London,United Kingdom,53.327,-4.608,Location,Port
+Huelva,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Huelva,Huelva LNG,L_ES_Huelv,Europe/Madrid,Spain,37.167,-6.91,Location,Port
+Idku,,,0,0,1,22.8,7,false,24,HOURS,,,,,Idku,Idku LNG,L_EG_Idku,Africa/Cairo,Egypt,31.37,30.295,Location,Port
+Inchon,,,0,0,1,0,7,false,24,HOURS,,,,,Incheon,"Incheon,Inchon - Soraepogu LNG Terminal",L_KR_Inche,Asia/Seoul,South Korea,37.505,126.6,Location,Port
+Ishikariwan-Shinko,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Otaru,Ishikariwan-Shinko,L_JP_Otaru,Asia/Tokyo,Japan,43.2,141.017,Location,Port
+Isle of Grain,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Isle of Grain,Isle of Grain Gas Terminal,L_GB_Isleo,Europe/London,United Kingdom,51.43,0.676,Location,Port
+Jebel Ali,,,0,0,1,22.76,7,false,24,HOURS,,,,,Jebel Ali,"Jebel Ali - Dubai,Jebel Ali - LNG Terminal",L_AE_Jebel,Asia/Dubai,United Arab Emirates,25.031,55.067,Location,Port
+Jiangsu,,,0,0,1,0,7,false,24,HOURS,,,,,Jiangsu,Jiangsu LNG Terminal,L_CN_Jiang,Asia/Chongqing,China,32.55,121.43,Location,Port
+Johore,,,0,0,1,0,7,false,24,HOURS,,,,,Johore,Johore LNG,L_MY_Johor,Asia/Kuala_Lumpur,Malaysia,1.457,103.777,Location,Port
+Jorf Lasfar,,,0,0,1,0,7,false,24,HOURS,,,,,Jorf Lasfar,,L_MA_JorfL,Africa/Casablanca,Morocco,33.128,-8.635,Location,Port
+Singapore,,,0,0,1,23.5,7,false,24,HOURS,,,,,Singapore,"Jurong Marine Base,Jurong Marine Base - Singapore,Jurong Island&#38;#44; Singapore",L_SG_Juron,Asia/Singapore,Singapore,1.3,103.683,Location,Port
+Kagoshima,,,0,0,1,0,7,false,24,HOURS,,,,,Kagoshima,Kagoshima - LNG Berths,L_JP_Kagos,Asia/Tokyo,Japan,31.483,130.53,Location,Port
+Kakinada,,,0,0,1,0,7,false,24,HOURS,,,,,Kakinada,Kakinada LNG,L_IN_Kakin,Asia/Kolkata,India,16.973,82.285,Location,Port
+Karachi,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Karachi,Karachi LNG,L_PK_Karac,Asia/Karachi,Pakistan,24.812,66.973,Location,Port
+Karwar,,,0,0,1,0,7,false,24,HOURS,,,,,Karwar - South Port,Karwar - South Port,L_IN_Karwa,Asia/Kolkata,India,14.77,74.137,Location,Port
+Khor al Zubair,,,0,0,1,0,7,false,24,HOURS,,,,,Khor al Zubair,,L_IQ_Khora,Asia/Baghdad,Iraq,30.197,47.886,Location,Port
+Kitakyushu,,,0,0,1,0,7,false,24,HOURS,,,,,Kitakyushu,Kitakyushu LNG,L_JP_Kitak,Asia/Tokyo,Japan,33.91,130.818,Location,Port
+Kitimat,,,0,0,1,0,7,false,24,HOURS,,,,,Kitimat,Kitimat LNG,L_CA_Kitim,America/Vancouver,Canada,53.988,-128.678,Location,Port
+Klaipeda,,,0,0,1,0,7,false,24,HOURS,,,,,Klaipeda,Klaipeda LNG,L_LT_Klaip,Europe/Vilnius,Lithuania,55.665,21.139,Location,Port
+Koper,,,0,0,1,0,7,false,24,HOURS,,,,,Koper,Koper LNG,L_SI_Koper,Europe/Ljubljana,Slovenia,45.558,13.733,Location,Port
+Kribi,,,0,0,1,0,7,false,24,HOURS,,,,,Kribi,Kribi LNG,L_CM_Kribi,Africa/Douala,Cameroon,2.942,9.893,Location,Port
+Krk Island,,,0,0,1,0,7,false,24,HOURS,,,,,Krk Island,,L_HR_KrkIs,Europe/Zagreb,Croatia,45.327,14.428,Location,Port
+Kushiro,,,0,0,1,0,7,false,24,HOURS,,,,,Kushiro,Kushiro LNG,L_JP_Kushi,Asia/Tokyo,Japan,42.992,144.337,Location,Port
+Lahad Datu,,,0,0,1,0,7,false,24,HOURS,,,,,Lahad Datu,,L_MY_Lahad,Asia/Kuching,Malaysia,5.02,118.328,Location,Port
+Lake Charles,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Lake Charles,Lake Charles - LNG Berths,L_US_LakeC,America/Chicago,United States,30.11,-93.29,Location,Port
+Le Havre,,,0,0,1,0,7,false,24,HOURS,,,,,Le Havre,,L_FR_LeHav,Europe/Paris,France,49.472,0.16,Location,Port
+Lianyungang,,,0,0,1,0,7,false,24,HOURS,,,,,Lianyungang,Lianyungang LNG,L_CN_Liany,Asia/Shanghai,China,34.75,119.45,Location,Port
+Limassol,,,0,0,1,0,7,false,24,HOURS,,,,,Limassol,Limassol LNG,L_CY_Limas,Africa/Cairo,Cyprus,34.648,33.021,Location,Port
+Limerick,,,0,0,1,0,7,false,24,HOURS,,,,,Limerick,Limerick LNG,L_IE_Limer,Europe/Dublin,Ireland,52.659,-8.646,Location,Port
+Livorno,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Livorno,Livorno LNG,L_IT_Livor,Europe/Rome,Italy,43.633,9.972,Location,Port
+Lumut,,LOAD,24,0,1,22.8,7,false,24,HOURS,,,,,Lumut,"Brunei LNG,Lumut Terminal&#38;#44; Brunei",L_BN_Lumut,Asia/Brunei,Brunei Darussalam,4.713,114.443,Location,Port
+Luwuk,,,0,0,1,0,7,false,24,HOURS,,,,,Luwuk,Luwuk LNG,L_ID_Luwuk,Asia/Makassar,Indonesia,-0.948,122.798,Location,Port
+Bintulu,,LOAD,24,0,1,22.67,7,false,24,HOURS,,,,,Bintulu,Bintulu LNG Terminal,L_MY_Bintu,Asia/Kuala_Lumpur,Malaysia,3.263,113.059,Location,Port
+Manzanillo,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Manzanillo,Manzanillo&#38;#44; Mexico,L_MX_Manza,America/Mexico_City,Mexico,19.058,-104.317,Location,Port
+Map Ta Phut,,,0,0,1,0,7,false,24,HOURS,,,,,Map Ta Phut,,L_TH_MapTa,Asia/Bangkok,Thailand,12.657,101.146,Location,Port
+Marmara Ereglisi,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Marmara Ereglisi,,L_TR_Marma,Europe/Istanbul,Turkey,40.972,27.962,Location,Port
+Marsa el Brega,,,0,0,1,0,7,false,24,HOURS,,,,,Marsa el Brega,,L_LY_Marsa,Africa/Tripoli,Libya,30.417,19.592,Location,Port
+Mejillones,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Mejillones,Mejillones - Terminal Maratimo,L_CL_Mejil,America/Santiago,Chile,-23.083,-70.417,Location,Port
+Mina Al-Ahmadi,MMA,DISCHARGE,0,24,1,22.55,7,false,24,HOURS,,,,,Mina Al Ahmadi,Mina Al-Ahmadi&#38;#44; Kuwait,L_KW_MinaA,Asia/Kuwait,Kuwait,29.067,48.167,Location,Port
+Mizushima,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Mizushima,Mizushima LNG,L_JP_Mizus,Asia/Tokyo,Japan,34.493,133.74,Location,Port
+Mombasa,,,0,0,1,0,7,false,24,HOURS,,,,,Mombasa,Mombasa LNG,L_KE_Momba,Africa/Nairobi,Kenya,-4.05,39.642,Location,Port
+Montevideo,,,0,0,1,0,7,false,24,HOURS,,,,,Montevideo,Montevideo LNG,L_UY_Monte,America/Montevideo,Uruguay,-34.901,-56.211,Location,Port
+Montoir,,DISCHARGE,24,24,1,22.8,7,false,24,HOURS,,,,,Montoir,Montoir Gas Terminal - Loire River,L_FR_Monto,Europe/Paris,France,47.298,-2.14,Location,Port
+Mossel Bay,,,0,0,1,0,7,false,24,HOURS,,,,,Mossel Bay,,L_ZA_Mosse,Africa/Johannesburg,South Africa,-34.178,22.147,Location,Port
+Mozambique Port,,,0,0,1,0,7,false,24,HOURS,,,,,Mozambique Port,,L_MZ_Mozam,Africa/Maputo,Mozambique,-15.041,40.787,Location,Port
+Mundra,,,0,0,1,0,7,false,24,HOURS,,,,,Mundra,Mundra LNG,L_IN_Mundr,Asia/Kolkata,India,22.727,69.707,Location,Port
+Nagasaki,,,0,0,1,0,7,false,24,HOURS,,,,,Nagasaki,Nagasaki LNG,L_JP_Nagas,Asia/Tokyo,Japan,32.738,129.863,Location,Port
+Nanao,,,0,0,1,0,7,false,24,HOURS,,,,,Nanao,Nanao LNG,L_JP_Nanao,Asia/Tokyo,Japan,37.072,137.002,Location,Port
+Joetsu,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Joetsu,Joetsu,L_JP_Joets,Asia/Kuching,Japan,37.193,138.252,Location,Port
+Negishi,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Negishi,Negishi LNG,L_JP_Negis,Asia/Tokyo,Japan,35.399,139.634,Location,Port
+New Plymouth,,,0,0,1,0,7,false,24,HOURS,,,,,New Plymouth,,L_NZ_NewPl,Pacific/Auckland,New Zealand,-39.055,174.038,Location,Port
+Niigata-Higashi,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Niigata Higashi,"Niigata-Higashi,Niigata",L_JP_Niiga,Asia/Tokyo,Japan,38.003,139.228,Location,Port
+Northeast Gateway,,,0,0,1,0,7,false,24,HOURS,,,,,Northeast Gateway,Northeast Gateway Deepwater Port,L_UM_North,America/Chicago,United States Minor Outlying Islands,42.405,-70.6,Location,Port
+Offshore Haldia No.1 (TA),,,0,0,1,0,7,false,24,HOURS,,,,,Haldia,,L_IN_Haldi,Asia/Kolkata,India,22.027,88.098,Location,Port
+Ohgishima,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Ohgishima,"Ogishima Tokyo Gas,Ogishima - Tokyo Gas LNG Berth",L_JP_Ohgis,Asia/Tokyo,Japan,35.462,139.72,Location,Port
+Oita,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Oita,Oita,L_JP_Oita,Asia/Tokyo,Japan,33.281,131.66,Location,Port
+Okinawa,,,0,0,1,0,7,false,24,HOURS,,,,,Okinawa,Okinawa LNG,L_JP_Okina,Asia/Tokyo,Japan,26.267,127.815,Location,Port
+Ortona,,,0,0,1,0,7,false,24,HOURS,,,,,Ortona,Ortona LNG,L_IT_Orton,Europe/Rome,Italy,42.353,14.417,Location,Port
+Paldiski South Harbour,,,0,0,1,0,7,false,24,HOURS,,,,,Paldiski,,L_EE_Paldi,Europe/Tallinn,Estonia,59.333,24.083,Location,Port
+Panjang,,,0,0,1,0,7,false,24,HOURS,,,,,Panjang,Panjang LNG,L_ID_Panja,Asia/Singapore,Indonesia,-5.47,105.315,Location,Port
+Pars,,,0,0,1,0,7,false,24,HOURS,,,,,Pars,Pars LNG Terminal,L_IR_ParsL,Asia/Tehran,Iran,27.517,52.513,Location,Port
+Pascagoula,,,0,24,1,0,7,false,24,HOURS,,,,,Pascagoula,"Pascagoula LNG Terminal,Gulf LNG Terminal - Pascagoula",L_US_Pasca,America/Chicago,United States,30.348,-88.567,Location,Port
+Pecem,,DISCHARGE,0,24,1,23.12,7,false,24,HOURS,,,,,Pecem,Petrobras Pecem LNG,L_BR_Pecem,America/Fortaleza,Brazil,-3.527,-38.8,Location,Port
+Pampa Melchorita,,,0,0,1,0,7,false,24,HOURS,,,,,Pampa Melchorita,Peru LNG Terminal,L_PE_Pampa,America/Lima,Peru,-13.26,-76.31,Location,Port
+Pipavav,,,0,0,1,0,7,false,24,HOURS,,,,,Pipavav,Pipavav LNG,L_IN_Pipav,Asia/Kolkata,India,20.916,71.509,Location,Port
+Plaquemines,,,0,0,1,0,7,false,24,HOURS,,,,,Plaquemines,Plaquemines LNG,L_US_Plaqu,America/Chicago,United States,29.477,-89.685,Location,Port
+Pluto,,LOAD,24,0,1,23.26,7,false,24,HOURS,,,,,Pluto,,L_AU_Pluto,Australia/Perth,Australia,-20.604,116.754,Location,Port
+Point Fortin,,LOAD,24,0,1,22.45,7,false,24,HOURS,,,,,Point Fortin,,L_TT_Point2,America/Port_of_Spain,Trinidad and Tobago,10.193,-61.7,Location,Port
+Pointe-a-Pitre,,,0,0,1,0,7,false,24,HOURS,,,,,Pointe-a-Pitre,Pointe-a-Pitre,L_TT_Point,America/Guadeloupe,Guadeloupe,16.233,-61.548,Location,Port
+Port Esquivel,,,0,0,1,0,7,false,24,HOURS,,,,,Port Esquivel,,L_JM_PortE,America/Jamaica,Jamaica,17.888,-77.13,Location,Port
+Port Moresby,,,0,0,1,0,7,false,24,HOURS,,,,,Port Moresby,,L_PG_PortM,Pacific/Port_Moresby,Papua New Guinea,-9.476,147.146,Location,Port
+Porto Empedocle,,,0,0,1,0,7,false,24,HOURS,,,,,Porto Empedocle,,L_IT_Porto,Europe/Rome,Italy,37.282,13.528,Location,Port
+Prigorodnoye,,LOAD,24,0,1,22.8,7,false,24,HOURS,,,,,Sakhalin,Sakhalin,L_RU_Sakha,Asia/Vladivostok,Russian Federation,46.619,142.899,Location,Port
+Prince Rupert,,,0,0,1,0,7,false,24,HOURS,,,,,Prince Rupert,,L_CA_Princ,America/Vancouver,Canada,54.322,-130.317,Location,Port
+Punta Europa,,LOAD,24,0,1,22.8,7,false,24,HOURS,,,,,Punta Europa,Punta Europa LNG Terminal,L_GQ_Punta,Africa/Malabo,Equatorial Guinea,3.783,8.697,Location,Port
+Pyeong Taek,,,0,0,1,0,7,false,24,HOURS,,,,,Pyeongtaek,"Pyeongtaek,Pyeong Taek LNG Terminal",L_KR_Pyeon,Asia/Seoul,South Korea,37.004,126.774,Location,Port
+Qalhat,,LOAD,24,0,1,22.8,7,false,24,HOURS,,,,,Qalhat,Qalhat,L_OM_Qalha,Asia/Qatar,Oman,22.667,59.413,Location,Port
+Qingdao,,,0,0,1,0,7,false,24,HOURS,,,,,Qingdao,Quingdao (formerly Tsingtao),L_CN_Qingd,Asia/Shanghai,China,36.094,120.317,Location,Port
+Qinhuangdao,,,0,0,1,0,7,false,24,HOURS,,,,,Qinhuangdao,Qinhuangdao LNG,L_CN_Qinhu,Asia/Shanghai,China,39.905,119.592,Location,Port
+Qinzhou,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Qinzhou,Qinzhou LNG,L_CN_Qinzh,Asia/Chongqing,China,21.717,108.583,Location,Port
+Quintero,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Quintero,Quintero Bay LNG,L_CL_Quint,America/Santiago,Chile,-32.748,-71.52,Location,Port
+Ras Laffan,,LOAD,24,0,1,22.8,7,false,24,HOURS,,,,,Ras Laffan,,L_QA_RasLa,Asia/Qatar,Qatar,25.93,51.607,Location,Port
+Revithoussa,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Revithoussa,Revithoussa LNG Terminal,L_GR_Revit,Europe/Athens,Greece,37.958,23.405,Location,Port
+Rio Grande,,,0,0,1,0,7,false,24,HOURS,,,,,Rio Grande,,L_BR_RioGr,America/Monterrey,Brazil,-32.079,-52.092,Location,Port
+Rosarito,,,0,0,1,0,7,false,24,HOURS,,,,,Rosarito,Rosarito LNG,L_MX_Rosar,America/Tijuana,Mexico,32.347,-117.104,Location,Port
+Rosignano,,,0,0,1,0,7,false,24,HOURS,,,,,Rosignano,,L_IT_Rosig,Europe/Rome,Italy,43.358,10.417,Location,Port
+Rostock,,,0,0,1,0,7,false,24,HOURS,,,,,Rostock,Rostock LNG,L_DE_Rosto,Europe/Berlin,Germany,54.158,12.103,Location,Port
+Rotterdam,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Rotterdam,Rotterdam LNG,L_NL_Rotte,Europe/Amsterdam,Netherlands,51.902,4.435,Location,Port
+Sabine Pass,,LOAD,24,0,1,22.53,7,false,24,HOURS,,,,,Sabine Pass,Sabine Pass LNG Terminal,L_US_Sabin,America/Chicago,United States,29.743,-93.871,Location,Port
+Sagunto,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Sagunto,Sagunto LNG Terminal,L_ES_Sagun,Europe/Madrid,Spain,39.637,-0.216,Location,Port
+Saint John,,,0,0,1,0,7,false,24,HOURS,,,,,Canaport,"Canaport,Canaport LNG",L_CA_Canap,America/Halifax,Canada,45.204,-65.98,Location,Port
+Sakai,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Sakai,Sakai,L_JP_Sakai,Asia/Tokyo,Japan,34.565,135.405,Location,Port
+Sakaide,,,0,0,1,0,7,false,24,HOURS,,,,,Sakaide,Sakaide LNG,L_JP_Sakai2,Asia/Tokyo,Japan,34.362,133.837,Location,Port
+Salvador,,,0,24,1,0,7,false,24,HOURS,,,,,Salvador,Salvador LNG,L_BR_Salva,America/Sao_Paulo,Brazil,-12.972,-38.537,Location,Port
+Santa Cruz de Tenerife,,,0,0,1,0,7,false,24,HOURS,,,,,Tenerife,Tenerife,L_YI_Tener,Atlantic/Canary,Canary Is.,28.483,-16.233,Location,Port
+Sao Francisco do Sul,,,0,0,1,0,7,false,24,HOURS,,,,,Sao Francisco do Sul,,L_BR_SaoFr,America/Sao_Paulo,Brazil,-26.236,-48.638,Location,Port
+Savannah,,,0,0,1,0,7,false,24,HOURS,,,,,Elba,,L_US_Elba,America/New_York,United States,32.088,-80.99,Location,Port
+Semarang,,,0,0,1,0,7,false,24,HOURS,,,,,Semarang,Semarang LNG,L_ID_Semar,Asia/Jakarta,Indonesia,-6.947,110.422,Location,Port
+Senboku,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Senboku,Senboku LNG,L_JP_Senbo,Asia/Tokyo,Japan,34.557,135.422,Location,Port
+Sendai,,,0,0,1,0,7,false,24,HOURS,,,,,Sendai,Sendai LNG,L_JP_Senda,Asia/Tokyo,Japan,38.27,141.033,Location,Port
+Shanghai,,,0,0,1,0,7,false,24,HOURS,,,,,Shanghai,Shanghai LNG,L_CN_Shang,Asia/Shanghai,China,31.258,121.543,Location,Port
+Shenzhen,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Shenzhen,Shenzhen LNG,L_CN_Shenz,Asia/Shanghai,China,22.443,113.884,Location,Port
+Shimizu,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Shimizu,Shimizu (Honshu),L_JP_Shimi,Asia/Tokyo,Japan,35.023,138.505,Location,Port
+Shinminato,,,0,0,1,0,7,false,24,HOURS,,,,,Shinminato,Shin-minato,L_JP_Shinm,Asia/Tokyo,Japan,36.77,137.115,Location,Port
+Sines,,DISCHARGE,0,24,1,22.52,7,false,24,HOURS,,,,,Sines,Sines LNG Terminal,L_PT_Sines,Europe/Lisbon,Portugal,37.936,-8.858,Location,Port
+Skikda,,,0,0,1,0,7,false,24,HOURS,,,,,Skikda,Skikda LNG,L_DZ_Skikd,Africa/Algiers,Algeria,36.887,6.94,Location,Port
+Sodegaura,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Sodegaura,Sodegaura LNG,L_JP_Sodeg,Asia/Tokyo,Japan,35.473,139.967,Location,Port
+Soma,,,0,0,1,0,7,false,24,HOURS,,,,,Soma,Soma LNG,L_JP_Soma,Asia/Tokyo,Japan,37.842,140.975,Location,Port
+South Hook,,,0,0,1,0,7,false,24,HOURS,,,,,South Hook,South Hook LNG Terminal,L_GB_South,Europe/London,United Kingdom,51.697,-5.08,Location,Port
+Soyo,,,0,0,1,0,7,false,24,HOURS,,,,,Soyo,Soyo Angola LNG Terminal,L_AO_Soyo,Africa/Luanda,Angola,-6.121,12.32,Location,Port
+Sungai Udang,,,0,0,1,0,7,false,24,HOURS,,,,,Sungai Udang,,L_MY_Sunga,Asia/Kuala_Lumpur,Malaysia,2.243,102.12,Location,Port
+Swinoujscie,,,0,0,1,0,7,false,24,HOURS,,,,,Swinoujscie,Swinoujscie LNG,L_PL_Swino,Europe/Lisbon,Poland,53.895,14.253,Location,Port
+Taichung,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Taichung,Taichung LNG,L_TW_Taich,Asia/Taipei,Taiwan,24.283,120.517,Location,Port
+Talcahuano,,,0,0,1,0,7,false,24,HOURS,,,,,Talcahuano,Talcahuano LNG,L_CL_Talca,America/Santiago,Chile,-36.705,-73.073,Location,Port
+Tangguh,,,0,0,1,0,7,false,24,HOURS,,,,,Tangguh,"Tangguh LNG,Tannguh",L_ID_Tangg,Asia/Jayapura,Indonesia,-2.423,133.127,Location,Port
+Taranto,,,0,0,1,0,7,false,24,HOURS,,,,,Taranto,Taranto LNG,L_IT_Taran,Europe/Rome,Italy,40.452,17.213,Location,Port
+Tianjin Lingang,,,0,0,1,0,7,false,24,HOURS,,,,,Tianjin (CNOOC),,L_CN_Tianj,Asia/Shanghai,China,38.938,117.812,Location,Port
+Tobata,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Tobata,Tobata LNG,L_JP_Tobat,Asia/Tokyo,Japan,33.92,130.863,Location,Port
+Tombak,,,0,0,1,0,7,false,24,HOURS,,,,,Tombak,"Iran,Tombak LNG Terminal",L_IR_Tomba,Asia/Tehran,Iran,27.717,52.167,Location,Port
+Tong Yong,,,0,0,1,0,7,false,24,HOURS,,,,,Tong Yong,,L_KR_TongY,Asia/Seoul,South Korea,34.949,128.437,Location,Port
+Trieste,,,0,0,1,0,7,false,24,HOURS,,,,,Trieste,Trieste LNG,L_IT_Tries,Europe/Rome,Italy,45.632,13.745,Location,Port
+Tripoli,,,0,0,1,0,7,false,24,HOURS,,,,,Tripoli,Tripoli&#38;#44; Lebanon,L_LB_Tripo,Asia/Beirut,Lebanon,34.488,35.853,Location,Port
+Vladivostok,,,0,0,1,0,7,false,24,HOURS,,,,,Vladivostok,Vladivostok LNG,L_RU_Vladi,Asia/Vladivostok,Russian Federation,43.108,131.887,Location,Port
+Vyborg,,,0,0,1,0,7,false,24,HOURS,,,,,Vyborg,Vyborg LNG,L_RU_Vybor,Europe/Moscow,Russian Federation,60.707,28.732,Location,Port
+Wakayama,,,0,0,1,0,7,false,24,HOURS,,,,,Wakayama,Wakayama LNG,L_JP_Wakay,Asia/Tokyo,Japan,34.21,135.138,Location,Port
+Darwin,,LOAD,24,0,1,22.8,7,false,24,HOURS,,,,,Darwin,"Wickham Point,Wickham Point LNG Terminal - Darwin",L_AU_Darwi,Australia/Darwin,Australia,-12.492,130.882,Location,Port
+Wilhelmshaven,,,0,0,1,0,7,false,24,HOURS,,,,,Wilhelmshaven,Wilhelmshaven LNG,L_DE_Wilhe,Europe/Berlin,Germany,53.533,8.163,Location,Port
+Yanai,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Yanai,Yanai LNG,L_JP_Yanai,Asia/Tokyo,Japan,33.95,132.133,Location,Port
+Yangshan,,,0,0,1,0,7,false,24,HOURS,,,,,Yangshan,Yangshan Deep Water Port,L_CN_Yangs,Asia/Shanghai,China,30.62,122.058,Location,Port
+Yokkaichi,,,0,24,1,23.47,7,false,24,HOURS,,,,,Yokkaichi,"Kawagoe,Yokkaichi - LNG",L_JP_Yokka,Asia/Tokyo,Japan,34.97,136.662,Location,Port
+Yung An,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Yung An,Yung An LNG Terminal,L_TW_YungA,Asia/Taipei,Taiwan,22.814,120.196,Location,Port
+Yuzhny,,,0,0,1,0,7,false,24,HOURS,,,,,Yuzhny,Yuzhny LNG,L_UA_Yuzhn,Europe/Kiev,Ukraine,46.615,31.02,Location,Port
+Zeebrugge,,DISCHARGE,0,24,1,0,7,false,24,HOURS,,,,,Zeebrugge,Zeebrugge LNG,L_BE_Zeebr,Europe/Brussels,Belgium,51.352,3.215,Location,Port
+Zhangjiagang,,,0,0,1,0,7,false,24,HOURS,,,,,Zhangjiagang,Zhangjiagang LNG,L_CN_Zhang,Asia/Shanghai,China,31.97,120.4,Location,Port
+Ningbo,,,0,0,1,0,0,false,1,DAYS,,,,,Ningbo,Ningbo,L_CN_Ningb,Asia/Shanghai,China,29.9,121.55,Location,Port
+Bei Hai,,,0,0,1,0,0,false,1,DAYS,,,,,Bei Hai,Beihai,L_CN_BeiHa,Asia/Shanghai,China,21.475,109.062,Location,Port
+Zhoushan,,,0,0,1,0,0,false,1,DAYS,,,,,Zhoushan,Ting Hai,L_CN_Zhous,Asia/Shanghai,China,30.007,122.095,Location,Port
+Jakarta,,,0,0,1,0,0,false,1,DAYS,,,,,Jakarta,Jakarta,L_ID_Jakar,Asia/Jakarta,Indonesia,-6.067,106.795,Location,Port
+Naoetsu,,,0,0,1,0,0,false,1,DAYS,,,,,Naoetsu,,L_JP_Naoet,Asia/Kuching,Japan,37.193,138.252,Location,Port
+Tabangao,,,0,0,1,0,0,false,1,DAYS,,,,,Tabangao,,L_PH_Taban,Asia/Manila,Philippines,13.721,121.054,Location,Port
+Samcheog,,,0,0,1,0,0,false,1,DAYS,,,,,Samcheog,"Samchok,Samcheok",L_KR_Samch,Asia/Seoul,South Korea,37.495,129.14,Location,Port
+Barrow Island,,,0,0,1,0,0,false,1,DAYS,,,,,Barrow Island,Gorgon,L_AU_Barro,Australia/Perth,Australia,-20.813,115.565,Location,Port
+Karratha,,,0,0,1,0,0,false,1,DAYS,,,,,Karratha,Withnell Bay,L_AU_Karra,Australia/Perth,Australia,-20.585,116.765,Location,Port
+Seria,,,0,0,1,0,0,false,1,DAYS,,,,,Seria,,L_BN_Seria,Asia/Brunei,Brunei Darussalam,4.715,114.325,Location,Port
+Quebec,,,0,0,1,0,0,false,1,DAYS,,,,,Quebec,,L_CA_Quebe,America/Toronto,Canada,46.827,-71.197,Location,Port
+Yuedong,,,0,0,1,0,0,false,1,DAYS,,,,,Yuedong,,L_CN_Yuedo,Asia/Chongqing,China,22.574,114.43,Location,Port
+Hainan,,,0,0,1,0,0,false,1,DAYS,,,,,Hainan,Hainan Strait,L_SP_Haina,Asia/Chongqing,China,20.183,110.365,Location,Port
+Caofeidian,,,0,0,1,0,0,false,1,DAYS,,,,,Caofeidian,Cao Fei Dian,L_CN_Caofe,Asia/Chongqing,China,38.917,118.55,Location,Port
+Tangshan,,,0,0,1,0,0,false,1,DAYS,,,,,Tangshan,,L_CN_Tangs,Asia/Chongqing,China,38.917,118.55,Location,Port
+Tianjin (Sinopec),,,0,0,1,0,0,false,1,DAYS,,,,,Tianjin (Sinopec),,L_CN_Tianj2,Asia/Shanghai,China,38.938,117.812,Location,Port
+Yangpu,,,0,0,1,0,0,false,1,DAYS,,,,,Yangpu,,L_CN_Yangp,Asia/Chongqing,China,19.72,109.182,Location,Port
+Zhuhai,,,0,0,1,0,0,false,1,DAYS,,,,,Zhuhai,,L_CN_Zhuha,Asia/Chongqing,China,22.239,113.585,Location,Port
+Puerto Bahia,,,0,0,1,0,0,false,1,DAYS,,,,,Puerto Bahia,Puerto Bahia,L_CO_Puert,America/Bogota,Colombia,10.293,-75.534,Location,Port
+Damietta,,,0,0,1,0,0,false,1,DAYS,,,,,Damietta,SEGAS,L_EG_Damie,Africa/Cairo,Egypt,31.467,31.758,Location,Port
+Suez,,,0,0,1,0,0,false,1,DAYS,,,,,Suez,,L_CP_Suez,Africa/Cairo,Egypt,29.835,32.553,Location,Port
+Fos Sur Mer,,,0,0,1,0,0,false,1,DAYS,,,,,Fos Sur Mer,Fos,L_FR_FosSu,Europe/Paris,France,43.45,4.855,Location,Port
+Gibraltar,,,0,0,1,0,0,false,1,DAYS,,,,,Gibraltar,Gibraltar,L_GI_Gibra,Europe/Gibraltar,Gibraltar,36.135,-5.365,Location,Port
+Kochi,,,0,0,1,0,0,false,1,DAYS,,,,,Kochi,Cochin,L_IN_Kochi,Asia/Calcutta,India,9.972,76.228,Location,Port
+Hadera,,,0,0,1,0,0,false,1,DAYS,,,,,Hadera,,L_IL_Hader,Asia/Tel_Aviv,Israel,32.467,34.738,Location,Port
+Panigaglia,,,0,0,1,0,0,false,1,DAYS,,,,,Panigaglia,La Spezia,L_IT_Panig,Europe/Rome,Italy,44.077,9.836,Location,Port
+Rovigo,,,0,0,1,0,0,false,1,DAYS,,,,,Rovigo,,L_IT_Rovig,Europe/Rome,Italy,45.092,12.592,Location,Port
+Fukuoko,,,0,0,1,0,0,false,1,DAYS,,,,,Fukuoko,Kumamoto,L_JP_Fukuo,Asia/Tokyo,Japan,32.76,130.588,Location,Port
+Hakodate,,,0,0,1,0,0,false,1,DAYS,,,,,Hakodate,,L_JP_Hakod,Asia/Tokyo,Japan,41.788,140.714,Location,Port
+Kawagoe,,,0,0,1,0,0,false,1,DAYS,,,,,Kawagoe,,L_JP_Kawag,Asia/Tokyo,Japan,34.997,136.697,Location,Port
+Niigata-Nishi,,,0,0,1,0,0,false,1,DAYS,,,,,Niigata-Nishi,Niigata Nishi,L_JP_Niiga2,Asia/Tokyo,Japan,37.945,139.067,Location,Port
+Osaka,,,0,0,1,0,0,false,1,DAYS,,,,,Osaka,Osaka,L_JP_Osaka,Asia/Tokyo,Japan,34.648,135.417,Location,Port
+Tokyo Bay,,,0,0,1,0,0,false,1,DAYS,,,,,Tokyo Bay,Tokyo,L_JP_Tokyo,Asia/Tokyo,Japan,35.603,139.775,Location,Port
+Yokohama,,,0,0,1,0,0,false,1,DAYS,,,,,Yokohama,Yokohama,L_JP_Yokoh,Asia/Tokyo,Japan,35.448,139.685,Location,Port
+Kwangyang,,,0,0,1,0,0,false,1,DAYS,,,,,Kwangyang,,L_KR_Kwang,Asia/Seoul,South Korea,34.883,127.795,Location,Port
+Malacca,,,0,0,1,0,0,false,1,DAYS,,,,,Malacca,,L_MY_Malac,Asia/Kuala_Lumpur,Malaysia,2.188,102.103,Location,Port
+Malta,,,0,0,1,0,0,false,1,DAYS,,,,,Malta,,L_MT_Malta,Europe/Malta,Malta,35.9,14.522,Location,Port
+Port Qasim,,,0,0,1,0,0,false,1,DAYS,,,,,Port Qasim,Port Qasim,L_PK_PortQ,Asia/Karachi,Pakistan,24.772,67.31,Location,Port
+Shtokman,,,0,0,1,0,0,false,1,DAYS,,,,,Shtokman,Murmansk,L_RU_Shtok,Europe/Moscow,Russian Federation,68.989,33.043,Location,Port
+Cape Town,,,0,0,1,0,0,false,1,DAYS,,,,,Cape Town,,L_ZA_CapeT,Africa/Johannesburg,South Africa,-33.91,18.433,Location,Port
+Port Arthur,,,0,0,1,0,0,false,1,DAYS,,,,,Port Arthur,Port Arthur&#38;#44; Texas&#38;#44; U.S.A.,L_US_PortA,America/Chicago,United States,29.862,-93.937,Location,Port
+Port Dolphin,,,0,0,1,0,0,false,1,DAYS,,,,,Port Dolphin,Tampa,L_US_PortD,America/New_York,United States,27.921,-82.425,Location,Port
+Kenai,,,0,0,1,0,0,false,1,DAYS,,,,,Kenai,Nikiski,L_US_Kenai,America/Anchorage,United States,60.677,-151.403,Location,Port
+Gulf Gateway,,,0,0,1,0,0,false,1,DAYS,,,,,Gulf Gateway,Gulf Gateway Deepwater Port,L_UM_GulfG,America/Chicago,United States Minor Outlying Islands,28.095,-93.022,Location,Port
+Neptune,,,0,0,1,0,0,false,1,DAYS,,,,,Neptune,Neptune Deepwater Port,L_UM_Neptu,America/New_York,United States Minor Outlying Islands,42.472,-70.605,Location,Port
+Port Said,,,0,0,1,0,0,false,1,DAYS,,,,,Port Said,,L_CP_PortS,Africa/Cairo,Egypt,31.42,32.402,Location,Port
+Balboa,,,0,0,1,0,0,false,1,DAYS,,,,,Balboa,,L_CP_Balbo,America/Panama,Panama,8.965,-79.575,Location,Port
+Boryeong,,,0,0,1,0,0,false,1,DAYS,,,,,Boryeong,,L_KR_Borye,Asia/Seoul,South Korea,35.995,126.709,Location,Port
+Onslow,,,0,0,1,0,0,false,1,DAYS,,,,,Onslow,Wheatstone,L_AU_Onslo,Australia/Perth,Australia,-21.625,115.096,Location,Port
+Hibiki,,,0,0,1,0,0,false,1,DAYS,,,,,Hibiki,Hibikinada,L_JP_Hibik,Asia/Tokyo,Japan,33.95,130.828,Location,Port
+Prelude FLNG,,,0,0,1,0,0,false,1,DAYS,,,,,Prelude FLNG,,L_AU_Prelu,Australia/Perth,Australia,-13.786,123.317,Location,Port
+Ichthys,,,0,0,1,0,0,false,1,DAYS,,,,,Ichthys,,L_AU_Ichth,Australia/Darwin,Australia,-12.492,130.882,Location,Port
+Bladin Point,,,0,0,1,0,0,false,1,DAYS,,,,,Bladin Point,,L_AU_Bladi,Australia/Darwin,Australia,-12.492,130.882,Location,Port

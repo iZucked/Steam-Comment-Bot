@@ -44,6 +44,10 @@ public class ExposureDataTransformer implements ISlotTransformer {
 	@Inject
 	@Named(SchedulerConstants.COMPUTE_EXPOSURES)
 	private boolean exposuresEnabled;
+	
+	@Inject
+	@Named(SchedulerConstants.EXPOSURES_CUTOFF_AT_PROMPT_START)
+	private boolean cutoffAtPromptStart;
 
 	@Override
 	public void slotTransformed(@NonNull Slot<?> modelSlot, @NonNull IPortSlot optimiserSlot) {
@@ -61,8 +65,11 @@ public class ExposureDataTransformer implements ISlotTransformer {
 		if (exposuresEnabled) {
 			if (lngScenarioModel != null && lngScenarioModel.getReferenceModel() != null) {
 				final PricingModel pricingModel = lngScenarioModel.getReferenceModel().getPricingModel();
-				if (pricingModel != null) {
+				if (pricingModel != null) {					
 					final ExposuresLookupData lookupData = new ExposuresLookupData();
+					if (lngScenarioModel.getPromptPeriodStart() != null && cutoffAtPromptStart) {
+						lookupData.cutoffDate = lngScenarioModel.getPromptPeriodStart();
+					}
 					pricingModel.getCommodityCurves().stream().filter(idx -> idx.getName() != null)//
 					.forEach(idx -> lookupData.commodityMap.put(idx.getName().toLowerCase(), new BasicCommodityCurveData(//
 									idx.getName().toLowerCase(), idx.getVolumeUnit(), idx.getCurrencyUnit(), idx.getExpression())));

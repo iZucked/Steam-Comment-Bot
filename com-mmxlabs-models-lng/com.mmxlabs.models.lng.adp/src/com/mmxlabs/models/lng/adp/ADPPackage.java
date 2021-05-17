@@ -2141,22 +2141,13 @@ public interface ADPPackage extends EPackage {
 	int MULL_ENTITY_ROW__DES_SALES_MARKET_ALLOCATION_ROWS = 3;
 
 	/**
-	 * The feature id for the '<em><b>Ports</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MULL_ENTITY_ROW__PORTS = 4;
-
-	/**
 	 * The feature id for the '<em><b>Sales Contract Allocation Rows</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MULL_ENTITY_ROW__SALES_CONTRACT_ALLOCATION_ROWS = 5;
+	int MULL_ENTITY_ROW__SALES_CONTRACT_ALLOCATION_ROWS = 4;
 
 	/**
 	 * The number of structural features of the '<em>Mull Entity Row</em>' class.
@@ -2165,7 +2156,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MULL_ENTITY_ROW_FEATURE_COUNT = 6;
+	int MULL_ENTITY_ROW_FEATURE_COUNT = 5;
 
 	/**
 	 * The number of operations of the '<em>Mull Entity Row</em>' class.
@@ -2379,13 +2370,22 @@ public interface ADPPackage extends EPackage {
 	int MULL_PROFILE__FULL_CARGO_LOT_VALUE = 3;
 
 	/**
+	 * The feature id for the '<em><b>Cargoes To Keep</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULL_PROFILE__CARGOES_TO_KEEP = 4;
+
+	/**
 	 * The number of structural features of the '<em>Mull Profile</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MULL_PROFILE_FEATURE_COUNT = 4;
+	int MULL_PROFILE_FEATURE_COUNT = 5;
 
 	/**
 	 * The number of operations of the '<em>Mull Profile</em>' class.
@@ -2443,6 +2443,52 @@ public interface ADPPackage extends EPackage {
 	int MULL_SUBPROFILE_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.MullCargoWrapperImpl <em>Mull Cargo Wrapper</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.MullCargoWrapperImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getMullCargoWrapper()
+	 * @generated
+	 */
+	int MULL_CARGO_WRAPPER = 37;
+
+	/**
+	 * The feature id for the '<em><b>Load Slot</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULL_CARGO_WRAPPER__LOAD_SLOT = 0;
+
+	/**
+	 * The feature id for the '<em><b>Discharge Slot</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULL_CARGO_WRAPPER__DISCHARGE_SLOT = 1;
+
+	/**
+	 * The number of structural features of the '<em>Mull Cargo Wrapper</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULL_CARGO_WRAPPER_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Mull Cargo Wrapper</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MULL_CARGO_WRAPPER_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.IntervalType <em>Interval Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2450,7 +2496,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getIntervalType()
 	 * @generated
 	 */
-	int INTERVAL_TYPE = 37;
+	int INTERVAL_TYPE = 38;
 
 
 	/**
@@ -2461,7 +2507,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getLNGVolumeUnit()
 	 * @generated
 	 */
-	int LNG_VOLUME_UNIT = 38;
+	int LNG_VOLUME_UNIT = 39;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.ADPModel <em>Model</em>}'.
@@ -3530,17 +3576,6 @@ public interface ADPPackage extends EPackage {
 	EReference getMullEntityRow_DesSalesMarketAllocationRows();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.adp.MullEntityRow#getPorts <em>Ports</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Ports</em>'.
-	 * @see com.mmxlabs.models.lng.adp.MullEntityRow#getPorts()
-	 * @see #getMullEntityRow()
-	 * @generated
-	 */
-	EReference getMullEntityRow_Ports();
-
-	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.adp.MullEntityRow#getSalesContractAllocationRows <em>Sales Contract Allocation Rows</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3648,6 +3683,17 @@ public interface ADPPackage extends EPackage {
 	EAttribute getMullProfile_FullCargoLotValue();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.adp.MullProfile#getCargoesToKeep <em>Cargoes To Keep</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Cargoes To Keep</em>'.
+	 * @see com.mmxlabs.models.lng.adp.MullProfile#getCargoesToKeep()
+	 * @see #getMullProfile()
+	 * @generated
+	 */
+	EReference getMullProfile_CargoesToKeep();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.MullSubprofile <em>Mull Subprofile</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3710,6 +3756,38 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getMullAllocationRow_Vessels();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.MullCargoWrapper <em>Mull Cargo Wrapper</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Mull Cargo Wrapper</em>'.
+	 * @see com.mmxlabs.models.lng.adp.MullCargoWrapper
+	 * @generated
+	 */
+	EClass getMullCargoWrapper();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.adp.MullCargoWrapper#getLoadSlot <em>Load Slot</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Load Slot</em>'.
+	 * @see com.mmxlabs.models.lng.adp.MullCargoWrapper#getLoadSlot()
+	 * @see #getMullCargoWrapper()
+	 * @generated
+	 */
+	EReference getMullCargoWrapper_LoadSlot();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.adp.MullCargoWrapper#getDischargeSlot <em>Discharge Slot</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Discharge Slot</em>'.
+	 * @see com.mmxlabs.models.lng.adp.MullCargoWrapper#getDischargeSlot()
+	 * @see #getMullCargoWrapper()
+	 * @generated
+	 */
+	EReference getMullCargoWrapper_DischargeSlot();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.adp.IntervalType <em>Interval Type</em>}'.
@@ -4619,14 +4697,6 @@ public interface ADPPackage extends EPackage {
 		EReference MULL_ENTITY_ROW__DES_SALES_MARKET_ALLOCATION_ROWS = eINSTANCE.getMullEntityRow_DesSalesMarketAllocationRows();
 
 		/**
-		 * The meta object literal for the '<em><b>Ports</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference MULL_ENTITY_ROW__PORTS = eINSTANCE.getMullEntityRow_Ports();
-
-		/**
 		 * The meta object literal for the '<em><b>Sales Contract Allocation Rows</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -4713,6 +4783,14 @@ public interface ADPPackage extends EPackage {
 		EAttribute MULL_PROFILE__FULL_CARGO_LOT_VALUE = eINSTANCE.getMullProfile_FullCargoLotValue();
 
 		/**
+		 * The meta object literal for the '<em><b>Cargoes To Keep</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MULL_PROFILE__CARGOES_TO_KEEP = eINSTANCE.getMullProfile_CargoesToKeep();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.MullSubprofileImpl <em>Mull Subprofile</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -4763,6 +4841,32 @@ public interface ADPPackage extends EPackage {
 		 * @generated
 		 */
 		EReference MULL_ALLOCATION_ROW__VESSELS = eINSTANCE.getMullAllocationRow_Vessels();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.MullCargoWrapperImpl <em>Mull Cargo Wrapper</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.adp.impl.MullCargoWrapperImpl
+		 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getMullCargoWrapper()
+		 * @generated
+		 */
+		EClass MULL_CARGO_WRAPPER = eINSTANCE.getMullCargoWrapper();
+
+		/**
+		 * The meta object literal for the '<em><b>Load Slot</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MULL_CARGO_WRAPPER__LOAD_SLOT = eINSTANCE.getMullCargoWrapper_LoadSlot();
+
+		/**
+		 * The meta object literal for the '<em><b>Discharge Slot</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MULL_CARGO_WRAPPER__DISCHARGE_SLOT = eINSTANCE.getMullCargoWrapper_DischargeSlot();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.IntervalType <em>Interval Type</em>}' enum.

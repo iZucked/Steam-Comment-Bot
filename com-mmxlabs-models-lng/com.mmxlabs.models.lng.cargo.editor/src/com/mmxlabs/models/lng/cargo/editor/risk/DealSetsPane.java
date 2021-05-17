@@ -264,7 +264,9 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 				final LNGScenarioModel scenarioModel = (LNGScenarioModel) inputElement;
 				final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
 				final List<DealSet> dealSets = cargoModel.getDealSets();
-				return dealSets.toArray();
+				if (dealSets != null) {
+					return dealSets.toArray();
+				}
 			}
 			return new Object[0];
 		}
@@ -344,7 +346,7 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 						final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
 						editorLock.lock();
 						try {
-							getJointModelEditorPart().setDisableUpdates(true);
+							getScenarioEditingLocation().setDisableUpdates(true);
 							
 							if (getLastSelection() instanceof TreeSelection) {
 								final TreeSelection ts = (TreeSelection) getLastSelection();
@@ -384,7 +386,7 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 							}
 						} finally {
 							editorLock.unlock();
-							getJointModelEditorPart().setDisableUpdates(false);
+							getScenarioEditingLocation().setDisableUpdates(false);
 						}
 					}
 

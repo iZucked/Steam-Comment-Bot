@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.commercial.BallastBonusCharterContract;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 
 public class VesselAvailabilityOverrideTests {
@@ -27,44 +27,9 @@ public class VesselAvailabilityOverrideTests {
 		LegalEntity le = CommercialFactory.eINSTANCE.createLegalEntity();
 		le.setName(TEST_ENTITY);
 		va.setEntity(le);
-		BallastBonusCharterContract bbc = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
-		va.setCharterContract(bbc);
+		GenericCharterContract bbc = CommercialFactory.eINSTANCE.createGenericCharterContract();
+		va.setGenericCharterContract(bbc);
 		assertEquals(TEST_ENTITY, va.getCharterOrDelegateEntity().getName());
 	}
-	
-	@Test
-	public void testRepositioningFeeOnVA() {
-		VesselAvailability va = CargoFactory.eINSTANCE.createVesselAvailability();
-		BallastBonusCharterContract bbc = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
-		va.setCharterContract(bbc);
-		va.setRepositioningFee(VA_REPOSITIONING_FEE);
-		assertEquals(VA_REPOSITIONING_FEE, va.getCharterOrDelegateRepositioningFee());		
-	}
 
-	@Test
-	public void testRepositioningFeeOnBBCC() {
-		VesselAvailability va = CargoFactory.eINSTANCE.createVesselAvailability();
-		BallastBonusCharterContract bbc = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
-		bbc.setRepositioningFee(BBC_REPOSITIONING_FEE);
-		va.setCharterContract(bbc);
-		assertEquals(BBC_REPOSITIONING_FEE, va.getCharterOrDelegateRepositioningFee());				
-	}
-	
-	@Test
-	public void testRepositioningFeeOnBothVABBCC() {
-		VesselAvailability va = CargoFactory.eINSTANCE.createVesselAvailability();
-		BallastBonusCharterContract bbc = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
-		bbc.setRepositioningFee(BBC_REPOSITIONING_FEE);
-		va.setCharterContract(bbc);
-		va.setRepositioningFee(VA_REPOSITIONING_FEE);
-		assertEquals(VA_REPOSITIONING_FEE, va.getCharterOrDelegateRepositioningFee());						
-	}
-	
-	@Test
-	public void testNoRepositioningFee() {
-		VesselAvailability va = CargoFactory.eINSTANCE.createVesselAvailability();
-		BallastBonusCharterContract bbc = CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract();
-		va.setCharterContract(bbc);
-		assertEquals(null, va.getCharterOrDelegateRepositioningFee());						
-	}
 }

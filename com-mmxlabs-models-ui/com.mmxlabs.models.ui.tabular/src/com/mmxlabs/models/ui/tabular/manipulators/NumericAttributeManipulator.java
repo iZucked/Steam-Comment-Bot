@@ -12,7 +12,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.edit.command.SetCommand;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.nebula.widgets.formattedtext.DoubleFormatter;
 import org.eclipse.nebula.widgets.formattedtext.FloatFormatter;
@@ -27,6 +26,7 @@ import com.mmxlabs.models.ui.NumberFormatterFactory.ExtendedDoubleFormatter;
 import com.mmxlabs.models.ui.NumberFormatterFactory.ExtendedFloatFormatter;
 import com.mmxlabs.models.ui.NumberFormatterFactory.ExtendedIntegerFormatter;
 import com.mmxlabs.models.ui.NumberFormatterFactory.ExtendedLongFormatter;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 
 /**
  * @author hinton
@@ -35,14 +35,14 @@ import com.mmxlabs.models.ui.NumberFormatterFactory.ExtendedLongFormatter;
 public class NumericAttributeManipulator extends BasicAttributeManipulator {
 
 	private final EDataType type;
-	private Object defaultValue;
+	protected Object defaultValue;
 
 	private NumberFormatter formatter;
 	private int scale = 1;
 	private Object input;
 
-	public NumericAttributeManipulator(final EStructuralFeature feature, final EditingDomain editingDomain) {
-		super(feature, editingDomain);
+	public NumericAttributeManipulator(final EStructuralFeature feature, final ICommandHandler commandHandler) {
+		super(feature, commandHandler);
 		type = (EDataType) feature.getEType();
 
 		final EAnnotation annotation = feature.getEAnnotation("http://www.mmxlabs.com/models/ui/numberFormat");

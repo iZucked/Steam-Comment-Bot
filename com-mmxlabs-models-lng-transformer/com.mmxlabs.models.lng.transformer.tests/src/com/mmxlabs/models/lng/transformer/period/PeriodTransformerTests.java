@@ -37,6 +37,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -810,8 +811,8 @@ public class PeriodTransformerTests {
 
 		{
 			final VesselAvailability vesselAvailability1 = CargoFactory.eINSTANCE.createVesselAvailability();
-			vesselAvailability1.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
-			vesselAvailability1.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+			vesselAvailability1.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+			vesselAvailability1.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 
 			transformer.updateStartConditions(vesselAvailability1, assignedObject1, startConditionMap, mapping);
 			transformer.updateStartConditions(vesselAvailability1, assignedObject2, startConditionMap, mapping);
@@ -826,8 +827,8 @@ public class PeriodTransformerTests {
 		// Same again, but reverse order. Should yield same result as before.
 		{
 			final VesselAvailability vesselAvailability2 = CargoFactory.eINSTANCE.createVesselAvailability();
-			vesselAvailability2.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
-			vesselAvailability2.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+			vesselAvailability2.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+			vesselAvailability2.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 
 			transformer.updateStartConditions(vesselAvailability2, assignedObject3, startConditionMap, mapping);
 			transformer.updateStartConditions(vesselAvailability2, assignedObject2, startConditionMap, mapping);
@@ -881,8 +882,8 @@ public class PeriodTransformerTests {
 
 		{
 			final VesselAvailability vesselAvailability1 = CargoFactory.eINSTANCE.createVesselAvailability();
-			vesselAvailability1.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
-			vesselAvailability1.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+			vesselAvailability1.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+			vesselAvailability1.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 
 			transformer.updateEndConditions(vesselAvailability1, assignedObject1, endConditionMap, mapping);
 			transformer.updateEndConditions(vesselAvailability1, assignedObject2, endConditionMap, mapping);
@@ -895,8 +896,8 @@ public class PeriodTransformerTests {
 		// Same again, but reverse order. Should yield same result as before.
 		{
 			final VesselAvailability vesselAvailability2 = CargoFactory.eINSTANCE.createVesselAvailability();
-			vesselAvailability2.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
-			vesselAvailability2.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+			vesselAvailability2.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+			vesselAvailability2.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 
 			transformer.updateEndConditions(vesselAvailability2, assignedObject3, endConditionMap, mapping);
 			transformer.updateEndConditions(vesselAvailability2, assignedObject2, endConditionMap, mapping);
@@ -2025,7 +2026,8 @@ public class PeriodTransformerTests {
 		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
 		scenarioModel.getReferenceModel().setSpotMarketsModel(PeriodTestUtils.createSpotMarkets(scenarioModel, "testSpots"));
 
-		transformer.trimSpotMarketCurves(periodRecord, scenarioModel);
+		// Second scenario should really be different.
+		transformer.trimSpotMarketCurves(periodRecord, scenarioModel, null);
 
 		for (SpotMarketGroup group : new SpotMarketGroup[] { scenarioModel.getReferenceModel().getSpotMarketsModel().getDesPurchaseSpotMarket(),
 				scenarioModel.getReferenceModel().getSpotMarketsModel().getDesSalesSpotMarket(), scenarioModel.getReferenceModel().getSpotMarketsModel().getFobPurchasesSpotMarket(),

@@ -22,7 +22,7 @@ import com.mmxlabs.scenario.service.model.util.encryption.impl.CachingSharedCiph
  * Small util class decrypt and extract the contents of a .lingo file. Remember to ensure the keyfile is correctly linked up. E.g. by adding the following system property;
  * 
  * <pre>
- * -Dlingo.enc.keyfile=${system_property:user.home}/mmxlabs/keyfiles/<CLIENT_CODE>/lingo.data
+ * -Dlingo.enc.keyfile=${system_property:user.home}/mmxlabs/keyfiles/<CLIENT_CODE>/lingo.pks
  * </pre>
  */
 public class LiNGODecrypter {

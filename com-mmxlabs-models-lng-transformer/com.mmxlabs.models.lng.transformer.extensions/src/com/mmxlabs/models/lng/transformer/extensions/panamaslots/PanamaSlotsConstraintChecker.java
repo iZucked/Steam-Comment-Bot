@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.transformer.extensions.panamaslots;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -16,9 +17,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.inject.Inject;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
-import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IInitialSequencesConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -28,16 +27,14 @@ import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider.RouteOptionDirection;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.schedule.PanamaBookingHelper;
 import com.mmxlabs.scheduler.optimiser.scheduling.ScheduledTimeWindows;
 import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.PanamaPeriod;
 
 /**
- * An implementation of {@link IConstraintChecker} to forbid certain {@link ISequenceElement} pairings
- * 
+ * Prevents new, Panama only routes without bookings, being introduced into the solution, which are not present in the initial solution
+ * where there is not sufficient slack in the schedule to wait at the Panama crossing for the prescribed number of waiting days.
  */
 public class PanamaSlotsConstraintChecker implements IInitialSequencesConstraintChecker {
 
@@ -81,75 +78,51 @@ public class PanamaSlotsConstraintChecker implements IInitialSequencesConstraint
 
 	public boolean checkConstraints(final ISequences sequences, final boolean initialState, final List<String> messages) {
 
+		//We only need basic time scheduling with canal trimming on.
 		scheduler.setUseCanalBasedWindowTrimming(true);
 		scheduler.setUsePriceBasedWindowTrimming(false);
-		//We only need basic time scheduling otherwise will be slow.
 		scheduler.setUsePNLBasedWindowTrimming(false);
 		
 		final ScheduledTimeWindows schedule = scheduler.calculateTrimmedWindows(sequences);
 
 		final Map<IResource, List<IPortTimeWindowsRecord>> trimmedWindows = schedule.getTrimmedTimeWindowsMap();
 
+		// For now, we don't need to check this constraint + above left for client runtime buffering,
+		// in case in future we need to re-enable this or similar logic, as per Simon.
+		if (true) {
+			return true;
+		}
+		
 		final Set<IPortSlot> currentUnbookedSlotsNorthbound = new HashSet<>();
-		final Set<IPortSlot> currentUnbookedSlotsNorthboundInRelaxed = new HashSet<>();
 		final Set<IPortSlot> currentUnbookedSlotsSouthbound = new HashSet<>();
-		final Set<IPortSlot> currentUnbookedSlotsSouthboundInRelaxed = new HashSet<>();
-
-		LOOP_RESOURCE: for (int r = 0; r < sequences.getResources().size(); r++) {
+		final Map<IPortSlot, IPortTimeWindowsRecord> portSlotToTimeWindowsRecord = new HashMap<>();
+		
+		for (int r = 0; r < sequences.getResources().size(); r++) {
 			final IResource resource = sequences.getResources().get(r);
 			final ISequence sequence = sequences.getSequence(resource);
 
-			// skip resources that are not scheduled
-			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-			// Skip invalid resources
-			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE //
-					|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE //
-					|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
-				continue;
-			}
+			// skip resources that are not scheduled, invalid resources
+			// (+filter out solutions with less than 2 elements i.e. spot charters, etc.)
+			if (realShippedVoyage(resource) && possiblePanamaJourney(sequence)) {
 
-			// filters out solutions with less than 2 elements (i.e. spot charters, etc.)
-			if (sequence.size() < 2) {
-				continue;
-			}
+				final List<IPortTimeWindowsRecord> records = trimmedWindows.get(resource);
+				for (final IPortTimeWindowsRecord record : records) {
+					for (final IPortSlot slot : record.getSlots()) {
+						
+						 // can only go through Panama and we do not have a booking
+						if (record.getSlotNextVoyageOptions(slot) == AvailableRouteChoices.PANAMA_ONLY &&
+							record.getRouteOptionBooking(slot) == null) { 
+								
+							// Get the direction.
+							final boolean usesNorthBoundDirection = distanceProvider.getRouteOptionDirection(slot.getPort(), ERouteOption.PANAMA) == RouteOptionDirection.NORTHBOUND;
 
-			final List<IPortTimeWindowsRecord> records = trimmedWindows.get(resource);
-			for (final IPortTimeWindowsRecord record : records) {
-				for (final IPortSlot slot : record.getSlots()) {
-					// TODO - fill in details
-					// note return slot not used in same way!
-					if (record.getSlotNextVoyageOptions(slot) != AvailableRouteChoices.PANAMA_ONLY) {
-						// not going through Panama, ignore
-						continue;
-					}
-					if (record.getRouteOptionBooking(slot) != null) {
-						// We have a booking, so ignore
-						continue;
-					}
-
-					final PanamaPeriod panamaPeriod = record.getSlotNextVoyagePanamaPeriod(slot);
-					if (panamaPeriod == PanamaPeriod.Relaxed || panamaPeriod == PanamaPeriod.Strict) {
-
-						final boolean usesNorthBoundDirection = distanceProvider.getRouteOptionDirection(slot.getPort(), ERouteOption.PANAMA) == RouteOptionDirection.NORTHBOUND;
-
-						if (panamaPeriod == PanamaPeriod.Relaxed) {
-							// Record relaxed period slots
+							// Record the slot without a booking.
 							if (usesNorthBoundDirection) {
-								currentUnbookedSlotsNorthboundInRelaxed.add(slot);
+								currentUnbookedSlotsNorthbound.add(slot);
 							} else {
-								currentUnbookedSlotsSouthboundInRelaxed.add(slot);
+								currentUnbookedSlotsSouthbound.add(slot);
 							}
 						}
-						// All slots, relaxed and strict
-						if (usesNorthBoundDirection) {
-							currentUnbookedSlotsNorthbound.add(slot);
-						} else {
-							currentUnbookedSlotsSouthbound.add(slot);
-						}
-					}
-					if (panamaPeriod == PanamaPeriod.Beyond) {
-						// Anything else after this voyage should also be beyond
-						continue LOOP_RESOURCE;
 					}
 				}
 			}
@@ -158,67 +131,19 @@ public class PanamaSlotsConstraintChecker implements IInitialSequencesConstraint
 		if (!initialState) {
 			assert unbookedSlotsNorthbound != null;
 			assert unbookedSlotsSouthbound != null;
-
-			//////// strict constraint
-			// Remove white list
+			
+			//Remove white listed violations present in initial solution.
 			currentUnbookedSlotsNorthbound.removeAll(unbookedSlotsNorthbound);
-			// Remove relaxed bookings
-			currentUnbookedSlotsNorthbound.removeAll(currentUnbookedSlotsNorthboundInRelaxed);
+		
 			if (!currentUnbookedSlotsNorthbound.isEmpty()) {
-				messages.add(String.format("%s: there are some unbooked northbound slots!", this.name));
 				return false;
 			}
-			// Remove white list
+			
+			//Remove white listed violations present in initial solution.
 			currentUnbookedSlotsSouthbound.removeAll(unbookedSlotsSouthbound);
-			// Remove relaxed bookings
-			currentUnbookedSlotsSouthbound.removeAll(currentUnbookedSlotsSouthboundInRelaxed);
+
 			if (!currentUnbookedSlotsSouthbound.isEmpty()) {
-				messages.add(String.format("%s: there are some unbooked southbound slots!", this.name));
 				return false;
-			}
-
-			//////// relaxed constraint
-			final boolean northboundIsValid;
-			final boolean southboundIsValid;
-			{
-				// Total northbound slots in relaxed period.
-				final int countBeforeNorthbound = currentUnbookedSlotsNorthboundInRelaxed.size(); // 0
-
-				// Remove all initially seen slots (use all slots in case something has moved between strict and relaxed)
-				currentUnbookedSlotsNorthboundInRelaxed.removeAll(unbookedSlotsNorthbound);
-
-				// New count is the new stuff we have not seen before
-				final int countAfterNorthbound = currentUnbookedSlotsNorthboundInRelaxed.size(); // 0
-
-				// The delta is the number "whitelisted" slots from the initial solution
-				final int whitelistedSlotCountNorthbound = (countBeforeNorthbound - countAfterNorthbound); // 6
-
-				// What is out upper limit?
-//				final int relaxedSlotCountNorthbound = panamaSlotsProvider.getRelaxedBookingCountNorthbound(); // 5
-
-				// Calculate the adjusted upper bound. Total flex, minus the previously seen stuff. This gives us the remaining flex for new slots. This may be negative meaning we have no further
-				// flex.
-//				final int adjustedFlexCountNorthbound = relaxedSlotCountNorthbound - whitelistedSlotCountNorthbound; // -1
-
-				// If count is zero, then there are no new slots in the relaxed period over the initial solution => accept.
-				// Otherwise if the current excess is less than or equal to the adjusted flex => accept.
-//				northboundIsValid = countAfterNorthbound == 0 || countAfterNorthbound <= adjustedFlexCountNorthbound;
-			}
-			if (!PanamaBookingHelper.isSouthboundIdleTimeRuleEnabled()) {
-				//OLD southbound rule.
-				final int countBeforeSouthbound = currentUnbookedSlotsSouthboundInRelaxed.size(); // 0
-				currentUnbookedSlotsSouthboundInRelaxed.removeAll(unbookedSlotsSouthbound);
-				final int countAfterSouthbound = currentUnbookedSlotsSouthboundInRelaxed.size(); // 0
-				final int whitelistedSlotCountSouthbound = (countBeforeSouthbound - countAfterSouthbound); // 6
-
-				final int relaxedSlotCountSouthbound = panamaSlotsProvider.getRelaxedBookingCountSouthbound(); // 5
-				final int adjustedCountSouthbound = relaxedSlotCountSouthbound - whitelistedSlotCountSouthbound; // -1
-
-				southboundIsValid = countAfterSouthbound == 0 || countAfterSouthbound <= adjustedCountSouthbound;
-				if(!southboundIsValid)
-					messages.add(String.format("%s: Panama booking count error!", this.name));
-//			return northboundIsValid && southboundIsValid;
-				return southboundIsValid;
 			}
 			
 		} else {
@@ -226,5 +151,19 @@ public class PanamaSlotsConstraintChecker implements IInitialSequencesConstraint
 			unbookedSlotsSouthbound = currentUnbookedSlotsSouthbound;
 		}
 		return true;
+	}
+	
+	private boolean realShippedVoyage(final IResource resource) {
+		// skip resources that are not scheduled
+		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+
+		return !(vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE //
+				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE //
+				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP);
+	}
+	
+	private boolean possiblePanamaJourney(final ISequence sequence) {
+		// filters out solutions with less than 2 elements (i.e. spot charters, etc.)
+		return sequence.size() > 1;
 	}
 }

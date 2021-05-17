@@ -5,25 +5,13 @@
 package com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 
 public class PartialCaseContentProvider implements ITreeContentProvider {
 
 	@Override
-	public void dispose() {
-
-	}
-
-	@Override
-	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-
-	}
-
-	@Override
 	public Object[] getElements(final Object inputElement) {
-
 		if (inputElement instanceof OptionAnalysisModel) {
 			final OptionAnalysisModel model = (OptionAnalysisModel) inputElement;
 			return model.getPartialCase().getPartialCase().toArray();

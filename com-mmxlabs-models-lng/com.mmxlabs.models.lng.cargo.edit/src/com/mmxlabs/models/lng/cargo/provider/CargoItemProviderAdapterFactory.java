@@ -27,6 +27,7 @@ import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
+import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.util.CargoAdapterFactory;
 
@@ -360,52 +361,6 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 		}
 
 		return vesselTypeGroupItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.EndHeelOptions} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected EndHeelOptionsItemProvider endHeelOptionsItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.EndHeelOptions}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createEndHeelOptionsAdapter() {
-		if (endHeelOptionsItemProvider == null) {
-			endHeelOptionsItemProvider = new EndHeelOptionsItemProvider(this);
-		}
-
-		return endHeelOptionsItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.StartHeelOptions} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected StartHeelOptionsItemProvider startHeelOptionsItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.StartHeelOptions}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createStartHeelOptionsAdapter() {
-		if (startHeelOptionsItemProvider == null) {
-			startHeelOptionsItemProvider = new StartHeelOptionsItemProvider(this);
-		}
-
-		return startHeelOptionsItemProvider;
 	}
 
 	/**
@@ -777,6 +732,29 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected VesselGroupCanalParametersItemProvider vesselGroupCanalParametersItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createVesselGroupCanalParametersAdapter() {
+		if (vesselGroupCanalParametersItemProvider == null) {
+			vesselGroupCanalParametersItemProvider = new VesselGroupCanalParametersItemProvider(this);
+		}
+
+		return vesselGroupCanalParametersItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -914,8 +892,6 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 		if (dryDockEventItemProvider != null) dryDockEventItemProvider.dispose();
 		if (charterOutEventItemProvider != null) charterOutEventItemProvider.dispose();
 		if (vesselTypeGroupItemProvider != null) vesselTypeGroupItemProvider.dispose();
-		if (endHeelOptionsItemProvider != null) endHeelOptionsItemProvider.dispose();
-		if (startHeelOptionsItemProvider != null) startHeelOptionsItemProvider.dispose();
 		if (inventoryEventRowItemProvider != null) inventoryEventRowItemProvider.dispose();
 		if (inventoryCapacityRowItemProvider != null) inventoryCapacityRowItemProvider.dispose();
 		if (inventoryItemProvider != null) inventoryItemProvider.dispose();
@@ -932,6 +908,7 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 		if (buyPaperDealItemProvider != null) buyPaperDealItemProvider.dispose();
 		if (sellPaperDealItemProvider != null) sellPaperDealItemProvider.dispose();
 		if (dealSetItemProvider != null) dealSetItemProvider.dispose();
+		if (vesselGroupCanalParametersItemProvider != null) vesselGroupCanalParametersItemProvider.dispose();
 	}
 
 }

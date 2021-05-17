@@ -53,7 +53,7 @@ public class VolumeAllocatedSequence {
 		}
 	}
 
-	protected @NonNull ISequence getSequence() {
+	public @NonNull ISequence getSequence() {
 		return sequence;
 	}
 

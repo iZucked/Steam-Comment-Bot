@@ -61,8 +61,6 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final ModelReference modelReference) {
 		super.init(path, adapterFactory, modelReference);
 
-		final EditingDomain ed = getEditingDomain();
-
 		final NonEditableColumn routeManipulator = new NonEditableColumn() {
 			@Override
 			public String render(final Object object) {
@@ -79,9 +77,9 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 
 		addTypicalColumn("Route", routeManipulator);
 		addTypicalColumn("Vessels",
-				new MultipleReferenceManipulator(PricingPackage.Literals.ROUTE_COST__VESSELS, getReferenceValueProviderCache(), ed, MMXCorePackage.eINSTANCE.getNamedObject_Name()));
-		addTypicalColumn("Laden Toll", new NumericAttributeManipulator(PricingPackage.Literals.ROUTE_COST__LADEN_COST, ed));
-		addTypicalColumn("Ballast Toll", new NumericAttributeManipulator(PricingPackage.Literals.ROUTE_COST__BALLAST_COST, ed));
+				new MultipleReferenceManipulator(PricingPackage.Literals.ROUTE_COST__VESSELS, getReferenceValueProviderCache(), getCommandHandler(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
+		addTypicalColumn("Laden Toll", new NumericAttributeManipulator(PricingPackage.Literals.ROUTE_COST__LADEN_COST, getCommandHandler()));
+		addTypicalColumn("Ballast Toll", new NumericAttributeManipulator(PricingPackage.Literals.ROUTE_COST__BALLAST_COST, getCommandHandler()));
 
 		defaultSetTitle("Canal Costs");
 
@@ -130,7 +128,7 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 			final CTabItem tabItem = new CTabItem(folder, SWT.NONE);
 			tabItem.setText("Fixed costs");
 			tabItem.setToolTipText("Legacy fixed canal costs");
-			
+
 			final ScenarioTableViewer v = super.createViewer(folder);
 			tabItem.setControl(v.getControl());
 			return v;

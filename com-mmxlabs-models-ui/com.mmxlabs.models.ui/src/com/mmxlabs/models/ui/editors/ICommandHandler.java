@@ -8,6 +8,8 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -18,22 +20,24 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
  * @author hinton
  *
  */
+
+@NonNullByDefault
 public interface ICommandHandler {
 	/**
 	 * Get reference value provider provider for the context of this command handler
 	 * 
 	 * @return
 	 */
-	public IReferenceValueProviderProvider getReferenceValueProviderProvider();
+	IReferenceValueProviderProvider getReferenceValueProviderProvider();
 
 	/**
 	 * Get the editing domain in which commands for this handler should happen
 	 * 
 	 * @return
 	 */
-	public EditingDomain getEditingDomain();
+	EditingDomain getEditingDomain();
 
-	public ModelReference getModelReference();
+	ModelReference getModelReference();
 
 	/**
 	 * Tell the command handler to deal with this command, applied to this feature on the target.
@@ -42,6 +46,10 @@ public interface ICommandHandler {
 	 * @param target
 	 * @param feature
 	 */
-	public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature);
+	void handleCommand(Command command, @Nullable EObject target, @Nullable EStructuralFeature feature);
+
+	default void handleCommand(Command command) {
+		handleCommand(command, null, null);
+	}
 
 }

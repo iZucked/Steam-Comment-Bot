@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Adapter;
@@ -37,7 +38,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.jface.gridviewer.GridViewerEditor;
@@ -190,7 +190,7 @@ public class PeriodDistributionProfileConstraintDetailComposite extends Composit
 
 		{
 			rangeColumn.setEditingSupport(
-					new GridViewerEditingSupport(tableViewer, table, () -> new MultiAttributeInlineEditor(ADPPackage.Literals.PERIOD_DISTRIBUTION__RANGE, commandHandler.getEditingDomain(), a -> {
+					new GridViewerEditingSupport(tableViewer, table, () -> new MultiAttributeInlineEditor(ADPPackage.Literals.PERIOD_DISTRIBUTION__RANGE, commandHandler, a -> {
 						return String.format("%s %02d", //
 								((YearMonth) a).getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()), //
 								((YearMonth) a).getYear());
@@ -229,21 +229,12 @@ public class PeriodDistributionProfileConstraintDetailComposite extends Composit
 		}, colourProvider));
 
 		minCargoesColumn.setEditingSupport(
-				new GridViewerEditingSupport(tableViewer, table, () -> new NumericAttributeManipulator(ADPPackage.Literals.PERIOD_DISTRIBUTION__MIN_CARGOES, commandHandler.getEditingDomain())));
+				new GridViewerEditingSupport(tableViewer, table, () -> new NumericAttributeManipulator(ADPPackage.Literals.PERIOD_DISTRIBUTION__MIN_CARGOES, commandHandler)));
 		maxCargoesColumn.setEditingSupport(
-				new GridViewerEditingSupport(tableViewer, table, () -> new NumericAttributeManipulator(ADPPackage.Literals.PERIOD_DISTRIBUTION__MAX_CARGOES, commandHandler.getEditingDomain())));
+				new GridViewerEditingSupport(tableViewer, table, () -> new NumericAttributeManipulator(ADPPackage.Literals.PERIOD_DISTRIBUTION__MAX_CARGOES, commandHandler)));
 
 		tableViewer.setContentProvider(new IStructuredContentProvider() {
-			@Override
-			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-
-			}
-
-			@Override
-			public void dispose() {
-
-			}
-
+			 
 			@Override
 			public Object[] getElements(final Object inputElement) {
 				final PeriodDistributionProfileConstraint model = (PeriodDistributionProfileConstraint) inputElement;

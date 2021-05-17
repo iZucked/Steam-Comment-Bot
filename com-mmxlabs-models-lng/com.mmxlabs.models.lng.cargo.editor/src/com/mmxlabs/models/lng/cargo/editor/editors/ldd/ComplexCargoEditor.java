@@ -186,7 +186,7 @@ public class ComplexCargoEditor extends Dialog {
 				column.getColumn().setText("Name");
 				column.getColumn().setWidth(60);
 
-				final BasicAttributeManipulator manipulator = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), sel.getEditingDomain());
+				final BasicAttributeManipulator manipulator = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), sel.getDefaultCommandHandler());
 				column.setLabelProvider(new CellRendererColumnLabelProvider(viewer, manipulator, validationErrors, new EMFPath(false)));
 
 				final CellManipulatorEditingSupport es = new CellManipulatorEditingSupport(column.getViewer(), viewer, manipulator, new EMFPath(false));
@@ -198,7 +198,7 @@ public class ComplexCargoEditor extends Dialog {
 				column.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 				column.getColumn().setText("Contract");
 				column.getColumn().setWidth(150);
-				final ContractManipulator manipulator = new ContractManipulator(sel.getReferenceValueProviderCache(), sel.getEditingDomain());
+				final ContractManipulator manipulator = new ContractManipulator(sel.getReferenceValueProviderCache(), sel.getDefaultCommandHandler());
 				column.setLabelProvider(new CellRendererColumnLabelProvider(viewer, manipulator, validationErrors, new EMFPath(false)));
 
 				final CellManipulatorEditingSupport es = new CellManipulatorEditingSupport(column.getViewer(), viewer, manipulator, new EMFPath(false));
@@ -212,7 +212,8 @@ public class ComplexCargoEditor extends Dialog {
 				column.getColumn().setText("Port");
 				column.getColumn().setWidth(100);
 
-				final SingleReferenceManipulator manipulator = new SingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Port(), sel.getReferenceValueProviderCache(), sel.getEditingDomain());
+				final SingleReferenceManipulator manipulator = new SingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Port(), sel.getReferenceValueProviderCache(),
+						sel.getDefaultCommandHandler());
 				column.setLabelProvider(new CellRendererColumnLabelProvider(viewer, manipulator, validationErrors, new EMFPath(false)));
 
 				final CellManipulatorEditingSupport es = new CellManipulatorEditingSupport(column.getViewer(), viewer, manipulator, new EMFPath(false));
@@ -226,7 +227,7 @@ public class ComplexCargoEditor extends Dialog {
 				column.getColumn().setWidth(100);
 				// column.setLabelProvider(new GenericMapCellLabelProvider("{0}", attributeMap));
 
-				final LocalDateAttributeManipulator manipulator = new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStart(), sel.getEditingDomain());
+				final LocalDateAttributeManipulator manipulator = new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStart(), sel.getDefaultCommandHandler());
 				column.setLabelProvider(new CellRendererColumnLabelProvider(viewer, manipulator, validationErrors, new EMFPath(false)));
 
 				final CellManipulatorEditingSupport es = new CellManipulatorEditingSupport(column.getViewer(), viewer, manipulator, new EMFPath(false));
@@ -238,7 +239,7 @@ public class ComplexCargoEditor extends Dialog {
 				column.getColumn().setText("Volume (Min)");
 				column.getColumn().setWidth(100);
 
-				final NumericAttributeManipulator manipulator = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MinQuantity(), sel.getEditingDomain());
+				final NumericAttributeManipulator manipulator = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MinQuantity(), sel.getDefaultCommandHandler());
 				column.setLabelProvider(new CellRendererColumnLabelProvider(viewer, manipulator, validationErrors, new EMFPath(false)));
 
 				final CellManipulatorEditingSupport es = new CellManipulatorEditingSupport(column.getViewer(), viewer, manipulator, new EMFPath(false)) {
@@ -251,7 +252,7 @@ public class ComplexCargoEditor extends Dialog {
 
 							cmd.append(SetCommand.create(sel.getEditingDomain(), dischargeSlot, CargoPackage.eINSTANCE.getSlot_MinQuantity(), value));
 							cmd.append(SetCommand.create(sel.getEditingDomain(), dischargeSlot, CargoPackage.eINSTANCE.getSlot_MaxQuantity(), value));
-							sel.getEditingDomain().getCommandStack().execute(cmd);
+							sel.getDefaultCommandHandler().handleCommand(cmd);
 
 						} else {
 							super.setValue(element, value);
@@ -267,7 +268,7 @@ public class ComplexCargoEditor extends Dialog {
 				column.getColumn().setText("Volume (Max)");
 				column.getColumn().setWidth(100);
 
-				final NumericAttributeManipulator manipulator = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MaxQuantity(), sel.getEditingDomain());
+				final NumericAttributeManipulator manipulator = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MaxQuantity(), sel.getDefaultCommandHandler());
 				column.setLabelProvider(new CellRendererColumnLabelProvider(viewer, manipulator, validationErrors, new EMFPath(false)));
 
 				final CellManipulatorEditingSupport es = new CellManipulatorEditingSupport(column.getViewer(), viewer, manipulator, new EMFPath(false)) {
@@ -280,7 +281,7 @@ public class ComplexCargoEditor extends Dialog {
 
 							cmd.append(SetCommand.create(sel.getEditingDomain(), dischargeSlot, CargoPackage.eINSTANCE.getSlot_MinQuantity(), value));
 							cmd.append(SetCommand.create(sel.getEditingDomain(), dischargeSlot, CargoPackage.eINSTANCE.getSlot_MaxQuantity(), value));
-							sel.getEditingDomain().getCommandStack().execute(cmd);
+							sel.getDefaultCommandHandler().handleCommand(cmd);
 
 						} else {
 							super.setValue(element, value);
@@ -399,12 +400,12 @@ public class ComplexCargoEditor extends Dialog {
 
 		validationSupport = new DialogValidationSupport(new DefaultExtraValidationContext(sel.getExtraValidationContext(), false));
 
-		final List<EObject> validationTargets = new ArrayList<EObject>();
+		final List<EObject> validationTargets = new ArrayList<>();
 		validationTargets.add(cargo);
 		validationTargets.addAll(cargo.getSlots());
 		validationSupport.setValidationTargets(validationTargets);
 
-		final CommandStack commandStack = sel.getEditingDomain().getCommandStack();
+		final CommandStack commandStack = sel.getDefaultCommandHandler().getEditingDomain().getCommandStack();
 		final CommandStackListener listener = new CommandStackListener() {
 
 			@Override

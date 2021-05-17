@@ -808,6 +808,29 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.MullCargoWrapper} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MullCargoWrapperItemProvider mullCargoWrapperItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.MullCargoWrapper}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMullCargoWrapperAdapter() {
+		if (mullCargoWrapperItemProvider == null) {
+			mullCargoWrapperItemProvider = new MullCargoWrapperItemProvider(this);
+		}
+
+		return mullCargoWrapperItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -964,6 +987,7 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 		if (salesContractAllocationRowItemProvider != null) salesContractAllocationRowItemProvider.dispose();
 		if (mullProfileItemProvider != null) mullProfileItemProvider.dispose();
 		if (mullSubprofileItemProvider != null) mullSubprofileItemProvider.dispose();
+		if (mullCargoWrapperItemProvider != null) mullCargoWrapperItemProvider.dispose();
 	}
 
 }

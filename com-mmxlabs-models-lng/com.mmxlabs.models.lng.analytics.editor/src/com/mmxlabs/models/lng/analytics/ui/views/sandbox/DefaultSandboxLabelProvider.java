@@ -14,16 +14,13 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.widgets.grid.GridItem;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
-import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
+import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.SandboxUIHelper;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.CellFormatterLabelProvider;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.util.emfpath.EMFPath;
@@ -31,51 +28,47 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
 public class DefaultSandboxLabelProvider extends CellFormatterLabelProvider {
 	protected final Map<Object, IStatus> validationErrors;
 	private final String name;
+	protected SandboxUIHelper sandboxUIHelper;
 
-	public DefaultSandboxLabelProvider(final ICellRenderer renderer, Map<Object, IStatus> validationErrors, String name, final ETypedElement... pathObjects) {
+	public DefaultSandboxLabelProvider(SandboxUIHelper sandboxUIHelper, final ICellRenderer renderer, Map<Object, IStatus> validationErrors, String name, final ETypedElement... pathObjects) {
 		super(renderer, new EMFPath(true, pathObjects));
+		this.sandboxUIHelper = sandboxUIHelper;
 		this.validationErrors = validationErrors;
 		this.name = name;
 	}
 
-	public DefaultSandboxLabelProvider(ICellRenderer renderer, Map<Object, IStatus> validationErrors, String name, @Nullable EMFPath path) {
+	public DefaultSandboxLabelProvider(SandboxUIHelper sandboxUIHelper, ICellRenderer renderer, Map<Object, IStatus> validationErrors, String name, @Nullable EMFPath path) {
 		super(renderer, path);
+		this.sandboxUIHelper = sandboxUIHelper;
 		this.validationErrors = validationErrors;
 		this.name = name;
 	}
-
-	protected Image imgError = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/error.gif").createImage();
-	protected Image imgWarn = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/warning.gif").createImage();
-	protected Image imgInfo = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/information.gif").createImage();
-	protected Image imgShippingRoundTrip = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/roundtrip.png").createImage();
-	protected Image imgShippingFleet = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/fleet.png").createImage();
-	protected Image imgModel = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/console_view.gif").createImage();
-
-	protected Color colour_error = new Color(Display.getDefault(), new RGB(255, 100, 100));
-	protected Color colour_warn = new Color(Display.getDefault(), new RGB(255, 255, 200));
-	protected Color colour_info = new Color(Display.getDefault(), new RGB(200, 240, 240));
+	//
+	// protected Image imgError = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/error.gif").createImage();
+	// protected Image imgWarn = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/warning.gif").createImage();
+	// protected Image imgInfo = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/information.gif").createImage();
+	// protected Image imgShippingRoundTrip = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/roundtrip.png").createImage();
+	// protected Image imgShippingFleet = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/fleet.png").createImage();
+	// protected Image imgModel = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/console_view.gif").createImage();
+	//
+	// protected Color colour_error = new Color(Display.getDefault(), new RGB(255, 100, 100));
+	// protected Color colour_warn = new Color(Display.getDefault(), new RGB(255, 255, 200));
+	// protected Color colour_info = new Color(Display.getDefault(), new RGB(200, 240, 240));
 
 	@Override
 	protected @Nullable Image getImage(@NonNull final ViewerCell cell, @Nullable final Object element) {
 
 		if (validationErrors.containsKey(element)) {
 			final IStatus status = validationErrors.get(element);
-			if (!status.isOK()) {
-				if (status.matches(IStatus.ERROR)) {
-					return imgError;
-				}
-				if (status.matches(IStatus.WARNING)) {
-					return imgWarn;
-				}
-				if (status.matches(IStatus.INFO)) {
-					return imgWarn;
-				}
+			Image img = sandboxUIHelper.getValidationImageForStatus(status);
+			if (img != null) {
+				return null;
 			}
 		} else {
 			if (element instanceof RoundTripShippingOption) {
-				return imgShippingRoundTrip;
+				return sandboxUIHelper.imgShippingRoundTrip;
 			} else if (element instanceof SimpleVesselCharterOption) {
-				return imgShippingFleet;
+				return sandboxUIHelper.imgShippingFleet;
 			}
 		}
 		return null;
@@ -158,31 +151,14 @@ public class DefaultSandboxLabelProvider extends CellFormatterLabelProvider {
 				}
 			}
 		}
-		if (!s.isOK()) {
-			if (s.matches(IStatus.ERROR)) {
-				cell.setBackground(colour_error);
-				item.setBackground(colour_error);
-			} else if (s.matches(IStatus.WARNING)) {
-				cell.setBackground(colour_warn);
-				item.setBackground(colour_warn);
-			} else if (s.matches(IStatus.INFO)) {
-				cell.setBackground(colour_info);
-				item.setBackground(colour_info);
-			}
-		}
+		
+		sandboxUIHelper.updateGridItem(cell, s);
+		 
 
 		if (element instanceof BaseCaseRow || element instanceof PartialCaseRow) {
 			if (validationErrors.containsKey(element)) {
 				final IStatus status = validationErrors.get(element);
-				if (!status.isOK()) {
-					if (status.matches(IStatus.ERROR)) {
-						item.setHeaderImage(imgError);
-					} else if (status.matches(IStatus.WARNING)) {
-						item.setHeaderImage(imgWarn);
-					} else if (status.matches(IStatus.INFO)) {
-						item.setHeaderImage(imgInfo);
-					}
-				}
+				sandboxUIHelper.updateGridHeaderItem(cell, status);
 			}
 		}
 		setFont(cell, element);
@@ -193,15 +169,6 @@ public class DefaultSandboxLabelProvider extends CellFormatterLabelProvider {
 
 	@Override
 	public void dispose() {
-		imgError.dispose();
-		imgWarn.dispose();
-		imgInfo.dispose();
-		imgShippingRoundTrip.dispose();
-		imgShippingFleet.dispose();
-		imgModel.dispose();
-		colour_error.dispose();
-		colour_info.dispose();
-		colour_warn.dispose();
 		super.dispose();
 	}
 }

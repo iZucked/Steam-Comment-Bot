@@ -158,7 +158,6 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 			final EObject value) {
 		final String label = EditorUtils.unmangleFeature(ref, object);
 		return createChildArea(childCompositeContainer, root, object, parent, ref, label, value);
-
 	}
 
 	/**

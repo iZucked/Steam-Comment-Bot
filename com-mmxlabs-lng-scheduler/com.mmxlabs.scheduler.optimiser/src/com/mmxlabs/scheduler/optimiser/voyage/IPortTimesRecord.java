@@ -4,16 +4,13 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage;
 
-import java.util.List;
-
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.optimiser.core.IElementAnnotation;
+import com.google.common.collect.ImmutableList;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.PanamaPeriod;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -27,7 +24,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  */
 @NonNullByDefault
-public interface IPortTimesRecord extends IElementAnnotation {
+public interface IPortTimesRecord {
 
 	/**
 	 * Returns all slots excluding the return slot
@@ -35,7 +32,7 @@ public interface IPortTimesRecord extends IElementAnnotation {
 	 * @return
 	 */
 
-	List<IPortSlot> getSlots();
+	ImmutableList<IPortSlot> getSlots();
 
 	int getSlotTime(IPortSlot slot);
 
@@ -71,9 +68,15 @@ public interface IPortTimesRecord extends IElementAnnotation {
 
 	void setRouteOptionBooking(IPortSlot slot, @Nullable IRouteOptionBooking routeOptionSlot);
 
-	void setSlotNextVoyageOptions(IPortSlot slot, AvailableRouteChoices nextVoyageRoute, PanamaPeriod panamaPeriod);
+	void setSlotNextVoyageOptions(IPortSlot slot, AvailableRouteChoices nextVoyageRoute);
 
 	AvailableRouteChoices getSlotNextVoyageOptions(IPortSlot slot);
 
-	PanamaPeriod getSlotNextVoyagePanamaPeriod(IPortSlot portSlot);
+	int getSlotAdditionaPanamaIdleHours(IPortSlot slot);
+
+	int getSlotMaxAdditionaPanamaIdleHours(IPortSlot slot);
+
+	void setSlotMaxAvailablePanamaIdleHours(IPortSlot from, int maxIdleTimeAvailable);
+
+	void setSlotAdditionalPanamaIdleHours(IPortSlot from, int additionalPanamaTime);
 }

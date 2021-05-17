@@ -161,7 +161,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 	@Override
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
 		// Add in Check for Tree
-		final ScenarioTableViewer result = new IndexTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart());
+		final ScenarioTableViewer result = new IndexTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getScenarioEditingLocation());
 		result.getGrid().setTreeLinesVisible(true);
 		return result;
 	}
@@ -191,7 +191,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 			}
 		});
 
-		nameViewerColumn = addTypicalColumn("Name", new ReadOnlyManipulatorWrapper<>(new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getEditingDomain()) {
+		nameViewerColumn = addTypicalColumn("Name", new ReadOnlyManipulatorWrapper<>(new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getCommandHandler()) {
 			@Override
 			public boolean canEdit(final Object object) {
 				// Skip tree model elements
@@ -684,7 +684,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 	public void setInput(final PricingModel pricingModel) {
 		this.pricingModel = pricingModel;
 
-		 getScenarioViewer().setCurrentContainerAndContainment(pricingModel, null);
+		getScenarioViewer().setCurrentContainerAndContainment(pricingModel, null);
 
 		final EObject root = transformer.getRootObject();
 		transformer.update(pricingModel);

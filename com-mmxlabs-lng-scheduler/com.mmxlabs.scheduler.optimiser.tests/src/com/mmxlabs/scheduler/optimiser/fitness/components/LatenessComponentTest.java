@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -189,18 +189,16 @@ public class LatenessComponentTest {
 		Mockito.when(portTimesRecord.getSlotTime(endSlot)).thenReturn(0);
 		Mockito.when(portTimesRecord.getSlotTime(loadSlot)).thenReturn(loadEndTime - 1 + loadLateTime);
 		Mockito.when(portTimesRecord.getSlotTime(dischargeSlot)).thenReturn(dischargeEndTime - 1 + dischargeLateTime);
-		
+
 		Mockito.when(portTimesRecord.getFirstSlot()).thenReturn(startSlot);
-		Mockito.when(portTimesRecord.getSlots()).thenReturn(Lists.newArrayList(startSlot,loadSlot,dischargeSlot,endSlot));
-		
+		Mockito.when(portTimesRecord.getSlots()).thenReturn(ImmutableList.of(startSlot, loadSlot, dischargeSlot, endSlot));
+
 		VoyagePlanRecord voyagePlanRecord = new VoyagePlanRecord(voyagePlan, portTimesRecord);
-		VolumeAllocatedSequence scheduledSequence = new VolumeAllocatedSequence(resource, mockedSequence, voyageStartTime,
-				new LinkedList<>(Arrays.asList(voyagePlanRecord)));
+		VolumeAllocatedSequence scheduledSequence = new VolumeAllocatedSequence(resource, mockedSequence, voyageStartTime, new LinkedList<>(Arrays.asList(voyagePlanRecord)));
 
 		final ProfitAndLossSequences profitAndLossSequences = new ProfitAndLossSequences();
 		profitAndLossSequences.add(vesselAvailability, scheduledSequence);
 
-		
 		checker.calculateLateness(resource, voyagePlanRecord, null);
 		checker.calculateLateness(scheduledSequence, null);
 		c.startEvaluation(profitAndLossSequences);

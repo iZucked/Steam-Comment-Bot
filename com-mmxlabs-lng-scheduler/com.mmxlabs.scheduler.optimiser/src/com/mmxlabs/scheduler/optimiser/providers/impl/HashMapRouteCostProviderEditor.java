@@ -39,32 +39,17 @@ public class HashMapRouteCostProviderEditor implements IRouteCostProviderEditor 
 	@Override
 	public long getRouteCost(final ERouteOption route, final IPort from, final IPort to, final IVessel vessel, final int voyageStartTime, final CostType vesselState) {
 
-		// Special case DIRECT
-		if (route == ERouteOption.DIRECT) {
-			return 0L;
-		}
-
-		ILongCurve cost = get(pricesByRouteClassAndState, route, vessel, vesselState, null);
-
-		if (cost == null) {
-			cost = defaultPrices.get(route);
-
-		}
-		if (cost != null) {
-			final long canalCost = cost.getValueAtPoint(voyageStartTime);
-
-			// Apply Suez voyage based rebate factor if present for port pair.
-			if (route == ERouteOption.SUEZ) {
-				final Long rebatePercentage = suezRouteRebate.get(Pair.of(from, to));
-				if (rebatePercentage != null) {
-					long rebate = Calculator.getShareOfValue(rebatePercentage, canalCost);
-					return canalCost - rebate;
-				}
-			}
-
-			return canalCost;
-		}
-		return 0L;
+		switch (route) {
+			case DIRECT:
+				// Special case DIRECT
+				return 0L;
+			case SUEZ:
+				return getSuezRouteCost(from, to, vessel, voyageStartTime, vesselState);
+			case PANAMA:
+				return getPanamaRouteCost(vessel, voyageStartTime, vesselState);
+			default:
+				throw new IllegalArgumentException("Unknown route option: "+route);
+		}		
 	}
 
 	/**
@@ -166,5 +151,42 @@ public class HashMapRouteCostProviderEditor implements IRouteCostProviderEditor 
 	@Override
 	public void setSuezRouteRebateFactor(final @NonNull IPort from, final @NonNull IPort to, long factor) {
 		suezRouteRebate.put(Pair.of(from, to), factor);
+	}
+
+	@Override
+	public long getSuezRouteCost(IPort from, IPort to, IVessel vessel, int voyageStartTime, CostType costType) {
+		ILongCurve cost = get(pricesByRouteClassAndState, ERouteOption.SUEZ, vessel, costType, null);
+
+		if (cost == null) {
+			cost = defaultPrices.get(ERouteOption.SUEZ);
+		}
+		if (cost != null) {
+			final long canalCost = cost.getValueAtPoint(voyageStartTime);
+
+			// Apply Suez voyage based rebate factor if present for port pair.
+			final Long rebatePercentage = suezRouteRebate.get(Pair.of(from, to));
+			if (rebatePercentage != null) {
+				long rebate = Calculator.getShareOfValue(rebatePercentage, canalCost);
+				return canalCost - rebate;
+			}
+
+			return canalCost;
+		}
+
+		return 0L;
+	}
+
+	@Override
+	public long getPanamaRouteCost(IVessel vessel, int voyageStartTime, CostType costType) {
+		ILongCurve cost = get(pricesByRouteClassAndState, ERouteOption.PANAMA, vessel, costType, null);
+
+		if (cost == null) {
+			cost = defaultPrices.get(ERouteOption.PANAMA);
+		}
+		if (cost != null) {
+			final long canalCost = cost.getValueAtPoint(voyageStartTime);
+			return canalCost;
+		}
+		return 0L;
 	}
 }

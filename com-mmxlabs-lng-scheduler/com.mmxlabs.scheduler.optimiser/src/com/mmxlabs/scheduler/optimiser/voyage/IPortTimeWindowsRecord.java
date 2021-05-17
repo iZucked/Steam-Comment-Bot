@@ -4,16 +4,14 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage;
 
-import java.util.List;
-
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.common.collect.ImmutableList;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.PanamaPeriod;
 
 /**
  * A similar class to {@link IPortTimesRecord}, created before arrival times have been scheduled. TODO: Replace {@link IPortTimesRecord} with this
@@ -21,8 +19,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PanamaPeriod;
  * @author achurchill
  *
  */
-@NonNullByDefault
-public interface IPortTimeWindowsRecord extends IElementAnnotation {
+
+public interface IPortTimeWindowsRecord {
 
 	/**
 	 * Returns all slots excluding the return slot
@@ -30,8 +28,9 @@ public interface IPortTimeWindowsRecord extends IElementAnnotation {
 	 * @return
 	 */
 
-	List<IPortSlot> getSlots();
+	ImmutableList<IPortSlot> getSlots();
 
+	@Nullable
 	ITimeWindow getSlotFeasibleTimeWindow(IPortSlot slot);
 
 	void setSlotFeasibleTimeWindow(IPortSlot slot, ITimeWindow timeWindow);
@@ -49,6 +48,7 @@ public interface IPortTimeWindowsRecord extends IElementAnnotation {
 	 * 
 	 * @return
 	 */
+
 	ITimeWindow getFirstSlotFeasibleTimeWindow();
 
 	IPortSlot getFirstSlot();
@@ -58,6 +58,7 @@ public interface IPortTimeWindowsRecord extends IElementAnnotation {
 	 * 
 	 * @return
 	 */
+	@Nullable
 	IPortSlot getReturnSlot();
 
 	void setSlot(IPortSlot slot, ITimeWindow timeWindow, int duration, int index);
@@ -68,20 +69,16 @@ public interface IPortTimeWindowsRecord extends IElementAnnotation {
 
 	AvailableRouteChoices getSlotNextVoyageOptions(IPortSlot slot);
 
-	void setSlotNextVoyageOptions(IPortSlot slot, AvailableRouteChoices nextVoyageRoute, PanamaPeriod panamaPeriod);
+	void setSlotNextVoyageOptions(IPortSlot slot, AvailableRouteChoices nextVoyageRoute);
 
-	void setRouteOptionBooking(IPortSlot slot, IRouteOptionBooking routeOptionSlot);
+	void setRouteOptionBooking(IPortSlot slot, @Nullable IRouteOptionBooking routeOptionSlot);
 
 	void setSlotAdditionalPanamaDetails(IPortSlot slot, boolean isConstrainedPanamaJourney, int additionalPanamaIdleTimeInHours);
 
+	@Nullable
 	IRouteOptionBooking getRouteOptionBooking(IPortSlot slot);
-
-	PanamaPeriod getSlotNextVoyagePanamaPeriod(IPortSlot slot);
 
 	boolean getSlotIsNextVoyageConstrainedPanama(IPortSlot slot);
 
 	int getSlotAdditionalPanamaIdleHours(IPortSlot slot);
-
-	void setSlotNextVoyagePanamaPeriod(IPortSlot slot, PanamaPeriod panamaPeriod);
-
 }

@@ -13,22 +13,23 @@ import com.mmxlabs.scheduler.optimiser.evaluation.PreviousHeelRecord;
 import com.mmxlabs.scheduler.optimiser.evaluation.ScheduledVoyagePlanResult;
 import com.mmxlabs.scheduler.optimiser.moves.util.MetricType;
 
-public class ScheduledRecord {
+public final class ScheduledRecord {
 
-	public int sequenceStartTime = 0;
-	public int currentEndTime = 0;
-	public int maxDuration = Integer.MAX_VALUE;
-	public int minDuration = 0;
+	public final int sequenceStartTime;
+	public final int currentEndTime;
+	public final int maxDuration;
+	public final int minDuration;
 
-	public long[] metrics = new long[MetricType.values().length];
+	public final long[] metrics = new long[MetricType.values().length];
 	public final ScheduledVoyagePlanResult head;
 	public final @NonNull ScheduledVoyagePlanResult result;
 
 	public final @Nullable ScheduledRecord previous;
 	public final PreviousHeelRecord previousHeelRecord;
 
+	// These are not final for unit test
 	public int maxDurationLateness;
-	public final int minDurationLateness;
+	public int minDurationLateness;
 
 	public ScheduledRecord(final @NonNull ScheduledVoyagePlanResult head, final PreviousHeelRecord previousHeelRecord, final int minDuration, final int maxDuration) {
 		this(head, previousHeelRecord, null, minDuration, maxDuration);

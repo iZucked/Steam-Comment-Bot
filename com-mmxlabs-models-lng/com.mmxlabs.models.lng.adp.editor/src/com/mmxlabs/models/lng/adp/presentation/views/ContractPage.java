@@ -8,7 +8,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -16,6 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Set;
 import java.util.TreeMap;
@@ -31,6 +34,7 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -65,6 +69,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
 import com.google.common.collect.Lists;
+import com.google.ortools.linearsolver.MPSolver;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.license.features.KnownFeatures;
@@ -74,18 +79,23 @@ import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.DESSalesMarketAllocationRow;
+import com.mmxlabs.models.lng.adp.MullAllocationRow;
+import com.mmxlabs.models.lng.adp.MullCargoWrapper;
 import com.mmxlabs.models.lng.adp.MullEntityRow;
 import com.mmxlabs.models.lng.adp.MullProfile;
 import com.mmxlabs.models.lng.adp.MullSubprofile;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractAllocationRow;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
+import com.mmxlabs.models.lng.adp.mull.AllocationDropType;
 import com.mmxlabs.models.lng.adp.mull.AllocationTracker;
 import com.mmxlabs.models.lng.adp.mull.CargoBlueprint;
+import com.mmxlabs.models.lng.adp.mull.DESMarketTracker;
 import com.mmxlabs.models.lng.adp.mull.InventoryDateTimeEvent;
 import com.mmxlabs.models.lng.adp.mull.MUDContainer;
 import com.mmxlabs.models.lng.adp.mull.MULLContainer;
 import com.mmxlabs.models.lng.adp.mull.RollingLoadWindow;
+import com.mmxlabs.models.lng.adp.mull.SalesContractTracker;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -97,9 +107,9 @@ import com.mmxlabs.models.lng.cargo.InventoryEventRow;
 import com.mmxlabs.models.lng.cargo.InventoryFrequency;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.cargo.ui.editorpart.InventoryFeedPane;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.VolumeAttributeManipulator;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditingCommands;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
@@ -113,6 +123,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.VolumeUnits;
@@ -369,29 +380,29 @@ public class ContractPage extends ADPComposite {
 
 		localPreviewViewer.getGrid().setHeaderVisible(true);
 
-		localPreviewViewer.addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editorData.getEditingDomain()));
+		localPreviewViewer.addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editorData.getDefaultCommandHandler()));
 		localPreviewViewer.addTypicalColumn("Port",
-				new TextualSingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Port(), editorData.getReferenceValueProviderCache(), editorData.getEditingDomain()));
+				new TextualSingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Port(), editorData.getReferenceValueProviderCache(), editorData.getDefaultCommandHandler()));
 
 		// TODO: Groups
 		final GridColumnGroup windowGroup = new GridColumnGroup(localPreviewViewer.getGrid(), SWT.NONE);
 		windowGroup.setText("Window");
 		GridViewerHelper.configureLookAndFeel(windowGroup);
-		localPreviewViewer.addTypicalColumn("Date", windowGroup, new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStart(), editorData.getEditingDomain()));
-		localPreviewViewer.addTypicalColumn("Time", windowGroup, new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStartTime(), editorData.getEditingDomain()));
-		localPreviewViewer.addTypicalColumn("Size", windowGroup, new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowSize(), editorData.getEditingDomain()));
+		localPreviewViewer.addTypicalColumn("Date", windowGroup, new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStart(), editorData.getDefaultCommandHandler()));
+		localPreviewViewer.addTypicalColumn("Time", windowGroup, new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStartTime(), editorData.getDefaultCommandHandler()));
+		localPreviewViewer.addTypicalColumn("Size", windowGroup, new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowSize(), editorData.getDefaultCommandHandler()));
 		localPreviewViewer.addTypicalColumn("Units", windowGroup,
-				new TextualEnumAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowSizeUnits(), editorData.getEditingDomain(), e -> mapName((TimePeriod) e)));
-		localPreviewViewer.addTypicalColumn("Duration", windowGroup, new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Duration(), editorData.getEditingDomain()));
+				new TextualEnumAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowSizeUnits(), editorData.getDefaultCommandHandler(), e -> mapName((TimePeriod) e)));
+		localPreviewViewer.addTypicalColumn("Duration", windowGroup, new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_Duration(), editorData.getDefaultCommandHandler()));
 
 		// TODO: Groups
 		final GridColumnGroup quantityGroup = new GridColumnGroup(localPreviewViewer.getGrid(), SWT.NONE);
 		quantityGroup.setText("Quantity");
 		GridViewerHelper.configureLookAndFeel(quantityGroup);
-		localPreviewViewer.addTypicalColumn("Min", quantityGroup, new VolumeAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MinQuantity(), editorData.getEditingDomain()));
-		localPreviewViewer.addTypicalColumn("Max", quantityGroup, new VolumeAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MaxQuantity(), editorData.getEditingDomain()));
+		localPreviewViewer.addTypicalColumn("Min", quantityGroup, new VolumeAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MinQuantity(), editorData.getDefaultCommandHandler()));
+		localPreviewViewer.addTypicalColumn("Max", quantityGroup, new VolumeAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MaxQuantity(), editorData.getDefaultCommandHandler()));
 		localPreviewViewer.addTypicalColumn("Units", quantityGroup,
-				new TextualEnumAttributeManipulator(CargoPackage.eINSTANCE.getSlot_VolumeLimitsUnit(), editorData.getEditingDomain(), e -> mapName((VolumeUnits) e)));
+				new TextualEnumAttributeManipulator(CargoPackage.eINSTANCE.getSlot_VolumeLimitsUnit(), editorData.getDefaultCommandHandler(), e -> mapName((VolumeUnits) e)));
 
 		localPreviewViewer.addDoubleClickListener(event -> {
 			final ISelection selection = localPreviewViewer.getSelection();
@@ -412,74 +423,731 @@ public class ContractPage extends ADPComposite {
 		deleteSlotAction.setEnabled(false);
 		return localPreviewViewer;
 	}
-	
-	private Command populateModelFromMultipleInventories(@NonNull final EditingDomain editingDomain, @NonNull final LNGScenarioModel sm, final ADPModel adpModel, @NonNull final MullProfile profile) {
+
+	private Command populateModelFromMultipleInventories(@NonNull final EditingDomain editingDomain, @NonNull final LNGScenarioModel sm, final ADPModel adpModel,
+			@NonNull final MullProfile originalProfile) {
 		final CompoundCommand cmd = new CompoundCommand("Generate ADP slots");
 
 		final IModelFactoryRegistry modelFactoryRegistry = Activator.getDefault().getModelFactoryRegistry();
 		if (modelFactoryRegistry == null) {
 			throw new IllegalStateException("Factory registry must not be null");
 		}
-		
+
 		final CargoEditingCommands cec = new CargoEditingCommands(editingDomain, sm, ScenarioModelUtil.getCargoModel(sm), ScenarioModelUtil.getCommercialModel(sm), modelFactoryRegistry);
-		
+
+		final MullProfile profile = trimZeroesFromMullProfile(originalProfile);
+
 		final int loadWindow = profile.getWindowSize();
 		final int volumeFlex = profile.getVolumeFlex();
 		final int fullCargoLotValue = profile.getFullCargoLotValue();
 		// Default value shouldn't be used
 		final int cargoVolume = 160_000;
-
-		final boolean debugFlex = false;
-
-		final int loadWindowHours = loadWindow*24;
-
-		final Map<Vessel, LocalDateTime> vesselToMostRecentUseDateTime = new HashMap<>();
-
-		final Set<BaseLegalEntity> firstPartyEntities = ScenarioModelUtil.getCommercialModel(sm).getEntities().stream() //
-				.filter(e -> !e.isThirdParty()) //
-				.collect(Collectors.toSet());
-
-		final LocalDate dayBeforeADPStart = adpModel.getYearStart().atDay(1).minusDays(1);
-		final LocalDateTime dateTimeBeforeADPStart = dayBeforeADPStart.atStartOfDay();
-
-		final Map<Inventory, MULLContainer> mullContainers = new HashMap<>();
-
-		for (MullSubprofile subprofile : profile.getInventories()) {
-			final Inventory currentInventory = subprofile.getInventory();
-			mullContainers.put(currentInventory, new MULLContainer(subprofile, fullCargoLotValue));
-
-			for (MullEntityRow row : subprofile.getEntityTable()) {
-				Stream.concat(
-						row.getSalesContractAllocationRows().stream().map(SalesContractAllocationRow::getVessels).flatMap(List::stream),
-						row.getDesSalesMarketAllocationRows().stream().map(DESSalesMarketAllocationRow::getVessels).flatMap(List::stream)
-				).forEach(vessel -> vesselToMostRecentUseDateTime.put(vessel, dateTimeBeforeADPStart));
-			}
-		}
-
-		final Set<Vessel> firstPartyVessels = mullContainers.entrySet().stream() //
-				.flatMap(e -> e.getValue().getMUDContainers().stream()) //
-				.filter(mudContainer -> firstPartyEntities.contains(mudContainer.getEntity()))
-				.flatMap(mudContainer -> mudContainer.getAllocationTrackers().stream()) //
-				.flatMap(allocationTracker -> allocationTracker.getVessels().stream()) //
-				.collect(Collectors.toSet());
-
-		mullContainers.entrySet().stream() //
-				.flatMap(e -> e.getValue().getMUDContainers().stream()) //
-				.flatMap(mudContainer -> mudContainer.getAllocationTrackers().stream()) //
-				.forEach(allocationTracker -> allocationTracker.setVesselSharing(firstPartyVessels));
-
-		final Set<Vessel> expectedVessels = profile.getInventories().stream() //
-				.flatMap(sProfile -> sProfile.getEntityTable().stream() //
-						.flatMap(row -> Stream.concat(
-								row.getDesSalesMarketAllocationRows().stream().flatMap(mar -> mar.getVessels().stream()), 
-								row.getSalesContractAllocationRows().stream().flatMap(con -> con.getVessels().stream())
-						)) //
-				).collect(Collectors.toSet());
-		final Map<Vessel, VesselAvailability> vessToVA = sm.getCargoModel().getVesselAvailabilities().stream().filter(va -> expectedVessels.contains(va.getVessel())).collect(Collectors.toMap(VesselAvailability::getVessel, Function.identity()));
+		final List<MullCargoWrapper> cargoesToKeep = new ArrayList<>(originalProfile.getCargoesToKeep());
 
 		final LocalDate startDate = adpModel.getYearStart().atDay(1);
 		final LocalDateTime startDateTime = startDate.atStartOfDay();
 		final LocalDateTime endDateTimeExclusive = adpModel.getYearEnd().atDay(1).atStartOfDay();
+
+		final boolean debugFlex = false;
+
+		final int loadWindowHours = loadWindow * 24;
+
+		// Reused objects
+		final Set<BaseLegalEntity> firstPartyEntities = ScenarioModelUtil.getCommercialModel(sm).getEntities().stream() //
+				.filter(e -> !e.isThirdParty()) //
+				.collect(Collectors.toSet());
+		final LocalDate dayBeforeADPStart = adpModel.getYearStart().atDay(1).minusDays(1);
+		final LocalDateTime dateTimeBeforeADPStart = dayBeforeADPStart.atStartOfDay();
+		final Map<Inventory, Integer> yearlyProductions = new HashMap<>();
+		final Map<Inventory, PurchaseContract> inventoryPurchaseContracts = new HashMap<>();
+
+		for (final MullSubprofile mullSubprofile : profile.getInventories()) {
+			final Inventory inventory = mullSubprofile.getInventory();
+			inventoryPurchaseContracts.put(inventory,
+					ScenarioModelUtil.getCommercialModel(sm).getPurchaseContracts().stream().filter(c -> inventory.getPort().equals(c.getPreferredPort())).findFirst().get());
+		}
+		final CharterInMarket adpNominalMarket = adpModel.getFleetProfile().getDefaultNominalMarket();
+		// End of shared objects
+
+		// Phase 1 - Generate cargoes favouring sales contracts - count of ship use
+		// should stay similar
+
+		// Start of phase 1
+		final Map<Vessel, LocalDateTime> phase1VesselToMostRecentUseDateTime = new HashMap<>();
+		final Map<Inventory, MULLContainer> phase1MullContainers = new HashMap<>();
+		final Map<Inventory, TreeMap<LocalDateTime, InventoryDateTimeEvent>> phase1InventoryHourlyInsAndOuts = new HashMap<>();
+		final Map<Inventory, Set<LocalDate>> phase1InventoryFlaggedDates = new HashMap<>();
+		final Map<Inventory, LinkedList<CargoBlueprint>> phase1CargoBlueprintsToGenerate = new HashMap<>();
+		final Map<Inventory, Integer> phase1InventorySlotCounters = new HashMap<>();
+		final List<Pair<Inventory, Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>>>> phase1IterSwap = new LinkedList<>();
+		final Map<Inventory, Iterator<Entry<LocalDateTime, Cargo>>> phase1InventoryExistingCargoes = new HashMap<>();
+		final Map<Inventory, Entry<LocalDateTime, Cargo>> phase1NextFixedCargoes = new HashMap<>();
+		final Map<Inventory, Set<String>> phase1InventoryKnownLoadIDs = new HashMap<>();
+		final Map<Inventory, RollingLoadWindow> phase1InventoryRollingWindows = new HashMap<>();
+
+		for (final MullSubprofile subprofile : profile.getInventories()) {
+			final Inventory currentInventory = subprofile.getInventory();
+			phase1MullContainers.put(currentInventory, new MULLContainer(subprofile, fullCargoLotValue));
+
+			for (MullEntityRow row : subprofile.getEntityTable()) {
+				Stream.concat(row.getSalesContractAllocationRows().stream().map(SalesContractAllocationRow::getVessels).flatMap(List::stream),
+						row.getDesSalesMarketAllocationRows().stream().map(DESSalesMarketAllocationRow::getVessels).flatMap(List::stream))
+						.forEach(vessel -> phase1VesselToMostRecentUseDateTime.put(vessel, dateTimeBeforeADPStart));
+			}
+
+			// Build ins and outs
+			final TreeMap<LocalDateTime, InventoryDateTimeEvent> currentInsAndOuts = getInventoryInsAndOutsHourly(currentInventory, sm, startDateTime, endDateTimeExclusive);
+			int totalInventoryVolume = 0;
+			while (currentInsAndOuts.firstKey().isBefore(startDateTime)) {
+				final InventoryDateTimeEvent event = currentInsAndOuts.remove(currentInsAndOuts.firstKey());
+				totalInventoryVolume += event.getNetVolumeIn();
+			}
+			currentInsAndOuts.firstEntry().getValue().addVolume(totalInventoryVolume);
+			phase1InventoryHourlyInsAndOuts.put(currentInventory, currentInsAndOuts);
+
+			// Flagged existing cargo dates
+			final Port inventoryPort = currentInventory.getPort();
+			final LocalDate dayBeforeStart = startDate.minusDays(1);
+			final Set<LocalDate> flaggedDates = new HashSet<>();
+			sm.getCargoModel().getLoadSlots().stream() //
+					.filter(s -> s.getPort().equals(inventoryPort) && dayBeforeStart.isBefore(s.getWindowStart())) //
+					.sorted((s1, s2) -> s1.getWindowStart().compareTo(s2.getWindowStart())) //
+					.map(LoadSlot::getWindowStart) //
+					.forEach(flaggedDates::add);
+			phase1InventoryFlaggedDates.put(currentInventory, flaggedDates);
+
+			final Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>> hourlyIter = currentInsAndOuts.entrySet().iterator();
+			phase1IterSwap.add(Pair.of(currentInventory, hourlyIter));
+
+			phase1InventorySlotCounters.put(currentInventory, 0);
+
+			phase1CargoBlueprintsToGenerate.put(currentInventory, new LinkedList<>());
+
+			final TreeMap<LocalDateTime, Cargo> existingCargoes = new TreeMap<>();
+			final Set<String> knownLoadIDs = new HashSet<>();
+			phase1InventoryKnownLoadIDs.put(currentInventory, knownLoadIDs);
+			cargoesToKeep.stream().filter(cargoWrapper -> cargoWrapper.getLoadSlot().getPort().equals(inventoryPort)).forEach(cargoWrapper -> {
+				final LoadSlot loadSlot = cargoWrapper.getLoadSlot();
+				final LocalDateTime loadStart = loadSlot.isSetWindowStartTime() ? loadSlot.getWindowStart().atTime(LocalTime.of(loadSlot.getWindowStartTime(), 00))
+						: loadSlot.getWindowStart().atStartOfDay();
+				knownLoadIDs.add(loadSlot.getName());
+				if (loadSlot.getCargo() != null) {
+					existingCargoes.put(loadStart, loadSlot.getCargo());
+				}
+			});
+			if (!existingCargoes.isEmpty()) {
+				LocalDateTime currentFirst = existingCargoes.firstKey();
+				while (currentFirst.isBefore(startDateTime)) {
+					final Cargo earliestCargo = existingCargoes.remove(currentFirst);
+					final Slot<?> dSlot = earliestCargo.getSlots().get(1);
+					if (dSlot instanceof DischargeSlot) {
+						final DischargeSlot dischargeSlot = (DischargeSlot) dSlot;
+						Vessel vessel = null;
+						if (dischargeSlot.isFOBSale()) {
+							vessel = dischargeSlot.getNominatedVessel();
+						} else {
+							final VesselAssignmentType vat = earliestCargo.getVesselAssignmentType();
+							if (vat instanceof VesselAvailability) {
+								vessel = ((VesselAvailability) vat).getVessel();
+							}
+						}
+						if (vessel != null) {
+							phase1VesselToMostRecentUseDateTime.put(vessel, currentFirst);
+						}
+					}
+					if (existingCargoes.isEmpty()) {
+						break;
+					}
+					currentFirst = existingCargoes.firstKey();
+				}
+			}
+
+			final Iterator<Entry<LocalDateTime, Cargo>> existingCargoesIter = existingCargoes.entrySet().iterator();
+			phase1InventoryExistingCargoes.put(currentInventory, existingCargoesIter);
+			if (existingCargoesIter.hasNext()) {
+				phase1NextFixedCargoes.put(currentInventory, existingCargoesIter.next());
+			}
+			final int inventoryLoadDuration = inventoryPort.getLoadDuration();
+			final OptionalInt optMaxLoadSlotDuration = existingCargoes.entrySet().stream().map(Entry::getValue).map(c -> c.getSlots().get(0))
+					.mapToInt(loadSlot -> loadSlot.isSetDuration() ? loadSlot.getDuration() : inventoryLoadDuration).max();
+			if (optMaxLoadSlotDuration.isPresent()) {
+				phase1InventoryRollingWindows.put(currentInventory, new RollingLoadWindow(inventoryLoadDuration, hourlyIter, Math.max(inventoryLoadDuration, optMaxLoadSlotDuration.getAsInt())));
+			} else {
+				phase1InventoryRollingWindows.put(currentInventory, new RollingLoadWindow(inventoryLoadDuration, hourlyIter, inventoryLoadDuration));
+			}
+		}
+		final Set<Vessel> phase1FirstPartyVessels = phase1MullContainers.entrySet().stream() //
+				.flatMap(e -> e.getValue().getMUDContainers().stream()) //
+				.filter(mudContainer -> firstPartyEntities.contains(mudContainer.getEntity())).flatMap(mudContainer -> mudContainer.getAllocationTrackers().stream()) //
+				.flatMap(allocationTracker -> allocationTracker.getVessels().stream()) //
+				.collect(Collectors.toSet());
+		phase1MullContainers.entrySet().stream() //
+				.flatMap(e -> e.getValue().getMUDContainers().stream()) //
+				.flatMap(mudContainer -> mudContainer.getAllocationTrackers().stream()) //
+				.forEach(allocationTracker -> allocationTracker.setVesselSharing(phase1FirstPartyVessels));
+
+		// End of phase 1 initialisation
+		// Start of phase 1 cargo generation
+		for (LocalDateTime phase1DateTime = startDateTime; phase1DateTime.isBefore(endDateTimeExclusive); phase1DateTime = phase1DateTime.plusHours(1)) {
+			for (Pair<Inventory, Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>>> phase1Curr : phase1IterSwap) {
+				final Inventory currentInventory = phase1Curr.getFirst();
+				final Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>> currentIter = phase1Curr.getSecond();
+
+				final RollingLoadWindow currentLoadWindow = phase1InventoryRollingWindows.get(currentInventory);
+				final InventoryDateTimeEvent newEndWindowEvent;
+				if (currentIter.hasNext()) {
+					newEndWindowEvent = currentIter.next().getValue();
+				} else {
+					final InventoryDateTimeEvent previousDateTimeEvent = currentLoadWindow.getLastEvent();
+					newEndWindowEvent = new InventoryDateTimeEvent(phase1DateTime, 0, previousDateTimeEvent.minVolume, previousDateTimeEvent.maxVolume);
+				}
+
+				final InventoryDateTimeEvent currentEvent = currentLoadWindow.getCurrentEvent();
+				final MULLContainer currentMULLContainer = phase1MullContainers.get(currentInventory);
+				currentMULLContainer.updateRunningAllocation(currentEvent.getNetVolumeIn());
+
+				final LocalDateTime currentDateTime = currentLoadWindow.getStartDateTime();
+				assert currentDateTime.equals(phase1DateTime);
+
+				if (isAtStartHourOfMonth(phase1DateTime)) {
+					final YearMonth currentYM = YearMonth.from(phase1DateTime);
+					final int monthIn = phase1InventoryHourlyInsAndOuts.get(currentInventory).entrySet().stream() //
+							.filter(p -> YearMonth.from(p.getKey()).equals(currentYM)) //
+							.mapToInt(p -> p.getValue().getNetVolumeIn()) //
+							.sum();
+					currentMULLContainer.updateCurrentMonthAbsoluteEntitlement(monthIn);
+				}
+				final Entry<LocalDateTime, Cargo> nextFixedCargo = phase1NextFixedCargoes.get(currentInventory);
+				if (nextFixedCargo != null && nextFixedCargo.getKey().equals(phase1DateTime)) {
+					final LinkedList<CargoBlueprint> currentCargoBlueprintsToGenerate = phase1CargoBlueprintsToGenerate.get(currentInventory);
+					final List<CargoBlueprint> cargoBlueprintsToUndo = currentLoadWindow.startFixedLoad(nextFixedCargo.getValue(), currentCargoBlueprintsToGenerate);
+					currentMULLContainer.phase1DropFixedLoad(nextFixedCargo.getValue());
+					final Set<Vessel> vesselsToUndo = new HashSet<>();
+					for (final CargoBlueprint cargoBlueprint : cargoBlueprintsToUndo) {
+						currentMULLContainer.phase1Undo(cargoBlueprint);
+						final Vessel undoneVessel = cargoBlueprint.getAssignedVessel();
+						if (undoneVessel != null) {
+							vesselsToUndo.add(undoneVessel);
+						}
+					}
+					final Iterator<CargoBlueprint> reverseCargoBlueprints = currentCargoBlueprintsToGenerate.descendingIterator();
+					while (!vesselsToUndo.isEmpty()) {
+						if (!reverseCargoBlueprints.hasNext()) {
+							break;
+						}
+						final CargoBlueprint cargoBlueprint = reverseCargoBlueprints.next();
+						final Vessel assignedVessel = cargoBlueprint.getAssignedVessel();
+						if (vesselsToUndo.contains(assignedVessel)) {
+							phase1VesselToMostRecentUseDateTime.put(assignedVessel, cargoBlueprint.getWindowStart());
+							vesselsToUndo.remove(assignedVessel);
+						}
+					}
+					if (currentCargoBlueprintsToGenerate.isEmpty()) {
+						phase1InventorySlotCounters.put(currentInventory, 0);
+					} else {
+						phase1InventorySlotCounters.put(currentInventory, currentCargoBlueprintsToGenerate.getLast().getLoadCounter() + 1);
+					}
+					for (final Vessel vesselToUndo : vesselsToUndo) {
+						phase1VesselToMostRecentUseDateTime.put(vesselToUndo, dateTimeBeforeADPStart);
+					}
+					final Iterator<Entry<LocalDateTime, Cargo>> nextFixedCargoesIter = phase1InventoryExistingCargoes.get(currentInventory);
+					if (nextFixedCargoesIter.hasNext()) {
+						phase1NextFixedCargoes.put(currentInventory, nextFixedCargoesIter.next());
+					} else {
+						phase1NextFixedCargoes.remove(currentInventory);
+					}
+				}
+				if (!currentLoadWindow.isLoading()) {
+					final MUDContainer mullMUDContainer = currentMULLContainer.phase1CalculateMULL(phase1VesselToMostRecentUseDateTime, cargoVolume, phase1FirstPartyVessels);
+					final AllocationTracker mudAllocationTracker = mullMUDContainer.phase1CalculateMUDAllocationTracker();
+					final List<Vessel> mudVesselRestrictions = mudAllocationTracker.getVessels();
+					final int currentAllocationDrop;
+					final Vessel assignedVessel;
+					if (!mudVesselRestrictions.isEmpty()) {
+						assignedVessel = mudVesselRestrictions.stream().min((v1, v2) -> phase1VesselToMostRecentUseDateTime.get(v1).compareTo(phase1VesselToMostRecentUseDateTime.get(v2))).get();
+						currentAllocationDrop = mudAllocationTracker.calculateExpectedAllocationDrop(assignedVessel, currentInventory.getPort().getLoadDuration(), phase1FirstPartyVessels.contains(assignedVessel));
+					} else {
+						assignedVessel = null;
+						currentAllocationDrop = cargoVolume;
+					}
+					if (currentLoadWindow.canLift(currentAllocationDrop)) {
+						final Set<String> currentKnownLoadIDs = phase1InventoryKnownLoadIDs.get(currentInventory);
+						currentLoadWindow.startLoad(currentAllocationDrop);
+						mullMUDContainer.dropAllocation(currentAllocationDrop);
+						mudAllocationTracker.phase1DropAllocation(currentAllocationDrop);
+						mullMUDContainer.reassessAACQSatisfaction();
+
+						int nextLoadCount = phase1InventorySlotCounters.get(currentInventory);
+						String expectedLoadName = String.format("%s-%03d", currentInventory.getName(), nextLoadCount);
+						while (currentKnownLoadIDs.contains(expectedLoadName)) {
+							++nextLoadCount;
+							expectedLoadName = String.format("%s-%03d", currentInventory.getName(), nextLoadCount);
+						}
+
+						final int volumeHigh;
+						final int volumeLow;
+						if (debugFlex) {
+							final int flexDifference = currentLoadWindow.getEndWindowVolume() - currentAllocationDrop - currentLoadWindow.getEndWindowTankMin();
+							assert flexDifference >= 0;
+							volumeHigh = currentAllocationDrop;
+							volumeLow = currentAllocationDrop - volumeFlex;
+						} else {
+							volumeHigh = currentAllocationDrop + volumeFlex;
+							volumeLow = currentAllocationDrop - volumeFlex;
+						}
+						final CargoBlueprint currentCargoBlueprint = new CargoBlueprint(currentInventory, inventoryPurchaseContracts.get(currentInventory), nextLoadCount, assignedVessel,
+								currentLoadWindow.getStartDateTime(), loadWindowHours, mudAllocationTracker, currentAllocationDrop, mullMUDContainer.getEntity(), volumeHigh, volumeLow);
+						if (!phase1CargoBlueprintsToGenerate.get(currentInventory).isEmpty()) {
+							final CargoBlueprint previousCargoBlueprint = phase1CargoBlueprintsToGenerate.get(currentInventory).getLast();
+							final LocalDateTime earliestPreviousStart = currentLoadWindow.getStartDateTime().minusHours(currentInventory.getPort().getLoadDuration());
+							final int newWindowHours = Hours.between(previousCargoBlueprint.getWindowStart(), earliestPreviousStart);
+							previousCargoBlueprint.updateWindowSize(newWindowHours);
+						}
+						phase1CargoBlueprintsToGenerate.get(currentInventory).add(currentCargoBlueprint);
+						phase1InventorySlotCounters.put(currentInventory, nextLoadCount + 1);
+						if (assignedVessel != null) {
+							phase1VesselToMostRecentUseDateTime.put(assignedVessel, currentCargoBlueprint.getWindowStart());
+						}
+					}
+				}
+				currentLoadWindow.stepForward(newEndWindowEvent);
+			}
+		}
+		// End of phase 1 cargo generation
+
+		// Phase 1 debug check
+		final Map<Inventory, Map<BaseLegalEntity, Map<SalesContractTracker, Integer>>> salesContractInspect = new HashMap<>();
+		final Map<Inventory, Map<BaseLegalEntity, Map<DESMarketTracker, Integer>>> desMarketInspect = new HashMap<>();
+		for (final Entry<Inventory, LinkedList<CargoBlueprint>> entry : phase1CargoBlueprintsToGenerate.entrySet()) {
+			salesContractInspect.put(entry.getKey(), new HashMap<>());
+			desMarketInspect.put(entry.getKey(), new HashMap<>());
+			for (final CargoBlueprint cargoBlueprint : entry.getValue()) {
+				if (cargoBlueprint.getAllocationTracker() instanceof SalesContractTracker) {
+					final Map<SalesContractTracker, Integer> scMap = salesContractInspect.get(entry.getKey()).computeIfAbsent(cargoBlueprint.getEntity(), k -> new HashMap<>());
+					scMap.compute((SalesContractTracker) cargoBlueprint.getAllocationTracker(), (k, v) -> v == null ? 1 : v + 1);
+				} else {
+					final Map<DESMarketTracker, Integer> dsmMap = desMarketInspect.get(entry.getKey()).computeIfAbsent(cargoBlueprint.getEntity(), k -> new HashMap<>());
+					dsmMap.compute((DESMarketTracker) cargoBlueprint.getAllocationTracker(), (k, v) -> v == null ? 1 : v + 1);
+				}
+			}
+		}
+
+		for (final Inventory inventory : phase1CargoBlueprintsToGenerate.keySet()) {
+			for (final MUDContainer mudContainer : phase1MullContainers.get(inventory).getMUDContainers()) {
+				final BaseLegalEntity entity = mudContainer.getEntity();
+				final Map<BaseLegalEntity, Map<DESMarketTracker, Integer>> desTrackers = desMarketInspect.get(inventory);
+				if (!desTrackers.containsKey(entity)) {
+					final HashMap<DESMarketTracker, Integer> map = new HashMap<>();
+					mudContainer.getAllocationTrackers().stream().filter(DESMarketTracker.class::isInstance).map(DESMarketTracker.class::cast).forEach(tracker -> map.put(tracker, 0));
+					desTrackers.put(entity, map);
+				}
+			}
+		}
+
+//		for (final Inventory inventory : phase1CargoBlueprintsToGenerate.keySet()) {
+//			System.out.println(String.format("For inventory %s", inventory.getName()));
+//			for (final MUDContainer mudContainer : phase1MullContainers.get(inventory).getMUDContainers()) {
+//				final BaseLegalEntity entity = mudContainer.getEntity();
+//				System.out.println(String.format("\tFor %s", entity.getName()));
+//				final Map<SalesContractTracker, Integer> currSCMap = salesContractInspect.get(inventory).get(entity);
+//				if (currSCMap != null) {
+//					for (Entry<SalesContractTracker, Integer> entry : currSCMap.entrySet()) {
+//						System.out.println(String.format("\t\tSC:%s. Expected: %d. Actual: %d", entry.getKey().getSalesContract().getName(), entry.getKey().getAACQ(), entry.getValue()));
+//					}
+//				}
+//				for (Entry<DESMarketTracker, Integer> entry : desMarketInspect.get(inventory).computeIfAbsent(entity, k -> {
+//					final HashMap<DESMarketTracker, Integer> map = new HashMap<>();
+//					mudContainer.getAllocationTrackers().stream().filter(DESMarketTracker.class::isInstance).map(DESMarketTracker.class::cast).forEach(tracker -> map.put(tracker, 0));
+//					return map;
+//				}).entrySet()) {
+//					System.out.println(String.format("\t\tDSM:%s. Expected: %d. Actual: %d", entry.getKey().getDESSalesMarket().getName(), entry.getKey().getAACQ(), entry.getValue()));
+//				}
+//			}
+//		}
+		// end of phase 1 debug check
+
+		// End of phase 1
+
+		// Phase 2 - Pull AACQs derived from phase 1 and use this to generate a
+		// harmonised scheduleGenerate cargoes favouring sales contracts
+		// Start of phase 2
+
+		// Start of phase 1 to phase 2 transistion
+		final MullProfile phase1RevisedProfile = ADPFactory.eINSTANCE.createMullProfile();
+		phase1RevisedProfile.setFullCargoLotValue(profile.getFullCargoLotValue());
+		phase1RevisedProfile.setVolumeFlex(profile.getVolumeFlex());
+		phase1RevisedProfile.setWindowSize(profile.getWindowSize());
+		// phase1RevisedProfile.getCargoesToKeep().addAll(profile.getCargoesToKeep());
+		for (final MullSubprofile mullSubprofile : profile.getInventories()) {
+			final MullSubprofile replacementSubprofile = ADPFactory.eINSTANCE.createMullSubprofile();
+			replacementSubprofile.setInventory(mullSubprofile.getInventory());
+			for (final MullEntityRow mullEntityRow : mullSubprofile.getEntityTable()) {
+				final MullEntityRow replacementEntityRow = ADPFactory.eINSTANCE.createMullEntityRow();
+				replacementEntityRow.setEntity(mullEntityRow.getEntity());
+				replacementEntityRow.setInitialAllocation(mullEntityRow.getInitialAllocation());
+				replacementEntityRow.setRelativeEntitlement(mullEntityRow.getRelativeEntitlement());
+				for (final SalesContractAllocationRow salesContractAllocationRow : mullEntityRow.getSalesContractAllocationRows()) {
+					final SalesContractAllocationRow replacementSalesContractAllocationRow = ADPFactory.eINSTANCE.createSalesContractAllocationRow();
+					replacementSalesContractAllocationRow.setContract(salesContractAllocationRow.getContract());
+					replacementSalesContractAllocationRow.setWeight(salesContractAllocationRow.getWeight());
+					replacementSalesContractAllocationRow.getVessels().addAll(salesContractAllocationRow.getVessels());
+					replacementEntityRow.getSalesContractAllocationRows().add(replacementSalesContractAllocationRow);
+				}
+				for (final DESSalesMarketAllocationRow desSalesMarketAllocationRow : mullEntityRow.getDesSalesMarketAllocationRows()) {
+					final DESSalesMarketAllocationRow replacementDesSalesMarketAllocationRow = ADPFactory.eINSTANCE.createDESSalesMarketAllocationRow();
+					replacementDesSalesMarketAllocationRow.setDesSalesMarket(desSalesMarketAllocationRow.getDesSalesMarket());
+					replacementDesSalesMarketAllocationRow.setWeight(desMarketInspect.get(mullSubprofile.getInventory()).get(mullEntityRow.getEntity()).entrySet().stream()
+							.filter(entry -> entry.getKey().getDESSalesMarket().equals(desSalesMarketAllocationRow.getDesSalesMarket())).mapToInt(Entry::getValue).findFirst().getAsInt());
+					replacementDesSalesMarketAllocationRow.getVessels().addAll(desSalesMarketAllocationRow.getVessels());
+					replacementEntityRow.getDesSalesMarketAllocationRows().add(replacementDesSalesMarketAllocationRow);
+				}
+				replacementSubprofile.getEntityTable().add(replacementEntityRow);
+			}
+			phase1RevisedProfile.getInventories().add(replacementSubprofile);
+		}
+		// End of phase 1 to phase 2 transition
+
+		// Phase 2 initialisation
+		final Map<Vessel, LocalDateTime> phase2VesselToMostRecentUseDateTime = new HashMap<>();
+		final Map<Vessel, LocalDateTime> finalPhaseVesselToMostRecentUseDateTime = new HashMap<>();
+
+		final Map<Inventory, MULLContainer> finalPhaseMullContainers = new HashMap<>();
+		for (final MullSubprofile subprofile : phase1RevisedProfile.getInventories()) {
+			final Inventory inventory = subprofile.getInventory();
+			finalPhaseMullContainers.put(inventory, new MULLContainer(subprofile, fullCargoLotValue));
+			for (final MullEntityRow mullEntityRow : subprofile.getEntityTable()) {
+				Stream.concat(mullEntityRow.getSalesContractAllocationRows().stream().map(SalesContractAllocationRow::getVessels).flatMap(List::stream),
+						mullEntityRow.getDesSalesMarketAllocationRows().stream().map(DESSalesMarketAllocationRow::getVessels).flatMap(List::stream))
+						.forEach(vessel -> finalPhaseVesselToMostRecentUseDateTime.put(vessel, dateTimeBeforeADPStart));
+			}
+			yearlyProductions.put(inventory, getYearlyProduction(inventory, sm, startDateTime, endDateTimeExclusive));
+		}
+
+		final Set<Vessel> firstPartyVessels = finalPhaseMullContainers.entrySet().stream() //
+				.flatMap(e -> e.getValue().getMUDContainers().stream()) //
+				.filter(mudContainer -> firstPartyEntities.contains(mudContainer.getEntity())).flatMap(mudContainer -> mudContainer.getAllocationTrackers().stream()) //
+				.flatMap(allocationTracker -> allocationTracker.getVessels().stream()) //
+				.collect(Collectors.toSet());
+
+		finalPhaseMullContainers.entrySet().stream() //
+				.flatMap(e -> e.getValue().getMUDContainers().stream()) //
+				.flatMap(mudContainer -> mudContainer.getAllocationTrackers().stream()) //
+				.forEach(allocationTracker -> allocationTracker.setVesselSharing(firstPartyVessels));
+
+		final MullProfile harmonisationMullProfile = ADPFactory.eINSTANCE.createMullProfile();
+		harmonisationMullProfile.setFullCargoLotValue(phase1RevisedProfile.getFullCargoLotValue());
+		harmonisationMullProfile.setVolumeFlex(phase1RevisedProfile.getVolumeFlex());
+		harmonisationMullProfile.setWindowSize(phase1RevisedProfile.getWindowSize());
+
+		final Map<Inventory, Map<MUDContainer, Pair<List<AllocationTracker>, Map<AllocationTracker, List<Pair<MUDContainer, AllocationTracker>>>>>> rearrangedProfiles = new HashMap<>();
+		for (final MULLContainer finalPhaseMullContainer : finalPhaseMullContainers.values()) {
+			// Expecting one first party MUD container - unknown behaviour for more than one
+			// or none first party
+			final Optional<MUDContainer> optMudContainer = finalPhaseMullContainer.getMUDContainers().stream().filter(m -> firstPartyEntities.contains(m.getEntity())).findAny();
+			if (optMudContainer.isEmpty()) {
+				throw new IllegalStateException("MULL profile should contain a first party entry.");
+			}
+			final MUDContainer firstPartyMudContainer = optMudContainer.get();
+
+			// Map of <entity, allocation tracker pair> to List of <entity, allocation
+			// tracker> that it combines with (using first party as sink)
+			final Map<Pair<MUDContainer, AllocationTracker>, List<Pair<MUDContainer, AllocationTracker>>> newCombinations = new HashMap<>();
+			firstPartyMudContainer.getAllocationTrackers().stream().map(a -> Pair.of(firstPartyMudContainer, a)).forEach(p -> newCombinations.put(p, new LinkedList<>(Collections.singleton(p))));
+			for (final MUDContainer thirdPartyMudContainer : finalPhaseMullContainer.getMUDContainers()) {
+				if (thirdPartyMudContainer.getEntity().isThirdParty()) {
+					for (final AllocationTracker thirdPartyAllocationTracker : thirdPartyMudContainer.getAllocationTrackers()) {
+						if (thirdPartyAllocationTracker.isSharingVessels()) {
+							final Optional<AllocationTracker> optAllocationTracker = firstPartyMudContainer.getAllocationTrackers().stream() //
+									.filter(a -> {
+										final HashSet<Vessel> firstVessSet = new HashSet<>(a.getVessels());
+										final List<Vessel> thirdPartyVessels = thirdPartyAllocationTracker.getVessels();
+										return firstVessSet.size() == thirdPartyVessels.size() && thirdPartyVessels.stream().allMatch(firstVessSet::contains);
+									}).findAny();
+							if (optAllocationTracker.isEmpty()) {
+								// Shares vessels but first party does not have a tracker with the same vessel
+								// set (not all vessels are shared)
+								final Pair<MUDContainer, AllocationTracker> p = Pair.of(thirdPartyMudContainer, thirdPartyAllocationTracker);
+								newCombinations.put(p, new LinkedList<>(Collections.singleton(p)));
+							} else {
+								newCombinations.get(Pair.of(firstPartyMudContainer, optAllocationTracker.get())).add(Pair.of(thirdPartyMudContainer, thirdPartyAllocationTracker));
+							}
+						} else {
+							final Pair<MUDContainer, AllocationTracker> p = Pair.of(thirdPartyMudContainer, thirdPartyAllocationTracker);
+							newCombinations.put(p, new LinkedList<>(Collections.singleton(p)));
+						}
+					}
+				}
+			}
+
+			// Maps to tie allocation tracker and entitlements to entities
+			final Map<MUDContainer, Set<AllocationTracker>> rearrangedContainment = new HashMap<>();
+			final Map<MUDContainer, Double> runningRelativeEntitlement = new HashMap<>();
+			final Map<MUDContainer, Long> runningInitialAllocation = new HashMap<>();
+			for (final MUDContainer currentMUDContainer : finalPhaseMullContainer.getMUDContainers()) {
+				rearrangedContainment.put(currentMUDContainer, new HashSet<>(currentMUDContainer.getAllocationTrackers()));
+				runningRelativeEntitlement.put(currentMUDContainer, currentMUDContainer.getRelativeEntitlement());
+				runningInitialAllocation.put(currentMUDContainer, currentMUDContainer.getInitialAllocation());
+			}
+
+			// <MUD, allocation tracker> pairs that do not move
+			final List<Pair<MUDContainer, AllocationTracker>> nonMovingElements = newCombinations.entrySet().stream().filter(entry -> entry.getValue().size() == 1).map(Entry::getKey)
+					.collect(Collectors.toList());
+			// <MUD, allocation tracker> pairs that combine with another
+			final Map<Pair<MUDContainer, AllocationTracker>, List<Pair<MUDContainer, AllocationTracker>>> movingElements = new HashMap<>();
+			for (final Entry<Pair<MUDContainer, AllocationTracker>, List<Pair<MUDContainer, AllocationTracker>>> entry : newCombinations.entrySet()) {
+				if (entry.getValue().size() > 1) {
+					movingElements.put(entry.getKey(), entry.getValue());
+				}
+			}
+
+			// Map of MUD to pair of <allocation trackers that are from the original setup
+			// and map from an allocation tracker to a list of <MUD, allocation tracker>
+			// that the current allocation tracker absorbs
+			final Map<MUDContainer, Pair<List<AllocationTracker>, Map<AllocationTracker, List<Pair<MUDContainer, AllocationTracker>>>>> rearrangedProfile = new HashMap<>();
+			// Populate with original MUD containers
+			for (final MUDContainer currentMUDContainer : finalPhaseMullContainer.getMUDContainers()) {
+				rearrangedProfile.put(currentMUDContainer, Pair.of(new LinkedList<>(), new HashMap<>()));
+			}
+
+			// Populate the rearranged profile
+			nonMovingElements.forEach(p -> rearrangedProfile.get(p.getFirst()).getFirst().add(p.getSecond()));
+			for (final Entry<Pair<MUDContainer, AllocationTracker>, List<Pair<MUDContainer, AllocationTracker>>> entry : movingElements.entrySet()) {
+				final MUDContainer minorMud = entry.getValue().stream().map(Pair::getFirst).min((mud1, mud2) -> Double.compare(mud1.getRelativeEntitlement(), mud2.getRelativeEntitlement())).get();
+
+				// If we have the option of using DESMarketTracker as sink, use it (otherwise
+				// throws an IllegalStateException later on)
+				final List<Pair<MUDContainer, AllocationTracker>> minorLifterPairCandidates = entry.getValue().stream().filter(p -> p.getFirst() == minorMud).collect(Collectors.toList());
+				final Optional<Pair<MUDContainer, AllocationTracker>> optDesMinorLifterPair = minorLifterPairCandidates.stream().filter(p -> p.getSecond() instanceof DESMarketTracker).findAny();
+				final Pair<MUDContainer, AllocationTracker> minorLifter = optDesMinorLifterPair.isPresent() ? optDesMinorLifterPair.get() : minorLifterPairCandidates.get(0);
+
+				final List<Pair<MUDContainer, AllocationTracker>> sharedCombinations = entry.getValue().stream().filter(p -> p != minorLifter).collect(Collectors.toList());
+				for (final Pair<MUDContainer, AllocationTracker> lifterToAbsorb : sharedCombinations) {
+					if (lifterToAbsorb.getFirst() != minorLifter.getFirst()) {
+						final MUDContainer mudToAbsorb = lifterToAbsorb.getFirst();
+						final AllocationTracker allocToAbsorb = lifterToAbsorb.getSecond();
+						rearrangedContainment.get(mudToAbsorb).remove(allocToAbsorb);
+						rearrangedContainment.get(minorLifter.getFirst()).add(allocToAbsorb);
+						if (rearrangedContainment.get(mudToAbsorb).isEmpty()) {
+							runningRelativeEntitlement.put(minorLifter.getFirst(), runningRelativeEntitlement.get(minorLifter.getFirst()) + runningRelativeEntitlement.get(mudToAbsorb));
+							runningRelativeEntitlement.put(mudToAbsorb, 0.0);
+							runningInitialAllocation.put(minorLifter.getFirst(), runningInitialAllocation.get(minorLifter.getFirst()) + runningInitialAllocation.get(mudToAbsorb));
+							runningInitialAllocation.put(mudToAbsorb, 0L);
+						} else {
+							final int averageVolumeLifted = allocToAbsorb.getVessels().stream() //
+									.mapToInt(v -> allocToAbsorb.calculateExpectedAllocationDrop(v, finalPhaseMullContainer.getInventory().getPort().getLoadDuration(), true)) //
+									.sum() / allocToAbsorb.getVessels().size();
+							final int totalProd = yearlyProductions.get(finalPhaseMullContainer.getInventory());
+							final double allocatedProduction = totalProd * lifterToAbsorb.getFirst().getRelativeEntitlement();
+							final int aacqLiftedVolume = allocToAbsorb.getAACQ() * averageVolumeLifted;
+							final double localPercentage = aacqLiftedVolume / allocatedProduction;
+							final double reShift = mudToAbsorb.getRelativeEntitlement() * localPercentage;
+							final long initialAllocationShift = (long) (mudToAbsorb.getInitialAllocation() * localPercentage);
+							runningRelativeEntitlement.put(minorLifter.getFirst(), runningRelativeEntitlement.get(minorLifter.getFirst()) + reShift);
+							runningRelativeEntitlement.put(mudToAbsorb, runningRelativeEntitlement.get(mudToAbsorb) - reShift);
+							runningInitialAllocation.put(minorLifter.getFirst(), runningInitialAllocation.get(minorLifter.getFirst()) + initialAllocationShift);
+							runningInitialAllocation.put(mudToAbsorb, runningInitialAllocation.get(mudToAbsorb) - initialAllocationShift);
+						}
+					}
+					rearrangedProfile.get(minorLifter.getFirst()).getSecond().put(minorLifter.getSecond(), sharedCombinations);
+				}
+			}
+
+			rearrangedProfiles.put(finalPhaseMullContainer.getInventory(), rearrangedProfile);
+
+			final double sumNewRelativeEntitlements = runningRelativeEntitlement.values().stream().mapToDouble(v -> v).sum();
+			// assert sumNewRelativeEntitlements == 1.0;
+
+			final long sumInitialAllocationsBefore = finalPhaseMullContainer.getMUDContainers().stream().mapToLong(MUDContainer::getInitialAllocation).sum();
+			final long sumInitialAllocationsAfter = runningInitialAllocation.values().stream().mapToLong(v -> v).sum();
+//			assert sumInitialAllocationsBefore == sumInitialAllocationsAfter;
+
+			// Convert rearranged profile to EMF MULL Subprofile (to use existing MULL
+			// objects)
+			final MullSubprofile newSubprofile = ADPFactory.eINSTANCE.createMullSubprofile();
+			newSubprofile.setInventory(finalPhaseMullContainer.getInventory());
+			rearrangedProfile.entrySet().forEach(entry -> {
+				final MUDContainer currentMudContainer = entry.getKey();
+				final Pair<List<AllocationTracker>, Map<AllocationTracker, List<Pair<MUDContainer, AllocationTracker>>>> pair = entry.getValue();
+				if (rearrangedContainment.get(currentMudContainer).isEmpty()) {
+					assert runningRelativeEntitlement.get(currentMudContainer) == 0.0;
+					assert runningInitialAllocation.get(currentMudContainer) == 0L;
+					assert pair.getFirst().isEmpty() && pair.getSecond().isEmpty();
+				} else {
+					assert !pair.getFirst().isEmpty() || !pair.getSecond().isEmpty();
+					final MullEntityRow tempRow = ADPFactory.eINSTANCE.createMullEntityRow();
+					tempRow.setEntity(currentMudContainer.getEntity());
+					tempRow.setRelativeEntitlement(runningRelativeEntitlement.get(currentMudContainer));
+					tempRow.setInitialAllocation(Long.toString(runningInitialAllocation.get(currentMudContainer)));
+					newSubprofile.getEntityTable().add(tempRow);
+					for (final AllocationTracker allocationTracker : pair.getFirst()) {
+						if (allocationTracker instanceof SalesContractTracker) {
+							final SalesContractAllocationRow tempAllocRow = ADPFactory.eINSTANCE.createSalesContractAllocationRow();
+							tempAllocRow.setContract(((SalesContractTracker) allocationTracker).getSalesContract());
+							tempAllocRow.setWeight(allocationTracker.getAACQ());
+							tempAllocRow.getVessels().addAll(allocationTracker.getVessels());
+							tempRow.getSalesContractAllocationRows().add(tempAllocRow);
+						} else if (allocationTracker instanceof DESMarketTracker) {
+							final DESSalesMarketAllocationRow tempAllocRow = ADPFactory.eINSTANCE.createDESSalesMarketAllocationRow();
+							tempAllocRow.setDesSalesMarket(((DESMarketTracker) allocationTracker).getDESSalesMarket());
+							tempAllocRow.setWeight(allocationTracker.getAACQ());
+							tempAllocRow.getVessels().addAll(allocationTracker.getVessels());
+							tempRow.getDesSalesMarketAllocationRows().add(tempAllocRow);
+						}
+					}
+					for (Entry<AllocationTracker, List<Pair<MUDContainer, AllocationTracker>>> entry2 : pair.getSecond().entrySet()) {
+						final AllocationTracker absorbingAllocationTracker = entry2.getKey();
+						final List<Pair<MUDContainer, AllocationTracker>> allocationTrackersToAbsorb = entry2.getValue();
+						if (absorbingAllocationTracker instanceof SalesContractTracker) {
+							final SalesContractAllocationRow tempAllocRow = ADPFactory.eINSTANCE.createSalesContractAllocationRow();
+							tempAllocRow.setContract(((SalesContractTracker) absorbingAllocationTracker).getSalesContract());
+							final int newAACQ = absorbingAllocationTracker.getAACQ() + allocationTrackersToAbsorb.stream().map(Pair::getSecond).mapToInt(AllocationTracker::getAACQ).sum();
+							tempAllocRow.setWeight(newAACQ);
+							tempAllocRow.getVessels().addAll(absorbingAllocationTracker.getVessels());
+							tempRow.getSalesContractAllocationRows().add(tempAllocRow);
+						} else if (absorbingAllocationTracker instanceof DESMarketTracker) {
+							final DESSalesMarketAllocationRow tempAllocRow = ADPFactory.eINSTANCE.createDESSalesMarketAllocationRow();
+							final int newAACQ = absorbingAllocationTracker.getAACQ() + allocationTrackersToAbsorb.stream().map(Pair::getSecond).mapToInt(AllocationTracker::getAACQ).sum();
+							tempAllocRow.setDesSalesMarket(((DESMarketTracker) absorbingAllocationTracker).getDESSalesMarket());
+							tempAllocRow.setWeight(newAACQ);
+							tempAllocRow.getVessels().addAll(absorbingAllocationTracker.getVessels());
+							tempRow.getDesSalesMarketAllocationRows().add(tempAllocRow);
+						}
+					}
+				}
+			});
+
+			final int aacqSumBefore = finalPhaseMullContainer.getMUDContainers().stream() //
+					.mapToInt(mc -> mc.getAllocationTrackers().stream().mapToInt(AllocationTracker::getAACQ).sum()) //
+					.sum();
+			final int aacqSumAfter = newSubprofile.getEntityTable().stream() //
+					.mapToInt(row -> row.getSalesContractAllocationRows().stream().mapToInt(MullAllocationRow::getWeight).sum()
+							+ row.getDesSalesMarketAllocationRows().stream().mapToInt(MullAllocationRow::getWeight).sum()) //
+					.sum();
+			assert aacqSumBefore == aacqSumAfter;
+			harmonisationMullProfile.getInventories().add(newSubprofile);
+		}
+
+		final Map<Inventory, MULLContainer> newMullContainers = new HashMap<>();
+		for (MullSubprofile subprofile : harmonisationMullProfile.getInventories()) {
+			final Inventory currentInventory = subprofile.getInventory();
+			newMullContainers.put(currentInventory, new MULLContainer(subprofile, fullCargoLotValue));
+
+			for (MullEntityRow row : subprofile.getEntityTable()) {
+				Stream.concat(row.getSalesContractAllocationRows().stream().map(SalesContractAllocationRow::getVessels).flatMap(List::stream),
+						row.getDesSalesMarketAllocationRows().stream().map(DESSalesMarketAllocationRow::getVessels).flatMap(List::stream))
+						.forEach(vessel -> phase2VesselToMostRecentUseDateTime.put(vessel, dateTimeBeforeADPStart));
+			}
+		}
+
+		newMullContainers.entrySet().stream() //
+				.flatMap(e -> e.getValue().getMUDContainers().stream()) //
+				.flatMap(mudContainer -> mudContainer.getAllocationTrackers().stream()) //
+				.forEach(allocationTracker -> allocationTracker.setVesselSharing(firstPartyVessels));
+
+		// Map <entity, contract/market> to rearranged profile allocation trackers
+		final Map<Inventory, Map<Pair<BaseLegalEntity, SalesContract>, AllocationTracker>> salesContractMap = new HashMap<>();
+		final Map<Inventory, Map<Pair<BaseLegalEntity, DESSalesMarket>, AllocationTracker>> desMarketMap = new HashMap<>();
+		for (MULLContainer mullContainer : newMullContainers.values()) {
+			final Map<Pair<BaseLegalEntity, SalesContract>, AllocationTracker> currentSalesContractMap = new HashMap<>();
+			final Map<Pair<BaseLegalEntity, DESSalesMarket>, AllocationTracker> currentDESMarketMap = new HashMap<>();
+			salesContractMap.put(mullContainer.getInventory(), currentSalesContractMap);
+			desMarketMap.put(mullContainer.getInventory(), currentDESMarketMap);
+			for (MUDContainer mudContainer : mullContainer.getMUDContainers()) {
+				for (AllocationTracker allocationTracker : mudContainer.getAllocationTrackers()) {
+					if (allocationTracker instanceof SalesContractTracker) {
+						currentSalesContractMap.put(Pair.of(mudContainer.getEntity(), ((SalesContractTracker) allocationTracker).getSalesContract()), allocationTracker);
+					} else if (allocationTracker instanceof DESMarketTracker) {
+						currentDESMarketMap.put(Pair.of(mudContainer.getEntity(), ((DESMarketTracker) allocationTracker).getDESSalesMarket()), allocationTracker);
+					}
+				}
+			}
+		}
+		final Map<Inventory, Map<AllocationTracker, List<Pair<MUDContainer, AllocationTracker>>>> newAllocationTrackerToCombinedMapMap = new HashMap<>();
+		final Map<Inventory, Map<Pair<BaseLegalEntity, SalesContract>, Pair<MUDContainer, AllocationTracker>>> originalSalesContractPairToNewAllocationPairMapMap = new HashMap<>();
+		final Map<Inventory, Map<Pair<BaseLegalEntity, DESSalesMarket>, Pair<MUDContainer, AllocationTracker>>> originalDESMarketPairToNewAllocationPairMapMap = new HashMap<>();
+		for (Entry<Inventory, Map<MUDContainer, Pair<List<AllocationTracker>, Map<AllocationTracker, List<Pair<MUDContainer, AllocationTracker>>>>>> entry : rearrangedProfiles.entrySet()) {
+			final Inventory inventory = entry.getKey();
+			final Map<Pair<BaseLegalEntity, SalesContract>, AllocationTracker> currentSalesContractMap = salesContractMap.get(inventory);
+			final Map<Pair<BaseLegalEntity, DESSalesMarket>, AllocationTracker> currentDESContractMap = desMarketMap.get(inventory);
+			final Map<AllocationTracker, List<Pair<MUDContainer, AllocationTracker>>> currentCombinedMap = new HashMap<>();
+			final Map<Pair<BaseLegalEntity, SalesContract>, Pair<MUDContainer, AllocationTracker>> currentSalesContractToNewAllocationPairMap = new HashMap<>();
+			final Map<Pair<BaseLegalEntity, DESSalesMarket>, Pair<MUDContainer, AllocationTracker>> currentDesMarketToNewAllocationPairMap = new HashMap<>();
+			newAllocationTrackerToCombinedMapMap.put(inventory, currentCombinedMap);
+			final Map<MUDContainer, Pair<List<AllocationTracker>, Map<AllocationTracker, List<Pair<MUDContainer, AllocationTracker>>>>> currentRearrangement = entry.getValue();
+			for (final Entry<MUDContainer, Pair<List<AllocationTracker>, Map<AllocationTracker, List<Pair<MUDContainer, AllocationTracker>>>>> remappingEntry : currentRearrangement.entrySet()) {
+				final BaseLegalEntity currentRemappingEntity = remappingEntry.getKey().getEntity();
+				final MUDContainer replacementMUDContainer = newMullContainers.get(inventory).getMUDContainers().stream().filter(m -> m.getEntity().equals(currentRemappingEntity)).findFirst().get();
+				final List<AllocationTracker> directMappings = remappingEntry.getValue().getFirst();
+				for (final AllocationTracker allocationTracker : directMappings) {
+					if (allocationTracker instanceof SalesContractTracker) {
+						final SalesContract salesContract = ((SalesContractTracker) allocationTracker).getSalesContract();
+						final AllocationTracker replacementTracker = currentSalesContractMap.get(Pair.of(currentRemappingEntity, salesContract));
+						currentCombinedMap.put(replacementTracker, new LinkedList<>(Collections.singleton(Pair.of(remappingEntry.getKey(), allocationTracker))));
+						currentSalesContractToNewAllocationPairMap.put(Pair.of(currentRemappingEntity, salesContract), Pair.of(replacementMUDContainer, replacementTracker));
+					} else if (allocationTracker instanceof DESMarketTracker) {
+						final DESSalesMarket desSalesMarket = ((DESMarketTracker) allocationTracker).getDESSalesMarket();
+						final AllocationTracker replacementTracker = currentDESContractMap.get(Pair.of(currentRemappingEntity, desSalesMarket));
+						currentCombinedMap.put(replacementTracker, new LinkedList<>(Collections.singleton(Pair.of(remappingEntry.getKey(), allocationTracker))));
+						currentDesMarketToNewAllocationPairMap.put(Pair.of(currentRemappingEntity, desSalesMarket), Pair.of(replacementMUDContainer, replacementTracker));
+					}
+				}
+				final Map<AllocationTracker, List<Pair<MUDContainer, AllocationTracker>>> combinedMappings = remappingEntry.getValue().getSecond();
+				for (final Entry<AllocationTracker, List<Pair<MUDContainer, AllocationTracker>>> entry2 : combinedMappings.entrySet()) {
+					final AllocationTracker allocationTracker = entry2.getKey();
+					assert !entry2.getValue().isEmpty();
+					final List<Pair<MUDContainer, AllocationTracker>> outputList = new LinkedList<>(entry2.getValue());
+					outputList.add(Pair.of(remappingEntry.getKey(), allocationTracker));
+					final AllocationTracker replacementTracker;
+					if (allocationTracker instanceof SalesContractTracker) {
+						final SalesContract salesContract = ((SalesContractTracker) allocationTracker).getSalesContract();
+						replacementTracker = currentSalesContractMap.get(Pair.of(currentRemappingEntity, salesContract));
+						// remapping shares vessels with first party - following needed for correct
+						// volume calculation
+//						replacementTracker.setVesselSharing(true);
+						currentCombinedMap.put(replacementTracker, outputList);
+						outputList.forEach(p -> {
+							final BaseLegalEntity currentEntity = p.getFirst().getEntity();
+							final AllocationTracker currentAllocationTracker = p.getSecond();
+							if (currentAllocationTracker instanceof SalesContractTracker) {
+								currentSalesContractToNewAllocationPairMap.put(Pair.of(currentEntity, ((SalesContractTracker) currentAllocationTracker).getSalesContract()),
+										Pair.of(replacementMUDContainer, replacementTracker));
+							} else if (currentAllocationTracker instanceof DESMarketTracker) {
+								currentDesMarketToNewAllocationPairMap.put(Pair.of(currentEntity, ((DESMarketTracker) currentAllocationTracker).getDESSalesMarket()),
+										Pair.of(replacementMUDContainer, replacementTracker));
+							}
+						});
+					} else if (allocationTracker instanceof DESMarketTracker) {
+						final DESSalesMarket desSalesMarket = ((DESMarketTracker) allocationTracker).getDESSalesMarket();
+						replacementTracker = currentDESContractMap.get(Pair.of(currentRemappingEntity, desSalesMarket));
+						// remapping shares vessels with first party - following needed for correct
+						// volume calculation
+//						replacementTracker.setVesselSharing(true);
+						currentCombinedMap.put(replacementTracker, outputList);
+						outputList.forEach(p -> {
+							final BaseLegalEntity currentEntity = p.getFirst().getEntity();
+							final AllocationTracker currentAllocationTracker = p.getSecond();
+							if (currentAllocationTracker instanceof SalesContractTracker) {
+								currentSalesContractToNewAllocationPairMap.put(Pair.of(currentEntity, ((SalesContractTracker) currentAllocationTracker).getSalesContract()),
+										Pair.of(replacementMUDContainer, replacementTracker));
+							} else if (currentAllocationTracker instanceof DESMarketTracker) {
+								currentDesMarketToNewAllocationPairMap.put(Pair.of(currentEntity, ((DESMarketTracker) currentAllocationTracker).getDESSalesMarket()),
+										Pair.of(replacementMUDContainer, replacementTracker));
+							}
+						});
+					}
+				}
+			}
+			originalSalesContractPairToNewAllocationPairMapMap.put(inventory, currentSalesContractToNewAllocationPairMap);
+			originalDESMarketPairToNewAllocationPairMapMap.put(inventory, currentDesMarketToNewAllocationPairMap);
+		}
+
+		final Set<Vessel> expectedVessels = profile.getInventories().stream() //
+				.flatMap(sProfile -> sProfile.getEntityTable().stream() //
+						.flatMap(row -> Stream.concat(row.getDesSalesMarketAllocationRows().stream().flatMap(mar -> mar.getVessels().stream()),
+								row.getSalesContractAllocationRows().stream().flatMap(con -> con.getVessels().stream()))) //
+				).collect(Collectors.toSet());
+		final Map<Vessel, VesselAvailability> vessToVA = sm.getCargoModel().getVesselAvailabilities().stream().filter(va -> expectedVessels.contains(va.getVessel()))
+				.collect(Collectors.toMap(VesselAvailability::getVessel, Function.identity()));
 
 		final Map<Inventory, TreeMap<LocalDateTime, InventoryDateTimeEvent>> inventoryHourlyInsAndOuts = new HashMap<>();
 		for (final MullSubprofile sProfile : profile.getInventories()) {
@@ -491,6 +1159,23 @@ public class ContractPage extends ADPComposite {
 			int totalInventoryVolume = 0;
 			final Inventory currentInventory = sProfile.getInventory();
 			final TreeMap<LocalDateTime, InventoryDateTimeEvent> currentInsAndOuts = inventoryHourlyInsAndOuts.get(currentInventory);
+			while (currentInsAndOuts.firstKey().isBefore(startDateTime)) {
+				final InventoryDateTimeEvent event = currentInsAndOuts.remove(currentInsAndOuts.firstKey());
+				totalInventoryVolume += event.getNetVolumeIn();
+			}
+			currentInsAndOuts.firstEntry().getValue().addVolume(totalInventoryVolume);
+		}
+
+		final Map<Inventory, TreeMap<LocalDateTime, InventoryDateTimeEvent>> newInventoryHourlyInsAndOuts = new HashMap<>();
+		for (final MullSubprofile sProfile : profile.getInventories()) {
+			final Inventory inventory = sProfile.getInventory();
+			newInventoryHourlyInsAndOuts.put(inventory, getInventoryInsAndOutsHourly(inventory, sm, startDateTime, endDateTimeExclusive));
+		}
+
+		for (final MullSubprofile sProfile : harmonisationMullProfile.getInventories()) {
+			int totalInventoryVolume = 0;
+			final Inventory currentInventory = sProfile.getInventory();
+			final TreeMap<LocalDateTime, InventoryDateTimeEvent> currentInsAndOuts = newInventoryHourlyInsAndOuts.get(currentInventory);
 			while (currentInsAndOuts.firstKey().isBefore(startDateTime)) {
 				final InventoryDateTimeEvent event = currentInsAndOuts.remove(currentInsAndOuts.firstKey());
 				totalInventoryVolume += event.getNetVolumeIn();
@@ -512,14 +1197,31 @@ public class ContractPage extends ADPComposite {
 			inventoryFlaggedDates.put(sProfile.getInventory(), flaggedDates);
 		}
 
+		Map<Inventory, Set<LocalDate>> newInventoryFlaggedDates = new HashMap<>();
+
+		for (final MullSubprofile sProfile : harmonisationMullProfile.getInventories()) {
+			final Port inventoryPort = sProfile.getInventory().getPort();
+			final Set<LocalDate> flaggedDates = new HashSet<>();
+			List<LoadSlot> existingLoads = sm.getCargoModel().getLoadSlots().stream() //
+					.filter(s -> s.getPort().equals(inventoryPort) && dayBeforeStart.isBefore(s.getWindowStart())) //
+					.sorted((s1, s2) -> s1.getWindowStart().compareTo(s2.getWindowStart())) //
+					.collect(Collectors.toList());
+			existingLoads.stream().map(LoadSlot::getWindowStart).forEach(flaggedDates::add);
+			newInventoryFlaggedDates.put(sProfile.getInventory(), flaggedDates);
+		}
+
 		final Map<Inventory, LinkedList<CargoBlueprint>> cargoBlueprintsToGenerate = new HashMap<>();
 		final Map<Inventory, Integer> inventorySlotCounters = new HashMap<>();
+
+		final Map<Inventory, LinkedList<CargoBlueprint>> newCargoBlueprintsToGenerate = new HashMap<>();
+		final Map<Inventory, Integer> newInventorySlotCounters = new HashMap<>();
 
 		final List<PurchaseContract> pcs = ScenarioModelUtil.getCommercialModel(sm).getPurchaseContracts();
 		final List<Pair<Inventory, Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>>>> newIterSwap = new LinkedList<>();
 
-		final Map<Inventory, Integer> inventoryRunningVolume = new HashMap<>();
-		final Map<Inventory, PurchaseContract> inventoryPurchaseContracts = new HashMap<>();
+		final List<PurchaseContract> newPcs = ScenarioModelUtil.getCommercialModel(sm).getPurchaseContracts();
+		final List<Pair<Inventory, Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>>>> newNewIterSwap = new LinkedList<>();
+
 		final Map<Inventory, RollingLoadWindow> inventoryRollingWindows = new HashMap<>();
 		final Map<Inventory, Iterator<Entry<LocalDateTime, Cargo>>> inventoryExistingCargoes = new HashMap<>();
 		final Map<Inventory, Set<String>> inventoryKnownLoadIDs = new HashMap<>();
@@ -529,11 +1231,6 @@ public class ContractPage extends ADPComposite {
 			final Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>> hourlyIter = inventoryHourlyInsAndOuts.get(inventory).entrySet().iterator();
 			newIterSwap.add(Pair.of(inventory, hourlyIter));
 
-			inventoryPurchaseContracts.put(
-					sProfile.getInventory(),
-					pcs.stream().filter(c -> sProfile.getInventory().getPort().equals(c.getPreferredPort())).findFirst().get()
-			);
-			inventoryRunningVolume.put(sProfile.getInventory(), 0);
 			inventorySlotCounters.put(sProfile.getInventory(), 0);
 			cargoBlueprintsToGenerate.put(sProfile.getInventory(), new LinkedList<>());
 
@@ -541,14 +1238,14 @@ public class ContractPage extends ADPComposite {
 			final TreeMap<LocalDateTime, Cargo> existingCargoes = new TreeMap<>();
 			final Set<String> knownLoadIDs = new HashSet<>();
 			inventoryKnownLoadIDs.put(inventory, knownLoadIDs);
-			sm.getCargoModel().getCargoes().stream() //
-					.filter(c -> c.getSlots().get(0).getPort().equals(inventoryPort)) //
-					.forEach(c -> {
-						Slot<?> loadSlot = c.getSlots().get(0);
-						final LocalDateTime loadStart = loadSlot.isSetWindowStartTime() ? loadSlot.getWindowStart().atTime(LocalTime.of(loadSlot.getWindowStartTime(), 0)) : loadSlot.getWindowStart().atStartOfDay();
-						knownLoadIDs.add(loadSlot.getName());
-						existingCargoes.put(loadStart, c);
-					});
+			cargoesToKeep.stream().filter(cargoWrapper -> cargoWrapper.getLoadSlot().getPort().equals(inventoryPort)).forEach(cargoWrapper -> {
+				final LoadSlot loadSlot = cargoWrapper.getLoadSlot();
+				final LocalDateTime loadStart = loadSlot.isSetWindowStartTime() ? loadSlot.getWindowStart().atTime(LocalTime.of(loadSlot.getWindowStartTime(), 00))
+						: loadSlot.getWindowStart().atStartOfDay();
+				knownLoadIDs.add(loadSlot.getName());
+				assert loadSlot.getCargo() != null;
+				existingCargoes.put(loadStart, loadSlot.getCargo());
+			});
 			if (!existingCargoes.isEmpty()) {
 				LocalDateTime currentFirst = existingCargoes.firstKey();
 				while (currentFirst.isBefore(startDateTime)) {
@@ -566,7 +1263,7 @@ public class ContractPage extends ADPComposite {
 							}
 						}
 						if (vessel != null) {
-							vesselToMostRecentUseDateTime.put(vessel, currentFirst);
+							finalPhaseVesselToMostRecentUseDateTime.put(vessel, currentFirst);
 						}
 					}
 					if (existingCargoes.isEmpty()) {
@@ -582,7 +1279,8 @@ public class ContractPage extends ADPComposite {
 				nextFixedCargoes.put(inventory, existingCargoesIter.next());
 			}
 			final int inventoryLoadDuration = inventoryPort.getLoadDuration();
-			final OptionalInt optMaxLoadSlotDuration = existingCargoes.entrySet().stream().map(Entry::getValue).map(c -> c.getSlots().get(0)).mapToInt(loadSlot -> loadSlot.isSetDuration() ? loadSlot.getDuration() : inventoryLoadDuration).max();
+			final OptionalInt optMaxLoadSlotDuration = existingCargoes.entrySet().stream().map(Entry::getValue).map(c -> c.getSlots().get(0))
+					.mapToInt(loadSlot -> loadSlot.isSetDuration() ? loadSlot.getDuration() : inventoryLoadDuration).max();
 			if (optMaxLoadSlotDuration.isPresent()) {
 				inventoryRollingWindows.put(sProfile.getInventory(), new RollingLoadWindow(inventoryLoadDuration, hourlyIter, Math.max(inventoryLoadDuration, optMaxLoadSlotDuration.getAsInt())));
 			} else {
@@ -590,13 +1288,85 @@ public class ContractPage extends ADPComposite {
 			}
 		}
 
-		final CharterInMarket adpNominalMarket = adpModel.getFleetProfile().getDefaultNominalMarket();
+		final Map<Inventory, Integer> newInventoryRunningVolume = new HashMap<>();
+		final Map<Inventory, PurchaseContract> newInventoryPurchaseContracts = new HashMap<>();
+		final Map<Inventory, RollingLoadWindow> newInventoryRollingWindows = new HashMap<>();
+		final Map<Inventory, TreeMap<LocalDateTime, Cargo>> existingCargoesContainer = new HashMap<>();
+		final Map<Inventory, Iterator<Entry<LocalDateTime, Cargo>>> newInventoryExistingCargoes = new HashMap<>();
+		final Map<Inventory, Set<String>> newInventoryKnownLoadIDs = new HashMap<>();
+		final Map<Inventory, Entry<LocalDateTime, Cargo>> newNextFixedCargoes = new HashMap<>();
+		for (final MullSubprofile sProfile : harmonisationMullProfile.getInventories()) {
+			final Inventory inventory = sProfile.getInventory();
+			final Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>> hourlyIter = newInventoryHourlyInsAndOuts.get(inventory).entrySet().iterator();
+			newNewIterSwap.add(Pair.of(inventory, hourlyIter));
+
+			newInventoryPurchaseContracts.put(sProfile.getInventory(), newPcs.stream().filter(c -> sProfile.getInventory().getPort().equals(c.getPreferredPort())).findFirst().get());
+			newInventoryRunningVolume.put(sProfile.getInventory(), 0);
+			newInventorySlotCounters.put(sProfile.getInventory(), 0);
+			newCargoBlueprintsToGenerate.put(sProfile.getInventory(), new LinkedList<>());
+
+			final Port inventoryPort = inventory.getPort();
+			final TreeMap<LocalDateTime, Cargo> existingCargoes = new TreeMap<>();
+			final Set<String> knownLoadIDs = new HashSet<>();
+			newInventoryKnownLoadIDs.put(inventory, knownLoadIDs);
+
+			cargoesToKeep.stream().filter(cargoWrapper -> cargoWrapper.getLoadSlot().getPort().equals(inventoryPort)).forEach(cargoWrapper -> {
+				final LoadSlot loadSlot = cargoWrapper.getLoadSlot();
+				final LocalDateTime loadStart = loadSlot.isSetWindowStartTime() ? loadSlot.getWindowStart().atTime(LocalTime.of(loadSlot.getWindowStartTime(), 00))
+						: loadSlot.getWindowStart().atStartOfDay();
+				knownLoadIDs.add(loadSlot.getName());
+				assert loadSlot.getCargo() != null;
+				existingCargoes.put(loadStart, loadSlot.getCargo());
+			});
+			if (!existingCargoes.isEmpty()) {
+				LocalDateTime currentFirst = existingCargoes.firstKey();
+				while (currentFirst.isBefore(startDateTime)) {
+					final Cargo earliestCargo = existingCargoes.remove(currentFirst);
+					final Slot<?> dSlot = earliestCargo.getSlots().get(1);
+					if (dSlot instanceof DischargeSlot) {
+						final DischargeSlot dischargeSlot = (DischargeSlot) dSlot;
+						Vessel vessel = null;
+						if (dischargeSlot.isFOBSale()) {
+							vessel = dischargeSlot.getNominatedVessel();
+						} else {
+							final VesselAssignmentType vat = earliestCargo.getVesselAssignmentType();
+							if (vat instanceof VesselAvailability) {
+								vessel = ((VesselAvailability) vat).getVessel();
+							}
+						}
+						if (vessel != null) {
+							phase2VesselToMostRecentUseDateTime.put(vessel, currentFirst);
+						}
+					}
+					if (existingCargoes.isEmpty()) {
+						break;
+					}
+					currentFirst = existingCargoes.firstKey();
+				}
+			}
+
+			final Iterator<Entry<LocalDateTime, Cargo>> existingCargoesIter = existingCargoes.entrySet().iterator();
+			newInventoryExistingCargoes.put(inventory, existingCargoesIter);
+			if (existingCargoesIter.hasNext()) {
+				newNextFixedCargoes.put(inventory, existingCargoesIter.next());
+			}
+			final int inventoryLoadDuration = inventoryPort.getLoadDuration();
+			final OptionalInt optMaxLoadSlotDuration = existingCargoes.entrySet().stream().map(Entry::getValue).map(c -> c.getSlots().get(0))
+					.mapToInt(loadSlot -> loadSlot.isSetDuration() ? loadSlot.getDuration() : inventoryLoadDuration).max();
+			if (optMaxLoadSlotDuration.isPresent()) {
+				newInventoryRollingWindows.put(sProfile.getInventory(), new RollingLoadWindow(inventoryLoadDuration, hourlyIter, Math.max(inventoryLoadDuration, optMaxLoadSlotDuration.getAsInt())));
+			} else {
+				newInventoryRollingWindows.put(sProfile.getInventory(), new RollingLoadWindow(inventoryLoadDuration, hourlyIter, inventoryLoadDuration));
+			}
+			existingCargoesContainer.put(inventory, existingCargoes);
+		}
+
 		for (LocalDateTime currentDateTime2 = startDateTime; currentDateTime2.isBefore(endDateTimeExclusive); currentDateTime2 = currentDateTime2.plusHours(1)) {
-			for (Pair<Inventory, Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>>> curr : newIterSwap) {
+			for (Pair<Inventory, Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>>> curr : newNewIterSwap) {
 				final Inventory currentInventory = curr.getFirst();
 				final Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>> currentIter = curr.getSecond();
 
-				final RollingLoadWindow currentLoadWindow = inventoryRollingWindows.get(currentInventory);
+				final RollingLoadWindow currentLoadWindow = newInventoryRollingWindows.get(currentInventory);
 				final InventoryDateTimeEvent newEndWindowEvent;
 				if (currentIter.hasNext()) {
 					newEndWindowEvent = currentIter.next().getValue();
@@ -606,7 +1376,7 @@ public class ContractPage extends ADPComposite {
 				}
 
 				final InventoryDateTimeEvent currentEvent = currentLoadWindow.getCurrentEvent();
-				final MULLContainer currentMULLContainer = mullContainers.get(currentInventory);
+				final MULLContainer currentMULLContainer = newMullContainers.get(currentInventory);
 				currentMULLContainer.updateRunningAllocation(currentEvent.getNetVolumeIn());
 
 				final LocalDateTime currentDateTime = currentLoadWindow.getStartDateTime();
@@ -614,18 +1384,60 @@ public class ContractPage extends ADPComposite {
 
 				if (isAtStartHourOfMonth(currentDateTime)) {
 					final YearMonth currentYM = YearMonth.from(currentDateTime);
-					final int monthIn = inventoryHourlyInsAndOuts.get(currentInventory).entrySet().stream() //
+					final int monthIn = newInventoryHourlyInsAndOuts.get(currentInventory).entrySet().stream() //
 							.filter(p -> YearMonth.from(p.getKey()).equals(currentYM)) //
 							.mapToInt(p -> p.getValue().getNetVolumeIn()) //
 							.sum();
 					currentMULLContainer.updateCurrentMonthAbsoluteEntitlement(monthIn);
 				}
-				final Entry<LocalDateTime, Cargo> nextFixedCargo = nextFixedCargoes.get(currentInventory);
+				final Entry<LocalDateTime, Cargo> nextFixedCargo = newNextFixedCargoes.get(currentInventory);
 				if (nextFixedCargo != null && nextFixedCargo.getKey().equals(currentDateTime)) {
-					final LinkedList<CargoBlueprint> currentCargoBlueprintsToGenerate = cargoBlueprintsToGenerate.get(currentInventory);
-					// Start fixed cargo load on rolling window return any undos on generated cargoes
+					final LinkedList<CargoBlueprint> currentCargoBlueprintsToGenerate = newCargoBlueprintsToGenerate.get(currentInventory);
+					// Start fixed cargo load on rolling window return any undos on generated
+					// cargoes
 					final List<CargoBlueprint> cargoBlueprintsToUndo = currentLoadWindow.startFixedLoad(nextFixedCargo.getValue(), currentCargoBlueprintsToGenerate);
-					currentMULLContainer.dropFixedLoad(nextFixedCargo.getValue());
+
+					final LoadSlot loadSlot = (LoadSlot) nextFixedCargo.getValue().getSlots().get(0);
+					final DischargeSlot dischargeSlot = (DischargeSlot) nextFixedCargo.getValue().getSlots().get(1);
+
+					if (dischargeSlot instanceof SpotSlot) {
+						// originalSalesContractPairToNewAllocationPairMapMap
+						final Map<Pair<BaseLegalEntity, DESSalesMarket>, Pair<MUDContainer, AllocationTracker>> currentContainer = originalDESMarketPairToNewAllocationPairMapMap.get(currentInventory);
+						final Pair<MUDContainer, AllocationTracker> currentPair = currentContainer.get(Pair.of(loadSlot.getEntity(), (DESSalesMarket) ((SpotDischargeSlot) dischargeSlot).getMarket()));
+						if (currentPair != null) {
+							final int expectedVolumeLoaded = loadSlot.getSlotOrDelegateMaxQuantity();
+							assert currentMULLContainer.getMUDContainers().contains(currentPair.getFirst());
+							currentPair.getFirst().dropFixedLoad(expectedVolumeLoaded);
+							currentPair.getSecond().dropFixedLoad(expectedVolumeLoaded);
+						}
+					} else {
+						if (dischargeSlot.isFOBSale()) {
+							Optional<MUDContainer> optMudContainer = currentMULLContainer.getMUDContainers().stream().filter(m -> m.getEntity().equals(loadSlot.getEntity())).findFirst();
+							if (optMudContainer.isPresent()) {
+								final MUDContainer mudContainer = optMudContainer.get();
+								final Optional<DESMarketTracker> optDesMarketTracker = mudContainer.getAllocationTrackers().stream().filter(DESMarketTracker.class::isInstance)
+										.map(DESMarketTracker.class::cast).findFirst();
+								if (optDesMarketTracker.isPresent()) {
+									final DESMarketTracker desMarketTracker = optDesMarketTracker.get();
+									final int expectedVolumeLoaded = loadSlot.getSlotOrDelegateMaxQuantity();
+									mudContainer.dropFixedLoad(expectedVolumeLoaded);
+									desMarketTracker.dropFixedLoad(expectedVolumeLoaded);
+								}
+							}
+						} else {
+							final Map<Pair<BaseLegalEntity, SalesContract>, Pair<MUDContainer, AllocationTracker>> currentContainer = originalSalesContractPairToNewAllocationPairMapMap
+									.get(currentInventory);
+							final Pair<MUDContainer, AllocationTracker> currentPair = currentContainer.get(Pair.of(loadSlot.getEntity(), dischargeSlot.getContract()));
+							if (currentPair != null) {
+								final int expectedVolumeLoaded = loadSlot.getSlotOrDelegateMaxQuantity();
+								assert currentMULLContainer.getMUDContainers().contains(currentPair.getFirst());
+								currentPair.getFirst().dropFixedLoad(expectedVolumeLoaded);
+								currentPair.getSecond().dropFixedLoad(expectedVolumeLoaded);
+							}
+						}
+					}
+
+//					currentMULLContainer.dropFixedLoad(nextFixedCargo.getValue());
 					final Set<Vessel> vesselsToUndo = new HashSet<>();
 					for (final CargoBlueprint cargoBlueprint : cargoBlueprintsToUndo) {
 						currentMULLContainer.undo(cargoBlueprint);
@@ -642,45 +1454,45 @@ public class ContractPage extends ADPComposite {
 						final CargoBlueprint cargoBlueprint = reverseCargoBlueprints.next();
 						final Vessel assignedVessel = cargoBlueprint.getAssignedVessel();
 						if (vesselsToUndo.contains(assignedVessel)) {
-							vesselToMostRecentUseDateTime.put(assignedVessel, cargoBlueprint.getWindowStart());
+							phase2VesselToMostRecentUseDateTime.put(assignedVessel, cargoBlueprint.getWindowStart());
 							vesselsToUndo.remove(assignedVessel);
 						}
 					}
 					if (currentCargoBlueprintsToGenerate.isEmpty()) {
-						inventorySlotCounters.put(currentInventory, 0);
+						newInventorySlotCounters.put(currentInventory, 0);
 					} else {
-						inventorySlotCounters.put(currentInventory, currentCargoBlueprintsToGenerate.getLast().getLoadCounter()+1);
+						newInventorySlotCounters.put(currentInventory, currentCargoBlueprintsToGenerate.getLast().getLoadCounter() + 1);
 					}
 					for (final Vessel vesselToUndo : vesselsToUndo) {
-						vesselToMostRecentUseDateTime.put(vesselToUndo, dateTimeBeforeADPStart);
+						phase2VesselToMostRecentUseDateTime.put(vesselToUndo, dateTimeBeforeADPStart);
 					}
-					final Iterator<Entry<LocalDateTime, Cargo>> nextFixedCargoesIter = inventoryExistingCargoes.get(currentInventory);
+					final Iterator<Entry<LocalDateTime, Cargo>> nextFixedCargoesIter = newInventoryExistingCargoes.get(currentInventory);
 					if (nextFixedCargoesIter.hasNext()) {
-						nextFixedCargoes.put(currentInventory, nextFixedCargoesIter.next());
+						newNextFixedCargoes.put(currentInventory, nextFixedCargoesIter.next());
 					} else {
-						nextFixedCargoes.remove(currentInventory);
+						newNextFixedCargoes.remove(currentInventory);
 					}
 				}
 				if (!currentLoadWindow.isLoading()) {
-					final MUDContainer mullMUDContainer = currentMULLContainer.calculateMULL(vesselToMostRecentUseDateTime, cargoVolume);
+					final MUDContainer mullMUDContainer = currentMULLContainer.calculateMULL(phase2VesselToMostRecentUseDateTime, cargoVolume, firstPartyVessels);
 					final AllocationTracker mudAllocationTracker = mullMUDContainer.calculateMUDAllocationTracker();
 					final List<Vessel> mudVesselRestrictions = mudAllocationTracker.getVessels();
 					final int currentAllocationDrop;
 					final Vessel assignedVessel;
 					if (!mudVesselRestrictions.isEmpty()) {
-						assignedVessel = mudVesselRestrictions.stream().min((v1, v2) -> vesselToMostRecentUseDateTime.get(v1).compareTo(vesselToMostRecentUseDateTime.get(v2))).get();
-						currentAllocationDrop = mudAllocationTracker.calculateExpectedAllocationDrop(assignedVessel, currentInventory.getPort().getLoadDuration());
+						assignedVessel = mudVesselRestrictions.stream().min((v1, v2) -> phase2VesselToMostRecentUseDateTime.get(v1).compareTo(phase2VesselToMostRecentUseDateTime.get(v2))).get();
+						currentAllocationDrop = mudAllocationTracker.calculateExpectedAllocationDrop(assignedVessel, currentInventory.getPort().getLoadDuration(), firstPartyVessels.contains(assignedVessel));
 					} else {
 						assignedVessel = null;
 						currentAllocationDrop = cargoVolume;
 					}
 					if (currentLoadWindow.canLift(currentAllocationDrop)) {
-						final Set<String> currentKnownLoadIDs = inventoryKnownLoadIDs.get(currentInventory);
+						final Set<String> currentKnownLoadIDs = newInventoryKnownLoadIDs.get(currentInventory);
 						currentLoadWindow.startLoad(currentAllocationDrop);
 						mullMUDContainer.dropAllocation(currentAllocationDrop);
 						mudAllocationTracker.dropAllocation(currentAllocationDrop);
 
-						int nextLoadCount = inventorySlotCounters.get(currentInventory);
+						int nextLoadCount = newInventorySlotCounters.get(currentInventory);
 						String expectedLoadName = String.format("%s-%03d", currentInventory.getName(), nextLoadCount);
 						while (currentKnownLoadIDs.contains(expectedLoadName)) {
 							++nextLoadCount;
@@ -690,7 +1502,7 @@ public class ContractPage extends ADPComposite {
 						final int volumeHigh;
 						final int volumeLow;
 						if (debugFlex) {
-							final int flexDifference = currentLoadWindow.getEndWindowVolume()-currentAllocationDrop - currentLoadWindow.getEndWindowTankMin();
+							final int flexDifference = currentLoadWindow.getEndWindowVolume() - currentAllocationDrop - currentLoadWindow.getEndWindowTankMin();
 							assert flexDifference >= 0;
 							volumeHigh = currentAllocationDrop;
 							volumeLow = currentAllocationDrop - volumeFlex;
@@ -698,17 +1510,18 @@ public class ContractPage extends ADPComposite {
 							volumeHigh = currentAllocationDrop + volumeFlex;
 							volumeLow = currentAllocationDrop - volumeFlex;
 						}
-						final CargoBlueprint currentCargoBlueprint = new CargoBlueprint(currentInventory, inventoryPurchaseContracts.get(currentInventory), nextLoadCount, assignedVessel, currentLoadWindow.getStartDateTime(), loadWindowHours, mudAllocationTracker, currentAllocationDrop, mullMUDContainer.getEntity(), volumeHigh, volumeLow);
-						if (!cargoBlueprintsToGenerate.get(currentInventory).isEmpty()) {
-							final CargoBlueprint previousCargoBlueprint = cargoBlueprintsToGenerate.get(currentInventory).getLast();
+						final CargoBlueprint currentCargoBlueprint = new CargoBlueprint(currentInventory, newInventoryPurchaseContracts.get(currentInventory), nextLoadCount, assignedVessel,
+								currentLoadWindow.getStartDateTime(), loadWindowHours, mudAllocationTracker, currentAllocationDrop, mullMUDContainer.getEntity(), volumeHigh, volumeLow);
+						if (!newCargoBlueprintsToGenerate.get(currentInventory).isEmpty()) {
+							final CargoBlueprint previousCargoBlueprint = newCargoBlueprintsToGenerate.get(currentInventory).getLast();
 							final LocalDateTime earliestPreviousStart = currentLoadWindow.getStartDateTime().minusHours(currentInventory.getPort().getLoadDuration());
 							final int newWindowHours = Hours.between(previousCargoBlueprint.getWindowStart(), earliestPreviousStart);
 							previousCargoBlueprint.updateWindowSize(newWindowHours);
 						}
-						cargoBlueprintsToGenerate.get(currentInventory).add(currentCargoBlueprint);
-						inventorySlotCounters.put(currentInventory, nextLoadCount+1);
+						newCargoBlueprintsToGenerate.get(currentInventory).add(currentCargoBlueprint);
+						newInventorySlotCounters.put(currentInventory, nextLoadCount + 1);
 						if (assignedVessel != null) {
-							vesselToMostRecentUseDateTime.put(assignedVessel, currentCargoBlueprint.getWindowStart());
+							phase2VesselToMostRecentUseDateTime.put(assignedVessel, currentCargoBlueprint.getWindowStart());
 						}
 					}
 				}
@@ -716,15 +1529,539 @@ public class ContractPage extends ADPComposite {
 			}
 		}
 
-		if (cargoBlueprintsToGenerate.values().stream().anyMatch(c -> !c.isEmpty())) {
-			final IScenarioDataProvider sdp = editorData.getScenarioDataProvider();
+		// Do second pass on cargoes to generate
+		final Map<Inventory, Map<YearMonth, List<Cargo>>> monthMappedExistingCargoes = new HashMap<>();
+		for (final Entry<Inventory, TreeMap<LocalDateTime, Cargo>> entry1 : existingCargoesContainer.entrySet()) {
+			final Map<YearMonth, List<Cargo>> map1 = new HashMap<>();
+			for (final Entry<LocalDateTime, Cargo> entry2 : entry1.getValue().entrySet()) {
+				map1.computeIfAbsent(YearMonth.from(entry2.getKey()), k -> new LinkedList<>()).add(entry2.getValue());
+			}
+			monthMappedExistingCargoes.put(entry1.getKey(), map1);
+		}
+		final List<Pair<Inventory, Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>>>> secondPassIterSwap = new LinkedList<>();
+		for (final MullSubprofile sProfile : profile.getInventories()) {
+			final Inventory inventory = sProfile.getInventory();
+			final Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>> hourlyIter = inventoryHourlyInsAndOuts.get(inventory).entrySet().iterator();
+			secondPassIterSwap.add(Pair.of(inventory, hourlyIter));
+		}
+		final Map<Inventory, CargoBlueprint[]> secondPassCargoBlueprints = new HashMap<>();
+		final Map<Inventory, Integer> secondPassCargoBlueprintIndex = new HashMap<>();
+		final Map<Inventory, Integer> secondPassOldCargoBlueprintsIndexStart = new HashMap<>();
+		final Map<Inventory, CargoBlueprint> secondPassNextCargoBlueprints = new HashMap<>();
+		final Map<Inventory, Iterator<CargoBlueprint>> secondPassCargoBlueprintIters = new HashMap<>();
+		for (final Entry<Inventory, LinkedList<CargoBlueprint>> entry : newCargoBlueprintsToGenerate.entrySet()) {
+			secondPassCargoBlueprints.put(entry.getKey(), new CargoBlueprint[entry.getValue().size()]);
+			secondPassCargoBlueprintIndex.put(entry.getKey(), 0);
+			secondPassOldCargoBlueprintsIndexStart.put(entry.getKey(), 0);
+			final Iterator<CargoBlueprint> cargoBlueprintIter = entry.getValue().iterator();
+			secondPassNextCargoBlueprints.put(entry.getKey(), cargoBlueprintIter.hasNext() ? cargoBlueprintIter.next() : null);
+			secondPassCargoBlueprintIters.put(entry.getKey(), cargoBlueprintIter);
+		}
+
+		for (YearMonth currentYearMonth = adpModel.getYearStart(); currentYearMonth.isBefore(adpModel.getYearEnd()); currentYearMonth = currentYearMonth.plusMonths(1)) {
+			final Map<Inventory, List<Entry<LocalDateTime, InventoryDateTimeEvent>>> persistedInventoryEventsContainer = new HashMap<>();
+			final Map<Inventory, List<CargoBlueprint>> persistedInventoryOldCargoBlueprintsContainer = new HashMap<>();
+			final Map<Inventory, List<Integer>> persistedInventoryOldCargoBlueprintsIndicesContainer = new HashMap<>();
+			// Persist iterator data
+			for (Pair<Inventory, Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>>> curr : secondPassIterSwap) {
+				final List<Entry<LocalDateTime, InventoryDateTimeEvent>> currentPersistedInventoryEvents = new LinkedList<>();
+				final Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>> currentIterator = curr.getSecond();
+				assert currentIterator.hasNext();
+				Entry<LocalDateTime, InventoryDateTimeEvent> currentEntry = currentIterator.next();
+				assert YearMonth.from(currentEntry.getKey()).equals(currentYearMonth);
+				final LocalDateTime lastExpectedDateTime = currentYearMonth.atEndOfMonth().atTime(23, 00);
+				while (currentEntry.getKey().isBefore(lastExpectedDateTime)) {
+					currentPersistedInventoryEvents.add(currentEntry);
+					assert currentIterator.hasNext();
+					currentEntry = currentIterator.next();
+				}
+				assert currentEntry.getKey().equals(lastExpectedDateTime);
+				currentPersistedInventoryEvents.add(currentEntry);
+				persistedInventoryEventsContainer.put(curr.getFirst(), currentPersistedInventoryEvents);
+
+				final List<CargoBlueprint> currentPersistedInventoryOldCargoBlueprints = new LinkedList<>();
+				final List<Integer> currentPersistedInventoryOldCargoBlueprintsIndices = new LinkedList<>();
+				final Iterator<CargoBlueprint> oldCargoBlueprintsIter = secondPassCargoBlueprintIters.get(curr.getFirst());
+				CargoBlueprint c = secondPassNextCargoBlueprints.get(curr.getFirst());
+				if (c != null) {
+					while (c != null && YearMonth.from(c.getWindowStart()).equals(currentYearMonth)) {
+						currentPersistedInventoryOldCargoBlueprints.add(c);
+						if (oldCargoBlueprintsIter.hasNext()) {
+							c = oldCargoBlueprintsIter.next();
+						} else {
+							c = null;
+						}
+					}
+					secondPassNextCargoBlueprints.put(curr.getFirst(), c);
+				}
+				persistedInventoryOldCargoBlueprintsContainer.put(curr.getFirst(), currentPersistedInventoryOldCargoBlueprints);
+				final int indexStart = secondPassOldCargoBlueprintsIndexStart.get(curr.getFirst());
+				for (int i = 0; i < currentPersistedInventoryOldCargoBlueprints.size(); ++i) {
+					currentPersistedInventoryOldCargoBlueprintsIndices.add(indexStart + i);
+				}
+				persistedInventoryOldCargoBlueprintsIndicesContainer.put(curr.getFirst(), currentPersistedInventoryOldCargoBlueprintsIndices);
+				secondPassOldCargoBlueprintsIndexStart.put(curr.getFirst(), indexStart + currentPersistedInventoryOldCargoBlueprints.size());
+			}
+
+			for (final Entry<Inventory, List<Entry<LocalDateTime, InventoryDateTimeEvent>>> currentPersistedContainerEntry : persistedInventoryEventsContainer.entrySet()) {
+				final Map<LocalDateTime, CargoBlueprint> entitySyncedCargoBlueprints = new TreeMap<>();
+				final Inventory currentInventory = currentPersistedContainerEntry.getKey();
+				final MULLContainer currentMULLContainer = finalPhaseMullContainers.get(currentInventory);
+				final List<Entry<LocalDateTime, InventoryDateTimeEvent>> currentPersisitedEventList = currentPersistedContainerEntry.getValue();
+
+				assert isAtStartHourOfMonth(currentPersisitedEventList.get(0).getKey());
+				final int monthIn = currentPersisitedEventList.stream().map(Entry::getValue).mapToInt(InventoryDateTimeEvent::getNetVolumeIn).sum();
+				currentMULLContainer.updateCurrentMonthAbsoluteEntitlement(monthIn);
+
+				currentMULLContainer.getMUDContainers().get(0).getCurrentMonthAbsoluteEntitlement();
+				final Map<BaseLegalEntity, Integer> temporaryMonthAbsoluteEntitlement = new HashMap<>();
+				currentMULLContainer.getMUDContainers().stream()
+						.forEach(mudContainer -> temporaryMonthAbsoluteEntitlement.put(mudContainer.getEntity(), mudContainer.getCurrentMonthAbsoluteEntitlement()));
+				final Map<AllocationTracker, List<Pair<MUDContainer, AllocationTracker>>> currentAllocationTrackerToCombinedMap = newAllocationTrackerToCombinedMapMap.get(currentInventory);
+
+				Iterator<CargoBlueprint> iterCargoBlueprint = persistedInventoryOldCargoBlueprintsContainer.get(currentInventory).iterator();
+				Iterator<Integer> iterCargoBlueprintIndices = persistedInventoryOldCargoBlueprintsIndicesContainer.get(currentInventory).iterator();
+
+				// Update status of fixed cargoes
+				final Map<YearMonth, List<Cargo>> currentMonthMappedFixedCargoes = monthMappedExistingCargoes.get(currentInventory);
+				final List<Cargo> currentCargoes = currentMonthMappedFixedCargoes.get(currentYearMonth);
+				if (currentCargoes != null) {
+					currentCargoes.forEach(currentMULLContainer::dropFixedLoad);
+				}
+
+				// Find obvious cargoes to map
+				while (iterCargoBlueprint.hasNext()) {
+					final CargoBlueprint currentCargoBlueprint = iterCargoBlueprint.next();
+					final int currentCargoBlueprintIndex = iterCargoBlueprintIndices.next();
+					final AllocationTracker allocationTrackerToReplace = currentCargoBlueprint.getAllocationTracker();
+					final List<Pair<MUDContainer, AllocationTracker>> combinedTrackers = currentAllocationTrackerToCombinedMap.get(allocationTrackerToReplace);
+
+					if (combinedTrackers.size() == 1) {
+						final Pair<MUDContainer, AllocationTracker> replacementPair = combinedTrackers.get(0);
+
+						final CargoBlueprint replacementCargoBlueprint = currentCargoBlueprint.getPostHarmonisationReplacement(replacementPair.getSecond(), replacementPair.getFirst().getEntity());
+						entitySyncedCargoBlueprints.put(replacementCargoBlueprint.getWindowStart(), replacementCargoBlueprint);
+						iterCargoBlueprint.remove();
+						iterCargoBlueprintIndices.remove();
+						secondPassCargoBlueprints.get(currentInventory)[currentCargoBlueprintIndex] = replacementCargoBlueprint;
+
+						replacementPair.getFirst().dropAllocation(replacementCargoBlueprint.getAllocatedVolume());
+						replacementPair.getSecond().dropAllocation(replacementCargoBlueprint.getAllocatedVolume());
+					}
+				}
+
+				// Find cargoes that can be deferred (have to decide for same entity-multiple
+				// discharge option [not tracking discharge tracker allocation yet])
+				final List<Pair<Integer, CargoBlueprint>> deferredCargoBlueprints = new LinkedList<>();
+				iterCargoBlueprint = persistedInventoryOldCargoBlueprintsContainer.get(currentInventory).iterator();
+				iterCargoBlueprintIndices = persistedInventoryOldCargoBlueprintsIndicesContainer.get(currentInventory).iterator();
+				while (iterCargoBlueprint.hasNext()) {
+					final CargoBlueprint currentCargoBlueprint = iterCargoBlueprint.next();
+					final int currentCargoBlueprintIndex = iterCargoBlueprintIndices.next();
+					final AllocationTracker allocationTrackerToReplace = currentCargoBlueprint.getAllocationTracker();
+					final List<Pair<MUDContainer, AllocationTracker>> combinedTrackers = currentAllocationTrackerToCombinedMap.get(allocationTrackerToReplace);
+
+					final Set<BaseLegalEntity> entitledEntities = new HashSet<>();
+					assert combinedTrackers.size() > 1;
+					combinedTrackers.stream().forEach(p -> entitledEntities.add(p.getFirst().getEntity()));
+					if (entitledEntities.size() == 1) {
+						deferredCargoBlueprints.add(Pair.of(currentCargoBlueprintIndex, currentCargoBlueprint));
+						iterCargoBlueprint.remove();
+						iterCargoBlueprintIndices.remove();
+
+						// MUD container is the same so just update the first option
+						combinedTrackers.get(0).getFirst().dropAllocation(currentCargoBlueprint.getAllocatedVolume());
+					}
+				}
+
+				// Allocate trackers that have an obvious FCL violation (i.e. only one of the
+				// trackers is above the FCL upper limit)
+				boolean madeChanges = true;
+				while (madeChanges) {
+					madeChanges = false;
+					iterCargoBlueprint = persistedInventoryOldCargoBlueprintsContainer.get(currentInventory).iterator();
+					iterCargoBlueprintIndices = persistedInventoryOldCargoBlueprintsIndicesContainer.get(currentInventory).iterator();
+					while (iterCargoBlueprint.hasNext()) {
+						final CargoBlueprint currentCargoBlueprint = iterCargoBlueprint.next();
+						final int currentCargoBlueprintIndex = iterCargoBlueprintIndices.next();
+						final AllocationTracker allocationTrackerToReplace = currentCargoBlueprint.getAllocationTracker();
+						final List<Pair<MUDContainer, AllocationTracker>> combinedTrackers = currentAllocationTrackerToCombinedMap.get(allocationTrackerToReplace);
+
+						final int allocationDrop = currentCargoBlueprint.getAllocatedVolume();
+						final Set<MUDContainer> uniqueMudContainers = new HashSet<>();
+						for (final Pair<MUDContainer, AllocationTracker> pair : combinedTrackers) {
+							uniqueMudContainers.add(pair.getFirst());
+						}
+						List<AllocationDropType> mappedToAllocationTypes = uniqueMudContainers.stream().map(p -> {
+							final int currentMonthEntitlement = p.getCurrentMonthAbsoluteEntitlement();
+							final int afterDrop = currentMonthEntitlement - allocationDrop;
+							if (currentMonthEntitlement > fullCargoLotValue) {
+								if (afterDrop > fullCargoLotValue) {
+									return AllocationDropType.ABOVE_ABOVE;
+								} else if (afterDrop >= -fullCargoLotValue) {
+									return AllocationDropType.ABOVE_IN;
+								} else {
+									return AllocationDropType.ABOVE_BELOW;
+								}
+							} else if (currentMonthEntitlement > -fullCargoLotValue) {
+								return afterDrop >= -fullCargoLotValue ? AllocationDropType.IN_IN : AllocationDropType.IN_BELOW;
+							} else {
+								return AllocationDropType.BELOW_BELOW;
+							}
+						}).collect(Collectors.toList());
+						final long countAboveAbove = mappedToAllocationTypes.stream().filter(v -> v == AllocationDropType.ABOVE_ABOVE).count();
+						if (countAboveAbove > 1) {
+							// wait cannot decide
+						} else {
+							final long countNotEndingBelow = mappedToAllocationTypes.stream()
+									.filter(v -> v != AllocationDropType.ABOVE_BELOW && v != AllocationDropType.IN_BELOW && v != AllocationDropType.BELOW_BELOW).count();
+							if (countNotEndingBelow == 1L) {
+								// Only one entity does not violate lower FCL bound - assign this one
+								final Iterator<AllocationDropType> dropTypeIter = mappedToAllocationTypes.iterator();
+								final Iterator<MUDContainer> containersIter = uniqueMudContainers.iterator();
+								AllocationDropType currentDropType;
+								MUDContainer currentMudContainer;
+								while (true) {
+									currentDropType = dropTypeIter.next();
+									currentMudContainer = containersIter.next();
+									if (currentDropType != AllocationDropType.ABOVE_BELOW && currentDropType != AllocationDropType.IN_BELOW && currentDropType != AllocationDropType.BELOW_BELOW) {
+										break;
+									}
+								}
+								final MUDContainer selectedMudContainer = currentMudContainer;
+								List<Pair<MUDContainer, AllocationTracker>> trackersToAssign = combinedTrackers.stream().filter(p -> p.getFirst() == selectedMudContainer).collect(Collectors.toList());
+								if (trackersToAssign.size() == 1) {
+									final Pair<MUDContainer, AllocationTracker> replacementPair = trackersToAssign.get(0);
+
+									final CargoBlueprint replacementCargoBlueprint = currentCargoBlueprint.getPostHarmonisationReplacement(replacementPair.getSecond(),
+											replacementPair.getFirst().getEntity());
+									entitySyncedCargoBlueprints.put(replacementCargoBlueprint.getWindowStart(), replacementCargoBlueprint);
+									iterCargoBlueprint.remove();
+									iterCargoBlueprintIndices.remove();
+									secondPassCargoBlueprints.get(currentInventory)[currentCargoBlueprintIndex] = replacementCargoBlueprint;
+
+									replacementPair.getFirst().dropAllocation(replacementCargoBlueprint.getAllocatedVolume());
+									replacementPair.getSecond().dropAllocation(replacementCargoBlueprint.getAllocatedVolume());
+								} else {
+									deferredCargoBlueprints.add(Pair.of(currentCargoBlueprintIndex, currentCargoBlueprint));
+									iterCargoBlueprint.remove();
+									iterCargoBlueprintIndices.remove();
+
+									// MUD container is the same so just update the first option
+									combinedTrackers.get(0).getFirst().dropAllocation(currentCargoBlueprint.getAllocatedVolume());
+								}
+								madeChanges = true;
+							}
+						}
+					}
+				}
+
+				// At this point all obvious assignments should be made (and deferred cargoes
+				// should be accounted for) default to MULL comparison
+				final Iterator<Pair<Integer, CargoBlueprint>> iter = deferredCargoBlueprints.iterator();
+				iterCargoBlueprint = persistedInventoryOldCargoBlueprintsContainer.get(currentInventory).iterator();
+				iterCargoBlueprintIndices = persistedInventoryOldCargoBlueprintsIndicesContainer.get(currentInventory).iterator();
+
+				Pair<Integer, CargoBlueprint> nextDeferredEntry = iter.hasNext() ? iter.next() : null;
+				int nextPersistedCargoBlueprintIndex = -1;
+				CargoBlueprint nextPersistedCargoBlueprint = null;
+				if (iterCargoBlueprint.hasNext()) {
+					nextPersistedCargoBlueprintIndex = iterCargoBlueprintIndices.next();
+					nextPersistedCargoBlueprint = iterCargoBlueprint.next();
+				}
+
+				int nextIndex;
+				CargoBlueprint nextCargoBlueprint;
+				if (nextDeferredEntry != null) {
+					if (nextPersistedCargoBlueprint != null) {
+						if (nextPersistedCargoBlueprintIndex < nextDeferredEntry.getFirst()) {
+							nextIndex = nextPersistedCargoBlueprintIndex;
+							nextCargoBlueprint = nextPersistedCargoBlueprint;
+						} else {
+							nextIndex = nextDeferredEntry.getFirst();
+							nextCargoBlueprint = nextDeferredEntry.getSecond();
+						}
+					} else {
+						nextIndex = nextDeferredEntry.getFirst();
+						nextCargoBlueprint = nextDeferredEntry.getSecond();
+					}
+				} else {
+					if (nextPersistedCargoBlueprint != null) {
+						nextIndex = nextPersistedCargoBlueprintIndex;
+						nextCargoBlueprint = nextPersistedCargoBlueprint;
+					} else {
+						nextIndex = -1;
+						nextCargoBlueprint = null;
+					}
+				}
+
+				if (nextCargoBlueprint != null) {
+					for (Entry<LocalDateTime, InventoryDateTimeEvent> entry : currentPersistedContainerEntry.getValue()) {
+						if (entry.getKey().equals(LocalDateTime.of(LocalDate.of(2021, 7, 31), LocalTime.of(11, 0)))) {
+							int i = 0;
+						}
+//						currentMULLContainer = mullContainers.get(currentInventory);
+						final InventoryDateTimeEvent currentEvent = entry.getValue();
+						currentMULLContainer.updateRunningAllocation(currentEvent.getNetVolumeIn());
+
+						assert entry.getKey().equals(currentEvent.getDateTime());
+
+						if (entry.getKey().equals(nextCargoBlueprint.getWindowStart())) {
+							final AllocationTracker allocationTrackerToReplace = nextCargoBlueprint.getAllocationTracker();
+							final List<Pair<MUDContainer, AllocationTracker>> combinedTrackers = currentAllocationTrackerToCombinedMap.get(allocationTrackerToReplace);
+
+							final int allocationDrop = nextCargoBlueprint.getAllocatedVolume();
+							final Set<MUDContainer> uniqueMudContainers = new HashSet<>();
+							for (final Pair<MUDContainer, AllocationTracker> pair : combinedTrackers) {
+								uniqueMudContainers.add(pair.getFirst());
+							}
+							final MUDContainer mostEntitledMUDContainer = uniqueMudContainers.stream().max((Comparator<MUDContainer>) (mc0, mc1) -> {
+								final Long allocation0 = mc0.getRunningAllocation();
+								final Long allocation1 = mc1.getRunningAllocation();
+								final int expectedAllocationDrop0 = allocationDrop;
+								final int expectedAllocationDrop1 = allocationDrop;
+								final int beforeDrop0 = mc0.getCurrentMonthAbsoluteEntitlement();
+								final int beforeDrop1 = mc1.getCurrentMonthAbsoluteEntitlement();
+								final int afterDrop0 = beforeDrop0 - expectedAllocationDrop0;
+								final int afterDrop1 = beforeDrop1 - expectedAllocationDrop1;
+
+								final boolean belowLower0 = afterDrop0 < -fullCargoLotValue;
+								final boolean belowLower1 = afterDrop1 < -fullCargoLotValue;
+								final boolean aboveUpper0 = afterDrop0 > fullCargoLotValue;
+								final boolean aboveUpper1 = afterDrop1 > fullCargoLotValue;
+								if (belowLower0) {
+									if (belowLower1) {
+										if (afterDrop0 < afterDrop1) {
+											return -1;
+										} else {
+											return 1;
+										}
+									} else {
+										return -1;
+									}
+								} else {
+									if (belowLower1) {
+										return 1;
+									} else {
+										if (aboveUpper0) {
+											if (aboveUpper1) {
+												if (allocation0 > allocation1) {
+													return 1;
+												} else {
+													return -1;
+												}
+											} else {
+												return 1;
+											}
+										} else {
+											if (aboveUpper1) {
+												return -1;
+											} else {
+												if (beforeDrop0 > fullCargoLotValue) {
+													if (beforeDrop1 > beforeDrop0) {
+														return -1;
+													} else {
+														return 1;
+													}
+												} else {
+													if (beforeDrop1 > fullCargoLotValue) {
+														return -1;
+													} else {
+														if (allocation0 > allocation1) {
+															return 1;
+														} else {
+															return -1;
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}).get();
+							final List<AllocationTracker> potentialAllocationTrackers = combinedTrackers.stream() //
+									.filter(p -> p.getFirst() == mostEntitledMUDContainer) //
+									.map(Pair::getSecond).collect(Collectors.toList());
+							final CargoBlueprint[] newCargoBlueprints = secondPassCargoBlueprints.get(currentInventory);
+							if (potentialAllocationTrackers.size() == 1) {
+								final Pair<MUDContainer, AllocationTracker> replacementPair = Pair.of(mostEntitledMUDContainer, potentialAllocationTrackers.get(0));
+
+								final CargoBlueprint replacementCargoBlueprint = nextCargoBlueprint.getPostHarmonisationReplacement(replacementPair.getSecond(),
+										replacementPair.getFirst().getEntity());
+
+								// secondPassCargoBlueprints.get(currentInventory)[currentCargoBlueprintIndex] =
+								// replacementCargoBlueprint;
+
+								assert newCargoBlueprints[nextIndex] == null;
+								newCargoBlueprints[nextIndex] = replacementCargoBlueprint;
+
+								replacementPair.getFirst().dropAllocation(replacementCargoBlueprint.getAllocatedVolume());
+								replacementPair.getSecond().dropAllocation(replacementCargoBlueprint.getAllocatedVolume());
+							} else {
+								final AllocationTracker mudAllocationTracker = potentialAllocationTrackers.stream().max((t1, t2) -> Long.compare(t1.getRunningAllocation(), t2.getRunningAllocation()))
+										.get();
+								final Pair<MUDContainer, AllocationTracker> replacementPair = Pair.of(mostEntitledMUDContainer, mudAllocationTracker);
+
+								final CargoBlueprint replacementCargoBlueprint = nextCargoBlueprint.getPostHarmonisationReplacement(replacementPair.getSecond(),
+										replacementPair.getFirst().getEntity());
+
+								assert newCargoBlueprints[nextIndex] == null;
+								newCargoBlueprints[nextIndex] = replacementCargoBlueprint;
+
+								if (nextDeferredEntry == null || nextDeferredEntry.getFirst() != nextIndex) {
+									// MUD Container already had allocation dropped
+									replacementPair.getFirst().dropAllocation(replacementCargoBlueprint.getAllocatedVolume());
+								}
+								replacementPair.getSecond().dropAllocation(replacementCargoBlueprint.getAllocatedVolume());
+							}
+
+							if (nextDeferredEntry != null && nextDeferredEntry.getFirst() == nextIndex) {
+								if (iter.hasNext()) {
+									nextDeferredEntry = iter.next();
+									if (nextPersistedCargoBlueprint != null) {
+										if (nextPersistedCargoBlueprintIndex < nextDeferredEntry.getFirst()) {
+											nextIndex = nextPersistedCargoBlueprintIndex;
+											nextCargoBlueprint = nextPersistedCargoBlueprint;
+										} else {
+											nextIndex = nextDeferredEntry.getFirst();
+											nextCargoBlueprint = nextDeferredEntry.getSecond();
+										}
+									} else {
+										nextIndex = nextDeferredEntry.getFirst();
+										nextCargoBlueprint = nextDeferredEntry.getSecond();
+									}
+								} else {
+									nextDeferredEntry = null;
+									if (nextPersistedCargoBlueprint != null) {
+										nextIndex = nextPersistedCargoBlueprintIndex;
+										nextCargoBlueprint = nextPersistedCargoBlueprint;
+									} else {
+										nextCargoBlueprint = null;
+									}
+								}
+							} else {
+								if (iterCargoBlueprint.hasNext()) {
+									nextPersistedCargoBlueprint = iterCargoBlueprint.next();
+									nextPersistedCargoBlueprintIndex = iterCargoBlueprintIndices.next();
+									if (nextDeferredEntry != null) {
+										if (nextPersistedCargoBlueprintIndex < nextDeferredEntry.getFirst()) {
+											nextIndex = nextPersistedCargoBlueprintIndex;
+											nextCargoBlueprint = nextPersistedCargoBlueprint;
+										} else {
+											nextIndex = nextDeferredEntry.getFirst();
+											nextCargoBlueprint = nextDeferredEntry.getSecond();
+										}
+									} else {
+										nextIndex = nextPersistedCargoBlueprintIndex;
+										nextCargoBlueprint = nextPersistedCargoBlueprint;
+									}
+								} else {
+									nextPersistedCargoBlueprint = null;
+									if (nextDeferredEntry != null) {
+										nextIndex = nextDeferredEntry.getFirst();
+										nextCargoBlueprint = nextDeferredEntry.getSecond();
+									} else {
+										nextCargoBlueprint = null;
+									}
+								}
+							}
+							if (nextCargoBlueprint == null) {
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		for (CargoBlueprint[] cargoBlueprints : secondPassCargoBlueprints.values()) {
+			for (CargoBlueprint cargoBlueprint : cargoBlueprints) {
+				assert cargoBlueprint != null;
+			}
+		}
+
+//		final Map<Inventory, Map<BaseLegalEntity, Map<SalesContractTracker, Integer>>> finalPhaseSalesContractInspect = new HashMap<>();
+//		final Map<Inventory, Map<BaseLegalEntity, Map<DESMarketTracker, Integer>>> finalPhaseDesMarketInspect = new HashMap<>();
+//		for (final Entry<Inventory, CargoBlueprint[]> entry : secondPassCargoBlueprints.entrySet()) {
+//			salesContractInspect.put(entry.getKey(), new HashMap<>());
+//			desMarketInspect.put(entry.getKey(), new HashMap<>());
+//			for (final CargoBlueprint cargoBlueprint : entry.getValue()) {
+//				if (cargoBlueprint.getAllocationTracker() instanceof SalesContractTracker) {
+//					final Map<SalesContractTracker, Integer> scMap = salesContractInspect.get(entry.getKey()).computeIfAbsent(cargoBlueprint.getEntity(), k -> new HashMap<>());
+//					scMap.compute((SalesContractTracker) cargoBlueprint.getAllocationTracker(), (k, v) -> v == null ? 1 : v + 1);
+//				} else {
+//					final Map<DESMarketTracker, Integer> dsmMap = desMarketInspect.get(entry.getKey()).computeIfAbsent(cargoBlueprint.getEntity(), k -> new HashMap<>());
+//					dsmMap.compute((DESMarketTracker) cargoBlueprint.getAllocationTracker(), (k, v) -> v == null ? 1 : v + 1);
+//				}
+//			}
+//		}
+
+//		System.out.println("==================");
+//		System.out.println("Final phase");
+//		for (final Inventory inventory : phase1CargoBlueprintsToGenerate.keySet()) {
+//			System.out.println(String.format("For inventory %s", inventory.getName()));
+//			for (final MUDContainer mudContainer : finalPhaseMullContainers.get(inventory).getMUDContainers()) {
+//				final BaseLegalEntity entity = mudContainer.getEntity();
+//				System.out.println(String.format("\tFor %s", entity.getName()));
+//				final Map<SalesContractTracker, Integer> currSCMap = salesContractInspect.get(inventory).get(entity);
+//				if (currSCMap != null) {
+//					for (Entry<SalesContractTracker, Integer> entry : currSCMap.entrySet()) {
+//						System.out.println(String.format("\t\tSC:%s. Expected: %d. Actual: %d", entry.getKey().getSalesContract().getName(), entry.getKey().getAACQ(), entry.getValue()));
+//					}
+//				}
+//				for (Entry<DESMarketTracker, Integer> entry : desMarketInspect.get(inventory).computeIfAbsent(entity, k -> {
+//					final HashMap<DESMarketTracker, Integer> map = new HashMap<>();
+//					mudContainer.getAllocationTrackers().stream().filter(DESMarketTracker.class::isInstance).map(DESMarketTracker.class::cast).forEach(tracker -> map.put(tracker, 0));
+//					return map;
+//				}).entrySet()) {
+//					System.out.println(String.format("\t\tDSM:%s. Expected: %d. Actual: %d", entry.getKey().getDESSalesMarket().getName(), entry.getKey().getAACQ(), entry.getValue()));
+//				}
+//			}
+//		}
+
+		final IScenarioDataProvider sdp = editorData.getScenarioDataProvider();
+
+		final List<Cargo> cargoesToDelete;
+		final List<LoadSlot> loadSlotsToDelete;
+		final List<DischargeSlot> dischargeSlotsToDelete;
+		if (cargoesToKeep.isEmpty()) {
+			cargoesToDelete = ScenarioModelUtil.getCargoModel(sdp).getCargoes();
+			loadSlotsToDelete = ScenarioModelUtil.getCargoModel(sdp).getLoadSlots();
+			dischargeSlotsToDelete = ScenarioModelUtil.getCargoModel(sdp).getDischargeSlots();
+		} else {
+			final Set<Cargo> cargoesToKeepSet = cargoesToKeep.stream().map(wrapper -> wrapper.getLoadSlot().getCargo()).collect(Collectors.toSet());
+			final int numSlotsToDelete = ScenarioModelUtil.getCargoModel(sdp).getCargoes().size() - cargoesToKeepSet.size();
+			loadSlotsToDelete = new ArrayList<>(numSlotsToDelete);
+			dischargeSlotsToDelete = new ArrayList<>(numSlotsToDelete);
+			cargoesToDelete = new ArrayList<>(numSlotsToDelete);
+			for (final Cargo cargo : ScenarioModelUtil.getCargoModel(sdp).getCargoes()) {
+				if (!cargoesToKeepSet.contains(cargo)) {
+					cargoesToDelete.add(cargo);
+					loadSlotsToDelete.add((LoadSlot) cargo.getSlots().get(0));
+					dischargeSlotsToDelete.add((DischargeSlot) cargo.getSlots().get(1));
+				}
+			}
+		}
+		if (!cargoesToDelete.isEmpty()) {
+			final List<EObject> objectsToDelete = new ArrayList<>(cargoesToDelete.size() + loadSlotsToDelete.size() + dischargeSlotsToDelete.size());
+			objectsToDelete.addAll(cargoesToDelete);
+			objectsToDelete.addAll(loadSlotsToDelete);
+			objectsToDelete.addAll(dischargeSlotsToDelete);
+			cmd.append(DeleteCommand.create(editingDomain, objectsToDelete));
+		}
+
+		if (secondPassCargoBlueprints.values().stream().anyMatch(arr -> arr.length > 0)) {
 			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sm);
-			cargoBlueprintsToGenerate.values().stream() //
-					.flatMap(List::stream) //
-					.forEach(cargoBlueprint -> cargoBlueprint.constructCargoModelPopulationCommands(cargoModel, cec, editingDomain, volumeFlex, sdp, vessToVA, adpNominalMarket, cmd));
-			editorData.getDefaultCommandHandler().handleCommand(cmd, profile, null);
-		} else if (cmd.isEmpty()) {
+			secondPassCargoBlueprints.values().forEach(arr -> {
+				for (final CargoBlueprint cargoBlueprint : arr) {
+					cargoBlueprint.constructCargoModelPopulationCommands(sm, cargoModel, cec, editingDomain, volumeFlex, sdp, vessToVA, adpNominalMarket, cmd, firstPartyVessels);
+				}
+			});
+		}
+		if (cmd.isEmpty()) {
 			return IdentityCommand.INSTANCE;
+		} else {
+			editorData.getDefaultCommandHandler().handleCommand(cmd, profile, null);
 		}
 		return cmd;
 	}
@@ -764,7 +2101,7 @@ public class ContractPage extends ADPComposite {
 				commercialModel.eAdapters().remove(commercialModelAdapter);
 				cargoModel.eAdapters().remove(cargoModelAdapter);
 			};
-			
+
 			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_MODEL) && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
 				MullProfile profile = adpModel.getMullProfile();
 				if (profile == null) {
@@ -836,7 +2173,7 @@ public class ContractPage extends ADPComposite {
 			if (editorData.adpModel.getMullProfile() == null) {
 				editorData.adpModel.setMullProfile((MullProfile) object);
 			}
-			
+
 			target = object;
 		}
 
@@ -888,7 +2225,7 @@ public class ContractPage extends ADPComposite {
 					|| msg.getFeature() == CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS) {
 				final CommercialModel commercialModel = (CommercialModel) msg.getNotifier();
 				final List<Object> objects = new LinkedList<>();
-				
+
 				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_MODEL) && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
 					MullProfile profile = editorData.adpModel.getMullProfile();
 					if (profile == null) {
@@ -896,7 +2233,7 @@ public class ContractPage extends ADPComposite {
 					}
 					objects.add(profile);
 				}
-				
+
 				objects.addAll(commercialModel.getPurchaseContracts());
 				objects.addAll(commercialModel.getSalesContracts());
 
@@ -1001,14 +2338,11 @@ public class ContractPage extends ADPComposite {
 		objectSelector.setSelection(new StructuredSelection(p.getContract()));
 	}
 
-	private TreeMap<LocalDateTime, InventoryDateTimeEvent> getInventoryInsAndOutsHourly(final Inventory inventory, final LNGScenarioModel scenarioModel, final LocalDateTime startDateTimeInclusive, final LocalDateTime endDateTimeExclusive) {
+	private TreeMap<LocalDateTime, InventoryDateTimeEvent> getInventoryInsAndOutsHourly(final Inventory inventory, final LNGScenarioModel scenarioModel, final LocalDateTime startDateTimeInclusive,
+			final LocalDateTime endDateTimeExclusive) {
 		final List<InventoryCapacityRow> capacities = inventory.getCapacities();
 		final TreeMap<LocalDate, InventoryCapacityRow> capacityTreeMap = capacities.stream() //
-				.collect(Collectors.toMap(
-						InventoryCapacityRow::getDate,
-						c -> c,
-						(oldVal, newVal) -> newVal,
-						TreeMap::new));
+				.collect(Collectors.toMap(InventoryCapacityRow::getDate, c -> c, (oldVal, newVal) -> newVal, TreeMap::new));
 		final TreeMap<LocalDateTime, InventoryDateTimeEvent> insAndOuts = new TreeMap<>();
 //		final List<InventoryEventRow> filteredFeeds = inventory.getFeeds().stream() //
 //				.filter(f -> !f.getStartDate().isBefore(startDateTimeInclusive.toLocalDate()) || f.getPeriod() == InventoryFrequency.LEVEL) //
@@ -1029,7 +2363,32 @@ public class ContractPage extends ADPComposite {
 		return insAndOuts;
 	}
 
-	private void addHourlyNetVolumes(final List<InventoryEventRow> events, final TreeMap<LocalDate, InventoryCapacityRow> capacityTreeMap, final TreeMap<LocalDateTime, InventoryDateTimeEvent> insAndOuts, final IntUnaryOperator volumeFunction) {
+	private int getYearlyProduction(final Inventory inventory, final LNGScenarioModel scenarioModel, final LocalDateTime startTimeInclusive, final LocalDateTime endTimeExclusive) {
+		int production = 0;
+		for (final InventoryEventRow eventRow : inventory.getFeeds()) {
+			final LocalDate eventStart = eventRow.getStartDate();
+			if (eventStart != null && !eventStart.isBefore(startTimeInclusive.toLocalDate()) && eventStart.isBefore(endTimeExclusive.toLocalDate())) {
+				if (eventRow.getPeriod() == InventoryFrequency.LEVEL) {
+					production += eventRow.getReliableVolume();
+				} else if (eventRow.getPeriod() == InventoryFrequency.DAILY) {
+					final LocalDate eventEnd = eventRow.getEndDate();
+					for (LocalDate currentDate = eventStart; !currentDate.isAfter(eventEnd); currentDate = currentDate.plusDays(1)) {
+						production += eventRow.getReliableVolume();
+					}
+				} else if (eventRow.getPeriod() == InventoryFrequency.HOURLY) {
+					final LocalDate eventEnd = eventRow.getEndDate();
+					final int delta = 24 * eventRow.getReliableVolume();
+					for (LocalDate currentDate = eventStart; !currentDate.isAfter(eventEnd); currentDate = currentDate.plusDays(1)) {
+						production += delta;
+					}
+				}
+			}
+		}
+		return production;
+	}
+
+	private void addHourlyNetVolumes(final List<InventoryEventRow> events, final TreeMap<LocalDate, InventoryCapacityRow> capacityTreeMap,
+			final TreeMap<LocalDateTime, InventoryDateTimeEvent> insAndOuts, final IntUnaryOperator volumeFunction) {
 		for (final InventoryEventRow inventoryEventRow : events) {
 			final LocalDate eventStart = inventoryEventRow.getStartDate();
 			if (eventStart != null) {
@@ -1060,7 +2419,8 @@ public class ContractPage extends ADPComposite {
 		}
 	}
 
-	private void addSingleVolume(final TreeMap<LocalDate, InventoryCapacityRow> capacityTreeMap, final TreeMap<LocalDateTime, InventoryDateTimeEvent> insAndOuts, final IntUnaryOperator volumeFunction, final LocalDateTime expectedDateTime, final int absoluteVolume) {
+	private void addSingleVolume(final TreeMap<LocalDate, InventoryCapacityRow> capacityTreeMap, final TreeMap<LocalDateTime, InventoryDateTimeEvent> insAndOuts, final IntUnaryOperator volumeFunction,
+			final LocalDateTime expectedDateTime, final int absoluteVolume) {
 		InventoryDateTimeEvent inventoryDateTimeEvent = insAndOuts.get(expectedDateTime);
 		if (inventoryDateTimeEvent == null) {
 			InventoryCapacityRow capacityRow = capacityTreeMap.get(expectedDateTime.toLocalDate());
@@ -1076,7 +2436,8 @@ public class ContractPage extends ADPComposite {
 		}
 	}
 
-	private void addSingleVolume(final TreeMap<LocalDate, InventoryCapacityRow> capacityTreeMap, final TreeMap<LocalDateTime, InventoryDateTimeEvent> insAndOuts, final LocalDateTime expectedDateTime, final int volume) {
+	private void addSingleVolume(final TreeMap<LocalDate, InventoryCapacityRow> capacityTreeMap, final TreeMap<LocalDateTime, InventoryDateTimeEvent> insAndOuts, final LocalDateTime expectedDateTime,
+			final int volume) {
 		InventoryDateTimeEvent inventoryDateTimeEvent = insAndOuts.get(expectedDateTime);
 		if (inventoryDateTimeEvent == null) {
 			InventoryCapacityRow capacityRow = capacityTreeMap.get(expectedDateTime.toLocalDate());
@@ -1094,5 +2455,54 @@ public class ContractPage extends ADPComposite {
 
 	private boolean isAtStartHourOfMonth(final LocalDateTime localDateTime) {
 		return localDateTime.getDayOfMonth() == 1 && localDateTime.getHour() == 0;
+	}
+
+	private MullProfile trimZeroesFromMullProfile(final MullProfile profile) {
+		final MullProfile trimmedProfile = ADPFactory.eINSTANCE.createMullProfile();
+		trimmedProfile.setFullCargoLotValue(profile.getFullCargoLotValue());
+		trimmedProfile.setVolumeFlex(profile.getVolumeFlex());
+		trimmedProfile.setWindowSize(profile.getWindowSize());
+		// Don't add cargoes to keep - or clone if needed
+
+		for (final MullSubprofile mullSubprofile : profile.getInventories()) {
+			final MullSubprofile trimmedMullSubprofile = ADPFactory.eINSTANCE.createMullSubprofile();
+			trimmedMullSubprofile.setInventory(mullSubprofile.getInventory());
+			for (final MullEntityRow mullEntityRow : mullSubprofile.getEntityTable()) {
+				if (mullEntityRow.getRelativeEntitlement() > 0.0) {
+					final MullEntityRow trimmedMullEntityRow = ADPFactory.eINSTANCE.createMullEntityRow();
+					trimmedMullEntityRow.setEntity(mullEntityRow.getEntity());
+					trimmedMullEntityRow.setInitialAllocation(mullEntityRow.getInitialAllocation());
+					trimmedMullEntityRow.setRelativeEntitlement(mullEntityRow.getRelativeEntitlement());
+					for (final SalesContractAllocationRow salesContractAllocationRow : mullEntityRow.getSalesContractAllocationRows()) {
+						if (salesContractAllocationRow.getWeight() != 0) {
+							final SalesContractAllocationRow rowCopy = ADPFactory.eINSTANCE.createSalesContractAllocationRow();
+							rowCopy.setContract(salesContractAllocationRow.getContract());
+							rowCopy.setWeight(salesContractAllocationRow.getWeight());
+							rowCopy.getVessels().addAll(salesContractAllocationRow.getVessels());
+							trimmedMullEntityRow.getSalesContractAllocationRows().add(rowCopy);
+						}
+					}
+					for (final DESSalesMarketAllocationRow desSalesMarketAllocationRow : mullEntityRow.getDesSalesMarketAllocationRows()) {
+						final DESSalesMarketAllocationRow rowCopy = ADPFactory.eINSTANCE.createDESSalesMarketAllocationRow();
+						rowCopy.setDesSalesMarket(desSalesMarketAllocationRow.getDesSalesMarket());
+						rowCopy.setWeight(desSalesMarketAllocationRow.getWeight());
+						rowCopy.getVessels().addAll(desSalesMarketAllocationRow.getVessels());
+						trimmedMullEntityRow.getDesSalesMarketAllocationRows().add(rowCopy);
+					}
+					trimmedMullSubprofile.getEntityTable().add(trimmedMullEntityRow);
+				}
+			}
+			trimmedProfile.getInventories().add(trimmedMullSubprofile);
+		}
+		return trimmedProfile;
+	}
+
+	private static @Nullable MPSolver createSolver() {
+		try {
+			return new MPSolver("HarmonisationSolver", MPSolver.OptimizationProblemType.valueOf("CBC_MIXED_INTEGER_PROGRAMMING"));
+		} catch (Exception | Error e) {
+			// or tools error, skip
+		}
+		return null;
 	}
 }

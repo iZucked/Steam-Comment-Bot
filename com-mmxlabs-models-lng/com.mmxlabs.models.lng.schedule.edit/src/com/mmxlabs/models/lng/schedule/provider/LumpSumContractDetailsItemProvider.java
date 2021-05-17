@@ -1,8 +1,4 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
- * All rights reserved.
- */
-/**
  */
 package com.mmxlabs.models.lng.schedule.provider;
 
@@ -100,7 +96,7 @@ public class LumpSumContractDetailsItemProvider extends MatchingContractDetailsI
 			getString("_UI_LumpSumContractDetails_type") :
 			getString("_UI_LumpSumContractDetails_type") + " " + label;
 	}
-	
+
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached

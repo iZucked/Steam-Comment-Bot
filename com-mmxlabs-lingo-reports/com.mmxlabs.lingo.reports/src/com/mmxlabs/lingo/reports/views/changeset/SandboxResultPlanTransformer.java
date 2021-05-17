@@ -9,6 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lingo.reports.services.ScenarioNotEvaluatedException;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
@@ -26,6 +28,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
 public class SandboxResultPlanTransformer {
+	private static final Logger logger = LoggerFactory.getLogger(SandboxResultPlanTransformer.class);
 
 	public ChangeSetRoot createDataModel(final ScenarioInstance scenarioInstance, final SandboxResult plan, final IProgressMonitor monitor) {
 
@@ -65,10 +68,23 @@ public class SandboxResultPlanTransformer {
 						altCurrent = new ScenarioResultImpl(scenarioInstance, slotInsertionOption.getMicroTargetCase().getScheduleModel());
 					}
 				}
+				// TODO: FIX ME!!! The null guards below are a patch for when either base or
+				// current do not have a scheduleModel. This patch prevents a message from
+				// popping up to the user.
 				if (plan.isHasDualModeSolutions()) {
-					changeSets.add(transformer.buildParallelDiffChangeSet(base, current, altBase, altCurrent, changeDescription, userSettings, null));
+					final ChangeSet changeSet = transformer.buildParallelDiffChangeSet(base, current, altBase, altCurrent, changeDescription, userSettings, null);
+					if (changeSet.getMetricsToDefaultBase() != null) {
+						changeSets.add(changeSet);
+					} else {
+						logger.error("Got null pointer when opening solution");
+					}
 				} else {
-					changeSets.add(transformer.buildSingleChangeChangeSet(base, current, changeDescription, userSettings, null));
+					final ChangeSet changeSet = transformer.buildSingleChangeChangeSet(base, current, changeDescription, userSettings, null);
+					if (changeSet.getMetricsToDefaultBase() != null) {
+						changeSets.add(changeSet);
+					} else {
+						logger.error("Got null pointer when opening solution");
+					}
 				}
 
 				monitor.worked(1);

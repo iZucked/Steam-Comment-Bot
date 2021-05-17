@@ -4,7 +4,10 @@
  */
 package com.mmxlabs.lngdataserver.lng.importers.merge;
 
+import org.eclipse.emf.ecore.EObject;
+
 class MergeMapping {
+	EObject sourceObject;
 	String sourceName;
 	String targetName;
 	String info = "";
@@ -51,6 +54,20 @@ class MergeMapping {
 		this.info = info;
 	}
 
+	/**
+	 * @return the sourceObject
+	 */
+	public EObject getSourceObject() {
+		return sourceObject;
+	}
+
+	/**
+	 * @param sourceObject the sourceObject to set
+	 */
+	public void setSourceObject(EObject sourceObject) {
+		this.sourceObject = sourceObject;
+	}
+	
 	@Override
 	public String toString() {
 		return sourceName;

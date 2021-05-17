@@ -8,12 +8,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
 import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.models.ui.date.LocalDateTimeTextFormatter;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 
 /**
  * A {@link LocalDate} attribute manipulator which uses the {@link FormattedTextCellEditor} from nebula.
@@ -23,8 +23,8 @@ import com.mmxlabs.models.ui.date.LocalDateTimeTextFormatter;
  */
 public class LocalDateTimeAttributeManipulator extends BasicAttributeManipulator {
 
-	public LocalDateTimeAttributeManipulator(final EStructuralFeature field, final EditingDomain editingDomain) {
-		super(field, editingDomain);
+	public LocalDateTimeAttributeManipulator(final EStructuralFeature field, final ICommandHandler commandHandler) {
+		super(field, commandHandler);
 	}
 
 	@Override

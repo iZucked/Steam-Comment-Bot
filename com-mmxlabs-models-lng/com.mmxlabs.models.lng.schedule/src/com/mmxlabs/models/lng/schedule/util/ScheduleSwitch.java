@@ -413,15 +413,6 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case SchedulePackage.BALLAST_BONUS_FEE_DETAILS: {
-				BallastBonusFeeDetails ballastBonusFeeDetails = (BallastBonusFeeDetails)theEObject;
-				T result = caseBallastBonusFeeDetails(ballastBonusFeeDetails);
-				if (result == null) result = caseUUIDObject(ballastBonusFeeDetails);
-				if (result == null) result = caseGeneralPNLDetails(ballastBonusFeeDetails);
-				if (result == null) result = caseMMXObject(ballastBonusFeeDetails);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case SchedulePackage.MATCHING_CONTRACT_DETAILS: {
 				MatchingContractDetails matchingContractDetails = (MatchingContractDetails)theEObject;
 				T result = caseMatchingContractDetails(matchingContractDetails);
@@ -457,12 +448,12 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case SchedulePackage.CANAL_BOOKING_EVENT: {
-				CanalBookingEvent canalBookingEvent = (CanalBookingEvent)theEObject;
-				T result = caseCanalBookingEvent(canalBookingEvent);
-				if (result == null) result = caseEvent(canalBookingEvent);
-				if (result == null) result = caseMMXObject(canalBookingEvent);
-				if (result == null) result = caseITimezoneProvider(canalBookingEvent);
+			case SchedulePackage.CANAL_JOURNEY_EVENT: {
+				CanalJourneyEvent canalJourneyEvent = (CanalJourneyEvent)theEObject;
+				T result = caseCanalJourneyEvent(canalJourneyEvent);
+				if (result == null) result = caseEvent(canalJourneyEvent);
+				if (result == null) result = caseMMXObject(canalJourneyEvent);
+				if (result == null) result = caseITimezoneProvider(canalJourneyEvent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -509,6 +500,73 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 			case SchedulePackage.PAPER_DEAL_ALLOCATION_ENTRY: {
 				PaperDealAllocationEntry paperDealAllocationEntry = (PaperDealAllocationEntry)theEObject;
 				T result = casePaperDealAllocationEntry(paperDealAllocationEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.CHARTER_CONTRACT_FEE_DETAILS: {
+				CharterContractFeeDetails charterContractFeeDetails = (CharterContractFeeDetails)theEObject;
+				T result = caseCharterContractFeeDetails(charterContractFeeDetails);
+				if (result == null) result = caseUUIDObject(charterContractFeeDetails);
+				if (result == null) result = caseGeneralPNLDetails(charterContractFeeDetails);
+				if (result == null) result = caseMMXObject(charterContractFeeDetails);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.LUMP_SUM_DETAILS: {
+				LumpSumDetails lumpSumDetails = (LumpSumDetails)theEObject;
+				T result = caseLumpSumDetails(lumpSumDetails);
+				if (result == null) result = caseMatchingContractDetails(lumpSumDetails);
+				if (result == null) result = caseUUIDObject(lumpSumDetails);
+				if (result == null) result = caseMMXObject(lumpSumDetails);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.LUMP_SUM_BALLAST_BONUS_TERM_DETAILS: {
+				LumpSumBallastBonusTermDetails lumpSumBallastBonusTermDetails = (LumpSumBallastBonusTermDetails)theEObject;
+				T result = caseLumpSumBallastBonusTermDetails(lumpSumBallastBonusTermDetails);
+				if (result == null) result = caseLumpSumDetails(lumpSumBallastBonusTermDetails);
+				if (result == null) result = caseMatchingContractDetails(lumpSumBallastBonusTermDetails);
+				if (result == null) result = caseUUIDObject(lumpSumBallastBonusTermDetails);
+				if (result == null) result = caseMMXObject(lumpSumBallastBonusTermDetails);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.LUMP_SUM_REPOSITIONING_FEE_TERM_DETAILS: {
+				LumpSumRepositioningFeeTermDetails lumpSumRepositioningFeeTermDetails = (LumpSumRepositioningFeeTermDetails)theEObject;
+				T result = caseLumpSumRepositioningFeeTermDetails(lumpSumRepositioningFeeTermDetails);
+				if (result == null) result = caseLumpSumDetails(lumpSumRepositioningFeeTermDetails);
+				if (result == null) result = caseMatchingContractDetails(lumpSumRepositioningFeeTermDetails);
+				if (result == null) result = caseUUIDObject(lumpSumRepositioningFeeTermDetails);
+				if (result == null) result = caseMMXObject(lumpSumRepositioningFeeTermDetails);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.NOTIONAL_JOURNEY_DETAILS: {
+				NotionalJourneyDetails notionalJourneyDetails = (NotionalJourneyDetails)theEObject;
+				T result = caseNotionalJourneyDetails(notionalJourneyDetails);
+				if (result == null) result = caseMatchingContractDetails(notionalJourneyDetails);
+				if (result == null) result = caseUUIDObject(notionalJourneyDetails);
+				if (result == null) result = caseMMXObject(notionalJourneyDetails);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.NOTIONAL_JOURNEY_BALLAST_BONUS_TERM_DETAILS: {
+				NotionalJourneyBallastBonusTermDetails notionalJourneyBallastBonusTermDetails = (NotionalJourneyBallastBonusTermDetails)theEObject;
+				T result = caseNotionalJourneyBallastBonusTermDetails(notionalJourneyBallastBonusTermDetails);
+				if (result == null) result = caseNotionalJourneyDetails(notionalJourneyBallastBonusTermDetails);
+				if (result == null) result = caseMatchingContractDetails(notionalJourneyBallastBonusTermDetails);
+				if (result == null) result = caseUUIDObject(notionalJourneyBallastBonusTermDetails);
+				if (result == null) result = caseMMXObject(notionalJourneyBallastBonusTermDetails);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM_DETAILS: {
+				OriginPortRepositioningFeeTermDetails originPortRepositioningFeeTermDetails = (OriginPortRepositioningFeeTermDetails)theEObject;
+				T result = caseOriginPortRepositioningFeeTermDetails(originPortRepositioningFeeTermDetails);
+				if (result == null) result = caseNotionalJourneyDetails(originPortRepositioningFeeTermDetails);
+				if (result == null) result = caseMatchingContractDetails(originPortRepositioningFeeTermDetails);
+				if (result == null) result = caseUUIDObject(originPortRepositioningFeeTermDetails);
+				if (result == null) result = caseMMXObject(originPortRepositioningFeeTermDetails);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1057,17 +1115,17 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Ballast Bonus Fee Details</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Charter Contract Fee Details</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Ballast Bonus Fee Details</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Charter Contract Fee Details</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseBallastBonusFeeDetails(BallastBonusFeeDetails object) {
+	public T caseCharterContractFeeDetails(CharterContractFeeDetails object) {
 		return null;
 	}
 
@@ -1132,6 +1190,21 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Canal Journey Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Canal Journey Event</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCanalJourneyEvent(CanalJourneyEvent object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Charter Available From Event</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -1158,21 +1231,6 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseGroupedCharterLengthEvent(GroupedCharterLengthEvent object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Canal Booking Event</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Canal Booking Event</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseCanalBookingEvent(CanalBookingEvent object) {
 		return null;
 	}
 
@@ -1233,6 +1291,96 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T casePaperDealAllocationEntry(PaperDealAllocationEntry object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Lump Sum Details</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Lump Sum Details</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseLumpSumDetails(LumpSumDetails object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Lump Sum Ballast Bonus Term Details</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Lump Sum Ballast Bonus Term Details</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseLumpSumBallastBonusTermDetails(LumpSumBallastBonusTermDetails object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Lump Sum Repositioning Fee Term Details</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Lump Sum Repositioning Fee Term Details</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseLumpSumRepositioningFeeTermDetails(LumpSumRepositioningFeeTermDetails object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Notional Journey Details</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Notional Journey Details</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseNotionalJourneyDetails(NotionalJourneyDetails object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Notional Journey Ballast Bonus Term Details</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Notional Journey Ballast Bonus Term Details</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseNotionalJourneyBallastBonusTermDetails(NotionalJourneyBallastBonusTermDetails object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Origin Port Repositioning Fee Term Details</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Origin Port Repositioning Fee Term Details</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseOriginPortRepositioningFeeTermDetails(OriginPortRepositioningFeeTermDetails object) {
 		return null;
 	}
 

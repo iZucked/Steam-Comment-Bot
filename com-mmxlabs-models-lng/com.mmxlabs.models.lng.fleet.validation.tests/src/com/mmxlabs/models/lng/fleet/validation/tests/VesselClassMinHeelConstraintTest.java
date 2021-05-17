@@ -35,12 +35,20 @@ public class VesselClassMinHeelConstraintTest {
 
 		VesselClassRouteParameters vcrp1 = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
 		vcrp1.setRouteOption(RouteOption.SUEZ);
+		vcrp1.setBallastConsumptionRate(0.0);
+		vcrp1.setBallastNBORate(1.0);
+		vcrp1.setLadenConsumptionRate(0.0);
+		vcrp1.setLadenNBORate(1.0);
 		VesselClassRouteParameters vcrp2 = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
 		vcrp2.setRouteOption(RouteOption.PANAMA);
+		vcrp2.setBallastConsumptionRate(0.0);
+		vcrp2.setBallastNBORate(1.0);
+		vcrp2.setLadenConsumptionRate(0.0);
+		vcrp2.setLadenNBORate(1.0);
 		
 		target.getRouteParameters().add(vcrp1);
 		target.getRouteParameters().add(vcrp2);
-		
+
 		target.setSafetyHeel(500);
 		target.setCapacity(1000);
 		target.setFillCapacity(1.0);

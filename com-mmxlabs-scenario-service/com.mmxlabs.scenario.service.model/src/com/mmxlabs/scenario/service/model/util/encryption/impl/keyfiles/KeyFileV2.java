@@ -13,13 +13,15 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import javax.crypto.Cipher;
-import javax.crypto.CipherInputStream;
-import javax.crypto.CipherOutputStream;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import javax.crypto.spec.GCMParameterSpec;
 
+import org.bouncycastle.crypto.engines.AESEngine;
+import org.bouncycastle.crypto.io.CipherInputStream;
+import org.bouncycastle.crypto.io.CipherOutputStream;
+import org.bouncycastle.crypto.modes.GCMBlockCipher;
+import org.bouncycastle.crypto.params.AEADParameters;
+import org.bouncycastle.crypto.params.KeyParameter;
 import org.eclipse.emf.ecore.resource.impl.AESCipherImpl;
 
 import com.mmxlabs.scenario.service.model.util.encryption.impl.IKeyFile;
@@ -79,9 +81,9 @@ public final class KeyFileV2 implements IKeyFile {
 		final byte[] encryptionIV = KeyFileUtil.randomBytes(16);
 		outputStream.write(encryptionIV);
 
-		// now create the encryption cipher
-		final Cipher cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);
-		cipher.init(Cipher.ENCRYPT_MODE, getKey(), new GCMParameterSpec(128, encryptionIV));
+		// create the encryption cipher
+		GCMBlockCipher cipher = new GCMBlockCipher(new AESEngine());
+		cipher.init(true, new AEADParameters(new KeyParameter(key.getEncoded()), 128, encryptionIV, null));
 
 		// The CipherOutputStream shouldn't close the underlying stream
 		//
@@ -134,9 +136,10 @@ public final class KeyFileV2 implements IKeyFile {
 		final byte[] flags = KeyFileUtil.readBytes(1, in);
 		final byte[] encryptionIV = KeyFileUtil.readBytes(16, in);
 
-		// now create the decrypt cipher
-		final Cipher cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);
-		cipher.init(Cipher.DECRYPT_MODE, getKey(), new GCMParameterSpec(128, encryptionIV));
+		// create the decryption cipher
+		GCMBlockCipher cipher = new GCMBlockCipher(new AESEngine());
+		cipher.init(false, new AEADParameters(new KeyParameter(key.getEncoded()), 128, encryptionIV, null));
+
 		in = new CipherInputStream(in, cipher) {
 
 			@Override

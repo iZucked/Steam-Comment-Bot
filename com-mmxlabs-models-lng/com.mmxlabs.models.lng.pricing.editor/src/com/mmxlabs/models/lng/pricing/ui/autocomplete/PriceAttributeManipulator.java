@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Text;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.autocomplete.AutoCompleteHelper;
 import com.mmxlabs.models.ui.editors.autocomplete.IMMXContentProposalProvider;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
@@ -37,8 +38,8 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
 public class PriceAttributeManipulator implements ICellManipulator, ICellRenderer {
 
 	private final EAttribute attribute;
-	
-	private final EditingDomain editingDomain;
+
+	private final ICommandHandler commandHandler;
 
 	/**
 	 * Label provider to map between NamedObjects and price expressions to strings.
@@ -48,7 +49,7 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 	private IExtraCommandsHook extraCommandsHook;
 
 	private Object parent;
-	
+
 	/**
 	 * Create a manipulator for the given field in the target object, taking values from the given valueProvider and creating set commands in the provided editingDomain.
 	 * 
@@ -58,9 +59,9 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 	 *            editing domain for setting
 	 * @param expressionAnnotationType
 	 */
-	public PriceAttributeManipulator(final EAttribute attribute, final EditingDomain editingDomain) {
+	public PriceAttributeManipulator(final EAttribute attribute, final ICommandHandler commandHandler) {
 		this.attribute = attribute;
-		this.editingDomain = editingDomain;
+		this.commandHandler = commandHandler;
 		this.labelProvider = new LabelProvider() {
 			@Override
 			public String getText(final Object element) {
@@ -79,7 +80,7 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 	protected EAttribute getAttribute(final Object object) {
 		return this.attribute;
 	}
-	
+
 	@Override
 	public String render(final Object object) {
 		if (object == null) {
@@ -103,7 +104,7 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 			runSetCommand(object, (String) text);
 		}
 	}
-		
+
 	public CellEditor createCellEditor(final Composite c, final Object object) {
 		TextCellEditor editor = new TextCellEditor(c, SWT.FLAT | SWT.BORDER) {
 			private IMMXContentProposalProvider proposalHelper;
@@ -112,6 +113,7 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 			protected Control createControl(Composite parent) {
 				Control control = super.createControl(parent);
 				this.proposalHelper = AutoCompleteHelper.createControlProposalAdapter(control, getAttribute(object));
+				EditingDomain editingDomain = commandHandler.getEditingDomain();
 				for (Resource r : editingDomain.getResourceSet().getResources()) {
 					for (EObject o : r.getContents()) {
 						if (o instanceof MMXRootObject) {
@@ -121,33 +123,35 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 				}
 				return control;
 			}
-			
-		    @Override
+
+			@Override
 			protected void doSetValue(Object value) {
 				if (value == null) {
 					value = "";
 				}
 				super.doSetValue(value);
-		    }
+			}
 		};
 
 		editor.addListener(new ICellEditorListener() {
 
 			@Override
-			public void applyEditorValue() { }
+			public void applyEditorValue() {
+			}
 
 			@Override
-			public void cancelEditor() { }
+			public void cancelEditor() {
+			}
 
 			@Override
-			public void editorValueChanged(boolean oldValidState, boolean newValidState) {	
-				Text text = ((Text)editor.getControl());
+			public void editorValueChanged(boolean oldValidState, boolean newValidState) {
+				Text text = ((Text) editor.getControl());
 				if (!editor.isActivated()) {
 					PriceAttributeManipulator.this.doSetValue(object, text.getText(), false);
 				}
 			}
 		});
-		
+
 		return editor;
 	}
 
@@ -165,11 +169,9 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 			} else {
 				return "";
 			}
-		}
-		else if (object instanceof String) {
+		} else if (object instanceof String) {
 			return object;
-		}
-		else {
+		} else {
 			return "";
 		}
 	}
@@ -205,12 +207,15 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 		}
 		return false;
 	}
-	
+
 	public void runSetCommand(final Object object, final String value) {
 		final Object currentValue = reallyGetValue(object);
 		if (Objects.equals(currentValue, value)) {
 			return;
 		}
+
+		EditingDomain editingDomain = commandHandler.getEditingDomain();
+
 		final Command command;
 		if (value != null && !value.isEmpty()) {
 			command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, getAttribute(object), value));
@@ -223,7 +228,7 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 		if (extraCommandsHook != null) {
 			extraCommandsHook.applyExtraCommands(editingDomain, cmd, parent, object, value);
 		}
-		editingDomain.getCommandStack().execute(cmd);
+		commandHandler.handleCommand(cmd, (EObject) object, getAttribute(object));
 	}
 
 	@Override
@@ -238,7 +243,7 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 
 	private Object reallyGetValue(final Object object) {
 		Object v = null;
-		
+
 		if (object instanceof EObject) {
 			final EObject eObject = (EObject) object;
 			if (eObject.eIsSet(this.getAttribute(object))) {
@@ -247,8 +252,7 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 		}
 		if (v == null || v == SetCommand.UNSET_VALUE) {
 			return "";
-		}
-		else {
+		} else {
 			return v;
 		}
 	}
@@ -272,7 +276,7 @@ public class PriceAttributeManipulator implements ICellManipulator, ICellRendere
 	@Override
 	public final void setValue(final Object object, final Object value) {
 		if (value == SetCommand.UNSET_VALUE && getAttribute(object).isUnsettable()) {
-			runSetCommand(object, (String)value);
+			runSetCommand(object, (String) value);
 		} else {
 			doSetValue(object, value);
 		}

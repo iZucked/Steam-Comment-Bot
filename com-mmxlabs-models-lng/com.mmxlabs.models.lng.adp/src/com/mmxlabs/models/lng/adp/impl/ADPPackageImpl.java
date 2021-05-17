@@ -39,6 +39,7 @@ import com.mmxlabs.models.lng.adp.LNGVolumeUnit;
 import com.mmxlabs.models.lng.adp.MaxCargoConstraint;
 import com.mmxlabs.models.lng.adp.MinCargoConstraint;
 import com.mmxlabs.models.lng.adp.MullAllocationRow;
+import com.mmxlabs.models.lng.adp.MullCargoWrapper;
 import com.mmxlabs.models.lng.adp.MullEntityRow;
 import com.mmxlabs.models.lng.adp.MullProfile;
 import com.mmxlabs.models.lng.adp.MullSubprofile;
@@ -333,6 +334,13 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * @generated
 	 */
 	private EClass mullAllocationRowEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass mullCargoWrapperEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1427,18 +1435,8 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getMullEntityRow_Ports() {
-		return (EReference)mullEntityRowEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getMullEntityRow_SalesContractAllocationRows() {
-		return (EReference)mullEntityRowEClass.getEStructuralFeatures().get(5);
+		return (EReference)mullEntityRowEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -1537,6 +1535,16 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getMullProfile_CargoesToKeep() {
+		return (EReference)mullProfileEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getMullSubprofile() {
 		return mullSubprofileEClass;
 	}
@@ -1589,6 +1597,36 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	@Override
 	public EReference getMullAllocationRow_Vessels() {
 		return (EReference)mullAllocationRowEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getMullCargoWrapper() {
+		return mullCargoWrapperEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getMullCargoWrapper_LoadSlot() {
+		return (EReference)mullCargoWrapperEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getMullCargoWrapper_DischargeSlot() {
+		return (EReference)mullCargoWrapperEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1771,7 +1809,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		createEAttribute(mullEntityRowEClass, MULL_ENTITY_ROW__INITIAL_ALLOCATION);
 		createEAttribute(mullEntityRowEClass, MULL_ENTITY_ROW__RELATIVE_ENTITLEMENT);
 		createEReference(mullEntityRowEClass, MULL_ENTITY_ROW__DES_SALES_MARKET_ALLOCATION_ROWS);
-		createEReference(mullEntityRowEClass, MULL_ENTITY_ROW__PORTS);
 		createEReference(mullEntityRowEClass, MULL_ENTITY_ROW__SALES_CONTRACT_ALLOCATION_ROWS);
 
 		desSalesMarketAllocationRowEClass = createEClass(DES_SALES_MARKET_ALLOCATION_ROW);
@@ -1785,6 +1822,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		createEAttribute(mullProfileEClass, MULL_PROFILE__VOLUME_FLEX);
 		createEReference(mullProfileEClass, MULL_PROFILE__INVENTORIES);
 		createEAttribute(mullProfileEClass, MULL_PROFILE__FULL_CARGO_LOT_VALUE);
+		createEReference(mullProfileEClass, MULL_PROFILE__CARGOES_TO_KEEP);
 
 		mullSubprofileEClass = createEClass(MULL_SUBPROFILE);
 		createEReference(mullSubprofileEClass, MULL_SUBPROFILE__INVENTORY);
@@ -1793,6 +1831,10 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		mullAllocationRowEClass = createEClass(MULL_ALLOCATION_ROW);
 		createEAttribute(mullAllocationRowEClass, MULL_ALLOCATION_ROW__WEIGHT);
 		createEReference(mullAllocationRowEClass, MULL_ALLOCATION_ROW__VESSELS);
+
+		mullCargoWrapperEClass = createEClass(MULL_CARGO_WRAPPER);
+		createEReference(mullCargoWrapperEClass, MULL_CARGO_WRAPPER__LOAD_SLOT);
+		createEReference(mullCargoWrapperEClass, MULL_CARGO_WRAPPER__DISCHARGE_SLOT);
 
 		// Create enums
 		intervalTypeEEnum = createEEnum(INTERVAL_TYPE);
@@ -2038,7 +2080,6 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		initEAttribute(getMullEntityRow_InitialAllocation(), ecorePackage.getEString(), "initialAllocation", null, 0, 1, MullEntityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMullEntityRow_RelativeEntitlement(), ecorePackage.getEDouble(), "relativeEntitlement", null, 0, 1, MullEntityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMullEntityRow_DesSalesMarketAllocationRows(), this.getDESSalesMarketAllocationRow(), null, "desSalesMarketAllocationRows", null, 0, -1, MullEntityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getMullEntityRow_Ports(), thePortPackage.getPort(), null, "ports", null, 0, -1, MullEntityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMullEntityRow_SalesContractAllocationRows(), this.getSalesContractAllocationRow(), null, "salesContractAllocationRows", null, 0, -1, MullEntityRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(desSalesMarketAllocationRowEClass, DESSalesMarketAllocationRow.class, "DESSalesMarketAllocationRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2052,6 +2093,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		initEAttribute(getMullProfile_VolumeFlex(), ecorePackage.getEInt(), "volumeFlex", null, 0, 1, MullProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMullProfile_Inventories(), this.getMullSubprofile(), null, "inventories", null, 0, -1, MullProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMullProfile_FullCargoLotValue(), ecorePackage.getEInt(), "fullCargoLotValue", null, 0, 1, MullProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMullProfile_CargoesToKeep(), this.getMullCargoWrapper(), null, "cargoesToKeep", null, 0, -1, MullProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(mullSubprofileEClass, MullSubprofile.class, "MullSubprofile", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getMullSubprofile_Inventory(), theCargoPackage.getInventory(), null, "inventory", null, 0, 1, MullSubprofile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2060,6 +2102,10 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		initEClass(mullAllocationRowEClass, MullAllocationRow.class, "MullAllocationRow", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getMullAllocationRow_Weight(), ecorePackage.getEInt(), "weight", null, 0, 1, MullAllocationRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMullAllocationRow_Vessels(), theFleetPackage.getVessel(), null, "vessels", null, 0, -1, MullAllocationRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(mullCargoWrapperEClass, MullCargoWrapper.class, "MullCargoWrapper", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getMullCargoWrapper_LoadSlot(), theCargoPackage.getLoadSlot(), null, "loadSlot", null, 0, 1, MullCargoWrapper.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMullCargoWrapper_DischargeSlot(), theCargoPackage.getDischargeSlot(), null, "dischargeSlot", null, 0, 1, MullCargoWrapper.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(intervalTypeEEnum, IntervalType.class, "IntervalType");

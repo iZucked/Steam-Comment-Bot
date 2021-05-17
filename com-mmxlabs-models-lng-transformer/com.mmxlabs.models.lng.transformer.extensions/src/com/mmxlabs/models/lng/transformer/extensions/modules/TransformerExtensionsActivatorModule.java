@@ -9,8 +9,8 @@ import org.ops4j.peaberry.activation.util.PeaberryActivationModule;
 import com.mmxlabs.models.lng.transformer.extensions.actuals.ActualsTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.adp.ADPTransformerModule;
 import com.mmxlabs.models.lng.transformer.extensions.contingencytime.ContingencyIdleTimeModule;
-import com.mmxlabs.models.lng.transformer.extensions.contracts.ballastbonus.BallastBonusContractTransformerFactory;
-import com.mmxlabs.models.lng.transformer.extensions.contracts.ballastbonus.BallastBonusExporterExtensionFactory;
+import com.mmxlabs.models.lng.transformer.extensions.contracts.charter.CharterContractExporterExtensionFactory;
+import com.mmxlabs.models.lng.transformer.extensions.contracts.charter.CharterContractTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.counterpartyvolume.CounterPartyVolumeDataModule;
 import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.exposures.ExposureDataModule;
@@ -52,12 +52,12 @@ public class TransformerExtensionsActivatorModule extends PeaberryActivationModu
 		install(new CounterPartyVolumeDataModule());
 
 		bindService(SimpleContractTransformerFactory.class).export();
-		bindService(BallastBonusContractTransformerFactory.class).export();
+		bindService(CharterContractTransformerFactory.class).export();
 
 		bindService(EntityTransformerExtensionFactory.class).export();
 		bindService(TradingExporterExtensionFactory.class).export();
 		bindService(BasicSlotPNLExporterExtensionFactory.class).export();
-		bindService(BallastBonusExporterExtensionFactory.class).export();
+		bindService(CharterContractExporterExtensionFactory.class).export();
 		
 		bindService(ExposuresExporterExtensionFactory.class).export();
 		bindService(PaperDealsExporterExtensionFactory.class).export();

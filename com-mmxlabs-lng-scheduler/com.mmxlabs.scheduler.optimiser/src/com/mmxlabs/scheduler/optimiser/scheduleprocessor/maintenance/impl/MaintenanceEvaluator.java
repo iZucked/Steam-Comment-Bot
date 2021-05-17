@@ -15,11 +15,13 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.impl.ConstantHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionConsumer;
 import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionSupplier;
+import com.mmxlabs.scheduler.optimiser.components.impl.MaintenanceVesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.impl.MaintenanceVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEventPortSlot;
@@ -158,20 +160,20 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 
 		{
 			final PortTimesRecord firstPortTimesRecord = new PortTimesRecord();
-
-			// Clone all the existing data
+			// Breaking at maintenance events so any VesselEventPortSlot associated with a maintenance event should not be copied across
 			for (int i = 0; i < originalPortTimesRecord.getSlots().size(); ++i) {
 				final IPortSlot portSlot = originalPortTimesRecord.getSlots().get(i);
-				if (portSlot != maintenancePortSlots[0].getFormerPortSlot()) {
-					firstPortTimesRecord.setSlotTime(portSlot, originalPortTimesRecord.getSlotTime(portSlot));
-					firstPortTimesRecord.setSlotDuration(portSlot, originalPortTimesRecord.getSlotDuration(portSlot));
-					firstPortTimesRecord.setSlotExtraIdleTime(portSlot, originalPortTimesRecord.getSlotExtraIdleTime(portSlot));
-					firstPortTimesRecord.setSlotNextVoyageOptions(portSlot, originalPortTimesRecord.getSlotNextVoyageOptions(portSlot), originalPortTimesRecord.getSlotNextVoyagePanamaPeriod(portSlot));
+				if (portSlot.getPortType() == PortType.Maintenance) {
+					continue;
 				}
+				firstPortTimesRecord.setSlotTime(portSlot, originalPortTimesRecord.getSlotTime(portSlot));
+				firstPortTimesRecord.setSlotDuration(portSlot, originalPortTimesRecord.getSlotDuration(portSlot));
+				firstPortTimesRecord.setSlotExtraIdleTime(portSlot, originalPortTimesRecord.getSlotExtraIdleTime(portSlot));
+				firstPortTimesRecord.setSlotNextVoyageOptions(portSlot, originalPortTimesRecord.getSlotNextVoyageOptions(portSlot));
 			}
 			firstPortTimesRecord.setReturnSlotTime(maintenancePortSlots[0], originalPortTimesRecord.getSlotTime(maintenancePortSlots[0].getFormerPortSlot()));
 
-			// Delete below
+			// Delete below (debugging code)
 			final VoyagePlan originalPlan2 = new VoyagePlan();
 			final IDetailsSequenceElement[] originalSequence2 = new IDetailsSequenceElement[originalPlan.getSequence().length];
 			for (int i = 0; i < originalSequence2.length; ++i) {
@@ -180,7 +182,7 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 			}
 			
 			final int originalViolationCount = voyageCalculator.calculateVoyagePlan(originalPlan2, vessel, vesselAvailability.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricePerMT, originalPortTimesRecord, originalSequence2);
-			// Delete until here
+
 			int originalConsumptionUptoMaintenance = 0;
 			for (int i = 0; i < 2; ++i) {
 				final IDetailsSequenceElement elem = originalPlan.getSequence()[i];
@@ -197,7 +199,8 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 					}
 				}
 			}
-			
+			// Delete until here
+
 			final VoyagePlan currentPlan = new VoyagePlan();
 			
 			final int violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselAvailability.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricePerMT, firstPortTimesRecord, currentNewSequence.toArray(new IDetailsSequenceElement[0]));
@@ -247,8 +250,8 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 			currentPortTimesRecord.setSlotTime(maintenancePortSlots[i], originalPortTimesRecord.getSlotTime(maintenancePortSlots[i].getFormerPortSlot()));
 			currentPortTimesRecord.setSlotDuration(maintenancePortSlots[i], originalPortTimesRecord.getSlotDuration(maintenancePortSlots[i].getFormerPortSlot()));
 			currentPortTimesRecord.setSlotExtraIdleTime(maintenancePortSlots[i], originalPortTimesRecord.getSlotExtraIdleTime(maintenancePortSlots[i].getFormerPortSlot()));
-			currentPortTimesRecord.setSlotNextVoyageOptions(maintenancePortSlots[i], originalPortTimesRecord.getSlotNextVoyageOptions(maintenancePortSlots[i].getFormerPortSlot()), originalPortTimesRecord.getSlotNextVoyagePanamaPeriod(maintenancePortSlots[i].getFormerPortSlot()));
 
+			currentPortTimesRecord.setSlotNextVoyageOptions(maintenancePortSlots[i], originalPortTimesRecord.getSlotNextVoyageOptions(maintenancePortSlots[i].getFormerPortSlot()));
 			currentPortTimesRecord.setReturnSlotTime(maintenancePortSlots[i+1], originalPortTimesRecord.getSlotTime(maintenancePortSlots[i+1].getFormerPortSlot()));
 
 			final VoyagePlan currentPlan = new VoyagePlan();
@@ -274,8 +277,8 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 			finalPortTimesRecord.setSlotTime(maintenancePortSlots[numMaintenanceEvents-1], originalPortTimesRecord.getSlotTime(maintenancePortSlots[numMaintenanceEvents-1].getFormerPortSlot()));
 			finalPortTimesRecord.setSlotDuration(maintenancePortSlots[numMaintenanceEvents-1], originalPortTimesRecord.getSlotDuration(maintenancePortSlots[numMaintenanceEvents-1].getFormerPortSlot()));
 			finalPortTimesRecord.setSlotExtraIdleTime(maintenancePortSlots[numMaintenanceEvents-1], originalPortTimesRecord.getSlotExtraIdleTime(maintenancePortSlots[numMaintenanceEvents-1].getFormerPortSlot()));
-			finalPortTimesRecord.setSlotNextVoyageOptions(maintenancePortSlots[numMaintenanceEvents-1], originalPortTimesRecord.getSlotNextVoyageOptions(maintenancePortSlots[numMaintenanceEvents-1].getFormerPortSlot()), originalPortTimesRecord.getSlotNextVoyagePanamaPeriod(maintenancePortSlots[numMaintenanceEvents-1].getFormerPortSlot()));
 
+			finalPortTimesRecord.setSlotNextVoyageOptions(maintenancePortSlots[numMaintenanceEvents-1], originalPortTimesRecord.getSlotNextVoyageOptions(maintenancePortSlots[numMaintenanceEvents-1].getFormerPortSlot()));
 			IPortSlot returnSlot = originalPortTimesRecord.getReturnSlot();
 			if (returnSlot != null) {
 				finalPortTimesRecord.setReturnSlotTime(returnSlot, originalPortTimesRecord.getSlotTime(returnSlot));

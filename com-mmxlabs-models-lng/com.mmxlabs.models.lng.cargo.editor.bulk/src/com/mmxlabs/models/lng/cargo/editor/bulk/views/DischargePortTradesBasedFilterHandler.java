@@ -31,7 +31,7 @@ public class DischargePortTradesBasedFilterHandler implements ITradesBasedFilter
 			@Override
 			protected void populate(Menu menu) {
 				
-				CargoModel cargoModel = ScenarioModelUtil.getCargoModel(viewer.getJointModelEditorPart().getScenarioDataProvider());
+				CargoModel cargoModel = ScenarioModelUtil.getCargoModel(viewer.getScenarioEditingLocation().getScenarioDataProvider());
 				
 				List<Port> discharges = new LinkedList<>();
 				for (Slot s : cargoModel.getDischargeSlots()) {

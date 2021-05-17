@@ -21,6 +21,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
@@ -31,6 +33,7 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -42,13 +45,17 @@ import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
+import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceIntervalProviderHelper;
+import com.mmxlabs.scheduler.optimiser.scheduling.PNLBasedWindowTrimmerUtils.TimeChoice;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
@@ -59,8 +66,8 @@ public class PNLBasedWindowTrimmerUtils {
 	public static final String ENABLE_BACKWARDS_NBO_CHECK = "ENABLE_BACKWARDS_NBO_CHECK";
 
 	public static class TimeChoice implements Comparable<TimeChoice> {
-		public int time;
-		public boolean important;
+		public final int time;
+		public final boolean important;
 
 		public TimeChoice(final int time, final boolean important) {
 			this.time = time;
@@ -144,6 +151,9 @@ public class PNLBasedWindowTrimmerUtils {
 	@Inject
 	@Named(SchedulerConstants.MIDNIGHT_ALIGNED_INTEGER_INTERVAL_CURVE)
 	private IIntegerIntervalCurve midnightIntervalsInHoursCurve;
+
+	@Inject
+	private IPanamaBookingsProvider panamaBookingsProvider;
 
 	// Compute best NBO based arrival time in initial interval computation
 	private static final boolean PRE_FORWARDS_NBO_TIME = true; // True fixes P case 1 issue (fixes 6k loss and gains 12k overall)
@@ -262,14 +272,18 @@ public class PNLBasedWindowTrimmerUtils {
 				priceIntervalProducer.getDischargeWindowBasedOnLoad(discharge, portTimeWindowRecord));
 	}
 
-	public void computeIntervalsForSlot(final IPortSlot slot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final PortTimesRecord _record, final IPortTimeWindowsRecord ptwr,
-			final List<IPortSlot> slots, final int slotIdx, final MinTravelTimeData minTimeData, final int lastSlotArrivalTime, final Set<TimeChoice> times) {
-		final IPortSlot lastSlot = slots.get(slotIdx - 1);
-		final int elementIndex = ptwr.getIndex(lastSlot);
+	public void computeIntervalsForSlot(final IPortSlot toPortSlot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final PortTimesRecord _record,
+			final IPortTimeWindowsRecord ptwr, final List<IPortSlot> slots, final int toSlotIdxInRecordArray, final MinTravelTimeData minTimeData, final int lastSlotArrivalTime,
+			final Set<TimeChoice> times) {
+		// This index in the index in the record slots array
+		final IPortSlot fromPortSlot = slots.get(toSlotIdxInRecordArray - 1);
 
-		ITimeWindow slotFeasibleTimeWindow = ptwr.getSlotFeasibleTimeWindow(slot);
+		// This index is the index in the entire sequence - for use in travel time array
+		final int fromElementIndexInSequence = ptwr.getIndex(fromPortSlot);
+
+		ITimeWindow slotFeasibleTimeWindow = ptwr.getSlotFeasibleTimeWindow(toPortSlot);
 		if (slotFeasibleTimeWindow == null) {
-			slotFeasibleTimeWindow = slot.getTimeWindow();
+			slotFeasibleTimeWindow = toPortSlot.getTimeWindow();
 		}
 		int twStart = slotFeasibleTimeWindow.getInclusiveStart();
 		int twEnd = slotFeasibleTimeWindow.getExclusiveEnd() - 1;
@@ -279,17 +293,17 @@ public class PNLBasedWindowTrimmerUtils {
 			int calculationCV;
 			AvailableRouteChoices lastRouteChoices = null;
 			lastRouteChoices = AvailableRouteChoices.OPTIMAL;
-			if (elementIndex > 0 && lastSlot != null) {
-				final VesselState vesselState = lastSlot instanceof ILoadOption ? VesselState.Laden : VesselState.Ballast;
-				if (lastSlot instanceof ILoadOption) {
-					final ILoadOption iLoadOption = (ILoadOption) lastSlot;
+			if (fromElementIndexInSequence >= 0 && fromPortSlot != null) {
+				final VesselState vesselState = fromPortSlot instanceof ILoadOption ? VesselState.Laden : VesselState.Ballast;
+				if (fromPortSlot instanceof ILoadOption) {
+					final ILoadOption iLoadOption = (ILoadOption) fromPortSlot;
 					calculationCV = iLoadOption.getCargoCVValue();
 				} else {
 					calculationCV = DEFAULT_CV;
 				}
 				final int nboSpeed = Math.min(Math.max(getNBOSpeed(vessel, vesselState, calculationCV), vessel.getMinSpeed()), vessel.getMaxSpeed());
 
-				final List<@NonNull DistanceMatrixEntry> allDistanceValues = distanceProvider.getDistanceValues(lastSlot.getPort(), slot.getPort(), vessel, lastRouteChoices);
+				final List<@NonNull DistanceMatrixEntry> allDistanceValues = distanceProvider.getDistanceValues(fromPortSlot.getPort(), toPortSlot.getPort(), vessel, lastRouteChoices);
 
 				final List<RouteCostRecord> extraTimes = new LinkedList<>();
 				for (final DistanceMatrixEntry dme : allDistanceValues) {
@@ -300,7 +314,7 @@ public class PNLBasedWindowTrimmerUtils {
 						continue;
 					}
 
-					if (SPEED_STEP_ENABLE && slot instanceof IEndPortSlot) {
+					if (SPEED_STEP_ENABLE && toPortSlot instanceof IEndPortSlot) {
 						int minSpeed = nboSpeed;// vessel.getMinSpeed();
 						// round min and max speeds to allow better speed stepping
 						minSpeed = roundUpToNearest(minSpeed, 100);
@@ -312,8 +326,8 @@ public class PNLBasedWindowTrimmerUtils {
 						// loop through speeds and canals
 						int speed = minSpeed;
 
-						final int baseTime = lastSlotArrivalTime + ptwr.getSlotDuration(lastSlot) //
-								+ ptwr.getSlotExtraIdleTime(lastSlot) //
+						final int baseTime = lastSlotArrivalTime + ptwr.getSlotDuration(fromPortSlot) //
+								+ ptwr.getSlotExtraIdleTime(fromPortSlot) //
 								+ routeCostProvider.getRouteTransitTime(dme.getRoute(), vessel);
 
 						// Window bounds will be taken care of later.
@@ -322,17 +336,18 @@ public class PNLBasedWindowTrimmerUtils {
 						while (speed <= maxSpeed) {
 							final int vesselTravelTimeInHours = Calculator.getTimeFromSpeedDistance(speed, dme.getDistance());
 							final int t = baseTime + vesselTravelTimeInHours;
-							copy.setSlotTime(lastSlot, t);
+							// This is ok! only on a temporary copy of the data for this method
+							copy.setSlotTime(toPortSlot, t);
 
-							if (slotFeasibleTimeWindow.contains(t) && lastSlot instanceof IDischargeOption) {
+							if (slotFeasibleTimeWindow.contains(t) && fromPortSlot instanceof IDischargeOption) {
 
-								final IDischargeOption iDischargeOption = (IDischargeOption) lastSlot;
+								final IDischargeOption iDischargeOption = (IDischargeOption) fromPortSlot;
 								final int p = iDischargeOption.getDischargePriceCalculator().estimateSalesUnitPrice(iDischargeOption, copy, null);
 								final RouteCostRecord rr = new RouteCostRecord();
 								rr.time = t;
 								// Add in canal cost
-								rr.cost += routeCostProvider.getRouteCost(dme.getRoute(), lastSlot.getPort(), slot.getPort(), vessel, lastSlotArrivalTime + ptwr.getSlotDuration(lastSlot),
-										CostType.Ballast);
+								rr.cost += routeCostProvider.getRouteCost(dme.getRoute(), fromPortSlot.getPort(), toPortSlot.getPort(), vessel,
+										lastSlotArrivalTime + ptwr.getSlotDuration(fromPortSlot), CostType.Ballast);
 
 								// Add charter cost
 								rr.cost += vesselAvailability.getCharterCostCalculator().getCharterCost(lastSlotArrivalTime, lastSlotArrivalTime, t - lastSlotArrivalTime);
@@ -355,8 +370,8 @@ public class PNLBasedWindowTrimmerUtils {
 								final RouteCostRecord rr = new RouteCostRecord();
 								rr.time = t;
 								// Add in canal cost
-								rr.cost += routeCostProvider.getRouteCost(dme.getRoute(), lastSlot.getPort(), slot.getPort(), vessel, lastSlotArrivalTime + ptwr.getSlotDuration(lastSlot),
-										CostType.Ballast);
+								rr.cost += routeCostProvider.getRouteCost(dme.getRoute(), fromPortSlot.getPort(), toPortSlot.getPort(), vessel,
+										lastSlotArrivalTime + ptwr.getSlotDuration(fromPortSlot), CostType.Ballast);
 
 								// Add charter cost
 								rr.cost += vesselAvailability.getCharterCostCalculator().getCharterCost(copy.getFirstSlotTime(), lastSlotArrivalTime, t - lastSlotArrivalTime);
@@ -387,18 +402,18 @@ public class PNLBasedWindowTrimmerUtils {
 						}
 					} else {
 
-						final int nbotravelTime = ptwr.getSlotDuration(lastSlot) //
+						final int nbotravelTime = ptwr.getSlotDuration(fromPortSlot) //
 								+ Calculator.getTimeFromSpeedDistance(nboSpeed, dme.getDistance()) //
 								+ routeCostProvider.getRouteTransitTime(dme.getRoute(), vessel) //
-								+ ptwr.getSlotExtraIdleTime(lastSlot) //
+								+ ptwr.getSlotExtraIdleTime(fromPortSlot) //
 						;
 
 						final int t = lastSlotArrivalTime;
 						{
-							final int fastestTime = t + minTimeData.getMinTravelTime(elementIndex - 1);
+							final int fastestTime = t + minTimeData.getMinTravelTime(fromElementIndexInSequence);
 							times.add(TimeChoice.forNormal(Math.max(twStart, fastestTime)));
 
-							final int nboTime = t + Math.max(nbotravelTime, minTimeData.getTravelTime(dme.getRoute(), elementIndex - 1));
+							final int nboTime = t + Math.max(nbotravelTime, minTimeData.getTravelTime(dme.getRoute(), fromElementIndexInSequence));
 							if (nboTime < slotFeasibleTimeWindow.getExclusiveEnd()) {
 								times.add(TimeChoice.forNormal(Math.max(twStart, nboTime)));
 							}
@@ -406,7 +421,7 @@ public class PNLBasedWindowTrimmerUtils {
 					}
 				}
 
-				if (!extraTimes.isEmpty()) {
+				if (SPEED_STEP_ENABLE && !extraTimes.isEmpty()) {
 					// Sort cheapest cost first
 					extraTimes.sort((a, b) -> Long.compare(a.cost, b.cost));
 					// Filter out similar results.
@@ -437,7 +452,7 @@ public class PNLBasedWindowTrimmerUtils {
 			}
 		}
 
-		if (slot instanceof IEndPortSlot) {
+		if (toPortSlot instanceof IEndPortSlot) {
 
 			final IResource resource = vesselProvider.getResource(vesselAvailability);
 			final IEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
@@ -470,7 +485,7 @@ public class PNLBasedWindowTrimmerUtils {
 				}
 			}
 		}
-		alignTimeChoicesToMidnightLocalTime(times, 24, slot);
+		alignTimeChoicesToMidnightLocalTime(times, 24, toPortSlot);
 
 		final int pTWStart = twStart;
 		final int pTWEnd = twEnd;
@@ -481,7 +496,7 @@ public class PNLBasedWindowTrimmerUtils {
 		}
 		// Ensure the quickest time is added and remove anything too early
 		{
-			int time = lastSlotArrivalTime + minTimeData.getMinTravelTime(elementIndex);
+			int time = lastSlotArrivalTime + minTimeData.getMinTravelTime(fromElementIndexInSequence);
 			time = Math.max(time, pTWStart);
 			times.add(TimeChoice.forImportant(time));
 			final int pTime = time;
@@ -490,7 +505,7 @@ public class PNLBasedWindowTrimmerUtils {
 		}
 	}
 
-	public Map<IPortSlot, Collection<TimeChoice>> computeDefaultIntervals(final List<IPortTimeWindowsRecord> records, final IResource resource, final MinTravelTimeData travelTimeData) {
+	public ImmutableMap<IPortSlot, ImmutableList<TimeChoice>> computeDefaultIntervals(final List<IPortTimeWindowsRecord> records, final IResource resource, final MinTravelTimeData travelTimeData) {
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
 		final IVessel vessel = vesselAvailability.getVessel();
@@ -543,19 +558,56 @@ public class PNLBasedWindowTrimmerUtils {
 								continue;
 							}
 
-							final int nboTravelTime = (dme.getDistance() == 0) ? 0
-									: Calculator.getTimeFromSpeedDistance(nboSpeed, dme.getDistance()) + routeCostProvider.getRouteTransitTime(dme.getRoute(), vessel);
+							// If we have a Panama booking allocated, the booking date constrains the departure and arrival times. The min travel time data is unable to accurately encode this for
+							// Panama.
+							if (dme.getRoute() == ERouteOption.PANAMA //
+									&& record.getSlotNextVoyageOptions(lastSlot) == AvailableRouteChoices.PANAMA_ONLY //
+									&& record.getRouteOptionBooking(lastSlot) != null //
+							) {
 
-							final int totalTravelTime = record.getSlotDuration(lastSlot) + nboTravelTime + record.getSlotExtraIdleTime(lastSlot);
+								final int bookingDate = record.getRouteOptionBooking(lastSlot).getBookingDate();
 
-							for (final TimeChoice lastSlotArrivalTime : lastIntervals) {
-								final int fastestArrivalTime = lastSlotArrivalTime.time + travelTimeData.getTravelTime(dme.getRoute(), elementIndex - 1);
+								final ECanalEntry exit = distanceProvider.getRouteOptionCanalEntrance(slot.getPort(), ERouteOption.PANAMA);
+								final IPort exitPort = distanceProvider.getRouteOptionEntryPort(ERouteOption.PANAMA, exit);
+								final int distanceFromCanal = distanceProvider.getDistance(ERouteOption.DIRECT, exitPort, slot.getPort(), vessel);
+
+								// Time from canal booking.
+								final int nboTravelTime = (distanceFromCanal == 0) ? 0 : Calculator.getTimeFromSpeedDistance(nboSpeed, distanceFromCanal);
+								final int maxSpeedTravelTime = (distanceFromCanal == 0) ? 0 : Calculator.getTimeFromSpeedDistance(vessel.getMaxSpeed(), distanceFromCanal);
+
+								final int transitTime = routeCostProvider.getRouteTransitTime(dme.getRoute(), vessel);
+								final int extraIdleTime = record.getSlotExtraIdleTime(lastSlot);
+
+								// Feasible trimmer should have made sure this is valid.
+								// assert lastSlotArrivalTime + visitDuration + timeToCanal < bookingDate - arrivalMargin;
+
+								// This is the fixed time components to add on to the booking date before we add on the speed based elements.
+								final int baseTime = bookingDate + transitTime + extraIdleTime;
+
+								final int fastestArrivalTime = baseTime + maxSpeedTravelTime;
 								if (fastestArrivalTime < tw.getExclusiveEnd()) {
 									intervals.add(TimeChoice.forNormal(Math.max(tw.getInclusiveStart(), fastestArrivalTime)));
 								}
-								final int nboBasedArrivalTime = lastSlotArrivalTime.time + totalTravelTime;
+								final int nboBasedArrivalTime = baseTime + nboTravelTime;
 								if (nboBasedArrivalTime < tw.getExclusiveEnd()) {
 									intervals.add(TimeChoice.forNormal(Math.max(tw.getInclusiveStart(), nboBasedArrivalTime)));
+								}
+
+							} else {
+								final int nboTravelTime = (dme.getDistance() == 0) ? 0
+										: Calculator.getTimeFromSpeedDistance(nboSpeed, dme.getDistance()) + routeCostProvider.getRouteTransitTime(dme.getRoute(), vessel);
+
+								final int totalTravelTime = record.getSlotDuration(lastSlot) + nboTravelTime + record.getSlotExtraIdleTime(lastSlot);
+
+								for (final TimeChoice lastSlotArrivalTime : lastIntervals) {
+									final int fastestArrivalTime = lastSlotArrivalTime.time + travelTimeData.getTravelTime(dme.getRoute(), elementIndex - 1);
+									if (fastestArrivalTime < tw.getExclusiveEnd()) {
+										intervals.add(TimeChoice.forNormal(Math.max(tw.getInclusiveStart(), fastestArrivalTime)));
+									}
+									final int nboBasedArrivalTime = lastSlotArrivalTime.time + totalTravelTime;
+									if (nboBasedArrivalTime < tw.getExclusiveEnd()) {
+										intervals.add(TimeChoice.forNormal(Math.max(tw.getInclusiveStart(), nboBasedArrivalTime)));
+									}
 								}
 							}
 						}
@@ -635,16 +687,59 @@ public class PNLBasedWindowTrimmerUtils {
 					if (dme.getDistance() == Integer.MAX_VALUE) {
 						continue;
 					}
-
 					final int nboSpeed = Math.min(Math.max(getNBOSpeed(vessel, vesselState, calculationCV), vessel.getMinSpeed()), vessel.getMaxSpeed());
-					final int nboTravelTime = dme.getDistance() == 0 ? 0
-							: Calculator.getTimeFromSpeedDistance(nboSpeed, dme.getDistance()) + routeCostProvider.getRouteTransitTime(dme.getRoute(), vessel);
 
-					final int totalTravelTime = record.getSlotDuration(lastSlot) + nboTravelTime + record.getSlotExtraIdleTime(lastSlot);
-					for (final TimeChoice t2 : intervalMap.get(slot)) {
-						final int t = Math.max(0, t2.time - totalTravelTime);
-						if (lastSlot.getTimeWindow() == null || (t >= lTW.getInclusiveStart() && t < lTW.getExclusiveEnd())) {
-							intervalMap.get(lastSlot).add(TimeChoice.forNormal(t));
+					// If we have a Panama booking allocated, the booking date constrains the departure and arrival times. The min travel time data is unable to accurately encode this for
+					// Panama.
+					if (dme.getRoute() == ERouteOption.PANAMA //
+							&& record.getSlotNextVoyageOptions(lastSlot) == AvailableRouteChoices.PANAMA_ONLY //
+							&& record.getRouteOptionBooking(lastSlot) != null //
+					) {
+
+						// Arrival time of the booking
+						final int bookingDate = record.getRouteOptionBooking(lastSlot).getBookingDate();
+
+						// Extra arrival time margin
+						final int arrivalMargin = panamaBookingsProvider.getMarginInHours();
+
+						// Get distance from origin to canal
+						final ECanalEntry entrance = distanceProvider.getRouteOptionCanalEntrance(lastSlot.getPort(), ERouteOption.PANAMA);
+						final IPort entrancePort = distanceProvider.getRouteOptionEntryPort(ERouteOption.PANAMA, entrance);
+						final int distanceToCanal = distanceProvider.getDistance(ERouteOption.DIRECT, lastSlot.getPort(), entrancePort, vessel);
+
+						// Travel time to the canal NBO speed and max speed.
+						final int nboTravelTime = (distanceToCanal == 0) ? 0 : Calculator.getTimeFromSpeedDistance(nboSpeed, distanceToCanal);
+						final int maxSpeedTravelTime = (distanceToCanal == 0) ? 0 : Calculator.getTimeFromSpeedDistance(vessel.getMaxSpeed(), distanceToCanal);
+
+						final int visitDuration = record.getSlotDuration(lastSlot);
+
+						// Calculate the arrival time of the from slot - work backwards from the booking date. These are the fixed components, travel time added next
+						final int baseTime = bookingDate - arrivalMargin - visitDuration;
+						{
+							// NBO based arrival time
+							final int t = baseTime - nboTravelTime;
+							if (lastSlot.getTimeWindow() == null || (t >= lTW.getInclusiveStart() && t < lTW.getExclusiveEnd())) {
+								intervalMap.get(lastSlot).add(TimeChoice.forNormal(t));
+							}
+						}
+						{
+							// Max speed based arrival time
+							final int t = baseTime - maxSpeedTravelTime;
+							if (lastSlot.getTimeWindow() == null || (t >= lTW.getInclusiveStart() && t < lTW.getExclusiveEnd())) {
+								intervalMap.get(lastSlot).add(TimeChoice.forNormal(t));
+							}
+						}
+					} else {
+
+						final int nboTravelTime = dme.getDistance() == 0 ? 0
+								: Calculator.getTimeFromSpeedDistance(nboSpeed, dme.getDistance()) + routeCostProvider.getRouteTransitTime(dme.getRoute(), vessel);
+
+						final int totalTravelTime = record.getSlotDuration(lastSlot) + nboTravelTime + record.getSlotExtraIdleTime(lastSlot);
+						for (final TimeChoice t2 : intervalMap.get(slot)) {
+							final int t = Math.max(0, t2.time - totalTravelTime);
+							if (lastSlot.getTimeWindow() == null || (t >= lTW.getInclusiveStart() && t < lTW.getExclusiveEnd())) {
+								intervalMap.get(lastSlot).add(TimeChoice.forNormal(t));
+							}
 						}
 					}
 				}
@@ -722,7 +817,11 @@ public class PNLBasedWindowTrimmerUtils {
 		// Final re-alignment pass
 		intervalMap.entrySet().forEach(e -> alignTimeChoicesToMidnightLocalTime(e.getValue(), 0, e.getKey()));
 
-		return intervalMap;
+		final ImmutableMap.Builder<IPortSlot, ImmutableList<TimeChoice>> subMap = new ImmutableMap.Builder<>();
+		for (Map.Entry<IPortSlot, Collection<TimeChoice>> e : intervalMap.entrySet()) {
+			subMap.put(e.getKey(), ImmutableList.copyOf(e.getValue()));
+		}
+		return subMap.build();
 	}
 
 	private int getNBOSpeed(final IVessel vessel, final VesselState vesselState, final int cv) {

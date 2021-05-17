@@ -14,14 +14,14 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 public class VesselAvailabilityImporter extends DefaultClassImporter {
 
 	protected boolean shouldImportReference(final EReference reference) {
-		return reference != CargoPackage.Literals.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT && super.shouldImportReference(reference);
+		return reference != CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT && super.shouldImportReference(reference);
 	}
 
 	protected boolean shouldExportFeature(final EReference reference) {
-		return reference != CargoPackage.Literals.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT && super.shouldExportFeature(reference);
+		return reference != CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT && super.shouldExportFeature(reference);
 	}
 	
 	protected boolean shouldFlattenReference(final EReference reference) {
-		return reference != CargoPackage.Literals.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT && super.shouldFlattenReference(reference);
+		return reference != CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT && super.shouldFlattenReference(reference);
 	}
 }

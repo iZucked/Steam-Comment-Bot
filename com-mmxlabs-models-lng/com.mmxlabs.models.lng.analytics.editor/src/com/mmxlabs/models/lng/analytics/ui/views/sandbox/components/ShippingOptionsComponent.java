@@ -36,16 +36,17 @@ import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
-import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.FullVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
+import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.ShippingOptionsContentProvider;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -80,14 +81,14 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent<Object, A
 
 			final Label addShipping = new Label(expandableCompo, SWT.NONE);
 			expandableCompo.setTextClient(addShipping);
-			addShipping.setImage(image_grey_add);
+			addShipping.setImage(sandboxUIHelper.image_grey_add);
 
 			addShipping.setLayoutData(GridDataFactory.fillDefaults().align(SWT.CENTER, SWT.BOTTOM).grab(true, false).create());
 			addShipping.addMouseTrackListener(new MouseTrackAdapter() {
 
 				@Override
 				public void mouseExit(final MouseEvent e) {
-					addShipping.setImage(image_grey_add);
+					addShipping.setImage(sandboxUIHelper.image_grey_add);
 				}
 
 				@Override
@@ -144,8 +145,8 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent<Object, A
 							helper.addAction(new RunnableAction("Full Charter", () -> {
 								final FullVesselCharterOption opt = AnalyticsFactory.eINSTANCE.createFullVesselCharterOption();
 								final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-								vesselAvailability.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
-								vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+								vesselAvailability.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+								vesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 								opt.setVesselCharter(vesselAvailability);
 								AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, opt);
 								scenarioEditingLocation.getDefaultCommandHandler().handleCommand(

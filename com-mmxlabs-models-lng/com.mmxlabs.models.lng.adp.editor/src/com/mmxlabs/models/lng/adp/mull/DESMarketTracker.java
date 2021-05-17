@@ -6,6 +6,8 @@ package com.mmxlabs.models.lng.adp.mull;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.emf.common.command.Command;
 
@@ -16,8 +18,10 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditingCommands;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.TimePeriod;
@@ -27,33 +31,38 @@ public class DESMarketTracker extends AllocationTracker {
 	final DESSalesMarket salesMarket;
 
 	public DESMarketTracker(final DESSalesMarketAllocationRow allocationRow, final double totalWeight) {
-		super(allocationRow.getWeight()/totalWeight, allocationRow.getVessels());
+		super(allocationRow, totalWeight);
 		this.salesMarket = allocationRow.getDesSalesMarket();
 	}
 
 	@Override
-	public int calculateExpectedBoiloff(final Vessel vessel, final int loadDuration) {
-		return this.sharesVessels ? super.calculateExpectedBoiloff(vessel, loadDuration) : 0;
+	public int calculateExpectedBoiloff(final Vessel vessel, final int loadDuration, final boolean isSharedVessel) {
+		return this.sharesVessels ? super.calculateExpectedBoiloff(vessel, loadDuration, isSharedVessel) : 0;
+	}
+
+	public DESSalesMarket getDESSalesMarket() {
+		return this.salesMarket;
 	}
 
 	@Override
-	public DischargeSlot createDischargeSlot(final CargoEditingCommands cec, List<Command> setCommands, final CargoModel cargoModel, final IScenarioDataProvider sdp, final LoadSlot loadSlot, final Vessel vessel) {
+	public DischargeSlot createDischargeSlot(final CargoEditingCommands cec, List<Command> setCommands, final CargoModel cargoModel, final IScenarioDataProvider sdp, final LoadSlot loadSlot,
+			final Vessel vessel, final Map<Vessel, VesselAvailability> vesselToVA, final LNGScenarioModel sm, final Set<Vessel> firstPartyVessels) {
 		final DischargeSlot dischargeSlot;
-		if (this.sharesVessels) {
+		if (firstPartyVessels.contains(vessel)) {
 			dischargeSlot = cec.createNewSpotDischarge(setCommands, cargoModel, this.salesMarket);
-			final LocalDate dischargeDate = AllocationTracker.calculateDischargeDate(loadSlot, dischargeSlot, vessel, sdp);
+			final LocalDate dischargeDate = AllocationTracker.calculateDischargeDate(loadSlot, dischargeSlot, vessel, sdp, vesselToVA, sm);
 			dischargeSlot.setWindowStart(dischargeDate);
 			dischargeSlot.setWindowStartTime(0);
 			dischargeSlot.setWindowSize(1);
 			dischargeSlot.setWindowSizeUnits(TimePeriod.MONTHS);
-			if (!this.vesselList.isEmpty()) {
-				dischargeSlot.setRestrictedVesselsArePermissive(true);
-				dischargeSlot.setRestrictedVesselsOverride(true);
-				dischargeSlot.getRestrictedVessels().addAll(this.vesselList);
-			}
-			dischargeSlot.setRestrictedPortsArePermissive(true);
-			dischargeSlot.setRestrictedPortsOverride(true);
-			dischargeSlot.getRestrictedPorts().add(loadSlot.getPort());
+//			if (!this.vesselList.isEmpty()) {
+//				dischargeSlot.setRestrictedVesselsArePermissive(true);
+//				dischargeSlot.setRestrictedVesselsOverride(true);
+//				dischargeSlot.getRestrictedVessels().addAll(this.vesselList);
+//			}
+//			dischargeSlot.setRestrictedPortsArePermissive(true);
+//			dischargeSlot.setRestrictedPortsOverride(true);
+//			dischargeSlot.getRestrictedPorts().add(loadSlot.getPort());
 			final String id = String.format("market-%s", loadSlot.getName());
 			dischargeSlot.setName(id);
 		} else {
@@ -85,5 +94,15 @@ public class DESMarketTracker extends AllocationTracker {
 				this.runningAllocation -= expectedVolumeLoaded;
 			}
 		}
+	}
+
+	@Override
+	public boolean satisfiedAACQ() {
+		return true;
+	}
+
+	@Override
+	public void phase1DropFixedLoad(Cargo cargo) {
+		dropFixedLoad(cargo);
 	}
 }

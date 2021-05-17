@@ -34,6 +34,8 @@ import com.mmxlabs.models.lng.port.util.PortModelLabeller;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.editors.DefaultCommandHandler;
+import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -53,7 +55,7 @@ public class CanalParametersDialog extends Dialog {
 	private EReference containment;
 
 	private AdapterFactory adapterFactory;
-	private EditingDomain editingDomain;
+	private ICommandHandler commandHandler;
 	private ModelReference modelReference;
 
 	public CanalParametersDialog(final Shell parentShell) {
@@ -84,11 +86,11 @@ public class CanalParametersDialog extends Dialog {
 			}
 		});
 
-		tableViewer.addTypicalColumn("Transit Time", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClassRouteParameters_ExtraTransitTime(), editingDomain));
-		tableViewer.addTypicalColumn("Laden Consumption Rate", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClassRouteParameters_LadenConsumptionRate(), editingDomain));
-		tableViewer.addTypicalColumn("Ballast Consumption Rate", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClassRouteParameters_BallastConsumptionRate(), editingDomain));
-		tableViewer.addTypicalColumn("Laden NBO Rate", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClassRouteParameters_LadenNBORate(), editingDomain));
-		tableViewer.addTypicalColumn("Ballast NBO Rate", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClassRouteParameters_BallastNBORate(), editingDomain));
+		tableViewer.addTypicalColumn("Transit Time", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClassRouteParameters_ExtraTransitTime(), commandHandler));
+		tableViewer.addTypicalColumn("Laden Consumption Rate", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClassRouteParameters_LadenConsumptionRate(), commandHandler));
+		tableViewer.addTypicalColumn("Ballast Consumption Rate", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClassRouteParameters_BallastConsumptionRate(), commandHandler));
+		tableViewer.addTypicalColumn("Laden NBO Rate", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClassRouteParameters_LadenNBORate(), commandHandler));
+		tableViewer.addTypicalColumn("Ballast NBO Rate", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClassRouteParameters_BallastNBORate(), commandHandler));
 
 		tableViewer.setInput(container);
 
@@ -124,7 +126,7 @@ public class CanalParametersDialog extends Dialog {
 		}
 
 		this.modelReference = modelReference;
-		this.editingDomain = modelReference.getEditingDomain();
+		this.commandHandler = new DefaultCommandHandler(modelReference, null);
 		this.adapterFactory = adapterFactory;
 
 		return super.open();

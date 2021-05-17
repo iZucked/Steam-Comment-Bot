@@ -28,6 +28,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.chartercontracts.ICharterContract;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
@@ -56,7 +57,6 @@ import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
@@ -218,16 +218,13 @@ public interface ISchedulerBuilder {
 	 * @param start
 	 * @param end
 	 * @param ballastBonusContract
-	 *            TODO
 	 * @param repositioningFee
-	 *            TODO
 	 * @param isOptional
-	 *            TODO
 	 * @return
 	 */
 	@NonNull
 	IVesselAvailability createVesselAvailability(@NonNull IVessel vessel, @NonNull ILongCurve dailyCharterInPrice, @NonNull VesselInstanceType vesselInstanceType, @NonNull IStartRequirement start,
-			@NonNull IEndRequirement end, IBallastBonusContract ballastBonusContract, ILongCurve repositioningFee, boolean isOptional);
+			@NonNull IEndRequirement end, ICharterContract charterContract, ILongCurve repositioningFee, boolean isOptional);
 
 	/**
 	 * Boolean flag to indicate hard start time window. If false, provider timeWindow is a notional start date.
@@ -625,8 +622,8 @@ public interface ISchedulerBuilder {
 	void setGeneratedCharterOutEndTime(int charterOutEndTime);
 
 	@NonNull
-	ISpotCharterInMarket createSpotCharterInMarket(@NonNull String name, @NonNull IVessel oVessel, @NonNull ILongCurve charterInCurve, int charterCount, IEndRequirement endRequiremenbt,
-			IBallastBonusContract ballastBonusContract, ILongCurve repositioningFee);
+	ISpotCharterInMarket createSpotCharterInMarket(@NonNull String name, @NonNull IVessel oVessel, @NonNull ILongCurve charterInCurve, int charterCount, //
+			IStartRequirement startRequirement, IEndRequirement endRequirement, ICharterContract charterContract, ILongCurve repositioningFee);
 
 	/***
 	 * Create a sequence element

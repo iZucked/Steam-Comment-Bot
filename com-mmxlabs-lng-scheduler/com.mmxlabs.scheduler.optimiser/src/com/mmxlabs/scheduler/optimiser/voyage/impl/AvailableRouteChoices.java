@@ -10,5 +10,18 @@ public enum AvailableRouteChoices {
 	DIRECT_ONLY, // Force use of direct use
 	SUEZ_ONLY, // Force use of suez canal
 	PANAMA_ONLY, // Force use of panama canal
-	EXCLUDE_PANAMA, // Optimal, but exclude panama canala
+	EXCLUDE_PANAMA // Optimal, but exclude panama canal
+	;
+
+	public static boolean directPermitted(AvailableRouteChoices arc) {
+		return arc == DIRECT_ONLY || arc == OPTIMAL || arc == EXCLUDE_PANAMA;
+	}
+
+	public static boolean suezPermitted(AvailableRouteChoices arc) {
+		return arc == SUEZ_ONLY || arc == OPTIMAL || arc == EXCLUDE_PANAMA;
+	}
+
+	public static boolean panamaPermitted(AvailableRouteChoices arc) {
+		return arc == PANAMA_ONLY || arc == OPTIMAL;
+	}
 }

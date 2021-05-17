@@ -168,6 +168,9 @@ public class VesselsToScenarioCopier {
 		createSet(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__MIN_SPEED, upstreamVessel.getMinSpeed());
 		createSet(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__HAS_RELIQ_CAPABILITY, upstreamVessel.getHasReliqCapacity());
 
+		createSet(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__REFERENCE_VESSEL, upstreamVessel.getIsReference());
+		createSet(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__MMX_REFERENCE, upstreamVessel.getMmxReference());
+
 		createSetFuelCommand(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__BASE_FUEL, upstreamVessel.getTravelBaseFuel(), baseFuels, fleetModel);
 		createSetFuelCommand(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__IDLE_BASE_FUEL, upstreamVessel.getIdleBaseFuel(), baseFuels, fleetModel);
 		createSetFuelCommand(cc, editingDomain, vesselToUpdate, FleetPackage.Literals.VESSEL__PILOT_LIGHT_BASE_FUEL, upstreamVessel.getPilotLightBaseFuel(), baseFuels, fleetModel);

@@ -1,8 +1,4 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
- * All rights reserved.
- */
-/**
  */
 package com.mmxlabs.models.lng.schedule;
 
@@ -38,10 +34,6 @@ public interface NotionalJourneyContractDetails extends MatchingContractDetails 
 	 * Returns the value of the '<em><b>Return Port</b></em>' attribute.
 	 * The default value is <code>""</code>.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Return Port</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Return Port</em>' attribute.
 	 * @see #setReturnPort(String)
@@ -66,10 +58,6 @@ public interface NotionalJourneyContractDetails extends MatchingContractDetails 
 	 * Returns the value of the '<em><b>Distance</b></em>' attribute.
 	 * The default value is <code>"0"</code>.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Distance</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Distance</em>' attribute.
 	 * @see #setDistance(int)
@@ -93,10 +81,6 @@ public interface NotionalJourneyContractDetails extends MatchingContractDetails 
 	 * Returns the value of the '<em><b>Total Time In Days</b></em>' attribute.
 	 * The default value is <code>"0"</code>.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Total Time In Days</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Total Time In Days</em>' attribute.
 	 * @see #setTotalTimeInDays(double)
@@ -120,10 +104,6 @@ public interface NotionalJourneyContractDetails extends MatchingContractDetails 
 	 * Returns the value of the '<em><b>Total Fuel Used</b></em>' attribute.
 	 * The default value is <code>"0"</code>.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Total Fuel Used</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Total Fuel Used</em>' attribute.
 	 * @see #setTotalFuelUsed(int)
@@ -147,10 +127,6 @@ public interface NotionalJourneyContractDetails extends MatchingContractDetails 
 	 * Returns the value of the '<em><b>Fuel Price</b></em>' attribute.
 	 * The default value is <code>"0"</code>.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Fuel Price</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Fuel Price</em>' attribute.
 	 * @see #setFuelPrice(double)
@@ -174,10 +150,6 @@ public interface NotionalJourneyContractDetails extends MatchingContractDetails 
 	 * Returns the value of the '<em><b>Total Fuel Cost</b></em>' attribute.
 	 * The default value is <code>"0"</code>.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Total Fuel Cost</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Total Fuel Cost</em>' attribute.
 	 * @see #setTotalFuelCost(int)
@@ -201,10 +173,6 @@ public interface NotionalJourneyContractDetails extends MatchingContractDetails 
 	 * Returns the value of the '<em><b>Hire Rate</b></em>' attribute.
 	 * The default value is <code>"0"</code>.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Hire Rate</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Hire Rate</em>' attribute.
 	 * @see #setHireRate(int)
@@ -228,10 +196,6 @@ public interface NotionalJourneyContractDetails extends MatchingContractDetails 
 	 * Returns the value of the '<em><b>Hire Cost</b></em>' attribute.
 	 * The default value is <code>"0"</code>.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Hire Cost</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Hire Cost</em>' attribute.
 	 * @see #setHireCost(int)
@@ -255,10 +219,6 @@ public interface NotionalJourneyContractDetails extends MatchingContractDetails 
 	 * Returns the value of the '<em><b>Route Taken</b></em>' attribute.
 	 * The default value is <code>""</code>.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Route Taken</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Route Taken</em>' attribute.
 	 * @see #setRouteTaken(String)
@@ -283,10 +243,6 @@ public interface NotionalJourneyContractDetails extends MatchingContractDetails 
 	 * Returns the value of the '<em><b>Canal Cost</b></em>' attribute.
 	 * The default value is <code>"0"</code>.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Canal Cost</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Canal Cost</em>' attribute.
 	 * @see #setCanalCost(int)
@@ -310,10 +266,6 @@ public interface NotionalJourneyContractDetails extends MatchingContractDetails 
 	 * Returns the value of the '<em><b>Lump Sum</b></em>' attribute.
 	 * The default value is <code>"0"</code>.
 	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Lump Sum</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Lump Sum</em>' attribute.
 	 * @see #setLumpSum(int)
