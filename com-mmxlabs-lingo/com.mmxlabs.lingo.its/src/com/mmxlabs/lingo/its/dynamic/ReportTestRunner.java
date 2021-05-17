@@ -99,7 +99,7 @@ public class ReportTestRunner {
 								final String reportID = t.getReportID();
 								elementCases.add(DynamicTest.dynamicTest(t.getFileNameCode(), () -> {
 									ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
-										final String actual = ReportTester.generateReportsWithElement(modelRecord, scenarioDataProvider, reportID, t.getReportType(), elementID);
+										final String actual = ReportTester.testReportsWithElement_New(modelRecord, scenarioDataProvider, reportID, t.getReportType(), elementID);
 
 										final File resultsFolder = new File(scenarioFile.getParentFile(), "results");
 										resultsFolder.mkdir();

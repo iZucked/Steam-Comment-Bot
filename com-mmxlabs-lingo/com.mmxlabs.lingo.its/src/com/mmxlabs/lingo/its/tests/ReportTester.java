@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Assumptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Lists;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.util.CheckedBiConsumer;
 import com.mmxlabs.common.util.CheckedConsumer;
@@ -137,6 +138,63 @@ public class ReportTester {
 		return actualContents;
 	}
 
+	/**
+	 * New (as of 2021-05-17) way to run report tests with an element. Bug Simon to clean up the old code if this is still here more than a month later.
+	 * 
+	 * @param instance
+	 * @param scenarioDataProvider
+	 * @param reportID
+	 * @param type
+	 * @param elementID
+	 * @return
+	 * @throws Exception
+	 */
+	public static String testReportsWithElement_New(final ScenarioModelRecord instance, @NonNull final IScenarioDataProvider scenarioDataProvider, final String reportID, final ReportType type,
+			final String elementID) throws Exception {
+		Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
+
+		final String result[] = new String[1];
+
+		// A side-effect is the initial evaluation.
+		LNGScenarioRunnerCreator.withLegacyEvaluationRunner(scenarioDataProvider, true, runner -> {
+
+			Object target = null;
+			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioDataProvider);
+			final Schedule schedule = scheduleModel.getSchedule();
+			if (schedule != null) {
+				for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
+					if (elementID.equals(cargoAllocation.getName())) {
+						target = cargoAllocation;
+						break;
+					}
+				}
+				if (target == null) {
+					for (final PaperDealAllocation pda : schedule.getPaperDealAllocations()) {
+						final PaperDeal pd = pda.getPaperDeal();
+						if (pd != null && elementID.equals(pd.getName())) {
+							target = pd;
+							break;
+						}
+					}
+				}
+			}
+
+			Assertions.assertNotNull("Target element not found", elementID);
+			final Object pTarget = target;
+
+			final ScenarioResult scenarioResult = new ScenarioResultImpl(instance, ScenarioModelUtil.getScheduleModel(runner.getScenarioDataProvider()));
+
+			final ReportTesterHelper reportTester = new ReportTesterHelper();
+
+			reportTester.runReportTest(reportID, null, null, IReportContentsGenerator.class, (generator) -> {
+				result[0] = generator.getReportContents(null, scenarioResult, Lists.newArrayList(pTarget)).getJSONContents();
+			});
+
+		});
+
+		return result[0];
+	}
+
 	public static void testReportsWithElement(final ScenarioModelRecord instance, @NonNull final IScenarioDataProvider scenarioDataProvider, final URL scenarioURL, final String reportID,
 			final String shortName, final ReportType type, final String elementID, @Nullable final Consumer<ScenarioModelRecord> preAction) throws Exception {
 		testReports(instance, scenarioDataProvider, scenarioURL, reportID, shortName, type, (t) -> {
@@ -154,7 +212,7 @@ public class ReportTester {
 				if (target == null) {
 					for (final PaperDealAllocation pda : schedule.getPaperDealAllocations()) {
 						final PaperDeal pd = pda.getPaperDeal();
-						if (pd != null && elementID.equals(pd.getName())){
+						if (pd != null && elementID.equals(pd.getName())) {
 							target = pd;
 							break;
 						}
@@ -264,13 +322,12 @@ public class ReportTester {
 			});
 		});
 	}
-	
+
 	public static void testVesselReportDiffs(final URL pinScenarioURL, final URL refScenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
 
 		ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(pinScenarioURL, (pinModelRecord, pinScenarioDataProvider) -> {
 			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(refScenarioURL, (refModelRecord, refScenarioDataProvider) -> {
-				ReportTester.testPinDiffReports(pinModelRecord, pinScenarioDataProvider, refModelRecord, refScenarioDataProvider, pinScenarioURL, reportID,
-						shortName, "html");
+				ReportTester.testPinDiffReports(pinModelRecord, pinScenarioDataProvider, refModelRecord, refScenarioDataProvider, pinScenarioURL, reportID, shortName, "html");
 
 			});
 		});
@@ -291,7 +348,7 @@ public class ReportTester {
 				final String result[] = new String[1];
 
 				reportTester.runReportTest(reportID, null, null, IReportContentsGenerator.class, (generator) -> {
-					result[0] = generator.getStringContents(pinResult, refResult);
+					result[0] = generator.getReportContents(pinResult, refResult, null).getHTMLContents();
 				});
 
 				Assertions.assertNotNull(result[0]);
@@ -439,7 +496,7 @@ public class ReportTester {
 		final ReportTesterHelper reportTester = new ReportTesterHelper();
 		final String result[] = new String[1];
 
-		reportTester.runReportTest(reportID, null, null, IReportContentsGenerator.class, generator -> result[0] = generator.getStringContents(pinResult, refResult));
+		reportTester.runReportTest(reportID, null, null, IReportContentsGenerator.class, generator -> result[0] = generator.getReportContents(pinResult, refResult, null).getHTMLContents());
 
 		Assertions.assertNotNull(result[0]);
 		final String actualContents = result[0];
