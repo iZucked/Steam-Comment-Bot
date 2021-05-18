@@ -50,6 +50,7 @@ import com.mmxlabs.common.io.FileDeleter;
 import com.mmxlabs.common.util.CheckedBiConsumer;
 import com.mmxlabs.common.util.CheckedBiFunction;
 import com.mmxlabs.common.util.TriConsumer;
+import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -195,6 +196,11 @@ public class ScenarioStorageUtil {
 
 				storeToURI(EcoreUtil.generateUUID(), EcoreUtil.copy(modelReference.getInstance()), extraDataObjects, modelRecord.getManifest(), URI.createFileURI(file.getAbsolutePath()),
 						scenarioCipherProvider);
+			}
+		} catch (Exception e) {
+			if (e.getCause() instanceof MigrationForbiddenException) {
+				log.error(e.getMessage());
+				throw new UserFeedbackException("Can't copy file since it requires prior migration to the latest version. Please drag and drop scenario into the workspace and try again.");
 			}
 		}
 	}
