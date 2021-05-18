@@ -3601,7 +3601,7 @@ public class LNGScenarioTransformer {
 			window = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(dateHelper.getEarliestTime()), dateHelper.convertTime(to), 0, false);
 		} else if (from != null && to == null) {
 			// Set a default window end date which is valid change later
-			window = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(from), Integer.MAX_VALUE, 0, true);
+			window = TimeWindowMaker.createInclusiveExclusive(dateHelper.convertTime(from), Integer.MAX_VALUE, 0, true);
 			builder.addPartiallyOpenEndWindow((MutableTimeWindow) window);
 		} else if (from != null && to != null) {
 			window = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(from), dateHelper.convertTime(to), 0, false);
