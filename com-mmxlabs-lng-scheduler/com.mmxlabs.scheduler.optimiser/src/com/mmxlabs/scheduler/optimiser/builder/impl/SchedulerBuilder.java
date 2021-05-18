@@ -1053,7 +1053,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			promptPeriodProviderEditor.setEndOfSchedulingPeriod(latestTime);
 		} else {
 			windowAdder = 0;
-			latestTime = promptPeriodProviderEditor.getEndOfSchedulingPeriod();
+			latestTime = promptPeriodProviderEditor.getEndOfSchedulingPeriod() + 1;
 		}
 		startEndRequirementProvider.setNotionalEndTime(latestTime);
 
