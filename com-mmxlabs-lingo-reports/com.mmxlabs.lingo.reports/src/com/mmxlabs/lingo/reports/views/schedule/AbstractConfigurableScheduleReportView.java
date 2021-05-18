@@ -142,6 +142,15 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 				}
 			}
 
+			// Temp debug info - delete after 20/05/2021
+			{
+				System.out.println(">> Include flag ? " + includeAllColumnsForITS + " <<");
+				System.out.println(">> Block ID order <<");
+				getBlockManager().getBlockIDOrder().forEach(System.out::println);
+				System.out.println(">> Sort order <<");
+				sortingSupport.getColumnSortOrder().forEach(gc -> System.out.println(gc.getText()));
+			}
+
 			final CopyGridToHtmlStringUtil htmlUtil = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, includeAllColumnsForITS);
 			htmlUtil.setShowBackgroundColours(true);
 			htmlUtil.setShowForegroundColours(true);
@@ -153,6 +162,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 			return adapter.cast(ReportContents.make(htmlContents, jsonContents));
 		}
 		return super.getAdapter(adapter);
+
 	}
 
 	protected ColumnBlock[] getInitialReverseSortOrderForITS() {
@@ -193,7 +203,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 		public void diffOptionChanged(final EDiffOption d, final Object oldValue, final Object newValue) {
 			ViewerHelper.refresh(viewer, true);
 		}
-		
+
 		@Override
 		public void selectedObjectChanged(@Nullable MPart source, @NonNull ISelection selection) {
 			if (scenarioComparisonService.getDiffOptions().isFilterSelectedElements()) {
