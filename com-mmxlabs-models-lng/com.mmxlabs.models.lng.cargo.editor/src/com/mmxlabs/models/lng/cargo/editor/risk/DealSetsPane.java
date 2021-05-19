@@ -84,6 +84,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
+import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
@@ -200,31 +201,60 @@ public class DealSetsPane extends ScenarioTableViewerPane {
 			@Override
 			public @Nullable String render(Object object) {
 				if (jointModelEditor != null) {
-					if (object instanceof DealSet) {
-						final DealSet ds = (DealSet) object;
-						final IScenarioDataProvider sdp = jointModelEditor.getScenarioDataProvider();
-						final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(sdp);
-						if (scheduleModel != null && scheduleModel.getSchedule() != null && scheduleModel.getSchedule().getSlotAllocations() != null) {
+					final IScenarioDataProvider sdp = jointModelEditor.getScenarioDataProvider();
+					final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(sdp);
+					if (scheduleModel != null) {
+						final Schedule schedule = scheduleModel.getSchedule();
+						if (schedule != null) {
 							long totalPNL = 0;
-							if (!ds.getSlots().isEmpty()) {
-								final List<SlotAllocation> salist = scheduleModel.getSchedule().getSlotAllocations()
-										.stream().filter(sa -> ds.getSlots().contains(sa.getSlot())).collect(Collectors.toList());
-								for (final SlotAllocation sa : salist) {
-									if (sa.getSlot() instanceof LoadSlot) {
-										totalPNL -= sa.getVolumeValue();
+							if (object instanceof DealSet) {
+								final DealSet ds = (DealSet) object;
+								
+								if (schedule.getSlotAllocations() != null && !ds.getSlots().isEmpty()) {
+									final List<SlotAllocation> salist = schedule.getSlotAllocations()
+											.stream().filter(sa -> ds.getSlots().contains(sa.getSlot())).collect(Collectors.toList());
+									for (final SlotAllocation sa : salist) {
+										if (sa.getSlot() instanceof LoadSlot) {
+											totalPNL -= sa.getVolumeValue();
+										}
+										if (sa.getSlot() instanceof DischargeSlot) {
+											totalPNL += sa.getVolumeValue();
+										}
 									}
-									if (sa.getSlot() instanceof DischargeSlot) {
-										totalPNL += sa.getVolumeValue();
+								}
+								if (schedule.getPaperDealAllocations() != null && !ds.getPaperDeals().isEmpty()) {
+									final List<PaperDealAllocation> pdalist = schedule.getPaperDealAllocations()
+											.stream().filter(pda -> ds.getPaperDeals().contains(pda.getPaperDeal())).collect(Collectors.toList());
+									for(final PaperDealAllocation pda : pdalist) {
+										totalPNL += pda.getGroupProfitAndLoss().getProfitAndLoss();
+									}
+								}
+								
+							} else if (object instanceof Slot) {
+								final Slot ls = (Slot) object;
+								if (schedule.getSlotAllocations() != null) {
+									final List<SlotAllocation> salist = schedule.getSlotAllocations()
+											.stream().filter(sa -> ls == sa.getSlot()).collect(Collectors.toList());
+									for (final SlotAllocation sa : salist) {
+										if (sa.getSlot() instanceof LoadSlot) {
+											totalPNL -= sa.getVolumeValue();
+										}
+										if (sa.getSlot() instanceof DischargeSlot) {
+											totalPNL += sa.getVolumeValue();
+										}
+									}
+								}
+							} else if (object instanceof PaperDeal) {
+								final PaperDeal pd = (PaperDeal) object;
+								if (schedule.getPaperDealAllocations() != null) {
+									final List<PaperDealAllocation> pdalist = schedule.getPaperDealAllocations()
+											.stream().filter(pda -> pd == pda.getPaperDeal()).collect(Collectors.toList());
+									for(final PaperDealAllocation pda : pdalist) {
+										totalPNL += pda.getGroupProfitAndLoss().getProfitAndLoss();
 									}
 								}
 							}
-							if (!ds.getPaperDeals().isEmpty()) {
-								final List<PaperDealAllocation> pdalist = scheduleModel.getSchedule().getPaperDealAllocations()
-										.stream().filter(pda -> ds.getPaperDeals().contains(pda.getPaperDeal())).collect(Collectors.toList());
-								for(final PaperDealAllocation pda : pdalist) {
-									totalPNL += pda.getGroupProfitAndLoss().getProfitAndLoss();
-								}
-							}
+							
 							final LongFormatter inner = new LongFormatter();
 							inner.setValue(totalPNL);
 							return inner.getDisplayString();
