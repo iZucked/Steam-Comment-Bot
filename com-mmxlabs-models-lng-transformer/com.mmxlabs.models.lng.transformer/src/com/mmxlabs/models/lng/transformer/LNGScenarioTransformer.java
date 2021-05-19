@@ -3600,13 +3600,22 @@ public class LNGScenarioTransformer {
 
 		boolean isOpenEnded = false;
 		if (from == null && to != null) {
-			window = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(dateHelper.getEarliestTime()), dateHelper.convertTime(to), 0, false);
+			// Would expect this to be zero!
+			final int inclusiveStart = Math.max(0, dateHelper.convertTime(dateHelper.getEarliestTime()));
+			final int inclusiveEnd = Math.max(inclusiveStart, dateHelper.convertTime(to));
+
+			window = TimeWindowMaker.createInclusiveInclusive(inclusiveStart, inclusiveEnd, 0, false);
 		} else if (from != null && to == null) {
 			// Set a default window end date which is valid change later
-			window = TimeWindowMaker.createInclusiveExclusive(dateHelper.convertTime(from), Integer.MAX_VALUE, 0, true);
+			final int inclusiveStart = Math.max(0, dateHelper.convertTime(from));
+
+			window = TimeWindowMaker.createInclusiveExclusive(inclusiveStart, Integer.MAX_VALUE, 0, true);
 			builder.addPartiallyOpenEndWindow((MutableTimeWindow) window);
 		} else if (from != null && to != null) {
-			window = TimeWindowMaker.createInclusiveInclusive(dateHelper.convertTime(from), dateHelper.convertTime(to), 0, false);
+			final int inclusiveStart = Math.max(0, dateHelper.convertTime(from));
+			final int inclusiveEnd = Math.max(inclusiveStart, dateHelper.convertTime(to));
+
+			window = TimeWindowMaker.createInclusiveInclusive(inclusiveStart, inclusiveEnd, 0, false);
 		} else {
 			// No window
 			isOpenEnded = true;
