@@ -27,7 +27,8 @@ public final class MutableTimeWindow implements ITimeWindow {
 	}
 
 	public MutableTimeWindow(final int start, final int end, final int endFlex) {
-		assert end >= 0;
+		assert start >= 0;
+		assert end > 0;
 		this.start = start;
 		this.end = end;
 		this.endFlex = endFlex;
@@ -43,6 +44,8 @@ public final class MutableTimeWindow implements ITimeWindow {
 	}
 
 	public void setInclusiveStart(final int start) {
+		assert start >= 0;
+
 		this.start = start;
 	}
 
@@ -52,7 +55,7 @@ public final class MutableTimeWindow implements ITimeWindow {
 	}
 
 	public void setExclusiveEnd(final int end) {
-		assert end >= 0;
+		assert end > 0;
 		this.end = end;
 	}
 
