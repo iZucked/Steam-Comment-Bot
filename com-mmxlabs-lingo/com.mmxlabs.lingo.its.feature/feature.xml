@@ -64,7 +64,7 @@
          id="com.google.guava"
          download-size="0"
          install-size="0"
-         version="27.1.0.v20190517-1946"
+         version="27.1.0.jre"
          unpack="false"/>
 
    <plugin
@@ -146,6 +146,27 @@
 
    <plugin
          id="org.slf4j.api"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="wrapped.org.testcontainers.junit-jupiter"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="wrapped.org.testcontainers.testcontainers"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="wrapped.org.rnorth.duct-tape.duct-tape"
          download-size="0"
          install-size="0"
          version="0.0.0"

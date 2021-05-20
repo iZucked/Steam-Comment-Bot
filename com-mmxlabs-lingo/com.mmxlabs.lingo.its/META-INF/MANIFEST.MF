@@ -77,13 +77,12 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.aopalliance;bundle-version="1.0.0",
  org.objenesis;bundle-version="2.6.0",
  com.mmxlabs.models.lng.cargo.validation,
- com.mmxlabs.models.lng.pricing.validation
+ com.mmxlabs.models.lng.pricing.validation,
+ wrapped.org.testcontainers.junit-jupiter;bundle-version="1.14.3",
+ wrapped.org.testcontainers.testcontainers;bundle-version="1.14.3",
+ wrapped.org.rnorth.duct-tape.duct-tape;bundle-version="1.0.8"
 Bundle-ClassPath: data/,
- .,
- junit-jupiter-1.14.3.jar,
- testcontainers-1.14.3.jar,
- duct-tape-1.0.8.jar,
- visible-assertions-2.1.2.jar
+ .
 Import-Package: com.sun.jna;version="4.5.1",
  com.sun.jna.platform;version="4.5.1",
  com.sun.jna.platform.win32;version="4.5.1";resolution:=optional,

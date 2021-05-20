@@ -10,7 +10,7 @@
 			<attribute name="annotationpath" value="/ExternalAnnotations/other"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="src/"/>
 	<classpathentry exported="true" kind="lib" path="java-cup-11b-runtime.jar"/>
+	<classpathentry kind="src" path="src/"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -17,6 +17,7 @@
 	<modules>
 		<module>com.mmxlabs.models.mmxcore</module>
 		<module>com.mmxlabs.models.mmxcore.edit</module>
+		<module>com.mmxlabs.models.mmxcore.tests</module>
 
 		<module>com.mmxlabs.models.mmxcore.runtime.feature</module>
 	</modules>
