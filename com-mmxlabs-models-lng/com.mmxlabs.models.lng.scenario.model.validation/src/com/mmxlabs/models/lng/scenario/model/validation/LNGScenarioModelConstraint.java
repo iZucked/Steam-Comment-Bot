@@ -59,7 +59,7 @@ public class LNGScenarioModelConstraint extends AbstractModelMultiConstraint {
 
 			if (lngScenarioModel.isSetSchedulingEndDate()) {
 				final LocalDate schedulingEndDate = lngScenarioModel.getSchedulingEndDate();
-				final LocalDate earliestSlotDate = getEarliestSlotDate(lngScenarioModel);
+				final LocalDate earliestSlotDate = LNGScenarioModelValidationUtils.getEarliestSlotDate(lngScenarioModel);
 				if (schedulingEndDate != null && !schedulingEndDate.isAfter(earliestSlotDate)) {
 					final String message = String.format("Schedule horizon date (%s) must be after earliest slot date start (%s)", 
 							schedulingEndDate.format(DateTimeFormatter.ISO_DATE), earliestSlotDate.format(DateTimeFormatter.ISO_DATE));
@@ -72,31 +72,6 @@ public class LNGScenarioModelConstraint extends AbstractModelMultiConstraint {
 
 		}
 		return Activator.PLUGIN_ID;
-	}
-
-
-	public static LocalDate getEarliestSlotDate(final LNGScenarioModel lngScenarioModel) {
-		LocalDate result = LocalDate.MAX;
-
-		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
-
-		LocalDate erl = result;
-
-		for (final LoadSlot ls : cargoModel.getLoadSlots()) {
-			if (ls.getSchedulingTimeWindow().getStart() != null && ls.getSchedulingTimeWindow().getStart().toLocalDate().isBefore(erl)) {
-				erl = ls.getSchedulingTimeWindow().getStart().toLocalDate();
-			}
-		}
-		for (final DischargeSlot ds : cargoModel.getDischargeSlots()) {
-			if (ds.getSchedulingTimeWindow().getStart() != null && ds.getSchedulingTimeWindow().getStart().toLocalDate().isBefore(erl)) {
-				erl = ds.getSchedulingTimeWindow().getStart().toLocalDate();
-			}
-		}
-		if (result.isAfter(erl)) {
-			result = erl;
-		}
-
-		return result;
 	}
 
 }

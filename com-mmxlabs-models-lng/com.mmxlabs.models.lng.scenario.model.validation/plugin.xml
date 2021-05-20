@@ -37,6 +37,21 @@
                 </message>
                 <target class="LNGScenarioModel" />
             </constraint>
+            
+            <constraint
+                      class="com.mmxlabs.models.lng.scenario.model.validation.LNGScenarioModelWarningConstraint"
+                      id="com.mmxlabs.models.lng.scenario.model.validation.LNGScenarioModelWarningConstraint"
+                      isEnabledByDefault="true"
+                      lang="Java"
+                      mode="Batch"
+                      name="LNGScenarioModel"
+                      severity="WARNING"
+                      statusCode="1">
+                <message>
+                    {0}
+                </message>
+                <target class="LNGScenarioModel" />
+            </constraint>
          </constraints>
       </constraintProvider>
     
