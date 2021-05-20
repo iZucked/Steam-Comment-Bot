@@ -25,16 +25,12 @@ public final class TimeWindow implements ITimeWindow {
 	private final int endFlex;
 
 	public TimeWindow(final int start, final int end) {
-		assert start >= 0;
-		assert end > 0;
 		this.start = start;
 		this.end = end;
 		this.endFlex = 0;
 	}
 
 	public TimeWindow(final int start, final int end, final int endFlex) {
-		assert start >= 0;
-		assert end > 0;
 		this.start = start;
 		this.end = end;
 		this.endFlex = endFlex;
