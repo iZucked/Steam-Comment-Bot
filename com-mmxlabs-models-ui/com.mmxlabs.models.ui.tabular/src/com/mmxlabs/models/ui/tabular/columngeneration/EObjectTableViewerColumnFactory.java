@@ -45,6 +45,8 @@ public class EObjectTableViewerColumnFactory implements IColumnFactory {
 
 		column.getColumn().setVisible(false);
 
+		column.getColumn().setData(EObjectTableViewer.COLUMN_BLOCK_ID, handler.block.blockID);
+		
 		return column;
 	}
 

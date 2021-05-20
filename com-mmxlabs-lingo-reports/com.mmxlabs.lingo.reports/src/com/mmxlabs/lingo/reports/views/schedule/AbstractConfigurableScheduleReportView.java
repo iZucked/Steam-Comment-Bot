@@ -141,15 +141,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 					}
 				}
 			}
-
-			// Temp debug info - delete after 20/05/2021
-			{
-				System.out.println(">> Include flag ? " + includeAllColumnsForITS + " <<");
-				System.out.println(">> Block ID order <<");
-				getBlockManager().getBlockIDOrder().forEach(System.out::println);
-				System.out.println(">> Sort order <<");
-				sortingSupport.getColumnSortOrder().forEach(gc -> System.out.println(gc.getText()));
-			}
+ 
 			// Refresh viewer as column and/or sort order may have changed
 			ViewerHelper.refresh(viewer, true);
 
