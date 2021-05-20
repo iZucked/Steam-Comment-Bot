@@ -150,6 +150,8 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 				System.out.println(">> Sort order <<");
 				sortingSupport.getColumnSortOrder().forEach(gc -> System.out.println(gc.getText()));
 			}
+			// Refresh viewer as column and/or sort order may have changed
+			ViewerHelper.refresh(viewer, true);
 
 			final CopyGridToHtmlStringUtil htmlUtil = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, includeAllColumnsForITS);
 			htmlUtil.setShowBackgroundColours(true);
