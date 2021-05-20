@@ -5,10 +5,13 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -622,7 +625,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 		// Take a copy so we can retain isIgnoreEnd flag later on
 		// TODO: remove
 		final VoyagePlan plan = originalPlan;
-		final List<@NonNull PlanEvaluationData> plans = new ArrayList<>();
+
+		List<@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord>> runningVoyagePlanPtrPairs = Collections.singletonList(Pair.of(plan, portTimesRecord));
 
 		assert heelVolumeRangeInM3[0] >= 0;
 		assert heelVolumeRangeInM3[1] >= 0;
@@ -631,40 +635,214 @@ public class VoyagePlanner implements IVoyagePlanner {
 		if (maintenanceEvaluator != null) {
 			final List<@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord>> lp = maintenanceEvaluator.processSchedule(heelVolumeRangeInM3, vesselAvailability, plan, portTimesRecord, annotatedSolution);
 			if (lp != null) {
-				for (final Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord> p : lp) {
-					final PlanEvaluationData evalData = new PlanEvaluationData(portTimesRecord, p.getFirst());
-					voyagePlansList.add(evalData.plan);
-					if (p.getSecond() instanceof IAllocationAnnotation) {
-						evalData.allocation = (IAllocationAnnotation) p.getSecond();
-					}
-					evalData.portTimesRecord = p.getSecond();
-					if (evalData.allocation != null) {
-						evalData.endHeelVolumeInM3 = evalData.allocation.getRemainingHeelVolumeInM3();
-						evalData.startHeelVolumeInM3 = evalData.allocation.getStartHeelVolumeInM3();
-					} else {
-						evalData.endHeelVolumeInM3 = evalData.plan.getRemainingHeelInM3();
-						evalData.startHeelVolumeInM3 = evalData.plan.getStartingHeelInM3();
-					}
-					plans.add(evalData);
-					evalData.setIgnoreEndSet(true);
-				}
-				planSet = true;
+				runningVoyagePlanPtrPairs = lp;
+//				for (final Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord> p : lp) {
+//					final PlanEvaluationData evalData = new PlanEvaluationData(portTimesRecord, p.getFirst());
+//					voyagePlansList.add(evalData.plan);
+//					if (p.getSecond() instanceof IAllocationAnnotation) {
+//						evalData.allocation = (IAllocationAnnotation) p.getSecond();
+//					}
+//					evalData.portTimesRecord = p.getSecond();
+//					if (evalData.allocation != null) {
+//						evalData.endHeelVolumeInM3 = evalData.allocation.getRemainingHeelVolumeInM3();
+//						evalData.startHeelVolumeInM3 = evalData.allocation.getStartHeelVolumeInM3();
+//					} else {
+//						evalData.endHeelVolumeInM3 = evalData.plan.getRemainingHeelInM3();
+//						evalData.startHeelVolumeInM3 = evalData.plan.getStartingHeelInM3();
+//					}
+//					plans.add(evalData);
+//					evalData.setIgnoreEndSet(true);
+//				}
+//				planSet = true;
 			}
 		}
 
 		// Run the break-evens first.
-		PlanEvaluationData be_evalData = null;
+		final Pair<@NonNull VoyagePlan, @NonNull IAllocationAnnotation> beVoyagePlanPtrPair;
+
+//		PlanEvaluationData be_evalData = null;
 		if (breakEvenEvaluator != null) {
-			final Pair<@NonNull VoyagePlan, @NonNull IAllocationAnnotation> p = breakEvenEvaluator.processSchedule(vesselAvailability, plan, portTimesRecord, annotatedSolution);
+			final List<@Nullable Pair<@NonNull VoyagePlan, @NonNull IAllocationAnnotation>> pairs = runningVoyagePlanPtrPairs.stream() //
+					.map(p -> breakEvenEvaluator.processSchedule(vesselAvailability, p.getFirst(), p.getSecond(), annotatedSolution)) //
+					.collect(Collectors.toList());
 
-			if (p != null) {
-				final PlanEvaluationData evalData = new PlanEvaluationData(portTimesRecord, p.getFirst());
+			final Iterator<@Nullable Pair<@NonNull VoyagePlan, @NonNull IAllocationAnnotation>> beIter = pairs.iterator();
+			// The iterator must have at least one element
+			final Pair<@NonNull VoyagePlan, @NonNull IAllocationAnnotation> p = beIter.next();
+			// All but the first element should be null (remaining splits should all be non-cargoes)
+			while (beIter.hasNext()) {
+				assert beIter.next() == null;
+			}
+			beVoyagePlanPtrPair = p;
 
-				if (p.getSecond() instanceof IAllocationAnnotation) {
-					evalData.allocation = p.getSecond();
-					evalData.portTimesRecord = p.getSecond();
+//			if (p != null) {
+//				beVoyagePlanPtrPair = p;
+//				final PlanEvaluationData evalData = new PlanEvaluationData(portTimesRecord, p.getFirst());
+//
+//				if (p.getSecond() instanceof IAllocationAnnotation) {
+//					evalData.allocation = p.getSecond();
+//					evalData.portTimesRecord = p.getSecond();
+//				} else {
+//					evalData.portTimesRecord = portTimesRecord;
+//				}
+//
+//				if (evalData.allocation != null) {
+//					evalData.endHeelVolumeInM3 = evalData.allocation.getRemainingHeelVolumeInM3();
+//					evalData.startHeelVolumeInM3 = evalData.allocation.getStartHeelVolumeInM3();
+//				} else {
+//					evalData.endHeelVolumeInM3 = evalData.plan.getRemainingHeelInM3();
+//					evalData.startHeelVolumeInM3 = evalData.plan.getStartingHeelInM3();
+//				}
+//
+//				be_evalData = evalData;
+//			}
+		} else {
+			beVoyagePlanPtrPair = null;
+		}
+
+		// If the break-even ran, then we cannot use the GCO as this changes ballast leg and thus the b/e will be wrong
+		if (beVoyagePlanPtrPair == null && generatedCharterOutEvaluator != null) {
+			final List<@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord>> replacementRunningVoyagePlanPtrPairs = new ArrayList<>();
+			for (final @NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord> oldPair : runningVoyagePlanPtrPairs) {
+				final List<@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord>> lp = generatedCharterOutEvaluator.processSchedule(heelVolumeRangeInM3, vesselAvailability, oldPair.getFirst(), oldPair.getSecond(),
+						annotatedSolution);
+				if (lp != null) {
+					lp.forEach(replacementRunningVoyagePlanPtrPairs::add);
+					planSet = true;
 				} else {
-					evalData.portTimesRecord = portTimesRecord;
+					replacementRunningVoyagePlanPtrPairs.add(oldPair);
+				}
+			}
+			runningVoyagePlanPtrPairs = replacementRunningVoyagePlanPtrPairs;
+//			final List<@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord>> lp = generatedCharterOutEvaluator.processSchedule(heelVolumeRangeInM3, vesselAvailability, plan, portTimesRecord,
+//					annotatedSolution);
+//			if (lp != null) {
+//				for (final Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord> p : lp) {
+//					final PlanEvaluationData evalData = new PlanEvaluationData(portTimesRecord, p.getFirst());
+//					voyagePlansList.add(evalData.plan);
+//
+//					if (p.getSecond() instanceof IAllocationAnnotation) {
+//						evalData.allocation = (IAllocationAnnotation) p.getSecond();
+//					}
+//					evalData.portTimesRecord = p.getSecond();
+//
+//					if (evalData.allocation != null) {
+//						evalData.endHeelVolumeInM3 = evalData.allocation.getRemainingHeelVolumeInM3();
+//						evalData.startHeelVolumeInM3 = evalData.allocation.getStartHeelVolumeInM3();
+//
+//					} else {
+//						evalData.endHeelVolumeInM3 = evalData.plan.getRemainingHeelInM3();
+//						evalData.startHeelVolumeInM3 = evalData.plan.getStartingHeelInM3();
+//					}
+//					plans.add(evalData);
+//					evalData.setIgnoreEndSet(true);
+//
+//				}
+//				planSet = true;
+//			}
+		}
+
+		// If GCO has not run, then run the charter length.
+		if (!planSet && generatedCharterLengthEvaluator != null) {
+			final List<@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord>> replacementRunningVoyagePlanPtrPairs = new ArrayList<>();
+			for (final @NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord> oldPair : runningVoyagePlanPtrPairs) {
+				final List<@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord>> lp = generatedCharterLengthEvaluator.processSchedule(heelVolumeRangeInM3, vesselAvailability, oldPair.getFirst(), oldPair.getSecond(), annotatedSolution);
+				if (lp != null) {
+					// lp.forEach(replacementRunningVoyagePlanPtrPairs::add);
+					for (final Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord> p : lp) {
+						boolean foundBE = false;
+						if (p.getSecond() instanceof IAllocationAnnotation) {
+							if (breakEvenEvaluator != null) {
+								final Pair<@NonNull VoyagePlan, @NonNull IAllocationAnnotation> pp = breakEvenEvaluator.processSchedule(vesselAvailability, p.getFirst(), p.getSecond(), annotatedSolution);
+								if (pp != null) {
+									final @NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord> ppp = Pair.of(pp.getFirst(), (IPortTimesRecord) pp.getSecond());
+									replacementRunningVoyagePlanPtrPairs.add(ppp);
+									foundBE = true;
+								}
+							} else {
+								replacementRunningVoyagePlanPtrPairs.add(p);
+							}
+						} else {
+							replacementRunningVoyagePlanPtrPairs.add(p);
+						}
+					}
+					planSet = true;
+				} else {
+					replacementRunningVoyagePlanPtrPairs.add(oldPair);
+				}
+			}
+			runningVoyagePlanPtrPairs = replacementRunningVoyagePlanPtrPairs;
+//			final List<@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord>> lp = generatedCharterLengthEvaluator.processSchedule(heelVolumeRangeInM3, vesselAvailability, plan,
+//					portTimesRecord, annotatedSolution);
+//
+//			if (lp != null) {
+//				for (final Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord> p : lp) {
+//					boolean foundBE = false;
+//					if (p.getSecond() instanceof IAllocationAnnotation) {
+//						// Re-run the break-evens. Not very efficient, but needed to split the charter length P&L out of the b/e calculation.
+//						// Note this means charter length would run with 0 sales price potentially.
+//						if (breakEvenEvaluator != null) {
+//							final Pair<@NonNull VoyagePlan, @NonNull IAllocationAnnotation> pp = breakEvenEvaluator.processSchedule(vesselAvailability, p.getFirst(), p.getSecond(), annotatedSolution);
+//
+//							if (pp != null) {
+//								final PlanEvaluationData evalData = new PlanEvaluationData(pp.getSecond(), pp.getFirst());
+//
+//								if (evalData.allocation != null) {
+//									evalData.endHeelVolumeInM3 = evalData.allocation.getRemainingHeelVolumeInM3();
+//									evalData.startHeelVolumeInM3 = evalData.allocation.getStartHeelVolumeInM3();
+//								} else {
+//									evalData.endHeelVolumeInM3 = evalData.plan.getRemainingHeelInM3();
+//									evalData.startHeelVolumeInM3 = evalData.plan.getStartingHeelInM3();
+//								}
+//
+//								plans.add(evalData);
+//								voyagePlansList.add(evalData.plan);
+//								evalData.setIgnoreEndSet(true);
+//
+//								foundBE = true;
+//							}
+//						}
+//					}
+//
+//					if (!foundBE) {
+//						final PlanEvaluationData evalData = new PlanEvaluationData(portTimesRecord, p.getFirst());
+//
+//						if (p.getSecond() instanceof IAllocationAnnotation) {
+//							evalData.allocation = (IAllocationAnnotation) p.getSecond();
+//						}
+//						evalData.portTimesRecord = p.getSecond();
+//
+//						if (evalData.allocation != null) {
+//							evalData.endHeelVolumeInM3 = evalData.allocation.getRemainingHeelVolumeInM3();
+//							evalData.startHeelVolumeInM3 = evalData.allocation.getStartHeelVolumeInM3();
+//
+//						} else {
+//							evalData.endHeelVolumeInM3 = evalData.plan.getRemainingHeelInM3();
+//							evalData.startHeelVolumeInM3 = evalData.plan.getStartingHeelInM3();
+//						}
+//
+//						plans.add(evalData);
+//						voyagePlansList.add(evalData.plan);
+//						evalData.setIgnoreEndSet(true);
+//					}
+//				}
+//				planSet = true;
+//			}
+		}
+
+		final List<@NonNull PlanEvaluationData> plans = new ArrayList<>();
+		final Iterator<@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord>> iterPairs = runningVoyagePlanPtrPairs.iterator();
+		if (!planSet) {
+			if (beVoyagePlanPtrPair != null) {
+				// Get plan evaluation data associated with break even
+				final Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord> oldPair = iterPairs.next();
+				final PlanEvaluationData evalData = new PlanEvaluationData(oldPair.getSecond(), beVoyagePlanPtrPair.getFirst());
+
+				if (beVoyagePlanPtrPair.getSecond() instanceof IAllocationAnnotation) {
+					evalData.allocation = beVoyagePlanPtrPair.getSecond();
+					evalData.portTimesRecord = beVoyagePlanPtrPair.getSecond();
+				} else {
+					evalData.portTimesRecord = oldPair.getSecond();
 				}
 
 				if (evalData.allocation != null) {
@@ -675,129 +853,112 @@ public class VoyagePlanner implements IVoyagePlanner {
 					evalData.startHeelVolumeInM3 = evalData.plan.getStartingHeelInM3();
 				}
 
-				be_evalData = evalData;
-			}
-		}
+				voyagePlansList.add(evalData.plan);
+				plans.add(evalData);
 
-		// If the break-even ran, then we cannot use the GCO as this changes ballast leg and thus the b/e will be wrong
-		if (be_evalData == null && generatedCharterOutEvaluator != null) {
-			final List<@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord>> lp = generatedCharterOutEvaluator.processSchedule(heelVolumeRangeInM3, vesselAvailability, plan, portTimesRecord,
-					annotatedSolution);
-			if (lp != null) {
-				for (final Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord> p : lp) {
-					final PlanEvaluationData evalData = new PlanEvaluationData(portTimesRecord, p.getFirst());
-					voyagePlansList.add(evalData.plan);
-
-					if (p.getSecond() instanceof IAllocationAnnotation) {
-						evalData.allocation = (IAllocationAnnotation) p.getSecond();
+				// Get plan evaluation for remaining voyages
+				while (iterPairs.hasNext()) {
+					final Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord> nextPair = iterPairs.next();
+					final PlanEvaluationData evalData2 = new PlanEvaluationData(nextPair.getSecond(), nextPair.getFirst());
+					if (nextPair.getSecond() instanceof IAllocationAnnotation) {
+						evalData2.allocation = (IAllocationAnnotation) nextPair.getSecond();
 					}
-					evalData.portTimesRecord = p.getSecond();
+					evalData2.portTimesRecord = nextPair.getSecond();
+					if (evalData2.allocation != null) {
+						evalData2.endHeelVolumeInM3 = evalData2.allocation.getRemainingHeelVolumeInM3();
+						evalData2.startHeelVolumeInM3 = evalData2.allocation.getStartHeelVolumeInM3();
+					} else {
+						evalData2.endHeelVolumeInM3 = evalData2.plan.getRemainingHeelInM3();
+						evalData2.startHeelVolumeInM3 = evalData2.plan.getStartingHeelInM3();
+					}
+					evalData2.setIgnoreEndSet(true);
+
+					voyagePlansList.add(evalData2.plan);
+					plans.add(evalData2);
+				}
+			} else {
+				// Get plan evaluation data for all voyages - have to allocate volumes
+				while (iterPairs.hasNext()) {
+					final Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord> nextPair = iterPairs.next();
+
+					final PlanEvaluationData evalData = new PlanEvaluationData(nextPair.getSecond(), nextPair.getFirst());
+
+					evalData.allocation = volumeAllocator.get().allocate(vesselAvailability, nextPair.getFirst(), nextPair.getSecond(), annotatedSolution);
+					if (evalData.allocation != null) {
+						evalData.portTimesRecord = evalData.allocation;
+					} else {
+						evalData.portTimesRecord = nextPair.getSecond();
+					}
 
 					if (evalData.allocation != null) {
 						evalData.endHeelVolumeInM3 = evalData.allocation.getRemainingHeelVolumeInM3();
 						evalData.startHeelVolumeInM3 = evalData.allocation.getStartHeelVolumeInM3();
-
 					} else {
 						evalData.endHeelVolumeInM3 = evalData.plan.getRemainingHeelInM3();
 						evalData.startHeelVolumeInM3 = evalData.plan.getStartingHeelInM3();
+
 					}
-					plans.add(evalData);
 					evalData.setIgnoreEndSet(true);
 
+					voyagePlansList.add(evalData.plan);
+					plans.add(evalData);
 				}
-				planSet = true;
+			}
+		} else {
+			// plan set
+			// Get plan evaluation data for all voyages - no volume allocation
+			while (iterPairs.hasNext()) {
+				final Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord> nextPair = iterPairs.next();
+				final PlanEvaluationData evalData = new PlanEvaluationData(nextPair.getSecond(), nextPair.getFirst());
+
+				if (nextPair.getSecond() instanceof IAllocationAnnotation) {
+					evalData.allocation = (IAllocationAnnotation) nextPair.getSecond();
+				}
+				evalData.portTimesRecord = nextPair.getSecond();
+				if (evalData.allocation != null) {
+					evalData.endHeelVolumeInM3 = evalData.allocation.getRemainingHeelVolumeInM3();
+					evalData.startHeelVolumeInM3 = evalData.allocation.getStartHeelVolumeInM3();
+				} else {
+					evalData.endHeelVolumeInM3 = evalData.plan.getRemainingHeelInM3();
+					evalData.startHeelVolumeInM3 = evalData.plan.getStartingHeelInM3();
+				}
+				evalData.setIgnoreEndSet(true);
+
+				voyagePlansList.add(evalData.plan);
+				plans.add(evalData);
 			}
 		}
-
-		// If GCO has not run, then run the charter length.
-		if (!planSet && generatedCharterLengthEvaluator != null) {
-			final List<@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord>> lp = generatedCharterLengthEvaluator.processSchedule(heelVolumeRangeInM3, vesselAvailability, plan,
-					portTimesRecord, annotatedSolution);
-
-			if (lp != null) {
-				for (final Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord> p : lp) {
-					boolean foundBE = false;
-					if (p.getSecond() instanceof IAllocationAnnotation) {
-						// Re-run the break-evens. Not very efficient, but needed to split the charter length P&L out of the b/e calculation.
-						// Note this means charter length would run with 0 sales price potentially.
-						if (breakEvenEvaluator != null) {
-							final Pair<@NonNull VoyagePlan, @NonNull IAllocationAnnotation> pp = breakEvenEvaluator.processSchedule(vesselAvailability, p.getFirst(), p.getSecond(), annotatedSolution);
-
-							if (pp != null) {
-								final PlanEvaluationData evalData = new PlanEvaluationData(pp.getSecond(), pp.getFirst());
-
-								if (evalData.allocation != null) {
-									evalData.endHeelVolumeInM3 = evalData.allocation.getRemainingHeelVolumeInM3();
-									evalData.startHeelVolumeInM3 = evalData.allocation.getStartHeelVolumeInM3();
-								} else {
-									evalData.endHeelVolumeInM3 = evalData.plan.getRemainingHeelInM3();
-									evalData.startHeelVolumeInM3 = evalData.plan.getStartingHeelInM3();
-								}
-
-								plans.add(evalData);
-								voyagePlansList.add(evalData.plan);
-								evalData.setIgnoreEndSet(true);
-
-								foundBE = true;
-							}
-						}
-					}
-
-					if (!foundBE) {
-						final PlanEvaluationData evalData = new PlanEvaluationData(portTimesRecord, p.getFirst());
-
-						if (p.getSecond() instanceof IAllocationAnnotation) {
-							evalData.allocation = (IAllocationAnnotation) p.getSecond();
-						}
-						evalData.portTimesRecord = p.getSecond();
-
-						if (evalData.allocation != null) {
-							evalData.endHeelVolumeInM3 = evalData.allocation.getRemainingHeelVolumeInM3();
-							evalData.startHeelVolumeInM3 = evalData.allocation.getStartHeelVolumeInM3();
-
-						} else {
-							evalData.endHeelVolumeInM3 = evalData.plan.getRemainingHeelInM3();
-							evalData.startHeelVolumeInM3 = evalData.plan.getStartingHeelInM3();
-						}
-
-						plans.add(evalData);
-						voyagePlansList.add(evalData.plan);
-						evalData.setIgnoreEndSet(true);
-					}
-				}
-				planSet = true;
-			}
-		}
+//		}
 
 		// So, GCO and Charter length have not changed anything, but there is a B/E so use the b/e data
-		if (!planSet && be_evalData != null) {
-			plans.add(be_evalData);
-			voyagePlansList.add(be_evalData.plan);
-			planSet = true;
-		}
+//		if (!planSet && be_evalData != null) {
+//			plans.add(be_evalData);
+//			voyagePlansList.add(be_evalData.plan);
+//			planSet = true;
+//		}
 
 		// Nothing has changed at all, so run on original data.
-		if (!planSet) {
-			final PlanEvaluationData evalData = new PlanEvaluationData(portTimesRecord, plan);
-			voyagePlansList.add(evalData.plan);
-
-			evalData.allocation = volumeAllocator.get().allocate(vesselAvailability, plan, portTimesRecord, annotatedSolution);
-			if (evalData.allocation != null) {
-				evalData.portTimesRecord = evalData.allocation;
-			} else {
-				evalData.portTimesRecord = portTimesRecord;
-			}
-
-			if (evalData.allocation != null) {
-				evalData.endHeelVolumeInM3 = evalData.allocation.getRemainingHeelVolumeInM3();
-				evalData.startHeelVolumeInM3 = evalData.allocation.getStartHeelVolumeInM3();
-			} else {
-				evalData.endHeelVolumeInM3 = evalData.plan.getRemainingHeelInM3();
-				evalData.startHeelVolumeInM3 = evalData.plan.getStartingHeelInM3();
-
-			}
-			plans.add(evalData);
-		}
+//		if (!planSet) {
+//			final PlanEvaluationData evalData = new PlanEvaluationData(portTimesRecord, plan);
+//			voyagePlansList.add(evalData.plan);
+//
+//			evalData.allocation = volumeAllocator.get().allocate(vesselAvailability, plan, portTimesRecord, annotatedSolution);
+//			if (evalData.allocation != null) {
+//				evalData.portTimesRecord = evalData.allocation;
+//			} else {
+//				evalData.portTimesRecord = portTimesRecord;
+//			}
+//
+//			if (evalData.allocation != null) {
+//				evalData.endHeelVolumeInM3 = evalData.allocation.getRemainingHeelVolumeInM3();
+//				evalData.startHeelVolumeInM3 = evalData.allocation.getStartHeelVolumeInM3();
+//			} else {
+//				evalData.endHeelVolumeInM3 = evalData.plan.getRemainingHeelInM3();
+//				evalData.startHeelVolumeInM3 = evalData.plan.getStartingHeelInM3();
+//
+//			}
+//			plans.add(evalData);
+//		}
 
 		for (final PlanEvaluationData planData : plans) {
 			evaluateBrokenUpVoyagePlan(planData, vesselAvailability, voyagePlansMap, voyagePlansList, originalPlan);

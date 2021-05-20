@@ -1,5 +1,6 @@
 package com.mmxlabs.lingo.its.tests.maintenance;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -7,6 +8,8 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,10 +18,12 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
-import com.mmxlabs.models.lng.cargo.EVesselTankState;
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.util.VesselAvailabilityMaker;
+import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
@@ -33,9 +38,12 @@ import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
+import com.mmxlabs.models.lng.types.TimePeriod;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 
 @ExtendWith(ShiroRunner.class)
 public class MaintenanceEventTests extends AbstractMicroTestCase {
@@ -49,9 +57,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 	private static final List<Class<? extends Event>> HANDLED_EVENT_CLASSES;
 
 	/*
-	 * Set of classes for which checkFuelSequence is currently defined,
-	 * checkFuelSequence and this set may have to be updated when adding new
-	 * tests/changing model.
+	 * Set of classes for which checkFuelSequence is currently defined, checkFuelSequence and this set may have to be updated when adding new tests/changing model.
 	 */
 	static {
 		HANDLED_EVENT_CLASSES = new ArrayList<>();
@@ -59,6 +65,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 		HANDLED_EVENT_CLASSES.add(Journey.class);
 		HANDLED_EVENT_CLASSES.add(Idle.class);
 		HANDLED_EVENT_CLASSES.add(VesselEventVisit.class);
+		HANDLED_EVENT_CLASSES.add(SlotVisit.class);
 		HANDLED_EVENT_CLASSES.add(Cooldown.class);
 		HANDLED_EVENT_CLASSES.add(EndEvent.class);
 	}
@@ -96,6 +103,8 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 				expectedClass = Idle.class;
 			} else if (eventIdentifier.equals("vev")) {
 				expectedClass = VesselEventVisit.class;
+			} else if (eventIdentifier.equals("sv")) {
+				expectedClass = SlotVisit.class;
 			} else if (eventIdentifier.equals("e")) {
 				expectedClass = EndEvent.class;
 			} else if (eventIdentifier.equals("c")) {
@@ -124,8 +133,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 	}
 
 	/*
-	 * Checks that the fuels used in travelling make sense with respect to presence
-	 * of LNG onboard
+	 * Checks that the fuels used in travelling make sense with respect to presence of LNG onboard
 	 */
 	private void checkFuelSequence(final @NonNull List<Event> events) {
 		assert !events.isEmpty();
@@ -161,8 +169,7 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 	}
 
 	/*
-	 * Checks that the sequence of classes in expectedSequence is matched by the
-	 * sequence of instances in events.
+	 * Checks that the sequence of classes in expectedSequence is matched by the sequence of instances in events.
 	 */
 	private void checkSequence(final @NonNull List<Class<? extends Event>> expectedClassSequence, final @NonNull List<Event> events) {
 		Assertions.assertEquals(expectedClassSequence.size(), events.size());
@@ -171,6 +178,10 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 			Assertions.assertTrue(expectedClass.isInstance(eventIter.next()));
 		}
 	}
+
+	/**********************************************
+	 * SINGLE MAINTENANCE EVENT TESTS
+	 *********************************************/
 
 	/**
 	 * Test for
@@ -1024,5 +1035,118 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 		}
 		Assertions.assertTrue(foundMaintenance);
 		Assertions.assertTrue(usedSuez);
+	}
+
+	/**********************************************
+	 * CARGO FOLLOWED BY MAINTENANCE TESTS
+	 *********************************************/
+
+	/**
+	 * Test for
+	 * 
+	 * - sequence: start -> cargo -> maintenance -> end
+	 * 
+	 * - travel statuses: pre and post maintenance journeys travel direct
+	 * 
+	 * - LNG status: have enough for entire sequence
+	 */
+	@Test
+	@Tag(TestCategories.MICRO_TEST)
+	public void testCargoFollowedBySingleMaintenanceAllLng() {
+		final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_ALTAMIRA);
+
+		final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
+		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+				.withStartWindow(LocalDateTime.of(2017, 1, 1, 0, 0), LocalDateTime.of(2017, 1, 1, 0, 0)) //
+				.withEndWindow(LocalDateTime.of(2017, 8, 1, 0, 0), LocalDateTime.of(2017, 8, 1, 0, 0)) //
+				.withCharterRate("70000") //
+				.withStartHeel(5_000, 150_000, 22.67, "1") //
+				.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
+				.build();
+		vesselAvailability.setFleet(true);
+
+		final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+
+		final Port loadPort = portFinder.findPortById(InternalDataConstants.PORT_HAMMERFEST);
+		final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_DRAGON);
+		final Cargo cargo = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("loadSlot", LocalDate.of(2017, 2, 1), loadPort, null, entity, "1") //
+				.withVolumeLimits(120_000, 150_000, VolumeUnits.M3) //
+				.withWindowSize(24, TimePeriod.HOURS) //
+				.with(s -> ((LoadSlot) s).setCargoCV(22.8)) //
+				.build() //
+				.makeDESSale("dischargeSlot", LocalDate.of(2017, 2, 1), dischargePort, null, entity, "9") //
+				.withVolumeLimits(100_000, 150_000, VolumeUnits.M3) //
+				.withWindowSize(1, TimePeriod.MONTHS) //
+				.build() //
+				.withVesselAssignment(vesselAvailability, 1) //
+				.build();
+
+		evaluateTest();
+
+		final Schedule schedule = fetchSchedule();
+		Assertions.assertNotNull(schedule);
+
+		final List<Sequence> sequences = schedule.getSequences();
+		Assertions.assertEquals(1, sequences.size());
+
+		final Sequence sequence = sequences.get(0);
+		final List<Event> events = sequence.getEvents();
+
+		final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence("s-i-sv-j-i-sv-j-i-vev-j-i-e");
+		checkSequence(expectedClassSequence, events);
+		checkFuelSequence(events);
+
+		// All events should start and end with heel
+		boolean foundMaintenance = false;
+		for (final Event event : events) {
+			Assertions.assertTrue(event.getHeelAtStart() > 0);
+			Assertions.assertTrue(event.getHeelAtEnd() > 0);
+			if (event instanceof Idle) {
+				if (!event.getStart().equals(event.getEnd())) {
+					final Idle idleEvent = (Idle) event;
+					final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(idleEvent);
+					final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
+					final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
+					Assertions.assertTrue(hasLngBoiloff);
+					Assertions.assertFalse(hasBunkerUse);
+				}
+			} else if (event instanceof VesselEventVisit) {
+				final VesselEventVisit vev = (VesselEventVisit) event;
+				if (vev.getVesselEvent() == maintenanceEvent) {
+					foundMaintenance = true;
+				}
+			} else if (event instanceof Journey) {
+				final Journey journey = (Journey) event;
+				final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(journey);
+				final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
+				final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
+				Assertions.assertTrue(hasLngBoiloff);
+				Assertions.assertFalse(hasBunkerUse);
+			}
+		}
+		Assertions.assertTrue(foundMaintenance);
+	}
+
+	/**********************************************
+	 * With charter length tests
+	 *********************************************/
+
+	@Nested
+	@DisplayName("With charter length tests")
+	class WithCharterLengthTests {
+
+		/**
+		 * Test for
+		 * 
+		 * - sequence: start -> maintenance -> charter length -> end
+		 * 
+		 * - travel statuses: pre and post maintenance journeys travel direct
+		 * 
+		 * - LNG status: have enough for entire sequence
+		 */
+		@Test
+		void allDatesInSameMonth() {
+		}
 	}
 }
