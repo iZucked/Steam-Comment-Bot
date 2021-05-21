@@ -5,22 +5,30 @@
 package com.mmxlabs.models.lng.adp.presentation.views;
 
 import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.validation.model.Category;
 import org.eclipse.emf.validation.model.EvaluationMode;
 import org.eclipse.emf.validation.service.IBatchValidator;
 import org.eclipse.emf.validation.service.IConstraintDescriptor;
 import org.eclipse.emf.validation.service.IConstraintFilter;
 import org.eclipse.emf.validation.service.ModelValidationService;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -49,10 +57,16 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.google.common.base.Objects;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.FleetProfile;
+import com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint;
+import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
+import com.mmxlabs.models.lng.adp.SalesContractProfile;
+import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioViewerPane;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -90,8 +104,9 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 		// Top Toolbar
 		{
 			final Composite toolbarComposite = new Composite(parent, SWT.NONE);
+			final int numColumns = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_CHANGE_ADP_YEAR) ? 7 : 6;
 			toolbarComposite.setLayout(GridLayoutFactory.fillDefaults() //
-					.numColumns(6) //
+					.numColumns(numColumns) //
 					.equalWidth(false) //
 					.create());
 			toolbarComposite.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
@@ -131,6 +146,38 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 									cmd.append(DeleteCommand.create(getEditingDomain(), editorData.adpModel));
 									getEditingDomain().getCommandStack().execute(cmd);
 									doDisplayScenarioInstance(getScenarioEditingLocation().getScenarioInstance(), getScenarioEditingLocation().getRootObject(), null);
+								}
+							}
+						}
+					});
+				}
+
+				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_CHANGE_ADP_YEAR)) {
+					final Button changeADPYearButton = new Button(toolbarComposite, SWT.PUSH);
+					changeADPYearButton.setText("Shift Year");
+					changeADPYearButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.END, SWT.CENTER).create());
+					changeADPYearButton.addSelectionListener(new SelectionAdapter() {
+						@Override
+						public void widgetSelected(final SelectionEvent e) {
+							if (editorData.adpModel != null) {
+								final Display display = PlatformUI.getWorkbench().getDisplay();
+								final InputDialog dialog = new InputDialog(display.getActiveShell(), "Shift ADP Year", "Enter a new ADP Start Year", "", newText -> {
+									if (newText == null) {
+										return "Please enter a new start year";
+									}
+									if (!newText.matches("^\\d+$")) {
+										return "Please enter a valid year";
+									}
+									return null;
+								});
+								if (dialog.open() == Window.OK) {
+									final String year = dialog.getValue();
+									final int startYear = Integer.parseInt(year);
+									final Command cmd = ADPModelUtil.constructShiftAdpYearCommand(getEditingDomain(), editorData.getAdpModel(), startYear);
+									if (cmd != null) {
+										getEditingDomain().getCommandStack().execute(cmd);
+										refresh();
+									}
 								}
 							}
 						}
@@ -253,6 +300,16 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 			// folder.getParent().layout(true);
 			updateRootModel(null, null);
 		}
+	}
+
+	private void refresh() {
+		final ADPModel adpModel = this.editorData.adpModel;
+		if (adpModel == null) {
+			return;
+		}
+		startEditor.setValue(adpModel.getYearStart());
+		endEditor.setValue(adpModel.getYearEnd());
+		pages.stream().forEach(ADPComposite::refresh);
 	}
 
 	private void updateRootModel(@Nullable final LNGScenarioModel scenarioModel, @Nullable final ADPModel adpModel) {

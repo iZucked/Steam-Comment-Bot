@@ -2109,8 +2109,12 @@ public class ContractPage extends ADPComposite {
 				}
 				objects.add(profile);
 			}
-			objects.addAll(commercialModel.getPurchaseContracts());
-			objects.addAll(commercialModel.getSalesContracts());
+			final List<PurchaseContract> sortedPurchaseContracts = new ArrayList<>(commercialModel.getPurchaseContracts());
+			sortedPurchaseContracts.sort((c1, c2) -> c1.getName().compareTo(c2.getName()));
+			objects.addAll(sortedPurchaseContracts);
+			final List<SalesContract> sortedSalesContracts = new ArrayList<>(commercialModel.getSalesContracts());
+			sortedSalesContracts.sort((c1, c2) -> c1.getName().compareTo(c2.getName()));
+			objects.addAll(sortedSalesContracts);
 		}
 		// Try to retain current selection
 		final ISelection selection = new StructuredSelection(objectSelector.getSelection());

@@ -1678,7 +1678,7 @@ public class InventoryReport extends ViewPart {
 			accTemp += monthlyProduction.remove(ym);
 		}
 		final Integer acc = accTemp;
-		monthlyProduction.compute(adpStart, (k, v) -> v + acc);
+		monthlyProduction.compute(adpStart, (k, v) -> v == null ? acc : v + acc);
 
 		return monthlyProduction;
 	}

@@ -113,6 +113,8 @@ public final class KnownFeatures {
 
 	public static final String FEATURE_SHOW_TRADING_SHIPPING_SPLIT = "features:headline-trading-shipping-split";
 
+	public static final String FEATURE_CHANGE_ADP_YEAR = "features:change-adp-year";
+
 	/**
 	 * Scenario repair features
 	 */
