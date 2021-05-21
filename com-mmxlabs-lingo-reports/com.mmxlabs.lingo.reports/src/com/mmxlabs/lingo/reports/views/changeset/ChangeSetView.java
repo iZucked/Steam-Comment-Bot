@@ -89,12 +89,14 @@ import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IReportContentsGenerator;
+import com.mmxlabs.lingo.reports.ReportContents;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.services.ScenarioNotEvaluatedException;
+import com.mmxlabs.lingo.reports.services.SelectedDataProviderImpl;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetToTableTransformer.SortMode;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetViewColumnHelper.VesselData;
@@ -340,7 +342,7 @@ public class ChangeSetView extends ViewPart {
 						final PinDiffResultPlanTransformer transformer = new PinDiffResultPlanTransformer();
 						final ChangeSetRoot newRoot = transformer.createDataModel(pin, other, monitor);
 						return new ViewState(newRoot, SortMode.BY_GROUP);
-					}, null);
+					}, !block, null);
 
 				}
 			}
@@ -550,16 +552,30 @@ public class ChangeSetView extends ViewPart {
 		if (IReportContentsGenerator.class.isAssignableFrom(adapter)) {
 			return (T) new IReportContentsGenerator() {
 
-				public String getStringContents(final ScenarioResult pin, final ScenarioResult other) {
+				public IReportContents getReportContents(final ScenarioResult pin, final ScenarioResult other, @Nullable List<Object> selectedObjects) {
 					try {
 						columnHelper.setTextualVesselMarkers(true);
 
-						ChangeSetView.this.setNewDataData(pin, (monitor, targetSlotId) -> {
-							final PinDiffResultPlanTransformer transformer = new PinDiffResultPlanTransformer();
-							final ChangeSetRoot newRoot = transformer.createDataModel(pin, other, monitor);
-							return new ViewState(newRoot, SortMode.BY_GROUP);
-						}, false, null);
-						ViewerHelper.refresh(viewer, true);
+						final SelectedDataProviderImpl provider = new SelectedDataProviderImpl();
+						if (pin != null) {
+							provider.addScenario(pin);
+							provider.setPinnedScenarioInstance(pin);
+						}
+						if (other != null) {
+							provider.addScenario(other);
+						}
+						// Request a blocking update ...
+						listener.selectedDataProviderChanged(provider, true);
+
+						//
+						// listener.selectedDataProviderChanged(null, canExportChangeSet);
+						//
+						// ChangeSetView.this.setNewDataData(pin, (monitor, targetSlotId) -> {
+						// final PinDiffResultPlanTransformer transformer = new PinDiffResultPlanTransformer();
+						// final ChangeSetRoot newRoot = transformer.createDataModel(pin, other, monitor);
+						// return new ViewState(newRoot, SortMode.BY_GROUP);
+						// }, false, null);
+						// ViewerHelper.refresh(viewer, true);
 
 						final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
 
@@ -567,7 +583,7 @@ public class ChangeSetView extends ViewPart {
 
 						ChangeSetView.this.setEmptyData();
 						// Prefix this header for rendering purposes
-						return "<meta charset=\"UTF-8\"/>" + contents;
+						return ReportContents.makeHTML("<meta charset=\"UTF-8\"/>" + contents);
 
 					} finally {
 						columnHelper.setTextualVesselMarkers(false);

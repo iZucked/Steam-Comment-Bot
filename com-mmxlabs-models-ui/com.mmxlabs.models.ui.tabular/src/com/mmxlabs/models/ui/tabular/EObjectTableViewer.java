@@ -61,6 +61,7 @@ import com.mmxlabs.scenario.service.model.manager.ModelReference;
  */
 public class EObjectTableViewer extends GridTreeViewer {
 
+	public static final String COLUMN_BLOCK_ID = "COLUMN_BLOCK_ID"; // Block ID linked to the column. E.g. the ID in the plugin.xml
 	public static final String COLUMN_PATH = "COLUMN_PATH";
 	public static final String COLUMN_RENDERER = "COLUMN_RENDERER";
 	public static final String COLUMN_FILTER = "COLUMN_FILTER";

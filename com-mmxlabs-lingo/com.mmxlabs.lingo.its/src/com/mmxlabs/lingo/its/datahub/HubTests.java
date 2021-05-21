@@ -19,6 +19,7 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.swtbot.swt.finder.waits.Conditions;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.hamcrest.Matcher;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -106,7 +107,9 @@ public class HubTests {
 	}
 
 	public static void openDatahubPreferencePage() {
-		bot.menu("Window").menu("Preferences").click();
+		SWTBotMenu menuWindow = bot.menu("Window");
+		SWTBotMenu menuWindowPreferences = menuWindow.menu("Preferences");
+		menuWindowPreferences.click();
 		bot.shell("Preferences").activate();
 		bot.tree().getTreeItem("Data Hub").select().expand().click();
 	}

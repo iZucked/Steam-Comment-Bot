@@ -28,7 +28,10 @@ public class ChangeSetsReportTests extends AbstractOptimisationResultTester {
 		final URL pinScenarioURL = getClass().getResource("/scenarios/demo-cases/Bonny problems/0 Bonny.lingo");
 		final URL refScenarioURL = getClass().getResource("/scenarios/demo-cases/Bonny problems/2 -O- late and lost-DES backfill -F- Bonny.lingo");
 
-		ReportTester.testPinDiffReports(pinScenarioURL, refScenarioURL, ReportTesterHelper.CHANGESET_REPORT_ID, ReportTesterHelper.CHANGESET_REPORT_SHORTNAME, "html");
+		// final URL dataURL = getClass().getResource("/scenarios/demo-cases/Bonny problems/");
+		final URL dataURL = pinScenarioURL;
+
+		ReportTester.testPinDiffReports(pinScenarioURL, refScenarioURL, dataURL, ReportTesterHelper.CHANGESET_REPORT_ID, ReportTesterHelper.CHANGESET_REPORT_SHORTNAME, "html");
 	}
 
 	@Test
@@ -36,6 +39,10 @@ public class ChangeSetsReportTests extends AbstractOptimisationResultTester {
 	public void testDrydockDiff() throws Exception {
 		final URL pinScenarioURL = getClass().getResource("/scenarios/demo-cases/Dry dock issues/0 base.lingo");
 		final URL refScenarioURL = getClass().getResource("/scenarios/demo-cases/Dry dock issues/5 charter-in generated - rewire for shorter one -O- -F- -F- base.lingo");
-		ReportTester.testPinDiffReports(pinScenarioURL, refScenarioURL, ReportTesterHelper.CHANGESET_REPORT_ID, ReportTesterHelper.CHANGESET_REPORT_SHORTNAME, "html");
+
+		// final URL dataURL = getClass().getResource("/scenarios/demo-cases/Dry dock issues/");
+		final URL dataURL = pinScenarioURL;
+
+		ReportTester.testPinDiffReports(pinScenarioURL, refScenarioURL, dataURL, ReportTesterHelper.CHANGESET_REPORT_ID, ReportTesterHelper.CHANGESET_REPORT_SHORTNAME, "html");
 	}
 }

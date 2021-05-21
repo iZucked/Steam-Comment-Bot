@@ -120,9 +120,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 		if (IReportContents.class.isAssignableFrom(adapter)) {
 			// Set a more repeatable sort order
 			{
-				final ColumnBlock[] initialReverseSortOrder = { //
-						getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.schedule.id") //
-				};
+				final ColumnBlock[] initialReverseSortOrder = getInitialReverseSortOrderForITS();
 
 				if (includeAllColumnsForITS) {
 					// Sort columns by ID
@@ -143,6 +141,9 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 					}
 				}
 			}
+ 
+			// Refresh viewer as column and/or sort order may have changed
+			ViewerHelper.refresh(viewer, true);
 
 			final CopyGridToHtmlStringUtil htmlUtil = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, includeAllColumnsForITS);
 			htmlUtil.setShowBackgroundColours(true);
@@ -155,6 +156,14 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 			return adapter.cast(ReportContents.make(htmlContents, jsonContents));
 		}
 		return super.getAdapter(adapter);
+
+	}
+
+	protected ColumnBlock[] getInitialReverseSortOrderForITS() {
+		final ColumnBlock[] initialReverseSortOrder = { //
+				getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.schedule.id") //
+		};
+		return initialReverseSortOrder;
 	}
 
 	private final ISelectedScenariosServiceListener scenarioComparisonServiceListener = new ISelectedScenariosServiceListener() {
@@ -188,7 +197,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 		public void diffOptionChanged(final EDiffOption d, final Object oldValue, final Object newValue) {
 			ViewerHelper.refresh(viewer, true);
 		}
-		
+
 		@Override
 		public void selectedObjectChanged(@Nullable MPart source, @NonNull ISelection selection) {
 			if (scenarioComparisonService.getDiffOptions().isFilterSelectedElements()) {
