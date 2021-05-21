@@ -312,11 +312,11 @@ public class ReportTester {
 
 	}
 
-	public static void testPinDiffReports(final URL pinScenarioURL, final URL refScenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
+	public static void testPinDiffReports(final URL pinScenarioURL, final URL refScenarioURL, final URL dataURL, final String reportID, final String shortName, final String extension) throws Exception {
 
 		ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(pinScenarioURL, (pinModelRecord, pinScenarioDataProvider) -> {
 			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(refScenarioURL, (refModelRecord, refScenarioDataProvider) -> {
-				ReportTester.testPinDiffReports(pinModelRecord, pinScenarioDataProvider, refModelRecord, refScenarioDataProvider, pinScenarioURL, ReportTesterHelper.CHANGESET_REPORT_ID,
+				ReportTester.testPinDiffReports(pinModelRecord, pinScenarioDataProvider, refModelRecord, refScenarioDataProvider, dataURL, ReportTesterHelper.CHANGESET_REPORT_ID,
 						ReportTesterHelper.CHANGESET_REPORT_SHORTNAME, "html");
 
 			});

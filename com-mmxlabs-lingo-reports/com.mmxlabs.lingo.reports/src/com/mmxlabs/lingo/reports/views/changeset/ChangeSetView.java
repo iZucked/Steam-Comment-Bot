@@ -96,6 +96,7 @@ import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.services.ScenarioNotEvaluatedException;
+import com.mmxlabs.lingo.reports.services.SelectedDataProviderImpl;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetToTableTransformer.SortMode;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetViewColumnHelper.VesselData;
@@ -341,7 +342,7 @@ public class ChangeSetView extends ViewPart {
 						final PinDiffResultPlanTransformer transformer = new PinDiffResultPlanTransformer();
 						final ChangeSetRoot newRoot = transformer.createDataModel(pin, other, monitor);
 						return new ViewState(newRoot, SortMode.BY_GROUP);
-					}, null);
+					}, !block, null);
 
 				}
 			}
@@ -555,12 +556,26 @@ public class ChangeSetView extends ViewPart {
 					try {
 						columnHelper.setTextualVesselMarkers(true);
 
-						ChangeSetView.this.setNewDataData(pin, (monitor, targetSlotId) -> {
-							final PinDiffResultPlanTransformer transformer = new PinDiffResultPlanTransformer();
-							final ChangeSetRoot newRoot = transformer.createDataModel(pin, other, monitor);
-							return new ViewState(newRoot, SortMode.BY_GROUP);
-						}, false, null);
-						ViewerHelper.refresh(viewer, true);
+						final SelectedDataProviderImpl provider = new SelectedDataProviderImpl();
+						if (pin != null) {
+							provider.addScenario(pin);
+							provider.setPinnedScenarioInstance(pin);
+						}
+						if (other != null) {
+							provider.addScenario(other);
+						}
+						// Request a blocking update ...
+						listener.selectedDataProviderChanged(provider, true);
+
+						//
+						// listener.selectedDataProviderChanged(null, canExportChangeSet);
+						//
+						// ChangeSetView.this.setNewDataData(pin, (monitor, targetSlotId) -> {
+						// final PinDiffResultPlanTransformer transformer = new PinDiffResultPlanTransformer();
+						// final ChangeSetRoot newRoot = transformer.createDataModel(pin, other, monitor);
+						// return new ViewState(newRoot, SortMode.BY_GROUP);
+						// }, false, null);
+						// ViewerHelper.refresh(viewer, true);
 
 						final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
 
