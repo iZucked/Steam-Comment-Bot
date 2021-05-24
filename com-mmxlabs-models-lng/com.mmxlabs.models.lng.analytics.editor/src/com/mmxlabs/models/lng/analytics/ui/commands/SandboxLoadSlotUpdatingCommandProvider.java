@@ -16,6 +16,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import com.mmxlabs.models.common.commandservice.IModelCommandProvider;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
@@ -40,6 +41,12 @@ public class SandboxLoadSlotUpdatingCommandProvider implements IModelCommandProv
 					if (parameter.getValue() instanceof Port) {
 						final Port port = (Port) parameter.getValue();
 						final double cv = port.getCvValue();
+						return SetCommand.create(editingDomain, loadSlot, AnalyticsPackage.eINSTANCE.getBuyOpportunity_Cv(), cv);
+					}
+				} else if (parameter.getEStructuralFeature() == AnalyticsPackage.eINSTANCE.getBuyOpportunity_Contract()) {
+					if (parameter.getValue() instanceof PurchaseContract) {
+						final PurchaseContract contract = (PurchaseContract) parameter.getValue();
+						final double cv = contract.getCargoCV();
 						return SetCommand.create(editingDomain, loadSlot, AnalyticsPackage.eINSTANCE.getBuyOpportunity_Cv(), cv);
 					}
 				}
