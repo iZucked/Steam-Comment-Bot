@@ -59,14 +59,7 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
-   <plugin
-         id="com.google.guava"
-         download-size="0"
-         install-size="0"
-         version="27.1.0.jre"
-         unpack="false"/>
-
+ 
    <plugin
          id="com.mmxlabs.lngdataserver.data.distances"
          download-size="0"
@@ -167,13 +160,6 @@
 
    <plugin
          id="wrapped.org.rnorth.duct-tape.duct-tape"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.google.guava.failureaccess"
          download-size="0"
          install-size="0"
          version="0.0.0"
