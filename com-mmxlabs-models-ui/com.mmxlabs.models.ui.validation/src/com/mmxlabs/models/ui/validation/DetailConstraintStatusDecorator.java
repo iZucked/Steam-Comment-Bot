@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -18,15 +19,15 @@ import org.eclipse.emf.validation.model.IModelConstraint;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.rcp.common.validation.IValidationApplicableProvider;
+
 /**
- * Implementation of {@link IDetailConstraintStatus} wrapping a
- * {@link IConstraintStatus} instance and adding in the extra methods for the
- * {@link IDetailConstraintStatus} interface
+ * Implementation of {@link IDetailConstraintStatus} wrapping a {@link IConstraintStatus} instance and adding in the extra methods for the {@link IDetailConstraintStatus} interface
  * 
  * @author Simon Goodall
  * 
  */
-public class DetailConstraintStatusDecorator implements IDetailConstraintStatus {
+public class DetailConstraintStatusDecorator implements IDetailConstraintStatus, IValidationApplicableProvider {
 
 	private final IConstraintStatus status;
 	private final int severity;
@@ -154,8 +155,7 @@ public class DetailConstraintStatusDecorator implements IDetailConstraintStatus 
 	}
 
 	/**
-	 * An arbitrary object tag to "classify" validation messages for types which can
-	 * be located in multiple places.
+	 * An arbitrary object tag to "classify" validation messages for types which can be located in multiple places.
 	 * 
 	 * @return
 	 */
@@ -164,7 +164,7 @@ public class DetailConstraintStatusDecorator implements IDetailConstraintStatus 
 	}
 
 	/**
-	 * An unique key used to identify the constraint code branch. 
+	 * An unique key used to identify the constraint code branch.
 	 * 
 	 * @return
 	 */
@@ -175,4 +175,30 @@ public class DetailConstraintStatusDecorator implements IDetailConstraintStatus 
 	public void setConstraintKey(Object constraintKey) {
 		this.constraintKey = constraintKey;
 	}
+
+	@Override
+	public boolean doesValidationApplyToChildOf(EObject parent) {
+
+		for (EObject e : objectMap.keySet()) {
+			if (findTargetInObjectTree(e, parent) != null) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+	
+	private @Nullable EObject findTargetInObjectTree(final @Nullable EObject node, final   EObject target) {
+		
+		
+		if (node == target ) {
+			return target;
+		}
+		if (node == null) {
+			return null;
+		}
+		
+		return findTargetInObjectTree(node.eContainer(), target);
+	}
+	
 }

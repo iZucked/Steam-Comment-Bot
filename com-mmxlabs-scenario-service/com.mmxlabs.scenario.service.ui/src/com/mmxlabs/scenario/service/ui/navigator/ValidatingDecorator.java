@@ -5,9 +5,12 @@
 package com.mmxlabs.scenario.service.ui.navigator;
 
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
@@ -16,6 +19,7 @@ import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.validation.IValidationApplicableProvider;
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
@@ -39,11 +43,12 @@ public class ValidatingDecorator extends LabelProvider implements ILightweightLa
 	private final @NonNull IScenarioValidationListener validationListener = new IScenarioValidationListener() {
 
 		@Override
-		public void validationChanged(@NonNull final ScenarioModelRecord modelRecord, @NonNull final IStatus status) {
-			if (modelRecord instanceof ScenarioModelRecord) {
-
-				final ScenarioModelRecord scenarioModelRecord = (ScenarioModelRecord) modelRecord;
-				final LabelProviderChangedEvent event = new LabelProviderChangedEvent(ValidatingDecorator.this, scenarioModelRecord);
+		public void validationChanged(@NonNull final ScenarioModelRecord scenarioModelRecord, @NonNull final IStatus status) {
+			if (scenarioModelRecord != null) {
+				List<Object> targets = new LinkedList<>();
+				targets.add(scenarioModelRecord);
+				targets.addAll(scenarioModelRecord.getScenarioInstance().getFragments());
+				final LabelProviderChangedEvent event = new LabelProviderChangedEvent(ValidatingDecorator.this, targets.toArray());
 				RunnerHelper.asyncExec(() -> fireLabelProviderChanged(event));
 			}
 		}
@@ -101,7 +106,7 @@ public class ValidatingDecorator extends LabelProvider implements ILightweightLa
 			}
 		} else if (element instanceof ScenarioInstance) {
 			final ScenarioInstance scenarioInstance = (ScenarioInstance) element;
-			@NonNull
+
 			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 			if (modelRecord != null) {
 				if (modelRecord.getValidationStatusSeverity() == IStatus.ERROR) {
@@ -124,6 +129,24 @@ public class ValidatingDecorator extends LabelProvider implements ILightweightLa
 			}
 		} else if (element instanceof ScenarioFragment) {
 			ScenarioFragment scenarioFragment = (ScenarioFragment) element;
+			ScenarioInstance scenarioInstance = scenarioFragment.getScenarioInstance();
+			if (scenarioInstance != null) {
+
+				final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+
+				if (modelRecord != null) {
+
+					int validationStatus = getObjectToStatus(modelRecord.getValidationStatus(), IStatus.OK, scenarioFragment.getFragment());
+
+					if (validationStatus == IStatus.ERROR) {
+						decoration.addOverlay(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/overlays/error.gif"), IDecoration.BOTTOM_RIGHT);
+					} else if (validationStatus == IStatus.WARNING) {
+						decoration.addOverlay(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/overlays/warning.gif"), IDecoration.BOTTOM_RIGHT);
+					} else if (validationStatus == IStatus.INFO) {
+						decoration.addOverlay(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/overlays/info.gif"), IDecoration.BOTTOM_RIGHT);
+					}
+				}
+			}
 
 		}
 	}
@@ -136,5 +159,24 @@ public class ValidatingDecorator extends LabelProvider implements ILightweightLa
 		modelRecord.addLockListener(lockListener);
 
 		listenerRefs.add(modelRecord);
+	}
+
+	private int getObjectToStatus(IStatus status, int severity, EObject target) {
+		if (status == null) {
+			return severity;
+		}
+		int newSeverity = severity;
+		if (status.isMultiStatus()) {
+			for (IStatus s : status.getChildren()) {
+				newSeverity = Math.max(newSeverity, getObjectToStatus(s, newSeverity, target));
+			}
+		}
+		if (status instanceof IValidationApplicableProvider) {
+			IValidationApplicableProvider p = (IValidationApplicableProvider) status;
+			if (p.doesValidationApplyToChildOf(target)) {
+				newSeverity = Math.max(newSeverity, status.getSeverity());
+			}
+		}
+		return newSeverity;
 	}
 }
