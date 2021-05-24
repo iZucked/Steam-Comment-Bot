@@ -1434,7 +1434,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.swtchart"
+         id="org.eclipse.swtchart"
          download-size="0"
          install-size="0"
          version="0.0.0"
