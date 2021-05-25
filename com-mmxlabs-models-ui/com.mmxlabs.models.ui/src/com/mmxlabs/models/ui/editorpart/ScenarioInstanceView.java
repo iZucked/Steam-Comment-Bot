@@ -25,6 +25,7 @@ import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
+import org.slf4j.Logger;
 
 import com.google.common.base.Objects;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
@@ -50,6 +51,8 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public abstract class ScenarioInstanceView extends ViewPart implements IScenarioEditingLocation, ISelectionListener, IScenarioInstanceProvider, IMMXRootObjectProvider, IValidationStatusGoto {
+
+	private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(ScenarioInstanceView.class);
 
 	protected ScenarioInstance scenarioInstance;
 	private ScenarioModelRecord modelRecord;
@@ -112,7 +115,11 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 			}
 		};
 		getSite().getPage().addPartListener(partListener);
-		partListener.partActivated(getSite().getPage().getActiveEditor());
+		try {
+			partListener.partActivated(getSite().getPage().getActiveEditor());
+		} catch (Exception e) {
+			LOGGER.error("Error initialising view: " + e.getMessage(), e);
+		}
 	}
 
 	@Override
