@@ -25,6 +25,9 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.util.VesselAvailabilityMaker;
 import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.parameters.ParametersFactory;
+import com.mmxlabs.models.lng.parameters.ParametersPackage;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -179,743 +182,763 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 		}
 	}
 
-	/**********************************************
-	 * SINGLE MAINTENANCE EVENT TESTS
-	 *********************************************/
+	@Nested
+	class LoneMaintenanceEventTests {
 
-	/**
-	 * Test for
-	 * 
-	 * - sequence: start -> maintenance -> end
-	 * 
-	 * - travel statuses: idles throughout
-	 * 
-	 * - LNG status: enough for entire sequence
-	 */
-	@Test
-	@Tag(TestCategories.MICRO_TEST)
-	public void testSingleMaintenanceNoCargoesAllLng() {
-		final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
+		/**
+		 * Test for
+		 * 
+		 * - sequence: start -> maintenance -> end
+		 * 
+		 * - travel statuses: idles throughout
+		 * 
+		 * - LNG status: enough for entire sequence
+		 */
+		@Test
+		@Tag(TestCategories.MICRO_TEST)
+		void testAllLng() {
+			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
 
-		final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
-		final VesselAvailability vesselAvailability = populateDefaultVesselAvailablityDetails(vessel) //
-				.withStartHeel(15_000, 150_000, 22.67, "0.01") //
-				.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
-				.build();
-		vesselAvailability.setFleet(true);
-		final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
+			final VesselAvailability vesselAvailability = populateDefaultVesselAvailablityDetails(vessel) //
+					.withStartHeel(15_000, 150_000, 22.67, "0.01") //
+					.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
+					.build();
+			vesselAvailability.setFleet(true);
+			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
 
-		evaluateTest();
+			evaluateTest();
 
-		final Schedule schedule = fetchSchedule();
-		Assertions.assertNotNull(schedule);
+			final Schedule schedule = fetchSchedule();
+			Assertions.assertNotNull(schedule);
 
-		final List<Sequence> sequences = schedule.getSequences();
-		Assertions.assertEquals(1, sequences.size());
+			final List<Sequence> sequences = schedule.getSequences();
+			Assertions.assertEquals(1, sequences.size());
 
-		final Sequence sequence = sequences.get(0);
-		final List<Event> events = sequence.getEvents();
+			final Sequence sequence = sequences.get(0);
+			final List<Event> events = sequence.getEvents();
 
-		final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE);
-		checkSequence(expectedClassSequence, events);
-		checkFuelSequence(events);
+			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE);
+			checkSequence(expectedClassSequence, events);
+			checkFuelSequence(events);
 
-		// Sequence should have (strictly positive) heel during all events
-		boolean foundMaintenance = false;
-		for (final Event event : events) {
-			Assertions.assertTrue(event.getHeelAtStart() > 0);
-			Assertions.assertTrue(event.getHeelAtEnd() > 0);
-			if (event instanceof Idle) {
-				final Idle idleEvent = (Idle) event;
-				final boolean hasLngBoiloff = idleEvent.getFuels().stream().map(FuelQuantity::getFuel).anyMatch(fuel -> fuel == Fuel.NBO || fuel == Fuel.FBO);
-				Assertions.assertTrue(hasLngBoiloff);
-			} else if (event instanceof VesselEventVisit) {
-				final VesselEventVisit vev = (VesselEventVisit) event;
-				if (vev.getVesselEvent() == maintenanceEvent) {
-					foundMaintenance = true;
+			// Sequence should have (strictly positive) heel during all events
+			boolean foundMaintenance = false;
+			for (final Event event : events) {
+				Assertions.assertTrue(event.getHeelAtStart() > 0);
+				Assertions.assertTrue(event.getHeelAtEnd() > 0);
+				if (event instanceof Idle) {
+					final Idle idleEvent = (Idle) event;
+					final boolean hasLngBoiloff = idleEvent.getFuels().stream().map(FuelQuantity::getFuel).anyMatch(fuel -> fuel == Fuel.NBO || fuel == Fuel.FBO);
+					Assertions.assertTrue(hasLngBoiloff);
+				} else if (event instanceof VesselEventVisit) {
+					final VesselEventVisit vev = (VesselEventVisit) event;
+					if (vev.getVesselEvent() == maintenanceEvent) {
+						foundMaintenance = true;
+					}
 				}
 			}
+			Assertions.assertTrue(foundMaintenance);
 		}
-		Assertions.assertTrue(foundMaintenance);
-	}
 
-	/**
-	 * Test for
-	 * 
-	 * - sequence: start -> maintenance -> end
-	 * 
-	 * - travel statuses: idles throughout
-	 * 
-	 * - LNG status: None available throughout sequence
-	 */
-	@Test
-	@Tag(TestCategories.MICRO_TEST)
-	public void testSingleMaintenanceNoCargoesNoLng() {
-		final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
+		/**
+		 * Test for
+		 * 
+		 * - sequence: start -> maintenance -> end
+		 * 
+		 * - travel statuses: idles throughout
+		 * 
+		 * - LNG status: None available throughout sequence
+		 */
+		@Test
+		@Tag(TestCategories.MICRO_TEST)
+		public void testNoLng() {
+			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
 
-		final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
-		final VesselAvailability vesselAvailability = populateDefaultVesselAvailablityDetails(vessel) //
-				.withStartHeel(0, 0, 22.67, "0.01") //
-				.withEndHeel(0, 500, EVesselTankState.EITHER, "") //
-				.build();
-		vesselAvailability.setFleet(true);
+			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
+			final VesselAvailability vesselAvailability = populateDefaultVesselAvailablityDetails(vessel) //
+					.withStartHeel(0, 0, 22.67, "0.01") //
+					.withEndHeel(0, 500, EVesselTankState.EITHER, "") //
+					.build();
+			vesselAvailability.setFleet(true);
 
-		final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
 
-		evaluateTest();
+			evaluateTest();
 
-		final Schedule schedule = fetchSchedule();
-		Assertions.assertNotNull(schedule);
+			final Schedule schedule = fetchSchedule();
+			Assertions.assertNotNull(schedule);
 
-		final List<Sequence> sequences = schedule.getSequences();
-		Assertions.assertEquals(1, sequences.size());
+			final List<Sequence> sequences = schedule.getSequences();
+			Assertions.assertEquals(1, sequences.size());
 
-		final Sequence sequence = sequences.get(0);
-		final List<Event> events = sequence.getEvents();
+			final Sequence sequence = sequences.get(0);
+			final List<Event> events = sequence.getEvents();
 
-		final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE);
-		checkSequence(expectedClassSequence, events);
-		checkFuelSequence(events);
+			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE);
+			checkSequence(expectedClassSequence, events);
+			checkFuelSequence(events);
 
-		// Sequence should have zero heel during all events
-		boolean foundMaintenance = false;
-		for (final Event event : events) {
-			Assertions.assertEquals(0, event.getHeelAtStart());
-			Assertions.assertEquals(0, event.getHeelAtEnd());
-			if (event instanceof Idle) {
-				final Idle idleEvent = (Idle) event;
-				final boolean hasLngBoiloff = idleEvent.getFuels().stream().map(FuelQuantity::getFuel).anyMatch(fuel -> fuel == Fuel.NBO || fuel == Fuel.FBO);
-				Assertions.assertFalse(hasLngBoiloff);
-			} else if (event instanceof VesselEventVisit) {
-				final VesselEventVisit vev = (VesselEventVisit) event;
-				if (vev.getVesselEvent() == maintenanceEvent) {
-					foundMaintenance = true;
-				}
-			}
-		}
-		Assertions.assertTrue(foundMaintenance);
-	}
-
-	/**
-	 * Test for
-	 * 
-	 * - sequence: start -> maintenance -> end
-	 * 
-	 * - travel statuses: idles throughout
-	 * 
-	 * - LNG status: runs out before the maintenance event starts
-	 */
-	@Test
-	@Tag(TestCategories.MICRO_TEST)
-	public void testSingleMaintenanceNoCargoesLngRunsOutBeforeEvent() {
-		final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
-
-		final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
-		final VesselAvailability vesselAvailability = populateDefaultVesselAvailablityDetails(vessel) //
-				.withStartHeel(3_000, 3_000, 22.67, "0.01") //
-				.withEndHeel(0, 500, EVesselTankState.EITHER, "") //
-				.build();
-		vesselAvailability.setFleet(true);
-
-		final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
-
-		evaluateTest();
-
-		final Schedule schedule = fetchSchedule();
-		Assertions.assertNotNull(schedule);
-
-		final List<Sequence> sequences = schedule.getSequences();
-		Assertions.assertEquals(1, sequences.size());
-
-		final Sequence sequence = sequences.get(0);
-		final List<Event> events = sequence.getEvents();
-
-		final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE);
-		checkSequence(expectedClassSequence, events);
-		checkFuelSequence(events);
-
-		// Sequence should have heel before maintenance and none after
-		boolean foundMaintenance = false;
-		for (final Event event : events) {
-			if (event instanceof Idle) {
-				final Idle idleEvent = (Idle) event;
-				final boolean hasLngBoiloff = idleEvent.getFuels().stream().map(FuelQuantity::getFuel).anyMatch(fuel -> fuel == Fuel.NBO || fuel == Fuel.FBO);
-				if (foundMaintenance) {
-					Assertions.assertEquals(0, event.getHeelAtStart());
-					Assertions.assertEquals(0, event.getHeelAtEnd());
+			// Sequence should have zero heel during all events
+			boolean foundMaintenance = false;
+			for (final Event event : events) {
+				Assertions.assertEquals(0, event.getHeelAtStart());
+				Assertions.assertEquals(0, event.getHeelAtEnd());
+				if (event instanceof Idle) {
+					final Idle idleEvent = (Idle) event;
+					final boolean hasLngBoiloff = idleEvent.getFuels().stream().map(FuelQuantity::getFuel).anyMatch(fuel -> fuel == Fuel.NBO || fuel == Fuel.FBO);
 					Assertions.assertFalse(hasLngBoiloff);
-				} else {
+				} else if (event instanceof VesselEventVisit) {
+					final VesselEventVisit vev = (VesselEventVisit) event;
+					if (vev.getVesselEvent() == maintenanceEvent) {
+						foundMaintenance = true;
+					}
+				}
+			}
+			Assertions.assertTrue(foundMaintenance);
+		}
+
+		/**
+		 * Test for
+		 * 
+		 * - sequence: start -> maintenance -> end
+		 * 
+		 * - travel statuses: idles throughout
+		 * 
+		 * - LNG status: runs out before the maintenance event starts
+		 */
+		@Test
+		@Tag(TestCategories.MICRO_TEST)
+		public void testLngRunsOutBeforeEvent() {
+			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
+
+			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
+			final VesselAvailability vesselAvailability = populateDefaultVesselAvailablityDetails(vessel) //
+					.withStartHeel(3_000, 3_000, 22.67, "0.01") //
+					.withEndHeel(0, 500, EVesselTankState.EITHER, "") //
+					.build();
+			vesselAvailability.setFleet(true);
+
+			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+
+			evaluateTest();
+
+			final Schedule schedule = fetchSchedule();
+			Assertions.assertNotNull(schedule);
+
+			final List<Sequence> sequences = schedule.getSequences();
+			Assertions.assertEquals(1, sequences.size());
+
+			final Sequence sequence = sequences.get(0);
+			final List<Event> events = sequence.getEvents();
+
+			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE);
+			checkSequence(expectedClassSequence, events);
+			checkFuelSequence(events);
+
+			// Sequence should have heel before maintenance and none after
+			boolean foundMaintenance = false;
+			for (final Event event : events) {
+				if (event instanceof Idle) {
+					final Idle idleEvent = (Idle) event;
+					final boolean hasLngBoiloff = idleEvent.getFuels().stream().map(FuelQuantity::getFuel).anyMatch(fuel -> fuel == Fuel.NBO || fuel == Fuel.FBO);
+					if (foundMaintenance) {
+						Assertions.assertEquals(0, event.getHeelAtStart());
+						Assertions.assertEquals(0, event.getHeelAtEnd());
+						Assertions.assertFalse(hasLngBoiloff);
+					} else {
+						Assertions.assertTrue(event.getHeelAtStart() > 0);
+						Assertions.assertTrue(hasLngBoiloff);
+					}
+				} else if (event instanceof VesselEventVisit) {
+					final VesselEventVisit vev = (VesselEventVisit) event;
+					if (vev.getVesselEvent() == maintenanceEvent) {
+						foundMaintenance = true;
+					}
+				}
+			}
+			Assertions.assertTrue(foundMaintenance);
+		}
+
+		/**
+		 * Test for
+		 * 
+		 * - sequence: start -> maintenance -> end
+		 * 
+		 * - travel statuses: idles throughout
+		 * 
+		 * - LNG status: runs out before maintenance event starts
+		 * 
+		 * - other: end event requires cooldown
+		 */
+		@Test
+		@Tag(TestCategories.MICRO_TEST)
+		public void testLngRunsOutBeforeEventEndCold() {
+			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
+
+			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
+			final VesselAvailability vesselAvailability = populateDefaultVesselAvailablityDetails(vessel) //
+					.withStartHeel(3_000, 3_000, 22.67, "0.01") //
+					.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
+					.build();
+			vesselAvailability.setFleet(true);
+
+			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+
+			evaluateTest();
+
+			final Schedule schedule = fetchSchedule();
+			Assertions.assertNotNull(schedule);
+
+			final List<Sequence> sequences = schedule.getSequences();
+			Assertions.assertEquals(1, sequences.size());
+
+			final Sequence sequence = sequences.get(0);
+			final List<Event> events = sequence.getEvents();
+
+			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE_W_COOLDOWN_BEFORE_END);
+			checkSequence(expectedClassSequence, events);
+			checkFuelSequence(events);
+
+			// Sequence should have heel before maintenance and none after
+			boolean foundMaintenance = false;
+			for (final Event event : events) {
+				if (event instanceof Idle) {
+					final Idle idleEvent = (Idle) event;
+					final boolean hasLngBoiloff = idleEvent.getFuels().stream().map(FuelQuantity::getFuel).anyMatch(fuel -> fuel == Fuel.NBO || fuel == Fuel.FBO);
+					if (foundMaintenance) {
+						Assertions.assertEquals(0, event.getHeelAtStart());
+						Assertions.assertEquals(0, event.getHeelAtEnd());
+						Assertions.assertFalse(hasLngBoiloff);
+					} else {
+						Assertions.assertTrue(event.getHeelAtStart() > 0);
+						Assertions.assertTrue(hasLngBoiloff);
+					}
+				} else if (event instanceof VesselEventVisit) {
+					final VesselEventVisit vev = (VesselEventVisit) event;
+					if (vev.getVesselEvent() == maintenanceEvent) {
+						foundMaintenance = true;
+					}
+				}
+			}
+			Assertions.assertTrue(foundMaintenance);
+		}
+
+		/**
+		 * Test for - sequence: start -> maintenance -> end
+		 * 
+		 * - travel statuses: idles throughout
+		 * 
+		 * - LNG status: runs out after the maintenance event
+		 */
+		@Test
+		@Tag(TestCategories.MICRO_TEST)
+		public void testLngRunsOutAfterEvent() {
+			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
+
+			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
+			final VesselAvailability vesselAvailability = populateDefaultVesselAvailablityDetails(vessel) //
+					.withStartHeel(18_000, 20_000, 22.67, "0.01") //
+					.withEndHeel(0, 500, EVesselTankState.EITHER, "") //
+					.build();
+			vesselAvailability.setFleet(true);
+
+			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+
+			evaluateTest();
+
+			final Schedule schedule = fetchSchedule();
+			Assertions.assertNotNull(schedule);
+
+			final List<Sequence> sequences = schedule.getSequences();
+			Assertions.assertEquals(1, sequences.size());
+
+			final Sequence sequence = sequences.get(0);
+			final List<Event> events = sequence.getEvents();
+
+			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE);
+			checkSequence(expectedClassSequence, events);
+			checkFuelSequence(events);
+
+			// Sequence should have heel before maintenance and after maintenance.
+			// After maintenance NBO time should be less than idle time
+			boolean foundMaintenance = false;
+			for (final Event event : events) {
+				if (event instanceof Idle) {
+					final Idle idleEvent = (Idle) event;
+					final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(idleEvent);
+					final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
+					final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
 					Assertions.assertTrue(event.getHeelAtStart() > 0);
 					Assertions.assertTrue(hasLngBoiloff);
-				}
-			} else if (event instanceof VesselEventVisit) {
-				final VesselEventVisit vev = (VesselEventVisit) event;
-				if (vev.getVesselEvent() == maintenanceEvent) {
-					foundMaintenance = true;
+					if (foundMaintenance) {
+						Assertions.assertEquals(0, event.getHeelAtEnd());
+						Assertions.assertTrue(hasBunkerUse);
+					} else {
+						Assertions.assertTrue(event.getHeelAtEnd() > 0);
+						Assertions.assertFalse(hasBunkerUse);
+					}
+				} else if (event instanceof VesselEventVisit) {
+					final VesselEventVisit vev = (VesselEventVisit) event;
+					if (vev.getVesselEvent() == maintenanceEvent) {
+						foundMaintenance = true;
+					}
 				}
 			}
+			Assertions.assertTrue(foundMaintenance);
 		}
-		Assertions.assertTrue(foundMaintenance);
-	}
 
-	/**
-	 * Test for
-	 * 
-	 * - sequence: start -> maintenance -> end
-	 * 
-	 * - travel statuses: idles throughout
-	 * 
-	 * - LNG status: runs out before maintenance event starts
-	 * 
-	 * - other: end event requires cooldown
-	 */
-	@Test
-	@Tag(TestCategories.MICRO_TEST)
-	public void testSingleMaintenanceNoCargoesLngRunsOutBeforeEventEndCold() {
-		final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
+		/**
+		 * Test for
+		 * 
+		 * - sequence: start -> maintenance -> end
+		 * 
+		 * - travel statuses: idles throughout
+		 * 
+		 * - LNG status: runs out after maintenance event starts
+		 * 
+		 * - other: end event requires cooldown
+		 */
+		@Test
+		@Tag(TestCategories.MICRO_TEST)
+		public void testLngRunsOutAfterEventEndCold() {
+			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
 
-		final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
-		final VesselAvailability vesselAvailability = populateDefaultVesselAvailablityDetails(vessel) //
-				.withStartHeel(3_000, 3_000, 22.67, "0.01") //
-				.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
-				.build();
-		vesselAvailability.setFleet(true);
+			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
+			final VesselAvailability vesselAvailability = populateDefaultVesselAvailablityDetails(vessel) //
+					.withStartHeel(18_000, 20_000, 22.67, "0.01") //
+					.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
+					.build();
+			vesselAvailability.setFleet(true);
 
-		final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
 
-		evaluateTest();
+			evaluateTest();
 
-		final Schedule schedule = fetchSchedule();
-		Assertions.assertNotNull(schedule);
+			final Schedule schedule = fetchSchedule();
+			Assertions.assertNotNull(schedule);
 
-		final List<Sequence> sequences = schedule.getSequences();
-		Assertions.assertEquals(1, sequences.size());
+			final List<Sequence> sequences = schedule.getSequences();
+			Assertions.assertEquals(1, sequences.size());
 
-		final Sequence sequence = sequences.get(0);
-		final List<Event> events = sequence.getEvents();
+			final Sequence sequence = sequences.get(0);
+			final List<Event> events = sequence.getEvents();
 
-		final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE_W_COOLDOWN_BEFORE_END);
-		checkSequence(expectedClassSequence, events);
-		checkFuelSequence(events);
+			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE_W_COOLDOWN_BEFORE_END);
+			checkSequence(expectedClassSequence, events);
+			checkFuelSequence(events);
 
-		// Sequence should have heel before maintenance and none after
-		boolean foundMaintenance = false;
-		for (final Event event : events) {
-			if (event instanceof Idle) {
-				final Idle idleEvent = (Idle) event;
-				final boolean hasLngBoiloff = idleEvent.getFuels().stream().map(FuelQuantity::getFuel).anyMatch(fuel -> fuel == Fuel.NBO || fuel == Fuel.FBO);
-				if (foundMaintenance) {
-					Assertions.assertEquals(0, event.getHeelAtStart());
-					Assertions.assertEquals(0, event.getHeelAtEnd());
-					Assertions.assertFalse(hasLngBoiloff);
-				} else {
+			// Sequence should have heel before maintenance and after maintenance.
+			// After maintenance NBO time should be less than idle time
+			boolean foundMaintenance = false;
+			for (final Event event : events) {
+				if (event instanceof Idle) {
+					final Idle idleEvent = (Idle) event;
+					final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(idleEvent);
+					final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
+					final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
 					Assertions.assertTrue(event.getHeelAtStart() > 0);
 					Assertions.assertTrue(hasLngBoiloff);
-				}
-			} else if (event instanceof VesselEventVisit) {
-				final VesselEventVisit vev = (VesselEventVisit) event;
-				if (vev.getVesselEvent() == maintenanceEvent) {
-					foundMaintenance = true;
+					if (foundMaintenance) {
+						Assertions.assertEquals(0, event.getHeelAtEnd());
+						Assertions.assertTrue(hasBunkerUse);
+					} else {
+						Assertions.assertTrue(event.getHeelAtEnd() > 0);
+						Assertions.assertFalse(hasBunkerUse);
+					}
+				} else if (event instanceof VesselEventVisit) {
+					final VesselEventVisit vev = (VesselEventVisit) event;
+					if (vev.getVesselEvent() == maintenanceEvent) {
+						foundMaintenance = true;
+					}
 				}
 			}
+			Assertions.assertTrue(foundMaintenance);
 		}
-		Assertions.assertTrue(foundMaintenance);
-	}
 
-	/**
-	 * Test for - sequence: start -> maintenance -> end
-	 * 
-	 * - travel statuses: idles throughout
-	 * 
-	 * - LNG status: runs out after the maintenance event
-	 */
-	@Test
-	@Tag(TestCategories.MICRO_TEST)
-	public void testSingleMaintenanceNoCargoesLngRunsOutAfterEvent() {
-		final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
+		/**
+		 * Test for
+		 * 
+		 * - sequence: start -> maintenance -> end
+		 * 
+		 * - travel statuses: idles throughout
+		 * 
+		 * - LNG status: have too much so cannot meet end volume limits
+		 */
+		@Test
+		@Tag(TestCategories.MICRO_TEST)
+		public void testTooMuchLng() {
+			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
 
-		final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
-		final VesselAvailability vesselAvailability = populateDefaultVesselAvailablityDetails(vessel) //
-				.withStartHeel(18_000, 20_000, 22.67, "0.01") //
-				.withEndHeel(0, 500, EVesselTankState.EITHER, "") //
-				.build();
-		vesselAvailability.setFleet(true);
+			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
+			final int minAllowedEndHeel = 500;
+			final int maxAllowedEndHeel = 1_000;
+			final VesselAvailability vesselAvailability = populateDefaultVesselAvailablityDetails(vessel) //
+					.withStartHeel(50_000, 150_000, 22.67, "0.01") //
+					.withEndHeel(minAllowedEndHeel, maxAllowedEndHeel, EVesselTankState.MUST_BE_COLD, "") //
+					.build();
+			vesselAvailability.setFleet(true);
 
-		final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
 
-		evaluateTest();
+			evaluateTest();
 
-		final Schedule schedule = fetchSchedule();
-		Assertions.assertNotNull(schedule);
+			final Schedule schedule = fetchSchedule();
+			Assertions.assertNotNull(schedule);
 
-		final List<Sequence> sequences = schedule.getSequences();
-		Assertions.assertEquals(1, sequences.size());
+			final List<Sequence> sequences = schedule.getSequences();
+			Assertions.assertEquals(1, sequences.size());
 
-		final Sequence sequence = sequences.get(0);
-		final List<Event> events = sequence.getEvents();
+			final Sequence sequence = sequences.get(0);
+			final List<Event> events = sequence.getEvents();
 
-		final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE);
-		checkSequence(expectedClassSequence, events);
-		checkFuelSequence(events);
+			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE);
+			checkSequence(expectedClassSequence, events);
+			checkFuelSequence(events);
 
-		// Sequence should have heel before maintenance and after maintenance.
-		// After maintenance NBO time should be less than idle time
-		boolean foundMaintenance = false;
-		for (final Event event : events) {
-			if (event instanceof Idle) {
-				final Idle idleEvent = (Idle) event;
-				final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(idleEvent);
-				final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
-				final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
+			// All events should start and end with heel
+			boolean foundMaintenance = false;
+			for (final Event event : events) {
 				Assertions.assertTrue(event.getHeelAtStart() > 0);
-				Assertions.assertTrue(hasLngBoiloff);
-				if (foundMaintenance) {
-					Assertions.assertEquals(0, event.getHeelAtEnd());
-					Assertions.assertTrue(hasBunkerUse);
-				} else {
-					Assertions.assertTrue(event.getHeelAtEnd() > 0);
-					Assertions.assertFalse(hasBunkerUse);
-				}
-			} else if (event instanceof VesselEventVisit) {
-				final VesselEventVisit vev = (VesselEventVisit) event;
-				if (vev.getVesselEvent() == maintenanceEvent) {
-					foundMaintenance = true;
-				}
-			}
-		}
-		Assertions.assertTrue(foundMaintenance);
-	}
-
-	/**
-	 * Test for
-	 * 
-	 * - sequence: start -> maintenance -> end
-	 * 
-	 * - travel statuses: idles throughout
-	 * 
-	 * - LNG status: runs out after maintenance event starts
-	 * 
-	 * - other: end event requires cooldown
-	 */
-	@Test
-	@Tag(TestCategories.MICRO_TEST)
-	public void testSingleMaintenanceNoCargoesLngRunsOutAfterEventEndCold() {
-		final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
-
-		final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
-		final VesselAvailability vesselAvailability = populateDefaultVesselAvailablityDetails(vessel) //
-				.withStartHeel(18_000, 20_000, 22.67, "0.01") //
-				.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
-				.build();
-		vesselAvailability.setFleet(true);
-
-		final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
-
-		evaluateTest();
-
-		final Schedule schedule = fetchSchedule();
-		Assertions.assertNotNull(schedule);
-
-		final List<Sequence> sequences = schedule.getSequences();
-		Assertions.assertEquals(1, sequences.size());
-
-		final Sequence sequence = sequences.get(0);
-		final List<Event> events = sequence.getEvents();
-
-		final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE_W_COOLDOWN_BEFORE_END);
-		checkSequence(expectedClassSequence, events);
-		checkFuelSequence(events);
-
-		// Sequence should have heel before maintenance and after maintenance.
-		// After maintenance NBO time should be less than idle time
-		boolean foundMaintenance = false;
-		for (final Event event : events) {
-			if (event instanceof Idle) {
-				final Idle idleEvent = (Idle) event;
-				final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(idleEvent);
-				final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
-				final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
-				Assertions.assertTrue(event.getHeelAtStart() > 0);
-				Assertions.assertTrue(hasLngBoiloff);
-				if (foundMaintenance) {
-					Assertions.assertEquals(0, event.getHeelAtEnd());
-					Assertions.assertTrue(hasBunkerUse);
-				} else {
-					Assertions.assertTrue(event.getHeelAtEnd() > 0);
-					Assertions.assertFalse(hasBunkerUse);
-				}
-			} else if (event instanceof VesselEventVisit) {
-				final VesselEventVisit vev = (VesselEventVisit) event;
-				if (vev.getVesselEvent() == maintenanceEvent) {
-					foundMaintenance = true;
-				}
-			}
-		}
-		Assertions.assertTrue(foundMaintenance);
-	}
-
-	/**
-	 * Test for
-	 * 
-	 * - sequence: start -> maintenance -> end
-	 * 
-	 * - travel statuses: idles throughout
-	 * 
-	 * - LNG status: have too much so cannot meet end volume limits
-	 */
-	@Test
-	@Tag(TestCategories.MICRO_TEST)
-	public void testSingleMaintenanceNoCargoesTooMuchLng() {
-		final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
-
-		final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
-		final int minAllowedEndHeel = 500;
-		final int maxAllowedEndHeel = 1_000;
-		final VesselAvailability vesselAvailability = populateDefaultVesselAvailablityDetails(vessel) //
-				.withStartHeel(50_000, 150_000, 22.67, "0.01") //
-				.withEndHeel(minAllowedEndHeel, maxAllowedEndHeel, EVesselTankState.MUST_BE_COLD, "") //
-				.build();
-		vesselAvailability.setFleet(true);
-
-		final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
-
-		evaluateTest();
-
-		final Schedule schedule = fetchSchedule();
-		Assertions.assertNotNull(schedule);
-
-		final List<Sequence> sequences = schedule.getSequences();
-		Assertions.assertEquals(1, sequences.size());
-
-		final Sequence sequence = sequences.get(0);
-		final List<Event> events = sequence.getEvents();
-
-		final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE);
-		checkSequence(expectedClassSequence, events);
-		checkFuelSequence(events);
-
-		// All events should start and end with heel
-		boolean foundMaintenance = false;
-		for (final Event event : events) {
-			Assertions.assertTrue(event.getHeelAtStart() > 0);
-			Assertions.assertTrue(event.getHeelAtEnd() > 0);
-			if (event instanceof Idle) {
-				final Idle idleEvent = (Idle) event;
-				final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(idleEvent);
-				final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
-				final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
-				Assertions.assertTrue(hasLngBoiloff);
-				Assertions.assertFalse(hasBunkerUse);
-			} else if (event instanceof VesselEventVisit) {
-				final VesselEventVisit vev = (VesselEventVisit) event;
-				if (vev.getVesselEvent() == maintenanceEvent) {
-					foundMaintenance = true;
-				}
-			}
-		}
-		// Last event end heel should be larger than max allowed
-		Assertions.assertTrue(events.get(events.size() - 1).getHeelAtEnd() > maxAllowedEndHeel);
-		Assertions.assertTrue(foundMaintenance);
-	}
-
-	/**
-	 * Test for
-	 * 
-	 * - sequence: start -> maintenance -> end
-	 * 
-	 * - travel statuses: idles throughout
-	 * 
-	 * - LNG status: have too little so we cannot meet end volume limits
-	 */
-	@Test
-	@Tag(TestCategories.MICRO_TEST)
-	public void testSingleMaintenanceNoCargoesTooLittleLng() {
-		final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
-
-		final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
-		final int minAllowedEndHeel = 500;
-		final int maxAllowedEndHeel = 1_000;
-		final VesselAvailability vesselAvailability = populateDefaultVesselAvailablityDetails(vessel) //
-				.withStartHeel(20_000, 45_000, 22.67, "0.01") //
-				.withEndHeel(minAllowedEndHeel, maxAllowedEndHeel, EVesselTankState.MUST_BE_COLD, "") //
-				.build();
-		vesselAvailability.setFleet(true);
-
-		final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
-
-		evaluateTest();
-
-		final Schedule schedule = fetchSchedule();
-		Assertions.assertNotNull(schedule);
-
-		final List<Sequence> sequences = schedule.getSequences();
-		Assertions.assertEquals(1, sequences.size());
-
-		final Sequence sequence = sequences.get(0);
-		final List<Event> events = sequence.getEvents();
-
-		final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE);
-		checkSequence(expectedClassSequence, events);
-		checkFuelSequence(events);
-
-		// All events should start and end with heel
-		boolean foundMaintenance = false;
-		for (final Event event : events) {
-			Assertions.assertTrue(event.getHeelAtStart() > 0);
-			Assertions.assertTrue(event.getHeelAtEnd() > 0);
-			if (event instanceof Idle) {
-				final Idle idleEvent = (Idle) event;
-				final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(idleEvent);
-				final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
-				final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
-				Assertions.assertTrue(hasLngBoiloff);
-				Assertions.assertFalse(hasBunkerUse);
-			} else if (event instanceof VesselEventVisit) {
-				final VesselEventVisit vev = (VesselEventVisit) event;
-				if (vev.getVesselEvent() == maintenanceEvent) {
-					foundMaintenance = true;
-				}
-			}
-		}
-		// Last event end heel should be larger than max allowed
-		Assertions.assertTrue(events.get(events.size() - 1).getHeelAtEnd() < minAllowedEndHeel);
-		Assertions.assertTrue(foundMaintenance);
-	}
-
-	/**
-	 * Test for
-	 * 
-	 * - sequence: start -> maintenance -> end
-	 * 
-	 * - travel statuses: pre and post maintenance journeys travel via Panama
-	 * 
-	 * - LNG status: have enough for entire sequence
-	 */
-	@Test
-	@Tag(TestCategories.MICRO_TEST)
-	public void testSingleMaintenanceTravelsViaPanamaAllLng() {
-		final Port startPort = portFinder.findPortById(InternalDataConstants.PORT_HIMEJI);
-		final Port endPort = startPort;
-		final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
-
-		final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
-				.withStartWindow(LocalDateTime.of(2017, 2, 15, 0, 0), LocalDateTime.of(2017, 2, 15, 0, 0)) //
-				.withEndWindow(LocalDateTime.of(2017, 4, 5, 0, 0), LocalDateTime.of(2017, 4, 5, 0, 0)) //
-				.withCharterRate("70000") //
-				.withStartHeel(15_000, 150_000, 22.67, "0.01") //
-				.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
-				.withStartPort(startPort) //
-				.withEndPort(endPort) //
-				.build();
-		vesselAvailability.setFleet(true);
-
-		final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
-
-		evaluateTest();
-
-		final Schedule schedule = fetchSchedule();
-		Assertions.assertNotNull(schedule);
-
-		final List<Sequence> sequences = schedule.getSequences();
-		Assertions.assertEquals(1, sequences.size());
-
-		final Sequence sequence = sequences.get(0);
-		final List<Event> events = sequence.getEvents();
-
-		final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE_W_JOURNEY);
-		checkSequence(expectedClassSequence, events);
-		checkFuelSequence(events);
-
-		// All events should start and end with heel
-		boolean foundMaintenance = false;
-		boolean usedPanama = false;
-		for (final Event event : events) {
-			Assertions.assertTrue(event.getHeelAtStart() > 0);
-			Assertions.assertTrue(event.getHeelAtEnd() > 0);
-			if (event instanceof Idle) {
-				if (!event.getStart().equals(event.getEnd())) {
+				Assertions.assertTrue(event.getHeelAtEnd() > 0);
+				if (event instanceof Idle) {
 					final Idle idleEvent = (Idle) event;
 					final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(idleEvent);
 					final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
 					final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
 					Assertions.assertTrue(hasLngBoiloff);
 					Assertions.assertFalse(hasBunkerUse);
-				}
-			} else if (event instanceof VesselEventVisit) {
-				final VesselEventVisit vev = (VesselEventVisit) event;
-				if (vev.getVesselEvent() == maintenanceEvent) {
-					foundMaintenance = true;
-				}
-			} else if (event instanceof Journey) {
-				final Journey journey = (Journey) event;
-				final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(journey);
-				final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
-				final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
-				Assertions.assertTrue(hasLngBoiloff);
-				Assertions.assertFalse(hasBunkerUse);
-				if (journey.getRouteOption() == RouteOption.PANAMA) {
-					usedPanama = true;
+				} else if (event instanceof VesselEventVisit) {
+					final VesselEventVisit vev = (VesselEventVisit) event;
+					if (vev.getVesselEvent() == maintenanceEvent) {
+						foundMaintenance = true;
+					}
 				}
 			}
+			// Last event end heel should be larger than max allowed
+			Assertions.assertTrue(events.get(events.size() - 1).getHeelAtEnd() > maxAllowedEndHeel);
+			Assertions.assertTrue(foundMaintenance);
 		}
-		Assertions.assertTrue(foundMaintenance);
-		Assertions.assertTrue(usedPanama);
-	}
 
-	/**
-	 * Test for
-	 * 
-	 * - sequence: start -> maintenance -> end
-	 * 
-	 * - travel statuses: pre and post maintenance journeys travel via Panama
-	 * 
-	 * - LNG status: runs out before maintenance event
-	 */
-	@Test
-	@Tag(TestCategories.MICRO_TEST)
-	public void testSingleMaintenanceTravelsViaPanamaRunsOutBeforeEvent() {
-		final Port startPort = portFinder.findPortById(InternalDataConstants.PORT_HIMEJI);
-		final Port endPort = startPort;
-		final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
+		/**
+		 * Test for
+		 * 
+		 * - sequence: start -> maintenance -> end
+		 * 
+		 * - travel statuses: idles throughout
+		 * 
+		 * - LNG status: have too little so we cannot meet end volume limits
+		 */
+		@Test
+		@Tag(TestCategories.MICRO_TEST)
+		public void testTooLittleLng() {
+			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
 
-		final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
-				.withStartWindow(LocalDateTime.of(2017, 2, 15, 0, 0), LocalDateTime.of(2017, 2, 15, 0, 0)) //
-				.withEndWindow(LocalDateTime.of(2017, 4, 5, 0, 0), LocalDateTime.of(2017, 4, 5, 0, 0)) //
-				.withCharterRate("70000") //
-				.withStartHeel(5_000, 5_000, 22.67, "0.01") //
-				.withEndHeel(0, 500, EVesselTankState.EITHER, "") //
-				.withStartPort(startPort) //
-				.withEndPort(endPort) //
-				.build();
-		vesselAvailability.setFleet(true);
+			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
+			final int minAllowedEndHeel = 500;
+			final int maxAllowedEndHeel = 1_000;
+			final VesselAvailability vesselAvailability = populateDefaultVesselAvailablityDetails(vessel) //
+					.withStartHeel(20_000, 45_000, 22.67, "0.01") //
+					.withEndHeel(minAllowedEndHeel, maxAllowedEndHeel, EVesselTankState.MUST_BE_COLD, "") //
+					.build();
+			vesselAvailability.setFleet(true);
 
-		final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
 
-		evaluateTest();
+			evaluateTest();
 
-		final Schedule schedule = fetchSchedule();
-		Assertions.assertNotNull(schedule);
+			final Schedule schedule = fetchSchedule();
+			Assertions.assertNotNull(schedule);
 
-		final List<Sequence> sequences = schedule.getSequences();
-		Assertions.assertEquals(1, sequences.size());
+			final List<Sequence> sequences = schedule.getSequences();
+			Assertions.assertEquals(1, sequences.size());
 
-		final Sequence sequence = sequences.get(0);
-		final List<Event> events = sequence.getEvents();
+			final Sequence sequence = sequences.get(0);
+			final List<Event> events = sequence.getEvents();
 
-		final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE_W_JOURNEY);
-		checkSequence(expectedClassSequence, events);
-		checkFuelSequence(events);
+			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE);
+			checkSequence(expectedClassSequence, events);
+			checkFuelSequence(events);
 
-		boolean foundMaintenance = false;
-		boolean usedPanama = false;
-		for (final Event event : events) {
-			if (event instanceof Idle) {
-				if (!event.getStart().equals(event.getEnd())) {
+			// All events should start and end with heel
+			boolean foundMaintenance = false;
+			for (final Event event : events) {
+				Assertions.assertTrue(event.getHeelAtStart() > 0);
+				Assertions.assertTrue(event.getHeelAtEnd() > 0);
+				if (event instanceof Idle) {
 					final Idle idleEvent = (Idle) event;
 					final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(idleEvent);
 					final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
 					final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
+					Assertions.assertTrue(hasLngBoiloff);
+					Assertions.assertFalse(hasBunkerUse);
+				} else if (event instanceof VesselEventVisit) {
+					final VesselEventVisit vev = (VesselEventVisit) event;
+					if (vev.getVesselEvent() == maintenanceEvent) {
+						foundMaintenance = true;
+					}
+				}
+			}
+			// Last event end heel should be larger than max allowed
+			Assertions.assertTrue(events.get(events.size() - 1).getHeelAtEnd() < minAllowedEndHeel);
+			Assertions.assertTrue(foundMaintenance);
+		}
+
+		/**
+		 * Test for
+		 * 
+		 * - sequence: start -> maintenance -> end
+		 * 
+		 * - travel statuses: pre and post maintenance journeys travel via Panama
+		 * 
+		 * - LNG status: have enough for entire sequence
+		 */
+		@Test
+		@Tag(TestCategories.MICRO_TEST)
+		public void testTravelsViaPanamaAllLng() {
+			final Port startPort = portFinder.findPortById(InternalDataConstants.PORT_HIMEJI);
+			final Port endPort = startPort;
+			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
+
+			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
+			final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+					.withStartWindow(LocalDateTime.of(2017, 2, 15, 0, 0), LocalDateTime.of(2017, 2, 15, 0, 0)) //
+					.withEndWindow(LocalDateTime.of(2017, 4, 5, 0, 0), LocalDateTime.of(2017, 4, 5, 0, 0)) //
+					.withCharterRate("70000") //
+					.withStartHeel(15_000, 150_000, 22.67, "0.01") //
+					.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
+					.withStartPort(startPort) //
+					.withEndPort(endPort) //
+					.build();
+			vesselAvailability.setFleet(true);
+
+			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+
+			evaluateTest();
+
+			final Schedule schedule = fetchSchedule();
+			Assertions.assertNotNull(schedule);
+
+			final List<Sequence> sequences = schedule.getSequences();
+			Assertions.assertEquals(1, sequences.size());
+
+			final Sequence sequence = sequences.get(0);
+			final List<Event> events = sequence.getEvents();
+
+			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE_W_JOURNEY);
+			checkSequence(expectedClassSequence, events);
+			checkFuelSequence(events);
+
+			// All events should start and end with heel
+			boolean foundMaintenance = false;
+			boolean usedPanama = false;
+			for (final Event event : events) {
+				Assertions.assertTrue(event.getHeelAtStart() > 0);
+				Assertions.assertTrue(event.getHeelAtEnd() > 0);
+				if (event instanceof Idle) {
+					if (!event.getStart().equals(event.getEnd())) {
+						final Idle idleEvent = (Idle) event;
+						final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(idleEvent);
+						final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
+						final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
+						Assertions.assertTrue(hasLngBoiloff);
+						Assertions.assertFalse(hasBunkerUse);
+					}
+				} else if (event instanceof VesselEventVisit) {
+					final VesselEventVisit vev = (VesselEventVisit) event;
+					if (vev.getVesselEvent() == maintenanceEvent) {
+						foundMaintenance = true;
+					}
+				} else if (event instanceof Journey) {
+					final Journey journey = (Journey) event;
+					final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(journey);
+					final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
+					final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
+					Assertions.assertTrue(hasLngBoiloff);
+					Assertions.assertFalse(hasBunkerUse);
+					if (journey.getRouteOption() == RouteOption.PANAMA) {
+						usedPanama = true;
+					}
+				}
+			}
+			Assertions.assertTrue(foundMaintenance);
+			Assertions.assertTrue(usedPanama);
+		}
+
+		/**
+		 * Test for
+		 * 
+		 * - sequence: start -> maintenance -> end
+		 * 
+		 * - travel statuses: pre and post maintenance journeys travel via Panama
+		 * 
+		 * - LNG status: runs out before maintenance event
+		 */
+		@Test
+		@Tag(TestCategories.MICRO_TEST)
+		public void testTravelsViaPanamaRunsOutBeforeEvent() {
+			final Port startPort = portFinder.findPortById(InternalDataConstants.PORT_HIMEJI);
+			final Port endPort = startPort;
+			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
+
+			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
+			final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+					.withStartWindow(LocalDateTime.of(2017, 2, 15, 0, 0), LocalDateTime.of(2017, 2, 15, 0, 0)) //
+					.withEndWindow(LocalDateTime.of(2017, 4, 5, 0, 0), LocalDateTime.of(2017, 4, 5, 0, 0)) //
+					.withCharterRate("70000") //
+					.withStartHeel(5_000, 5_000, 22.67, "0.01") //
+					.withEndHeel(0, 500, EVesselTankState.EITHER, "") //
+					.withStartPort(startPort) //
+					.withEndPort(endPort) //
+					.build();
+			vesselAvailability.setFleet(true);
+
+			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+
+			evaluateTest();
+
+			final Schedule schedule = fetchSchedule();
+			Assertions.assertNotNull(schedule);
+
+			final List<Sequence> sequences = schedule.getSequences();
+			Assertions.assertEquals(1, sequences.size());
+
+			final Sequence sequence = sequences.get(0);
+			final List<Event> events = sequence.getEvents();
+
+			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE_W_JOURNEY);
+			checkSequence(expectedClassSequence, events);
+			checkFuelSequence(events);
+
+			boolean foundMaintenance = false;
+			boolean usedPanama = false;
+			for (final Event event : events) {
+				if (event instanceof Idle) {
+					if (!event.getStart().equals(event.getEnd())) {
+						final Idle idleEvent = (Idle) event;
+						final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(idleEvent);
+						final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
+						final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
+						if (foundMaintenance) {
+							Assertions.assertEquals(0, event.getHeelAtStart());
+							Assertions.assertEquals(0, event.getHeelAtEnd());
+							Assertions.assertFalse(hasLngBoiloff);
+							Assertions.assertTrue(hasBunkerUse);
+						} else {
+							Assertions.assertTrue(event.getHeelAtStart() >= 0);
+							Assertions.assertEquals(0, event.getHeelAtEnd());
+							Assertions.assertTrue(hasLngBoiloff);
+							Assertions.assertFalse(hasBunkerUse);
+						}
+					}
+				} else if (event instanceof VesselEventVisit) {
+					final VesselEventVisit vev = (VesselEventVisit) event;
+					if (vev.getVesselEvent() == maintenanceEvent) {
+						foundMaintenance = true;
+					}
+				} else if (event instanceof Journey) {
+					final Journey journey = (Journey) event;
+					final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(journey);
+					final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
+					final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
+
 					if (foundMaintenance) {
 						Assertions.assertEquals(0, event.getHeelAtStart());
 						Assertions.assertEquals(0, event.getHeelAtEnd());
 						Assertions.assertFalse(hasLngBoiloff);
 						Assertions.assertTrue(hasBunkerUse);
 					} else {
-						Assertions.assertTrue(event.getHeelAtStart() >= 0);
-						Assertions.assertEquals(0, event.getHeelAtEnd());
+						Assertions.assertTrue(event.getHeelAtStart() > 0);
 						Assertions.assertTrue(hasLngBoiloff);
-						Assertions.assertFalse(hasBunkerUse);
+						Assertions.assertTrue(hasBunkerUse);
+					}
+					if (journey.getRouteOption() == RouteOption.PANAMA) {
+						usedPanama = true;
 					}
 				}
-			} else if (event instanceof VesselEventVisit) {
-				final VesselEventVisit vev = (VesselEventVisit) event;
-				if (vev.getVesselEvent() == maintenanceEvent) {
-					foundMaintenance = true;
-				}
-			} else if (event instanceof Journey) {
-				final Journey journey = (Journey) event;
-				final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(journey);
-				final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
-				final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
-
-				if (foundMaintenance) {
-					Assertions.assertEquals(0, event.getHeelAtStart());
-					Assertions.assertEquals(0, event.getHeelAtEnd());
-					Assertions.assertFalse(hasLngBoiloff);
-					Assertions.assertTrue(hasBunkerUse);
-				} else {
-					Assertions.assertTrue(event.getHeelAtStart() > 0);
-					Assertions.assertTrue(hasLngBoiloff);
-					Assertions.assertTrue(hasBunkerUse);
-				}
-				if (journey.getRouteOption() == RouteOption.PANAMA) {
-					usedPanama = true;
-				}
 			}
+			Assertions.assertTrue(foundMaintenance);
+			Assertions.assertTrue(usedPanama);
 		}
-		Assertions.assertTrue(foundMaintenance);
-		Assertions.assertTrue(usedPanama);
-	}
 
-	/**
-	 * Test for
-	 * 
-	 * - sequence: start -> maintenance -> end
-	 * 
-	 * - travel statuses: pre and post maintenance journeys travel via Panama
-	 * 
-	 * - LNG status: runs out before maintenance event
-	 */
-	@Test
-	@Tag(TestCategories.MICRO_TEST)
-	public void testSingleMaintenanceTravelsViaPanamaRunsOutAfterEvent() {
-		final Port startPort = portFinder.findPortById(InternalDataConstants.PORT_HIMEJI);
-		final Port endPort = startPort;
-		final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
+		/**
+		 * Test for
+		 * 
+		 * - sequence: start -> maintenance -> end
+		 * 
+		 * - travel statuses: pre and post maintenance journeys travel via Panama
+		 * 
+		 * - LNG status: runs out before maintenance event
+		 */
+		@Test
+		@Tag(TestCategories.MICRO_TEST)
+		public void testTravelsViaPanamaRunsOutAfterEvent() {
+			final Port startPort = portFinder.findPortById(InternalDataConstants.PORT_HIMEJI);
+			final Port endPort = startPort;
+			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
 
-		final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
-				.withStartWindow(LocalDateTime.of(2017, 2, 01, 0, 0), LocalDateTime.of(2017, 2, 01, 0, 0)) //
-				.withEndWindow(LocalDateTime.of(2017, 4, 5, 0, 0), LocalDateTime.of(2017, 4, 5, 0, 0)) //
-				.withCharterRate("70000") //
-				.withStartHeel(5_000, 12_000, 22.67, "0.01") //
-				.withEndHeel(0, 500, EVesselTankState.EITHER, "") //
-				.withStartPort(startPort) //
-				.withEndPort(endPort) //
-				.build();
-		vesselAvailability.setFleet(true);
+			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
+			final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+					.withStartWindow(LocalDateTime.of(2017, 2, 01, 0, 0), LocalDateTime.of(2017, 2, 01, 0, 0)) //
+					.withEndWindow(LocalDateTime.of(2017, 4, 5, 0, 0), LocalDateTime.of(2017, 4, 5, 0, 0)) //
+					.withCharterRate("70000") //
+					.withStartHeel(5_000, 12_000, 22.67, "0.01") //
+					.withEndHeel(0, 500, EVesselTankState.EITHER, "") //
+					.withStartPort(startPort) //
+					.withEndPort(endPort) //
+					.build();
+			vesselAvailability.setFleet(true);
 
-		final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
 
-		evaluateTest();
+			evaluateTest();
 
-		final Schedule schedule = fetchSchedule();
-		Assertions.assertNotNull(schedule);
+			final Schedule schedule = fetchSchedule();
+			Assertions.assertNotNull(schedule);
 
-		final List<Sequence> sequences = schedule.getSequences();
-		Assertions.assertEquals(1, sequences.size());
+			final List<Sequence> sequences = schedule.getSequences();
+			Assertions.assertEquals(1, sequences.size());
 
-		final Sequence sequence = sequences.get(0);
-		final List<Event> events = sequence.getEvents();
+			final Sequence sequence = sequences.get(0);
+			final List<Event> events = sequence.getEvents();
 
-		final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE_W_JOURNEY);
-		checkSequence(expectedClassSequence, events);
-		checkFuelSequence(events);
+			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE_W_JOURNEY);
+			checkSequence(expectedClassSequence, events);
+			checkFuelSequence(events);
 
-		boolean foundMaintenance = false;
-		boolean usedPanama = false;
-		for (final Event event : events) {
-			if (event instanceof Idle) {
-				if (!event.getStart().equals(event.getEnd())) {
-					final Idle idleEvent = (Idle) event;
-					final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(idleEvent);
+			boolean foundMaintenance = false;
+			boolean usedPanama = false;
+			for (final Event event : events) {
+				if (event instanceof Idle) {
+					if (!event.getStart().equals(event.getEnd())) {
+						final Idle idleEvent = (Idle) event;
+						final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(idleEvent);
+						final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
+						final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
+						if (foundMaintenance) {
+							Assertions.assertTrue(event.getHeelAtStart() >= 0);
+							Assertions.assertEquals(0, event.getHeelAtEnd());
+							Assertions.assertTrue(hasLngBoiloff);
+							Assertions.assertTrue(hasBunkerUse);
+						} else {
+							Assertions.assertTrue(event.getHeelAtStart() > 0);
+							Assertions.assertTrue(event.getHeelAtEnd() > 0);
+							Assertions.assertTrue(hasLngBoiloff);
+							Assertions.assertFalse(hasBunkerUse);
+						}
+					}
+				} else if (event instanceof VesselEventVisit) {
+					final VesselEventVisit vev = (VesselEventVisit) event;
+					if (vev.getVesselEvent() == maintenanceEvent) {
+						foundMaintenance = true;
+					}
+				} else if (event instanceof Journey) {
+					final Journey journey = (Journey) event;
+					final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(journey);
 					final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
 					final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
+
 					if (foundMaintenance) {
-						Assertions.assertTrue(event.getHeelAtStart() >= 0);
-						Assertions.assertEquals(0, event.getHeelAtEnd());
 						Assertions.assertTrue(hasLngBoiloff);
 						Assertions.assertTrue(hasBunkerUse);
 					} else {
@@ -924,216 +947,190 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 						Assertions.assertTrue(hasLngBoiloff);
 						Assertions.assertFalse(hasBunkerUse);
 					}
+					if (journey.getRouteOption() == RouteOption.PANAMA) {
+						usedPanama = true;
+					}
+				} else if (event instanceof EndEvent) {
+					Assertions.assertEquals(0, event.getHeelAtStart());
 				}
-			} else if (event instanceof VesselEventVisit) {
-				final VesselEventVisit vev = (VesselEventVisit) event;
-				if (vev.getVesselEvent() == maintenanceEvent) {
-					foundMaintenance = true;
-				}
-			} else if (event instanceof Journey) {
-				final Journey journey = (Journey) event;
-				final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(journey);
-				final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
-				final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
-
-				if (foundMaintenance) {
-					Assertions.assertTrue(hasLngBoiloff);
-					Assertions.assertTrue(hasBunkerUse);
-				} else {
-					Assertions.assertTrue(event.getHeelAtStart() > 0);
-					Assertions.assertTrue(event.getHeelAtEnd() > 0);
-					Assertions.assertTrue(hasLngBoiloff);
-					Assertions.assertFalse(hasBunkerUse);
-				}
-				if (journey.getRouteOption() == RouteOption.PANAMA) {
-					usedPanama = true;
-				}
-			} else if (event instanceof EndEvent) {
-				Assertions.assertEquals(0, event.getHeelAtStart());
 			}
+			Assertions.assertTrue(foundMaintenance);
+			Assertions.assertTrue(usedPanama);
 		}
-		Assertions.assertTrue(foundMaintenance);
-		Assertions.assertTrue(usedPanama);
-	}
 
-	/**
-	 * Test for
-	 * 
-	 * - sequence: start -> maintenance -> end
-	 * 
-	 * - travel statuses: pre and post maintenance journeys travel via Suez
-	 * 
-	 * - LNG status: have enough for entire sequence
-	 */
-	@Test
-	@Tag(TestCategories.MICRO_TEST)
-	public void testSingleMaintenanceTravelsViaSuezAllLng() {
-		final Port startPort = portFinder.findPortById(InternalDataConstants.PORT_BARCELONA);
-		final Port endPort = startPort;
-		final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_DAHEJ);
+		/**
+		 * Test for
+		 * 
+		 * - sequence: start -> maintenance -> end
+		 * 
+		 * - travel statuses: pre and post maintenance journeys travel via Suez
+		 * 
+		 * - LNG status: have enough for entire sequence
+		 */
+		@Test
+		@Tag(TestCategories.MICRO_TEST)
+		public void testTravelsViaSuezAllLng() {
+			final Port startPort = portFinder.findPortById(InternalDataConstants.PORT_BARCELONA);
+			final Port endPort = startPort;
+			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_DAHEJ);
 
-		final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
-				.withStartWindow(LocalDateTime.of(2017, 2, 15, 0, 0), LocalDateTime.of(2017, 2, 15, 0, 0)) //
-				.withEndWindow(LocalDateTime.of(2017, 4, 3, 0, 0), LocalDateTime.of(2017, 4, 3, 0, 0)) //
-				.withCharterRate("70000") //
-				.withStartHeel(15_000, 150_000, 22.67, "0.01") //
-				.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
-				.withStartPort(startPort) //
-				.withEndPort(endPort) //
-				.build();
-		vesselAvailability.setFleet(true);
+			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
+			final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+					.withStartWindow(LocalDateTime.of(2017, 2, 15, 0, 0), LocalDateTime.of(2017, 2, 15, 0, 0)) //
+					.withEndWindow(LocalDateTime.of(2017, 4, 3, 0, 0), LocalDateTime.of(2017, 4, 3, 0, 0)) //
+					.withCharterRate("70000") //
+					.withStartHeel(15_000, 150_000, 22.67, "0.01") //
+					.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
+					.withStartPort(startPort) //
+					.withEndPort(endPort) //
+					.build();
+			vesselAvailability.setFleet(true);
 
-		final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
 
-		evaluateTest();
+			evaluateTest();
 
-		final Schedule schedule = fetchSchedule();
-		Assertions.assertNotNull(schedule);
+			final Schedule schedule = fetchSchedule();
+			Assertions.assertNotNull(schedule);
 
-		final List<Sequence> sequences = schedule.getSequences();
-		Assertions.assertEquals(1, sequences.size());
+			final List<Sequence> sequences = schedule.getSequences();
+			Assertions.assertEquals(1, sequences.size());
 
-		final Sequence sequence = sequences.get(0);
-		final List<Event> events = sequence.getEvents();
+			final Sequence sequence = sequences.get(0);
+			final List<Event> events = sequence.getEvents();
 
-		final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE_W_JOURNEY);
-		checkSequence(expectedClassSequence, events);
-		checkFuelSequence(events);
+			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE_W_JOURNEY);
+			checkSequence(expectedClassSequence, events);
+			checkFuelSequence(events);
 
-		// All events should start and end with heel
-		boolean foundMaintenance = false;
-		boolean usedSuez = false;
-		for (final Event event : events) {
-			Assertions.assertTrue(event.getHeelAtStart() > 0);
-			Assertions.assertTrue(event.getHeelAtEnd() > 0);
-			if (event instanceof Idle) {
-				if (!event.getStart().equals(event.getEnd())) {
-					final Idle idleEvent = (Idle) event;
-					final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(idleEvent);
+			// All events should start and end with heel
+			boolean foundMaintenance = false;
+			boolean usedSuez = false;
+			for (final Event event : events) {
+				Assertions.assertTrue(event.getHeelAtStart() > 0);
+				Assertions.assertTrue(event.getHeelAtEnd() > 0);
+				if (event instanceof Idle) {
+					if (!event.getStart().equals(event.getEnd())) {
+						final Idle idleEvent = (Idle) event;
+						final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(idleEvent);
+						final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
+						final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
+						Assertions.assertTrue(hasLngBoiloff);
+						Assertions.assertFalse(hasBunkerUse);
+					}
+				} else if (event instanceof VesselEventVisit) {
+					final VesselEventVisit vev = (VesselEventVisit) event;
+					if (vev.getVesselEvent() == maintenanceEvent) {
+						foundMaintenance = true;
+					}
+				} else if (event instanceof Journey) {
+					final Journey journey = (Journey) event;
+					final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(journey);
 					final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
 					final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
 					Assertions.assertTrue(hasLngBoiloff);
 					Assertions.assertFalse(hasBunkerUse);
-				}
-			} else if (event instanceof VesselEventVisit) {
-				final VesselEventVisit vev = (VesselEventVisit) event;
-				if (vev.getVesselEvent() == maintenanceEvent) {
-					foundMaintenance = true;
-				}
-			} else if (event instanceof Journey) {
-				final Journey journey = (Journey) event;
-				final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(journey);
-				final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
-				final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
-				Assertions.assertTrue(hasLngBoiloff);
-				Assertions.assertFalse(hasBunkerUse);
-				if (journey.getRouteOption() == RouteOption.SUEZ) {
-					usedSuez = true;
+					if (journey.getRouteOption() == RouteOption.SUEZ) {
+						usedSuez = true;
+					}
 				}
 			}
+			Assertions.assertTrue(foundMaintenance);
+			Assertions.assertTrue(usedSuez);
 		}
-		Assertions.assertTrue(foundMaintenance);
-		Assertions.assertTrue(usedSuez);
 	}
-
-	/**********************************************
-	 * CARGO FOLLOWED BY MAINTENANCE TESTS
-	 *********************************************/
-
-	/**
-	 * Test for
-	 * 
-	 * - sequence: start -> cargo -> maintenance -> end
-	 * 
-	 * - travel statuses: pre and post maintenance journeys travel direct
-	 * 
-	 * - LNG status: have enough for entire sequence
-	 */
-	@Test
-	@Tag(TestCategories.MICRO_TEST)
-	public void testCargoFollowedBySingleMaintenanceAllLng() {
-		final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_ALTAMIRA);
-
-		final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
-		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
-				.withStartWindow(LocalDateTime.of(2017, 1, 1, 0, 0), LocalDateTime.of(2017, 1, 1, 0, 0)) //
-				.withEndWindow(LocalDateTime.of(2017, 8, 1, 0, 0), LocalDateTime.of(2017, 8, 1, 0, 0)) //
-				.withCharterRate("70000") //
-				.withStartHeel(5_000, 150_000, 22.67, "1") //
-				.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
-				.build();
-		vesselAvailability.setFleet(true);
-
-		final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
-
-		final Port loadPort = portFinder.findPortById(InternalDataConstants.PORT_HAMMERFEST);
-		final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_DRAGON);
-		final Cargo cargo = cargoModelBuilder.makeCargo() //
-				.makeFOBPurchase("loadSlot", LocalDate.of(2017, 2, 1), loadPort, null, entity, "1") //
-				.withVolumeLimits(120_000, 150_000, VolumeUnits.M3) //
-				.withWindowSize(24, TimePeriod.HOURS) //
-				.with(s -> ((LoadSlot) s).setCargoCV(22.8)) //
-				.build() //
-				.makeDESSale("dischargeSlot", LocalDate.of(2017, 2, 1), dischargePort, null, entity, "9") //
-				.withVolumeLimits(100_000, 150_000, VolumeUnits.M3) //
-				.withWindowSize(1, TimePeriod.MONTHS) //
-				.build() //
-				.withVesselAssignment(vesselAvailability, 1) //
-				.build();
-
-		evaluateTest();
-
-		final Schedule schedule = fetchSchedule();
-		Assertions.assertNotNull(schedule);
-
-		final List<Sequence> sequences = schedule.getSequences();
-		Assertions.assertEquals(1, sequences.size());
-
-		final Sequence sequence = sequences.get(0);
-		final List<Event> events = sequence.getEvents();
-
-		final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence("s-i-sv-j-i-sv-j-i-vev-j-i-e");
-		checkSequence(expectedClassSequence, events);
-		checkFuelSequence(events);
-
-		// All events should start and end with heel
-		boolean foundMaintenance = false;
-		for (final Event event : events) {
-			Assertions.assertTrue(event.getHeelAtStart() > 0);
-			Assertions.assertTrue(event.getHeelAtEnd() > 0);
-			if (event instanceof Idle) {
-				if (!event.getStart().equals(event.getEnd())) {
-					final Idle idleEvent = (Idle) event;
-					final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(idleEvent);
-					final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
-					final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
-					Assertions.assertTrue(hasLngBoiloff);
-					Assertions.assertFalse(hasBunkerUse);
-				}
-			} else if (event instanceof VesselEventVisit) {
-				final VesselEventVisit vev = (VesselEventVisit) event;
-				if (vev.getVesselEvent() == maintenanceEvent) {
-					foundMaintenance = true;
-				}
-			} else if (event instanceof Journey) {
-				final Journey journey = (Journey) event;
-				final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(journey);
-				final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
-				final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
-				Assertions.assertTrue(hasLngBoiloff);
-				Assertions.assertFalse(hasBunkerUse);
-			}
-		}
-		Assertions.assertTrue(foundMaintenance);
-	}
-
-	/**********************************************
-	 * With charter length tests
-	 *********************************************/
 
 	@Nested
-	@DisplayName("With charter length tests")
+	class CargoFollowedByMaintenanceTests {
+		/**
+		 * Test for
+		 * 
+		 * - sequence: start -> cargo -> maintenance -> end
+		 * 
+		 * - travel statuses: pre and post maintenance journeys travel direct
+		 * 
+		 * - LNG status: have enough for entire sequence
+		 */
+		@Test
+		@Tag(TestCategories.MICRO_TEST)
+		public void testAllLng() {
+			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_ALTAMIRA);
+
+			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
+			final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+					.withStartWindow(LocalDateTime.of(2017, 1, 1, 0, 0), LocalDateTime.of(2017, 1, 1, 0, 0)) //
+					.withEndWindow(LocalDateTime.of(2017, 8, 1, 0, 0), LocalDateTime.of(2017, 8, 1, 0, 0)) //
+					.withCharterRate("70000") //
+					.withStartHeel(5_000, 150_000, 22.67, "1") //
+					.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
+					.build();
+			vesselAvailability.setFleet(true);
+
+			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
+
+			final Port loadPort = portFinder.findPortById(InternalDataConstants.PORT_HAMMERFEST);
+			final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_DRAGON);
+			final Cargo cargo = cargoModelBuilder.makeCargo() //
+					.makeFOBPurchase("loadSlot", LocalDate.of(2017, 2, 1), loadPort, null, entity, "1") //
+					.withVolumeLimits(120_000, 150_000, VolumeUnits.M3) //
+					.withWindowSize(24, TimePeriod.HOURS) //
+					.with(s -> ((LoadSlot) s).setCargoCV(22.8)) //
+					.build() //
+					.makeDESSale("dischargeSlot", LocalDate.of(2017, 2, 1), dischargePort, null, entity, "9") //
+					.withVolumeLimits(100_000, 150_000, VolumeUnits.M3) //
+					.withWindowSize(1, TimePeriod.MONTHS) //
+					.build() //
+					.withVesselAssignment(vesselAvailability, 1) //
+					.build();
+
+			evaluateTest();
+
+			final Schedule schedule = fetchSchedule();
+			Assertions.assertNotNull(schedule);
+
+			final List<Sequence> sequences = schedule.getSequences();
+			Assertions.assertEquals(1, sequences.size());
+
+			final Sequence sequence = sequences.get(0);
+			final List<Event> events = sequence.getEvents();
+
+			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence("s-i-sv-j-i-sv-j-i-vev-j-i-e");
+			checkSequence(expectedClassSequence, events);
+			checkFuelSequence(events);
+
+			// All events should start and end with heel
+			boolean foundMaintenance = false;
+			for (final Event event : events) {
+				Assertions.assertTrue(event.getHeelAtStart() > 0);
+				Assertions.assertTrue(event.getHeelAtEnd() > 0);
+				if (event instanceof Idle) {
+					if (!event.getStart().equals(event.getEnd())) {
+						final Idle idleEvent = (Idle) event;
+						final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(idleEvent);
+						final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
+						final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
+						Assertions.assertTrue(hasLngBoiloff);
+						Assertions.assertFalse(hasBunkerUse);
+					}
+				} else if (event instanceof VesselEventVisit) {
+					final VesselEventVisit vev = (VesselEventVisit) event;
+					if (vev.getVesselEvent() == maintenanceEvent) {
+						foundMaintenance = true;
+					}
+				} else if (event instanceof Journey) {
+					final Journey journey = (Journey) event;
+					final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(journey);
+					final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
+					final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
+					Assertions.assertTrue(hasLngBoiloff);
+					Assertions.assertFalse(hasBunkerUse);
+				}
+			}
+			Assertions.assertTrue(foundMaintenance);
+		}
+	}
+
+	@Nested
 	class WithCharterLengthTests {
 
 		/**
@@ -1144,9 +1141,66 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 		 * - travel statuses: pre and post maintenance journeys travel direct
 		 * 
 		 * - LNG status: have enough for entire sequence
+		 * 
+		 * - Notes: All dates including start and end are in the same month-year
 		 */
 		@Test
 		void allDatesInSameMonth() {
+			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
+
+			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
+			final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+					.withStartWindow(LocalDateTime.of(2017, 3, 2, 0, 0)) //
+					.withEndWindow(LocalDateTime.of(2017, 3, 29, 0, 0)) //
+					.withStartHeel(0, 150_000, 22.67, "0.01") //
+					.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
+					.build();
+			vesselAvailability.setFleet(true);
+			final LocalDateTime maintenanceDateTime = LocalDateTime.of(2017, 3, 4, 3, 0);
+			final MaintenanceEvent maintenanceEvent = cargoModelBuilder.makeMaintenanceEvent("Maintenance", maintenanceDateTime, maintenanceDateTime, maintenancePort) //
+					.withDurationInDays(5) //
+					.withVesselAssignment(vesselAvailability, 0) //
+					.build();
+
+			final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
+			userSettings.setWithCharterLength(false);
+			
+			evaluateTestWith(userSettings, null);
+			
+			evaluateTest();
+
+			final Schedule schedule = fetchSchedule();
+			Assertions.assertNotNull(schedule);
+
+			final List<Sequence> sequences = schedule.getSequences();
+			Assertions.assertEquals(1, sequences.size());
+
+			final Sequence sequence = sequences.get(0);
+			final List<Event> events = sequence.getEvents();
+
+			final List<Class<? extends Event>> expectedClassSequence = buildExpectedClassSequence(SEQ_ONLY_MAINTENANCE);
+			checkSequence(expectedClassSequence, events);
+			checkFuelSequence(events);
+
+			// Sequence should have (strictly positive) heel during all events
+			boolean foundMaintenance = false;
+			for (final Event event : events) {
+				Assertions.assertTrue(event.getHeelAtStart() > 0);
+				Assertions.assertTrue(event.getHeelAtEnd() > 0);
+				if (event instanceof Idle) {
+					final Idle idleEvent = (Idle) event;
+					final boolean hasLngBoiloff = idleEvent.getFuels().stream().map(FuelQuantity::getFuel).anyMatch(fuel -> fuel == Fuel.NBO || fuel == Fuel.FBO);
+					Assertions.assertTrue(hasLngBoiloff);
+				} else if (event instanceof VesselEventVisit) {
+					final VesselEventVisit vev = (VesselEventVisit) event;
+					if (vev.getVesselEvent() == maintenanceEvent) {
+						foundMaintenance = true;
+					}
+				}
+			}
+			Assertions.assertTrue(foundMaintenance);
+
+			Assertions.fail("Incomplete test - delete when complete");
 		}
 	}
 }
