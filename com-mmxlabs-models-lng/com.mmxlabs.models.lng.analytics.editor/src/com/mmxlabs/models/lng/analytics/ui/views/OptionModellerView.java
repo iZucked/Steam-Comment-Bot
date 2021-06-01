@@ -100,6 +100,7 @@ import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
@@ -1174,4 +1175,36 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		});
 		return matching;
 	}
+
+	@Override
+	public void openStatus(final IStatus status) {
+		if (status.isMultiStatus()) {
+			// Try first element
+			openStatus(status.getChildren()[0]);
+		}
+
+		if (status instanceof DetailConstraintStatusDecorator) {
+
+			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
+			final OptionAnalysisModel model = findSandboxInObjectTree(dcsd.getTarget());
+			if (model != null) {
+				if (currentModel != model && currentModel.eContainer() instanceof AnalyticsModel && ((AnalyticsModel) currentModel.eContainer()).getOptionModels().contains(model)) {
+					displayScenarioInstance(this.scenarioInstance, this.rootObject, model);
+				}
+			}
+		}
+	}
+
+	private @Nullable OptionAnalysisModel findSandboxInObjectTree(final @Nullable EObject node) {
+
+		if (node instanceof OptionAnalysisModel) {
+			return (OptionAnalysisModel) node;
+		}
+		if (node == null) {
+			return null;
+		}
+
+		return findSandboxInObjectTree(node.eContainer());
+	}
+
 }

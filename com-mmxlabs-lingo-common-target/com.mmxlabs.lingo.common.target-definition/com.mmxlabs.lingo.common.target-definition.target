@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="73">
+<target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="74">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.equinox.compendium.sdk.feature.group" version="0.0.0"/>
@@ -8,7 +8,6 @@
 <unit id="org.eclipse.equinox.core.sdk.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.equinox.sdk.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.jdt.annotation" version="2.2.400.v20191120-1313"/>
-<unit id="org.eclipse.jdt.annotation.source" version="2.2.400.v20191120-1313"/>
 <unit id="org.eclipse.platform.sdk" version="0.0.0"/>
 <unit id="org.eclipse.sdk.ide" version="0.0.0"/>
 <unit id="org.eclipse.swt.tools.feature.feature.group" version="0.0.0"/>
@@ -43,50 +42,31 @@
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="ch.qos.logback.classic" version="0.0.0"/>
-<unit id="ch.qos.logback.classic.source" version="0.0.0"/>
 <unit id="ch.qos.logback.core" version="0.0.0"/>
-<unit id="ch.qos.logback.core.source" version="0.0.0"/>
 <unit id="ch.qos.logback.slf4j" version="0.0.0"/>
-<unit id="ch.qos.logback.slf4j.source" version="0.0.0"/>
 
 <unit id="javax.activation" version="0.0.0"/>
-<unit id="javax.activation.source" version="0.0.0"/>
 <unit id="javax.jms" version="0.0.0"/>
-<unit id="javax.jms.source" version="0.0.0"/>
 <unit id="javax.wsdl" version="0.0.0"/>
-<unit id="javax.wsdl.source" version="0.0.0"/>
-<unit id="javax.xml" version="0.0.0"/>
 <unit id="javax.xml" version="0.0.0"/>
 <unit id="javax.xml.bind" version="0.0.0"/>
 <unit id="javax.xml.soap" version="0.0.0"/>
 <unit id="javax.xml.stream" version="0.0.0"/>
 <unit id="javax.xml.ws" version="0.0.0"/>
-<unit id="javax.xml.ws" version="0.0.0"/>
 <unit id="org.aopalliance" version="0.0.0"/>
 <unit id="org.apache.commons.cli" version="1.2.0.v201404270220"/>
-<unit id="org.apache.commons.cli.source" version="1.2.0.v201404270220"/>
 <unit id="org.apache.commons.lang" version="2.6.0.v201404270220"/>
-<unit id="org.apache.commons.lang.source" version="2.6.0.v201404270220"/>
 <unit id="org.apache.commons.logging" version="1.1.1.v201101211721"/>
-<unit id="org.apache.commons.logging.source" version="1.1.1.v201101211721"/>
 <unit id="org.apache.commons.math" version="0.0.0"/>
-<unit id="org.apache.commons.math.source" version="0.0.0"/>
 <unit id="org.apache.commons.compress" version="1.18.0.v20181121-2221"/>
 <unit id="org.apache.log4j" version="0.0.0"/>
-<unit id="org.apache.log4j.source" version="0.0.0"/>
 <unit id="org.dom4j" version="1.6.1.v20190321-1528"/>
-<unit id="org.dom4j.source" version="1.6.1.v20190321-1528"/>
 <unit id="org.hamcrest" version="1.1.0.v20090501071000"/>
 <unit id="org.hamcrest.core" version="1.3.0.v20180420-1519"/>
-<unit id="org.hamcrest.core.source" version="1.3.0.v20180420-1519"/>
 <unit id="org.hamcrest.generator" version="1.3.0.v201305210900"/>
-<unit id="org.hamcrest.generator.source" version="1.3.0.v201305210900"/>
 <unit id="org.hamcrest.integration" version="1.3.0.v201305210900"/>
-<unit id="org.hamcrest.integration.source" version="1.3.0.v201305210900"/>
 <unit id="org.hamcrest.library" version="1.3.0.v20180524-2246"/>
-<unit id="org.hamcrest.library.source" version="1.3.0.v20180524-2246"/>
 <unit id="org.hamcrest.text" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.text.source" version="1.1.0.v20090501071000"/>
 <unit id="org.slf4j.api" version="1.7.10.v20170428-1633"/>
 <unit id="org.slf4j.ext" version="1.7.10.v20180919-1350"/>
 	<unit id="org.junit.jupiter.api" version="0.0.0"/>
@@ -112,11 +92,6 @@
 <repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/nebula/widgets/p2/repository/com.mmxlabs.nebula.widgets.p2/1.1.1/com.mmxlabs.nebula.widgets.p2-1.1.1-p2-repo.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.swtchart" version="0.10.0.v20160212"/>
-<unit id="org.swtchart.ext" version="0.10.0.v20160212"/>
-<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-external/1.0.32/mmxlabs-external-1.0.32-p2-repo.zip-unzip/"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.models.datetime.feature.feature.group" version="0.0.0"/>
 <repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/datetime/com.mmxlabs.models.datetime.p2/2.1.6.RELEASE/com.mmxlabs.models.datetime.p2-2.1.6.RELEASE.zip-unzip"/>
 </location>
@@ -124,10 +99,14 @@
 <unit id="com.google.ortools.feature.feature.group" version="0.0.0"/>
 <repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/google/ortools/com.google.ortools.p2/7.5.7466.jdk11v2/com.google.ortools.p2-7.5.7466.jdk11v2.zip-unzip"/>
 </location>
+	<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+		<repository location="https://download.eclipse.org/swtchart/releases/0.12.0/repository/"/>
+		<unit id="org.eclipse.swtchart.feature.feature.group" version="0.0.0"/>
+	</location>
 	<location includeSource="true" missingManifest="generate" type="Maven">
 		<groupId>com.google.inject</groupId>
 		<artifactId>guice</artifactId>
-		<version>4.2.2</version>
+		<version>4.2.3</version>
 		<type>jar</type>
 	</location>
 	<location includeSource="true" missingManifest="generate" type="Maven">
@@ -136,12 +115,7 @@
 		<version>27.1-jre</version>
 		<type>jar</type>
 	</location>
-	<location includeSource="true" missingManifest="generate" type="Maven">
-		<groupId>com.google.guava</groupId>
-		<artifactId>guava</artifactId>
-		<version>25.1-jre</version>
-		<type>jar</type>
-	</location>
+
 	<location includeSource="true" missingManifest="generate" type="Maven">
 		<groupId>com.google.guava</groupId>
 		<artifactId>failureaccess</artifactId>

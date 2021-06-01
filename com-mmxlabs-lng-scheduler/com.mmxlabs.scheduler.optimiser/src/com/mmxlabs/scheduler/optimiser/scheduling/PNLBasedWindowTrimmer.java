@@ -375,7 +375,17 @@ public class PNLBasedWindowTrimmer {
 
 			if (cacheMode == CacheMode.Verify) {
 				final List<Pair<ScheduledPlanInput, ScheduledVoyagePlanResult>> expected = doComputeVoyagePlanResults(key);
-				assert Objects.equals(result, expected);
+				if (expected.size() != result.size()) {
+					throw new CacheVerificationFailedException();
+				}
+				for (int i =0; i<expected.size();++i) {
+					if (!expected.get(i).getFirst().equals(result.get(i).getFirst())) {
+						throw new CacheVerificationFailedException();
+					}
+					if (!expected.get(i).getSecond().isEqual(result.get(i).getSecond())) {
+						throw new CacheVerificationFailedException();
+					}
+				}
 			}
 			return result;
 		}
