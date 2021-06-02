@@ -18,9 +18,10 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class MaintenanceVesselEventPortSlot extends VesselEventPortSlot implements IMaintenanceVesselEventPortSlot {
 
+	@NonNull
 	private final IVesselEventPortSlot formerPortSlot;
 
-	public MaintenanceVesselEventPortSlot(@NonNull final String id, @Nullable final ITimeWindow timeWindow, @NonNull final IPort port, final int durationHours, @NonNull final IHeelOptionConsumer heelConsumer, @NonNull final IHeelOptionSupplier heelSupplier, final IVesselEventPortSlot formerPortSlot) {
+	public MaintenanceVesselEventPortSlot(@NonNull final String id, @Nullable final ITimeWindow timeWindow, @NonNull final IPort port, final int durationHours, @NonNull final IHeelOptionConsumer heelConsumer, @NonNull final IHeelOptionSupplier heelSupplier, @NonNull final IVesselEventPortSlot formerPortSlot) {
 		super(id, PortType.Maintenance, port, timeWindow, new MaintenanceVesselEvent(timeWindow, port, durationHours, heelConsumer, heelSupplier), heelConsumer);
 		this.formerPortSlot = formerPortSlot;
 	}
@@ -31,7 +32,7 @@ public class MaintenanceVesselEventPortSlot extends VesselEventPortSlot implemen
 	}
 
 	@Override
-	public IVesselEventPortSlot getFormerPortSlot() {
+	public @NonNull IVesselEventPortSlot getFormerPortSlot() {
 		return this.formerPortSlot;
 	}
 

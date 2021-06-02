@@ -1,11 +1,13 @@
 package com.mmxlabs.scheduler.optimiser.components;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 public interface IMaintenanceVesselEvent extends IVesselEvent {
-	void setHeelConsumer(final IHeelOptionConsumer heelConsumer);
+	void setHeelConsumer(@NonNull final IHeelOptionConsumer heelConsumer);
 
-	void setHeelSupplier(final IHeelOptionSupplier heelSupplier);
+	void setHeelSupplier(@NonNull final IHeelOptionSupplier heelSupplier);
 
-	IHeelOptionConsumer getHeelOptionsConsumer();
+	@NonNull IHeelOptionConsumer getHeelOptionsConsumer();
 
-	IHeelOptionSupplier getHeelOptionSupplier();
+	@NonNull IHeelOptionSupplier getHeelOptionSupplier();
 }
