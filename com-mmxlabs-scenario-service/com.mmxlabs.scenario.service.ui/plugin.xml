@@ -667,9 +667,14 @@
             location="BOTTOM_RIGHT"
             state="true">
          <enablement>
+            <or>
                <objectClass
-                    name="com.mmxlabs.scenario.service.model.Container">
+                     name="com.mmxlabs.scenario.service.model.ScenarioFragment">
                </objectClass>
+               <objectClass
+                     name="com.mmxlabs.scenario.service.model.Container">
+               </objectClass>
+            </or>
          </enablement>
       </decorator>
    </extension>

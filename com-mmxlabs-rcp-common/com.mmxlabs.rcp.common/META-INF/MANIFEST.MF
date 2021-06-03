@@ -48,6 +48,7 @@ Export-Package: com.mmxlabs.rcp.common,
  com.mmxlabs.rcp.common.locking,
  com.mmxlabs.rcp.common.loginject,
  com.mmxlabs.rcp.common.menus,
+ com.mmxlabs.rcp.common.validation,
  com.mmxlabs.rcp.common.versions,
  com.mmxlabs.rcp.common.viewfactory,
  com.mmxlabs.rcp.common.wizards
