@@ -77,20 +77,7 @@ public final class NonShippedVoyagePlanCacheKey {
 			;
 
 			if (keepDetails && partA) {
-				for (final IPortSlot slot : portTimesRecord.getSlots()) {
-					if (portTimesRecord.getSlotDuration(slot) != other.portTimesRecord.getSlotDuration(slot)) {
-						return false;
-					}
-					if (portTimesRecord.getSlotTime(slot) != other.portTimesRecord.getSlotTime(slot)) {
-						return false;
-					}
-				}
-				if (returnSlot != null && otherReturnSlot != null) {
-					if (portTimesRecord.getSlotTime(returnSlot) != other.portTimesRecord.getSlotTime(otherReturnSlot)) {
-						return false;
-					}
-				}
-
+				return (portTimesRecord.equals(other.portTimesRecord));
 			}
 			return partA;
 		}

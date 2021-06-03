@@ -47,10 +47,12 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IdleNBOVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.ReliqVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.TravelVoyagePlanChoice;
+import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider.CharterMarketOptions;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -94,6 +96,9 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 	@Inject
 	private IRouteCostProvider routeCostProvider;
+
+	@Inject
+	private IPanamaBookingsProvider panamaBookingsProvider;
 
 	private static final double canalChoiceThreshold = 0.1; // percentage improvement required to choose a canal route
 
@@ -294,12 +299,12 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	}
 
 	@Nullable
-	private Triple<Integer, ERouteOption, Integer> calculateShortestTimeToPort(final IPort slotPort, final IPort charterPort, final IVessel vessel) {
+	private Triple<Integer, ERouteOption, Integer> calculateShortestTimeToPort(final IPort fromPort, final IPort toPort, final IVessel vessel) {
 		int distance = Integer.MAX_VALUE;
 		int shortestTime = Integer.MAX_VALUE;
 		ERouteOption route = ERouteOption.DIRECT;
 
-		final List<DistanceMatrixEntry> distances = distanceProvider.getDistanceValues(slotPort, charterPort, vessel);
+		final List<DistanceMatrixEntry> distances = distanceProvider.getDistanceValues(fromPort, toPort, vessel);
 		int directTime = Integer.MAX_VALUE;
 		DistanceMatrixEntry directEntry = null;
 		for (final DistanceMatrixEntry d : distances) {
@@ -308,7 +313,21 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			if (thisDistance == Integer.MAX_VALUE) {
 				continue;
 			}
-			final int travelTime = Calculator.getTimeFromSpeedDistance(vessel.getMaxSpeed(), d.getDistance()) + routeCostProvider.getRouteTransitTime(routeOption, vessel);
+			int travelTime = Calculator.getTimeFromSpeedDistance(vessel.getMaxSpeed(), d.getDistance()) + routeCostProvider.getRouteTransitTime(routeOption, vessel);
+			if (travelTime == Integer.MAX_VALUE) {
+				continue;
+			}
+
+			if (routeOption == ERouteOption.PANAMA) {
+				// If Panama, make sure we take into account the idle days
+				ECanalEntry canal = distanceProvider.getRouteOptionCanalEntrance(fromPort, ERouteOption.PANAMA);
+				if (canal == ECanalEntry.NorthSide) {
+					travelTime += panamaBookingsProvider.getSouthboundMaxIdleDays(vessel) * 24;
+				} else {
+					travelTime += panamaBookingsProvider.getNorthboundMaxIdleDays(vessel) * 24;
+				}
+			}
+
 			if (routeOption == ERouteOption.DIRECT) {
 				directTime = travelTime;
 				directEntry = d;
@@ -469,6 +488,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			newPortsTimeRecord.setSlotTime(existing.getSlots().get(i), existing.getSlotTime(existing.getSlots().get(i)));
 			newPortsTimeRecord.setSlotDuration(existing.getSlots().get(i), existing.getSlotDuration(existing.getSlots().get(i)));
 			newPortsTimeRecord.setSlotExtraIdleTime(existing.getSlots().get(i), existing.getSlotExtraIdleTime(existing.getSlots().get(i)));
+			newPortsTimeRecord.setSlotAdditionalPanamaIdleHours(existing.getSlots().get(i), existing.getSlotAdditionaPanamaIdleHours(existing.getSlots().get(i)));
+			newPortsTimeRecord.setSlotMaxAvailablePanamaIdleHours(existing.getSlots().get(i), existing.getSlotMaxAdditionaPanamaIdleHours(existing.getSlots().get(i)));
 		}
 		// new
 		for (final Triple<IPortSlot, Integer, Integer> slotToAdd : slotsToAdd) {
@@ -497,11 +518,15 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		for (int i = 0; i < existing.getSlots().size() - 1; i++) {
 			firstPortsTimeRecord.setSlotTime(existing.getSlots().get(i), existing.getSlotTime(existing.getSlots().get(i)));
 			firstPortsTimeRecord.setSlotDuration(existing.getSlots().get(i), existing.getSlotDuration(existing.getSlots().get(i)));
+			firstPortsTimeRecord.setSlotAdditionalPanamaIdleHours(existing.getSlots().get(i), existing.getSlotAdditionaPanamaIdleHours(existing.getSlots().get(i)));
+			firstPortsTimeRecord.setSlotMaxAvailablePanamaIdleHours(existing.getSlots().get(i), existing.getSlotMaxAdditionaPanamaIdleHours(existing.getSlots().get(i)));
 		}
 		firstPortsTimeRecord.setReturnSlotTime(existing.getSlots().get(existing.getSlots().size() - 1), existing.getSlotTime(existing.getSlots().get(existing.getSlots().size() - 1)));
 		// second (... CO -- NL)
 		secondPortsTimeRecord.setSlotTime(existing.getSlots().get(existing.getSlots().size() - 1), existing.getSlotTime(existing.getSlots().get(existing.getSlots().size() - 1)));
 		secondPortsTimeRecord.setSlotDuration(existing.getSlots().get(existing.getSlots().size() - 1), existing.getSlotDuration(existing.getSlots().get(existing.getSlots().size() - 1)));
+		secondPortsTimeRecord.setSlotAdditionalPanamaIdleHours(existing.getSlots().get(existing.getSlots().size() - 1), existing.getSlotAdditionaPanamaIdleHours(existing.getSlots().get(existing.getSlots().size() - 1)));
+		secondPortsTimeRecord.setSlotMaxAvailablePanamaIdleHours(existing.getSlots().get(existing.getSlots().size() - 1), existing.getSlotMaxAdditionaPanamaIdleHours(existing.getSlots().get(existing.getSlots().size() - 1)));
 		IPortSlot returnSlot = existing.getReturnSlot();
 		if (returnSlot != null) {
 			secondPortsTimeRecord.setReturnSlotTime(returnSlot, existing.getSlotTime(returnSlot));

@@ -6,6 +6,8 @@ package com.mmxlabs.models.lng.adp.mull;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,6 +18,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.models.lng.adp.MullAllocationRow;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SchedulingTimeWindow;
@@ -65,22 +68,22 @@ public abstract class AllocationTracker {
 		dropAllocation(allocationDrop);
 	}
 
-	public int calculateExpectedAllocationDrop(final Map<Vessel, LocalDateTime> vesselToMostRecentUseDateTime, final int defaultAllocationDrop, final int loadDuration) {
+	public int calculateExpectedAllocationDrop(final Map<Vessel, LocalDateTime> vesselToMostRecentUseDateTime, final int defaultAllocationDrop, final int loadDuration, final Set<Vessel> firstPartyVessels) {
 		if (vesselList.isEmpty()) {
 			return defaultAllocationDrop;
 		}
 		final Vessel expectedVessel = this.vesselList.stream() //
 				.min((v1, v2) -> vesselToMostRecentUseDateTime.get(v1).compareTo(vesselToMostRecentUseDateTime.get(v2))) //
 				.get();
-		return calculateExpectedAllocationDrop(expectedVessel, loadDuration);
+		return calculateExpectedAllocationDrop(expectedVessel, loadDuration, firstPartyVessels.contains(expectedVessel));
 	}
 
-	public int calculateExpectedAllocationDrop(final Vessel vessel, final int loadDuration) {
-		final int expectedBoiloff = calculateExpectedBoiloff(vessel, loadDuration);
+	public int calculateExpectedAllocationDrop(final Vessel vessel, final int loadDuration, final boolean isSharedVessel) {
+		final int expectedBoiloff = calculateExpectedBoiloff(vessel, loadDuration, isSharedVessel);
 		return expectedBoiloff + (int) (vessel.getVesselOrDelegateCapacity() * vessel.getVesselOrDelegateFillCapacity() - vessel.getVesselOrDelegateSafetyHeel());
 	}
 
-	public int calculateExpectedBoiloff(final Vessel vessel, final int loadDuration) {
+	public int calculateExpectedBoiloff(final Vessel vessel, final int loadDuration, final boolean isSharedVessel) {
 		return (int) (loadDuration * (vessel.getLadenAttributes().getVesselOrDelegateInPortNBORate() / 24.0));
 	}
 
@@ -129,12 +132,17 @@ public abstract class AllocationTracker {
 			final Integer minTime = CargoTravelTimeUtils.getFobMinTimeInHours(loadSlot, dischargeSlot, loadSlot.getWindowStart(), vesselAvailability, ScenarioModelUtil.getPortModel(sm),
 					vesselMaxSpeedKnots, modelDistanceProvider);
 			final SchedulingTimeWindow loadSTW = loadSlot.getSchedulingTimeWindow();
-			return loadSTW.getStart().plusHours(minTime + (long) loadSTW.getDuration()).withDayOfMonth(1).withHour(0).toLocalDate();
+			final ZonedDateTime loadTimeZoneDischargeArrival = loadSTW.getStart().plusHours(minTime + (long) loadSTW.getDuration());
+			final ZonedDateTime dischargeTimeZoneDischargeArrival = loadTimeZoneDischargeArrival
+					.withZoneSameInstant(ZoneId.of(dischargeSlot.getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
+			final LocalDateTime localDischargeArrival = dischargeTimeZoneDischargeArrival.toLocalDateTime();
+
+			return localDischargeArrival.withDayOfMonth(1).withHour(0).toLocalDate();
 		}
 	}
 
 	public abstract DischargeSlot createDischargeSlot(final CargoEditingCommands cec, List<Command> setCommands, final CargoModel cargoModel, @NonNull final IScenarioDataProvider sdp,
-			final LoadSlot loadSlot, final Vessel vessel, final Map<Vessel, VesselAvailability> vesselToVA, final LNGScenarioModel sm);
+			final LoadSlot loadSlot, final Vessel vessel, final Map<Vessel, VesselAvailability> vesselToVA, final LNGScenarioModel sm, final Set<Vessel> firstPartyVessels);
 
 	public abstract void dropFixedLoad(final Cargo cargo);
 

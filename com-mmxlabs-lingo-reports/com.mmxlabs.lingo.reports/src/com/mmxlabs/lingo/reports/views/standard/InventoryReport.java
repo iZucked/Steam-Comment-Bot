@@ -63,19 +63,20 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swtchart.Chart;
+import org.eclipse.swtchart.IAxisSet;
+import org.eclipse.swtchart.IBarSeries;
+import org.eclipse.swtchart.ILineSeries;
+import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
+import org.eclipse.swtchart.ISeries;
+import org.eclipse.swtchart.ISeries.SeriesType;
+import org.eclipse.swtchart.model.DateArraySeriesModel;
+import org.eclipse.swtchart.ISeriesSet;
+import org.eclipse.swtchart.LineStyle;
+import org.eclipse.swtchart.Range;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.osgi.service.event.EventHandler;
-import org.swtchart.Chart;
-import org.swtchart.IAxisSet;
-import org.swtchart.IBarSeries;
-import org.swtchart.ILineSeries;
-import org.swtchart.ILineSeries.PlotSymbolType;
-import org.swtchart.ISeries;
-import org.swtchart.ISeries.SeriesType;
-import org.swtchart.ISeriesSet;
-import org.swtchart.LineStyle;
-import org.swtchart.Range;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.time.Months;
@@ -1373,8 +1374,8 @@ public class InventoryReport extends ViewPart {
 		}
 
 		final ILineSeries series = (ILineSeries) seriesSet.createSeries(SeriesType.LINE, name);
-		series.setXDateSeries(dates);
-		series.setYSeries(values);
+		final DateArraySeriesModel seriesModel = new DateArraySeriesModel(dates, values);
+		series.setDataModel(seriesModel);
 		return series;
 	}
 
@@ -1398,8 +1399,8 @@ public class InventoryReport extends ViewPart {
 		}
 
 		final ILineSeries series = (ILineSeries) seriesSet.createSeries(SeriesType.LINE, name);
-		series.setXDateSeries(dates);
-		series.setYSeries(values);
+		final DateArraySeriesModel seriesModel = new DateArraySeriesModel(dates, values);
+		series.setDataModel(seriesModel);
 		return series;
 	}
 
@@ -1422,8 +1423,9 @@ public class InventoryReport extends ViewPart {
 		}
 
 		final IBarSeries series = (IBarSeries) seriesSet.createSeries(SeriesType.BAR, name);
-		series.setXDateSeries(dates);
-		series.setYSeries(values);
+
+		final DateArraySeriesModel seriesModel = new DateArraySeriesModel(dates, values);
+		series.setDataModel(seriesModel);
 		return series;
 	}
 
@@ -1648,15 +1650,13 @@ public class InventoryReport extends ViewPart {
 				return false;
 			if (row.getInitialAllocation() == null || !row.getInitialAllocation().matches("-?\\d+"))
 				return false;
-			if (row.getRelativeEntitlement() <= 0.0)
-				return false;
 			return true;
 		});
 	}
 
 	private Map<YearMonth, Integer> calculateMonthlyProduction(final Inventory inventory, final YearMonth adpStart) {
 		final Map<YearMonth, Integer> monthlyProduction = new HashMap<>();
-		inventory.getFeeds().stream().forEach(row -> {
+		inventory.getFeeds().stream().filter(event -> event.getStartDate() != null && event.getEndDate() != null).forEach(row -> {
 			final YearMonth currYM = YearMonth.from(row.getStartDate());
 			final Integer currVal = monthlyProduction.get(currYM);
 			if (currVal == null) {
@@ -1665,7 +1665,7 @@ public class InventoryReport extends ViewPart {
 				monthlyProduction.put(currYM, currVal + row.getVolume());
 			}
 		});
-		inventory.getOfftakes().stream().forEach(row -> {
+		inventory.getOfftakes().stream().filter(event -> event.getStartDate() != null && event.getEndDate() != null).forEach(row -> {
 			final YearMonth currYM = YearMonth.from(row.getStartDate());
 			final Integer currVal = monthlyProduction.get(currYM);
 			if (currVal == null) {

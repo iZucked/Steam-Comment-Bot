@@ -10,6 +10,7 @@ import java.time.YearMonth;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -77,15 +78,15 @@ public class CargoBlueprint {
 		return this.windowStart;
 	}
 
-	public void constructCargoModelPopulationCommands(final LNGScenarioModel sm, final CargoModel cargoModel, final CargoEditingCommands cec, @NonNull final EditingDomain editingDomain, final int volumeFlex, final IScenarioDataProvider sdp, final Map<Vessel, VesselAvailability> vesselToVA, final CharterInMarket adpNominalMarket, final CompoundCommand compoundCommand) {
+	public void constructCargoModelPopulationCommands(final LNGScenarioModel sm, final CargoModel cargoModel, final CargoEditingCommands cec, @NonNull final EditingDomain editingDomain, final int volumeFlex, final IScenarioDataProvider sdp, final Map<Vessel, VesselAvailability> vesselToVA, final CharterInMarket adpNominalMarket, final CompoundCommand compoundCommand, final Set<Vessel> firstPartyVessels) {
 		final List<Command> commands = new LinkedList<>();
 
 		final LoadSlot loadSlot = this.createLoadSlot(cec, commands, cargoModel, volumeFlex);
-		final DischargeSlot dischargeSlot = this.dischargeAllocation.createDischargeSlot(cec, commands, cargoModel, sdp, loadSlot, this.assignedVessel, vesselToVA, sm);
+		final DischargeSlot dischargeSlot = this.dischargeAllocation.createDischargeSlot(cec, commands, cargoModel, sdp, loadSlot, this.assignedVessel, vesselToVA, sm, firstPartyVessels);
 		final Cargo cargo = CargoEditingCommands.createNewCargo(editingDomain, commands, cargoModel, null, 0);
 		loadSlot.setCargo(cargo);
 		dischargeSlot.setCargo(cargo);
-		cargo.setAllowRewiring(this.entity.getName().equalsIgnoreCase("capl/tapl"));
+		cargo.setAllowRewiring(!this.entity.isThirdParty());
 		if (!dischargeSlot.isFOBSale() && this.assignedVessel != null) {
 			final VesselAvailability vesselAvailability = vesselToVA.get(this.assignedVessel);
 			if (vesselAvailability != null) {

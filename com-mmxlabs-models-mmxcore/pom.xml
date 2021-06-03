@@ -5,18 +5,19 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.models.mmxcore</groupId>
 	<artifactId>com.mmxlabs.models.mmxcore.parent</artifactId>
-	<version>4.12.22-SNAPSHOT</version>
+	<version>4.12.28-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<parent>
 		<groupId>com.mmxlabs.lingo.master</groupId>
 		<artifactId>com.mmxlabs.lingo.master.parent</artifactId>
-		<version>4.12.22-SNAPSHOT</version>
+		<version>4.12.28-SNAPSHOT</version>
 	</parent>
 
 	<modules>
 		<module>com.mmxlabs.models.mmxcore</module>
 		<module>com.mmxlabs.models.mmxcore.edit</module>
+		<module>com.mmxlabs.models.mmxcore.tests</module>
 
 		<module>com.mmxlabs.models.mmxcore.runtime.feature</module>
 	</modules>

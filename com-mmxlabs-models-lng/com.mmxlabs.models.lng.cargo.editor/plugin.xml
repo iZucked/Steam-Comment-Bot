@@ -115,18 +115,6 @@
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.cargo.VesselTypeGroup"/>
          <componentHelper
-               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.EndHeelOptionsComponentHelper"
-               id="com.mmxlabs.models.lng.cargo.presentation.composites.EndHeelOptionsComponentHelper"
-               inheritable="true"
-               modelClass="com.mmxlabs.models.lng.cargo.EndHeelOptions">
-         </componentHelper>
-         <componentHelper
-               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.StartHeelOptionsComponentHelper"
-               id="com.mmxlabs.models.lng.cargo.presentation.composites.StartHeelOptionsComponentHelper"
-               inheritable="true"
-               modelClass="com.mmxlabs.models.lng.cargo.StartHeelOptions">
-         </componentHelper>
-         <componentHelper
                helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.InventoryEventRowComponentHelper"
                id="com.mmxlabs.models.lng.cargo.presentation.composites.InventoryEventRowComponentHelper"
                inheritable="true"
@@ -173,7 +161,13 @@
                id="com.mmxlabs.models.lng.cargo.presentation.composites.SellPaperDealComponentHelper"
                inheritable="true"
                modelClass="com.mmxlabs.models.lng.cargo.SellPaperDeal">
-         </componentHelper>        
+         </componentHelper>
+         <componentHelper
+               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.CanalBookingsComponentHelper"
+               id="com.mmxlabs.models.lng.cargo.presentation.composites.CanalBookingsComponentHelper"
+               inheritable="true"
+               modelClass="com.mmxlabs.models.lng.cargo.CanalBookings">
+         </componentHelper>   
 	</extension>
  <extension
        point="com.mmxlabs.models.ui.jointmodeleditors">
@@ -299,6 +293,18 @@
            ownerEClass="com.mmxlabs.models.lng.cargo.CanalBookingSlot"
            referenceEClass="com.mmxlabs.models.lng.cargo.Slot">
      </valueProvider>
+     <valueProvider
+           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CanalBookingBookingCodeValueProviderFactory"
+           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CanalBookingBookingCodeValueProviderFactory_BookingCode"
+           ownerEClass="com.mmxlabs.models.lng.cargo.CanalBookingSlot"
+           referenceEClass="com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters">
+     </valueProvider>
+     <valueProvider
+           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CanalBookingVesselValueProviderFactory"
+           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CanalBookingVesselValueProviderFactory_Vessel"
+           ownerEClass="com.mmxlabs.models.lng.cargo.CanalBookingSlot"
+           referenceEClass="com.mmxlabs.models.lng.types.AVesselSet">
+     </valueProvider>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.displaycompositefactories">
@@ -327,9 +333,15 @@
           inheritable="true">
     </displayCompositeFactory>
     <displayCompositeFactory
-          eClass="com.mmxlabs.models.lng.cargo.EndHeelOptions"
+          eClass="com.mmxlabs.models.lng.commercial.EndHeelOptions"
           factory="com.mmxlabs.models.lng.cargo.ui.displaycomposites.EndHeelOptionsCompositeFactory"
           id="com.mmxlabs.models.lng.cargo.ui.displaycomposites.EndHeelOptionsCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.commercial.StartHeelOptions"
+          factory="com.mmxlabs.models.lng.cargo.ui.displaycomposites.StartHeelOptionsCompositeFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.displaycomposites.StartHeelOptionsCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
     <displayCompositeFactory
@@ -353,7 +365,7 @@
             class="com.mmxlabs.models.lng.cargo.importer.AssignmentModelImporter">
       </extramodelimporter>
       <extramodelimporter
-            class="com.mmxlabs.models.lng.cargo.importer.VesselAvailabilityBallastBonusImporterExtraImporter">
+            class="com.mmxlabs.models.lng.cargo.importer.VesselAvailabilityCharterContractIExtraModelImporter">
       </extramodelimporter>
       <extramodelimporter
             class="com.mmxlabs.models.lng.cargo.importer.InventoryExtraImporter">
@@ -537,16 +549,6 @@
        </OwnerAnyOf>
     </editorFactory>
     <editorFactory
-          factoryClass="com.mmxlabs.models.lng.cargo.editor.editors.VesselTankStateInlineEditorFactory"
-          id="com.mmxlabs.models.lng.cargo.editor.editors.VesselTankStateInlineEditorFactory">
-       <FeatureAnyOf>
-          <EDataTypeIs
-                EDataTypeName="EVesselTankState"
-                EDataTypeURI="http://www.mmxlabs.com/models/lng/cargo/1/">
-          </EDataTypeIs>
-       </FeatureAnyOf>
-    </editorFactory>
-    <editorFactory
           factoryClass="com.mmxlabs.models.lng.cargo.editor.editors.InventoryPeriodInlineEditorFactory"
           id="com.mmxlabs.models.lng.cargo.editor.editors.InventoryPeriodInlineEditorFactory">
        <FeatureAnyOf>
@@ -573,6 +575,21 @@
           <EDataTypeIs
                 EDataTypeName="PaperPricingType"
                 EDataTypeURI="http://www.mmxlabs.com/models/lng/cargo/1/">
+          </EDataTypeIs>
+       </FeatureAnyOf>
+    </editorFactory>
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.cargo.ui.inlineeditors.PanamaDirectionInlineEditorFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.inlineeditors.PanamaDirectionInlineEditorFactory">
+       <OwnerAnyOf>
+          <EClassExtends
+                EClass="com.mmxlabs.models.lng.cargo.CanalBookingSlot">
+          </EClassExtends>
+       </OwnerAnyOf>
+       <FeatureAnyOf>
+          <EDataTypeIs
+                EDataTypeName="CanalEntry"
+                EDataTypeURI="http://www.mmxlabs.com/models/lng/port/1/">
           </EDataTypeIs>
        </FeatureAnyOf>
     </editorFactory>

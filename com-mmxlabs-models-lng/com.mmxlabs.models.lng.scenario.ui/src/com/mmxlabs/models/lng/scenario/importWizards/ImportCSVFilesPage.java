@@ -524,9 +524,8 @@ public class ImportCSVFilesPage extends WizardPage {
 					}
 				}
 			});
-		} catch (final InvocationTargetException e) {
-			return null;
-		} catch (final InterruptedException e) {
+		} catch (final Exception e) {
+			log.error(e.getMessage());
 			return null;
 		}
 

@@ -100,7 +100,7 @@ public class LumpSumContractDetailsItemProvider extends MatchingContractDetailsI
 			getString("_UI_LumpSumContractDetails_type") :
 			getString("_UI_LumpSumContractDetails_type") + " " + label;
 	}
-	
+
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached

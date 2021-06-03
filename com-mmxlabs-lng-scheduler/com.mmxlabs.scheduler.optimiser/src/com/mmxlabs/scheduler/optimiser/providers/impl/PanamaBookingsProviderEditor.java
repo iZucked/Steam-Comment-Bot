@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -20,6 +19,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProviderEditor;
 
@@ -33,31 +33,32 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 	private static final int MAX_SPEED_TO_CANAL = Integer.MAX_VALUE;
 
 	private ImmutableMap<ECanalEntry, ImmutableList<IRouteOptionBooking>> panamaBookings;
-	private int strictBoundary;
-	private int relaxedBoundary;
 	private int northboundMaxIdleDays;
 	private int southboundMaxIdleDays;
-	private int relaxedBookingsCountAtEntryA;
-	private int relaxedBookingsCountAtEntryB;
 	private int arrivalMargin;
+	private Map<IVessel, Integer> vesselToNorthboundMaxIdleDays = new HashMap<>();
+	private Map<IVessel, Integer> vesselToSouthboundMaxIdleDays = new HashMap<>();
 
 	private ImmutableMap<ECanalEntry, ImmutableList<IRouteOptionBooking>> assignedBookings;
 
 	private ImmutableMap<ECanalEntry, ImmutableList<IRouteOptionBooking>> unassignedBookings;
 
 	@Override
-	public void setBookings(final Map<ECanalEntry, SortedSet<IRouteOptionBooking>> bookings) {
+	public void setBookings(final Map<ECanalEntry, List<IRouteOptionBooking>> bookings) {
 		final ImmutableMap.Builder<ECanalEntry, ImmutableList<IRouteOptionBooking>> builder = new ImmutableMap.Builder<>();
 		bookings.forEach((k, v) -> {
 			builder.put(k, ImmutableList.copyOf(v));
 		});
+		
 		panamaBookings = builder.build();
 
 		Map<ECanalEntry, ImmutableList<IRouteOptionBooking>> assignedBookings = new HashMap<>();
 		Map<ECanalEntry, ImmutableList<IRouteOptionBooking>> unassignedBookings = new HashMap<>();
 
 		panamaBookings.entrySet().forEach(e -> {
-			final Set<@NonNull IRouteOptionBooking> assigned = e.getValue().stream().filter(j -> j.getPortSlot().isPresent()).collect(Collectors.toSet());
+			final Set<@NonNull IRouteOptionBooking> assigned = e.getValue().stream() //
+					.filter(j -> j.getVessels().size() == 1) //
+					.collect(Collectors.toSet());
 
 			final List<@NonNull IRouteOptionBooking> list_assigned = new ArrayList<>(assigned);
 			Collections.sort(list_assigned);
@@ -68,9 +69,14 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 			unassignedBookings.put(e.getKey(), ImmutableList.copyOf(list_unassigned));
 		});
 
+		//Make sure a list even if empty for both south-side + north-side bookings, in case no bookings set.
+		for (ECanalEntry entryPoint : ECanalEntry.values()) {
+			assignedBookings.putIfAbsent(entryPoint, ImmutableList.of());
+			unassignedBookings.putIfAbsent(entryPoint, ImmutableList.of());
+		}
+		
 		this.assignedBookings = new ImmutableMap.Builder().putAll(assignedBookings).build();
 		this.unassignedBookings = new ImmutableMap.Builder().putAll(unassignedBookings).build();
-
 	}
 
 	@Override
@@ -95,45 +101,6 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 			throw new IllegalStateException("Panama booking not set");
 		}
 		return unassignedBookings;
-	}
-
-	@Override
-	public int getStrictBoundary() {
-		return strictBoundary;
-	}
-
-	public int getRelaxedBookingCountNorthbound() {
-		return relaxedBookingsCountAtEntryA;
-	}
-
-	@Override
-	public int getRelaxedBookingCountSouthbound() {
-		return relaxedBookingsCountAtEntryB;
-	}
-
-	@Override
-	public int getRelaxedBoundary() {
-		return relaxedBoundary;
-	}
-
-	@Override
-	public void setStrictBoundary(final int boundary) {
-		strictBoundary = boundary;
-	}
-
-	@Override
-	public void setRelaxedBookingCountNorthbound(final int bookingCount) {
-		relaxedBookingsCountAtEntryA = bookingCount;
-	}
-
-	@Override
-	public void setRelaxedBookingCountSouthbound(final int bookingCount) {
-		relaxedBookingsCountAtEntryB = bookingCount;
-	}
-
-	@Override
-	public void setRelaxedBoundary(final int boundary) {
-		relaxedBoundary = boundary;
 	}
 
 	@Override
@@ -166,9 +133,28 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 		southboundMaxIdleDays = maxIdleDays;
 	}
 	
-	
 	@Override
 	public void setNorthboundMaxIdleDays(int maxIdleDays) {
 		northboundMaxIdleDays = maxIdleDays;
+	}
+	
+	@Override
+	public int getNorthboundMaxIdleDays(IVessel vessel) {
+		return this.vesselToNorthboundMaxIdleDays.getOrDefault(vessel, this.northboundMaxIdleDays);
+	}
+
+	@Override
+	public int getSouthboundMaxIdleDays(IVessel vessel) {
+		return this.vesselToSouthboundMaxIdleDays.getOrDefault(vessel, this.southboundMaxIdleDays);
+	}
+
+	@Override
+	public void setNorthboundMaxIdleDays(IVessel vessel, int maxIdleDays) {
+		this.vesselToNorthboundMaxIdleDays.put(vessel, maxIdleDays);
+	}
+
+	@Override
+	public void setSouthboundMaxIdleDays(IVessel vessel, int maxIdleDays) {
+		this.vesselToSouthboundMaxIdleDays.put(vessel, maxIdleDays);		
 	}
 }

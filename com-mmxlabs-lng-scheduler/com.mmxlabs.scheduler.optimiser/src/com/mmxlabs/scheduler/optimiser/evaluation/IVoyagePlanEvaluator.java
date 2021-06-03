@@ -4,11 +4,10 @@
  */
 package com.mmxlabs.scheduler.optimiser.evaluation;
 
-import java.util.List;
-
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.common.collect.ImmutableList;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -19,7 +18,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 @NonNullByDefault
 public interface IVoyagePlanEvaluator {
 
-	public List<ScheduledVoyagePlanResult> evaluateShipped(IResource resource, //
+	public ImmutableList<ScheduledVoyagePlanResult> evaluateShipped(IResource resource, //
 			IVesselAvailability vesselAvailability, //
 			ICharterCostCalculator charterCostCalculator, //
 			int vesselStartTime, //
@@ -31,7 +30,7 @@ public interface IVoyagePlanEvaluator {
 			boolean keepDetails, //
 			@Nullable IAnnotatedSolution annotatedSolution);
 	
-	public List<ScheduledVoyagePlanResult> evaluateRoundTrip(IResource resource, //
+	public ImmutableList<ScheduledVoyagePlanResult> evaluateRoundTrip(IResource resource, //
 			IVesselAvailability vesselAvailability, //
 			ICharterCostCalculator charterCostCalculator, //
 			IPortTimesRecord portTimesRecord, //

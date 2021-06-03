@@ -67,7 +67,7 @@ public class CommercialModelItemProvider
 			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__ENTITIES);
 			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS);
 			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS);
-			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTERING_CONTRACTS);
+			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTER_CONTRACTS);
 		}
 		return childrenFeatures;
 	}
@@ -125,7 +125,7 @@ public class CommercialModelItemProvider
 			case CommercialPackage.COMMERCIAL_MODEL__ENTITIES:
 			case CommercialPackage.COMMERCIAL_MODEL__SALES_CONTRACTS:
 			case CommercialPackage.COMMERCIAL_MODEL__PURCHASE_CONTRACTS:
-			case CommercialPackage.COMMERCIAL_MODEL__CHARTERING_CONTRACTS:
+			case CommercialPackage.COMMERCIAL_MODEL__CHARTER_CONTRACTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -160,18 +160,8 @@ public class CommercialModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTERING_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createSimpleCharterContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTERING_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createSimpleBallastBonusCharterContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTERING_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createMonthlyBallastBonusCharterContract()));
+				(CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTER_CONTRACTS,
+				 CommercialFactory.eINSTANCE.createGenericCharterContract()));
 	}
 
 }

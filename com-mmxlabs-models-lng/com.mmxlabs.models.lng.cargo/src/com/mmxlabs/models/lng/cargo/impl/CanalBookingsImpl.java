@@ -10,6 +10,8 @@ import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 
+import com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 import java.util.Collection;
 
@@ -23,6 +25,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
@@ -41,6 +44,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getFlexibleBookingAmountSouthbound <em>Flexible Booking Amount Southbound</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getNorthboundMaxIdleDays <em>Northbound Max Idle Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getSouthboundMaxIdleDays <em>Southbound Max Idle Days</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getBookingExemptVessels <em>Booking Exempt Vessels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getVesselGroupCanalParameters <em>Vessel Group Canal Parameters</em>}</li>
  * </ul>
  *
  * @generated
@@ -195,6 +200,26 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	 * @ordered
 	 */
 	protected int southboundMaxIdleDays = SOUTHBOUND_MAX_IDLE_DAYS_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getBookingExemptVessels() <em>Booking Exempt Vessels</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBookingExemptVessels()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Vessel> bookingExemptVessels;
+
+	/**
+	 * The cached value of the '{@link #getVesselGroupCanalParameters() <em>Vessel Group Canal Parameters</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselGroupCanalParameters()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<VesselGroupCanalParameters> vesselGroupCanalParameters;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -395,10 +420,38 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	 * @generated
 	 */
 	@Override
+	public EList<Vessel> getBookingExemptVessels() {
+		if (bookingExemptVessels == null) {
+			bookingExemptVessels = new EObjectResolvingEList<Vessel>(Vessel.class, this, CargoPackage.CANAL_BOOKINGS__BOOKING_EXEMPT_VESSELS);
+		}
+		return bookingExemptVessels;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<VesselGroupCanalParameters> getVesselGroupCanalParameters() {
+		if (vesselGroupCanalParameters == null) {
+			vesselGroupCanalParameters = new EObjectContainmentEList.Resolving<VesselGroupCanalParameters>(VesselGroupCanalParameters.class, this, CargoPackage.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS);
+		}
+		return vesselGroupCanalParameters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case CargoPackage.CANAL_BOOKINGS__CANAL_BOOKING_SLOTS:
 				return ((InternalEList<?>)getCanalBookingSlots()).basicRemove(otherEnd, msgs);
+			case CargoPackage.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS:
+				return ((InternalEList<?>)getVesselGroupCanalParameters()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -427,6 +480,10 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 				return getNorthboundMaxIdleDays();
 			case CargoPackage.CANAL_BOOKINGS__SOUTHBOUND_MAX_IDLE_DAYS:
 				return getSouthboundMaxIdleDays();
+			case CargoPackage.CANAL_BOOKINGS__BOOKING_EXEMPT_VESSELS:
+				return getBookingExemptVessels();
+			case CargoPackage.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS:
+				return getVesselGroupCanalParameters();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -465,6 +522,14 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 			case CargoPackage.CANAL_BOOKINGS__SOUTHBOUND_MAX_IDLE_DAYS:
 				setSouthboundMaxIdleDays((Integer)newValue);
 				return;
+			case CargoPackage.CANAL_BOOKINGS__BOOKING_EXEMPT_VESSELS:
+				getBookingExemptVessels().clear();
+				getBookingExemptVessels().addAll((Collection<? extends Vessel>)newValue);
+				return;
+			case CargoPackage.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS:
+				getVesselGroupCanalParameters().clear();
+				getVesselGroupCanalParameters().addAll((Collection<? extends VesselGroupCanalParameters>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -501,6 +566,12 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 			case CargoPackage.CANAL_BOOKINGS__SOUTHBOUND_MAX_IDLE_DAYS:
 				setSouthboundMaxIdleDays(SOUTHBOUND_MAX_IDLE_DAYS_EDEFAULT);
 				return;
+			case CargoPackage.CANAL_BOOKINGS__BOOKING_EXEMPT_VESSELS:
+				getBookingExemptVessels().clear();
+				return;
+			case CargoPackage.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS:
+				getVesselGroupCanalParameters().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -529,6 +600,10 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 				return northboundMaxIdleDays != NORTHBOUND_MAX_IDLE_DAYS_EDEFAULT;
 			case CargoPackage.CANAL_BOOKINGS__SOUTHBOUND_MAX_IDLE_DAYS:
 				return southboundMaxIdleDays != SOUTHBOUND_MAX_IDLE_DAYS_EDEFAULT;
+			case CargoPackage.CANAL_BOOKINGS__BOOKING_EXEMPT_VESSELS:
+				return bookingExemptVessels != null && !bookingExemptVessels.isEmpty();
+			case CargoPackage.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS:
+				return vesselGroupCanalParameters != null && !vesselGroupCanalParameters.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

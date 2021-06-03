@@ -61,6 +61,8 @@ public class CanalBookingsItemProvider
 			addFlexibleBookingAmountSouthboundPropertyDescriptor(object);
 			addNorthboundMaxIdleDaysPropertyDescriptor(object);
 			addSouthboundMaxIdleDaysPropertyDescriptor(object);
+			addBookingExemptVesselsPropertyDescriptor(object);
+			addVesselGroupCanalParametersPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -121,7 +123,7 @@ public class CanalBookingsItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_CanalBookings_arrivalMarginHours_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CanalBookings_arrivalMarginHours_feature", "_UI_CanalBookings_type"),
+				 getString("_UI_CanalBookings_arrivalMarginHours_description"),
 				 CargoPackage.Literals.CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS,
 				 true,
 				 false,
@@ -215,6 +217,50 @@ public class CanalBookingsItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Booking Exempt Vessels feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addBookingExemptVesselsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CanalBookings_bookingExemptVessels_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CanalBookings_bookingExemptVessels_feature", "_UI_CanalBookings_type"),
+				 CargoPackage.Literals.CANAL_BOOKINGS__BOOKING_EXEMPT_VESSELS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Vessel Group Canal Parameters feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVesselGroupCanalParametersPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CanalBookings_vesselGroupCanalParameters_feature"),
+				 getString("_UI_CanalBookings_vesselGroupCanalParameters_description"),
+				 CargoPackage.Literals.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

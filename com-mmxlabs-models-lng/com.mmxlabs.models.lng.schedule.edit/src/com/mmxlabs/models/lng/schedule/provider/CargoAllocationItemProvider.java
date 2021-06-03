@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.schedule.provider;
 
 
+import com.mmxlabs.models.lng.cargo.CargoType;
 import java.util.Collection;
 import java.util.List;
 
@@ -282,7 +283,7 @@ public class CargoAllocationItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS,
-				 ScheduleFactory.eINSTANCE.createBallastBonusFeeDetails()));
+				 ScheduleFactory.eINSTANCE.createCharterContractFeeDetails()));
 	}
 
 }

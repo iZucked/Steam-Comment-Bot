@@ -2,10 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: MMXLabs Hub Support
 Bundle-SymbolicName: com.mmxlabs.hub;singleton:=true
-Bundle-Version: 4.12.22.qualifier
+Bundle-Version: 4.12.28.qualifier
 Bundle-ClassPath: .,
- lib/okhttp-3.14.2.jar,
- lib/okio-1.17.4.jar,
  lib/json-20140107.jar
 Bundle-Activator: com.mmxlabs.hub.DataHubActivator
 Bundle-Vendor: Minimax Labs
@@ -15,27 +13,13 @@ Export-Package: com.mmxlabs.hub,
  com.mmxlabs.hub.preferences,
  com.mmxlabs.hub.services.permissions,
  com.mmxlabs.hub.services.users,
- okhttp3;version="3.14.2",
- okhttp3.internal;version="3.14.2",
- okhttp3.internal.cache;version="3.14.2",
- okhttp3.internal.cache2;version="3.14.2",
- okhttp3.internal.connection;version="3.14.2",
- okhttp3.internal.http;version="3.14.2",
- okhttp3.internal.http1;version="3.14.2",
- okhttp3.internal.http2;version="3.14.2",
- okhttp3.internal.io;version="3.14.2",
- okhttp3.internal.platform;version="3.14.2",
- okhttp3.internal.publicsuffix;version="3.14.2",
- okhttp3.internal.tls;version="3.14.2",
- okhttp3.internal.ws;version="3.14.2",
- okio,
  org.json,
  org.json.zip
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.license.ssl,
- com.mmxlabs.common.common-util;bundle-version="4.12.22",
+ com.mmxlabs.common.common-util;bundle-version="4.12.28",
  org.eclipse.equinox.security,
  com.fasterxml.jackson.core.jackson-databind,
  com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.10.0",
@@ -47,7 +31,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.expressions,
  org.eclipse.e4.ui.model.workbench;bundle-version="2.1.600.v20191106-1503",
  javax.annotation;bundle-version="1.2.0",
- org.eclipse.e4.core.di
+ org.eclipse.e4.core.di,
+ wrapped.com.squareup.okhttp3.okhttp;bundle-version="3.14.2";visibility:=reexport,
+ wrapped.com.squareup.okio.okio;bundle-version="1.17.4";visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Eclipse-BuddyPolicy: registered

@@ -2839,6 +2839,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public EList<AVesselSet<Vessel>> getSlotOrDelegateVesselRestrictions() {
 		if (getContract() == null || isRestrictedVesselsOverride()) {

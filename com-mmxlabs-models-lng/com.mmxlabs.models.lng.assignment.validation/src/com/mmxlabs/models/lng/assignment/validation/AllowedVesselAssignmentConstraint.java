@@ -8,7 +8,9 @@
  */
 package com.mmxlabs.models.lng.assignment.validation;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -27,10 +29,12 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
@@ -87,15 +91,25 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 				boolean isVesselRestrictionsPermissive = false;
 
 				if (target instanceof Slot) {
-					final Slot<?> slot = (Slot<?>) target;
-					allowedVessels = slot.getSlotOrDelegateVesselRestrictions();
-					isVesselRestrictionsPermissive = slot.getSlotOrDelegateVesselRestrictionsArePermissive();
-
+					if (target instanceof SpotSlot) {
+						SpotSlot spotSlot = (SpotSlot) target;
+						SpotMarket market = spotSlot.getMarket();
+						if (market != null) {
+							isVesselRestrictionsPermissive = market.isRestrictedVesselsArePermissive();
+							allowedVessels = market.getRestrictedVessels();
+						} else {
+							isVesselRestrictionsPermissive = false;
+							allowedVessels = Collections.emptyList();
+						}
+					} else {
+						final Slot<?> slot = (Slot<?>) target;
+						allowedVessels = slot.getSlotOrDelegateVesselRestrictions();
+						isVesselRestrictionsPermissive = slot.getSlotOrDelegateVesselRestrictionsArePermissive();
+					}
 				} else if (target instanceof VesselEvent) {
 					final VesselEvent vesselEvent = (VesselEvent) target;
 					allowedVessels = vesselEvent.getAllowedVessels();
 					isVesselRestrictionsPermissive = !allowedVessels.isEmpty();
-
 				}
 
 				if (allowedVessels == null || allowedVessels.isEmpty()) {

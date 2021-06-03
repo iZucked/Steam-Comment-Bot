@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.google.common.collect.ImmutableList;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.ProfitAndLossSequences;
@@ -54,7 +55,7 @@ public class CapacityEvaluatedStateCheckerTest {
 		when(first.getCapacityViolations(port)).thenReturn(violations);
 		IPortTimesRecord ptr = mock(IPortTimesRecord.class);
 		
-		when(ptr.getSlots()).thenReturn(Collections.singletonList(port));
+		when(ptr.getSlots()).thenReturn(ImmutableList.of(port));
 		when(first.getPortTimesRecord()).thenReturn(ptr);
 		when(first.getCapacityViolations(port)).thenReturn(violations);
 

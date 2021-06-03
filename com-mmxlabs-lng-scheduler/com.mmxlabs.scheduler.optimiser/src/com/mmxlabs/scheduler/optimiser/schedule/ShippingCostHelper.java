@@ -11,12 +11,13 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.detailtree.DetailTree;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.chartercontracts.CharterContractConstants;
+import com.mmxlabs.scheduler.optimiser.chartercontracts.ICharterContract;
+import com.mmxlabs.scheduler.optimiser.chartercontracts.ICharterContractAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.IBallastBonusContract;
-import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl.BallastBonusAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
@@ -205,36 +206,27 @@ public class ShippingCostHelper {
 		return shippingCosts + portCosts + hireCosts + capacityCosts + crewBonusCosts + insuranceCosts;
 	}
 
-	public long getShippingRepositioningCost(final @NonNull IPortSlot portSlot, final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime) {
-		if (portSlot.getPortType() == PortType.Start) {
-			return vesselAvailability.getRepositioningFee().getValueAtPoint(vesselStartTime);
-		}
-		return 0L;
-	}
-
-	public long getShippingBallastBonusCost(final @NonNull IPortSlot portSlot, final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, final IPort firstLoadPort,
+	public long getShippingCharterContractCost(final @NonNull IPortSlot portSlot, final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, final IPort firstLoadPort,
 			final int vesselEndTime) {
-		if (portSlot.getPortType() == PortType.End) {
+		if (portSlot.getPortType() == PortType.End || portSlot.getPortType() == PortType.Start) {
 			@Nullable
-			IBallastBonusContract ballastBonusContract = vesselAvailability.getBallastBonusContract();
-			if (ballastBonusContract == null) {
-				return 0L;
-			} else {
-				return ballastBonusContract.calculateBallastBonus(firstLoadPort, portSlot, vesselAvailability, vesselStartTime, vesselEndTime);
+			ICharterContract charterContract = vesselAvailability.getCharterContract();
+			if (charterContract != null) {
+				return charterContract.calculateCost(firstLoadPort, portSlot, vesselAvailability, vesselStartTime, vesselEndTime);
 			}
 		}
 		return 0L;
 	}
 
-	public void addBallastBonusAnnotation(DetailTree shippingDetails, IPortSlot portSlot, @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, IPort firstLoadPort,
+	public void addCharterContractAnnotation(DetailTree shippingDetails, IPortSlot portSlot, @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, IPort firstLoadPort,
 			int vesselEndTime) {
-		if (portSlot.getPortType() == PortType.End) {
-			final @Nullable IBallastBonusContract ballastBonusContract = vesselAvailability.getBallastBonusContract();
-			if (ballastBonusContract == null) {
-				return;
-			} else {
-				BallastBonusAnnotation annotation = ballastBonusContract.annotate(firstLoadPort, portSlot, vesselAvailability, vesselStartTime, vesselEndTime);
-				shippingDetails.addChild(BallastBonusAnnotation.ANNOTATION_KEY, annotation);
+		final boolean bb = portSlot.getPortType() == PortType.End;
+		if (portSlot.getPortType() == PortType.End || portSlot.getPortType() == PortType.Start) {
+			@Nullable
+			ICharterContract charterContract = vesselAvailability.getCharterContract();
+			if (charterContract != null) {
+				ICharterContractAnnotation annotation = charterContract.annotate(firstLoadPort, portSlot, vesselAvailability, vesselStartTime, vesselEndTime);
+				shippingDetails.addChild(bb ? CharterContractConstants.BALLAST_BONUS_KEY : CharterContractConstants.REPOSITIONING_FEE_KEY, annotation);
 			}
 		}
 	}

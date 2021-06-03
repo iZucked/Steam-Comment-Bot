@@ -1710,7 +1710,7 @@
   "Ballast Travel" : "09:04",
   "Ballast Canal Entry" : "No",
   "Ballast Canal Date" : "05/07/11",
-  "Ballast Canal Entry-88" : "Southside",
+  "Ballast Canal Entry-com.mmxlabs.lingo.reports.components.columns.schedule.ballast.canal_entry" : "Southside",
   "Ballast Canal Latest Date" : "17/06/11",
   "Ballast LNG Cost" : "495,930",
   "Ballast LNG (m³)" : "3,134",

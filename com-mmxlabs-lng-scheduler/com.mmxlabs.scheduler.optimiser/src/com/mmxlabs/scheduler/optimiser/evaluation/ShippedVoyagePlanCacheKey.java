@@ -48,10 +48,10 @@ public final class ShippedVoyagePlanCacheKey {
 	private final int hash;
 	private int effectiveLastHeelPricePerMMBTU;
 	private int effectiveLastHeelCV;
+	public final IVesselAvailability vesselAvailability;
 
 	// Not part of cache
 	public final IResource resource;
-	public final IVesselAvailability vesselAvailability;
 
 	public ShippedVoyagePlanCacheKey(final IResource resource, final IVesselAvailability vesselAvailability, ICharterCostCalculator charterCostCalculator, final int vesselStartTime,
 			@Nullable final IPort firstLoadPort, final PreviousHeelRecord previousHeelRecord, final IPortTimesRecord portTimesRecord, boolean lastPlan, boolean keepDetails) {
@@ -63,7 +63,7 @@ public final class ShippedVoyagePlanCacheKey {
 		} else {
 			this.vesselKey = vesselAvailability;
 		}
-		
+		//
 		this.charterCostCalculator = charterCostCalculator;
 		this.vesselStartTime = vesselStartTime;
 		this.firstLoadPort = firstLoadPort;
@@ -84,14 +84,13 @@ public final class ShippedVoyagePlanCacheKey {
 		}
 		isCargo = portTimesRecord.getSlots().get(0) instanceof ILoadOption;
 
-		// These values have no impact on the cargo
+		// These values have no impact on a cargo - heel volume is the important field going into a cargo.
 		effectiveLastHeelPricePerMMBTU = isCargo ? 0 : previousHeelRecord.lastHeelPricePerMMBTU;
 		effectiveLastHeelCV = isCargo ? 0 : previousHeelRecord.lastCV;
 		this.hash = Objects.hash(lastPlan, keepDetails, //
 				vesselKey, // Vessel
 				// charterCostCalculator, // Charter costs
-				getPortName(firstLoadPort),
-				previousHeelRecord.heelVolumeInM3, effectiveLastHeelCV, effectiveLastHeelPricePerMMBTU, // Heel record info
+				getPortName(firstLoadPort), previousHeelRecord.heelVolumeInM3, effectiveLastHeelCV, effectiveLastHeelPricePerMMBTU, // Heel record info
 				slotsIds, //
 				slotTimes, // Slot times.
 				canalBookings, voyageKeys);
@@ -104,7 +103,7 @@ public final class ShippedVoyagePlanCacheKey {
 		String portName = port == null ? "" : port.getName();
 		return portName;
 	}
-	
+
 	@Override
 	public final int hashCode() {
 
@@ -120,45 +119,37 @@ public final class ShippedVoyagePlanCacheKey {
 
 		if (obj instanceof ShippedVoyagePlanCacheKey) {
 			final ShippedVoyagePlanCacheKey other = (ShippedVoyagePlanCacheKey) obj;
+			// Do quick simple checks first
 			final boolean partA = keepDetails == other.keepDetails //
-					&& Objects.equals(getPortName(firstLoadPort), getPortName(other.firstLoadPort))
-					&& lastPlan == other.lastPlan //
+					&& Objects.equals(getPortName(firstLoadPort), getPortName(other.firstLoadPort)) && lastPlan == other.lastPlan //
 					&& previousHeelRecord.heelVolumeInM3 == other.previousHeelRecord.heelVolumeInM3 //
 					&& effectiveLastHeelCV == other.effectiveLastHeelCV //
 					&& effectiveLastHeelPricePerMMBTU == other.effectiveLastHeelPricePerMMBTU //
 					&& previousHeelRecord.forcedCooldown == other.previousHeelRecord.forcedCooldown //
-					&& Objects.equals(vesselKey, other.vesselKey) //
-					// && Objects.equals(charterCostCalculator, other.charterCostCalculator) //
-					// && Objects.equals(returnSlot, otherReturnSlot) //
-					// && Objects.equals(portTimesRecord.getSlots(), other.portTimesRecord.getSlots()) //
-					&& Objects.equals(slotsIds, other.slotsIds) //
-					&& Objects.equals(slotTimes, other.slotTimes) //
-					&& Objects.equals(voyageKeys, other.voyageKeys);
-			;
+					&& Objects.equals(vesselKey, other.vesselKey); //
 
-			if (keepDetails && partA) {
-				for (final IPortSlot slot : portTimesRecord.getSlots()) {
-					if (portTimesRecord.getSlotDuration(slot) != other.portTimesRecord.getSlotDuration(slot)) {
-						return false;
-					}
-					if (portTimesRecord.getSlotTime(slot) != other.portTimesRecord.getSlotTime(slot)) {
-						return false;
-					}
-					if (portTimesRecord.getRouteOptionBooking(slot) != other.portTimesRecord.getRouteOptionBooking(slot)) {
-						return false;
-					}
+			if (!partA) {
+				return false;
+			}
+
+			if (!keepDetails) {
+				// Perform simple equivalence checks as we don't store the fully built up data structures.
+				// Spot market slots and charter in vessel options can be equivalent.
+				return Objects.equals(slotsIds, other.slotsIds) //
+						&& Objects.equals(slotTimes, other.slotTimes) //
+						&& Objects.equals(canalBookings, other.canalBookings) //
+						&& Objects.equals(voyageKeys, other.voyageKeys);
+			} else {
+				// With keep details, we need to ensure exact matches rather than just equivalence
+				if (vesselAvailability != other.vesselAvailability) {
+					return false;
 				}
-				final IPortSlot returnSlot = portTimesRecord.getReturnSlot();
-				final IPortSlot otherReturnSlot = other.portTimesRecord.getReturnSlot();
-				if (returnSlot != null && otherReturnSlot != null) {
-					if (portTimesRecord.getSlotTime(returnSlot) != other.portTimesRecord.getSlotTime(otherReturnSlot)) {
-						return false;
-					}
+
+				if (!portTimesRecord.equals(other.portTimesRecord)) {
+					return false;
 				}
 
 				return true;
-			} else {
-				return partA;
 			}
 		}
 		return false;

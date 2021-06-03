@@ -35,8 +35,8 @@ public final class SchedulerConstants {
 	
 	// Caching constants - used in injection framework
 	public static final String Key_VoyagePlanEvaluatorCache = "cache-voyage-plan-evaluator";
-	public static final String Key_ArrivalTimeCache = "cache-arrival-times";
-	public static final String Key_PNLTrimmerCache = "cache-pnl-trimmer-times";
+	public static final String Key_TimeWindowSchedulerCache = "cache-arrival-times";
+	public static final String Key_PNLBasedWindowTrimmerCache = "cache-pnl-trimmer-times";
 
 	// Additional Info keys
 	public static final String AI_volumeAllocationInfo = "info-volume-allocation";
@@ -79,8 +79,10 @@ public final class SchedulerConstants {
 
 	public static final String OPTIMISE_PAPER_PNL = "optimise-paper-pnl";
 	public static final String COMPUTE_EXPOSURES = "compute-exposures";
+	public static final String EXPOSURES_CUTOFF_AT_PROMPT_START = "exposures-cutoff-at-prompt-start";
 	public static final String COMPUTE_PAPER_PNL = "compute-paper-pnl";
 	public static final String RE_HEDGE_WITH_PAPERS = "re-hedge-with-papers";
+	public static final String RE_HEDGE_CUTOFF_AT_PROMPT_START = "re-hedge-cutoff-at-prompt-start";
 	public static final String GENERATED_PAPERS_IN_PNL = "generated-papers-in-pnl";
 	
 	public static final String COMMERCIAL_VOLUME_OVERCAPACITY = "COMMERCIAL_VOLUME_OVERCAPACITY";

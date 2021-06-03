@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.port.ui.editors;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.jface.viewers.CellEditor;
@@ -23,15 +24,17 @@ import com.mmxlabs.models.ui.tabular.manipulators.ValueListAttributeManipulator;
 
 public class CanalEntryAttributeManipulator extends ValueListAttributeManipulator {
 	PortModel portModel;
-	public CanalEntryAttributeManipulator(PortModel portModel, final EAttribute field, final ICommandHandler commandHandler) {
-		super(field, commandHandler, getValues());
+	final Function<CanalEntry, String> nameProvider;
+	public CanalEntryAttributeManipulator(PortModel portModel, final EAttribute field, final ICommandHandler commandHandler, final Function<CanalEntry, String> nameProvider) {
+		super(field, commandHandler, getValues(nameProvider));
 		this.portModel = portModel;
+		this.nameProvider = nameProvider;
 	}
 
-	private static List<Pair<String, Object>> getValues() {
+	private static List<Pair<String, Object>> getValues(final Function<CanalEntry, String> nameProvider) {
 		final LinkedList<Pair<String, Object>> values = new LinkedList<Pair<String, Object>>();
 		for (final CanalEntry literal : CanalEntry.values()) {
-			values.add(new Pair<String, Object>(PortModelLabeller.getName(literal), literal));
+			values.add(new Pair<String, Object>(nameProvider.apply(literal), literal));
 		}
 		return values;
 	}
@@ -46,7 +49,7 @@ public class CanalEntryAttributeManipulator extends ValueListAttributeManipulato
 			String[] names = new String[CanalEntry.values().length];
 			int n = 0;
 			for (final CanalEntry literal : CanalEntry.values()) {
-				names[n] = ModelDistanceProvider.getCanalEntranceName(portModel, canalBookingSlot.getRouteOption(), literal);
+				names[n] = nameProvider.apply(literal);
 				n++;
 			}
 			return new ComboBoxCellEditor(c, names);
@@ -63,7 +66,7 @@ public class CanalEntryAttributeManipulator extends ValueListAttributeManipulato
 			String[] names = new String[CanalEntry.values().length];
 			int n = 0;
 			for (final CanalEntry literal : CanalEntry.values()) {
-				names[n] = ModelDistanceProvider.getCanalEntranceName(portModel, canalBookingSlot.getRouteOption(), literal);
+				names[n] = nameProvider.apply(literal);
 				n++;
 			}
 			return names[(int) value];

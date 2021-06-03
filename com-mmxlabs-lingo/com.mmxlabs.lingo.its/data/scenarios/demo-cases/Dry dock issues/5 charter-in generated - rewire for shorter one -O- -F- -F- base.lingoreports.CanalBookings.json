@@ -1,33 +1,33 @@
 [ {
   "Schedule" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
-  "Pre-booked" : "No",
-  "Canal" : "PANAMA",
-  "Canal Entry" : "Northside",
   "Date" : "11/02/11",
+  "Direction" : "Southbound",
+  "Vessel" : "Bluesky",
+  "Booking Code" : "default",
   "Event" : "load-cargo-48",
-  "Next Slot" : "discharge-cargo-48 15/03/11",
-  "Next Slot Port" : "Pyeongtaek",
-  "Next Slot Window Start" : "15/03/11",
-  "Next Slot Window End" : "15/03/11",
-  "Period" : "Open"
+  "Next Event" : "discharge-cargo-48",
+  "Next Port" : "Pyeongtaek",
+  "Next Window Start" : "15/03/11",
+  "Next Window End" : "15/03/11",
+  "Type" : "Wait (0d)"
 }, {
   "Schedule" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
-  "Pre-booked" : "No",
-  "Canal" : "PANAMA",
-  "Canal Entry" : "Southside",
   "Date" : "31/05/11",
+  "Direction" : "Northbound",
+  "Vessel" : "Methane Becki Anne",
+  "Booking Code" : "default",
   "Event" : "discharge-cargo-9",
-  "Next Slot" : "load-cargo-60 06/06/11",
-  "Next Slot Port" : "Point Fortin",
-  "Next Slot Window Start" : "06/06/11",
-  "Next Slot Window End" : "06/06/11",
-  "Period" : "Open"
+  "Next Event" : "load-cargo-60",
+  "Next Port" : "Point Fortin",
+  "Next Window Start" : "06/06/11",
+  "Next Window End" : "06/06/11",
+  "Type" : "Wait (0d)"
 }, {
   "Schedule" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
-  "Pre-booked" : "No",
-  "Canal" : "PANAMA",
-  "Canal Entry" : "Southside",
   "Date" : "15/06/11",
+  "Direction" : "Northbound",
+  "Vessel" : "Methane Princess",
+  "Booking Code" : "default",
   "Event" : "discharge-cargo-28",
-  "Period" : "Open"
+  "Type" : "Wait (0d)"
 } ]

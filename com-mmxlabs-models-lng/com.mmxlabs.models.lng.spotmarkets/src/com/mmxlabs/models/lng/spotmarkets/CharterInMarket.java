@@ -6,13 +6,16 @@
  */
 package com.mmxlabs.models.lng.spotmarkets;
 
+import org.eclipse.emf.common.util.EList;
+
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.commercial.CharterContract;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.NamedObject;
-import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -28,12 +31,14 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getSpotCharterCount <em>Spot Charter Count</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#isOverrideInaccessibleRoutes <em>Override Inaccessible Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getInaccessibleRoutes <em>Inaccessible Routes</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterContract <em>Charter Contract</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getGenericCharterContract <em>Generic Charter Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#isNominal <em>Nominal</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getMinDuration <em>Min Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getMaxDuration <em>Max Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#isMtm <em>Mtm</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getEntity <em>Entity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getStartAt <em>Start At</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getEndAt <em>End At</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket()
@@ -271,6 +276,90 @@ public interface CharterInMarket extends SpotCharterMarket, VesselAssignmentType
 	void setEntity(BaseLegalEntity value);
 
 	/**
+	 * Returns the value of the '<em><b>Start At</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Start At</em>' reference.
+	 * @see #isSetStartAt()
+	 * @see #unsetStartAt()
+	 * @see #setStartAt(Port)
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket_StartAt()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	Port getStartAt();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getStartAt <em>Start At</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Start At</em>' reference.
+	 * @see #isSetStartAt()
+	 * @see #unsetStartAt()
+	 * @see #getStartAt()
+	 * @generated
+	 */
+	void setStartAt(Port value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getStartAt <em>Start At</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetStartAt()
+	 * @see #getStartAt()
+	 * @see #setStartAt(Port)
+	 * @generated
+	 */
+	void unsetStartAt();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getStartAt <em>Start At</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Start At</em>' reference is set.
+	 * @see #unsetStartAt()
+	 * @see #getStartAt()
+	 * @see #setStartAt(Port)
+	 * @generated
+	 */
+	boolean isSetStartAt();
+
+	/**
+	 * Returns the value of the '<em><b>End At</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}<code>&lt;com.mmxlabs.models.lng.port.Port&gt;</code>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>End At</em>' reference list.
+	 * @see #isSetEndAt()
+	 * @see #unsetEndAt()
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket_EndAt()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	EList<APortSet<Port>> getEndAt();
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getEndAt <em>End At</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetEndAt()
+	 * @see #getEndAt()
+	 * @generated
+	 */
+	void unsetEndAt();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getEndAt <em>End At</em>}' reference list is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>End At</em>' reference list is set.
+	 * @see #unsetEndAt()
+	 * @see #getEndAt()
+	 * @generated
+	 */
+	boolean isSetEndAt();
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
@@ -357,57 +446,57 @@ public interface CharterInMarket extends SpotCharterMarket, VesselAssignmentType
 	EList<RouteOption> getInaccessibleRoutes();
 
 	/**
-	 * Returns the value of the '<em><b>Charter Contract</b></em>' reference.
+	 * Returns the value of the '<em><b>Generic Charter Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Charter Contract</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Charter Contract</em>' reference.
-	 * @see #isSetCharterContract()
-	 * @see #unsetCharterContract()
-	 * @see #setCharterContract(CharterContract)
-	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket_CharterContract()
+	 * @return the value of the '<em>Generic Charter Contract</em>' reference.
+	 * @see #isSetGenericCharterContract()
+	 * @see #unsetGenericCharterContract()
+	 * @see #setGenericCharterContract(GenericCharterContract)
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket_GenericCharterContract()
 	 * @model unsettable="true"
 	 * @generated
 	 */
-	CharterContract getCharterContract();
+	GenericCharterContract getGenericCharterContract();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterContract <em>Charter Contract</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getGenericCharterContract <em>Generic Charter Contract</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Charter Contract</em>' reference.
-	 * @see #isSetCharterContract()
-	 * @see #unsetCharterContract()
-	 * @see #getCharterContract()
+	 * @param value the new value of the '<em>Generic Charter Contract</em>' reference.
+	 * @see #isSetGenericCharterContract()
+	 * @see #unsetGenericCharterContract()
+	 * @see #getGenericCharterContract()
 	 * @generated
 	 */
-	void setCharterContract(CharterContract value);
+	void setGenericCharterContract(GenericCharterContract value);
 
 	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterContract <em>Charter Contract</em>}' reference.
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getGenericCharterContract <em>Generic Charter Contract</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isSetCharterContract()
-	 * @see #getCharterContract()
-	 * @see #setCharterContract(CharterContract)
+	 * @see #isSetGenericCharterContract()
+	 * @see #getGenericCharterContract()
+	 * @see #setGenericCharterContract(GenericCharterContract)
 	 * @generated
 	 */
-	void unsetCharterContract();
+	void unsetGenericCharterContract();
 
 	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getCharterContract <em>Charter Contract</em>}' reference is set.
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getGenericCharterContract <em>Generic Charter Contract</em>}' reference is set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Charter Contract</em>' reference is set.
-	 * @see #unsetCharterContract()
-	 * @see #getCharterContract()
-	 * @see #setCharterContract(CharterContract)
+	 * @return whether the value of the '<em>Generic Charter Contract</em>' reference is set.
+	 * @see #unsetGenericCharterContract()
+	 * @see #getGenericCharterContract()
+	 * @see #setGenericCharterContract(GenericCharterContract)
 	 * @generated
 	 */
-	boolean isSetCharterContract();
+	boolean isSetGenericCharterContract();
 
 	/**
 	 * Returns the value of the '<em><b>Charter In Rate</b></em>' attribute.

@@ -105,10 +105,24 @@ public class CopyGridToJSONUtil {
 
 				final String text = item.getText(colIdx);
 				if (text != null && !text.isEmpty()) {
+
+					// Empty key becomes column idx
 					String key = column.getText();
 					if (key.isEmpty()) {
 						key = Integer.toString(colIdx);
 					}
+
+					//// Conflicting key - JSON object is really a Map, so we need unique keys
+
+					// Try one - see of there is a column Id we can append
+					if (colData.containsKey(key)) {
+						String blockId = (String) column.getData("COLUMN_BLOCK_ID");
+						if (blockId != null && !blockId.isBlank()) {
+							key = key + "-" + blockId;
+						}
+					}
+					// Try two, append column index (possibly again if the column had no name. This is good for uniqueness, but not repeatability as it depends on the order columns were added to the
+					// table. Plugin.xml based code could happen in arbitrary order
 					if (colData.containsKey(key)) {
 						key = key + "-" + colIdx;
 					}

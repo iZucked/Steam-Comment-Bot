@@ -173,24 +173,20 @@ public class ScheduleCalculator {
 		ScheduledVoyagePlanResult lastResult = null;
 
 		IPort firstLoadPort = getFirstLoadPort(records);
-		
+
 		for (int idx = 0; idx < records.size(); idx++) {
 
 			final IPortTimesRecord portTimeWindowsRecord = records.get(idx);
 			final boolean lastPlan = idx == records.size() - 1;
 
-			final PreviousHeelRecord previousHeelRecord = new PreviousHeelRecord();
-
-			previousHeelRecord.heelVolumeInM3 = lastResult == null ? 0 : lastResult.lastHeelVolumeInM3;
-			previousHeelRecord.lastHeelPricePerMMBTU = lastResult == null ? 0 : lastResult.lastHeelPricePerMMBTU;
-			previousHeelRecord.lastCV = lastResult == null ? 0 : lastResult.lastCV;
-			previousHeelRecord.forcedCooldown = lastResult == null ? false : lastResult.forcedCooldown;
+			final PreviousHeelRecord previousHeelRecord = lastResult == null ? new PreviousHeelRecord() : lastResult.endHeelState;
 
 			final List<ScheduledVoyagePlanResult> results = voyagePlanEvaluator.evaluateShipped(resource, vesselAvailability, //
 					vesselAvailability.getCharterCostCalculator(), //
 					vesselStartTime, //
-					firstLoadPort,
-					previousHeelRecord, portTimeWindowsRecord, //
+					firstLoadPort, //
+					previousHeelRecord, //
+					portTimeWindowsRecord, //
 					lastPlan, //
 					false, // Return best
 					true, // annotatedSolution != null, // Keep solutions for export

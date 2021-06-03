@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.mmxlabs.models.lng.adp.MullEntityRow;
@@ -29,12 +30,12 @@ public class MULLContainer {
 		mudContainerList = subprofile.getEntityTable().stream().filter(row -> row.getRelativeEntitlement() > 0.0).map(row -> new MUDContainer(row, totalWeight)).collect(Collectors.toList());
 	}
 
-	public MUDContainer calculateMULL(final Map<Vessel, LocalDateTime> vesselToMostRecentUseDateTime, final int defaultAllocationDrop) {
+	public MUDContainer calculateMULL(final Map<Vessel, LocalDateTime> vesselToMostRecentUseDateTime, final int defaultAllocationDrop, final Set<Vessel> firstPartyVessels) {
 		return this.mudContainerList.stream().max((Comparator<MUDContainer>) (mc0, mc1) -> {
 			final Long allocation0 = mc0.getRunningAllocation();
 			final Long allocation1 = mc1.getRunningAllocation();
-			final int expectedAllocationDrop0 = mc0.calculateExpectedAllocationDrop(vesselToMostRecentUseDateTime, defaultAllocationDrop, inventory.getPort().getLoadDuration());
-			final int expectedAllocationDrop1 = mc1.calculateExpectedAllocationDrop(vesselToMostRecentUseDateTime, defaultAllocationDrop, inventory.getPort().getLoadDuration());
+			final int expectedAllocationDrop0 = mc0.calculateExpectedAllocationDrop(vesselToMostRecentUseDateTime, defaultAllocationDrop, inventory.getPort().getLoadDuration(), firstPartyVessels);
+			final int expectedAllocationDrop1 = mc1.calculateExpectedAllocationDrop(vesselToMostRecentUseDateTime, defaultAllocationDrop, inventory.getPort().getLoadDuration(), firstPartyVessels);
 			final int beforeDrop0 = mc0.getCurrentMonthAbsoluteEntitlement();
 			final int beforeDrop1 = mc1.getCurrentMonthAbsoluteEntitlement();
 			final int afterDrop0 = beforeDrop0 - expectedAllocationDrop0;
@@ -96,12 +97,12 @@ public class MULLContainer {
 		}).get();
 	}
 
-	public MUDContainer phase1CalculateMULL(final Map<Vessel, LocalDateTime> vesselToMostRecentUseDateTime, final int defaultAllocationDrop) {
+	public MUDContainer phase1CalculateMULL(final Map<Vessel, LocalDateTime> vesselToMostRecentUseDateTime, final int defaultAllocationDrop, final Set<Vessel> firstPartyVessels) {
 		return this.mudContainerList.stream().max((Comparator<MUDContainer>) (mc0, mc1) -> {
 			final Long allocation0 = mc0.getRunningAllocation();
 			final Long allocation1 = mc1.getRunningAllocation();
-			final int expectedAllocationDrop0 = mc0.phase1CalculateExpectedAllocationDrop(vesselToMostRecentUseDateTime, defaultAllocationDrop, inventory.getPort().getLoadDuration());
-			final int expectedAllocationDrop1 = mc1.phase1CalculateExpectedAllocationDrop(vesselToMostRecentUseDateTime, defaultAllocationDrop, inventory.getPort().getLoadDuration());
+			final int expectedAllocationDrop0 = mc0.phase1CalculateExpectedAllocationDrop(vesselToMostRecentUseDateTime, defaultAllocationDrop, inventory.getPort().getLoadDuration(), firstPartyVessels);
+			final int expectedAllocationDrop1 = mc1.phase1CalculateExpectedAllocationDrop(vesselToMostRecentUseDateTime, defaultAllocationDrop, inventory.getPort().getLoadDuration(), firstPartyVessels);
 			final int beforeDrop0 = mc0.getCurrentMonthAbsoluteEntitlement();
 			final int beforeDrop1 = mc1.getCurrentMonthAbsoluteEntitlement();
 			final int afterDrop0 = beforeDrop0 - expectedAllocationDrop0;

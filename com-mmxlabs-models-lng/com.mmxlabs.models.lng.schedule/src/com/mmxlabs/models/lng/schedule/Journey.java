@@ -31,6 +31,7 @@ import java.time.LocalDateTime;
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalArrivalTime <em>Canal Arrival Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalBookingPeriod <em>Canal Booking Period</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalEntrancePort <em>Canal Entrance Port</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Journey#getCanalJourneyEvent <em>Canal Journey Event</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getJourney()
@@ -384,6 +385,28 @@ public interface Journey extends Event, FuelUsage {
 	 * @generated
 	 */
 	void setCanalEntrancePort(Port value);
+
+	/**
+	 * Returns the value of the '<em><b>Canal Journey Event</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Canal Journey Event</em>' containment reference.
+	 * @see #setCanalJourneyEvent(CanalJourneyEvent)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getJourney_CanalJourneyEvent()
+	 * @model containment="true"
+	 * @generated
+	 */
+	CanalJourneyEvent getCanalJourneyEvent();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Journey#getCanalJourneyEvent <em>Canal Journey Event</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Canal Journey Event</em>' containment reference.
+	 * @see #getCanalJourneyEvent()
+	 * @generated
+	 */
+	void setCanalJourneyEvent(CanalJourneyEvent value);
 
 } // end of  Journey
 

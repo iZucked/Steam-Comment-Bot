@@ -17,8 +17,6 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.EVesselTankState;
-import com.mmxlabs.models.lng.cargo.EndHeelOptions;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
@@ -26,7 +24,10 @@ import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.EVesselTankState;
+import com.mmxlabs.models.lng.commercial.EndHeelOptions;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -38,6 +39,7 @@ import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.PortCapability;
@@ -60,7 +62,7 @@ public class CargoModelBuilder {
 	}
 
 	public @NonNull EndHeelOptions createEndHeelOptions(int minVolumeInM3, int maxVolumeInM3, @NonNull EVesselTankState state) {
-		final EndHeelOptions result = CargoFactory.eINSTANCE.createEndHeelOptions();
+		final EndHeelOptions result = CommercialFactory.eINSTANCE.createEndHeelOptions();
 
 		if (minVolumeInM3 < 0) {
 			throw new IllegalArgumentException();
@@ -372,16 +374,17 @@ public class CargoModelBuilder {
 	public @NonNull SlotMaker<SpotDischargeSlot> makeSpotFOBSale(String name, @NonNull YearMonth windowStart, @NonNull FOBSalesMarket market, @NonNull Port port) {
 		return new SlotMaker<SpotDischargeSlot>(this).withMarketFOBSale(name, market, windowStart, port);
 	}
-
-	public @NonNull CanalBookingSlot makeCanalBooking(final @NonNull RouteOption routeOption, final @NonNull CanalEntry canalEntrance, final @NonNull LocalDate date, @Nullable Slot slot) {
+	
+	public @NonNull CanalBookingSlot makeCanalBooking(final @NonNull RouteOption routeOption, final @NonNull CanalEntry canalEntrance, final @NonNull LocalDate date, @Nullable AVesselSet<Vessel> vessel) {
 		final CanalBookingSlot booking = CargoFactory.eINSTANCE.createCanalBookingSlot();
 		booking.setRouteOption(routeOption);
 		booking.setCanalEntrance(canalEntrance);
 		booking.setBookingDate(date);
-		if (slot != null) {
-			booking.setSlot(slot);
+		
+		if (vessel != null) {
+			booking.setVessel(vessel);
 		}
-
+		
 		if (cargoModel.getCanalBookings() == null) {
 			cargoModel.setCanalBookings(CargoFactory.eINSTANCE.createCanalBookings());
 		}

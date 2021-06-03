@@ -11,8 +11,9 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
-import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
+import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 
@@ -26,8 +27,8 @@ public class CharterOutEventMaker {
 		this.cargoModelBuilder = cargoModelBuilder;
 		this.event = CargoFactory.eINSTANCE.createCharterOutEvent();
 
-		this.event.setAvailableHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
-		this.event.setRequiredHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+		this.event.setAvailableHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+		this.event.setRequiredHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 
 		this.event.setName(name);
 

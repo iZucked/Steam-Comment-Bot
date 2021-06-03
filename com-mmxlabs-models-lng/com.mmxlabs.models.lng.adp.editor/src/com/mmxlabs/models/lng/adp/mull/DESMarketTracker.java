@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.adp.mull;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.emf.common.command.Command;
 
@@ -35,8 +36,8 @@ public class DESMarketTracker extends AllocationTracker {
 	}
 
 	@Override
-	public int calculateExpectedBoiloff(final Vessel vessel, final int loadDuration) {
-		return this.sharesVessels ? super.calculateExpectedBoiloff(vessel, loadDuration) : 0;
+	public int calculateExpectedBoiloff(final Vessel vessel, final int loadDuration, final boolean isSharedVessel) {
+		return this.sharesVessels ? super.calculateExpectedBoiloff(vessel, loadDuration, isSharedVessel) : 0;
 	}
 
 	public DESSalesMarket getDESSalesMarket() {
@@ -45,9 +46,9 @@ public class DESMarketTracker extends AllocationTracker {
 
 	@Override
 	public DischargeSlot createDischargeSlot(final CargoEditingCommands cec, List<Command> setCommands, final CargoModel cargoModel, final IScenarioDataProvider sdp, final LoadSlot loadSlot,
-			final Vessel vessel, final Map<Vessel, VesselAvailability> vesselToVA, final LNGScenarioModel sm) {
+			final Vessel vessel, final Map<Vessel, VesselAvailability> vesselToVA, final LNGScenarioModel sm, final Set<Vessel> firstPartyVessels) {
 		final DischargeSlot dischargeSlot;
-		if (this.sharesVessels) {
+		if (firstPartyVessels.contains(vessel)) {
 			dischargeSlot = cec.createNewSpotDischarge(setCommands, cargoModel, this.salesMarket);
 			final LocalDate dischargeDate = AllocationTracker.calculateDischargeDate(loadSlot, dischargeSlot, vessel, sdp, vesselToVA, sm);
 			dischargeSlot.setWindowStart(dischargeDate);

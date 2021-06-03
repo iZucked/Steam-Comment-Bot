@@ -330,7 +330,7 @@ public class NotionalJourneyContractDetailsItemProvider extends MatchingContract
 			getString("_UI_NotionalJourneyContractDetails_type") :
 			getString("_UI_NotionalJourneyContractDetails_type") + " " + label;
 	}
-	
+
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached

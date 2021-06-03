@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 
 /**
  * 
@@ -16,34 +17,6 @@ import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 public interface IPanamaBookingsProvider extends IDataComponentProvider {
 
 	ImmutableMap<ECanalEntry, ImmutableList<IRouteOptionBooking>> getAllBookings();
-
-	/**
-	 * All dates before this boundary strictly need a Panama booking. Exclusive
-	 * 
-	 * @return
-	 */
-	int getStrictBoundary();
-
-//	/**
-//	 * Between the {@link #getStrictBoundary()} and {@link #getRelaxedBoundary()}, there can be some relaxation, i.e. not all journeys through Panama need a booking.
-//	 * 
-//	 * @return
-//	 */
-//	int getRelaxedBookingCountNorthbound();
-
-	/**
-	 * Between the {@link #getStrictBoundary()} and {@link #getRelaxedBoundary()}, there can be some relaxation, i.e. not all journeys through Panama need a booking.
-	 * 
-	 * @return
-	 */
-	int getRelaxedBookingCountSouthbound();
-
-	/**
-	 * All dates after this boundary don't need a Panama booking. Inclusive.
-	 * 
-	 * @return
-	 */
-	int getRelaxedBoundary();
 
 	/**
 	 * The speed to be used to calculate the time to reach the canal.
@@ -58,19 +31,37 @@ public interface IPanamaBookingsProvider extends IDataComponentProvider {
 	 * @return
 	 */
 	int getMarginInHours();
-	
+
 	/**
-	 * The amount of days a vessel will idle in front of the canal on a NORTHBOUND in order to try and get a spontaneous booking.
+	 * The default amount of days a vessel will idle in front of the canal on a NORTHBOUND voyage in order to try and get a spontaneous booking. Typically you will want to call
+	 * {@link #getNorthboundMaxIdleDays(IVessel)} instead.
+	 * 
 	 * @return
 	 */
 	int getNorthboundMaxIdleDays();
 
 	/**
-	 * The amount of days a vessel will idle in front of the canal on a NORTHBOUND in order to try and get a spontaneous booking.
+	 * The default amount of days a vessel will idle in front of the canal on a SOUTHBOUND voyage in order to try and get a spontaneous booking. Typically you will want to call
+	 * {@link #getSouthboundMaxIdleDays(IVessel)} instead.
+	 * 
 	 * @return
 	 */
 	int getSouthboundMaxIdleDays();
-	
+
+	/**
+	 * The amount of days a vessel will idle in front of the canal on a NORTHBOUND voyage in order to try and get a spontaneous booking.
+	 * 
+	 * @return
+	 */
+	int getNorthboundMaxIdleDays(IVessel vessel);
+
+	/**
+	 * The amount of days a vessel will idle in front of the canal on a SOUTHBOUND voyage in order to try and get a spontaneous booking.
+	 * 
+	 * @return
+	 */
+	int getSouthboundMaxIdleDays(IVessel vessel);
+
 	// Sorted
 	ImmutableMap<ECanalEntry, ImmutableList<IRouteOptionBooking>> getAssignedBookings();
 

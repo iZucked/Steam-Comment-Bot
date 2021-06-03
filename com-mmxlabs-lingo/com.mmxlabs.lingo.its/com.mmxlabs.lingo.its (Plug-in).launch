@@ -33,7 +33,7 @@
     <stringAttribute key="org.eclipse.jdt.junit.EXCLUDE_TAGS" value=""/>
     <booleanAttribute key="org.eclipse.jdt.junit.HAS_EXCLUDE_TAGS" value="false"/>
     <booleanAttribute key="org.eclipse.jdt.junit.HAS_INCLUDE_TAGS" value="false"/>
-    <stringAttribute key="org.eclipse.jdt.junit.INCLUDE_TAGS" value="com.mmxlabs.lingo.its.tests.category.ReportTest"/>
+    <stringAttribute key="org.eclipse.jdt.junit.INCLUDE_TAGS" value="com.mmxlabs.lingo.its.tests.category.OptimisationTest"/>
     <booleanAttribute key="org.eclipse.jdt.junit.KEEPRUNNING_ATTR" value="false"/>
     <stringAttribute key="org.eclipse.jdt.junit.TESTNAME" value=""/>
     <stringAttribute key="org.eclipse.jdt.junit.TEST_KIND" value="org.eclipse.jdt.junit.loader.junit5"/>
@@ -295,7 +295,7 @@
         <setEntry value="org.sat4j.pb@default:default"/>
         <setEntry value="org.slf4j.api*1.7.10.v20170428-1633@default:default"/>
         <setEntry value="org.slf4j.api*1.7.2.v20121108-1250@default:default"/>
-        <setEntry value="org.swtchart@default:default"/>
+        <setEntry value="org.eclipse.swtchart@default:default"/>
         <setEntry value="org.tukaani.xz@default:default"/>
         <setEntry value="org.w3c.css.sac@default:default"/>
         <setEntry value="org.w3c.dom.events@default:default"/>

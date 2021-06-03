@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.common.exposures;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,4 +30,6 @@ public class ExposuresLookupData {
 	public Map<String, BasicPricingCalendar> pricingCalendars = new HashMap<>();
 	// Keeps a Holiday calendar for a curve name
 	public Map<String, BasicHolidayCalendar> holidayCalendars = new HashMap<>();
+	
+	public LocalDate cutoffDate = LocalDate.MIN;
 }

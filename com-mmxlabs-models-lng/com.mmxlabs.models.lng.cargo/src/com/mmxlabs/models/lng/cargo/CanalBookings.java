@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.cargo;
 
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import org.eclipse.emf.common.util.EList;
 
@@ -26,6 +27,8 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleBookingAmountSouthbound <em>Flexible Booking Amount Southbound</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getNorthboundMaxIdleDays <em>Northbound Max Idle Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getSouthboundMaxIdleDays <em>Southbound Max Idle Days</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getBookingExemptVessels <em>Booking Exempt Vessels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getVesselGroupCanalParameters <em>Vessel Group Canal Parameters</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookings()
@@ -109,10 +112,13 @@ public interface CanalBookings extends MMXObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Number of hours arrival margin prior Panama booking date or expected crossing time.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Arrival Margin Hours</em>' attribute.
 	 * @see #setArrivalMarginHours(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookings_ArrivalMarginHours()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hours'"
 	 * @generated
 	 */
 	int getArrivalMarginHours();
@@ -226,5 +232,29 @@ public interface CanalBookings extends MMXObject {
 	 * @generated
 	 */
 	void setSouthboundMaxIdleDays(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Booking Exempt Vessels</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.fleet.Vessel}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Booking Exempt Vessels</em>' reference list.
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookings_BookingExemptVessels()
+	 * @model
+	 * @generated
+	 */
+	EList<Vessel> getBookingExemptVessels();
+
+	/**
+	 * Returns the value of the '<em><b>Vessel Group Canal Parameters</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessel Group Canal Parameters</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookings_VesselGroupCanalParameters()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	EList<VesselGroupCanalParameters> getVesselGroupCanalParameters();
 
 } // CanalBookings

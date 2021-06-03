@@ -54,7 +54,6 @@ import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
-import com.mmxlabs.models.lng.cargo.EVesselTankState;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -62,6 +61,9 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
+import com.mmxlabs.models.lng.commercial.EVesselTankState;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.Port;
@@ -814,8 +816,8 @@ public class PeriodTransformer {
 						if (vesselAssignmentType instanceof VesselAvailability) {
 							final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
 							final VesselAvailability newVesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-							newVesselAvailability.setStartHeel(CargoFactory.eINSTANCE.createStartHeelOptions());
-							newVesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+							newVesselAvailability.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+							newVesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 							newVesselAvailability.setVessel(vesselAvailability.getVessel());
 							newVesselAvailability.setCharterNumber(vesselAvailability.getCharterNumber());
 
@@ -1354,14 +1356,31 @@ public class PeriodTransformer {
 				vesselAvailability.getStartHeel().setMaxVolumeAvailable(0);
 				vesselAvailability.getStartHeel().setCvValue(0.0);
 				vesselAvailability.getStartHeel().setPriceExpression("");
-				vesselAvailability.setRepositioningFee("");
 			} else {
 				vesselAvailability.getStartHeel().setMinVolumeAvailable(heelAtStart);
 				vesselAvailability.getStartHeel().setMaxVolumeAvailable(heelAtStart);
 				vesselAvailability.getStartHeel().setCvValue(22.8);
 				vesselAvailability.getStartHeel().setPriceExpression("");
-				vesselAvailability.setRepositioningFee("");
 			}
+			
+			GenericCharterContract gcc = null;
+			boolean contained = false;
+			if (vesselAvailability.isCharterContractOverride()) {
+				gcc = vesselAvailability.getContainedCharterContract();
+				contained = true;
+			} else {
+				if (vesselAvailability.getGenericCharterContract() != null) {
+					final Copier copier = new Copier();
+					gcc = (GenericCharterContract) copier.copy(vesselAvailability.getGenericCharterContract());
+				}
+			}
+			if (gcc != null) {
+				gcc.setRepositioningFeeTerms(null);
+				if (!contained) {
+					vesselAvailability.setGenericCharterContract(gcc);
+				}
+			}
+			
 		}
 	}
 
@@ -1397,7 +1416,7 @@ public class PeriodTransformer {
 			vesselAvailability.setForceHireCostOnlyEndRule(false);
 
 			if (vesselAvailability.getEndHeel() == null) {
-				vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+				vesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 			}
 
 			// Set must arrive cold with target heel volume
@@ -1418,7 +1437,23 @@ public class PeriodTransformer {
 				vesselAvailability.getEndHeel().setPriceExpression("");
 				vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_WARM);
 			}
-			vesselAvailability.setBallastBonusContract(null);
+			GenericCharterContract gcc = null;
+			boolean contained = false;
+			if (vesselAvailability.isCharterContractOverride()) {
+				gcc = vesselAvailability.getContainedCharterContract();
+				contained = true;
+			} else {
+				if (vesselAvailability.getGenericCharterContract() != null) {
+					final Copier copier = new Copier();
+					gcc = (GenericCharterContract) copier.copy(vesselAvailability.getGenericCharterContract());
+				}
+			}
+			if (gcc != null) {
+				gcc.setBallastBonusTerms(null);
+				if (!contained) {
+					vesselAvailability.setGenericCharterContract(gcc);
+				}
+			}
 		}
 	}
 
@@ -1487,14 +1522,14 @@ public class PeriodTransformer {
 			final int heel = portVisit.getHeelAtStart();
 			if (heel > 0 || portVisit.getPreviousEvent() instanceof Cooldown) {
 				if (vesselAvailability.getEndHeel() == null) {
-					vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+					vesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 				}
 				vesselAvailability.getEndHeel().setMinimumEndHeel(heel);
 				vesselAvailability.getEndHeel().setMaximumEndHeel(heel);
 				vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
 			} else {
 				if (vesselAvailability.getEndHeel() == null) {
-					vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+					vesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
 				}
 				vesselAvailability.getEndHeel().setMinimumEndHeel(0);
 				vesselAvailability.getEndHeel().setMaximumEndHeel(0);

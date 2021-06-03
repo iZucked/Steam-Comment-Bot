@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -277,7 +278,7 @@ public class TestCalculations {
 						ArgumentMatchers.any())).thenReturn(null);
 			}
 
-			Mockito.when(allocationAnnotation.getSlots()).thenReturn(Lists.newArrayList(loadSlot, dischargeSlot));
+			Mockito.when(allocationAnnotation.getSlots()).thenReturn(ImmutableList.of(loadSlot, dischargeSlot));
 			Mockito.when(allocationAnnotation.getFirstSlot()).thenReturn(loadSlot);
 			Mockito.when(allocationAnnotation.getSlotCargoCV(loadSlot)).thenReturn(2_000_000);
 			Mockito.when(allocationAnnotation.getSlotCargoCV(dischargeSlot)).thenReturn(2_000_000);
@@ -621,7 +622,7 @@ public class TestCalculations {
 						ArgumentMatchers.any())).thenReturn(null);
 			}
 
-			Mockito.when(allocationAnnotation.getSlots()).thenReturn(Lists.newArrayList(loadSlot, dischargeSlot));
+			Mockito.when(allocationAnnotation.getSlots()).thenReturn(ImmutableList.of(loadSlot, dischargeSlot));
 			Mockito.when(allocationAnnotation.getFirstSlot()).thenReturn(loadSlot);
 			Mockito.when(allocationAnnotation.getSlotTime(loadSlot)).thenReturn(25);
 			Mockito.when(allocationAnnotation.getSlotDuration(loadSlot)).thenReturn(1);
@@ -974,7 +975,7 @@ public class TestCalculations {
 						ArgumentMatchers.any())).thenReturn(null);
 			}
 
-			Mockito.when(allocationAnnotation.getSlots()).thenReturn(Lists.newArrayList(loadSlot, dischargeSlot));
+			Mockito.when(allocationAnnotation.getSlots()).thenReturn(ImmutableList.of(loadSlot, dischargeSlot));
 
 			Mockito.when(allocationAnnotation.getFirstSlot()).thenReturn(loadSlot);
 			Mockito.when(allocationAnnotation.getSlotTime(loadSlot)).thenReturn(25);
@@ -1253,7 +1254,7 @@ public class TestCalculations {
 
 				bind(VesselBaseFuelCalculator.class).toInstance(baseFuelCalculator);
 
-				bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_ArrivalTimeCache)).toInstance(CacheMode.Off);
+				bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_TimeWindowSchedulerCache)).toInstance(CacheMode.Off);
 				bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VoyagePlanEvaluatorCache)).toInstance(CacheMode.Off);
 				bind(boolean.class).annotatedWith(Names.named("schedule-purges")).toInstance(Boolean.TRUE);
 				bind(boolean.class).annotatedWith(Names.named("hint-lngtransformer-disable-caches")).toInstance(Boolean.TRUE);

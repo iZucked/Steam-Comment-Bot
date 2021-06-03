@@ -27,6 +27,7 @@ import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
+import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.util.CommercialAdapterFactory;
 
@@ -317,187 +318,302 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.GenericCharterContract} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected RuleBasedBallastBonusContractItemProvider ruleBasedBallastBonusContractItemProvider;
+	protected GenericCharterContractItemProvider genericCharterContractItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.RuleBasedBallastBonusContract}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.GenericCharterContract}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createRuleBasedBallastBonusContractAdapter() {
-		if (ruleBasedBallastBonusContractItemProvider == null) {
-			ruleBasedBallastBonusContractItemProvider = new RuleBasedBallastBonusContractItemProvider(this);
+	public Adapter createGenericCharterContractAdapter() {
+		if (genericCharterContractItemProvider == null) {
+			genericCharterContractItemProvider = new GenericCharterContractItemProvider(this);
 		}
 
-		return ruleBasedBallastBonusContractItemProvider;
+		return genericCharterContractItemProvider;
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.SimpleRepositioningFeeContainer} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected LumpSumBallastBonusContractLineItemProvider lumpSumBallastBonusContractLineItemProvider;
+	protected SimpleRepositioningFeeContainerItemProvider simpleRepositioningFeeContainerItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.LumpSumBallastBonusContractLine}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.SimpleRepositioningFeeContainer}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createLumpSumBallastBonusContractLineAdapter() {
-		if (lumpSumBallastBonusContractLineItemProvider == null) {
-			lumpSumBallastBonusContractLineItemProvider = new LumpSumBallastBonusContractLineItemProvider(this);
+	public Adapter createSimpleRepositioningFeeContainerAdapter() {
+		if (simpleRepositioningFeeContainerItemProvider == null) {
+			simpleRepositioningFeeContainerItemProvider = new SimpleRepositioningFeeContainerItemProvider(this);
 		}
 
-		return lumpSumBallastBonusContractLineItemProvider;
+		return simpleRepositioningFeeContainerItemProvider;
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.SimpleBallastBonusContainer} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected NotionalJourneyBallastBonusContractLineItemProvider notionalJourneyBallastBonusContractLineItemProvider;
+	protected SimpleBallastBonusContainerItemProvider simpleBallastBonusContainerItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusContractLine}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.SimpleBallastBonusContainer}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createNotionalJourneyBallastBonusContractLineAdapter() {
-		if (notionalJourneyBallastBonusContractLineItemProvider == null) {
-			notionalJourneyBallastBonusContractLineItemProvider = new NotionalJourneyBallastBonusContractLineItemProvider(this);
+	public Adapter createSimpleBallastBonusContainerAdapter() {
+		if (simpleBallastBonusContainerItemProvider == null) {
+			simpleBallastBonusContainerItemProvider = new SimpleBallastBonusContainerItemProvider(this);
 		}
 
-		return notionalJourneyBallastBonusContractLineItemProvider;
+		return simpleBallastBonusContainerItemProvider;
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.SimpleCharterContract} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContainer} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected SimpleCharterContractItemProvider simpleCharterContractItemProvider;
+	protected MonthlyBallastBonusContainerItemProvider monthlyBallastBonusContainerItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.SimpleCharterContract}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContainer}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createSimpleCharterContractAdapter() {
-		if (simpleCharterContractItemProvider == null) {
-			simpleCharterContractItemProvider = new SimpleCharterContractItemProvider(this);
+	public Adapter createMonthlyBallastBonusContainerAdapter() {
+		if (monthlyBallastBonusContainerItemProvider == null) {
+			monthlyBallastBonusContainerItemProvider = new MonthlyBallastBonusContainerItemProvider(this);
 		}
 
-		return simpleCharterContractItemProvider;
+		return monthlyBallastBonusContainerItemProvider;
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.SimpleBallastBonusCharterContract} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.BallastBonusTerm} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected SimpleBallastBonusCharterContractItemProvider simpleBallastBonusCharterContractItemProvider;
+	protected BallastBonusTermItemProvider ballastBonusTermItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.SimpleBallastBonusCharterContract}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.BallastBonusTerm}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createSimpleBallastBonusCharterContractAdapter() {
-		if (simpleBallastBonusCharterContractItemProvider == null) {
-			simpleBallastBonusCharterContractItemProvider = new SimpleBallastBonusCharterContractItemProvider(this);
+	public Adapter createBallastBonusTermAdapter() {
+		if (ballastBonusTermItemProvider == null) {
+			ballastBonusTermItemProvider = new BallastBonusTermItemProvider(this);
 		}
 
-		return simpleBallastBonusCharterContractItemProvider;
+		return ballastBonusTermItemProvider;
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.LumpSumBallastBonusTerm} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected MonthlyBallastBonusContractLineItemProvider monthlyBallastBonusContractLineItemProvider;
+	protected LumpSumBallastBonusTermItemProvider lumpSumBallastBonusTermItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContractLine}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.LumpSumBallastBonusTerm}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createMonthlyBallastBonusContractLineAdapter() {
-		if (monthlyBallastBonusContractLineItemProvider == null) {
-			monthlyBallastBonusContractLineItemProvider = new MonthlyBallastBonusContractLineItemProvider(this);
+	public Adapter createLumpSumBallastBonusTermAdapter() {
+		if (lumpSumBallastBonusTermItemProvider == null) {
+			lumpSumBallastBonusTermItemProvider = new LumpSumBallastBonusTermItemProvider(this);
 		}
 
-		return monthlyBallastBonusContractLineItemProvider;
+		return lumpSumBallastBonusTermItemProvider;
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContract} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusTerm} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected MonthlyBallastBonusContractItemProvider monthlyBallastBonusContractItemProvider;
+	protected NotionalJourneyBallastBonusTermItemProvider notionalJourneyBallastBonusTermItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusContract}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.NotionalJourneyBallastBonusTerm}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createMonthlyBallastBonusContractAdapter() {
-		if (monthlyBallastBonusContractItemProvider == null) {
-			monthlyBallastBonusContractItemProvider = new MonthlyBallastBonusContractItemProvider(this);
+	public Adapter createNotionalJourneyBallastBonusTermAdapter() {
+		if (notionalJourneyBallastBonusTermItemProvider == null) {
+			notionalJourneyBallastBonusTermItemProvider = new NotionalJourneyBallastBonusTermItemProvider(this);
 		}
 
-		return monthlyBallastBonusContractItemProvider;
+		return notionalJourneyBallastBonusTermItemProvider;
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusCharterContract} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusTerm} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected MonthlyBallastBonusCharterContractItemProvider monthlyBallastBonusCharterContractItemProvider;
+	protected MonthlyBallastBonusTermItemProvider monthlyBallastBonusTermItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusCharterContract}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.MonthlyBallastBonusTerm}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createMonthlyBallastBonusCharterContractAdapter() {
-		if (monthlyBallastBonusCharterContractItemProvider == null) {
-			monthlyBallastBonusCharterContractItemProvider = new MonthlyBallastBonusCharterContractItemProvider(this);
+	public Adapter createMonthlyBallastBonusTermAdapter() {
+		if (monthlyBallastBonusTermItemProvider == null) {
+			monthlyBallastBonusTermItemProvider = new MonthlyBallastBonusTermItemProvider(this);
 		}
 
-		return monthlyBallastBonusCharterContractItemProvider;
+		return monthlyBallastBonusTermItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.RepositioningFeeTerm} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected RepositioningFeeTermItemProvider repositioningFeeTermItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.RepositioningFeeTerm}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createRepositioningFeeTermAdapter() {
+		if (repositioningFeeTermItemProvider == null) {
+			repositioningFeeTermItemProvider = new RepositioningFeeTermItemProvider(this);
+		}
+
+		return repositioningFeeTermItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.LumpSumRepositioningFeeTerm} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected LumpSumRepositioningFeeTermItemProvider lumpSumRepositioningFeeTermItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.LumpSumRepositioningFeeTerm}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createLumpSumRepositioningFeeTermAdapter() {
+		if (lumpSumRepositioningFeeTermItemProvider == null) {
+			lumpSumRepositioningFeeTermItemProvider = new LumpSumRepositioningFeeTermItemProvider(this);
+		}
+
+		return lumpSumRepositioningFeeTermItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.OriginPortRepositioningFeeTerm} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected OriginPortRepositioningFeeTermItemProvider originPortRepositioningFeeTermItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.OriginPortRepositioningFeeTerm}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createOriginPortRepositioningFeeTermAdapter() {
+		if (originPortRepositioningFeeTermItemProvider == null) {
+			originPortRepositioningFeeTermItemProvider = new OriginPortRepositioningFeeTermItemProvider(this);
+		}
+
+		return originPortRepositioningFeeTermItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.EndHeelOptions} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected EndHeelOptionsItemProvider endHeelOptionsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.EndHeelOptions}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createEndHeelOptionsAdapter() {
+		if (endHeelOptionsItemProvider == null) {
+			endHeelOptionsItemProvider = new EndHeelOptionsItemProvider(this);
+		}
+
+		return endHeelOptionsItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.StartHeelOptions} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected StartHeelOptionsItemProvider startHeelOptionsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.StartHeelOptions}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createStartHeelOptionsAdapter() {
+		if (startHeelOptionsItemProvider == null) {
+			startHeelOptionsItemProvider = new StartHeelOptionsItemProvider(this);
+		}
+
+		return startHeelOptionsItemProvider;
 	}
 
 	/**
@@ -636,14 +752,19 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (contractExpressionMapEntryItemProvider != null) contractExpressionMapEntryItemProvider.dispose();
 		if (simpleEntityBookItemProvider != null) simpleEntityBookItemProvider.dispose();
 		if (dateShiftExpressionPriceParametersItemProvider != null) dateShiftExpressionPriceParametersItemProvider.dispose();
-		if (ruleBasedBallastBonusContractItemProvider != null) ruleBasedBallastBonusContractItemProvider.dispose();
-		if (lumpSumBallastBonusContractLineItemProvider != null) lumpSumBallastBonusContractLineItemProvider.dispose();
-		if (notionalJourneyBallastBonusContractLineItemProvider != null) notionalJourneyBallastBonusContractLineItemProvider.dispose();
-		if (simpleCharterContractItemProvider != null) simpleCharterContractItemProvider.dispose();
-		if (simpleBallastBonusCharterContractItemProvider != null) simpleBallastBonusCharterContractItemProvider.dispose();
-		if (monthlyBallastBonusContractLineItemProvider != null) monthlyBallastBonusContractLineItemProvider.dispose();
-		if (monthlyBallastBonusContractItemProvider != null) monthlyBallastBonusContractItemProvider.dispose();
-		if (monthlyBallastBonusCharterContractItemProvider != null) monthlyBallastBonusCharterContractItemProvider.dispose();
+		if (genericCharterContractItemProvider != null) genericCharterContractItemProvider.dispose();
+		if (simpleRepositioningFeeContainerItemProvider != null) simpleRepositioningFeeContainerItemProvider.dispose();
+		if (simpleBallastBonusContainerItemProvider != null) simpleBallastBonusContainerItemProvider.dispose();
+		if (monthlyBallastBonusContainerItemProvider != null) monthlyBallastBonusContainerItemProvider.dispose();
+		if (ballastBonusTermItemProvider != null) ballastBonusTermItemProvider.dispose();
+		if (lumpSumBallastBonusTermItemProvider != null) lumpSumBallastBonusTermItemProvider.dispose();
+		if (notionalJourneyBallastBonusTermItemProvider != null) notionalJourneyBallastBonusTermItemProvider.dispose();
+		if (monthlyBallastBonusTermItemProvider != null) monthlyBallastBonusTermItemProvider.dispose();
+		if (repositioningFeeTermItemProvider != null) repositioningFeeTermItemProvider.dispose();
+		if (lumpSumRepositioningFeeTermItemProvider != null) lumpSumRepositioningFeeTermItemProvider.dispose();
+		if (originPortRepositioningFeeTermItemProvider != null) originPortRepositioningFeeTermItemProvider.dispose();
+		if (endHeelOptionsItemProvider != null) endHeelOptionsItemProvider.dispose();
+		if (startHeelOptionsItemProvider != null) startHeelOptionsItemProvider.dispose();
 	}
 
 }

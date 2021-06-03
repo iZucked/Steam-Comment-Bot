@@ -123,7 +123,7 @@ public class MergeHelper implements Closeable {
 		fm.getVesselGroups().forEach(ctx::registerType);
 
 		final CommercialModel targetScenarioDataProviderCM = ScenarioModelUtil.getCommercialModel(targetScenarioDataProvider);
-		targetScenarioDataProviderCM.getCharteringContracts().forEach(ctx::registerType);
+		targetScenarioDataProviderCM.getCharterContracts().forEach(ctx::registerType);
 		targetScenarioDataProviderCM.getPurchaseContracts().forEach(ctx::registerType);
 		targetScenarioDataProviderCM.getSalesContracts().forEach(ctx::registerType);
 		targetScenarioDataProviderCM.getEntities().forEach(ctx::registerType);

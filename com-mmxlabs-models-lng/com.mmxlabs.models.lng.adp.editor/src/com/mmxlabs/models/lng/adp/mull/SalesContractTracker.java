@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.adp.mull;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.jdt.annotation.NonNull;
@@ -48,7 +49,9 @@ public class SalesContractTracker extends AllocationTracker {
 	@Override
 	public void phase1Undo(CargoBlueprint cargoBlueprint) {
 		super.phase1Undo(cargoBlueprint);
-		--currentAllocatedAACQ;
+		if (this.equals(cargoBlueprint.getAllocationTracker())) {
+			--currentAllocatedAACQ;
+		}
 	}
 
 	@Override
@@ -58,7 +61,7 @@ public class SalesContractTracker extends AllocationTracker {
 
 	@Override
 	public DischargeSlot createDischargeSlot(final CargoEditingCommands cec, List<Command> setCommands, final CargoModel cargoModel, @NonNull final IScenarioDataProvider sdp, final LoadSlot loadSlot,
-			final Vessel vessel, final Map<Vessel, VesselAvailability> vesselToVA, final LNGScenarioModel sm) {
+			final Vessel vessel, final Map<Vessel, VesselAvailability> vesselToVA, final LNGScenarioModel sm, final Set<Vessel> firstPartyVessels) {
 		final DischargeSlot dischargeSlot = cec.createNewDischarge(setCommands, cargoModel, false);
 		dischargeSlot.setContract(this.salesContract);
 		dischargeSlot.setEntity(loadSlot.getEntity());

@@ -305,7 +305,7 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 				portTimesRecord1.setSlotTime(portSlot, originalPortTimesRecord.getSlotTime(portSlot));
 				portTimesRecord1.setSlotDuration(portSlot, originalPortTimesRecord.getSlotDuration(portSlot));
 				portTimesRecord1.setSlotExtraIdleTime(portSlot, originalPortTimesRecord.getSlotExtraIdleTime(portSlot));
-				portTimesRecord1.setSlotNextVoyageOptions(portSlot, originalPortTimesRecord.getSlotNextVoyageOptions(portSlot), originalPortTimesRecord.getSlotNextVoyagePanamaPeriod(portSlot));
+				portTimesRecord1.setSlotNextVoyageOptions(portSlot, originalPortTimesRecord.getSlotNextVoyageOptions(portSlot));
 			}
 			portTimesRecord1.setReturnSlotTime(charterLengthPortSlot, ballastStartTime + originalBallast.getTravelTime());
 

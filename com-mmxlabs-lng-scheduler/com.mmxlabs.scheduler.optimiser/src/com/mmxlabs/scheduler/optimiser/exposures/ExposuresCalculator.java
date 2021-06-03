@@ -124,11 +124,12 @@ public class ExposuresCalculator {
 			}
 			final LocalDate pricingDate = externalDateProvider.getDateFromHours(pricingTime, portSlot.getPort()).toLocalDate();
 			final ExposuresLookupData lookupData = exposureDataProvider.getExposuresLookupData();
-			
-			return calculateExposures(volumeMMBTU, pricePerMMBTU, priceExpression, pricingDate, isLong, lookupData);
-		} else {
-			return Collections.emptyList();
+			if (pricingDate.isAfter(lookupData.cutoffDate)) {
+				return calculateExposures(volumeMMBTU, pricePerMMBTU, priceExpression, pricingDate, isLong, lookupData);
+			}
 		}
+		
+		return Collections.emptyList();
 	}
 	
 	private List<BasicExposureRecord> calculateExposures(final long volumeMMBTU, final int pricePerMMBTU, final String priceExpression, 
@@ -332,11 +333,15 @@ public class ExposuresCalculator {
 			for (int i = 0; i < averageNode.getMonths(); ++i) {
 				final Pair<Integer, IExposureNode> p = getExposureNode(inputRecord, averageNode.getChild(), startDate.plusMonths(i), 
 						lookupData);
-				ExposureRecords result = (ExposureRecords) p.getSecond();
-				price += p.getFirst();
-				result = modify(result, c -> new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, c.nativeVolume / months, 
-						c.nativeValue / months, c.mmbtuVolume / months, c.date, c.volumeUnit));
-				records.records.addAll(result.records);
+				if (p.getSecond() instanceof ExposureRecords) {
+					ExposureRecords result = (ExposureRecords) p.getSecond();
+					price += p.getFirst();
+					result = modify(result, c -> new ExposureRecord(c.curveName, c.currencyUnit, c.unitPrice, c.nativeVolume / months, 
+							c.nativeValue / months, c.mmbtuVolume / months, c.date, c.volumeUnit));
+					records.records.addAll(result.records);
+				} else if (p.getSecond() instanceof Constant) {
+					return new Pair<>(p.getFirst(), p.getSecond());
+				}
 			}
 
 			return new Pair<>(price / months, records);

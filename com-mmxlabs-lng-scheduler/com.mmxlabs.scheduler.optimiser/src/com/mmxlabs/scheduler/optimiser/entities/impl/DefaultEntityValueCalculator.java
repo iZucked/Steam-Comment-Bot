@@ -49,7 +49,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.ballastbonus.impl.RepositioningFeeAnnotation;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
@@ -451,21 +450,11 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				revenue = 0;
 			}
 
-			if (firstPortSlot.getPortType() == PortType.Start) {
-				final long fee = shippingCostHelper.getShippingRepositioningCost(firstPortSlot, vesselAvailability, portTimesRecord.getFirstSlotTime());
-
-				additionalCost += fee;
-				if (shippingDetails != null) {
-					final RepositioningFeeAnnotation annotation = new RepositioningFeeAnnotation();
-					annotation.repositioningFee = fee;
-					shippingDetails.addChild(RepositioningFeeAnnotation.ANNOTATION_KEY, annotation);
-				}
-			}
-			if (firstPortSlot.getPortType() == PortType.End) {
+			if (firstPortSlot.getPortType() == PortType.Start || firstPortSlot.getPortType() == PortType.End) {
 				final int vesselEndTime = utcOffsetProvider.UTC(portTimesRecord.getSlotTime(firstPortSlot), firstPortSlot);
-				additionalCost += shippingCostHelper.getShippingBallastBonusCost(firstPortSlot, vesselAvailability, vesselStartTime, firstLoadPort, vesselEndTime);
+				additionalCost += shippingCostHelper.getShippingCharterContractCost(firstPortSlot, vesselAvailability, vesselStartTime, firstLoadPort, vesselEndTime);
 				if (annotatedSolution != null) {
-					shippingCostHelper.addBallastBonusAnnotation(shippingDetails, firstPortSlot, vesselAvailability, vesselStartTime, firstLoadPort, vesselEndTime);
+					shippingCostHelper.addCharterContractAnnotation(shippingDetails, firstPortSlot, vesselAvailability, vesselStartTime, firstLoadPort, vesselEndTime);
 				}
 			}
 

@@ -1,25 +1,23 @@
 [ {
   "Schedule" : "des-cargo",
-  "Pre-booked" : "No",
-  "Canal" : "PANAMA",
-  "Canal Entry" : "Southside",
   "Date" : "03/02/11",
+  "Direction" : "Northbound",
+  "Vessel" : "Methane Becki Anne",
   "Event" : "discharge-cargo-70",
-  "Next Slot" : "load-cargo-48 07/02/11",
-  "Next Slot Port" : "Point Fortin",
-  "Next Slot Window Start" : "07/02/11",
-  "Next Slot Window End" : "07/02/11",
-  "Period" : "Open"
+  "Next Event" : "load-cargo-48",
+  "Next Port" : "Point Fortin",
+  "Next Window Start" : "07/02/11",
+  "Next Window End" : "07/02/11",
+  "Type" : "Wait (0d)"
 }, {
   "Schedule" : "des-cargo",
-  "Pre-booked" : "No",
-  "Canal" : "PANAMA",
-  "Canal Entry" : "Southside",
   "Date" : "27/03/11",
+  "Direction" : "Northbound",
+  "Vessel" : "Methane Lydon Volney",
   "Event" : "discharge-cargo-22",
-  "Next Slot" : "load-cargo-12 13/04/11",
-  "Next Slot Port" : "Point Fortin",
-  "Next Slot Window Start" : "13/04/11",
-  "Next Slot Window End" : "13/04/11",
-  "Period" : "Open"
+  "Next Event" : "load-cargo-12",
+  "Next Port" : "Point Fortin",
+  "Next Window Start" : "13/04/11",
+  "Next Window End" : "13/04/11",
+  "Type" : "Wait (0d)"
 } ]

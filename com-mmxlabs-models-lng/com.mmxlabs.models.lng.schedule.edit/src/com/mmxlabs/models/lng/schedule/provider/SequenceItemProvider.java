@@ -327,7 +327,7 @@ public class SequenceItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(SchedulePackage.Literals.SEQUENCE__EVENTS,
-				 ScheduleFactory.eINSTANCE.createCanalBookingEvent()));
+				 ScheduleFactory.eINSTANCE.createCanalJourneyEvent()));
 
 		newChildDescriptors.add
 			(createChildParameter

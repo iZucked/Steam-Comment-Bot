@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collection;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -21,14 +22,12 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.EndHeelOptions;
-import com.mmxlabs.models.lng.cargo.StartHeelOptions;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.commercial.BallastBonusCharterContract;
-import com.mmxlabs.models.lng.commercial.BallastBonusContract;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.commercial.CharterContract;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.EndHeelOptions;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
+import com.mmxlabs.models.lng.commercial.StartHeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
@@ -58,11 +57,11 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getStartHeel <em>Start Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getEndHeel <em>End Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#isForceHireCostOnlyEndRule <em>Force Hire Cost Only End Rule</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getRepositioningFee <em>Repositioning Fee</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getBallastBonusContract <em>Ballast Bonus Contract</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getCharterContract <em>Charter Contract</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getContainedCharterContract <em>Contained Charter Contract</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getGenericCharterContract <em>Generic Charter Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getMinDuration <em>Min Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getMaxDuration <em>Max Duration</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#isCharterContractOverride <em>Charter Contract Override</em>}</li>
  * </ul>
  *
  * @generated
@@ -363,62 +362,33 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	protected boolean forceHireCostOnlyEndRule = FORCE_HIRE_COST_ONLY_END_RULE_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getRepositioningFee() <em>Repositioning Fee</em>}' attribute.
+	 * The cached value of the '{@link #getContainedCharterContract() <em>Contained Charter Contract</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getRepositioningFee()
+	 * @see #getContainedCharterContract()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String REPOSITIONING_FEE_EDEFAULT = null;
+	protected GenericCharterContract containedCharterContract;
 
 	/**
-	 * The cached value of the '{@link #getRepositioningFee() <em>Repositioning Fee</em>}' attribute.
+	 * The cached value of the '{@link #getGenericCharterContract() <em>Generic Charter Contract</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getRepositioningFee()
+	 * @see #getGenericCharterContract()
 	 * @generated
 	 * @ordered
 	 */
-	protected String repositioningFee = REPOSITIONING_FEE_EDEFAULT;
+	protected GenericCharterContract genericCharterContract;
 
 	/**
-	 * This is true if the Repositioning Fee attribute has been set.
+	 * This is true if the Generic Charter Contract reference has been set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	protected boolean repositioningFeeESet;
-
-	/**
-	 * The cached value of the '{@link #getBallastBonusContract() <em>Ballast Bonus Contract</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getBallastBonusContract()
-	 * @generated
-	 * @ordered
-	 */
-	protected BallastBonusContract ballastBonusContract;
-
-	/**
-	 * The cached value of the '{@link #getCharterContract() <em>Charter Contract</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCharterContract()
-	 * @generated
-	 * @ordered
-	 */
-	protected CharterContract charterContract;
-
-	/**
-	 * This is true if the Charter Contract reference has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean charterContractESet;
+	protected boolean genericCharterContractESet;
 
 	/**
 	 * The default value of the '{@link #getMinDuration() <em>Min Duration</em>}' attribute.
@@ -477,6 +447,26 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * @ordered
 	 */
 	protected boolean maxDurationESet;
+
+	/**
+	 * The default value of the '{@link #isCharterContractOverride() <em>Charter Contract Override</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isCharterContractOverride()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean CHARTER_CONTRACT_OVERRIDE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isCharterContractOverride() <em>Charter Contract Override</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isCharterContractOverride()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean charterContractOverride = CHARTER_CONTRACT_OVERRIDE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1028,6 +1018,74 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * @generated
 	 */
 	@Override
+	public GenericCharterContract getContainedCharterContract() {
+		if (containedCharterContract != null && containedCharterContract.eIsProxy()) {
+			InternalEObject oldContainedCharterContract = (InternalEObject)containedCharterContract;
+			containedCharterContract = (GenericCharterContract)eResolveProxy(oldContainedCharterContract);
+			if (containedCharterContract != oldContainedCharterContract) {
+				InternalEObject newContainedCharterContract = (InternalEObject)containedCharterContract;
+				NotificationChain msgs = oldContainedCharterContract.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT, null, null);
+				if (newContainedCharterContract.eInternalContainer() == null) {
+					msgs = newContainedCharterContract.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT, oldContainedCharterContract, containedCharterContract));
+			}
+		}
+		return containedCharterContract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public GenericCharterContract basicGetContainedCharterContract() {
+		return containedCharterContract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetContainedCharterContract(GenericCharterContract newContainedCharterContract, NotificationChain msgs) {
+		GenericCharterContract oldContainedCharterContract = containedCharterContract;
+		containedCharterContract = newContainedCharterContract;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT, oldContainedCharterContract, newContainedCharterContract);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setContainedCharterContract(GenericCharterContract newContainedCharterContract) {
+		if (newContainedCharterContract != containedCharterContract) {
+			NotificationChain msgs = null;
+			if (containedCharterContract != null)
+				msgs = ((InternalEObject)containedCharterContract).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT, null, msgs);
+			if (newContainedCharterContract != null)
+				msgs = ((InternalEObject)newContainedCharterContract).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT, null, msgs);
+			msgs = basicSetContainedCharterContract(newContainedCharterContract, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT, newContainedCharterContract, newContainedCharterContract));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public boolean isOptional() {
 		return optional;
 	}
@@ -1051,124 +1109,6 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * @generated
 	 */
 	@Override
-	public String getRepositioningFee() {
-		return repositioningFee;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setRepositioningFee(String newRepositioningFee) {
-		String oldRepositioningFee = repositioningFee;
-		repositioningFee = newRepositioningFee;
-		boolean oldRepositioningFeeESet = repositioningFeeESet;
-		repositioningFeeESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__REPOSITIONING_FEE, oldRepositioningFee, repositioningFee, !oldRepositioningFeeESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void unsetRepositioningFee() {
-		String oldRepositioningFee = repositioningFee;
-		boolean oldRepositioningFeeESet = repositioningFeeESet;
-		repositioningFee = REPOSITIONING_FEE_EDEFAULT;
-		repositioningFeeESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.VESSEL_AVAILABILITY__REPOSITIONING_FEE, oldRepositioningFee, REPOSITIONING_FEE_EDEFAULT, oldRepositioningFeeESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isSetRepositioningFee() {
-		return repositioningFeeESet;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public BallastBonusContract getBallastBonusContract() {
-		if (ballastBonusContract != null && ballastBonusContract.eIsProxy()) {
-			InternalEObject oldBallastBonusContract = (InternalEObject)ballastBonusContract;
-			ballastBonusContract = (BallastBonusContract)eResolveProxy(oldBallastBonusContract);
-			if (ballastBonusContract != oldBallastBonusContract) {
-				InternalEObject newBallastBonusContract = (InternalEObject)ballastBonusContract;
-				NotificationChain msgs = oldBallastBonusContract.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT, null, null);
-				if (newBallastBonusContract.eInternalContainer() == null) {
-					msgs = newBallastBonusContract.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT, oldBallastBonusContract, ballastBonusContract));
-			}
-		}
-		return ballastBonusContract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public BallastBonusContract basicGetBallastBonusContract() {
-		return ballastBonusContract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetBallastBonusContract(BallastBonusContract newBallastBonusContract, NotificationChain msgs) {
-		BallastBonusContract oldBallastBonusContract = ballastBonusContract;
-		ballastBonusContract = newBallastBonusContract;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT, oldBallastBonusContract, newBallastBonusContract);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setBallastBonusContract(BallastBonusContract newBallastBonusContract) {
-		if (newBallastBonusContract != ballastBonusContract) {
-			NotificationChain msgs = null;
-			if (ballastBonusContract != null)
-				msgs = ((InternalEObject)ballastBonusContract).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT, null, msgs);
-			if (newBallastBonusContract != null)
-				msgs = ((InternalEObject)newBallastBonusContract).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT, null, msgs);
-			msgs = basicSetBallastBonusContract(newBallastBonusContract, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT, newBallastBonusContract, newBallastBonusContract));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public int getCharterNumber() {
 		return charterNumber;
 	}
@@ -1179,17 +1119,26 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * @generated
 	 */
 	@Override
-	public CharterContract getCharterContract() {
-		if (charterContract != null && charterContract.eIsProxy()) {
-			InternalEObject oldCharterContract = (InternalEObject)charterContract;
-			charterContract = (CharterContract)eResolveProxy(oldCharterContract);
-			if (charterContract != oldCharterContract) {
+	public GenericCharterContract getGenericCharterContract() {
+		if (genericCharterContract != null && genericCharterContract.eIsProxy()) {
+			InternalEObject oldGenericCharterContract = (InternalEObject)genericCharterContract;
+			genericCharterContract = (GenericCharterContract)eResolveProxy(oldGenericCharterContract);
+			if (genericCharterContract != oldGenericCharterContract) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT, oldCharterContract, charterContract));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT, oldGenericCharterContract, genericCharterContract));
 			}
 		}
-		return charterContract;
+		return genericCharterContract;
 	}
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public GenericCharterContract basicGetGenericCharterContract() {
+		return genericCharterContract;
+	}
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1208,23 +1157,14 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CharterContract basicGetCharterContract() {
-		return charterContract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
-	public void setCharterContract(CharterContract newCharterContract) {
-		CharterContract oldCharterContract = charterContract;
-		charterContract = newCharterContract;
-		boolean oldCharterContractESet = charterContractESet;
-		charterContractESet = true;
+	public void setGenericCharterContract(GenericCharterContract newGenericCharterContract) {
+		GenericCharterContract oldGenericCharterContract = genericCharterContract;
+		genericCharterContract = newGenericCharterContract;
+		boolean oldGenericCharterContractESet = genericCharterContractESet;
+		genericCharterContractESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT, oldCharterContract, charterContract, !oldCharterContractESet));
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT, oldGenericCharterContract, genericCharterContract, !oldGenericCharterContractESet));
 	}
 
 	/**
@@ -1233,13 +1173,13 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * @generated
 	 */
 	@Override
-	public void unsetCharterContract() {
-		CharterContract oldCharterContract = charterContract;
-		boolean oldCharterContractESet = charterContractESet;
-		charterContract = null;
-		charterContractESet = false;
+	public void unsetGenericCharterContract() {
+		GenericCharterContract oldGenericCharterContract = genericCharterContract;
+		boolean oldGenericCharterContractESet = genericCharterContractESet;
+		genericCharterContract = null;
+		genericCharterContractESet = false;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT, oldCharterContract, null, oldCharterContractESet));
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT, oldGenericCharterContract, null, oldGenericCharterContractESet));
 	}
 
 	/**
@@ -1248,10 +1188,10 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * @generated
 	 */
 	@Override
-	public boolean isSetCharterContract() {
-		return charterContractESet;
+	public boolean isSetGenericCharterContract() {
+		return genericCharterContractESet;
 	}
-	
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1357,6 +1297,32 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
+	public boolean isCharterContractOverride() {
+		if (getContainedCharterContract() != null) {
+			return true;
+		}
+		return charterContractOverride;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCharterContractOverride(boolean newCharterContractOverride) {
+		boolean oldCharterContractOverride = charterContractOverride;
+		charterContractOverride = newCharterContractOverride;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE, oldCharterContractOverride, charterContractOverride));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
 	public ZonedDateTime getStartByAsDateTime() {
 		if (isSetStartBy()) {
 			final LocalDateTime ldt = getStartBy();
@@ -1418,28 +1384,6 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public BallastBonusContract getCharterOrDelegateBallastBonusContract() {
-		if (this.isSetCharterContract()) {
-			if (this.getCharterContract() != null && this.getCharterContract() instanceof BallastBonusCharterContract) {
-				if (this.getCharterContract() instanceof BallastBonusCharterContract) {
-					BallastBonusCharterContract bbcc = (BallastBonusCharterContract) this.getCharterContract();
-					if (bbcc.getBallastBonusContract() != null) {
-						return bbcc.getBallastBonusContract();
-					}
-				}
-			}
-		} else {
-			return this.getBallastBonusContract();
-		}
-		return null;
-	}
-
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
 	public int getCharterOrDelegateMinDuration() {
 		return (Integer) eGetWithDefault(CargoPackage.Literals.VESSEL_AVAILABILITY__MIN_DURATION);
 
@@ -1471,8 +1415,14 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public BaseLegalEntity getCharterOrDelegateEntity() {
-		return (BaseLegalEntity) eGetWithDefault(CargoPackage.Literals.VESSEL_AVAILABILITY__ENTITY);
+	@Override
+	public GenericCharterContract getCharterOrDelegateCharterContract() {
+		if (this.isCharterContractOverride()) {
+			return this.getContainedCharterContract();
+		} else if (this.isSetGenericCharterContract() && this.getGenericCharterContract() != null) {
+			return this.getGenericCharterContract();
+		}
+		return null;
 	}
 
 	/**
@@ -1480,9 +1430,8 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	@Override
-	public String getCharterOrDelegateRepositioningFee() {
-		return (String) eGetWithDefault(CargoPackage.Literals.VESSEL_AVAILABILITY__REPOSITIONING_FEE);
+	public BaseLegalEntity getCharterOrDelegateEntity() {
+		return (BaseLegalEntity) eGetWithDefault(CargoPackage.Literals.VESSEL_AVAILABILITY__ENTITY);
 	}
 
 	/**
@@ -1564,8 +1513,8 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 				return basicSetStartHeel(null, msgs);
 			case CargoPackage.VESSEL_AVAILABILITY__END_HEEL:
 				return basicSetEndHeel(null, msgs);
-			case CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT:
-				return basicSetBallastBonusContract(null, msgs);
+			case CargoPackage.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT:
+				return basicSetContainedCharterContract(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -1613,18 +1562,18 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 				return basicGetEndHeel();
 			case CargoPackage.VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE:
 				return isForceHireCostOnlyEndRule();
-			case CargoPackage.VESSEL_AVAILABILITY__REPOSITIONING_FEE:
-				return getRepositioningFee();
-			case CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT:
-				if (resolve) return getBallastBonusContract();
-				return basicGetBallastBonusContract();
-			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT:
-				if (resolve) return getCharterContract();
-				return basicGetCharterContract();
+			case CargoPackage.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT:
+				if (resolve) return getContainedCharterContract();
+				return basicGetContainedCharterContract();
+			case CargoPackage.VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT:
+				if (resolve) return getGenericCharterContract();
+				return basicGetGenericCharterContract();
 			case CargoPackage.VESSEL_AVAILABILITY__MIN_DURATION:
 				return getMinDuration();
 			case CargoPackage.VESSEL_AVAILABILITY__MAX_DURATION:
 				return getMaxDuration();
+			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE:
+				return isCharterContractOverride();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1684,20 +1633,20 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE:
 				setForceHireCostOnlyEndRule((Boolean)newValue);
 				return;
-			case CargoPackage.VESSEL_AVAILABILITY__REPOSITIONING_FEE:
-				setRepositioningFee((String)newValue);
+			case CargoPackage.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT:
+				setContainedCharterContract((GenericCharterContract)newValue);
 				return;
-			case CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT:
-				setBallastBonusContract((BallastBonusContract)newValue);
-				return;
-			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT:
-				setCharterContract((CharterContract)newValue);
+			case CargoPackage.VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT:
+				setGenericCharterContract((GenericCharterContract)newValue);
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__MIN_DURATION:
 				setMinDuration((Integer)newValue);
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__MAX_DURATION:
 				setMaxDuration((Integer)newValue);
+				return;
+			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE:
+				setCharterContractOverride((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -1756,20 +1705,20 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE:
 				setForceHireCostOnlyEndRule(FORCE_HIRE_COST_ONLY_END_RULE_EDEFAULT);
 				return;
-			case CargoPackage.VESSEL_AVAILABILITY__REPOSITIONING_FEE:
-				unsetRepositioningFee();
+			case CargoPackage.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT:
+				setContainedCharterContract((GenericCharterContract)null);
 				return;
-			case CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT:
-				setBallastBonusContract((BallastBonusContract)null);
-				return;
-			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT:
-				unsetCharterContract();
+			case CargoPackage.VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT:
+				unsetGenericCharterContract();
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__MIN_DURATION:
 				unsetMinDuration();
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__MAX_DURATION:
 				unsetMaxDuration();
+				return;
+			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE:
+				setCharterContractOverride(CHARTER_CONTRACT_OVERRIDE_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -1813,16 +1762,16 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 				return endHeel != null;
 			case CargoPackage.VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE:
 				return forceHireCostOnlyEndRule != FORCE_HIRE_COST_ONLY_END_RULE_EDEFAULT;
-			case CargoPackage.VESSEL_AVAILABILITY__REPOSITIONING_FEE:
-				return isSetRepositioningFee();
-			case CargoPackage.VESSEL_AVAILABILITY__BALLAST_BONUS_CONTRACT:
-				return ballastBonusContract != null;
-			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT:
-				return isSetCharterContract();
+			case CargoPackage.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT:
+				return containedCharterContract != null;
+			case CargoPackage.VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT:
+				return isSetGenericCharterContract();
 			case CargoPackage.VESSEL_AVAILABILITY__MIN_DURATION:
 				return isSetMinDuration();
 			case CargoPackage.VESSEL_AVAILABILITY__MAX_DURATION:
 				return isSetMaxDuration();
+			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE:
+				return charterContractOverride != CHARTER_CONTRACT_OVERRIDE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1843,18 +1792,16 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 				return getEndByAsDateTime();
 			case CargoPackage.VESSEL_AVAILABILITY___GET_END_AFTER_AS_DATE_TIME:
 				return getEndAfterAsDateTime();
-			case CargoPackage.VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_BALLAST_BONUS_CONTRACT:
-				return getCharterOrDelegateBallastBonusContract();
 			case CargoPackage.VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_MIN_DURATION:
 				return getCharterOrDelegateMinDuration();
 			case CargoPackage.VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_MAX_DURATION:
 				return getCharterOrDelegateMaxDuration();
 			case CargoPackage.VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_ENTITY:
 				return getCharterOrDelegateEntity();
-			case CargoPackage.VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_REPOSITIONING_FEE:
-				return getCharterOrDelegateRepositioningFee();
 			case CargoPackage.VESSEL_AVAILABILITY___JSONID:
 				return jsonid();
+			case CargoPackage.VESSEL_AVAILABILITY___GET_CHARTER_OR_DELEGATE_CHARTER_CONTRACT:
+				return getCharterOrDelegateCharterContract();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
@@ -1887,12 +1834,12 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 		if (endByESet) result.append(endBy); else result.append("<unset>");
 		result.append(", forceHireCostOnlyEndRule: ");
 		result.append(forceHireCostOnlyEndRule);
-		result.append(", repositioningFee: ");
-		if (repositioningFeeESet) result.append(repositioningFee); else result.append("<unset>");
 		result.append(", minDuration: ");
 		if (minDurationESet) result.append(minDuration); else result.append("<unset>");
 		result.append(", maxDuration: ");
 		if (maxDurationESet) result.append(maxDuration); else result.append("<unset>");
+		result.append(", charterContractOverride: ");
+		result.append(charterContractOverride);
 		result.append(')');
 		return result.toString();
 	}
@@ -1906,11 +1853,9 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 		CommercialPackage commercial = CommercialPackage.eINSTANCE;
 		SpotMarketsPackage spotMarkets = SpotMarketsPackage.eINSTANCE;
 		if (cargo.getVesselAvailability_MinDuration() == feature) {
-			return new DelegateInformation(cargo.getVesselAvailability_CharterContract(), commercial.getCharterContract_MinDuration(), (Integer) 0);
+			return new DelegateInformation(cargo.getVesselAvailability_GenericCharterContract(), commercial.getGenericCharterContract_MinDuration(), (Integer) 0);
 		} else if (cargo.getVesselAvailability_MaxDuration() == feature) {
-			return new DelegateInformation(cargo.getVesselAvailability_CharterContract(), commercial.getCharterContract_MaxDuration(), (Integer) 0);
-		} else if (cargo.getVesselAvailability_RepositioningFee() == feature) {
-			return new DelegateInformation(cargo.getVesselAvailability_CharterContract(), commercial.getBallastBonusCharterContract_RepositioningFee(), null);
+			return new DelegateInformation(cargo.getVesselAvailability_GenericCharterContract(), commercial.getGenericCharterContract_MaxDuration(), (Integer) 0);
 		}
 		
 		return super.getUnsetValueOrDelegate(feature);

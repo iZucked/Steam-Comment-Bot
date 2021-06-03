@@ -18,6 +18,7 @@ import java.util.Map;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -296,7 +297,7 @@ public class ConfigurableVesselSummaryReport extends AbstractConfigurableGridRep
 				}
 			}
 			return adapter.cast(new IReportContentsGenerator() {
-				public String getStringContents(final ScenarioResult pin, final ScenarioResult other) {
+				public IReportContents getReportContents(final ScenarioResult pin, final ScenarioResult other, final @Nullable List<Object> selectedObjects) {
 					final SelectedDataProviderImpl provider = new SelectedDataProviderImpl();
 					if (pin != null) {
 						provider.addScenario(pin);
@@ -311,7 +312,7 @@ public class ConfigurableVesselSummaryReport extends AbstractConfigurableGridRep
 					final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
 					final String contents = util.convert();
 
-					return "<meta charset=\"UTF-8\"/>" + contents;
+					return ReportContents.makeHTML("<meta charset=\"UTF-8\"/>" + contents);
 				}
 			});
 		}

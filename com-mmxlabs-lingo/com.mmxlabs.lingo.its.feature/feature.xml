@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.lingo.its.feature"
       label="Lingo ITS"
-      version="4.12.22.qualifier"
+      version="4.12.28.qualifier"
       provider-name="Minimax Labs Ltd."
       plugin="com.mmxlabs.lingo.app">
 
@@ -59,14 +59,7 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
-   <plugin
-         id="com.google.guava"
-         download-size="0"
-         install-size="0"
-         version="27.1.0.v20190517-1946"
-         unpack="false"/>
-
+ 
    <plugin
          id="com.mmxlabs.lngdataserver.data.distances"
          download-size="0"
@@ -146,6 +139,27 @@
 
    <plugin
          id="org.slf4j.api"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="wrapped.org.testcontainers.junit-jupiter"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="wrapped.org.testcontainers.testcontainers"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="wrapped.org.rnorth.duct-tape.duct-tape"
          download-size="0"
          install-size="0"
          version="0.0.0"

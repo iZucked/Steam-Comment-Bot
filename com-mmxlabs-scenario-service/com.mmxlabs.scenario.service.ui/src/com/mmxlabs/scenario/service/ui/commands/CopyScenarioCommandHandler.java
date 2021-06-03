@@ -16,13 +16,16 @@ import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
@@ -58,6 +61,11 @@ public class CopyScenarioCommandHandler extends AbstractHandler {
 								tempFiles.add(ScenarioStorageUtil.storeToTemporaryFile(modelRecord).getAbsolutePath());
 							} catch (final IOException e) {
 								e.printStackTrace();
+							} catch (final UserFeedbackException ufe) {
+								MessageBox mb = new MessageBox(HandlerUtil.getActiveShell(event), SWT.ERROR);
+								mb.setMessage(ufe.getMessage());
+								mb.setText("Error!");
+								mb.open();
 							}
 						}
 					}

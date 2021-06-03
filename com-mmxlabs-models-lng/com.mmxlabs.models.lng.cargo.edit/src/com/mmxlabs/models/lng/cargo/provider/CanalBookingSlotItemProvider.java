@@ -56,6 +56,8 @@ public class CanalBookingSlotItemProvider extends MMXObjectItemProvider {
 			addBookingDatePropertyDescriptor(object);
 			addSlotPropertyDescriptor(object);
 			addNotesPropertyDescriptor(object);
+			addVesselPropertyDescriptor(object);
+			addBookingCodePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -166,6 +168,50 @@ public class CanalBookingSlotItemProvider extends MMXObjectItemProvider {
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Vessel feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVesselPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CanalBookingSlot_vessel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CanalBookingSlot_vessel_feature", "_UI_CanalBookingSlot_type"),
+				 CargoPackage.Literals.CANAL_BOOKING_SLOT__VESSEL,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Booking Code feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addBookingCodePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CanalBookingSlot_bookingCode_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CanalBookingSlot_bookingCode_feature", "_UI_CanalBookingSlot_type"),
+				 CargoPackage.Literals.CANAL_BOOKING_SLOT__BOOKING_CODE,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

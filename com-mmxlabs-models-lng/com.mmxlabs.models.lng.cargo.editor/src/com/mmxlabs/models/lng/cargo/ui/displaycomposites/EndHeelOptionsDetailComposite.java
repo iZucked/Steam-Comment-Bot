@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
@@ -31,7 +31,7 @@ public class EndHeelOptionsDetailComposite extends DefaultDetailComposite {
 
 			@Override
 			public Layout createDetailLayout(final MMXRootObject root, final EObject value) {
-				return new GridLayout(4, false);
+				return new GridLayout(9, false);
 			}
 
 			@Override
@@ -39,8 +39,17 @@ public class EndHeelOptionsDetailComposite extends DefaultDetailComposite {
 
 				{
 					final EStructuralFeature feature = editor.getFeature();
-					if (feature == CargoPackage.Literals.END_HEEL_OPTIONS__PRICE_EXPRESSION || feature == CargoPackage.Literals.END_HEEL_OPTIONS__USE_LAST_HEEL_PRICE) {
+					if (feature == CommercialPackage.Literals.END_HEEL_OPTIONS__PRICE_EXPRESSION 
+							|| feature == CommercialPackage.Literals.END_HEEL_OPTIONS__USE_LAST_HEEL_PRICE) {
 						return super.createEditorLayoutData(root, value, editor, control);
+					}
+					
+					if (feature == CommercialPackage.Literals.END_HEEL_OPTIONS__MINIMUM_END_HEEL 
+							|| feature == CommercialPackage.Literals.END_HEEL_OPTIONS__MAXIMUM_END_HEEL) {
+						final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+						gd.minimumWidth = 64;
+						gd.horizontalSpan = 4;
+						return gd;
 					}
 				}
 				// Anything else needs to fill the space.

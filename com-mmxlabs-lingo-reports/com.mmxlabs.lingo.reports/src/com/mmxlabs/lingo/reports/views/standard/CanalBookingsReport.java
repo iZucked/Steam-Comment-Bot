@@ -177,44 +177,44 @@ public class CanalBookingsReport extends AbstractReportView {
 
 		scheduleColumn = createColumn(sortingSupport, true, "Schedule", rowData -> rowData.scheduleName, rowData -> rowData.scheduleName);
 
-		createColumn(sortingSupport, "Pre-booked", rowData -> (rowData.preBooked) ? "Yes" : "No", rowData -> rowData.preBooked);
+//		createColumn(sortingSupport, "Booking", rowData -> (rowData.preBooked) ? "Yes" : "No", rowData -> rowData.preBooked);
 
-		createColumn(sortingSupport, "Canal", rowData -> (rowData.routeOption == null) ? "" : rowData.routeOption.toString(),
-				rowData -> (rowData.routeOption == null) ? "" : rowData.routeOption.toString());
-
-		createColumn(sortingSupport, "Canal Entry", rowData -> (rowData.entryPointName == null) ? "" : rowData.entryPointName,
-				rowData -> (rowData.entryPointName == null) ? "" : rowData.entryPointName);
+//		createColumn(sortingSupport, "Canal", rowData -> (rowData.routeOption == null) ? "" : rowData.routeOption.toString(),
+//				rowData -> (rowData.routeOption == null) ? "" : rowData.routeOption.toString());
 
 		createColumn(sortingSupport, "Date", rowData -> Formatters.asLocalDateFormatter.render(rowData.bookingDate), rowData -> rowData.bookingDate);
 
+		createColumn(sortingSupport, "Direction", rowData -> (rowData.entryPointName == null) ? "" : rowData.entryPointName,
+				rowData -> (rowData.entryPointName == null) ? "" : rowData.entryPointName);
+
+		createColumn(sortingSupport, "Vessel", rowData -> ((rowData.vessel == null) ? "" : rowData.vessel), rowData -> ((rowData.vessel == null) ? "" : rowData.vessel));
+		
+		createColumn(sortingSupport, "Booking Code", rowData -> (rowData.bookingCode == null) ? "" : rowData.bookingCode, rowData -> (rowData.bookingCode == null) ? "" : rowData.bookingCode);
+
 		createColumn(sortingSupport, "Event", rowData -> (rowData.event == null) ? "" : rowData.event.name(), rowData -> (rowData.event == null) ? "" : rowData.event.name());
 
-		createColumn(sortingSupport, "Next Slot", rowData -> {
+		createColumn(sortingSupport, "Next Event", rowData -> {
 			if (rowData.nextSlot == null) {
 				return "";
 			} else {
 				final StringBuilder sb = new StringBuilder();
 				sb.append(rowData.nextSlot.getName());
-				if (rowData.nextSlot.getWindowStart() != null) {
-					sb.append(" ");
-					sb.append(rowData.nextSlot.getWindowStart().format(dateFormatter));
-				}
 				return sb.toString();
 			}
 
 		}, rowData -> (rowData.nextSlot == null ? "" : rowData.nextSlot.getName()));
 
-		createColumn(sortingSupport, "Next Slot Port", rowData -> (rowData.nextSlot == null ? "" : rowData.nextSlot.getPort().getName()),
+		createColumn(sortingSupport, "Next Port", rowData -> (rowData.nextSlot == null ? "" : rowData.nextSlot.getPort().getName()),
 				rowData -> (rowData.nextSlot == null ? "" : rowData.nextSlot.getPort().getName()));
 
-		createColumn(sortingSupport, "Next Slot Window Start", rowData -> (rowData.nextSlot == null ? "" : Formatters.asLocalDateFormatter.render(rowData.nextSlot.getWindowStart())),
+		createColumn(sortingSupport, "Next Window Start", rowData -> (rowData.nextSlot == null ? "" : Formatters.asLocalDateFormatter.render(rowData.nextSlot.getWindowStart())),
 				rowData -> (rowData.nextSlot == null ? null : rowData.nextSlot.getWindowStart()));
 
-		createColumn(sortingSupport, "Next Slot Window End",
+		createColumn(sortingSupport, "Next Window End",
 				rowData -> (rowData.nextSlot == null ? "" : Formatters.asLocalDateFormatter.render(rowData.nextSlot.getWindowStart().plusDays(rowData.nextSlot.getSchedulingTimeWindow().getSizeInHours() / 24))),
 				rowData -> (rowData.nextSlot == null ? null : rowData.nextSlot.getSchedulingTimeWindow().getSizeInHours() / 24));
 
-		createColumn(sortingSupport, "Period", rowData -> rowData.period, rowData -> rowData.period);
+		createColumn(sortingSupport, "Type", rowData -> rowData.type, rowData -> rowData.type);
 
 		createColumn(sortingSupport, "Notes", rowData -> rowData.notes, rowData -> rowData.notes);
 

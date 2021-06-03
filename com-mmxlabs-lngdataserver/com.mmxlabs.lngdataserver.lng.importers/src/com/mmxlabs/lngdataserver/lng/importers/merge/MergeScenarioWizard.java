@@ -86,8 +86,8 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 		
 		//Charter terms.
 		charterTermsMapperPage = new MergeScenarioWizardDataMapperPage("Map charter terms to target", 
-				s ->  ScenarioModelUtil.getCommercialModel(s).getCharteringContracts(), s ->  ScenarioModelUtil.getCommercialModel(s), 
-				CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTERING_CONTRACTS);
+				s ->  ScenarioModelUtil.getCommercialModel(s).getCharterContracts(), s ->  ScenarioModelUtil.getCommercialModel(s), 
+				CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTER_CONTRACTS);
 		
 		//Contracts.
 		purchaseContractMapperPage = new MergeScenarioWizardDataMapperPage("Map purchase contracts of cargoes to target", 

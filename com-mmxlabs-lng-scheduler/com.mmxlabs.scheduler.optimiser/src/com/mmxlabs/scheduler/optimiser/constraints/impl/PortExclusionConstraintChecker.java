@@ -132,8 +132,9 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 		final IPort firstPort = portProvider.getPortForElement(first);
 		final IPort secondPort = portProvider.getPortForElement(second);
 		final boolean result = !(exclusions.contains(firstPort) || exclusions.contains(secondPort));
-		if (!result)
-			messages.add(String.format("%s: Vessel %s is exluded from ports % or %s.", this.name, vessel.getName(), firstPort.getName(), secondPort.getName()));
+		if (!result) {
+			messages.add(String.format("%s: Vessel %s is exluded from ports %s or %s.", this.name, vessel.getName(), firstPort.getName(), secondPort.getName()));
+		}
 		return result;
 	}
 

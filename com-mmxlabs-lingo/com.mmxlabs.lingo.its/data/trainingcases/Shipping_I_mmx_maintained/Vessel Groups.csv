@@ -1,0 +1,17 @@
+name,vessels,kind
+M_1,M_1,VesselGroup
+M_2,M_2,VesselGroup
+TFDE_1,"TFDE_160,TFDE_1",VesselGroup
+TFDE_2,TFDE_2,VesselGroup
+M_3,M_3,VesselGroup
+TFDE_3,TFDE_3,VesselGroup
+TFDE_4,TFDE_4,VesselGroup
+TFDE_5,TFDE_5,VesselGroup
+TFDE_6,TFDE_6,VesselGroup
+TFDE_7,TFDE_7,VesselGroup
+Steam_1,"Steam_145,Steam_1",VesselGroup
+DFDE_1,DFDE_1,VesselGroup
+DFDE_2,DFDE_2,VesselGroup
+Steam_2,"Steam_138,Steam_2",VesselGroup
+ST_1,ST_1,VesselGroup
+ST_2,ST_2,VesselGroup

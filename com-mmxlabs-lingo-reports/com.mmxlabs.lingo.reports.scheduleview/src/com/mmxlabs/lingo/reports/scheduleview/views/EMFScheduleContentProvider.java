@@ -31,7 +31,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioSharedModelTypes;
-import com.mmxlabs.models.lng.schedule.CanalBookingEvent;
+import com.mmxlabs.models.lng.schedule.CanalJourneyEvent;
 import com.mmxlabs.models.lng.schedule.CharterAvailableFromEvent;
 import com.mmxlabs.models.lng.schedule.CharterAvailableToEvent;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -156,32 +156,36 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 				newEvents.add(event);
 				if (event instanceof Journey) {
 					final Journey journey = (Journey) event;
+		
 					if (journey.getCanalDateTime() != null) {
 						if (journey.getRouteOption() == RouteOption.PANAMA) {
-							final IScenarioDataProvider scenarioDataProviderFor = getScenarioDataProviderFor(journey);
-							if (scenarioDataProviderFor != null) {
-								final @NonNull ModelDistanceProvider modelDistanceProvider = scenarioDataProviderFor.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES,
-										ModelDistanceProvider.class);
+//							final IScenarioDataProvider scenarioDataProviderFor = getScenarioDataProviderFor(journey);
+//							if (scenarioDataProviderFor != null) {
+//								final @NonNull ModelDistanceProvider modelDistanceProvider = scenarioDataProviderFor.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES,
+//										ModelDistanceProvider.class);
 								if (sequence.getCharterInMarket() == null || sequence.getSpotIndex() != -1) {
-
-									final CanalBookingEvent canal = ScheduleFactory.eINSTANCE.createCanalBookingEvent();
-									canal.setLinkedSequence(journey.getSequence());
-									canal.setLinkedJourney(journey);
-									canal.setStart(journey.getCanalDateTime().atZone(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE_TIME))));
-									canal.setEnd(canal.getStart().plusDays(1));
-									if (journey.getCanalBooking() == null) {
-										if (journey.getLatestPossibleCanalDateTime() != null) {
-											ZonedDateTime atStartOfDay = journey.getLatestPossibleCanalDateTime()
-													.atZone(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE_TIME)));
-											int hours = Math.max(1, Hours.between(canal.getStart(), atStartOfDay));
-											canal.setEnd(canal.getStart().plusHours(hours));
-										}
+//
+//									final CanalJourneyEvent canal = ScheduleFactory.eINSTANCE.createCanalJourneyEvent();
+//									canal.setLinkedSequence(journey.getSequence());
+//									canal.setLinkedJourney(journey);
+//									canal.setStart(journey.getCanalDateTime().atZone(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE_TIME))));
+//									canal.setEnd(canal.getStart().plusDays(1));
+//									if (journey.getCanalBooking() == null) {
+//										if (journey.getLatestPossibleCanalDateTime() != null) {
+//											ZonedDateTime atStartOfDay = journey.getLatestPossibleCanalDateTime()
+//													.atZone(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE_TIME)));
+//											int hours = Math.max(1, Hours.between(canal.getStart(), atStartOfDay));
+//											canal.setEnd(canal.getStart().plusHours(hours));
+//										}
+//									}
+//									canal.setPort(modelDistanceProvider.getCanalPort(journey.getRouteOption(), journey.getCanalEntrance()));
+									if (journey.getCanalJourneyEvent() != null) {
+										journey.getCanalJourneyEvent().setLinkedSequence(sequence);
+										newEvents.add(journey.getCanalJourneyEvent());
 									}
-									canal.setPort(modelDistanceProvider.getCanalPort(journey.getRouteOption(), journey.getCanalEntrance()));
-									newEvents.add(canal);
 								}
 							}
-						}
+//						}
 					}
 				}
 			}
@@ -226,29 +230,33 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 						if (journey.getCanalDateTime() != null) {
 							if (journey.getRouteOption() == RouteOption.PANAMA) {
 								if (sequence.getCharterInMarket() == null || sequence.getSpotIndex() != -1) {
-									IScenarioDataProvider scenarioDataProvider = getScenarioDataProviderFor(journey);
-									if (scenarioDataProvider == null) {
-										continue;
-									}
-									final @NonNull ModelDistanceProvider modelDistanceProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES,
-											ModelDistanceProvider.class);
+//									IScenarioDataProvider scenarioDataProvider = getScenarioDataProviderFor(journey);
+//									if (scenarioDataProvider == null) {
+//										continue;
+//									}
+//									final @NonNull ModelDistanceProvider modelDistanceProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES,
+//											ModelDistanceProvider.class);
 
-									final CanalBookingEvent canal = ScheduleFactory.eINSTANCE.createCanalBookingEvent();
-									canal.setLinkedSequence(journey.getSequence());
-									canal.setLinkedJourney(journey);
-									canal.setStart(journey.getCanalDateTime().atZone(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE_TIME))));
-									canal.setEnd(canal.getStart().plusDays(1));
-									if (journey.getCanalBooking() == null) {
-										if (journey.getLatestPossibleCanalDateTime() != null) {
-											ZonedDateTime atStartOfDay = journey.getLatestPossibleCanalDateTime()
-													.atZone(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE_TIME)));
-											int hours = Math.max(1, Hours.between(canal.getStart(), atStartOfDay));
-											canal.setEnd(canal.getStart().plusHours(hours));
-
-										}
+//									final CanalJourneyEvent canal = ScheduleFactory.eINSTANCE.createCanalBookingEvent();
+//									canal.setLinkedSequence(journey.getSequence());
+//									canal.setLinkedJourney(journey);
+//									canal.setStart(journey.getCanalDateTime().atZone(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE_TIME))));
+//									canal.setEnd(canal.getStart().plusDays(1));
+//									if (journey.getCanalBooking() == null) {
+//										if (journey.getLatestPossibleCanalDateTime() != null) {
+//											ZonedDateTime atStartOfDay = journey.getLatestPossibleCanalDateTime()
+//													.atZone(ZoneId.of(journey.getTimeZone(SchedulePackage.Literals.JOURNEY__CANAL_DATE_TIME)));
+//											int hours = Math.max(1, Hours.between(canal.getStart(), atStartOfDay));
+//											canal.setEnd(canal.getStart().plusHours(hours));
+//
+//										}
+//									}
+//									canal.setPort(modelDistanceProvider.getCanalPort(journey.getRouteOption(), journey.getCanalEntrance()));
+//									newEvents.add(canal);
+									if (journey.getCanalJourneyEvent() != null) {
+										journey.getCanalJourneyEvent().setLinkedSequence(sequence);
+										newEvents.add(journey.getCanalJourneyEvent());
 									}
-									canal.setPort(modelDistanceProvider.getCanalPort(journey.getRouteOption(), journey.getCanalEntrance()));
-									newEvents.add(canal);
 								}
 							}
 						}
@@ -363,8 +371,8 @@ public abstract class EMFScheduleContentProvider implements IGanttChartContentPr
 		if (element instanceof Event) {
 			final Event event = (Event) element;
 			final Sequence sequence;
-			if (event instanceof CanalBookingEvent) {
-				sequence = ((CanalBookingEvent) event).getLinkedSequence();
+			if (event instanceof CanalJourneyEvent) {
+				sequence = ((CanalJourneyEvent) event).getLinkedJourney().getSequence();
 			} else if (event instanceof CharterAvailableFromEvent) {
 				sequence = ((CharterAvailableFromEvent) event).getLinkedSequence();
 			} else if (event instanceof CharterAvailableToEvent) {

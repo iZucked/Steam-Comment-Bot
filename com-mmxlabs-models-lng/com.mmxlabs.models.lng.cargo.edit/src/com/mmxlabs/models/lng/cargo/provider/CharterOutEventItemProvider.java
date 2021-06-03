@@ -21,6 +21,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.cargo.CharterOutEvent} object.
@@ -312,12 +313,12 @@ public class CharterOutEventItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(CargoPackage.Literals.CHARTER_OUT_EVENT__REQUIRED_HEEL,
-				 CargoFactory.eINSTANCE.createEndHeelOptions()));
+				 CommercialFactory.eINSTANCE.createEndHeelOptions()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(CargoPackage.Literals.CHARTER_OUT_EVENT__AVAILABLE_HEEL,
-				 CargoFactory.eINSTANCE.createStartHeelOptions()));
+				 CommercialFactory.eINSTANCE.createStartHeelOptions()));
 	}
 
 }

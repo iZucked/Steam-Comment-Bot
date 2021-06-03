@@ -4,9 +4,12 @@
  */
 package com.mmxlabs.scenario.service.model.manager;
 
+import java.io.ByteArrayOutputStream;
 import java.io.CharConversionException;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URL;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -22,6 +25,8 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
@@ -29,12 +34,16 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
@@ -50,8 +59,10 @@ import com.mmxlabs.common.io.FileDeleter;
 import com.mmxlabs.common.util.CheckedBiConsumer;
 import com.mmxlabs.common.util.CheckedBiFunction;
 import com.mmxlabs.common.util.TriConsumer;
+import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.manifest.Manifest;
@@ -72,7 +83,7 @@ public class ScenarioStorageUtil {
 
 	public static class EncryptedScenarioException extends RuntimeException {
 
-		public EncryptedScenarioException(Exception e) {
+		public EncryptedScenarioException(final Exception e) {
 			super(e);
 		}
 
@@ -195,6 +206,11 @@ public class ScenarioStorageUtil {
 
 				storeToURI(EcoreUtil.generateUUID(), EcoreUtil.copy(modelReference.getInstance()), extraDataObjects, modelRecord.getManifest(), URI.createFileURI(file.getAbsolutePath()),
 						scenarioCipherProvider);
+			}
+		} catch (final Exception e) {
+			if (e.getCause() instanceof MigrationForbiddenException) {
+				log.error(e.getMessage());
+				throw new UserFeedbackException("Can't copy file since it requires prior migration to the latest version. Please drag and drop scenario into the workspace and try again.");
 			}
 		}
 	}
@@ -388,7 +404,7 @@ public class ScenarioStorageUtil {
 					return modelRecord;
 				}
 			}
-		} catch (CharConversionException e) {
+		} catch (final CharConversionException e) {
 			throw new EncryptedScenarioException(e);
 		}
 		return null;
@@ -567,7 +583,7 @@ public class ScenarioStorageUtil {
 	}
 
 	private static BiConsumer<ModelRecord, InstanceData> createSaveCallback(final URI archiveURI, final ResourceSet resourceSet, final String fragment) {
-		final BiConsumer<ModelRecord, InstanceData> saveCallback = (modelRecord, d) -> {
+		return (modelRecord, d) -> {
 
 			{
 				final URI backupTarget = archiveURI.appendFileExtension("backup");
@@ -582,9 +598,91 @@ public class ScenarioStorageUtil {
 			try (ModelReference ref = modelRecord.aquireReference("ScenarioStorageUtil:2")) {
 				try {
 					final Resource resource = resourceSet.getResource(createArtifactURI(archiveURI, fragment), false);
+
+					final var badReferences = checkModelConsistency(resource);
+					if (!badReferences.isEmpty()) {
+
+						final File tempFile = Files.createTempFile("lingo-", ".debug").toFile();
+						ServiceHelper.withOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
+
+							// Skip the normal save process and manually encrypt into a memory byte buffer then save use ZIP API rather than go through EMF
+							try {
+
+								byte[] scenarioContent;
+								try (ByteArrayOutputStream fos = new ByteArrayOutputStream()) {
+									try (OutputStream os = scenarioCipherProvider.getSharedCipher().encrypt(fos)) {
+										resource.save(os, null);
+									}
+									fos.flush();
+									scenarioContent = fos.toByteArray();
+								}
+								byte[] manifestContent = null;
+								if (modelRecord instanceof ScenarioModelRecord) {
+									final ScenarioModelRecord scenarioModelRecord = (ScenarioModelRecord) modelRecord;
+									final Manifest manifest = scenarioModelRecord.getManifest();
+
+									try (ByteArrayOutputStream fos = new ByteArrayOutputStream()) {
+										final XMIResourceImpl manifestResource = new XMIResourceImpl();
+										// Create a copy to avoid moving into the new resource
+										manifestResource.getContents().add(EcoreUtil.copy(manifest));
+										try (OutputStream os = scenarioCipherProvider.getSharedCipher().encrypt(fos)) {
+											manifestResource.save(os, null);
+										}
+										fos.flush();
+										manifestContent = fos.toByteArray();
+									}
+								}
+								// Save some debugging information about the problem to the scenario file.
+								byte[] debugDetailsContent;
+								try (ByteArrayOutputStream fos = new ByteArrayOutputStream()) {
+									try (OutputStream os = scenarioCipherProvider.getSharedCipher().encrypt(fos)) {
+										for (final var r : badReferences) {
+											final String s = r.toString() + "\n";
+											os.write(s.getBytes());
+										}
+									}
+									fos.flush();
+									debugDetailsContent = fos.toByteArray();
+								}
+
+								// Copy the encrypted byte arrays into a zip file
+								try (FileOutputStream fos = new FileOutputStream(tempFile)) {
+									try (ZipOutputStream zipOut = new ZipOutputStream(fos)) {
+										if (manifestContent != null) {
+											final ZipEntry zipOutEntry = new ZipEntry(PATH_MANIFEST_OBJECT);
+											zipOut.putNextEntry(zipOutEntry);
+											zipOut.write(manifestContent, 0, manifestContent.length);
+											zipOut.closeEntry();
+										}
+										{
+											final ZipEntry zipOutEntry = new ZipEntry(PATH_ROOT_OBJECT);
+											zipOut.putNextEntry(zipOutEntry);
+											zipOut.write(scenarioContent, 0, scenarioContent.length);
+											zipOut.closeEntry();
+										}
+										{
+											final ZipEntry zipOutEntry = new ZipEntry("bad-references.txt");
+											zipOut.putNextEntry(zipOutEntry);
+											zipOut.write(debugDetailsContent, 0, debugDetailsContent.length);
+											zipOut.closeEntry();
+										}
+									}
+								}
+							} catch (final Exception e) {
+								log.error("Error saving debug scenario data " + e.getMessage(), e);
+							}
+						});
+						throw new ModelInconsistentException(
+								"Unable to save - model has uncontained references. Please contact Minimax Labs with this error, any changes you have made since the last save and the encrypted scenario saved to "
+										+ tempFile.getAbsolutePath());
+
+					}
+
 					ResourceHelper.saveResource(resource);
 				} catch (final Exception e) {
-					e.printStackTrace();
+					throw new RuntimeException(e);
+
+					// e.printStackTrace();
 				}
 
 				// This is not very nice
@@ -604,7 +702,7 @@ public class ScenarioStorageUtil {
 						try {
 							manifestResource.save(null);
 						} catch (final IOException e) {
-							e.printStackTrace();
+							throw new RuntimeException(e);
 						}
 					}
 				}
@@ -613,7 +711,7 @@ public class ScenarioStorageUtil {
 				commandStack.saveIsDone();
 			}
 		};
-		return saveCallback;
+
 	}
 
 	public static ResourceSet createResourceSet(@Nullable final IScenarioCipherProvider cipherProvider) {
@@ -719,7 +817,7 @@ public class ScenarioStorageUtil {
 		});
 	}
 
-	public static @Nullable Manifest loadManifest(final File scenarioFile, IScenarioCipherProvider scenarioCipherProvider) {
+	public static @Nullable Manifest loadManifest(final File scenarioFile, final IScenarioCipherProvider scenarioCipherProvider) {
 		final URI fileURI = URI.createFileURI(scenarioFile.toString());
 
 		final URI manifestURI = ScenarioStorageUtil.createArtifactURI(fileURI, ScenarioStorageUtil.PATH_MANIFEST_OBJECT);
@@ -753,5 +851,82 @@ public class ScenarioStorageUtil {
 
 		}
 		return null;
+	}
+
+	public static List<ReferenceRecord> checkModelConsistency(final Resource r) {
+
+		final List<ReferenceRecord> badReferences = new LinkedList<>();
+
+		final TreeIterator<EObject> itr = r.getAllContents();
+		while (itr.hasNext()) {
+			final EObject next = itr.next();
+
+			final @NonNull EClass eClass = next.eClass();
+			for (final EReference ref : eClass.getEAllReferences()) {
+				// We only want to check non-contained references to make sure they have a container in the same resource
+				if (ref.isContainment()) {
+					continue;
+				}
+				if (ref.isMany()) {
+					final List<EObject> children = (List<EObject>) next.eGet(ref);
+					for (final EObject child : children) {
+						if (child != null) {
+							if (child.eContainer() == null) {
+								badReferences.add(ReferenceRecord.of(next, ref, child));
+							} else if (child.eResource() != r) {
+								badReferences.add(ReferenceRecord.of(next, ref, child));
+							}
+						}
+					}
+				} else {
+					final EObject child = (EObject) next.eGet(ref);
+					if (child != null) {
+						if (child.eContainer() == null) {
+							badReferences.add(ReferenceRecord.of(next, ref, child));
+						} else if (child.eResource() != r) {
+							badReferences.add(ReferenceRecord.of(next, ref, child));
+						}
+					}
+				}
+			}
+		}
+
+		return badReferences;
+	}
+
+	public static class ReferenceRecord {
+		public final EObject parent;
+		public final EReference feature;
+		public final EObject child;
+
+		public ReferenceRecord(final EObject parent, final EReference feature, final EObject child) {
+			this.parent = parent;
+			this.feature = feature;
+			this.child = child;
+
+		}
+
+		public static ReferenceRecord of(final EObject parent, final EReference feature, final EObject child) {
+			return new ReferenceRecord(parent, feature, child);
+		}
+
+		@Override
+		public String toString() {
+			return String.format("Parent: %s, Feature: %s, Child: %s", getName(this.parent), this.feature.getName(), getName(this.child));
+		}
+
+		private String getName(final EObject eObject) {
+			if (MMXCorePackage.eINSTANCE.getNamedObject().isInstance(eObject) && MMXCorePackage.eINSTANCE.getUUIDObject().isInstance(eObject)) {
+				return String.format("(%s: %s %s)", eObject.eClass().getName(), eObject.eGet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid()),
+						eObject.eGet(MMXCorePackage.eINSTANCE.getNamedObject_Name()));
+			}
+			if (MMXCorePackage.eINSTANCE.getNamedObject().isInstance(eObject)) {
+				return String.format("(%s: %s)", eObject.eClass().getName(), eObject.eGet(MMXCorePackage.eINSTANCE.getNamedObject_Name()));
+			}
+			if (MMXCorePackage.eINSTANCE.getUUIDObject().isInstance(eObject)) {
+				return String.format("(%s: %s)", eObject.eClass().getName(), eObject.eGet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid()));
+			}
+			return String.format("(%s)", eObject.eClass().getName());
+		}
 	}
 }
