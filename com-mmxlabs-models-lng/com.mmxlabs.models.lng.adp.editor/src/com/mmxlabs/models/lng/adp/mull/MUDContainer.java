@@ -90,6 +90,18 @@ public class MUDContainer {
 		}).get();
 	}
 
+	public AllocationTracker phase2CalculateMUDAllocationTracker() {
+		return metAllHardAACQs ? this.desMarketTracker : this.allocationTrackers.stream().max((t1, t2) -> {
+			if (t1.phase2SatisfiedAACQ()) {
+				return -1;
+			} else if (t2.phase2SatisfiedAACQ()) {
+				return 1;
+			} else {
+				return Long.compare(t1.getRunningAllocation(), t2.getRunningAllocation());
+			}
+		}).get();
+	}
+
 	public void dropAllocation(final long allocationDrop) {
 		this.runningAllocation -= allocationDrop;
 		this.currentMonthAbsoluteEntitlement -= (int) allocationDrop;
@@ -106,6 +118,11 @@ public class MUDContainer {
 
 	public int phase1CalculateExpectedAllocationDrop(final Map<Vessel, LocalDateTime> vesselToMostRecentUseDateTime, final int defaultAllocationDrop, final int loadDuration, final Set<Vessel> firstPartyVessels) {
 		final AllocationTracker mudTracker = this.phase1CalculateMUDAllocationTracker();
+		return mudTracker.calculateExpectedAllocationDrop(vesselToMostRecentUseDateTime, defaultAllocationDrop, loadDuration, firstPartyVessels);
+	}
+
+	public int phase2CalculateExpectedAllocationDrop(final Map<Vessel, LocalDateTime> vesselToMostRecentUseDateTime, final int defaultAllocationDrop, final int loadDuration, final Set<Vessel> firstPartyVessels) {
+		final AllocationTracker mudTracker = this.phase2CalculateMUDAllocationTracker();
 		return mudTracker.calculateExpectedAllocationDrop(vesselToMostRecentUseDateTime, defaultAllocationDrop, loadDuration, firstPartyVessels);
 	}
 
@@ -142,6 +159,17 @@ public class MUDContainer {
 		}
 	}
 
+	public void phase2Undo(final CargoBlueprint cargoBlueprint) {
+		if (cargoBlueprint.getEntity().equals(this.entity)) {
+			this.runningAllocation += cargoBlueprint.getAllocatedVolume();
+			this.currentMonthAbsoluteEntitlement += cargoBlueprint.getAllocatedVolume();
+			for (final AllocationTracker allocationTracker : allocationTrackers) {
+				allocationTracker.phase2Undo(cargoBlueprint);
+			}
+			reassessAACQSatisfaction();
+		}
+	}
+
 	public void dropFixedLoad(final Cargo cargo) {
 		final Slot<?> loadSlot = cargo.getSlots().get(0);
 		if (this.entity.equals(loadSlot.getEntity())) {
@@ -162,6 +190,19 @@ public class MUDContainer {
 			this.currentMonthAbsoluteEntitlement -= expectedVolumeLoaded;
 			for (final AllocationTracker allocationTracker : this.allocationTrackers) {
 				allocationTracker.phase1DropFixedLoad(cargo);
+			}
+			reassessAACQSatisfaction();
+		}
+	}
+
+	public void phase2DropFixedLoad(final Cargo cargo) {
+		final Slot<?> loadSlot = cargo.getSlots().get(0);
+		if (this.entity.equals(loadSlot.getEntity())) {
+			final int expectedVolumeLoaded = loadSlot.getSlotOrDelegateMaxQuantity();
+			this.runningAllocation -= expectedVolumeLoaded;
+			this.currentMonthAbsoluteEntitlement -= expectedVolumeLoaded;
+			for (final AllocationTracker allocationTracker : this.allocationTrackers) {
+				allocationTracker.phase2DropFixedLoad(cargo);
 			}
 			reassessAACQSatisfaction();
 		}

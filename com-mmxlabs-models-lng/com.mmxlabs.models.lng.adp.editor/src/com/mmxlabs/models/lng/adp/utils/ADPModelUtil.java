@@ -24,6 +24,8 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
@@ -42,9 +44,11 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPModel;
+import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.FleetProfile;
 import com.mmxlabs.models.lng.adp.LNGVolumeUnit;
 import com.mmxlabs.models.lng.adp.PeriodDistribution;
+import com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint;
 import com.mmxlabs.models.lng.adp.ProfileVesselRestriction;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
@@ -202,6 +206,55 @@ public class ADPModelUtil {
 			logger.error("Invalid syntax: ", e);
 		}
 		return null;
+	}
+
+	public static Command constructShiftAdpYearCommand(final EditingDomain editingDomain, @NonNull final ADPModel adpModel, final int startYear) {
+		if (adpModel.getYearStart() == null || adpModel.getYearEnd() == null) {
+			return null;
+		}
+		final int deltaShift = startYear - adpModel.getYearStart().getYear();
+		if (deltaShift == 0) {
+			return null;
+		}
+
+		final CompoundCommand cmd = new CompoundCommand("Shift ADP year");
+
+		final YearMonth newYearStart = adpModel.getYearStart().plusYears(deltaShift);
+		final YearMonth newYearEnd = adpModel.getYearEnd().plusYears(deltaShift);
+		cmd.append(SetCommand.create(editingDomain, adpModel, ADPPackage.Literals.ADP_MODEL__YEAR_START, newYearStart));
+		cmd.append(SetCommand.create(editingDomain, adpModel, ADPPackage.Literals.ADP_MODEL__YEAR_END, newYearEnd));
+
+		for (final PurchaseContractProfile purchaseContractProfile : adpModel.getPurchaseContractProfiles()) {
+			purchaseContractProfile.getConstraints().stream() //
+					.filter(PeriodDistributionProfileConstraint.class::isInstance) //
+					.map(PeriodDistributionProfileConstraint.class::cast) //
+					.map(PeriodDistributionProfileConstraint::getDistributions) //
+					.forEach(distributions -> distributions.stream() //
+							.filter(distribution -> !distribution.getRange().isEmpty()) //
+							.forEach(distribution -> {
+								final List<YearMonth> yearMonthsToRemove = new ArrayList<>(distribution.getRange());
+								final List<YearMonth> yearMonthsToAdd = yearMonthsToRemove.stream().map(ym -> ym.plusYears(deltaShift)).collect(Collectors.toList());
+								cmd.append(RemoveCommand.create(editingDomain, distribution, ADPPackage.Literals.PERIOD_DISTRIBUTION__RANGE, yearMonthsToRemove));
+								cmd.append(AddCommand.create(editingDomain, distribution, ADPPackage.Literals.PERIOD_DISTRIBUTION__RANGE, yearMonthsToAdd));
+							})
+					);
+		}
+		for (final SalesContractProfile salesContractProfile : adpModel.getSalesContractProfiles()) {
+			salesContractProfile.getConstraints().stream() //
+					.filter(PeriodDistributionProfileConstraint.class::isInstance) //
+					.map(PeriodDistributionProfileConstraint.class::cast) //
+					.map(PeriodDistributionProfileConstraint::getDistributions) //
+					.forEach(distributions -> distributions.stream() //
+							.filter(distribution -> !distribution.getRange().isEmpty()) //
+							.forEach(distribution -> {
+								final List<YearMonth> yearMonthsToRemove = new ArrayList<>(distribution.getRange());
+								final List<YearMonth> yearMonthsToAdd = yearMonthsToRemove.stream().map(ym -> ym.plusYears(deltaShift)).collect(Collectors.toList());
+								cmd.append(RemoveCommand.create(editingDomain, distribution, ADPPackage.Literals.PERIOD_DISTRIBUTION__RANGE, yearMonthsToRemove));
+								cmd.append(AddCommand.create(editingDomain, distribution, ADPPackage.Literals.PERIOD_DISTRIBUTION__RANGE, yearMonthsToAdd));
+							})
+					);
+		}
+		return cmd;
 	}
 
 	public static Command populateModel(final EditingDomain editingDomain, final LNGScenarioModel scenarioModel, final ADPModel adpModel, final SalesContractProfile profile) {

@@ -45,6 +45,26 @@ public class DESMarketTracker extends AllocationTracker {
 	}
 
 	@Override
+	public void phase2DropAllocation(long allocationDrop) {
+		super.phase2DropAllocation(allocationDrop);
+		++currentAllocatedAACQ;
+	}
+
+	@Override
+	public void finalPhaseDropAllocation(long allocationDrop) {
+		super.finalPhaseDropAllocation(allocationDrop);
+		++currentAllocatedAACQ;
+	}
+
+	@Override
+	public void phase2Undo(CargoBlueprint cargoBlueprint) {
+		super.phase2Undo(cargoBlueprint);
+		if (this.equals(cargoBlueprint.getAllocationTracker())) {
+			--currentAllocatedAACQ;
+		}
+	}
+
+	@Override
 	public DischargeSlot createDischargeSlot(final CargoEditingCommands cec, List<Command> setCommands, final CargoModel cargoModel, final IScenarioDataProvider sdp, final LoadSlot loadSlot,
 			final Vessel vessel, final Map<Vessel, VesselAvailability> vesselToVA, final LNGScenarioModel sm, final Set<Vessel> firstPartyVessels) {
 		final DischargeSlot dischargeSlot;
@@ -104,5 +124,17 @@ public class DESMarketTracker extends AllocationTracker {
 	@Override
 	public void phase1DropFixedLoad(Cargo cargo) {
 		dropFixedLoad(cargo);
+	}
+
+	@Override
+	public void phase2DropFixedLoad(Cargo cargo) {
+		final Slot<?> dischargeSlot = cargo.getSlots().get(1);
+		if (dischargeSlot instanceof SpotDischargeSlot) {
+			final SpotDischargeSlot spotDischargeSlot = (SpotDischargeSlot) dischargeSlot;
+			if (this.salesMarket.equals(spotDischargeSlot.getMarket())) {
+				final int expectedVolumeLoaded = cargo.getSlots().get(0).getSlotOrDelegateMaxQuantity();
+				this.runningAllocation -= expectedVolumeLoaded;
+			}
+		}
 	}
 }

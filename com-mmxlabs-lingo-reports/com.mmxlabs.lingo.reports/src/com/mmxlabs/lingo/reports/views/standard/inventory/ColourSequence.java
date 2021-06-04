@@ -31,6 +31,7 @@ public class ColourSequence {
 	 *         Uses the local resource manager to create colours that are returned
 	 *         in the array.
 	 */
+	@SuppressWarnings("null")
 	public static @NonNull Color[] createColourSequence(@NonNull final LocalResourceManager localResourceManager) {
 		final Color[] initialisedSequence = new Color[sequence.length];
 		for (int i = 0; i < sequence.length; ++i) {

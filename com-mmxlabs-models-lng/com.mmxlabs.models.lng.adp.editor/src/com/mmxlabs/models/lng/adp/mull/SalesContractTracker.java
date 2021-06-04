@@ -29,7 +29,6 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class SalesContractTracker extends AllocationTracker {
 	private final SalesContract salesContract;
-	private int currentAllocatedAACQ = 0;
 
 	public SalesContractTracker(final SalesContractAllocationRow allocationRow, final double totalWeight) {
 		super(allocationRow, totalWeight);
@@ -45,13 +44,33 @@ public class SalesContractTracker extends AllocationTracker {
 		super.phase1DropAllocation(allocationDrop);
 		++currentAllocatedAACQ;
 	}
-	
+
 	@Override
 	public void phase1Undo(CargoBlueprint cargoBlueprint) {
 		super.phase1Undo(cargoBlueprint);
 		if (this.equals(cargoBlueprint.getAllocationTracker())) {
 			--currentAllocatedAACQ;
 		}
+	}
+
+	@Override
+	public void phase2DropAllocation(long allocationDrop) {
+		super.phase2DropAllocation(allocationDrop);
+		++currentAllocatedAACQ;
+	}
+
+	@Override
+	public void phase2Undo(CargoBlueprint cargoBlueprint) {
+		super.phase1Undo(cargoBlueprint);
+		if (this.equals(cargoBlueprint.getAllocationTracker())) {
+			--currentAllocatedAACQ;
+		}
+	}
+
+	@Override
+	public void finalPhaseDropAllocation(long allocationDrop) {
+		super.finalPhaseDropAllocation(allocationDrop);
+		++currentAllocatedAACQ;
 	}
 
 	@Override
@@ -107,6 +126,17 @@ public class SalesContractTracker extends AllocationTracker {
 				final int expectedVolumeLoaded = cargo.getSlots().get(0).getSlotOrDelegateMaxQuantity();
 				this.runningAllocation -= expectedVolumeLoaded;
 				++currentAllocatedAACQ;
+			}
+		}
+	}
+
+	@Override
+	public void phase2DropFixedLoad(Cargo cargo) {
+		final Slot<?> dischargeSlot = cargo.getSlots().get(1);
+		if (!(dischargeSlot instanceof SpotDischargeSlot)) {
+			if (this.salesContract.equals(dischargeSlot.getContract())) {
+				final int expectedVolumeLoaded = cargo.getSlots().get(0).getSlotOrDelegateMaxQuantity();
+				this.runningAllocation -= expectedVolumeLoaded;
 			}
 		}
 	}
