@@ -133,7 +133,7 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 					statuses.add(deco);
 				}
 			}
-			final boolean hasCharterOutOpportunities = partialCaseRow.getVesselEventOptions().stream().filter(CharterOutOpportunity.class::isInstance).findAny().isPresent();
+			final boolean hasCharterOutOpportunities = partialCaseRow.getVesselEventOptions().stream().anyMatch(CharterOutOpportunity.class::isInstance);
 			final boolean hasShippingOptions = !partialCaseRow.getShipping().isEmpty();
 			if (hasCharterOutOpportunities && !hasShippingOptions) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
