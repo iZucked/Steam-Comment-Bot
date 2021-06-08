@@ -208,7 +208,7 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 	}
 
 	protected void doDisplay(IDialogEditingContext dialogContext, MMXRootObject root, EMFDataBindingContext dbc, final GenericCharterContract gcc) {
-		if (gcc != null) {
+		if (gcc != null && gcc.getName() != null) {
 			if (gcc.getBallastBonusTerms() instanceof MonthlyBallastBonusContainer) {
 				final MonthlyBallastBonusContainer mbbc = (MonthlyBallastBonusContainer) gcc.getBallastBonusTerms();
 				Composite hubsComp = toolkit.createComposite(owner);
