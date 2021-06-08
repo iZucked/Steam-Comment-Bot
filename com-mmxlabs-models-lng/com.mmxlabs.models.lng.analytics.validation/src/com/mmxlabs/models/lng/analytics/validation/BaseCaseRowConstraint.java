@@ -16,6 +16,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.CharterOutOpportunity;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
@@ -120,6 +121,12 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point: load and discharge volumes do not match"));
 				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 //				statuses.add(deco);
+			}
+			if (baseCaseRow.getVesselEventOption() instanceof CharterOutOpportunity && baseCaseRow.getShipping() == null) {
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point: charter out opportunity without shipping option"));
+				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+				statuses.add(deco);
 			}
 		}
 
