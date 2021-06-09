@@ -373,7 +373,11 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="containedCharterContract"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//GenericCharterContract"
-        containment="true"/>
+        containment="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject">
+        <details key="optionalName" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="genericCharterContract"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//GenericCharterContract"
         unsettable="true"/>

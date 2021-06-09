@@ -5,7 +5,6 @@
 package com.mmxlabs.lingo.app.intro;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.InvocationTargetException;
@@ -14,19 +13,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.emf.ecore.resource.URIConverter.Cipher;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.equinox.internal.p2.garbagecollector.GarbageCollector;
@@ -42,17 +34,15 @@ import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.io.FileDeleter;
 import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.auth.AuthenticationManager;
-import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.services.permissions.UserPermissionsService;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
@@ -74,9 +64,6 @@ import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvide
 import com.mmxlabs.scenario.service.model.util.encryption.WorkspaceReencrypter;
 import com.mmxlabs.scenario.service.model.util.encryption.impl.DelegatingEMFCipher;
 
-import okhttp3.OkHttpClient;
-import okio.Okio;
-
 /**
  * This class controls all aspects of the application's execution
  */
@@ -84,12 +71,6 @@ import okio.Okio;
 public class Application implements IApplication {
 
 	AuthenticationManager authenticationManager = AuthenticationManager.getInstance();
-
-	private static final Logger log = LoggerFactory.getLogger(Application.class);
-	private final OkHttpClient httpClient = HttpClientUtil.basicBuilder().build();
-
-	private static final String LICENSE_FOLDER = "license";
-	private Object applicationExitCode;
 
 	/*
 	 * (non-Javadoc)
@@ -132,171 +113,17 @@ public class Application implements IApplication {
 				e1.printStackTrace();
 			}
 		}
-		final var display = PlatformUI.createDisplay();
-
-		initAccessControl();
-		WorkbenchStateManager.cleanupWorkbenchState();
-
-		displayProgressMonitor(display);
-
-		if (applicationExitCode == ApplicationCode.CONTINUE) {
-			final var processor = new DelayedOpenFileProcessor(display);
-			final int returnCode = PlatformUI.createAndRunWorkbench(display, new ApplicationWorkbenchAdvisor(processor));
-			if (returnCode == PlatformUI.RETURN_RESTART) {
-				return IApplication.EXIT_RESTART;
-			}
-		}
-
-		// clean exit
-		display.dispose();
-		return IApplication.EXIT_OK;
-	}
-
-	/**
-	 * Runs the 5 following startup tasks and monitors their progress with the IProgressMonitor: login, permission check, license check, p2 cleanup, (optional) re-encryption
-	 *
-	 * @param display
-	 * @param monitor
-	 * @return an CONTINUE {@see com.mmxlabs.lingo.app.intro.ApplicationCode} or IApplication.EXIT_OK
-	 * @throws Exception
-	 */
-	public Object startupTasks(Display display, IProgressMonitor monitor) throws Exception {
-		var subMonitor = SubMonitor.convert(monitor, 5);
-
-		datahubLogin(subMonitor.split(1));
-		if (!datahubPermissionCheck(display, subMonitor.split(1))) {
-			return IApplication.EXIT_OK;
-		}
-
-		if (!licenseCheck(subMonitor.split(1))) {
-			MessageDialog.openError(display.getActiveShell(), "License Error", "Unable to validate license");
+		final Display display = PlatformUI.createDisplay();
+		final LicenseState validity = LicenseChecker.checkLicense();
+		if (validity != LicenseState.Valid) {
+			MessageDialog.openError(display.getActiveShell(), "License Error", "Unable to validate license: " + validity.getMessage());
 			display.dispose();
 			return IApplication.EXIT_OK;
 		}
 
-		// Don't abort LiNGO if p2 garbage collect fails.
-		// For some reason this started to happen ~14 Dec 2017
-		try {
-			cleanupP2(subMonitor.split(1));
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
+		initAccessControl();
+		WorkbenchStateManager.cleanupWorkbenchState();
 
-		// Defer the background polling a little
-		UpstreamUrlProvider.INSTANCE.start();
-
-		// TODO: Handle error conditions better!
-		final Location instanceLoc = Platform.getInstanceLocation();
-		try {
-			if (instanceLoc == null) {
-				// Need a workspace
-				return IApplication.EXIT_OK;
-			}
-			if (instanceLoc.isSet()) {
-				// Attempt to lock workspace
-				if (instanceLoc.lock()) {
-					reencryptWorkspace(display, monitor);
-					return ApplicationCode.CONTINUE;
-				} else {
-					// Tell user about lock
-					MessageDialog.openError(display.getActiveShell(), "Startup Error", "The workspace could not be locked");
-					display.dispose();
-				}
-			}
-		} catch (final IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (instanceLoc != null) {
-				instanceLoc.release();
-			}
-		}
-		return IApplication.EXIT_OK;
-	}
-
-	/**
-	 * Extend IApplication with CONTINUE code.
-	 */
-	public interface ApplicationCode extends IApplication {
-		public static final Integer CONTINUE = Integer.valueOf(100);
-	}
-
-	/**
-	 * Re-encrypt the workspace if the re-encryption feature is enabled
-	 *
-	 * @param display
-	 * @param monitor
-	 * @throws Exception
-	 */
-	private void reencryptWorkspace(Display display, IProgressMonitor monitor) throws Exception {
-		var encryptionMonitor = SubMonitor.convert(monitor, 1);
-		encryptionMonitor.setTaskName("Checking if encryption migration is needed");
-
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_REENCRYPT)) {
-
-			DataStreamReencrypter.ENABLED = true;
-
-			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, p -> {
-				if (p != null) {
-					final var sharedCipher = p.getSharedCipher();
-					if (sharedCipher instanceof DelegatingEMFCipher) {
-						final DelegatingEMFCipher cipher = (DelegatingEMFCipher) sharedCipher;
-
-						final var reencrypter = new WorkspaceReencrypter();
-						// Add in standard paths.
-						reencrypter.addDefaultPaths();
-
-						reencrypter.migrateWorkspaceEncryption(display.getActiveShell(), cipher);
-					}
-				}
-			});
-		} else {
-			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, p -> {
-				if (p != null) {
-					final var sharedCipher = p.getSharedCipher();
-					if (sharedCipher instanceof DelegatingEMFCipher) {
-						final DelegatingEMFCipher cipher = (DelegatingEMFCipher) sharedCipher;
-						final var reencrypter = new WorkspaceReencrypter();
-
-						reencrypter.writeCurrentKeyToStateFile(cipher);
-					}
-				}
-			});
-		}
-
-		// Data file manipulation complete, allow startup to continue.
-		WellKnownTriggers.WORKSPACE_DATA_ENCRYPTION_CHECK.fireTrigger();
-	}
-
-	/**
-	 * Checks whether a valid license keystore exists in one of the pre-defined locations. See {@link LicenseChecker#doCheckLicense(KeyStore)} for more info
-	 *
-	 * @return true if there is a valid license, false other
-	 * @throws IOException
-	 */
-	private boolean licenseCheck(IProgressMonitor monitor) throws IOException {
-		var licenseMonitor = SubMonitor.convert(monitor, 1);
-		licenseMonitor.setTaskName("Validating the license");
-
-		// check if the datahub license is valid
-		KeyStore licenseKeystore = getLicenseFromDatahub();
-		if (licenseKeystore != null) {
-			final LicenseState validity = LicenseChecker.doCheckLicense(licenseKeystore);
-			if (validity == LicenseState.Valid) {
-				return true;
-			}
-		}
-
-		// check if the other licenses are valid
-		final LicenseState validity = LicenseChecker.checkLicense();
-		return validity == LicenseState.Valid;
-	}
-
-	/**
-	 * Check if the DataHub is online. If it is, start the authentication prompt then re-check the online status
-	 */
-	private void datahubLogin(IProgressMonitor monitor) {
-		var loginMonitor = SubMonitor.convert(monitor, 1);
-		loginMonitor.setTaskName("Logging into the DataHub");
 		UpstreamUrlProvider.INSTANCE.updateOnlineStatus();
 
 		// Trigger early startup prompt for Data Hub
@@ -306,24 +133,12 @@ public class Application implements IApplication {
 			// Re-test online status
 			UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
 		}
-	}
 
-	/**
-	 * Check DataHub to see if user is authorised to use LiNGO
-	 *
-	 * @param display
-	 * @return true if the user has the correct permission, false otherwise
-	 */
-	private boolean datahubPermissionCheck(Display display, IProgressMonitor monitor) {
-		var permissionMonitor = SubMonitor.convert(monitor, 1);
-		permissionMonitor.setTaskName("Checking the DataHub permissions");
-		var success = false;
-
+		// Check Data Hub to see if user is authorised to use LiNGO
 		final boolean datahubStartupCheck = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_STARTUP_CHECK);
 		if (datahubStartupCheck) {
 
-			// use the progress monitor for all startup tasks
-			waitForHub();
+			displayProgressMonitor(display);
 
 			// check if datahub is available
 			if (DataHubServiceProvider.getInstance().isHubOnline()) {
@@ -335,29 +150,101 @@ public class Application implements IApplication {
 					MessageDialog.openError(display.getActiveShell(), "", "Error getting user permissions from Data Hub. Please try again later.");
 				}
 
-				if (UserPermissionsService.INSTANCE.hasUserPermissions() && UserPermissionsService.INSTANCE.isPermitted("lingo", "read")) {
-					success = true;
-				} else {
+				if (UserPermissionsService.INSTANCE.hasUserPermissions() && !UserPermissionsService.INSTANCE.isPermitted("lingo", "read")) {
 					MessageDialog.openError(display.getActiveShell(), "", "User is not authorised to use LiNGO");
 					display.dispose();
+					return IApplication.EXIT_OK;
 				}
+
 			} else {
 				MessageDialog.openError(display.getActiveShell(), "", "Unable to connect to DataHub. Please try again later.");
 			}
-		} else {
-			// don't block startup if the permission check feature is disabled
-			success = true;
 		}
 
-		return success;
+		// Don't abort LiNGO if p2 garbage collect fails.
+		// For some reason this started to happen ~14 Dec 2017
+		try {
+			cleanupP2();
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+
+		final DelayedOpenFileProcessor processor = new DelayedOpenFileProcessor(display);
+
+		// Defer the background polling a little
+		UpstreamUrlProvider.INSTANCE.start();
+
+		// TODO: Handle error conditions better!
+		final Location instanceLoc = Platform.getInstanceLocation();
+		try {
+
+			if (instanceLoc == null) {
+				// Need a workspace
+				return IApplication.EXIT_OK;
+			}
+
+			if (instanceLoc.isSet()) {
+
+				// Attempt to lock workspace
+				if (instanceLoc.lock()) {
+
+					if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_REENCRYPT)) {
+
+						DataStreamReencrypter.ENABLED = true;
+
+						ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, p -> {
+							if (p != null) {
+								final Cipher sharedCipher = p.getSharedCipher();
+								if (sharedCipher instanceof DelegatingEMFCipher) {
+									final DelegatingEMFCipher cipher = (DelegatingEMFCipher) sharedCipher;
+
+									final WorkspaceReencrypter reencrypter = new WorkspaceReencrypter();
+									// Add in standard paths.
+									reencrypter.addDefaultPaths();
+
+									reencrypter.migrateWorkspaceEncryption(display.getActiveShell(), cipher);
+								}
+							}
+						});
+					} else {
+						ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, p -> {
+							if (p != null) {
+								final Cipher sharedCipher = p.getSharedCipher();
+								if (sharedCipher instanceof DelegatingEMFCipher) {
+									final DelegatingEMFCipher cipher = (DelegatingEMFCipher) sharedCipher;
+									final WorkspaceReencrypter reencrypter = new WorkspaceReencrypter();
+
+									reencrypter.writeCurrentKeyToStateFile(cipher);
+								}
+							}
+						});
+					}
+
+					// Data file manipulation complete, allow startup to continue.
+					WellKnownTriggers.WORKSPACE_DATA_ENCRYPTION_CHECK.fireTrigger();
+					
+					final int returnCode = PlatformUI.createAndRunWorkbench(display, new ApplicationWorkbenchAdvisor(processor));
+					if (returnCode == PlatformUI.RETURN_RESTART) {
+						return IApplication.EXIT_RESTART;
+					}
+				} else {
+					// Tell user about locked
+				}
+			}
+
+		} catch (final IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (display != null) {
+				display.dispose();
+			}
+			if (instanceLoc != null) {
+				instanceLoc.release();
+			}
+		}
+		return IApplication.EXIT_OK;
 	}
 
-	/**
-	 * Get the heap size from the JVM runtime arguments
-	 *
-	 * @param appLineArgs
-	 * @return heap size as a string
-	 */
 	private String getHeapSize(final String[] appLineArgs) {
 		String heapSize = null;
 
@@ -402,9 +289,6 @@ public class Application implements IApplication {
 		return heapSize;
 	}
 
-	/**
-	 * Remove the temporary folders in the workspace
-	 */
 	private void cleanUpTemporaryFolder() {
 		// Clean up temp folder on start up.
 		final File tempDirectory = ScenarioStorageUtil.getTempDirectory();
@@ -435,35 +319,23 @@ public class Application implements IApplication {
 		tempDirectory.mkdirs();
 	}
 
-	/**
-	 * Show the progress monitor while waiting for the hub to come online
-	 *
-	 * @param display
-	 */
 	private void displayProgressMonitor(final Display display) {
-		var progressDialog = new ProgressMonitorDialog(display.getActiveShell());
+		final ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(display.getActiveShell());
 		try {
-			progressDialog.run(false, false, monitor -> {
-				try {
-					applicationExitCode = startupTasks(display, monitor);
-				} catch (Exception e) {
-					log.error("failed to start LiNGO: " + e.getMessage());
-				}
+			progressDialog.run(true, false, monitor -> {
+				waitForHub(display);
 				monitor.done();
 			});
-		} catch (InvocationTargetException | InterruptedException e) {
+		} catch (final InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (final InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
 
-	/**
-	 * Wait up to 30 seconds for the hub to come online. Tries to connect once every second
-	 *
-	 * @param display
-	 */
-	private void waitForHub() {
-		var timeoutInSeconds = 30;
-		var msInASecond = 1000;
+	private void waitForHub(final Display display) {
+		final int timeoutInSeconds = 30;
+		final int msInASecond = 1000;
 
 		for (int i = 0; i < timeoutInSeconds; ++i) {
 			if (DataHubServiceProvider.getInstance().isHubOnline()) {
@@ -480,11 +352,8 @@ public class Application implements IApplication {
 
 	/**
 	 */
-	private void cleanupP2(IProgressMonitor monitor) {
-		var cleanupMonitor = SubMonitor.convert(monitor, 1);
-		cleanupMonitor.setTaskName("Cleaning up the eclipse p2 files");
-
-		final var context = FrameworkUtil.getBundle(Application.class).getBundleContext();
+	private void cleanupP2() {
+		final BundleContext context = FrameworkUtil.getBundle(Application.class).getBundleContext();
 		final ServiceReference<IProvisioningAgentProvider> providerRef = context.getServiceReference(IProvisioningAgentProvider.class);
 		if (providerRef == null) {
 			throw new RuntimeException("No provisioning agent provider is available"); //$NON-NLS-1$
@@ -542,7 +411,7 @@ public class Application implements IApplication {
 			return;
 		}
 		final IWorkbench workbench = PlatformUI.getWorkbench();
-		final var display = workbench.getDisplay();
+		final Display display = workbench.getDisplay();
 		display.syncExec(() -> {
 			if (!display.isDisposed()) {
 				workbench.close();
@@ -572,7 +441,7 @@ public class Application implements IApplication {
 	 * 
 	 */
 	private String buildCommandLine(final String memory) {
-		final var result = new StringBuffer(512);
+		final StringBuffer result = new StringBuffer(512);
 
 		String property = System.getProperty(PROP_VM);
 		if (property != null) {
@@ -625,91 +494,8 @@ public class Application implements IApplication {
 		String cmdLine = result.toString();
 
 		// Strip duplicate newlines
-		cmdLine = cmdLine.replace("\n\n", "\n");
+		cmdLine = cmdLine.replaceAll("\n\n", "\n");
 
 		return cmdLine;
-	}
-
-
-	/**
-	 * Gets the currently selected license from the DataHub and overwrites the license in the user's home
-	 *
-	 * @return the license keystore
-	 * @throws IOException
-	 */
-	public KeyStore getLicenseFromDatahub() throws IOException {
-		KeyStore licenseKeystore = null;
-
-		final var requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(LicenseChecker.LICENSE_ENDPOINT);
-		if (requestBuilder == null) {
-			return null;
-		}
-
-		var request = requestBuilder.build();
-
-		try (var response = httpClient.newCall(request).execute()) {
-			if (!response.isSuccessful()) {
-				if (response.code() == 401) {
-					log.error("insufficient permissions to retrieve license from DataHub");
-				} else if (response.code() == 404) {
-					// TODO comment back in once the DataHubs have support for license management
-					// log.error("there is currently no selected license on the DataHub");
-				} else {
-					log.error("unable to retrieve license from DataHub, unexpected code: " + response);
-				}
-
-				return null;
-			}
-
-			try (var bufferedSource = response.body().source()) {
-
-				String licenseFolderPath;
-
-				if (isDevEnvironment()) {
-					licenseFolderPath = System.getProperty(LicenseChecker.USER_HOME_PROPERTY);
-				} else {
-					final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
-					licenseFolderPath = workspaceLocation.toOSString() + IPath.SEPARATOR + LICENSE_FOLDER;
-				}
-
-				// create license folder if necessary
-				var licenseFolder = new File(licenseFolderPath);
-				licenseFolder.mkdir();
-
-				// try save response to file
-				final var licenseFile = new File(licenseFolderPath + File.separator + LicenseChecker.DATAHUB_LICENSE_KEYSTORE);
-				try (var bufferedSink = Okio.buffer(Okio.sink(licenseFile))) {
-					bufferedSink.writeAll(bufferedSource);
-				}
-
-				// try read from file
-				try (var inStream = new FileInputStream(licenseFile)) {
-					final var instance = KeyStore.getInstance(LicenseChecker.PKCS12);
-					final String password = LicenseChecker.getPassword();
-					instance.load(inStream, password.toCharArray());
-					licenseKeystore = instance;
-				} catch (IOException | CertificateException | KeyStoreException | NoSuchAlgorithmException e) {
-					log.error("failed to read from newly written license file in user's home: " + e.getMessage());
-				}
-			}
-		}
-		return licenseKeystore;
-	}
-
-	/**
-	 * Checks if the license.folder program argument is set. Creates the directory if it does not already exist. LiNGO will save the license in this folder to avoid using a different license per LiNGO
-	 * instance. The argument must be the full path to the license folder i.e. -license.folder C:\Users\Username\mmxlabs\license
-	 *
-	 * @return true if license.folder is set, false otherwise
-	 */
-	public static boolean isDevEnvironment() {
-		final String userHome = System.getProperty(LicenseChecker.LICENSE_FOLDER);
-		if (userHome != null) {
-			final var licenseFolder = new File(userHome);
-			licenseFolder.mkdir();
-			return true;
-		} else {
-			return false;
-		}
 	}
 }

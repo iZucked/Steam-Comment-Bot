@@ -3963,6 +3963,12 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   new String[] {
 			   "nonUniqueChildren", "true"
 		   });
+		addAnnotation
+		  (getVesselAvailability_ContainedCharterContract(),
+		   source,
+		   new String[] {
+			   "optionalName", "true"
+		   });
 	}
 
 	/**
