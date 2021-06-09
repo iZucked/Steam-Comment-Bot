@@ -14,6 +14,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOption;
+import com.mmxlabs.models.lng.analytics.CharterOutOpportunity;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
@@ -104,8 +105,7 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 			boolean vesselPorts = getVesselPortRestrictionsValid(partialCaseRow);
 			if (!vesselPorts) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
-						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row uses a vessel that cannot visit the specified ports", viewName)),
-						IStatus.WARNING);
+						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row uses a vessel that cannot visit the specified ports", viewName)), IStatus.WARNING);
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 				statuses.add(deco);
 			}
@@ -122,8 +122,7 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 			boolean vessels = getVesselRestrictionsValid(partialCaseRow);
 			if (!vessels) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
-						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row uses a vessel that is restricted by the load slot", viewName)),
-						IStatus.WARNING);
+						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row uses a vessel that is restricted by the load slot", viewName)), IStatus.WARNING);
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 				statuses.add(deco);
 			}
@@ -133,6 +132,14 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 					deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
 					statuses.add(deco);
 				}
+			}
+			final boolean hasCharterOutOpportunities = partialCaseRow.getVesselEventOptions().stream().anyMatch(CharterOutOpportunity.class::isInstance);
+			final boolean hasShippingOptions = !partialCaseRow.getShipping().isEmpty();
+			if (hasCharterOutOpportunities && !hasShippingOptions) {
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - the row contains charter out opportunities without shipping options", viewName)));
+				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
+				statuses.add(deco);
 			}
 		}
 

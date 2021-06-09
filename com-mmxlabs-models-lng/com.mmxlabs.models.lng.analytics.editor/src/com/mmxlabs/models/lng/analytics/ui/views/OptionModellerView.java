@@ -1117,6 +1117,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					cmd.append(SetCommand.create(getEditingDomain(), m.getPartialCase(), AnalyticsPackage.Literals.PARTIAL_CASE__KEEP_EXISTING_SCENARIO, matchingButton.getSelection()));
 
 					getDefaultCommandHandler().handleCommand(cmd, null, null);
+					refreshSections(false, EnumSet.of(SectionType.MIDDLE));
 				}
 			}
 		});
