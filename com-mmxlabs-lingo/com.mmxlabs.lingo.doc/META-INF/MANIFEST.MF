@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: LiNGO Documentation
 Bundle-SymbolicName: com.mmxlabs.lingo.doc;singleton:=true
-Bundle-Version: 4.12.28.qualifier
+Bundle-Version: 4.12.28.RELEASE
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.help;bundle-version="3.5.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-11
