@@ -123,7 +123,7 @@ public class VesselConstraint extends AbstractModelMultiConstraint {
 				} else {
 					canalName = routeParameter.getRouteOption().getName();
 				}
-				if (routeParameter.getBallastConsumptionRate() >= routeParameter.getBallastNBORate()) {
+				if (routeParameter.getBallastConsumptionRate() > 0 && routeParameter.getBallastConsumptionRate() >= routeParameter.getBallastNBORate()) {
 					baseFactory.copyName() //
 						.withMessage(String.format("%s ballast base fuel rate should be less than ballast NBO rate.", canalName)) //
 						.withObjectAndFeature(routeParameter, FleetPackage.eINSTANCE.getVesselClassRouteParameters_BallastConsumptionRate()) //
@@ -131,7 +131,7 @@ public class VesselConstraint extends AbstractModelMultiConstraint {
 						.withObjectAndFeature(vessel, FleetPackage.eINSTANCE.getVessel_RouteParameters()) //
 						.make(ctx, statuses);
 				}
-				if (routeParameter.getLadenConsumptionRate() >= routeParameter.getLadenNBORate()) {
+				if (routeParameter.getLadenConsumptionRate() > 0 && routeParameter.getLadenConsumptionRate() >= routeParameter.getLadenNBORate()) {
 					baseFactory.copyName() //
 						.withMessage(String.format("%s laden base fuel rate should be less than laden NBO rate.", canalName)) //
 						.withObjectAndFeature(routeParameter, FleetPackage.eINSTANCE.getVesselClassRouteParameters_LadenConsumptionRate()) //
