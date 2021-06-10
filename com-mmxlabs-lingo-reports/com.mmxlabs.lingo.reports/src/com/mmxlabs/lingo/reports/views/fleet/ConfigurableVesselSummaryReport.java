@@ -44,6 +44,7 @@ import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
+import com.mmxlabs.lingo.reports.services.ReentrantSelectionManager;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.services.SelectedDataProviderImpl;
 import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
@@ -66,6 +67,7 @@ import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
@@ -101,6 +103,8 @@ public class ConfigurableVesselSummaryReport extends AbstractConfigurableGridRep
 
 	@Inject
 	private ScenarioComparisonService scenarioComparisonService;
+
+	protected ReentrantSelectionManager selectionManager;
 
 	/*
 	 * Field to allow subclasses of specific reports to only include visible columns rather than everything
@@ -372,9 +376,9 @@ public class ConfigurableVesselSummaryReport extends AbstractConfigurableGridRep
 
 				setDiffMode(inPinDiffMode);
 				ViewerHelper.setInput(viewer, true, rows);
+				viewer.setSelection(SelectionHelper.adaptSelection(newSelectedDataProvider.getSelectedObjects()));
 			};
-
-			RunnerHelper.exec(r, block);
+			ViewerHelper.runIfViewerValid(viewer, block, r);
 		}
 
 		@Override
@@ -384,9 +388,8 @@ public class ConfigurableVesselSummaryReport extends AbstractConfigurableGridRep
 
 		@Override
 		public void selectedObjectChanged(final MPart source, final ISelection selection) {
-			if (scenarioComparisonService.getDiffOptions().isFilterSelectedSequences()) {
-				ViewerHelper.refresh(viewer, false);
-			}
+			selectionManager.setViewerSelection(selection, false);
+			ViewerHelper.refresh(viewer, false);
 		}
 	};
 
@@ -398,7 +401,6 @@ public class ConfigurableVesselSummaryReport extends AbstractConfigurableGridRep
 
 		super.initPartControl(parent);
 
-		scenarioComparisonService.addListener(scenarioComparisonServiceListener);
 		// Add diff button
 		final Action action = new DiffAction(viewer, this);
 		final IActionBars actionBars = getViewSite().getActionBars();
@@ -413,7 +415,10 @@ public class ConfigurableVesselSummaryReport extends AbstractConfigurableGridRep
 			@Override
 			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 
-				final Collection<Object> selectedElements = currentSelectedDataProvider.getSelectedObjects();
+				Collection<Object> selectedElements = currentSelectedDataProvider.getChangeSetSelection();
+				if (selectedElements == null) {
+					selectedElements = Collections.emptyList();
+				}
 
 				if (scenarioComparisonService.getDiffOptions().isFilterSelectedSequences() && !selectedElements.isEmpty()) {
 
@@ -514,23 +519,17 @@ public class ConfigurableVesselSummaryReport extends AbstractConfigurableGridRep
 			}
 		});
 
-		// Try and set initial selection. Do not abort on exceptions
+		// // Try and set initial selection. Do not abort on exceptions
+		selectionManager = new ReentrantSelectionManager(viewer, scenarioComparisonServiceListener, scenarioComparisonService, false);
 		try {
-
-			triggerSeletedScenariosServiceListener();
-		} catch (final Exception e) {
-			LOG.error(e.getMessage(), e);
+			scenarioComparisonService.triggerListener(scenarioComparisonServiceListener, false);
+		} catch (Exception e) {
+			// Ignore any initial issues.
 		}
 	}
 
 	public void triggerSeletedScenariosServiceListener() {
 		scenarioComparisonService.triggerListener(scenarioComparisonServiceListener, false);
-	}
-
-	@Override
-	public void dispose() {
-		scenarioComparisonService.removeListener(scenarioComparisonServiceListener);
-		super.dispose();
 	}
 
 	@Override
