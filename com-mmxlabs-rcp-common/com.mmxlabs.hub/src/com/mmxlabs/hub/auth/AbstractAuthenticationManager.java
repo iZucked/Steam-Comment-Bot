@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.hub.auth;
 
+import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -41,10 +42,14 @@ abstract class AbstractAuthenticationManager {
 		try {
 			final ISecurePreferences node = PREFERENCES.node(PREFERENCES_NODE);
 			node.put(key, value, true);
+			node.flush();
 		} catch (IllegalArgumentException e) {
 			LOGGER.error(String.format("Failed to create a node in secure preferences, please use a valid node path: %s", e.getMessage()));
 		} catch (StorageException e) {
 			LOGGER.error(String.format("Failed to encrypt the value and save it to secure preferences: %s", e.getMessage()));
+		} catch (IOException e) {
+			LOGGER.error(String.format("Failed to save value to secure preferences: %s", e.getMessage()));
+
 		}
 	}
 
