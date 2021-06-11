@@ -1292,7 +1292,7 @@ public class AnalyticsBuilder {
 			if (port != null) {
 				final LocalDate date = buyOpportunity.getDate();
 				if (date != null) {
-					return date.atStartOfDay(ZoneId.of(port.getLocation().getTimeZone()));
+					return date.atStartOfDay(ZoneId.of(port.getLocation().getTimeZone())).plusHours(port.getDefaultStartTime());
 				}
 			}
 		} else if (option instanceof BuyReference) {
@@ -1310,7 +1310,7 @@ public class AnalyticsBuilder {
 			final SellOpportunity sellOpportunity = (SellOpportunity) option;
 			final Port port = sellOpportunity.getPort();
 			if (port != null) {
-				return sellOpportunity.getDate().atStartOfDay(port.getZoneId());
+				return sellOpportunity.getDate().atStartOfDay(port.getZoneId()).plusHours(port.getDefaultStartTime());
 			}
 		} else if (option instanceof SellReference) {
 			final SellReference sellReference = (SellReference) option;
@@ -1327,7 +1327,7 @@ public class AnalyticsBuilder {
 			final BuyOpportunity buyOpportunity = (BuyOpportunity) option;
 			final Port port = buyOpportunity.getPort();
 			if (port != null) {
-				ZonedDateTime t = buyOpportunity.getDate().atStartOfDay(ZoneId.of(port.getLocation().getTimeZone()));
+				ZonedDateTime t = buyOpportunity.getDate().atStartOfDay(ZoneId.of(port.getLocation().getTimeZone())).plusHours(port.getDefaultStartTime());
 				if (buyOpportunity.isSpecifyWindow()) {
 					if (buyOpportunity.getWindowSizeUnits() == TimePeriod.HOURS) {
 						t = t.plusHours(buyOpportunity.getWindowSize());

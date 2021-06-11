@@ -263,22 +263,20 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 		}
 
 		final LookupData pLookupData = lookupData;
-		final @Nullable Collection<@NonNull AbstractYearMonthCurve> r = lookupData.expressionCache2.computeIfAbsent(priceExpression, key -> {
+		final @Nullable Collection<@NonNull AbstractYearMonthCurve> r;
+		if (lookupData.expressionCache2.containsKey(priceExpression)) {
+			r = lookupData.expressionCache2.get(priceExpression);
+		} else {
 			try {
-				// Parse the expression
-				final IExpression<Node> parse = new RawTreeParser().parse(key);
+				final IExpression<Node> parse = new RawTreeParser().parse(priceExpression);
 				final Node p = parse.evaluate();
 				final Node node = expandNode(p, pLookupData);
-				final Collection<@NonNull AbstractYearMonthCurve> result = collectIndicies(node, pLookupData);
-				if (result != null) {
-					return result;
-				}
-
+				r = collectIndicies(node, pLookupData);
+				lookupData.expressionCache2.put(priceExpression, r);
+			} catch (Exception e) {
 				return Collections.emptySet();
-			} catch (final Exception e) {
-				return null;
 			}
-		});
+		}
 		if (r != null) {
 			return r;
 		}

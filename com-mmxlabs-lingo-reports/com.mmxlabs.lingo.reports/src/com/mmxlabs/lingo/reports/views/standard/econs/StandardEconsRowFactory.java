@@ -27,7 +27,6 @@ import com.mmxlabs.lingo.reports.views.standard.econs.EconsOptions.MarginBy;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -104,7 +103,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 						if (e instanceof StartEvent) {
 							containsStartEvent = true;
 						}
-						if (e instanceof VesselEvent) {
+						if (e instanceof VesselEventVisit) {
 							containsVesselEvent = true;
 						}
 						if (e instanceof GeneratedCharterOut) {

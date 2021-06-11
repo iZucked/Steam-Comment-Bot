@@ -4,16 +4,23 @@
  */
 package com.mmxlabs.models.mmxcore.validation;
 
+import java.util.List;
+
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.validation.AbstractModelConstraint;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
  * A constraint to check that id / name fields are all set (BugzID:288)
@@ -21,16 +28,29 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
  * @author hinton
  * 
  */
-public class NameValidityConstraint extends AbstractModelConstraint {
+public class NameValidityConstraint extends AbstractModelMultiConstraint {
+	
+	private static final EAttribute attribute = MMXCorePackage.eINSTANCE.getNamedObject_Name();
+	
 	@Override
-	public IStatus validate(final IValidationContext ctx) {
+	public void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses){
 		final EObject target = ctx.getTarget();
+		final Pair<EObject, EReference> containerAndFeature = Pair.of(extraContext.getContainer(target), extraContext.getContainment(target));
 
-		if (target instanceof NamedObject) {
-			return validate(target, MMXCorePackage.eINSTANCE.getNamedObject_Name(), ctx);
+		final EObject container = containerAndFeature.getFirst();
+		if (container == null) {
+			return;
 		}
-
-		return ctx.createSuccessStatus();
+		final EStructuralFeature feature = containerAndFeature.getSecond();
+		if (feature != null && feature instanceof EReference && ((EReference) feature).getEReferenceType().getEAllAttributes().contains(attribute)) {
+			final EAnnotation eAnnotation = feature.getEAnnotation("http://www.mmxlabs.com/models/mmxcore/validation/NamedObject");
+			if (eAnnotation != null) {
+				if (Boolean.valueOf(eAnnotation.getDetails().get("optionalName"))) {
+					return;
+				}
+			}
+		}
+		statuses.add(validate(target, attribute, ctx));
 	}
 
 	/**

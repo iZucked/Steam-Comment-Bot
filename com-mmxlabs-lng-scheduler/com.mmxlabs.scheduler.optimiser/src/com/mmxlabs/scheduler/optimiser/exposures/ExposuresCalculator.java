@@ -524,6 +524,7 @@ public class ExposuresCalculator {
 
 			final int unitPrice = OptimiserUnitConvertor.convertToInternalPrice(evaluate.doubleValue());
 			long nativeVolume = inputRecord.volumeInMMBTU * 10;
+			long volumeInMMBTU = inputRecord.volumeInMMBTU * 10;
 
 			// Perform units conversion.
 			for (final BasicUnitConversionData factor : lookupData.conversionMap.values()) {
@@ -531,9 +532,9 @@ public class ExposuresCalculator {
 					if (factor.getFrom().equalsIgnoreCase(commodityNode.getVolumeUnit())) {
 						if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EXPOSURES_IGNORE_ENERGY_CONVERSION)) {
 							// If we are in this situation, that means, that volume is *ACTUALLY* in native units
-							inputRecord.volumeInMMBTU /= factor.getFactor();
+							volumeInMMBTU /= factor.getFactor();
 						} else {
-							nativeVolume += factor.getFactor();
+							nativeVolume *= factor.getFactor();
 						}
 						break;
 					}
@@ -541,7 +542,7 @@ public class ExposuresCalculator {
 			}
 
 			final ExposureRecord record = new ExposureRecord(commodityNode.getName(), commodityNode.getCurrencyUnit(), 
-					unitPrice, nativeVolume, Calculator.costFromVolume(nativeVolume, unitPrice), inputRecord.volumeInMMBTU * 10, date,
+					unitPrice, nativeVolume, Calculator.costFromVolume(nativeVolume, unitPrice), volumeInMMBTU, date,
 					commodityNode.getVolumeUnit());
 			return new Pair<>(unitPrice, new ExposureRecords(record));
 		} else if (node instanceof CurrencyNode) {

@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.SellOption;
+import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -40,7 +41,7 @@ public class BaseCaseConstraint extends AbstractModelMultiConstraint {
 				final Set<SellOption> dischargeSlots = new HashSet<>();
 
 				final Set<BuyOption> duplicatedLoadSlots = new HashSet<>();
-				final Set<SellOption> duplicatdDischargeSlots = new HashSet<>();
+				final Set<SellOption> duplicatedDischargeSlots = new HashSet<>();
 
 				// First pass, find problem slots
 				processBaseCase(baseCase, (row, slot) -> {
@@ -49,24 +50,29 @@ public class BaseCaseConstraint extends AbstractModelMultiConstraint {
 					}
 				}, (row, slot) -> {
 					if (!dischargeSlots.add(slot)) {
-						duplicatdDischargeSlots.add(slot);
+						duplicatedDischargeSlots.add(slot);
 					}
 				});
 				// Second pass, report problem slots
 				processBaseCase(baseCase, (row, slot) -> {
 					if (duplicatedLoadSlots.contains(slot)) {
-						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Sandbox|Base case - existing slot used multiple times."));
+						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus("Sandbox|Base case - existing slot used multiple times."));
 						deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.BASE_CASE_ROW__BUY_OPTION);
 						statuses.add(deco);
 					}
 				}, (row, slot) -> {
-					if (duplicatdDischargeSlots.contains(slot)) {
-						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Sandbox|Base case -existing slot used multiple times."));
+					if (duplicatedDischargeSlots.contains(slot)) {
+						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus("Sandbox|Base case -existing slot used multiple times."));
 						deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
 						statuses.add(deco);
 					}
 				});
 
+				if (!baseCase.isKeepExistingScenario()) {
+					processBaseCaseShipping(baseCase, ctx, statuses);
+				}
 			}
 		}
 
@@ -83,6 +89,27 @@ public class BaseCaseConstraint extends AbstractModelMultiConstraint {
 
 			if (sell != null) {
 				visitDischargeSlot.accept(row, sell);
+			}
+		}
+	}
+
+	public void processBaseCaseShipping(final BaseCase baseCase, @NonNull final IValidationContext ctx, @NonNull final List<IStatus> statuses) {
+		final Set<ShippingOption> shippingOptions = new HashSet<>();
+		final Set<ShippingOption> duplicatedShippingOptions = new HashSet<>();
+		for (final BaseCaseRow row : baseCase.getBaseCase()) {
+			final ShippingOption shipping = row.getShipping();
+			if (shipping != null && !shippingOptions.add(shipping)) {
+				duplicatedShippingOptions.add(shipping);
+			}
+		}
+
+		for (final BaseCaseRow row : baseCase.getBaseCase()) {
+			final ShippingOption shipping = row.getShipping();
+			if (shipping != null && duplicatedShippingOptions.contains(shipping)) {
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus("Sandbox|Base case -existing shipping option used multiple times."));
+				deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+				statuses.add(deco);
 			}
 		}
 	}

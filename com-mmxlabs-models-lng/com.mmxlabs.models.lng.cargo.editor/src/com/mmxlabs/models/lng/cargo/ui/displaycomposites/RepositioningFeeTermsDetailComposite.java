@@ -96,11 +96,9 @@ public class RepositioningFeeTermsDetailComposite extends DefaultTopLevelComposi
 	}
 	
 	protected void doDisplay(final GenericCharterContract gcc) {
-
-		if (gcc != null) {
+		if (gcc != null && gcc.getName() != null) {
 			createRepositioningFeeComposite(owner, toolkit, gcc);
 		}
-		
 		resizeAction.run();
 	}
 
