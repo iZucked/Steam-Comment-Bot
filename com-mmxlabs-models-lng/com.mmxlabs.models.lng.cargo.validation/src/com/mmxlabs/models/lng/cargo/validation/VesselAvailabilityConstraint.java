@@ -217,13 +217,13 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 			}
-			charterContractValidation(ctx, extraContext, baseFactory, statuses, earliestDate);
+			charterContractValidation(ctx, extraContext, baseFactory, statuses, earliestDate, vesselName);
 		}
 		return Activator.PLUGIN_ID;
 	}
 
 	private void charterContractValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final DetailConstraintStatusFactory baseFactory, 
-			final List<IStatus> failures, final YearMonth earliestDate) {
+			final List<IStatus> failures, final YearMonth earliestDate, final String vesselName) {
 		final EObject target = ctx.getTarget();
 		if (target instanceof VesselAvailability) {
 			final VesselAvailability va = (VesselAvailability) target;
@@ -232,7 +232,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 			if (contract != null) {
 				final IBallastBonus ballastBonusContract = contract.getBallastBonusTerms();
 				EStructuralFeature feature = CommercialPackage.Literals.COMMERCIAL_MODEL__CHARTER_CONTRACTS;
-				String message = String.format("Charter %s end terms: ", va.getVessel().getName());
+				String message = String.format("Charter %s end terms: ", vesselName);
 				if (ballastBonusContract instanceof SimpleBallastBonusContainer) {
 					CharterContractValidationUtils.simpleBallastBonusValidation(ctx, extraContext, failures, (SimpleBallastBonusContainer) ballastBonusContract, contract, feature, message);
 					CharterContractValidationUtils.ballastBonusCheckPortGroups(ctx, extraContext, baseFactory, failures, va, (SimpleBallastBonusContainer) ballastBonusContract);

@@ -70,8 +70,7 @@ public class LNGScenarioModelConstraint extends AbstractModelMultiConstraint {
 			}
 
 			if (lngScenarioModel.isSetSchedulingEndDate()) {
-				
-				if (schedulingEndDate != null && !schedulingEndDate.isAfter(earliestSlotDate)) {
+				if (earliestSlotDate != LocalDate.MAX && schedulingEndDate != null && !schedulingEndDate.isAfter(earliestSlotDate)) {
 					final String message = String.format("Schedule horizon date (%s) must be after earliest slot date start (%s)", 
 							schedulingEndDate.format(DateTimeFormatter.ISO_DATE), earliestSlotDate.format(DateTimeFormatter.ISO_DATE));
 					statuses.add(DetailConstraintStatusFactory.makeStatus() //

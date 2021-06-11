@@ -504,6 +504,7 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @see #setContainedCharterContract(GenericCharterContract)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_ContainedCharterContract()
 	 * @model containment="true" resolveProxies="true"
+	 *        annotation="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject optionalName='true'"
 	 * @generated
 	 */
 	GenericCharterContract getContainedCharterContract();
