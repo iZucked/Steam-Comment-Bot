@@ -125,16 +125,11 @@ public class CopiedCSVImporter {
 	public void importContractData(@NonNull final String uriRoot) throws MalformedURLException {
 		dataMap.put(CommercialModelImporter.PURCHASE_CON_KEY, createURI(uriRoot, "Purchase Contracts.csv"));
 		dataMap.put(CommercialModelImporter.SALES_CON_KEY, createURI(uriRoot, "Sales Contracts.csv"));
-		//dataMap.put(CommercialModelImporter.CHARTER_CON_KEY, createURI(uriRoot, "Charter Contracts.csv"));
 		
 		dataMap.put(CharterContractConstants.CHARTER_CONTRACT_KEY, 
 				createURI(uriRoot, String.format("%s.%s",CharterContractConstants.CHARTER_CONTRACT_CHARTER_CONTRACT_DEFAULT_NAME, "csv")));
-		dataMap.put(CharterContractConstants.BALLAST_BONUS_CONTAINER_KEY, 
-				createURI(uriRoot, String.format("%s.%s",CharterContractConstants.CHARTER_CONTRACT_BALLAST_BONUS_CONTAINER_DEFAULT_NAME, "csv")));
 		dataMap.put(CharterContractConstants.BALLAST_BONUS_KEY, 
 				createURI(uriRoot, String.format("%s.%s",CharterContractConstants.CHARTER_CONTRACT_BALLAST_BONUS_DEFAULT_NAME, "csv")));
-		dataMap.put(CharterContractConstants.REPOSITIONING_FEE_CONTAINER_KEY, 
-				createURI(uriRoot, String.format("%s.%s",CharterContractConstants.CHARTER_CONTRACT_REPOSITIONING_FEE_CONTAINER_DEFAULT_NAME, "csv")));
 		dataMap.put(CharterContractConstants.REPOSITIONING_FEE_KEY, 
 				createURI(uriRoot, String.format("%s.%s",CharterContractConstants.CHARTER_CONTRACT_REPOSITIONING_FEE_DEFAULT_NAME, "csv")));
 	}
@@ -176,12 +171,8 @@ public class CopiedCSVImporter {
 		dataMap.put(CargoModelImporter.CANAL_BOOKINGS_KEY, createURI(uriRoot, "Canal Bookings.csv"));
 		dataMap.put(CharterContractConstants.CHARTER_CONTRACT_KEY, 
 				createURI(uriRoot, String.format("%s.%s",CharterContractConstants.VESSEL_AVAILAVILITY_CHARTER_CONTRACT_DEFAULT_NAME, "csv")));
-		dataMap.put(CharterContractConstants.BALLAST_BONUS_CONTAINER_KEY, 
-				createURI(uriRoot, String.format("%s.%s",CharterContractConstants.VESSEL_AVAILAVILITY_BALLAST_BONUS_CONTAINER_DEFAULT_NAME, "csv")));
 		dataMap.put(CharterContractConstants.BALLAST_BONUS_KEY, 
 				createURI(uriRoot, String.format("%s.%s",CharterContractConstants.VESSEL_AVAILAVILITY_BALLAST_BONUS_DEFAULT_NAME, "csv")));
-		dataMap.put(CharterContractConstants.REPOSITIONING_FEE_CONTAINER_KEY, 
-				createURI(uriRoot, String.format("%s.%s",CharterContractConstants.VESSEL_AVAILAVILITY_REPOSITIONING_FEE_CONTAINER_DEFAULT_NAME, "csv")));
 		dataMap.put(CharterContractConstants.REPOSITIONING_FEE_KEY, 
 				createURI(uriRoot, String.format("%s.%s",CharterContractConstants.VESSEL_AVAILAVILITY_REPOSITIONING_FEE_DEFAULT_NAME, "csv")));
 		dataMap.put(InventoryExtraImporter.INVENTORY_KEY, createURI(uriRoot, "Inventories.csv"));
