@@ -17,6 +17,7 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
@@ -30,8 +31,8 @@ public class HashMapShippingHoursRestrictionProviderEditor implements IShippingH
 
 	private final Map<ISequenceElement, Integer> hoursMap = new HashMap<>();
 	private final Map<ISequenceElement, ITimeWindow> baseTimeMap = new HashMap<>();
-	private final Map<IVessel, Integer> ballastReferenceSpeeds = new HashMap<>();
-	private final Map<IVessel, Integer> ladenReferenceSpeeds = new HashMap<>();
+	private final Map<IPortSlot, Map<IVessel, Integer>> ballastReferenceSpeeds = new HashMap<>();
+	private final Map<IPortSlot, Map<IVessel, Integer>> ladenReferenceSpeeds = new HashMap<>();
 	private final Map<ILoadOption, List<ERouteOption>> allowedDESRoutes = new HashMap<>();
 	private final Map<IDischargeOption, List<ERouteOption>> allowedFOBRoutes = new HashMap<>();
 
@@ -63,21 +64,21 @@ public class HashMapShippingHoursRestrictionProviderEditor implements IShippingH
 	}
 
 	@Override
-	public int getReferenceSpeed(@NonNull final IVessel vessel, final VesselState vesselState) {
+	public int getReferenceSpeed(@NonNull final IPortSlot slot, @NonNull final IVessel vessel, final VesselState vesselState) {
 		if (vesselState == VesselState.Ballast) {
-			return ballastReferenceSpeeds.get(vessel);
+			return ballastReferenceSpeeds.get(slot).get(vessel);
 		} else {
-			return ladenReferenceSpeeds.get(vessel);
+			return ladenReferenceSpeeds.get(slot).get(vessel);
 
 		}
 	}
 
 	@Override
-	public void setReferenceSpeed(@NonNull final IVessel vessel, final VesselState vesselState, final int referenceSpeed) {
+	public void setReferenceSpeed(@NonNull final IPortSlot slot, @NonNull final IVessel vessel, final VesselState vesselState, final int referenceSpeed) {
 		if (vesselState == VesselState.Ballast) {
-			ballastReferenceSpeeds.put(vessel, referenceSpeed);
+			ballastReferenceSpeeds.computeIfAbsent(slot, k -> new HashMap<>()).put(vessel, referenceSpeed);
 		} else {
-			ladenReferenceSpeeds.put(vessel, referenceSpeed);
+			ladenReferenceSpeeds.computeIfAbsent(slot, k -> new HashMap<>()).put(vessel, referenceSpeed);
 		}
 	}
 

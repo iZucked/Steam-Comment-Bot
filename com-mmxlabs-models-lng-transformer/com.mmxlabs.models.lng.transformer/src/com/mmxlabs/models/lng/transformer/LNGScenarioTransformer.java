@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -1208,6 +1209,24 @@ public class LNGScenarioTransformer {
 						dischargeOptions.add(discharge);
 						slotMap.put(dischargeSlot, discharge);
 						slots.add(discharge);
+						if (dischargeSlot.isFOBSale()) {
+							final Iterator<Pair<Vessel, IVessel>> vesselAssociationIterator = vesselAssociation.iterator();
+							while (vesselAssociationIterator.hasNext()) {
+								final Pair<Vessel, IVessel> currentAssociation = vesselAssociationIterator.next();
+								final Vessel vessel = currentAssociation.getFirst();
+								final IVessel iVessel = currentAssociation.getSecond();
+								final int ballastReferenceSpeed;
+								final int ladenReferenceSpeed;
+								if (shippingDaysRestrictionSpeedProvider == null) {
+									throw new IllegalStateException("Missing shipping days restriction speed provider");
+								} else {
+									ladenReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(dischargeSlot, vessel, true));
+									ballastReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(dischargeSlot, vessel, false));
+								}
+								builder.setShippingDaysRestrictionReferenceSpeed(discharge, iVessel, VesselState.Laden, ladenReferenceSpeed);
+								builder.setShippingDaysRestrictionReferenceSpeed(discharge, iVessel, VesselState.Ballast, ballastReferenceSpeed);
+							}
+						}
 					}
 				} else {
 					throw new IllegalArgumentException("Unexpected Slot type");
@@ -1735,6 +1754,23 @@ public class LNGScenarioTransformer {
 		}
 		if (!dischargeSlot.isFOBSale()) {
 			applySlotVesselRestrictions(dischargeSlot.getSlotOrDelegateVesselRestrictions(), dischargeSlot.getSlotOrDelegateVesselRestrictionsArePermissive(), discharge, vesselAssociation);
+		} else {
+			final Iterator<Pair<Vessel, IVessel>> vesselAssociationIterator = vesselAssociation.iterator();
+			while (vesselAssociationIterator.hasNext()) {
+				final Pair<Vessel, IVessel> currentAssociation = vesselAssociationIterator.next();
+				final Vessel vessel = currentAssociation.getFirst();
+				final IVessel iVessel = currentAssociation.getSecond();
+				final int ballastReferenceSpeed;
+				final int ladenReferenceSpeed;
+				if (shippingDaysRestrictionSpeedProvider == null) {
+					throw new IllegalStateException("Missing shipping days restriction speed provider");
+				} else {
+					ladenReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(dischargeSlot, vessel, true));
+					ballastReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(dischargeSlot, vessel, false));
+				}
+				builder.setShippingDaysRestrictionReferenceSpeed(discharge, iVessel, VesselState.Laden, ladenReferenceSpeed);
+				builder.setShippingDaysRestrictionReferenceSpeed(discharge, iVessel, VesselState.Ballast, ballastReferenceSpeed);
+			}
 		}
 		return discharge;
 	}
@@ -1899,8 +1935,24 @@ public class LNGScenarioTransformer {
 
 		if (!loadSlot.isDESPurchase()) {
 			applySlotVesselRestrictions(loadSlot.getSlotOrDelegateVesselRestrictions(), loadSlot.getSlotOrDelegateVesselRestrictionsArePermissive(), load, vesselAssociation);
+		} else {
+			final Iterator<Pair<Vessel, IVessel>> vesselAssociationIterator = vesselAssociation.iterator();
+			while (vesselAssociationIterator.hasNext()) {
+				final Pair<Vessel, IVessel> currentAssociation = vesselAssociationIterator.next();
+				final Vessel vessel = currentAssociation.getFirst();
+				final IVessel iVessel = currentAssociation.getSecond();
+				final int ballastReferenceSpeed;
+				final int ladenReferenceSpeed;
+				if (shippingDaysRestrictionSpeedProvider == null) {
+					throw new IllegalStateException("Missing shipping days restriction speed provider");
+				} else {
+					ladenReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(loadSlot, vessel, true));
+					ballastReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(loadSlot, vessel, false));
+				}
+				builder.setShippingDaysRestrictionReferenceSpeed(load, iVessel, VesselState.Laden, ladenReferenceSpeed);
+				builder.setShippingDaysRestrictionReferenceSpeed(load, iVessel, VesselState.Ballast, ballastReferenceSpeed);
+			}
 		}
-
 		return load;
 	}
 
@@ -3132,17 +3184,6 @@ public class LNGScenarioTransformer {
 			 * set up inaccessible routes for vessel
 			 */
 			getAndSetInaccessibleRoutesForVessel(builder, eVessel, oVessel);
-
-			final int ballastReferenceSpeed;
-			final int ladenReferenceSpeed;
-			if (shippingDaysRestrictionSpeedProvider == null) {
-				ballastReferenceSpeed = ladenReferenceSpeed = oVessel.getMaxSpeed();
-			} else {
-				ballastReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(eVessel, false /* ballast */));
-				ladenReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(eVessel, true /* laden */));
-			}
-			builder.setShippingDaysRestrictionReferenceSpeed(oVessel, VesselState.Ballast, ballastReferenceSpeed);
-			builder.setShippingDaysRestrictionReferenceSpeed(oVessel, VesselState.Laden, ladenReferenceSpeed);
 
 			vesselAssociation.add(eVessel, oVessel);
 			modelEntityMap.addModelObject(eVessel, oVessel);

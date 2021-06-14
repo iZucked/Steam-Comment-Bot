@@ -127,7 +127,7 @@ public class DefaultDivertibleDESShippingTimesCalculator implements IDivertibleD
 	}
 
 	protected int getReferenceSpeed(final @NonNull IPortSlot slot, final @NonNull IVessel nominatedVessel, final @NonNull VesselState vesselState) {
-		return shippingHoursRestrictionProvider.getReferenceSpeed(nominatedVessel, vesselState);
+		return shippingHoursRestrictionProvider.getReferenceSpeed(slot, nominatedVessel, vesselState);
 	}
 
 }

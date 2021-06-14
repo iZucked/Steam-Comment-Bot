@@ -205,18 +205,6 @@ public class CargoTravelTimeUtils {
 		return new Pair<>();
 	}
 
-	public static double getReferenceSpeed(final @Nullable IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider, final Vessel vessel, final boolean isLaden) {
-		double referenceSpeed;
-
-		// catch error in case no service registered
-		if (shippingDaysSpeedProvider != null) {
-			referenceSpeed = shippingDaysSpeedProvider.getSpeed(vessel, isLaden);
-		} else {
-			referenceSpeed = vessel.getVesselOrDelegateMaxSpeed();
-		}
-		return referenceSpeed;
-	}
-
 	public static double getReferenceSpeed(final @Nullable IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider, final LoadSlot desPurchase, final Vessel vessel, final boolean isLaden) {
 		double referenceSpeed;
 
