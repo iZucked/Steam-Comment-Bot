@@ -13,6 +13,7 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.collect.Lists;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -31,8 +32,8 @@ public class HashMapShippingHoursRestrictionProviderEditor implements IShippingH
 
 	private final Map<ISequenceElement, Integer> hoursMap = new HashMap<>();
 	private final Map<ISequenceElement, ITimeWindow> baseTimeMap = new HashMap<>();
-	private final Map<IPortSlot, Map<IVessel, Integer>> ballastReferenceSpeeds = new HashMap<>();
-	private final Map<IPortSlot, Map<IVessel, Integer>> ladenReferenceSpeeds = new HashMap<>();
+	private final Map<@NonNull Pair<@NonNull IPortSlot, @NonNull IVessel>, Integer> ballastReferenceSpeeds = new HashMap<>();
+	private final Map<@NonNull Pair<@NonNull IPortSlot, @NonNull IVessel>, Integer> ladenReferenceSpeeds = new HashMap<>();
 	private final Map<ILoadOption, List<ERouteOption>> allowedDESRoutes = new HashMap<>();
 	private final Map<IDischargeOption, List<ERouteOption>> allowedFOBRoutes = new HashMap<>();
 
@@ -65,20 +66,28 @@ public class HashMapShippingHoursRestrictionProviderEditor implements IShippingH
 
 	@Override
 	public int getReferenceSpeed(@NonNull final IPortSlot slot, @NonNull final IVessel vessel, final VesselState vesselState) {
+		@NonNull
+		final Pair<@NonNull IPortSlot, @NonNull IVessel> key = Pair.of(slot, vessel);
+		final Integer referenceSpeed;
 		if (vesselState == VesselState.Ballast) {
-			return ballastReferenceSpeeds.get(slot).get(vessel);
+			referenceSpeed = ballastReferenceSpeeds.get(key);
 		} else {
-			return ladenReferenceSpeeds.get(slot).get(vessel);
-
+			referenceSpeed = ladenReferenceSpeeds.get(key);
 		}
+		if (referenceSpeed == null) {
+			throw new IllegalStateException("Could not find reference speed");
+		}
+		return referenceSpeed;
 	}
 
 	@Override
 	public void setReferenceSpeed(@NonNull final IPortSlot slot, @NonNull final IVessel vessel, final VesselState vesselState, final int referenceSpeed) {
+		@NonNull
+		final Pair<@NonNull IPortSlot, @NonNull IVessel> key = Pair.of(slot, vessel);
 		if (vesselState == VesselState.Ballast) {
-			ballastReferenceSpeeds.computeIfAbsent(slot, k -> new HashMap<>()).put(vessel, referenceSpeed);
+			ballastReferenceSpeeds.put(key, referenceSpeed);
 		} else {
-			ladenReferenceSpeeds.computeIfAbsent(slot, k -> new HashMap<>()).put(vessel, referenceSpeed);
+			ladenReferenceSpeeds.put(key, referenceSpeed);
 		}
 	}
 

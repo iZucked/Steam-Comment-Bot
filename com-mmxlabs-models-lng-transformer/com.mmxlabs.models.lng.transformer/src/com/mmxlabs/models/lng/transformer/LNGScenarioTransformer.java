@@ -1756,20 +1756,17 @@ public class LNGScenarioTransformer {
 			applySlotVesselRestrictions(dischargeSlot.getSlotOrDelegateVesselRestrictions(), dischargeSlot.getSlotOrDelegateVesselRestrictionsArePermissive(), discharge, vesselAssociation);
 		} else {
 			final Iterator<Pair<Vessel, IVessel>> vesselAssociationIterator = vesselAssociation.iterator();
+			if (shippingDaysRestrictionSpeedProvider == null && vesselAssociationIterator.hasNext()) {
+				throw new IllegalStateException("Missing shipping days restriction speed provider");
+			}
 			while (vesselAssociationIterator.hasNext()) {
 				final Pair<Vessel, IVessel> currentAssociation = vesselAssociationIterator.next();
-				final Vessel vessel = currentAssociation.getFirst();
-				final IVessel iVessel = currentAssociation.getSecond();
-				final int ballastReferenceSpeed;
-				final int ladenReferenceSpeed;
-				if (shippingDaysRestrictionSpeedProvider == null) {
-					throw new IllegalStateException("Missing shipping days restriction speed provider");
-				} else {
-					ladenReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(dischargeSlot, vessel, true));
-					ballastReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(dischargeSlot, vessel, false));
-				}
-				builder.setShippingDaysRestrictionReferenceSpeed(discharge, iVessel, VesselState.Laden, ladenReferenceSpeed);
-				builder.setShippingDaysRestrictionReferenceSpeed(discharge, iVessel, VesselState.Ballast, ballastReferenceSpeed);
+				final Vessel eVessel = currentAssociation.getFirst();
+				final IVessel oVessel = currentAssociation.getSecond();
+				final int ladenReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(dischargeSlot, eVessel, true));
+				final int ballastReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(dischargeSlot, eVessel, false));
+				builder.setShippingDaysRestrictionReferenceSpeed(discharge, oVessel, VesselState.Laden, ladenReferenceSpeed);
+				builder.setShippingDaysRestrictionReferenceSpeed(discharge, oVessel, VesselState.Ballast, ballastReferenceSpeed);
 			}
 		}
 		return discharge;
@@ -1937,18 +1934,15 @@ public class LNGScenarioTransformer {
 			applySlotVesselRestrictions(loadSlot.getSlotOrDelegateVesselRestrictions(), loadSlot.getSlotOrDelegateVesselRestrictionsArePermissive(), load, vesselAssociation);
 		} else {
 			final Iterator<Pair<Vessel, IVessel>> vesselAssociationIterator = vesselAssociation.iterator();
+			if (shippingDaysRestrictionSpeedProvider == null && vesselAssociationIterator.hasNext()) {
+				throw new IllegalStateException("Missing shipping days restriction speed provider");
+			}
 			while (vesselAssociationIterator.hasNext()) {
 				final Pair<Vessel, IVessel> currentAssociation = vesselAssociationIterator.next();
 				final Vessel vessel = currentAssociation.getFirst();
 				final IVessel iVessel = currentAssociation.getSecond();
-				final int ballastReferenceSpeed;
-				final int ladenReferenceSpeed;
-				if (shippingDaysRestrictionSpeedProvider == null) {
-					throw new IllegalStateException("Missing shipping days restriction speed provider");
-				} else {
-					ladenReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(loadSlot, vessel, true));
-					ballastReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(loadSlot, vessel, false));
-				}
+				final int ladenReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(loadSlot, vessel, true));
+				final int ballastReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(loadSlot, vessel, false));
 				builder.setShippingDaysRestrictionReferenceSpeed(load, iVessel, VesselState.Laden, ladenReferenceSpeed);
 				builder.setShippingDaysRestrictionReferenceSpeed(load, iVessel, VesselState.Ballast, ballastReferenceSpeed);
 			}
