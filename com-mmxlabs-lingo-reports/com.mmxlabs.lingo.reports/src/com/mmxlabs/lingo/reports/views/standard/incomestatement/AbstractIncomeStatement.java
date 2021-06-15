@@ -337,8 +337,10 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 						Double volume = volsInMMBTU.valuesByMonth.get(key);
 						Double value = valuesInDollars.valuesByMonth.get(key);
 
-						if (volume != 0.0) {
-							exposuresByMonth.put(key, value / volume);
+						if (volume != null && value != null) {
+							if (volume != 0.0) {
+								exposuresByMonth.put(key, value / volume);
+							}
 						}
 					}
 
@@ -353,11 +355,13 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 								final Map<YearMonth, Double> dExposuresByMonth = new HashMap<>();
 
 								for (YearMonth key : overallIncomeMonths) {
+									
 									Double volume = dVols.valuesByMonth.get(key);
 									Double value = dValues.valuesByMonth.get(key);
-
-									if (volume != null && volume != 0.0) {
-										dExposuresByMonth.put(key, value / volume);
+									if (volume != null && value != null) {
+										if (volume != 0.0) {
+											dExposuresByMonth.put(key, value / volume);
+										}
 									}
 								}
 								IncomeStatementData data2 = new IncomeStatementData(scenarioResult, schedule, dVols.key, dExposuresByMonth);
