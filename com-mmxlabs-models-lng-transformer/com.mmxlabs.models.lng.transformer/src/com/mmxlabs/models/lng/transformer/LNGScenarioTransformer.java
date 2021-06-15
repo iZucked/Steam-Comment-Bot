@@ -1939,12 +1939,12 @@ public class LNGScenarioTransformer {
 			}
 			while (vesselAssociationIterator.hasNext()) {
 				final Pair<Vessel, IVessel> currentAssociation = vesselAssociationIterator.next();
-				final Vessel vessel = currentAssociation.getFirst();
-				final IVessel iVessel = currentAssociation.getSecond();
-				final int ladenReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(loadSlot, vessel, true));
-				final int ballastReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(loadSlot, vessel, false));
-				builder.setShippingDaysRestrictionReferenceSpeed(load, iVessel, VesselState.Laden, ladenReferenceSpeed);
-				builder.setShippingDaysRestrictionReferenceSpeed(load, iVessel, VesselState.Ballast, ballastReferenceSpeed);
+				final Vessel eVessel = currentAssociation.getFirst();
+				final IVessel oVessel = currentAssociation.getSecond();
+				final int ladenReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(loadSlot, eVessel, true));
+				final int ballastReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(loadSlot, eVessel, false));
+				builder.setShippingDaysRestrictionReferenceSpeed(load, oVessel, VesselState.Laden, ladenReferenceSpeed);
+				builder.setShippingDaysRestrictionReferenceSpeed(load, oVessel, VesselState.Ballast, ballastReferenceSpeed);
 			}
 		}
 		return load;
