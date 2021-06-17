@@ -24,6 +24,8 @@ import com.mmxlabs.common.paperdeals.BasicPaperDealData;
 import com.mmxlabs.common.paperdeals.PaperDealsLookupData;
 import com.mmxlabs.models.lng.cargo.BuyPaperDeal;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
@@ -113,6 +115,23 @@ public class PaperDealDataTransformer implements ISlotTransformer {
 					if (lngScenarioModel.getPromptPeriodStart() != null && cutoffAtPromptStart) {
 						lookupData.cutoffMonth = YearMonth.from(lngScenarioModel.getPromptPeriodStart());
 					}
+					cargoModel.getCargoesForHedging().forEach(c -> {
+						for (final var slot : c.getSlots()) {
+							String prefix = "FP-";
+							if (slot instanceof LoadSlot) {
+								prefix = "FP-";
+								if (((LoadSlot) slot).isDESPurchase()) {
+									prefix = "DP-";
+								}
+							} else {
+								prefix = "DS-";
+								if (((DischargeSlot) slot).isFOBSale()) {
+									prefix = "FS-";
+								}
+							}
+							lookupData.slotsToInclude.add(prefix + slot.getName());
+						}
+					});
 					paperDealDataProviderEditor.addLookupData(lookupData);
 				}
 			}

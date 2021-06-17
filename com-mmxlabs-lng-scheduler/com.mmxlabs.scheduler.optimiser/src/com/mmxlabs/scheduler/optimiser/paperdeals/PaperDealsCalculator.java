@@ -109,7 +109,8 @@ public class PaperDealsCalculator {
 			final PaperDealsLookupData lookupData = paperDealDataProvider.getPaperDealsLookupData();
 			for (final OptimiserExposureRecords records : exposureRecords) {
 				for (final BasicExposureRecord record : records.records) {
-					if (record.getIndexName().equalsIgnoreCase("Physical"))
+					if (record.getIndexName().equalsIgnoreCase("Physical")
+							|| lookupData.slotsToInclude.contains(record.getPortSlotName()))
 						continue;
 					final YearMonth month = YearMonth.from(record.getTime());
 					final String marketIndex = lookupData.marketIndices.get(record.getIndexName().toLowerCase());

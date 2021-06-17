@@ -102,42 +102,46 @@ public class ExposuresCalculator {
 		if (exposuresEnabled) {
 			//only support one load and one discharge
 			assert cargoValueAnnotation.getSlots().size() == 2;
+			final IPortSlot dischargeOption = cargoValueAnnotation.getSlots().get(1);
 			
-			boolean isLong = false;
-			if (portSlot.getPortType() == PortType.Load) {
-				isLong = true;
-			} else if (portSlot.getPortType() == PortType.Discharge) {
-				isLong = false;
-			} else {
-				return Collections.emptyList();
-			}
-
-			final long volumeMMBTU = cargoValueAnnotation.getPhysicalSlotVolumeInMMBTu(portSlot);
-			final int pricePerMMBTU = cargoValueAnnotation.getSlotPricePerMMBTu(portSlot);
-			final String priceExpression = exposureDataProvider.getPriceExpression(portSlot);
-			int pricingTime = 0;
-			if (isLong) {
-				final IPortSlot dischargeOption = cargoValueAnnotation.getSlots().get(1);
-				pricingTime = pricingEventHelper.getLoadPricingDate((ILoadOption) portSlot, (IDischargeOption) dischargeOption, cargoValueAnnotation);
-			} else {
-				pricingTime = pricingEventHelper.getDischargePricingDate((IDischargeOption) portSlot, cargoValueAnnotation);
-			}
-			final LocalDate pricingDate = externalDateProvider.getDateFromHours(pricingTime, portSlot.getPort()).toLocalDate();
 			final ExposuresLookupData lookupData = exposureDataProvider.getExposuresLookupData();
-			if (pricingDate.isAfter(lookupData.cutoffDate)) {
-				return calculateExposures(volumeMMBTU, pricePerMMBTU, priceExpression, pricingDate, isLong, lookupData);
+			if (lookupData.slotsToInclude.contains(portSlot.getId())) {
+			
+				boolean isLong = false;
+				if (portSlot.getPortType() == PortType.Load) {
+					isLong = true;
+				} else if (portSlot.getPortType() == PortType.Discharge) {
+					isLong = false;
+				} else {
+					return Collections.emptyList();
+				}
+	
+				final long volumeMMBTU = cargoValueAnnotation.getPhysicalSlotVolumeInMMBTu(portSlot);
+				final int pricePerMMBTU = cargoValueAnnotation.getSlotPricePerMMBTu(portSlot);
+				final String priceExpression = exposureDataProvider.getPriceExpression(portSlot);
+				int pricingTime = 0;
+				if (isLong) {
+					pricingTime = pricingEventHelper.getLoadPricingDate((ILoadOption) portSlot, (IDischargeOption) dischargeOption, cargoValueAnnotation);
+				} else {
+					pricingTime = pricingEventHelper.getDischargePricingDate((IDischargeOption) portSlot, cargoValueAnnotation);
+				}
+				final LocalDate pricingDate = externalDateProvider.getDateFromHours(pricingTime, portSlot.getPort()).toLocalDate();
+				
+				if (pricingDate.isAfter(lookupData.cutoffDate)) {
+					return calculateExposures(portSlot.getId(), volumeMMBTU, pricePerMMBTU, priceExpression, pricingDate, isLong, lookupData);
+				}
 			}
 		}
 		
 		return Collections.emptyList();
 	}
 	
-	private List<BasicExposureRecord> calculateExposures(final long volumeMMBTU, final int pricePerMMBTU, final String priceExpression, 
+	private List<BasicExposureRecord> calculateExposures(final String name, final long volumeMMBTU, final int pricePerMMBTU, final String priceExpression, 
 			final LocalDate pricingDate, final boolean isLong, final ExposuresLookupData lookupData) {
 		
 		final List<BasicExposureRecord> result = new ArrayList<>();
 		result.add(calculatePhysicalExposure(volumeMMBTU, pricePerMMBTU, pricingDate, isLong));
-		result.addAll(calculateFinancialExposures(priceExpression, volumeMMBTU, pricingDate, isLong, lookupData));
+		result.addAll(calculateFinancialExposures(name, priceExpression, volumeMMBTU, pricingDate, isLong, lookupData));
 		return result;
 	}
 	
@@ -154,7 +158,7 @@ public class ExposuresCalculator {
 			final LocalDate pricingDate, final boolean isLong, final ExposuresLookupData lookupData) {
 		
 		final List<BasicExposureRecord> result = new ArrayList<>();
-		result.addAll(calculateFinancialExposures(priceExpression, volumeMMBTU, pricingDate, isLong, lookupData));
+		result.addAll(calculateFinancialExposures("", priceExpression, volumeMMBTU, pricingDate, isLong, lookupData));
 		return result;
 	}
 	
@@ -175,13 +179,13 @@ public class ExposuresCalculator {
 		return physical;
 	}
 	
-	private List<BasicExposureRecord> calculateFinancialExposures(final String priceExpression, final long volumeMMBTU, final LocalDate pricingDate, final boolean isLong,//
-			final ExposuresLookupData lookupData){
+	private List<BasicExposureRecord> calculateFinancialExposures(final String name, final String priceExpression, final long volumeMMBTU, final LocalDate pricingDate, //
+			final boolean isLong, final ExposuresLookupData lookupData){
 		final List<BasicExposureRecord> result = new ArrayList<>();
 		if (lookupData != null) {
 		final MarkedUpNode node = getExposureCoefficient(priceExpression, lookupData);
 			if (node != null) {
-				final Collection<BasicExposureRecord> records = createOptimiserExposureRecord(node, pricingDate, volumeMMBTU, isLong, lookupData, priceExpression);
+				final Collection<BasicExposureRecord> records = createOptimiserExposureRecord(name, node, pricingDate, volumeMMBTU, isLong, lookupData, priceExpression);
 				if (!records.isEmpty()) {
 					result.addAll(records);
 				}
@@ -216,7 +220,7 @@ public class ExposuresCalculator {
 		return null;
 	}
 
-	private Collection<BasicExposureRecord> createOptimiserExposureRecord(final @NonNull MarkedUpNode node,
+	private Collection<BasicExposureRecord> createOptimiserExposureRecord(final String name, final @NonNull MarkedUpNode node,
 			final LocalDate pricingDate, final long volumeInMMBtu, final boolean isLong, final ExposuresLookupData lookupData, final String priceExpression) {
 		final List<BasicExposureRecord> results = new LinkedList<>();
 
@@ -229,6 +233,7 @@ public class ExposuresCalculator {
 				
 				final BasicExposureRecord exposure = new BasicExposureRecord();
 
+				exposure.setPortSlotName(name);
 				exposure.setIndexName(record.curveName);
 				exposure.setCurrencyUnit(record.currencyUnit);
 				exposure.setVolumeUnit(record.volumeUnit);

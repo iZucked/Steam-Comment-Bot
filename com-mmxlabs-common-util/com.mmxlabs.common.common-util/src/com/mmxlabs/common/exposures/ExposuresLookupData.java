@@ -31,7 +31,7 @@ public class ExposuresLookupData {
 	// Keeps a Holiday calendar for a curve name
 	public Map<String, BasicHolidayCalendar> holidayCalendars = new HashMap<>();
 	
-	public Map<String, String> slotsToInclude = new HashMap<>();
+	public List<String> slotsToInclude = new ArrayList<>();
 	
 	public LocalDate cutoffDate = LocalDate.MIN;
 }
