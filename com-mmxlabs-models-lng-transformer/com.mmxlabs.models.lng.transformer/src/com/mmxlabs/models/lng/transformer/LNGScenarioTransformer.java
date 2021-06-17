@@ -1209,24 +1209,6 @@ public class LNGScenarioTransformer {
 						dischargeOptions.add(discharge);
 						slotMap.put(dischargeSlot, discharge);
 						slots.add(discharge);
-						if (dischargeSlot.isFOBSale()) {
-							final Iterator<Pair<Vessel, IVessel>> vesselAssociationIterator = vesselAssociation.iterator();
-							while (vesselAssociationIterator.hasNext()) {
-								final Pair<Vessel, IVessel> currentAssociation = vesselAssociationIterator.next();
-								final Vessel vessel = currentAssociation.getFirst();
-								final IVessel iVessel = currentAssociation.getSecond();
-								final int ballastReferenceSpeed;
-								final int ladenReferenceSpeed;
-								if (shippingDaysRestrictionSpeedProvider == null) {
-									throw new IllegalStateException("Missing shipping days restriction speed provider");
-								} else {
-									ladenReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(dischargeSlot, vessel, true));
-									ballastReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(dischargeSlot, vessel, false));
-								}
-								builder.setShippingDaysRestrictionReferenceSpeed(discharge, iVessel, VesselState.Laden, ladenReferenceSpeed);
-								builder.setShippingDaysRestrictionReferenceSpeed(discharge, iVessel, VesselState.Ballast, ballastReferenceSpeed);
-							}
-						}
 					}
 				} else {
 					throw new IllegalArgumentException("Unexpected Slot type");
