@@ -164,6 +164,73 @@ public class MULLContainer {
 		}).get();
 	}
 
+	public MUDContainer phase2CalculateMULL(final Map<Vessel, LocalDateTime> vesselToMostRecentUseDateTime, final int defaultAllocationDrop, final Set<Vessel> firstPartyVessels) {
+		return this.mudContainerList.stream().max((Comparator<MUDContainer>) (mc0, mc1) -> {
+			final Long allocation0 = mc0.getRunningAllocation();
+			final Long allocation1 = mc1.getRunningAllocation();
+			final int expectedAllocationDrop0 = mc0.phase2CalculateExpectedAllocationDrop(vesselToMostRecentUseDateTime, defaultAllocationDrop, inventory.getPort().getLoadDuration(), firstPartyVessels);
+			final int expectedAllocationDrop1 = mc1.phase2CalculateExpectedAllocationDrop(vesselToMostRecentUseDateTime, defaultAllocationDrop, inventory.getPort().getLoadDuration(), firstPartyVessels);
+			final int beforeDrop0 = mc0.getCurrentMonthAbsoluteEntitlement();
+			final int beforeDrop1 = mc1.getCurrentMonthAbsoluteEntitlement();
+			final int afterDrop0 = beforeDrop0 - expectedAllocationDrop0;
+			final int afterDrop1 = beforeDrop1 - expectedAllocationDrop1;
+
+			final boolean belowLower0 = afterDrop0 < -fullCargoLotValue;
+			final boolean belowLower1 = afterDrop1 < -fullCargoLotValue;
+			final boolean aboveUpper0 = afterDrop0 > fullCargoLotValue;
+			final boolean aboveUpper1 = afterDrop1 > fullCargoLotValue;
+			if (belowLower0) {
+				if (belowLower1) {
+					if (afterDrop0 < afterDrop1) {
+						return -1;
+					} else {
+						return 1;
+					}
+				} else {
+					return -1;
+				}
+			} else {
+				if (belowLower1) {
+					return 1;
+				} else {
+					if (aboveUpper0) {
+						if (aboveUpper1) {
+							if (allocation0 > allocation1) {
+								return 1;
+							} else {
+								return -1;
+							}
+						} else {
+							return 1;
+						}
+					} else {
+						if (aboveUpper1) {
+							return -1;
+						} else {
+							if (beforeDrop0 > fullCargoLotValue) {
+								if (beforeDrop1 > beforeDrop0) {
+									return -1;
+								} else {
+									return 1;
+								}
+							} else {
+								if (beforeDrop1 > fullCargoLotValue) {
+									return -1;
+								} else {
+									if (allocation0 > allocation1) {
+										return 1;
+									} else {
+										return -1;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}).get();
+	}
+
 	public void updateRunningAllocation(final int volumeIn) {
 		this.mudContainerList.stream().forEach(mc -> mc.updateRunningAllocation((long) volumeIn));
 	}

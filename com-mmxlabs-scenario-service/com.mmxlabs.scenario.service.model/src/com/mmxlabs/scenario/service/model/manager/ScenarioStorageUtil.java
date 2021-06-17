@@ -864,7 +864,7 @@ public class ScenarioStorageUtil {
 			final @NonNull EClass eClass = next.eClass();
 			for (final EReference ref : eClass.getEAllReferences()) {
 				// We only want to check non-contained references to make sure they have a container in the same resource
-				if (ref.isContainment()) {
+				if (ref.isContainment() || ref.isTransient()) {
 					continue;
 				}
 				if (ref.isMany()) {

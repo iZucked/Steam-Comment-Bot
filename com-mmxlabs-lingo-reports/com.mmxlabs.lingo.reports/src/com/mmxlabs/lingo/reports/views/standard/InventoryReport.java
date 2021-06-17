@@ -85,6 +85,7 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.lingo.reports.views.standard.inventory.ChartColourSchemeAction;
 import com.mmxlabs.lingo.reports.views.standard.inventory.ColourSequence;
 import com.mmxlabs.lingo.reports.views.standard.inventory.InventoryLevel;
 import com.mmxlabs.lingo.reports.views.standard.inventory.MullDailyInformation;
@@ -169,6 +170,9 @@ public class InventoryReport extends ViewPart {
 	private ActionContributionItem mullDailyTableCopyActionContributionItem;
 	private ActionContributionItem mullDailyTablePackActionContributionItem;
 
+	private ChartColourSchemeAction colourSchemeAction;
+	private ActionContributionItem colourSchemeActionContributionItem;
+
 	private Inventory selectedInventory;
 	private ScenarioResult currentResult;
 
@@ -183,6 +187,8 @@ public class InventoryReport extends ViewPart {
 	private Color colourRed;
 
 	private EventHandler todayHandler;
+
+	private IBarSeries cargoSeries;
 
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
@@ -247,7 +253,6 @@ public class InventoryReport extends ViewPart {
 	 */
 	@Override
 	public void createPartControl(final Composite parent) {
-
 		this.localResourceManager = new LocalResourceManager(JFaceResources.getResources(), parent);
 
 		this.colourOrange = this.localResourceManager.createColor(new RGB(255, 200, 15));
@@ -299,7 +304,7 @@ public class InventoryReport extends ViewPart {
 		chartItem.setText("Chart");
 
 		final CTabItem inventoryDailyChartItem = new CTabItem(folder, SWT.NONE);
-		inventoryDailyChartItem.setText("Inventory Daily");
+		inventoryDailyChartItem.setText("Daily Production");
 
 		final CTabItem tableItem = new CTabItem(folder, SWT.NONE);
 		tableItem.setText("Table");
@@ -352,6 +357,11 @@ public class InventoryReport extends ViewPart {
 
 		selectedScenariosService.addListener(selectedScenariosServiceListener);
 		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
+
+		colourSchemeAction = new ChartColourSchemeAction(this);
+		colourSchemeActionContributionItem = new ActionContributionItem(colourSchemeAction);
+		getViewSite().getActionBars().getToolBarManager().add(colourSchemeActionContributionItem);
+		colourSchemeActionContributionItem.setVisible(folderSelection == 0);
 
 		final PackGridTableColumnsAction inventoryTablePackAction = PackActionFactory.createPackColumnsAction(inventoryTableViewer);
 		inventoryTablePackActionContributionItem = new ActionContributionItem(inventoryTablePackAction);
@@ -534,6 +544,7 @@ public class InventoryReport extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				final int currentTabSelection = folder.getSelectionIndex();
+				colourSchemeActionContributionItem.setVisible(currentTabSelection == 0);
 				inventoryTableCopyActionContributionItem.setVisible(currentTabSelection == 2);
 				inventoryTablePackActionContributionItem.setVisible(currentTabSelection == 2);
 				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
@@ -564,6 +575,15 @@ public class InventoryReport extends ViewPart {
 		getViewSite().getActionBars().getToolBarManager().update(true);
 	}
 
+	public void setCargoVisibilityInInventoryChart(final boolean isVisible) {
+		if (cargoSeries != null) {
+			cargoSeries.setVisible(isVisible);
+			cargoSeries.setVisibleInLegend(isVisible);
+			inventoryInsAndOutChart.updateLayout();
+			inventoryInsAndOutChart.redraw();
+		}
+	}
+
 	/**
 	 * Passing the focus request to the viewer's control.
 	 */
@@ -575,6 +595,7 @@ public class InventoryReport extends ViewPart {
 	@Override
 	public void dispose() {
 		localResourceManager.dispose();
+		colourSchemeAction.dispose();
 		// Colours are added to localResourceManager so they don't need an explicit
 		// dispose
 		selectedScenariosService.removeListener(selectedScenariosServiceListener);
@@ -586,12 +607,14 @@ public class InventoryReport extends ViewPart {
 	}
 
 	private void updatePlots(final Collection<Inventory> inventoryModels, final ScenarioResult toDisplay) {
+
 		final DateFormat dateFormat = new SimpleDateFormat("d MMM");
 		final ISeriesSet seriesSet = inventoryInsAndOutChart.getSeriesSet();
 		final ISeriesSet inventoryDailyChartSeriesSet = inventoryDailyChartViewer.getSeriesSet();
 
 		// Delete existing data
 		clearChartData(seriesSet);
+		cargoSeries = null;
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
 			clearChartData(mullMonthlyOverliftChart.getSeriesSet());
 			clearChartData(mullMonthlyCargoCountChart.getSeriesSet());
@@ -1185,6 +1208,9 @@ public class InventoryReport extends ViewPart {
 								final IBarSeries series = createDaySizedBarSeries(seriesSet, "Cargoes", values);
 								series.setBarWidth(1);
 								series.setBarColor(Display.getDefault().getSystemColor(SWT.COLOR_GREEN));
+								series.setVisible(colourSchemeAction.isShowingCargoes());
+								series.setVisibleInLegend(colourSchemeAction.isShowingCargoes());
+								cargoSeries = series;
 							}
 						}
 						{
@@ -1300,9 +1326,7 @@ public class InventoryReport extends ViewPart {
 			total += lvl.changeInM3;
 			lvl.runningTotal = total;
 			/*
-			 * In the case, when the low/high forecast value is zero , we assume that's a
-			 * wrong data! Hence we use the feedIn (actual volume) if it's also not zero.
-			 * Maybe we need to fix that!
+			 * In the case, when the low/high forecast value is zero , we assume that's a wrong data! Hence we use the feedIn (actual volume) if it's also not zero. Maybe we need to fix that!
 			 */
 			final int vl = lvl.volumeLow == 0 ? lvl.feedIn == 0 ? 0 : lvl.feedIn : lvl.volumeLow;
 
@@ -1680,7 +1704,7 @@ public class InventoryReport extends ViewPart {
 			accTemp += monthlyProduction.remove(ym);
 		}
 		final Integer acc = accTemp;
-		monthlyProduction.compute(adpStart, (k, v) -> v + acc);
+		monthlyProduction.compute(adpStart, (k, v) -> v == null ? acc : v + acc);
 
 		return monthlyProduction;
 	}

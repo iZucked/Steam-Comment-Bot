@@ -51,15 +51,11 @@ public class CharterContractIExtraModelImporter implements IExtraModelImporter {
 
 	static {
 		inputs.put(CharterContractConstants.BALLAST_BONUS_KEY, CharterContractConstants.CHARTER_CONTRACT_BALLAST_BONUS_DEFAULT_NAME);
-		inputs.put(CharterContractConstants.BALLAST_BONUS_CONTAINER_KEY, CharterContractConstants.CHARTER_CONTRACT_BALLAST_BONUS_CONTAINER_DEFAULT_NAME);
 		inputs.put(CharterContractConstants.REPOSITIONING_FEE_KEY, CharterContractConstants.CHARTER_CONTRACT_REPOSITIONING_FEE_DEFAULT_NAME);
-		inputs.put(CharterContractConstants.REPOSITIONING_FEE_CONTAINER_KEY, CharterContractConstants.CHARTER_CONTRACT_REPOSITIONING_FEE_CONTAINER_DEFAULT_NAME);
 
 		keys.put(CharterContractConstants.CHARTER_CONTRACT_KEY, CommercialPackage.Literals.GENERIC_CHARTER_CONTRACT);
 		keys.put(CharterContractConstants.BALLAST_BONUS_KEY, CommercialPackage.Literals.BALLAST_BONUS_TERM);
-		keys.put(CharterContractConstants.BALLAST_BONUS_CONTAINER_KEY, CommercialPackage.Literals.IBALLAST_BONUS);
 		keys.put(CharterContractConstants.REPOSITIONING_FEE_KEY, CommercialPackage.Literals.REPOSITIONING_FEE_TERM);
-		keys.put(CharterContractConstants.REPOSITIONING_FEE_CONTAINER_KEY, CommercialPackage.Literals.IREPOSITIONING_FEE);
 	}
 
 	@Override
@@ -118,9 +114,7 @@ public class CharterContractIExtraModelImporter implements IExtraModelImporter {
 			}
 
 			output.put(CharterContractConstants.CHARTER_CONTRACT_KEY, extraImporter.exportObjects(ccList, context));
-			output.put(CharterContractConstants.BALLAST_BONUS_CONTAINER_KEY, extraImporter.exportObjects(bbExportContainers, context));
 			output.put(CharterContractConstants.BALLAST_BONUS_KEY, extraImporter.exportObjects(bbExports, context));
-			output.put(CharterContractConstants.REPOSITIONING_FEE_CONTAINER_KEY, extraImporter.exportObjects(rfExportContainers, context));
 			output.put(CharterContractConstants.REPOSITIONING_FEE_KEY, extraImporter.exportObjects(rfExports, context));
 
 		}
