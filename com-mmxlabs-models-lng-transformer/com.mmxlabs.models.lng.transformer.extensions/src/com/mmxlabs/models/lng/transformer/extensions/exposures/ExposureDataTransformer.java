@@ -65,6 +65,7 @@ public class ExposureDataTransformer implements ISlotTransformer {
 		if (exposuresEnabled) {
 			if (lngScenarioModel != null && lngScenarioModel.getReferenceModel() != null) {
 				final PricingModel pricingModel = lngScenarioModel.getReferenceModel().getPricingModel();
+				//final CargoModel cargoModel = lngScenarioModel.getCargoModel();
 				if (pricingModel != null) {					
 					final ExposuresLookupData lookupData = new ExposuresLookupData();
 					if (lngScenarioModel.getPromptPeriodStart() != null && cutoffAtPromptStart) {
