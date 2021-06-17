@@ -615,76 +615,6 @@ public class LightTradesWiringViewer extends ScenarioTableViewerPane {
 
 			private Menu menu;
 
-			private void populateSingleSelectionMenu(final GridItem item, final GridColumn column) {
-				if (item == null) {
-					return;
-				}
-
-				final Object data = item.getData();
-				if (data instanceof RowData) {
-
-					final RowData rowDataItem = (RowData) data;
-					final int idx = rootData.getRows().indexOf(rowDataItem);
-
-					if (menu == null) {
-						menu = mgr.createContextMenu(scenarioViewer.getGrid());
-					}
-					mgr.removeAll();
-					{
-						final IContributionItem[] items = mgr.getItems();
-						mgr.removeAll();
-						for (final IContributionItem mItem : items) {
-							mItem.dispose();
-						}
-					}
-
-					if (loadColumns.contains(column)) {
-						if (rowDataItem.loadSlot != null) {
-							final IMenuListener listener = menuHelper.createLoadSlotMenuListener(rootData.getLoadSlots(), idx);
-							listener.menuAboutToShow(mgr);
-							if (contextMenuExtensions != null) {
-								final Slot<?> slot = rootData.getLoadSlots().get(idx);
-								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
-									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
-								}
-							}
-						} else {
-							final IMenuListener listener = menuHelper.createDischargeSlotMenuListener(rootData.getDischargeSlots(), idx);
-							listener.menuAboutToShow(mgr);
-							if (contextMenuExtensions != null) {
-								final Slot<?> slot = rootData.getDischargeSlots().get(idx);
-								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
-									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
-								}
-							}
-						}
-					}
-					if (dischargeColumns.contains(column)) {
-						if (rowDataItem.dischargeSlot != null) {
-							final IMenuListener listener = menuHelper.createDischargeSlotMenuListener(rootData.getDischargeSlots(), idx);
-							listener.menuAboutToShow(mgr);
-							if (contextMenuExtensions != null) {
-								final Slot<?> slot = rootData.getDischargeSlots().get(idx);
-								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
-									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
-								}
-							}
-						} else if (rowDataItem.loadSlot != null) {
-							final IMenuListener listener = menuHelper.createLoadSlotMenuListener(rootData.getLoadSlots(), idx);
-							listener.menuAboutToShow(mgr);
-							if (contextMenuExtensions != null) {
-								final Slot<?> slot = rootData.getLoadSlots().get(idx);
-								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
-									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
-								}
-							}
-						}
-					}
-
-					menu.setVisible(true);
-				}
-			}
-
 			@Override
 			public void menuDetected(final MenuDetectEvent e) {
 
@@ -692,39 +622,22 @@ public class LightTradesWiringViewer extends ScenarioTableViewerPane {
 					return;
 				}
 
-				final Grid grid = getScenarioViewer().getGrid();
-
-				final Point mousePoint = grid.toControl(new Point(e.x, e.y));
-				final GridColumn column = grid.getColumn(mousePoint);
-
 				final IStructuredSelection selection = (IStructuredSelection) getScenarioViewer().getSelection();
 
-				if (selection.size() <= 1) {
-					populateSingleSelectionMenu(grid.getItem(mousePoint), column);
-				} else {
+				if (!selection.isEmpty()) {
 					final Set<Cargo> cargoes = new HashSet<>();
-					final Set<LoadSlot> loads = new HashSet<>();
-					final Set<DischargeSlot> discharges = new HashSet<>();
-					boolean loadSide = loadColumns.contains(column);
-					boolean dischargeSide = dischargeColumns.contains(column);
 					for (final Object item : selection.toList()) {
 						RowData row = (RowData) item;
 						final Cargo cargo = row.cargo;
 						if (cargo != null) {
 							cargoes.add(cargo);
 						}
-						if (loadSide && row.getLoadSlot() != null) {
-							loads.add(row.getLoadSlot());
-						}
-						if (dischargeSide && row.getDischargeSlot() != null) {
-							discharges.add(row.getDischargeSlot());
-						}
 					}
-					populateMultipleSelectionMenu(cargoes, loads, discharges, selection, column);
+					populateSelectionMenu(cargoes);
 				}
 			}
 
-			private void populateMultipleSelectionMenu(final Set<Cargo> cargoes, Set<LoadSlot> loads, Set<DischargeSlot> discharges, final IStructuredSelection selection, GridColumn column) {
+			private void populateSelectionMenu(final Set<Cargo> cargoes) {
 				if (menu == null) {
 					menu = mgr.createContextMenu(scenarioViewer.getGrid());
 				}
@@ -736,12 +649,8 @@ public class LightTradesWiringViewer extends ScenarioTableViewerPane {
 						item.dispose();
 					}
 				}
-
-				if (contextMenuExtensions != null) {
-					for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
-						ext.contributeToMenu(scenarioEditingLocation, selection, mgr);
-					}
-				}
+				
+				menuHelper.createLightEditorMenuListener(mgr, cargoes);
 
 				menu.setVisible(true);
 			}
@@ -972,6 +881,44 @@ public class LightTradesWiringViewer extends ScenarioTableViewerPane {
 			assignmentColumn = addTradesColumn(null, "Vessel", new ReadOnlyManipulatorWrapper<>(assignmentManipulator), assignmentPath);
 		}
 		{
+			final BasicAttributeManipulator manipulator = new BasicAttributeManipulator(CargoPackage.eINSTANCE.getCargoModel_Cargoes(), commandHandler) {
+				@Override
+				public String render(final Object object) {
+					if (object instanceof Cargo) {
+						if (scenarioEditingLocation != null && scenarioEditingLocation.getRootObject() instanceof LNGScenarioModel) {
+							final var lngScenario = (LNGScenarioModel) scenarioEditingLocation.getRootObject();
+							final var cargoModel = lngScenario.getCargoModel();
+							if (cargoModel.getCargoesForExposures().contains(object)) {
+								return "Y";
+							}
+						}
+					}
+					return "N";
+				}
+			};
+			final RowDataEMFPath assignmentPath = new RowDataEMFPath(false, Type.CARGO);
+			addTradesColumn(null, "Exposure", manipulator, assignmentPath);
+		}
+		{
+			final BasicAttributeManipulator manipulator = new BasicAttributeManipulator(CargoPackage.eINSTANCE.getCargoModel_Cargoes(), commandHandler) {
+				@Override
+				public String render(final Object object) {
+					if (object instanceof Cargo) {
+						if (scenarioEditingLocation != null && scenarioEditingLocation.getRootObject() instanceof LNGScenarioModel) {
+							final var lngScenario = (LNGScenarioModel) scenarioEditingLocation.getRootObject();
+							final var cargoModel = lngScenario.getCargoModel();
+							if (cargoModel.getCargoesForHedging().contains(object)) {
+								return "Y";
+							}
+						}
+					}
+					return "N";
+				}
+			};
+			final RowDataEMFPath assignmentPath = new RowDataEMFPath(false, Type.CARGO);
+			addTradesColumn(null, "Hedging", manipulator, assignmentPath);
+		}
+		{
 			final BasicAttributeManipulator manipulator = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), commandHandler);
 			final RowDataEMFPath assignmentPath = new RowDataEMFPath(false, Type.LOAD);
 			final GridViewerColumn idColumn = addTradesColumn(loadColumns, "L-ID", manipulator, assignmentPath);
@@ -1090,6 +1037,44 @@ public class LightTradesWiringViewer extends ScenarioTableViewerPane {
 					return super.getImage(element);
 				}
 			});
+		}
+		{
+			final BasicAttributeManipulator manipulator = new BasicAttributeManipulator(CargoPackage.eINSTANCE.getCargoModel_Cargoes(), commandHandler) {
+				@Override
+				public String render(final Object object) {
+					if (object instanceof Cargo) {
+						if (scenarioEditingLocation != null && scenarioEditingLocation.getRootObject() instanceof LNGScenarioModel) {
+							final var lngScenario = (LNGScenarioModel) scenarioEditingLocation.getRootObject();
+							final var cargoModel = lngScenario.getCargoModel();
+							if (cargoModel.getCargoesForHedging().contains(object)) {
+								return "Y";
+							}
+						}
+					}
+					return "N";
+				}
+			};
+			final RowDataEMFPath assignmentPath = new RowDataEMFPath(false, Type.CARGO);
+			addTradesColumn(null, "Hedging", manipulator, assignmentPath);
+		}
+		{
+			final BasicAttributeManipulator manipulator = new BasicAttributeManipulator(CargoPackage.eINSTANCE.getCargoModel_Cargoes(), commandHandler) {
+				@Override
+				public String render(final Object object) {
+					if (object instanceof Cargo) {
+						if (scenarioEditingLocation != null && scenarioEditingLocation.getRootObject() instanceof LNGScenarioModel) {
+							final var lngScenario = (LNGScenarioModel) scenarioEditingLocation.getRootObject();
+							final var cargoModel = lngScenario.getCargoModel();
+							if (cargoModel.getCargoesForExposures().contains(object)) {
+								return "Y";
+							}
+						}
+					}
+					return "N";
+				}
+			};
+			final RowDataEMFPath assignmentPath = new RowDataEMFPath(false, Type.CARGO);
+			addTradesColumn(null, "Exposure", manipulator, assignmentPath);
 		}
 
 		// Trigger sorting on the load date column to make this the initial sort column.
@@ -1384,11 +1369,11 @@ public class LightTradesWiringViewer extends ScenarioTableViewerPane {
 	}
 
 	private <T extends ICellManipulator & ICellRenderer> GridViewerColumn addTradesColumn(final String columnName, final T manipulator, final EMFPath path) {
-		return this.addTradesColumn(null, columnName, new ReadOnlyManipulatorWrapper(manipulator), path);
+		return this.addTradesColumn(null, columnName, new ReadOnlyManipulatorWrapper<>(manipulator), path);
 	}
 
 	private <T extends ICellManipulator & ICellRenderer> GridViewerColumn addTradesColumn(final Set<GridColumn> group, final String columnName, final T manipulator, final EMFPath path) {
-		final GridViewerColumn col = getScenarioViewer().addColumn(columnName, manipulator, new ReadOnlyManipulatorWrapper(manipulator), path);
+		final GridViewerColumn col = getScenarioViewer().addColumn(columnName, manipulator, new ReadOnlyManipulatorWrapper<>(manipulator), path);
 		if (group != null) {
 			group.add(col.getColumn());
 		}
