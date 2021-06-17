@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyOption;
+import com.mmxlabs.models.lng.analytics.CharterOutOpportunity;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.FullVesselCharterOption;
@@ -177,6 +178,8 @@ public class BaseCaseDropTargetListener implements DropTargetListener {
 									|| o instanceof ExistingCharterMarketOption) {
 								opt = (ShippingOption) o;
 							}
+						} else if (existing.getVesselEventOption() instanceof VesselEventOption) {
+							opt = (ShippingOption) o;
 						}
 						if (opt != null) {
 							scenarioEditingLocation.getDefaultCommandHandler().handleCommand(

@@ -298,6 +298,20 @@ public class SandboxManualRunner {
 					tasks.remove(bc);
 					break;
 				}
+				
+				if (bcRow.getBuyOption() != null && bcRow.getSellOption() == null) {
+					if (AnalyticsBuilder.getDate(bcRow.getBuyOption()) == null || bcRow.getBuyOption() instanceof BuyMarket) {
+						tasks.remove(bc);
+						break;
+					}
+				}
+				
+				if (bcRow.getSellOption() != null && bcRow.getBuyOption() == null) {
+					if (AnalyticsBuilder.getDate(bcRow.getSellOption()) == null || bcRow.getSellOption() instanceof SellMarket) {
+						tasks.remove(bc);
+						break;
+					}
+				}
 			}
 		}
 	}
@@ -316,26 +330,23 @@ public class SandboxManualRunner {
 					return;
 				}
 				if (row.getVesselEventOption() != null) {
-					if (row.getBuyOption() != null) {
-
+					if (row.getBuyOption() != null && AnalyticsBuilder.getDate(row.getBuyOption()) != null) {
 						final BaseCaseRow extra = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
 						BuyOption buyOption = row.getBuyOption();
-						if (buyOption instanceof BuyMarket) {
-							buyOption = EMFCopier.copy(row.getBuyOption());
+						if (!(buyOption instanceof BuyMarket)) {
+							extra.setBuyOption(buyOption);
+							copy.getBaseCase().add(extra);
+							data.add(extra);
 						}
-						extra.setBuyOption(buyOption);
-						copy.getBaseCase().add(extra);
-						data.add(extra);
 					}
-					if (row.getSellOption() != null) {
+					if (row.getSellOption() != null && AnalyticsBuilder.getDate(row.getSellOption()) != null) {
 						final BaseCaseRow extra = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
 						SellOption sellOption = row.getSellOption();
-						if (sellOption instanceof SellMarket) {
-							sellOption = EMFCopier.copy(row.getSellOption());
+						if (!(sellOption instanceof SellMarket)) {
+							extra.setSellOption(sellOption);
+							copy.getBaseCase().add(extra);
+							data.add(extra);
 						}
-						extra.setSellOption(sellOption);
-						copy.getBaseCase().add(extra);
-						data.add(extra);
 					}
 					row.setBuyOption(null);
 					row.setSellOption(null);

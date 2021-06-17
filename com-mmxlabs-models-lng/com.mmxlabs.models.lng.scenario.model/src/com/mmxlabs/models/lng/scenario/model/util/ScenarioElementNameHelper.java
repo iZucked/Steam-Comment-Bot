@@ -139,4 +139,8 @@ public class ScenarioElementNameHelper {
 
 		return Joiner.on(", ").join(parts);
 	}
+
+	public static int safeCompareNamedObjects(@NonNull final NamedObject a, @NonNull final NamedObject b, final @NonNull String defaultName) {
+		return getName(a, defaultName).compareTo(getName(b, defaultName));
+	}
 }

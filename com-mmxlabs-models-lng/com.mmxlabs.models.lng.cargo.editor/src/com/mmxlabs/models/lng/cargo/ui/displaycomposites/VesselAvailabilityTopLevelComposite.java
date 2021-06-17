@@ -47,7 +47,8 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 	 */
 	private BallastBonusTermsDetailComposite ballastBonusComposite;
 	private RepositioningFeeTermsDetailComposite repositioningFeeComposite;
-
+	private Button gccButton;
+	
 	public VesselAvailabilityTopLevelComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, FormToolkit toolkit) {
 		super(parent, style, dialogContext, toolkit);
 	}
@@ -78,9 +79,10 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 		topRight.setCommandHandler(commandHandler);
 		topRight.setEditorWrapper(editorWrapper);
 		topRight.display(dialogContext, root, object, range, dbc);
-		
-		final Button bbButton = toolkit.createButton(topRight.getComposite(), "Override", SWT.CENTER);
-		bbButton.addMouseListener(new CharterContractMouseListener(object));
+
+		checkForNewAvailability(object);
+		gccButton = toolkit.createButton(topRight.getComposite(), gccButtonLabel(object), SWT.CENTER);
+		gccButton.addMouseListener(new CharterContractMouseListener(object));
 
 		Composite midComposite = toolkit.createComposite(this, SWT.NONE);
 		midComposite.setLayout(new GridLayout(1, true));
@@ -164,13 +166,15 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 							CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT);
 					commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), va, CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE, Boolean.FALSE), va,
 							CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE);
+					gccButton.setText(gccButtonLabel(va));
 				} else {
 					GenericCharterContract gcc = CommercialFactory.eINSTANCE.createGenericCharterContract();
-					gcc.setName(validateOrOfferName("ballast_bonus_terms", va));
+					gcc.setName("-");
 					commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), va, CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT, gcc), va,
 							CargoPackage.Literals.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT);
 					commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), va, CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE, Boolean.TRUE), va,
 							CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE);
+					gccButton.setText(gccButtonLabel(va));
 				}
 				boolean needRebuilding = true;
 				if (repositioningFeeComposite != null && needRebuilding) {
@@ -186,13 +190,28 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 		@Override
 		public void mouseDoubleClick(MouseEvent e) {
 		}
-		
-		private String validateOrOfferName(final String type, final VesselAvailability va) {
-			if (va.getVessel() == null) {
-				return String.format("%s_%s", type, va.getUuid());
+	}
+	
+	private void checkForNewAvailability(EObject object) {
+		if (object instanceof VesselAvailability) {
+			final VesselAvailability va = (VesselAvailability) object;
+			final GenericCharterContract gcc = va.getContainedCharterContract();
+			if (gcc != null && gcc.getName() == null) {
+				va.setContainedCharterContract(null);
 			}
-			return String.format("%s_%s_%d", type, va.getVessel().getName(), va.getCharterNumber());
 		}
 	}
 	
+	private String gccButtonLabel(EObject object) {
+		if (object instanceof VesselAvailability) {
+			final VesselAvailability va = (VesselAvailability) object;
+			final GenericCharterContract gcc = va.getContainedCharterContract();
+			if (gcc != null) {
+				return "Clear up";
+			} else {
+				return "Override";
+			}
+		}
+		return "Override";
+	}
 }

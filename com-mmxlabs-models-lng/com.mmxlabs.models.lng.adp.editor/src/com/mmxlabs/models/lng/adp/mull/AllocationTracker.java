@@ -39,13 +39,18 @@ public abstract class AllocationTracker {
 	protected final List<Vessel> vesselList;
 	protected boolean sharesVessels;
 	protected final int aacq;
+	protected int currentAllocatedAACQ = 0;
 
 	protected AllocationTracker(final MullAllocationRow row, final double totalWeight) {
 		this.aacq = row.getWeight();
 		this.vesselList = row.getVessels();
-//		this.relativeEntitlement = this.aacq / totalWeight;
+		// this.relativeEntitlement = this.aacq / totalWeight;
 		final double averageVesselSize = row.getVessels().stream().mapToInt(Vessel::getVesselOrDelegateCapacity).sum() / ((double) row.getVessels().size());
 		this.relativeEntitlement = this.aacq * averageVesselSize / totalWeight;
+	}
+
+	public void setAllocatedAacq(final int currentAllocatedAACQ) {
+		this.currentAllocatedAACQ = currentAllocatedAACQ;
 	}
 
 	public int getAACQ() {
@@ -68,7 +73,16 @@ public abstract class AllocationTracker {
 		dropAllocation(allocationDrop);
 	}
 
-	public int calculateExpectedAllocationDrop(final Map<Vessel, LocalDateTime> vesselToMostRecentUseDateTime, final int defaultAllocationDrop, final int loadDuration, final Set<Vessel> firstPartyVessels) {
+	public void phase2DropAllocation(final long allocationDrop) {
+		dropAllocation(allocationDrop);
+	}
+
+	public void finalPhaseDropAllocation(final long allocationDrop) {
+		dropAllocation(allocationDrop);
+	}
+
+	public int calculateExpectedAllocationDrop(final Map<Vessel, LocalDateTime> vesselToMostRecentUseDateTime, final int defaultAllocationDrop, final int loadDuration,
+			final Set<Vessel> firstPartyVessels) {
 		if (vesselList.isEmpty()) {
 			return defaultAllocationDrop;
 		}
@@ -113,6 +127,10 @@ public abstract class AllocationTracker {
 		undo(cargoBlueprint);
 	}
 
+	public void phase2Undo(final CargoBlueprint cargoBlueprint) {
+		undo(cargoBlueprint);
+	}
+
 	public static LocalDate calculateDischargeDate(@NonNull final LoadSlot loadSlot, @NonNull DischargeSlot dischargeSlot, final Vessel vessel, @NonNull final IScenarioDataProvider sdp,
 			final Map<Vessel, VesselAvailability> vesselToVA, final LNGScenarioModel sm) {
 		final VesselAvailability vesselAvailability = vesselToVA.get(vessel);
@@ -146,6 +164,8 @@ public abstract class AllocationTracker {
 
 	public abstract void dropFixedLoad(final Cargo cargo);
 
+	public abstract void phase2DropFixedLoad(final Cargo cargo);
+
 	public abstract void phase1DropFixedLoad(final Cargo cargo);
 
 	public void dropFixedLoad(final int volumeLoaded) {
@@ -153,5 +173,13 @@ public abstract class AllocationTracker {
 	}
 
 	public abstract boolean satisfiedAACQ();
+
+	public boolean phase2SatisfiedAACQ() {
+		return this.aacq == currentAllocatedAACQ;
+	}
+
+	public boolean finalPhaseSatisfiedAACQ() {
+		return this.aacq == currentAllocatedAACQ;
+	}
 
 }
