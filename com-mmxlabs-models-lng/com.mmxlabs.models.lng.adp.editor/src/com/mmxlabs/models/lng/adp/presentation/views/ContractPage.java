@@ -150,6 +150,8 @@ import com.mmxlabs.models.ui.tabular.manipulators.TextualSingleReferenceManipula
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
+import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.ecore.SafeEContentAdapter;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
@@ -393,6 +395,8 @@ public class ContractPage extends ADPComposite {
 						});
 						toolbarManager.getToolbarManager().add(filterAction);
 
+						mullSummaryViewer = constructMullSummaryViewer(editorData, mullSummaryGroup);
+
 						Action packAction = new Action("Pack") {
 							@Override
 							public void run() {
@@ -411,6 +415,9 @@ public class ContractPage extends ADPComposite {
 						ResourceLocator.imageDescriptorFromBundle("com.mmxlabs.rcp.common", "/icons/pack.gif").ifPresent(packAction::setImageDescriptor);
 
 						toolbarManager.getToolbarManager().add(packAction);
+
+						final CopyGridToClipboardAction mullSummaryTableCopyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(mullSummaryViewer);
+						toolbarManager.getToolbarManager().add(mullSummaryTableCopyAction);
 
 						mullSummaryExpandLevel = 1;
 						final Action collapseOneLevel = new Action("Collapse All") {
@@ -2201,7 +2208,6 @@ public class ContractPage extends ADPComposite {
 
 	@Override
 	public synchronized void updateRootModel(@Nullable final LNGScenarioModel scenarioModel, @Nullable final ADPModel adpModel) {
-
 		if (releaseAdaptersRunnable != null) {
 			releaseAdaptersRunnable.run();
 			releaseAdaptersRunnable = null;
@@ -2212,17 +2218,8 @@ public class ContractPage extends ADPComposite {
 			previewViewer.dispose();
 			previewViewer = null;
 		}
-		if (mullSummaryViewer != null) {
-			mullSummaryViewer.getControl().dispose();
-			mullSummaryViewer = null;
-		}
 		if (scenarioModel != null) {
 			previewViewer = constructPreviewViewer(editorData, previewGroup);
-			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
-				mullSummaryViewer = constructMullSummaryViewer(editorData, mullSummaryGroup);
-			}
-			// previewGroup.layout();
-			// rhsScrolledComposite.setMinSize(rhsComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		}
 		final List<Object> objects = new LinkedList<>();
 		if (scenarioModel != null && adpModel != null) {
@@ -2274,6 +2271,7 @@ public class ContractPage extends ADPComposite {
 		}
 		if (filterAction != null) {
 			filterAction.dispose();
+			filterAction = null;
 		}
 		super.dispose();
 	}
