@@ -126,12 +126,8 @@ public class CSVImporter {
 		
 		dataMap.put(CharterContractConstants.CHARTER_CONTRACT_KEY, 
 				createURL(urlRoot, String.format("%s.%s",CharterContractConstants.CHARTER_CONTRACT_CHARTER_CONTRACT_DEFAULT_NAME, "csv")));
-		dataMap.put(CharterContractConstants.BALLAST_BONUS_CONTAINER_KEY, 
-				createURL(urlRoot, String.format("%s.%s",CharterContractConstants.CHARTER_CONTRACT_BALLAST_BONUS_CONTAINER_DEFAULT_NAME, "csv")));
 		dataMap.put(CharterContractConstants.BALLAST_BONUS_KEY, 
 				createURL(urlRoot, String.format("%s.%s",CharterContractConstants.CHARTER_CONTRACT_BALLAST_BONUS_DEFAULT_NAME, "csv")));
-		dataMap.put(CharterContractConstants.REPOSITIONING_FEE_CONTAINER_KEY, 
-				createURL(urlRoot, String.format("%s.%s",CharterContractConstants.CHARTER_CONTRACT_REPOSITIONING_FEE_CONTAINER_DEFAULT_NAME, "csv")));
 		dataMap.put(CharterContractConstants.REPOSITIONING_FEE_KEY, 
 				createURL(urlRoot, String.format("%s.%s",CharterContractConstants.CHARTER_CONTRACT_REPOSITIONING_FEE_DEFAULT_NAME, "csv")));
 
@@ -177,12 +173,8 @@ public class CSVImporter {
 		dataMap.put(CargoModelImporter.CANAL_BOOKINGS_KEY, createURL(urlRoot, "Canal Bookings.csv"));
 		dataMap.put(CharterContractConstants.CHARTER_CONTRACT_KEY, 
 				createURL(urlRoot, String.format("%s.%s",CharterContractConstants.VESSEL_AVAILAVILITY_CHARTER_CONTRACT_DEFAULT_NAME, "csv")));
-		dataMap.put(CharterContractConstants.BALLAST_BONUS_CONTAINER_KEY, 
-				createURL(urlRoot, String.format("%s.%s",CharterContractConstants.VESSEL_AVAILAVILITY_BALLAST_BONUS_CONTAINER_DEFAULT_NAME, "csv")));
 		dataMap.put(CharterContractConstants.BALLAST_BONUS_KEY, 
 				createURL(urlRoot, String.format("%s.%s",CharterContractConstants.VESSEL_AVAILAVILITY_BALLAST_BONUS_DEFAULT_NAME, "csv")));
-		dataMap.put(CharterContractConstants.REPOSITIONING_FEE_CONTAINER_KEY, 
-				createURL(urlRoot, String.format("%s.%s",CharterContractConstants.VESSEL_AVAILAVILITY_REPOSITIONING_FEE_CONTAINER_DEFAULT_NAME, "csv")));
 		dataMap.put(CharterContractConstants.REPOSITIONING_FEE_KEY, 
 				createURL(urlRoot, String.format("%s.%s",CharterContractConstants.VESSEL_AVAILAVILITY_REPOSITIONING_FEE_DEFAULT_NAME, "csv")));
 		
