@@ -1738,15 +1738,18 @@ public class LNGScenarioTransformer {
 			applySlotVesselRestrictions(dischargeSlot.getSlotOrDelegateVesselRestrictions(), dischargeSlot.getSlotOrDelegateVesselRestrictionsArePermissive(), discharge, vesselAssociation);
 		} else {
 			final Iterator<Pair<Vessel, IVessel>> vesselAssociationIterator = vesselAssociation.iterator();
-			if (shippingDaysRestrictionSpeedProvider == null && vesselAssociationIterator.hasNext()) {
-				throw new IllegalStateException("Missing shipping days restriction speed provider");
-			}
 			while (vesselAssociationIterator.hasNext()) {
 				final Pair<Vessel, IVessel> currentAssociation = vesselAssociationIterator.next();
 				final Vessel eVessel = currentAssociation.getFirst();
 				final IVessel oVessel = currentAssociation.getSecond();
-				final int ladenReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(dischargeSlot, eVessel, true));
-				final int ballastReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(dischargeSlot, eVessel, false));
+				final int ladenReferenceSpeed;
+				final int ballastReferenceSpeed;
+				if (shippingDaysRestrictionSpeedProvider == null) {
+					ladenReferenceSpeed = ballastReferenceSpeed = oVessel.getMaxSpeed();
+				} else {
+					ladenReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(dischargeSlot, eVessel, true));
+					ballastReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(dischargeSlot, eVessel, false));
+				}
 				builder.setShippingDaysRestrictionReferenceSpeed(discharge, oVessel, VesselState.Laden, ladenReferenceSpeed);
 				builder.setShippingDaysRestrictionReferenceSpeed(discharge, oVessel, VesselState.Ballast, ballastReferenceSpeed);
 			}
@@ -1916,15 +1919,18 @@ public class LNGScenarioTransformer {
 			applySlotVesselRestrictions(loadSlot.getSlotOrDelegateVesselRestrictions(), loadSlot.getSlotOrDelegateVesselRestrictionsArePermissive(), load, vesselAssociation);
 		} else {
 			final Iterator<Pair<Vessel, IVessel>> vesselAssociationIterator = vesselAssociation.iterator();
-			if (shippingDaysRestrictionSpeedProvider == null && vesselAssociationIterator.hasNext()) {
-				throw new IllegalStateException("Missing shipping days restriction speed provider");
-			}
 			while (vesselAssociationIterator.hasNext()) {
 				final Pair<Vessel, IVessel> currentAssociation = vesselAssociationIterator.next();
 				final Vessel eVessel = currentAssociation.getFirst();
 				final IVessel oVessel = currentAssociation.getSecond();
-				final int ladenReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(loadSlot, eVessel, true));
-				final int ballastReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(loadSlot, eVessel, false));
+				final int ladenReferenceSpeed;
+				final int ballastReferenceSpeed;
+				if (shippingDaysRestrictionSpeedProvider == null) {
+					ladenReferenceSpeed = ballastReferenceSpeed = oVessel.getMaxSpeed();
+				} else {
+					ladenReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(loadSlot, eVessel, true));
+					ballastReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(loadSlot, eVessel, false));
+				}
 				builder.setShippingDaysRestrictionReferenceSpeed(load, oVessel, VesselState.Laden, ladenReferenceSpeed);
 				builder.setShippingDaysRestrictionReferenceSpeed(load, oVessel, VesselState.Ballast, ballastReferenceSpeed);
 			}
