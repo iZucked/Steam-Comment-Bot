@@ -957,7 +957,7 @@ public class InventoryReport extends ViewPart {
 												final List<String> monthsList = monthsToDisplay.stream().map(ym -> ym.format(categoryFormatter)).collect(Collectors.toList());
 												final String[] temp = new String[0];
 												final String[] formattedMonthLabels = monthsList.toArray(temp);
-												setMULLChartData(mullMonthlyOverliftChart, formattedMonthLabels, entitiesOrdered, pairedMullList, MullInformation::getOverliftCF);
+												setMULLChartData(mullMonthlyOverliftChart, formattedMonthLabels, entitiesOrdered, pairedMullList, m -> -1*m.getOverliftCF());
 												setMULLChartData(mullMonthlyCargoCountChart, formattedMonthLabels, entitiesOrdered, pairedMullList, MullInformation::getCargoCount);
 											}
 										}
@@ -1309,7 +1309,7 @@ public class InventoryReport extends ViewPart {
 		inventoryDailyChartViewer.redraw();
 
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
-			finaliseMULLChart(mullMonthlyOverliftChart, "Month", "Overlift");
+			finaliseMULLChart(mullMonthlyOverliftChart, "Month", "Underlift/Overlift");
 			finaliseMULLChart(mullMonthlyCargoCountChart, "Month", "# Cargoes Lifted");
 		}
 

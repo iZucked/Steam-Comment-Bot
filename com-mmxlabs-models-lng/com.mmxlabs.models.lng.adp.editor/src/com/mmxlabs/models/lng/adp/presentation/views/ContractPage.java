@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.adp.presentation.views;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -31,8 +33,11 @@ import java.util.stream.Stream;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -150,6 +155,8 @@ import com.mmxlabs.models.ui.tabular.manipulators.TextualSingleReferenceManipula
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
+import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.ecore.SafeEContentAdapter;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
@@ -172,6 +179,8 @@ public class ContractPage extends ADPComposite {
 	FilterToVesselsAction filterAction;
 
 	private IActionBars actionBars;
+
+	private Adapter mullSummaryAdapter;
 
 	public ContractPage(final Composite parent, final int style, final ADPEditorData editorData, IActionBars actionBars) {
 		super(parent, style);
@@ -393,6 +402,8 @@ public class ContractPage extends ADPComposite {
 						});
 						toolbarManager.getToolbarManager().add(filterAction);
 
+						mullSummaryViewer = constructMullSummaryViewer(editorData, mullSummaryGroup);
+
 						Action packAction = new Action("Pack") {
 							@Override
 							public void run() {
@@ -411,6 +422,9 @@ public class ContractPage extends ADPComposite {
 						ResourceLocator.imageDescriptorFromBundle("com.mmxlabs.rcp.common", "/icons/pack.gif").ifPresent(packAction::setImageDescriptor);
 
 						toolbarManager.getToolbarManager().add(packAction);
+
+						final CopyGridToClipboardAction mullSummaryTableCopyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(mullSummaryViewer);
+						toolbarManager.getToolbarManager().add(mullSummaryTableCopyAction);
 
 						mullSummaryExpandLevel = 1;
 						final Action collapseOneLevel = new Action("Collapse All") {
@@ -434,6 +448,64 @@ public class ContractPage extends ADPComposite {
 						toolbarManager.getToolbarManager().add(collapseOneLevel);
 						toolbarManager.getToolbarManager().add(expandOneLevel);
 						toolbarManager.getToolbarManager().update(true);
+
+						mullSummaryAdapter = new EContentAdapter() {
+							@Override
+							public void notifyChanged(final Notification notification) {
+								super.notifyChanged(notification);
+								final Object notifier = notification.getNotifier();
+								ViewerHelper.refresh(mullSummaryViewer, false);
+							}
+
+							@Override
+							protected void setTarget(final EObject target) {
+								basicSetTarget(target);
+								if (target instanceof ADPModel) {
+									basicSetTarget(target);
+									addAdapter(target);
+									final MullProfile mullProfile = ((ADPModel) target).getMullProfile();
+									if (mullProfile != null) {
+										addAdapter(mullProfile);
+										for (final MullSubprofile mullSubprofile : mullProfile.getInventories()) {
+											addAdapter(mullSubprofile);
+											for (final MullEntityRow mullEntityRow : mullSubprofile.getEntityTable()) {
+												addAdapter(mullEntityRow);
+												for (final SalesContractAllocationRow salesContractAllocationRow : mullEntityRow.getSalesContractAllocationRows()) {
+													addAdapter(salesContractAllocationRow);
+												}
+												for (final DESSalesMarketAllocationRow desSalesMarketAllocationRow : mullEntityRow.getDesSalesMarketAllocationRows()) {
+													addAdapter(desSalesMarketAllocationRow);
+												}
+											}
+										}
+									}
+								}
+							}
+
+							@Override
+							protected void unsetTarget(final EObject target) {
+								basicUnsetTarget(target);
+								if (target instanceof ADPModel) {
+									removeAdapter(target, false, true);
+									final MullProfile mullProfile = ((ADPModel) target).getMullProfile();
+									if (mullProfile != null) {
+										removeAdapter(mullProfile, false, true);
+										for (final MullSubprofile mullSubprofile : mullProfile.getInventories()) {
+											removeAdapter(mullSubprofile, false, true);
+											for (final MullEntityRow mullEntityRow : mullSubprofile.getEntityTable()) {
+												removeAdapter(mullEntityRow, false, true);
+												for (final SalesContractAllocationRow salesContractAllocationRow : mullEntityRow.getSalesContractAllocationRows()) {
+													removeAdapter(salesContractAllocationRow, false, true);
+												}
+												for (final DESSalesMarketAllocationRow desSalesMarketAllocationRow : mullEntityRow.getDesSalesMarketAllocationRows()) {
+													removeAdapter(desSalesMarketAllocationRow, false, true);
+												}
+											}
+										}
+									}
+								}
+							}
+						};
 					}
 				}
 			}
@@ -573,7 +645,9 @@ public class ContractPage extends ADPComposite {
 								dischargeName = dischargeSlot.getPriceExpression() != null ? dischargeSlot.getPriceExpression() : "<Not specified>";
 							}
 						}
-						return String.format("%s--%s--%s", entityName, loadContractName, dischargeName);
+						final LocalDate loadDate = mullCargoWrapper.getLoadSlot().getWindowStart();
+						final String loadDateString = loadDate != null ? String.format("%01d/%01d/%d", loadDate.getDayOfMonth(), loadDate.getMonthValue(), loadDate.getYear()) : "<Not specified>";
+						return String.format("%s--%s(%s)--%s", entityName, loadContractName, loadDateString, dischargeName);
 					} else if (secondElement instanceof Integer) {
 						return String.format("%,d", (int) secondElement);
 					} else if (secondElement instanceof Double) {
@@ -2201,7 +2275,6 @@ public class ContractPage extends ADPComposite {
 
 	@Override
 	public synchronized void updateRootModel(@Nullable final LNGScenarioModel scenarioModel, @Nullable final ADPModel adpModel) {
-
 		if (releaseAdaptersRunnable != null) {
 			releaseAdaptersRunnable.run();
 			releaseAdaptersRunnable = null;
@@ -2212,17 +2285,8 @@ public class ContractPage extends ADPComposite {
 			previewViewer.dispose();
 			previewViewer = null;
 		}
-		if (mullSummaryViewer != null) {
-			mullSummaryViewer.getControl().dispose();
-			mullSummaryViewer = null;
-		}
 		if (scenarioModel != null) {
 			previewViewer = constructPreviewViewer(editorData, previewGroup);
-			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
-				mullSummaryViewer = constructMullSummaryViewer(editorData, mullSummaryGroup);
-			}
-			// previewGroup.layout();
-			// rhsScrolledComposite.setMinSize(rhsComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		}
 		final List<Object> objects = new LinkedList<>();
 		if (scenarioModel != null && adpModel != null) {
@@ -2232,17 +2296,23 @@ public class ContractPage extends ADPComposite {
 			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
 			cargoModel.eAdapters().add(cargoModelAdapter);
 
-			releaseAdaptersRunnable = () -> {
-				commercialModel.eAdapters().remove(commercialModelAdapter);
-				cargoModel.eAdapters().remove(cargoModelAdapter);
-			};
-
 			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_INVENTORY_MODEL) && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
 				MullProfile profile = adpModel.getMullProfile();
 				if (profile == null) {
 					profile = ADPFactory.eINSTANCE.createMullProfile();
 				}
 				objects.add(profile);
+				mullSummaryAdapter.setTarget(adpModel);
+				releaseAdaptersRunnable = () -> {
+					commercialModel.eAdapters().remove(commercialModelAdapter);
+					cargoModel.eAdapters().remove(cargoModelAdapter);
+					adpModel.eAdapters().remove(mullSummaryAdapter);
+				};
+			} else {
+				releaseAdaptersRunnable = () -> {
+					commercialModel.eAdapters().remove(commercialModelAdapter);
+					cargoModel.eAdapters().remove(cargoModelAdapter);
+				};
 			}
 			final List<PurchaseContract> sortedPurchaseContracts = new ArrayList<>(commercialModel.getPurchaseContracts());
 			sortedPurchaseContracts.sort((c1, c2) -> c1.getName().compareTo(c2.getName()));
@@ -2274,6 +2344,7 @@ public class ContractPage extends ADPComposite {
 		}
 		if (filterAction != null) {
 			filterAction.dispose();
+			filterAction = null;
 		}
 		super.dispose();
 	}
