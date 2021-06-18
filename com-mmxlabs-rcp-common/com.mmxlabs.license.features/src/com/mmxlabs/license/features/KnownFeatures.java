@@ -78,6 +78,9 @@ public final class KnownFeatures {
 	public static final String FEATURE_DEAL_SETS_GENERATE_FROM_CURVES = "features:deal-sets-generate-from-curves";
 
 	public static final String FEATURE_DEAL_SETS_GENERATE_FROM_INDICES = "features:deal-sets-generate-from-indices";
+	
+	public static final String FEATURE_INDIVIDUAL_EXPOSURES = "features:individual-exposures";
+	
 
 	/**
 	 * Enable the charter length evaluation mode

@@ -40,6 +40,10 @@
         eType="#//PaperDeal" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="dealSets" upperBound="-1"
         eType="#//DealSet" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cargoesForExposures" upperBound="-1"
+        eType="#//Cargo"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cargoesForHedging" upperBound="-1"
+        eType="#//Cargo"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Cargo" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//AssignableElement">
     <eOperations name="getCargoType" lowerBound="1" eType="#//CargoType"/>

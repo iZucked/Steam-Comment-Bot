@@ -240,13 +240,31 @@ public interface CargoPackage extends EPackage {
 	int CARGO_MODEL__DEAL_SETS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
+	 * The feature id for the '<em><b>Cargoes For Exposures</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_MODEL__CARGOES_FOR_EXPOSURES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+
+	/**
+	 * The feature id for the '<em><b>Cargoes For Hedging</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_MODEL__CARGOES_FOR_HEDGING = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+	int CARGO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -8481,6 +8499,28 @@ public interface CargoPackage extends EPackage {
 	EReference getCargoModel_DealSets();
 
 	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getCargoesForExposures <em>Cargoes For Exposures</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Cargoes For Exposures</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getCargoesForExposures()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_CargoesForExposures();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getCargoesForHedging <em>Cargoes For Hedging</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Cargoes For Hedging</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getCargoesForHedging()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_CargoesForHedging();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.CargoModel#getLoadSlotByName(java.lang.String) <em>Get Load Slot By Name</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11080,6 +11120,22 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CARGO_MODEL__DEAL_SETS = eINSTANCE.getCargoModel_DealSets();
+
+		/**
+		 * The meta object literal for the '<em><b>Cargoes For Exposures</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__CARGOES_FOR_EXPOSURES = eINSTANCE.getCargoModel_CargoesForExposures();
+
+		/**
+		 * The meta object literal for the '<em><b>Cargoes For Hedging</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__CARGOES_FOR_HEDGING = eINSTANCE.getCargoModel_CargoesForHedging();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Load Slot By Name</b></em>' operation.
