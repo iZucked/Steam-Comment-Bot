@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.adp.presentation.views;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -643,7 +645,9 @@ public class ContractPage extends ADPComposite {
 								dischargeName = dischargeSlot.getPriceExpression() != null ? dischargeSlot.getPriceExpression() : "<Not specified>";
 							}
 						}
-						return String.format("%s--%s--%s", entityName, loadContractName, dischargeName);
+						final LocalDate loadDate = mullCargoWrapper.getLoadSlot().getWindowStart();
+						final String loadDateString = loadDate != null ? String.format("%01d/%01d/%d", loadDate.getDayOfMonth(), loadDate.getMonthValue(), loadDate.getYear()) : "<Not specified>";
+						return String.format("%s--%s(%s)--%s", entityName, loadContractName, loadDateString, dischargeName);
 					} else if (secondElement instanceof Integer) {
 						return String.format("%,d", (int) secondElement);
 					} else if (secondElement instanceof Double) {
