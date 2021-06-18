@@ -18,7 +18,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
@@ -50,6 +49,7 @@ import com.google.ortools.linearsolver.MPConstraint;
 import com.google.ortools.linearsolver.MPObjective;
 import com.google.ortools.linearsolver.MPSolver;
 import com.google.ortools.linearsolver.MPVariable;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.adp.ADPFactory;
@@ -61,8 +61,11 @@ import com.mmxlabs.models.lng.adp.MinCargoConstraint;
 import com.mmxlabs.models.lng.adp.PeriodDistribution;
 import com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint;
 import com.mmxlabs.models.lng.adp.ProfileConstraint;
+import com.mmxlabs.models.lng.adp.ProfileVesselRestriction;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
+import com.mmxlabs.models.lng.adp.SubContractProfile;
+import com.mmxlabs.models.lng.adp.SubProfileConstraint;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -73,6 +76,7 @@ import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioElementNameHelper;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -80,10 +84,119 @@ import com.mmxlabs.models.ui.editors.DetailToolbarManager;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
+import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 
 public class SummaryPage extends ADPComposite {
+
+	private class ADPConstraintsSummaryAdapter extends EContentAdapter {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			final Object notifier = notification.getNotifier();
+			if (constraintsViewer != null) {
+				if (notifier instanceof PeriodDistribution) {
+					ViewerHelper.refresh(constraintsViewer, false);
+				} else if (notifier instanceof PeriodDistributionProfileConstraint) {
+					ViewerHelper.refresh(constraintsViewer, false);
+				} else if (notifier instanceof ProfileVesselRestriction) {
+					ViewerHelper.refresh(constraintsViewer, false);
+				}
+			}
+		}
+
+		@Override
+		protected void setTarget(final EObject target) {
+			if (this.target != null && this.target != target) {
+				releaseAdapter();
+			}
+			basicSetTarget(target);
+			if (target instanceof ADPModel) {
+				final ADPModel localAdpModel = (ADPModel) target;
+				addAdapter(localAdpModel);
+				for (final PurchaseContractProfile profile : localAdpModel.getPurchaseContractProfiles()) {
+					addToContractProfile(profile);
+				}
+				for (final SalesContractProfile profile : localAdpModel.getSalesContractProfiles()) {
+					addToContractProfile(profile);
+				}
+			}
+		}
+
+		private <T extends Slot<U>, U extends Contract> void addToContractProfile(final ContractProfile<T, U> contractProfile) {
+			addAdapter(contractProfile);
+			for (final ProfileConstraint constraint : contractProfile.getConstraints()) {
+				if (constraint instanceof PeriodDistributionProfileConstraint) {
+					final PeriodDistributionProfileConstraint pdpc = (PeriodDistributionProfileConstraint) constraint;
+					addAdapter(pdpc);
+					pdpc.getDistributions().forEach(this::addAdapter);
+				} else if (constraint instanceof MaxCargoConstraint || constraint instanceof MinCargoConstraint) {
+					addAdapter(constraint);
+				}
+			}
+			for (final SubContractProfile<T, U> subprofile : contractProfile.getSubProfiles()) {
+				addAdapter(subprofile);
+				for (final SubProfileConstraint spc : subprofile.getConstraints()) {
+					if (spc instanceof ProfileVesselRestriction) {
+						addAdapter(spc);
+					}
+				}
+			}
+		}
+
+		@Override
+		protected void unsetTarget(final EObject target) {
+			basicUnsetTarget(target);
+			if (target instanceof ADPModel) {
+				final ADPModel localAdpModel = (ADPModel) target;
+				removeAdapter(localAdpModel, false, true);
+				for (final PurchaseContractProfile profile : localAdpModel.getPurchaseContractProfiles()) {
+					removeAdapter(profile, false, true);
+					for (final ProfileConstraint constraint : profile.getConstraints()) {
+						if (constraint instanceof PeriodDistributionProfileConstraint) {
+							final PeriodDistributionProfileConstraint pdpc = (PeriodDistributionProfileConstraint) constraint;
+							removeAdapter(pdpc, false, true);
+							for (final PeriodDistribution distribution : pdpc.getDistributions()) {
+								removeAdapter(distribution, false, true);
+							}
+						} else if (constraint instanceof MaxCargoConstraint) {
+							final MaxCargoConstraint maxCargoConstraint = (MaxCargoConstraint) constraint;
+							removeAdapter(maxCargoConstraint, false, true);
+						} else if (constraint instanceof MinCargoConstraint) {
+							final MinCargoConstraint minCargoConstraint = (MinCargoConstraint) constraint;
+							removeAdapter(minCargoConstraint, false, true);
+						}
+					}
+				}
+				for (final SalesContractProfile profile : localAdpModel.getSalesContractProfiles()) {
+					removeAdapter(profile, false, true);
+					for (final ProfileConstraint constraint : profile.getConstraints()) {
+						if (constraint instanceof PeriodDistributionProfileConstraint) {
+							final PeriodDistributionProfileConstraint pdpc = (PeriodDistributionProfileConstraint) constraint;
+							removeAdapter(pdpc, false, true);
+							for (final PeriodDistribution distribution : pdpc.getDistributions()) {
+								removeAdapter(distribution, false, true);
+							}
+						} else if (constraint instanceof MaxCargoConstraint) {
+							final MaxCargoConstraint maxCargoConstraint = (MaxCargoConstraint) constraint;
+							removeAdapter(maxCargoConstraint, false, true);
+						} else if (constraint instanceof MinCargoConstraint) {
+							final MinCargoConstraint minCargoConstraint = (MinCargoConstraint) constraint;
+							removeAdapter(minCargoConstraint, false, true);
+						}
+					}
+				}
+			}
+		}
+
+		public void releaseAdapter() {
+			if (target != null) {
+				unsetTarget(target);
+			}
+		}
+	}
 
 	private ADPEditorData editorData;
 
@@ -114,7 +227,7 @@ public class SummaryPage extends ADPComposite {
 		}
 	};
 
-	private final Adapter adpAdapter;
+	private ADPConstraintsSummaryAdapter adpAdapter;
 
 	public SummaryPage(final Composite parent, final int style, final ADPEditorData editorData) {
 		super(parent, style);
@@ -122,110 +235,7 @@ public class SummaryPage extends ADPComposite {
 		this.setLayout(GridLayoutFactory.fillDefaults().numColumns(1).margins(0, 0).create());
 
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP_PROFILE_CONSTRAINTS_SUMMARY)) {
-			adpAdapter = new EContentAdapter() {
-				@Override
-				public void notifyChanged(final Notification notification) {
-					super.notifyChanged(notification);
-					final Object notifier = notification.getNotifier();
-					if (constraintsViewer != null) {
-						if (notifier instanceof PeriodDistribution) {
-							ViewerHelper.refresh(constraintsViewer, false);
-						} else if (notifier instanceof PeriodDistributionProfileConstraint) {
-							ViewerHelper.refresh(constraintsViewer, false);
-						}
-					}
-				}
-
-				@Override
-				protected void setTarget(final EObject target) {
-					basicSetTarget(target);
-					if (target instanceof ADPModel) {
-						final ADPModel localAdpModel = (ADPModel) target;
-						addAdapter(localAdpModel);
-						for (final PurchaseContractProfile profile : localAdpModel.getPurchaseContractProfiles()) {
-							addAdapter(profile);
-							for (final ProfileConstraint constraint : profile.getConstraints()) {
-								if (constraint instanceof PeriodDistributionProfileConstraint) {
-									final PeriodDistributionProfileConstraint pdpc = (PeriodDistributionProfileConstraint) constraint;
-									addAdapter(pdpc);
-									for (final PeriodDistribution distribution : pdpc.getDistributions()) {
-										addAdapter(distribution);
-									}
-								} else if (constraint instanceof MaxCargoConstraint) {
-									final MaxCargoConstraint maxCargoConstraint = (MaxCargoConstraint) constraint;
-									addAdapter(maxCargoConstraint);
-								} else if (constraint instanceof MinCargoConstraint) {
-									final MinCargoConstraint minCargoConstraint = (MinCargoConstraint) constraint;
-									addAdapter(minCargoConstraint);
-								}
-							}
-						}
-						for (final SalesContractProfile profile : localAdpModel.getSalesContractProfiles()) {
-							addAdapter(profile);
-							for (final ProfileConstraint constraint : profile.getConstraints()) {
-								if (constraint instanceof PeriodDistributionProfileConstraint) {
-									final PeriodDistributionProfileConstraint pdpc = (PeriodDistributionProfileConstraint) constraint;
-									addAdapter(pdpc);
-									for (final PeriodDistribution distribution : pdpc.getDistributions()) {
-										addAdapter(distribution);
-									}
-								} else if (constraint instanceof MaxCargoConstraint) {
-									final MaxCargoConstraint maxCargoConstraint = (MaxCargoConstraint) constraint;
-									addAdapter(maxCargoConstraint);
-								} else if (constraint instanceof MinCargoConstraint) {
-									final MinCargoConstraint minCargoConstraint = (MinCargoConstraint) constraint;
-									addAdapter(minCargoConstraint);
-								}
-							}
-						}
-					}
-				}
-
-				@Override
-				protected void unsetTarget(final EObject target) {
-					basicUnsetTarget(target);
-					if (target instanceof ADPModel) {
-						final ADPModel localAdpModel = (ADPModel) target;
-						removeAdapter(localAdpModel, false, true);
-						for (final PurchaseContractProfile profile : localAdpModel.getPurchaseContractProfiles()) {
-							removeAdapter(profile, false, true);
-							for (final ProfileConstraint constraint : profile.getConstraints()) {
-								if (constraint instanceof PeriodDistributionProfileConstraint) {
-									final PeriodDistributionProfileConstraint pdpc = (PeriodDistributionProfileConstraint) constraint;
-									removeAdapter(pdpc, false, true);
-									for (final PeriodDistribution distribution : pdpc.getDistributions()) {
-										removeAdapter(distribution, false, true);
-									}
-								} else if (constraint instanceof MaxCargoConstraint) {
-									final MaxCargoConstraint maxCargoConstraint = (MaxCargoConstraint) constraint;
-									removeAdapter(maxCargoConstraint, false, true);
-								} else if (constraint instanceof MinCargoConstraint) {
-									final MinCargoConstraint minCargoConstraint = (MinCargoConstraint) constraint;
-									removeAdapter(minCargoConstraint, false, true);
-								}
-							}
-						}
-						for (final SalesContractProfile profile : localAdpModel.getSalesContractProfiles()) {
-							removeAdapter(profile, false, true);
-							for (final ProfileConstraint constraint : profile.getConstraints()) {
-								if (constraint instanceof PeriodDistributionProfileConstraint) {
-									final PeriodDistributionProfileConstraint pdpc = (PeriodDistributionProfileConstraint) constraint;
-									removeAdapter(pdpc, false, true);
-									for (final PeriodDistribution distribution : pdpc.getDistributions()) {
-										removeAdapter(distribution, false, true);
-									}
-								} else if (constraint instanceof MaxCargoConstraint) {
-									final MaxCargoConstraint maxCargoConstraint = (MaxCargoConstraint) constraint;
-									removeAdapter(maxCargoConstraint, false, true);
-								} else if (constraint instanceof MinCargoConstraint) {
-									final MinCargoConstraint minCargoConstraint = (MinCargoConstraint) constraint;
-									removeAdapter(minCargoConstraint, false, true);
-								}
-							}
-						}
-					}
-				}
-			};
+			adpAdapter = new ADPConstraintsSummaryAdapter();
 		} else {
 			adpAdapter = null;
 		}
@@ -375,78 +385,7 @@ public class SummaryPage extends ADPComposite {
 
 			constraintsViewer = new GridTreeViewer(contractConstraintsGroup, SWT.V_SCROLL | SWT.FILL);
 			constraintsViewer.getGrid().setHeaderVisible(true);
-			constraintsViewer.setContentProvider(new ITreeContentProvider() {
-				final HashMap<Object, Object> reverseParentMap = new HashMap<>();
-
-				@Override
-				public boolean hasChildren(Object element) {
-					return element instanceof ContractProfile;
-				}
-
-				@Override
-				public Object getParent(Object element) {
-					final Object parent = reverseParentMap.get(element);
-					return parent;
-				}
-
-				@Override
-				public Object[] getElements(Object inputElement) {
-					if (inputElement instanceof ADPModel) {
-						final ADPModel adpModel = (ADPModel) inputElement;
-						final List<PurchaseContractProfile> purchaseContractProfiles = new ArrayList<>(adpModel.getPurchaseContractProfiles());
-						purchaseContractProfiles.sort((profile1, profile2) -> {
-							final String contractName1 = ScenarioElementNameHelper.getName(profile1.getContract(), "<Not specified>");
-							final String contractName2 = ScenarioElementNameHelper.getName(profile2.getContract(), "<Not specified>");
-							return contractName1.compareTo(contractName2);
-						});
-						final List<SalesContractProfile> salesContractProfiles = new ArrayList<>(adpModel.getSalesContractProfiles());
-						salesContractProfiles.sort((profile1, profile2) -> {
-							final String contractName1 = ScenarioElementNameHelper.getName(profile1.getContract(), "<Not specified>");
-							final String contractName2 = ScenarioElementNameHelper.getName(profile2.getContract(), "<Not specified>");
-							return contractName1.compareTo(contractName2);
-						});
-						final Object[] elements = new Object[purchaseContractProfiles.size() + salesContractProfiles.size()];
-						int i = 0;
-						final Iterator<PurchaseContractProfile> iterPurchaseProfiles = purchaseContractProfiles.iterator();
-						while (iterPurchaseProfiles.hasNext()) {
-							elements[i++] = iterPurchaseProfiles.next();
-						}
-						final Iterator<SalesContractProfile> iterSalesProfiles = salesContractProfiles.iterator();
-						while (iterSalesProfiles.hasNext()) {
-							elements[i++] = iterSalesProfiles.next();
-						}
-						assert i == elements.length;
-						return elements;
-					}
-					return new Object[0];
-				}
-
-				@Override
-				public Object[] getChildren(Object parentElement) {
-					if (parentElement instanceof PurchaseContractProfile) {
-						final List<Object> profileConstraints = ((PurchaseContractProfile) parentElement).getConstraints().stream().flatMap(pc -> {
-							if (pc instanceof PeriodDistributionProfileConstraint) {
-								return ((PeriodDistributionProfileConstraint) pc).getDistributions().stream().map(Object.class::cast);
-							} else {
-								return Stream.of((Object) pc);
-							}
-						}).collect(Collectors.toList());
-						profileConstraints.forEach(o -> reverseParentMap.put(o, parentElement));
-						return profileConstraints.toArray();
-					} else if (parentElement instanceof SalesContractProfile) {
-						final List<Object> profileConstraints = ((SalesContractProfile) parentElement).getConstraints().stream().flatMap(pc -> {
-							if (pc instanceof PeriodDistributionProfileConstraint) {
-								return ((PeriodDistributionProfileConstraint) pc).getDistributions().stream().map(Object.class::cast);
-							} else {
-								return Stream.of((Object) pc);
-							}
-						}).collect(Collectors.toList());
-						profileConstraints.forEach(o -> reverseParentMap.put(o, parentElement));
-						return profileConstraints.toArray();
-					}
-					return new Object[0];
-				}
-			});
+			constraintsViewer.setContentProvider(getConstraintsSummaryContentProvider());
 			final GridViewerColumn rangeColumn = new GridViewerColumn(constraintsViewer, SWT.NONE);
 			rangeColumn.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
 			rangeColumn.getColumn().setText("Range");
@@ -465,6 +404,9 @@ public class SummaryPage extends ADPComposite {
 						return ADPModelUtil.getPeriodDistributionRangeString((PeriodDistribution) element);
 					} else if (element instanceof ProfileConstraint) {
 						return "Range";
+					} else if (element instanceof Pair) {
+						final Pair<String, ?> pair = (Pair<String, ?>) element;
+						return pair.getFirst();
 					}
 					return "";
 				}
@@ -481,6 +423,8 @@ public class SummaryPage extends ADPComposite {
 						return Integer.toString(periodDistribution.getMinCargoes());
 					} else if (element instanceof MinCargoConstraint) {
 						return Integer.toString(((MinCargoConstraint) element).getMinCargoes());
+					} else if (element instanceof Vessel) {
+						return ScenarioElementNameHelper.getName((Vessel) element, "<Not specified>");
 					}
 					return "";
 				}
@@ -517,8 +461,12 @@ public class SummaryPage extends ADPComposite {
 			};
 
 			ResourceLocator.imageDescriptorFromBundle("com.mmxlabs.rcp.common", "/icons/pack.gif").ifPresent(packAction::setImageDescriptor);
-
 			toolbarManager.getToolbarManager().add(packAction);
+
+			final CopyGridToClipboardAction constraintsViewerCopyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(constraintsViewer);
+			final ActionContributionItem copyToClipboardAci = new ActionContributionItem(constraintsViewerCopyAction);
+			toolbarManager.getToolbarManager().add(copyToClipboardAci);
+
 			constraintsSummaryExpandLevel = 1;
 			final Action collapseOneLevel = new Action("Collapse All") {
 				@Override
@@ -678,6 +626,7 @@ public class SummaryPage extends ADPComposite {
 			if (thisAdpModel != null && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP_PROFILE_CONSTRAINTS_SUMMARY)) {
 				releaseAdaptersRunnable = () -> {
 					cargoModel.eAdapters().remove(cargoAdapter);
+					adpAdapter.releaseAdapter();
 				};
 				cargoModel.eAdapters().add(cargoAdapter);
 				adpAdapter.setTarget(thisAdpModel);
@@ -695,7 +644,7 @@ public class SummaryPage extends ADPComposite {
 			releaseAdaptersRunnable.run();
 			releaseAdaptersRunnable = null;
 		}
-
+		adpAdapter = null;
 		super.dispose();
 	}
 
@@ -883,5 +832,122 @@ public class SummaryPage extends ADPComposite {
 			}
 			return false;
 		}
+	}
+
+	private ITreeContentProvider getConstraintsSummaryContentProvider() {
+		return new ITreeContentProvider() {
+			HashMap<Object, Object> reverseParentMap = new HashMap<>();
+
+			@Override
+			public boolean hasChildren(Object element) {
+				if (element instanceof PurchaseContractProfile) {
+					final PurchaseContractProfile pcp = (PurchaseContractProfile) element;
+					return hasContractConstraints(pcp) || hasVesselConstraints(pcp);
+				} else if (element instanceof SalesContractProfile) {
+					final SalesContractProfile scp = (SalesContractProfile) element;
+					return hasContractConstraints(scp) || hasVesselConstraints(scp);
+				} else if (element instanceof Pair) {
+					return true;
+				}
+				return false;
+			}
+
+			private <T extends Slot<U>, U extends Contract> boolean hasContractConstraints(final ContractProfile<T, U> contractProfile) {
+				return contractProfile.getConstraints().stream().anyMatch(con -> {
+					if (con instanceof PeriodDistributionProfileConstraint) {
+						final PeriodDistributionProfileConstraint pdpc = (PeriodDistributionProfileConstraint) con;
+						return !pdpc.getDistributions().isEmpty();
+					}
+					return false;
+				});
+			}
+
+			private <T extends Slot<U>, U extends Contract> boolean hasVesselConstraints(final ContractProfile<T, U> contractProfile) {
+				return contractProfile.getSubProfiles().stream().flatMap(scp -> scp.getConstraints().stream()).filter(ProfileVesselRestriction.class::isInstance)
+						.map(ProfileVesselRestriction.class::cast).anyMatch(pvr -> !pvr.getVessels().isEmpty());
+			}
+
+			@Override
+			public Object getParent(Object element) {
+				final Object parent = reverseParentMap.get(element);
+				return parent;
+			}
+
+			@Override
+			public Object[] getElements(Object inputElement) {
+				if (inputElement instanceof ADPModel) {
+					final ADPModel adpModel = (ADPModel) inputElement;
+					final List<PurchaseContractProfile> purchaseContractProfiles = new ArrayList<>(adpModel.getPurchaseContractProfiles());
+					purchaseContractProfiles.sort((profile1, profile2) -> {
+						final String contractName1 = ScenarioElementNameHelper.getName(profile1.getContract(), "<Not specified>");
+						final String contractName2 = ScenarioElementNameHelper.getName(profile2.getContract(), "<Not specified>");
+						return contractName1.compareTo(contractName2);
+					});
+					final List<SalesContractProfile> salesContractProfiles = new ArrayList<>(adpModel.getSalesContractProfiles());
+					salesContractProfiles.sort((profile1, profile2) -> {
+						final String contractName1 = ScenarioElementNameHelper.getName(profile1.getContract(), "<Not specified>");
+						final String contractName2 = ScenarioElementNameHelper.getName(profile2.getContract(), "<Not specified>");
+						return contractName1.compareTo(contractName2);
+					});
+					final Object[] elements = new Object[purchaseContractProfiles.size() + salesContractProfiles.size()];
+					int i = 0;
+					final Iterator<PurchaseContractProfile> iterPurchaseProfiles = purchaseContractProfiles.iterator();
+					while (iterPurchaseProfiles.hasNext()) {
+						elements[i++] = iterPurchaseProfiles.next();
+					}
+					final Iterator<SalesContractProfile> iterSalesProfiles = salesContractProfiles.iterator();
+					while (iterSalesProfiles.hasNext()) {
+						elements[i++] = iterSalesProfiles.next();
+					}
+					assert i == elements.length;
+					return elements;
+				}
+				return new Object[0];
+			}
+
+			@Override
+			public Object[] getChildren(Object parentElement) {
+				if (parentElement instanceof PurchaseContractProfile) {
+					return localGetChildren((PurchaseContractProfile) parentElement);
+				} else if (parentElement instanceof SalesContractProfile) {
+					return localGetChildren((SalesContractProfile) parentElement);
+				} else if (parentElement instanceof Pair) {
+					final Pair<?, List<Object>> pair = (Pair<?, List<Object>>) parentElement;
+					return pair.getSecond().toArray();
+				}
+				return new Object[0];
+			}
+
+			private <T extends Slot<U>, U extends Contract> Object[] localGetChildren(final ContractProfile<T, U> contractProfile) {
+				final List<Object> constraintGroups = new ArrayList<>();
+				final List<Object> profileConstraints = contractProfile.getConstraints().stream().flatMap(constraint -> {
+					if (constraint instanceof PeriodDistributionProfileConstraint) {
+						return ((PeriodDistributionProfileConstraint) constraint).getDistributions().stream().map(Object.class::cast);
+					} else {
+						return Stream.of((Object) constraint);
+					}
+				}).collect(Collectors.toList());
+				if (!profileConstraints.isEmpty()) {
+					final Pair<String, List<Object>> pair = Pair.of("Contract constraints", profileConstraints);
+					profileConstraints.forEach(o -> reverseParentMap.put(o, contractProfile));
+					reverseParentMap.put(pair, contractProfile);
+					constraintGroups.add(pair);
+				}
+				final List<Object> vesselConstraints = contractProfile.getSubProfiles().stream().flatMap(scp -> scp.getConstraints().stream()).filter(ProfileVesselRestriction.class::isInstance)
+						.map(ProfileVesselRestriction.class::cast).map(ProfileVesselRestriction::getVessels).flatMap(List::stream).collect(Collectors.toList());
+				if (!vesselConstraints.isEmpty()) {
+					final Pair<String, List<Object>> pair = Pair.of("Vessel restrictions", vesselConstraints);
+					vesselConstraints.forEach(o -> reverseParentMap.put(o, contractProfile));
+					reverseParentMap.put(pair, contractProfile);
+					constraintGroups.add(pair);
+				}
+				return constraintGroups.toArray();
+			}
+
+			@Override
+			public void dispose() {
+				this.reverseParentMap = null;
+			}
+		};
 	}
 }
