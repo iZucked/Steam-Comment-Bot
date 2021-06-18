@@ -83,6 +83,10 @@ public class ExposuresCalculator {
 	private SeriesParser currencyIndices;
 	
 	@Inject
+	@Named(SchedulerConstants.INDIVIDUAL_EXPOSURES)
+	private boolean individualExposures;
+	
+	@Inject
 	private IExternalDateProvider externalDateProvider;
 	
 	@Inject
@@ -103,36 +107,39 @@ public class ExposuresCalculator {
 			//only support one load and one discharge
 			assert cargoValueAnnotation.getSlots().size() == 2;
 			final IPortSlot dischargeOption = cargoValueAnnotation.getSlots().get(1);
-			
+
 			final ExposuresLookupData lookupData = exposureDataProvider.getExposuresLookupData();
-			if (lookupData.slotsToInclude.contains(portSlot.getId())) {
-			
-				boolean isLong = false;
-				if (portSlot.getPortType() == PortType.Load) {
-					isLong = true;
-				} else if (portSlot.getPortType() == PortType.Discharge) {
-					isLong = false;
-				} else {
-					return Collections.emptyList();
-				}
-	
-				final long volumeMMBTU = cargoValueAnnotation.getPhysicalSlotVolumeInMMBTu(portSlot);
-				final int pricePerMMBTU = cargoValueAnnotation.getSlotPricePerMMBTu(portSlot);
-				final String priceExpression = exposureDataProvider.getPriceExpression(portSlot);
-				int pricingTime = 0;
-				if (isLong) {
-					pricingTime = pricingEventHelper.getLoadPricingDate((ILoadOption) portSlot, (IDischargeOption) dischargeOption, cargoValueAnnotation);
-				} else {
-					pricingTime = pricingEventHelper.getDischargePricingDate((IDischargeOption) portSlot, cargoValueAnnotation);
-				}
-				final LocalDate pricingDate = externalDateProvider.getDateFromHours(pricingTime, portSlot.getPort()).toLocalDate();
-				
-				if (pricingDate.isAfter(lookupData.cutoffDate)) {
-					return calculateExposures(portSlot.getId(), volumeMMBTU, pricePerMMBTU, priceExpression, pricingDate, isLong, lookupData);
-				}
+
+			if (individualExposures && !lookupData.slotsToInclude.contains(portSlot.getId())) {
+				return Collections.emptyList();
 			}
+			
+			boolean isLong = false;
+			if (portSlot.getPortType() == PortType.Load) {
+				isLong = true;
+			} else if (portSlot.getPortType() == PortType.Discharge) {
+				isLong = false;
+			} else {
+				return Collections.emptyList();
+			}
+
+			final long volumeMMBTU = cargoValueAnnotation.getPhysicalSlotVolumeInMMBTu(portSlot);
+			final int pricePerMMBTU = cargoValueAnnotation.getSlotPricePerMMBTu(portSlot);
+			final String priceExpression = exposureDataProvider.getPriceExpression(portSlot);
+			int pricingTime = 0;
+			if (isLong) {
+				pricingTime = pricingEventHelper.getLoadPricingDate((ILoadOption) portSlot, (IDischargeOption) dischargeOption, cargoValueAnnotation);
+			} else {
+				pricingTime = pricingEventHelper.getDischargePricingDate((IDischargeOption) portSlot, cargoValueAnnotation);
+			}
+			final LocalDate pricingDate = externalDateProvider.getDateFromHours(pricingTime, portSlot.getPort()).toLocalDate();
+
+			if (pricingDate.isAfter(lookupData.cutoffDate)) {
+				return calculateExposures(portSlot.getId(), volumeMMBTU, pricePerMMBTU, priceExpression, pricingDate, isLong, lookupData);
+			}
+
 		}
-		
+
 		return Collections.emptyList();
 	}
 	

@@ -61,6 +61,10 @@ public class PaperDealDataTransformer implements ISlotTransformer {
 	private boolean paperPnLEnabled;
 	
 	@Inject
+	@Named(SchedulerConstants.INDIVIDUAL_EXPOSURES)
+	private boolean individualExposures;
+	
+	@Inject
 	@Named(SchedulerConstants.RE_HEDGE_CUTOFF_AT_PROMPT_START)
 	private boolean cutoffAtPromptStart;
 	
@@ -115,23 +119,25 @@ public class PaperDealDataTransformer implements ISlotTransformer {
 					if (lngScenarioModel.getPromptPeriodStart() != null && cutoffAtPromptStart) {
 						lookupData.cutoffMonth = YearMonth.from(lngScenarioModel.getPromptPeriodStart());
 					}
-					cargoModel.getCargoesForHedging().forEach(c -> {
-						for (final var slot : c.getSlots()) {
-							String prefix = "FP-";
-							if (slot instanceof LoadSlot) {
-								prefix = "FP-";
-								if (((LoadSlot) slot).isDESPurchase()) {
-									prefix = "DP-";
+					if (individualExposures) {
+						cargoModel.getCargoesForHedging().forEach(c -> {
+							for (final var slot : c.getSlots()) {
+								String prefix = "FP-";
+								if (slot instanceof LoadSlot) {
+									prefix = "FP-";
+									if (((LoadSlot) slot).isDESPurchase()) {
+										prefix = "DP-";
+									}
+								} else {
+									prefix = "DS-";
+									if (((DischargeSlot) slot).isFOBSale()) {
+										prefix = "FS-";
+									}
 								}
-							} else {
-								prefix = "DS-";
-								if (((DischargeSlot) slot).isFOBSale()) {
-									prefix = "FS-";
-								}
+								lookupData.slotsToInclude.add(prefix + slot.getName());
 							}
-							lookupData.slotsToInclude.add(prefix + slot.getName());
-						}
-					});
+						});
+					}
 					paperDealDataProviderEditor.addLookupData(lookupData);
 				}
 			}

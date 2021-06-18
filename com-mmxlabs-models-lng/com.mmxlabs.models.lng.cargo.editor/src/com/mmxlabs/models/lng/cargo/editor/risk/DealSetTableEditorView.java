@@ -8,11 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.SashForm;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.ui.editorpart.LightTradesWiringViewer;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.lng.ui.views.MultiScenarioTableViewersView;

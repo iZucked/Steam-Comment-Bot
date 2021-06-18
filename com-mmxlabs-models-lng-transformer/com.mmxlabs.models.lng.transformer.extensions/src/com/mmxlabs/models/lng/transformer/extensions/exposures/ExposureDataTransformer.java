@@ -45,6 +45,10 @@ public class ExposureDataTransformer implements ISlotTransformer {
 	private IExposuresCustomiser exposureCustomiser;
 	
 	@Inject
+	@Named(SchedulerConstants.INDIVIDUAL_EXPOSURES)
+	private boolean individualExposures;
+	
+	@Inject
 	@Named(SchedulerConstants.COMPUTE_EXPOSURES)
 	private boolean exposuresEnabled;
 	
@@ -74,23 +78,25 @@ public class ExposureDataTransformer implements ISlotTransformer {
 					if (lngScenarioModel.getPromptPeriodStart() != null && cutoffAtPromptStart) {
 						lookupData.cutoffDate = lngScenarioModel.getPromptPeriodStart();
 					}
-					cargoModel.getCargoesForExposures().forEach(c -> {
-						for (final var slot : c.getSlots()) {
-							String prefix = "FP-";
-							if (slot instanceof LoadSlot) {
-								prefix = "FP-";
-								if (((LoadSlot) slot).isDESPurchase()) {
-									prefix = "DP-";
+					if (individualExposures) {
+						cargoModel.getCargoesForExposures().forEach(c -> {
+							for (final var slot : c.getSlots()) {
+								String prefix = "FP-";
+								if (slot instanceof LoadSlot) {
+									prefix = "FP-";
+									if (((LoadSlot) slot).isDESPurchase()) {
+										prefix = "DP-";
+									}
+								} else {
+									prefix = "DS-";
+									if (((DischargeSlot) slot).isFOBSale()) {
+										prefix = "FS-";
+									}
 								}
-							} else {
-								prefix = "DS-";
-								if (((DischargeSlot) slot).isFOBSale()) {
-									prefix = "FS-";
-								}
+								lookupData.slotsToInclude.add(prefix + slot.getName());
 							}
-							lookupData.slotsToInclude.add(prefix + slot.getName());
-						}
-					});
+						});
+					}
 					pricingModel.getCommodityCurves().stream().filter(idx -> idx.getName() != null)//
 					.forEach(idx -> lookupData.commodityMap.put(idx.getName().toLowerCase(), new BasicCommodityCurveData(//
 									idx.getName().toLowerCase(), idx.getVolumeUnit(), idx.getCurrencyUnit(), idx.getExpression())));

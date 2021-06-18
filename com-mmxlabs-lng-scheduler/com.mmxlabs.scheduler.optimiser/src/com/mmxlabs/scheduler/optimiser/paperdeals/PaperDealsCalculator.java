@@ -61,6 +61,10 @@ public class PaperDealsCalculator {
 	@Inject
 	@Named(SchedulerConstants.COMPUTE_PAPER_PNL)
 	private boolean paperPnLEnabled;
+	
+	@Inject
+	@Named(SchedulerConstants.INDIVIDUAL_EXPOSURES)
+	private boolean individualExposures;
 
 	@Inject
 	@Named(SchedulerConstants.RE_HEDGE_WITH_PAPERS)
@@ -109,17 +113,25 @@ public class PaperDealsCalculator {
 			final PaperDealsLookupData lookupData = paperDealDataProvider.getPaperDealsLookupData();
 			for (final OptimiserExposureRecords records : exposureRecords) {
 				for (final BasicExposureRecord record : records.records) {
-					if (record.getIndexName().equalsIgnoreCase("Physical")
-							|| lookupData.slotsToInclude.contains(record.getPortSlotName()))
-						continue;
-					final YearMonth month = YearMonth.from(record.getTime());
-					final String marketIndex = lookupData.marketIndices.get(record.getIndexName().toLowerCase());
-					final Pair<String, YearMonth> pair = new Pair<>(marketIndex, month);
-					exposures.merge(pair, record.getVolumeMMBTU(), Long::sum);
+					
+					if (checkValid(lookupData, record)){
+						final YearMonth month = YearMonth.from(record.getTime());
+						final String marketIndex = lookupData.marketIndices.get(record.getIndexName().toLowerCase());
+						final Pair<String, YearMonth> pair = new Pair<>(marketIndex, month);
+						exposures.merge(pair, record.getVolumeMMBTU(), Long::sum);
+					}
 				}
 			}
 		}
 		return exposures;
+	}
+	
+	private boolean checkValid(final PaperDealsLookupData lookupData, final BasicExposureRecord record) {
+		boolean result = true;
+		if (individualExposures) {
+			result = lookupData.slotsToInclude.contains(record.getPortSlotName());
+		}
+		return result && !record.getIndexName().equalsIgnoreCase("Physical");
 	}
 
 	/**
