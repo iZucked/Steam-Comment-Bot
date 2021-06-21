@@ -16,12 +16,14 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.CharterOutOpportunity;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
-import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.FullVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
+import com.mmxlabs.models.lng.analytics.SellMarket;
+import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ShippingType;
 import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
@@ -125,6 +127,18 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 			if (baseCaseRow.getVesselEventOption() instanceof CharterOutOpportunity && baseCaseRow.getShipping() == null) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
 						(IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point: charter out opportunity without shipping option"));
+				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+				statuses.add(deco);
+			}
+			if (baseCaseRow.getBuyOption() == null && baseCaseRow.getSellOption() instanceof SellMarket) {
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point: cannot have spot discharge as an open sell"));
+				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+				statuses.add(deco);
+			}
+			if (baseCaseRow.getBuyOption() instanceof BuyMarket && baseCaseRow.getSellOption() == null) {
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point: cannot have spot load as an open buy"));
 				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 				statuses.add(deco);
 			}
