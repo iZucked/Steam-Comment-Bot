@@ -45,6 +45,7 @@ public class BaseCaseStatusTrimContribution {
 	}
 	
 	BCSVersionRecord myRecord = new BCSVersionRecord();
+	private Label mainLabel = null;
 
 	@PostConstruct
 	protected Control createControl(Composite parent) {
@@ -81,6 +82,7 @@ public class BaseCaseStatusTrimContribution {
 		};
 		control.setLayout(new FillLayout());
 		final Label myLabel = new Label(control, SWT.CENTER);
+		mainLabel = myLabel;
 		myLabel.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -170,6 +172,12 @@ public class BaseCaseStatusTrimContribution {
 		BaseCaseVersionsProviderService service = plugin.getBaseCaseVersionsProviderService();
 		if (service != null && pListener != null) {
 			service.removeChangedListener(pListener);
+		}
+		if (mainLabel != null && !mainLabel.isDisposed()) {
+			if (mainLabel.getImage()!= null && !mainLabel.getImage().isDisposed()) {
+				mainLabel.getImage().dispose();
+			}
+			mainLabel.dispose();
 		}
 	}
 	

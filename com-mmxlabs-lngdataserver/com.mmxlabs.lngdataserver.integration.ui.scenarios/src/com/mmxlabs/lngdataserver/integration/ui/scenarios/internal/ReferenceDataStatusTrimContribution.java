@@ -53,6 +53,7 @@ public class ReferenceDataStatusTrimContribution {
 	
 	private RDSRecords currentRecords;
 	private RDSRecords newRecords;
+	private Label mainLabel = null;
 
 
 	@PostConstruct
@@ -90,6 +91,7 @@ public class ReferenceDataStatusTrimContribution {
 		};
 		control.setLayout(new FillLayout());
 		final Label myLabel = new Label(control, SWT.CENTER);
+		mainLabel = myLabel;
 		myLabel.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -175,6 +177,12 @@ public class ReferenceDataStatusTrimContribution {
 		BaseCaseVersionsProviderService service = plugin.getBaseCaseVersionsProviderService();
 		if (service != null && pListener != null) {
 			service.removeChangedListener(pListener);
+		}
+		if (mainLabel != null && !mainLabel.isDisposed()) {
+			if (mainLabel.getImage()!= null && !mainLabel.getImage().isDisposed()) {
+				mainLabel.getImage().dispose();
+			}
+			mainLabel.dispose();
 		}
 	}
 	
