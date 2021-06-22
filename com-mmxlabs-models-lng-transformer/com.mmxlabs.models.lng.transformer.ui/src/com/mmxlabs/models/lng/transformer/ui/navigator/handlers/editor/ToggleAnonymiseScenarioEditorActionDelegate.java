@@ -61,7 +61,7 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 	protected EditingDomain editingDomain;
 	private static final Set<String> usedIDStrings = new HashSet<>();
 	
-	private static final String VesselID = "Charter";
+	private static final String VesselID = "Vessel";
 	private static final String VesselShortID = "VSL";
 	private static final String BuyID = "Purchase";
 	private static final String SellID = "Sale";
@@ -244,7 +244,8 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 	}
 	
 	private static String getNewName(final List<AnonymisationRecord> records, final String oldName, final AnonymisationRecordType type) {
-		if (oldName == null || type == null || records == null || records.isEmpty())
+		if (oldName == null || type == null || records == null || records.isEmpty() 
+				|| (type == AnonymisationRecordType.VesselShortID && oldName == ""))
 			return "";
 		final List<AnonymisationRecord> filtered = records.stream().filter(r -> r.type == type && oldName.equalsIgnoreCase(r.oldName)).collect(Collectors.toList());
 		if (!filtered.isEmpty()) {
@@ -285,7 +286,7 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 	
 	private static String suggestNewName(final RFEntry entry) {
 		int counter = 0;
-		String suggestedName = entry.prefix;//Sting.format("%s-%d", entry.prefix, counter++);
+		String suggestedName = entry.prefix;
 		String prefix = entry.prefix;
 		if (entry.renamee instanceof Slot) {
 			final Slot<?> slot = (Slot<?>) entry.renamee;
@@ -293,11 +294,15 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 			suggestedName = String.format("%s-%s-%s-%d", getSlotPrefix(slot), slot.getPort().getName(), slot.getWindowStart().format(dtf), slot.getWindowStartTime());
 			prefix = suggestedName;
 		}
-		if (entry.renamee instanceof Vessel && entry.type == AnonymisationRecordType.VesselID) {
+		if (entry.renamee instanceof Vessel) {
 			final Vessel v = (Vessel) entry.renamee;
-			String capacity = String.format("%d", (int)(v.getCapacity() / 1_000.0));
+			String capacity = String.format("%dK", (int)(v.getCapacity() / 1_000.0));
 			String type = v.getType();
-			suggestedName = String.format("Charter-%s-%s", capacity, type);
+			String vPrefix = "Vessel";
+			if (entry.type == AnonymisationRecordType.VesselShortID){
+				vPrefix = "VSL";
+			}
+			suggestedName = String.format("%s-%s-%s", vPrefix, capacity, type);
 			prefix = suggestedName;
 		}
 		while(usedIDStrings.contains(suggestedName)) {
