@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor;
 
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,6 +31,7 @@ import org.eclipse.ui.actions.ActionDelegate;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
@@ -227,7 +229,7 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 	private static Command rename(RFEntry entry) {
 		String name = getNewName(entry.records, entry.name, entry.type);
 		if (name.isEmpty()) {
-			name = suggestNewName(entry.prefix);
+			name = suggestNewName(entry);
 			entry.records.add(new AnonymisationRecord(entry.name, name, entry.type));
 		}
 		return SetCommand.create(entry.editingDomain, entry.renamee, entry.feature, name);
@@ -279,6 +281,49 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 		}
 		usedIDStrings.add(suggestedName);
 		return suggestedName;
+	}
+	
+	private static String suggestNewName(final RFEntry entry) {
+		int counter = 0;
+		String suggestedName = entry.prefix;//Sting.format("%s-%d", entry.prefix, counter++);
+		String prefix = entry.prefix;
+		if (entry.renamee instanceof Slot) {
+			final Slot<?> slot = (Slot<?>) entry.renamee;
+			final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+			suggestedName = String.format("%s-%s-%s-%d", getSlotPrefix(slot), slot.getPort().getName(), slot.getWindowStart().format(dtf), slot.getWindowStartTime());
+			prefix = suggestedName;
+		}
+		if (entry.renamee instanceof Vessel && entry.type == AnonymisationRecordType.VesselID) {
+			final Vessel v = (Vessel) entry.renamee;
+			String capacity = String.format("%d", (int)(v.getCapacity() / 1_000.0));
+			String type = v.getType();
+			suggestedName = String.format("Charter-%s-%s", capacity, type);
+			prefix = suggestedName;
+		}
+		while(usedIDStrings.contains(suggestedName)) {
+			suggestedName = String.format("%s-%d", prefix, counter++);
+		}
+		usedIDStrings.add(suggestedName);
+		return suggestedName;
+	}
+	
+	private static String getSlotPrefix(final Slot<?> slot) {
+		if (slot instanceof LoadSlot) {
+			final LoadSlot ls = (LoadSlot) slot;
+			if (ls.isDESPurchase()) {
+				return "DP";
+			} else {
+				return "FP";
+			}
+		} else if (slot instanceof DischargeSlot) {
+			final DischargeSlot ds = (DischargeSlot) slot;
+			if (ds.isFOBSale()) {
+				return "FS";
+			} else {
+				return "DS";
+			}
+		}
+		return "UD";
 	}
 	
 	private class RFEntry{
