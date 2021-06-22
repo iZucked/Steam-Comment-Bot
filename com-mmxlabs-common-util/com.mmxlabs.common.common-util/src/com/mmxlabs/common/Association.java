@@ -5,6 +5,8 @@
 package com.mmxlabs.common;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -94,5 +96,25 @@ public final class Association<A, B> {
 	public void clear() {
 		forwards.clear();
 		reverse.clear();
+	}
+
+	/**
+	 * Returns an iterator that wraps the forwards map. Uses wrapper to prevent any modification to the original map.
+	 */
+	public Iterator<Pair<A, B>> iterator() {
+		return new Iterator<Pair<A, B>>() {
+			final Iterator<Entry<A, B>> forwardsIterator = forwards.entrySet().iterator();
+
+			@Override
+			public boolean hasNext() {
+				return forwardsIterator.hasNext();
+			}
+
+			@Override
+			public @NonNull Pair<A, B> next() {
+				final Entry<A, B> entry = forwardsIterator.next();
+				return Pair.of(entry.getKey(), entry.getValue());
+			}
+		};
 	}
 }
