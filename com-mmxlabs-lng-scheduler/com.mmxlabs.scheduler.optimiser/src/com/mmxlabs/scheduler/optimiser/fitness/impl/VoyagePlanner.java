@@ -61,6 +61,7 @@ import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCh
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.maintenance.IMaintenanceEvaluator;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.IdleFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.LNGFuelKeys;
@@ -70,6 +71,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -121,6 +123,9 @@ public class VoyagePlanner implements IVoyagePlanner {
 
 	@Inject
 	private ActualsBaseFuelHelper actualsBaseFuelHelper;
+
+	@Inject
+	private ILNGVoyageCalculator voyageCalculator;
 
 	/**
 	 * Returns a voyage options object and extends the current VPO with appropriate choices for a particular journey. TODO: refactor this if possible to simplify it and make it stateless (it currently
@@ -633,7 +638,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 		boolean planSet = false;
 
 		if (maintenanceEvaluator != null) {
-			final List<@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord>> lp = maintenanceEvaluator.processSchedule(heelVolumeRangeInM3, vesselAvailability, plan, portTimesRecord, annotatedSolution);
+			final List<@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord>> lp = maintenanceEvaluator.processSchedule(heelVolumeRangeInM3, vesselAvailability, plan, portTimesRecord,
+					annotatedSolution);
 			if (lp != null) {
 				runningVoyagePlanPtrPairs = lp;
 			}
@@ -648,7 +654,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 					.collect(Collectors.toList());
 
 			final Iterator<@Nullable Pair<@NonNull VoyagePlan, @NonNull IAllocationAnnotation>> beIter = pairs.iterator();
-			// By construction, the iterator must have at least one element. If the break even evaluator ran, then it should only affect the first voyage plan since only that one can include a cargo (sequences are broken on loads).
+			// By construction, the iterator must have at least one element. If the break even evaluator ran, then it should only affect the first voyage plan since only that one can include a cargo
+			// (sequences are broken on loads).
 			final Pair<@NonNull VoyagePlan, @NonNull IAllocationAnnotation> p = beIter.next();
 			// Since only the first voyage plan can involve a cargo, all remaining break even evaluations should be null
 			while (beIter.hasNext()) {
@@ -663,18 +670,57 @@ public class VoyagePlanner implements IVoyagePlanner {
 		// Later voyage plans are not tested by the GCO since their fuel prices could be dependent on a (purchase) break-even price
 		final List<Integer> nonGCOIndices = new ArrayList<>();
 		if (beVoyagePlanPtrPair == null && generatedCharterOutEvaluator != null) {
+			long[] currentHeelVolumeRange = heelVolumeRangeInM3;
 			final List<@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord>> replacementRunningVoyagePlanPtrPairs = new ArrayList<>();
 			int idx = 0;
 			for (final @NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord> oldPair : runningVoyagePlanPtrPairs) {
-				final List<@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord>> lp = generatedCharterOutEvaluator.processSchedule(heelVolumeRangeInM3, vesselAvailability, oldPair.getFirst(), oldPair.getSecond(),
-						annotatedSolution);
+				// final long[] currentHeelVolumeRange;
+
+				// final IPortSlot firstSlot = oldPair.getSecond().getFirstSlot();
+				// if (firstSlot != null && firstSlot.getPortType() == PortType.Maintenance) {
+				// final long startingHeel = oldPair.getFirst().getStartingHeelInM3();
+				// currentHeelVolumeRange = new long[] {startingHeel, startingHeel};
+				// } else {
+				// currentHeelVolumeRange = heelVolumeRangeInM3;
+				// }
+				// if (runningVoyagePlanPtrPairs.size() == 3) {
+				// int i = 0;
+				// }
+				final List<@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord>> lp = generatedCharterOutEvaluator.processSchedule(currentHeelVolumeRange, vesselAvailability,
+						oldPair.getFirst(), oldPair.getSecond(), annotatedSolution);
 				if (lp != null) {
 					lp.forEach(replacementRunningVoyagePlanPtrPairs::add);
 					assert lp.size() == 2;
 					idx += 2;
 					planSet = true;
+					final long leftoverHeel = lp.get(1).getFirst().getRemainingHeelInM3();
+					currentHeelVolumeRange = new long[] { leftoverHeel, leftoverHeel };
 				} else {
-					replacementRunningVoyagePlanPtrPairs.add(oldPair);
+
+					if (idx != 0 && oldPair.getFirst().getStartingHeelInM3() != currentHeelVolumeRange[0]) {
+						final PortTimesRecord replacementPtr = new PortTimesRecord(oldPair.getSecond());
+						final VoyagePlan replacementVoyagePlan = new VoyagePlan();
+						final IDetailsSequenceElement[] replacementSequence = new IDetailsSequenceElement[oldPair.getFirst().getSequence().length];
+						for (int i = 0; i < replacementSequence.length; ++i) {
+							IDetailsSequenceElement detailsSequenceElement = oldPair.getFirst().getSequence()[i];
+							if (detailsSequenceElement instanceof PortDetails) {
+								replacementSequence[i] = ((PortDetails) detailsSequenceElement).clone();
+							} else if (detailsSequenceElement instanceof VoyageDetails) {
+								replacementSequence[i] = ((VoyageDetails) detailsSequenceElement).clone();
+							} else {
+								throw new IllegalStateException("Unknown sequence type");
+							}
+						}
+						voyageCalculator.calculateVoyagePlan(replacementVoyagePlan, vesselAvailability.getVessel(), vesselAvailability.getCharterCostCalculator(), currentHeelVolumeRange,
+								vesselBaseFuelCalculator.getBaseFuelPrices(vesselAvailability.getVessel(), replacementPtr), replacementPtr, replacementSequence);
+						replacementRunningVoyagePlanPtrPairs.add(Pair.of(replacementVoyagePlan, replacementPtr));
+						int i = 0;
+					} else {
+						int i = 0;
+						replacementRunningVoyagePlanPtrPairs.add(oldPair);
+					}
+					final long leftoverHeel = oldPair.getFirst().getRemainingHeelInM3();
+					currentHeelVolumeRange = new long[] { leftoverHeel, leftoverHeel };
 					nonGCOIndices.add(idx);
 					++idx;
 				}
@@ -698,13 +744,16 @@ public class VoyagePlanner implements IVoyagePlanner {
 					replacementRunningVoyagePlanPtrPairs.add(oldPairs.next());
 				}
 				final @NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord> pairToCheck = oldPairs.next();
-				final List<@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord>> lp = generatedCharterLengthEvaluator.processSchedule(heelVolumeRangeInM3, vesselAvailability, pairToCheck.getFirst(), pairToCheck.getSecond(), annotatedSolution);
+				final List<@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord>> lp = generatedCharterLengthEvaluator.processSchedule(heelVolumeRangeInM3, vesselAvailability,
+						pairToCheck.getFirst(), pairToCheck.getSecond(), annotatedSolution);
 				if (lp != null) {
 					for (final @NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord> p : lp) {
-						@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord> pairToAdd = p;
+						@NonNull
+						Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord> pairToAdd = p;
 						if (p.getSecond() instanceof IAllocationAnnotation) {
 							if (breakEvenEvaluator != null) {
-								final Pair<@NonNull VoyagePlan, @NonNull IAllocationAnnotation> pp = breakEvenEvaluator.processSchedule(vesselAvailability, p.getFirst(), p.getSecond(), annotatedSolution);
+								final Pair<@NonNull VoyagePlan, @NonNull IAllocationAnnotation> pp = breakEvenEvaluator.processSchedule(vesselAvailability, p.getFirst(), p.getSecond(),
+										annotatedSolution);
 								if (pp != null) {
 									pairToAdd = Pair.of(pp.getFirst(), (IPortTimesRecord) pp.getSecond());
 								}
