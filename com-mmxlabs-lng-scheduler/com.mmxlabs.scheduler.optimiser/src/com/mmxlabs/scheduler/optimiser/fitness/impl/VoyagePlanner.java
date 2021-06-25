@@ -35,9 +35,12 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
+import com.mmxlabs.scheduler.optimiser.components.impl.MaintenanceVesselEventPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.VesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
@@ -642,6 +645,14 @@ public class VoyagePlanner implements IVoyagePlanner {
 					annotatedSolution);
 			if (lp != null) {
 				runningVoyagePlanPtrPairs = lp;
+				final IPortSlot iPortSlot = lp.get(0).getSecond().getReturnSlot();
+				if (iPortSlot instanceof MaintenanceVesselEventPortSlot) {
+					final MaintenanceVesselEventPortSlot maintenancePortSlot = (MaintenanceVesselEventPortSlot) iPortSlot;
+					final IVesselEventPortSlot vesselEventPortSlot = maintenancePortSlot.getFormerPortSlot();
+					if (vesselEventPortSlot.getId().equals("M1")) {
+						int i = 0;
+					}
+				}
 			}
 		}
 
@@ -666,26 +677,30 @@ public class VoyagePlanner implements IVoyagePlanner {
 			beVoyagePlanPtrPair = null;
 		}
 
+		// Disable GCO if maintenance events present since currently can get volume violations
+		// Could just check if runningVoyagePlanPtrPairs.size() >= 2, but loop below is more change resistant
+		boolean hasMaintenanceEvents = false;
+		final IDetailsSequenceElement[] originalSequence = originalPlan.getSequence();
+		for (final IDetailsSequenceElement sequenceElement : originalSequence) {
+			if (sequenceElement instanceof PortDetails) {
+				final PortDetails portDetails = (PortDetails) sequenceElement;
+				if (portDetails.getOptions().getPortSlot().getPortType() == PortType.Maintenance) {
+					hasMaintenanceEvents = true;
+					break;
+				}
+			}
+		}
+
 		// If the break-even ran, then we cannot use the GCO as this changes ballast leg and thus the b/e will be wrong.
 		// Later voyage plans are not tested by the GCO since their fuel prices could be dependent on a (purchase) break-even price
 		final List<Integer> nonGCOIndices = new ArrayList<>();
-		if (beVoyagePlanPtrPair == null && generatedCharterOutEvaluator != null) {
+		if (beVoyagePlanPtrPair == null && generatedCharterOutEvaluator != null && !hasMaintenanceEvents) {
+			// Assertion below currently should hold.
+			assert runningVoyagePlanPtrPairs.size() == 1;
 			long[] currentHeelVolumeRange = heelVolumeRangeInM3;
 			final List<@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord>> replacementRunningVoyagePlanPtrPairs = new ArrayList<>();
 			int idx = 0;
 			for (final @NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord> oldPair : runningVoyagePlanPtrPairs) {
-				// final long[] currentHeelVolumeRange;
-
-				// final IPortSlot firstSlot = oldPair.getSecond().getFirstSlot();
-				// if (firstSlot != null && firstSlot.getPortType() == PortType.Maintenance) {
-				// final long startingHeel = oldPair.getFirst().getStartingHeelInM3();
-				// currentHeelVolumeRange = new long[] {startingHeel, startingHeel};
-				// } else {
-				// currentHeelVolumeRange = heelVolumeRangeInM3;
-				// }
-				// if (runningVoyagePlanPtrPairs.size() == 3) {
-				// int i = 0;
-				// }
 				final List<@NonNull Pair<@NonNull VoyagePlan, @NonNull IPortTimesRecord>> lp = generatedCharterOutEvaluator.processSchedule(currentHeelVolumeRange, vesselAvailability,
 						oldPair.getFirst(), oldPair.getSecond(), annotatedSolution);
 				if (lp != null) {
@@ -696,7 +711,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 					final long leftoverHeel = lp.get(1).getFirst().getRemainingHeelInM3();
 					currentHeelVolumeRange = new long[] { leftoverHeel, leftoverHeel };
 				} else {
-
+					// Recalculate voyage plan based on remaining heel given by GCO on previous plan
+					final Pair<VoyagePlan, IPortTimesRecord> pairKept;
 					if (idx != 0 && oldPair.getFirst().getStartingHeelInM3() != currentHeelVolumeRange[0]) {
 						final PortTimesRecord replacementPtr = new PortTimesRecord(oldPair.getSecond());
 						final VoyagePlan replacementVoyagePlan = new VoyagePlan();
@@ -713,13 +729,12 @@ public class VoyagePlanner implements IVoyagePlanner {
 						}
 						voyageCalculator.calculateVoyagePlan(replacementVoyagePlan, vesselAvailability.getVessel(), vesselAvailability.getCharterCostCalculator(), currentHeelVolumeRange,
 								vesselBaseFuelCalculator.getBaseFuelPrices(vesselAvailability.getVessel(), replacementPtr), replacementPtr, replacementSequence);
-						replacementRunningVoyagePlanPtrPairs.add(Pair.of(replacementVoyagePlan, replacementPtr));
-						int i = 0;
+						pairKept = Pair.of(replacementVoyagePlan, replacementPtr);
 					} else {
-						int i = 0;
-						replacementRunningVoyagePlanPtrPairs.add(oldPair);
+						pairKept = oldPair;
 					}
-					final long leftoverHeel = oldPair.getFirst().getRemainingHeelInM3();
+					replacementRunningVoyagePlanPtrPairs.add(pairKept);
+					final long leftoverHeel = pairKept.getFirst().getRemainingHeelInM3();
 					currentHeelVolumeRange = new long[] { leftoverHeel, leftoverHeel };
 					nonGCOIndices.add(idx);
 					++idx;
