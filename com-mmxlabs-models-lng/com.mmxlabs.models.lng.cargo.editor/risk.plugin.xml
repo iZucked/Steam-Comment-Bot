@@ -24,5 +24,12 @@
             name="Deal Sets"
             restorable="true">
       </view>
+      <view
+      		category="com.mmxlabs.lngdataserver.views.dataserver"
+            class="com.mmxlabs.models.lng.cargo.editor.risk.CargoSelectionTableEditorView"
+            id="com.mmxlabs.models.lng.cargo.editor.risk.CargoSelectionTableEditorView"
+            name="Cargoes"
+            restorable="true">
+      </view>
    </extension>
 </plugin>

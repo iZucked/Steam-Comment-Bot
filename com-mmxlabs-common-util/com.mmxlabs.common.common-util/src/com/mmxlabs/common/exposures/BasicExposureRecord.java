@@ -8,6 +8,7 @@ import java.time.LocalDate;
 
 public class BasicExposureRecord {
 	
+	private String portSlotName;
 	private long volumeMMBTU;
 	private long volumeNative;
 	private long volumeValueNative;
@@ -18,6 +19,12 @@ public class BasicExposureRecord {
 	private String volumeUnit;
 	private String currencyUnit;
 	
+	public String getPortSlotName() {
+		return portSlotName;
+	}
+	public void setPortSlotName(String portSlotName) {
+		this.portSlotName = portSlotName;
+	}
 	public long getVolumeMMBTU() {
 		return volumeMMBTU;
 	}

@@ -70,19 +70,21 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 		g.setLayoutData(layoutProvider.createTopLayoutData(root, object, object));
 		g.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 		
-		topLevel = new VesselAvailabilityDetailComposite(g, SWT.NONE, toolkit, VesselAvailabilityDetailGroup.TOP_LEFT);
+		topLevel = new VesselAvailabilityDetailComposite(g, SWT.NONE, toolkit, VesselAvailabilityDetailGroup.TOP_LEFT, dialogContext);
 		topLevel.setCommandHandler(commandHandler);
 		topLevel.setEditorWrapper(editorWrapper);
 		topLevel.display(dialogContext, root, object, range, dbc);
 		
-		IDisplayComposite topRight = new VesselAvailabilityDetailComposite(g, SWT.NONE, toolkit, VesselAvailabilityDetailGroup.TOP_RIGHT);
+		IDisplayComposite topRight = new VesselAvailabilityDetailComposite(g, SWT.NONE, toolkit, VesselAvailabilityDetailGroup.TOP_RIGHT, dialogContext);
 		topRight.setCommandHandler(commandHandler);
 		topRight.setEditorWrapper(editorWrapper);
 		topRight.display(dialogContext, root, object, range, dbc);
 
 		checkForNewAvailability(object);
-		gccButton = toolkit.createButton(topRight.getComposite(), gccButtonLabel(object), SWT.CENTER);
-		gccButton.addMouseListener(new CharterContractMouseListener(object));
+		if (!dialogContext.isMultiEdit()) {
+			gccButton = toolkit.createButton(topRight.getComposite(), gccButtonLabel(object), SWT.CENTER);
+			gccButton.addMouseListener(new CharterContractMouseListener(object));
+		}
 
 		Composite midComposite = toolkit.createComposite(this, SWT.NONE);
 		midComposite.setLayout(new GridLayout(1, true));
@@ -94,13 +96,14 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 		g2.setLayout(new GridLayout());
 		g2.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 		
-		IDisplayComposite startStuff = new VesselAvailabilityDetailComposite(g2, SWT.NONE, toolkit, VesselAvailabilityDetailGroup.START);
+		IDisplayComposite startStuff = new VesselAvailabilityDetailComposite(g2, SWT.NONE, toolkit, VesselAvailabilityDetailGroup.START, dialogContext);
 		startStuff.setCommandHandler(commandHandler);
 		startStuff.setEditorWrapper(editorWrapper);
 		startStuff.display(dialogContext, root, object, range, dbc);
 		
 		repositioningFeeComposite = new RepositioningFeeTermsDetailComposite(g2, SWT.NONE, dialogContext, toolkit, defaultResizeAction());
 		repositioningFeeComposite.setCommandHandler(commandHandler);
+		repositioningFeeComposite.setEditorWrapper(editorWrapper);
 		repositioningFeeComposite.display(dialogContext, root, object, range, dbc);
 		
 		Composite bottomComposite = toolkit.createComposite(this, SWT.NONE);
@@ -113,13 +116,14 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 		g3.setLayout(new GridLayout());
 		g3.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 		
-		IDisplayComposite endStuff = new VesselAvailabilityDetailComposite(g3, SWT.NONE, toolkit, VesselAvailabilityDetailGroup.END);
+		IDisplayComposite endStuff = new VesselAvailabilityDetailComposite(g3, SWT.NONE, toolkit, VesselAvailabilityDetailGroup.END, dialogContext);
 		endStuff.setCommandHandler(commandHandler);
 		endStuff.setEditorWrapper(editorWrapper);
 		endStuff.display(dialogContext, root, object, range, dbc);
 		
 		ballastBonusComposite = new BallastBonusTermsDetailComposite(g3, SWT.NONE, dialogContext, toolkit, defaultResizeAction());
 		ballastBonusComposite.setCommandHandler(commandHandler);
+		ballastBonusComposite.setEditorWrapper(editorWrapper);
 		ballastBonusComposite.display(dialogContext, root, object, range, dbc);
 
 		this.setLayout(new GridLayout(1, true));

@@ -647,48 +647,42 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 					if (loadColumns.contains(column)) {
 						if (rowDataItem.loadSlot != null) {
-							final IMenuListener listener = menuHelper.createLoadSlotMenuListener(rootData.getLoadSlots(), idx);
-							listener.menuAboutToShow(mgr);
-							if (contextMenuExtensions != null) {
-								final Slot<?> slot = rootData.getLoadSlots().get(idx);
-								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
-									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
-								}
-							}
+							createLoadSlotMenuListener(mgr, idx);
 						} else {
-							final IMenuListener listener = menuHelper.createDischargeSlotMenuListener(rootData.getDischargeSlots(), idx);
-							listener.menuAboutToShow(mgr);
-							if (contextMenuExtensions != null) {
-								final Slot<?> slot = rootData.getDischargeSlots().get(idx);
-								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
-									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
-								}
-							}
+							createDischargeSlotMenuListener(mgr, idx);
 						}
 					}
 					if (dischargeColumns.contains(column)) {
 						if (rowDataItem.dischargeSlot != null) {
-							final IMenuListener listener = menuHelper.createDischargeSlotMenuListener(rootData.getDischargeSlots(), idx);
-							listener.menuAboutToShow(mgr);
-							if (contextMenuExtensions != null) {
-								final Slot<?> slot = rootData.getDischargeSlots().get(idx);
-								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
-									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
-								}
-							}
+							createDischargeSlotMenuListener(mgr, idx);
 						} else if (rowDataItem.loadSlot != null) {
-							final IMenuListener listener = menuHelper.createLoadSlotMenuListener(rootData.getLoadSlots(), idx);
-							listener.menuAboutToShow(mgr);
-							if (contextMenuExtensions != null) {
-								final Slot<?> slot = rootData.getLoadSlots().get(idx);
-								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
-									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
-								}
-							}
+							createLoadSlotMenuListener(mgr, idx);
 						}
 					}
 
 					menu.setVisible(true);
+				}
+			}
+
+			private void createDischargeSlotMenuListener(final MenuManager mgr, final int idx) {
+				final IMenuListener listener = menuHelper.createDischargeSlotMenuListener(rootData.getDischargeSlots(), idx);
+				listener.menuAboutToShow(mgr);
+				if (contextMenuExtensions != null) {
+					final Slot<?> slot = rootData.getDischargeSlots().get(idx);
+					for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
+						ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
+					}
+				}
+			}
+
+			private void createLoadSlotMenuListener(final MenuManager mgr, final int idx) {
+				final IMenuListener listener = menuHelper.createLoadSlotMenuListener(rootData.getLoadSlots(), idx);
+				listener.menuAboutToShow(mgr);
+				if (contextMenuExtensions != null) {
+					final Slot<?> slot = rootData.getLoadSlots().get(idx);
+					for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
+						ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
+					}
 				}
 			}
 

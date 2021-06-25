@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
 import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeLayoutProvider;
 
@@ -31,15 +32,17 @@ import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeLayoutProvider;
 public class VesselAvailabilityDetailComposite extends DefaultDetailComposite {
 	
 	private final VesselAvailabilityDetailGroup detailGroup;
+	private final IDialogEditingContext dialogContext;
 
 	public enum VesselAvailabilityDetailGroup{
 		TOP_LEFT, TOP_LEFT_EXTRA, TOP_RIGHT, TOP_RIGHT_EXTRA, GENERAL, START, END;
 	}
 	
-	public VesselAvailabilityDetailComposite(Composite parent, int style, FormToolkit toolkit, VesselAvailabilityDetailGroup detailGroup) {
+	public VesselAvailabilityDetailComposite(Composite parent, int style, FormToolkit toolkit, VesselAvailabilityDetailGroup detailGroup, IDialogEditingContext dialogContext) {
 		super(parent, style, toolkit);
 		this.detailGroup = detailGroup;
-	}	
+		this.dialogContext = dialogContext;
+	}
 	
 	@Override
 	public IInlineEditor addInlineEditor(final IInlineEditor editor) {
@@ -66,7 +69,7 @@ public class VesselAvailabilityDetailComposite extends DefaultDetailComposite {
 			cdg = VesselAvailabilityDetailGroup.TOP_RIGHT;
 		}
 		
-		if (editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_GenericCharterContract()) {
+		if (dialogContext != null && !dialogContext.isMultiEdit() && editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_GenericCharterContract()) {
 			cdg = VesselAvailabilityDetailGroup.TOP_LEFT;
 		}
 

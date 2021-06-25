@@ -13,6 +13,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 
@@ -49,7 +50,7 @@ public interface IShippingHoursRestrictionProvider extends IDataComponentProvide
 	 * @param vessel
 	 * @return
 	 */
-	int getReferenceSpeed(@NonNull IVessel vessel, @NonNull VesselState vesselState);
+	int getReferenceSpeed(@NonNull IPortSlot slot, @NonNull IVessel vessel, @NonNull VesselState vesselState);
 
 	@NonNull
 	Collection<ERouteOption> getDivertibleDESAllowedRoutes(@NonNull ILoadOption desPurchase);

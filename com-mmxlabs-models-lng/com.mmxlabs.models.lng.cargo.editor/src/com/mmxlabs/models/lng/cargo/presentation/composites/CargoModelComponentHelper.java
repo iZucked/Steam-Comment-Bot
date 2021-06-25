@@ -76,6 +76,8 @@ public class CargoModelComponentHelper extends BaseComponentHelper {
 		add_charterInMarketOverridesEditor(detailComposite, topClass);
 		add_paperDealsEditor(detailComposite, topClass);
 		add_dealSetsEditor(detailComposite, topClass);
+		add_cargoesForExposuresEditor(detailComposite, topClass);
+		add_cargoesForHedgingEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the loadSlots feature on CargoModel
@@ -181,5 +183,23 @@ public class CargoModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_dealSetsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO_MODEL__DEAL_SETS));
+	}
+
+	/**
+	 * Create the editor for the cargoesForExposures feature on CargoModel
+	 *
+	 * @generated
+	 */
+	protected void add_cargoesForExposuresEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO_MODEL__CARGOES_FOR_EXPOSURES));
+	}
+
+	/**
+	 * Create the editor for the cargoesForHedging feature on CargoModel
+	 *
+	 * @generated
+	 */
+	protected void add_cargoesForHedgingEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO_MODEL__CARGOES_FOR_HEDGING));
 	}
 }

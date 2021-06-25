@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -1735,6 +1736,23 @@ public class LNGScenarioTransformer {
 		}
 		if (!dischargeSlot.isFOBSale()) {
 			applySlotVesselRestrictions(dischargeSlot.getSlotOrDelegateVesselRestrictions(), dischargeSlot.getSlotOrDelegateVesselRestrictionsArePermissive(), discharge, vesselAssociation);
+		} else {
+			final Iterator<Pair<Vessel, IVessel>> vesselAssociationIterator = vesselAssociation.iterator();
+			while (vesselAssociationIterator.hasNext()) {
+				final Pair<Vessel, IVessel> currentAssociation = vesselAssociationIterator.next();
+				final Vessel eVessel = currentAssociation.getFirst();
+				final IVessel oVessel = currentAssociation.getSecond();
+				final int ladenReferenceSpeed;
+				final int ballastReferenceSpeed;
+				if (shippingDaysRestrictionSpeedProvider == null) {
+					ladenReferenceSpeed = ballastReferenceSpeed = oVessel.getMaxSpeed();
+				} else {
+					ladenReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(dischargeSlot, eVessel, true));
+					ballastReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(dischargeSlot, eVessel, false));
+				}
+				builder.setShippingDaysRestrictionReferenceSpeed(discharge, oVessel, VesselState.Laden, ladenReferenceSpeed);
+				builder.setShippingDaysRestrictionReferenceSpeed(discharge, oVessel, VesselState.Ballast, ballastReferenceSpeed);
+			}
 		}
 		return discharge;
 	}
@@ -1899,8 +1917,24 @@ public class LNGScenarioTransformer {
 
 		if (!loadSlot.isDESPurchase()) {
 			applySlotVesselRestrictions(loadSlot.getSlotOrDelegateVesselRestrictions(), loadSlot.getSlotOrDelegateVesselRestrictionsArePermissive(), load, vesselAssociation);
+		} else {
+			final Iterator<Pair<Vessel, IVessel>> vesselAssociationIterator = vesselAssociation.iterator();
+			while (vesselAssociationIterator.hasNext()) {
+				final Pair<Vessel, IVessel> currentAssociation = vesselAssociationIterator.next();
+				final Vessel eVessel = currentAssociation.getFirst();
+				final IVessel oVessel = currentAssociation.getSecond();
+				final int ladenReferenceSpeed;
+				final int ballastReferenceSpeed;
+				if (shippingDaysRestrictionSpeedProvider == null) {
+					ladenReferenceSpeed = ballastReferenceSpeed = oVessel.getMaxSpeed();
+				} else {
+					ladenReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(loadSlot, eVessel, true));
+					ballastReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(loadSlot, eVessel, false));
+				}
+				builder.setShippingDaysRestrictionReferenceSpeed(load, oVessel, VesselState.Laden, ladenReferenceSpeed);
+				builder.setShippingDaysRestrictionReferenceSpeed(load, oVessel, VesselState.Ballast, ballastReferenceSpeed);
+			}
 		}
-
 		return load;
 	}
 
@@ -3132,17 +3166,6 @@ public class LNGScenarioTransformer {
 			 * set up inaccessible routes for vessel
 			 */
 			getAndSetInaccessibleRoutesForVessel(builder, eVessel, oVessel);
-
-			final int ballastReferenceSpeed;
-			final int ladenReferenceSpeed;
-			if (shippingDaysRestrictionSpeedProvider == null) {
-				ballastReferenceSpeed = ladenReferenceSpeed = oVessel.getMaxSpeed();
-			} else {
-				ballastReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(eVessel, false /* ballast */));
-				ladenReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(eVessel, true /* laden */));
-			}
-			builder.setShippingDaysRestrictionReferenceSpeed(oVessel, VesselState.Ballast, ballastReferenceSpeed);
-			builder.setShippingDaysRestrictionReferenceSpeed(oVessel, VesselState.Laden, ladenReferenceSpeed);
 
 			vesselAssociation.add(eVessel, oVessel);
 			modelEntityMap.addModelObject(eVessel, oVessel);

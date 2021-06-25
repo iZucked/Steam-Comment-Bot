@@ -30,6 +30,8 @@ import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.parser.series.SeriesParserData;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IEvaluationContext;
 import com.mmxlabs.optimiser.core.IResource;
@@ -1235,6 +1237,7 @@ public class TestCalculations {
 				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.OPTIMISE_PAPER_PNL)).toInstance(Boolean.FALSE);
 				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)).toInstance(Boolean.FALSE);
 				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_PAPER_PNL)).toInstance(Boolean.FALSE);
+				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.INDIVIDUAL_EXPOSURES)).toInstance(Boolean.FALSE);
 				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_EXPOSURES)).toInstance(Boolean.FALSE);
 				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.RE_HEDGE_WITH_PAPERS)).toInstance(Boolean.FALSE);
 				bind(SeriesParser.class).annotatedWith(Names.named(SchedulerConstants.Parser_Commodity)).toInstance(new SeriesParser(new SeriesParserData()));
