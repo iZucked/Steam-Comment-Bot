@@ -330,7 +330,9 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 			if (!reference.isMany()) {
 				final ArrayList<EObject> subOriginals = new ArrayList<>(originals.size());
 				for (final EObject original : originals) {
-					subOriginals.add((EObject) original.eGet(reference));
+					if (original != null) {
+						subOriginals.add((EObject) original.eGet(reference));
+					}
 				}
 				setCounterparts((EObject) proxy.eGet(reference), subOriginals);
 			}
