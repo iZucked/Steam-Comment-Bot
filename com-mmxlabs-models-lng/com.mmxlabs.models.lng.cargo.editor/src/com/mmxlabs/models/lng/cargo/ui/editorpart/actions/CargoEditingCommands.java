@@ -138,14 +138,15 @@ public class CargoEditingCommands {
 		return newLoad;
 	}
 	
-	public static @NonNull SpotLoadSlot createNewSpotLoad(final @NonNull EditingDomain editingDomain, final List<Command> setCommands, final CargoModel cargoModel, final boolean isDESPurchase, final SpotMarket market) {
+	public static @NonNull SpotLoadSlot createNewSpotLoad(final @NonNull EditingDomain editingDomain, final List<Command> setCommands, final CargoModel cargoModel, final SpotMarket market) {
 
 		final SpotLoadSlot newLoad = CargoFactory.eINSTANCE.createSpotLoadSlot();
-		newLoad.setDESPurchase(isDESPurchase);
+		newLoad.setDESPurchase(true);
 		newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 		newLoad.setMarket(market);
 		if (market instanceof FOBPurchasesMarket) {
 			final FOBPurchasesMarket fobPurchasesMarket = (FOBPurchasesMarket) market;
+			newLoad.setDESPurchase(false);
 			newLoad.setPort((Port) fobPurchasesMarket.getNotionalPort());
 		}
 

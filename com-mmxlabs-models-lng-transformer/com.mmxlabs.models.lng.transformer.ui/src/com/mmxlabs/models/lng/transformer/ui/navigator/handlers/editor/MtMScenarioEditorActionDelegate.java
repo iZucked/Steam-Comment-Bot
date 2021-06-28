@@ -288,7 +288,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 					continue;
 				}
 
-				double price = Double.MIN_VALUE;
+				double price = Double.MAX_VALUE;
 
 				if (!loads.isEmpty()) {
 					final SlotAllocation sa = loads.get(dischargeSlot);
@@ -303,7 +303,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 				for (final MTMResult result : row.getLhsResults()) {
 					if (result.getEarliestETA() == null)
 						continue;
-					if (price < result.getEarliestPrice()) {
+					if (price > result.getEarliestPrice()) {
 						price = result.getEarliestPrice();
 						bestResult = result;
 					}
@@ -325,7 +325,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 							}
 						}
 
-						final LoadSlot loadSlot = CargoEditingCommands.createNewSpotLoad(editingDomain, setCommands, cargoModel, !dischargeSlot.isFOBSale(), market);
+						final LoadSlot loadSlot = CargoEditingCommands.createNewSpotLoad(editingDomain, setCommands, cargoModel, market);
 						// making up the loadSlot
 						{
 							Vessel assignedVessel = null;

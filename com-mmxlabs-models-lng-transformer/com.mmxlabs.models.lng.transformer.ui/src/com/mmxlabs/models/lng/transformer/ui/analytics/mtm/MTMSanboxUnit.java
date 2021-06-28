@@ -42,7 +42,9 @@ import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -220,105 +222,16 @@ public class MTMSanboxUnit {
 					for (final MTMRow row : model.getRows()) {
 						row.getRhsResults().clear();
 						row.getLhsResults().clear();
-						final LoadSlot load;
 
-						if (row.getBuyOption() != null) {
-							load = mapper.getOriginal(row.getBuyOption());
-						} else {
-							continue;
-						}
-						if (load == null) {
-							continue;
-						}
-
-						for (final CharterInMarket shipping : model.getNominalMarkets()) {
-
-							if (!shipping.isEnabled()) {
-								continue;
-							}
-
-							for (final SpotMarket market : model.getMarkets()) {
-								final Callable<Runnable> job = () -> {
-									if (monitor.isCanceled()) {
-										return null;
-									}
-									final MTMResult mtmResult = AnalyticsFactory.eINSTANCE.createMTMResult();
-									final ExistingCharterMarketOption ecmo = AnalyticsFactory.eINSTANCE.createExistingCharterMarketOption();
-									ecmo.setCharterInMarket(shipping);
-									ecmo.setSpotIndex(-1);
-									mtmResult.setShipping(ecmo);
-									mtmResult.setTarget(market);
-
-									final InternalResult ret = new InternalResult();
-									DischargeSlot discharge = null;
-									Slot be_target = null;
-									Slot reference_slot = null;
-
-									try {
-
-										String timeZone = "UTC";
-										for (int i = 0; i < 2; ++i) {
-
-											boolean shipped = true;
-
-											if (market instanceof FOBSalesMarket) {
-												shipped = false;
-												discharge = mapper.getSalesMarketOriginal(market, YearMonth.from(load.getWindowStart()));
-												reference_slot = mapper.getSalesMarketOriginal(market, YearMonth.from(load.getWindowStart()));
-											} else if (market instanceof DESSalesMarket) {
-												if (load.isDESPurchase()) {
-													shipped = false;
-													discharge = mapper.getSalesMarketOriginal(market, YearMonth.from(load.getWindowStart()));
-													reference_slot = mapper.getSalesMarketOriginal(market, YearMonth.from(load.getWindowStart()));
-												} else {
-													shipped = true;
-													discharge = mapper.getSalesMarketOriginal(market, YearMonth.from(load.getWindowStart().plusMonths(i)));
-													reference_slot = mapper.getSalesMarketOriginal(market, YearMonth.from(load.getWindowStart().plusMonths(i)));
-												}
-											} else {
-												continue;
-											}
-											if (discharge == null) {
-												continue;
-											}
-											be_target = discharge;
-											if (discharge.getPort() == null) {
-												timeZone = load.getPort().getLocation().getTimeZone();
-											} else {
-												timeZone = discharge.getPort().getLocation().getTimeZone();
-											}
-
-											final SingleResult result = doIt(shipped, shipping, load, discharge, be_target);
-											ret.merge(result);
-											if (!shipped) {
-												// only one iteration.
-												break;
-											}
-
-										}
-										if (ret != null && ret.arrivalTime != Integer.MAX_VALUE) {
-											mtmResult.setEarliestETA(modelEntityMap.getDateFromHours(ret.arrivalTime, timeZone).toLocalDate());
-											mtmResult.setEarliestVolume(OptimiserUnitConvertor.convertToExternalVolume(ret.volumeInMMBTU));
-											mtmResult.setEarliestPrice(OptimiserUnitConvertor.convertToExternalPrice(ret.netbackPrice));
-											mtmResult.setShippingCost(
-													OptimiserUnitConvertor.convertToExternalPrice(ret.volumeInMMBTU == 0 ? 0 : //
-														Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(ret.shippingCost, ret.volumeInMMBTU)));
-										}
-										synchronized (row) {
-											if (row.getBuyOption() != null) {
-												row.getRhsResults().add(mtmResult);
-											} else {
-												row.getLhsResults().add(mtmResult);
-											}
-										}
-										return null;
-									} finally {
-										monitor.worked(1);
-									}
-								};
-								futures.add(executorService.submit(job));
-							}
-						}
+						createOpportunity(model, mapper, monitor, modelEntityMap, futures, row, mapper.getOriginal(row.getSellOption()), mapper.getOriginal(row.getBuyOption()));
+						
+//						if (row.getBuyOption() != null) {
+//							handleBuySide(model, mapper, monitor, modelEntityMap, futures, row, mapper.getOriginal(row.getBuyOption()));
+//						} else if (row.getSellOption() != null){
+//							
+//						}
+						
+						
 					}
 
 					// Block until all futures completed
@@ -373,6 +286,226 @@ public class MTMSanboxUnit {
 					lmtm.remove(best);
 					row.getRhsResults().removeAll(lmtm);
 				}
+			}
+		}
+	}
+
+	private void handleBuySide(final MTMModel model, final IMapperClass mapper, final IProgressMonitor monitor, final ModelEntityMap modelEntityMap, final List<Future<Runnable>> futures,
+			final MTMRow row, final LoadSlot load) {
+		
+		if (load == null) {
+			return;
+		}
+
+		for (final CharterInMarket shipping : model.getNominalMarkets()) {
+
+			if (!shipping.isEnabled()) {
+				continue;
+			}
+
+			for (final SpotMarket market : model.getMarkets()) {
+				final Callable<Runnable> job = () -> {
+					if (monitor.isCanceled()) {
+						return null;
+					}
+					final MTMResult mtmResult = AnalyticsFactory.eINSTANCE.createMTMResult();
+					final ExistingCharterMarketOption ecmo = AnalyticsFactory.eINSTANCE.createExistingCharterMarketOption();
+					ecmo.setCharterInMarket(shipping);
+					ecmo.setSpotIndex(-1);
+					mtmResult.setShipping(ecmo);
+					mtmResult.setTarget(market);
+
+					final InternalResult ret = new InternalResult();
+					DischargeSlot discharge = null;
+					Slot be_target = null;
+					Slot reference_slot = null;
+
+					try {
+
+						String timeZone = "UTC";
+						for (int i = 0; i < 2; ++i) {
+
+							boolean shipped = true;
+
+							if (market instanceof FOBSalesMarket) {
+								shipped = false;
+								discharge = mapper.getSalesMarketOriginal(market, YearMonth.from(load.getWindowStart()));
+								reference_slot = mapper.getSalesMarketOriginal(market, YearMonth.from(load.getWindowStart()));
+							} else if (market instanceof DESSalesMarket) {
+								if (load.isDESPurchase()) {
+									shipped = false;
+									discharge = mapper.getSalesMarketOriginal(market, YearMonth.from(load.getWindowStart()));
+									reference_slot = mapper.getSalesMarketOriginal(market, YearMonth.from(load.getWindowStart()));
+								} else {
+									shipped = true;
+									discharge = mapper.getSalesMarketOriginal(market, YearMonth.from(load.getWindowStart().plusMonths(i)));
+									reference_slot = mapper.getSalesMarketOriginal(market, YearMonth.from(load.getWindowStart().plusMonths(i)));
+								}
+							} else {
+								continue;
+							}
+							if (discharge == null) {
+								continue;
+							}
+							be_target = discharge;
+							if (discharge.getPort() == null) {
+								timeZone = load.getPort().getLocation().getTimeZone();
+							} else {
+								timeZone = discharge.getPort().getLocation().getTimeZone();
+							}
+
+							final SingleResult result = doIt(shipped, shipping, load, discharge, be_target);
+							ret.merge(result);
+							if (!shipped) {
+								// only one iteration.
+								break;
+							}
+
+						}
+						if (ret != null && ret.arrivalTime != Integer.MAX_VALUE) {
+							mtmResult.setEarliestETA(modelEntityMap.getDateFromHours(ret.arrivalTime, timeZone).toLocalDate());
+							mtmResult.setEarliestVolume(OptimiserUnitConvertor.convertToExternalVolume(ret.volumeInMMBTU));
+							mtmResult.setEarliestPrice(OptimiserUnitConvertor.convertToExternalPrice(ret.netbackPrice));
+							mtmResult.setShippingCost(
+									OptimiserUnitConvertor.convertToExternalPrice(ret.volumeInMMBTU == 0 ? 0 : //
+										Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(ret.shippingCost, ret.volumeInMMBTU)));
+						}
+						synchronized (row) {
+							if (row.getBuyOption() != null) {
+								row.getRhsResults().add(mtmResult);
+							} else {
+								row.getLhsResults().add(mtmResult);
+							}
+						}
+						return null;
+					} finally {
+						monitor.worked(1);
+					}
+				};
+				futures.add(executorService.submit(job));
+			}
+		}
+	}
+	
+	private void createOpportunity(final MTMModel model, final IMapperClass mapper, final IProgressMonitor monitor, final ModelEntityMap modelEntityMap, final List<Future<Runnable>> futures,
+			final MTMRow row, final DischargeSlot discharge, final LoadSlot load) {
+		
+		if (discharge == null && load == null) {
+			return;
+		}
+
+		for (final CharterInMarket shipping : model.getNominalMarkets()) {
+
+			if (!shipping.isEnabled()) {
+				continue;
+			}
+
+			for (final SpotMarket market : model.getMarkets()) {
+				final Callable<Runnable> job = () -> {
+					if (monitor.isCanceled()) {
+						return null;
+					}
+					
+					final MTMResult mtmResult = AnalyticsFactory.eINSTANCE.createMTMResult();
+					final ExistingCharterMarketOption ecmo = AnalyticsFactory.eINSTANCE.createExistingCharterMarketOption();
+					ecmo.setCharterInMarket(shipping);
+					ecmo.setSpotIndex(-1);
+					mtmResult.setShipping(ecmo);
+					mtmResult.setTarget(market);
+
+					final InternalResult ret = new InternalResult();
+					LoadSlot ls = load;
+					DischargeSlot ds = discharge;
+					
+					Slot<?> beTarget = null;
+
+					try {
+
+						String timeZone = "UTC";
+						for (int i = 0; i < 2; ++i) {
+
+							boolean shipped = true;
+
+							if (ls != null) {
+								if (market instanceof FOBSalesMarket) {
+									shipped = false;
+									ds = mapper.getSalesMarketOriginal(market, YearMonth.from(ls.getWindowStart()));
+								} else if (market instanceof DESSalesMarket) {
+									if (ls.isDESPurchase()) {
+										shipped = false;
+										ds = mapper.getSalesMarketOriginal(market, YearMonth.from(ls.getWindowStart()));
+									} else {
+										shipped = true;
+										ds = mapper.getSalesMarketOriginal(market, YearMonth.from(ls.getWindowStart().plusMonths(i)));
+									}
+								}
+								if (ds != null) {
+									beTarget = ds;
+								}
+							} else if (ds != null) {
+								if (market instanceof FOBPurchasesMarket) {
+									if (ds.isFOBSale()) {
+										if (((FOBPurchasesMarket) market).getNotionalPort() == ds.getPort()) {
+											shipped = false;
+											ls = mapper.getPurchaseMarketOriginal(market, YearMonth.from(ds.getWindowStart()));
+										}
+									} else {
+										shipped = true;
+										ls = mapper.getPurchaseMarketOriginal(market, YearMonth.from(ds.getWindowStart().minusMonths(i)));
+									}
+								} else if (market instanceof DESPurchaseMarket) {
+									if (!ds.isFOBSale() && ((DESPurchaseMarket) market).getDestinationPorts().contains(ds.getPort())) {
+										shipped = false;
+										ls = mapper.getPurchaseMarketOriginal(market, YearMonth.from(ds.getWindowStart()));
+									}
+								}
+								if (ls != null) {
+									beTarget = ls;
+								}
+							}
+							
+							if (ls != null && ds != null) {
+								if (shipped) {
+									timeZone = ls.getPort().getLocation().getTimeZone();
+								} else {
+									timeZone = ds.getPort().getLocation().getTimeZone();
+								}
+	
+								final SingleResult result = doIt(shipped, shipping, ls, ds, beTarget);
+								ret.merge(result);
+								if (!shipped) {
+									// only one iteration.
+									break;
+								}
+							}
+
+						}
+						
+						if (ret != null && ret.arrivalTime != Integer.MAX_VALUE) {
+							mtmResult.setEarliestETA(modelEntityMap.getDateFromHours(ret.arrivalTime, timeZone).toLocalDate());
+							mtmResult.setEarliestVolume(OptimiserUnitConvertor.convertToExternalVolume(ret.volumeInMMBTU));
+							mtmResult.setEarliestPrice(OptimiserUnitConvertor.convertToExternalPrice(ret.netbackPrice));
+							mtmResult.setShippingCost(
+									OptimiserUnitConvertor.convertToExternalPrice(ret.volumeInMMBTU == 0 ? 0 : //
+										Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(ret.shippingCost, ret.volumeInMMBTU)));
+						}
+						synchronized (row) {
+							if (mtmResult.getEarliestETA() != null) {
+								if (row.getBuyOption() != null) {
+									row.getRhsResults().add(mtmResult);
+								} else if (row.getSellOption() != null){
+									row.getLhsResults().add(mtmResult);
+								}
+							}
+						}
+						
+						return null;
+					} finally {
+						monitor.worked(1);
+					}
+				};
+				
+				futures.add(executorService.submit(job));
 			}
 		}
 	}
