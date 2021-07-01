@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Models: LNG Transformer Extensions
 Bundle-SymbolicName: com.mmxlabs.models.lng.transformer.extensions;singleton:=true
-Bundle-Version: 4.12.32.qualifier
+Bundle-Version: 4.12.32.RELEASE
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
