@@ -75,6 +75,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		boolean containsVesselEvent = false;
 		boolean containsGeneratedCharterOut = false;
 		boolean containsStartEvent = false;
+		boolean containsEndEvent = false;
 		boolean containsOpenSlot = false;
 		boolean containsPaperDeals = false;
 
@@ -90,6 +91,9 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				}
 				if (target instanceof StartEvent) {
 					containsStartEvent = true;
+				}
+				if (target instanceof EndEvent) {
+					containsEndEvent = true;
 				}
 				if (target instanceof VesselEventVisit) {
 					final VesselEventVisit vesselEventVisit = (VesselEventVisit) target;
@@ -177,7 +181,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		if (containsOpenSlot) {
 			rows.add(createRow(185, "Cancellation", true, "$", "", createCancellationCosts(options, RowType.COST)));
 		}
-		if (containsCargo || containsCharterOut || containsCooldown || containsGeneratedCharterOut || containsOpenSlot || containsPurge || containsStartEvent || containsVesselEvent) {
+		if (containsCargo || containsCharterOut || containsCooldown || containsGeneratedCharterOut || containsOpenSlot || containsPurge || containsStartEvent || containsVesselEvent  ) {
 			rows.add(createRow(190, "P&L", true, "$", "", createPNLTotal(options, RowType.REVENUE)));
 		}
 		if (containsCargo) {
