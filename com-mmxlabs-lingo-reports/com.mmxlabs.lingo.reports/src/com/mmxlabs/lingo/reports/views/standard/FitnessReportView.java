@@ -149,7 +149,7 @@ public class FitnessReportView extends ViewPart {
 					}
 				}
 			};
-			ViewerHelper.runIfViewerValid(viewer, block, r);
+			RunnerHelper.exec(r, block);
 		}
 	};
 

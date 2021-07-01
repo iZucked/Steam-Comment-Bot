@@ -64,7 +64,7 @@ public abstract class AbstractReportView extends ViewPart implements org.eclipse
 				}
 			};
 
-			ViewerHelper.runIfViewerValid(getViewer(), block, r);
+			RunnerHelper.exec(r, block);
 		}
 	};
 

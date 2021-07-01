@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -31,12 +32,13 @@ import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
-import com.mmxlabs.lingo.reports.services.ReentrantSelectionManager;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.services.SelectionServiceUtils;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -61,10 +63,9 @@ import com.mmxlabs.scenario.service.ScenarioResult;
 /**
  */
 
-public class ExposureDetailReportView extends ViewPart {
+public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener {
 
 	private ScenarioComparisonService selectedScenariosService;
-	private ReentrantSelectionManager selectionManager;
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -194,15 +195,15 @@ public class ExposureDetailReportView extends ViewPart {
 			}
 		});
 
-		selectedScenariosService = getSite().getService(ScenarioComparisonService.class);
+		final ESelectionService service = getSite().getService(ESelectionService.class);
+		service.addPostSelectionListener(this);
 
-		selectionManager = new ReentrantSelectionManager(viewer, selectedScenariosServiceListener, selectedScenariosService);
+		selectedScenariosService = getSite().getService(ScenarioComparisonService.class);
+		selectedScenariosService.addListener(selectedScenariosServiceListener);
+
 		makeActions();
-		try {
-			selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
-		} catch (Exception e) {
-			// Ignore any initial issues.
-		}
+
+		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 	}
 
 	private void makeActions() {
@@ -320,7 +321,20 @@ public class ExposureDetailReportView extends ViewPart {
 		return col;
 	}
 
+	@Override
+	public void dispose() {
+		final ESelectionService service = getSite().getService(ESelectionService.class);
+		service.removePostSelectionListener(this);
+
+		selectedScenariosService.removeListener(selectedScenariosServiceListener);
+		super.dispose();
+	}
+
 	private ISelection selection;
+
+	public ExposureDetailReportView() {
+		// super("com.mmxlabs.lingo.doc.Reports_IndexExposuresDetails");
+	}
 
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
@@ -361,20 +375,18 @@ public class ExposureDetailReportView extends ViewPart {
 				}
 			};
 
-			ViewerHelper.runIfViewerValid(viewer, block, r);
+			RunnerHelper.exec(r, block);
 		}
-
-		@Override
-		public void selectedObjectChanged(MPart source, ISelection selection) {
-			if (SelectionServiceUtils.isSelectionValid(source, selection)) {
-				// Update selection before view refresh
-				ExposureDetailReportView.this.selection = SelectionHelper.adaptSelection(selection);
-				ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
-			}
-		}
-
 	};
 	private GridTreeViewer viewer;
+
+	@Override
+	public void selectionChanged(final MPart part, final Object selectionObject) {
+		if (SelectionServiceUtils.isSelectionValid(part, selectionObject)) {
+			selection = SelectionHelper.adaptSelection(selectionObject);
+			ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+		}
+	}
 
 	@Override
 	public void setFocus() {

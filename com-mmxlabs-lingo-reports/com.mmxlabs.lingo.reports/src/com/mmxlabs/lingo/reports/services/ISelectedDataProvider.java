@@ -56,7 +56,4 @@ public interface ISelectedDataProvider {
 
 	Collection<Object> getSelectedObjects();
 
-	@Nullable
-	Collection<Object> getChangeSetSelection();
-
 }

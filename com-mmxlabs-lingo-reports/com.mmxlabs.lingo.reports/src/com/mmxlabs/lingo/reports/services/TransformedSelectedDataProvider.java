@@ -171,12 +171,4 @@ public class TransformedSelectedDataProvider implements ISelectedDataProvider {
 		}
 		return Collections.emptySet();
 	}
-	
-	@Override
-	public @Nullable Collection<Object> getChangeSetSelection() {
-		if (selectedDataProvider != null) {
-			return selectedDataProvider.getChangeSetSelection();
-		}
-		return null;
-	}
 }

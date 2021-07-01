@@ -12,11 +12,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Composite;
 
 import com.google.inject.Inject;
@@ -26,7 +23,6 @@ import com.mmxlabs.lingo.reports.ReportContents;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
-import com.mmxlabs.lingo.reports.services.ReentrantSelectionManager;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
@@ -69,19 +65,17 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 	private List<Object> elements;
 
 	@Inject
-	private ScenarioComparisonService scenarioComparisonService;
-
-	protected ReentrantSelectionManager selectionManager;
+	private ScenarioComparisonService selectedScenariosService;
 
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
-		@Override
-		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
-
+@Override
+public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
+ 
 			ViewerHelper.setInput(viewer, block, () -> {
-
+				
 				ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
-
+				
 				elements.clear();
 				elementCollector.beginCollecting(pinned != null);
 				if (pinned != null) {
@@ -94,11 +88,6 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 				setCurrentSelectedDataProvider(new TransformedSelectedDataProvider(selectedDataProvider));
 				return elements;
 			});
-		}
-
-		@Override
-		public void selectedObjectChanged(@Nullable MPart source, @NonNull ISelection selection) {
-			selectionManager.setSelection(selection, false, true);
 		}
 	};
 
@@ -220,7 +209,7 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 		clearInputEquivalents();
 		for (final Object event : result) {
 			if (event instanceof SlotVisit) {
-				setInputEquivalents(event, Arrays.asList(new Object[] { ((SlotVisit) event).getSlotAllocation().getSlot() }));
+				setInputEquivalents(event, Arrays.asList(new Object[] { ((SlotVisit) event).getSlotAllocation().getCargoAllocation() }));
 			} else if (event instanceof VesselEventVisit) {
 				setInputEquivalents(event, Arrays.asList(new Object[] { ((VesselEventVisit) event).getVesselEvent() }));
 			} else {
@@ -288,7 +277,7 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 
 	@Override
 	public void initPartControl(final Composite parent) {
-		elements = new LinkedList<>();
+		elements = new LinkedList<Object>();
 		transformer = new PortRotationsReportTransformer(builder);
 		elementCollector = transformer.getElementCollector(elements, this);
 
@@ -310,13 +299,15 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 		viewer.setContentProvider(new ArrayContentProvider());
 		ViewerHelper.setInput(viewer, true, elements);
 
-		selectionManager = new ReentrantSelectionManager(viewer, selectedScenariosServiceListener, scenarioComparisonService);
-		try {
-			scenarioComparisonService.triggerListener(selectedScenariosServiceListener, false);
-		} catch (Exception e) {
-			// Ignore any initial issues.
-		}
-		selectionManager.addListener(this);
+		selectedScenariosService.addListener(selectedScenariosServiceListener);
+
+		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
+	}
+
+	@Override
+	public void dispose() {
+		selectedScenariosService.removeListener(selectedScenariosServiceListener);
+		super.dispose();
 	}
 
 	@Override

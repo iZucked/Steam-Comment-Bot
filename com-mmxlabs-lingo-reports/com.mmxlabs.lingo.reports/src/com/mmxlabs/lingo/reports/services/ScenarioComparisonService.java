@@ -5,13 +5,11 @@
 package com.mmxlabs.lingo.reports.services;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EventObject;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -31,7 +29,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +65,7 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 	 */
 	private final AtomicInteger counter = new AtomicInteger();
 
-	private final AtomicBoolean inSelectionChanged = new AtomicBoolean(false);
+	private AtomicBoolean inSelectionChanged = new AtomicBoolean(false);
 
 	private final DiffOptions diffOptions = ScheduleReportFactory.eINSTANCE.createDiffOptions();
 
@@ -216,55 +213,31 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 		}
 	}
 
-	private synchronized void scheduleSelectionRefresh(final ISelection originalSelection, final boolean withChangeSets, final boolean block) {
-
+	private synchronized void scheduleSelectionRefresh(final ISelection selection, boolean withChangeSets, final boolean block) {
 		final int value = counter.get();
 		if (PlatformUI.isWorkbenchRunning()) {
 			RunnerHelper.exec(() -> {
-				// Is this the current request? If not abort
 				if (value != counter.get()) {
 					return;
 				}
 				if (inSelectionChanged.compareAndSet(false, true)) {
 					try {
 
-						ISelection sel = originalSelection;
-
+						// Selection object is expected to have ChangeSet info, so extract and update the information
 						if (withChangeSets) {
-							// Selection object is expected to have ChangeSet info, so extract and update the information
-							updateChangeSetFromSelection(originalSelection, currentSelectedDataProvider);
-						} else {
-							// No new change sets, but try and retain any change set information from the previous selection state.
-							final Set<Object> selectedObjects = new LinkedHashSet<>();
-
-							if (originalSelection instanceof IStructuredSelection) {
-								final IStructuredSelection ss = (IStructuredSelection) originalSelection;
-								ss.forEach(obj -> selectedObjects.add(obj));
-							}
-
-							selectedObjects.add(currentSelectedDataProvider.getChangeSet());
-							selectedObjects.add(currentSelectedDataProvider.getChangeSetRoot());
-							final Collection<ChangeSetTableRow> selectedChangeSetRows = currentSelectedDataProvider.getSelectedChangeSetRows();
-							if (selectedChangeSetRows != null) {
-								selectedObjects.addAll(selectedChangeSetRows);
-							}
-							// Remove any possible nulls from the list
-							selectedObjects.remove(null);
-
-							// Replace the original selection with a copy that also contains the change set info
-							sel = new StructuredSelection(new ArrayList<>(selectedObjects));
-
+							updateChangeSetFromSelection(selection, currentSelectedDataProvider);
 						}
-						currentSelectedDataProvider.setSelectedObjects(null, sel);
+						currentSelectedDataProvider.setSelectedObjects(null, selection);
 
 						for (final ISelectedScenariosServiceListener l : listeners) {
 
 							try {
-								l.selectedObjectChanged(null, sel);
+								l.selectedObjectChanged(null, selection);
 							} catch (final Exception e) {
 								LOGGER.error(e.getMessage(), e);
 							}
 						}
+						PlatformUI.getWorkbench().getService(ESelectionService.class).setPostSelection(selection);
 					} catch (final Exception e) {
 						LOGGER.error(e.getMessage(), e);
 					} finally {
@@ -338,7 +311,6 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 			ChangeSetTableRoot root = null;
 			ChangeSetTableGroup set = null;
 			final List<ChangeSetTableRow> rows = new LinkedList<>();
-			final List<Object> changeSetSelection = new LinkedList<>();
 
 			final Iterator<?> itr = structuredSelection.iterator();
 			while (itr.hasNext()) {
@@ -357,13 +329,11 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 					final ChangeSetTableRoot r = (ChangeSetTableRoot) o;
 					root = r;
 				}
-				changeSetSelection.add(o);
 			}
 			selectedDataProvider.setDiffToBase(diffToBase);
 			selectedDataProvider.setChangeSetRoot(root);
 			selectedDataProvider.setChangeSet(set);
 			selectedDataProvider.setChangeSetRows(rows);
-			selectedDataProvider.setChangeSetSelection(changeSetSelection);
 		}
 	}
 
@@ -495,16 +465,6 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 
 		@Override
 		public void selectionChanged(final MPart part, final Object selectedObject) {
-
-			if (part != null) {
-
-				final String elementID = part.getElementId();
-
-				if ("com.mmxlabs.scheduleview.views.SchedulerView".equals(elementID)) {
-					return;
-				}
-			}
-
 			if (SelectionServiceUtils.isSelectionValid(part, selectedObject)) {
 				// Avoid re-entrant selection changes.
 				if (inSelectionChanged.compareAndSet(false, true)) {
@@ -536,7 +496,7 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 		selectionService = null;
 	}
 
-	public synchronized void updateActiveEditorScenario(@Nullable final ScenarioInstance newInstance, @Nullable final ScenarioInstance oldInstance, final boolean block) {
+	public synchronized void updateActiveEditorScenario(@Nullable ScenarioInstance newInstance, @Nullable ScenarioInstance oldInstance, boolean block) {
 
 		// Same instance? No need to update
 		if (oldInstance == newInstance) {

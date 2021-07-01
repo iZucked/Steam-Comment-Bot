@@ -102,7 +102,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 	protected @NonNull TransformedSelectedDataProvider currentSelectedDataProvider = new TransformedSelectedDataProvider(null);
 
-	protected AbstractConfigurableGridReportView(final String helpContextID) {
+	public AbstractConfigurableGridReportView(final String helpContextID) {
 		this.helpContextId = helpContextID;
 	}
 
@@ -180,7 +180,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 						} else if (tmp.getPinnedRow() != null) {
 							g1 = tmp.getPinnedRow().getRowGroup();
 							e1 = tmp.getPinnedRow();
-						}
+						}						
 						if (g1 == null && tmp.getPinnedRow() != null) {
 							g1 = tmp.getPinnedRow().getRowGroup();
 						}
@@ -323,6 +323,13 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			makeActions();
 			hookContextMenu();
 			contributeToActionBars();
+
+			getSite().setSelectionProvider(viewer);
+			if (handleSelections()) {
+				// Get e4 selection service!
+				final ESelectionService service = getSite().getService(ESelectionService.class);
+				service.addPostSelectionListener(this);
+			}
 		}
 
 		// Look at the extension points for the initial visibilities, rows and diff options
@@ -388,7 +395,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			};
 			manager.appendToGroup("additions", configureColumnsAction);
 
-			// No new button for Schedule Summary Report as we want people to use custom reports.
+			//No new button for Schedule Summary Report as we want people to use custom reports.
 			if (!(this instanceof ScheduleSummaryReport)) {
 				final Action newViewPartAction = new Action("New view...") {
 					@Override
@@ -397,22 +404,22 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 						final InputDialog dialog = new InputDialog(getSite().getShell(), "New view", "Choose name for view. This view persists until explicitly closed.", getPartName(),
 								new IInputValidator() {
 
-									@Override
-									public String isValid(String newText) {
-										if (newText == null || newText.isEmpty()) {
-											return "A name must be set";
-										}
-										// FIXME: Should really look this up rather than hard-code.
-										if ("Port Rotation".equals(newText.trim())) {
-											return "Cannot use this name";
-										}
-										if ("Schedule Summary".equals(newText.trim())) {
-											return "Cannot use this name";
-										}
+							@Override
+							public String isValid(String newText) {
+								if (newText == null || newText.isEmpty()) {
+									return "A name must be set";
+								}
+								// FIXME: Should really look this up rather than hard-code.
+								if ("Port Rotation".equals(newText.trim())) {
+									return "Cannot use this name";
+								}
+								if ("Schedule Summary".equals(newText.trim())) {
+									return "Cannot use this name";
+								}
 
-										return null;
-									}
-								});
+								return null;
+							}
+						});
 						if (dialog.open() == Window.OK) {
 							final String name = dialog.getValue();
 							IWorkbenchPage page = getSite().getPage();
@@ -657,7 +664,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 	private final HashMap<Object, Object> equivalents = new HashMap<>();
 	private final HashSet<Object> contents = new HashSet<>();
-	// protected Table table;
+//	protected Table table;
 	protected boolean copyPasteMode;
 
 	public void setInputEquivalents(final Object input, final Collection<? extends Object> objectEquivalents) {
@@ -683,8 +690,8 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 	private void contributeToActionBars() {
 		final IActionBars bars = getViewSite().getActionBars();
-
-		// If this is not a custom report (we know if the title is Schedule Summary this is the original view), then allow new + configure menu.
+		
+		//If this is not a custom report (we know if the title is Schedule Summary this is the original view), then allow new + configure menu.
 		if (!(this instanceof ScheduleSummaryReport) || "Schedule Summary".equals(this.getTitle())) {
 			fillLocalPullDown(bars.getMenuManager());
 		}
@@ -737,6 +744,8 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 		ViewerHelper.setFocus(viewer);
 	}
 
+	//
+
 	@Override
 	public void selectionChanged(final MPart part, final Object selectionObject) {
 
@@ -759,7 +768,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 		if (refreshOnSelectionChange()) {
 			ViewerHelper.refresh(viewer, true);
-
 		}
 	}
 

@@ -238,7 +238,7 @@ public class InventoryReport extends ViewPart {
 					updatePlots(Collections.emptyList(), null);
 				}
 			};
-			ViewerHelper.runIfViewerValid(comboViewer, block, r);
+			RunnerHelper.exec(r, block);
 		}
 	};
 

@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.rcp.common;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,9 +37,6 @@ public final class SelectionHelper {
 		} else if (selectionObject instanceof Object[]) {
 			final Object[] objects = (Object[]) selectionObject;
 			return new StructuredSelection(objects);
-		} else if (selectionObject instanceof Collection<?>) {
-			final Collection<?> list = (Collection<?>) selectionObject;
-			return new StructuredSelection(new ArrayList<>(list));
 		} else {
 			return new StructuredSelection(selectionObject);
 		}

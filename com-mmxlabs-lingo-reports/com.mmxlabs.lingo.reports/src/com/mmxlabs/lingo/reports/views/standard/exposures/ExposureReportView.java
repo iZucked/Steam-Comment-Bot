@@ -76,7 +76,7 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 /**
  */
 
-public class ExposureReportView extends SimpleTabularReportView<IndexExposureData> {
+public class ExposureReportView extends SimpleTabularReportView<IndexExposureData> implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener {
 
 	protected Color colourBlue;
 	protected Color colourLightBlue;
@@ -407,7 +407,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 	// ends----------------------------------------
 
 	protected List<String> getFiscalYears(final Schedule schedule) {
-		final List<String> result = new LinkedList<>();
+		final List<String> result = new LinkedList<String>();
 		for (final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
 			final PaperDeal pd = paperDealAllocation.getPaperDeal();
 			if (pd == null) {
@@ -463,6 +463,9 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 	@Override
 	public void createPartControl(final Composite parent) {
 		super.createPartControl(parent);
+		// Get e4 selection service!
+		final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
+		service.addPostSelectionListener(this);
 
 		ImageDescriptor imageDescriptor = Activator.Implementation.getImageDescriptor("icons/dark_arrow_down.png");
 		cellImageDarkArrowDown = imageDescriptor.createImage();
@@ -481,7 +484,8 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 	@Override
 	public void dispose() {
-
+		final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
+		service.removePostSelectionListener(this);
 		if (cellImageDarkArrowDown != null) {
 			cellImageDarkArrowDown.dispose();
 		}
@@ -781,7 +785,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 	}
 
 	@Override
-	public void doSelectionChanged(final MPart part, final Object selectionObject) {
+	public void selectionChanged(final MPart part, final Object selectionObject) {
 		if (selectionMode && SelectionServiceUtils.isSelectionValid(part, selectionObject)) {
 			selection = SelectionHelper.adaptSelection(selectionObject);
 			ExposureReportView.this.refresh();
@@ -925,7 +929,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 	@Override
 	protected void applyExpansionOnNewElements(final Object[] expanded, final List<?> rowElements) {
-		final List<Object> newToExpand = new ArrayList<>();
+		final List<Object> newToExpand = new ArrayList<Object>();
 		for (var e : expanded) {
 			if (e instanceof IndexExposureData) {
 				for (var elem : rowElements) {

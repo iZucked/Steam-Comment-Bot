@@ -64,7 +64,7 @@ public class PortRotationsReportTransformer {
 
 				super.endCollecting();
 
-				viewer.processInputs(elementList);
+				viewer.processInputs(elements);
 				builder.refreshDataColumns(rootObjects);
 				elements.addAll(elementList);
 			}

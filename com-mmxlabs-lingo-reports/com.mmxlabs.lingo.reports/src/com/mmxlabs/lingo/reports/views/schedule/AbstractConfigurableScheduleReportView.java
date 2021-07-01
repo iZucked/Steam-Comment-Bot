@@ -42,7 +42,6 @@ import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
-import com.mmxlabs.lingo.reports.services.ReentrantSelectionManager;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
@@ -63,7 +62,6 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
-import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
@@ -94,8 +92,6 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 	private ScenarioComparisonService scenarioComparisonService;
 
 	private EventHandler todayHandler;
-
-	protected ReentrantSelectionManager selectionManager;
 
 	/*
 	 * Field to allow subclasses of specific reports to only include visible columns rather than everything
@@ -145,7 +141,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 					}
 				}
 			}
-
+ 
 			// Refresh viewer as column and/or sort order may have changed
 			ViewerHelper.refresh(viewer, true);
 
@@ -195,9 +191,6 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 			setCurrentSelectedDataProvider(newSelectedDataProvider);
 
 			ViewerHelper.setInput(viewer, block, rows);
-			final ISelection selection = SelectionHelper.adaptSelection(newSelectedDataProvider.getSelectedObjects());
-
-			viewer.setSelection(selection, true);
 		}
 
 		@Override
@@ -207,13 +200,9 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 
 		@Override
 		public void selectedObjectChanged(@Nullable MPart source, @NonNull ISelection selection) {
-
 			if (scenarioComparisonService.getDiffOptions().isFilterSelectedElements()) {
 				ViewerHelper.refresh(viewer, false);
-			} else {
-				selectionManager.setSelection(selection, false, true);
 			}
-
 		}
 	};
 
@@ -222,6 +211,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 		super.initPartControl(parent);
 
 		viewer.setContentProvider(new ArrayContentProvider());
+		scenarioComparisonService.addListener(scenarioComparisonServiceListener);
 
 		// Add a filter to only show certain rows.
 		viewer.setFilters(super.filterSupport.createViewerFilter(), new ViewerFilter() {
@@ -229,9 +219,9 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 			@Override
 			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 
-				Collection<Object> selectedElements = currentSelectedDataProvider.getChangeSetSelection();
+				Collection<Object> selectedElements = currentSelectedDataProvider.getSelectedObjects();
 
-				if (scenarioComparisonService.getDiffOptions().isFilterSelectedElements() && selectedElements != null && !selectedElements.isEmpty()) {
+				if (scenarioComparisonService.getDiffOptions().isFilterSelectedElements() && !selectedElements.isEmpty()) {
 					if (!selectedElements.contains(element)) {
 						if (element instanceof Row) {
 							final Row row = (Row) element;
@@ -273,13 +263,8 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 				return true;
 			}
 		});
-		selectionManager = new ReentrantSelectionManager(viewer, scenarioComparisonServiceListener, scenarioComparisonService);
-		try {
-			scenarioComparisonService.triggerListener(scenarioComparisonServiceListener, false);
-		} catch (Exception e) {
-			// Ignore any initial issues.
-		}
-		selectionManager.addListener(this);
+
+		scenarioComparisonService.triggerListener(scenarioComparisonServiceListener, false);
 
 		// Adding an event broker for the snap-to-date event todayHandler
 		final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
@@ -329,6 +314,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 
 	@Override
 	public void dispose() {
+		scenarioComparisonService.removeListener(scenarioComparisonServiceListener);
 		if (this.todayHandler != null) {
 			final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 			eventBroker.unsubscribe(this.todayHandler);
