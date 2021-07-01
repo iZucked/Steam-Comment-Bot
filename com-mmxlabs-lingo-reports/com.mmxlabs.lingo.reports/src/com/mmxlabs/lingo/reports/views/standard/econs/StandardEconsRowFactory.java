@@ -181,7 +181,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		if (containsOpenSlot) {
 			rows.add(createRow(185, "Cancellation", true, "$", "", createCancellationCosts(options, RowType.COST)));
 		}
-		if (containsCargo || containsCharterOut || containsCooldown || containsGeneratedCharterOut || containsOpenSlot || containsPurge || containsStartEvent || containsVesselEvent  ) {
+		if (containsCargo || containsCharterOut || containsCooldown || containsGeneratedCharterOut || containsOpenSlot || containsPurge || containsStartEvent || containsVesselEvent || containsEndEvent) {
 			rows.add(createRow(190, "P&L", true, "$", "", createPNLTotal(options, RowType.REVENUE)));
 		}
 		if (containsCargo) {
