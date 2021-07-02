@@ -174,8 +174,7 @@ public final class ChangeSetTransformerUtil {
 	}
 
 	/**
-	 * Given a list of target {@link EObject}s, generate a {@link MappingModel}
-	 * which can be used to compare against other {@link MappingModel}s
+	 * Given a list of target {@link EObject}s, generate a {@link MappingModel} which can be used to compare against other {@link MappingModel}s
 	 * 
 	 * @param targets
 	 * @return
@@ -349,11 +348,11 @@ public final class ChangeSetTransformerUtil {
 
 				final ChangeSetRowData row = ChangesetFactory.eINSTANCE.createChangeSetRowData();
 				group.getMembers().add(row);
-				
+
 				row.setPaperDealAllocation(paperDealAllocation);
 				row.setLhsGroupProfitAndLoss(paperDealAllocation);
 				row.setLhsName(paperDeal.getName());
-				
+
 				mappingModel.lhsRowMap.put(paperDeal.getName(), row);
 			}
 		}
@@ -367,7 +366,7 @@ public final class ChangeSetTransformerUtil {
 					cle.setLinkedSequence(c.getSequence());
 				}
 				if (e instanceof ProfitAndLossContainer) {
-					ProfitAndLossContainer c = (ProfitAndLossContainer)e;
+					ProfitAndLossContainer c = (ProfitAndLossContainer) e;
 					pnl1 += c.getGroupProfitAndLoss().getProfitAndLoss();
 					pnl2 += c.getGroupProfitAndLoss().getProfitAndLossPreTax();
 				}
@@ -394,11 +393,8 @@ public final class ChangeSetTransformerUtil {
 	}
 
 	/**
-	 * Bind the before and after state based on identical keys. For spot market
-	 * slots which are not identical, but have exactly one free equivalent, bind
-	 * them. (For example DES Sale market in Feb 2017 may use in stance 1 in the
-	 * before state and instance 2 in the after state. This should be considered the
-	 * same). This method sets the LHS/RHS links
+	 * Bind the before and after state based on identical keys. For spot market slots which are not identical, but have exactly one free equivalent, bind them. (For example DES Sale market in Feb 2017
+	 * may use in stance 1 in the before state and instance 2 in the after state. This should be considered the same). This method sets the LHS/RHS links
 	 * 
 	 * @param beforeMapping
 	 * @param afterMapping
@@ -939,7 +935,7 @@ public final class ChangeSetTransformerUtil {
 		}
 		throw new NullPointerException();
 	}
-	
+
 	@NonNull
 	public static Integer getCharterNumber(@NonNull final Sequence sequence) {
 		if (sequence.isSetVesselAvailability()) {
@@ -947,7 +943,7 @@ public final class ChangeSetTransformerUtil {
 		}
 		return 0;
 	}
-	
+
 	@NonNull
 	public static Integer getCharterNumber(@Nullable final VesselAssignmentType t) {
 		if (t instanceof VesselAvailability) {
@@ -1293,8 +1289,7 @@ public final class ChangeSetTransformerUtil {
 						final ChangeSetRowData beforeData = beforeGroup.getMembers().get(0);
 						final ChangeSetRowData afterData = afterGroup.getMembers().get(0);
 
-						
-						// Mark up lateness over 24 hours as a structural change.
+						// Mark up lateness over 24 hours as a major change.
 						{
 							long beforeLateness = 0L;
 							for (ChangeSetRowData data : row.getBeforeData().getMembers()) {
@@ -1308,13 +1303,15 @@ public final class ChangeSetTransformerUtil {
 								row.setVesselChange(true);
 							}
 						}
-						
-						// Start / end events are not structural changes.
-						if ((beforeData.getLhsEvent() instanceof StartEvent || beforeData.getLhsEvent() instanceof EndEvent)
-								|| (afterData.getLhsEvent() instanceof StartEvent || afterData.getLhsEvent() instanceof EndEvent)) {
+
+						// Start / end events are minor changes.
+						if (beforeData.getLhsEvent() instanceof StartEvent //
+								|| afterData.getLhsEvent() instanceof StartEvent //
+								|| beforeData.getLhsEvent() instanceof EndEvent //
+								|| afterData.getLhsEvent() instanceof EndEvent) {
 							continue;
 						}
-						// GCO are not structural changes.
+						// GCO are minor changes.
 						if ((beforeData.getLhsEvent() instanceof GeneratedCharterOut) || (afterData.getLhsEvent() instanceof GeneratedCharterOut)) {
 							continue;
 						}
