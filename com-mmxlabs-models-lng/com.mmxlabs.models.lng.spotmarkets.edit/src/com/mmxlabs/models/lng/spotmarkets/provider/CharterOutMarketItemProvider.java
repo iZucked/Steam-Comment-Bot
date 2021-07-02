@@ -140,7 +140,7 @@ public class CharterOutMarketItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_CharterOutMarket_availablePorts_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOutMarket_availablePorts_feature", "_UI_CharterOutMarket_type"),
+				 getString("_UI_CharterOutMarket_availablePorts_description"),
 				 SpotMarketsPackage.Literals.CHARTER_OUT_MARKET__AVAILABLE_PORTS,
 				 true,
 				 false,
