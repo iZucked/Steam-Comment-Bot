@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.adp.mull;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -74,8 +75,22 @@ public class SalesContractTracker extends AllocationTracker {
 	}
 
 	@Override
+	public void harmonisationPhaseUndo(CargoBlueprint cargoBlueprint) {
+		super.harmonisationPhaseUndo(cargoBlueprint);
+		if (this.equals(cargoBlueprint.getAllocationTracker())) {
+			--currentAllocatedAACQ;
+			--this.currentMonthLifted;
+		}
+	}
+
+	@Override
 	public boolean satisfiedAACQ() {
 		return this.aacq == currentAllocatedAACQ;
+	}
+
+	@Override
+	public boolean satisfiedMonthlyAllocation() {
+		return this.monthlyAllocation <= this.currentMonthLifted;
 	}
 
 	@Override
@@ -138,6 +153,16 @@ public class SalesContractTracker extends AllocationTracker {
 				final int expectedVolumeLoaded = cargo.getSlots().get(0).getSlotOrDelegateMaxQuantity();
 				this.runningAllocation -= expectedVolumeLoaded;
 			}
+		}
+	}
+
+	@Override
+	public void updateCurrentMonthAllocations(final YearMonth nextMonth) {
+		if (this.monthlyAllocations != null) {
+			final int newMonthlyAllocation = this.monthlyAllocations.get(nextMonth);
+			final int rollForwardAllocation = this.monthlyAllocation - this.currentMonthLifted;
+			this.monthlyAllocation = newMonthlyAllocation + rollForwardAllocation;
+			this.currentMonthLifted = 0;
 		}
 	}
 }
