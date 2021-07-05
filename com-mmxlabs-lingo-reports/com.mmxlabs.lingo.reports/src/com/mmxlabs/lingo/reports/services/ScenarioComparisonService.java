@@ -265,6 +265,7 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 								LOGGER.error(e.getMessage(), e);
 							}
 						}
+						PlatformUI.getWorkbench().getService(ESelectionService.class).setPostSelection(sel);
 					} catch (final Exception e) {
 						LOGGER.error(e.getMessage(), e);
 					} finally {
