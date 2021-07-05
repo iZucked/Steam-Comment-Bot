@@ -1109,13 +1109,15 @@ public class ChangeSetViewColumnHelper {
 							final Event beforeEvent = tableRow.getLhsBefore() != null ? tableRow.getLhsBefore().getLhsEvent() : null;
 							final Event afterEvent = tableRow.getLhsAfter() != null ? tableRow.getLhsAfter().getLhsEvent() : null;
 
-							if (beforeEvent != null) {
+							// Check start times are non-null as well, can happen for grouped events
+							if (beforeEvent != null && beforeEvent.getStart() != null) {
 
 								sb.append(String.format("Before: %s ", beforeEvent.getStart().toLocalDate().format(formatter)));
 								newLine = true;
 								hasDate = true;
 							}
-							if (afterEvent != null) {
+							// Check start times are non-null as well, can happen for grouped events
+							if (afterEvent != null && afterEvent.getStart() != null) {
 								if (newLine) {
 									sb.append("\n");
 								}
@@ -1127,13 +1129,15 @@ public class ChangeSetViewColumnHelper {
 							final Event beforeRHSEvent = tableRow.getRhsBefore() != null ? tableRow.getRhsBefore().getLhsEvent() : null;
 							final Event afterRHSEvent = tableRow.getRhsAfter() != null ? tableRow.getRhsAfter().getLhsEvent() : null;
 
-							if (beforeRHSEvent != null) {
+							// Check start times are non-null as well, can happen for grouped events
+							if (beforeRHSEvent != null && beforeRHSEvent.getStart() != null) {
 
 								sb.append(String.format("Before: %s ", beforeRHSEvent.getStart().toLocalDate().format(formatter)));
 								newLine = true;
 								hasDate = true;
 							}
-							if (afterRHSEvent != null) {
+							// Check start times are non-null as well, can happen for grouped events
+							if (afterRHSEvent != null && afterRHSEvent.getStart() != null) {
 								if (newLine) {
 									sb.append("\n");
 								}
@@ -1213,7 +1217,8 @@ public class ChangeSetViewColumnHelper {
 									windowStart = dateFunc.apply(beforeEvent);
 								}
 
-								if (beforeEvent != null && afterEvent != null) {
+								// Check start times are non-null as well, can happen for grouped events
+								if (beforeEvent != null && beforeEvent.getStart() != null && afterEvent != null && afterEvent.getStart() != null) {
 									deltaHours = Hours.between(beforeEvent.getStart(), afterEvent.getStart());
 									if (deltaHours != 0) {
 										isDelta = true;
@@ -1229,7 +1234,8 @@ public class ChangeSetViewColumnHelper {
 									windowStart = dateFunc.apply(beforeRHSEvent);
 								}
 
-								if (beforeRHSEvent != null && afterRHSEvent != null) {
+								// Check start times are non-null as well, can happen for grouped events
+								if (beforeRHSEvent != null && beforeRHSEvent.getStart() != null && afterRHSEvent != null && afterRHSEvent.getStart() != null) {
 									deltaHours = Hours.between(beforeRHSEvent.getStart(), afterRHSEvent.getStart());
 									if (deltaHours != 0) {
 										isDelta = true;
