@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.adp.mull;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -65,6 +66,20 @@ public class DESMarketTracker extends AllocationTracker {
 	}
 
 	@Override
+	public void harmonisationPhaseUndo(CargoBlueprint cargoBlueprint) {
+		super.harmonisationPhaseUndo(cargoBlueprint);
+		if (this.equals(cargoBlueprint.getAllocationTracker())) {
+			--currentAllocatedAACQ;
+			--this.currentMonthLifted;
+		}
+	}
+
+	@Override
+	public boolean satisfiedMonthlyAllocation() {
+		return this.monthlyAllocation <= this.currentMonthLifted;
+	}
+
+	@Override
 	public DischargeSlot createDischargeSlot(final CargoEditingCommands cec, List<Command> setCommands, final CargoModel cargoModel, final IScenarioDataProvider sdp, final LoadSlot loadSlot,
 			final Vessel vessel, final Map<Vessel, VesselAvailability> vesselToVA, final LNGScenarioModel sm, final Set<Vessel> firstPartyVessels) {
 		final DischargeSlot dischargeSlot;
@@ -75,14 +90,14 @@ public class DESMarketTracker extends AllocationTracker {
 			dischargeSlot.setWindowStartTime(0);
 			dischargeSlot.setWindowSize(1);
 			dischargeSlot.setWindowSizeUnits(TimePeriod.MONTHS);
-//			if (!this.vesselList.isEmpty()) {
-//				dischargeSlot.setRestrictedVesselsArePermissive(true);
-//				dischargeSlot.setRestrictedVesselsOverride(true);
-//				dischargeSlot.getRestrictedVessels().addAll(this.vesselList);
-//			}
-//			dischargeSlot.setRestrictedPortsArePermissive(true);
-//			dischargeSlot.setRestrictedPortsOverride(true);
-//			dischargeSlot.getRestrictedPorts().add(loadSlot.getPort());
+			// if (!this.vesselList.isEmpty()) {
+			// dischargeSlot.setRestrictedVesselsArePermissive(true);
+			// dischargeSlot.setRestrictedVesselsOverride(true);
+			// dischargeSlot.getRestrictedVessels().addAll(this.vesselList);
+			// }
+			// dischargeSlot.setRestrictedPortsArePermissive(true);
+			// dischargeSlot.setRestrictedPortsOverride(true);
+			// dischargeSlot.getRestrictedPorts().add(loadSlot.getPort());
 			final String id = String.format("market-%s", loadSlot.getName());
 			dischargeSlot.setName(id);
 		} else {
@@ -135,6 +150,16 @@ public class DESMarketTracker extends AllocationTracker {
 				final int expectedVolumeLoaded = cargo.getSlots().get(0).getSlotOrDelegateMaxQuantity();
 				this.runningAllocation -= expectedVolumeLoaded;
 			}
+		}
+	}
+
+	@Override
+	public void updateCurrentMonthAllocations(final YearMonth nextMonth) {
+		if (this.monthlyAllocations != null) {
+			final int newMonthlyAllocation = this.monthlyAllocations.get(nextMonth);
+			final int rollForwardAllocation = this.monthlyAllocation - this.currentMonthLifted;
+			this.monthlyAllocation = newMonthlyAllocation + rollForwardAllocation;
+			this.currentMonthLifted = 0;
 		}
 	}
 }

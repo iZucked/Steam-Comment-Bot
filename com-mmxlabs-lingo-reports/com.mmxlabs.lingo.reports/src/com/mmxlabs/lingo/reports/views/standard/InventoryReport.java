@@ -64,16 +64,19 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swtchart.Chart;
+import org.eclipse.swtchart.IAxis;
+import org.eclipse.swtchart.IAxis.Position;
 import org.eclipse.swtchart.IAxisSet;
 import org.eclipse.swtchart.IBarSeries;
 import org.eclipse.swtchart.ILineSeries;
 import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
 import org.eclipse.swtchart.ISeries;
 import org.eclipse.swtchart.ISeries.SeriesType;
-import org.eclipse.swtchart.model.DateArraySeriesModel;
 import org.eclipse.swtchart.ISeriesSet;
 import org.eclipse.swtchart.LineStyle;
 import org.eclipse.swtchart.Range;
+import org.eclipse.swtchart.model.DateArraySeriesModel;
+import org.eclipse.swtchart.model.DoubleArraySeriesModel;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.osgi.service.event.EventHandler;
@@ -401,8 +404,8 @@ public class InventoryReport extends ViewPart {
 					createMullColumn("Entity", 150, o -> o.getFirst().entity.getName(), o -> o.getFirst().entity.getName());
 					createMullColumn("Monthly Entitlement", 150, o -> generateDiffString(o, MullInformation::getMonthlyRE), o -> generateSortValue(o, MullInformation::getMonthlyRE));
 					createMullColumn("Monthly lifted", 150, o -> generateDiffString(o, MullInformation::getLifted), o -> generateSortValue(o, MullInformation::getLifted));
-					createMullColumn("Delta", 150, o -> generateDiffString(o, MullInformation::getDelta), o -> generateSortValue(o, MullInformation::getDelta));
-					createMullColumn("Cumulative Delta", 150, o -> generateDiffString(o, MullInformation::getCumulativeDelta), o -> generateSortValue(o, MullInformation::getCumulativeDelta));
+					createMullColumn("Delta", 150, o -> generateDiffString(o, m -> -1 * m.getDelta()), o -> generateSortValue(o, m -> -1 * m.getDelta()));
+					createMullColumn("Cumulative Delta", 150, o -> generateDiffString(o, m -> -1 * m.getCumulativeDelta()), o -> generateSortValue(o, m -> -1 * m.getCumulativeDelta()));
 					createMullColumn("# Cargoes", 150, o -> generateDiffString(o, MullInformation::getCargoCount), o -> generateSortValue(o, MullInformation::getCargoCount));
 
 					mullItem.setControl(mullMonthlyTableViewer.getControl());
@@ -454,7 +457,7 @@ public class InventoryReport extends ViewPart {
 					createMullCumulativeColumn("Entity", 150, o -> o.getFirst().entity.getName(), o -> o.getFirst().entity.getName());
 					createMullCumulativeColumn("Reference Entitlement", 150, o -> generateDiffString(o, MullInformation::getMonthlyRE), o -> generateSortValue(o, MullInformation::getMonthlyRE));
 					createMullCumulativeColumn("Lifted", 150, o -> generateDiffString(o, MullInformation::getLifted), o -> generateSortValue(o, MullInformation::getLifted));
-					createMullCumulativeColumn("Delta", 150, o -> generateDiffString(o, m -> m.monthlyRE - m.lifted), o -> generateSortValue(o, m -> m.monthlyRE - m.lifted));
+					createMullCumulativeColumn("Delta", 150, o -> generateDiffString(o, m -> m.lifted - m.monthlyRE), o -> generateSortValue(o, m -> m.lifted - m.monthlyRE));
 					createMullCumulativeColumn("# Cargoes", 150, o -> generateDiffString(o, MullInformation::getCargoCount), o -> generateSortValue(o, MullInformation::getCargoCount));
 
 					mullMonthlyCumulativeItem.setControl(mullMonthlyCumulativeTableViewer.getControl());
@@ -957,7 +960,28 @@ public class InventoryReport extends ViewPart {
 												final List<String> monthsList = monthsToDisplay.stream().map(ym -> ym.format(categoryFormatter)).collect(Collectors.toList());
 												final String[] temp = new String[0];
 												final String[] formattedMonthLabels = monthsList.toArray(temp);
-												setMULLChartData(mullMonthlyOverliftChart, formattedMonthLabels, entitiesOrdered, pairedMullList, m -> -1*m.getOverliftCF());
+												setMULLChartData(mullMonthlyOverliftChart, formattedMonthLabels, entitiesOrdered, pairedMullList, m -> m.getOverliftCF());
+												// int axisId = mullMonthlyOverliftChart.getAxisSet().createXAxis();
+												// final IAxis xAxis2 = mullMonthlyOverliftChart.getAxisSet().getXAxis(axisId);
+												//// xAxis2.setPosition(Position.Primary);
+												//// xAxis2.
+												//// mullProfile.getFullCargoLotValue();
+												// final double[] dates = new double[2];
+												// dates[0] = -0.5;
+												// dates[1] = 1000.5;
+												// final double[] values = new double[2];
+												// values[0] = mullProfile.getFullCargoLotValue();
+												// values[1] = mullProfile.getFullCargoLotValue();
+												// final ILineSeries series = (ILineSeries) mullMonthlyOverliftChart.getSeriesSet().createSeries(SeriesType.LINE, "FCL Max");
+												// final DoubleArraySeriesModel seriesModel = new DoubleArraySeriesModel(dates, values);
+												// series.setDataModel(seriesModel);
+												// series.setSymbolType(PlotSymbolType.NONE);
+												// series.setXAxisId(axisId);
+
+												// mullMonthlyOverliftChart.
+
+												// final ILineSeries series = (ILineSeries) seriesSet.createSeries(SeriesType.LINE, "FCL Min");
+
 												setMULLChartData(mullMonthlyCargoCountChart, formattedMonthLabels, entitiesOrdered, pairedMullList, MullInformation::getCargoCount);
 											}
 										}

@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.adp.validation;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,6 +25,7 @@ import com.mmxlabs.models.lng.adp.MullSubprofile;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.types.util.ValidationConstants;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
@@ -67,6 +69,26 @@ public class MullSubprofileConstraint extends AbstractModelMultiConstraint {
 								.withObjectAndFeature(mullSubprofile, ADPPackage.Literals.MULL_SUBPROFILE__INVENTORY) //
 								.withMessage(String.format("%s capacity information starts after ADP start", inventory.getName())) //
 								.make(ctx, statuses);
+					}
+				}
+
+				final ADPModel adpModel = (ADPModel) (target.eContainer().eContainer());
+				final YearMonth adpStart = adpModel.getYearStart();
+				if (adpStart != null) {
+					final YearMonth adpEnd = adpModel.getYearEnd();
+					if (adpEnd != null) {
+						final LocalDate adpStartDate = adpStart.atDay(1);
+						final LocalDate adpEndDate = adpEnd.atDay(1);
+						if (inventory.getFeeds().stream().noneMatch(row -> {
+							final LocalDate rowStart = row.getStartDate();
+							final LocalDate rowEnd = row.getEndDate();
+							return (!rowStart.isBefore(adpStartDate) && rowStart.isBefore(adpEndDate)) || (!rowEnd.isBefore(adpStartDate) && rowEnd.isBefore(adpEndDate));
+						})) {
+							factory.copyName() //
+									.withObjectAndFeature(mullSubprofile, ADPPackage.Literals.MULL_SUBPROFILE__INVENTORY) //
+									.withMessage(String.format("%s feeds do not overlap with ADP year", inventory.getName())) //
+									.make(ctx, statuses);
+						}
 					}
 				}
 			}
