@@ -74,8 +74,8 @@ public class UpdateSandboxFromRowsAction extends Action {
 
 			CompoundCommand cc = new CompoundCommand("Update sandbox");
 
-			final Map<SpotMarket, BuyMarket> buyMarketOptions = new HashMap<>();
-			final Map<SpotMarket, SellMarket> sellMarketOptions = new HashMap<>();
+			// final Map<SpotMarket, BuyMarket> buyMarketOptions = new HashMap<>();
+			// final Map<SpotMarket, SellMarket> sellMarketOptions = new HashMap<>();
 			final Map<LoadSlot, BuyOption> buyOptions = new HashMap<>();
 			final Map<DischargeSlot, SellOption> sellOptions = new HashMap<>();
 			final Map<VesselEvent, VesselEventOption> eventOptions = new HashMap<>();
@@ -88,7 +88,8 @@ public class UpdateSandboxFromRowsAction extends Action {
 				existingModel.getBuys().stream().forEach(buy -> {
 					if (buy instanceof BuyMarket) {
 						BuyMarket op = (BuyMarket) buy;
-						buyMarketOptions.put(op.getMarket(), op);
+						// Ignore as we need one market per use
+						// buyMarketOptions.put(op.getMarket(), op);
 					} else if (buy instanceof BuyReference) {
 						BuyReference op = (BuyReference) buy;
 						buyOptions.put(op.getSlot(), op);
@@ -101,7 +102,8 @@ public class UpdateSandboxFromRowsAction extends Action {
 				existingModel.getSells().stream().forEach(sell -> {
 					if (sell instanceof SellMarket) {
 						SellMarket op = (SellMarket) sell;
-						sellMarketOptions.put(op.getMarket(), op);
+						// Ignore as we need one market per use
+						// sellMarketOptions.put(op.getMarket(), op);
 					} else if (sell instanceof SellReference) {
 						SellReference op = (SellReference) sell;
 						sellOptions.put(op.getSlot(), op);
@@ -145,12 +147,13 @@ public class UpdateSandboxFromRowsAction extends Action {
 				} else {
 					if (s instanceof SpotSlot) {
 						final SpotSlot spotSlot = (SpotSlot) s;
-						return buyMarketOptions.computeIfAbsent(spotSlot.getMarket(), mkt -> {
-							final BuyMarket m = AnalyticsFactory.eINSTANCE.createBuyMarket();
-							m.setMarket(mkt);
-							cc.append(AddCommand.create(editingDomain, existingModel, AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__BUYS, m));
-							return m;
-						});
+						// return buyMarketOptions.computeIfAbsent(spotSlot.getMarket(), mkt -> {
+						final SpotMarket mkt = spotSlot.getMarket();
+						final BuyMarket m = AnalyticsFactory.eINSTANCE.createBuyMarket();
+						m.setMarket(mkt);
+						cc.append(AddCommand.create(editingDomain, existingModel, AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__BUYS, m));
+						return m;
+						// });
 					} else {
 						final BuyReference ref = AnalyticsFactory.eINSTANCE.createBuyReference();
 						ref.setSlot(s);
@@ -168,12 +171,13 @@ public class UpdateSandboxFromRowsAction extends Action {
 				} else {
 					if (s instanceof SpotSlot) {
 						final SpotSlot spotSlot = (SpotSlot) s;
-						return sellMarketOptions.computeIfAbsent(spotSlot.getMarket(), mkt -> {
-							final SellMarket m = AnalyticsFactory.eINSTANCE.createSellMarket();
-							m.setMarket(mkt);
-							cc.append(AddCommand.create(editingDomain, existingModel, AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__SELLS, m));
-							return m;
-						});
+						// return sellMarketOptions.computeIfAbsent(spotSlot.getMarket(), mkt -> {
+						final SpotMarket mkt = spotSlot.getMarket();
+						final SellMarket m = AnalyticsFactory.eINSTANCE.createSellMarket();
+						m.setMarket(mkt);
+						cc.append(AddCommand.create(editingDomain, existingModel, AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__SELLS, m));
+						return m;
+						// });
 					} else {
 						final SellReference ref = AnalyticsFactory.eINSTANCE.createSellReference();
 						ref.setSlot(s);
