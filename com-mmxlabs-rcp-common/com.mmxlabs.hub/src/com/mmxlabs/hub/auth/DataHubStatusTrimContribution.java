@@ -27,6 +27,8 @@ import com.mmxlabs.hub.IDataHubStateChangeListener;
 public class DataHubStatusTrimContribution {
 	
 	protected IDataHubStateChangeListener listener;
+	
+	private Label mainLabel = null;
 
 	@PostConstruct
 	protected Control createControl(Composite parent) {
@@ -62,6 +64,7 @@ public class DataHubStatusTrimContribution {
 		};
 		control.setLayout(new FillLayout());
 		final Label myLabel = new Label(control, SWT.CENTER);
+		mainLabel = myLabel;
 		myLabel.setText("DataHub status");
 		
 		{
@@ -130,8 +133,15 @@ public class DataHubStatusTrimContribution {
 	@PreDestroy
 	public void dispose() {
 		IDataHubStateChangeListener pListener = listener;
-		if (pListener != null)
+		if (pListener != null) {
 			DataHubServiceProvider.getInstance().removeDataHubStateListener(pListener);
+		}
+		if (mainLabel != null && !mainLabel.isDisposed()) {
+			if (mainLabel.getImage()!= null && !mainLabel.getImage().isDisposed()) {
+				mainLabel.getImage().dispose();
+			}
+			mainLabel.dispose();
+		}
 	}
 	
 	private String dataHubStatusToolTipText(boolean online, boolean loggedin) {

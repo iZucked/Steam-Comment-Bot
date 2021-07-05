@@ -1796,8 +1796,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void setShippingDaysRestrictionReferenceSpeed(@NonNull final IVessel vessel, final VesselState vesselState, final int referenceSpeed) {
-		shippingHoursRestrictionProviderEditor.setReferenceSpeed(vessel, vesselState, referenceSpeed);
+	public void setShippingDaysRestrictionReferenceSpeed(@NonNull IPortSlot slot, @NonNull final IVessel vessel, final VesselState vesselState, final int referenceSpeed) {
+		shippingHoursRestrictionProviderEditor.setReferenceSpeed(slot, vessel, vesselState, referenceSpeed);
 	}
 
 	@Override

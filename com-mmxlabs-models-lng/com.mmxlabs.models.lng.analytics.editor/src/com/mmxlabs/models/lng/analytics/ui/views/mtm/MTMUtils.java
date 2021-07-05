@@ -8,14 +8,18 @@ import java.time.LocalDate;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.MTMModel;
 import com.mmxlabs.models.lng.analytics.MTMRow;
 import com.mmxlabs.models.lng.analytics.SellOption;
+import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
@@ -56,6 +60,16 @@ public final class MTMUtils {
 				final BuyReference buy = AnalyticsFactory.eINSTANCE.createBuyReference();
 				buy.setSlot(slot);
 				model.getBuys().add(buy);
+			}
+		}
+		
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MTM_SELL_SIDE)) {
+			for (final DischargeSlot slot : cargoModel.getDischargeSlots()) {
+				if (allowSlot(slot, allowCargoes, allowSpotCargoes, start, end)) {
+					final SellReference sell = AnalyticsFactory.eINSTANCE.createSellReference();
+					sell.setSlot(slot);
+					model.getSells().add(sell);
+				}
 			}
 		}
 		

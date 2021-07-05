@@ -35,6 +35,8 @@ public class PaperDealsLookupData {
 	// Keeps a list of indices to hedge
 	public List<String> indicesToHedge = new ArrayList<>();
 	
+	public List<String> slotsToInclude = new ArrayList<>();
+	
 	public YearMonth cutoffMonth = YearMonth.of(1970, 1);
 	
 	public PaperDealsLookupData(final Map<String, BasicPricingCalendar> pricingCalendars, final Map<String, BasicHolidayCalendar> holidayCalendars, final Map<String, Map<LocalDate, Double>> settledPrices, //

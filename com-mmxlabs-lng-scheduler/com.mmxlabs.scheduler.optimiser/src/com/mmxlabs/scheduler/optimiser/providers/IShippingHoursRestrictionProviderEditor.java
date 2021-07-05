@@ -10,6 +10,7 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 
@@ -32,7 +33,7 @@ public interface IShippingHoursRestrictionProviderEditor extends IShippingHoursR
 	 * @param vessel
 	 * @param referenceSpeed
 	 */
-	void setReferenceSpeed(@NonNull IVessel vessel, VesselState vesselState, int referenceSpeed);
+	void setReferenceSpeed(@NonNull IPortSlot slot, @NonNull IVessel vessel, VesselState vesselState, int referenceSpeed);
 
 	/**
 	 * Add an allowed route that a DES cargo can follow

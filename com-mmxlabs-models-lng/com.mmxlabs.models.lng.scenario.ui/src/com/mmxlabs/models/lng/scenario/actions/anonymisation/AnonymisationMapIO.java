@@ -58,7 +58,7 @@ public class AnonymisationMapIO {
 	}
 	
 	public static List<AnonymisationRecord> read(final File file) {
-
+		
 		try (InputStream inputStream = new FileInputStream(file)){
 			return EncryptionUtils.decrypt(inputStream, AnonymisationMapIO::readRecords);
 		} catch (Exception e) {

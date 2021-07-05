@@ -94,7 +94,7 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 		endHeelComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		endHeelComposite.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 		
-		if (LicenseFeatures.isPermitted("features:monthly-ballast-bonus")) {
+		if (!dialogContext.isMultiEdit() && LicenseFeatures.isPermitted("features:monthly-ballast-bonus")) {
 			Composite bottomComposite = toolkit.createComposite(this, SWT.NONE);
 			GridLayout gridLayoutCheckbox = new GridLayout(3, false);
 			bottomComposite.setLayout(gridLayoutCheckbox);
@@ -208,7 +208,7 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 	}
 
 	protected void doDisplay(IDialogEditingContext dialogContext, MMXRootObject root, EMFDataBindingContext dbc, final GenericCharterContract gcc) {
-		if (gcc != null && gcc.getName() != null) {
+		if (!dialogContext.isMultiEdit() && gcc != null && gcc.getName() != null) {
 			if (gcc.getBallastBonusTerms() instanceof MonthlyBallastBonusContainer) {
 				final MonthlyBallastBonusContainer mbbc = (MonthlyBallastBonusContainer) gcc.getBallastBonusTerms();
 				Composite hubsComp = toolkit.createComposite(owner);

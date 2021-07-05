@@ -158,7 +158,8 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 			final List<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
 			final EndEvent end = getEndEvent(vesselAvailability);
 			
-			final long endEventPNL = -12_499;
+			// -distance/(hoursInDay*speed)*pctCharterRate*hireExpression (for February 2016 value)
+			final long endEventPNL = (long) (-1000/(24*20.0)*0.95*20_000);
 			final long actualPnL = end.getGroupProfitAndLoss().getProfitAndLoss();
 			Assertions.assertEquals(endEventPNL, actualPnL);
 			Assertions.assertEquals(cargoPNL + endEventPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
