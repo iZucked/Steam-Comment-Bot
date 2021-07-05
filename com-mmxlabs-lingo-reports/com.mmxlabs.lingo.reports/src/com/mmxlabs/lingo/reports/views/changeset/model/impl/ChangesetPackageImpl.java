@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
@@ -505,8 +506,18 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	@Override
+	public EAttribute getChangeSetRow_DateChange() {
+		return (EAttribute)changeSetRowEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EReference getChangeSetRow_BeforeData() {
-		return (EReference)changeSetRowEClass.getEStructuralFeatures().get(2);
+		return (EReference)changeSetRowEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -516,7 +527,17 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 */
 	@Override
 	public EReference getChangeSetRow_AfterData() {
-		return (EReference)changeSetRowEClass.getEStructuralFeatures().get(3);
+		return (EReference)changeSetRowEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getChangeSetRow__IsMajorChange() {
+		return changeSetRowEClass.getEOperations().get(0);
 	}
 
 	/**
@@ -1025,8 +1046,8 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	@Override
-	public EReference getChangeSetTableRow_PreviousRHS() {
-		return (EReference)changeSetTableRowEClass.getEStructuralFeatures().get(12);
+	public EAttribute getChangeSetTableRow_DateChange() {
+		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(12);
 	}
 
 	/**
@@ -1035,7 +1056,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	@Override
-	public EReference getChangeSetTableRow_NextLHS() {
+	public EReference getChangeSetTableRow_PreviousRHS() {
 		return (EReference)changeSetTableRowEClass.getEStructuralFeatures().get(13);
 	}
 
@@ -1045,8 +1066,8 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getChangeSetTableRow_LhsSlot() {
-		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(14);
+	public EReference getChangeSetTableRow_NextLHS() {
+		return (EReference)changeSetTableRowEClass.getEStructuralFeatures().get(14);
 	}
 
 	/**
@@ -1055,7 +1076,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getChangeSetTableRow_LhsSpot() {
+	public EAttribute getChangeSetTableRow_LhsSlot() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(15);
 	}
 
@@ -1065,7 +1086,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getChangeSetTableRow_LhsOptional() {
+	public EAttribute getChangeSetTableRow_LhsSpot() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(16);
 	}
 
@@ -1075,7 +1096,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getChangeSetTableRow_LhsValid() {
+	public EAttribute getChangeSetTableRow_LhsOptional() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(17);
 	}
 
@@ -1085,7 +1106,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getChangeSetTableRow_LhsNonShipped() {
+	public EAttribute getChangeSetTableRow_LhsValid() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(18);
 	}
 
@@ -1095,7 +1116,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getChangeSetTableRow_RhsSlot() {
+	public EAttribute getChangeSetTableRow_LhsNonShipped() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(19);
 	}
 
@@ -1105,7 +1126,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getChangeSetTableRow_RhsSpot() {
+	public EAttribute getChangeSetTableRow_RhsSlot() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(20);
 	}
 
@@ -1115,7 +1136,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getChangeSetTableRow_RhsOptional() {
+	public EAttribute getChangeSetTableRow_RhsSpot() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(21);
 	}
 
@@ -1125,7 +1146,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getChangeSetTableRow_RhsValid() {
+	public EAttribute getChangeSetTableRow_RhsOptional() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(22);
 	}
 
@@ -1135,7 +1156,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getChangeSetTableRow_RhsNonShipped() {
+	public EAttribute getChangeSetTableRow_RhsValid() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(23);
 	}
 
@@ -1145,7 +1166,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getChangeSetTableRow_BeforeVesselType() {
+	public EAttribute getChangeSetTableRow_RhsNonShipped() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(24);
 	}
 
@@ -1155,7 +1176,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getChangeSetTableRow_AfterVesselType() {
+	public EAttribute getChangeSetTableRow_BeforeVesselType() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(25);
 	}
 
@@ -1165,7 +1186,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getChangeSetTableRow_BeforeVesselCharterNumber() {
+	public EAttribute getChangeSetTableRow_AfterVesselType() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(26);
 	}
 
@@ -1175,8 +1196,28 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	@Override
-	public EAttribute getChangeSetTableRow_AfterVesselCharterNumber() {
+	public EAttribute getChangeSetTableRow_BeforeVesselCharterNumber() {
 		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(27);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getChangeSetTableRow_AfterVesselCharterNumber() {
+		return (EAttribute)changeSetTableRowEClass.getEStructuralFeatures().get(28);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getChangeSetTableRow__IsMajorChange() {
+		return changeSetTableRowEClass.getEOperations().get(0);
 	}
 
 	/**
@@ -1301,8 +1342,10 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		changeSetRowEClass = createEClass(CHANGE_SET_ROW);
 		createEAttribute(changeSetRowEClass, CHANGE_SET_ROW__WIRING_CHANGE);
 		createEAttribute(changeSetRowEClass, CHANGE_SET_ROW__VESSEL_CHANGE);
+		createEAttribute(changeSetRowEClass, CHANGE_SET_ROW__DATE_CHANGE);
 		createEReference(changeSetRowEClass, CHANGE_SET_ROW__BEFORE_DATA);
 		createEReference(changeSetRowEClass, CHANGE_SET_ROW__AFTER_DATA);
+		createEOperation(changeSetRowEClass, CHANGE_SET_ROW___IS_MAJOR_CHANGE);
 
 		changeSetRowDataEClass = createEClass(CHANGE_SET_ROW_DATA);
 		createEAttribute(changeSetRowDataEClass, CHANGE_SET_ROW_DATA__PRIMARY_RECORD);
@@ -1356,6 +1399,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		createEAttribute(changeSetTableRowEClass, CHANGE_SET_TABLE_ROW__AFTER_VESSEL_SHORT_NAME);
 		createEAttribute(changeSetTableRowEClass, CHANGE_SET_TABLE_ROW__WIRING_CHANGE);
 		createEAttribute(changeSetTableRowEClass, CHANGE_SET_TABLE_ROW__VESSEL_CHANGE);
+		createEAttribute(changeSetTableRowEClass, CHANGE_SET_TABLE_ROW__DATE_CHANGE);
 		createEReference(changeSetTableRowEClass, CHANGE_SET_TABLE_ROW__PREVIOUS_RHS);
 		createEReference(changeSetTableRowEClass, CHANGE_SET_TABLE_ROW__NEXT_LHS);
 		createEAttribute(changeSetTableRowEClass, CHANGE_SET_TABLE_ROW__LHS_SLOT);
@@ -1372,6 +1416,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		createEAttribute(changeSetTableRowEClass, CHANGE_SET_TABLE_ROW__AFTER_VESSEL_TYPE);
 		createEAttribute(changeSetTableRowEClass, CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_CHARTER_NUMBER);
 		createEAttribute(changeSetTableRowEClass, CHANGE_SET_TABLE_ROW__AFTER_VESSEL_CHARTER_NUMBER);
+		createEOperation(changeSetTableRowEClass, CHANGE_SET_TABLE_ROW___IS_MAJOR_CHANGE);
 
 		changeSetTableRootEClass = createEClass(CHANGE_SET_TABLE_ROOT);
 		createEReference(changeSetTableRootEClass, CHANGE_SET_TABLE_ROOT__GROUPS);
@@ -1452,8 +1497,11 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		initEClass(changeSetRowEClass, ChangeSetRow.class, "ChangeSetRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getChangeSetRow_WiringChange(), ecorePackage.getEBoolean(), "wiringChange", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getChangeSetRow_VesselChange(), ecorePackage.getEBoolean(), "vesselChange", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getChangeSetRow_DateChange(), ecorePackage.getEBoolean(), "dateChange", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSetRow_BeforeData(), this.getChangeSetRowDataGroup(), null, "beforeData", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSetRow_AfterData(), this.getChangeSetRowDataGroup(), null, "afterData", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getChangeSetRow__IsMajorChange(), ecorePackage.getEBoolean(), "isMajorChange", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(changeSetRowDataEClass, ChangeSetRowData.class, "ChangeSetRowData", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getChangeSetRowData_PrimaryRecord(), ecorePackage.getEBoolean(), "primaryRecord", "true", 0, 1, ChangeSetRowData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1507,6 +1555,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		initEAttribute(getChangeSetTableRow_AfterVesselShortName(), ecorePackage.getEString(), "afterVesselShortName", null, 0, 1, ChangeSetTableRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getChangeSetTableRow_WiringChange(), ecorePackage.getEBoolean(), "wiringChange", null, 0, 1, ChangeSetTableRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getChangeSetTableRow_VesselChange(), ecorePackage.getEBoolean(), "vesselChange", null, 0, 1, ChangeSetTableRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getChangeSetTableRow_DateChange(), ecorePackage.getEBoolean(), "dateChange", null, 0, 1, ChangeSetTableRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSetTableRow_PreviousRHS(), this.getChangeSetTableRow(), this.getChangeSetTableRow_NextLHS(), "previousRHS", null, 0, 1, ChangeSetTableRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSetTableRow_NextLHS(), this.getChangeSetTableRow(), this.getChangeSetTableRow_PreviousRHS(), "nextLHS", null, 0, 1, ChangeSetTableRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getChangeSetTableRow_LhsSlot(), ecorePackage.getEBoolean(), "lhsSlot", null, 0, 1, ChangeSetTableRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1523,6 +1572,8 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		initEAttribute(getChangeSetTableRow_AfterVesselType(), this.getChangeSetVesselType(), "afterVesselType", null, 0, 1, ChangeSetTableRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getChangeSetTableRow_BeforeVesselCharterNumber(), ecorePackage.getEInt(), "beforeVesselCharterNumber", null, 0, 1, ChangeSetTableRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getChangeSetTableRow_AfterVesselCharterNumber(), ecorePackage.getEInt(), "afterVesselCharterNumber", null, 0, 1, ChangeSetTableRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getChangeSetTableRow__IsMajorChange(), ecorePackage.getEBoolean(), "isMajorChange", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(changeSetTableRootEClass, ChangeSetTableRoot.class, "ChangeSetTableRoot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getChangeSetTableRoot_Groups(), this.getChangeSetTableGroup(), null, "groups", null, 0, -1, ChangeSetTableRoot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

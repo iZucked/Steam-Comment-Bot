@@ -198,6 +198,7 @@ public class UpdateSandboxFromRowsAction extends Action {
 			for (final ChangeSetTableRow row : selectedRows) {
 				final BaseCaseRow bRow = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
 				if (row.isWiringChange() || row.isVesselChange()) {
+					// Date only changes not required for sandbox as they are derived values
 					{
 						final ChangeSetRowData lhsData = row.getLhsAfter();
 						if (lhsData != null) {
