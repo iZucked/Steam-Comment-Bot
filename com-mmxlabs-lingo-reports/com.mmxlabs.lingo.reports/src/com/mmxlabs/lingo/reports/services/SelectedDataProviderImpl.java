@@ -155,6 +155,8 @@ public class SelectedDataProviderImpl implements ISelectedDataProvider {
 	}
 
 	private Collection<Object> selectedObjects = new LinkedHashSet<>();
+
+	private Collection<Object> changeSetSelection;
 	
 	public void setSelectedObjects(final IWorkbenchPart part, final ISelection selection) {
 		
@@ -213,6 +215,15 @@ public class SelectedDataProviderImpl implements ISelectedDataProvider {
 	@Override
 	public Collection<Object> getSelectedObjects() {
 		return selectedObjects;
+	}
+	
+	@Override
+	public @Nullable  Collection<Object> getChangeSetSelection() {
+		return changeSetSelection;
+	}
+
+	public void setChangeSetSelection(List<Object> changeSetSelection) {
+		this.changeSetSelection = new LinkedHashSet<>(changeSetSelection);
 	}
 	
 }

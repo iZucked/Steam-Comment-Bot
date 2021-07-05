@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.views.vertical;
 
-import java.util.Date;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -27,7 +26,6 @@ import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.views.vertical.providers.EventProvider;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
-import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
@@ -87,7 +85,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 				}
 
 			};
-			RunnerHelper.exec(r, block);
+			ViewerHelper.runIfViewerValid(gridViewer, block, r);
 		}
 	};
 

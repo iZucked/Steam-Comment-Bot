@@ -22,6 +22,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.common.CumulativeMap;
@@ -146,6 +147,15 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 								if (modelRecord != null) {
 									return modelRecord.getName();
 								}
+							}
+							return null;
+						}
+
+						@Override
+						public Image getColumnImage(IncomeStatementData data) {
+							final ScenarioResult scenarioResult = data.scenarioResult;
+							if (selectedDataProvider.getPinnedScenarioResult() == scenarioResult) {
+								return pinImage;
 							}
 							return null;
 						}
