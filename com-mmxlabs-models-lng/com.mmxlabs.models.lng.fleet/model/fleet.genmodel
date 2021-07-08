@@ -70,7 +70,8 @@
           ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/hasReliqCapability"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/notes"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/mmxId"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/referenceVessel"/>
+      <genFeatures createChild="false" propertyDescription="Flag indicating whether this is a reference vessel"
+          ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/referenceVessel"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//Vessel/mmxReference"/>
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getShortenedName"/>
       <genOperations ecoreOperation="fleet.ecore#//Vessel/getVesselOrDelegateInaccessiblePorts"/>

@@ -71,14 +71,14 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 
 		paperDealViewer.getGrid().setHeaderVisible(true);
 		paperDealViewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
-		
+
 		EObjectTableViewerSortingSupport sortingSupport = new EObjectTableViewerSortingSupport();
 		paperDealViewer.setComparator(sortingSupport.createViewerComparer());
 
 		final GridViewerColumn dateColumn = createColumn("Date", SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__DATE);
 		sortingSupport.addSortableColumn(paperDealViewer, dateColumn, dateColumn.getColumn());
 		dateColumn.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, new IComparableProvider() {
-			
+
 			@Override
 			public Comparable getComparable(Object object) {
 				LocalDate earliestPDA = LocalDate.MAX;
@@ -95,7 +95,7 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 		final GridViewerColumn priceColumn = createColumn("Price", SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__PRICE);
 		sortingSupport.addSortableColumn(paperDealViewer, priceColumn, priceColumn.getColumn());
 		priceColumn.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, new IComparableProvider() {
-			
+
 			@Override
 			public Comparable getComparable(Object object) {
 				Double lowestPrice = Double.MIN_VALUE;
@@ -112,7 +112,7 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 		final GridViewerColumn quantityColumn = createColumn("Quantity", SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__QUANTITY);
 		sortingSupport.addSortableColumn(paperDealViewer, quantityColumn, quantityColumn.getColumn());
 		quantityColumn.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, new IComparableProvider() {
-			
+
 			@Override
 			public Comparable getComparable(Object object) {
 				Double lowestQuantity = Double.MIN_VALUE;
@@ -128,7 +128,7 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 		final GridViewerColumn valueColumn = createColumn("Value", SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__VALUE);
 		sortingSupport.addSortableColumn(paperDealViewer, valueColumn, valueColumn.getColumn());
 		valueColumn.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, new IComparableProvider() {
-			
+
 			@Override
 			public Comparable getComparable(Object object) {
 				Double lowestValue = Double.MIN_VALUE;
@@ -159,7 +159,7 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 	}
 
 	private void makeActions() {
-		
+
 		final Action expandCollapseAll = createExpandButton();
 		getViewSite().getActionBars().getToolBarManager().add(expandCollapseAll);
 
@@ -267,12 +267,12 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 	private ISelection selection;
 
 	public PaperDealsReportView() {
-		this.selectedScenariosServiceListener =  new PaperDealSelectedScenariosServiceListener();
+		this.selectedScenariosServiceListener = new PaperDealSelectedScenariosServiceListener();
 	}
 
 	@NonNull
 	protected ISelectedScenariosServiceListener selectedScenariosServiceListener;
-	
+
 	protected GridTreeViewer paperDealViewer;
 
 	@Override
@@ -290,15 +290,16 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 		selection = SelectionHelper.adaptSelection(selectionObject);
 		ViewerHelper.refreshThen(paperDealViewer, true, this::processExpand);
 	}
+
 	@Override
 	public void setFocus() {
 		ViewerHelper.setFocus(paperDealViewer);
 	}
-	
+
 	protected void refresh() {
 		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 	}
-	
+
 	protected final class PaperDealSelectedScenariosServiceListener implements ISelectedScenariosServiceListener {
 		@Override
 		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
@@ -352,10 +353,10 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 				}
 			};
 
-			RunnerHelper.exec(r, block);
+			ViewerHelper.runIfViewerValid(paperDealViewer, block, r);
 		}
 	}
-	
+
 	public final class GeneratedPaperDealsSelectedScenariosServiceListener implements ISelectedScenariosServiceListener {
 		@Override
 		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
@@ -371,8 +372,8 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 						if (scheduleModel != null) {
 							final Schedule schedule = scheduleModel.getSchedule();
 							if (schedule != null) {
-								for(final PaperDeal paperDeal : schedule.getGeneratedPaperDeals()) {
-									for(final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
+								for (final PaperDeal paperDeal : schedule.getGeneratedPaperDeals()) {
+									for (final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
 										if (paperDealAllocation.getPaperDeal().equals(paperDeal)) {
 											paperDealAllocations.add(paperDealAllocation);
 										}
@@ -392,8 +393,8 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 						if (scheduleModel != null) {
 							final Schedule schedule = scheduleModel.getSchedule();
 							if (schedule != null) {
-								for(final PaperDeal paperDeal : schedule.getGeneratedPaperDeals()) {
-									for(final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
+								for (final PaperDeal paperDeal : schedule.getGeneratedPaperDeals()) {
+									for (final PaperDealAllocation paperDealAllocation : schedule.getPaperDealAllocations()) {
 										if (paperDealAllocation.getPaperDeal().equals(paperDeal)) {
 											paperDealAllocations.add(paperDealAllocation);
 										}
@@ -411,10 +412,10 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 				}
 			};
 
-			RunnerHelper.exec(r, block);
+			ViewerHelper.runIfViewerValid(paperDealViewer, block, r);
 		}
 	}
-	
+
 	private void processExpand() {
 		if (expand) {
 			paperDealViewer.expandAll();

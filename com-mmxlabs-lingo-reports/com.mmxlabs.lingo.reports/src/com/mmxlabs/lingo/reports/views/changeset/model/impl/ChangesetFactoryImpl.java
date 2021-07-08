@@ -10,7 +10,6 @@ import com.mmxlabs.lingo.reports.views.changeset.model.*;
 import com.mmxlabs.models.lng.analytics.ChangeDescription;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.scenario.service.ScenarioResult;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;

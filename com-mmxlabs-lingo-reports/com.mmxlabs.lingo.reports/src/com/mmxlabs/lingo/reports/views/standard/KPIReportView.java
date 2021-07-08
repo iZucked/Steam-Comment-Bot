@@ -131,7 +131,7 @@ public class KPIReportView extends ViewPart {
 				}
 			};
 
-			RunnerHelper.exec(r, block);
+			ViewerHelper.runIfViewerValid(viewer, block, r);
 		}
 	};
 

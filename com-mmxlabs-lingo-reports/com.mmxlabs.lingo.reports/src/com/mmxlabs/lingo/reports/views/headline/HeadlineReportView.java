@@ -239,7 +239,7 @@ public class HeadlineReportView extends ViewPart {
 				pinnedData = pPinnedData;
 				ViewerHelper.setInput(viewer, true, rowElements);
 			};
-			RunnerHelper.exec(r, block);
+			ViewerHelper.runIfViewerValid(viewer, block, r);
 		}
 	};
 

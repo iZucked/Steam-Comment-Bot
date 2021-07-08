@@ -17,7 +17,6 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
-import com.mmxlabs.rcp.common.application.BindSelectionListener;
 
 public abstract class DetailPropertiesView<T extends DetailPropertiesViewComponent> extends ViewPart {
 	private Action packColumnsAction;
@@ -48,7 +47,7 @@ public abstract class DetailPropertiesView<T extends DetailPropertiesViewCompone
 		componentContext.set(Options.class, options);
 
 		component = ContextInjectionFactory.make(getComponentClass(), componentContext);
-		ContextInjectionFactory.invoke(component, BindSelectionListener.class, componentContext);
+//		ContextInjectionFactory.invoke(component, BindSelectionListener.class, componentContext);
 		
 
 		GridTreeViewer viewer = component.getViewer();

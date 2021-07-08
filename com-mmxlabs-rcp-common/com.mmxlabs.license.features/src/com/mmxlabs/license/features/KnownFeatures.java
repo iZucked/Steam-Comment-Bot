@@ -81,7 +81,8 @@ public final class KnownFeatures {
 	
 	public static final String FEATURE_INDIVIDUAL_EXPOSURES = "features:individual-exposures";
 	
-
+	public static final String FEATURE_MTM_SELL_SIDE = "features:mtm-sell-side";
+	
 	/**
 	 * Enable the charter length evaluation mode
 	 */

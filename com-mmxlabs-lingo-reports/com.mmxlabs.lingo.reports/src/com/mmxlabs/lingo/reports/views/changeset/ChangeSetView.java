@@ -361,7 +361,7 @@ public class ChangeSetView extends ViewPart {
 
 	private InsertionPlanGrouperAndFilter insertionPlanFilter;
 
-	private boolean showNonStructuralChanges = false;
+	private boolean showMinorChanges = false;
 	private boolean sortByVesselAndDate = false;
 	private boolean showRelatedChangesMenus = false;
 	private boolean showUserFilterMenus = false;
@@ -808,10 +808,10 @@ public class ChangeSetView extends ViewPart {
 						}
 					}
 				}
-				if (!showNonStructuralChanges) {
+				if (!showMinorChanges) {
 					if (element instanceof ChangeSetTableRow) {
 						final ChangeSetTableRow row = (ChangeSetTableRow) element;
-						if (!row.isWiringChange() && !row.isVesselChange()) {
+						if (!row.isMajorChange()) {
 							final long delta = ChangeSetKPIUtil.getRowProfitAndLossValue(row, ResultType.After, ScheduleModelKPIUtils::getGroupProfitAndLoss)
 									- ChangeSetKPIUtil.getRowProfitAndLossValue(row, ResultType.Before, ScheduleModelKPIUtils::getGroupProfitAndLoss);
 							long totalPNLDelta = 0;
@@ -1029,10 +1029,10 @@ public class ChangeSetView extends ViewPart {
 						groupModeAction.setToolTipText("Change the grouping choice");
 						addActionToMenu(groupModeAction, menu);
 					}
-					final RunnableAction toggleStructuralChanges = new RunnableAction("Show non-structural changes", ChangeSetView.this::doShowStructuralChangesToggle);
-					toggleStructuralChanges.setToolTipText("Toggling filtering of non structural changes");
-					toggleStructuralChanges.setChecked(showNonStructuralChanges);
-					addActionToMenu(toggleStructuralChanges, menu);
+					final RunnableAction toggleMinorChanges = new RunnableAction("Show minor changes", ChangeSetView.this::doShowMinorChangesToggle);
+					toggleMinorChanges.setToolTipText("Toggling filtering of minor changes");
+					toggleMinorChanges.setChecked(showMinorChanges);
+					addActionToMenu(toggleMinorChanges, menu);
 
 					final RunnableAction toggleSortByVesselAndDate = new RunnableAction("Sort by vessel and date", ChangeSetView.this::doSortByVesselAndDateToggle);
 					toggleSortByVesselAndDate.setToolTipText("Toggling sorting by vessel and date");
@@ -1301,8 +1301,8 @@ public class ChangeSetView extends ViewPart {
 		}
 	}
 
-	private void doShowStructuralChangesToggle() {
-		showNonStructuralChanges = !showNonStructuralChanges;
+	private void doShowMinorChangesToggle() {
+		showMinorChanges = !showMinorChanges;
 		ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 	}
 

@@ -52,8 +52,10 @@
     <genClasses ecoreClass="changeset.ecore#//ChangeSetRow">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRow/wiringChange"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRow/vesselChange"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRow/dateChange"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/beforeData"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetRow/afterData"/>
+      <genOperations ecoreOperation="changeset.ecore#//ChangeSetRow/isMajorChange"/>
     </genClasses>
     <genClasses ecoreClass="changeset.ecore#//ChangeSetRowData">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetRowData/primaryRecord"/>
@@ -107,6 +109,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/afterVesselShortName"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/wiringChange"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/vesselChange"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/dateChange"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableRow/previousRHS"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableRow/nextLHS"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/lhsSlot"/>
@@ -123,6 +126,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/afterVesselType"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/beforeVesselCharterNumber"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute changeset.ecore#//ChangeSetTableRow/afterVesselCharterNumber"/>
+      <genOperations ecoreOperation="changeset.ecore#//ChangeSetTableRow/isMajorChange"/>
     </genClasses>
     <genClasses ecoreClass="changeset.ecore#//ChangeSetTableRoot">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference changeset.ecore#//ChangeSetTableRoot/groups"/>

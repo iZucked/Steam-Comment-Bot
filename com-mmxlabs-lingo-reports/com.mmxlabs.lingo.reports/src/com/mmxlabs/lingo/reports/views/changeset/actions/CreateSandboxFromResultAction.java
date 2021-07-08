@@ -82,8 +82,8 @@ public class CreateSandboxFromResultAction extends Action {
 			newModel.setName("Sandbox from solution");
 		}
 
-		final Map<SpotMarket, BuyMarket> buyMarketOptions = new HashMap<>();
-		final Map<SpotMarket, SellMarket> sellMarketOptions = new HashMap<>();
+//		final Map<SpotMarket, BuyMarket> buyMarketOptions = new HashMap<>();
+//		final Map<SpotMarket, SellMarket> sellMarketOptions = new HashMap<>();
 		final Map<LoadSlot, BuyOption> buyOptions = new HashMap<>();
 		final Map<DischargeSlot, SellOption> sellOptions = new HashMap<>();
 		final Map<VesselEvent, VesselEventOption> eventOptions = new HashMap<>();
@@ -105,13 +105,14 @@ public class CreateSandboxFromResultAction extends Action {
 			} else {
 				if (s instanceof SpotSlot) {
 					final SpotSlot spotSlot = (SpotSlot) s;
-					return buyMarketOptions.computeIfAbsent(spotSlot.getMarket(), mkt -> {
+//					return buyMarketOptions.computeIfAbsent(spotSlot.getMarket(), mkt -> {
+						final SpotMarket mkt = spotSlot.getMarket();
 						final BuyMarket m = AnalyticsFactory.eINSTANCE.createBuyMarket();
 						m.setMarket(mkt);
 						newModel.getBuys().add(m);
 
 						return m;
-					});
+//					});
 				} else {
 					final BuyReference ref = AnalyticsFactory.eINSTANCE.createBuyReference();
 					ref.setSlot(s);
@@ -128,13 +129,14 @@ public class CreateSandboxFromResultAction extends Action {
 			} else {
 				if (s instanceof SpotSlot) {
 					final SpotSlot spotSlot = (SpotSlot) s;
-					return sellMarketOptions.computeIfAbsent(spotSlot.getMarket(), mkt -> {
+//					return sellMarketOptions.computeIfAbsent(spotSlot.getMarket(), mkt -> {
+						final SpotMarket mkt = spotSlot.getMarket();
 						final SellMarket m = AnalyticsFactory.eINSTANCE.createSellMarket();
 						m.setMarket(mkt);
 						newModel.getSells().add(m);
 
 						return m;
-					});
+//					});
 				} else {
 					final SellReference ref = AnalyticsFactory.eINSTANCE.createSellReference();
 					ref.setSlot(s);
@@ -201,6 +203,7 @@ public class CreateSandboxFromResultAction extends Action {
 		for (final ChangeSetTableRow row : selectedRows) {
 			final BaseCaseRow bRow = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
 			if (row.isWiringChange() || row.isVesselChange()) {
+				// Date only changes not required for sandbox as they are derived values
 				{
 					final ChangeSetRowData lhsData = row.getLhsAfter();
 					if (lhsData != null) {
