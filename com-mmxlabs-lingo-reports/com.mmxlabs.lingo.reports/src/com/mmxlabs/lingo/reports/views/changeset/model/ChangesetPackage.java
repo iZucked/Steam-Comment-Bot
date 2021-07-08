@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -411,13 +412,22 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET_ROW__VESSEL_CHANGE = 1;
 
 	/**
+	 * The feature id for the '<em><b>Date Change</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_ROW__DATE_CHANGE = 2;
+
+	/**
 	 * The feature id for the '<em><b>Before Data</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW__BEFORE_DATA = 2;
+	int CHANGE_SET_ROW__BEFORE_DATA = 3;
 
 	/**
 	 * The feature id for the '<em><b>After Data</b></em>' containment reference.
@@ -426,7 +436,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW__AFTER_DATA = 3;
+	int CHANGE_SET_ROW__AFTER_DATA = 4;
 
 	/**
 	 * The number of structural features of the '<em>Change Set Row</em>' class.
@@ -435,7 +445,16 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_FEATURE_COUNT = 4;
+	int CHANGE_SET_ROW_FEATURE_COUNT = 5;
+
+	/**
+	 * The operation id for the '<em>Is Major Change</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_ROW___IS_MAJOR_CHANGE = 0;
 
 	/**
 	 * The number of operations of the '<em>Change Set Row</em>' class.
@@ -444,7 +463,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_OPERATION_COUNT = 0;
+	int CHANGE_SET_ROW_OPERATION_COUNT = 1;
 
 
 	/**
@@ -938,13 +957,22 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET_TABLE_ROW__VESSEL_CHANGE = 11;
 
 	/**
+	 * The feature id for the '<em><b>Date Change</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_ROW__DATE_CHANGE = 12;
+
+	/**
 	 * The feature id for the '<em><b>Previous RHS</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__PREVIOUS_RHS = 12;
+	int CHANGE_SET_TABLE_ROW__PREVIOUS_RHS = 13;
 
 	/**
 	 * The feature id for the '<em><b>Next LHS</b></em>' reference.
@@ -953,7 +981,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__NEXT_LHS = 13;
+	int CHANGE_SET_TABLE_ROW__NEXT_LHS = 14;
 
 	/**
 	 * The feature id for the '<em><b>Lhs Slot</b></em>' attribute.
@@ -962,7 +990,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__LHS_SLOT = 14;
+	int CHANGE_SET_TABLE_ROW__LHS_SLOT = 15;
 
 	/**
 	 * The feature id for the '<em><b>Lhs Spot</b></em>' attribute.
@@ -971,7 +999,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__LHS_SPOT = 15;
+	int CHANGE_SET_TABLE_ROW__LHS_SPOT = 16;
 
 	/**
 	 * The feature id for the '<em><b>Lhs Optional</b></em>' attribute.
@@ -980,7 +1008,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__LHS_OPTIONAL = 16;
+	int CHANGE_SET_TABLE_ROW__LHS_OPTIONAL = 17;
 
 	/**
 	 * The feature id for the '<em><b>Lhs Valid</b></em>' attribute.
@@ -989,7 +1017,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__LHS_VALID = 17;
+	int CHANGE_SET_TABLE_ROW__LHS_VALID = 18;
 
 	/**
 	 * The feature id for the '<em><b>Lhs Non Shipped</b></em>' attribute.
@@ -998,7 +1026,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__LHS_NON_SHIPPED = 18;
+	int CHANGE_SET_TABLE_ROW__LHS_NON_SHIPPED = 19;
 
 	/**
 	 * The feature id for the '<em><b>Rhs Slot</b></em>' attribute.
@@ -1007,7 +1035,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__RHS_SLOT = 19;
+	int CHANGE_SET_TABLE_ROW__RHS_SLOT = 20;
 
 	/**
 	 * The feature id for the '<em><b>Rhs Spot</b></em>' attribute.
@@ -1016,7 +1044,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__RHS_SPOT = 20;
+	int CHANGE_SET_TABLE_ROW__RHS_SPOT = 21;
 
 	/**
 	 * The feature id for the '<em><b>Rhs Optional</b></em>' attribute.
@@ -1025,7 +1053,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__RHS_OPTIONAL = 21;
+	int CHANGE_SET_TABLE_ROW__RHS_OPTIONAL = 22;
 
 	/**
 	 * The feature id for the '<em><b>Rhs Valid</b></em>' attribute.
@@ -1034,7 +1062,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__RHS_VALID = 22;
+	int CHANGE_SET_TABLE_ROW__RHS_VALID = 23;
 
 	/**
 	 * The feature id for the '<em><b>Rhs Non Shipped</b></em>' attribute.
@@ -1043,7 +1071,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__RHS_NON_SHIPPED = 23;
+	int CHANGE_SET_TABLE_ROW__RHS_NON_SHIPPED = 24;
 
 	/**
 	 * The feature id for the '<em><b>Before Vessel Type</b></em>' attribute.
@@ -1052,7 +1080,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_TYPE = 24;
+	int CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_TYPE = 25;
 
 	/**
 	 * The feature id for the '<em><b>After Vessel Type</b></em>' attribute.
@@ -1061,7 +1089,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__AFTER_VESSEL_TYPE = 25;
+	int CHANGE_SET_TABLE_ROW__AFTER_VESSEL_TYPE = 26;
 
 	/**
 	 * The feature id for the '<em><b>Before Vessel Charter Number</b></em>' attribute.
@@ -1070,7 +1098,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_CHARTER_NUMBER = 26;
+	int CHANGE_SET_TABLE_ROW__BEFORE_VESSEL_CHARTER_NUMBER = 27;
 
 	/**
 	 * The feature id for the '<em><b>After Vessel Charter Number</b></em>' attribute.
@@ -1079,7 +1107,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW__AFTER_VESSEL_CHARTER_NUMBER = 27;
+	int CHANGE_SET_TABLE_ROW__AFTER_VESSEL_CHARTER_NUMBER = 28;
 
 	/**
 	 * The number of structural features of the '<em>Change Set Table Row</em>' class.
@@ -1088,7 +1116,16 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW_FEATURE_COUNT = 28;
+	int CHANGE_SET_TABLE_ROW_FEATURE_COUNT = 29;
+
+	/**
+	 * The operation id for the '<em>Is Major Change</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_TABLE_ROW___IS_MAJOR_CHANGE = 0;
 
 	/**
 	 * The number of operations of the '<em>Change Set Table Row</em>' class.
@@ -1097,7 +1134,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_TABLE_ROW_OPERATION_COUNT = 0;
+	int CHANGE_SET_TABLE_ROW_OPERATION_COUNT = 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableRootImpl <em>Change Set Table Root</em>}' class.
@@ -1449,6 +1486,17 @@ public interface ChangesetPackage extends EPackage {
 	EAttribute getChangeSetRow_VesselChange();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#isDateChange <em>Date Change</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Date Change</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#isDateChange()
+	 * @see #getChangeSetRow()
+	 * @generated
+	 */
+	EAttribute getChangeSetRow_DateChange();
+
+	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getBeforeData <em>Before Data</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1469,6 +1517,16 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getChangeSetRow_AfterData();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#isMajorChange() <em>Is Major Change</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Is Major Change</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#isMajorChange()
+	 * @generated
+	 */
+	EOperation getChangeSetRow__IsMajorChange();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData <em>Change Set Row Data</em>}'.
@@ -1996,6 +2054,17 @@ public interface ChangesetPackage extends EPackage {
 	EAttribute getChangeSetTableRow_VesselChange();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isDateChange <em>Date Change</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Date Change</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isDateChange()
+	 * @see #getChangeSetTableRow()
+	 * @generated
+	 */
+	EAttribute getChangeSetTableRow_DateChange();
+
+	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getPreviousRHS <em>Previous RHS</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2172,6 +2241,16 @@ public interface ChangesetPackage extends EPackage {
 	EAttribute getChangeSetTableRow_AfterVesselCharterNumber();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isMajorChange() <em>Is Major Change</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Is Major Change</em>' operation.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isMajorChange()
+	 * @generated
+	 */
+	EOperation getChangeSetTableRow__IsMajorChange();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRoot <em>Change Set Table Root</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2263,7 +2342,7 @@ public interface ChangesetPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @return the meta object for data type '<em>Scenario Result</em>'.
 	 * @see com.mmxlabs.scenario.service.ScenarioResult
-	 * @model instanceClass="com.mmxlabs.scenario.service.ui.ScenarioResult"
+	 * @model instanceClass="com.mmxlabs.scenario.service.ScenarioResult"
 	 * @generated
 	 */
 	EDataType getScenarioResult();
@@ -2550,6 +2629,14 @@ public interface ChangesetPackage extends EPackage {
 		EAttribute CHANGE_SET_ROW__VESSEL_CHANGE = eINSTANCE.getChangeSetRow_VesselChange();
 
 		/**
+		 * The meta object literal for the '<em><b>Date Change</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_ROW__DATE_CHANGE = eINSTANCE.getChangeSetRow_DateChange();
+
+		/**
 		 * The meta object literal for the '<em><b>Before Data</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2564,6 +2651,14 @@ public interface ChangesetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CHANGE_SET_ROW__AFTER_DATA = eINSTANCE.getChangeSetRow_AfterData();
+
+		/**
+		 * The meta object literal for the '<em><b>Is Major Change</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHANGE_SET_ROW___IS_MAJOR_CHANGE = eINSTANCE.getChangeSetRow__IsMajorChange();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowDataImpl <em>Change Set Row Data</em>}' class.
@@ -2932,6 +3027,14 @@ public interface ChangesetPackage extends EPackage {
 		EAttribute CHANGE_SET_TABLE_ROW__VESSEL_CHANGE = eINSTANCE.getChangeSetTableRow_VesselChange();
 
 		/**
+		 * The meta object literal for the '<em><b>Date Change</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_TABLE_ROW__DATE_CHANGE = eINSTANCE.getChangeSetTableRow_DateChange();
+
+		/**
 		 * The meta object literal for the '<em><b>Previous RHS</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3058,6 +3161,14 @@ public interface ChangesetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CHANGE_SET_TABLE_ROW__AFTER_VESSEL_CHARTER_NUMBER = eINSTANCE.getChangeSetTableRow_AfterVesselCharterNumber();
+
+		/**
+		 * The meta object literal for the '<em><b>Is Major Change</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHANGE_SET_TABLE_ROW___IS_MAJOR_CHANGE = eINSTANCE.getChangeSetTableRow__IsMajorChange();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableRootImpl <em>Change Set Table Root</em>}' class.

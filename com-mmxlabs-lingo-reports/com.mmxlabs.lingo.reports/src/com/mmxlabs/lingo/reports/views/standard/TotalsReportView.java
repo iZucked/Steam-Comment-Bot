@@ -128,7 +128,7 @@ public class TotalsReportView extends ViewPart {
 					}
 				}
 			};
-			RunnerHelper.exec(r, block);
+			ViewerHelper.runIfViewerValid(viewer, block, r);
 		}
 	};
 

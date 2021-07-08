@@ -811,7 +811,7 @@ public class ChangeSetView extends ViewPart {
 				if (!showMinorChanges) {
 					if (element instanceof ChangeSetTableRow) {
 						final ChangeSetTableRow row = (ChangeSetTableRow) element;
-						if (!row.isWiringChange() && !row.isVesselChange()) {
+						if (!row.isMajorChange()) {
 							final long delta = ChangeSetKPIUtil.getRowProfitAndLossValue(row, ResultType.After, ScheduleModelKPIUtils::getGroupProfitAndLoss)
 									- ChangeSetKPIUtil.getRowProfitAndLossValue(row, ResultType.Before, ScheduleModelKPIUtils::getGroupProfitAndLoss);
 							long totalPNLDelta = 0;

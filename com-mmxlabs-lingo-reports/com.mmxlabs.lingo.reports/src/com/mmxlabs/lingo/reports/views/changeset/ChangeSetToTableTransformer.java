@@ -104,20 +104,20 @@ public class ChangeSetToTableTransformer {
 //				ChangeSetTransformerUtil.sortRows(changeSetTableGroupRows, targetToSortFirst);
 //				changeSetTableGroup.getRows().addAll(changeSetTableGroupRows);
 /// -------------
-				int structuralChanges = 0;
+				int majorChanges = 0;
 				for (final ChangeSetRow row : changeSetRows) {
 					final ChangeSetRowDataGroup afterData = row.getAfterData();
-					if (afterData != null && (!afterData.getMembers().isEmpty() && (row.isWiringChange() || row.isVesselChange()))) {
-						++structuralChanges;
+					if (afterData != null && (!afterData.getMembers().isEmpty() && (row.isMajorChange()))) {
+						++majorChanges;
 					}
 				}
-				changeSetTableGroup.setComplexity(structuralChanges);
+				changeSetTableGroup.setComplexity(majorChanges);
 				// TODO: For B.E. grab the B/E. price
 				if (sortMode == SortMode.BY_PNL) {
 					// Lower is better for default sort
 					changeSetTableGroup.setSortValue(-changeSetTableGroup.getDeltaMetrics().getPnlDelta());
 				} else if (sortMode == SortMode.BY_PNL_PER_CHANGE) {
-					changeSetTableGroup.setSortValue((double) -changeSetTableGroup.getDeltaMetrics().getPnlDelta() / (double) (structuralChanges == 0 ? 1 : structuralChanges));
+					changeSetTableGroup.setSortValue((double) -changeSetTableGroup.getDeltaMetrics().getPnlDelta() / (double) (majorChanges == 0 ? 1 : majorChanges));
 				} else if (sortMode == SortMode.BY_GROUP) {
 					changeSetTableGroup.setSortValue(groupIdx);
 				} else {
@@ -223,6 +223,7 @@ public class ChangeSetToTableTransformer {
 
 					changeSetTableRow.setVesselChange(changeSetRow.isVesselChange());
 					changeSetTableRow.setWiringChange(changeSetRow.isWiringChange());
+					changeSetTableRow.setDateChange(changeSetRow.isDateChange());
 					primaryIsWiring = changeSetRow.isWiringChange();
 					// Maybe useful filters?
 					// changeSetTableRow.setPNLChange(changeSetRow.isPNLChange());

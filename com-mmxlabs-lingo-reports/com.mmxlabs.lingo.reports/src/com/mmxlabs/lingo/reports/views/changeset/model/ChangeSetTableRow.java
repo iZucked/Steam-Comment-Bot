@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getAfterVesselShortName <em>After Vessel Short Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isWiringChange <em>Wiring Change</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isVesselChange <em>Vessel Change</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isDateChange <em>Date Change</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getPreviousRHS <em>Previous RHS</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#getNextLHS <em>Next LHS</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isLhsSlot <em>Lhs Slot</em>}</li>
@@ -363,6 +364,28 @@ public interface ChangeSetTableRow extends EObject {
 	 * @generated
 	 */
 	void setVesselChange(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Date Change</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Date Change</em>' attribute.
+	 * @see #setDateChange(boolean)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetTableRow_DateChange()
+	 * @model
+	 * @generated
+	 */
+	boolean isDateChange();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow#isDateChange <em>Date Change</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Date Change</em>' attribute.
+	 * @see #isDateChange()
+	 * @generated
+	 */
+	void setDateChange(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Previous RHS</b></em>' reference.
@@ -781,5 +804,13 @@ public interface ChangeSetTableRow extends EObject {
 	 * @generated
 	 */
 	void setAfterVesselCharterNumber(int value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	boolean isMajorChange();
 
 } // ChangeSetTableRow

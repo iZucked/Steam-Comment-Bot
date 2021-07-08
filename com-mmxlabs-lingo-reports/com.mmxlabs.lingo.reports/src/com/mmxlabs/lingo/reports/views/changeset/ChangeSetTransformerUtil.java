@@ -26,6 +26,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.base.Objects;
+import com.mmxlabs.common.time.Days;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.FlexType;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
@@ -82,6 +83,12 @@ import com.mmxlabs.models.mmxcore.NamedObject;
 
 public final class ChangeSetTransformerUtil {
 
+	/**
+	 * How many days difference needed to count as a major change
+	 */
+	private static final int MAJOR_CHANGE_DAYS_THRESHOLD = 2;
+
+	
 	private ChangeSetTransformerUtil() {
 
 	}
@@ -366,7 +373,7 @@ public final class ChangeSetTransformerUtil {
 					cle.setLinkedSequence(c.getSequence());
 				}
 				if (e instanceof ProfitAndLossContainer) {
-					ProfitAndLossContainer c = (ProfitAndLossContainer) e;
+					final ProfitAndLossContainer c = (ProfitAndLossContainer) e;
 					pnl1 += c.getGroupProfitAndLoss().getProfitAndLoss();
 					pnl2 += c.getGroupProfitAndLoss().getProfitAndLossPreTax();
 				}
@@ -758,9 +765,9 @@ public final class ChangeSetTransformerUtil {
 						if (rhsLink != null) {
 							// LDD? Merge after records)
 							if (!rhsLink.isPrimaryRecord()) {
-								ChangeSetRowDataGroup rowDataGroup2 = rhsLink.getRowDataGroup();
-								ChangeSetRowData changeSetRowData = rowDataGroup2.getMembers().get(0);
-								ChangeSetRowData lhsLink = changeSetRowData.getLhsLink();
+								final ChangeSetRowDataGroup rowDataGroup2 = rhsLink.getRowDataGroup();
+								final ChangeSetRowData changeSetRowData = rowDataGroup2.getMembers().get(0);
+								final ChangeSetRowData lhsLink = changeSetRowData.getLhsLink();
 								if (lhsLink != null) {
 									// TODO: Why is it null in sandbox?
 									final ChangeSetRowDataGroup rowDataGroup = lhsLink.getRowDataGroup();
@@ -965,7 +972,7 @@ public final class ChangeSetTransformerUtil {
 			final int windowSize = slot.getWindowSize();
 			String formattedWindowStart = format(slot.getWindowStart());
 			if (windowSize > 1 && slot.getWindowSizeUnits() == TimePeriod.MONTHS) {
-				String formattedWindowPeriodEnd = format(slot.getWindowStart().plusMonths(windowSize));
+				final String formattedWindowPeriodEnd = format(slot.getWindowStart().plusMonths(windowSize));
 				formattedWindowStart = String.format("%s-%s", formattedWindowStart, formattedWindowPeriodEnd);
 			}
 			return String.format("%s-%s", market.getName(), formattedWindowStart);
@@ -1114,6 +1121,14 @@ public final class ChangeSetTransformerUtil {
 						return 1;
 					}
 				}
+				// Sort by date.
+				if (o1.isDateChange() != o2.isDateChange()) {
+					if (o1.isDateChange()) {
+						return -1;
+					} else {
+						return 1;
+					}
+				}
 
 				// Compare name
 				return ("" + o1.getLhsName()).compareTo("" + o2.getLhsName());
@@ -1171,7 +1186,7 @@ public final class ChangeSetTransformerUtil {
 
 					if (event instanceof SlotVisit) {
 						final SlotVisit slotVisit = (SlotVisit) event;
-						SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
+						final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
 						if (slotAllocation != null && slotAllocation.getSlot() instanceof LoadSlot) {
 							final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
 							if (cargoAllocation != null) {
@@ -1226,7 +1241,7 @@ public final class ChangeSetTransformerUtil {
 					}
 					if (event instanceof SlotVisit) {
 						final SlotVisit slotVisit = (SlotVisit) event;
-						SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
+						final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
 						if (slotAllocation != null && slotAllocation.getSlot() instanceof LoadSlot) {
 							final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
 							if (cargoAllocation != null) {
@@ -1292,11 +1307,11 @@ public final class ChangeSetTransformerUtil {
 						// Mark up lateness over 24 hours as a major change.
 						{
 							long beforeLateness = 0L;
-							for (ChangeSetRowData data : row.getBeforeData().getMembers()) {
+							for (final ChangeSetRowData data : row.getBeforeData().getMembers()) {
 								beforeLateness += LatenessUtils.getLatenessExcludingFlex(data.getEventGrouping());
 							}
 							long afterLateness = 0L;
-							for (ChangeSetRowData data : row.getAfterData().getMembers()) {
+							for (final ChangeSetRowData data : row.getAfterData().getMembers()) {
 								afterLateness += LatenessUtils.getLatenessExcludingFlex(data.getEventGrouping());
 							}
 							if (Math.abs(beforeLateness - afterLateness) > 24) {
@@ -1356,6 +1371,56 @@ public final class ChangeSetTransformerUtil {
 								}
 							}
 						}
+
+						if (!row.isWiringChange()) {
+							{
+								final SlotAllocation beforeAllocation = beforeData.getLoadAllocation();
+								final SlotAllocation afterAllocation = afterData.getLoadAllocation();
+								if (beforeAllocation != null && afterAllocation != null) {
+
+									final SlotVisit beforeVisit = beforeAllocation.getSlotVisit();
+									final SlotVisit afterVisit = afterAllocation.getSlotVisit();
+
+									if (beforeVisit != null && afterVisit != null) {
+										if (Math.abs(Days.between(beforeVisit.getStart(), afterVisit.getStart())) > MAJOR_CHANGE_DAYS_THRESHOLD) {
+											row.setDateChange(true);
+										}
+									}
+
+								}
+							}
+							{
+								final SlotAllocation beforeAllocation = beforeData.getDischargeAllocation();
+								final SlotAllocation afterAllocation = afterData.getDischargeAllocation();
+								if (beforeAllocation != null && afterAllocation != null) {
+
+									final SlotVisit beforeVisit = beforeAllocation.getSlotVisit();
+									final SlotVisit afterVisit = afterAllocation.getSlotVisit();
+
+									if (beforeVisit != null && afterVisit != null) {
+										if (Math.abs(Days.between(beforeVisit.getStart(), afterVisit.getStart())) > MAJOR_CHANGE_DAYS_THRESHOLD) {
+											row.setDateChange(true);
+										}
+									}
+								}
+							}
+
+							if (beforeData.getLhsEvent() != null && afterData.getLhsEvent() != null) {
+								final Event beforeEvent = beforeData.getLhsEvent();
+								final Event afterEvent = afterData.getLhsEvent();
+								if (Math.abs(Days.between(beforeEvent.getStart(), afterEvent.getStart())) > MAJOR_CHANGE_DAYS_THRESHOLD) {
+									row.setDateChange(true);
+								}
+							}
+							if (beforeData.getRhsEvent() != null && afterData.getRhsEvent() != null) {
+								final Event beforeEvent = beforeData.getRhsEvent();
+								final Event afterEvent = afterData.getRhsEvent();
+								if (Math.abs(Days.between(beforeEvent.getStart(), afterEvent.getStart())) > MAJOR_CHANGE_DAYS_THRESHOLD) {
+									row.setDateChange(true);
+								}
+							}
+						}
+
 					}
 					if (beforePrimaryCount != afterPrimaryCount) {
 						row.setWiringChange(true);
@@ -1373,7 +1438,7 @@ public final class ChangeSetTransformerUtil {
 			final ChangeSetTableRow changeSetTableRow = itr.next();
 
 			if (size == 1) {
-				if (!changeSetTableRow.isWiringChange() && !changeSetTableRow.isVesselChange()) {
+				if (!changeSetTableRow.isMajorChange()) {
 					long a = ChangeSetKPIUtil.getPNL(changeSetTableRow, ResultType.Before);
 					long b = ChangeSetKPIUtil.getPNL(changeSetTableRow, ResultType.After);
 					if (a == b) {
