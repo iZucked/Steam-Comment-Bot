@@ -180,16 +180,31 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		 * Base fuel requirement for canal traversal
 		 */
 		calculateRouteAdditionalFuelRequirements(options, output, vessel, vesselState, additionalRouteTimeInHours, nboAvailableInM3);
-		if (nboAvailableInM3 != Long.MAX_VALUE) { // Keep Max_Value at Max_Value
-			nboAvailableInM3 -= output.getRouteAdditionalConsumption(LNGFuelKeys.NBO_In_m3);
-			nboAvailableInM3 -= output.getRouteAdditionalConsumption(LNGFuelKeys.FBO_In_m3);
-		}
-
-		// Calculate fuel requirements for travel time
-		calculateTravelFuelRequirements(options, output, vessel, vesselState, travelTimeInHours, speed, nboAvailableInM3);
-		if (nboAvailableInM3 != Long.MAX_VALUE) { // Keep Max_Value at Max_Value
-			nboAvailableInM3 -= output.getFuelConsumption(LNGFuelKeys.NBO_In_m3);
-			nboAvailableInM3 -= output.getFuelConsumption(LNGFuelKeys.FBO_In_m3);
+		final long minBaseFuelConsumptionInMT = Calculator.quantityFromRateTime(vessel.getMinBaseFuelConsumptionInMTPerDay(), additionalRouteTimeInHours) / 24L;
+		if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS && output.getRouteAdditionalConsumption(vessel.getSupplementalTravelBaseFuelInMT()) > minBaseFuelConsumptionInMT) {
+			// Ran out of LNG in canal travel, calculate travel (which should also run out but has run dry logic) first
+			calculateTravelFuelRequirements(options, output, vessel, vesselState, travelTimeInHours, speed, nboAvailableInM3);
+			if (nboAvailableInM3 != Long.MAX_VALUE) { // Keep Max_Value at Max_Value
+				nboAvailableInM3 -= output.getFuelConsumption(LNGFuelKeys.NBO_In_m3);
+				nboAvailableInM3 -= output.getFuelConsumption(LNGFuelKeys.FBO_In_m3);
+			}
+			calculateRouteAdditionalFuelRequirements(options, output, vessel, vesselState, additionalRouteTimeInHours, nboAvailableInM3);
+			if (nboAvailableInM3 != Long.MAX_VALUE) { // Keep Max_Value at Max_Value
+				nboAvailableInM3 -= output.getRouteAdditionalConsumption(LNGFuelKeys.NBO_In_m3);
+				nboAvailableInM3 -= output.getRouteAdditionalConsumption(LNGFuelKeys.FBO_In_m3);
+			}
+			
+		} else {
+			// Did not run out of LNG in the canal calculation - update available NBO and calculate travel fuel consumption
+			if (nboAvailableInM3 != Long.MAX_VALUE) { // Keep Max_Value at Max_Value
+				nboAvailableInM3 -= output.getRouteAdditionalConsumption(LNGFuelKeys.NBO_In_m3);
+				nboAvailableInM3 -= output.getRouteAdditionalConsumption(LNGFuelKeys.FBO_In_m3);
+			}
+			calculateTravelFuelRequirements(options, output, vessel, vesselState, travelTimeInHours, speed, nboAvailableInM3);
+			if (nboAvailableInM3 != Long.MAX_VALUE) { // Keep Max_Value at Max_Value
+				nboAvailableInM3 -= output.getFuelConsumption(LNGFuelKeys.NBO_In_m3);
+				nboAvailableInM3 -= output.getFuelConsumption(LNGFuelKeys.FBO_In_m3);
+			}
 		}
 
 		// Calculate fuel requirements for an idle time
@@ -235,7 +250,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 		if (routeRequiredConsumptionInMT > 0) {
 
-			if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS) {
+			// if no nboAvailable, have to use bunkers irrespective of fuel choice
+			if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS && nboAvailableInM3 > 0) {
 
 				final long nboRouteRateInM3PerDay = routeCostProvider.getRouteNBORate(options.getRoute(), vessel, vesselState);
 

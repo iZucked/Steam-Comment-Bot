@@ -277,16 +277,6 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		// For each voyage options, calculate new Details.
 
 		final List<IDetailsSequenceElement> currentSequence = voyageCalculator.generateFuelCostCalculatedSequence(record.basicSequence.toArray(new IOptionsSequenceElement[0]));
-		// Check if we ended in the (incorrect) state of NBO_PLUS_FBO and supplementing with base fuel
-		for (final IDetailsSequenceElement sequenceElement : currentSequence) {
-			if (sequenceElement instanceof VoyageDetails) {
-				final VoyageDetails voyageDetails = (VoyageDetails) sequenceElement;
-				final TravelFuelChoice travelFuelChoice = voyageDetails.getOptions().getTravelFuelChoice();
-				if (travelFuelChoice == TravelFuelChoice.NBO_PLUS_FBO && voyageDetails.getRouteAdditionalConsumption(record.vessel.getSupplementalTravelBaseFuelInMT()) > 0) {
-					return null;
-				}
-			}
-		}
 		final VoyagePlan currentPlan = new VoyagePlan();
 
 		// Calculate voyage plan
