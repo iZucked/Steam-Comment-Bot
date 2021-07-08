@@ -133,6 +133,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.YearMonthPointContainer;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioElementNameHelper;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -1884,12 +1885,18 @@ public class ContractPage extends ADPComposite {
 				final Pair<BaseLegalEntity, DESSalesMarket> pair = Pair.of(entity, (DESSalesMarket) spotDischargeSlot.getMarket());
 				final Map<Pair<BaseLegalEntity, DESSalesMarket>, Integer> map = desSalesMarketAacqSatisfiedByFixedCargoes.get(inventory);
 				final Integer currentCount = map.get(pair);
-				map.put(pair, currentCount + 1);
+				// The DES market is not part of the MULL data - ignore
+				if (currentCount != null) {
+					map.put(pair, currentCount + 1);
+				}
 			} else {
 				final Pair<BaseLegalEntity, SalesContract> pair = Pair.of(entity, dischargeSlot.getContract());
 				final Map<Pair<BaseLegalEntity, SalesContract>, Integer> map = salesContractAacqSatisfiedByFixedCargoes.get(inventory);
 				final Integer currentCount = map.get(pair);
-				map.put(pair, currentCount + 1);
+				// The sales contract is not part of the MULL data - ignore
+				if (currentCount != null) {
+					map.put(pair, currentCount + 1);
+				}
 			}
 		});
 
@@ -3129,9 +3136,12 @@ public class ContractPage extends ADPComposite {
 		final List<LoadSlot> loadSlotsToDelete;
 		final List<DischargeSlot> dischargeSlotsToDelete;
 		if (cargoesToKeep.isEmpty()) {
-			cargoesToDelete = ScenarioModelUtil.getCargoModel(sdp).getCargoes();
-			loadSlotsToDelete = ScenarioModelUtil.getCargoModel(sdp).getLoadSlots();
-			dischargeSlotsToDelete = ScenarioModelUtil.getCargoModel(sdp).getDischargeSlots();
+			cargoesToDelete = ScenarioModelUtil.getCargoModel(sdp).getCargoes().stream().filter(c -> {
+				final YearMonth loadYM = YearMonth.from(((LoadSlot) c.getSlots().get(0)).getWindowStart());
+				return !loadYM.isBefore(adpModel.getYearStart()) && loadYM.isBefore(adpModel.getYearEnd());
+			}).collect(Collectors.toList());
+			loadSlotsToDelete = cargoesToDelete.stream().map(c -> (LoadSlot) c.getSlots().get(0)).collect(Collectors.toList());
+			dischargeSlotsToDelete = cargoesToDelete.stream().map(c -> (DischargeSlot) c.getSlots().get(1)).collect(Collectors.toList());
 		} else {
 			final Set<Cargo> cargoesToKeepSet = cargoesToKeep.stream().map(wrapper -> wrapper.getLoadSlot().getCargo()).collect(Collectors.toSet());
 			final int numSlotsToDelete = ScenarioModelUtil.getCargoModel(sdp).getCargoes().size() - cargoesToKeepSet.size();
@@ -3139,9 +3149,11 @@ public class ContractPage extends ADPComposite {
 			dischargeSlotsToDelete = new ArrayList<>(numSlotsToDelete);
 			cargoesToDelete = new ArrayList<>(numSlotsToDelete);
 			for (final Cargo cargo : ScenarioModelUtil.getCargoModel(sdp).getCargoes()) {
-				if (!cargoesToKeepSet.contains(cargo)) {
+				final LoadSlot loadSlot = (LoadSlot) cargo.getSlots().get(0);
+				final YearMonth loadYM = YearMonth.from(loadSlot.getWindowStart());
+				if (!cargoesToKeepSet.contains(cargo) && (!loadYM.isBefore(adpModel.getYearStart()) && loadYM.isBefore(adpModel.getYearEnd()))) {
 					cargoesToDelete.add(cargo);
-					loadSlotsToDelete.add((LoadSlot) cargo.getSlots().get(0));
+					loadSlotsToDelete.add(loadSlot);
 					dischargeSlotsToDelete.add((DischargeSlot) cargo.getSlots().get(1));
 				}
 			}
@@ -3165,7 +3177,12 @@ public class ContractPage extends ADPComposite {
 		if (cmd.isEmpty()) {
 			return IdentityCommand.INSTANCE;
 		} else {
-			editorData.getDefaultCommandHandler().handleCommand(cmd, profile, null);
+			try {
+				editorData.setDisableUpdates(true);
+				editorData.getDefaultCommandHandler().handleCommand(cmd, profile, null);
+			} finally {
+				editorData.setDisableUpdates(false);
+			}
 		}
 		return cmd;
 	}
@@ -3484,10 +3501,10 @@ public class ContractPage extends ADPComposite {
 		final TreeMap<LocalDate, InventoryCapacityRow> capacityTreeMap = capacities.stream() //
 				.collect(Collectors.toMap(InventoryCapacityRow::getDate, c -> c, (oldVal, newVal) -> newVal, TreeMap::new));
 		final TreeMap<LocalDateTime, InventoryDateTimeEvent> insAndOuts = new TreeMap<>();
-		// final List<InventoryEventRow> filteredFeeds = inventory.getFeeds().stream() //
-		// .filter(f -> !f.getStartDate().isBefore(startDateTimeInclusive.toLocalDate()) || f.getPeriod() == InventoryFrequency.LEVEL) //
-		// .collect(Collectors.toList());
-		addHourlyNetVolumes(inventory.getFeeds(), capacityTreeMap, insAndOuts, IntUnaryOperator.identity());
+		final List<InventoryEventRow> filteredFeeds = inventory.getFeeds().stream() //
+				.filter(f -> !f.getStartDate().isBefore(startDateTimeInclusive.toLocalDate()) || f.getPeriod() == InventoryFrequency.LEVEL) //
+				.collect(Collectors.toList());
+		addHourlyNetVolumes(filteredFeeds, capacityTreeMap, insAndOuts, IntUnaryOperator.identity());
 		addHourlyNetVolumes(inventory.getOfftakes(), capacityTreeMap, insAndOuts, a -> -a);
 
 		for (LocalDateTime currentDateTime = startDateTimeInclusive; currentDateTime.isBefore(endDateTimeExclusive); currentDateTime = currentDateTime.plusHours(1)) {
