@@ -349,12 +349,16 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				output.setRouteAdditionalConsumption(LNGFuelKeys.NBO_In_MT, 0);
 				output.setRouteAdditionalConsumption(LNGFuelKeys.FBO_In_MT, 0);
 				output.setRouteAdditionalConsumption(vessel.getPilotLightFuelInMT(), 0);
+				// Reset these values since they might be set on previous calls to this method
+				output.setRouteAdditionalConsumption(vessel.getSupplementalTravelBaseFuelInMT(), 0);
+				output.setRouteAdditionalConsumption(vessel.getPilotLightFuelInMT(), 0);
 			}
 			
 		}
 
 		final long minBaseFuelConsumptionInMT = Calculator.quantityFromRateTime(vessel.getMinBaseFuelConsumptionInMTPerDay(), additionalRouteTimeInHours) / 24L;
-		if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS) {
+		// Check if there is NBO available for which the pilot light would be needed
+		if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS && nboAvailableInM3 > 0) {
 			if (output.getRouteAdditionalConsumption(vessel.getSupplementalTravelBaseFuelInMT()) < minBaseFuelConsumptionInMT) {
 				output.setRouteAdditionalConsumption(vessel.getSupplementalTravelBaseFuelInMT(), minBaseFuelConsumptionInMT);
 			}
