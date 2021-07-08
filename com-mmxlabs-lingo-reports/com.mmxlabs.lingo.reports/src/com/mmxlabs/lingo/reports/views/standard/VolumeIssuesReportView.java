@@ -287,7 +287,7 @@ public class VolumeIssuesReportView extends EMFReportView {
 
 		final EClass rowClass = GenericEMFTableDataModel.getRowClass(tableDataModel);
 		attribRowType = GenericEMFTableDataModel.createRowAttribute(rowClass, SchedulePackage.Literals.CAPACITY_VIOLATION_TYPE, ATTRIBUTE_TYPE);
-		attribRowQuantity = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.eINSTANCE.getELong(), ATTRIBUTE_QUANTITY);
+		attribRowQuantity = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.eINSTANCE.getELongObject(), ATTRIBUTE_QUANTITY);
 		attribRowScenarioName = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.eINSTANCE.getEString(), ATTRIBUTE_SCENARIO_NAME);
 		attribRowPinned = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.eINSTANCE.getEBoolean(), ATTRIBUTE_PINNED);
 
@@ -298,7 +298,12 @@ public class VolumeIssuesReportView extends EMFReportView {
 		final EObject row = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, null);
 		row.eSet(refRowOwner, owner);
 		row.eSet(attribRowType, type);
-		row.eSet(attribRowQuantity, qty);
+		
+		if (type == CapacityViolationType.FORCED_COOLDOWN && qty == 0) {
+			// Show nothing as not all cooldowns have a quantity
+		} else {
+			row.eSet(attribRowQuantity, qty);
+		}
 		row.eSet(attribRowScenarioName, scenarioName);
 		row.eSet(attribRowPinned, pinned);
 
