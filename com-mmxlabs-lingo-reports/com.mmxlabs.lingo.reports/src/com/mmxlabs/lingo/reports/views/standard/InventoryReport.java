@@ -1704,7 +1704,7 @@ public class InventoryReport extends ViewPart {
 
 	private Map<YearMonth, Integer> calculateMonthlyProduction(final Inventory inventory, final YearMonth adpStart) {
 		final Map<YearMonth, Integer> monthlyProduction = new HashMap<>();
-		inventory.getFeeds().stream().filter(event -> event.getStartDate() != null && event.getEndDate() != null).forEach(row -> {
+		inventory.getFeeds().stream().filter(event -> event.getStartDate() != null && event.getEndDate() != null && !YearMonth.from(event.getStartDate()).isBefore(adpStart)).forEach(row -> {
 			final YearMonth currYM = YearMonth.from(row.getStartDate());
 			final Integer currVal = monthlyProduction.get(currYM);
 			if (currVal == null) {
