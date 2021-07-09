@@ -1,13 +1,16 @@
 package com.mmxlabs.lingo.its.tests.maintenance;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
@@ -15,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.lingo.its.tests.IOTestUtil;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
@@ -1054,6 +1058,54 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 		@Test
 		@Tag(TestCategories.MICRO_TEST)
 		public void testAllLng() {
+			pricingModelBuilder.makeBunkerFuelDataCurve("HSFO", "$", "MT") //
+					.addIndexPoint(YearMonth.of(2016, 12), 248.551) //
+					.addIndexPoint(YearMonth.of(2017, 1), 250.591) //
+					.addIndexPoint(YearMonth.of(2017, 2), 252.314) //
+					.addIndexPoint(YearMonth.of(2017, 3), 253.467) //
+					.addIndexPoint(YearMonth.of(2017, 4), 254.486) //
+					.addIndexPoint(YearMonth.of(2017, 5), 255.734) //
+					.addIndexPoint(YearMonth.of(2017, 6), 256.643) //
+					.addIndexPoint(YearMonth.of(2017, 7), 257.716) //
+					.addIndexPoint(YearMonth.of(2017, 8), 258.721) //
+					.addIndexPoint(YearMonth.of(2017, 9), 259.806) //
+					.addIndexPoint(YearMonth.of(2017, 10), 260.996) //
+					.addIndexPoint(YearMonth.of(2017, 11), 261.779) //
+					.addIndexPoint(YearMonth.of(2017, 12), 262.730) //
+					.addIndexPoint(YearMonth.of(2018, 1), 265.216) //
+					.build();
+			pricingModelBuilder.makeBunkerFuelDataCurve("LSMGO", "$", "MT") //
+					.addIndexPoint(YearMonth.of(2016, 12), 463.733) //
+					.addIndexPoint(YearMonth.of(2017, 1), 464.460) //
+					.addIndexPoint(YearMonth.of(2017, 2), 467.825) //
+					.addIndexPoint(YearMonth.of(2017, 3), 470.934) //
+					.addIndexPoint(YearMonth.of(2017, 4), 473.570) //
+					.addIndexPoint(YearMonth.of(2017, 5), 476.065) //
+					.addIndexPoint(YearMonth.of(2017, 6), 479.409) //
+					.addIndexPoint(YearMonth.of(2017, 7), 482.222) //
+					.addIndexPoint(YearMonth.of(2017, 8), 484.960) //
+					.addIndexPoint(YearMonth.of(2017, 9), 487.751) //
+					.addIndexPoint(YearMonth.of(2017, 10), 489.589) //
+					.addIndexPoint(YearMonth.of(2017, 11), 490.824) //
+					.addIndexPoint(YearMonth.of(2017, 12), 493.389) //
+					.addIndexPoint(YearMonth.of(2018, 1), 496.582) //
+					.build();
+			pricingModelBuilder.makeBunkerFuelDataCurve("MGO", "$", "MT") //
+					.addIndexPoint(YearMonth.of(2016, 12), 455.277) //
+					.addIndexPoint(YearMonth.of(2017, 1), 456.004) //
+					.addIndexPoint(YearMonth.of(2017, 2), 459.368) //
+					.addIndexPoint(YearMonth.of(2017, 3), 462.478) //
+					.addIndexPoint(YearMonth.of(2017, 4), 465.113) //
+					.addIndexPoint(YearMonth.of(2017, 5), 467.609) //
+					.addIndexPoint(YearMonth.of(2017, 6), 470.952) //
+					.addIndexPoint(YearMonth.of(2017, 7), 473.766) //
+					.addIndexPoint(YearMonth.of(2017, 8), 476.504) //
+					.addIndexPoint(YearMonth.of(2017, 9), 479.295) //
+					.addIndexPoint(YearMonth.of(2017, 10), 481.133) //
+					.addIndexPoint(YearMonth.of(2017, 11), 482.368) //
+					.addIndexPoint(YearMonth.of(2017, 12), 484.932) //
+					.addIndexPoint(YearMonth.of(2018, 1), 488.126) //
+					.build();
 			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_ALTAMIRA);
 
 			final Vessel vessel = fleetModelFinder.findVessel(VESSEL_MEDIUM);
@@ -1070,10 +1122,11 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 
 			final Port loadPort = portFinder.findPortById(InternalDataConstants.PORT_HAMMERFEST);
 			final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_DRAGON);
-			final Cargo cargo = cargoModelBuilder.makeCargo() //
-					.makeFOBPurchase("loadSlot", LocalDate.of(2017, 2, 1), loadPort, null, entity, "1") //
+			cargoModelBuilder.makeCargo() //
+					.makeFOBPurchase("loadSlot", LocalDate.of(2017, 2, 2), loadPort, null, entity, "1") //
 					.withVolumeLimits(120_000, 150_000, VolumeUnits.M3) //
-					.withWindowSize(24, TimePeriod.HOURS) //
+					.withWindowSize(0, TimePeriod.HOURS) //
+					.withWindowStartTime(7) //
 					.with(s -> ((LoadSlot) s).setCargoCV(22.8)) //
 					.build() //
 					.makeDESSale("dischargeSlot", LocalDate.of(2017, 2, 1), dischargePort, null, entity, "9") //
@@ -1119,11 +1172,10 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 					}
 				} else if (event instanceof Journey) {
 					final Journey journey = (Journey) event;
+					// all journeys should be using lng boiloff
 					final Pair<Boolean, Boolean> boiloffAndBunkerUse = getBoiloffAndBunkerUse(journey);
 					final boolean hasLngBoiloff = boiloffAndBunkerUse.getFirst();
-					final boolean hasBunkerUse = boiloffAndBunkerUse.getSecond();
 					Assertions.assertTrue(hasLngBoiloff);
-					Assertions.assertFalse(hasBunkerUse);
 				}
 			}
 			Assertions.assertTrue(foundMaintenance);
@@ -1144,7 +1196,9 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 		 * 
 		 * - Notes: All dates including start and end are in the same month-year
 		 */
+		@Disabled("Pending completion")
 		@Test
+		@Tag(TestCategories.MICRO_TEST)
 		void allDatesInSameMonth() {
 			final Port maintenancePort = portFinder.findPortById(InternalDataConstants.PORT_CAMERON);
 
@@ -1164,9 +1218,9 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 
 			final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 			userSettings.setWithCharterLength(false);
-			
+
 			evaluateTestWith(userSettings, null);
-			
+
 			evaluateTest();
 
 			final Schedule schedule = fetchSchedule();
