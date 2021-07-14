@@ -68,14 +68,8 @@ public class PNLBasedWindowTrimmer {
 	public static final int SIZE_OF_POOL = 80; // Maximum number of solutions to keep in the pool for the next iteration
 
 	/**
-	 * <<<<<<< HEAD Trim out solutions which are equivalent. E.g. start sequence
-	 * start and current end time, retain the best solution so far and discard the
-	 * rest. Assumes there is no interaction with the future sections that would
-	 * change the current metrics. ======= Trim out solutions which are equivalent.
-	 * E.g. start sequence start and current end time, retain the best solution so
-	 * far and discard the rest. Assumes there is no interaction with the future
-	 * sections that would change the current metrics. >>>>>>>
-	 * refs/remotes/origin/master
+	 * Trim out solutions which are equivalent. E.g. start sequence start and current end time, retain the best solution so far and discard the rest. Assumes there is no interaction with the future
+	 * sections that would change the current metrics
 	 * 
 	 */
 	public static final boolean TRIM_EQUIV = true;
@@ -378,7 +372,7 @@ public class PNLBasedWindowTrimmer {
 				if (expected.size() != result.size()) {
 					throw new CacheVerificationFailedException();
 				}
-				for (int i =0; i<expected.size();++i) {
+				for (int i = 0; i < expected.size(); ++i) {
 					if (!expected.get(i).getFirst().equals(result.get(i).getFirst())) {
 						throw new CacheVerificationFailedException();
 					}
