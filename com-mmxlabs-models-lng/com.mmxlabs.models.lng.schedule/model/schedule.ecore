@@ -408,6 +408,9 @@
   <eClassifiers xsi:type="ecore:EClass" name="CharterAvailableFromEvent" eSuperTypes="#//Event">
     <eStructuralFeatures xsi:type="ecore:EReference" name="linkedSequence" eType="#//Sequence"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GroupedCharterOutEvent" eSuperTypes="#//Event #//EventGrouping #//ProfitAndLossContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linkedSequence" eType="#//Sequence"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GroupedCharterLengthEvent" eSuperTypes="#//Event #//EventGrouping #//ProfitAndLossContainer">
     <eStructuralFeatures xsi:type="ecore:EReference" name="linkedSequence" eType="#//Sequence"/>
   </eClassifiers>

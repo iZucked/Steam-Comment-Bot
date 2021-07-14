@@ -58,6 +58,7 @@ import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
+import com.mmxlabs.models.lng.schedule.GroupedCharterOutEvent;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
@@ -189,7 +190,8 @@ public final class ChangeSetTransformerUtil {
 	public static @NonNull MappingModel generateMappingModel(final @NonNull Collection<EObject> targets) {
 
 		final MappingModel mappingModel = new MappingModel();
-		final Map<Sequence, GroupedCharterLengthEvent> extraEvents = new HashMap<>();
+		final Map<Sequence, GroupedCharterLengthEvent> extraLengthEvents = new HashMap<>();
+		final Map<Sequence, GroupedCharterOutEvent> extraGCOEvents = new HashMap<>();
 		// Split this code out as it is used in two places.
 		final Consumer<Event> eventMapper = event -> {
 			// Assume we are a valid event to include if we get here
@@ -343,7 +345,12 @@ public final class ChangeSetTransformerUtil {
 				if (event instanceof CharterLengthEvent) {
 					// Record these events so we can group them up later
 					final CharterLengthEvent charterLengthEvent = (CharterLengthEvent) event;
-					extraEvents.computeIfAbsent(charterLengthEvent.getSequence(), k -> ScheduleFactory.eINSTANCE.createGroupedCharterLengthEvent()).getEvents().addAll(charterLengthEvent.getEvents());
+					extraLengthEvents.computeIfAbsent(charterLengthEvent.getSequence(), k -> ScheduleFactory.eINSTANCE.createGroupedCharterLengthEvent()).getEvents().addAll(charterLengthEvent.getEvents());
+				} else if (event instanceof GeneratedCharterOut) {
+					// Record these events so we can group them up later
+					final GeneratedCharterOut charterLengthEvent = (GeneratedCharterOut) event;
+					extraGCOEvents.computeIfAbsent(charterLengthEvent.getSequence(), k -> ScheduleFactory.eINSTANCE.createGroupedCharterOutEvent()).getEvents().addAll(charterLengthEvent.getEvents());
+					
 				} else {
 					eventMapper.accept(event);
 				}
@@ -364,7 +371,7 @@ public final class ChangeSetTransformerUtil {
 			}
 		}
 
-		for (final GroupedCharterLengthEvent cle : extraEvents.values()) {
+		for (final GroupedCharterLengthEvent cle : extraLengthEvents.values()) {
 			long pnl1 = 0L;
 			long pnl2 = 0L;
 			for (final Event e : cle.getEvents()) {
@@ -383,6 +390,28 @@ public final class ChangeSetTransformerUtil {
 			groupProfitAndLoss.setProfitAndLossPreTax(pnl2);
 			cle.setGroupProfitAndLoss(groupProfitAndLoss);
 
+			// Create an entry for the new grouped item
+			eventMapper.accept(cle);
+		}
+		for (final GroupedCharterOutEvent cle : extraGCOEvents.values()) {
+			long pnl1 = 0L;
+			long pnl2 = 0L;
+			for (final Event e : cle.getEvents()) {
+				if (e instanceof GeneratedCharterOut) {
+					final GeneratedCharterOut c = (GeneratedCharterOut) e;
+					cle.setLinkedSequence(c.getSequence());
+				}
+				if (e instanceof ProfitAndLossContainer) {
+					final ProfitAndLossContainer c = (ProfitAndLossContainer) e;
+					pnl1 += c.getGroupProfitAndLoss().getProfitAndLoss();
+					pnl2 += c.getGroupProfitAndLoss().getProfitAndLossPreTax();
+				}
+			}
+			final GroupProfitAndLoss groupProfitAndLoss = ScheduleFactory.eINSTANCE.createGroupProfitAndLoss();
+			groupProfitAndLoss.setProfitAndLoss(pnl1);
+			groupProfitAndLoss.setProfitAndLossPreTax(pnl2);
+			cle.setGroupProfitAndLoss(groupProfitAndLoss);
+			
 			// Create an entry for the new grouped item
 			eventMapper.accept(cle);
 		}
@@ -1334,6 +1363,9 @@ public final class ChangeSetTransformerUtil {
 							continue;
 						}
 						if ((beforeData.getLhsEvent() instanceof GroupedCharterLengthEvent) || (afterData.getLhsEvent() instanceof GroupedCharterLengthEvent)) {
+							continue;
+						}
+						if ((beforeData.getLhsEvent() instanceof GroupedCharterOutEvent) || (afterData.getLhsEvent() instanceof GroupedCharterOutEvent)) {
 							continue;
 						}
 					}

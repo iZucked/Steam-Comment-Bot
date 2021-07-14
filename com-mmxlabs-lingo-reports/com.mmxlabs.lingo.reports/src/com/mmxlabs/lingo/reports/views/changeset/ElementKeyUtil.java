@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
+import com.mmxlabs.models.lng.schedule.GroupedCharterOutEvent;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -112,6 +113,11 @@ public class ElementKeyUtil {
 			// Equivalence is really overlapping event time on a resource, element name (currently) encode the previous cargo/event ID which may change.
 			return element.eClass().getName() + "-" + ((Event) element).name() + "-" + element.hashCode();
 		} else if (element instanceof GroupedCharterLengthEvent) {
+			// Add in hash code to keep elements unique.
+			// See start of #checkElementEquivalence
+			// Equivalence is really overlapping event time on a resource, element name (currently) encode the previous cargo/event ID which may change.
+			return element.eClass().getName() + "-" + ((Event) element).name();
+		} else if (element instanceof GroupedCharterOutEvent) {
 			// Add in hash code to keep elements unique.
 			// See start of #checkElementEquivalence
 			// Equivalence is really overlapping event time on a resource, element name (currently) encode the previous cargo/event ID which may change.

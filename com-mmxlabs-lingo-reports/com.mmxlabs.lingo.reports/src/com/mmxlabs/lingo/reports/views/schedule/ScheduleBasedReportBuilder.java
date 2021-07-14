@@ -41,6 +41,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
+import com.mmxlabs.models.lng.schedule.GroupedCharterOutEvent;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -148,6 +149,8 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 		} else if (event instanceof VesselEventVisit) {
 			return rowFilterInfo.contains(ROW_FILTER_VESSEL_EVENT_ROW.id);
 		} else if (event instanceof GeneratedCharterOut) {
+			return rowFilterInfo.contains(ROW_FILTER_CHARTER_OUT_ROW.id);
+		} else if (event instanceof GroupedCharterOutEvent) {
 			return rowFilterInfo.contains(ROW_FILTER_CHARTER_OUT_ROW.id);
 		} else if (event instanceof CharterLengthEvent) {
 			return rowFilterInfo.contains(ROW_FILTER_VESSEL_CHARTER_LENGTH.id);
