@@ -536,9 +536,9 @@ public class PortTimesRecordMaker {
 				} else {
 					// We need to update the return time of this record
 					recordToUpdateReturnTime = portTimesRecord;
-					// We need to update panama information this record
-					recordPairToUpdateWithPanama = Pair.of(record, portTimesRecord);
 				}
+				// Update Panama information of this record
+				recordPairToUpdateWithPanama = Pair.of(record, portTimesRecord);
 			}
 		}
 
@@ -594,7 +594,7 @@ public class PortTimesRecordMaker {
 						panamaTime += additionalPanamaTime;
 
 						// Is there still time to go via Panama? Exclude if not
-						if (panamaTime > availableTravelTime) {
+						if ((panamaTime > availableTravelTime) && to.getPortType() != PortType.Round_Trip_Cargo_End) {
 							// It has all gone wrong if we hit this assert
 							assert recordCopy.getSlotNextVoyageOptions(from) != AvailableRouteChoices.PANAMA_ONLY;
 							recordCopy.setSlotNextVoyageOptions(from, AvailableRouteChoices.EXCLUDE_PANAMA);
