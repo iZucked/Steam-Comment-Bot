@@ -30,6 +30,7 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class MullEntityRowConstraint extends AbstractModelMultiConstraint {
+	private static final String REGEXP_INTEGER = "-?\\d+";
 	@Override
 	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
@@ -54,7 +55,7 @@ public class MullEntityRowConstraint extends AbstractModelMultiConstraint {
 						.withMessage("A value must be provided for the initial allocation") //
 						.make(ctx, statuses);
 			} else {
-				if (!mullEntityRow.getInitialAllocation().matches("-?\\d+")) {
+				if (!mullEntityRow.getInitialAllocation().matches(REGEXP_INTEGER)) {
 					factory.copyName() //
 							.withObjectAndFeature(mullEntityRow, ADPPackage.Literals.MULL_ENTITY_ROW__INITIAL_ALLOCATION) //
 							.withMessage("The initial allocation must be a whole number") //
