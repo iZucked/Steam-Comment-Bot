@@ -2,12 +2,10 @@
   "Schedule" : "0 fleet demo",
   "ID" : "Charter Out - Lagos",
   "Type" : "Charter Out",
-  "Issue" : "Forced Cooldown",
-  "Quantity (m³)" : "0"
+  "Issue" : "Forced Cooldown"
 }, {
   "Schedule" : "0 fleet demo",
   "ID" : "Charter Out - RO drydock",
   "Type" : "Charter Out",
-  "Issue" : "Forced Cooldown",
-  "Quantity (m³)" : "0"
+  "Issue" : "Forced Cooldown"
 } ]

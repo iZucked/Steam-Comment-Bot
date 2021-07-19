@@ -2,18 +2,15 @@
   "Schedule" : "3 -O- dry dock 55 -F- lateness removed -F- base",
   "ID" : "load-cargo-21",
   "Type" : "Load",
-  "Issue" : "Forced Cooldown",
-  "Quantity (m³)" : "0"
+  "Issue" : "Forced Cooldown"
 }, {
   "Schedule" : "3 -O- dry dock 55 -F- lateness removed -F- base",
   "ID" : "load-cargo-32",
   "Type" : "Load",
-  "Issue" : "Forced Cooldown",
-  "Quantity (m³)" : "0"
+  "Issue" : "Forced Cooldown"
 }, {
   "Schedule" : "3 -O- dry dock 55 -F- lateness removed -F- base",
   "ID" : "load-cargo-41",
   "Type" : "Load",
-  "Issue" : "Forced Cooldown",
-  "Quantity (m³)" : "0"
+  "Issue" : "Forced Cooldown"
 } ]

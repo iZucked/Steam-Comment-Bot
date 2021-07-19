@@ -2,6 +2,5 @@
   "Schedule" : "2 -O- late and lost-DES backfill -F- Bonny",
   "ID" : "load-cargo-78",
   "Type" : "Load",
-  "Issue" : "Forced Cooldown",
-  "Quantity (m³)" : "0"
+  "Issue" : "Forced Cooldown"
 } ]
