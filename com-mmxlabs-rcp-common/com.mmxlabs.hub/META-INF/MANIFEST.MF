@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: MMXLabs Hub Support
 Bundle-SymbolicName: com.mmxlabs.hub;singleton:=true
-Bundle-Version: 4.12.36.RELEASE
+Bundle-Version: 4.12.37.qualifier
 Bundle-ClassPath: .,
  lib/json-20140107.jar
 Bundle-Activator: com.mmxlabs.hub.DataHubActivator
@@ -19,7 +19,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.license.ssl,
- com.mmxlabs.common.common-util;bundle-version="4.12.36",
+ com.mmxlabs.common.common-util;bundle-version="4.12.37",
  org.eclipse.equinox.security,
  com.fasterxml.jackson.core.jackson-databind,
  com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.10.0",
