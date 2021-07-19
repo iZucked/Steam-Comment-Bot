@@ -56,7 +56,6 @@ public class VesselAvailabilityItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addFleetPropertyDescriptor(object);
 			addOptionalPropertyDescriptor(object);
 			addVesselPropertyDescriptor(object);
 			addCharterNumberPropertyDescriptor(object);
@@ -77,28 +76,6 @@ public class VesselAvailabilityItemProvider
 			addCharterContractOverridePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Fleet feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addFleetPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_VesselAvailability_fleet_feature"),
-				 getString("_UI_VesselAvailability_fleet_description"),
-				 CargoPackage.Literals.VESSEL_AVAILABILITY__FLEET,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -578,7 +555,6 @@ public class VesselAvailabilityItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(VesselAvailability.class)) {
-			case CargoPackage.VESSEL_AVAILABILITY__FLEET:
 			case CargoPackage.VESSEL_AVAILABILITY__OPTIONAL:
 			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_NUMBER:
 			case CargoPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:

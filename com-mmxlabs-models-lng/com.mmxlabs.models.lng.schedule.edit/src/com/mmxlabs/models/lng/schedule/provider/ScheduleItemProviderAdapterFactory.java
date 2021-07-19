@@ -1031,6 +1031,29 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.GroupedCharterOutEvent} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected GroupedCharterOutEventItemProvider groupedCharterOutEventItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.GroupedCharterOutEvent}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createGroupedCharterOutEventAdapter() {
+		if (groupedCharterOutEventItemProvider == null) {
+			groupedCharterOutEventItemProvider = new GroupedCharterOutEventItemProvider(this);
+		}
+
+		return groupedCharterOutEventItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1449,6 +1472,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (charterAvailableToEventItemProvider != null) charterAvailableToEventItemProvider.dispose();
 		if (canalJourneyEventItemProvider != null) canalJourneyEventItemProvider.dispose();
 		if (charterAvailableFromEventItemProvider != null) charterAvailableFromEventItemProvider.dispose();
+		if (groupedCharterOutEventItemProvider != null) groupedCharterOutEventItemProvider.dispose();
 		if (groupedCharterLengthEventItemProvider != null) groupedCharterLengthEventItemProvider.dispose();
 		if (inventoryEventsItemProvider != null) inventoryEventsItemProvider.dispose();
 		if (inventoryChangeEventItemProvider != null) inventoryChangeEventItemProvider.dispose();

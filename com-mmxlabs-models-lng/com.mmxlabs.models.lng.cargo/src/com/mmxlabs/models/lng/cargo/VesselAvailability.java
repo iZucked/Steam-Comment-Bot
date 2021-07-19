@@ -30,7 +30,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isFleet <em>Fleet</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isOptional <em>Optional</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterNumber <em>Charter Number</em>}</li>
@@ -57,32 +56,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @generated
  */
 public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
-	/**
-	 * Returns the value of the '<em><b>Fleet</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Fleet</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Fleet</em>' attribute.
-	 * @see #setFleet(boolean)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_Fleet()
-	 * @model
-	 * @generated
-	 */
-	boolean isFleet();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isFleet <em>Fleet</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Fleet</em>' attribute.
-	 * @see #isFleet()
-	 * @generated
-	 */
-	void setFleet(boolean value);
-
 	/**
 	 * Returns the value of the '<em><b>Vessel</b></em>' reference.
 	 * <!-- begin-user-doc -->

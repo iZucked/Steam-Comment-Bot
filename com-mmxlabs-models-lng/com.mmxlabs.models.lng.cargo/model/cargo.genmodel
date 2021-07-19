@@ -202,8 +202,6 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoGroup/cargoes"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//VesselAvailability">
-      <genFeatures createChild="false" propertyDescription="Flag indicates vessel is owned or on a long term charter"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/fleet"/>
       <genFeatures createChild="false" propertyDescription="Is this availability optional?"
           ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/optional"/>
       <genFeatures notify="false" createChild="false" propertyDescription="The vessel"

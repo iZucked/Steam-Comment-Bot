@@ -1030,7 +1030,10 @@ public class ChangeSetViewColumnHelper {
 						}
 					}
 
-					return sb.toString();
+					String str = sb.toString();
+					if (!str.isBlank()) {
+						return str;
+					}
 				}
 				return super.getToolTipText(element);
 			}
@@ -1508,7 +1511,9 @@ public class ChangeSetViewColumnHelper {
 						}
 						latenessTooltip += rhsLateness;
 					}
-					return latenessTooltip;
+					if (!latenessTooltip.isBlank()) {
+						return latenessTooltip;
+					}
 				}
 				return null;
 
@@ -2024,7 +2029,10 @@ public class ChangeSetViewColumnHelper {
 						}
 					}
 
-					return sb.toString();
+					String str = sb.toString();
+					if (!str.isBlank()) {
+						return str;
+					}
 				}
 
 				return super.getToolTipText(element);

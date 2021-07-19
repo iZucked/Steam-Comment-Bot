@@ -466,6 +466,17 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case SchedulePackage.GROUPED_CHARTER_OUT_EVENT: {
+				GroupedCharterOutEvent groupedCharterOutEvent = (GroupedCharterOutEvent)theEObject;
+				T result = caseGroupedCharterOutEvent(groupedCharterOutEvent);
+				if (result == null) result = caseEvent(groupedCharterOutEvent);
+				if (result == null) result = caseEventGrouping(groupedCharterOutEvent);
+				if (result == null) result = caseProfitAndLossContainer(groupedCharterOutEvent);
+				if (result == null) result = caseMMXObject(groupedCharterOutEvent);
+				if (result == null) result = caseITimezoneProvider(groupedCharterOutEvent);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case SchedulePackage.GROUPED_CHARTER_LENGTH_EVENT: {
 				GroupedCharterLengthEvent groupedCharterLengthEvent = (GroupedCharterLengthEvent)theEObject;
 				T result = caseGroupedCharterLengthEvent(groupedCharterLengthEvent);
@@ -1216,6 +1227,21 @@ public class ScheduleSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseCharterAvailableFromEvent(CharterAvailableFromEvent object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Grouped Charter Out Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Grouped Charter Out Event</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseGroupedCharterOutEvent(GroupedCharterOutEvent object) {
 		return null;
 	}
 

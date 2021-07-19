@@ -48,6 +48,7 @@ import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
+import com.mmxlabs.models.lng.schedule.GroupedCharterOutEvent;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.InventoryChangeEvent;
 import com.mmxlabs.models.lng.schedule.InventoryEvents;
@@ -395,6 +396,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EClass charterAvailableFromEventEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass groupedCharterOutEventEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -2722,6 +2730,26 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
+	public EClass getGroupedCharterOutEvent() {
+		return groupedCharterOutEventEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getGroupedCharterOutEvent_LinkedSequence() {
+		return (EReference)groupedCharterOutEventEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getGroupedCharterLengthEvent() {
 		return groupedCharterLengthEventEClass;
 	}
@@ -3554,6 +3582,9 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		charterAvailableFromEventEClass = createEClass(CHARTER_AVAILABLE_FROM_EVENT);
 		createEReference(charterAvailableFromEventEClass, CHARTER_AVAILABLE_FROM_EVENT__LINKED_SEQUENCE);
 
+		groupedCharterOutEventEClass = createEClass(GROUPED_CHARTER_OUT_EVENT);
+		createEReference(groupedCharterOutEventEClass, GROUPED_CHARTER_OUT_EVENT__LINKED_SEQUENCE);
+
 		groupedCharterLengthEventEClass = createEClass(GROUPED_CHARTER_LENGTH_EVENT);
 		createEReference(groupedCharterLengthEventEClass, GROUPED_CHARTER_LENGTH_EVENT__LINKED_SEQUENCE);
 
@@ -3729,6 +3760,9 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		charterAvailableToEventEClass.getESuperTypes().add(this.getEvent());
 		canalJourneyEventEClass.getESuperTypes().add(this.getEvent());
 		charterAvailableFromEventEClass.getESuperTypes().add(this.getEvent());
+		groupedCharterOutEventEClass.getESuperTypes().add(this.getEvent());
+		groupedCharterOutEventEClass.getESuperTypes().add(this.getEventGrouping());
+		groupedCharterOutEventEClass.getESuperTypes().add(this.getProfitAndLossContainer());
 		groupedCharterLengthEventEClass.getESuperTypes().add(this.getEvent());
 		groupedCharterLengthEventEClass.getESuperTypes().add(this.getEventGrouping());
 		groupedCharterLengthEventEClass.getESuperTypes().add(this.getProfitAndLossContainer());
@@ -4003,6 +4037,9 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		initEClass(charterAvailableFromEventEClass, CharterAvailableFromEvent.class, "CharterAvailableFromEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCharterAvailableFromEvent_LinkedSequence(), this.getSequence(), null, "linkedSequence", null, 0, 1, CharterAvailableFromEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(groupedCharterOutEventEClass, GroupedCharterOutEvent.class, "GroupedCharterOutEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getGroupedCharterOutEvent_LinkedSequence(), this.getSequence(), null, "linkedSequence", null, 0, 1, GroupedCharterOutEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(groupedCharterLengthEventEClass, GroupedCharterLengthEvent.class, "GroupedCharterLengthEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getGroupedCharterLengthEvent_LinkedSequence(), this.getSequence(), null, "linkedSequence", null, 0, 1, GroupedCharterLengthEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
