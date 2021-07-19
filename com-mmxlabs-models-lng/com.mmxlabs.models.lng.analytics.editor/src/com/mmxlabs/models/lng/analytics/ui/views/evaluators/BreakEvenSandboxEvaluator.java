@@ -223,7 +223,6 @@ public class BreakEvenSandboxEvaluator {
 				vesselAvailability.setEndAfter(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
 				vesselAvailability.setEndBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
 				vesselAvailability.setOptional(true);
-				vesselAvailability.setFleet(false);
 				vesselAvailability.setContainedCharterContract(AnalyticsBuilder.createCharterTerms(optionalAvailabilityShippingOption.getRepositioningFee(),//
 						optionalAvailabilityShippingOption.getBallastBonus()));
 				if (optionalAvailabilityShippingOption.getStartPort() != null) {
@@ -262,7 +261,6 @@ public class BreakEvenSandboxEvaluator {
 					vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
 				}
 				vesselAvailability.setOptional(false);
-				vesselAvailability.setFleet(true);
 				clone.getCargoModel().getVesselAvailabilities().add(vesselAvailability);
 				availabilitiesMap.put(fleetShippingOption, vesselAvailability);
 				mapper.addMapping(fleetShippingOption, vesselAvailability);

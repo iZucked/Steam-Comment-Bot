@@ -520,8 +520,6 @@ public class FleetPage extends ADPComposite {
 
 		previewViewer.addTypicalColumn("Name", nameManipulator, CargoPackage.eINSTANCE.getVesselAvailability_Vessel());
 
-		previewViewer.addTypicalColumn("Fleet", new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_Fleet(), editorData.getDefaultCommandHandler()));
-
 		previewViewer.addTypicalColumn("Optional", new BooleanAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_Optional(), editorData.getDefaultCommandHandler()));
 
 		previewViewer.addTypicalColumn("Charter", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_TimeCharterRate(), editorData.getDefaultCommandHandler()));

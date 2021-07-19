@@ -334,6 +334,7 @@
     <eOperations name="getCharterOrDelegateEntity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
     <eOperations name="jsonid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eOperations name="getCharterOrDelegateCharterContract" lowerBound="1" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//GenericCharterContract"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fleet" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="optional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="charterNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"

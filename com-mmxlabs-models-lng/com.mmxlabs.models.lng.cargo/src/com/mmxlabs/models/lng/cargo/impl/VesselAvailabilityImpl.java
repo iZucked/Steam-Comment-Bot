@@ -42,7 +42,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#isFleet <em>Fleet</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#isOptional <em>Optional</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getCharterNumber <em>Charter Number</em>}</li>
@@ -67,26 +66,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * @generated
  */
 public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvailability {
-	/**
-	 * The default value of the '{@link #isFleet() <em>Fleet</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isFleet()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean FLEET_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isFleet() <em>Fleet</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isFleet()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean fleet = FLEET_EDEFAULT;
-
 	/**
 	 * The default value of the '{@link #isOptional() <em>Optional</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -485,29 +464,6 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	@Override
 	protected EClass eStaticClass() {
 		return CargoPackage.Literals.VESSEL_AVAILABILITY;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isFleet() {
-		return fleet;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setFleet(boolean newFleet) {
-		boolean oldFleet = fleet;
-		fleet = newFleet;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__FLEET, oldFleet, fleet));
 	}
 
 	/**
@@ -1527,8 +1483,6 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case CargoPackage.VESSEL_AVAILABILITY__FLEET:
-				return isFleet();
 			case CargoPackage.VESSEL_AVAILABILITY__OPTIONAL:
 				return isOptional();
 			case CargoPackage.VESSEL_AVAILABILITY__VESSEL:
@@ -1587,9 +1541,6 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case CargoPackage.VESSEL_AVAILABILITY__FLEET:
-				setFleet((Boolean)newValue);
-				return;
 			case CargoPackage.VESSEL_AVAILABILITY__OPTIONAL:
 				setOptional((Boolean)newValue);
 				return;
@@ -1660,9 +1611,6 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case CargoPackage.VESSEL_AVAILABILITY__FLEET:
-				setFleet(FLEET_EDEFAULT);
-				return;
 			case CargoPackage.VESSEL_AVAILABILITY__OPTIONAL:
 				setOptional(OPTIONAL_EDEFAULT);
 				return;
@@ -1732,8 +1680,6 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case CargoPackage.VESSEL_AVAILABILITY__FLEET:
-				return fleet != FLEET_EDEFAULT;
 			case CargoPackage.VESSEL_AVAILABILITY__OPTIONAL:
 				return optional != OPTIONAL_EDEFAULT;
 			case CargoPackage.VESSEL_AVAILABILITY__VESSEL:
@@ -1816,9 +1762,7 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (fleet: ");
-		result.append(fleet);
-		result.append(", optional: ");
+		result.append(" (optional: ");
 		result.append(optional);
 		result.append(", charterNumber: ");
 		result.append(charterNumber);
