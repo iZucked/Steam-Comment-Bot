@@ -282,14 +282,17 @@ public class PortTimesRecordMaker {
 					final IPortSlot prevPortSlot = portTimesRecord.getSlots().get(portTimesRecord.getSlots().size() - 1);
 					final int prevArrivalTime = portTimesRecord.getSlotTime(prevPortSlot);
 					final int prevVisitDuration = portTimesRecord.getSlotDuration(prevPortSlot);
+					final int prevPanamaIdleTime = record.getSlotAdditionalPanamaIdleHours(prevPortSlot);
 					final int availableTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), //
 							prevPortSlot.getPort(), startPortSlot.getPort(), //
 							vesselAvailability.getVessel().getMaxSpeed(), //
 							record.getSlotNextVoyageOptions(prevPortSlot) //
 					).getSecond();
-					final int roundTripReturnArrivalTime = prevArrivalTime + prevVisitDuration + availableTime + record.getSlotExtraIdleTime(prevPortSlot);
+					final int roundTripReturnArrivalTime = prevArrivalTime + prevVisitDuration + availableTime //
+							+ prevPanamaIdleTime + record.getSlotExtraIdleTime(prevPortSlot);
 
 					portTimesRecord.setReturnSlotTime(returnSlot, roundTripReturnArrivalTime);
+					updatePortTimesRecordWithPanamaRestrictions(distanceProvider, vesselAvailability.getVessel(), record, portTimesRecord);
 
 					// Reset arrival time state
 					lastNextExpectedArrivalTime = 0;
@@ -520,25 +523,16 @@ public class PortTimesRecordMaker {
 			final IPortSlot returnSlot = record.getReturnSlot();
 			if (returnSlot != null) {
 				if (returnSlot.getPortType() == PortType.Round_Trip_Cargo_End) {
-
-					final IPortSlot startPortSlot = portTimesRecord.getSlots().get(0);
-					final IPortSlot prevPortSlot = portTimesRecord.getSlots().get(portTimesRecord.getSlots().size() - 1);
-					final int prevArrivalTime = portTimesRecord.getSlotTime(prevPortSlot);
-					final int prevVisitDuration = portTimesRecord.getSlotDuration(prevPortSlot);
-					final int availableTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), //
-							prevPortSlot.getPort(), startPortSlot.getPort(), //
-							vesselAvailability.getVessel().getMaxSpeed(), //
-							record.getSlotNextVoyageOptions(prevPortSlot) //
-					).getSecond();
-					final int roundTripReturnArrivalTime = prevArrivalTime + prevVisitDuration + availableTime + record.getSlotExtraIdleTime(prevPortSlot);
-
-					portTimesRecord.setReturnSlotTime(returnSlot, roundTripReturnArrivalTime);
+					//Copy the return time across
+					portTimesRecord.setReturnSlotTime(returnSlot, record.getSlotFeasibleTimeWindow(returnSlot).getInclusiveStart());
+					updatePortTimesRecordWithPanamaRestrictions(distanceProvider, vesselAvailability.getVessel(), record, portTimesRecord);
+					
 				} else {
 					// We need to update the return time of this record
 					recordToUpdateReturnTime = portTimesRecord;
+					// Update Panama information of this record
+					recordPairToUpdateWithPanama = Pair.of(record, portTimesRecord);
 				}
-				// Update Panama information of this record
-				recordPairToUpdateWithPanama = Pair.of(record, portTimesRecord);
 			}
 		}
 
@@ -594,6 +588,7 @@ public class PortTimesRecordMaker {
 						panamaTime += additionalPanamaTime;
 
 						// Is there still time to go via Panama? Exclude if not
+						// If it's an end of the round trip cargo, we ALLWAYS have a time to go via Panama
 						if ((panamaTime > availableTravelTime) && to.getPortType() != PortType.Round_Trip_Cargo_End) {
 							// It has all gone wrong if we hit this assert
 							assert recordCopy.getSlotNextVoyageOptions(from) != AvailableRouteChoices.PANAMA_ONLY;

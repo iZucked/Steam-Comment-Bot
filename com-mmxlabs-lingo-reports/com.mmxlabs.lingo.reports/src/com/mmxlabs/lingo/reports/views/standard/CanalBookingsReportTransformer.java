@@ -134,24 +134,16 @@ public class CanalBookingsReportTransformer {
 
 					String type = "";
 
-//					switch (journey.getCanalBookingPeriod()) {
-//					case NOMINAL:
-//						type = "Nominal";
-//						break;
-//					default:
-						if (journey.getCanalBooking() != null) {
-							type = "Booked";
+					if (journey.getCanalBooking() != null) {
+						type = "Booked";
+					}
+					else {
+						if (journey.getCanalJourneyEvent() != null) {
+							type = "Wait ("+(journey.getCanalJourneyEvent().getPanamaWaitingTimeHours()/24)+"d)";
+						} else {
+							type = "Wait";
 						}
-						else {
-							if (journey.getCanalJourneyEvent() != null) {
-								type = "Wait ("+(journey.getCanalJourneyEvent().getPanamaWaitingTimeHours()/24)+"d)";
-							}
-							else {
-								type = "Wait";
-							}
-						}
-//						break;
-//					}
+					}
 
 					Event nextEvent = evt.getNextEvent();
 					Slot nextSlot = null;
@@ -206,22 +198,23 @@ public class CanalBookingsReportTransformer {
 	
 	private String getVesselBookingCode(Journey journey, CanalBookings canalBookings) {
 		Vessel v = null;
-		if (journey.getSequence() != null) {
+		String defaultGroupName = "";
+		if (journey.getSequence() != null && canalBookings != null) {
 			if (journey.getSequence().getVesselAvailability() != null) {
 				v = journey.getSequence().getVesselAvailability().getVessel();
 			} else if(journey.getSequence().getCharterInMarket() != null) {
 				v = journey.getSequence().getCharterInMarket().getVessel();
 			}
-		}
-		String defaultGroupName = "";
-		if (v != null && canalBookings != null) {
-			for (var vgp : canalBookings.getVesselGroupCanalParameters()) {
-				if (vgp.getVesselGroup() == null || vgp.getVesselGroup().isEmpty()) {
-					defaultGroupName = vgp.getName();
-				}
-				final Set<Vessel> vgvs = SetUtils.getObjects(vgp.getVesselGroup());
-				if (vgvs.contains(v)) {
-					return vgp.getName();
+			
+			if (v != null) {
+				for (var vgp : canalBookings.getVesselGroupCanalParameters()) {
+					if (vgp.getVesselGroup() == null || vgp.getVesselGroup().isEmpty()) {
+						defaultGroupName = vgp.getName();
+					}
+					final Set<Vessel> vgvs = SetUtils.getObjects(vgp.getVesselGroup());
+					if (vgvs.contains(v)) {
+						return vgp.getName();
+					}
 				}
 			}
 		}
