@@ -66,7 +66,7 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editors for features on this class directly, and superclass' features.
 	 *
-	 * @generated NOT
+	 * @generated
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {

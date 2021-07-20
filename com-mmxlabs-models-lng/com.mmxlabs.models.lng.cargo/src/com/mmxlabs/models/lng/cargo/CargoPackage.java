@@ -4444,22 +4444,13 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
 
 	/**
-	 * The feature id for the '<em><b>Generic Charter Contract</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
-
-	/**
 	 * The feature id for the '<em><b>Min Duration</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__MIN_DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
+	int VESSEL_AVAILABILITY__MIN_DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
 
 	/**
 	 * The feature id for the '<em><b>Max Duration</b></em>' attribute.
@@ -4468,7 +4459,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__MAX_DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
+	int VESSEL_AVAILABILITY__MAX_DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
 
 	/**
 	 * The feature id for the '<em><b>Charter Contract Override</b></em>' attribute.
@@ -4477,7 +4468,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
+	int VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
+
+	/**
+	 * The feature id for the '<em><b>Generic Charter Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Availability</em>' class.

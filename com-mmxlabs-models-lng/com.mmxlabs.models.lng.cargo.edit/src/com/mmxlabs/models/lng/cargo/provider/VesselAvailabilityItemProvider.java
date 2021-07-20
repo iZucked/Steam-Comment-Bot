@@ -70,10 +70,10 @@ public class VesselAvailabilityItemProvider
 			addStartHeelPropertyDescriptor(object);
 			addEndHeelPropertyDescriptor(object);
 			addForceHireCostOnlyEndRulePropertyDescriptor(object);
-			addGenericCharterContractPropertyDescriptor(object);
 			addMinDurationPropertyDescriptor(object);
 			addMaxDurationPropertyDescriptor(object);
 			addCharterContractOverridePropertyDescriptor(object);
+			addGenericCharterContractPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}

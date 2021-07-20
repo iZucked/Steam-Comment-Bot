@@ -57,10 +57,10 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getEndHeel <em>End Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#isForceHireCostOnlyEndRule <em>Force Hire Cost Only End Rule</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getContainedCharterContract <em>Contained Charter Contract</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getGenericCharterContract <em>Generic Charter Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getMinDuration <em>Min Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getMaxDuration <em>Max Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#isCharterContractOverride <em>Charter Contract Override</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getGenericCharterContract <em>Generic Charter Contract</em>}</li>
  * </ul>
  *
  * @generated
@@ -351,25 +351,6 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	protected GenericCharterContract containedCharterContract;
 
 	/**
-	 * The cached value of the '{@link #getGenericCharterContract() <em>Generic Charter Contract</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getGenericCharterContract()
-	 * @generated
-	 * @ordered
-	 */
-	protected GenericCharterContract genericCharterContract;
-
-	/**
-	 * This is true if the Generic Charter Contract reference has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean genericCharterContractESet;
-
-	/**
 	 * The default value of the '{@link #getMinDuration() <em>Min Duration</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -446,6 +427,25 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * @ordered
 	 */
 	protected boolean charterContractOverride = CHARTER_CONTRACT_OVERRIDE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getGenericCharterContract() <em>Generic Charter Contract</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getGenericCharterContract()
+	 * @generated
+	 * @ordered
+	 */
+	protected GenericCharterContract genericCharterContract;
+
+	/**
+	 * This is true if the Generic Charter Contract reference has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean genericCharterContractESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1519,15 +1519,15 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT:
 				if (resolve) return getContainedCharterContract();
 				return basicGetContainedCharterContract();
-			case CargoPackage.VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT:
-				if (resolve) return getGenericCharterContract();
-				return basicGetGenericCharterContract();
 			case CargoPackage.VESSEL_AVAILABILITY__MIN_DURATION:
 				return getMinDuration();
 			case CargoPackage.VESSEL_AVAILABILITY__MAX_DURATION:
 				return getMaxDuration();
 			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE:
 				return isCharterContractOverride();
+			case CargoPackage.VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT:
+				if (resolve) return getGenericCharterContract();
+				return basicGetGenericCharterContract();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1587,9 +1587,6 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT:
 				setContainedCharterContract((GenericCharterContract)newValue);
 				return;
-			case CargoPackage.VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT:
-				setGenericCharterContract((GenericCharterContract)newValue);
-				return;
 			case CargoPackage.VESSEL_AVAILABILITY__MIN_DURATION:
 				setMinDuration((Integer)newValue);
 				return;
@@ -1598,6 +1595,9 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE:
 				setCharterContractOverride((Boolean)newValue);
+				return;
+			case CargoPackage.VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT:
+				setGenericCharterContract((GenericCharterContract)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -1656,9 +1656,6 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT:
 				setContainedCharterContract((GenericCharterContract)null);
 				return;
-			case CargoPackage.VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT:
-				unsetGenericCharterContract();
-				return;
 			case CargoPackage.VESSEL_AVAILABILITY__MIN_DURATION:
 				unsetMinDuration();
 				return;
@@ -1667,6 +1664,9 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE:
 				setCharterContractOverride(CHARTER_CONTRACT_OVERRIDE_EDEFAULT);
+				return;
+			case CargoPackage.VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT:
+				unsetGenericCharterContract();
 				return;
 		}
 		super.eUnset(featureID);
@@ -1710,14 +1710,14 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 				return forceHireCostOnlyEndRule != FORCE_HIRE_COST_ONLY_END_RULE_EDEFAULT;
 			case CargoPackage.VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT:
 				return containedCharterContract != null;
-			case CargoPackage.VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT:
-				return isSetGenericCharterContract();
 			case CargoPackage.VESSEL_AVAILABILITY__MIN_DURATION:
 				return isSetMinDuration();
 			case CargoPackage.VESSEL_AVAILABILITY__MAX_DURATION:
 				return isSetMaxDuration();
 			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE:
 				return charterContractOverride != CHARTER_CONTRACT_OVERRIDE_EDEFAULT;
+			case CargoPackage.VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT:
+				return isSetGenericCharterContract();
 		}
 		return super.eIsSet(featureID);
 	}

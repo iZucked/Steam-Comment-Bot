@@ -45,10 +45,10 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEndHeel <em>End Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isForceHireCostOnlyEndRule <em>Force Hire Cost Only End Rule</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getContainedCharterContract <em>Contained Charter Contract</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getGenericCharterContract <em>Generic Charter Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getMinDuration <em>Min Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getMaxDuration <em>Max Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isCharterContractOverride <em>Charter Contract Override</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getGenericCharterContract <em>Generic Charter Contract</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability()
