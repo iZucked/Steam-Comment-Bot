@@ -219,17 +219,11 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		if (options.shouldBeCold() == VesselTankState.MUST_BE_COLD) {
 
 			// Work out how long we have been warming up
-			long warmingHours = 0;
-			if (options.getIdleFuelChoice() == IdleFuelChoice.BUNKERS) {
-				warmingHours += idleTimeInHours;
-			} else {
-				warmingHours += idleTimeInHours - output.getIdleNBOHours();
-			}
-			if (options.getTravelFuelChoice() == TravelFuelChoice.BUNKERS) {
-				warmingHours += travelTimeInHours;
-			} else {
-				warmingHours += travelTimeInHours - output.getTravelNBOHours();
-			}
+			long warmingHours = options.getAvailableTime();
+			warmingHours -= output.getTravelNBOHours();
+			warmingHours -= output.getRouteAdditionalNBOHours();
+			warmingHours -= output.getIdleNBOHours();
+
 			if (options.isWarm() || (warmingHours > vessel.getWarmupTime())) {
 				final long cooldownVolume = vessel.getCooldownVolume();
 				output.setFuelConsumption(LNGFuelKeys.Cooldown_In_m3, cooldownVolume);
@@ -249,6 +243,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		final long routeRequiredConsumptionInMT = Calculator.quantityFromRateTime(routeCostProvider.getRouteFuelUsage(options.getRoute(), vessel, vesselState), additionalRouteTimeInHours) / 24L;
 		final int cargoCVValue = options.getCargoCVValue();
 
+		//Reset the field
+		output.setRouteAdditionalNBOHours(0);
+
 		if (routeRequiredConsumptionInMT > 0) {
 
 			// if no nboAvailable, have to use bunkers irrespective of fuel choice
@@ -261,6 +258,17 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				 */
 				final long routeNboRequestedInM3 = Calculator.quantityFromRateTime(nboRouteRateInM3PerDay, additionalRouteTimeInHours) / 24L;
 
+				int nboHours= additionalRouteTimeInHours;
+				boolean ranDry = false;
+				if (routeNboRequestedInM3 > nboAvailableInM3) {
+					// Ran dry
+					nboHours = Calculator.getTimeFromRateQuantity(nboRouteRateInM3PerDay, nboAvailableInM3 * 24L);
+					ranDry = true;
+
+				}
+
+				output.setIdleNBOHours(nboHours);
+				
 				// Check that we actually have enough lng to make the NBO journey
 				final long routeNboProvidedInM3 = routeNboRequestedInM3 <= nboAvailableInM3 ? routeNboRequestedInM3 : nboAvailableInM3;
 				/**
@@ -342,6 +350,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				output.setRouteAdditionalConsumption(LNGFuelKeys.FBO_In_MT, routeFboProvidedInMT);
 				output.setRouteAdditionalConsumption(vessel.getSupplementalTravelBaseFuelInMT(), supplementalBaseInMT);
 				output.setRouteAdditionalConsumption(vessel.getPilotLightFuelInMT(), pilotLightConsumptionInMT);
+				
+				output.setRouteAdditionalNBOHours(nboHours);
+
 			} else {
 				// Base fuel only
 				output.setRouteAdditionalConsumption(vessel.getTravelBaseFuelInMT(), routeRequiredConsumptionInMT);
@@ -1418,20 +1429,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				assert totalVoyageTime > 0;
 
 				// We have started the voyage cold. Was there time to warm up?
-				int warmingHours = 0;
-				{
-					// Check the warming up time.
-					if (lastVoyageDetailsElement.getIdleTime() > 0) {
-						if (lastVoyageDetailsElement.getFuelConsumption(LNGFuelKeys.IdleNBO_In_m3) == 0) {
-							warmingHours += lastVoyageDetailsElement.getIdleTime();
-						}
-					}
-					if (lastVoyageDetailsElement.getTravelTime() > 0) {
-						if (lastVoyageDetailsElement.getFuelConsumption(LNGFuelKeys.NBO_In_m3) == 0) {
-							warmingHours += lastVoyageDetailsElement.getTravelTime();
-						}
-					}
-				}
+				int nboHours = lastVoyageDetailsElement.getTravelNBOHours() +  lastVoyageDetailsElement.getRouteAdditionalNBOHours() + lastVoyageDetailsElement.getIdleNBOHours();
+				int warmingHours = lastVoyageDetailsElement.getOptions().getAvailableTime() - nboHours;
+
 				if (warmingHours > 0) {
 					if (warmingHours > vesselWarmupTime) {
 						// Spent too long empty, so we are now warm

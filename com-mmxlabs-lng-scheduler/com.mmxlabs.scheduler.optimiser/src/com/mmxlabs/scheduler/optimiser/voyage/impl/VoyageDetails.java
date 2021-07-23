@@ -42,6 +42,7 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 	 */
 	private int idleNBOHours;
 	private int travelNBOHours;
+	private int routeAdditionalNBOHours;
 	private int purgeHours;
 
 	private long idleCharterCost;
@@ -55,15 +56,16 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 	private VoyageDetails(final int idleTime2, final int travelTime2, final int speed2, final int startTime2, final @NonNull VoyageOptions options,
 			final LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption2, final @NonNull LongFastEnumEnumMap<FuelComponent, FuelUnit> routeAdditionalConsumption2,
 			final @NonNull LongFastEnumMap<FuelComponent> fuelUnitPrices2, final boolean cooldownPerformed, final boolean purgePerformed, int purgeHours, int idleNBOHours, 
-			int travelNBOHours, long idleCharterCost, long purgeCharterCost, long travelCharterCost) {
+			int travelNBOHours, int routeAdditionalNBOHours, long idleCharterCost, long purgeCharterCost, long travelCharterCost) {
 		this.idleTime = idleTime2;
 		this.travelTime = travelTime2;
 		this.speed = speed2;
 		this.startTime = startTime2;
 		this.options = options;
 		this.purgeHours = purgeHours;
-		this.setIdleNBOHours(idleNBOHours);
-		this.setTravelNBOHours(travelNBOHours);
+		this.idleNBOHours = idleNBOHours;
+		this.travelNBOHours = travelNBOHours;
+		this.routeAdditionalNBOHours = routeAdditionalNBOHours;
 		this.fuelConsumption.putAll(fuelConsumption2);
 		this.fuelUnitPrices.putAll(fuelUnitPrices2);
 		this.routeAdditionalConsumption.putAll(routeAdditionalConsumption2);
@@ -78,7 +80,7 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 	public VoyageDetails clone() {
 		return new VoyageDetails(idleTime, travelTime, speed, startTime, new VoyageOptions(options), fuelConsumption, routeAdditionalConsumption, fuelUnitPrices, //
 				cooldownPerformed, purgePerformed, purgeHours, //
-				getIdleNBOHours(), getTravelNBOHours(), this.idleCharterCost, this.purgeCharterCost, this.travelCharterCost);
+				getIdleNBOHours(), getTravelNBOHours(), getRouteAdditionalNBOHours(), this.idleCharterCost, this.purgeCharterCost, this.travelCharterCost);
 	}
 
 	public final long getFuelConsumption(final @NonNull FuelKey fuelKey) {
@@ -168,6 +170,7 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 				&& Objects.equal(routeAdditionalConsumption,  d.routeAdditionalConsumption)
 				&& Objects.equal(getIdleNBOHours(),  d.getIdleNBOHours())
 				&& Objects.equal(getTravelNBOHours(),  d.getTravelNBOHours())
+				&& Objects.equal(getRouteAdditionalNBOHours(),  d.getRouteAdditionalNBOHours())
 				&& this.idleCharterCost == d.idleCharterCost
 				&& this.purgeCharterCost == d.purgeCharterCost
 				&& this.travelCharterCost == d.travelCharterCost
@@ -223,6 +226,14 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 
 	public void setTravelNBOHours(int travelNBOHours) {
 		this.travelNBOHours = travelNBOHours;
+	}
+	
+	public int getRouteAdditionalNBOHours() {
+		return routeAdditionalNBOHours;
+	}
+	
+	public void setRouteAdditionalNBOHours(int routeAdditionalNBOHours) {
+		this.routeAdditionalNBOHours = routeAdditionalNBOHours;
 	}
 
 	public boolean isPurgePerformed() {
