@@ -44,6 +44,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan.VoyagePlanMetrics;
 
 public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 
@@ -76,7 +77,7 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 			return null;
 		}
 		// TODO: sanity checks (see CharterLengthEvaluator for inspiration)
-		assert vp.getViolationsCount() == newVoyagePlans.stream().map(Pair::getFirst).mapToInt(VoyagePlan::getViolationsCount).sum();
+		assert vp.getVoyagePlanMetrics()[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()] == newVoyagePlans.stream().map(Pair::getFirst).mapToLong(lvp -> lvp.getVoyagePlanMetrics()[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()]).sum();
 
 		return newVoyagePlans;
 	}
@@ -138,11 +139,11 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 
 			final VoyagePlan currentPlan = new VoyagePlan();
 
-			final int violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselAvailability.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricePerMT,
+			final long[] violationMetrics = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselAvailability.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricePerMT,
 					firstPortTimesRecord, currentNewSequence.toArray(new IDetailsSequenceElement[0]));
 			currentPlan.setIgnoreEnd(true);
 
-			assert violationCount != Integer.MAX_VALUE;
+			assert violationMetrics != null;
 			assert currentPlan.getStartingHeelInM3() == originalPlan.getStartingHeelInM3();
 
 			currentPlan.setRemainingHeelInM3(beforeMaintenanceHeels[0]);
@@ -176,9 +177,9 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 			final VoyagePlan currentPlan = new VoyagePlan();
 			currentPlan.setIgnoreEnd(true);
 
-			final int violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselAvailability.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricePerMT,
+			final long[] violationMetrics = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselAvailability.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricePerMT,
 					currentPortTimesRecord, currentNewSequence.toArray(new IDetailsSequenceElement[0]));
-			assert violationCount != Integer.MAX_VALUE;
+			assert violationMetrics != null;
 
 			currentPlan.setIgnoreEnd(true);
 
@@ -210,9 +211,9 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 			final VoyagePlan currentPlan = new VoyagePlan();
 			currentPlan.setIgnoreEnd(originalPlan.isIgnoreEnd());
 
-			final int violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselAvailability.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricePerMT,
+			final long[] violationMetrics = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselAvailability.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricePerMT,
 					finalPortTimesRecord, currentNewSequence.toArray(new IDetailsSequenceElement[0]));
-			assert violationCount != Integer.MAX_VALUE;
+			assert violationMetrics != null;
 
 			maintenancePlans.add(Pair.of(currentPlan, finalPortTimesRecord));
 			currentPlan.setIgnoreEnd(originalPlan.isIgnoreEnd());

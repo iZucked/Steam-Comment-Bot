@@ -710,7 +710,6 @@ public class LNGVoyageCalculatorTest {
 		expectedPlan.setIgnoreEnd(true);
 		expectedPlan.setRemainingHeelInM3(0);
 		expectedPlan.setStartingHeelInM3(0);
-		expectedPlan.setViolationsCount(0);
 		expectedPlan.setTotalRouteCost(0);
 
 		Assertions.assertEquals(expectedPlan, plan);

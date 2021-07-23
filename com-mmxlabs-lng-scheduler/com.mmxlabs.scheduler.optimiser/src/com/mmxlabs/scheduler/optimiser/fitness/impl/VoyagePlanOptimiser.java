@@ -9,6 +9,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -28,6 +29,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan.VoyagePlanMetrics;
 
 /**
  * The {@link VoyagePlanOptimiser} performs an exhaustive search through the choices in a {@link VoyagePlan}. {@link IVoyagePlanChoice} implementations are provided in a set order which edit the
@@ -70,7 +72,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	}
 
 	static class InternalState {
-		public int bestProblemCount = Integer.MAX_VALUE;
+		public long[] bestMetrics = new long[] { Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE };
 
 		public long bestCost = Long.MAX_VALUE;
 
@@ -174,16 +176,17 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 */
 	private void evaluateVoyagePlan(final Record record, final InternalState state) {
 
-		int currentProblemCount;
+		long[] currentPlanMetrics;
 
 		// Fall back to a single evaluation assuming final voyage options
 		// are good
 		final VoyagePlan currentPlan = calculateVoyagePlan(record);
 		final long cost = evaluatePlan(currentPlan);
 		if (currentPlan != null) {
-			currentProblemCount = currentPlan.getViolationsCount();
+			currentPlanMetrics = currentPlan.getVoyagePlanMetrics();
 		} else {
-			currentProblemCount = Integer.MAX_VALUE;
+			currentPlanMetrics = new long[VoyagePlanMetrics.values().length];
+			currentPlanMetrics[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()] = Long.MAX_VALUE;
 		}
 
 		// this way could be cheaper, but we need to add in a sanity check
@@ -227,9 +230,10 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 				// this plan is valid, or the other is not, and it's cheaper
 			} else if (currentPlanFitsInAvailableTime || !state.bestPlanFitsInAvailableTime) {
 
-				if (currentProblemCount < state.bestProblemCount) {
+				int metricsCompareValue = VoyagePlan.MetricComparator.compare(currentPlanMetrics, state.bestMetrics);
+				if (metricsCompareValue < 0) {
 					storePlan = true;
-				} else if ((currentProblemCount == state.bestProblemCount) && (cost < state.bestCost)) {
+				} else if (metricsCompareValue == 0 && (cost < state.bestCost)) {
 					storePlan = true;
 				}
 			}
@@ -241,7 +245,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			state.bestPlanFitsInAvailableTime = currentPlanFitsInAvailableTime;
 			state.bestCost = cost;
 			state.bestPlan = currentPlan;
-			state.bestProblemCount = currentProblemCount;
+			state.bestMetrics = currentPlanMetrics;
 
 			// We need to ensure the best plan as a set of options which are not
 			// changed by further iterations through choices, so lets loop
@@ -280,10 +284,10 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		final VoyagePlan currentPlan = new VoyagePlan();
 
 		// Calculate voyage plan
-		final int violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, record.vessel, record.charterCostCalculator, record.startHeelRangeInM3, record.baseFuelPricesPerMT,
+		final long[] voyagePlanMetrics = voyageCalculator.calculateVoyagePlan(currentPlan, record.vessel, record.charterCostCalculator, record.startHeelRangeInM3, record.baseFuelPricesPerMT,
 				record.portTimesRecord, currentSequence.toArray(new IDetailsSequenceElement[0]));
 
-		if (violationCount == Integer.MAX_VALUE) {
+		if (voyagePlanMetrics == null) {
 			return null;
 		}
 

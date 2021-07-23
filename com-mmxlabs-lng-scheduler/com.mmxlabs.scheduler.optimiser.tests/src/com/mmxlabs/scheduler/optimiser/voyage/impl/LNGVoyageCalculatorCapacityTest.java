@@ -15,6 +15,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.LNGFuelKeys;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan.VoyagePlanMetrics;
 
 public class LNGVoyageCalculatorCapacityTest {
 
@@ -40,8 +41,11 @@ public class LNGVoyageCalculatorCapacityTest {
 		long cargoCapacityInM3 = 140_000;
 
 		// No violations
-		final int violationCount = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, cargoCapacityInM3, endHeel, remainingHeelInM3, null);
-		Assertions.assertEquals(0, violationCount);
+		final long[] violationCount = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, cargoCapacityInM3, endHeel, remainingHeelInM3, null);
+//		Assertions.assertEquals(0, violationCount);
+		Assertions.assertEquals(0, violationCount[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()]);
+		Assertions.assertEquals(0, violationCount[VoyagePlanMetrics.VOLUME_VIOLATION_QUANTITY.ordinal()]);
+		Assertions.assertEquals(0, violationCount[VoyagePlanMetrics.COOLDOWN_COUNT.ordinal()]);
 	}
 
 	@Test
@@ -66,8 +70,11 @@ public class LNGVoyageCalculatorCapacityTest {
 		long cargoCapacityInM3 = 90_000;
 
 		// Lower vessel capacity should trigger issues on both load and discharge limits
-		final int violationCount = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, cargoCapacityInM3, endHeel, remainingHeelInM3, null);
-		Assertions.assertEquals(2, violationCount);
+		final long[] violationCount = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, cargoCapacityInM3, endHeel, remainingHeelInM3, null);
+//		Assertions.assertEquals(2, violationCount);
+		Assertions.assertEquals(2, violationCount[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()]);
+//		Assertions.assertEquals(0, violationCount[VoyagePlanMetrics.VOLUME_VIOLATION_QUANTITY.ordinal()]);
+		Assertions.assertEquals(0, violationCount[VoyagePlanMetrics.COOLDOWN_COUNT.ordinal()]);
 	}
 
 	@Test
@@ -92,8 +99,11 @@ public class LNGVoyageCalculatorCapacityTest {
 		long cargoCapacityInM3 = 90_000;
 
 		// Lower vessel capacity should trigger issues on just load limit
-		final int violationCount = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, cargoCapacityInM3, endHeel, remainingHeelInM3, null);
-		Assertions.assertEquals(1, violationCount);
+		final long[] violationCount = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, cargoCapacityInM3, endHeel, remainingHeelInM3, null);
+//		Assertions.assertEquals(1, violationCount);
+		Assertions.assertEquals(1, violationCount[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()]);
+//		Assertions.assertEquals(0, violationCount[VoyagePlanMetrics.VOLUME_VIOLATION_QUANTITY.ordinal()]);
+		Assertions.assertEquals(0, violationCount[VoyagePlanMetrics.COOLDOWN_COUNT.ordinal()]);
 	}
 
 	@Test
@@ -111,8 +121,11 @@ public class LNGVoyageCalculatorCapacityTest {
 		long cargoCapacityInM3 = 140_000L;
 		final long[] remainingHeelInM3 = new long[] { 5_000L, 5_000L };
 
-		final int violationCount = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, cargoCapacityInM3, endHeel, remainingHeelInM3, null);
-		Assertions.assertEquals(0, violationCount);
+		final long[] violationCount = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, cargoCapacityInM3, endHeel, remainingHeelInM3, null);
+//		Assertions.assertEquals(0, violationCount);
+		Assertions.assertEquals(0, violationCount[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()]);
+		Assertions.assertEquals(0, violationCount[VoyagePlanMetrics.VOLUME_VIOLATION_QUANTITY.ordinal()]);
+		Assertions.assertEquals(0, violationCount[VoyagePlanMetrics.COOLDOWN_COUNT.ordinal()]);
 	}
 
 	@Test
@@ -131,8 +144,11 @@ public class LNGVoyageCalculatorCapacityTest {
 		final long[] remainingHeelInM3 = new long[] { 5_000L, 5_000L };
 
 		// Vessel cannot meet min load + starting heel
-		final int violationCount = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, cargoCapacityInM3, endHeel, remainingHeelInM3, null);
-		Assertions.assertEquals(1, violationCount);
+		final long[] violationCount = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, cargoCapacityInM3, endHeel, remainingHeelInM3, null);
+		// Assertions.assertEquals(1, violationCount);
+		Assertions.assertEquals(1, violationCount[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()]);
+		// Assertions.assertEquals(0, violationCount[VoyagePlanMetrics.VOLUME_VIOLATION_QUANTITY.ordinal()]);
+		Assertions.assertEquals(0, violationCount[VoyagePlanMetrics.COOLDOWN_COUNT.ordinal()]);
 	}
 
 	@Test
@@ -151,8 +167,11 @@ public class LNGVoyageCalculatorCapacityTest {
 		final long[] remainingHeelInM3 = new long[] { 10_000L, 10_000L };
 
 		// Vessel max load does not cover heel , boil-off and min discharge requirements.
-		final int violationCount = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, cargoCapacityInM3, endHeel, remainingHeelInM3, null);
-		Assertions.assertEquals(1, violationCount);
+		final long[] violationCount = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, cargoCapacityInM3, endHeel, remainingHeelInM3, null);
+		// Assertions.assertEquals(1, violationCount);
+		Assertions.assertEquals(1, violationCount[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()]);
+		// Assertions.assertEquals(0, violationCount[VoyagePlanMetrics.VOLUME_VIOLATION_QUANTITY.ordinal()]);
+		Assertions.assertEquals(0, violationCount[VoyagePlanMetrics.COOLDOWN_COUNT.ordinal()]);
 	}
 
 	@Test
@@ -173,8 +192,11 @@ public class LNGVoyageCalculatorCapacityTest {
 		final long[] remainingHeelInM3 = new long[] { 6_000L, 6_000L };
 
 		// End heel is under range
-		final int violationCount = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, cargoCapacityInM3, endHeel, remainingHeelInM3, null);
-		Assertions.assertEquals(1, violationCount);
+		final long[] violationCount = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, cargoCapacityInM3, endHeel, remainingHeelInM3, null);
+		// Assertions.assertEquals(1, violationCount);
+		Assertions.assertEquals(1, violationCount[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()]);
+		// Assertions.assertEquals(0, violationCount[VoyagePlanMetrics.VOLUME_VIOLATION_QUANTITY.ordinal()]);
+		Assertions.assertEquals(0, violationCount[VoyagePlanMetrics.COOLDOWN_COUNT.ordinal()]);
 	}
 
 	@Test
@@ -195,8 +217,11 @@ public class LNGVoyageCalculatorCapacityTest {
 		final long[] remainingHeelInM3 = new long[] { 4_000L, 4_000L };
 
 		// End heel is over range
-		final int violationCount = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, cargoCapacityInM3, endHeel, remainingHeelInM3, null);
-		Assertions.assertEquals(1, violationCount);
+		final long[] violationCount = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, cargoCapacityInM3, endHeel, remainingHeelInM3, null);
+		// Assertions.assertEquals(1, violationCount);
+		Assertions.assertEquals(1, violationCount[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()]);
+		// Assertions.assertEquals(0, violationCount[VoyagePlanMetrics.VOLUME_VIOLATION_QUANTITY.ordinal()]);
+		Assertions.assertEquals(0, violationCount[VoyagePlanMetrics.COOLDOWN_COUNT.ordinal()]);
 	}
 
 	@Test
@@ -215,13 +240,16 @@ public class LNGVoyageCalculatorCapacityTest {
 		final long[] remainingHeelInM3 = new long[] { 5_000L, 5_000L };
 
 		// MIN_DISCHARGE
-		final int violationCountC = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, cargoCapacityInM3, endHeel, remainingHeelInM3, null);
-		Assertions.assertEquals(1, violationCountC);
+		final long[] violationCountC = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, cargoCapacityInM3, endHeel, remainingHeelInM3, null);
+		// Assertions.assertEquals(1, violationCountC);
+
+		Assertions.assertEquals(1, violationCountC[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()]);
+		// Assertions.assertEquals(0, violationCountC[VoyagePlanMetrics.VOLUME_VIOLATION_QUANTITY.ordinal()]);
+		Assertions.assertEquals(0, violationCountC[VoyagePlanMetrics.COOLDOWN_COUNT.ordinal()]);
 	}
 
 	/**
-	 * When we add load BOG above the final loaded quantity, we hit an issue where we would break vessel capacity. This test makes sure there is no violation.
-	 * See FogBugz 5061 and gitlab 287 
+	 * When we add load BOG above the final loaded quantity, we hit an issue where we would break vessel capacity. This test makes sure there is no violation. See FogBugz 5061 and gitlab 287
 	 */
 	@Test
 	public void testCheckCargoCapacityViolations_ExcessBOG() {
@@ -249,7 +277,9 @@ public class LNGVoyageCalculatorCapacityTest {
 		details.setFuelConsumption(LNGFuelKeys.NBO_In_m3, 300_000L);
 		IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { details };
 		// Lower vessel capacity should trigger issues on just load limit
-		final int violationCount = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, cargoCapacityInM3, endHeel, remainingHeelInM3, sequence);
-		Assertions.assertEquals(0, violationCount);
+		final long[] violationCount = calc.checkCargoCapacityViolations(startHeel, lngCommitmentInM3, loadSlot, dischargeSlot, cargoCapacityInM3, endHeel, remainingHeelInM3, sequence);
+		Assertions.assertEquals(0, violationCount[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()]);
+		Assertions.assertEquals(0, violationCount[VoyagePlanMetrics.VOLUME_VIOLATION_QUANTITY.ordinal()]);
+		Assertions.assertEquals(0, violationCount[VoyagePlanMetrics.COOLDOWN_COUNT.ordinal()]);
 	}
 }
