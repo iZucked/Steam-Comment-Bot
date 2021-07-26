@@ -56,24 +56,6 @@ public class GoogleORToolsPairingMatrixOptimiser<P, C> implements IPairingMatrix
 		// Set up non optional penalties - default 0
 		long[][] nonOptionalPenalty = new long[no_loads][no_discharges];
 
-		// Modify loads with a non-optional penalty
-		for (int load_id = 0; load_id < no_loads; load_id++) {
-			if (!optionalLoads[load_id]) {
-				for (int discharge_id = 0; discharge_id < no_discharges; discharge_id++) {
-					nonOptionalPenalty[load_id][discharge_id] += NON_OPTIONAL_PENALTY;
-				}
-			}
-		}
-
-		// Modify discharges with a non-optional penalty
-		for (int dischargeId = 0; dischargeId < no_discharges; dischargeId++) {
-			if (!optionalDischarges[dischargeId]) {
-				for (int loadId = 0; loadId < no_loads; loadId++) {
-					nonOptionalPenalty[loadId][dischargeId] += NON_OPTIONAL_PENALTY;
-				}
-			}
-		}
-
 		// Set up symmettry reward - default 0
 		double[][] symmetryPenalty = new double[no_loads][no_discharges];
 
