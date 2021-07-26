@@ -119,30 +119,6 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 				.filter(interestingElements::contains) //
 				.count();
 
-//		final List<ConstraintInfo<?, ?, ILoadOption>> allMinLoadGroupCounts = maxSlotCountConstraintProvider.getAllMinLoadGroupCounts();
-//		fitness += allMinLoadGroupCounts.stream().mapToInt(c -> {
-//			final int usedSlotsCount = (int) c.getSlots().stream().filter(filterPredicate).count();
-//			return Math.max(c.getBound() - usedSlotsCount, 0);
-//		}).sum();
-//
-//		final List<ConstraintInfo<?, ?, ILoadOption>> allMaxLoadGroupCounts = maxSlotCountConstraintProvider.getAllMaxLoadGroupCounts();
-//		fitness += allMaxLoadGroupCounts.stream().mapToInt(c -> {
-//			final int usedSlotsCount = (int) c.getSlots().stream().filter(filterPredicate).count();
-//			return Math.max(usedSlotsCount - c.getBound(), 0);
-//		}).sum();
-//
-//		final List<ConstraintInfo<?, ?, IDischargeOption>> allMinDischargeGroupCounts = maxSlotCountConstraintProvider.getAllMinDischargeGroupCounts();
-//		fitness += allMinDischargeGroupCounts.stream().mapToInt(c -> {
-//			final int usedSlotsCount = (int) c.getSlots().stream().filter(filterPredicate).count();
-//			return Math.max(c.getBound() - usedSlotsCount, 0);
-//		}).sum();
-//
-//		final List<ConstraintInfo<?, ?, IDischargeOption>> allMaxDischargeGroupCounts = maxSlotCountConstraintProvider.getAllMaxDischargeGroupCounts();
-//		fitness += allMaxDischargeGroupCounts.stream().mapToInt(c -> {
-//			final int usedSlotsCount = (int) c.getSlots().stream().filter(filterPredicate).count();
-//			return Math.max(usedSlotsCount - c.getBound(), 0);
-//		}).sum();
-
 		for (final IResource resource : sequences.getResources()) {
 			if (vesselProvider.getVesselAvailability(resource).getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
 				final ISequence sequence = sequences.getSequence(resource);
