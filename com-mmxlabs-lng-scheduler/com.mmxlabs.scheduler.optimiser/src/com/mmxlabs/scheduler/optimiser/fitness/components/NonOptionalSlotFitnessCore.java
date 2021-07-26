@@ -5,8 +5,14 @@
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
@@ -22,7 +28,13 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.providers.ConstraintInfo;
+import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotCountConstraintDataProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
@@ -32,6 +44,12 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
  * @since 2.0
  */
 public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessComponent {
+
+	@Inject
+	private IMaxSlotCountConstraintDataProvider maxSlotCountConstraintProvider;
+
+	@Inject
+	private IPortSlotProvider portSlotProvider;
 
 	@NonNull
 	private final String name;
@@ -50,6 +68,8 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 		this.name = name;
 	}
 
+	private Map<String, Integer> consideredDischargeSlots = new HashMap<>();
+
 	@Override
 	public void init(@NonNull final IPhaseOptimisationData data) {
 
@@ -57,6 +77,20 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 		interestingElements.removeAll(phaseOptimisationData.getOptionalElements());
 		// Make sure these are retained
 		interestingElements.addAll(phaseOptimisationData.getSoftRequiredElements());
+		// Remove constrained slots
+		streamConstrainedSlots().map(portSlotProvider::getElement).forEach(interestingElements::remove);
+	}
+
+	private Stream<@NonNull IPortSlot> streamConstrainedSlots() {
+		return Stream.concat(
+				Stream.concat(
+						((List<ConstraintInfo<?, ?, ILoadOption>>) maxSlotCountConstraintProvider.getAllMinLoadGroupCounts()).stream().flatMap(c -> c.getSlots().stream()).map(IPortSlot.class::cast),
+						((List<ConstraintInfo<?, ?, ILoadOption>>) maxSlotCountConstraintProvider.getAllMaxLoadGroupCounts()).stream().flatMap(c -> c.getSlots().stream()).map(IPortSlot.class::cast)),
+				Stream.concat(
+						((List<ConstraintInfo<?, ?, IDischargeOption>>) maxSlotCountConstraintProvider.getAllMinDischargeGroupCounts()).stream().map(ConstraintInfo::getSlots).flatMap(Set::stream)
+								.map(IPortSlot.class::cast),
+						((List<ConstraintInfo<?, ?, IDischargeOption>>) maxSlotCountConstraintProvider.getAllMaxDischargeGroupCounts()).stream().flatMap(c -> c.getSlots().stream())
+								.map(IPortSlot.class::cast)));
 	}
 
 	@Override
@@ -78,10 +112,36 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 	}
 
 	private void evaluation(@NonNull final ISequences sequences) {
+		final @NonNull Set<@NonNull ISequenceElement> unusedSet = getUnusedSet(sequences);
+
 		int fitness = 0;
 		fitness += (int) sequences.getUnusedElements().stream() //
 				.filter(interestingElements::contains) //
 				.count();
+
+//		final List<ConstraintInfo<?, ?, ILoadOption>> allMinLoadGroupCounts = maxSlotCountConstraintProvider.getAllMinLoadGroupCounts();
+//		fitness += allMinLoadGroupCounts.stream().mapToInt(c -> {
+//			final int usedSlotsCount = (int) c.getSlots().stream().filter(filterPredicate).count();
+//			return Math.max(c.getBound() - usedSlotsCount, 0);
+//		}).sum();
+//
+//		final List<ConstraintInfo<?, ?, ILoadOption>> allMaxLoadGroupCounts = maxSlotCountConstraintProvider.getAllMaxLoadGroupCounts();
+//		fitness += allMaxLoadGroupCounts.stream().mapToInt(c -> {
+//			final int usedSlotsCount = (int) c.getSlots().stream().filter(filterPredicate).count();
+//			return Math.max(usedSlotsCount - c.getBound(), 0);
+//		}).sum();
+//
+//		final List<ConstraintInfo<?, ?, IDischargeOption>> allMinDischargeGroupCounts = maxSlotCountConstraintProvider.getAllMinDischargeGroupCounts();
+//		fitness += allMinDischargeGroupCounts.stream().mapToInt(c -> {
+//			final int usedSlotsCount = (int) c.getSlots().stream().filter(filterPredicate).count();
+//			return Math.max(c.getBound() - usedSlotsCount, 0);
+//		}).sum();
+//
+//		final List<ConstraintInfo<?, ?, IDischargeOption>> allMaxDischargeGroupCounts = maxSlotCountConstraintProvider.getAllMaxDischargeGroupCounts();
+//		fitness += allMaxDischargeGroupCounts.stream().mapToInt(c -> {
+//			final int usedSlotsCount = (int) c.getSlots().stream().filter(filterPredicate).count();
+//			return Math.max(usedSlotsCount - c.getBound(), 0);
+//		}).sum();
 
 		for (final IResource resource : sequences.getResources()) {
 			if (vesselProvider.getVesselAvailability(resource).getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
@@ -111,5 +171,9 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 	@NonNull
 	public IFitnessCore getFitnessCore() {
 		return this;
+	}
+
+	private @NonNull Set<@NonNull ISequenceElement> getUnusedSet(@NonNull final ISequences sequences) {
+		return new HashSet<>(sequences.getUnusedElements());
 	}
 }
