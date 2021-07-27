@@ -26,6 +26,17 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public interface ILNGVoyageCalculator {
 
 	/**
+	 * Enum to select a mode for modelling run dry during a travel or idle leg. This assumes a standard L-D cargo.
+	 */
+	enum CargoRunDryMode {
+		OFF, // Run dry not permitted
+		PREFER_MAX_MIN, // Run dry estimating available BOG based on max load and min discharge
+		PREFER_MAX_MAX, // Run dry estimating available BOG based on max load and max discharge
+		PREFER_MIN_MIN, // Run dry estimating available BOG based on min load and min discharge
+		PREFER_MIN_MAX // Run dry estimating available BOG based on min load and max discharge
+	}
+
+	/**
 	 * Calculate the fuel requirements, speed and times for the port to port journey options defined in {@link VoyageOptions} and store the results in {@link VoyageDetails}.
 	 * 
 	 * @param options
@@ -64,5 +75,6 @@ public interface ILNGVoyageCalculator {
 	 * @param sequence
 	 * @return Returns a new sequence of appropriate Details objects with fuel cost information attached
 	 */
-	List<IDetailsSequenceElement> generateFuelCostCalculatedSequence(IOptionsSequenceElement... sequence);
+	List<IDetailsSequenceElement> generateFuelCostCalculatedSequence(IVessel vessel, CargoRunDryMode cargoSequence, long[] startHeelInM3, IOptionsSequenceElement... baseSequence);
+
 }

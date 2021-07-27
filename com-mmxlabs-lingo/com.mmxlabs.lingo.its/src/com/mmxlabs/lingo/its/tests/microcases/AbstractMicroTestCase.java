@@ -225,6 +225,20 @@ public abstract class AbstractMicroTestCase {
 			runnerBuilder.dispose();
 		}
 	}
+	
+	public void evaluateTestWith(UserSettings userSettings) {
+
+		LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
+				.withUserSettings(userSettings) //
+				.withThreadCount(getThreadCount()) //
+				.buildDefaultRunner();
+
+		try {
+			runnerBuilder.evaluateInitialState();
+		} finally {
+			runnerBuilder.dispose();
+		}
+	}
 
 	public void evaluateTest(@Nullable final Consumer<OptimisationPlan> tweaker, @Nullable final Function<LNGScenarioRunner, IRunnerHook> runnerHookFactory,
 			@NonNull final Consumer<LNGScenarioRunner> checker) {

@@ -19,6 +19,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
@@ -40,6 +41,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan.VoyagePlanMetrics;
  */
 public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
+	
+	public static final boolean ENABLE_CARGO_RUN_DRY = false;
+	
 	public static class Record {
 
 		public Record(@Nullable final IResource resource, @NonNull final IVessel vessel, final long[] startHeelRangeInM3, final int[] baseFuelPricesPerMT,
@@ -103,13 +107,6 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 		final InternalState state = new InternalState();
 		runLoop(record, state, 0);
-		if (state.bestPlan.getSequence().length > 2) {
-			final long supplementalbasefuelconsumption = ((VoyageDetails) state.bestPlan.getSequence()[1]).getFuelConsumption(record.vessel.getSupplementalTravelBaseFuelInMT());
-			final long idlebasefuelconsumption = ((VoyageDetails) state.bestPlan.getSequence()[1]).getFuelConsumption(record.vessel.getIdleBaseFuelInMT());
-			final long pilotbasefuelconsumption = ((VoyageDetails) state.bestPlan.getSequence()[1]).getFuelConsumption(record.vessel.getPilotLightFuelInMT());
-			final long travelbasefuelconsumption = ((VoyageDetails) state.bestPlan.getSequence()[1]).getFuelConsumption(record.vessel.getTravelBaseFuelInMT());
-			int i = 0;
-		}
 		return state.bestPlan;
 	}
 
@@ -135,8 +132,34 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		if (i == record.choices.size()) {
 			final InternalState state = new InternalState();
 			// Perform voyage calculations and populate plan.
-			evaluateVoyagePlan(record, state);
-			hook.accept(state.bestPlan);
+			VoyagePlan baseVP = evaluateVoyagePlan(record, state, ILNGVoyageCalculator.CargoRunDryMode.OFF);
+			hook.accept(baseVP);
+
+			if (ENABLE_CARGO_RUN_DRY && record.portTimesRecord.getFirstSlot() instanceof ILoadOption) {
+				if (state.bestPlan.getVoyagePlanMetrics()[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()] > 0 || state.bestPlan.getCooldownCost() != 0) {
+					{
+						final InternalState state2 = new InternalState();
+						VoyagePlan vp = evaluateVoyagePlan(record, state2, ILNGVoyageCalculator.CargoRunDryMode.PREFER_MAX_MIN);
+						hook.accept(vp);
+					}
+					{
+						final InternalState state2 = new InternalState();
+						VoyagePlan vp = evaluateVoyagePlan(record, state2, ILNGVoyageCalculator.CargoRunDryMode.PREFER_MAX_MAX);
+						hook.accept(vp);
+					}
+					{
+						final InternalState state2 = new InternalState();
+						VoyagePlan vp = evaluateVoyagePlan(record, state2, ILNGVoyageCalculator.CargoRunDryMode.PREFER_MIN_MAX);
+						hook.accept(vp);
+					}
+					{
+						final InternalState state2 = new InternalState();
+						VoyagePlan vp = evaluateVoyagePlan(record, state2, ILNGVoyageCalculator.CargoRunDryMode.PREFER_MIN_MIN);
+						hook.accept(vp);
+					}
+				}
+			}
+
 		} else {
 			// Perform recursive application of choice objects.
 			final IVoyagePlanChoice c = record.choices.get(i);
@@ -159,7 +182,18 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		// Recursive termination point.
 		if (i == record.choices.size()) {
 			// Perform voyage calculations and populate plan.
-			evaluateVoyagePlan(record, state);
+			evaluateVoyagePlan(record, state, ILNGVoyageCalculator.CargoRunDryMode.OFF);
+
+			if (ENABLE_CARGO_RUN_DRY && record.portTimesRecord.getFirstSlot() instanceof ILoadOption) {
+				// if (currentPlan.getViolationsCount() > 0 ||currentPlan.getCooldownCost() != 0)
+				{
+					evaluateVoyagePlan(record, state, ILNGVoyageCalculator.CargoRunDryMode.PREFER_MAX_MAX);
+					evaluateVoyagePlan(record, state, ILNGVoyageCalculator.CargoRunDryMode.PREFER_MAX_MIN);
+					evaluateVoyagePlan(record, state, ILNGVoyageCalculator.CargoRunDryMode.PREFER_MIN_MAX);
+					evaluateVoyagePlan(record, state, ILNGVoyageCalculator.CargoRunDryMode.PREFER_MIN_MIN);
+				}
+			}
+
 		} else {
 			// Perform recursive application of choice objects.
 			final IVoyagePlanChoice c = record.choices.get(i);
@@ -172,15 +206,15 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	}
 
 	/**
-	 * Evaluates the current sequences from the current choice set.
+	 * Evaluates the current sequences from the current choice set and updates the best. Returns the current plab.
 	 */
-	private void evaluateVoyagePlan(final Record record, final InternalState state) {
+	private VoyagePlan evaluateVoyagePlan(final Record record, final InternalState state, ILNGVoyageCalculator.CargoRunDryMode cargoRunDry) {
 
 		long[] currentPlanMetrics;
 
 		// Fall back to a single evaluation assuming final voyage options
 		// are good
-		final VoyagePlan currentPlan = calculateVoyagePlan(record);
+		final VoyagePlan currentPlan = calculateVoyagePlan(record, cargoRunDry);
 		final long cost = evaluatePlan(currentPlan);
 		if (currentPlan != null) {
 			currentPlanMetrics = currentPlan.getVoyagePlanMetrics();
@@ -261,6 +295,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 				}
 			}
 		}
+		
+		return currentPlan;
 	}
 
 	public long evaluatePlan(final VoyagePlan plan) {
@@ -277,10 +313,15 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	/**
 	 */
-	private @Nullable VoyagePlan calculateVoyagePlan(final Record record) {
+	private @Nullable VoyagePlan calculateVoyagePlan(final Record record, ILNGVoyageCalculator.CargoRunDryMode runDry) {
 		// For each voyage options, calculate new Details.
+		final List<IDetailsSequenceElement> currentSequence = voyageCalculator.generateFuelCostCalculatedSequence(record.vessel, runDry, record.startHeelRangeInM3,
+				record.basicSequence.toArray(new IOptionsSequenceElement[0]));
 
-		final List<IDetailsSequenceElement> currentSequence = voyageCalculator.generateFuelCostCalculatedSequence(record.basicSequence.toArray(new IOptionsSequenceElement[0]));
+		if (currentSequence == null) {
+			return null;
+		}
+		
 		final VoyagePlan currentPlan = new VoyagePlan();
 
 		// Calculate voyage plan
