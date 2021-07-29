@@ -95,7 +95,7 @@ public class ScheduleModelInvalidateCommandProvider extends BaseModelCommandProv
 	}
 
 	//TODO: keep updates in-line with MtMScenarioEditorActionDelegate
-	private static Command createClearModelsCommand(final EditingDomain domain, final LNGScenarioModel scenarioModel, final AnalyticsModel analyticsModel) {
+	public static Command createClearModelsCommand(final EditingDomain domain, final LNGScenarioModel scenarioModel, final AnalyticsModel analyticsModel) {
 		final List<EObject> delete = new LinkedList<>();
 
 		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioModel);

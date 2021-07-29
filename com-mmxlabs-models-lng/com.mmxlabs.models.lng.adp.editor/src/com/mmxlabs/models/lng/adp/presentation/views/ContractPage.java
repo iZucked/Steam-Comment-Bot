@@ -135,6 +135,8 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioElementNameHelper;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.ui.commands.ScheduleModelInvalidateCommandProvider;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
@@ -1004,7 +1006,6 @@ public class ContractPage extends ADPComposite {
 					phase1aMonthEndAllocationTrackerEntitlements.get(inventory).put(alloc, new HashMap<>());
 				}
 			}
-
 		}
 		phase1aMullContainers.entrySet().stream().flatMap(e -> e.getValue().getMUDContainers().stream()).flatMap(mudContainer -> mudContainer.getAllocationTrackers().stream())
 				.forEach(allocationTracker -> allocationTracker.setVesselSharing(phase1FirstPartyVessels));
@@ -1401,8 +1402,7 @@ public class ContractPage extends ADPComposite {
 					monthMappedEntityCargoBlueprints.get(inventory).get(selectedEntity).computeIfAbsent(fromYM, k -> new HashSet<>()).add(selectedCargoBlueprint);
 					// We've moved cargoes for a different entity and the current entity have to update their reference entitlements to accomodate this.
 					// Using matched cargoblueprint for volume - this might be a bad assumption
-					final Predicate<YearMonth> loopContinueCheck = releasingYearMonth.equals(toYM) ? ym -> ym.isBefore(finalReleasingYm) : ym -> !finalReleasingYm.isAfter(ym);
-					for (YearMonth ym = acceptingYearMonth; loopContinueCheck.test(ym); ym = ym.plusMonths(1)) {
+					for (YearMonth ym = acceptingYearMonth; ym.isBefore(finalReleasingYm); ym = ym.plusMonths(1)) {
 						final long newEntitlement = phase1aMonthEndEntitlements.get(inventory).get(selectedEntity).get(ym).longValue() - selectedCargoBlueprint.getAllocatedVolume();
 						phase1aMonthEndEntitlements.get(inventory).get(selectedEntity).put(ym, newEntitlement);
 						final long newEntitlementForFixedCargo = phase1aMonthEndEntitlements.get(inventory).get(entity).get(ym).longValue() + fixedCargoMatchedBlueprint.getAllocatedVolume();
@@ -1528,8 +1528,7 @@ public class ContractPage extends ADPComposite {
 					monthMappedCargoBlueprints.get(inventory).computeIfAbsent(acceptingYearMonth, k -> new HashSet<>()).add(selectedCargoBlueprint);
 					monthMappedEntityCargoBlueprints.get(inventory).get(selectedEntity).computeIfAbsent(acceptingYearMonth, k -> new HashSet<>()).add(selectedCargoBlueprint);
 
-					final Predicate<YearMonth> loopContinueCheck = releasingYearMonth.equals(toYM) ? ym -> ym.isAfter(finalReleasingYm) : ym -> !finalReleasingYm.isBefore(ym);
-					for (YearMonth ym = acceptingYearMonth; loopContinueCheck.test(ym); ym = ym.minusMonths(1)) {
+					for (YearMonth ym = acceptingYearMonth; ym.isAfter(finalReleasingYm); ym = ym.minusMonths(1)) {
 						final long newEntitlement = phase1aMonthEndEntitlements.get(inventory).get(selectedEntity).get(ym).longValue() + selectedCargoBlueprint.getAllocatedVolume();
 						phase1aMonthEndEntitlements.get(inventory).get(selectedEntity).put(ym, newEntitlement);
 						final long newEntitlementForFixedCargo = phase1aMonthEndEntitlements.get(inventory).get(entity).get(ym).longValue() - fixedCargoMatchedBlueprint.getAllocatedVolume();
@@ -3132,6 +3131,7 @@ public class ContractPage extends ADPComposite {
 		// }
 
 		final IScenarioDataProvider sdp = editorData.getScenarioDataProvider();
+		final Command deleteModelsCommand = ScheduleModelInvalidateCommandProvider.createClearModelsCommand(editingDomain, sm, ScenarioModelUtil.getAnalyticsModel(sm));
 
 		final List<Cargo> cargoesToDelete;
 		final List<LoadSlot> loadSlotsToDelete;
@@ -3178,6 +3178,9 @@ public class ContractPage extends ADPComposite {
 		if (cmd.isEmpty()) {
 			return IdentityCommand.INSTANCE;
 		} else {
+			if (deleteModelsCommand != null) {
+				editorData.getDefaultCommandHandler().handleCommand(deleteModelsCommand);
+			}
 			try {
 				editorData.setDisableUpdates(true);
 				editorData.getDefaultCommandHandler().handleCommand(cmd, profile, null);
