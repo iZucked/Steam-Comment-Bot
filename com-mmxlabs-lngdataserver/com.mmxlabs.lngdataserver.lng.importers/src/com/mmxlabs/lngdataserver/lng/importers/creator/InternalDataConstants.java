@@ -46,6 +46,7 @@ public class InternalDataConstants {
 	public static final String PORT_DAS_ISLAND = "L_AE_AbuDh";
 	public static final String PORT_QALHAT = "L_OM_Qalha";
 	public static final String PORT_BORYEONG = "L_KR_Borye";
+	public static final String PORT_ALTAMIRA = "L_MX_Altam";
 	
 	public static final String PORT_ISLE_OF_GRAIN = "L_GB_Isleo";
 	public static final String PORT_DRAGON = "L_GB_Drago";

@@ -33,6 +33,7 @@ import com.mmxlabs.common.parser.series.SeriesParserData;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IEvaluationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -107,6 +108,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.maintenance.IMaintenanceEvaluator;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.maintenance.impl.MaintenanceEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduling.IArrivalTimeScheduler;
 import com.mmxlabs.scheduler.optimiser.shared.SharedDataModule;
 import com.mmxlabs.scheduler.optimiser.shared.SharedPortDistanceDataBuilder;
@@ -1266,6 +1269,9 @@ public class TestCalculations {
 				bind(int.class).annotatedWith(Names.named(SchedulerConstants.COOLDOWN_MIN_IDLE_HOURS)).toInstance(Integer.MAX_VALUE);
 				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMMERCIAL_VOLUME_OVERCAPACITY)).toInstance(Boolean.FALSE);
 
+				final IMaintenanceEvaluator maintenanceEvaluator = Mockito.mock(IMaintenanceEvaluator.class);
+				Mockito.when(maintenanceEvaluator.processSchedule(ArgumentMatchers.any(long[].class), ArgumentMatchers.any(IVesselAvailability.class), ArgumentMatchers.any(VoyagePlan.class), ArgumentMatchers.any(IPortTimesRecord.class), ArgumentMatchers.nullable(IAnnotatedSolution.class))).thenReturn(null);
+				bind(IMaintenanceEvaluator.class).toInstance(maintenanceEvaluator);
 			}
 		});
 	}

@@ -659,7 +659,7 @@ public class NewLNGVoyageCalculatorTest {
 		Mockito.when(mockRouteCostProvider.getRouteNBORate(options.getRoute(), options.getVessel(), vesselState)).thenReturn(nboRate);
 		Mockito.when(mockRouteCostProvider.getRouteFuelUsage(options.getRoute(), options.getVessel(), vesselState)).thenReturn(expectedBaseConsumption);
 
-		calc.calculateRouteAdditionalFuelRequirements(options, details, options.getVessel(), vesselState, additionalRouteTime);
+		calc.calculateRouteAdditionalFuelRequirements(options, details, options.getVessel(), vesselState, additionalRouteTime, Long.MAX_VALUE);
 
 		// Check results
 		final long pilotLightRate = options.getVessel().getPilotLightRate();
@@ -710,7 +710,7 @@ public class NewLNGVoyageCalculatorTest {
 		Mockito.when(mockRouteCostProvider.getRouteNBORate(options.getRoute(), options.getVessel(), vesselState)).thenReturn(nboRate);
 		Mockito.when(mockRouteCostProvider.getRouteFuelUsage(options.getRoute(), options.getVessel(), vesselState)).thenReturn(expectedBaseConsumption);
 
-		calc.calculateRouteAdditionalFuelRequirements(options, details, options.getVessel(), vesselState, additionalRouteTime);
+		calc.calculateRouteAdditionalFuelRequirements(options, details, options.getVessel(), vesselState, additionalRouteTime, Long.MAX_VALUE);
 
 		final IVessel vessel = options.getVessel();
 		final long pilotLightRate = vessel.getPilotLightRate();
@@ -763,7 +763,7 @@ public class NewLNGVoyageCalculatorTest {
 		calc.setPortCVProvider(mockPortCVProvider);
 		final IVessel vessel = options.getVessel();
 
-		calc.calculateRouteAdditionalFuelRequirements(options, details, options.getVessel(), vesselState, additionalRouteTime);
+		calc.calculateRouteAdditionalFuelRequirements(options, details, options.getVessel(), vesselState, additionalRouteTime, Long.MAX_VALUE);
 
 		Assertions.assertEquals(nboRate * additionalRouteTime / 24, details.getRouteAdditionalConsumption(LNGFuelKeys.NBO_In_m3));
 		// Some supplement expected
@@ -809,7 +809,7 @@ public class NewLNGVoyageCalculatorTest {
 		Mockito.when(mockRouteCostProvider.getRouteFuelUsage(options.getRoute(), options.getVessel(), vesselState)).thenReturn(expectedBaseConsumption);
 		final IVessel vessel = options.getVessel();
 
-		calc.calculateRouteAdditionalFuelRequirements(options, details, options.getVessel(), vesselState, additionalRouteTime);
+		calc.calculateRouteAdditionalFuelRequirements(options, details, options.getVessel(), vesselState, additionalRouteTime, Long.MAX_VALUE);
 
 		Assertions.assertEquals(expectedBaseConsumption * additionalRouteTime / 24, details.getRouteAdditionalConsumption(vessel.getTravelBaseFuelInMT()));
 

@@ -193,7 +193,6 @@ public class FeasibleTimeWindowTrimmer {
 			case CharterOut:
 			case DryDock:
 			case Other:
-			case Maintenance:
 			case End:
 			case Round_Trip_Cargo_End:
 				result[idx] = true;
