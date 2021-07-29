@@ -1,6 +1,5 @@
 package com.mmxlabs.lingo.its.tests.maintenance;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
@@ -11,18 +10,15 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lingo.its.tests.IOTestUtil;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
-import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -30,7 +26,6 @@ import com.mmxlabs.models.lng.cargo.util.VesselAvailabilityMaker;
 import com.mmxlabs.models.lng.commercial.EVesselTankState;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
-import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
@@ -208,7 +203,6 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 					.withStartHeel(15_000, 150_000, 22.67, "0.01") //
 					.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
 					.build();
-			vesselAvailability.setFleet(true);
 			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
 
 			evaluateTest();
@@ -264,7 +258,6 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 					.withStartHeel(0, 0, 22.67, "0.01") //
 					.withEndHeel(0, 500, EVesselTankState.EITHER, "") //
 					.build();
-			vesselAvailability.setFleet(true);
 
 			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
 
@@ -321,7 +314,6 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 					.withStartHeel(3_000, 3_000, 22.67, "0.01") //
 					.withEndHeel(0, 500, EVesselTankState.EITHER, "") //
 					.build();
-			vesselAvailability.setFleet(true);
 
 			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
 
@@ -385,7 +377,6 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 					.withStartHeel(3_000, 3_000, 22.67, "0.01") //
 					.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
 					.build();
-			vesselAvailability.setFleet(true);
 
 			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
 
@@ -445,7 +436,6 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 					.withStartHeel(18_000, 20_000, 22.67, "0.01") //
 					.withEndHeel(0, 500, EVesselTankState.EITHER, "") //
 					.build();
-			vesselAvailability.setFleet(true);
 
 			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
 
@@ -513,7 +503,6 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 					.withStartHeel(18_000, 20_000, 22.67, "0.01") //
 					.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
 					.build();
-			vesselAvailability.setFleet(true);
 
 			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
 
@@ -581,7 +570,6 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 					.withStartHeel(50_000, 150_000, 22.67, "0.01") //
 					.withEndHeel(minAllowedEndHeel, maxAllowedEndHeel, EVesselTankState.MUST_BE_COLD, "") //
 					.build();
-			vesselAvailability.setFleet(true);
 
 			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
 
@@ -645,7 +633,6 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 					.withStartHeel(20_000, 45_000, 22.67, "0.01") //
 					.withEndHeel(minAllowedEndHeel, maxAllowedEndHeel, EVesselTankState.MUST_BE_COLD, "") //
 					.build();
-			vesselAvailability.setFleet(true);
 
 			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
 
@@ -714,7 +701,6 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 					.withStartPort(startPort) //
 					.withEndPort(endPort) //
 					.build();
-			vesselAvailability.setFleet(true);
 
 			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
 
@@ -795,7 +781,6 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 					.withStartPort(startPort) //
 					.withEndPort(endPort) //
 					.build();
-			vesselAvailability.setFleet(true);
 
 			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
 
@@ -891,7 +876,6 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 					.withStartPort(startPort) //
 					.withEndPort(endPort) //
 					.build();
-			vesselAvailability.setFleet(true);
 
 			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
 
@@ -988,7 +972,6 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 					.withStartPort(startPort) //
 					.withEndPort(endPort) //
 					.build();
-			vesselAvailability.setFleet(true);
 
 			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
 
@@ -1116,7 +1099,6 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 					.withStartHeel(5_000, 150_000, 22.67, "1") //
 					.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
 					.build();
-			vesselAvailability.setFleet(true);
 
 			final MaintenanceEvent maintenanceEvent = makeDefaultMaintenanceEvent(maintenancePort, vesselAvailability);
 
@@ -1209,7 +1191,6 @@ public class MaintenanceEventTests extends AbstractMicroTestCase {
 					.withStartHeel(0, 150_000, 22.67, "0.01") //
 					.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, "") //
 					.build();
-			vesselAvailability.setFleet(true);
 			final LocalDateTime maintenanceDateTime = LocalDateTime.of(2017, 3, 4, 3, 0);
 			final MaintenanceEvent maintenanceEvent = cargoModelBuilder.makeMaintenanceEvent("Maintenance", maintenanceDateTime, maintenanceDateTime, maintenancePort) //
 					.withDurationInDays(5) //
