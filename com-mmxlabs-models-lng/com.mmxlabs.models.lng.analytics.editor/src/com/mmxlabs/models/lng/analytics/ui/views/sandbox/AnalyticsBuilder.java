@@ -481,7 +481,7 @@ public class AnalyticsBuilder {
 		}
 		return 0;
 	}
-	
+
 	public static int calculateVoyageDurationInHours(final @Nullable BuyOption buyOption, final @Nullable SellOption sellOption, final PortModel portModel, final @Nullable Vessel vessel,
 			ModelDistanceProvider modelDistanceProvider) {
 		if (buyOption == null || sellOption == null) {
@@ -490,16 +490,16 @@ public class AnalyticsBuilder {
 		final Port fromPort = AnalyticsBuilder.getPort(buyOption);
 		final Port toPort = AnalyticsBuilder.getPort(sellOption);
 		if (fromPort != null && toPort != null && vessel != null) {
-			
+
 			final ZonedDateTime windowStartDate = AnalyticsBuilder.getWindowStartDate(buyOption);
 			final ZonedDateTime windowEndDate = AnalyticsBuilder.getWindowEndDate(sellOption);
-			
+
 			if (windowStartDate != null && windowEndDate != null) {
 				int loadDuration = AnalyticsBuilder.getDuration(buyOption);
 				final int availableTime = Hours.between(windowStartDate, windowEndDate) - loadDuration;
 				return availableTime;
 			}
- 		}
+		}
 		return 0;
 	}
 
@@ -593,6 +593,13 @@ public class AnalyticsBuilder {
 		}
 
 		final ShippingType sellType = getSellShippingType(sell);
+
+		if (buyType == ShippingType.None && sellType != ShippingType.None) {
+			return ShippingType.Open;
+		}
+		if (buyType != ShippingType.None && sellType == ShippingType.None) {
+			return ShippingType.Open;
+		}
 
 		if (sellType == ShippingType.Mixed) {
 			return ShippingType.Mixed;
@@ -1677,6 +1684,7 @@ public class AnalyticsBuilder {
 		}
 		return Pair.of(permitted, expandedVessels);
 	}
+
 	public static Pair<Boolean, Set<APortSet<Port>>> getBuyPortRestrictions(final BuyOption buy) {
 		final Set<APortSet<Port>> expandedPorts = new HashSet<>();
 		boolean permitted = false;
@@ -1696,7 +1704,7 @@ public class AnalyticsBuilder {
 		}
 		return Pair.of(permitted, expandedPorts);
 	}
-	
+
 	public static Pair<Boolean, Set<APortSet<Port>>> getSellPortRestrictions(final SellOption sell) {
 		final Set<APortSet<Port>> expandedPorts = new HashSet<>();
 		boolean permitted = false;
@@ -1800,7 +1808,7 @@ public class AnalyticsBuilder {
 		}
 		return false;
 	}
-	
+
 	public static GenericCharterContract createCharterTerms(final String sRepositioningFee, final String sBallastBonus) {
 		GenericCharterContract gcc = CommercialFactory.eINSTANCE.createGenericCharterContract();
 		if (sRepositioningFee != null) {
@@ -1814,10 +1822,17 @@ public class AnalyticsBuilder {
 			final IBallastBonus ballastBonus = CommercialFactory.eINSTANCE.createSimpleBallastBonusContainer();
 			final LumpSumBallastBonusTerm term = CommercialFactory.eINSTANCE.createLumpSumBallastBonusTerm();
 			term.setPriceExpression(sBallastBonus);
-			((SimpleBallastBonusContainer)ballastBonus).getTerms().add(term);
+			((SimpleBallastBonusContainer) ballastBonus).getTerms().add(term);
 			gcc.setBallastBonusTerms(ballastBonus);
 		}
 		return gcc;
 	}
 
+	public static boolean isNullOrOpen(BuyOption opt) {
+		return opt == null || opt instanceof OpenBuy;
+	}
+
+	public static boolean isNullOrOpen(SellOption opt) {
+		return opt == null || opt instanceof OpenSell;
+	}
 }

@@ -1731,7 +1731,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EReference getVesselAvailability_GenericCharterContract() {
-		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(15);
+		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(18);
 	}
 
 	/**
@@ -1741,7 +1741,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getVesselAvailability_MinDuration() {
-		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(16);
+		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(15);
 	}
 
 	/**
@@ -1751,7 +1751,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getVesselAvailability_MaxDuration() {
-		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(17);
+		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(16);
 	}
 
 	/**
@@ -1761,7 +1761,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getVesselAvailability_CharterContractOverride() {
-		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(18);
+		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(17);
 	}
 
 	/**
@@ -3263,10 +3263,10 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(vesselAvailabilityEClass, VESSEL_AVAILABILITY__END_HEEL);
 		createEAttribute(vesselAvailabilityEClass, VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE);
 		createEReference(vesselAvailabilityEClass, VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT);
-		createEReference(vesselAvailabilityEClass, VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT);
 		createEAttribute(vesselAvailabilityEClass, VESSEL_AVAILABILITY__MIN_DURATION);
 		createEAttribute(vesselAvailabilityEClass, VESSEL_AVAILABILITY__MAX_DURATION);
 		createEAttribute(vesselAvailabilityEClass, VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE);
+		createEReference(vesselAvailabilityEClass, VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT);
 		createEOperation(vesselAvailabilityEClass, VESSEL_AVAILABILITY___GET_START_BY_AS_DATE_TIME);
 		createEOperation(vesselAvailabilityEClass, VESSEL_AVAILABILITY___GET_START_AFTER_AS_DATE_TIME);
 		createEOperation(vesselAvailabilityEClass, VESSEL_AVAILABILITY___GET_END_BY_AS_DATE_TIME);
@@ -3722,10 +3722,10 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getVesselAvailability_EndHeel(), theCommercialPackage.getEndHeelOptions(), null, "endHeel", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselAvailability_ForceHireCostOnlyEndRule(), ecorePackage.getEBoolean(), "forceHireCostOnlyEndRule", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVesselAvailability_ContainedCharterContract(), theCommercialPackage.getGenericCharterContract(), null, "containedCharterContract", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getVesselAvailability_GenericCharterContract(), theCommercialPackage.getGenericCharterContract(), null, "genericCharterContract", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselAvailability_MinDuration(), ecorePackage.getEInt(), "minDuration", null, 1, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselAvailability_MaxDuration(), ecorePackage.getEInt(), "maxDuration", null, 1, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselAvailability_CharterContractOverride(), ecorePackage.getEBoolean(), "charterContractOverride", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVesselAvailability_GenericCharterContract(), theCommercialPackage.getGenericCharterContract(), null, "genericCharterContract", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getVesselAvailability__GetStartByAsDateTime(), theDateTimePackage.getDateTime(), "getStartByAsDateTime", 0, 1, IS_UNIQUE, IS_ORDERED);
 

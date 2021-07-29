@@ -60,8 +60,10 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 
 			final ShippingType nonShipped = AnalyticsBuilder.isNonShipped(baseCaseRow);
 			if (nonShipped == ShippingType.Shipped) {
-				if (baseCaseRow.getBuyOption() != null && baseCaseRow.getSellOption() != null) {
-					if (baseCaseRow.getShipping() == null) {
+				if (baseCaseRow.getBuyOption() != null && baseCaseRow.getSellOption() != null //
+						&& !(baseCaseRow.getBuyOption() instanceof OpenBuy) && !(baseCaseRow.getSellOption() instanceof OpenSell)  
+						) {
+					if (baseCaseRow.getShipping() == null ) {
 						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
 								(IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point - no shipping option defined."));
 						deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);

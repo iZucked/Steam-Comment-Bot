@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.rcp.common.parent</artifactId>
 		<groupId>com.mmxlabs.rcp.common</groupId>
-		<version>4.12.37-SNAPSHOT</version>
+		<version>4.12.38-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.rcp.common.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>

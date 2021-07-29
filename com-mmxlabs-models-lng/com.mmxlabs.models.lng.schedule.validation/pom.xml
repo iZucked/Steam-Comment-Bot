@@ -6,10 +6,10 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.lng.parent</artifactId>
 		<groupId>com.mmxlabs.models.lng</groupId>
-		<version>4.12.37-SNAPSHOT</version>
+		<version>4.12.38-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.models.lng.schedule.validation</artifactId>
-	<version>4.12.37-SNAPSHOT</version>
+	<version>4.12.38-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 </project>

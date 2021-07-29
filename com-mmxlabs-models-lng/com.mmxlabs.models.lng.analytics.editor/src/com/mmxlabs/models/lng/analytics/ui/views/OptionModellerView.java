@@ -894,7 +894,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					final int mode = m.getMode();
 					if (mode == SandboxModeConstants.MODE_OPTIMISE && !m.getBaseCase().isKeepExistingScenario()) {
 						// BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(),
-						MessageDialog.openError(PlatformUI.getWorkbench().getDisplay().getActiveShell(), "Error running sandbox", "Derive mode needs portfolio link enabled");
+						MessageDialog.openError(PlatformUI.getWorkbench().getDisplay().getActiveShell(), "Error running sandbox", "Optimise mode needs portfolio link enabled");
 					} else {
 
 						if (mode != SandboxModeConstants.MODE_DERIVE || partialCaseValid) {

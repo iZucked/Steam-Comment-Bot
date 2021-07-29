@@ -21,6 +21,8 @@ import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.FullVesselCharterOption;
+import com.mmxlabs.models.lng.analytics.OpenBuy;
+import com.mmxlabs.models.lng.analytics.OpenSell;
 import com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellMarket;
@@ -91,7 +93,18 @@ public class BaseCaseToScheduleSpecification {
 			}
 
 			final ShippingType shippingType = row.getVesselEventOption() != null ? ShippingType.Shipped : AnalyticsBuilder.getShippingType(row.getBuyOption(), row.getSellOption());
-			if (shippingType == ShippingType.NonShipped) {
+			if (shippingType == ShippingType.Open) {
+				if (row.getBuyOption() != null && !(row.getBuyOption() instanceof OpenBuy)) {
+					final SlotSpecification spec = CargoFactory.eINSTANCE.createSlotSpecification();
+					spec.setSlot(getOrCreate(row.getBuyOption()));
+					specification.getOpenEvents().add(spec);
+				}
+				if (row.getSellOption() != null && !(row.getSellOption() instanceof OpenSell)) {
+					final SlotSpecification spec = CargoFactory.eINSTANCE.createSlotSpecification();
+					spec.setSlot(getOrCreate(row.getSellOption()));
+					specification.getOpenEvents().add(spec);
+				}
+			} else if (shippingType == ShippingType.NonShipped) {
 				final NonShippedCargoSpecification spec = CargoFactory.eINSTANCE.createNonShippedCargoSpecification();
 
 				DischargeSlot dischargeSlot = null;
@@ -179,7 +192,7 @@ public class BaseCaseToScheduleSpecification {
 						vesselAvailability.setEndAfter(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
 						vesselAvailability.setEndBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
 						vesselAvailability.setOptional(true);
-						vesselAvailability.setContainedCharterContract(AnalyticsBuilder.createCharterTerms(optionalAvailabilityShippingOption.getRepositioningFee(),//
+						vesselAvailability.setContainedCharterContract(AnalyticsBuilder.createCharterTerms(optionalAvailabilityShippingOption.getRepositioningFee(), //
 								optionalAvailabilityShippingOption.getBallastBonus()));
 						if (optionalAvailabilityShippingOption.getStartPort() != null) {
 							vesselAvailability.setStartAt(optionalAvailabilityShippingOption.getStartPort());
@@ -375,14 +388,8 @@ public class BaseCaseToScheduleSpecification {
 		if (original != null) {
 			return original;
 		}
-		this.usedIDs.addAll(
-				mapper.getExtraDataProvider().extraDischarges.stream()
-				.map(DischargeSlot::getName)
-				.collect(Collectors.toSet()));
-		this.usedIDs.addAll(
-				mapper.getExtraDataProvider().extraLoads.stream()
-				.map(LoadSlot::getName)
-				.collect(Collectors.toSet()));
+		this.usedIDs.addAll(mapper.getExtraDataProvider().extraDischarges.stream().map(DischargeSlot::getName).collect(Collectors.toSet()));
+		this.usedIDs.addAll(mapper.getExtraDataProvider().extraLoads.stream().map(LoadSlot::getName).collect(Collectors.toSet()));
 		final DischargeSlot dischargeSlot_original = AnalyticsBuilder.makeDischargeSlot(sellOption, scenarioModel, SlotMode.ORIGINAL_SLOT, this.usedIDs);
 
 		if (mapper.isCreateBEOptions()) {
@@ -402,14 +409,8 @@ public class BaseCaseToScheduleSpecification {
 		if (original != null) {
 			return original;
 		}
-		this.usedIDs.addAll(
-				mapper.getExtraDataProvider().extraDischarges.stream()
-				.map(DischargeSlot::getName)
-				.collect(Collectors.toSet()));
-		this.usedIDs.addAll(
-				mapper.getExtraDataProvider().extraLoads.stream()
-				.map(LoadSlot::getName)
-				.collect(Collectors.toSet()));
+		this.usedIDs.addAll(mapper.getExtraDataProvider().extraDischarges.stream().map(DischargeSlot::getName).collect(Collectors.toSet()));
+		this.usedIDs.addAll(mapper.getExtraDataProvider().extraLoads.stream().map(LoadSlot::getName).collect(Collectors.toSet()));
 		final LoadSlot loadSlot_original = AnalyticsBuilder.makeLoadSlot(buyOption, scenarioModel, SlotMode.ORIGINAL_SLOT, this.usedIDs);
 		if (mapper.isCreateBEOptions()) {
 			final LoadSlot loadSlot_breakEven = AnalyticsBuilder.makeLoadSlot(buyOption, scenarioModel, SlotMode.BREAK_EVEN_VARIANT, this.usedIDs);
@@ -448,15 +449,11 @@ public class BaseCaseToScheduleSpecification {
 		}
 		throw new IllegalArgumentException();
 	}
-	
+
 	private static Set<String> getUsedSlotIDs(final LNGScenarioModel lngScenarioModel) {
 		final Set<String> usedIDs = new HashSet<>();
-		usedIDs.addAll(lngScenarioModel.getCargoModel().getLoadSlots().stream()
-				.map(LoadSlot::getName)
-				.collect(Collectors.toSet()));
-		usedIDs.addAll(lngScenarioModel.getCargoModel().getDischargeSlots().stream()
-				.map(DischargeSlot::getName)
-				.collect(Collectors.toSet()));
+		usedIDs.addAll(lngScenarioModel.getCargoModel().getLoadSlots().stream().map(LoadSlot::getName).collect(Collectors.toSet()));
+		usedIDs.addAll(lngScenarioModel.getCargoModel().getDischargeSlots().stream().map(DischargeSlot::getName).collect(Collectors.toSet()));
 		return usedIDs;
 	}
 
