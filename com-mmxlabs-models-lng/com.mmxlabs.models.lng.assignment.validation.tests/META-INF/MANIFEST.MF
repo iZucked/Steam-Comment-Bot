@@ -3,13 +3,13 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Assignment Validation Tests
 Fragment-Host: com.mmxlabs.models.lng.assignment.validation
 Bundle-SymbolicName: com.mmxlabs.models.lng.assignment.validation.tests
-Bundle-Version: 4.12.35.qualifier
+Bundle-Version: 4.12.38.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
- com.mmxlabs.models.lng.assignment.validation;bundle-version="[4.12.35,5.0.0)",
- com.mmxlabs.models.lng.fleet;bundle-version="[4.12.35,5.0.0)",
- com.mmxlabs.models.ui.validation;bundle-version="[4.12.35,5.0.0)",
+ com.mmxlabs.models.lng.assignment.validation;bundle-version="[4.12.38,5.0.0)",
+ com.mmxlabs.models.lng.fleet;bundle-version="[4.12.38,5.0.0)",
+ com.mmxlabs.models.ui.validation;bundle-version="[4.12.38,5.0.0)",
  org.mockito.mockito-core;bundle-version="1.9.5",
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  net.bytebuddy.byte-buddy;bundle-version="1.7.8",

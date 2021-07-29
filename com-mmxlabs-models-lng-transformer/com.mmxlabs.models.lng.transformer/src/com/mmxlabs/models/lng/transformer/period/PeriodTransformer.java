@@ -823,9 +823,6 @@ public class PeriodTransformer {
 
 							// TODO: set charter rate, set entity. Once multiple avail complete, grab from assignment.
 							newVesselAvailability.setTimeCharterRate(vesselAvailability.getTimeCharterRate());
-							newVesselAvailability.setFleet(vesselAvailability.isFleet());
-
-							newVesselAvailability.setFleet(vesselAvailability.isFleet());
 							newVesselAvailability.setEntity(vesselAvailability.getCharterOrDelegateEntity());
 
 							// Ignore Ballast bonus/repositioning - should not be part of P&L...

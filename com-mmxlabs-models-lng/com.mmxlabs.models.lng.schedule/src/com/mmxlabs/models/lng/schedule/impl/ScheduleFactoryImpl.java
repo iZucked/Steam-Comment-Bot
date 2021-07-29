@@ -139,6 +139,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.CHARTER_AVAILABLE_TO_EVENT: return createCharterAvailableToEvent();
 			case SchedulePackage.CANAL_JOURNEY_EVENT: return createCanalJourneyEvent();
 			case SchedulePackage.CHARTER_AVAILABLE_FROM_EVENT: return createCharterAvailableFromEvent();
+			case SchedulePackage.GROUPED_CHARTER_OUT_EVENT: return createGroupedCharterOutEvent();
 			case SchedulePackage.GROUPED_CHARTER_LENGTH_EVENT: return createGroupedCharterLengthEvent();
 			case SchedulePackage.INVENTORY_EVENTS: return createInventoryEvents();
 			case SchedulePackage.INVENTORY_CHANGE_EVENT: return createInventoryChangeEvent();
@@ -670,6 +671,17 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public CharterAvailableFromEvent createCharterAvailableFromEvent() {
 		CharterAvailableFromEventImpl charterAvailableFromEvent = new CharterAvailableFromEventImpl();
 		return charterAvailableFromEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public GroupedCharterOutEvent createGroupedCharterOutEvent() {
+		GroupedCharterOutEventImpl groupedCharterOutEvent = new GroupedCharterOutEventImpl();
+		return groupedCharterOutEvent;
 	}
 
 	/**

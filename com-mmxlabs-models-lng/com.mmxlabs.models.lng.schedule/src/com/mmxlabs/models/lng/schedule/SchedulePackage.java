@@ -5290,7 +5290,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCharterContractFeeDetails()
 	 * @generated
 	 */
-	int CHARTER_CONTRACT_FEE_DETAILS = 47;
+	int CHARTER_CONTRACT_FEE_DETAILS = 48;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.MatchingContractDetailsImpl <em>Matching Contract Details</em>}' class.
@@ -6071,7 +6071,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGroupedCharterLengthEvent()
 	 * @generated
 	 */
-	int GROUPED_CHARTER_LENGTH_EVENT = 42;
+	int GROUPED_CHARTER_LENGTH_EVENT = 43;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -6252,6 +6252,223 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int CHARTER_AVAILABLE_FROM_EVENT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.GroupedCharterOutEventImpl <em>Grouped Charter Out Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.GroupedCharterOutEventImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGroupedCharterOutEvent()
+	 * @generated
+	 */
+	int GROUPED_CHARTER_OUT_EVENT = 42;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_CHARTER_OUT_EVENT__EXTENSIONS = EVENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_CHARTER_OUT_EVENT__START = EVENT__START;
+
+	/**
+	 * The feature id for the '<em><b>End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_CHARTER_OUT_EVENT__END = EVENT__END;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_CHARTER_OUT_EVENT__PORT = EVENT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Previous Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_CHARTER_OUT_EVENT__PREVIOUS_EVENT = EVENT__PREVIOUS_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Next Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_CHARTER_OUT_EVENT__NEXT_EVENT = EVENT__NEXT_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Sequence</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_CHARTER_OUT_EVENT__SEQUENCE = EVENT__SEQUENCE;
+
+	/**
+	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_CHARTER_OUT_EVENT__CHARTER_COST = EVENT__CHARTER_COST;
+
+	/**
+	 * The feature id for the '<em><b>Heel At Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_CHARTER_OUT_EVENT__HEEL_AT_START = EVENT__HEEL_AT_START;
+
+	/**
+	 * The feature id for the '<em><b>Heel At End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_CHARTER_OUT_EVENT__HEEL_AT_END = EVENT__HEEL_AT_END;
+
+	/**
+	 * The feature id for the '<em><b>Events</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_CHARTER_OUT_EVENT__EVENTS = EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_CHARTER_OUT_EVENT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_CHARTER_OUT_EVENT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Linked Sequence</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_CHARTER_OUT_EVENT__LINKED_SEQUENCE = EVENT_FEATURE_COUNT + 3;
+
+	/**
+	 * The number of structural features of the '<em>Grouped Charter Out Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_CHARTER_OUT_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 4;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_CHARTER_OUT_EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_CHARTER_OUT_EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_CHARTER_OUT_EVENT___ECONTAINER_OP = EVENT___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Get Time Zone</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_CHARTER_OUT_EVENT___GET_TIME_ZONE__EATTRIBUTE = EVENT___GET_TIME_ZONE__EATTRIBUTE;
+
+	/**
+	 * The operation id for the '<em>Get Duration</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_CHARTER_OUT_EVENT___GET_DURATION = EVENT___GET_DURATION;
+
+	/**
+	 * The operation id for the '<em>Type</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_CHARTER_OUT_EVENT___TYPE = EVENT___TYPE;
+
+	/**
+	 * The operation id for the '<em>Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_CHARTER_OUT_EVENT___NAME = EVENT___NAME;
+
+	/**
+	 * The number of operations of the '<em>Grouped Charter Out Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_CHARTER_OUT_EVENT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -6468,7 +6685,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getInventoryEvents()
 	 * @generated
 	 */
-	int INVENTORY_EVENTS = 43;
+	int INVENTORY_EVENTS = 44;
 
 	/**
 	 * The feature id for the '<em><b>Facility</b></em>' reference.
@@ -6514,7 +6731,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getInventoryChangeEvent()
 	 * @generated
 	 */
-	int INVENTORY_CHANGE_EVENT = 44;
+	int INVENTORY_CHANGE_EVENT = 45;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -6632,7 +6849,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPaperDealAllocation()
 	 * @generated
 	 */
-	int PAPER_DEAL_ALLOCATION = 45;
+	int PAPER_DEAL_ALLOCATION = 46;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -6732,7 +6949,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPaperDealAllocationEntry()
 	 * @generated
 	 */
-	int PAPER_DEAL_ALLOCATION_ENTRY = 46;
+	int PAPER_DEAL_ALLOCATION_ENTRY = 47;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -6895,7 +7112,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getLumpSumDetails()
 	 * @generated
 	 */
-	int LUMP_SUM_DETAILS = 48;
+	int LUMP_SUM_DETAILS = 49;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -6986,7 +7203,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getLumpSumBallastBonusTermDetails()
 	 * @generated
 	 */
-	int LUMP_SUM_BALLAST_BONUS_TERM_DETAILS = 49;
+	int LUMP_SUM_BALLAST_BONUS_TERM_DETAILS = 50;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7077,7 +7294,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getLumpSumRepositioningFeeTermDetails()
 	 * @generated
 	 */
-	int LUMP_SUM_REPOSITIONING_FEE_TERM_DETAILS = 50;
+	int LUMP_SUM_REPOSITIONING_FEE_TERM_DETAILS = 51;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7177,7 +7394,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getNotionalJourneyDetails()
 	 * @generated
 	 */
-	int NOTIONAL_JOURNEY_DETAILS = 51;
+	int NOTIONAL_JOURNEY_DETAILS = 52;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7349,7 +7566,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getNotionalJourneyBallastBonusTermDetails()
 	 * @generated
 	 */
-	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM_DETAILS = 52;
+	int NOTIONAL_JOURNEY_BALLAST_BONUS_TERM_DETAILS = 53;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7530,7 +7747,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getOriginPortRepositioningFeeTermDetails()
 	 * @generated
 	 */
-	int ORIGIN_PORT_REPOSITIONING_FEE_TERM_DETAILS = 53;
+	int ORIGIN_PORT_REPOSITIONING_FEE_TERM_DETAILS = 54;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -7711,7 +7928,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUnit()
 	 * @generated
 	 */
-	int FUEL_UNIT = 56;
+	int FUEL_UNIT = 57;
 
 
 	/**
@@ -7722,7 +7939,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuel()
 	 * @generated
 	 */
-	int FUEL = 55;
+	int FUEL = 56;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SequenceType <em>Sequence Type</em>}' enum.
@@ -7732,7 +7949,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSequenceType()
 	 * @generated
 	 */
-	int SEQUENCE_TYPE = 54;
+	int SEQUENCE_TYPE = 55;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.CapacityViolationType <em>Capacity Violation Type</em>}' enum.
@@ -7742,7 +7959,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationType()
 	 * @generated
 	 */
-	int CAPACITY_VIOLATION_TYPE = 57;
+	int CAPACITY_VIOLATION_TYPE = 58;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.PortVisitLatenessType <em>Port Visit Lateness Type</em>}' enum.
@@ -7752,7 +7969,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPortVisitLatenessType()
 	 * @generated
 	 */
-	int PORT_VISIT_LATENESS_TYPE = 58;
+	int PORT_VISIT_LATENESS_TYPE = 59;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SlotAllocationType <em>Slot Allocation Type</em>}' enum.
@@ -7762,7 +7979,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSlotAllocationType()
 	 * @generated
 	 */
-	int SLOT_ALLOCATION_TYPE = 59;
+	int SLOT_ALLOCATION_TYPE = 60;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.PanamaBookingPeriod <em>Panama Booking Period</em>}' enum.
@@ -7772,7 +7989,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPanamaBookingPeriod()
 	 * @generated
 	 */
-	int PANAMA_BOOKING_PERIOD = 60;
+	int PANAMA_BOOKING_PERIOD = 61;
 
 	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
@@ -7782,7 +7999,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 61;
+	int CALENDAR = 62;
 
 
 	/**
@@ -7793,7 +8010,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 62;
+	int ITERABLE = 63;
 
 
 	/**
@@ -7804,7 +8021,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 63;
+	int OBJECT = 64;
 
 
 	/**
@@ -10063,6 +10280,27 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getCharterAvailableFromEvent_LinkedSequence();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.GroupedCharterOutEvent <em>Grouped Charter Out Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Grouped Charter Out Event</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.GroupedCharterOutEvent
+	 * @generated
+	 */
+	EClass getGroupedCharterOutEvent();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.GroupedCharterOutEvent#getLinkedSequence <em>Linked Sequence</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Linked Sequence</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.GroupedCharterOutEvent#getLinkedSequence()
+	 * @see #getGroupedCharterOutEvent()
+	 * @generated
+	 */
+	EReference getGroupedCharterOutEvent_LinkedSequence();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent <em>Grouped Charter Length Event</em>}'.
@@ -12449,6 +12687,24 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference CHARTER_AVAILABLE_FROM_EVENT__LINKED_SEQUENCE = eINSTANCE.getCharterAvailableFromEvent_LinkedSequence();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.GroupedCharterOutEventImpl <em>Grouped Charter Out Event</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.GroupedCharterOutEventImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGroupedCharterOutEvent()
+		 * @generated
+		 */
+		EClass GROUPED_CHARTER_OUT_EVENT = eINSTANCE.getGroupedCharterOutEvent();
+
+		/**
+		 * The meta object literal for the '<em><b>Linked Sequence</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference GROUPED_CHARTER_OUT_EVENT__LINKED_SEQUENCE = eINSTANCE.getGroupedCharterOutEvent_LinkedSequence();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.GroupedCharterLengthEventImpl <em>Grouped Charter Length Event</em>}' class.

@@ -2,12 +2,10 @@
   "Schedule" : "0 base",
   "ID" : "load-cargo-32",
   "Type" : "Load",
-  "Issue" : "Forced Cooldown",
-  "Quantity (m³)" : "0"
+  "Issue" : "Forced Cooldown"
 }, {
   "Schedule" : "0 base",
   "ID" : "load-cargo-78",
   "Type" : "Load",
-  "Issue" : "Forced Cooldown",
-  "Quantity (m³)" : "0"
+  "Issue" : "Forced Cooldown"
 } ]

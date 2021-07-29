@@ -74,6 +74,7 @@ import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
+import com.mmxlabs.models.lng.schedule.GroupedCharterOutEvent;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
@@ -764,7 +765,9 @@ public class CargoEconsReport extends ViewPart {
 			if (object instanceof GroupedCharterLengthEvent) {
 				name = ((GroupedCharterLengthEvent) object).name();
 			}
-
+			if (object instanceof GroupedCharterOutEvent) {
+				name = ((GroupedCharterOutEvent) object).name();
+			}
 			if (object instanceof DeltaPair) {
 				name = ((DeltaPair) object).getName();
 			}
@@ -1044,6 +1047,24 @@ public class CargoEconsReport extends ViewPart {
 				gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
 				gvc.getColumn().setWidth(100);
 
+				if (selectedDataProvider != null && selectedDataProvider.isPinnedObject(charterLengthEvent)) {
+					gvc.getColumn().setHeaderRenderer(columnImageHeaderCenteredRenderer);
+					gvc.getColumn().setImage(pinImage);
+				}
+			} else if (selectedObject instanceof GroupedCharterOutEvent) {
+				final GroupedCharterOutEvent charterLengthEvent = (GroupedCharterOutEvent) selectedObject;
+				
+				final GridColumnGroup gridColumnGroup = gridColumnGroupsMap.get(charterLengthEvent.name());
+				final GridColumn gc = new GridColumn(gridColumnGroup, SWT.NONE);
+				final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+				GridViewerHelper.configureLookAndFeel(gvc);
+				// Mark column for disposal on selection change
+				dataColumns.add(gvc);
+				
+				gvc.getColumn().setText("");
+				gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
+				gvc.getColumn().setWidth(100);
+				
 				if (selectedDataProvider != null && selectedDataProvider.isPinnedObject(charterLengthEvent)) {
 					gvc.getColumn().setHeaderRenderer(columnImageHeaderCenteredRenderer);
 					gvc.getColumn().setImage(pinImage);

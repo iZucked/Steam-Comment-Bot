@@ -82,7 +82,7 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 
 		checkForNewAvailability(object);
 		if (!dialogContext.isMultiEdit()) {
-			gccButton = toolkit.createButton(topRight.getComposite(), gccButtonLabel(object), SWT.CENTER);
+			gccButton = toolkit.createButton(topLevel.getComposite(), gccButtonLabel(object), SWT.CENTER);
 			gccButton.addMouseListener(new CharterContractMouseListener(object));
 		}
 
@@ -211,7 +211,7 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 			final VesselAvailability va = (VesselAvailability) object;
 			final GenericCharterContract gcc = va.getContainedCharterContract();
 			if (gcc != null) {
-				return "Clear up";
+				return "Reset";
 			} else {
 				return "Override";
 			}
