@@ -13,7 +13,9 @@ public class MullDailyInformation {
 	public BaseLegalEntity entity;
 	public int allocatedEntitlement;
 	public int actualEntitlement;
+	public int actualEntitlementWithLiftings;
 	public boolean grey;
+	public boolean lifting = false;
 	
 	public LocalDate getDate() {
 		return this.date;
@@ -25,5 +27,9 @@ public class MullDailyInformation {
 	
 	public int getActualEntitlement() {
 		return this.actualEntitlement;
+	}
+
+	public int getActualEntitlementWithLiftings() {
+		return this.actualEntitlementWithLiftings;
 	}
 }

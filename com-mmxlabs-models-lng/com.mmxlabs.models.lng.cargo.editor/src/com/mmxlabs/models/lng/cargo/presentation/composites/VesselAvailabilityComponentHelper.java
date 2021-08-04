@@ -66,12 +66,11 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editors for features on this class directly, and superclass' features.
 	 *
-	 * @generated NOT
+	 * @generated
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_fleetEditor(detailComposite, topClass);
 		add_optionalEditor(detailComposite, topClass);
 		add_vesselEditor(detailComposite, topClass);
 		add_charterNumberEditor(detailComposite, topClass);
@@ -92,15 +91,6 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 		add_charterContractOverrideEditor(detailComposite, topClass);
 		add_genericCharterContractEditor(detailComposite, topClass);
 	}
-	/**
-	 * Create the editor for the fleet feature on VesselAvailability
-	 *
-	 * @generated
-	 */
-	protected void add_fleetEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__FLEET));
-	}
-
 	/**
 	 * Create the editor for the vessel feature on VesselAvailability
 	 *

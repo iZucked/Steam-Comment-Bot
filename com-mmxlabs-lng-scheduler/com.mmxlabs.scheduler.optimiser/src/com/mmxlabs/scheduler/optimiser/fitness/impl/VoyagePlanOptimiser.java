@@ -22,6 +22,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
@@ -100,6 +101,13 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 		final InternalState state = new InternalState();
 		runLoop(record, state, 0);
+		if (state.bestPlan.getSequence().length > 2) {
+			final long supplementalbasefuelconsumption = ((VoyageDetails) state.bestPlan.getSequence()[1]).getFuelConsumption(record.vessel.getSupplementalTravelBaseFuelInMT());
+			final long idlebasefuelconsumption = ((VoyageDetails) state.bestPlan.getSequence()[1]).getFuelConsumption(record.vessel.getIdleBaseFuelInMT());
+			final long pilotbasefuelconsumption = ((VoyageDetails) state.bestPlan.getSequence()[1]).getFuelConsumption(record.vessel.getPilotLightFuelInMT());
+			final long travelbasefuelconsumption = ((VoyageDetails) state.bestPlan.getSequence()[1]).getFuelConsumption(record.vessel.getTravelBaseFuelInMT());
+			int i = 0;
+		}
 		return state.bestPlan;
 	}
 
@@ -269,7 +277,6 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		// For each voyage options, calculate new Details.
 
 		final List<IDetailsSequenceElement> currentSequence = voyageCalculator.generateFuelCostCalculatedSequence(record.basicSequence.toArray(new IOptionsSequenceElement[0]));
-
 		final VoyagePlan currentPlan = new VoyagePlan();
 
 		// Calculate voyage plan

@@ -31,7 +31,7 @@ public interface ILNGVoyageCalculator {
 	 * @param options
 	 * @param output
 	 */
-	void calculateVoyageFuelRequirements(VoyageOptions options, VoyageDetails output, long nboAvailableInM3);
+	long calculateVoyageFuelRequirements(VoyageOptions options, VoyageDetails output, long nboAvailableInM3);
 
 	/**
 	 * Given an alternating sequence of {@link IPortDetails} and {@link IVoyageDetails}, populate a {@link VoyagePlan} object with the group voyage details. E.g. calculate load and discharge

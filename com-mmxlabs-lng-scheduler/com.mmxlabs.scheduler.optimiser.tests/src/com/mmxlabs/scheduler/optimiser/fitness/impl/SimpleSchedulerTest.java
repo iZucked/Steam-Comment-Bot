@@ -15,6 +15,7 @@ import javax.inject.Singleton;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Lists;
@@ -62,6 +63,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -74,20 +76,27 @@ import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.CharterRateToCharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VoyagePlanStartDateCharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.EntityBookType;
 import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntity;
 import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntityBook;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IExternalDateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IInternalDateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.maintenance.IMaintenanceEvaluator;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.maintenance.impl.MaintenanceEvaluator;
 import com.mmxlabs.scheduler.optimiser.shared.SharedDataModule;
 import com.mmxlabs.scheduler.optimiser.shared.SharedPortDistanceDataBuilder;
+import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * Test class to run a "system" test of the LSO to optimise a sequence of elements based upon distance. I.e. find minimum travel distance for each resource.
@@ -385,6 +394,11 @@ public class SimpleSchedulerTest {
 						bind(ICharterRateCalculator.class).to(VoyagePlanStartDateCharterRateCalculator.class);
 						bind(ICharterCostCalculator.class).to(CharterRateToCharterCostCalculator.class);
 						bind(Integer.class).annotatedWith(Names.named(SchedulerConstants.CONCURRENCY_LEVEL)).toInstance(1);
+
+						final IMaintenanceEvaluator maintenanceEvaluator = Mockito.mock(IMaintenanceEvaluator.class);
+						Mockito.when(maintenanceEvaluator.processSchedule(ArgumentMatchers.any(long[].class), ArgumentMatchers.any(IVesselAvailability.class), ArgumentMatchers.any(VoyagePlan.class),
+								ArgumentMatchers.any(IPortTimesRecord.class), ArgumentMatchers.nullable(IAnnotatedSolution.class))).thenReturn(null);
+						bind(IMaintenanceEvaluator.class).toInstance(maintenanceEvaluator);
 					}
 				});
 	}

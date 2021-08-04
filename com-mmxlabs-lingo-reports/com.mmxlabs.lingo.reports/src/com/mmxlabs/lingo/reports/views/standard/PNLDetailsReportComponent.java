@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
+import com.mmxlabs.models.lng.schedule.GroupedCharterOutEvent;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -96,6 +97,9 @@ public class PNLDetailsReportComponent extends DetailPropertiesViewComponent {
 				} else if (a instanceof GroupedCharterLengthEvent) {
 					GroupedCharterLengthEvent groupedCharterLengthEvent = (GroupedCharterLengthEvent) a;
 					adaptedObjects.addAll(groupedCharterLengthEvent.getEvents());
+				} else if (a instanceof GroupedCharterOutEvent) {
+					GroupedCharterOutEvent groupedCharterOutEvent = (GroupedCharterOutEvent) a;
+					adaptedObjects.addAll(groupedCharterOutEvent.getEvents());
 				}
 			}
 			return adaptedObjects;

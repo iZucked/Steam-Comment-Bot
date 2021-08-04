@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.lingo.its.feature"
       label="Lingo ITS"
-      version="4.12.35.qualifier"
+      version="4.12.40.qualifier"
       provider-name="Minimax Labs Ltd."
       plugin="com.mmxlabs.lingo.app">
 
@@ -160,6 +160,13 @@
 
    <plugin
          id="wrapped.org.rnorth.duct-tape.duct-tape"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.google.guava.failureaccess"
          download-size="0"
          install-size="0"
          version="0.0.0"

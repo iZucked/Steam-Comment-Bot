@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.adp.presentation.views;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -27,6 +25,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.function.IntUnaryOperator;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -105,6 +104,8 @@ import com.mmxlabs.models.lng.adp.mull.FilterToVesselsAction;
 import com.mmxlabs.models.lng.adp.mull.InventoryDateTimeEvent;
 import com.mmxlabs.models.lng.adp.mull.MUDContainer;
 import com.mmxlabs.models.lng.adp.mull.MULLContainer;
+import com.mmxlabs.models.lng.adp.mull.Phase1AComparator;
+import com.mmxlabs.models.lng.adp.mull.Phase1AComparator2;
 import com.mmxlabs.models.lng.adp.mull.RollingLoadWindow;
 import com.mmxlabs.models.lng.adp.mull.SalesContractTracker;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
@@ -131,11 +132,11 @@ import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.pricing.YearMonthPointContainer;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioElementNameHelper;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.ui.commands.ScheduleModelInvalidateCommandProvider;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
@@ -1005,7 +1006,6 @@ public class ContractPage extends ADPComposite {
 					phase1aMonthEndAllocationTrackerEntitlements.get(inventory).put(alloc, new HashMap<>());
 				}
 			}
-
 		}
 		phase1aMullContainers.entrySet().stream().flatMap(e -> e.getValue().getMUDContainers().stream()).flatMap(mudContainer -> mudContainer.getAllocationTrackers().stream())
 				.forEach(allocationTracker -> allocationTracker.setVesselSharing(phase1FirstPartyVessels));
@@ -1149,6 +1149,7 @@ public class ContractPage extends ADPComposite {
 			if (allocationTracker != null) {
 				final LocalDateTime liftingDateTime = LocalDateTime.of(fixedCargoWrapper.getLoadSlot().getWindowStart(), LocalTime.of(fixedCargoWrapper.getLoadSlot().getWindowStartTime(), 0));
 				CargoBlueprint previousCargoBlueprint = null;
+				boolean foundMatch = false;
 				for (final CargoBlueprint cargoBlueprint : phase1aCargoBluePrintsToGenerate.get(inventory)) {
 					if (!cargoBlueprint.getEntity().equals(entity) || !cargoBlueprint.getAllocationTracker().equals(allocationTracker) || usedCargoBlueprints.contains(cargoBlueprint)) {
 						continue;
@@ -1159,6 +1160,7 @@ public class ContractPage extends ADPComposite {
 					} else if (currentDateTime.equals(liftingDateTime)) {
 						sameMonthShiftCargoBlueprints.add(cargoBlueprint);
 						usedCargoBlueprints.add(cargoBlueprint);
+						foundMatch = true;
 						break;
 					} else if (currentDateTime.isAfter(liftingDateTime)) {
 						if (previousCargoBlueprint == null) {
@@ -1170,6 +1172,7 @@ public class ContractPage extends ADPComposite {
 								differentMonthShiftCargoBlueprints.add(Pair.of(cargoBlueprint, liftingDateTime));
 							}
 							usedCargoBlueprints.add(cargoBlueprint);
+							foundMatch = true;
 						} else {
 							final int hoursDifferencePrevious = Hours.between(previousCargoBlueprint.getWindowStart(), liftingDateTime);
 							final int hoursDifferenceLater = Hours.between(liftingDateTime, currentDateTime);
@@ -1189,9 +1192,20 @@ public class ContractPage extends ADPComposite {
 								differentMonthShiftCargoBlueprints.add(Pair.of(selectedCargoBlueprint, liftingDateTime));
 							}
 							usedCargoBlueprints.add(selectedCargoBlueprint);
+							foundMatch = true;
 						}
 						break;
 					}
+				}
+				if (!foundMatch && previousCargoBlueprint != null) {
+					final YearMonth liftingYM = YearMonth.from(liftingDateTime);
+					final YearMonth cargoYM = YearMonth.from(previousCargoBlueprint.getWindowStart());
+					if (liftingYM.equals(cargoYM)) {
+						sameMonthShiftCargoBlueprints.add(previousCargoBlueprint);
+					} else {
+						differentMonthShiftCargoBlueprints.add(Pair.of(previousCargoBlueprint, liftingDateTime));
+					}
+					usedCargoBlueprints.add(previousCargoBlueprint);
 				}
 			}
 		}
@@ -1329,106 +1343,101 @@ public class ContractPage extends ADPComposite {
 						continue;
 					}
 				}
-				/*
-				 * // This is commented out because we could have the choice of a minor lifter in toYM that isn't in fromYM that is a better switching choice. // If we get here then we could not make
-				 * a switch over the same entity // Since the fixed cargo is in a future month, bring back a cargo for the most underlifted entity (up to finding matching entities) final
-				 * List<BaseLegalEntity> potentialSwitchEntities = monthMappedEntityCargoBlueprints.get(inventory).entrySet().stream().filter(entry -> { final Map<YearMonth, Set<CargoBlueprint>>
-				 * ymCbMap = entry.getValue(); final Set<CargoBlueprint> fromCbs = ymCbMap.get(fromYM); final Set<CargoBlueprint> toCbs = ymCbMap.get(toYM); return fromCbs != null && toCbs != null &&
-				 * !fromCbs.isEmpty() && !toCbs.isEmpty(); }).map(Entry::getKey).collect(Collectors.toList()); if (!potentialSwitchEntities.isEmpty()) { final BaseLegalEntity mostUnderLiftedEntity =
-				 * potentialSwitchEntities.stream().max((e1, e2) -> { return Long.compare(phase1aMonthEndEntitlements.get(inventory).get(e1).get(fromYM),
-				 * phase1aMonthEndEntitlements.get(inventory).get(e2).get(fromYM)); }).get(); final int movedAllocatedVolume = fixedCargoMatchedBlueprint.getAllocatedVolume(); final CargoBlueprint
-				 * selectedCargoblueprint = monthMappedEntityCargoBlueprints.get(inventory).get(mostUnderLiftedEntity).get(toYM).stream() .min((cb1, cb2) ->
-				 * Integer.compare(Math.abs(movedAllocatedVolume - cb1.getAllocatedVolume()), Math.abs(movedAllocatedVolume - cb2.getAllocatedVolume()))).get();
-				 * selectedCargoblueprint.setWindowStart(fixedCargoMatchedBlueprint.getWindowStart());
-				 * monthMappedAllocationTrackerCargoBlueprints.get(inventory).get(selectedCargoblueprint.getAllocationTracker()).get(toYM).remove(selectedCargoblueprint);
-				 * monthMappedCargoBlueprints.get(inventory).get(toYM).remove(selectedCargoblueprint);
-				 * monthMappedEntityCargoBlueprints.get(inventory).get(mostUnderLiftedEntity).get(toYM).remove(selectedCargoblueprint);
-				 * monthMappedAllocationTrackerCargoBlueprints.get(inventory).get(selectedCargoblueprint.getAllocationTracker()).computeIfAbsent(fromYM, k -> new HashSet<>())
-				 * .add(selectedCargoblueprint); monthMappedCargoBlueprints.get(inventory).computeIfAbsent(fromYM, k -> new HashSet<>()).add(selectedCargoblueprint);
-				 * monthMappedEntityCargoBlueprints.get(inventory).get(mostUnderLiftedEntity).computeIfAbsent(fromYM, k -> new HashSet<>()).add(selectedCargoblueprint); // We've moved cargoes for a
-				 * different entity and the current entity have to update their reference entitlements to accomodate this. // Using matched cargoblueprint for volume - this might be a bad assumption
-				 * for (YearMonth ym = fromYM; ym.isBefore(toYM); ym = ym.plusMonths(1)) { final long newEntitlement =
-				 * phase1aMonthEndEntitlements.get(inventory).get(mostUnderLiftedEntity).get(ym).longValue() - selectedCargoblueprint.getAllocatedVolume();
-				 * phase1aMonthEndEntitlements.get(inventory).get(mostUnderLiftedEntity).put(ym, newEntitlement); final long newEntitlementForFixedCargo =
-				 * phase1aMonthEndEntitlements.get(inventory).get(entity).get(ym).longValue() + fixedCargoMatchedBlueprint.getAllocatedVolume();
-				 * phase1aMonthEndEntitlements.get(inventory).get(entity).put(ym, newEntitlementForFixedCargo); } final AllocationTracker alloc = selectedCargoblueprint.getAllocationTracker(); if
-				 * (alloc instanceof SalesContractTracker) { final SalesContract salesContract = ((SalesContractTracker) alloc).getSalesContract(); final int toMonthCount =
-				 * phase1aMonthlySalesContract.get(inventory).get(mostUnderLiftedEntity).get(toYM).get(salesContract); final int fromMonthCount =
-				 * phase1aMonthlySalesContract.get(inventory).get(mostUnderLiftedEntity).get(fromYM).get(salesContract);
-				 * phase1aMonthlySalesContract.get(inventory).get(mostUnderLiftedEntity).get(toYM).put(salesContract, toMonthCount - 1);
-				 * phase1aMonthlySalesContract.get(inventory).get(mostUnderLiftedEntity).get(fromYM).put(salesContract, fromMonthCount + 1); } else { final DESSalesMarket desSalesMarket =
-				 * ((DESMarketTracker) alloc).getDESSalesMarket(); final int toMonthCount = phase1aMonthlyDesSalesMarket.get(inventory).get(mostUnderLiftedEntity).get(toYM).get(desSalesMarket); final
-				 * int fromMonthCount = phase1aMonthlyDesSalesMarket.get(inventory).get(mostUnderLiftedEntity).get(fromYM).get(desSalesMarket);
-				 * phase1aMonthlyDesSalesMarket.get(inventory).get(mostUnderLiftedEntity).get(toYM).put(desSalesMarket, toMonthCount - 1);
-				 * phase1aMonthlyDesSalesMarket.get(inventory).get(mostUnderLiftedEntity).get(fromYM).put(desSalesMarket, fromMonthCount + 1); } // Made switch so continue continue; }
-				 */
 
-				final Comparator<CargoBlueprint> violationComparator = (cb1, cb2) -> {
-					// Calculate movement violations
-					long violations1 = 0L;
-					long violations2 = 0L;
-					final int allocatedVolume1 = cb1.getAllocatedVolume();
-					final int allocatedVolume2 = cb2.getAllocatedVolume();
-					for (YearMonth ym = fromYM; ym.isBefore(toYM); ym = ym.plusMonths(1)) {
-						final long newEntitlement1 = phase1aMonthEndEntitlements.get(inventory).get(cb1.getEntity()).get(ym).longValue() - allocatedVolume1;
-						final long thisViolationScore1 = Math.abs(Math.max(fullCargoLotValue, newEntitlement1) + Math.min(-fullCargoLotValue, newEntitlement1));
-						violations1 += thisViolationScore1;
-
-						final long newEntitlement2 = phase1aMonthEndEntitlements.get(inventory).get(cb2.getEntity()).get(ym).longValue() - allocatedVolume2;
-						final long thisViolationScore2 = Math.abs(Math.max(fullCargoLotValue, newEntitlement2) + Math.min(-fullCargoLotValue, newEntitlement2));
-						violations2 += thisViolationScore2;
-					}
-					if (violations1 < violations2) {
-						return -1;
-					} else if (violations2 < violations1) {
-						return 1;
-					}
-
-					long entitlementSum1 = 0L;
-					long entitlementSum2 = 0L;
-
-					for (YearMonth ym = fromYM; ym.isBefore(toYM); ym = ym.plusMonths(1)) {
-						entitlementSum1 += phase1aMonthEndEntitlements.get(inventory).get(cb1.getEntity()).get(ym).longValue() - allocatedVolume1;
-						entitlementSum2 += phase1aMonthEndEntitlements.get(inventory).get(cb2.getEntity()).get(ym).longValue() - allocatedVolume2;
-					}
-					return Long.compare(Math.abs(entitlementSum1), Math.abs(entitlementSum2));
-				};
+				final Map<BaseLegalEntity, Map<YearMonth, Long>> monthEndEntitlements = phase1aMonthEndEntitlements.get(inventory);
+				final Phase1AComparator violationComparator = new Phase1AComparator(fromYM, toYM, monthEndEntitlements, fullCargoLotValue);
 				// If we get here then we could not find an alternative entity to switch cargoes on
 				// Find entity that causes minimal violation on either side if brought forward
-				final CargoBlueprint selectedCargoBlueprint = monthMappedAllocationTrackerCargoBlueprints.get(inventory).entrySet().stream().map(Entry::getValue).filter(currentYmMap -> {
-					final Set<CargoBlueprint> set = currentYmMap.get(toYM);
-					return set != null && !set.isEmpty();
-				}).flatMap(currentYmMap -> currentYmMap.get(toYM).stream()).min(violationComparator).get();
-				selectedCargoBlueprint.setWindowStart(fixedCargoMatchedBlueprint.getWindowStart());
-				final BaseLegalEntity selectedEntity = selectedCargoBlueprint.getEntity();
-				monthMappedAllocationTrackerCargoBlueprints.get(inventory).get(selectedCargoBlueprint.getAllocationTracker()).get(toYM).remove(selectedCargoBlueprint);
-				monthMappedCargoBlueprints.get(inventory).get(toYM).remove(selectedCargoBlueprint);
-				monthMappedEntityCargoBlueprints.get(inventory).get(selectedEntity).get(toYM).remove(selectedCargoBlueprint);
-				monthMappedAllocationTrackerCargoBlueprints.get(inventory).get(selectedCargoBlueprint.getAllocationTracker()).computeIfAbsent(fromYM, k -> new HashSet<>()).add(selectedCargoBlueprint);
-				monthMappedCargoBlueprints.get(inventory).computeIfAbsent(fromYM, k -> new HashSet<>()).add(selectedCargoBlueprint);
-				monthMappedEntityCargoBlueprints.get(inventory).get(selectedEntity).computeIfAbsent(fromYM, k -> new HashSet<>()).add(selectedCargoBlueprint);
-				// We've moved cargoes for a different entity and the current entity have to update their reference entitlements to accomodate this.
-				// Using matched cargoblueprint for volume - this might be a bad assumption
-				for (YearMonth ym = fromYM; ym.isBefore(toYM); ym = ym.plusMonths(1)) {
-					final long newEntitlement = phase1aMonthEndEntitlements.get(inventory).get(selectedEntity).get(ym).longValue() - selectedCargoBlueprint.getAllocatedVolume();
-					phase1aMonthEndEntitlements.get(inventory).get(selectedEntity).put(ym, newEntitlement);
-					final long newEntitlementForFixedCargo = phase1aMonthEndEntitlements.get(inventory).get(entity).get(ym).longValue() + fixedCargoMatchedBlueprint.getAllocatedVolume();
-					phase1aMonthEndEntitlements.get(inventory).get(entity).put(ym, newEntitlementForFixedCargo);
+
+				// Switch cargoes on a case-by-case basis
+				CargoBlueprint transferredCargoBlueprint = null;
+
+				YearMonth releasingYearMonth = toYM;
+				YearMonth acceptingYearMonth = null;
+				for (YearMonth currentYm = toYM.minusMonths(1); !fromYM.isAfter(currentYm); currentYm = currentYm.minusMonths(1)) {
+					final Set<CargoBlueprint> cbSet = monthMappedCargoBlueprints.get(inventory).get(currentYm);
+					if (cbSet != null && !cbSet.isEmpty()) {
+						acceptingYearMonth = currentYm;
+						break;
+					}
 				}
-				final AllocationTracker alloc = selectedCargoBlueprint.getAllocationTracker();
-				if (alloc instanceof SalesContractTracker) {
-					final SalesContract salesContract = ((SalesContractTracker) alloc).getSalesContract();
-					final int toMonthCount = phase1aMonthlySalesContract.get(inventory).get(selectedEntity).get(toYM).get(salesContract);
-					final int fromMonthCount = phase1aMonthlySalesContract.get(inventory).get(selectedEntity).get(fromYM).get(salesContract);
-					phase1aMonthlySalesContract.get(inventory).get(selectedEntity).get(toYM).put(salesContract, toMonthCount - 1);
-					phase1aMonthlySalesContract.get(inventory).get(selectedEntity).get(fromYM).put(salesContract, fromMonthCount + 1);
-				} else {
-					final DESSalesMarket desSalesMarket = ((DESMarketTracker) alloc).getDESSalesMarket();
-					final int toMonthCount = phase1aMonthlyDesSalesMarket.get(inventory).get(selectedEntity).get(toYM).get(desSalesMarket);
-					final int fromMonthCount = phase1aMonthlyDesSalesMarket.get(inventory).get(selectedEntity).get(fromYM).get(desSalesMarket);
-					phase1aMonthlyDesSalesMarket.get(inventory).get(selectedEntity).get(toYM).put(desSalesMarket, toMonthCount - 1);
-					phase1aMonthlyDesSalesMarket.get(inventory).get(selectedEntity).get(fromYM).put(desSalesMarket, fromMonthCount + 1);
+
+				while (!fromYM.isAfter(releasingYearMonth)) {
+					final YearMonth finalReleasingYm = releasingYearMonth;
+					final CargoBlueprint selectedCargoBlueprint;
+					if (transferredCargoBlueprint == null) {
+						violationComparator.init(acceptingYearMonth, releasingYearMonth);
+						selectedCargoBlueprint = monthMappedAllocationTrackerCargoBlueprints.get(inventory).entrySet().stream().map(Entry::getValue).filter(currentYmMap -> {
+							final Set<CargoBlueprint> set = currentYmMap.get(finalReleasingYm);
+							return set != null && !set.isEmpty();
+						}).flatMap(currentYmMap -> currentYmMap.get(finalReleasingYm).stream()).min(violationComparator).get();
+					} else {
+						final CargoBlueprint finalTransferredCargoBlueprint = transferredCargoBlueprint;
+						violationComparator.init(acceptingYearMonth, releasingYearMonth);
+						final AllocationTracker transferenceAllocationTracker = transferredCargoBlueprint.getAllocationTracker();
+						Optional<CargoBlueprint> optSelectedCargoBlueprint = monthMappedAllocationTrackerCargoBlueprints.get(inventory).entrySet().stream().filter(entry -> {
+							final Set<CargoBlueprint> set = entry.getValue().get(finalReleasingYm);
+							return set != null && !set.isEmpty();
+						}).flatMap(entry -> {
+							final Stream<CargoBlueprint> stream = entry.getValue().get(finalReleasingYm).stream();
+							if (entry.getKey() == transferenceAllocationTracker) {
+								return stream.filter(cb -> cb != finalTransferredCargoBlueprint);
+							} else {
+								return stream;
+							}
+						}).min(violationComparator);
+						if (optSelectedCargoBlueprint.isPresent()) {
+							selectedCargoBlueprint = optSelectedCargoBlueprint.get();
+						} else {
+							selectedCargoBlueprint = transferredCargoBlueprint;
+						}
+					}
+					final BaseLegalEntity selectedEntity = selectedCargoBlueprint.getEntity();
+					monthMappedAllocationTrackerCargoBlueprints.get(inventory).get(selectedCargoBlueprint.getAllocationTracker()).get(releasingYearMonth).remove(selectedCargoBlueprint);
+					monthMappedCargoBlueprints.get(inventory).get(releasingYearMonth).remove(selectedCargoBlueprint);
+					monthMappedEntityCargoBlueprints.get(inventory).get(selectedEntity).get(releasingYearMonth).remove(selectedCargoBlueprint);
+					monthMappedAllocationTrackerCargoBlueprints.get(inventory).get(selectedCargoBlueprint.getAllocationTracker()).computeIfAbsent(acceptingYearMonth, k -> new HashSet<>())
+							.add(selectedCargoBlueprint);
+					monthMappedCargoBlueprints.get(inventory).computeIfAbsent(fromYM, k -> new HashSet<>()).add(selectedCargoBlueprint);
+					monthMappedEntityCargoBlueprints.get(inventory).get(selectedEntity).computeIfAbsent(fromYM, k -> new HashSet<>()).add(selectedCargoBlueprint);
+					// We've moved cargoes for a different entity and the current entity have to update their reference entitlements to accomodate this.
+					// Using matched cargoblueprint for volume - this might be a bad assumption
+					for (YearMonth ym = acceptingYearMonth; ym.isBefore(finalReleasingYm); ym = ym.plusMonths(1)) {
+						final long newEntitlement = phase1aMonthEndEntitlements.get(inventory).get(selectedEntity).get(ym).longValue() - selectedCargoBlueprint.getAllocatedVolume();
+						phase1aMonthEndEntitlements.get(inventory).get(selectedEntity).put(ym, newEntitlement);
+						final long newEntitlementForFixedCargo = phase1aMonthEndEntitlements.get(inventory).get(entity).get(ym).longValue() + fixedCargoMatchedBlueprint.getAllocatedVolume();
+						phase1aMonthEndEntitlements.get(inventory).get(entity).put(ym, newEntitlementForFixedCargo);
+					}
+					final AllocationTracker alloc = selectedCargoBlueprint.getAllocationTracker();
+					if (alloc instanceof SalesContractTracker) {
+						final SalesContract salesContract = ((SalesContractTracker) alloc).getSalesContract();
+						final int toMonthCount = phase1aMonthlySalesContract.get(inventory).get(selectedEntity).get(releasingYearMonth).get(salesContract);
+						final int fromMonthCount = phase1aMonthlySalesContract.get(inventory).get(selectedEntity).get(acceptingYearMonth).get(salesContract);
+						phase1aMonthlySalesContract.get(inventory).get(selectedEntity).get(releasingYearMonth).put(salesContract, toMonthCount - 1);
+						phase1aMonthlySalesContract.get(inventory).get(selectedEntity).get(acceptingYearMonth).put(salesContract, fromMonthCount + 1);
+					} else {
+						final DESSalesMarket desSalesMarket = ((DESMarketTracker) alloc).getDESSalesMarket();
+						final int toMonthCount = phase1aMonthlyDesSalesMarket.get(inventory).get(selectedEntity).get(releasingYearMonth).get(desSalesMarket);
+						final int fromMonthCount = phase1aMonthlyDesSalesMarket.get(inventory).get(selectedEntity).get(acceptingYearMonth).get(desSalesMarket);
+						phase1aMonthlyDesSalesMarket.get(inventory).get(selectedEntity).get(releasingYearMonth).put(desSalesMarket, toMonthCount - 1);
+						phase1aMonthlyDesSalesMarket.get(inventory).get(selectedEntity).get(acceptingYearMonth).put(desSalesMarket, fromMonthCount + 1);
+					}
+
+					transferredCargoBlueprint = selectedCargoBlueprint;
+					releasingYearMonth = acceptingYearMonth;
+					acceptingYearMonth = null;
+					for (YearMonth currentYm = releasingYearMonth.minusMonths(1); !fromYM.isAfter(currentYm); currentYm = currentYm.minusMonths(1)) {
+						final Set<CargoBlueprint> cbSet = monthMappedCargoBlueprints.get(inventory).get(currentYm);
+						if (cbSet != null && !cbSet.isEmpty()) {
+							acceptingYearMonth = currentYm;
+							break;
+						}
+					}
+					if (acceptingYearMonth == null) {
+						break;
+					}
 				}
+
 			} else {
 				final BaseLegalEntity entity = fixedCargoMatchedBlueprint.getEntity();
 				Map<YearMonth, Set<CargoBlueprint>> ymMap = monthMappedEntityCargoBlueprints.get(inventory).get(entity);
@@ -1464,105 +1473,96 @@ public class ContractPage extends ADPComposite {
 						continue;
 					}
 				}
-				/*
-				 * // This is commented out because we could have the choice of a minor lifter in toYM that isn't in fromYM that is a better switching choice. // If we get here then we could not make
-				 * a switch over the same entity // Since the fixed cargo is in a previous month, bring forward a cargo for the most overlifted entity (up to finding matching entities) final
-				 * List<BaseLegalEntity> potentialSwitchEntities = monthMappedEntityCargoBlueprints.get(inventory).entrySet().stream().filter(entry -> { final Map<YearMonth, Set<CargoBlueprint>>
-				 * ymCbMap = entry.getValue(); final Set<CargoBlueprint> fromCbs = ymCbMap.get(fromYM); final Set<CargoBlueprint> toCbs = ymCbMap.get(toYM); return fromCbs != null && toCbs != null &&
-				 * !fromCbs.isEmpty() && !toCbs.isEmpty(); }).map(Entry::getKey).collect(Collectors.toList()); if (!potentialSwitchEntities.isEmpty()) { // Looking for entity with least entitlement
-				 * final BaseLegalEntity mostOverLiftedEntity = potentialSwitchEntities.stream().min((e1, e2) -> { return Long.compare(phase1aMonthEndEntitlements.get(inventory).get(e1).get(fromYM),
-				 * phase1aMonthEndEntitlements.get(inventory).get(e2).get(fromYM)); }).get(); final int movedAllocatedVolume = fixedCargoMatchedBlueprint.getAllocatedVolume(); final CargoBlueprint
-				 * selectedCargoblueprint = monthMappedEntityCargoBlueprints.get(inventory).get(mostOverLiftedEntity).get(toYM).stream() .min((cb1, cb2) ->
-				 * Integer.compare(Math.abs(movedAllocatedVolume - cb1.getAllocatedVolume()), Math.abs(movedAllocatedVolume - cb2.getAllocatedVolume()))).get();
-				 * selectedCargoblueprint.setWindowStart(fixedCargoMatchedBlueprint.getWindowStart());
-				 * monthMappedAllocationTrackerCargoBlueprints.get(inventory).get(selectedCargoblueprint.getAllocationTracker()).get(toYM).remove(selectedCargoblueprint);
-				 * monthMappedCargoBlueprints.get(inventory).get(toYM).remove(selectedCargoblueprint);
-				 * monthMappedEntityCargoBlueprints.get(inventory).get(mostOverLiftedEntity).get(toYM).remove(selectedCargoblueprint);
-				 * monthMappedAllocationTrackerCargoBlueprints.get(inventory).get(selectedCargoblueprint.getAllocationTracker()).computeIfAbsent(fromYM, k -> new HashSet<>())
-				 * .add(selectedCargoblueprint); monthMappedCargoBlueprints.get(inventory).computeIfAbsent(fromYM, k -> new HashSet<>()).add(selectedCargoblueprint);
-				 * monthMappedEntityCargoBlueprints.get(inventory).get(mostOverLiftedEntity).computeIfAbsent(fromYM, k -> new HashSet<>()).add(selectedCargoblueprint); // We've moved cargoes for a
-				 * different entity and the current entity have to update their reference entitlements to accomodate this [adding to entitlement for selected cargo, dropping entitlement for fixed
-				 * cargo] // Using matched cargoblueprint for volume - this might be a bad assumption for (YearMonth ym = fromYM; ym.isBefore(toYM); ym = ym.plusMonths(1)) { final long newEntitlement
-				 * = phase1aMonthEndEntitlements.get(inventory).get(mostOverLiftedEntity).get(ym).longValue() + selectedCargoblueprint.getAllocatedVolume();
-				 * phase1aMonthEndEntitlements.get(inventory).get(mostOverLiftedEntity).put(ym, newEntitlement); final long newEntitlementForFixedCargo =
-				 * phase1aMonthEndEntitlements.get(inventory).get(entity).get(ym).longValue() - fixedCargoMatchedBlueprint.getAllocatedVolume();
-				 * phase1aMonthEndEntitlements.get(inventory).get(entity).put(ym, newEntitlementForFixedCargo); } final AllocationTracker alloc = selectedCargoblueprint.getAllocationTracker(); if
-				 * (alloc instanceof SalesContractTracker) { final SalesContract salesContract = ((SalesContractTracker) alloc).getSalesContract(); final int toMonthCount =
-				 * phase1aMonthlySalesContract.get(inventory).get(mostOverLiftedEntity).get(toYM).get(salesContract); final int fromMonthCount =
-				 * phase1aMonthlySalesContract.get(inventory).get(mostOverLiftedEntity).get(fromYM).get(salesContract);
-				 * phase1aMonthlySalesContract.get(inventory).get(mostOverLiftedEntity).get(toYM).put(salesContract, toMonthCount - 1);
-				 * phase1aMonthlySalesContract.get(inventory).get(mostOverLiftedEntity).get(fromYM).put(salesContract, fromMonthCount + 1); } else { final DESSalesMarket desSalesMarket =
-				 * ((DESMarketTracker) alloc).getDESSalesMarket(); final int toMonthCount = phase1aMonthlyDesSalesMarket.get(inventory).get(mostOverLiftedEntity).get(toYM).get(desSalesMarket); final
-				 * int fromMonthCount = phase1aMonthlyDesSalesMarket.get(inventory).get(mostOverLiftedEntity).get(fromYM).get(desSalesMarket);
-				 * phase1aMonthlyDesSalesMarket.get(inventory).get(mostOverLiftedEntity).get(toYM).put(desSalesMarket, toMonthCount - 1);
-				 * phase1aMonthlyDesSalesMarket.get(inventory).get(mostOverLiftedEntity).get(fromYM).put(desSalesMarket, fromMonthCount + 1); } // Made switch so continue continue; }
-				 */
-				final Comparator<CargoBlueprint> violationComparator = (cb1, cb2) -> {
-					// Calculate movement violations
-					long violations1 = 0L;
-					long violations2 = 0L;
-					final int allocatedVolume1 = cb1.getAllocatedVolume();
-					final int allocatedVolume2 = cb2.getAllocatedVolume();
-					for (YearMonth ym = fromYM; ym.isBefore(toYM); ym = ym.plusMonths(1)) {
-						final long newEntitlement1 = phase1aMonthEndEntitlements.get(inventory).get(cb1.getEntity()).get(ym).longValue() + allocatedVolume1;
-						final long thisViolationScore1 = Math.abs(Math.max(fullCargoLotValue, newEntitlement1) + Math.min(-fullCargoLotValue, newEntitlement1));
-						violations1 += thisViolationScore1;
-
-						final long newEntitlement2 = phase1aMonthEndEntitlements.get(inventory).get(cb2.getEntity()).get(ym).longValue() + allocatedVolume2;
-						final long thisViolationScore2 = Math.abs(Math.max(fullCargoLotValue, newEntitlement2) + Math.min(-fullCargoLotValue, newEntitlement2));
-						violations2 += thisViolationScore2;
-					}
-					if (violations1 < violations2) {
-						return -1;
-					} else if (violations2 < violations1) {
-						return 1;
-					}
-
-					long entitlementSum1 = 0L;
-					long entitlementSum2 = 0L;
-
-					for (YearMonth ym = fromYM; ym.isBefore(toYM); ym = ym.plusMonths(1)) {
-						entitlementSum1 += phase1aMonthEndEntitlements.get(inventory).get(cb1.getEntity()).get(ym).longValue() + allocatedVolume1;
-						entitlementSum2 += phase1aMonthEndEntitlements.get(inventory).get(cb2.getEntity()).get(ym).longValue() + allocatedVolume2;
-					}
-					return Long.compare(Math.abs(entitlementSum1), Math.abs(entitlementSum2));
-				};
+				final Map<BaseLegalEntity, Map<YearMonth, Long>> monthEndEntitlements = phase1aMonthEndEntitlements.get(inventory);
+				final Phase1AComparator2 violationComparator = new Phase1AComparator2(fromYM, toYM, monthEndEntitlements, fullCargoLotValue);
 				// If we get here then we could not find an alternative entity to switch cargoes on
 				// Find entity that causes minimal violation on either side if brought forward
-				final CargoBlueprint selectedCargoBlueprint = monthMappedAllocationTrackerCargoBlueprints.get(inventory).entrySet().stream().map(Entry::getValue).filter(currentYmMap -> {
-					final Set<CargoBlueprint> set = currentYmMap.get(toYM);
-					return set != null && !set.isEmpty();
-				}).flatMap(currentYmMap -> currentYmMap.get(toYM).stream()).min(violationComparator).get();
-				selectedCargoBlueprint.setWindowStart(fixedCargoMatchedBlueprint.getWindowStart());
-				final BaseLegalEntity selectedEntity = selectedCargoBlueprint.getEntity();
-				monthMappedAllocationTrackerCargoBlueprints.get(inventory).get(selectedCargoBlueprint.getAllocationTracker()).get(toYM).remove(selectedCargoBlueprint);
-				monthMappedCargoBlueprints.get(inventory).get(toYM).remove(selectedCargoBlueprint);
-				monthMappedEntityCargoBlueprints.get(inventory).get(selectedEntity).get(toYM).remove(selectedCargoBlueprint);
-				monthMappedAllocationTrackerCargoBlueprints.get(inventory).get(selectedCargoBlueprint.getAllocationTracker()).computeIfAbsent(fromYM, k -> new HashSet<>()).add(selectedCargoBlueprint);
-				monthMappedCargoBlueprints.get(inventory).computeIfAbsent(fromYM, k -> new HashSet<>()).add(selectedCargoBlueprint);
-				monthMappedEntityCargoBlueprints.get(inventory).get(selectedEntity).computeIfAbsent(fromYM, k -> new HashSet<>()).add(selectedCargoBlueprint);
-				// We've moved cargoes for a different entity and the current entity have to update their reference entitlements to accomodate this.
-				// Using matched cargoblueprint for volume - this might be a bad assumption
-				for (YearMonth ym = fromYM; ym.isBefore(toYM); ym = ym.plusMonths(1)) {
-					final long newEntitlement = phase1aMonthEndEntitlements.get(inventory).get(selectedEntity).get(ym).longValue() + selectedCargoBlueprint.getAllocatedVolume();
-					phase1aMonthEndEntitlements.get(inventory).get(selectedEntity).put(ym, newEntitlement);
-					final long newEntitlementForFixedCargo = phase1aMonthEndEntitlements.get(inventory).get(entity).get(ym).longValue() - fixedCargoMatchedBlueprint.getAllocatedVolume();
-					phase1aMonthEndEntitlements.get(inventory).get(entity).put(ym, newEntitlementForFixedCargo);
+
+				// Switch cargoes on a case-by-case basis
+				CargoBlueprint transferredCargoBlueprint = null;
+
+				YearMonth releasingYearMonth = toYM;
+				YearMonth acceptingYearMonth = null;
+				for (YearMonth currentYm = toYM.plusMonths(1); !fromYM.isBefore(currentYm); currentYm = currentYm.plusMonths(1)) {
+					final Set<CargoBlueprint> cbSet = monthMappedCargoBlueprints.get(inventory).get(currentYm);
+					if (cbSet != null && !cbSet.isEmpty()) {
+						acceptingYearMonth = currentYm;
+						break;
+					}
 				}
-				final AllocationTracker alloc = selectedCargoBlueprint.getAllocationTracker();
-				if (alloc instanceof SalesContractTracker) {
-					final SalesContract salesContract = ((SalesContractTracker) alloc).getSalesContract();
-					final int toMonthCount = phase1aMonthlySalesContract.get(inventory).get(selectedEntity).get(toYM).get(salesContract);
-					final int fromMonthCount = phase1aMonthlySalesContract.get(inventory).get(selectedEntity).get(fromYM).get(salesContract);
-					phase1aMonthlySalesContract.get(inventory).get(selectedEntity).get(toYM).put(salesContract, toMonthCount - 1);
-					phase1aMonthlySalesContract.get(inventory).get(selectedEntity).get(fromYM).put(salesContract, fromMonthCount + 1);
-				} else {
-					final DESSalesMarket desSalesMarket = ((DESMarketTracker) alloc).getDESSalesMarket();
-					final int toMonthCount = phase1aMonthlyDesSalesMarket.get(inventory).get(selectedEntity).get(toYM).get(desSalesMarket);
-					final int fromMonthCount = phase1aMonthlyDesSalesMarket.get(inventory).get(selectedEntity).get(fromYM).get(desSalesMarket);
-					phase1aMonthlyDesSalesMarket.get(inventory).get(selectedEntity).get(toYM).put(desSalesMarket, toMonthCount - 1);
-					phase1aMonthlyDesSalesMarket.get(inventory).get(selectedEntity).get(fromYM).put(desSalesMarket, fromMonthCount + 1);
+
+				while (!fromYM.isBefore(releasingYearMonth)) {
+					final YearMonth finalReleasingYm = releasingYearMonth;
+					final CargoBlueprint selectedCargoBlueprint;
+					if (transferredCargoBlueprint == null) {
+						violationComparator.init(acceptingYearMonth, releasingYearMonth);
+						selectedCargoBlueprint = monthMappedAllocationTrackerCargoBlueprints.get(inventory).entrySet().stream().map(Entry::getValue).filter(map -> {
+							final Set<CargoBlueprint> cbSet = map.get(finalReleasingYm);
+							return cbSet != null && !cbSet.isEmpty();
+						}).flatMap(map -> map.get(finalReleasingYm).stream()).min(violationComparator).get();
+					} else {
+						final CargoBlueprint finalTransferredCargoBlueprint = transferredCargoBlueprint;
+						violationComparator.init(acceptingYearMonth, releasingYearMonth);
+						final AllocationTracker transferenceAllocationTracker = transferredCargoBlueprint.getAllocationTracker();
+						Optional<CargoBlueprint> optSelectedCargoBlueprint = monthMappedAllocationTrackerCargoBlueprints.get(inventory).entrySet().stream().filter(entry -> {
+							final Set<CargoBlueprint> set = entry.getValue().get(finalReleasingYm);
+							return set != null && !set.isEmpty();
+						}).flatMap(entry -> {
+							final Stream<CargoBlueprint> stream = entry.getValue().get(finalReleasingYm).stream();
+							if (entry.getKey() == transferenceAllocationTracker) {
+								return stream.filter(cb -> cb != finalTransferredCargoBlueprint);
+							} else {
+								return stream;
+							}
+						}).min(violationComparator);
+						selectedCargoBlueprint = optSelectedCargoBlueprint.isPresent() ? optSelectedCargoBlueprint.get() : transferredCargoBlueprint;
+						// We've moved cargoes for a different entity and the current entity have to update their reference entitlements to accomodate this.
+						// Using matched cargoblueprint for volume - this might be a bad assumption
+					}
+					final BaseLegalEntity selectedEntity = selectedCargoBlueprint.getEntity();
+					monthMappedAllocationTrackerCargoBlueprints.get(inventory).get(selectedCargoBlueprint.getAllocationTracker()).get(releasingYearMonth).remove(selectedCargoBlueprint);
+					monthMappedCargoBlueprints.get(inventory).get(releasingYearMonth).remove(selectedCargoBlueprint);
+					monthMappedEntityCargoBlueprints.get(inventory).get(selectedEntity).get(releasingYearMonth).remove(selectedCargoBlueprint);
+					monthMappedAllocationTrackerCargoBlueprints.get(inventory).get(selectedCargoBlueprint.getAllocationTracker()).computeIfAbsent(acceptingYearMonth, k -> new HashSet<>())
+							.add(selectedCargoBlueprint);
+					monthMappedCargoBlueprints.get(inventory).computeIfAbsent(acceptingYearMonth, k -> new HashSet<>()).add(selectedCargoBlueprint);
+					monthMappedEntityCargoBlueprints.get(inventory).get(selectedEntity).computeIfAbsent(acceptingYearMonth, k -> new HashSet<>()).add(selectedCargoBlueprint);
+
+					for (YearMonth ym = acceptingYearMonth; ym.isAfter(finalReleasingYm); ym = ym.minusMonths(1)) {
+						final long newEntitlement = phase1aMonthEndEntitlements.get(inventory).get(selectedEntity).get(ym).longValue() + selectedCargoBlueprint.getAllocatedVolume();
+						phase1aMonthEndEntitlements.get(inventory).get(selectedEntity).put(ym, newEntitlement);
+						final long newEntitlementForFixedCargo = phase1aMonthEndEntitlements.get(inventory).get(entity).get(ym).longValue() - fixedCargoMatchedBlueprint.getAllocatedVolume();
+						phase1aMonthEndEntitlements.get(inventory).get(entity).put(ym, newEntitlementForFixedCargo);
+					}
+					final AllocationTracker alloc = selectedCargoBlueprint.getAllocationTracker();
+					if (alloc instanceof SalesContractTracker) {
+						final SalesContract salesContract = ((SalesContractTracker) alloc).getSalesContract();
+						final int toMonthCount = phase1aMonthlySalesContract.get(inventory).get(selectedEntity).get(releasingYearMonth).get(salesContract);
+						final int fromMonthCount = phase1aMonthlySalesContract.get(inventory).get(selectedEntity).get(acceptingYearMonth).get(salesContract);
+						phase1aMonthlySalesContract.get(inventory).get(selectedEntity).get(releasingYearMonth).put(salesContract, toMonthCount - 1);
+						phase1aMonthlySalesContract.get(inventory).get(selectedEntity).get(acceptingYearMonth).put(salesContract, fromMonthCount + 1);
+					} else {
+						final DESSalesMarket desSalesMarket = ((DESMarketTracker) alloc).getDESSalesMarket();
+						final int toMonthCount = phase1aMonthlyDesSalesMarket.get(inventory).get(selectedEntity).get(releasingYearMonth).get(desSalesMarket);
+						final int fromMonthCount = phase1aMonthlyDesSalesMarket.get(inventory).get(selectedEntity).get(acceptingYearMonth).get(desSalesMarket);
+						phase1aMonthlyDesSalesMarket.get(inventory).get(selectedEntity).get(releasingYearMonth).put(desSalesMarket, toMonthCount - 1);
+						phase1aMonthlyDesSalesMarket.get(inventory).get(selectedEntity).get(acceptingYearMonth).put(desSalesMarket, fromMonthCount + 1);
+					}
+					transferredCargoBlueprint = selectedCargoBlueprint;
+					releasingYearMonth = acceptingYearMonth;
+					acceptingYearMonth = null;
+					for (YearMonth currentYm = releasingYearMonth.plusMonths(1); !fromYM.isBefore(currentYm); currentYm = currentYm.plusMonths(1)) {
+						final Set<CargoBlueprint> cbSet = monthMappedCargoBlueprints.get(inventory).get(currentYm);
+						if (cbSet != null && !cbSet.isEmpty()) {
+							acceptingYearMonth = currentYm;
+							break;
+						}
+					}
+					if (acceptingYearMonth == null) {
+						break;
+					}
 				}
+
 			}
 		}
 
@@ -3131,6 +3131,7 @@ public class ContractPage extends ADPComposite {
 		// }
 
 		final IScenarioDataProvider sdp = editorData.getScenarioDataProvider();
+		final Command deleteModelsCommand = ScheduleModelInvalidateCommandProvider.createClearModelsCommand(editingDomain, sm, ScenarioModelUtil.getAnalyticsModel(sm));
 
 		final List<Cargo> cargoesToDelete;
 		final List<LoadSlot> loadSlotsToDelete;
@@ -3177,6 +3178,9 @@ public class ContractPage extends ADPComposite {
 		if (cmd.isEmpty()) {
 			return IdentityCommand.INSTANCE;
 		} else {
+			if (deleteModelsCommand != null) {
+				editorData.getDefaultCommandHandler().handleCommand(deleteModelsCommand);
+			}
 			try {
 				editorData.setDisableUpdates(true);
 				editorData.getDefaultCommandHandler().handleCommand(cmd, profile, null);
@@ -3501,9 +3505,12 @@ public class ContractPage extends ADPComposite {
 		final TreeMap<LocalDate, InventoryCapacityRow> capacityTreeMap = capacities.stream() //
 				.collect(Collectors.toMap(InventoryCapacityRow::getDate, c -> c, (oldVal, newVal) -> newVal, TreeMap::new));
 		final TreeMap<LocalDateTime, InventoryDateTimeEvent> insAndOuts = new TreeMap<>();
-		final List<InventoryEventRow> filteredFeeds = inventory.getFeeds().stream() //
-				.filter(f -> !f.getStartDate().isBefore(startDateTimeInclusive.toLocalDate()) || f.getPeriod() == InventoryFrequency.LEVEL) //
-				.collect(Collectors.toList());
+
+		final InventoryEventRow lastPreAdpLevel = getLastPreAdpLevelFeed(inventory.getFeeds(), startDateTimeInclusive);
+		final Stream<InventoryEventRow> inAdpYearFeedsStream = inventory.getFeeds().stream().filter(f -> !f.getStartDate().isBefore(startDateTimeInclusive.toLocalDate()));
+		final Stream<InventoryEventRow> feedsOfInterest = lastPreAdpLevel == null ? inAdpYearFeedsStream : Stream.concat(Stream.of(lastPreAdpLevel), inAdpYearFeedsStream);
+		final List<InventoryEventRow> filteredFeeds = feedsOfInterest.collect(Collectors.toList());
+
 		addHourlyNetVolumes(filteredFeeds, capacityTreeMap, insAndOuts, IntUnaryOperator.identity());
 		addHourlyNetVolumes(inventory.getOfftakes(), capacityTreeMap, insAndOuts, a -> -a);
 
@@ -3518,6 +3525,24 @@ public class ContractPage extends ADPComposite {
 			}
 		}
 		return insAndOuts;
+	}
+
+	private InventoryEventRow getLastPreAdpLevelFeed(final List<InventoryEventRow> feeds, final LocalDateTime startDateTimeInclusive) {
+		final LocalDate startLocalDateInclusive = startDateTimeInclusive.toLocalDate();
+		final Iterator<InventoryEventRow> levelFeedsBeforeAdpStartIter = feeds.stream().filter(f -> f.getPeriod() == InventoryFrequency.LEVEL && f.getStartDate().isBefore(startLocalDateInclusive))
+				.iterator();
+
+		if (!levelFeedsBeforeAdpStartIter.hasNext()) {
+			return null;
+		}
+		InventoryEventRow lastPreAdpLevel = levelFeedsBeforeAdpStartIter.next();
+		while (levelFeedsBeforeAdpStartIter.hasNext()) {
+			final InventoryEventRow feed = levelFeedsBeforeAdpStartIter.next();
+			if (lastPreAdpLevel.getStartDate().isBefore(feed.getStartDate())) {
+				lastPreAdpLevel = feed;
+			}
+		}
+		return lastPreAdpLevel;
 	}
 
 	private int getYearlyProduction(final Inventory inventory, final LNGScenarioModel scenarioModel, final LocalDateTime startTimeInclusive, final LocalDateTime endTimeExclusive) {
