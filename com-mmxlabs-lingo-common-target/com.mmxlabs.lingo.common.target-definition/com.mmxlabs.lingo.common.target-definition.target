@@ -34,10 +34,6 @@
 <unit id="org.eclipse.jdt.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.pde.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.rcp.source.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.swtbot.eclipse.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.swtbot.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.swtbot.forms.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.swtbot.ide.feature.group" version="0.0.0"/>
 <repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.201912/201912181000/org.eclipse.201912-201912181000.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
@@ -103,6 +99,13 @@
 		<repository location="https://download.eclipse.org/swtchart/releases/0.12.0/repository/"/>
 		<unit id="org.eclipse.swtchart.feature.feature.group" version="0.0.0"/>
 	</location>
+	<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+		<repository location="http://download.eclipse.org/technology/swtbot/releases/3.1.0/"/>
+		<unit id="org.eclipse.swtbot.eclipse.feature.group" version="3.1.0.202106041005"/>
+		<unit id="org.eclipse.swtbot.feature.group" version="3.1.0.202106041005"/>
+		<unit id="org.eclipse.swtbot.junit5.feature.group" version="3.1.0.202106041005"/>
+		<unit id="org.eclipse.swtbot.forms.feature.group" version="3.1.0.202106041005"/>
+	</location>
 	<location includeSource="true" missingManifest="generate" type="Maven">
 		<groupId>com.google.inject</groupId>
 		<artifactId>guice</artifactId>
@@ -115,7 +118,6 @@
 		<version>27.1-jre</version>
 		<type>jar</type>
 	</location>
-
 	<location includeSource="true" missingManifest="generate" type="Maven">
 		<groupId>com.google.guava</groupId>
 		<artifactId>failureaccess</artifactId>
