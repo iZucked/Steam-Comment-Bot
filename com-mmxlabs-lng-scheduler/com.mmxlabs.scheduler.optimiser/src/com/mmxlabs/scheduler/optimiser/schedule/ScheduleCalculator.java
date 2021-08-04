@@ -76,7 +76,7 @@ public class ScheduleCalculator {
 
 	@Nullable
 	public ProfitAndLossSequences schedule(final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
-		final Map<IResource, List<IPortTimesRecord>> allPortTimeRecords = arrivalTimeScheduler.schedule(sequences);
+		final Map<IResource, List<@NonNull IPortTimesRecord>> allPortTimeRecords = arrivalTimeScheduler.schedule(sequences);
 		return schedule(sequences, allPortTimeRecords, solution);
 	}
 
@@ -181,7 +181,7 @@ public class ScheduleCalculator {
 
 			final PreviousHeelRecord previousHeelRecord = lastResult == null ? new PreviousHeelRecord() : lastResult.endHeelState;
 
-			final List<ScheduledVoyagePlanResult> results = voyagePlanEvaluator.evaluateShipped(resource, vesselAvailability, //
+			final List<@NonNull ScheduledVoyagePlanResult> results = voyagePlanEvaluator.evaluateShipped(resource, vesselAvailability, //
 					vesselAvailability.getCharterCostCalculator(), //
 					vesselStartTime, //
 					firstLoadPort, //

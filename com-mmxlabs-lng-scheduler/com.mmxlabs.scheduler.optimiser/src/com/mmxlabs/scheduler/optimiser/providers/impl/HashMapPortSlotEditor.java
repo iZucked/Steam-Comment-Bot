@@ -11,6 +11,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.MaintenanceVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.WrappedSequenceElement;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -44,11 +45,15 @@ public final class HashMapPortSlotEditor implements IPortSlotProviderEditor {
 	public ISequenceElement getElement(@NonNull final IPortSlot portSlot) {
 		if (elementMap.containsKey(portSlot)) {
 			return elementMap.get(portSlot);
+		} else if (portSlot instanceof MaintenanceVesselEventPortSlot) {
+			final IPortSlot formerPortSlot = ((MaintenanceVesselEventPortSlot) portSlot).getFormerPortSlot();
+			if (elementMap.containsKey(formerPortSlot)) {
+				return elementMap.get(formerPortSlot);
+			}
 		}
 
 		if (portSlot.getPortType() == PortType.GeneratedCharterOut
-				|| portSlot.getPortType() == PortType.GeneratedCharterLength
-				|| portSlot.getPortType() == PortType.Maintenance) {
+				|| portSlot.getPortType() == PortType.GeneratedCharterLength) {
 			return new WrappedSequenceElement(portSlot);
 		}
 
