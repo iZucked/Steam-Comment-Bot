@@ -481,7 +481,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 		if (runAsync) {
 			final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> {
-				return new LNGSandboxJobDescriptor(pTaskName, scenarioInstance, createSandboxOptionsFunction(scenarioDataProvider, scenarioInstance, pUserSettings, model));
+				return new LNGSandboxJobDescriptor(pTaskName, scenarioInstance, createSandboxOptionsFunction(scenarioDataProvider, scenarioInstance, pUserSettings, model), model);
 			};
 
 			final TriConsumer<IJobControl, EJobState, IScenarioDataProvider> jobCompletedCallback = (jobControl, newState, sdp) -> {
@@ -537,7 +537,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 		if (runAsync) {
 			final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> {
-				return new LNGSandboxJobDescriptor(pTaskName, scenarioInstance, createSandboxInsertionFunction(scenarioDataProvider, scenarioInstance, pUserSettings, model));
+				return new LNGSandboxJobDescriptor(pTaskName, scenarioInstance, createSandboxInsertionFunction(scenarioDataProvider, scenarioInstance, pUserSettings, model), model);
 			};
 
 			final TriConsumer<IJobControl, EJobState, IScenarioDataProvider> jobCompletedCallback = (jobControl, newState, sdp) -> {
@@ -889,7 +889,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 		if (runAsync) {
 			final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> {
-				return new LNGSandboxJobDescriptor(pTaskName, scenarioInstance, createSandboxOptimiserFunction(scenarioDataProvider, scenarioInstance, pUserSettings, model));
+				return new LNGSandboxJobDescriptor(pTaskName, scenarioInstance, createSandboxOptimiserFunction(scenarioDataProvider, scenarioInstance, pUserSettings, model), model);
 			};
 
 			final TriConsumer<IJobControl, EJobState, IScenarioDataProvider> jobCompletedCallback = (jobControl, newState, sdp) -> {

@@ -110,7 +110,7 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 					} else {
 						boolean relaxedValidation = "Period Scenario".equals(modelRecord.getName());
 						// New optimisation, so check there are no validation errors.
-						if (!OptimisationHelper.validateScenario(scenarioDataProvider, optimising, false, relaxedValidation, job.getExtraValidationCategories())) {
+						if (!OptimisationHelper.validateScenario(scenarioDataProvider, null, optimising, false, relaxedValidation, job.getExtraValidationCategories())) {
 							action.setEnabled(false);
 							return;
 						}

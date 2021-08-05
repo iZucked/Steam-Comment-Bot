@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -1079,7 +1080,7 @@ public final class OptimisationHelper {
 		return false;
 	}
 
-	public static boolean validateScenario(final IScenarioDataProvider scenarioDataProvider, final boolean optimising, final boolean displayErrors,
+	public static boolean validateScenario(final IScenarioDataProvider scenarioDataProvider, @Nullable EObject extraTarget, final boolean optimising, final boolean displayErrors,
 			final boolean relaxedValidation, Set<String> extraCategories) {
 		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
 		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
@@ -1104,10 +1105,10 @@ public final class OptimisationHelper {
 			return false;
 		});
 
-		final MMXRootObject root = scenarioDataProvider.getTypedScenario(MMXRootObject.class);
+		final MMXRootObject rootObject = scenarioDataProvider.getTypedScenario(MMXRootObject.class);
 		final IStatus status = ServiceHelper.withOptionalService(IValidationService.class, helper -> {
 			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(scenarioDataProvider, false, relaxedValidation);
-			return helper.runValidation(validator, extraContext, root);
+			return helper.runValidation(validator, extraContext, rootObject, extraTarget);
 		});
 
 		if (status == null) {

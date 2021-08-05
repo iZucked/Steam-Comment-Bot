@@ -575,5 +575,15 @@
                   </visibleWhen>
       </command>
    </menuContribution>
+</extension>
+<extension
+      point="org.eclipse.emf.validation.traversal">
+   <traversalStrategy
+         class="com.mmxlabs.models.lng.scenario.LNGRecursiveValidationStrategy"
+         namespaceUri="http://www.mmxlabs.com/models/lng/scenario/1/">
+      <eclass
+            name="LNGScenarioModel">
+      </eclass>
+   </traversalStrategy>
 </extension>      
 </plugin>

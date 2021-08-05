@@ -10,15 +10,16 @@ import java.util.Collections;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.service.IValidator;
+import org.eclipse.jdt.annotation.Nullable;
 
 /**
  */
 public interface IValidationService {
-	default IStatus runValidation(final IValidator<EObject> validator, final IExtraValidationContext extraContext, final EObject target) {
-		return runValidation(validator, extraContext, Collections.singleton(target));
+	default IStatus runValidation(final IValidator<EObject> validator, final IExtraValidationContext extraContext, final EObject target, @Nullable EObject extraTarget) {
+		return runValidation(validator, extraContext, Collections.singleton(target), extraTarget);
 	}
 
-	IStatus runValidation(final IValidator<EObject> validator, final IExtraValidationContext extraContext, final Collection<? extends EObject> targets);
+	IStatus runValidation(IValidator<EObject> validator, IExtraValidationContext extraContext, Collection<? extends EObject> targets, @Nullable EObject extraTarget);
 
 	/**
 	 * Returns the registered {@link IExtraValidationContext} for the current thread

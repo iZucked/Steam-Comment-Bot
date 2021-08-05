@@ -79,7 +79,7 @@ public class OptimisationJobRunner {
 						boolean relaxedValidation = "Period Scenario".equals(modelRecord.getName());
 
 						// New optimisation, so check there are no validation errors.
-						if (!validateScenario(sdp, true, relaxedValidation, job.getExtraValidationCategories())) {
+						if (!validateScenario(sdp, job.getExtraValidationTarget(), true, relaxedValidation, job.getExtraValidationCategories())) {
 							scenarioLock.unlock();
 							return;
 						}
@@ -145,7 +145,7 @@ public class OptimisationJobRunner {
 		}
 	}
 
-	protected boolean validateScenario(IScenarioDataProvider scenarioDataProvider, boolean optimising, boolean relaxedValidation, Set<String> extraCategories) {
-		return OptimisationHelper.validateScenario(scenarioDataProvider, optimising, true, relaxedValidation, extraCategories);
+	protected boolean validateScenario(IScenarioDataProvider scenarioDataProvider, @Nullable EObject extraTarget, boolean optimising, boolean relaxedValidation, Set<String> extraCategories) {
+		return OptimisationHelper.validateScenario(scenarioDataProvider, extraTarget, optimising, true, relaxedValidation, extraCategories);
 	}
 }

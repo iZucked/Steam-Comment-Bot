@@ -7,7 +7,8 @@ Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-11
-Export-Package: com.mmxlabs.models.lng.scenario.actions.anonymisation,
+Export-Package: com.mmxlabs.models.lng.scenario,
+ com.mmxlabs.models.lng.scenario.actions.anonymisation,
  com.mmxlabs.models.lng.scenario.exportWizards,
  com.mmxlabs.models.lng.scenario.importWizards,
  com.mmxlabs.models.lng.scenario.importWizards.canalcosts,
