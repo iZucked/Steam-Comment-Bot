@@ -101,6 +101,8 @@ public class LNGTransformerModule extends AbstractModule {
 
 	private final boolean withSpotCargoMarkets;
 
+	private final boolean hintEvaluationMode;
+	
 	private final boolean hintEnableCache;
 	private final boolean portfolioBreakEven;
 
@@ -136,6 +138,7 @@ public class LNGTransformerModule extends AbstractModule {
 		this.withNoNominalsInPrompt = hints.contains(LNGTransformerHelper.HINT_NO_NOMINALS_IN_PROMPT);
 		this.withCharterLength = hints.contains(LNGTransformerHelper.HINT_CHARTER_LENGTH);
 		this.withFlatCurve = hints.contains(LNGTransformerHelper.HINT_GENERATED_PAPERS_PNL);
+		this.hintEvaluationMode = hints.contains(LNGTransformerHelper.HINT_EVALUATION_ONLY);
 		assert scenario != null;
 		// Temporary check to make sure the UI is correctly configured.
 		assert scenario.isLongTerm() == (userSettings.getMode() == OptimisationMode.LONG_TERM);
@@ -155,6 +158,7 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_PORTFOLIO_BREAKEVEN)).toInstance(portfolioBreakEven);
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_SPOT_CARGO_MARKETS)).toInstance(withSpotCargoMarkets);
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_NO_NOMINALS_IN_PROMPT)).toInstance(withNoNominalsInPrompt);
+		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_EVALUATION_ONLY)).toInstance(hintEvaluationMode);
 		bind(int.class).annotatedWith(Names.named(SchedulerConstants.CONCURRENCY_LEVEL)).toInstance(concurrencyLevel);
 
 		// Default binding - no limit

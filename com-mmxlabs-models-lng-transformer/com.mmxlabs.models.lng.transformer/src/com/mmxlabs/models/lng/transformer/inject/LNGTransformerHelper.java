@@ -50,6 +50,10 @@ public class LNGTransformerHelper {
 	public static final @NonNull String HINT_OPTIMISE_LSO = "hint-lngtransformer-optimise-lso";
 	public static final @NonNull String HINT_OPTIMISE_INSERTION = "hint-lngtransformer-optimise-insertion";
 	/**
+	 * Hint to indicate this is for evaluation only
+	 */
+	public static final @NonNull String HINT_EVALUATION_ONLY = "hint-lngtransformer-evaluation";
+	/**
 	 */
 	public static final @NonNull String HINT_OPTIMISE_BREAKDOWN = "hint-lngtransformer-optimise-breakdown";
 
