@@ -299,13 +299,10 @@ public class PeriodTransformer {
 						vesselAvailability.setEndAfter(endEvent.getEnd().withZoneSameInstant(ZONEID_UTC).toLocalDateTime());
 						vesselAvailability.setEndBy(endEvent.getEnd().withZoneSameInstant(ZONEID_UTC).toLocalDateTime());
 					}
-
-					vesselAvailability.setForceHireCostOnlyEndRule(true);
 				} else if (vesselAvailability.isSetEndAfter()) {
 					if (output.isSetSchedulingEndDate() && periodRecord.upperBoundary != null && output.getSchedulingEndDate().atStartOfDay().isBefore(vesselAvailability.getEndAfter())) {
 						if (vesselAvailability.getEndAfter().isAfter(output.getSchedulingEndDate().atStartOfDay())) {
 							vesselAvailability.setEndAfter(output.getSchedulingEndDate().atStartOfDay());
-							vesselAvailability.setForceHireCostOnlyEndRule(true);
 						}
 					}
 				}
@@ -1410,7 +1407,6 @@ public class PeriodTransformer {
 
 			vesselAvailability.setEndAfter(portVisit.getStart().withZoneSameInstant(ZONEID_UTC).toLocalDateTime());
 			vesselAvailability.setEndBy(portVisit.getStart().withZoneSameInstant(ZONEID_UTC).toLocalDateTime());
-			vesselAvailability.setForceHireCostOnlyEndRule(false);
 
 			if (vesselAvailability.getEndHeel() == null) {
 				vesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
@@ -1513,7 +1509,6 @@ public class PeriodTransformer {
 
 			vesselAvailability.setEndAfter(portVisit.getStart().withZoneSameInstant(ZONEID_UTC).toLocalDateTime());
 			vesselAvailability.setEndBy(portVisit.getStart().withZoneSameInstant(ZONEID_UTC).toLocalDateTime());
-			vesselAvailability.setForceHireCostOnlyEndRule(false);
 
 			// Set must arrive cold with target heel volume
 			final int heel = portVisit.getHeelAtStart();

@@ -15,7 +15,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 
 public class EndRequirement extends StartEndRequirement implements IEndRequirement {
 	private final @NonNull IHeelOptionConsumer heelOptions;
-	private final boolean isHireCostOnlyEndRule;
 	private boolean isMinimalDurationSet;
 	private boolean isMaximalDurationSet;
 	private int minimalDurationInHours;
@@ -23,20 +22,14 @@ public class EndRequirement extends StartEndRequirement implements IEndRequireme
 	
 	
 	public EndRequirement(final Collection<IPort> portSet, final boolean portIsSpecified, final boolean hasTimeRequirement, final ITimeWindow timeWindow,
-			final @NonNull IHeelOptionConsumer heelOptions, final boolean isHireCostOnlyEndRule) {
+			final @NonNull IHeelOptionConsumer heelOptions) {
 		super(portSet.size() == 1 ? portSet.iterator().next() : null, portSet, portIsSpecified, hasTimeRequirement, timeWindow);
 		assert timeWindow != null;
 		this.heelOptions = heelOptions;
-		this.isHireCostOnlyEndRule = isHireCostOnlyEndRule;
 		this.isMaximalDurationSet = false;
 		this.isMinimalDurationSet = false;
 		this.minimalDurationInHours = 0;
 		this.maximalDurationInHours = 0;
-	}
-
-	@Override
-	public boolean isHireCostOnlyEndRule() {
-		return isHireCostOnlyEndRule;
 	}
 
 	@Override

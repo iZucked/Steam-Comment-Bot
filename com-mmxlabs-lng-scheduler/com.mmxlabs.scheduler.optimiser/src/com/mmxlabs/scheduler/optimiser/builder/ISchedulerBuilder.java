@@ -236,7 +236,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	public IStartRequirement createStartRequirement(@Nullable IPort fixedPort, boolean hasTimeRequirement, @Nullable ITimeWindow timeWindow, @Nullable IHeelOptionSupplier heelSupplierOptions);
+	IStartRequirement createStartRequirement(@Nullable IPort fixedPort, boolean hasTimeRequirement, @Nullable ITimeWindow timeWindow, @Nullable IHeelOptionSupplier heelSupplierOptions);
 
 	/**
 	 * Boolean flag to indicate hard end time window. If false, provider timeWindow is a notional end date and should be an instanceof of a {@link MutableTimeWindow}.
@@ -248,8 +248,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	public IEndRequirement createEndRequirement(@Nullable Collection<IPort> portSet, boolean hasTimeRequirement, @NonNull ITimeWindow timeWindow, IHeelOptionConsumer heelConsumer,
-			boolean isOpenEnded);
+	IEndRequirement createEndRequirement(@Nullable Collection<IPort> portSet, boolean hasTimeRequirement, @NonNull ITimeWindow timeWindow, IHeelOptionConsumer heelConsumer);
 
 	/**
 	 * Set a port's cooldown cooldown requirement
