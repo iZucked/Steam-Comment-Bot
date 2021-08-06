@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.jobmanager.jobs;
 
+import java.util.Collections;
+import java.util.Set;
+
 import com.mmxlabs.jobmanager.manager.IJobManager;
 
 /**
@@ -42,4 +45,8 @@ public interface IJobDescriptor {
 	 * Clean up
 	 */
 	void dispose();
+	
+	default Set<String> getExtraValidationCategories() {
+		return Collections.emptySet();
+	}
 }

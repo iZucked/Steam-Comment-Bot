@@ -1079,7 +1079,8 @@ public final class OptimisationHelper {
 		return false;
 	}
 
-	public static boolean validateScenario(final IScenarioDataProvider scenarioDataProvider, final boolean optimising, final boolean displayErrors, final boolean relaxedValidation) {
+	public static boolean validateScenario(final IScenarioDataProvider scenarioDataProvider, final boolean optimising, final boolean displayErrors,
+			final boolean relaxedValidation, Set<String> extraCategories) {
 		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
 		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
 
@@ -1091,6 +1092,12 @@ public final class OptimisationHelper {
 					return true;
 				} else if (!optimising && cat.getId().endsWith(".evaluation")) {
 					return true;
+				}
+				// Any extra validation category suffixes to include e.g. for sandbox
+				for (String catSuffix : extraCategories) {
+					if (cat.getId().endsWith(catSuffix)) {
+						return true;
+					}
 				}
 			}
 
