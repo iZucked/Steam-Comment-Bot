@@ -25,7 +25,6 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.ReportsConstants;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
@@ -54,7 +53,7 @@ public class CompareScenariosHandler extends AbstractHandler {
 
 						RunnerHelper.asyncExec(() -> {
 
-							if (LicenseFeatures.isPermitted("features:difftools")) {
+							 {
 								final EPartService partService = PlatformUI.getWorkbench().getService(EPartService.class);
 								final EModelService modelService = PlatformUI.getWorkbench().getService(EModelService.class);
 								final MApplication application = PlatformUI.getWorkbench().getService(MApplication.class);
