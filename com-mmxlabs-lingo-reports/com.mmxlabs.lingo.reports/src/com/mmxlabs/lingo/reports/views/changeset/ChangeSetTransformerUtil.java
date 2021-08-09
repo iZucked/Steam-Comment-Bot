@@ -89,7 +89,6 @@ public final class ChangeSetTransformerUtil {
 	 */
 	private static final int MAJOR_CHANGE_DAYS_THRESHOLD = 2;
 
-	
 	private ChangeSetTransformerUtil() {
 
 	}
@@ -345,12 +344,13 @@ public final class ChangeSetTransformerUtil {
 				if (event instanceof CharterLengthEvent) {
 					// Record these events so we can group them up later
 					final CharterLengthEvent charterLengthEvent = (CharterLengthEvent) event;
-					extraLengthEvents.computeIfAbsent(charterLengthEvent.getSequence(), k -> ScheduleFactory.eINSTANCE.createGroupedCharterLengthEvent()).getEvents().addAll(charterLengthEvent.getEvents());
+					extraLengthEvents.computeIfAbsent(charterLengthEvent.getSequence(), k -> ScheduleFactory.eINSTANCE.createGroupedCharterLengthEvent()).getEvents()
+							.addAll(charterLengthEvent.getEvents());
 				} else if (event instanceof GeneratedCharterOut) {
 					// Record these events so we can group them up later
 					final GeneratedCharterOut charterLengthEvent = (GeneratedCharterOut) event;
 					extraGCOEvents.computeIfAbsent(charterLengthEvent.getSequence(), k -> ScheduleFactory.eINSTANCE.createGroupedCharterOutEvent()).getEvents().addAll(charterLengthEvent.getEvents());
-					
+
 				} else {
 					eventMapper.accept(event);
 				}
@@ -411,7 +411,7 @@ public final class ChangeSetTransformerUtil {
 			groupProfitAndLoss.setProfitAndLoss(pnl1);
 			groupProfitAndLoss.setProfitAndLossPreTax(pnl2);
 			cle.setGroupProfitAndLoss(groupProfitAndLoss);
-			
+
 			// Create an entry for the new grouped item
 			eventMapper.accept(cle);
 		}
@@ -1414,8 +1414,10 @@ public final class ChangeSetTransformerUtil {
 									final SlotVisit afterVisit = afterAllocation.getSlotVisit();
 
 									if (beforeVisit != null && afterVisit != null) {
-										if (Math.abs(Days.between(beforeVisit.getStart(), afterVisit.getStart())) > MAJOR_CHANGE_DAYS_THRESHOLD) {
-											row.setDateChange(true);
+										if (beforeVisit.getStart() != null && afterVisit.getStart() != null) {
+											if (Math.abs(Days.between(beforeVisit.getStart(), afterVisit.getStart())) > MAJOR_CHANGE_DAYS_THRESHOLD) {
+												row.setDateChange(true);
+											}
 										}
 									}
 
@@ -1430,8 +1432,10 @@ public final class ChangeSetTransformerUtil {
 									final SlotVisit afterVisit = afterAllocation.getSlotVisit();
 
 									if (beforeVisit != null && afterVisit != null) {
-										if (Math.abs(Days.between(beforeVisit.getStart(), afterVisit.getStart())) > MAJOR_CHANGE_DAYS_THRESHOLD) {
-											row.setDateChange(true);
+										if (beforeVisit.getStart() != null && afterVisit.getStart() != null) {
+											if (Math.abs(Days.between(beforeVisit.getStart(), afterVisit.getStart())) > MAJOR_CHANGE_DAYS_THRESHOLD) {
+												row.setDateChange(true);
+											}
 										}
 									}
 								}
@@ -1440,15 +1444,19 @@ public final class ChangeSetTransformerUtil {
 							if (beforeData.getLhsEvent() != null && afterData.getLhsEvent() != null) {
 								final Event beforeEvent = beforeData.getLhsEvent();
 								final Event afterEvent = afterData.getLhsEvent();
-								if (Math.abs(Days.between(beforeEvent.getStart(), afterEvent.getStart())) > MAJOR_CHANGE_DAYS_THRESHOLD) {
-									row.setDateChange(true);
+								if (beforeEvent.getStart() != null && afterEvent.getStart() != null) {
+									if (Math.abs(Days.between(beforeEvent.getStart(), afterEvent.getStart())) > MAJOR_CHANGE_DAYS_THRESHOLD) {
+										row.setDateChange(true);
+									}
 								}
 							}
 							if (beforeData.getRhsEvent() != null && afterData.getRhsEvent() != null) {
 								final Event beforeEvent = beforeData.getRhsEvent();
 								final Event afterEvent = afterData.getRhsEvent();
-								if (Math.abs(Days.between(beforeEvent.getStart(), afterEvent.getStart())) > MAJOR_CHANGE_DAYS_THRESHOLD) {
-									row.setDateChange(true);
+								if (beforeEvent.getStart() != null && afterEvent.getStart() != null) {
+									if (Math.abs(Days.between(beforeEvent.getStart(), afterEvent.getStart())) > MAJOR_CHANGE_DAYS_THRESHOLD) {
+										row.setDateChange(true);
+									}
 								}
 							}
 						}
