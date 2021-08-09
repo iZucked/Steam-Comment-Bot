@@ -100,7 +100,7 @@ public class PairingOptimisationData<P, C> implements ProfitAndLossRecorder {
 	 */
 	public IDischargeOption getPairedDischarge(ILoadOption load, boolean[][] allocations) {
 		for (int i = 0; i < allocations[loadMap.get(load)].length; i++) {
-			if (allocations[loadMap.get(load)][i] == true) {
+			if (allocations[loadMap.get(load)][i]) {
 				return getSortedDischarges().get(i);
 			}
 		}

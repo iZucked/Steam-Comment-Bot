@@ -5,10 +5,8 @@
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -66,8 +64,6 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 		this.name = name;
 	}
 
-	private Map<String, Integer> consideredDischargeSlots = new HashMap<>();
-
 	@Override
 	public void init(@NonNull final IPhaseOptimisationData data) {
 
@@ -110,8 +106,6 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 	}
 
 	private void evaluation(@NonNull final ISequences sequences) {
-		final @NonNull Set<@NonNull ISequenceElement> unusedSet = getUnusedSet(sequences);
-
 		int fitness = 0;
 		fitness += (int) sequences.getUnusedElements().stream() //
 				.filter(interestingElements::contains) //
