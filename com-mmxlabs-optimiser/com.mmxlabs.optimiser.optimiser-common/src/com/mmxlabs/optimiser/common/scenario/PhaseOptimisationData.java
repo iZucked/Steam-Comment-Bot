@@ -16,11 +16,10 @@ import com.mmxlabs.common.indexedobjects.impl.ArrayIndexBits;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 /**
- * Implementation of {@link IOptimisationData}
+ * Implementation of {@link IPhaseOptimisationData}
  * 
  * @author Simon Goodall
  * 

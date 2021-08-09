@@ -10,8 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
@@ -77,7 +75,7 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 		interestingElements.removeAll(phaseOptimisationData.getOptionalElements());
 		// Make sure these are retained
 		interestingElements.addAll(phaseOptimisationData.getSoftRequiredElements());
-		// Remove constrained slots
+		// Remove constrained slots - if not running ADP optimiser, should stream should be empty.
 		streamConstrainedSlots().map(portSlotProvider::getElement).forEach(interestingElements::remove);
 	}
 

@@ -135,12 +135,6 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 				}
 			}
 
-			if (!contractProfile.getConstraints().isEmpty()) {
-				for (final Pair<ILoadOption, Integer> oSlot : o_slots) {
-					optionalElementsProvider.setSoftRequired(portSlotProvider.getElement(oSlot.getFirst()), true);
-				}
-			}
-
 			for (final ProfileConstraint profileConstraint : contractProfile.getConstraints()) {
 				if (profileConstraint instanceof MinCargoConstraint) {
 					final MinCargoConstraint minCargoConstraint = (MinCargoConstraint) profileConstraint;
@@ -226,12 +220,6 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 				final Collection<@NonNull IVessel> permittedVessels = allowedVesselProviderEditor.getPermittedVessels(slot.getFirst());
 				if (permittedVessels != null) {
 					permittedVessels.add(iDefaultVessel);
-				}
-			}
-
-			if (!contractProfile.getConstraints().isEmpty()) {
-				for (final Pair<IDischargeOption, Integer> oSlot : o_slots) {
-					optionalElementsProvider.setSoftRequired(portSlotProvider.getElement(oSlot.getFirst()), true);
 				}
 			}
 
