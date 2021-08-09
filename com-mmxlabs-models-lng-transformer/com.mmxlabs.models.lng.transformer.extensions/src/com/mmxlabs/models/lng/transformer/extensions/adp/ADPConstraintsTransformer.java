@@ -135,6 +135,13 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 				}
 			}
 
+			// Only soft required slots are the constrained ones. The optionality of these slots during optimisation is handled by NonOptionalFitnessCore by ignoring them in the fitness calculation.
+			if (!contractProfile.getConstraints().isEmpty()) {
+				for (final Pair<ILoadOption, Integer> oSlot : o_slots) {
+					optionalElementsProvider.setSoftRequired(portSlotProvider.getElement(oSlot.getFirst()), true);
+				}
+			}
+
 			for (final ProfileConstraint profileConstraint : contractProfile.getConstraints()) {
 				if (profileConstraint instanceof MinCargoConstraint) {
 					final MinCargoConstraint minCargoConstraint = (MinCargoConstraint) profileConstraint;
@@ -220,6 +227,13 @@ public class ADPConstraintsTransformer implements ITransformerExtension {
 				final Collection<@NonNull IVessel> permittedVessels = allowedVesselProviderEditor.getPermittedVessels(slot.getFirst());
 				if (permittedVessels != null) {
 					permittedVessels.add(iDefaultVessel);
+				}
+			}
+
+			// Only soft required slots are the constrained ones. The optionality of these slots during optimisation is handled by NonOptionalFitnessCore by ignoring them in the fitness calculation.
+			if (!contractProfile.getConstraints().isEmpty()) {
+				for (final Pair<IDischargeOption, Integer> oSlot : o_slots) {
+					optionalElementsProvider.setSoftRequired(portSlotProvider.getElement(oSlot.getFirst()), true);
 				}
 			}
 
