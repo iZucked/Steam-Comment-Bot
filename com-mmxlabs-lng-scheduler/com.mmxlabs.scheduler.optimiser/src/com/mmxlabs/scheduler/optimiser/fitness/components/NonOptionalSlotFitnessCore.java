@@ -140,8 +140,4 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 	public IFitnessCore getFitnessCore() {
 		return this;
 	}
-
-	private @NonNull Set<@NonNull ISequenceElement> getUnusedSet(@NonNull final ISequences sequences) {
-		return new HashSet<>(sequences.getUnusedElements());
-	}
 }
