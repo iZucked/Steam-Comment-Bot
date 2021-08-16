@@ -124,9 +124,9 @@ public class PairingOptimisationData<P, C> implements ProfitAndLossRecorder {
 	}
 
 	private void setOptionalLoads() {
-		final Stream<ConstraintInfo<P, C, ILoadOption>> str = Stream.concat(maxSlotCountConstraint.getAllMaxLoadGroupCounts().stream(),
+		final Stream<ConstraintInfo<P, C, ILoadOption>> loadGroupConstraintsStream = Stream.concat(maxSlotCountConstraint.getAllMaxLoadGroupCounts().stream(),
 				maxSlotCountConstraint.getAllMinLoadGroupCounts().stream());
-		final Set<ILoadOption> constrainedLoadOptions = str.flatMap(cInfo -> cInfo.getSlots().stream()).collect(Collectors.toSet());
+		final Set<ILoadOption> constrainedLoadOptions = loadGroupConstraintsStream.flatMap(cInfo -> cInfo.getSlots().stream()).collect(Collectors.toSet());
 		
 		optionalLoads = new boolean[this.getSortedLoads().size()];
 		for (int i = 0; i < getSortedLoads().size(); i++) {
@@ -137,9 +137,9 @@ public class PairingOptimisationData<P, C> implements ProfitAndLossRecorder {
 	}
 
 	private void setOptionalDischarges() {
-		final Stream<ConstraintInfo<P, C, IDischargeOption>> str = Stream.concat(maxSlotCountConstraint.getAllMaxDischargeGroupCounts().stream(),
+		final Stream<ConstraintInfo<P, C, IDischargeOption>> dischargeGroupConstraintsStream = Stream.concat(maxSlotCountConstraint.getAllMaxDischargeGroupCounts().stream(),
 				maxSlotCountConstraint.getAllMinDischargeGroupCounts().stream());
-		final Set<IDischargeOption> constrainedDischargeOptions = str.flatMap(cInfo -> cInfo.getSlots().stream()).collect(Collectors.toSet());
+		final Set<IDischargeOption> constrainedDischargeOptions = dischargeGroupConstraintsStream.flatMap(cInfo -> cInfo.getSlots().stream()).collect(Collectors.toSet());
 
 		optionalDischarges = new boolean[this.getSortedDischarges().size()];
 		for (int i = 0; i < getSortedDischarges().size(); i++) {
