@@ -415,7 +415,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					setInput(null);
 					return;
 				} else {
-					if (currentModel != null) {
+					// Is the current model part of the current scenario model?
+					if (currentModel != null && ScenarioModelUtil.findScenarioModel(currentModel) == target) {
 						newModel = currentModel;
 					} else {
 						newModel = analyticsModel.getOptionModels().get(0);
