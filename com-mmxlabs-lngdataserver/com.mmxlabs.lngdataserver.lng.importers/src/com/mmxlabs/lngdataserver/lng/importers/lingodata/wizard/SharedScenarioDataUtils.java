@@ -117,6 +117,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.rcp.common.json.EMFDeserializationContext;
 import com.mmxlabs.rcp.common.json.EMFJacksonModule;
 import com.mmxlabs.rcp.common.json.IJSONSerialisationConfigProvider;
@@ -1403,6 +1404,10 @@ public final class SharedScenarioDataUtils {
 
 					try {
 						final OptionAnalysisModel newModel = mapper.readValue(json, OptionAnalysisModel.class);
+						// Ensure newly created objects have new UUID's
+						EMFCopier.resetUUID(newModel);
+						newModel.eAllContents().forEachRemaining(EMFCopier::resetUUID);
+
 						ctx.runDeferredActions();
 						final EditingDomain editingDomain = target.getEditingDomain();
 						appendAndExecute(AddCommand.create(editingDomain, ScenarioModelUtil.getAnalyticsModel(target), AnalyticsPackage.eINSTANCE.getAnalyticsModel_OptionModels(), newModel));
