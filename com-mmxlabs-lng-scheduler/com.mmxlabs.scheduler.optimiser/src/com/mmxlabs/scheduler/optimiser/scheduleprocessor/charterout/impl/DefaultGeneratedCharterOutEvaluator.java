@@ -104,7 +104,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 	@Override
 	public @Nullable List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(final long[] startHeelVolumeRangeInM3, final IVesselAvailability vesselAvailability, final VoyagePlan vp,
-			final IPortTimesRecord portTimesRecord, @Nullable IAnnotatedSolution annotatedSolution) {
+			final IPortTimesRecord portTimesRecord, @Nullable final IAnnotatedSolution annotatedSolution) {
 
 		if (!(vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET //
 				|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
@@ -320,7 +320,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 			if (routeOption == ERouteOption.PANAMA) {
 				// If Panama, make sure we take into account the idle days
-				ECanalEntry canal = distanceProvider.getRouteOptionCanalEntrance(fromPort, ERouteOption.PANAMA);
+				final ECanalEntry canal = distanceProvider.getRouteOptionCanalEntrance(fromPort, ERouteOption.PANAMA);
 				if (canal == ECanalEntry.NorthSide) {
 					travelTime += panamaBookingsProvider.getSouthboundMaxIdleDays(vessel) * 24;
 				} else {
@@ -391,8 +391,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		final VoyageDetails originalBallast = (VoyageDetails) currentSequence[ballastIdx];
 
 		// These will be updated later on
-		HeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(0, Long.MAX_VALUE, VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0), false);
-		HeelOptionSupplier heelOptionSupplier = new HeelOptionSupplier(0, 0, originalBallast.getOptions().getCargoCVValue(), new ConstantHeelPriceCalculator(0));
+		final HeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(0, Long.MAX_VALUE, VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0), false);
+		final HeelOptionSupplier heelOptionSupplier = new HeelOptionSupplier(0, 0, originalBallast.getOptions().getCargoCVValue(), new ConstantHeelPriceCalculator(0));
 
 		// now update port slot
 		final GeneratedCharterOutVesselEventPortSlot charterOutPortSlot = new GeneratedCharterOutVesselEventPortSlot(
@@ -458,6 +458,40 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		newRawSequence.add(((PortDetails) currentSequence[currentSequence.length - 1]).getOptions().copy());
 		final IPortTimesRecord bigPlanPortTimesRecord = createPortTimesRecordForExtendedPlan(portTimesRecord, charterOutTimesRecord);
 
+		
+		if (charterOutOption.getToCharterPort().getSecond() == ERouteOption.PANAMA) {
+
+			final boolean isNorthbound = distanceProvider.getRouteOptionDirection(originalBallast.getOptions().getFromPortSlot().getPort(),
+					ERouteOption.PANAMA) == IDistanceProvider.RouteOptionDirection.NORTHBOUND;
+
+			int idleDays;
+			if (isNorthbound) {
+				idleDays = 24 * panamaBookingsProvider.getNorthboundMaxIdleDays(vessel);
+			} else {
+				idleDays = 24 * panamaBookingsProvider.getSouthboundMaxIdleDays(vessel);
+			}
+			bigPlanPortTimesRecord.setSlotAdditionalPanamaIdleHours(originalBallast.getOptions().getFromPortSlot(), idleDays);
+			// TODO: Assuming there will be no excess idle time with the GCO
+			bigPlanPortTimesRecord.setSlotMaxAvailablePanamaIdleHours(originalBallast.getOptions().getFromPortSlot(), idleDays);
+		} else {
+			// Reset field if route has changed as this was copied from the original record
+			bigPlanPortTimesRecord.setSlotAdditionalPanamaIdleHours(originalBallast.getOptions().getFromPortSlot(), 0);
+			bigPlanPortTimesRecord.setSlotMaxAvailablePanamaIdleHours(originalBallast.getOptions().getFromPortSlot(), 0);
+		}
+		if (charterOutOption.getFromCharterPort().getSecond() == ERouteOption.PANAMA) {
+
+			final boolean isNorthbound = distanceProvider.getRouteOptionDirection(charterOutPortSlot.getPort(), ERouteOption.PANAMA) == IDistanceProvider.RouteOptionDirection.NORTHBOUND;
+			int idleDays;
+			if (isNorthbound) {
+				idleDays = 24 * panamaBookingsProvider.getNorthboundMaxIdleDays(vessel);
+			} else {
+				idleDays = 24 * panamaBookingsProvider.getSouthboundMaxIdleDays(vessel);
+			}
+			bigPlanPortTimesRecord.setSlotAdditionalPanamaIdleHours(charterOutPortSlot, idleDays);
+			// TODO: Assuming there will be no excess idle time with the GCO
+			bigPlanPortTimesRecord.setSlotMaxAvailablePanamaIdleHours(charterOutPortSlot, idleDays);
+		}
+		
 		// store data in extended sequence data structure
 		setExtendedSequence(newRawSequence, bigSequence, bigPlanPortTimesRecord, dischargeToCharterPortVoyageOptions, generatedCharterPortOptions, charterToReturnPortVoyageOptions);
 
@@ -527,7 +561,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		secondPortsTimeRecord.setSlotDuration(existing.getSlots().get(existing.getSlots().size() - 1), existing.getSlotDuration(existing.getSlots().get(existing.getSlots().size() - 1)));
 		secondPortsTimeRecord.setSlotAdditionalPanamaIdleHours(existing.getSlots().get(existing.getSlots().size() - 1), existing.getSlotAdditionaPanamaIdleHours(existing.getSlots().get(existing.getSlots().size() - 1)));
 		secondPortsTimeRecord.setSlotMaxAvailablePanamaIdleHours(existing.getSlots().get(existing.getSlots().size() - 1), existing.getSlotMaxAdditionaPanamaIdleHours(existing.getSlots().get(existing.getSlots().size() - 1)));
-		IPortSlot returnSlot = existing.getReturnSlot();
+		final IPortSlot returnSlot = existing.getReturnSlot();
 		if (returnSlot != null) {
 			secondPortsTimeRecord.setReturnSlotTime(returnSlot, existing.getSlotTime(returnSlot));
 		}
@@ -708,8 +742,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			}
 		}
 		assert heelPriceCalculator != null;
-		HeelOptionConsumer heelConsumer = new HeelOptionConsumer(heelVolume, heelVolume, heelVolume > 0 ? VesselTankState.MUST_BE_COLD : VesselTankState.MUST_BE_WARM, heelPriceCalculator, false);
-		HeelOptionSupplier heelSupplier = new HeelOptionSupplier(heelVolume, heelVolume, cv, heelPriceCalculator);
+		final HeelOptionConsumer heelConsumer = new HeelOptionConsumer(heelVolume, heelVolume, heelVolume > 0 ? VesselTankState.MUST_BE_COLD : VesselTankState.MUST_BE_WARM, heelPriceCalculator, false);
+		final HeelOptionSupplier heelSupplier = new HeelOptionSupplier(heelVolume, heelVolume, cv, heelPriceCalculator);
 		generatedCharterOutVesselEvent.setHeelConsumer(heelConsumer);
 		generatedCharterOutVesselEvent.setHeelSupplier(heelSupplier);
 	}
