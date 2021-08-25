@@ -261,6 +261,38 @@
                      class="PeriodDistribution">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.adp.validation.IntervalDistributionConstraint"
+                  id="com.mmxlabs.models.lng.adp.validation.IntervalDistributionConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="IntervalDistributionConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="CargoIntervalDistributionModel">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.adp.validation.DistributionModelConstraint"
+                  id="com.mmxlabs.models.lng.adp.validation.DistributionModelConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="DistributionModelConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="DistributionModel">
+               </target>
+            </constraint>
                 
         </constraints>
       </constraintProvider>
