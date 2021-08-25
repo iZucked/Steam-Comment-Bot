@@ -204,6 +204,12 @@
          id="com.mmxlabs.models.lng.adp.presentation.PeriodDistributionProfileConstraintDisplayCompositeFactory"
          inheritable="true">
    </displayCompositeFactory>
+   <displayCompositeFactory
+         eClass="com.mmxlabs.models.lng.adp.CargoIntervalDistributionModel"
+         factory="com.mmxlabs.models.lng.adp.presentation.composites.CargoIntervalDistributionModelTopLevelCompositeFactory"
+         id="com.mmxlabs.models.lng.adp.presentation.composites.CargoIntervalDistributionModelTopLevelCompositeFactory"
+         inheritable="true">
+   </displayCompositeFactory>
 </extension>
 <extension
       point="com.mmxlabs.models.ui.editorfactories">

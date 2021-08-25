@@ -41,11 +41,11 @@ public class PreDefinedDistributionModelComponentHelper extends BaseComponentHel
 	/**
 	 * Construct a new instance of this helper
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	public PreDefinedDistributionModelComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(ADPPackage.Literals.DISTRIBUTION_MODEL));
+//		superClassesHelpers.addAll(registry.getComponentHelpers(ADPPackage.Literals.DISTRIBUTION_MODEL));
 	}
 	
 	/**
