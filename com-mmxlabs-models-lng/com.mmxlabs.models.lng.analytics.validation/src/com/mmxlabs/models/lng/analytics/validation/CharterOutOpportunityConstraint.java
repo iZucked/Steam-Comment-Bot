@@ -26,6 +26,13 @@ public class CharterOutOpportunityConstraint extends AbstractModelMultiConstrain
 		if (target instanceof CharterOutOpportunity) {
 			final CharterOutOpportunity charterOutOpportunity = (CharterOutOpportunity) target;
 
+			if (!charterOutOpportunity.eIsSet(AnalyticsPackage.Literals.CHARTER_OUT_OPPORTUNITY__HIRE_COST)) {
+				final String message = "Hire cost must be non-zero";
+				DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+
+				dsd.addEObjectAndFeature(charterOutOpportunity, AnalyticsPackage.Literals.CHARTER_OUT_OPPORTUNITY__HIRE_COST);
+				failures.add(dsd);
+			}
 			if (charterOutOpportunity.getDate() == null) {
 				final String message = "No date specified.";
 				DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
@@ -38,6 +45,13 @@ public class CharterOutOpportunityConstraint extends AbstractModelMultiConstrain
 				DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
 				dsd.addEObjectAndFeature(charterOutOpportunity, AnalyticsPackage.Literals.CHARTER_OUT_OPPORTUNITY__PORT);
+				failures.add(dsd);
+			}
+			if (!charterOutOpportunity.eIsSet(AnalyticsPackage.Literals.CHARTER_OUT_OPPORTUNITY__DURATION)) {
+				final String message = "Duration must be non-zero";
+				DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+
+				dsd.addEObjectAndFeature(charterOutOpportunity, AnalyticsPackage.Literals.CHARTER_OUT_OPPORTUNITY__DURATION);
 				failures.add(dsd);
 			}
 		}
