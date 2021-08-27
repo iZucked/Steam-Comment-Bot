@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.mmxlabs.optimiser</groupId>
 		<artifactId>optimiser-parent</artifactId>
-		<version>4.12.43-SNAPSHOT</version>
+		<version>4.12.44-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.optimiser.optimiser-lso.tests</artifactId>
