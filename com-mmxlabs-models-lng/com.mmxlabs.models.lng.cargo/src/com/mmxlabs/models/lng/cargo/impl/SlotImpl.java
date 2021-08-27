@@ -13,6 +13,7 @@ import java.util.Collections;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -2815,10 +2816,10 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public EList<Contract> getSlotOrDelegateContractRestrictions() {
-		if (getContract() == null || isRestrictedContractsOverride()) {
+		if (isRestrictedContractsOverride()) {
 			return getRestrictedContracts();
 		}
-		return getContract().getRestrictedContracts();
+		return (EList<Contract>) getUnsetValueOrDelegate(CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS).getValue(this);
 	}
 
 	/**
@@ -2828,10 +2829,10 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public EList<APortSet<Port>> getSlotOrDelegatePortRestrictions() {
-		if (getContract() == null || isRestrictedPortsOverride()) {
+		if (isRestrictedPortsOverride()) {
 			return getRestrictedPorts();
 		}
-		return getContract().getRestrictedPorts();
+		return (EList<APortSet<Port>>) getUnsetValueOrDelegate(CargoPackage.Literals.SLOT__RESTRICTED_PORTS).getValue(this);
 	}
 
 	/**
@@ -2842,10 +2843,10 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	@SuppressWarnings("unchecked")
 	@Override
 	public EList<AVesselSet<Vessel>> getSlotOrDelegateVesselRestrictions() {
-		if (getContract() == null || isRestrictedVesselsOverride()) {
+		if (isRestrictedVesselsOverride()) {
 			return getRestrictedVessels();
 		}
-		return getContract().getRestrictedVessels();
+		return (EList<AVesselSet<Vessel>>) getUnsetValueOrDelegate(CargoPackage.Literals.SLOT__RESTRICTED_VESSELS).getValue(this);
 	}
 
 	/**
@@ -3663,7 +3664,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				
 				@Override
 				public Object getValue(final EObject object) {
-					Object result = Collections.EMPTY_LIST;
+					Object result = ECollections.emptyEList();
 					final Contract contract = getContract();
 					if (!isRestrictedVesselsOverride() && contract != null) {
 						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS)) {
