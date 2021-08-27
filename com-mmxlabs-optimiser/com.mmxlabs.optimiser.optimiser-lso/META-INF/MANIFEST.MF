@@ -5,7 +5,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-SymbolicName: com.mmxlabs.optimiser.optimiser-lso
 Automatic-Module-Name: com.mmxlabs.optimiser.optimiser-lso
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 4.12.43.qualifier
+Bundle-Version: 4.12.43.RELEASE
 Export-Package: com.mmxlabs.optimiser.lso,
  com.mmxlabs.optimiser.lso.impl,
  com.mmxlabs.optimiser.lso.multiobjective.impl,

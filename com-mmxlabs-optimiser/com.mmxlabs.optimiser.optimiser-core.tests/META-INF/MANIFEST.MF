@@ -5,7 +5,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-SymbolicName: com.mmxlabs.optimiser.optimiser-core.tests
 Automatic-Module-Name: com.mmxlabs.optimiser.optimiser-core.tests
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 4.12.43.qualifier
+Bundle-Version: 4.12.43.RELEASE
 Fragment-Host: com.mmxlabs.optimiser.optimiser-core
 Require-Bundle: org.mockito.mockito-core;bundle-version="1.9.5",
  org.slf4j.api;bundle-version="1.6.4",
