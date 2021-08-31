@@ -308,7 +308,7 @@ public class SpotLoadSlotImpl extends LoadSlotImpl implements SpotLoadSlot {
 				}
 
 				public Object getValue(final EObject object) {
-					if (!isRestrictedVesselsOverride()) {
+					if (!isRestrictedContractsOverride()) {
 						final SpotMarket market = getMarket();
 						if (market != null && market.eIsSet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_CONTRACTS)) {
 							return market.eGet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_CONTRACTS);
@@ -324,7 +324,7 @@ public class SpotLoadSlotImpl extends LoadSlotImpl implements SpotLoadSlot {
 				}
 
 				public Object getValue(final EObject object) {
-					if (!isRestrictedVesselsOverride()) {
+					if (!isRestrictedPortsOverride()) {
 						final SpotMarket market = getMarket();
 						if (market != null && market.eIsSet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_PORTS)) {
 							return market.eGet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_PORTS);
