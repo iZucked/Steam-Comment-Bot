@@ -867,11 +867,8 @@ public class SchedulerView extends ViewPart implements
 	}
 
 	private void fillLocalPullDown(final IMenuManager manager) {
-		manager.add(zoomInAction);
-		manager.add(zoomOutAction);
-		manager.add(saveFullImageAction);
+		// manager.add(saveFullImageAction);
 		manager.add(toggleLegend);
-		manager.add(toggleShowDaysOnEvents);
 	}
 
 	private void fillContextMenu(final IMenuManager manager) {
@@ -911,13 +908,6 @@ public class SchedulerView extends ViewPart implements
 			viewer.getGanttChart().getGanttComposite().redraw();
 		});
 		toggleLegend.setChecked(viewer.getGanttChart().getGanttComposite().isShowLegend());
-
-		toggleShowDaysOnEvents = new RunnableAction("Show days on events", SWT.CHECK, () -> {
-			final boolean b = viewer.getGanttChart().getGanttComposite().isShowingDaysOnEvents();
-			viewer.getGanttChart().getGanttComposite().setShowDaysOnEvents(!b);
-			viewer.getGanttChart().getGanttComposite().redraw();
-		});
-		toggleShowDaysOnEvents.setChecked(viewer.getGanttChart().getGanttComposite().isShowingDaysOnEvents());
 
 		sortModeAction = new SortModeAction(this, viewer, (EMFScheduleLabelProvider) viewer.getLabelProvider(), viewerComparator);
 
@@ -1228,5 +1218,4 @@ public class SchedulerView extends ViewPart implements
 	};
 
 	private RunnableAction toggleLegend;
-	private RunnableAction toggleShowDaysOnEvents;
 }
