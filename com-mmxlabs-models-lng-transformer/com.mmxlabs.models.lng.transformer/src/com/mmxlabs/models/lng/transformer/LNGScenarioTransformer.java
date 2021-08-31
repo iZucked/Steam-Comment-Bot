@@ -3206,14 +3206,11 @@ public class LNGScenarioTransformer {
 
 			final ZonedDateTime endBy = eVesselAvailability.isSetEndBy() ? eVesselAvailability.getEndByAsDateTime() : null;
 			ZonedDateTime endAfter = eVesselAvailability.isSetEndAfter() ? eVesselAvailability.getEndAfterAsDateTime() : null;
-			boolean forceHireCostOnlyEndRule = eVesselAvailability.isForceHireCostOnlyEndRule();
 
 			if (rootObject.isSetSchedulingEndDate()) {
 				final ZonedDateTime schedulingEndDate = rootObject.getSchedulingEndDate().atStartOfDay(ZoneId.of("Etc/UTC"));
 				if (endAfter != null && endAfter.isAfter(schedulingEndDate)) {
 					endAfter = schedulingEndDate;
-					forceHireCostOnlyEndRule = true;
-
 				}
 			}
 
@@ -3223,7 +3220,7 @@ public class LNGScenarioTransformer {
 			final Set<Port> endPorts = SetUtils.getObjects(eVesselAvailability.getEndAt());
 			// Assume validation ensures at least one valid port will remain if initial set has ports present.
 			endPorts.removeAll(SetUtils.getObjects(eVessel.getVesselOrDelegateInaccessiblePorts()));
-			final IEndRequirement endRequirement = createEndRequirement(builder, portAssociation, endAfter, endBy, endPorts, heelConsumer, forceHireCostOnlyEndRule);
+			final IEndRequirement endRequirement = createEndRequirement(builder, portAssociation, endAfter, endBy, endPorts, heelConsumer);
 
 			final int minDuration = eVesselAvailability.getCharterOrDelegateMinDuration();
 			if (minDuration != 0) {
@@ -3443,7 +3440,7 @@ public class LNGScenarioTransformer {
 						} else {
 							portSet = spotCharterInMarket.getEndRequirement().getLocations();
 						}
-						end = builder.createEndRequirement(portSet, tw.getExclusiveEnd() != Integer.MAX_VALUE, tw, heelOptions, tw.getExclusiveEnd() == Integer.MAX_VALUE);
+						end = builder.createEndRequirement(portSet, tw.getExclusiveEnd() != Integer.MAX_VALUE, tw, heelOptions);
 					} else if (spotCharterInMarket.getEndRequirement() != null) {
 						end = spotCharterInMarket.getEndRequirement();
 					} else {
@@ -3601,9 +3598,9 @@ public class LNGScenarioTransformer {
 		}
 		// Is the availability open ended or do we force the end rule?
 		if (ports == null || ports.isEmpty()) {
-			return builder.createEndRequirement(null, false, new TimeWindow(0, Integer.MAX_VALUE), heelConsumer, false);
+			return builder.createEndRequirement(null, false, new TimeWindow(0, Integer.MAX_VALUE), heelConsumer);
 		} else {
-			return builder.createEndRequirement(portSet, false, new TimeWindow(0, Integer.MAX_VALUE), heelConsumer, false);
+			return builder.createEndRequirement(portSet, false, new TimeWindow(0, Integer.MAX_VALUE), heelConsumer);
 		}
 	}
 
@@ -3618,7 +3615,7 @@ public class LNGScenarioTransformer {
 	 */
 	@NonNull
 	private IEndRequirement createEndRequirement(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @Nullable final ZonedDateTime from,
-			@Nullable final ZonedDateTime to, @Nullable final Set<Port> ports, final IHeelOptionConsumer heelConsumer, final boolean forceHireCostOnlyEndRule) {
+			@Nullable final ZonedDateTime to, @Nullable final Set<Port> ports, final IHeelOptionConsumer heelConsumer) {
 		final ITimeWindow window;
 
 		boolean isOpenEnded = false;
@@ -3649,12 +3646,11 @@ public class LNGScenarioTransformer {
 		for (final Port p : ports) {
 			portSet.add(portAssociation.lookup(p));
 		}
-		// Is the availability open ended or do we force the end rule?
-		final boolean useHireCostOnlyEndRule = forceHireCostOnlyEndRule || isOpenEnded;
+		
 		if (ports.isEmpty()) {
-			return builder.createEndRequirement(null, !isOpenEnded, window, heelConsumer, useHireCostOnlyEndRule);
+			return builder.createEndRequirement(null, !isOpenEnded, window, heelConsumer);
 		} else {
-			return builder.createEndRequirement(portSet, !isOpenEnded, window, heelConsumer, useHireCostOnlyEndRule);
+			return builder.createEndRequirement(portSet, !isOpenEnded, window, heelConsumer);
 		}
 
 	}

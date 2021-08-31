@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
@@ -1261,7 +1262,9 @@ public class ChangeSetTransformerUtilTest {
 		Mockito.when(visit.getSequence()).thenReturn(sequence);
 
 		Mockito.when(visit.getVesselEvent()).thenReturn(event);
-
+		BasicEList<Event> l = new BasicEList<Event>();
+		l.add(visit);
+		Mockito.when(visit.getEvents()).thenReturn(l);
 		Mockito.when(visit.eClass()).thenReturn(CargoPackage.Literals.DRY_DOCK_EVENT);
 
 		return visit;
@@ -1272,7 +1275,9 @@ public class ChangeSetTransformerUtilTest {
 		final StartEvent startEvent = Mockito.mock(StartEvent.class);
 		Mockito.when(startEvent.name()).thenReturn(name);
 		Mockito.when(startEvent.getSequence()).thenReturn(sequence);
-
+		BasicEList<Event> l = new BasicEList<Event>();
+		l.add(startEvent);
+		Mockito.when(startEvent.getEvents()).thenReturn(l);
 		return startEvent;
 	}
 
@@ -1280,6 +1285,9 @@ public class ChangeSetTransformerUtilTest {
 
 		final EndEvent endEvent = Mockito.mock(EndEvent.class);
 		Mockito.when(endEvent.name()).thenReturn(name);
+		BasicEList<Event> l = new BasicEList<Event>();
+		l.add(endEvent);
+		Mockito.when(endEvent.getEvents()).thenReturn(l);
 		Mockito.when(endEvent.getSequence()).thenReturn(sequence);
 
 		return endEvent;

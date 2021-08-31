@@ -12,13 +12,16 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.junit5.SWTBotJunit5Extension;
 import org.eclipse.swtbot.swt.finder.utils.SWTUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 
+@ExtendWith(SWTBotJunit5Extension.class) 
 public class CopyTreeToClipboardActionTest {
 
 	@Disabled("Almost always fails on build server, probably timing issue")
@@ -62,6 +65,13 @@ public class CopyTreeToClipboardActionTest {
 				shell.setSize(200, 200);
 				shell.open();
 
+				
+				try {
+					Thread.sleep(5_000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				// Create and run the copy action
 				final CopyTreeToClipboardAction a = new CopyTreeToClipboardAction(tree);
 				a.run();

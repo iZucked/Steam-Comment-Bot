@@ -351,7 +351,6 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 			// No end date flex, fully costed
 			VesselAvailability period_vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
-			Assertions.assertTrue(period_vesselAvailability.isForceHireCostOnlyEndRule());
 			Assertions.assertEquals(horizon, period_vesselAvailability.getEndAfter().plusHours(1).toLocalDate());
 			Assertions.assertEquals(LocalDate.of(2016, 7, 1), period_vesselAvailability.getEndBy().plusHours(1).toLocalDate());
 
@@ -436,7 +435,6 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 			// No end date flex, fully costed
 			VesselAvailability period_vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
-			Assertions.assertFalse(period_vesselAvailability.isForceHireCostOnlyEndRule());
 			Assertions.assertEquals(LocalDateTime.of(2016, 1, 5, 0, 0, 0), period_vesselAvailability.getEndAfter());
 			Assertions.assertEquals(LocalDateTime.of(2016, 1, 5, 0, 0, 0), period_vesselAvailability.getEndBy());
 
@@ -522,7 +520,6 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 			// No end date flex, fully costed
 			VesselAvailability period_vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
-			Assertions.assertFalse(period_vesselAvailability.isForceHireCostOnlyEndRule());
 			Assertions.assertEquals(LocalDateTime.of(2016, 1, 5, 0, 0, 0), period_vesselAvailability.getEndAfter());
 			Assertions.assertEquals(LocalDateTime.of(2016, 1, 5, 0, 0, 0), period_vesselAvailability.getEndBy());
 
@@ -609,7 +606,6 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 			// No end date flex, fully costed
 			VesselAvailability period_vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
-			Assertions.assertFalse(period_vesselAvailability.isForceHireCostOnlyEndRule());
 			Assertions.assertEquals(LocalDateTime.of(2016, 4, 16, 0, 0, 0), period_vesselAvailability.getEndAfter());
 			Assertions.assertEquals(LocalDateTime.of(2016, 5, 16, 0, 0, 0), period_vesselAvailability.getEndBy());
 
@@ -699,7 +695,6 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 			// No end date flex, fully costed
 			VesselAvailability period_vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
-			Assertions.assertTrue(period_vesselAvailability.isForceHireCostOnlyEndRule());
 			Assertions.assertEquals(LocalDateTime.of(2016, 1, 1, 0, 0, 0), period_vesselAvailability.getEndAfter());
 			Assertions.assertEquals(LocalDateTime.of(2016, 5, 16, 0, 0, 0), period_vesselAvailability.getEndBy());
 
@@ -776,7 +771,6 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 
 			// No end date flex, fully costed
 			VesselAvailability period_vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
-			Assertions.assertTrue(period_vesselAvailability.isForceHireCostOnlyEndRule());
 			Assertions.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0, 0), period_vesselAvailability.getEndAfter());
 			Assertions.assertEquals(LocalDateTime.of(2021, 9, 1, 0, 0, 0), period_vesselAvailability.getEndBy());
 

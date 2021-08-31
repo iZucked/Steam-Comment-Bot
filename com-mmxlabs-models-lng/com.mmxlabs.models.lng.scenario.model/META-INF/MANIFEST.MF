@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.lng.scenario.model;singleton:=true
 Automatic-Module-Name: com.mmxlabs.models.lng.scenario.model
-Bundle-Version: 4.12.40.qualifier
+Bundle-Version: 4.12.44.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
@@ -13,20 +13,20 @@ Export-Package: com.mmxlabs.models.lng.scenario.model,
  com.mmxlabs.models.lng.scenario.model.util
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.eclipse.emf.ecore;bundle-version="2.7.0";visibility:=reexport,
- com.mmxlabs.models.lng.actuals;bundle-version="[4.12.40,5.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.actuals;bundle-version="[4.12.44,5.0.0)";visibility:=reexport,
  com.mmxlabs.models.lng.adp;visibility:=reexport,
- com.mmxlabs.models.lng.types;bundle-version="[4.12.40,5.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.types;bundle-version="[4.12.44,5.0.0)";visibility:=reexport,
  com.mmxlabs.models.mmxcore;visibility:=reexport,
- com.mmxlabs.models.lng.analytics;bundle-version="[4.12.40,5.0.0)";visibility:=reexport,
- com.mmxlabs.models.lng.cargo;bundle-version="[4.12.40,5.0.0)";visibility:=reexport,
- com.mmxlabs.models.lng.commercial;bundle-version="[4.12.40,5.0.0)";visibility:=reexport,
- com.mmxlabs.models.lng.fleet;bundle-version="[4.12.40,5.0.0)";visibility:=reexport,
- com.mmxlabs.models.lng.parameters;bundle-version="[4.12.40,5.0.0)";visibility:=reexport,
- com.mmxlabs.models.lng.pricing;bundle-version="[4.12.40,5.0.0)";visibility:=reexport,
- com.mmxlabs.models.lng.port;bundle-version="[4.12.40,5.0.0)";visibility:=reexport,
- com.mmxlabs.models.lng.schedule;bundle-version="[4.12.40,5.0.0)";visibility:=reexport,
- com.mmxlabs.models.lng.spotmarkets;bundle-version="[4.12.40,5.0.0)";visibility:=reexport,
- com.mmxlabs.models.lng.nominations;bundle-version="[4.12.40,5.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.analytics;bundle-version="[4.12.44,5.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.cargo;bundle-version="[4.12.44,5.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.commercial;bundle-version="[4.12.44,5.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.fleet;bundle-version="[4.12.44,5.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.parameters;bundle-version="[4.12.44,5.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.pricing;bundle-version="[4.12.44,5.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.port;bundle-version="[4.12.44,5.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.schedule;bundle-version="[4.12.44,5.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.spotmarkets;bundle-version="[4.12.44,5.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.nominations;bundle-version="[4.12.44,5.0.0)";visibility:=reexport,
  com.mmxlabs.models.datetime;bundle-version="[2.1.0,3.0.0)";visibility:=reexport,
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.common.common-util,

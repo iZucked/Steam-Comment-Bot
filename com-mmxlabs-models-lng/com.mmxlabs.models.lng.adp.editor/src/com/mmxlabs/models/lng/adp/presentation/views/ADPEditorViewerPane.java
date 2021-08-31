@@ -459,7 +459,7 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 		final MMXRootObject rootObject = scenarioDataProvider.getTypedScenario(MMXRootObject.class);
 		final IStatus status = ServiceHelper.withOptionalService(IValidationService.class, helper -> {
 			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(scenarioDataProvider, false, false);
-			return helper.runValidation(validator, extraContext, rootObject);
+			return helper.runValidation(validator, extraContext, rootObject, null);
 		});
 
 		if (status == null) {

@@ -135,6 +135,7 @@ public class ADPModelUtil {
 		final BundleContext bundleContext = bundle.getBundleContext();
 		Collection<ServiceReference<IProfileGenerator>> serviceReferences;
 		try {
+			// TODO: Use ServiceHelper class
 			serviceReferences = bundleContext.getServiceReferences(IProfileGenerator.class, null);
 
 			final List<IProfileGenerator> generators = new LinkedList<>();
@@ -144,26 +145,22 @@ public class ADPModelUtil {
 			}
 			try {
 				if (profile.isEnabled()) {
-					List<Slot> slotsToRemove = new LinkedList<>();
-					List<Cargo> cargoesToRemove = new LinkedList<>();
+					List<EObject> objectsToRemove = new LinkedList<>();
 					for (LoadSlot slot : cargoModel.getLoadSlots()) {
 						if (slot.getContract() == profile.getContract()) {
-							slotsToRemove.add(slot);
+							objectsToRemove.add(slot);
 							if (slot.getCargo() != null) {
-								cargoesToRemove.add(slot.getCargo());
-								for (Slot s : slot.getCargo().getSlots()) {
+								objectsToRemove.add(slot.getCargo());
+								for (Slot<?> s : slot.getCargo().getSlots()) {
 									if (s instanceof SpotSlot) {
-										slotsToRemove.add(s);
+										objectsToRemove.add(s);
 									}
 								}
 							}
 						}
 					}
-					if (!slotsToRemove.isEmpty()) {
-						cmd.append(DeleteCommand.create(editingDomain, slotsToRemove));
-					}
-					if (!cargoesToRemove.isEmpty()) {
-						cmd.append(DeleteCommand.create(editingDomain, cargoesToRemove));
+					if (!objectsToRemove.isEmpty()) {
+						cmd.append(DeleteCommand.create(editingDomain, objectsToRemove));
 					}
 
 					for (final SubContractProfile<LoadSlot, PurchaseContract> subProfile : profile.getSubProfiles()) {
@@ -274,26 +271,23 @@ public class ADPModelUtil {
 			}
 			try {
 				if (profile.isEnabled()) {
-					List<Slot> slotsToRemove = new LinkedList<>();
-					List<Cargo> cargoesToRemove = new LinkedList<>();
+					List<EObject> objectsToRemove = new LinkedList<>();
+
 					for (DischargeSlot slot : cargoModel.getDischargeSlots()) {
 						if (slot.getContract() == profile.getContract()) {
-							slotsToRemove.add(slot);
+							objectsToRemove.add(slot);
 							if (slot.getCargo() != null) {
-								cargoesToRemove.add(slot.getCargo());
+								objectsToRemove.add(slot.getCargo());
 								for (Slot s : slot.getCargo().getSlots()) {
 									if (s instanceof SpotSlot) {
-										slotsToRemove.add(s);
+										objectsToRemove.add(s);
 									}
 								}
 							}
 						}
 					}
-					if (!slotsToRemove.isEmpty()) {
-						cmd.append(DeleteCommand.create(editingDomain, slotsToRemove));
-					}
-					if (!cargoesToRemove.isEmpty()) {
-						cmd.append(DeleteCommand.create(editingDomain, cargoesToRemove));
+					if (!objectsToRemove.isEmpty()) {
+						cmd.append(DeleteCommand.create(editingDomain, objectsToRemove));
 					}
 					for (final SubContractProfile<DischargeSlot, SalesContract> subProfile : profile.getSubProfiles()) {
 						for (final IProfileGenerator g : generators) {

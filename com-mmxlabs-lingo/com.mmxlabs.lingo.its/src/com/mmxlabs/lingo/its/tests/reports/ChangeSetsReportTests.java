@@ -18,8 +18,6 @@ import com.mmxlabs.models.lng.transformer.its.RequireFeature;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 
 @ExtendWith(ShiroRunner.class)
-// NOTE: This does not work - it is applied too late in the application life-cycle. Instead we need to enable it in the ITS feature.
-@RequireFeature(KnownFeatures.FEATURE_MODULE_DIFF_TOOLS)
 public class ChangeSetsReportTests extends AbstractOptimisationResultTester {
 
 	@Test

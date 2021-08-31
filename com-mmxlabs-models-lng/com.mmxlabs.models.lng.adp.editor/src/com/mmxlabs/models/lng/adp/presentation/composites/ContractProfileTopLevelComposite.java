@@ -52,6 +52,8 @@ import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
+import com.mmxlabs.models.ui.impl.FeatureFilteringDetailDisplayComposite;
+import com.mmxlabs.models.ui.impl.RowGroupDisplayCompositeLayoutProviderBuilder;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 
 /**
@@ -64,7 +66,7 @@ public class ContractProfileTopLevelComposite extends DefaultTopLevelComposite {
 	/**
 	 * {@link Composite} to contain the sub editors
 	 */
-	private Composite middle;
+	private Group middle;
 	private EClass eClass;
 	private List<IProfileConstraintFactory> profileConstraintFactories;
 	private Collection<ServiceReference<IProfileConstraintFactory>> profileConstraintFactoriesServiceReferences;
@@ -97,7 +99,17 @@ public class ContractProfileTopLevelComposite extends DefaultTopLevelComposite {
 		g.setLayout(new GridLayout(noCols, false));
 		g.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		topLevel = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(eClass).createSublevelComposite(g, eClass, dialogContext, toolkit);
+		topLevel = new FeatureFilteringDetailDisplayComposite(g, SWT.NONE, toolkit);
+		((FeatureFilteringDetailDisplayComposite) topLevel).excludeFeature(ADPPackage.Literals.CONTRACT_PROFILE__CONTRACT);
+		((FeatureFilteringDetailDisplayComposite) topLevel).excludeFeature(ADPPackage.Literals.CONTRACT_PROFILE__CONTRACT_CODE);
+		((FeatureFilteringDetailDisplayComposite) topLevel).setLayoutProvider(new RowGroupDisplayCompositeLayoutProviderBuilder() //
+				.withRow() //
+				.withLabel("Contract volume") //
+				.withFeature(ADPPackage.Literals.CONTRACT_PROFILE__TOTAL_VOLUME, 80) //
+				.withFeature(ADPPackage.Literals.CONTRACT_PROFILE__VOLUME_UNIT) //
+				.makeRow() //
+				.make() //
+		);
 
 		topLevel.setCommandHandler(commandHandler);
 		topLevel.setEditorWrapper(editorWrapper);
@@ -177,39 +189,19 @@ public class ContractProfileTopLevelComposite extends DefaultTopLevelComposite {
 
 		{
 			// Initialise middle composite
-			middle = toolkit.createComposite(this);
-
-			final int numChildren = createDefaultChildCompositeSection(dialogContext, root, object, range, dbc, eClass, middle);
+			middle = new Group(this, SWT.NONE);
+			middle.setText("Generation parameters");
+			middle.setToolTipText("Parameters used when slots are generated. Subsequent changes will not apply to existing slots.");
+			toolkit.adapt(middle);
+			final int numChildren = 1;//
+			createDefaultChildCompositeSection(dialogContext, root, object, range, dbc, eClass, middle);
 
 			boolean displayAddButtons = false;
 
 			// We know there are n slots, so n columns
 			middle.setLayout(new GridLayout(numChildren + (displayAddButtons ? 2 : 0), false));
-			middle.setLayoutData(new GridData(GridData.FILL_BOTH));
-			if (displayAddButtons) { // Create a toolbar for remove buttons
-				final DetailToolbarManager addButtonManager = new DetailToolbarManager(middle, SWT.RIGHT);
-				toolkit.adapt(addButtonManager.getToolbarManager().getControl());
-				final Action action = new Action("New volume allocation") {
-					@Override
-					public void run() {
-
-						final SubContractProfile<?, ?> p2 = ADPFactory.eINSTANCE.createSubContractProfile();
-						final Command remove = AddCommand.create(dialogContext.getScenarioEditingLocation().getEditingDomain(), object, ADPPackage.Literals.CONTRACT_PROFILE__SUB_PROFILES, p2);
-						commandHandler.handleCommand(remove, object, ADPPackage.Literals.CONTRACT_PROFILE__SUB_PROFILES);
-						// Object tree has changed, request a relayout
-						dialogContext.getDialogController().rebuild(true);
-
-					}
-
-				};
-				action.setHoverImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
-				action.setImageDescriptor(image_grey_add);
-
-				addButtonManager.getToolbarManager().add(action);
-				addButtonManager.getToolbarManager().update(true);
-
-			}
-
+			// middle.setLayoutData(new GridData(GridData.FILL_BOTH));
+			middle.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 		}
 		// Overrides default layout factory so we get a single column rather than multiple columns and one row
 		this.setLayout(new GridLayout(1, false));

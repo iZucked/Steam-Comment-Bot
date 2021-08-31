@@ -91,4 +91,6 @@ public interface IExtraValidationContext {
 	 * @return
 	 */
 	boolean isRelaxedChecking();
+
+	boolean isFullModelValidation();
 }

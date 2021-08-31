@@ -30,8 +30,6 @@ import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.parser.series.SeriesParserData;
-import com.mmxlabs.license.features.KnownFeatures;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IEvaluationContext;
@@ -93,9 +91,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentPara
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.DefaultEndEventScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.GeneralTestUtils;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.IEndEventScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
@@ -109,7 +105,6 @@ import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModu
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.maintenance.IMaintenanceEvaluator;
-import com.mmxlabs.scheduler.optimiser.scheduleprocessor.maintenance.impl.MaintenanceEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduling.IArrivalTimeScheduler;
 import com.mmxlabs.scheduler.optimiser.shared.SharedDataModule;
 import com.mmxlabs.scheduler.optimiser.shared.SharedPortDistanceDataBuilder;
@@ -211,7 +206,7 @@ public class TestCalculations {
 			final IStartRequirement startRequirement = builder.createStartRequirement(port1, true, TimeWindowMaker.createInclusiveInclusive(0, 0), null);
 
 			final IHeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0), false);
-			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), true, TimeWindowMaker.createInclusiveInclusive(75, 75), heelOptionConsumer, false);
+			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), true, TimeWindowMaker.createInclusiveInclusive(75, 75), heelOptionConsumer);
 
 			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, null,
 					new ConstantValueLongCurve(0), false);
@@ -555,8 +550,7 @@ public class TestCalculations {
 			final IStartRequirement startRequirement = builder.createStartRequirement(port1, true, TimeWindowMaker.createInclusiveInclusive(0, 0, 0, false), null);
 
 			final IHeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0), false);
-			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), true, TimeWindowMaker.createInclusiveInclusive(75, 75, 0, false), heelOptionConsumer,
-					false);
+			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), true, TimeWindowMaker.createInclusiveInclusive(75, 75, 0, false), heelOptionConsumer);
 
 			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, null,
 					new ConstantValueLongCurve(0), false);
@@ -910,7 +904,7 @@ public class TestCalculations {
 			final IStartRequirement startRequirement = builder.createStartRequirement(port1, true, TimeWindowMaker.createInclusiveInclusive(0, 0), null);
 			final IHeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0), false);
 
-			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), true, TimeWindowMaker.createInclusiveInclusive(75, 75), heelOptionConsumer, false);
+			final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), true, TimeWindowMaker.createInclusiveInclusive(75, 75), heelOptionConsumer);
 
 			final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, null,
 					new ConstantValueLongCurve(0), isOptional);
@@ -1250,8 +1244,6 @@ public class TestCalculations {
 
 				bind(IArrivalTimeScheduler.class).toInstance(Mockito.mock(IArrivalTimeScheduler.class));
 
-				bind(IEndEventScheduler.class).to(DefaultEndEventScheduler.class);
-
 				bind(IVesselBaseFuelCalculator.class).to(VesselBaseFuelCalculator.class);
 				final VesselBaseFuelCalculator baseFuelCalculator = Mockito.mock(VesselBaseFuelCalculator.class);
 
@@ -1264,7 +1256,6 @@ public class TestCalculations {
 				bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VoyagePlanEvaluatorCache)).toInstance(CacheMode.Off);
 				bind(boolean.class).annotatedWith(Names.named("schedule-purges")).toInstance(Boolean.TRUE);
 				bind(boolean.class).annotatedWith(Names.named("hint-lngtransformer-disable-caches")).toInstance(Boolean.TRUE);
-				bind(boolean.class).annotatedWith(Names.named(IEndEventScheduler.ENABLE_HIRE_COST_ONLY_END_RULE)).toInstance(Boolean.TRUE);
 				bind(int.class).annotatedWith(Names.named(SchedulerConstants.CHARTER_LENGTH_MIN_IDLE_HOURS)).toInstance(Integer.MAX_VALUE);
 				bind(int.class).annotatedWith(Names.named(SchedulerConstants.COOLDOWN_MIN_IDLE_HOURS)).toInstance(Integer.MAX_VALUE);
 				bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMMERCIAL_VOLUME_OVERCAPACITY)).toInstance(Boolean.FALSE);

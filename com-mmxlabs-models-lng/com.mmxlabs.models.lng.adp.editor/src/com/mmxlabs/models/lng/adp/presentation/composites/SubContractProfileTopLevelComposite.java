@@ -22,6 +22,7 @@ import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelection;
@@ -54,14 +55,16 @@ import com.mmxlabs.models.lng.adp.ext.IDistributionModelFactory;
 import com.mmxlabs.models.lng.adp.ext.ISubProfileConstraintFactory;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editors.DetailToolbarManager;
 import com.mmxlabs.models.ui.editors.HoverActionHelper;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
+import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.ValidationStatusWrapper;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
+import com.mmxlabs.models.ui.impl.FeatureFilteringDetailDisplayComposite;
+import com.mmxlabs.models.ui.impl.RowGroupDisplayCompositeLayoutProviderBuilder;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 
@@ -72,20 +75,19 @@ import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
  */
 public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposite {
 
-	/**
-	 * {@link Composite} to contain the sub editors
-	 */
-	private Group distributionComposite;
 	private ComboViewer distributionModelSelector;
 	private Collection<ServiceReference<IDistributionModelFactory>> distributionFactoriesServiceReferences;
 	private List<IDistributionModelFactory> distributionFactories;
+	protected FeatureFilteringDetailDisplayComposite mainFeatures = null;
+	protected FeatureFilteringDetailDisplayComposite windowFeatures = null;
+	protected FeatureFilteringDetailDisplayComposite volumeFeatures = null;
+	protected FeatureFilteringDetailDisplayComposite contractCodeLevel = null;
 
-	private Group constraintComposite;
-	private EClass eClass;
+	// private Group constraintComposite;
+	// private EClass eClass;
 	private SubContractProfile<?, ?> contractProfile;
 	private List<ISubProfileConstraintFactory> subProfileConstraintFactories;
 	private Collection<ServiceReference<ISubProfileConstraintFactory>> subProfileConstraintFactoriesServiceReferences;
-	private Composite distributionModelComposite;
 
 	public SubContractProfileTopLevelComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
 		super(parent, style, dialogContext, toolkit);
@@ -97,53 +99,103 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 		if (contractProfile != null) {
 			contractProfile.eAdapters().remove(adapter);
 			contractProfile = null;
-
 		}
-
-		this.eClass = object.eClass();
-
-		final Group g = new Group(this, SWT.NONE);
-		toolkit.adapt(g);
-
-		int noCols = 1;
-		String groupName = EditorUtils.unmangle(eClass.getName());
-		if (object instanceof SubContractProfile<?, ?>) {
-			// createSlotButtons = true;
-			final SubContractProfile<?, ?> subProfile = (SubContractProfile<?, ?>) object;
-			// groupName = subProfile.getName();
-			groupName = "Profile";// subProfile.getName();
-			noCols = 3;
-		}
-
-		if (groupName != null) {
-			g.setText(groupName);
-		}
-		g.setLayout(new GridLayout(noCols, false));
-		g.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		initialiseFactories();
 
-		topLevel = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(eClass).createSublevelComposite(g, eClass, dialogContext, toolkit);
-
-		topLevel.setCommandHandler(commandHandler);
-		topLevel.setEditorWrapper(editorWrapper);
-
-		topLevel.display(dialogContext, root, object, range, dbc);
+		// Grab this now, but set adapters etc later on
+		if (object instanceof SubContractProfile<?, ?>) {
+			contractProfile = (SubContractProfile<?, ?>) object;
+		}
 
 		{
-			// Initialise child composites
-			createChildOtherCompsiteSection(dialogContext, root, object, range, dbc, eClass, this);
+			contractCodeLevel = new FeatureFilteringDetailDisplayComposite(this, SWT.NONE, toolkit);
+			contractCodeLevel.includeFeature(ADPPackage.Literals.CONTRACT_PROFILE__CONTRACT_CODE);
+
+			contractCodeLevel.setCommandHandler(commandHandler);
+			contractCodeLevel.setEditorWrapper(editorWrapper);
+
+			contractCodeLevel.display(dialogContext, root, contractProfile.eContainer(), range, dbc);
+		}
+		{
+			mainFeatures = new FeatureFilteringDetailDisplayComposite(this, SWT.NONE, toolkit);
+			mainFeatures.excludeFeature(ADPPackage.Literals.SUB_CONTRACT_PROFILE__WINDOW_SIZE);
+			mainFeatures.excludeFeature(ADPPackage.Literals.SUB_CONTRACT_PROFILE__WINDOW_SIZE_UNITS);
+
+			mainFeatures.setLayoutProvider(new RowGroupDisplayCompositeLayoutProviderBuilder() //
+					.withRow() //
+					.withFeature(ADPPackage.Literals.SUB_CONTRACT_PROFILE__CONTRACT_TYPE) //
+					.withFeature(ADPPackage.Literals.SUB_CONTRACT_PROFILE__NOMINATED_VESSEL) //
+					.makeRow() //
+					.make() //
+			);
+
+			mainFeatures.setCommandHandler(commandHandler);
+			mainFeatures.setEditorWrapper(editorWrapper);
+
+			mainFeatures.display(dialogContext, root, object, range, dbc);
+		}
+		{
+			windowFeatures = new FeatureFilteringDetailDisplayComposite(this, SWT.NONE, toolkit);
+			windowFeatures.setLayoutProvider(new RowGroupDisplayCompositeLayoutProviderBuilder() //
+					.withRow() //
+					.withLabel("Window") //
+					.withFeature(ADPPackage.Literals.SUB_CONTRACT_PROFILE__WINDOW_SIZE) //
+					.withFeature(ADPPackage.Literals.SUB_CONTRACT_PROFILE__WINDOW_SIZE_UNITS) //
+					.makeRow() //
+					.make() //
+			);
+
+			windowFeatures.includeFeature(ADPPackage.Literals.SUB_CONTRACT_PROFILE__WINDOW_SIZE);
+			windowFeatures.includeFeature(ADPPackage.Literals.SUB_CONTRACT_PROFILE__WINDOW_SIZE_UNITS);
+
+			windowFeatures.setCommandHandler(commandHandler);
+			windowFeatures.setEditorWrapper(editorWrapper);
+
+			windowFeatures.display(dialogContext, root, object, range, dbc);
 		}
 		{
 
-			// Initialise middle composite
-			distributionComposite = new Group(this, SWT.NONE);
-			distributionComposite.setText("Slot generation");
-			toolkit.adapt(distributionComposite);
+			volumeFeatures = new FeatureFilteringDetailDisplayComposite(this, SWT.NONE, toolkit) {
+				@Override
+				protected void initialize(EClass eClass) {
+					// Override the default eClass to look up the specific super class we want as this is explicitly excluded now in the sub-classes.
+					super.initialize(ADPPackage.eINSTANCE.getDistributionModel());
+				}
+			};
+			volumeFeatures.setLayoutProvider(new RowGroupDisplayCompositeLayoutProviderBuilder() //
+					.withRow() //
+					.withLabel("Cargo volume") //
+					.withFeature(ADPPackage.Literals.DISTRIBUTION_MODEL__VOLUME_PER_CARGO) //
+					.withFeature(ADPPackage.Literals.DISTRIBUTION_MODEL__VOLUME_UNIT) //
+					.makeRow() //
+					.make()//
+			);
+
+			volumeFeatures.includeFeature(ADPPackage.Literals.DISTRIBUTION_MODEL__VOLUME_PER_CARGO);
+			volumeFeatures.includeFeature(ADPPackage.Literals.DISTRIBUTION_MODEL__VOLUME_UNIT);
+
+			volumeFeatures.setCommandHandler(commandHandler);
+			volumeFeatures.setEditorWrapper(editorWrapper);
+
+			volumeFeatures.display(dialogContext, root, ((SubContractProfile) object).getDistributionModel(), range, dbc);
+		}
+		
+		setMargins(contractCodeLevel);
+		setMargins(mainFeatures);
+		setMargins(windowFeatures);
+		setMargins(volumeFeatures);
+	 
+		{
+			// Initialise child composites
+			createChildOtherCompsiteSection(dialogContext, root, object, range, dbc, object.eClass(), this);
+		}
+		{
+			Composite distributionComposite = this;
 
 			{
 				final Composite selectorComposite = toolkit.createComposite(distributionComposite);
-				selectorComposite.setLayout(new GridLayout(2, false));
+				selectorComposite.setLayout(GridLayoutFactory.swtDefaults().numColumns(2).margins(5, 0).create());
 
 				toolkit.createLabel(selectorComposite, "Model:");
 				distributionModelSelector = new ComboViewer(selectorComposite, SWT.DROP_DOWN);
@@ -176,20 +228,23 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 					}
 				});
 			}
-			final int numChildren = createChildDistributionCompsiteSection(dialogContext, root, object, range, dbc, eClass, distributionComposite);
+			final int numChildren = createChildDistributionCompsiteSection(dialogContext, root, object, range, dbc, object.eClass(), this);
 
 			// We know there are n slots, so n columns
 			distributionComposite.setLayout(new GridLayout(1, false));
 			distributionComposite.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+
+			setMargins(distributionComposite);
 		}
 		{
 
 			// Initialise middle composite
-			constraintComposite = new Group(this, SWT.NONE);
-			constraintComposite.setText("Profile constraints");
+			Group constraintComposite = new Group(this, SWT.NONE);
+			constraintComposite.setText("Generation constraints");
 			toolkit.adapt(constraintComposite);
 
-			final int numChildren = createChildConstraintsCompsiteSection(dialogContext, root, object, range, dbc, eClass, constraintComposite);
+			// final int numChildren =
+			createChildConstraintsCompsiteSection(dialogContext, root, object, range, dbc, object.eClass(), constraintComposite);
 
 			constraintComposite.setLayout(new GridLayout(1, false));
 			constraintComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -213,33 +268,12 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 				toolkit.adapt(addAction, false, false);
 
 			}
-
-		}
-		final boolean displayDeleteButton = false;
-		if (displayDeleteButton && object instanceof SubContractProfile<?, ?>) { // Create a toolbar for remove buttons
-			final DetailToolbarManager removeButtonManager = new DetailToolbarManager(g, SWT.RIGHT);
-			toolkit.adapt(removeButtonManager.getToolbarManager().getControl());
-
-			final Action action = new Action("Delete") {
-
-				@Override
-				public void run() {
-
-					final Command remove = RemoveCommand.create(dialogContext.getScenarioEditingLocation().getEditingDomain(), object.eContainer(), ADPPackage.Literals.CONTRACT_PROFILE__SUB_PROFILES,
-							object);
-					commandHandler.handleCommand(remove, object.eContainer(), ADPPackage.Literals.CONTRACT_PROFILE__SUB_PROFILES);
-					dialogContext.getDialogController().rebuild(true);
-
-				}
-			};
-			action.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE));
-			removeButtonManager.getToolbarManager().add(action);
-			removeButtonManager.getToolbarManager().update(true);
-
 		}
 
 		// Overrides default layout factory so we get a single column rather than multiple columns and one row
-		this.setLayout(new GridLayout(1, false));
+		// Set the spacing to zero as we have many child composites
+		this.setLayout(GridLayoutFactory.swtDefaults().spacing(0, 0).create());
+		this.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		if (object instanceof SubContractProfile<?, ?>) {
 			contractProfile = (SubContractProfile<?, ?>) object;
@@ -267,7 +301,7 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 
 			if (shouldDisplay(ref)) {
 				if (ref.isMany()) {
-					final List values = (List) object.eGet(ref);
+					final List<?> values = (List<?>) object.eGet(ref);
 					for (final Object o : values) {
 						if (o instanceof EObject) {
 							createChildArea(childContainer, root, object, parent, ref, (EObject) o);
@@ -275,7 +309,6 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 					}
 				} else {
 					final EObject value = (EObject) object.eGet(ref);
-
 					createChildArea(childContainer, root, object, parent, ref, value);
 				}
 			}
@@ -484,9 +517,37 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 
 	@Override
 	public void displayValidationStatus(final IStatus status) {
+
+		if (mainFeatures != null) {
+			mainFeatures.displayValidationStatus(status);
+		}
+
+		if (windowFeatures != null) {
+			windowFeatures.displayValidationStatus(status);
+		}
+
+		if (contractCodeLevel != null) {
+			contractCodeLevel.displayValidationStatus(status);
+		}
+
+		if (volumeFeatures != null) {
+			volumeFeatures.displayValidationStatus(status);
+		}
+
 		super.displayValidationStatus(status);
 		if (distributionModelValidationWrapper != null) {
 			distributionModelValidationWrapper.processValidation(status);
 		}
+	}
+
+	private void setMargins(Composite composite) {
+
+		GridLayout newLayout = GridLayoutFactory.createFrom((GridLayout) composite.getLayout()) //
+				.extendedMargins(0, 0, 0, 0) //
+				.margins(5, 2) //
+				.create();
+
+		composite.setLayout(newLayout);
+
 	}
 }

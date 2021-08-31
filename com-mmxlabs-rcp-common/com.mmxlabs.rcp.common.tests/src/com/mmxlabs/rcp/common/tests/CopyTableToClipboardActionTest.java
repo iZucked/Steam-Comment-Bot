@@ -12,12 +12,15 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.swt.finder.junit5.SWTBotJunit5Extension;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 
+@ExtendWith(SWTBotJunit5Extension.class)
 public class CopyTableToClipboardActionTest {
 
 	@Disabled("Almost always fails on build server, probably timing issue")

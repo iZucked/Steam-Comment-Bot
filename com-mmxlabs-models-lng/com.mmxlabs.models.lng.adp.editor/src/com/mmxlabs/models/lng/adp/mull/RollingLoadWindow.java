@@ -29,7 +29,9 @@ public class RollingLoadWindow {
 	private final LinkedList<InventoryDateTimeEvent> backWindow = new LinkedList<>();
 	private int currentLoadTime;
 
-	public RollingLoadWindow(final int loadDuration, final Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>> entries, final int maxExistingLoadDuration) {
+	public RollingLoadWindow(final int loadDuration, final Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>> entries, final int maxExistingLoadDuration, final int initialTankVolume) {
+		beforeWindowTankVolume = initialTankVolume;
+		endWindowVolume = initialTankVolume;
 		this.loadDuration = loadDuration;
 		final int extraTrackedWindowSize = maxExistingLoadDuration - loadDuration;
 		if (loadDuration <= 0) {

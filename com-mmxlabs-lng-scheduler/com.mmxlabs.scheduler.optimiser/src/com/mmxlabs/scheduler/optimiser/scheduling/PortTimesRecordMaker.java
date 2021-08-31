@@ -29,7 +29,6 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.IEndEventScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
@@ -65,9 +64,6 @@ public class PortTimesRecordMaker {
 
 	@Inject
 	private IActualsDataProvider actualsDataProvider;
-
-	@Inject
-	private IEndEventScheduler endEventScheduler;
 
 	@Inject
 	private IElementDurationProvider durationProvider;
@@ -334,11 +330,16 @@ public class PortTimesRecordMaker {
 						updateFirstRecordStartTime = false;
 					}
 
-					// FIXME: There is a conflict with this code and the min/max duration code
-					// (which assumes end event duration is 0).
-					// Delegate to the end event schedule to determine correct end time.
-					portTimesRecords.addAll(endEventScheduler.scheduleEndEvent(resource, vesselAvailability, portTimesRecord, arrivalTime, returnSlot));
+					// Set the end event for the last record
+					portTimesRecord.setReturnSlotTime(returnSlot, arrivalTime);
+					portTimesRecord.setSlotDuration(returnSlot, 0);
 
+					// Add in the final end event record itself
+					final PortTimesRecord endPortTimesRecord = new PortTimesRecord();
+					endPortTimesRecord.setSlotTime(returnSlot, arrivalTime);
+					endPortTimesRecord.setSlotDuration(returnSlot, 0);
+					portTimesRecords.add(endPortTimesRecord);
+		 
 					// We need to update the start time after the end event is scheduled, to make
 					// the min/max duration adjustments
 					updateRecord(isRoundTripSequence, vesselAvailability, portTimesRecords, trimmedWindows, travelTimeData);
@@ -507,8 +508,7 @@ public class PortTimesRecordMaker {
 				portTimesRecord.setSlotDuration(slot, visitDuration);
 				portTimesRecord.setSlotExtraIdleTime(slot, extraIdleTime);
 				// What is the next travel time?
-				
-				
+
 				if (recordToUpdateReturnTime != null) {
 					recordToUpdateReturnTime.setReturnSlotTime(slot, arrivalTime);
 					recordToUpdateReturnTime = null;
@@ -523,10 +523,10 @@ public class PortTimesRecordMaker {
 			final IPortSlot returnSlot = record.getReturnSlot();
 			if (returnSlot != null) {
 				if (returnSlot.getPortType() == PortType.Round_Trip_Cargo_End) {
-					//Copy the return time across
+					// Copy the return time across
 					portTimesRecord.setReturnSlotTime(returnSlot, record.getSlotFeasibleTimeWindow(returnSlot).getInclusiveStart());
 					updatePortTimesRecordWithPanamaRestrictions(distanceProvider, vesselAvailability.getVessel(), record, portTimesRecord);
-					
+
 				} else {
 					// We need to update the return time of this record
 					recordToUpdateReturnTime = portTimesRecord;

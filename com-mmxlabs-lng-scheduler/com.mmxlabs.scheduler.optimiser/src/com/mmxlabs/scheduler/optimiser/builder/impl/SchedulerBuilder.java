@@ -724,7 +724,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			end = spotCharterInMarket.getEndRequirement();
 		} else {
 			end = createEndRequirement(Collections.singletonList(ANYWHERE), false, new TimeWindow(0, Integer.MAX_VALUE),
-					createHeelConsumer(vessel.getSafetyHeel(), vessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0), false), false);
+					createHeelConsumer(vessel.getSafetyHeel(), vessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0), false));
 		}
 		final ILongCurve dailyCharterInPrice = spotCharterInMarket.getDailyCharterInRateCurve();
 
@@ -886,17 +886,16 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@NonNull
 	public IEndRequirement createEndRequirement() {
 		return createEndRequirement(Collections.singletonList(ANYWHERE), false, new MutableTimeWindow(0, Integer.MAX_VALUE),
-				createHeelConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0), false), false);
+				createHeelConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0), false));
 	}
 
 	@Override
-	public @NonNull IEndRequirement createEndRequirement(@Nullable Collection<IPort> portSet, boolean hasTimeRequirement, @NonNull ITimeWindow timeWindow, IHeelOptionConsumer heelConsumer,
-			boolean isOpenEnded) {
+	public @NonNull IEndRequirement createEndRequirement(@Nullable Collection<IPort> portSet, boolean hasTimeRequirement, @NonNull ITimeWindow timeWindow, IHeelOptionConsumer heelConsumer) {
 
 		if (portSet == null || portSet.isEmpty()) {
-			return new EndRequirement(Collections.singleton(ANYWHERE), false, hasTimeRequirement, timeWindow, heelConsumer, isOpenEnded);
+			return new EndRequirement(Collections.singleton(ANYWHERE), false, hasTimeRequirement, timeWindow, heelConsumer);
 		} else {
-			return new EndRequirement(portSet, true, hasTimeRequirement, timeWindow, heelConsumer, isOpenEnded);
+			return new EndRequirement(portSet, true, hasTimeRequirement, timeWindow, heelConsumer);
 		}
 	}
 
@@ -1854,8 +1853,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		} else {
 			end = createEndRequirement(Collections.singletonList(ANYWHERE), false, new TimeWindow(0, Integer.MAX_VALUE), //
 					createHeelConsumer(roundTripCargoVessel.getSafetyHeel(), roundTripCargoVessel.getSafetyHeel(), //
-							VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0), false),
-					false);
+							VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0), false));
 		}
 
 		final IVesselAvailability vesselAvailability = createVesselAvailability(roundTripCargoVessel, spotCharterInMarket.getDailyCharterInRateCurve(), //
