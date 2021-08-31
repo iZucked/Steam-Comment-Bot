@@ -3585,7 +3585,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		result.append(')');
 		return result.toString();
 	}
-	
+
 	@Override
 	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
 		final CargoPackage cargo = CargoPackage.eINSTANCE;
@@ -3624,7 +3624,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				
 				@Override
 				public Object getValue(final EObject object) {
-					Object result = Collections.EMPTY_LIST;
+					Object result = ECollections.emptyEList();
 					final Contract contract = getContract();
 					if (!isRestrictedContractsOverride() && contract != null) {
 						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS)) {
@@ -3632,8 +3632,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 						}
 					}
 					return result;
-					
-				}				
+				}
 			};
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS) {
 			return new DelegateInformation(null, null, null) {
@@ -3641,10 +3640,10 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				public boolean delegatesTo(final Object changedFeature) {
 					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
 				}
-				
+
 				@Override
 				public Object getValue(final EObject object) {
-					Object result = Collections.EMPTY_LIST;
+					Object result = ECollections.emptyEList();
 					final Contract contract = getContract();
 					if (!isRestrictedPortsOverride() && contract != null) {
 						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS)) {
@@ -3652,8 +3651,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 						}
 					}
 					return result;
-					
-				}				
+				}
 			};
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS) {
 			return new DelegateInformation(null, null, null) {
@@ -3661,7 +3659,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				public boolean delegatesTo(final Object changedFeature) {
 					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
 				}
-				
+
 				@Override
 				public Object getValue(final EObject object) {
 					Object result = ECollections.emptyEList();
@@ -3672,8 +3670,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 						}
 					}
 					return result;
-					
-				}				
+				}
 			};
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_RestrictedContractsArePermissive(), Boolean.FALSE);
@@ -3684,10 +3681,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		} else if (feature == CargoPackage.Literals.SLOT__FULL_CARGO_LOT) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_FullCargoLot(), Boolean.FALSE);
 		}
-		
 		return super.getUnsetValueOrDelegate(feature);
-	}	
-	
+	}
 } // end of SlotImpl
 
 // finish type fixing
