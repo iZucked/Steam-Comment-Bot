@@ -3624,14 +3624,13 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				
 				@Override
 				public Object getValue(final EObject object) {
-					Object result = ECollections.emptyEList();
-					final Contract contract = getContract();
-					if (!isRestrictedContractsOverride() && contract != null) {
-						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS)) {
-							result = contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS);
+					if (!isRestrictedContractsOverride()) {
+						final Contract contract = getContract();
+						if (contract != null && contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS)) {
+							return contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS);
 						}
 					}
-					return result;
+					return ECollections.emptyEList();
 				}
 			};
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS) {
@@ -3643,14 +3642,13 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 
 				@Override
 				public Object getValue(final EObject object) {
-					Object result = ECollections.emptyEList();
-					final Contract contract = getContract();
-					if (!isRestrictedPortsOverride() && contract != null) {
-						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS)) {
-							result = contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS);
+					if (!isRestrictedPortsOverride()) {
+						final Contract contract = getContract();
+						if (contract != null && contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS)) {
+							return contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS);
 						}
 					}
-					return result;
+					return ECollections.emptyEList();
 				}
 			};
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS) {
@@ -3662,14 +3660,13 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 
 				@Override
 				public Object getValue(final EObject object) {
-					Object result = ECollections.emptyEList();
-					final Contract contract = getContract();
-					if (!isRestrictedVesselsOverride() && contract != null) {
-						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS)) {
-							result = contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS);
+					if (!isRestrictedVesselsOverride()) {
+						final Contract contract = getContract();
+						if (contract != null && contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS)) {
+							return contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS);
 						}
 					}
-					return result;
+					return ECollections.emptyEList();
 				}
 			};
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE) {
