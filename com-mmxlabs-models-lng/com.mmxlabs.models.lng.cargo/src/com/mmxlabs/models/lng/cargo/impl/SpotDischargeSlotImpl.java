@@ -3,10 +3,8 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.impl;
-import java.util.Collections;
-
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -16,16 +14,11 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
-import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 
@@ -286,53 +279,54 @@ public class SpotDischargeSlotImpl extends DischargeSlotImpl implements SpotDisc
 				public boolean delegatesTo(final Object changedFeature) {
 					return (changedFeature == CargoPackage.Literals.SPOT_SLOT__MARKET);
 				}
-				
+
 				public Object getValue(final EObject object) {
-					Object result = Collections.EMPTY_LIST;
-					final SpotMarket market = (SpotMarket) getMarket();
-					if (!isRestrictedVesselsOverride() && market != null) {
-						if (market.eIsSet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_CONTRACTS)) {
-							result = market.eGet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_CONTRACTS);
+					if (!isRestrictedContractsOverride()) {
+						final SpotMarket market = getMarket();
+						if (market != null && market.eIsSet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_CONTRACTS)) {
+							return market.eGet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_CONTRACTS);
 						}
+					} else {
+						return getRestrictedContracts();
 					}
-					return result;
-					
-				}				
+					return ECollections.emptyEList();
+				}
 			};
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS) {
 			return new DelegateInformation(null, null, null) {
 				public boolean delegatesTo(final Object changedFeature) {
 					return (changedFeature == CargoPackage.Literals.SPOT_SLOT__MARKET);
 				}
-				
+
 				public Object getValue(final EObject object) {
-					Object result = Collections.EMPTY_LIST;
-					final SpotMarket market = (SpotMarket) getMarket();
-					if (!isRestrictedVesselsOverride() && market != null) {
-						if (market.eIsSet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_PORTS)) {
-							result = market.eGet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_PORTS);
+					if (!isRestrictedPortsOverride()) {
+						final SpotMarket market = getMarket();
+						if (market != null && market.eIsSet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_PORTS)) {
+							return market.eGet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_PORTS);
 						}
+					} else {
+						return getRestrictedPorts();
 					}
-					return result;
-				}				
+					return ECollections.emptyEList();
+				}
 			};
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS) {
 			return new DelegateInformation(null, null, null) {
 				public boolean delegatesTo(final Object changedFeature) {
 					return (changedFeature == CargoPackage.Literals.SPOT_SLOT__MARKET);
 				}
-				
+
 				public Object getValue(final EObject object) {
-					Object result = Collections.EMPTY_LIST;
-					final SpotMarket market = (SpotMarket) getMarket();
-					if (!isRestrictedVesselsOverride() && market != null) {
-						if (market.eIsSet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_VESSELS)) {
-							result = market.eGet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_VESSELS);
+					if (!isRestrictedVesselsOverride()) {
+						final SpotMarket market = getMarket();
+						if (market != null && market.eIsSet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_VESSELS)) {
+							return market.eGet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_VESSELS);
 						}
+					} else {
+						return getRestrictedVessels();
 					}
-					return result;
-					
-				}				
+					return ECollections.emptyEList();
+				}
 			};
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE) {
 			return new DelegateInformation(CargoPackage.Literals.SPOT_SLOT__MARKET, SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_CONTRACTS_ARE_PERMISSIVE, Boolean.FALSE);
