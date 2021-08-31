@@ -19,7 +19,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 
 /**
- * Implementation of {@link IOptimisationData}
+ * Implementation of {@link IPhaseOptimisationData}
  * 
  * @author Simon Goodall
  * 
