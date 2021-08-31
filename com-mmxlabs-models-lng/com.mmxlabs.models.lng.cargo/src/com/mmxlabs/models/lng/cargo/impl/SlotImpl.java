@@ -2816,9 +2816,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public EList<Contract> getSlotOrDelegateContractRestrictions() {
-		if (isRestrictedContractsOverride()) {
-			return getRestrictedContracts();
-		}
 		return (EList<Contract>) getUnsetValueOrDelegate(CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS).getValue(this);
 	}
 
@@ -2829,9 +2826,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public EList<APortSet<Port>> getSlotOrDelegatePortRestrictions() {
-		if (isRestrictedPortsOverride()) {
-			return getRestrictedPorts();
-		}
 		return (EList<APortSet<Port>>) getUnsetValueOrDelegate(CargoPackage.Literals.SLOT__RESTRICTED_PORTS).getValue(this);
 	}
 
@@ -2843,9 +2837,6 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	@SuppressWarnings("unchecked")
 	@Override
 	public EList<AVesselSet<Vessel>> getSlotOrDelegateVesselRestrictions() {
-		if (isRestrictedVesselsOverride()) {
-			return getRestrictedVessels();
-		}
 		return (EList<AVesselSet<Vessel>>) getUnsetValueOrDelegate(CargoPackage.Literals.SLOT__RESTRICTED_VESSELS).getValue(this);
 	}
 
@@ -3626,9 +3617,15 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				public Object getValue(final EObject object) {
 					if (!isRestrictedContractsOverride()) {
 						final Contract contract = getContract();
-						if (contract != null && contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS)) {
-							return contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS);
+						if (contract != null) {
+							if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS)) {
+								return contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS);
+							}
+						} else {
+							return getRestrictedContracts();
 						}
+					} else {
+						return getRestrictedContracts();
 					}
 					return ECollections.emptyEList();
 				}
@@ -3644,9 +3641,15 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				public Object getValue(final EObject object) {
 					if (!isRestrictedPortsOverride()) {
 						final Contract contract = getContract();
-						if (contract != null && contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS)) {
-							return contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS);
+						if (contract != null) {
+							if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS)) {
+								return contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS);
+							}
+						} else {
+							return getRestrictedPorts();
 						}
+					} else {
+						return getRestrictedPorts();
 					}
 					return ECollections.emptyEList();
 				}
@@ -3662,9 +3665,15 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				public Object getValue(final EObject object) {
 					if (!isRestrictedVesselsOverride()) {
 						final Contract contract = getContract();
-						if (contract != null && contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS)) {
-							return contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS);
+						if (contract != null) {
+							if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS)) {
+								return contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS);
+							}
+						} else {
+							return getRestrictedVessels();
 						}
+					} else {
+						return getRestrictedVessels();
 					}
 					return ECollections.emptyEList();
 				}

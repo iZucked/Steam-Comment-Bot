@@ -286,6 +286,8 @@ public class SpotDischargeSlotImpl extends DischargeSlotImpl implements SpotDisc
 						if (market != null && market.eIsSet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_CONTRACTS)) {
 							return market.eGet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_CONTRACTS);
 						}
+					} else {
+						return getRestrictedContracts();
 					}
 					return ECollections.emptyEList();
 				}
@@ -302,6 +304,8 @@ public class SpotDischargeSlotImpl extends DischargeSlotImpl implements SpotDisc
 						if (market != null && market.eIsSet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_PORTS)) {
 							return market.eGet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_PORTS);
 						}
+					} else {
+						return getRestrictedPorts();
 					}
 					return ECollections.emptyEList();
 				}
@@ -318,6 +322,8 @@ public class SpotDischargeSlotImpl extends DischargeSlotImpl implements SpotDisc
 						if (market != null && market.eIsSet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_VESSELS)) {
 							return market.eGet(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_VESSELS);
 						}
+					} else {
+						return getRestrictedVessels();
 					}
 					return ECollections.emptyEList();
 				}
