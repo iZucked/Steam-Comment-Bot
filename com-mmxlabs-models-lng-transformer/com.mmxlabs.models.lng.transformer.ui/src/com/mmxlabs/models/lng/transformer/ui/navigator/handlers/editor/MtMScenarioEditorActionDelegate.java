@@ -103,7 +103,6 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 							}
 
 						});
-						//
 					} catch (final Exception e) {
 						throw new RuntimeException("Unable to mark scenario to market", e);
 					}
@@ -163,14 +162,14 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 				MTMUtils.evaluateMTMModel(model[0], instance, sdp);
 			}).get();
 		} catch (Exception e) {
-			throw new RuntimeException("Unable to evaluate MTM model", e);
+			throw new RuntimeException("Unable to evaluate the MTM model", e);
 		} finally {
 			progressMonitor.done();
 			executor.shutdown();
 		}
 
 		progressMonitor.worked(200);
-		progressMonitor.subTask("Checking changes in MtM model");
+		progressMonitor.subTask("Checking changes in the MtM model");
 		final Set<String> usedDischargeIDStrings = new HashSet<>();
 		for (final DischargeSlot slot : cargoModel.getDischargeSlots()) {
 			usedDischargeIDStrings.add(slot.getName());
@@ -211,7 +210,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 		}
 
 		progressMonitor.worked(200);
-		progressMonitor.subTask("Looking for the best moves in the MtM model");
+		progressMonitor.subTask("Looking for the best solutions in the MtM model");
 
 		for (final MTMRow row : model[0].getRows()) {
 			if (row.getBuyOption() != null) {
