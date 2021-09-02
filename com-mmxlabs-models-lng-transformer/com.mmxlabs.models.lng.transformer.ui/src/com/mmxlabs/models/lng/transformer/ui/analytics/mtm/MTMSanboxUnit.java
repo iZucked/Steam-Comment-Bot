@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
@@ -468,7 +469,11 @@ public class MTMSanboxUnit {
 								if (shipped) {
 									timeZone = ls.getPort().getLocation().getTimeZone();
 								} else {
-									timeZone = ds.getPort().getLocation().getTimeZone();
+									if (ls.getPort() != null) {
+										timeZone = ls.getPort().getLocation().getTimeZone();
+									} else if (ds.getPort() != null) {
+										timeZone = ds.getPort().getLocation().getTimeZone();
+									}
 								}
 	
 								final SingleResult result = doIt(shipped, shipping, ls, ds, beTarget);

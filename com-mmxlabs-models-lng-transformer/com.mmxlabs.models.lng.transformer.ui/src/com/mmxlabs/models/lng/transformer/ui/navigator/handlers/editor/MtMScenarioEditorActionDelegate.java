@@ -239,7 +239,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 				for (final MTMResult result : row.getRhsResults()) {
 					if (result.getEarliestETA() == null)
 						continue;
-					if (price < result.getEarliestPrice()) {
+					if (price < (result.getEarliestPrice() - result.getShippingCost())) {
 						price = result.getEarliestPrice();
 						bestResult = result;
 					}
@@ -302,7 +302,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 				for (final MTMResult result : row.getLhsResults()) {
 					if (result.getEarliestETA() == null)
 						continue;
-					if (price > result.getEarliestPrice()) {
+					if (price > (result.getEarliestPrice() + result.getShippingCost())) {
 						price = result.getEarliestPrice();
 						bestResult = result;
 					}
