@@ -6,7 +6,7 @@ package com.mmxlabs.models.lng.analytics.ui.views.mtm;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,7 +46,7 @@ public class MTMSandboxEvaluator {
 
 	protected static void buildFullScenario(final LNGScenarioModel clone, final MTMModel clonedModel, final IMapperClass mapper) {
 		final Set<String> usedIDs = getUsedSlotIDs(clone);
-		final Set<YearMonth> loadDates = new HashSet<>();
+		final Set<YearMonth> loadDates = new LinkedHashSet<>();
 		for (final BuyOption buy : clonedModel.getBuys()) {
 			final LoadSlot loadSlot_original = AnalyticsBuilder.makeLoadSlot(buy, clone, SlotMode.ORIGINAL_SLOT, usedIDs);
 			final LoadSlot loadSlot_breakEven = AnalyticsBuilder.makeLoadSlot(buy, clone, SlotMode.BREAK_EVEN_VARIANT, usedIDs);
@@ -61,7 +61,7 @@ public class MTMSandboxEvaluator {
 
 		}
 
-		final Set<YearMonth> dischargeDates = new HashSet<>();
+		final Set<YearMonth> dischargeDates = new LinkedHashSet<>();
 
 		for (final SellOption sell : clonedModel.getSells()) {
 			final DischargeSlot dischargeSlot_original = AnalyticsBuilder.makeDischargeSlot(sell, clone, SlotMode.ORIGINAL_SLOT, usedIDs);
@@ -159,7 +159,7 @@ public class MTMSandboxEvaluator {
 	}
 	
 	private static Set<String> getUsedSlotIDs(final LNGScenarioModel lngScenarioModel) {
-		final Set<String> usedIDs = new HashSet<>();
+		final Set<String> usedIDs = new LinkedHashSet<>();
 		usedIDs.addAll(lngScenarioModel.getCargoModel().getLoadSlots().stream()
 				.map(LoadSlot::getName)
 				.collect(Collectors.toSet()));

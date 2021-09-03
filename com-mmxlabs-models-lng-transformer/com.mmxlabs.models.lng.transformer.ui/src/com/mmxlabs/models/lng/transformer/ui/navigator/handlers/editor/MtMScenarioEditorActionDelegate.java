@@ -124,52 +124,9 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 		final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
 		final EditingDomain editingDomain = sdp.getEditingDomain();
-		progressMonitor.worked(100);
-
-		if (!promptClearModels()) {
-			return;
-		} else {
-			final Command dc = createClearModelsCommand(editingDomain, scenarioModel, analyticsModel);
-			if (dc != null) {
-				assert dc.canExecute();
-				RunnerHelper.syncExecDisplayOptional(() -> {
-					editingDomain.getCommandStack().execute(dc);
-				});
-			}
-		}
-
-		progressMonitor.worked(100);
-
-		final List<Command> setCommands = new LinkedList();
-		final List<EObject> deleteObjects = new LinkedList();
-
-		progressMonitor.worked(100);
-		progressMonitor.subTask("Creating MtM model");
-		final MTMModel[] model = new MTMModel[1];
-		RunnerHelper.syncExecDisplayOptional(() -> {
-			model[0] = MTMUtils.createModelFromScenario(scenarioModel, "MtMScenarioEditorActionDelegate", false, true, null, null);
-		});
-		if (model[0] == null) {
-			throw new RuntimeException("Unable to create an MTM model");
-		}
-
-		progressMonitor.worked(100);
-		progressMonitor.subTask("Evaluating the MtM model");
-
-		final ExecutorService executor = Executors.newFixedThreadPool(1);
-		try {
-			executor.submit(() -> {
-				MTMUtils.evaluateMTMModel(model[0], instance, sdp);
-			}).get();
-		} catch (Exception e) {
-			throw new RuntimeException("Unable to evaluate the MTM model", e);
-		} finally {
-			progressMonitor.done();
-			executor.shutdown();
-		}
-
+		
 		progressMonitor.worked(200);
-		progressMonitor.subTask("Checking changes in the MtM model");
+		progressMonitor.subTask("Checking the schedule model");
 		final Set<String> usedDischargeIDStrings = new HashSet<>();
 		for (final DischargeSlot slot : cargoModel.getDischargeSlots()) {
 			usedDischargeIDStrings.add(slot.getName());
@@ -207,6 +164,51 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 					}
 				}
 			}
+		}
+		
+		progressMonitor.worked(100);
+		if (!promptClearModels()) {
+			return;
+		} else {
+			final Command dc = createClearModelsCommand(editingDomain, scenarioModel, analyticsModel);
+			if (dc != null) {
+				assert dc.canExecute();
+				RunnerHelper.syncExecDisplayOptional(() -> {
+					editingDomain.getCommandStack().execute(dc);
+				});
+			}
+		}
+
+		progressMonitor.worked(100);
+
+		final List<Command> setCommands = new LinkedList();
+		final List<EObject> deleteObjects = new LinkedList();
+		
+		
+
+		progressMonitor.worked(200);
+		progressMonitor.subTask("Creating MtM model");
+		final MTMModel[] model = new MTMModel[1];
+		RunnerHelper.syncExecDisplayOptional(() -> {
+			model[0] = MTMUtils.createModelFromScenario(scenarioModel, "MtMScenarioEditorActionDelegate", false, true, null, null);
+		});
+		if (model[0] == null) {
+			throw new RuntimeException("Unable to create an MTM model");
+		}
+
+		progressMonitor.worked(200);
+		progressMonitor.subTask("Evaluating the MtM model");
+
+		final ExecutorService executor = Executors.newFixedThreadPool(1);
+		try {
+			executor.submit(() -> {
+				MTMUtils.evaluateMTMModel(model[0], instance, sdp);
+			}).get();
+		} catch (Exception e) {
+			throw new RuntimeException("Unable to evaluate the MTM model", e);
+		} finally {
+			progressMonitor.done();
+			executor.shutdown();
 		}
 
 		progressMonitor.worked(200);
