@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.lng.commercial.editor;singleton:=true
 Automatic-Module-Name: com.mmxlabs.models.lng.commercial.editor
-Bundle-Version: 4.12.47.RELEASE
+Bundle-Version: 4.12.48.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.models.lng.commercial.presentation.CommercialEditorPlugin$Implementation
 Bundle-Vendor: %providerName
@@ -24,18 +24,18 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  org.eclipse.emf.ecore.xmi;visibility:=reexport,
  com.google.guava;bundle-version="15.0.0",
  org.eclipse.nebula.widgets.formattedtext;bundle-version="1.0.0",
- com.mmxlabs.license.features;bundle-version="[4.12.47,5.0.0)",
- com.mmxlabs.models.lng.types.edit;bundle-version="[4.12.47,5.0.0)";visibility:=reexport,
+ com.mmxlabs.license.features;bundle-version="[4.12.48,5.0.0)",
+ com.mmxlabs.models.lng.types.edit;bundle-version="[4.12.48,5.0.0)";visibility:=reexport,
  com.mmxlabs.models.mmxcore.edit;visibility:=reexport,
- com.mmxlabs.models.lng.port.edit;bundle-version="[4.12.47,5.0.0)";visibility:=reexport,
- com.mmxlabs.models.lng.commercial.edit;bundle-version="[4.12.47,5.0.0)";visibility:=reexport,
- com.mmxlabs.models.lng.cargo.editor;bundle-version="[4.12.47,5.0.0)",
- com.mmxlabs.models.lng.scenario.model;bundle-version="[4.12.47,5.0.0)",
- com.mmxlabs.models.ui;bundle-version="[4.12.47,5.0.0)",
- com.mmxlabs.models.util;bundle-version="[4.12.47,5.0.0)",
- com.mmxlabs.models.ui.tabular;bundle-version="[4.12.47,5.0.0)",
- com.mmxlabs.rcp.common;bundle-version="[4.12.47,5.0.0)",
- com.mmxlabs.models.lng.ui;bundle-version="[4.12.47,5.0.0)",
+ com.mmxlabs.models.lng.port.edit;bundle-version="[4.12.48,5.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.commercial.edit;bundle-version="[4.12.48,5.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.cargo.editor;bundle-version="[4.12.48,5.0.0)",
+ com.mmxlabs.models.lng.scenario.model;bundle-version="[4.12.48,5.0.0)",
+ com.mmxlabs.models.ui;bundle-version="[4.12.48,5.0.0)",
+ com.mmxlabs.models.util;bundle-version="[4.12.48,5.0.0)",
+ com.mmxlabs.models.ui.tabular;bundle-version="[4.12.48,5.0.0)",
+ com.mmxlabs.rcp.common;bundle-version="[4.12.48,5.0.0)",
+ com.mmxlabs.models.lng.ui;bundle-version="[4.12.48,5.0.0)",
  com.mmxlabs.scenario.service.model,
  com.mmxlabs.models.lng.pricing,
  com.mmxlabs.scheduler.optimiser,
