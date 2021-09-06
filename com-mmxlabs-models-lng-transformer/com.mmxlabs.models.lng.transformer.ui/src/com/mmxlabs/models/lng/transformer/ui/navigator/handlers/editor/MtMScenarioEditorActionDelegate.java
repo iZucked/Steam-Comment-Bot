@@ -33,6 +33,8 @@ import org.eclipse.ui.IEditorPart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
@@ -74,11 +76,15 @@ import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 /**
  * @author FM
+ * @version 2 06/09/2021
  * 
  */
 public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, IActionDelegate2 {
 
 	private static final Logger LOG = LoggerFactory.getLogger(MtMScenarioEditorActionDelegate.class);
+	
+	// make decision based on PNL
+	private static final boolean PNL = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MTM_PNL);
 
 	private IEditorPart editor;
 
@@ -119,8 +125,10 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 		progressMonitor.subTask("Prepare scenario");
 
 		final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(sdp);
-		if (scenarioModel == null)
+		if (scenarioModel == null) {
+			progressMonitor.done();
 			return;
+		}
 		final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
 		final EditingDomain editingDomain = sdp.getEditingDomain();
@@ -168,6 +176,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 		
 		progressMonitor.worked(100);
 		if (!promptClearModels()) {
+			progressMonitor.done();
 			return;
 		} else {
 			final Command dc = createClearModelsCommand(editingDomain, scenarioModel, analyticsModel);
@@ -193,6 +202,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 			model[0] = MTMUtils.createModelFromScenario(scenarioModel, "MtMScenarioEditorActionDelegate", false, true, null, null);
 		});
 		if (model[0] == null) {
+			progressMonitor.done();
 			throw new RuntimeException("Unable to create an MTM model");
 		}
 
@@ -205,14 +215,16 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 				MTMUtils.evaluateMTMModel(model[0], instance, sdp);
 			}).get();
 		} catch (Exception e) {
+			progressMonitor.done();
 			throw new RuntimeException("Unable to evaluate the MTM model", e);
 		} finally {
-			progressMonitor.done();
 			executor.shutdown();
 		}
 
 		progressMonitor.worked(200);
 		progressMonitor.subTask("Looking for the best solutions in the MtM model");
+		
+		
 
 		for (final MTMRow row : model[0].getRows()) {
 			if (row.getBuyOption() != null) {
@@ -226,12 +238,14 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 				}
 
 				double price = Double.MIN_VALUE;
+				int volume = 0;
 
 				// getting the price of the original cargo
 				if (!discharges.isEmpty()) {
 					final SlotAllocation sa = discharges.get(loadSlot);
 					if (sa instanceof SlotAllocation) {
 						price = sa.getPrice();
+						volume = sa.getPhysicalVolumeTransferred();
 					}
 				}
 
@@ -241,9 +255,17 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 				for (final MTMResult result : row.getRhsResults()) {
 					if (result.getEarliestETA() == null)
 						continue;
-					if (price < (result.getEarliestPrice() - result.getShippingCost())) {
-						price = result.getEarliestPrice();
-						bestResult = result;
+					if (PNL) {
+						if (price * volume < (result.getEarliestPrice() - result.getShippingCost()) * result.getEarliestVolume()) {
+							price = result.getEarliestPrice();
+							volume = result.getEarliestVolume();
+							bestResult = result;
+						}
+					} else {
+						if (price < (result.getEarliestPrice() - result.getShippingCost())) {
+							price = result.getEarliestPrice();
+							bestResult = result;
+						}
 					}
 				}
 
@@ -290,11 +312,12 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 				}
 
 				double price = Double.MAX_VALUE;
-
+				int volume = 0;
 				if (!loads.isEmpty()) {
 					final SlotAllocation sa = loads.get(dischargeSlot);
 					if (sa != null) {
 						price = sa.getPrice();
+						volume = sa.getPhysicalVolumeTransferred();
 					}
 				}
 
@@ -304,9 +327,18 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 				for (final MTMResult result : row.getLhsResults()) {
 					if (result.getEarliestETA() == null)
 						continue;
-					if (price > (result.getEarliestPrice() + result.getShippingCost())) {
-						price = result.getEarliestPrice();
-						bestResult = result;
+					
+					if (PNL) {
+						if (price * volume > (result.getEarliestPrice() + result.getShippingCost()) * result.getEarliestVolume()) {
+							price = result.getEarliestPrice();
+							volume = result.getEarliestVolume();
+							bestResult = result;
+						}
+					} else {
+						if (price > (result.getEarliestPrice() + result.getShippingCost())) {
+							price = result.getEarliestPrice();
+							bestResult = result;
+						}
 					}
 				}
 
@@ -380,12 +412,12 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 			runnerBuilder.evaluateInitialState();
 			sdp.setLastEvaluationFailed(false);
 		} catch (final Exception e) {
+			progressMonitor.done();
 			System.out.print(e.getMessage() + "\n");
 		} finally {
+			progressMonitor.done();
 			runnerBuilder.dispose();
 		}
-
-		progressMonitor.done();
 	}
 
 	@Override

@@ -390,17 +390,19 @@ public class MTMSanboxUnit {
 									OptimiserUnitConvertor.convertToExternalPrice(ret.volumeInMMBTU == 0 ? 0 : //
 										Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(ret.shippingCost, ret.volumeInMMBTU)));
 						}
-						synchronized (row) {
-							if (mtmResult.getEarliestETA() != null) {
-								if (row.getBuyOption() != null) {
-									row.getRhsResults().add(mtmResult);
-								} else if (row.getSellOption() != null){
-									row.getLhsResults().add(mtmResult);
+						
+						return new Runnable(){
+							@Override
+							public void run(){
+								if (mtmResult.getEarliestETA() != null) {
+									if (row.getBuyOption() != null) {
+										row.getRhsResults().add(mtmResult);
+									} else if (row.getSellOption() != null){
+										row.getLhsResults().add(mtmResult);
+									}
 								}
 							}
-						}
-						
-						return null;
+						};
 					} finally {
 						monitor.worked(1);
 					}

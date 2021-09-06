@@ -80,6 +80,8 @@ public final class KnownFeatures {
 	
 	public static final String FEATURE_MTM_SELL_SIDE = "features:mtm-sell-side";
 	
+	public static final String FEATURE_MTM_PNL = "features:mtm-pnl";
+	
 	/**
 	 * Enable the charter length evaluation mode
 	 */

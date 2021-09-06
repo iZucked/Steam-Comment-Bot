@@ -269,10 +269,12 @@ public class ViabilitySanboxUnit {
 							return null;
 						}
 						try {
-							synchronized (row) {
-								row.getRhsResults().add(generateViabilityResult(mapper, modelEntityMap, vesselAssignment, vesselSpotIndex, load, market));
-							}
-							return null;
+							return new Runnable() {
+							@Override
+								public void run() {
+									row.getRhsResults().add(generateViabilityResult(mapper, modelEntityMap, vesselAssignment, vesselSpotIndex, load, market));
+								}
+							};
 						} finally {
 							monitor.worked(1);
 						}
