@@ -5,9 +5,9 @@
 package com.mmxlabs.models.lng.transformer.period;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
@@ -21,6 +21,8 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.transformer.period.PeriodTransformer.InclusionRecord;
+import com.mmxlabs.models.lng.transformer.period.PeriodTransformer.SlotLockMode;
 
 /**
  * Helper class used by PeriodTransformer to determine which elements are included and which are excluded.
@@ -57,25 +59,21 @@ public class InclusionChecker {
 	 * 
 	 */
 	public static class PeriodRecord {
-		@Nullable
-		public ZonedDateTime lowerCutoff;
-		@Nullable
-		public ZonedDateTime lowerBoundary;
+		public @Nullable ZonedDateTime lowerCutoff;
+		public @Nullable ZonedDateTime lowerBoundary;
 
-		@Nullable
-		public ZonedDateTime upperBoundary;
-		@Nullable
-		public ZonedDateTime upperCutoff;
+		public @Nullable ZonedDateTime upperBoundary;
+		public @Nullable ZonedDateTime upperCutoff;
 
-		@Nullable
-		LocalDate promptStart = null;
-		@Nullable
-		LocalDate promptEnd = null;
+		public @Nullable LocalDate promptStart = null;
+		public @Nullable LocalDate promptEnd = null;
+
+		public @Nullable LocalDateTime schedulingEndDate = null;
 	}
 
 	@NonNull
-	public NonNullPair<InclusionType, Position> getObjectInclusionType(@NonNull final EObject object, @NonNull final Map<EObject, PortVisit> scheduledEventMap,
-			@NonNull final PeriodRecord periodRecord) {
+	public NonNullPair<InclusionType, Position> getObjectInclusionType(@NonNull final InclusionRecord inclusionRecord, @NonNull final PeriodRecord periodRecord) {
+		final EObject object = inclusionRecord.object;
 
 		if (object instanceof Cargo) {
 
@@ -85,16 +83,30 @@ public class InclusionChecker {
 			final Cargo cargo = (Cargo) object;
 			final NonNullPair<Slot<?>, Slot<?>> slots = getFirstAndLastSlots(cargo);
 			final Slot<?> firstSlot = slots.getFirst();
+
 			final Slot<?> lastSlot = slots.getSecond();
+			// Is the cargo after the upper cut off? If so OUT
 			if (periodRecord.upperCutoff != null) {
-				final PortVisit portVisit = scheduledEventMap.get(firstSlot);
+				final PortVisit portVisit = inclusionRecord.event.get(firstSlot);
 				if (getScheduledStart(firstSlot, portVisit).isAfter(periodRecord.upperCutoff)) {
+
+					for (final Slot<?> s : cargo.getSlots()) {
+						inclusionRecord.slotLockMode.put(s, SlotLockMode.VESSEL_AND_DATES);
+					}
+
 					return new NonNullPair<>(InclusionType.Out, Position.After);
 				}
 			}
+			// Is the cargo before the lower cutoff - but with the final ballast coming into the period? BOUNDARY
 			if (periodRecord.lowerCutoff != null) {
-				final PortVisit portVisit = scheduledEventMap.get(lastSlot);
+				final PortVisit portVisit = inclusionRecord.event.get(lastSlot);
 				if (getScheduledEnd(lastSlot, portVisit).isBefore(periodRecord.lowerCutoff)) {
+
+					// Slots need to be fully locked down
+					for (final Slot<?> s : cargo.getSlots()) {
+						inclusionRecord.slotLockMode.put(s, SlotLockMode.VESSEL_AND_DATES);
+					}
+
 					if (portVisit != null) {
 						Event evt = portVisit.getNextEvent();
 						while (evt != null && !(evt instanceof PortVisit)) {
@@ -114,19 +126,35 @@ public class InclusionChecker {
 							}
 						}
 					}
+
 					return new NonNullPair<>(InclusionType.Out, Position.Before);
 				}
 			}
 			{
+				// Assume cargo is IN unless following checks update the state
 				InclusionType type = InclusionType.In;
 				Position pos = Position.Unknown;
+				// If the last slot is after the boundary, then assume IN -> OUT => BOUNDARY
 				if (periodRecord.upperBoundary != null) {
 					if (lastSlot.getSchedulingTimeWindow().getEnd().isAfter(periodRecord.upperBoundary)) {
 						type = InclusionType.Boundary;
 						pos = Position.After;
+
+						// Lock the slots to the current vessel, but keep the window flex as they are in the future
+						boolean first = true;
+						for (final Slot<?> s : cargo.getSortedSlots()) {
+							if (first) {
+								first = false;
+								continue;
+							}
+							if (s.getSchedulingTimeWindow().getEnd().isAfter(periodRecord.upperBoundary)) {
+								inclusionRecord.slotLockMode.put(s, SlotLockMode.VESSEL_ONLY);
+							}
+						}
 					}
 				}
 				if (periodRecord.lowerBoundary != null) {
+					// If the first slot is before the boundary then assume OUT -> IN => BOUNDARY
 					if (firstSlot.getSchedulingTimeWindow().getStart().isBefore(periodRecord.lowerBoundary)) {
 						type = InclusionType.Boundary;
 						if (pos != Position.Unknown) {
@@ -134,12 +162,22 @@ public class InclusionChecker {
 						} else {
 							pos = Position.Before;
 						}
+
+						// Historical slots, lock down vessel and window
+						for (final Slot<?> s : cargo.getSortedSlots()) {
+							if (s.getSchedulingTimeWindow().getStart().isBefore(periodRecord.lowerBoundary)) {
+								inclusionRecord.slotLockMode.put(s, SlotLockMode.VESSEL_AND_DATES);
+							}
+						}
+
 					}
 
 				}
 				return new NonNullPair<>(type, pos);
 			}
-		} else if (object instanceof Slot<?>) {
+		}
+
+		else if (object instanceof Slot<?>) {
 			final Slot<?> slot = (Slot<?>) object;
 
 			// This should just be open positions and thus are only IN or OUT
@@ -156,15 +194,17 @@ public class InclusionChecker {
 			}
 		} else if (object instanceof VesselEvent) {
 			final VesselEvent event = (VesselEvent) object;
-			final PortVisit portVisit = scheduledEventMap.get(event);
+			final PortVisit portVisit = inclusionRecord.event.get(event);
 
 			if (periodRecord.upperCutoff != null) {
-				if (getScheduledStart(event, scheduledEventMap.get(event)).isAfter(periodRecord.upperCutoff)) {
+				// Is the start of the event after the upper cut off? if so exclude
+				if (getScheduledStart(event, portVisit).isAfter(periodRecord.upperCutoff)) {
 					return new NonNullPair<>(InclusionType.Out, Position.After);
 				}
 			}
 			if (periodRecord.lowerCutoff != null) {
-				final ZonedDateTime cal = getScheduledStart(event, scheduledEventMap.get(event)).plusDays(event.getDurationInDays());
+				// Look to see if the ballast leg finishes before the lower cutoff. We assume the next port visit after the event is the marker for end of the ballast leg
+				final ZonedDateTime cal = getScheduledStart(event, portVisit).plusDays(event.getDurationInDays());
 				if (cal.isBefore(periodRecord.lowerCutoff)) {
 					if (portVisit != null) {
 						Event evt = portVisit.getNextEvent();
@@ -209,21 +249,45 @@ public class InclusionChecker {
 				}
 				return new NonNullPair<>(type, pos);
 			}
-		} else if (object instanceof VesselAvailability) {
-			final VesselAvailability vesselAvailability = (VesselAvailability) object;
-			if (periodRecord.lowerCutoff != null) {
-				if (vesselAvailability.isSetEndBy() && vesselAvailability.getEndByAsDateTime().isBefore(periodRecord.lowerCutoff)) {
-					return new NonNullPair<>(InclusionType.Out, Position.Before);
-				}
+		}
+
+		return new NonNullPair<>(InclusionType.In, Position.Unknown);
+	}
+
+
+	@NonNull
+	public NonNullPair<InclusionType, Position> getVesselAvailabilityInclusionType(@NonNull final VesselAvailability vesselAvailability, @NonNull final PeriodRecord periodRecord) {
+
+		if (periodRecord.lowerCutoff != null) {
+			if (vesselAvailability.isSetEndBy() && vesselAvailability.getEndByAsDateTime().isBefore(periodRecord.lowerCutoff)) {
+				return new NonNullPair<>(InclusionType.Out, Position.Before);
 			}
-			if (periodRecord.upperCutoff != null) {
-				if (vesselAvailability.isSetStartAfter() && vesselAvailability.getStartAfterAsDateTime().isAfter(periodRecord.upperCutoff)) {
-					return new NonNullPair<>(InclusionType.Out, Position.After);
-				}
+		}
+		if (periodRecord.upperCutoff != null) {
+			if (vesselAvailability.isSetStartAfter() && vesselAvailability.getStartAfterAsDateTime().isAfter(periodRecord.upperCutoff)) {
+				return new NonNullPair<>(InclusionType.Out, Position.After);
 			}
 		}
 
 		return new NonNullPair<>(InclusionType.In, Position.Unknown);
+	}
+
+	public Position getSlotPosition(final Slot<?> slot, final PeriodRecord periodRecord) {
+
+		// This should just be open positions and thus are only IN or OUT
+
+		if (periodRecord.upperBoundary != null) {
+			if (slot.getSchedulingTimeWindow().getStart().isAfter(periodRecord.upperBoundary)) {
+				return Position.After;
+			}
+		}
+		if (periodRecord.lowerBoundary != null) {
+			if (slot.getSchedulingTimeWindow().getEnd().isBefore(periodRecord.lowerBoundary)) {
+				return Position.Before;
+			}
+		}
+		return Position.Unknown;
+
 	}
 
 	@NonNull

@@ -188,7 +188,7 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 			final Vessel period_vessel_1 = ((VesselAvailability) period_event.getVesselAssignmentType()).getVessel();
 			Assertions.assertEquals(vessel_1.getName(), period_vessel_1.getName());
 
-			Assertions.assertFalse(period_event.isLocked());
+			Assertions.assertTrue(period_event.isLocked());
 			Assertions.assertFalse(period_event.getAllowedVessels().isEmpty());
 			Assertions.assertEquals(1, period_event.getAllowedVessels().size());
 			Assertions.assertTrue(period_event.getAllowedVessels().contains(period_vessel_1));

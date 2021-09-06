@@ -48,17 +48,17 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 	 * "Simple" horizon - one vessel, one cargo, horizon in the future, vessel should end at that date.
 	 */
 	@Test
-	public void testSimpleHorizon() {
-
+	public void testSimpleHorizon () {
+		
 		@NonNull
 		LocalDate horizon = LocalDate.of(2016, 3, 1);
 		scenarioModelBuilder.setScheduleHorizon(horizon);
-
+		
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
-
+		
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.build();
-
+		
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
 				.build() //
@@ -67,31 +67,103 @@ public class ScheduleHorizonTests extends AbstractMicroTestCase {
 				.withVesselAssignment(vesselAvailability, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
-
+		
 		evaluateWithLSOTest(scenarioRunner -> {
-
+			
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-
+			
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 			final Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
-
+			
 			@Nullable
 			final Schedule schedule = ScenarioModelUtil.findSchedule(lngScenarioModel);
 			Assertions.assertNotNull(schedule);
-
+			
 			@Nullable
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(optCargo1.getLoadName(), schedule);
-
+			
 			Assertions.assertNotNull(cargoAllocation);
-
+			
 			final EList<Event> events = cargoAllocation.getSequence().getEvents();
 			final Event lastEvent = events.get(events.size() - 1);
-
+			
 			Assertions.assertEquals(horizon, lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate());
-
+			
 		});
 	}
+
+	
+	/**
+	 * Two cargo case with a horizon and an optimisation period. This used to cause an assertion error
+	 */
+	@Test
+	public void testHorizonRegression() {
+
+		@NonNull
+		LocalDate horizon = LocalDate.of(2021, 11, 15);
+		scenarioModelBuilder.setScheduleHorizon(horizon);
+
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+
+		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+				.build();
+
+		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L1", LocalDate.of(2021, 10, 26), portFinder.findPortById(InternalDataConstants.PORT_PLUTO), null, entity, "5") //
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2021, 11, 8), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7") //
+				.build() //
+				.withVesselAssignment(vesselAvailability, 1) //
+				.withAssignmentFlags(false, false) //
+				.build();
+
+
+		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("L2", LocalDate.of(2022, 1, 14), portFinder.findPortById(InternalDataConstants.PORT_PLUTO), null, entity, "5") //
+				.build() //
+				.makeDESSale("D2", LocalDate.of(2022, 1, 24), portFinder.findPortById(InternalDataConstants.PORT_HIMEJI), null, entity, "7") //
+				.build() //
+				.withVesselAssignment(vesselAvailability, 1) //
+				.withAssignmentFlags(false, false) //
+				.build();
+		
+		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2021, 4, 7));
+		lngScenarioModel.setPromptPeriodEnd(LocalDate.of(2021, 7, 6));
+		evaluateWithLSOTest(true, optimisationPlan -> {
+			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2021, 8, 1));
+			optimisationPlan.getUserSettings().setPeriodEnd(YearMonth.of(2021, 12));
+		}, null, scenarioRunner -> {
+
+//			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+//
+//			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+//
+//			@Nullable
+//			final Schedule schedule = scenarioToOptimiserBridge.createOptimiserSchedule(scenarioToOptimiserBridge.getDataTransformer().getInitialSequences(), null);
+//			Assertions.assertNotNull(schedule);
+//
+//			@Nullable
+//			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(cargo1.getLoadName(), schedule);
+//
+//			Assertions.assertNotNull(cargoAllocation);
+//
+//			Sequence sequence = cargoAllocation.getSequence();
+//			final List<Event> events = sequence.getEvents();
+//			final Event lastEvent = events.get(events.size() - 1);
+//
+//			// Expect to end in time for cargo 2 loading which has been stripped out
+//			// Assertions.assertEquals(LocalDate.of(2016, 4, 16), lastEvent.getEnd().plusHours(1).withZoneSameInstant(ZoneId.of("UTC")).toLocalDate());
+//
+//			// No end date flex, fully costed
+//			VesselAvailability period_vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
+//			Assertions.assertEquals(LocalDateTime.of(2017, 6, 1, 0, 0, 0), period_vesselAvailability.getEndAfter());
+//			Assertions.assertEquals(LocalDateTime.of(2021, 9, 1, 0, 0, 0), period_vesselAvailability.getEndBy());
+//
+//			Assertions.assertNull(optimiserScenario.getSchedulingEndDate());
+		}, null);
+	}
+	
 
 	/**
 	 * Optional unused time charter, should not be evaluated
