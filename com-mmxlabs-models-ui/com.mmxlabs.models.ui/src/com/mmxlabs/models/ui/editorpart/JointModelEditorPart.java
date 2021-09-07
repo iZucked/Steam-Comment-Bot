@@ -488,8 +488,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 					sw.append(String.format("Name: %s%n", instance.getName()));
 					sw.append(String.format("UUID: %s%n", instance.getUuid()));
-					sw.append(String.format("Scenario Version: %s - %d%n", instance.getVersionContext(), instance.getScenarioVersion()));
-					sw.append(String.format("Client Version: %s - %d%n", instance.getClientVersionContext(), instance.getClientScenarioVersion()));
+					sw.append(String.format("Scenario Version: %d%n", instance.getScenarioVersion()));
+					sw.append(String.format("Client Version: %d%n", instance.getClientScenarioVersion()));
 					sw.append(String.format("%n"));
 				}
 			}
