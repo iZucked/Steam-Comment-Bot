@@ -10,7 +10,21 @@
    <extension
          point="org.eclipse.core.runtime.adapters">
       <factory
+            adaptableType="com.mmxlabs.scenario.service.model.manager.MigrationForbiddenException"
+            class="com.mmxlabs.models.migration.scenario.internal.ScenarioMigrationExceptionReasonProviderAdapterFactory">
+         <adapter
+               type="com.mmxlabs.rcp.common.editors.IReasonProvider">
+         </adapter>
+      </factory>
+      <factory
             adaptableType="com.mmxlabs.models.migration.scenario.ScenarioMigrationException"
+            class="com.mmxlabs.models.migration.scenario.internal.ScenarioMigrationExceptionReasonProviderAdapterFactory">
+         <adapter
+               type="com.mmxlabs.rcp.common.editors.IReasonProvider">
+         </adapter>
+      </factory>
+      <factory
+            adaptableType="com.mmxlabs.models.migration.scenario.FinalClientMigratedVersionMismatchException"
             class="com.mmxlabs.models.migration.scenario.internal.ScenarioMigrationExceptionReasonProviderAdapterFactory">
          <adapter
                type="com.mmxlabs.rcp.common.editors.IReasonProvider">

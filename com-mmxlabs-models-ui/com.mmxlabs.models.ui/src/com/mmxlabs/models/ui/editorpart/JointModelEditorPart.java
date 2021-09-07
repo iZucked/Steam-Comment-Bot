@@ -493,9 +493,11 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 					sw.append(String.format("%n"));
 				}
 			}
-			sw.append(String.format("Message %s%n", throwable.getMessage()));
-			sw.append("\nStackTrace:\n");
-			throwable.printStackTrace(new PrintWriter(sw));
+			if (throwable != null) {
+				sw.append(String.format("Message %s%n", throwable.getMessage()));
+				sw.append("\nStackTrace:\n");
+				throwable.printStackTrace(new PrintWriter(sw));
+			}
 			final Text detailsText = toolkit.createText(technicalDetails, sw.toString(), SWT.MULTI | SWT.READ_ONLY);
 			technicalDetails.setClient(detailsText);
 
