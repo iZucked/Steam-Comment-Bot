@@ -213,9 +213,9 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 			if (gcc != null) {
 				return "Reset";
 			} else {
-				return "Override";
+				return "Create";
 			}
 		}
-		return "Override";
+		return "Create";
 	}
 }

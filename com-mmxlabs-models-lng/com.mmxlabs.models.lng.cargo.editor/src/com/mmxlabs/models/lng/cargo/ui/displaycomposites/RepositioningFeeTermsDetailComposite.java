@@ -23,7 +23,6 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.DefaultStatusProvider;
-import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
@@ -96,7 +95,7 @@ public class RepositioningFeeTermsDetailComposite extends DefaultTopLevelComposi
 	}
 	
 	protected void doDisplay(final GenericCharterContract gcc) {
-		if (!this.dialogContext.isMultiEdit() && gcc != null && gcc.getName() != null) {
+		if (!this.dialogContext.isMultiEdit() && gcc != null) {
 			createRepositioningFeeComposite(owner, toolkit, gcc);
 		}
 		resizeAction.run();
