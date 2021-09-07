@@ -452,6 +452,7 @@ public class PNLBasedWindowTrimmerUtils {
 			}
 		}
 
+		alignTimeChoicesToMidnightLocalTime(times, 24, toPortSlot);
 		if (toPortSlot instanceof IEndPortSlot) {
 
 			final IResource resource = vesselProvider.getResource(vesselAvailability);
@@ -466,7 +467,8 @@ public class PNLBasedWindowTrimmerUtils {
 					// Then finish at the end.
 					if (endRequirement.isMinDurationSet()) {
 						final int minEndTime = vesselStartTime + endRequirement.getMinDurationInHours();
-						if (minEndTime > twEnd) {
+						times.add(TimeChoice.forImportant(minEndTime));
+						if (minEndTime > twStart) {
 							// Adjust time time windows
 							twStart = Math.max(minEndTime, twStart);
 							twEnd = Math.max(twStart, twEnd);
@@ -475,6 +477,7 @@ public class PNLBasedWindowTrimmerUtils {
 
 					if (endRequirement.isMaxDurationSet()) {
 						final int maxEndTime = vesselStartTime + endRequirement.getMaxDurationInHours();
+						times.add(TimeChoice.forImportant(maxEndTime));
 						if (maxEndTime < twEnd) {
 							// Reduce end time
 							twEnd = Math.min(maxEndTime, twEnd);
@@ -485,7 +488,6 @@ public class PNLBasedWindowTrimmerUtils {
 				}
 			}
 		}
-		alignTimeChoicesToMidnightLocalTime(times, 24, toPortSlot);
 
 		final int pTWStart = twStart;
 		final int pTWEnd = twEnd;
@@ -818,7 +820,7 @@ public class PNLBasedWindowTrimmerUtils {
 		intervalMap.entrySet().forEach(e -> alignTimeChoicesToMidnightLocalTime(e.getValue(), 0, e.getKey()));
 
 		final ImmutableMap.Builder<IPortSlot, ImmutableList<TimeChoice>> subMap = new ImmutableMap.Builder<>();
-		for (Map.Entry<IPortSlot, Collection<TimeChoice>> e : intervalMap.entrySet()) {
+		for (final Map.Entry<IPortSlot, Collection<TimeChoice>> e : intervalMap.entrySet()) {
 			subMap.put(e.getKey(), ImmutableList.copyOf(e.getValue()));
 		}
 		return subMap.build();

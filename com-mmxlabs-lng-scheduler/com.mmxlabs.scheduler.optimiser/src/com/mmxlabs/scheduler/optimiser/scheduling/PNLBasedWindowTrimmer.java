@@ -48,6 +48,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.evaluation.IVoyagePlanEvaluator;
 import com.mmxlabs.scheduler.optimiser.evaluation.PreviousHeelRecord;
 import com.mmxlabs.scheduler.optimiser.evaluation.ScheduledVoyagePlanResult;
@@ -268,13 +269,16 @@ public class PNLBasedWindowTrimmer {
 		List<ScheduledRecord> currentHeads = new LinkedList<>();
 		for (int idx = 0; idx < trimmedWindowRecords.size(); idx++) {
 
-			final boolean lastPlan = idx == trimmedWindowRecords.size() - 1;
 			final IPortTimeWindowsRecord portTimeWindowsRecord = trimmedWindowRecords.get(idx);
+			final boolean lastPlan = idx == trimmedWindowRecords.size() - 1;
 
 			final List<ScheduledRecord> results = evaluateShippedWithIntervals(resource, vesselAvailability, lastPlan, portTimeWindowsRecord, travelTimeData, intervalMap, currentHeads);
 
 			assert !results.isEmpty();
-			Collections.sort(results, ScheduledRecord.getComparator(lastPlan));
+			boolean includeMinDuration = lastPlan;
+			final IPortSlot returnSlot = portTimeWindowsRecord.getReturnSlot();
+			includeMinDuration |= returnSlot instanceof IEndPortSlot;			
+			Collections.sort(results, ScheduledRecord.getComparator(includeMinDuration));
 
 			if (!lastPlan && TRIM_EQUIV) {
 				// Attempt to retain the best solutions for the given vessel start time and end
