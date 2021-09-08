@@ -88,7 +88,7 @@ public class GenericCharterContractTopLevelComposite extends DefaultTopLevelComp
 		g3.setLayout(new GridLayout());
 		g3.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
-		ballastBonusComposite = new BallastBonusDetailComposite(g3, SWT.NONE, dialogContext, toolkit, defaultResizeMethod());
+		ballastBonusComposite = new BallastBonusDetailComposite(g3, SWT.NONE, dialogContext, toolkit, defaultResizeMethod(), object);
 		ballastBonusComposite.setCommandHandler(commandHandler);
 		ballastBonusComposite.display(dialogContext, root, object, range, dbc);
 		
