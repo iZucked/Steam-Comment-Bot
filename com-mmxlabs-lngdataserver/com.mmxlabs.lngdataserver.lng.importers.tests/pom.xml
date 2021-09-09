@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.lngdataserver.parent</artifactId>
 		<groupId>com.mmxlabs.lngdataserver</groupId>
-		<version>4.12.48-SNAPSHOT</version>
+		<version>4.12.48.RELEASE</version>
 	</parent>
 	<artifactId>com.mmxlabs.lngdataserver.lng.importers.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
