@@ -277,7 +277,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 				}
 
-				output.setIdleNBOHours(nboHours);
+				output.setRouteAdditionalNBOHours(nboHours);
 				
 				// Check that we actually have enough lng to make the NBO journey
 				final long routeNboProvidedInM3 = routeNboRequestedInM3 <= nboAvailableInM3 ? routeNboRequestedInM3 : nboAvailableInM3;
@@ -481,8 +481,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				ranDry = true;
 			}
 
-			// Retain any canal nbo hours
-			output.setTravelNBOHours(output.getTravelNBOHours() + nboHours);
+			output.setTravelNBOHours(nboHours);
 
 			long nboInM3 = Calculator.quantityFromRateTime(nboRateInM3PerDay, nboHours) / 24L;
 
