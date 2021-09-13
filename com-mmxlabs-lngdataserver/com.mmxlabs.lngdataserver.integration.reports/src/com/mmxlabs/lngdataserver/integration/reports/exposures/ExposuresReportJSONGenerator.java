@@ -71,7 +71,7 @@ public class ExposuresReportJSONGenerator {
 	}
 
 	private static LocalDate getEarliestScenarioDate(final IScenarioDataProvider sdp) {
-		LocalDate result = LocalDate.now();
+		LocalDate result = LocalDate.MAX;
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
 		LocalDate erl = result;
 
@@ -93,7 +93,7 @@ public class ExposuresReportJSONGenerator {
 	}
 
 	private static LocalDate getLatestScenarioDate(final IScenarioDataProvider sdp) {
-		LocalDate result = LocalDate.now();
+		LocalDate result = LocalDate.MIN;
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
 		LocalDate erl = result;
 
