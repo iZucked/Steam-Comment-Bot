@@ -10,10 +10,13 @@ s3_resource = boto3.resource("s3", region_name="eu-west-2")
 def downloadDirectory(bucketName):
     s3_resource = boto3.resource('s3')
     bucket = s3_resource.Bucket(bucketName) 
-    for obj in bucket.objects.filter(): ##(Prefix = remoteDirectoryName):
-        if not os.path.exists(os.path.dirname(obj.key)):
-            os.makedirs(os.path.dirname(obj.key))
-        bucket.download_file(obj.key, obj.key) # save to same path
+    for obj in bucket.objects.filter(Prefix = 'dynamictests'):
+        target = obj.key.replace('dynamictests/','')
+        print(obj.key + " -- " + target)
+        if not os.path.exists(os.path.dirname(target)):
+            os.makedirs(os.path.dirname(target))
+
+        bucket.download_file(obj.key, target) # save to same path
 
 if __name__ == '__main__':
 	try:
