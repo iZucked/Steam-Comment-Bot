@@ -26,7 +26,7 @@ public class SandboxScenario {
 		this.model = model;
 
 		@NonNull
-		ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+		ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecordChecked(instance);
 		this.modelReference = modelRecord.aquireReference("SandboxScenario:1");
 	}
 

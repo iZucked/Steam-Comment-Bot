@@ -64,9 +64,8 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 			final IScenarioServiceEditorInput iScenarioServiceEditorInput = (IScenarioServiceEditorInput) targetEditor.getEditorInput();
 
 			final ScenarioInstance instance = iScenarioServiceEditorInput.getScenarioInstance();
-			@NonNull
-			ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
-			if (modelRecord.isLoadFailure()) {
+ 			ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+			if (modelRecord == null || modelRecord.isLoadFailure()) {
 				action.setEnabled(false);
 				return;
 			}

@@ -271,7 +271,7 @@ public final class OptimisationHelper {
 		if (service == null) {
 			return null;
 		}
-		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecordChecked(instance);
 
 		final OptimisationPlan[] planRef = new OptimisationPlan[1];
 		final BiPredicate<IScenarioDataProvider, LNGScenarioModel> prepareCallback = (ref, root) -> {

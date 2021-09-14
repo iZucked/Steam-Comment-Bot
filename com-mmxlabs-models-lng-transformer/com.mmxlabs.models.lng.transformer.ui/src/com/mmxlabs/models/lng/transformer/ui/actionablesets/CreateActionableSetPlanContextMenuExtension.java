@@ -93,7 +93,7 @@ public class CreateActionableSetPlanContextMenuExtension implements ITradesTable
 			final ScenarioInstance instance = scenarioEditingLocation.getScenarioInstance();
 			// While we only keep the reference for the duration of this method call, the two current concrete implementations of IJobControl will obtain a ModelReference
 			@NonNull
-			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecordChecked(instance);
 			try (final IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ActionPlanContextMenuExtension")) {
 				final EObject object = scenarioDataProvider.getScenario();
 

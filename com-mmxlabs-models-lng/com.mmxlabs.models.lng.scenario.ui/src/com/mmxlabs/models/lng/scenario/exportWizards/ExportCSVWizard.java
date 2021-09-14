@@ -84,7 +84,7 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 		for (final ScenarioInstance instance : instances) {
 			// Release reference on block exit
 			@NonNull
-			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecordChecked(instance);
 			try (final IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ExportCSVWizard")) {
 				final String name = instance.getName();
 				exportScenario(scenarioDataProvider, info, createExportDirectories, name);

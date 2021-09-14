@@ -84,7 +84,7 @@ public class CombinePADPWizard extends Wizard implements IExportWizard {
 		this.supplySideScenario = supplySideSelectorPage.getScenarioInstance();
 		BusyIndicator.showWhile(this.getContainer().getShell().getDisplay(), () -> {
 			@NonNull
-			ScenarioModelRecord supplySideModelRecord = SSDataManager.Instance.getModelRecord(supplySideScenario);
+			ScenarioModelRecord supplySideModelRecord = SSDataManager.Instance.getModelRecordChecked(supplySideScenario);
 			if (supplySideModelRecord.isLoadFailure()) {
 				throw new RuntimeException("Unable to load supply side model data");
 			}
@@ -102,7 +102,7 @@ public class CombinePADPWizard extends Wizard implements IExportWizard {
 
 					// Check demand side scenario has expected sales contracts before fork
 					@NonNull
-					ScenarioModelRecord demandSideModelRecord = SSDataManager.Instance.getModelRecord(demandSideScenario);
+					ScenarioModelRecord demandSideModelRecord = SSDataManager.Instance.getModelRecordChecked(demandSideScenario);
 					if (demandSideModelRecord.isLoadFailure()) {
 						throw new RuntimeException("Unable to load demand side model data");
 					}
@@ -159,7 +159,7 @@ public class CombinePADPWizard extends Wizard implements IExportWizard {
 						throw new RuntimeException("Unable to fork scenario for combined model.", exception);
 					}
 					@NonNull
-					ScenarioModelRecord combinedModelRecord = SSDataManager.Instance.getModelRecord(combinedScenarioInstance);
+					ScenarioModelRecord combinedModelRecord = SSDataManager.Instance.getModelRecordChecked(combinedScenarioInstance);
 					if (combinedModelRecord.isLoadFailure()) {
 						throw new RuntimeException("Unable to load combined model data");
 					}

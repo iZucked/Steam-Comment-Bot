@@ -46,21 +46,23 @@ public class DeleteScenarioFragmentCommandHandler extends AbstractHandler {
 							final ScenarioFragment fragment = (ScenarioFragment) element;
 							final ScenarioInstance instance = fragment.getScenarioInstance();
 							assert instance != null;
-							final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
-							modelRecord.execute(ref -> {
-								final EditingDomain domain = ref.getEditingDomain();
-								final EObject fragmentObject = fragment.getFragment();
-								if (fragmentObject != null) {
-									final Command cmd = RemoveCommand.create(domain, fragmentObject);
-									assert cmd.canExecute();
-									if (fragment.isUseCommandStack()) {
-										domain.getCommandStack().execute(cmd);
-									} else {
-										cmd.execute();
-										ref.setDirty();
+							final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+							if (modelRecord != null) {
+								modelRecord.execute(ref -> {
+									final EditingDomain domain = ref.getEditingDomain();
+									final EObject fragmentObject = fragment.getFragment();
+									if (fragmentObject != null) {
+										final Command cmd = RemoveCommand.create(domain, fragmentObject);
+										assert cmd.canExecute();
+										if (fragment.isUseCommandStack()) {
+											domain.getCommandStack().execute(cmd);
+										} else {
+											cmd.execute();
+											ref.setDirty();
+										}
 									}
-								}
-							});
+								});
+							}
 						}
 					}
 				}

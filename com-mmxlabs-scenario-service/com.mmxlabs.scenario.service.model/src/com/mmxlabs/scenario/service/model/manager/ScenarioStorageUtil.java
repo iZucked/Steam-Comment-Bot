@@ -87,6 +87,10 @@ public class ScenarioStorageUtil {
 			super(e);
 		}
 
+		public EncryptedScenarioException(String message) {
+			super(message);
+		}
+
 	}
 
 	public static final @NonNull String DEFAULT_CONTENT_TYPE = "com.mmxlabs.shiplingo.platform.models.manifest.scnfile";
@@ -405,7 +409,9 @@ public class ScenarioStorageUtil {
 				}
 			}
 		} catch (final CharConversionException e) {
-			throw new EncryptedScenarioException(e);
+			return ScenarioModelRecord.forException(new EncryptedScenarioException(e));
+		} catch (final Exception e) {
+			return ScenarioModelRecord.forException(e);
 		}
 		return null;
 	}

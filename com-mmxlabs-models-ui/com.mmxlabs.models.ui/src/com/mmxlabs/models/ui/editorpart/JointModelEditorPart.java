@@ -364,6 +364,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 			}
 
 			modelRecord = SSDataManager.Instance.getModelRecord(instance);
+			if (modelRecord == null) {
+				throw new RuntimeException("Model record is null");
+			}
 			final ProgressMonitorDialog dialog = new ProgressMonitorDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
 			dialog.run(false, false, monitor -> modelReference = modelRecord.aquireReference("JointModelEditorPart", monitor));
 

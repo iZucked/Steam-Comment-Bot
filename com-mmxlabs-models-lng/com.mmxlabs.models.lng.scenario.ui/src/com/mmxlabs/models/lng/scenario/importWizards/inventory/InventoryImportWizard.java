@@ -170,7 +170,7 @@ public class InventoryImportWizard extends Wizard implements IImportWizard {
 	private void doImportAction(final String filename, final char listSeparator, final char decimalSeparator, final ScenarioInstance instance, final Set<String> uniqueProblems,
 			final List<String> allProblems, final boolean multipleDetails) {
 		@NonNull
-		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecordChecked(instance);
 		try (final ModelReference modelReference = modelRecord.aquireReference("InventoryImportWizard")) {
 			final ImportAction.ImportHooksProvider ihp = getHooksProvider(instance, modelReference, getShell(), filename, listSeparator, decimalSeparator);
 			CargoModel cargoModel = ScenarioModelUtil.getCargoModel((LNGScenarioModel) modelReference.getInstance());

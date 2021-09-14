@@ -10,7 +10,6 @@ import java.util.concurrent.ForkJoinPool;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.custom.BusyIndicator;
@@ -52,10 +51,12 @@ public class RevertScenarioCommandHandler extends AbstractHandler {
 						final Object element = iterator.next();
 						if (element instanceof ScenarioInstance) {
 							final ScenarioInstance scenarioInstance = (ScenarioInstance) element;
-							final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
-							ScenarioServiceModelUtils.closeReferences(scenarioInstance);
-							// Run revert in BG to free up UI thread
-							ForkJoinPool.commonPool().submit(() -> modelRecord.revert());
+							final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+							if (modelRecord != null) {
+								ScenarioServiceModelUtils.closeReferences(scenarioInstance);
+								// Run revert in BG to free up UI thread
+								ForkJoinPool.commonPool().submit(() -> modelRecord.revert());
+							}
 						}
 					}
 				}

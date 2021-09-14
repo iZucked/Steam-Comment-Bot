@@ -537,7 +537,7 @@ public class CargoEconsReport extends ViewPart {
 							event = (VesselEvent) obj;
 						} else if (obj instanceof Cargo) {
 							cargo = (Cargo) obj;
-						}  else if (obj instanceof PaperDeal) {
+						} else if (obj instanceof PaperDeal) {
 							final PaperDeal paperDeal = (PaperDeal) obj;
 							if (schedule != null) {
 								if (paperDealMap == null) {
@@ -560,7 +560,6 @@ public class CargoEconsReport extends ViewPart {
 								slot = (DischargeSlot) obj;
 							}
 						}
-
 
 						if (cargo != null && schedule != null) {
 							if (cargoMap == null) {
@@ -605,7 +604,7 @@ public class CargoEconsReport extends ViewPart {
 								validObjects.add(vesselEventVisit);
 							}
 						}
-					}					
+					}
 				}
 			}
 		}
@@ -685,9 +684,10 @@ public class CargoEconsReport extends ViewPart {
 				final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editorInput;
 				final ScenarioInstance scenarioInstance = scenarioServiceEditorInput.getScenarioInstance();
 				if (scenarioInstance != null) {
-					@NonNull
 					final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
-					return modelRecord.aquireReference("CargoEconsReport");
+					if (modelRecord != null) {
+						return modelRecord.aquireReference("CargoEconsReport");
+					}
 				}
 			}
 		}
@@ -706,9 +706,8 @@ public class CargoEconsReport extends ViewPart {
 		if (IReportContentsGenerator.class.isAssignableFrom(adapter)) {
 			dummyDataCol.getColumn().dispose();
 
-			
 			return adapter.cast(new IReportContentsGenerator() {
-				public IReportContents getReportContents(final ScenarioResult pin, final ScenarioResult other, final @Nullable  List<Object> selectedObjects) {
+				public IReportContents getReportContents(final ScenarioResult pin, final ScenarioResult other, final @Nullable List<Object> selectedObjects) {
 					final SelectedDataProviderImpl provider = new SelectedDataProviderImpl();
 					if (pin != null) {
 						provider.addScenario(pin);
@@ -717,11 +716,11 @@ public class CargoEconsReport extends ViewPart {
 					if (other != null) {
 						provider.addScenario(other);
 					}
-					
+
 					if (selectedObjects != null) {
 						provider.setSelectedObjects(null, new StructuredSelection(selectedObjects));
 					}
-					
+
 					// Request a blocking update ...
 					listener.selectedDataProviderChanged(provider, true);
 					// ... so the data is ready to be read here.
@@ -1053,18 +1052,18 @@ public class CargoEconsReport extends ViewPart {
 				}
 			} else if (selectedObject instanceof GroupedCharterOutEvent) {
 				final GroupedCharterOutEvent charterLengthEvent = (GroupedCharterOutEvent) selectedObject;
-				
+
 				final GridColumnGroup gridColumnGroup = gridColumnGroupsMap.get(charterLengthEvent.name());
 				final GridColumn gc = new GridColumn(gridColumnGroup, SWT.NONE);
 				final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
 				GridViewerHelper.configureLookAndFeel(gvc);
 				// Mark column for disposal on selection change
 				dataColumns.add(gvc);
-				
+
 				gvc.getColumn().setText("");
 				gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
 				gvc.getColumn().setWidth(100);
-				
+
 				if (selectedDataProvider != null && selectedDataProvider.isPinnedObject(charterLengthEvent)) {
 					gvc.getColumn().setHeaderRenderer(columnImageHeaderCenteredRenderer);
 					gvc.getColumn().setImage(pinImage);

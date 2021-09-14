@@ -34,7 +34,7 @@ public class AnalyticsSolution {
 		this.title = title;
 
 		@NonNull
-		ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+		ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecordChecked(instance);
 		this.modelReference = modelRecord.aquireReference("AnalyticsSolution:1");
 	}
 

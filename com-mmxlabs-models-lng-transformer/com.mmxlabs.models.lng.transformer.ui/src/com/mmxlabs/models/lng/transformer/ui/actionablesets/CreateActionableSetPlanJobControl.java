@@ -86,7 +86,7 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 		this.jobDescriptor = jobDescriptor;
 		this.scenarioInstance = jobDescriptor.getJobContext();
 		@NonNull
-		ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecordChecked(scenarioInstance);
 		this.originalScenarioDataProvider = modelRecord.aquireScenarioDataProvider("LNGActionPlanJobControl");
 		originalEditingDomain = originalScenarioDataProvider.getEditingDomain();
 

@@ -27,7 +27,6 @@ import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -581,9 +580,11 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 				final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editorInput;
 				final ScenarioInstance scenarioInstance = scenarioServiceEditorInput.getScenarioInstance();
 				if (scenarioInstance != null) {
-					@NonNull
+
 					final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
-					return modelRecord.aquireReference("PNLConsReport");
+					if (modelRecord != null) {
+						return modelRecord.aquireReference("PNLConsReport");
+					}
 				}
 			}
 		}
