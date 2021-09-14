@@ -165,7 +165,7 @@ public class InclusionChecker {
 
 						// Historical slots, lock down vessel and window
 						for (final Slot<?> s : cargo.getSortedSlots()) {
-							if (s.getSchedulingTimeWindow().getStart().isBefore(periodRecord.lowerBoundary)) {
+							if (s.getSchedulingTimeWindow().getEnd().isBefore(periodRecord.lowerBoundary)) {
 								inclusionRecord.slotLockMode.put(s, SlotLockMode.VESSEL_AND_DATES);
 							}
 						}

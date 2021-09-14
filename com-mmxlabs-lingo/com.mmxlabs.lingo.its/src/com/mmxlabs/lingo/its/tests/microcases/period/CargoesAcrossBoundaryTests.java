@@ -154,23 +154,23 @@ public class CargoesAcrossBoundaryTests extends AbstractMicroTestCase {
 			Assertions.assertEquals(cargo1.getLoadName(), periodCargo1.getLoadName());
 
 			// Cargo should be locked
-			Assertions.assertTrue(periodCargo1.isLocked());
-			Assertions.assertFalse(periodCargo1.isAllowRewiring());
+			Assertions.assertFalse(periodCargo1.isLocked());
+			Assertions.assertTrue(periodCargo1.isAllowRewiring());
 			// Check load slot
 
 			final Slot<?> loadSlot = periodCargo1.getSortedSlots().get(0);
 			// Locked to vessel
 			Assertions.assertTrue(loadSlot.isLocked());
 			Assertions.assertEquals(((VesselAvailability) periodCargo1.getVesselAssignmentType()).getVessel(), loadSlot.getRestrictedVessels().get(0));
-			// Window should be "locked
+			// Window should be "locked"
 			Assertions.assertEquals(0, loadSlot.getWindowSize());
 
 			// Check discharge slot
 			final Slot<?> dischargeSlot = periodCargo1.getSortedSlots().get(1);
-			// Locked discharge
-			Assertions.assertEquals(0, dischargeSlot.getWindowSize());
-			Assertions.assertTrue(dischargeSlot.isLocked());
-			Assertions.assertFalse(dischargeSlot.getRestrictedVessels().isEmpty());
+			// Unlocked discharge
+			Assertions.assertEquals(2, dischargeSlot.getWindowSize());
+			Assertions.assertFalse(dischargeSlot.isLocked());
+			Assertions.assertTrue(dischargeSlot.getRestrictedVessels().isEmpty());
 
 		}, null);
 	}
