@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="74">
+<target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="78">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.equinox.compendium.sdk.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.equinox.core.feature.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.equinox.core.sdk.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.equinox.sdk.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.jdt.annotation" version="2.2.400.v20191120-1313"/>
+<unit id="org.eclipse.jdt.annotation" version="2.2.600.v20200408-1511"/>
 <unit id="org.eclipse.platform.sdk" version="0.0.0"/>
 <unit id="org.eclipse.sdk.ide" version="0.0.0"/>
 <unit id="org.eclipse.swt.tools.feature.feature.group" version="0.0.0"/>
-<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.updates.201912/R-4.14-201912100610/org.eclipse.updates.201912-R-4.14-201912100610.zip-unzip/"/>
+<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.updates/R-4.21-202109060500/org.eclipse.updates-R-4.21-202109060500.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.ecf.core.feature.feature.group" version="0.0.0"/>
@@ -34,14 +34,14 @@
 <unit id="org.eclipse.jdt.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.pde.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.rcp.source.feature.group" version="0.0.0"/>
-<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.201912/201912181000/org.eclipse.201912-201912181000.zip-unzip/"/>
+<unit id="javax.activation" version="1.1.0.v201211130549"/>
+<unit id="javax.servlet" version="3.1.0.v201410161800"/>
+<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.release/202109151000/org.eclipse.release-202109151000.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="ch.qos.logback.classic" version="0.0.0"/>
 <unit id="ch.qos.logback.core" version="0.0.0"/>
 <unit id="ch.qos.logback.slf4j" version="0.0.0"/>
-
-<unit id="javax.activation" version="0.0.0"/>
 <unit id="javax.jms" version="0.0.0"/>
 <unit id="javax.wsdl" version="0.0.0"/>
 <unit id="javax.xml" version="0.0.0"/>
@@ -54,7 +54,7 @@
 <unit id="org.apache.commons.lang" version="2.6.0.v201404270220"/>
 <unit id="org.apache.commons.logging" version="1.1.1.v201101211721"/>
 <unit id="org.apache.commons.math" version="0.0.0"/>
-<unit id="org.apache.commons.compress" version="1.18.0.v20181121-2221"/>
+<unit id="org.apache.commons.compress" version="1.20.0.v20210713-1928"/>
 <unit id="org.apache.log4j" version="0.0.0"/>
 <unit id="org.dom4j" version="1.6.1.v20190321-1528"/>
 <unit id="org.hamcrest" version="1.1.0.v20090501071000"/>
@@ -63,8 +63,8 @@
 <unit id="org.hamcrest.integration" version="1.3.0.v201305210900"/>
 <unit id="org.hamcrest.library" version="1.3.0.v20180524-2246"/>
 <unit id="org.hamcrest.text" version="1.1.0.v20090501071000"/>
-<unit id="org.slf4j.api" version="1.7.10.v20170428-1633"/>
-<unit id="org.slf4j.ext" version="1.7.10.v20180919-1350"/>
+<unit id="org.slf4j.api" version="1.7.30.v20200204-2150"/>
+<unit id="org.slf4j.ext" version="1.7.30.v20200204-2150"/>
 	<unit id="org.junit.jupiter.api" version="0.0.0"/>
 	<unit id="org.junit.jupiter.engine" version="0.0.0"/>
 	<unit id="org.junit.jupiter.migrationsupport" version="0.0.0"/>
@@ -75,12 +75,13 @@
 	<unit id="org.junit.platform.runner" version="0.0.0"/>
 	<unit id="org.junit.platform.suite.api" version="0.0.0"/>
 	<unit id="org.junit.vintage.engine" version="0.0.0"/>
-	<unit id="com.sun.jna" version="4.5.1.v20190425-1842"/>	
+	<unit id="com.sun.jna" version="4.5.1.v20210503-0343"/>	
 	<unit id="com.sun.jna.platform" version="4.5.1.v20190425-1842"/>
+	<unit id="org.bouncycastle.bcutil" version="0.0.0"/>
 	<unit id="org.bouncycastle.bcpg" version="0.0.0"/>
 	<unit id="org.bouncycastle.bcpkix" version="0.0.0"/>
 	<unit id="org.bouncycastle.bcprov" version="0.0.0"/>
-<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/orbit/orbit-buildrepo/R20191126223242/orbit-buildrepo-R20191126223242.zip-unzip/"/>
+<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/orbit/orbit-buildrepo/R20210825222808/orbit-buildrepo-R20210825222808.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.nebula.widgets.grid" version="0.0.0"/>

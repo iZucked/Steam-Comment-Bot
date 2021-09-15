@@ -26,7 +26,7 @@
 						<repository>
 							<id>mmxlabs-releases</id>
 							<layout>p2</layout>
-							<url>http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.201912/201912181000/org.eclipse.201912-201912181000.zip-unzip/</url>
+							<url>http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.release/202109151000/org.eclipse.release-202109151000.zip-unzip/</url>
 						</repository>
 					</repositories>
 					<!-- this is to fix some lucene 3.x compatibility issue -->

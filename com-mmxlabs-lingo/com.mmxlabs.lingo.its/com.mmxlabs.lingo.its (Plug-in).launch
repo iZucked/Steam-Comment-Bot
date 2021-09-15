@@ -197,7 +197,7 @@
         <setEntry value="org.eclipse.equinox.console@default:default"/>
         <setEntry value="org.eclipse.equinox.coordinator@default:default"/>
         <setEntry value="org.eclipse.equinox.device@default:default"/>
-        <setEntry value="org.eclipse.equinox.ds@2:true"/>
+        <setEntry value="org.apache.felix.scr@2:true"/>
         <setEntry value="org.eclipse.equinox.event@2:true"/>
         <setEntry value="org.eclipse.equinox.frameworkadmin.equinox@default:default"/>
         <setEntry value="org.eclipse.equinox.frameworkadmin@default:default"/>

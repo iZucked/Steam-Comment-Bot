@@ -101,7 +101,6 @@ public class Application implements IApplication {
 
 		// Start peaberry activation - only for ITS runs inside eclipse.
 		final String[] bundlesToStart = { "org.eclipse.equinox.common", //
-				"org.eclipse.equinox.ds", //
 				"org.eclipse.equinox.event", //
 				"org.ops4j.peaberry.activation", //
 		};

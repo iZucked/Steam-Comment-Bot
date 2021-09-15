@@ -42,7 +42,7 @@
 					<dependencies>
 						<dependency>
 							<type>eclipse-plugin</type>
-							<artifactId>org.eclipse.equinox.ds</artifactId>
+							<artifactId>org.apache.felix.scr</artifactId>
 							<version>0.0.0</version>
 						</dependency>
 						<dependency>
@@ -77,7 +77,7 @@
 						contain the services required for test execution -->
 					<bundleStartLevel>
 						<bundle>
-							<id>org.eclipse.equinox.ds</id>
+							<id>org.apache.felix.scr</id>
 							<level>1</level>
 							<autoStart>true</autoStart>
 						</bundle>
