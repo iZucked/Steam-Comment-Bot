@@ -16,6 +16,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -167,6 +170,17 @@ public class SandboxManualRunner {
 				templateBaseCase.getBaseCase().add(bcr);
 			}
 
+			if (combinations.isEmpty()) {
+
+				if (System.getProperty("lingo.suppress.dialogs") == null) {
+
+					final Display display = PlatformUI.getWorkbench().getDisplay();
+					if (display != null) {
+						display.syncExec(() -> MessageDialog.openWarning(display.getActiveShell(), "No valid options found",
+								String.format("Sandbox \"%s\": No valid combination of options found - most likely, specified options are incompatible.", model.getName())));
+					}
+				}
+			}
 			final List<BaseCase> tasks = new LinkedList<>();
 			recursiveTaskCreator(0, combinations, model, templateBaseCase, tasks);
 			filterTasks(tasks);
@@ -247,9 +261,21 @@ public class SandboxManualRunner {
 					progressMonitor.worked(1);
 				}
 			});
+			if (results.size() < 2) {
+				if (System.getProperty("lingo.suppress.dialogs") == null) {
+
+					final Display display = PlatformUI.getWorkbench().getDisplay();
+					if (display != null) {
+						display.syncExec(() -> MessageDialog.openWarning(display.getActiveShell(), "No solutions found",
+								String.format("Sandbox \"%s\": No solutions found - most likely due to constraint violations. Please check validation messages.", model.getName())));
+					}
+				}
+
+			}
 			if (results.isEmpty()) {
 				return null;
 			}
+
 			// Not really the best
 			final ISequences base = results.get(0);
 			final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.stream()//
@@ -298,14 +324,14 @@ public class SandboxManualRunner {
 					tasks.remove(bc);
 					break;
 				}
-				
+
 				if (bcRow.getBuyOption() != null && bcRow.getSellOption() == null) {
 					if (AnalyticsBuilder.getDate(bcRow.getBuyOption()) == null || bcRow.getBuyOption() instanceof BuyMarket) {
 						tasks.remove(bc);
 						break;
 					}
 				}
-				
+
 				if (bcRow.getSellOption() != null && bcRow.getBuyOption() == null) {
 					if (AnalyticsBuilder.getDate(bcRow.getSellOption()) == null || bcRow.getSellOption() instanceof SellMarket) {
 						tasks.remove(bc);
