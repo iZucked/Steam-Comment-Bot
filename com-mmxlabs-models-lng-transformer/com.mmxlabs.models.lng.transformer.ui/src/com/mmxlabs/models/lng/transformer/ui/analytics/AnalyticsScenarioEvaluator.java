@@ -712,6 +712,14 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			try {
 
 				final IMultiStateResult results = sandboxJob.run(monitor);
+				
+				if (results == null) {
+					sandboxResult.setName("SandboxResult");
+					sandboxResult.setHasDualModeSolutions(dualPNLMode);
+					sandboxResult.setUserSettings(EMFCopier.copy(userSettings));
+					return sandboxResult;
+				}
+				
 				final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = sandboxJob.getScenarioRunner();
 				final ExecutorService executor = LNGScenarioChainBuilder.createExecutorService();
 

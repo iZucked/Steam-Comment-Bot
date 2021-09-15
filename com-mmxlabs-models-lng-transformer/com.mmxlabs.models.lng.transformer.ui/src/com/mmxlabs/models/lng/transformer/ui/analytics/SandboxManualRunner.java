@@ -85,6 +85,8 @@ public class SandboxManualRunner {
 
 	private List<Pair<BaseCase, ScheduleSpecification>> specifications;
 
+	private boolean skipRun = false;
+
 	public SandboxManualRunner(@Nullable final ScenarioInstance scenarioInstance, final IScenarioDataProvider scenarioDataProvider, final UserSettings userSettings, final IMapperClass mapper,
 			final OptionAnalysisModel model) {
 
@@ -180,6 +182,7 @@ public class SandboxManualRunner {
 								String.format("Sandbox \"%s\": No valid combination of options found - most likely, specified options are incompatible.", model.getName())));
 					}
 				}
+				skipRun = true;
 			}
 			final List<BaseCase> tasks = new LinkedList<>();
 			recursiveTaskCreator(0, combinations, model, templateBaseCase, tasks);
@@ -206,7 +209,6 @@ public class SandboxManualRunner {
 		}
 		helper = new ScheduleSpecificationHelper(scenarioDataProvider);
 		helper.processExtraDataProvider(mapper.getExtraDataProvider());
-
 	}
 
 	private boolean checkSequenceSatifiesConstraints(final @NonNull LNGDataTransformer dataTransformer, final @NonNull ISequences rawSequences) {
@@ -235,6 +237,11 @@ public class SandboxManualRunner {
 		}
 
 		progressMonitor.beginTask("Sandbox", specifications.size());
+		if (skipRun) {
+			progressMonitor.done();
+			return null;
+		}
+
 		try {
 			// In constructor?
 			///////
