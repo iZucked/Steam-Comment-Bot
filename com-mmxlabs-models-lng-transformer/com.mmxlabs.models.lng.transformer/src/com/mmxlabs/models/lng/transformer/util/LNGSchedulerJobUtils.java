@@ -448,6 +448,14 @@ public class LNGSchedulerJobUtils {
 
 		final Set<Slot> slotsToRemove = new HashSet<>();
 
+		// Get base case spot slots to identify slots to delete.
+		final Set<SpotSlot> baseCaseSpotSlots = new HashSet<>();
+		cargoModel.getLoadSlots().stream().filter(SpotSlot.class::isInstance).map(SpotSlot.class::cast).forEach(baseCaseSpotSlots::add);
+		cargoModel.getDischargeSlots().stream().filter(SpotSlot.class::isInstance).map(SpotSlot.class::cast).forEach(baseCaseSpotSlots::add);
+
+		// Set to store whether spot slot has already been flagged to be deleted
+		final Set<SpotSlot> seenBaseCaseSpotSlots = new HashSet<>();
+
 		final List<EObject> objectsToDelete = new LinkedList<>();
 
 		// For slots which are no longer used, remove the cargo
@@ -481,7 +489,15 @@ public class LNGSchedulerJobUtils {
 					// Remove rather than full delete as we may wish to re-use the object later
 					// Note ensure this is also removed from the unused elements list as Remove does
 					// not delete other references.
-					slotsToRemove.add((Slot<?>) spotSlot);
+					if (baseCaseSpotSlots.contains(spotSlot)) {
+						// If part of the original cargo model, the spot slot could be referenced
+						// elsewhere, e.g. slot restrictions. Delete slot here so that all user facing
+						// references are removed.
+						objectsToDelete.add(spotSlot);
+						seenBaseCaseSpotSlots.add(spotSlot);
+					} else {
+						slotsToRemove.add((Slot<?>) spotSlot);
+					}
 
 				}
 			}
@@ -509,7 +525,17 @@ public class LNGSchedulerJobUtils {
 							// Note ensure this is also removed from the unused elements list as Remove does
 							// not delete other references.
 							if (!setCargoSlots.contains(slot)) {
-								slotsToRemove.add(slot);
+								if (baseCaseSpotSlots.contains(spotSlot)) {
+									// If part of the pre-optimisation base case, the spot slot could be referenced
+									// elsewhere, e.g. slot restrictions. Delete slot here so that all user facing
+									// references are removed.
+									if (!seenBaseCaseSpotSlots.contains(spotSlot)) {
+										// Only add to list if not seen before.
+										objectsToDelete.add(spotSlot);
+									}
+								} else {
+									slotsToRemove.add(slot);
+								}
 							}
 						}
 					}
@@ -548,7 +574,6 @@ public class LNGSchedulerJobUtils {
 					final Slot slot = ((SlotVisit) event).getSlotAllocation().getSlot();
 
 					if (slot instanceof LoadSlot) {
-
 						final LoadSlot loadSlot = (LoadSlot) slot;
 						object = slotToCargoMap.get(loadSlot);
 						if (object == null) {
