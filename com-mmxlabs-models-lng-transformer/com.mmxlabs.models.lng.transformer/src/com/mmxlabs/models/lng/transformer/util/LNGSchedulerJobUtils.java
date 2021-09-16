@@ -532,6 +532,7 @@ public class LNGSchedulerJobUtils {
 									if (!seenBaseCaseSpotSlots.contains(spotSlot)) {
 										// Only add to list if not seen before.
 										objectsToDelete.add(spotSlot);
+										seenBaseCaseSpotSlots.add(spotSlot);
 									}
 								} else {
 									slotsToRemove.add(slot);
