@@ -905,7 +905,7 @@
       <ReplaceableView
             viewId="com.mmxlabs.lingo.reports.verticalreport"
             name="Vertical Schedule"
-            icon="icons/cview16/VerticalReport.gif"
+            icon="icons/cview16/vertical_schedule.png"
             category="com.mmxlabs.scheduleview"
             class="com.mmxlabs.lingo.reports.views.vertical.DefaultVerticalReportView">
       </ReplaceableView>
@@ -1146,15 +1146,21 @@
 			label="Change Set Tools">
 			<action
 				class="com.mmxlabs.lingo.reports.services.handlers.FilterScheduleReportBySelectionAction"
-				icon="icons/FilterBySelection.gif"
+				icon="icons/FilterScheduleReport.png"
+				disabledIcon="icons/FilterScheduleReport_disabled.png"
 				id="com.mmxlabs.lingo.reports.services.handlers.FilterScheduleReportBySelectionAction"
-				label="Filter Schedule Summary" style="toggle" toolbarPath="additions">
+         label="Filter Schedule Summary"
+         style="toggle"
+         toolbarPath="additions">
 			</action>
 			<action
 				class="com.mmxlabs.lingo.reports.services.handlers.FilterScheduleChartBySelectionAction"
-				icon="icons/filterGantt.gif"
+				icon="icons/FilterScheduleChart.png"
+				disabledIcon="icons/FilterScheduleChart_disabled.png"
 				id="com.mmxlabs.lingo.reports.services.handlers.FilterScheduleReportBySelectionAction"
-				label="Filter Schedule Chart" style="toggle" toolbarPath="additions">
+         label="Filter Schedule Chart"
+         style="toggle"
+         toolbarPath="additions">
 			</action>
 		</actionSet>
 	</extension>

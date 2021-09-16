@@ -83,7 +83,12 @@ import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.util.StringEscaper;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
+
+import jdk.jfr.Enabled;
 
 /**
  * A dialog for editing scenario objects using the generated detail views.
@@ -652,7 +657,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 				};
 
-				copy.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/copy.gif"));
+//				copy.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Pack, IconMode.Enabled));
+				copy.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Copy, IconMode.Enabled));
 
 				barManager.add(copy);
 				barManager.update(true);
@@ -663,7 +669,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	}
 
 	private Action createAddAction(final IModelFactory factory) {
-		return new Action("Create new " + factory.getLabel(), PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD)) {
+		return new Action("Create new " + factory.getLabel(), CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled)) {
 			@Override
 			public void run() {
 				final Collection<? extends ISetting> settings = factory.createInstance(rootObject, sidebarContainer, sidebarContainment, null);
@@ -731,7 +737,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		// create delete actions
 		final Action deleteAction = new Action() {
 			{
-				setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
+				setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled));
 				selectionViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 					@Override
 					public void selectionChanged(final SelectionChangedEvent event) {

@@ -16,6 +16,10 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
+
 public class FilterToVesselsAction extends Action implements IMenuCreator {
 
 	private boolean showingVessels = false;
@@ -32,13 +36,14 @@ public class FilterToVesselsAction extends Action implements IMenuCreator {
 				filterToVesselsAction.accept(showingVessels);
 			}
 		};
-		try {
-			setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.models.ui.tabular/icons/filter.gif")));
-		} catch (final MalformedURLException ex) {
-			
-		}
+		setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Filter, IconMode.Enabled));
+//		try {
+//			setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.models.ui.tabular/icons/filter.png")));
+//		} catch (final MalformedURLException ex) {
+//			
+//		}
 		
-//		ResourceLocator.imageDescriptorFromBundle("com.mmxlabs.rcp.common", "/icons/filter.gif").ifPresent(img -> {
+//		ResourceLocator.imageDescriptorFromBundle("com.mmxlabs.rcp.common", "/icons/filter.png").ifPresent(img -> {
 //			setImageDescriptor(img);
 //		});
 	}

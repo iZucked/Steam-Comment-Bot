@@ -79,7 +79,10 @@ import com.mmxlabs.models.ui.tabular.manipulators.LocalDateTimeAttributeManipula
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
+import com.mmxlabs.rcp.common.CommonImages;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.actions.AbstractMenuLockableAction;
 
 public class FleetPage extends ADPComposite {
@@ -280,7 +283,7 @@ public class FleetPage extends ADPComposite {
 								}
 							}
 						};
-						action.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+						action.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled));
 						buttonManager.getToolbarManager().add(action);
 					}
 					{
@@ -321,10 +324,10 @@ public class FleetPage extends ADPComposite {
 									}
 								}
 							};
-							packAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.rcp.common", "/icons/pack.gif"));
+							packAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Pack, IconMode.Enabled));
 							buttonManager.getToolbarManager().add(packAction);
 						}
-						deleteAvailabilityAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE));
+						CommonImages.setImageDescriptors(deleteAvailabilityAction, IconPaths.Delete);
 						buttonManager.getToolbarManager().add(deleteAvailabilityAction);
 					}
 					buttonManager.getToolbarManager().update(true);
@@ -426,7 +429,7 @@ public class FleetPage extends ADPComposite {
 
 							}
 						};
-						menu.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+						menu.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled));
 						buttonManager.getToolbarManager().add(menu);
 					} else {
 						final Action action = new Action("New") {
@@ -443,7 +446,7 @@ public class FleetPage extends ADPComposite {
 								}
 							}
 						};
-						action.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+						CommonImages.setImageDescriptors(action, IconPaths.Plus);
 						buttonManager.getToolbarManager().add(action);
 					}
 
@@ -487,10 +490,10 @@ public class FleetPage extends ADPComposite {
 									}
 								}
 							};
-							packAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.rcp.common", "/icons/pack.gif"));
+							packAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Pack, IconMode.Enabled));
 							buttonManager.getToolbarManager().add(packAction);
 						}
-						deleteEventAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE));
+						CommonImages.setImageDescriptors(deleteEventAction, IconPaths.Delete);
 						buttonManager.getToolbarManager().add(deleteEventAction);
 					}
 					buttonManager.getToolbarManager().update(true);

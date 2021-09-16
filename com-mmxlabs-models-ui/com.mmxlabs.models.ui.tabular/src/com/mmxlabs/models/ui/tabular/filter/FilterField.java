@@ -26,6 +26,9 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Text;
 
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerFilterSupport;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 
 /**
  * Wraps up a text box, actions, events etc for a filter
@@ -66,10 +69,11 @@ public class FilterField implements ModifyListener, DisposeListener, KeyListener
 					{
 						setChecked(false);
 						setText("Filter table");
-						try {
-							setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.models.ui.tabular/icons/filter.gif")));
-						} catch (final MalformedURLException ex) {
-						}
+						setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Filter, IconMode.Enabled));
+//	OLD ImDesc			try {
+//							setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.models.ui.tabular/icons/filter.png")));
+//						} catch (final MalformedURLException ex) {
+//						}
 					}
 
 					@Override

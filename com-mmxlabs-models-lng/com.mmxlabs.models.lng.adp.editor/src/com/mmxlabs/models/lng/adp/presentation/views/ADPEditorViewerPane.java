@@ -70,7 +70,10 @@ import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IValidationService;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
+import com.mmxlabs.rcp.common.CommonImages;
 import com.mmxlabs.rcp.common.ServiceHelper;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
@@ -127,7 +130,10 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 				{
 					deleteScenarioButton = new Button(toolbarComposite, SWT.PUSH);
 					// deleteScenarioButton.setText("X");
-					deleteScenarioButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ETOOL_DELETE));
+
+					final Image img = CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled).createImage();
+					deleteScenarioButton.addDisposeListener(e -> img.dispose());
+					deleteScenarioButton.setImage(img);
 					deleteScenarioButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.END, SWT.CENTER).create());
 
 					deleteScenarioButton.setToolTipText("Delete current ADP");

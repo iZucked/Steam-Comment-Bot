@@ -96,6 +96,9 @@ import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
 import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
@@ -327,11 +330,12 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 						ADPFactory.eINSTANCE::createMullSubprofile, MullSubprofile::setInventory);
 			}
 		};
-		addInventorySubprofileRows.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+
+		CommonImages.setImageDescriptors(addInventorySubprofileRows, IconPaths.Plus);
 		buttonManager.getToolbarManager().add(addInventorySubprofileRows);
 
 		final Action deleteInventorySubprofileRows = createDeleteTableRowsAction(eViewer, "Inventory Rows");
-		deleteInventorySubprofileRows.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE));
+		CommonImages.setImageDescriptors(deleteInventorySubprofileRows, IconPaths.Delete);
 		deleteInventorySubprofileRows.setEnabled(false);
 		buttonManager.getToolbarManager().add(deleteInventorySubprofileRows);
 
@@ -397,11 +401,11 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 		buttonManager.getToolbarManager().getControl().setBackground(systemWhite);
 
 		final Action addAction = new AddAction("Add", parent);
-		addAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+		CommonImages.setImageDescriptors(addAction, IconPaths.Plus);
 		buttonManager.getToolbarManager().add(addAction);
 
 		final Action deleteEntityRows = createDeleteTableRowsAction(eViewer, "Entity Rows");
-		deleteEntityRows.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE));
+		CommonImages.setImageDescriptors(deleteEntityRows, IconPaths.Delete);
 		deleteEntityRows.setEnabled(false);
 		buttonManager.getToolbarManager().add(deleteEntityRows);
 
@@ -532,11 +536,11 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 				}
 			}
 		};
-		addContractRows.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+		CommonImages.setImageDescriptors(addContractRows, IconPaths.Plus);
 		buttonManager.getToolbarManager().add(addContractRows);
 
 		final Action deleteContractRows = createDeleteTableRowsAction(eViewer, "Sales Contract Rows");
-		deleteContractRows.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE));
+		CommonImages.setImageDescriptors(deleteContractRows, IconPaths.Delete);
 		deleteContractRows.setEnabled(false);
 		buttonManager.getToolbarManager().add(deleteContractRows);
 
@@ -606,11 +610,11 @@ public class MullProfileDetailComposite extends Composite implements IDisplayCom
 				}
 			}
 		};
-		addMarketRows.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+		CommonImages.setImageDescriptors(addMarketRows, IconPaths.Plus);
 		buttonManager.getToolbarManager().add(addMarketRows);
 
 		final Action deleteMarketRows = createDeleteTableRowsAction(eViewer, "DES Sales Market Rows");
-		deleteMarketRows.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE));
+		CommonImages.setImageDescriptors(deleteMarketRows, IconPaths.Delete);
 		deleteMarketRows.setEnabled(false);
 		buttonManager.getToolbarManager().add(deleteMarketRows);
 

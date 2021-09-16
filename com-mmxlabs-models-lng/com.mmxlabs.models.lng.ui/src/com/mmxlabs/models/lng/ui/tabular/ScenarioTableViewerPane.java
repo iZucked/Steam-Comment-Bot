@@ -36,10 +36,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +54,9 @@ import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
@@ -68,14 +69,15 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 	private static final Logger log = LoggerFactory.getLogger(ScenarioTableViewerPane.class);
 
 	public class ScenarioTableViewerDeleteAction extends ScenarioModifyingAction {
-		
-		@Nullable final Function<Collection<?>, Collection<Object>> callback;
-		
+
+		@Nullable
+		final Function<Collection<?>, Collection<Object>> callback;
+
 		public ScenarioTableViewerDeleteAction(@Nullable final Function<Collection<?>, Collection<Object>> callback) {
 			super("Delete");
 			this.callback = callback;
-			setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
-			setDisabledImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE_DISABLED));
+			setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled));
+			setDisabledImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Disabled));
 			viewer.addSelectionChangedListener(this);
 		}
 
@@ -130,8 +132,8 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 		protected boolean isApplicableToSelection(final ISelection selection) {
 			return selection.isEmpty() == false && selection instanceof IStructuredSelection;
 		}
-	}; 
-	
+	};
+
 	protected ScenarioTableViewer scenarioViewer;
 
 	protected Action deleteAction;
@@ -219,7 +221,7 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 		final Action[] extraActions = eal.toArray(new Action[eal.size()]);
 		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment), extraActions);
 	}
-	
+
 	protected void addExtraAddActions(final List<Action> extraActions) {
 	}
 
@@ -360,7 +362,7 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 
 	public void refresh() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void pack() {

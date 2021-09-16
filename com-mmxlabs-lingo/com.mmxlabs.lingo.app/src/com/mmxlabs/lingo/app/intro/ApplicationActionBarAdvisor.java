@@ -45,8 +45,11 @@ import org.eclipse.ui.menus.CommandContributionItemParameter;
 
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.lingo.app.Activator;
 import com.mmxlabs.lingo.reports.customizable.CustomReportsRegistry;
-
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 /**
  * 
  * Copy of {@link WorkbenchActionBuilder}. Need to build our own version at some point (rebase on version in history?)
@@ -68,12 +71,12 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	/**
 	 */
 	public static final String DATA_END = "dataEnd";
-
+	
 	public static final String DATA_IMPORT = "dataImport";
 	public static final String DATA_EXPORT = "dataExport";
 	public static final String WINDOW_CUSTOM_START = "windowCustomStart";
 	public static final String WINDOW_CUSTOM_END = "windowCustomEnd";
-
+	
 	private final IWorkbenchWindow window;
 
 	// generic actions
@@ -236,7 +239,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	 * Constructs a new action builder which contributes actions to the given window.
 	 * 
 	 * @param configurer
-	 *            the action bar configurer for the window
+	 *                       the action bar configurer for the window
 	 */
 	public ApplicationActionBarAdvisor(final IActionBarConfigurer configurer) {
 		super(configurer);
@@ -728,15 +731,40 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	 * Creates and returns the Help menu.
 	 */
 	private MenuManager createHelpMenu() {
-		final MenuManager menu = new MenuManager(IDEWorkbenchMessages.Workbench_help, "mmx.help");
-		// Add Help Menu
+		final MenuManager menu = new MenuManager(IDEWorkbenchMessages.Workbench_help, IWorkbenchActionConstants.M_HELP);
+		addSeparatorOrGroupMarker(menu, "group.intro"); //$NON-NLS-1$
+		// See if a welcome or intro page is specified
+		// if (introAction != null) {
+		// menu.add(introAction);
+		// } else if (quickStartAction != null) {
+		// menu.add(quickStartAction);
+		// }
+		menu.add(new GroupMarker("group.intro.ext")); //$NON-NLS-1$
+		addSeparatorOrGroupMarker(menu, "group.main"); //$NON-NLS-1$
 		menu.add(helpContentsAction);
-		// Check for updates (needs an icon)
-		menu.add(new CommandContributionItem(new CommandContributionItemParameter(getWindow(), null, "org.eclipse.equinox.p2.ui.sdk.update", CommandContributionItem.STYLE_PUSH)));
-		// About menu
+		menu.add(helpSearchAction);
+		menu.add(dynamicHelpAction);
+		addSeparatorOrGroupMarker(menu, "group.assist"); //$NON-NLS-1$
+		// // See if a tips and tricks page is specified
+		// if (tipsAndTricksAction != null) {
+		// menu.add(tipsAndTricksAction);
+		// }
+		// HELP_START should really be the first item, but it was after
+		// quickStartAction and tipsAndTricksAction in 2.1.
+		menu.add(new GroupMarker(IWorkbenchActionConstants.HELP_START));
+		menu.add(new GroupMarker("group.main.ext")); //$NON-NLS-1$
+		addSeparatorOrGroupMarker(menu, "group.tutorials"); //$NON-NLS-1$
+		addSeparatorOrGroupMarker(menu, "group.tools"); //$NON-NLS-1$
+		addSeparatorOrGroupMarker(menu, "group.updates"); //$NON-NLS-1$
+		menu.add(new GroupMarker(IWorkbenchActionConstants.HELP_END));
+		addSeparatorOrGroupMarker(menu, IWorkbenchActionConstants.MB_ADDITIONS);
+		// about should always be at the bottom
+		menu.add(new Separator("group.about")); //$NON-NLS-1$
+
 		final ActionContributionItem aboutItem = new ActionContributionItem(aboutAction);
 		aboutItem.setVisible(!Util.isMac());
 		menu.add(aboutItem);
+		menu.add(new GroupMarker("group.about.ext")); //$NON-NLS-1$
 		return menu;
 	}
 
@@ -745,9 +773,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	 * useSeparator.MENUID.GROUPID that is set to <code>true</code>.
 	 * 
 	 * @param menu
-	 *            the menu to add to
+	 *                    the menu to add to
 	 * @param groupId
-	 *            the group id for the added separator or group marker
+	 *                    the group id for the added separator or group marker
 	 */
 	private void addSeparatorOrGroupMarker(final MenuManager menu, final String groupId) {
 		final String prefId = "useSeparator." + menu.getId() + "." + groupId; //$NON-NLS-1$ //$NON-NLS-2$
@@ -904,7 +932,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		statusLine.add(statusLineItem);
 		CustomReportsRegistry.getInstance().setStatusLineManager(statusLine);
 	}
-
+	
 	/**
 	 * Creates actions (and contribution items) for the menu bar, toolbar and status line.
 	 */
@@ -939,12 +967,18 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// register(toggleAutoBuildAction);
 
 		saveAction = ActionFactory.SAVE.create(window);
+		saveAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Save, IconMode.Enabled));
+		saveAction.setDisabledImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Save, IconMode.Disabled));
+		
 		register(saveAction);
 
 //		saveAsAction = ActionFactory.SAVE_AS.create(window);
 //		register(saveAsAction);
 
 		saveAllAction = ActionFactory.SAVE_ALL.create(window);
+		saveAllAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Saveall, IconMode.Enabled));
+		saveAllAction.setDisabledImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Saveall, IconMode.Disabled));
+//		saveAllAction.setDisabledImageDescriptor(ImageDescriptor.createWithFlags(Activator.getImageDescriptor("/icons/saveall.png"), SWT.IMAGE_DISABLE));
 		register(saveAllAction);
 
 		newWindowAction = ActionFactory.OPEN_NEW_WINDOW.create(getWindow());
@@ -1381,6 +1415,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		return getItem(ActionFactory.DELETE.getId(), ActionFactory.DELETE.getCommandId(), ISharedImages.IMG_TOOL_DELETE, ISharedImages.IMG_TOOL_DELETE_DISABLED, WorkbenchMessages.Workbench_delete,
 				WorkbenchMessages.Workbench_deleteToolTip, IWorkbenchHelpContextIds.DELETE_RETARGET_ACTION);
 	}
+
 	// private IContributionItem getRevertItem() {
 	// return getItem(ActionFactory.REVERT.getId(), ActionFactory.REVERT.getCommandId(), null, null, WorkbenchMessages.Workbench_revert, WorkbenchMessages.Workbench_revertToolTip, null);
 	// }
@@ -1416,7 +1451,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 			final String helpContextId) {
 		final ISharedImages sharedImages = getWindow().getWorkbench().getSharedImages();
 
-		final IActionCommandMappingService acms = getWindow().getService(IActionCommandMappingService.class);
+		final IActionCommandMappingService acms = (IActionCommandMappingService) getWindow().getService(IActionCommandMappingService.class);
 		acms.map(actionId, commandId);
 
 		final CommandContributionItemParameter commandParm = new CommandContributionItemParameter(getWindow(), actionId, commandId, null, sharedImages.getImageDescriptor(image),
@@ -1434,15 +1469,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 		final ActionSetRegistry reg = WorkbenchPlugin.getDefault().getActionSetRegistry();
 		final IActionSetDescriptor[] actionSets = reg.getActionSets();
-		final String[] removeActionSets = new String[] { //
-				"org.eclipse.search.searchActionSet", //
-				"org.eclipse.ui.edit.text.actionSet.navigation", //
-				"org.eclipse.ui.edit.text.actionSet.annotationNavigation", //
-				"org.eclipse.ui.edit.text.actionSet.convertLineDelimitersTo", //
-				"org.eclipse.ui.edit.text.actionSet.openExternalFile", //
-				"org.eclipse.ui.externaltools.ExternalToolsSet", //
-				"org.eclipse.ui.actionSet.openFiles", //
-		};
+		final String[] removeActionSets = new String[] { "org.eclipse.search.searchActionSet", "org.eclipse.ui.edit.text.actionSet.navigation",
+				"org.eclipse.ui.edit.text.actionSet.annotationNavigation", "org.eclipse.ui.edit.text.actionSet.convertLineDelimitersTo", "org.eclipse.ui.edit.text.actionSet.openExternalFile",
+				"org.eclipse.ui.externaltools.ExternalToolsSet", "org.eclipse.ui.actionSet.openFiles", };
 
 		for (int i = 0; i < actionSets.length; i++) {
 			boolean found = false;
