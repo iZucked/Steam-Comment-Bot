@@ -103,7 +103,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 	private IWorkbenchAction openPreferencesAction;
 
-	private IWorkbenchAction saveAsAction;
+//	private IWorkbenchAction saveAsAction;
 
 	private IWorkbenchAction hideShowEditorAction;
 
@@ -479,7 +479,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		menu.add(new GroupMarker(IWorkbenchActionConstants.CLOSE_EXT));
 		menu.add(new Separator());
 		menu.add(saveAction);
-		menu.add(saveAsAction);
+//		menu.add(saveAsAction);
 		menu.add(saveAllAction);
 		// menu.add(getRevertItem());
 		// menu.add(new Separator());
@@ -808,7 +808,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		dynamicHelpAction = null;
 		aboutAction = null;
 		openPreferencesAction = null;
-		saveAsAction = null;
+//		saveAsAction = null;
 		hideShowEditorAction = null;
 		savePerspectiveAction = null;
 		resetPerspectiveAction = null;
@@ -941,8 +941,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		saveAction = ActionFactory.SAVE.create(window);
 		register(saveAction);
 
-		saveAsAction = ActionFactory.SAVE_AS.create(window);
-		register(saveAsAction);
+//		saveAsAction = ActionFactory.SAVE_AS.create(window);
+//		register(saveAsAction);
 
 		saveAllAction = ActionFactory.SAVE_ALL.create(window);
 		register(saveAllAction);
