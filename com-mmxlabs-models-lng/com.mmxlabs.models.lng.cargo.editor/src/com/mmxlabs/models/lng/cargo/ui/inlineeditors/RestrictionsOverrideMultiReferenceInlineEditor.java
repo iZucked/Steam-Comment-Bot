@@ -362,7 +362,7 @@ public class RestrictionsOverrideMultiReferenceInlineEditor extends BasicAttribu
 		}
 		{
 			if (!canOverride()) {
-				return super.getValue();
+				return ((MMXObject) input).getUnsetValue(getFeature());
 			} else if (input.eIsSet(feature)) {
 				return super.getValue();
 			} else {
