@@ -48,6 +48,9 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 	private long idleCharterCost;
 	private long purgeCharterCost;
 	private long travelCharterCost;
+
+	private boolean travelRanDry;
+	private boolean idleRanDry;
 	
 	public VoyageDetails(@NonNull final VoyageOptions options) {
 		this.options = options;
@@ -56,7 +59,7 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 	private VoyageDetails(final int idleTime2, final int travelTime2, final int speed2, final int startTime2, final @NonNull VoyageOptions options,
 			final LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption2, final @NonNull LongFastEnumEnumMap<FuelComponent, FuelUnit> routeAdditionalConsumption2,
 			final @NonNull LongFastEnumMap<FuelComponent> fuelUnitPrices2, final boolean cooldownPerformed, final boolean purgePerformed, int purgeHours, int idleNBOHours, 
-			int travelNBOHours, int routeAdditionalNBOHours, long idleCharterCost, long purgeCharterCost, long travelCharterCost) {
+			int travelNBOHours, int routeAdditionalNBOHours, long idleCharterCost, long purgeCharterCost, long travelCharterCost, final boolean travelRanDry, final boolean idleRanDry) {
 		this.idleTime = idleTime2;
 		this.travelTime = travelTime2;
 		this.speed = speed2;
@@ -74,13 +77,15 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 		this.idleCharterCost = idleCharterCost;
 		this.purgeCharterCost = purgeCharterCost;
 		this.travelCharterCost = travelCharterCost;
+		this.travelRanDry = travelRanDry;
+		this.idleRanDry = idleRanDry;
 	}
 
 	@Override
 	public VoyageDetails clone() {
 		return new VoyageDetails(idleTime, travelTime, speed, startTime, new VoyageOptions(options), fuelConsumption, routeAdditionalConsumption, fuelUnitPrices, //
 				cooldownPerformed, purgePerformed, purgeHours, //
-				getIdleNBOHours(), getTravelNBOHours(), getRouteAdditionalNBOHours(), this.idleCharterCost, this.purgeCharterCost, this.travelCharterCost);
+				getIdleNBOHours(), getTravelNBOHours(), getRouteAdditionalNBOHours(), this.idleCharterCost, this.purgeCharterCost, this.travelCharterCost, this.travelRanDry, this.idleRanDry);
 	}
 
 	public final long getFuelConsumption(final @NonNull FuelKey fuelKey) {
@@ -174,6 +179,8 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 				&& this.idleCharterCost == d.idleCharterCost
 				&& this.purgeCharterCost == d.purgeCharterCost
 				&& this.travelCharterCost == d.travelCharterCost
+				&& this.travelRanDry == d.travelRanDry
+				&& this.idleRanDry == d.idleRanDry
 				;
 				// @formatter:on
 		}
@@ -200,6 +207,8 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 				.add("idleCharterCost",  getIdleCharterCost())
 				.add("purgeCharterCost",  getPurgeCharterCost())
 				.add("travelCharterCost", getTravelCharterCost())
+				.add("travelRanDry", getTravelRanDry())
+				.add("idleRanDry", getIdleRanDry())
 				.toString();
 		// @formatter:on
 	}
@@ -227,11 +236,11 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 	public void setTravelNBOHours(int travelNBOHours) {
 		this.travelNBOHours = travelNBOHours;
 	}
-	
+
 	public int getRouteAdditionalNBOHours() {
 		return routeAdditionalNBOHours;
 	}
-	
+
 	public void setRouteAdditionalNBOHours(int routeAdditionalNBOHours) {
 		this.routeAdditionalNBOHours = routeAdditionalNBOHours;
 	}
@@ -274,5 +283,21 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 
 	public void setTravelCharterCost(long travelCharterCost) {
 		this.travelCharterCost = travelCharterCost;
+	}
+
+	public boolean getTravelRanDry() {
+		return travelRanDry;
+	}
+
+	public void setTravelRanDry(final boolean travelRanDry) {
+		this.travelRanDry = travelRanDry;
+	}
+
+	public boolean getIdleRanDry() {
+		return idleRanDry;
+	}
+
+	public void setIdleRanDry(final boolean idleRanDry) {
+		this.idleRanDry = idleRanDry;
 	}
 }
