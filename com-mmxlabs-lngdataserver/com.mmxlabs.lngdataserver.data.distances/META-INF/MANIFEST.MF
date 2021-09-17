@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.osgi,
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.lngdataserver.data.distances.Activator
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-16
 Export-Package: com.mmxlabs.lngdataserver.data.distances
 Bundle-ClassPath: data/,
  .

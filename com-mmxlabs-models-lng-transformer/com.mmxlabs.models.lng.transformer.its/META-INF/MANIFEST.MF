@@ -4,7 +4,7 @@ Bundle-Name: Lingo Transformer Tests
 Bundle-SymbolicName: com.mmxlabs.models.lng.transformer.its
 Bundle-Version: 4.13.4.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-16
 Require-Bundle: com.mmxlabs.optimiser.optimiser-common;bundle-version="[4.13.4,5.0.0)",
  com.mmxlabs.optimiser.optimiser-core;bundle-version="[4.13.4,5.0.0)",
  com.mmxlabs.optimiser.optimiser-lso;bundle-version="[4.13.4,5.0.0)",

@@ -17,7 +17,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.objenesis;bundle-version="2.6.0",
  org.aopalliance;bundle-version="1.0.0",
  com.mmxlabs.rcp.common;bundle-version="4.13.4"
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-16
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: com.mmxlabs.models.ui.validation.tests
 Import-Package: org.junit.jupiter.api;version="5.1.0",

@@ -9,6 +9,5 @@
 		<version>4.13.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.optimiser.feature</artifactId>
-	<version>4.13.4-SNAPSHOT</version>
 	<packaging>eclipse-feature</packaging>
 </project>

@@ -3,7 +3,7 @@ Bundle-Description: Parent maven project for core optimisation projects
 Bundle-DocURL: http://www.minimaxlabs.com/
 Bundle-ManifestVersion: 2
 Bundle-Name: Optimiser - Common
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-16
 Bundle-SymbolicName: com.mmxlabs.optimiser.optimiser-common;singleton:=true
 Automatic-Module-Name: com.mmxlabs.optimiser.optimiser-common
 Bundle-Vendor: Minimax Labs Ltd.

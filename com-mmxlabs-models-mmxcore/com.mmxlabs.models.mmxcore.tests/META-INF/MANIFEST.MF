@@ -6,7 +6,7 @@ Fragment-Host: com.mmxlabs.models.mmxcore
 Bundle-Version: 4.13.4.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-16
 Require-Bundle: org.mockito.mockito-core;bundle-version="2.1.0",
  javax.annotation;bundle-version="1.2.0",
  net.bytebuddy.byte-buddy;bundle-version="1.9.9",

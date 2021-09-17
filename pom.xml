@@ -91,7 +91,7 @@
 				<configuration>
 
 					<resolver>p2</resolver>
-					<executionEnvironment>JavaSE-11</executionEnvironment>
+					<executionEnvironment>JavaSE-16</executionEnvironment>
 
 					<target>
 						<artifact>
