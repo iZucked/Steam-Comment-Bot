@@ -172,8 +172,10 @@ public class SandboxManualRunner {
 				templateBaseCase.getBaseCase().add(bcr);
 			}
 
-			if (combinations.isEmpty()) {
-
+			final List<BaseCase> tasks = new LinkedList<>();
+			recursiveTaskCreator(0, combinations, model, templateBaseCase, tasks);
+			filterTasks(tasks);
+			if (tasks.isEmpty()) {
 				if (System.getProperty("lingo.suppress.dialogs") == null) {
 
 					final Display display = PlatformUI.getWorkbench().getDisplay();
@@ -184,9 +186,6 @@ public class SandboxManualRunner {
 				}
 				skipRun = true;
 			}
-			final List<BaseCase> tasks = new LinkedList<>();
-			recursiveTaskCreator(0, combinations, model, templateBaseCase, tasks);
-			filterTasks(tasks);
 
 			// ScheduleSpecification baseSpecification;
 			if (model.getBaseCase().isKeepExistingScenario()) {
