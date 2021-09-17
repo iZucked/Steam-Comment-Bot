@@ -92,7 +92,7 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 			}
 		});
 		dateColumn.getColumn().setTree(true);
-		final GridViewerColumn priceColumn = createColumn("Price", SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__PRICE);
+		final GridViewerColumn priceColumn = createColumn("MtM Price", SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__PRICE);
 		sortingSupport.addSortableColumn(paperDealViewer, priceColumn, priceColumn.getColumn());
 		priceColumn.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, new IComparableProvider() {
 
@@ -125,7 +125,7 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 				return lowestQuantity;
 			}
 		});
-		final GridViewerColumn valueColumn = createColumn("Value", SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__VALUE);
+		final GridViewerColumn valueColumn = createColumn("MtM P&L", SchedulePackage.Literals.PAPER_DEAL_ALLOCATION_ENTRY__VALUE);
 		sortingSupport.addSortableColumn(paperDealViewer, valueColumn, valueColumn.getColumn());
 		valueColumn.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, new IComparableProvider() {
 
@@ -222,7 +222,7 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 					PaperDealAllocation paperDealAllocation = (PaperDealAllocation) element;
 					PaperDeal paperDeal = paperDealAllocation.getPaperDeal();
 					if (reference == SchedulePackage.eINSTANCE.getPaperDealAllocationEntry_Date()) {
-						cell.setText(paperDeal == null ? "<Unknown deal>" : paperDeal.getName());
+						cell.setText(paperDeal == null ? "<Unknown deal>" : String.format("%s (@$%,.1f)", paperDeal.getName(), paperDeal.getPrice()));
 					} else if (reference == SchedulePackage.eINSTANCE.getPaperDealAllocationEntry_Quantity()) {
 						double sum = paperDealAllocation.getEntries().stream().mapToDouble(PaperDealAllocationEntry::getQuantity).sum();
 						cell.setText(String.format("%,.1f", sum));
