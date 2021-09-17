@@ -65,11 +65,11 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.widgets.grid.DefaultCellRenderer;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridCellRenderer;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridItem;
-import org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.dnd.DND;
@@ -574,7 +574,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 
 			@Override
-			@SuppressWarnings("restriction")
 			protected GridCellRenderer createCellRenderer() {
 				return new DefaultCellRenderer();
 			}

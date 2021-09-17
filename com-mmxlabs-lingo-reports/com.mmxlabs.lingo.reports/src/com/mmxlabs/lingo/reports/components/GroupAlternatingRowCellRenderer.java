@@ -239,7 +239,7 @@ public class GroupAlternatingRowCellRenderer extends GridCellRenderer {
 		}
 
 		if (!isWordWrap()) {
-			String text = TextUtils.getShortString(gc, item.getText(getColumn()), width);
+			String text = TextUtils.getShortStr(gc, item.getText(getColumn()), width, SWT.RIGHT);
 
 			if (getAlignment() == SWT.RIGHT) {
 				int len = gc.stringExtent(text).x;

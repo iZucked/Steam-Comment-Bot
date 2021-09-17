@@ -40,11 +40,11 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.widgets.grid.DefaultCellRenderer;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridCellRenderer;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridItem;
-import org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -300,7 +300,6 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 			}
 
 			@Override
-			@SuppressWarnings("restriction")
 			protected GridCellRenderer createCellRenderer() {
 				return new DefaultCellRenderer();
 			}
