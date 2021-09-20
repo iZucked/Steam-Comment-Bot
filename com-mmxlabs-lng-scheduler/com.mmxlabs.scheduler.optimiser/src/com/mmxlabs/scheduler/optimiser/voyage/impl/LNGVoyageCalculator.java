@@ -184,7 +184,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		 */
 		calculateRouteAdditionalFuelRequirements(options, output, vessel, vesselState, additionalRouteTimeInHours, nboAvailableInM3);
 
-		if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS && output.getTravelRanDry()) {
+		if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS && output.isTravelRanDry()) {
 			// Vessel ran dry in canal travel, calculate travel first since running dry in canal should, in general, mean that the run dry happened during travel and we arrive at the canal without
 			// LNG.
 

@@ -207,8 +207,8 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 				.add("idleCharterCost",  getIdleCharterCost())
 				.add("purgeCharterCost",  getPurgeCharterCost())
 				.add("travelCharterCost", getTravelCharterCost())
-				.add("travelRanDry", getTravelRanDry())
-				.add("idleRanDry", getIdleRanDry())
+				.add("travelRanDry", isTravelRanDry())
+				.add("idleRanDry", isIdleRanDry())
 				.toString();
 		// @formatter:on
 	}
@@ -285,7 +285,7 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 		this.travelCharterCost = travelCharterCost;
 	}
 
-	public boolean getTravelRanDry() {
+	public boolean isTravelRanDry() {
 		return travelRanDry;
 	}
 
@@ -293,7 +293,7 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 		this.travelRanDry = travelRanDry;
 	}
 
-	public boolean getIdleRanDry() {
+	public boolean isIdleRanDry() {
 		return idleRanDry;
 	}
 
