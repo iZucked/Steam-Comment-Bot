@@ -1170,32 +1170,4 @@
 			id="com.mmxlabs.lingo.reports.components.columns.fleet.diff_selection_gco">
 		</FleetBasedColumn>
 	</extension>
-	<extension point="org.eclipse.ui.menus">
-		<menuContribution allPopups="false"
-			locationURI="popup:com.mmxlabs.scenario.service.ui.navigator">
-			<command commandId="com.mmxlabs.lingo.reports.changeset.analyse"
-				icon="icons/cview16/actionsets_view.gif" label="Open action sets"
-				style="push">
-				<visibleWhen checkEnabled="false">
-					<and>
-						<with variable="selection">
-							<iterate ifEmpty="false">
-								<instanceof
-									value="com.mmxlabs.scenario.service.model.ScenarioInstance">
-								</instanceof>
-							</iterate>
-						</with>
-						<count value="1">
-						</count>
-					</and>
-				</visibleWhen>
-			</command>
-		</menuContribution>
-	</extension>
-	<extension point="org.eclipse.ui.commands">
-		<command id="com.mmxlabs.lingo.reports.changeset.analyse"
-			name="Open action sets">
-		</command>
-	</extension>
-
 </plugin>
