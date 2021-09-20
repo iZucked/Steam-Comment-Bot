@@ -502,7 +502,7 @@ public class FleetPage extends ADPComposite {
 
 	private ScenarioTableViewer constructFleetViewer(final ADPEditorData editorData, final Group previewGroup) {
 
-		final ScenarioTableViewer previewViewer = new ScenarioTableViewer(previewGroup, SWT.V_SCROLL | SWT.MULTI, editorData);
+		final ScenarioTableViewer previewViewer = new ScenarioTableViewer(previewGroup, SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI, editorData);
 		previewViewer.init(editorData.getAdapterFactory(), editorData.getModelReference(), CargoPackage.Literals.CARGO_MODEL__VESSEL_AVAILABILITIES);
 		GridViewerHelper.configureLookAndFeel(previewViewer);
 
@@ -580,7 +580,7 @@ public class FleetPage extends ADPComposite {
 
 	private ScenarioTableViewer constructEventsViewer(final ADPEditorData editorData, final Group previewGroup) {
 
-		final ScenarioTableViewer previewViewer = new ScenarioTableViewer(previewGroup, SWT.V_SCROLL | SWT.MULTI, editorData);
+		final ScenarioTableViewer previewViewer = new ScenarioTableViewer(previewGroup, SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI, editorData);
 		previewViewer.init(editorData.getAdapterFactory(), editorData.getModelReference(), CargoPackage.Literals.CARGO_MODEL__VESSEL_EVENTS);
 		GridViewerHelper.configureLookAndFeel(previewViewer);
 
