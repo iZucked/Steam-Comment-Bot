@@ -324,8 +324,6 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		@Override
 		public @NonNull List<@NonNull IndexExposureData> createData(@Nullable final Pair<@NonNull Schedule, @NonNull ScenarioResult> pinnedPair,
 				@NonNull final List<@NonNull Pair<@NonNull Schedule, @NonNull ScenarioResult>> otherPairs) {
-			dateRange.setBoth(null, null);
-
 			final List<IndexExposureData> output = new LinkedList<>();
 
 			if (pinnedPair != null && otherPairs.size() == 1) {
@@ -357,15 +355,6 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				}
 				for (final Pair<@NonNull Schedule, com.mmxlabs.scenario.service.ScenarioResult> p : otherPairs) {
 					output.addAll(createData(p.getFirst(), p.getSecond()));
-				}
-			}
-			for (final IndexExposureData d : output) {
-				final YearMonth ym = d.date;
-				if (dateRange.getFirst() == null || ym.isBefore(dateRange.getFirst())) {
-					dateRange.setFirst(ym);
-				}
-				if (dateRange.getSecond() == null || ym.isAfter(dateRange.getSecond())) {
-					dateRange.setSecond(ym);
 				}
 			}
 
@@ -512,8 +501,6 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		}
 		super.dispose();
 	}
-
-	protected final Pair<YearMonth, YearMonth> dateRange = new Pair<>();
 
 	protected ValueMode mode = ValueMode.VOLUME_MMBTU;
 	protected AggregationMode viewMode = AggregationMode.BY_MONTH;
