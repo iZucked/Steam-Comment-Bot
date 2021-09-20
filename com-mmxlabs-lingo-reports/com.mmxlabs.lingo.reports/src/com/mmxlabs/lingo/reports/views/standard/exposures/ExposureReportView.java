@@ -25,6 +25,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -45,11 +46,13 @@ import com.mmxlabs.common.exposures.ExposureEnumerations.ValueMode;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.IReportContentsGenerator;
 import com.mmxlabs.lingo.reports.ReportContents;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.SelectedDataProviderImpl;
 import com.mmxlabs.lingo.reports.services.SelectionServiceUtils;
 import com.mmxlabs.lingo.reports.views.standard.SimpleTabularReportView;
 import com.mmxlabs.lingo.reports.views.standard.exposures.IndexExposureData.IndexExposureType;
@@ -67,6 +70,8 @@ import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
+import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.ScenarioResult;
@@ -373,9 +378,8 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			fiscalYears = getFiscalYears(schedule);
 			final YearMonth ymStart = getEarliestExposureDate(schedule);
 			final YearMonth ymEnd = getLatestExposureDate(schedule);
-
 			final LNGScenarioModel rootObject = scenarioResult.getTypedRoot(LNGScenarioModel.class);
-			if (rootObject == null) {
+			if (ymStart == null || ymEnd == null || rootObject == null) {
 				return Collections.emptyList();
 			}
 
@@ -843,17 +847,45 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			util.setShowBackgroundColours(true);
 			return adapter.cast(ReportContents.makeHTML(util.convert()));
 		}
+		if (IReportContentsGenerator.class.isAssignableFrom(adapter)) {
+			
+			return adapter.cast(new IReportContentsGenerator() {
+				public IReportContents getReportContents(final ScenarioResult pin, final ScenarioResult other, final @Nullable List<Object> selectedObjects) {
+					if (selectedObjects == null) {
+						selection = new StructuredSelection();
+					} else {
+						selection = new StructuredSelection(selectedObjects);
+					}
+					final SelectedDataProviderImpl provider = new SelectedDataProviderImpl();
+					if (pin != null) {
+						provider.addScenario(pin);
+						provider.setPinnedScenarioInstance(pin);
+					}
+					if (other != null) {
+						provider.addScenario(other);
+					}
+					// Request a blocking update ...
+					selectedScenariosServiceListener.selectedDataProviderChanged(provider, true);
+					// ... so the data is ready to be read here.
+					final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
+					final String contents = util.convert();
+
+					return ReportContents.makeHTML("<meta charset=\"UTF-8\"/>" + contents);
+					
+				}
+			});
+		}
 		return super.getAdapter(adapter);
 	}
 
 	protected YearMonth getEarliestExposureDate(final Schedule schedule) {
-		YearMonth result = YearMonth.now();
+		YearMonth result = null;
 
 		if (schedule != null) {
 			for (final CargoAllocation ca : schedule.getCargoAllocations()) {
 				for (final SlotAllocation sa : ca.getSlotAllocations()) {
 					for (final ExposureDetail detail : sa.getExposures()) {
-						if (detail.getDate().isBefore(result)) {
+						if (result == null || detail.getDate().isBefore(result)) {
 							result = detail.getDate();
 						}
 					}
@@ -863,7 +895,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				return result;
 			for (final OpenSlotAllocation sa : schedule.getOpenSlotAllocations()) {
 				for (final ExposureDetail detail : sa.getExposures()) {
-					if (detail.getDate().isBefore(result)) {
+					if (result == null || detail.getDate().isBefore(result)) {
 						result = detail.getDate();
 					}
 				}
@@ -873,13 +905,13 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 	}
 
 	protected YearMonth getLatestExposureDate(final Schedule schedule) {
-		YearMonth result = YearMonth.now();
+		YearMonth result = null;
 
 		if (schedule != null) {
 			for (final CargoAllocation ca : schedule.getCargoAllocations()) {
 				for (final SlotAllocation sa : ca.getSlotAllocations()) {
 					for (final ExposureDetail detail : sa.getExposures()) {
-						if (detail.getDate().isAfter(result)) {
+						if (result == null || detail.getDate().isAfter(result)) {
 							result = detail.getDate();
 						}
 					}
@@ -889,7 +921,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				return result;
 			for (final OpenSlotAllocation sa : schedule.getOpenSlotAllocations()) {
 				for (final ExposureDetail detail : sa.getExposures()) {
-					if (detail.getDate().isAfter(result)) {
+					if (result == null || detail.getDate().isAfter(result)) {
 						result = detail.getDate();
 					}
 				}
