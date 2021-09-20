@@ -65,9 +65,9 @@ public class ExportScheduleHelper {
 	private static final Logger LOG = LoggerFactory.getLogger(ExportScheduleHelper.class);
 
 	private ExportScheduleHelper() {
-		//Just a static helper class, so disallow construction.
+		// Just a static helper class, so disallow construction.
 	}
-	
+
 	public static @Nullable ScenarioInstance export(final ScenarioResult scenarioResult) throws Exception {
 		return export(scenarioResult, null, true, null);
 	}
@@ -93,7 +93,8 @@ public class ExportScheduleHelper {
 		copier.copyReferences();
 
 		final ScheduleModel source_scheduleModel = (ScheduleModel) copier.get(o_scheduleModel);
-		// Null mean original schedule model was not contained by the original scenario model
+		// Null mean original schedule model was not contained by the original scenario
+		// model
 		assert source_scheduleModel != null;
 
 		final ClonedScenarioDataProvider scenarioDataProvider = ClonedScenarioDataProvider.make(scenarioModel, scenarioResult.getScenarioDataProvider());
@@ -156,7 +157,7 @@ public class ExportScheduleHelper {
 					slot.eContainer().eUnset(ref);
 				}
 			}
-			
+
 		}
 
 		// Clear any insertion plans - assume no longer relevant
@@ -181,7 +182,7 @@ public class ExportScheduleHelper {
 				}
 			}
 		}
-		
+
 		// Spot market slots should only have one month window
 		for (final Sequence seq : schedule.getSequences()) {
 			for (final Event event : seq.getEvents()) {
@@ -200,16 +201,16 @@ public class ExportScheduleHelper {
 				}
 			}
 		}
-		
+
 		// Only retain nominations for retained slots
 		final NominationsModel nominationsModel = ScenarioModelUtil.getNominationsModel(scenarioDataProvider);
 		final List<AbstractNomination> nominationsToKeep = new ArrayList<>();
 
 		for (final Slot<?> slot : cargoModel.getLoadSlots()) {
-			nominationsToKeep.addAll(NominationsModelUtils.findNominationsForSlot(scenarioDataProvider,slot));
+			nominationsToKeep.addAll(NominationsModelUtils.findNominationsForSlot(scenarioDataProvider, slot));
 		}
 		for (final Slot<?> slot : cargoModel.getDischargeSlots()) {
-			nominationsToKeep.addAll(NominationsModelUtils.findNominationsForSlot(scenarioDataProvider,slot));
+			nominationsToKeep.addAll(NominationsModelUtils.findNominationsForSlot(scenarioDataProvider, slot));
 		}
 		nominationsModel.getNominations().retainAll(nominationsToKeep);
 
@@ -220,7 +221,7 @@ public class ExportScheduleHelper {
 			// Open but deleted scenario?
 			return null;
 		}
-		
+
 		final ScenarioInstance theFork = scenarioService.copyInto(scenarioInstance, scenarioDataProvider, newForkName, new NullProgressMonitor());
 
 		if (openScenario) {
