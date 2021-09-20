@@ -175,7 +175,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					.grab(false, true)//
 					.span(3, 1) //
 					.align(SWT.LEFT, SWT.FILL).create());
-			lhsScrolledComposite.setLayout(new GridLayout());
+			lhsScrolledComposite.setLayout(GridLayoutFactory.swtDefaults().create());
 			lhsScrolledComposite.setExpandHorizontal(true);
 			lhsScrolledComposite.setExpandVertical(true);
 			lhsScrolledComposite.setBackgroundMode(SWT.INHERIT_FORCE);
@@ -191,7 +191,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					.equalWidth(false) //
 					.numColumns(1) //
 					.spacing(0, 20) //
-					.margins(0, 0)//
+					.margins(3, 3)//
 					.create());
 			final IExpansionListener lhsExpansionListener = new ExpansionAdapter() {
 
