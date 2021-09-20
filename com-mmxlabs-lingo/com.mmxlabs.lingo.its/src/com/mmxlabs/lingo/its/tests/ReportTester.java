@@ -139,6 +139,45 @@ public class ReportTester {
 	}
 
 	/**
+	 * New (as of 2021-09-20) way to run report tests with an element. Bug Simon to clean up the old code if this is still here more than a month later.
+	 * 
+	 * @param instance
+	 * @param scenarioDataProvider
+	 * @param reportID
+	 * @param type
+	 * @param elementID
+	 * @return
+	 * @throws Exception
+	 */
+	public static String testReports_New(final ScenarioModelRecord instance, @NonNull final IScenarioDataProvider scenarioDataProvider, final String reportID, final ReportType type) throws Exception {
+		Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
+
+		final String result[] = new String[1];
+
+		// A side-effect is the initial evaluation.
+		LNGScenarioRunnerCreator.withLegacyEvaluationRunner(scenarioDataProvider, true, runner -> {
+
+			final ScenarioResult scenarioResult = new ScenarioResultImpl(instance, ScenarioModelUtil.getScheduleModel(runner.getScenarioDataProvider()));
+
+			final ReportTesterHelper reportTester = new ReportTesterHelper();
+
+			reportTester.runReportTest(reportID, null, null, IReportContentsGenerator.class, (generator) -> {
+				IReportContents reportContents = generator.getReportContents(null, scenarioResult, null);
+				if (type == ReportType.REPORT_HTML) {
+					result[0] = reportContents.getHTMLContents();
+				} else if (type == ReportType.REPORT_JSON) {
+					result[0] = reportContents.getJSONContents();
+				} else {
+					throw new IllegalArgumentException();
+				}
+			});
+
+		});
+
+		return result[0];
+	}
+
+	/**
 	 * New (as of 2021-05-17) way to run report tests with an element. Bug Simon to clean up the old code if this is still here more than a month later.
 	 * 
 	 * @param instance
@@ -312,7 +351,8 @@ public class ReportTester {
 
 	}
 
-	public static void testPinDiffReports(final URL pinScenarioURL, final URL refScenarioURL, final URL dataURL, final String reportID, final String shortName, final String extension) throws Exception {
+	public static void testPinDiffReports(final URL pinScenarioURL, final URL refScenarioURL, final URL dataURL, final String reportID, final String shortName, final String extension)
+			throws Exception {
 
 		ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(pinScenarioURL, (pinModelRecord, pinScenarioDataProvider) -> {
 			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(refScenarioURL, (refModelRecord, refScenarioDataProvider) -> {

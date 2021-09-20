@@ -57,11 +57,17 @@ public class ReportTesterHelper {
 		private final String reportID;
 		private final String fileNameCode;
 		private final ReportType reportType;
+		private final boolean newReportGenerator;
 
 		public ReportRecord(final String reportID, final String fileNameCode, final ReportType reportType) {
+			this(reportID, fileNameCode, reportType, false);
+		}
+
+		public ReportRecord(final String reportID, final String fileNameCode, final ReportType reportType, boolean newReportGenerator) {
 			this.reportID = reportID;
 			this.fileNameCode = fileNameCode;
 			this.reportType = reportType;
+			this.newReportGenerator = newReportGenerator;
 
 		}
 
@@ -75,6 +81,10 @@ public class ReportTesterHelper {
 
 		public ReportType getReportType() {
 			return reportType;
+		}
+
+		public boolean newReportGenerator() {
+			return newReportGenerator;
 		}
 	}
 
@@ -140,7 +150,7 @@ public class ReportTesterHelper {
 		reports.add(new ReportRecord(ReportTesterHelper.KPI_REPORT_ID, ReportTesterHelper.KPI_REPORT_SHORTNAME, ReportType.REPORT_JSON));
 		reports.add(new ReportRecord(ReportTesterHelper.CANAL_BOOKINGS_REPORT_ID, ReportTesterHelper.CANAL_BOOKINGS_REPORT_SHORTNAME, ReportType.REPORT_JSON));
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EXPOSURES)) {
-			reports.add(new ReportRecord(ReportTesterHelper.EXPOSURES_REPORT_ID, ReportTesterHelper.EXPOSURES_REPORT_SHORTNAME, ReportType.REPORT_HTML));
+			reports.add(new ReportRecord(ReportTesterHelper.EXPOSURES_REPORT_ID, ReportTesterHelper.EXPOSURES_REPORT_SHORTNAME, ReportType.REPORT_HTML, true));
 		}
 		reports.add(new ReportRecord(ReportTesterHelper.INCOME_STATEMENT_REGION_REPORT_ID, ReportTesterHelper.INCOME_STATEMENT_REGION_REPORT_SHORTNAME, ReportType.REPORT_JSON));
 		reports.add(new ReportRecord(ReportTesterHelper.INCOME_STATEMENT_CONTRACT_REPORT_ID, ReportTesterHelper.INCOME_STATEMENT_CONTRACT_REPORT_SHORTNAME, ReportType.REPORT_JSON));
@@ -154,8 +164,7 @@ public class ReportTesterHelper {
 
 		return reports;
 	}
-	
-	
+
 	@FunctionalInterface
 	interface IScenarioSelection {
 

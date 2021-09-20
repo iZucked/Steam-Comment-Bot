@@ -855,9 +855,11 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					selectedScenariosServiceListener.selectedDataProviderChanged(provider, true);
 					// ... so the data is ready to be read here.
 					final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
+					util.setRowHeadersIncluded(true);
+					util.setShowBackgroundColours(true);
 					final String contents = util.convert();
 
-					return ReportContents.makeHTML("<meta charset=\"UTF-8\"/>" + contents);
+					return ReportContents.makeHTML(contents);
 					
 				}
 			});
