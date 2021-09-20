@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.lingo.master</groupId>
 	<artifactId>com.mmxlabs.lingo.master.parent</artifactId>
@@ -45,54 +46,61 @@
 		<module>com-mmxlabs-lingo</module>
 	</modules>
 	<build>
-	<plugins>
-		<plugin>
-			<groupId>org.eclipse.tycho</groupId>
-			<artifactId>tycho-surefire-plugin</artifactId>
-			<configuration>
-				<argLine>-ea -Dosgi.nl=en_GB -Dlingo.suppress.dialogs=true -Dlingo.enc.keyfile=${lingo.enc.keyfile} -Dlingo.license.file=${lingo.license.file}</argLine>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.eclipse.tycho</groupId>
+										<artifactId>target-platform-configuration</artifactId>
+										<versionRange>[0.15.0,)</versionRange>
+										<goals>
+											<goal>target-platform</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 
-				<dependencies>
-					<!-- avoid CNFE in Surefire when looking for JUnitPlatformProvider -->
-					<dependency>
-						<artifactId>org.junit</artifactId>
-						<type>eclipse-plugin</type>
-					</dependency>
-				</dependencies>
-			</configuration>
-		</plugin>
-	</plugins>
-</build>
-	<!--
-	<pluginRepositories>
-		<pluginRepository>
-			<id>cbi</id>
-			<url>https://repo.eclipse.org/content/repositories/cbi-releases/
-			</url>
-		</pluginRepository>
-	</pluginRepositories>
-
-	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.eclipse.cbi.maven.plugins</groupId>
-				<artifactId>eclipse-jarsigner-plugin</artifactId>
-				<version>1.1.7</version>
-				<executions>
-					<execution>
-						<id>sign</id>
-						<phase>package</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-					</execution>
-				</executions>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
 				<configuration>
-					<signerUrl>http://kubera.mmxlabs.lan:3138/jarsigner</signerUrl>
+					<argLine>-ea -Dosgi.nl=en_GB -Dlingo.suppress.dialogs=true -Dlingo.enc.keyfile=${lingo.enc.keyfile} -Dlingo.license.file=${lingo.license.file}</argLine>
+
+					<dependencies>
+						<!-- avoid CNFE in Surefire when looking for JUnitPlatformProvider -->
+						<dependency>
+							<artifactId>org.junit</artifactId>
+							<type>eclipse-plugin</type>
+						</dependency>
+					</dependencies>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-	-->
+	<!-- <pluginRepositories> <pluginRepository> <id>cbi</id> <url>https://repo.eclipse.org/content/repositories/cbi-releases/ 
+		</url> </pluginRepository> </pluginRepositories> <build> <plugins> <plugin> 
+		<groupId>org.eclipse.cbi.maven.plugins</groupId> <artifactId>eclipse-jarsigner-plugin</artifactId> 
+		<version>1.1.7</version> <executions> <execution> <id>sign</id> <phase>package</phase> 
+		<goals> <goal>sign</goal> </goals> </execution> </executions> <configuration> 
+		<signerUrl>http://kubera.mmxlabs.lan:3138/jarsigner</signerUrl> </configuration> 
+		</plugin> </plugins> </build> -->
 </project>
 
