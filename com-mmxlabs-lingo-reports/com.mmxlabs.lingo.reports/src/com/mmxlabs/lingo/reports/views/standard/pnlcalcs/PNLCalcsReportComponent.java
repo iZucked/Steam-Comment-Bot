@@ -54,6 +54,8 @@ import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.IReportContentsGenerator;
+import com.mmxlabs.lingo.reports.ReportContentsGenerators;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
@@ -600,6 +602,7 @@ public class PNLCalcsReportComponent implements IAdaptable /* extends ViewPart *
 		if (Grid.class.isAssignableFrom(adapter)) {
 			return adapter.cast(viewer.getGrid());
 		}
+
 		if (IReportContents.class.isAssignableFrom(adapter)) {
 
 			final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), true);

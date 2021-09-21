@@ -37,6 +37,7 @@ import org.osgi.service.event.EventHandler;
 
 import com.google.inject.Inject;
 import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.IReportContentsGenerator;
 import com.mmxlabs.lingo.reports.ReportContents;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
@@ -44,6 +45,7 @@ import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ReentrantSelectionManager;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.lingo.reports.services.SelectedDataProviderImpl;
 import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.views.AbstractConfigurableGridReportView;
@@ -121,43 +123,54 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 			return adapter.cast(viewer.getGrid());
 		}
 
-		if (IReportContents.class.isAssignableFrom(adapter)) {
+		if (IReportContentsGenerator.class.isAssignableFrom(adapter)) {
 			// Set a more repeatable sort order
-			{
-				final ColumnBlock[] initialReverseSortOrder = getInitialReverseSortOrderForITS();
+			final ColumnBlock[] initialReverseSortOrder = getInitialReverseSortOrderForITS();
 
-				if (includeAllColumnsForITS) {
-					// Sort columns by ID
-					final List<String> blockIDOrder = new ArrayList<>(getBlockManager().getBlockIDOrder());
-					Collections.sort(blockIDOrder);
-					getBlockManager().setBlockIDOrder(blockIDOrder);
-				}
+			if (includeAllColumnsForITS) {
+				// Sort columns by ID
+				final List<String> blockIDOrder = new ArrayList<>(getBlockManager().getBlockIDOrder());
+				Collections.sort(blockIDOrder);
+				getBlockManager().setBlockIDOrder(blockIDOrder);
+			}
 
-				// go through in reverse order as latest is set to primary sort
-				for (final ColumnBlock block : initialReverseSortOrder) {
-					if (block != null) {
-						final List<ColumnHandler> handlers = block.getColumnHandlers();
-						for (final ColumnHandler handler : handlers) {
-							if (handler.column != null) {
-								sortingSupport.sortColumnsBy(handler.column.getColumn());
-							}
+			// go through in reverse order as latest is set to primary sort
+			for (final ColumnBlock block : initialReverseSortOrder) {
+				if (block != null) {
+					final List<ColumnHandler> handlers = block.getColumnHandlers();
+					for (final ColumnHandler handler : handlers) {
+						if (handler.column != null) {
+							sortingSupport.sortColumnsBy(handler.column.getColumn());
 						}
 					}
 				}
 			}
 
-			// Refresh viewer as column and/or sort order may have changed
-			ViewerHelper.refresh(viewer, true);
+			return adapter.cast(new IReportContentsGenerator() {
+				public IReportContents getReportContents(final ScenarioResult pin, final ScenarioResult other, final @Nullable List<Object> selectedObjects) {
+					final SelectedDataProviderImpl provider = new SelectedDataProviderImpl();
+					if (pin != null) {
+						provider.addScenario(pin);
+						provider.setPinnedScenarioInstance(pin);
+					}
+					if (other != null) {
+						provider.addScenario(other);
+					}
+					// Request a blocking update ...
+					selectedScenariosServiceListener.selectedDataProviderChanged(provider, true);
 
-			final CopyGridToHtmlStringUtil htmlUtil = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, includeAllColumnsForITS);
-			htmlUtil.setShowBackgroundColours(true);
-			htmlUtil.setShowForegroundColours(true);
-			final String htmlContents = htmlUtil.convert();
+					// ... so the data is ready to be read here.
+					final CopyGridToHtmlStringUtil htmlUtil = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, includeAllColumnsForITS);
+					htmlUtil.setShowBackgroundColours(true);
+					htmlUtil.setShowForegroundColours(true);
+					final String htmlContents = htmlUtil.convert();
 
-			final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), includeAllColumnsForITS);
-			final String jsonContents = jsonUtil.convert();
+					final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), includeAllColumnsForITS);
+					final String jsonContents = jsonUtil.convert();
 
-			return adapter.cast(ReportContents.make(htmlContents, jsonContents));
+					return ReportContents.make(htmlContents, jsonContents);
+				}
+			});
 		}
 		return super.getAdapter(adapter);
 
@@ -170,7 +183,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 		return initialReverseSortOrder;
 	}
 
-	private final ISelectedScenariosServiceListener scenarioComparisonServiceListener = new ISelectedScenariosServiceListener() {
+	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 		@Override
 		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
 
@@ -273,9 +286,9 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 				return true;
 			}
 		});
-		selectionManager = new ReentrantSelectionManager(viewer, scenarioComparisonServiceListener, scenarioComparisonService);
+		selectionManager = new ReentrantSelectionManager(viewer, selectedScenariosServiceListener, scenarioComparisonService);
 		try {
-			scenarioComparisonService.triggerListener(scenarioComparisonServiceListener, false);
+			scenarioComparisonService.triggerListener(selectedScenariosServiceListener, false);
 		} catch (Exception e) {
 			// Ignore any initial issues.
 		}

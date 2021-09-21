@@ -57,18 +57,11 @@ public class ReportTesterHelper {
 		private final String reportID;
 		private final String fileNameCode;
 		private final ReportType reportType;
-		private final boolean newReportGenerator;
 
 		public ReportRecord(final String reportID, final String fileNameCode, final ReportType reportType) {
-			this(reportID, fileNameCode, reportType, false);
-		}
-
-		public ReportRecord(final String reportID, final String fileNameCode, final ReportType reportType, boolean newReportGenerator) {
 			this.reportID = reportID;
 			this.fileNameCode = fileNameCode;
 			this.reportType = reportType;
-			this.newReportGenerator = newReportGenerator;
-
 		}
 
 		public String getReportID() {
@@ -81,10 +74,6 @@ public class ReportTesterHelper {
 
 		public ReportType getReportType() {
 			return reportType;
-		}
-
-		public boolean newReportGenerator() {
-			return newReportGenerator;
 		}
 	}
 
@@ -150,7 +139,7 @@ public class ReportTesterHelper {
 		reports.add(new ReportRecord(ReportTesterHelper.KPI_REPORT_ID, ReportTesterHelper.KPI_REPORT_SHORTNAME, ReportType.REPORT_JSON));
 		reports.add(new ReportRecord(ReportTesterHelper.CANAL_BOOKINGS_REPORT_ID, ReportTesterHelper.CANAL_BOOKINGS_REPORT_SHORTNAME, ReportType.REPORT_JSON));
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_EXPOSURES)) {
-			reports.add(new ReportRecord(ReportTesterHelper.EXPOSURES_REPORT_ID, ReportTesterHelper.EXPOSURES_REPORT_SHORTNAME, ReportType.REPORT_HTML, true));
+			reports.add(new ReportRecord(ReportTesterHelper.EXPOSURES_REPORT_ID, ReportTesterHelper.EXPOSURES_REPORT_SHORTNAME, ReportType.REPORT_HTML));
 		}
 		reports.add(new ReportRecord(ReportTesterHelper.INCOME_STATEMENT_REGION_REPORT_ID, ReportTesterHelper.INCOME_STATEMENT_REGION_REPORT_SHORTNAME, ReportType.REPORT_JSON));
 		reports.add(new ReportRecord(ReportTesterHelper.INCOME_STATEMENT_CONTRACT_REPORT_ID, ReportTesterHelper.INCOME_STATEMENT_CONTRACT_REPORT_SHORTNAME, ReportType.REPORT_JSON));
@@ -171,159 +160,159 @@ public class ReportTesterHelper {
 		void updateSelection(IViewPart view, IScenarioServiceSelectionProvider provider);
 
 	}
+//
+//	@Nullable
+//	public IReportContents getActionPlanReportContents(final List<ScenarioResult> scenarios, final String reportID) throws InterruptedException {
+//		return getReportContents(reportID, (v, p) -> {
+//
+//			IActionPlanHandler handler = v.getAdapter(IActionPlanHandler.class);
+//			if (handler == null) {
+//				final EPartService partService = (EPartService) v.getViewSite().getService(EPartService.class);
+//				final MPart part = partService.findPart(reportID);
+//				if (part.getObject() instanceof CompatibilityView) {
+//					CompatibilityView compatibilityView = (CompatibilityView) part.getObject();
+//					IViewPart oPart = compatibilityView.getView();
+//					handler = oPart.getAdapter(IActionPlanHandler.class);
+//				} else {
+//					handler = ((IAdaptable) part.getObject()).getAdapter(IActionPlanHandler.class);
+//				}
+//			}
+//			if (handler != null) {
+//				handler.displayActionPlan(scenarios);
+//			}
+//		}, (v, p) -> {
+//			IActionPlanHandler handler = v.getAdapter(IActionPlanHandler.class);
+//			if (handler == null) {
+//				final EPartService partService = (EPartService) v.getViewSite().getService(EPartService.class);
+//				final MPart part = partService.findPart(reportID);
+//				if (part.getObject() instanceof CompatibilityView) {
+//					CompatibilityView compatibilityView = (CompatibilityView) part.getObject();
+//					IViewPart oPart = compatibilityView.getView();
+//					handler = oPart.getAdapter(IActionPlanHandler.class);
+//				} else {
+//					handler = ((IAdaptable) part.getObject()).getAdapter(IActionPlanHandler.class);
+//				}
+//			}
+//			if (handler != null) {
+//				handler.displayActionPlan(Collections.emptyList());
+//			}
+//		});
+//	}
 
-	@Nullable
-	public IReportContents getActionPlanReportContents(final List<ScenarioResult> scenarios, final String reportID) throws InterruptedException {
-		return getReportContents(reportID, (v, p) -> {
+//	@Nullable
+//	public IReportContents getReportContents(final ScenarioResult scenario, final String reportID) throws InterruptedException {
+//		return getReportContents(reportID, (v, p) -> {
+//
+//			final IProvideEditorInputScenario scenarioInputProvider = v.getAdapter(IProvideEditorInputScenario.class);
+//			if (scenarioInputProvider != null) {
+//				scenarioInputProvider.provideScenarioInstance(scenario);
+//			}
+//
+//			p.deselectAll(true);
+//			p.select(scenario, true);
+//		}, (v, p) -> {
+//			final IProvideEditorInputScenario scenarioInputProvider = v.getAdapter(IProvideEditorInputScenario.class);
+//			if (scenarioInputProvider != null) {
+//				scenarioInputProvider.provideScenarioInstance(null);
+//			}
+//			p.deselectAll(true);
+//		});
+//	}
+//
+//	@Nullable
+//	public IReportContents getReportContents(final @NonNull ScenarioResult pinScenario, @NonNull final ScenarioResult ref, final String reportID) throws InterruptedException {
+//		return getReportContents(reportID, (v, p) -> {
+//			p.setPinnedPair(pinScenario, ref, true);
+//		}, (v, p) -> {
+//			p.deselectAll(true);
+//		});
+//	}
 
-			IActionPlanHandler handler = v.getAdapter(IActionPlanHandler.class);
-			if (handler == null) {
-				final EPartService partService = (EPartService) v.getViewSite().getService(EPartService.class);
-				final MPart part = partService.findPart(reportID);
-				if (part.getObject() instanceof CompatibilityView) {
-					CompatibilityView compatibilityView = (CompatibilityView) part.getObject();
-					IViewPart oPart = compatibilityView.getView();
-					handler = oPart.getAdapter(IActionPlanHandler.class);
-				} else {
-					handler = ((IAdaptable) part.getObject()).getAdapter(IActionPlanHandler.class);
-				}
-			}
-			if (handler != null) {
-				handler.displayActionPlan(scenarios);
-			}
-		}, (v, p) -> {
-			IActionPlanHandler handler = v.getAdapter(IActionPlanHandler.class);
-			if (handler == null) {
-				final EPartService partService = (EPartService) v.getViewSite().getService(EPartService.class);
-				final MPart part = partService.findPart(reportID);
-				if (part.getObject() instanceof CompatibilityView) {
-					CompatibilityView compatibilityView = (CompatibilityView) part.getObject();
-					IViewPart oPart = compatibilityView.getView();
-					handler = oPart.getAdapter(IActionPlanHandler.class);
-				} else {
-					handler = ((IAdaptable) part.getObject()).getAdapter(IActionPlanHandler.class);
-				}
-			}
-			if (handler != null) {
-				handler.displayActionPlan(Collections.emptyList());
-			}
-		});
-	}
-
-	@Nullable
-	public IReportContents getReportContents(final ScenarioResult scenario, final String reportID) throws InterruptedException {
-		return getReportContents(reportID, (v, p) -> {
-
-			final IProvideEditorInputScenario scenarioInputProvider = v.getAdapter(IProvideEditorInputScenario.class);
-			if (scenarioInputProvider != null) {
-				scenarioInputProvider.provideScenarioInstance(scenario);
-			}
-
-			p.deselectAll(true);
-			p.select(scenario, true);
-		}, (v, p) -> {
-			final IProvideEditorInputScenario scenarioInputProvider = v.getAdapter(IProvideEditorInputScenario.class);
-			if (scenarioInputProvider != null) {
-				scenarioInputProvider.provideScenarioInstance(null);
-			}
-			p.deselectAll(true);
-		});
-	}
-
-	@Nullable
-	public IReportContents getReportContents(final @NonNull ScenarioResult pinScenario, @NonNull final ScenarioResult ref, final String reportID) throws InterruptedException {
-		return getReportContents(reportID, (v, p) -> {
-			p.setPinnedPair(pinScenario, ref, true);
-		}, (v, p) -> {
-			p.deselectAll(true);
-		});
-	}
-
-	@Nullable
-	public IReportContents getReportContents(final String reportID, final @Nullable IScenarioSelection callable, final @Nullable IScenarioSelection cleanUp) throws InterruptedException {
-
-		// Get reference to the selection provider service
-
-		return ServiceHelper.withCheckedService(IScenarioServiceSelectionProvider.class, provider -> {
-
-			final IViewPart[] view = new IViewPart[1];
-			final IReportContents[] contents = new IReportContents[1];
-			try {
-				// Step 1 open the view, release UI thread
-				Display.getDefault().syncExec(new Runnable() {
-
-					@Override
-					public void run() {
-						final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-						Assertions.assertNotNull(activePage);
-						try {
-							// Close the existing view reference. E.g. because we have changed the license features.
-							final IViewReference ref = activePage.findViewReference(reportID);
-							if (ref != null) {
-								// This will dispose the view
-								activePage.hideView(ref);
-							}
-
-							// Clear existing selection so newly opened view does not pick up any prior data.
-							provider.deselectAll(true);
-
-							view[0] = activePage.showView(reportID);
-							Assertions.assertNotNull(view[0]);
-							activePage.activate(view[0]);
-
-						} catch (final PartInitException e) {
-							e.printStackTrace();
-						}
-					}
-				});
-
-				// Step two set the new selection, release UI thread
-				Thread.sleep(1000);
-				Thread.yield();
-
-				if (callable != null) {
-					RunnerHelper.exec(() -> {
-						callable.updateSelection(view[0], provider);
-					}, true);
-					Thread.yield();
-					Thread.sleep(1000);
-				}
-				// Step 3, obtain report contents
-				Display.getDefault().syncExec(new Runnable() {
-
-					@Override
-					public void run() {
-						contents[0] = (IReportContents) view[0].getAdapter(IReportContents.class);
-						if (contents[0] == null) {
-							if (view[0] instanceof E4PartWrapper) {
-								final E4PartWrapper e4PartWrapper = (E4PartWrapper) view[0];
-								final IViewSite viewSite = view[0].getViewSite();
-								final EPartService service = (EPartService) viewSite.getService(EPartService.class);
-								final MPart p = service.findPart(reportID);
-								if (p != null) {
-									final Object o = p.getObject();
-									if (o instanceof IAdaptable) {
-										final IAdaptable adaptable = (IAdaptable) o;
-										contents[0] = (IReportContents) adaptable.getAdapter(IReportContents.class);
-									}
-								}
-								// EModelService
-								// EPartService
-							}
-						}
-					}
-				});
-			} finally {
-				if (cleanUp != null) {
-					RunnerHelper.exec(() -> {
-						cleanUp.updateSelection(view[0], provider);
-					}, true);
-				}
-			}
-
-			return contents[0];
-		});
-	}
+//	@Nullable
+//	public IReportContents getReportContents(final String reportID, final @Nullable IScenarioSelection callable, final @Nullable IScenarioSelection cleanUp) throws InterruptedException {
+//
+//		// Get reference to the selection provider service
+//
+//		return ServiceHelper.withCheckedService(IScenarioServiceSelectionProvider.class, provider -> {
+//
+//			final IViewPart[] view = new IViewPart[1];
+//			final IReportContents[] contents = new IReportContents[1];
+//			try {
+//				// Step 1 open the view, release UI thread
+//				Display.getDefault().syncExec(new Runnable() {
+//
+//					@Override
+//					public void run() {
+//						final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+//						Assertions.assertNotNull(activePage);
+//						try {
+//							// Close the existing view reference. E.g. because we have changed the license features.
+//							final IViewReference ref = activePage.findViewReference(reportID);
+//							if (ref != null) {
+//								// This will dispose the view
+//								activePage.hideView(ref);
+//							}
+//
+//							// Clear existing selection so newly opened view does not pick up any prior data.
+//							provider.deselectAll(true);
+//
+//							view[0] = activePage.showView(reportID);
+//							Assertions.assertNotNull(view[0]);
+//							activePage.activate(view[0]);
+//
+//						} catch (final PartInitException e) {
+//							e.printStackTrace();
+//						}
+//					}
+//				});
+//
+//				// Step two set the new selection, release UI thread
+//				Thread.sleep(1000);
+//				Thread.yield();
+//
+//				if (callable != null) {
+//					RunnerHelper.exec(() -> {
+//						callable.updateSelection(view[0], provider);
+//					}, true);
+//					Thread.yield();
+//					Thread.sleep(1000);
+//				}
+//				// Step 3, obtain report contents
+//				Display.getDefault().syncExec(new Runnable() {
+//
+//					@Override
+//					public void run() {
+//						contents[0] = (IReportContents) view[0].getAdapter(IReportContents.class);
+//						if (contents[0] == null) {
+//							if (view[0] instanceof E4PartWrapper) {
+//								final E4PartWrapper e4PartWrapper = (E4PartWrapper) view[0];
+//								final IViewSite viewSite = view[0].getViewSite();
+//								final EPartService service = (EPartService) viewSite.getService(EPartService.class);
+//								final MPart p = service.findPart(reportID);
+//								if (p != null) {
+//									final Object o = p.getObject();
+//									if (o instanceof IAdaptable) {
+//										final IAdaptable adaptable = (IAdaptable) o;
+//										contents[0] = (IReportContents) adaptable.getAdapter(IReportContents.class);
+//									}
+//								}
+//								// EModelService
+//								// EPartService
+//							}
+//						}
+//					}
+//				});
+//			} finally {
+//				if (cleanUp != null) {
+//					RunnerHelper.exec(() -> {
+//						cleanUp.updateSelection(view[0], provider);
+//					}, true);
+//				}
+//			}
+//
+//			return contents[0];
+//		});
+//	}
 
 	public <U> void runReportTest(final String reportID, final @Nullable IScenarioSelection callable, final @Nullable IScenarioSelection cleanUp, Class<U> adapterClass, Consumer<U> consumer)
 			throws InterruptedException {

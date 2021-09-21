@@ -826,14 +826,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
-
-		if (IReportContents.class.isAssignableFrom(adapter)) {
-
-			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
-			util.setRowHeadersIncluded(true);
-			util.setShowBackgroundColours(true);
-			return adapter.cast(ReportContents.makeHTML(util.convert()));
-		}
+ 
 		if (IReportContentsGenerator.class.isAssignableFrom(adapter)) {
 			
 			return adapter.cast(new IReportContentsGenerator() {

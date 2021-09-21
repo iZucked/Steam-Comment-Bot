@@ -11,26 +11,18 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.PlatformUI;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
-import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.util.CheckedBiConsumer;
-import com.mmxlabs.common.util.CheckedConsumer;
 import com.mmxlabs.lingo.its.tests.AbstractReportTester.ReportType;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IReportContentsGenerator;
@@ -57,89 +49,8 @@ public class ReportTester {
 	private static final Logger LOG = LoggerFactory.getLogger(ReportTester.class);
 	private static final UnaryOperator<String> stripWhitespace = s -> s.replaceAll("\\s+", "").replaceAll("\r\n", "").replaceAll("\n", "");
 
-	public static String generateReportsWithElement(final ScenarioModelRecord modelRecord, @NonNull final IScenarioDataProvider scenarioDataProvider, final String reportID, final ReportType type,
-			final String elementID) throws Exception {
-
-		Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
-
-		// A side-effect is the initial evaluation.
-		LNGScenarioRunnerCreator.withLegacyEvaluationRunner(scenarioDataProvider, true, runner -> {
-		});
-
-		Object target = null;
-		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioDataProvider);
-		final Schedule schedule = scheduleModel.getSchedule();
-		if (schedule != null) {
-			for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
-				if (elementID.equals(cargoAllocation.getName())) {
-					target = cargoAllocation;
-					break;
-				}
-			}
-		}
-
-		Assertions.assertNotNull("Target element not found", elementID);
-		final Object pTarget = target;
-
-		Display.getDefault().syncExec(() -> {
-			final ESelectionService selectionService = PlatformUI.getWorkbench().getService(ESelectionService.class);
-			Assertions.assertNotNull(selectionService);
-			selectionService.setPostSelection(pTarget);
-		});
-
-		final ReportTesterHelper reportTester = new ReportTesterHelper();
-		final ScenarioResult scenarioResult = new ScenarioResultImpl(modelRecord, ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
-		final IReportContents reportContents = reportTester.getReportContents(scenarioResult, reportID);
-
-		Assertions.assertNotNull(reportContents);
-		final String actualContents;
-
-		switch (type) {
-		case REPORT_HTML:
-			actualContents = reportContents.getHTMLContents();
-			break;
-		case REPORT_JSON:
-			actualContents = reportContents.getJSONContents();
-			break;
-		default:
-			throw new IllegalArgumentException();
-		}
-		Assertions.assertNotNull(actualContents);
-		return actualContents;
-	}
-
-	public static String generateReports(final ScenarioModelRecord modelRecord, @NonNull final IScenarioDataProvider scenarioDataProvider, final String reportID, final ReportType type)
-			throws Exception {
-
-		Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
-
-		// A side-effect is the initial evaluation.
-		LNGScenarioRunnerCreator.withLegacyEvaluationRunner(scenarioDataProvider, true, runner -> {
-		});
-
-		final ReportTesterHelper reportTester = new ReportTesterHelper();
-		final ScenarioResult scenarioResult = new ScenarioResultImpl(modelRecord, ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
-		final IReportContents reportContents = reportTester.getReportContents(scenarioResult, reportID);
-
-		Assertions.assertNotNull(reportContents);
-		final String actualContents;
-
-		switch (type) {
-		case REPORT_HTML:
-			actualContents = reportContents.getHTMLContents();
-			break;
-		case REPORT_JSON:
-			actualContents = reportContents.getJSONContents();
-			break;
-		default:
-			throw new IllegalArgumentException();
-		}
-		Assertions.assertNotNull(actualContents);
-		return actualContents;
-	}
-
 	/**
-	 * New (as of 2021-09-20) way to run report tests with an element. Bug Simon to clean up the old code if this is still here more than a month later.
+	 * Runs a report test and returns the result
 	 * 
 	 * @param instance
 	 * @param scenarioDataProvider
@@ -149,7 +60,7 @@ public class ReportTester {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String testReports_New(final ScenarioModelRecord instance, @NonNull final IScenarioDataProvider scenarioDataProvider, final String reportID, final ReportType type) throws Exception {
+	public static String runReportsTest(final ScenarioModelRecord instance, @NonNull final IScenarioDataProvider scenarioDataProvider, final String reportID, final ReportType type) throws Exception {
 		Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 
 		final String result[] = new String[1];
@@ -188,7 +99,7 @@ public class ReportTester {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String testReportsWithElement_New(final ScenarioModelRecord instance, @NonNull final IScenarioDataProvider scenarioDataProvider, final String reportID, final ReportType type,
+	public static String runReportsTestWithElement(final ScenarioModelRecord instance, @NonNull final IScenarioDataProvider scenarioDataProvider, final String reportID, final ReportType type,
 			final String elementID) throws Exception {
 		Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
 
@@ -225,8 +136,15 @@ public class ReportTester {
 
 			final ReportTesterHelper reportTester = new ReportTesterHelper();
 
-			reportTester.runReportTest(reportID, null, null, IReportContentsGenerator.class, (generator) -> {
-				result[0] = generator.getReportContents(null, scenarioResult, Lists.newArrayList(pTarget)).getJSONContents();
+			reportTester.runReportTest(reportID, null, null, IReportContentsGenerator.class, generator -> {
+				IReportContents reportContents = generator.getReportContents(null, scenarioResult, Lists.newArrayList(pTarget));
+				if (type == ReportType.REPORT_HTML) {
+					result[0] = reportContents.getHTMLContents();
+				} else if (type == ReportType.REPORT_JSON) {
+					result[0] = reportContents.getJSONContents();
+				} else {
+					throw new IllegalArgumentException();
+				}
 			});
 
 		});
@@ -236,48 +154,42 @@ public class ReportTester {
 
 	public static void testReportsWithElement(final ScenarioModelRecord instance, @NonNull final IScenarioDataProvider scenarioDataProvider, final URL scenarioURL, final String reportID,
 			final String shortName, final ReportType type, final String elementID, @Nullable final Consumer<ScenarioModelRecord> preAction) throws Exception {
-		testReports(instance, scenarioDataProvider, scenarioURL, reportID, shortName, type, (t) -> {
 
-			Object target = null;
-			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioDataProvider);
-			final Schedule schedule = scheduleModel.getSchedule();
-			if (schedule != null) {
-				for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
-					if (elementID.equals(cargoAllocation.getName())) {
-						target = cargoAllocation;
-						break;
+		String actualContents = runReportsTestWithElement(instance, scenarioDataProvider, reportID, type, elementID);
+
+		Assertions.assertNotNull(actualContents);
+		if (TestingModes.ReportTestMode == TestMode.Generate) {
+
+			final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString())).toString().replaceAll(" ", "%20"));
+
+			final File f1 = new File(expectedReportOutput.toURI());
+			final String slash = f1.isDirectory() ? "/" : "";
+			final File file2 = new File(f1.getAbsoluteFile() + slash + "reports" + "." + shortName + "." + type.getExtension());
+			try (PrintWriter pw = new PrintWriter(file2, StandardCharsets.UTF_8.name())) {
+				pw.print(actualContents);
+			}
+		} else {
+			final URL expectedReportOutput = new URL(
+					FileLocator.toFileURL(new URL(scenarioURL.toString() + "reports" + "." + shortName + "." + type.getExtension())).toString().replaceAll(" ", "%20"));
+			final StringBuilder expectedOutputBuilder = new StringBuilder();
+			{
+				try (InputStream is = expectedReportOutput.openStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+					String line = reader.readLine();
+					if (line != null) {
+						expectedOutputBuilder.append(line);
 					}
-				}
-				if (target == null) {
-					for (final PaperDealAllocation pda : schedule.getPaperDealAllocations()) {
-						final PaperDeal pd = pda.getPaperDeal();
-						if (pd != null && elementID.equals(pd.getName())) {
-							target = pd;
-							break;
+					while (line != null) {
+						line = reader.readLine();
+						if (line != null) {
+							expectedOutputBuilder.append(System.lineSeparator());
+							expectedOutputBuilder.append(line);
 						}
 					}
 				}
 			}
+			doValidate(actualContents, expectedOutputBuilder);
 
-			Assertions.assertNotNull("Target element not found", elementID);
-			final Object pTarget = target;
-
-			// Step 1 open the view, release UI thread
-			Display.getDefault().syncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					final ESelectionService selectionService = PlatformUI.getWorkbench().getService(ESelectionService.class);
-					Assertions.assertNotNull(selectionService);
-					selectionService.setPostSelection(pTarget);
-				}
-			});
-
-			if (preAction != null) {
-				preAction.accept(t);
-			}
-
-		});
+		}
 	}
 
 	public static void testReports(final @NonNull ScenarioModelRecord modelRecord, @NonNull final IScenarioDataProvider scenarioDataProvider, final URL scenarioURL, final String reportID,
@@ -297,24 +209,44 @@ public class ReportTester {
 		if (preAction != null) {
 			preAction.accept(modelRecord);
 		}
-
-		final ReportTesterHelper reportTester = new ReportTesterHelper();
+		
+		
 		final ScenarioResult scenarioResult = new ScenarioResultImpl(modelRecord, ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
-		final IReportContents reportContents = reportTester.getReportContents(scenarioResult, reportID);
 
-		Assertions.assertNotNull(reportContents);
-		final String actualContents;
+		
+		final ReportTesterHelper reportTester = new ReportTesterHelper();
+String[] result = new String[1];
+		reportTester.runReportTest(reportID, null, null, IReportContentsGenerator.class, (generator) -> {
+			IReportContents reportContents = generator.getReportContents(null, scenarioResult, null);
+			if (type == ReportType.REPORT_HTML) {
+				result[0] = reportContents.getHTMLContents();
+			} else if (type == ReportType.REPORT_JSON) {
+				result[0] = reportContents.getJSONContents();
+			} else {
+				throw new IllegalArgumentException();
+			}
+		});
 
-		switch (type) {
-		case REPORT_HTML:
-			actualContents = reportContents.getHTMLContents();
-			break;
-		case REPORT_JSON:
-			actualContents = reportContents.getJSONContents();
-			break;
-		default:
-			throw new IllegalArgumentException();
-		}
+		final String actualContents =	result[0];
+		
+//
+//		final ReportTesterHelper reportTester = new ReportTesterHelper();
+//		final ScenarioResult scenarioResult = new ScenarioResultImpl(modelRecord, ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
+//		final IReportContents reportContents = reportTester.runReportTest(reportID, null, null, null, null);getReportContents(scenarioResult, reportID);
+//
+//		Assertions.assertNotNull(reportContents);
+//		final String actualContents;
+//
+//		switch (type) {
+//		case REPORT_HTML:
+//			actualContents = reportContents.getHTMLContents();
+//			break;
+//		case REPORT_JSON:
+//			actualContents = reportContents.getJSONContents();
+//			break;
+//		default:
+//			throw new IllegalArgumentException();
+//		}
 		Assertions.assertNotNull(actualContents);
 		if (TestingModes.ReportTestMode == TestMode.Generate) {
 
@@ -363,16 +295,6 @@ public class ReportTester {
 		});
 	}
 
-	public static void testVesselReportDiffs(final URL pinScenarioURL, final URL refScenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
-
-		ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(pinScenarioURL, (pinModelRecord, pinScenarioDataProvider) -> {
-			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(refScenarioURL, (refModelRecord, refScenarioDataProvider) -> {
-				ReportTester.testPinDiffReports(pinModelRecord, pinScenarioDataProvider, refModelRecord, refScenarioDataProvider, pinScenarioURL, reportID, shortName, "html");
-
-			});
-		});
-	}
-
 	public static void testPinDiffReports(final ScenarioModelRecord pinInstance, final IScenarioDataProvider pinModelDataProvider, final ScenarioModelRecord refInstance,
 			final IScenarioDataProvider refModelDataProvider, final URL scenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
 		Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
@@ -385,7 +307,7 @@ public class ReportTester {
 				final ScenarioResult refResult = new ScenarioResultImpl(refInstance, ScenarioModelUtil.getScheduleModel(refRunner.getScenarioDataProvider()));
 
 				final ReportTesterHelper reportTester = new ReportTesterHelper();
-				final String result[] = new String[1];
+				final String[] result = new String[1];
 
 				reportTester.runReportTest(reportID, null, null, IReportContentsGenerator.class, (generator) -> {
 					result[0] = generator.getReportContents(pinResult, refResult, null).getHTMLContents();
@@ -427,98 +349,6 @@ public class ReportTester {
 
 			});
 		});
-	}
-
-	public static void testActionPlanReport(final URL baseScenarioURL, final List<URL> scenarioURLs, final String reportID, final String shortName, final String extension) throws Exception {
-
-		final CheckedConsumer<List<Pair<ScenarioModelRecord, IScenarioDataProvider>>, Exception> executeTestConsumer = orderedInstances -> {
-
-			ReportTester.testActionPlanReport(orderedInstances, baseScenarioURL, ReportTesterHelper.ACTIONPLAN_REPORT_ID, ReportTesterHelper.ACTIONPLAN_REPORT_SHORTNAME, "html");
-		};
-
-		final List<Pair<ScenarioModelRecord, IScenarioDataProvider>> orderedInstances = new LinkedList<>();
-		final CheckedBiConsumer<Integer, CheckedBiConsumer, Exception> generateDataConsumer = (index, action) -> {
-			if (index == scenarioURLs.size()) {
-				executeTestConsumer.accept(orderedInstances);
-				return;
-			}
-			final URL url = scenarioURLs.get(index);
-			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(url, (instance, scenarioDataProvider) -> {
-				orderedInstances.add(new Pair<>(instance, scenarioDataProvider));
-				action.accept(index + 1, action);
-			});
-		};
-		generateDataConsumer.accept(0, generateDataConsumer);
-	}
-
-	public static void testActionPlanReport(final List<Pair<ScenarioModelRecord, IScenarioDataProvider>> orderedInstances, final URL scenarioURL, final String reportID, final String shortName,
-			final String extension) throws Exception {
-		Assumptions.assumeTrue(TestingModes.ReportTestMode != TestMode.Skip);
-
-		final CheckedConsumer<List<ScenarioResult>, Exception> c = orderedResults -> {
-
-			final ReportTesterHelper reportTester = new ReportTesterHelper();
-
-			final IReportContents reportContents = reportTester.getActionPlanReportContents(orderedResults, reportID);
-
-			Assertions.assertNotNull(reportContents);
-			final String actualContents = reportContents.getHTMLContents();
-			Assertions.assertNotNull(actualContents);
-			if (TestingModes.ReportTestMode == TestMode.Generate) {
-
-				final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString())).toString().replaceAll(" ", "%20"));
-
-				final File f1 = new File(expectedReportOutput.toURI());
-				final String slash = f1.isDirectory() ? "/" : "";
-				final File file2 = new File(f1.getAbsoluteFile() + slash + "reports" + "." + shortName + "." + extension);
-				try (PrintWriter pw = new PrintWriter(file2, StandardCharsets.UTF_8.name())) {
-					pw.print(actualContents);
-				}
-			} else {
-				final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString() + "reports" + "." + shortName + "." + extension)).toString().replaceAll(" ", "%20"));
-				final StringBuilder expectedOutputBuilder = new StringBuilder();
-				{
-					try (InputStream is = expectedReportOutput.openStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-						String line = reader.readLine();
-						if (line != null) {
-							expectedOutputBuilder.append(line);
-						}
-						while (line != null) {
-							line = reader.readLine();
-							if (line != null) {
-								expectedOutputBuilder.append("\n");
-								expectedOutputBuilder.append(line);
-							}
-						}
-					}
-				}
-
-				doValidate(actualContents, expectedOutputBuilder);
-			}
-		};
-
-		final List<ScenarioResult> orderedResults = new LinkedList<>();
-		final CheckedBiConsumer<Integer, CheckedBiConsumer, Exception> f = (a, b) -> {
-			if (a == orderedInstances.size()) {
-				c.accept(orderedResults);
-				return;
-			}
-
-			final Pair<ScenarioModelRecord, IScenarioDataProvider> p = orderedInstances.get(a);
-			final IScenarioDataProvider scenarioDataProvider = p.getSecond();
-			try {
-				LNGScenarioRunnerCreator.withLegacyEvaluationRunner(scenarioDataProvider, false, pinRunner -> {
-					// Perform eval
-				});
-			} catch (final Exception e) {
-				throw new RuntimeException(e);
-			}
-			final ScenarioResult result = new ScenarioResultImpl(p.getFirst(), ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
-			orderedResults.add(result);
-
-			b.accept(a + 1, b);
-		};
-		f.accept(0, f);
 	}
 
 	private static void doValidate(final String actualContents, final StringBuilder expectedOutputBuilder) {

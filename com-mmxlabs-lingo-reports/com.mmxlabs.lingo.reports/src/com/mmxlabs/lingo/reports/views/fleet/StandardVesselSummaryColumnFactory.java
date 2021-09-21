@@ -130,6 +130,7 @@ public class StandardVesselSummaryColumnFactory implements IVesselSummaryColumnF
 						block = blockManager.createBlock(COLUMN_BLOCK_GCO_VESSEL, "Charter Out (virtual)", ColumnType.NORMAL);
 					}
 					block.setPlaceholder(true);
+					block.setForceGroup(true);
 
 					blockManager.createColumn(block, "Days", new GeneratedCharterDaysFormatter());
 					blockManager.createColumn(block, "Revenue", new GeneratedCharterRevenueFormatter(ICostTypeFormatter.Type.REVENUE));

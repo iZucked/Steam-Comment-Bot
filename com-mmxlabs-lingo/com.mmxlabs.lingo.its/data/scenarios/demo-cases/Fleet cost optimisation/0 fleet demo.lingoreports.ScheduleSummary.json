@@ -13,10 +13,6 @@
   "Next event date" : "27/01/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "4,886,000"
-  },
   "P&L (Shipping)" : "4,886,000",
   "P&L" : "4,886,000",
   "P&L (Trading)" : "0",
@@ -33,7 +29,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-4,886,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Kano (162k)"
+  "Vessel" : "LNG Kano (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "4,886,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "11/01/11",
@@ -49,10 +49,6 @@
   "Next event date" : "11/01/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "3,990,000"
-  },
   "P&L (Shipping)" : "3,990,000",
   "P&L" : "3,990,000",
   "P&L (Trading)" : "0",
@@ -69,7 +65,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-3,990,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Lagos (162k)"
+  "Vessel" : "LNG Lagos (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "3,990,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "09/01/11",
@@ -85,10 +85,6 @@
   "Next event date" : "09/01/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "3,878,000"
-  },
   "P&L (Shipping)" : "3,878,000",
   "P&L" : "3,878,000",
   "P&L (Trading)" : "0",
@@ -105,7 +101,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-3,878,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Lokoja (162k)"
+  "Vessel" : "LNG Lokoja (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "3,878,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "29/01/11",
@@ -121,10 +121,6 @@
   "Next event date" : "29/01/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "4,998,000"
-  },
   "P&L (Shipping)" : "4,998,000",
   "P&L" : "4,998,000",
   "P&L (Trading)" : "0",
@@ -141,7 +137,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-4,998,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Ogun (162k)"
+  "Vessel" : "LNG Ogun (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "4,998,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "18/01/11",
@@ -157,10 +157,6 @@
   "Next event date" : "18/01/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "4,382,000"
-  },
   "P&L (Shipping)" : "4,382,000",
   "P&L" : "4,382,000",
   "P&L (Trading)" : "0",
@@ -177,7 +173,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-4,382,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Ondo (162k)"
+  "Vessel" : "LNG Ondo (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "4,382,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "19/01/11",
@@ -193,10 +193,6 @@
   "Next event date" : "19/01/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "4,438,000"
-  },
   "P&L (Shipping)" : "4,438,000",
   "P&L" : "4,438,000",
   "P&L (Trading)" : "0",
@@ -213,7 +209,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-4,438,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Oyo (162k)"
+  "Vessel" : "LNG Oyo (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "4,438,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "10/02/11",
@@ -229,10 +229,6 @@
   "Next event date" : "10/02/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "5,670,000"
-  },
   "P&L (Shipping)" : "5,670,000",
   "P&L" : "5,670,000",
   "P&L (Trading)" : "0",
@@ -249,7 +245,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-5,670,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Port Harcourt (162k)"
+  "Vessel" : "LNG Port Harcourt (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "5,670,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "07/01/11",
@@ -265,10 +265,6 @@
   "Next event date" : "07/01/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "3,766,000"
-  },
   "P&L (Shipping)" : "3,766,000",
   "P&L" : "3,766,000",
   "P&L (Trading)" : "0",
@@ -285,7 +281,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-3,766,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG River Niger (162k)"
+  "Vessel" : "LNG River Niger (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "3,766,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "28/12/10",
@@ -301,10 +301,6 @@
   "Next event date" : "28/12/10",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "3,227,000"
-  },
   "P&L (Shipping)" : "3,227,000",
   "P&L" : "3,227,000",
   "P&L (Trading)" : "0",
@@ -321,7 +317,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-3,227,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG River Orashi (162k)"
+  "Vessel" : "LNG River Orashi (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "3,227,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "15/01/11",
@@ -337,10 +337,6 @@
   "Next event date" : "15/01/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "4,214,000"
-  },
   "P&L (Shipping)" : "4,214,000",
   "P&L" : "4,214,000",
   "P&L (Trading)" : "0",
@@ -357,7 +353,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-4,214,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Rivers (162k)"
+  "Vessel" : "LNG Rivers (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "4,214,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "30/12/10",
@@ -373,10 +373,6 @@
   "Next event date" : "30/12/10",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "3,318,000"
-  },
   "P&L (Shipping)" : "3,318,000",
   "P&L" : "3,318,000",
   "P&L (Trading)" : "0",
@@ -393,7 +389,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-3,318,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Sokoto (162k)"
+  "Vessel" : "LNG Sokoto (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "3,318,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Violation" : "1",
@@ -410,10 +410,6 @@
   "Next event date" : "29/06/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "1,518,750"
-  },
   "P&L (Shipping)" : "1,518,750",
   "P&L" : "1,518,750",
   "P&L (Trading)" : "0",
@@ -430,7 +426,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-1,518,750",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Lagos (162k)"
+  "Vessel" : "LNG Lagos (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "1,518,750"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Violation" : "1",
@@ -447,10 +447,6 @@
   "Next event date" : "12/09/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "1,876,250"
-  },
   "P&L (Shipping)" : "1,876,250",
   "P&L" : "1,876,250",
   "P&L (Trading)" : "0",
@@ -467,7 +463,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-1,876,250",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG River Orashi (162k)"
+  "Vessel" : "LNG River Orashi (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "1,876,250"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "10/07/11",
@@ -483,10 +483,6 @@
   "Next event date" : "10/07/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "1,413,750"
-  },
   "P&L (Shipping)" : "1,413,750",
   "P&L" : "1,413,750",
   "P&L (Trading)" : "0",
@@ -503,7 +499,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-1,413,750",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG River Niger (162k)"
+  "Vessel" : "LNG River Niger (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "1,413,750"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "17/02/11",
@@ -519,10 +519,6 @@
   "Next event date" : "17/02/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "1,350,000"
-  },
   "P&L (Shipping)" : "1,350,000",
   "P&L" : "1,350,000",
   "P&L (Trading)" : "0",
@@ -539,7 +535,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-1,350,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Lagos (162k)"
+  "Vessel" : "LNG Lagos (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "1,350,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "25/07/11",
@@ -555,10 +555,6 @@
   "Next event date" : "25/07/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "3,180,000"
-  },
   "P&L (Shipping)" : "3,180,000",
   "P&L" : "3,180,000",
   "P&L (Trading)" : "0",
@@ -575,7 +571,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-3,180,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Lokoja (162k)"
+  "Vessel" : "LNG Lokoja (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "3,180,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "20/08/11",
@@ -591,10 +591,6 @@
   "Next event date" : "20/08/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "2,936,250"
-  },
   "P&L (Shipping)" : "2,936,250",
   "P&L" : "2,936,250",
   "P&L (Trading)" : "0",
@@ -611,7 +607,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-2,936,250",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Oyo (162k)"
+  "Vessel" : "LNG Oyo (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "2,936,250"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "30/07/11",
@@ -627,10 +627,6 @@
   "Next event date" : "30/07/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "2,865,000"
-  },
   "P&L (Shipping)" : "2,865,000",
   "P&L" : "2,865,000",
   "P&L (Trading)" : "0",
@@ -647,7 +643,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-2,865,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Port Harcourt (162k)"
+  "Vessel" : "LNG Port Harcourt (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "2,865,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "10/08/11",
@@ -663,10 +663,6 @@
   "Next event date" : "10/08/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "1,743,750"
-  },
   "P&L (Shipping)" : "1,743,750",
   "P&L" : "1,743,750",
   "P&L (Trading)" : "0",
@@ -683,7 +679,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-1,743,750",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Lagos (162k)"
+  "Vessel" : "LNG Lagos (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "1,743,750"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "09/09/11",
@@ -699,10 +699,6 @@
   "Next event date" : "09/09/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "1,527,916"
-  },
   "P&L (Shipping)" : "1,527,916",
   "P&L" : "1,527,916",
   "P&L (Trading)" : "0",
@@ -719,7 +715,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-1,527,916",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG River Niger (162k)"
+  "Vessel" : "LNG River Niger (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "1,527,916"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "07/09/11",
@@ -735,10 +735,6 @@
   "Next event date" : "07/09/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "1,979,166"
-  },
   "P&L (Shipping)" : "1,979,166",
   "P&L" : "1,979,166",
   "P&L (Trading)" : "0",
@@ -755,7 +751,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-1,979,166",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Sokoto (162k)"
+  "Vessel" : "LNG Sokoto (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "1,979,166"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
@@ -771,10 +771,6 @@
   "Next event date" : "23/12/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "9,040,000"
-  },
   "P&L (Shipping)" : "9,040,000",
   "P&L" : "9,040,000",
   "P&L (Trading)" : "0",
@@ -791,7 +787,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-9,040,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Kano (162k)"
+  "Vessel" : "LNG Kano (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "9,040,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "26/02/11",
@@ -807,10 +807,6 @@
   "Next event date" : "26/02/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "1,300,000"
-  },
   "P&L (Shipping)" : "1,300,000",
   "P&L" : "1,300,000",
   "P&L (Trading)" : "0",
@@ -827,7 +823,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-1,300,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Ondo (162k)"
+  "Vessel" : "LNG Ondo (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "1,300,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
@@ -843,10 +843,6 @@
   "Next event date" : "23/12/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "9,345,000"
-  },
   "P&L (Shipping)" : "9,345,000",
   "P&L" : "9,345,000",
   "P&L (Trading)" : "0",
@@ -863,7 +859,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-9,345,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Ogun (162k)"
+  "Vessel" : "LNG Ogun (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "9,345,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
@@ -879,10 +879,6 @@
   "Next event date" : "23/12/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "9,205,000"
-  },
   "P&L (Shipping)" : "9,205,000",
   "P&L" : "9,205,000",
   "P&L (Trading)" : "0",
@@ -899,7 +895,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-9,205,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Sokoto (162k)"
+  "Vessel" : "LNG Sokoto (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "9,205,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
@@ -915,10 +915,6 @@
   "Next event date" : "23/12/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "9,880,000"
-  },
   "P&L (Shipping)" : "9,880,000",
   "P&L" : "9,880,000",
   "P&L (Trading)" : "0",
@@ -935,7 +931,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-9,880,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG River Niger (162k)"
+  "Vessel" : "LNG River Niger (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "9,880,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
@@ -951,10 +951,6 @@
   "Next event date" : "23/12/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "6,550,000"
-  },
   "P&L (Shipping)" : "6,550,000",
   "P&L" : "6,550,000",
   "P&L (Trading)" : "0",
@@ -971,7 +967,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-6,550,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG River Orashi (162k)"
+  "Vessel" : "LNG River Orashi (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "6,550,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
@@ -987,10 +987,6 @@
   "Next event date" : "23/12/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "9,760,000"
-  },
   "P&L (Shipping)" : "9,760,000",
   "P&L" : "9,760,000",
   "P&L (Trading)" : "0",
@@ -1007,7 +1003,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-9,760,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Lokoja (162k)"
+  "Vessel" : "LNG Lokoja (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "9,760,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
@@ -1023,10 +1023,6 @@
   "Next event date" : "23/12/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "9,540,000"
-  },
   "P&L (Shipping)" : "9,540,000",
   "P&L" : "9,540,000",
   "P&L (Trading)" : "0",
@@ -1043,7 +1039,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-9,540,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Lagos (162k)"
+  "Vessel" : "LNG Lagos (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "9,540,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
@@ -1059,10 +1059,6 @@
   "Next event date" : "23/12/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "8,920,000"
-  },
   "P&L (Shipping)" : "8,920,000",
   "P&L" : "8,920,000",
   "P&L (Trading)" : "0",
@@ -1079,7 +1075,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-8,920,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Rivers (162k)"
+  "Vessel" : "LNG Rivers (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "8,920,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
@@ -1095,10 +1095,6 @@
   "Next event date" : "23/12/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "8,200,000"
-  },
   "P&L (Shipping)" : "8,200,000",
   "P&L" : "8,200,000",
   "P&L (Trading)" : "0",
@@ -1115,7 +1111,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-8,200,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Ondo (162k)"
+  "Vessel" : "LNG Ondo (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "8,200,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
@@ -1131,10 +1131,6 @@
   "Next event date" : "23/12/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "6,935,000"
-  },
   "P&L (Shipping)" : "6,935,000",
   "P&L" : "6,935,000",
   "P&L (Trading)" : "0",
@@ -1151,7 +1147,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-6,935,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Port Harcourt (162k)"
+  "Vessel" : "LNG Port Harcourt (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "6,935,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
@@ -1167,10 +1167,6 @@
   "Next event date" : "23/12/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "6,160,000"
-  },
   "P&L (Shipping)" : "6,160,000",
   "P&L" : "6,160,000",
   "P&L (Trading)" : "0",
@@ -1187,7 +1183,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-6,160,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Oyo (162k)"
+  "Vessel" : "LNG Oyo (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "6,160,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "12/04/11",
@@ -1203,10 +1203,6 @@
   "Next event date" : "12/04/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "3,656,250"
-  },
   "P&L (Shipping)" : "3,656,250",
   "P&L" : "3,656,250",
   "P&L (Trading)" : "0",
@@ -1223,7 +1219,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-3,656,250",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Sokoto (162k)"
+  "Vessel" : "LNG Sokoto (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "3,656,250"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/02/11",
@@ -1239,10 +1239,6 @@
   "Next event date" : "23/02/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "2,725,000"
-  },
   "P&L (Shipping)" : "2,725,000",
   "P&L" : "2,725,000",
   "P&L (Trading)" : "0",
@@ -1259,7 +1255,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-2,725,000",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG River Orashi (162k)"
+  "Vessel" : "LNG River Orashi (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "2,725,000"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "05/02/11",
@@ -1275,10 +1275,6 @@
   "Next event date" : "05/02/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "1,196,875"
-  },
   "P&L (Shipping)" : "1,196,875",
   "P&L" : "1,196,875",
   "P&L (Trading)" : "0",
@@ -1295,7 +1291,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-1,196,875",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Sokoto (162k)"
+  "Vessel" : "LNG Sokoto (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "1,196,875"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "08/06/11",
@@ -1311,10 +1311,6 @@
   "Next event date" : "08/06/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "3,157,458"
-  },
   "P&L (Shipping)" : "3,157,458",
   "P&L" : "3,157,458",
   "P&L (Trading)" : "0",
@@ -1331,7 +1327,11 @@
   "Port Cost" : "0",
   "Total Cost" : "-3,157,458",
   "Type" : "Charter Out (virt)",
-  "Vessel" : "LNG Sokoto (162k)"
+  "Vessel" : "LNG Sokoto (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "3,157,458"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
@@ -1344,10 +1344,6 @@
   "Load/Start Date" : "23/12/11",
   "Load/Start Time" : "06:00",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -1364,7 +1360,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "End",
-  "Vessel" : "LNG Kano (162k)"
+  "Vessel" : "LNG Kano (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
@@ -1377,10 +1377,6 @@
   "Load/Start Date" : "23/12/11",
   "Load/Start Time" : "06:00",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -1397,7 +1393,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "End",
-  "Vessel" : "LNG Lagos (162k)"
+  "Vessel" : "LNG Lagos (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
@@ -1410,10 +1410,6 @@
   "Load/Start Date" : "23/12/11",
   "Load/Start Time" : "06:00",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -1430,7 +1426,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "End",
-  "Vessel" : "LNG Lokoja (162k)"
+  "Vessel" : "LNG Lokoja (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
@@ -1443,10 +1443,6 @@
   "Load/Start Date" : "23/12/11",
   "Load/Start Time" : "06:00",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -1463,7 +1459,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "End",
-  "Vessel" : "LNG Ogun (162k)"
+  "Vessel" : "LNG Ogun (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
@@ -1476,10 +1476,6 @@
   "Load/Start Date" : "23/12/11",
   "Load/Start Time" : "06:00",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -1496,7 +1492,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "End",
-  "Vessel" : "LNG Ondo (162k)"
+  "Vessel" : "LNG Ondo (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
@@ -1509,10 +1509,6 @@
   "Load/Start Date" : "23/12/11",
   "Load/Start Time" : "06:00",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -1529,7 +1525,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "End",
-  "Vessel" : "LNG Oyo (162k)"
+  "Vessel" : "LNG Oyo (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
@@ -1542,10 +1542,6 @@
   "Load/Start Date" : "23/12/11",
   "Load/Start Time" : "06:00",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -1562,7 +1558,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "End",
-  "Vessel" : "LNG Port Harcourt (162k)"
+  "Vessel" : "LNG Port Harcourt (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
@@ -1575,10 +1575,6 @@
   "Load/Start Date" : "23/12/11",
   "Load/Start Time" : "06:00",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -1595,7 +1591,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "End",
-  "Vessel" : "LNG River Niger (162k)"
+  "Vessel" : "LNG River Niger (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
@@ -1608,10 +1608,6 @@
   "Load/Start Date" : "23/12/11",
   "Load/Start Time" : "06:00",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -1628,7 +1624,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "End",
-  "Vessel" : "LNG River Orashi (162k)"
+  "Vessel" : "LNG River Orashi (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
@@ -1641,10 +1641,6 @@
   "Load/Start Date" : "23/12/11",
   "Load/Start Time" : "06:00",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -1661,7 +1657,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "End",
-  "Vessel" : "LNG Rivers (162k)"
+  "Vessel" : "LNG Rivers (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "23/12/11",
@@ -1674,10 +1674,6 @@
   "Load/Start Date" : "23/12/11",
   "Load/Start Time" : "06:00",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -1694,7 +1690,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "End",
-  "Vessel" : "LNG Sokoto (162k)"
+  "Vessel" : "LNG Sokoto (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "01/11/10",
@@ -1710,10 +1710,6 @@
   "Next event date" : "01/11/10",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -1730,7 +1726,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "Start",
-  "Vessel" : "LNG Kano (162k)"
+  "Vessel" : "LNG Kano (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "01/11/10",
@@ -1746,10 +1746,6 @@
   "Next event date" : "01/11/10",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -1766,7 +1762,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "Start",
-  "Vessel" : "LNG Lagos (162k)"
+  "Vessel" : "LNG Lagos (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "01/11/10",
@@ -1782,10 +1782,6 @@
   "Next event date" : "01/11/10",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -1802,7 +1798,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "Start",
-  "Vessel" : "LNG Lokoja (162k)"
+  "Vessel" : "LNG Lokoja (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "01/11/10",
@@ -1818,10 +1818,6 @@
   "Next event date" : "01/11/10",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -1838,7 +1834,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "Start",
-  "Vessel" : "LNG Ogun (162k)"
+  "Vessel" : "LNG Ogun (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "01/11/10",
@@ -1854,10 +1854,6 @@
   "Next event date" : "01/11/10",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -1874,7 +1870,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "Start",
-  "Vessel" : "LNG Ondo (162k)"
+  "Vessel" : "LNG Ondo (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "01/11/10",
@@ -1890,10 +1890,6 @@
   "Next event date" : "01/11/10",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -1910,7 +1906,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "Start",
-  "Vessel" : "LNG Oyo (162k)"
+  "Vessel" : "LNG Oyo (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "01/11/10",
@@ -1926,10 +1926,6 @@
   "Next event date" : "01/11/10",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -1946,7 +1942,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "Start",
-  "Vessel" : "LNG Port Harcourt (162k)"
+  "Vessel" : "LNG Port Harcourt (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "01/11/10",
@@ -1962,10 +1962,6 @@
   "Next event date" : "01/11/10",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -1982,7 +1978,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "Start",
-  "Vessel" : "LNG River Niger (162k)"
+  "Vessel" : "LNG River Niger (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "01/11/10",
@@ -1998,10 +1998,6 @@
   "Next event date" : "01/11/10",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -2018,7 +2014,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "Start",
-  "Vessel" : "LNG River Orashi (162k)"
+  "Vessel" : "LNG River Orashi (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "01/11/10",
@@ -2034,10 +2034,6 @@
   "Next event date" : "01/11/10",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -2054,7 +2050,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "Start",
-  "Vessel" : "LNG Rivers (162k)"
+  "Vessel" : "LNG Rivers (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Bonny",
   "Discharge/End Date" : "01/11/10",
@@ -2070,10 +2070,6 @@
   "Next event date" : "01/11/10",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -2090,7 +2086,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "Start",
-  "Vessel" : "LNG Sokoto (162k)"
+  "Vessel" : "LNG Sokoto (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Montoir",
   "Discharge/End Date" : "03/06/11",
@@ -2108,10 +2108,6 @@
   "Next event date" : "12/06/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "-792,599"
-  },
   "P&L (Shipping)" : "-792,599",
   "P&L" : "-792,599",
   "P&L (Trading)" : "0",
@@ -2129,7 +2125,11 @@
   "Port Cost" : "140,000",
   "Total Cost" : "792,599",
   "Type" : "Dry Dock",
-  "Vessel" : "LNG Lagos (162k)"
+  "Vessel" : "LNG Lagos (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "-792,599"
+  }
 }, {
   "Buy/Start Port" : "Senboku",
   "Discharge/End Date" : "31/07/11",
@@ -2147,10 +2147,6 @@
   "Next event date" : "23/08/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Shipping - Trading)" : "0",
-    "P&L (Shipping - Shipping)" : "-1,868,762"
-  },
   "P&L (Shipping)" : "-1,868,762",
   "P&L" : "-1,868,762",
   "P&L (Trading)" : "0",
@@ -2168,7 +2164,11 @@
   "Port Cost" : "140,000",
   "Total Cost" : "1,868,762",
   "Type" : "Dry Dock",
-  "Vessel" : "LNG River Orashi (162k)"
+  "Vessel" : "LNG River Orashi (162k)",
+  "[P&L]" : {
+    "P&L (Shipping - Trading)" : "0",
+    "P&L (Shipping - Shipping)" : "-1,868,762"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "00:12",
@@ -2207,10 +2207,6 @@
   "Next event date" : "09/05/11",
   "Next event port" : "Montoir",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,581,411",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,581,411",
   "P&L (Trading)" : "17,581,411",
@@ -2235,7 +2231,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "781,088",
   "Type" : "Cargo",
-  "Vessel" : "LNG Lagos (162k)"
+  "Vessel" : "LNG Lagos (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,581,411",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "09:20",
   "Ballast Travel" : "09:05",
@@ -2274,10 +2274,6 @@
   "Next event date" : "04/06/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,884,941",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,884,941",
   "P&L (Trading)" : "16,884,941",
@@ -2302,7 +2298,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,364,557",
   "Type" : "Cargo",
-  "Vessel" : "LNG River Niger (162k)"
+  "Vessel" : "LNG River Niger (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,884,941",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "08:08",
@@ -2341,10 +2341,6 @@
   "Next event date" : "24/06/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,159,491",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,159,491",
   "P&L (Trading)" : "17,159,491",
@@ -2369,7 +2365,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,203,007",
   "Type" : "Cargo",
-  "Vessel" : "LNG River Niger (162k)"
+  "Vessel" : "LNG River Niger (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,159,491",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "06:00",
   "Ballast Travel" : "07:23",
@@ -2408,10 +2408,6 @@
   "Next event date" : "31/01/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,043,141",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,043,141",
   "P&L (Trading)" : "17,043,141",
@@ -2436,7 +2432,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,149,857",
   "Type" : "Cargo",
-  "Vessel" : "LNG River Niger (162k)"
+  "Vessel" : "LNG River Niger (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,043,141",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:11",
   "Ballast Travel" : "09:14",
@@ -2475,10 +2475,6 @@
   "Next event date" : "29/05/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,026,191",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,026,191",
   "P&L (Trading)" : "17,026,191",
@@ -2503,7 +2499,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,223,307",
   "Type" : "Cargo",
-  "Vessel" : "LNG Oyo (162k)"
+  "Vessel" : "LNG Oyo (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,026,191",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:01",
   "Ballast Travel" : "09:22",
@@ -2542,10 +2542,6 @@
   "Next event date" : "29/05/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,057,267",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,057,267",
   "P&L (Trading)" : "17,057,267",
@@ -2570,7 +2566,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,192,231",
   "Type" : "Cargo",
-  "Vessel" : "LNG Lokoja (162k)"
+  "Vessel" : "LNG Lokoja (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,057,267",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "04:11",
   "Ballast Travel" : "09:14",
@@ -2609,10 +2609,6 @@
   "Next event date" : "09/06/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,867,991",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,867,991",
   "P&L (Trading)" : "16,867,991",
@@ -2637,7 +2633,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,381,507",
   "Type" : "Cargo",
-  "Vessel" : "LNG Port Harcourt (162k)"
+  "Vessel" : "LNG Port Harcourt (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,867,991",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "04:11",
   "Ballast Travel" : "09:14",
@@ -2676,10 +2676,6 @@
   "Next event date" : "12/06/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,867,991",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,867,991",
   "P&L (Trading)" : "16,867,991",
@@ -2704,7 +2700,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,381,507",
   "Type" : "Cargo",
-  "Vessel" : "LNG Rivers (162k)"
+  "Vessel" : "LNG Rivers (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,867,991",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "08:01",
   "Ballast Travel" : "09:22",
@@ -2743,10 +2743,6 @@
   "Next event date" : "08/02/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,819,025",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,819,025",
   "P&L (Trading)" : "16,819,025",
@@ -2771,7 +2767,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,373,973",
   "Type" : "Cargo",
-  "Vessel" : "LNG Lokoja (162k)"
+  "Vessel" : "LNG Lokoja (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,819,025",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "01:11",
   "Ballast Travel" : "09:14",
@@ -2810,10 +2810,6 @@
   "Next event date" : "14/06/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,935,791",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,935,791",
   "P&L (Trading)" : "16,935,791",
@@ -2838,7 +2834,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,313,707",
   "Type" : "Cargo",
-  "Vessel" : "LNG Ogun (162k)"
+  "Vessel" : "LNG Ogun (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,935,791",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "01:18",
   "Ballast Travel" : "25:14",
@@ -2877,10 +2877,6 @@
   "Next event date" : "25/07/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "15,441,366",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "15,441,366",
   "P&L (Trading)" : "15,441,366",
@@ -2905,7 +2901,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "2,808,132",
   "Type" : "Cargo",
-  "Vessel" : "LNG Ondo (162k)"
+  "Vessel" : "LNG Ondo (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "15,441,366",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "08:00",
@@ -2944,10 +2944,6 @@
   "Next event date" : "30/01/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,152,200",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,152,200",
   "P&L (Trading)" : "17,152,200",
@@ -2972,7 +2968,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,153,799",
   "Type" : "Cargo",
-  "Vessel" : "LNG Lagos (162k)"
+  "Vessel" : "LNG Lagos (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,152,200",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "08:17",
@@ -3011,10 +3011,6 @@
   "Next event date" : "19/06/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,105,073",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,105,073",
   "P&L (Trading)" : "17,105,073",
@@ -3039,7 +3035,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,257,425",
   "Type" : "Cargo",
-  "Vessel" : "LNG Lokoja (162k)"
+  "Vessel" : "LNG Lokoja (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,105,073",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "20:16",
@@ -3078,10 +3078,6 @@
   "Next event date" : "18/07/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "15,741,779",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "15,741,779",
   "P&L (Trading)" : "15,741,779",
@@ -3106,7 +3102,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "2,620,719",
   "Type" : "Cargo",
-  "Vessel" : "LNG Oyo (162k)"
+  "Vessel" : "LNG Oyo (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "15,741,779",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "11:06",
   "Ballast Travel" : "17:22",
@@ -3145,10 +3145,6 @@
   "Next event date" : "27/07/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "15,992,214",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "15,992,214",
   "P&L (Trading)" : "15,992,214",
@@ -3173,7 +3169,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "2,200,784",
   "Type" : "Cargo",
-  "Vessel" : "LNG Sokoto (162k)"
+  "Vessel" : "LNG Sokoto (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "15,992,214",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "07:05",
@@ -3212,10 +3212,6 @@
   "Next event date" : "28/06/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,251,181",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,251,181",
   "P&L (Trading)" : "17,251,181",
@@ -3240,7 +3236,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,111,316",
   "Type" : "Cargo",
-  "Vessel" : "LNG Port Harcourt (162k)"
+  "Vessel" : "LNG Port Harcourt (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,251,181",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "09:10",
   "Ballast Travel" : "09:14",
@@ -3279,10 +3279,6 @@
   "Next event date" : "13/07/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,868,933",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,868,933",
   "P&L (Trading)" : "16,868,933",
@@ -3307,7 +3303,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,380,565",
   "Type" : "Cargo",
-  "Vessel" : "LNG Rivers (162k)"
+  "Vessel" : "LNG Rivers (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,868,933",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "07:01",
   "Ballast Travel" : "07:23",
@@ -3346,10 +3346,6 @@
   "Next event date" : "10/07/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,054,441",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,054,441",
   "P&L (Trading)" : "17,054,441",
@@ -3374,7 +3370,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,195,057",
   "Type" : "Cargo",
-  "Vessel" : "LNG Ogun (162k)"
+  "Vessel" : "LNG Ogun (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,054,441",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "04:20",
   "Ballast Travel" : "07:23",
@@ -3413,10 +3413,6 @@
   "Next event date" : "15/07/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,122,241",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,122,241",
   "P&L (Trading)" : "17,122,241",
@@ -3441,7 +3437,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,127,257",
   "Type" : "Cargo",
-  "Vessel" : "LNG Kano (162k)"
+  "Vessel" : "LNG Kano (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,122,241",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "08:16",
@@ -3480,10 +3480,6 @@
   "Next event date" : "21/07/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,030,240",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,030,240",
   "P&L (Trading)" : "17,030,240",
@@ -3508,7 +3504,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,275,758",
   "Type" : "Cargo",
-  "Vessel" : "LNG Lagos (162k)"
+  "Vessel" : "LNG Lagos (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,030,240",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "19:00",
@@ -3547,10 +3547,6 @@
   "Next event date" : "24/08/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "15,908,726",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "15,908,726",
   "P&L (Trading)" : "15,908,726",
@@ -3575,7 +3571,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "2,397,273",
   "Type" : "Cargo",
-  "Vessel" : "LNG River Niger (162k)"
+  "Vessel" : "LNG River Niger (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "15,908,726",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "06:11",
   "Ballast Travel" : "22:20",
@@ -3614,10 +3614,6 @@
   "Next event date" : "05/09/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "15,678,666",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "15,678,666",
   "P&L (Trading)" : "15,678,666",
@@ -3642,7 +3638,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "2,570,832",
   "Type" : "Cargo",
-  "Vessel" : "LNG Ogun (162k)"
+  "Vessel" : "LNG Ogun (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "15,678,666",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "10:02",
   "Ballast Travel" : "08:22",
@@ -3681,10 +3681,6 @@
   "Next event date" : "12/08/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,918,841",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,918,841",
   "P&L (Trading)" : "16,918,841",
@@ -3709,7 +3705,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,330,657",
   "Type" : "Cargo",
-  "Vessel" : "LNG Rivers (162k)"
+  "Vessel" : "LNG Rivers (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,918,841",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "09:11",
   "Ballast Travel" : "09:14",
@@ -3748,10 +3748,6 @@
   "Next event date" : "17/08/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,822,791",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,822,791",
   "P&L (Trading)" : "16,822,791",
@@ -3776,7 +3772,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,426,707",
   "Type" : "Cargo",
-  "Vessel" : "LNG Kano (162k)"
+  "Vessel" : "LNG Kano (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,822,791",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "01:11",
   "Ballast Travel" : "22:20",
@@ -3815,10 +3815,6 @@
   "Next event date" : "13/09/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "15,780,366",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "15,780,366",
   "P&L (Trading)" : "15,780,366",
@@ -3843,7 +3839,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "2,412,632",
   "Type" : "Cargo",
-  "Vessel" : "LNG Lokoja (162k)"
+  "Vessel" : "LNG Lokoja (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "15,780,366",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "07:05",
   "Ballast Travel" : "25:03",
@@ -3882,10 +3882,6 @@
   "Next event date" : "23/09/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "15,507,283",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "15,507,283",
   "P&L (Trading)" : "15,507,283",
@@ -3910,7 +3906,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "2,742,216",
   "Type" : "Cargo",
-  "Vessel" : "LNG Ondo (162k)"
+  "Vessel" : "LNG Ondo (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "15,507,283",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "08:02",
@@ -3949,10 +3949,6 @@
   "Next event date" : "17/08/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,156,848",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,156,848",
   "P&L (Trading)" : "17,156,848",
@@ -3977,7 +3973,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,205,650",
   "Type" : "Cargo",
-  "Vessel" : "LNG Sokoto (162k)"
+  "Vessel" : "LNG Sokoto (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,156,848",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "02:01",
   "Ballast Travel" : "08:00",
@@ -4016,10 +4016,6 @@
   "Next event date" : "21/08/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,086,458",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,086,458",
   "P&L (Trading)" : "17,086,458",
@@ -4044,7 +4040,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,106,540",
   "Type" : "Cargo",
-  "Vessel" : "LNG Port Harcourt (162k)"
+  "Vessel" : "LNG Port Harcourt (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,086,458",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "10:11",
   "Ballast Travel" : "10:12",
@@ -4083,10 +4083,6 @@
   "Next event date" : "18/02/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,701,316",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,701,316",
   "P&L (Trading)" : "16,701,316",
@@ -4111,7 +4107,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,491,682",
   "Type" : "Cargo",
-  "Vessel" : "LNG Rivers (162k)"
+  "Vessel" : "LNG Rivers (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,701,316",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "08:10",
   "Ballast Travel" : "12:09",
@@ -4150,10 +4150,6 @@
   "Next event date" : "15/09/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,571,366",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,571,366",
   "P&L (Trading)" : "16,571,366",
@@ -4178,7 +4174,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,621,632",
   "Type" : "Cargo",
-  "Vessel" : "LNG Lagos (162k)"
+  "Vessel" : "LNG Lagos (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,571,366",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "08:01",
   "Ballast Travel" : "08:00",
@@ -4217,10 +4217,6 @@
   "Next event date" : "19/09/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,781,358",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,781,358",
   "P&L (Trading)" : "16,781,358",
@@ -4245,7 +4241,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,468,140",
   "Type" : "Cargo",
-  "Vessel" : "LNG Rivers (162k)"
+  "Vessel" : "LNG Rivers (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,781,358",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "22:23",
@@ -4284,10 +4284,6 @@
   "Next event date" : "08/10/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "15,554,132",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "15,554,132",
   "P&L (Trading)" : "15,554,132",
@@ -4312,7 +4308,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "2,808,366",
   "Type" : "Cargo",
-  "Vessel" : "LNG Kano (162k)"
+  "Vessel" : "LNG Kano (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "15,554,132",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "11:06",
   "Ballast Travel" : "17:22",
@@ -4351,10 +4351,6 @@
   "Next event date" : "13/10/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "15,911,258",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "15,911,258",
   "P&L (Trading)" : "15,911,258",
@@ -4379,7 +4375,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "2,281,740",
   "Type" : "Cargo",
-  "Vessel" : "LNG Oyo (162k)"
+  "Vessel" : "LNG Oyo (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "15,911,258",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "08:11",
   "Ballast Travel" : "09:14",
@@ -4418,10 +4418,6 @@
   "Next event date" : "25/09/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,777,591",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,777,591",
   "P&L (Trading)" : "16,777,591",
@@ -4446,7 +4442,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,471,907",
   "Type" : "Cargo",
-  "Vessel" : "LNG Port Harcourt (162k)"
+  "Vessel" : "LNG Port Harcourt (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,777,591",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "08:16",
@@ -4485,10 +4485,6 @@
   "Next event date" : "08/02/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,051,899",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,051,899",
   "P&L (Trading)" : "17,051,899",
@@ -4513,7 +4509,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,254,100",
   "Type" : "Cargo",
-  "Vessel" : "LNG Ondo (162k)"
+  "Vessel" : "LNG Ondo (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,051,899",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "08:00",
@@ -4552,10 +4552,6 @@
   "Next event date" : "25/09/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,187,042",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,187,042",
   "P&L (Trading)" : "17,187,042",
@@ -4580,7 +4576,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,175,457",
   "Type" : "Cargo",
-  "Vessel" : "LNG Ogun (162k)"
+  "Vessel" : "LNG Ogun (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,187,042",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "08:08",
@@ -4619,10 +4619,6 @@
   "Next event date" : "26/09/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,103,205",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,103,205",
   "P&L (Trading)" : "17,103,205",
@@ -4647,7 +4643,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,202,793",
   "Type" : "Cargo",
-  "Vessel" : "LNG Sokoto (162k)"
+  "Vessel" : "LNG Sokoto (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,103,205",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "08:16",
@@ -4686,10 +4686,6 @@
   "Next event date" : "01/10/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,030,240",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,030,240",
   "P&L (Trading)" : "17,030,240",
@@ -4714,7 +4710,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,275,758",
   "Type" : "Cargo",
-  "Vessel" : "LNG River Niger (162k)"
+  "Vessel" : "LNG River Niger (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,030,240",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "20:16",
@@ -4753,10 +4753,6 @@
   "Next event date" : "29/10/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "15,753,079",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "15,753,079",
   "P&L (Trading)" : "15,753,079",
@@ -4781,7 +4777,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "2,552,919",
   "Type" : "Cargo",
-  "Vessel" : "LNG River Orashi (162k)"
+  "Vessel" : "LNG River Orashi (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "15,753,079",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "08:16",
@@ -4820,10 +4820,6 @@
   "Next event date" : "02/10/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,070,806",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,070,806",
   "P&L (Trading)" : "17,070,806",
@@ -4848,7 +4844,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,291,691",
   "Type" : "Cargo",
-  "Vessel" : "LNG Lokoja (162k)"
+  "Vessel" : "LNG Lokoja (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,070,806",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "08:12",
@@ -4887,10 +4887,6 @@
   "Next event date" : "04/10/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,113,563",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,113,563",
   "P&L (Trading)" : "17,113,563",
@@ -4915,7 +4911,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,248,935",
   "Type" : "Cargo",
-  "Vessel" : "LNG Lagos (162k)"
+  "Vessel" : "LNG Lagos (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,113,563",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "08:16",
@@ -4954,10 +4954,6 @@
   "Next event date" : "09/10/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,131,940",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,131,940",
   "P&L (Trading)" : "17,131,940",
@@ -4982,7 +4978,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,230,558",
   "Type" : "Cargo",
-  "Vessel" : "LNG Rivers (162k)"
+  "Vessel" : "LNG Rivers (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,131,940",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "08:16",
@@ -5021,10 +5021,6 @@
   "Next event date" : "15/10/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,086,740",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,086,740",
   "P&L (Trading)" : "17,086,740",
@@ -5049,7 +5045,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,275,758",
   "Type" : "Cargo",
-  "Vessel" : "LNG Ondo (162k)"
+  "Vessel" : "LNG Ondo (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,086,740",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "07:05",
@@ -5088,10 +5088,6 @@
   "Next event date" : "26/10/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,979,981",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,979,981",
   "P&L (Trading)" : "16,979,981",
@@ -5116,7 +5112,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,382,516",
   "Type" : "Cargo",
-  "Vessel" : "LNG Port Harcourt (162k)"
+  "Vessel" : "LNG Port Harcourt (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,979,981",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "11:01",
   "Ballast Travel" : "07:23",
@@ -5155,10 +5155,6 @@
   "Next event date" : "20/02/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,861,400",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,861,400",
   "P&L (Trading)" : "16,861,400",
@@ -5183,7 +5179,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,331,598",
   "Type" : "Cargo",
-  "Vessel" : "LNG Oyo (162k)"
+  "Vessel" : "LNG Oyo (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,861,400",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "08:16",
@@ -5222,10 +5222,6 @@
   "Next event date" : "01/11/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,070,806",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,070,806",
   "P&L (Trading)" : "17,070,806",
@@ -5250,7 +5246,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,291,691",
   "Type" : "Cargo",
-  "Vessel" : "LNG Oyo (162k)"
+  "Vessel" : "LNG Oyo (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,070,806",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "03:05",
   "Ballast Travel" : "25:03",
@@ -5289,10 +5289,6 @@
   "Next event date" : "24/03/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "15,541,183",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "15,541,183",
   "P&L (Trading)" : "15,541,183",
@@ -5317,7 +5313,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "2,651,816",
   "Type" : "Cargo",
-  "Vessel" : "LNG Kano (162k)"
+  "Vessel" : "LNG Kano (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "15,541,183",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "03:09",
   "Ballast Travel" : "24:23",
@@ -5356,10 +5356,6 @@
   "Next event date" : "26/03/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "15,548,716",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "15,548,716",
   "P&L (Trading)" : "15,548,716",
@@ -5384,7 +5380,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "2,644,282",
   "Type" : "Cargo",
-  "Vessel" : "LNG Ogun (162k)"
+  "Vessel" : "LNG Ogun (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "15,548,716",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "02:06",
   "Ballast Travel" : "17:22",
@@ -5423,10 +5423,6 @@
   "Next event date" : "17/03/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,171,158",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,171,158",
   "P&L (Trading)" : "16,171,158",
@@ -5451,7 +5447,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "2,078,340",
   "Type" : "Cargo",
-  "Vessel" : "LNG River Niger (162k)"
+  "Vessel" : "LNG River Niger (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,171,158",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "07:05",
@@ -5490,10 +5490,6 @@
   "Next event date" : "22/02/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,224,013",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,224,013",
   "P&L (Trading)" : "17,224,013",
@@ -5518,7 +5514,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,081,984",
   "Type" : "Cargo",
-  "Vessel" : "LNG Sokoto (162k)"
+  "Vessel" : "LNG Sokoto (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,224,013",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "05:01",
   "Ballast Travel" : "09:22",
@@ -5557,10 +5557,6 @@
   "Next event date" : "10/03/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,875,525",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,875,525",
   "P&L (Trading)" : "16,875,525",
@@ -5585,7 +5581,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,373,973",
   "Type" : "Cargo",
-  "Vessel" : "LNG Lokoja (162k)"
+  "Vessel" : "LNG Lokoja (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,875,525",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "05:04",
   "Ballast Travel" : "08:20",
@@ -5624,10 +5624,6 @@
   "Next event date" : "09/03/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,935,791",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,935,791",
   "P&L (Trading)" : "16,935,791",
@@ -5652,7 +5648,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,257,207",
   "Type" : "Cargo",
-  "Vessel" : "LNG Port Harcourt (162k)"
+  "Vessel" : "LNG Port Harcourt (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,935,791",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "03:18",
   "Ballast Travel" : "14:23",
@@ -5691,10 +5691,6 @@
   "Next event date" : "27/03/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,409,400",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,409,400",
   "P&L (Trading)" : "16,409,400",
@@ -5719,7 +5715,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,783,599",
   "Type" : "Cargo",
-  "Vessel" : "LNG Lagos (162k)"
+  "Vessel" : "LNG Lagos (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,409,400",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "05:01",
   "Ballast Travel" : "18:03",
@@ -5758,10 +5758,6 @@
   "Next event date" : "03/04/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,184,341",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,184,341",
   "P&L (Trading)" : "16,184,341",
@@ -5786,7 +5782,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "2,065,157",
   "Type" : "Cargo",
-  "Vessel" : "LNG Rivers (162k)"
+  "Vessel" : "LNG Rivers (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,184,341",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "03:01",
   "Ballast Travel" : "07:23",
@@ -5825,10 +5825,6 @@
   "Next event date" : "13/03/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,163,675",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,163,675",
   "P&L (Trading)" : "17,163,675",
@@ -5853,7 +5849,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,085,823",
   "Type" : "Cargo",
-  "Vessel" : "LNG Oyo (162k)"
+  "Vessel" : "LNG Oyo (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,163,675",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "02:09",
   "Ballast Travel" : "24:23",
@@ -5892,10 +5892,6 @@
   "Next event date" : "19/04/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "15,571,316",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "15,571,316",
   "P&L (Trading)" : "15,571,316",
@@ -5920,7 +5916,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "2,621,682",
   "Type" : "Cargo",
-  "Vessel" : "LNG River Orashi (162k)"
+  "Vessel" : "LNG River Orashi (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "15,571,316",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "08:01",
   "Ballast Travel" : "09:22",
@@ -5959,10 +5959,6 @@
   "Next event date" : "28/03/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,819,025",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,819,025",
   "P&L (Trading)" : "16,819,025",
@@ -5987,7 +5983,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,373,973",
   "Type" : "Cargo",
-  "Vessel" : "LNG Ondo (162k)"
+  "Vessel" : "LNG Ondo (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,819,025",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "08:16",
@@ -6026,10 +6026,6 @@
   "Next event date" : "17/01/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,079,058",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,079,058",
   "P&L (Trading)" : "17,079,058",
@@ -6054,7 +6050,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,226,940",
   "Type" : "Cargo",
-  "Vessel" : "LNG River Orashi (162k)"
+  "Vessel" : "LNG River Orashi (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,079,058",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "09:02",
   "Ballast Travel" : "08:22",
@@ -6093,10 +6093,6 @@
   "Next event date" : "09/04/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,897,183",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,897,183",
   "P&L (Trading)" : "16,897,183",
@@ -6121,7 +6117,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,352,316",
   "Type" : "Cargo",
-  "Vessel" : "LNG Port Harcourt (162k)"
+  "Vessel" : "LNG Port Harcourt (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,897,183",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "05:02",
   "Ballast Travel" : "09:22",
@@ -6160,10 +6160,6 @@
   "Next event date" : "12/04/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,807,725",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,807,725",
   "P&L (Trading)" : "16,807,725",
@@ -6188,7 +6184,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,441,773",
   "Type" : "Cargo",
-  "Vessel" : "LNG Lokoja (162k)"
+  "Vessel" : "LNG Lokoja (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,807,725",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "03:01",
   "Ballast Travel" : "07:23",
@@ -6227,10 +6227,6 @@
   "Next event date" : "04/04/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,149,550",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,149,550",
   "P&L (Trading)" : "17,149,550",
@@ -6255,7 +6251,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,099,948",
   "Type" : "Cargo",
-  "Vessel" : "LNG Oyo (162k)"
+  "Vessel" : "LNG Oyo (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,149,550",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:19",
   "Ballast Travel" : "09:14",
@@ -6294,10 +6294,6 @@
   "Next event date" : "10/04/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,018,658",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,018,658",
   "P&L (Trading)" : "17,018,658",
@@ -6322,7 +6318,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,230,840",
   "Type" : "Cargo",
-  "Vessel" : "LNG River Niger (162k)"
+  "Vessel" : "LNG River Niger (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,018,658",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "07:05",
@@ -6361,10 +6361,6 @@
   "Next event date" : "20/01/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,148,540",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,148,540",
   "P&L (Trading)" : "17,148,540",
@@ -6389,7 +6385,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,157,458",
   "Type" : "Cargo",
-  "Vessel" : "LNG Sokoto (162k)"
+  "Vessel" : "LNG Sokoto (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,148,540",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "02:11",
   "Ballast Travel" : "09:14",
@@ -6428,10 +6428,6 @@
   "Next event date" : "18/04/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,003,591",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,003,591",
   "P&L (Trading)" : "17,003,591",
@@ -6456,7 +6452,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,245,907",
   "Type" : "Cargo",
-  "Vessel" : "LNG Kano (162k)"
+  "Vessel" : "LNG Kano (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,003,591",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "02:01",
   "Ballast Travel" : "08:00",
@@ -6495,10 +6495,6 @@
   "Next event date" : "17/04/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,142,958",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,142,958",
   "P&L (Trading)" : "17,142,958",
@@ -6523,7 +6519,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,106,540",
   "Type" : "Cargo",
-  "Vessel" : "LNG Ogun (162k)"
+  "Vessel" : "LNG Ogun (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,142,958",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "07:12",
   "Ballast Travel" : "08:13",
@@ -6562,10 +6562,6 @@
   "Next event date" : "26/04/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,936,733",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,936,733",
   "P&L (Trading)" : "16,936,733",
@@ -6590,7 +6586,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,312,766",
   "Type" : "Cargo",
-  "Vessel" : "LNG Lagos (162k)"
+  "Vessel" : "LNG Lagos (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,936,733",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "06:02",
   "Ballast Travel" : "09:22",
@@ -6629,10 +6629,6 @@
   "Next event date" : "27/04/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,875,525",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,875,525",
   "P&L (Trading)" : "16,875,525",
@@ -6657,7 +6653,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,373,973",
   "Type" : "Cargo",
-  "Vessel" : "LNG Ondo (162k)"
+  "Vessel" : "LNG Ondo (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,875,525",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "03:02",
   "Ballast Travel" : "09:22",
@@ -6696,10 +6696,6 @@
   "Next event date" : "24/05/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,943,325",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,943,325",
   "P&L (Trading)" : "16,943,325",
@@ -6724,7 +6720,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,306,173",
   "Type" : "Cargo",
-  "Vessel" : "LNG Ondo (162k)"
+  "Vessel" : "LNG Ondo (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,943,325",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "04:19",
   "Ballast Travel" : "14:23",
@@ -6763,10 +6763,6 @@
   "Next event date" : "12/05/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,443,300",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,443,300",
   "P&L (Trading)" : "16,443,300",
@@ -6791,7 +6787,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,806,198",
   "Type" : "Cargo",
-  "Vessel" : "LNG Rivers (162k)"
+  "Vessel" : "LNG Rivers (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,443,300",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "09:11",
   "Ballast Travel" : "09:14",
@@ -6830,10 +6830,6 @@
   "Next event date" : "05/05/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,867,991",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,867,991",
   "P&L (Trading)" : "16,867,991",
@@ -6858,7 +6854,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,381,507",
   "Type" : "Cargo",
-  "Vessel" : "LNG Oyo (162k)"
+  "Vessel" : "LNG Oyo (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,867,991",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "05:11",
   "Ballast Travel" : "09:14",
@@ -6897,10 +6897,6 @@
   "Next event date" : "09/05/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,890,591",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,890,591",
   "P&L (Trading)" : "16,890,591",
@@ -6925,7 +6921,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,358,907",
   "Type" : "Cargo",
-  "Vessel" : "LNG Port Harcourt (162k)"
+  "Vessel" : "LNG Port Harcourt (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,890,591",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "01:19",
   "Ballast Travel" : "09:14",
@@ -6964,10 +6964,6 @@
   "Next event date" : "04/05/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,033,725",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,033,725",
   "P&L (Trading)" : "17,033,725",
@@ -6992,7 +6988,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,215,773",
   "Type" : "Cargo",
-  "Vessel" : "LNG River Niger (162k)"
+  "Vessel" : "LNG River Niger (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,033,725",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "08:00",
@@ -7031,10 +7031,6 @@
   "Next event date" : "01/05/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "17,153,142",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "17,153,142",
   "P&L (Trading)" : "17,153,142",
@@ -7059,7 +7055,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,152,857",
   "Type" : "Cargo",
-  "Vessel" : "LNG Sokoto (162k)"
+  "Vessel" : "LNG Sokoto (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "17,153,142",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "01:02",
   "Ballast Travel" : "09:22",
@@ -7098,10 +7098,6 @@
   "Next event date" : "07/05/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,988,525",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,988,525",
   "P&L (Trading)" : "16,988,525",
@@ -7126,7 +7122,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,260,973",
   "Type" : "Cargo",
-  "Vessel" : "LNG Lokoja (162k)"
+  "Vessel" : "LNG Lokoja (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,988,525",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "11:01",
   "Ballast Travel" : "08:00",
@@ -7165,10 +7165,6 @@
   "Next event date" : "17/05/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,962,158",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,962,158",
   "P&L (Trading)" : "16,962,158",
@@ -7193,7 +7189,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "1,287,340",
   "Type" : "Cargo",
-  "Vessel" : "LNG Ogun (162k)"
+  "Vessel" : "LNG Ogun (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,962,158",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "10:07",
   "Ballast Travel" : "25:01",
@@ -7232,10 +7232,6 @@
   "Next event date" : "22/06/11",
   "Next event port" : "Bonny",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "15,398,050",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "15,398,050",
   "P&L (Trading)" : "15,398,050",
@@ -7260,7 +7256,11 @@
   "Port Cost" : "280,000",
   "Total Cost" : "2,851,448",
   "Type" : "Cargo",
-  "Vessel" : "LNG Kano (162k)"
+  "Vessel" : "LNG Kano (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "15,398,050",
+    "P&L (Others - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:04",
   "Ballast Travel" : "27:04",
@@ -7302,10 +7302,6 @@
   "Next event date" : "01/06/11",
   "Next event port" : "Senboku",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Others - Trading)" : "16,071,924",
-    "P&L (Others - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "16,071,924",
   "P&L (Trading)" : "16,071,924",
@@ -7330,5 +7326,9 @@
   "Port Cost" : "280,000",
   "Total Cost" : "2,290,574",
   "Type" : "Cargo",
-  "Vessel" : "LNG River Orashi (162k)"
+  "Vessel" : "LNG River Orashi (162k)",
+  "[P&L]" : {
+    "P&L (Others - Trading)" : "16,071,924",
+    "P&L (Others - Shipping)" : "0"
+  }
 } ]

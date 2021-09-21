@@ -590,29 +590,6 @@ public class ChangeSetView extends ViewPart {
 					}
 				}
 			};
-
-		}
-		if (IReportContents.class.isAssignableFrom(adapter)) {
-
-			try {
-				columnHelper.setTextualVesselMarkers(true);
-				// Need to refresh the view to trigger creation of the text labels
-				ViewerHelper.refresh(viewer, true);
-				final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
-
-				final String contents = util.convert();
-				return (T) new IReportContents() {
-
-					@Override
-					public String getHTMLContents() {
-						// Prefix this header for rendering purposes
-						return "<meta charset=\"UTF-8\"/>" + contents;
-					}
-
-				};
-			} finally {
-				columnHelper.setTextualVesselMarkers(false);
-			}
 		}
 		return (T) null;
 	}
