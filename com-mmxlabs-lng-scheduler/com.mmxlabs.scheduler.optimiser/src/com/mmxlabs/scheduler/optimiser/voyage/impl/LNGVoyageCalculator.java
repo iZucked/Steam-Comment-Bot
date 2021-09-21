@@ -184,7 +184,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		 */
 		calculateRouteAdditionalFuelRequirements(options, output, vessel, vesselState, additionalRouteTimeInHours, nboAvailableInM3);
 
-		if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS && output.isTravelRanDry()) {
+		if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS && output.isRouteAdditionalTravelRanDry()) {
 			// Vessel ran dry in canal travel, calculate travel first since running dry in canal should, in general, mean that the run dry happened during travel and we arrive at the canal without
 			// LNG.
 
@@ -197,7 +197,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			output.setRouteAdditionalConsumption(vessel.getTravelBaseFuelInMT(), 0);
 			output.setRouteAdditionalConsumption(vessel.getSupplementalTravelBaseFuelInMT(), 0);
 			output.setRouteAdditionalConsumption(vessel.getPilotLightFuelInMT(), 0);
-			output.setTravelRanDry(false);
+			output.setRouteAdditionalTravelRanDry(false);
 
 			calculateTravelFuelRequirements(options, output, vessel, vesselState, travelTimeInHours, speed, nboAvailableInM3);
 			if (nboAvailableInM3 != Long.MAX_VALUE) { // Keep Max_Value at Max_Value
@@ -209,9 +209,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				nboAvailableInM3 -= output.getRouteAdditionalConsumption(LNGFuelKeys.NBO_In_m3);
 				nboAvailableInM3 -= output.getRouteAdditionalConsumption(LNGFuelKeys.FBO_In_m3);
 			}
-			// At this point travelRanDry should be set. If calculateTravelFuelRequirements ran dry then the run dry code path should invoke on calculateRouteAdditionalFuelRequirements so the runDry
-			// flag should be set. If, for whatever reason, calculateTravelFuelRequirements does not run dry, the fact that calculateRouteAdditionalFuelRequirements ran dry before should mean that
-			// runDry should be set again.
+			// At this point travelRanDry should be true. routeAdditionalTravelRanDry should generally be true as well but it can be false from data that is not bad but is unrealistic.
 		} else {
 			// Did not run out of LNG in the canal calculation - update available NBO and calculate travel fuel consumption
 			if (nboAvailableInM3 != Long.MAX_VALUE) { // Keep Max_Value at Max_Value
@@ -266,7 +264,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		final long consumptionRateInMTPerDay = routeCostProvider.getRouteFuelUsage(options.getRoute(), vessel, vesselState);
 
 		calculateFuelRequirements(options, vessel, additionalRouteTimeInHours, nboAvailableInM3, nboRouteRateInM3PerDay, consumptionRateInMTPerDay, output::setRouteAdditionalNBOHours,
-				output::setRouteAdditionalConsumption, output::getRouteAdditionalConsumption, output::setTravelRanDry);
+				output::setRouteAdditionalConsumption, output::getRouteAdditionalConsumption, output::setRouteAdditionalTravelRanDry);
 	}
 
 	protected final void calculateIdleFuelRequirements(final VoyageOptions options, final VoyageDetails output, final IVessel vessel, final VesselState vesselState, final int idleTimeInHours,
