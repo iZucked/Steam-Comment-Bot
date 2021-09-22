@@ -416,4 +416,13 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 			super.handleDoubleClick(anEvent);
 		}
 	}
+	
+	@Override
+	public void createPartControl(Composite aParent) {
+		super.createPartControl(aParent);
+		
+		// Override super class and disconnect the table as a selection provider
+		getSite().setSelectionProvider(null);
+
+	}
 }
