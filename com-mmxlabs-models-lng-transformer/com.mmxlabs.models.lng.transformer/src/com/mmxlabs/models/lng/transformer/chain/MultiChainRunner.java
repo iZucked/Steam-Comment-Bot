@@ -16,7 +16,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.JobExecutor;
+import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -44,12 +45,12 @@ public class MultiChainRunner implements IChainRunner {
 	private final IMultiStateResult initialState;
 
 	@NonNull
-	private final CleanableExecutorService executorService;
+	private final JobExecutorFactory jobExecutorFactory;
 
-	public MultiChainRunner(@NonNull final LNGDataTransformer dataTransformer, @NonNull final List<IChainRunner> chains, @NonNull final CleanableExecutorService executorService) {
+	public MultiChainRunner(@NonNull final LNGDataTransformer dataTransformer, @NonNull final List<IChainRunner> chains, @NonNull final JobExecutorFactory jobExecutorFactory) {
 		this.dataTransformer = dataTransformer;
 		this.chains = chains;
-		this.executorService = executorService;
+		this.jobExecutorFactory = jobExecutorFactory;
 		// Return the data transformer state, - without an IAnnotatedSolution.
 		initialState = createInitialResult(dataTransformer.getInitialSequences());
 	}
@@ -71,21 +72,23 @@ public class MultiChainRunner implements IChainRunner {
 		try {
 			final List<Future<IMultiStateResult>> results = new ArrayList<>(chains.size());
 
-			for (final IChainRunner chain : chains) {
-				results.add(executorService.submit(new MyRunnable(chain, monitor, 1000)));
-			}
+			try (JobExecutor jobExecutor = jobExecutorFactory.begin()) {
+				for (final IChainRunner chain : chains) {
+					results.add(jobExecutor.submit(new MyRunnable(chain, monitor, 1000)));
+				}
 
-			// Wait for all results
-			for (final Future<IMultiStateResult> f : results) {
-				// TODO: If this throws an exception, we will skip blocking other results
-				// TODO: Combine results?
+				// Wait for all results
+				for (final Future<IMultiStateResult> f : results) {
+					// TODO: If this throws an exception, we will skip blocking other results
+					// TODO: Combine results?
 
-				// Put in try/catch to avoid breaking out of run and loosing track of other threads.
-				try {
-					f.get();
-				} catch (final Exception e) {
-					// TODO: throw exception at the end of execution.
-					LOG.error(e.getMessage(), e);
+					// Put in try/catch to avoid breaking out of run and loosing track of other threads.
+					try {
+						f.get();
+					} catch (final Exception e) {
+						// TODO: throw exception at the end of execution.
+						LOG.error(e.getMessage(), e);
+					}
 				}
 			}
 		} catch (final Throwable e) {

@@ -6,15 +6,15 @@ package com.mmxlabs.optimiser.core.inject.scopes;
 
 import com.google.inject.AbstractModule;
 
-public class PerChainUnitScopeModule extends AbstractModule {
+public class ThreadLocalScopeModule extends AbstractModule {
 	@Override
 	public void configure() {
-		PerChainUnitScopeImpl perChainUnitScope = new PerChainUnitScopeImpl();
+		ThreadLocalScopeImpl perChainUnitScope = new ThreadLocalScopeImpl();
 
 		// tell Guice about the scope
-		bindScope(PerChainUnitScope.class, perChainUnitScope);
+		bindScope(ThreadLocalScope.class, perChainUnitScope);
 
 		// make our scope instance injectable
-		bind(PerChainUnitScopeImpl.class).toInstance(perChainUnitScope);
+		bind(ThreadLocalScopeImpl.class).toInstance(perChainUnitScope);
 	}
 }

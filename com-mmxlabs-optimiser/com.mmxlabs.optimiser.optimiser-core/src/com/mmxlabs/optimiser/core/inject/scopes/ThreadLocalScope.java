@@ -23,7 +23,7 @@ import com.google.inject.Scope;
 import com.google.inject.ScopeAnnotation;
 
 /**
- * The {@link PerChainUnitScope} is a {@link Guice} {@link Scope} intended to be bound to {@link PerChainUnitScopeImpl} and entered/exited at the start and end of a optimisation run. This scope
+ * The {@link ThreadLocalScope} is a {@link Guice} {@link Scope} intended to be bound to {@link ThreadLocalScopeImpl} and entered/exited at the start and end of a optimisation run. This scope
  * annotation indicates that the bound variable should be {@link ThreadLocal} within that run. Note: such injected variables will need to be injected into object instances created outside of this
  * scope will need a {@link Provider} to select the correct thread local instance.
  * 
@@ -33,5 +33,5 @@ import com.google.inject.ScopeAnnotation;
 @Target({ TYPE, METHOD })
 @Retention(RUNTIME)
 @ScopeAnnotation
-public @interface PerChainUnitScope {
+public @interface ThreadLocalScope {
 }

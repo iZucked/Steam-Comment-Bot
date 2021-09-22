@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.concurrent.JobExecutor;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -43,7 +44,7 @@ import com.mmxlabs.optimiser.lso.logging.LSOLogger;
  * 
  */
 public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
-	
+
 	protected static final Logger LOG = LoggerFactory.getLogger(DefaultLocalSearchOptimiser.class);
 
 	@Inject
@@ -78,6 +79,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 	@Override
 	public IAnnotatedSolution start(@NonNull final IOptimisationContext optimiserContext, @NonNull final ISequences initialRawSequences, @NonNull final ISequences inputRawSequences) {
+
 		setCurrentContext(optimiserContext);
 
 		initLogger();
@@ -147,11 +149,11 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 	}
 
 	@Override
-	public int step(final int percentage) {
-		return step(percentage, potentialRawSequences, currentRawSequences);
+	public int step(final int percentage, JobExecutor jobExecutor) {
+		return step(percentage, potentialRawSequences, currentRawSequences, jobExecutor);
 	}
 
-	protected int step(final int percentage, @NonNull final ModifiableSequences pinnedPotentialRawSequences, @NonNull final ModifiableSequences pinnedCurrentRawSequences) {
+	protected int step(final int percentage, @NonNull final ModifiableSequences pinnedPotentialRawSequences, @NonNull final ModifiableSequences pinnedCurrentRawSequences, JobExecutor jobExecutor) {
 
 		final int iterationsThisStep = Math.min(Math.max(1, (getNumberOfIterations() * percentage) / 100), getNumberOfIterations() - getNumberOfIterationsCompleted());
 		MAIN_LOOP: for (int i = 0; i < iterationsThisStep; i++) {
@@ -334,7 +336,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 				// Reject Move
 				updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
 				// Break out
-				
+
 				if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 					messages.stream().forEach(LOG::debug);
 				return false;

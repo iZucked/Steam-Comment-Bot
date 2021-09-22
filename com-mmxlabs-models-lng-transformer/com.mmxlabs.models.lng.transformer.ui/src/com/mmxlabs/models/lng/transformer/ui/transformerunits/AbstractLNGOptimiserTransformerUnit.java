@@ -15,7 +15,8 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.JobExecutor;
+import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.common.util.TriFunction;
 import com.mmxlabs.models.lng.parameters.ConstraintsAndFitnessSettingsStage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -36,7 +37,7 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
@@ -52,17 +53,15 @@ public abstract class AbstractLNGOptimiserTransformerUnit<T extends ConstraintsA
 
 	protected final LocalSearchOptimiser optimiser;
 
-	protected CleanableExecutorService executorService;
+	protected JobExecutorFactory jobExecutorFactory;
 
 	public AbstractLNGOptimiserTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String stage, @NonNull final UserSettings userSettings, @NonNull final T stageSettings,
-			@NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences, @NonNull final Collection<@NonNull String> hints, CleanableExecutorService executorService) {
+			@NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences, @NonNull final Collection<@NonNull String> hints, JobExecutorFactory jobExecutorFactory) {
 		this.dataTransformer = dataTransformer;
 		this.stage = stage;
-		this.executorService = executorService;
+		this.jobExecutorFactory = jobExecutorFactory;
 
-		final Collection<IOptimiserInjectorService> services = dataTransformer.getModuleServices();
-
-		final List<Module> modules = createModules(dataTransformer, stage, userSettings, stageSettings, initialSequences, inputSequences, hints, executorService);
+		final List<Module> modules = createModules(dataTransformer, stage, userSettings, stageSettings, initialSequences, inputSequences, hints);
 
 		injector = dataTransformer.getInjector().createChildInjector(modules);
 		optimiser = createOptimiser(dataTransformer, stage, inputSequences);
@@ -71,8 +70,7 @@ public abstract class AbstractLNGOptimiserTransformerUnit<T extends ConstraintsA
 	protected abstract LocalSearchOptimiser createOptimiser(final LNGDataTransformer dataTransformer, final String stage, final ISequences inputSequences);
 
 	protected abstract List<Module> createModules(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String stage, @NonNull final UserSettings userSettings,
-			@NonNull final T stageSettings, @NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences, @NonNull final Collection<@NonNull String> hints,
-			CleanableExecutorService executorService);
+			@NonNull final T stageSettings, @NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences, @NonNull final Collection<@NonNull String> hints);
 
 	@Override
 	@NonNull
@@ -84,18 +82,24 @@ public abstract class AbstractLNGOptimiserTransformerUnit<T extends ConstraintsA
 	public IMultiStateResult run(@NonNull final IProgressMonitor monitor) {
 		final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
 
-		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+		try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 			scope.enter();
 
 			monitor.beginTask("", 100);
-			try {
+			final JobExecutorFactory subExecutorFactory = jobExecutorFactory.withDefaultBegin(() -> {
+				final ThreadLocalScopeImpl s = injector.getInstance(ThreadLocalScopeImpl.class);
+				s.enter();
+				return s;
+			});
+			try (JobExecutor jobExecutor = subExecutorFactory.begin()) {
+
 
 				// Main Optimisation Loop
 				while (!optimiser.isFinished()) {
 					if (monitor.isCanceled()) {
 						throw new OperationCanceledException();
 					}
-					optimiser.step(1);
+					optimiser.step(1, jobExecutor);
 					monitor.worked(1);
 				}
 				assert optimiser.isFinished();
@@ -119,10 +123,12 @@ public abstract class AbstractLNGOptimiserTransformerUnit<T extends ConstraintsA
 		}
 	}
 
-	protected abstract void threadCleanup(PerChainUnitScopeImpl scope);
+	protected void threadCleanup(ThreadLocalScopeImpl scope) {
+
+	}
 
 	@NonNull
-	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final String stage, @NonNull final UserSettings userSettings, @Nullable final CleanableExecutorService executorService,
+	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final String stage, @NonNull final UserSettings userSettings, @Nullable final JobExecutorFactory jobExecutorFactory,
 			final int progressTicks, final Collection<@NonNull String> hints,
 			final TriFunction<SequencesContainer, IMultiStateResult, IProgressMonitor, @NonNull IMultiStateResult> transformerUnitActor) {
 		final IChainLink link = new IChainLink() {
@@ -174,8 +180,7 @@ public abstract class AbstractLNGOptimiserTransformerUnit<T extends ConstraintsA
 	}
 
 	protected void addDefaultModules(@NonNull List<Module> modules, @NonNull final LNGDataTransformer dataTransformer, @NonNull final String stage, @NonNull final UserSettings userSettings,
-			@NonNull final T stageSettings, @NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences, @NonNull final Collection<@NonNull String> hints,
-			CleanableExecutorService executorService) {
+			@NonNull final T stageSettings, @NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences, @NonNull final Collection<@NonNull String> hints) {
 
 		final Collection<IOptimiserInjectorService> services = dataTransformer.getModuleServices();
 		modules.add(new InitialSequencesModule(initialSequences));

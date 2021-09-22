@@ -47,7 +47,7 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
@@ -292,7 +292,7 @@ public class SimpleSchedulerTest {
 		// Build opt data
 		final ScheduleTestModule m = new ScheduleTestModule(data, pData);
 		final Injector injector = parentInjector.createChildInjector(m);
-		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+		try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 			scope.enter();
 
 			// Generate initial state
@@ -358,7 +358,7 @@ public class SimpleSchedulerTest {
 
 			Assertions.assertFalse(initialFitness == Long.MAX_VALUE);
 
-			optimiser.optimise(context);
+			optimiser.optimise(context, null);
 
 			final long finalFitness = linearFitnessEvaluator.getBestFitness();
 			System.out.println("Final fitness " + finalFitness);

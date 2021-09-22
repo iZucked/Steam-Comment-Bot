@@ -106,7 +106,7 @@ public class LoadDischargeCostPairingTests extends AbstractMicroTestCase {
 			calculator.run(defaultVessel, new ProfitAndLossExtractor((load, discharge, value) -> {
 				System.out.printf("%s -> %s == %,d\n", load.getId(), discharge.getId(), value);
 				counter.getAndIncrement();
-			}), scenarioRunner.getExecutorService(), new NullProgressMonitor());
+			}), scenarioRunner.getJobExecutorFactory(), new NullProgressMonitor());
 			System.out.printf("Found %d values\n", counter.get());
 
 		}, null);

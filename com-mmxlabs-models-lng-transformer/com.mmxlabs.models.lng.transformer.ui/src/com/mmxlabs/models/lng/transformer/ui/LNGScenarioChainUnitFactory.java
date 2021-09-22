@@ -13,7 +13,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.common.time.Months;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
@@ -62,12 +62,12 @@ public class LNGScenarioChainUnitFactory {
 	private static final int PROGRESS_ACTION_SET_OPTIMISATION = 20;
 	private static final int PROGRESS_ACTION_SET_SAVE = 5;
 
-	public static @Nullable BiConsumer<LNGScenarioToOptimiserBridge, String> chainUp(final @NonNull ChainBuilder builder, @NonNull LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, final @NonNull CleanableExecutorService executorService,
+	public static @Nullable BiConsumer<LNGScenarioToOptimiserBridge, String> chainUp(final @NonNull ChainBuilder builder, @NonNull LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, final @NonNull JobExecutorFactory jobExecutorFactory,
 			final @NonNull OptimisationStage template, final int jobCount, final @NonNull UserSettings userSettings) {
 		if (template instanceof CleanStateOptimisationStage) {
 			final CleanStateOptimisationStage stage = (CleanStateOptimisationStage) template;
 			if (stage.getAnnealingSettings().getIterations() > 0) {
-				LightWeightSchedulerOptimiserUnit.chain(builder, scenarioToOptimiserBridge, stage.getName(), userSettings, stage, PROGRESS_CLEAN_STATE, executorService, stage.getSeed());
+				LightWeightSchedulerOptimiserUnit.chain(builder, scenarioToOptimiserBridge, stage.getName(), userSettings, stage, PROGRESS_CLEAN_STATE, jobExecutorFactory, stage.getSeed());
 			}
 			return null;
 		} else if (template instanceof MultiobjectiveSimilarityOptimisationStage) {
@@ -80,17 +80,17 @@ public class LNGScenarioChainUnitFactory {
 				}
 				if (template instanceof ParallelMultiobjectiveSimilarityOptimisationStage) {
 					if (doSecondRun) {
-						LNGMultiObjectiveOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, executorService, seeds);
-						LNGParallelMultiObjectiveOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, executorService, PROGRESS_OPTIMISATION, true);
+						LNGMultiObjectiveOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, jobExecutorFactory, seeds);
+						LNGParallelMultiObjectiveOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, jobExecutorFactory, PROGRESS_OPTIMISATION, true);
 					} else {
-						LNGParallelMultiObjectiveOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, executorService, PROGRESS_OPTIMISATION, true);
+						LNGParallelMultiObjectiveOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, jobExecutorFactory, PROGRESS_OPTIMISATION, true);
 					}
 				} else {
 					if (doSecondRun) {
-						LNGMultiObjectiveOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, executorService, seeds);
-						LNGMultiObjectiveOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION - (PROGRESS_OPTIMISATION / 3), executorService, seeds);
+						LNGMultiObjectiveOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, jobExecutorFactory, seeds);
+						LNGMultiObjectiveOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION - (PROGRESS_OPTIMISATION / 3), jobExecutorFactory, seeds);
 					} else {
-						LNGMultiObjectiveOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION, executorService, seeds);
+						LNGMultiObjectiveOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION, jobExecutorFactory, seeds);
 					}
 				}
 			}
@@ -104,17 +104,17 @@ public class LNGScenarioChainUnitFactory {
 				}
 				if (template instanceof ParallelMultipleSolutionSimilarityOptimisationStage) {
 					if (doSecondRun) {
-						LNGMultiObjectiveOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, executorService, seeds);
-						LNGParallelMultiObjectiveOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, executorService, PROGRESS_OPTIMISATION, false);
+						LNGMultiObjectiveOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, jobExecutorFactory, seeds);
+						LNGParallelMultiObjectiveOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, jobExecutorFactory, PROGRESS_OPTIMISATION, false);
 					} else {
-						LNGParallelMultiObjectiveOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, executorService, PROGRESS_OPTIMISATION, false);
+						LNGParallelMultiObjectiveOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, jobExecutorFactory, PROGRESS_OPTIMISATION, false);
 					}
 				} else {
 					if (doSecondRun) {
-						LNGMultiObjectiveOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, executorService, seeds);
-						LNGMultiObjectiveOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION - (PROGRESS_OPTIMISATION / 3), executorService, seeds);
+						LNGMultiObjectiveOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, jobExecutorFactory, seeds);
+						LNGMultiObjectiveOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION - (PROGRESS_OPTIMISATION / 3), jobExecutorFactory, seeds);
 					} else {
-						LNGMultiObjectiveOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION, executorService, seeds);
+						LNGMultiObjectiveOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION, jobExecutorFactory, seeds);
 					}
 				}
 				return (bridge, name) -> {
@@ -136,17 +136,17 @@ public class LNGScenarioChainUnitFactory {
 				final boolean doSecondRun = doSecondLSORun(userSettings);
 				if (template instanceof ParallelLocalSearchOptimisationStage) {
 					if (doSecondRun) {
-						LNGLSOOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, executorService, seeds);
-						LNGParallelOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, executorService, PROGRESS_OPTIMISATION);
+						LNGLSOOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, jobExecutorFactory, seeds);
+						LNGParallelOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, jobExecutorFactory, PROGRESS_OPTIMISATION);
 					} else {
-						LNGParallelOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, executorService, PROGRESS_OPTIMISATION);
+						LNGParallelOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, jobExecutorFactory, PROGRESS_OPTIMISATION);
 					}
 				} else {
 					if (doSecondRun) {
-						LNGLSOOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, executorService, seeds);
-						LNGLSOOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION - (PROGRESS_OPTIMISATION / 3), executorService, seeds);
+						LNGLSOOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, jobExecutorFactory, seeds);
+						LNGLSOOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION - (PROGRESS_OPTIMISATION / 3), jobExecutorFactory, seeds);
 					} else {
-						LNGLSOOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION, executorService, seeds);
+						LNGLSOOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION, jobExecutorFactory, seeds);
 					}
 				}
 			}
@@ -160,12 +160,12 @@ public class LNGScenarioChainUnitFactory {
 				final HillClimbOptimisationStage stage = (HillClimbOptimisationStage) template;
 				if (stage.getAnnealingSettings().getIterations() > 0) {
 					if (template instanceof ParallelHillClimbOptimisationStage) {
-						LNGParallelHillClimbingOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, executorService, PROGRESS_HILLCLIMBING_OPTIMISATION);
+						LNGParallelHillClimbingOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, jobExecutorFactory, PROGRESS_HILLCLIMBING_OPTIMISATION);
 					} else {
 						if (jobCount > 1) {
-							LNGHillClimbOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_HILLCLIMBING_OPTIMISATION, executorService, true);
+							LNGHillClimbOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_HILLCLIMBING_OPTIMISATION, jobExecutorFactory, true);
 						} else {
-							LNGHillClimbOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_HILLCLIMBING_OPTIMISATION, executorService, false);
+							LNGHillClimbOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_HILLCLIMBING_OPTIMISATION, jobExecutorFactory, false);
 						}
 					}
 				}
@@ -178,10 +178,10 @@ public class LNGScenarioChainUnitFactory {
 					// Run the action set post optimisation
 					final boolean doSecondRun = doSecondActionSetRun(userSettings);
 					if (doSecondRun) {
-						LNGActionSetTransformerUnit.chainFake(builder, stage.getName(), userSettings, stage, executorService, PROGRESS_ACTION_SET_OPTIMISATION / 2);
-						LNGActionSetTransformerUnit.chain(builder, stage.getName(), userSettings, stage, executorService, PROGRESS_ACTION_SET_OPTIMISATION / 2);
+						LNGActionSetTransformerUnit.chainFake(builder, stage.getName(), userSettings, stage, jobExecutorFactory, PROGRESS_ACTION_SET_OPTIMISATION / 2);
+						LNGActionSetTransformerUnit.chain(builder, stage.getName(), userSettings, stage, jobExecutorFactory, PROGRESS_ACTION_SET_OPTIMISATION / 2);
 					} else {
-						LNGActionSetTransformerUnit.chain(builder, stage.getName(), userSettings, stage, executorService, PROGRESS_ACTION_SET_OPTIMISATION);
+						LNGActionSetTransformerUnit.chain(builder, stage.getName(), userSettings, stage, jobExecutorFactory, PROGRESS_ACTION_SET_OPTIMISATION);
 					}
 				}
 				return (bridge, name) -> {

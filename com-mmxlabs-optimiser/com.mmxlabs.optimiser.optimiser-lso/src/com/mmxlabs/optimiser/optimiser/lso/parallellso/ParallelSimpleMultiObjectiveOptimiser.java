@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 import javax.inject.Named;
@@ -18,6 +17,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.mmxlabs.common.concurrent.JobExecutor;
 import com.mmxlabs.optimiser.common.components.impl.IncrementingRandomSeed;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
@@ -32,14 +32,11 @@ public class ParallelSimpleMultiObjectiveOptimiser extends SimpleMultiObjectiveO
 	private long seed;
 
 	@Inject
-	ExecutorService executorService;
-
-	@Inject
 	@Named(ParallelLSOConstants.PARALLEL_MOO_BATCH_SIZE)
 	private int batchSize;
-	
+
 	@Inject
-	Injector injector;
+	private Injector injector;
 
 	private IncrementingRandomSeed incrementingRandomSeed = new IncrementingRandomSeed(seed);
 
@@ -48,7 +45,7 @@ public class ParallelSimpleMultiObjectiveOptimiser extends SimpleMultiObjectiveO
 	}
 
 	@Override
-	protected int step(final int percentage, @NonNull final ModifiableSequences pinnedPotentialRawSequences, @NonNull final ModifiableSequences pinnedCurrentRawSequences) {
+	protected int step(final int percentage, @NonNull final ModifiableSequences pinnedPotentialRawSequences, @NonNull final ModifiableSequences pinnedCurrentRawSequences, JobExecutor jobExecutor) {
 
 		final int iterationsThisStep = Math.min(Math.max(1, (getNumberOfIterations() * percentage) / 100), getNumberOfIterations() - getNumberOfIterationsCompleted());
 		MAIN_LOOP: for (int i = 0; i < (iterationsThisStep / batchSize); i++) {
@@ -59,8 +56,9 @@ public class ParallelSimpleMultiObjectiveOptimiser extends SimpleMultiObjectiveO
 			// create and submit jobs
 			for (int b = 0; b < batchSize; b++) {
 				NonDominatedSolution nonDominatedSolution = getNonDominatedSolution();
-				MultiObjectiveOptimiserJob job = new MultiObjectiveOptimiserJob(injector, nonDominatedSolution.getSequences(), nonDominatedSolution.getManager(), getMoveGenerator(), incrementingRandomSeed.getSeed(), failedInitialConstraintCheckers);
-				futures.add(executorService.submit(job));
+				MultiObjectiveOptimiserJob job = new MultiObjectiveOptimiserJob(injector, nonDominatedSolution.getSequences(), nonDominatedSolution.getManager(), getMoveGenerator(),
+						incrementingRandomSeed.getSeed(), failedInitialConstraintCheckers);
+				futures.add(jobExecutor.submit(job));
 			}
 			List<MultiObjectiveJobState> states = new LinkedList<>();
 			// collect jobs
@@ -72,7 +70,7 @@ public class ParallelSimpleMultiObjectiveOptimiser extends SimpleMultiObjectiveO
 					throw new RuntimeException(e);
 				}
 			}
-			
+
 			for (MultiObjectiveJobState state : states) {
 				if (state.getStatus() == LSOJobStatus.Pass && state.getRawSequences() != null && state.getFitness() != null) {
 					addSolutionToNonDominatedArchive(state.getRawSequences(), state.getFitness());
@@ -94,7 +92,7 @@ public class ParallelSimpleMultiObjectiveOptimiser extends SimpleMultiObjectiveO
 	private NonDominatedSolution getNonDominatedSolution() {
 		return archive.get(random.nextInt(archive.size()));
 	}
-	
+
 	@Override
 	protected void initNextIteration() {
 		stepIteration();
@@ -107,7 +105,7 @@ public class ParallelSimpleMultiObjectiveOptimiser extends SimpleMultiObjectiveO
 					getFitnessEvaluator().getBestFitness(), getFitnessEvaluator().getCurrentFitness(), new Date().getTime());
 		}
 		if (loggingDataStore != null && (numberOfMovesTried % loggingDataStore.getReportingInterval()) == 0) {
-			// this sets best fitness for the best solution	
+			// this sets best fitness for the best solution
 			getBestSolution();
 		}
 	}

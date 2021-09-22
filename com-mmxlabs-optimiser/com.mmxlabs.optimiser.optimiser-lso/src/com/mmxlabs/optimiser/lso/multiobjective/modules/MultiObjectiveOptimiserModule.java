@@ -16,7 +16,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
@@ -34,21 +33,14 @@ public class MultiObjectiveOptimiserModule extends AbstractModule {
 	public static final String MULTIOBJECTIVE_ADDITIONAL_OBJECTIVE_NAMES = "MULTIOBJECTIVE_OBJECTIVE_NAMES";
 	public static final String MULTIOBJECTIVE_OBJECTIVE_EPSILON_DOMINANCE_VALUES = "MULTIOBJECTIVE_OBJECTIVE_EPSILON_DOMINANCE_VALUES";
 
-	private CleanableExecutorService executorService;
-
-	public MultiObjectiveOptimiserModule(CleanableExecutorService executorService) {
-		this.executorService = executorService;
-	}
-	
 	@Override
 	protected void configure() {
-		bind(CleanableExecutorService.class).toInstance(executorService);
 	}
 
 	@Provides
 	@Singleton
-	SequentialParallelSimpleMultiObjectiveOptimiser buildMultiObjectiveOptimiser(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator,
-			@NonNull final IMoveGenerator moveGenerator, @NonNull final IMultiObjectiveFitnessEvaluator fitnessEvaluator,
+	SequentialParallelSimpleMultiObjectiveOptimiser buildMultiObjectiveOptimiser(@NonNull final Injector injector, @NonNull final IOptimisationContext context,
+			@NonNull final ISequencesManipulator manipulator, @NonNull final IMoveGenerator moveGenerator, @NonNull final IMultiObjectiveFitnessEvaluator fitnessEvaluator,
 			@Named(LocalSearchOptimiserModule.LSO_NUMBER_OF_ITERATIONS) final int numberOfIterations,
 			@Named(MultiObjectiveOptimiserModule.MULTIOBJECTIVE_ADDITIONAL_OBJECTIVE_NAMES) final List<String> objectiveNames, @NonNull final List<IConstraintChecker> constraintCheckers,
 			@NonNull final List<IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers, @NonNull final List<IEvaluationProcess> evaluationProcesses,
@@ -61,11 +53,11 @@ public class MultiObjectiveOptimiserModule extends AbstractModule {
 		lso.setMultiObjectiveFitnessEvaluator(fitnessEvaluator);
 		return lso;
 	}
-	
-	private void setLSO(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator,
-			@NonNull final IMoveGenerator moveGenerator, @NonNull final IFitnessEvaluator fitnessEvaluator, final int numberOfIterations,
-			@NonNull final List<@NonNull IConstraintChecker> constraintCheckers, @NonNull final List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers,
-			@NonNull final List<@NonNull IEvaluationProcess> evaluationProcesses, @NonNull final LocalSearchOptimiser lso, final long seed) {
+
+	private void setLSO(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator, @NonNull final IMoveGenerator moveGenerator,
+			@NonNull final IFitnessEvaluator fitnessEvaluator, final int numberOfIterations, @NonNull final List<@NonNull IConstraintChecker> constraintCheckers,
+			@NonNull final List<@NonNull IEvaluatedStateConstraintChecker> evaluatedStateConstraintCheckers, @NonNull final List<@NonNull IEvaluationProcess> evaluationProcesses,
+			@NonNull final LocalSearchOptimiser lso, final long seed) {
 		injector.injectMembers(lso);
 		lso.setNumberOfIterations(numberOfIterations);
 

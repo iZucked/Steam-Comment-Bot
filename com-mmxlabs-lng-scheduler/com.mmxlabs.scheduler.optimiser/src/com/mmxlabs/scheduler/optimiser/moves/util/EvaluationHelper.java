@@ -33,7 +33,7 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess.Phase;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScope;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -48,7 +48,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.CapacityViolationChecker;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 
-@PerChainUnitScope
+@ThreadLocalScope
 public class EvaluationHelper {
 	protected static final Logger LOG = LoggerFactory.getLogger(EvaluationHelper.class);
 

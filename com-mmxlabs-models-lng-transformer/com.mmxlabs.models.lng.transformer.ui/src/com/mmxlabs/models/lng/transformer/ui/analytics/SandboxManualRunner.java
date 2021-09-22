@@ -58,7 +58,7 @@ import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -217,7 +217,7 @@ public class SandboxManualRunner {
 
 		final Injector injector = evaluationTransformerUnit.getInjector();
 
-		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+		try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 			scope.enter();
 			final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 			final EvaluationHelper evaluationHelper = injector.getInstance(EvaluationHelper.class);

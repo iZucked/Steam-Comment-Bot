@@ -9,7 +9,7 @@ import java.util.List;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.JobExecutor;
 
 /**
  * Optimiser for lightweight cargo scheduling
@@ -19,5 +19,5 @@ import com.mmxlabs.common.concurrent.CleanableExecutorService;
  */
 public interface ILightWeightSequenceOptimiser {
 	List<List<Integer>> optimise(ILightWeightOptimisationData lightWeightOptimisationData, List<ILightWeightConstraintChecker> constraintCheckers, List<ILightWeightFitnessFunction> fitnessFunctions,
-			@NonNull CleanableExecutorService executorService, IProgressMonitor monitor);
+			@NonNull JobExecutor jobExecutor, IProgressMonitor monitor);
 }

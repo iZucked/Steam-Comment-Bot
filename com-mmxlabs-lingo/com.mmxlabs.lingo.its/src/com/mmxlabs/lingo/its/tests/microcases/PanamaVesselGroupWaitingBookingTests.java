@@ -64,7 +64,7 @@ import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -312,7 +312,7 @@ public class PanamaVesselGroupWaitingBookingTests extends AbstractMicroTestCase 
 			LNGDataTransformer dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
 			final Injector injector = MicroTestUtils.createEvaluationInjector(dataTransformer);
 
-			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 				scope.enter();
 
 				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);

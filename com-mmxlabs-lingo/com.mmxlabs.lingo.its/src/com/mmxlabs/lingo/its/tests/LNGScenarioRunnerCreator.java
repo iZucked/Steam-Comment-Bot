@@ -10,7 +10,6 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Executors;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
@@ -21,8 +20,8 @@ import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
-import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
+import com.mmxlabs.common.concurrent.DefaultJobExecutorFactory;
+import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.common.util.CheckedConsumer;
 import com.mmxlabs.common.util.CheckedFunction;
 import com.mmxlabs.models.lng.migration.ModelsLNGVersionMaker;
@@ -75,22 +74,14 @@ public class LNGScenarioRunnerCreator {
 		});
 	}
 
-	public static <E extends Exception> void withExecutorService(final CheckedConsumer<@NonNull CleanableExecutorService, E> consumer) throws E {
-		final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
-		try {
-			consumer.accept(executorService);
-		} finally {
-			executorService.shutdown();
-		}
+	public static <E extends Exception> void withExecutorService(final CheckedConsumer<@NonNull JobExecutorFactory, E> consumer) throws E {
+		final JobExecutorFactory executorService = LNGScenarioChainBuilder.createExecutorService(1);
+		consumer.accept(executorService);
 	}
 
-	public static <T, E extends Exception> T withExecutorService(final CheckedFunction<@NonNull CleanableExecutorService, T, E> func) throws E {
-		final CleanableExecutorService executorService = new SimpleCleanableExecutorService(Executors.newSingleThreadExecutor(), 1);
-		try {
-			return func.apply(executorService);
-		} finally {
-			executorService.shutdown();
-		}
+	public static <T, E extends Exception> T withExecutorService(final CheckedFunction<@NonNull JobExecutorFactory, T, E> func) throws E {
+		final JobExecutorFactory executorService = new DefaultJobExecutorFactory(1);
+		return func.apply(executorService);
 	}
 
 	public static void withEvaluationRunner(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final CheckedConsumer<@NonNull LNGScenarioRunner, Exception> consumer)
