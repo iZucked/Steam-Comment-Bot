@@ -196,7 +196,7 @@ public class ExposureDetailReportView extends ViewPart {
 
 		selectedScenariosService = getSite().getService(ScenarioComparisonService.class);
 
-		selectionManager = new ReentrantSelectionManager(viewer, selectedScenariosServiceListener, selectedScenariosService);
+		selectionManager = new ReentrantSelectionManager(viewer, selectedScenariosServiceListener, selectedScenariosService, false);
 		makeActions();
 		try {
 			selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
@@ -412,7 +412,6 @@ public class ExposureDetailReportView extends ViewPart {
 	@Override
 	public void setFocus() {
 		ViewerHelper.setFocus(viewer);
-
 	}
 
 }
