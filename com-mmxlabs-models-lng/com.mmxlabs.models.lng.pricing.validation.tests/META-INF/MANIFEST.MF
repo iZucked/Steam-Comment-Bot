@@ -3,12 +3,12 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Pricing Validation Tests
 Fragment-Host: com.mmxlabs.models.lng.pricing.validation
 Bundle-SymbolicName: com.mmxlabs.models.lng.pricing.validation.tests
-Bundle-Version: 4.12.51.RELEASE
+Bundle-Version: 4.12.52.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.eclipse.emf.validation;bundle-version="1.4.0",
- com.mmxlabs.models.lng.pricing;bundle-version="[4.12.51,5.0.0)",
+ com.mmxlabs.models.lng.pricing;bundle-version="[4.12.52,5.0.0)",
  org.mockito.mockito-core;bundle-version="1.9.5",
  javax.annotation;bundle-version="1.2.0",
  net.bytebuddy.byte-buddy;bundle-version="1.9.9",
