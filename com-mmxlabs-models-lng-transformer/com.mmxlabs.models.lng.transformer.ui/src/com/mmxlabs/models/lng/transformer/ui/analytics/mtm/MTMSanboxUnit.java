@@ -10,7 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
@@ -165,24 +164,18 @@ public class MTMSanboxUnit {
 				bind(IBreakEvenEvaluator.class).to(DefaultBreakEvenEvaluator.class);
 			}
 
-			private final Map<Thread, EvaluationHelper> threadCache_EvaluationHelper = new ConcurrentHashMap<>(100);
-
 			@Provides
+			@ThreadLocalScope
 			private EvaluationHelper provideEvaluationHelper(final Injector injector, @Named(LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE) final boolean isReevaluating,
 					@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) final ISequences initialRawSequences) {
 
-				EvaluationHelper helper = threadCache_EvaluationHelper.get(Thread.currentThread());
-				if (helper == null) {
-					helper = new EvaluationHelper(isReevaluating);
-					injector.injectMembers(helper);
+				EvaluationHelper helper = new EvaluationHelper(isReevaluating);
+				injector.injectMembers(helper);
 
-					final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
-					helper.acceptSequences(initialRawSequences, manipulator.createManipulatedSequences(initialRawSequences));
+				final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
+				helper.acceptSequences(initialRawSequences, manipulator.createManipulatedSequences(initialRawSequences));
 
-					helper.setFlexibleCapacityViolationCount(Integer.MAX_VALUE);
-
-					threadCache_EvaluationHelper.put(Thread.currentThread(), helper);
-				}
+				helper.setFlexibleCapacityViolationCount(Integer.MAX_VALUE);
 				return helper;
 			}
 
