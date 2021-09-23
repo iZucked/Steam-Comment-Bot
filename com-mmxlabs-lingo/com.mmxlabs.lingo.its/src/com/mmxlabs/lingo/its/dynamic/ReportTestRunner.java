@@ -66,7 +66,7 @@ public class ReportTestRunner {
 										Files.writeString(reportFile.toPath(), actual);
 									} else if (TestingModes.ReportTestMode == TestMode.Run) {
 										final String expected = Files.readString(reportFile.toPath());
-										Assertions.assertEquals(expected.replaceAll("\\r\\n", "\n"), actual.replaceAll("\\r\\n", "\n"));
+										Assertions.assertEquals(expected.replaceAll("\\r\\n", "\n"), actual.replaceAll("\\r\\n", "\n"), String.format("Mismatching result: %s for %s", reportID, f.getName()));
 									}
 								});
 							}));
