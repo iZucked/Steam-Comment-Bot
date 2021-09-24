@@ -209,19 +209,21 @@ public class ViabilitySanboxUnit {
 			final List<Future<Runnable>> futures = new LinkedList<>();
 
 			createFutureJobs(model, mapper, shippingMap, monitor, modelEntityMap, futures, jobExecutor);
-
-			// Block until all futures completed
-			for (final Future<Runnable> f : futures) {
-				if (monitor.isCanceled()) {
-					return;
-				}
-				try {
-					final Runnable runnable = f.get();
-					if (runnable != null) {
-						runnable.run();
+			try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
+				scope.enter();
+				// Block until all futures completed
+				for (final Future<Runnable> f : futures) {
+					if (monitor.isCanceled()) {
+						return;
 					}
-				} catch (final Exception e) {
-					e.printStackTrace();
+					try {
+						final Runnable runnable = f.get();
+						if (runnable != null) {
+							runnable.run();
+						}
+					} catch (final Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		} finally {
