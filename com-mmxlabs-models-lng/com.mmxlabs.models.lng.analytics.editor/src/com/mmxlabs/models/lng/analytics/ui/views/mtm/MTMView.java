@@ -31,10 +31,8 @@ import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
@@ -47,6 +45,8 @@ import com.mmxlabs.models.mmxcore.impl.SafeMMXContentAdapter;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
@@ -94,7 +94,7 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 		dates = new DatesToolbarEditor("netbacks_dates_toolbar", e -> refresh());
 		getViewSite().getActionBars().getToolBarManager().add(dates);
 		
-		final RunnableAction go = new RunnableAction("Generate", Action.AS_PUSH_BUTTON, () -> {
+		final RunnableAction go = new RunnableAction("Generating the MTM report", Action.AS_PUSH_BUTTON, () -> {
 			BusyIndicator.showWhile(Display.getDefault(), () -> {
 				try {
 					final LNGScenarioModel scenarioModel = (LNGScenarioModel) getRootObject();
@@ -132,7 +132,7 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 				}
 			});
 		});
-		go.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_generate.gif"));
+		CommonImages.setImageDescriptors(go, IconPaths.Play);
 		getViewSite().getActionBars().getToolBarManager().add(go);
 
 		final Action remove = new Action("Remove", Action.AS_PUSH_BUTTON) {
@@ -154,7 +154,7 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 				}
 			}
 		};
-		remove.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
+		CommonImages.setImageDescriptors(remove, IconPaths.Delete);
 		getViewSite().getActionBars().getToolBarManager().add(remove);
 
 		final Action packColumnsAction = PackActionFactory.createPackColumnsAction(mainTableComponent.getViewer());

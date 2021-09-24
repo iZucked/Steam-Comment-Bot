@@ -309,7 +309,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 	@Override
 	public void evaluateViabilitySandbox(@NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance scenarioInstance, @NonNull final UserSettings userSettings,
-			final ViabilityModel model, final IMapperClass mapper, final Map<ShippingOption, VesselAssignmentType> shippingMap) {
+			final ViabilityModel model, final IMapperClass mapper, final Map<ShippingOption, VesselAssignmentType> shippingMap, final IProgressMonitor progressMonitor) {
 
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
@@ -353,7 +353,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			final ViabilitySanboxUnit unit = new ViabilitySanboxUnit(dataTransformer, userSettings, constraints, jobExecutorFactory, dataTransformer.getInitialSequences(),
 					dataTransformer.getInitialResult(), dataTransformer.getHints());
 			/* Command cmd = */
-			unit.run(model, mapper, shippingMap, new NullProgressMonitor());
+			unit.run(model, mapper, shippingMap, progressMonitor);
 		});
 	}
 

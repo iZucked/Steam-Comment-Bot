@@ -127,8 +127,6 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 		}
 	}
 	
-	
-
 	private static final Logger LOG = LoggerFactory.getLogger(MtMScenarioEditorActionDelegate.class);
 	
 	// make decision based on PNL

@@ -209,8 +209,8 @@ public class ViabilitySanboxUnit {
 			final List<Future<Runnable>> futures = new LinkedList<>();
 
 			createFutureJobs(model, mapper, shippingMap, monitor, modelEntityMap, futures, jobExecutor);
-			try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
-				scope.enter();
+//			try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
+//				scope.enter();
 				// Block until all futures completed
 				for (final Future<Runnable> f : futures) {
 					if (monitor.isCanceled()) {
@@ -225,7 +225,7 @@ public class ViabilitySanboxUnit {
 						e.printStackTrace();
 					}
 				}
-			}
+			//}
 		} finally {
 			monitor.done();
 		}
@@ -256,8 +256,9 @@ public class ViabilitySanboxUnit {
 							return null;
 						}
 						try {
+							final ViabilityResult result = generateViabilityResult(mapper, modelEntityMap, vesselAssignment, vesselSpotIndex, load, market);
 							return () -> {
-								row.getRhsResults().add(generateViabilityResult(mapper, modelEntityMap, vesselAssignment, vesselSpotIndex, load, market));
+								row.getRhsResults().add(result);
 							};
 						} finally {
 							monitor.worked(1);

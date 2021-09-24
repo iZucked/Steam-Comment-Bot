@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.views.viability;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.EventObject;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -27,12 +28,12 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.resource.ResourceLocator;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
@@ -41,6 +42,8 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.views.properties.PropertySheet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
@@ -63,6 +66,8 @@ import com.mmxlabs.models.mmxcore.impl.SafeMMXContentAdapter;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
@@ -90,6 +95,8 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 	private ICommandHandler localCommandHandler;
 
 	private MainTableCompoment mainTableComponent;
+	
+	private static final Logger LOG = LoggerFactory.getLogger(ViabilityView.class);
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -101,67 +108,86 @@ public class ViabilityView extends ScenarioInstanceView implements CommandStackL
 		mainTableComponent = new MainTableCompoment();
 		mainTableComponent.createControls(this.parent, ViabilityView.this);
 		inputWants.addAll(mainTableComponent.getInputWants());
+		
+		final RunnableAction go = new RunnableAction("Generate", IAction.AS_PUSH_BUTTON, () -> {
+		
+		if (modelRecord != null) {
+			try (final IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("MtMScenarioEditorActionDelegate::Create")) {
+				final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 
-		final RunnableAction go = new RunnableAction("Generate", IAction.AS_PUSH_BUTTON, () -> BusyIndicator.showWhile(Display.getDefault(), () -> {
-			try {
-				LNGScenarioModel foo = (LNGScenarioModel) getRootObject();
-				final IScenarioDataProvider sdp = getScenarioDataProvider();
-				if (foo == null) {
-					foo = ScenarioModelUtil.findScenarioModel(sdp);
-				}
-				final LNGScenarioModel scenarioModel = foo;
-				final ScenarioInstance scenarioInstance = getScenarioInstance();
-				if (scenarioModel == null) {
-					return;
-				}
-				final ExecutorService executor = Executors.newFixedThreadPool(1);
-				try {
-					executor.submit(() -> {
-						final ViabilityModel model = ViabilityUtils.createModelFromScenario(scenarioModel, "viabilitymarket");
-						ViabilitySandboxEvaluator.evaluate(sdp, scenarioInstance, model);
+				sdp.getModelReference().executeWithTryLock(true, 2_000, () -> {
+					try {
+						dialog.run(true, false, m -> {
+							try {
+								LNGScenarioModel foo = (LNGScenarioModel) getRootObject();
+								if (foo == null) {
+									foo = ScenarioModelUtil.findScenarioModel(sdp);
+								}
+								final LNGScenarioModel scenarioModel = foo;
+								final ScenarioInstance scenarioInstance = getScenarioInstance();
+								if (scenarioModel == null) {
+									return;
+								}
+								final ExecutorService executor = Executors.newFixedThreadPool(1);
+								try {
+									executor.submit(() -> {
+										final ViabilityModel model = ViabilityUtils.createModelFromScenario(scenarioModel, "viabilitymarket");
+										ViabilitySandboxEvaluator.evaluate(sdp, scenarioInstance, model, m);
 
-						RunnerHelper.asyncExec(() -> {
-							final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);
-							final EditingDomain editingDomain = sdp.getEditingDomain();
+										RunnerHelper.asyncExec(() -> {
+											final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);
+											final EditingDomain editingDomain = sdp.getEditingDomain();
 
-							final CompoundCommand cmd = new CompoundCommand("Create viability matrix");
-							cmd.append(SetCommand.create(editingDomain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_ViabilityModel(), model));
-							editingDomain.getCommandStack().execute(cmd);
+											final CompoundCommand cmd = new CompoundCommand("Create viability matrix");
+											cmd.append(SetCommand.create(editingDomain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_ViabilityModel(), model));
+											editingDomain.getCommandStack().execute(cmd);
 
-							doDisplayScenarioInstance(scenarioInstance, scenarioModel, model);
+											doDisplayScenarioInstance(scenarioInstance, scenarioModel, model);
+										});
+									}).get();
+								} finally {
+									executor.shutdown();
+								}
+							} catch (final InterruptedException | ExecutionException e) {
+								e.printStackTrace();
+							}
 						});
-					}).get();
-				} finally {
-					executor.shutdown();
-				}
-			} catch (final InterruptedException | ExecutionException e) {
-				e.printStackTrace();
-			}
-		}));
+					} catch (final InvocationTargetException | InterruptedException e) {
+						LOG.error(e.getMessage(), e);
+					}
 
-		ResourceLocator.imageDescriptorFromBundle("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_generate.gif").ifPresent(go::setImageDescriptor);
+				});
+			} catch (final Exception e) {
+				throw new RuntimeException("Unable to mark scenario to market", e);
+			}
+		}});
+		
+		CommonImages.setImageDescriptors(go, IconPaths.Play);
 		getViewSite().getActionBars().getToolBarManager().add(go);
 
-		final Action remove = new Action("Remove", IAction.AS_PUSH_BUTTON) {
-			@Override
-			public void run() {
-				final LNGScenarioModel scenarioModel = (LNGScenarioModel) getRootObject();
-				final ScenarioInstance scenarioInstance = getScenarioInstance();
-				final IScenarioDataProvider sdp = getScenarioDataProvider();
-				final EditingDomain editingDomain = sdp.getEditingDomain();
-				final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);
-				final ViabilityModel model = analyticsModel.getViabilityModel();
+		final RunnableAction remove = new RunnableAction("Remove", IAction.AS_PUSH_BUTTON, () -> {
+			if (modelRecord != null) {
+				try (final IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("MtMScenarioEditorActionDelegate::Delete")) {
 
-				if (model != null) {
-					final CompoundCommand cmd = new CompoundCommand("Remove viability matrix");
-					cmd.append(SetCommand.create(editingDomain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_ViabilityModel(), SetCommand.UNSET_VALUE));
-					editingDomain.getCommandStack().execute(cmd);
+					sdp.getModelReference().executeWithTryLock(true, 2_000, () -> {
+						final LNGScenarioModel scenarioModel = (LNGScenarioModel) getRootObject();
+						final EditingDomain editingDomain = sdp.getEditingDomain();
+						final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);
+						final ViabilityModel model = analyticsModel.getViabilityModel();
 
-					doDisplayScenarioInstance(scenarioInstance, scenarioModel, null);
+						if (model != null) {
+							final CompoundCommand cmd = new CompoundCommand("Remove viability matrix");
+							cmd.append(SetCommand.create(editingDomain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_ViabilityModel(), SetCommand.UNSET_VALUE));
+							editingDomain.getCommandStack().execute(cmd);
+
+							doDisplayScenarioInstance(scenarioInstance, scenarioModel, null);
+						}
+					});
 				}
 			}
-		};
-		remove.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
+		});
+		
+		CommonImages.setImageDescriptors(remove, IconPaths.Delete);
 		getViewSite().getActionBars().getToolBarManager().add(remove);
 
 		final Action packColumnsAction = PackActionFactory.createPackColumnsAction(mainTableComponent.getViewer());

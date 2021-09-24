@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.analytics.services;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -37,7 +38,7 @@ public interface IAnalyticsScenarioEvaluator {
 	ScenarioInstance exportResult(ScenarioResult result, String name);
 
 	void evaluateViabilitySandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull UserSettings userSettings, ViabilityModel model,
-			IMapperClass mapper, Map<ShippingOption, VesselAssignmentType> shippingMap);
+			IMapperClass mapper, Map<ShippingOption, VesselAssignmentType> shippingMap, IProgressMonitor progressMonitor);
 
 	void evaluateMTMSandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull UserSettings userSettings, MTMModel model, IMapperClass mapper);
 
