@@ -84,7 +84,7 @@
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.nebula.widgets.grid" version="0.0.0"/>
-<repository location="http://download.eclipse.org/nebula/releases/2.5.0"/>
+<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/nebula/widgets/2.5.0/widgets-2.5.0.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.nebula.widgets.formattedtext" version="0.0.0"/>
@@ -103,7 +103,7 @@
 		<unit id="org.eclipse.swtchart.feature.feature.group" version="0.0.0"/>
 	</location>
 	<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-		<repository location="http://download.eclipse.org/technology/swtbot/releases/3.1.0/"/>
+		<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/swtbot/swtbot/3.1.0/swtbot-3.1.0.zip-unzip/"/>
 		<unit id="org.eclipse.swtbot.eclipse.feature.group" version="3.1.0.202106041005"/>
 		<unit id="org.eclipse.swtbot.feature.group" version="3.1.0.202106041005"/>
 		<unit id="org.eclipse.swtbot.junit5.feature.group" version="3.1.0.202106041005"/>
