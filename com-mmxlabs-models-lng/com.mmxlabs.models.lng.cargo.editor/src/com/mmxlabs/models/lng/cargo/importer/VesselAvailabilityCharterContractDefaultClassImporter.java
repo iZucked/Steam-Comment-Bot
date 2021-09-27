@@ -160,9 +160,9 @@ public class VesselAvailabilityCharterContractDefaultClassImporter extends Defau
 								bbContainer.getTerms().add((BallastBonusTerm) object);
 							} else if (object instanceof LumpSumRepositioningFeeTerm || object instanceof OriginPortRepositioningFeeTerm) {
 								final SimpleRepositioningFeeContainer rfContainer;
-								if (contract.getBallastBonusTerms() instanceof SimpleRepositioningFeeContainer) {
+								if (contract.getRepositioningFeeTerms() instanceof SimpleRepositioningFeeContainer) {
 									rfContainer = (SimpleRepositioningFeeContainer) contract.getRepositioningFeeTerms();
-								} else if (contract.getBallastBonusTerms() == null) {
+								} else if (contract.getRepositioningFeeTerms() == null) {
 									rfContainer = CommercialFactory.eINSTANCE.createSimpleRepositioningFeeContainer();
 									contract.setRepositioningFeeTerms(rfContainer);
 								} else {
