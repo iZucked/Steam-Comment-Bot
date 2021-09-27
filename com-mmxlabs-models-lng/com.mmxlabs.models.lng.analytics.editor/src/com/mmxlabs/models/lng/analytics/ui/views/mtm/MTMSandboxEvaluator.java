@@ -10,6 +10,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
@@ -130,17 +131,19 @@ public class MTMSandboxEvaluator {
 		}
 	}
 
-	public static void evaluate(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, final MTMModel model) {
+	public static void evaluate(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, //
+			final MTMModel model, IProgressMonitor progressMonitor) {
 		final long a = System.currentTimeMillis();
 		{
-			singleEval(scenarioDataProvider, scenarioInstance, model);
+			singleEval(scenarioDataProvider, scenarioInstance, model, progressMonitor);
 		}
 
 		final long b = System.currentTimeMillis();
 		System.out.printf("Marked to market eval %d\n", b - a);
 	}
 
-	private static void singleEval(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, final MTMModel model) {
+	private static void singleEval(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, final MTMModel model, //
+			IProgressMonitor progressMonitor) {
 
 		final LNGScenarioModel optimiserScenario = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 		final IMapperClass mapper = new Mapper(optimiserScenario, true);
@@ -154,7 +157,7 @@ public class MTMSandboxEvaluator {
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
 		ServiceHelper.<IAnalyticsScenarioEvaluator> withServiceConsumer(IAnalyticsScenarioEvaluator.class, evaluator -> {
-			evaluator.evaluateMTMSandbox(scenarioDataProvider, scenarioInstance, userSettings, model, mapper);
+			evaluator.evaluateMTMSandbox(scenarioDataProvider, scenarioInstance, userSettings, model, mapper, progressMonitor);
 		});
 	}
 	

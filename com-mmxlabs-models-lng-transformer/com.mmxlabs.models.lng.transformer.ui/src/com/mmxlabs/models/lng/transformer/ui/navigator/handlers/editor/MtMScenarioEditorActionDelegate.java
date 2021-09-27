@@ -222,7 +222,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 		final ExecutorService executor = Executors.newFixedThreadPool(1);
 		try {
 			executor.submit(() -> {
-				MTMUtils.evaluateMTMModel(model[0], instance, sdp);
+				MTMUtils.evaluateMTMModel(model[0], instance, sdp, progressMonitor);
 			}).get();
 		} catch (Exception e) {
 			progressMonitor.done();

@@ -195,7 +195,7 @@ public class MTMSanboxUnit {
 	}
 
 	public void run(final MTMModel model, final IMapperClass mapper, @NonNull final IProgressMonitor monitor) {
-		monitor.beginTask("Generate solutions", IProgressMonitor.UNKNOWN);
+		monitor.beginTask("Generate MTM solutions", IProgressMonitor.UNKNOWN);
 		final JobExecutorFactory subExecutorFactory = jobExecutorFactory.withDefaultBegin(() -> {
 			final ThreadLocalScopeImpl s = injector.getInstance(ThreadLocalScopeImpl.class);
 			s.enter();

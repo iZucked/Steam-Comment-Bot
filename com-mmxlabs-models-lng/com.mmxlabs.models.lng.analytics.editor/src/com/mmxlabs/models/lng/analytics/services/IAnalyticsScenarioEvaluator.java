@@ -40,7 +40,8 @@ public interface IAnalyticsScenarioEvaluator {
 	void evaluateViabilitySandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull UserSettings userSettings, ViabilityModel model,
 			IMapperClass mapper, Map<ShippingOption, VesselAssignmentType> shippingMap, IProgressMonitor progressMonitor);
 
-	void evaluateMTMSandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull UserSettings userSettings, MTMModel model, IMapperClass mapper);
+	void evaluateMTMSandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull UserSettings userSettings, MTMModel model, //
+			IMapperClass mapper, IProgressMonitor progressMonitor);
 
 	void evaluateBreakEvenSandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull UserSettings userSettings, BreakEvenAnalysisModel model,
 			IMapperClass mapper, Map<ShippingOption, VesselAssignmentType> shippingMap, CompoundCommand cmd);

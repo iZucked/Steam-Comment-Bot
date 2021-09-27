@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
@@ -91,7 +92,7 @@ public class ViabilityTest extends AbstractMicroTestCase {
 		if (lngScenarioModel != null) {
 			ViabilityModel model = ViabilityUtils.createModelFromScenario(lngScenarioModel, "test");
 
-			ViabilitySandboxEvaluator.evaluate(scenarioDataProvider, null, model);
+			ViabilitySandboxEvaluator.evaluate(scenarioDataProvider, null, model, new NullProgressMonitor());
 
 			final Map<Pair<LoadSlot,VesselAvailability>, List<ViabilityResult>> checks = getResultingModel();
 

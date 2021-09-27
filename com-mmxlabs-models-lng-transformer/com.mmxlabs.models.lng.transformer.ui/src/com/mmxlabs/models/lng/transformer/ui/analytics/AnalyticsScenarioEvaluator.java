@@ -359,7 +359,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 	@Override
 	public void evaluateMTMSandbox(@NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance scenarioInstance, @NonNull final UserSettings userSettings,
-			final MTMModel model, final IMapperClass mapper) {
+			final MTMModel model, final IMapperClass mapper, IProgressMonitor progressMonitor) {
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 
@@ -392,7 +392,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			final MTMSanboxUnit unit = new MTMSanboxUnit(lngScenarioModel, dataTransformer, "mtm-sandbox", userSettings, constraints, jobExecutorFactory, dataTransformer.getInitialSequences(),
 					dataTransformer.getInitialResult(), dataTransformer.getHints());
 			/* Command cmd = */
-			unit.run(model, mapper, new NullProgressMonitor());
+			unit.run(model, mapper, progressMonitor);
 		});
 
 	}
