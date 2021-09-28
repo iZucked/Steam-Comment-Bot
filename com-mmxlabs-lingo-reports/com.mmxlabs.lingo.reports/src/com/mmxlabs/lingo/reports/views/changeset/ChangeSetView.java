@@ -614,7 +614,7 @@ public class ChangeSetView extends ViewPart {
 
 		// Create table
 		viewer = new GridTreeViewer(parent, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
-		GridViewerHelper.configureLookAndFeel(viewer);
+		GridViewerHelper.configureLookAndFeel(viewer, false);
 
 		ColumnViewerToolTipSupport.enableFor(viewer, ToolTip.RECREATE);
 

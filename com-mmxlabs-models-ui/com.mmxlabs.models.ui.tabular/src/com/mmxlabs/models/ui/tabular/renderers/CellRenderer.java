@@ -75,8 +75,11 @@ public class CellRenderer extends GridCellRenderer {
 		}
 
 		if (drawAsSelected) {
-			gc.setBackground(getDisplay().getSystemColor(SWT.COLOR_LIST_SELECTION));
-			gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_LIST_SELECTION_TEXT));
+			boolean hasFocus = item.getParent().isFocusOnGrid();
+        	Color backgroundColor = hasFocus?getDisplay().getSystemColor(SWT.COLOR_LIST_SELECTION):getDisplay().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW);
+            Color foregroundColor = hasFocus?getDisplay().getSystemColor(SWT.COLOR_LIST_SELECTION_TEXT):getDisplay().getSystemColor(SWT.COLOR_BLACK);
+        	gc.setBackground(backgroundColor);
+            gc.setForeground(foregroundColor);
 		} else if (drawAsHover) {
 			gc.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_NORMAL_SHADOW));
 			gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_DARK_BLUE));
@@ -92,8 +95,8 @@ public class CellRenderer extends GridCellRenderer {
 			} else {
 				gc.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 			}
-			gc.setForeground(item.getForeground(getColumn()));
-		}
+			  Color foreground = item.getForeground(getColumn());
+				gc.setForeground(foreground == null ? getDisplay().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND) : foreground);		}
 
 		if (drawBackground)
 			gc.fillRectangle(getBounds().x, getBounds().y, getBounds().width, getBounds().height);
@@ -162,11 +165,15 @@ public class CellRenderer extends GridCellRenderer {
 
 		int width = getBounds().width - x - rightMargin;
 
-		if (drawAsSelected) {
-			gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_LIST_SELECTION_TEXT));
-		} else {
-			gc.setForeground(item.getForeground(getColumn()));
-		}
+		 if (drawAsSelected) {
+	        	boolean hasFocus = item.getParent().isFocusOnGrid();
+	        	Color backgroundColor = hasFocus?getDisplay().getSystemColor(SWT.COLOR_LIST_SELECTION):getDisplay().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW);
+	            Color foregroundColor = hasFocus?getDisplay().getSystemColor(SWT.COLOR_LIST_SELECTION_TEXT):getDisplay().getSystemColor(SWT.COLOR_BLACK);
+	        	gc.setBackground(backgroundColor);
+	            gc.setForeground(foregroundColor);
+	        } else {
+	            gc.setForeground(item.getForeground(getColumn()));
+	        }
 
 		if (!isWordWrap()) {
 			String text = TextUtils.getShortStr(gc, item.getText(getColumn()), width, SWT.RIGHT);
