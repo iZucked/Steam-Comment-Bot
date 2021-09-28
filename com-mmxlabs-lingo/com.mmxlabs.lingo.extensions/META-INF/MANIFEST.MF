@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Lingo Extensions
+Bundle-Name: LiNGO Extensions
 Bundle-SymbolicName: com.mmxlabs.lingo.extensions;singleton:=true
 Bundle-Version: 4.12.52.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
