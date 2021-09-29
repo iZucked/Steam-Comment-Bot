@@ -353,7 +353,14 @@ String[] result = new String[1];
 
 	private static void doValidate(final String actualContents, final StringBuilder expectedOutputBuilder) {
 		final String expectedOutput = expectedOutputBuilder.toString();
-		final boolean valid = stripWhitespace.apply(expectedOutput).equals(stripWhitespace.apply(actualContents));
+		final boolean valid = stripWhitespace.apply(expectedOutput
+				
+				.replaceAll("Sep([^t])", "Sept$1") // Java 16 Compat
+				.replaceAll("\\(EET\\)", "(TRT)") // Java 16 Compat (New turkey timezone)
+				).equals(stripWhitespace.apply(actualContents
+						.replaceAll("Sep([^t])", "Sept$1") // Java 16 Compat
+						.replaceAll("\\(EET\\)", "(TRT)") // Java 16 Compat (New turkey timezone)
+						));
 		if (!valid) {
 			LOG.warn("Expected " + expectedOutput);
 			LOG.warn("Actual " + actualContents);
