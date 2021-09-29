@@ -2,11 +2,16 @@
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
 <suppress>
    <notes><![CDATA[
+   Applies to jetty, not equinox connector
    file name:    org.eclipse.*jetty*
    ]]></notes>
    <filePath regex="true">.*org\.eclipse\.equinox.*\.jar</filePath>     
+   <cve>CVE-2017-7656</cve>   
    <cve>CVE-2017-7657</cve>
    <cve>CVE-2017-7658</cve>
+   <cve>CVE-2021-28169</cve>
+   <cve>CVE-2021-34428</cve>
+   <cve>CVE-2020-27216</cve>
 </suppress>
 <suppress>
    <notes><![CDATA[
@@ -14,6 +19,13 @@
    ]]></notes>
    <filePath regex="true">.*com\.google\.guava\.failureaccess-1\.0\.1\.jar</filePath>     
    <cve>CVE-2020-8908</cve>
+</suppress>
+<suppress>
+   <notes><![CDATA[
+   file name:  wrapped.junit is not junit, it is part of testcontainers
+   ]]></notes>
+   <filePath regex="true">.*wrapped\.junit\.junit.*.jar</filePath>     
+   <cve>CVE-2020-15250</cve>
 </suppress>
 <suppress>
    <notes><![CDATA[
@@ -34,7 +46,13 @@
    ]]></notes>
    <cve>CVE-2008-7271</cve>
 </suppress>
- 
+ <suppress>
+   <notes><![CDATA[
+   file name: Jira false positive
+   ]]></notes>
+   <cve>CVE-2020-15943</cve>
+   <cve>CVE-2020-15944</cve>   
+</suppress>
 <suppress>
    <notes><![CDATA[
    file name: org.eclipse.ecf.provider.filetransfer-3.2.400.v20180306-0429.jar
