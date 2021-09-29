@@ -17,10 +17,7 @@ Build: {1}
    </configIni>
 
    <launcherArgs>
-      <vmArgs>-ea -server
-         <argsX86>-Xmx768m</argsX86>
-         <argsX86_64>-Xmx3G</argsX86_64>
-      </vmArgs>
+      <vmArgs>-ea -server -XX:MaxRAMPercentage=75</vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
    </launcherArgs>
