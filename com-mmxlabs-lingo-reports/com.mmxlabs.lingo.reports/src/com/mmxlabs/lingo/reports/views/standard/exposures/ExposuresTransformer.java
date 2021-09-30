@@ -52,12 +52,12 @@ public class ExposuresTransformer {
 	 */
 	public static IndexExposureData getExposuresByMonth(final @Nullable ScenarioResult scenarioResult, final @NonNull IScenarioDataProvider scenarioDataProvider, final @NonNull Schedule schedule, // 
 			final @NonNull YearMonth date, final ValueMode mode, //
-			final Collection<Object> filterOn, final String selectedEntity, final int selectedFiscalYear, final AssetType selectedAssetType, final boolean showGenerated) {
+			final Collection<Object> filterOn, final String selectedEntity, final int selectedFiscalYear, final AssetType selectedAssetType, final boolean showGenerated, //
+			final Map<String, String> curve2Index) {
 
 		final Map<String, Double> result = new HashMap<>();
 		final Map<String, Map<String, Double>> dealMap = new HashMap<>();
 
-		final PricingModel pm = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
 		if (selectedAssetType != AssetType.PAPER && selectedAssetType != AssetType.FINANCIAL) {
 			for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
 				for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
@@ -95,7 +95,7 @@ public class ExposuresTransformer {
 							}
 						}
 						if (detail.getDate().equals(date)) {
-							String indexName = detail.getIndexName().equalsIgnoreCase("Physical") ? detail.getIndexName() : ModelMarketCurveProvider.getMarketIndexName(pm, detail.getIndexName());
+							String indexName = detail.getIndexName().equalsIgnoreCase("Physical") ? detail.getIndexName().toLowerCase() : curve2Index.get(detail.getIndexName().toLowerCase());
 							if (indexName == null) {
 								continue;
 							}
@@ -165,7 +165,7 @@ public class ExposuresTransformer {
 				for (final PaperDealAllocationEntry paperDealAllocationEntry : paperDealAllocation.getEntries()) {
 					for (final ExposureDetail detail : paperDealAllocationEntry.getExposures()) {
 						if (detail.getDate().equals(date)) {
-							String indexName = ModelMarketCurveProvider.getMarketIndexName(pm, detail.getIndexName());
+							String indexName = curve2Index.get(detail.getIndexName());
 							if (indexName == null) {
 								continue;
 							}

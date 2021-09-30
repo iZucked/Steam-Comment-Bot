@@ -62,6 +62,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -130,16 +131,16 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 							return "";
 						if (data.exposures.isEmpty())
 							return "";
-						if (data.exposures.containsKey(columnName)) {
+						if (data.exposures.containsKey(columnName.toLowerCase())) {
 							final double result;
 							if (pinnedMode) {
 								if (useImage(data)) {
-									result = Math.abs(data.exposures.get(columnName));
+									result = Math.abs(data.exposures.get(columnName.toLowerCase()));
 								} else {
-									result = data.exposures.get(columnName);
+									result = data.exposures.get(columnName.toLowerCase());
 								}
 							} else {
-								result = data.exposures.get(columnName);
+								result = data.exposures.get(columnName.toLowerCase());
 							}
 							if (mode == ValueMode.VOLUME_TBTU) {
 								return String.format("%,.03f", result);
@@ -382,9 +383,11 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		protected List<IndexExposureData> getExposuresByMonth(final Schedule schedule, final ScenarioResult scenarioResult, final YearMonth ymStart, final YearMonth ymEnd, List<Object> selected) {
 			final List<IndexExposureData> output = new LinkedList<>();
 			final IScenarioDataProvider sdp = scenarioResult.getScenarioDataProvider();
+			final Map<String, String> curve2Index = ModelMarketCurveProvider.getCurveToIndexMap(ScenarioModelUtil.getPricingModel(sdp));
+			
 			for (YearMonth cym = ymStart; cym.isBefore(ymEnd.plusMonths(1)); cym = cym.plusMonths(1)) {
 				IndexExposureData exposuresByMonth = ExposuresTransformer.getExposuresByMonth(scenarioResult, sdp, schedule, cym, mode, selected, 
-						selectedEntity, selectedFiscalYear, selectedAssetType, showGenerated);
+						selectedEntity, selectedFiscalYear, selectedAssetType, showGenerated, curve2Index);
 				if (inspectChildrenAndExposures(exposuresByMonth)) {
 					output.add(exposuresByMonth);
 				}

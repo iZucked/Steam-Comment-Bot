@@ -10,6 +10,7 @@ import java.time.YearMonth;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -23,6 +24,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
 import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.util.ModelMarketCurveProvider;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -42,6 +44,7 @@ public class ExposuresReportJSONGenerator {
 	public static List<ExposuresReportModel> createTransformedData(final @NonNull Schedule schedule, final @NonNull IScenarioDataProvider scenarioDataProvider) {
 
 		final PricingModel pm = ScenarioModelUtil.getPricingModel(scenarioDataProvider);
+		final Map<String, String> curve2Index = ModelMarketCurveProvider.getCurveToIndexMap(pm);
 		final List<CommodityCurve> indices = pm.getCommodityCurves();
 		List<IndexExposureData> temp = new LinkedList<>();
 
@@ -51,7 +54,7 @@ public class ExposuresReportJSONGenerator {
 		for (YearMonth cym = ymStart; cym.isBefore(ymEnd); cym = cym.plusMonths(1)) {
 
 			IndexExposureData exposuresByMonth = 
-					ExposuresTransformer.getExposuresByMonth(null, scenarioDataProvider, schedule, cym, ValueMode.VOLUME_MMBTU,  Collections.emptyList(), null, -1, AssetType.NET, false);
+					ExposuresTransformer.getExposuresByMonth(null, scenarioDataProvider, schedule, cym, ValueMode.VOLUME_MMBTU,  Collections.emptyList(), null, -1, AssetType.NET, false, curve2Index);
 
 			if (exposuresByMonth.exposures.size() != 0.0) {
 				temp.add(exposuresByMonth);
