@@ -22,6 +22,13 @@
 </suppress>
 <suppress>
    <notes><![CDATA[
+   file name:    Applies to SLF4j, not logback bridge
+   ]]></notes>
+   <filePath regex="true">.*ch\.qos\.logback\.slf4j.*\.jar</filePath>     
+   <cve>CVE-2018-8088</cve>
+</suppress>
+<suppress>
+   <notes><![CDATA[
    file name:  wrapped.junit is not junit, it is part of testcontainers
    ]]></notes>
    <filePath regex="true">.*wrapped\.junit\.junit.*.jar</filePath>     
