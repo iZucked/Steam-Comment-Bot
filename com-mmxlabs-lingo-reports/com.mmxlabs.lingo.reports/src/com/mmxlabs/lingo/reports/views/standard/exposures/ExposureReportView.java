@@ -712,7 +712,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 				@Override
 				protected void populate(Menu subMenu) {
-					if (entities.isEmpty())
+					if (entities == null || entities.isEmpty())
 						return;
 					for (final String e : entities) {
 						final Action entityAction = new Action(e) {
@@ -722,6 +722,9 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 								ExposureReportView.this.refresh();
 							}
 						};
+						if (Objects.equals(selectedEntity, e)) {
+							entityAction.setChecked(true);
+						}
 						addActionToMenu(entityAction, subMenu);
 					}
 				}
@@ -733,7 +736,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 				@Override
 				protected void populate(Menu subMenu) {
-					if (fiscalYears.isEmpty())
+					if (fiscalYears == null || fiscalYears.isEmpty())
 						return;
 					for (final String e : fiscalYears) {
 						final Action fiscalYearAction = new Action(e) {
@@ -743,6 +746,9 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 								ExposureReportView.this.refresh();
 							}
 						};
+						if (selectedFiscalYear == Integer.parseInt(e)) {
+							fiscalYearAction.setChecked(true);
+						}
 						addActionToMenu(fiscalYearAction, subMenu);
 					}
 				}
@@ -762,6 +768,9 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 								ExposureReportView.this.refresh();
 							}
 						};
+						if (selectedAssetType == at) {
+							assetTypeAction.setChecked(true);
+						}
 						addActionToMenu(assetTypeAction, subMenu);
 					}
 				}
@@ -826,9 +835,9 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
- 
+
 		if (IReportContentsGenerator.class.isAssignableFrom(adapter)) {
-			
+
 			return adapter.cast(new IReportContentsGenerator() {
 				public IReportContents getReportContents(final ScenarioResult pin, final ScenarioResult other, final @Nullable List<Object> selectedObjects) {
 					if (selectedObjects == null) {
@@ -853,7 +862,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					final String contents = util.convert();
 
 					return ReportContents.makeHTML(contents);
-					
+
 				}
 			});
 		}
