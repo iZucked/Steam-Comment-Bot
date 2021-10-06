@@ -28,8 +28,6 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.mmxlabs.common.concurrent.DefaultJobExecutorFactory;
-import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -74,7 +72,7 @@ public class HeadlessOptimiserRunner {
 		try {
 			URL urlRoot = csvDirectory.toURI().toURL();
 			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
-				try (IScenarioDataProvider scenarioDataProvider = CopiedCSVImporter.importCSVScenario(urlRoot.toString())) {
+				try (IScenarioDataProvider scenarioDataProvider = new CSVImporter().importCSVScenario(urlRoot.toString())) {
 					run(options, scenarioDataProvider, monitor, completedHook, jsonOutput);
 				}
 			});
@@ -93,7 +91,7 @@ public class HeadlessOptimiserRunner {
 			String zipUriString = String.format("archive:%s!", zipFile.toURI().toString());
 
 			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
-				try (IScenarioDataProvider scenarioDataProvider = CopiedCSVImporter.importCSVScenario(zipUriString)) {
+				try (IScenarioDataProvider scenarioDataProvider = new CSVImporter().importCSVScenario(zipUriString)) {
 					run(options, scenarioDataProvider, monitor, completedHook, jsonOutput);
 				}
 			});
@@ -106,8 +104,11 @@ public class HeadlessOptimiserRunner {
 	}
 
 	/**
-	 * Returns the optimisation plan specified in the optimiser configuration options, or generates one from the user settings object if there are no stages in the specified plan, or generates one
-	 * from the default user settings if there are no user settings (this also occurs if the {@link OptimiserConfigurationOptions} are null).
+	 * Returns the optimisation plan specified in the optimiser configuration
+	 * options, or generates one from the user settings object if there are no
+	 * stages in the specified plan, or generates one from the default user settings
+	 * if there are no user settings (this also occurs if the
+	 * {@link OptimiserConfigurationOptions} are null).
 	 * 
 	 * @param ocOptions
 	 * @param sdp
@@ -184,11 +185,11 @@ public class HeadlessOptimiserRunner {
 			public List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
 				if (moduleType == ModuleType.Module_EvaluationParametersModule) {
 					if (ocOptions.injections != null) {
-						return Collections.<@NonNull Module> singletonList(new EvaluationSettingsOverrideModule(ocOptions.injections));
+						return Collections.<@NonNull Module>singletonList(new EvaluationSettingsOverrideModule(ocOptions.injections));
 					}
 				}
 				if (moduleType == ModuleType.Module_OptimisationParametersModule) {
-					return Collections.<@NonNull Module> singletonList(new OptimisationSettingsOverrideModule());
+					return Collections.<@NonNull Module>singletonList(new OptimisationSettingsOverrideModule());
 				}
 				if (moduleType == ModuleType.Module_Optimisation) {
 					final LinkedList<@NonNull Module> modules = new LinkedList<>();
@@ -294,7 +295,8 @@ public class HeadlessOptimiserRunner {
 	}
 
 	/**
-	 * Creates a module for providing logging parameters to the {@link Injector} framework.
+	 * Creates a module for providing logging parameters to the {@link Injector}
+	 * framework.
 	 */
 	@NonNull
 	private Module createLoggingModule(LoggingParameters loggingParameters, final Map<String, LSOLogger> phaseToLoggerMap, final ActionSetLogger actionSetLogger, final AbstractRunnerHook runnerHook) {
@@ -309,7 +311,8 @@ public class HeadlessOptimiserRunner {
 	}
 
 	/**
-	 * Debug method to allow an optimisation plan to be written as JSON for visual inspection.
+	 * Debug method to allow an optimisation plan to be written as JSON for visual
+	 * inspection.
 	 * 
 	 * @param plan
 	 * @param filename

@@ -31,7 +31,7 @@ import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.its.RequireFeature;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
-import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
+import com.mmxlabs.models.lng.transformer.its.scenario.ITSCSVImporter;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
@@ -57,7 +57,7 @@ public class MultiObjectiveSimilarityTests extends AbstractLegacyMicroTestCase {
 	public static IScenarioDataProvider importReferenceData(final String url) throws MalformedURLException {
 
 		final @NonNull String urlRoot = AbstractLegacyMicroTestCase.class.getResource(url).toString();
-		final CSVImporter importer = new CSVImporter();
+		final ITSCSVImporter importer = new ITSCSVImporter();
 		importer.importPortData(urlRoot);
 		importer.importCostData(urlRoot);
 		importer.importEntityData(urlRoot);

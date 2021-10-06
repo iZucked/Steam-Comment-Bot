@@ -26,7 +26,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSchedulerInsertSlotJobRunner;
-import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.CopiedCSVImporter;
+import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.CSVImporter;
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.HeadlessOptimiserJSON;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.rcp.common.ServiceHelper;
@@ -61,8 +61,10 @@ public class HeadlessOptioniserRunner {
 	}
 
 	/**
-	 * Runs the optioniser on the specified scenario, using the specified starting seed, with the specified options. The optioniser output is logged to the logger, which can then be used to extract
-	 * information about the optioniser run.
+	 * Runs the optioniser on the specified scenario, using the specified starting
+	 * seed, with the specified options. The optioniser output is logged to the
+	 * logger, which can then be used to extract information about the optioniser
+	 * run.
 	 * 
 	 * @param startTry
 	 * @param lingoFile
@@ -85,7 +87,7 @@ public class HeadlessOptioniserRunner {
 		try {
 			URL urlRoot = csvDirectory.toURI().toURL();
 			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
-				try (IScenarioDataProvider scenarioDataProvider = CopiedCSVImporter.importCSVScenario(urlRoot.toString())) {
+				try (IScenarioDataProvider scenarioDataProvider = new CSVImporter().importCSVScenario(urlRoot.toString())) {
 					run(startTry, logger, options, null, scenarioDataProvider, completedHook);
 				}
 			});
@@ -103,12 +105,11 @@ public class HeadlessOptioniserRunner {
 		try {
 			String zipUriString = String.format("archive:%s!", zipFile.toURI().toString());
 			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
-				try (IScenarioDataProvider scenarioDataProvider = CopiedCSVImporter.importCSVScenario(zipUriString)) {
+				try (IScenarioDataProvider scenarioDataProvider = new CSVImporter().importCSVScenario(zipUriString)) {
 					run(startTry, logger, options, null, scenarioDataProvider, completedHook);
 				}
 			});
 		} catch (MalformedURLException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			return;
 		}

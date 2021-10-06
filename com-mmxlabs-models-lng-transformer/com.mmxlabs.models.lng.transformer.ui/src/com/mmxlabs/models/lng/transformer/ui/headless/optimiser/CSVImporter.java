@@ -4,11 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.headless.optimiser;
 
-/**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2019
- * All rights reserved.
- */
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -55,6 +50,8 @@ import com.mmxlabs.models.lng.fleet.importer.BaseFuelImporter;
 import com.mmxlabs.models.lng.fleet.importer.FleetModelImporter;
 import com.mmxlabs.models.lng.fleet.importer.VesselImporter;
 import com.mmxlabs.models.lng.migration.ModelsLNGVersionMaker;
+import com.mmxlabs.models.lng.nominations.NominationsModel;
+import com.mmxlabs.models.lng.nominations.NominationsPackage;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.importer.PortModelImporter;
@@ -96,9 +93,9 @@ import com.mmxlabs.models.util.importer.registry.impl.ImporterRegistry;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
 
-public class CopiedCSVImporter {
+public class CSVImporter {
 
-	private final @NonNull Map<String, URI> dataMap = new HashMap<>();
+	protected final @NonNull Map<String, URI> dataMap = new HashMap<>();
 
 	public void importPortData(@NonNull final String uriRoot) throws MalformedURLException {
 		dataMap.put(PortModelImporter.PORT_KEY, createURI(uriRoot, "Ports.csv"));
@@ -125,13 +122,10 @@ public class CopiedCSVImporter {
 	public void importContractData(@NonNull final String uriRoot) throws MalformedURLException {
 		dataMap.put(CommercialModelImporter.PURCHASE_CON_KEY, createURI(uriRoot, "Purchase Contracts.csv"));
 		dataMap.put(CommercialModelImporter.SALES_CON_KEY, createURI(uriRoot, "Sales Contracts.csv"));
-		
-		dataMap.put(CharterContractConstants.CHARTER_CONTRACT_KEY, 
-				createURI(uriRoot, String.format("%s.%s",CharterContractConstants.CHARTER_CONTRACT_CHARTER_CONTRACT_DEFAULT_NAME, "csv")));
-		dataMap.put(CharterContractConstants.BALLAST_BONUS_KEY, 
-				createURI(uriRoot, String.format("%s.%s",CharterContractConstants.CHARTER_CONTRACT_BALLAST_BONUS_DEFAULT_NAME, "csv")));
-		dataMap.put(CharterContractConstants.REPOSITIONING_FEE_KEY, 
-				createURI(uriRoot, String.format("%s.%s",CharterContractConstants.CHARTER_CONTRACT_REPOSITIONING_FEE_DEFAULT_NAME, "csv")));
+
+		dataMap.put(CharterContractConstants.CHARTER_CONTRACT_KEY, createURI(uriRoot, String.format("%s.%s", CharterContractConstants.CHARTER_CONTRACT_CHARTER_CONTRACT_DEFAULT_NAME, "csv")));
+		dataMap.put(CharterContractConstants.BALLAST_BONUS_KEY, createURI(uriRoot, String.format("%s.%s", CharterContractConstants.CHARTER_CONTRACT_BALLAST_BONUS_DEFAULT_NAME, "csv")));
+		dataMap.put(CharterContractConstants.REPOSITIONING_FEE_KEY, createURI(uriRoot, String.format("%s.%s", CharterContractConstants.CHARTER_CONTRACT_REPOSITIONING_FEE_DEFAULT_NAME, "csv")));
 	}
 
 	public void importMarketData(@NonNull final String uriRoot) throws MalformedURLException {
@@ -140,6 +134,9 @@ public class CopiedCSVImporter {
 		dataMap.put(PricingModelImporter.CHARTER_CURVE_KEY, createURI(uriRoot, "Charter Curves.csv"));
 		dataMap.put(PricingModelImporter.CONVERSION_FACTORS_KEY, createURI(uriRoot, "Conversion Factors.csv"));
 		dataMap.put(PricingModelImporter.SETTLED_PRICES_KEY, createURI(uriRoot, "Settled Prices.csv"));
+		dataMap.put(PricingModelImporter.MARKET_INDEX_KEY, createURI(uriRoot, "Market Indices.csv"));
+		dataMap.put(PricingModelImporter.CURRENCY_CURVE_KEY, createURI(uriRoot, "Currency Curves.csv"));
+		dataMap.put(PricingModelImporter.SETTLE_STRATEGY_KEY, createURI(uriRoot, "Settle Strategies.csv"));
 	}
 
 	public void importCostData(@NonNull final String uriRoot) throws MalformedURLException {
@@ -169,12 +166,9 @@ public class CopiedCSVImporter {
 		dataMap.put(CargoModelImporter.VESSEL_AVAILABILITY_KEY, createURI(uriRoot, "Vessel Availability.csv"));
 		dataMap.put(AssignmentModelImporter.ASSIGNMENTS, createURI(uriRoot, "Assignments.csv"));
 		dataMap.put(CargoModelImporter.CANAL_BOOKINGS_KEY, createURI(uriRoot, "Canal Bookings.csv"));
-		dataMap.put(CharterContractConstants.CHARTER_CONTRACT_KEY, 
-				createURI(uriRoot, String.format("%s.%s",CharterContractConstants.VESSEL_AVAILAVILITY_CHARTER_CONTRACT_DEFAULT_NAME, "csv")));
-		dataMap.put(CharterContractConstants.BALLAST_BONUS_KEY, 
-				createURI(uriRoot, String.format("%s.%s",CharterContractConstants.VESSEL_AVAILAVILITY_BALLAST_BONUS_DEFAULT_NAME, "csv")));
-		dataMap.put(CharterContractConstants.REPOSITIONING_FEE_KEY, 
-				createURI(uriRoot, String.format("%s.%s",CharterContractConstants.VESSEL_AVAILAVILITY_REPOSITIONING_FEE_DEFAULT_NAME, "csv")));
+		dataMap.put(CharterContractConstants.CHARTER_CONTRACT_KEY, createURI(uriRoot, String.format("%s.%s", CharterContractConstants.VESSEL_AVAILAVILITY_CHARTER_CONTRACT_DEFAULT_NAME, "csv")));
+		dataMap.put(CharterContractConstants.BALLAST_BONUS_KEY, createURI(uriRoot, String.format("%s.%s", CharterContractConstants.VESSEL_AVAILAVILITY_BALLAST_BONUS_DEFAULT_NAME, "csv")));
+		dataMap.put(CharterContractConstants.REPOSITIONING_FEE_KEY, createURI(uriRoot, String.format("%s.%s", CharterContractConstants.VESSEL_AVAILAVILITY_REPOSITIONING_FEE_DEFAULT_NAME, "csv")));
 		dataMap.put(InventoryExtraImporter.INVENTORY_KEY, createURI(uriRoot, "Inventories.csv"));
 	}
 
@@ -204,11 +198,9 @@ public class CopiedCSVImporter {
 		return dataMap;
 	}
 
-	public static @NonNull IScenarioDataProvider importCSVScenario(@NonNull final String uriRoot, final String... extraMapEntries) throws MalformedURLException {
+	public @NonNull IScenarioDataProvider importCSVScenario(@NonNull final String uriRoot, final String... extraMapEntries) throws MalformedURLException {
 
-		final CopiedCSVImporter importer = new CopiedCSVImporter();
-
-		importer.importStandardComponents(uriRoot);
+		importStandardComponents(uriRoot);
 
 		for (int i = 0; i < extraMapEntries.length; i += 2) {
 			if (i + 1 < extraMapEntries.length) {
@@ -216,19 +208,19 @@ public class CopiedCSVImporter {
 				assert key != null;
 				final String value = extraMapEntries[i + 1];
 				assert value != null;
-				importer.addExtraMapEntry(key, URI.createURI(value));
+				addExtraMapEntry(key, URI.createURI(value));
 			}
 		}
-		return importCSVScenario(importer.dataMap);
+		return importCSVScenario(dataMap);
 	}
 
-	public static @NonNull IScenarioDataProvider importCSVScenario(@NonNull final Map<String, URI> dataMap) {
+	public @NonNull IScenarioDataProvider importCSVScenario(@NonNull final Map<String, URI> dataMap) {
 
 		final IImporterRegistry importerRegistry = getImporterRegistry();
 		return importCSVScenario(dataMap, importerRegistry);
 	}
 
-	public static @NonNull IScenarioDataProvider importCSVScenario(final @NonNull Map<String, URI> dataMap, @NonNull final IImporterRegistry importerRegistry) {
+	public @NonNull IScenarioDataProvider importCSVScenario(final @NonNull Map<String, URI> dataMap, @NonNull final IImporterRegistry importerRegistry) {
 
 		final DefaultImportContext context = new DefaultImportContext('.');
 
@@ -240,6 +232,7 @@ public class CopiedCSVImporter {
 		if (scenarioModel.getAnalyticsModel() == null) {
 			scenarioModel.setAnalyticsModel(AnalyticsFactory.eINSTANCE.createAnalyticsModel());
 		}
+		scenarioModel.setNominationsModel((NominationsModel) importSubModel(importerRegistry, context, dataMap, NominationsPackage.eINSTANCE.getNominationsModel()));
 
 		final LNGReferenceModel referenceModel = LNGScenarioFactory.eINSTANCE.createLNGReferenceModel();
 		scenarioModel.setReferenceModel(referenceModel);
@@ -301,10 +294,11 @@ public class CopiedCSVImporter {
 				assert importerRegistry != null;
 				return importerRegistry;
 			} else {
-				final Bundle bundle = FrameworkUtil.getBundle(CopiedCSVImporter.class);
+				final Bundle bundle = FrameworkUtil.getBundle(CSVImporter.class);
 				final BundleContext bundleContext = bundle != null ? bundle.getBundleContext() : null;
 				if (bundleContext != null) {
-					// Partial plugin env - its bundle activator does not seem to be started when run from eclipse.
+					// Partial plugin env - its bundle activator does not seem to be started when
+					// run from eclipse.
 					final Injector injector = Guice.createInjector(new ExtensionConfigurationModule(bundleContext));
 					final IImporterRegistry importerRegistry = new ImporterRegistry();
 					injector.injectMembers(importerRegistry);
@@ -315,14 +309,17 @@ public class CopiedCSVImporter {
 					subModelImporters.put(CargoPackage.eINSTANCE.getCargoModel(), new CargoModelImporter());
 					subModelImporters.put(CommercialPackage.eINSTANCE.getCommercialModel(), new CommercialModelImporter());
 					subModelImporters.put(FleetPackage.eINSTANCE.getFleetModel(), new FleetModelImporter());
-					// subModelImporters.put(AssignmentPackage.eINSTANCE.getAssignmentModel(), new AssignmentModelImporter());
-					// subModelImporters.put(ParametersPackage.eINSTANCE.getParametersModel(), new ParametersModelImporter());
+					// subModelImporters.put(AssignmentPackage.eINSTANCE.getAssignmentModel(), new
+					// AssignmentModelImporter());
+					// subModelImporters.put(ParametersPackage.eINSTANCE.getParametersModel(), new
+					// ParametersModelImporter());
 					subModelImporters.put(PortPackage.eINSTANCE.getPortModel(), new PortModelImporter());
 					subModelImporters.put(PricingPackage.eINSTANCE.getCostModel(), new CostModelImporter());
 					subModelImporters.put(PricingPackage.eINSTANCE.getPricingModel(), new PricingModelImporter());
 					subModelImporters.put(SchedulePackage.eINSTANCE.getScheduleModel(), new ScheduleModelImporter());
 					subModelImporters.put(SpotMarketsPackage.eINSTANCE.getSpotMarketsModel(), new SpotMarketsModelImporter());
-					// subModelImporters.put(ActualsPackage.eINSTANCE.getActualsModel(), new ActualsModelImporter());
+					// subModelImporters.put(ActualsPackage.eINSTANCE.getActualsModel(), new
+					// ActualsModelImporter());
 
 					final Map<EClass, IClassImporter> classImporters = new HashMap<>();
 					classImporters.put(FleetPackage.eINSTANCE.getBaseFuel(), new BaseFuelImporter());
@@ -411,7 +408,7 @@ public class CopiedCSVImporter {
 
 	}
 
-	private static EObject importSubModel(@NonNull final IImporterRegistry importerRegistry, @NonNull final IMMXImportContext context, @NonNull final Map<String, URI> dataMap,
+	private EObject importSubModel(@NonNull final IImporterRegistry importerRegistry, @NonNull final IMMXImportContext context, @NonNull final Map<String, URI> dataMap,
 			@NonNull final EClass subModelClass) {
 
 		final ISubmodelImporter importer = importerRegistry.getSubmodelImporter(subModelClass);
@@ -437,7 +434,7 @@ public class CopiedCSVImporter {
 			try {
 				return importer.importModel(readers, context);
 			} catch (final Throwable th) {
-				th.printStackTrace();
+				handleThrowable(th);
 			}
 		} finally {
 			for (final CSVReader r : readers.values()) {
@@ -451,7 +448,7 @@ public class CopiedCSVImporter {
 		return null;
 	}
 
-	private static void importExtraModels(@NonNull final LNGScenarioModel scenarioModel, @NonNull final IImporterRegistry importerRegistry, @NonNull final IMMXImportContext context,
+	private void importExtraModels(@NonNull final LNGScenarioModel scenarioModel, @NonNull final IImporterRegistry importerRegistry, @NonNull final IMMXImportContext context,
 			@NonNull final Map<String, URI> dataMap) {
 		for (final IExtraModelImporter importer : importerRegistry.getExtraModelImporters()) {
 			if (importer == null) {
@@ -490,8 +487,11 @@ public class CopiedCSVImporter {
 		}
 	}
 
-	@NonNull
-	public IScenarioDataProvider doImport() {
-		return CopiedCSVImporter.importCSVScenario(getDataMap());
+	public @NonNull IScenarioDataProvider doImport() {
+		return importCSVScenario(getDataMap());
+	}
+
+	public void handleThrowable(Throwable th) {
+		th.printStackTrace();
 	}
 }
