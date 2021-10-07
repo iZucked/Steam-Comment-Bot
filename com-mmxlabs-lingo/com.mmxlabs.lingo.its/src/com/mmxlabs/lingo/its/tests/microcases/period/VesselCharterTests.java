@@ -33,7 +33,8 @@ import com.mmxlabs.models.lng.types.TimePeriod;
 public class VesselCharterTests extends AbstractMicroTestCase {
 
 	/**
-	 * Check repositioning is cleared as the first cargo should be removed and the start conditions of the charter should be updated.
+	 * Check repositioning is cleared as the first cargo should be removed and the
+	 * start conditions of the charter should be updated.
 	 */
 	@Test
 	public void testClearRemoveRepositioning() {
@@ -92,7 +93,9 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Check repositioning is cleared as the first cargo should be removed and the start conditions of the charter should be updated. Shared contract should be unaffected
+	 * Check repositioning is cleared as the first cargo should be removed and the
+	 * start conditions of the charter should be updated. Shared contract should be
+	 * unaffected
 	 */
 	@Test
 	public void testClearRemoveRepositioningSharedContract() {
@@ -153,7 +156,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 			final VesselAvailability periodVA = cargoModel.getVesselAvailabilities().get(0);
 			// Vessel should have no repositioning terms
 			Assertions.assertNull(periodVA.getCharterOrDelegateCharterContract().getRepositioningFeeTerms());
-			
+
 			Assertions.assertNull(periodVA.getGenericCharterContract());
 			Assertions.assertNotNull(periodVA.getContainedCharterContract());
 			// The shared contract should still be ok
@@ -163,7 +166,8 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Check repositioning is cleared as the first cargo should be removed and the start conditions of the charter should be updated.
+	 * Check repositioning is cleared as the first cargo should be removed and the
+	 * start conditions of the charter should be updated.
 	 */
 	@Test
 	public void testClearRemoveBallastBonus() {
@@ -225,7 +229,8 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Check repositioning is cleared as the first cargo should be removed and the start conditions of the charter should be updated.
+	 * Check repositioning is cleared as the first cargo should be removed and the
+	 * start conditions of the charter should be updated.
 	 */
 	@Test
 	public void testClearRemoveBallastBonusSharedContract() {
@@ -280,7 +285,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 			final VesselAvailability periodVA = cargoModel.getVesselAvailabilities().get(0);
 
 			Assertions.assertNull(periodVA.getCharterOrDelegateCharterContract().getBallastBonusTerms());
-			
+
 			Assertions.assertNull(periodVA.getGenericCharterContract());
 			Assertions.assertNotNull(periodVA.getContainedCharterContract());
 			// The shared contract should still be ok
@@ -343,7 +348,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 			Assertions.assertEquals(100 - 92, periodVA.getCharterOrDelegateMinDuration());
 			Assertions.assertEquals(300 - 92, periodVA.getMaxDuration());
 			Assertions.assertEquals(300 - 92, periodVA.getCharterOrDelegateMaxDuration());
-			
+
 			Assertions.assertNull(periodVA.getGenericCharterContract());
 			Assertions.assertNull(periodVA.getContainedCharterContract());
 		}, null);
@@ -404,10 +409,9 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 
 			final VesselAvailability periodVA = cargoModel.getVesselAvailabilities().get(0);
 
-			
 			Assertions.assertNull(periodVA.getGenericCharterContract());
 			Assertions.assertNotNull(periodVA.getContainedCharterContract());
-			
+
 			// Loose first cargo (so reduce min duration by 31 days Oct, 30 Nov & 31 Dec)
 			Assertions.assertEquals(100 - 92, periodVA.getCharterOrDelegateMinDuration());
 			Assertions.assertEquals(100 - 92, periodVA.getMinDuration());
@@ -417,9 +421,11 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * This test is for the min duration being updated for the lost orphan ballast (the time between vessel start and first cargo).
+	 * This test is for the min duration being updated for the lost orphan ballast
+	 * (the time between vessel start and first cargo).
 	 * 
-	 * TODO: Current period transformer has a bug where this is not taken into account. This test should fail and needs to be updated when the bug is fixed.
+	 * TODO: Current period transformer has a bug where this is not taken into
+	 * account. This test should fail and needs to be updated when the bug is fixed.
 	 */
 	@Test
 	public void testMinMaxDurationUpdatedBeforePeriodIncludeOrphanBallast() {
@@ -470,7 +476,8 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 
 			// Loose first cargo (so reduce min duration by 31 days Oct, 30 Nov & 31 Dec )
 			int cargoTime = 92;
-			// Reduce orphan leg (currently a bug in the period transformer ignores this. Expect it to be 2 or 3 days)
+			// Reduce orphan leg (currently a bug in the period transformer ignores this.
+			// Expect it to be 2 or 3 days)
 			int orphanLegTime = 0;
 			Assertions.assertEquals(100 - cargoTime - orphanLegTime, periodVA.getMinDuration());
 			Assertions.assertEquals(100 - cargoTime - orphanLegTime, periodVA.getCharterOrDelegateMinDuration());
@@ -482,11 +489,12 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 		}, null);
 	}
 
-	
 	/**
-	 * This test is for the min duration being updated for the lost orphan ballast (the time between vessel start and first cargo).
+	 * This test is for the min duration being updated for the lost orphan ballast
+	 * (the time between vessel start and first cargo).
 	 * 
-	 * TODO: Current period transformer has a bug where this is not taken into account. This test should fail and needs to be updated when the bug is fixed.
+	 * TODO: Current period transformer has a bug where this is not taken into
+	 * account. This test should fail and needs to be updated when the bug is fixed.
 	 */
 	@Test
 	public void testMinMaxDurationUpdatedBeforePeriodIncludeOrphanBallastSharedContract() {
@@ -496,13 +504,12 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withStartWindow(LocalDateTime.of(2021, 9, 28, 0, 0, 0)) //
 				.build();
-		
+
 		final GenericCharterContract gcc = CommercialFactory.eINSTANCE.createGenericCharterContract();
 		commercialModelFinder.getCommercialModel().getCharterContracts().add(gcc);
 		gcc.setMinDuration(100);
 		gcc.setMaxDuration(300);
 		vesselAvailability.setGenericCharterContract(gcc);
-		
 
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2021, 10, 1), portFinder.findPortById(InternalDataConstants.PORT_PLUTO), null, entity, "5") //
@@ -542,7 +549,8 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 
 			// Loose first cargo (so reduce min duration by 31 days Oct, 30 Nov & 31 Dec )
 			int cargoTime = 92;
-			// Reduce orphan leg (currently a bug in the period transformer ignores this. Expect it to be 2 or 3 days)
+			// Reduce orphan leg (currently a bug in the period transformer ignores this.
+			// Expect it to be 2 or 3 days)
 			int orphanLegTime = 0;
 			Assertions.assertEquals(100 - cargoTime - orphanLegTime, periodVA.getMinDuration());
 			Assertions.assertEquals(100 - cargoTime - orphanLegTime, periodVA.getCharterOrDelegateMinDuration());
@@ -551,11 +559,10 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 
 			Assertions.assertNull(periodVA.getGenericCharterContract());
 			Assertions.assertNotNull(periodVA.getContainedCharterContract());
-			
-			
+
 		}, null);
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -613,31 +620,31 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 			Assertions.assertEquals(100 - 31 - 28 - 1, periodVA.getMinDuration());
 			Assertions.assertEquals(300 - 31 - 28, periodVA.getCharterOrDelegateMaxDuration());
 			Assertions.assertEquals(300 - 31 - 28, periodVA.getMaxDuration());
-			
-			
+
 			Assertions.assertNull(periodVA.getGenericCharterContract());
 			Assertions.assertNull(periodVA.getContainedCharterContract());
 		}, null);
 	}
+
 	/**
 	 * 
 	 */
 	@Test
 	public void testMinMaxDurationUpdatedAfterPeriodSharedContract() {
-		
+
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
-		
+
 		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
 				.withEndWindow(LocalDateTime.of(2022, 3, 1, 0, 0, 0)) // Set end window to make maths easier
-				
+
 				.build();
-		
+
 		final GenericCharterContract gcc = CommercialFactory.eINSTANCE.createGenericCharterContract();
 		commercialModelFinder.getCommercialModel().getCharterContracts().add(gcc);
 		gcc.setMinDuration(100);
 		gcc.setMaxDuration(300);
 		vesselAvailability.setGenericCharterContract(gcc);
-		
+
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2021, 10, 1), portFinder.findPortById(InternalDataConstants.PORT_PLUTO), null, entity, "5") //
 				.withWindowSize(0, TimePeriod.DAYS) //
@@ -647,7 +654,7 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 				.withVesselAssignment(vesselAvailability, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
-		
+
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L2", LocalDate.of(2022, 1, 1), portFinder.findPortById(InternalDataConstants.PORT_PLUTO), null, entity, "5") //
 				.build() //
@@ -656,33 +663,110 @@ public class VesselCharterTests extends AbstractMicroTestCase {
 				.withVesselAssignment(vesselAvailability, 1) //
 				.withAssignmentFlags(false, false) //
 				.build();
-		
+
 		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2021, 4, 7));
 		lngScenarioModel.setPromptPeriodEnd(LocalDate.of(2021, 7, 6));
-		
+
 		evaluateWithLSOTest(true, optimisationPlan -> {
 			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2021, 9, 1));
 			optimisationPlan.getUserSettings().setPeriodEnd(YearMonth.of(2021, 11));
 		}, null, scenarioRunner -> {
-			
+
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-			
+
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 			final CargoModel cargoModel = optimiserScenario.getCargoModel();
 			// Expect second cargo will have been removed
 			Assertions.assertEquals(1, cargoModel.getCargoes().size());
-			
+
 			final VesselAvailability periodVA = cargoModel.getVesselAvailabilities().get(0);
-			
+
 			// Loose first cargo (so reduce min duration by 31 days Jan, 28 Feb)
 			// -1 for round error due to timezones (whole days vs hours)
 			Assertions.assertEquals(100 - 31 - 28 - 1, periodVA.getCharterOrDelegateMinDuration());
 			Assertions.assertEquals(100 - 31 - 28 - 1, periodVA.getMinDuration());
 			Assertions.assertEquals(300 - 31 - 28, periodVA.getCharterOrDelegateMaxDuration());
 			Assertions.assertEquals(300 - 31 - 28, periodVA.getMaxDuration());
-			
+
 			Assertions.assertNull(periodVA.getGenericCharterContract());
 			Assertions.assertNotNull(periodVA.getContainedCharterContract());
+
+		}, null);
+	}
+
+	/**
+	 * Check optional charter-in with open end date is unchanged. Note: This is
+	 * problably not the desired behaviour as we have not properly constrained the
+	 * end date of the vessel - it will depend on the optimiser derived end date.
+	 */
+	@Test
+	public void testOptionalUnusedCharter() {
+
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+
+		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+				.withOptionality(true) //
+				.build();
+
+		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2021, 4, 7));
+		lngScenarioModel.setPromptPeriodEnd(LocalDate.of(2021, 7, 6));
+
+		evaluateWithLSOTest(true, optimisationPlan -> {
+			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2022, 2, 1));
+			optimisationPlan.getUserSettings().setPeriodEnd(YearMonth.of(2022, 12));
+		}, null, scenarioRunner -> {
+
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+			final CargoModel cargoModel = optimiserScenario.getCargoModel();
+
+			final VesselAvailability periodVA = cargoModel.getVesselAvailabilities().get(0);
+
+			// Values should be unchanged.
+			Assertions.assertNull(periodVA.getEndAfter());
+			Assertions.assertNull(periodVA.getEndBy());
+			Assertions.assertTrue(periodVA.getEndAt().isEmpty());
+
+		}, null);
+	}
+	/**
+	 * Check optional charter-in with open end date is unchanged. Note: This is
+	 * problably not the desired behaviour as we have not properly constrained the
+	 * end date of the vessel - it will depend on the optimiser derived end date.
+	 */
+	@Test
+	public void testOptionalUnusedCharterWithHorizon() {
+		
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+		
+		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+				.withOptionality(true) //
+				.build();
+		
+		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2021, 4, 7));
+		lngScenarioModel.setPromptPeriodEnd(LocalDate.of(2021, 7, 6));
+		// This should become the vessel end date
+		lngScenarioModel.setSchedulingEndDate(LocalDate.of(2022, 7, 1));
+		
+		evaluateWithLSOTest(true, optimisationPlan -> {
+			optimisationPlan.getUserSettings().setPeriodStartDate(LocalDate.of(2022, 2, 1));
+			optimisationPlan.getUserSettings().setPeriodEnd(YearMonth.of(2022, 12));
+		}, null, scenarioRunner -> {
+			
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
+			
+			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+			final CargoModel cargoModel = optimiserScenario.getCargoModel();
+			
+			final VesselAvailability periodVA = cargoModel.getVesselAvailabilities().get(0);
+
+			// No change
+			Assertions.assertTrue(periodVA.getEndAt().isEmpty());
+			// Expect horizon as start date here
+			Assertions.assertEquals(LocalDate.of(2022, 7, 1).atStartOfDay(), periodVA.getEndAfter());
+			// End date should be at least the horizon date. Code would normally extend to period end
+			Assertions.assertFalse(LocalDate.of(2022, 7, 1).atStartOfDay().isAfter(periodVA.getEndBy()));
 			
 		}, null);
 	}
