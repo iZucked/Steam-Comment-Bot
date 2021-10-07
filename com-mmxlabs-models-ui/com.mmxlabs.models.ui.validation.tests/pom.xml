@@ -4,11 +4,11 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.ui.parent</artifactId>
 		<groupId>com.mmxlabs.models.ui</groupId>
-		<version>4.12.53.RELEASE</version>
+		<version>4.12.54-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>com.mmxlabs.models.ui.validation.tests</artifactId>
-	<version>4.12.53.RELEASE</version>
+	<version>4.12.54-SNAPSHOT</version>
 	<packaging>eclipse-test-plugin</packaging>
 
 	
