@@ -1148,7 +1148,7 @@ public class PeriodTransformer {
 								&& periodRecord.schedulingEndDate.isBefore(periodRecord.upperBoundary.toLocalDate().atStartOfDay())) {
 							vesselAvailability.setEndAfter(periodRecord.schedulingEndDate);
 							vesselAvailability.setEndBy(periodRecord.upperBoundary.toLocalDateTime());
-						} else {
+						} else if (endEvent != null) {
 							vesselAvailability.setEndAfter(endEvent.getEnd().withZoneSameInstant(ZONEID_UTC).toLocalDateTime());
 							vesselAvailability.setEndBy(endEvent.getEnd().withZoneSameInstant(ZONEID_UTC).toLocalDateTime());
 						}
