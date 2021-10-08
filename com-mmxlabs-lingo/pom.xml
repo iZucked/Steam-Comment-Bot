@@ -36,4 +36,28 @@
 		<module>com.mmxlabs.lingo.its</module>
 		<module>com.mmxlabs.lingo.its.p2</module>
 	</modules>
+
+	<build>
+
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<configuration>
+					<target>
+						<artifact>
+							<groupId>com.mmxlabs.lingo.common.target</groupId>
+							<artifactId>com.mmxlabs.lingo.common.target-definition</artifactId>
+							<version>${project.version}</version>
+						</artifact>
+						<artifact>
+							<groupId>com.mmxlabs.lingo</groupId>
+							<artifactId>com.mmxlabs.lingo.target-definition</artifactId>
+							<version>${project.version}</version>
+						</artifact>
+					</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
