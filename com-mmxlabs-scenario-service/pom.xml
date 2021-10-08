@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.mmxlabs.lingo.master</groupId>
 		<artifactId>com.mmxlabs.lingo.master.parent</artifactId>
-		<version>4.12.54-SNAPSHOT</version>
+		<version>4.13.0.RELEASE</version>
 	</parent>
 
 	<groupId>com.mmxlabs.scenario.service</groupId>
@@ -30,4 +30,4 @@
 
 		<module>com.mmxlabs.scenario.service.feature</module>
 	</modules>
-</project>
+<version>4.13.0.RELEASE</version></project>
