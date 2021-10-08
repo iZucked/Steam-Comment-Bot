@@ -20,6 +20,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListModifiableSequence;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 
 public class Move4over1Test {
@@ -138,7 +139,7 @@ public class Move4over1Test {
 
 		final List<IResource> r1 = Collections.emptyList();
 
-		Assertions.assertFalse(move.validate(new Sequences(r1, sequenceMap_r1)));
+		Assertions.assertFalse(move.validate(new Sequences(r1, sequenceMap_r1, Collections.emptyList(),  new SequencesAttributesProviderImpl())));
 
 		// NOTE: This test does not trigger the desired code path. Check cobertura reports
 		move.setSegment1End(100);

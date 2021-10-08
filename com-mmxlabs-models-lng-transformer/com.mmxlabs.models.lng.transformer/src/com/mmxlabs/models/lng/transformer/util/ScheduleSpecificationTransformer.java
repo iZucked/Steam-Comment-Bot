@@ -38,6 +38,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ListModifiableSequence;
 import com.mmxlabs.optimiser.core.impl.Sequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
@@ -257,7 +258,7 @@ public class ScheduleSpecificationTransformer {
 				}
 			}
 		}
-		final ISequences seq = new Sequences(orderedResources, sequences, unusedElements);
+		final ISequences seq = new Sequences(orderedResources, sequences, unusedElements, new SequencesAttributesProviderImpl());
 
 		assert SequencesHitchHikerHelper.checkValidSequences(seq);
 

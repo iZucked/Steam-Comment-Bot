@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,6 +36,7 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.impl.NullSequencesManipulator;
 import com.mmxlabs.optimiser.core.impl.Resource;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
@@ -278,7 +280,7 @@ public class SimilarityFitnessCoreTest {
 		final Map<IResource, ISequence> sMap = new HashMap<IResource, ISequence>();
 		sMap.put(resources.get(0), sequence1);
 		sMap.put(resources.get(1), sequence2);
-		final ISequences sequences = new Sequences(resources, sMap);
+		final ISequences sequences = new Sequences(resources, sMap, Collections.emptyList(), new SequencesAttributesProviderImpl());
 		return sequences;
 	}
 

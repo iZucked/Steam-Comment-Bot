@@ -5,6 +5,7 @@
 package com.mmxlabs.optimiser.common.constraints;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.impl.Resource;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 
 public class ResourceAllocationConstraintCheckerTest {
@@ -67,7 +69,7 @@ public class ResourceAllocationConstraintCheckerTest {
 		final ListSequence seq2 = new ListSequence(CollectionsUtil.makeArrayList(obj2, obj3, obj4));
 
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r1, seq1, r2, seq2);
-		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r1, r2), map);
+		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r1, r2), map, Collections.emptyList(), new SequencesAttributesProviderImpl());
 
 		Assertions.assertTrue(checker.checkConstraints(sequences, null, new ArrayList<>()));
 	}
@@ -96,7 +98,7 @@ public class ResourceAllocationConstraintCheckerTest {
 		final ListSequence seq2 = new ListSequence(CollectionsUtil.makeArrayList(obj2, obj4));
 
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r1, seq1, r2, seq2);
-		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r1, r2), map);
+		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r1, r2), map, Collections.emptyList(), new SequencesAttributesProviderImpl());
 
 		Assertions.assertFalse(checker.checkConstraints(sequences, null, new ArrayList<>()));
 	}
@@ -125,7 +127,7 @@ public class ResourceAllocationConstraintCheckerTest {
 		final ListSequence seq2 = new ListSequence(CollectionsUtil.makeArrayList(obj2, obj3, obj4));
 
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r1, seq1, r2, seq2);
-		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r1, r2), map);
+		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r1, r2), map, Collections.emptyList(), new SequencesAttributesProviderImpl());
 
 		final List<String> messages = new LinkedList<String>();
 
@@ -158,7 +160,7 @@ public class ResourceAllocationConstraintCheckerTest {
 		final ListSequence seq2 = new ListSequence(CollectionsUtil.makeArrayList(obj2, obj4));
 
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r1, seq1, r2, seq2);
-		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r1, r2), map);
+		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r1, r2), map, Collections.emptyList(), new SequencesAttributesProviderImpl());
 
 		final List<String> messages = new LinkedList<String>();
 
