@@ -69,38 +69,13 @@ public class HeadlessOptimiserRunner {
 	public void runFromCsvDirectory(final File csvDirectory, final HeadlessApplicationOptions options, IProgressMonitor monitor,
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, HeadlessOptimiserJSON jsonOutput) {
 
-		try {
-			URL urlRoot = csvDirectory.toURI().toURL();
-			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
-				try (IScenarioDataProvider scenarioDataProvider = new CSVImporter().importCSVScenario(urlRoot.toString())) {
-					run(options, scenarioDataProvider, monitor, completedHook, jsonOutput);
-				}
-			});
-		} catch (MalformedURLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return;
-		}
-
+		CSVImporter.runFromCSVDirectory(csvDirectory, sdp -> run(options, sdp, monitor, completedHook, jsonOutput));
 	}
 
 	public void runFromCsvZipFile(final File zipFile, final HeadlessApplicationOptions options, IProgressMonitor monitor, final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook,
 			HeadlessOptimiserJSON jsonOutput) {
 
-		try {
-			String zipUriString = String.format("archive:%s!", zipFile.toURI().toString());
-
-			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
-				try (IScenarioDataProvider scenarioDataProvider = new CSVImporter().importCSVScenario(zipUriString)) {
-					run(options, scenarioDataProvider, monitor, completedHook, jsonOutput);
-				}
-			});
-		} catch (MalformedURLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return;
-		}
-
+		CSVImporter.runFromCSVZipFile(zipFile, sdp -> run(options, sdp, monitor, completedHook, jsonOutput));
 	}
 
 	/**

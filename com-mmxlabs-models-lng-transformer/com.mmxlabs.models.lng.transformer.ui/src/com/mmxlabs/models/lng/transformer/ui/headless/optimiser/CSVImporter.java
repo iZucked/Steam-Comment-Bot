@@ -4,13 +4,16 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.headless.optimiser;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -90,8 +93,10 @@ import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 import com.mmxlabs.models.util.importer.registry.ExtensionConfigurationModule;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 import com.mmxlabs.models.util.importer.registry.impl.ImporterRegistry;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 
 public class CSVImporter {
 
@@ -493,5 +498,41 @@ public class CSVImporter {
 
 	public void handleThrowable(Throwable th) {
 		th.printStackTrace();
+	}
+
+	public static void runFromCSVDirectory(final File csvDirectory, Consumer<IScenarioDataProvider> action) {
+		// TODO: This is usually run in osgi - maybe we should be using the import
+		// wizard code to get the main importer and client customer hooks
+		try {
+			URL urlRoot = csvDirectory.toURI().toURL();
+			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
+				try (IScenarioDataProvider scenarioDataProvider = new CSVImporter().importCSVScenario(urlRoot.toString())) {
+					action.accept(scenarioDataProvider);
+				}
+			});
+		} catch (MalformedURLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return;
+		}
+
+	}
+
+	public static void runFromCSVZipFile(final File zipFile, Consumer<IScenarioDataProvider> action) {
+		// TODO: This is usually run in osgi - maybe we should be using the import
+		// wizard code to get the main importer and client customer hooks
+		try {
+			// Note: Eclipse also supports jar: ! in a similar way
+			String zipUriString = String.format("archive:%s!", zipFile.toURI().toString());
+			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
+				try (IScenarioDataProvider scenarioDataProvider = new CSVImporter().importCSVScenario(zipUriString)) {
+					action.accept(scenarioDataProvider);
+				}
+			});
+		} catch (MalformedURLException e1) {
+			e1.printStackTrace();
+			return;
+		}
+
 	}
 }
