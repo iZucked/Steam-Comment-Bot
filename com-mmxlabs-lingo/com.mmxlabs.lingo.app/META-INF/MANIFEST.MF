@@ -3,7 +3,6 @@ Bundle-ManifestVersion: 2
 Bundle-Name: LiNGO Application
 Bundle-SymbolicName: com.mmxlabs.lingo.app;singleton:=true
 Bundle-Version: 4.13.4.qualifier
-Bundle-Activator: com.mmxlabs.lingo.app.Activator
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.core.runtime;bundle-version="3.7.0",
@@ -37,7 +36,6 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.apache.felix.scr;bundle-version="2.1.24"
 Bundle-RequiredExecutionEnvironment: JavaSE-16
 Bundle-ActivationPolicy: lazy
-Export-Package: com.mmxlabs.lingo.app,
- com.mmxlabs.lingo.app.intro
 Automatic-Module-Name: com.mmxlabs.lingo.app
 Import-Package: org.slf4j
+Bundle-Activator: com.mmxlabs.lingo.app.Activator

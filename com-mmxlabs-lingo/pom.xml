@@ -19,6 +19,7 @@
 
 		<module>com.mmxlabs.lingo.platform.feature</module>
 
+		<module>com.mmxlabs.lingo.updater</module>
 		<module>com.mmxlabs.lingo.app</module>
 		<module>com.mmxlabs.lingo.app.headless</module>
 
