@@ -7,6 +7,7 @@ package com.mmxlabs.hub.auth;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
@@ -21,17 +22,22 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 
 import okhttp3.OkHttpClient;
 
-public class OAuthAuthenticationDialog extends Window {
+public class OAuthDialog extends Window {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(OAuthDialog.class);
 
 	private static Browser browser;
 	private static final OkHttpClient httpClient = HttpClientUtil.basicBuilder().build();
@@ -41,10 +47,10 @@ public class OAuthAuthenticationDialog extends Window {
 
 	private List<Runnable> disposeHandlers = new LinkedList<>();
 
-	public OAuthAuthenticationDialog(Shell shell, final String baseUrl, String fragment) {
+	public OAuthDialog(final String upstreamUrl, String path, @Nullable Shell shell) {
 		super(shell);
-		this.baseUrl = baseUrl;
-		this.fragment = fragment;
+		this.baseUrl = upstreamUrl;
+		this.fragment = path;
 
 		setShellStyle(SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL | SWT.MAX | SWT.RESIZE | getDefaultOrientation());
 		setBlockOnOpen(true);
@@ -54,24 +60,30 @@ public class OAuthAuthenticationDialog extends Window {
 	protected void configureShell(Shell newShell) {
 		newShell.setText("Data Hub OAuth Login");
 		super.configureShell(newShell);
+		newShell.setLayout(getLayout());
 		newShell.setSize(640, 480);
+	}
+
+	@Override
+	protected Layout getLayout() {
+		return new GridLayout(1, false);
 	}
 
 	@Override
 	protected Control createContents(Composite _parent) {
 
 		_parent.setLayout(new FillLayout());
-		Composite parent = new Composite(_parent, SWT.DEFAULT | SWT.BORDER);
-		parent.setLayout(new GridLayout(1, false));
+		Composite oauthComposite = new Composite(_parent, SWT.DEFAULT | SWT.BORDER);
+		oauthComposite.setLayout(getLayout());
 
-		ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.RIGHT);
+		ToolBar toolBar = new ToolBar(oauthComposite, SWT.FLAT | SWT.RIGHT);
 		toolBar.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
 		ToolItem tltmBack = new ToolItem(toolBar, SWT.NONE);
 		ToolItem tltmForward = new ToolItem(toolBar, SWT.NONE);
 		ToolItem tltmRefresh = new ToolItem(toolBar, SWT.NONE);
 
-		Text txtLocation = new Text(parent, SWT.BORDER);
+		Text txtLocation = new Text(oauthComposite, SWT.BORDER);
 		txtLocation.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -88,7 +100,7 @@ public class OAuthAuthenticationDialog extends Window {
 		txtLocation.setEnabled(false);
 		txtLocation.setEditable(false);
 
-		browser = new Browser(parent, SWT.NONE);
+		browser = new Browser(oauthComposite, SWT.NONE);
 
 		GridData gd_browser = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		gd_browser.heightHint = 691;
@@ -128,25 +140,23 @@ public class OAuthAuthenticationDialog extends Window {
 				if (event.top) {
 					txtLocation.setText(event.location);
 				}
-				/*
-				 * if the user is already logged in, the hub sometimes redirects the browser straight to /ui/#/dashboard. If this happens we just shutdown the browser
-				 */
-				if (event.location.contains(baseUrl + UpstreamUrlProvider.HOME_PATH) || event.location.contains(UpstreamUrlProvider.BASIC_LOGIN_FORM_PATH) || event.location.contains("/logout")) {
-					OAuthAuthenticationDialog.this.close();
-				} else if (event.location.contains(baseUrl + UpstreamUrlProvider.URI_AFTER_SUCCESSFULL_AUTHENTICATION)) {
+				LOGGER.info(event.location);
+				if (event.location.contains(UpstreamUrlProvider.BASIC_LOGIN_FORM_PATH) || event.location.contains("/logout")) {
+					OAuthDialog.this.close();
+				} else if (event.location.contains(baseUrl + UpstreamUrlProvider.URI_AFTER_SUCCESSFULL_AUTHENTICATION) || event.location.contains(baseUrl + UpstreamUrlProvider.HOME_PATH)) {
 					String cookie = Browser.getCookie("JSESSIONID", baseUrl);
 
 					// store sso cookie in secure preferences for later use
-					AuthenticationManager.getInstance().storeInSecurePreferences(OAuthAuthenticationManager.COOKIE, "JSESSIONID=" + cookie);
+					AuthenticationManager.getInstance().storeInSecurePreferences(OAuthManager.COOKIE, "JSESSIONID=" + cookie);
 
-					OAuthAuthenticationDialog.this.close();
+					OAuthDialog.this.close();
 				}
 			}
 		});
 
 		browser.setUrl(baseUrl + fragment);
 
-		return parent;
+		return oauthComposite;
 	}
 
 	@Override

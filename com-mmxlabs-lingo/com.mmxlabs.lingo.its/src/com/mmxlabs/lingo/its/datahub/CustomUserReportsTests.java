@@ -49,7 +49,7 @@ public class CustomUserReportsTests {
 
 	// @formatter:off
 	@Container
-	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer("docker.mmxlabs.com/datahub-v:1.8.1-SNAPSHOT")
+	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer("docker.mmxlabs.com/datahub-v:1.9.1-SNAPSHOT")
 	.withFixedExposedPort(availablePort, DATAHUB_PORT)
 	.withExposedPorts(DATAHUB_PORT)
 	.withEnv("PORT", Integer.toString(DATAHUB_PORT))
@@ -83,7 +83,6 @@ public class CustomUserReportsTests {
 	public static void afterAll() {
 		deleteAllUserReports();
 		bot.resetWorkbench();
-		bot.button("Cancel").click();
 		bot = null;
 	}
 
@@ -130,8 +129,8 @@ public class CustomUserReportsTests {
 	public boolean viewWithTitleExists(SWTBotShell[] shells, @NonNull String title) {
 		boolean exists = false;
 		for (SWTBotShell shell : shells) {
-			System.out.println(shell.getId());
-			System.out.println(shell.getText());
+			logger.info(shell.getId());
+			logger.info(shell.getText());
 			if (title.equals(shell.getText())) {
 				exists = true;
 			}

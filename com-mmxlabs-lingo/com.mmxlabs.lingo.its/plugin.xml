@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2021
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="com.mmxlabs.license.features.FeatureEnablement">
+      <FeatureEnablement
+            feature="difftools">
+      </FeatureEnablement>
+   </extension>
+
+   <extension
+         id="com.mmxlabs.lingo.its.datahub.TestPasswordProvider"
+         point="org.eclipse.equinox.security.secureStorage">
+       <provider
+            class="com.mmxlabs.lingo.its.datahub.TestPasswordProvider"
+            description="%provider.description"
+            priority="10">
+      </provider>
+   </extension>
+
+
+</plugin>

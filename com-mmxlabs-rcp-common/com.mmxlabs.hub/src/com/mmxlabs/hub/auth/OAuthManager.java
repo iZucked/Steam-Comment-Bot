@@ -19,19 +19,19 @@ import com.mmxlabs.hub.UpstreamUrlProvider;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
+public class OAuthManager extends AbstractAuthenticationManager {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(OAuthAuthenticationManager.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(OAuthManager.class);
 	public static final String COOKIE = "cookie";
 
-	private static OAuthAuthenticationManager instance = null;
+	private static OAuthManager instance = null;
 
-	private OAuthAuthenticationManager() {
+	private OAuthManager() {
 	}
 
-	public static OAuthAuthenticationManager getInstance() {
+	public static OAuthManager getInstance() {
 		if (instance == null) {
-			instance = new OAuthAuthenticationManager();
+			instance = new OAuthManager();
 		}
 		return instance;
 	}
@@ -81,15 +81,15 @@ public class OAuthAuthenticationManager extends AbstractAuthenticationManager {
 	public boolean hasToken() {
 		return retrieveFromSecurePreferences(COOKIE).isPresent();
 	}
-	
+
 	protected void startAuthenticationShell(final String upstreamURL, final String path, @Nullable final Shell optionalShell) {
 		if (authenticationShellIsOpen.compareAndSet(false, true)) {
-			final OAuthAuthenticationDialog authenticationShell = new OAuthAuthenticationDialog(optionalShell, upstreamURL, path);
+			final OAuthDialog authenticationShell = new OAuthDialog(upstreamURL, path, optionalShell);
 			// Set access token when shell is disposed
 			authenticationShell.addDisposeListener(() -> {
 				authenticationShellIsOpen.compareAndSet(true, false);
 			});
-			try { 
+			try {
 				authenticationShell.open();
 			} catch (Exception e) {
 				// Make sure we have cleared the setting.

@@ -78,14 +78,18 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.objenesis;bundle-version="2.6.0",
  com.mmxlabs.models.lng.cargo.validation,
  com.mmxlabs.models.lng.pricing.validation,
- wrapped.org.testcontainers.junit-jupiter;bundle-version="1.14.3",
- wrapped.org.testcontainers.testcontainers;bundle-version="1.14.3",
+ wrapped.org.testcontainers.junit-jupiter;bundle-version="1.16.0",
+ wrapped.org.testcontainers.testcontainers;bundle-version="1.16.0",
  wrapped.org.rnorth.duct-tape.duct-tape;bundle-version="1.0.8",
- com.google.guava.failureaccess;bundle-version="1.0.1"
+ wrapped.org.rnorth.visible-assertions.visible-assertions;bundle-version="2.1.2",
+ wrapped.com.github.docker-java.docker-java-api;bundle-version="3.2.11",
+ wrapped.com.github.docker-java.docker-java-transport;bundle-version="3.2.11",
+ wrapped.com.github.docker-java.docker-java-transport-zerodep;bundle-version="3.2.11",
+ org.eclipse.equinox.security;bundle-version="1.3.400"
 Bundle-ClassPath: data/,
  .
 Import-Package: com.sun.jna;version="4.5.1",
- com.sun.jna.platform;version="4.5.1",
+ com.sun.jna.platform;version="4.5.1";resolution:=optional,
  com.sun.jna.platform.win32;version="4.5.1";resolution:=optional,
  javax.inject;version="1.0.0",
  org.eclipse.swtbot.eclipse.finder,
@@ -119,3 +123,4 @@ Export-Package: com.mmxlabs.lingo.its,
  com.mmxlabs.lingo.its.uat.suite.utils,
  com.mmxlabs.lingo.its.verifier
 Automatic-Module-Name: com.mmxlabs.lingo.its
+Eclipse-RegisterBuddy: org.apache.log4j

@@ -4,16 +4,19 @@
  */
 package com.mmxlabs.lingo.its.datahub;
 
+import static org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.withText;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.SWTBot;
-import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
+import org.eclipse.swtbot.swt.finder.waits.Conditions;
 import org.eclipse.swtbot.swt.finder.waits.ICondition;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotBrowser;
+import org.hamcrest.Matcher;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,19 +30,21 @@ import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import com.mmxlabs.hub.DataHubActivator;
 import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.UpstreamUrlProvider.StateReason;
-import com.mmxlabs.hub.auth.OAuthAuthenticationManager;
+import com.mmxlabs.hub.auth.OAuthManager;
+import com.mmxlabs.hub.preferences.DataHubPreferenceConstants;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 
 @Testcontainers
 @Tag(TestCategories.HUB_TEST)
-public class OAuthAuthenticationTests {
+public class OAuthTests {
 
 	private static DataHubServiceProvider datahubServiceProvider = DataHubServiceProvider.getInstance();
-	private static OAuthAuthenticationManager oauthAuthenticationManager = OAuthAuthenticationManager.getInstance();
-	static final Logger logger = LoggerFactory.getLogger(OAuthAuthenticationTests.class);
+	private static OAuthManager oauthManager = OAuthManager.getInstance();
+	static final Logger logger = LoggerFactory.getLogger(OAuthTests.class);
 
 	public static final int DATAHUB_PORT = 8090;
 	static List<Integer> portPool = List.of(8090, 8091, 8092, 8093, 8094, 8095, 8096, 8097, 8098, 8099);
@@ -52,9 +57,9 @@ public class OAuthAuthenticationTests {
 
 	// @formatter:off
 	@Container
-	// we need a fixed port for this test because we cannot programatically modify the redirection-url on Azure
+	// we need a fixed port for this test because we cannot programmatically modify the redirection-url on Azure
 	// AD has port 8090 - 8099 set for testing purposes
-	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer("docker.mmxlabs.com/datahub-v:1.8.1-SNAPSHOT")
+	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer("docker.mmxlabs.com/datahub-v:1.9.1-SNAPSHOT")
 	.withFixedExposedPort(availablePort, DATAHUB_PORT)
 	.withExposedPorts(DATAHUB_PORT)
 	.withEnv("PORT", Integer.toString(DATAHUB_PORT))
@@ -66,7 +71,7 @@ public class OAuthAuthenticationTests {
 	.withEnv("DB_PORT", "27000")
 	.withEnv("AZURE_CLIENT_ID", "e52d83a9-40c0-42ae-aae3-d5054ef24919")
 	.withEnv("AZURE_TENANT_ID", "dceff11f-6e74-436e-b9a0-65f9697b8472")
-	.withEnv("AZURE_CLIENT_SECRET", "@t:1uqW2cYN1iH7S]RQqBiHgchhvEr/[")
+	.withEnv("AZURE_CLIENT_SECRET", "n-LV4_3vPJ3s1v.9MWwLy1.ZO-1oz17u54")
 	.withEnv("AZURE_GROUPS", "MinimaxUsers, MinimaxLingo, MinimaxBasecase")
 	.withEnv("AZURE_BASECASE_GROUP_ID", "452fe6d8-7360-47fd-b5b5-8cd8108d9233")
 	.withEnv("AZURE_BASECASE_GROUP_NAME", "MinimaxBasecase")
@@ -81,13 +86,20 @@ public class OAuthAuthenticationTests {
 	private static void beforeAll() {
 		datahubHost = datahubContainer.getHost();
 		upstreamUrl = String.format("http://%s:%s", datahubHost, availablePort);
-		System.out.println(upstreamUrl);
+		logger.info(upstreamUrl);
 		bot = new SWTWorkbenchBot();
 		HubTestHelper.setDatahubUrl(upstreamUrl);
-		// slow down tests by 500ms
+		enableOAuth();
+		// slow down tests' playback speed to 500ms
 		SWTBotPreferences.PLAYBACK_DELAY = 500;
 		// increase timeout to 10 seconds
-		SWTBotPreferences.TIMEOUT = 10000;
+		SWTBotPreferences.TIMEOUT = 30000;
+		// force trigger refresh
+		UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
+	}
+
+	public static void enableOAuth() {
+		DataHubActivator.getDefault().getPreferenceStore().setValue(DataHubPreferenceConstants.P_FORCE_BASIC_AUTH, false);
 	}
 
 	/*
@@ -95,6 +107,7 @@ public class OAuthAuthenticationTests {
 	 */
 	@AfterAll
 	public static void afterAll() {
+		bot.resetWorkbench();
 		bot = null;
 	}
 
@@ -145,43 +158,54 @@ public class OAuthAuthenticationTests {
 	/**
 	 * Test OAuth login by executing JavaScript in the browser. Because bot.browser() returns void type we cannot use bot.waitUntil() conditions to check the contents of the page.
 	 * bot.waitForPageLoaded() doesn't work for this use case because the url doesn't change during the authentication process
-	 *
-	 * If the tests fail to often try increasing the sleep time
+	 * <p>
+	 * </p>
+	 * If the tests fail to often try increasing the sleep time. If it keeps failing, make sure that test@minimaxlabs.com is able to login to {@link https://portal.azure.com} without any additional
+	 * prompts
 	 */
 	@Test
-	public void oauthAuthenticationLogin() throws InterruptedException {
+	public void oauthLogin() throws InterruptedException {
 		openDatahubPreferencePage();
-
 		// logout if necessary
-		try {
-			bot.button("Logout").click();
-		} catch (WidgetNotFoundException e) {
-			bot.button("Login").click();
+		if ("Logout".equals(bot.buttonWithId("login").getText())) {
+			bot.buttonWithId("login").click();
+			Thread.sleep(2000);
 		}
-		SWTBotBrowser browser = bot.browser();
+		bot.buttonWithId("login").click();
 		Thread.sleep(2000);
 
-		// click on "use another account" button
-		browser.execute(HubTestHelper.clickUserAnotherAccount);
-		Thread.sleep(2000);
+		// if user was previously authenticated, clikcing on Login will automatically log them back in
+		if (!datahubServiceProvider.isLoggedIn()) {
+			Matcher<Shell> oauthLoginShellMatcher = withText("Data Hub OAuth Login");
+			bot.waitUntil(Conditions.waitForShell(oauthLoginShellMatcher));
+			SWTBotBrowser browser = bot.browser();
+			Thread.sleep(2000);
 
-		// fill in the email input
-		browser.execute(HubTestHelper.fillEmail);
-		browser.execute(HubTestHelper.focusEmail);
-		browser.execute(HubTestHelper.clickNext);
-		Thread.sleep(2000);
+			// click on "use another account" button
+			browser.execute(HubTestHelper.clickUserAnotherAccount);
+			Thread.sleep(2000);
 
-		// fill in the password input
-		browser.execute(HubTestHelper.fillPassword);
-		browser.execute(HubTestHelper.focusPassword);
-		browser.execute(HubTestHelper.clickNext);
-		Thread.sleep(2000);
+			// fill in the email input
+			browser.execute(HubTestHelper.fillEmail);
+			browser.execute(HubTestHelper.focusEmail);
+			browser.execute(HubTestHelper.clickNext);
+			Thread.sleep(2000);
 
-		// click yes on "stay signed in?" page
-		browser.execute(HubTestHelper.clickNext);
+			// fill in the password input
+			browser.execute(HubTestHelper.fillPassword);
+			browser.execute(HubTestHelper.focusPassword);
+			browser.execute(HubTestHelper.clickNext);
+			Thread.sleep(2000);
 
-		// wait until authenticated status updates
-		bot.waitUntil(waitUntilAuthenticated());
+			// click yes on "stay signed in?" page
+			browser.execute(HubTestHelper.clickNo);
+			Thread.sleep(2000);
+
+			// wait until authenticated status updates
+			bot.waitUntil(waitUntilAuthenticated());
+		} else {
+			logger.info("datahub already logged in");
+		}
 
 		assertTrue(datahubServiceProvider.isLoggedIn());
 
