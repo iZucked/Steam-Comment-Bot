@@ -582,10 +582,15 @@
   <eClassifiers xsi:type="ecore:EClass" name="ScheduleSpecificationEvent"/>
   <eClassifiers xsi:type="ecore:EClass" name="VesselEventSpecification" eSuperTypes="#//ScheduleSpecificationEvent">
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEvent" eType="#//VesselEvent"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="arrivalDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="VoyageSpecification" eSuperTypes="#//ScheduleSpecificationEvent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="VoyageSpecification" eSuperTypes="#//ScheduleSpecificationEvent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="routeOption" eType="ecore:EEnum ../../com.mmxlabs.models.lng.port/model/port.ecore#//RouteOption"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fuelChoice" eType="#//FuelChoice"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SlotSpecification" eSuperTypes="#//ScheduleSpecificationEvent">
     <eStructuralFeatures xsi:type="ecore:EReference" name="slot" eType="#//Slot"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="arrivalDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CharterInMarketOverride" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VesselAssignmentType">
     <eOperations name="getStartDateAsDateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//DateTime"/>
@@ -714,5 +719,9 @@
       <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//SalesContract"/>
       <eTypeArguments eClassifier="#//DischargeSlot"/>
     </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="FuelChoice">
+    <eLiterals name="NBO_FBO" value="0"/>
+    <eLiterals name="NBO_BUNKERS" value="1"/>
   </eClassifiers>
 </ecore:EPackage>

@@ -146,7 +146,18 @@
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.analytics.CharterOutOpportunity">
   </componentHelper>
-		
+		 <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.PartialCaseRowOptionsComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.PartialCaseRowOptionsComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.PartialCaseRowOptions">
+  </componentHelper>
+   <componentHelper
+         helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.BaseCaseRowOptionsComponentHelper"
+         id="com.mmxlabs.models.lng.analytics.presentation.composites.BaseCaseRowOptionsComponentHelper"
+         inheritable="true"
+         modelClass="com.mmxlabs.models.lng.analytics.BaseCaseRowOptions">
+   </componentHelper>
 	</extension>
  <extension
        point="com.mmxlabs.models.util.import.submodels">
@@ -461,6 +472,18 @@
             eClass="com.mmxlabs.models.lng.analytics.SellOpportunity"
             factory="com.mmxlabs.models.lng.analytics.presentation.displaycomposites.SellOpportunityCompositeFactory"
             id="com.mmxlabs.models.lng.analytics.presentation.displaycomposites.SellOpportunityCompositeFactory"
+            inheritable="true">
+      </displayCompositeFactory>
+      <displayCompositeFactory
+            eClass="com.mmxlabs.models.lng.analytics.PartialCaseRowOptions"
+            factory="com.mmxlabs.models.lng.analytics.presentation.displaycomposites.PartialCaseRowOptionsCompositeFactory"
+            id="com.mmxlabs.models.lng.analytics.presentation.displaycomposites.PartialCaseRowOptionsTopLevelComposite"
+            inheritable="true">
+      </displayCompositeFactory>
+      <displayCompositeFactory
+            eClass="com.mmxlabs.models.lng.analytics.BaseCaseRowOptions"
+            factory="com.mmxlabs.models.lng.analytics.presentation.displaycomposites.BaseCaseRowOptionsCompositeFactory"
+            id="com.mmxlabs.models.lng.analytics.presentation.displaycomposites.BaseCaseRowOptionsCompositeFactory"
             inheritable="true">
       </displayCompositeFactory>
    </extension>

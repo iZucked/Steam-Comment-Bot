@@ -30,7 +30,7 @@ public class StartLocationRemovingSequenceManipulator implements ISequencesManip
 	@Inject
 	private IVesselProvider vesselProvider;
 	
-	private final Set<IResource> resourcesToManipulate = new HashSet<IResource>();
+	private final Set<IResource> resourcesToManipulate = new HashSet<>();
 
 	@Override
 	public void manipulate(final IModifiableSequences sequences) {

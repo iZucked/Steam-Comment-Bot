@@ -16,16 +16,20 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.time.Months;
+import com.mmxlabs.common.util.TriConsumer;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.BaseCaseRowOptions;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
@@ -57,6 +61,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
+import com.mmxlabs.models.lng.cargo.ScheduleSpecificationEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SlotSpecification;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
@@ -64,6 +69,7 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.VesselEventSpecification;
 import com.mmxlabs.models.lng.cargo.VesselScheduleSpecification;
+import com.mmxlabs.models.lng.cargo.VoyageSpecification;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
 import com.mmxlabs.models.lng.cargo.util.scheduling.FakeCargo;
@@ -100,7 +106,9 @@ public class ExistingBaseCaseToScheduleSpecification {
 	}
 
 	/**
-	 * Take the current scenario starting point and generate a {@link ScheduleSpecification} from it applying the cases defined in the {@link BaseCase}.
+	 * Take the current scenario starting point and generate a
+	 * {@link ScheduleSpecification} from it applying the cases defined in the
+	 * {@link BaseCase}.
 	 * 
 	 * @param baseCase
 	 * @return
@@ -111,7 +119,8 @@ public class ExistingBaseCaseToScheduleSpecification {
 
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioDataProvider);
 
-		// Start by creating maps of current slots to cargo allocations and cargoes to vessels of the CargoModel state
+		// Start by creating maps of current slots to cargo allocations and cargoes to
+		// vessels of the CargoModel state
 
 		final Map<Slot<?>, AssignableElement> slotToCargoMap = new HashMap<>();
 		final Collection<LoadSlot> unusedLoads = new LinkedHashSet<>();
@@ -143,6 +152,8 @@ public class ExistingBaseCaseToScheduleSpecification {
 		final Map<AssignableElement, @Nullable CollectedAssignment> cargoToCollectedAssignmentMap = new HashMap<>();
 		final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider);
 
+		Map<EObject, BaseCaseRow> elementToRowMap = new HashMap<>();
+
 		for (final CollectedAssignment seq : assignments) {
 			if (seq.getVesselAvailability() != null) {
 				vaMap.put(seq.getVesselAvailability(), seq);
@@ -168,7 +179,8 @@ public class ExistingBaseCaseToScheduleSpecification {
 			}
 		}
 
-		// Now process the base case and update cargo and vessel allocations. Use a FakeCargo to represent a Cargo (this does not have containment side-effects).
+		// Now process the base case and update cargo and vessel allocations. Use a
+		// FakeCargo to represent a Cargo (this does not have containment side-effects).
 		{
 			// Function to clean up an existing allocation
 			Consumer<Slot<?>> removeExistingAssignment = slot -> {
@@ -192,8 +204,10 @@ public class ExistingBaseCaseToScheduleSpecification {
 
 				if (!AnalyticsBuilder.isNullOrOpen(row.getBuyOption())) {
 					ls = getOrCreate(row.getBuyOption());
+					elementToRowMap.put(ls, row);
 				} else if (!AnalyticsBuilder.isNullOrOpen(row.getSellOption())) {
 					ds = getOrCreate(row.getSellOption());
+					elementToRowMap.put(ds, row);
 				}
 				if (ls != null && ls.getCargo() != null) {
 					orphanedLoadSlots.remove(ls);
@@ -208,6 +222,12 @@ public class ExistingBaseCaseToScheduleSpecification {
 					if (!slot.equals(ls)) {
 						orphanedLoadSlots.add((LoadSlot) slot);
 					}
+				}
+
+				if (row.getVesselEventOption() != null) {
+					EObject ve = getOrCreate(row.getVesselEventOption());
+					elementToRowMap.put(ve, row);
+
 				}
 			}
 
@@ -224,7 +244,9 @@ public class ExistingBaseCaseToScheduleSpecification {
 					} else if (!AnalyticsBuilder.isNullOrOpen(row.getSellOption())) {
 						slot = getOrCreate(row.getSellOption());
 					}
+
 					if (slot != null) {
+						elementToRowMap.put(slot, row);
 						if (slot instanceof LoadSlot) {
 							unusedLoads.add((LoadSlot) slot);
 						} else if (slot instanceof DischargeSlot) {
@@ -252,6 +274,9 @@ public class ExistingBaseCaseToScheduleSpecification {
 						loadSlot = getOrCreate(row.getBuyOption());
 					}
 
+					elementToRowMap.put(loadSlot, row);
+					elementToRowMap.put(dischargeSlot, row);
+
 					unusedLoads.remove(loadSlot);
 					unusedDischarges.remove(dischargeSlot);
 
@@ -272,6 +297,7 @@ public class ExistingBaseCaseToScheduleSpecification {
 							collectedAssignment.getAssignedObjects().remove(assignableElement);
 							cargoToCollectedAssignmentMap.remove(assignableElement);
 						}
+
 					} else {
 
 						DischargeSlot dischargeSlot = null;
@@ -287,6 +313,9 @@ public class ExistingBaseCaseToScheduleSpecification {
 							dischargeSlot = getOrCreate(row.getSellOption());
 							loadSlot = getOrCreate(row.getBuyOption());
 						}
+
+						elementToRowMap.put(loadSlot, row);
+						elementToRowMap.put(dischargeSlot, row);
 
 						unusedLoads.remove(loadSlot);
 						unusedDischarges.remove(dischargeSlot);
@@ -472,6 +501,52 @@ public class ExistingBaseCaseToScheduleSpecification {
 			final BiConsumer<CollectedAssignment, VesselScheduleSpecification> action = (seq, vesselScheduleSpecification) -> {
 				seq.resort(portModel, modelDistanceProvider, null);
 
+				Map<EObject, VoyageSpecification> voyageSpecs = new HashMap<>();
+				Function<EObject, VoyageSpecification> builder = k -> {
+					final VoyageSpecification spec = CargoFactory.eINSTANCE.createVoyageSpecification();
+					vesselScheduleSpecification.getEvents().add(spec);
+					return spec;
+				};
+
+				TriConsumer<EObject, BaseCaseRowOptions, ScheduleSpecificationEvent> applyOptions = (target, options, slotSpec) -> {
+					if (options != null) {
+						if (target instanceof LoadSlot) {
+							if (options.getLadenRoute() != null) {
+								voyageSpecs.computeIfAbsent(target, builder).setRouteOption(options.getLadenRoute());
+							}
+							if (options.getLadenFuelChoice() != null) {
+								voyageSpecs.computeIfAbsent(target, builder).setFuelChoice(options.getLadenFuelChoice());
+							}
+							if (options.getLoadDate() != null) {
+								((SlotSpecification) slotSpec).setArrivalDate(options.getLoadDate());
+							}
+
+						}
+						if (target instanceof DischargeSlot) {
+							if (options.getBallastRoute() != null) {
+								voyageSpecs.computeIfAbsent(target, builder).setRouteOption(options.getBallastRoute());
+							}
+							if (options.getBallastFuelChoice() != null) {
+								voyageSpecs.computeIfAbsent(target, builder).setFuelChoice(options.getBallastFuelChoice());
+							}
+							if (options.getDischargeDate() != null && slotSpec instanceof SlotSpecification) {
+								((SlotSpecification) slotSpec).setArrivalDate(options.getDischargeDate());
+							}
+						}
+						if (target instanceof VesselEvent) {
+							if (options.getBallastRoute() != null) {
+								voyageSpecs.computeIfAbsent(target, builder).setRouteOption(options.getLadenRoute());
+							}
+							if (options.getBallastFuelChoice() != null) {
+								voyageSpecs.computeIfAbsent(target, builder).setFuelChoice(options.getLadenFuelChoice());
+							}
+							if (options.getLoadDate() != null) {
+								((VesselEventSpecification) slotSpec).setArrivalDate(options.getLoadDate());
+							}
+						}
+					}
+				};
+
 				for (final AssignableElement assignedObject : seq.getAssignedObjects()) {
 					if (assignedObject instanceof Cargo) {
 						final Cargo cargo = (Cargo) assignedObject;
@@ -483,6 +558,12 @@ public class ExistingBaseCaseToScheduleSpecification {
 							eventSpecification.setSlot(slot);
 							vesselScheduleSpecification.getEvents().add(eventSpecification);
 							seenSlots.add(slot);
+
+							if (elementToRowMap.containsKey(slot)) {
+								BaseCaseRow row = elementToRowMap.get(slot);
+								applyOptions.accept(slot, row.getOptions(), eventSpecification);
+							}
+
 						}
 						seenCargoes.add(cargo);
 
@@ -495,7 +576,13 @@ public class ExistingBaseCaseToScheduleSpecification {
 							eventSpecification.setSlot(slot);
 							vesselScheduleSpecification.getEvents().add(eventSpecification);
 							seenSlots.add(slot);
+
+							if (elementToRowMap.containsKey(slot)) {
+								BaseCaseRow row = elementToRowMap.get(slot);
+								applyOptions.accept(slot, row.getOptions(), eventSpecification);
+							}
 						}
+
 						seenCargoes.add(cargo);
 
 					} else if (assignedObject instanceof VesselEvent) {
@@ -505,6 +592,11 @@ public class ExistingBaseCaseToScheduleSpecification {
 						vesselScheduleSpecification.getEvents().add(eventSpecification);
 
 						seenEvents.add(vesselEvent);
+
+						if (elementToRowMap.containsKey(vesselEvent)) {
+							BaseCaseRow row = elementToRowMap.get(vesselEvent);
+							applyOptions.accept(vesselEvent, row.getOptions(), eventSpecification);
+						}
 					} else {
 						assert false;
 					}
@@ -572,6 +664,19 @@ public class ExistingBaseCaseToScheduleSpecification {
 							assert !seenSlots.contains(slot);
 							final SlotSpecification eventSpecification = CargoFactory.eINSTANCE.createSlotSpecification();
 							eventSpecification.setSlot(slot);
+
+							BaseCaseRow row = elementToRowMap.get(slot);
+							if (row != null) {
+								final BaseCaseRowOptions options = row.getOptions();
+								if (options != null) {
+									if (slot instanceof LoadSlot && options.isSetLoadDate()) {
+										eventSpecification.setArrivalDate(options.getLoadDate());
+									} else if (slot instanceof DischargeSlot && options.isSetDischargeDate()) {
+										eventSpecification.setArrivalDate(options.getDischargeDate());
+									}
+								}
+							}
+
 							nonShipedCargoSpecification.getSlotSpecifications().add(eventSpecification);
 							seenSlots.add(slot);
 						}
@@ -611,6 +716,19 @@ public class ExistingBaseCaseToScheduleSpecification {
 						if (slot instanceof DischargeSlot) {
 							nonShipped |= ((DischargeSlot) slot).isFOBSale();
 						}
+
+						BaseCaseRow row = elementToRowMap.get(slot);
+						if (row != null) {
+							final BaseCaseRowOptions options = row.getOptions();
+							if (options != null) {
+								if (slot instanceof LoadSlot && options.isSetLoadDate()) {
+									eventSpecification.setArrivalDate(options.getLoadDate());
+								} else if (slot instanceof DischargeSlot && options.isSetDischargeDate()) {
+									eventSpecification.setArrivalDate(options.getDischargeDate());
+								}
+							}
+						}
+
 					}
 					if (!nonShipped) {
 						// Sanity check!

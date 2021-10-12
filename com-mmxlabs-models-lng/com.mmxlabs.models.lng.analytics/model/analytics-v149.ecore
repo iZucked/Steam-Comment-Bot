@@ -134,6 +134,23 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEventOption" eType="#//VesselEventOption"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="shipping" eType="#//ShippingOption"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="optionise" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>    
+    <eStructuralFeatures xsi:type="ecore:EReference" name="options" eType="#//BaseCaseRowOptions"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="freeze" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BaseCaseRowOptions">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ladenRoute" eType="ecore:EEnum ../../com.mmxlabs.models.lng.port/model/port.ecore#//RouteOption"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ballastRoute" eType="ecore:EEnum ../../com.mmxlabs.models.lng.port/model/port.ecore#//RouteOption"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ladenFuelChoice" eType="ecore:EEnum ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//FuelChoice"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ballastFuelChoice" eType="ecore:EEnum ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//FuelChoice"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="loadDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dischargeDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"
+        unsettable="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PartialCaseRow">
     <eStructuralFeatures xsi:type="ecore:EReference" name="buyOptions" upperBound="-1"
@@ -144,6 +161,22 @@
         eType="#//VesselEventOption"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="shipping" upperBound="-1"
         eType="#//ShippingOption"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="options" eType="#//PartialCaseRowOptions"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PartialCaseRowOptions">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ladenRoutes" upperBound="-1"
+        eType="ecore:EEnum ../../com.mmxlabs.models.lng.port/model/port.ecore#//RouteOption"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ballastRoutes" upperBound="-1"
+        eType="ecore:EEnum ../../com.mmxlabs.models.lng.port/model/port.ecore#//RouteOption"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ladenFuelChoices" upperBound="-1"
+        eType="ecore:EEnum ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//FuelChoice"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ballastFuelChoices" upperBound="-1"
+        eType="ecore:EEnum ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//FuelChoice"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loadDates" upperBound="-1"
+        eType="#//LocalDateTimeHolder" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeDates" upperBound="-1"
+        eType="#//LocalDateTimeHolder" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ShippingOption"/>
   <eClassifiers xsi:type="ecore:EClass" name="SimpleVesselCharterOption" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//ShippingOption">
@@ -484,5 +517,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="price" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="eta" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="referencePrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LocalDateTimeHolder">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"/>
   </eClassifiers>
 </ecore:EPackage>

@@ -598,6 +598,16 @@
           </EDataTypeIs>
        </FeatureAnyOf>
     </editorFactory>
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.cargo.ui.inlineeditors.FuelChoiceInlineEditorFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.inlineeditors.FuelChoiceInlineEditorFactory">
+       <FeatureAnyOf>
+          <EDataTypeIs
+                EDataTypeName="FuelChoice"
+                EDataTypeURI="http://www.mmxlabs.com/models/lng/cargo/1/">
+          </EDataTypeIs>
+       </FeatureAnyOf>
+    </editorFactory>
  </extension>
  <extension
        point="com.mmxlabs.models.common.modelcommandprovider">

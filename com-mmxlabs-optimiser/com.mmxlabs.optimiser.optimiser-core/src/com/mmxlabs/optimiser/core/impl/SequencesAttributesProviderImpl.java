@@ -12,6 +12,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.base.Objects;
+import com.google.common.hash.HashCode;
 import com.mmxlabs.optimiser.core.ISequencesAttributesProvider;
 
 /**

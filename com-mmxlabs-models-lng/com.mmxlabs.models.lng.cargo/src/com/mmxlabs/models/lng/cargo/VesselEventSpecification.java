@@ -6,6 +6,8 @@
  */
 package com.mmxlabs.models.lng.cargo;
 
+import java.time.LocalDateTime;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -17,6 +19,7 @@ package com.mmxlabs.models.lng.cargo;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselEventSpecification#getVesselEvent <em>Vessel Event</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.VesselEventSpecification#getArrivalDate <em>Arrival Date</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselEventSpecification()
@@ -49,5 +52,27 @@ public interface VesselEventSpecification extends ScheduleSpecificationEvent {
 	 * @generated
 	 */
 	void setVesselEvent(VesselEvent value);
+
+	/**
+	 * Returns the value of the '<em><b>Arrival Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Arrival Date</em>' attribute.
+	 * @see #setArrivalDate(LocalDateTime)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselEventSpecification_ArrivalDate()
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDateTime"
+	 * @generated
+	 */
+	LocalDateTime getArrivalDate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselEventSpecification#getArrivalDate <em>Arrival Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Arrival Date</em>' attribute.
+	 * @see #getArrivalDate()
+	 * @generated
+	 */
+	void setArrivalDate(LocalDateTime value);
 
 } // VesselEventSpecification

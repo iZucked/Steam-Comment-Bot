@@ -1072,7 +1072,10 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					getDefaultCommandHandler().handleCommand(SetCommand.create(getEditingDomain(), m, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__MODE, mode), m,
 							AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__MODE);
 					refreshSections(true, EnumSet.of(SectionType.MIDDLE));
+				} else {
+					baseCaseComponent.setMode(-1);
 				}
+
 			}
 		});
 
@@ -1094,6 +1097,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				}
 				baseCaseComponent.setMode(mode);
 				refreshSections(true, EnumSet.of(SectionType.MIDDLE));
+			} else {
+				baseCaseComponent.setMode(-1);
 			}
 		});
 

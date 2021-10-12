@@ -240,7 +240,7 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 
 			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 
-				final IPortTimesRecord record = portTimesRecordMaker.makeDESOrFOBPortTimesRecord(resource, sequence);
+				final IPortTimesRecord record = portTimesRecordMaker.makeDESOrFOBPortTimesRecord(resource, sequence, fullSequences.getProviders());
 				if (record != null) {
 					portTimeRecords.put(resource, Lists.newArrayList(record));
 				}
@@ -300,9 +300,9 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 		}
 
 		if (!(isADPScenario || isLongTermScenario) && usePNLBasedWindowTrimming && pnlBasedWindowTrimmerProvider != null) {
-			pnlBasedWindowTrimmerProvider.trimWindows(resource, list, minTimeData);
+			pnlBasedWindowTrimmerProvider.trimWindows(resource, list, minTimeData, sequencesAttributesProvider);
 		} else if (usePriceBasedWindowTrimming && priceBasedWindowTrimmerProvider != null) {
-			priceBasedWindowTrimmerProvider.trimWindows(resource, list, minTimeData);
+			priceBasedWindowTrimmerProvider.trimWindows(resource, list, minTimeData, sequencesAttributesProvider);
 		}
 
 		return new Pair<>(list, minTimeData);

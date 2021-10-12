@@ -93,12 +93,31 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BaseCaseRow/vesselEventOption"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//BaseCaseRow/shipping"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BaseCaseRow/optionise"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//BaseCaseRow/options"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BaseCaseRow/freeze"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//BaseCaseRowOptions">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BaseCaseRowOptions/ladenRoute"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BaseCaseRowOptions/ballastRoute"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BaseCaseRowOptions/ladenFuelChoice"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BaseCaseRowOptions/ballastFuelChoice"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BaseCaseRowOptions/loadDate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BaseCaseRowOptions/dischargeDate"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//PartialCaseRow">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//PartialCaseRow/buyOptions"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//PartialCaseRow/sellOptions"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//PartialCaseRow/vesselEventOptions"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//PartialCaseRow/shipping"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//PartialCaseRow/options"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//PartialCaseRowOptions">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//PartialCaseRowOptions/ladenRoutes"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//PartialCaseRowOptions/ballastRoutes"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//PartialCaseRowOptions/ladenFuelChoices"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//PartialCaseRowOptions/ballastFuelChoices"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//PartialCaseRowOptions/loadDates"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//PartialCaseRowOptions/dischargeDates"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//ShippingOption"/>
     <genClasses ecoreClass="analytics.ecore#//SimpleVesselCharterOption">
@@ -165,7 +184,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//ExistingCharterMarketOption/charterInMarket"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//ExistingCharterMarketOption/spotIndex"/>
     </genClasses>
-    <genClasses ecoreClass="analytics.ecore#//AbstractSolutionSet">
+    <genClasses image="false" ecoreClass="analytics.ecore#//AbstractSolutionSet">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//AbstractSolutionSet/hasDualModeSolutions"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//AbstractSolutionSet/portfolioBreakEvenMode"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//AbstractSolutionSet/userSettings"/>
@@ -278,7 +297,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MTMResult/earliestETA"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MTMResult/earliestVolume"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MTMResult/earliestPrice"/>
-      <genFeatures createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference analytics.ecore#//MTMResult/shipping"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference analytics.ecore#//MTMResult/shipping"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//MTMResult/shippingCost"/>
     </genClasses>
     <genClasses ecoreClass="analytics.ecore#//MTMRow">
@@ -315,6 +334,9 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BreakEvenAnalysisResult/price"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BreakEvenAnalysisResult/eta"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//BreakEvenAnalysisResult/referencePrice"/>
+    </genClasses>
+    <genClasses ecoreClass="analytics.ecore#//LocalDateTimeHolder">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute analytics.ecore#//LocalDateTimeHolder/dateTime"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

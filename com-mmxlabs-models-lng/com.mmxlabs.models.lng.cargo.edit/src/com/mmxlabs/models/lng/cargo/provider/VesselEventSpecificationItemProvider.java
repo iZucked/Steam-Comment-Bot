@@ -9,6 +9,8 @@ package com.mmxlabs.models.lng.cargo.provider;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 
+import com.mmxlabs.models.lng.cargo.VesselEventSpecification;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -17,6 +19,8 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.cargo.VesselEventSpecification} object.
@@ -47,6 +51,7 @@ public class VesselEventSpecificationItemProvider extends ScheduleSpecificationE
 			super.getPropertyDescriptors(object);
 
 			addVesselEventPropertyDescriptor(object);
+			addArrivalDatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -74,6 +79,28 @@ public class VesselEventSpecificationItemProvider extends ScheduleSpecificationE
 	}
 
 	/**
+	 * This adds a property descriptor for the Arrival Date feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addArrivalDatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselEventSpecification_arrivalDate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselEventSpecification_arrivalDate_feature", "_UI_VesselEventSpecification_type"),
+				 CargoPackage.Literals.VESSEL_EVENT_SPECIFICATION__ARRIVAL_DATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns VesselEventSpecification.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -92,7 +119,11 @@ public class VesselEventSpecificationItemProvider extends ScheduleSpecificationE
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_VesselEventSpecification_type");
+		LocalDateTime labelValue = ((VesselEventSpecification)object).getArrivalDate();
+		String label = labelValue == null ? null : labelValue.toString();
+		return label == null || label.length() == 0 ?
+			getString("_UI_VesselEventSpecification_type") :
+			getString("_UI_VesselEventSpecification_type") + " " + label;
 	}
 	
 
@@ -106,6 +137,12 @@ public class VesselEventSpecificationItemProvider extends ScheduleSpecificationE
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(VesselEventSpecification.class)) {
+			case CargoPackage.VESSEL_EVENT_SPECIFICATION__ARRIVAL_DATE:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 
