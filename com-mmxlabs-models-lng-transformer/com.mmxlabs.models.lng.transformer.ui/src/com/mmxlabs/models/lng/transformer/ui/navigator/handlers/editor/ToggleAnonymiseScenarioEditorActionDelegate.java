@@ -31,6 +31,7 @@ import org.eclipse.ui.actions.ActionDelegate;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -55,6 +56,9 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate implements IEditorActionDelegate {
+
+	private static final boolean CLEAR_NOTES = false;
+
 	protected IEditorPart targetEditor;
 	protected IAction action;
 	protected LNGScenarioModel currentModel;
@@ -201,15 +205,22 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 					renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, s, s.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, SellID, AnonymisationRecordType.SellID)));
 					usedSlots.add(s);
 				}
+
 			}
 		}
 		for (final Slot<?> s : cargoModel.getLoadSlots()) {
+			if (CLEAR_NOTES) {
+				renameCommand.append(SetCommand.create(editingDomain, s, CargoPackage.Literals.SLOT__NOTES, SetCommand.UNSET_VALUE));
+			}
 			if (!(usedSlots.contains(s))) {
 				renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, s, s.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, BuyID, AnonymisationRecordType.BuyID)));
 				usedSlots.add(s);
 			}
 		}
 		for (final Slot<?> s : cargoModel.getDischargeSlots()) {
+			if (CLEAR_NOTES) {
+				renameCommand.append(SetCommand.create(editingDomain, s, CargoPackage.Literals.SLOT__NOTES, SetCommand.UNSET_VALUE));
+			}
 			if (!(usedSlots.contains(s))) {
 				renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, s, s.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, SellID, AnonymisationRecordType.SellID)));
 				usedSlots.add(s);
