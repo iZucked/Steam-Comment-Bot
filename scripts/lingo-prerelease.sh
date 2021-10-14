@@ -58,10 +58,10 @@ git commit -a -m "Update headers"
 ## Set release version number
 for repo in com*/; do
 	pushd $repo
-	mvn -Dtycho.mode=maven -DnewVersion=$RELEASE_VERSION org.eclipse.tycho:tycho-versions-plugin:0.18.0:set-version
+	mvn -Dtycho.mode=maven -DnewVersion=$RELEASE_VERSION org.eclipse.tycho:tycho-versions-plugin::2.4.0:set-version
 	popd
 done
-mvn -Dtycho.mode=maven -DnewVersion=$RELEASE_VERSION org.eclipse.tycho:tycho-versions-plugin:0.18.0:set-version
+mvn -Dtycho.mode=maven -DnewVersion=$RELEASE_VERSION org.eclipse.tycho:tycho-versions-plugin::2.4.0:set-version
 git commit -a -m "Bump version to $RELEASE_VERSION in prep for release"
 
 SHORTVERSION=`echo $RELEASE_VERSION | sed -e "s/.RELEASE//"`
