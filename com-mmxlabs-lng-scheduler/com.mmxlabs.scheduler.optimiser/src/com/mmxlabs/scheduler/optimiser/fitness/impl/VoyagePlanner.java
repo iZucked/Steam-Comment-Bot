@@ -40,7 +40,6 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.impl.MaintenanceVesselEventPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.VesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
@@ -669,9 +668,9 @@ public class VoyagePlanner implements IVoyagePlanner {
 			// (sequences are broken on loads).
 			final Pair<@NonNull VoyagePlan, @NonNull IAllocationAnnotation> p = beIter.next();
 			// Since only the first voyage plan can involve a cargo, all remaining break even evaluations should be null
-			while (beIter.hasNext()) {
-				assert beIter.next() == null;
-			}
+			beIter.forEachRemaining(pair -> {
+				assert pair == null;
+			});
 			beVoyagePlanPtrPair = p;
 		} else {
 			beVoyagePlanPtrPair = null;
