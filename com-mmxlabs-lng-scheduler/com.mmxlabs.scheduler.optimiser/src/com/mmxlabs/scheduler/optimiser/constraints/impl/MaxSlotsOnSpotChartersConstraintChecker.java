@@ -61,7 +61,8 @@ public class MaxSlotsOnSpotChartersConstraintChecker implements IConstraintCheck
 				}
 			}
 			if (spots > MAX_SPOT_COUNT) {
-				messages.add(String.format("%s: More than one cargo on the round trip charter vessel %s.", this.name, vesselAvailability.getVessel().getName()));
+				if (messages != null)
+					messages.add(String.format("%s: More than one cargo on the round trip charter vessel %s.", this.name, vesselAvailability.getVessel().getName()));
 				return false;
 			}
 		}

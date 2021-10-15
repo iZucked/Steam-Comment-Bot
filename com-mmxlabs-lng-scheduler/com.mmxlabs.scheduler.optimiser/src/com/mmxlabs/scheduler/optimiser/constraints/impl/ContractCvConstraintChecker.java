@@ -53,7 +53,7 @@ public class ContractCvConstraintChecker extends AbstractPairwiseConstraintCheck
 
 			final int cv = loadSlot.getCargoCVValue();
 			final boolean result = (dischargeSlot.getMinCvValue() <= cv && dischargeSlot.getMaxCvValue() >= cv);
-			if (!result) {
+			if (!result && messages != null) {
 				messages.add(explain(first, second, resource));
 			}
 

@@ -71,8 +71,13 @@ public abstract class AbstractLSOMover {
 		final IModifiableSequences potentialFullSequences = new ModifiableSequences(initialRawSequences);
 		sequencesManipulator.manipulate(potentialFullSequences);
 
-		final List<String> messages = new ArrayList<>();
-		messages.add(String.format("%s: initSearchProcesses", this.getClass().getName()));
+		final List<@Nullable String> messages;
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
+			messages = new ArrayList<>();
+			messages.add(String.format("%s: initSearchProcesses", this.getClass().getName()));
+		} else {
+			messages = null;
+		}
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
 			if (!checker.checkConstraints(potentialFullSequences, null, messages)) {

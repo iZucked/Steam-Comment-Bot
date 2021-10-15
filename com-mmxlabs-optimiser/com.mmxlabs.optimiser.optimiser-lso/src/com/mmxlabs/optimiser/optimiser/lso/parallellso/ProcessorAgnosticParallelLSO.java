@@ -12,6 +12,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,8 +103,13 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 		// Apply sequence manipulators
 		final IModifiableSequences potentialFullSequences = getSequenceManipulator().createManipulatedSequences(currentRawSequences);
 
-		final List<String> messages = new ArrayList<>();
-		messages.add(String.format("%s: start", this.getClass().getName()));
+		final List<@Nullable String> messages;
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
+			messages = new ArrayList<>();
+			messages.add(String.format("%s: start", this.getClass().getName()));
+		} else {
+			messages = null;
+		}
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : getConstraintCheckers()) {
 			if (!checker.checkConstraints(potentialFullSequences, null, messages)) {

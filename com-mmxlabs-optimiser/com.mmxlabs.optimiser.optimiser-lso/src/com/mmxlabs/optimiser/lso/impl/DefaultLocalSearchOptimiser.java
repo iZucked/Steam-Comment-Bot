@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -116,8 +117,13 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		// Apply sequence manipulators
 		final IModifiableSequences potentialFullSequences = getSequenceManipulator().createManipulatedSequences(lCurrentRawSequences);
 
-		final List<String> messages = new ArrayList<>();
-		messages.add(String.format("%s: start", this.getClass().getName()));
+		final List<@Nullable String> messages;
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
+			messages = new ArrayList<>();
+			messages.add(String.format("%s: start", this.getClass().getName()));
+		} else {
+			messages = null;
+		}
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : getConstraintCheckers()) {
 			if (!checker.checkConstraints(potentialFullSequences, null, messages)) {
@@ -319,8 +325,13 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 	protected boolean applyHardConstraints(final @NonNull IModifiableSequences pinnedPotentialRawSequences, final @NonNull ISequences pinnedCurrentRawSequences, final IMove move,
 			final @NonNull ISequences potentialFullSequences) {
-		final List<String> messages = new ArrayList<>();
-		messages.add(String.format("%s: applyHardConstraints", this.getClass().getName()));
+		final List<@Nullable String> messages;
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
+			messages = new ArrayList<>();
+			messages.add(String.format("%s: apllyHardConstraints", this.getClass().getName()));
+		} else {
+			messages = null;
+		}
 		for (final IConstraintChecker checker : getConstraintCheckers()) {
 			// For constraint checker changed resources functions, if initial solution is invalid, we want to always perform a full constraint checker set of checks until we accept a valid
 			// solution

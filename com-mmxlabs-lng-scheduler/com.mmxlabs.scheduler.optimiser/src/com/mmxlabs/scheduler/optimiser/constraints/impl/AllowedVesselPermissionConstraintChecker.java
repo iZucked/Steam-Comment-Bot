@@ -70,7 +70,7 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @NonNull final List<@NonNull String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
 		final Collection<@NonNull IResource> loopResources;
 		if (changedResources == null) {
 			loopResources = sequences.getResources();
@@ -90,7 +90,7 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 			}
 		}
 
-		if (valid) {
+		if (valid && messages != null) {
 			messages.add(String.format("%s : all sequences satisfied the constraint!", this.name));
 		}
 		return valid;
@@ -102,7 +102,7 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 	}
 
 	@Override
-	public boolean checkElement(final @NonNull ISequenceElement element, final @NonNull IResource resource, final @NonNull List<@NonNull String> messages) {
+	public boolean checkElement(final @NonNull ISequenceElement element, final @NonNull IResource resource, final List<String> messages) {
 		// Skip these element types
 		if (portTypeProvider.getPortType(element) == PortType.Start) {
 			return true;
@@ -129,14 +129,15 @@ public class AllowedVesselPermissionConstraintChecker implements IPairwiseConstr
 					|| type == PortType.Maintenance //
 					|| type == PortType.CharterOut //
 			) {
-				messages.add(String.format("%s : Vessel %s is a spot charter and should not have %s in the schedule!", this.name, vessel != null ? vessel.getName() : "unknown vessel", type.toString()));
+				if (messages != null)
+					messages.add(String.format("%s : Vessel %s is a spot charter and should not have %s in the schedule!", this.name, vessel != null ? vessel.getName() : "unknown vessel", type.toString()));
 				return false;
 			}
 		} else if (vesselAvailability.getVesselInstanceType().isNonShipped()) {
 			vessel = nominatedVesselProvider.getNominatedVessel(resource);
 		}
 		final boolean result = allowedVesselProvider.isPermittedOnVessel(portSlot, vessel);
-		if (!result) {
+		if (!result && messages != null) {
 			messages.add(String.format("%s: Slot %s is not allowed on vessel %s!", this.name, portSlot.getId(), vessel != null ? vessel.getName() : "unknown vessel"));
 		}
 		return result;

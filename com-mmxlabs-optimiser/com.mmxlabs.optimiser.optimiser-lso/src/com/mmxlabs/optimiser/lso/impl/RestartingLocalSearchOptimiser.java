@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,8 +51,13 @@ public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser 
 	protected int step(final int percentage, @NonNull final ModifiableSequences pinnedPotentialRawSequences, @NonNull final ModifiableSequences pinnedCurrentRawSequences, JobExecutor jobExecutor) {
 
 		final int iterationsThisStep = Math.min(Math.max(1, (getNumberOfIterations() * percentage) / 100), getNumberOfIterations() - getNumberOfIterationsCompleted());
-		final List<String> messages = new ArrayList<>();
-		messages.add(String.format("%s: step", this.getClass().getName()));
+		final List<@Nullable String> messages;
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
+			messages = new ArrayList<>();
+			messages.add(String.format("%s: step", this.getClass().getName()));
+		} else {
+			messages = null;
+		}
 		MAIN_LOOP: for (int i = 0; i < iterationsThisStep; i++) {
 			stepIteration();
 			setNumberOfMovesTried(getNumberOfMovesTried() + 1);

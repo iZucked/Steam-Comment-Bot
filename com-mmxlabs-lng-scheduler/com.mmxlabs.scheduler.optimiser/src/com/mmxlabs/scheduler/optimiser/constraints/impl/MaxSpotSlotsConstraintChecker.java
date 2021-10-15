@@ -52,7 +52,8 @@ public class MaxSpotSlotsConstraintChecker implements IConstraintChecker {
 			}
 		}
 		if (spots > MAX_SPOT_COUNT) {
-			messages.add(String.format("%s: It seems that there are spot loads wired to spot discharges. Spot count %d.", this.name, spots));
+			if (messages != null)
+				messages.add(String.format("%s: It seems that there are spot loads wired to spot discharges. Spot count %d.", this.name, spots));
 			return false;
 		} else {
 			return true;
