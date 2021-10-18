@@ -118,6 +118,8 @@ public final class KnownFeatures {
 
 	public static final String FEATURE_ADP_PROFILE_CONSTRAINTS_SUMMARY = "features:adp-profile-constraints-summary";
 
+	public static final String FEATURE_ADP_SPACING_RATEABILITY = "features:adp-spacing-rateability";
+
 	/**
 	 * Scenario repair features
 	 */

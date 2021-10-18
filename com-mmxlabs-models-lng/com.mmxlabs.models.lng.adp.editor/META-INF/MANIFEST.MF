@@ -56,7 +56,8 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.optimiser.optimiser-core,
  org.eclipse.core.expressions,
  org.slf4j.api;bundle-version="1.7.10",
- org.eclipse.emf.ecore
+ org.eclipse.emf.ecore,
+ com.mmxlabs.models.lng.adp.rateability.spacing;bundle-version="0.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Module: com.mmxlabs.models.lng.adp.editor.internal.ADPActivatorModule
 Import-Package: com.google.ortools.linearsolver

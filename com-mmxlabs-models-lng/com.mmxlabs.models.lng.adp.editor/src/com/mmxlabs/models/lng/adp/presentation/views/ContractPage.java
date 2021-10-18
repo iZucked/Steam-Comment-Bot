@@ -4,8 +4,7 @@
  */
 package com.mmxlabs.models.lng.adp.presentation.views;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -44,6 +43,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.resource.ResourceLocator;
@@ -107,6 +107,10 @@ import com.mmxlabs.models.lng.adp.mull.MUDContainer;
 import com.mmxlabs.models.lng.adp.mull.MULLContainer;
 import com.mmxlabs.models.lng.adp.mull.RollingLoadWindow;
 import com.mmxlabs.models.lng.adp.mull.SalesContractTracker;
+import com.mmxlabs.models.lng.adp.rateability.export.FeasibleSolverResult;
+import com.mmxlabs.models.lng.adp.rateability.export.Infeasible;
+import com.mmxlabs.models.lng.adp.rateability.export.SpacingRateabilitySolverResult;
+import com.mmxlabs.models.lng.adp.rateability.spacing.CPBasedSolver;
 import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -269,6 +273,39 @@ public class ContractPage extends ADPComposite {
 						updateDetailPaneInput(input);
 					}
 				});
+			}
+			{
+				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP_SPACING_RATEABILITY)) {
+					cpSolveButton = new Button(toolbarComposite, SWT.PUSH);
+					cpSolveButton.setText("Run rateability solver");
+					cpSolveButton.setEnabled(true);
+					cpSolveButton.addSelectionListener(new SelectionAdapter() {
+						@Override
+						public void widgetSelected(final SelectionEvent e) {
+							final CPBasedSolver cpBasedSolver = new CPBasedSolver();
+							try {
+								final SpacingRateabilitySolverResult result = cpBasedSolver.runCpSolver(editorData.scenarioModel, editorData.getEditingDomain(), editorData.getScenarioDataProvider());
+								if (result instanceof FeasibleSolverResult) {
+									final FeasibleSolverResult feasibleResult = (FeasibleSolverResult) result;
+									final CompoundCommand modelPopulationCommand = (CompoundCommand) feasibleResult.getModelPopulationCommand();
+									if (!modelPopulationCommand.isEmpty()) {
+										editorData.getDefaultCommandHandler().handleCommand(modelPopulationCommand);
+									}
+								} else {
+									final String message;
+									if (result instanceof Infeasible) {
+										message = "Rateability model is infeasible";
+									} else {
+										message = "Rateability solver could not find a solution";
+									}
+									MessageDialog.openInformation(getShell(), "No solution found", message);
+								}
+							} catch (IOException ioException) {
+								
+							}
+						}
+					});
+				}
 			}
 		}
 
@@ -2516,6 +2553,8 @@ public class ContractPage extends ADPComposite {
 	};
 
 	private Button generateButton;
+
+	private Button cpSolveButton;
 
 	private Group previewGroup;
 
