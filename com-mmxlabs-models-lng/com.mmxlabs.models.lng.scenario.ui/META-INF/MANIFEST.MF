@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.lng.scenario.ui;singleton:=true
-Bundle-Version: 4.13.1.RELEASE
+Bundle-Version: 4.13.2.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
@@ -23,23 +23,23 @@ Export-Package: com.mmxlabs.models.lng.scenario,
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.eclipse.ui.ide;bundle-version="3.7.0",
  org.eclipse.emf.edit.ui;bundle-version="2.7.0",
- com.mmxlabs.models.lng.scenario.model;bundle-version="[4.13.1,5.0.0)",
- com.mmxlabs.models.lng.cargo.editor;bundle-version="[4.13.1,5.0.0)",
- com.mmxlabs.models.ui;bundle-version="[4.13.1,5.0.0)",
- com.mmxlabs.models.util;bundle-version="[4.13.1,5.0.0)",
- com.mmxlabs.scenario.service.manifest;bundle-version="[4.13.1,5.0.0)",
- com.mmxlabs.scenario.service.model;bundle-version="[4.13.1,5.0.0)",
- com.mmxlabs.scenario.service.ui;bundle-version="[4.13.1,5.0.0)",
- com.mmxlabs.models.migration;bundle-version="[4.13.1,5.0.0)",
- com.mmxlabs.common.common-util;bundle-version="[4.13.1,5.0.0)",
- com.mmxlabs.models.common;bundle-version="[4.13.1,5.0.0)",
- com.mmxlabs.models.lng.ui;bundle-version="[4.13.1,5.0.0)",
- com.mmxlabs.rcp.common;bundle-version="[4.13.1,5.0.0)",
+ com.mmxlabs.models.lng.scenario.model;bundle-version="[4.13.2,5.0.0)",
+ com.mmxlabs.models.lng.cargo.editor;bundle-version="[4.13.2,5.0.0)",
+ com.mmxlabs.models.ui;bundle-version="[4.13.2,5.0.0)",
+ com.mmxlabs.models.util;bundle-version="[4.13.2,5.0.0)",
+ com.mmxlabs.scenario.service.manifest;bundle-version="[4.13.2,5.0.0)",
+ com.mmxlabs.scenario.service.model;bundle-version="[4.13.2,5.0.0)",
+ com.mmxlabs.scenario.service.ui;bundle-version="[4.13.2,5.0.0)",
+ com.mmxlabs.models.migration;bundle-version="[4.13.2,5.0.0)",
+ com.mmxlabs.common.common-util;bundle-version="[4.13.2,5.0.0)",
+ com.mmxlabs.models.common;bundle-version="[4.13.2,5.0.0)",
+ com.mmxlabs.models.lng.ui;bundle-version="[4.13.2,5.0.0)",
+ com.mmxlabs.rcp.common;bundle-version="[4.13.2,5.0.0)",
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
- com.mmxlabs.models.lng.pricing.editor;bundle-version="[4.13.1,5.0.0)",
- com.mmxlabs.models.lng.migration;bundle-version="[4.13.1,5.0.0)",
+ com.mmxlabs.models.lng.pricing.editor;bundle-version="[4.13.2,5.0.0)",
+ com.mmxlabs.models.lng.migration;bundle-version="[4.13.2,5.0.0)",
  com.google.guava,
- com.mmxlabs.license.features;bundle-version="4.13.1",
+ com.mmxlabs.license.features;bundle-version="4.13.2",
  com.mmxlabs.models.lng.nominations,
  com.mmxlabs.models.lng.nominations.editor,
  com.fasterxml.jackson.core.jackson-databind,
