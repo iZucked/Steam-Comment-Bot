@@ -34,4 +34,30 @@
          </run>
       </application>
    </extension>
+   <extension
+         id="com.mmxlabs.lingo.app.headless.HeadlessOptimiserOneshotApplication"
+         name="Headless oneshot optimiser"
+         point="org.eclipse.core.runtime.applications">
+      <application
+            cardinality="singleton-global"
+            thread="main"
+            visible="true">
+         <run
+               class="com.mmxlabs.lingo.app.headless.HeadlessOptimiserOneshotApplication">
+         </run>
+      </application>
+   </extension>
+   <extension
+         id="com.mmxlabs.lingo.app.headless.HeadlessOptioniserOneshotApplication"
+         name="Oneshot Optioniser"
+         point="org.eclipse.core.runtime.applications">
+      <application
+            cardinality="singleton-global"
+            thread="main"
+            visible="true">
+         <run
+               class="com.mmxlabs.lingo.app.headless.HeadlessOptioniserOneshotApplication">
+         </run>
+      </application>
+   </extension>
 </plugin>

@@ -75,7 +75,7 @@ public class HeadlessUtils {
 	}
 
 	/**
-	 * Logs the user in and initialises the application for their use.
+	 * Initialises the application custom features
 	 */
 	public static void initAccessControl() {
 		// Initialise feature enablements

@@ -132,7 +132,9 @@ public class HeadlessOptioniserRunner {
 				});
 
 		// Override iterations
-		insertionRunner.setIteration(options.iterations);
+		if (options.iterations > 0) {
+			insertionRunner.setIteration(options.iterations);
+		}
 
 		final IMultiStateResult results = insertionRunner.runInsertion(logger, new NullProgressMonitor());
 		// Includes starting solution, so take off one.

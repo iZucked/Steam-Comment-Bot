@@ -93,6 +93,8 @@ public abstract class HeadlessGenericApplication implements IApplication {
 	protected static final String NUM_RUNS = "numRuns";
 	protected static final String CUSTOM_INFO = "custom";
 	protected static final String USE_CASE = "useCase";
+	protected static final String PARAMS_FILE = "params";
+
 
 	protected String clientCode;
 	protected String machineInfo;
