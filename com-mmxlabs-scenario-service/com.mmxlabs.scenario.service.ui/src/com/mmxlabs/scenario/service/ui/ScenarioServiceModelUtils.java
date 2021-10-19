@@ -146,7 +146,7 @@ public final class ScenarioServiceModelUtils {
 		final String namePrefix = (withinContainer ? "Copy of " : "") + currentName;
 		final String newName = ScenarioServiceUtils.getNextName(namePrefix, existingNames);
 
-		final ScenarioModelRecord record = SSDataManager.Instance.getModelRecord(scenario);
+		final ScenarioModelRecord record = SSDataManager.Instance.getModelRecordChecked(scenario);
 
 		final IScenarioService destinationScenarioService = SSDataManager.Instance.findScenarioService(destination);
 

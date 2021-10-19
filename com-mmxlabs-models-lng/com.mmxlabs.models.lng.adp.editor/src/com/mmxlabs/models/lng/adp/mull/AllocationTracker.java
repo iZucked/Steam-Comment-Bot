@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.adp.mull;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.Set;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.adp.MullAllocationRow;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -39,7 +41,10 @@ public abstract class AllocationTracker {
 	protected final List<Vessel> vesselList;
 	protected boolean sharesVessels;
 	protected final int aacq;
+	protected int monthlyAllocation = 0;
 	protected int currentAllocatedAACQ = 0;
+	protected int currentMonthLifted = 0;
+	protected Map<YearMonth, Integer> monthlyAllocations = null;
 
 	protected AllocationTracker(final MullAllocationRow row, final double totalWeight) {
 		this.aacq = row.getWeight();
@@ -47,6 +52,10 @@ public abstract class AllocationTracker {
 		// this.relativeEntitlement = this.aacq / totalWeight;
 		final double averageVesselSize = row.getVessels().stream().mapToInt(Vessel::getVesselOrDelegateCapacity).sum() / ((double) row.getVessels().size());
 		this.relativeEntitlement = this.aacq * averageVesselSize / totalWeight;
+	}
+
+	public void setMonthlyAllocations(final Map<YearMonth, Integer> monthlyAllocations) {
+		this.monthlyAllocations = monthlyAllocations;
 	}
 
 	public void setAllocatedAacq(final int currentAllocatedAACQ) {
@@ -69,6 +78,11 @@ public abstract class AllocationTracker {
 		this.runningAllocation -= allocationDrop;
 	}
 
+	public void harmonisationPhaseDropAllocation(final long allocationDrop) {
+		dropAllocation(allocationDrop);
+		++this.currentMonthLifted;
+	}
+
 	public void phase1DropAllocation(final long allocationDrop) {
 		dropAllocation(allocationDrop);
 	}
@@ -81,13 +95,33 @@ public abstract class AllocationTracker {
 		dropAllocation(allocationDrop);
 	}
 
-	public int calculateExpectedAllocationDrop(final Map<Vessel, LocalDateTime> vesselToMostRecentUseDateTime, final int defaultAllocationDrop, final int loadDuration,
-			final Set<Vessel> firstPartyVessels) {
+	public int calculateExpectedAllocationDrop(final Map<Vessel, LocalDateTime> vesselToMostRecentUseDateTime, final Map<Vessel, LocalDateTime> vesselToNextForwardUseTime,
+			final int defaultAllocationDrop, final int loadDuration, final Set<Vessel> firstPartyVessels, final LocalDateTime currentDateTime) {
 		if (vesselList.isEmpty()) {
 			return defaultAllocationDrop;
 		}
 		final Vessel expectedVessel = this.vesselList.stream() //
-				.min((v1, v2) -> vesselToMostRecentUseDateTime.get(v1).compareTo(vesselToMostRecentUseDateTime.get(v2))) //
+				.max((v1, v2) -> {
+					final LocalDateTime lookahead1 = vesselToNextForwardUseTime.get(v1);
+					final LocalDateTime lookahead2 = vesselToNextForwardUseTime.get(v2);
+					final LocalDateTime lookback1 = vesselToMostRecentUseDateTime.get(v1);
+					final LocalDateTime lookback2 = vesselToMostRecentUseDateTime.get(v2);
+					// Get minimum difference in hours
+					final int hoursDiff1;
+					final int hoursDiff2;
+					if (lookahead1 != null) {
+						hoursDiff1 = Math.min(Hours.between(lookback1, currentDateTime), Hours.between(currentDateTime, lookahead1));
+					} else {
+						hoursDiff1 = Hours.between(lookback1, currentDateTime);
+					}
+					if (lookahead2 != null) {
+						hoursDiff2 = Math.min(Hours.between(lookback2, currentDateTime), Hours.between(currentDateTime, lookahead2));
+					} else {
+						hoursDiff2 = Hours.between(lookback2, currentDateTime);
+					}
+					// Compare hour differences - largest is vessel furthest from being used
+					return Integer.compare(hoursDiff1, hoursDiff2);
+				}) //
 				.get();
 		return calculateExpectedAllocationDrop(expectedVessel, loadDuration, firstPartyVessels.contains(expectedVessel));
 	}
@@ -128,6 +162,10 @@ public abstract class AllocationTracker {
 	}
 
 	public void phase2Undo(final CargoBlueprint cargoBlueprint) {
+		undo(cargoBlueprint);
+	}
+
+	public void harmonisationPhaseUndo(final CargoBlueprint cargoBlueprint) {
 		undo(cargoBlueprint);
 	}
 
@@ -182,4 +220,7 @@ public abstract class AllocationTracker {
 		return this.aacq == currentAllocatedAACQ;
 	}
 
+	public abstract boolean satisfiedMonthlyAllocation();
+
+	public abstract void updateCurrentMonthAllocations(final YearMonth nextMonth);
 }

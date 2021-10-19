@@ -63,7 +63,6 @@ public class ScenarioServiceSaveHook {
 					final EObject eObj = itr.next();
 					if (eObj instanceof ScenarioInstance) {
 						final ScenarioInstance scenarioInstance = (ScenarioInstance) eObj;
-						@NonNull
 						final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 						if (modelRecord != null) {
 							try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("ScenarioServiceSaveHook:1")) {
@@ -204,13 +203,15 @@ public class ScenarioServiceSaveHook {
 						for (final Object instance : scenariosToSave) {
 							final ScenarioInstance scenario = (ScenarioInstance) instance;
 							monitor.setTaskName("Saving: " + scenario.getName());
-							final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenario);
-							try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("ScenarioServiceSaveHook:2")) {
-								if (ref != null) {
-									try {
-										ref.save();
-									} finally {
-										ref.close();
+							final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenario);
+							if (modelRecord != null) {
+								try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("ScenarioServiceSaveHook:2")) {
+									if (ref != null) {
+										try {
+											ref.save();
+										} finally {
+											ref.close();
+										}
 									}
 								}
 							}
@@ -224,7 +225,7 @@ public class ScenarioServiceSaveHook {
 							if (ignoredInstance != null) {
 								final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(ignoredInstance);
 								try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("ScenarioServiceSaveHook:3")) {
-//									 ref.setDirty(false);
+									// ref.setDirty(false);
 								}
 							}
 						}

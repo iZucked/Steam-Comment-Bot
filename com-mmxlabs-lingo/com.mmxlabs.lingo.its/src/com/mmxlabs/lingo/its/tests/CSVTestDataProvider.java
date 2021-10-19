@@ -14,7 +14,7 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.util.CheckedConsumer;
-import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
+import com.mmxlabs.models.lng.transformer.its.scenario.ITSCSVImporter;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class CSVTestDataProvider implements ITestDataProvider {
@@ -40,7 +40,7 @@ public class CSVTestDataProvider implements ITestDataProvider {
 
 	@Override
 	public <E extends Exception> void execute(final CheckedConsumer<@NonNull IScenarioDataProvider, E> testRunner) throws E, MalformedURLException {
-		final @NonNull IScenarioDataProvider scenarioDataProvider = CSVImporter.importCSVScenario(scenarioURL.toString());
+		final @NonNull IScenarioDataProvider scenarioDataProvider = new ITSCSVImporter().importCSVScenario(scenarioURL.toString());
 		testRunner.accept(scenarioDataProvider);
 	}
 }

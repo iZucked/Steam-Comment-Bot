@@ -12,9 +12,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
-import com.mmxlabs.common.concurrent.NamedExecutorService;
-import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
+import com.mmxlabs.common.concurrent.JobExecutorFactory;
+import com.mmxlabs.common.concurrent.DefaultJobExecutorFactory;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
@@ -48,14 +47,14 @@ public class LNGScenarioChainBuilder {
 	 * @param dataTransformer
 	 * @param scenarioToOptimiserBridge
 	 * @param optimiserSettings
-	 * @param executorService           Optional (for now)
-	 *                                  {@link CleanableExecutorService} for
+	 * @param jobExecutorFactory           Optional (for now)
+	 *                                  {@link ExecutorFactory} for
 	 *                                  parallelisation
 	 * @param initialHints
 	 * @return
 	 */
 	public static @NonNull IChainRunner createStandardOptimisationChain(@NonNull final String resultName, @NonNull final LNGDataTransformer dataTransformer,
-			@NonNull final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, @NonNull final OptimisationPlan optimisationPlan, @NonNull final CleanableExecutorService executorService,
+			@NonNull final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, @NonNull final OptimisationPlan optimisationPlan, @NonNull final JobExecutorFactory jobExecutorFactory,
 			boolean includeDefaultExport, @NonNull final String @Nullable... initialHints) {
 		boolean createOptimiser = false;
 
@@ -93,10 +92,10 @@ public class LNGScenarioChainBuilder {
 						final ParallelOptimisationStage<? extends OptimisationStage> parallelOptimisationStage = (ParallelOptimisationStage<? extends OptimisationStage>) stage;
 						final OptimisationStage template = parallelOptimisationStage.getTemplate();
 						assert template != null;
-						callback = LNGScenarioChainUnitFactory.chainUp(builder, scenarioToOptimiserBridge, executorService, template, parallelOptimisationStage.getJobCount(), userSettings);
+						callback = LNGScenarioChainUnitFactory.chainUp(builder, scenarioToOptimiserBridge, jobExecutorFactory, template, parallelOptimisationStage.getJobCount(), userSettings);
 
 					} else {
-						callback = LNGScenarioChainUnitFactory.chainUp(builder, scenarioToOptimiserBridge, executorService, stage, 1, userSettings);
+						callback = LNGScenarioChainUnitFactory.chainUp(builder, scenarioToOptimiserBridge, jobExecutorFactory, stage, 1, userSettings);
 					}
 					if (callback != null) {
 						exportCallback = callback;
@@ -130,14 +129,14 @@ public class LNGScenarioChainBuilder {
 	}
 
 	@NonNull
-	public static CleanableExecutorService createExecutorService() {
+	public static JobExecutorFactory createExecutorService() {
 		final int cores = getNumberOfAvailableCores();
 		return createExecutorService(cores);
 	}
 
 	@NonNull
-	public static CleanableExecutorService createExecutorService(final int nThreads) {
-		return new SimpleCleanableExecutorService(NamedExecutorService.createFixedPool(nThreads), nThreads);
+	public static JobExecutorFactory createExecutorService(final int nThreads) {
+		return new DefaultJobExecutorFactory(nThreads);
 	}
 
 	public static int getNumberOfAvailableCores() {

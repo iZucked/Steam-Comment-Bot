@@ -38,7 +38,7 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 public class CargoBlueprint {
 	private final int loadCounter;
 	private final Vessel assignedVessel;
-	private final LocalDateTime windowStart;
+	private LocalDateTime windowStart;
 	private int windowSizeHours;
 	private final Inventory inventory;
 	private final PurchaseContract inventoryPurchaseContract;
@@ -48,7 +48,8 @@ public class CargoBlueprint {
 	private final int volumeHigh;
 	private final int volumeLow;
 
-	public CargoBlueprint(final Inventory inventory, final PurchaseContract purchaseContract, final int loadCounter, final Vessel assignedVessel, final LocalDateTime windowStart, final int windowSizeHours, final AllocationTracker allocationTracker, final int allocatedVolume, final BaseLegalEntity entity, final int volumeHigh, final int volumeLow) {
+	public CargoBlueprint(final Inventory inventory, final PurchaseContract purchaseContract, final int loadCounter, final Vessel assignedVessel, final LocalDateTime windowStart,
+			final int windowSizeHours, final AllocationTracker allocationTracker, final int allocatedVolume, final BaseLegalEntity entity, final int volumeHigh, final int volumeLow) {
 		this.inventory = inventory;
 		this.inventoryPurchaseContract = purchaseContract;
 		this.loadCounter = loadCounter;
@@ -58,14 +59,15 @@ public class CargoBlueprint {
 		this.entity = entity;
 		final LocalDateTime endWindowDateTime = windowStart.plusHours(windowSizeHours);
 		final LocalDateTime lastDateTimeOfMonth = LocalDateTime.of(YearMonth.from(windowStart).atEndOfMonth(), LocalTime.of(23, 00));
-		this.windowSizeHours = lastDateTimeOfMonth.isBefore(endWindowDateTime) ? Hours.between(windowStart,lastDateTimeOfMonth) : windowSizeHours;
+		this.windowSizeHours = lastDateTimeOfMonth.isBefore(endWindowDateTime) ? Hours.between(windowStart, lastDateTimeOfMonth) : windowSizeHours;
 		this.dischargeAllocation = allocationTracker;
 		this.volumeHigh = volumeHigh;
 		this.volumeLow = volumeLow;
 	}
 
 	public CargoBlueprint getPostHarmonisationReplacement(final AllocationTracker replacementAllocationTracker, final BaseLegalEntity replacementEntity) {
-		return new CargoBlueprint(this.inventory, this.inventoryPurchaseContract, this.loadCounter, this.assignedVessel, this.windowStart, this.windowSizeHours, replacementAllocationTracker, this.allocatedVolume, replacementEntity, this.volumeHigh, this.volumeLow);
+		return new CargoBlueprint(this.inventory, this.inventoryPurchaseContract, this.loadCounter, this.assignedVessel, this.windowStart, this.windowSizeHours, replacementAllocationTracker,
+				this.allocatedVolume, replacementEntity, this.volumeHigh, this.volumeLow);
 	}
 
 	public void updateWindowSize(final int newWindowSizeHours) {
@@ -74,11 +76,21 @@ public class CargoBlueprint {
 		}
 	}
 
+	public void setWindowStart(LocalDateTime newWindowStart) {
+		this.windowStart = newWindowStart;
+	}
+
 	public LocalDateTime getWindowStart() {
 		return this.windowStart;
 	}
 
-	public void constructCargoModelPopulationCommands(final LNGScenarioModel sm, final CargoModel cargoModel, final CargoEditingCommands cec, @NonNull final EditingDomain editingDomain, final int volumeFlex, final IScenarioDataProvider sdp, final Map<Vessel, VesselAvailability> vesselToVA, final CharterInMarket adpNominalMarket, final CompoundCommand compoundCommand, final Set<Vessel> firstPartyVessels) {
+	public PurchaseContract getPurchaseContract() {
+		return this.inventoryPurchaseContract;
+	}
+
+	public void constructCargoModelPopulationCommands(final LNGScenarioModel sm, final CargoModel cargoModel, final CargoEditingCommands cec, @NonNull final EditingDomain editingDomain,
+			final int volumeFlex, final IScenarioDataProvider sdp, final Map<Vessel, VesselAvailability> vesselToVA, final CharterInMarket adpNominalMarket, final CompoundCommand compoundCommand,
+			final Set<Vessel> firstPartyVessels) {
 		final List<Command> commands = new LinkedList<>();
 
 		final LoadSlot loadSlot = this.createLoadSlot(cec, commands, cargoModel, volumeFlex);
@@ -143,5 +155,4 @@ public class CargoBlueprint {
 		return this.loadCounter;
 	}
 
-	
 }

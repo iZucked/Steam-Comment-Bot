@@ -64,46 +64,46 @@ public class RowHeaderRenderer extends AbstractRenderer {
 		gc.fillRectangle(getBounds().x, getBounds().y, getBounds().width, getBounds().height + 1);
 
 		if (!item.getParent().getCellSelectionEnabled()) {
-//			if (isSelected()) {
-//				gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Foreground));
-//			} else {
-				gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Background));
-//			}
+			// if (isSelected()) {
+			// gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Foreground));
+			// } else {
+			gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Background));
+			// }
 
 			if (TableColourPalette.getInstance().SANDBOX_WHITER_THEME) {
 				gc.drawLine(getBounds().x, getBounds().y - 1, getBounds().x + getBounds().width, getBounds().y - 1);
 				gc.drawLine(getBounds().x, getBounds().y - 1, getBounds().x, getBounds().y + getBounds().height);
 			}
-			
+
 			if (!isSelected()) {
-//				gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Foreground));
-//				gc.drawLine(getBounds().x + 1, getBounds().y + 1, getBounds().x + getBounds().width - 2, getBounds().y + 1);
-//				gc.drawLine(getBounds().x + 1, getBounds().y + 1, getBounds().x + 1, getBounds().y + getBounds().height - 2);
+				// gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Foreground));
+				// gc.drawLine(getBounds().x + 1, getBounds().y + 1, getBounds().x + getBounds().width - 2, getBounds().y + 1);
+				// gc.drawLine(getBounds().x + 1, getBounds().y + 1, getBounds().x + 1, getBounds().y + getBounds().height - 2);
 			}
 
-//			if (isSelected()) {
-//				gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Foreground));
-//			} else {
-//				gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Foreground));
-//			}
+			// if (isSelected()) {
+			// gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Foreground));
+			// } else {
+			// gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Foreground));
+			// }
 			if (!TableColourPalette.getInstance().SANDBOX_WHITER_THEME) {
 				gc.drawLine(getBounds().x + getBounds().width - 1, getBounds().y, getBounds().x + getBounds().width - 1, getBounds().y + getBounds().height - 1);
 				gc.drawLine(getBounds().x, getBounds().y + getBounds().height - 1, getBounds().x + getBounds().width - 1, getBounds().y + getBounds().height - 1);
 			}
 
-//			if (!isSelected()) {
-//				gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Foreground));
-//				gc.drawLine(getBounds().x + getBounds().width - 2, getBounds().y + 1, getBounds().x + getBounds().width - 2, getBounds().y + getBounds().height - 2);
-//				gc.drawLine(getBounds().x + 1, getBounds().y + getBounds().height - 2, getBounds().x + getBounds().width - 2, getBounds().y + getBounds().height - 2);
-//			}
+			// if (!isSelected()) {
+			// gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Foreground));
+			// gc.drawLine(getBounds().x + getBounds().width - 2, getBounds().y + 1, getBounds().x + getBounds().width - 2, getBounds().y + getBounds().height - 2);
+			// gc.drawLine(getBounds().x + 1, getBounds().y + getBounds().height - 2, getBounds().x + getBounds().width - 2, getBounds().y + getBounds().height - 2);
+			// }
 		} else {
 			if (!TableColourPalette.getInstance().SANDBOX_WHITER_THEME) {
 				gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.LineBorders, ColourElements.Foreground));
 			}
-		
-//
-//			gc.drawLine(getBounds().x + getBounds().width - 1, getBounds().y, getBounds().x + getBounds().width - 1, getBounds().y + getBounds().height - 1);
-//			gc.drawLine(getBounds().x, getBounds().y + getBounds().height - 1, getBounds().x + getBounds().width - 1, getBounds().y + getBounds().height - 1);
+
+			//
+			// gc.drawLine(getBounds().x + getBounds().width - 1, getBounds().y, getBounds().x + getBounds().width - 1, getBounds().y + getBounds().height - 1);
+			// gc.drawLine(getBounds().x, getBounds().y + getBounds().height - 1, getBounds().x + getBounds().width - 1, getBounds().y + getBounds().height - 1);
 		}
 
 		int x = leftMargin;
@@ -139,7 +139,7 @@ public class RowHeaderRenderer extends AbstractRenderer {
 
 		if (!item.getParent().isWordWrapHeader()) {
 			y += (getBounds().height - gc.stringExtent(text).y) / 2;
-			gc.drawString(TextUtils.getShortString(gc, text, width), getBounds().x + x + selectionOffset, y + selectionOffset, true);
+			gc.drawString(TextUtils.getShortStr(gc, text, width, SWT.RIGHT), getBounds().x + x + selectionOffset, y + selectionOffset, true);
 		} else {
 			getTextLayout(gc, item);
 			textLayout.setWidth(width < 1 ? 1 : width);

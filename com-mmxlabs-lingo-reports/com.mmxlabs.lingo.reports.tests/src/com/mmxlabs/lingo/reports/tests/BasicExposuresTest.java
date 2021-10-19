@@ -39,8 +39,6 @@ import com.mmxlabs.common.exposures.ExposuresLookupData;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.time.Hours;
-import com.mmxlabs.license.features.KnownFeatures;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve;
 import com.mmxlabs.models.lng.pricing.BunkerFuelCurve;
 import com.mmxlabs.models.lng.pricing.CharterCurve;
@@ -76,12 +74,13 @@ public class BasicExposuresTest {
 	private static final int pricingDay = 4;
 
 	private static final double defaultVolumeInMMBTU = 3_000_000.0;
-
+	private static final double bbl_to_mmBtu = 0.180136;
+	
 	public static Collection generateTests() {
 		return Arrays.asList(new Object[][] { //
 				{ "HH", "HH", "HH", single(calcExpected("HH", 5.0, 1.0)), indicesOf(makeHH()) }, //
 
-				{ "10%Brent", "10%Brent", "Brent", single(new ExpectedResult("Brent", defaultVolumeInMMBTU * 0.1, defaultVolumeInMMBTU * 0.1 * 90.0)), indicesOf(makeBrent()) }, //
+				{ "10%Brent", "10%Brent", "Brent", single(new ExpectedResult("Brent", defaultVolumeInMMBTU * 0.1 * bbl_to_mmBtu, defaultVolumeInMMBTU * 0.1 * 90 * bbl_to_mmBtu)), indicesOf(makeBrent()) }, //
 
 				{ "A + 1", "A + 1", "HH", single(calcExpected("A", 5.0, 1.0)), indicesOf(makeHH(), makeIndex("A", "$", "mmBtu", YearMonth.of(2000, 1), 5)) }, //
 
@@ -225,7 +224,7 @@ public class BasicExposuresTest {
 						indicesOf(//
 								makeHH(), makeBrent()) }, //
 				{ "SplitMonth Exposure 2", "SPLITMONTH(HH, Brent, 2)", "HH", single(//
-						calcExpected("Brent", YearMonth.of(2016, 4), 90, 1.0, LocalDate.of(2016, 4, 4)) //
+						calcExpected("Brent", YearMonth.of(2016, 4), 90, 1.0 * bbl_to_mmBtu, LocalDate.of(2016, 4, 4)) //
 				), //
 						indicesOf(//
 								makeHH(), makeBrent()) }, //
@@ -365,7 +364,7 @@ public class BasicExposuresTest {
 		}
 
 		makeConversionFactor("therm", "mmbtu", 10, pricingModel);
-		makeConversionFactor("bbl", "mmbtu", 0.180136, pricingModel);
+		makeConversionFactor("bbl", "mmbtu", bbl_to_mmBtu, pricingModel);
 		makeConversionFactor("mwh", "mmbtu", 0.293297, pricingModel);
 
 		makeFXCurve("p", "USD", 1.3 / 100.0, pricingModel);
@@ -765,6 +764,7 @@ public class BasicExposuresTest {
 						
 						bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMPUTE_EXPOSURES)).toInstance(Boolean.TRUE);
 						bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.EXPOSURES_CUTOFF_AT_PROMPT_START)).toInstance(Boolean.TRUE);
+						bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.INDIVIDUAL_EXPOSURES)).toInstance(Boolean.FALSE);
 					}
 					
 					@Provides

@@ -39,7 +39,7 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.IntegerIntervalCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScope;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
@@ -68,8 +68,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllo
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.MinMaxUnconstrainedVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.IBoilOffHelper;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.utils.InPortBoilOffHelper;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.DefaultEndEventScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.IEndEventScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.providers.IExternalDateProvider;
@@ -101,6 +99,8 @@ public class LNGTransformerModule extends AbstractModule {
 
 	private final boolean withSpotCargoMarkets;
 
+	private final boolean hintEvaluationMode;
+	
 	private final boolean hintEnableCache;
 	private final boolean portfolioBreakEven;
 
@@ -136,6 +136,7 @@ public class LNGTransformerModule extends AbstractModule {
 		this.withNoNominalsInPrompt = hints.contains(LNGTransformerHelper.HINT_NO_NOMINALS_IN_PROMPT);
 		this.withCharterLength = hints.contains(LNGTransformerHelper.HINT_CHARTER_LENGTH);
 		this.withFlatCurve = hints.contains(LNGTransformerHelper.HINT_GENERATED_PAPERS_PNL);
+		this.hintEvaluationMode = hints.contains(LNGTransformerHelper.HINT_EVALUATION_ONLY);
 		assert scenario != null;
 		// Temporary check to make sure the UI is correctly configured.
 		assert scenario.isLongTerm() == (userSettings.getMode() == OptimisationMode.LONG_TERM);
@@ -155,6 +156,7 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_PORTFOLIO_BREAKEVEN)).toInstance(portfolioBreakEven);
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_SPOT_CARGO_MARKETS)).toInstance(withSpotCargoMarkets);
 		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_NO_NOMINALS_IN_PROMPT)).toInstance(withNoNominalsInPrompt);
+		bind(boolean.class).annotatedWith(Names.named(LNGTransformerHelper.HINT_EVALUATION_ONLY)).toInstance(hintEvaluationMode);
 		bind(int.class).annotatedWith(Names.named(SchedulerConstants.CONCURRENCY_LEVEL)).toInstance(concurrencyLevel);
 
 		// Default binding - no limit
@@ -227,9 +229,6 @@ public class LNGTransformerModule extends AbstractModule {
 		// Register default implementations
 		bind(IProfitAndLossCacheKeyDependencyLinker.class).to(NullCacheKeyDependencyLinker.class);
 
-		bind(boolean.class).annotatedWith(Names.named(IEndEventScheduler.ENABLE_HIRE_COST_ONLY_END_RULE)).toInstance(Boolean.TRUE);
-		bind(IEndEventScheduler.class).to(DefaultEndEventScheduler.class);
-
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.COMMERCIAL_VOLUME_OVERCAPACITY)).toInstance(Boolean.FALSE);
 		bind(IVolumeAllocator.class).to(MinMaxUnconstrainedVolumeAllocator.class);
 
@@ -276,7 +275,7 @@ public class LNGTransformerModule extends AbstractModule {
 	}
 
 	@Provides
-	@PerChainUnitScope
+	@ThreadLocalScope
 	private IPriceIntervalProducer providePriceIntervalProducer(final PriceIntervalProducer delegate, @NonNull final Injector injector) {
 		final CachingPriceIntervalProducer cachingPriceIntervalProducer = new CachingPriceIntervalProducer(delegate);
 		injector.injectMembers(cachingPriceIntervalProducer);
@@ -284,7 +283,7 @@ public class LNGTransformerModule extends AbstractModule {
 	}
 
 	@Provides
-	@PerChainUnitScope
+	@ThreadLocalScope
 	private ITimeWindowSchedulingCanalDistanceProvider provideTimeWindowSchedulingCanalDistanceProvider(@NonNull final Injector injector) {
 		final TimeWindowSchedulingCanalDistanceProvider delegate = new TimeWindowSchedulingCanalDistanceProvider();
 		injector.injectMembers(delegate);

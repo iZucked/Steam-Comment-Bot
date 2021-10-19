@@ -8,6 +8,7 @@ import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridCellRenderer;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 
@@ -20,6 +21,15 @@ import com.mmxlabs.models.ui.tabular.TableColourPalette;
  * @since 2.0.0
  */
 public class EmptyCellRenderer extends GridCellRenderer {
+	private boolean checkFocus;
+
+	public EmptyCellRenderer(boolean checkFocus) {
+		this.checkFocus = checkFocus;
+	}
+
+	public EmptyCellRenderer() {
+		this(true);
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -40,8 +50,15 @@ public class EmptyCellRenderer extends GridCellRenderer {
 		boolean drawBackground = true;
 
 		if (isSelected()) {
-			gc.setBackground(getDisplay().getSystemColor(SWT.COLOR_LIST_SELECTION));
-			gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_LIST_SELECTION_TEXT));
+
+			boolean hasFocus = !checkFocus || table.isFocusOnGrid();
+			Color backgroundColor = hasFocus ? getDisplay().getSystemColor(SWT.COLOR_LIST_SELECTION) : getDisplay().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW);
+			Color foregroundColor = hasFocus ? getDisplay().getSystemColor(SWT.COLOR_LIST_SELECTION_TEXT) : getDisplay().getSystemColor(SWT.COLOR_BLACK);
+			gc.setBackground(backgroundColor);
+			gc.setForeground(foregroundColor);
+
+//			gc.setBackground(getDisplay().getSystemColor(SWT.COLOR_LIST_SELECTION));
+//			gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_LIST_SELECTION_TEXT));
 		} else {
 			if (table.isEnabled()) {
 				drawBackground = false;

@@ -12,17 +12,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Composite;
 
 import com.google.inject.Inject;
-import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.IReportContentsGenerator;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
-import com.mmxlabs.lingo.reports.ReportContents;
+import com.mmxlabs.lingo.reports.ReportContentsGenerators;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
+import com.mmxlabs.lingo.reports.services.ReentrantSelectionManager;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
@@ -37,7 +41,6 @@ import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
 import com.mmxlabs.rcp.common.ViewerHelper;
-import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
 import com.mmxlabs.scenario.service.ScenarioResult;
 
 /**
@@ -65,17 +68,19 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 	private List<Object> elements;
 
 	@Inject
-	private ScenarioComparisonService selectedScenariosService;
+	private ScenarioComparisonService scenarioComparisonService;
+
+	protected ReentrantSelectionManager selectionManager;
 
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
-@Override
-public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
- 
+		@Override
+		public synchronized void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
+
 			ViewerHelper.setInput(viewer, block, () -> {
-				
+
 				ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
-				
+
 				elements.clear();
 				elementCollector.beginCollecting(pinned != null);
 				if (pinned != null) {
@@ -88,6 +93,11 @@ public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedD
 				setCurrentSelectedDataProvider(new TransformedSelectedDataProvider(selectedDataProvider));
 				return elements;
 			});
+		}
+
+		@Override
+		public void selectedObjectChanged(@Nullable MPart source, @NonNull ISelection selection) {
+			selectionManager.setSelection(selection, false, true);
 		}
 	};
 
@@ -209,7 +219,7 @@ public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedD
 		clearInputEquivalents();
 		for (final Object event : result) {
 			if (event instanceof SlotVisit) {
-				setInputEquivalents(event, Arrays.asList(new Object[] { ((SlotVisit) event).getSlotAllocation().getCargoAllocation() }));
+				setInputEquivalents(event, Arrays.asList(new Object[] { ((SlotVisit) event).getSlotAllocation().getSlot() }));
 			} else if (event instanceof VesselEventVisit) {
 				setInputEquivalents(event, Arrays.asList(new Object[] { ((VesselEventVisit) event).getVesselEvent() }));
 			} else {
@@ -277,7 +287,7 @@ public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedD
 
 	@Override
 	public void initPartControl(final Composite parent) {
-		elements = new LinkedList<Object>();
+		elements = new LinkedList<>();
 		transformer = new PortRotationsReportTransformer(builder);
 		elementCollector = transformer.getElementCollector(elements, this);
 
@@ -291,7 +301,7 @@ public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedD
 				final List<ColumnHandler> handlers = block.getColumnHandlers();
 				for (final ColumnHandler handler : handlers) {
 					if (handler.column != null) {
-						sortingSupport.sortColumnsBy(handler.column.getColumn());
+						sortingSupport.sortColumnsBy(handler.column.getColumn(), false);
 					}
 				}
 			}
@@ -299,50 +309,45 @@ public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedD
 		viewer.setContentProvider(new ArrayContentProvider());
 		ViewerHelper.setInput(viewer, true, elements);
 
-		selectedScenariosService.addListener(selectedScenariosServiceListener);
-
-		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
-	}
-
-	@Override
-	public void dispose() {
-		selectedScenariosService.removeListener(selectedScenariosServiceListener);
-		super.dispose();
+		selectionManager = new ReentrantSelectionManager(viewer, selectedScenariosServiceListener, scenarioComparisonService);
+		try {
+			scenarioComparisonService.triggerListener(selectedScenariosServiceListener, false);
+		} catch (Exception e) {
+			// Ignore any initial issues.
+		}
+		selectionManager.addListener(this);
 	}
 
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
 
-		if (IReportContents.class.isAssignableFrom(adapter)) {
+		if (IReportContentsGenerator.class.isAssignableFrom(adapter)) {
+
 			// Set a more repeatable sort order
-			{
-				final ColumnBlock[] initialReverseSortOrder = { getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.startdate"),
-						getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.vessel"),
-						getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.schedule") };
+			final ColumnBlock[] initialReverseSortOrder = { getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.startdate"),
+					getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.vessel"),
+					getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.schedule") };
 
-				if (includeAllColumnsForITS) {
-					// Sort columns by ID
-					List<String> blockIDOrder = new ArrayList<>(getBlockManager().getBlockIDOrder());
-					Collections.sort(blockIDOrder);
-					getBlockManager().setBlockIDOrder(blockIDOrder);
-				}
+			if (includeAllColumnsForITS) {
+				// Sort columns by ID
+				List<String> blockIDOrder = new ArrayList<>(getBlockManager().getBlockIDOrder());
+				Collections.sort(blockIDOrder);
+				getBlockManager().setBlockIDOrder(blockIDOrder);
+			}
 
-				// go through in reverse order as latest is set to primary sort
-				for (final ColumnBlock block : initialReverseSortOrder) {
-					if (block != null) {
-						final List<ColumnHandler> handlers = block.getColumnHandlers();
-						for (final ColumnHandler handler : handlers) {
-							if (handler.column != null) {
-								sortingSupport.sortColumnsBy(handler.column.getColumn());
-							}
+			// go through in reverse order as latest is set to primary sort
+			for (final ColumnBlock block : initialReverseSortOrder) {
+				if (block != null) {
+					final List<ColumnHandler> handlers = block.getColumnHandlers();
+					for (final ColumnHandler handler : handlers) {
+						if (handler.column != null) {
+							sortingSupport.sortColumnsBy(handler.column.getColumn(), false);
 						}
 					}
 				}
 			}
 
-			final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), true);
-			final String jsonContents = jsonUtil.convert();
-			return adapter.cast(ReportContents.makeJSON(jsonContents));
+			return adapter.cast(ReportContentsGenerators.createJSONFor(selectedScenariosServiceListener, viewer.getGrid()));
 		}
 		return super.getAdapter(adapter);
 	}

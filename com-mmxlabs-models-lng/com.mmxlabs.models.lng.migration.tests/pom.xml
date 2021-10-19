@@ -4,11 +4,11 @@
 	<parent>
 		<artifactId>com.mmxlabs.models.lng.parent</artifactId>
 		<groupId>com.mmxlabs.models.lng</groupId>
-		<version>4.12.31-SNAPSHOT</version>
+		<version>4.13.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.models.lng.migration.tests</artifactId>
-	<version>4.12.31-SNAPSHOT</version>
+	<version>4.13.1-SNAPSHOT</version>
 	<packaging>eclipse-test-plugin</packaging>
 	
 	<properties>
@@ -53,7 +53,7 @@
 					<!-- Automatically start these bundles at specified run level. These contain the services required for test execution -->
 					<bundleStartLevel>
 						<bundle>
-							<id>org.eclipse.equinox.ds</id>
+							<id>org.apache.felix.scr</id>
 							<level>1</level>
 							<autoStart>true</autoStart>
 						</bundle>

@@ -98,6 +98,23 @@ public class EObjectTableViewerSortingSupport {
 		}
 		tColumn.setSort(isSortDescending() ? SWT.UP : SWT.DOWN);
 	}
+	
+	public void sortColumnsBy(final GridColumn tColumn, boolean descending) {
+		// Sort order changed - clear fixed ordering
+		fixedSortOrder = null;
+		if (getColumnSortOrder().isEmpty()) {
+			return;
+		}
+		if (getColumnSortOrder().get(0) == tColumn) {
+			setSortDescending(descending);
+		} else {
+			setSortDescending(descending);
+			getColumnSortOrder().get(0).setSort(SWT.NONE);
+			getColumnSortOrder().remove(tColumn);
+			getColumnSortOrder().add(0, tColumn);
+		}
+		tColumn.setSort(isSortDescending() ? SWT.UP : SWT.DOWN);
+	}
 
 	/**
 	 * Set a predefined sort order to override current column sort order. This will be overridden if the column sort order changes.

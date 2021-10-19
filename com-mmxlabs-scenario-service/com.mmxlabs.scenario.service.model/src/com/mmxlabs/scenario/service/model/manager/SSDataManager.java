@@ -16,6 +16,7 @@ import java.util.function.BiConsumer;
 
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -141,7 +142,16 @@ public class SSDataManager {
 		lookup.remove(instance);
 	}
 
-	public @NonNull ScenarioModelRecord getModelRecord(@NonNull final ScenarioInstance instance) {
+	public @NonNull ScenarioModelRecord getModelRecordChecked(@NonNull final ScenarioInstance instance) {
+
+		final ScenarioModelRecord modelRecord = getModelRecord(instance);
+		if (modelRecord != null) {
+			return modelRecord;
+		}
+		throw new NullPointerException();
+	}
+
+	public @Nullable ScenarioModelRecord getModelRecord(@NonNull final ScenarioInstance instance) {
 		// final boolean[] runPostLoadHook = new boolean[1];
 		final ScenarioModelRecord modelRecord = lookup.get(instance);
 

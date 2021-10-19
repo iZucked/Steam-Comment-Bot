@@ -28,6 +28,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
+
 /**
  * Helper class for common images colours etc in the Sandbox.
  * 
@@ -51,6 +55,7 @@ public class SandboxUIHelper {
 	public final Image imgShippingFleet;
 	public final Image imgModel;
 
+	public final Image image_add;
 	public final Image image_grey_add;
 
 	public final Font normalFont;
@@ -92,7 +97,8 @@ public class SandboxUIHelper {
 		this.largeFont = images.createFont(FontDescriptor.createFrom(systemFont).increaseHeight(2));
 		this.boldFont = images.createFont(FontDescriptor.createFrom(systemFont).setStyle(SWT.BOLD));
 
-		final ImageDescriptor baseAdd = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD);
+		final ImageDescriptor baseAdd = CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled);
+		image_add = images.createImage(baseAdd);  
 		image_grey_add = images.createImage(ImageDescriptor.createWithFlags(baseAdd, SWT.IMAGE_GRAY));
 	}
 

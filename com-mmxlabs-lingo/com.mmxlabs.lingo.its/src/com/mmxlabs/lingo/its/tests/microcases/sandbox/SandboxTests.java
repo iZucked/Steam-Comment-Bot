@@ -624,7 +624,7 @@ public class SandboxTests extends AbstractSandboxTestCase {
 		Assertions.assertNotNull(result);
 
 		// Check expected results size
-		Assertions.assertNotNull(result.getBaseOption());
+		Assertions.assertNull(result.getBaseOption());
 		Assertions.assertEquals(0, result.getOptions().size());
 
 		// Check expected extra data items

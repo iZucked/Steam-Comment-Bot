@@ -82,7 +82,7 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 
 		checkForNewAvailability(object);
 		if (!dialogContext.isMultiEdit()) {
-			gccButton = toolkit.createButton(topRight.getComposite(), gccButtonLabel(object), SWT.CENTER);
+			gccButton = toolkit.createButton(topLevel.getComposite(), gccButtonLabel(object), SWT.CENTER);
 			gccButton.addMouseListener(new CharterContractMouseListener(object));
 		}
 
@@ -121,7 +121,7 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 		endStuff.setEditorWrapper(editorWrapper);
 		endStuff.display(dialogContext, root, object, range, dbc);
 		
-		ballastBonusComposite = new BallastBonusTermsDetailComposite(g3, SWT.NONE, dialogContext, toolkit, defaultResizeAction());
+		ballastBonusComposite = new BallastBonusTermsDetailComposite(g3, SWT.NONE, dialogContext, toolkit, defaultResizeAction(), object);
 		ballastBonusComposite.setCommandHandler(commandHandler);
 		ballastBonusComposite.setEditorWrapper(editorWrapper);
 		ballastBonusComposite.display(dialogContext, root, object, range, dbc);
@@ -211,11 +211,11 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 			final VesselAvailability va = (VesselAvailability) object;
 			final GenericCharterContract gcc = va.getContainedCharterContract();
 			if (gcc != null) {
-				return "Clear up";
+				return "Reset";
 			} else {
-				return "Override";
+				return "Create";
 			}
 		}
-		return "Override";
+		return "Create";
 	}
 }

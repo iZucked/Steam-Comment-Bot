@@ -43,11 +43,11 @@ public class CargoIntervalDistributionModelComponentHelper extends BaseComponent
 	/**
 	 * Construct a new instance of this helper
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	public CargoIntervalDistributionModelComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(ADPPackage.Literals.DISTRIBUTION_MODEL));
+//		superClassesHelpers.addAll(registry.getComponentHelpers(ADPPackage.Literals.DISTRIBUTION_MODEL));
 	}
 	
 	/**

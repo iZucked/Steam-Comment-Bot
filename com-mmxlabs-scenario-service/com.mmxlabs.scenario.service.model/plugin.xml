@@ -39,6 +39,20 @@
                type="com.mmxlabs.rcp.common.editors.IReasonProvider">
          </adapter>
       </factory>
+      <factory
+            adaptableType="com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil$EncryptedScenarioException"
+            class="com.mmxlabs.scenario.service.model.util.internal.ScenarioEncryptionExceptionReasonProviderApaterFactory">
+         <adapter
+               type="com.mmxlabs.rcp.common.editors.IReasonProvider">
+         </adapter>
+      </factory>
+      <factory
+            adaptableType="com.mmxlabs.scenario.service.model.util.encryption.UnknownEncryptionKeyException"
+            class="com.mmxlabs.scenario.service.model.util.internal.ScenarioEncryptionExceptionReasonProviderApaterFactory">
+         <adapter
+               type="com.mmxlabs.rcp.common.editors.IReasonProvider">
+         </adapter>
+      </factory>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">

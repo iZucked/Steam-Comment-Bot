@@ -11,6 +11,7 @@ import java.util.function.BiConsumer;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelection;
@@ -29,11 +30,15 @@ import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.IReportContentsGenerator;
+import com.mmxlabs.lingo.reports.ReportContents;
+import com.mmxlabs.lingo.reports.ReportContentsGenerators;
 import com.mmxlabs.lingo.reports.modelbased.ColumnGenerator.ColumnInfo;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.lingo.reports.services.SelectedDataProviderImpl;
 import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerFilterSupport;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
@@ -45,6 +50,7 @@ import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
+import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceNavigator;
 
 public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener {
@@ -193,21 +199,10 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 			return (T) viewer.getGrid();
 		}
 
-		if (IReportContents.class.isAssignableFrom(adapter)) {
-
-			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
-			util.setShowBackgroundColours(true);
-			util.setShowForegroundColours(true);
-			final String contents = util.convert();
-			return (T) new IReportContents() {
-
-				@Override
-				public String getHTMLContents() {
-					return contents;
-				}
-			};
-
+		if (IReportContentsGenerator.class.isAssignableFrom(adapter)) {
+			return adapter.cast(ReportContentsGenerators.createHTMLFor(scenarioComparisonServiceListener, viewer.getGrid(), true));
 		}
+		
 		return super.getAdapter(adapter);
 	}
 

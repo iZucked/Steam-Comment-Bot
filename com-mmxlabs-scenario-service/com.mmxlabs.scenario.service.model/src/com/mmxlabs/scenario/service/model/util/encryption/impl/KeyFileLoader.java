@@ -352,6 +352,15 @@ public final class KeyFileLoader {
 		return null;
 	}
 
+	public static void listWSKeys() throws Exception {
+		String home = "c:\\users\\sg";
+		listKeys(home + "\\mmxlabs\\keyfiles\\k\\lingo.pks");
+		listKeys(home + "\\mmxlabs\\keyfiles\\p\\lingo.pks");
+		listKeys(home + "\\mmxlabs\\keyfiles\\r\\lingo.pks");
+		listKeys(home + "\\mmxlabs\\keyfiles\\s\\lingo.pks");
+		listKeys(home + "\\mmxlabs\\keyfiles\\t\\lingo.pks");
+	}
+
 	public static void main(final String[] args) throws Exception {
 
 		// Sample code to convert legacy file and generate a new v2 key
@@ -369,6 +378,9 @@ public final class KeyFileLoader {
 
 		// Generate a new key into the new store. Can repeat this to generate a new key for a client.
 		generate(dest);
+
+		// List all key files in the user workspace
+		// listlistWSKeys();
 	}
 
 	public static void generate(String out) {
@@ -386,6 +398,13 @@ public final class KeyFileLoader {
 		} catch (final Exception e1) {
 			e1.printStackTrace();
 		}
+	}
+
+	public static void listKeys(String keyfile) throws Exception {
+		System.out.println("\nKey ID's in " + keyfile);
+
+		DelegatingEMFCipher keystore = KeyFileLoader.loadCipher(new File(keyfile));
+		keystore.listKeys().forEach(k -> System.out.println(KeyFileUtil.byteToString(k, ":")));
 	}
 
 	public static void convert(final String in, final String out, final char[] pw) throws Exception {

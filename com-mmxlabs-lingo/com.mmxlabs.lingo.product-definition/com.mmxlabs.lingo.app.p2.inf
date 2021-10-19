@@ -7,8 +7,8 @@ properties.1.value=false
 
 instructions.configure=\
 org.eclipse.equinox.p2.touchpoint.natives.remove(path:${installFolder}/eclipsec.exe); \
-org.eclipse.equinox.p2.touchpoint.eclipse.addProgramArg(programArg:-eclipse.keyring); org.eclipse.equinox.p2.touchpoint.eclipse.addProgramArg(programArg:secure_storage); \
- org.eclipse.equinox.p2.touchpoint.eclipse.addProgramArg(programArg:-automem);
+org.eclipse.equinox.p2.touchpoint.natives.remove(path:${installFolder}/LiNGOc.exe); \
+org.eclipse.equinox.p2.touchpoint.eclipse.addProgramArg(programArg:-eclipse.keyring); org.eclipse.equinox.p2.touchpoint.eclipse.addProgramArg(programArg:secure_storage);
 
 instructions.unconfigure=\
 org.eclipse.equinox.p2.touchpoint.eclipse.removeProgramArg(programArg:-eclipse.keyring); org.eclipse.equinox.p2.touchpoint.eclipse.removeProgramArg(programArg:secure_storage); \

@@ -114,12 +114,14 @@ public class MinMaxVolumeChecker implements IPairwiseConstraintChecker {
 			IDischargeOption discharge = (IDischargeOption) slot2;
 			if (Math.min(load.getMinLoadVolumeMMBTU(), Calculator.convertM3ToMMBTu(vesselAvailability.getVessel().getCargoCapacity(), load.getCargoCVValue())) > discharge.getMaxDischargeVolumeMMBTU(load.getCargoCVValue())) {
 				// min > max
-				messages.add(String.format("%s: Load %s min load volume is greater than discharge %s max discharge volume", this.name, load.getId(), discharge.getId()));
+				if (messages != null)
+					messages.add(String.format("%s: Load %s min load volume is greater than discharge %s max discharge volume", this.name, load.getId(), discharge.getId()));
 				return false;
 			}
 			if (load.getMaxLoadVolumeMMBTU() < discharge.getMinDischargeVolumeMMBTU(load.getCargoCVValue())) {
 				// max < min
-				messages.add(String.format("%s: Load %s max load volume is less than discharge %s min discharge volume", this.name, load.getId(), discharge.getId()));
+				if (messages != null)
+					messages.add(String.format("%s: Load %s max load volume is less than discharge %s min discharge volume", this.name, load.getId(), discharge.getId()));
 				return false;
 			}
 		}

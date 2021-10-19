@@ -11,7 +11,6 @@ import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
-import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IValidationService;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.IScenarioServiceListener;
@@ -52,13 +51,18 @@ public class ScenarioInstanceValidatorService implements IPostChangeHook {
 
 		modelRecord.executeWithProvider(scenarioDataProvider -> {
 
-			boolean relaxedValidation = "Period Scenario".equals(modelRecord.getName());
+			// Nasty hack to skip some validation checks for debugging scenarios.
+			final boolean relaxedValidation = "Period Scenario".equals(modelRecord.getName());
 
-			final IExtraValidationContext extraContext = new DefaultExtraValidationContext(scenarioDataProvider, false, relaxedValidation);
+			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(scenarioDataProvider, false, relaxedValidation);
+
+			// Mark this as a full model validation. The LNGRecursiveValidationStrategy will examine this to determine how much data model to validate
+			extraContext.setFullModelValidation(true);
 
 			final IValidationService pValidationService = validationService;
 			if (pValidationService != null) {
-				final IStatus status = pValidationService.runValidation(createValidator(), extraContext, scenarioDataProvider.getScenario());
+				final IBatchValidator validator = createValidator();
+				final IStatus status = pValidationService.runValidation(validator, extraContext, scenarioDataProvider.getScenario(), null);
 				if (status != null) {
 					modelRecord.setValidationStatus(status);
 				}

@@ -48,7 +48,7 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelFinder;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
-import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
+import com.mmxlabs.models.lng.transformer.its.scenario.ITSCSVImporter;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
@@ -133,7 +133,7 @@ public abstract class AbstractLegacyMicroTestCase {
 	public static IScenarioDataProvider importReferenceData(final String url) throws Exception {
 
 		final @NonNull String urlRoot = AbstractLegacyMicroTestCase.class.getResource(url).toString();
-		final CSVImporter importer = new CSVImporter();
+		final ITSCSVImporter importer = new ITSCSVImporter();
 		importer.importPortData(urlRoot);
 		importer.importCostData(urlRoot);
 		importer.importEntityData(urlRoot);

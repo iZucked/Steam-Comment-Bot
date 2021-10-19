@@ -85,7 +85,7 @@ public class BlueSkyPADPWizard extends Wizard implements IExportWizard {
 		final ScenarioInstance supplySideScenario = supplySideSelectorPage.getScenarioInstance();
 		BusyIndicator.showWhile(this.getContainer().getShell().getDisplay(), () -> {
 			@NonNull
-			ScenarioModelRecord supplySideModelRecord = SSDataManager.Instance.getModelRecord(supplySideScenario);
+			ScenarioModelRecord supplySideModelRecord = SSDataManager.Instance.getModelRecordChecked(supplySideScenario);
 			if (supplySideModelRecord.isLoadFailure()) {
 				throw new RuntimeException("Unable to load supply side model data");
 			}
@@ -97,11 +97,11 @@ public class BlueSkyPADPWizard extends Wizard implements IExportWizard {
 					// final Map<PurchaseContract, List<LocalDate>> purchaseContractLiftingDates = fetchPurchaseContractLiftingDates(supplySideCargoModel);
 					final Map<PurchaseContract, Map<YearMonth, Integer>> purchaseContractMonthlyCounts = fetchPurchaseContractMonthlyCount(supplySideCargoModel);
 					final Set<PurchaseContract> expectedPurchaseContracts = purchaseContractMonthlyCounts.entrySet().stream().map(Entry::getKey).collect(Collectors.toSet());
-					final Set<SalesContract> expectedSalesContracts = getExpectedSalesContracts(supplySideRoot);
+					// final Set<SalesContract> expectedSalesContracts = getExpectedSalesContracts(supplySideRoot);
 
 					// Check demand side scenario has expected sales contracts before fork
 					@NonNull
-					ScenarioModelRecord demandSideModelRecord = SSDataManager.Instance.getModelRecord(demandSideScenario);
+					ScenarioModelRecord demandSideModelRecord = SSDataManager.Instance.getModelRecordChecked(demandSideScenario);
 					if (demandSideModelRecord.isLoadFailure()) {
 						throw new RuntimeException("Unable to load demand side model data");
 					}
@@ -116,36 +116,35 @@ public class BlueSkyPADPWizard extends Wizard implements IExportWizard {
 							for (final PurchaseContract expectedPurchaseContract : expectedPurchaseContracts) {
 								final String expectedLowerCaseName = expectedPurchaseContract.getName().toLowerCase();
 								if (!demandSidePurchaseContractLowercaseNames.contains(expectedLowerCaseName)) {
-									MessageDialog.openInformation(getShell(), "Blue sky model construction", String.format("Demand side model does not contain expected purchase contract: %s", expectedPurchaseContract.getName()));
+									MessageDialog.openInformation(getShell(), "Blue sky model construction",
+											String.format("Demand side model does not contain expected purchase contract: %s", expectedPurchaseContract.getName()));
 									return;
 								}
 							}
-							final Set<String> demandSideSalesContractLowercaseNames = demandSideCommercialModel.getSalesContracts().stream().map(SalesContract::getName).map(String::toLowerCase)
-									.collect(Collectors.toSet());
-							for (final SalesContract expectedSalesContract : expectedSalesContracts) {
-								final String expectedLowercaseName = expectedSalesContract.getName().toLowerCase();
-								if (!demandSideSalesContractLowercaseNames.contains(expectedLowercaseName)) {
-									MessageDialog.openInformation(getShell(), "Blue sky model construction", String.format("Demand side model does not contain expected sales contract: %s", expectedSalesContract.getName()));
-									return;
-								}
-							}
+							/*
+							 * final Set<String> demandSideSalesContractLowercaseNames = demandSideCommercialModel.getSalesContracts().stream().map(SalesContract::getName).map(String::toLowerCase)
+							 * .collect(Collectors.toSet()); for (final SalesContract expectedSalesContract : expectedSalesContracts) { final String expectedLowercaseName =
+							 * expectedSalesContract.getName().toLowerCase(); if (!demandSideSalesContractLowercaseNames.contains(expectedLowercaseName)) { MessageDialog.openInformation(getShell(),
+							 * "Blue sky model construction", String.format("Demand side model does not contain expected sales contract: %s", expectedSalesContract.getName())); return; } }
+							 */
 							final ADPModel demandSideAdpModel = ScenarioModelUtil.getADPModel(demandSideRoot);
 							if (demandSideAdpModel == null) {
 								MessageDialog.openInformation(getShell(), "Blue sky model construction", "Demand side model does not contain an ADP model");
 								return;
 							}
-							final Set<String> expectedSalesContractsLowercaseNames = expectedSalesContracts.stream().map(SalesContract::getName).map(String::toLowerCase).collect(Collectors.toSet());
-							int hitContracts = 0;
-							for (final SalesContractProfile demandSideSalesContractProfile : demandSideAdpModel.getSalesContractProfiles()) {
-								final String lowercaseName = demandSideSalesContractProfile.getContract().getName().toLowerCase();
-								if (expectedSalesContractsLowercaseNames.contains(lowercaseName)) {
-									++hitContracts;
-								}
-							}
-							if (expectedSalesContractsLowercaseNames.size() != hitContracts) {
-								MessageDialog.openInformation(getShell(), "Blue sky model construction", "ADP sales contract profile missing data");
-								return;
-							}
+							// final Set<String> expectedSalesContractsLowercaseNames =
+							// expectedSalesContracts.stream().map(SalesContract::getName).map(String::toLowerCase).collect(Collectors.toSet());
+							// int hitContracts = 0;
+							// for (final SalesContractProfile demandSideSalesContractProfile : demandSideAdpModel.getSalesContractProfiles()) {
+							// final String lowercaseName = demandSideSalesContractProfile.getContract().getName().toLowerCase();
+							// if (expectedSalesContractsLowercaseNames.contains(lowercaseName)) {
+							// ++hitContracts;
+							// }
+							// }
+							/*
+							 * if (expectedSalesContractsLowercaseNames.size() != hitContracts) { MessageDialog.openInformation(getShell(), "Blue sky model construction",
+							 * "ADP sales contract profile missing data"); return; }
+							 */
 						}
 					}
 
@@ -156,7 +155,7 @@ public class BlueSkyPADPWizard extends Wizard implements IExportWizard {
 						throw new RuntimeException("Unable to fork scenario for blue sky model.", exception);
 					}
 					@NonNull
-					ScenarioModelRecord combinedModelRecord = SSDataManager.Instance.getModelRecord(combinedScenarioInstance);
+					ScenarioModelRecord combinedModelRecord = SSDataManager.Instance.getModelRecordChecked(combinedScenarioInstance);
 					if (combinedModelRecord.isLoadFailure()) {
 						throw new RuntimeException("Unable to load blue sky model data");
 					}
@@ -165,7 +164,7 @@ public class BlueSkyPADPWizard extends Wizard implements IExportWizard {
 						if (combinedObject instanceof LNGScenarioModel) {
 							final LNGScenarioModel combinedModelRoot = (LNGScenarioModel) combinedObject;
 							transferLiftingDates(combinedModelRoot, purchaseContractMonthlyCounts);
-							regenerateSlots(combinedSDP, combinedModelRoot, expectedPurchaseContracts, expectedSalesContracts);
+							regenerateSlots(combinedSDP, combinedModelRoot, expectedPurchaseContracts);
 
 							final Map<Object, Object> saveOptions = new HashMap<>();
 							saveOptions.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_FILE_BUFFER);
@@ -244,8 +243,7 @@ public class BlueSkyPADPWizard extends Wizard implements IExportWizard {
 		return preDefinedDate;
 	}
 
-	private void regenerateSlots(final IScenarioDataProvider combinedSDP, @NonNull final LNGScenarioModel combinedModelRoot, final Set<PurchaseContract> expectedPurchaseContracts,
-			final Set<SalesContract> expectedSalesContracts) {
+	private void regenerateSlots(final IScenarioDataProvider combinedSDP, @NonNull final LNGScenarioModel combinedModelRoot, final Set<PurchaseContract> expectedPurchaseContracts) {
 		final CargoModel combinedCargoModel = ScenarioModelUtil.getCargoModel(combinedModelRoot);
 		final EditingDomain combinedEditingDomain = combinedSDP.getEditingDomain();
 		// Clear all slots
@@ -275,17 +273,17 @@ public class BlueSkyPADPWizard extends Wizard implements IExportWizard {
 			}
 		}
 
-		final Map<String, SalesContractProfile> salesContractProfileMap = new HashMap<>();
-		for (final SalesContractProfile salesContractProfile : combinedAdpModel.getSalesContractProfiles()) {
-			salesContractProfileMap.put(salesContractProfile.getContract().getName().toLowerCase(), salesContractProfile);
-		}
-		for (final SalesContract expectedSalesContract : expectedSalesContracts) {
-			final SalesContractProfile salesContractProfile = salesContractProfileMap.get(expectedSalesContract.getName().toLowerCase());
-			final Command populateModelCommand = ADPModelUtil.populateModel(combinedSDP.getEditingDomain(), combinedModelRoot, combinedAdpModel, salesContractProfile);
-			if (populateModelCommand != null) {
-				generateCmd.append(populateModelCommand);
-			}
-		}
+		// final Map<String, SalesContractProfile> salesContractProfileMap = new HashMap<>();
+		// for (final SalesContractProfile salesContractProfile : combinedAdpModel.getSalesContractProfiles()) {
+		// salesContractProfileMap.put(salesContractProfile.getContract().getName().toLowerCase(), salesContractProfile);
+		// }
+		// for (final SalesContract expectedSalesContract : expectedSalesContracts) {
+		// final SalesContractProfile salesContractProfile = salesContractProfileMap.get(expectedSalesContract.getName().toLowerCase());
+		// final Command populateModelCommand = ADPModelUtil.populateModel(combinedSDP.getEditingDomain(), combinedModelRoot, combinedAdpModel, salesContractProfile);
+		// if (populateModelCommand != null) {
+		// generateCmd.append(populateModelCommand);
+		// }
+		// }
 
 		if (!generateCmd.isEmpty()) {
 			combinedSDP.getCommandStack().execute(generateCmd);

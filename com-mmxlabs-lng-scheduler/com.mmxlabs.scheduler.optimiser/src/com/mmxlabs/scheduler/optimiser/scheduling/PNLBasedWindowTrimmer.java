@@ -48,6 +48,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
 import com.mmxlabs.scheduler.optimiser.evaluation.IVoyagePlanEvaluator;
 import com.mmxlabs.scheduler.optimiser.evaluation.PreviousHeelRecord;
 import com.mmxlabs.scheduler.optimiser.evaluation.ScheduledVoyagePlanResult;
@@ -68,14 +69,8 @@ public class PNLBasedWindowTrimmer {
 	public static final int SIZE_OF_POOL = 80; // Maximum number of solutions to keep in the pool for the next iteration
 
 	/**
-	 * <<<<<<< HEAD Trim out solutions which are equivalent. E.g. start sequence
-	 * start and current end time, retain the best solution so far and discard the
-	 * rest. Assumes there is no interaction with the future sections that would
-	 * change the current metrics. ======= Trim out solutions which are equivalent.
-	 * E.g. start sequence start and current end time, retain the best solution so
-	 * far and discard the rest. Assumes there is no interaction with the future
-	 * sections that would change the current metrics. >>>>>>>
-	 * refs/remotes/origin/master
+	 * Trim out solutions which are equivalent. E.g. start sequence start and current end time, retain the best solution so far and discard the rest. Assumes there is no interaction with the future
+	 * sections that would change the current metrics
 	 * 
 	 */
 	public static final boolean TRIM_EQUIV = true;
@@ -274,13 +269,16 @@ public class PNLBasedWindowTrimmer {
 		List<ScheduledRecord> currentHeads = new LinkedList<>();
 		for (int idx = 0; idx < trimmedWindowRecords.size(); idx++) {
 
-			final boolean lastPlan = idx == trimmedWindowRecords.size() - 1;
 			final IPortTimeWindowsRecord portTimeWindowsRecord = trimmedWindowRecords.get(idx);
+			final boolean lastPlan = idx == trimmedWindowRecords.size() - 1;
 
 			final List<ScheduledRecord> results = evaluateShippedWithIntervals(resource, vesselAvailability, lastPlan, portTimeWindowsRecord, travelTimeData, intervalMap, currentHeads);
 
 			assert !results.isEmpty();
-			Collections.sort(results, ScheduledRecord.getComparator(lastPlan));
+			boolean includeMinDuration = lastPlan;
+			final IPortSlot returnSlot = portTimeWindowsRecord.getReturnSlot();
+			includeMinDuration |= returnSlot instanceof IEndPortSlot;			
+			Collections.sort(results, ScheduledRecord.getComparator(includeMinDuration));
 
 			if (!lastPlan && TRIM_EQUIV) {
 				// Attempt to retain the best solutions for the given vessel start time and end
@@ -378,7 +376,7 @@ public class PNLBasedWindowTrimmer {
 				if (expected.size() != result.size()) {
 					throw new CacheVerificationFailedException();
 				}
-				for (int i =0; i<expected.size();++i) {
+				for (int i = 0; i < expected.size(); ++i) {
 					if (!expected.get(i).getFirst().equals(result.get(i).getFirst())) {
 						throw new CacheVerificationFailedException();
 					}

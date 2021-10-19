@@ -18,7 +18,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Module;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
 import com.mmxlabs.models.lng.parameters.OptimisationMode;
@@ -128,8 +128,7 @@ public class LNGOptimisationBuilder {
 	}
 
 	/**
-	 * Add the {@link LNGTransformerHelper#HINT_OPTIMISE_LSO} hint and sets
-	 * evaluationOnly to false.
+	 * Add the {@link LNGTransformerHelper#HINT_OPTIMISE_LSO} hint and sets evaluationOnly to false.
 	 * 
 	 * @return
 	 */
@@ -139,8 +138,7 @@ public class LNGOptimisationBuilder {
 	}
 
 	/**
-	 * Flag indicating whether to run the default export stages or just return the
-	 * {@link IMultiStateResult} without further processing.
+	 * Flag indicating whether to run the default export stages or just return the {@link IMultiStateResult} without further processing.
 	 * 
 	 * @return
 	 */
@@ -173,7 +171,7 @@ public class LNGOptimisationBuilder {
 			}
 		}
 
-		final CleanableExecutorService executorService = createExecutorService();
+		final JobExecutorFactory executorService = createExecutorService();
 
 		try {
 			final String[] hints;
@@ -202,9 +200,9 @@ public class LNGOptimisationBuilder {
 				final OptimiserInjectorServiceMaker serviceMaker = OptimiserInjectorServiceMaker.begin()//
 						.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, StrategicScenarioModuleHelper.createExtraDataModule())//
 				;
-				
+
 				// IS this needed?
-//				serviceMaker.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_InitialSolution, StrategicScenarioModuleHelper.createEmptySolutionModule());
+				// serviceMaker.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_InitialSolution, StrategicScenarioModuleHelper.createEmptySolutionModule());
 
 				optimiserInjectorService = serviceMaker.make(optimiserInjectorService);
 			}
@@ -217,13 +215,12 @@ public class LNGOptimisationBuilder {
 
 			return new LNGOptimisationRunnerBuilder(this, scenarioRunner);
 		} catch (final Exception e) {
-			executorService.shutdownNow();
 			throw e;
 		}
 	}
 
-	private CleanableExecutorService createExecutorService() {
-		final CleanableExecutorService executorService;
+	private JobExecutorFactory createExecutorService() {
+		final JobExecutorFactory executorService;
 		if (threadCount != null) {
 			executorService = LNGScenarioChainBuilder.createExecutorService(threadCount);
 		} else {
@@ -252,9 +249,9 @@ public class LNGOptimisationBuilder {
 	}
 
 	public IChainRunner buildStandardChain(final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, final OptimisationPlan optimisationPlan, boolean includeDefaultExportStage,
-			final CleanableExecutorService executorService, final String... initialHints) {
+			final JobExecutorFactory jobExecutorFactory, final String... initialHints) {
 		return LNGScenarioChainBuilder.createStandardOptimisationChain(optimisationPlan.getResultName(), scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimisationPlan,
-				executorService, includeDefaultExportStage, initialHints);
+				jobExecutorFactory, includeDefaultExportStage, initialHints);
 	}
 
 	public static class LNGOptimisationRunnerBuilder implements AutoCloseable {
@@ -286,17 +283,11 @@ public class LNGOptimisationBuilder {
 		}
 
 		public void run(final boolean runOptimisation, @Nullable final Consumer<LNGScenarioRunner> resultChecker) {
-			final CleanableExecutorService executorService = scenarioRunner.getExecutorService();
-			try {
-
-				if (runOptimisation) {
-					scenarioRunner.runAndApplyBest();
-				}
-				if (resultChecker != null) {
-					resultChecker.accept(scenarioRunner);
-				}
-			} finally {
-				executorService.shutdownNow();
+			if (runOptimisation) {
+				scenarioRunner.runAndApplyBest();
+			}
+			if (resultChecker != null) {
+				resultChecker.accept(scenarioRunner);
 			}
 		}
 
@@ -304,16 +295,12 @@ public class LNGOptimisationBuilder {
 		 * Run the optimisation and return the exported Schedule
 		 */
 		public Schedule runAndReturnSchedule() {
-			final CleanableExecutorService executorService = scenarioRunner.getExecutorService();
-			try {
 
-				IMultiStateResult result = scenarioRunner.runWithProgress(new NullProgressMonitor());
-				if (result != null) {
-					return scenarioRunner.getScenarioToOptimiserBridge().createSchedule(result.getBestSolution().getFirst(), result.getBestSolution().getSecond());
-				}
-			} finally {
-				executorService.shutdownNow();
+			IMultiStateResult result = scenarioRunner.runWithProgress(new NullProgressMonitor());
+			if (result != null) {
+				return scenarioRunner.getScenarioToOptimiserBridge().createSchedule(result.getBestSolution().getFirst(), result.getBestSolution().getSecond());
 			}
+
 			return null;
 		}
 
@@ -323,7 +310,7 @@ public class LNGOptimisationBuilder {
 		}
 
 		public void dispose() {
-			scenarioRunner.getExecutorService().shutdownNow();
+			
 		}
 
 		public LNGScenarioRunner getScenarioRunner() {

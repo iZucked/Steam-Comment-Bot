@@ -99,6 +99,7 @@ import com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ISchedulerView
 import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
+import com.mmxlabs.lingo.reports.services.ReentrantSelectionManager;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
@@ -121,6 +122,9 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.ui.tabular.TableColourPalette;
 import com.mmxlabs.models.ui.tabular.TableColourPalette.ColourElements;
 import com.mmxlabs.models.ui.tabular.TableColourPalette.TableItems;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
@@ -165,6 +169,8 @@ public class SchedulerView extends ViewPart implements
 	private ScenarioComparisonService scenarioComparisonService;
 
 	private final boolean showConnections = true;
+
+	private ReentrantSelectionManager selectionManager;
 
 	@Nullable
 	private ISelectedDataProvider currentSelectedDataProvider = new TransformedSelectedDataProvider(null);
@@ -314,6 +320,7 @@ public class SchedulerView extends ViewPart implements
 				if (l != null) {
 					// Use the internalMap to obtain the list of events we are selecting
 					selectedEvents = new ArrayList<>(l.size());
+
 					if (!l.isEmpty() && currentSelectedDataProvider != null && (currentSelectedDataProvider.getSelectedChangeSetRows() != null || !currentSelectedDataProvider.inPinDiffMode())) {
 						for (final Object ge : ganttChart.getGanttComposite().getEvents()) {
 							final GanttEvent ganttEvent = (GanttEvent) ge;
@@ -350,6 +357,34 @@ public class SchedulerView extends ViewPart implements
 							}
 						}
 					}
+					final Collection<Object> changeSetSelection = currentSelectedDataProvider.getChangeSetSelection();
+					if (changeSetSelection != null) {
+						for (final Object obj : changeSetSelection) {
+							if (obj != null) {
+								if (internalMap.containsKey(obj)) {
+									final GanttEvent ge = internalMap.get(obj);
+									// selectedEvents.add(ge);
+									if (ge.getGanttSection() != null) {
+										selectedSections.add(ge.getGanttSection());
+									}
+									// ge.setStatusAlpha(getLabelProviderAlpha((ILabelProvider) getLabelProvider(), obj));
+
+								} else if (getComparer() != null) {
+									for (final Map.Entry<Object, GanttEvent> e : internalMap.entrySet()) {
+										if (getComparer().equals(e.getKey(), obj)) {
+											final GanttEvent ge = internalMap.get(e.getKey());
+											// selectedEvents.add(ge);
+											if (ge.getGanttSection() != null) {
+												selectedSections.add(ge.getGanttSection());
+											}
+											// e.getValue().setStatusAlpha(getLabelProviderAlpha((ILabelProvider) getLabelProvider(), e.getKey()));
+											// ge.setStatusAlpha(getLabelProviderAlpha((ILabelProvider) getLabelProvider(), e.getKey()));
+										}
+									}
+								}
+							}
+						}
+					}
 				} else {
 					// Clear selection
 					selectedEvents = new ArrayList<>(0);
@@ -369,7 +404,13 @@ public class SchedulerView extends ViewPart implements
 
 						events.retainAll(selectedEvents);
 						if (events.isEmpty()) {
-							ganttSection.setVisible(false);
+							boolean visible = true;
+							visible = false;
+							if (selectedSections.contains(ganttSection)) {
+								visible = true;
+							}
+							ganttSection.setVisible(visible);
+
 						} else {
 							boolean visible = true;
 							final Object d = ganttSection.getData();
@@ -554,8 +595,6 @@ public class SchedulerView extends ViewPart implements
 
 		viewer.setInput(getViewSite());
 
-		scenarioComparisonService.addListener(selectedScenariosServiceListener);
-		// scenarioComparisonService.addListener(scenarioComparisonServiceListener);
 		// Create the help context id for the viewer's control. This is in the
 		// format of pluginid.contextId
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Reports_ScheduleChart");
@@ -564,17 +603,12 @@ public class SchedulerView extends ViewPart implements
 		hookContextMenu();
 		contributeToActionBars();
 
-		getSite().setSelectionProvider(viewer);
-
-		// Get e4 selection service!
-		// final ESelectionService service = getSite().getService(ESelectionService.class);
-		// service.addPostSelectionListener(this);
+		selectionManager = new ReentrantSelectionManager(viewer, selectedScenariosServiceListener, scenarioComparisonService);
 
 		final String colourScheme = memento.getString(SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME);
 		labelProvider.setScheme(colourScheme);
 
 		scenarioComparisonService.triggerListener(selectedScenariosServiceListener, false);
-		// scenarioComparisonService.triggerListener(scenarioComparisonServiceListener);
 	}
 
 	private IColorManager createGanttColourManager() {
@@ -779,7 +813,7 @@ public class SchedulerView extends ViewPart implements
 			public boolean showMenuItemsOnRightClick() {
 				return true;
 			}
-			
+
 			@Override
 			public boolean showDefaultMenuItemsOnEventRightClick() {
 				return false;
@@ -817,9 +851,6 @@ public class SchedulerView extends ViewPart implements
 		final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
 		prefs.removePreferenceChangeListener(this);
 
-		// scenarioComparisonService.removeListener(scenarioComparisonServiceListener);
-		scenarioComparisonService.removeListener(selectedScenariosServiceListener);
-
 		super.dispose();
 	}
 
@@ -839,11 +870,8 @@ public class SchedulerView extends ViewPart implements
 	}
 
 	private void fillLocalPullDown(final IMenuManager manager) {
-		manager.add(zoomInAction);
-		manager.add(zoomOutAction);
-		manager.add(saveFullImageAction);
+		// manager.add(saveFullImageAction);
 		manager.add(toggleLegend);
-		manager.add(toggleShowDaysOnEvents);
 	}
 
 	private void fillContextMenu(final IMenuManager manager) {
@@ -870,6 +898,7 @@ public class SchedulerView extends ViewPart implements
 
 		zoomInAction = new ZoomInAction(viewer.getGanttChart());
 		zoomOutAction = new ZoomOutAction(viewer.getGanttChart());
+		packAction = new PackAction(viewer.getGanttChart());
 
 		highlightAction = new HighlightAction(this, viewer, (EMFScheduleLabelProvider) (viewer.getLabelProvider()));
 
@@ -884,23 +913,13 @@ public class SchedulerView extends ViewPart implements
 		});
 		toggleLegend.setChecked(viewer.getGanttChart().getGanttComposite().isShowLegend());
 
-		toggleShowDaysOnEvents = new RunnableAction("Show days on events", SWT.CHECK, () -> {
-			final boolean b = viewer.getGanttChart().getGanttComposite().isShowingDaysOnEvents();
-			viewer.getGanttChart().getGanttComposite().setShowDaysOnEvents(!b);
-			viewer.getGanttChart().getGanttComposite().redraw();
-		});
-		toggleShowDaysOnEvents.setChecked(viewer.getGanttChart().getGanttComposite().isShowingDaysOnEvents());
-
 		sortModeAction = new SortModeAction(this, viewer, (EMFScheduleLabelProvider) viewer.getLabelProvider(), viewerComparator);
 
-		packAction = new PackAction(viewer.getGanttChart());
 
 		saveFullImageAction = new SaveFullImageAction(viewer.getGanttChart());
 
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.SAVE_AS.getId(), saveFullImageAction);
 
-	
-		
 	}
 
 	/**
@@ -908,7 +927,7 @@ public class SchedulerView extends ViewPart implements
 	 */
 	@Override
 	public void setFocus() {
-		viewer.getControl().setFocus();
+		ViewerHelper.setFocus(viewer);
 	}
 
 	public void redraw() {
@@ -968,7 +987,7 @@ public class SchedulerView extends ViewPart implements
 		public SortModeAction(final SchedulerView schedulerView, final GanttChartViewer viewer, final EMFScheduleLabelProvider lp, final ScenarioViewerComparator comparator) {
 			super("Sort", IAction.AS_DROP_DOWN_MENU, schedulerView, viewer, lp);
 			this.comparator = comparator;
-			setImageDescriptor(Activator.getImageDescriptor("/icons/alphab_sort_co.gif"));
+			setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Sort, IconMode.Enabled));
 		}
 
 		@Override
@@ -1112,8 +1131,7 @@ public class SchedulerView extends ViewPart implements
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 		public void selectedDataProviderChanged(final ISelectedDataProvider selectedDataProvider, final boolean block) {
-
-			RunnerHelper.exec(() -> {
+			ViewerHelper.runIfViewerValid(viewer, block, () -> {
 				SchedulerView.this.currentSelectedDataProvider = selectedDataProvider;
 
 				final ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
@@ -1164,13 +1182,13 @@ public class SchedulerView extends ViewPart implements
 					}
 				}
 
-			}, block);
+			});
 		}
 
 		@Override
 		public void diffOptionChanged(final EDiffOption d, final Object oldValue, final Object newValue) {
 			if (d == EDiffOption.FILTER_SCHEDULE_CHART_BY_SELECTION) {
-				viewer.setSelection(viewer.getSelection());
+				selectionManager.setViewerSelection(viewer.getSelection(), false);
 			}
 		}
 
@@ -1199,10 +1217,8 @@ public class SchedulerView extends ViewPart implements
 				selection = new StructuredSelection(objects);
 			}
 			ViewerHelper.setSelection(viewer, true, selection);
-
 		}
 	};
 
 	private RunnableAction toggleLegend;
-	private RunnableAction toggleShowDaysOnEvents;
 }

@@ -1,6 +1,0 @@
-instructions.unconfigure=\  
-  org.eclipse.equinox.p2.touchpoint.eclipse.setStartLevel(startLevel:-1); \  
-  org.eclipse.equinox.p2.touchpoint.eclipse.markStarted(started:false);  
-instructions.configure=\  
-  org.eclipse.equinox.p2.touchpoint.eclipse.setStartLevel(startLevel:4); \  
-  org.eclipse.equinox.p2.touchpoint.eclipse.markStarted(started:true);  

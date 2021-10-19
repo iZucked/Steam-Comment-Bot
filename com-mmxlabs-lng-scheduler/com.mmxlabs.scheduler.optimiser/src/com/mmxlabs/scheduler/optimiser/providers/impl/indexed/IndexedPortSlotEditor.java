@@ -13,6 +13,8 @@ import com.mmxlabs.common.indexedobjects.IIndexMap;
 import com.mmxlabs.common.indexedobjects.impl.ArrayIndexMap;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.MaintenanceVesselEvent;
+import com.mmxlabs.scheduler.optimiser.components.impl.MaintenanceVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.WrappedSequenceElement;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -34,8 +36,12 @@ public final class IndexedPortSlotEditor implements IPortSlotProviderEditor {
 
 	@Override
 	public final ISequenceElement getElement(final @NonNull IPortSlot portSlot) {
-		if (portSlot.getPortType() == PortType.GeneratedCharterOut || portSlot.getPortType() == PortType.GeneratedCharterLength) {
+		if (portSlot.getPortType() == PortType.GeneratedCharterOut
+				|| portSlot.getPortType() == PortType.GeneratedCharterLength) {
 			return new WrappedSequenceElement(portSlot);
+		} else if (portSlot instanceof MaintenanceVesselEventPortSlot) {
+			final MaintenanceVesselEventPortSlot maintenancePortSlot = (MaintenanceVesselEventPortSlot) portSlot;
+			return elements.get(maintenancePortSlot.getFormerPortSlot());
 		}
 
 		return elements.get(portSlot);

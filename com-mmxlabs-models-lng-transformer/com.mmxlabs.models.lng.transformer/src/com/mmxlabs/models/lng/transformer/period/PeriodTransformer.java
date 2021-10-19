@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.emf.edit.command.DeleteCommand;
@@ -81,11 +82,9 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
-import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotAvailability;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
@@ -98,22 +97,23 @@ import com.mmxlabs.models.lng.transformer.period.extensions.IPeriodTransformerEx
 import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
-import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.model.manager.ClonedScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /***
- * TODO
+ * The PeriodTransformer aims to take a slice of the full scenario for optimisation. Given the user supplied dates (the boundary) we will add +/- 1 month (the cutoff) and remove cargoes, events etc
+ * outside of this range. For slots or events outside of the boundary we will lockdown the variables (dates/windows, vessel, option to rewire). The aim of the boundary cargoes is to be able to take
+ * into account any knock on P&L changes as a result of changes to the optimisable period without any direct changes.
  * 
- * Break up for unit tests!
+ * There are a number of gotchas etc in the period. We can never fully represent the behaviour of the full scenario within the period scenario, but aim to capture as much as possible.
  * 
- * Update for extension points
+ * Key points; - We lockdown dates before the period on the assumption they have already happened. We tend to just lock the vessel assignment after the period to allow some greater flexibility in
+ * re-wiring. - We tend to work with the scheduled dates rather that original windows as lateness can shift cargoes/event in or out of the period in conflict with the original window - We reduce the
+ * min/max duration values of a vessel by the usage time chopped out of the scenario. However the duration is whole days whereas the chopped elements time is counted in hours (and thus may not be
+ * whole days)
  * 
- * Update for multiple availabilities
- * 
- * Update for end conditions
- * 
+ * -- TODO Note there are a few "compat with master" messages with old buggy behaviour.
  * 
  * @author Simon Goodall
  * 
@@ -199,9 +199,42 @@ public class PeriodTransformer {
 		if (scenario != null) {
 			periodRecord.promptStart = scenario.getPromptPeriodStart();
 			periodRecord.promptEnd = scenario.getPromptPeriodEnd();
+
+			if (scenario.getSchedulingEndDate() != null) {
+				periodRecord.schedulingEndDate = scenario.getSchedulingEndDate().atStartOfDay();
+			}
 		}
 
 		return periodRecord;
+	}
+
+	enum SlotLockMode {
+		UNSET, VESSEL_ONLY, VESSEL_AND_DATES
+	}
+
+	enum Status {
+		NotChecked, // Initial status. This should be updated by the end of the transformation
+		ToLockdown, // Some or all of the object should be locked down (dates if before the boundary, vessel, maybe wiring)
+		ToRemove, // Object is not needed in the final result
+		Readded, // Object is a calculation dependency and is to be re-added but fully locked down.
+		ToKeep // Object is a keeper and can be optimised
+	}
+
+	/**
+	 * A record created for each input in the scenario (cargo, vessel event or open slot). This records the links to the schedule model objects (if present), some handy object references to make some
+	 * code lookups easier later on. Most importantly it records the Status of the object i.e. what we will do with it for the purpose of the period (basically keep, lockdown or remove).
+	 */
+	static class InclusionRecord {
+		EObject object; // Vessel Event (may be open), Cargo or Open slot
+		Map<EObject, PortVisit> event = new HashMap<>();
+		InclusionType inclusionType;
+		Position position;
+		Status status = Status.NotChecked;
+
+		Map<Slot<?>, SlotLockMode> slotLockMode = new HashMap<>();
+
+		Sequence sequence;
+		VesselAvailability vesselAvailability; // Current VA. This is not expected to be updated if status is Readded (to review)
 	}
 
 	public @NonNull PeriodTransformResult transform(@NonNull final IScenarioDataProvider wholeScenarioDataProvider, @NonNull final Schedule wholeScenarioSchedule,
@@ -217,12 +250,11 @@ public class PeriodTransformer {
 
 		// Do not allow the prompt period to extend past the optimisation period
 		if (periodRecord.upperBoundary != null && periodRecord.promptEnd != null) {
-
 			if (periodRecord.upperBoundary.isBefore(periodRecord.promptEnd.atStartOfDay(ZONEID_UTC))) {
 				output.setPromptPeriodEnd(periodRecord.upperBoundary.toLocalDate());
 			}
 		}
-		// Evaluate copy!
+
 		final EditingDomain internalDomain = outputDataProvider.getEditingDomain();
 
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(output);
@@ -237,148 +269,83 @@ public class PeriodTransformer {
 			}
 		}
 
-		// Generate the schedule map - maps cargoes and events to schedule information for date, port and heel data extraction
-		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
-		generateObjectToPortVisitMap(schedule, objectToPortVisitMap);
+		// Create the basic records based on scheduled dates etc. No modifications are performed yet as following stages can update the records
+		final Map<EObject, InclusionRecord> records = generateInclusionRecords(schedule, cargoModel, periodRecord);
 
-		final Map<AssignableElement, PortVisit> startConditionMap = new HashMap<>();
-		final Map<AssignableElement, PortVisit> endConditionMap = new HashMap<>();
-		generateStartAndEndConditionsMap(schedule, startConditionMap, endConditionMap);
+		// Step two, some vessel events require the preceeding events to still be included. If they are marked to be removed, the upgrade to locked.
+		// Note this implicitly upgrades events marked as ToRemove and already skipped over if they are before an event to be included.
+		for (final InclusionRecord inclusionRecord : records.values()) {
+			if (inclusionRecord.object instanceof VesselEvent) {
+				final VesselEvent event = (VesselEvent) inclusionRecord.object;
+				// ...actually this is all current event types...
+				if (inclusionRecord.status != Status.ToRemove && (event instanceof DryDockEvent || event instanceof MaintenanceEvent || event instanceof CharterOutEvent)) {
 
-		final Map<Slot<?>, SlotAllocation> slotAllocationMap = new HashMap<>();
-		generateSlotAllocationMap(schedule, slotAllocationMap);
-
-		// final Map<Cargo, CargoAllocation> fullMap = originalScenario.getScheduleModel().getSchedule().getCargoAllocations().stream() //
-		// .collect(Collectors.toMap(CargoAllocation::getInputCargo, Function.identity()));
-
-		final Map<VesselAvailability, Event> map = schedule.getSequences().stream() //
-				.filter(s -> s.getVesselAvailability() != null) //
-				.collect(Collectors.toMap(Sequence::getVesselAvailability, s -> s.getEvents().get(s.getEvents().size() - 1)));
-
-		// Extend the vessel end date to cover late ending if present in input scenario
-		for (final Sequence seq : schedule.getSequences()) {
-			final VesselAvailability va = seq.getVesselAvailability();
-			if (va != null) {
-				// Do we have an end date set?
-				if (va.isSetEndBy() && seq.getEvents().size() > 0) {
-					final ZonedDateTime endDate = va.getEndByAsDateTime();
-					final Event endEvent = seq.getEvents().get(seq.getEvents().size() - 1);
-					// Does the vessel end late?
-					if (endEvent.getEnd().isAfter(endDate)) {
-						// Is the required vessel end date in or before the boundary?
-						if (periodRecord.lowerBoundary != null) {
-							if (periodRecord.lowerBoundary.isAfter(endDate)) {
-								// Is the last event (slot or vessel event) "locked"? (OUT or BOUNDARY)
-								Event evt = endEvent.getPreviousEvent();
-								while (evt != null && !(evt instanceof PortVisit)) {
-									evt = evt.getPreviousEvent();
+					final VesselEventVisit visit = (VesselEventVisit) inclusionRecord.event.get(event);
+					if (visit != null) {
+						final Collection<EObject> eventsAndCargoesToKeep = getPriorDependenciesForEvent(event, visit);
+						if (eventsAndCargoesToKeep != null) {
+							eventsAndCargoesToKeep.forEach(e -> {
+								final InclusionRecord ir = records.get(e);
+								if (ir.status == Status.ToRemove) {
+									ir.status = Status.ToLockdown;
 								}
-								if (evt instanceof PortVisit) {
-									final PortVisit portVisit = (PortVisit) evt;
-									if (inclusionChecker.getObjectInVesselAvailabilityRange(portVisit, va) == InclusionType.Out) {
-										// Change the vessel availability end date to match exported end date
-										va.setEndBy(endEvent.getEnd().withZoneSameInstant(ZONEID_UTC).toLocalDateTime());
-									}
-								}
-							}
+							});
 						}
 					}
-				}
-			}
-		}
-
-		// Set initial end conditions - if open, use the evaluated end date to keep long ballast leg P&L the same
-		for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
-			final EndEvent endEvent = (EndEvent) map.get(vesselAvailability);
-			if (endEvent != null && (!vesselAvailability.isSetMinDuration() || !vesselAvailability.isSetMaxDuration())) {
-				if (!vesselAvailability.isSetEndAfter() && !vesselAvailability.isSetEndBy()) {
-					if (output.isSetSchedulingEndDate() && periodRecord.upperBoundary != null && output.getSchedulingEndDate().isBefore(periodRecord.upperBoundary.toLocalDate())) {
-						vesselAvailability.setEndAfter(output.getSchedulingEndDate().atStartOfDay());
-						vesselAvailability.setEndBy(periodRecord.upperBoundary.toLocalDateTime());
-					} else {
-						vesselAvailability.setEndAfter(endEvent.getEnd().withZoneSameInstant(ZONEID_UTC).toLocalDateTime());
-						vesselAvailability.setEndBy(endEvent.getEnd().withZoneSameInstant(ZONEID_UTC).toLocalDateTime());
-					}
-
-					vesselAvailability.setForceHireCostOnlyEndRule(true);
-				} else if (vesselAvailability.isSetEndAfter()) {
-					if (output.isSetSchedulingEndDate() && periodRecord.upperBoundary != null && output.getSchedulingEndDate().atStartOfDay().isBefore(vesselAvailability.getEndAfter())) {
-						if (vesselAvailability.getEndAfter().isAfter(output.getSchedulingEndDate().atStartOfDay())) {
-							vesselAvailability.setEndAfter(output.getSchedulingEndDate().atStartOfDay());
-							vesselAvailability.setForceHireCostOnlyEndRule(true);
-						}
-					}
-				}
-				if (!vesselAvailability.getEndAt().isEmpty()) {
-					vesselAvailability.getEndAt().add(endEvent.getPort());
 				}
 			}
 		}
 
 		// List of new vessel availabilities for cargoes outside normal range
 		final List<VesselAvailability> newVesselAvailabilities = new LinkedList<>();
-		final Set<Slot<?>> seenSlots = new HashSet<>();
-		final Set<Slot<?>> slotsToRemove = new HashSet<>();
-		final Set<Cargo> cargoesToRemove = new HashSet<>();
+		// Custom phase
+		if (false) {
+			// TODO: This code needs to be re-introduced. This is where any dependents to the P&L calculation need to have their status changed to "ReAdded" if they are marked ToRemove.
+			// Any cloned vessel availabilities should be configured here too. These will typically be a copy of the original vessel with the start and end heel set to match the boundary conditions of
+			// the cargo to allow an identical P&l calculation.
 
-		final Set<Cargo> lockedCargoes = new HashSet<>();
-		final Set<Slot<?>> lockedSlots = new HashSet<>();
+			// TODO: Method naming and doc
+			checkIfRemovedSlotsAreStillNeeded(records, newVesselAvailabilities);
 
-		// Filter out slots and cargoes, create new availabilities for special cases.
-		findSlotsAndCargoesToRemove(periodRecord, cargoModel, seenSlots, slotsToRemove, cargoesToRemove, slotAllocationMap, objectToPortVisitMap, lockedCargoes, lockedSlots);
-		final Triple<Set<Cargo>, Set<VesselEvent>, Set<VesselEvent>> vesselEventDependencies = findVesselEventsToRemoveAndDependencies(schedule, periodRecord, cargoModel, objectToPortVisitMap);
-
-		final Set<Cargo> cargoesToKeep = vesselEventDependencies.getFirst();
-		final Set<VesselEvent> vesselEventsToKeep = vesselEventDependencies.getSecond();
-		final Set<VesselEvent> vesselEventsToRemove = vesselEventDependencies.getThird();
-
-		updateSlotsToRemoveWithDependencies(slotAllocationMap, slotsToRemove, cargoesToRemove, cargoesToKeep, lockedCargoes);
-
-		// Update vessel availabilities
-		updateVesselAvailabilities(periodRecord, cargoModel, spotMarketsModel, portModel, modelDistanceProvider, startConditionMap, endConditionMap, cargoesToKeep, vesselEventsToKeep,
-				objectToPortVisitMap, mapping);
-		checkIfRemovedSlotsAreStillNeeded(seenSlots, slotsToRemove, cargoesToRemove, newVesselAvailabilities, startConditionMap, endConditionMap, slotAllocationMap, lockedCargoes);
-
-		if (extensions != null) {
-			for (final IPeriodTransformerExtension ext : extensions) {
-				ext.processSlotInclusionsAndExclusions(cargoModel, schedule, slotsToRemove, cargoesToRemove);
-			}
-		}
-
-		final List<Pair<CharterInMarket, Integer>> spotCharterUse = getSpotCharterInUseForCargoes(cargoesToRemove);
-		updateSpotCharterMarkets(mapping, spotCharterUse, cargoModel, spotMarketsModel, cargoesToRemove);
-
-		removeExcludedSlotsAndCargoes(internalDomain, mapping, slotsToRemove, cargoesToRemove);
-		// Some slots are brought in from outside the period, make sure they are locked
-		lockOpenSlots(output.getCargoModel(), periodRecord, objectToPortVisitMap);
-
-		// Sort out Canal bookings
-		lockAndRemoveCanalBookings(slotsToRemove, cargoesToRemove, lockedSlots, lockedCargoes, slotAllocationMap, output);
-
-		// TODO: We can probably get rid of this now -- need some unit tests to verify
-
-		// TEMP HACK UNTIL MULTIPLE AVAILABILITES PROPERLY IN PLACE AND filterSlotsAndCargoes can properly handle this.
-		for (final VesselAvailability newVA : newVesselAvailabilities) {
-			for (final VesselAvailability vesselAvailability : ScenarioModelUtil.getCargoModel(wholeScenarioDataProvider).getVesselAvailabilities()) {
-				if (newVA.getVessel() == mapping.getCopyFromOriginal(vesselAvailability.getVessel())) {
-					if (newVA.getCharterNumber() == vesselAvailability.getCharterNumber()) {
-						newVA.setEntity(mapping.getCopyFromOriginal(vesselAvailability.getCharterOrDelegateEntity()));
-						if (vesselAvailability.isSetTimeCharterRate()) {
-							newVA.setTimeCharterRate(vesselAvailability.getTimeCharterRate());
-						}
-					}
+			if (extensions != null) {
+				for (final IPeriodTransformerExtension ext : extensions) {
+					// ext.processSlotInclusionsAndExclusions(cargoModel, schedule, records);
 				}
 			}
 		}
-		// Filter out vessel events
-		filterVesselEvents(internalDomain, vesselEventsToRemove, cargoModel, mapping, periodRecord, objectToPortVisitMap);
 
-		// Filter out vessels
-		filterVesselAvailabilities(internalDomain, periodRecord, cargoModel, mapping, objectToPortVisitMap);
+		// Step 3 lockdown vessels and dates if needed.
+		// ToLockdown may be a partial lock if a cargo is partially In the period.
+		// ReAdded is always a full lockdown.
+		lockDownRecords(periodRecord, records);
 
+		// Update vessel availabilities based on cargoes/events being removed.
+		updateVesselAvailabilities(cargoModel, spotMarketsModel, portModel, schedule, modelDistanceProvider, records, periodRecord, mapping);
+
+		// Sanity check - all records should have a valid status
+		for (final InclusionRecord r : records.values()) {
+			assert r.status != Status.NotChecked;
+		}
+
+		// Reduce the spot charter-in markets based on removed cargoes and generate the re-numbering mapping (as by limiting the count we may have invalid sopt indices)
+		updateSpotCharterInMarkets(mapping, records);
+
+		// Remove excluded cargoes, slots and events.
+		removeExcludedObjects(internalDomain, mapping, records);
+
+		// Remove vessels based on updated start / end dates
+		removeVesselAvailabilities(internalDomain, periodRecord, cargoModel, mapping);
+
+		// Sort out Canal bookings
+		lockAndRemoveCanalBookings(records, output);
+
+		// Trim the spot market curves largely by converting the constant into a curve for the optimisation period and set the constant to 0 for outside of the period.
+		trimSpotMarketCurves(periodRecord, output, wholeScenarioDataProvider.getTypedScenario(LNGScenarioModel.class));
+
+		// Add any vessel created from the ReAdded cargoes
 		output.getCargoModel().getVesselAvailabilities().addAll(newVesselAvailabilities);
 
-		trimSpotMarketCurves(periodRecord, output, wholeScenarioDataProvider.getTypedScenario(LNGScenarioModel.class));
+		// Final scenario clean up
 
 		// Remove schedule model
 		output.getScheduleModel().setSchedule(null);
@@ -387,86 +354,211 @@ public class PeriodTransformer {
 		// Clear this date as we have fixed everything and it will conflict with rules in schedule transformer.
 		output.unsetSchedulingEndDate();
 
-		final PeriodTransformResult r = new PeriodTransformResult(outputDataProvider, internalDomain, p.getSecond());
-
-		return r;
+		return new PeriodTransformResult(outputDataProvider, internalDomain, p.getSecond());
 	}
 
-	private void lockAndRemoveCanalBookings(final Set<Slot<?>> slotsToRemove, final Set<Cargo> cargoesToRemove, final Set<Slot<?>> lockedSlots, final Set<Cargo> lockedCargoes,
-			final Map<Slot<?>, SlotAllocation> slotAllocationMap, final LNGScenarioModel output) {
+	public void lockDownRecords(final PeriodRecord periodRecord, final Map<EObject, InclusionRecord> records) {
+		for (final InclusionRecord inclusionRecord : records.values()) {
+			// Check for relevant statues
+			if (inclusionRecord.status == Status.ToLockdown || inclusionRecord.status == Status.Readded) {
+
+				if (inclusionRecord.object instanceof Slot) {
+					// An open slot is marked "keep open"
+					final Slot<?> slot = (Slot<?>) inclusionRecord.object;
+					slot.setLocked(true);
+				} else if (inclusionRecord.object instanceof Cargo) {
+					final Cargo cargo = (Cargo) inclusionRecord.object;
+					// Check for full lockdown
+					if (inclusionRecord.status == Status.Readded //
+							|| inclusionRecord.inclusionType == InclusionType.Out // Completely out
+							|| (inclusionRecord.inclusionType == InclusionType.Boundary && cargo.getVesselAssignmentType() == null) // Non-shipped cargo
+							|| (inclusionRecord.inclusionType == InclusionType.Boundary && inclusionRecord.position == Position.Both) // Cargo crosses the whole optimisation period
+					) {
+						// Lockdown cargo dates before the optimisation period or ReAdded cargoes.
+						boolean lockDates = inclusionRecord.status == Status.Readded;
+						if (!lockDates) {
+							// Are any slots in the before position?
+							for (final Slot<?> slot : cargo.getSlots()) {
+								// Note this code is slightly different to the #getObjectInclusionType. We check window END in the slot case and window START in the cargo case for the BOUNDARY/BEFORE
+								// combination.
+								lockDates = inclusionChecker.getSlotPosition(slot, periodRecord) == Position.Before;
+								if (lockDates) {
+									break;
+								}
+							}
+						}
+
+						// Development assertion - can we replace the above loop with this check instead?
+						// We currently can not due to different in the check logic noted above.
+						// assert lockDates == (inclusionRecord.status == Status.Readded || inclusionRecord.position == Position.Before || inclusionRecord.position == Position.Both);
+
+						lockDownCargoDates(inclusionRecord, cargo, lockDates);
+					} else {
+						// Partially optimisable cargo.
+
+						// For nominal cargoes in the prompt, we do not constrain as they will be "open" positions from the optimisation point of view.
+						if (isNominalInPrompt(cargo, periodRecord)) {
+							continue;
+						}
+
+						// Will be set to true if any of the slots are IN the period
+						boolean oneIsIn = false;
+						final List<Slot<?>> slots = new LinkedList<>(cargo.getSortedSlots());
+						// Examine the slot "window" (rather than scheduled date - hmm is this the desired behaviour? 2021-08-17 -- SG)
+						// and if the cargo is partially optimisable, only lock down the slots which are not IN the period.
+						for (final Slot<?> slot : slots) {
+
+							final SlotLockMode mode = inclusionRecord.slotLockMode.getOrDefault(slot, SlotLockMode.UNSET);
+							if (mode != SlotLockMode.UNSET) {
+								// The slot window is in the Out or Boundary zone, lock it down.
+								final SlotAllocation slotAllocation = ((SlotVisit) inclusionRecord.event.get(slot)).getSlotAllocation();
+								lockDownSlotDates(slot, slotAllocation, mode == SlotLockMode.VESSEL_AND_DATES);
+							} else {
+								oneIsIn = true;
+							}
+						}
+						if (!oneIsIn) {
+							// No slots are in the optimisation period, mark the cargo as not optimisable
+							cargo.setAllowRewiring(false);
+							if (cargo.getCargoType() == CargoType.FLEET) {
+								cargo.setLocked(true);
+							}
+						}
+
+					}
+
+					for (final Slot<?> s : cargo.getSlots()) {
+						if (periodRecord.upperBoundary != null) {
+							if (s.getSchedulingTimeWindow().getStart().isAfter(periodRecord.upperBoundary)) {
+								s.setLocked(true);
+								continue;
+							}
+						}
+						if (periodRecord.lowerBoundary != null) {
+							if (s.getSchedulingTimeWindow().getEnd().isBefore(periodRecord.lowerBoundary)) {
+								s.setLocked(true);
+								continue;
+							}
+						}
+					}
+
+				} else if (inclusionRecord.object instanceof VesselEvent) {
+					final VesselEvent vesselEvent = (VesselEvent) inclusionRecord.object;
+					if (vesselEvent instanceof CharterOutEvent) {
+						// If in boundary, limit available vessels to assigned vessel
+						final CharterOutEvent charterOutEvent = (CharterOutEvent) vesselEvent;
+						final VesselAvailability vesselAvailability = ((VesselAvailability) charterOutEvent.getVesselAssignmentType());
+						if (vesselAvailability != null) {
+							charterOutEvent.getAllowedVessels().clear();
+							charterOutEvent.getAllowedVessels().add(vesselAvailability.getVessel());
+						} else {
+							// Unused optional event, strip out as it can't be used and we do not have a "lock as unused" option.
+							if (charterOutEvent.isOptional()) {
+								inclusionRecord.status = Status.ToRemove;
+							}
+						}
+						// Note this is new code by SG added 2021/08/12
+						final boolean lockDates = inclusionRecord.position != Position.After;
+						// Re-check lockdown status after optional charter out check as lockdown the event dates
+						if (lockDates && inclusionRecord.status == Status.ToLockdown) {
+							// disabled due to compat with master
+							vesselEvent.setLocked(true);
+							// final ZonedDateTime localStart = inclusionRecord.event.get(vesselEvent).getStart();
+							// vesselEvent.setStartAfter(localStart.toLocalDateTime());
+							// vesselEvent.setStartBy(localStart.toLocalDateTime());
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * This method removes any bookings associated with elements that are being removed from the optimisation so they are not available. Locked-down events will allocate the vessel to the booking.
+	 * Note: this does not strictly assign the booking to the event as we no longer have this capability.
+	 * 
+	 * @param records
+	 * @param output
+	 */
+	private void lockAndRemoveCanalBookings(final Map<EObject, InclusionRecord> records, final LNGScenarioModel output) {
 		final CargoModel cargoModel = output.getCargoModel();
 		final CanalBookings canalBookings = cargoModel.getCanalBookings();
 		if (canalBookings != null) {
 			// data structures
 
-			final Map<Slot<?>, CanalBookingSlot> preBookedBookings = new HashMap<>();
-			final Map<Slot<?>, CanalBookingSlot> bookingToLock = new HashMap<>();
 			final Set<CanalBookingSlot> bookingToRemove = new HashSet<>();
 
-			final Set<Slot<?>> allSlotsRemoved = new HashSet<>(slotsToRemove);
-			allSlotsRemoved.addAll(cargoesToRemove.stream().map(Cargo::getSortedSlots).flatMap(Collection::stream).collect(Collectors.toSet()));
-			final Set<Slot<?>> allSlotsLocked = new HashSet<>(lockedSlots);
-			allSlotsLocked.addAll(lockedCargoes.stream().map(Cargo::getSortedSlots).flatMap(Collection::stream).collect(Collectors.toSet()));
-
-			for (final CanalBookingSlot booking : canalBookings.getCanalBookingSlots()) {
-				if (booking.getSlot() != null) {
-					preBookedBookings.put(booking.getSlot(), booking);
-				}
-			}
-
-			for (final Slot<?> slot : allSlotsRemoved) {
-				final SlotAllocation slotAllocation = slotAllocationMap.get(slot);
-				if (slotAllocation != null) {
-					final SlotVisit slotVisit = slotAllocation.getSlotVisit();
-					if (slotVisit != null) {
-						if (slotVisit.getNextEvent() instanceof Journey) {
-							final Journey journey = (Journey) slotVisit.getNextEvent();
-							if (journey.getCanalBooking() != null) {
-								bookingToRemove.add(journey.getCanalBooking());
+			for (final InclusionRecord inclusionRecord : records.values()) {
+				if (inclusionRecord.status == Status.ToRemove) {
+					// Find bookings to remove
+					if (inclusionRecord.object instanceof VesselEvent) {
+						final VesselEventVisit vev = (VesselEventVisit) inclusionRecord.event.get(inclusionRecord.object);
+						if (vev != null) {
+							final Event nextEvent = vev.getNextEvent();
+							if (nextEvent instanceof Journey) {
+								final Journey journey = (Journey) nextEvent;
+								if (journey.getCanalBooking() != null) {
+									bookingToRemove.add(journey.getCanalBooking());
+								}
 							}
 						}
 					}
-				}
-				if (preBookedBookings.get(slot) != null) {
-					bookingToRemove.add(preBookedBookings.get(slot));
-				}
-			}
+					if (inclusionRecord.object instanceof Cargo) {
+						final Cargo cargo = (Cargo) inclusionRecord.object;
+						for (final Slot<?> slot : cargo.getSlots()) {
 
-			for (final Slot<?> slot : allSlotsLocked) {
-				final SlotAllocation slotAllocation = slotAllocationMap.get(slot);
-				if (slotAllocation != null) {
-					final SlotVisit slotVisit = slotAllocation.getSlotVisit();
-					if (slotVisit != null) {
-						if (slotVisit.getNextEvent() instanceof Journey) {
-							final Journey journey = (Journey) slotVisit.getNextEvent();
-							if (journey.getCanalBooking() != null) {
-								Slot<?> nextSlot = null;
-								Event nextEvent = slotVisit.getNextEvent();
-								while (nextEvent.getNextEvent() != null) {
-									if (nextEvent instanceof SlotVisit) {
-										nextSlot = ((SlotVisit) nextEvent).getSlotAllocation().getSlot();
-										break;
-									}
-									nextEvent = nextEvent.getNextEvent();
-								}
-								if (nextSlot != null && allSlotsLocked.contains(nextSlot)) {
-									bookingToLock.put(slot, journey.getCanalBooking());
-									if (preBookedBookings.get(slot) != null && preBookedBookings.get(slot) != journey.getCanalBooking()) {
-										bookingToRemove.add(preBookedBookings.get(slot));
+							final SlotVisit slotVisit = (SlotVisit) inclusionRecord.event.get(slot);
+							if (slotVisit != null) {
+								if (slotVisit.getNextEvent() instanceof Journey) {
+									final Journey journey = (Journey) slotVisit.getNextEvent();
+									if (journey.getCanalBooking() != null) {
+										bookingToRemove.add(journey.getCanalBooking());
 									}
 								}
 							}
 						}
 					}
+				} else if (inclusionRecord.status == Status.ToLockdown || inclusionRecord.status == Status.Readded) {
+					// Bookings to *try* to assign to the current event
+					if (inclusionRecord.object instanceof VesselEvent) {
+						final VesselEventVisit vev = (VesselEventVisit) inclusionRecord.event.get(inclusionRecord.object);
+						if (vev != null) {
+							final Event nextEvent = vev.getNextEvent();
+							if (nextEvent instanceof Journey) {
+								final Journey journey = (Journey) nextEvent;
+								if (journey.getCanalBooking() != null) {
+									final CanalBookingSlot canalBooking = journey.getCanalBooking();
+									if (canalBooking != null) {
+										canalBooking.setVessel(vev.getSequence().getVesselAvailability().getVessel());
+									}
+								}
+							}
+						}
+					}
+					if (inclusionRecord.object instanceof Cargo) {
+						final Cargo cargo = (Cargo) inclusionRecord.object;
+						for (final Slot<?> slot : cargo.getSlots()) {
+
+							final SlotVisit slotVisit = (SlotVisit) inclusionRecord.event.get(slot);
+							if (slotVisit != null) {
+								if (slotVisit.getNextEvent() instanceof Journey) {
+									final Journey journey = (Journey) slotVisit.getNextEvent();
+
+									final CanalBookingSlot canalBooking = journey.getCanalBooking();
+									if (canalBooking != null) {
+										canalBooking.setVessel(slotVisit.getSequence().getVesselAvailability().getVessel());
+									}
+								}
+							}
+						}
+					}
 				}
+
 			}
 
+			// Remove the bookings
 			for (final CanalBookingSlot bookingSlot : bookingToRemove) {
 				canalBookings.getCanalBookingSlots().remove(bookingSlot);
-			}
-
-			for (final Map.Entry<Slot<?>, CanalBookingSlot> bookingSlot : bookingToLock.entrySet()) {
-				bookingSlot.getValue().setSlot(bookingSlot.getKey());
 			}
 		}
 	}
@@ -476,29 +568,19 @@ public class PeriodTransformer {
 	 * maintain a mapping between the original scenario spot index and the period scenario spot index to avoid issues with merging on the period export.
 	 * 
 	 * @param periodMapping
-	 * @param spotCharterUse
 	 * @param cargoModel
 	 * @param spotMarketsModel
 	 */
-	private void updateSpotCharterMarkets(final IScenarioEntityMapping periodMapping, final List<Pair<CharterInMarket, Integer>> spotCharterUse, final CargoModel cargoModel,
-			final SpotMarketsModel spotMarketsModel, final Collection<Cargo> cargoesToRemove) {
-		// Generate the list of all spot charter ins used by all the cargoes in the scenario. An option may appear multiple times.
-		final List<Pair<CharterInMarket, Integer>> total = getSpotCharterInUseForCargoes(cargoModel.getCargoes());
-		// Convert the list into an accumulated map count.
+	private void updateSpotCharterInMarkets(final IScenarioEntityMapping periodMapping, final Map<EObject, InclusionRecord> records) {
 
-		final Map<Pair<CharterInMarket, Integer>, Long> counter_jav8 = total.stream() //
+		// // Generate the list of all spot charter ins used by all the cargoes in the scenario. An option may appear multiple times.
+		final List<Pair<CharterInMarket, Integer>> total = getSpotCharterInUseForCargoes(records, false);
+		//
+		final Map<Pair<CharterInMarket, Integer>, Long> counter = total.stream() //
 				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
-		final Map<Pair<CharterInMarket, Integer>, Long> counter = new HashMap<>();
-		// Accumulate total charter use
-		for (final Pair<CharterInMarket, Integer> p : total) {
-			long t = 0;
-			if (counter.containsKey(p)) {
-				t = counter.get(p);
-			}
-			counter.put(p, t + 1);
-		}
-		assert counter.equals(counter_jav8);
+		// Just the numbers for the removed cargoes
+		final List<Pair<CharterInMarket, Integer>> spotCharterUse = getSpotCharterInUseForCargoes(records, true);
 
 		//// Next - determine which charter in vessels are no longer used (all allocated cargoes are outside of the period)
 
@@ -548,82 +630,62 @@ public class PeriodTransformer {
 			}
 		}
 
-		// Finally update the spot index on the cargoes.
-		for (final Cargo cargo : cargoModel.getCargoes()) {
-			// Skip this cargo as it will be removed.
-			if (cargoesToRemove.contains(cargo)) {
-				continue;
-			}
+		// Apply the renumbering
+		for (final InclusionRecord inclusionRecord : records.values()) {
+			if (inclusionRecord.object instanceof Cargo) {
+				// Skip this cargo as it will be removed.
+				if (inclusionRecord.status == Status.ToRemove) {
+					continue;
+				}
 
-			final VesselAssignmentType vesselAssignmentType = cargo.getVesselAssignmentType();
-			if (vesselAssignmentType instanceof CharterInMarket) {
-				final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
-				final int spotIndex = cargo.getSpotIndex();
-				if (spotIndex < 0) {
-					continue;
+				final Cargo cargo = (Cargo) inclusionRecord.object;
+				final VesselAssignmentType vesselAssignmentType = cargo.getVesselAssignmentType();
+				if (vesselAssignmentType instanceof CharterInMarket) {
+					final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
+					final int spotIndex = cargo.getSpotIndex();
+					if (spotIndex < 0) {
+						continue;
+					}
+					final int[] m = mapping.get(charterInMarket);
+					if (m == null) {
+						continue;
+					}
+					cargo.setSpotIndex(m[spotIndex]);
 				}
-				final int[] m = mapping.get(charterInMarket);
-				if (m == null) {
-					continue;
-				}
-				cargo.setSpotIndex(m[spotIndex]);
 			}
 		}
-
 	}
 
 	@NonNull
-	private List<Pair<CharterInMarket, Integer>> getSpotCharterInUseForCargoes(final Collection<Cargo> cargoesToRemove) {
+	private List<Pair<CharterInMarket, Integer>> getSpotCharterInUseForCargoes(final Map<EObject, InclusionRecord> records, final boolean onlyRemoved) {
 		final List<Pair<CharterInMarket, Integer>> result = new LinkedList<>();
-		for (final Cargo cargo : cargoesToRemove) {
-			final VesselAssignmentType vesselAssignmentType = cargo.getVesselAssignmentType();
-			if (vesselAssignmentType instanceof CharterInMarket) {
-				final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
-				final int spotIndex = cargo.getSpotIndex();
-				final Pair<CharterInMarket, Integer> p = new Pair<>(charterInMarket, spotIndex);
-				result.add(p);
+
+		for (final InclusionRecord inclusionRecord : records.values()) {
+			if (inclusionRecord.object instanceof Cargo && (!onlyRemoved || inclusionRecord.status == Status.ToRemove)) {
+				final Cargo cargo = (Cargo) inclusionRecord.object;
+				final VesselAssignmentType vesselAssignmentType = cargo.getVesselAssignmentType();
+				if (vesselAssignmentType instanceof CharterInMarket) {
+					final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
+					final int spotIndex = cargo.getSpotIndex();
+					final Pair<CharterInMarket, Integer> p = new Pair<>(charterInMarket, spotIndex);
+					result.add(p);
+				}
 			}
 		}
 		return result;
 
 	}
 
-	private void lockOpenSlots(@NonNull final CargoModel cargoModel, @NonNull final PeriodRecord periodRecord, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap) {
-		for (final List<Slot<?>> slotList : new List[] { cargoModel.getLoadSlots(), cargoModel.getDischargeSlots() }) {
-			for (final Slot<?> slot : slotList) {
-				if (inclusionChecker.getObjectInclusionType(slot, objectToPortVisitMap, periodRecord).getFirst() != InclusionType.In) {
-					if (slot.getCargo() != null && isNominalInPrompt(slot.getCargo(), periodRecord)) {
-						// break out if part of a nominal cargo
-						continue;
-					}
-					slot.setLocked(true);
-				}
-			}
-
-		}
-	}
-
-	private void updateSlotsToRemoveWithDependencies(@NonNull final Map<Slot<?>, SlotAllocation> slotAllocationMap, @NonNull final Set<Slot<?>> slotsToRemove,
-			@NonNull final Set<Cargo> cargoesToRemove, @NonNull final Set<Cargo> cargoesToKeep, final Set<Cargo> lockedCargoes) {
-		for (final Cargo cargo : cargoesToKeep) {
-			if (cargoesToRemove.contains(cargo)) {
-				lockDownCargoDates(slotAllocationMap, cargo, lockedCargoes, true);
-			}
-			slotsToRemove.removeAll(cargo.getSlots());
-			cargoesToRemove.remove(cargo);
-		}
-	}
-
-	public void filterVesselAvailabilities(@NonNull final EditingDomain internalDomain, @NonNull final PeriodRecord periodRecord, @NonNull final CargoModel cargoModel,
-			@NonNull final IScenarioEntityMapping mapping, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap) {
+	public void removeVesselAvailabilities(@NonNull final EditingDomain internalDomain, @NonNull final PeriodRecord periodRecord, @NonNull final CargoModel cargoModel,
+			@NonNull final IScenarioEntityMapping mapping) {
 		final Set<VesselAvailability> vesselsToRemove = new HashSet<>();
 
 		for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
 			assert vesselAvailability != null;
-			if (inclusionChecker.getObjectInclusionType(vesselAvailability, objectToPortVisitMap, periodRecord).getFirst() == InclusionType.Out) {
-				inclusionChecker.getObjectInclusionType(vesselAvailability, objectToPortVisitMap, periodRecord);
+			if (inclusionChecker.getVesselAvailabilityInclusionType(vesselAvailability, periodRecord).getFirst() == InclusionType.Out) {
+				// inclusionChecker.getObjectInclusionType(vesselAvailability, periodRecord);
 				vesselsToRemove.add(vesselAvailability);
-				@Nullable
+
 				final VesselAvailability originalFromCopy = mapping.getOriginalFromCopy(vesselAvailability);
 				assert originalFromCopy != null; // We should not be null in the transformer
 				mapping.registerRemovedOriginal(originalFromCopy);
@@ -634,217 +696,76 @@ public class PeriodTransformer {
 
 	}
 
-	public void filterVesselEvents(@NonNull final EditingDomain internalDomain, @NonNull final Set<VesselEvent> eventsToRemove, @NonNull final CargoModel cargoModel,
-			@NonNull final IScenarioEntityMapping mapping, @NonNull final PeriodRecord periodRecord, @NonNull final Map<EObject, PortVisit> scheduledEventMap) {
-		for (final VesselEvent event : cargoModel.getVesselEvents()) {
-			if (event instanceof CharterOutEvent) {
-				// If in boundary, limit available vessels to assigned vessel
-
-				final CharterOutEvent charterOutEvent = (CharterOutEvent) event;
-				@NonNull
-				final NonNullPair<InclusionType, Position> p = inclusionChecker.getObjectInclusionType(event, scheduledEventMap, periodRecord);
-				if (p.getFirst() != InclusionType.In) {
-					charterOutEvent.getAllowedVessels().clear();
-					final VesselAvailability vesselAvailability = ((VesselAvailability) charterOutEvent.getVesselAssignmentType());
-					if (vesselAvailability != null) {
-						charterOutEvent.getAllowedVessels().add(vesselAvailability.getVessel());
-					} else {
-						if (charterOutEvent.isOptional()) {
-							eventsToRemove.add(event);
-						}
-					}
-				}
-			}
-		}
-		for (final VesselEvent event : eventsToRemove) {
-			@Nullable
-			final VesselEvent originalFromCopy = mapping.getOriginalFromCopy(event);
-			assert originalFromCopy != null; // We should not be null in the transformer
-			mapping.registerRemovedOriginal(originalFromCopy);
-		}
-		internalDomain.getCommandStack().execute(DeleteCommand.create(internalDomain, eventsToRemove));
-	}
-
-	@NonNull
-	public Triple<Set<Cargo>, Set<VesselEvent>, Set<VesselEvent>> findVesselEventsToRemoveAndDependencies(@NonNull final Schedule schedule, @NonNull final PeriodRecord periodRecord,
-			@NonNull final CargoModel cargoModel, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap) {
-		final Set<VesselEvent> eventsToRemove = new HashSet<>();
-		final Set<VesselEvent> eventsToKeep = new HashSet<>();
-		final Set<Cargo> cargoesToKeep = new HashSet<>();
-
-		for (final VesselEvent event : cargoModel.getVesselEvents()) {
-			boolean removed = false;
-			if (inclusionChecker.getObjectInclusionType(event, objectToPortVisitMap, periodRecord).getFirst() == InclusionType.Out) {
-				eventsToRemove.add(event);
-				removed = true;
-			}
-			// DryDockEvent and MaintenanceEvent do not have a start or end heel. Include the preceeding cargo which does have heel to allow for some change.
-			if (removed == false && (event instanceof DryDockEvent || event instanceof MaintenanceEvent || event instanceof CharterOutEvent)) {
-				final Pair<Set<Cargo>, Set<VesselEvent>> eventsAndCargoesToKeep = getDependenciesForEvent(schedule, event);
-				if (eventsAndCargoesToKeep != null) {
-					cargoesToKeep.addAll(eventsAndCargoesToKeep.getFirst());
-					eventsToKeep.addAll(eventsAndCargoesToKeep.getSecond());
-				}
-			}
-		}
-		// update events to remove
-		eventsToRemove.removeAll(eventsToKeep);
-
-		return new Triple<>(cargoesToKeep, eventsToKeep, eventsToRemove);
-	}
-
-	public void findSlotsAndCargoesToRemove(@NonNull final PeriodRecord periodRecord, @NonNull final CargoModel cargoModel, @NonNull final Set<Slot<?>> seenSlots,
-			@NonNull final Collection<Slot<?>> slotsToRemove, @NonNull final Collection<Cargo> cargoesToRemove, @NonNull final Map<Slot<?>, SlotAllocation> slotAllocationMap,
-			@NonNull final Map<EObject, PortVisit> objectToPortVisitMap, final Set<Cargo> lockedCargoes, final Set<Slot<?>> lockedSlots) {
-
-		for (final Cargo cargo : cargoModel.getCargoes()) {
-			assert cargo != null;
-			final NonNullPair<InclusionType, Position> inclusionResult = inclusionChecker.getObjectInclusionType(cargo, objectToPortVisitMap, periodRecord);
-			final InclusionType inclusionType = inclusionResult.getFirst();
-			final Position pos = inclusionResult.getSecond();
-
-			if (inclusionType == InclusionType.Out) {
-				cargoesToRemove.add(cargo);
-				slotsToRemove.addAll(cargo.getSlots());
-			} else if (inclusionType == InclusionType.Boundary) {
-				if (pos == Position.Both || cargo.getVesselAssignmentType() == null) {
-					// lock whole cargo if both slots are outside period or if there is no vessel
-					// check slots are after start
-					boolean isBefore = false;
-					for (final Slot<?> slot : cargo.getSlots()) {
-						if (inclusionChecker.getObjectInclusionType(slot, objectToPortVisitMap, periodRecord).getSecond() == Position.Before) {
-							isBefore = true;
-							break;
-						}
-					}
-					lockDownCargoDates(slotAllocationMap, cargo, lockedCargoes, isBefore);
-				} else {
-					// lock only one slot
-					final NonNullPair<Slot<?>, Slot<?>> slots = inclusionChecker.getFirstAndLastSlots(cargo);
-					if (pos == Position.After) {
-						if (inclusionChecker.getObjectInclusionType(slots.getFirst(), objectToPortVisitMap, periodRecord).getFirst() == InclusionType.In) {
-							if (!isNominalInPrompt(cargo, periodRecord)) {
-								lockDownSlotDates(slotAllocationMap, slots.getSecond(), lockedSlots, false);
-							}
-						} else {
-							lockDownCargoDates(slotAllocationMap, cargo, lockedCargoes, false);
-						}
-					} else {
-						if (inclusionChecker.getObjectInclusionType(slots.getSecond(), objectToPortVisitMap, periodRecord).getFirst() == InclusionType.In) {
-							if (!isNominalInPrompt(cargo, periodRecord)) {
-								lockDownSlotDates(slotAllocationMap, slots.getFirst(), lockedSlots, true);
-							}
-						} else {
-							lockDownCargoDates(slotAllocationMap, cargo, lockedCargoes, true);
-						}
-					}
-				}
-			}
-
-			// These slots have been considered
-			seenSlots.addAll(cargo.getSlots());
-		}
-
-		// open slots
-		for (final LoadSlot slot : cargoModel.getLoadSlots()) {
-			assert slot != null;
-			if (seenSlots.contains(slot)) {
-				continue;
-			}
-			seenSlots.add(slot);
-			if (inclusionChecker.getObjectInclusionType(slot, objectToPortVisitMap, periodRecord).getFirst() == InclusionType.Out) {
-				slotsToRemove.add(slot);
-			}
-		}
-
-		for (final DischargeSlot slot : cargoModel.getDischargeSlots()) {
-			assert slot != null;
-			if (seenSlots.contains(slot)) {
-				continue;
-			}
-			seenSlots.add(slot);
-			if (inclusionChecker.getObjectInclusionType(slot, objectToPortVisitMap, periodRecord).getFirst() == InclusionType.Out) {
-				slotsToRemove.add(slot);
-			}
-		}
-	}
-
 	/**
 	 * Scan through the slots processed and if still in use check for removed slots and cargoes which are required to e.g. complete P&L evaluation and bring them back in on dedicated round trip cargo
 	 * models.
 	 * 
-	 * @param seenSlots
-	 * @param slotsToRemove
-	 * @param cargoesToRemove
+	 * @param records
 	 * @param newVesselAvailabilities
-	 * @param startConditionMap
-	 * @param endConditionMap
-	 * @param slotAllocationMap
-	 * @param lockedCargoes
-	 *            TODO
 	 */
-	public void checkIfRemovedSlotsAreStillNeeded(final @NonNull Set<Slot<?>> seenSlots, final @NonNull Collection<Slot<?>> slotsToRemove, final @NonNull Collection<Cargo> cargoesToRemove,
-			final @NonNull List<VesselAvailability> newVesselAvailabilities, final @NonNull Map<AssignableElement, PortVisit> startConditionMap,
-			final @NonNull Map<AssignableElement, PortVisit> endConditionMap, final @NonNull Map<Slot<?>, SlotAllocation> slotAllocationMap, final Set<Cargo> lockedCargoes) {
+	public void checkIfRemovedSlotsAreStillNeeded(final Map<EObject, InclusionRecord> records, final @NonNull List<VesselAvailability> newVesselAvailabilities) {
 
-		for (final Slot<?> slot : seenSlots) {
-			// Slot has already been removed, ignore it.
-			// FIXME: This slot may be a dependency of a slot later in the list and have it's own dependencies which will not be included. We should probably loop over a cloned list which can be added
-			// to.
-			if (slotsToRemove.contains(slot)) {
-				continue;
-			}
-			final Set<Slot<?>> slotDependencies = new HashSet<>(getExtraDependenciesForSlot(slot));
-			updateSlotDependencies(slotsToRemove, cargoesToRemove, newVesselAvailabilities, startConditionMap, endConditionMap, slotAllocationMap, slotDependencies, lockedCargoes);
-		}
-	}
-
-	private void updateSlotDependencies(final @NonNull Collection<Slot<?>> slotsToRemove, final @NonNull Collection<Cargo> cargoesToRemove,
-			final @NonNull List<VesselAvailability> newVesselAvailabilities, final @NonNull Map<AssignableElement, PortVisit> startConditionMap,
-			@NonNull final Map<AssignableElement, PortVisit> endConditionMap, @NonNull final Map<Slot<?>, SlotAllocation> slotAllocationMap, final Set<Slot<?>> slotDependencies,
-			final Set<Cargo> lockedCargoes) {
-		for (final Slot<?> dep : slotDependencies) {
-			if (slotsToRemove.contains(dep)) {
-				slotsToRemove.remove(dep);
-				final Cargo depCargo = dep.getCargo();
-				if (depCargo != null) {
-					// Include all deps too
-					slotsToRemove.removeAll(depCargo.getSlots());
-					cargoesToRemove.remove(depCargo);
-					if (depCargo.getCargoType() == CargoType.FLEET) {
-						final VesselAssignmentType vesselAssignmentType = depCargo.getVesselAssignmentType();
-						if (vesselAssignmentType instanceof VesselAvailability) {
-							final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
-							final VesselAvailability newVesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-							newVesselAvailability.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
-							newVesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
-							newVesselAvailability.setVessel(vesselAvailability.getVessel());
-							newVesselAvailability.setCharterNumber(vesselAvailability.getCharterNumber());
-
-							// TODO: set charter rate, set entity. Once multiple avail complete, grab from assignment.
-							newVesselAvailability.setTimeCharterRate(vesselAvailability.getTimeCharterRate());
-							newVesselAvailability.setFleet(vesselAvailability.isFleet());
-
-							newVesselAvailability.setFleet(vesselAvailability.isFleet());
-							newVesselAvailability.setEntity(vesselAvailability.getCharterOrDelegateEntity());
-
-							// Ignore Ballast bonus/repositioning - should not be part of P&L...
-							// ... unless linked to a curve price.
-							// Do not set optional, as this is no longer optional!
-
-							newVesselAvailabilities.add(newVesselAvailability);
-
-							depCargo.setVesselAssignmentType(newVesselAvailability);
-
-							updateVesselAvailabilityConditions(newVesselAvailability, depCargo, startConditionMap, endConditionMap);
+		boolean changed = true;
+		while (changed) {
+			changed = false;
+			for (final InclusionRecord inclusionRecord : records.values()) {
+				if (inclusionRecord.status != Status.ToRemove) {
+					if (inclusionRecord.object instanceof Cargo) {
+						final Cargo cargo = (Cargo) inclusionRecord.object;
+						for (final Slot<?> slot : cargo.getSlots()) {
+							final Set<Slot<?>> slotDependencies = new HashSet<>(getExtraDependenciesForSlot(slot));
+							changed |= updateSlotDependencies(newVesselAvailabilities, slotDependencies, records);
 						}
-
 					}
-					// Remove any vessel & time window flexibility
-					lockDownCargoDates(slotAllocationMap, depCargo, lockedCargoes, true);
 				}
 			}
 		}
+	}
+
+	private boolean updateSlotDependencies(final @NonNull List<VesselAvailability> newVesselAvailabilities, final Set<Slot<?>> slotDependencies, final Map<EObject, InclusionRecord> records) {
+
+		boolean changed = false;
+		for (final Slot<?> dep : slotDependencies) {
+
+			final Cargo cargo = dep.getCargo();
+			if (cargo == null) {
+				final InclusionRecord inclusionRecord = records.get(dep);
+				if (inclusionRecord.status == Status.ToRemove) {
+					inclusionRecord.status = Status.Readded;
+					changed = true;
+				}
+			} else {
+				final InclusionRecord inclusionRecord = records.get(cargo);
+				if (inclusionRecord.status == Status.ToRemove) {
+					inclusionRecord.status = Status.Readded;
+					changed = true;
+					final VesselAssignmentType vesselAssignmentType = cargo.getVesselAssignmentType();
+					if (vesselAssignmentType instanceof VesselAvailability) {
+						final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
+						final VesselAvailability newVesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+						newVesselAvailability.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+						newVesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
+						newVesselAvailability.setVessel(vesselAvailability.getVessel());
+						newVesselAvailability.setCharterNumber(vesselAvailability.getCharterNumber());
+
+						newVesselAvailability.setTimeCharterRate(vesselAvailability.getTimeCharterRate());
+						newVesselAvailability.setEntity(vesselAvailability.getCharterOrDelegateEntity());
+
+						// Ignore Ballast bonus/repositioning - should not be part of P&L...
+						// ... unless linked to a curve price.
+						// Do not set optional, as this is no longer optional!
+
+						newVesselAvailabilities.add(newVesselAvailability);
+
+						cargo.setVesselAssignmentType(newVesselAvailability);
+
+						updateStartConditions(newVesselAvailability, inclusionRecord);
+						updateEndConditions(newVesselAvailability, inclusionRecord);
+					}
+				}
+			}
+		}
+		return changed;
 	}
 
 	/**
@@ -855,40 +776,58 @@ public class PeriodTransformer {
 	 * @param slotsToRemove
 	 * @param cargoesToRemove
 	 */
-	public void removeExcludedSlotsAndCargoes(final EditingDomain internalDomain, final IScenarioEntityMapping mapping, final Collection<@NonNull Slot<?>> slotsToRemove,
-			final Collection<@NonNull Cargo> cargoesToRemove) {
-		// <<<
-		// Delete slots and cargoes outside of range.
+	public void removeExcludedObjects(final EditingDomain internalDomain, final IScenarioEntityMapping mapping, final Map<EObject, InclusionRecord> records) {
 		final List<EObject> objectsToDelete = new LinkedList<>();
-		for (final Slot<?> slot : slotsToRemove) {
-			@Nullable
-			final Slot<?> originalFromCopy = mapping.getOriginalFromCopy(slot);
-			assert originalFromCopy != null; // We should not be null in the transformer
-			mapping.registerRemovedOriginal(originalFromCopy);
-			if (slot instanceof LoadSlot) {
-				// cargoModel.getLoadSlots().remove(slot);
-			} else if (slot instanceof DischargeSlot) {
-				// cargoModel.getDischargeSlots().remove(slot);
-			} else {
-				throw new IllegalStateException("Unknown slot type");
+		for (final InclusionRecord inclusionRecord : records.values()) {
+
+			if (inclusionRecord.status != Status.ToRemove) {
+				continue;
 			}
-			objectsToDelete.add(slot);
+
+			if (inclusionRecord.object instanceof Slot) {
+				final Slot<?> slot = (Slot<?>) inclusionRecord.object;
+				final Slot<?> originalFromCopy = mapping.getOriginalFromCopy(slot);
+				assert originalFromCopy != null; // We should not be null in the transformer
+				mapping.registerRemovedOriginal(originalFromCopy);
+
+				objectsToDelete.add(slot);
+
+			} else if (inclusionRecord.object instanceof Cargo) {
+				final Cargo cargo = (Cargo) inclusionRecord.object;
+				{
+					final Cargo originalFromCopy = mapping.getOriginalFromCopy(cargo);
+					assert originalFromCopy != null; // We should not be null in the transformer
+					mapping.registerRemovedOriginal(originalFromCopy);
+					objectsToDelete.add(cargo);
+				}
+				for (final Slot<?> slot : cargo.getSlots()) {
+					final @Nullable Slot<?> originalFromCopy = mapping.getOriginalFromCopy(slot);
+					assert originalFromCopy != null; // We should not be null in the transformer
+					mapping.registerRemovedOriginal(originalFromCopy);
+
+					objectsToDelete.add(slot);
+				}
+
+			} else if (inclusionRecord.object instanceof VesselEvent) {
+				final VesselEvent vesselEvent = (VesselEvent) inclusionRecord.object;
+				final VesselEvent originalFromCopy = mapping.getOriginalFromCopy(vesselEvent);
+				assert originalFromCopy != null; // We should not be null in the transformer
+				mapping.registerRemovedOriginal(originalFromCopy);
+				objectsToDelete.add(vesselEvent);
+			} else {
+				throw new IllegalStateException();
+			}
 		}
-		for (final Cargo cargo : cargoesToRemove) {
-			// cargoModel.getCargoes().remove(cargo);
-			@Nullable
-			final Cargo originalFromCopy = mapping.getOriginalFromCopy(cargo);
-			assert originalFromCopy != null; // We should not be null in the transformer
-			mapping.registerRemovedOriginal(originalFromCopy);
-			objectsToDelete.add(cargo);
+
+		if (!objectsToDelete.isEmpty()) {
+			internalDomain.getCommandStack().execute(DeleteCommand.create(internalDomain, objectsToDelete));
 		}
-		internalDomain.getCommandStack().execute(DeleteCommand.create(internalDomain, objectsToDelete));
 	}
 
-	public void lockDownCargoDates(final Map<Slot<?>, SlotAllocation> slotAllocationMap, final Cargo cargo, final Set<Cargo> lockedCargoes, final boolean doLockDates) {
+	public void lockDownCargoDates(final InclusionRecord inclusionRecord, final Cargo cargo, final boolean doLockDates) {
 
-		final VesselAssignmentType vat = cargo.getVesselAssignmentType();
 		Vessel lockedVessel = null;
+		final VesselAssignmentType vat = cargo.getVesselAssignmentType();
 		if (vat instanceof VesselAvailability) {
 			lockedVessel = (((VesselAvailability) vat).getVessel());
 		} else if (vat instanceof CharterInMarket) {
@@ -897,6 +836,7 @@ public class PeriodTransformer {
 			lockedVessel = (((CharterInMarketOverride) vat).getCharterInMarket().getVessel());
 		}
 
+		// TODO: Look into lockDownSlotDates method. Lots of duplication!
 		for (final Slot<?> slot : cargo.getSlots()) {
 			// Load and discharge window are often part of the pricing for a DES purchase or FOB sale, so if we change
 			// the window, then the price incurred might change, hence we only fix one side of the cargo and leave the
@@ -919,7 +859,7 @@ public class PeriodTransformer {
 			// continue;
 			// }
 			if (doLockDates) {
-				final SlotAllocation cargoSlotAllocation = slotAllocationMap.get(slot);
+				final SlotAllocation cargoSlotAllocation = ((SlotVisit) inclusionRecord.event.get(slot)).getSlotAllocation();
 				if (cargoSlotAllocation != null) {
 					slot.setWindowFlex(0);
 					if (!slot.isWindowCounterParty()) {
@@ -943,10 +883,9 @@ public class PeriodTransformer {
 		if (cargo.getCargoType() == CargoType.FLEET) {
 			cargo.setLocked(true);
 		}
-		lockedCargoes.add(cargo);
 	}
 
-	public void lockDownSlotDates(final Map<Slot<?>, SlotAllocation> slotAllocationMap, final Slot<?> slot, final Set<Slot<?>> lockedSlots, final boolean doLockDates) {
+	public void lockDownSlotDates(final Slot<?> slot, final SlotAllocation cargoSlotAllocation, final boolean doLockDates) {
 		// Load and discharge window are often part of the pricing for a DES purchase or FOB sale, so if we change
 		// the window, then the price incurred might change, hence we only fix one side of the cargo and leave the
 		// window untouched.
@@ -964,31 +903,36 @@ public class PeriodTransformer {
 			}
 		}
 
-		final SlotAllocation cargoSlotAllocation = slotAllocationMap.get(slot);
 		if (cargoSlotAllocation != null) {
 			if (doLockDates) {
-				slot.setWindowSize(0);
 				slot.setWindowFlex(0);
+				if (!slot.isWindowCounterParty()) {
+					slot.setWindowSize(0);
+				}
 				final ZonedDateTime localStart = cargoSlotAllocation.getSlotVisit().getStart();
 				slot.setWindowStart(localStart.toLocalDate());
 				slot.setWindowStartTime(localStart.getHour());
 			}
 
-			slot.getRestrictedVessels().clear();
-			slot.setRestrictedVesselsArePermissive(true);
-			slot.setRestrictedVesselsOverride(true);
-
-			final VesselAssignmentType vat = slot.getCargo().getVesselAssignmentType();
+		}
+		final Cargo cargo = slot.getCargo();
+		if (cargo != null) {
+			final VesselAssignmentType vat = cargo.getVesselAssignmentType();
+			Vessel lockedVessel = null;
 			if (vat instanceof VesselAvailability) {
-				slot.getRestrictedVessels().add(((VesselAvailability) vat).getVessel());
+				lockedVessel = (((VesselAvailability) vat).getVessel());
 			} else if (vat instanceof CharterInMarket) {
-				slot.getRestrictedVessels().add(((CharterInMarket) vat).getVessel());
+				lockedVessel = (((CharterInMarket) vat).getVessel());
 			} else if (vat instanceof CharterInMarketOverride) {
-				slot.getRestrictedVessels().add(((CharterInMarketOverride) vat).getCharterInMarket().getVessel());
+				lockedVessel = (((CharterInMarketOverride) vat).getCharterInMarket().getVessel());
 			}
+
+			slot.getRestrictedVessels().clear();
+			slot.getRestrictedVessels().add(lockedVessel);
+			slot.setRestrictedVesselsOverride(true);
+			slot.setRestrictedVesselsArePermissive(true);
 		}
 		slot.setLocked(true);
-		lockedSlots.add(slot);
 	}
 
 	private boolean isNominalInPrompt(@NonNull final Cargo cargo, @NonNull final PeriodRecord periodRecord) {
@@ -1030,194 +974,379 @@ public class PeriodTransformer {
 		return extraDependencies;
 	}
 
-	public void updateVesselAvailabilities(@NonNull final PeriodRecord periodRecord, @NonNull final CargoModel cargoModel, @NonNull final SpotMarketsModel spotMarketsModel,
-			@NonNull final PortModel portModel, @NonNull final ModelDistanceProvider modelDistanceProvider, @NonNull final Map<AssignableElement, PortVisit> startConditionMap,
-			@NonNull final Map<AssignableElement, PortVisit> endConditionMap, @NonNull final Set<Cargo> cargoesToKeep, @NonNull final Set<VesselEvent> eventsToKeep,
-			@NonNull final Map<EObject, PortVisit> objectToPortVisitMap, final IScenarioEntityMapping mapping) {
+	public void updateVesselAvailabilities(@NonNull final CargoModel cargoModel, @NonNull final SpotMarketsModel spotMarketsModel, @NonNull final PortModel portModel, final Schedule schedule,
+			@NonNull final ModelDistanceProvider modelDistanceProvider, final Map<EObject, InclusionRecord> records, final PeriodRecord periodRecord, final IScenarioEntityMapping mapping) {
 
 		final List<CollectedAssignment> collectedAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, portModel, spotMarketsModel, modelDistanceProvider);
 		assert collectedAssignments != null;
-		updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, cargoesToKeep, eventsToKeep, objectToPortVisitMap, mapping);
+		updateVesselAvailabilities(collectedAssignments, schedule, records, periodRecord, mapping);
 	}
 
-	public void updateVesselAvailabilities(@NonNull final PeriodRecord periodRecord, @NonNull final List<CollectedAssignment> collectedAssignments,
-			@NonNull final Map<AssignableElement, PortVisit> startConditionMap, @NonNull final Map<AssignableElement, PortVisit> endConditionMap, @NonNull final Set<Cargo> cargoesToKeep,
-			@NonNull final Set<VesselEvent> eventsToKeep, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap, final IScenarioEntityMapping mapping) {
+	/**
+	 * Update the vessel dates. We need to take into account any lateness, trimed cargoes and events, schedule horizon, optimiser end dates etc.
+	 * 
+	 * @param collectedAssignments
+	 * @param schedule
+	 * @param records
+	 * @param periodRecord
+	 * @param mapping
+	 */
+	public void updateVesselAvailabilities(@NonNull final List<CollectedAssignment> collectedAssignments, final Schedule schedule, final Map<EObject, InclusionRecord> records,
+			final PeriodRecord periodRecord, final IScenarioEntityMapping mapping) {
 
 		// Here we loop through all the collected assignments, trimming the vessel availability to anything outside of the date range.
 		// This can handle out-of-order assignments by checking to see whether or not a cargo has already been trimmed out of the date range before updating
-		COLLECTED_ASSIGNMENT_LOOP: for (final CollectedAssignment collectedAssignment : collectedAssignments) {
-
-			final List<AssignableElement> assignedObjects = collectedAssignment.getAssignedObjects();
-
-			VesselAvailability vesselAvailability = null;
-			int hoursBeforeNewStart = 0;
-			int hoursAfterNewEnd = 0;
-
-			for (final AssignableElement assignedObject : assignedObjects) {
-				assert assignedObject != null;
-				if (assignedObject instanceof Cargo) {
-					if (cargoesToKeep.contains(assignedObject)) {
-						continue;
-					}
-				} else if (assignedObject instanceof VesselEvent) {
-					if (eventsToKeep.contains(assignedObject)) {
-						continue;
-					}
-				}
-				final NonNullPair<InclusionType, Position> result = inclusionChecker.getObjectInclusionType(assignedObject, objectToPortVisitMap, periodRecord);
-				if (collectedAssignment.isSetSpotIndex()) {
-					if (collectedAssignment.getSpotIndex() == NOMINAL_INDEX) {
-						continue;
-					}
-					if (result.getFirst() == InclusionType.Out) {
-						final Position position = result.getSecond();
-
-						// This *should* be working in sorted order. Thus keep that last #Before case and terminate loop at the first #After case
-						if (position == Position.Before) {
-							mapping.setLastTrimmedBefore(collectedAssignment.getCharterInMarket(), collectedAssignment.getSpotIndex(), assignedObject);
-						} else if (position == Position.After) {
-							mapping.setLastTrimmedAfter(collectedAssignment.getCharterInMarket(), collectedAssignment.getSpotIndex(), assignedObject);
-							continue COLLECTED_ASSIGNMENT_LOOP;
-						}
+		for (final CollectedAssignment collectedAssignment : collectedAssignments) {
+			// Find the matching sequence
+			Sequence sequence = null;
+			for (final Sequence seq : schedule.getSequences()) {
+				if (collectedAssignment.isSpotVessel()) {
+					if (collectedAssignment.getCharterInMarket() == seq.getCharterInMarket() //
+							&& collectedAssignment.getSpotIndex() == seq.getSpotIndex() //
+					) {
+						sequence = seq;
+						break;
 					}
 				} else {
-					vesselAvailability = collectedAssignment.getVesselAvailability();
+					if (collectedAssignment.getVesselAvailability() == seq.getVesselAvailability()) {
+						sequence = seq;
+						break;
+					}
+				}
+			}
+			// Find end event if applicable
+			EndEvent endEvent = null;
+			if (sequence != null && !collectedAssignment.isSpotVessel() && !sequence.getEvents().isEmpty()) {
+				endEvent = (EndEvent) sequence.getEvents().get(sequence.getEvents().size() - 1);
+			}
 
-					if (vesselAvailability != null) {
-						if (result.getFirst() == InclusionType.Out) {
-							final Position position = result.getSecond();
-							final PortVisit startPortVisit = startConditionMap.get(assignedObject);
-							final PortVisit endPortVisit = endConditionMap.get(assignedObject);
+			updateVesselAvailability(collectedAssignment, endEvent, records, periodRecord, mapping);
+		}
+	}
 
-							final int duration = Hours.between(endPortVisit.getStart(), startPortVisit.getStart());
+	public void updateVesselAvailability(@NonNull final CollectedAssignment collectedAssignment, final @Nullable EndEvent endEvent, final Map<EObject, InclusionRecord> records,
+			final PeriodRecord periodRecord, final IScenarioEntityMapping mapping) {
 
-							if (position == Position.Before) {
-								// Update availability start heel
-								hoursBeforeNewStart += duration;
-								updateStartConditions(vesselAvailability, assignedObject, startConditionMap, mapping);
-							} else if (position == Position.After) {
-								// Update availability end heel
-								hoursAfterNewEnd += duration;
-								updateEndConditions(vesselAvailability, assignedObject, endConditionMap, mapping);
+		// Ignore nominals
+		if (collectedAssignment.isSetSpotIndex()) {
+			if (collectedAssignment.getSpotIndex() == NOMINAL_INDEX) {
+				return;
+			}
+		}
+
+		final List<AssignableElement> assignedObjects = collectedAssignment.getAssignedObjects();
+
+		final VesselAvailability vesselAvailability = collectedAssignment.getVesselAvailability();
+		int hoursBeforeNewStart = 0;
+		int hoursAfterNewEnd = 0;
+
+		boolean updatedBefore = false;
+		boolean updatedAfter = false;
+
+		for (final AssignableElement assignedObject : assignedObjects) {
+			assert assignedObject != null;
+
+			final InclusionRecord inclusionRecord = records.get(assignedObject);
+			final Status status = inclusionRecord.status;
+			if (status == Status.ToKeep) {
+				continue;
+			}
+			if (status == Status.ToRemove || status == Status.Readded) {
+
+				final Position position = inclusionRecord.position;
+
+				// Element has been removed from this sequence
+				// This *should* be working in sorted order. Thus keep that last #Before case and terminate loop at the first #After case
+				if (position == Position.Before) {
+					// Overwrite any previous trimmed before call
+					mapping.setLastTrimmedBefore(collectedAssignment.getVesselAssignmentType(), collectedAssignment.getSpotIndex(), assignedObject);
+					updatedBefore = true;
+
+				} else if (position == Position.After) {
+					// Only expect to do this once
+					mapping.setLastTrimmedAfter(collectedAssignment.getVesselAssignmentType(), collectedAssignment.getSpotIndex(), assignedObject);
+					updatedAfter = true;
+					break;
+				} else {
+					assert false;
+				}
+			}
+		}
+
+		// The rounding is over-constraining the problem
+		if (vesselAvailability != null) {
+
+			// Update starting conditions of the vessel
+			if (updatedBefore) {
+				final AssignableElement newFirstElement = mapping.getLastTrimmedBefore(collectedAssignment.getVesselAssignmentType(), collectedAssignment.getSpotIndex());
+				final InclusionRecord inclusionRecord = records.get(newFirstElement);
+				updateStartConditions(vesselAvailability, inclusionRecord);
+
+				Event event = inclusionRecord.sequence.getEvents().get(0);
+				// Compat with master - ignore orphan ballast legs
+				{
+					event = event.getNextEvent();
+					while (event != null) {
+						if (event instanceof PortVisit) {
+							break;
+						}
+						event = event.getNextEvent();
+					}
+				}
+				final int duration = Hours.between(event.getStart(), vesselAvailability.getStartAfterAsDateTime());
+				hoursBeforeNewStart = duration;
+			}
+
+			// Update ending conditions of the vessel
+			if (updatedAfter) {
+				final AssignableElement newLastElement = mapping.getLastTrimmedAfter(collectedAssignment.getVesselAssignmentType(), collectedAssignment.getSpotIndex());
+				final InclusionRecord inclusionRecord = records.get(newLastElement);
+				updateEndConditions(vesselAvailability, inclusionRecord);
+
+				final EList<Event> events = inclusionRecord.sequence.getEvents();
+				final Event event = events.get(events.size() - 1);
+				final int duration = Hours.between(vesselAvailability.getEndByAsDateTime(), event.getEnd());
+				hoursAfterNewEnd = duration;
+			}
+
+			// Disconnect charter contract
+			copyCharterContract(vesselAvailability, updatedBefore, updatedAfter);
+
+			// If there is no explicit end date set, update with the implicit end dates (schedule horizon or the optimiser defined date - which should be the current end event start date)
+			if (!updatedAfter) {
+				// Extend the vessel end date to cover late ending if present in input scenario. This does not cover max duration breaches.
+
+				// (Note) This used to be done before the update end conditions call
+				// Do we have an end date set?
+				if (vesselAvailability.isSetEndBy() && endEvent != null) {
+					final ZonedDateTime endDate = vesselAvailability.getEndByAsDateTime();
+					// Does the vessel end late?
+					if (endEvent.getEnd().isAfter(endDate)) {
+						// Is the required vessel end date in or before the boundary?
+						if (periodRecord.lowerBoundary != null) {
+							if (periodRecord.lowerBoundary.isAfter(endDate)) {
+								// Is the last event (slot or vessel event) "locked"? (OUT or BOUNDARY)
+								Event evt = endEvent.getPreviousEvent();
+								while (evt != null && !(evt instanceof PortVisit)) {
+									evt = evt.getPreviousEvent();
+								}
+								if (evt instanceof PortVisit) {
+									final PortVisit portVisit = (PortVisit) evt;
+									if (inclusionChecker.getObjectInVesselAvailabilityRange(portVisit, vesselAvailability) == InclusionType.Out) {
+										// Change the vessel availability end date to match exported end date
+										vesselAvailability.setEndBy(endEvent.getEnd().withZoneSameInstant(ZONEID_UTC).toLocalDateTime());
+									}
+								}
 							}
 						}
 					}
 				}
+
+				if (!vesselAvailability.isSetMinDuration() || !vesselAvailability.isSetMaxDuration()) {
+					if (!vesselAvailability.isSetEndAfter() && !vesselAvailability.isSetEndBy()) {
+						if (periodRecord.schedulingEndDate != null && periodRecord.upperBoundary != null
+								&& periodRecord.schedulingEndDate.isBefore(periodRecord.upperBoundary.toLocalDate().atStartOfDay())) {
+							vesselAvailability.setEndAfter(periodRecord.schedulingEndDate);
+							vesselAvailability.setEndBy(periodRecord.upperBoundary.toLocalDateTime());
+						} else if (endEvent != null) {
+							vesselAvailability.setEndAfter(endEvent.getEnd().withZoneSameInstant(ZONEID_UTC).toLocalDateTime());
+							vesselAvailability.setEndBy(endEvent.getEnd().withZoneSameInstant(ZONEID_UTC).toLocalDateTime());
+						}
+					} else if (vesselAvailability.isSetEndAfter()) {
+						if (periodRecord.schedulingEndDate != null && periodRecord.upperBoundary != null && periodRecord.schedulingEndDate.isBefore(vesselAvailability.getEndAfter())) {
+							if (vesselAvailability.getEndAfter().isAfter(periodRecord.schedulingEndDate)) {
+								vesselAvailability.setEndAfter(periodRecord.schedulingEndDate);
+							}
+						}
+					}
+
+					// // Only update if the dates changed?
+					// if (!vesselAvailability.getEndAt().isEmpty() && endEvent != null) {
+					// vesselAvailability.getEndAt().clear();
+					// vesselAvailability.getEndAt().add(endEvent.getPort());
+					// }
+				}
 			}
 
-			// The rounding is over-constraining the problem
-			if (vesselAvailability != null) {
-				if (vesselAvailability.getCharterOrDelegateMinDuration() != 0) {
-					int minDurationInDays = vesselAvailability.getCharterOrDelegateMinDuration();
+			// If we have change the start or end conditions we may need to update the min/max durations
+			if (vesselAvailability.getCharterOrDelegateMinDuration() != 0) {
+				int minDurationInDays = vesselAvailability.getCharterOrDelegateMinDuration();
 
-					if (hoursBeforeNewStart > 0 && hoursAfterNewEnd > 0) {
-						vesselAvailability.setMinDuration(0);
-					} else {
-						final int hoursAlreadyUsed = hoursBeforeNewStart + hoursAfterNewEnd;
-						minDurationInDays -= Math.ceil((double) ((double) hoursAlreadyUsed / (double) 24));
-						minDurationInDays = Math.max(minDurationInDays, 0);
+				if (hoursBeforeNewStart > 0 && hoursAfterNewEnd > 0) {
+					vesselAvailability.setMinDuration(0);
+				} else {
+					final int hoursAlreadyUsed = hoursBeforeNewStart + hoursAfterNewEnd;
+					// Over-compensate the amount used to avoid constraint violation due to rounding
+					minDurationInDays -= Math.ceil((double) ((double) hoursAlreadyUsed / (double) 24));
+					minDurationInDays = Math.max(minDurationInDays, 0);
 
-						vesselAvailability.setMinDuration(minDurationInDays);
-					}
+					vesselAvailability.setMinDuration(minDurationInDays);
 				}
-				if (vesselAvailability.getCharterOrDelegateMaxDuration() != 0) {
-					int maxDurationInDays = vesselAvailability.getCharterOrDelegateMaxDuration();
+			}
+			if (vesselAvailability.getCharterOrDelegateMaxDuration() != 0) {
+				int maxDurationInDays = vesselAvailability.getCharterOrDelegateMaxDuration();
 
-					if (hoursBeforeNewStart > 0 && hoursAfterNewEnd > 0) {
-						vesselAvailability.setMaxDuration(0);
-					} else {
-						final int hoursAlreadyUsed = hoursBeforeNewStart + hoursAfterNewEnd;
-						maxDurationInDays -= Math.floor((double) ((double) hoursAlreadyUsed / (double) 24));
-						maxDurationInDays = Math.max(maxDurationInDays, 0);
+				if (hoursBeforeNewStart > 0 && hoursAfterNewEnd > 0) {
+					vesselAvailability.setMaxDuration(0);
+				} else {
+					final int hoursAlreadyUsed = hoursBeforeNewStart + hoursAfterNewEnd;
+					// Under-compensate the amount used to avoid constraint violation due to rounding
+					maxDurationInDays -= Math.floor((double) ((double) hoursAlreadyUsed / (double) 24));
+					maxDurationInDays = Math.max(maxDurationInDays, 0);
 
-						vesselAvailability.setMaxDuration(maxDurationInDays);
-					}
+					vesselAvailability.setMaxDuration(maxDurationInDays);
 				}
 			}
 		}
 	}
 
-	public void generateObjectToPortVisitMap(@NonNull final Schedule schedule, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap) {
+	private void copyCharterContract(final VesselAvailability vesselAvailability, final boolean clearStart, final boolean clearEnd) {
+		// Create a copy of any shared charter contract to avoid changes impacting all vessels
+		GenericCharterContract gcc = null;
+		if (vesselAvailability.isCharterContractOverride()) {
+			gcc = vesselAvailability.getContainedCharterContract();
+		} else {
+			if (vesselAvailability.getGenericCharterContract() != null) {
+				final Copier copier = new Copier();
+				gcc = (GenericCharterContract) copier.copy(vesselAvailability.getGenericCharterContract());
+
+				// Min/max duration is ignored on contained charter contracts, so copy values then clear
+				if (!vesselAvailability.isSetMinDuration()) {
+					vesselAvailability.setMinDuration(gcc.getMinDuration());
+				}
+				if (!vesselAvailability.isSetMaxDuration()) {
+					vesselAvailability.setMaxDuration(gcc.getMaxDuration());
+				}
+				gcc.unsetMinDuration();
+				gcc.unsetMaxDuration();
+
+				// Start and end heels are ignored on vessel availability contracts (contained or shared)
+				gcc.setStartHeel(CommercialFactory.eINSTANCE.createStartHeelOptions());
+				gcc.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
+
+				vesselAvailability.setCharterContractOverride(true);
+				vesselAvailability.unsetGenericCharterContract();
+				vesselAvailability.setContainedCharterContract(gcc);
+			}
+		}
+
+		if (gcc != null) {
+			if (clearStart) {
+				gcc.setRepositioningFeeTerms(null);
+			}
+			if (clearEnd) {
+				gcc.setBallastBonusTerms(null);
+			}
+		}
+	}
+
+	/**
+	 * For each cargo, open slot and vessel event determine whether or not it is part of the optimisation period
+	 * 
+	 * @param schedule
+	 * @param cargoModel
+	 * @param periodRecord
+	 * @return
+	 */
+	public Map<EObject, InclusionRecord> generateInclusionRecords(@NonNull final Schedule schedule, @NonNull final CargoModel cargoModel, final PeriodRecord periodRecord) {
+
+		final Map<EObject, InclusionRecord> records = new HashMap<>();
+
+		// Create the basic object structure. Source object, child object and schedule mapping, real vessel allocation
+
+		//// Step 1, record the scheduled objects
 
 		for (final Sequence sequence : schedule.getSequences()) {
 			for (final Event event : sequence.getEvents()) {
 				if (event instanceof SlotVisit) {
 					final SlotVisit slotVisit = (SlotVisit) event;
 					final Slot<?> slot = slotVisit.getSlotAllocation().getSlot();
-					objectToPortVisitMap.put(slot, slotVisit);
+					final Cargo cargo = slot.getCargo();
+					assert cargo != null;
+
+					final InclusionRecord inclusionRecord = records.computeIfAbsent(cargo, c -> {
+						final InclusionRecord r = new InclusionRecord();
+						r.object = c;
+						r.sequence = sequence;
+						r.vesselAvailability = sequence.getVesselAvailability();
+						return r;
+					});
+
+					inclusionRecord.event.put(slot, slotVisit);
 				} else if (event instanceof VesselEventVisit) {
 					final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
 					final VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
-					objectToPortVisitMap.put(vesselEvent, vesselEventVisit);
+					final InclusionRecord inclusionRecord = new InclusionRecord();
+					inclusionRecord.object = vesselEvent;
+					inclusionRecord.event.put(vesselEvent, vesselEventVisit);
+					inclusionRecord.sequence = sequence;
+					inclusionRecord.vesselAvailability = sequence.getVesselAvailability();
+					records.put(vesselEvent, inclusionRecord);
 				}
 			}
 		}
+
+		//// Step 2, record the unallocated or open slots and events
+
+		// Open events
+		for (final VesselEvent vesselEvent : cargoModel.getVesselEvents()) {
+			if (vesselEvent.getVesselAssignmentType() == null) {
+				final InclusionRecord inclusionRecord = new InclusionRecord();
+				inclusionRecord.object = vesselEvent;
+				records.put(vesselEvent, inclusionRecord);
+			}
+		}
+
+		// open load slots
+		for (final LoadSlot slot : cargoModel.getLoadSlots()) {
+			if (slot.getCargo() == null) {
+				final InclusionRecord inclusionRecord = new InclusionRecord();
+				inclusionRecord.object = slot;
+				records.put(slot, inclusionRecord);
+			}
+		}
+
+		// Open discharge slots
+		for (final DischargeSlot slot : cargoModel.getDischargeSlots()) {
+			if (slot.getCargo() == null) {
+				final InclusionRecord inclusionRecord = new InclusionRecord();
+				inclusionRecord.object = slot;
+				records.put(slot, inclusionRecord);
+			}
+		}
+
+		// For each record, determine whether it is in or out of the optimisation
+		records.values().forEach(r -> {
+			final NonNullPair<InclusionType, Position> p = inclusionChecker.getObjectInclusionType(r, periodRecord);
+			r.inclusionType = p.getFirst();
+			r.position = p.getSecond();
+
+			if (r.inclusionType == InclusionType.Out) {
+				r.status = Status.ToRemove;
+			} else if (r.inclusionType == InclusionType.Boundary) {
+				// Object is to be kept, but limited or no optimisation scope
+				r.status = Status.ToLockdown;
+			} else {
+				r.status = Status.ToKeep;
+			}
+
+		});
+
+		return records;
+
 	}
 
-	public void generateStartAndEndConditionsMap(@NonNull final Schedule schedule, @NonNull final Map<AssignableElement, PortVisit> startConditionMap,
-			@NonNull final Map<AssignableElement, PortVisit> endConditionMap) {
-		for (final Sequence sequence : schedule.getSequences()) {
-			for (final Event event : sequence.getEvents()) {
-				final Event segmentStart = ScheduleModelUtils.getSegmentStart(event);
-				if (event == segmentStart) {
-					if (event instanceof SlotVisit) {
-						final SlotVisit slotVisit = (SlotVisit) event;
-						// Get the cargo for the set of visits., set start/end heel links
-						final Cargo cargo = slotVisit.getSlotAllocation().getSlot().getCargo();
-						endConditionMap.put(cargo, slotVisit);
+	/**
+	 * A vessel event typically need the previous cargo/event to work out heel information correctly. Return the list of prior events that are needed to compute this correctly. This could be zero to
+	 * many object depending on the sequence. We are looking for the cargo before the event (which could even be cargo, other event, other event, this event)
+	 * 
+	 * @param ve
+	 * @param interestingVesselEventVisit
+	 * @return
+	 */
+	private Collection<EObject> getPriorDependenciesForEvent(final VesselEvent ve, final VesselEventVisit interestingVesselEventVisit) {
+		final Set<EObject> previousCargoes = new HashSet<>();
 
-						// skip to next segment - start of next sequence. Otherwise this could e.g. cargo discharge slot.
-						// TODO: Note, what about FOB/DES here?
-						Event segmentEnd = ScheduleModelUtils.getSegmentEnd(event).getNextEvent();
-						while (segmentEnd != null && !(segmentEnd instanceof PortVisit)) {
-							segmentEnd = segmentEnd.getNextEvent();
-						}
-
-						startConditionMap.put(cargo, (PortVisit) segmentEnd);
-
-					} else if (event instanceof VesselEventVisit) {
-						final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
-						// Find sequence start and sequence end and map to event.
-						final VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
-						endConditionMap.put(vesselEvent, vesselEventVisit);
-
-						Event segmentEnd = ScheduleModelUtils.getSegmentEnd(event);
-						while (segmentEnd != null && !(segmentEnd instanceof PortVisit)) {
-							segmentEnd = segmentEnd.getNextEvent();
-						}
-						startConditionMap.put(vesselEvent, (PortVisit) segmentEnd);
-
-					}
-				}
-			}
-		}
-	}
-
-	private Pair<Set<Cargo>, Set<VesselEvent>> getDependenciesForEvent(final Schedule schedule, final VesselEvent ve) {
-		VesselEventVisit interestingVesselEventVisit = null;
-		final Set<Cargo> previousCargoes = new HashSet<>();
-		final Set<VesselEvent> previousEvents = new HashSet<>();
-		final Set<Vessel> vessels = SetUtils.getObjects(ve.getAllowedVessels());
-
-		for (final Sequence sequence : schedule.getSequences()) {
-
-			if (!(sequence.getSequenceType() == SequenceType.VESSEL && vessels.contains(sequence.getVesselAvailability().getVessel()))) {
-				continue;
-			}
-			for (final Event event : sequence.getEvents()) {
-				if (event instanceof VesselEventVisit) {
-					final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
-					if (vesselEventVisit.getVesselEvent() == ve) {
-						interestingVesselEventVisit = vesselEventVisit;
-						break;
-					}
-				}
-			}
-			if (interestingVesselEventVisit != null) {
-				break;
-			}
-		}
 		if (interestingVesselEventVisit != null) {
 			Event currentEvent = interestingVesselEventVisit.getPreviousEvent();
 			boolean foundCargo = false;
@@ -1229,12 +1358,12 @@ public class PeriodTransformer {
 					break;
 				} else if (currentEvent instanceof VesselEventVisit) {
 					final VesselEventVisit vesselEventVisit = (VesselEventVisit) currentEvent;
-					previousEvents.add(vesselEventVisit.getVesselEvent());
+					previousCargoes.add(vesselEventVisit.getVesselEvent());
 				}
 				currentEvent = currentEvent.getPreviousEvent();
 			}
 			if (foundCargo) {
-				return new Pair<>(previousCargoes, previousEvents);
+				return previousCargoes;
 			}
 		}
 		return null;
@@ -1323,13 +1452,29 @@ public class PeriodTransformer {
 	 * @param assignedObject
 	 * @param startConditionMap
 	 */
-	public void updateStartConditions(@NonNull final VesselAvailability vesselAvailability, @NonNull final AssignableElement assignedObject,
-			@NonNull final Map<AssignableElement, PortVisit> startConditionMap, @NonNull final IScenarioEntityMapping mapping) {
-		final PortVisit portVisit = startConditionMap.get(assignedObject);
+	public void updateStartConditions(@NonNull final VesselAvailability vesselAvailability, final InclusionRecord inclusionRecord) {
 
-		if (inclusionChecker.getObjectInVesselAvailabilityRange(portVisit, vesselAvailability) == InclusionType.In) {
+		PortVisit portVisit;
+		if (inclusionRecord.object instanceof Cargo) {
+			final Cargo cargo = (Cargo) inclusionRecord.object;
+			portVisit = inclusionRecord.event.get(cargo.getSortedSlots().get(cargo.getSlots().size() - 1));
+		} else if (inclusionRecord.object instanceof VesselEvent) {
+			portVisit = inclusionRecord.event.get(inclusionRecord.object);
+		} else {
+			// assert false;
+			throw new IllegalStateException();
+		}
 
-			mapping.setLastTrimmedBefore(vesselAvailability, 0, assignedObject);
+		Event evt = portVisit;
+		while (evt != null) {
+			evt = evt.getNextEvent();
+			if (evt instanceof PortVisit) {
+				portVisit = (PortVisit) evt;
+				break;
+			}
+		}
+
+		{
 
 			vesselAvailability.setStartAt(null);
 			if (portVisit instanceof VesselEventVisit && ((VesselEventVisit) portVisit).getVesselEvent() instanceof CharterOutEvent) {
@@ -1362,99 +1507,67 @@ public class PeriodTransformer {
 				vesselAvailability.getStartHeel().setCvValue(22.8);
 				vesselAvailability.getStartHeel().setPriceExpression("");
 			}
-			
-			GenericCharterContract gcc = null;
-			boolean contained = false;
-			if (vesselAvailability.isCharterContractOverride()) {
-				gcc = vesselAvailability.getContainedCharterContract();
-				contained = true;
-			} else {
-				if (vesselAvailability.getGenericCharterContract() != null) {
-					final Copier copier = new Copier();
-					gcc = (GenericCharterContract) copier.copy(vesselAvailability.getGenericCharterContract());
-				}
-			}
-			if (gcc != null) {
-				gcc.setRepositioningFeeTerms(null);
-				if (!contained) {
-					vesselAvailability.setGenericCharterContract(gcc);
-				}
-			}
-			
+
+			copyCharterContract(vesselAvailability, true, false);
 		}
 	}
 
-	public void updateEndConditions(@NonNull final VesselAvailability vesselAvailability, @NonNull final AssignableElement assignedObject,
-			@NonNull final Map<AssignableElement, PortVisit> endConditionMap, @NonNull final IScenarioEntityMapping mapping) {
+	public void updateEndConditions(@NonNull final VesselAvailability vesselAvailability, final InclusionRecord inclusionRecord) {
+		final PortVisit portVisit;
+		if (inclusionRecord.object instanceof Cargo) {
+			final Cargo cargo = (Cargo) inclusionRecord.object;
+			portVisit = inclusionRecord.event.get(cargo.getSortedSlots().get(0));
+		} else if (inclusionRecord.object instanceof VesselEvent) {
+			portVisit = inclusionRecord.event.get(inclusionRecord.object);
+		} else {
+			// assert false;
+			throw new IllegalStateException();
+		}
 
-		final PortVisit portVisit = endConditionMap.get(assignedObject);
-		assert portVisit != null;
-
-		if (inclusionChecker.getObjectInVesselAvailabilityRange(portVisit, vesselAvailability) == InclusionType.In) {
-
-			mapping.setLastTrimmedAfter(vesselAvailability, 0, assignedObject);
-
-			vesselAvailability.getEndAt().clear();
-			// Standard case
-			vesselAvailability.getEndAt().add(portVisit.getPort());
-			// Special case for charter outs start/end ports can differ
-			if (portVisit instanceof VesselEventVisit) {
-				final VesselEventVisit vesselEventVisit = (VesselEventVisit) portVisit;
-				final VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
-				if (vesselEvent instanceof CharterOutEvent) {
-					final CharterOutEvent charterOutEvent = (CharterOutEvent) vesselEvent;
-					if (charterOutEvent.isSetRelocateTo()) {
-						final Port port = charterOutEvent.getPort();
-						vesselAvailability.getEndAt().clear();
-						vesselAvailability.getEndAt().add(port);
-					}
-				}
-			}
-
-			vesselAvailability.setEndAfter(portVisit.getStart().withZoneSameInstant(ZONEID_UTC).toLocalDateTime());
-			vesselAvailability.setEndBy(portVisit.getStart().withZoneSameInstant(ZONEID_UTC).toLocalDateTime());
-			vesselAvailability.setForceHireCostOnlyEndRule(false);
-
-			if (vesselAvailability.getEndHeel() == null) {
-				vesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
-			}
-
-			// Set must arrive cold with target heel volume
-			final int heel = portVisit.getHeelAtStart();
-			if (heel > 0 || portVisit.getPreviousEvent() instanceof Cooldown) {
-				vesselAvailability.getEndHeel().setMinimumEndHeel(heel);
-				vesselAvailability.getEndHeel().setMaximumEndHeel(heel);
-				vesselAvailability.getEndHeel().setPriceExpression("");
-				if (portVisit.getPreviousEvent() instanceof Cooldown) {
-					// We had a cooldown before, so end either way
-					vesselAvailability.getEndHeel().setTankState(EVesselTankState.EITHER);
-				} else {
-					vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
-				}
-			} else {
-				vesselAvailability.getEndHeel().setMinimumEndHeel(0);
-				vesselAvailability.getEndHeel().setMaximumEndHeel(0);
-				vesselAvailability.getEndHeel().setPriceExpression("");
-				vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_WARM);
-			}
-			GenericCharterContract gcc = null;
-			boolean contained = false;
-			if (vesselAvailability.isCharterContractOverride()) {
-				gcc = vesselAvailability.getContainedCharterContract();
-				contained = true;
-			} else {
-				if (vesselAvailability.getGenericCharterContract() != null) {
-					final Copier copier = new Copier();
-					gcc = (GenericCharterContract) copier.copy(vesselAvailability.getGenericCharterContract());
-				}
-			}
-			if (gcc != null) {
-				gcc.setBallastBonusTerms(null);
-				if (!contained) {
-					vesselAvailability.setGenericCharterContract(gcc);
+		vesselAvailability.getEndAt().clear();
+		// Standard case
+		vesselAvailability.getEndAt().add(portVisit.getPort());
+		// Special case for charter outs start/end ports can differ
+		if (portVisit instanceof VesselEventVisit) {
+			final VesselEventVisit vesselEventVisit = (VesselEventVisit) portVisit;
+			final VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
+			if (vesselEvent instanceof CharterOutEvent) {
+				final CharterOutEvent charterOutEvent = (CharterOutEvent) vesselEvent;
+				if (charterOutEvent.isSetRelocateTo()) {
+					final Port port = charterOutEvent.getPort();
+					vesselAvailability.getEndAt().clear();
+					vesselAvailability.getEndAt().add(port);
 				}
 			}
 		}
+
+		vesselAvailability.setEndAfter(portVisit.getStart().withZoneSameInstant(ZONEID_UTC).toLocalDateTime());
+		vesselAvailability.setEndBy(portVisit.getStart().withZoneSameInstant(ZONEID_UTC).toLocalDateTime());
+
+		if (vesselAvailability.getEndHeel() == null) {
+			vesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
+		}
+
+		// Set must arrive cold with target heel volume
+		final int heel = portVisit.getHeelAtStart();
+		if (heel > 0 || portVisit.getPreviousEvent() instanceof Cooldown) {
+			vesselAvailability.getEndHeel().setMinimumEndHeel(heel);
+			vesselAvailability.getEndHeel().setMaximumEndHeel(heel);
+			vesselAvailability.getEndHeel().setPriceExpression("");
+			if (portVisit.getPreviousEvent() instanceof Cooldown) {
+				// We had a cooldown before, so end either way
+				vesselAvailability.getEndHeel().setTankState(EVesselTankState.EITHER);
+			} else {
+				vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
+			}
+		} else {
+			vesselAvailability.getEndHeel().setMinimumEndHeel(0);
+			vesselAvailability.getEndHeel().setMaximumEndHeel(0);
+			vesselAvailability.getEndHeel().setPriceExpression("");
+			vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_WARM);
+		}
+
+		copyCharterContract(vesselAvailability, false, true);
 	}
 
 	@NonNull
@@ -1466,79 +1579,7 @@ public class PeriodTransformer {
 		this.inclusionChecker = inclusionChecker;
 	}
 
-	/**
-	 * Given a new vessel availability, update the start and end conditions around the input AssignableElement. This is assumed to be a single element modelled statically outside the main period
-	 * scope.
-	 * 
-	 * @param vesselAvailability
-	 * @param assignedObject
-	 * @param startConditionMap
-	 * @param endConditionMap
-	 */
-
-	public void updateVesselAvailabilityConditions(@NonNull final VesselAvailability vesselAvailability, @NonNull final AssignableElement assignedObject,
-			@NonNull final Map<AssignableElement, PortVisit> startConditionMap, @NonNull final Map<AssignableElement, PortVisit> endConditionMap) {
-
-		// TODO: Refactor the other conditions methods to avoid code duplication.
-		{
-			final PortVisit portVisit = endConditionMap.get(assignedObject);
-			vesselAvailability.setStartAt(portVisit.getPort());
-
-			vesselAvailability.setStartAfter(portVisit.getStart().withZoneSameInstant(ZONEID_UTC).toLocalDateTime());
-			vesselAvailability.setStartBy(portVisit.getStart().withZoneSameInstant(ZONEID_UTC).toLocalDateTime());
-
-			// Check end after bounds. Do they still apply?
-			// TODO: Add this to unit tests
-			if (vesselAvailability.isSetEndAfter()) {
-				if (vesselAvailability.getEndAfterAsDateTime().isBefore(portVisit.getStart())) {
-					vesselAvailability.unsetEndAfter();
-				}
-			}
-
-			// TODO: Set CV, price
-			final int heelAtStart = portVisit.getHeelAtStart();
-			if (heelAtStart == 0) {
-				vesselAvailability.getStartHeel().setMinVolumeAvailable(0);
-				vesselAvailability.getStartHeel().setMaxVolumeAvailable(0);
-				vesselAvailability.getStartHeel().setCvValue(0.0);
-				vesselAvailability.getStartHeel().setPriceExpression("0.0");
-			} else {
-				vesselAvailability.getStartHeel().setMinVolumeAvailable(heelAtStart);
-				vesselAvailability.getStartHeel().setMaxVolumeAvailable(heelAtStart);
-				vesselAvailability.getStartHeel().setCvValue(22.8);
-				vesselAvailability.getStartHeel().setPriceExpression("0.01");
-			}
-		}
-		{
-			final PortVisit portVisit = startConditionMap.get(assignedObject);
-			vesselAvailability.getEndAt().clear();
-			vesselAvailability.getEndAt().add(portVisit.getPort());
-
-			vesselAvailability.setEndAfter(portVisit.getStart().withZoneSameInstant(ZONEID_UTC).toLocalDateTime());
-			vesselAvailability.setEndBy(portVisit.getStart().withZoneSameInstant(ZONEID_UTC).toLocalDateTime());
-			vesselAvailability.setForceHireCostOnlyEndRule(false);
-
-			// Set must arrive cold with target heel volume
-			final int heel = portVisit.getHeelAtStart();
-			if (heel > 0 || portVisit.getPreviousEvent() instanceof Cooldown) {
-				if (vesselAvailability.getEndHeel() == null) {
-					vesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
-				}
-				vesselAvailability.getEndHeel().setMinimumEndHeel(heel);
-				vesselAvailability.getEndHeel().setMaximumEndHeel(heel);
-				vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
-			} else {
-				if (vesselAvailability.getEndHeel() == null) {
-					vesselAvailability.setEndHeel(CommercialFactory.eINSTANCE.createEndHeelOptions());
-				}
-				vesselAvailability.getEndHeel().setMinimumEndHeel(0);
-				vesselAvailability.getEndHeel().setMaximumEndHeel(0);
-				vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_WARM);
-			}
-		}
-	}
-
-	public void trimSpotMarketCurves(@NonNull final PeriodRecord periodRecord, @NonNull final LNGScenarioModel scenario, LNGScenarioModel wholeScenario) {
+	public void trimSpotMarketCurves(@NonNull final PeriodRecord periodRecord, @NonNull final LNGScenarioModel scenario, final LNGScenarioModel wholeScenario) {
 		final SpotMarketsModel spotMarketsModel = scenario.getReferenceModel().getSpotMarketsModel();
 		ZonedDateTime earliestDate = periodRecord.lowerBoundary;
 		ZonedDateTime latestDate = periodRecord.upperBoundary;
@@ -1551,14 +1592,14 @@ public class PeriodTransformer {
 				latestDate = earliestAndLatestTimes.getSecond();
 			}
 		}
-		
+
 		if (earliestDate == null) {
 			throw new IllegalStateException("Unable to find earliest scenario date");
 		}
 		if (latestDate == null) {
 			throw new IllegalStateException("Unable to find latest scenario date");
 		}
-		
+
 		if (wholeScenario != null) {
 			final Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTimesForWholeScenario = LNGScenarioUtils.findEarliestAndLatestTimes(wholeScenario);
 			// Make sure the spot markets do no start any earlier than in the parent scenario

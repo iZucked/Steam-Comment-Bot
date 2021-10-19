@@ -102,7 +102,7 @@ public class DefaultLocalSearchOptimiserTest {
 		});
 		lso.setRandom(random);
 		// Perform the optimisation
-		lso.optimise(context);
+		lso.optimise(context, null);
 
 		// TODO: Validate run -- use progress monitor output?
 	}

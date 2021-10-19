@@ -26,6 +26,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.base.Objects;
+import com.mmxlabs.common.time.Days;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.FlexType;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
@@ -57,6 +58,7 @@ import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
+import com.mmxlabs.models.lng.schedule.GroupedCharterOutEvent;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
@@ -81,6 +83,11 @@ import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.NamedObject;
 
 public final class ChangeSetTransformerUtil {
+
+	/**
+	 * How many days difference needed to count as a major change
+	 */
+	private static final int MAJOR_CHANGE_DAYS_THRESHOLD = 2;
 
 	private ChangeSetTransformerUtil() {
 
@@ -174,8 +181,7 @@ public final class ChangeSetTransformerUtil {
 	}
 
 	/**
-	 * Given a list of target {@link EObject}s, generate a {@link MappingModel}
-	 * which can be used to compare against other {@link MappingModel}s
+	 * Given a list of target {@link EObject}s, generate a {@link MappingModel} which can be used to compare against other {@link MappingModel}s
 	 * 
 	 * @param targets
 	 * @return
@@ -183,7 +189,8 @@ public final class ChangeSetTransformerUtil {
 	public static @NonNull MappingModel generateMappingModel(final @NonNull Collection<EObject> targets) {
 
 		final MappingModel mappingModel = new MappingModel();
-		final Map<Sequence, GroupedCharterLengthEvent> extraEvents = new HashMap<>();
+		final Map<Sequence, GroupedCharterLengthEvent> extraLengthEvents = new HashMap<>();
+		final Map<Sequence, GroupedCharterOutEvent> extraGCOEvents = new HashMap<>();
 		// Split this code out as it is used in two places.
 		final Consumer<Event> eventMapper = event -> {
 			// Assume we are a valid event to include if we get here
@@ -337,7 +344,13 @@ public final class ChangeSetTransformerUtil {
 				if (event instanceof CharterLengthEvent) {
 					// Record these events so we can group them up later
 					final CharterLengthEvent charterLengthEvent = (CharterLengthEvent) event;
-					extraEvents.computeIfAbsent(charterLengthEvent.getSequence(), k -> ScheduleFactory.eINSTANCE.createGroupedCharterLengthEvent()).getEvents().addAll(charterLengthEvent.getEvents());
+					extraLengthEvents.computeIfAbsent(charterLengthEvent.getSequence(), k -> ScheduleFactory.eINSTANCE.createGroupedCharterLengthEvent()).getEvents()
+							.addAll(charterLengthEvent.getEvents());
+				} else if (event instanceof GeneratedCharterOut) {
+					// Record these events so we can group them up later
+					final GeneratedCharterOut charterLengthEvent = (GeneratedCharterOut) event;
+					extraGCOEvents.computeIfAbsent(charterLengthEvent.getSequence(), k -> ScheduleFactory.eINSTANCE.createGroupedCharterOutEvent()).getEvents().addAll(charterLengthEvent.getEvents());
+
 				} else {
 					eventMapper.accept(event);
 				}
@@ -349,16 +362,16 @@ public final class ChangeSetTransformerUtil {
 
 				final ChangeSetRowData row = ChangesetFactory.eINSTANCE.createChangeSetRowData();
 				group.getMembers().add(row);
-				
+
 				row.setPaperDealAllocation(paperDealAllocation);
 				row.setLhsGroupProfitAndLoss(paperDealAllocation);
 				row.setLhsName(paperDeal.getName());
-				
+
 				mappingModel.lhsRowMap.put(paperDeal.getName(), row);
 			}
 		}
 
-		for (final GroupedCharterLengthEvent cle : extraEvents.values()) {
+		for (final GroupedCharterLengthEvent cle : extraLengthEvents.values()) {
 			long pnl1 = 0L;
 			long pnl2 = 0L;
 			for (final Event e : cle.getEvents()) {
@@ -367,7 +380,29 @@ public final class ChangeSetTransformerUtil {
 					cle.setLinkedSequence(c.getSequence());
 				}
 				if (e instanceof ProfitAndLossContainer) {
-					ProfitAndLossContainer c = (ProfitAndLossContainer)e;
+					final ProfitAndLossContainer c = (ProfitAndLossContainer) e;
+					pnl1 += c.getGroupProfitAndLoss().getProfitAndLoss();
+					pnl2 += c.getGroupProfitAndLoss().getProfitAndLossPreTax();
+				}
+			}
+			final GroupProfitAndLoss groupProfitAndLoss = ScheduleFactory.eINSTANCE.createGroupProfitAndLoss();
+			groupProfitAndLoss.setProfitAndLoss(pnl1);
+			groupProfitAndLoss.setProfitAndLossPreTax(pnl2);
+			cle.setGroupProfitAndLoss(groupProfitAndLoss);
+
+			// Create an entry for the new grouped item
+			eventMapper.accept(cle);
+		}
+		for (final GroupedCharterOutEvent cle : extraGCOEvents.values()) {
+			long pnl1 = 0L;
+			long pnl2 = 0L;
+			for (final Event e : cle.getEvents()) {
+				if (e instanceof GeneratedCharterOut) {
+					final GeneratedCharterOut c = (GeneratedCharterOut) e;
+					cle.setLinkedSequence(c.getSequence());
+				}
+				if (e instanceof ProfitAndLossContainer) {
+					final ProfitAndLossContainer c = (ProfitAndLossContainer) e;
 					pnl1 += c.getGroupProfitAndLoss().getProfitAndLoss();
 					pnl2 += c.getGroupProfitAndLoss().getProfitAndLossPreTax();
 				}
@@ -394,11 +429,8 @@ public final class ChangeSetTransformerUtil {
 	}
 
 	/**
-	 * Bind the before and after state based on identical keys. For spot market
-	 * slots which are not identical, but have exactly one free equivalent, bind
-	 * them. (For example DES Sale market in Feb 2017 may use in stance 1 in the
-	 * before state and instance 2 in the after state. This should be considered the
-	 * same). This method sets the LHS/RHS links
+	 * Bind the before and after state based on identical keys. For spot market slots which are not identical, but have exactly one free equivalent, bind them. (For example DES Sale market in Feb 2017
+	 * may use in stance 1 in the before state and instance 2 in the after state. This should be considered the same). This method sets the LHS/RHS links
 	 * 
 	 * @param beforeMapping
 	 * @param afterMapping
@@ -762,9 +794,9 @@ public final class ChangeSetTransformerUtil {
 						if (rhsLink != null) {
 							// LDD? Merge after records)
 							if (!rhsLink.isPrimaryRecord()) {
-								ChangeSetRowDataGroup rowDataGroup2 = rhsLink.getRowDataGroup();
-								ChangeSetRowData changeSetRowData = rowDataGroup2.getMembers().get(0);
-								ChangeSetRowData lhsLink = changeSetRowData.getLhsLink();
+								final ChangeSetRowDataGroup rowDataGroup2 = rhsLink.getRowDataGroup();
+								final ChangeSetRowData changeSetRowData = rowDataGroup2.getMembers().get(0);
+								final ChangeSetRowData lhsLink = changeSetRowData.getLhsLink();
 								if (lhsLink != null) {
 									// TODO: Why is it null in sandbox?
 									final ChangeSetRowDataGroup rowDataGroup = lhsLink.getRowDataGroup();
@@ -939,7 +971,7 @@ public final class ChangeSetTransformerUtil {
 		}
 		throw new NullPointerException();
 	}
-	
+
 	@NonNull
 	public static Integer getCharterNumber(@NonNull final Sequence sequence) {
 		if (sequence.isSetVesselAvailability()) {
@@ -947,7 +979,7 @@ public final class ChangeSetTransformerUtil {
 		}
 		return 0;
 	}
-	
+
 	@NonNull
 	public static Integer getCharterNumber(@Nullable final VesselAssignmentType t) {
 		if (t instanceof VesselAvailability) {
@@ -969,7 +1001,7 @@ public final class ChangeSetTransformerUtil {
 			final int windowSize = slot.getWindowSize();
 			String formattedWindowStart = format(slot.getWindowStart());
 			if (windowSize > 1 && slot.getWindowSizeUnits() == TimePeriod.MONTHS) {
-				String formattedWindowPeriodEnd = format(slot.getWindowStart().plusMonths(windowSize));
+				final String formattedWindowPeriodEnd = format(slot.getWindowStart().plusMonths(windowSize));
 				formattedWindowStart = String.format("%s-%s", formattedWindowStart, formattedWindowPeriodEnd);
 			}
 			return String.format("%s-%s", market.getName(), formattedWindowStart);
@@ -1118,6 +1150,14 @@ public final class ChangeSetTransformerUtil {
 						return 1;
 					}
 				}
+				// Sort by date.
+				if (o1.isDateChange() != o2.isDateChange()) {
+					if (o1.isDateChange()) {
+						return -1;
+					} else {
+						return 1;
+					}
+				}
 
 				// Compare name
 				return ("" + o1.getLhsName()).compareTo("" + o2.getLhsName());
@@ -1175,7 +1215,7 @@ public final class ChangeSetTransformerUtil {
 
 					if (event instanceof SlotVisit) {
 						final SlotVisit slotVisit = (SlotVisit) event;
-						SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
+						final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
 						if (slotAllocation != null && slotAllocation.getSlot() instanceof LoadSlot) {
 							final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
 							if (cargoAllocation != null) {
@@ -1230,7 +1270,7 @@ public final class ChangeSetTransformerUtil {
 					}
 					if (event instanceof SlotVisit) {
 						final SlotVisit slotVisit = (SlotVisit) event;
-						SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
+						final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
 						if (slotAllocation != null && slotAllocation.getSlot() instanceof LoadSlot) {
 							final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
 							if (cargoAllocation != null) {
@@ -1293,28 +1333,29 @@ public final class ChangeSetTransformerUtil {
 						final ChangeSetRowData beforeData = beforeGroup.getMembers().get(0);
 						final ChangeSetRowData afterData = afterGroup.getMembers().get(0);
 
-						
-						// Mark up lateness over 24 hours as a structural change.
+						// Mark up lateness over 24 hours as a major change.
 						{
 							long beforeLateness = 0L;
-							for (ChangeSetRowData data : row.getBeforeData().getMembers()) {
+							for (final ChangeSetRowData data : row.getBeforeData().getMembers()) {
 								beforeLateness += LatenessUtils.getLatenessExcludingFlex(data.getEventGrouping());
 							}
 							long afterLateness = 0L;
-							for (ChangeSetRowData data : row.getAfterData().getMembers()) {
+							for (final ChangeSetRowData data : row.getAfterData().getMembers()) {
 								afterLateness += LatenessUtils.getLatenessExcludingFlex(data.getEventGrouping());
 							}
 							if (Math.abs(beforeLateness - afterLateness) > 24) {
 								row.setVesselChange(true);
 							}
 						}
-						
-						// Start / end events are not structural changes.
-						if ((beforeData.getLhsEvent() instanceof StartEvent || beforeData.getLhsEvent() instanceof EndEvent)
-								|| (afterData.getLhsEvent() instanceof StartEvent || afterData.getLhsEvent() instanceof EndEvent)) {
+
+						// Start / end events are minor changes.
+						if (beforeData.getLhsEvent() instanceof StartEvent //
+								|| afterData.getLhsEvent() instanceof StartEvent //
+								|| beforeData.getLhsEvent() instanceof EndEvent //
+								|| afterData.getLhsEvent() instanceof EndEvent) {
 							continue;
 						}
-						// GCO are not structural changes.
+						// GCO are minor changes.
 						if ((beforeData.getLhsEvent() instanceof GeneratedCharterOut) || (afterData.getLhsEvent() instanceof GeneratedCharterOut)) {
 							continue;
 						}
@@ -1322,6 +1363,9 @@ public final class ChangeSetTransformerUtil {
 							continue;
 						}
 						if ((beforeData.getLhsEvent() instanceof GroupedCharterLengthEvent) || (afterData.getLhsEvent() instanceof GroupedCharterLengthEvent)) {
+							continue;
+						}
+						if ((beforeData.getLhsEvent() instanceof GroupedCharterOutEvent) || (afterData.getLhsEvent() instanceof GroupedCharterOutEvent)) {
 							continue;
 						}
 					}
@@ -1359,6 +1403,64 @@ public final class ChangeSetTransformerUtil {
 								}
 							}
 						}
+
+						if (!row.isWiringChange()) {
+							{
+								final SlotAllocation beforeAllocation = beforeData.getLoadAllocation();
+								final SlotAllocation afterAllocation = afterData.getLoadAllocation();
+								if (beforeAllocation != null && afterAllocation != null) {
+
+									final SlotVisit beforeVisit = beforeAllocation.getSlotVisit();
+									final SlotVisit afterVisit = afterAllocation.getSlotVisit();
+
+									if (beforeVisit != null && afterVisit != null) {
+										if (beforeVisit.getStart() != null && afterVisit.getStart() != null) {
+											if (Math.abs(Days.between(beforeVisit.getStart(), afterVisit.getStart())) > MAJOR_CHANGE_DAYS_THRESHOLD) {
+												row.setDateChange(true);
+											}
+										}
+									}
+
+								}
+							}
+							{
+								final SlotAllocation beforeAllocation = beforeData.getDischargeAllocation();
+								final SlotAllocation afterAllocation = afterData.getDischargeAllocation();
+								if (beforeAllocation != null && afterAllocation != null) {
+
+									final SlotVisit beforeVisit = beforeAllocation.getSlotVisit();
+									final SlotVisit afterVisit = afterAllocation.getSlotVisit();
+
+									if (beforeVisit != null && afterVisit != null) {
+										if (beforeVisit.getStart() != null && afterVisit.getStart() != null) {
+											if (Math.abs(Days.between(beforeVisit.getStart(), afterVisit.getStart())) > MAJOR_CHANGE_DAYS_THRESHOLD) {
+												row.setDateChange(true);
+											}
+										}
+									}
+								}
+							}
+
+							if (beforeData.getLhsEvent() != null && afterData.getLhsEvent() != null) {
+								final Event beforeEvent = beforeData.getLhsEvent();
+								final Event afterEvent = afterData.getLhsEvent();
+								if (beforeEvent.getStart() != null && afterEvent.getStart() != null) {
+									if (Math.abs(Days.between(beforeEvent.getStart(), afterEvent.getStart())) > MAJOR_CHANGE_DAYS_THRESHOLD) {
+										row.setDateChange(true);
+									}
+								}
+							}
+							if (beforeData.getRhsEvent() != null && afterData.getRhsEvent() != null) {
+								final Event beforeEvent = beforeData.getRhsEvent();
+								final Event afterEvent = afterData.getRhsEvent();
+								if (beforeEvent.getStart() != null && afterEvent.getStart() != null) {
+									if (Math.abs(Days.between(beforeEvent.getStart(), afterEvent.getStart())) > MAJOR_CHANGE_DAYS_THRESHOLD) {
+										row.setDateChange(true);
+									}
+								}
+							}
+						}
+
 					}
 					if (beforePrimaryCount != afterPrimaryCount) {
 						row.setWiringChange(true);
@@ -1376,7 +1478,7 @@ public final class ChangeSetTransformerUtil {
 			final ChangeSetTableRow changeSetTableRow = itr.next();
 
 			if (size == 1) {
-				if (!changeSetTableRow.isWiringChange() && !changeSetTableRow.isVesselChange()) {
+				if (!changeSetTableRow.isMajorChange()) {
 					long a = ChangeSetKPIUtil.getPNL(changeSetTableRow, ResultType.Before);
 					long b = ChangeSetKPIUtil.getPNL(changeSetTableRow, ResultType.After);
 					if (a == b) {

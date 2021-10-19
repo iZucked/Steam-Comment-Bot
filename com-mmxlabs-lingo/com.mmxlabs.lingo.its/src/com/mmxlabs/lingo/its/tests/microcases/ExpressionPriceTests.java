@@ -6,6 +6,7 @@ package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -14,6 +15,8 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import com.google.inject.Injector;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
@@ -233,4 +236,102 @@ public class ExpressionPriceTests extends AbstractMicroTestCase {
 		Assertions.assertEquals(expectedLoadPrice, simpleCargoAllocation.getDischargeAllocation().getPrice(), 0.0001);
 
 	}
+
+	/**
+	 * Data for the shift function tests. These set the pricing date, expression and expected value for the load slot
+	 * Added to test fix for FB 5310
+	 * @return
+	 */
+	public static Iterable<Object[]> generateShiftData() {
+		return Arrays.asList(new Object[][] { //
+
+				// Check values for varying month durations. Bug caused the wrong month duration to be used in change point
+				{ LocalDate.of(2021, 1, 1), "SHIFT(Test, 1)", 12.0 }, //
+				{ LocalDate.of(2021, 1, 31), "SHIFT(Test, 1)", 12.0 }, //
+				{ LocalDate.of(2021, 1, 1), "SHIFT(Test, 2)", 11.0 }, //
+				{ LocalDate.of(2021, 1, 31), "SHIFT(Test, 2)", 11.0 }, //
+				{ LocalDate.of(2021, 1, 1), "SHIFT(Test, 3)", 10.0 }, //
+				{ LocalDate.of(2021, 1, 31), "SHIFT(Test, 3)", 10.0 }, //
+
+				// Test data range - bug caused data range to be truncated.
+				{ LocalDate.of(2020, 1, 1), "SHIFT(Test, 3)", 0.0 }, // Too early
+				{ LocalDate.of(2020, 2, 1), "SHIFT(Test, 3)", 0.0 }, // Too early
+				{ LocalDate.of(2020, 3, 1), "SHIFT(Test, 3)", 0.0 }, // Too early
+				{ LocalDate.of(2020, 4, 1), "SHIFT(Test, 3)", 1.0 }, // First Entry
+				{ LocalDate.of(2020, 5, 1), "SHIFT(Test, 3)", 2.0 }, // Within data
+				{ LocalDate.of(2021, 5, 1), "SHIFT(Test, 3)", 14.0 }, // Within data
+				{ LocalDate.of(2021, 6, 1), "SHIFT(Test, 3)", 15.0 }, // Last Entry
+				{ LocalDate.of(2021, 7, 1), "SHIFT(Test, 3)", 15.0 }, // Out of data
+		});
+	}
+
+	@Tag(TestCategories.MICRO_TEST)
+	@ParameterizedTest(name = "{0} {1} = {2}")
+	@MethodSource("generateShiftData")
+	public void testShiftFunction(LocalDate pricingDate, String expression, double expected) {
+
+		portModelBuilder.setAllExistingPortsToUTC();
+
+		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
+		final VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+				.build();
+
+		pricingModelBuilder.makeCommodityDataCurve("Test", "$", "mmBtu") //
+
+				.addIndexPoint(YearMonth.of(2020, 1), 1.0) //
+				.addIndexPoint(YearMonth.of(2020, 2), 2.0) //
+				.addIndexPoint(YearMonth.of(2020, 3), 3.0) //
+				.addIndexPoint(YearMonth.of(2020, 4), 4.0) //
+				.addIndexPoint(YearMonth.of(2020, 5), 5.0) //
+				.addIndexPoint(YearMonth.of(2020, 6), 6.0) //
+				.addIndexPoint(YearMonth.of(2020, 7), 7.0) //
+				.addIndexPoint(YearMonth.of(2020, 8), 8.0) //
+				.addIndexPoint(YearMonth.of(2020, 9), 9.0) //
+				.addIndexPoint(YearMonth.of(2020, 10), 10.0) //
+				.addIndexPoint(YearMonth.of(2020, 11), 11.0) //
+				.addIndexPoint(YearMonth.of(2020, 12), 12.0) //
+
+				.addIndexPoint(YearMonth.of(2021, 1), 13.0) //
+				.addIndexPoint(YearMonth.of(2021, 2), 14.0) //
+				.addIndexPoint(YearMonth.of(2021, 3), 15.0) //
+			 
+				.build();
+
+		Cargo testCargo = cargoModelBuilder.makeCargo() ///
+				.makeFOBPurchase("F1", LocalDate.of(2021, 1, 1), portFinder.findPortById(InternalDataConstants.PORT_DARWIN), null, entity, expression)//
+				.withWindowStartTime(0) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.withPricingEvent(PricingEvent.START_LOAD, pricingDate) //
+				//
+				.build() //
+				.makeDESSale("D1", LocalDate.of(2021, 1, 31), portFinder.findPortById(InternalDataConstants.PORT_CHITA), null, entity, expression) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.withWindowStartTime(0) //
+				.withPricingEvent(PricingEvent.START_LOAD, null) //
+				.build() //
+				//
+				// .withVesselAssignment(charterInMarket_1, -1, 1) //
+				.withVesselAssignment(vesselAvailability, 1) //
+				.build();
+
+		Slot load = testCargo.getSlots().get(0);
+		Slot discharge = testCargo.getSlots().get(1);
+
+		final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
+				.withThreadCount(1) //
+				.buildDefaultRunner();
+
+		try {
+			runnerBuilder.evaluateInitialState();
+		} finally {
+			runnerBuilder.dispose();
+		}
+		CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(load.getName(), ScenarioModelUtil.findSchedule(scenarioDataProvider));
+		SimpleCargoAllocation simpleCargoAllocation = new SimpleCargoAllocation(cargoAllocation);
+		double expectedBuySellPrice = expected;
+		Assertions.assertEquals(expectedBuySellPrice, simpleCargoAllocation.getLoadAllocation().getPrice(), 0.0001);
+		// Assertions.assertEquals(expectedBuySellPrice, simpleCargoAllocation.getDischargeAllocation().getPrice(), 0.0001);
+
+	}
+
 }

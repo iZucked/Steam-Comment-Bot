@@ -5,6 +5,7 @@
 package com.mmxlabs.rcp.common.editors;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * Interface to provide human readable information about an {@link Exception} to a user.
@@ -22,7 +23,7 @@ public interface IReasonProvider {
 	@NonNull
 	String getResolutionSteps();
 
-	@NonNull
+	@Nullable
 	Throwable getThrowable();
 
 }

@@ -184,7 +184,7 @@ public class MinMaxUnconstrainedVolumeAllocator extends UnconstrainedVolumeAlloc
 
 	protected AllocationAnnotation calculateShippedMode_MinVolumes(final AllocationRecord allocationRecord, final List<IPortSlot> slots, final IVessel vessel) {
 		assert allocationRecord.allocationMode == AllocationMode.Shipped;
-		int ii = 1;
+
 		// Scale factor applied internal mmbtu values *for this method only* to help
 		// mitigate m3 <-> mmbtu rounding problems
 		final int scaleFactor = 10;

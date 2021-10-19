@@ -64,6 +64,8 @@ public class BuyOptionsComponent extends AbstractSandboxComponent<Object, Abstra
 
 			final Label c = new Label(expandableComposite, SWT.NONE);
 			expandableComposite.setTextClient(c);
+
+			
 			c.setImage(sandboxUIHelper.image_grey_add);
 			c.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).hint(16, 16).grab(true, false).create());
 			c.addMouseTrackListener(new MouseTrackAdapter() {
@@ -75,7 +77,7 @@ public class BuyOptionsComponent extends AbstractSandboxComponent<Object, Abstra
 
 				@Override
 				public void mouseEnter(final MouseEvent e) {
-					c.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
+					c.setImage(sandboxUIHelper.image_add);
 				}
 			});
 			c.addMouseListener(OptionMenuHelper.createNewBuyOptionMenuListener(c.getParent(), scenarioEditingLocation, modelProvider));

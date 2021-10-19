@@ -627,7 +627,7 @@ public class VesselItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Vessel_referenceVessel_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Vessel_referenceVessel_feature", "_UI_Vessel_type"),
+				 getString("_UI_Vessel_referenceVessel_description"),
 				 FleetPackage.Literals.VESSEL__REFERENCE_VESSEL,
 				 true,
 				 false,

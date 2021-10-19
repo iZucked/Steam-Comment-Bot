@@ -134,23 +134,15 @@ public class CanalBookingsReportTransformer {
 
 					String type = "";
 
-					switch (journey.getCanalBookingPeriod()) {
-					case NOMINAL:
-						type = "Nominal";
-						break;
-					default:
-						if (journey.getCanalBooking() != null) {
-							type = "Booked";
+					if (journey.getCanalBooking() != null) {
+						type = "Booked";
+					}
+					else {
+						if (journey.getCanalJourneyEvent() != null) {
+							type = "Wait ("+(journey.getCanalJourneyEvent().getPanamaWaitingTimeHours()/24)+"d)";
+						} else {
+							type = "Wait";
 						}
-						else {
-							if (journey.getCanalJourneyEvent() != null) {
-								type = "Wait ("+(journey.getCanalJourneyEvent().getPanamaWaitingTimeHours()/24)+"d)";
-							}
-							else {
-								type = "Wait";
-							}
-						}
-						break;
 					}
 
 					Event nextEvent = evt.getNextEvent();
@@ -205,32 +197,38 @@ public class CanalBookingsReportTransformer {
 	}
 	
 	private String getVesselBookingCode(Journey journey, CanalBookings canalBookings) {
-		if (journey.getSequence() != null && journey.getSequence().getVesselAvailability() != null && 
-				journey.getSequence().getVesselAvailability().getVessel() != null) {
-			Vessel vessel = journey.getSequence().getVesselAvailability().getVessel();
-			String defaultGroupName = "";
-			if (canalBookings != null) {
+		Vessel v = null;
+		String defaultGroupName = "";
+		if (journey.getSequence() != null && canalBookings != null) {
+			if (journey.getSequence().getVesselAvailability() != null) {
+				v = journey.getSequence().getVesselAvailability().getVessel();
+			} else if(journey.getSequence().getCharterInMarket() != null) {
+				v = journey.getSequence().getCharterInMarket().getVessel();
+			}
+			
+			if (v != null) {
 				for (var vgp : canalBookings.getVesselGroupCanalParameters()) {
 					if (vgp.getVesselGroup() == null || vgp.getVesselGroup().isEmpty()) {
 						defaultGroupName = vgp.getName();
 					}
 					final Set<Vessel> vgvs = SetUtils.getObjects(vgp.getVesselGroup());
-					if (vgvs.contains(vessel)) {
+					if (vgvs.contains(v)) {
 						return vgp.getName();
 					}
 				}
 			}
-			return defaultGroupName;
 		}
-		
-		//Unknown, shouldn't happen, but...
-		return "";
+		return defaultGroupName;
 	}
 
 	String getVesselName(final Journey journey) {
-		if (journey.getSequence() != null && journey.getSequence().getVesselAvailability() != null && 
-			journey.getSequence().getVesselAvailability().getVessel() != null) {
-			return journey.getSequence().getVesselAvailability().getVessel().getName();
+		if (journey.getSequence() != null) {
+			if (journey.getSequence().getVesselAvailability() != null && 
+					journey.getSequence().getVesselAvailability().getVessel() != null) {
+				return journey.getSequence().getVesselAvailability().getVessel().getName();
+			} else if(journey.getSequence().getCharterInMarket() != null) {
+				return journey.getSequence().getCharterInMarket().getName();
+			}
 		}
 		//Else we don't know yet?
 		return "";

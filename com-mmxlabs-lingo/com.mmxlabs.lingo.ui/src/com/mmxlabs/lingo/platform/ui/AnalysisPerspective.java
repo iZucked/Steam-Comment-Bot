@@ -28,8 +28,7 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 	@Override
 	public void createInitialLayout(final IPageLayout layout) {
 		layout.addActionSet("com.mmxlabs.lingo.reports.diff.actionset");
-
-		layout.addActionSet("com.mmxlabs.lingo.reports.diff.actionset");
+		
 		// if (layout instanceof ModeledPageLayout) {
 		// ModeledPageLayout modeledPageLayout = (ModeledPageLayout) layout;
 		// modeledPageLayout.stackView(ReportsConstants.VIEW_COMPARE_SCENARIOS_ID, IPageLayout.ID_EDITOR_AREA, false);

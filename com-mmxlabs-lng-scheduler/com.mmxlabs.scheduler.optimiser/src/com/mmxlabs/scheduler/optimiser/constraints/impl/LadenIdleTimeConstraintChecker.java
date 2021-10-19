@@ -166,7 +166,8 @@ public class LadenIdleTimeConstraintChecker implements IPairwiseConstraintChecke
 			Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), slot1.getPort(), slot2.getPort(), MAX_SPEED,
 					AvailableRouteChoices.OPTIMAL);
 			if (quickestTravelTime.getSecond() == Integer.MAX_VALUE) {
-				messages.add(explain(first, second, resource));
+				if (messages != null)
+					messages.add(explain(first, second, resource));
 				return false;
 			}
 

@@ -46,6 +46,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterLengthEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IMaintenanceVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
@@ -170,8 +171,8 @@ public class TradingExporterExtension implements IExporterExtension {
 								}
 							} else {
 								
-
-								final com.mmxlabs.models.lng.cargo.VesselEvent modelEvent = modelEntityMap.getModelObject(slot, com.mmxlabs.models.lng.cargo.VesselEvent.class);
+								final IPortSlot slotToFetch = slot instanceof IMaintenanceVesselEventPortSlot ? ((IMaintenanceVesselEventPortSlot) slot).getFormerPortSlot() : slot;
+								final com.mmxlabs.models.lng.cargo.VesselEvent modelEvent = modelEntityMap.getModelObject(slotToFetch, com.mmxlabs.models.lng.cargo.VesselEvent.class);
 								VesselEventVisit visit = null;
 								//
 								for (final Sequence sequence : outputSchedule.getSequences()) {

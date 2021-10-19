@@ -2,11 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
-/**
 
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
- * All rights reserved.
- */
 package com.mmxlabs.lingo.app.intro;
 
 import org.eclipse.core.runtime.IExtension;
@@ -49,7 +45,11 @@ import org.eclipse.ui.menus.CommandContributionItemParameter;
 
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.lingo.app.Activator;
 import com.mmxlabs.lingo.reports.customizable.CustomReportsRegistry;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 /**
  * 
  * Copy of {@link WorkbenchActionBuilder}. Need to build our own version at some point (rebase on version in history?)
@@ -106,7 +106,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 	private IWorkbenchAction openPreferencesAction;
 
-	private IWorkbenchAction saveAsAction;
+//	private IWorkbenchAction saveAsAction;
 
 	private IWorkbenchAction hideShowEditorAction;
 
@@ -482,7 +482,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		menu.add(new GroupMarker(IWorkbenchActionConstants.CLOSE_EXT));
 		menu.add(new Separator());
 		menu.add(saveAction);
-		menu.add(saveAsAction);
+//		menu.add(saveAsAction);
 		menu.add(saveAllAction);
 		// menu.add(getRevertItem());
 		// menu.add(new Separator());
@@ -836,7 +836,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		dynamicHelpAction = null;
 		aboutAction = null;
 		openPreferencesAction = null;
-		saveAsAction = null;
+//		saveAsAction = null;
 		hideShowEditorAction = null;
 		savePerspectiveAction = null;
 		resetPerspectiveAction = null;
@@ -967,12 +967,18 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// register(toggleAutoBuildAction);
 
 		saveAction = ActionFactory.SAVE.create(window);
+		saveAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Save, IconMode.Enabled));
+		saveAction.setDisabledImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Save, IconMode.Disabled));
+		
 		register(saveAction);
 
-		saveAsAction = ActionFactory.SAVE_AS.create(window);
-		register(saveAsAction);
+//		saveAsAction = ActionFactory.SAVE_AS.create(window);
+//		register(saveAsAction);
 
 		saveAllAction = ActionFactory.SAVE_ALL.create(window);
+		saveAllAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Saveall, IconMode.Enabled));
+		saveAllAction.setDisabledImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Saveall, IconMode.Disabled));
+//		saveAllAction.setDisabledImageDescriptor(ImageDescriptor.createWithFlags(Activator.getImageDescriptor("/icons/saveall.png"), SWT.IMAGE_DISABLE));
 		register(saveAllAction);
 
 		newWindowAction = ActionFactory.OPEN_NEW_WINDOW.create(getWindow());

@@ -311,6 +311,9 @@
     <genClasses ecoreClass="schedule.ecore#//CharterAvailableFromEvent">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//CharterAvailableFromEvent/linkedSequence"/>
     </genClasses>
+    <genClasses ecoreClass="schedule.ecore#//GroupedCharterOutEvent">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//GroupedCharterOutEvent/linkedSequence"/>
+    </genClasses>
     <genClasses ecoreClass="schedule.ecore#//GroupedCharterLengthEvent">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//GroupedCharterLengthEvent/linkedSequence"/>
     </genClasses>

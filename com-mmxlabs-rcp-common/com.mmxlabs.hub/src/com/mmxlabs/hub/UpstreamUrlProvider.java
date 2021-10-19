@@ -314,9 +314,11 @@ public class UpstreamUrlProvider {
 			connectionValid = true;
 
 			return OnlineState.online();
+		} catch (final NullPointerException npe) {
+			LOGGER.error("Failed to get url from secure preferences: " + npe.getMessage());
+			return OnlineState.error("Unknown error", npe);
 		} catch (final Exception e) {
-			// Ignore...?
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 			return OnlineState.error("Unknown error", e);
 		} finally {
 			// Set state to invalid if we didn't complete the checks successfully

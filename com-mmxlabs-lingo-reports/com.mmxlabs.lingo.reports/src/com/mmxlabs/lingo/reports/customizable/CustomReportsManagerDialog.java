@@ -989,6 +989,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		data.widthHint = convertWidthInCharsToPixels(20);
 		data.heightHint = table.getItemHeight() * 15;
 		table.setLayoutData(data);
+		table.setData("org.eclipse.swtbot.widget.key", "customReportsViewer"); // this id is used in swtbot tests
 
 		final TableColumn column = new TableColumn(table, SWT.NONE);
 		column.setText("Custom Reports");

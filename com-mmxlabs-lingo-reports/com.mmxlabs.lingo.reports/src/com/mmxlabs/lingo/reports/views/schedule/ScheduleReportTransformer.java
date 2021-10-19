@@ -35,6 +35,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
+import com.mmxlabs.models.lng.schedule.GroupedCharterOutEvent;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
@@ -69,7 +70,7 @@ public class ScheduleReportTransformer {
 		if (schedule == null) {
 			return Collections.emptyList();
 		}
-		final Map<Sequence, GroupedCharterLengthEvent> extraEvents = new HashMap<>();
+//		final Map<Sequence, GroupedCharterLengthEvent> extraEvents = new HashMap<>();
 
 		final List<EObject> interestingEvents = new LinkedList<>();
 		final Set<EObject> allEvents = new HashSet<>();
@@ -84,6 +85,15 @@ public class ScheduleReportTransformer {
 					continue;
 				}
 
+				if (event instanceof GeneratedCharterOut) {
+					// final GeneratedCharterOutEvent charterOutEvent = (GeneratedCharterOutEvent) event;
+					// extraEvents.computeIfAbsent(charterOutEvent.getSequence(), k -> ScheduleFactory.eINSTANCE.createGroupedCharterOutEvent()).getEvents().add(charterOutEvent);
+					// continue;
+					interestingEvents.add(event);
+					allEvents.add(event);
+					continue;
+				}
+				
 				if (showEvent(event)) {
 					interestingEvents.add(event);
 				}
@@ -95,22 +105,36 @@ public class ScheduleReportTransformer {
 			interestingEvents.add(openSlotAllocation);
 			allEvents.add(openSlotAllocation);
 		}
-		for (final GroupedCharterLengthEvent cle : extraEvents.values()) {
-			long pnl1 = 0L;
-			long pnl2 = 0L;
-			for (final Event e : cle.getEvents()) {
-				final CharterLengthEvent c = (CharterLengthEvent) e;
-				pnl1 += c.getGroupProfitAndLoss().getProfitAndLoss();
-				pnl2 += c.getGroupProfitAndLoss().getProfitAndLossPreTax();
-				cle.setLinkedSequence(c.getSequence());
-			}
-			final GroupProfitAndLoss groupProfitAndLoss = ScheduleFactory.eINSTANCE.createGroupProfitAndLoss();
-			groupProfitAndLoss.setProfitAndLoss(pnl1);
-			groupProfitAndLoss.setProfitAndLossPreTax(pnl2);
-			cle.setGroupProfitAndLoss(groupProfitAndLoss);
-		}
-		allEvents.addAll(extraEvents.values());
-		interestingEvents.addAll(extraEvents.values());
+//		for (final GroupedCharterLengthEvent cle : extraEvents.values()) {
+//			long pnl1 = 0L;
+//			long pnl2 = 0L;
+//			for (final Event e : cle.getEvents()) {
+//				final CharterLengthEvent c = (CharterLengthEvent) e;
+//				pnl1 += c.getGroupProfitAndLoss().getProfitAndLoss();
+//				pnl2 += c.getGroupProfitAndLoss().getProfitAndLossPreTax();
+//				cle.setLinkedSequence(c.getSequence());
+//			}
+//			final GroupProfitAndLoss groupProfitAndLoss = ScheduleFactory.eINSTANCE.createGroupProfitAndLoss();
+//			groupProfitAndLoss.setProfitAndLoss(pnl1);
+//			groupProfitAndLoss.setProfitAndLossPreTax(pnl2);
+//			cle.setGroupProfitAndLoss(groupProfitAndLoss);
+//		}
+//		for (final GroupedCharterOutEvent cle : extraEvents.values()) {
+//			long pnl1 = 0L;
+//			long pnl2 = 0L;
+//			for (final Event e : cle.getEvents()) {
+//				final CharterLengthEvent c = (CharterLengthEvent) e;
+//				pnl1 += c.getGroupProfitAndLoss().getProfitAndLoss();
+//				pnl2 += c.getGroupProfitAndLoss().getProfitAndLossPreTax();
+//				cle.setLinkedSequence(c.getSequence());
+//			}
+//			final GroupProfitAndLoss groupProfitAndLoss = ScheduleFactory.eINSTANCE.createGroupProfitAndLoss();
+//			groupProfitAndLoss.setProfitAndLoss(pnl1);
+//			groupProfitAndLoss.setProfitAndLossPreTax(pnl2);
+//			cle.setGroupProfitAndLoss(groupProfitAndLoss);
+//		}
+//		allEvents.addAll(extraEvents.values());
+//		interestingEvents.addAll(extraEvents.values());
 
 		return generateRows(scenarioResult, schedule, interestingEvents, allEvents, isPinned);
 	}

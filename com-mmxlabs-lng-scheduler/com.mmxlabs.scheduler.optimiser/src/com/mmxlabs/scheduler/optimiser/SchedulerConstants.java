@@ -88,4 +88,9 @@ public final class SchedulerConstants {
 	
 	public static final String COMMERCIAL_VOLUME_OVERCAPACITY = "COMMERCIAL_VOLUME_OVERCAPACITY";
 
+	
+	/**
+	 * Ignore small capacity violations e.g. 5 units (which would be 5_000).
+	 */
+	public static final long CAPACITY_VIOLATION_THRESHOLD = 0L;
 }

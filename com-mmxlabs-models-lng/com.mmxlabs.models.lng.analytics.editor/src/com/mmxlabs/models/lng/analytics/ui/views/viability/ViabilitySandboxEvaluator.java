@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -239,7 +240,6 @@ public class ViabilitySandboxEvaluator {
 				vesselAvailability.setEndAfter(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
 				vesselAvailability.setEndBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
 				vesselAvailability.setOptional(true);
-				vesselAvailability.setFleet(false);
 				vesselAvailability.setContainedCharterContract(AnalyticsBuilder.createCharterTerms(optionalAvailabilityShippingOption.getRepositioningFee(),//
 						optionalAvailabilityShippingOption.getBallastBonus()));
 				if (optionalAvailabilityShippingOption.getStartPort() != null) {
@@ -277,7 +277,6 @@ public class ViabilitySandboxEvaluator {
 					vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
 				}
 				vesselAvailability.setOptional(false);
-				vesselAvailability.setFleet(true);
 				clone.getCargoModel().getVesselAvailabilities().add(vesselAvailability);
 				availabilitiesMap.put(fleetShippingOption, vesselAvailability);
 				mapper.addMapping(fleetShippingOption, vesselAvailability);
@@ -319,10 +318,11 @@ public class ViabilitySandboxEvaluator {
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
-	public static void evaluate(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, final ViabilityModel model) {
+	public static void evaluate(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, //
+			final ViabilityModel model, final IProgressMonitor progressMonitor) {
 		final long a = System.currentTimeMillis();
 		{
-			singleEval(scenarioDataProvider, scenarioInstance, model);
+			singleEval(scenarioDataProvider, scenarioInstance, model, progressMonitor);
 		}
 
 		final long b = System.currentTimeMillis();
@@ -330,7 +330,8 @@ public class ViabilitySandboxEvaluator {
 
 	}
 	
-	private static void singleEval(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, final ViabilityModel model) {
+	private static void singleEval(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, //
+			final ViabilityModel model, final IProgressMonitor progressMonitor) {
 
 		final LNGScenarioModel optimiserScenario = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 		final IMapperClass mapper = new Mapper(optimiserScenario, true);
@@ -344,7 +345,7 @@ public class ViabilitySandboxEvaluator {
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
 		ServiceHelper.<IAnalyticsScenarioEvaluator> withServiceConsumer(IAnalyticsScenarioEvaluator.class, evaluator -> {
-			evaluator.evaluateViabilitySandbox(scenarioDataProvider, scenarioInstance, userSettings, model, mapper, shippingMap);
+			evaluator.evaluateViabilitySandbox(scenarioDataProvider, scenarioInstance, userSettings, model, mapper, shippingMap, progressMonitor);
 		});
 	}
 

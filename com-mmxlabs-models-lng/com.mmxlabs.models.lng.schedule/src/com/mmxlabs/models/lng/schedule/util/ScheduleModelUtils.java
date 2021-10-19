@@ -420,6 +420,17 @@ public class ScheduleModelUtils {
 		}
 		return null;
 	}
+	
+	public static String getVesselNameFromAllocation(final Object allocation) {
+		if (allocation instanceof CargoAllocation) {
+			final CargoAllocation cargoAllocation = (CargoAllocation) allocation;
+			final Vessel v = getVessel(cargoAllocation.getSequence());
+			if (v != null) {
+				return v.getName();
+			}
+		}
+		return "";
+	}
 
 	private static int getFuelCost(final FuelUsage fuelUser, final Fuel... fuels) {
 		final Set<Fuel> fuelsOfInterest = Sets.newHashSet(fuels);

@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.voyage.IdleFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
@@ -69,7 +70,7 @@ public final class TravelVoyagePlanChoice implements IVoyagePlanChoice {
 		options.setTravelFuelChoice(fuelChoice);
 
 		if (fuelChoice != TravelFuelChoice.BUNKERS && (previousOptions != null)) {
-			return previousOptions.getTravelFuelChoice() != TravelFuelChoice.BUNKERS;
+			return previousOptions.getIdleFuelChoice() != IdleFuelChoice.BUNKERS;
 		}
 
 		// Ensure NBO is always true when state is laden

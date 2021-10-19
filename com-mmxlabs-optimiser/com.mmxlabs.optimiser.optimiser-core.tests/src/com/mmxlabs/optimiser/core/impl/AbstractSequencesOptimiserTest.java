@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.concurrent.JobExecutor;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -303,7 +304,7 @@ public class AbstractSequencesOptimiserTest {
 		}
 
 		@Override
-		public int step(final int percentage) {
+		public int step(final int percentage, JobExecutor jobExecutor) {
 			Assertions.fail("This is not part of the test.");
 			return 0;
 		}

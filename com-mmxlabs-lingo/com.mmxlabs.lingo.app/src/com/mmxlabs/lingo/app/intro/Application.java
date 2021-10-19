@@ -88,20 +88,8 @@ public class Application implements IApplication {
 		@NonNull
 		final ISharedDataModelType<@NonNull PortModel> distances = LNGScenarioSharedModelTypes.DISTANCES;
 
-		// restart the the workbench with the new heap size
-		final String heapSize = getHeapSize(appLineArgs);
-
-		if (heapSize != null) {
-			// Construct new command line with new VM arg and restart workbench
-			System.setProperty(IApplicationContext.EXIT_DATA_PROPERTY, buildCommandLine(heapSize));
-			// This might be surplus to the return statement.
-			System.setProperty("eclipse.exitcode", Integer.toString(24));
-			return org.eclipse.equinox.app.IApplication.EXIT_RELAUNCH;
-		}
-
 		// Start peaberry activation - only for ITS runs inside eclipse.
 		final String[] bundlesToStart = { "org.eclipse.equinox.common", //
-				"org.eclipse.equinox.ds", //
 				"org.eclipse.equinox.event", //
 				"org.ops4j.peaberry.activation", //
 		};
@@ -245,50 +233,6 @@ public class Application implements IApplication {
 		return IApplication.EXIT_OK;
 	}
 
-	private String getHeapSize(final String[] appLineArgs) {
-		String heapSize = null;
-
-		if (appLineArgs != null && appLineArgs.length > 0) {
-			// Look for the no-auto-mem command first and skip auto-mem code if so (e.g.
-			// could get here through a relaunch)
-			boolean skipAutoMemory = false;
-			for (final String arg : appLineArgs) {
-				if (arg.equalsIgnoreCase(CMD_NO_AUTO_MEM)) {
-					skipAutoMemory = true;
-					break;
-				}
-			}
-
-			if (!skipAutoMemory) {
-				for (final String arg : appLineArgs) {
-					if (arg.equals(CMD_AUTO_MEM)) {
-
-						final MBeanServer platformMBeanServer = ManagementFactory.getPlatformMBeanServer();
-						try {
-							// Get total physical memory
-							final Number totalMemory = (Number) platformMBeanServer.getAttribute(new ObjectName("java.lang", "type", "OperatingSystem"), "TotalPhysicalMemorySize");
-							if (totalMemory != null) {
-								// Convert to gigabytes
-								final long gigabytes = totalMemory.longValue() / 1024L / 1024L / 1024L;
-								if (gigabytes < 1) {
-									heapSize = "-Xmx512m";
-								} else if (gigabytes < 3) {
-									heapSize = "-Xmx1G";
-								} else {
-									heapSize = String.format("-Xmx%dG", gigabytes - 2);
-								}
-							}
-						} catch (final Exception e) {
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-		}
-
-		return heapSize;
-	}
-
 	private void cleanUpTemporaryFolder() {
 		// Clean up temp folder on start up.
 		final File tempDirectory = ScenarioStorageUtil.getTempDirectory();
@@ -417,85 +361,5 @@ public class Application implements IApplication {
 				workbench.close();
 			}
 		});
-	}
-	//////////////////////
-
-	private static final String PROP_VM = "eclipse.vm";
-
-	private static final String PROP_VMARGS = "eclipse.vmargs";
-
-	private static final String PROP_COMMANDS = "eclipse.commands";
-
-	private static final String CMD_VMARGS = "-vmargs";
-
-	private static final String CMD_AUTO_MEM = "-automem";
-	private static final String CMD_NO_AUTO_MEM = "-noautomem";
-
-	private static final String NEW_LINE = "\n";
-
-	/**
-	 * Reconstruct command line arguments and modify to suit
-	 * 
-	 * Taken from org.eclipse.ui.internal.ide.actions.OpenWorkspaceAction. This required EXIT_RELAUNCH - not EXIT_RESTART to work. Note only works in builds, not from within eclipse.
-	 * 
-	 * 
-	 */
-	private String buildCommandLine(final String memory) {
-		final StringBuffer result = new StringBuffer(512);
-
-		String property = System.getProperty(PROP_VM);
-		if (property != null) {
-			result.append(property);
-			result.append(NEW_LINE);
-		}
-
-		// append the vmargs and commands. Assume that these already end in \n
-		// Note: We need to do this twice for some reason. This is the first time
-		final String vmargs = System.getProperty(PROP_VMARGS);
-		if (vmargs != null) {
-			// Strip any existing mem params
-			result.append(vmargs.replaceAll("-Xmx[0-9*][a-zA-Z]", ""));
-		}
-
-		// append the rest of the args, replacing or adding -no-auto-mem / -auto-mem as
-		// required
-		property = System.getProperty(PROP_COMMANDS);
-		if (property == null) {
-
-		} else {
-			// Strip any existing mem params
-			property = property.replaceAll("-Xmx[0-9*][a-zA-Z]", "");
-			// Remove the auto-mem command
-			property = property.replaceAll(CMD_AUTO_MEM, "");
-
-			result.append(property);
-		}
-		result.append(NEW_LINE);
-		result.append(CMD_NO_AUTO_MEM);
-		result.append(NEW_LINE);
-
-		// put the vmargs back at the very end (the eclipse.commands property
-		// already contains the -vm arg)
-		if (result.charAt(result.length() - 1) != '\n') {
-			result.append('\n');
-		}
-		result.append(CMD_VMARGS);
-		result.append(NEW_LINE);
-		if (vmargs != null) {
-			// Note: We need to do this twice for some reason. This is the second time
-			// Strip any existing mem params
-			result.append(vmargs.replaceAll("-Xmx[0-9*][a-zA-Z]", ""));
-		}
-
-		result.append(memory);
-		result.append(NEW_LINE);
-
-		@NonNull
-		String cmdLine = result.toString();
-
-		// Strip duplicate newlines
-		cmdLine = cmdLine.replaceAll("\n\n", "\n");
-
-		return cmdLine;
 	}
 }

@@ -6,10 +6,11 @@ package com.mmxlabs.models.lng.analytics.ui.views.mtm;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
@@ -46,7 +47,7 @@ public class MTMSandboxEvaluator {
 
 	protected static void buildFullScenario(final LNGScenarioModel clone, final MTMModel clonedModel, final IMapperClass mapper) {
 		final Set<String> usedIDs = getUsedSlotIDs(clone);
-		final Set<YearMonth> loadDates = new HashSet<>();
+		final Set<YearMonth> loadDates = new LinkedHashSet<>();
 		for (final BuyOption buy : clonedModel.getBuys()) {
 			final LoadSlot loadSlot_original = AnalyticsBuilder.makeLoadSlot(buy, clone, SlotMode.ORIGINAL_SLOT, usedIDs);
 			final LoadSlot loadSlot_breakEven = AnalyticsBuilder.makeLoadSlot(buy, clone, SlotMode.BREAK_EVEN_VARIANT, usedIDs);
@@ -61,7 +62,7 @@ public class MTMSandboxEvaluator {
 
 		}
 
-		final Set<YearMonth> dischargeDates = new HashSet<>();
+		final Set<YearMonth> dischargeDates = new LinkedHashSet<>();
 
 		for (final SellOption sell : clonedModel.getSells()) {
 			final DischargeSlot dischargeSlot_original = AnalyticsBuilder.makeDischargeSlot(sell, clone, SlotMode.ORIGINAL_SLOT, usedIDs);
@@ -130,17 +131,19 @@ public class MTMSandboxEvaluator {
 		}
 	}
 
-	public static void evaluate(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, final MTMModel model) {
+	public static void evaluate(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, //
+			final MTMModel model, IProgressMonitor progressMonitor) {
 		final long a = System.currentTimeMillis();
 		{
-			singleEval(scenarioDataProvider, scenarioInstance, model);
+			singleEval(scenarioDataProvider, scenarioInstance, model, progressMonitor);
 		}
 
 		final long b = System.currentTimeMillis();
 		System.out.printf("Marked to market eval %d\n", b - a);
 	}
 
-	private static void singleEval(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, final MTMModel model) {
+	private static void singleEval(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, final MTMModel model, //
+			IProgressMonitor progressMonitor) {
 
 		final LNGScenarioModel optimiserScenario = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 		final IMapperClass mapper = new Mapper(optimiserScenario, true);
@@ -154,12 +157,12 @@ public class MTMSandboxEvaluator {
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
 		ServiceHelper.<IAnalyticsScenarioEvaluator> withServiceConsumer(IAnalyticsScenarioEvaluator.class, evaluator -> {
-			evaluator.evaluateMTMSandbox(scenarioDataProvider, scenarioInstance, userSettings, model, mapper);
+			evaluator.evaluateMTMSandbox(scenarioDataProvider, scenarioInstance, userSettings, model, mapper, progressMonitor);
 		});
 	}
 	
 	private static Set<String> getUsedSlotIDs(final LNGScenarioModel lngScenarioModel) {
-		final Set<String> usedIDs = new HashSet<>();
+		final Set<String> usedIDs = new LinkedHashSet<>();
 		usedIDs.addAll(lngScenarioModel.getCargoModel().getLoadSlots().stream()
 				.map(LoadSlot::getName)
 				.collect(Collectors.toSet()));

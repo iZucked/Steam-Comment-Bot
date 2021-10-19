@@ -49,7 +49,7 @@ public class LoadTriggerEditorActionDelegate implements IEditorActionDelegate, I
 						
 						@NonNull
 						final
-						ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+						ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecordChecked(scenarioInstance);
 						final LNGScenarioModel scenarioModel;
 						try (final ModelReference scenarioRef = modelRecord.aquireReference("LoadTrigger:1")) {
 							scenarioModel = (LNGScenarioModel) (scenarioRef.getInstance());

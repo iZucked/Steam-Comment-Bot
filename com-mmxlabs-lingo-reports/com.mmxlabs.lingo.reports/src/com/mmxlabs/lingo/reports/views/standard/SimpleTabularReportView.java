@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
@@ -43,8 +44,10 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer.ColumnManager;
+import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
+import com.mmxlabs.lingo.reports.services.ReentrantSelectionManager;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -77,6 +80,8 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	private final String helpContextId;
 
 	protected boolean pinnedMode = false;
+
+	protected Image pinImage;
 
 	@NonNull
 	protected final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
@@ -137,6 +142,11 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 			};
 			ViewerHelper.runIfViewerValid(viewer, block, r);
 		}
+
+		public void selectedObjectChanged(org.eclipse.e4.ui.model.application.ui.basic.MPart source, org.eclipse.jface.viewers.ISelection selection) {
+			doSelectionChanged(source, selection);
+		}
+
 	};
 
 	/**
@@ -203,7 +213,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	 * 
 	 * @param helpContextId
 	 */
-	public SimpleTabularReportView(final String helpContextId) {
+	protected SimpleTabularReportView(final String helpContextId) {
 		this.helpContextId = helpContextId;
 	}
 
@@ -238,11 +248,15 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 
 	final List<GridViewerColumn> viewerColumns = new ArrayList<>();
 
+	protected ReentrantSelectionManager selectionManager;
+
 	/**
 	 * This is a callback that will allow us to create the viewer and initialise it.
 	 */
 	@Override
 	public void createPartControl(final Composite parent) {
+
+		pinImage = Activator.getDefault().getImageRegistry().get(Activator.Implementation.IMAGE_PINNED_ROW);
 
 		selectedScenariosService = getSite().getService(ScenarioComparisonService.class);
 
@@ -289,8 +303,12 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 		hookContextMenu();
 		contributeToActionBars();
 
-		selectedScenariosService.addListener(selectedScenariosServiceListener);
-		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
+		selectionManager = new ReentrantSelectionManager(viewer, selectedScenariosServiceListener, selectedScenariosService, false);
+		try {
+			selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
+		} catch (Exception e) {
+			// Ignore any initial issues.
+		}
 	}
 
 	/**
@@ -358,13 +376,6 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 		ViewerHelper.setFocus(viewer);
 	}
 
-	@Override
-	public void dispose() {
-		selectedScenariosService.removeListener(selectedScenariosServiceListener);
-
-		super.dispose();
-	}
-
 	private void setShowColumns(final boolean showDeltaColumn, final int numberOfSchedules) {
 
 	}
@@ -396,5 +407,10 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 
 	protected void refresh() {
 		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
+	}
+
+	public void doSelectionChanged(MPart part, Object selectionObject) {
+		// For subclasses to override if they need to respond to selection changes
+
 	}
 }

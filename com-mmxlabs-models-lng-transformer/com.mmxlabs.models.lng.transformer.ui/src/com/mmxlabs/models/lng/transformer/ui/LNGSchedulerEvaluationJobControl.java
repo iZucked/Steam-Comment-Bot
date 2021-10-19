@@ -54,15 +54,15 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 		setJobState(EJobState.RUNNING);
 		final ScenarioInstance scenarioInstance = jobDescriptor.getJobContext();
 
-		final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecordChecked(scenarioInstance);
 		try (final IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("LNGSchedulerEvaluationJobControl")) {
-			// Hack: Add on shipping only hint to avoid generating spot markets during eval.
 
 			scenarioDataProvider.setLastEvaluationFailed(true);
 			LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider, scenarioInstance) //
 					.withThreadCount(1) //
 					.withOptimisationPlan(jobDescriptor.getOptimisationPlan()) //
-					.withHints(LNGTransformerHelper.HINT_SHIPPING_ONLY) //
+					// Hack: Add on shipping only hint to avoid generating spot markets during eval.
+					.withHints(LNGTransformerHelper.HINT_SHIPPING_ONLY, LNGTransformerHelper.HINT_EVALUATION_ONLY) //
 					.buildDefaultRunner();
 			try {
 				runner.evaluateInitialState();

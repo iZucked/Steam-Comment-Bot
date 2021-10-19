@@ -109,7 +109,6 @@
         <setEntry value="org.apache.lucene.analyzers-smartcn@default:default"/>
         <setEntry value="org.apache.lucene.core@default:default"/>
         <setEntry value="org.apache.poi@default:default"/>
-        <setEntry value="org.apache.shiro.core@default:default"/>
         <setEntry value="org.apiguardian@default:default"/>
         <setEntry value="org.eclipse.compare.core@default:default"/>
         <setEntry value="org.eclipse.core.commands@default:default"/>
@@ -198,15 +197,13 @@
         <setEntry value="org.eclipse.equinox.console@default:default"/>
         <setEntry value="org.eclipse.equinox.coordinator@default:default"/>
         <setEntry value="org.eclipse.equinox.device@default:default"/>
-        <setEntry value="org.eclipse.equinox.ds@2:true"/>
+        <setEntry value="org.apache.felix.scr@2:true"/>
         <setEntry value="org.eclipse.equinox.event@2:true"/>
         <setEntry value="org.eclipse.equinox.frameworkadmin.equinox@default:default"/>
         <setEntry value="org.eclipse.equinox.frameworkadmin@default:default"/>
         <setEntry value="org.eclipse.equinox.http.registry@default:default"/>
         <setEntry value="org.eclipse.equinox.http.servlet@default:default"/>
         <setEntry value="org.eclipse.equinox.http.servletbridge@default:default"/>
-        <setEntry value="org.eclipse.equinox.io@default:default"/>
-        <setEntry value="org.eclipse.equinox.ip@default:default"/>
         <setEntry value="org.eclipse.equinox.jsp.jasper.registry@default:default"/>
         <setEntry value="org.eclipse.equinox.jsp.jasper@default:default"/>
         <setEntry value="org.eclipse.equinox.launcher.win32.win32.x86_64@default:false"/>
@@ -259,6 +256,7 @@
         <setEntry value="org.eclipse.rcp@default:default"/>
         <setEntry value="org.eclipse.swt.win32.win32.x86_64@default:false"/>
         <setEntry value="org.eclipse.swt@default:default"/>
+        <setEntry value="org.eclipse.swtchart@default:default"/>
         <setEntry value="org.eclipse.text@default:default"/>
         <setEntry value="org.eclipse.ui.console@default:default"/>
         <setEntry value="org.eclipse.ui.editors@default:default"/>
@@ -295,7 +293,6 @@
         <setEntry value="org.sat4j.pb@default:default"/>
         <setEntry value="org.slf4j.api*1.7.10.v20170428-1633@default:default"/>
         <setEntry value="org.slf4j.api*1.7.2.v20121108-1250@default:default"/>
-        <setEntry value="org.eclipse.swtchart@default:default"/>
         <setEntry value="org.tukaani.xz@default:default"/>
         <setEntry value="org.w3c.css.sac@default:default"/>
         <setEntry value="org.w3c.dom.events@default:default"/>

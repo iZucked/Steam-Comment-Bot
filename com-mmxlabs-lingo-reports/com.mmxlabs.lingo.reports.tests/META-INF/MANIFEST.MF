@@ -3,19 +3,20 @@ Bundle-ManifestVersion: 2
 Bundle-Name: LiNGO Reports Tests
 Bundle-SymbolicName: com.mmxlabs.lingo.reports.tests;singleton:=true
 Fragment-Host: com.mmxlabs.lingo.reports
-Bundle-Version: 4.12.31.qualifier
+Bundle-Version: 4.13.1.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-11
-Require-Bundle: com.mmxlabs.models.lng.types;bundle-version="[4.12.31,5.0.0)",
- com.mmxlabs.models.lng.cargo;bundle-version="[4.12.31,5.0.0)",
- com.mmxlabs.models.lng.commercial;bundle-version="[4.12.31,5.0.0)",
- com.mmxlabs.models.lng.pricing;bundle-version="[4.12.31,5.0.0)",
+Require-Bundle: com.mmxlabs.models.lng.types;bundle-version="[4.13.1,5.0.0)",
+ com.mmxlabs.models.lng.cargo;bundle-version="[4.13.1,5.0.0)",
+ com.mmxlabs.models.lng.commercial;bundle-version="[4.13.1,5.0.0)",
+ com.mmxlabs.models.lng.pricing;bundle-version="[4.13.1,5.0.0)",
  org.mockito.mockito-core;bundle-version="1.9.5",
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.models.lng.pricing.validation,
  net.bytebuddy.byte-buddy;bundle-version="1.9.9",
  org.objenesis;bundle-version="2.6.0",
- org.aopalliance;bundle-version="1.0.0"
+ org.aopalliance;bundle-version="1.0.0",
+ com.google.guava.failureaccess;bundle-version="1.0.1"
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Automatic-Module-Name: com.mmxlabs.lingo.reports.tests

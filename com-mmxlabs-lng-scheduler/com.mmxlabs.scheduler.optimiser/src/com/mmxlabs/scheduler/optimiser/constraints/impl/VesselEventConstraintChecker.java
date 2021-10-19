@@ -93,7 +93,7 @@ public class VesselEventConstraintChecker implements IPairwiseConstraintChecker 
 
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 			final boolean result = (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET || vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER);
-			if (!result)
+			if (!result && messages != null)
 				messages.add(String.format("%s : For element %s vessel availability is fleet or time charter!", this.name, element.getName()));
 			return result;
 		}

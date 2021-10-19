@@ -364,6 +364,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 			}
 
 			modelRecord = SSDataManager.Instance.getModelRecord(instance);
+			if (modelRecord == null) {
+				throw new RuntimeException("Model record is null");
+			}
 			final ProgressMonitorDialog dialog = new ProgressMonitorDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
 			dialog.run(false, false, monitor -> modelReference = modelRecord.aquireReference("JointModelEditorPart", monitor));
 
@@ -488,14 +491,16 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 					sw.append(String.format("Name: %s%n", instance.getName()));
 					sw.append(String.format("UUID: %s%n", instance.getUuid()));
-					sw.append(String.format("Scenario Version: %s - %d%n", instance.getVersionContext(), instance.getScenarioVersion()));
-					sw.append(String.format("Client Version: %s - %d%n", instance.getClientVersionContext(), instance.getClientScenarioVersion()));
+					sw.append(String.format("Scenario Version: %d%n", instance.getScenarioVersion()));
+					sw.append(String.format("Client Version: %d%n", instance.getClientScenarioVersion()));
 					sw.append(String.format("%n"));
 				}
 			}
-			sw.append(String.format("Message %s%n", throwable.getMessage()));
-			sw.append("\nStackTrace:\n");
-			throwable.printStackTrace(new PrintWriter(sw));
+			if (throwable != null) {
+				sw.append(String.format("Message %s%n", throwable.getMessage()));
+				sw.append("\nStackTrace:\n");
+				throwable.printStackTrace(new PrintWriter(sw));
+			}
 			final Text detailsText = toolkit.createText(technicalDetails, sw.toString(), SWT.MULTI | SWT.READ_ONLY);
 			technicalDetails.setClient(detailsText);
 

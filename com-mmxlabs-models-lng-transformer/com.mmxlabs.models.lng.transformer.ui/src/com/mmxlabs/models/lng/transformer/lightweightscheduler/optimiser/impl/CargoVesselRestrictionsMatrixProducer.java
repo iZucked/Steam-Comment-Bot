@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,15 +52,24 @@ public class CargoVesselRestrictionsMatrixProducer implements ICargoVesselRestri
 	@Inject
 	public void injectConstraintChecker(@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) final ISequences initialRawSequences, final List<IConstraintChecker> injectedConstraintCheckers) {
 		this.constraintCheckers = new LinkedList<>();
+		final List<@Nullable String> messages;
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
+			messages = new ArrayList<>();
+			messages.add(String.format("%s: injectConstraintChecker", this.getClass().getName()));
+		} else {
+			messages = null;
+		}
 		for (final IConstraintChecker checker : injectedConstraintCheckers) {
 			if (checker instanceof IPairwiseConstraintChecker) {
 				final IPairwiseConstraintChecker constraintChecker = (IPairwiseConstraintChecker) checker;
 				constraintCheckers.add(constraintChecker);
 
 				// Prep with initial sequences.
-				constraintChecker.checkConstraints(initialRawSequences, null, new ArrayList<>());
+				constraintChecker.checkConstraints(initialRawSequences, null, messages);
 			}
 		}
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+			messages.stream().forEach(LOG::debug);
 	}
 
 	@Override
@@ -82,8 +92,13 @@ public class CargoVesselRestrictionsMatrixProducer implements ICargoVesselRestri
 	}
 
 	private boolean checkConstraints(List<IConstraintChecker> constraints, List<IPortSlot> cargo, IVesselAvailability vessel) {
-		final List<String> messages = new ArrayList<>();
-		messages.add(String.format("%s: checkConstraints", this.getClass().getName()));
+		final List<@Nullable String> messages;
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
+			messages = new ArrayList<>();
+			messages.add(String.format("%s: checkConstraints", this.getClass().getName()));
+		} else {
+			messages = null;
+		}
 		for (IConstraintChecker con : constraints) {
 			if (con instanceof IResourceElementConstraintChecker) {
 				IResourceElementConstraintChecker c = (IResourceElementConstraintChecker)con;

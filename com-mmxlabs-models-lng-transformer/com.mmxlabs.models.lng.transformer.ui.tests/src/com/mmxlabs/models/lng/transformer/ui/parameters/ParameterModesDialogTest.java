@@ -21,7 +21,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferenceConstants;
 import org.eclipse.swtbot.swt.finder.waits.Conditions;
-import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -140,9 +139,9 @@ public class ParameterModesDialogTest {
 		settings.setWithCharterLength(false);
 		
 		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_CHARTERLENGTH_ON).click(), u -> {
-			Assert.assertTrue(u.isWithCharterLength());
+			Assertions.assertTrue(u.isWithCharterLength());
 			OptimisationHelper.mergeFields(u, settings);
-			Assert.assertTrue(settings.isWithCharterLength());
+			Assertions.assertTrue(settings.isWithCharterLength());
 		});
 	}
 	
@@ -152,9 +151,9 @@ public class ParameterModesDialogTest {
 		settings.setWithCharterLength(true);
 		
 		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_CHARTERLENGTH_OFF).click(), u -> {
-			Assert.assertFalse(u.isWithCharterLength());
+			Assertions.assertFalse(u.isWithCharterLength());
 			OptimisationHelper.mergeFields(u, settings);
-			Assert.assertFalse(settings.isWithCharterLength());
+			Assertions.assertFalse(settings.isWithCharterLength());
 		});
 	}
 

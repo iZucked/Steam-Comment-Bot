@@ -183,16 +183,16 @@ public class ExistingBaseCaseToScheduleSpecification {
 				}
 			};
 
-			// Find any slots which are not in the start options but their other side is 
+			// Find any slots which are not in the start options but their other side is
 			final Collection<LoadSlot> orphanedLoadSlots = new LinkedHashSet<>();
 			final Collection<DischargeSlot> orphanedDischargeSlots = new LinkedHashSet<>();
 			for (final BaseCaseRow row : baseCase.getBaseCase()) {
 				LoadSlot ls = null;
 				DischargeSlot ds = null;
-				
-				if (row.getBuyOption() != null) {
+
+				if (!AnalyticsBuilder.isNullOrOpen(row.getBuyOption())) {
 					ls = getOrCreate(row.getBuyOption());
-				} else if (row.getSellOption() != null) {
+				} else if (!AnalyticsBuilder.isNullOrOpen(row.getSellOption())) {
 					ds = getOrCreate(row.getSellOption());
 				}
 				if (ls != null && ls.getCargo() != null) {
@@ -210,18 +210,18 @@ public class ExistingBaseCaseToScheduleSpecification {
 					}
 				}
 			}
-			
+
 			unusedLoads.addAll(orphanedLoadSlots);
 			unusedDischarges.addAll(orphanedDischargeSlots);
-			
+
 			for (final BaseCaseRow row : baseCase.getBaseCase()) {
 				// This row has a single open buy or sell position on it.
 				if (row.getVesselEventOption() == null
 						&& (row.getBuyOption() == null || row.getSellOption() == null || row.getBuyOption() instanceof OpenBuy || row.getSellOption() instanceof OpenSell)) {
 					Slot<?> slot = null;
-					if (row.getBuyOption() != null) {
+					if (!AnalyticsBuilder.isNullOrOpen(row.getBuyOption())) {
 						slot = getOrCreate(row.getBuyOption());
-					} else if (row.getSellOption() != null) {
+					} else if (!AnalyticsBuilder.isNullOrOpen(row.getSellOption())) {
 						slot = getOrCreate(row.getSellOption());
 					}
 					if (slot != null) {
@@ -368,8 +368,7 @@ public class ExistingBaseCaseToScheduleSpecification {
 							vesselAvailability.setEndAfter(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
 							vesselAvailability.setEndBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
 							vesselAvailability.setOptional(true);
-							vesselAvailability.setFleet(false);
-							vesselAvailability.setContainedCharterContract(AnalyticsBuilder.createCharterTerms(optionalAvailabilityShippingOption.getRepositioningFee(),//
+							vesselAvailability.setContainedCharterContract(AnalyticsBuilder.createCharterTerms(optionalAvailabilityShippingOption.getRepositioningFee(), //
 									optionalAvailabilityShippingOption.getBallastBonus()));
 							if (optionalAvailabilityShippingOption.getStartPort() != null) {
 								vesselAvailability.setStartAt(optionalAvailabilityShippingOption.getStartPort());
@@ -415,7 +414,6 @@ public class ExistingBaseCaseToScheduleSpecification {
 								vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
 							}
 							vesselAvailability.setOptional(false);
-							vesselAvailability.setFleet(true);
 
 							mapper.addMapping(fleetShippingOption, vesselAvailability);
 
@@ -536,7 +534,7 @@ public class ExistingBaseCaseToScheduleSpecification {
 			final Set<AssignableElement> elements = new LinkedHashSet<>();
 			// 2020-06-29 - Comment out this line as we re-added existing cargoes
 			// elements.addAll(cargoModel.getCargoes());
-			
+
 			elements.addAll(cargoToCollectedAssignmentMap.keySet());
 			elements.removeAll(seenCargoes);
 
@@ -776,18 +774,16 @@ public class ExistingBaseCaseToScheduleSpecification {
 
 	private DischargeSlot getOrCreate(final SellOption sellOption) {
 
+		if (sellOption instanceof OpenSell) {
+			throw new IllegalArgumentException();
+		}
+
 		final DischargeSlot original = mapper.getOriginal(sellOption);
 		if (original != null) {
 			return original;
 		}
-		this.usedIDs.addAll(
-				mapper.getExtraDataProvider().extraDischarges.stream()
-				.map(DischargeSlot::getName)
-				.collect(Collectors.toSet()));
-		this.usedIDs.addAll(
-				mapper.getExtraDataProvider().extraLoads.stream()
-				.map(LoadSlot::getName)
-				.collect(Collectors.toSet()));
+		this.usedIDs.addAll(mapper.getExtraDataProvider().extraDischarges.stream().map(DischargeSlot::getName).collect(Collectors.toSet()));
+		this.usedIDs.addAll(mapper.getExtraDataProvider().extraLoads.stream().map(LoadSlot::getName).collect(Collectors.toSet()));
 		final DischargeSlot dischargeSlot_original = AnalyticsBuilder.makeDischargeSlot(sellOption, scenarioModel, SlotMode.ORIGINAL_SLOT, this.usedIDs);
 		final DischargeSlot dischargeSlot_breakEven = AnalyticsBuilder.makeDischargeSlot(sellOption, scenarioModel, SlotMode.BREAK_EVEN_VARIANT, this.usedIDs);
 		final DischargeSlot dischargeSlot_changeable = AnalyticsBuilder.makeDischargeSlot(sellOption, scenarioModel, SlotMode.CHANGE_PRICE_VARIANT, this.usedIDs);
@@ -800,18 +796,16 @@ public class ExistingBaseCaseToScheduleSpecification {
 
 	private LoadSlot getOrCreate(final BuyOption buyOption) {
 
+		if (buyOption instanceof OpenBuy) {
+			throw new IllegalArgumentException();
+		}
+
 		final LoadSlot original = mapper.getOriginal(buyOption);
 		if (original != null) {
 			return original;
 		}
-		this.usedIDs.addAll(
-				mapper.getExtraDataProvider().extraDischarges.stream()
-				.map(DischargeSlot::getName)
-				.collect(Collectors.toSet()));
-		this.usedIDs.addAll(
-				mapper.getExtraDataProvider().extraLoads.stream()
-				.map(LoadSlot::getName)
-				.collect(Collectors.toSet()));
+		this.usedIDs.addAll(mapper.getExtraDataProvider().extraDischarges.stream().map(DischargeSlot::getName).collect(Collectors.toSet()));
+		this.usedIDs.addAll(mapper.getExtraDataProvider().extraLoads.stream().map(LoadSlot::getName).collect(Collectors.toSet()));
 		final LoadSlot loadSlot_original = AnalyticsBuilder.makeLoadSlot(buyOption, scenarioModel, SlotMode.ORIGINAL_SLOT, this.usedIDs);
 		final LoadSlot loadSlot_breakEven = AnalyticsBuilder.makeLoadSlot(buyOption, scenarioModel, SlotMode.BREAK_EVEN_VARIANT, this.usedIDs);
 		final LoadSlot loadSlot_changeable = AnalyticsBuilder.makeLoadSlot(buyOption, scenarioModel, SlotMode.CHANGE_PRICE_VARIANT, this.usedIDs);
@@ -849,15 +843,11 @@ public class ExistingBaseCaseToScheduleSpecification {
 		}
 		throw new IllegalArgumentException();
 	}
-	
+
 	private static Set<String> getUsedSlotIDs(final LNGScenarioModel lngScenarioModel) {
 		final Set<String> usedIDs = new HashSet<>();
-		usedIDs.addAll(lngScenarioModel.getCargoModel().getLoadSlots().stream()
-				.map(LoadSlot::getName)
-				.collect(Collectors.toSet()));
-		usedIDs.addAll(lngScenarioModel.getCargoModel().getDischargeSlots().stream()
-				.map(DischargeSlot::getName)
-				.collect(Collectors.toSet()));
+		usedIDs.addAll(lngScenarioModel.getCargoModel().getLoadSlots().stream().map(LoadSlot::getName).collect(Collectors.toSet()));
+		usedIDs.addAll(lngScenarioModel.getCargoModel().getDischargeSlots().stream().map(DischargeSlot::getName).collect(Collectors.toSet()));
 		return usedIDs;
 	}
 }

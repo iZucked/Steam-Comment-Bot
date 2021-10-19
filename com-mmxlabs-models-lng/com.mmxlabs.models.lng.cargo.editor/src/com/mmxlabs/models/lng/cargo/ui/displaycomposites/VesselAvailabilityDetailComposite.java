@@ -6,10 +6,13 @@ package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -42,6 +45,7 @@ public class VesselAvailabilityDetailComposite extends DefaultDetailComposite {
 		super(parent, style, toolkit);
 		this.detailGroup = detailGroup;
 		this.dialogContext = dialogContext;
+		this.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
 	}
 	
 	@Override
@@ -54,8 +58,7 @@ public class VesselAvailabilityDetailComposite extends DefaultDetailComposite {
 		// By default all elements are in the main tab
 		VesselAvailabilityDetailGroup cdg = VesselAvailabilityDetailGroup.GENERAL;
 		
-		if (editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_Fleet()
-				|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_Vessel()
+		if (editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_Vessel()
 				|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_CharterNumber()
 				|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_TimeCharterRate()
 				|| editor.getFeature() == CargoPackage.eINSTANCE.getVesselAvailability_MinDuration()
@@ -190,18 +193,18 @@ public class VesselAvailabilityDetailComposite extends DefaultDetailComposite {
 					return gd;
 				}
 
-//				if (feature == CargoPackage.Literals.VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT) {
-//					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
-//
-//					if (feature == CargoPackage.Literals.VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT) {
-//						final Label label = editor.getLabel();
-//						if (label != null) {
-//							label.setText("Charter contract");
-//						}
-//						editor.setLabel(null);
-//					}
-//					return gd;
-//				}
+				if (feature == CargoPackage.Literals.VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+
+					if (feature == CargoPackage.Literals.VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT) {
+						final Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("Charter terms");
+						}
+						editor.setLabel(null);
+					}
+					return gd;
+				}
 				
 				// Anything else needs to fill the space.
 				GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);

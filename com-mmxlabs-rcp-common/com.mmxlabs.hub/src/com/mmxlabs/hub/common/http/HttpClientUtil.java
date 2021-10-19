@@ -364,7 +364,7 @@ public class HttpClientUtil {
 
 	private static boolean checkCompatibility(final String url, final ConnectionSpec connectionSpec, final TlsVersion tlsVersion, final CipherSuite cipherSuite) {
 
-		final OkHttpClient.Builder builder = CLIENT.newBuilder();
+		final OkHttpClient.Builder builder = basicBuilder();
 
 		// Ignore any hostname issues here
 		builder.hostnameVerifier(new HostnameVerifier() {

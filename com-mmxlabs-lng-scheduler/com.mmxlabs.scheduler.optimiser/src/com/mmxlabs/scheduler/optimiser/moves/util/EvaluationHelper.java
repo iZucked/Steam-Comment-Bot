@@ -33,7 +33,7 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess.Phase;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScope;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -48,7 +48,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.CapacityViolationChecker;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 
-@PerChainUnitScope
+@ThreadLocalScope
 public class EvaluationHelper {
 	protected static final Logger LOG = LoggerFactory.getLogger(EvaluationHelper.class);
 
@@ -129,8 +129,13 @@ public class EvaluationHelper {
 	}
 
 	public boolean checkConstraints(@NonNull final ISequences currentFullSequences, @Nullable final Collection<@NonNull IResource> currentChangedResources) {
-		final List<String> messages = new ArrayList<>();
-		messages.add(String.format("%s: checkConstraints", this.getClass().getName()));
+		final List<@Nullable String> messages;
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
+			messages = new ArrayList<>();
+			messages.add(String.format("%s: checkConstraints", this.getClass().getName()));
+		} else {
+			messages = null;
+		}
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
 
@@ -162,8 +167,13 @@ public class EvaluationHelper {
 	 * @return
 	 */
 	public boolean checkConstraintsForRelaxedConstraints(@NonNull final ISequences currentFullSequences, @Nullable final Collection<@NonNull IResource> currentChangedResources) {
-		final List<String> messages = new ArrayList<>();
-		messages.add(String.format("%s: checkConstraintsForRelaxedConstraints", this.getClass().getName()));
+		final List<@Nullable String> messages;
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
+			messages = new ArrayList<>();
+			messages.add(String.format("%s: checkConstraintsForRelaxedConstraints", this.getClass().getName()));
+		} else {
+			messages = null;
+		}
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
 
@@ -188,8 +198,13 @@ public class EvaluationHelper {
 	}
 
 	public boolean doesMovePassConstraints(final @NonNull ISequences rawSequences) {
-		final List<String> messages = new ArrayList<>();
-		messages.add(String.format("%s: doesMovePassConstraints", this.getClass().getName()));
+		final List<@Nullable String> messages;
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
+			messages = new ArrayList<>();
+			messages.add(String.format("%s: doesMovePassConstraints", this.getClass().getName()));
+		} else {
+			messages = null;
+		}
 		// Do normal manipulation
 		final ISequences movedFullSequences = sequenceManipulator.createManipulatedSequences(rawSequences);
 

@@ -54,7 +54,7 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 		selectionProviderTracker.open();
 		showEnabledImage = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif").createImage();
 		showDisabledImage = ImageDescriptor.createWithFlags(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif"), SWT.IMAGE_DISABLE).createImage();
-		pinImage = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/pin_editor.gif").createImage();
+		pinImage = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/pin_scenario.png").createImage();
 
 		final Font systemFont = Display.getDefault().getSystemFont();
 		// Clone the font data

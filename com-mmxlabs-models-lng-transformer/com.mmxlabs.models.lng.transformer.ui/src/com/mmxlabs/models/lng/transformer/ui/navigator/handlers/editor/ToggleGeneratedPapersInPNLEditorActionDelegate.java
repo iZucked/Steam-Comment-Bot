@@ -8,7 +8,6 @@ import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorInput;
@@ -74,13 +73,14 @@ public class ToggleGeneratedPapersInPNLEditorActionDelegate extends ActionDelega
 				final IScenarioServiceEditorInput iScenarioServiceEditorInput = (IScenarioServiceEditorInput) editorInput;
 				final ScenarioInstance instance = iScenarioServiceEditorInput.getScenarioInstance();
 
-				final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
-
-				try (final IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("ToggleGeneratedPapersInPNLEditorActionDelegate")) {
-					this.currentModel = sdp.getTypedScenario(LNGScenarioModel.class);
-					this.currentModel.eAdapters().add(notificationAdapter);
-					this.currentSettings = currentModel.getUserSettings();
-					this.editingDomain = sdp.getEditingDomain();
+				final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+				if (modelRecord != null) {
+					try (final IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("ToggleGeneratedPapersInPNLEditorActionDelegate")) {
+						this.currentModel = sdp.getTypedScenario(LNGScenarioModel.class);
+						this.currentModel.eAdapters().add(notificationAdapter);
+						this.currentSettings = currentModel.getUserSettings();
+						this.editingDomain = sdp.getEditingDomain();
+					}
 				}
 			}
 		}

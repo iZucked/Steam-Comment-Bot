@@ -140,6 +140,9 @@ import com.mmxlabs.models.lng.transformer.ui.analytics.EvaluateSolutionSetHelper
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
@@ -361,7 +364,7 @@ public class ChangeSetView extends ViewPart {
 
 	private InsertionPlanGrouperAndFilter insertionPlanFilter;
 
-	private boolean showNonStructuralChanges = false;
+	private boolean showMinorChanges = false;
 	private boolean sortByVesselAndDate = false;
 	private boolean showRelatedChangesMenus = false;
 	private boolean showUserFilterMenus = false;
@@ -590,29 +593,6 @@ public class ChangeSetView extends ViewPart {
 					}
 				}
 			};
-
-		}
-		if (IReportContents.class.isAssignableFrom(adapter)) {
-
-			try {
-				columnHelper.setTextualVesselMarkers(true);
-				// Need to refresh the view to trigger creation of the text labels
-				ViewerHelper.refresh(viewer, true);
-				final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
-
-				final String contents = util.convert();
-				return (T) new IReportContents() {
-
-					@Override
-					public String getHTMLContents() {
-						// Prefix this header for rendering purposes
-						return "<meta charset=\"UTF-8\"/>" + contents;
-					}
-
-				};
-			} finally {
-				columnHelper.setTextualVesselMarkers(false);
-			}
 		}
 		return (T) null;
 	}
@@ -637,7 +617,7 @@ public class ChangeSetView extends ViewPart {
 
 		// Create table
 		viewer = new GridTreeViewer(parent, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
-		GridViewerHelper.configureLookAndFeel(viewer);
+		GridViewerHelper.configureLookAndFeel(viewer, false);
 
 		ColumnViewerToolTipSupport.enableFor(viewer, ToolTip.RECREATE);
 
@@ -808,10 +788,10 @@ public class ChangeSetView extends ViewPart {
 						}
 					}
 				}
-				if (!showNonStructuralChanges) {
+				if (!showMinorChanges) {
 					if (element instanceof ChangeSetTableRow) {
 						final ChangeSetTableRow row = (ChangeSetTableRow) element;
-						if (!row.isWiringChange() && !row.isVesselChange()) {
+						if (!row.isMajorChange()) {
 							final long delta = ChangeSetKPIUtil.getRowProfitAndLossValue(row, ResultType.After, ScheduleModelKPIUtils::getGroupProfitAndLoss)
 									- ChangeSetKPIUtil.getRowProfitAndLossValue(row, ResultType.Before, ScheduleModelKPIUtils::getGroupProfitAndLoss);
 							long totalPNLDelta = 0;
@@ -1029,10 +1009,10 @@ public class ChangeSetView extends ViewPart {
 						groupModeAction.setToolTipText("Change the grouping choice");
 						addActionToMenu(groupModeAction, menu);
 					}
-					final RunnableAction toggleStructuralChanges = new RunnableAction("Show non-structural changes", ChangeSetView.this::doShowStructuralChangesToggle);
-					toggleStructuralChanges.setToolTipText("Toggling filtering of non structural changes");
-					toggleStructuralChanges.setChecked(showNonStructuralChanges);
-					addActionToMenu(toggleStructuralChanges, menu);
+					final RunnableAction toggleMinorChanges = new RunnableAction("Show minor changes", ChangeSetView.this::doShowMinorChangesToggle);
+					toggleMinorChanges.setToolTipText("Toggling filtering of minor changes");
+					toggleMinorChanges.setChecked(showMinorChanges);
+					addActionToMenu(toggleMinorChanges, menu);
 
 					final RunnableAction toggleSortByVesselAndDate = new RunnableAction("Sort by vessel and date", ChangeSetView.this::doSortByVesselAndDateToggle);
 					toggleSortByVesselAndDate.setToolTipText("Toggling sorting by vessel and date");
@@ -1070,7 +1050,7 @@ public class ChangeSetView extends ViewPart {
 				}
 			};
 			filterMenu.setToolTipText("Change filters");
-			filterMenu.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/filter.gif"));
+			filterMenu.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Filter, IconMode.Enabled));
 			getViewSite().getActionBars().getToolBarManager().add(filterMenu);
 		}
 		{
@@ -1301,8 +1281,8 @@ public class ChangeSetView extends ViewPart {
 		}
 	}
 
-	private void doShowStructuralChangesToggle() {
-		showNonStructuralChanges = !showNonStructuralChanges;
+	private void doShowMinorChangesToggle() {
+		showMinorChanges = !showMinorChanges;
 		ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 	}
 
@@ -1792,7 +1772,11 @@ public class ChangeSetView extends ViewPart {
 	@Optional
 	public void onClosingScenario(@UIEventTopic(ScenarioServiceUtils.EVENT_CLOSING_SCENARIO_INSTANCE) final ScenarioInstance scenarioInstance) {
 
-		final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		
+		if (modelRecord == null) {
+			return;
+		}
 
 		final Function<ScenarioResult, Boolean> checker = (sr) -> sr != null && (sr.getModelRecord() == modelRecord || sr.getScenarioInstance() == scenarioInstance);
 		final ViewState viewState = currentViewState;

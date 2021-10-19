@@ -8,16 +8,15 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Singleton;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
-import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
+import com.mmxlabs.common.concurrent.JobExecutor;
+import com.mmxlabs.common.concurrent.JobExecutorFactory;
+import com.mmxlabs.common.concurrent.DefaultJobExecutorFactory;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
@@ -114,77 +113,73 @@ public class ParallelFollowersAndPrecedersProviderImpl implements IFollowersAndP
 
 		// Do lookups in parallel
 		// TODO: Parameterise the thread count
-		final CleanableExecutorService executor = createExecutorService();
+		final JobExecutorFactory executorFactory = createExecutorService();
+		try (final JobExecutor executor = executorFactory.begin()) {
+			optimisationData.getSequenceElements().forEach(e1 -> {
 
-		optimisationData.getSequenceElements().forEach(e1 -> {
+				executor.submit(() -> {
 
-			executor.submit(() -> {
+					final LinkedHashSet<ISequenceElement> followers = new LinkedHashSet<>();
+					final LinkedHashSet<ISequenceElement> preceders = new LinkedHashSet<>();
 
-				final LinkedHashSet<ISequenceElement> followers = new LinkedHashSet<>();
-				final LinkedHashSet<ISequenceElement> preceders = new LinkedHashSet<>();
-
-				for (final ISequenceElement e2 : optimisationData.getSequenceElements()) {
-					if (e1 == e2) {
-						continue;
-					}
-
-					// Check for special cargo elements. A special element can only go on one resource and all three elements in the set must be on the same one.
-					if (spotElementMap.containsKey(e1) && spotElementMap.containsKey(e2)) {
-						final IResource r1 = spotElementMap.get(e1);
-						final IResource r2 = spotElementMap.get(e2);
-						if (r1 != r2) {
+					for (final ISequenceElement e2 : optimisationData.getSequenceElements()) {
+						if (e1 == e2) {
 							continue;
 						}
-					}
 
-					// Check for special cargo elements. A special element can only go on one resource and all three elements in the set must be on the same one.
-					boolean expectFalse = false;
-					if (terminalElementMap.containsKey(e1) && terminalElementMap.containsKey(e2)) {
-						final IResource r1 = terminalElementMap.get(e1);
-						final IResource r2 = terminalElementMap.get(e2);
-						if (r1 != r2) {
-							// continue;
-							expectFalse = true;
+						// Check for special cargo elements. A special element can only go on one resource and all three elements in the set must be on the same one.
+						if (spotElementMap.containsKey(e1) && spotElementMap.containsKey(e2)) {
+							final IResource r1 = spotElementMap.get(e1);
+							final IResource r2 = spotElementMap.get(e2);
+							if (r1 != r2) {
+								continue;
+							}
+						}
+
+						// Check for special cargo elements. A special element can only go on one resource and all three elements in the set must be on the same one.
+						boolean expectFalse = false;
+						if (terminalElementMap.containsKey(e1) && terminalElementMap.containsKey(e2)) {
+							final IResource r1 = terminalElementMap.get(e1);
+							final IResource r2 = terminalElementMap.get(e2);
+							if (r1 != r2) {
+								// continue;
+								expectFalse = true;
+							}
+						}
+						// This code segment yields a large speed up, but breaks ITS
+
+						// If any of e1 or e2 is a special spot element then there is only one resource it is permitted to go on. Ignore the rest for sequencing checks.
+						IResource spotResource = null;
+						if (spotElementMap.containsKey(e1)) {
+							spotResource = spotElementMap.get(e1);
+						} else if (spotElementMap.containsKey(e2)) {
+							spotResource = spotElementMap.get(e2);
+						}
+
+						final boolean allowForwardSequence = spotResource == null ? checker.allowSequence(e1, e2) : checker.allowSequence(e1, e2, spotResource);
+						if (allowForwardSequence) {
+							if (expectFalse) {
+								int ii = 0;
+							}
+							followers.add(e2);
+						}
+
+						final boolean allowReverseSequence = spotResource == null ? checker.allowSequence(e2, e1) : checker.allowSequence(e2, e1, spotResource);
+						if (allowReverseSequence) {
+							if (expectFalse) {
+								int ii = 0;
+							}
+							preceders.add(e2);
 						}
 					}
-					// This code segment yields a large speed up, but breaks ITS
 
-					// If any of e1 or e2 is a special spot element then there is only one resource it is permitted to go on. Ignore the rest for sequencing checks.
-					IResource spotResource = null;
-					if (spotElementMap.containsKey(e1)) {
-						spotResource = spotElementMap.get(e1);
-					} else if (spotElementMap.containsKey(e2)) {
-						spotResource = spotElementMap.get(e2);
-					}
-
-					final boolean allowForwardSequence = spotResource == null ? checker.allowSequence(e1, e2) : checker.allowSequence(e1, e2, spotResource);
-					if (allowForwardSequence) {
-						if (expectFalse) {
-							int ii = 0;
-						}
-						followers.add(e2);
-					}
-
-					final boolean allowReverseSequence = spotResource == null ? checker.allowSequence(e2, e1) : checker.allowSequence(e2, e1, spotResource);
-					if (allowReverseSequence) {
-						if (expectFalse) {
-							int ii = 0;
-						}
-						preceders.add(e2);
-					}
-				}
-
-				validFollowers.put(e1, new Followers<>(followers));
-				validPreceders.put(e1, new Followers<>(preceders));
+					validFollowers.put(e1, new Followers<>(followers));
+					validPreceders.put(e1, new Followers<>(preceders));
+				});
 			});
-		});
 
-		// Wait for task list to complete.
-		executor.shutdown();
-		try {
-			executor.awaitTermination(1, TimeUnit.DAYS);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
+			// Wait for task list to complete.
+			executor.waitUntilComplete();
 		}
 	}
 
@@ -193,14 +188,14 @@ public class ParallelFollowersAndPrecedersProviderImpl implements IFollowersAndP
 	public static final String PROPERTY_MMX_NUMBER_OF_CORES = "MMX_NUMBER_OF_CORES";
 
 	@NonNull
-	public static CleanableExecutorService createExecutorService() {
+	public static JobExecutorFactory createExecutorService() {
 		final int cores = getNumberOfAvailableCores();
 		return createExecutorService(cores);
 	}
 
 	@NonNull
-	public static CleanableExecutorService createExecutorService(final int nThreads) {
-		return new SimpleCleanableExecutorService(Executors.newFixedThreadPool(nThreads), nThreads);
+	public static JobExecutorFactory createExecutorService(final int nThreads) {
+		return new DefaultJobExecutorFactory(nThreads);
 	}
 
 	public static int getNumberOfAvailableCores() {

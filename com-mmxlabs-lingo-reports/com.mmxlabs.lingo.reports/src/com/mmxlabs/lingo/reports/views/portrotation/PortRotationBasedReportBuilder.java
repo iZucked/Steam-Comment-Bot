@@ -182,7 +182,7 @@ public class PortRotationBasedReportBuilder extends AbstractReportBuilder {
 
 	}
 
-	private Collection<ColumnHandler> addFuelColumns(final ColumnBlock block, final String fuelName) {
+	private synchronized Collection<ColumnHandler> addFuelColumns(final ColumnBlock block, final String fuelName) {
 
 		if (baseFuelNames.contains(fuelName)) {
 			return Collections.emptyList();
@@ -276,6 +276,8 @@ public class PortRotationBasedReportBuilder extends AbstractReportBuilder {
 					block = blockManager.createBlock(COLUMN_BLOCK_FUELS, "[Fuels]", ColumnType.NORMAL);
 				}
 				block.setPlaceholder(true);
+				block.setForceGroup(true);
+
 				return null;
 			}
 		};

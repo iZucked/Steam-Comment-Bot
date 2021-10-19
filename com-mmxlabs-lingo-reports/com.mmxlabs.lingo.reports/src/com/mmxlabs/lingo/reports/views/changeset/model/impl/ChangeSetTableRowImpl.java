@@ -10,9 +10,11 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowData;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetTableRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetVesselType;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
+import java.lang.reflect.InvocationTargetException;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
@@ -39,6 +41,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableRowImpl#getAfterVesselShortName <em>After Vessel Short Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableRowImpl#isWiringChange <em>Wiring Change</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableRowImpl#isVesselChange <em>Vessel Change</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableRowImpl#isDateChange <em>Date Change</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableRowImpl#getPreviousRHS <em>Previous RHS</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableRowImpl#getNextLHS <em>Next LHS</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetTableRowImpl#isLhsSlot <em>Lhs Slot</em>}</li>
@@ -259,6 +262,26 @@ public class ChangeSetTableRowImpl extends MinimalEObjectImpl.Container implemen
 	 * @ordered
 	 */
 	protected boolean vesselChange = VESSEL_CHANGE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isDateChange() <em>Date Change</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDateChange()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean DATE_CHANGE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isDateChange() <em>Date Change</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDateChange()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean dateChange = DATE_CHANGE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getPreviousRHS() <em>Previous RHS</em>}' reference.
@@ -929,6 +952,29 @@ public class ChangeSetTableRowImpl extends MinimalEObjectImpl.Container implemen
 	 * @generated
 	 */
 	@Override
+	public boolean isDateChange() {
+		return dateChange;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setDateChange(boolean newDateChange) {
+		boolean oldDateChange = dateChange;
+		dateChange = newDateChange;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_TABLE_ROW__DATE_CHANGE, oldDateChange, dateChange));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ChangeSetTableRow getPreviousRHS() {
 		if (previousRHS != null && previousRHS.eIsProxy()) {
 			InternalEObject oldPreviousRHS = (InternalEObject)previousRHS;
@@ -1372,6 +1418,16 @@ public class ChangeSetTableRowImpl extends MinimalEObjectImpl.Container implemen
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public boolean isMajorChange() {
+		return isWiringChange() || isVesselChange() || isDateChange();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -1441,6 +1497,8 @@ public class ChangeSetTableRowImpl extends MinimalEObjectImpl.Container implemen
 				return isWiringChange();
 			case ChangesetPackage.CHANGE_SET_TABLE_ROW__VESSEL_CHANGE:
 				return isVesselChange();
+			case ChangesetPackage.CHANGE_SET_TABLE_ROW__DATE_CHANGE:
+				return isDateChange();
 			case ChangesetPackage.CHANGE_SET_TABLE_ROW__PREVIOUS_RHS:
 				if (resolve) return getPreviousRHS();
 				return basicGetPreviousRHS();
@@ -1522,6 +1580,9 @@ public class ChangeSetTableRowImpl extends MinimalEObjectImpl.Container implemen
 				return;
 			case ChangesetPackage.CHANGE_SET_TABLE_ROW__VESSEL_CHANGE:
 				setVesselChange((Boolean)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_ROW__DATE_CHANGE:
+				setDateChange((Boolean)newValue);
 				return;
 			case ChangesetPackage.CHANGE_SET_TABLE_ROW__PREVIOUS_RHS:
 				setPreviousRHS((ChangeSetTableRow)newValue);
@@ -1619,6 +1680,9 @@ public class ChangeSetTableRowImpl extends MinimalEObjectImpl.Container implemen
 			case ChangesetPackage.CHANGE_SET_TABLE_ROW__VESSEL_CHANGE:
 				setVesselChange(VESSEL_CHANGE_EDEFAULT);
 				return;
+			case ChangesetPackage.CHANGE_SET_TABLE_ROW__DATE_CHANGE:
+				setDateChange(DATE_CHANGE_EDEFAULT);
+				return;
 			case ChangesetPackage.CHANGE_SET_TABLE_ROW__PREVIOUS_RHS:
 				setPreviousRHS((ChangeSetTableRow)null);
 				return;
@@ -1703,6 +1767,8 @@ public class ChangeSetTableRowImpl extends MinimalEObjectImpl.Container implemen
 				return wiringChange != WIRING_CHANGE_EDEFAULT;
 			case ChangesetPackage.CHANGE_SET_TABLE_ROW__VESSEL_CHANGE:
 				return vesselChange != VESSEL_CHANGE_EDEFAULT;
+			case ChangesetPackage.CHANGE_SET_TABLE_ROW__DATE_CHANGE:
+				return dateChange != DATE_CHANGE_EDEFAULT;
 			case ChangesetPackage.CHANGE_SET_TABLE_ROW__PREVIOUS_RHS:
 				return previousRHS != null;
 			case ChangesetPackage.CHANGE_SET_TABLE_ROW__NEXT_LHS:
@@ -1745,6 +1811,20 @@ public class ChangeSetTableRowImpl extends MinimalEObjectImpl.Container implemen
 	 * @generated
 	 */
 	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case ChangesetPackage.CHANGE_SET_TABLE_ROW___IS_MAJOR_CHANGE:
+				return isMajorChange();
+		}
+		return super.eInvoke(operationID, arguments);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
@@ -1765,6 +1845,8 @@ public class ChangeSetTableRowImpl extends MinimalEObjectImpl.Container implemen
 		result.append(wiringChange);
 		result.append(", vesselChange: ");
 		result.append(vesselChange);
+		result.append(", dateChange: ");
+		result.append(dateChange);
 		result.append(", lhsSlot: ");
 		result.append(lhsSlot);
 		result.append(", lhsSpot: ");

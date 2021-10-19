@@ -35,6 +35,8 @@ import org.eclipse.ui.part.ViewPart;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.IReportContentsGenerator;
+import com.mmxlabs.lingo.reports.ReportContentsGenerators;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
@@ -48,7 +50,6 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
-import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
 import com.mmxlabs.scenario.service.ScenarioResult;
@@ -215,7 +216,8 @@ public class HeadlineReportView extends ViewPart {
 								if (pPinnedData != null) {
 									rowElements.add(transformer.transform(schedule, other));
 								} else {
-									if ((HeadlineReportView.this.scheduleModel != null && schedule == HeadlineReportView.this.scheduleModel.getSchedule()) || (selectedDataProvider.getOtherScenarioResults().size() == 1 && pinned == null)) {
+									if ((HeadlineReportView.this.scheduleModel != null && schedule == HeadlineReportView.this.scheduleModel.getSchedule())
+											|| (selectedDataProvider.getOtherScenarioResults().size() == 1 && pinned == null)) {
 										rowElements.add(transformer.transform(schedule, other));
 									}
 								}
@@ -239,7 +241,7 @@ public class HeadlineReportView extends ViewPart {
 				pinnedData = pPinnedData;
 				ViewerHelper.setInput(viewer, true, rowElements);
 			};
-			RunnerHelper.exec(r, block);
+			ViewerHelper.runIfViewerValid(viewer, block, r);
 		}
 	};
 
@@ -645,9 +647,9 @@ public class HeadlineReportView extends ViewPart {
 				final IScenarioServiceEditorInput ssInput = (IScenarioServiceEditorInput) editorInput;
 				final ScenarioInstance scenarioInstance = ssInput.getScenarioInstance();
 				if (scenarioInstance != null) {
-					@NonNull
+
 					ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
-					if (!modelRecord.isLoadFailure()) {
+					if (modelRecord != null && !modelRecord.isLoadFailure()) {
 						this.modelReference = modelRecord.aquireReference("HeadlineReportView:1");
 						final EObject instance = modelReference.getInstance();
 						if (instance instanceof LNGScenarioModel) {
@@ -709,16 +711,8 @@ public class HeadlineReportView extends ViewPart {
 			};
 		}
 
-		if (IReportContents.class.isAssignableFrom(adapter)) {
-
-			final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), true);
-			final String jsonContents = jsonUtil.convert();
-			return (T) new IReportContents() {
-				@Override
-				public String getJSONContents() {
-					return jsonContents;
-				}
-			};
+		if (IReportContentsGenerator.class.isAssignableFrom(adapter)) {
+			return adapter.cast(ReportContentsGenerators.createJSONFor(selectedScenariosServiceListener, viewer.getGrid()));
 		}
 
 		return super.getAdapter(adapter);

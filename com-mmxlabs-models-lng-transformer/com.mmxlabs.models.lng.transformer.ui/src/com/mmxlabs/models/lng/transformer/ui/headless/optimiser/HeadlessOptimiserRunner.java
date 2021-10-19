@@ -16,7 +16,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -29,8 +28,6 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
-import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -72,44 +69,21 @@ public class HeadlessOptimiserRunner {
 	public void runFromCsvDirectory(final File csvDirectory, final HeadlessApplicationOptions options, IProgressMonitor monitor,
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, HeadlessOptimiserJSON jsonOutput) {
 
-		try {
-			URL urlRoot = csvDirectory.toURI().toURL();
-			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
-				try (IScenarioDataProvider scenarioDataProvider = CopiedCSVImporter.importCSVScenario(urlRoot.toString())) {
-					run(options, scenarioDataProvider, monitor, completedHook, jsonOutput);
-				}
-			});
-		} catch (MalformedURLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return;
-		}
-
+		CSVImporter.runFromCSVDirectory(csvDirectory, sdp -> run(options, sdp, monitor, completedHook, jsonOutput));
 	}
 
 	public void runFromCsvZipFile(final File zipFile, final HeadlessApplicationOptions options, IProgressMonitor monitor, final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook,
 			HeadlessOptimiserJSON jsonOutput) {
 
-		try {
-			String zipUriString = String.format("archive:%s!", zipFile.toURI().toString());
-
-			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
-				try (IScenarioDataProvider scenarioDataProvider = CopiedCSVImporter.importCSVScenario(zipUriString)) {
-					run(options, scenarioDataProvider, monitor, completedHook, jsonOutput);
-				}
-			});
-		} catch (MalformedURLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return;
-		}
-
+		CSVImporter.runFromCSVZipFile(zipFile, sdp -> run(options, sdp, monitor, completedHook, jsonOutput));
 	}
-	
+
 	/**
-	 * Returns the optimisation plan specified in the optimiser configuration options, or generates one from the user settings object 
-	 * if there are no stages in the specified plan, or generates one from the default user settings if there are no user settings 
-	 * (this also occurs if the {@link OptimiserConfigurationOptions} are null).
+	 * Returns the optimisation plan specified in the optimiser configuration
+	 * options, or generates one from the user settings object if there are no
+	 * stages in the specified plan, or generates one from the default user settings
+	 * if there are no user settings (this also occurs if the
+	 * {@link OptimiserConfigurationOptions} are null).
 	 * 
 	 * @param ocOptions
 	 * @param sdp
@@ -117,28 +91,27 @@ public class HeadlessOptimiserRunner {
 	 */
 	public static @NonNull OptimiserConfigurationOptions getOrCreateConfigOptions(HeadlessApplicationOptions options, @NonNull final IScenarioDataProvider sdp) {
 		final OptimiserConfigurationOptions result;
-		
+
 		if (options.algorithmConfigFile != null) {
-			result = OptimiserConfigurationOptions.readFromFile(options.algorithmConfigFile, options.customInfo);						
-		}
-		else {
+			result = OptimiserConfigurationOptions.readFromFile(options.algorithmConfigFile, options.customInfo);
+		} else {
 			result = new OptimiserConfigurationOptions();
-			
+
 			final UserSettings optionSettings = options.getUserSettingsContent();
 			final @NonNull UserSettings userSettings = (optionSettings == null ? ScenarioUtils.createDefaultUserSettings() : optionSettings);
 			result.plan = OptimisationHelper.transformUserSettings(userSettings, null, sdp.getTypedScenario(LNGScenarioModel.class));
 			result.overrideNumThreads(LNGScenarioChainBuilder.getNumberOfAvailableCores());
-			
-		}		
-		
+
+		}
+
 		return result;
 	}
 
 	public boolean run(final HeadlessApplicationOptions options, @NonNull final IScenarioDataProvider sdp, IProgressMonitor monitor,
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, HeadlessOptimiserJSON jsonOutput) {
 
-		final OptimiserConfigurationOptions ocOptions = getOrCreateConfigOptions(options, sdp);		
-		
+		final OptimiserConfigurationOptions ocOptions = getOrCreateConfigOptions(options, sdp);
+
 		final int num_threads = ocOptions.getNumThreads();
 
 		OptimisationPlan optimisationPlan = LNGScenarioRunnerUtils.createExtendedSettings(ocOptions.plan, true, false); // incorporate the settings from the parameterModesRegistry
@@ -153,137 +126,130 @@ public class HeadlessOptimiserRunner {
 		}
 
 		// Create logging module
-		final @NonNull CleanableExecutorService executorService = new SimpleCleanableExecutorService(Executors.newFixedThreadPool(num_threads), num_threads);
-
 		final Map<String, LSOLogger> phaseToLoggerMap = new ConcurrentHashMap<>();
 
 		final boolean doesActionSet = optimisationPlan.getStages().stream().anyMatch(stage -> (stage instanceof ActionPlanOptimisationStage));
-		final ActionSetLogger actionSetLogger = doesActionSet ? new ActionSetLogger() : null; 
-		
-		try {
+		final ActionSetLogger actionSetLogger = doesActionSet ? new ActionSetLogger() : null;
 
-			final AbstractRunnerHook runnerHook = !exportLogs ? null : new AbstractRunnerHook() {
+		final AbstractRunnerHook runnerHook = !exportLogs ? null : new AbstractRunnerHook() {
 
-				@Override
-				protected void doEndStageJob(@NonNull final String stage, final int jobID, @Nullable final Injector injector) {
+			@Override
+			protected void doEndStageJob(@NonNull final String stage, final int jobID, @Nullable final Injector injector) {
 
-					final String stageAndJobID = getStageAndJobID();
-					final LSOLogger logger = phaseToLoggerMap.remove(stageAndJobID);
-					if (logger != null) {
-						final LSOLoggingExporter lsoLoggingExporter = new LSOLoggingExporter(jsonStagesStorage, stageAndJobID, logger);
-						lsoLoggingExporter.exportData("best-fitness", "current-fitness");
-					}
+				final String stageAndJobID = getStageAndJobID();
+				final LSOLogger logger = phaseToLoggerMap.remove(stageAndJobID);
+				if (logger != null) {
+					final LSOLoggingExporter lsoLoggingExporter = new LSOLoggingExporter(jsonStagesStorage, stageAndJobID, logger);
+					lsoLoggingExporter.exportData("best-fitness", "current-fitness");
 				}
-
-			};
-
-			final boolean doInjections = OptimiserConfigurationOptions.requiresInjections(ocOptions) || exportLogs;
-			
-			// Create logging module
-			final IOptimiserInjectorService localOverrides = (doInjections == false) ? null : new IOptimiserInjectorService() {
-				@Override
-				public Module requestModule(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
-					return null;
-				}
-
-				@Override
-				@Nullable
-				public List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
-					if (moduleType == ModuleType.Module_EvaluationParametersModule) {
-						if (ocOptions.injections != null) {
-							return Collections.<@NonNull Module>singletonList(new EvaluationSettingsOverrideModule(ocOptions.injections));
-						}
-					}
-					if (moduleType == ModuleType.Module_OptimisationParametersModule) {
-						return Collections.<@NonNull Module>singletonList(new OptimisationSettingsOverrideModule());
-					}
-					if (moduleType == ModuleType.Module_Optimisation) {
-						final LinkedList<@NonNull Module> modules = new LinkedList<>();
-						if (exportLogs) {
-							modules.add(createLoggingModule(options.loggingParameters, phaseToLoggerMap, actionSetLogger, runnerHook));
-						}
-						if (ocOptions.injections != null) {
-							modules.add(new LNGOptimisationOverrideModule(ocOptions.injections));
-						}
-						return modules;
-					}
-					return null;
-				}
-			};
-
-			final List<String> hints = new LinkedList<>();
-			hints.add(LNGTransformerHelper.HINT_OPTIMISE_LSO);
-
-			try {
-
-				if (jsonOutput != null) {
-					jsonOutput.setOptimisationPlan(optimisationPlan);
-				}
-				
-				final LNGOptimisationBuilder runnerBuilder = LNGOptimisationBuilder.begin(sdp) //
-						.withRunnerHook(runnerHook) //
-						.withOptimiserInjectorService(localOverrides) //
-						.withHints(hints.toArray(new String[hints.size()])) //
-						.withOptimisationPlan(optimisationPlan) //
-						.withThreadCount(num_threads) //
-				;
-				if (localOverrides != null) {
-					runnerBuilder.withOptimiserInjectorService(localOverrides);
-				}
-				final LNGScenarioRunner runner = runnerBuilder //
-						.buildDefaultRunner() //
-						.getScenarioRunner();
-
-				final long startTime = System.currentTimeMillis();
-				runner.evaluateInitialState();
-				System.out.println("LNGResult(");
-				System.out.println("\tscenario='" + options.scenarioFileName + "',");
-				if (options.outputScenarioFileName != null) {
-					System.out.println("\toutput='" + options.outputScenarioFileName + "',");
-				}
-
-				System.err.println("Starting run...");
-
-				IMultiStateResult result = runner.runWithProgress(monitor);
-				runner.applyBest(result);
-
-				final long runTime = System.currentTimeMillis() - startTime;
-				final Schedule finalSchedule = runner.getSchedule();
-				if (finalSchedule == null) {
-					System.err.println("Error optimising scenario");
-				}
-
-				System.out.println("\truntime=" + runTime + ",");
-				if (jsonOutput != null) {
-					jsonOutput.getMetrics().setRuntime(runTime);
-				}
-
-				System.err.println("Optimised!");
-
-				if (options.isScenarioOutputRequired()) {
-					// TODO: make this work when there is no parent file specified
-					File parentDirectory = new File(options.outputScenarioFileName).getParentFile();
-					
-					if (parentDirectory != null) {
-						parentDirectory.mkdirs();
-					}
-
-					saveScenario(options.outputScenarioFileName, sdp);
-				}
-				if (exportLogs) {
-					exportData(phaseToLoggerMap, actionSetLogger, options.outputLoggingFolder, false);
-				}
-
-				return true;
-			} catch (final Exception e) {
-				System.out.println("Headless Error");
-				System.err.println("Headless Error:" + e.getMessage());
-				e.printStackTrace();
 			}
 
-		} finally {
-			executorService.shutdownNow();
+		};
+
+		final boolean doInjections = OptimiserConfigurationOptions.requiresInjections(ocOptions) || exportLogs;
+
+		// Create logging module
+		final IOptimiserInjectorService localOverrides = (doInjections == false) ? null : new IOptimiserInjectorService() {
+			@Override
+			public Module requestModule(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
+				return null;
+			}
+
+			@Override
+			@Nullable
+			public List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
+				if (moduleType == ModuleType.Module_EvaluationParametersModule) {
+					if (ocOptions.injections != null) {
+						return Collections.<@NonNull Module>singletonList(new EvaluationSettingsOverrideModule(ocOptions.injections));
+					}
+				}
+				if (moduleType == ModuleType.Module_OptimisationParametersModule) {
+					return Collections.<@NonNull Module>singletonList(new OptimisationSettingsOverrideModule());
+				}
+				if (moduleType == ModuleType.Module_Optimisation) {
+					final LinkedList<@NonNull Module> modules = new LinkedList<>();
+					if (exportLogs) {
+						modules.add(createLoggingModule(options.loggingParameters, phaseToLoggerMap, actionSetLogger, runnerHook));
+					}
+					if (ocOptions.injections != null) {
+						modules.add(new LNGOptimisationOverrideModule(ocOptions.injections));
+					}
+					return modules;
+				}
+				return null;
+			}
+		};
+
+		final List<String> hints = new LinkedList<>();
+		hints.add(LNGTransformerHelper.HINT_OPTIMISE_LSO);
+
+		try {
+
+			if (jsonOutput != null) {
+				jsonOutput.setOptimisationPlan(optimisationPlan);
+			}
+
+			final LNGOptimisationBuilder runnerBuilder = LNGOptimisationBuilder.begin(sdp) //
+					.withRunnerHook(runnerHook) //
+					.withOptimiserInjectorService(localOverrides) //
+					.withHints(hints.toArray(new String[hints.size()])) //
+					.withOptimisationPlan(optimisationPlan) //
+					.withThreadCount(num_threads) //
+			;
+			if (localOverrides != null) {
+				runnerBuilder.withOptimiserInjectorService(localOverrides);
+			}
+			final LNGScenarioRunner runner = runnerBuilder //
+					.buildDefaultRunner() //
+					.getScenarioRunner();
+
+			final long startTime = System.currentTimeMillis();
+			runner.evaluateInitialState();
+			System.out.println("LNGResult(");
+			System.out.println("\tscenario='" + options.scenarioFileName + "',");
+			if (options.outputScenarioFileName != null) {
+				System.out.println("\toutput='" + options.outputScenarioFileName + "',");
+			}
+
+			System.err.println("Starting run...");
+
+			IMultiStateResult result = runner.runWithProgress(monitor);
+			runner.applyBest(result);
+
+			final long runTime = System.currentTimeMillis() - startTime;
+			final Schedule finalSchedule = runner.getSchedule();
+			if (finalSchedule == null) {
+				System.err.println("Error optimising scenario");
+			}
+
+			System.out.println("\truntime=" + runTime + ",");
+			if (jsonOutput != null) {
+				jsonOutput.getMetrics().setRuntime(runTime);
+			}
+
+			System.err.println("Optimised!");
+
+			if (options.isScenarioOutputRequired()) {
+				// TODO: make this work when there is no parent file specified
+				File parentDirectory = new File(options.outputScenarioFileName).getParentFile();
+
+				if (parentDirectory != null) {
+					parentDirectory.mkdirs();
+				}
+
+				saveScenario(options.outputScenarioFileName, sdp);
+			}
+			if (exportLogs) {
+				exportData(phaseToLoggerMap, actionSetLogger, options.outputLoggingFolder, false);
+			}
+
+			return true;
+		} catch (final Exception e) {
+			System.out.println("Headless Error");
+			System.err.println("Headless Error:" + e.getMessage());
+			e.printStackTrace();
 		}
+
 		return false;
 	}
 
@@ -304,7 +270,8 @@ public class HeadlessOptimiserRunner {
 	}
 
 	/**
-	 * Creates a module for providing logging parameters to the {@link Injector} framework. 
+	 * Creates a module for providing logging parameters to the {@link Injector}
+	 * framework.
 	 */
 	@NonNull
 	private Module createLoggingModule(LoggingParameters loggingParameters, final Map<String, LSOLogger> phaseToLoggerMap, final ActionSetLogger actionSetLogger, final AbstractRunnerHook runnerHook) {

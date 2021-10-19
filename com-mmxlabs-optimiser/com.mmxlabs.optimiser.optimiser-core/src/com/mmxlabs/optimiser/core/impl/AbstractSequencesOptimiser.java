@@ -13,6 +13,7 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Triple;
+import com.mmxlabs.common.concurrent.JobExecutor;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -78,7 +79,8 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	 * A default optimisation loop, which calls start() and then step() until done, and notifies the progress monitor. Subclasses will need to implement these.
 	 */
 	@Override
-	public final void optimise(@NonNull final IOptimisationContext optimiserContext) {
+	public final void optimise(@NonNull final IOptimisationContext optimiserContext, JobExecutor jobExecutor) {
+
 		final IAnnotatedSolution startSolution = start(optimiserContext, optimiserContext.getInputSequences(), optimiserContext.getInputSequences());
 		getProgressMonitor().begin(this, fitnessEvaluator.getBestFitness(), startSolution);
 		final int percentage = (100 * getReportInterval()) / getNumberOfIterations();
@@ -86,7 +88,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 		numberOfIterationsCompleted = 0;
 
 		while (getNumberOfIterationsCompleted() < getNumberOfIterations()) {
-			step(percentage);
+			step(percentage, jobExecutor);
 			getProgressMonitor().report(this, getNumberOfIterationsCompleted(), fitnessEvaluator.getCurrentFitness(), fitnessEvaluator.getBestFitness(), getCurrentSolution(), getBestSolution());
 		}
 

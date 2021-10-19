@@ -16,8 +16,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
@@ -26,6 +24,9 @@ import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.actions.AbstractMenuLockableAction;
 
 /**
@@ -108,7 +109,8 @@ class MenuAddAction extends AbstractMenuLockableAction {
 	
 	public MenuAddAction(final List<IModelFactory> factories, final IAddContext context, final Action[] additionalActions, Viewer viewer) {
 		super("Create new element");
-		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+		
+ 		setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled));
 		this.context = context;
 		this.factories = factories;
 		this.additionalActions = additionalActions;
@@ -136,7 +138,7 @@ class MultiAddContextAction extends AbstractMenuLockableAction {
 
 	public MultiAddContextAction(final List<Pair<IModelFactory, IAddContext>> factories, final Action[] additionalActions) {
 		super("Create new element");
-		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+ 		setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled));
 		this.factories = factories;
 		this.additionalActions = additionalActions;
 	}

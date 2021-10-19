@@ -89,7 +89,7 @@ public class DialogValidationSupport {
 			// Should this be OK or CANCEL/ERROR?
 			return Status.OK_STATUS;
 		}
-		return validationService.runValidation(validator, validationContext, pVvalidationTargets);
+		return validationService.runValidation(validator, validationContext, pVvalidationTargets, null);
 	}
 
 	public DefaultExtraValidationContext getValidationContext() {

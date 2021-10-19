@@ -8,6 +8,7 @@ package com.mmxlabs.lingo.reports.views.changeset.model.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -16,6 +17,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRowDataGroup;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * <!-- begin-user-doc -->
@@ -27,6 +29,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
  * <ul>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#isWiringChange <em>Wiring Change</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#isVesselChange <em>Vessel Change</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#isDateChange <em>Date Change</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getBeforeData <em>Before Data</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getAfterData <em>After Data</em>}</li>
  * </ul>
@@ -73,6 +76,26 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * @ordered
 	 */
 	protected boolean vesselChange = VESSEL_CHANGE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isDateChange() <em>Date Change</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDateChange()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean DATE_CHANGE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isDateChange() <em>Date Change</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDateChange()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean dateChange = DATE_CHANGE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getBeforeData() <em>Before Data</em>}' containment reference.
@@ -157,6 +180,29 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 		vesselChange = newVesselChange;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW__VESSEL_CHANGE, oldVesselChange, vesselChange));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isDateChange() {
+		return dateChange;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setDateChange(boolean newDateChange) {
+		boolean oldDateChange = dateChange;
+		dateChange = newDateChange;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW__DATE_CHANGE, oldDateChange, dateChange));
 	}
 
 	/**
@@ -252,6 +298,16 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public boolean isMajorChange() {
+		return isWiringChange() || isVesselChange() || isDateChange();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -277,6 +333,8 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 				return isWiringChange();
 			case ChangesetPackage.CHANGE_SET_ROW__VESSEL_CHANGE:
 				return isVesselChange();
+			case ChangesetPackage.CHANGE_SET_ROW__DATE_CHANGE:
+				return isDateChange();
 			case ChangesetPackage.CHANGE_SET_ROW__BEFORE_DATA:
 				return getBeforeData();
 			case ChangesetPackage.CHANGE_SET_ROW__AFTER_DATA:
@@ -298,6 +356,9 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 				return;
 			case ChangesetPackage.CHANGE_SET_ROW__VESSEL_CHANGE:
 				setVesselChange((Boolean)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW__DATE_CHANGE:
+				setDateChange((Boolean)newValue);
 				return;
 			case ChangesetPackage.CHANGE_SET_ROW__BEFORE_DATA:
 				setBeforeData((ChangeSetRowDataGroup)newValue);
@@ -323,6 +384,9 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 			case ChangesetPackage.CHANGE_SET_ROW__VESSEL_CHANGE:
 				setVesselChange(VESSEL_CHANGE_EDEFAULT);
 				return;
+			case ChangesetPackage.CHANGE_SET_ROW__DATE_CHANGE:
+				setDateChange(DATE_CHANGE_EDEFAULT);
+				return;
 			case ChangesetPackage.CHANGE_SET_ROW__BEFORE_DATA:
 				setBeforeData((ChangeSetRowDataGroup)null);
 				return;
@@ -345,12 +409,28 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 				return wiringChange != WIRING_CHANGE_EDEFAULT;
 			case ChangesetPackage.CHANGE_SET_ROW__VESSEL_CHANGE:
 				return vesselChange != VESSEL_CHANGE_EDEFAULT;
+			case ChangesetPackage.CHANGE_SET_ROW__DATE_CHANGE:
+				return dateChange != DATE_CHANGE_EDEFAULT;
 			case ChangesetPackage.CHANGE_SET_ROW__BEFORE_DATA:
 				return beforeData != null;
 			case ChangesetPackage.CHANGE_SET_ROW__AFTER_DATA:
 				return afterData != null;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case ChangesetPackage.CHANGE_SET_ROW___IS_MAJOR_CHANGE:
+				return isMajorChange();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**
@@ -367,6 +447,8 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 		result.append(wiringChange);
 		result.append(", vesselChange: ");
 		result.append(vesselChange);
+		result.append(", dateChange: ");
+		result.append(dateChange);
 		result.append(')');
 		return result.toString();
 	}

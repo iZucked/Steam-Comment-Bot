@@ -109,7 +109,7 @@ public class PortShipSizeConstraintChecker implements IPairwiseConstraintChecker
 	
 	private boolean checkVesselElementConstraint(@NonNull final IVessel vessel, @NonNull final ISequenceElement sequenceElement, List<String> messages) {
 		final boolean result = this.portShipSizeProvider.isCompatible(vessel, sequenceElement);
-		if (!result)
+		if (!result && messages != null)
 			messages.add(String.format("%s: Sequence element %s port cannot accept vessel %s due to size restriction!", this.name, sequenceElement.getName(), vessel.getName()));
 		return result;
 	}

@@ -11,8 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 import javax.inject.Singleton;
@@ -30,6 +28,8 @@ import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.concurrent.JobExecutor;
+import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
@@ -67,7 +67,8 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScope;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
@@ -133,16 +134,13 @@ public class ViabilitySanboxUnit {
 	@NonNull
 	private final Injector injector;
 
-	private final Map<Thread, ViabilitySandboxEvaluator> threadCache = new ConcurrentHashMap<>(100);
-
-	private @NonNull ExecutorService executorService;
+	private @NonNull JobExecutorFactory jobExecutorFactory;
 
 	@SuppressWarnings("null")
-	public ViabilitySanboxUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final UserSettings userSettings,
-			@NonNull final ConstraintAndFitnessSettings constainAndFitnessSettings, @NonNull final ExecutorService executorService, @NonNull final ISequences initialSequences,
-			@NonNull final IMultiStateResult inputState, @NonNull final Collection<String> hints) {
+	public ViabilitySanboxUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final UserSettings userSettings, @NonNull final ConstraintAndFitnessSettings constainAndFitnessSettings,
+			@NonNull final JobExecutorFactory jobExecutorFactory, @NonNull final ISequences initialSequences, @NonNull final IMultiStateResult inputState, @NonNull final Collection<String> hints) {
 		this.dataTransformer = dataTransformer;
-		this.executorService = executorService;
+		this.jobExecutorFactory = jobExecutorFactory;
 
 		final Collection<IOptimiserInjectorService> services = dataTransformer.getModuleServices();
 
@@ -168,38 +166,28 @@ public class ViabilitySanboxUnit {
 				bind(IBreakEvenEvaluator.class).to(DefaultBreakEvenEvaluator.class);
 			}
 
-			private final Map<Thread, EvaluationHelper> threadCache_EvaluationHelper = new ConcurrentHashMap<>(100);
-
 			@Provides
+			@ThreadLocalScope
 			private EvaluationHelper provideEvaluationHelper(final Injector injector, @Named(LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE) final boolean isReevaluating,
 					@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) final ISequences initialRawSequences) {
 
-				EvaluationHelper helper = threadCache_EvaluationHelper.get(Thread.currentThread());
-				if (helper == null) {
-					helper = new EvaluationHelper(isReevaluating);
-					injector.injectMembers(helper);
+				EvaluationHelper helper = new EvaluationHelper(isReevaluating);
+				injector.injectMembers(helper);
 
-					final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
-					helper.acceptSequences(initialRawSequences, manipulator.createManipulatedSequences(initialRawSequences));
+				final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
+				helper.acceptSequences(initialRawSequences, manipulator.createManipulatedSequences(initialRawSequences));
 
-					helper.setFlexibleCapacityViolationCount(Integer.MAX_VALUE);
+				helper.setFlexibleCapacityViolationCount(Integer.MAX_VALUE);
 
-					threadCache_EvaluationHelper.put(Thread.currentThread(), helper);
-				}
 				return helper;
 			}
 
 			@Provides
+			@ThreadLocalScope
 			private ViabilitySandboxEvaluator providePerThreadOptimiser(@NonNull final Injector injector) {
 
-				ViabilitySandboxEvaluator optimiser = threadCache.get(Thread.currentThread());
-				if (optimiser == null) {
-					final PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);
-					scope.enter();
-					optimiser = new ViabilitySandboxEvaluator();
-					injector.injectMembers(optimiser);
-					threadCache.put(Thread.currentThread(), optimiser);
-				}
+				ViabilitySandboxEvaluator optimiser = new ViabilitySandboxEvaluator();
+				injector.injectMembers(optimiser);
 				return optimiser;
 			}
 		});
@@ -210,42 +198,41 @@ public class ViabilitySanboxUnit {
 	public synchronized void run(final ViabilityModel model, final IMapperClass mapper, final Map<ShippingOption, VesselAssignmentType> shippingMap, @NonNull final IProgressMonitor monitor) {
 		monitor.beginTask("Generate solutions", IProgressMonitor.UNKNOWN);
 
-		try {
+		final JobExecutorFactory subExecutorFactory = jobExecutorFactory.withDefaultBegin(() -> {
+			final ThreadLocalScopeImpl s = injector.getInstance(ThreadLocalScopeImpl.class);
+			s.enter();
+			return s;
+		});
+		try (JobExecutor jobExecutor = subExecutorFactory.begin()) {
 
 			final @NonNull ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
 			final List<Future<Runnable>> futures = new LinkedList<>();
 
-			createFutureJobs(model, mapper, shippingMap, monitor, modelEntityMap, futures);
-
-			// Block until all futures completed
-			for (final Future<Runnable> f : futures) {
-				if (monitor.isCanceled()) {
-					return;
-				}
-				try {
-					final Runnable runnable = f.get();
-					if (runnable != null) {
-						runnable.run();
+			createFutureJobs(model, mapper, shippingMap, monitor, modelEntityMap, futures, jobExecutor);
+//			try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
+//				scope.enter();
+				// Block until all futures completed
+				for (final Future<Runnable> f : futures) {
+					if (monitor.isCanceled()) {
+						return;
 					}
-				} catch (final Exception e) {
-					e.printStackTrace();
+					try {
+						final Runnable runnable = f.get();
+						if (runnable != null) {
+							runnable.run();
+						}
+					} catch (final Exception e) {
+						e.printStackTrace();
+					}
 				}
-			}
+			//}
 		} finally {
-
 			monitor.done();
-			final PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);
-
-			// Clean up thread-locals created in the scope object
-			for (final Thread thread : threadCache.keySet()) {
-				scope.exit(thread);
-				threadCache.clear();
-			}
 		}
 	}
 
 	private void createFutureJobs(final ViabilityModel model, final IMapperClass mapper, final Map<ShippingOption, VesselAssignmentType> shippingMap, final IProgressMonitor monitor,
-			final ModelEntityMap modelEntityMap, final List<Future<Runnable>> futures) {
+			final ModelEntityMap modelEntityMap, final List<Future<Runnable>> futures, JobExecutor jobExecutor) {
 		for (final ViabilityRow row : model.getRows()) {
 			row.getRhsResults().clear();
 			row.getLhsResults().clear();
@@ -269,15 +256,15 @@ public class ViabilitySanboxUnit {
 							return null;
 						}
 						try {
-							synchronized (row) {
-								row.getRhsResults().add(generateViabilityResult(mapper, modelEntityMap, vesselAssignment, vesselSpotIndex, load, market));
-							}
-							return null;
+							final ViabilityResult result = generateViabilityResult(mapper, modelEntityMap, vesselAssignment, vesselSpotIndex, load, market);
+							return () -> {
+								row.getRhsResults().add(result);
+							};
 						} finally {
 							monitor.worked(1);
 						}
 					};
-					futures.add(executorService.submit(job));
+					futures.add(jobExecutor.submit(job));
 				}
 			}
 		}
@@ -293,11 +280,11 @@ public class ViabilitySanboxUnit {
 		return vsi;
 	}
 
-	private ViabilityResult generateViabilityResult(final IMapperClass mapper, final ModelEntityMap modelEntityMap, final VesselAssignmentType vesselAssignment, final int vesselSpotIndex, 
+	private ViabilityResult generateViabilityResult(final IMapperClass mapper, final ModelEntityMap modelEntityMap, final VesselAssignmentType vesselAssignment, final int vesselSpotIndex,
 			final LoadSlot load, final SpotMarket market) {
 		final ViabilityResult viabilityResult = AnalyticsFactory.eINSTANCE.createViabilityResult();
 		viabilityResult.setTarget(market);
-		
+
 		final InternalResult ret = new InternalResult();
 		String timeZone = "UTC";
 		for (int i = 0; i < 4; ++i) {
@@ -332,8 +319,7 @@ public class ViabilitySanboxUnit {
 		return viabilityResult;
 	}
 
-	private InternalResult doIt(final boolean shipped, final VesselAssignmentType vesselAssignment, final int vesselSpotIndex, final LoadSlot load, final DischargeSlot discharge, 
-			final Slot<?> target,
+	private InternalResult doIt(final boolean shipped, final VesselAssignmentType vesselAssignment, final int vesselSpotIndex, final LoadSlot load, final DischargeSlot discharge, final Slot<?> target,
 			final ISequences initialSequences) {
 		if (!shipped) {
 			return doUnshipped(load, discharge, target);
@@ -341,7 +327,7 @@ public class ViabilitySanboxUnit {
 			return doShipped(vesselAssignment, vesselSpotIndex, load, discharge, target, initialSequences);
 		}
 	}
-	
+
 	private InternalResult doUnshipped(final LoadSlot load, final DischargeSlot discharge, final Slot<?> target) {
 		final IResource resource = SequenceHelper.getResource(dataTransformer, load.isDESPurchase() ? load : discharge);
 		final IModifiableSequences solution = new ModifiableSequences(CollectionsUtil.makeArrayList(resource));
@@ -353,14 +339,13 @@ public class ViabilitySanboxUnit {
 		res.merge(evaluator.evaluate(resource, solution, portSlot));
 		return res;
 	}
-	
+
 	private InternalResult doShipped(final VesselAssignmentType vesselAssignment, final int vesselSpotIndex, final LoadSlot load, final DischargeSlot discharge, final Slot<?> target,
 			final ISequences initialSequences) {
 		final IResource resource;
 
 		final IPortSlot a = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(load, IPortSlot.class);
 		final IPortSlot b = dataTransformer.getModelEntityMap().getOptimiserObjectNullChecked(discharge, IPortSlot.class);
-
 
 		if (vesselAssignment instanceof VesselAvailability) {
 			resource = SequenceHelper.getResource(dataTransformer, (VesselAvailability) vesselAssignment);
@@ -375,10 +360,10 @@ public class ViabilitySanboxUnit {
 
 		final ISequence seq = initialSequences.getSequence(resource);
 		Iterator<ISequenceElement> iter = seq.iterator();
-		while(iter.hasNext()) {
+		while (iter.hasNext()) {
 			ISequenceElement ise = iter.next();
 			for (final ISequenceElement e : cargoSegment) {
-				if(ise.equals(e))
+				if (ise.equals(e))
 					return ret;
 			}
 		}
@@ -396,8 +381,8 @@ public class ViabilitySanboxUnit {
 		});
 		return ret;
 	}
-	
-	private Pair<Boolean, DischargeSlot> getShippedAndDischarge(final IMapperClass mapper, final LoadSlot load, final SpotMarket market, final int month){
+
+	private Pair<Boolean, DischargeSlot> getShippedAndDischarge(final IMapperClass mapper, final LoadSlot load, final SpotMarket market, final int month) {
 		boolean shipped = true;
 		DischargeSlot discharge = null;
 		if (market instanceof FOBSalesMarket) {

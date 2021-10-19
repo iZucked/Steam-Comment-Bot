@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.views.mtm;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.EventObject;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,16 +26,16 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
@@ -47,6 +48,8 @@ import com.mmxlabs.models.mmxcore.impl.SafeMMXContentAdapter;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
@@ -79,6 +82,8 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 	private ICommandHandler commandHandler;
 
 	private MainTableCompoment mainTableComponent;
+	
+	private static final Logger LOG = LoggerFactory.getLogger(MTMView.class);
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -94,67 +99,84 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 		dates = new DatesToolbarEditor("netbacks_dates_toolbar", e -> refresh());
 		getViewSite().getActionBars().getToolBarManager().add(dates);
 		
-		final RunnableAction go = new RunnableAction("Generate", Action.AS_PUSH_BUTTON, () -> {
-			BusyIndicator.showWhile(Display.getDefault(), () -> {
-				try {
-					final LNGScenarioModel scenarioModel = (LNGScenarioModel) getRootObject();
-					final ScenarioInstance scenarioInstance = getScenarioInstance();
-					final IScenarioDataProvider sdp = getScenarioDataProvider();
+		final RunnableAction go = new RunnableAction("Generating the MTM report", Action.AS_PUSH_BUTTON, () -> {
+			
+			if (modelRecord != null) {
+				try (final IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("MtMScenarioEditorActionDelegate::Create")) {
+					final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 
-					if (scenarioModel == null) {
-						return;
-					}
-					final ExecutorService executor = Executors.newFixedThreadPool(1);
-					try {
-						executor.submit(() -> {
+					sdp.getModelReference().executeWithTryLock(true, 2_000, () -> {
+						try {
+							dialog.run(true, false, m -> {
+								try {
+									LNGScenarioModel foo = (LNGScenarioModel) getRootObject();
+									if (foo == null) {
+										foo = ScenarioModelUtil.findScenarioModel(sdp);
+									}
+									final LNGScenarioModel scenarioModel = foo;
+									final ScenarioInstance scenarioInstance = getScenarioInstance();
+									if (scenarioModel == null) {
+										return;
+									}
+									final ExecutorService executor = Executors.newFixedThreadPool(1);
+									try {
+										executor.submit(() -> {
+											final MTMModel model = MTMUtils.evaluateMTMModel(scenarioModel, scenarioInstance, sdp, true, "mtm", false,//
+													dates.getStartDate(), dates.getEndDate(), m);
 
-							final MTMModel model = MTMUtils.evaluateMTMModel(scenarioModel, scenarioInstance, sdp, true, "mtm", false,//
-									dates.getStartDate(), dates.getEndDate());
+											RunnerHelper.asyncExec(() -> {
+												final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);
+												final EditingDomain editingDomain = sdp.getEditingDomain();
 
-							RunnerHelper.asyncExec(() -> {
-								final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);
-								final EditingDomain editingDomain = sdp.getEditingDomain();
+												final CompoundCommand cmd = new CompoundCommand("Create mtm matrix");
+												cmd.append(SetCommand.create(editingDomain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_MtmModel(), model));
+												editingDomain.getCommandStack().execute(cmd);
 
-								final CompoundCommand cmd = new CompoundCommand("Create mtm matrix");
-								cmd.append(SetCommand.create(editingDomain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_MtmModel(), model));
-								editingDomain.getCommandStack().execute(cmd);
-
-								doDisplayScenarioInstance(scenarioInstance, scenarioModel, model);
+												doDisplayScenarioInstance(scenarioInstance, scenarioModel, model);
+											});
+										}).get();
+									} finally {
+										executor.shutdown();
+									}
+								} catch (final InterruptedException | ExecutionException e) {
+									e.printStackTrace();
+								}
 							});
-						}).get();
-					} finally {
-						executor.shutdown();
-					}
-				} catch (final InterruptedException e) {
-					e.printStackTrace();
-				} catch (final ExecutionException e) {
-					e.printStackTrace();
-				}
-			});
-		});
-		go.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_generate.gif"));
-		getViewSite().getActionBars().getToolBarManager().add(go);
+						} catch (final InvocationTargetException | InterruptedException e) {
+							LOG.error(e.getMessage(), e);
+						}
 
-		final Action remove = new Action("Remove", Action.AS_PUSH_BUTTON) {
-			@Override
-			public void run() {
-				final LNGScenarioModel scenarioModel = (LNGScenarioModel) getRootObject();
-				final ScenarioInstance scenarioInstance = getScenarioInstance();
-				final IScenarioDataProvider sdp = getScenarioDataProvider();
-				final EditingDomain editingDomain = sdp.getEditingDomain();
-				final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);
-				final MTMModel model = analyticsModel.getMtmModel();
-
-				if (model != null) {
-					final CompoundCommand cmd = new CompoundCommand("Remove mtm matrix");
-					cmd.append(SetCommand.create(editingDomain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_MtmModel(), SetCommand.UNSET_VALUE));
-					editingDomain.getCommandStack().execute(cmd);
-
-					doDisplayScenarioInstance(scenarioInstance, scenarioModel, null);
+					});
+				} catch (final Exception e) {
+					throw new RuntimeException("Unable to mark scenario to market", e);
 				}
 			}
-		};
-		remove.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
+		});
+		CommonImages.setImageDescriptors(go, IconPaths.Play);
+		getViewSite().getActionBars().getToolBarManager().add(go);
+
+		final RunnableAction remove = new RunnableAction("Remove", Action.AS_PUSH_BUTTON, () -> {
+			if (modelRecord != null) {
+				try (final IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("MtMScenarioEditorActionDelegate::Delete")) {
+
+					sdp.getModelReference().executeWithTryLock(true, 2_000, () -> {
+						final LNGScenarioModel scenarioModel = (LNGScenarioModel) getRootObject();
+						final EditingDomain editingDomain = sdp.getEditingDomain();
+						final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(sdp);
+						final MTMModel model = analyticsModel.getMtmModel();
+
+						if (model != null) {
+							final CompoundCommand cmd = new CompoundCommand("Remove mtm matrix");
+							cmd.append(SetCommand.create(editingDomain, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_MtmModel(), SetCommand.UNSET_VALUE));
+							editingDomain.getCommandStack().execute(cmd);
+
+							doDisplayScenarioInstance(scenarioInstance, scenarioModel, null);
+						}
+					});
+				}
+			}
+		});
+		CommonImages.setImageDescriptors(remove, IconPaths.Delete);
 		getViewSite().getActionBars().getToolBarManager().add(remove);
 
 		final Action packColumnsAction = PackActionFactory.createPackColumnsAction(mainTableComponent.getViewer());

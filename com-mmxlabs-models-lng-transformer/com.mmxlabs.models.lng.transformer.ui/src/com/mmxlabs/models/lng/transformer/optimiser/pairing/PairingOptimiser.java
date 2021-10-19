@@ -15,7 +15,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.optimiser.common.AbstractOptimiserHelper;
@@ -72,7 +72,7 @@ public class PairingOptimiser {
 	 * @param charterInMarket
 	 * @return
 	 */
-	public Pair<ISequences, Long> optimise(final CleanableExecutorService executorService, final LNGDataTransformer dataTransformer, CharterInMarket charterInMarket) {
+	public Pair<ISequences, Long> optimise(final LNGDataTransformer dataTransformer, CharterInMarket charterInMarket) {
 		// (1) Identify LT slots
 		@NonNull
 		Collection<IPortSlot> longTermSlots = longTermSlotsProvider.getLongTermSlots();

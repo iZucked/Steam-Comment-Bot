@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -25,7 +26,8 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSchedulerInsertSlotJobRunner;
-import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.CopiedCSVImporter;
+import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.CSVImporter;
+import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.HeadlessOptimiserJSON;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -59,8 +61,10 @@ public class HeadlessOptioniserRunner {
 	}
 
 	/**
-	 * Runs the optioniser on the specified scenario, using the specified starting seed, with the specified options. The optioniser output is logged to the logger, which can then be used to extract
-	 * information about the optioniser run.
+	 * Runs the optioniser on the specified scenario, using the specified starting
+	 * seed, with the specified options. The optioniser output is logged to the
+	 * logger, which can then be used to extract information about the optioniser
+	 * run.
 	 * 
 	 * @param startTry
 	 * @param lingoFile
@@ -80,19 +84,13 @@ public class HeadlessOptioniserRunner {
 	public void runFromCSVDirectory(final int startTry, final File csvDirectory, final SlotInsertionOptimiserLogger logger, final Options options,
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) {
 
-		try {
-			URL urlRoot = csvDirectory.toURI().toURL();
-			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
-				try (IScenarioDataProvider scenarioDataProvider = CopiedCSVImporter.importCSVScenario(urlRoot.toString())) {
-					run(startTry, logger, options, null, scenarioDataProvider, completedHook);
-				}
-			});
-		} catch (MalformedURLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return;
-		}
+		CSVImporter.runFromCSVDirectory(csvDirectory, sdp -> run(startTry, logger, options, null, sdp, completedHook));
+	}
 
+	public void runFromCsvZipFile(final int startTry, final File zipFile, final SlotInsertionOptimiserLogger logger, final Options options,
+			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) {
+
+		CSVImporter.runFromCSVZipFile(zipFile, sdp -> run(startTry, logger, options, null, sdp, completedHook));
 	}
 
 	public void run(final int startTry, final SlotInsertionOptimiserLogger logger, final Options options, final ScenarioModelRecord scenarioModelRecord, @NonNull final IScenarioDataProvider sdp,

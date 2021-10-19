@@ -48,7 +48,7 @@ public abstract class AbstractOptimisationEditorActionDelegate extends Parameter
 
 				final ScenarioInstance instance = iScenarioServiceEditorInput.getScenarioInstance();
 				@NonNull
-				ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+				ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecordChecked(instance);
 
 				try (final ModelReference modelReference = modelRecord.aquireReference("AbstractOptimisationEditorActionDelegate")) {
 					final Object object = modelReference.getInstance();

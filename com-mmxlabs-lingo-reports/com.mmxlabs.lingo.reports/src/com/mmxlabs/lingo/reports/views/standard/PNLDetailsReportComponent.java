@@ -8,18 +8,16 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
-import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PlatformUI;
 
+import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -32,6 +30,7 @@ import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
+import com.mmxlabs.models.lng.schedule.GroupedCharterOutEvent;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -42,8 +41,8 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
-import com.mmxlabs.models.mmxcore.impl.SafeMMXContentAdapter;
 import com.mmxlabs.models.ui.properties.views.DetailPropertiesViewComponent;
+import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 
 public class PNLDetailsReportComponent extends DetailPropertiesViewComponent {
@@ -98,6 +97,9 @@ public class PNLDetailsReportComponent extends DetailPropertiesViewComponent {
 				} else if (a instanceof GroupedCharterLengthEvent) {
 					GroupedCharterLengthEvent groupedCharterLengthEvent = (GroupedCharterLengthEvent) a;
 					adaptedObjects.addAll(groupedCharterLengthEvent.getEvents());
+				} else if (a instanceof GroupedCharterOutEvent) {
+					GroupedCharterOutEvent groupedCharterOutEvent = (GroupedCharterOutEvent) a;
+					adaptedObjects.addAll(groupedCharterOutEvent.getEvents());
 				}
 			}
 			return adaptedObjects;
@@ -196,50 +198,21 @@ public class PNLDetailsReportComponent extends DetailPropertiesViewComponent {
 		}
 	}
 
-	private final Set<ScheduleModel> hookedSchedules = new HashSet<>();
+	public void rebuild(final ISelectedDataProvider selectedDataProvider, boolean block) {
 
-	private final @NonNull SafeMMXContentAdapter contentAdapter = new SafeMMXContentAdapter() {
-
-		@Override
-		public void reallyNotifyChanged(final Notification notification) {
-			if (notification.getEventType() != Notification.REMOVING_ADAPTER) {
-				ViewerHelper.refresh(viewer, false);
-			}
+		if (pinSelection) {
+			return;
 		}
 
-		@Override
-		protected synchronized void missedNotifications(final List<Notification> missed) {
-			ViewerHelper.refresh(viewer, false);
-		}
-	};
+		final ISelection selection = SelectionHelper.adaptSelection(selectedDataProvider == null ? Collections.emptyList() : selectedDataProvider.getSelectedObjects());
+		removeAdapters();
 
-	@Override
-	protected void hookAdapters(final Collection<?> adaptSelection) {
-		final Set<ScheduleModel> schedules = new HashSet<>();
-		for (final Object object : adaptSelection) {
-			if (object instanceof EObject) {
-				EObject eObject = (EObject) object;
-				while (eObject != null && !(eObject instanceof ScheduleModel)) {
-					eObject = eObject.eContainer();
-				}
-
-				if (eObject instanceof ScheduleModel) {
-					ScheduleModel scheduleModel = (ScheduleModel) eObject;
-					schedules.add(scheduleModel);
-				}
-			}
-		}
-		for (final ScheduleModel scheduleModel : schedules) {
-			scheduleModel.eAdapters().add(contentAdapter);
-			hookedSchedules.add(scheduleModel);
-		}
-	}
-
-	@Override
-	protected void removeAdapters() {
-		for (final ScheduleModel scheduleModel : hookedSchedules) {
-			scheduleModel.eAdapters().remove(contentAdapter);
-		}
-		hookedSchedules.clear();
+		// This is very slow with many selected items. Run async to avoid blocking other actions.
+		ViewerHelper.runIfViewerValid(viewer, block, v -> {
+			removeAdapters();
+			final Collection<?> adaptSelection = adaptSelection(selection);
+			viewer.setInput(adaptSelection);
+			hookAdapters(adaptSelection);
+		});
 	}
 }

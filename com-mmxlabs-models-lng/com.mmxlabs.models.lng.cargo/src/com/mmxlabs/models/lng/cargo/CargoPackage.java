@@ -4309,22 +4309,13 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_AVAILABILITY__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Fleet</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_AVAILABILITY__FLEET = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Optional</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__OPTIONAL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int VESSEL_AVAILABILITY__OPTIONAL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Vessel</b></em>' reference.
@@ -4333,7 +4324,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__VESSEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int VESSEL_AVAILABILITY__VESSEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Charter Number</b></em>' attribute.
@@ -4342,7 +4333,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__CHARTER_NUMBER = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int VESSEL_AVAILABILITY__CHARTER_NUMBER = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -4351,7 +4342,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int VESSEL_AVAILABILITY__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Time Charter Rate</b></em>' attribute.
@@ -4360,7 +4351,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__TIME_CHARTER_RATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int VESSEL_AVAILABILITY__TIME_CHARTER_RATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Start At</b></em>' reference.
@@ -4369,7 +4360,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__START_AT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int VESSEL_AVAILABILITY__START_AT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Start After</b></em>' attribute.
@@ -4378,7 +4369,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__START_AFTER = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int VESSEL_AVAILABILITY__START_AFTER = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Start By</b></em>' attribute.
@@ -4387,7 +4378,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__START_BY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+	int VESSEL_AVAILABILITY__START_BY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>End At</b></em>' reference list.
@@ -4396,7 +4387,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__END_AT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+	int VESSEL_AVAILABILITY__END_AT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>End After</b></em>' attribute.
@@ -4405,7 +4396,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__END_AFTER = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+	int VESSEL_AVAILABILITY__END_AFTER = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>End By</b></em>' attribute.
@@ -4414,7 +4405,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__END_BY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+	int VESSEL_AVAILABILITY__END_BY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Start Heel</b></em>' containment reference.
@@ -4423,7 +4414,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__START_HEEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+	int VESSEL_AVAILABILITY__START_HEEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>End Heel</b></em>' containment reference.
@@ -4432,7 +4423,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__END_HEEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
+	int VESSEL_AVAILABILITY__END_HEEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The feature id for the '<em><b>Force Hire Cost Only End Rule</b></em>' attribute.
@@ -4441,7 +4432,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
+	int VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
 
 	/**
 	 * The feature id for the '<em><b>Contained Charter Contract</b></em>' containment reference.
@@ -4450,16 +4441,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
-
-	/**
-	 * The feature id for the '<em><b>Generic Charter Contract</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
+	int VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
 
 	/**
 	 * The feature id for the '<em><b>Min Duration</b></em>' attribute.
@@ -4468,7 +4450,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__MIN_DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
+	int VESSEL_AVAILABILITY__MIN_DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
 
 	/**
 	 * The feature id for the '<em><b>Max Duration</b></em>' attribute.
@@ -4477,7 +4459,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__MAX_DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
+	int VESSEL_AVAILABILITY__MAX_DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
 
 	/**
 	 * The feature id for the '<em><b>Charter Contract Override</b></em>' attribute.
@@ -4486,7 +4468,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 19;
+	int VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
+
+	/**
+	 * The feature id for the '<em><b>Generic Charter Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Availability</em>' class.
@@ -4495,7 +4486,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 20;
+	int VESSEL_AVAILABILITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 19;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -8613,17 +8604,6 @@ public interface CargoPackage extends EPackage {
 	EClass getVesselAvailability();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#isFleet <em>Fleet</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Fleet</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#isFleet()
-	 * @see #getVesselAvailability()
-	 * @generated
-	 */
-	EAttribute getVesselAvailability_Fleet();
-
-	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getVessel <em>Vessel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11218,14 +11198,6 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EClass VESSEL_AVAILABILITY = eINSTANCE.getVesselAvailability();
-
-		/**
-		 * The meta object literal for the '<em><b>Fleet</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VESSEL_AVAILABILITY__FLEET = eINSTANCE.getVesselAvailability_Fleet();
 
 		/**
 		 * The meta object literal for the '<em><b>Vessel</b></em>' reference feature.

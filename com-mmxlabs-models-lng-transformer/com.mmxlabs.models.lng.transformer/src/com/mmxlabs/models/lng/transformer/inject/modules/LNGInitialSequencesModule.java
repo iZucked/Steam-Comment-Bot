@@ -17,13 +17,16 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Exposed;
 import com.google.inject.Injector;
+import com.google.inject.Key;
 import com.google.inject.PrivateModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
+import com.google.inject.name.Names;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.transformer.util.OptimisationTransformer;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -41,6 +44,7 @@ import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
 import com.mmxlabs.optimiser.lso.impl.LinearFitnessCombiner;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.SimpleInitialSequenceBuilder;
 
@@ -54,6 +58,9 @@ public class LNGInitialSequencesModule extends PrivateModule {
 
 	@NonNull
 	public static final String KEY_GENERATED_SOLUTION_PAIR = "generated-solution-pair";
+
+	private static final String QUICK_SOLUTION = "quick";
+	private static final String FULL_SOLUTION = "full";
 
 	@Override
 	protected void configure() {
@@ -97,12 +104,28 @@ public class LNGInitialSequencesModule extends PrivateModule {
 	@Singleton
 	@Named(KEY_GENERATED_SOLUTION_PAIR)
 	@Exposed
-	private IMultiStateResult provideSolutionPair(@NonNull final Injector injector, @NonNull @Named(KEY_GENERATED_RAW_SEQUENCES) final ISequences rawSequences,
-			@NonNull List<IFitnessComponent> fitnessComponents, @NonNull IFitnessHelper fitnessHelper, @NonNull IFitnessCombiner fitnessCombiner) {
+	private IMultiStateResult provideSolutionPair(@NonNull final Injector injector, @Named(LNGTransformerHelper.HINT_EVALUATION_ONLY) boolean evaluationMode) {
+		// If we are just evaluating a scenario, then do not run the initial evaluation here as it is redundant.
+		// Split into multiple methods to avoid unnecessary fitness etc object instantiation for the quick code path
+		if (evaluationMode) {
+			return injector.getInstance(Key.get(IMultiStateResult.class, Names.named(QUICK_SOLUTION)));
+		} else {
+			return injector.getInstance(Key.get(IMultiStateResult.class, Names.named(FULL_SOLUTION)));
+		}
+
+	}
+
+	@Provides
+	@Singleton
+	@Named(FULL_SOLUTION)
+	private IMultiStateResult provideEvaluatedSolutionPair(@NonNull final Injector injector, @NonNull @Named(KEY_GENERATED_RAW_SEQUENCES) final ISequences rawSequences,
+			@NonNull final List<IFitnessComponent> fitnessComponents, @NonNull final IFitnessHelper fitnessHelper, @NonNull final IFitnessCombiner fitnessCombiner) {
+
+		final Map<String, Object> extraAnnotations = new HashMap<>();
 
 		final Pair<IAnnotatedSolution, IEvaluationState> p = LNGSchedulerJobUtils.evaluateCurrentState(injector, rawSequences);
-		IAnnotatedSolution annotatedSolution = p.getFirst();
-		IEvaluationState evaluationState = p.getSecond();
+		final IAnnotatedSolution annotatedSolution = p.getFirst();
+		final IEvaluationState evaluationState = p.getSecond();
 
 		fitnessHelper.evaluateSequencesFromComponents(annotatedSolution.getFullSequences(), evaluationState, fitnessComponents, null);
 		final Map<String, Long> currentFitnesses = new HashMap<>();
@@ -110,8 +133,16 @@ public class LNGInitialSequencesModule extends PrivateModule {
 			currentFitnesses.put(fitnessComponent.getName(), fitnessComponent.getFitness());
 		}
 
-		final Map<String, Object> extraAnnotations = new HashMap<>();
 		extraAnnotations.put(OptimiserConstants.G_AI_fitnessComponents, currentFitnesses);
 		return new MultiStateResult(rawSequences, extraAnnotations);
 	}
+
+	@Provides
+	@Singleton
+	@Named(QUICK_SOLUTION)
+	private IMultiStateResult provideQuickSolutionPair(@NonNull @Named(KEY_GENERATED_RAW_SEQUENCES) final ISequences rawSequences) {
+		// If we are just evaluating a scenario, then do not run the initial evaluation here as it is redundant.
+		return new MultiStateResult(rawSequences, new HashMap<>());
+	}
+
 }

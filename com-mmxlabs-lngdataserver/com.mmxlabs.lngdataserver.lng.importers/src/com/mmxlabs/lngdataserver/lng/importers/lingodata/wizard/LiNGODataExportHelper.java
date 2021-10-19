@@ -48,7 +48,7 @@ public final class LiNGODataExportHelper {
 	public static void exportLingoDataFiles(final @NonNull ScenarioInstance currentScenario, @NonNull final File target) throws IOException {
 
 		@NonNull
-		final ScenarioModelRecord sourceModelRecord = SSDataManager.Instance.getModelRecord(currentScenario);
+		final ScenarioModelRecord sourceModelRecord = SSDataManager.Instance.getModelRecordChecked(currentScenario);
 
 		try (final IScenarioDataProvider sdp = sourceModelRecord.aquireScenarioDataProvider("LiNGODataExportHelper:1")) {
 			final PortModel portModel = ScenarioModelUtil.getPortModel(sdp);

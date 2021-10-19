@@ -25,6 +25,7 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.concurrent.DefaultJobExecutorFactory;
 import com.mmxlabs.lingo.reports.modelbased.annotations.LingoIgnore;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
@@ -52,7 +53,7 @@ import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
 
@@ -136,7 +137,7 @@ public class MicroTestUtils {
 
 		final List<IEvaluatedStateConstraintChecker> failedCheckers = new LinkedList<>();
 
-		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+		try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 			scope.enter();
 			final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 			// Apply initial state (store initial lateness etc)
@@ -187,7 +188,7 @@ public class MicroTestUtils {
 				dataTransformer.getHints());
 		final Injector injector = evaluationTransformerUnit.getInjector();
 
-		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+		try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 			scope.enter();
 			final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 			// Apply initial state (store initial lateness etc)
@@ -218,7 +219,7 @@ public class MicroTestUtils {
 				dataTransformer.getHints());
 		final Injector injector = evaluationTransformerUnit.getInjector();
 
-		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+		try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 			scope.enter();
 			final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 			final EvaluationHelper evaluationHelper = injector.getInstance(EvaluationHelper.class);
@@ -265,9 +266,9 @@ public class MicroTestUtils {
 	public static boolean evaluateLSOSequences(@NonNull final LNGDataTransformer dataTransformer, @NonNull final ISequences rawSequences) {
 
 		LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(ScenarioUtils.createDefaultConstraintAndFitnessSettings(), false);
-
+		
 		final LNGLSOOptimiserTransformerUnit unit = new LNGLSOOptimiserTransformerUnit(dataTransformer, IRunnerHook.STAGE_LSO, 0, dataTransformer.getUserSettings(), stage,
-				dataTransformer.getInitialSequences(), dataTransformer.getInitialSequences(), dataTransformer.getHints());
+				dataTransformer.getInitialSequences(), dataTransformer.getInitialSequences(), dataTransformer.getHints(), new DefaultJobExecutorFactory(1));
 
 		return true;
 	}

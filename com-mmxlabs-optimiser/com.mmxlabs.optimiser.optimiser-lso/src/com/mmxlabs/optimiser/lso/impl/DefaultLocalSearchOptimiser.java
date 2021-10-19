@@ -10,11 +10,13 @@ import java.util.Date;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.concurrent.JobExecutor;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -43,7 +45,7 @@ import com.mmxlabs.optimiser.lso.logging.LSOLogger;
  * 
  */
 public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
-	
+
 	protected static final Logger LOG = LoggerFactory.getLogger(DefaultLocalSearchOptimiser.class);
 
 	@Inject
@@ -78,6 +80,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 	@Override
 	public IAnnotatedSolution start(@NonNull final IOptimisationContext optimiserContext, @NonNull final ISequences initialRawSequences, @NonNull final ISequences inputRawSequences) {
+
 		setCurrentContext(optimiserContext);
 
 		initLogger();
@@ -114,8 +117,13 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		// Apply sequence manipulators
 		final IModifiableSequences potentialFullSequences = getSequenceManipulator().createManipulatedSequences(lCurrentRawSequences);
 
-		final List<String> messages = new ArrayList<>();
-		messages.add(String.format("%s: start", this.getClass().getName()));
+		final List<@Nullable String> messages;
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
+			messages = new ArrayList<>();
+			messages.add(String.format("%s: start", this.getClass().getName()));
+		} else {
+			messages = null;
+		}
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : getConstraintCheckers()) {
 			if (!checker.checkConstraints(potentialFullSequences, null, messages)) {
@@ -147,11 +155,11 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 	}
 
 	@Override
-	public int step(final int percentage) {
-		return step(percentage, potentialRawSequences, currentRawSequences);
+	public int step(final int percentage, JobExecutor jobExecutor) {
+		return step(percentage, potentialRawSequences, currentRawSequences, jobExecutor);
 	}
 
-	protected int step(final int percentage, @NonNull final ModifiableSequences pinnedPotentialRawSequences, @NonNull final ModifiableSequences pinnedCurrentRawSequences) {
+	protected int step(final int percentage, @NonNull final ModifiableSequences pinnedPotentialRawSequences, @NonNull final ModifiableSequences pinnedCurrentRawSequences, JobExecutor jobExecutor) {
 
 		final int iterationsThisStep = Math.min(Math.max(1, (getNumberOfIterations() * percentage) / 100), getNumberOfIterations() - getNumberOfIterationsCompleted());
 		MAIN_LOOP: for (int i = 0; i < iterationsThisStep; i++) {
@@ -317,8 +325,13 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 	protected boolean applyHardConstraints(final @NonNull IModifiableSequences pinnedPotentialRawSequences, final @NonNull ISequences pinnedCurrentRawSequences, final IMove move,
 			final @NonNull ISequences potentialFullSequences) {
-		final List<String> messages = new ArrayList<>();
-		messages.add(String.format("%s: applyHardConstraints", this.getClass().getName()));
+		final List<@Nullable String> messages;
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
+			messages = new ArrayList<>();
+			messages.add(String.format("%s: apllyHardConstraints", this.getClass().getName()));
+		} else {
+			messages = null;
+		}
 		for (final IConstraintChecker checker : getConstraintCheckers()) {
 			// For constraint checker changed resources functions, if initial solution is invalid, we want to always perform a full constraint checker set of checks until we accept a valid
 			// solution
@@ -334,7 +347,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 				// Reject Move
 				updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
 				// Break out
-				
+
 				if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 					messages.stream().forEach(LOG::debug);
 				return false;

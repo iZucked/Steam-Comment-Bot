@@ -17,7 +17,6 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
@@ -57,6 +56,7 @@ import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.properties.ScheduledEventPropertySourceProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
+import com.mmxlabs.lingo.reports.services.ReentrantSelectionManager;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.utils.PinDiffModeColumnManager;
@@ -71,7 +71,6 @@ import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.EObjectTableViewerColumnFactory;
 import com.mmxlabs.models.ui.tabular.columngeneration.IColumnFactory;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
-import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
@@ -99,12 +98,15 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 	private final ColumnBlockManager blockManager = new ColumnBlockManager();
 
 	private ScenarioComparisonService selectedScenariosService;
+
+	private ReentrantSelectionManager selectionManager;
+
 	private @NonNull TransformedSelectedDataProvider currentSelectedDataProvider = new TransformedSelectedDataProvider(null);
 
 	protected Image pinImage;
 
-	@NonNull
-	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
+	
+	protected final @NonNull ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 		@Override
 		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
 			final Runnable r = new Runnable() {
@@ -139,7 +141,7 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 				}
 			};
 
-			RunnerHelper.exec(r, block);
+			ViewerHelper.runIfViewerValid(viewer, block, r);
 		}
 	};
 
@@ -483,16 +485,15 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 
 		viewer.init(getContentProvider(), null);
 
-		getSite().setSelectionProvider(viewer);
-		if (handleSelections()) {
-
-			final ESelectionService service = getSite().getService(ESelectionService.class);
-			service.addPostSelectionListener(this);
-		}
-
 		selectedScenariosService = getSite().getService(ScenarioComparisonService.class);
-		selectedScenariosService.addListener(selectedScenariosServiceListener);
-		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
+
+		selectionManager = new ReentrantSelectionManager(viewer, selectedScenariosServiceListener, selectedScenariosService);
+		try {
+			selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
+		} catch (Exception e) {
+			// Ignore any initial issues.
+		}
+		selectionManager.addListener(this);
 	}
 
 	protected IColumnFactory getColumnFactory(final EObjectTableViewer viewer) {
@@ -577,17 +578,6 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 
 	protected boolean handleSelections() {
 		return false;
-	}
-
-	@Override
-	public void dispose() {
-
-		final ESelectionService service = getSite().getService(ESelectionService.class);
-		service.removePostSelectionListener(this);
-
-		selectedScenariosService.removeListener(selectedScenariosServiceListener);
-
-		super.dispose();
 	}
 
 	/**

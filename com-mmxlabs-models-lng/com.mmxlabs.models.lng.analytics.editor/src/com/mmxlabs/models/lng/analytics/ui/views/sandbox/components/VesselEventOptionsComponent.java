@@ -76,7 +76,7 @@ public class VesselEventOptionsComponent extends AbstractSandboxComponent<Object
 
 				@Override
 				public void mouseEnter(final MouseEvent e) {
-					c.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
+					c.setImage(sandboxUIHelper.image_add);
 				}
 			});
 			c.addMouseListener(OptionMenuHelper.createNewVesselEventOptionMenuListener(c.getParent(), scenarioEditingLocation, modelProvider));

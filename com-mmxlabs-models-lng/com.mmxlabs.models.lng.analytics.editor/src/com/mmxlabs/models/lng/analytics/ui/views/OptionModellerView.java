@@ -102,6 +102,9 @@ import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
@@ -175,7 +178,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					.grab(false, true)//
 					.span(3, 1) //
 					.align(SWT.LEFT, SWT.FILL).create());
-			lhsScrolledComposite.setLayout(new GridLayout());
+			lhsScrolledComposite.setLayout(GridLayoutFactory.swtDefaults().create());
 			lhsScrolledComposite.setExpandHorizontal(true);
 			lhsScrolledComposite.setExpandVertical(true);
 			lhsScrolledComposite.setBackgroundMode(SWT.INHERIT_FORCE);
@@ -191,7 +194,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					.equalWidth(false) //
 					.numColumns(1) //
 					.spacing(0, 20) //
-					.margins(0, 0)//
+					.margins(3, 3)//
 					.create());
 			final IExpansionListener lhsExpansionListener = new ExpansionAdapter() {
 
@@ -282,23 +285,24 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				 * toggle for portfolio mode
 				 */
 				final Composite portfolioModeToggle = createPortfolioToggleComposite(c);
-				GridDataFactory.generate(portfolioModeToggle, 1, 1);
+				GridDataFactory.defaultsFor(portfolioModeToggle).span(1, 1).align(SWT.LEFT, SWT.CENTER).applyTo(portfolioModeToggle);
 
 				final Composite sandboxModeSelector = createSandboxModeComposite(c);
-				GridDataFactory.generate(sandboxModeSelector, 1, 1);
+				GridDataFactory.defaultsFor(sandboxModeSelector).span(1, 1).align(SWT.LEFT, SWT.CENTER).applyTo(sandboxModeSelector);
 
 				final Composite generateButton = createRunButton(c);
-				GridDataFactory.generate(generateButton, 1, 1);
+				GridDataFactory.defaultsFor(generateButton).span(1, 1).align(SWT.LEFT, SWT.CENTER).applyTo(generateButton);
 
 				final Composite displayButton = createDisplayButton(c);
-				GridDataFactory.generate(displayButton, 1, 1);
+				GridDataFactory.defaultsFor(displayButton).span(1, 1).align(SWT.LEFT, SWT.CENTER).applyTo(displayButton);
 
 				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_SANDBOX)) {
 					beModeToggle = createUseTargetPNLToggleComposite(c);
-					GridDataFactory.generate(beModeToggle, 1, 1);
+					GridDataFactory.defaultsFor(beModeToggle).span(1, 1).align(SWT.LEFT, SWT.CENTER).applyTo(beModeToggle);
 				}
 				final Composite deleteButton = createDeleteResultButton(c);
-				GridDataFactory.generate(deleteButton, 1, 1);
+				GridDataFactory.defaultsFor(deleteButton).span(1, 1).align(SWT.LEFT, SWT.CENTER).applyTo(deleteButton);
+
 			}
 
 			{
@@ -415,7 +419,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					setInput(null);
 					return;
 				} else {
-					if (currentModel != null) {
+					// Is the current model part of the current scenario model?
+					if (currentModel != null && ScenarioModelUtil.findScenarioModel(currentModel) == target) {
 						newModel = currentModel;
 					} else {
 						newModel = analyticsModel.getOptionModels().get(0);
@@ -860,7 +865,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	private Composite createRunButton(final Composite parent) {
 		//
-		final ImageDescriptor generateDesc = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/sandbox_generate.gif");
+		final ImageDescriptor generateDesc = CommonImages.getImageDescriptor(IconPaths.Play, IconMode.Enabled);
 		final Image imageGenerate = generateDesc.createImage();
 
 		final Composite generateComposite = new Composite(parent, SWT.NONE);
@@ -894,7 +899,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 					final int mode = m.getMode();
 					if (mode == SandboxModeConstants.MODE_OPTIMISE && !m.getBaseCase().isKeepExistingScenario()) {
 						// BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(),
-						MessageDialog.openError(PlatformUI.getWorkbench().getDisplay().getActiveShell(), "Error running sandbox", "Derive mode needs portfolio link enabled");
+						MessageDialog.openError(PlatformUI.getWorkbench().getDisplay().getActiveShell(), "Error running sandbox", "Optimise mode needs portfolio link enabled");
 					} else {
 
 						if (mode != SandboxModeConstants.MODE_DERIVE || partialCaseValid) {
@@ -987,15 +992,17 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	private Composite createDeleteResultButton(final Composite parent) {
 		//
-		final Image imageGenerate = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE);
-
 		final Composite generateComposite = new Composite(parent, SWT.NONE);
 		GridDataFactory.generate(generateComposite, 1, 1);
-
 		generateComposite.setLayout(new GridLayout(1, true));
+		
+
 
 		final Label generateButton = new Label(generateComposite, SWT.NONE);
 		generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.RIGHT, SWT.CENTER).grab(false, false).create());
+		
+		final Image imageGenerate = CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled).createImage();
+		generateButton.addDisposeListener(e -> imageGenerate.dispose()); 
 		generateButton.setImage(imageGenerate);
 
 		generateButton.setToolTipText("Delete current results");

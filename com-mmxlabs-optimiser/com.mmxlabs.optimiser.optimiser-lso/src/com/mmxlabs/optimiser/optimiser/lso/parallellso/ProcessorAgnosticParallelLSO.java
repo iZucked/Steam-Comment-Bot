@@ -12,13 +12,14 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.name.Named;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.JobExecutor;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.common.components.impl.IncrementingRandomSeed;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -54,9 +55,6 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 	private Injector injector;
 
 	@Inject
-	private CleanableExecutorService executorService;
-
-	@Inject
 	@Named(LocalSearchOptimiserModule.RANDOM_SEED)
 	private long seed;
 
@@ -75,6 +73,7 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 
 	@Inject(optional = true)
 	protected ILoggingProvider loggingProvider;
+
 	private int numberOfMovesAccepted = 0;
 	private int numberOfMovesRejected = 0;
 
@@ -103,9 +102,14 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 		this.failedInitialConstraintCheckers = false;
 		// Apply sequence manipulators
 		final IModifiableSequences potentialFullSequences = getSequenceManipulator().createManipulatedSequences(currentRawSequences);
-		
-		final List<String> messages = new ArrayList<>();
-		messages.add(String.format("%s: start", this.getClass().getName()));
+
+		final List<@Nullable String> messages;
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
+			messages = new ArrayList<>();
+			messages.add(String.format("%s: start", this.getClass().getName()));
+		} else {
+			messages = null;
+		}
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : getConstraintCheckers()) {
 			if (!checker.checkConstraints(potentialFullSequences, null, messages)) {
@@ -138,11 +142,11 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 	}
 
 	@Override
-	public int step(final int percentage) {
-		return step(percentage, potentialRawSequences, currentRawSequences);
+	public int step(final int percentage, JobExecutor jobExecutor) {
+		return step(percentage, potentialRawSequences, currentRawSequences, jobExecutor);
 	}
 
-	protected int step(final int percentage, @NonNull final ModifiableSequences pinnedPotentialRawSequences, @NonNull final ModifiableSequences pinnedCurrentRawSequences) {
+	protected int step(final int percentage, @NonNull final ModifiableSequences pinnedPotentialRawSequences, @NonNull final ModifiableSequences pinnedCurrentRawSequences, JobExecutor jobExecutor) {
 		long start = System.currentTimeMillis();
 		final int iterationsThisStep = Math.min(Math.max(1, (getNumberOfIterations() * percentage) / 100), getNumberOfIterations() - getNumberOfIterationsCompleted());
 		int iterationsCompletedThisStep = 0;
@@ -157,7 +161,7 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 			// build jobs
 			for (int b = 0; b < batchSize; b++) {
 				LSOJob job = new LSOJob(injector, batchSequences, lookupManagerBatch, getMoveGenerator(), incrementingRandomSeed.getSeed(), failedInitialConstraintCheckers);
-				futures.add(executorService.submit(job));
+				futures.add(jobExecutor.submit(job));
 			}
 
 			// collect and process jobs
@@ -223,7 +227,7 @@ public class ProcessorAgnosticParallelLSO extends LocalSearchOptimiser {
 				incrementingRandomSeed.setSeed(acceptedSeed);
 				continue;
 			}
-			this.executorService.removeCompleted();
+			jobExecutor.removeCompleted();
 		}
 		setNumberOfIterationsCompleted(numberOfMovesTried);
 		if (DEBUG) {

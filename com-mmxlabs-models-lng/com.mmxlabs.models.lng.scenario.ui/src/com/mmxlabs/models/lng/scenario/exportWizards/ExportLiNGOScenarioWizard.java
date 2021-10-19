@@ -56,7 +56,7 @@ public class ExportLiNGOScenarioWizard extends Wizard implements IExportWizard {
 
 		// Release reference on block exit
 		@NonNull
-		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecordChecked(instance);
 		try (final IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ExportLiNGOScenarioWizard")) {
 
 			// Create parent directories if needed.

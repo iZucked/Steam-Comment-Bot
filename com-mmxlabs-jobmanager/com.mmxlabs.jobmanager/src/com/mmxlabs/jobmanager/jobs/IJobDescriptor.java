@@ -4,6 +4,12 @@
  */
 package com.mmxlabs.jobmanager.jobs;
 
+import java.util.Collections;
+import java.util.Set;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.jobmanager.manager.IJobManager;
 
 /**
@@ -42,4 +48,16 @@ public interface IJobDescriptor {
 	 * Clean up
 	 */
 	void dispose();
+
+	/**
+	 * Optional extra object to pass into validation framework
+	 * @return
+	 */
+	default @Nullable EObject getExtraValidationTarget() {
+		return null;
+	}	
+	
+	default Set<String> getExtraValidationCategories() {
+		return Collections.emptySet();
+	}
 }

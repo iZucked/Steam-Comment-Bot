@@ -334,7 +334,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 	public IMultiStateResult runInsertion(SlotInsertionOptimiserLogger logger, final IProgressMonitor progressMonitor) {
 
 		final SlotInsertionOptimiserUnit slotInserter = new SlotInsertionOptimiserUnit(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(), insertionStage,
-				scenarioRunner.getExecutorService(), dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), dataTransformer.getHints());
+				scenarioRunner.getJobExecutorFactory(), dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), dataTransformer.getHints());
 
 		return slotInserter.run(targetOptimiserSlots, targetOptimiserEvents, logger, progressMonitor);
 	}
@@ -366,9 +366,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 	}
 
 	public void dispose() {
-		if (scenarioRunner != null) {
-			scenarioRunner.getExecutorService().shutdownNow();
-		}
+		 
 	}
 
 }

@@ -32,7 +32,7 @@ import com.mmxlabs.models.lng.transformer.inject.modules.PhaseOptimisationDataMo
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
@@ -121,7 +121,7 @@ public class BreakEvenTransformerUnit implements ILNGStateTransformerUnit {
 
 	@Override
 	public IMultiStateResult run(@NonNull final IProgressMonitor monitor) {
-		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+		try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 			scope.enter();
 			monitor.beginTask("", 100);
 			try {
