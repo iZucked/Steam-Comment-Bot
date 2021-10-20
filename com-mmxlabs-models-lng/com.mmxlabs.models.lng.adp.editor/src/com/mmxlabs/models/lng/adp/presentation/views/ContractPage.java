@@ -291,7 +291,7 @@ public class ContractPage extends ADPComposite {
 						public void widgetSelected(final SelectionEvent e) {
 							final CPBasedSolver cpBasedSolver = new CPBasedSolver();
 							try {
-								final SpacingRateabilitySolverResult result = cpBasedSolver.runCpSolver(editorData.scenarioModel, editorData.getEditingDomain(), editorData.getScenarioDataProvider());
+								final SpacingRateabilitySolverResult result = cpBasedSolver.runCpSolver(editorData.scenarioModel, editorData.getEditingDomain(), editorData.getScenarioDataProvider(), getShell());
 								if (result instanceof FeasibleSolverResult) {
 									final FeasibleSolverResult feasibleResult = (FeasibleSolverResult) result;
 									final CompoundCommand modelPopulationCommand = (CompoundCommand) feasibleResult.getModelPopulationCommand();
@@ -305,7 +305,9 @@ public class ContractPage extends ADPComposite {
 									} else {
 										message = "Rateability solver could not find a solution";
 									}
-									MessageDialog.openInformation(getShell(), "No solution found", message);
+									if (result != null) {
+										MessageDialog.openInformation(getShell(), "No solution found", message);
+									}
 								}
 							} catch (IOException ioException) {
 								
