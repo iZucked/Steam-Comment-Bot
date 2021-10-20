@@ -34,7 +34,7 @@ public class ExportAnonymisationMapHandler extends AbstractHandler {
 		try {
 			records.addAll(AnonymisationMapIO.read(AnonymisationMapIO.anonyMapFile));
 		} catch (Exception e) {
-			message = "Coudl not get the anonymisation map contents:\n" + e.getMessage();
+			message = "Could not get the anonymisation map contents:\n" + e.getMessage();
 		}
 		
 		if (records.isEmpty()) {
