@@ -5,11 +5,18 @@
 package com.mmxlabs.lngdataserver.lng.importers.menus;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
@@ -22,6 +29,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorPart;
+import org.osgi.service.application.ApplicationAdminPermission;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +46,7 @@ import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BasecaseServiceLoc
 import com.mmxlabs.lngdataserver.lng.importers.menus.PublishBasecaseException.Type;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.actions.anonymisation.AnonymisationUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -44,6 +54,8 @@ import com.mmxlabs.models.lng.scenario.utils.ExportCSVBundleUtil;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
+import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper.NameProvider;
+import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.OptimisationSettingsOverrideModule;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.migration.scenario.ScenarioMigrationException;
@@ -68,7 +80,7 @@ public class ScenarioServicePushToCloudAction {
 	private ScenarioServicePushToCloudAction() {
 	}
 
-	public static void uploadScenario(final ScenarioInstance scenarioInstance) {
+	public static void uploadScenario(final ScenarioInstance scenarioInstance, final boolean optimisation) {
 		boolean doPublish = false;
 		String notes = null;
 		
@@ -87,15 +99,34 @@ public class ScenarioServicePushToCloudAction {
 			doPublish = MessageDialog.openQuestion(activeShell, "Confirm base case push for cloud optimisation", String.format("Publish scenario %s  for cloud optimisation?", scenarioInstance.getName()));
 		}
 		if (doPublish) {
-			uploadScenario(scenarioInstance, notes);
+			final OptimisationPlan optimisationPlan;
+			if (optimisation) {
+				optimisationPlan = getOptimisationPlanForOptimisaiton(scenarioInstance);
+			} else {
+				throw new IllegalArgumentException("Only optimisation is supported at the moment.");
+			}
+			uploadScenario(scenarioInstance, notes, optimisationPlan, optimisation);
 		}
 	}
 
-	public static void uploadScenario(final ScenarioInstance scenarioInstance, final String notes) {
-		final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
+	private static OptimisationPlan getOptimisationPlanForOptimisaiton(final ScenarioInstance scenarioInstance) {
+		Set<String> existingNames = new HashSet<>();
+		scenarioInstance.getFragments().forEach(f -> existingNames.add(f.getName()));
+		scenarioInstance.getElements().forEach(f -> existingNames.add(f.getName()));
+		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		try (IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
+			final LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+			return OptimisationHelper.getOptimiserSettings(scenarioModel, false, "Custom", true, true, new NameProvider("Optimisation", existingNames));
+		} catch (final Exception e) {
+			LOG.error("Error getting the optimisation plan: " + e.getMessage(), e);
+		}
+		return null;
+	}
 
+	public static void uploadScenario(final ScenarioInstance scenarioInstance, final String notes, final OptimisationPlan optimisationPlan, final boolean optimisation) {
+		final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 		try {
-			dialog.run(true, false, m -> uploadScenario(scenarioInstance, notes, m));
+			dialog.run(true, false, m -> uploadScenario(scenarioInstance, notes, optimisationPlan, m));
 		} catch (final InvocationTargetException e) {
 			LOG.error(e.getMessage(), e);
 			final Throwable cause = e.getCause();
@@ -137,7 +168,7 @@ public class ScenarioServicePushToCloudAction {
 
 	}
 
-	private static void uploadScenario(final ScenarioInstance scenarioInstance, final String notes, final IProgressMonitor parentProgressMonitor) {
+	private static void uploadScenario(final ScenarioInstance scenarioInstance, final String notes, final OptimisationPlan optimisationPlan, final IProgressMonitor parentProgressMonitor) {
 
 		// Check user permission
 		if (UserPermissionsService.INSTANCE.hubSupportsPermissions()) {
@@ -179,13 +210,18 @@ public class ScenarioServicePushToCloudAction {
 				progressMonitor.subTask("Evaluate scenario");
 
 				// Evaluate scenario
-				final OptimisationPlan optimisationPlan = OptimisationHelper.getOptimiserSettings(o_scenarioModel, true, null, false, false, null);
-				assert optimisationPlan != null;
+				final OptimisationPlan optiPlan;
+				if (optimisationPlan != null) {
+					optiPlan = optimisationPlan;
+				} else {
+					optiPlan = OptimisationHelper.getOptimiserSettings(o_scenarioModel, true, null, false, false, null);
+				}
+				assert optiPlan != null;
 
 				// Hack: Add on shipping only hint to avoid generating spot markets during eval.
 				final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, scenarioInstance) //
 						.withThreadCount(1) //
-						.withOptimisationPlan(optimisationPlan) //
+						.withOptimisationPlan(optiPlan) //
 						.withHints(LNGTransformerHelper.HINT_SHIPPING_ONLY) //
 						.buildDefaultRunner();
 
@@ -210,7 +246,7 @@ public class ScenarioServicePushToCloudAction {
 			File tmpScenarioFile = null;
 
 			try {
-				tmpScenarioFile = ScenarioStorageUtil.getTempDirectory().createTempFile("publishScenarioUtil_", "");
+				tmpScenarioFile = ScenarioStorageUtil.getTempDirectory().createTempFile("cloudopti_", "");
 			} catch (final IOException e) {
 				e.printStackTrace();
 				throw new PublishBasecaseException(MSG_ERROR_SAVING, Type.FAILED_TO_SAVE, e);
@@ -278,6 +314,89 @@ public class ScenarioServicePushToCloudAction {
 		} finally {
 			progressMonitor.done();
 		}
+	}
+	
+	private static void archive(final File targetFile, final List<File> files) {
+		try(ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(targetFile))){
+			for (final File file : files) {
+				try(FileInputStream fis = new FileInputStream(file)){
+					zos.putNextEntry(new ZipEntry(file.getName()));
+					
+					byte[] buffer = new byte[1024];
+					int fl;
+					while ((fl = fis.read(buffer)) > 0) {
+						zos.write(buffer);
+					}
+				} catch (final Exception e) {
+					LOG.error(String.format("Can't add %s into the archive", file.getAbsolutePath()), e);
+				} finally {
+					zos.closeEntry();
+				}
+				
+			}
+		} catch (Exception e) {
+			LOG.error("Can't write the archive", e);
+		}
+	}
+	
+	private static File createOptimisationSettingsJson(final OptimisationPlan plan) {
+		final UserSettings us = plan.getUserSettings();
+		if (us != null) {
+			OpimisationSettings settings = new OpimisationSettings();
+			settings.periodStartDate = us.getPeriodStartDate();
+			settings.periodEnd = us.getPeriodEnd();
+			settings.shippingOnly = us.isShippingOnly();
+			settings.generateCharterOuts = us.isGenerateCharterOuts();
+			settings.withCharterLength = us.isWithCharterLength();
+			settings.withSpotCargoMarkets = us.isWithSpotCargoMarkets();
+			settings.similarityMode = us.getSimilarityMode().getLiteral();
+			
+			final ObjectMapper objectMapper = new ObjectMapper();
+			try {
+				final File file = Files.createTempFile("parameters", ".json").toFile();
+				objectMapper.writeValue(file, settings);
+				return file;
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+	
+	private static File createManifest(final String scenarioName, final boolean optimisation){
+		final ManifestDescription md = new ManifestDescription();
+		md.scenario = scenarioName;
+		md.type = optimisation ? "optimisation" : "optionise";
+		md.parameters = "parameters.json";
+		md.jvmConfig = "jvm.options";
+		md.version = "";
+		md.clientCode = "";
+		
+		final ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			final File file = Files.createTempFile("manifest", ".json").toFile();
+			objectMapper.writeValue(file, md);
+			return file;
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	private static File createJVMOptions(){
+		try{
+			final File file = Files.createTempFile("jvm", ".options").toFile();
+			try(PrintWriter pw = new PrintWriter(new FileOutputStream(file))){
+				pw.println("-Xms40m");
+				pw.println("-Xmx4g");
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
+			return file;
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

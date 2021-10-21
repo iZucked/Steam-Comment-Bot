@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;

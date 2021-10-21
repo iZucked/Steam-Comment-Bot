@@ -35,11 +35,10 @@ public class StartCloudOptimisationEditorActionDelegate extends ActionDelegate i
 	protected IAction action;
 	protected ScenarioInstance currentScenarioInstance;
 	
-	
 	@Override
 	public void run(IAction action) {
 		BusyIndicator.showWhile(Display.getDefault(), () -> {
-			ScenarioServicePushToCloudAction.uploadScenario(currentScenarioInstance);
+			ScenarioServicePushToCloudAction.uploadScenario(currentScenarioInstance, true);
 		});
 	}
 
