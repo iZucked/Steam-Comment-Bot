@@ -29,8 +29,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IEditorPart;
-import org.osgi.service.application.ApplicationAdminPermission;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,9 +52,8 @@ import com.mmxlabs.models.lng.scenario.utils.ExportCSVBundleUtil;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
-import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper.NameProvider;
-import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.OptimisationSettingsOverrideModule;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
+import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper.NameProvider;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.migration.scenario.ScenarioMigrationException;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -258,7 +255,21 @@ public class ScenarioServicePushToCloudAction {
 				e.printStackTrace();
 				throw new PublishBasecaseException(MSG_ERROR_SAVING, Type.FAILED_TO_SAVE, e);
 			}
-
+			
+			final List<File> filesToZip = new ArrayList<File>(4);
+			filesToZip.add(tmpScenarioFile);
+			filesToZip.add(createJVMOptions());
+			filesToZip.add(createManifest(tmpScenarioFile.getName(), true));
+			filesToZip.add(createOptimisationSettingsJson(optimisationPlan));
+			File zipToUpload = null;
+			
+			try {
+				tmpScenarioFile = ScenarioStorageUtil.getTempDirectory().createTempFile("archive_", ".zip");
+			} catch (final IOException e) {
+				e.printStackTrace();
+				throw new PublishBasecaseException(MSG_ERROR_SAVING, Type.FAILED_TO_SAVE, e);
+			}
+			archive(zipToUpload, filesToZip);
 			
 			progressMonitor.worked(200);
 			progressMonitor.subTask("Upload base case");
@@ -267,7 +278,7 @@ public class ScenarioServicePushToCloudAction {
 			String response = null;
 			final SubMonitor uploadMonitor = progressMonitor.split(500);
 			try {
-				response = BaseCaseServiceClient.INSTANCE.uploadScenarioForCloudOpti(tmpScenarioFile, "checksum" ,scenarioInstance.getName(), notes, //
+				response = BaseCaseServiceClient.INSTANCE.uploadScenarioForCloudOpti(zipToUpload, "checksum" ,scenarioInstance.getName(), notes, //
 						WrappedProgressMonitor.wrapMonitor(uploadMonitor));
 			} catch (final BasecaseServiceLockedException e) {
 				throw new PublishBasecaseException(MSG_ERROR_UPLOADING, Type.FAILED_SERVICE_LOCKED, e);
@@ -291,26 +302,6 @@ public class ScenarioServicePushToCloudAction {
 				System.out.println("Cannot read server response after scenario upload");
 				e.printStackTrace();
 			}
-
-			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_BASECASE_ARCHIVE)) {
-				try {
-					final File tempFile = Files.createTempFile(uuid, ".zip").toFile();
-					try {
-						ExportCSVBundleUtil.exportScenarioToZip(scenarioDataProvider, tempFile);
-						BaseCaseServiceClient.INSTANCE.uploadBaseCaseArchive(tempFile, uuid, null);
-					} finally {
-						// Delete temporary file
-						final boolean secureDelete = LicenseFeatures.isPermitted(FileDeleter.LICENSE_FEATURE__SECURE_DELETE);
-						FileDeleter.delete(tempFile, secureDelete);
-					}
-
-				} catch (final IOException ex) {
-					System.out.println("Error while uploading base case archive");
-					ex.printStackTrace();
-					throw new PublishBasecaseException("Error while uploading base case archive", Type.FAILED_TO_UPLOAD_BASECASE_CSV, ex);
-				}
-			}
-
 		} finally {
 			progressMonitor.done();
 		}

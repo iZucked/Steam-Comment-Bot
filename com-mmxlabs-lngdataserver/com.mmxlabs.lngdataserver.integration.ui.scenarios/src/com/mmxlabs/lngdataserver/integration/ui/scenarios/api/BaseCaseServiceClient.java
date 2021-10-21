@@ -109,7 +109,7 @@ public class BaseCaseServiceClient {
 			final String notes, final IProgressListener progressListener) throws IOException {
 		Builder builder = new MultipartBody.Builder() //
 				.setType(MultipartBody.FORM) //
-				.addFormDataPart("checksum", checksum) //
+				.addFormDataPart("sha256", checksum) //
 				.addFormDataPart("scenario", scenarioName, RequestBody.create(mediaType, scenario)) //
 		;
 		if (notes != null) {
