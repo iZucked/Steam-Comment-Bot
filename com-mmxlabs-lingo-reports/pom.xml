@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.mmxlabs.lingo.master</groupId>
 		<artifactId>com.mmxlabs.lingo.master.parent</artifactId>
-		<version>4.13.1-SNAPSHOT</version>
+		<version>4.13.2-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.mmxlabs.lingo.reports</groupId>
@@ -23,4 +23,4 @@
 		<!-- Features -->
 		<module>com.mmxlabs.lingo.reports.feature</module>
 	</modules>
-<version>4.13.1-SNAPSHOT</version></project>
+</project>

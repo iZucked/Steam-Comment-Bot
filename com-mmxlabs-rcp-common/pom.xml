@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.mmxlabs.lingo.master</groupId>
 		<artifactId>com.mmxlabs.lingo.master.parent</artifactId>
-		<version>4.13.1-SNAPSHOT</version>
+		<version>4.13.2-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.mmxlabs.rcp.common</groupId>
@@ -34,4 +34,4 @@
 		<module>com.mmxlabs.rcp.common.tests</module>
 		<module>com.mmxlabs.hub.tests</module>
 	</modules>
-<version>4.13.1-SNAPSHOT</version></project>
+</project>
