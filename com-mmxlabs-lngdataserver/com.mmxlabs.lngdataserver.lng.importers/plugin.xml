@@ -371,4 +371,20 @@
          type="com.mmxlabs.scenario.service.model.ScenarioService">
    </propertyTester>
 </extension>
+ <extension point="org.eclipse.ui.editorActions">
+         <editorContribution
+               id="com.mmxlabs.shiplingo.platform.models.optimisation.editorContributions"
+               targetID="com.mmxlabs.models.lng.demo.scneditor">
+            <action
+                  class="com.mmxlabs.lngdataserver.lng.importers.menus.StartCloudOptimisationEditorActionDelegate"
+                  definitionId="com.mmxlabs.commands.optimisation.cloud"
+                  icon="platform:/plugin/com.mmxlabs.rcp.common/icons/optimise.png"
+                  disabledIcon="platform:/plugin/com.mmxlabs.rcp.common/icons/optimise_disabled.png"
+                  id="com.mmxlabs.shiplingo.platform.models.optimisation.cloud"
+                  label="Start Cloud Optimisation"
+                  toolbarPath="optimisationgroup"
+                  tooltip="Start a cloud optimisation">
+            </action>
+         </editorContribution>
+ </extension>
 </plugin>

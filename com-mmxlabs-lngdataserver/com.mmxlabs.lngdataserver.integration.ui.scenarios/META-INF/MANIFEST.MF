@@ -52,7 +52,8 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.lngdataserver.integration.vessels;bundle-version="4.13.2",
  javax.annotation;bundle-version="1.2.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-11
-Import-Package: javax.inject;version="1.0.0",
+Import-Package: com.fasterxml.jackson.datatype.jdk8;version="2.12.5",
+ javax.inject;version="1.0.0",
  javax.servlet;version="4.0.0",
  javax.servlet.annotation;version="4.0.0",
  javax.servlet.descriptor;version="4.0.0",
@@ -62,6 +63,7 @@ Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.Activator
 Export-Package: com.mmxlabs.lngdataserver.integration.ui.scenarios,
  com.mmxlabs.lngdataserver.integration.ui.scenarios.api,
+ com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud,
  com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions,
  com.mmxlabs.lngdataserver.integration.ui.scenarios.internal
 Bundle-ClassPath: .

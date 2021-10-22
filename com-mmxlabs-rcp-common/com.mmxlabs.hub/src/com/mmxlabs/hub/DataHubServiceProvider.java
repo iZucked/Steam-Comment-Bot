@@ -134,6 +134,10 @@ public class DataHubServiceProvider {
 	public @Nullable Builder makeRequestBuilder(String urlPath) {
 		return UpstreamUrlProvider.INSTANCE.makeRequestBuilder(urlPath);
 	}
+	
+	public @Nullable Builder makeRequestBuilder(String baseUrl, String urlPath) {
+		return UpstreamUrlProvider.INSTANCE.makeRequestBuilder(baseUrl, urlPath);
+	}
 
 	public synchronized void setOnlineState(final boolean newOnline) {
 		if (this.online != newOnline) {
