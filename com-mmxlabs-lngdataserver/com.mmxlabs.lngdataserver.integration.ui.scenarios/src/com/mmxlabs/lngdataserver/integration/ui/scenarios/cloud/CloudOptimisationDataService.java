@@ -31,13 +31,13 @@ import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.IProgressListener;
 
-public class CloudOptimisationDataRepository {
+public class CloudOptimisationDataService {
 
 	public static final int CURRENT_MODEL_VERSION = 1;
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(CloudOptimisationDataRepository.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CloudOptimisationDataService.class);
 
-	public static final CloudOptimisationDataRepository INSTANCE = new CloudOptimisationDataRepository();
+	public static final CloudOptimisationDataService INSTANCE = new CloudOptimisationDataService();
 
 	private File dataFolder;
 
@@ -49,7 +49,7 @@ public class CloudOptimisationDataRepository {
 
 	private final IUpstreamDetailChangedListener upstreamDetailsChangedListener;
 	
-	private CloudOptimisationDataRepository() {
+	private CloudOptimisationDataService() {
 		dataList = new ConcurrentLinkedQueue<>();
 		upstreamDetailsChangedListener = dataList::clear;
 		start();
@@ -131,7 +131,7 @@ public class CloudOptimisationDataRepository {
 					}
 
 					client = new CloudOptimisationDataServiceClient();
-					updater = new CloudOptimisationDataUpdater(dataFolder, client, CloudOptimisationDataRepository.this::update);
+					updater = new CloudOptimisationDataUpdater(dataFolder, client, CloudOptimisationDataService.this::update);
 					updater.start();
 				}
 				this.close();

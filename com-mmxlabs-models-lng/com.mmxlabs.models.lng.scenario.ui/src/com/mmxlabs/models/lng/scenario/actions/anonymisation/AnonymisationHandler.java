@@ -40,11 +40,6 @@ public class AnonymisationHandler {
 	private static final String SellContractID = "Sales contract";
 	
 	public CompoundCommand createAnonymisationCommand(final @NonNull LNGScenarioModel scenarioModel, final EditingDomain ed, final Set<String> usedIDStrings, //
-			final List<AnonymisationRecord> records, final boolean anonymise) {	
-		return createAnonymisationCommand(scenarioModel, ed, usedIDStrings, records, anonymise, AnonymisationMapIO.anonyMapFile);
-	}
-	
-	public CompoundCommand createAnonymisationCommand(final @NonNull LNGScenarioModel scenarioModel, final EditingDomain ed, final Set<String> usedIDStrings, //
 			final List<AnonymisationRecord> records, final boolean anonymise, final @NonNull File anonyMap) {
 		final CompoundCommand cmd = new CompoundCommand("Toggle anonymisation");
 		

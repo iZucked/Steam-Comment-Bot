@@ -21,6 +21,12 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 public class AnonymisationUtils {
 	
 	public static CompoundCommand createAnonymisationCommand(final @NonNull LNGScenarioModel scenarioModel, final EditingDomain ed, final Set<String> usedIDStrings, //
+			final List<AnonymisationRecord> records, final boolean anonymise) {
+		final AnonymisationHandler handler = new AnonymisationHandler();
+		return handler.createAnonymisationCommand(scenarioModel, ed, usedIDStrings, records, anonymise, AnonymisationMapIO.anonyMapFile);
+	}
+	
+	public static CompoundCommand createAnonymisationCommand(final @NonNull LNGScenarioModel scenarioModel, final EditingDomain ed, final Set<String> usedIDStrings, //
 			final List<AnonymisationRecord> records, final boolean anonymise, final @NonNull File anonyMap) {
 		final AnonymisationHandler handler = new AnonymisationHandler();
 		return handler.createAnonymisationCommand(scenarioModel, ed, usedIDStrings, records, anonymise, anonyMap);
