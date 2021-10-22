@@ -47,6 +47,7 @@ import com.mmxlabs.models.lng.parameters.InsertionOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
+import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -118,19 +119,25 @@ public class LNGSchedulerInsertSlotJobRunner {
 			@Nullable TriFunction<ModelEntityMap, IOptimisationData, Injector, ISequences> initialSolutionProvider) {
 		this(scenarioInstance, scenarioDataProvider, editingDomain, userSettings, targetSlots, targetEvents, extraDataProvider, initialSolutionProvider, null);
 	}
-	
+
 	public LNGSchedulerInsertSlotJobRunner(@Nullable final ScenarioInstance scenarioInstance, final IScenarioDataProvider scenarioDataProvider, final EditingDomain editingDomain,
 			final UserSettings userSettings, final List<Slot<?>> targetSlots, final List<VesselEvent> targetEvents, @Nullable ExtraDataProvider extraDataProvider,
 			@Nullable TriFunction<ModelEntityMap, IOptimisationData, Injector, ISequences> initialSolutionProvider, @Nullable Consumer<LNGOptimisationBuilder> builderCustomiser) {
 
 		this.originalScenarioDataProvider = scenarioDataProvider;
 		this.originalEditingDomain = editingDomain;
-		this.userSettings = userSettings;
+		this.userSettings = EcoreUtil.copy(userSettings);
 		this.targetSlots = targetSlots;
 		this.targetEvents = targetEvents;
 
+		// Reset settings not supplied to the user
+		this.userSettings.setShippingOnly(false);
+		this.userSettings.setBuildActionSets(false);
+		this.userSettings.setCleanSlateOptimisation(false);
+		this.userSettings.setSimilarityMode(SimilarityMode.OFF);
+
 		plan = ParametersFactory.eINSTANCE.createOptimisationPlan();
-		plan.setUserSettings(EcoreUtil.copy(userSettings));
+		plan.setUserSettings(this.userSettings);
 		plan.setSolutionBuilderSettings(ScenarioUtils.createDefaultSolutionBuilderSettings());
 		plan.getStages().add(ScenarioUtils.createDefaultInsertionSettings());
 
@@ -156,7 +163,8 @@ public class LNGSchedulerInsertSlotJobRunner {
 			}
 		}
 
-		// TODO: Only disable caches if we do a break-even (caches *should* be ok otherwise?)
+		// TODO: Only disable caches if we do a break-even (caches *should* be ok
+		// otherwise?)
 		final String[] hints = isBreakEven ? hint_with_breakeven : hint_without_breakeven;
 		final LNGOptimisationBuilder builder = LNGOptimisationBuilder.begin(originalScenarioDataProvider, scenarioInstance) //
 				.withExtraDataProvider(extraDataProvider) //
@@ -297,13 +305,12 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 	public SlotInsertionOptions doRunJob(final IProgressMonitor progressMonitor) {
 		final long start = System.currentTimeMillis();
-		SlotInsertionOptimiserLogger logger = new SlotInsertionOptimiserLogger();
 		final SubMonitor subMonitor = SubMonitor.convert(progressMonitor, "Inserting option(s)", 100);
 		try {
 			final Schedule schedule = ScenarioModelUtil.getScheduleModel(scenarioToOptimiserBridge.getOptimiserScenario()).getSchedule();
 			final long targetPNL = performBreakEven ? ScheduleModelKPIUtils.getScheduleProfitAndLoss(schedule) : 0L;
 
-			final IMultiStateResult results = runInsertion(logger, subMonitor.split(90));
+			final IMultiStateResult results = runInsertion(null, subMonitor.split(90));
 			if (results == null) {
 				System.out.println("Found no solutions");
 				return null;
@@ -319,8 +326,6 @@ public class LNGSchedulerInsertSlotJobRunner {
 				return null;
 			}
 
-			logger.setSolutionsFound(solutions.size());
-
 			return exportSolutions(results, targetPNL, subMonitor.split(10));
 		} finally {
 			SubMonitor.done(progressMonitor);
@@ -331,7 +336,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 	}
 
-	public IMultiStateResult runInsertion(SlotInsertionOptimiserLogger logger, final IProgressMonitor progressMonitor) {
+	public IMultiStateResult runInsertion(final @Nullable SlotInsertionOptimiserLogger logger, final IProgressMonitor progressMonitor) {
 
 		final SlotInsertionOptimiserUnit slotInserter = new SlotInsertionOptimiserUnit(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(), insertionStage,
 				scenarioRunner.getJobExecutorFactory(), dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), dataTransformer.getHints());

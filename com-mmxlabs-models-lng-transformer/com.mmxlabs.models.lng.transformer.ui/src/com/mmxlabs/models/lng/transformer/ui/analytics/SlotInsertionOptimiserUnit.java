@@ -630,10 +630,13 @@ public class SlotInsertionOptimiserUnit {
 					System.out.printf("Found %d insertion options.\n", solutions.size());
 				}
 
-				solutions.add(0, new NonNullPair<ISequences, Map<String, Object>>(inputState.getBestSolution().getFirst(), new HashMap<>()));
+				if (logger != null) {
+					logger.setSolutionsFound(solutions.size());
+				}
+
+				solutions.add(0, new NonNullPair<>(inputState.getBestSolution().getFirst(), new HashMap<>()));
 
 				if (logger != null) {
-
 					logger.doneStage(SlotInsertionOptimiserLogger.STAGE_PROCESS_SOLUTIONS);
 				}
 				return new MultiStateResult(inputState.getBestSolution(), solutions);
