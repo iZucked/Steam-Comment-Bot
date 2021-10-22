@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -34,13 +35,11 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mmxlabs.common.io.FileDeleter;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
 import com.mmxlabs.hub.services.permissions.UserPermissionsService;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
-import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BasecaseServiceLockedException;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataRepository;
 import com.mmxlabs.lngdataserver.lng.importers.menus.PublishBasecaseException.Type;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
@@ -48,7 +47,6 @@ import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.actions.anonymisation.AnonymisationUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.lng.scenario.utils.ExportCSVBundleUtil;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
@@ -80,9 +78,6 @@ public class ScenarioServicePushToCloudAction {
 	public static void uploadScenario(final ScenarioInstance scenarioInstance, final boolean optimisation) {
 		boolean doPublish = false;
 		String notes = null;
-		
-		// TODO:
-		// request optimiser or optioniser settings
 
 		final Shell activeShell = Display.getDefault().getActiveShell();
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_BASECASE_NOTES)) {
@@ -199,7 +194,16 @@ public class ScenarioServicePushToCloudAction {
 				final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
 				
 				progressMonitor.subTask("Anonymise scenario");
-				final CompoundCommand cmd = AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, new HashSet(), new ArrayList(), true);
+				
+				File anonymisationMap = null;
+				try {
+					anonymisationMap = ScenarioStorageUtil.getTempDirectory().createTempFile("anonyMap_" + scenarioInstance.getName() + Instant.now().toString(), ".data");
+				} catch (final IOException e) {
+					e.printStackTrace();
+					throw new PublishBasecaseException(MSG_ERROR_SAVING, Type.FAILED_TO_SAVE, e);
+				}
+				
+				final CompoundCommand cmd = AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, new HashSet(), new ArrayList(), true, anonymisationMap);
 				if (cmd != null && !cmd.isEmpty()) {
 					editingDomain.getCommandStack().execute(cmd);
 				}
@@ -278,11 +282,9 @@ public class ScenarioServicePushToCloudAction {
 			String response = null;
 			final SubMonitor uploadMonitor = progressMonitor.split(500);
 			try {
-				response = BaseCaseServiceClient.INSTANCE.uploadScenarioForCloudOpti(zipToUpload, "checksum" ,scenarioInstance.getName(), notes, //
+				response = CloudOptimisationDataRepository.INSTANCE.uploadData(zipToUpload, "checksum" ,scenarioInstance.getName(), //
 						WrappedProgressMonitor.wrapMonitor(uploadMonitor));
-			} catch (final BasecaseServiceLockedException e) {
-				throw new PublishBasecaseException(MSG_ERROR_UPLOADING, Type.FAILED_SERVICE_LOCKED, e);
-			} catch (final IOException e) {
+			} catch (final Exception e) {
 				System.out.println(MSG_ERROR_UPLOADING);
 				e.printStackTrace();
 				throw new PublishBasecaseException(MSG_ERROR_UPLOADING, Type.FAILED_TO_UPLOAD_BASECASE, e);
@@ -307,6 +309,11 @@ public class ScenarioServicePushToCloudAction {
 		}
 	}
 	
+	/**
+	 * Archives the files in the list into the target file
+	 * @param targetFile
+	 * @param files
+	 */
 	private static void archive(final File targetFile, final List<File> files) {
 		try(ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(targetFile))){
 			for (final File file : files) {

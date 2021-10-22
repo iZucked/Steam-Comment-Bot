@@ -102,41 +102,6 @@ public class BaseCaseServiceClient {
 			return response.body().string();
 		}
 	}
-	
-	public String uploadScenarioForCloudOpti(final File scenario, //
-			final String checksum, //
-			final String scenarioName, //
-			final String notes, final IProgressListener progressListener) throws IOException {
-		Builder builder = new MultipartBody.Builder() //
-				.setType(MultipartBody.FORM) //
-				.addFormDataPart("sha256", checksum) //
-				.addFormDataPart("scenario", scenarioName, RequestBody.create(mediaType, scenario)) //
-		;
-		if (notes != null) {
-			builder.addFormDataPart("notes", notes);
-		}
-		RequestBody requestBody = builder.build();
-
-		if (progressListener != null) {
-			requestBody = new ProgressRequestBody(requestBody, progressListener);
-		}
-
-		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder("http://localhost:8080", SCENARIO_CLOUD_UPLOAD_URL);
-		if (requestBuilder == null) {
-			return null;
-		}
-
-		final Request request = requestBuilder //
-				.post(requestBody).build();
-
-		// Check the response
-		try (Response response = httpClient.newCall(request).execute()) {
-			if (!response.isSuccessful()) {
-				throw new IOException("Unexpected code " + response);
-			}
-			return response.body().string();
-		}
-	}
 
 	public void uploadBaseCaseArchive(final File file, //
 			final String uuid, ///

@@ -35,45 +35,39 @@ import okio.Okio;
 
 public class CloudOptimisationDataServiceClient {
 
-	private static final String SCENARIO_UPLOAD_URL = "/reports/v1/team/custom/upload";
-	private static final String SCENARIO_DELETE_URL = "/reports/v1/team/custom/remove";
-	private static final String SCENARIO_ENDPOINT_URL = "/reports/v1/team/custom";
-	private static final String SCENARIO_LAST_MODIFIED_URL = "/reports/v1/team/custom/mod/lastModified";
 	private static final String LIST_SCENARIOS_URL = "/scenarios";
 	private static final String LIST_RESULTS_URL = "/results";
 	private static final String SCENARIO_RESULT_URL = "/result";
 	private static final String SCENARIO_CLOUD_UPLOAD_URL = "/scenarios/v1/cloud/opti/upload";
+	private static final String OPTI_CLOUD_BASE_URL = "http://localhost:8080";
 
 	private final OkHttpClient httpClient = com.mmxlabs.hub.common.http.HttpClientUtil.basicBuilder() //
 			.build();
 	
 	private final okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
 	
-	private Instant lastModified = Instant.EPOCH;
+	private Instant lastSuccessfulAccess = Instant.EPOCH;
 
-	public Instant getLastModified() {
-		return this.lastModified;
+	public Instant getLastSuccessfulAccess() {
+		return this.lastSuccessfulAccess;
 	}
 
-	public String uploadScenarioForCloudOpti(final File scenario, //
+	public String upload(final File scenario, //
 			final String checksum, //
 			final String scenarioName, //
-			final String notes, final IProgressListener progressListener) throws IOException {
+			final IProgressListener progressListener) throws IOException {
 		Builder builder = new MultipartBody.Builder() //
 				.setType(MultipartBody.FORM) //
 				.addFormDataPart("sha256", checksum) //
 				.addFormDataPart("scenario", scenarioName, RequestBody.create(mediaType, scenario)) //
 		;
-		if (notes != null) {
-			builder.addFormDataPart("notes", notes);
-		}
 		RequestBody requestBody = builder.build();
 
 		if (progressListener != null) {
 			requestBody = new ProgressRequestBody(requestBody, progressListener);
 		}
 
-		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder("http://localhost:8080", SCENARIO_CLOUD_UPLOAD_URL);
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(OPTI_CLOUD_BASE_URL, SCENARIO_CLOUD_UPLOAD_URL);
 		if (requestBuilder == null) {
 			return null;
 		}
@@ -105,7 +99,7 @@ public class CloudOptimisationDataServiceClient {
 				.build();
 
 		final String requestURL = String.format("%s/%s", SCENARIO_RESULT_URL, uuid);
-		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(requestURL);
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(OPTI_CLOUD_BASE_URL, requestURL);
 		if (requestBuilder == null) {
 			return false;
 		}
@@ -127,9 +121,23 @@ public class CloudOptimisationDataServiceClient {
 		}
 	}
 
-	public Pair<String, Instant> getRecords() throws IOException {
+	/**
+	 * Lists scenarios in the job queue
+	 * -OR-
+	 * Lists scenarios which have been optimised
+	 * @return
+	 * @throws IOException
+	 */
+	public Pair<String, Instant> listContents(final boolean listFinished) throws IOException {
+		
+		final String url;
+		if (listFinished) {
+			url = LIST_RESULTS_URL;
+		} else {
+			url = LIST_SCENARIOS_URL;
+		}
 
-		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(LIST_RESULTS_URL);
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(OPTI_CLOUD_BASE_URL, url);
 		if (requestBuilder == null) {
 			return null;
 		}
@@ -141,9 +149,12 @@ public class CloudOptimisationDataServiceClient {
 			if (!response.isSuccessful()) {
 				throw new IOException("Unexpected code: " + response);
 			}
-			lastModified = Instant.now();
+			// Only update the last successful access time, only if we list acomplished tasks
+			if (listFinished) {
+				lastSuccessfulAccess = Instant.now();
+			}
 			final String jsonData = response.body().string();
-			return new Pair<>(jsonData, lastModified);
+			return new Pair<>(jsonData, lastSuccessfulAccess);
 		}
 	}
 

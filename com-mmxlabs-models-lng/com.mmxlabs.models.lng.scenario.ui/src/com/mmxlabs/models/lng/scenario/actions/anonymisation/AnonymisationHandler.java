@@ -1,5 +1,6 @@
 package com.mmxlabs.models.lng.scenario.actions.anonymisation;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,7 +40,12 @@ public class AnonymisationHandler {
 	private static final String SellContractID = "Sales contract";
 	
 	public CompoundCommand createAnonymisationCommand(final @NonNull LNGScenarioModel scenarioModel, final EditingDomain ed, final Set<String> usedIDStrings, //
-			final List<AnonymisationRecord> records, final boolean anonymise) {
+			final List<AnonymisationRecord> records, final boolean anonymise) {	
+		return createAnonymisationCommand(scenarioModel, ed, usedIDStrings, records, anonymise, AnonymisationMapIO.anonyMapFile);
+	}
+	
+	public CompoundCommand createAnonymisationCommand(final @NonNull LNGScenarioModel scenarioModel, final EditingDomain ed, final Set<String> usedIDStrings, //
+			final List<AnonymisationRecord> records, final boolean anonymise, final @NonNull File anonyMap) {
 		final CompoundCommand cmd = new CompoundCommand("Toggle anonymisation");
 		
 		cmd.append(SetCommand.create(ed, scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_Anonymised(), anonymise));
@@ -47,7 +53,7 @@ public class AnonymisationHandler {
 			renameVessels(scenarioModel, ed, records, cmd, usedIDStrings, AnonymisationUtils::rename);
 			renameSlots(scenarioModel, ed, records, cmd, usedIDStrings, AnonymisationUtils::rename);
 			renameContracts(scenarioModel, ed, records, cmd, usedIDStrings, AnonymisationUtils::rename);
-			AnonymisationMapIO.write(records, AnonymisationMapIO.anonyMapFile);
+			AnonymisationMapIO.write(records, anonyMap);
 		} else {
 			renameVessels(scenarioModel, ed, records, cmd, usedIDStrings, AnonymisationUtils::renameToOriginal);
 			renameSlots(scenarioModel, ed, records, cmd, usedIDStrings, AnonymisationUtils::renameToOriginal);

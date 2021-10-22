@@ -207,9 +207,9 @@ public class CloudOptimisationDataUpdater {
 
 		if (available) {
 
-			final Instant m = client.getLastModified();
+			final Instant m = client.getLastSuccessfulAccess();
 			if (m != null && m.isAfter(lastModified)) {
-				final Pair<String, Instant> recordsPair = client.getRecords();
+				final Pair<String, Instant> recordsPair = client.listContents(true);
 				if (recordsPair != null) {
 					final File recordsFile = new File(basePath.getAbsolutePath() + "/records.json");
 					final File recordsFileBKP = new File(basePath.getAbsolutePath() + "/records.json.bkp");

@@ -1,5 +1,6 @@
 package com.mmxlabs.models.lng.scenario.actions.anonymisation;
 
+import java.io.File;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
@@ -20,9 +21,9 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 public class AnonymisationUtils {
 	
 	public static CompoundCommand createAnonymisationCommand(final @NonNull LNGScenarioModel scenarioModel, final EditingDomain ed, final Set<String> usedIDStrings, //
-			final List<AnonymisationRecord> records, final boolean anonymise) {
+			final List<AnonymisationRecord> records, final boolean anonymise, final @NonNull File anonyMap) {
 		final AnonymisationHandler handler = new AnonymisationHandler();
-		return handler.createAnonymisationCommand(scenarioModel, ed, usedIDStrings, records, anonymise);
+		return handler.createAnonymisationCommand(scenarioModel, ed, usedIDStrings, records, anonymise, anonyMap);
 	}
 	
 	public static Command rename(AnonymisationEntry entry) {

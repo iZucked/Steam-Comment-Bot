@@ -29,6 +29,7 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
+import com.mmxlabs.hub.common.http.IProgressListener;
 
 public class CloudOptimisationDataRepository {
 
@@ -45,7 +46,6 @@ public class CloudOptimisationDataRepository {
 	private CloudOptimisationDataUpdater updater;
 	private ConcurrentLinkedQueue<CloudOptimisationResultDataRecord> dataList;
 	private ConcurrentLinkedQueue<IUpdateListener> listeners = new ConcurrentLinkedQueue<>();
-
 
 	private final IUpstreamDetailChangedListener upstreamDetailsChangedListener;
 	
@@ -77,6 +77,35 @@ public class CloudOptimisationDataRepository {
 
 	public @Nullable File getDataFile(final String uuid) {
 		return new File(String.format("%s/%s.data", dataFolder.getAbsoluteFile(), uuid));
+	}
+	
+	public String uploadData(final File dataFile, //
+			final String checksum, //
+			final String scenarioName, //
+			final IProgressListener progressListener) throws Exception {
+		String response = null;
+		try {
+
+			try {
+				updater.pause();
+				response = //
+						client.upload(dataFile, checksum, scenarioName, progressListener);
+			} catch (final Exception e){
+				LOGGER.error(e.getMessage());
+			} finally {
+				updater.resume();
+			}
+			
+			try {
+				updater.pause();
+				updater.refresh();
+			} finally {
+				updater.resume();
+			}
+		} catch (Exception e) {
+			throw e;
+		}
+		return response;
 	}
 
 	public void start() {
