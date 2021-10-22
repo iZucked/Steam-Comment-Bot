@@ -395,7 +395,6 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 			System.out.print(e.getMessage() + "\n");
 		} finally {
 			progressMonitor.done();
-			runnerBuilder.dispose();
 		}
 	}
 

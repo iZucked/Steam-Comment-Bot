@@ -147,8 +147,6 @@ public class HeadlessOptioniserRunner {
 		if (completedHook != null) {
 			completedHook.accept(scenarioModelRecord, sdp);
 		}
-
-		insertionRunner.dispose();
 	}
 
 }

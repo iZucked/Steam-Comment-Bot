@@ -69,7 +69,8 @@ public class PurgeTests extends AbstractMicroTestCase {
 				.withEndHeel(50, 50, EVesselTankState.MUST_BE_COLD, null)//
 				.build();
 
-		final DryDockEvent drydock = cargoModelBuilder.makeDryDockEvent("drydock", LocalDateTime.of(2017, 12, 2, 0, 0, 0), LocalDateTime.of(2017, 12, 2, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_FREEPORT))
+		final DryDockEvent drydock = cargoModelBuilder
+				.makeDryDockEvent("drydock", LocalDateTime.of(2017, 12, 2, 0, 0, 0), LocalDateTime.of(2017, 12, 2, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_FREEPORT))
 				.withDurationInDays(5) //
 				.withVesselAssignment(vesselAvailability, 1) //
 				.build();
@@ -144,7 +145,8 @@ public class PurgeTests extends AbstractMicroTestCase {
 				.withEndHeel(50, 50, EVesselTankState.MUST_BE_COLD, null)//
 				.build();
 
-		final DryDockEvent drydock = cargoModelBuilder.makeDryDockEvent("drydock", LocalDateTime.of(2017, 12, 2, 0, 0, 0), LocalDateTime.of(2017, 12, 2, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_FREEPORT))
+		final DryDockEvent drydock = cargoModelBuilder
+				.makeDryDockEvent("drydock", LocalDateTime.of(2017, 12, 2, 0, 0, 0), LocalDateTime.of(2017, 12, 2, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_FREEPORT))
 				.withDurationInDays(5) //
 				.withVesselAssignment(vesselAvailability, 1) //
 				.build();
@@ -287,11 +289,7 @@ public class PurgeTests extends AbstractMicroTestCase {
 				.withThreadCount(1) //
 				.buildDefaultRunner();
 
-		try {
-			runnerBuilder.evaluateInitialState();
-			runnerBuilder.run(false, checker);
-		} finally {
-			runnerBuilder.dispose();
-		}
+		runnerBuilder.evaluateInitialState();
+		runnerBuilder.run(false, checker);
 	}
 }

@@ -62,7 +62,8 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 				.build();
 
 		// Create a single charter out event
-		cargoModelBuilder.makeCharterOutEvent("charter-1", LocalDateTime.of(2015, 1, 1, 0, 0, 0), LocalDateTime.of(2015, 1, 1, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
+		cargoModelBuilder
+				.makeCharterOutEvent("charter-1", LocalDateTime.of(2015, 1, 1, 0, 0, 0), LocalDateTime.of(2015, 1, 1, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withRelocatePort(portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN)) //
 				.withDurationInDays(10) //
 				.withVesselAssignment(vesselAvailability_1, 0) //
@@ -80,7 +81,8 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 				.withVesselAssignment(vesselAvailability_1, 2) //
 				.build(); //
 
-		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
+		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in
+		// period.
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
@@ -100,44 +102,41 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 				.withThreadCount(1)//
 				.withOptimiseHint() //
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+		runner.evaluateInitialState();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
-			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getVesselEvents().size());
-			Assertions.assertEquals("charter-2", optimiserScenario.getCargoModel().getVesselEvents().get(0).getName());
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
-			final VesselAvailability vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
-			{
-				final Port startAt = vesselAvailability.getStartAt();
-				Assertions.assertNotNull(startAt);
-				Assertions.assertEquals("Ras Laffan", startAt.getName());
-				final ZoneId rasLaffanTimeZone = portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN).getZoneId();
-				final ZoneId utcTimeZone = ZoneId.of("UTC");
-				// Vessel availabilities always in UTC
-				Assertions.assertEquals(ZonedDateTime.of(2015, 2, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getStartAfterAsDateTime());
-				Assertions.assertEquals(ZonedDateTime.of(2015, 2, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getStartByAsDateTime());
-			}
-			{
-				final List<APortSet<Port>> endAt = vesselAvailability.getEndAt();
-				Assertions.assertEquals(1, endAt.size());
-				Assertions.assertEquals("Ras Laffan", endAt.get(0).getName());
-				final ZoneId rasLaffanTimeZone = portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN).getZoneId();
-				final ZoneId utcTimeZone = ZoneId.of("UTC");
-				// Vessel availabilities always in UTC
-				Assertions.assertEquals(ZonedDateTime.of(2015, 7, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getEndAfterAsDateTime());
-				Assertions.assertEquals(ZonedDateTime.of(2015, 7, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getEndByAsDateTime());
-			}
+		final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+		Assertions.assertEquals(1, optimiserScenario.getCargoModel().getVesselEvents().size());
+		Assertions.assertEquals("charter-2", optimiserScenario.getCargoModel().getVesselEvents().get(0).getName());
 
-			// Assert initial state can be evaluted
-			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-			// Validate the initial sequences are valid
-			Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
-		} finally {
-			runner.dispose();
+		final VesselAvailability vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
+		{
+			final Port startAt = vesselAvailability.getStartAt();
+			Assertions.assertNotNull(startAt);
+			Assertions.assertEquals("Ras Laffan", startAt.getName());
+			final ZoneId rasLaffanTimeZone = portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN).getZoneId();
+			final ZoneId utcTimeZone = ZoneId.of("UTC");
+			// Vessel availabilities always in UTC
+			Assertions.assertEquals(ZonedDateTime.of(2015, 2, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getStartAfterAsDateTime());
+			Assertions.assertEquals(ZonedDateTime.of(2015, 2, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getStartByAsDateTime());
 		}
+		{
+			final List<APortSet<Port>> endAt = vesselAvailability.getEndAt();
+			Assertions.assertEquals(1, endAt.size());
+			Assertions.assertEquals("Ras Laffan", endAt.get(0).getName());
+			final ZoneId rasLaffanTimeZone = portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN).getZoneId();
+			final ZoneId utcTimeZone = ZoneId.of("UTC");
+			// Vessel availabilities always in UTC
+			Assertions.assertEquals(ZonedDateTime.of(2015, 7, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getEndAfterAsDateTime());
+			Assertions.assertEquals(ZonedDateTime.of(2015, 7, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getEndByAsDateTime());
+		}
+
+		// Assert initial state can be evaluted
+		final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+		// Validate the initial sequences are valid
+		Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 	}
 
 	@Test
@@ -165,7 +164,8 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 				.withVesselAssignment(vesselAvailability_1, 2) //
 				.build(); //
 
-		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
+		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in
+		// period.
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
@@ -185,43 +185,40 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 				.withThreadCount(1)//
 				.withOptimiseHint() //
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+		runner.evaluateInitialState();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
-			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getVesselEvents().size());
-			Assertions.assertEquals("drydock-2", optimiserScenario.getCargoModel().getVesselEvents().get(0).getName());
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
-			final VesselAvailability vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
-			{
-				final Port startAt = vesselAvailability.getStartAt();
-				Assertions.assertNotNull(startAt);
-				Assertions.assertEquals("Ras Laffan", startAt.getName());
-				final ZoneId rasLaffanTimeZone = portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN).getZoneId();
-				final ZoneId utcTimeZone = ZoneId.of("UTC");
-				// Vessel availabilities always in UTC
-				Assertions.assertEquals(ZonedDateTime.of(2015, 2, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getStartAfterAsDateTime());
-				Assertions.assertEquals(ZonedDateTime.of(2015, 2, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getStartByAsDateTime());
-			}
-			{
-				final List<APortSet<Port>> endAt = vesselAvailability.getEndAt();
-				Assertions.assertEquals(1, endAt.size());
-				Assertions.assertEquals("Ras Laffan", endAt.get(0).getName());
-				final ZoneId rasLaffanTimeZone = portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN).getZoneId();
-				final ZoneId utcTimeZone = ZoneId.of("UTC");
-				// Vessel availabilities always in UTC
-				Assertions.assertEquals(ZonedDateTime.of(2015, 7, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getEndAfterAsDateTime());
-				Assertions.assertEquals(ZonedDateTime.of(2015, 7, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getEndByAsDateTime());
-			}
-			// Assert initial state can be evaluated
-			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-			// Validate the initial sequences are valid
-			Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
-		} finally {
-			runner.dispose();
+		final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+		Assertions.assertEquals(1, optimiserScenario.getCargoModel().getVesselEvents().size());
+		Assertions.assertEquals("drydock-2", optimiserScenario.getCargoModel().getVesselEvents().get(0).getName());
+
+		final VesselAvailability vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
+		{
+			final Port startAt = vesselAvailability.getStartAt();
+			Assertions.assertNotNull(startAt);
+			Assertions.assertEquals("Ras Laffan", startAt.getName());
+			final ZoneId rasLaffanTimeZone = portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN).getZoneId();
+			final ZoneId utcTimeZone = ZoneId.of("UTC");
+			// Vessel availabilities always in UTC
+			Assertions.assertEquals(ZonedDateTime.of(2015, 2, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getStartAfterAsDateTime());
+			Assertions.assertEquals(ZonedDateTime.of(2015, 2, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getStartByAsDateTime());
 		}
+		{
+			final List<APortSet<Port>> endAt = vesselAvailability.getEndAt();
+			Assertions.assertEquals(1, endAt.size());
+			Assertions.assertEquals("Ras Laffan", endAt.get(0).getName());
+			final ZoneId rasLaffanTimeZone = portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN).getZoneId();
+			final ZoneId utcTimeZone = ZoneId.of("UTC");
+			// Vessel availabilities always in UTC
+			Assertions.assertEquals(ZonedDateTime.of(2015, 7, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getEndAfterAsDateTime());
+			Assertions.assertEquals(ZonedDateTime.of(2015, 7, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getEndByAsDateTime());
+		}
+		// Assert initial state can be evaluated
+		final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+		// Validate the initial sequences are valid
+		Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 	}
 
 	@Test
@@ -238,7 +235,8 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 				.withEndWindow(LocalDateTime.of(2015, 9, 01, 0, 0, 0), LocalDateTime.of(2015, 9, 01, 0, 0, 0)) //
 				.build();
 
-		cargoModelBuilder.makeMaintenanceEvent("event-1", LocalDateTime.of(2015, 1, 1, 0, 0, 0), LocalDateTime.of(2015, 1, 1, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
+		cargoModelBuilder
+				.makeMaintenanceEvent("event-1", LocalDateTime.of(2015, 1, 1, 0, 0, 0), LocalDateTime.of(2015, 1, 1, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 				.withVesselAssignment(vesselAvailability_1, 0) //
 				.build(); //
 
@@ -251,7 +249,8 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 				.withVesselAssignment(vesselAvailability_1, 1) //
 				.build(); //
 
-		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
+		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in
+		// period.
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
@@ -272,44 +271,41 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 				.withThreadCount(1)//
 				.withOptimiseHint() //
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+		runner.evaluateInitialState();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
-			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getVesselEvents().size());
-			Assertions.assertEquals("event-2", optimiserScenario.getCargoModel().getVesselEvents().get(0).getName());
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
-			final VesselAvailability vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
+		final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+		Assertions.assertEquals(1, optimiserScenario.getCargoModel().getVesselEvents().size());
+		Assertions.assertEquals("event-2", optimiserScenario.getCargoModel().getVesselEvents().get(0).getName());
 
-			{
-				final Port startAt = vesselAvailability.getStartAt();
-				Assertions.assertNotNull(startAt);
-				Assertions.assertEquals("Ras Laffan", startAt.getName());
-				final ZoneId rasLaffanTimeZone = portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN).getZoneId();
-				final ZoneId utcTimeZone = ZoneId.of("UTC");
-				// Vessel availabilities always in UTC
-				Assertions.assertEquals(ZonedDateTime.of(2015, 2, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getStartAfterAsDateTime());
-				Assertions.assertEquals(ZonedDateTime.of(2015, 2, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getStartByAsDateTime());
-			}
-			{
-				final List<APortSet<Port>> endAt = vesselAvailability.getEndAt();
-				Assertions.assertEquals(1, endAt.size());
-				Assertions.assertEquals("Ras Laffan", endAt.get(0).getName());
-				final ZoneId rasLaffanTimeZone = portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN).getZoneId();
-				final ZoneId utcTimeZone = ZoneId.of("UTC");
-				// Vessel availabilities always in UTC
-				Assertions.assertEquals(ZonedDateTime.of(2015, 7, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getEndAfterAsDateTime());
-				Assertions.assertEquals(ZonedDateTime.of(2015, 7, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getEndByAsDateTime());
-			}
-			// Assert initial state can be evaluted
-			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-			// Validate the initial sequences are valid
-			Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
-		} finally {
-			runner.dispose();
+		final VesselAvailability vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
+
+		{
+			final Port startAt = vesselAvailability.getStartAt();
+			Assertions.assertNotNull(startAt);
+			Assertions.assertEquals("Ras Laffan", startAt.getName());
+			final ZoneId rasLaffanTimeZone = portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN).getZoneId();
+			final ZoneId utcTimeZone = ZoneId.of("UTC");
+			// Vessel availabilities always in UTC
+			Assertions.assertEquals(ZonedDateTime.of(2015, 2, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getStartAfterAsDateTime());
+			Assertions.assertEquals(ZonedDateTime.of(2015, 2, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getStartByAsDateTime());
 		}
+		{
+			final List<APortSet<Port>> endAt = vesselAvailability.getEndAt();
+			Assertions.assertEquals(1, endAt.size());
+			Assertions.assertEquals("Ras Laffan", endAt.get(0).getName());
+			final ZoneId rasLaffanTimeZone = portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN).getZoneId();
+			final ZoneId utcTimeZone = ZoneId.of("UTC");
+			// Vessel availabilities always in UTC
+			Assertions.assertEquals(ZonedDateTime.of(2015, 7, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getEndAfterAsDateTime());
+			Assertions.assertEquals(ZonedDateTime.of(2015, 7, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getEndByAsDateTime());
+		}
+		// Assert initial state can be evaluted
+		final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+		// Validate the initial sequences are valid
+		Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 	}
 
 	@Test
@@ -364,7 +360,8 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 				.withAssignmentFlags(true, false) //
 				.build();
 
-		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
+		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in
+		// period.
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
@@ -384,47 +381,44 @@ public class EventsAcrossPeriodTests extends AbstractMicroTestCase {
 				.withThreadCount(1)//
 				.withOptimiseHint() //
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+		runner.evaluateInitialState();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
-			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
-			Assertions.assertEquals("L2", optimiserScenario.getCargoModel().getCargoes().get(0).getLoadName());
-			{
-				final VesselAvailability vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
-				final Port startAt = vesselAvailability.getStartAt();
-				Assertions.assertNotNull(startAt);
-				Assertions.assertEquals("Ras Laffan", startAt.getName());
-				final ZoneId rasLaffanTimeZone = portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN).getZoneId();
-				final ZoneId utcTimeZone = ZoneId.of("UTC");
-				// Vessel availabilities always in UTC
-				Assertions.assertEquals(ZonedDateTime.of(2015, 2, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getStartAfterAsDateTime());
-				Assertions.assertEquals(ZonedDateTime.of(2015, 2, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getStartByAsDateTime());
-			}
-			{
-				final VesselAvailability vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
-				final List<APortSet<Port>> endAt = vesselAvailability.getEndAt();
-				Assertions.assertEquals(1, endAt.size());
-				Assertions.assertEquals("Ras Laffan", endAt.get(0).getName());
-				final ZoneId rasLaffanTimeZone = portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN).getZoneId();
-				final ZoneId utcTimeZone = ZoneId.of("UTC");
-				// Vessel availabilities always in UTC
-				Assertions.assertEquals(ZonedDateTime.of(2015, 7, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getEndAfterAsDateTime());
-				Assertions.assertEquals(ZonedDateTime.of(2015, 7, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getEndByAsDateTime());
-			}
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
-			// Ensure heel value matches
-			Assertions.assertEquals(vessel_1.getVesselOrDelegateSafetyHeel(), optimiserScenario.getCargoModel().getVesselAvailabilities().get(0).getStartHeel().getMinVolumeAvailable(), 0.0001);
-			Assertions.assertEquals(vessel_1.getVesselOrDelegateSafetyHeel(), optimiserScenario.getCargoModel().getVesselAvailabilities().get(0).getStartHeel().getMaxVolumeAvailable(), 0.0001);
-
-			// Assert initial state can be evaluted
-			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-			// Validate the initial sequences are valid
-			Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
-		} finally {
-			runner.dispose();
+		final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+		Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+		Assertions.assertEquals("L2", optimiserScenario.getCargoModel().getCargoes().get(0).getLoadName());
+		{
+			final VesselAvailability vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
+			final Port startAt = vesselAvailability.getStartAt();
+			Assertions.assertNotNull(startAt);
+			Assertions.assertEquals("Ras Laffan", startAt.getName());
+			final ZoneId rasLaffanTimeZone = portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN).getZoneId();
+			final ZoneId utcTimeZone = ZoneId.of("UTC");
+			// Vessel availabilities always in UTC
+			Assertions.assertEquals(ZonedDateTime.of(2015, 2, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getStartAfterAsDateTime());
+			Assertions.assertEquals(ZonedDateTime.of(2015, 2, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getStartByAsDateTime());
 		}
+		{
+			final VesselAvailability vesselAvailability = optimiserScenario.getCargoModel().getVesselAvailabilities().get(0);
+			final List<APortSet<Port>> endAt = vesselAvailability.getEndAt();
+			Assertions.assertEquals(1, endAt.size());
+			Assertions.assertEquals("Ras Laffan", endAt.get(0).getName());
+			final ZoneId rasLaffanTimeZone = portFinder.findPortById(InternalDataConstants.PORT_RAS_LAFFAN).getZoneId();
+			final ZoneId utcTimeZone = ZoneId.of("UTC");
+			// Vessel availabilities always in UTC
+			Assertions.assertEquals(ZonedDateTime.of(2015, 7, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getEndAfterAsDateTime());
+			Assertions.assertEquals(ZonedDateTime.of(2015, 7, 1, 0, 0, 0, 0, rasLaffanTimeZone).withZoneSameInstant(utcTimeZone), vesselAvailability.getEndByAsDateTime());
+		}
+
+		// Ensure heel value matches
+		Assertions.assertEquals(vessel_1.getVesselOrDelegateSafetyHeel(), optimiserScenario.getCargoModel().getVesselAvailabilities().get(0).getStartHeel().getMinVolumeAvailable(), 0.0001);
+		Assertions.assertEquals(vessel_1.getVesselOrDelegateSafetyHeel(), optimiserScenario.getCargoModel().getVesselAvailabilities().get(0).getStartHeel().getMaxVolumeAvailable(), 0.0001);
+
+		// Assert initial state can be evaluted
+		final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+		// Validate the initial sequences are valid
+
 	}
 }

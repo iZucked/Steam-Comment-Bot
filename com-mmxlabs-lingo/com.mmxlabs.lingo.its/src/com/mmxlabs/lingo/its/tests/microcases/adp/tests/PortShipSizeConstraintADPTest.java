@@ -57,16 +57,17 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 public class PortShipSizeConstraintADPTest extends AbstractADPAndLightWeightTests {
 
 	private VesselAvailability defaultVesselAvailability;
-	
+
 	@Test
 	public void testADPOptimisationViolatesPortShipSizeConstraint() {
 		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
-		//create legal medium ship, illegal small ship wrt port ship size constraint.
-		//ADP normally will allocate to the nominal small ship, which will violate the port ship size constraint, however the ADP optimiser
-		//should not be considering the port ship size constraint, so this is fine.
+		// create legal medium ship, illegal small ship wrt port ship size constraint.
+		// ADP normally will allocate to the nominal small ship, which will violate the
+		// port ship size constraint, however the ADP optimiser
+		// should not be considering the port ship size constraint, so this is fine.
 		final CharterInMarket defaultCharterInMarket = this.setInvalidSmallVesselValidMediumVesselContracts(100000, 150000);
-		
+
 		final ADPModelBuilder adpModelBuilder = scenarioModelBuilder.initialiseADP(YearMonth.of(2018, 10), YearMonth.of(2019, 10), defaultCharterInMarket);
 
 		setSimple12CargoCase(adpModelBuilder);
@@ -81,31 +82,24 @@ public class PortShipSizeConstraintADPTest extends AbstractADPAndLightWeightTest
 		Assertions.assertFalse(cargoModel.getLoadSlots().isEmpty());
 		Assertions.assertFalse(cargoModel.getDischargeSlots().isEmpty());
 
-		//true == only run ADP, do not run light weight tabu search.
+		// true == only run ADP, do not run light weight tabu search.
 		final OptimisationPlan optimisationPlan = createOptimisationPlan(true);
 
-		final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null)
-				.withOptimisationPlan(optimisationPlan)
-				.withOptimiseHint()
-				.withThreadCount(1)
+		final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null).withOptimisationPlan(optimisationPlan).withOptimiseHint().withThreadCount(1)
 				.buildDefaultRunner();
 
-		try {
-			runnerBuilder.evaluateInitialState();
-			runnerBuilder.run(false, runner -> {
-				final IMultiStateResult result = runner.runAndApplyBest();
-				final NonNullPair<ISequences, Map<String, Object>> bestSolution = result.getBestSolution();
+		runnerBuilder.evaluateInitialState();
+		runnerBuilder.run(false, runner -> {
+			final IMultiStateResult result = runner.runAndApplyBest();
+			final NonNullPair<ISequences, Map<String, Object>> bestSolution = result.getBestSolution();
 
-				//Check failed constraints after adp (we do not want ADP taking into account the Port Ship size constraint as the
-				//vessel is not a real vessel...
-				List<IConstraintChecker> failedConstraints = MicroTestUtils.validateConstraintCheckers(
-						runner.getScenarioToOptimiserBridge().getDataTransformer(), bestSolution.getFirst());
-				this.validatePortShipSizeConstraintViolated(failedConstraints);
+			// Check failed constraints after adp (we do not want ADP taking into account
+			// the Port Ship size constraint as the
+			// vessel is not a real vessel...
+			List<IConstraintChecker> failedConstraints = MicroTestUtils.validateConstraintCheckers(runner.getScenarioToOptimiserBridge().getDataTransformer(), bestSolution.getFirst());
+			this.validatePortShipSizeConstraintViolated(failedConstraints);
 
-			});
-		} finally {
-			runnerBuilder.dispose();
-		}
+		});
 	}
 
 	@Test
@@ -113,12 +107,13 @@ public class PortShipSizeConstraintADPTest extends AbstractADPAndLightWeightTest
 		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		scenarioModelBuilder.setPromptPeriod(LocalDate.of(2017, 1, 1), LocalDate.of(2017, 2, 1));
-		
-		//create medium ship which violates the port size constraints for all ports, small ship which does not violate the port ship size constraints.
-		final CharterInMarket defaultCharterInMarket = this.setInvalidSmallVesselValidMediumVesselContracts(150000,210000);
+
+		// create medium ship which violates the port size constraints for all ports,
+		// small ship which does not violate the port ship size constraints.
+		final CharterInMarket defaultCharterInMarket = this.setInvalidSmallVesselValidMediumVesselContracts(150000, 210000);
 
 		final ADPModelBuilder adpModelBuilder = scenarioModelBuilder.initialiseADP(YearMonth.of(2018, 10), YearMonth.of(2019, 10), defaultCharterInMarket);
-		
+
 		setSimple12CargoCase(adpModelBuilder);
 
 		// Generate all the ADP slots
@@ -131,33 +126,26 @@ public class PortShipSizeConstraintADPTest extends AbstractADPAndLightWeightTest
 		Assertions.assertFalse(cargoModel.getLoadSlots().isEmpty());
 		Assertions.assertFalse(cargoModel.getDischargeSlots().isEmpty());
 
-		//false == Run ADP + light weight tabu search.
+		// false == Run ADP + light weight tabu search.
 		final OptimisationPlan optimisationPlan = createOptimisationPlan(false);
-		
-		final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null)
-				.withOptimisationPlan(optimisationPlan)
-				.withOptimiseHint() 
-				.withThreadCount(1) 
+
+		final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null).withOptimisationPlan(optimisationPlan).withOptimiseHint().withThreadCount(1)
 				.buildDefaultRunner();
 
-		try {
-			runnerBuilder.evaluateInitialState();
-			runnerBuilder.run(false, runner -> {
-				final IMultiStateResult result = runner.runAndApplyBest();
-				final NonNullPair<ISequences, Map<String, Object>> bestSolution = result.getBestSolution();
-				
-				List<IConstraintChecker> failedConstraints = MicroTestUtils.validateConstraintCheckers(
-						runner.getScenarioToOptimiserBridge().getDataTransformer(), bestSolution.getFirst());
+		runnerBuilder.evaluateInitialState();
+		runnerBuilder.run(false, runner -> {
+			final IMultiStateResult result = runner.runAndApplyBest();
+			final NonNullPair<ISequences, Map<String, Object>> bestSolution = result.getBestSolution();
 
-				//Check no cargos on medium ship after tabu, as would violate the constraints.
-				checkNoCargosOnMediumShip(runner.getScenarioToOptimiserBridge().getDataTransformer(), bestSolution.getFirst());
-				
-				//Tabu search should respect the constraints, so none should fail as everything should be unallocated or on small ship.
-				assertNull(failedConstraints);
-			});
-		} finally {
-			runnerBuilder.dispose();
-		}
+			List<IConstraintChecker> failedConstraints = MicroTestUtils.validateConstraintCheckers(runner.getScenarioToOptimiserBridge().getDataTransformer(), bestSolution.getFirst());
+
+			// Check no cargos on medium ship after tabu, as would violate the constraints.
+			checkNoCargosOnMediumShip(runner.getScenarioToOptimiserBridge().getDataTransformer(), bestSolution.getFirst());
+
+			// Tabu search should respect the constraints, so none should fail as everything
+			// should be unallocated or on small ship.
+			assertNull(failedConstraints);
+		});
 	}
 
 	private void checkNoCargosOnMediumShip(@NonNull final LNGDataTransformer dataTransformer, ISequences sequences) {
@@ -165,16 +153,15 @@ public class PortShipSizeConstraintADPTest extends AbstractADPAndLightWeightTest
 			ISequence seq = sequences.getSequences().get(res);
 			IResource mediumShipRes = SequenceHelper.getResource(dataTransformer, defaultVesselAvailability);
 			if (res == mediumShipRes) {
-				//Only start and end elements.
+				// Only start and end elements.
 				assertEquals(2, seq.size());
-			}
-			else {
-				//Should have everything else in it.
+			} else {
+				// Should have everything else in it.
 				assertTrue(seq.size() > 2);
 			}
 		}
 	}
-	
+
 	private void validatePortShipSizeConstraintViolated(final List<IConstraintChecker> failedConstraintCheckers) {
 		// Check that port ship size constraint is violated.
 		boolean portShipSizeConstraintCheckerViolated = false;
@@ -224,9 +211,10 @@ public class PortShipSizeConstraintADPTest extends AbstractADPAndLightWeightTest
 		himeji.setMinVesselSize(110000);
 		himeji.setMaxVesselSize(180000);
 		final CharterInMarket defaultCharterInMarket = spotMarketsModelBuilder.createCharterInMarket("ADP Default", vesselSmall, entity, "50000", 0);
-		defaultCharterInMarket.setNominal(true); //Creates 1 small ship, which ADP uses for Pnl evaluation and tabu search then moves to other ships after ADP phase, if sufficient capacity.
+		defaultCharterInMarket.setNominal(true); // Creates 1 small ship, which ADP uses for Pnl evaluation and tabu search then
+													// moves to other ships after ADP phase, if sufficient capacity.
 		defaultCharterInMarket.setEnabled(true);
-		defaultCharterInMarket.setSpotCharterCount(0); //If set to 1, we get another small ship.
+		defaultCharterInMarket.setSpotCharterCount(0); // If set to 1, we get another small ship.
 
 		defaultVesselAvailability = cargoModelBuilder.makeVesselAvailability(vesselMedium, entity) //
 				.withStartWindow(LocalDateTime.of(2018, 10, 1, 0, 0)) //
@@ -246,7 +234,7 @@ public class PortShipSizeConstraintADPTest extends AbstractADPAndLightWeightTest
 		salesContract.setVolumeLimitsUnit(VolumeUnits.MMBTU);
 		return defaultCharterInMarket;
 	}
-	
+
 	protected OptimisationPlan createOptimisationPlan(boolean nominalADP) {
 		// create plan in parent
 		final UserSettings userSettings = createUserSettings();
@@ -255,5 +243,5 @@ public class PortShipSizeConstraintADPTest extends AbstractADPAndLightWeightTest
 		// and now delete lso and hill
 		OptimisationEMFTestUtils.removeLSOAndHill(optimisationPlan);
 		return optimisationPlan;
-	}	
+	}
 }

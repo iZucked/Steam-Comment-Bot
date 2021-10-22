@@ -364,9 +364,4 @@ public class LNGSchedulerInsertSlotJobRunner {
 	public LNGScenarioRunner getLNGScenarioRunner() {
 		return scenarioRunner;
 	}
-
-	public void dispose() {
-		 
-	}
-
 }

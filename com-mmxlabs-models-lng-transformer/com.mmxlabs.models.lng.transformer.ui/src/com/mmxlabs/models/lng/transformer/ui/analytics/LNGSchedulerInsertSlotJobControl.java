@@ -78,15 +78,7 @@ public class LNGSchedulerInsertSlotJobControl extends AbstractEclipseJobControl 
 	}
 
 	@Override
-	protected void kill() {
-	}
-
-	@Override
 	public void dispose() {
-		if (runner != null) {
-			runner.dispose();
-		}
-
 		if (scenarioDataProvider != null) {
 			scenarioDataProvider.close();
 		}

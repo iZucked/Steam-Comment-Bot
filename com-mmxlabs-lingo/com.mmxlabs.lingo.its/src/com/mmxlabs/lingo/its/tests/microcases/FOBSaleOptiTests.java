@@ -176,54 +176,51 @@ public class FOBSaleOptiTests extends AbstractMicroTestCase {
 				.withThreadCount(1)//
 				.withHints(LNGTransformerHelper.HINT_OPTIMISE_LSO) //
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+		runner.evaluateInitialState();
 
-			// Assert initial state can be evaluated
-			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-			// Validate the initial sequences are valid
-			Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
-			List<IConstraintChecker> checkers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			Assertions.assertNotNull(checkers);
-			boolean foundCompat = false;
-			for (IConstraintChecker cc : checkers) {
-				if (cc instanceof FOBDESCompatibilityConstraintChecker) {
-					foundCompat = true;
-				}
+		// Assert initial state can be evaluated
+		final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+		// Validate the initial sequences are valid
+		Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+
+		List<IConstraintChecker> checkers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
+		Assertions.assertNotNull(checkers);
+		boolean foundCompat = false;
+		for (IConstraintChecker cc : checkers) {
+			if (cc instanceof FOBDESCompatibilityConstraintChecker) {
+				foundCompat = true;
 			}
-			Assertions.assertTrue(foundCompat);
-		} finally {
-			runner.dispose();
 		}
+		Assertions.assertTrue(foundCompat);
 	}
+
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void divertibleFOBSale_DestWithSourceFlex() throws Exception {
-		
-		cargoModelBuilder.makeCargo()//
-		.makeFOBPurchase("L1", LocalDate.of(2019, 8, 14), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
-		.with(s -> ((LoadSlot) s).setCargoCV(22.6)) //
-		.withWindowStartTime(1) //
-		.withWindowSize(0, TimePeriod.HOURS) //
-		
-		.build() //
-		
-		.makeFOBSale("D1", FOBSaleDealType.SOURCE_WITH_DEST, LocalDate.of(2019, 8, 14), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5", null) //
-		.withWindowSize(0, TimePeriod.HOURS) //
-		.withWindowFlex(1  , TimePeriod.HOURS)
-		.withWindowStartTime(0) //
 
-		.build() //
-		
-		.build();
-		
+		cargoModelBuilder.makeCargo()//
+				.makeFOBPurchase("L1", LocalDate.of(2019, 8, 14), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
+				.with(s -> ((LoadSlot) s).setCargoCV(22.6)) //
+				.withWindowStartTime(1) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+
+				.build() //
+
+				.makeFOBSale("D1", FOBSaleDealType.SOURCE_WITH_DEST, LocalDate.of(2019, 8, 14), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "5", null) //
+				.withWindowSize(0, TimePeriod.HOURS) //
+				.withWindowFlex(1, TimePeriod.HOURS).withWindowStartTime(0) //
+
+				.build() //
+
+				.build();
+
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
-		
+
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 		// Generate internal data
@@ -233,27 +230,23 @@ public class FOBSaleOptiTests extends AbstractMicroTestCase {
 				.withThreadCount(1)//
 				.withHints(LNGTransformerHelper.HINT_OPTIMISE_LSO) //
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
-			
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
-			
-			// Assert initial state can be evaluated
-			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-			// Validate the initial sequences are valid
-			Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
-			
 
-			List<IConstraintChecker> checkers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			if (checkers != null) {
-				for (IConstraintChecker cc : checkers) {
-					System.out.println(cc);
-				}
+		runner.evaluateInitialState();
+
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+
+		// Assert initial state can be evaluated
+		final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+		// Validate the initial sequences are valid
+		Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+
+		List<IConstraintChecker> checkers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
+		if (checkers != null) {
+			for (IConstraintChecker cc : checkers) {
+				System.out.println(cc);
 			}
-			Assertions.assertNull(checkers);
-		} finally {
-			runner.dispose();
 		}
+		Assertions.assertNull(checkers);
 	}
 
 	@Test
@@ -289,25 +282,22 @@ public class FOBSaleOptiTests extends AbstractMicroTestCase {
 				.withThreadCount(1)//
 				.withHints(LNGTransformerHelper.HINT_OPTIMISE_LSO) //
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+		runner.evaluateInitialState();
 
-			// Assert initial state can be evaluated
-			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-			// Validate the initial sequences are valid
-			Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
-			List<IConstraintChecker> checkers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			if (checkers != null) {
-				for (IConstraintChecker cc : checkers) {
-					System.out.println(cc);
-				}
+		// Assert initial state can be evaluated
+		final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+		// Validate the initial sequences are valid
+		Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+
+		List<IConstraintChecker> checkers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
+		if (checkers != null) {
+			for (IConstraintChecker cc : checkers) {
+				System.out.println(cc);
 			}
-			Assertions.assertNull(checkers);
-		} finally {
-			runner.dispose();
 		}
+		Assertions.assertNull(checkers);
 	}
 }

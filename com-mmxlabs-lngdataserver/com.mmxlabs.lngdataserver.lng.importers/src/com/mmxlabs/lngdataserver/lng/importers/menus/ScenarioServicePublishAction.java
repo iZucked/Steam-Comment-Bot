@@ -234,8 +234,6 @@ public class ScenarioServicePublishAction {
 					scenarioDataProvider.setLastEvaluationFailed(false);
 				} catch (final Exception e) {
 					throw new PublishBasecaseException("Error evaluating scenario.", Type.FAILED_TO_EVALUATE);
-				} finally {
-					runnerBuilder.dispose();
 				}
 			} catch (final RuntimeException e) {
 				if (e.getCause() instanceof ScenarioMigrationException) {

@@ -486,7 +486,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 
 				int maxDurationInHours = 24 * (vesselAvailability.getMaxDuration());
 				// This is false as we cannot meet the max duration.
-				Assertions.assertFalse( endFirstWindow.getInclusiveStart() <= maxDurationInHours );
+				Assertions.assertFalse(endFirstWindow.getInclusiveStart() <= maxDurationInHours);
 
 			}
 		});
@@ -1031,11 +1031,13 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void maxDurationWithOpenEndAndHireCostEndRulesTest() throws Exception {
-		
+
 		if (!NonLicenseFeatures.isSouthboundIdleTimeRuleEnabled()) {
-			return; //This test is only applicable to old South-bound panama rules, as new south-bound idle rule allows existing panama voyages and flags as a warning in validation.
+			return; // This test is only applicable to old South-bound panama rules, as new
+					// south-bound idle rule allows existing panama voyages and flags as a warning
+					// in validation.
 		}
-		
+
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
 
@@ -1047,7 +1049,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 		cargoModel.getCanalBookings().setRelaxedBoundaryOffsetDays(100);
 
 		cargoModel.getCanalBookings().setFlexibleBookingAmountSouthbound(0);
-			
+
 		cargoModel.getCanalBookings().setNorthboundMaxIdleDays(5);
 		cargoModel.getCanalBookings().setArrivalMarginHours(12);
 
@@ -1196,35 +1198,30 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 				.withThreadCount(1) //
 				.buildDefaultRunner();
 
-		try {
-			runnerBuilder.evaluateInitialState();
-			runnerBuilder.run(true);
+		runnerBuilder.evaluateInitialState();
+		runnerBuilder.run(true);
 
-			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
-			final Schedule schedule = scheduleModel.getSchedule();
+		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
+		final Schedule schedule = scheduleModel.getSchedule();
 
-			boolean foundVessel1 = false;
-			for (Sequence sequence : schedule.getSequences()) {
-				if (sequence.getCharterInMarket() == charterInMarket) {
-					foundVessel1 = true;
-				} else {
-					continue;
-				}
-
-				// Found a vessel, make sure we are within the min/max bounds.
-				// Note: Given the input cargo this should not happen.
-				final Event start = sequence.getEvents().get(0);
-				final Event end = sequence.getEvents().get(sequence.getEvents().size() - 1);
-
-				int duration = Days.between(start.getStart(), end.getEnd());
-				Assertions.assertTrue(duration >= minDuration);
-				Assertions.assertTrue(duration <= maxDuration);
+		boolean foundVessel1 = false;
+		for (Sequence sequence : schedule.getSequences()) {
+			if (sequence.getCharterInMarket() == charterInMarket) {
+				foundVessel1 = true;
+			} else {
+				continue;
 			}
-			Assertions.assertFalse(foundVessel1);
-		} finally {
-			runnerBuilder.dispose();
-		}
 
+			// Found a vessel, make sure we are within the min/max bounds.
+			// Note: Given the input cargo this should not happen.
+			final Event start = sequence.getEvents().get(0);
+			final Event end = sequence.getEvents().get(sequence.getEvents().size() - 1);
+
+			int duration = Days.between(start.getStart(), end.getEnd());
+			Assertions.assertTrue(duration >= minDuration);
+			Assertions.assertTrue(duration <= maxDuration);
+		}
+		Assertions.assertFalse(foundVessel1);
 	}
 
 	private IOptimiserInjectorService makeTimeScheduleRulesModuleService(boolean canalTrimming) {

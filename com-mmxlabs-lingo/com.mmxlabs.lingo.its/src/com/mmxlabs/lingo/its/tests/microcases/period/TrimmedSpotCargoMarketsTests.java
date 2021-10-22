@@ -51,7 +51,8 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 					.build();
 
 			// Create a single charter out event
-			cargoModelBuilder.makeCharterOutEvent("charter-1", LocalDateTime.of(2015, 1, 1, 0, 0, 0), LocalDateTime.of(2015, 1, 1, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
+			cargoModelBuilder
+					.makeCharterOutEvent("charter-1", LocalDateTime.of(2015, 1, 1, 0, 0, 0), LocalDateTime.of(2015, 1, 1, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 					.withRelocatePort(portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN)) //
 					.withDurationInDays(10) //
 					.withVesselAssignment(vesselAvailability_1, 0) //
@@ -63,7 +64,8 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 				.withAvailabilityDate(YearMonth.of(2015, 12), 6) //
 				.build();
 
-		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
+		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in
+		// period.
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
@@ -84,47 +86,44 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 				.withThreadCount(1)//
 				.withOptimiseHint() //
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+		runner.evaluateInitialState();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
-			Assertions.assertEquals(1, optimiserScenario.getReferenceModel().getSpotMarketsModel().getDesSalesSpotMarket().getMarkets().size());
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
-			SpotMarket opt_market = optimiserScenario.getReferenceModel().getSpotMarketsModel().getDesSalesSpotMarket().getMarkets().get(0);
+		final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+		Assertions.assertEquals(1, optimiserScenario.getReferenceModel().getSpotMarketsModel().getDesSalesSpotMarket().getMarkets().size());
 
-			// Constant should be zero, and instead new options created
-			Assertions.assertEquals(0, opt_market.getAvailability().getConstant());
-			// Expect 1 (this should be the newly created entry)
-			Assertions.assertEquals(1, opt_market.getAvailability().getCurve().getPoints().size());
-			boolean foundNewOne = false;
-			for (IndexPoint<Integer> pt : opt_market.getAvailability().getCurve().getPoints()) {
-				if (pt.getDate().isBefore(userSettings.getPeriodEnd())
-						&& (pt.getDate().isAfter(YearMonth.from(userSettings.getPeriodStartDate())) || pt.getDate().equals(YearMonth.from(userSettings.getPeriodStartDate())))) {
-					Assertions.assertEquals(market.getAvailability().getConstant(), pt.getValue().intValue());
-				} else {
-					Assertions.assertEquals(0, pt.getValue().intValue());
-				}
+		SpotMarket opt_market = optimiserScenario.getReferenceModel().getSpotMarketsModel().getDesSalesSpotMarket().getMarkets().get(0);
 
-				if (pt.getDate().equals(YearMonth.of(2015, 1))) {
-					// A new entry should have been created
-					foundNewOne = true;
-				}
-				if (pt.getDate().equals(YearMonth.of(2015, 12))) {
-					// This should have been removed as outside of period
-					Assertions.fail("Unexpected state");
-				}
+		// Constant should be zero, and instead new options created
+		Assertions.assertEquals(0, opt_market.getAvailability().getConstant());
+		// Expect 1 (this should be the newly created entry)
+		Assertions.assertEquals(1, opt_market.getAvailability().getCurve().getPoints().size());
+		boolean foundNewOne = false;
+		for (IndexPoint<Integer> pt : opt_market.getAvailability().getCurve().getPoints()) {
+			if (pt.getDate().isBefore(userSettings.getPeriodEnd())
+					&& (pt.getDate().isAfter(YearMonth.from(userSettings.getPeriodStartDate())) || pt.getDate().equals(YearMonth.from(userSettings.getPeriodStartDate())))) {
+				Assertions.assertEquals(market.getAvailability().getConstant(), pt.getValue().intValue());
+			} else {
+				Assertions.assertEquals(0, pt.getValue().intValue());
 			}
-			Assertions.assertTrue(foundNewOne);
 
-			// Assert initial state can be evaluated
-			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-			// Validate the initial sequences are valid
-			Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
-		} finally {
-			runner.dispose();
+			if (pt.getDate().equals(YearMonth.of(2015, 1))) {
+				// A new entry should have been created
+				foundNewOne = true;
+			}
+			if (pt.getDate().equals(YearMonth.of(2015, 12))) {
+				// This should have been removed as outside of period
+				Assertions.fail("Unexpected state");
+			}
 		}
+		Assertions.assertTrue(foundNewOne);
+
+		// Assert initial state can be evaluated
+		final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+		// Validate the initial sequences are valid
+		Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 	}
 
 	/**
@@ -146,7 +145,8 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 					.build();
 
 			// Create a single charter out event
-			cargoModelBuilder.makeCharterOutEvent("charter-1", LocalDateTime.of(2015, 1, 1, 0, 0, 0), LocalDateTime.of(2015, 1, 1, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
+			cargoModelBuilder
+					.makeCharterOutEvent("charter-1", LocalDateTime.of(2015, 1, 1, 0, 0, 0), LocalDateTime.of(2015, 1, 1, 0, 0, 0), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN)) //
 					.withRelocatePort(portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN)) //
 					.withDurationInDays(10) //
 					.withVesselAssignment(vesselAvailability_1, 0) //
@@ -158,7 +158,8 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 				.withAvailabilityDate(YearMonth.of(2015, 12), 6) //
 				.build();
 
-		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
+		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in
+		// period.
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
@@ -179,46 +180,43 @@ public class TrimmedSpotCargoMarketsTests extends AbstractMicroTestCase {
 				.withThreadCount(1)//
 				.withOptimiseHint() //
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+		runner.evaluateInitialState();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
-			Assertions.assertEquals(1, optimiserScenario.getReferenceModel().getSpotMarketsModel().getDesSalesSpotMarket().getMarkets().size());
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
-			SpotMarket opt_market = optimiserScenario.getReferenceModel().getSpotMarketsModel().getDesSalesSpotMarket().getMarkets().get(0);
+		final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+		Assertions.assertEquals(1, optimiserScenario.getReferenceModel().getSpotMarketsModel().getDesSalesSpotMarket().getMarkets().size());
 
-			// Constant should be zero, and instead new options created
-			Assertions.assertEquals(0, opt_market.getAvailability().getConstant());
-			// Expect 1 (this should be the newly created entry)
-			Assertions.assertEquals(1, opt_market.getAvailability().getCurve().getPoints().size());
-			boolean foundNewOne = false;
-			for (IndexPoint<Integer> pt : opt_market.getAvailability().getCurve().getPoints()) {
-				if (pt.getDate().isBefore(userSettings.getPeriodEnd())
-						&& (pt.getDate().isAfter(YearMonth.from(userSettings.getPeriodStartDate())) || pt.getDate().equals(YearMonth.from(userSettings.getPeriodStartDate())))) {
-					Assertions.assertEquals(market.getAvailability().getConstant(), pt.getValue().intValue());
-				} else {
-					Assertions.assertEquals(0, pt.getValue().intValue());
-				}
+		SpotMarket opt_market = optimiserScenario.getReferenceModel().getSpotMarketsModel().getDesSalesSpotMarket().getMarkets().get(0);
 
-				if (pt.getDate().equals(YearMonth.of(2015, 1))) {
-					// A new entry should have been created
-					foundNewOne = true;
-				}
-				if (pt.getDate().equals(YearMonth.of(2015, 12))) {
-					// This should have been removed as outside of period
-					Assertions.fail("Unexpected state");
-				}
+		// Constant should be zero, and instead new options created
+		Assertions.assertEquals(0, opt_market.getAvailability().getConstant());
+		// Expect 1 (this should be the newly created entry)
+		Assertions.assertEquals(1, opt_market.getAvailability().getCurve().getPoints().size());
+		boolean foundNewOne = false;
+		for (IndexPoint<Integer> pt : opt_market.getAvailability().getCurve().getPoints()) {
+			if (pt.getDate().isBefore(userSettings.getPeriodEnd())
+					&& (pt.getDate().isAfter(YearMonth.from(userSettings.getPeriodStartDate())) || pt.getDate().equals(YearMonth.from(userSettings.getPeriodStartDate())))) {
+				Assertions.assertEquals(market.getAvailability().getConstant(), pt.getValue().intValue());
+			} else {
+				Assertions.assertEquals(0, pt.getValue().intValue());
 			}
-			Assertions.assertTrue(foundNewOne);
 
-			// Assert initial state can be evaluated
-			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-			// Validate the initial sequences are valid
-			Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
-		} finally {
-			runner.dispose();
+			if (pt.getDate().equals(YearMonth.of(2015, 1))) {
+				// A new entry should have been created
+				foundNewOne = true;
+			}
+			if (pt.getDate().equals(YearMonth.of(2015, 12))) {
+				// This should have been removed as outside of period
+				Assertions.fail("Unexpected state");
+			}
 		}
+		Assertions.assertTrue(foundNewOne);
+
+		// Assert initial state can be evaluated
+		final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+		// Validate the initial sequences are valid
+		Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 	}
 }

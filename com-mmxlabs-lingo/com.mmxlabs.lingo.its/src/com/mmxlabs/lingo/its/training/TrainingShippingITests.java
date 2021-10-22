@@ -87,17 +87,21 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 		}
 		return sb.getScenarioDataProvider();
 		// new CargoModelImporter().
-		// updateDistanceData(scenarioDataProvider, DataConstants.DISTANCES_LATEST_JSON);
+		// updateDistanceData(scenarioDataProvider,
+		// DataConstants.DISTANCES_LATEST_JSON);
 		// updatePortsData(scenarioDataProvider, DataConstants.PORTS_LATEST_JSON);
 		//
 		// return scenarioDataProvider;
 	}
 	//
-	// // Override default behaviour to also import portfolio data e.g. cargoes, vessel availabilities, events
+	// // Override default behaviour to also import portfolio data e.g. cargoes,
+	// vessel availabilities, events
 	// @NonNull
-	// public static IScenarioDataProvider importReferenceData(final String url) throws MalformedURLException {
+	// public static IScenarioDataProvider importReferenceData(final String url)
+	// throws MalformedURLException {
 	//
-	// final @NonNull String urlRoot = AbstractMicroTestCase.class.getResource(url).toString();
+	// final @NonNull String urlRoot =
+	// AbstractMicroTestCase.class.getResource(url).toString();
 	// final CSVImporter importer = new CSVImporter();
 	// importer.importPortData(urlRoot);
 	// importer.importCostData(urlRoot);
@@ -156,49 +160,50 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 
 		final UserSettings userSettings = createUserSettings();
 
-		try (final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
+		final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
 				.withOptimisationPlan(createOptimisationPlan(userSettings)) //
 				.withOptimiseHint() //
 				.withThreadCount(1) //
-				.buildDefaultRunner()) {
+				.buildDefaultRunner();
 
-			runnerBuilder.evaluateInitialState();
+		runnerBuilder.evaluateInitialState();
 
-			final Schedule initialSchedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
-			Assertions.assertNotNull(initialSchedule);
-			final long initialPNL = ScheduleModelKPIUtils.getScheduleProfitAndLoss(initialSchedule);
-			runnerBuilder.run(false, runner -> {
+		final Schedule initialSchedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
+		Assertions.assertNotNull(initialSchedule);
+		final long initialPNL = ScheduleModelKPIUtils.getScheduleProfitAndLoss(initialSchedule);
+		runnerBuilder.run(false, runner -> {
 
-				// Run, get result and store to schedule model for inspection at EMF level if needed
-				final IMultiStateResult result = runner.runWithProgress(new NullProgressMonitor());
-				final LNGScenarioToOptimiserBridge bridge = runnerBuilder.getScenarioRunner().getScenarioToOptimiserBridge();
-				final OptimiserDataMapper mapper = new OptimiserDataMapper(bridge);
-				final List<SolutionData> solutionDataList = OptimiserResultVerifier.createSolutionData(true, result, mapper);
-				// Solution 1
-				{
-					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-							.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel(SMALL_SHIP) //
-							.withUsedLoad("S_1").onFleetVessel(MEDIUM_SHIP) //
-							.withUsedLoad("S_4").onFleetVessel(LARGE_SHIP) //
-							.pnlDelta(initialPNL, 944_899, 1_000) //
-							.build();
+			// Run, get result and store to schedule model for inspection at EMF level if
+			// needed
+			final IMultiStateResult result = runner.runWithProgress(new NullProgressMonitor());
+			final LNGScenarioToOptimiserBridge bridge = runnerBuilder.getScenarioRunner().getScenarioToOptimiserBridge();
+			final OptimiserDataMapper mapper = new OptimiserDataMapper(bridge);
+			final List<SolutionData> solutionDataList = OptimiserResultVerifier.createSolutionData(true, result, mapper);
+			// Solution 1
+			{
+				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
+						.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel(SMALL_SHIP) //
+						.withUsedLoad("S_1").onFleetVessel(MEDIUM_SHIP) //
+						.withUsedLoad("S_4").onFleetVessel(LARGE_SHIP) //
+						.pnlDelta(initialPNL, 944_899, 1_000) //
+						.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assertions::fail);
-					Assertions.assertNotNull(solution);
-				}
-				// Solution 2
-				{
-					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-							.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel(SMALL_SHIP) //
-							.withUsedLoad("S_4").onFleetVessel(MEDIUM_SHIP) //
-							.pnlDelta(initialPNL, 610_378, 1_000) //
-							.build();
+				final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assertions::fail);
+				Assertions.assertNotNull(solution);
+			}
+			// Solution 2
+			{
+				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
+						.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel(SMALL_SHIP) //
+						.withUsedLoad("S_4").onFleetVessel(MEDIUM_SHIP) //
+						.pnlDelta(initialPNL, 610_378, 1_000) //
+						.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assertions::fail);
-					Assertions.assertNotNull(solution);
-				}
-			});
-		}
+				final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assertions::fail);
+				Assertions.assertNotNull(solution);
+			}
+		});
+
 	}
 
 	@Test
@@ -219,71 +224,71 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 
 		final UserSettings userSettings = createUserSettings();
 
-		try (final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
+		final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
 				.withOptimisationPlan(createOptimisationPlan(userSettings)) //
 				.withOptimiseHint() //
 				.withThreadCount(1) //
-				.buildDefaultRunner()) {
+				.buildDefaultRunner();
 
-			runnerBuilder.evaluateInitialState();
+		runnerBuilder.evaluateInitialState();
 
-			final Schedule initialSchedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
-			Assertions.assertNotNull(initialSchedule);
+		final Schedule initialSchedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
+		Assertions.assertNotNull(initialSchedule);
 
-			final long initialPNL = ScheduleModelKPIUtils.getScheduleProfitAndLoss(initialSchedule);
-			final long initialLateness = ScheduleModelKPIUtils.getScheduleLateness(initialSchedule)[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
-			final long initialViolations = ScheduleModelKPIUtils.getScheduleViolationCount(initialSchedule);
+		final long initialPNL = ScheduleModelKPIUtils.getScheduleProfitAndLoss(initialSchedule);
+		final long initialLateness = ScheduleModelKPIUtils.getScheduleLateness(initialSchedule)[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
+		final long initialViolations = ScheduleModelKPIUtils.getScheduleViolationCount(initialSchedule);
 
-			runnerBuilder.run(false, runner -> {
-				// Run, get result and store to schedule model for inspection at EMF level if needed
-				final IMultiStateResult result = runner.runWithProgress(new NullProgressMonitor());
-				final LNGScenarioToOptimiserBridge bridge = runnerBuilder.getScenarioRunner().getScenarioToOptimiserBridge();
-				final OptimiserDataMapper mapper = new OptimiserDataMapper(bridge);
-				final List<SolutionData> solutionDataList = OptimiserResultVerifier.createSolutionData(true, result, mapper);
-				// Solution 1
-				{
-					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-							.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel(SMALL_SHIP) //
-							.withUsedLoad("BO_1").onFleetVessel(SMALL_SHIP) //
-							.withUsedLoad("S_1").onFleetVessel(MEDIUM_SHIP) //
-							.withUsedLoad("S_4").onFleetVessel(LARGE_SHIP) //
-							.violationDelta(initialViolations, -1) //
-							.latenessDelta(initialLateness, -((4 * 24) + 5)) //
-							.pnlDelta(initialPNL, -992_994, 1_000) //
-							.build();
+		runnerBuilder.run(false, runner -> {
+			// Run, get result and store to schedule model for inspection at EMF level if
+			// needed
+			final IMultiStateResult result = runner.runWithProgress(new NullProgressMonitor());
+			final LNGScenarioToOptimiserBridge bridge = runnerBuilder.getScenarioRunner().getScenarioToOptimiserBridge();
+			final OptimiserDataMapper mapper = new OptimiserDataMapper(bridge);
+			final List<SolutionData> solutionDataList = OptimiserResultVerifier.createSolutionData(true, result, mapper);
+			// Solution 1
+			{
+				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
+						.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel(SMALL_SHIP) //
+						.withUsedLoad("BO_1").onFleetVessel(SMALL_SHIP) //
+						.withUsedLoad("S_1").onFleetVessel(MEDIUM_SHIP) //
+						.withUsedLoad("S_4").onFleetVessel(LARGE_SHIP) //
+						.violationDelta(initialViolations, -1) //
+						.latenessDelta(initialLateness, -((4 * 24) + 5)) //
+						.pnlDelta(initialPNL, -992_994, 1_000) //
+						.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assertions.fail(msg));
-					Assertions.assertNotNull(solution);
-				}
-				// Solution 2
-				{
-					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-							.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel(SMALL_SHIP) //
-							.withUsedLoad("BO_1").onFleetVessel(SMALL_SHIP) //
-							.withUsedLoad("S_4").onFleetVessel(MEDIUM_SHIP) //
-							.violationDelta(initialViolations, -1) //
-							.latenessDelta(initialLateness, -((4 * 24) + 5)) //
-							.pnlDelta(initialPNL, -1_327_515, 1_000) //
-							.build();
+				final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assertions.fail(msg));
+				Assertions.assertNotNull(solution);
+			}
+			// Solution 2
+			{
+				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
+						.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel(SMALL_SHIP) //
+						.withUsedLoad("BO_1").onFleetVessel(SMALL_SHIP) //
+						.withUsedLoad("S_4").onFleetVessel(MEDIUM_SHIP) //
+						.violationDelta(initialViolations, -1) //
+						.latenessDelta(initialLateness, -((4 * 24) + 5)) //
+						.pnlDelta(initialPNL, -1_327_515, 1_000) //
+						.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assertions.fail(msg));
-					Assertions.assertNotNull(solution);
-				}
-				// Solution 3
-				{
-					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner) //
-							.withAnySolutionResultChecker().withUsedLoad("BO_1").onFleetVessel(SMALL_SHIP) //
-							.violationDelta(initialViolations, -1) //
-							.latenessDelta(initialLateness, -((4 * 24) + 5)) //
-							.pnlDelta(initialPNL, -2_144_366, 1_000) //
-							.build();
+				final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assertions.fail(msg));
+				Assertions.assertNotNull(solution);
+			}
+			// Solution 3
+			{
+				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner) //
+						.withAnySolutionResultChecker().withUsedLoad("BO_1").onFleetVessel(SMALL_SHIP) //
+						.violationDelta(initialViolations, -1) //
+						.latenessDelta(initialLateness, -((4 * 24) + 5)) //
+						.pnlDelta(initialPNL, -2_144_366, 1_000) //
+						.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assertions.fail(msg));
-					Assertions.assertNotNull(solution);
+				final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, msg -> Assertions.fail(msg));
+				Assertions.assertNotNull(solution);
 
-				}
-			});
-		}
+			}
+		});
 	}
 
 	@Test
@@ -309,73 +314,74 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 
 		final UserSettings userSettings = createUserSettings();
 
-		try (final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
+		final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
 				.withOptimisationPlan(createOptimisationPlan(userSettings)) //
 				.withOptimiseHint() //
 				.withThreadCount(1) //
-				.buildDefaultRunner()) {
+				.buildDefaultRunner();
 
-			runnerBuilder.evaluateInitialState();
+		runnerBuilder.evaluateInitialState();
 
-			final Schedule initialSchedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
-			Assertions.assertNotNull(initialSchedule);
+		final Schedule initialSchedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
+		Assertions.assertNotNull(initialSchedule);
 
-			final long initialPNL = ScheduleModelKPIUtils.getScheduleProfitAndLoss(initialSchedule);
-			final long initialLateness = ScheduleModelKPIUtils.getScheduleLateness(initialSchedule)[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
-			final long initialViolations = ScheduleModelKPIUtils.getScheduleViolationCount(initialSchedule);
+		final long initialPNL = ScheduleModelKPIUtils.getScheduleProfitAndLoss(initialSchedule);
+		final long initialLateness = ScheduleModelKPIUtils.getScheduleLateness(initialSchedule)[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
+		final long initialViolations = ScheduleModelKPIUtils.getScheduleViolationCount(initialSchedule);
 
-			runnerBuilder.run(false, runner -> {
+		runnerBuilder.run(false, runner -> {
 
-				// Run, get result and store to schedule model for inspection at EMF level if needed
-				final IMultiStateResult result = runner.runWithProgress(new NullProgressMonitor());
-				final LNGScenarioToOptimiserBridge bridge = runnerBuilder.getScenarioRunner().getScenarioToOptimiserBridge();
-				final OptimiserDataMapper mapper = new OptimiserDataMapper(bridge);
-				final List<SolutionData> solutionDataList = OptimiserResultVerifier.createSolutionData(true, result, mapper);
-				// Solution 1
-				{
-					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-							.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel(SMALL_SHIP) //
-							.withUsedLoad("BO_2").onSpotCharter("CI_10") //
-							.withUsedLoad("S_1").onFleetVessel(MEDIUM_SHIP) //
-							.withUsedLoad("S_4").onFleetVessel(LARGE_SHIP) //
-							.violationDelta(initialViolations, 0) //
-							.latenessDelta(initialLateness, -((4 * 24) + 5)) //
-							.pnlDelta(initialPNL, -147_982, 1_000) //
-							.build();
+			// Run, get result and store to schedule model for inspection at EMF level if
+			// needed
+			final IMultiStateResult result = runner.runWithProgress(new NullProgressMonitor());
+			final LNGScenarioToOptimiserBridge bridge = runnerBuilder.getScenarioRunner().getScenarioToOptimiserBridge();
+			final OptimiserDataMapper mapper = new OptimiserDataMapper(bridge);
+			final List<SolutionData> solutionDataList = OptimiserResultVerifier.createSolutionData(true, result, mapper);
+			// Solution 1
+			{
+				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
+						.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel(SMALL_SHIP) //
+						.withUsedLoad("BO_2").onSpotCharter("CI_10") //
+						.withUsedLoad("S_1").onFleetVessel(MEDIUM_SHIP) //
+						.withUsedLoad("S_4").onFleetVessel(LARGE_SHIP) //
+						.violationDelta(initialViolations, 0) //
+						.latenessDelta(initialLateness, -((4 * 24) + 5)) //
+						.pnlDelta(initialPNL, -147_982, 1_000) //
+						.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assertions::fail);
-					Assertions.assertNotNull(solution);
-				}
-				// Solution 2
-				{
-					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-							.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel(SMALL_SHIP) //
-							.withUsedLoad("BO_2").onSpotCharter("CI_10") //
-							.withUsedLoad("S_4").onFleetVessel(MEDIUM_SHIP) //
-							.violationDelta(initialViolations, 0) //
-							.latenessDelta(initialLateness, -((4 * 24) + 5)) //
-							.pnlDelta(initialPNL, -482_503, 1_000) //
-							.build();
+				final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assertions::fail);
+				Assertions.assertNotNull(solution);
+			}
+			// Solution 2
+			{
+				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
+						.withAnySolutionResultChecker().withUsedLoad("A_3").onFleetVessel(SMALL_SHIP) //
+						.withUsedLoad("BO_2").onSpotCharter("CI_10") //
+						.withUsedLoad("S_4").onFleetVessel(MEDIUM_SHIP) //
+						.violationDelta(initialViolations, 0) //
+						.latenessDelta(initialLateness, -((4 * 24) + 5)) //
+						.pnlDelta(initialPNL, -482_503, 1_000) //
+						.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assertions::fail);
-					Assertions.assertNotNull(solution);
+				final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assertions::fail);
+				Assertions.assertNotNull(solution);
 
-				}
-				// Solution 3
-				{
-					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-							.withAnySolutionResultChecker().withUsedLoad("BO_2").onSpotCharter("CI_10") //
-							.violationDelta(initialViolations, 0) //
-							.latenessDelta(initialLateness, -((4 * 24) + 5)) //
-							.pnlDelta(initialPNL, -1_351_441, 1_000) //
-							.build();
+			}
+			// Solution 3
+			{
+				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
+						.withAnySolutionResultChecker().withUsedLoad("BO_2").onSpotCharter("CI_10") //
+						.violationDelta(initialViolations, 0) //
+						.latenessDelta(initialLateness, -((4 * 24) + 5)) //
+						.pnlDelta(initialPNL, -1_351_441, 1_000) //
+						.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(result, Assertions::fail);
-					Assertions.assertNotNull(solution);
-				}
+				final ISequences solution = verifier.verifySolutionExistsInResults(result, Assertions::fail);
+				Assertions.assertNotNull(solution);
+			}
 
-			});
-		}
+		});
+
 	}
 
 	@Test
@@ -420,58 +426,59 @@ public class TrainingShippingITests extends AbstractMicroTestCase {
 		final UserSettings userSettings = createUserSettings();
 		userSettings.setShippingOnly(false);
 
-		try (final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
+		final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
 				.withOptimisationPlan(createOptimisationPlan(userSettings)) //
 				.withOptimiseHint() //
 				.withThreadCount(1) //
-				.buildDefaultRunner()) {
+				.buildDefaultRunner();
 
-			runnerBuilder.evaluateInitialState();
+		runnerBuilder.evaluateInitialState();
 
-			final Schedule initialSchedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
-			Assertions.assertNotNull(initialSchedule);
+		final Schedule initialSchedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
+		Assertions.assertNotNull(initialSchedule);
 
-			final long initialPNL = ScheduleModelKPIUtils.getScheduleProfitAndLoss(initialSchedule);
-			final long initialLateness = ScheduleModelKPIUtils.getScheduleLateness(initialSchedule)[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
-			final long initialViolations = ScheduleModelKPIUtils.getScheduleViolationCount(initialSchedule);
+		final long initialPNL = ScheduleModelKPIUtils.getScheduleProfitAndLoss(initialSchedule);
+		final long initialLateness = ScheduleModelKPIUtils.getScheduleLateness(initialSchedule)[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
+		final long initialViolations = ScheduleModelKPIUtils.getScheduleViolationCount(initialSchedule);
 
-			runnerBuilder.run(false, runner -> {
-				// Run, get result and store to schedule model for inspection at EMF level if needed
-				final IMultiStateResult result = runner.runWithProgress(new NullProgressMonitor());
+		runnerBuilder.run(false, runner -> {
+			// Run, get result and store to schedule model for inspection at EMF level if
+			// needed
+			final IMultiStateResult result = runner.runWithProgress(new NullProgressMonitor());
 
-				final LNGScenarioToOptimiserBridge bridge = runnerBuilder.getScenarioRunner().getScenarioToOptimiserBridge();
-				final OptimiserDataMapper mapper = new OptimiserDataMapper(bridge);
-				final List<SolutionData> solutionDataList = OptimiserResultVerifier.createSolutionData(true, result, mapper);
-				// Solution 1
-				{
-					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-							.withAnySolutionResultChecker().withCargo("New_Load", "New_Discharge").onFleetVessel(SMALL_SHIP) //
-							.withUsedLoad("A_3").onFleetVessel(SMALL_SHIP) //
-							.withUsedLoad("S_1").onFleetVessel(MEDIUM_SHIP) //
-							.withUsedLoad("S_4").onFleetVessel(LARGE_SHIP) //
-							.violationDelta(initialViolations, -1) //
-							.latenessDelta(initialLateness, 0) //
-							.pnlDelta(initialPNL, 19_124_719, 1_000) //
-							.build();
+			final LNGScenarioToOptimiserBridge bridge = runnerBuilder.getScenarioRunner().getScenarioToOptimiserBridge();
+			final OptimiserDataMapper mapper = new OptimiserDataMapper(bridge);
+			final List<SolutionData> solutionDataList = OptimiserResultVerifier.createSolutionData(true, result, mapper);
+			// Solution 1
+			{
+				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
+						.withAnySolutionResultChecker().withCargo("New_Load", "New_Discharge").onFleetVessel(SMALL_SHIP) //
+						.withUsedLoad("A_3").onFleetVessel(SMALL_SHIP) //
+						.withUsedLoad("S_1").onFleetVessel(MEDIUM_SHIP) //
+						.withUsedLoad("S_4").onFleetVessel(LARGE_SHIP) //
+						.violationDelta(initialViolations, -1) //
+						.latenessDelta(initialLateness, 0) //
+						.pnlDelta(initialPNL, 19_124_719, 1_000) //
+						.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assertions::fail);
+				final ISequences solution = verifier.verifySolutionExistsInResults(solutionDataList, Assertions::fail);
 
-				}
-				// Solution 2
-				{
-					final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-							.withAnySolutionResultChecker().withCargo("New_Load", "New_Discharge").onFleetVessel(SMALL_SHIP) //
-							.violationDelta(initialViolations, -1) //
-							.latenessDelta(initialLateness, 0) //
-							.pnlDelta(initialPNL, 18_179_820, 1_000) //
-							.build();
+			}
+			// Solution 2
+			{
+				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
+						.withAnySolutionResultChecker().withCargo("New_Load", "New_Discharge").onFleetVessel(SMALL_SHIP) //
+						.violationDelta(initialViolations, -1) //
+						.latenessDelta(initialLateness, 0) //
+						.pnlDelta(initialPNL, 18_179_820, 1_000) //
+						.build();
 
-					final ISequences solution = verifier.verifySolutionExistsInResults(result, Assertions::fail);
-					Assertions.assertNotNull(solution);
+				final ISequences solution = verifier.verifySolutionExistsInResults(result, Assertions::fail);
+				Assertions.assertNotNull(solution);
 
-				}
-			});
-		}
+			}
+		});
+
 	}
 
 }

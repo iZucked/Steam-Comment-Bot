@@ -89,11 +89,7 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				.withThreadCount(1) //
 				.buildDefaultRunner();
 
-		try {
-			runnerBuilder.evaluateInitialState();
-		} finally {
-			runnerBuilder.dispose();
-		}
+		runnerBuilder.evaluateInitialState();
 
 		Assertions.assertNotNull(testCargo.eContainer());
 		Assertions.assertNotNull(load.getCargo());
@@ -128,19 +124,16 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				.withThreadCount(1) //
 				.buildDefaultRunner();
 
-		try {
-			runnerBuilder.evaluateInitialState();
-			runnerBuilder.run(false, runner -> {
-				// Run, get result and store to schedule model for inspection at EMF level if needed
-				final IMultiStateResult result = runner.runAndApplyBest();
-				// Simple verification, have these slots been used?
-				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
-				verifier.withAnySolutionResultChecker().withCargoCount(12, true).build();
-				verifier.verifyOptimisationResults(result, Assertions::fail);
-			});
-		} finally {
-			runnerBuilder.dispose();
-		}
+		runnerBuilder.evaluateInitialState();
+		runnerBuilder.run(false, runner -> {
+			// Run, get result and store to schedule model for inspection at EMF level if
+			// needed
+			final IMultiStateResult result = runner.runAndApplyBest();
+			// Simple verification, have these slots been used?
+			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
+			verifier.withAnySolutionResultChecker().withCargoCount(12, true).build();
+			verifier.verifyOptimisationResults(result, Assertions::fail);
+		});
 	}
 
 	private void setSimple12CargoCase(final ADPModelBuilder adpModelBuilder, final YearMonth start, final YearMonth end) {
@@ -255,19 +248,16 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				.withThreadCount(1) //
 				.buildDefaultRunner();
 
-		try {
-			runnerBuilder.evaluateInitialState();
-			runnerBuilder.run(false, runner -> {
-				// Run, get result and store to schedule model for inspection at EMF level if needed
-				final IMultiStateResult result = runner.runAndApplyBest();
-				// Simple verification, have these slots been used?
-				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
-				verifier.withAnySolutionResultChecker().withCargoCount(12, true).build();
-				verifier.verifyOptimisationResults(result, Assertions::fail);
-			});
-		} finally {
-			runnerBuilder.dispose();
-		}
+		runnerBuilder.evaluateInitialState();
+		runnerBuilder.run(false, runner -> {
+			// Run, get result and store to schedule model for inspection at EMF level if
+			// needed
+			final IMultiStateResult result = runner.runAndApplyBest();
+			// Simple verification, have these slots been used?
+			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
+			verifier.withAnySolutionResultChecker().withCargoCount(12, true).build();
+			verifier.verifyOptimisationResults(result, Assertions::fail);
+		});
 	}
 
 	/**
@@ -303,19 +293,16 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				.withThreadCount(1) //
 				.buildDefaultRunner();
 
-		try {
-			runnerBuilder.evaluateInitialState();
-			runnerBuilder.run(false, runner -> {
-				// Run, get result and store to schedule model for inspection at EMF level if needed
-				final IMultiStateResult result = runner.runAndApplyBest();
-				// Simple verification, have these slots been used?
-				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
-				verifier.withAnySolutionResultChecker().withCargoCount(10, true).build();
-				verifier.verifyOptimisationResults(result, Assertions::fail);
-			});
-		} finally {
-			runnerBuilder.dispose();
-		}
+		runnerBuilder.evaluateInitialState();
+		runnerBuilder.run(false, runner -> {
+			// Run, get result and store to schedule model for inspection at EMF level if
+			// needed
+			final IMultiStateResult result = runner.runAndApplyBest();
+			// Simple verification, have these slots been used?
+			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
+			verifier.withAnySolutionResultChecker().withCargoCount(10, true).build();
+			verifier.verifyOptimisationResults(result, Assertions::fail);
+		});
 	}
 
 	/**
@@ -353,22 +340,20 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				.withThreadCount(1) //
 				.buildDefaultRunner();
 
-		try {
-			runnerBuilder.evaluateInitialState();
-			runnerBuilder.run(false, runner -> {
-				// Run, get result and store to schedule model for inspection at EMF level if needed
-				final IMultiStateResult result = runner.runAndApplyBest();
-				// Simple verification, have these slots been used?
-				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
-				verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 8, result, Assertions::fail);
-			});
-		} finally {
-			runnerBuilder.dispose();
-		}
+		runnerBuilder.evaluateInitialState();
+		runnerBuilder.run(false, runner -> {
+			// Run, get result and store to schedule model for inspection at EMF level if
+			// needed
+			final IMultiStateResult result = runner.runAndApplyBest();
+			// Simple verification, have these slots been used?
+			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
+			verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 8, result, Assertions::fail);
+		});
 	}
 
 	/**
-	 * Trim the start of the vessel to start later and the end to start earlier Expect 2 fewer cargoes
+	 * Trim the start of the vessel to start later and the end to start earlier
+	 * Expect 2 fewer cargoes
 	 */
 	@Test
 	public void testVesselStartAndEndTrimming() {
@@ -399,18 +384,15 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				.withThreadCount(1) //
 				.buildDefaultRunner();
 
-		try {
-			runnerBuilder.evaluateInitialState();
-			runnerBuilder.run(false, runner -> {
-				// Run, get result and store to schedule model for inspection at EMF level if needed
-				final IMultiStateResult result = runner.runAndApplyBest();
-				// Simple verification, have these slots been used?
-				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
-				verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 10, result, Assertions::fail);
-			});
-		} finally {
-			runnerBuilder.dispose();
-		}
+		runnerBuilder.evaluateInitialState();
+		runnerBuilder.run(false, runner -> {
+			// Run, get result and store to schedule model for inspection at EMF level if
+			// needed
+			final IMultiStateResult result = runner.runAndApplyBest();
+			// Simple verification, have these slots been used?
+			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
+			verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 10, result, Assertions::fail);
+		});
 	}
 
 	/**
@@ -421,7 +403,8 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
-		// final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
+		// final VesselAvailability vesselAvailability =
+		// cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
 		final ADPModelBuilder adpModelBuilder = scenarioModelBuilder.initialiseADP(YearMonth.of(2018, 10), YearMonth.of(2018, 11), defaultCharterInMarket);
 
 		setSimple12CargoCase(adpModelBuilder, YearMonth.of(2018, 10), YearMonth.of(2018, 11));
@@ -443,18 +426,15 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				.withThreadCount(1) //
 				.buildDefaultRunner();
 
-		try {
-			runnerBuilder.evaluateInitialState();
-			runnerBuilder.run(false, runner -> {
-				// Run, get result and store to schedule model for inspection at EMF level if needed
-				final IMultiStateResult result = runner.runAndApplyBest();
-				// Simple verification, have these slots been used?
-				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
-				verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 1, result, Assertions::fail);
-			});
-		} finally {
-			runnerBuilder.dispose();
-		}
+		runnerBuilder.evaluateInitialState();
+		runnerBuilder.run(false, runner -> {
+			// Run, get result and store to schedule model for inspection at EMF level if
+			// needed
+			final IMultiStateResult result = runner.runAndApplyBest();
+			// Simple verification, have these slots been used?
+			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
+			verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 1, result, Assertions::fail);
+		});
 	}
 
 	/**
@@ -465,8 +445,10 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		Assumptions.assumeTrue(TestingModes.OptimisationTestMode == TestMode.Run);
 
 		final CharterInMarket defaultCharterInMarket = setDefaultVesselsAndContracts();
-		// final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
-		// final VesselAvailability vesselAvailability = cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
+		// final VesselAvailability vesselAvailability =
+		// cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
+		// final VesselAvailability vesselAvailability =
+		// cargoModelFinder.findVesselAvailability(TrainingCaseConstants.VESSEL_MEDIUM_SHIP);
 		final ADPModelBuilder adpModelBuilder = scenarioModelBuilder.initialiseADP(YearMonth.of(2018, 10), YearMonth.of(2018, 12), defaultCharterInMarket);
 
 		setSimple12CargoCase(adpModelBuilder, YearMonth.of(2018, 10), YearMonth.of(2018, 12));
@@ -496,18 +478,15 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				.withThreadCount(1) //
 				.buildDefaultRunner();
 
-		try {
-			runnerBuilder.evaluateInitialState();
-			runnerBuilder.run(false, runner -> {
-				// Run, get result and store to schedule model for inspection at EMF level if needed
-				final IMultiStateResult result = runner.runAndApplyBest();
-				// Simple verification, have these slots been used?
-				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
-				verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 2, result, Assertions::fail);
-			});
-		} finally {
-			runnerBuilder.dispose();
-		}
+		runnerBuilder.evaluateInitialState();
+		runnerBuilder.run(false, runner -> {
+			// Run, get result and store to schedule model for inspection at EMF level if
+			// needed
+			final IMultiStateResult result = runner.runAndApplyBest();
+			// Simple verification, have these slots been used?
+			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
+			verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 2, result, Assertions::fail);
+		});
 	}
 
 	/**
@@ -559,18 +538,15 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				.withThreadCount(1) //
 				.buildDefaultRunner();
 
-		try {
-			runnerBuilder.evaluateInitialState();
-			runnerBuilder.run(false, runner -> {
-				// Run, get result and store to schedule model for inspection at EMF level if needed
-				final IMultiStateResult result = runner.runAndApplyBest();
-				// Simple verification, have these slots been used?
-				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
-				verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 2, result, Assertions::fail);
-			});
-		} finally {
-			runnerBuilder.dispose();
-		}
+		runnerBuilder.evaluateInitialState();
+		runnerBuilder.run(false, runner -> {
+			// Run, get result and store to schedule model for inspection at EMF level if
+			// needed
+			final IMultiStateResult result = runner.runAndApplyBest();
+			// Simple verification, have these slots been used?
+			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
+			verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 2, result, Assertions::fail);
+		});
 	}
 
 	/**
@@ -622,18 +598,15 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				.withThreadCount(1) //
 				.buildDefaultRunner();
 
-		try {
-			runnerBuilder.evaluateInitialState();
-			runnerBuilder.run(false, runner -> {
-				// Run, get result and store to schedule model for inspection at EMF level if needed
-				final IMultiStateResult result = runner.runAndApplyBest();
-				// Simple verification, have these slots been used?
-				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
-				verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 2, result, Assertions::fail);
-			});
-		} finally {
-			runnerBuilder.dispose();
-		}
+		runnerBuilder.evaluateInitialState();
+		runnerBuilder.run(false, runner -> {
+			// Run, get result and store to schedule model for inspection at EMF level if
+			// needed
+			final IMultiStateResult result = runner.runAndApplyBest();
+			// Simple verification, have these slots been used?
+			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
+			verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 2, result, Assertions::fail);
+		});
 	}
 
 	/**
@@ -662,8 +635,9 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 		Assertions.assertFalse(defaultVesselAvailability.getStartAfter().isAfter(charterOutStartTime));
 		Assertions.assertFalse(charterOutStartTime.plusDays(charterOutDurationDays).isAfter(defaultVesselAvailability.getEndBy()));
 
-		final CharterOutEvent charterOutEvent = cargoModelBuilder.makeCharterOutEvent("Charter out event", charterOutStartTime, charterOutStartTime, charterOutPort).withDurationInDays(charterOutDurationDays)
-				.withRequiredHeelOptions(0, 5000, EVesselTankState.EITHER, "").withAvailableHeelOptions(0, 5000, 22.3, "").withVesselAssignment(defaultVesselAvailability, 0).build();
+		final CharterOutEvent charterOutEvent = cargoModelBuilder.makeCharterOutEvent("Charter out event", charterOutStartTime, charterOutStartTime, charterOutPort)
+				.withDurationInDays(charterOutDurationDays).withRequiredHeelOptions(0, 5000, EVesselTankState.EITHER, "").withAvailableHeelOptions(0, 5000, 22.3, "")
+				.withVesselAssignment(defaultVesselAvailability, 0).build();
 
 		// Check initial conditions are correct
 		Assertions.assertTrue(cargoModel.getCargoes().isEmpty());
@@ -685,18 +659,15 @@ public class SimpleADPTests extends AbstractADPAndLightWeightTests {
 				.withThreadCount(1) //
 				.buildDefaultRunner();
 
-		try {
-			runnerBuilder.evaluateInitialState();
-			runnerBuilder.run(false, runner -> {
-				// Run, get result and store to schedule model for inspection at EMF level if needed
-				final IMultiStateResult result = runner.runAndApplyBest();
-				// Simple verification, have these slots been used?
-				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
-				verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 2, result, Assertions::fail);
-			});
-		} finally {
-			runnerBuilder.dispose();
-		}
+		runnerBuilder.evaluateInitialState();
+		runnerBuilder.run(false, runner -> {
+			// Run, get result and store to schedule model for inspection at EMF level if
+			// needed
+			final IMultiStateResult result = runner.runAndApplyBest();
+			// Simple verification, have these slots been used?
+			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
+			verifier.verifyCargoCountInOptimisationResultWithoutNominals(0, 2, result, Assertions::fail);
+		});
 	}
 
 	private CharterInMarket setDefaultVesselsAndContracts() {
