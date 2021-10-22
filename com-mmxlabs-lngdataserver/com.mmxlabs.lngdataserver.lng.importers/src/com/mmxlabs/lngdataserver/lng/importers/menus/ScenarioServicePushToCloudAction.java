@@ -230,8 +230,6 @@ public class ScenarioServicePushToCloudAction {
 					scenarioDataProvider.setLastEvaluationFailed(false);
 				} catch (final Exception e) {
 					throw new PublishBasecaseException(MSG_ERROR_EVALUATING, Type.FAILED_TO_EVALUATE);
-				} finally {
-					runnerBuilder.dispose();
 				}
 			} catch (final RuntimeException e) {
 				if (e.getCause() instanceof ScenarioMigrationException) {
