@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lngdataserver.lng.importers.menus;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -35,6 +37,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.io.ByteStreams;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
 import com.mmxlabs.hub.services.permissions.UserPermissionsService;
 import com.mmxlabs.license.features.KnownFeatures;
@@ -195,7 +198,7 @@ public class ScenarioServicePushToCloudAction {
 				
 				File anonymisationMap = null;
 				try {
-					anonymisationMap = ScenarioStorageUtil.getTempDirectory().createTempFile("anonyMap_" + scenarioInstance.getName() + Instant.now().toString(), ".data");
+					anonymisationMap = ScenarioStorageUtil.getTempDirectory().createTempFile("anonyMap_", ".data");
 				} catch (final IOException e) {
 					e.printStackTrace();
 					throw new PublishBasecaseException(MSG_ERROR_SAVING, Type.FAILED_TO_SAVE, e);
@@ -240,14 +243,7 @@ public class ScenarioServicePushToCloudAction {
 			}
 
 			// CreateFile
-			File tmpScenarioFile = null;
-
-			try {
-				tmpScenarioFile = ScenarioStorageUtil.getTempDirectory().createTempFile("cloudopti_", "");
-			} catch (final IOException e) {
-				e.printStackTrace();
-				throw new PublishBasecaseException(MSG_ERROR_SAVING, Type.FAILED_TO_SAVE, e);
-			}
+			File tmpScenarioFile = new File("scenario.lingo");
 
 			try {
 				ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, tmpScenarioFile);
@@ -262,9 +258,8 @@ public class ScenarioServicePushToCloudAction {
 			filesToZip.add(createManifest(tmpScenarioFile.getName(), true));
 			filesToZip.add(createOptimisationSettingsJson(optimisationPlan));
 			File zipToUpload = null;
-			
 			try {
-				tmpScenarioFile = ScenarioStorageUtil.getTempDirectory().createTempFile("archive_", ".zip");
+				zipToUpload = ScenarioStorageUtil.getTempDirectory().createTempFile("archive_", ".zip");
 			} catch (final IOException e) {
 				e.printStackTrace();
 				throw new PublishBasecaseException(MSG_ERROR_SAVING, Type.FAILED_TO_SAVE, e);
@@ -295,7 +290,7 @@ public class ScenarioServicePushToCloudAction {
 			String uuid = null;
 			try {
 				final JsonNode actualObj = mapper.readTree(response);
-				uuid = actualObj.get("uuid").textValue();
+				uuid = actualObj.get("jobid").textValue();
 			} catch (final IOException e) {
 				System.out.println("Cannot read server response after scenario upload");
 				e.printStackTrace();
@@ -316,10 +311,14 @@ public class ScenarioServicePushToCloudAction {
 				try(FileInputStream fis = new FileInputStream(file)){
 					zos.putNextEntry(new ZipEntry(file.getName()));
 					
-					byte[] buffer = new byte[1024];
-					int fl;
-					while ((fl = fis.read(buffer)) > 0) {
-						zos.write(buffer);
+					byte[] data;
+					try (ByteArrayOutputStream bytesOut = new ByteArrayOutputStream()) {
+						ByteStreams.copy(fis, bytesOut);
+						data = bytesOut.toByteArray();
+					}
+					
+					try (ByteArrayInputStream bytesIn = new ByteArrayInputStream(data)) {
+						ByteStreams.copy(bytesIn, zos);
 					}
 				} catch (final Exception e) {
 					LOG.error(String.format("Can't add %s into the archive", file.getAbsolutePath()), e);
@@ -347,7 +346,7 @@ public class ScenarioServicePushToCloudAction {
 			
 			final ObjectMapper objectMapper = new ObjectMapper();
 			try {
-				final File file = Files.createTempFile("parameters", ".json").toFile();
+				final File file = new File("parameters.json");
 				objectMapper.writeValue(file, settings);
 				return file;
 			} catch (final Exception e) {
@@ -363,12 +362,13 @@ public class ScenarioServicePushToCloudAction {
 		md.type = optimisation ? "optimisation" : "optionise";
 		md.parameters = "parameters.json";
 		md.jvmConfig = "jvm.options";
-		md.version = "";
-		md.clientCode = "";
+		md.version = "4.13.1";
+		md.clientCode = "v";
+		md.dev = true;
 		
 		final ObjectMapper objectMapper = new ObjectMapper();
 		try {
-			final File file = Files.createTempFile("manifest", ".json").toFile();
+			final File file = new File("manifest.json");
 			objectMapper.writeValue(file, md);
 			return file;
 		} catch (final Exception e) {
@@ -379,7 +379,7 @@ public class ScenarioServicePushToCloudAction {
 	
 	private static File createJVMOptions(){
 		try{
-			final File file = Files.createTempFile("jvm", ".options").toFile();
+			final File file = new File("jvm.options");
 			try(PrintWriter pw = new PrintWriter(new FileOutputStream(file))){
 				pw.println("-Xms40m");
 				pw.println("-Xmx4g");

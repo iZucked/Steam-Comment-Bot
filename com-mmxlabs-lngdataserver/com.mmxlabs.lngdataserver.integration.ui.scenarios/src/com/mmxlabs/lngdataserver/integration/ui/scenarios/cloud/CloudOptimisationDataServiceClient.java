@@ -38,8 +38,8 @@ public class CloudOptimisationDataServiceClient {
 	private static final String LIST_SCENARIOS_URL = "/scenarios";
 	private static final String LIST_RESULTS_URL = "/results";
 	private static final String SCENARIO_RESULT_URL = "/result";
-	private static final String SCENARIO_CLOUD_UPLOAD_URL = "/scenarios/v1/cloud/opti/upload";
-	private static final String OPTI_CLOUD_BASE_URL = "http://localhost:8080";
+	private static final String SCENARIO_CLOUD_UPLOAD_URL = "/scenario"; //for localhost - "/scenarios/v1/cloud/opti/upload"
+	private static final String OPTI_CLOUD_BASE_URL = "https://gw.mmxlabs.com"; // "https://wzgy9ex061.execute-api.eu-west-2.amazonaws.com/dev/"
 
 	private final OkHttpClient httpClient = com.mmxlabs.hub.common.http.HttpClientUtil.basicBuilder() //
 			.build();
@@ -59,7 +59,7 @@ public class CloudOptimisationDataServiceClient {
 		Builder builder = new MultipartBody.Builder() //
 				.setType(MultipartBody.FORM) //
 				.addFormDataPart("sha256", checksum) //
-				.addFormDataPart("scenario", scenarioName, RequestBody.create(mediaType, scenario)) //
+				.addFormDataPart("scenario", scenarioName + ".zip", RequestBody.create(mediaType, scenario)) //
 		;
 		RequestBody requestBody = builder.build();
 
@@ -159,10 +159,10 @@ public class CloudOptimisationDataServiceClient {
 	}
 
 	//
-	private static final TypeReference<List<CloudOptimisationResultDataRecord>> TYPE_GDR_LIST = new TypeReference<List<CloudOptimisationResultDataRecord>>() {
+	private static final TypeReference<List<CloudOptimisationDataResultRecord>> TYPE_GDR_LIST = new TypeReference<List<CloudOptimisationDataResultRecord>>() {
 	};
 
-	public static List<CloudOptimisationResultDataRecord> parseRecordsJSONData(final String jsonData) {
+	public static List<CloudOptimisationDataResultRecord> parseRecordsJSONData(final String jsonData) {
 		final ObjectMapper mapper = new ObjectMapper();
 		mapper.registerModule(new JavaTimeModule());
 		try {

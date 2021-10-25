@@ -8,10 +8,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.osgi.framework.Bundle;
@@ -30,6 +34,16 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.IProgressListener;
+import com.mmxlabs.rcp.common.ServiceHelper;
+import com.mmxlabs.scenario.service.manifest.Manifest;
+import com.mmxlabs.scenario.service.model.Metadata;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
+import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
+import com.mmxlabs.scenario.service.model.util.encryption.ScenarioEncryptionException;
 
 public class CloudOptimisationDataService {
 
@@ -44,10 +58,61 @@ public class CloudOptimisationDataService {
 	private CloudOptimisationDataServiceClient client;
 
 	private CloudOptimisationDataUpdater updater;
-	private ConcurrentLinkedQueue<CloudOptimisationResultDataRecord> dataList;
+	private ConcurrentLinkedQueue<CloudOptimisationDataResultRecord> dataList;
 	private ConcurrentLinkedQueue<IUpdateListener> listeners = new ConcurrentLinkedQueue<>();
+	// Set used to emit load failure messages once
+		private Set<String> warnedLoadFailures = new HashSet<>();
 
 	private final IUpstreamDetailChangedListener upstreamDetailsChangedListener;
+	
+	protected ScenarioInstance loadScenarioFrom(final File f, final CloudOptimisationDataResultRecord record, final String scenarioname) {
+		final URI archiveURI = URI.createFileURI(f.getAbsolutePath());
+		final Manifest manifest = ScenarioStorageUtil.loadManifest(f);
+		if (manifest != null) {
+			final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+			scenarioInstance.setReadonly(true);
+			scenarioInstance.setUuid(manifest.getUUID());
+			scenarioInstance.setExternalID(record.getUuid());
+
+			scenarioInstance.setRootObjectURI(archiveURI.toString());
+
+			scenarioInstance.setName(scenarioname);
+			scenarioInstance.setVersionContext(manifest.getVersionContext());
+			scenarioInstance.setScenarioVersion(manifest.getScenarioVersion());
+
+			scenarioInstance.setClientVersionContext(manifest.getClientVersionContext());
+			scenarioInstance.setClientScenarioVersion(manifest.getClientScenarioVersion());
+
+			final Metadata meta = ScenarioServiceFactory.eINSTANCE.createMetadata();
+			meta.setCreator(record.getCreator());
+			meta.setCreated(Date.from(record.getCreationDate()));
+
+			scenarioInstance.setMetadata(meta);
+			meta.setContentType(manifest.getScenarioType());
+			// Probably better pass in from service
+			ServiceHelper.withOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
+				try {
+					final ScenarioModelRecord modelRecord = ScenarioStorageUtil.loadInstanceFromURIChecked(archiveURI, true, false, false, scenarioCipherProvider);
+					if (modelRecord != null) {
+						modelRecord.setName(scenarioInstance.getName());
+						modelRecord.setScenarioInstance(scenarioInstance);
+						SSDataManager.Instance.register(scenarioInstance, modelRecord);
+						scenarioInstance.setRootObjectURI(archiveURI.toString());
+					}
+				} catch (ScenarioEncryptionException e) {
+					LOGGER.error(e.getMessage(), e);
+				} catch (Exception e) {
+					LOGGER.error(e.getMessage(), e);
+				}
+			});
+			return scenarioInstance;
+		}
+
+		if (warnedLoadFailures.add(f.getName())) {
+			LOGGER.error("Error reading team scenario file {}. Check encryption certificate.", f.getName());
+		}
+		return null;
+	}
 	
 	private CloudOptimisationDataService() {
 		dataList = new ConcurrentLinkedQueue<>();
@@ -55,11 +120,11 @@ public class CloudOptimisationDataService {
 		start();
 	}
 
-	public Collection<CloudOptimisationResultDataRecord> getRecords() {
+	public Collection<CloudOptimisationDataResultRecord> getRecords() {
 		return dataList;
 	}
 
-	private void update(final CloudOptimisationResultDataRecord record) {
+	private void update(final CloudOptimisationDataResultRecord record) {
 		if (!dataList.contains(record)) {
 			dataList.add(record);
 			fireListeners();
@@ -110,7 +175,7 @@ public class CloudOptimisationDataService {
 
 	public void start() {
 
-		final Bundle bundle = FrameworkUtil.getBundle(CloudOptimisationResultDataRecord.class);
+		final Bundle bundle = FrameworkUtil.getBundle(CloudOptimisationDataResultRecord.class);
 		final BundleContext bundleContext = bundle.getBundleContext();
 
 		new ServiceTracker<IWorkspace, IWorkspace>(bundleContext, IWorkspace.class, null) {
@@ -173,9 +238,9 @@ public class CloudOptimisationDataService {
 		return objectMapper;
 	}
 
-	public static CloudOptimisationResultDataRecord read(final InputStream is) throws IOException {
+	public static CloudOptimisationDataResultRecord read(final InputStream is) throws IOException {
 		final ObjectMapper mapper = createObjectMapper();
-		return mapper.readValue(is, CloudOptimisationResultDataRecord.class);
+		return mapper.readValue(is, CloudOptimisationDataResultRecord.class);
 	}
 	
 	public void refresh()  throws IOException {

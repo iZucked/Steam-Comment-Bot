@@ -7,4 +7,5 @@ public class ManifestDescription {
 	public String jvmConfig;
 	public String version;
 	public String clientCode;
+	public Boolean dev;
 }

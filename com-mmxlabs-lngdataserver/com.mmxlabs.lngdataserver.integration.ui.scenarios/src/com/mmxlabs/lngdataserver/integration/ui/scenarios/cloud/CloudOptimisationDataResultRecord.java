@@ -7,7 +7,7 @@ package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud;
 import java.time.Instant;
 import java.util.Objects;
 
-public class CloudOptimisationResultDataRecord {
+public class CloudOptimisationDataResultRecord {
 
 	private String uuid;
 
@@ -54,8 +54,8 @@ public class CloudOptimisationResultDataRecord {
 		if (obj == this) {
 			return true;
 		}
-		if (obj instanceof CloudOptimisationResultDataRecord) {
-			CloudOptimisationResultDataRecord other = (CloudOptimisationResultDataRecord) obj;
+		if (obj instanceof CloudOptimisationDataResultRecord) {
+			CloudOptimisationDataResultRecord other = (CloudOptimisationDataResultRecord) obj;
 			return Objects.equals(uuid, other.getUuid());
 		}
 		return false;

@@ -56,10 +56,10 @@ public class CloudOptimisationDataUpdater {
 	private Thread updateThread;
 	private final ReentrantLock updateLock = new ReentrantLock();
 
-	private final Consumer<CloudOptimisationResultDataRecord> readyCallback;
+	private final Consumer<CloudOptimisationDataResultRecord> readyCallback;
 	private final ConcurrentMap<String, Instant> oldReports;
 
-	public CloudOptimisationDataUpdater(final File basePath, final CloudOptimisationDataServiceClient client, final Consumer<CloudOptimisationResultDataRecord> readyCallback) {
+	public CloudOptimisationDataUpdater(final File basePath, final CloudOptimisationDataServiceClient client, final Consumer<CloudOptimisationDataResultRecord> readyCallback) {
 		this.basePath = basePath;
 		this.client = client;
 		this.readyCallback = readyCallback;
@@ -75,25 +75,25 @@ public class CloudOptimisationDataUpdater {
 		taskExecutor.shutdownNow();
 	}
 
-	public void update(final List<CloudOptimisationResultDataRecord> records) {
+	public void update(final List<CloudOptimisationDataResultRecord> records) {
 
 		if (records != null) {
-			for (final CloudOptimisationResultDataRecord record : records) {
+			for (final CloudOptimisationDataResultRecord record : records) {
 				taskExecutor.execute(new DownloadTask(record));
 			}
 		}
 	}
 
 	private class DownloadTask implements Runnable {
-		private final CloudOptimisationResultDataRecord record;
+		private final CloudOptimisationDataResultRecord record;
 
-		public DownloadTask(final CloudOptimisationResultDataRecord record) {
+		public DownloadTask(final CloudOptimisationDataResultRecord record) {
 			this.record = record;
 		}
 
 		@Override
 		public void run() {
-			final File f = new File(String.format("%s/%s.json", basePath, record.getUuid()));
+			final File f = new File(String.format("%s/%s.lingo", basePath, record.getUuid()));
 			final Instant creationDate = oldReports.get(record.getUuid());
 			if (!Objects.equals(record.getCreationDate(), creationDate) && record.getCreationDate() != null) {
 				try {
@@ -119,7 +119,7 @@ public class CloudOptimisationDataUpdater {
 			}
 		}
 
-		private boolean downloadData(final CloudOptimisationResultDataRecord record, final File f) {
+		private boolean downloadData(final CloudOptimisationDataResultRecord record, final File f) {
 			final boolean[] ret = new boolean[1];
 			final Job background = new Job("Downloading reference data") {
 
@@ -164,7 +164,7 @@ public class CloudOptimisationDataUpdater {
 			String json;
 			try {
 				json = Files.readString(f.toPath());
-				final List<CloudOptimisationResultDataRecord> records = CloudOptimisationDataServiceClient.parseRecordsJSONData(json);
+				final List<CloudOptimisationDataResultRecord> records = CloudOptimisationDataServiceClient.parseRecordsJSONData(json);
 				if (records != null) {
 					update(records);
 				}
@@ -220,7 +220,7 @@ public class CloudOptimisationDataUpdater {
 						}
 						recordsFile.renameTo(recordsFileBKP);
 					}
-					final List<CloudOptimisationResultDataRecord> records = CloudOptimisationDataServiceClient.parseRecordsJSONData(recordsPair.getFirst());
+					final List<CloudOptimisationDataResultRecord> records = CloudOptimisationDataServiceClient.parseRecordsJSONData(recordsPair.getFirst());
 					update(records);
 					Files.writeString(recordsFile.toPath(), recordsPair.getFirst(), Charsets.UTF_8);
 					lastModified = recordsPair.getSecond();
