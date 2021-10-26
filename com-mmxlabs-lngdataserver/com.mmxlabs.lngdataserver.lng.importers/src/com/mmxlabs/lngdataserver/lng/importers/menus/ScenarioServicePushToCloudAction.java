@@ -12,7 +12,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.file.Files;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,6 +20,8 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -42,6 +43,7 @@ import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
 import com.mmxlabs.hub.services.permissions.UserPermissionsService;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataResultRecord;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataService;
 import com.mmxlabs.lngdataserver.lng.importers.menus.PublishBasecaseException.Type;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
@@ -72,6 +74,9 @@ public class ScenarioServicePushToCloudAction {
 	private static final String MSG_ERROR_SAVING = "Error saving temporary scenario";
 	private static final String MSG_ERROR_UPLOADING = "Error uploading scenario";
 	private static final String MSG_ERROR_EVALUATING = "Error evaluating scenario";
+	
+	private static final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
+	private static final String CLOUD_OPTI_PATH = workspaceLocation.toOSString() + IPath.SEPARATOR + "cloud-opti";	
 
 	private ScenarioServicePushToCloudAction() {
 	}
@@ -119,7 +124,7 @@ public class ScenarioServicePushToCloudAction {
 	public static void uploadScenario(final ScenarioInstance scenarioInstance, final String notes, final OptimisationPlan optimisationPlan, final boolean optimisation) {
 		final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 		try {
-			dialog.run(true, false, m -> uploadScenario(scenarioInstance, notes, optimisationPlan, m));
+			dialog.run(true, false, m -> doUploadScenario(scenarioInstance, notes, optimisationPlan, m));
 		} catch (final InvocationTargetException e) {
 			LOG.error(e.getMessage(), e);
 			final Throwable cause = e.getCause();
@@ -161,7 +166,7 @@ public class ScenarioServicePushToCloudAction {
 
 	}
 
-	private static void uploadScenario(final ScenarioInstance scenarioInstance, final String notes, final OptimisationPlan optimisationPlan, final IProgressMonitor parentProgressMonitor) {
+	private static void doUploadScenario(final ScenarioInstance scenarioInstance, final String notes, final OptimisationPlan optimisationPlan, final IProgressMonitor parentProgressMonitor) {
 
 		// Check user permission
 		if (UserPermissionsService.INSTANCE.hubSupportsPermissions()) {
@@ -170,10 +175,15 @@ public class ScenarioServicePushToCloudAction {
 			}
 		}
 
+		
 		parentProgressMonitor.beginTask("Push scenario", 1000);
 		final SubMonitor progressMonitor = SubMonitor.convert(parentProgressMonitor, 1000);
 		try {
 			progressMonitor.subTask("Prepare scenario");
+			final CloudOptimisationDataResultRecord record = new CloudOptimisationDataResultRecord();
+			record.setUuid(scenarioInstance.getUuid());
+			record.setCreationDate(Instant.now());
+			record.setCreator("Foo Bar");
 			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 
 			IScenarioDataProvider scenarioDataProvider = null;
@@ -196,13 +206,9 @@ public class ScenarioServicePushToCloudAction {
 				
 				progressMonitor.subTask("Anonymise scenario");
 				
-				File anonymisationMap = null;
-				try {
-					anonymisationMap = ScenarioStorageUtil.getTempDirectory().createTempFile("anonyMap_", ".data");
-				} catch (final IOException e) {
-					e.printStackTrace();
-					throw new PublishBasecaseException(MSG_ERROR_SAVING, Type.FAILED_TO_SAVE, e);
-				}
+				final String amfName = CLOUD_OPTI_PATH + IPath.SEPARATOR + scenarioInstance.getUuid() + "anonyMap.data";
+				record.setAnonyMapFileName(amfName);
+				File anonymisationMap = new File(amfName);
 				
 				final CompoundCommand cmd = AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, new HashSet(), new ArrayList(), true, anonymisationMap);
 				if (cmd != null && !cmd.isEmpty()) {
@@ -244,7 +250,6 @@ public class ScenarioServicePushToCloudAction {
 
 			// CreateFile
 			File tmpScenarioFile = new File("scenario.lingo");
-
 			try {
 				ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, tmpScenarioFile);
 			} catch (final IOException e) {
@@ -287,14 +292,14 @@ public class ScenarioServicePushToCloudAction {
 				throw new RuntimeException("Error pushing the scenario for cloud optimisation");
 			}
 			final ObjectMapper mapper = new ObjectMapper();
-			String uuid = null;
 			try {
 				final JsonNode actualObj = mapper.readTree(response);
-				uuid = actualObj.get("jobid").textValue();
+				record.setJobid(actualObj.get("jobid").textValue());
 			} catch (final IOException e) {
 				System.out.println("Cannot read server response after scenario upload");
 				e.printStackTrace();
 			}
+			CloudOptimisationDataService.INSTANCE.updateRecords(record);
 		} finally {
 			progressMonitor.done();
 		}
@@ -308,27 +313,30 @@ public class ScenarioServicePushToCloudAction {
 	private static void archive(final File targetFile, final List<File> files) {
 		try(ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(targetFile))){
 			for (final File file : files) {
-				try(FileInputStream fis = new FileInputStream(file)){
-					zos.putNextEntry(new ZipEntry(file.getName()));
-					
-					byte[] data;
-					try (ByteArrayOutputStream bytesOut = new ByteArrayOutputStream()) {
-						ByteStreams.copy(fis, bytesOut);
-						data = bytesOut.toByteArray();
-					}
-					
-					try (ByteArrayInputStream bytesIn = new ByteArrayInputStream(data)) {
-						ByteStreams.copy(bytesIn, zos);
-					}
-				} catch (final Exception e) {
-					LOG.error(String.format("Can't add %s into the archive", file.getAbsolutePath()), e);
-				} finally {
-					zos.closeEntry();
-				}
-				
+				doArchive(zos, file);
 			}
 		} catch (Exception e) {
 			LOG.error("Can't write the archive", e);
+		}
+	}
+
+	private static void doArchive(ZipOutputStream zos, final File file) throws IOException {
+		try(FileInputStream fis = new FileInputStream(file)){
+			zos.putNextEntry(new ZipEntry(file.getName()));
+			
+			byte[] data;
+			try (ByteArrayOutputStream bytesOut = new ByteArrayOutputStream()) {
+				ByteStreams.copy(fis, bytesOut);
+				data = bytesOut.toByteArray();
+			}
+			
+			try (ByteArrayInputStream bytesIn = new ByteArrayInputStream(data)) {
+				ByteStreams.copy(bytesIn, zos);
+			}
+		} catch (final Exception e) {
+			LOG.error(String.format("Can't add %s into the archive", file.getAbsolutePath()), e);
+		} finally {
+			zos.closeEntry();
 		}
 	}
 	
@@ -359,7 +367,7 @@ public class ScenarioServicePushToCloudAction {
 	private static File createManifest(final String scenarioName, final boolean optimisation){
 		final ManifestDescription md = new ManifestDescription();
 		md.scenario = scenarioName;
-		md.type = optimisation ? "optimisation" : "optionise";
+		md.type = optimisation ? "optimisation" : "optioniser";
 		md.parameters = "parameters.json";
 		md.jvmConfig = "jvm.options";
 		md.version = "4.13.1";

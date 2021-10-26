@@ -176,5 +176,20 @@ public class CloudOptimisationDataServiceClient {
 		}
 		return Collections.emptyList();
 	}
+	
+	public static String getJSON(final List<CloudOptimisationDataResultRecord> records) {
+		final ObjectMapper mapper = new ObjectMapper();
+		mapper.registerModule(new JavaTimeModule());
+		try {
+			return mapper.writeValueAsString(records);
+		} catch (final JsonParseException e) {
+			e.printStackTrace();
+		} catch (final JsonMappingException e) {
+			e.printStackTrace();
+		} catch (final IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 }

@@ -7,7 +7,9 @@ package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,6 +33,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.common.base.Charsets;
 import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.IProgressListener;
@@ -160,7 +163,6 @@ public class CloudOptimisationDataService {
 			} finally {
 				updater.resume();
 			}
-			
 			try {
 				updater.pause();
 				updater.refresh();
@@ -171,6 +173,25 @@ public class CloudOptimisationDataService {
 			throw e;
 		}
 		return response;
+	}
+	
+	public boolean updateRecords(final CloudOptimisationDataResultRecord record) {
+		updater.pause();
+		if (!dataList.contains(record)) {
+			final File recordsFile = new File(dataFolder.getAbsolutePath() + IPath.SEPARATOR + "records.json");
+			final String json = CloudOptimisationDataServiceClient.getJSON(Collections.singletonList(record));
+			if (json != null) {
+				try {
+					Files.writeString(recordsFile.toPath(), json, Charsets.UTF_8);
+				} catch (IOException e) {
+					e.printStackTrace();
+					return false;
+				}
+			}
+			dataList.add(record);
+		}
+		updater.resume();
+		return true;
 	}
 
 	public void start() {
@@ -190,7 +211,7 @@ public class CloudOptimisationDataService {
 					final IPath workspaceLocation = workspace.getRoot().getLocation();
 					final File workspaceLocationFile = workspaceLocation.toFile();
 
-					dataFolder = new File(workspaceLocationFile.getAbsolutePath() + File.separator + "team-reports");
+					dataFolder = new File(workspaceLocationFile.getAbsolutePath() + File.separator + "cloud-opti");
 					if (!dataFolder.exists()) {
 						dataFolder.mkdirs();
 					}

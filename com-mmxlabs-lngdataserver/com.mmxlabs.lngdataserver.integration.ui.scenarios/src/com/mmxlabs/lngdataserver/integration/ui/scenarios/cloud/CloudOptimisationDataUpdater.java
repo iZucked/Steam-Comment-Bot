@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,6 +18,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -57,14 +59,14 @@ public class CloudOptimisationDataUpdater {
 	private final ReentrantLock updateLock = new ReentrantLock();
 
 	private final Consumer<CloudOptimisationDataResultRecord> readyCallback;
-	private final ConcurrentMap<String, Instant> oldReports;
+	private final ConcurrentMap<String, Instant> oldRecords;
 
 	public CloudOptimisationDataUpdater(final File basePath, final CloudOptimisationDataServiceClient client, final Consumer<CloudOptimisationDataResultRecord> readyCallback) {
 		this.basePath = basePath;
 		this.client = client;
 		this.readyCallback = readyCallback;
 		taskExecutor = Executors.newSingleThreadExecutor();
-		oldReports = new ConcurrentHashMap<String, Instant>();
+		oldRecords = new ConcurrentHashMap<String, Instant>();
 		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(purgeLocalRecords);
 		DataHubServiceProvider.getInstance().addDataHubStateListener(dataHubStateChangeListener);
 	}
@@ -94,7 +96,7 @@ public class CloudOptimisationDataUpdater {
 		@Override
 		public void run() {
 			final File f = new File(String.format("%s/%s.lingo", basePath, record.getUuid()));
-			final Instant creationDate = oldReports.get(record.getUuid());
+			final Instant creationDate = oldRecords.get(record.getUuid());
 			if (!Objects.equals(record.getCreationDate(), creationDate) && record.getCreationDate() != null) {
 				try {
 					f.getParentFile().mkdirs();
@@ -104,7 +106,7 @@ public class CloudOptimisationDataUpdater {
 						// Failed!
 						return;
 					} else {
-						oldReports.put(record.getUuid(), record.getCreationDate());
+						oldRecords.put(record.getUuid(), record.getCreationDate());
 					}
 				} catch (final Exception e) {
 					// Something went wrong - reset lastModified to trigger another refresh
@@ -159,7 +161,7 @@ public class CloudOptimisationDataUpdater {
 	}
 
 	public void start() {
-		final File f = new File(basePath.getAbsolutePath() + "/records.json");
+		final File f = new File(basePath.getAbsolutePath() + "/tasks.json");
 		if (f.exists() && f.canRead()) {
 			String json;
 			try {
@@ -211,22 +213,57 @@ public class CloudOptimisationDataUpdater {
 			if (m != null && m.isAfter(lastModified)) {
 				final Pair<String, Instant> recordsPair = client.listContents(true);
 				if (recordsPair != null) {
-					final File recordsFile = new File(basePath.getAbsolutePath() + "/records.json");
-					final File recordsFileBKP = new File(basePath.getAbsolutePath() + "/records.json.bkp");
+					final File tasksFile = new File(basePath.getAbsolutePath() + IPath.SEPARATOR + "tasks.json");
+					final File tasksFileBKP = new File(basePath.getAbsolutePath() + IPath.SEPARATOR + "tasks.json.bkp");
 					
-					if (recordsFile.exists()) {
-						if (recordsFileBKP.exists()) {
-							recordsFileBKP.delete();
+					if (tasksFile.exists()) {
+						if (tasksFileBKP.exists()) {
+							tasksFileBKP.delete();
 						}
-						recordsFile.renameTo(recordsFileBKP);
+						tasksFile.renameTo(tasksFileBKP);
 					}
-					final List<CloudOptimisationDataResultRecord> records = CloudOptimisationDataServiceClient.parseRecordsJSONData(recordsPair.getFirst());
+					
+					final List<CloudOptimisationDataResultRecord> tasks = CloudOptimisationDataServiceClient.parseRecordsJSONData(recordsPair.getFirst());
+					final List<CloudOptimisationDataResultRecord> records = processRecordsFromTasks(tasks);
 					update(records);
-					Files.writeString(recordsFile.toPath(), recordsPair.getFirst(), Charsets.UTF_8);
+					final String json = CloudOptimisationDataServiceClient.getJSON(records);
+					Files.writeString(tasksFile.toPath(), json, Charsets.UTF_8);
 					lastModified = recordsPair.getSecond();
 				}
 			}
 		}
+	}
+	
+	private List<CloudOptimisationDataResultRecord> processRecordsFromTasks(final List<CloudOptimisationDataResultRecord> tasks){
+		final List<CloudOptimisationDataResultRecord> results = new ArrayList(tasks.size());
+		for (final CloudOptimisationDataResultRecord task : tasks) {
+			final CloudOptimisationDataResultRecord temp = getRecord(task.getUuid());
+			if (temp != null) {
+				results.add(temp);
+			} else {
+				throw new IllegalStateException("Can't find the records with UUID: " + task.getUuid());
+			}
+		}
+		return results;
+	}
+	
+	private CloudOptimisationDataResultRecord getRecord(final String uuid) {
+		final File recordsFile = new File(basePath.getAbsolutePath() + IPath.SEPARATOR + "records.json");
+		String json;
+		try {
+			json = Files.readString(recordsFile.toPath());
+			final List<CloudOptimisationDataResultRecord> records = client.parseRecordsJSONData(json);
+			if (records != null && !records.isEmpty()) {
+				for (final CloudOptimisationDataResultRecord record : records) {
+					if (record.getUuid().equalsIgnoreCase(uuid)) {
+						return record;
+					}
+				}
+			}
+		} catch (final IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	private synchronized void purgeLocalRecords() {
@@ -235,7 +272,7 @@ public class CloudOptimisationDataUpdater {
 				if (f.exists())
 					f.delete();
 			}
-			oldReports.clear();
+			oldRecords.clear();
 			purgeCache = false;
 			lastModified = Instant.EPOCH;
 		}

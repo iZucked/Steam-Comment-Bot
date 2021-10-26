@@ -10,6 +10,8 @@ import java.util.Objects;
 public class CloudOptimisationDataResultRecord {
 
 	private String uuid;
+	
+	private String jobid;
 
 	private String creator;
 	
@@ -47,6 +49,14 @@ public class CloudOptimisationDataResultRecord {
 	
 	public void setAnonyMapFileName(String anonyMapFileName) {
 		this.anonyMapFileName = anonyMapFileName;
+	}
+
+	public String getJobid() {
+		return jobid;
+	}
+
+	public void setJobid(String jobid) {
+		this.jobid = jobid;
 	}
 
 	@Override
