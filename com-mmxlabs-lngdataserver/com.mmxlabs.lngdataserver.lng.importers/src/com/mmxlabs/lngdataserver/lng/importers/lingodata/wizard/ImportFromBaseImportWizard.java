@@ -50,8 +50,8 @@ public class ImportFromBaseImportWizard extends Wizard implements IImportWizard 
 				.flatMap(e -> e.options.stream())//
 				.collect(Collectors.toSet());
 
-		ScenarioModelRecord currentScenarioModelRecord = SSDataManager.Instance.getModelRecord(baseCase);
-		ScenarioModelRecord destinationScenarioModelRecord = SSDataManager.Instance.getModelRecord(destination);
+		ScenarioModelRecord currentScenarioModelRecord = SSDataManager.Instance.getModelRecordChecked(baseCase);
+		ScenarioModelRecord destinationScenarioModelRecord = SSDataManager.Instance.getModelRecordChecked(destination);
 
 		final UpdateJob job = new UpdateJob(options, currentScenarioModelRecord, Collections.singletonList(destinationScenarioModelRecord), true);
 

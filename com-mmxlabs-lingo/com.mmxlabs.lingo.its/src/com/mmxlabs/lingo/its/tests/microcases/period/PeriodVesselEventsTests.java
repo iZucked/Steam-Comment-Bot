@@ -34,7 +34,9 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 
 /**
- * Some test cases around period optimisation with vessel events (specifically charter out events which can move between vessels). Original period transformer locks down all vessel events.
+ * Some test cases around period optimisation with vessel events (specifically
+ * charter out events which can move between vessels). Original period
+ * transformer locks down all vessel events.
  *
  */
 @ExtendWith(ShiroRunner.class)
@@ -75,7 +77,8 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 				.withAllowedVessels(vessel_1, vessel_2) //
 				.build();
 
-		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
+		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in
+		// period.
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
@@ -97,26 +100,23 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 				.withThreadCount(1)//
 				.withOptimiseHint() //
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+		runner.evaluateInitialState();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
-			// Check locked flags
-			final VesselEvent period_event = optimiserScenario.getCargoModel().getVesselEvents().get(0);
-			Assertions.assertEquals(vessel_1.getName(), ((VesselAvailability) period_event.getVesselAssignmentType()).getVessel().getName());
+		final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
-			Assertions.assertFalse(period_event.isLocked());
-			Assertions.assertFalse(period_event.getAllowedVessels().isEmpty());
-			Assertions.assertEquals(charter_1.getAllowedVessels().size(), period_event.getAllowedVessels().size());
+		// Check locked flags
+		final VesselEvent period_event = optimiserScenario.getCargoModel().getVesselEvents().get(0);
+		Assertions.assertEquals(vessel_1.getName(), ((VesselAvailability) period_event.getVesselAssignmentType()).getVessel().getName());
 
-			runner.run(true);
-			Assertions.assertSame(vesselAvailability_2, charter_1.getVesselAssignmentType());
-		} finally {
-			runner.dispose();
-		}
+		Assertions.assertFalse(period_event.isLocked());
+		Assertions.assertFalse(period_event.getAllowedVessels().isEmpty());
+		Assertions.assertEquals(charter_1.getAllowedVessels().size(), period_event.getAllowedVessels().size());
+
+		runner.run(true);
+		Assertions.assertSame(vesselAvailability_2, charter_1.getVesselAssignmentType());
 	}
 
 	/**
@@ -154,7 +154,8 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 				.withAllowedVessels(vessel_1, vessel_2) //
 				.build();
 
-		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
+		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in
+		// period.
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
@@ -176,28 +177,24 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 				.withThreadCount(1)//
 				.withOptimiseHint() //
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+		runner.evaluateInitialState();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
-			// Check locked flags
-			final VesselEvent period_event = optimiserScenario.getCargoModel().getVesselEvents().get(0);
-			final Vessel period_vessel_1 = ((VesselAvailability) period_event.getVesselAssignmentType()).getVessel();
-			Assertions.assertEquals(vessel_1.getName(), period_vessel_1.getName());
+		final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
-			Assertions.assertFalse(period_event.isLocked());
-			Assertions.assertFalse(period_event.getAllowedVessels().isEmpty());
-			Assertions.assertEquals(1, period_event.getAllowedVessels().size());
-			Assertions.assertTrue(period_event.getAllowedVessels().contains(period_vessel_1));
+		// Check locked flags
+		final VesselEvent period_event = optimiserScenario.getCargoModel().getVesselEvents().get(0);
+		final Vessel period_vessel_1 = ((VesselAvailability) period_event.getVesselAssignmentType()).getVessel();
+		Assertions.assertEquals(vessel_1.getName(), period_vessel_1.getName());
 
-			runner.run(true);
-			Assertions.assertSame(vesselAvailability_1, charter_1.getVesselAssignmentType());
+		Assertions.assertTrue(period_event.isLocked());
+		Assertions.assertFalse(period_event.getAllowedVessels().isEmpty());
+		Assertions.assertEquals(1, period_event.getAllowedVessels().size());
+		Assertions.assertTrue(period_event.getAllowedVessels().contains(period_vessel_1));
 
-		} finally {
-			runner.dispose();
-		}
+		runner.run(true);
+		Assertions.assertSame(vesselAvailability_1, charter_1.getVesselAssignmentType());
 	}
 }

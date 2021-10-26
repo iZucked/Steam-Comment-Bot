@@ -70,10 +70,10 @@ import org.eclipse.swtchart.ILineSeries;
 import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
 import org.eclipse.swtchart.ISeries;
 import org.eclipse.swtchart.ISeries.SeriesType;
-import org.eclipse.swtchart.model.DateArraySeriesModel;
 import org.eclipse.swtchart.ISeriesSet;
 import org.eclipse.swtchart.LineStyle;
 import org.eclipse.swtchart.Range;
+import org.eclipse.swtchart.model.DateArraySeriesModel;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.osgi.service.event.EventHandler;
@@ -85,6 +85,7 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.lingo.reports.views.standard.inventory.ChartColourSchemeAction;
 import com.mmxlabs.lingo.reports.views.standard.inventory.ColourSequence;
 import com.mmxlabs.lingo.reports.views.standard.inventory.InventoryLevel;
 import com.mmxlabs.lingo.reports.views.standard.inventory.MullDailyInformation;
@@ -119,7 +120,6 @@ import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.IComparableProvider;
 import com.mmxlabs.models.ui.tabular.IFilterProvider;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
-import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
@@ -169,6 +169,9 @@ public class InventoryReport extends ViewPart {
 	private ActionContributionItem mullDailyTableCopyActionContributionItem;
 	private ActionContributionItem mullDailyTablePackActionContributionItem;
 
+	private ChartColourSchemeAction colourSchemeAction;
+	private ActionContributionItem colourSchemeActionContributionItem;
+
 	private Inventory selectedInventory;
 	private ScenarioResult currentResult;
 
@@ -183,6 +186,8 @@ public class InventoryReport extends ViewPart {
 	private Color colourRed;
 
 	private EventHandler todayHandler;
+
+	private IBarSeries cargoSeries;
 
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
@@ -232,7 +237,7 @@ public class InventoryReport extends ViewPart {
 					updatePlots(Collections.emptyList(), null);
 				}
 			};
-			RunnerHelper.exec(r, block);
+			ViewerHelper.runIfViewerValid(comboViewer, block, r);
 		}
 	};
 
@@ -247,7 +252,6 @@ public class InventoryReport extends ViewPart {
 	 */
 	@Override
 	public void createPartControl(final Composite parent) {
-
 		this.localResourceManager = new LocalResourceManager(JFaceResources.getResources(), parent);
 
 		this.colourOrange = this.localResourceManager.createColor(new RGB(255, 200, 15));
@@ -299,7 +303,7 @@ public class InventoryReport extends ViewPart {
 		chartItem.setText("Chart");
 
 		final CTabItem inventoryDailyChartItem = new CTabItem(folder, SWT.NONE);
-		inventoryDailyChartItem.setText("Inventory Daily");
+		inventoryDailyChartItem.setText("Daily Production");
 
 		final CTabItem tableItem = new CTabItem(folder, SWT.NONE);
 		tableItem.setText("Table");
@@ -353,6 +357,11 @@ public class InventoryReport extends ViewPart {
 		selectedScenariosService.addListener(selectedScenariosServiceListener);
 		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 
+		colourSchemeAction = new ChartColourSchemeAction(this);
+		colourSchemeActionContributionItem = new ActionContributionItem(colourSchemeAction);
+		getViewSite().getActionBars().getToolBarManager().add(colourSchemeActionContributionItem);
+		colourSchemeActionContributionItem.setVisible(folderSelection == 0);
+
 		final PackGridTableColumnsAction inventoryTablePackAction = PackActionFactory.createPackColumnsAction(inventoryTableViewer);
 		inventoryTablePackActionContributionItem = new ActionContributionItem(inventoryTablePackAction);
 		getViewSite().getActionBars().getToolBarManager().add(inventoryTablePackActionContributionItem);
@@ -391,8 +400,8 @@ public class InventoryReport extends ViewPart {
 					createMullColumn("Entity", 150, o -> o.getFirst().entity.getName(), o -> o.getFirst().entity.getName());
 					createMullColumn("Monthly Entitlement", 150, o -> generateDiffString(o, MullInformation::getMonthlyRE), o -> generateSortValue(o, MullInformation::getMonthlyRE));
 					createMullColumn("Monthly lifted", 150, o -> generateDiffString(o, MullInformation::getLifted), o -> generateSortValue(o, MullInformation::getLifted));
-					createMullColumn("Delta", 150, o -> generateDiffString(o, MullInformation::getDelta), o -> generateSortValue(o, MullInformation::getDelta));
-					createMullColumn("Cumulative Delta", 150, o -> generateDiffString(o, MullInformation::getCumulativeDelta), o -> generateSortValue(o, MullInformation::getCumulativeDelta));
+					createMullColumn("Delta", 150, o -> generateDiffString(o, m -> -1 * m.getDelta()), o -> generateSortValue(o, m -> -1 * m.getDelta()));
+					createMullColumn("Cumulative Delta", 150, o -> generateDiffString(o, m -> -1 * m.getCumulativeDelta()), o -> generateSortValue(o, m -> -1 * m.getCumulativeDelta()));
 					createMullColumn("# Cargoes", 150, o -> generateDiffString(o, MullInformation::getCargoCount), o -> generateSortValue(o, MullInformation::getCargoCount));
 
 					mullItem.setControl(mullMonthlyTableViewer.getControl());
@@ -444,7 +453,7 @@ public class InventoryReport extends ViewPart {
 					createMullCumulativeColumn("Entity", 150, o -> o.getFirst().entity.getName(), o -> o.getFirst().entity.getName());
 					createMullCumulativeColumn("Reference Entitlement", 150, o -> generateDiffString(o, MullInformation::getMonthlyRE), o -> generateSortValue(o, MullInformation::getMonthlyRE));
 					createMullCumulativeColumn("Lifted", 150, o -> generateDiffString(o, MullInformation::getLifted), o -> generateSortValue(o, MullInformation::getLifted));
-					createMullCumulativeColumn("Delta", 150, o -> generateDiffString(o, m -> m.monthlyRE - m.lifted), o -> generateSortValue(o, m -> m.monthlyRE - m.lifted));
+					createMullCumulativeColumn("Delta", 150, o -> generateDiffString(o, m -> m.lifted - m.monthlyRE), o -> generateSortValue(o, m -> m.lifted - m.monthlyRE));
 					createMullCumulativeColumn("# Cargoes", 150, o -> generateDiffString(o, MullInformation::getCargoCount), o -> generateSortValue(o, MullInformation::getCargoCount));
 
 					mullMonthlyCumulativeItem.setControl(mullMonthlyCumulativeTableViewer.getControl());
@@ -489,10 +498,11 @@ public class InventoryReport extends ViewPart {
 						return String.format("%01d-%01d-%d", date.getDayOfMonth(), date.getMonthValue(), date.getYear());
 					}, o -> o.getFirst().date);
 					createMullDailyColumn("Entity", 150, o -> o.getFirst().entity.getName(), o -> o.getFirst().entity.getName());
-					createMullDailyColumn("Production allocation", 150, o -> generateDailyDiffString(o, MullDailyInformation::getAllocatedEntitlement),
+					createMullDailyColumn("Production Allocation", 150, o -> generateDailyDiffString(o, MullDailyInformation::getAllocatedEntitlement),
 							o -> generateDailySortValue(o, MullDailyInformation::getAllocatedEntitlement));
-					createMullDailyColumn("Running entitlement", 150, o -> generateDailyDiffString(o, MullDailyInformation::getActualEntitlement),
+					createMullDailyColumn("Running Overlift", 150, o -> generateDailyDiffString(o, m -> -1 * m.getActualEntitlement()),
 							o -> generateDailySortValue(o, MullDailyInformation::getActualEntitlement));
+					createMullDailyColumn("Lifting", 150, o -> o.getFirst().lifting ? "Y" : "", o -> o.getFirst().lifting);
 					mullDailyItem.setControl(mullDailyTableViewer.getControl());
 				}
 			}
@@ -534,6 +544,7 @@ public class InventoryReport extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				final int currentTabSelection = folder.getSelectionIndex();
+				colourSchemeActionContributionItem.setVisible(currentTabSelection == 0);
 				inventoryTableCopyActionContributionItem.setVisible(currentTabSelection == 2);
 				inventoryTablePackActionContributionItem.setVisible(currentTabSelection == 2);
 				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
@@ -564,6 +575,15 @@ public class InventoryReport extends ViewPart {
 		getViewSite().getActionBars().getToolBarManager().update(true);
 	}
 
+	public void setCargoVisibilityInInventoryChart(final boolean isVisible) {
+		if (cargoSeries != null) {
+			cargoSeries.setVisible(isVisible);
+			cargoSeries.setVisibleInLegend(isVisible);
+			inventoryInsAndOutChart.updateLayout();
+			inventoryInsAndOutChart.redraw();
+		}
+	}
+
 	/**
 	 * Passing the focus request to the viewer's control.
 	 */
@@ -575,6 +595,7 @@ public class InventoryReport extends ViewPart {
 	@Override
 	public void dispose() {
 		localResourceManager.dispose();
+		colourSchemeAction.dispose();
 		// Colours are added to localResourceManager so they don't need an explicit
 		// dispose
 		selectedScenariosService.removeListener(selectedScenariosServiceListener);
@@ -586,12 +607,14 @@ public class InventoryReport extends ViewPart {
 	}
 
 	private void updatePlots(final Collection<Inventory> inventoryModels, final ScenarioResult toDisplay) {
+
 		final DateFormat dateFormat = new SimpleDateFormat("d MMM");
 		final ISeriesSet seriesSet = inventoryInsAndOutChart.getSeriesSet();
 		final ISeriesSet inventoryDailyChartSeriesSet = inventoryDailyChartViewer.getSeriesSet();
 
 		// Delete existing data
 		clearChartData(seriesSet);
+		cargoSeries = null;
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
 			clearChartData(mullMonthlyOverliftChart.getSeriesSet());
 			clearChartData(mullMonthlyCargoCountChart.getSeriesSet());
@@ -645,7 +668,9 @@ public class InventoryReport extends ViewPart {
 												totalInventoryVolume += event.netVolumeIn;
 											}
 											if (!insAndOuts.isEmpty()) {
-												insAndOuts.firstEntry().getValue().addVolume(totalInventoryVolume);
+												// Do not need to add inventory volume pre ADP year since they should be associated with pre ADP cargoes and initial tank volume (which should be
+												// covered by initial allocation)
+												// insAndOuts.firstEntry().getValue().addVolume(totalInventoryVolume);
 												final Map<YearMonth, Integer> monthlyProduction = calculateMonthlyProduction(inventory, adpStart);
 												final List<BaseLegalEntity> entitiesOrdered = calculateEntityOrder(sProfile);
 												final List<Pair<BaseLegalEntity, Double>> relativeEntitlements = sProfile.getEntityTable().stream() //
@@ -686,6 +711,7 @@ public class InventoryReport extends ViewPart {
 
 														final List<CargoAllocation> sortedPinnedCargoAllocations = pinnedCargoAllocations.stream() //
 																.filter(c -> c.getSlotAllocations().get(0).getPort().equals(expectedLoadPort)) //
+																.filter(c -> !c.getSlotAllocations().get(0).getSlot().getWindowStart().isBefore(startDate)) //
 																.sorted((c1, c2) -> c1.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate()
 																		.compareTo(c2.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate())) //
 																.collect(Collectors.toList());
@@ -712,6 +738,36 @@ public class InventoryReport extends ViewPart {
 																		pinnedMullDailyList.add(currRow);
 																	}
 																});
+
+														final Map<BaseLegalEntity, List<LocalDate>> pinnedLiftingDates = new HashMap<>();
+														for (final BaseLegalEntity entity : entitiesOrdered) {
+															pinnedLiftingDates.put(entity, new LinkedList<>());
+														}
+														for (final CargoAllocation alloc : sortedPinnedCargoAllocations) {
+															final SlotAllocation slotAlloc = alloc.getSlotAllocations().get(0);
+															pinnedLiftingDates.get(slotAlloc.getSlot().getEntity()).add(slotAlloc.getSlotVisit().getStart().toLocalDate());
+														}
+														final Map<BaseLegalEntity, Iterator<LocalDate>> iterPinnedLiftingDates = new HashMap<>();
+														final Map<BaseLegalEntity, LocalDate> pinnedNextLiftingDates = new HashMap<>();
+														pinnedLiftingDates.forEach((e, l) -> iterPinnedLiftingDates.put(e, l.iterator()));
+														iterPinnedLiftingDates.entrySet().stream().filter(e -> e.getValue().hasNext())
+																.forEach(e -> pinnedNextLiftingDates.put(e.getKey(), e.getValue().next()));
+
+														pinnedMullDailyList.forEach(m -> {
+															final LocalDate nextLiftingDate = pinnedNextLiftingDates.get(m.entity);
+															if (nextLiftingDate != null) {
+																if (m.date.equals(nextLiftingDate)) {
+																	m.lifting = true;
+																	final Iterator<LocalDate> iter = iterPinnedLiftingDates.get(m.entity);
+																	if (iter.hasNext()) {
+																		pinnedNextLiftingDates.put(m.entity, iter.next());
+																	} else {
+																		pinnedNextLiftingDates.remove(m.entity);
+																	}
+																}
+															}
+														});
+
 													}
 													final List<MullInformation> otherMullList = new LinkedList<>();
 													final List<MullInformation> otherMullCumulativeList = new LinkedList<>();
@@ -758,6 +814,7 @@ public class InventoryReport extends ViewPart {
 
 																final List<CargoAllocation> sortedOtherCargoAllocations = otherCargoAllocations.stream() //
 																		.filter(c -> c.getSlotAllocations().get(0).getPort().equals(otherInventoryLoadPort)) //
+																		.filter(c -> !c.getSlotAllocations().get(0).getSlot().getWindowStart().isBefore(startDate)) //
 																		.sorted((c1, c2) -> c1.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate()
 																				.compareTo(c2.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate())) //
 																		.collect(Collectors.toList());
@@ -789,6 +846,36 @@ public class InventoryReport extends ViewPart {
 																	}
 																	grey = !grey;
 																}
+
+																final Map<BaseLegalEntity, List<LocalDate>> otherLiftingDates = new HashMap<>();
+																for (final BaseLegalEntity entity : entitiesOrdered) {
+																	otherLiftingDates.put(entity, new LinkedList<>());
+																}
+																for (final CargoAllocation alloc : sortedOtherCargoAllocations) {
+																	final SlotAllocation slotAlloc = alloc.getSlotAllocations().get(0);
+																	otherLiftingDates.get(reverseEntityEntityMap.get(slotAlloc.getSlot().getEntity()))
+																			.add(slotAlloc.getSlotVisit().getStart().toLocalDate());
+																}
+																final Map<BaseLegalEntity, Iterator<LocalDate>> iterOtherLiftingDates = new HashMap<>();
+																final Map<BaseLegalEntity, LocalDate> otherNextLiftingDates = new HashMap<>();
+																otherLiftingDates.forEach((e, l) -> iterOtherLiftingDates.put(e, l.iterator()));
+																iterOtherLiftingDates.entrySet().stream().filter(e -> e.getValue().hasNext())
+																		.forEach(e -> otherNextLiftingDates.put(e.getKey(), e.getValue().next()));
+
+																otherMullDailyList.forEach(m -> {
+																	final LocalDate nextLiftingDate = otherNextLiftingDates.get(m.entity);
+																	if (nextLiftingDate != null) {
+																		if (m.date.equals(nextLiftingDate)) {
+																			m.lifting = true;
+																			final Iterator<LocalDate> iter = iterOtherLiftingDates.get(m.entity);
+																			if (iter.hasNext()) {
+																				otherNextLiftingDates.put(m.entity, iter.next());
+																			} else {
+																				otherNextLiftingDates.remove(m.entity);
+																			}
+																		}
+																	}
+																});
 															}
 														}
 													}
@@ -889,6 +976,7 @@ public class InventoryReport extends ViewPart {
 														}
 														final List<CargoAllocation> sortedOtherCargoAllocations = otherCargoAllocations.stream() //
 																.filter(c -> c.getSlotAllocations().get(0).getPort().equals(expectedLoadPort)) //
+																.filter(c -> !c.getSlotAllocations().get(0).getSlot().getWindowStart().isBefore(startDate)) //
 																.sorted((c1, c2) -> c1.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate()
 																		.compareTo(c2.getSlotAllocations().get(0).getSlotVisit().getStart().toLocalDate())) //
 																.collect(Collectors.toList());
@@ -915,6 +1003,34 @@ public class InventoryReport extends ViewPart {
 															}
 															grey = !grey;
 														}
+														final Map<BaseLegalEntity, List<LocalDate>> otherLiftingDates = new HashMap<>();
+														for (final BaseLegalEntity entity : entitiesOrdered) {
+															otherLiftingDates.put(entity, new LinkedList<>());
+														}
+														for (final CargoAllocation alloc : sortedOtherCargoAllocations) {
+															final SlotAllocation slotAlloc = alloc.getSlotAllocations().get(0);
+															otherLiftingDates.get(slotAlloc.getSlot().getEntity()).add(slotAlloc.getSlotVisit().getStart().toLocalDate());
+														}
+														final Map<BaseLegalEntity, Iterator<LocalDate>> iterOtherLiftingDates = new HashMap<>();
+														final Map<BaseLegalEntity, LocalDate> otherNextLiftingDates = new HashMap<>();
+														otherLiftingDates.forEach((e, l) -> iterOtherLiftingDates.put(e, l.iterator()));
+														iterOtherLiftingDates.entrySet().stream().filter(e -> e.getValue().hasNext())
+																.forEach(e -> otherNextLiftingDates.put(e.getKey(), e.getValue().next()));
+
+														otherMullDailyList.forEach(m -> {
+															final LocalDate nextLiftingDate = otherNextLiftingDates.get(m.entity);
+															if (nextLiftingDate != null) {
+																if (m.date.equals(nextLiftingDate)) {
+																	m.lifting = true;
+																	final Iterator<LocalDate> iter = iterOtherLiftingDates.get(m.entity);
+																	if (iter.hasNext()) {
+																		otherNextLiftingDates.put(m.entity, iter.next());
+																	} else {
+																		otherNextLiftingDates.remove(m.entity);
+																	}
+																}
+															}
+														});
 														otherMullList.forEach(m -> pairedMullList.add(Pair.of(m, null)));
 														otherMullCumulativeList.forEach(m -> pairedCumulativeMullList.add(Pair.of(m, null)));
 														otherMullDailyList.forEach(m -> pairedDailyMullList.add(Pair.of(m, null)));
@@ -934,7 +1050,28 @@ public class InventoryReport extends ViewPart {
 												final List<String> monthsList = monthsToDisplay.stream().map(ym -> ym.format(categoryFormatter)).collect(Collectors.toList());
 												final String[] temp = new String[0];
 												final String[] formattedMonthLabels = monthsList.toArray(temp);
-												setMULLChartData(mullMonthlyOverliftChart, formattedMonthLabels, entitiesOrdered, pairedMullList, MullInformation::getOverliftCF);
+												setMULLChartData(mullMonthlyOverliftChart, formattedMonthLabels, entitiesOrdered, pairedMullList, m -> m.getOverliftCF());
+												// int axisId = mullMonthlyOverliftChart.getAxisSet().createXAxis();
+												// final IAxis xAxis2 = mullMonthlyOverliftChart.getAxisSet().getXAxis(axisId);
+												//// xAxis2.setPosition(Position.Primary);
+												//// xAxis2.
+												//// mullProfile.getFullCargoLotValue();
+												// final double[] dates = new double[2];
+												// dates[0] = -0.5;
+												// dates[1] = 1000.5;
+												// final double[] values = new double[2];
+												// values[0] = mullProfile.getFullCargoLotValue();
+												// values[1] = mullProfile.getFullCargoLotValue();
+												// final ILineSeries series = (ILineSeries) mullMonthlyOverliftChart.getSeriesSet().createSeries(SeriesType.LINE, "FCL Max");
+												// final DoubleArraySeriesModel seriesModel = new DoubleArraySeriesModel(dates, values);
+												// series.setDataModel(seriesModel);
+												// series.setSymbolType(PlotSymbolType.NONE);
+												// series.setXAxisId(axisId);
+
+												// mullMonthlyOverliftChart.
+
+												// final ILineSeries series = (ILineSeries) seriesSet.createSeries(SeriesType.LINE, "FCL Min");
+
 												setMULLChartData(mullMonthlyCargoCountChart, formattedMonthLabels, entitiesOrdered, pairedMullList, MullInformation::getCargoCount);
 											}
 										}
@@ -1185,6 +1322,9 @@ public class InventoryReport extends ViewPart {
 								final IBarSeries series = createDaySizedBarSeries(seriesSet, "Cargoes", values);
 								series.setBarWidth(1);
 								series.setBarColor(Display.getDefault().getSystemColor(SWT.COLOR_GREEN));
+								series.setVisible(colourSchemeAction.isShowingCargoes());
+								series.setVisibleInLegend(colourSchemeAction.isShowingCargoes());
+								cargoSeries = series;
 							}
 						}
 						{
@@ -1283,7 +1423,7 @@ public class InventoryReport extends ViewPart {
 		inventoryDailyChartViewer.redraw();
 
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
-			finaliseMULLChart(mullMonthlyOverliftChart, "Month", "Overlift");
+			finaliseMULLChart(mullMonthlyOverliftChart, "Month", "Underlift/Overlift");
 			finaliseMULLChart(mullMonthlyCargoCountChart, "Month", "# Cargoes Lifted");
 		}
 
@@ -1300,9 +1440,7 @@ public class InventoryReport extends ViewPart {
 			total += lvl.changeInM3;
 			lvl.runningTotal = total;
 			/*
-			 * In the case, when the low/high forecast value is zero , we assume that's a
-			 * wrong data! Hence we use the feedIn (actual volume) if it's also not zero.
-			 * Maybe we need to fix that!
+			 * In the case, when the low/high forecast value is zero , we assume that's a wrong data! Hence we use the feedIn (actual volume) if it's also not zero. Maybe we need to fix that!
 			 */
 			final int vl = lvl.volumeLow == 0 ? lvl.feedIn == 0 ? 0 : lvl.feedIn : lvl.volumeLow;
 
@@ -1512,7 +1650,7 @@ public class InventoryReport extends ViewPart {
 				if (element.getFirst().ym.getMonthValue() % 2 == 1) {
 					cell.setBackground(colourLightGrey);
 				}
-				if (!title.equals("Month") && !title.equals("Entity")) {
+				if (!title.equals("Month") && !title.equals("Entity") && !title.equals("Lifting")) {
 					if (element.getSecond() == null) {
 						if ((element.getFirst().deltaViolatesFCL && title.equals("Delta")) || (element.getFirst().cumulativeDeltaViolatesFCL && title.equals("Cumulative Delta"))) {
 							cell.setForeground(colourRed);
@@ -1656,7 +1794,7 @@ public class InventoryReport extends ViewPart {
 
 	private Map<YearMonth, Integer> calculateMonthlyProduction(final Inventory inventory, final YearMonth adpStart) {
 		final Map<YearMonth, Integer> monthlyProduction = new HashMap<>();
-		inventory.getFeeds().stream().filter(event -> event.getStartDate() != null && event.getEndDate() != null).forEach(row -> {
+		inventory.getFeeds().stream().filter(event -> event.getStartDate() != null && event.getEndDate() != null && !YearMonth.from(event.getStartDate()).isBefore(adpStart)).forEach(row -> {
 			final YearMonth currYM = YearMonth.from(row.getStartDate());
 			final Integer currVal = monthlyProduction.get(currYM);
 			if (currVal == null) {
@@ -1680,7 +1818,7 @@ public class InventoryReport extends ViewPart {
 			accTemp += monthlyProduction.remove(ym);
 		}
 		final Integer acc = accTemp;
-		monthlyProduction.compute(adpStart, (k, v) -> v + acc);
+		monthlyProduction.compute(adpStart, (k, v) -> v == null ? acc : v + acc);
 
 		return monthlyProduction;
 	}

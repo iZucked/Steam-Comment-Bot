@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan.VoyagePlanMetrics;
 
 public class VoyagePlanTest {
 
@@ -80,6 +81,9 @@ public class VoyagePlanTest {
 	VoyagePlan make(final IDetailsSequenceElement[] sequence, final long baseFuelCost, final long cooldownCost, final long lngFuelCost, final long lngFuelVolume,
 			final long remainingHeel, final long startingHeel, final long totalRouteCost, final int cvtQty, boolean ignoreEnd) {
 
+		long[] metrics = new long[VoyagePlanMetrics.values().length];
+		metrics[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()] = cvtQty;
+		
 		final VoyagePlan p = new VoyagePlan();
 
 		p.setSequence(sequence);
@@ -90,7 +94,7 @@ public class VoyagePlanTest {
 		p.setRemainingHeelInM3(remainingHeel);
 		p.setStartingHeelInM3(startingHeel);
 		p.setTotalRouteCost(totalRouteCost);
-		p.setViolationsCount(cvtQty);
+		p.setVoyagePlanMetrics(metrics);
 		p.setIgnoreEnd(ignoreEnd);
 
 		return p;

@@ -5,10 +5,13 @@
 package com.mmxlabs.models.lng.adp.validation;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.IStatus;
@@ -23,6 +26,8 @@ import com.mmxlabs.models.lng.adp.MullEntityRow;
 import com.mmxlabs.models.lng.adp.MullSubprofile;
 import com.mmxlabs.models.lng.cargo.Inventory;
 import com.mmxlabs.models.lng.cargo.InventoryCapacityRow;
+import com.mmxlabs.models.lng.cargo.InventoryEventRow;
+import com.mmxlabs.models.lng.cargo.InventoryFrequency;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.types.util.ValidationConstants;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -32,6 +37,7 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class MullSubprofileConstraint extends AbstractModelMultiConstraint {
 
 	private static final double EPSILON_DOUBLE = 0.001;
+	private static final String REGEXP_INTEGER = "-?\\d+";
 
 	@Override
 	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
@@ -67,6 +73,36 @@ public class MullSubprofileConstraint extends AbstractModelMultiConstraint {
 								.withObjectAndFeature(mullSubprofile, ADPPackage.Literals.MULL_SUBPROFILE__INVENTORY) //
 								.withMessage(String.format("%s capacity information starts after ADP start", inventory.getName())) //
 								.make(ctx, statuses);
+					}
+				}
+
+				final ADPModel adpModel = (ADPModel) (target.eContainer().eContainer());
+				final YearMonth adpStart = adpModel.getYearStart();
+				if (adpStart != null) {
+					final YearMonth adpEnd = adpModel.getYearEnd();
+					if (adpEnd != null) {
+						final LocalDate adpStartDate = adpStart.atDay(1);
+						final LocalDate adpEndDate = adpEnd.atDay(1);
+						if (inventory.getFeeds().stream().noneMatch(row -> {
+							final LocalDate rowStart = row.getStartDate();
+							final LocalDate rowEnd = row.getEndDate();
+							return (!rowStart.isBefore(adpStartDate) && rowStart.isBefore(adpEndDate)) || (!rowEnd.isBefore(adpStartDate) && rowEnd.isBefore(adpEndDate));
+						})) {
+							factory.copyName() //
+									.withObjectAndFeature(mullSubprofile, ADPPackage.Literals.MULL_SUBPROFILE__INVENTORY) //
+									.withMessage(String.format("%s feeds do not overlap with ADP year", inventory.getName())) //
+									.make(ctx, statuses);
+						}
+					}
+
+					final LocalDate adpStartDate = adpStart.atDay(1);
+					final int levelBeforeAdpStart = getLevelPriorToAdpStart(inventory.getFeeds(), adpStartDate);
+					final int sumInitialAllocations = mullSubprofile.getEntityTable().stream().map(MullEntityRow::getInitialAllocation).filter(Objects::nonNull).filter(s -> s.matches(REGEXP_INTEGER)).mapToInt(Integer::parseInt).sum();
+					if (levelBeforeAdpStart != sumInitialAllocations) {
+						factory.copyName() //
+						.withObjectAndFeature(mullSubprofile, ADPPackage.Literals.MULL_SUBPROFILE__INVENTORY) //
+						.withMessage(String.format("%s level prior to ADP start do not equal sum of entity initial allocations", inventory.getName())) //
+						.make(ctx, statuses);
 					}
 				}
 			}
@@ -110,5 +146,21 @@ public class MullSubprofileConstraint extends AbstractModelMultiConstraint {
 								.make(ctx, statuses);
 					}
 				});
+	}
+
+	private int getLevelPriorToAdpStart(final List<InventoryEventRow> feeds, final LocalDate adpStartDate) {
+		final Iterator<InventoryEventRow> levelFeedsBeforeAdpStartIter = feeds.stream().filter(f -> f.getPeriod() == InventoryFrequency.LEVEL && f.getStartDate().isBefore(adpStartDate)).iterator();
+
+		if (!levelFeedsBeforeAdpStartIter.hasNext()) {
+			return 0;
+		}
+		InventoryEventRow lastPreAdpLevel = levelFeedsBeforeAdpStartIter.next();
+		while (levelFeedsBeforeAdpStartIter.hasNext()) {
+			final InventoryEventRow feed = levelFeedsBeforeAdpStartIter.next();
+			if (lastPreAdpLevel.getStartDate().isBefore(feed.getStartDate())) {
+				lastPreAdpLevel = feed;
+			}
+		}
+		return lastPreAdpLevel.getReliableVolume();
 	}
 }

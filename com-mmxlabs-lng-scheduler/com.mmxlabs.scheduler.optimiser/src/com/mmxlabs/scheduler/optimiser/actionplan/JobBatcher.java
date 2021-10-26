@@ -11,20 +11,20 @@ import java.util.List;
 import java.util.concurrent.Future;
 
 import com.google.inject.Injector;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.JobExecutor;
 
 public class JobBatcher {
 	List<JobState> states = new LinkedList<>();
 	int index = 0; // index of next int
 	private final int batchSize;
-	private final CleanableExecutorService executorService;
+	private final JobExecutor jobExecutor;
 	private final int depthStart;
 	private final int depthEnd;
 
-	public JobBatcher(final CleanableExecutorService executorService, final List<JobState> states, final int batchSize, final int depthStart, final int depthEnd) {
+	public JobBatcher(final JobExecutor jobExecutor, final List<JobState> states, final int batchSize, final int depthStart, final int depthEnd) {
 		this.states = states;
 		this.batchSize = batchSize;
-		this.executorService = executorService;
+		this.jobExecutor = jobExecutor;
 		this.depthStart = depthStart;
 		this.depthEnd = depthEnd;
 	}
@@ -34,7 +34,7 @@ public class JobBatcher {
 			final List<Future<Collection<JobState>>> futures = new LinkedList<>();
 			final int incrementedBatchSize = index + this.batchSize;
 			for (int i = index; i < Math.min(incrementedBatchSize, states.size()); i++) {
-				futures.add(executorService.submit(new ChangeSetFinderJob(injector, states.get(i), similarityState, jobStore, incrementingRandomSeed.getSeed(), depthStart, depthEnd)));
+				futures.add(jobExecutor.submit(new ChangeSetFinderJob(injector, states.get(i), similarityState, jobStore, incrementingRandomSeed.getSeed(), depthStart, depthEnd)));
 				index++;
 			}
 			return futures;

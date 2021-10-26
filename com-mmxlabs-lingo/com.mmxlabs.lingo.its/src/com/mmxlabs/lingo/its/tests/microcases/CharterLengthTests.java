@@ -66,7 +66,8 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Create a scenario where we expect the charter length to be equivalent to the idle
+	 * Create a scenario where we expect the charter length to be equivalent to the
+	 * idle
 	 * 
 	 * @throws Exception
 	 */
@@ -117,8 +118,9 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Construct a test case where the Charter Length (cooldown rule change really) we would prefer to heel out and convert idle to charter length where as with it disabled we are forced to NBO until
-	 * the end.
+	 * Construct a test case where the Charter Length (cooldown rule change really)
+	 * we would prefer to heel out and convert idle to charter length where as with
+	 * it disabled we are forced to NBO until the end.
 	 * 
 	 * @throws Exception
 	 */
@@ -172,8 +174,9 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 	}
 
 	/**
-	 * Construct a test case where cargoes spanning the period backend are late. Removing cargoes to fix lateness will introduce charter length, but this conflicts with end heel changes. Regression
-	 * test for P!
+	 * Construct a test case where cargoes spanning the period backend are late.
+	 * Removing cargoes to fix lateness will introduce charter length, but this
+	 * conflicts with end heel changes. Regression test for P!
 	 *
 	 * @throws Exception
 	 */
@@ -433,11 +436,7 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 				.withUserSettings(userSettings) //
 				.withThreadCount(1) //
 				.buildDefaultRunner();
-		try {
-			runnerBuilder.evaluateInitialState();
-		} finally {
-			runnerBuilder.dispose();
-		}
+		runnerBuilder.evaluateInitialState();
 	}
 
 	private Schedule optimise(final boolean withCharterLength, LocalDate periodStart, YearMonth periodEnd) {
@@ -466,16 +465,14 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 					ScenarioUtils.setLSOStageIterations(plan, 400_000);
 					ScenarioUtils.setHillClimbStageIterations(plan, 30_000);
 				}).buildDefaultRunner();
-		try {
-			runnerBuilder.evaluateInitialState();
-			return runnerBuilder.runAndReturnSchedule();
-		} finally {
-			runnerBuilder.dispose();
-		}
+
+		runnerBuilder.evaluateInitialState();
+		return runnerBuilder.runAndReturnSchedule();
 	}
 
 	/**
-	 * Based on an extract from a P scenario where the charter length violated the heel constraints - which should never happen.
+	 * Based on an extract from a P scenario where the charter length violated the
+	 * heel constraints - which should never happen.
 	 * 
 	 * @throws Exception
 	 */
@@ -528,7 +525,8 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 		Assertions.assertNotNull(withSchedule);
 		final CharterLengthEvent charterLengthEvent = findFirstEventOnSameSequence(slot, withSchedule, CharterLengthEvent.class);
 
-		// Lets make sure everything matches up - the charter length should have replaced the idle
+		// Lets make sure everything matches up - the charter length should have
+		// replaced the idle
 		Assertions.assertEquals(idle.getHeelAtEnd(), charterLengthEvent.getHeelAtEnd());
 		Assertions.assertEquals(idle.getHeelAtStart(), charterLengthEvent.getHeelAtStart());
 

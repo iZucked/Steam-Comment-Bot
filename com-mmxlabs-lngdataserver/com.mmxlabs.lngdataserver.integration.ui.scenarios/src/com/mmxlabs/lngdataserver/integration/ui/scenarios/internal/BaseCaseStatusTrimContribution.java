@@ -45,6 +45,7 @@ public class BaseCaseStatusTrimContribution {
 	}
 	
 	BCSVersionRecord myRecord = new BCSVersionRecord();
+	private Label mainLabel = null;
 
 	@PostConstruct
 	protected Control createControl(Composite parent) {
@@ -81,6 +82,7 @@ public class BaseCaseStatusTrimContribution {
 		};
 		control.setLayout(new FillLayout());
 		final Label myLabel = new Label(control, SWT.CENTER);
+		mainLabel = myLabel;
 		myLabel.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -171,6 +173,18 @@ public class BaseCaseStatusTrimContribution {
 		if (service != null && pListener != null) {
 			service.removeChangedListener(pListener);
 		}
+		if (!baseFlagEmpty.isDisposed()) {
+			baseFlagEmpty.dispose();
+		}
+		if (!baseFlagGreen.isDisposed()) {
+			baseFlagGreen.dispose();
+		}
+		if (mainLabel != null && !mainLabel.isDisposed()) {
+			if (mainLabel.getImage()!= null && !mainLabel.getImage().isDisposed()) {
+				mainLabel.getImage().dispose();
+			}
+			mainLabel.dispose();
+		}
 	}
 	
 	private void saveRecord(final BCSVersionRecord myRecord) {
@@ -224,11 +238,13 @@ public class BaseCaseStatusTrimContribution {
 		return "You have the latest base case \nor you have dismissed the notification";
 	}
 	
+	private final Image baseFlagGreen = new Image(Display.getDefault(), BaseCaseStatusTrimContribution.class.getResourceAsStream("/icons/base-flag-green.png"));
+	private final Image baseFlagEmpty = new Image(Display.getDefault(), BaseCaseStatusTrimContribution.class.getResourceAsStream("/icons/base-flag.png"));
+	
 	private Image dataHubStatusImage(final boolean changed) {
-		Display display = Display.getDefault();
 		if (changed && !myRecord.isDismissed) {
-			return new Image(display, BaseCaseStatusTrimContribution.class.getResourceAsStream("/icons/base-flag-green.png"));
+			return baseFlagGreen;
 		}
-		return new Image(display, BaseCaseStatusTrimContribution.class.getResourceAsStream("/icons/base-flag.png"));
+		return baseFlagEmpty;
 	}
 }

@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,8 +75,13 @@ public class LoadDischargePairValueCalculator {
 	@Inject
 	public void injectConstraintChecker(@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) final ISequences initialRawSequences, final List<IConstraintChecker> injectedConstraintCheckers) {
 		this.constraintCheckers = new LinkedList<>();
-		final List<String> messages = new ArrayList<>();
-		messages.add(String.format("%s: injectConstraintChecker", this.getClass().getName()));
+		final List<@Nullable String> messages;
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
+			messages = new ArrayList<>();
+			messages.add(String.format("%s: injectConstraintChecker", this.getClass().getName()));
+		} else {
+			messages = null;
+		}
 		for (final IConstraintChecker checker : injectedConstraintCheckers) {
 			if (checker instanceof IPairwiseConstraintChecker) {
 				final IPairwiseConstraintChecker constraintChecker = (IPairwiseConstraintChecker) checker;
@@ -110,8 +116,13 @@ public class LoadDischargePairValueCalculator {
 		if (!(load instanceof ILoadSlot) && !(discharge instanceof IDischargeSlot)) {
 			return false;
 		}
-		final List<String> messages = new ArrayList<>();
-		messages.add(String.format("%s: isValidPair", this.getClass().getName()));
+		final List<@Nullable String> messages;
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
+			messages = new ArrayList<>();
+			messages.add(String.format("%s: isValidPair", this.getClass().getName()));
+		} else {
+			messages = null;
+		}
 		for (final IPairwiseConstraintChecker checker : constraintCheckers) {
 			if (!checker.checkPairwiseConstraint(portSlotProvider.getElement(load), portSlotProvider.getElement(discharge), vesselProvider.getResource(vessel), messages)) {
 				if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
@@ -139,8 +150,13 @@ public class LoadDischargePairValueCalculator {
 		if (!(load instanceof ILoadSlot) && !(discharge instanceof IDischargeSlot)) {
 			return false;
 		}
-		final List<String> messages = new ArrayList<>();
-		messages.add(String.format("%s: isValidPair", this.getClass().getName()));
+		final List<@Nullable String> messages;
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
+			messages = new ArrayList<>();
+			messages.add(String.format("%s: isValidPair", this.getClass().getName()));
+		} else {
+			messages = null;
+		}
 		for (final IVesselAvailability v : vessels) {
 			if (v == vessel) continue;
 			boolean isValid = true;

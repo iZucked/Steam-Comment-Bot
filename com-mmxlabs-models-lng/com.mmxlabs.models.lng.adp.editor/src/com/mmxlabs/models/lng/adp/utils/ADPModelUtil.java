@@ -24,6 +24,8 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
@@ -42,9 +44,11 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.models.lng.adp.ADPFactory;
 import com.mmxlabs.models.lng.adp.ADPModel;
+import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.FleetProfile;
 import com.mmxlabs.models.lng.adp.LNGVolumeUnit;
 import com.mmxlabs.models.lng.adp.PeriodDistribution;
+import com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint;
 import com.mmxlabs.models.lng.adp.ProfileVesselRestriction;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
@@ -131,6 +135,7 @@ public class ADPModelUtil {
 		final BundleContext bundleContext = bundle.getBundleContext();
 		Collection<ServiceReference<IProfileGenerator>> serviceReferences;
 		try {
+			// TODO: Use ServiceHelper class
 			serviceReferences = bundleContext.getServiceReferences(IProfileGenerator.class, null);
 
 			final List<IProfileGenerator> generators = new LinkedList<>();
@@ -140,26 +145,22 @@ public class ADPModelUtil {
 			}
 			try {
 				if (profile.isEnabled()) {
-					List<Slot> slotsToRemove = new LinkedList<>();
-					List<Cargo> cargoesToRemove = new LinkedList<>();
+					List<EObject> objectsToRemove = new LinkedList<>();
 					for (LoadSlot slot : cargoModel.getLoadSlots()) {
 						if (slot.getContract() == profile.getContract()) {
-							slotsToRemove.add(slot);
+							objectsToRemove.add(slot);
 							if (slot.getCargo() != null) {
-								cargoesToRemove.add(slot.getCargo());
-								for (Slot s : slot.getCargo().getSlots()) {
+								objectsToRemove.add(slot.getCargo());
+								for (Slot<?> s : slot.getCargo().getSlots()) {
 									if (s instanceof SpotSlot) {
-										slotsToRemove.add(s);
+										objectsToRemove.add(s);
 									}
 								}
 							}
 						}
 					}
-					if (!slotsToRemove.isEmpty()) {
-						cmd.append(DeleteCommand.create(editingDomain, slotsToRemove));
-					}
-					if (!cargoesToRemove.isEmpty()) {
-						cmd.append(DeleteCommand.create(editingDomain, cargoesToRemove));
+					if (!objectsToRemove.isEmpty()) {
+						cmd.append(DeleteCommand.create(editingDomain, objectsToRemove));
 					}
 
 					for (final SubContractProfile<LoadSlot, PurchaseContract> subProfile : profile.getSubProfiles()) {
@@ -204,6 +205,55 @@ public class ADPModelUtil {
 		return null;
 	}
 
+	public static Command constructShiftAdpYearCommand(final EditingDomain editingDomain, @NonNull final ADPModel adpModel, final int startYear) {
+		if (adpModel.getYearStart() == null || adpModel.getYearEnd() == null) {
+			return null;
+		}
+		final int deltaShift = startYear - adpModel.getYearStart().getYear();
+		if (deltaShift == 0) {
+			return null;
+		}
+
+		final CompoundCommand cmd = new CompoundCommand("Shift ADP year");
+
+		final YearMonth newYearStart = adpModel.getYearStart().plusYears(deltaShift);
+		final YearMonth newYearEnd = adpModel.getYearEnd().plusYears(deltaShift);
+		cmd.append(SetCommand.create(editingDomain, adpModel, ADPPackage.Literals.ADP_MODEL__YEAR_START, newYearStart));
+		cmd.append(SetCommand.create(editingDomain, adpModel, ADPPackage.Literals.ADP_MODEL__YEAR_END, newYearEnd));
+
+		for (final PurchaseContractProfile purchaseContractProfile : adpModel.getPurchaseContractProfiles()) {
+			purchaseContractProfile.getConstraints().stream() //
+					.filter(PeriodDistributionProfileConstraint.class::isInstance) //
+					.map(PeriodDistributionProfileConstraint.class::cast) //
+					.map(PeriodDistributionProfileConstraint::getDistributions) //
+					.forEach(distributions -> distributions.stream() //
+							.filter(distribution -> !distribution.getRange().isEmpty()) //
+							.forEach(distribution -> {
+								final List<YearMonth> yearMonthsToRemove = new ArrayList<>(distribution.getRange());
+								final List<YearMonth> yearMonthsToAdd = yearMonthsToRemove.stream().map(ym -> ym.plusYears(deltaShift)).collect(Collectors.toList());
+								cmd.append(RemoveCommand.create(editingDomain, distribution, ADPPackage.Literals.PERIOD_DISTRIBUTION__RANGE, yearMonthsToRemove));
+								cmd.append(AddCommand.create(editingDomain, distribution, ADPPackage.Literals.PERIOD_DISTRIBUTION__RANGE, yearMonthsToAdd));
+							})
+					);
+		}
+		for (final SalesContractProfile salesContractProfile : adpModel.getSalesContractProfiles()) {
+			salesContractProfile.getConstraints().stream() //
+					.filter(PeriodDistributionProfileConstraint.class::isInstance) //
+					.map(PeriodDistributionProfileConstraint.class::cast) //
+					.map(PeriodDistributionProfileConstraint::getDistributions) //
+					.forEach(distributions -> distributions.stream() //
+							.filter(distribution -> !distribution.getRange().isEmpty()) //
+							.forEach(distribution -> {
+								final List<YearMonth> yearMonthsToRemove = new ArrayList<>(distribution.getRange());
+								final List<YearMonth> yearMonthsToAdd = yearMonthsToRemove.stream().map(ym -> ym.plusYears(deltaShift)).collect(Collectors.toList());
+								cmd.append(RemoveCommand.create(editingDomain, distribution, ADPPackage.Literals.PERIOD_DISTRIBUTION__RANGE, yearMonthsToRemove));
+								cmd.append(AddCommand.create(editingDomain, distribution, ADPPackage.Literals.PERIOD_DISTRIBUTION__RANGE, yearMonthsToAdd));
+							})
+					);
+		}
+		return cmd;
+	}
+
 	public static Command populateModel(final EditingDomain editingDomain, final LNGScenarioModel scenarioModel, final ADPModel adpModel, final SalesContractProfile profile) {
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
 		final CompoundCommand cmd = new CompoundCommand("Generate ADP slots");
@@ -221,26 +271,23 @@ public class ADPModelUtil {
 			}
 			try {
 				if (profile.isEnabled()) {
-					List<Slot> slotsToRemove = new LinkedList<>();
-					List<Cargo> cargoesToRemove = new LinkedList<>();
+					List<EObject> objectsToRemove = new LinkedList<>();
+
 					for (DischargeSlot slot : cargoModel.getDischargeSlots()) {
 						if (slot.getContract() == profile.getContract()) {
-							slotsToRemove.add(slot);
+							objectsToRemove.add(slot);
 							if (slot.getCargo() != null) {
-								cargoesToRemove.add(slot.getCargo());
+								objectsToRemove.add(slot.getCargo());
 								for (Slot s : slot.getCargo().getSlots()) {
 									if (s instanceof SpotSlot) {
-										slotsToRemove.add(s);
+										objectsToRemove.add(s);
 									}
 								}
 							}
 						}
 					}
-					if (!slotsToRemove.isEmpty()) {
-						cmd.append(DeleteCommand.create(editingDomain, slotsToRemove));
-					}
-					if (!cargoesToRemove.isEmpty()) {
-						cmd.append(DeleteCommand.create(editingDomain, cargoesToRemove));
+					if (!objectsToRemove.isEmpty()) {
+						cmd.append(DeleteCommand.create(editingDomain, objectsToRemove));
 					}
 					for (final SubContractProfile<DischargeSlot, SalesContract> subProfile : profile.getSubProfiles()) {
 						for (final IProfileGenerator g : generators) {

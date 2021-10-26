@@ -89,7 +89,7 @@ public final class ResourceAllocationConstraintChecker implements IPairwiseConst
 	@Override
 	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final List<String> messages) {
 		final boolean result = checkElement(first, resource, messages) && checkElement(second, resource, messages);
-		if (!result)
+		if (messages != null && !result)
 			messages.add(explain(first, second, resource));
 		return result;
 	}
@@ -99,7 +99,7 @@ public final class ResourceAllocationConstraintChecker implements IPairwiseConst
 
 		final Collection<IResource> resources = resourceAllocationConstraintDataComponentProvider.getAllowedResources(element);
 		final boolean result = ((resources == null) || resources.contains(resource));
-		if (!result)
+		if (!result && messages != null)
 			messages.add(String.format("%s: Element (%s) is not permitted to be allocated to resource (%s)", this.name, element, resource));
 		return result;
 	}

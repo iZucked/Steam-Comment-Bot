@@ -186,8 +186,8 @@ public class VesselTypeGroupImpl extends AVesselSetImpl<Vessel> implements Vesse
 				for (final EObject eObj : execute) {
 					if (eObj instanceof VesselAvailability) {
 						final VesselAvailability va = (VesselAvailability) eObj;
-						if ((va.isFleet() && (getVesselType() == VesselType.OWNED)) //
-								|| (!va.isFleet() && (getVesselType() == VesselType.TIME_CHARTERED))) {
+						if ((!va.isOptional() && (getVesselType() == VesselType.OWNED)) //
+								|| (va.isOptional() && (getVesselType() == VesselType.TIME_CHARTERED))) {
 							result.addAll(va.getVessel().collect(marked));
 						}
 					}

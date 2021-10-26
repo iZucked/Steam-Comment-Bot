@@ -8,25 +8,30 @@ import java.io.IOException;
 import java.util.List;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.FixedHostPortGenericContainer;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.wait.Wait;
+import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import com.mmxlabs.hub.DataHubActivator;
-import com.mmxlabs.hub.preferences.DataHubPreferenceConstants;
+import com.mmxlabs.hub.UpstreamUrlProvider;
+import com.mmxlabs.hub.auth.BasicAuthenticationManager;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.api.BaseCaseServiceClient;
 
 @Testcontainers
 @Tag(TestCategories.HUB_TEST)
 public class UserPermissionsTest {
+
+	static final Logger logger = LoggerFactory.getLogger(UserPermissionsTest.class);
 
 	public static final int DATAHUB_PORT = 8090;
 	public final String REPORT_NAME = "test";
@@ -41,7 +46,7 @@ public class UserPermissionsTest {
 
 	// @formatter:off
 	@Container
-	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer("docker.mmxlabs.com/datahub-v:1.8.1-SNAPSHOT")
+	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer("docker.mmxlabs.com/datahub-v:1.9.1-SNAPSHOT")
 	.withFixedExposedPort(availablePort, DATAHUB_PORT)
 	.withExposedPorts(DATAHUB_PORT)
 	.withEnv("PORT", Integer.toString(DATAHUB_PORT))
@@ -64,26 +69,43 @@ public class UserPermissionsTest {
 	.waitingFor(Wait.forLogMessage(".*Started ServerConnector.*", 1));
 	// @formatter:on
 
-	private static HubTestHelper hubHelper;
+	public void asBaseCaseUser() {
+		BasicAuthenticationManager.getInstance().withCredentials("u_basecase", "u_basecase");
+		UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
+	}
+
+	public void asAlternativeBaseCaseUser() {
+		BasicAuthenticationManager.getInstance().withCredentials("simon", "simon");
+		UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
+	}
 
 	@BeforeAll
-	public static void initHelper() {
+	public static void beforeAll() {
 		datahubHost = datahubContainer.getHost();
 		upstreamUrl = String.format("http://%s:%s", datahubHost, availablePort);
+		logger.info(upstreamUrl);
 		bot = new SWTWorkbenchBot();
+		HubTestHelper.setDatahubUrl(upstreamUrl);
+		// force trigger refresh
+		UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
+	}
 
-		DataHubActivator.getDefault().getPreferenceStore().setValue(DataHubPreferenceConstants.P_DATAHUB_URL_KEY, upstreamUrl);
+	@AfterAll
+	public static void afterAll() {
+		bot.resetWorkbench();
+		bot = null;
 	}
 
 	@BeforeEach
 	public void resetLocking() throws IOException {
-		hubHelper.asBaseCaseUser();
+		asBaseCaseUser();
 		BaseCaseServiceClient.INSTANCE.forceUnlock();
+		bot.resetWorkbench();
 	}
 
 	@Test
 	public void testLocking() throws IOException {
-		hubHelper.asBaseCaseUser();
+		asBaseCaseUser();
 
 		Assertions.assertFalse(BaseCaseServiceClient.INSTANCE.isServiceLocked());
 		BaseCaseServiceClient.INSTANCE.lock();
@@ -101,7 +123,7 @@ public class UserPermissionsTest {
 
 	@Test
 	public void testLockedByOther() throws IOException {
-		hubHelper.asBaseCaseUser();
+		asBaseCaseUser();
 
 		Assertions.assertFalse(BaseCaseServiceClient.INSTANCE.isServiceLocked());
 		BaseCaseServiceClient.INSTANCE.lock();
@@ -111,7 +133,7 @@ public class UserPermissionsTest {
 		Assertions.assertTrue(BaseCaseServiceClient.INSTANCE.isServiceLockedByMe());
 
 		// Switch users, make sure we cannot unlock
-		hubHelper.asAlternativeBaseCaseUser();
+		asAlternativeBaseCaseUser();
 		BaseCaseServiceClient.INSTANCE.updateLockedState();
 		Assertions.assertTrue(BaseCaseServiceClient.INSTANCE.isServiceLocked());
 		Assertions.assertFalse(BaseCaseServiceClient.INSTANCE.isServiceLockedByMe());

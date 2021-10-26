@@ -384,6 +384,15 @@ public interface ScheduleFactory extends EFactory {
 	CharterAvailableFromEvent createCharterAvailableFromEvent();
 
 	/**
+	 * Returns a new object of class '<em>Grouped Charter Out Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Grouped Charter Out Event</em>'.
+	 * @generated
+	 */
+	GroupedCharterOutEvent createGroupedCharterOutEvent();
+
+	/**
 	 * Returns a new object of class '<em>Grouped Charter Length Event</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

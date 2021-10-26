@@ -8,8 +8,8 @@ import java.time.LocalDate;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.nebula.widgets.grid.DefaultCellRenderer;
 import org.eclipse.nebula.widgets.grid.GridItem;
-import org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
@@ -17,9 +17,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalReportVisualiser;
 import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalReportVisualiser.Alignment;
-import com.mmxlabs.lingo.reports.views.vertical.ReportNebulaGridManager;
 import com.mmxlabs.lingo.reports.views.vertical.labellers.IBorderProvider;
 import com.mmxlabs.lingo.reports.views.vertical.providers.EventProvider;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -28,7 +26,6 @@ import com.mmxlabs.models.lng.schedule.Event;
  * Class to draw vertical report cells with borders
  * 
  */
-@SuppressWarnings("restriction")
 public class EventBorderCellRenderer extends DefaultCellRenderer {
 	private final ReportNebulaGridManager manager;
 	private final AbstractVerticalReportVisualiser verticalReportVisualiser;

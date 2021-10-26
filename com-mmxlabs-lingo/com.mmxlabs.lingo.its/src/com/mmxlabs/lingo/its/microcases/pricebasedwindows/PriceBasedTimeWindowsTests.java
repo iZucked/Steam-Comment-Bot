@@ -610,7 +610,8 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 	}
 
 	/**
-	 * Test: The exact time window specified is chosen - [(2016, 7, 1), (2016, 8, 21)]
+	 * Test: The exact time window specified is chosen - [(2016, 7, 1), (2016, 8,
+	 * 21)]
 	 * 
 	 * @throws Exception
 	 */
@@ -686,7 +687,8 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 	/**
 	 * Test for issue;
 	 * 
-	 * Single cargo with price change at month boundary and an India timezone (n+30mins tz offset).
+	 * Single cargo with price change at month boundary and an India timezone
+	 * (n+30mins tz offset).
 	 * 
 	 * @throws Exception
 	 */
@@ -741,11 +743,7 @@ public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 				.withThreadCount(1) //
 				.buildDefaultRunner();
 
-		try {
-			runnerBuilder.evaluateInitialState();
-		} finally {
-			runnerBuilder.dispose();
-		}
+		runnerBuilder.evaluateInitialState();
 
 		CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(cargo1.getLoadName(), ScenarioModelUtil.findSchedule(scenarioDataProvider));
 		SimpleCargoAllocation simpleCargoAllocation = new SimpleCargoAllocation(cargoAllocation);

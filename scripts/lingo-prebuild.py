@@ -26,7 +26,7 @@ subprocess.call("git tag TEMP_TAG", shell=True)
 for subdir in subdirs:
 	print (subdir)
 	with cd(subdir):
-		subprocess.call("mvn -Dtycho.mode=maven -DnewVersion={} org.eclipse.tycho:tycho-versions-plugin:0.18.0:set-version".format(lingoVersion), shell=True)
+		subprocess.call("mvn -Dtycho.mode=maven -DnewVersion={} org.eclipse.tycho:tycho-versions-plugin::2.4.0:set-version".format(lingoVersion), shell=True)
 
 			
 #with open('known-projects.txt') as fin:
@@ -47,7 +47,7 @@ for subdir in subdirs:
 #		subprocess.call(['hg', 'tag', '-f', "$RELEASE_VERSION"])
 
 ## Also on master repo
-subprocess.call("mvn -Dtycho.mode=maven -DnewVersion={} org.eclipse.tycho:tycho-versions-plugin:0.18.0:set-version".format(lingoVersion), shell=True)
+subprocess.call("mvn -Dtycho.mode=maven -DnewVersion={} org.eclipse.tycho:tycho-versions-plugin::2.4.0:set-version".format(lingoVersion), shell=True)
 subprocess.call("git commit -a -m 'Update version references to {}'".format(lingoVersion), shell=True)
 subprocess.call("git tag -f {} -m 'Tagging {}'".format(lingoVersion, lingoVersion), shell=True)
 subprocess.call("git bundle create changes.git --tags={} TEMP_TAG..{}".format(lingoVersion, lingoVersion), shell=True)

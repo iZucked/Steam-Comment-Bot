@@ -14,13 +14,16 @@ import java.util.Set;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -595,6 +598,64 @@ public class CargoEditingHelper {
 		}
 		if (!deleteObjects.isEmpty()) {
 			currentWiringCommand.append(DeleteCommand.create(editingDomain, deleteObjects));
+		}
+	}
+
+	public void setExposuresForCargoAssignment(@NonNull final String description, final CargoModel cargoModel, final boolean add, @NonNull final Collection<@NonNull Cargo> cargoes) {
+
+		final CompoundCommand cc = new CompoundCommand(description);
+
+		for (final var cargo : cargoes) {
+			final boolean allowsExposures = cargoModel.getCargoesForExposures().contains(cargo);
+			final boolean allowsHedging = cargoModel.getCargoesForHedging().contains(cargo);
+			if (add) {
+				if (!allowsExposures) {
+					cc.append(AddCommand.create(editingDomain, cargoModel, CargoPackage.Literals.CARGO_MODEL__CARGOES_FOR_EXPOSURES, cargo));
+				}
+			} else {
+				if (allowsExposures) {
+					cc.append(RemoveCommand.create(editingDomain, cargoModel, CargoPackage.Literals.CARGO_MODEL__CARGOES_FOR_EXPOSURES, cargo));
+					if (allowsHedging) {
+						cc.append(RemoveCommand.create(editingDomain, cargoModel, CargoPackage.Literals.CARGO_MODEL__CARGOES_FOR_HEDGING, cargo));
+					}
+				}
+			}
+		}
+
+		if (!cc.isEmpty()) {
+			assert cc.canExecute();
+			editingDomain.getCommandStack().execute(cc);
+
+			verifyModel();
+		}
+	}
+	
+	public void setHedgingForCargoAssignment(@NonNull final String description, final CargoModel cargoModel, final boolean add, @NonNull final Collection<@NonNull Cargo> cargoes) {
+
+		final CompoundCommand cc = new CompoundCommand(description);
+
+		for (final var cargo : cargoes) {
+			final boolean allowsHedging = cargoModel.getCargoesForHedging().contains(cargo);
+			final boolean allowsExposures = cargoModel.getCargoesForExposures().contains(cargo);
+			if (add) {
+				if (!allowsHedging) {
+					cc.append(AddCommand.create(editingDomain, cargoModel, CargoPackage.Literals.CARGO_MODEL__CARGOES_FOR_HEDGING, cargo));
+					if (!allowsExposures) {
+						cc.append(AddCommand.create(editingDomain, cargoModel, CargoPackage.Literals.CARGO_MODEL__CARGOES_FOR_EXPOSURES, cargo));
+					}
+				}
+			} else {
+				if (allowsHedging) {
+					cc.append(RemoveCommand.create(editingDomain, cargoModel, CargoPackage.Literals.CARGO_MODEL__CARGOES_FOR_HEDGING, cargo));
+				}
+			}
+		}
+
+		if (!cc.isEmpty()) {
+			assert cc.canExecute();
+			editingDomain.getCommandStack().execute(cc);
+
+			verifyModel();
 		}
 	}
 }

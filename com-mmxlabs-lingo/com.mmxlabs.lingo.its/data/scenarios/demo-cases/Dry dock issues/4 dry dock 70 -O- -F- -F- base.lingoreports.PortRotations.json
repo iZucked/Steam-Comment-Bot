@@ -5,7 +5,6 @@
   "End Date" : "01/01/11 20:00 (GMT-04:00)",
   "From Port" : "Point Fortin",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "0",
@@ -16,7 +15,8 @@
   "Start Date" : "01/01/11 20:00 (GMT-04:00)",
   "Total Cost" : "0",
   "Type" : "Start Event",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Point Fortin",
   "Charter Cost" : "45,833",
@@ -24,11 +24,6 @@
   "End Date" : "02/01/11 07:00 (GMT-04:00)",
   "From Port" : "Point Fortin",
   "Fuel Cost" : "22,916",
-  "[Fuels]" : {
-    "MDO" : "22.9",
-    "MDO Unit Price" : "1,000.00",
-    "MDO Cost" : "22,916"
-  },
   "Volume on board End" : "0",
   "Volume on board Start" : "0",
   "ID" : "Bluesky",
@@ -36,7 +31,12 @@
   "Start Date" : "01/01/11 20:00 (GMT-04:00)",
   "Total Cost" : "68,749",
   "Type" : "Idle",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : {
+    "MDO" : "22.9",
+    "MDO Unit Price" : "1,000.00",
+    "MDO Cost" : "22,916"
+  }
 }, {
   "At Port" : "Point Fortin",
   "Charter Cost" : "100,000",
@@ -46,7 +46,6 @@
   "End Date" : "03/01/11 07:00 (GMT-04:00)",
   "From Port" : "Point Fortin",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "145,800",
@@ -60,7 +59,8 @@
   "Transfer Volume" : "145,800",
   "Transfer Energy" : "3,295,080",
   "Type" : "Load",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Point Fortin",
   "Charter Cost" : "812,500",
@@ -69,14 +69,6 @@
   "End Date" : "11/01/11 14:00 (BT)",
   "From Port" : "Point Fortin",
   "Fuel Cost" : "467,930",
-  "[Fuels]" : {
-    "NBO" : "1625",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "257,075",
-    "FBO" : "1333",
-    "FBO Unit Price" : "7.00",
-    "FBO Cost" : "210,855"
-  },
   "Volume on board End" : "142,842",
   "Volume on board Start" : "145,800",
   "ID" : "load-cargo-1",
@@ -88,7 +80,15 @@
   "To Port" : "Dragon",
   "Total Cost" : "1,280,429",
   "Type" : "Journey",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : {
+    "NBO" : "1625",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "257,075",
+    "FBO" : "1333",
+    "FBO Unit Price" : "7.00",
+    "FBO Cost" : "210,855"
+  }
 }, {
   "At Port" : "Dragon",
   "Charter Cost" : "0",
@@ -96,7 +96,6 @@
   "End Date" : "11/01/11 14:00 (BT)",
   "From Port" : "Dragon",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "142,842",
   "Volume on board Start" : "142,842",
   "ID" : "load-cargo-1",
@@ -104,7 +103,8 @@
   "Start Date" : "11/01/11 14:00 (BT)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Dragon",
   "Charter Cost" : "100,000",
@@ -114,7 +114,6 @@
   "End Date" : "12/01/11 14:00 (BT)",
   "From Port" : "Dragon",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "3,359",
@@ -128,7 +127,8 @@
   "Transfer Volume" : "139,482",
   "Transfer Energy" : "3,152,315",
   "Type" : "Discharge",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Dragon",
   "Charter Cost" : "995,833",
@@ -137,11 +137,6 @@
   "End Date" : "22/01/11 15:00 (EET)",
   "From Port" : "Dragon",
   "Fuel Cost" : "283,574",
-  "[Fuels]" : {
-    "NBO" : "1793",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "283,574"
-  },
   "Volume on board End" : "1,566",
   "Volume on board Start" : "3,359",
   "ID" : "discharge-cargo-1",
@@ -153,7 +148,12 @@
   "To Port" : "Idku",
   "Total Cost" : "1,279,406",
   "Type" : "Journey",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : {
+    "NBO" : "1793",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "283,574"
+  }
 }, {
   "At Port" : "Idku",
   "Charter Cost" : "1,066,666",
@@ -161,11 +161,6 @@
   "End Date" : "02/02/11 07:00 (EET)",
   "From Port" : "Idku",
   "Fuel Cost" : "168,746",
-  "[Fuels]" : {
-    "NBO" : "1067",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "168,747"
-  },
   "Volume on board End" : "500",
   "Volume on board Start" : "1,566",
   "ID" : "discharge-cargo-1",
@@ -173,7 +168,12 @@
   "Start Date" : "22/01/11 15:00 (EET)",
   "Total Cost" : "1,235,412",
   "Type" : "Idle",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : {
+    "NBO" : "1067",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "168,747"
+  }
 }, {
   "At Port" : "Idku",
   "Charter Cost" : "100,000",
@@ -183,7 +183,6 @@
   "End Date" : "03/02/11 07:00 (EET)",
   "From Port" : "Idku",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "145,800",
@@ -197,7 +196,8 @@
   "Transfer Volume" : "145,300",
   "Transfer Energy" : "3,283,780",
   "Type" : "Load",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Idku",
   "Canal Arrival" : "03/02/11 16:00",
@@ -209,14 +209,6 @@
   "End Date" : "24/02/11 07:00 (KT)",
   "From Port" : "Idku",
   "Fuel Cost" : "1,007,827",
-  "[Fuels]" : {
-    "NBO" : "4142",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "655,212",
-    "FBO" : "2229",
-    "FBO Unit Price" : "7.00",
-    "FBO Cost" : "352,616"
-  },
   "Volume on board End" : "139,429",
   "Volume on board Start" : "145,800",
   "ID" : "load-cargo-50",
@@ -229,7 +221,15 @@
   "To Port" : "Pyeongtaek",
   "Total Cost" : "3,128,660",
   "Type" : "Journey",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : {
+    "NBO" : "4142",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "655,212",
+    "FBO" : "2229",
+    "FBO Unit Price" : "7.00",
+    "FBO Cost" : "352,616"
+  }
 }, {
   "At Port" : "Pyeongtaek",
   "Charter Cost" : "0",
@@ -237,7 +237,6 @@
   "End Date" : "24/02/11 07:00 (KT)",
   "From Port" : "Pyeongtaek",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "139,429",
   "Volume on board Start" : "139,429",
   "ID" : "load-cargo-50",
@@ -245,7 +244,8 @@
   "Start Date" : "24/02/11 07:00 (KT)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Pyeongtaek",
   "Charter Cost" : "100,000",
@@ -255,7 +255,6 @@
   "End Date" : "25/02/11 07:00 (KT)",
   "From Port" : "Pyeongtaek",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "5,759",
@@ -269,7 +268,8 @@
   "Transfer Volume" : "133,669",
   "Transfer Energy" : "3,020,929",
   "Type" : "Discharge",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Pyeongtaek",
   "Canal Arrival" : "22/03/11 02:00",
@@ -281,14 +281,6 @@
   "End Date" : "23/03/11 14:00 (EET)",
   "From Port" : "Pyeongtaek",
   "Fuel Cost" : "832,126",
-  "[Fuels]" : {
-    "NBO" : "4805",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "760,151",
-    "FBO" : "455",
-    "FBO Unit Price" : "7.00",
-    "FBO Cost" : "71,975"
-  },
   "Volume on board End" : "500",
   "Volume on board Start" : "5,759",
   "ID" : "discharge-cargo-50",
@@ -301,7 +293,15 @@
   "To Port" : "Damietta",
   "Total Cost" : "3,520,458",
   "Type" : "Journey",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : {
+    "NBO" : "4805",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "760,151",
+    "FBO" : "455",
+    "FBO Unit Price" : "7.00",
+    "FBO Cost" : "71,975"
+  }
 }, {
   "At Port" : "Damietta",
   "Charter Cost" : "0",
@@ -309,7 +309,6 @@
   "End Date" : "23/03/11 14:00 (EET)",
   "From Port" : "Damietta",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "500",
   "Volume on board Start" : "500",
   "ID" : "discharge-cargo-50",
@@ -317,7 +316,8 @@
   "Start Date" : "23/03/11 14:00 (EET)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Damietta",
   "Charter Cost" : "100,000",
@@ -327,7 +327,6 @@
   "End Date" : "24/03/11 14:00 (EET)",
   "From Port" : "Damietta",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "145,800",
@@ -341,7 +340,8 @@
   "Transfer Volume" : "145,300",
   "Transfer Energy" : "3,283,780",
   "Type" : "Load",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Damietta",
   "Charter Cost" : "1,808,333",
@@ -350,11 +350,6 @@
   "End Date" : "11/04/11 10:00 (GMT-05:00)",
   "From Port" : "Damietta",
   "Fuel Cost" : "572,157",
-  "[Fuels]" : {
-    "NBO" : "3617",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "572,157"
-  },
   "Volume on board End" : "142,183",
   "Volume on board Start" : "145,800",
   "ID" : "load-cargo-78",
@@ -366,7 +361,12 @@
   "To Port" : "Elba Island",
   "Total Cost" : "2,380,489",
   "Type" : "Journey",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : {
+    "NBO" : "3617",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "572,157"
+  }
 }, {
   "At Port" : "Elba Island",
   "Charter Cost" : "687,500",
@@ -374,11 +374,6 @@
   "End Date" : "18/04/11 07:00 (GMT-05:00)",
   "From Port" : "Elba Island",
   "Fuel Cost" : "195,772",
-  "[Fuels]" : {
-    "NBO" : "1238",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "195,773"
-  },
   "Volume on board End" : "140,945",
   "Volume on board Start" : "142,183",
   "ID" : "load-cargo-78",
@@ -386,7 +381,12 @@
   "Start Date" : "11/04/11 10:00 (GMT-05:00)",
   "Total Cost" : "883,272",
   "Type" : "Idle",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : {
+    "NBO" : "1238",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "195,773"
+  }
 }, {
   "At Port" : "Elba Island",
   "Charter Cost" : "100,000",
@@ -396,7 +396,6 @@
   "End Date" : "19/04/11 07:00 (GMT-05:00)",
   "From Port" : "Elba Island",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "1,584",
@@ -410,7 +409,8 @@
   "Transfer Volume" : "139,361",
   "Transfer Energy" : "3,149,559",
   "Type" : "Discharge",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Elba Island",
   "Charter Cost" : "529,166",
@@ -419,14 +419,6 @@
   "End Date" : "24/04/11 14:00 (GMT-04:00)",
   "From Port" : "Elba Island",
   "Fuel Cost" : "171,616",
-  "[Fuels]" : {
-    "NBO" : "953",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "150,686",
-    "FBO" : "132",
-    "FBO Unit Price" : "7.00",
-    "FBO Cost" : "20,930"
-  },
   "Volume on board End" : "500",
   "Volume on board Start" : "1,584",
   "ID" : "discharge-cargo-78",
@@ -438,7 +430,15 @@
   "To Port" : "Point Fortin",
   "Total Cost" : "700,781",
   "Type" : "Journey",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : {
+    "NBO" : "953",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "150,686",
+    "FBO" : "132",
+    "FBO Unit Price" : "7.00",
+    "FBO Cost" : "20,930"
+  }
 }, {
   "At Port" : "Point Fortin",
   "Charter Cost" : "0",
@@ -446,7 +446,6 @@
   "End Date" : "24/04/11 14:00 (GMT-04:00)",
   "From Port" : "Point Fortin",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "500",
   "Volume on board Start" : "500",
   "ID" : "discharge-cargo-78",
@@ -454,7 +453,8 @@
   "Start Date" : "24/04/11 14:00 (GMT-04:00)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Point Fortin",
   "Charter Cost" : "100,000",
@@ -464,7 +464,6 @@
   "End Date" : "25/04/11 14:00 (GMT-04:00)",
   "From Port" : "Point Fortin",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "145,800",
@@ -478,7 +477,8 @@
   "Transfer Volume" : "145,300",
   "Transfer Energy" : "3,283,780",
   "Type" : "Load",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Point Fortin",
   "Charter Cost" : "3,050,000",
@@ -487,14 +487,6 @@
   "End Date" : "26/05/11 14:00 (CT)",
   "From Port" : "Point Fortin",
   "Fuel Cost" : "1,539,977",
-  "[Fuels]" : {
-    "NBO" : "6100",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "965,020",
-    "FBO" : "3634",
-    "FBO Unit Price" : "7.00",
-    "FBO Cost" : "574,957"
-  },
   "Volume on board End" : "136,065",
   "Volume on board Start" : "145,800",
   "ID" : "load-cargo-28",
@@ -506,7 +498,15 @@
   "To Port" : "Fujian",
   "Total Cost" : "4,589,977",
   "Type" : "Journey",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : {
+    "NBO" : "6100",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "965,020",
+    "FBO" : "3634",
+    "FBO Unit Price" : "7.00",
+    "FBO Cost" : "574,957"
+  }
 }, {
   "At Port" : "Fujian",
   "Charter Cost" : "0",
@@ -514,7 +514,6 @@
   "End Date" : "26/05/11 14:00 (CT)",
   "From Port" : "Fujian",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "136,065",
   "Volume on board Start" : "136,065",
   "ID" : "load-cargo-28",
@@ -522,7 +521,8 @@
   "Start Date" : "26/05/11 14:00 (CT)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Fujian",
   "Charter Cost" : "100,000",
@@ -532,7 +532,6 @@
   "End Date" : "27/05/11 14:00 (CT)",
   "From Port" : "Fujian",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "12,733",
@@ -546,7 +545,8 @@
   "Transfer Volume" : "123,332",
   "Transfer Energy" : "2,787,309",
   "Type" : "Discharge",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Fujian",
   "Charter Cost" : "4,354,166",
@@ -555,11 +555,6 @@
   "End Date" : "09/07/11 15:00 (GMT-04:00)",
   "From Port" : "Fujian",
   "Fuel Cost" : "1,239,893",
-  "[Fuels]" : {
-    "NBO" : "7838",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "1,239,893"
-  },
   "Volume on board End" : "4,895",
   "Volume on board Start" : "12,733",
   "ID" : "discharge-cargo-28",
@@ -571,7 +566,12 @@
   "To Port" : "Point Fortin",
   "Total Cost" : "5,594,058",
   "Type" : "Journey",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : {
+    "NBO" : "7838",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "1,239,893"
+  }
 }, {
   "At Port" : "Point Fortin",
   "Charter Cost" : "4,895,833",
@@ -579,11 +579,6 @@
   "End Date" : "27/08/11 14:00 (GMT-04:00)",
   "From Port" : "Point Fortin",
   "Fuel Cost" : "774,520",
-  "[Fuels]" : {
-    "NBO" : "4896",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "774,521"
-  },
   "Volume on board End" : "0",
   "Volume on board Start" : "4,895",
   "ID" : "discharge-cargo-28",
@@ -591,7 +586,12 @@
   "Start Date" : "09/07/11 15:00 (GMT-04:00)",
   "Total Cost" : "5,670,353",
   "Type" : "Idle",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : {
+    "NBO" : "4896",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "774,521"
+  }
 }, {
   "At Port" : "Point Fortin",
   "Charter Cost" : "0",
@@ -599,7 +599,6 @@
   "End Date" : "27/08/11 14:00 (GMT-04:00)",
   "From Port" : "Point Fortin",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "0",
@@ -610,7 +609,8 @@
   "Start Date" : "27/08/11 14:00 (GMT-04:00)",
   "Total Cost" : "0",
   "Type" : "End Event",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -618,7 +618,6 @@
   "End Date" : "20/12/10 06:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "0",
@@ -629,7 +628,8 @@
   "Start Date" : "20/12/10 06:00 (WAT)",
   "Total Cost" : "0",
   "Type" : "Start Event",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -637,11 +637,6 @@
   "End Date" : "21/12/10 07:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "52,083",
-  "[Fuels]" : {
-    "MDO" : "52.1",
-    "MDO Unit Price" : "1,000.00",
-    "MDO Cost" : "52,083"
-  },
   "Volume on board End" : "0",
   "Volume on board Start" : "0",
   "ID" : "Methane Becki Anne",
@@ -649,7 +644,12 @@
   "Start Date" : "20/12/10 06:00 (WAT)",
   "Total Cost" : "52,083",
   "Type" : "Idle",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : {
+    "MDO" : "52.1",
+    "MDO Unit Price" : "1,000.00",
+    "MDO Cost" : "52,083"
+  }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -657,14 +657,14 @@
   "End Date" : "21/12/10 07:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "0",
   "Volume on board Start" : "0",
   "Scenario" : "4 dry dock 70 -O- -F- -F- base",
   "Start Date" : "21/12/10 07:00 (WAT)",
   "Total Cost" : "231,198",
   "Type" : "Cooldown",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -674,7 +674,6 @@
   "End Date" : "22/12/10 07:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "170,000",
@@ -688,7 +687,8 @@
   "Transfer Volume" : "170,000",
   "Transfer Energy" : "3,842,000",
   "Type" : "Load",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -697,11 +697,6 @@
   "End Date" : "17/01/11 01:00 (KT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "924,811",
-  "[Fuels]" : {
-    "NBO" : "5846",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "924,811"
-  },
   "Volume on board End" : "164,154",
   "Volume on board Start" : "170,000",
   "ID" : "load-cargo-21",
@@ -713,7 +708,12 @@
   "To Port" : "Pyeongtaek",
   "Total Cost" : "924,810",
   "Type" : "Journey",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : {
+    "NBO" : "5846",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "924,811"
+  }
 }, {
   "At Port" : "Pyeongtaek",
   "Charter Cost" : "0",
@@ -721,11 +721,6 @@
   "End Date" : "19/01/11 07:00 (KT)",
   "From Port" : "Pyeongtaek",
   "Fuel Cost" : "74,749",
-  "[Fuels]" : {
-    "NBO" : "473",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "74,750"
-  },
   "Volume on board End" : "163,681",
   "Volume on board Start" : "164,154",
   "ID" : "load-cargo-21",
@@ -733,7 +728,12 @@
   "Start Date" : "17/01/11 01:00 (KT)",
   "Total Cost" : "74,749",
   "Type" : "Idle",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : {
+    "NBO" : "473",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "74,750"
+  }
 }, {
   "At Port" : "Pyeongtaek",
   "Charter Cost" : "0",
@@ -743,7 +743,6 @@
   "End Date" : "20/01/11 07:00 (KT)",
   "From Port" : "Pyeongtaek",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "5,749",
@@ -757,7 +756,8 @@
   "Transfer Volume" : "157,931",
   "Transfer Energy" : "3,569,255",
   "Type" : "Discharge",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Pyeongtaek",
   "Charter Cost" : "0",
@@ -766,14 +766,6 @@
   "End Date" : "16/02/11 14:00 (WAT)",
   "From Port" : "Pyeongtaek",
   "Fuel Cost" : "830,549",
-  "[Fuels]" : {
-    "NBO" : "4973",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "786,650",
-    "FBO" : "277",
-    "FBO Unit Price" : "7.00",
-    "FBO Cost" : "43,900"
-  },
   "Volume on board End" : "500",
   "Volume on board Start" : "5,749",
   "ID" : "discharge-cargo-21",
@@ -785,7 +777,15 @@
   "To Port" : "Punta Europa",
   "Total Cost" : "830,549",
   "Type" : "Journey",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : {
+    "NBO" : "4973",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "786,650",
+    "FBO" : "277",
+    "FBO Unit Price" : "7.00",
+    "FBO Cost" : "43,900"
+  }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -793,7 +793,6 @@
   "End Date" : "16/02/11 14:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "500",
   "Volume on board Start" : "500",
   "ID" : "discharge-cargo-21",
@@ -801,7 +800,8 @@
   "Start Date" : "16/02/11 14:00 (WAT)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -811,7 +811,6 @@
   "End Date" : "17/02/11 14:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "170,000",
@@ -825,7 +824,8 @@
   "Transfer Volume" : "169,500",
   "Transfer Energy" : "3,830,700",
   "Type" : "Load",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -834,11 +834,6 @@
   "End Date" : "12/03/11 23:00 (CT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "839,910",
-  "[Fuels]" : {
-    "NBO" : "5309",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "839,910"
-  },
   "Volume on board End" : "164,690",
   "Volume on board Start" : "170,000",
   "ID" : "load-cargo-71",
@@ -850,7 +845,12 @@
   "To Port" : "Yung An",
   "Total Cost" : "839,910",
   "Type" : "Journey",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : {
+    "NBO" : "5309",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "839,910"
+  }
 }, {
   "At Port" : "Yung An",
   "Charter Cost" : "0",
@@ -858,11 +858,6 @@
   "End Date" : "17/03/11 07:00 (CT)",
   "From Port" : "Yung An",
   "Fuel Cost" : "143,962",
-  "[Fuels]" : {
-    "NBO" : "910",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "143,962"
-  },
   "Volume on board End" : "163,780",
   "Volume on board Start" : "164,690",
   "ID" : "load-cargo-71",
@@ -870,7 +865,12 @@
   "Start Date" : "12/03/11 23:00 (CT)",
   "Total Cost" : "143,962",
   "Type" : "Idle",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : {
+    "NBO" : "910",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "143,962"
+  }
 }, {
   "At Port" : "Yung An",
   "Charter Cost" : "0",
@@ -880,7 +880,6 @@
   "End Date" : "18/03/11 07:00 (CT)",
   "From Port" : "Yung An",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "5,208",
@@ -894,7 +893,8 @@
   "Transfer Volume" : "158,572",
   "Transfer Energy" : "3,583,738",
   "Type" : "Discharge",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Yung An",
   "Charter Cost" : "0",
@@ -903,11 +903,6 @@
   "End Date" : "12/04/11 15:00 (WAT)",
   "From Port" : "Yung An",
   "Fuel Cost" : "729,698",
-  "[Fuels]" : {
-    "NBO" : "4613",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "729,698"
-  },
   "Volume on board End" : "595",
   "Volume on board Start" : "5,208",
   "ID" : "discharge-cargo-71",
@@ -919,7 +914,12 @@
   "To Port" : "Punta Europa",
   "Total Cost" : "729,697",
   "Type" : "Journey",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : {
+    "NBO" : "4613",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "729,698"
+  }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -927,11 +927,6 @@
   "End Date" : "13/04/11 14:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "15,160",
-  "[Fuels]" : {
-    "NBO" : "96",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "15,161"
-  },
   "Volume on board End" : "500",
   "Volume on board Start" : "595",
   "ID" : "discharge-cargo-71",
@@ -939,7 +934,12 @@
   "Start Date" : "12/04/11 15:00 (WAT)",
   "Total Cost" : "15,160",
   "Type" : "Idle",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : {
+    "NBO" : "96",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "15,161"
+  }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -949,7 +949,6 @@
   "End Date" : "14/04/11 14:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "170,000",
@@ -963,7 +962,8 @@
   "Transfer Volume" : "169,500",
   "Transfer Energy" : "3,830,700",
   "Type" : "Load",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -972,11 +972,6 @@
   "End Date" : "07/05/11 23:00 (CT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "839,910",
-  "[Fuels]" : {
-    "NBO" : "5309",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "839,910"
-  },
   "Volume on board End" : "164,690",
   "Volume on board Start" : "170,000",
   "ID" : "load-cargo-9",
@@ -988,7 +983,12 @@
   "To Port" : "Yung An",
   "Total Cost" : "839,910",
   "Type" : "Journey",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : {
+    "NBO" : "5309",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "839,910"
+  }
 }, {
   "At Port" : "Yung An",
   "Charter Cost" : "0",
@@ -996,11 +996,6 @@
   "End Date" : "10/05/11 07:00 (CT)",
   "From Port" : "Yung An",
   "Fuel Cost" : "77,518",
-  "[Fuels]" : {
-    "NBO" : "490",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "77,518"
-  },
   "Volume on board End" : "164,200",
   "Volume on board Start" : "164,690",
   "ID" : "load-cargo-9",
@@ -1008,7 +1003,12 @@
   "Start Date" : "07/05/11 23:00 (CT)",
   "Total Cost" : "77,518",
   "Type" : "Idle",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : {
+    "NBO" : "490",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "77,518"
+  }
 }, {
   "At Port" : "Yung An",
   "Charter Cost" : "0",
@@ -1018,7 +1018,6 @@
   "End Date" : "11/05/11 07:00 (CT)",
   "From Port" : "Yung An",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "4,482",
@@ -1032,7 +1031,8 @@
   "Transfer Volume" : "159,718",
   "Transfer Energy" : "3,609,631",
   "Type" : "Discharge",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Yung An",
   "Canal Arrival" : "29/05/11 17:00",
@@ -1044,14 +1044,6 @@
   "End Date" : "31/05/11 03:00 (EET)",
   "From Port" : "Yung An",
   "Fuel Cost" : "575,337",
-  "[Fuels]" : {
-    "NBO" : "3635",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "575,057",
-    "FBO" : "2",
-    "FBO Unit Price" : "7.00",
-    "FBO Cost" : "280"
-  },
   "Volume on board End" : "845",
   "Volume on board Start" : "4,482",
   "ID" : "discharge-cargo-9",
@@ -1064,7 +1056,15 @@
   "To Port" : "Damietta",
   "Total Cost" : "605,337",
   "Type" : "Journey",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : {
+    "NBO" : "3635",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "575,057",
+    "FBO" : "2",
+    "FBO Unit Price" : "7.00",
+    "FBO Cost" : "280"
+  }
 }, {
   "At Port" : "Damietta",
   "Charter Cost" : "0",
@@ -1072,11 +1072,6 @@
   "End Date" : "03/06/11 14:00 (EET)",
   "From Port" : "Damietta",
   "Fuel Cost" : "54,710",
-  "[Fuels]" : {
-    "NBO" : "346",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "54,711"
-  },
   "Volume on board End" : "500",
   "Volume on board Start" : "845",
   "ID" : "discharge-cargo-9",
@@ -1084,7 +1079,12 @@
   "Start Date" : "31/05/11 03:00 (EET)",
   "Total Cost" : "54,710",
   "Type" : "Idle",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : {
+    "NBO" : "346",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "54,711"
+  }
 }, {
   "At Port" : "Damietta",
   "Charter Cost" : "0",
@@ -1094,7 +1094,6 @@
   "End Date" : "04/06/11 14:00 (EET)",
   "From Port" : "Damietta",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "170,000",
@@ -1108,7 +1107,8 @@
   "Transfer Volume" : "169,500",
   "Transfer Energy" : "3,830,700",
   "Type" : "Load",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Damietta",
   "Charter Cost" : "0",
@@ -1117,11 +1117,6 @@
   "End Date" : "19/06/11 18:00 (GMT-06:00)",
   "From Port" : "Damietta",
   "Fuel Cost" : "562,467",
-  "[Fuels]" : {
-    "NBO" : "3555",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "562,467"
-  },
   "Volume on board End" : "166,444",
   "Volume on board Start" : "170,000",
   "ID" : "load-cargo-20",
@@ -1133,7 +1128,12 @@
   "To Port" : "Pascagoula",
   "Total Cost" : "562,466",
   "Type" : "Journey",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : {
+    "NBO" : "3555",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "562,467"
+  }
 }, {
   "At Port" : "Pascagoula",
   "Charter Cost" : "0",
@@ -1141,11 +1141,6 @@
   "End Date" : "26/06/11 07:00 (GMT-06:00)",
   "From Port" : "Pascagoula",
   "Fuel Cost" : "217,327",
-  "[Fuels]" : {
-    "NBO" : "1374",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "217,327"
-  },
   "Volume on board End" : "165,070",
   "Volume on board Start" : "166,444",
   "ID" : "load-cargo-20",
@@ -1153,7 +1148,12 @@
   "Start Date" : "19/06/11 18:00 (GMT-06:00)",
   "Total Cost" : "217,327",
   "Type" : "Idle",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : {
+    "NBO" : "1374",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "217,327"
+  }
 }, {
   "At Port" : "Pascagoula",
   "Charter Cost" : "0",
@@ -1163,7 +1163,6 @@
   "End Date" : "27/06/11 07:00 (GMT-06:00)",
   "From Port" : "Pascagoula",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "7,498",
@@ -1177,7 +1176,8 @@
   "Transfer Volume" : "157,572",
   "Transfer Energy" : "3,561,138",
   "Type" : "Discharge",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Pascagoula",
   "Charter Cost" : "0",
@@ -1186,11 +1186,6 @@
   "End Date" : "14/07/11 18:00 (EET)",
   "From Port" : "Pascagoula",
   "Fuel Cost" : "488,838",
-  "[Fuels]" : {
-    "NBO" : "3090",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "488,838"
-  },
   "Volume on board End" : "4,408",
   "Volume on board Start" : "7,498",
   "ID" : "discharge-cargo-20",
@@ -1202,7 +1197,12 @@
   "To Port" : "Damietta",
   "Total Cost" : "488,838",
   "Type" : "Journey",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : {
+    "NBO" : "3090",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "488,838"
+  }
 }, {
   "At Port" : "Damietta",
   "Charter Cost" : "0",
@@ -1210,11 +1210,6 @@
   "End Date" : "27/08/11 20:00 (EET)",
   "From Port" : "Damietta",
   "Fuel Cost" : "697,398",
-  "[Fuels]" : {
-    "NBO" : "4408",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "697,398"
-  },
   "Volume on board End" : "0",
   "Volume on board Start" : "4,408",
   "ID" : "discharge-cargo-20",
@@ -1222,7 +1217,12 @@
   "Start Date" : "14/07/11 18:00 (EET)",
   "Total Cost" : "697,398",
   "Type" : "Idle",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : {
+    "NBO" : "4408",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "697,398"
+  }
 }, {
   "At Port" : "Damietta",
   "Charter Cost" : "0",
@@ -1230,7 +1230,6 @@
   "End Date" : "27/08/11 20:00 (EET)",
   "From Port" : "Damietta",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "0",
@@ -1241,7 +1240,8 @@
   "Start Date" : "27/08/11 20:00 (EET)",
   "Total Cost" : "0",
   "Type" : "End Event",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -1249,7 +1249,6 @@
   "End Date" : "29/11/10 06:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "0",
@@ -1260,7 +1259,8 @@
   "Start Date" : "29/11/10 06:00 (WAT)",
   "Total Cost" : "0",
   "Type" : "Start Event",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -1268,11 +1268,6 @@
   "End Date" : "29/11/10 07:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "2,083",
-  "[Fuels]" : {
-    "MDO" : "2.08",
-    "MDO Unit Price" : "1,000.00",
-    "MDO Cost" : "2,083"
-  },
   "Volume on board End" : "0",
   "Volume on board Start" : "0",
   "ID" : "Methane Heather Sally",
@@ -1280,7 +1275,12 @@
   "Start Date" : "29/11/10 06:00 (WAT)",
   "Total Cost" : "2,083",
   "Type" : "Idle",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[Fuels]" : {
+    "MDO" : "2.08",
+    "MDO Unit Price" : "1,000.00",
+    "MDO Cost" : "2,083"
+  }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -1290,7 +1290,6 @@
   "End Date" : "30/11/10 07:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "149,700",
@@ -1304,7 +1303,8 @@
   "Transfer Volume" : "149,700",
   "Transfer Energy" : "3,383,220",
   "Type" : "Load",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -1313,11 +1313,6 @@
   "End Date" : "03/01/11 22:00 (KT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "1,084,988",
-  "[Fuels]" : {
-    "NBO" : "6858",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "1,084,988"
-  },
   "Volume on board End" : "142,841",
   "Volume on board Start" : "149,700",
   "ID" : "load-cargo-70",
@@ -1329,7 +1324,12 @@
   "To Port" : "Pyeongtaek",
   "Total Cost" : "1,084,988",
   "Type" : "Journey",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[Fuels]" : {
+    "NBO" : "6858",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "1,084,988"
+  }
 }, {
   "At Port" : "Pyeongtaek",
   "Charter Cost" : "0",
@@ -1337,11 +1337,6 @@
   "End Date" : "15/01/11 07:00 (KT)",
   "From Port" : "Pyeongtaek",
   "Fuel Cost" : "323,914",
-  "[Fuels]" : {
-    "NBO" : "2048",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "323,915"
-  },
   "Volume on board End" : "140,794",
   "Volume on board Start" : "142,841",
   "ID" : "load-cargo-70",
@@ -1349,7 +1344,12 @@
   "Start Date" : "03/01/11 22:00 (KT)",
   "Total Cost" : "323,914",
   "Type" : "Idle",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[Fuels]" : {
+    "NBO" : "2048",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "323,915"
+  }
 }, {
   "At Port" : "Pyeongtaek",
   "Charter Cost" : "0",
@@ -1359,7 +1359,6 @@
   "End Date" : "16/01/11 07:00 (KT)",
   "From Port" : "Pyeongtaek",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "5,489",
@@ -1373,7 +1372,8 @@
   "Transfer Volume" : "135,305",
   "Transfer Energy" : "3,057,896",
   "Type" : "Discharge",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Pyeongtaek",
   "Canal Arrival" : "08/02/11 20:00",
@@ -1385,14 +1385,6 @@
   "End Date" : "10/02/11 07:00 (EET)",
   "From Port" : "Pyeongtaek",
   "Fuel Cost" : "868,364",
-  "[Fuels]" : {
-    "NBO" : "4573",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "723,370",
-    "FBO" : "917",
-    "FBO Unit Price" : "7.00",
-    "FBO Cost" : "144,995"
-  },
   "Volume on board End" : "0",
   "Volume on board Start" : "5,489",
   "ID" : "discharge-cargo-70",
@@ -1405,7 +1397,15 @@
   "To Port" : "Damietta",
   "Total Cost" : "898,364",
   "Type" : "Journey",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[Fuels]" : {
+    "NBO" : "4573",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "723,370",
+    "FBO" : "917",
+    "FBO Unit Price" : "7.00",
+    "FBO Cost" : "144,995"
+  }
 }, {
   "At Port" : "Damietta",
   "Charter Cost" : "0",
@@ -1413,7 +1413,6 @@
   "End Date" : "10/02/11 07:00 (EET)",
   "From Port" : "Damietta",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "0",
   "Volume on board Start" : "0",
   "ID" : "discharge-cargo-70",
@@ -1421,14 +1420,14 @@
   "Start Date" : "10/02/11 07:00 (EET)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Damietta",
   "Charter Cost" : "0",
   "Duration" : "70:00",
   "End Date" : "21/04/11 07:00 (EET)",
   "From Port" : "Damietta",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "0",
@@ -1439,7 +1438,8 @@
   "Start Date" : "10/02/11 07:00 (EET)",
   "Total Cost" : "0",
   "Type" : "Dry Dock",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Damietta",
   "Charter Cost" : "0",
@@ -1448,11 +1448,6 @@
   "End Date" : "21/04/11 13:00 (EET)",
   "From Port" : "Damietta",
   "Fuel Cost" : "44,500",
-  "[Fuels]" : {
-    "MDO" : "44.5",
-    "MDO Unit Price" : "1,000.00",
-    "MDO Cost" : "44,500"
-  },
   "Volume on board End" : "0",
   "Volume on board Start" : "0",
   "ID" : "Dry Dock",
@@ -1464,7 +1459,12 @@
   "To Port" : "Idku",
   "Total Cost" : "44,500",
   "Type" : "Journey",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[Fuels]" : {
+    "MDO" : "44.5",
+    "MDO Unit Price" : "1,000.00",
+    "MDO Cost" : "44,500"
+  }
 }, {
   "At Port" : "Idku",
   "Charter Cost" : "0",
@@ -1472,7 +1472,6 @@
   "End Date" : "21/04/11 13:00 (EET)",
   "From Port" : "Idku",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "0",
   "Volume on board Start" : "0",
   "ID" : "Dry Dock",
@@ -1480,7 +1479,8 @@
   "Start Date" : "21/04/11 13:00 (EET)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Idku",
   "Charter Cost" : "0",
@@ -1488,7 +1488,6 @@
   "End Date" : "21/04/11 13:00 (EET)",
   "From Port" : "Idku",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "0",
   "Volume on board Start" : "0",
   "ID" : "Dry Dock",
@@ -1496,7 +1495,8 @@
   "Start Date" : "21/04/11 13:00 (EET)",
   "Total Cost" : "231,424",
   "Type" : "Cooldown",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Idku",
   "Charter Cost" : "0",
@@ -1506,7 +1506,6 @@
   "End Date" : "22/04/11 13:00 (EET)",
   "From Port" : "Idku",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "149,700",
@@ -1520,7 +1519,8 @@
   "Transfer Volume" : "149,700",
   "Transfer Energy" : "3,383,220",
   "Type" : "Load",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Idku",
   "Charter Cost" : "0",
@@ -1529,14 +1529,6 @@
   "End Date" : "04/05/11 02:00 (GMT-05:00)",
   "From Port" : "Idku",
   "Fuel Cost" : "715,141",
-  "[Fuels]" : {
-    "NBO" : "2358",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "373,088",
-    "FBO" : "2162",
-    "FBO Unit Price" : "7.00",
-    "FBO Cost" : "342,053"
-  },
   "Volume on board End" : "145,179",
   "Volume on board Start" : "149,700",
   "ID" : "load-cargo-41",
@@ -1548,7 +1540,15 @@
   "To Port" : "Elba Island",
   "Total Cost" : "715,141",
   "Type" : "Journey",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[Fuels]" : {
+    "NBO" : "2358",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "373,088",
+    "FBO" : "2162",
+    "FBO Unit Price" : "7.00",
+    "FBO Cost" : "342,053"
+  }
 }, {
   "At Port" : "Elba Island",
   "Charter Cost" : "0",
@@ -1556,7 +1556,6 @@
   "End Date" : "04/05/11 02:00 (GMT-05:00)",
   "From Port" : "Elba Island",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "145,179",
   "Volume on board Start" : "145,179",
   "ID" : "load-cargo-41",
@@ -1564,7 +1563,8 @@
   "Start Date" : "04/05/11 02:00 (GMT-05:00)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Elba Island",
   "Charter Cost" : "0",
@@ -1574,7 +1574,6 @@
   "End Date" : "05/05/11 02:00 (GMT-05:00)",
   "From Port" : "Elba Island",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "3,874",
@@ -1588,7 +1587,8 @@
   "Transfer Volume" : "141,304",
   "Transfer Energy" : "3,193,491",
   "Type" : "Discharge",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Elba Island",
   "Charter Cost" : "0",
@@ -1597,14 +1597,6 @@
   "End Date" : "22/05/11 07:00 (WAT)",
   "From Port" : "Elba Island",
   "Fuel Cost" : "533,860",
-  "[Fuels]" : {
-    "NBO" : "3060",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "484,092",
-    "FBO" : "315",
-    "FBO Unit Price" : "7.00",
-    "FBO Cost" : "49,768"
-  },
   "Volume on board End" : "500",
   "Volume on board Start" : "3,874",
   "ID" : "discharge-cargo-41",
@@ -1616,7 +1608,15 @@
   "To Port" : "Punta Europa",
   "Total Cost" : "533,860",
   "Type" : "Journey",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[Fuels]" : {
+    "NBO" : "3060",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "484,092",
+    "FBO" : "315",
+    "FBO Unit Price" : "7.00",
+    "FBO Cost" : "49,768"
+  }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -1624,7 +1624,6 @@
   "End Date" : "22/05/11 07:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "500",
   "Volume on board Start" : "500",
   "ID" : "discharge-cargo-41",
@@ -1632,7 +1631,8 @@
   "Start Date" : "22/05/11 07:00 (WAT)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -1642,7 +1642,6 @@
   "End Date" : "23/05/11 07:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "149,700",
@@ -1656,7 +1655,8 @@
   "Transfer Volume" : "149,200",
   "Transfer Energy" : "3,371,920",
   "Type" : "Load",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -1665,14 +1665,6 @@
   "End Date" : "25/06/11 14:00 (JT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "1,182,377",
-  "[Fuels]" : {
-    "NBO" : "6592",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "1,042,802",
-    "FBO" : "882",
-    "FBO Unit Price" : "7.00",
-    "FBO Cost" : "139,575"
-  },
   "Volume on board End" : "142,226",
   "Volume on board Start" : "149,700",
   "ID" : "load-cargo-76",
@@ -1684,7 +1676,15 @@
   "To Port" : "Ohgishima",
   "Total Cost" : "1,182,376",
   "Type" : "Journey",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[Fuels]" : {
+    "NBO" : "6592",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "1,042,802",
+    "FBO" : "882",
+    "FBO Unit Price" : "7.00",
+    "FBO Cost" : "139,575"
+  }
 }, {
   "At Port" : "Ohgishima",
   "Charter Cost" : "0",
@@ -1692,7 +1692,6 @@
   "End Date" : "25/06/11 14:00 (JT)",
   "From Port" : "Ohgishima",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "142,226",
   "Volume on board Start" : "142,226",
   "ID" : "load-cargo-76",
@@ -1700,7 +1699,8 @@
   "Start Date" : "25/06/11 14:00 (JT)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Ohgishima",
   "Charter Cost" : "0",
@@ -1710,7 +1710,6 @@
   "End Date" : "26/06/11 14:00 (JT)",
   "From Port" : "Ohgishima",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "9,174",
@@ -1724,7 +1723,8 @@
   "Transfer Volume" : "133,051",
   "Transfer Energy" : "3,006,972",
   "Type" : "Discharge",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Ohgishima",
   "Charter Cost" : "0",
@@ -1733,11 +1733,6 @@
   "End Date" : "01/08/11 18:00 (WAT)",
   "From Port" : "Ohgishima",
   "Fuel Cost" : "1,039,374",
-  "[Fuels]" : {
-    "NBO" : "6570",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "1,039,374"
-  },
   "Volume on board End" : "2,604",
   "Volume on board Start" : "9,174",
   "ID" : "discharge-cargo-76",
@@ -1749,7 +1744,12 @@
   "To Port" : "Punta Europa",
   "Total Cost" : "1,039,374",
   "Type" : "Journey",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[Fuels]" : {
+    "NBO" : "6570",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "1,039,374"
+  }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -1757,11 +1757,6 @@
   "End Date" : "27/08/11 19:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "411,979",
-  "[Fuels]" : {
-    "NBO" : "2604",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "411,979"
-  },
   "Volume on board End" : "0",
   "Volume on board Start" : "2,604",
   "ID" : "discharge-cargo-76",
@@ -1769,7 +1764,12 @@
   "Start Date" : "01/08/11 18:00 (WAT)",
   "Total Cost" : "411,979",
   "Type" : "Idle",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[Fuels]" : {
+    "NBO" : "2604",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "411,979"
+  }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -1777,7 +1777,6 @@
   "End Date" : "27/08/11 19:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "0",
@@ -1788,7 +1787,8 @@
   "Start Date" : "27/08/11 19:00 (WAT)",
   "Total Cost" : "0",
   "Type" : "End Event",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -1796,7 +1796,6 @@
   "End Date" : "30/12/10 06:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "0",
@@ -1807,7 +1806,8 @@
   "Start Date" : "30/12/10 06:00 (WAT)",
   "Total Cost" : "0",
   "Type" : "Start Event",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -1815,11 +1815,6 @@
   "End Date" : "31/12/10 07:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "52,083",
-  "[Fuels]" : {
-    "MDO" : "52.1",
-    "MDO Unit Price" : "1,000.00",
-    "MDO Cost" : "52,083"
-  },
   "Volume on board End" : "0",
   "Volume on board Start" : "0",
   "ID" : "Methane Julia Louise",
@@ -1827,7 +1822,12 @@
   "Start Date" : "30/12/10 06:00 (WAT)",
   "Total Cost" : "52,083",
   "Type" : "Idle",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : {
+    "MDO" : "52.1",
+    "MDO Unit Price" : "1,000.00",
+    "MDO Cost" : "52,083"
+  }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -1835,14 +1835,14 @@
   "End Date" : "31/12/10 07:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "0",
   "Volume on board Start" : "0",
   "Scenario" : "4 dry dock 70 -O- -F- -F- base",
   "Start Date" : "31/12/10 07:00 (WAT)",
   "Total Cost" : "231,198",
   "Type" : "Cooldown",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -1852,7 +1852,6 @@
   "End Date" : "01/01/11 07:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "170,000",
@@ -1866,7 +1865,8 @@
   "Transfer Volume" : "170,000",
   "Transfer Energy" : "3,842,000",
   "Type" : "Load",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -1875,14 +1875,6 @@
   "End Date" : "25/01/11 07:00 (KT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "976,157",
-  "[Fuels]" : {
-    "NBO" : "5443",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "861,135",
-    "FBO" : "727",
-    "FBO Unit Price" : "7.00",
-    "FBO Cost" : "115,021"
-  },
   "Volume on board End" : "163,829",
   "Volume on board Start" : "170,000",
   "ID" : "load-cargo-32",
@@ -1894,7 +1886,15 @@
   "To Port" : "Pyeongtaek",
   "Total Cost" : "976,156",
   "Type" : "Journey",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : {
+    "NBO" : "5443",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "861,135",
+    "FBO" : "727",
+    "FBO Unit Price" : "7.00",
+    "FBO Cost" : "115,021"
+  }
 }, {
   "At Port" : "Pyeongtaek",
   "Charter Cost" : "0",
@@ -1902,7 +1902,6 @@
   "End Date" : "25/01/11 07:00 (KT)",
   "From Port" : "Pyeongtaek",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "163,829",
   "Volume on board Start" : "163,829",
   "ID" : "load-cargo-32",
@@ -1910,7 +1909,8 @@
   "Start Date" : "25/01/11 07:00 (KT)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Pyeongtaek",
   "Charter Cost" : "0",
@@ -1920,7 +1920,6 @@
   "End Date" : "26/01/11 07:00 (KT)",
   "From Port" : "Pyeongtaek",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "5,538",
@@ -1934,7 +1933,8 @@
   "Transfer Volume" : "158,291",
   "Transfer Energy" : "3,577,385",
   "Type" : "Discharge",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Pyeongtaek",
   "Canal Arrival" : "12/02/11 02:00",
@@ -1946,14 +1946,6 @@
   "End Date" : "13/02/11 15:00 (EET)",
   "From Port" : "Pyeongtaek",
   "Fuel Cost" : "797,043",
-  "[Fuels]" : {
-    "NBO" : "3373",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "533,530",
-    "FBO" : "1666",
-    "FBO Unit Price" : "7.00",
-    "FBO Cost" : "263,513"
-  },
   "Volume on board End" : "500",
   "Volume on board Start" : "5,538",
   "ID" : "discharge-cargo-32",
@@ -1966,7 +1958,15 @@
   "To Port" : "Idku",
   "Total Cost" : "827,042",
   "Type" : "Journey",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : {
+    "NBO" : "3373",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "533,530",
+    "FBO" : "1666",
+    "FBO Unit Price" : "7.00",
+    "FBO Cost" : "263,513"
+  }
 }, {
   "At Port" : "Idku",
   "Charter Cost" : "0",
@@ -1974,7 +1974,6 @@
   "End Date" : "13/02/11 15:00 (EET)",
   "From Port" : "Idku",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "500",
   "Volume on board Start" : "500",
   "ID" : "discharge-cargo-32",
@@ -1982,7 +1981,8 @@
   "Start Date" : "13/02/11 15:00 (EET)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Idku",
   "Charter Cost" : "0",
@@ -1992,7 +1992,6 @@
   "End Date" : "14/02/11 15:00 (EET)",
   "From Port" : "Idku",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "170,000",
@@ -2006,7 +2005,8 @@
   "Transfer Volume" : "169,500",
   "Transfer Energy" : "3,830,700",
   "Type" : "Load",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Idku",
   "Canal Arrival" : "15/02/11 00:00",
@@ -2018,14 +2018,6 @@
   "End Date" : "07/03/11 14:00 (KT)",
   "From Port" : "Idku",
   "Fuel Cost" : "756,983",
-  "[Fuels]" : {
-    "NBO" : "4723",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "747,231",
-    "FBO" : "62",
-    "FBO Unit Price" : "7.00",
-    "FBO Cost" : "9,752"
-  },
   "Volume on board End" : "165,215",
   "Volume on board Start" : "170,000",
   "ID" : "load-cargo-22",
@@ -2038,7 +2030,15 @@
   "To Port" : "Pyeongtaek",
   "Total Cost" : "806,983",
   "Type" : "Journey",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : {
+    "NBO" : "4723",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "747,231",
+    "FBO" : "62",
+    "FBO Unit Price" : "7.00",
+    "FBO Cost" : "9,752"
+  }
 }, {
   "At Port" : "Pyeongtaek",
   "Charter Cost" : "0",
@@ -2046,7 +2046,6 @@
   "End Date" : "07/03/11 14:00 (KT)",
   "From Port" : "Pyeongtaek",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "165,215",
   "Volume on board Start" : "165,215",
   "ID" : "load-cargo-22",
@@ -2054,7 +2053,8 @@
   "Start Date" : "07/03/11 14:00 (KT)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Pyeongtaek",
   "Charter Cost" : "0",
@@ -2064,7 +2064,6 @@
   "End Date" : "08/03/11 14:00 (KT)",
   "From Port" : "Pyeongtaek",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "7,015",
@@ -2078,7 +2077,8 @@
   "Transfer Volume" : "158,200",
   "Transfer Energy" : "3,575,320",
   "Type" : "Discharge",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Pyeongtaek",
   "Charter Cost" : "0",
@@ -2087,11 +2087,6 @@
   "End Date" : "13/04/11 04:00 (GMT-04:00)",
   "From Port" : "Pyeongtaek",
   "Fuel Cost" : "1,028,696",
-  "[Fuels]" : {
-    "NBO" : "6503",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "1,028,696"
-  },
   "Volume on board End" : "512",
   "Volume on board Start" : "7,015",
   "ID" : "discharge-cargo-22",
@@ -2103,7 +2098,12 @@
   "To Port" : "Point Fortin",
   "Total Cost" : "1,028,695",
   "Type" : "Journey",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : {
+    "NBO" : "6503",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "1,028,696"
+  }
 }, {
   "At Port" : "Point Fortin",
   "Charter Cost" : "0",
@@ -2111,11 +2111,6 @@
   "End Date" : "13/04/11 07:00 (GMT-04:00)",
   "From Port" : "Point Fortin",
   "Fuel Cost" : "1,977",
-  "[Fuels]" : {
-    "NBO" : "13",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "1,978"
-  },
   "Volume on board End" : "500",
   "Volume on board Start" : "512",
   "ID" : "discharge-cargo-22",
@@ -2123,7 +2118,12 @@
   "Start Date" : "13/04/11 04:00 (GMT-04:00)",
   "Total Cost" : "1,977",
   "Type" : "Idle",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : {
+    "NBO" : "13",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "1,978"
+  }
 }, {
   "At Port" : "Point Fortin",
   "Charter Cost" : "0",
@@ -2133,7 +2133,6 @@
   "End Date" : "14/04/11 07:00 (GMT-04:00)",
   "From Port" : "Point Fortin",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "170,000",
@@ -2147,7 +2146,8 @@
   "Transfer Volume" : "169,500",
   "Transfer Energy" : "3,830,700",
   "Type" : "Load",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Point Fortin",
   "Charter Cost" : "0",
@@ -2156,14 +2156,6 @@
   "End Date" : "30/04/11 07:00 (CLT)",
   "From Port" : "Point Fortin",
   "Fuel Cost" : "638,551",
-  "[Fuels]" : {
-    "NBO" : "3670",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "580,660",
-    "FBO" : "366",
-    "FBO Unit Price" : "7.00",
-    "FBO Cost" : "57,891"
-  },
   "Volume on board End" : "165,963",
   "Volume on board Start" : "170,000",
   "ID" : "load-cargo-12",
@@ -2175,7 +2167,15 @@
   "To Port" : "Quintero",
   "Total Cost" : "638,550",
   "Type" : "Journey",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : {
+    "NBO" : "3670",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "580,660",
+    "FBO" : "366",
+    "FBO Unit Price" : "7.00",
+    "FBO Cost" : "57,891"
+  }
 }, {
   "At Port" : "Quintero",
   "Charter Cost" : "0",
@@ -2183,7 +2183,6 @@
   "End Date" : "30/04/11 07:00 (CLT)",
   "From Port" : "Quintero",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "165,963",
   "Volume on board Start" : "165,963",
   "ID" : "load-cargo-12",
@@ -2191,7 +2190,8 @@
   "Start Date" : "30/04/11 07:00 (CLT)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Quintero",
   "Charter Cost" : "0",
@@ -2201,7 +2201,6 @@
   "End Date" : "01/05/11 07:00 (CLT)",
   "From Port" : "Quintero",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "4,151",
@@ -2215,7 +2214,8 @@
   "Transfer Volume" : "161,811",
   "Transfer Energy" : "3,656,951",
   "Type" : "Discharge",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Quintero",
   "Charter Cost" : "0",
@@ -2224,14 +2224,6 @@
   "End Date" : "16/05/11 14:00 (WAT)",
   "From Port" : "Quintero",
   "Fuel Cost" : "577,692",
-  "[Fuels]" : {
-    "NBO" : "2723",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "430,700",
-    "FBO" : "929",
-    "FBO Unit Price" : "7.00",
-    "FBO Cost" : "146,992"
-  },
   "Volume on board End" : "500",
   "Volume on board Start" : "4,151",
   "ID" : "discharge-cargo-12",
@@ -2243,7 +2235,15 @@
   "To Port" : "Punta Europa",
   "Total Cost" : "577,691",
   "Type" : "Journey",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : {
+    "NBO" : "2723",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "430,700",
+    "FBO" : "929",
+    "FBO Unit Price" : "7.00",
+    "FBO Cost" : "146,992"
+  }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -2251,7 +2251,6 @@
   "End Date" : "16/05/11 14:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "500",
   "Volume on board Start" : "500",
   "ID" : "discharge-cargo-12",
@@ -2259,7 +2258,8 @@
   "Start Date" : "16/05/11 14:00 (WAT)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -2269,7 +2269,6 @@
   "End Date" : "17/05/11 14:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "170,000",
@@ -2283,7 +2282,8 @@
   "Transfer Volume" : "169,500",
   "Transfer Energy" : "3,830,700",
   "Type" : "Load",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -2292,11 +2292,6 @@
   "End Date" : "12/06/11 05:00 (JT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "920,263",
-  "[Fuels]" : {
-    "NBO" : "5817",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "920,263"
-  },
   "Volume on board End" : "164,182",
   "Volume on board Start" : "170,000",
   "ID" : "load-cargo-66",
@@ -2308,7 +2303,12 @@
   "To Port" : "Tobata",
   "Total Cost" : "920,262",
   "Type" : "Journey",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : {
+    "NBO" : "5817",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "920,263"
+  }
 }, {
   "At Port" : "Tobata",
   "Charter Cost" : "0",
@@ -2316,11 +2316,6 @@
   "End Date" : "17/06/11 07:00 (JT)",
   "From Port" : "Tobata",
   "Fuel Cost" : "168,878",
-  "[Fuels]" : {
-    "NBO" : "1068",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "168,879"
-  },
   "Volume on board End" : "163,115",
   "Volume on board Start" : "164,182",
   "ID" : "load-cargo-66",
@@ -2328,7 +2323,12 @@
   "Start Date" : "12/06/11 05:00 (JT)",
   "Total Cost" : "168,878",
   "Type" : "Idle",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : {
+    "NBO" : "1068",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "168,879"
+  }
 }, {
   "At Port" : "Tobata",
   "Charter Cost" : "0",
@@ -2338,7 +2338,6 @@
   "End Date" : "18/06/11 07:00 (JT)",
   "From Port" : "Tobata",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "9,326",
@@ -2352,7 +2351,8 @@
   "Transfer Volume" : "153,788",
   "Transfer Energy" : "3,475,625",
   "Type" : "Discharge",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Tobata",
   "Charter Cost" : "0",
@@ -2361,11 +2361,6 @@
   "End Date" : "16/07/11 00:00 (WAT)",
   "From Port" : "Tobata",
   "Fuel Cost" : "798,515",
-  "[Fuels]" : {
-    "NBO" : "5048",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "798,515"
-  },
   "Volume on board End" : "4,279",
   "Volume on board Start" : "9,326",
   "ID" : "discharge-cargo-66",
@@ -2377,7 +2372,12 @@
   "To Port" : "Punta Europa",
   "Total Cost" : "798,514",
   "Type" : "Journey",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : {
+    "NBO" : "5048",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "798,515"
+  }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -2385,11 +2385,6 @@
   "End Date" : "27/08/11 19:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "676,964",
-  "[Fuels]" : {
-    "NBO" : "4279",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "676,964"
-  },
   "Volume on board End" : "0",
   "Volume on board Start" : "4,279",
   "ID" : "discharge-cargo-66",
@@ -2397,7 +2392,12 @@
   "Start Date" : "16/07/11 00:00 (WAT)",
   "Total Cost" : "676,964",
   "Type" : "Idle",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : {
+    "NBO" : "4279",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "676,964"
+  }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -2405,7 +2405,6 @@
   "End Date" : "27/08/11 19:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "0",
@@ -2416,7 +2415,8 @@
   "Start Date" : "27/08/11 19:00 (WAT)",
   "Total Cost" : "0",
   "Type" : "End Event",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -2424,7 +2424,6 @@
   "End Date" : "08/12/10 06:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "0",
@@ -2435,7 +2434,8 @@
   "Start Date" : "08/12/10 06:00 (WAT)",
   "Total Cost" : "0",
   "Type" : "Start Event",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -2443,11 +2443,6 @@
   "End Date" : "08/12/10 07:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "2,083",
-  "[Fuels]" : {
-    "MDO" : "2.08",
-    "MDO Unit Price" : "1,000.00",
-    "MDO Cost" : "2,083"
-  },
   "Volume on board End" : "0",
   "Volume on board Start" : "0",
   "ID" : "Methane Lydon Volney",
@@ -2455,7 +2450,12 @@
   "Start Date" : "08/12/10 06:00 (WAT)",
   "Total Cost" : "2,083",
   "Type" : "Idle",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : {
+    "MDO" : "2.08",
+    "MDO Unit Price" : "1,000.00",
+    "MDO Cost" : "2,083"
+  }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -2465,7 +2465,6 @@
   "End Date" : "09/12/10 07:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "149,700",
@@ -2479,7 +2478,8 @@
   "Transfer Volume" : "149,700",
   "Transfer Energy" : "3,383,220",
   "Type" : "Load",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -2488,11 +2488,6 @@
   "End Date" : "30/12/10 21:00 (CLT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "688,170",
-  "[Fuels]" : {
-    "NBO" : "4350",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "688,170"
-  },
   "Volume on board End" : "145,350",
   "Volume on board Start" : "149,700",
   "ID" : "load-cargo-39",
@@ -2504,7 +2499,12 @@
   "To Port" : "Quintero",
   "Total Cost" : "688,170",
   "Type" : "Journey",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : {
+    "NBO" : "4350",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "688,170"
+  }
 }, {
   "At Port" : "Quintero",
   "Charter Cost" : "0",
@@ -2512,11 +2512,6 @@
   "End Date" : "01/01/11 07:00 (CLT)",
   "From Port" : "Quintero",
   "Fuel Cost" : "40,341",
-  "[Fuels]" : {
-    "NBO" : "255",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "40,341"
-  },
   "Volume on board End" : "145,095",
   "Volume on board Start" : "145,350",
   "ID" : "load-cargo-39",
@@ -2524,7 +2519,12 @@
   "Start Date" : "30/12/10 21:00 (CLT)",
   "Total Cost" : "40,341",
   "Type" : "Idle",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : {
+    "NBO" : "255",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "40,341"
+  }
 }, {
   "At Port" : "Quintero",
   "Charter Cost" : "0",
@@ -2534,7 +2534,6 @@
   "End Date" : "02/01/11 07:00 (CLT)",
   "From Port" : "Quintero",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "6,016",
@@ -2548,7 +2547,8 @@
   "Transfer Volume" : "139,078",
   "Transfer Energy" : "3,143,170",
   "Type" : "Discharge",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Quintero",
   "Charter Cost" : "0",
@@ -2557,11 +2557,6 @@
   "End Date" : "25/01/11 19:00 (GMT-04:00)",
   "From Port" : "Quintero",
   "Fuel Cost" : "670,373",
-  "[Fuels]" : {
-    "NBO" : "4238",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "670,373"
-  },
   "Volume on board End" : "1,779",
   "Volume on board Start" : "6,016",
   "ID" : "discharge-cargo-39",
@@ -2573,7 +2568,12 @@
   "To Port" : "Point Fortin",
   "Total Cost" : "670,372",
   "Type" : "Journey",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : {
+    "NBO" : "4238",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "670,373"
+  }
 }, {
   "At Port" : "Point Fortin",
   "Charter Cost" : "0",
@@ -2581,11 +2581,6 @@
   "End Date" : "07/02/11 14:00 (GMT-04:00)",
   "From Port" : "Point Fortin",
   "Fuel Cost" : "202,364",
-  "[Fuels]" : {
-    "NBO" : "1279",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "202,364"
-  },
   "Volume on board End" : "500",
   "Volume on board Start" : "1,779",
   "ID" : "discharge-cargo-39",
@@ -2593,7 +2588,12 @@
   "Start Date" : "25/01/11 19:00 (GMT-04:00)",
   "Total Cost" : "202,364",
   "Type" : "Idle",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : {
+    "NBO" : "1279",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "202,364"
+  }
 }, {
   "At Port" : "Point Fortin",
   "Charter Cost" : "0",
@@ -2603,7 +2603,6 @@
   "End Date" : "08/02/11 14:00 (GMT-04:00)",
   "From Port" : "Point Fortin",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "149,700",
@@ -2617,7 +2616,8 @@
   "Transfer Volume" : "149,200",
   "Transfer Energy" : "3,371,920",
   "Type" : "Load",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Point Fortin",
   "Canal Booked" : "No",
@@ -2630,14 +2630,6 @@
   "End Date" : "13/03/11 17:00 (KT)",
   "From Port" : "Point Fortin",
   "Fuel Cost" : "1,031,217",
-  "[Fuels]" : {
-    "NBO" : "6517",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "1,030,937",
-    "FBO" : "2",
-    "FBO Unit Price" : "7.00",
-    "FBO Cost" : "280"
-  },
   "Volume on board End" : "143,181",
   "Volume on board Start" : "149,700",
   "ID" : "load-cargo-48",
@@ -2650,7 +2642,15 @@
   "To Port" : "Pyeongtaek",
   "Total Cost" : "1,532,178",
   "Type" : "Journey",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : {
+    "NBO" : "6517",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "1,030,937",
+    "FBO" : "2",
+    "FBO Unit Price" : "7.00",
+    "FBO Cost" : "280"
+  }
 }, {
   "At Port" : "Pyeongtaek",
   "Charter Cost" : "0",
@@ -2658,11 +2658,6 @@
   "End Date" : "15/03/11 07:00 (KT)",
   "From Port" : "Pyeongtaek",
   "Fuel Cost" : "45,087",
-  "[Fuels]" : {
-    "NBO" : "285",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "45,087"
-  },
   "Volume on board End" : "142,896",
   "Volume on board Start" : "143,181",
   "ID" : "load-cargo-48",
@@ -2670,7 +2665,12 @@
   "Start Date" : "13/03/11 17:00 (KT)",
   "Total Cost" : "45,087",
   "Type" : "Idle",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : {
+    "NBO" : "285",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "45,087"
+  }
 }, {
   "At Port" : "Pyeongtaek",
   "Charter Cost" : "0",
@@ -2680,7 +2680,6 @@
   "End Date" : "16/03/11 07:00 (KT)",
   "From Port" : "Pyeongtaek",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "6,337",
@@ -2694,7 +2693,8 @@
   "Transfer Volume" : "136,558",
   "Transfer Energy" : "3,086,232",
   "Type" : "Discharge",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Pyeongtaek",
   "Canal Arrival" : "11/04/11 17:00",
@@ -2706,14 +2706,6 @@
   "End Date" : "13/04/11 14:00 (EET)",
   "From Port" : "Pyeongtaek",
   "Fuel Cost" : "817,383",
-  "[Fuels]" : {
-    "NBO" : "5165",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "817,103",
-    "FBO" : "2",
-    "FBO Unit Price" : "7.00",
-    "FBO Cost" : "280"
-  },
   "Volume on board End" : "1,170",
   "Volume on board Start" : "6,337",
   "ID" : "discharge-cargo-48",
@@ -2726,7 +2718,15 @@
   "To Port" : "Idku",
   "Total Cost" : "847,383",
   "Type" : "Journey",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : {
+    "NBO" : "5165",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "817,103",
+    "FBO" : "2",
+    "FBO Unit Price" : "7.00",
+    "FBO Cost" : "280"
+  }
 }, {
   "At Port" : "Idku",
   "Charter Cost" : "0",
@@ -2734,11 +2734,6 @@
   "End Date" : "20/04/11 07:00 (EET)",
   "From Port" : "Idku",
   "Fuel Cost" : "106,125",
-  "[Fuels]" : {
-    "NBO" : "671",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "106,126"
-  },
   "Volume on board End" : "500",
   "Volume on board Start" : "1,170",
   "ID" : "discharge-cargo-48",
@@ -2746,7 +2741,12 @@
   "Start Date" : "13/04/11 14:00 (EET)",
   "Total Cost" : "106,125",
   "Type" : "Idle",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : {
+    "NBO" : "671",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "106,126"
+  }
 }, {
   "At Port" : "Idku",
   "Charter Cost" : "0",
@@ -2756,7 +2756,6 @@
   "End Date" : "21/04/11 07:00 (EET)",
   "From Port" : "Idku",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "149,700",
@@ -2770,7 +2769,8 @@
   "Transfer Volume" : "149,200",
   "Transfer Energy" : "3,371,920",
   "Type" : "Load",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Idku",
   "Charter Cost" : "0",
@@ -2779,14 +2779,6 @@
   "End Date" : "06/05/11 14:00 (GMT-05:00)",
   "From Port" : "Idku",
   "Fuel Cost" : "610,935",
-  "[Fuels]" : {
-    "NBO" : "3108",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "491,738",
-    "FBO" : "753",
-    "FBO Unit Price" : "7.00",
-    "FBO Cost" : "119,197"
-  },
   "Volume on board End" : "145,838",
   "Volume on board Start" : "149,700",
   "ID" : "load-cargo-5",
@@ -2798,7 +2790,15 @@
   "To Port" : "Elba Island",
   "Total Cost" : "610,934",
   "Type" : "Journey",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : {
+    "NBO" : "3108",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "491,738",
+    "FBO" : "753",
+    "FBO Unit Price" : "7.00",
+    "FBO Cost" : "119,197"
+  }
 }, {
   "At Port" : "Elba Island",
   "Charter Cost" : "0",
@@ -2806,7 +2806,6 @@
   "End Date" : "06/05/11 14:00 (GMT-05:00)",
   "From Port" : "Elba Island",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "145,838",
   "Volume on board Start" : "145,838",
   "ID" : "load-cargo-5",
@@ -2814,7 +2813,8 @@
   "Start Date" : "06/05/11 14:00 (GMT-05:00)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Elba Island",
   "Charter Cost" : "0",
@@ -2824,7 +2824,6 @@
   "End Date" : "07/05/11 14:00 (GMT-05:00)",
   "From Port" : "Elba Island",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "3,927",
@@ -2838,7 +2837,8 @@
   "Transfer Volume" : "141,910",
   "Transfer Energy" : "3,207,182",
   "Type" : "Discharge",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Elba Island",
   "Charter Cost" : "0",
@@ -2847,11 +2847,6 @@
   "End Date" : "13/05/11 07:00 (GMT-04:00)",
   "From Port" : "Elba Island",
   "Fuel Cost" : "162,551",
-  "[Fuels]" : {
-    "NBO" : "1028",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "162,551"
-  },
   "Volume on board End" : "2,900",
   "Volume on board Start" : "3,927",
   "ID" : "discharge-cargo-5",
@@ -2863,7 +2858,12 @@
   "To Port" : "Point Fortin",
   "Total Cost" : "162,550",
   "Type" : "Journey",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : {
+    "NBO" : "1028",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "162,551"
+  }
 }, {
   "At Port" : "Point Fortin",
   "Charter Cost" : "0",
@@ -2871,11 +2871,6 @@
   "End Date" : "06/06/11 07:00 (GMT-04:00)",
   "From Port" : "Point Fortin",
   "Fuel Cost" : "379,680",
-  "[Fuels]" : {
-    "NBO" : "2400",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "379,680"
-  },
   "Volume on board End" : "500",
   "Volume on board Start" : "2,900",
   "ID" : "discharge-cargo-5",
@@ -2883,7 +2878,12 @@
   "Start Date" : "13/05/11 07:00 (GMT-04:00)",
   "Total Cost" : "379,680",
   "Type" : "Idle",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : {
+    "NBO" : "2400",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "379,680"
+  }
 }, {
   "At Port" : "Point Fortin",
   "Charter Cost" : "0",
@@ -2893,7 +2893,6 @@
   "End Date" : "07/06/11 07:00 (GMT-04:00)",
   "From Port" : "Point Fortin",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "149,700",
@@ -2907,7 +2906,8 @@
   "Transfer Volume" : "149,200",
   "Transfer Energy" : "3,371,920",
   "Type" : "Load",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Point Fortin",
   "Charter Cost" : "0",
@@ -2916,14 +2916,6 @@
   "End Date" : "28/06/11 14:00 (CLT)",
   "From Port" : "Point Fortin",
   "Fuel Cost" : "761,185",
-  "[Fuels]" : {
-    "NBO" : "4258",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "673,668",
-    "FBO" : "553",
-    "FBO Unit Price" : "7.00",
-    "FBO Cost" : "87,517"
-  },
   "Volume on board End" : "144,888",
   "Volume on board Start" : "149,700",
   "ID" : "load-cargo-60",
@@ -2935,7 +2927,15 @@
   "To Port" : "Quintero",
   "Total Cost" : "761,185",
   "Type" : "Journey",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : {
+    "NBO" : "4258",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "673,668",
+    "FBO" : "553",
+    "FBO Unit Price" : "7.00",
+    "FBO Cost" : "87,517"
+  }
 }, {
   "At Port" : "Quintero",
   "Charter Cost" : "0",
@@ -2943,7 +2943,6 @@
   "End Date" : "28/06/11 14:00 (CLT)",
   "From Port" : "Quintero",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "144,888",
   "Volume on board Start" : "144,888",
   "ID" : "load-cargo-60",
@@ -2951,7 +2950,8 @@
   "Start Date" : "28/06/11 14:00 (CLT)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Quintero",
   "Charter Cost" : "0",
@@ -2961,7 +2961,6 @@
   "End Date" : "29/06/11 14:00 (CLT)",
   "From Port" : "Quintero",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "7,783",
@@ -2975,7 +2974,8 @@
   "Transfer Volume" : "137,105",
   "Transfer Energy" : "3,098,575",
   "Type" : "Discharge",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Quintero",
   "Charter Cost" : "0",
@@ -2984,11 +2984,6 @@
   "End Date" : "23/07/11 03:00 (GMT-04:00)",
   "From Port" : "Quintero",
   "Fuel Cost" : "670,373",
-  "[Fuels]" : {
-    "NBO" : "4238",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "670,373"
-  },
   "Volume on board End" : "3,545",
   "Volume on board Start" : "7,783",
   "ID" : "discharge-cargo-60",
@@ -3000,7 +2995,12 @@
   "To Port" : "Point Fortin",
   "Total Cost" : "670,372",
   "Type" : "Journey",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : {
+    "NBO" : "4238",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "670,373"
+  }
 }, {
   "At Port" : "Point Fortin",
   "Charter Cost" : "0",
@@ -3008,11 +3008,6 @@
   "End Date" : "27/08/11 14:00 (GMT-04:00)",
   "From Port" : "Point Fortin",
   "Fuel Cost" : "560,950",
-  "[Fuels]" : {
-    "NBO" : "3546",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "560,951"
-  },
   "Volume on board End" : "0",
   "Volume on board Start" : "3,545",
   "ID" : "discharge-cargo-60",
@@ -3020,7 +3015,12 @@
   "Start Date" : "23/07/11 03:00 (GMT-04:00)",
   "Total Cost" : "560,950",
   "Type" : "Idle",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : {
+    "NBO" : "3546",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "560,951"
+  }
 }, {
   "At Port" : "Point Fortin",
   "Charter Cost" : "0",
@@ -3028,7 +3028,6 @@
   "End Date" : "27/08/11 14:00 (GMT-04:00)",
   "From Port" : "Point Fortin",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "0",
@@ -3039,7 +3038,8 @@
   "Start Date" : "27/08/11 14:00 (GMT-04:00)",
   "Total Cost" : "0",
   "Type" : "End Event",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Point Fortin",
   "Charter Cost" : "0",
@@ -3047,7 +3047,6 @@
   "End Date" : "24/12/10 14:00 (GMT-04:00)",
   "From Port" : "Point Fortin",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "0",
@@ -3058,7 +3057,8 @@
   "Start Date" : "24/12/10 14:00 (GMT-04:00)",
   "Total Cost" : "0",
   "Type" : "Start Event",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Point Fortin",
   "Charter Cost" : "0",
@@ -3066,7 +3066,6 @@
   "End Date" : "24/12/10 14:00 (GMT-04:00)",
   "From Port" : "Point Fortin",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "0",
   "Volume on board Start" : "0",
   "ID" : "Methane Princess",
@@ -3074,7 +3073,8 @@
   "Start Date" : "24/12/10 14:00 (GMT-04:00)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Point Fortin",
   "Charter Cost" : "100,000",
@@ -3084,7 +3084,6 @@
   "End Date" : "25/12/10 14:00 (GMT-04:00)",
   "From Port" : "Point Fortin",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "138,000",
@@ -3098,7 +3097,8 @@
   "Transfer Volume" : "138,000",
   "Transfer Energy" : "3,118,800",
   "Type" : "Load",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Point Fortin",
   "Charter Cost" : "983,333",
@@ -3107,14 +3107,6 @@
   "End Date" : "04/01/11 14:00 (BT)",
   "From Port" : "Point Fortin",
   "Fuel Cost" : "481,429",
-  "[Fuels]" : {
-    "NBO" : "1967",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "311,127",
-    "FBO" : "1077",
-    "FBO Unit Price" : "7.00",
-    "FBO Cost" : "170,302"
-  },
   "Volume on board End" : "134,956",
   "Volume on board Start" : "138,000",
   "ID" : "load-cargo-24",
@@ -3126,7 +3118,15 @@
   "To Port" : "Isle of Grain",
   "Total Cost" : "1,464,761",
   "Type" : "Journey",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : {
+    "NBO" : "1967",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "311,127",
+    "FBO" : "1077",
+    "FBO Unit Price" : "7.00",
+    "FBO Cost" : "170,302"
+  }
 }, {
   "At Port" : "Isle of Grain",
   "Charter Cost" : "0",
@@ -3134,7 +3134,6 @@
   "End Date" : "04/01/11 14:00 (BT)",
   "From Port" : "Isle of Grain",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "134,956",
   "Volume on board Start" : "134,956",
   "ID" : "load-cargo-24",
@@ -3142,7 +3141,8 @@
   "Start Date" : "04/01/11 14:00 (BT)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Isle of Grain",
   "Charter Cost" : "100,000",
@@ -3152,7 +3152,6 @@
   "End Date" : "05/01/11 14:00 (BT)",
   "From Port" : "Isle of Grain",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "3,502",
@@ -3166,7 +3165,8 @@
   "Transfer Volume" : "131,454",
   "Transfer Energy" : "2,970,867",
   "Type" : "Discharge",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Isle of Grain",
   "Charter Cost" : "1,508,333",
@@ -3175,11 +3175,6 @@
   "End Date" : "20/01/11 17:00 (WAT)",
   "From Port" : "Isle of Grain",
   "Fuel Cost" : "429,513",
-  "[Fuels]" : {
-    "NBO" : "2715",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "429,513"
-  },
   "Volume on board End" : "787",
   "Volume on board Start" : "3,502",
   "ID" : "discharge-cargo-24",
@@ -3191,7 +3186,12 @@
   "To Port" : "Punta Europa",
   "Total Cost" : "1,937,846",
   "Type" : "Journey",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : {
+    "NBO" : "2715",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "429,513"
+  }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "287,500",
@@ -3199,11 +3199,6 @@
   "End Date" : "23/01/11 14:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "45,482",
-  "[Fuels]" : {
-    "NBO" : "288",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "45,483"
-  },
   "Volume on board End" : "500",
   "Volume on board Start" : "787",
   "ID" : "discharge-cargo-24",
@@ -3211,7 +3206,12 @@
   "Start Date" : "20/01/11 17:00 (WAT)",
   "Total Cost" : "332,982",
   "Type" : "Idle",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : {
+    "NBO" : "288",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "45,483"
+  }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "100,000",
@@ -3221,7 +3221,6 @@
   "End Date" : "24/01/11 14:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "138,000",
@@ -3235,7 +3234,8 @@
   "Transfer Volume" : "137,500",
   "Transfer Energy" : "3,107,500",
   "Type" : "Load",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "2,041,666",
@@ -3244,11 +3244,6 @@
   "End Date" : "13/02/11 18:00 (GMT-05:00)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "645,983",
-  "[Fuels]" : {
-    "NBO" : "4083",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "645,983"
-  },
   "Volume on board End" : "133,916",
   "Volume on board Start" : "138,000",
   "ID" : "load-cargo-31",
@@ -3260,7 +3255,12 @@
   "To Port" : "Freeport",
   "Total Cost" : "2,687,649",
   "Type" : "Journey",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : {
+    "NBO" : "4083",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "645,983"
+  }
 }, {
   "At Port" : "Freeport",
   "Charter Cost" : "2,154,166",
@@ -3268,11 +3268,6 @@
   "End Date" : "07/03/11 07:00 (GMT-05:00)",
   "From Port" : "Freeport",
   "Fuel Cost" : "613,420",
-  "[Fuels]" : {
-    "NBO" : "3878",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "613,421"
-  },
   "Volume on board End" : "130,039",
   "Volume on board Start" : "133,916",
   "ID" : "load-cargo-31",
@@ -3280,7 +3275,12 @@
   "Start Date" : "13/02/11 18:00 (GMT-05:00)",
   "Total Cost" : "2,767,586",
   "Type" : "Idle",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : {
+    "NBO" : "3878",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "613,421"
+  }
 }, {
   "At Port" : "Freeport",
   "Charter Cost" : "100,000",
@@ -3290,7 +3290,6 @@
   "End Date" : "08/03/11 07:00 (GMT-05:00)",
   "From Port" : "Freeport",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "4,848",
@@ -3304,7 +3303,8 @@
   "Transfer Volume" : "125,190",
   "Transfer Energy" : "2,829,308",
   "Type" : "Discharge",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Freeport",
   "Charter Cost" : "1,350,000",
@@ -3313,14 +3313,6 @@
   "End Date" : "22/03/11 01:00 (WAT)",
   "From Port" : "Freeport",
   "Fuel Cost" : "767,038",
-  "[Fuels]" : {
-    "NBO" : "2430",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "384,426",
-    "FBO" : "2419",
-    "FBO Unit Price" : "7.00",
-    "FBO Cost" : "382,612"
-  },
   "Volume on board End" : "0",
   "Volume on board Start" : "4,848",
   "ID" : "discharge-cargo-31",
@@ -3332,7 +3324,15 @@
   "To Port" : "Punta Europa",
   "Total Cost" : "2,117,037",
   "Type" : "Journey",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : {
+    "NBO" : "2430",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "384,426",
+    "FBO" : "2419",
+    "FBO Unit Price" : "7.00",
+    "FBO Cost" : "382,612"
+  }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -3340,7 +3340,6 @@
   "End Date" : "22/03/11 01:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "0",
   "Volume on board Start" : "0",
   "ID" : "discharge-cargo-31",
@@ -3348,14 +3347,14 @@
   "Start Date" : "22/03/11 01:00 (WAT)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "1,754,166",
   "Duration" : "17:13",
   "End Date" : "08/04/11 14:00 (WAT)",
   "From Port" : "Punta Europa",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "0",
@@ -3366,7 +3365,8 @@
   "Start Date" : "22/03/11 01:00 (WAT)",
   "Total Cost" : "1,754,166",
   "Type" : "Charter Out",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -3374,7 +3374,6 @@
   "End Date" : "08/04/11 14:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "0",
   "Volume on board Start" : "0",
   "ID" : "discharge-cargo-31",
@@ -3382,7 +3381,8 @@
   "Start Date" : "08/04/11 14:00 (WAT)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "100,000",
@@ -3392,7 +3392,6 @@
   "End Date" : "09/04/11 14:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "138,000",
@@ -3406,7 +3405,8 @@
   "Transfer Volume" : "138,000",
   "Transfer Energy" : "3,118,800",
   "Type" : "Load",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "2,079,166",
@@ -3415,14 +3415,6 @@
   "End Date" : "30/04/11 14:00 (IT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "851,887",
-  "[Fuels]" : {
-    "NBO" : "4158",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "657,848",
-    "FBO" : "1227",
-    "FBO Unit Price" : "7.00",
-    "FBO Cost" : "194,038"
-  },
   "Volume on board End" : "132,615",
   "Volume on board Start" : "138,000",
   "ID" : "load-cargo-16",
@@ -3434,7 +3426,15 @@
   "To Port" : "Hazira",
   "Total Cost" : "2,931,052",
   "Type" : "Journey",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : {
+    "NBO" : "4158",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "657,848",
+    "FBO" : "1227",
+    "FBO Unit Price" : "7.00",
+    "FBO Cost" : "194,038"
+  }
 }, {
   "At Port" : "Hazira",
   "Charter Cost" : "0",
@@ -3442,7 +3442,6 @@
   "End Date" : "30/04/11 14:00 (IT)",
   "From Port" : "Hazira",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "132,615",
   "Volume on board Start" : "132,615",
   "ID" : "load-cargo-16",
@@ -3450,7 +3449,8 @@
   "Start Date" : "30/04/11 14:00 (IT)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Hazira",
   "Charter Cost" : "100,000",
@@ -3460,7 +3460,6 @@
   "End Date" : "01/05/11 14:00 (IT)",
   "From Port" : "Hazira",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "5,779",
@@ -3474,7 +3473,8 @@
   "Transfer Volume" : "126,836",
   "Transfer Energy" : "2,866,495",
   "Type" : "Discharge",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Hazira",
   "Charter Cost" : "1,891,666",
@@ -3483,14 +3483,6 @@
   "End Date" : "20/05/11 07:00 (WAT)",
   "From Port" : "Hazira",
   "Fuel Cost" : "835,143",
-  "[Fuels]" : {
-    "NBO" : "3405",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "538,671",
-    "FBO" : "1874",
-    "FBO Unit Price" : "7.00",
-    "FBO Cost" : "296,472"
-  },
   "Volume on board End" : "500",
   "Volume on board Start" : "5,779",
   "ID" : "discharge-cargo-16",
@@ -3502,7 +3494,15 @@
   "To Port" : "Punta Europa",
   "Total Cost" : "2,726,809",
   "Type" : "Journey",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : {
+    "NBO" : "3405",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "538,671",
+    "FBO" : "1874",
+    "FBO Unit Price" : "7.00",
+    "FBO Cost" : "296,472"
+  }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -3510,7 +3510,6 @@
   "End Date" : "20/05/11 07:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "500",
   "Volume on board Start" : "500",
   "ID" : "discharge-cargo-16",
@@ -3518,7 +3517,8 @@
   "Start Date" : "20/05/11 07:00 (WAT)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "100,000",
@@ -3528,7 +3528,6 @@
   "End Date" : "21/05/11 07:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "138,000",
@@ -3542,7 +3541,8 @@
   "Transfer Volume" : "137,500",
   "Transfer Energy" : "3,107,500",
   "Type" : "Load",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "2,120,833",
@@ -3551,14 +3551,6 @@
   "End Date" : "11/06/11 07:00 (CLT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "702,458",
-  "[Fuels]" : {
-    "NBO" : "4242",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "671,032",
-    "FBO" : "199",
-    "FBO Unit Price" : "7.00",
-    "FBO Cost" : "31,426"
-  },
   "Volume on board End" : "133,559",
   "Volume on board Start" : "138,000",
   "ID" : "load-cargo-30",
@@ -3570,7 +3562,15 @@
   "To Port" : "Quintero",
   "Total Cost" : "2,823,290",
   "Type" : "Journey",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : {
+    "NBO" : "4242",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "671,032",
+    "FBO" : "199",
+    "FBO Unit Price" : "7.00",
+    "FBO Cost" : "31,426"
+  }
 }, {
   "At Port" : "Quintero",
   "Charter Cost" : "0",
@@ -3578,7 +3578,6 @@
   "End Date" : "11/06/11 07:00 (CLT)",
   "From Port" : "Quintero",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "133,559",
   "Volume on board Start" : "133,559",
   "ID" : "load-cargo-30",
@@ -3586,7 +3585,8 @@
   "Start Date" : "11/06/11 07:00 (CLT)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Quintero",
   "Charter Cost" : "100,000",
@@ -3596,7 +3596,6 @@
   "End Date" : "12/06/11 07:00 (CLT)",
   "From Port" : "Quintero",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "5,177",
@@ -3610,7 +3609,8 @@
   "Transfer Volume" : "128,381",
   "Transfer Energy" : "2,901,431",
   "Type" : "Discharge",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Quintero",
   "Charter Cost" : "1,441,666",
@@ -3619,14 +3619,6 @@
   "End Date" : "26/06/11 22:00 (WAT)",
   "From Port" : "Quintero",
   "Fuel Cost" : "819,120",
-  "[Fuels]" : {
-    "NBO" : "2595",
-    "NBO Unit Price" : "7.00",
-    "NBO Cost" : "410,529",
-    "FBO" : "2583",
-    "FBO Unit Price" : "7.00",
-    "FBO Cost" : "408,591"
-  },
   "Volume on board End" : "0",
   "Volume on board Start" : "5,177",
   "ID" : "discharge-cargo-30",
@@ -3638,7 +3630,15 @@
   "To Port" : "Punta Europa",
   "Total Cost" : "2,260,786",
   "Type" : "Journey",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : {
+    "NBO" : "2595",
+    "NBO Unit Price" : "7.00",
+    "NBO Cost" : "410,529",
+    "FBO" : "2583",
+    "FBO Unit Price" : "7.00",
+    "FBO Cost" : "408,591"
+  }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -3646,7 +3646,6 @@
   "End Date" : "26/06/11 22:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "0",
   "Volume on board Start" : "0",
   "ID" : "discharge-cargo-30",
@@ -3654,14 +3653,14 @@
   "Start Date" : "26/06/11 22:00 (WAT)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "6,187,500",
   "Duration" : "61:21",
   "End Date" : "27/08/11 19:00 (WAT)",
   "From Port" : "Punta Europa",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "0",
@@ -3672,7 +3671,8 @@
   "Start Date" : "26/06/11 22:00 (WAT)",
   "Total Cost" : "6,187,500",
   "Type" : "Charter Out",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -3680,7 +3680,6 @@
   "End Date" : "27/08/11 19:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Volume on board End" : "0",
   "Volume on board Start" : "0",
   "ID" : "discharge-cargo-30",
@@ -3688,7 +3687,8 @@
   "Start Date" : "27/08/11 19:00 (WAT)",
   "Total Cost" : "0",
   "Type" : "Idle",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : { }
 }, {
   "At Port" : "Punta Europa",
   "Charter Cost" : "0",
@@ -3696,7 +3696,6 @@
   "End Date" : "27/08/11 19:00 (WAT)",
   "From Port" : "Punta Europa",
   "Fuel Cost" : "0",
-  "[Fuels]" : { },
   "Heel Cost" : "0",
   "Heel Revenue" : "0",
   "Volume on board End" : "0",
@@ -3707,5 +3706,6 @@
   "Start Date" : "27/08/11 19:00 (WAT)",
   "Total Cost" : "0",
   "Type" : "End Event",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[Fuels]" : { }
 } ]

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor;
 
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,6 +31,8 @@ import org.eclipse.ui.actions.ActionDelegate;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
@@ -53,13 +56,16 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate implements IEditorActionDelegate {
+
+	private static final boolean CLEAR_NOTES = false;
+
 	protected IEditorPart targetEditor;
 	protected IAction action;
 	protected LNGScenarioModel currentModel;
 	protected EditingDomain editingDomain;
 	private static final Set<String> usedIDStrings = new HashSet<>();
-	
-	private static final String VesselID = "Charter";
+
+	private static final String VesselID = "Vessel";
 	private static final String VesselShortID = "VSL";
 	private static final String BuyID = "Purchase";
 	private static final String SellID = "Sale";
@@ -101,12 +107,13 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 				final IScenarioServiceEditorInput iScenarioServiceEditorInput = (IScenarioServiceEditorInput) editorInput;
 				final ScenarioInstance instance = iScenarioServiceEditorInput.getScenarioInstance();
 
-				final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
-
-				try (final IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("ToggleAnonymiseScenarioEditorActionDelegate")) {
-					this.currentModel = sdp.getTypedScenario(LNGScenarioModel.class);
-					this.currentModel.eAdapters().add(notificationAdapter);
-					this.editingDomain = sdp.getEditingDomain();
+				final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+				if (modelRecord != null) {
+					try (final IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("ToggleAnonymiseScenarioEditorActionDelegate")) {
+						this.currentModel = sdp.getTypedScenario(LNGScenarioModel.class);
+						this.currentModel.eAdapters().add(notificationAdapter);
+						this.editingDomain = sdp.getEditingDomain();
+					}
 				}
 			}
 		}
@@ -145,9 +152,9 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 		final EditingDomain ed = editingDomain;
 		final List<AnonymisationRecord> records = AnonymisationMapIO.read(AnonymisationMapIO.anonyMapFile);
 		if (records.isEmpty()) {
-			//Show dialog which says that automatic naming will be applied
+			// Show dialog which says that automatic naming will be applied
 			final Shell shell = PlatformUI.getWorkbench().getDisplay().getActiveShell();
-			final MessageDialog dialog = new MessageDialog(shell, "Anonymisation", null, "Default naming generation will be applied!", 0, 0, "OK","Cancel") ;
+			final MessageDialog dialog = new MessageDialog(shell, "Anonymisation", null, "Default naming generation will be applied!", 0, 0, "OK", "Cancel");
 			dialog.create();
 			// TODO: change to IDialog.Cancel
 			if (dialog.open() == 1) {
@@ -174,22 +181,23 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 		if (!cmd.isEmpty())
 			ed.getCommandStack().execute(cmd);
 	}
-	
+
 	private void renameVessels(final @NonNull LNGScenarioModel currentModel, final EditingDomain editingDomain, final List<AnonymisationRecord> records, //
 			final CompoundCommand renameCommand, Function<RFEntry, Command> renameFunction) {
 		final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(currentModel);
 		for (final Vessel v : fleetModel.getVessels()) {
 			renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, v, v.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, VesselID, AnonymisationRecordType.VesselID)));
-			renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, v, v.getShortName(), FleetPackage.Literals.VESSEL__SHORT_NAME, VesselShortID, AnonymisationRecordType.VesselShortID)));
+			renameCommand.append(
+					renameFunction.apply(new RFEntry(editingDomain, records, v, v.getShortName(), FleetPackage.Literals.VESSEL__SHORT_NAME, VesselShortID, AnonymisationRecordType.VesselShortID)));
 		}
 	}
-	
+
 	private void renameSlots(final @NonNull LNGScenarioModel currentModel, final EditingDomain editingDomain, final List<AnonymisationRecord> records, //
 			final CompoundCommand renameCommand, Function<RFEntry, Command> renameFunction) {
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(currentModel);
 		final Set<Slot<?>> usedSlots = new HashSet();
 		for (final Cargo c : cargoModel.getCargoes()) {
-			for(final Slot<?> s : c.getSlots()) {
+			for (final Slot<?> s : c.getSlots()) {
 				if (s instanceof LoadSlot) {
 					renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, s, s.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, BuyID, AnonymisationRecordType.BuyID)));
 					usedSlots.add(s);
@@ -197,42 +205,51 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 					renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, s, s.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, SellID, AnonymisationRecordType.SellID)));
 					usedSlots.add(s);
 				}
+
 			}
 		}
 		for (final Slot<?> s : cargoModel.getLoadSlots()) {
+			if (CLEAR_NOTES) {
+				renameCommand.append(SetCommand.create(editingDomain, s, CargoPackage.Literals.SLOT__NOTES, SetCommand.UNSET_VALUE));
+			}
 			if (!(usedSlots.contains(s))) {
 				renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, s, s.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, BuyID, AnonymisationRecordType.BuyID)));
 				usedSlots.add(s);
 			}
 		}
 		for (final Slot<?> s : cargoModel.getDischargeSlots()) {
+			if (CLEAR_NOTES) {
+				renameCommand.append(SetCommand.create(editingDomain, s, CargoPackage.Literals.SLOT__NOTES, SetCommand.UNSET_VALUE));
+			}
 			if (!(usedSlots.contains(s))) {
 				renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, s, s.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, SellID, AnonymisationRecordType.SellID)));
 				usedSlots.add(s);
 			}
 		}
 	}
-	
+
 	private void renameContracts(final @NonNull LNGScenarioModel currentModel, final EditingDomain editingDomain, final List<AnonymisationRecord> records, //
 			final CompoundCommand renameCommand, Function<RFEntry, Command> renameFunction) {
 		final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(currentModel);
 		for (final PurchaseContract c : commercialModel.getPurchaseContracts()) {
-			renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, c, c.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, BuyContractID, AnonymisationRecordType.BuyContractID)));
+			renameCommand.append(
+					renameFunction.apply(new RFEntry(editingDomain, records, c, c.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, BuyContractID, AnonymisationRecordType.BuyContractID)));
 		}
 		for (final SalesContract c : commercialModel.getSalesContracts()) {
-			renameCommand.append(renameFunction.apply(new RFEntry(editingDomain, records, c, c.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, SellContractID, AnonymisationRecordType.SellContractID)));
+			renameCommand.append(
+					renameFunction.apply(new RFEntry(editingDomain, records, c, c.getName(), MMXCorePackage.Literals.NAMED_OBJECT__NAME, SellContractID, AnonymisationRecordType.SellContractID)));
 		}
 	}
-	
+
 	private static Command rename(RFEntry entry) {
 		String name = getNewName(entry.records, entry.name, entry.type);
 		if (name.isEmpty()) {
-			name = suggestNewName(entry.prefix);
+			name = suggestNewName(entry);
 			entry.records.add(new AnonymisationRecord(entry.name, name, entry.type));
 		}
 		return SetCommand.create(entry.editingDomain, entry.renamee, entry.feature, name);
 	}
-	
+
 	private static Command renameBW(RFEntry entry) {
 		String name = getOldName(entry.records, entry.name, entry.type);
 		if (!name.isEmpty() || entry.type == AnonymisationRecordType.VesselShortID) {
@@ -240,9 +257,9 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 		}
 		return null;
 	}
-	
+
 	private static String getNewName(final List<AnonymisationRecord> records, final String oldName, final AnonymisationRecordType type) {
-		if (oldName == null || type == null || records == null || records.isEmpty())
+		if (oldName == null || type == null || records == null || records.isEmpty() || (type == AnonymisationRecordType.VesselShortID && oldName == ""))
 			return "";
 		final List<AnonymisationRecord> filtered = records.stream().filter(r -> r.type == type && oldName.equalsIgnoreCase(r.oldName)).collect(Collectors.toList());
 		if (!filtered.isEmpty()) {
@@ -255,7 +272,7 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 		}
 		return "";
 	}
-	
+
 	private static @NonNull String getOldName(final List<AnonymisationRecord> records, final String newName, final AnonymisationRecordType type) {
 		if (newName == null || type == null || records == null || records.isEmpty())
 			return "";
@@ -274,14 +291,61 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 	private static String suggestNewName(final String prefix) {
 		int counter = 0;
 		String suggestedName = String.format("%s %d", prefix, counter++);
-		while(usedIDStrings.contains(suggestedName)) {
+		while (usedIDStrings.contains(suggestedName)) {
 			suggestedName = String.format("%s %d", prefix, counter++);
 		}
 		usedIDStrings.add(suggestedName);
 		return suggestedName;
 	}
-	
-	private class RFEntry{
+
+	private static String suggestNewName(final RFEntry entry) {
+		int counter = 0;
+		String suggestedName = entry.prefix;
+		String prefix = entry.prefix;
+		if (entry.renamee instanceof Slot) {
+			final Slot<?> slot = (Slot<?>) entry.renamee;
+			final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+			suggestedName = String.format("%s-%s-%s-%d", getSlotPrefix(slot), slot.getPort().getName(), slot.getWindowStart().format(dtf), slot.getWindowStartTime());
+			prefix = suggestedName;
+		}
+		if (entry.renamee instanceof Vessel) {
+			final Vessel v = (Vessel) entry.renamee;
+			String capacity = String.format("%dK", (int) (v.getCapacity() / 1_000.0));
+			String type = v.getType();
+			String vPrefix = "Vessel";
+			if (entry.type == AnonymisationRecordType.VesselShortID) {
+				vPrefix = "VSL";
+			}
+			suggestedName = String.format("%s-%s-%s", vPrefix, capacity, type);
+			prefix = suggestedName;
+		}
+		while (usedIDStrings.contains(suggestedName)) {
+			suggestedName = String.format("%s-%d", prefix, counter++);
+		}
+		usedIDStrings.add(suggestedName);
+		return suggestedName;
+	}
+
+	private static String getSlotPrefix(final Slot<?> slot) {
+		if (slot instanceof LoadSlot) {
+			final LoadSlot ls = (LoadSlot) slot;
+			if (ls.isDESPurchase()) {
+				return "DP";
+			} else {
+				return "FP";
+			}
+		} else if (slot instanceof DischargeSlot) {
+			final DischargeSlot ds = (DischargeSlot) slot;
+			if (ds.isFOBSale()) {
+				return "FS";
+			} else {
+				return "DS";
+			}
+		}
+		return "UD";
+	}
+
+	private class RFEntry {
 		public RFEntry(EditingDomain editingDomain, List<AnonymisationRecord> records, EObject renamee, String name, EStructuralFeature feature, String prefix, AnonymisationRecordType type) {
 			super();
 			this.editingDomain = editingDomain;
@@ -292,12 +356,13 @@ public class ToggleAnonymiseScenarioEditorActionDelegate extends ActionDelegate 
 			this.prefix = prefix;
 			this.type = type;
 		}
-		final EditingDomain editingDomain; 
-		final List<AnonymisationRecord> records; 
-		final EObject renamee; 
-		final String name; 
-		final EStructuralFeature feature; 
-		final String prefix; 
+
+		final EditingDomain editingDomain;
+		final List<AnonymisationRecord> records;
+		final EObject renamee;
+		final String name;
+		final EStructuralFeature feature;
+		final String prefix;
 		final AnonymisationRecordType type;
 	}
 }

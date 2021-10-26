@@ -353,7 +353,7 @@ public class FileScenarioService extends AbstractScenarioService {
 				fireEvent(ScenarioServiceEvent.PRE_DELETE, instance);
 			}
 
-			final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 
 			System.gc();
 			System.gc();

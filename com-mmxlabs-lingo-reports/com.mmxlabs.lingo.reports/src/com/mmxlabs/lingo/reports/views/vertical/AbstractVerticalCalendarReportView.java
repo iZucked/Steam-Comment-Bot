@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.views.vertical;
 
-import java.util.Date;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -27,7 +26,6 @@ import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.views.vertical.providers.EventProvider;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
-import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
@@ -68,26 +66,21 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 	private ScenarioComparisonService selectedScenariosService;
 
-	@NonNull
-	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
+	protected final @NonNull ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 		public void selectedDataProviderChanged(ISelectedDataProvider selectedDataProvider, boolean block) {
 
-			final Runnable r = new Runnable() {
-				@Override
-				public void run() {
-					final List<com.mmxlabs.scenario.service.ScenarioResult> scenarios = selectedDataProvider.getOtherScenarioResults();
-					if (!scenarios.isEmpty()) {
-						final ScenarioResult result = scenarios.get(0);
-						ViewerHelper.setInput(gridViewer, true, result);
-						setCurrentScenario(result);
-					} else {
-						ViewerHelper.setInput(gridViewer, true, (Object) null);
-						setCurrentScenario(null);
-					}
+			final Runnable r = () -> {
+				final List<com.mmxlabs.scenario.service.ScenarioResult> scenarios = selectedDataProvider.getOtherScenarioResults();
+				if (!scenarios.isEmpty()) {
+					final ScenarioResult result = scenarios.get(0);
+					ViewerHelper.setInput(gridViewer, true, result);
+					setCurrentScenario(result);
+				} else {
+					ViewerHelper.setInput(gridViewer, true, (Object) null);
+					setCurrentScenario(null);
 				}
-
 			};
-			RunnerHelper.exec(r, block);
+			ViewerHelper.runIfViewerValid(gridViewer, block, r);
 		}
 	};
 
@@ -108,7 +101,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	@Override
 	public void createPartControl(final Composite parent) {
 
-		selectedScenariosService =  getSite().getService(ScenarioComparisonService.class);
+		selectedScenariosService = getSite().getService(ScenarioComparisonService.class);
 
 		final Composite container = new Composite(parent, SWT.NONE);
 		final FillLayout layout = new FillLayout();

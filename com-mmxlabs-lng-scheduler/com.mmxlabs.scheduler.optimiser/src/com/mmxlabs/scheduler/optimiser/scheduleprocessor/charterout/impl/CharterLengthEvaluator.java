@@ -31,6 +31,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptionSupplier;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterLengthEvaluator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
@@ -68,6 +69,11 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 	@Inject
 	@Named(SchedulerConstants.CHARTER_LENGTH_MIN_IDLE_HOURS)
 	private int minIdleTimeInHours;
+
+	/**
+	 * If false, split any idle that is large enough. If true, split the idle at the point we run out of NBO and the remaining time is large enough.
+	 */
+	private static final boolean SPLIT_ON_RUNDRY = false;
 
 	@Override
 	public @Nullable List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(final long[] startHeelVolumeRangeInM3, final IVesselAvailability vesselAvailability, final VoyagePlan vp,
@@ -109,8 +115,14 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 		}
 
 		// Check idle length. Note: This is idle based on current speed. While we could speed up the vessel to get more idle time, this is not what we want to do.
-		if (ballastDetails.getIdleTime() < minIdleTimeInHours) {
-			return null;
+		if (SPLIT_ON_RUNDRY) {
+			if ((ballastDetails.getIdleTime() - ballastDetails.getIdleNBOHours()) < minIdleTimeInHours) {
+				return null;
+			}
+		} else {
+			if (ballastDetails.getIdleTime() < minIdleTimeInHours) {
+				return null;
+			}
 		}
 
 		// We have a candidate voyage plan with enough time, pass into the method to split into two plans and recompute values.
@@ -162,9 +174,25 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 		// Grab the target ballast leg we want to convert.
 		final VoyageDetails originalBallast = (VoyageDetails) currentSequence[ballastIdx];
 
+		// Manually construct the voyage details based on previous data.
+		VoyageDetails intermediateResult = null;
+		if (SPLIT_ON_RUNDRY && originalBallast.getIdleNBOHours() > 0 && originalBallast.getIdleNBOHours() < originalBallast.getIdleTime()) {
+			// With run-dry we NBO until we run out then switch to bunkers. Due to e.g. min base fuel we can't easily split the original details so we re-compute just the NBO part of the voyage. We
+			// can then apply this later to the original when we do the split.
+
+			VoyageOptions intermediateOptions = originalBallast.getOptions().copy();
+			intermediateOptions.setAvailableTime(originalBallast.getIdleNBOHours());
+			intermediateOptions.setFromPortSlot(originalBallast.getOptions().getToPortSlot());
+			intermediateOptions.setRoute(ERouteOption.DIRECT, 0, 0);
+
+			intermediateResult = new VoyageDetails(intermediateOptions);
+			voyageCalculator.calculateVoyageFuelRequirements(intermediateOptions, intermediateResult, Long.MAX_VALUE);
+
+		}
+
 		// Calculate how much heel we need to keep to cover charter length event idle and heel for next event. This is the original end heel + idle BOG.
-		final long idleBOGInM3 = originalBallast.getFuelConsumption(LNGFuelKeys.IdleNBO_In_m3);
-		long charterLengthHeelInM3 = originalPlan.getRemainingHeelInM3() + idleBOGInM3;
+		long idleBOGInM3 = originalBallast.getFuelConsumption(LNGFuelKeys.IdleNBO_In_m3);
+		long charterLengthHeelInM3 = originalPlan.getRemainingHeelInM3() + (SPLIT_ON_RUNDRY ? 0 : idleBOGInM3);
 
 		// Set explicit values as we already know what the heel should be at the switch over point.
 		final HeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(charterLengthHeelInM3, charterLengthHeelInM3, idleBOGInM3 > 0 ? VesselTankState.MUST_BE_COLD : VesselTankState.EITHER,
@@ -212,24 +240,36 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 		// No distance or costs to apply
 		charterToReturnPortVoyageOptions.setRoute(originalBallast.getOptions().getRoute(), 0, 0);
 
-		// Manually construct the voyage details based on previous data.
-
 		// This leg is just the travel values, so clear out any idle portion.
 		final VoyageDetails newTravelToCharterLength = originalBallast.clone();
 		{
 			newTravelToCharterLength.setOptions(ballastStartToCharterLengthPortVoyageOptions);
+			// Any cooldown or purge details go on the charter length
 			newTravelToCharterLength.setCooldownPerformed(false);
+			newTravelToCharterLength.setFuelConsumption(LNGFuelKeys.Cooldown_In_m3, 0);
 			newTravelToCharterLength.setPurgePerformed(false);
 			newTravelToCharterLength.setPurgeDuration(0);
-			// Clear Idle values
-			newTravelToCharterLength.setIdleTime(0);
-			newTravelToCharterLength.setIdleNBOHours(0);
 
-			newTravelToCharterLength.setFuelConsumption(vessel.getIdleBaseFuelInMT(), 0);
-			newTravelToCharterLength.setFuelConsumption(vessel.getIdlePilotLightFuelInMT(), 0);
-			newTravelToCharterLength.setFuelConsumption(LNGFuelKeys.Cooldown_In_m3, 0);
-			for (final FuelKey fk : LNGFuelKeys.Idle_LNG) {
-				newTravelToCharterLength.setFuelConsumption(fk, 0);
+			if (SPLIT_ON_RUNDRY && intermediateResult != null) {
+				// Copy Idle time values. These should be identical
+				newTravelToCharterLength.setIdleTime(intermediateResult.getIdleTime());
+				newTravelToCharterLength.setIdleNBOHours(intermediateResult.getIdleNBOHours());
+
+				// Update the base fuel as it only covers part of the voyage now. We do not update the LNG as this should already have been correct as we split when we run out.
+				newTravelToCharterLength.setFuelConsumption(vessel.getIdleBaseFuelInMT(), intermediateResult.getFuelConsumption(vessel.getIdleBaseFuelInMT()));
+				newTravelToCharterLength.setFuelConsumption(vessel.getIdlePilotLightFuelInMT(), intermediateResult.getFuelConsumption(vessel.getIdlePilotLightFuelInMT()));
+			} else {
+
+				// Clear Idle values
+				newTravelToCharterLength.setIdleTime(0);
+				newTravelToCharterLength.setIdleNBOHours(0);
+
+				newTravelToCharterLength.setFuelConsumption(vessel.getIdleBaseFuelInMT(), 0);
+				newTravelToCharterLength.setFuelConsumption(vessel.getIdlePilotLightFuelInMT(), 0);
+				newTravelToCharterLength.setFuelConsumption(LNGFuelKeys.Cooldown_In_m3, 0);
+				for (final FuelKey fk : LNGFuelKeys.Idle_LNG) {
+					newTravelToCharterLength.setFuelConsumption(fk, 0);
+				}
 			}
 		}
 
@@ -248,6 +288,23 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 			for (final FuelKey fk : LNGFuelKeys.Travel_LNG) {
 				newIdleFromCharterLength.setFuelConsumption(fk, 0);
 				newIdleFromCharterLength.setRouteAdditionalConsumption(fk, 0);
+			}
+
+			if (SPLIT_ON_RUNDRY && intermediateResult != null) {
+				// The new idle time is the remaining portion. Could also do idletime - idleNBOhours
+				newIdleFromCharterLength.setIdleTime(newIdleFromCharterLength.getIdleTime() - intermediateResult.getIdleTime());
+				newIdleFromCharterLength.setIdleNBOHours(0);
+
+				// Subtract the bunker values from the NBo part of the idle time
+				newIdleFromCharterLength.setFuelConsumption(vessel.getIdleBaseFuelInMT(),
+						newIdleFromCharterLength.getFuelConsumption(vessel.getIdleBaseFuelInMT()) - intermediateResult.getFuelConsumption(vessel.getIdleBaseFuelInMT()));
+				newIdleFromCharterLength.setFuelConsumption(vessel.getIdlePilotLightFuelInMT(),
+						newIdleFromCharterLength.getFuelConsumption(vessel.getIdlePilotLightFuelInMT()) - intermediateResult.getFuelConsumption(vessel.getIdlePilotLightFuelInMT()));
+
+				// By definition all LNG is in the non-charter length portion
+				for (final FuelKey fk : LNGFuelKeys.Idle_LNG) {
+					newIdleFromCharterLength.setFuelConsumption(fk, 0);
+				}
 			}
 		}
 
@@ -307,16 +364,16 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 				portTimesRecord1.setSlotExtraIdleTime(portSlot, originalPortTimesRecord.getSlotExtraIdleTime(portSlot));
 				portTimesRecord1.setSlotNextVoyageOptions(portSlot, originalPortTimesRecord.getSlotNextVoyageOptions(portSlot));
 			}
-			portTimesRecord1.setReturnSlotTime(charterLengthPortSlot, ballastStartTime + originalBallast.getTravelTime());
+			portTimesRecord1.setReturnSlotTime(charterLengthPortSlot, ballastStartTime + originalBallast.getTravelTime() + (SPLIT_ON_RUNDRY ? originalBallast.getIdleNBOHours() : 0));
 
 			//
 			final VoyagePlan currentPlan = new VoyagePlan();
 			currentPlan.setIgnoreEnd(true);
 
 			// Calculate voyage plan
-			final int violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselAvailability.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricesPerMT,
+			final long[] violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselAvailability.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricesPerMT,
 					portTimesRecord1, partialSequenceUpToCharterLength.toArray(new IDetailsSequenceElement[0]));
-			assert violationCount != Integer.MAX_VALUE;
+			assert violationCount != null;
 
 			// Make sure this is still the same
 			assert currentPlan.getStartingHeelInM3() == originalPlan.getStartingHeelInM3();
@@ -352,7 +409,7 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 
 			final PortTimesRecord portTimesRecord2 = new PortTimesRecord();
 
-			portTimesRecord2.setSlotTime(charterLengthPortSlot, ballastStartTime + originalBallast.getTravelTime());
+			portTimesRecord2.setSlotTime(charterLengthPortSlot, ballastStartTime + originalBallast.getTravelTime() + (SPLIT_ON_RUNDRY ? originalBallast.getIdleNBOHours() : 0));
 			portTimesRecord2.setSlotDuration(charterLengthPortSlot, 0);
 			portTimesRecord2.setSlotExtraIdleTime(charterLengthPortSlot, 0);
 
@@ -365,9 +422,9 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 			currentPlan.setIgnoreEnd(originalPlan.isIgnoreEnd());
 
 			// Calculate voyage plan
-			final int violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselAvailability.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricesPerMT,
+			final long[] violationCount = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, vesselAvailability.getCharterCostCalculator(), startHeelRangeInM3, baseFuelPricesPerMT,
 					portTimesRecord2, partialSequenceFromCharterLength.toArray(new IDetailsSequenceElement[0]));
-			assert violationCount != Integer.MAX_VALUE;
+			assert violationCount != null;
 
 			charterPlans.add(Pair.of(currentPlan, portTimesRecord2));
 

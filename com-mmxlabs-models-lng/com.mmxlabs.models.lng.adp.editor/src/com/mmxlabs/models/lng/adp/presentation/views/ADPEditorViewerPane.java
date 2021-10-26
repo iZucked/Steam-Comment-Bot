@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
@@ -21,12 +22,14 @@ import org.eclipse.emf.validation.service.IConstraintDescriptor;
 import org.eclipse.emf.validation.service.IConstraintFilter;
 import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.nebula.widgets.formattedtext.FormattedText;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -42,6 +45,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
@@ -49,10 +53,15 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.google.common.base.Objects;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.FleetProfile;
+import com.mmxlabs.models.lng.adp.mull.scenariocombine.BlueSkyPADPWizard;
+import com.mmxlabs.models.lng.adp.mull.scenariocombine.CombinePADPWizard;
+import com.mmxlabs.models.lng.adp.utils.ADPModelUtil;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioViewerPane;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -61,7 +70,10 @@ import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IValidationService;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
+import com.mmxlabs.rcp.common.CommonImages;
 import com.mmxlabs.rcp.common.ServiceHelper;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
@@ -90,8 +102,10 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 		// Top Toolbar
 		{
 			final Composite toolbarComposite = new Composite(parent, SWT.NONE);
+			final int additionalColumns = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION) ? 2 : 0;
+			final int numColumns = additionalColumns + 7;
 			toolbarComposite.setLayout(GridLayoutFactory.fillDefaults() //
-					.numColumns(6) //
+					.numColumns(numColumns) //
 					.equalWidth(false) //
 					.create());
 			toolbarComposite.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
@@ -116,7 +130,10 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 				{
 					deleteScenarioButton = new Button(toolbarComposite, SWT.PUSH);
 					// deleteScenarioButton.setText("X");
-					deleteScenarioButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ETOOL_DELETE));
+
+					final Image img = CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled).createImage();
+					deleteScenarioButton.addDisposeListener(e -> img.dispose());
+					deleteScenarioButton.setImage(img);
 					deleteScenarioButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.END, SWT.CENTER).create());
 
 					deleteScenarioButton.setToolTipText("Delete current ADP");
@@ -132,6 +149,77 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 									getEditingDomain().getCommandStack().execute(cmd);
 									doDisplayScenarioInstance(getScenarioEditingLocation().getScenarioInstance(), getScenarioEditingLocation().getRootObject(), null);
 								}
+							}
+						}
+					});
+				}
+
+				final Button changeADPYearButton = new Button(toolbarComposite, SWT.PUSH);
+				changeADPYearButton.setText("Shift Year");
+				changeADPYearButton.setToolTipText("Requests a new year for the ADP start and updates all profile constraints to align with the new year.");
+				changeADPYearButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.END, SWT.CENTER).create());
+				changeADPYearButton.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(final SelectionEvent e) {
+						if (editorData.adpModel != null) {
+							final Display display = PlatformUI.getWorkbench().getDisplay();
+							final InputDialog dialog = new InputDialog(display.getActiveShell(), "Shift ADP Year", "Enter a new ADP Start Year", "", newText -> {
+								if (newText == null) {
+									return "Please enter a new start year";
+								}
+								if (!newText.matches("^\\d+$")) {
+									return "Please enter a valid year";
+								}
+								return null;
+							});
+							if (dialog.open() == Window.OK) {
+								final String year = dialog.getValue();
+								final int startYear = Integer.parseInt(year);
+								final Command cmd = ADPModelUtil.constructShiftAdpYearCommand(getEditingDomain(), editorData.getAdpModel(), startYear);
+								if (cmd != null) {
+									getEditingDomain().getCommandStack().execute(cmd);
+									refresh();
+								}
+							}
+						}
+					}
+				});
+
+				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MULL_SLOT_GENERATION)) {
+					final Button buildBlueSkyButton = new Button(toolbarComposite, SWT.PUSH);
+					buildBlueSkyButton.setText("Build blue sky");
+					buildBlueSkyButton.setToolTipText("Builds blue sky model where current scenario is the demand side");
+					buildBlueSkyButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.END, SWT.CENTER).create());
+					buildBlueSkyButton.addSelectionListener(new SelectionAdapter() {
+						@Override
+						public void widgetSelected(final SelectionEvent e) {
+							ScenarioInstance demandSideScenarioInstance = editorData.getScenarioInstance();
+							if (demandSideScenarioInstance != null) {
+								final BlueSkyPADPWizard wizard = new BlueSkyPADPWizard(demandSideScenarioInstance);
+								wizard.init(page.getWorkbenchWindow().getWorkbench(), null);
+								Shell parent = page.getWorkbenchWindow().getShell();
+								WizardDialog dialog = new WizardDialog(parent, wizard);
+								dialog.create();
+								dialog.open();
+							}
+						}
+					});
+
+					final Button buildCombinedModelButton = new Button(toolbarComposite, SWT.PUSH);
+					buildCombinedModelButton.setText("Build combined");
+					buildCombinedModelButton.setToolTipText("Builds combined model where current scenario is the demand side");
+					buildCombinedModelButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.END, SWT.CENTER).create());
+					buildCombinedModelButton.addSelectionListener(new SelectionAdapter() {
+						@Override
+						public void widgetSelected(final SelectionEvent e) {
+							ScenarioInstance demandSideScenarioInstance = editorData.getScenarioInstance();
+							if (demandSideScenarioInstance != null) {
+								final CombinePADPWizard wizard = new CombinePADPWizard(demandSideScenarioInstance);
+								wizard.init(page.getWorkbenchWindow().getWorkbench(), null);
+								Shell parent = page.getWorkbenchWindow().getShell();
+								WizardDialog dialog = new WizardDialog(parent, wizard);
+								dialog.create();
+								dialog.open();
 							}
 						}
 					});
@@ -255,6 +343,16 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 		}
 	}
 
+	private void refresh() {
+		final ADPModel adpModel = this.editorData.adpModel;
+		if (adpModel == null) {
+			return;
+		}
+		startEditor.setValue(adpModel.getYearStart());
+		endEditor.setValue(adpModel.getYearEnd());
+		pages.stream().forEach(ADPComposite::refresh);
+	}
+
 	private void updateRootModel(@Nullable final LNGScenarioModel scenarioModel, @Nullable final ADPModel adpModel) {
 		final boolean changed = this.editorData.adpModel != adpModel;
 		if (!changed) {
@@ -367,7 +465,7 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 		final MMXRootObject rootObject = scenarioDataProvider.getTypedScenario(MMXRootObject.class);
 		final IStatus status = ServiceHelper.withOptionalService(IValidationService.class, helper -> {
 			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(scenarioDataProvider, false, false);
-			return helper.runValidation(validator, extraContext, rootObject);
+			return helper.runValidation(validator, extraContext, rootObject, null);
 		});
 
 		if (status == null) {
@@ -406,7 +504,7 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 			((ContractPage) pages.get(0)).setSelectedProfile((ContractProfile<?, ?>) target);
 		}
 	}
-	
+
 	@Override
 	public void updateActionBars() {
 		// TODO Auto-generated method stub

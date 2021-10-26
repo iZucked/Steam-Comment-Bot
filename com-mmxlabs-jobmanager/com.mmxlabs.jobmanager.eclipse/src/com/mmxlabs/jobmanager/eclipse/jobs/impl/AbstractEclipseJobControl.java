@@ -82,7 +82,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 				return Status.CANCEL_STATUS;
 
 			} catch (final Exception | Error e) {
-				
+
 				boolean visualStudioError = false;
 				if (e instanceof NoClassDefFoundError) {
 					NoClassDefFoundError noClassDefFoundError = (NoClassDefFoundError) e;
@@ -90,7 +90,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 						visualStudioError = true;
 					}
 				}
-				
+
 				kill();
 				setJobState(EJobState.CANCELLED);
 
@@ -98,7 +98,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 					throw new RuntimeException("Microsoft Visual C++ Redistributable 2019 not found. Please install the latest version from the Microsoft website.");
 				}
 				LOG.error(e.getMessage(), e);
-				
+
 				throw new RuntimeException(e);
 			} finally {
 				monitor.done();
@@ -118,7 +118,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 	private int progress = 0;
 
 	public AbstractEclipseJobControl(final String jobName) {
-		this(jobName, Collections.<QualifiedName, Object> emptyMap());
+		this(jobName, Collections.<QualifiedName, Object>emptyMap());
 	}
 
 	protected abstract void doRunJob(IProgressMonitor progressMonitor);
@@ -284,7 +284,9 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 	/**
 	 * This method will be called if the job gets killed; clean up any resources.
 	 */
-	protected abstract void kill();
+	protected void kill() {
+		// For sub-classes to override
+	}
 
 	public void setJobProperty(final QualifiedName name, final Object value) {
 		if (this.runner != null) {

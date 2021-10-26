@@ -876,10 +876,6 @@
    <extension
          point="com.mmxlabs.license.features.PluginXMLEnablement">
       <PluginXMLEnablement
-            feature="difftools"
-            plugin.xml="difftools.plugin.xml">
-      </PluginXMLEnablement>
-      <PluginXMLEnablement
             feature="exposures"
             plugin.xml="exposures.plugin.xml">
       </PluginXMLEnablement>
@@ -909,7 +905,7 @@
       <ReplaceableView
             viewId="com.mmxlabs.lingo.reports.verticalreport"
             name="Vertical Schedule"
-            icon="icons/cview16/VerticalReport.gif"
+            icon="icons/cview16/vertical_schedule.png"
             category="com.mmxlabs.scheduleview"
             class="com.mmxlabs.lingo.reports.views.vertical.DefaultVerticalReportView">
       </ReplaceableView>
@@ -1047,25 +1043,6 @@
       </package>
    </extension>
    <extension
-         id="id1"
-         point="org.eclipse.e4.workbench.model">
-      <processor
-            apply="always"
-            beforefragment="true"
-            class="com.mmxlabs.lingo.reports.internal.FixActionSetsModelProcessor">
-      </processor>
-      <processor
-            apply="always"
-            beforefragment="false"
-            class="com.mmxlabs.lingo.reports.views.changeset.ActionPlanModuleProcessor">
-      </processor>
-      <processor
-            apply="always"
-            beforefragment="false"
-            class="com.mmxlabs.lingo.reports.views.changeset.CompareModuleProcessor">
-      </processor>
-   </extension>
-   <extension
          point="org.eclipse.ui.commands">
       <command
             defaultHandler="com.mmxlabs.lingo.reports.views.changeset.handlers.CompareScenariosHandler"
@@ -1157,6 +1134,46 @@
             restorable="true">
       </view>
    </extension>
+<extension point="org.eclipse.ui.perspectives">
+		<perspective class="com.mmxlabs.lingo.reports.diff.DiffPerspective"
+			id="com.mmxlabs.lingo.reports.diff.DiffPerspective" name="Compare"
+			icon="icons/cview16/changes_view.gif">
+		</perspective>
+	</extension>
 
-
+	<extension point="org.eclipse.ui.actionSets">
+		<actionSet id="com.mmxlabs.lingo.reports.diff.actionset"
+			label="Change Set Tools">
+			<action
+				class="com.mmxlabs.lingo.reports.services.handlers.FilterScheduleReportBySelectionAction"
+				icon="icons/FilterScheduleReport.png"
+				disabledIcon="icons/FilterScheduleReport_disabled.png"
+				id="com.mmxlabs.lingo.reports.services.handlers.FilterScheduleReportBySelectionAction"
+         label="Filter Schedule Summary"
+         style="toggle"
+         toolbarPath="additions">
+			</action>
+			<action
+				class="com.mmxlabs.lingo.reports.services.handlers.FilterScheduleChartBySelectionAction"
+				icon="icons/FilterScheduleChart.png"
+				disabledIcon="icons/FilterScheduleChart_disabled.png"
+				id="com.mmxlabs.lingo.reports.services.handlers.FilterScheduleReportBySelectionAction"
+         label="Filter Schedule Chart"
+         style="toggle"
+         toolbarPath="additions">
+			</action>
+		</actionSet>
+	</extension>
+	<extension point="org.eclipse.ui.perspectiveExtensions">
+		<perspectiveExtension targetID="*">
+			<perspectiveShortcut id="com.mmxlabs.lingo.reports.diff.DiffPerspective">
+			</perspectiveShortcut>
+		</perspectiveExtension>
+	</extension>
+	<extension point="com.mmxlabs.lingo.reports.FleetBasedColumn">
+		<FleetBasedColumn
+			handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
+			id="com.mmxlabs.lingo.reports.components.columns.fleet.diff_selection_gco">
+		</FleetBasedColumn>
+	</extension>
 </plugin>

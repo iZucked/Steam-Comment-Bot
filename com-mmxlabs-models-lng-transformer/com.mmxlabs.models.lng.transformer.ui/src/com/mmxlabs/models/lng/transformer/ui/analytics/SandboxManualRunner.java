@@ -16,6 +16,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +58,7 @@ import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -81,6 +84,8 @@ public class SandboxManualRunner {
 	private LNGScenarioToOptimiserBridge bridge;
 
 	private List<Pair<BaseCase, ScheduleSpecification>> specifications;
+
+	private boolean skipRun = false;
 
 	public SandboxManualRunner(@Nullable final ScenarioInstance scenarioInstance, final IScenarioDataProvider scenarioDataProvider, final UserSettings userSettings, final IMapperClass mapper,
 			final OptionAnalysisModel model) {
@@ -170,6 +175,17 @@ public class SandboxManualRunner {
 			final List<BaseCase> tasks = new LinkedList<>();
 			recursiveTaskCreator(0, combinations, model, templateBaseCase, tasks);
 			filterTasks(tasks);
+			if (tasks.isEmpty()) {
+				if (System.getProperty("lingo.suppress.dialogs") == null) {
+
+					final Display display = PlatformUI.getWorkbench().getDisplay();
+					if (display != null) {
+						display.syncExec(() -> MessageDialog.openWarning(display.getActiveShell(), "No valid options found",
+								String.format("Sandbox \"%s\": No valid combination of options found - most likely, specified options are incompatible.", model.getName())));
+					}
+				}
+				skipRun = true;
+			}
 
 			// ScheduleSpecification baseSpecification;
 			if (model.getBaseCase().isKeepExistingScenario()) {
@@ -192,7 +208,6 @@ public class SandboxManualRunner {
 		}
 		helper = new ScheduleSpecificationHelper(scenarioDataProvider);
 		helper.processExtraDataProvider(mapper.getExtraDataProvider());
-
 	}
 
 	private boolean checkSequenceSatifiesConstraints(final @NonNull LNGDataTransformer dataTransformer, final @NonNull ISequences rawSequences) {
@@ -202,7 +217,7 @@ public class SandboxManualRunner {
 
 		final Injector injector = evaluationTransformerUnit.getInjector();
 
-		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+		try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 			scope.enter();
 			final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 			final EvaluationHelper evaluationHelper = injector.getInstance(EvaluationHelper.class);
@@ -221,6 +236,11 @@ public class SandboxManualRunner {
 		}
 
 		progressMonitor.beginTask("Sandbox", specifications.size());
+		if (skipRun) {
+			progressMonitor.done();
+			return null;
+		}
+
 		try {
 			// In constructor?
 			///////
@@ -247,9 +267,21 @@ public class SandboxManualRunner {
 					progressMonitor.worked(1);
 				}
 			});
+			if (results.size() < 2) {
+				if (System.getProperty("lingo.suppress.dialogs") == null) {
+
+					final Display display = PlatformUI.getWorkbench().getDisplay();
+					if (display != null) {
+						display.syncExec(() -> MessageDialog.openWarning(display.getActiveShell(), "No solutions found",
+								String.format("Sandbox \"%s\": No solutions found - most likely due to constraint violations. Please check validation messages.", model.getName())));
+					}
+				}
+
+			}
 			if (results.isEmpty()) {
 				return null;
 			}
+
 			// Not really the best
 			final ISequences base = results.get(0);
 			final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.stream()//
@@ -298,6 +330,20 @@ public class SandboxManualRunner {
 					tasks.remove(bc);
 					break;
 				}
+
+				if (bcRow.getBuyOption() != null && bcRow.getSellOption() == null) {
+					if (AnalyticsBuilder.getDate(bcRow.getBuyOption()) == null || bcRow.getBuyOption() instanceof BuyMarket) {
+						tasks.remove(bc);
+						break;
+					}
+				}
+
+				if (bcRow.getSellOption() != null && bcRow.getBuyOption() == null) {
+					if (AnalyticsBuilder.getDate(bcRow.getSellOption()) == null || bcRow.getSellOption() instanceof SellMarket) {
+						tasks.remove(bc);
+						break;
+					}
+				}
 			}
 		}
 	}
@@ -316,26 +362,23 @@ public class SandboxManualRunner {
 					return;
 				}
 				if (row.getVesselEventOption() != null) {
-					if (row.getBuyOption() != null) {
-
+					if (row.getBuyOption() != null && AnalyticsBuilder.getDate(row.getBuyOption()) != null) {
 						final BaseCaseRow extra = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
 						BuyOption buyOption = row.getBuyOption();
-						if (buyOption instanceof BuyMarket) {
-							buyOption = EMFCopier.copy(row.getBuyOption());
+						if (!(buyOption instanceof BuyMarket)) {
+							extra.setBuyOption(buyOption);
+							copy.getBaseCase().add(extra);
+							data.add(extra);
 						}
-						extra.setBuyOption(buyOption);
-						copy.getBaseCase().add(extra);
-						data.add(extra);
 					}
-					if (row.getSellOption() != null) {
+					if (row.getSellOption() != null && AnalyticsBuilder.getDate(row.getSellOption()) != null) {
 						final BaseCaseRow extra = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
 						SellOption sellOption = row.getSellOption();
-						if (sellOption instanceof SellMarket) {
-							sellOption = EMFCopier.copy(row.getSellOption());
+						if (!(sellOption instanceof SellMarket)) {
+							extra.setSellOption(sellOption);
+							copy.getBaseCase().add(extra);
+							data.add(extra);
 						}
-						extra.setSellOption(sellOption);
-						copy.getBaseCase().add(extra);
-						data.add(extra);
 					}
 					row.setBuyOption(null);
 					row.setSellOption(null);

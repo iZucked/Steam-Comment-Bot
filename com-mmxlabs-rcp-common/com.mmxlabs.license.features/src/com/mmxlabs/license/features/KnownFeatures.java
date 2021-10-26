@@ -19,9 +19,6 @@ public final class KnownFeatures {
 	}
 
 	public static final String FEATURE_REENCRYPT = "features:reencrypt";
-
-	
-	public static final String FEATURE_MODULE_DIFF_TOOLS = "features:difftools";
 	
 	/**
 	 * Enable parallelisation in optimiser
@@ -78,7 +75,13 @@ public final class KnownFeatures {
 	public static final String FEATURE_DEAL_SETS_GENERATE_FROM_CURVES = "features:deal-sets-generate-from-curves";
 
 	public static final String FEATURE_DEAL_SETS_GENERATE_FROM_INDICES = "features:deal-sets-generate-from-indices";
-
+	
+	public static final String FEATURE_INDIVIDUAL_EXPOSURES = "features:individual-exposures";
+	
+	public static final String FEATURE_MTM_SELL_SIDE = "features:mtm-sell-side";
+	
+	public static final String FEATURE_MTM_OLD = "features:mtm-old";
+	
 	/**
 	 * Enable the charter length evaluation mode
 	 */
@@ -112,6 +115,8 @@ public final class KnownFeatures {
 	public static final String FEATURE_DATAHUB_STARTUP_CHECK = "features:datahub-lingo-startup-check";
 
 	public static final String FEATURE_SHOW_TRADING_SHIPPING_SPLIT = "features:headline-trading-shipping-split";
+
+	public static final String FEATURE_ADP_PROFILE_CONSTRAINTS_SUMMARY = "features:adp-profile-constraints-summary";
 
 	/**
 	 * Scenario repair features

@@ -28,7 +28,8 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.PropertySheet;
 
-import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.IReportContentsGenerator;
+import com.mmxlabs.lingo.reports.ReportContentsGenerators;
 import com.mmxlabs.lingo.reports.modelbased.ColumnGenerator.ColumnInfo;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
@@ -42,7 +43,6 @@ import com.mmxlabs.models.ui.tabular.filter.FilterField;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
-import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceNavigator;
@@ -193,21 +193,10 @@ public abstract class AbstractSimpleModelBasedReportView<M> extends ViewPart imp
 			return (T) viewer.getGrid();
 		}
 
-		if (IReportContents.class.isAssignableFrom(adapter)) {
-
-			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
-			util.setShowBackgroundColours(true);
-			util.setShowForegroundColours(true);
-			final String contents = util.convert();
-			return (T) new IReportContents() {
-
-				@Override
-				public String getHTMLContents() {
-					return contents;
-				}
-			};
-
+		if (IReportContentsGenerator.class.isAssignableFrom(adapter)) {
+			return adapter.cast(ReportContentsGenerators.createHTMLFor(scenarioComparisonServiceListener, viewer.getGrid(), true));
 		}
+		
 		return super.getAdapter(adapter);
 	}
 

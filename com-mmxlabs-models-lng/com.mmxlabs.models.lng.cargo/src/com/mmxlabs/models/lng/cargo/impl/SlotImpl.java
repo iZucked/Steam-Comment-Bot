@@ -13,6 +13,7 @@ import java.util.Collections;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -2815,10 +2816,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public EList<Contract> getSlotOrDelegateContractRestrictions() {
-		if (getContract() == null || isRestrictedContractsOverride()) {
-			return getRestrictedContracts();
-		}
-		return getContract().getRestrictedContracts();
+		return (EList<Contract>) getUnsetValueOrDelegate(CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS).getValue(this);
 	}
 
 	/**
@@ -2828,10 +2826,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	 */
 	@Override
 	public EList<APortSet<Port>> getSlotOrDelegatePortRestrictions() {
-		if (getContract() == null || isRestrictedPortsOverride()) {
-			return getRestrictedPorts();
-		}
-		return getContract().getRestrictedPorts();
+		return (EList<APortSet<Port>>) getUnsetValueOrDelegate(CargoPackage.Literals.SLOT__RESTRICTED_PORTS).getValue(this);
 	}
 
 	/**
@@ -2842,10 +2837,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 	@SuppressWarnings("unchecked")
 	@Override
 	public EList<AVesselSet<Vessel>> getSlotOrDelegateVesselRestrictions() {
-		if (getContract() == null || isRestrictedVesselsOverride()) {
-			return getRestrictedVessels();
-		}
-		return getContract().getRestrictedVessels();
+		return (EList<AVesselSet<Vessel>>) getUnsetValueOrDelegate(CargoPackage.Literals.SLOT__RESTRICTED_VESSELS).getValue(this);
 	}
 
 	/**
@@ -3584,7 +3576,7 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		result.append(')');
 		return result.toString();
 	}
-	
+
 	@Override
 	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
 		final CargoPackage cargo = CargoPackage.eINSTANCE;
@@ -3623,16 +3615,20 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				
 				@Override
 				public Object getValue(final EObject object) {
-					Object result = Collections.EMPTY_LIST;
-					final Contract contract = getContract();
-					if (!isRestrictedContractsOverride() && contract != null) {
-						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS)) {
-							result = contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS);
+					if (!isRestrictedContractsOverride()) {
+						final Contract contract = getContract();
+						if (contract != null) {
+							if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS)) {
+								return contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS);
+							}
+						} else {
+							return getRestrictedContracts();
 						}
+					} else {
+						return getRestrictedContracts();
 					}
-					return result;
-					
-				}				
+					return ECollections.emptyEList();
+				}
 			};
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_PORTS) {
 			return new DelegateInformation(null, null, null) {
@@ -3640,19 +3636,23 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				public boolean delegatesTo(final Object changedFeature) {
 					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
 				}
-				
+
 				@Override
 				public Object getValue(final EObject object) {
-					Object result = Collections.EMPTY_LIST;
-					final Contract contract = getContract();
-					if (!isRestrictedPortsOverride() && contract != null) {
-						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS)) {
-							result = contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS);
+					if (!isRestrictedPortsOverride()) {
+						final Contract contract = getContract();
+						if (contract != null) {
+							if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS)) {
+								return contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS);
+							}
+						} else {
+							return getRestrictedPorts();
 						}
+					} else {
+						return getRestrictedPorts();
 					}
-					return result;
-					
-				}				
+					return ECollections.emptyEList();
+				}
 			};
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_VESSELS) {
 			return new DelegateInformation(null, null, null) {
@@ -3660,19 +3660,23 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 				public boolean delegatesTo(final Object changedFeature) {
 					return (changedFeature == CargoPackage.Literals.SLOT__CONTRACT);
 				}
-				
+
 				@Override
 				public Object getValue(final EObject object) {
-					Object result = Collections.EMPTY_LIST;
-					final Contract contract = getContract();
-					if (!isRestrictedVesselsOverride() && contract != null) {
-						if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS)) {
-							result = contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS);
+					if (!isRestrictedVesselsOverride()) {
+						final Contract contract = getContract();
+						if (contract != null) {
+							if (contract.eIsSet(CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS)) {
+								return contract.eGet(CommercialPackage.Literals.CONTRACT__RESTRICTED_VESSELS);
+							}
+						} else {
+							return getRestrictedVessels();
 						}
+					} else {
+						return getRestrictedVessels();
 					}
-					return result;
-					
-				}				
+					return ECollections.emptyEList();
+				}
 			};
 		} else if (feature == CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS_ARE_PERMISSIVE) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_RestrictedContractsArePermissive(), Boolean.FALSE);
@@ -3683,10 +3687,8 @@ public abstract class SlotImpl<T extends Contract> extends UUIDObjectImpl implem
 		} else if (feature == CargoPackage.Literals.SLOT__FULL_CARGO_LOT) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_FullCargoLot(), Boolean.FALSE);
 		}
-		
 		return super.getUnsetValueOrDelegate(feature);
-	}	
-	
+	}
 } // end of SlotImpl
 
 // finish type fixing

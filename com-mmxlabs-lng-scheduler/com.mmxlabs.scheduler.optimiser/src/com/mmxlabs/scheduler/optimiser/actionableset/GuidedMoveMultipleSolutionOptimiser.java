@@ -18,7 +18,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.common.RandomHelper;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.JobExecutor;
 import com.mmxlabs.optimiser.common.components.impl.IncrementingRandomSeed;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IProgressReporter;
@@ -41,15 +41,12 @@ public class GuidedMoveMultipleSolutionOptimiser {
 	private FitnessCalculator fitnessCalculator;
 
 	@Inject
-	private CleanableExecutorService executorService;
-
-	@Inject
 	private ISequencesManipulator manipulator;
 
 	@Inject
 	private EvaluationHelper evaluationHelper;
 
-	public List<ISequences> optimise(@NonNull final ISequences inputRawSequences, final IProgressReporter progressReporter) throws Exception {
+	public List<ISequences> optimise(@NonNull final ISequences inputRawSequences, final IProgressReporter progressReporter, JobExecutor jobExecutor) throws Exception {
 
 		long initialFitness;
 		long[] initialMetrics;
@@ -77,12 +74,11 @@ public class GuidedMoveMultipleSolutionOptimiser {
 		final int totalWork = iterations * numberOfJobs;
 
 		progressReporter.begin(totalWork);
-
-		List<ActionableSetJobState> jobStates = new LinkedList<ActionableSetJobState>();
+		List<ActionableSetJobState> jobStates = new LinkedList<>();
 		jobStates.add(new ActionableSetJobState(inputRawSequences, initialFitness, initialMetrics, Status.Pass, -1, "Initial Solution", null));
 		for (int iteration = 0; iteration < iterations; ++iteration) {
 			final List<ActionableSetJobState> currentIterationJobs = generateBatch(jobStates, new Random(iteration), numberOfJobs);
-			final List<ActionableSetJobState> results = runJobs(currentIterationJobs, progressReporter);
+			final List<ActionableSetJobState> results = runJobs(currentIterationJobs, progressReporter, jobExecutor);
 
 			// TODO: Mix up generations!
 
@@ -126,12 +122,10 @@ public class GuidedMoveMultipleSolutionOptimiser {
 		}
 		System.out.printf("results %s\n", results.size());
 		return results.stream().limit(100000).collect(Collectors.toList());
-		// return results;
-
 	}
 
 	private List<ActionableSetJobState> generateBatch(final List<ActionableSetJobState> jobStates, final Random random, final int targetSize) {
-		final List<ActionableSetJobState> nextOutput = new LinkedList<ActionableSetJobState>();
+		final List<ActionableSetJobState> nextOutput = new LinkedList<>();
 		for (int i = 0; i < targetSize; ++i) {
 			nextOutput.add(RandomHelper.chooseElementFrom(random, jobStates));
 		}
@@ -139,10 +133,10 @@ public class GuidedMoveMultipleSolutionOptimiser {
 	}
 
 	@NonNull
-	protected List<ActionableSetJobState> runJobs(final List<ActionableSetJobState> sortedJobStates, final IProgressReporter progressReporter) throws InterruptedException {
+	protected List<ActionableSetJobState> runJobs(final List<ActionableSetJobState> sortedJobStates, final IProgressReporter progressReporter, JobExecutor jobExecutor) throws InterruptedException {
 		// Create a batcher, which produces small batches of jobs that we can then spread among cores
 		// but keep the progress log accurate and maintain repeatablility
-		final ActionableSetJobBatcher jobBatcher = new ActionableSetJobBatcher(executorService, sortedJobStates, 100);
+		final ActionableSetJobBatcher jobBatcher = new ActionableSetJobBatcher(jobExecutor, sortedJobStates, 100);
 
 		final List<ActionableSetJobState> states = new LinkedList<>();
 		List<Future<ActionableSetJobState>> futures;

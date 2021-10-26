@@ -27,7 +27,6 @@ import com.mmxlabs.lingo.reports.views.standard.econs.EconsOptions.MarginBy;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -76,6 +75,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		boolean containsVesselEvent = false;
 		boolean containsGeneratedCharterOut = false;
 		boolean containsStartEvent = false;
+		boolean containsEndEvent = false;
 		boolean containsOpenSlot = false;
 		boolean containsPaperDeals = false;
 
@@ -92,6 +92,9 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				if (target instanceof StartEvent) {
 					containsStartEvent = true;
 				}
+				if (target instanceof EndEvent) {
+					containsEndEvent = true;
+				}
 				if (target instanceof VesselEventVisit) {
 					final VesselEventVisit vesselEventVisit = (VesselEventVisit) target;
 					if (vesselEventVisit.getVesselEvent() instanceof CharterOutEvent) {
@@ -104,7 +107,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 						if (e instanceof StartEvent) {
 							containsStartEvent = true;
 						}
-						if (e instanceof VesselEvent) {
+						if (e instanceof VesselEventVisit) {
 							containsVesselEvent = true;
 						}
 						if (e instanceof GeneratedCharterOut) {
@@ -178,7 +181,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		if (containsOpenSlot) {
 			rows.add(createRow(185, "Cancellation", true, "$", "", createCancellationCosts(options, RowType.COST)));
 		}
-		if (containsCargo || containsCharterOut || containsCooldown || containsGeneratedCharterOut || containsOpenSlot || containsPurge || containsStartEvent || containsVesselEvent) {
+		if (containsCargo || containsCharterOut || containsCooldown || containsGeneratedCharterOut || containsOpenSlot || containsPurge || containsStartEvent || containsVesselEvent || containsEndEvent) {
 			rows.add(createRow(190, "P&L", true, "$", "", createPNLTotal(options, RowType.REVENUE)));
 		}
 		if (containsCargo) {

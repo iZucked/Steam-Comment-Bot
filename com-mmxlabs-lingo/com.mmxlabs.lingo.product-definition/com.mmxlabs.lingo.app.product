@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="LiNGO" uid="com.mmxlabs.lingo.app.product.id" id="com.mmxlabs.lingo.product.product" application="com.mmxlabs.lingo.app.application" version="4.12.28.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="LiNGO" uid="com.mmxlabs.lingo.app.product.id" id="com.mmxlabs.lingo.product.product" application="com.mmxlabs.lingo.app.application" version="4.13.2.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="icons/logo-square-16.png"/>
@@ -17,10 +17,7 @@ Build: {1}
    </configIni>
 
    <launcherArgs>
-      <vmArgs>-ea -server
-         <argsX86>-Xmx768m</argsX86>
-         <argsX86_64>-Xmx3G</argsX86_64>
-      </vmArgs>
+      <vmArgs>-ea -server -XX:MaxRAMPercentage=75</vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
    </launcherArgs>
@@ -71,7 +68,7 @@ Build: {1}
       <plugin id="com.mmxlabs.scheduler.optimiser" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
-      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="2" />
+      <plugin id="org.apache.felix.scr" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
       <plugin id="org.ops4j.peaberry.activation" autoStart="true" startLevel="1" />

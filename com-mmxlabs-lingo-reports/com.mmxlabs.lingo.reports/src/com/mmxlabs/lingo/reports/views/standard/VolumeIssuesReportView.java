@@ -22,9 +22,10 @@ import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
-import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.IReportContentsGenerator;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ReportContents;
+import com.mmxlabs.lingo.reports.ReportContentsGenerators;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
@@ -287,7 +288,7 @@ public class VolumeIssuesReportView extends EMFReportView {
 
 		final EClass rowClass = GenericEMFTableDataModel.getRowClass(tableDataModel);
 		attribRowType = GenericEMFTableDataModel.createRowAttribute(rowClass, SchedulePackage.Literals.CAPACITY_VIOLATION_TYPE, ATTRIBUTE_TYPE);
-		attribRowQuantity = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.eINSTANCE.getELong(), ATTRIBUTE_QUANTITY);
+		attribRowQuantity = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.eINSTANCE.getELongObject(), ATTRIBUTE_QUANTITY);
 		attribRowScenarioName = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.eINSTANCE.getEString(), ATTRIBUTE_SCENARIO_NAME);
 		attribRowPinned = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.eINSTANCE.getEBoolean(), ATTRIBUTE_PINNED);
 
@@ -298,7 +299,12 @@ public class VolumeIssuesReportView extends EMFReportView {
 		final EObject row = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, null);
 		row.eSet(refRowOwner, owner);
 		row.eSet(attribRowType, type);
-		row.eSet(attribRowQuantity, qty);
+		
+		if (type == CapacityViolationType.FORCED_COOLDOWN && qty == 0) {
+			// Show nothing as not all cooldowns have a quantity
+		} else {
+			row.eSet(attribRowQuantity, qty);
+		}
 		row.eSet(attribRowScenarioName, scenarioName);
 		row.eSet(attribRowPinned, pinned);
 
@@ -313,11 +319,10 @@ public class VolumeIssuesReportView extends EMFReportView {
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
 
-		if (IReportContents.class.isAssignableFrom(adapter)) {
+		if (IReportContentsGenerator.class.isAssignableFrom(adapter)) {
 
-			final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), true);
-			final String jsonContents = jsonUtil.convert();
-			return adapter.cast(ReportContents.makeJSON(jsonContents));
+			return adapter.cast(ReportContentsGenerators.createJSONFor(selectedScenariosServiceListener, viewer.getGrid()));
+
 		}
 		return super.getAdapter(adapter);
 	}

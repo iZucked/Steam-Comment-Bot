@@ -174,6 +174,22 @@
                </target>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.analytics.validation.PartialCaseRowBuyToSellConstraint"
+                  id="com.mmxlabs.models.lng.analytics.validation.PartialCaseRowBuyToSellConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="PartialCaseRowBuyToSellConstraint"
+                  severity="WARNING"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="PartialCaseRow">
+               </target>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.analytics.validation.BaseCaseConstraint"
                   id="com.mmxlabs.models.lng.analytics.validation.BaseCaseConstraint"
                   isEnabledByDefault="true"
@@ -267,6 +283,38 @@
                </message>
                <target
                      class="ExistingCharterMarketOption">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.analytics.validation.VesselEventReferenceConstraint"
+                  id="com.mmxlabs.models.lng.analytics.validation.VesselEventReferenceConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="VesselEventReferenceConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="VesselEventReference">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.analytics.validation.CharterOutOpportunityConstraint"
+                  id="com.mmxlabs.models.lng.analytics.validation.CharterOutOpportunityConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="CharterOutOpportunityConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="CharterOutOpportunity">
                </target>
             </constraint>
          </constraints>

@@ -6,6 +6,7 @@ package com.mmxlabs.scenario.service.model.util;
 
 import java.io.CharConversionException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,6 +18,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter.Cipher;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.resource.impl.URIConverterImpl;
 import org.eclipse.emf.ecore.xmi.IllegalValueException;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
@@ -24,8 +26,11 @@ import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 import com.mmxlabs.scenario.service.model.util.encryption.ScenarioEncryptionException;
+import com.mmxlabs.scenario.service.model.util.encryption.UnknownEncryptionKeyException;
+import com.mmxlabs.scenario.service.model.util.encryption.impl.KeyFileUtil;
 import com.mmxlabs.scenario.service.model.util.encryption.impl.PassthroughCipherProvider;
 
 public final class ResourceHelper {
@@ -101,6 +106,21 @@ public final class ResourceHelper {
 						loadOptions.put(Resource.OPTION_CIPHER, null);
 						resource.unload();
 						continue;
+					}
+				}
+				if (ee.getCause() instanceof org.xml.sax.SAXParseException) {
+					org.xml.sax.SAXParseException saxParseException = (org.xml.sax.SAXParseException) ee.getCause();
+					if (saxParseException.getMessage().equals("Content is not allowed in prolog.")) {
+						URIConverterImpl uc = new URIConverterImpl();
+						byte[] keyID = new byte[0];
+						try (InputStream is = uc.createInputStream(uri)) {
+							keyID = KeyFileUtil.getKeyID(is);
+
+						} catch (Exception e) {
+							throw new RuntimeException(e);
+						}
+
+						throw new UnknownEncryptionKeyException("Unable to open file. Encrypted with key " + KeyFileUtil.byteToString(keyID, ":"), keyID);
 					}
 				}
 				throw ee;

@@ -41,7 +41,7 @@ public class PackGridHandler {
 
 		final MHandledToolItem element = MMenuFactory.INSTANCE.createHandledToolItem();
 		element.setLabel("Pack");
-		element.setIconURI(FrameworkUtil.getBundle(PackGridHandler.class).getEntry("/icons/pack.gif").toString());
+		element.setIconURI(FrameworkUtil.getBundle(PackGridHandler.class).getEntry("/icons/pack.png").toString());
 		final String location = FrameworkUtil.getBundle(PackGridHandler.class).getSymbolicName();
 		element.setContributorURI(location);
 		element.setCommand(command);

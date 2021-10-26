@@ -236,7 +236,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	public IStartRequirement createStartRequirement(@Nullable IPort fixedPort, boolean hasTimeRequirement, @Nullable ITimeWindow timeWindow, @Nullable IHeelOptionSupplier heelSupplierOptions);
+	IStartRequirement createStartRequirement(@Nullable IPort fixedPort, boolean hasTimeRequirement, @Nullable ITimeWindow timeWindow, @Nullable IHeelOptionSupplier heelSupplierOptions);
 
 	/**
 	 * Boolean flag to indicate hard end time window. If false, provider timeWindow is a notional end date and should be an instanceof of a {@link MutableTimeWindow}.
@@ -248,8 +248,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	public IEndRequirement createEndRequirement(@Nullable Collection<IPort> portSet, boolean hasTimeRequirement, @NonNull ITimeWindow timeWindow, IHeelOptionConsumer heelConsumer,
-			boolean isOpenEnded);
+	IEndRequirement createEndRequirement(@Nullable Collection<IPort> portSet, boolean hasTimeRequirement, @NonNull ITimeWindow timeWindow, IHeelOptionConsumer heelConsumer);
 
 	/**
 	 * Set a port's cooldown cooldown requirement
@@ -350,9 +349,9 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	ILoadSlot createLoadSlot(@NonNull String id, @NonNull IPort port, @NonNull ITimeWindow window, long minVolume, long maxVolume, boolean counterPartyVolume,
-			@NonNull ILoadPriceCalculator priceCalculator, int cargoCVValue, int durationHours, boolean cooldownSet, boolean cooldownForbidden, boolean purgeScheduled, int pricingDate,
-			@NonNull PricingEventType pricingEvent, boolean slotIsOptional, boolean slotIsLocked, boolean isSpotMarketSlot, boolean isVolumeLimitInM3, boolean isCancelled);
+	ILoadSlot createLoadSlot(@NonNull String id, @NonNull IPort port, @NonNull ITimeWindow window, long minVolume, long maxVolume, @NonNull ILoadPriceCalculator priceCalculator, int cargoCVValue,
+			int durationHours, boolean cooldownSet, boolean cooldownForbidden, boolean purgeScheduled, int pricingDate, @NonNull PricingEventType pricingEvent, boolean slotIsOptional,
+			boolean slotIsLocked, boolean isSpotMarketSlot, boolean isVolumeLimitInM3, boolean isCancelled);
 
 	/**
 	 */
@@ -596,7 +595,7 @@ public interface ISchedulerBuilder {
 	 */
 	void setShippingHoursRestriction(@NonNull IPortSlot slot, @NonNull ITimeWindow baseTime, int hours);
 
-	void setShippingDaysRestrictionReferenceSpeed(@NonNull IVessel vessel, @NonNull VesselState vesselState, int referenceSpeed);
+	void setShippingDaysRestrictionReferenceSpeed(@NonNull IPortSlot slot, @NonNull IVessel vessel, @NonNull VesselState vesselState, int referenceSpeed);
 
 	/**
 	 * Freeze a {@link IPortSlot} to a single {@link IVesselAvailability}. Unlike {@link #constrainSlotToVesselAvailabilities(IPortSlot, Set)} which still permits allocations to special vessels, this

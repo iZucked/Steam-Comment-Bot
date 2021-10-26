@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.cargo.util.scheduling.WrappedAssignableElement;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.NamedObject;
 
 /**
@@ -29,6 +30,8 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  * 
  */
 public class CollectedAssignment {
+	private final VesselAssignmentType vesselAssignmentType;
+
 
 	private final VesselAvailability vesselAvailability;
 	private final CharterInMarket charterInMarket;
@@ -40,6 +43,7 @@ public class CollectedAssignment {
 		this.vesselAvailability = vesselAvailability;
 		this.charterInMarket = null;
 		this.spotIndex = null;
+		this.vesselAssignmentType = vesselAvailability;
 		this.assignments = sortAssignments(assignments, portModel, modelDistanceProvider, dateProvider);
 	}
 
@@ -48,20 +52,23 @@ public class CollectedAssignment {
 		this.vesselAvailability = null;
 		this.charterInMarket = charterInMarket;
 		this.spotIndex = spotIndex;
+		this.vesselAssignmentType = charterInMarket;
 		// -1 is the nominal cargoes, so no need to sort
 		this.assignments = spotIndex == -1 ? assignments : sortAssignments(assignments, portModel, modelDistanceProvider, dateProvider);
 	}
 
 	public @NonNull List<@NonNull AssignableElement> getAssignedObjects() {
 		return assignments;
-//		return Collections.unmodifiableList(
-//				);
 	}
 
 	public boolean isSpotVessel() {
 		return vesselAvailability == null;
 	}
 
+	public VesselAssignmentType getVesselAssignmentType() {
+		return vesselAssignmentType;
+	}
+	
 	public CharterInMarket getCharterInMarket() {
 		return charterInMarket;
 	}

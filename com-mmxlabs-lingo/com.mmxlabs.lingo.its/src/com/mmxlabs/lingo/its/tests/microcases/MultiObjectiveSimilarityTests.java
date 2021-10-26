@@ -31,7 +31,7 @@ import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.its.RequireFeature;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
-import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
+import com.mmxlabs.models.lng.transformer.its.scenario.ITSCSVImporter;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
@@ -52,12 +52,13 @@ public class MultiObjectiveSimilarityTests extends AbstractLegacyMicroTestCase {
 		return scenarioDataProvider;
 	}
 
-	// Override default behaviour to also import portfolio data e.g. cargoes, vessel availabilities, events
+	// Override default behaviour to also import portfolio data e.g. cargoes, vessel
+	// availabilities, events
 	@NonNull
 	public static IScenarioDataProvider importReferenceData(final String url) throws MalformedURLException {
 
 		final @NonNull String urlRoot = AbstractLegacyMicroTestCase.class.getResource(url).toString();
-		final CSVImporter importer = new CSVImporter();
+		final ITSCSVImporter importer = new ITSCSVImporter();
 		importer.importPortData(urlRoot);
 		importer.importCostData(urlRoot);
 		importer.importEntityData(urlRoot);
@@ -111,42 +112,41 @@ public class MultiObjectiveSimilarityTests extends AbstractLegacyMicroTestCase {
 
 		final UserSettings userSettings = createUserSettings();
 		OptimisationPlan optimisationPlan = createOptimisationPlan(userSettings);
-		try (final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
+		final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
 				.withOptimisationPlan(optimisationPlan) //
 				.withOptimiseHint() //
 				.withThreadCount(1) //
-				.buildDefaultRunner()) {
+				.buildDefaultRunner();
 
-			runnerBuilder.evaluateInitialState();
+		runnerBuilder.evaluateInitialState();
 
-			final Schedule initialSchedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
-			Assertions.assertNotNull(initialSchedule);
-			final long initialPNL = ScheduleModelKPIUtils.getScheduleProfitAndLoss(initialSchedule);
-			runnerBuilder.run(false, runner -> {
+		final Schedule initialSchedule = ScenarioModelUtil.getScheduleModel(lngScenarioModel).getSchedule();
+		Assertions.assertNotNull(initialSchedule);
+		final long initialPNL = ScheduleModelKPIUtils.getScheduleProfitAndLoss(initialSchedule);
+		runnerBuilder.run(false, runner -> {
 
-				// Run, get result and store to schedule model for inspection at EMF level if needed
-				final IMultiStateResult result = runner.runWithProgress(new NullProgressMonitor());
-				final LNGScenarioToOptimiserBridge bridge = runnerBuilder.getScenarioRunner().getScenarioToOptimiserBridge();
-				final OptimiserDataMapper mapper = new OptimiserDataMapper(bridge);
+			// Run, get result and store to schedule model for inspection at EMF level if
+			// needed
+			final IMultiStateResult result = runner.runWithProgress(new NullProgressMonitor());
+			final LNGScenarioToOptimiserBridge bridge = runnerBuilder.getScenarioRunner().getScenarioToOptimiserBridge();
+			final OptimiserDataMapper mapper = new OptimiserDataMapper(bridge);
 
-				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
-						.withMultipleSolutionCount(2);
+			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(mapper) //
+					.withMultipleSolutionCount(2);
 
-				// Solution 1
-				verifier.withSolutionResultChecker(0).withUsedLoad("A_3").onFleetVessel(TrainingCaseConstants.VESSEL_SMALL_SHIP) //
-						.withUsedLoad("S_1").onFleetVessel(TrainingCaseConstants.VESSEL_LARGE_SHIP) //
-						.withUsedLoad("S_4").onFleetVessel(TrainingCaseConstants.VESSEL_MEDIUM_SHIP) //
-						.build();
+			// Solution 1
+			verifier.withSolutionResultChecker(0).withUsedLoad("A_3").onFleetVessel(TrainingCaseConstants.VESSEL_SMALL_SHIP) //
+					.withUsedLoad("S_1").onFleetVessel(TrainingCaseConstants.VESSEL_LARGE_SHIP) //
+					.withUsedLoad("S_4").onFleetVessel(TrainingCaseConstants.VESSEL_MEDIUM_SHIP) //
+					.build();
 
-				// Solution 2
-				verifier.withSolutionResultChecker(1).withUsedLoad("A_3").onFleetVessel(TrainingCaseConstants.VESSEL_SMALL_SHIP) //
-						.withUsedLoad("S_1").onFleetVessel(TrainingCaseConstants.VESSEL_MEDIUM_SHIP) //
-						.withUsedLoad("S_4").onFleetVessel(TrainingCaseConstants.VESSEL_LARGE_SHIP) //
-						.build();
+			// Solution 2
+			verifier.withSolutionResultChecker(1).withUsedLoad("A_3").onFleetVessel(TrainingCaseConstants.VESSEL_SMALL_SHIP) //
+					.withUsedLoad("S_1").onFleetVessel(TrainingCaseConstants.VESSEL_MEDIUM_SHIP) //
+					.withUsedLoad("S_4").onFleetVessel(TrainingCaseConstants.VESSEL_LARGE_SHIP) //
+					.build();
 
-				verifier.verifyOptimisationResults(result, Assertions::fail);
-			});
-		}
+			verifier.verifyOptimisationResults(result, Assertions::fail);
+		});
 	}
-
 }

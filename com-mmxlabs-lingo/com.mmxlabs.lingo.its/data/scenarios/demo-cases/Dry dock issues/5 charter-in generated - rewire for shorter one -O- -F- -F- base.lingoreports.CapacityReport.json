@@ -2,18 +2,15 @@
   "Schedule" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
   "ID" : "load-cargo-21",
   "Type" : "Load",
-  "Issue" : "Forced Cooldown",
-  "Quantity (m³)" : "0"
+  "Issue" : "Forced Cooldown"
 }, {
   "Schedule" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
   "ID" : "load-cargo-32",
   "Type" : "Load",
-  "Issue" : "Forced Cooldown",
-  "Quantity (m³)" : "0"
+  "Issue" : "Forced Cooldown"
 }, {
   "Schedule" : "5 charter-in generated - rewire for shorter one -O- -F- -F- base",
   "ID" : "load-cargo-66",
   "Type" : "Load",
-  "Issue" : "Forced Cooldown",
-  "Quantity (m³)" : "0"
+  "Issue" : "Forced Cooldown"
 } ]

@@ -24,7 +24,7 @@ import com.mmxlabs.models.lng.transformer.inject.modules.PhaseOptimisationDataMo
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.NoNominalInPromptTransformer;
 
 public class LNGNoNominalInPromptTransformerUnit implements ILNGStateTransformerUnit {
@@ -73,7 +73,7 @@ public class LNGNoNominalInPromptTransformerUnit implements ILNGStateTransformer
 		modules.add(new PhaseOptimisationDataModule());
 
 		injector = dataTransformer.getInjector().createChildInjector(modules);
-		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+		try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 			scope.enter();
 
 			transformer = injector.getInstance(NoNominalInPromptTransformer.class);
@@ -94,7 +94,7 @@ public class LNGNoNominalInPromptTransformerUnit implements ILNGStateTransformer
 	@Override
 	public IMultiStateResult run(@NonNull final IProgressMonitor monitor) {
 
-		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+		try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 			scope.enter();
 
 			monitor.beginTask("", 1);

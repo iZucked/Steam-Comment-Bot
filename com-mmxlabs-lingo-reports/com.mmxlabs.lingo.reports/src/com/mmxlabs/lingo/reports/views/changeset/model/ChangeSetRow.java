@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#isWiringChange <em>Wiring Change</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#isVesselChange <em>Vessel Change</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#isDateChange <em>Date Change</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getBeforeData <em>Before Data</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getAfterData <em>After Data</em>}</li>
  * </ul>
@@ -81,6 +82,28 @@ public interface ChangeSetRow extends EObject {
 	void setVesselChange(boolean value);
 
 	/**
+	 * Returns the value of the '<em><b>Date Change</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Date Change</em>' attribute.
+	 * @see #setDateChange(boolean)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow_DateChange()
+	 * @model
+	 * @generated
+	 */
+	boolean isDateChange();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#isDateChange <em>Date Change</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Date Change</em>' attribute.
+	 * @see #isDateChange()
+	 * @generated
+	 */
+	void setDateChange(boolean value);
+
+	/**
 	 * Returns the value of the '<em><b>Before Data</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -131,5 +154,13 @@ public interface ChangeSetRow extends EObject {
 	 * @generated
 	 */
 	void setAfterData(ChangeSetRowDataGroup value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	boolean isMajorChange();
 
 } // ChangeSetRow

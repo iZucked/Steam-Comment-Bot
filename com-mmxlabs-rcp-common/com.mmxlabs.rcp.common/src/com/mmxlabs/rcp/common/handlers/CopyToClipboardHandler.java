@@ -43,7 +43,7 @@ public class CopyToClipboardHandler {
 
 		final MHandledToolItem element = MMenuFactory.INSTANCE.createHandledToolItem();
 		element.setLabel("Pack");
-		element.setIconURI(FrameworkUtil.getBundle(CopyToClipboardHandler.class).getEntry("/icons/copy.gif").toString());
+		element.setIconURI(FrameworkUtil.getBundle(CopyToClipboardHandler.class).getEntry("/icons/copy.png").toString());
 		final String location = FrameworkUtil.getBundle(CopyToClipboardHandler.class).getSymbolicName();
 		element.setContributorURI(location);
 		element.setCommand(command);

@@ -21,7 +21,7 @@ import com.google.inject.Module;
 import com.google.inject.name.Names;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -51,7 +51,7 @@ public class MicroCaseUtils {
 
 		@NonNull
 		final Injector injector = bridge.getDataTransformer().getInjector();
-		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+		try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 			scope.enter();
 			r.run();
 		}
@@ -59,7 +59,7 @@ public class MicroCaseUtils {
 
 	public static void withEvaluationInjectorPerChainScope(@NonNull final LNGScenarioToOptimiserBridge bridge, @NonNull final Consumer<Injector> r) {
 		final Injector injector = MicroTestUtils.createEvaluationInjector(bridge.getDataTransformer());
-		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+		try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 			scope.enter();
 			r.accept(injector);
 		}

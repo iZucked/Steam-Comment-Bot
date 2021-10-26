@@ -24,9 +24,10 @@ public class ShiftedSeries implements ISeries {
 	@Override
 	public int[] getChangePoints() {
 		final int[] shifteePoints = shiftee.getChangePoints().clone();
-
+		// Adapt the date range by the shift amount. If Jan-Dec and shift is 1 (I.e. Feb looks up Jan price) then new range is Feb->Jan
+		// Note different sign to the evaluate method
 		for (int i = 0; i < shifteePoints.length; i++) {
-			shifteePoints[i] = shiftMapper.mapChangePoint(shifteePoints[i], shift);
+			shifteePoints[i] = shiftMapper.mapChangePoint(shifteePoints[i], -shift);
 		}
 		return shifteePoints;
 

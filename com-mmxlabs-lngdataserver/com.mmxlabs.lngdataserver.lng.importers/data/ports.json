@@ -1,6 +1,6 @@
 {
-	"identifier": "103cb9a4-f81d-4aa5-a345-469af4d07fc7",
-	"createdAt": "2021-01-15T10:24:24.015Z",
+	"identifier": "303cb9a4-f81d-4aa5-a345-469af4d07fc7",
+	"createdAt": "2021-08-31T10:24:24.015Z",
 	"locations": [{
 			"mmxId": "L_DZ_Bethi",
 			"name": "Bethioua",
@@ -2755,7 +2755,95 @@
 				"timeZone": "Asia/Makassar"
 			},
 			"upstreamID": "ID0476"
-		}
+		},    
+    {
+      "mmxId": "L_KR_Yeosu",
+      "name": "Yeosu",
+      "geographicPoint": {
+        "lat": 34.8558349609375,
+        "lon": 127.73750305175781,
+        "country": "South Korea",
+        "timeZone": "Asia/Seoul"
+      },
+      "upstreamID": "KR0054"
+    },
+    {
+      "mmxId": "L_KR_Gunsa",
+      "name": "Gunsan",
+      "geographicPoint": {
+        "lat": 35.994998931884766,
+        "lon": 126.70916748046875,
+        "country": "South Korea",
+        "timeZone": "Asia/Seoul"
+      },
+      "upstreamID": "KR0010"
+    },
+    {
+      "mmxId": "L_IN_Benoa",
+      "name": "Benoa",
+      "geographicPoint": {
+        "lat": -8.75,
+        "lon": 115.21583557128906,
+        "country": "Indonesia",
+        "timeZone": "Asia/Jakarta"
+      },
+      "upstreamID": "ID0348"
+    },
+    {
+      "mmxId": "L_IN_Balik",
+      "name": "Balikpapan",
+      "geographicPoint": {
+        "lat": -1.2633333206176758,
+        "lon": 116.80833435058594,
+        "country": "Indonesia",
+        "timeZone": "Asia/Makassar"
+      },
+      "upstreamID": "ID0025"
+    },
+    {
+      "mmxId": "L_TW_Kaohs",
+      "name": "Kaohsiung",
+      "geographicPoint": {
+        "lat": 22.579999923706055,
+        "lon": 120.30000305175781,
+		"country": "Taiwan",
+        "timeZone": "Asia/Taipei"
+      },
+      "upstreamID": "TW0006"
+    },
+    {
+      "mmxId": "L_PH_Manil",
+      "name": "Manila",
+      "geographicPoint": {
+        "lat": 14.601666450500488,
+        "lon": 120.94999694824219,
+        "country": "Philippines",
+        "timeZone": "Asia/Manila"
+      },
+      "upstreamID": "PH0238"
+    },
+    {
+      "mmxId": "L_CN_HongK",
+      "name": "Hong Kong",
+      "geographicPoint": {
+        "lat": 22.290000915527344,
+        "lon": 114.1683349609375,
+        "country": "China",
+        "timeZone": "Asia/Hong_Kong"
+      },
+      "upstreamID": "CN0041"
+    },
+    {
+      "mmxId": "L_MY_Labua",
+      "name": "Labuan",
+      "geographicPoint": {
+        "lat": 5.268333435058594,
+        "lon": 115.25166320800781,
+        "country": "Malaysia",
+        "timeZone": "Asia/Kuching"
+      },
+      "upstreamID": "MY0046"
+    }  
 	],
 	"routingPoints": [{
 		"identifier": "SUZ",

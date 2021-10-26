@@ -119,7 +119,8 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 				final PortType ptEnd = portTypeProvider.getPortType(sequence.get(3));
 				return ptStart == PortType.Start && ptEnd == PortType.End && pt1 == PortType.Load && pt2 == PortType.Discharge;
 			}
-			messages.add(String.format("%s: Sequence starting with sequence element %s has a wrong size!", this.name, 
+			if (messages != null)
+				messages.add(String.format("%s: Sequence starting with sequence element %s has a wrong size!", this.name, 
 					sequence.first() != null ? sequence.first().getName() : "(unknown element)"));
 			return false;
 		}
@@ -136,13 +137,15 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 					// must either start with Start and be not a round trip,
 					// or must start with a load or an End and be a round trip.
 
-					messages.add(this.name + ": Sequence must begin with PortType. Start or, if roundtrip, End or Load, but actually begins with " + type + " (for instance type " + instanceType + ")");
+					if (messages != null)
+						messages.add(this.name + ": Sequence must begin with PortType. Start or, if roundtrip, End or Load, but actually begins with " + type + " (for instance type " + instanceType + ")");
 					return false;
 				}
 			} else {
 				if (previousType == PortType.End) {
 					// Cannot have two elements with an End type.
-					messages.add(this.name + ": Sequence can only have one PortType.End");
+					if (messages != null)
+						messages.add(this.name + ": Sequence can only have one PortType.End");
 					return false;
 				}
 			}
@@ -154,12 +157,14 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 			case Discharge:
 				if (seenDischarge && checkConstraint) {
 					// Cannot have two discharges in a row
-					messages.add(this.name + ": Cannot have two PortType.Discharge in a row");
+					if (messages != null)
+						messages.add(this.name + ": Cannot have two PortType.Discharge in a row");
 					return false;
 				}
 				if (!seenLoad && checkConstraint) {
 					// Cannot discharge without loading
-					messages.add(this.name + ": Cannot have PortType.Discharge without a PortType.Load");
+					if (messages != null)
+						messages.add(this.name + ": Cannot have PortType.Discharge without a PortType.Load");
 					return false;
 				}
 				seenLoad = false;
@@ -168,7 +173,8 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 			case Load:
 				if (seenLoad && checkConstraint) {
 					// Cannot have two loads in a row
-					messages.add(this.name + ": Cannot have two PortType.Load in a row");
+					if (messages != null)
+						messages.add(this.name + ": Cannot have two PortType.Load in a row");
 					return false;
 				}
 				seenLoad = true;
@@ -177,7 +183,8 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 			case Start:
 				if (previous != null && checkConstraint) {
 					// Start must occur at the start
-					messages.add(this.name + ": PortType.Start must occur at beginning of Sequence");
+					if (messages != null)
+						messages.add(this.name + ": PortType.Start must occur at beginning of Sequence");
 					return false;
 				}
 				break;
@@ -191,19 +198,22 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 			case Virtual:
 				if (seenLoad && checkConstraint) {
 					// Cannot insert between load and discharge
-					messages.add(this.name + ": Cannot insert " + type + " between PortType.Load and PortType.Discharge");
+					if (messages != null)
+						messages.add(this.name + ": Cannot insert " + type + " between PortType.Load and PortType.Discharge");
 					return false;
 				}
 				break;
 			case End:
 				if (seenLoad && checkConstraint) {
 					// Need a discharge
-					messages.add(this.name + ": Cannot leave unused Need to PortType.Load");
+					if (messages != null)
+						messages.add(this.name + ": Cannot leave unused Need to PortType.Load");
 					return false;
 				}
 				break;
 			default:
-				messages.add(this.name + ": Unsupported PortType");
+				if (messages != null)
+					messages.add(this.name + ": Unsupported PortType");
 				// Unsupported type
 				return false;
 
@@ -216,7 +226,8 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 		if ((instanceType == VesselInstanceType.ROUND_TRIP && !(previousType == null || previousType == PortType.Round_Trip_Cargo_End))
 				|| (instanceType != VesselInstanceType.ROUND_TRIP && previousType != PortType.End)) {
 			// Must end with an End type.
-			messages.add(this.name + ": Sequence must end with PortType.End");
+			if (messages != null)
+				messages.add(this.name + ": Sequence must end with PortType.End");
 			return false;
 		}
 
@@ -240,7 +251,8 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 		// check the legality of this sequencing decision
 		// End can't come before anything and Start can't come after anything
 		if (firstType.equals(PortType.End) || secondType.equals(PortType.Start)) {
-			messages.add(explain(first, second, resource));
+			if (messages != null)
+				messages.add(explain(first, second, resource));
 			return false;
 		}
 
@@ -259,25 +271,29 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 			if (firstType == PortType.Discharge && secondType == PortType.End) {
 				return true;
 			}
-			messages.add(explain(first, second, resource));
+			if (messages != null)
+				messages.add(explain(first, second, resource));
 			return false;
 		}
 
 		// Discharge must follow a load
 		if (firstType != PortType.Load && secondType == PortType.Discharge) {
-			messages.add(explain(first, second, resource));
+			if (messages != null)
+				messages.add(explain(first, second, resource));
 			return false;
 		}
 		//
 		if (secondType != PortType.Discharge && firstType == PortType.Load) {
-			messages.add(explain(first, second, resource));
+			if (messages != null)
+				messages.add(explain(first, second, resource));
 			return false;
 		}
 		final VesselInstanceType instanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
 		if (instanceType == VesselInstanceType.ROUND_TRIP) {
 			// No Discharge followed by a load permitted here....
 			if (firstType == PortType.Discharge && secondType == PortType.Load) {
-				messages.add(explain(first, second, resource));
+				if (messages != null)
+					messages.add(explain(first, second, resource));
 				return false;
 			}
 		}

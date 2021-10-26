@@ -88,7 +88,6 @@ public class ScheduleWithChangeToScheduleSpecification {
 
 		newAvailability.setVessel(oldAvailability.getVessel());
 		newAvailability.setEntity(oldAvailability.getEntity());
-		newAvailability.setFleet(oldAvailability.isFleet());
 		newAvailability.setCharterNumber(oldAvailability.getCharterNumber());
 		newAvailability.setOptional(oldAvailability.isOptional());
 

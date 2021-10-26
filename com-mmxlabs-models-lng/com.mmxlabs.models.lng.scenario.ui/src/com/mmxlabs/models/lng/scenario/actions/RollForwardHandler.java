@@ -37,7 +37,7 @@ public class RollForwardHandler extends AbstractHandler {
 			final IScenarioServiceEditorInput ssEditorInput = (IScenarioServiceEditorInput) editorInput;
 			final ScenarioInstance scenarioInstance = ssEditorInput.getScenarioInstance();
 
-			final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+			final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecordChecked(scenarioInstance);
 			try (final IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("RollForwardHandler:1")) {
 
 				final Shell shell = HandlerUtil.getActiveShell(event);

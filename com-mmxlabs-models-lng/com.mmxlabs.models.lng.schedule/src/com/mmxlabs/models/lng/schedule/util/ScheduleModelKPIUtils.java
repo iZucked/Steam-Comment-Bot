@@ -549,7 +549,7 @@ public class ScheduleModelKPIUtils {
 		return null;
 	}
 
-	private static Double calculateLegSpeed(final CargoAllocation cargoAllocation, final SlotAllocation allocation) {
+	public static Double calculateLegSpeed(final CargoAllocation cargoAllocation, final SlotAllocation allocation) {
 		if (allocation != null && cargoAllocation != null) {
 
 			boolean collecting = false;

@@ -1480,6 +1480,26 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getCargoModel_CargoesForExposures() {
+		return (EReference)cargoModelEClass.getEStructuralFeatures().get(12);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getCargoModel_CargoesForHedging() {
+		return (EReference)cargoModelEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EOperation getCargoModel__GetLoadSlotByName__String() {
 		return cargoModelEClass.getEOperations().get(0);
 	}
@@ -1570,18 +1590,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getVesselAvailability_Fleet() {
-		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getVesselAvailability_Vessel() {
-		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(2);
+		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1591,7 +1601,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getVesselAvailability_TimeCharterRate() {
-		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(5);
+		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -1601,7 +1611,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EReference getVesselAvailability_StartAt() {
-		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(6);
+		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -1611,7 +1621,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getVesselAvailability_StartAfter() {
-		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(7);
+		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -1621,7 +1631,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getVesselAvailability_StartBy() {
-		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(8);
+		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -1631,7 +1641,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EReference getVesselAvailability_EndAt() {
-		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(9);
+		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(8);
 	}
 
 	/**
@@ -1641,7 +1651,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getVesselAvailability_EndAfter() {
-		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(10);
+		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(9);
 	}
 
 	/**
@@ -1651,7 +1661,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getVesselAvailability_EndBy() {
-		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(11);
+		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(10);
 	}
 
 	/**
@@ -1661,7 +1671,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EReference getVesselAvailability_StartHeel() {
-		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(12);
+		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -1671,7 +1681,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EReference getVesselAvailability_EndHeel() {
-		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(13);
+		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(12);
 	}
 
 	/**
@@ -1681,7 +1691,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getVesselAvailability_ForceHireCostOnlyEndRule() {
-		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(14);
+		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(13);
 	}
 
 	/**
@@ -1691,7 +1701,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EReference getVesselAvailability_ContainedCharterContract() {
-		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(15);
+		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(14);
 	}
 
 	/**
@@ -1701,7 +1711,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getVesselAvailability_Optional() {
-		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -1711,7 +1721,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getVesselAvailability_CharterNumber() {
-		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(3);
+		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1721,7 +1731,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EReference getVesselAvailability_GenericCharterContract() {
-		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(16);
+		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(18);
 	}
 
 	/**
@@ -1731,7 +1741,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getVesselAvailability_MinDuration() {
-		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(17);
+		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(15);
 	}
 
 	/**
@@ -1741,7 +1751,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getVesselAvailability_MaxDuration() {
-		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(18);
+		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(16);
 	}
 
 	/**
@@ -1751,7 +1761,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EAttribute getVesselAvailability_CharterContractOverride() {
-		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(19);
+		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(17);
 	}
 
 	/**
@@ -1841,7 +1851,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EReference getVesselAvailability_Entity() {
-		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(4);
+		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -3126,6 +3136,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(cargoModelEClass, CARGO_MODEL__CHARTER_IN_MARKET_OVERRIDES);
 		createEReference(cargoModelEClass, CARGO_MODEL__PAPER_DEALS);
 		createEReference(cargoModelEClass, CARGO_MODEL__DEAL_SETS);
+		createEReference(cargoModelEClass, CARGO_MODEL__CARGOES_FOR_EXPOSURES);
+		createEReference(cargoModelEClass, CARGO_MODEL__CARGOES_FOR_HEDGING);
 		createEOperation(cargoModelEClass, CARGO_MODEL___GET_LOAD_SLOT_BY_NAME__STRING);
 		createEOperation(cargoModelEClass, CARGO_MODEL___GET_DISCHARGE_SLOT_BY_NAME__STRING);
 
@@ -3236,7 +3248,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(cargoGroupEClass, CARGO_GROUP__CARGOES);
 
 		vesselAvailabilityEClass = createEClass(VESSEL_AVAILABILITY);
-		createEAttribute(vesselAvailabilityEClass, VESSEL_AVAILABILITY__FLEET);
 		createEAttribute(vesselAvailabilityEClass, VESSEL_AVAILABILITY__OPTIONAL);
 		createEReference(vesselAvailabilityEClass, VESSEL_AVAILABILITY__VESSEL);
 		createEAttribute(vesselAvailabilityEClass, VESSEL_AVAILABILITY__CHARTER_NUMBER);
@@ -3252,10 +3263,10 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(vesselAvailabilityEClass, VESSEL_AVAILABILITY__END_HEEL);
 		createEAttribute(vesselAvailabilityEClass, VESSEL_AVAILABILITY__FORCE_HIRE_COST_ONLY_END_RULE);
 		createEReference(vesselAvailabilityEClass, VESSEL_AVAILABILITY__CONTAINED_CHARTER_CONTRACT);
-		createEReference(vesselAvailabilityEClass, VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT);
 		createEAttribute(vesselAvailabilityEClass, VESSEL_AVAILABILITY__MIN_DURATION);
 		createEAttribute(vesselAvailabilityEClass, VESSEL_AVAILABILITY__MAX_DURATION);
 		createEAttribute(vesselAvailabilityEClass, VESSEL_AVAILABILITY__CHARTER_CONTRACT_OVERRIDE);
+		createEReference(vesselAvailabilityEClass, VESSEL_AVAILABILITY__GENERIC_CHARTER_CONTRACT);
 		createEOperation(vesselAvailabilityEClass, VESSEL_AVAILABILITY___GET_START_BY_AS_DATE_TIME);
 		createEOperation(vesselAvailabilityEClass, VESSEL_AVAILABILITY___GET_START_AFTER_AS_DATE_TIME);
 		createEOperation(vesselAvailabilityEClass, VESSEL_AVAILABILITY___GET_END_BY_AS_DATE_TIME);
@@ -3521,6 +3532,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getCargoModel_CharterInMarketOverrides(), this.getCharterInMarketOverride(), null, "charterInMarketOverrides", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoModel_PaperDeals(), this.getPaperDeal(), null, "paperDeals", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoModel_DealSets(), this.getDealSet(), null, "dealSets", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoModel_CargoesForExposures(), this.getCargo(), null, "cargoesForExposures", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoModel_CargoesForHedging(), this.getCargo(), null, "cargoesForHedging", null, 0, -1, CargoModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		EOperation op = initEOperation(getCargoModel__GetLoadSlotByName__String(), this.getLoadSlot(), "getLoadSlotByName", 0, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED);
@@ -3691,7 +3704,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getCargoGroup_Cargoes(), this.getCargo(), null, "cargoes", null, 0, -1, CargoGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(vesselAvailabilityEClass, VesselAvailability.class, "VesselAvailability", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getVesselAvailability_Fleet(), ecorePackage.getEBoolean(), "fleet", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselAvailability_Optional(), ecorePackage.getEBoolean(), "optional", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVesselAvailability_Vessel(), theFleetPackage.getVessel(), null, "vessel", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselAvailability_CharterNumber(), ecorePackage.getEInt(), "charterNumber", "1", 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3710,10 +3722,10 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getVesselAvailability_EndHeel(), theCommercialPackage.getEndHeelOptions(), null, "endHeel", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselAvailability_ForceHireCostOnlyEndRule(), ecorePackage.getEBoolean(), "forceHireCostOnlyEndRule", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVesselAvailability_ContainedCharterContract(), theCommercialPackage.getGenericCharterContract(), null, "containedCharterContract", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getVesselAvailability_GenericCharterContract(), theCommercialPackage.getGenericCharterContract(), null, "genericCharterContract", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselAvailability_MinDuration(), ecorePackage.getEInt(), "minDuration", null, 1, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselAvailability_MaxDuration(), ecorePackage.getEInt(), "maxDuration", null, 1, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselAvailability_CharterContractOverride(), ecorePackage.getEBoolean(), "charterContractOverride", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVesselAvailability_GenericCharterContract(), theCommercialPackage.getGenericCharterContract(), null, "genericCharterContract", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getVesselAvailability__GetStartByAsDateTime(), theDateTimePackage.getDateTime(), "getStartByAsDateTime", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -3962,6 +3974,12 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   source,
 		   new String[] {
 			   "nonUniqueChildren", "true"
+		   });
+		addAnnotation
+		  (getVesselAvailability_ContainedCharterContract(),
+		   source,
+		   new String[] {
+			   "optionalName", "true"
 		   });
 	}
 

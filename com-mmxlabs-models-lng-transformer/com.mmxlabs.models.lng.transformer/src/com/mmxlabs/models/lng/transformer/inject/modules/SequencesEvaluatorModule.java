@@ -32,7 +32,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessHelper;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.optimiser.core.modules.FitnessFunctionInstantiatorModule;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
 import com.mmxlabs.optimiser.lso.impl.LinearFitnessCombiner;
@@ -73,7 +73,7 @@ public class SequencesEvaluatorModule extends PrivateModule {
 
 		return new ISequenceEvaluator() {
 			public IMultiStateResult eval(ISequences rawSequences) {
-				final PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);
+				final ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class);
 				try {
 					scope.enter();
 					final Pair<IAnnotatedSolution, IEvaluationState> p = LNGSchedulerJobUtils.evaluateCurrentState(injector, rawSequences);

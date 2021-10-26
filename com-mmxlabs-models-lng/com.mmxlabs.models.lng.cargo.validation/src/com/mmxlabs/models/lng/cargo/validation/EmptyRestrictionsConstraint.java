@@ -37,7 +37,7 @@ public class EmptyRestrictionsConstraint extends AbstractModelMultiConstraint {
 
 		return Activator.PLUGIN_ID;
 	}
-	
+
 	/**
 	 * Check slot2 can be paired to slot1 based on slot1's restrictions
 	 * 
@@ -49,7 +49,7 @@ public class EmptyRestrictionsConstraint extends AbstractModelMultiConstraint {
 	 */
 	private void checkSlot(final IValidationContext ctx, final Slot slot, final List<IStatus> statuses, final MMXRootObject rootObject) {
 
-		if (slot.eContainer() == null || slot.eContainer() instanceof CargoModel){
+		if (slot.eContainer() == null || slot.eContainer() instanceof CargoModel) {
 			final boolean rSlotsEmpty = slot.getRestrictedSlots().isEmpty();
 			final boolean rContractsEmpty = slot.getRestrictedContracts().isEmpty();
 			final boolean rPortsEmpty = slot.getRestrictedPorts().isEmpty();
@@ -70,6 +70,8 @@ public class EmptyRestrictionsConstraint extends AbstractModelMultiConstraint {
 						checkSpotMarketSlot(CargoPackage.eINSTANCE.getSlot_RestrictedPortsArePermissive(), ctx, slot, statuses, "ports", name);
 						checkSpotMarketSlot(CargoPackage.eINSTANCE.getSlot_RestrictedContractsArePermissive(), ctx, slot, statuses, "contracts", name);
 						checkSpotMarketSlot(CargoPackage.eINSTANCE.getSlot_RestrictedVesselsArePermissive(), ctx, slot, statuses, "vessels", name);
+						checkSpotMarketSlot(CargoPackage.eINSTANCE.getSlot_RestrictedSlots(), ctx, slot, statuses, "slots", name);
+						checkSpotMarketSlot(CargoPackage.eINSTANCE.getSlot_RestrictedSlotsArePermissive(), ctx, slot, statuses, "slots", name);
 					}
 				}
 				return;
@@ -78,24 +80,22 @@ public class EmptyRestrictionsConstraint extends AbstractModelMultiConstraint {
 			if (slot.isSetContract()) {
 				if (slot.eIsSet(CargoPackage.eINSTANCE.getSlot_RestrictedPortsArePermissive()) && !slot.eIsSet(CargoPackage.eINSTANCE.getSlot_RestrictedPorts())
 						|| !slot.eIsSet(CargoPackage.eINSTANCE.getSlot_RestrictedPortsArePermissive()) && slot.eIsSet(CargoPackage.eINSTANCE.getSlot_RestrictedPorts())) {
-					addFail(CargoPackage.eINSTANCE.getSlot_RestrictedPorts(),
-							String.format("%s: Both restiction ports list and type should be overriden.", name), slot, ctx, statuses);
+					addFail(CargoPackage.eINSTANCE.getSlot_RestrictedPorts(), String.format("%s: Both restiction ports list and type should be overriden.", name), slot, ctx, statuses);
 				}
 
 				if (slot.eIsSet(CargoPackage.eINSTANCE.getSlot_RestrictedContractsArePermissive()) && !slot.eIsSet(CargoPackage.eINSTANCE.getSlot_RestrictedContracts())
 						|| !slot.eIsSet(CargoPackage.eINSTANCE.getSlot_RestrictedContractsArePermissive()) && slot.eIsSet(CargoPackage.eINSTANCE.getSlot_RestrictedContracts())) {
-					addFail(CargoPackage.eINSTANCE.getSlot_RestrictedContracts(),
-							String.format("%s: Both restriction contracts list and type should be overriden.", name), slot, ctx, statuses);
+					addFail(CargoPackage.eINSTANCE.getSlot_RestrictedContracts(), String.format("%s: Both restriction contracts list and type should be overriden.", name), slot, ctx, statuses);
 				}
 
 				if (slot.eIsSet(CargoPackage.eINSTANCE.getSlot_RestrictedVesselsArePermissive()) && !slot.eIsSet(CargoPackage.eINSTANCE.getSlot_RestrictedVessels())
 						|| !slot.eIsSet(CargoPackage.eINSTANCE.getSlot_RestrictedVesselsArePermissive()) && slot.eIsSet(CargoPackage.eINSTANCE.getSlot_RestrictedVessels())) {
-					addFail(CargoPackage.eINSTANCE.getSlot_RestrictedVessels(),
-							String.format("%s: Both restriction vessels list and type should be overriden.", name), slot, ctx, statuses);
+					addFail(CargoPackage.eINSTANCE.getSlot_RestrictedVessels(), String.format("%s: Both restriction vessels list and type should be overriden.", name), slot, ctx, statuses);
 				}
-				
+
 				if (slot.isRestrictedContractsOverride() && slot.eIsSet(CargoPackage.eINSTANCE.getSlot_RestrictedContractsArePermissive())) {
-					checkForEmptyRestrictions(CargoPackage.eINSTANCE.getSlot_RestrictedContractsArePermissive(), ctx, slot, statuses, rContractsEmpty && restrictedContractsArePermissive, "contracts", name);
+					checkForEmptyRestrictions(CargoPackage.eINSTANCE.getSlot_RestrictedContractsArePermissive(), ctx, slot, statuses, rContractsEmpty && restrictedContractsArePermissive, "contracts",
+							name);
 				}
 				if (slot.isRestrictedPortsOverride() && slot.eIsSet(CargoPackage.eINSTANCE.getSlot_RestrictedPortsArePermissive())) {
 					checkForEmptyRestrictions(CargoPackage.eINSTANCE.getSlot_RestrictedPortsArePermissive(), ctx, slot, statuses, rPortsEmpty && restrictedPortsArePermissive, "ports", name);
@@ -107,7 +107,8 @@ public class EmptyRestrictionsConstraint extends AbstractModelMultiConstraint {
 					checkForEmptyRestrictions(CargoPackage.eINSTANCE.getSlot_RestrictedVesselsArePermissive(), ctx, slot, statuses, rVesselsEmpty && restrictedVesselsArePermissive, "vessels", name);
 				}
 			} else {
-				checkForEmptyRestrictions(CargoPackage.eINSTANCE.getSlot_RestrictedContractsArePermissive(), ctx, slot, statuses, rContractsEmpty && restrictedContractsArePermissive, "contracts", name);
+				checkForEmptyRestrictions(CargoPackage.eINSTANCE.getSlot_RestrictedContractsArePermissive(), ctx, slot, statuses, rContractsEmpty && restrictedContractsArePermissive, "contracts",
+						name);
 				checkForEmptyRestrictions(CargoPackage.eINSTANCE.getSlot_RestrictedPortsArePermissive(), ctx, slot, statuses, rPortsEmpty && restrictedPortsArePermissive, "ports", name);
 				checkForEmptyRestrictions(CargoPackage.eINSTANCE.getSlot_RestrictedSlotsArePermissive(), ctx, slot, statuses, rSlotsEmpty && restrictedSlotsArePermissive, "slots", name);
 				checkForEmptyRestrictions(CargoPackage.eINSTANCE.getSlot_RestrictedVesselsArePermissive(), ctx, slot, statuses, rVesselsEmpty && restrictedVesselsArePermissive, "vessels", name);
@@ -120,16 +121,15 @@ public class EmptyRestrictionsConstraint extends AbstractModelMultiConstraint {
 			addFail(feature, String.format("%s: Spot market slot's %s restrictions should not be changed!.", messageSubject, name), slot, ctx, statuses);
 		}
 	}
-	
-	private void checkForEmptyRestrictions(final EStructuralFeature feature, final IValidationContext ctx, final Slot slot, final List<IStatus> statuses, final boolean fail, 
+
+	private void checkForEmptyRestrictions(final EStructuralFeature feature, final IValidationContext ctx, final Slot slot, final List<IStatus> statuses, final boolean fail,
 			final String messageSubject, final String name) {
 		if (fail) {
 			addFail(feature, String.format("%s: Empty allowed %s restriction list.", messageSubject, name), slot, ctx, statuses);
 		}
 	}
-	
-	private void addFail( final EStructuralFeature feature,
-			final String message, final Slot<?> slot, final IValidationContext ctx, final List<IStatus> statuses) {
+
+	private void addFail(final EStructuralFeature feature, final String message, final Slot<?> slot, final IValidationContext ctx, final List<IStatus> statuses) {
 		final DetailConstraintStatusDecorator d = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 		d.addEObjectAndFeature(slot, feature);
 		statuses.add(d);

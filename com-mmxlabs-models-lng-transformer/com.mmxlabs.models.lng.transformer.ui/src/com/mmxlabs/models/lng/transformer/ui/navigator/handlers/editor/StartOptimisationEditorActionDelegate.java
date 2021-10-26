@@ -69,8 +69,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 				return;
 			}
 
-			@NonNull
-			ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+ 			ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 			if (modelRecord == null) {
 				action.setEnabled(false);
 				return;
@@ -105,7 +104,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 					} else {
 						boolean relaxedValidation = "Period Scenario".equals(modelRecord.getName());
 						// New optimisation, so check there are no validation errors.
-						if (!OptimisationHelper.validateScenario(scenarioDataProvider, optimising, false, relaxedValidation)) {
+						if (!OptimisationHelper.validateScenario(scenarioDataProvider, null, optimising, false, relaxedValidation, job.getExtraValidationCategories())) {
 							action.setEnabled(false);
 							return;
 						}

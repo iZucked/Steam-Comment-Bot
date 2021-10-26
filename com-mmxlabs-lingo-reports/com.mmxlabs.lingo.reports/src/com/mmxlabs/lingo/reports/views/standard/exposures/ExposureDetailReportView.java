@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -32,13 +31,12 @@ import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
-import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
+import com.mmxlabs.lingo.reports.services.ReentrantSelectionManager;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.services.SelectionServiceUtils;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -63,9 +61,10 @@ import com.mmxlabs.scenario.service.ScenarioResult;
 /**
  */
 
-public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener {
+public class ExposureDetailReportView extends ViewPart {
 
 	private ScenarioComparisonService selectedScenariosService;
+	private ReentrantSelectionManager selectionManager;
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -195,15 +194,15 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 			}
 		});
 
-		final ESelectionService service = getSite().getService(ESelectionService.class);
-		service.addPostSelectionListener(this);
-
 		selectedScenariosService = getSite().getService(ScenarioComparisonService.class);
-		selectedScenariosService.addListener(selectedScenariosServiceListener);
 
+		selectionManager = new ReentrantSelectionManager(viewer, selectedScenariosServiceListener, selectedScenariosService, false);
 		makeActions();
-
-		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
+		try {
+			selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
+		} catch (Exception e) {
+			// Ignore any initial issues.
+		}
 	}
 
 	private void makeActions() {
@@ -278,63 +277,83 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 					final EObject eObject = (EObject) element;
 					if (reference instanceof EAttribute) {
 						if (eObject.eClass().getEAllAttributes().contains(reference)) {
-							final Object o = ((EObject) element).eGet(reference);
-							if (o == null) {
-								cell.setText("");
-							} else if (reference == SchedulePackage.Literals.EXPOSURE_DETAIL__UNIT_PRICE) {
-								cell.setText(String.format("%,.3f", (Double) o));
-							} else if (reference.getEType() == EcorePackage.Literals.EDOUBLE) {
-								cell.setText(String.format("%,.1f", (Double) o));
-							} else {
-								cell.setText(o.toString());
-							}
+							updateCellForEAttributeReference(cell, element, reference);
 						}
 					} else {
 						if (eObject.eClass().getEAllReferences().contains(reference)) {
 							try {
-								final Object o = ((EObject) element).eGet(reference);
-								if (o instanceof Slot) {
-									final Slot<?> slot = (Slot<?>) o;
-									cell.setText(slot.getName());
-								} else if (o instanceof AbstractYearMonthCurve) {
-									final AbstractYearMonthCurve idx = (AbstractYearMonthCurve) o;
-									cell.setText(idx.getName());
-								} else if (element instanceof ExposureDetail) {
-									if (reference == SchedulePackage.Literals.EXPOSURE_DETAIL__UNIT_PRICE) {
-										cell.setText(String.format("%,.3f", (Double) o));
-									} else if (reference.getEType() == EcorePackage.Literals.EDOUBLE) {
-										cell.setText(String.format("%,.1f", (Double) o));
-									} else {
-										cell.setText(o.toString());
-									}
-								}
-							} catch (final Throwable e) {
+								updateCellWithEGET(cell, element, reference);
+							} catch (final Exception e) {
+								System.out.println(e.getMessage());
+							} finally {
 								cell.setText("");
 							}
 						}
 					}
 				}
 			}
+
 		});
 
 		col.getColumn().setWidth(120);
 		return col;
 	}
-
-	@Override
-	public void dispose() {
-		final ESelectionService service = getSite().getService(ESelectionService.class);
-		service.removePostSelectionListener(this);
-
-		selectedScenariosService.removeListener(selectedScenariosServiceListener);
-		super.dispose();
+	
+	private void updateCellForEAttributeReference(final ViewerCell cell, final Object element, final EStructuralFeature reference) {
+		final Object o = ((EObject) element).eGet(reference);
+		if (o == null) {
+			cell.setText("");
+		} else if (reference == SchedulePackage.Literals.EXPOSURE_DETAIL__UNIT_PRICE) {
+			cell.setText(String.format("%,.3f", (Double) o));
+		} else if (reference.getEType() == EcorePackage.Literals.EDOUBLE) {
+			cell.setText(String.format("%,.1f", (Double) o));
+		} else if (reference == SchedulePackage.Literals.EXPOSURE_DETAIL__INDEX_NAME) {
+			if ("physical".equalsIgnoreCase(o.toString())) {
+				cell.setText(o.toString());
+			} else {
+				cell.setText(o.toString().toUpperCase());
+			}
+		} else if (reference == SchedulePackage.Literals.EXPOSURE_DETAIL__VOLUME_UNIT) { 
+			switch(o.toString().toLowerCase()) {
+			case "mmbtu" :
+				cell.setText("mmBtu");
+				break;
+			case "mwh" :
+				cell.setText("MWh");
+				break;
+			case "bbl" :
+				cell.setText("bbl");
+				break;
+			case "therm" :
+				cell.setText("therm");
+				break;
+			default: cell.setText(o.toString());
+			}
+		} else {
+			cell.setText(o.toString());
+		}
+	}
+	
+	private void updateCellWithEGET(final ViewerCell cell, final Object element, final EStructuralFeature reference) {
+		final Object o = ((EObject) element).eGet(reference);
+		if (o instanceof Slot) {
+			final Slot<?> slot = (Slot<?>) o;
+			cell.setText(slot.getName());
+		} else if (o instanceof AbstractYearMonthCurve) {
+			final AbstractYearMonthCurve idx = (AbstractYearMonthCurve) o;
+			cell.setText(idx.getName());
+		} else if (element instanceof ExposureDetail) {
+			if (reference == SchedulePackage.Literals.EXPOSURE_DETAIL__UNIT_PRICE) {
+				cell.setText(String.format("%,.3f", (Double) o));
+			} else if (reference.getEType() == EcorePackage.Literals.EDOUBLE) {
+				cell.setText(String.format("%,.1f", (Double) o));
+			} else {
+				cell.setText(o.toString());
+			}
+		}
 	}
 
 	private ISelection selection;
-
-	public ExposureDetailReportView() {
-		// super("com.mmxlabs.lingo.doc.Reports_IndexExposuresDetails");
-	}
 
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
@@ -375,23 +394,24 @@ public class ExposureDetailReportView extends ViewPart implements org.eclipse.e4
 				}
 			};
 
-			RunnerHelper.exec(r, block);
+			ViewerHelper.runIfViewerValid(viewer, block, r);
 		}
+
+		@Override
+		public void selectedObjectChanged(MPart source, ISelection selection) {
+			if (SelectionServiceUtils.isSelectionValid(source, selection)) {
+				// Update selection before view refresh
+				ExposureDetailReportView.this.selection = SelectionHelper.adaptSelection(selection);
+				ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+			}
+		}
+
 	};
 	private GridTreeViewer viewer;
 
 	@Override
-	public void selectionChanged(final MPart part, final Object selectionObject) {
-		if (SelectionServiceUtils.isSelectionValid(part, selectionObject)) {
-			selection = SelectionHelper.adaptSelection(selectionObject);
-			ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
-		}
-	}
-
-	@Override
 	public void setFocus() {
 		ViewerHelper.setFocus(viewer);
-
 	}
 
 }

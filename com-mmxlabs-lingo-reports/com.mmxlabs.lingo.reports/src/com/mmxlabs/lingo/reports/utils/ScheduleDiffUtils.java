@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
+import com.mmxlabs.models.lng.schedule.GroupedCharterOutEvent;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -58,6 +59,17 @@ public class ScheduleDiffUtils {
 			// Specific to each scenario/schedule so always mark as different.
 			return false;
 		}
+		if (pinnedObject instanceof GroupedCharterOutEvent || otherObject instanceof GroupedCharterOutEvent) {
+			final GroupedCharterOutEvent pinnedCharterOut = (GroupedCharterOutEvent) pinnedObject;
+			final GroupedCharterOutEvent otherCharterOut = (GroupedCharterOutEvent) otherObject;
+
+			if (getEventGroupingDuration(pinnedCharterOut) != getEventGroupingDuration(otherCharterOut)) {
+				return true;
+			}
+			// Specific to each scenario/schedule so always mark as different.
+			return false;
+		}
+
 		if (pinnedObject instanceof CharterLengthEvent || otherObject instanceof CharterLengthEvent) {
 			final CharterLengthEvent pinnedCharterOut = (CharterLengthEvent) pinnedObject;
 			final CharterLengthEvent otherCharterOut = (CharterLengthEvent) otherObject;

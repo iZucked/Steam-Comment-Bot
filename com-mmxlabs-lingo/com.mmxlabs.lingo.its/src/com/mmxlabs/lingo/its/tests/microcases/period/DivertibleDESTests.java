@@ -49,9 +49,10 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  */
 @ExtendWith(ShiroRunner.class)
 public class DivertibleDESTests extends AbstractMicroTestCase {
-	
+
 	/**
-	 * This test case originally lead to a scenario with no cargoes as the sale was outside the period and des cargoes are based on sales date.
+	 * This test case originally lead to a scenario with no cargoes as the sale was
+	 * outside the period and des cargoes are based on sales date.
 	 * 
 	 * @throws Exception
 	 */
@@ -93,7 +94,8 @@ public class DivertibleDESTests extends AbstractMicroTestCase {
 
 				.build();
 
-		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
+		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in
+		// period.
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
@@ -113,27 +115,24 @@ public class DivertibleDESTests extends AbstractMicroTestCase {
 				.withThreadCount(1)//
 				.withHints(LNGTransformerHelper.HINT_OPTIMISE_LSO) //
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+		runner.evaluateInitialState();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
-			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
-			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
-			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
-			// Check locked flags
-			Assertions.assertFalse(optimiserScenario.getCargoModel().getCargoes().get(0).isLocked());
-			Assertions.assertFalse(optimiserScenario.getCargoModel().getLoadSlots().get(0).isLocked());
-			Assertions.assertTrue(optimiserScenario.getCargoModel().getDischargeSlots().get(0).isLocked());
+		final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+		Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+		Assertions.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
+		Assertions.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
 
-			// Assert initial state can be evaluated
-			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-			// Validate the initial sequences are valid
-			Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
-		} finally {
-			runner.dispose();
-		}
+		// Check locked flags
+		Assertions.assertFalse(optimiserScenario.getCargoModel().getCargoes().get(0).isLocked());
+		Assertions.assertFalse(optimiserScenario.getCargoModel().getLoadSlots().get(0).isLocked());
+		Assertions.assertTrue(optimiserScenario.getCargoModel().getDischargeSlots().get(0).isLocked());
+
+		// Assert initial state can be evaluated
+		final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+		// Validate the initial sequences are valid
+		Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 	}
 }

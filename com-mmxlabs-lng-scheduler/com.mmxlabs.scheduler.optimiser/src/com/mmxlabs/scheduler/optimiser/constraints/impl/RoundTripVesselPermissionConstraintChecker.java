@@ -68,7 +68,8 @@ public class RoundTripVesselPermissionConstraintChecker implements IPairwiseCons
 
 			if (prevElement != null) {
 				if (!roundTripVesselPermissionProvider.isBoundPair(prevElement, element)) {
-					messages.add(String.format("%s: Sequence elements pair (%s, %s) is no a bound pair!", this.name, prevElement.getName(), element.getName()));
+					if (messages != null)
+						messages.add(String.format("%s: Sequence elements pair (%s, %s) is no a bound pair!", this.name, prevElement.getName(), element.getName()));
 					return false;
 				}
 			}
@@ -108,7 +109,8 @@ public class RoundTripVesselPermissionConstraintChecker implements IPairwiseCons
 		if (valid) {
 			final boolean result = roundTripVesselPermissionProvider.isBoundPair(first, second);
 			if (!result)
-				messages.add(String.format("%s: Sequence elements pair (%s, %s) is no a bound pair!", this.name, first.getName(), second.getName()));
+				if (messages != null)
+					messages.add(String.format("%s: Sequence elements pair (%s, %s) is no a bound pair!", this.name, first.getName(), second.getName()));
 			return result;
 		}
 		return false;
@@ -126,7 +128,8 @@ public class RoundTripVesselPermissionConstraintChecker implements IPairwiseCons
 		}
 		final boolean permitted = roundTripVesselPermissionProvider.isPermittedOnResource(element, resource);
 		if (!permitted) {
-			messages.add(String.format("%s: Element %s is not permitted on the resource %s!", this.name, element.getName(), resource.getName()));
+			if (messages != null)
+				messages.add(String.format("%s: Element %s is not permitted on the resource %s!", this.name, element.getName(), resource.getName()));
 			return false;
 		}
 

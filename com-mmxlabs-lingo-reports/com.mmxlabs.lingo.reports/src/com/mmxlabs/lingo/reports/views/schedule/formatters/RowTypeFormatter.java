@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.schedule.CharterLengthEvent;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupedCharterLengthEvent;
+import com.mmxlabs.models.lng.schedule.GroupedCharterOutEvent;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
@@ -42,6 +43,8 @@ public class RowTypeFormatter extends BaseFormatter {
 		} else if (object instanceof EndEvent) {
 			return "End";
 		} else if (object instanceof GeneratedCharterOut) {
+			return "Charter Out (virt)";
+		} else if (object instanceof GroupedCharterOutEvent) {
 			return "Charter Out (virt)";
 		} else if (object instanceof CharterLengthEvent) {
 			return "Charter length";

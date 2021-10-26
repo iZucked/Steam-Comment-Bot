@@ -38,6 +38,7 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchActionConstants;
 
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
@@ -99,6 +100,14 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 /**
  */
 public class CargoEditorMenuHelper {
+
+	private static final String ALLOW_HEDGING = "Allow hedging";
+
+	private static final String NO_HEDGING = "No hedging";
+
+	private static final String ALLOW_EXPOSURES = "Allow exposures";
+
+	private static final String NO_EXPOSURES = "No exposures";
 
 	private final Shell shell;
 
@@ -272,7 +281,7 @@ public class CargoEditorMenuHelper {
 				createDeleteSlotMenu(manager, dischargeSlot);
 				if (dischargeSlot.isFOBSale()) {
 					createAssignmentMenus(manager, dischargeSlot);
-					createPanamaAssignmentMenus(manager, dischargeSlot);
+//					createPanamaAssignmentMenus(manager, dischargeSlot);
 				} else if (dischargeSlot.getCargo() != null) {
 
 					boolean foundDESPurchase = false;
@@ -307,11 +316,35 @@ public class CargoEditorMenuHelper {
 				}
 
 				if (cargoModel.getCanalBookings() != null) {
-					panamaAssignmentMenu(manager, dischargeSlot);
+//					panamaAssignmentMenu(manager, dischargeSlot);
 				}
 			}
 
 		};
+	}
+	
+	public void createLightEditorMenuListener(final IMenuManager manager, final Set<Cargo> cargoes) {
+		final CargoModel cm = scenarioModel.getCargoModel();
+		if (cargoes.size() == 1) {
+			cargoes.forEach(c -> {
+				if (cm.getCargoesForExposures().contains(c)) {
+					manager.add(new RunnableAction(NO_EXPOSURES, () -> helper.setExposuresForCargoAssignment(NO_EXPOSURES, cm, false, cargoes)));
+				} else {
+					manager.add(new RunnableAction(ALLOW_EXPOSURES, () -> helper.setExposuresForCargoAssignment(ALLOW_EXPOSURES, cm, true, cargoes)));
+				}
+				if (cm.getCargoesForHedging().contains(c)) {
+					manager.add(new RunnableAction(NO_HEDGING, () -> helper.setHedgingForCargoAssignment(NO_HEDGING, cm, false, cargoes)));
+				} else {
+					manager.add(new RunnableAction(ALLOW_HEDGING, () -> helper.setHedgingForCargoAssignment(ALLOW_HEDGING, cm, true, cargoes)));
+				}
+			});
+		} else if (cargoes.size() > 1){
+			manager.add(new RunnableAction(ALLOW_EXPOSURES, () -> helper.setExposuresForCargoAssignment(ALLOW_EXPOSURES, cm, true, cargoes)));
+			manager.add(new RunnableAction(ALLOW_HEDGING, () -> helper.setHedgingForCargoAssignment(ALLOW_HEDGING, cm, true, cargoes)));
+			manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+			manager.add(new RunnableAction(NO_EXPOSURES, () -> helper.setExposuresForCargoAssignment(NO_EXPOSURES, cm, false, cargoes)));
+			manager.add(new RunnableAction(NO_HEDGING, () -> helper.setHedgingForCargoAssignment(NO_HEDGING, cm, false, cargoes)));
+		}
 	}
 
 	private void createEditMenu(final IMenuManager newMenuManager, final Slot<?> slot, final Contract contract, final Cargo cargo) {
@@ -683,7 +716,7 @@ public class CargoEditorMenuHelper {
 			createDeleteSlotMenu(manager, loadSlot);
 			if (loadSlot.isDESPurchase()) {
 				createAssignmentMenus(manager, loadSlot);
-				createPanamaAssignmentMenus(manager, loadSlot);
+//				createPanamaAssignmentMenus(manager, loadSlot);
 			} else if (loadSlot.getCargo() != null) {
 				boolean foundFobSale = false;
 				for (final Slot<?> s : loadSlot.getCargo().getSlots()) {
@@ -716,7 +749,7 @@ public class CargoEditorMenuHelper {
 				createFOBDESSwitchMenu(manager, loadSlot);
 			}
 			if (cargoModel.getCanalBookings() != null) {
-				panamaAssignmentMenu(manager, loadSlot);
+//				panamaAssignmentMenu(manager, loadSlot);
 			}
 
 		};

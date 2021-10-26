@@ -277,6 +277,10 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createCharterAvailableFromEventAdapter();
 			}
 			@Override
+			public Adapter caseGroupedCharterOutEvent(GroupedCharterOutEvent object) {
+				return createGroupedCharterOutEventAdapter();
+			}
+			@Override
 			public Adapter caseGroupedCharterLengthEvent(GroupedCharterLengthEvent object) {
 				return createGroupedCharterLengthEventAdapter();
 			}
@@ -963,6 +967,20 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCharterAvailableFromEventAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.GroupedCharterOutEvent <em>Grouped Charter Out Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.GroupedCharterOutEvent
+	 * @generated
+	 */
+	public Adapter createGroupedCharterOutEventAdapter() {
 		return null;
 	}
 

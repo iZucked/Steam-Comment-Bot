@@ -82,36 +82,37 @@ public class DestWithSourceDESTests extends AbstractMicroTestCase {
 				.withThreadCount(1)//
 				.withHints(LNGTransformerHelper.HINT_OPTIMISE_LSO) //
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
-			//
-			// final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
-			// Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
-			// Assertions.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
-			// Assertions.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
-			//
-			// // Check locked flags
-			// Assertions.assertFalse(optimiserScenario.getCargoModel().getCargoes().get(0).isLocked());
-			// Assertions.assertFalse(optimiserScenario.getCargoModel().getLoadSlots().get(0).isLocked());
-			// Assertions.assertTrue(optimiserScenario.getCargoModel().getDischargeSlots().get(0).isLocked());
+		runner.evaluateInitialState();
 
-			// Assert initial state can be evaluated
-			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-			// Validate the initial sequences are valid
-			Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+		//
+		// final LNGScenarioModel optimiserScenario =
+		// scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+		// Assertions.assertEquals(1,
+		// optimiserScenario.getCargoModel().getCargoes().size());
+		// Assertions.assertEquals(1,
+		// optimiserScenario.getCargoModel().getLoadSlots().size());
+		// Assertions.assertEquals(1,
+		// optimiserScenario.getCargoModel().getDischargeSlots().size());
+		//
+		// // Check locked flags
+		// Assertions.assertFalse(optimiserScenario.getCargoModel().getCargoes().get(0).isLocked());
+		// Assertions.assertFalse(optimiserScenario.getCargoModel().getLoadSlots().get(0).isLocked());
+		// Assertions.assertTrue(optimiserScenario.getCargoModel().getDischargeSlots().get(0).isLocked());
 
-			List<IConstraintChecker> checkers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			if (checkers != null) {
-				for (IConstraintChecker cc : checkers) {
-					System.out.println(cc);
-				}
+		// Assert initial state can be evaluated
+		final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+		// Validate the initial sequences are valid
+		Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+
+		List<IConstraintChecker> checkers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
+		if (checkers != null) {
+			for (IConstraintChecker cc : checkers) {
+				System.out.println(cc);
 			}
-			Assertions.assertNull(checkers);
-		} finally {
-			runner.dispose();
 		}
+		Assertions.assertNull(checkers);
 	}
 
 	/**
@@ -148,22 +149,19 @@ public class DestWithSourceDESTests extends AbstractMicroTestCase {
 				.withThreadCount(1)//
 				.withHints(LNGTransformerHelper.HINT_OPTIMISE_LSO) //
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
-			runner.run(true);
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+		runner.evaluateInitialState();
+		runner.run(true);
 
-			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
-			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+		final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
-			// Make sure a cargo has been created
-			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+		Assertions.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
+		Assertions.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
 
-		} finally {
-			runner.dispose();
-		}
+		// Make sure a cargo has been created
+		Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
+
 	}
 
 	@Test
@@ -201,28 +199,25 @@ public class DestWithSourceDESTests extends AbstractMicroTestCase {
 				.withThreadCount(1)//
 				.withHints(LNGTransformerHelper.HINT_OPTIMISE_LSO) //
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+		runner.evaluateInitialState();
 
-			// Assert initial state can be evaluated
-			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-			// Validate the initial sequences are valid
-			Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
-			List<IConstraintChecker> checkers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			Assertions.assertNotNull(checkers);
-			boolean foundCompat = false;
-			for (IConstraintChecker cc : checkers) {
-				if (cc instanceof FOBDESCompatibilityConstraintChecker) {
-					foundCompat = true;
-				}
+		// Assert initial state can be evaluated
+		final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+		// Validate the initial sequences are valid
+		Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+
+		List<IConstraintChecker> checkers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
+		Assertions.assertNotNull(checkers);
+		boolean foundCompat = false;
+		for (IConstraintChecker cc : checkers) {
+			if (cc instanceof FOBDESCompatibilityConstraintChecker) {
+				foundCompat = true;
 			}
-			Assertions.assertTrue(foundCompat);
-		} finally {
-			runner.dispose();
 		}
+		Assertions.assertTrue(foundCompat);
 	}
 
 	@Test
@@ -257,26 +252,23 @@ public class DestWithSourceDESTests extends AbstractMicroTestCase {
 				.withThreadCount(1)//
 				.withHints(LNGTransformerHelper.HINT_OPTIMISE_LSO) //
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+		runner.evaluateInitialState();
 
-			// Assert initial state can be evaluated
-			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-			// Validate the initial sequences are valid
-			Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
-			List<IConstraintChecker> checkers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			if (checkers != null) {
-				for (IConstraintChecker cc : checkers) {
-					System.out.println(cc);
-				}
+		// Assert initial state can be evaluated
+		final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+		// Validate the initial sequences are valid
+		Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+
+		List<IConstraintChecker> checkers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
+		if (checkers != null) {
+			for (IConstraintChecker cc : checkers) {
+				System.out.println(cc);
 			}
-			Assertions.assertNull(checkers);
-		} finally {
-			runner.dispose();
 		}
+		Assertions.assertNull(checkers);
 	}
 
 	@Test
@@ -311,22 +303,19 @@ public class DestWithSourceDESTests extends AbstractMicroTestCase {
 				.withThreadCount(1)//
 				.withHints(LNGTransformerHelper.HINT_OPTIMISE_LSO) //
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
 
-			runner.run(true);
+		runner.evaluateInitialState();
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+		runner.run(true);
 
-			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
-			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+		final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
-			// Make sure a cargo has been created
-			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
-		} finally {
-			runner.dispose();
-		}
+		Assertions.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
+		Assertions.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
+
+		// Make sure a cargo has been created
+		Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 	}
 
 	@Test
@@ -362,22 +351,19 @@ public class DestWithSourceDESTests extends AbstractMicroTestCase {
 				.withThreadCount(1)//
 				.withHints(LNGTransformerHelper.HINT_OPTIMISE_LSO) //
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
 
-			runner.run(true);
+		runner.evaluateInitialState();
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+		runner.run(true);
 
-			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
-			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+		final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
-			// Make sure a cargo has been created
-			Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
-		} finally {
-			runner.dispose();
-		}
+		Assertions.assertEquals(1, optimiserScenario.getCargoModel().getLoadSlots().size());
+		Assertions.assertEquals(1, optimiserScenario.getCargoModel().getDischargeSlots().size());
+
+		// Make sure a cargo has been created
+		Assertions.assertEquals(1, optimiserScenario.getCargoModel().getCargoes().size());
 	}
 
 	@Test
@@ -417,32 +403,30 @@ public class DestWithSourceDESTests extends AbstractMicroTestCase {
 				.withThreadCount(1)//
 				.withHints(LNGTransformerHelper.HINT_OPTIMISE_LSO) //
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+		runner.evaluateInitialState();
 
-			// Assert initial state can be evaluated
-			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-			// Validate the initial sequences are valid
-			Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
-			List<IConstraintChecker> checkers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
-			Assertions.assertNotNull(checkers);
-			boolean foundCompat = false;
-			for (IConstraintChecker cc : checkers) {
-				if (cc instanceof FOBDESCompatibilityConstraintChecker) {
-					foundCompat = true;
-				}
+		// Assert initial state can be evaluated
+		final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+		// Validate the initial sequences are valid
+		Assertions.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
+
+		List<IConstraintChecker> checkers = MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences);
+		Assertions.assertNotNull(checkers);
+		boolean foundCompat = false;
+		for (IConstraintChecker cc : checkers) {
+			if (cc instanceof FOBDESCompatibilityConstraintChecker) {
+				foundCompat = true;
 			}
-			Assertions.assertTrue(foundCompat);
-		} finally {
-			runner.dispose();
 		}
+		Assertions.assertTrue(foundCompat);
 	}
 
 	/**
-	 * Test to ensure that the localised time windows are used in scheduling and passed through to the period transformer
+	 * Test to ensure that the localised time windows are used in scheduling and
+	 * passed through to the period transformer
 	 * 
 	 * @throws Exception
 	 */
@@ -482,27 +466,23 @@ public class DestWithSourceDESTests extends AbstractMicroTestCase {
 				.withOptimiseHint() //
 				.buildDefaultRunner();
 
-		try {
-			runner.evaluateInitialState();
+		runner.evaluateInitialState();
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+		final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
-			LoadSlot periodLoad = optimiserScenario.getCargoModel().getLoadSlots().get(0);
-			DischargeSlot periodDischarge = optimiserScenario.getCargoModel().getDischargeSlots().get(0);
+		LoadSlot periodLoad = optimiserScenario.getCargoModel().getLoadSlots().get(0);
+		DischargeSlot periodDischarge = optimiserScenario.getCargoModel().getDischargeSlots().get(0);
 
-			// Expect start time to move to 7AM rather than 6AM to match load window start.
-			Assertions.assertEquals(7, periodDischarge.getWindowStartTime());
-			Assertions.assertEquals(periodLoad.getWindowStartTime(), periodDischarge.getWindowStartTime());
-
-		} finally {
-			runner.dispose();
-		}
+		// Expect start time to move to 7AM rather than 6AM to match load window start.
+		Assertions.assertEquals(7, periodDischarge.getWindowStartTime());
+		Assertions.assertEquals(periodLoad.getWindowStartTime(), periodDischarge.getWindowStartTime());
 	}
 
 	/**
-	 * Test to ensure that the localised time windows are used in scheduling and passed through to the period transformer
+	 * Test to ensure that the localised time windows are used in scheduling and
+	 * passed through to the period transformer
 	 * 
 	 * @throws Exception
 	 */
@@ -542,27 +522,23 @@ public class DestWithSourceDESTests extends AbstractMicroTestCase {
 				.withOptimiseHint() //
 				.buildDefaultRunner();
 
-		try {
-			runner.evaluateInitialState();
+		runner.evaluateInitialState();
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+		final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
-			LoadSlot periodLoad = optimiserScenario.getCargoModel().getLoadSlots().get(0);
-			DischargeSlot periodDischarge = optimiserScenario.getCargoModel().getDischargeSlots().get(0);
+		LoadSlot periodLoad = optimiserScenario.getCargoModel().getLoadSlots().get(0);
+		DischargeSlot periodDischarge = optimiserScenario.getCargoModel().getDischargeSlots().get(0);
 
-			// Expect start time to move to 7AM rather than 6AM to match load window start.
-			Assertions.assertEquals(7, periodDischarge.getWindowStartTime());
-			Assertions.assertEquals(periodLoad.getWindowStartTime(), periodDischarge.getWindowStartTime());
-
-		} finally {
-			runner.dispose();
-		}
+		// Expect start time to move to 7AM rather than 6AM to match load window start.
+		Assertions.assertEquals(7, periodDischarge.getWindowStartTime());
+		Assertions.assertEquals(periodLoad.getWindowStartTime(), periodDischarge.getWindowStartTime());
 	}
 
 	/**
-	 * Test to ensure that the localised time windows are used in scheduling and passed through to the period transformer
+	 * Test to ensure that the localised time windows are used in scheduling and
+	 * passed through to the period transformer
 	 * 
 	 * @throws Exception
 	 */
@@ -578,7 +554,9 @@ public class DestWithSourceDESTests extends AbstractMicroTestCase {
 				.build();
 
 		cargoModelBuilder.makeCargo()//
-				// .makeDESPurchase("L1", DESPurchaseDealType.DIVERTIBLE, LocalDate.of(2020, 8, 11), portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN), null, entity, "5", 22.8, null)
+				// .makeDESPurchase("L1", DESPurchaseDealType.DIVERTIBLE, LocalDate.of(2020, 8,
+				// 11), portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN), null,
+				// entity, "5", 22.8, null)
 				// //
 				.makeMarketDESPurchase("L1", sm, YearMonth.of(2020, 9), portFinder.findPortById(InternalDataConstants.PORT_ISLE_OF_GRAIN)) //
 				// .withShippingDaysRestriction() //
@@ -609,24 +587,18 @@ public class DestWithSourceDESTests extends AbstractMicroTestCase {
 				.withOptimiseHint() //
 				.buildDefaultRunner();
 
-		try {
-			runner.evaluateInitialState();
+		runner.evaluateInitialState();
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+		final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
-			LoadSlot periodLoad = optimiserScenario.getCargoModel().getLoadSlots().get(0);
-			DischargeSlot periodDischarge = optimiserScenario.getCargoModel().getDischargeSlots().get(0);
+		LoadSlot periodLoad = optimiserScenario.getCargoModel().getLoadSlots().get(0);
+		DischargeSlot periodDischarge = optimiserScenario.getCargoModel().getDischargeSlots().get(0);
 
-			// Expect start time to move to 7AM rather than 6AM to match load window start.
-			Assertions.assertEquals(0, periodDischarge.getWindowStartTime());
-			Assertions.assertEquals(periodLoad.getWindowStartTime(), periodDischarge.getWindowStartTime());
-
-			Assertions.assertEquals(periodLoad.getWindowStart(), periodDischarge.getWindowStart());
-
-		} finally {
-			runner.dispose();
-		}
+		// Expect start time to move to 7AM rather than 6AM to match load window start.
+		Assertions.assertEquals(0, periodDischarge.getWindowStartTime());
+		Assertions.assertEquals(periodLoad.getWindowStartTime(), periodDischarge.getWindowStartTime());
+		Assertions.assertEquals(periodLoad.getWindowStart(), periodDischarge.getWindowStart());
 	}
 }

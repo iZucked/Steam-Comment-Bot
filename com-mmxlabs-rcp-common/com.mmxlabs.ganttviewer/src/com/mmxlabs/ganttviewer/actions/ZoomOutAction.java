@@ -18,8 +18,8 @@ public class ZoomOutAction extends Action {
 	public ZoomOutAction() {
 		super();
 		setText("Zoom Out");
-		setImageDescriptor(Activator.getImageDescriptor("icons/clcl16/zoomout_nav.gif"));
-		setDisabledImageDescriptor(Activator.getImageDescriptor("icons/dlcl16/zoomout_nav.gif"));
+		setImageDescriptor(Activator.getImageDescriptor("icons/clcl16/zoomout_nav.png"));
+		setDisabledImageDescriptor(Activator.getImageDescriptor("icons/dlcl16/zoomout_nav.png"));
 	}
 
 	public ZoomOutAction(final GanttChart ganttChart) {

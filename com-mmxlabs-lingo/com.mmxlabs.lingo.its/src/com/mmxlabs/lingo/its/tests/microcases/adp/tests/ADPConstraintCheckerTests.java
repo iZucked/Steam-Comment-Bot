@@ -154,9 +154,6 @@ public class ADPConstraintCheckerTests extends AbstractADPAndLightWeightTests {
 			if (!failedAsExpected) {
 				ex.printStackTrace();
 			}
-
-		} finally {
-			runnerBuilder.dispose();
 		}
 
 		assertTrue(failedAsExpected);

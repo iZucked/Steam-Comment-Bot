@@ -42,7 +42,7 @@ public class CopyGridToExcelMSClipboardAction extends Action {
 		setText("Copy");
 		setDescription("Copies grid data into the clipboard");
 		setToolTipText("Copies grid data into the clipboard");
-		setImageDescriptor(Activator.getImageDescriptor("/icons/copy.gif"));
+		setImageDescriptor(Activator.getImageDescriptor("/icons/copy.png"));
 	}
 
 	public void setAdditionalAttributeProvider(IAdditionalAttributeProvider provider) {

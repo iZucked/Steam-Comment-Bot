@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import com.mmxlabs.common.concurrent.JobExecutor;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
@@ -100,7 +101,7 @@ public class LocalSearchOptimiserTest {
 		}
 
 		@Override
-		public int step(final int percentage) {
+		public int step(final int percentage, JobExecutor jobExecutor) {
 			Assertions.fail("This is not part of the test.");
 			return 0;
 		}

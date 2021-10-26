@@ -7,8 +7,8 @@
 -->
 <feature
       id="com.mmxlabs.lingo.platform.feature"
-      label="Lingo Eclipse Platform Feature"
-      version="4.12.28.qualifier"
+      label="LiNGO Eclipse Platform Feature"
+      version="4.13.2.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <description>
@@ -389,13 +389,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.equinox.ds"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.equinox.preferences"
          download-size="0"
          install-size="0"
@@ -458,16 +451,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.core.net.linux.x86_64"
-         os="linux"
-         arch="x86_64"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         fragment="true"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.core.net.win32.x86_64"
          os="win32"
          arch="x86_64"
@@ -527,13 +510,6 @@
 
    <plugin
          id="org.eclipse.osgi.util"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.ui.console"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -801,7 +777,7 @@
          id="com.google.guava"
          download-size="0"
          install-size="0"
-         version="27.1.0.jre"
+         version="30.1.1.jre"
          unpack="false"/>
 
    <plugin
@@ -871,7 +847,7 @@
          id="javax.activation"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="1.1.0.v201211130549"
          unpack="false"/>
 
    <plugin
@@ -1258,13 +1234,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.jetty.continuation"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.jetty.http"
          download-size="0"
          install-size="0"
@@ -1467,7 +1436,7 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
- 
+
    <plugin
          id="org.apache.servicemix.bundles.poi"
          download-size="0"
@@ -1656,6 +1625,62 @@
 
    <plugin
          id="org.eclipse.equinox.concurrent"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.urischeme"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.e4.ui.ide"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.jface.notifications"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.jetty.util.ajax"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.sun.jna"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.sun.jna.platform"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.bouncycastle.bcutil"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="jakarta.servlet-api"
          download-size="0"
          install-size="0"
          version="0.0.0"

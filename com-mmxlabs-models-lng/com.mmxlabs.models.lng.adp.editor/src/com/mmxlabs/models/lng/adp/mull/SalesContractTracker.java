@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.adp.mull;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,7 +30,6 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class SalesContractTracker extends AllocationTracker {
 	private final SalesContract salesContract;
-	private int currentAllocatedAACQ = 0;
 
 	public SalesContractTracker(final SalesContractAllocationRow allocationRow, final double totalWeight) {
 		super(allocationRow, totalWeight);
@@ -45,7 +45,7 @@ public class SalesContractTracker extends AllocationTracker {
 		super.phase1DropAllocation(allocationDrop);
 		++currentAllocatedAACQ;
 	}
-	
+
 	@Override
 	public void phase1Undo(CargoBlueprint cargoBlueprint) {
 		super.phase1Undo(cargoBlueprint);
@@ -55,8 +55,42 @@ public class SalesContractTracker extends AllocationTracker {
 	}
 
 	@Override
+	public void phase2DropAllocation(long allocationDrop) {
+		super.phase2DropAllocation(allocationDrop);
+		++currentAllocatedAACQ;
+	}
+
+	@Override
+	public void phase2Undo(CargoBlueprint cargoBlueprint) {
+		super.phase1Undo(cargoBlueprint);
+		if (this.equals(cargoBlueprint.getAllocationTracker())) {
+			--currentAllocatedAACQ;
+		}
+	}
+
+	@Override
+	public void finalPhaseDropAllocation(long allocationDrop) {
+		super.finalPhaseDropAllocation(allocationDrop);
+		++currentAllocatedAACQ;
+	}
+
+	@Override
+	public void harmonisationPhaseUndo(CargoBlueprint cargoBlueprint) {
+		super.harmonisationPhaseUndo(cargoBlueprint);
+		if (this.equals(cargoBlueprint.getAllocationTracker())) {
+			--currentAllocatedAACQ;
+			--this.currentMonthLifted;
+		}
+	}
+
+	@Override
 	public boolean satisfiedAACQ() {
 		return this.aacq == currentAllocatedAACQ;
+	}
+
+	@Override
+	public boolean satisfiedMonthlyAllocation() {
+		return this.monthlyAllocation <= this.currentMonthLifted;
 	}
 
 	@Override
@@ -108,6 +142,27 @@ public class SalesContractTracker extends AllocationTracker {
 				this.runningAllocation -= expectedVolumeLoaded;
 				++currentAllocatedAACQ;
 			}
+		}
+	}
+
+	@Override
+	public void phase2DropFixedLoad(Cargo cargo) {
+		final Slot<?> dischargeSlot = cargo.getSlots().get(1);
+		if (!(dischargeSlot instanceof SpotDischargeSlot)) {
+			if (this.salesContract.equals(dischargeSlot.getContract())) {
+				final int expectedVolumeLoaded = cargo.getSlots().get(0).getSlotOrDelegateMaxQuantity();
+				this.runningAllocation -= expectedVolumeLoaded;
+			}
+		}
+	}
+
+	@Override
+	public void updateCurrentMonthAllocations(final YearMonth nextMonth) {
+		if (this.monthlyAllocations != null) {
+			final int newMonthlyAllocation = this.monthlyAllocations.get(nextMonth);
+			final int rollForwardAllocation = this.monthlyAllocation - this.currentMonthLifted;
+			this.monthlyAllocation = newMonthlyAllocation + rollForwardAllocation;
+			this.currentMonthLifted = 0;
 		}
 	}
 }

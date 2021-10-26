@@ -19,17 +19,23 @@ import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.common.CumulativeMap;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.IReportContentsGenerator;
+import com.mmxlabs.lingo.reports.ReportContents;
+import com.mmxlabs.lingo.reports.ReportContentsGenerators;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.SelectedDataProviderImpl;
 import com.mmxlabs.lingo.reports.views.standard.SimpleTabularReportView;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -42,6 +48,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils.ShippingCostType;
+import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
@@ -146,6 +153,15 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 								if (modelRecord != null) {
 									return modelRecord.getName();
 								}
+							}
+							return null;
+						}
+
+						@Override
+						public Image getColumnImage(IncomeStatementData data) {
+							final ScenarioResult scenarioResult = data.scenarioResult;
+							if (selectedDataProvider.getPinnedScenarioResult() == scenarioResult) {
+								return pinImage;
 							}
 							return null;
 						}
@@ -337,8 +353,10 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 						Double volume = volsInMMBTU.valuesByMonth.get(key);
 						Double value = valuesInDollars.valuesByMonth.get(key);
 
-						if (volume != 0.0) {
-							exposuresByMonth.put(key, value / volume);
+						if (volume != null && value != null) {
+							if (volume != 0.0) {
+								exposuresByMonth.put(key, value / volume);
+							}
 						}
 					}
 
@@ -353,11 +371,13 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 								final Map<YearMonth, Double> dExposuresByMonth = new HashMap<>();
 
 								for (YearMonth key : overallIncomeMonths) {
+
 									Double volume = dVols.valuesByMonth.get(key);
 									Double value = dValues.valuesByMonth.get(key);
-
-									if (volume != null && volume != 0.0) {
-										dExposuresByMonth.put(key, value / volume);
+									if (volume != null && value != null) {
+										if (volume != 0.0) {
+											dExposuresByMonth.put(key, value / volume);
+										}
 									}
 								}
 								IncomeStatementData data2 = new IncomeStatementData(scenarioResult, schedule, dVols.key, dExposuresByMonth);
@@ -566,20 +586,9 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 	protected abstract String doGetColumnText(final IncomeStatementData data);
 
 	@Override
-	public <T> T getAdapter(final Class<T> adapter) {
-
-		if (IReportContents.class.isAssignableFrom(adapter)) {
-
-			final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), true);
-			final String jsonContents = jsonUtil.convert();
-			return (T) new IReportContents() {
-
-				@Override
-				public String getJSONContents() {
-					return jsonContents;
-				}
-			};
-
+	public <U> U getAdapter(final Class<U> adapter) {
+		if (IReportContentsGenerator.class.isAssignableFrom(adapter)) {
+			return adapter.cast(ReportContentsGenerators.createJSONFor(selectedScenariosServiceListener, viewer.getGrid()));
 		}
 		return super.getAdapter(adapter);
 	}

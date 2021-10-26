@@ -13,6 +13,7 @@ import com.google.inject.Inject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumer;
@@ -286,6 +287,18 @@ public class CapacityViolationChecker {
 	 */
 	private void addEntryToCapacityViolationAnnotation(final @NonNull IPortSlot portSlot, final @NonNull CapacityViolationType cvt, final long volume,
 			final @NonNull VoyagePlanRecord voyagePlanRecord) {
+
+		// Cooldowns do not always have a volume associated with them
+		if (cvt != CapacityViolationType.FORCED_COOLDOWN) {
+			// Counter party volume violations can be negative
+			if (!counterPartyVolumeProvider.isCounterPartyVolume(portSlot)) {
+				// Finally check to see if volume is below threshold to ignore.
+				if (volume < SchedulerConstants.CAPACITY_VIOLATION_THRESHOLD) {
+					return;
+				}
+			}
+		}
+
 		// Set port details entry
 		voyagePlanRecord.addCapacityViolation(portSlot, cvt, volume);
 	}

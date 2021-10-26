@@ -16,11 +16,16 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.BuyMarket;
+import com.mmxlabs.models.lng.analytics.CharterOutOpportunity;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
-import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.FullVesselCharterOption;
+import com.mmxlabs.models.lng.analytics.OpenBuy;
+import com.mmxlabs.models.lng.analytics.OpenSell;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
+import com.mmxlabs.models.lng.analytics.SellMarket;
+import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ShippingType;
 import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
@@ -55,16 +60,20 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 
 			final ShippingType nonShipped = AnalyticsBuilder.isNonShipped(baseCaseRow);
 			if (nonShipped == ShippingType.Shipped) {
-				if (baseCaseRow.getBuyOption() != null && baseCaseRow.getSellOption() != null) {
-					if (baseCaseRow.getShipping() == null) {
-						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point - no shipping option defined."));
+				if (baseCaseRow.getBuyOption() != null && baseCaseRow.getSellOption() != null //
+						&& !(baseCaseRow.getBuyOption() instanceof OpenBuy) && !(baseCaseRow.getSellOption() instanceof OpenSell)  
+						) {
+					if (baseCaseRow.getShipping() == null ) {
+						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point - no shipping option defined."));
 						deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 						statuses.add(deco);
 					}
 					if (!(baseCaseRow.getShipping() instanceof SimpleVesselCharterOption || baseCaseRow.getShipping() instanceof RoundTripShippingOption
 							|| baseCaseRow.getShipping() instanceof FullVesselCharterOption || baseCaseRow.getShipping() instanceof ExistingVesselCharterOption
 							|| baseCaseRow.getShipping() instanceof ExistingCharterMarketOption)) {
-						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point - incompatible shipping option defined."));
+						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point - incompatible shipping option defined."));
 						deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 						statuses.add(deco);
 					}
@@ -90,7 +99,8 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 			}
 
 			if (baseCaseRow.getShipping() != null && baseCaseRow.getShipping().eContainer() == null) {
-				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point: shipping option is not present in current scenario."));
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point: shipping option is not present in current scenario."));
 				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 				statuses.add(deco);
 			}
@@ -107,19 +117,38 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 				statuses.add(deco);
 			}
 			if (baseCaseRow.getShipping() != null && !SandboxConstraintUtils.vesselRestrictionsValid(baseCaseRow.getBuyOption(), baseCaseRow.getSellOption(), baseCaseRow.getShipping())) {
-				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point: load not permitted with this shipping option"));
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point: load not permitted with this shipping option"));
 				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 				statuses.add(deco);
 			}
 			if (!SandboxConstraintUtils.checkVolumeAgainstBuyAndSell(baseCaseRow.getBuyOption(), baseCaseRow.getSellOption())) {
-				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point: load and discharge volumes do not match"));
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point: load and discharge volumes do not match"));
 				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-//				statuses.add(deco);
+				// statuses.add(deco);
 			}
 			if (baseCaseRow.getShipping() != null && !SandboxConstraintUtils.checkVolumeAgainstVessel(baseCaseRow.getBuyOption(), baseCaseRow.getSellOption(), baseCaseRow.getShipping())) {
-				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point: load and discharge volumes do not match"));
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point: load and discharge volumes do not match"));
 				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-//				statuses.add(deco);
+				// statuses.add(deco);
+			}
+			if (baseCaseRow.getVesselEventOption() instanceof CharterOutOpportunity && baseCaseRow.getShipping() == null) {
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point: charter out opportunity without shipping option"));
+				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+				statuses.add(deco);
+			}
+			if ((baseCaseRow.getBuyOption() == null || baseCaseRow.getBuyOption() instanceof OpenBuy) && baseCaseRow.getSellOption() instanceof SellMarket) {
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point: cannot leave market sell open"));
+				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+				statuses.add(deco);
+			}
+			if (baseCaseRow.getBuyOption() instanceof BuyMarket && (baseCaseRow.getSellOption() == null || baseCaseRow.getSellOption() instanceof OpenSell)) {
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point: cannot leave market buy open"));
+				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+				statuses.add(deco);
 			}
 		}
 

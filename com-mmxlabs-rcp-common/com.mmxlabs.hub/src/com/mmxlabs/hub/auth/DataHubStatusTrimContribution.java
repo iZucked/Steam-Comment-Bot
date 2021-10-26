@@ -27,6 +27,8 @@ import com.mmxlabs.hub.IDataHubStateChangeListener;
 public class DataHubStatusTrimContribution {
 	
 	protected IDataHubStateChangeListener listener;
+	
+	private Label mainLabel = null;
 
 	@PostConstruct
 	protected Control createControl(Composite parent) {
@@ -62,6 +64,7 @@ public class DataHubStatusTrimContribution {
 		};
 		control.setLayout(new FillLayout());
 		final Label myLabel = new Label(control, SWT.CENTER);
+		mainLabel = myLabel;
 		myLabel.setText("DataHub status");
 		
 		{
@@ -90,7 +93,7 @@ public class DataHubStatusTrimContribution {
 
 				@Override
 				public void mouseUp(MouseEvent e) {
-					// When mouse is up it means that the cat caught it and threw it in the air to catch like a peanut.
+					// When mouse is up it means that the cat caught it and threw it up in the air to catch like a peanut.
 					// Is cat going to catch the mouse, or is it going to be a misfortune for cat, but a life changing
 					// slip for the mouse?
 					// We are not going to find that out. Mouse might became an alcoholic or a drug addict. It might start selling
@@ -130,8 +133,24 @@ public class DataHubStatusTrimContribution {
 	@PreDestroy
 	public void dispose() {
 		IDataHubStateChangeListener pListener = listener;
-		if (pListener != null)
+		if (pListener != null) {
 			DataHubServiceProvider.getInstance().removeDataHubStateListener(pListener);
+		}
+		if (!connectedAndAuth.isDisposed()) {
+			connectedAndAuth.dispose();
+		}
+		if (!connectedNotAuth.isDisposed()) {
+			connectedNotAuth.dispose();
+		}
+		if (!disconnected.isDisposed()) {
+			disconnected.dispose();
+		}
+		if (mainLabel != null && !mainLabel.isDisposed()) {
+			if (mainLabel.getImage()!= null && !mainLabel.getImage().isDisposed()) {
+				mainLabel.getImage().dispose();
+			}
+			mainLabel.dispose();
+		}
 	}
 	
 	private String dataHubStatusToolTipText(boolean online, boolean loggedin) {
@@ -142,18 +161,20 @@ public class DataHubStatusTrimContribution {
 		if (online && !loggedin) {
 			result = " Connected and logged out\n Double click to check connection settings";
 		}
-		
 		return result;
 	}
 	
+	private final Image connectedAndAuth = new Image(Display.getDefault(), DataHubStatusTrimContribution.class.getResourceAsStream("/icons/connectedauth.png"));
+	private final Image connectedNotAuth = new Image(Display.getDefault(), DataHubStatusTrimContribution.class.getResourceAsStream("/icons/connectednotauth.png"));
+	private final Image disconnected = new Image(Display.getDefault(), DataHubStatusTrimContribution.class.getResourceAsStream("/icons/disconnected.png"));
+	
 	private Image dataHubStatusImage(boolean online, boolean loggedin) {
-		Display display = Display.getDefault();
 		if (online && loggedin) {
-			return new Image(display, DataHubStatusTrimContribution.class.getResourceAsStream("/icons/connectedauth.png"));
+			return connectedAndAuth;
 		}
 		if (online && !loggedin) {
-			return new Image(display, DataHubStatusTrimContribution.class.getResourceAsStream("/icons/connectednotauth.png"));
+			return connectedNotAuth;
 		}
-		return new Image(display, DataHubStatusTrimContribution.class.getResourceAsStream("/icons/disconnected.png"));
+		return disconnected;
 	}
 }

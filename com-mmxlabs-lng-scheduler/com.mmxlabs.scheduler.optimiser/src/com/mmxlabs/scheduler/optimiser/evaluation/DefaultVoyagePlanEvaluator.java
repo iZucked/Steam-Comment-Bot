@@ -99,7 +99,7 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 		assert cargoValueAnnotation != null;
 		final long[] metrics = new long[MetricType.values().length];
 		metrics[MetricType.PNL.ordinal()] += cargoValueAnnotation.getTotalProfitAndLoss();
-		metrics[MetricType.CAPACITY.ordinal()] += vp.getViolationsCount();
+		metrics[MetricType.CAPACITY.ordinal()] += vp.getWeightedVoyagePlanMetrics();
 		metrics[MetricType.COMPULSARY_SLOT.ordinal()] = 0; // Always zero
 
 		final VoyagePlanRecord vpr = new VoyagePlanRecord(vp, cargoValueAnnotation);
@@ -284,7 +284,7 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 
 				voyagePlanRecords.add(vpr);
 
-				metrics[MetricType.CAPACITY.ordinal()] += vp.getViolationsCount();
+				metrics[MetricType.CAPACITY.ordinal()] += vp.getWeightedVoyagePlanMetrics();
 				metrics[MetricType.COMPULSARY_SLOT.ordinal()] = 0; // Always zero
 
 				final PreviousHeelRecord planHeelRecord = new PreviousHeelRecord(lastHeelVolumeInM3, lastHeelPricePerMMBTU, lastCV, forcedCooldown);

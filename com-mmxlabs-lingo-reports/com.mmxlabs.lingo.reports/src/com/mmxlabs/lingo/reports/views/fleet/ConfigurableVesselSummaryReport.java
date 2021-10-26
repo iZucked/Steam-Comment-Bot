@@ -18,7 +18,6 @@ import java.util.Map;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -26,8 +25,8 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.nebula.widgets.grid.DefaultCellRenderer;
 import org.eclipse.nebula.widgets.grid.GridColumn;
-import org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
@@ -36,16 +35,15 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IReportContentsGenerator;
-import com.mmxlabs.lingo.reports.ReportContents;
+import com.mmxlabs.lingo.reports.ReportContentsGenerators;
 import com.mmxlabs.lingo.reports.components.GroupAlternatingRowCellRenderer;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
+import com.mmxlabs.lingo.reports.services.ReentrantSelectionManager;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
-import com.mmxlabs.lingo.reports.services.SelectedDataProviderImpl;
 import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.views.AbstractConfigurableGridReportView;
@@ -65,11 +63,8 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
-import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
-import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
-import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
-import com.mmxlabs.scenario.service.ScenarioResult;
 
 /**
  * A customisable report for fleet based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available for
@@ -101,6 +96,8 @@ public class ConfigurableVesselSummaryReport extends AbstractConfigurableGridRep
 
 	@Inject
 	private ScenarioComparisonService scenarioComparisonService;
+
+	protected ReentrantSelectionManager selectionManager;
 
 	/*
 	 * Field to allow subclasses of specific reports to only include visible columns rather than everything
@@ -241,80 +238,31 @@ public class ConfigurableVesselSummaryReport extends AbstractConfigurableGridRep
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
 
-		if (IReportContents.class.isAssignableFrom(adapter)) {
-			// Set a more repeatable sort order
-			{
-				final ColumnBlock[] initialReverseSortOrder = { //
-						getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.fleet.vessel") //
-				};
-
-				if (includeAllColumnsForITS) {
-					// Sort columns by ID
-					final List<String> blockIDOrder = new ArrayList<>(getBlockManager().getBlockIDOrder());
-					Collections.sort(blockIDOrder);
-					getBlockManager().setBlockIDOrder(blockIDOrder);
-				}
-
-				// go through in reverse order as latest is set to primary sort
-				for (final ColumnBlock block : initialReverseSortOrder) {
-					if (block != null) {
-						final List<ColumnHandler> handlers = block.getColumnHandlers();
-						for (final ColumnHandler handler : handlers) {
-							if (handler.column != null) {
-								sortingSupport.sortColumnsBy(handler.column.getColumn());
-							}
-						}
-					}
-				}
-			}
-			final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), true);
-			final String jsonContents = jsonUtil.convert();
-			return adapter.cast(ReportContents.makeJSON(jsonContents));
-		}
 		if (IReportContentsGenerator.class.isAssignableFrom(adapter)) {
-			{
-				final ColumnBlock[] initialReverseSortOrder = { //
-						getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.fleet.vessel") //
-				};
+			final ColumnBlock[] initialReverseSortOrder = { //
+					getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.fleet.vessel") //
+			};
 
-				if (includeAllColumnsForITS) {
-					// Sort columns by ID
-					final List<String> blockIDOrder = new ArrayList<>(getBlockManager().getBlockIDOrder());
-					Collections.sort(blockIDOrder);
-					getBlockManager().setBlockIDOrder(blockIDOrder);
-				}
+			if (includeAllColumnsForITS) {
+				// Sort columns by ID
+				final List<String> blockIDOrder = new ArrayList<>(getBlockManager().getBlockIDOrder());
+				Collections.sort(blockIDOrder);
+				getBlockManager().setBlockIDOrder(blockIDOrder);
+			}
 
-				// go through in reverse order as latest is set to primary sort
-				for (final ColumnBlock block : initialReverseSortOrder) {
-					if (block != null) {
-						final List<ColumnHandler> handlers = block.getColumnHandlers();
-						for (final ColumnHandler handler : handlers) {
-							if (handler.column != null) {
-								sortingSupport.sortColumnsBy(handler.column.getColumn());
-							}
+			// go through in reverse order as latest is set to primary sort
+			for (final ColumnBlock block : initialReverseSortOrder) {
+				if (block != null) {
+					final List<ColumnHandler> handlers = block.getColumnHandlers();
+					for (final ColumnHandler handler : handlers) {
+						if (handler.column != null) {
+							sortingSupport.sortColumnsBy(handler.column.getColumn(), false);
 						}
 					}
 				}
 			}
-			return adapter.cast(new IReportContentsGenerator() {
-				public IReportContents getReportContents(final ScenarioResult pin, final ScenarioResult other, final @Nullable List<Object> selectedObjects) {
-					final SelectedDataProviderImpl provider = new SelectedDataProviderImpl();
-					if (pin != null) {
-						provider.addScenario(pin);
-						provider.setPinnedScenarioInstance(pin);
-					}
-					if (other != null) {
-						provider.addScenario(other);
-					}
-					// Request a blocking update ...
-					scenarioComparisonServiceListener.selectedDataProviderChanged(provider, true);
-					// ... so the data is ready to be read here.
-					final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
-					final String contents = util.convert();
 
-					return ReportContents.makeHTML("<meta charset=\"UTF-8\"/>" + contents);
-				}
-			});
+			return adapter.cast(ReportContentsGenerators.createContentsFor(selectedScenariosServiceListener, viewer.getGrid()));
 		}
 
 		return super.getAdapter(adapter);
@@ -345,7 +293,7 @@ public class ConfigurableVesselSummaryReport extends AbstractConfigurableGridRep
 		return true;
 	}
 
-	private final ISelectedScenariosServiceListener scenarioComparisonServiceListener = new ISelectedScenariosServiceListener() {
+	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 
 		@Override
 		public void selectedDataProviderChanged(@NonNull final ISelectedDataProvider selectedDataProvider, final boolean block) {
@@ -372,9 +320,9 @@ public class ConfigurableVesselSummaryReport extends AbstractConfigurableGridRep
 
 				setDiffMode(inPinDiffMode);
 				ViewerHelper.setInput(viewer, true, rows);
+				viewer.setSelection(SelectionHelper.adaptSelection(newSelectedDataProvider.getSelectedObjects()));
 			};
-
-			RunnerHelper.exec(r, block);
+			ViewerHelper.runIfViewerValid(viewer, block, r);
 		}
 
 		@Override
@@ -384,9 +332,8 @@ public class ConfigurableVesselSummaryReport extends AbstractConfigurableGridRep
 
 		@Override
 		public void selectedObjectChanged(final MPart source, final ISelection selection) {
-			if (scenarioComparisonService.getDiffOptions().isFilterSelectedSequences()) {
-				ViewerHelper.refresh(viewer, false);
-			}
+			selectionManager.setViewerSelection(selection, false);
+			ViewerHelper.refresh(viewer, false);
 		}
 	};
 
@@ -398,7 +345,6 @@ public class ConfigurableVesselSummaryReport extends AbstractConfigurableGridRep
 
 		super.initPartControl(parent);
 
-		scenarioComparisonService.addListener(scenarioComparisonServiceListener);
 		// Add diff button
 		final Action action = new DiffAction(viewer, this);
 		final IActionBars actionBars = getViewSite().getActionBars();
@@ -413,7 +359,10 @@ public class ConfigurableVesselSummaryReport extends AbstractConfigurableGridRep
 			@Override
 			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 
-				final Collection<Object> selectedElements = currentSelectedDataProvider.getSelectedObjects();
+				Collection<Object> selectedElements = currentSelectedDataProvider.getChangeSetSelection();
+				if (selectedElements == null) {
+					selectedElements = Collections.emptyList();
+				}
 
 				if (scenarioComparisonService.getDiffOptions().isFilterSelectedSequences() && !selectedElements.isEmpty()) {
 
@@ -514,23 +463,17 @@ public class ConfigurableVesselSummaryReport extends AbstractConfigurableGridRep
 			}
 		});
 
-		// Try and set initial selection. Do not abort on exceptions
+		// // Try and set initial selection. Do not abort on exceptions
+		selectionManager = new ReentrantSelectionManager(viewer, selectedScenariosServiceListener, scenarioComparisonService, false);
 		try {
-
-			triggerSeletedScenariosServiceListener();
-		} catch (final Exception e) {
-			LOG.error(e.getMessage(), e);
+			scenarioComparisonService.triggerListener(selectedScenariosServiceListener, false);
+		} catch (Exception e) {
+			// Ignore any initial issues.
 		}
 	}
 
 	public void triggerSeletedScenariosServiceListener() {
-		scenarioComparisonService.triggerListener(scenarioComparisonServiceListener, false);
-	}
-
-	@Override
-	public void dispose() {
-		scenarioComparisonService.removeListener(scenarioComparisonServiceListener);
-		super.dispose();
+		scenarioComparisonService.triggerListener(selectedScenariosServiceListener, false);
 	}
 
 	@Override

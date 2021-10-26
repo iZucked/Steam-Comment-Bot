@@ -77,7 +77,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterOutMarket/charterOutRate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterOutMarket/minCharterOutDuration"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterOutMarket/maxCharterOutDuration"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterOutMarket/availablePorts"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="If specified these are the chartering hub ports to ballast the vessel to and from either side of the charter out event. If blank the vessel will ballast to its destination before chartering out."
+          propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterOutMarket/availablePorts"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterOutMarket/vessels"/>
     </genClasses>
     <genClasses ecoreClass="spotmarkets.ecore#//CharterInMarket">

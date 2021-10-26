@@ -6,16 +6,21 @@ package com.mmxlabs.models.lng.analytics.ui.views.mtm;
 
 import java.time.LocalDate;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.MTMModel;
 import com.mmxlabs.models.lng.analytics.MTMRow;
 import com.mmxlabs.models.lng.analytics.SellOption;
+import com.mmxlabs.models.lng.analytics.SellReference;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
@@ -56,6 +61,16 @@ public final class MTMUtils {
 				final BuyReference buy = AnalyticsFactory.eINSTANCE.createBuyReference();
 				buy.setSlot(slot);
 				model.getBuys().add(buy);
+			}
+		}
+		
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MTM_SELL_SIDE)) {
+			for (final DischargeSlot slot : cargoModel.getDischargeSlots()) {
+				if (allowSlot(slot, allowCargoes, allowSpotCargoes, start, end)) {
+					final SellReference sell = AnalyticsFactory.eINSTANCE.createSellReference();
+					sell.setSlot(slot);
+					model.getSells().add(sell);
+				}
 			}
 		}
 		
@@ -116,14 +131,14 @@ public final class MTMUtils {
 	
 	public static MTMModel evaluateMTMModel(final LNGScenarioModel scenarioModel, final ScenarioInstance scenarioInstance, 
 			final IScenarioDataProvider sdp, final boolean allowCargoes, final String modelName, final boolean allowSpotCargoes, 
-			final LocalDate start, final LocalDate end) {
+			final LocalDate start, final LocalDate end, IProgressMonitor progressMonitor) {
 		final MTMModel model = MTMUtils.createModelFromScenario(scenarioModel, modelName, allowCargoes, allowSpotCargoes, start, end);
-		MTMSandboxEvaluator.evaluate(sdp, scenarioInstance, model);
+		MTMSandboxEvaluator.evaluate(sdp, scenarioInstance, model, progressMonitor);
 		return model;
 	}
 	
-	public static void evaluateMTMModel(final MTMModel model, final ScenarioInstance scenarioInstance, final IScenarioDataProvider sdp) {
-		MTMSandboxEvaluator.evaluate(sdp, scenarioInstance, model);
+	public static void evaluateMTMModel(final MTMModel model, final ScenarioInstance scenarioInstance, final IScenarioDataProvider sdp, IProgressMonitor progressMonitor) {
+		MTMSandboxEvaluator.evaluate(sdp, scenarioInstance, model, progressMonitor);
 	}
 	
 }

@@ -20,6 +20,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Injector;
 import com.google.inject.name.Named;
+import com.mmxlabs.common.concurrent.JobExecutor;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -89,7 +90,7 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 	}
 
 	@Override
-	public IAnnotatedSolution start(@NonNull final IOptimisationContext optimiserContext, @NonNull final ISequences initialRawSequences, @NonNull final ISequences inputRawSequences) {
+	public IAnnotatedSolution start(@NonNull final IOptimisationContext optimiserContext, @NonNull final ISequences initialRawSequences, @NonNull final ISequences inputRawSequences ) {
 		archive = new ArrayList<>();
 		return super.start(optimiserContext, initialRawSequences, inputRawSequences);
 	}
@@ -103,7 +104,7 @@ public class SimpleMultiObjectiveOptimiser extends DefaultLocalSearchOptimiser {
 	}
 
 	@Override
-	protected int step(final int percentage, @NonNull final ModifiableSequences pinnedPotentialRawSequences, @NonNull final ModifiableSequences pinnedCurrentRawSequences) {
+	protected int step(final int percentage, @NonNull final ModifiableSequences pinnedPotentialRawSequences, @NonNull final ModifiableSequences pinnedCurrentRawSequences, JobExecutor jobExecutor) {
 
 		final int iterationsThisStep = Math.min(Math.max(1, (getNumberOfIterations() * percentage) / 100), getNumberOfIterations() - getNumberOfIterationsCompleted());
 		MAIN_LOOP: for (int i = 0; i < iterationsThisStep; i++) {

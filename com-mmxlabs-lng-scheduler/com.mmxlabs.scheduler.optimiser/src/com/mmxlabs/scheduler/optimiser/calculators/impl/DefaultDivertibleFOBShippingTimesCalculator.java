@@ -21,6 +21,7 @@ import com.mmxlabs.scheduler.optimiser.calculators.IDivertibleFOBShippingTimesCa
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
@@ -52,14 +53,14 @@ public class DefaultDivertibleFOBShippingTimesCalculator implements IDivertibleF
 			final @NonNull IVessel nominatedVessel, final @NonNull IResource resource) {
 
 		final Triple<Integer, ERouteOption, Integer> ladenDistanceData = getShortestTravelTimeToPort(sellOption, buyOption.getPort(), sellOption.getPort(), nominatedVessel,
-				getReferenceSpeed(nominatedVessel, VesselState.Laden));
+				getReferenceSpeed(sellOption, nominatedVessel, VesselState.Laden));
 		if (ladenDistanceData == null) {
 			throw new IllegalStateException(String.format("No distance between %s and %s", buyOption.getPort().getName(), sellOption.getPort().getName()));
 		}
 		final int notionalLadenTime = ladenDistanceData.getThird();
 
 		final Triple<Integer, ERouteOption, Integer> ballastDistanceData = getShortestTravelTimeToPort(sellOption, buyOption.getPort(), sellOption.getPort(), nominatedVessel,
-				getReferenceSpeed(nominatedVessel, VesselState.Ballast));
+				getReferenceSpeed(sellOption, nominatedVessel, VesselState.Ballast));
 		if (ballastDistanceData == null) {
 			throw new IllegalStateException(String.format("No distance between %s and %s", sellOption.getPort().getName(), buyOption.getPort().getName()));
 		}
@@ -125,8 +126,8 @@ public class DefaultDivertibleFOBShippingTimesCalculator implements IDivertibleF
 		return new Triple<>(distance, route, shortestTime);
 	}
 
-	protected int getReferenceSpeed(final @NonNull IVessel nominatedVessel, final @NonNull VesselState vesselState) {
-		return shippingHoursRestrictionProvider.getReferenceSpeed(nominatedVessel, vesselState);
+	protected int getReferenceSpeed(final @NonNull IPortSlot slot, final @NonNull IVessel nominatedVessel, final @NonNull VesselState vesselState) {
+		return shippingHoursRestrictionProvider.getReferenceSpeed(slot, nominatedVessel, vesselState);
 	}
 
 }

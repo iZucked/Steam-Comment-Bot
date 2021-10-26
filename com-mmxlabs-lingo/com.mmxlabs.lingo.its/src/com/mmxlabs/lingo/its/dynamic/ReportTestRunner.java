@@ -50,7 +50,7 @@ public class ReportTestRunner {
 							final String reportID = t.getReportID();
 							scenarioCases.add(DynamicTest.dynamicTest(t.getFileNameCode(), () -> {
 								ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
-									final String actual = ReportTester.generateReports(modelRecord, scenarioDataProvider, reportID, t.getReportType());
+									final String actual = ReportTester.runReportsTest(modelRecord, scenarioDataProvider, reportID, t.getReportType());
 
 									final File resultsFolder = new File(scenarioFile.getParentFile(), "results");
 									resultsFolder.mkdir();
@@ -61,7 +61,7 @@ public class ReportTestRunner {
 										Files.writeString(reportFile.toPath(), actual);
 									} else if (TestingModes.ReportTestMode == TestMode.Run) {
 										final String expected = Files.readString(reportFile.toPath());
-										Assertions.assertEquals(expected.replaceAll("\\r\\n", "\n"), actual.replaceAll("\\r\\n", "\n"));
+										Assertions.assertEquals(expected.replaceAll("\\r\\n", "\n"), actual.replaceAll("\\r\\n", "\n"), String.format("Mismatching result: %s for %s", reportID, f.getName()));
 									}
 								});
 							}));
@@ -99,7 +99,7 @@ public class ReportTestRunner {
 								final String reportID = t.getReportID();
 								elementCases.add(DynamicTest.dynamicTest(t.getFileNameCode(), () -> {
 									ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
-										final String actual = ReportTester.testReportsWithElement_New(modelRecord, scenarioDataProvider, reportID, t.getReportType(), elementID);
+										final String actual = ReportTester.runReportsTestWithElement(modelRecord, scenarioDataProvider, reportID, t.getReportType(), elementID);
 
 										final File resultsFolder = new File(scenarioFile.getParentFile(), "results");
 										resultsFolder.mkdir();

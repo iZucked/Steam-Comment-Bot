@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
@@ -33,7 +32,8 @@ import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.JobExecutor;
+import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -59,7 +59,8 @@ import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScope;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.actionplan.ChangeChecker;
 import com.mmxlabs.scheduler.optimiser.actionplan.SimilarityState;
@@ -97,18 +98,13 @@ public class SlotInsertionOptimiserUnit {
 	@NonNull
 	private final String phase;
 
-	private final Map<Thread, SlotInsertionEvaluator> threadCache_SlotInsertionEvaluator = new ConcurrentHashMap<>(100);
-	private final Map<Thread, SlotInsertionOptimiser> threadCache_SlotInsertionOptimiser = new ConcurrentHashMap<>(100);
-	private final Map<Thread, EvaluationHelper> threadCache_EvaluationHelper = new ConcurrentHashMap<>(100);
-	private final Map<Thread, PerChainUnitScopeImpl> threadCache_Scope = new ConcurrentHashMap<>(100);
-
-	private @NonNull CleanableExecutorService executorService;
+	private @NonNull JobExecutorFactory jobExecutorFactory;
 
 	private @NonNull InsertionOptimisationStage stage;
 
 	@SuppressWarnings("null")
 	public SlotInsertionOptimiserUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String phase, @NonNull final UserSettings userSettings,
-			@NonNull final InsertionOptimisationStage stage, @NonNull final CleanableExecutorService executorService, @NonNull final ISequences initialSequences,
+			@NonNull final InsertionOptimisationStage stage, @NonNull final JobExecutorFactory jobExecutorFactory, @NonNull final ISequences initialSequences,
 			@NonNull final IMultiStateResult inputState, @NonNull final Collection<String> initialHints) {
 
 		this.stage = stage;
@@ -117,7 +113,7 @@ public class SlotInsertionOptimiserUnit {
 
 		this.dataTransformer = dataTransformer;
 		this.phase = phase;
-		this.executorService = executorService;
+		this.jobExecutorFactory = jobExecutorFactory;
 
 		final Collection<IOptimiserInjectorService> services = dataTransformer.getModuleServices();
 
@@ -136,54 +132,35 @@ public class SlotInsertionOptimiserUnit {
 			}
 
 			@Provides
+			@ThreadLocalScope
 			private EvaluationHelper provideEvaluationHelper(final Injector injector, @Named(LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE) final boolean isReevaluating,
 					@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) final ISequences initialRawSequences) {
 
-				EvaluationHelper helper = threadCache_EvaluationHelper.get(Thread.currentThread());
-				if (helper == null) {
-					helper = new EvaluationHelper(isReevaluating);
-					injector.injectMembers(helper);
+				EvaluationHelper helper = new EvaluationHelper(isReevaluating);
+				injector.injectMembers(helper);
 
-					final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
-					helper.acceptSequences(initialRawSequences, manipulator.createManipulatedSequences(initialRawSequences));
+				final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
+				helper.acceptSequences(initialRawSequences, manipulator.createManipulatedSequences(initialRawSequences));
 
-					helper.setFlexibleCapacityViolationCount(Integer.MAX_VALUE);
-					threadCache_EvaluationHelper.put(Thread.currentThread(), helper);
-				}
+				helper.setFlexibleCapacityViolationCount(Integer.MAX_VALUE);
 				return helper;
 			}
 
 			@Provides
+			@ThreadLocalScope
 			private SlotInsertionOptimiser providePerThreadOptimiser(@NonNull final Injector injector) {
 
-				SlotInsertionOptimiser optimiser = threadCache_SlotInsertionOptimiser.get(Thread.currentThread());
-				if (optimiser == null) {
-					threadCache_Scope.computeIfAbsent(Thread.currentThread(), (k) -> {
-						final PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);
-						scope.enter();
-						return scope;
-					});
-					optimiser = new SlotInsertionOptimiser();
-					injector.injectMembers(optimiser);
-					threadCache_SlotInsertionOptimiser.put(Thread.currentThread(), optimiser);
-				}
+				SlotInsertionOptimiser optimiser = new SlotInsertionOptimiser();
+				injector.injectMembers(optimiser);
 				return optimiser;
 			}
 
 			@Provides
+			@ThreadLocalScope
 			private SlotInsertionEvaluator providePerThreadEvaluator(@NonNull final Injector injector) {
 
-				SlotInsertionEvaluator optimiser = threadCache_SlotInsertionEvaluator.get(Thread.currentThread());
-				if (optimiser == null) {
-					threadCache_Scope.computeIfAbsent(Thread.currentThread(), (k) -> {
-						final PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);
-						scope.enter();
-						return scope;
-					});
-					optimiser = new SlotInsertionEvaluator();
-					injector.injectMembers(optimiser);
-					threadCache_SlotInsertionEvaluator.put(Thread.currentThread(), optimiser);
-				}
+				SlotInsertionEvaluator optimiser = new SlotInsertionEvaluator();
+				injector.injectMembers(optimiser);
 				return optimiser;
 			}
 		});
@@ -199,7 +176,14 @@ public class SlotInsertionOptimiserUnit {
 
 	public IMultiStateResult run(final @NonNull List<Slot<?>> slotsToInsert, final List<VesselEvent> eventsToInsert, final int tries, @Nullable SlotInsertionOptimiserLogger logger,
 			@NonNull final IProgressMonitor monitor) {
-		try {
+
+		final JobExecutorFactory subExecutorFactory = jobExecutorFactory.withDefaultBegin(() -> {
+			final ThreadLocalScopeImpl s = injector.getInstance(ThreadLocalScopeImpl.class);
+			s.enter();
+			return s;
+		});
+
+		try (JobExecutor jobExecutor = subExecutorFactory.begin()) {
 			if (logger != null) {
 				logger.begin();
 			}
@@ -228,7 +212,7 @@ public class SlotInsertionOptimiserUnit {
 				final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
 
 				// Calculate the initial metrics and slot pairings.
-				try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+				try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 					scope.enter();
 					final IFollowersAndPreceders followersAndPreceders = injector.getInstance(IFollowersAndPreceders.class);
 
@@ -405,7 +389,7 @@ public class SlotInsertionOptimiserUnit {
 						final ISequenceElement buy = p.getFirst();
 						final ISequenceElement sell = p.getSecond();
 
-						futures.add(executorService.submit(() -> {
+						futures.add(jobExecutor.submit(() -> {
 							if (monitor.isCanceled()) {
 								return null;
 							}
@@ -453,7 +437,7 @@ public class SlotInsertionOptimiserUnit {
 					for (int tryNo = 0; tryNo < tries; ++tryNo) {
 						final int pTryNo = tryNo;
 
-						futures.add(executorService.submit(() -> {
+						futures.add(jobExecutor.submit(() -> {
 							if (monitor.isCanceled()) {
 								return null;
 							}
@@ -660,19 +644,6 @@ public class SlotInsertionOptimiserUnit {
 					logger.done();
 				}
 			}
-
-		} finally {
-			final PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);
-
-			// Clean up thread-locals created in the scope object
-			for (final Thread thread : threadCache_Scope.keySet()) {
-				scope.exit(thread);
-			}
-			threadCache_SlotInsertionOptimiser.clear();
-			threadCache_SlotInsertionEvaluator.clear();
-			threadCache_Scope.clear();
-
-			threadCache_EvaluationHelper.clear();
 		}
 	}
 

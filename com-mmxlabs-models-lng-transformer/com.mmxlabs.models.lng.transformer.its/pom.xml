@@ -4,11 +4,11 @@
 	<parent>
 		<groupId>com.mmxlabs.models.lng.transformer</groupId>
 		<artifactId>com.mmxlabs.models.lng.transformer.parent</artifactId>
-		<version>4.12.28-SNAPSHOT</version>
+		<version>4.13.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.models.lng.transformer.its</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
-	<version>4.12.28-SNAPSHOT</version>
+	<version>4.13.2-SNAPSHOT</version>
 
 	<build>
 		<plugins>
@@ -56,7 +56,7 @@
 							</requirement>
 							<requirement>
 								<type>eclipse-plugin</type>
-								<id>org.eclipse.equinox.ds</id>
+								<id>org.apache.felix.scr</id>
 								<versionRange>0.0.0</versionRange>
 							</requirement>
 							<requirement>
@@ -105,7 +105,7 @@
 							<autoStart>true</autoStart>
 						</bundle>
 						<bundle>
-							<id>org.eclipse.equinox.ds</id>
+							<id>org.apache.felix.scr</id>
 							<level>1</level>
 							<autoStart>true</autoStart>
 						</bundle>

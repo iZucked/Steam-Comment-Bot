@@ -43,6 +43,8 @@ public class ReferenceDataStatusTrimContribution {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReferenceDataStatusTrimContribution.class);
 	protected IBaseCaseChanged listener;
 	private final Activator plugin = Activator.getDefault();
+	private final Image circleOrange = new Image(Display.getDefault(), ReferenceDataStatusTrimContribution.class.getResourceAsStream("/icons/circle_orange.png"));
+	private final Image circleGreen = new Image(Display.getDefault(), ReferenceDataStatusTrimContribution.class.getResourceAsStream("/icons/circle_green.png"));
 	
 	private static final List<String> types = getBaseCaseTypesToCheck();
 	
@@ -53,6 +55,7 @@ public class ReferenceDataStatusTrimContribution {
 	
 	private RDSRecords currentRecords;
 	private RDSRecords newRecords;
+	private Label mainLabel = null;
 
 
 	@PostConstruct
@@ -90,6 +93,7 @@ public class ReferenceDataStatusTrimContribution {
 		};
 		control.setLayout(new FillLayout());
 		final Label myLabel = new Label(control, SWT.CENTER);
+		mainLabel = myLabel;
 		myLabel.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -176,6 +180,18 @@ public class ReferenceDataStatusTrimContribution {
 		if (service != null && pListener != null) {
 			service.removeChangedListener(pListener);
 		}
+		if (circleGreen != null && !circleGreen.isDisposed()) {
+			circleGreen.dispose();
+		}
+		if (!circleOrange.isDisposed()) {
+			circleOrange.dispose();
+		}
+		if (mainLabel != null && !mainLabel.isDisposed()) {
+			if (mainLabel.getImage()!= null && !mainLabel.getImage().isDisposed()) {
+				mainLabel.getImage().dispose();
+			}
+			mainLabel.dispose();
+		}
 	}
 	
 	private void saveRecord(final RDSRecords myRecord) {
@@ -232,11 +248,10 @@ public class ReferenceDataStatusTrimContribution {
 	}
 	
 	private Image dataHubStatusImage(final boolean changed) {
-		Display display = Display.getDefault();
 		if (changed && !currentRecords.isDismissed) {
-			return new Image(display, ReferenceDataStatusTrimContribution.class.getResourceAsStream("/icons/circle_orange.png"));
+			return circleOrange;
 		}
-		return new Image(display, ReferenceDataStatusTrimContribution.class.getResourceAsStream("/icons/circle_green.png"));
+		return circleGreen;
 	}
 	
 	public static final List<String> getBaseCaseTypesToCheck() {

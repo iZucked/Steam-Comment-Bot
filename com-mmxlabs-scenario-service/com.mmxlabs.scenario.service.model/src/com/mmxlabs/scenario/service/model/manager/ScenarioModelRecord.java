@@ -17,6 +17,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
@@ -24,12 +26,18 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 import com.mmxlabs.scenario.service.manifest.Manifest;
+import com.mmxlabs.scenario.service.manifest.ManifestFactory;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager.PostChangeType;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil.EncryptedScenarioException;
+import com.mmxlabs.scenario.service.model.util.MMXAdaptersAwareCommandStack;
+import com.mmxlabs.scenario.service.model.util.ResourceHelper;
 import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
 import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 
@@ -252,6 +260,20 @@ public final class ScenarioModelRecord extends ModelRecord {
 		try (IScenarioDataProvider ref = aquireScenarioDataProvider("ScenarioModelRecord:executeWithProvider")) {
 			hook.accept(ref);
 		}
+	}
+
+	public static ScenarioModelRecord forException(Exception e) {
+
+		BiFunction<ModelRecord, IProgressMonitor, InstanceData> loadFunc = (record, monitor) -> {
+			record.setLoadFailure(e);
+			return null;
+		};
+		Manifest m = ManifestFactory.eINSTANCE.createManifest();
+
+		ScenarioModelRecord record = new ScenarioModelRecord(m, loadFunc);
+
+		// TODO Auto-generated method stub
+		return record;
 	}
 
 }

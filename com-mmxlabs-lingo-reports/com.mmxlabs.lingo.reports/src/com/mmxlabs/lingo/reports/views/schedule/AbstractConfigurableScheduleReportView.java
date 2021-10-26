@@ -37,12 +37,15 @@ import org.osgi.service.event.EventHandler;
 
 import com.google.inject.Inject;
 import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.IReportContentsGenerator;
 import com.mmxlabs.lingo.reports.ReportContents;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
+import com.mmxlabs.lingo.reports.services.ReentrantSelectionManager;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.lingo.reports.services.SelectedDataProviderImpl;
 import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.views.AbstractConfigurableGridReportView;
@@ -62,6 +65,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
+import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
@@ -93,6 +97,8 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 
 	private EventHandler todayHandler;
 
+	protected ReentrantSelectionManager selectionManager;
+
 	/*
 	 * Field to allow subclasses of specific reports to only include visible columns rather than everything
 	 */
@@ -117,43 +123,54 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 			return adapter.cast(viewer.getGrid());
 		}
 
-		if (IReportContents.class.isAssignableFrom(adapter)) {
+		if (IReportContentsGenerator.class.isAssignableFrom(adapter)) {
 			// Set a more repeatable sort order
-			{
-				final ColumnBlock[] initialReverseSortOrder = getInitialReverseSortOrderForITS();
+			final ColumnBlock[] initialReverseSortOrder = getInitialReverseSortOrderForITS();
 
-				if (includeAllColumnsForITS) {
-					// Sort columns by ID
-					final List<String> blockIDOrder = new ArrayList<>(getBlockManager().getBlockIDOrder());
-					Collections.sort(blockIDOrder);
-					getBlockManager().setBlockIDOrder(blockIDOrder);
-				}
+			if (includeAllColumnsForITS) {
+				// Sort columns by ID
+				final List<String> blockIDOrder = new ArrayList<>(getBlockManager().getBlockIDOrder());
+				Collections.sort(blockIDOrder);
+				getBlockManager().setBlockIDOrder(blockIDOrder);
+			}
 
-				// go through in reverse order as latest is set to primary sort
-				for (final ColumnBlock block : initialReverseSortOrder) {
-					if (block != null) {
-						final List<ColumnHandler> handlers = block.getColumnHandlers();
-						for (final ColumnHandler handler : handlers) {
-							if (handler.column != null) {
-								sortingSupport.sortColumnsBy(handler.column.getColumn());
-							}
+			// go through in reverse order as latest is set to primary sort
+			for (final ColumnBlock block : initialReverseSortOrder) {
+				if (block != null) {
+					final List<ColumnHandler> handlers = block.getColumnHandlers();
+					for (final ColumnHandler handler : handlers) {
+						if (handler.column != null) {
+							sortingSupport.sortColumnsBy(handler.column.getColumn());
 						}
 					}
 				}
 			}
- 
-			// Refresh viewer as column and/or sort order may have changed
-			ViewerHelper.refresh(viewer, true);
 
-			final CopyGridToHtmlStringUtil htmlUtil = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, includeAllColumnsForITS);
-			htmlUtil.setShowBackgroundColours(true);
-			htmlUtil.setShowForegroundColours(true);
-			final String htmlContents = htmlUtil.convert();
+			return adapter.cast(new IReportContentsGenerator() {
+				public IReportContents getReportContents(final ScenarioResult pin, final ScenarioResult other, final @Nullable List<Object> selectedObjects) {
+					final SelectedDataProviderImpl provider = new SelectedDataProviderImpl();
+					if (pin != null) {
+						provider.addScenario(pin);
+						provider.setPinnedScenarioInstance(pin);
+					}
+					if (other != null) {
+						provider.addScenario(other);
+					}
+					// Request a blocking update ...
+					selectedScenariosServiceListener.selectedDataProviderChanged(provider, true);
 
-			final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), includeAllColumnsForITS);
-			final String jsonContents = jsonUtil.convert();
+					// ... so the data is ready to be read here.
+					final CopyGridToHtmlStringUtil htmlUtil = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, includeAllColumnsForITS);
+					htmlUtil.setShowBackgroundColours(true);
+					htmlUtil.setShowForegroundColours(true);
+					final String htmlContents = htmlUtil.convert();
 
-			return adapter.cast(ReportContents.make(htmlContents, jsonContents));
+					final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), includeAllColumnsForITS);
+					final String jsonContents = jsonUtil.convert();
+
+					return ReportContents.make(htmlContents, jsonContents);
+				}
+			});
 		}
 		return super.getAdapter(adapter);
 
@@ -166,7 +183,7 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 		return initialReverseSortOrder;
 	}
 
-	private final ISelectedScenariosServiceListener scenarioComparisonServiceListener = new ISelectedScenariosServiceListener() {
+	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 		@Override
 		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
 
@@ -191,6 +208,9 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 			setCurrentSelectedDataProvider(newSelectedDataProvider);
 
 			ViewerHelper.setInput(viewer, block, rows);
+			final ISelection selection = SelectionHelper.adaptSelection(newSelectedDataProvider.getSelectedObjects());
+
+			viewer.setSelection(selection, true);
 		}
 
 		@Override
@@ -200,9 +220,13 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 
 		@Override
 		public void selectedObjectChanged(@Nullable MPart source, @NonNull ISelection selection) {
+
 			if (scenarioComparisonService.getDiffOptions().isFilterSelectedElements()) {
 				ViewerHelper.refresh(viewer, false);
+			} else {
+				selectionManager.setSelection(selection, false, true);
 			}
+
 		}
 	};
 
@@ -211,7 +235,6 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 		super.initPartControl(parent);
 
 		viewer.setContentProvider(new ArrayContentProvider());
-		scenarioComparisonService.addListener(scenarioComparisonServiceListener);
 
 		// Add a filter to only show certain rows.
 		viewer.setFilters(super.filterSupport.createViewerFilter(), new ViewerFilter() {
@@ -219,9 +242,9 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 			@Override
 			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 
-				Collection<Object> selectedElements = currentSelectedDataProvider.getSelectedObjects();
+				Collection<Object> selectedElements = currentSelectedDataProvider.getChangeSetSelection();
 
-				if (scenarioComparisonService.getDiffOptions().isFilterSelectedElements() && !selectedElements.isEmpty()) {
+				if (scenarioComparisonService.getDiffOptions().isFilterSelectedElements() && selectedElements != null && !selectedElements.isEmpty()) {
 					if (!selectedElements.contains(element)) {
 						if (element instanceof Row) {
 							final Row row = (Row) element;
@@ -263,8 +286,13 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 				return true;
 			}
 		});
-
-		scenarioComparisonService.triggerListener(scenarioComparisonServiceListener, false);
+		selectionManager = new ReentrantSelectionManager(viewer, selectedScenariosServiceListener, scenarioComparisonService);
+		try {
+			scenarioComparisonService.triggerListener(selectedScenariosServiceListener, false);
+		} catch (Exception e) {
+			// Ignore any initial issues.
+		}
+		selectionManager.addListener(this);
 
 		// Adding an event broker for the snap-to-date event todayHandler
 		final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
@@ -314,7 +342,6 @@ public abstract class AbstractConfigurableScheduleReportView extends AbstractCon
 
 	@Override
 	public void dispose() {
-		scenarioComparisonService.removeListener(scenarioComparisonServiceListener);
 		if (this.todayHandler != null) {
 			final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 			eventBroker.unsubscribe(this.todayHandler);

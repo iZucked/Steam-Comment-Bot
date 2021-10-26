@@ -232,7 +232,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 					{
 						for (final ChangeSetRowData d : afterData.getMembers()) {
-							if (!afterData.getMembers().isEmpty() && (row.isWiringChange() || row.isVesselChange())) {
+							if (!afterData.getMembers().isEmpty() && (row.isMajorChange())) {
 
 								if (d.getLoadAllocation() != null) {
 									if (d.getDischargeAllocation() != null) {

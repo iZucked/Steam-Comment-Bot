@@ -24,12 +24,16 @@ import com.mmxlabs.models.lng.adp.MullCargoWrapper;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioElementNameHelper;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.MultiReferenceInlineEditor;
+import com.mmxlabs.rcp.common.dialogs.GroupedElementProvider;
 import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
 
 public class MullCargoWrapperInlineEditor extends MultiReferenceInlineEditor {
+
+	private static final String UNKNOWN_NAME_DEFAULT_VALUE = "<Not specified>";
 
 	public MullCargoWrapperInlineEditor(EStructuralFeature feature) {
 		super(feature);
@@ -47,7 +51,7 @@ public class MullCargoWrapperInlineEditor extends MultiReferenceInlineEditor {
 			@SuppressWarnings("unchecked")
 			@Override
 			public String getText(final Object element) {
-				return ((LoadSlot) ((Pair<?, EObject>) element).getSecond()).getName();
+				return ScenarioElementNameHelper.getName(((LoadSlot) ((Pair<?, EObject>) element).getSecond()), UNKNOWN_NAME_DEFAULT_VALUE);
 			}
 		});
 		dlg.addColumn("Entity", new ColumnLabelProvider() {
@@ -55,7 +59,7 @@ public class MullCargoWrapperInlineEditor extends MultiReferenceInlineEditor {
 			@Override
 			public String getText(final Object element) {
 				final BaseLegalEntity entity = ((LoadSlot) ((Pair<?, EObject>) element).getSecond()).getEntity();
-				return entity == null ? "<Not specified>" : entity.getName();
+				return ScenarioElementNameHelper.getName(entity, UNKNOWN_NAME_DEFAULT_VALUE);
 			}
 		});
 		dlg.addColumn("Load Date", new ColumnLabelProvider() {
@@ -63,14 +67,14 @@ public class MullCargoWrapperInlineEditor extends MultiReferenceInlineEditor {
 			@Override
 			public String getText(final Object element) {
 				final LocalDate loadDate = ((LoadSlot) ((Pair<?, EObject>) element).getSecond()).getWindowStart();
-				return loadDate.toString();
+				return loadDate != null ? loadDate.toString() : UNKNOWN_NAME_DEFAULT_VALUE;
 			}
 		});
 		dlg.addColumn("Discharge ID", new ColumnLabelProvider() {
 			@SuppressWarnings("unchecked")
 			@Override
 			public String getText(final Object element) {
-				return ((LoadSlot) ((Pair<?, EObject>) element).getSecond()).getCargo().getSlots().get(1).getName();
+				return ScenarioElementNameHelper.getName(((LoadSlot) ((Pair<?, EObject>) element).getSecond()).getCargo().getSlots().get(1), UNKNOWN_NAME_DEFAULT_VALUE);
 			}
 		});
 	}
@@ -88,7 +92,16 @@ public class MullCargoWrapperInlineEditor extends MultiReferenceInlineEditor {
 			public String getText(final Object element) {
 				return ((Pair<String, ?>) element).getFirst();
 			}
-		});
+		}) {
+			@Override
+			protected String getFilterableText(final Object element) {
+				final StringBuilder builder = new StringBuilder(super.getFilterableText(element));
+				final String entityName = ScenarioElementNameHelper
+						.getName(((LoadSlot) ((Pair<?, EObject>) (((GroupedElementProvider.E) element).value)).getSecond()).getEntity(), UNKNOWN_NAME_DEFAULT_VALUE).toLowerCase();
+				builder.append(entityName);
+				return builder.toString();
+			}
+		};
 		dlg.setTitle("Value Selection");
 
 		final ArrayList<Pair<String, EObject>> selectedOptions = new ArrayList<>();
@@ -129,20 +142,4 @@ public class MullCargoWrapperInlineEditor extends MultiReferenceInlineEditor {
 
 		return null;
 	}
-
-//	@Override
-//	protected Object getValue() {
-//		if (input == null) {
-//			return null;
-//		}
-//		final List<MullCargoWrapper> mullCargoWrappers = (List<MullCargoWrapper>) input.eGet(feature);
-//		if (mullCargoWrappers.isEmpty()) {
-//			return mullCargoWrappers;
-//		}
-//		final ArrayList<EObject> selectedLoadSlots = new ArrayList<>(mullCargoWrappers.size());
-//		for (final MullCargoWrapper mullCargoWrapper : mullCargoWrappers) {
-//			selectedLoadSlots.add(mullCargoWrapper.getLoadSlot());
-//		}
-//		return selectedLoadSlots;
-//	}
 }

@@ -14,4 +14,15 @@
       </FeatureEnablement>
    </extension>
 
+   <extension
+         id="com.mmxlabs.lingo.its.datahub.TestPasswordProvider"
+         point="org.eclipse.equinox.security.secureStorage">
+       <provider
+            class="com.mmxlabs.lingo.its.datahub.TestPasswordProvider"
+            description="%provider.description"
+            priority="10">
+      </provider>
+   </extension>
+
+
 </plugin>

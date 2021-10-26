@@ -15,6 +15,9 @@ import com.mmxlabs.common.calendars.BasicPricingCalendarEntry;
 import com.mmxlabs.common.curves.BasicCommodityCurveData;
 import com.mmxlabs.common.curves.BasicUnitConversionData;
 import com.mmxlabs.common.exposures.ExposuresLookupData;
+import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.util.IExposuresCustomiser;
 import com.mmxlabs.models.lng.pricing.CommodityCurve;
@@ -42,6 +45,10 @@ public class ExposureDataTransformer implements ISlotTransformer {
 	private IExposuresCustomiser exposureCustomiser;
 	
 	@Inject
+	@Named(SchedulerConstants.INDIVIDUAL_EXPOSURES)
+	private boolean individualExposures;
+	
+	@Inject
 	@Named(SchedulerConstants.COMPUTE_EXPOSURES)
 	private boolean exposuresEnabled;
 	
@@ -65,10 +72,30 @@ public class ExposureDataTransformer implements ISlotTransformer {
 		if (exposuresEnabled) {
 			if (lngScenarioModel != null && lngScenarioModel.getReferenceModel() != null) {
 				final PricingModel pricingModel = lngScenarioModel.getReferenceModel().getPricingModel();
+				final CargoModel cargoModel = lngScenarioModel.getCargoModel();
 				if (pricingModel != null) {					
 					final ExposuresLookupData lookupData = new ExposuresLookupData();
 					if (lngScenarioModel.getPromptPeriodStart() != null && cutoffAtPromptStart) {
 						lookupData.cutoffDate = lngScenarioModel.getPromptPeriodStart();
+					}
+					if (individualExposures) {
+						cargoModel.getCargoesForExposures().forEach(c -> {
+							for (final var slot : c.getSlots()) {
+								String prefix = "FP-";
+								if (slot instanceof LoadSlot) {
+									prefix = "FP-";
+									if (((LoadSlot) slot).isDESPurchase()) {
+										prefix = "DP-";
+									}
+								} else {
+									prefix = "DS-";
+									if (((DischargeSlot) slot).isFOBSale()) {
+										prefix = "FS-";
+									}
+								}
+								lookupData.slotsToInclude.add(prefix + slot.getName());
+							}
+						});
 					}
 					pricingModel.getCommodityCurves().stream().filter(idx -> idx.getName() != null)//
 					.forEach(idx -> lookupData.commodityMap.put(idx.getName().toLowerCase(), new BasicCommodityCurveData(//

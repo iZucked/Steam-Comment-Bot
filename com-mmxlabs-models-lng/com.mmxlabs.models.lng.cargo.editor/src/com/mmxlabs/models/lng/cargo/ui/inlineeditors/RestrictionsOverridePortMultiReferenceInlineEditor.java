@@ -320,7 +320,7 @@ public class RestrictionsOverridePortMultiReferenceInlineEditor extends BasicAtt
 		}
 		{
 			if (!canOverride()) {
-				return super.getValue();
+				return ((MMXObject) input).getUnsetValue(getFeature());
 			} else if (input.eIsSet(feature)) {
 				return super.getValue();
 			} else {

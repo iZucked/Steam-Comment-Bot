@@ -186,7 +186,8 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 						if (tw2.getInclusiveStart() < tw1.getExclusiveEnd() && tw2.getExclusiveEnd() >= tw1.getExclusiveEnd()) {
 							return true;
 						}
-						messages.add(explain(first, second, resource));
+						if (messages != null)
+							messages.add(explain(first, second, resource));
 						return false;
 					}
 				}
@@ -220,7 +221,8 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 		Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), slot1.getPort(), slot2.getPort(), resourceMaxSpeed,
 				AvailableRouteChoices.OPTIMAL);
 		if (quickestTravelTime.getSecond() == Integer.MAX_VALUE) {
-			messages.add(explain(first, second, resource));
+			if (messages != null)
+				messages.add(explain(first, second, resource));
 			return false;
 		}
 
@@ -231,7 +233,8 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 
 		boolean result = earliestArrivalTime <= latestAllowableTime;
 		if (!result)
-			messages.add(String.format("%s: Earliest arrival time %d is less or equal than latest allowed time %d!", this.name, earliestArrivalTime, latestAllowableTime));
+			if (messages != null)
+				messages.add(String.format("%s: Earliest arrival time %d is less or equal than latest allowed time %d!", this.name, earliestArrivalTime, latestAllowableTime));
 		return result;
 	}
 

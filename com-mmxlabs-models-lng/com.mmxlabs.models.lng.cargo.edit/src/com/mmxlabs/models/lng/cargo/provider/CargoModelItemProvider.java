@@ -50,6 +50,8 @@ public class CargoModelItemProvider
 			super.getPropertyDescriptors(object);
 
 			addInventoryModelsPropertyDescriptor(object);
+			addCargoesForExposuresPropertyDescriptor(object);
+			addCargoesForHedgingPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -68,6 +70,50 @@ public class CargoModelItemProvider
 				 getString("_UI_CargoModel_inventoryModels_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_CargoModel_inventoryModels_feature", "_UI_CargoModel_type"),
 				 CargoPackage.Literals.CARGO_MODEL__INVENTORY_MODELS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Cargoes For Exposures feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCargoesForExposuresPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoModel_cargoesForExposures_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoModel_cargoesForExposures_feature", "_UI_CargoModel_type"),
+				 CargoPackage.Literals.CARGO_MODEL__CARGOES_FOR_EXPOSURES,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Cargoes For Hedging feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCargoesForHedgingPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoModel_cargoesForHedging_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoModel_cargoesForHedging_feature", "_UI_CargoModel_type"),
+				 CargoPackage.Literals.CARGO_MODEL__CARGOES_FOR_HEDGING,
 				 true,
 				 false,
 				 true,

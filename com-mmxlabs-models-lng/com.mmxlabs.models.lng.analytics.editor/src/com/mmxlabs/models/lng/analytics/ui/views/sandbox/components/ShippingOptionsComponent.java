@@ -93,7 +93,7 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent<Object, A
 
 				@Override
 				public void mouseEnter(final MouseEvent e) {
-					addShipping.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
+					addShipping.setImage(sandboxUIHelper.image_add);
 				}
 			});
 
