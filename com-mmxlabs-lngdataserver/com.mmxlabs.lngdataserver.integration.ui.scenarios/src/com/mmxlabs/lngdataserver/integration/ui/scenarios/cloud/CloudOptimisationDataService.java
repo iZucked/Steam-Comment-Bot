@@ -9,9 +9,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -175,14 +175,22 @@ public class CloudOptimisationDataService {
 		return response;
 	}
 	
-	public boolean updateRecords(final CloudOptimisationDataResultRecord record) {
+	public synchronized boolean updateRecords(final CloudOptimisationDataResultRecord record) {
 		updater.pause();
 		if (!dataList.contains(record)) {
 			final File recordsFile = new File(dataFolder.getAbsolutePath() + IPath.SEPARATOR + "records.json");
-			final String json = CloudOptimisationDataServiceClient.getJSON(Collections.singletonList(record));
-			if (json != null) {
+			String json = null;
+			try {
+				json = Files.readString(recordsFile.toPath());
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			final List<CloudOptimisationDataResultRecord> records = CloudOptimisationDataServiceClient.parseRecordsJSONData(json);
+			records.add(record);
+			final String output = CloudOptimisationDataServiceClient.getJSON(records);
+			if (output != null) {
 				try {
-					Files.writeString(recordsFile.toPath(), json, Charsets.UTF_8);
+					Files.writeString(recordsFile.toPath(), output, Charsets.UTF_8);
 				} catch (IOException e) {
 					e.printStackTrace();
 					return false;

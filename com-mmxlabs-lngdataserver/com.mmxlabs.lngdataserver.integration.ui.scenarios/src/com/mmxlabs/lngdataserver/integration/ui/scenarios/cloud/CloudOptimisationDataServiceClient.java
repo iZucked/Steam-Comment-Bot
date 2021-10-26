@@ -46,7 +46,7 @@ public class CloudOptimisationDataServiceClient {
 	
 	private final okhttp3.MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
 	
-	private Instant lastSuccessfulAccess = Instant.EPOCH;
+	private Instant lastSuccessfulAccess = Instant.EPOCH.plusNanos(1);
 
 	public Instant getLastSuccessfulAccess() {
 		return this.lastSuccessfulAccess;

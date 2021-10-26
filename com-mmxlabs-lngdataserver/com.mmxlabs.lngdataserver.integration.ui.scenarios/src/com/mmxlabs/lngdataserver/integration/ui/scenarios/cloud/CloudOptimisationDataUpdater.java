@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,6 +25,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.hub.DataHubServiceProvider;
@@ -95,7 +97,7 @@ public class CloudOptimisationDataUpdater {
 
 		@Override
 		public void run() {
-			final File f = new File(String.format("%s/%s.lingo", basePath, record.getUuid()));
+			final File f = new File(String.format("%s/%s.lingo", basePath, record.getJobid()));
 			final Instant creationDate = oldRecords.get(record.getUuid());
 			if (!Objects.equals(record.getCreationDate(), creationDate) && record.getCreationDate() != null) {
 				try {
@@ -166,9 +168,9 @@ public class CloudOptimisationDataUpdater {
 			String json;
 			try {
 				json = Files.readString(f.toPath());
-				final List<CloudOptimisationDataResultRecord> records = CloudOptimisationDataServiceClient.parseRecordsJSONData(json);
-				if (records != null) {
-					update(records);
+				final List<CloudOptimisationDataResultRecord> tasks = CloudOptimisationDataServiceClient.parseRecordsJSONData(json);
+				if (tasks != null && !tasks.isEmpty()) {
+					update(tasks);
 				}
 			} catch (final IOException e) {
 				e.printStackTrace();
@@ -209,8 +211,8 @@ public class CloudOptimisationDataUpdater {
 
 		if (available) {
 
-			final Instant m = client.getLastSuccessfulAccess();
-			if (m != null && m.isAfter(lastModified)) {
+			//final Instant m = client.getLastSuccessfulAccess();
+			//if (m != null && m.isAfter(lastModified)) {
 				final Pair<String, Instant> recordsPair = client.listContents(true);
 				if (recordsPair != null) {
 					final File tasksFile = new File(basePath.getAbsolutePath() + IPath.SEPARATOR + "tasks.json");
@@ -223,39 +225,47 @@ public class CloudOptimisationDataUpdater {
 						tasksFile.renameTo(tasksFileBKP);
 					}
 					
-					final List<CloudOptimisationDataResultRecord> tasks = CloudOptimisationDataServiceClient.parseRecordsJSONData(recordsPair.getFirst());
+					final List<String> tasks = getJobId(recordsPair.getFirst());
 					final List<CloudOptimisationDataResultRecord> records = processRecordsFromTasks(tasks);
 					update(records);
 					final String json = CloudOptimisationDataServiceClient.getJSON(records);
 					Files.writeString(tasksFile.toPath(), json, Charsets.UTF_8);
 					lastModified = recordsPair.getSecond();
 				}
-			}
+			//}
 		}
 	}
 	
-	private List<CloudOptimisationDataResultRecord> processRecordsFromTasks(final List<CloudOptimisationDataResultRecord> tasks){
+	private List<String> getJobId(final String jobIds){
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			return mapper.readValue(jobIds, List.class);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return Collections.EMPTY_LIST;
+	}
+	
+	private List<CloudOptimisationDataResultRecord> processRecordsFromTasks(final List<String> tasks){
 		final List<CloudOptimisationDataResultRecord> results = new ArrayList(tasks.size());
-		for (final CloudOptimisationDataResultRecord task : tasks) {
-			final CloudOptimisationDataResultRecord temp = getRecord(task.getUuid());
+		for (final String jobId : tasks) {
+			final CloudOptimisationDataResultRecord temp = getRecord(jobId);
 			if (temp != null) {
 				results.add(temp);
-			} else {
-				throw new IllegalStateException("Can't find the records with UUID: " + task.getUuid());
 			}
 		}
 		return results;
 	}
 	
-	private CloudOptimisationDataResultRecord getRecord(final String uuid) {
+	private CloudOptimisationDataResultRecord getRecord(final String jobid) {
 		final File recordsFile = new File(basePath.getAbsolutePath() + IPath.SEPARATOR + "records.json");
 		String json;
 		try {
 			json = Files.readString(recordsFile.toPath());
-			final List<CloudOptimisationDataResultRecord> records = client.parseRecordsJSONData(json);
+			final List<CloudOptimisationDataResultRecord> records = CloudOptimisationDataServiceClient.parseRecordsJSONData(json);
 			if (records != null && !records.isEmpty()) {
 				for (final CloudOptimisationDataResultRecord record : records) {
-					if (record.getUuid().equalsIgnoreCase(uuid)) {
+					if (record.getJobid().equalsIgnoreCase(jobid)) {
 						return record;
 					}
 				}
