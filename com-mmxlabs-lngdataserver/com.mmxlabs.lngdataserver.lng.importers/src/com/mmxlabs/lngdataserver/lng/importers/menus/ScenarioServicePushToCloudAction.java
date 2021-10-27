@@ -44,7 +44,7 @@ import com.mmxlabs.hub.services.permissions.UserPermissionsService;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataResultRecord;
-import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataService;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataServiceWrapper;
 import com.mmxlabs.lngdataserver.lng.importers.menus.PublishBasecaseException.Type;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
@@ -184,6 +184,7 @@ public class ScenarioServicePushToCloudAction {
 			record.setUuid(scenarioInstance.getUuid());
 			record.setCreationDate(Instant.now());
 			record.setCreator("Foo Bar");
+			record.setOriginalName(scenarioInstance.getName());
 			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 
 			IScenarioDataProvider scenarioDataProvider = null;
@@ -278,7 +279,7 @@ public class ScenarioServicePushToCloudAction {
 			String response = null;
 			final SubMonitor uploadMonitor = progressMonitor.split(500);
 			try {
-				response = CloudOptimisationDataService.INSTANCE.uploadData(zipToUpload, "checksum" ,scenarioInstance.getName(), //
+				response = CloudOptimisationDataServiceWrapper.uploadData(zipToUpload, "checksum", scenarioInstance.getName(), //
 						WrappedProgressMonitor.wrapMonitor(uploadMonitor));
 			} catch (final Exception e) {
 				System.out.println(MSG_ERROR_UPLOADING);
@@ -299,7 +300,7 @@ public class ScenarioServicePushToCloudAction {
 				System.out.println("Cannot read server response after scenario upload");
 				e.printStackTrace();
 			}
-			CloudOptimisationDataService.INSTANCE.updateRecords(record);
+			CloudOptimisationDataServiceWrapper.updateRecords(record);
 		} finally {
 			progressMonitor.done();
 		}

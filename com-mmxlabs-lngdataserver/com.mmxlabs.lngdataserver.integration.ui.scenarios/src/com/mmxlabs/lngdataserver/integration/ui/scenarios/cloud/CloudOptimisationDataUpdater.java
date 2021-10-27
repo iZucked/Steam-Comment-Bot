@@ -10,8 +10,11 @@ import java.nio.file.Files;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
@@ -24,6 +27,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.emf.common.util.URI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
@@ -33,16 +39,35 @@ import com.mmxlabs.hub.IDataHubStateChangeListener;
 import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
+import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ServiceHelper;
+import com.mmxlabs.scenario.service.manifest.Manifest;
+import com.mmxlabs.scenario.service.model.Container;
+import com.mmxlabs.scenario.service.model.Metadata;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioService;
+import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
+import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
+import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
+import com.mmxlabs.scenario.service.model.util.encryption.ScenarioEncryptionException;
 
 public class CloudOptimisationDataUpdater {
 
 	private final CloudOptimisationDataServiceClient client;
 
 	private final ExecutorService taskExecutor;
+	private final ScenarioService modelRoot;
 
 	private final File basePath;
 	private Instant lastModified = Instant.EPOCH;
 	private boolean purgeCache = false;
+	
+	private Set<String> warnedLoadFailures = new HashSet<>();
+	
+	private static final Logger LOG = LoggerFactory.getLogger(CloudOptimisationDataUpdater.class);
+
 	private final IUpstreamDetailChangedListener purgeLocalRecords = () -> purgeCache = true;
 	private final IDataHubStateChangeListener dataHubStateChangeListener = new IDataHubStateChangeListener() {
 		
@@ -63,7 +88,9 @@ public class CloudOptimisationDataUpdater {
 	private final Consumer<CloudOptimisationDataResultRecord> readyCallback;
 	private final ConcurrentMap<String, Instant> oldRecords;
 
-	public CloudOptimisationDataUpdater(final File basePath, final CloudOptimisationDataServiceClient client, final Consumer<CloudOptimisationDataResultRecord> readyCallback) {
+	public CloudOptimisationDataUpdater(final File basePath, final CloudOptimisationDataServiceClient client, final ScenarioService modelRoot,
+			final Consumer<CloudOptimisationDataResultRecord> readyCallback) {
+		this.modelRoot = modelRoot;
 		this.basePath = basePath;
 		this.client = client;
 		this.readyCallback = readyCallback;
@@ -90,9 +117,11 @@ public class CloudOptimisationDataUpdater {
 
 	private class DownloadTask implements Runnable {
 		private final CloudOptimisationDataResultRecord record;
+		private final Container parent;
 
 		public DownloadTask(final CloudOptimisationDataResultRecord record) {
 			this.record = record;
+			this.parent = modelRoot;
 		}
 
 		@Override
@@ -117,20 +146,38 @@ public class CloudOptimisationDataUpdater {
 					return;
 				}
 			}
+			
+			if (f.exists() && f.canRead()) {
+				final ScenarioInstance instance = loadScenarioFrom(f, record);
+				if (instance != null) {
+					RunnerHelper.syncExecDisplayOptional(() -> {
+						// We could already be in a container, so lets remove it first...
+						if (instance.eContainer() != null) {
+							((Container) instance.eContainer()).getElements().remove(instance);
+						}
+
+						// ... because this can trigger a rename request back to the hub due to the adapter in SharedWorkspaceServiceClient ...
+						instance.setName(record.getOriginalName());
+
+						// ... then re-add it to the new (or existing) parent.
+						parent.getElements().add(instance);
+					});
+				}
+			}
 
 			if (record.getCreationDate() != null) {
 				readyCallback.accept(record);
 			}
 		}
 
-		private boolean downloadData(final CloudOptimisationDataResultRecord record, final File f) {
+		private boolean downloadData(final CloudOptimisationDataResultRecord rtd, final File f) {
 			final boolean[] ret = new boolean[1];
-			final Job background = new Job("Downloading reference data") {
+			final Job background = new Job("Downloading scenario") {
 
 				@Override
 				public IStatus run(final IProgressMonitor monitor) {
 					try {
-						ret[0] = client.downloadTo(record.getUuid(), f, WrappedProgressMonitor.wrapMonitor(monitor));
+						ret[0] = client.downloadTo(rtd.getJobid(), f, WrappedProgressMonitor.wrapMonitor(monitor));
 					} catch (final Exception e) {
 						// return Status.
 						e.printStackTrace();
@@ -294,5 +341,54 @@ public class CloudOptimisationDataUpdater {
 
 	public void resume() {
 		updateLock.unlock();
+	}
+	
+	protected ScenarioInstance loadScenarioFrom(final File f, final CloudOptimisationDataResultRecord record) {
+		final URI archiveURI = URI.createFileURI(f.getAbsolutePath());
+		final Manifest manifest = ScenarioStorageUtil.loadManifest(f);
+		if (manifest != null) {
+			final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+			scenarioInstance.setReadonly(true);
+			scenarioInstance.setUuid(manifest.getUUID());
+			scenarioInstance.setExternalID(record.getUuid());
+
+			scenarioInstance.setRootObjectURI(archiveURI.toString());
+
+			scenarioInstance.setName(record.getOriginalName());
+			scenarioInstance.setVersionContext(manifest.getVersionContext());
+			scenarioInstance.setScenarioVersion(manifest.getScenarioVersion());
+
+			scenarioInstance.setClientVersionContext(manifest.getClientVersionContext());
+			scenarioInstance.setClientScenarioVersion(manifest.getClientScenarioVersion());
+
+			final Metadata meta = ScenarioServiceFactory.eINSTANCE.createMetadata();
+			meta.setCreator(record.getCreator());
+			meta.setCreated(Date.from(record.getCreationDate()));
+
+			scenarioInstance.setMetadata(meta);
+			meta.setContentType(manifest.getScenarioType());
+			// Probably better pass in from service
+			ServiceHelper.withOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
+				try {
+					final ScenarioModelRecord modelRecord = ScenarioStorageUtil.loadInstanceFromURIChecked(archiveURI, true, false, false, scenarioCipherProvider);
+					if (modelRecord != null) {
+						modelRecord.setName(scenarioInstance.getName());
+						modelRecord.setScenarioInstance(scenarioInstance);
+						SSDataManager.Instance.register(scenarioInstance, modelRecord);
+						scenarioInstance.setRootObjectURI(archiveURI.toString());
+					}
+				} catch (ScenarioEncryptionException e) {
+					LOG.error(e.getMessage(), e);
+				} catch (Exception e) {
+					LOG.error(e.getMessage(), e);
+				}
+			});
+			return scenarioInstance;
+		}
+
+		if (warnedLoadFailures.add(f.getName())) {
+			LOG.error("Error reading team scenario file {}. Check encryption certificate.", f.getName());
+		}
+		return null;
 	}
 }

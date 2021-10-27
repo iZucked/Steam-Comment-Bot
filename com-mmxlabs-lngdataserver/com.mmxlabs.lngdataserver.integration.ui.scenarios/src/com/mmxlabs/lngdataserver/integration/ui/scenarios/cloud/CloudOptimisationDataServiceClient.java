@@ -84,7 +84,7 @@ public class CloudOptimisationDataServiceClient {
 		}
 	}
 
-	public boolean downloadTo(final String uuid, final File file, final IProgressListener progressListener) throws IOException {
+	public boolean downloadTo(final String jobid, final File file, final IProgressListener progressListener) throws IOException {
 		OkHttpClient.Builder clientBuilder = httpClient.newBuilder();
 		if (progressListener != null) {
 			clientBuilder = clientBuilder.addNetworkInterceptor(new Interceptor() {
@@ -98,7 +98,7 @@ public class CloudOptimisationDataServiceClient {
 		final OkHttpClient localHttpClient = clientBuilder //
 				.build();
 
-		final String requestURL = String.format("%s/%s", SCENARIO_RESULT_URL, uuid);
+		final String requestURL = String.format("%s/%s", SCENARIO_RESULT_URL, jobid);
 		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(OPTI_CLOUD_BASE_URL, requestURL);
 		if (requestBuilder == null) {
 			return false;

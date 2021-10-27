@@ -18,6 +18,8 @@ public class CloudOptimisationDataResultRecord {
 	private Instant creationDate;
 	
 	private String anonyMapFileName;
+	
+	private String originalName;
 
 	public String getUuid() {
 		return uuid;
@@ -49,6 +51,14 @@ public class CloudOptimisationDataResultRecord {
 	
 	public void setAnonyMapFileName(String anonyMapFileName) {
 		this.anonyMapFileName = anonyMapFileName;
+	}
+
+	public String getOriginalName() {
+		return originalName;
+	}
+
+	public void setOriginalName(String originalName) {
+		this.originalName = originalName;
 	}
 
 	public String getJobid() {

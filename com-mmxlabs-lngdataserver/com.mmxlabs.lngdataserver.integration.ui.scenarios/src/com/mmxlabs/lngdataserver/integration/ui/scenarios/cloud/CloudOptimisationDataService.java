@@ -9,14 +9,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -37,90 +35,38 @@ import com.google.common.base.Charsets;
 import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.IProgressListener;
-import com.mmxlabs.rcp.common.ServiceHelper;
-import com.mmxlabs.scenario.service.manifest.Manifest;
-import com.mmxlabs.scenario.service.model.Metadata;
+import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
-import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
-import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
-import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
-import com.mmxlabs.scenario.service.model.util.encryption.ScenarioEncryptionException;
+import com.mmxlabs.scenario.service.util.AbstractScenarioService;
 
-public class CloudOptimisationDataService {
+public class CloudOptimisationDataService extends AbstractScenarioService {
 
 	public static final int CURRENT_MODEL_VERSION = 1;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CloudOptimisationDataService.class);
-
 	public static final CloudOptimisationDataService INSTANCE = new CloudOptimisationDataService();
 
 	private File dataFolder;
+	private String serviceName;
 
 	private CloudOptimisationDataServiceClient client;
-
 	private CloudOptimisationDataUpdater updater;
+	
 	private ConcurrentLinkedQueue<CloudOptimisationDataResultRecord> dataList;
 	private ConcurrentLinkedQueue<IUpdateListener> listeners = new ConcurrentLinkedQueue<>();
 	// Set used to emit load failure messages once
-		private Set<String> warnedLoadFailures = new HashSet<>();
-
+	
 	private final IUpstreamDetailChangedListener upstreamDetailsChangedListener;
 	
-	protected ScenarioInstance loadScenarioFrom(final File f, final CloudOptimisationDataResultRecord record, final String scenarioname) {
-		final URI archiveURI = URI.createFileURI(f.getAbsolutePath());
-		final Manifest manifest = ScenarioStorageUtil.loadManifest(f);
-		if (manifest != null) {
-			final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
-			scenarioInstance.setReadonly(true);
-			scenarioInstance.setUuid(manifest.getUUID());
-			scenarioInstance.setExternalID(record.getUuid());
-
-			scenarioInstance.setRootObjectURI(archiveURI.toString());
-
-			scenarioInstance.setName(scenarioname);
-			scenarioInstance.setVersionContext(manifest.getVersionContext());
-			scenarioInstance.setScenarioVersion(manifest.getScenarioVersion());
-
-			scenarioInstance.setClientVersionContext(manifest.getClientVersionContext());
-			scenarioInstance.setClientScenarioVersion(manifest.getClientScenarioVersion());
-
-			final Metadata meta = ScenarioServiceFactory.eINSTANCE.createMetadata();
-			meta.setCreator(record.getCreator());
-			meta.setCreated(Date.from(record.getCreationDate()));
-
-			scenarioInstance.setMetadata(meta);
-			meta.setContentType(manifest.getScenarioType());
-			// Probably better pass in from service
-			ServiceHelper.withOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
-				try {
-					final ScenarioModelRecord modelRecord = ScenarioStorageUtil.loadInstanceFromURIChecked(archiveURI, true, false, false, scenarioCipherProvider);
-					if (modelRecord != null) {
-						modelRecord.setName(scenarioInstance.getName());
-						modelRecord.setScenarioInstance(scenarioInstance);
-						SSDataManager.Instance.register(scenarioInstance, modelRecord);
-						scenarioInstance.setRootObjectURI(archiveURI.toString());
-					}
-				} catch (ScenarioEncryptionException e) {
-					LOGGER.error(e.getMessage(), e);
-				} catch (Exception e) {
-					LOGGER.error(e.getMessage(), e);
-				}
-			});
-			return scenarioInstance;
-		}
-
-		if (warnedLoadFailures.add(f.getName())) {
-			LOGGER.error("Error reading team scenario file {}. Check encryption certificate.", f.getName());
-		}
-		return null;
-	}
-	
-	private CloudOptimisationDataService() {
+	public CloudOptimisationDataService() {
+		super("Cloud Optimisation");
 		dataList = new ConcurrentLinkedQueue<>();
 		upstreamDetailsChangedListener = dataList::clear;
-		start();
+		//start();
 	}
 
 	public Collection<CloudOptimisationDataResultRecord> getRecords() {
@@ -225,7 +171,7 @@ public class CloudOptimisationDataService {
 					}
 
 					client = new CloudOptimisationDataServiceClient();
-					updater = new CloudOptimisationDataUpdater(dataFolder, client, CloudOptimisationDataService.this::update);
+					updater = new CloudOptimisationDataUpdater(dataFolder, client, serviceModel, CloudOptimisationDataService.this::update);
 					updater.start();
 				}
 				this.close();
@@ -295,5 +241,58 @@ public class CloudOptimisationDataService {
 		if (updater != null) {
 			updater.resume();
 		}
+	}
+
+	@Override
+	public void delete(@NonNull Container container) {
+		// do nothing
+	}
+
+	@Override
+	public void moveInto(@NonNull List<Container> elements, @NonNull Container destination) {
+		// do nothing
+	}
+
+	@Override
+	public void makeFolder(@NonNull Container parent, @NonNull String name) {
+		// do nothing
+	}
+
+	@Override
+	public String getSerivceID() {
+		return "cloud-workspace-" + serviceName;
+	}
+
+	@Override
+	public ScenarioInstance copyInto(@NonNull Container parent, @NonNull ScenarioModelRecord tmpRecord, @NonNull String name, @NonNull IProgressMonitor progressMonitor) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ScenarioInstance copyInto(@NonNull Container parent, @NonNull IScenarioDataProvider scenarioDataProvider, @NonNull String name, @NonNull IProgressMonitor progressMonitor) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void fireEvent(final ScenarioServiceEvent event, final ScenarioInstance scenarioInstance) {
+		super.fireEvent(event, scenarioInstance);
+	}
+
+	@Override
+	protected ScenarioService initServiceModel() {
+		final ScenarioService serviceModel = ScenarioServiceFactory.eINSTANCE.createScenarioService();
+		serviceModel.setName(serviceName);
+		serviceModel.setDescription("Cloud workspace");
+		serviceModel.setLocal(false);
+		serviceModel.setOffline(true);
+		serviceModel.setServiceID(getSerivceID());
+		return serviceModel;
+	}
+
+	@Override
+	public URI resolveURI(final String uri) {
+		return URI.createURI(uri);
 	}
 }
