@@ -436,27 +436,4 @@ public class HeadlessOptimiserRunner {
 
 		ScenarioStorageUtil.storeCopyToFile(sdp, new File(outputFile));
 	}
-
-	/**
-	 * Debug method to allow an optimisation plan to be written as JSON for visual
-	 * inspection.
-	 * 
-	 * @param plan
-	 * @param filename
-	 */
-	private void writeOptimisationPlan(OptimisationPlan plan, String filename) {
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.registerModule(new JavaTimeModule());
-			mapper.registerModule(new Jdk8Module());
-			mapper.registerModule(new EMFJacksonModule());
-
-			mapper.writerWithDefaultPrettyPrinter().writeValue(new File(filename), plan);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
 }
