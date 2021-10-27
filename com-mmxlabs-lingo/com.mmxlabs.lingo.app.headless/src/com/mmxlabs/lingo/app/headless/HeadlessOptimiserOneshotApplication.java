@@ -55,28 +55,23 @@ public class HeadlessOptimiserOneshotApplication extends HeadlessGenericApplicat
 	@Override
 	public Object start(final IApplicationContext context) throws IOException {
 		try {
-			// check the license
-			doCheckLicense();
-		} catch (final InvalidLicenseException e) {
-
-			// TODO: Log the error
-
-			return IApplication.EXIT_OK;
+			return dostart(context);
+		} catch (Throwable t) {
+			t.printStackTrace();
+			return 500;
 		}
+	}
+
+	public Object dostart(final IApplicationContext context) throws Exception {
+
+		// get the command line
+		readCommandLine();
+		setupBasicFields();
+		// check the license
+		doCheckLicense();
 
 		// log the user in and initialise related features
 		HeadlessUtils.initAccessControl();
-		try {
-			// get the command line
-			readCommandLine();
-
-			setupBasicFields();
-		} catch (final InvalidCommandLineException e) {
-
-			// Log the error
-
-			return IApplication.EXIT_OK;
-		}
 
 		final int numThreads = LNGScenarioChainBuilder.getNumberOfAvailableCores();
 
@@ -130,7 +125,7 @@ public class HeadlessOptimiserOneshotApplication extends HeadlessGenericApplicat
 				runner.doRun(scenarioDataProvider, userSettings, exportLogs, outputScenarioFileName, outputLoggingFolder, json, numThreads);
 			});
 		} catch (Exception e) {
-			throw new IOException("Error running optimisation");
+			throw new IOException("Error running optimisation", e);
 
 		}
 
@@ -160,6 +155,7 @@ public class HeadlessOptimiserOneshotApplication extends HeadlessGenericApplicat
 		} catch (final Exception e) {
 			System.err.println("Error writing to file:");
 			e.printStackTrace();
+			return 500;
 		}
 
 //		List<HeadlessApplicationOptions> optionsList = getHeadlessOptions();

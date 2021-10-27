@@ -63,28 +63,24 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 	@Override
 	public Object start(final IApplicationContext context) throws IOException {
 		try {
-			// check the license
-			doCheckLicense();
-		} catch (final InvalidLicenseException e) {
-
-			// TODO: Log the error
-
-			return IApplication.EXIT_OK;
+			return dostart(context);
+		} catch (Throwable t) {
+			t.printStackTrace();
+			return 500;
 		}
+	}
+
+	public Object dostart(final IApplicationContext context) throws Exception {
+		// check the license
+		doCheckLicense();
 
 		// log the user in and initialise related features
 		HeadlessUtils.initAccessControl();
-		try {
-			// get the command line
-			readCommandLine();
 
-			setupBasicFields();
-		} catch (final InvalidCommandLineException e) {
+		// get the command line
+		readCommandLine();
 
-			// Log the error
-
-			return IApplication.EXIT_OK;
-		}
+		setupBasicFields();
 
 		final int numThreads = LNGScenarioChainBuilder.getNumberOfAvailableCores();
 
@@ -103,7 +99,7 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 		}
 		// Make sure we save the optimiser results in the scenario
 		options.exportResults = true;
-		
+
 		// Set to zero take take LiNGO defaults
 		options.maxWorkerThreads = 0;
 		options.iterations = 0;
@@ -154,7 +150,7 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 //				runner.doRun(scenarioDataProvider, userSettings, exportLogs, outputScenarioFileName, outputLoggingFolder, json, numThreads);
 //			});
 		} catch (Exception e) {
-			throw new IOException("Error running optioniser");
+			throw new IOException("Error running optioniser", e);
 
 		}
 
@@ -186,14 +182,9 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 			} catch (Exception e) {
 				System.err.println("Error writing to file:");
 				e.printStackTrace();
+				return 500;
 			}
 		}
-
-//		List<HeadlessApplicationOptions> optionsList = getHeadlessOptions();
-//
-//		for (HeadlessApplicationOptions hOptions : optionsList) {
-//			runScenarioMultipleTimes(hOptions);
-//		}
 
 		return IApplication.EXIT_OK;
 	}
