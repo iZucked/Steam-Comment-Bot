@@ -13,7 +13,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -86,7 +85,8 @@ public class CloudOptimisationDataUpdater {
 	private final ReentrantLock updateLock = new ReentrantLock();
 
 	private final Consumer<CloudOptimisationDataResultRecord> readyCallback;
-	private final ConcurrentMap<String, Instant> oldRecords;
+	private final ConcurrentMap<String, Instant> installedRecords;
+	private final ConcurrentMap<String, Instant> downloadedRecords;
 
 	public CloudOptimisationDataUpdater(final File basePath, final CloudOptimisationDataServiceClient client, final ScenarioService modelRoot,
 			final Consumer<CloudOptimisationDataResultRecord> readyCallback) {
@@ -95,7 +95,8 @@ public class CloudOptimisationDataUpdater {
 		this.client = client;
 		this.readyCallback = readyCallback;
 		taskExecutor = Executors.newSingleThreadExecutor();
-		oldRecords = new ConcurrentHashMap<String, Instant>();
+		installedRecords = new ConcurrentHashMap<String, Instant>();
+		downloadedRecords = new ConcurrentHashMap<String, Instant>();
 		UpstreamUrlProvider.INSTANCE.registerDetailsChangedLister(purgeLocalRecords);
 		DataHubServiceProvider.getInstance().addDataHubStateListener(dataHubStateChangeListener);
 	}
@@ -110,7 +111,9 @@ public class CloudOptimisationDataUpdater {
 
 		if (records != null) {
 			for (final CloudOptimisationDataResultRecord record : records) {
-				taskExecutor.execute(new DownloadTask(record));
+				if (!installedRecords.containsKey(record.getUuid()) && !downloadedRecords.containsKey(record.getUuid())) {
+					taskExecutor.execute(new DownloadTask(record));
+				}
 			}
 		}
 	}
@@ -127,8 +130,7 @@ public class CloudOptimisationDataUpdater {
 		@Override
 		public void run() {
 			final File f = new File(String.format("%s/%s.lingo", basePath, record.getJobid()));
-			final Instant creationDate = oldRecords.get(record.getUuid());
-			if (!Objects.equals(record.getCreationDate(), creationDate) && record.getCreationDate() != null) {
+			if (!f.exists() && !downloadedRecords.containsKey(record.getUuid())) {
 				try {
 					f.getParentFile().mkdirs();
 					if (!downloadData(record, f)) {
@@ -137,7 +139,7 @@ public class CloudOptimisationDataUpdater {
 						// Failed!
 						return;
 					} else {
-						oldRecords.put(record.getUuid(), record.getCreationDate());
+						downloadedRecords.put(record.getUuid(), record.getCreationDate());
 					}
 				} catch (final Exception e) {
 					// Something went wrong - reset lastModified to trigger another refresh
@@ -145,9 +147,13 @@ public class CloudOptimisationDataUpdater {
 					e.printStackTrace();
 					return;
 				}
+			} else {
+				if (f.exists()) {
+					downloadedRecords.put(record.getUuid(), record.getCreationDate());
+				}
 			}
 			
-			if (f.exists() && f.canRead()) {
+			if (f.exists() && f.canRead() && !installedRecords.containsKey(record.getUuid())) {
 				final ScenarioInstance instance = loadScenarioFrom(f, record);
 				if (instance != null) {
 					RunnerHelper.syncExecDisplayOptional(() -> {
@@ -161,6 +167,7 @@ public class CloudOptimisationDataUpdater {
 
 						// ... then re-add it to the new (or existing) parent.
 						parent.getElements().add(instance);
+						installedRecords.put(record.getUuid(), record.getCreationDate());
 					});
 				}
 			}
@@ -257,9 +264,6 @@ public class CloudOptimisationDataUpdater {
 		final boolean available = DataHubServiceProvider.getInstance().isOnlineAndLoggedIn();
 
 		if (available) {
-
-			//final Instant m = client.getLastSuccessfulAccess();
-			//if (m != null && m.isAfter(lastModified)) {
 				final Pair<String, Instant> recordsPair = client.listContents(true);
 				if (recordsPair != null) {
 					final File tasksFile = new File(basePath.getAbsolutePath() + IPath.SEPARATOR + "tasks.json");
@@ -279,7 +283,6 @@ public class CloudOptimisationDataUpdater {
 					Files.writeString(tasksFile.toPath(), json, Charsets.UTF_8);
 					lastModified = recordsPair.getSecond();
 				}
-			//}
 		}
 	}
 	
@@ -306,19 +309,21 @@ public class CloudOptimisationDataUpdater {
 	
 	private CloudOptimisationDataResultRecord getRecord(final String jobid) {
 		final File recordsFile = new File(basePath.getAbsolutePath() + IPath.SEPARATOR + "records.json");
-		String json;
-		try {
-			json = Files.readString(recordsFile.toPath());
-			final List<CloudOptimisationDataResultRecord> records = CloudOptimisationDataServiceClient.parseRecordsJSONData(json);
-			if (records != null && !records.isEmpty()) {
-				for (final CloudOptimisationDataResultRecord record : records) {
-					if (record.getJobid().equalsIgnoreCase(jobid)) {
-						return record;
+		if (recordsFile.exists() && recordsFile.canRead()) {
+			String json;
+			try {
+				json = Files.readString(recordsFile.toPath());
+				final List<CloudOptimisationDataResultRecord> records = CloudOptimisationDataServiceClient.parseRecordsJSONData(json);
+				if (records != null && !records.isEmpty()) {
+					for (final CloudOptimisationDataResultRecord record : records) {
+						if (record.getJobid().equalsIgnoreCase(jobid)) {
+							return record;
+						}
 					}
 				}
+			} catch (final IOException e) {
+				e.printStackTrace();
 			}
-		} catch (final IOException e) {
-			e.printStackTrace();
 		}
 		return null;
 	}
@@ -329,7 +334,7 @@ public class CloudOptimisationDataUpdater {
 				if (f.exists())
 					f.delete();
 			}
-			oldRecords.clear();
+			installedRecords.clear();
 			purgeCache = false;
 			lastModified = Instant.EPOCH;
 		}

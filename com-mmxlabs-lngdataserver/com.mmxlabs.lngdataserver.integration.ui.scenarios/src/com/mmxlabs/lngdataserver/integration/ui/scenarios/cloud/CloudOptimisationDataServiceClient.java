@@ -7,7 +7,7 @@ package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -163,18 +163,20 @@ public class CloudOptimisationDataServiceClient {
 	};
 
 	public static List<CloudOptimisationDataResultRecord> parseRecordsJSONData(final String jsonData) {
-		final ObjectMapper mapper = new ObjectMapper();
-		mapper.registerModule(new JavaTimeModule());
-		try {
-			return mapper.readValue(jsonData, TYPE_GDR_LIST);
-		} catch (final JsonParseException e) {
-			e.printStackTrace();
-		} catch (final JsonMappingException e) {
-			e.printStackTrace();
-		} catch (final IOException e) {
-			e.printStackTrace();
+		if (jsonData != null && !jsonData.isEmpty()) {
+			final ObjectMapper mapper = new ObjectMapper();
+			mapper.registerModule(new JavaTimeModule());
+			try {
+				return mapper.readValue(jsonData, TYPE_GDR_LIST);
+			} catch (final JsonParseException e) {
+				e.printStackTrace();
+			} catch (final JsonMappingException e) {
+				e.printStackTrace();
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
 		}
-		return Collections.emptyList();
+		return new ArrayList();
 	}
 	
 	public static String getJSON(final List<CloudOptimisationDataResultRecord> records) {

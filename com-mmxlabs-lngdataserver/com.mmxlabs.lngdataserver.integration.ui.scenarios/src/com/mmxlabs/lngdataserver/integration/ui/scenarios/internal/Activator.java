@@ -226,15 +226,6 @@ public class Activator extends AbstractUIPlugin {
 			if (scenarioCipherProviderTracker != null) {
 				cloudOptimisationService.setScenarioCipherProvider(scenarioCipherProviderTracker.getService());
 			}
-			
-			try {
-				cloudOptimisationService.start();
-			} catch (Exception e) {
-				e.printStackTrace();
-				cloudOptimisationService.stop();
-				cloudOptimisationService = null;
-				return;
-			}
 
 			final Hashtable<String, String> props = new Hashtable<>();
 			// used internally by eclipse/OSGi

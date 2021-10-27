@@ -35,6 +35,7 @@ import com.google.common.base.Charsets;
 import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.IProgressListener;
+import com.mmxlabs.rcp.common.locking.WellKnownTriggers;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
@@ -66,7 +67,7 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 		super("Cloud Optimisation");
 		dataList = new ConcurrentLinkedQueue<>();
 		upstreamDetailsChangedListener = dataList::clear;
-		//start();
+		start();
 	}
 
 	public Collection<CloudOptimisationDataResultRecord> getRecords() {
@@ -125,11 +126,13 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 		updater.pause();
 		if (!dataList.contains(record)) {
 			final File recordsFile = new File(dataFolder.getAbsolutePath() + IPath.SEPARATOR + "records.json");
-			String json = null;
-			try {
-				json = Files.readString(recordsFile.toPath());
-			} catch (Exception e1) {
-				e1.printStackTrace();
+			String json = "";
+			if (recordsFile.exists()) {
+				try {
+					json = Files.readString(recordsFile.toPath());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 			final List<CloudOptimisationDataResultRecord> records = CloudOptimisationDataServiceClient.parseRecordsJSONData(json);
 			records.add(record);
@@ -171,8 +174,22 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 					}
 
 					client = new CloudOptimisationDataServiceClient();
-					updater = new CloudOptimisationDataUpdater(dataFolder, client, serviceModel, CloudOptimisationDataService.this::update);
-					updater.start();
+					
+					getServiceModel();
+					setReady();
+					WellKnownTriggers.WORKSPACE_DATA_ENCRYPTION_CHECK.delayUntilTriggered(() -> {
+
+						// Initial model load
+						new Thread(() -> {
+
+							getServiceModel();
+							setReady();
+							updater = new CloudOptimisationDataUpdater(dataFolder, client, serviceModel, CloudOptimisationDataService.this::update);
+							updater.start();
+						}).start();
+					});
+//					updater = new CloudOptimisationDataUpdater(dataFolder, client, serviceModel, CloudOptimisationDataService.this::update);
+//					updater.start();
 				}
 				this.close();
 				return workspace;

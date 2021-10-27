@@ -124,16 +124,12 @@ public class ScenarioServicePushToCloudAction {
 	public static void uploadScenario(final ScenarioInstance scenarioInstance, final String notes, final OptimisationPlan optimisationPlan, final boolean optimisation) {
 		final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 		try {
-			dialog.run(true, false, m -> doUploadScenario(scenarioInstance, notes, optimisationPlan, m));
+			dialog.run(true, false, m -> doUploadScenario(scenarioInstance, notes, optimisationPlan, optimisation, m));
 		} catch (final InvocationTargetException e) {
 			LOG.error(e.getMessage(), e);
 			final Throwable cause = e.getCause();
 			if (cause instanceof PublishBasecaseException) {
 				final PublishBasecaseException publishBasecaseException = (PublishBasecaseException) cause;
-				String message = e.getMessage();
-				if (publishBasecaseException.getMessage() != null) {
-					message = publishBasecaseException.getMessage();
-				}
 				switch (publishBasecaseException.getType()) {
 				case FAILED_UNKNOWN_ERROR:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING,
@@ -166,7 +162,7 @@ public class ScenarioServicePushToCloudAction {
 
 	}
 
-	private static void doUploadScenario(final ScenarioInstance scenarioInstance, final String notes, final OptimisationPlan optimisationPlan, final IProgressMonitor parentProgressMonitor) {
+	private static void doUploadScenario(final ScenarioInstance scenarioInstance, final String notes, final OptimisationPlan optimisationPlan, final boolean optimisation, final IProgressMonitor parentProgressMonitor) {
 
 		// Check user permission
 		if (UserPermissionsService.INSTANCE.hubSupportsPermissions()) {
@@ -174,7 +170,6 @@ public class ScenarioServicePushToCloudAction {
 				throw new PublishBasecaseException(MSG_ERROR_PUSHING, Type.FAILED_NOT_PERMITTED, new RuntimeException());
 			}
 		}
-
 		
 		parentProgressMonitor.beginTask("Push scenario", 1000);
 		final SubMonitor progressMonitor = SubMonitor.convert(parentProgressMonitor, 1000);
@@ -189,6 +184,7 @@ public class ScenarioServicePushToCloudAction {
 
 			IScenarioDataProvider scenarioDataProvider = null;
 			LNGScenarioModel scenarioModel = null;
+			File anonymisationMap = null;
 
 			try (IScenarioDataProvider o_scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
 				final LNGScenarioModel o_scenarioModel = o_scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
@@ -209,7 +205,7 @@ public class ScenarioServicePushToCloudAction {
 				
 				final String amfName = CLOUD_OPTI_PATH + IPath.SEPARATOR + scenarioInstance.getUuid() + "anonyMap.data";
 				record.setAnonyMapFileName(amfName);
-				File anonymisationMap = new File(amfName);
+				anonymisationMap = new File(amfName);
 				
 				final CompoundCommand cmd = AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, new HashSet(), new ArrayList(), true, anonymisationMap);
 				if (cmd != null && !cmd.isEmpty()) {
@@ -239,9 +235,11 @@ public class ScenarioServicePushToCloudAction {
 					runnerBuilder.evaluateInitialState();
 					scenarioDataProvider.setLastEvaluationFailed(false);
 				} catch (final Exception e) {
+					deleteAnonyMap(anonymisationMap);
 					throw new PublishBasecaseException(MSG_ERROR_EVALUATING, Type.FAILED_TO_EVALUATE);
 				}
 			} catch (final RuntimeException e) {
+				deleteAnonyMap(anonymisationMap);
 				if (e.getCause() instanceof ScenarioMigrationException) {
 					final ScenarioMigrationException ee = (ScenarioMigrationException) e.getCause();
 					throw new PublishBasecaseException(MSG_ERROR_EVALUATING, Type.FAILED_TO_MIGRATE, ee);
@@ -254,6 +252,7 @@ public class ScenarioServicePushToCloudAction {
 			try {
 				ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, tmpScenarioFile);
 			} catch (final IOException e) {
+				deleteAnonyMap(anonymisationMap);
 				e.printStackTrace();
 				throw new PublishBasecaseException(MSG_ERROR_SAVING, Type.FAILED_TO_SAVE, e);
 			}
@@ -262,11 +261,14 @@ public class ScenarioServicePushToCloudAction {
 			filesToZip.add(tmpScenarioFile);
 			filesToZip.add(createJVMOptions());
 			filesToZip.add(createManifest(tmpScenarioFile.getName(), true));
-			filesToZip.add(createOptimisationSettingsJson(optimisationPlan));
+			if (optimisation) {
+				filesToZip.add(createOptimisationSettingsJson(optimisationPlan));
+			}
 			File zipToUpload = null;
 			try {
 				zipToUpload = ScenarioStorageUtil.getTempDirectory().createTempFile("archive_", ".zip");
 			} catch (final IOException e) {
+				deleteAnonyMap(anonymisationMap);
 				e.printStackTrace();
 				throw new PublishBasecaseException(MSG_ERROR_SAVING, Type.FAILED_TO_SAVE, e);
 			}
@@ -282,6 +284,7 @@ public class ScenarioServicePushToCloudAction {
 				response = CloudOptimisationDataServiceWrapper.uploadData(zipToUpload, "checksum", scenarioInstance.getName(), //
 						WrappedProgressMonitor.wrapMonitor(uploadMonitor));
 			} catch (final Exception e) {
+				deleteAnonyMap(anonymisationMap);
 				System.out.println(MSG_ERROR_UPLOADING);
 				e.printStackTrace();
 				throw new PublishBasecaseException(MSG_ERROR_UPLOADING, Type.FAILED_TO_UPLOAD_BASECASE, e);
@@ -290,6 +293,7 @@ public class ScenarioServicePushToCloudAction {
 			}
 			
 			if (response == null) {
+				deleteAnonyMap(anonymisationMap);
 				throw new RuntimeException("Error pushing the scenario for cloud optimisation");
 			}
 			final ObjectMapper mapper = new ObjectMapper();
@@ -297,12 +301,24 @@ public class ScenarioServicePushToCloudAction {
 				final JsonNode actualObj = mapper.readTree(response);
 				record.setJobid(actualObj.get("jobid").textValue());
 			} catch (final IOException e) {
+				deleteAnonyMap(anonymisationMap);
 				System.out.println("Cannot read server response after scenario upload");
 				e.printStackTrace();
 			}
+			try {
 			CloudOptimisationDataServiceWrapper.updateRecords(record);
+			} catch (final Exception e) {
+				deleteAnonyMap(anonymisationMap);
+				throw new PublishBasecaseException(MSG_ERROR_UPLOADING, Type.FAILED_TO_UPLOAD_BASECASE, e);
+			}
 		} finally {
 			progressMonitor.done();
+		}
+	}
+
+	private static void deleteAnonyMap(File anonymisationMap) {
+		if (anonymisationMap != null) {
+			anonymisationMap.delete();
 		}
 	}
 	
