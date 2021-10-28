@@ -98,13 +98,7 @@ public class HeadlessOptioniserRunner {
 		final LNGScenarioModel lngScenarioModel = sdp.getTypedScenario(LNGScenarioModel.class);
 
 		final UserSettings userSettings = OptimisationHelper.promptForInsertionUserSettings(lngScenarioModel, false, false, false, null, null);
-
-		// Reset settings not supplied to the user
-		userSettings.setShippingOnly(false);
-		userSettings.setBuildActionSets(false);
-		userSettings.setCleanSlateOptimisation(false);
-		userSettings.setSimilarityMode(SimilarityMode.OFF);
-
+		
 		if (options.periodStart != null) {
 			userSettings.setPeriodStartDate(options.periodStart);
 		}
@@ -132,13 +126,11 @@ public class HeadlessOptioniserRunner {
 				});
 
 		// Override iterations
-		insertionRunner.setIteration(options.iterations);
+		if (options.iterations > 0) {
+			insertionRunner.setIteration(options.iterations);
+		}
 
 		final IMultiStateResult results = insertionRunner.runInsertion(logger, new NullProgressMonitor());
-		// Includes starting solution, so take off one.
-		if (logger != null) {
-			logger.setSolutionsFound(results.getSolutions().size() - 1);
-		}
 
 		if (options.exportResults) {
 			insertionRunner.exportSolutions(results, 0L, new NullProgressMonitor());
