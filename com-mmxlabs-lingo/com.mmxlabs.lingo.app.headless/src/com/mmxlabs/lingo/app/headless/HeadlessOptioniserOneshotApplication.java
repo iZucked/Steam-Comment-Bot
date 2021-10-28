@@ -66,7 +66,7 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 			return dostart(context);
 		} catch (Throwable t) {
 			t.printStackTrace();
-			return 500;
+			return HeadlessGenericApplication.EXIT_CODE_EXCEPTION;
 		}
 	}
 
@@ -182,7 +182,7 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 			} catch (Exception e) {
 				System.err.println("Error writing to file:");
 				e.printStackTrace();
-				return 500;
+				return HeadlessGenericApplication.EXIT_CODE_EXCEPTION;
 			}
 		}
 

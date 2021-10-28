@@ -58,12 +58,11 @@ public class HeadlessOptimiserOneshotApplication extends HeadlessGenericApplicat
 			return dostart(context);
 		} catch (Throwable t) {
 			t.printStackTrace();
-			return 500;
+			return HeadlessGenericApplication.EXIT_CODE_EXCEPTION;
 		}
 	}
 
 	public Object dostart(final IApplicationContext context) throws Exception {
-
 		// get the command line
 		readCommandLine();
 		setupBasicFields();
@@ -155,7 +154,7 @@ public class HeadlessOptimiserOneshotApplication extends HeadlessGenericApplicat
 		} catch (final Exception e) {
 			System.err.println("Error writing to file:");
 			e.printStackTrace();
-			return 500;
+			return HeadlessGenericApplication.EXIT_CODE_EXCEPTION;
 		}
 
 //		List<HeadlessApplicationOptions> optionsList = getHeadlessOptions();

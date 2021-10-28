@@ -70,6 +70,8 @@ import com.mmxlabs.rcp.common.json.EMFJacksonModule;
  */
 public abstract class HeadlessGenericApplication implements IApplication {
 
+	public static final int EXIT_CODE_EXCEPTION = 100;
+	
 	/** New exception type for scenario types that can't be handled */
 	@SuppressWarnings("serial")
 	public static class UnhandledScenarioTypeException extends RuntimeException {
