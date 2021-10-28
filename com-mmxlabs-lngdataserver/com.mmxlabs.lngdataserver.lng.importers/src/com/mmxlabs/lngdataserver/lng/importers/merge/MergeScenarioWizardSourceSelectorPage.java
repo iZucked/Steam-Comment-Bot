@@ -37,7 +37,7 @@ public class MergeScenarioWizardSourceSelectorPage extends WizardPage {
 	private static final String SECTION_NAME = "MergeScenarioWizardSourceSelectorPage.section";
 
 	protected MergeScenarioWizardSourceSelectorPage(ISelection selection) {
-		super("Select scenario to merge in", "Select scenario to merge in", null);
+		super("Select scenario to merge in", "Select source scenario", null);
 		this.selection = selection;
 	}
 
@@ -95,9 +95,9 @@ public class MergeScenarioWizardSourceSelectorPage extends WizardPage {
 		if (!visible) {
 			IWizardPage[] pages = super.getWizard().getPages();
 
-			//Ugly but best to do this here, to save doing it multiple times.
+			// Ugly but best to do this here, to save doing it multiple times.
 			ScenarioInstance source = getScenarioInstance();
-			ScenarioInstance target = ((MergeScenarioWizard)super.getWizard()).getTargetScenarioInstance(); 
+			ScenarioInstance target = ((MergeScenarioWizard) super.getWizard()).getTargetScenarioInstance();
 
 			final ScenarioModelRecord sourceModelRecordSource = SSDataManager.Instance.getModelRecord(source);
 			try (IScenarioDataProvider scenarioDataProviderSource = sourceModelRecordSource.aquireScenarioDataProvider("MergeScenarioWizardContractMapperPage.getItems1")) {
@@ -116,7 +116,7 @@ public class MergeScenarioWizardSourceSelectorPage extends WizardPage {
 			}
 		}
 	}
-	
+
 	/**
 	 * Ensures that both text fields are set.
 	 */
@@ -139,8 +139,7 @@ public class MergeScenarioWizardSourceSelectorPage extends WizardPage {
 	public ScenarioInstance getScenarioInstance() {
 		if (scenarioServiceSelectionGroup.getSelectedContainer() instanceof ScenarioInstance) {
 			return (ScenarioInstance) scenarioServiceSelectionGroup.getSelectedContainer();
-		}
-		else {
+		} else {
 			return null;
 		}
 	}

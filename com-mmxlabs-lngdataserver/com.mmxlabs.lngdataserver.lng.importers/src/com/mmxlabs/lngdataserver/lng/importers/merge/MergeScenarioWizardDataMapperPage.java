@@ -21,6 +21,8 @@ import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -99,6 +101,15 @@ public class MergeScenarioWizardDataMapperPage extends WizardPage implements ISc
 			table.setLinesVisible(true);
 			table.setHeaderVisible(true);
 			mergeTableViewer.setContentProvider(ArrayContentProvider.getInstance().getInstance());
+
+			mergeTableViewer.setComparator(new ViewerComparator() {
+				@Override
+				public int compare(final Viewer viewer, Object e1, Object e2) {
+					final MergeMapping row1 = (MergeMapping) e1;
+					final MergeMapping row2 = (MergeMapping) e2;
+					return row1.sourceName.compareTo(row2.sourceName);
+				}
+			});
 
 			String[] titles = { "Source:"+sourceName, "Target:"+targetName, "Info" };
 
@@ -240,8 +251,8 @@ public class MergeScenarioWizardDataMapperPage extends WizardPage implements ISc
 				}
 				
 			});
-			
-			mergeTableViewer.setInput(createModel(sourceObjects,sourceContracts, targetContracts, infos));
+			final List<MergeMapping> mergeRows = createModel(sourceObjects,sourceContracts, targetContracts, infos);
+			mergeTableViewer.setInput(mergeRows);
 		}
 	}
 

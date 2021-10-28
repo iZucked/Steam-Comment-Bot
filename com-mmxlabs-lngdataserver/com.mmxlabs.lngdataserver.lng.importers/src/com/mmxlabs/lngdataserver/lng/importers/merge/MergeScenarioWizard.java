@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
@@ -42,7 +41,7 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 	private MergeScenarioWizardDataMapperPage baseFuelCostMapperPage;
 	private MergeScenarioWizardDataMapperPage vesselGroupsMapperPage;
 	private MergeScenarioWizardDataMapperPage routeCostsMapperPage;
-	private MergeScenarioWizardDataMapperPage portsMapperPage;
+	private MergeScenarioWizardPortMapperPage portsMapperPage;
 	private MergeScenarioWizardDataMapperPage fobBuySpotMarketsMapperPage;
 	private MergeScenarioWizardDataMapperPage fobSellSpotMarketsMapperPage;
 	private MergeScenarioWizardDataMapperPage desBuySpotMarketsMapperPage;
@@ -111,9 +110,7 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 		routeCostsMapperPage = new MergeScenarioWizardRouteCostMapperPage("Map route costs to target");
 		
 		//Ports mapper page
-		portsMapperPage = new MergeScenarioWizardDataMapperPage("Map ports to target", 
-				s -> ScenarioModelUtil.findReferenceModel(s).getPortModel().getPorts(), s -> ScenarioModelUtil.getPortModel(s), 
-				PortPackage.Literals.PORT_MODEL__PORTS); 
+		portsMapperPage = new MergeScenarioWizardPortMapperPage("Map ports to target");
 		//TODO Port groups etc
 		
 		//Vessel charter page.
@@ -201,6 +198,9 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 						if (page instanceof MergeScenarioWizardDataMapperPage) {
 							MergeScenarioWizardDataMapperPage mapperPage = (MergeScenarioWizardDataMapperPage)page;
 							mapperPage.merge(cmd, mergeHelper);
+						} else if (page instanceof MergeScenarioWizardPortMapperPage) {
+							MergeScenarioWizardPortMapperPage portPage = (MergeScenarioWizardPortMapperPage) page;
+							portPage.merge(cmd, mergeHelper);
 						}
 					}
 
@@ -210,7 +210,7 @@ public class MergeScenarioWizard extends Wizard implements IExportWizard {
 						} catch (Exception e) {
 							exceptions[0] = e;
 						}
-					});		
+					});
 				} catch (final Exception e) {
 					exceptions[0] = e;
 				}
