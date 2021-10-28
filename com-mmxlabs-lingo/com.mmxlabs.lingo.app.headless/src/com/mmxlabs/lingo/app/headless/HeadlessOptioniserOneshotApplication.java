@@ -21,6 +21,7 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.jdt.annotation.Nullable;
@@ -133,6 +134,8 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 
 		HeadlessOptioniserRunner runner = new HeadlessOptioniserRunner();
 
+		ConsoleProgressMonitor monitor = new ConsoleProgressMonitor();
+		
 		boolean exportLogs = outputLoggingFolder != null;
 		// Get the root object
 
@@ -142,7 +145,7 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 			int startTry = 0;
 			// Get the root object
 			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
-				runner.run(startTry, logger, options, modelRecord, scenarioDataProvider, null);
+				runner.run(startTry, logger, options, modelRecord, scenarioDataProvider, null, SubMonitor.convert(monitor));
 				ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, new File(outputScenarioFileName));
 			});
 

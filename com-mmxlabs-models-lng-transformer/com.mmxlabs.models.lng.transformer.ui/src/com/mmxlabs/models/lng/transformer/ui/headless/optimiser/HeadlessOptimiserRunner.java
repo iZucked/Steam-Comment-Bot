@@ -7,8 +7,6 @@ package com.mmxlabs.models.lng.transformer.ui.headless.optimiser;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
@@ -19,14 +17,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.json.simple.JSONArray;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
@@ -48,12 +43,9 @@ import com.mmxlabs.models.lng.transformer.ui.headless.LSOLoggingExporter;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger.LoggingParameters;
-import com.mmxlabs.rcp.common.ServiceHelper;
-import com.mmxlabs.rcp.common.json.EMFJacksonModule;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
-import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 import com.mmxlabs.scheduler.optimiser.actionplan.ActionSetLogger;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
@@ -258,12 +250,9 @@ public class HeadlessOptimiserRunner {
 //			final HeadlessApplicationOptions options,
 //			IProgressMonitor monitor,
 //			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, 
-			HeadlessOptimiserJSON jsonOutput, int numThreads
+			HeadlessOptimiserJSON jsonOutput, int numThreads, @NonNull IProgressMonitor monitor
 
 	) {
-
-		IProgressMonitor monitor = new NullProgressMonitor();
-
 		// Default logging parameters
 		LoggingParameters loggingParameters = new LoggingParameters();
 		loggingParameters.loggingInterval = 5000;
@@ -359,11 +348,10 @@ public class HeadlessOptimiserRunner {
 			System.err.println("Starting run...");
 
 			IMultiStateResult result = runner.runWithProgress(monitor);
-//			runner.applyBest(result);
 
 			final long runTime = System.currentTimeMillis() - startTime;
-			final Schedule finalSchedule = runner.getSchedule();
-			if (finalSchedule == null) {
+
+			if (result == null) {
 				System.err.println("Error optimising scenario");
 			}
 
@@ -394,7 +382,6 @@ public class HeadlessOptimiserRunner {
 			System.err.println("Headless Error:" + e.getMessage());
 			e.printStackTrace();
 		}
-
 		return false;
 	}
 

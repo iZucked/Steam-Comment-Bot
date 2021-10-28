@@ -16,6 +16,7 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.jdt.annotation.Nullable;
@@ -117,11 +118,14 @@ public class HeadlessOptimiserOneshotApplication extends HeadlessGenericApplicat
 
 		HeadlessOptimiserRunner runner = new HeadlessOptimiserRunner();
 
+		
+		ConsoleProgressMonitor monitor = new ConsoleProgressMonitor();
+		
 		boolean exportLogs = outputLoggingFolder != null;
 		// Get the root object
 		try {
 			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
-				runner.doRun(scenarioDataProvider, userSettings, exportLogs, outputScenarioFileName, outputLoggingFolder, json, numThreads);
+				runner.doRun(scenarioDataProvider, userSettings, exportLogs, outputScenarioFileName, outputLoggingFolder, json, numThreads, SubMonitor.convert(monitor));
 			});
 		} catch (Exception e) {
 			throw new IOException("Error running optimisation", e);
