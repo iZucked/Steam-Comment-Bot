@@ -233,10 +233,12 @@ public class MergeScenarioWizardPortMapperPage extends WizardPage implements ISc
 								if (isMappable(element)) {
 									if (index == 0) {
 										mergePair.setTo(overwriteExistingOption);
+										getViewer().update(element, null);
 									} else {
 										--index;
 										final MergeOption mergeOption = targetMappingOptions.get(index);
 										mergePair.setTo(mergeOption);
+										getViewer().update(element, null);
 									}
 								} else {
 									if (index < 2) {
@@ -245,9 +247,11 @@ public class MergeScenarioWizardPortMapperPage extends WizardPage implements ISc
 										} else {
 											mergePair.setTo(ignoreOption);
 										}
+										getViewer().update(element, null);
 									} else {
 										final MergeOption mergeOption = targetMappingOptions.get(index - 2);
 										mergePair.setTo(mergeOption);
+										getViewer().update(element, null);
 									}
 								}
 							}
