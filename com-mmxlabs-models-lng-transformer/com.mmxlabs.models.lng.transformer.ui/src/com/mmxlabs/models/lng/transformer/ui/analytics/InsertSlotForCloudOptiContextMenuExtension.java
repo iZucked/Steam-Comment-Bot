@@ -6,14 +6,10 @@ package com.mmxlabs.models.lng.transformer.ui.analytics;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-import java.util.function.Supplier;
 
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
@@ -21,15 +17,9 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.common.util.TriConsumer;
-import com.mmxlabs.jobmanager.jobs.EJobState;
-import com.mmxlabs.jobmanager.jobs.IJobControl;
-import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.adp.ADPModel;
-import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
-import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolutionHelper;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -38,26 +28,16 @@ import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor.Row;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
-import com.mmxlabs.models.lng.parameters.SimilarityMode;
-import com.mmxlabs.models.lng.parameters.UserSettings;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
-import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper.NameProvider;
-import com.mmxlabs.models.lng.transformer.ui.OptimisationJobRunner;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
-import com.mmxlabs.scenario.service.model.manager.ModelReference;
-import com.mmxlabs.scenario.service.model.manager.SSDataManager;
-import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
-public class InsertSlotContextMenuExtension implements ITradesTableContextMenuExtension {
+public class InsertSlotForCloudOptiContextMenuExtension implements ITradesTableContextMenuExtension {
 
 	private static final String LBL_KEPT_OPEN = "(Kept open)";
 	private static final String LBL_LOCKED = "(Locked)";
 
-	private static final Logger log = LoggerFactory.getLogger(InsertSlotContextMenuExtension.class);
+	private static final Logger log = LoggerFactory.getLogger(InsertSlotForCloudOptiContextMenuExtension.class);
 
 	@Override
 	public void contributeToMenu(@NonNull final IScenarioEditingLocation scenarioEditingLocation, @NonNull final Slot slot, @NonNull final MenuManager menuManager) {
@@ -187,64 +167,16 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 		private final IScenarioEditingLocation scenarioEditingLocation;
 
 		public InsertSlotAction(final IScenarioEditingLocation scenarioEditingLocation, final List<Slot<?>> targetSlots) {
-			super(AnalyticsSolutionHelper.generateInsertionName(false, targetSlots));
+			super(AnalyticsSolutionHelper.generateInsertionName(true, targetSlots));
 			this.scenarioEditingLocation = scenarioEditingLocation;
 			this.targetSlots = targetSlots;
 		}
 
 		@Override
 		public void run() {
-
-			final OptimisationJobRunner jobRunner = new OptimisationJobRunner();
-
 			final ScenarioInstance original = scenarioEditingLocation.getScenarioInstance();
-			UserSettings userSettings = null;
-			final ScenarioModelRecord originalModelRecord = SSDataManager.Instance.getModelRecord(original);
-			String taskName = AnalyticsSolutionHelper.generateInsertionName(false, targetSlots);
-			{
-
-				try (final ModelReference modelReference = originalModelRecord.aquireReference("InsertSlotContextMenuExtension:1")) {
-
-					final EObject object = modelReference.getInstance();
-
-					if (object instanceof LNGScenarioModel) {
-						final LNGScenarioModel root = (LNGScenarioModel) object;
-						Set<String> existingNames = new HashSet<>();
-						original.getFragments().forEach(f -> existingNames.add(f.getName()));
-						original.getElements().forEach(f -> existingNames.add(f.getName()));
-
-						NameProvider nameProvider = new NameProvider(taskName, existingNames);
-						userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false, nameProvider);
-						taskName = nameProvider.getNameSuggestion();
-					}
-				}
-			}
-			if (userSettings == null) {
-				return;
-			}
-			// Reset settings not supplied to the user
-			userSettings.setShippingOnly(false);
-			userSettings.setBuildActionSets(false);
-			userSettings.setCleanSlateOptimisation(false);
-			userSettings.setSimilarityMode(SimilarityMode.OFF);
-			final UserSettings pUserSettings = userSettings;
-			final String pTaskName = taskName;
-			final Supplier<IJobDescriptor> createJobDescriptorCallback = () -> {
-				return new LNGSlotInsertionJobDescriptor(pTaskName, original, pUserSettings, targetSlots, Collections.emptyList());
-			};
-
-			final TriConsumer<IJobControl, EJobState, IScenarioDataProvider> jobCompletedCallback = (jobControl, newState, sdp) -> {
-				if (newState == EJobState.COMPLETED) {
-
-					final SlotInsertionOptions plan = (SlotInsertionOptions) jobControl.getJobOutput();
-					if (plan != null) {
-						final AnalyticsSolution data = new AnalyticsSolution(original, plan, pTaskName);
-						data.openAndSwitchScreen();
-					}
-				}
-			};
-
-			jobRunner.run(taskName, original, originalModelRecord, null, createJobDescriptorCallback, jobCompletedCallback);
+			
+			
 
 		}
 	}

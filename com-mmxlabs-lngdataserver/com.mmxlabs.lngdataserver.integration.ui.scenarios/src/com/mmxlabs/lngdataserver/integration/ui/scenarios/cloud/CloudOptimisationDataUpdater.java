@@ -18,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
@@ -26,7 +27,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +41,8 @@ import com.mmxlabs.hub.IDataHubStateChangeListener;
 import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
+import com.mmxlabs.models.lng.scenario.actions.anonymisation.AnonymisationUtils;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.manifest.Manifest;
@@ -46,6 +51,7 @@ import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
@@ -111,7 +117,7 @@ public class CloudOptimisationDataUpdater {
 
 		if (records != null) {
 			for (final CloudOptimisationDataResultRecord record : records) {
-				if (!installedRecords.containsKey(record.getUuid()) && !downloadedRecords.containsKey(record.getUuid())) {
+				if (!installedRecords.containsKey(record.getJobid()) && !downloadedRecords.containsKey(record.getJobid())) {
 					taskExecutor.execute(new DownloadTask(record));
 				}
 			}
@@ -130,7 +136,7 @@ public class CloudOptimisationDataUpdater {
 		@Override
 		public void run() {
 			final File f = new File(String.format("%s/%s.lingo", basePath, record.getJobid()));
-			if (!f.exists() && !downloadedRecords.containsKey(record.getUuid())) {
+			if (!f.exists() && !downloadedRecords.containsKey(record.getJobid())) {
 				try {
 					f.getParentFile().mkdirs();
 					if (!downloadData(record, f)) {
@@ -139,7 +145,7 @@ public class CloudOptimisationDataUpdater {
 						// Failed!
 						return;
 					} else {
-						downloadedRecords.put(record.getUuid(), record.getCreationDate());
+						downloadedRecords.put(record.getJobid(), record.getCreationDate());
 					}
 				} catch (final Exception e) {
 					// Something went wrong - reset lastModified to trigger another refresh
@@ -149,12 +155,12 @@ public class CloudOptimisationDataUpdater {
 				}
 			} else {
 				if (f.exists()) {
-					downloadedRecords.put(record.getUuid(), record.getCreationDate());
+					downloadedRecords.put(record.getJobid(), record.getCreationDate());
 				}
 			}
 			
-			if (f.exists() && f.canRead() && !installedRecords.containsKey(record.getUuid())) {
-				final ScenarioInstance instance = loadScenarioFrom(f, record);
+			if (f.exists() && f.canRead() && !installedRecords.containsKey(record.getJobid())) {
+				final ScenarioInstance instance = deanonymiseScenario(f, record);
 				if (instance != null) {
 					RunnerHelper.syncExecDisplayOptional(() -> {
 						// We could already be in a container, so lets remove it first...
@@ -162,12 +168,10 @@ public class CloudOptimisationDataUpdater {
 							((Container) instance.eContainer()).getElements().remove(instance);
 						}
 
-						// ... because this can trigger a rename request back to the hub due to the adapter in SharedWorkspaceServiceClient ...
-						instance.setName(record.getOriginalName());
-
 						// ... then re-add it to the new (or existing) parent.
 						parent.getElements().add(instance);
-						installedRecords.put(record.getUuid(), record.getCreationDate());
+						installedRecords.put(record.getJobid(), record.getCreationDate());
+
 					});
 				}
 			}
@@ -335,6 +339,7 @@ public class CloudOptimisationDataUpdater {
 					f.delete();
 			}
 			installedRecords.clear();
+			downloadedRecords.clear();
 			purgeCache = false;
 			lastModified = Instant.EPOCH;
 		}
@@ -348,12 +353,12 @@ public class CloudOptimisationDataUpdater {
 		updateLock.unlock();
 	}
 	
-	protected ScenarioInstance loadScenarioFrom(final File f, final CloudOptimisationDataResultRecord record) {
+	protected ScenarioInstance loadScenarioFrom(final File f, final CloudOptimisationDataResultRecord record, final boolean readOnly) {
 		final URI archiveURI = URI.createFileURI(f.getAbsolutePath());
 		final Manifest manifest = ScenarioStorageUtil.loadManifest(f);
 		if (manifest != null) {
 			final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
-			scenarioInstance.setReadonly(true);
+			scenarioInstance.setReadonly(readOnly);
 			scenarioInstance.setUuid(manifest.getUUID());
 			scenarioInstance.setExternalID(record.getUuid());
 
@@ -395,5 +400,43 @@ public class CloudOptimisationDataUpdater {
 			LOG.error("Error reading team scenario file {}. Check encryption certificate.", f.getName());
 		}
 		return null;
+	}
+	
+	protected ScenarioInstance deanonymiseScenario(final File f, final CloudOptimisationDataResultRecord record) {
+		final ScenarioInstance instance = loadScenarioFrom(f, record, false);
+		if (instance != null) {
+			RunnerHelper.syncExecDisplayOptional(() -> {
+				// We could already be in a container, so lets remove it first...
+				if (instance.eContainer() != null) {
+					((Container) instance.eContainer()).getElements().remove(instance);
+				}
+				final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+				
+				try (IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
+					final LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+					if (scenarioModel.isAnonymised()) {
+						final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
+
+						final File anonymisationMap = new File(String.format("%s/%s.amap", basePath, record.getJobid()));
+						final CompoundCommand cmd = AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, 
+								new HashSet(), new ArrayList(), false, anonymisationMap);
+						if (cmd != null && !cmd.isEmpty()) {
+							editingDomain.getCommandStack().execute(cmd);
+						}
+						final File temp = new File(String.format("%s/%s-temp.lingo", basePath, record.getJobid()));
+						ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, temp);
+						if (f.delete()) {
+							temp.renameTo(f);
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			});
+		}
+		
+		ScenarioInstance result = loadScenarioFrom(f, record, true);
+		result.setName(record.getOriginalName());
+		return result;
 	}
 }

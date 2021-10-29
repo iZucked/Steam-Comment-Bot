@@ -133,7 +133,7 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 		private final IScenarioEditingLocation scenarioEditingLocation;
 
 		public InsertEventAction(final IScenarioEditingLocation scenarioEditingLocation, final List<VesselEvent> targetVesselEvents) {
-			super(AnalyticsSolutionHelper.generateInsertionName(targetVesselEvents));
+			super(AnalyticsSolutionHelper.generateInsertionName(false, targetVesselEvents));
 			this.scenarioEditingLocation = scenarioEditingLocation;
 			this.originalTargetEvents = targetVesselEvents;
 		}
@@ -146,7 +146,7 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 			final ScenarioModelRecord originalModelRecord = SSDataManager.Instance.getModelRecord(original);
 			UserSettings userSettings = null;
 
-			String taskName = AnalyticsSolutionHelper.generateInsertionName(originalTargetEvents);
+			String taskName = AnalyticsSolutionHelper.generateInsertionName(false, originalTargetEvents);
 			{
 
 				try (final ModelReference modelReference = originalModelRecord.aquireReference("InsertEventContextMenuExtension:1")) {

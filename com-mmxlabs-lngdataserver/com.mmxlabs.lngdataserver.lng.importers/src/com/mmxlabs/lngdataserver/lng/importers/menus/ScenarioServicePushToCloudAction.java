@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -47,7 +48,12 @@ import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisatio
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataServiceWrapper;
 import com.mmxlabs.lngdataserver.lng.importers.menus.PublishBasecaseException.Type;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
+import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolutionHelper;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
+import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.actions.anonymisation.AnonymisationUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -61,6 +67,7 @@ import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.migration.scenario.ScenarioMigrationException;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
@@ -81,11 +88,17 @@ public class ScenarioServicePushToCloudAction {
 	private ScenarioServicePushToCloudAction() {
 	}
 
-	public static void uploadScenario(final ScenarioInstance scenarioInstance, final boolean optimisation) {
+	public static void uploadScenario(final ScenarioInstance scenarioInstance, final boolean optimisation, final List<Slot<?>> targetSlots) {
 		boolean doPublish = false;
 		String notes = null;
 
 		final Shell activeShell = Display.getDefault().getActiveShell();
+		
+		if (!optimisation && (targetSlots == null || targetSlots.isEmpty())) {
+			MessageDialog.openError(activeShell, "Error", "No target slots provided. Aborting");
+			return;
+		}
+		
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_BASECASE_NOTES)) {
 			final InputDialog dialog = new InputDialog(activeShell, "Confirm base case push for cloud optimisation", String.format("Push scenario %s for cloud optimisation? Please enter notes.", scenarioInstance.getName()), "",
 					null);
@@ -97,13 +110,13 @@ public class ScenarioServicePushToCloudAction {
 			doPublish = MessageDialog.openQuestion(activeShell, "Confirm base case push for cloud optimisation", String.format("Publish scenario %s  for cloud optimisation?", scenarioInstance.getName()));
 		}
 		if (doPublish) {
-			final OptimisationPlan optimisationPlan;
+			final EObject optPlanOrUsrSettings;
 			if (optimisation) {
-				optimisationPlan = getOptimisationPlanForOptimisaiton(scenarioInstance);
+				optPlanOrUsrSettings = getOptimisationPlanForOptimisaiton(scenarioInstance);
 			} else {
-				throw new IllegalArgumentException("Only optimisation is supported at the moment.");
+				optPlanOrUsrSettings = getOptimisationPlanForInsertion(scenarioInstance, targetSlots);
 			}
-			uploadScenario(scenarioInstance, notes, optimisationPlan, optimisation);
+			uploadScenario(scenarioInstance, notes, optPlanOrUsrSettings, optimisation, targetSlots);
 		}
 	}
 
@@ -120,11 +133,44 @@ public class ScenarioServicePushToCloudAction {
 		}
 		return null;
 	}
+	
+	private static UserSettings getOptimisationPlanForInsertion(final ScenarioInstance scenarioInstance, final List<Slot<?>> targetSlots) {
+		UserSettings userSettings = null;
+		final ScenarioModelRecord originalModelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		String taskName = AnalyticsSolutionHelper.generateInsertionName(true, targetSlots);
+		{
 
-	public static void uploadScenario(final ScenarioInstance scenarioInstance, final String notes, final OptimisationPlan optimisationPlan, final boolean optimisation) {
+			try (final ModelReference modelReference = originalModelRecord.aquireReference("InsertSlotContextMenuExtension:1")) {
+
+				final EObject object = modelReference.getInstance();
+
+				if (object instanceof LNGScenarioModel) {
+					final LNGScenarioModel root = (LNGScenarioModel) object;
+					Set<String> existingNames = new HashSet<>();
+					scenarioInstance.getFragments().forEach(f -> existingNames.add(f.getName()));
+					scenarioInstance.getElements().forEach(f -> existingNames.add(f.getName()));
+
+					NameProvider nameProvider = new NameProvider(taskName, existingNames);
+					userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false, nameProvider);
+					taskName = nameProvider.getNameSuggestion();
+				}
+			}
+		}
+		if (userSettings != null) {
+			// Reset settings not supplied to the user
+			userSettings.setShippingOnly(false);
+			userSettings.setBuildActionSets(false);
+			userSettings.setCleanSlateOptimisation(false);
+			userSettings.setSimilarityMode(SimilarityMode.OFF);
+		}
+		return userSettings;
+	}
+
+	public static void uploadScenario(final ScenarioInstance scenarioInstance, final String notes, final EObject optiPlanOrUserSettings,//
+			final boolean optimisation, final List<Slot<?>> targetSlots) {
 		final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 		try {
-			dialog.run(true, false, m -> doUploadScenario(scenarioInstance, notes, optimisationPlan, optimisation, m));
+			dialog.run(true, false, m -> doUploadScenario(scenarioInstance, notes, optiPlanOrUserSettings, optimisation, targetSlots, m));
 		} catch (final InvocationTargetException e) {
 			LOG.error(e.getMessage(), e);
 			final Throwable cause = e.getCause();
@@ -162,7 +208,8 @@ public class ScenarioServicePushToCloudAction {
 
 	}
 
-	private static void doUploadScenario(final ScenarioInstance scenarioInstance, final String notes, final OptimisationPlan optimisationPlan, final boolean optimisation, final IProgressMonitor parentProgressMonitor) {
+	private static void doUploadScenario(final ScenarioInstance scenarioInstance, final String notes, final EObject optiPlanOrUserSettings, //
+			final boolean optimisation, final List<Slot<?>> targetSlots, final IProgressMonitor parentProgressMonitor) {
 
 		// Check user permission
 		if (UserPermissionsService.INSTANCE.hubSupportsPermissions()) {
@@ -203,8 +250,8 @@ public class ScenarioServicePushToCloudAction {
 				
 				progressMonitor.subTask("Anonymise scenario");
 				
-				final String amfName = CLOUD_OPTI_PATH + IPath.SEPARATOR + scenarioInstance.getUuid() + "anonyMap.data";
-				record.setAnonyMapFileName(amfName);
+				final String amfName = CLOUD_OPTI_PATH + IPath.SEPARATOR + scenarioInstance.getUuid() + ".amap";
+				record.setAnonyMapFileName(scenarioInstance.getUuid() + ".amap");
 				anonymisationMap = new File(amfName);
 				
 				final CompoundCommand cmd = AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, new HashSet(), new ArrayList(), true, anonymisationMap);
@@ -216,8 +263,8 @@ public class ScenarioServicePushToCloudAction {
 
 				// Evaluate scenario
 				final OptimisationPlan optiPlan;
-				if (optimisationPlan != null) {
-					optiPlan = optimisationPlan;
+				if (optiPlanOrUserSettings instanceof OptimisationPlan) {
+					optiPlan = (OptimisationPlan) optiPlanOrUserSettings;
 				} else {
 					optiPlan = OptimisationHelper.getOptimiserSettings(o_scenarioModel, true, null, false, false, null);
 				}
@@ -262,7 +309,9 @@ public class ScenarioServicePushToCloudAction {
 			filesToZip.add(createJVMOptions());
 			filesToZip.add(createManifest(tmpScenarioFile.getName(), true));
 			if (optimisation) {
-				filesToZip.add(createOptimisationSettingsJson(optimisationPlan));
+				filesToZip.add(createOptimisationSettingsJson(optiPlanOrUserSettings));
+			} else {
+				filesToZip.add(createOptioniserSettingsJson(optiPlanOrUserSettings, targetSlots));
 			}
 			File zipToUpload = null;
 			try {
@@ -299,14 +348,22 @@ public class ScenarioServicePushToCloudAction {
 			final ObjectMapper mapper = new ObjectMapper();
 			try {
 				final JsonNode actualObj = mapper.readTree(response);
-				record.setJobid(actualObj.get("jobid").textValue());
+				final String jobid = actualObj.get("jobid").textValue();
+				if (jobid != null) {
+					record.setJobid(jobid);
+					final File temp = new File(CLOUD_OPTI_PATH + IPath.SEPARATOR + jobid + ".amap");
+					anonymisationMap.renameTo(temp);
+				} else {
+					deleteAnonyMap(anonymisationMap);
+					throw new PublishBasecaseException(MSG_ERROR_UPLOADING, Type.FAILED_TO_UPLOAD_BASECASE, new IllegalStateException());
+				}
 			} catch (final IOException e) {
 				deleteAnonyMap(anonymisationMap);
 				System.out.println("Cannot read server response after scenario upload");
 				e.printStackTrace();
 			}
 			try {
-			CloudOptimisationDataServiceWrapper.updateRecords(record);
+				CloudOptimisationDataServiceWrapper.updateRecords(record);
 			} catch (final Exception e) {
 				deleteAnonyMap(anonymisationMap);
 				throw new PublishBasecaseException(MSG_ERROR_UPLOADING, Type.FAILED_TO_UPLOAD_BASECASE, e);
@@ -357,18 +414,53 @@ public class ScenarioServicePushToCloudAction {
 		}
 	}
 	
-	private static File createOptimisationSettingsJson(final OptimisationPlan plan) {
-		final UserSettings us = plan.getUserSettings();
-		if (us != null) {
-			OpimisationSettings settings = new OpimisationSettings();
+	private static File createOptimisationSettingsJson(final EObject plan) {
+		if (plan instanceof OptimisationPlan) {
+			final UserSettings us = ((OptimisationPlan) plan).getUserSettings();
+			if (us != null) {
+				OpimisationSettings settings = new OpimisationSettings();
+				settings.periodStartDate = us.getPeriodStartDate();
+				settings.periodEnd = us.getPeriodEnd();
+				settings.shippingOnly = us.isShippingOnly();
+				settings.generateCharterOuts = us.isGenerateCharterOuts();
+				settings.withCharterLength = us.isWithCharterLength();
+				settings.withSpotCargoMarkets = us.isWithSpotCargoMarkets();
+				settings.similarityMode = us.getSimilarityMode().getLiteral();
+				
+				final ObjectMapper objectMapper = new ObjectMapper();
+				try {
+					final File file = new File("parameters.json");
+					objectMapper.writeValue(file, settings);
+					return file;
+				} catch (final Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
+	
+	private static File createOptioniserSettingsJson(final EObject plan, final List<Slot<?>> targetSlots) {
+		if (plan instanceof UserSettings) {
+			final UserSettings us = (UserSettings) plan;
+			OptioniserSettings settings = new OptioniserSettings();
 			settings.periodStartDate = us.getPeriodStartDate();
 			settings.periodEnd = us.getPeriodEnd();
-			settings.shippingOnly = us.isShippingOnly();
-			settings.generateCharterOuts = us.isGenerateCharterOuts();
-			settings.withCharterLength = us.isWithCharterLength();
-			settings.withSpotCargoMarkets = us.isWithSpotCargoMarkets();
-			settings.similarityMode = us.getSimilarityMode().getLiteral();
-			
+			settings.iterations = 10000;
+			settings.loadIds = new ArrayList<>();
+			settings.dischargeIds = new ArrayList<>();
+			settings.eventsIds = new ArrayList<>();
+
+			for (final Slot<?> s : targetSlots) {
+				if (s instanceof LoadSlot) {
+					settings.loadIds.add(s.getName());
+				} else if (s instanceof DischargeSlot) {
+					settings.dischargeIds.add(s.getName());
+				}
+			}
+
+			settings.exportResults = true;
+
 			final ObjectMapper objectMapper = new ObjectMapper();
 			try {
 				final File file = new File("parameters.json");

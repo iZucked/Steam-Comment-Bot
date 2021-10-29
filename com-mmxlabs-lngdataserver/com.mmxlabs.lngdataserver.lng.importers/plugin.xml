@@ -387,4 +387,11 @@
             </action>
          </editorContribution>
  </extension>
+ 	<extension
+            point="com.mmxlabs.license.features.PluginXMLEnablement">
+         <PluginXMLEnablement
+               feature="options-suggester"
+               plugin.xml="options-suggester.plugin.xml">
+         </PluginXMLEnablement>     
+      </extension>
 </plugin>

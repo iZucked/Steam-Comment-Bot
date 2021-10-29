@@ -50,6 +50,9 @@ public class AnonymisationHandler {
 			renameContracts(scenarioModel, ed, records, cmd, usedIDStrings, AnonymisationUtils::rename);
 			AnonymisationMapIO.write(records, anonyMap);
 		} else {
+			if (records.isEmpty()) {
+				records.addAll(AnonymisationMapIO.read(anonyMap));
+			}
 			renameVessels(scenarioModel, ed, records, cmd, usedIDStrings, AnonymisationUtils::renameToOriginal);
 			renameSlots(scenarioModel, ed, records, cmd, usedIDStrings, AnonymisationUtils::renameToOriginal);
 			renameContracts(scenarioModel, ed, records, cmd, usedIDStrings, AnonymisationUtils::renameToOriginal);

@@ -53,6 +53,7 @@ Require-Bundle: org.eclipse.core.runtime,
  javax.annotation;bundle-version="1.2.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Import-Package: com.fasterxml.jackson.datatype.jdk8;version="2.12.5",
+ com.mmxlabs.models.lng.scenario.actions.anonymisation,
  javax.inject;version="1.0.0",
  javax.servlet;version="4.0.0",
  javax.servlet.annotation;version="4.0.0",
