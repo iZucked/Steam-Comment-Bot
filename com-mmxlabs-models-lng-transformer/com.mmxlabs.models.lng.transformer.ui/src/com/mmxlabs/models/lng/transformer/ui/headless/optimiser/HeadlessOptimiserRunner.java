@@ -352,7 +352,7 @@ public class HeadlessOptimiserRunner {
 			final long runTime = System.currentTimeMillis() - startTime;
 
 			if (result == null) {
-				System.err.println("Error optimising scenario");
+				throw new RuntimeException("Error optimising scenario - null result");
 			}
 
 			System.out.println("\truntime=" + runTime + ",");
@@ -378,11 +378,8 @@ public class HeadlessOptimiserRunner {
 
 			return true;
 		} catch (final Exception e) {
-			System.out.println("Headless Error");
-			System.err.println("Headless Error:" + e.getMessage());
-			e.printStackTrace();
+			throw new RuntimeException("Error during optimisation", e);
 		}
-		return false;
 	}
 
 	private void exportData(final Map<String, LSOLogger> loggerMap, final ActionSetLogger actionSetLogger, final String path, final boolean verbose) {
