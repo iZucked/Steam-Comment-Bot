@@ -76,8 +76,8 @@ import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
 public class ScenarioServicePushToCloudAction {
 	private static final Logger LOG = LoggerFactory.getLogger(ScenarioServicePushToCloudAction.class);
 
-	private static final String MSG_ERROR_PUSHING = "Error pushing the scenario";
-	private static final String MSG_FAILED_PUSHING = "Failed to push the scenario";
+	private static final String MSG_ERROR_PUSHING = "Error sending the scenario";
+	private static final String MSG_FAILED_PUSHING = "Failed to send the scenario";
 	private static final String MSG_ERROR_SAVING = "Error saving temporary scenario";
 	private static final String MSG_ERROR_UPLOADING = "Error uploading scenario";
 	private static final String MSG_ERROR_EVALUATING = "Error evaluating scenario";
@@ -95,19 +95,19 @@ public class ScenarioServicePushToCloudAction {
 		final Shell activeShell = Display.getDefault().getActiveShell();
 		
 		if (!optimisation && (targetSlots == null || targetSlots.isEmpty())) {
-			MessageDialog.openError(activeShell, "Error", "No target slots provided. Aborting");
+			MessageDialog.openError(activeShell, "Error", "No target slots provided.");
 			return;
 		}
 		
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_BASECASE_NOTES)) {
-			final InputDialog dialog = new InputDialog(activeShell, "Confirm base case push for cloud optimisation", String.format("Push scenario %s for cloud optimisation? Please enter notes.", scenarioInstance.getName()), "",
+			final InputDialog dialog = new InputDialog(activeShell, "Confirm sending the scenario", String.format("Send scenario %s for online optimisation? Please enter notes.", scenarioInstance.getName()), "",
 					null);
 			doPublish = dialog.open() == InputDialog.OK;
 			if (doPublish) {
 				notes = dialog.getValue();
 			}
 		} else {
-			doPublish = MessageDialog.openQuestion(activeShell, "Confirm base case push for cloud optimisation", String.format("Publish scenario %s  for cloud optimisation?", scenarioInstance.getName()));
+			doPublish = MessageDialog.openQuestion(activeShell, "Confirm sending the scenario", String.format("Send scenario %s for online optimisation?", scenarioInstance.getName()));
 		}
 		if (doPublish) {
 			final EObject optPlanOrUsrSettings;
@@ -179,26 +179,26 @@ public class ScenarioServicePushToCloudAction {
 				switch (publishBasecaseException.getType()) {
 				case FAILED_UNKNOWN_ERROR:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING,
-							"Failed to push scenario with unknown error. " + publishBasecaseException.getCause().getMessage());
+							"Failed to send scenario with unknown error. " + publishBasecaseException.getCause().getMessage());
 					break;
 				case FAILED_NOT_PERMITTED:
-					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_FAILED_PUSHING, "Insufficient permissions to push scenario.");
+					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_FAILED_PUSHING, "Insufficient permissions to send the scenario.");
 					break;
 				case FAILED_TO_MIGRATE:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING,
-							"Failed to migrate the scenario to current data model version. Unable to push scenario.");
+							"Failed to migrate the scenario to current data model version. Unable to send.");
 					break;
 				case FAILED_TO_EVALUATE:
-					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING, "Failed to evaluate the scenario. Unable to push scenario.");
+					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING, "Failed to evaluate the scenario. Unable to send.");
 					break;
 				case FAILED_TO_SAVE:
-					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING, "Failed to save the scenario to a temporary file. Unable to push scenario.");
+					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING, "Failed to save the scenario to a temporary file. Unable to send.");
 					break;
 				case FAILED_TO_UPLOAD_BASECASE:
-					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING, "Failed to upload the scenario. Unable to push scenario.");
+					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING, "Failed to upload the scenario. Unable to send.");
 					break;
 				default:
-					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING, "Unknown error occurred. Unable to push scenario.");
+					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING, "Unknown error occurred. Unable to send.");
 					break;
 				}
 			}
@@ -218,7 +218,7 @@ public class ScenarioServicePushToCloudAction {
 			}
 		}
 		
-		parentProgressMonitor.beginTask("Push scenario", 1000);
+		parentProgressMonitor.beginTask("Send scenario", 1000);
 		final SubMonitor progressMonitor = SubMonitor.convert(parentProgressMonitor, 1000);
 		try {
 			progressMonitor.subTask("Prepare scenario");
@@ -343,7 +343,7 @@ public class ScenarioServicePushToCloudAction {
 			
 			if (response == null) {
 				deleteAnonyMap(anonymisationMap);
-				throw new RuntimeException("Error pushing the scenario for cloud optimisation");
+				throw new RuntimeException("Error sending the scenario for online optimisation");
 			}
 			final ObjectMapper mapper = new ObjectMapper();
 			try {
@@ -359,8 +359,8 @@ public class ScenarioServicePushToCloudAction {
 				}
 			} catch (final IOException e) {
 				deleteAnonyMap(anonymisationMap);
-				System.out.println("Cannot read server response after scenario upload");
-				e.printStackTrace();
+				throw new PublishBasecaseException(MSG_ERROR_UPLOADING, Type.FAILED_TO_UPLOAD_BASECASE, 
+						new IllegalStateException("Unexpected server response: "+ e.getMessage()));
 			}
 			try {
 				CloudOptimisationDataServiceWrapper.updateRecords(record);
@@ -390,7 +390,7 @@ public class ScenarioServicePushToCloudAction {
 				doArchive(zos, file);
 			}
 		} catch (Exception e) {
-			LOG.error("Can't write the archive", e);
+			LOG.error("Can't write the ZIP archive", e);
 		}
 	}
 

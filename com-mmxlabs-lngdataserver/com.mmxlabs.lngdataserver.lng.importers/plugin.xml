@@ -381,9 +381,9 @@
                   icon="platform:/plugin/com.mmxlabs.rcp.common/icons/optimise.png"
                   disabledIcon="platform:/plugin/com.mmxlabs.rcp.common/icons/optimise_disabled.png"
                   id="com.mmxlabs.shiplingo.platform.models.optimisation.cloud"
-                  label="Start Cloud Optimisation"
+                  label="Start Online Optimisation"
                   toolbarPath="optimisationgroup"
-                  tooltip="Start a cloud optimisation">
+                  tooltip="Start an online optimisation">
             </action>
          </editorContribution>
  </extension>

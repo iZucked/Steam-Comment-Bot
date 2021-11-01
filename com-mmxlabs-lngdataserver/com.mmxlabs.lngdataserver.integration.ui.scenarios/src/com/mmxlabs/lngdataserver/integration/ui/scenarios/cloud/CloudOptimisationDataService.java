@@ -64,7 +64,7 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 	private final IUpstreamDetailChangedListener upstreamDetailsChangedListener;
 	
 	public CloudOptimisationDataService() {
-		super("Cloud Optimisation");
+		super("Online Tasks");
 		dataList = new ConcurrentLinkedQueue<>();
 		upstreamDetailsChangedListener = dataList::clear;
 		start();
@@ -301,9 +301,9 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 	protected ScenarioService initServiceModel() {
 		final ScenarioService serviceModel = ScenarioServiceFactory.eINSTANCE.createScenarioService();
 		serviceModel.setName(serviceName);
-		serviceModel.setDescription("Cloud workspace");
+		serviceModel.setDescription("Online tasks results");
 		serviceModel.setLocal(false);
-		serviceModel.setOffline(true);
+		serviceModel.setOffline(false);
 		serviceModel.setServiceID(getSerivceID());
 		return serviceModel;
 	}
