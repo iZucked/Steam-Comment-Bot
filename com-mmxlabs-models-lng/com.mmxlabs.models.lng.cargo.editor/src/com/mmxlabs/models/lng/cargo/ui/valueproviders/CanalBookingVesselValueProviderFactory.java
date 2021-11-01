@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.cargo.ui.valueproviders;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.command.SetCommand;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -26,7 +27,7 @@ public class CanalBookingVesselValueProviderFactory implements IReferenceValuePr
 
 			@Override
 			protected Pair<String, EObject> getEmptyObject() {
-				return new Pair<String, EObject>("<Not set>", null);
+				return new Pair("<Not set>", IReferenceValueProvider.EUNSET_VALUE);
 			}
 		};
 	}

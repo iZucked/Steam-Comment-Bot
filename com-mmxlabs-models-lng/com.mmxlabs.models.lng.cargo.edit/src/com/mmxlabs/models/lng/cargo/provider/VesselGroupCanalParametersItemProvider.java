@@ -52,55 +52,9 @@ public class VesselGroupCanalParametersItemProvider extends NamedObjectItemProvi
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addNorthboundWaitingDaysPropertyDescriptor(object);
-			addSouthboundWaitingDaysPropertyDescriptor(object);
 			addVesselGroupPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Northbound Waiting Days feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addNorthboundWaitingDaysPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_VesselGroupCanalParameters_northboundWaitingDays_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselGroupCanalParameters_northboundWaitingDays_feature", "_UI_VesselGroupCanalParameters_type"),
-				 CargoPackage.Literals.VESSEL_GROUP_CANAL_PARAMETERS__NORTHBOUND_WAITING_DAYS,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Southbound Waiting Days feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addSouthboundWaitingDaysPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_VesselGroupCanalParameters_southboundWaitingDays_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselGroupCanalParameters_southboundWaitingDays_feature", "_UI_VesselGroupCanalParameters_type"),
-				 CargoPackage.Literals.VESSEL_GROUP_CANAL_PARAMETERS__SOUTHBOUND_WAITING_DAYS,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -161,13 +115,6 @@ public class VesselGroupCanalParametersItemProvider extends NamedObjectItemProvi
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
-
-		switch (notification.getFeatureID(VesselGroupCanalParameters.class)) {
-			case CargoPackage.VESSEL_GROUP_CANAL_PARAMETERS__NORTHBOUND_WAITING_DAYS:
-			case CargoPackage.VESSEL_GROUP_CANAL_PARAMETERS__SOUTHBOUND_WAITING_DAYS:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
-		}
 		super.notifyChanged(notification);
 	}
 

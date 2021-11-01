@@ -19,6 +19,7 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
@@ -214,5 +215,18 @@ public class EmbeddedDetailComposite {
 	public Control getComposite() {
 		return mainCompositeScrolled;
 	}
-
+	
+	public void setLocked(boolean locked) {
+		setLocked(getComposite(), locked);
+	}
+	
+	private void setLocked(final Control control, boolean locked) {
+		if (control instanceof Label)
+			return;
+		control.setEnabled(!locked);
+		if (control instanceof Composite) {
+			for (final Control c : ((Composite) control).getChildren())
+				setLocked(c, locked);
+		}
+	}
 }

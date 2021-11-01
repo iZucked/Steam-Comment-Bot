@@ -70,28 +70,8 @@ public class VesselGroupCanalParametersComponentHelper extends BaseComponentHelp
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_northboundWaitingDaysEditor(detailComposite, topClass);
-		add_southboundWaitingDaysEditor(detailComposite, topClass);
 		add_vesselGroupEditor(detailComposite, topClass);
 	}
-	/**
-	 * Create the editor for the northboundWaitingDays feature on VesselGroupCanalParameters
-	 *
-	 * @generated
-	 */
-	protected void add_northboundWaitingDaysEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_GROUP_CANAL_PARAMETERS__NORTHBOUND_WAITING_DAYS));
-	}
-
-	/**
-	 * Create the editor for the southboundWaitingDays feature on VesselGroupCanalParameters
-	 *
-	 * @generated
-	 */
-	protected void add_southboundWaitingDaysEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_GROUP_CANAL_PARAMETERS__SOUTHBOUND_WAITING_DAYS));
-	}
-
 	/**
 	 * Create the editor for the vesselGroup feature on VesselGroupCanalParameters
 	 *

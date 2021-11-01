@@ -230,6 +230,10 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 				return createVesselGroupCanalParametersAdapter();
 			}
 			@Override
+			public Adapter casePanamaSeasonalityRecord(PanamaSeasonalityRecord object) {
+				return createPanamaSeasonalityRecordAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -792,6 +796,20 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createVesselGroupCanalParametersAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord <em>Panama Seasonality Record</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord
+	 * @generated
+	 */
+	public Adapter createPanamaSeasonalityRecordAdapter() {
 		return null;
 	}
 

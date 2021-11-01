@@ -755,6 +755,29 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PanamaSeasonalityRecordItemProvider panamaSeasonalityRecordItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPanamaSeasonalityRecordAdapter() {
+		if (panamaSeasonalityRecordItemProvider == null) {
+			panamaSeasonalityRecordItemProvider = new PanamaSeasonalityRecordItemProvider(this);
+		}
+
+		return panamaSeasonalityRecordItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -909,6 +932,7 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 		if (sellPaperDealItemProvider != null) sellPaperDealItemProvider.dispose();
 		if (dealSetItemProvider != null) dealSetItemProvider.dispose();
 		if (vesselGroupCanalParametersItemProvider != null) vesselGroupCanalParametersItemProvider.dispose();
+		if (panamaSeasonalityRecordItemProvider != null) panamaSeasonalityRecordItemProvider.dispose();
 	}
 
 }

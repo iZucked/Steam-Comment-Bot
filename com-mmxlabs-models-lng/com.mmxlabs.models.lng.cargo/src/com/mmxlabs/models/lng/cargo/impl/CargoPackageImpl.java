@@ -39,6 +39,7 @@ import com.mmxlabs.models.lng.cargo.InventoryFrequency;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification;
+import com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.PaperPricingType;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
@@ -310,6 +311,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	private EClass vesselGroupCanalParametersEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass panamaSeasonalityRecordEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -2480,28 +2488,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getCanalBookings_NorthboundMaxIdleDays() {
-		return (EAttribute)canalBookingsEClass.getEStructuralFeatures().get(6);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getCanalBookings_SouthboundMaxIdleDays() {
-		return (EAttribute)canalBookingsEClass.getEStructuralFeatures().get(7);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getCanalBookings_BookingExemptVessels() {
-		return (EReference)canalBookingsEClass.getEStructuralFeatures().get(8);
+		return (EReference)canalBookingsEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -2511,7 +2499,17 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	@Override
 	public EReference getCanalBookings_VesselGroupCanalParameters() {
-		return (EReference)canalBookingsEClass.getEStructuralFeatures().get(9);
+		return (EReference)canalBookingsEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getCanalBookings_PanamaSeasonalityRecords() {
+		return (EReference)canalBookingsEClass.getEStructuralFeatures().get(8);
 	}
 
 	/**
@@ -3010,28 +3008,78 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getVesselGroupCanalParameters_NorthboundWaitingDays() {
-		return (EAttribute)vesselGroupCanalParametersEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getVesselGroupCanalParameters_SouthboundWaitingDays() {
-		return (EAttribute)vesselGroupCanalParametersEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getVesselGroupCanalParameters_VesselGroup() {
-		return (EReference)vesselGroupCanalParametersEClass.getEStructuralFeatures().get(2);
+		return (EReference)vesselGroupCanalParametersEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getPanamaSeasonalityRecord() {
+		return panamaSeasonalityRecordEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPanamaSeasonalityRecord_VesselGroupCanalParameter() {
+		return (EReference)panamaSeasonalityRecordEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPanamaSeasonalityRecord_StartDay() {
+		return (EAttribute)panamaSeasonalityRecordEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPanamaSeasonalityRecord_StartMonth() {
+		return (EAttribute)panamaSeasonalityRecordEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPanamaSeasonalityRecord_StartYear() {
+		return (EAttribute)panamaSeasonalityRecordEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPanamaSeasonalityRecord_NorthboundWaitingDays() {
+		return (EAttribute)panamaSeasonalityRecordEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPanamaSeasonalityRecord_SouthboundWaitingDays() {
+		return (EAttribute)panamaSeasonalityRecordEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -3349,10 +3397,9 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS);
 		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND);
 		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND);
-		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS);
-		createEAttribute(canalBookingsEClass, CANAL_BOOKINGS__SOUTHBOUND_MAX_IDLE_DAYS);
 		createEReference(canalBookingsEClass, CANAL_BOOKINGS__BOOKING_EXEMPT_VESSELS);
 		createEReference(canalBookingsEClass, CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS);
+		createEReference(canalBookingsEClass, CANAL_BOOKINGS__PANAMA_SEASONALITY_RECORDS);
 
 		scheduleSpecificationEClass = createEClass(SCHEDULE_SPECIFICATION);
 		createEReference(scheduleSpecificationEClass, SCHEDULE_SPECIFICATION__VESSEL_SCHEDULE_SPECIFICATIONS);
@@ -3415,9 +3462,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(dealSetEClass, DEAL_SET__PAPER_DEALS);
 
 		vesselGroupCanalParametersEClass = createEClass(VESSEL_GROUP_CANAL_PARAMETERS);
-		createEAttribute(vesselGroupCanalParametersEClass, VESSEL_GROUP_CANAL_PARAMETERS__NORTHBOUND_WAITING_DAYS);
-		createEAttribute(vesselGroupCanalParametersEClass, VESSEL_GROUP_CANAL_PARAMETERS__SOUTHBOUND_WAITING_DAYS);
 		createEReference(vesselGroupCanalParametersEClass, VESSEL_GROUP_CANAL_PARAMETERS__VESSEL_GROUP);
+
+		panamaSeasonalityRecordEClass = createEClass(PANAMA_SEASONALITY_RECORD);
+		createEReference(panamaSeasonalityRecordEClass, PANAMA_SEASONALITY_RECORD__VESSEL_GROUP_CANAL_PARAMETER);
+		createEAttribute(panamaSeasonalityRecordEClass, PANAMA_SEASONALITY_RECORD__START_DAY);
+		createEAttribute(panamaSeasonalityRecordEClass, PANAMA_SEASONALITY_RECORD__START_MONTH);
+		createEAttribute(panamaSeasonalityRecordEClass, PANAMA_SEASONALITY_RECORD__START_YEAR);
+		createEAttribute(panamaSeasonalityRecordEClass, PANAMA_SEASONALITY_RECORD__NORTHBOUND_WAITING_DAYS);
+		createEAttribute(panamaSeasonalityRecordEClass, PANAMA_SEASONALITY_RECORD__SOUTHBOUND_WAITING_DAYS);
 
 		// Create enums
 		cargoTypeEEnum = createEEnum(CARGO_TYPE);
@@ -3827,10 +3880,9 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getCanalBookings_ArrivalMarginHours(), ecorePackage.getEInt(), "arrivalMarginHours", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCanalBookings_FlexibleBookingAmountNorthbound(), ecorePackage.getEInt(), "flexibleBookingAmountNorthbound", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCanalBookings_FlexibleBookingAmountSouthbound(), ecorePackage.getEInt(), "flexibleBookingAmountSouthbound", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCanalBookings_NorthboundMaxIdleDays(), ecorePackage.getEInt(), "northboundMaxIdleDays", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCanalBookings_SouthboundMaxIdleDays(), ecorePackage.getEInt(), "southboundMaxIdleDays", null, 0, 1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCanalBookings_BookingExemptVessels(), theFleetPackage.getVessel(), null, "bookingExemptVessels", null, 0, -1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCanalBookings_VesselGroupCanalParameters(), this.getVesselGroupCanalParameters(), null, "vesselGroupCanalParameters", null, 0, -1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCanalBookings_PanamaSeasonalityRecords(), this.getPanamaSeasonalityRecord(), null, "panamaSeasonalityRecords", null, 0, -1, CanalBookings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(scheduleSpecificationEClass, ScheduleSpecification.class, "ScheduleSpecification", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getScheduleSpecification_VesselScheduleSpecifications(), this.getVesselScheduleSpecification(), null, "vesselScheduleSpecifications", null, 0, -1, ScheduleSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3900,12 +3952,18 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getDealSet_PaperDeals(), this.getPaperDeal(), null, "paperDeals", null, 0, -1, DealSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(vesselGroupCanalParametersEClass, VesselGroupCanalParameters.class, "VesselGroupCanalParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getVesselGroupCanalParameters_NorthboundWaitingDays(), ecorePackage.getEInt(), "northboundWaitingDays", null, 0, 1, VesselGroupCanalParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVesselGroupCanalParameters_SouthboundWaitingDays(), ecorePackage.getEInt(), "southboundWaitingDays", null, 0, 1, VesselGroupCanalParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(theTypesPackage.getAVesselSet());
 		g2 = createEGenericType(theFleetPackage.getVessel());
 		g1.getETypeArguments().add(g2);
 		initEReference(getVesselGroupCanalParameters_VesselGroup(), g1, null, "vesselGroup", null, 0, -1, VesselGroupCanalParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(panamaSeasonalityRecordEClass, PanamaSeasonalityRecord.class, "PanamaSeasonalityRecord", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getPanamaSeasonalityRecord_VesselGroupCanalParameter(), this.getVesselGroupCanalParameters(), null, "vesselGroupCanalParameter", null, 0, 1, PanamaSeasonalityRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPanamaSeasonalityRecord_StartDay(), ecorePackage.getEInt(), "startDay", null, 0, 1, PanamaSeasonalityRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPanamaSeasonalityRecord_StartMonth(), ecorePackage.getEInt(), "startMonth", null, 0, 1, PanamaSeasonalityRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPanamaSeasonalityRecord_StartYear(), ecorePackage.getEInt(), "startYear", null, 0, 1, PanamaSeasonalityRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPanamaSeasonalityRecord_NorthboundWaitingDays(), ecorePackage.getEInt(), "northboundWaitingDays", null, 0, 1, PanamaSeasonalityRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPanamaSeasonalityRecord_SouthboundWaitingDays(), ecorePackage.getEInt(), "southboundWaitingDays", null, 0, 1, PanamaSeasonalityRecord.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(cargoTypeEEnum, CargoType.class, "CargoType");
@@ -4168,7 +4226,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		  (getCanalBookings_ArrivalMarginHours(),
 		   source,
 		   new String[] {
-			   "unit", "hours"
+			   "unit", "hours",
+			   "formatString", "##,##0"
 		   });
 		addAnnotation
 		  (getCharterInMarketOverride_MinDuration(),
@@ -4196,6 +4255,18 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   source,
 		   new String[] {
 			   "formatString", "####"
+		   });
+		addAnnotation
+		  (getPanamaSeasonalityRecord_StartDay(),
+		   source,
+		   new String[] {
+			   "numberFormat", "#0"
+		   });
+		addAnnotation
+		  (getPanamaSeasonalityRecord_StartYear(),
+		   source,
+		   new String[] {
+			   "numberFormat", "#0"
 		   });
 	}
 

@@ -30,4 +30,7 @@ public interface IExternalDateProvider {
     
     @NonNull
 	ZonedDateTime getEarliestTime();
+    
+    @NonNull
+	ZonedDateTime getLatestTime();
 }
