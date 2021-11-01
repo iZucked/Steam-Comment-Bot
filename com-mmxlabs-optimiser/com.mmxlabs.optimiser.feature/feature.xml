@@ -10,20 +10,7 @@
       label="Optimiser Feature"
       version="4.13.3.qualifier"
       provider-name="Minimax Labs Ltd.">
-
-   <description>
-      Optimiser
-   </description>
-
-   <copyright>
-      Copyright (C) Minimax Labs Ltd., 2010 - 2012
-All rights reserved.
-   </copyright>
-
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
-   </license>
-
+ 
    <plugin
          id="com.mmxlabs.optimiser.optimiser-common"
          download-size="0"
