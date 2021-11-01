@@ -10,11 +10,9 @@ package com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.Triple;
 import com.mmxlabs.scheduler.optimiser.components.IHeelPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider.CharterMarketOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 
@@ -24,8 +22,8 @@ public class GeneratedCharterOutOption {
 	private int charterDuration;
 	private CharterMarketOptions option = null;
 	private IPort port;
-	private Triple<Integer, ERouteOption, Integer> toCharterPort;
-	private Triple<Integer, ERouteOption, Integer> fromCharterPort;
+	private GeneratedCharterOutLeg toCharterPort;
+	private GeneratedCharterOutLeg fromCharterPort;
 	private int charterOutIdleTimeHours;
 	private long maxCharteringRevenue = -1;
 
@@ -76,19 +74,19 @@ public class GeneratedCharterOutOption {
 		this.port = port;
 	}
 
-	public Triple<Integer, ERouteOption, Integer> getToCharterPort() {
+	public GeneratedCharterOutLeg getToCharterPort() {
 		return toCharterPort;
 	}
 
-	public void setToCharterPort(Triple<Integer, ERouteOption, Integer> toCharterPort) {
+	public void setToCharterPort(GeneratedCharterOutLeg toCharterPort) {
 		this.toCharterPort = toCharterPort;
 	}
 
-	public Triple<Integer, ERouteOption, Integer> getFromCharterPort() {
+	public GeneratedCharterOutLeg getFromCharterPort() {
 		return fromCharterPort;
 	}
 
-	public void setFromCharterPort(Triple<Integer, ERouteOption, Integer> fromCharterPort) {
+	public void setFromCharterPort(GeneratedCharterOutLeg fromCharterPort) {
 		this.fromCharterPort = fromCharterPort;
 	}
 

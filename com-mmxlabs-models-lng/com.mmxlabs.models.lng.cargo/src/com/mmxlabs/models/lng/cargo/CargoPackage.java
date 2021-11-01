@@ -6043,31 +6043,13 @@ public interface CargoPackage extends EPackage {
 	int CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
-	 * The feature id for the '<em><b>Northbound Max Idle Days</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
-
-	/**
-	 * The feature id for the '<em><b>Southbound Max Idle Days</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CANAL_BOOKINGS__SOUTHBOUND_MAX_IDLE_DAYS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
-
-	/**
 	 * The feature id for the '<em><b>Booking Exempt Vessels</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_BOOKINGS__BOOKING_EXEMPT_VESSELS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
+	int CANAL_BOOKINGS__BOOKING_EXEMPT_VESSELS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Group Canal Parameters</b></em>' containment reference list.
@@ -6076,7 +6058,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
+	int CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Panama Seasonality Records</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CANAL_BOOKINGS__PANAMA_SEASONALITY_RECORDS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The number of structural features of the '<em>Canal Bookings</em>' class.
@@ -6085,7 +6076,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CANAL_BOOKINGS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
+	int CANAL_BOOKINGS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -7226,31 +7217,13 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_GROUP_CANAL_PARAMETERS__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Northbound Waiting Days</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_GROUP_CANAL_PARAMETERS__NORTHBOUND_WAITING_DAYS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Southbound Waiting Days</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_GROUP_CANAL_PARAMETERS__SOUTHBOUND_WAITING_DAYS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Vessel Group</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_GROUP_CANAL_PARAMETERS__VESSEL_GROUP = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+	int VESSEL_GROUP_CANAL_PARAMETERS__VESSEL_GROUP = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Group Canal Parameters</em>' class.
@@ -7259,7 +7232,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_GROUP_CANAL_PARAMETERS_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+	int VESSEL_GROUP_CANAL_PARAMETERS_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -7298,6 +7271,88 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_GROUP_CANAL_PARAMETERS_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.PanamaSeasonalityRecordImpl <em>Panama Seasonality Record</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.PanamaSeasonalityRecordImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getPanamaSeasonalityRecord()
+	 * @generated
+	 */
+	int PANAMA_SEASONALITY_RECORD = 34;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Group Canal Parameter</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PANAMA_SEASONALITY_RECORD__VESSEL_GROUP_CANAL_PARAMETER = 0;
+
+	/**
+	 * The feature id for the '<em><b>Start Day</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PANAMA_SEASONALITY_RECORD__START_DAY = 1;
+
+	/**
+	 * The feature id for the '<em><b>Start Month</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PANAMA_SEASONALITY_RECORD__START_MONTH = 2;
+
+	/**
+	 * The feature id for the '<em><b>Start Year</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PANAMA_SEASONALITY_RECORD__START_YEAR = 3;
+
+	/**
+	 * The feature id for the '<em><b>Northbound Waiting Days</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PANAMA_SEASONALITY_RECORD__NORTHBOUND_WAITING_DAYS = 4;
+
+	/**
+	 * The feature id for the '<em><b>Southbound Waiting Days</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PANAMA_SEASONALITY_RECORD__SOUTHBOUND_WAITING_DAYS = 5;
+
+	/**
+	 * The number of structural features of the '<em>Panama Seasonality Record</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PANAMA_SEASONALITY_RECORD_FEATURE_COUNT = 6;
+
+	/**
+	 * The number of operations of the '<em>Panama Seasonality Record</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PANAMA_SEASONALITY_RECORD_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7305,7 +7360,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCargoType()
 	 * @generated
 	 */
-	int CARGO_TYPE = 34;
+	int CARGO_TYPE = 35;
 
 
 	/**
@@ -7316,7 +7371,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselType()
 	 * @generated
 	 */
-	int VESSEL_TYPE = 35;
+	int VESSEL_TYPE = 36;
 
 
 	/**
@@ -7327,7 +7382,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryFacilityType()
 	 * @generated
 	 */
-	int INVENTORY_FACILITY_TYPE = 36;
+	int INVENTORY_FACILITY_TYPE = 37;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.InventoryFrequency <em>Inventory Frequency</em>}' enum.
@@ -7337,7 +7392,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryFrequency()
 	 * @generated
 	 */
-	int INVENTORY_FREQUENCY = 37;
+	int INVENTORY_FREQUENCY = 38;
 
 
 	/**
@@ -7348,7 +7403,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getPaperPricingType()
 	 * @generated
 	 */
-	int PAPER_PRICING_TYPE = 38;
+	int PAPER_PRICING_TYPE = 39;
 
 	/**
 	 * The meta object id for the '<em>Scheduling Time Window</em>' data type.
@@ -7358,7 +7413,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSchedulingTimeWindow()
 	 * @generated
 	 */
-	int SCHEDULING_TIME_WINDOW = 39;
+	int SCHEDULING_TIME_WINDOW = 40;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.Cargo <em>Cargo</em>}'.
@@ -9570,28 +9625,6 @@ public interface CargoPackage extends EPackage {
 	EAttribute getCanalBookings_FlexibleBookingAmountSouthbound();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getNorthboundMaxIdleDays <em>Northbound Max Idle Days</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Northbound Max Idle Days</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CanalBookings#getNorthboundMaxIdleDays()
-	 * @see #getCanalBookings()
-	 * @generated
-	 */
-	EAttribute getCanalBookings_NorthboundMaxIdleDays();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getSouthboundMaxIdleDays <em>Southbound Max Idle Days</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Southbound Max Idle Days</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.CanalBookings#getSouthboundMaxIdleDays()
-	 * @see #getCanalBookings()
-	 * @generated
-	 */
-	EAttribute getCanalBookings_SouthboundMaxIdleDays();
-
-	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getBookingExemptVessels <em>Booking Exempt Vessels</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9612,6 +9645,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getCanalBookings_VesselGroupCanalParameters();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getPanamaSeasonalityRecords <em>Panama Seasonality Records</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Panama Seasonality Records</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CanalBookings#getPanamaSeasonalityRecords()
+	 * @see #getCanalBookings()
+	 * @generated
+	 */
+	EReference getCanalBookings_PanamaSeasonalityRecords();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.ScheduleSpecification <em>Schedule Specification</em>}'.
@@ -10136,28 +10180,6 @@ public interface CargoPackage extends EPackage {
 	EClass getVesselGroupCanalParameters();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters#getNorthboundWaitingDays <em>Northbound Waiting Days</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Northbound Waiting Days</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters#getNorthboundWaitingDays()
-	 * @see #getVesselGroupCanalParameters()
-	 * @generated
-	 */
-	EAttribute getVesselGroupCanalParameters_NorthboundWaitingDays();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters#getSouthboundWaitingDays <em>Southbound Waiting Days</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Southbound Waiting Days</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters#getSouthboundWaitingDays()
-	 * @see #getVesselGroupCanalParameters()
-	 * @generated
-	 */
-	EAttribute getVesselGroupCanalParameters_SouthboundWaitingDays();
-
-	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters#getVesselGroup <em>Vessel Group</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10167,6 +10189,82 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getVesselGroupCanalParameters_VesselGroup();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord <em>Panama Seasonality Record</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Panama Seasonality Record</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord
+	 * @generated
+	 */
+	EClass getPanamaSeasonalityRecord();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord#getVesselGroupCanalParameter <em>Vessel Group Canal Parameter</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Vessel Group Canal Parameter</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord#getVesselGroupCanalParameter()
+	 * @see #getPanamaSeasonalityRecord()
+	 * @generated
+	 */
+	EReference getPanamaSeasonalityRecord_VesselGroupCanalParameter();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord#getStartDay <em>Start Day</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Start Day</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord#getStartDay()
+	 * @see #getPanamaSeasonalityRecord()
+	 * @generated
+	 */
+	EAttribute getPanamaSeasonalityRecord_StartDay();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord#getStartMonth <em>Start Month</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Start Month</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord#getStartMonth()
+	 * @see #getPanamaSeasonalityRecord()
+	 * @generated
+	 */
+	EAttribute getPanamaSeasonalityRecord_StartMonth();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord#getStartYear <em>Start Year</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Start Year</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord#getStartYear()
+	 * @see #getPanamaSeasonalityRecord()
+	 * @generated
+	 */
+	EAttribute getPanamaSeasonalityRecord_StartYear();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord#getNorthboundWaitingDays <em>Northbound Waiting Days</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Northbound Waiting Days</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord#getNorthboundWaitingDays()
+	 * @see #getPanamaSeasonalityRecord()
+	 * @generated
+	 */
+	EAttribute getPanamaSeasonalityRecord_NorthboundWaitingDays();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord#getSouthboundWaitingDays <em>Southbound Waiting Days</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Southbound Waiting Days</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord#getSouthboundWaitingDays()
+	 * @see #getPanamaSeasonalityRecord()
+	 * @generated
+	 */
+	EAttribute getPanamaSeasonalityRecord_SouthboundWaitingDays();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}'.
@@ -11942,22 +12040,6 @@ public interface CargoPackage extends EPackage {
 		EAttribute CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND = eINSTANCE.getCanalBookings_FlexibleBookingAmountSouthbound();
 
 		/**
-		 * The meta object literal for the '<em><b>Northbound Max Idle Days</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS = eINSTANCE.getCanalBookings_NorthboundMaxIdleDays();
-
-		/**
-		 * The meta object literal for the '<em><b>Southbound Max Idle Days</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CANAL_BOOKINGS__SOUTHBOUND_MAX_IDLE_DAYS = eINSTANCE.getCanalBookings_SouthboundMaxIdleDays();
-
-		/**
 		 * The meta object literal for the '<em><b>Booking Exempt Vessels</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -11972,6 +12054,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS = eINSTANCE.getCanalBookings_VesselGroupCanalParameters();
+
+		/**
+		 * The meta object literal for the '<em><b>Panama Seasonality Records</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CANAL_BOOKINGS__PANAMA_SEASONALITY_RECORDS = eINSTANCE.getCanalBookings_PanamaSeasonalityRecords();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.ScheduleSpecificationImpl <em>Schedule Specification</em>}' class.
@@ -12392,12 +12482,62 @@ public interface CargoPackage extends EPackage {
 		EClass VESSEL_GROUP_CANAL_PARAMETERS = eINSTANCE.getVesselGroupCanalParameters();
 
 		/**
+		 * The meta object literal for the '<em><b>Vessel Group</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_GROUP_CANAL_PARAMETERS__VESSEL_GROUP = eINSTANCE.getVesselGroupCanalParameters_VesselGroup();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.PanamaSeasonalityRecordImpl <em>Panama Seasonality Record</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.PanamaSeasonalityRecordImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getPanamaSeasonalityRecord()
+		 * @generated
+		 */
+		EClass PANAMA_SEASONALITY_RECORD = eINSTANCE.getPanamaSeasonalityRecord();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Group Canal Parameter</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PANAMA_SEASONALITY_RECORD__VESSEL_GROUP_CANAL_PARAMETER = eINSTANCE.getPanamaSeasonalityRecord_VesselGroupCanalParameter();
+
+		/**
+		 * The meta object literal for the '<em><b>Start Day</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PANAMA_SEASONALITY_RECORD__START_DAY = eINSTANCE.getPanamaSeasonalityRecord_StartDay();
+
+		/**
+		 * The meta object literal for the '<em><b>Start Month</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PANAMA_SEASONALITY_RECORD__START_MONTH = eINSTANCE.getPanamaSeasonalityRecord_StartMonth();
+
+		/**
+		 * The meta object literal for the '<em><b>Start Year</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PANAMA_SEASONALITY_RECORD__START_YEAR = eINSTANCE.getPanamaSeasonalityRecord_StartYear();
+
+		/**
 		 * The meta object literal for the '<em><b>Northbound Waiting Days</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute VESSEL_GROUP_CANAL_PARAMETERS__NORTHBOUND_WAITING_DAYS = eINSTANCE.getVesselGroupCanalParameters_NorthboundWaitingDays();
+		EAttribute PANAMA_SEASONALITY_RECORD__NORTHBOUND_WAITING_DAYS = eINSTANCE.getPanamaSeasonalityRecord_NorthboundWaitingDays();
 
 		/**
 		 * The meta object literal for the '<em><b>Southbound Waiting Days</b></em>' attribute feature.
@@ -12405,15 +12545,7 @@ public interface CargoPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute VESSEL_GROUP_CANAL_PARAMETERS__SOUTHBOUND_WAITING_DAYS = eINSTANCE.getVesselGroupCanalParameters_SouthboundWaitingDays();
-
-		/**
-		 * The meta object literal for the '<em><b>Vessel Group</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference VESSEL_GROUP_CANAL_PARAMETERS__VESSEL_GROUP = eINSTANCE.getVesselGroupCanalParameters_VesselGroup();
+		EAttribute PANAMA_SEASONALITY_RECORD__SOUTHBOUND_WAITING_DAYS = eINSTANCE.getPanamaSeasonalityRecord_SouthboundWaitingDays();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.

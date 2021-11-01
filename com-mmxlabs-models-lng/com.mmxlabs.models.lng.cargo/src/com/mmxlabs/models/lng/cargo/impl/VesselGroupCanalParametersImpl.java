@@ -33,54 +33,12 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselGroupCanalParametersImpl#getNorthboundWaitingDays <em>Northbound Waiting Days</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselGroupCanalParametersImpl#getSouthboundWaitingDays <em>Southbound Waiting Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselGroupCanalParametersImpl#getVesselGroup <em>Vessel Group</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class VesselGroupCanalParametersImpl extends NamedObjectImpl implements VesselGroupCanalParameters {
-	/**
-	 * The default value of the '{@link #getNorthboundWaitingDays() <em>Northbound Waiting Days</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getNorthboundWaitingDays()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int NORTHBOUND_WAITING_DAYS_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getNorthboundWaitingDays() <em>Northbound Waiting Days</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getNorthboundWaitingDays()
-	 * @generated
-	 * @ordered
-	 */
-	protected int northboundWaitingDays = NORTHBOUND_WAITING_DAYS_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getSouthboundWaitingDays() <em>Southbound Waiting Days</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSouthboundWaitingDays()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int SOUTHBOUND_WAITING_DAYS_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getSouthboundWaitingDays() <em>Southbound Waiting Days</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSouthboundWaitingDays()
-	 * @generated
-	 * @ordered
-	 */
-	protected int southboundWaitingDays = SOUTHBOUND_WAITING_DAYS_EDEFAULT;
-
 	/**
 	 * The cached value of the '{@link #getVesselGroup() <em>Vessel Group</em>}' reference list.
 	 * <!-- begin-user-doc -->
@@ -116,52 +74,6 @@ public class VesselGroupCanalParametersImpl extends NamedObjectImpl implements V
 	 * @generated
 	 */
 	@Override
-	public int getNorthboundWaitingDays() {
-		return northboundWaitingDays;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setNorthboundWaitingDays(int newNorthboundWaitingDays) {
-		int oldNorthboundWaitingDays = northboundWaitingDays;
-		northboundWaitingDays = newNorthboundWaitingDays;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_GROUP_CANAL_PARAMETERS__NORTHBOUND_WAITING_DAYS, oldNorthboundWaitingDays, northboundWaitingDays));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int getSouthboundWaitingDays() {
-		return southboundWaitingDays;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setSouthboundWaitingDays(int newSouthboundWaitingDays) {
-		int oldSouthboundWaitingDays = southboundWaitingDays;
-		southboundWaitingDays = newSouthboundWaitingDays;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_GROUP_CANAL_PARAMETERS__SOUTHBOUND_WAITING_DAYS, oldSouthboundWaitingDays, southboundWaitingDays));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EList<AVesselSet<Vessel>> getVesselGroup() {
 		if (vesselGroup == null) {
 			vesselGroup = new EObjectResolvingEList<AVesselSet<Vessel>>(AVesselSet.class, this, CargoPackage.VESSEL_GROUP_CANAL_PARAMETERS__VESSEL_GROUP);
@@ -177,10 +89,6 @@ public class VesselGroupCanalParametersImpl extends NamedObjectImpl implements V
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case CargoPackage.VESSEL_GROUP_CANAL_PARAMETERS__NORTHBOUND_WAITING_DAYS:
-				return getNorthboundWaitingDays();
-			case CargoPackage.VESSEL_GROUP_CANAL_PARAMETERS__SOUTHBOUND_WAITING_DAYS:
-				return getSouthboundWaitingDays();
 			case CargoPackage.VESSEL_GROUP_CANAL_PARAMETERS__VESSEL_GROUP:
 				return getVesselGroup();
 		}
@@ -196,12 +104,6 @@ public class VesselGroupCanalParametersImpl extends NamedObjectImpl implements V
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case CargoPackage.VESSEL_GROUP_CANAL_PARAMETERS__NORTHBOUND_WAITING_DAYS:
-				setNorthboundWaitingDays((Integer)newValue);
-				return;
-			case CargoPackage.VESSEL_GROUP_CANAL_PARAMETERS__SOUTHBOUND_WAITING_DAYS:
-				setSouthboundWaitingDays((Integer)newValue);
-				return;
 			case CargoPackage.VESSEL_GROUP_CANAL_PARAMETERS__VESSEL_GROUP:
 				getVesselGroup().clear();
 				getVesselGroup().addAll((Collection<? extends AVesselSet<Vessel>>)newValue);
@@ -218,12 +120,6 @@ public class VesselGroupCanalParametersImpl extends NamedObjectImpl implements V
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case CargoPackage.VESSEL_GROUP_CANAL_PARAMETERS__NORTHBOUND_WAITING_DAYS:
-				setNorthboundWaitingDays(NORTHBOUND_WAITING_DAYS_EDEFAULT);
-				return;
-			case CargoPackage.VESSEL_GROUP_CANAL_PARAMETERS__SOUTHBOUND_WAITING_DAYS:
-				setSouthboundWaitingDays(SOUTHBOUND_WAITING_DAYS_EDEFAULT);
-				return;
 			case CargoPackage.VESSEL_GROUP_CANAL_PARAMETERS__VESSEL_GROUP:
 				getVesselGroup().clear();
 				return;
@@ -239,32 +135,10 @@ public class VesselGroupCanalParametersImpl extends NamedObjectImpl implements V
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case CargoPackage.VESSEL_GROUP_CANAL_PARAMETERS__NORTHBOUND_WAITING_DAYS:
-				return northboundWaitingDays != NORTHBOUND_WAITING_DAYS_EDEFAULT;
-			case CargoPackage.VESSEL_GROUP_CANAL_PARAMETERS__SOUTHBOUND_WAITING_DAYS:
-				return southboundWaitingDays != SOUTHBOUND_WAITING_DAYS_EDEFAULT;
 			case CargoPackage.VESSEL_GROUP_CANAL_PARAMETERS__VESSEL_GROUP:
 				return vesselGroup != null && !vesselGroup.isEmpty();
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (northboundWaitingDays: ");
-		result.append(northboundWaitingDays);
-		result.append(", southboundWaitingDays: ");
-		result.append(southboundWaitingDays);
-		result.append(')');
-		return result.toString();
 	}
 
 } //VesselGroupCanalParametersImpl

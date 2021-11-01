@@ -10,6 +10,7 @@ import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 
+import com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord;
 import com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
@@ -42,10 +43,9 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getArrivalMarginHours <em>Arrival Margin Hours</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getFlexibleBookingAmountNorthbound <em>Flexible Booking Amount Northbound</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getFlexibleBookingAmountSouthbound <em>Flexible Booking Amount Southbound</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getNorthboundMaxIdleDays <em>Northbound Max Idle Days</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getSouthboundMaxIdleDays <em>Southbound Max Idle Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getBookingExemptVessels <em>Booking Exempt Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getVesselGroupCanalParameters <em>Vessel Group Canal Parameters</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CanalBookingsImpl#getPanamaSeasonalityRecords <em>Panama Seasonality Records</em>}</li>
  * </ul>
  *
  * @generated
@@ -162,46 +162,6 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	protected int flexibleBookingAmountSouthbound = FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getNorthboundMaxIdleDays() <em>Northbound Max Idle Days</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getNorthboundMaxIdleDays()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int NORTHBOUND_MAX_IDLE_DAYS_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getNorthboundMaxIdleDays() <em>Northbound Max Idle Days</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getNorthboundMaxIdleDays()
-	 * @generated
-	 * @ordered
-	 */
-	protected int northboundMaxIdleDays = NORTHBOUND_MAX_IDLE_DAYS_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getSouthboundMaxIdleDays() <em>Southbound Max Idle Days</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSouthboundMaxIdleDays()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int SOUTHBOUND_MAX_IDLE_DAYS_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getSouthboundMaxIdleDays() <em>Southbound Max Idle Days</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSouthboundMaxIdleDays()
-	 * @generated
-	 * @ordered
-	 */
-	protected int southboundMaxIdleDays = SOUTHBOUND_MAX_IDLE_DAYS_EDEFAULT;
-
-	/**
 	 * The cached value of the '{@link #getBookingExemptVessels() <em>Booking Exempt Vessels</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -220,6 +180,16 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	 * @ordered
 	 */
 	protected EList<VesselGroupCanalParameters> vesselGroupCanalParameters;
+
+	/**
+	 * The cached value of the '{@link #getPanamaSeasonalityRecords() <em>Panama Seasonality Records</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPanamaSeasonalityRecords()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<PanamaSeasonalityRecord> panamaSeasonalityRecords;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -374,52 +344,6 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	 * @generated
 	 */
 	@Override
-	public int getNorthboundMaxIdleDays() {
-		return northboundMaxIdleDays;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setNorthboundMaxIdleDays(int newNorthboundMaxIdleDays) {
-		int oldNorthboundMaxIdleDays = northboundMaxIdleDays;
-		northboundMaxIdleDays = newNorthboundMaxIdleDays;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS, oldNorthboundMaxIdleDays, northboundMaxIdleDays));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int getSouthboundMaxIdleDays() {
-		return southboundMaxIdleDays;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setSouthboundMaxIdleDays(int newSouthboundMaxIdleDays) {
-		int oldSouthboundMaxIdleDays = southboundMaxIdleDays;
-		southboundMaxIdleDays = newSouthboundMaxIdleDays;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CANAL_BOOKINGS__SOUTHBOUND_MAX_IDLE_DAYS, oldSouthboundMaxIdleDays, southboundMaxIdleDays));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EList<Vessel> getBookingExemptVessels() {
 		if (bookingExemptVessels == null) {
 			bookingExemptVessels = new EObjectResolvingEList<Vessel>(Vessel.class, this, CargoPackage.CANAL_BOOKINGS__BOOKING_EXEMPT_VESSELS);
@@ -446,12 +370,27 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 	 * @generated
 	 */
 	@Override
+	public EList<PanamaSeasonalityRecord> getPanamaSeasonalityRecords() {
+		if (panamaSeasonalityRecords == null) {
+			panamaSeasonalityRecords = new EObjectContainmentEList.Resolving<PanamaSeasonalityRecord>(PanamaSeasonalityRecord.class, this, CargoPackage.CANAL_BOOKINGS__PANAMA_SEASONALITY_RECORDS);
+		}
+		return panamaSeasonalityRecords;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case CargoPackage.CANAL_BOOKINGS__CANAL_BOOKING_SLOTS:
 				return ((InternalEList<?>)getCanalBookingSlots()).basicRemove(otherEnd, msgs);
 			case CargoPackage.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS:
 				return ((InternalEList<?>)getVesselGroupCanalParameters()).basicRemove(otherEnd, msgs);
+			case CargoPackage.CANAL_BOOKINGS__PANAMA_SEASONALITY_RECORDS:
+				return ((InternalEList<?>)getPanamaSeasonalityRecords()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -476,14 +415,12 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 				return getFlexibleBookingAmountNorthbound();
 			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND:
 				return getFlexibleBookingAmountSouthbound();
-			case CargoPackage.CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS:
-				return getNorthboundMaxIdleDays();
-			case CargoPackage.CANAL_BOOKINGS__SOUTHBOUND_MAX_IDLE_DAYS:
-				return getSouthboundMaxIdleDays();
 			case CargoPackage.CANAL_BOOKINGS__BOOKING_EXEMPT_VESSELS:
 				return getBookingExemptVessels();
 			case CargoPackage.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS:
 				return getVesselGroupCanalParameters();
+			case CargoPackage.CANAL_BOOKINGS__PANAMA_SEASONALITY_RECORDS:
+				return getPanamaSeasonalityRecords();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -516,12 +453,6 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND:
 				setFlexibleBookingAmountSouthbound((Integer)newValue);
 				return;
-			case CargoPackage.CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS:
-				setNorthboundMaxIdleDays((Integer)newValue);
-				return;
-			case CargoPackage.CANAL_BOOKINGS__SOUTHBOUND_MAX_IDLE_DAYS:
-				setSouthboundMaxIdleDays((Integer)newValue);
-				return;
 			case CargoPackage.CANAL_BOOKINGS__BOOKING_EXEMPT_VESSELS:
 				getBookingExemptVessels().clear();
 				getBookingExemptVessels().addAll((Collection<? extends Vessel>)newValue);
@@ -529,6 +460,10 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 			case CargoPackage.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS:
 				getVesselGroupCanalParameters().clear();
 				getVesselGroupCanalParameters().addAll((Collection<? extends VesselGroupCanalParameters>)newValue);
+				return;
+			case CargoPackage.CANAL_BOOKINGS__PANAMA_SEASONALITY_RECORDS:
+				getPanamaSeasonalityRecords().clear();
+				getPanamaSeasonalityRecords().addAll((Collection<? extends PanamaSeasonalityRecord>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -560,17 +495,14 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND:
 				setFlexibleBookingAmountSouthbound(FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND_EDEFAULT);
 				return;
-			case CargoPackage.CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS:
-				setNorthboundMaxIdleDays(NORTHBOUND_MAX_IDLE_DAYS_EDEFAULT);
-				return;
-			case CargoPackage.CANAL_BOOKINGS__SOUTHBOUND_MAX_IDLE_DAYS:
-				setSouthboundMaxIdleDays(SOUTHBOUND_MAX_IDLE_DAYS_EDEFAULT);
-				return;
 			case CargoPackage.CANAL_BOOKINGS__BOOKING_EXEMPT_VESSELS:
 				getBookingExemptVessels().clear();
 				return;
 			case CargoPackage.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS:
 				getVesselGroupCanalParameters().clear();
+				return;
+			case CargoPackage.CANAL_BOOKINGS__PANAMA_SEASONALITY_RECORDS:
+				getPanamaSeasonalityRecords().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -596,14 +528,12 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 				return flexibleBookingAmountNorthbound != FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND_EDEFAULT;
 			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND:
 				return flexibleBookingAmountSouthbound != FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND_EDEFAULT;
-			case CargoPackage.CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS:
-				return northboundMaxIdleDays != NORTHBOUND_MAX_IDLE_DAYS_EDEFAULT;
-			case CargoPackage.CANAL_BOOKINGS__SOUTHBOUND_MAX_IDLE_DAYS:
-				return southboundMaxIdleDays != SOUTHBOUND_MAX_IDLE_DAYS_EDEFAULT;
 			case CargoPackage.CANAL_BOOKINGS__BOOKING_EXEMPT_VESSELS:
 				return bookingExemptVessels != null && !bookingExemptVessels.isEmpty();
 			case CargoPackage.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS:
 				return vesselGroupCanalParameters != null && !vesselGroupCanalParameters.isEmpty();
+			case CargoPackage.CANAL_BOOKINGS__PANAMA_SEASONALITY_RECORDS:
+				return panamaSeasonalityRecords != null && !panamaSeasonalityRecords.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -628,10 +558,6 @@ public class CanalBookingsImpl extends MMXObjectImpl implements CanalBookings {
 		result.append(flexibleBookingAmountNorthbound);
 		result.append(", flexibleBookingAmountSouthbound: ");
 		result.append(flexibleBookingAmountSouthbound);
-		result.append(", northboundMaxIdleDays: ");
-		result.append(northboundMaxIdleDays);
-		result.append(", southboundMaxIdleDays: ");
-		result.append(southboundMaxIdleDays);
 		result.append(')');
 		return result.toString();
 	}

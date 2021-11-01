@@ -900,6 +900,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2017, 7, 1));
 
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
+		cargoModelBuilder.initCanalBookings();
 		final CanalBookings canalBookings = cargoModel.getCanalBookings();
 
 		canalBookings.setStrictBoundaryOffsetDays(0);
@@ -908,7 +909,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		canalBookings.setFlexibleBookingAmountSouthbound(0);
 
 		// Need at least 5 days of idle time to allow it to go through.
-		canalBookings.setSouthboundMaxIdleDays(5);
+		//canalBookings.setSouthboundMaxIdleDays(5);
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 		vesselAvailability.getVessel().setMaxSpeed(16.0);
@@ -924,6 +925,19 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 
 		// Direct is twice as far as panama
 		distanceModelBuilder.setPortToPortDistance(loadPort, dischargePort, 10 * 16 * 24 * 2, Integer.MAX_VALUE, 10 * 16 * 24, true);
+		
+		@NonNull
+		final Port panama_entrance = portFinder.findPortById(InternalDataConstants.PORT_COLON);
+		@NonNull
+		final Port panama_exit = portFinder.findPortById(InternalDataConstants.PORT_BALBOA);
+
+		// Load port to Panama canal entrance distance
+		distanceModelBuilder.setPortToPortDistance(loadPort, panama_entrance, RouteOption.DIRECT, 10 * 16 * 12,true);
+		// Distance from Panama canal exit to the discharge port 
+		// we set it to zero, so it's not double accounted when compute travel time from Panama Canal Entrance port to the discharge port
+		distanceModelBuilder.setPortToPortDistance(panama_exit, dischargePort, RouteOption.DIRECT, 0, true);
+		// Distance from Panama canal entrance to the discharge via Panama canal
+		distanceModelBuilder.setPortToPortDistance(panama_entrance, dischargePort, RouteOption.PANAMA, 10 * 16 * 12,true);
 
 		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L", loadDate.toLocalDate(), loadPort, null, entity, "5", 22.6) //
 				.withWindowStartTime(0) //
@@ -991,7 +1005,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		canalBookings.setFlexibleBookingAmountSouthbound(0);
 
 		// Need at least 5 days of idle time to allow it to go through.
-		canalBookings.setSouthboundMaxIdleDays(5);
+		//canalBookings.setSouthboundMaxIdleDays(5);
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 		vesselAvailability.getVessel().setMaxSpeed(16.0);
@@ -1119,6 +1133,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2017, 7, 1));
 
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
+		cargoModelBuilder.initCanalBookings();
 		final CanalBookings canalBookings = cargoModel.getCanalBookings();
 
 		canalBookings.setStrictBoundaryOffsetDays(0);
@@ -1141,6 +1156,18 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 
 		// Direct is twice as far as panama
 		distanceModelBuilder.setPortToPortDistance(loadPort, dischargePort, 10 * 16 * 24 * 2, Integer.MAX_VALUE, 10 * 16 * 24, true);
+		@NonNull
+		final Port panama_entrance = portFinder.findPortById(InternalDataConstants.PORT_COLON);
+		@NonNull
+		final Port panama_exit = portFinder.findPortById(InternalDataConstants.PORT_BALBOA);
+
+		// Load port to Panama canal entrance distance
+		distanceModelBuilder.setPortToPortDistance(loadPort, panama_entrance, RouteOption.DIRECT, 10 * 16 * 12,true);
+		// Distance from Panama canal exit to the discharge port 
+		// we set it to zero, so it's not double accounted when compute travel time from Panama Canal Entrance port to the discharge port
+		distanceModelBuilder.setPortToPortDistance(panama_exit, dischargePort, RouteOption.DIRECT, 0, true);
+		// Distance from Panama canal entrance to the discharge via Panama canal
+		distanceModelBuilder.setPortToPortDistance(panama_entrance, dischargePort, RouteOption.PANAMA, 10 * 16 * 12,true);
 
 		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L", loadDate.toLocalDate(), loadPort, null, entity, "5", 22.6) //
 				.withWindowStartTime(0) //
@@ -1255,11 +1282,12 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2017, 7, 1));
 
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
+		cargoModelBuilder.initCanalBookings();
 		final CanalBookings canalBookings = cargoModel.getCanalBookings();
 
 		canalBookings.setStrictBoundaryOffsetDays(0);
 		canalBookings.setRelaxedBoundaryOffsetDays(60);
-		canalBookings.setNorthboundMaxIdleDays(5);
+		//canalBookings.setNorthboundMaxIdleDays(5);
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 		vesselAvailability.getVessel().setMaxSpeed(16.0);
@@ -1279,6 +1307,19 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		// Direct is twice as far as panama
 		distanceModelBuilder.setPortToPortDistance(loadPort, dischargePort, 20 * 16 * 24, Integer.MAX_VALUE, 10 * 16 * 24, true);
 
+		@NonNull
+		final Port panama_entrance = portFinder.findPortById(InternalDataConstants.PORT_BALBOA);
+		@NonNull
+		final Port panama_exit = portFinder.findPortById(InternalDataConstants.PORT_COLON);
+
+		// Load port to Panama canal entrance distance
+		distanceModelBuilder.setPortToPortDistance(loadPort, panama_entrance, RouteOption.DIRECT, 10 * 16 * 12,true);
+		// Distance from Panama canal exit to the discharge port 
+		// we set it to zero, so it's not double accounted when compute travel time from Panama Canal Entrance port to the discharge port
+		distanceModelBuilder.setPortToPortDistance(panama_exit, dischargePort, RouteOption.DIRECT, 0, true);
+		// Distance from Panama canal entrance to the discharge via Panama canal
+		distanceModelBuilder.setPortToPortDistance(panama_entrance, dischargePort, RouteOption.PANAMA, 10 * 16 * 12,true);
+		
 		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L", loadDate.toLocalDate(), loadPort, null, entity, "5", 22.6) //
 				.withWindowStartTime(0) //
 				.withVisitDuration(0) //
@@ -1331,6 +1372,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2017, 7, 1));
 
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
+		cargoModelBuilder.initCanalBookings();
 		final CanalBookings canalBookings = cargoModel.getCanalBookings();
 
 		canalBookings.setStrictBoundaryOffsetDays(0);
@@ -1345,6 +1387,10 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		final Port loadPort = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 		@NonNull
 		final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_QUINTERO);
+		@NonNull
+		final Port panama_entrance = portFinder.findPortById(InternalDataConstants.PORT_COLON);
+		@NonNull
+		final Port panama_exit = portFinder.findPortById(InternalDataConstants.PORT_BALBOA);		
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JULY, 1, 0, 0, 0);
 		// journey could be made direct
@@ -1352,6 +1398,13 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 
 		// Direct is twice as far as panama
 		distanceModelBuilder.setPortToPortDistance(loadPort, dischargePort, 10 * 16 * 24 * 2, Integer.MAX_VALUE, 10 * 16 * 24, true);
+		// Load port to Panama canal entrance distance
+		distanceModelBuilder.setPortToPortDistance(loadPort, panama_entrance, RouteOption.DIRECT, 10 * 16 * 12,true);
+		// Distance from Panama canal exit to the discharge port 
+		// we set it to zero, so it's not double accounted when compute travel time from Panama Canal Entrance port to the discharge port
+		distanceModelBuilder.setPortToPortDistance(panama_exit, dischargePort, RouteOption.DIRECT, 0, true);
+		// Distance from Panama canal entrance to the discharge via Panama canal
+		distanceModelBuilder.setPortToPortDistance(panama_entrance, dischargePort, RouteOption.PANAMA, 10 * 16 * 12,true);
 
 		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L", loadDate.toLocalDate(), loadPort, null, entity, "5", 22.6) //
 				.withWindowStartTime(0) //
