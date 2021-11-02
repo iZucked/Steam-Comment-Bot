@@ -59,8 +59,6 @@ public class CanalBookingsItemProvider
 			addArrivalMarginHoursPropertyDescriptor(object);
 			addFlexibleBookingAmountNorthboundPropertyDescriptor(object);
 			addFlexibleBookingAmountSouthboundPropertyDescriptor(object);
-			addNorthboundMaxIdleDaysPropertyDescriptor(object);
-			addSouthboundMaxIdleDaysPropertyDescriptor(object);
 			addBookingExemptVesselsPropertyDescriptor(object);
 			addVesselGroupCanalParametersPropertyDescriptor(object);
 		}
@@ -178,50 +176,6 @@ public class CanalBookingsItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Northbound Max Idle Days feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addNorthboundMaxIdleDaysPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_CanalBookings_northboundMaxIdleDays_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CanalBookings_northboundMaxIdleDays_feature", "_UI_CanalBookings_type"),
-				 CargoPackage.Literals.CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Southbound Max Idle Days feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addSouthboundMaxIdleDaysPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_CanalBookings_southboundMaxIdleDays_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CanalBookings_southboundMaxIdleDays_feature", "_UI_CanalBookings_type"),
-				 CargoPackage.Literals.CANAL_BOOKINGS__SOUTHBOUND_MAX_IDLE_DAYS,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Booking Exempt Vessels feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -278,6 +232,7 @@ public class CanalBookingsItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(CargoPackage.Literals.CANAL_BOOKINGS__CANAL_BOOKING_SLOTS);
+			childrenFeatures.add(CargoPackage.Literals.CANAL_BOOKINGS__PANAMA_SEASONALITY_RECORDS);
 		}
 		return childrenFeatures;
 	}
@@ -336,11 +291,10 @@ public class CanalBookingsItemProvider
 			case CargoPackage.CANAL_BOOKINGS__ARRIVAL_MARGIN_HOURS:
 			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND:
 			case CargoPackage.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND:
-			case CargoPackage.CANAL_BOOKINGS__NORTHBOUND_MAX_IDLE_DAYS:
-			case CargoPackage.CANAL_BOOKINGS__SOUTHBOUND_MAX_IDLE_DAYS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case CargoPackage.CANAL_BOOKINGS__CANAL_BOOKING_SLOTS:
+			case CargoPackage.CANAL_BOOKINGS__PANAMA_SEASONALITY_RECORDS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -362,6 +316,11 @@ public class CanalBookingsItemProvider
 			(createChildParameter
 				(CargoPackage.Literals.CANAL_BOOKINGS__CANAL_BOOKING_SLOTS,
 				 CargoFactory.eINSTANCE.createCanalBookingSlot()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CargoPackage.Literals.CANAL_BOOKINGS__PANAMA_SEASONALITY_RECORDS,
+				 CargoFactory.eINSTANCE.createPanamaSeasonalityRecord()));
 	}
 
 }

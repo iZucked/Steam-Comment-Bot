@@ -83,7 +83,10 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 		if (value.equals(-1)) {
 			return;
 		}
-		final EObject newValue = valueList.get((Integer) value);
+		Object newValue = valueList.get((Integer) value);
+		if (IReferenceValueProvider.EUNSET_VALUE.equals(newValue)) {
+			newValue = SetCommand.UNSET_VALUE;
+		}
 		runSetCommand(object, newValue);
 	}
 

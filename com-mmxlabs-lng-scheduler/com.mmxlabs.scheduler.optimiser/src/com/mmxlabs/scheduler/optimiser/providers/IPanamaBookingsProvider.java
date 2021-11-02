@@ -33,34 +33,22 @@ public interface IPanamaBookingsProvider extends IDataComponentProvider {
 	int getMarginInHours();
 
 	/**
-	 * The default amount of days a vessel will idle in front of the canal on a NORTHBOUND voyage in order to try and get a spontaneous booking. Typically you will want to call
-	 * {@link #getNorthboundMaxIdleDays(IVessel)} instead.
-	 * 
-	 * @return
-	 */
-	int getNorthboundMaxIdleDays();
-
-	/**
-	 * The default amount of days a vessel will idle in front of the canal on a SOUTHBOUND voyage in order to try and get a spontaneous booking. Typically you will want to call
-	 * {@link #getSouthboundMaxIdleDays(IVessel)} instead.
-	 * 
-	 * @return
-	 */
-	int getSouthboundMaxIdleDays();
-
-	/**
 	 * The amount of days a vessel will idle in front of the canal on a NORTHBOUND voyage in order to try and get a spontaneous booking.
 	 * 
 	 * @return
 	 */
-	int getNorthboundMaxIdleDays(IVessel vessel);
+	int getNorthboundMaxIdleDays(IVessel vessel, int atPanamaTimeZone);
 
 	/**
 	 * The amount of days a vessel will idle in front of the canal on a SOUTHBOUND voyage in order to try and get a spontaneous booking.
 	 * 
 	 * @return
 	 */
-	int getSouthboundMaxIdleDays(IVessel vessel);
+	int getSouthboundMaxIdleDays(IVessel vessel, int atPanamaTimeZone);
+	
+	int getWorstIdleHours(IVessel vessel, int startDateInclusive, int endDateExclusive, boolean northbound);
+	
+	int getBestIdleHours(IVessel vessel, int startDateInclusive, int endDateExclusive, boolean northbound);
 
 	// Sorted
 	ImmutableMap<ECanalEntry, ImmutableList<IRouteOptionBooking>> getAssignedBookings();

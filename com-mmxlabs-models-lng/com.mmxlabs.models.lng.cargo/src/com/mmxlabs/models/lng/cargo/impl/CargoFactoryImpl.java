@@ -122,6 +122,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 			case CargoPackage.SELL_PAPER_DEAL: return createSellPaperDeal();
 			case CargoPackage.DEAL_SET: return createDealSet();
 			case CargoPackage.VESSEL_GROUP_CANAL_PARAMETERS: return createVesselGroupCanalParameters();
+			case CargoPackage.PANAMA_SEASONALITY_RECORD: return createPanamaSeasonalityRecord();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -494,6 +495,17 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	public VesselGroupCanalParameters createVesselGroupCanalParameters() {
 		VesselGroupCanalParametersImpl vesselGroupCanalParameters = new VesselGroupCanalParametersImpl();
 		return vesselGroupCanalParameters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public PanamaSeasonalityRecord createPanamaSeasonalityRecord() {
+		PanamaSeasonalityRecordImpl panamaSeasonalityRecord = new PanamaSeasonalityRecordImpl();
+		return panamaSeasonalityRecord;
 	}
 
 	/**

@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.widgets.Display;
 import org.junit.jupiter.api.Assertions;
@@ -55,7 +56,7 @@ public class OptioniserTestRunner {
 					final HeadlessOptioniserRunner.Options options = getOptioniserSettings(paramsFile);
 
 					HeadlessOptioniserRunner runner = new HeadlessOptioniserRunner();
-					runner.run(0, (SlotInsertionOptimiserLogger) null, options, modelRecord, scenarioDataProvider, null);
+					runner.run(0, (SlotInsertionOptimiserLogger) null, options, modelRecord, scenarioDataProvider, null, new NullProgressMonitor());
 					AnalyticsSolution as = new AnalyticsSolution(modelRecord, analyticsModel.getOptimisations().get(0), "Test");
 					String reportID = as.getID();
 					Display.getDefault().syncExec(() -> as.open());

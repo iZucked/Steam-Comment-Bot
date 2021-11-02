@@ -7,8 +7,6 @@ package com.mmxlabs.models.lng.transformer.ui.headless.optimiser;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
@@ -19,13 +17,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.json.simple.JSONArray;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
@@ -47,12 +43,9 @@ import com.mmxlabs.models.lng.transformer.ui.headless.LSOLoggingExporter;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger.LoggingParameters;
-import com.mmxlabs.rcp.common.ServiceHelper;
-import com.mmxlabs.rcp.common.json.EMFJacksonModule;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
-import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 import com.mmxlabs.scheduler.optimiser.actionplan.ActionSetLogger;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
@@ -253,6 +246,142 @@ public class HeadlessOptimiserRunner {
 		return false;
 	}
 
+	public boolean doRun(final IScenarioDataProvider sdp, UserSettings userSettings, boolean exportLogs, String outputScenarioFileName, String outputLoggingFolder,
+//			final HeadlessApplicationOptions options,
+//			IProgressMonitor monitor,
+//			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, 
+			HeadlessOptimiserJSON jsonOutput, int numThreads, @NonNull IProgressMonitor monitor
+
+	) {
+		// Default logging parameters
+		LoggingParameters loggingParameters = new LoggingParameters();
+		loggingParameters.loggingInterval = 5000;
+		loggingParameters.metricsToLog = new String[0];
+
+		final JSONArray jsonStagesStorage = new JSONArray(); // array for output data at present
+
+		if (jsonOutput != null) {
+			jsonOutput.getMetrics().setStages(jsonStagesStorage);
+		}
+
+		// Create logging module
+		final Map<String, LSOLogger> phaseToLoggerMap = new ConcurrentHashMap<>();
+
+		final AbstractRunnerHook runnerHook = !exportLogs ? null : new AbstractRunnerHook() {
+
+			@Override
+			protected void doEndStageJob(@NonNull final String stage, final int jobID, @Nullable final Injector injector) {
+
+				final String stageAndJobID = getStageAndJobID();
+				final LSOLogger logger = phaseToLoggerMap.remove(stageAndJobID);
+				if (logger != null) {
+					final LSOLoggingExporter lsoLoggingExporter = new LSOLoggingExporter(jsonStagesStorage, stageAndJobID, logger);
+					lsoLoggingExporter.exportData("best-fitness", "current-fitness");
+				}
+			}
+
+		};
+
+		// Create logging module
+		final IOptimiserInjectorService localOverrides = (exportLogs == false) ? null : new IOptimiserInjectorService() {
+			@Override
+			public Module requestModule(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
+				return null;
+			}
+
+			@Override
+			@Nullable
+			public List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
+
+				if (moduleType == ModuleType.Module_OptimisationParametersModule) {
+					return Collections.<@NonNull Module>singletonList(new OptimisationSettingsOverrideModule());
+				}
+				if (moduleType == ModuleType.Module_Optimisation) {
+					final LinkedList<@NonNull Module> modules = new LinkedList<>();
+					if (exportLogs) {
+						modules.add(createLoggingModule(loggingParameters, phaseToLoggerMap, null, runnerHook));
+					}
+
+					return modules;
+				}
+				return null;
+			}
+		};
+
+		final List<String> hints = new LinkedList<>();
+		hints.add(LNGTransformerHelper.HINT_OPTIMISE_LSO);
+
+		try {
+
+			final LNGOptimisationBuilder runnerBuilder = LNGOptimisationBuilder.begin(sdp) //
+					.withRunnerHook(runnerHook) //
+					.withOptimiserInjectorService(localOverrides) //
+					.withHints(hints.toArray(new String[hints.size()])) //
+					.withUserSettings(userSettings) //
+					.withThreadCount(numThreads) //
+					.withOptimiseHint() //
+					.withOptimisationPlanCustomiser(plan -> {
+						// Set a default name is there is none
+						if (plan.getResultName() == null || plan.getResultName().isBlank()) {
+							plan.setResultName("Optimisation");
+						}
+						if (jsonOutput != null) {
+							jsonOutput.setOptimisationPlan(plan);
+						}
+					}) //
+			;
+			if (localOverrides != null) {
+				runnerBuilder.withOptimiserInjectorService(localOverrides);
+			}
+			final LNGScenarioRunner runner = runnerBuilder //
+					.buildDefaultRunner() //
+					.getScenarioRunner();
+
+			final long startTime = System.currentTimeMillis();
+			runner.evaluateInitialState();
+			System.out.println("LNGResult(");
+//			System.out.println("\tscenario='" + options.scenarioFileName + "',");
+//			if (options.outputScenarioFileName != null) {
+//				System.out.println("\toutput='" + options.outputScenarioFileName + "',");
+//			}
+
+			System.err.println("Starting run...");
+
+			IMultiStateResult result = runner.runWithProgress(monitor);
+
+			final long runTime = System.currentTimeMillis() - startTime;
+
+			if (result == null) {
+				throw new RuntimeException("Error optimising scenario - null result");
+			}
+
+			System.out.println("\truntime=" + runTime + ",");
+			if (jsonOutput != null) {
+				jsonOutput.getMetrics().setRuntime(runTime);
+			}
+
+			System.err.println("Optimised!");
+
+			if (outputScenarioFileName != null) {
+				// TODO: make this work when there is no parent file specified
+				File parentDirectory = new File(outputScenarioFileName).getParentFile();
+
+				if (parentDirectory != null) {
+					parentDirectory.mkdirs();
+				}
+
+				saveScenario(outputScenarioFileName, sdp);
+			}
+			if (exportLogs) {
+				exportData(phaseToLoggerMap, null, outputLoggingFolder, false);
+			}
+
+			return true;
+		} catch (final Exception e) {
+			throw new RuntimeException("Error during optimisation", e);
+		}
+	}
+
 	private void exportData(final Map<String, LSOLogger> loggerMap, final ActionSetLogger actionSetLogger, final String path, final boolean verbose) {
 		// // first export logging data
 		if (actionSetLogger != null) {
@@ -284,27 +413,4 @@ public class HeadlessOptimiserRunner {
 
 		ScenarioStorageUtil.storeCopyToFile(sdp, new File(outputFile));
 	}
-
-	/**
-	 * Debug method to allow an optimisation plan to be written as JSON for visual
-	 * inspection.
-	 * 
-	 * @param plan
-	 * @param filename
-	 */
-	private void writeOptimisationPlan(OptimisationPlan plan, String filename) {
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.registerModule(new JavaTimeModule());
-			mapper.registerModule(new Jdk8Module());
-			mapper.registerModule(new EMFJacksonModule());
-
-			mapper.writerWithDefaultPrettyPrinter().writeValue(new File(filename), plan);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
 }

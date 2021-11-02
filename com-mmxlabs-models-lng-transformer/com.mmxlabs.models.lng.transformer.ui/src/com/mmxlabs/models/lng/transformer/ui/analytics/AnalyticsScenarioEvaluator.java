@@ -565,8 +565,6 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 		return createSandboxFunction(sdp, scenarioInstance, userSettings, model, sandboxResult, (mapper, baseScheduleSpecification) -> {
 
-			final ExtraDataProvider extraDataProvider = mapper.getExtraDataProvider();
-
 			final SandboxManualRunner insertionRunner = new SandboxManualRunner(scenarioInstance, sdp, userSettings, mapper, model);
 
 			return new SandboxJob() {

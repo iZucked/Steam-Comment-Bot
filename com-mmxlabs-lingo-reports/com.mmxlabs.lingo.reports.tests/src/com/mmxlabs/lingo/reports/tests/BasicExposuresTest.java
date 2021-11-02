@@ -802,5 +802,10 @@ public class BasicExposuresTest {
 		public @NonNull ZonedDateTime getEarliestTime() {
 			return ZonedDateTime.of(dateZero, ZoneId.of("UTC"));
 		}
+
+		@Override
+		public @NonNull ZonedDateTime getLatestTime() {
+			return ZonedDateTime.now();
+		}
 	}
 }

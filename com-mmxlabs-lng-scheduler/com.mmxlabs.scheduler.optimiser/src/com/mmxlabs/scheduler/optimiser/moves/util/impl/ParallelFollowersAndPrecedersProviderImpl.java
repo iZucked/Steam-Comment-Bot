@@ -46,7 +46,9 @@ public class ParallelFollowersAndPrecedersProviderImpl implements IFollowersAndP
 
 	@Inject
 	private IStartEndRequirementProvider startEndRequirementProvider;
-
+public ParallelFollowersAndPrecedersProviderImpl() {
+	System.out.println("New impl");
+}
 	/**
 	 * A structure caching the output of the {@link LegalSequencingChecker}. If an element x is in the set mapped to by key y, x can legally follow y under some circumstance
 	 */

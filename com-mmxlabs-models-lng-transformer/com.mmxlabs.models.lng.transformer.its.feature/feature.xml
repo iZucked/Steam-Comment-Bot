@@ -8,21 +8,8 @@
 <feature
       id="com.mmxlabs.models.lng.transformer.its.feature"
       label="Models: LNG Types - Transformer ITS Feature"
-      version="4.13.2.qualifier"
+      version="4.13.3.qualifier"
       provider-name="Minimax Labs Ltd.">
-
-   <description>
-      LNG transformer ITS Feature.
-   </description>
-
-   <copyright>
-      Copyright (C) Minimax Labs Ltd., 2010 - 2012
-All rights reserved.
-   </copyright>
-
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
-   </license>
 
    <plugin
          id="com.mmxlabs.models.lng.transformer.its"

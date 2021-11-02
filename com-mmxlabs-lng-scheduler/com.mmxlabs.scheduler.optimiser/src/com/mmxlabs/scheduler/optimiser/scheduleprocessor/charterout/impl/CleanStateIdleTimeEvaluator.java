@@ -46,11 +46,13 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IdleNBOVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.ReliqVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.TravelVoyagePlanChoice;
+import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
-import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
@@ -92,6 +94,9 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 
 	@Inject
 	private IRouteCostProvider routeCostProvider;
+	
+	@Inject
+	private IPanamaBookingsProvider panamaBookingsProvider;
 
 	private static final double canalChoiceThreshold = 0.1; // percentage improvement required to choose a canal route
 
@@ -248,16 +253,20 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 
 			final IPort charterOutPort = nextLoadSlot.getPort();
 			{
-				final Triple<Integer, ERouteOption, Integer> toCharterPort = calculateShortestTimeToPort(discharge, charterOutPort, vesselAvailability.getVessel());
+				final GeneratedCharterOutLeg toCharterPort = calculateShortestTimeToPort(discharge, charterOutPort, //
+						vesselAvailability.getVessel(), ballastStartTime, 
+						Math.min(availableTime, minDays), false);
 				if (toCharterPort == null) {
 					return null;
 				}
-				final Triple<Integer, ERouteOption, Integer> fromCharterPort = calculateShortestTimeToPort(charterOutPort, nextLoad, vesselAvailability.getVessel());
+				final GeneratedCharterOutLeg fromCharterPort = calculateShortestTimeToPort(charterOutPort, nextLoad, //
+						vesselAvailability.getVessel(), ballastStartTime + toCharterPort.getShortestTime(),
+						Math.min(availableTime - toCharterPort.getShortestTime(), minDays), true);
 				if (fromCharterPort == null) {
 					return null;
 				}
-				final int availableCharteringTime = availableTime - toCharterPort.getThird() - fromCharterPort.getThird();
-				final int charterStartTime = ballastStartTime + toCharterPort.getThird();
+				final int availableCharteringTime = availableTime - toCharterPort.getShortestTime() - fromCharterPort.getShortestTime();
+				final int charterStartTime = ballastStartTime + toCharterPort.getShortestTime();
 				final long charteringRevenue = 0;
 				if (availableCharteringTime >= minDays * 24) {
 					gcoo.setToCharterPort(toCharterPort);
@@ -276,12 +285,18 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 	}
 
 	@Nullable
-	private Triple<Integer, ERouteOption, Integer> calculateShortestTimeToPort(final IPort slotPort, final IPort charterPort, final IVessel vessel) {
+	private GeneratedCharterOutLeg calculateShortestTimeToPort(final IPort slotPort, final IPort charterPort, final IVessel vessel,//
+			final int startOfTheJourney, final int availableTime, boolean backwards) {
 		int distance = Integer.MAX_VALUE;
 		int shortestTime = Integer.MAX_VALUE;
 		ERouteOption route = ERouteOption.DIRECT;
+		int panamaIdleHours = Integer.MIN_VALUE;
 
 		final List<DistanceMatrixEntry> distances = distanceProvider.getDistanceValues(slotPort, charterPort, vessel);
+		ECanalEntry panamaCanalEntry = distanceProvider.getRouteOptionCanalEntrance(slotPort, ERouteOption.PANAMA);
+		final Pair<Integer, Integer> toAndFromPanama = computeTimeToAndFromPanamaBetweenPorts(slotPort, charterPort, vessel, panamaCanalEntry);
+		final int travelTimeToPanama = toAndFromPanama.getFirst();
+		final int travelTimeFromPanama = toAndFromPanama.getSecond();
 		int directTime = Integer.MAX_VALUE;
 		DistanceMatrixEntry directEntry = null;
 		for (final DistanceMatrixEntry d : distances) {
@@ -290,8 +305,30 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 			if (thisDistance == Integer.MAX_VALUE) {
 				continue;
 			}
-			final int travelTime = Calculator.getTimeFromSpeedDistance(vessel.getMaxSpeed(), d.getDistance()) + routeCostProvider.getRouteTransitTime(routeOption, vessel);
-			if (routeOption == ERouteOption.DIRECT) {
+			int travelTime = Calculator.getTimeFromSpeedDistance(vessel.getMaxSpeed(), d.getDistance()) + routeCostProvider.getRouteTransitTime(routeOption, vessel);
+			
+			if (routeOption == ERouteOption.PANAMA) {
+				if (travelTimeToPanama == Integer.MAX_VALUE || travelTimeFromPanama == Integer.MAX_VALUE) {
+					continue;
+				}
+				// If Panama, make sure we take into account the idle days
+				// It might include the high season when chartering out, whereas we might never actually reach it
+				travelTime = travelTimeToPanama;
+				int latestPanamaWindowEnd = startOfTheJourney + travelTimeToPanama;
+				if (backwards) {
+					latestPanamaWindowEnd = startOfTheJourney + availableTime - travelTimeFromPanama;
+				}
+				panamaIdleHours = getWorstMaxIdleHours(vessel, panamaCanalEntry == ECanalEntry.SouthSide,
+						startOfTheJourney + travelTimeToPanama, latestPanamaWindowEnd + 1);
+				if (panamaIdleHours == Integer.MIN_VALUE || panamaIdleHours < 0) {
+					throw new IllegalStateException(
+							String.format("Journey from %s to %s via Panama Canal has an Panama waiting time in %s direction",
+									slotPort.getName(), charterPort.getName(),
+									panamaCanalEntry == ECanalEntry.SouthSide? "northbound" : "southbound"));
+				}
+				travelTime += panamaIdleHours;
+				travelTime += travelTimeFromPanama;
+			} else if (routeOption == ERouteOption.DIRECT) {
 				directTime = travelTime;
 				directEntry = d;
 			}
@@ -315,7 +352,23 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 				shortestTime = directTime;
 			}
 		}
-		return new Triple<>(distance, route, shortestTime);
+		return new GeneratedCharterOutLeg(distance, route, shortestTime, panamaIdleHours);
+	}
+	
+	private Pair<Integer, Integer> computeTimeToAndFromPanamaBetweenPorts(final IPort fromPort, final IPort toPort, final IVessel vessel, final ECanalEntry panamaCanalEntry) {
+		int travelTimeToPanama = Integer.MAX_VALUE;
+		int travelTimeFromPanama = Integer.MAX_VALUE;
+		IPort panamaCanalEntryPort = distanceProvider.getRouteOptionEntryPort(ERouteOption.PANAMA, panamaCanalEntry);
+		if (panamaCanalEntryPort != null) {
+			int vesselMaxSpeed = vessel.getMaxSpeed();
+			travelTimeToPanama = distanceProvider.getTravelTime(ERouteOption.DIRECT, vessel, fromPort, panamaCanalEntryPort, Math.min(panamaBookingsProvider.getSpeedToCanal(), vesselMaxSpeed));
+			travelTimeFromPanama = distanceProvider.getTravelTimeViaCanal(ERouteOption.PANAMA, vessel, panamaCanalEntryPort, toPort, vesselMaxSpeed);
+		}
+		return new Pair(travelTimeToPanama, travelTimeFromPanama);
+	}
+	
+	private int getWorstMaxIdleHours(final IVessel vessel, final boolean northbound, int startDateInclusive, int endDateExclusive) {
+		return panamaBookingsProvider.getWorstIdleHours(vessel, startDateInclusive, endDateExclusive, northbound);
 	}
 
 	/**
@@ -359,7 +412,7 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		HeelOptionSupplier heelOptionSupplier = new HeelOptionSupplier(0, 0, originalBallast.getOptions().getCargoCVValue(), new ConstantHeelPriceCalculator(0));
 
 		// now update port slot
-		final String id = String.format("gco-%s-%s", originalBallast.getOptions().getFromPortSlot().getPort(), originalBallast.getOptions().getToPortSlot().getPort());
+		final String id = String.format("gco-%s-%s", existingSlotUsedToGenerateCharterOut.getPort(), originalBallast.getOptions().getToPortSlot().getPort());
 		final GeneratedCharterOutVesselEventPortSlot charterOutPortSlot = new GeneratedCharterOutVesselEventPortSlot(
 
 				/* ID */ id, //
@@ -378,10 +431,10 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 
 		CostType dischargeToCharterPortCostType = CostType.Ballast;
 		// Is this a round trip?
-		if (ladenRoute == charterOutOption.getToCharterPort().getSecond()) {
+		if (ladenRoute == charterOutOption.getToCharterPort().getRoute()) {
 			dischargeToCharterPortCostType = CostType.RoundTripBallast;
 		}
-		final long dischargeToCharterPortRouteCosts = routeCostProvider.getRouteCost(charterOutOption.getToCharterPort().getSecond(), //
+		final long dischargeToCharterPortRouteCosts = routeCostProvider.getRouteCost(charterOutOption.getToCharterPort().getRoute(), //
 				originalBallast.getOptions().getFromPortSlot().getPort(), //
 				charterOutPortSlot.getPort(), //
 				vessel, //
@@ -389,8 +442,8 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 				CostType.Ballast);
 
 		final VoyageOptions dischargeToCharterPortVoyageOptions = new VoyageOptions(originalBallast.getOptions().getFromPortSlot(), charterOutPortSlot);
-		dischargeToCharterPortVoyageOptions.setRoute(charterOutOption.getToCharterPort().getSecond(), charterOutOption.getToCharterPort().getFirst(), dischargeToCharterPortRouteCosts);
-		dischargeToCharterPortVoyageOptions.setAvailableTime(charterOutOption.getToCharterPort().getThird());
+		dischargeToCharterPortVoyageOptions.setRoute(charterOutOption.getToCharterPort().getRoute(), charterOutOption.getToCharterPort().getDistance(), dischargeToCharterPortRouteCosts);
+		dischargeToCharterPortVoyageOptions.setAvailableTime(charterOutOption.getToCharterPort().getShortestTime());
 		dischargeToCharterPortVoyageOptions.setVesselState(VesselState.Ballast);
 		dischargeToCharterPortVoyageOptions.setVessel(originalBallast.getOptions().getVessel());
 		dischargeToCharterPortVoyageOptions.setShouldBeCold(originalBallast.getOptions().shouldBeCold());
@@ -422,7 +475,7 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 		charterOutOption.setPortOptions(generatedCharterPortOptions);
 		// (3) ballast to return port
 		final int startOfPostCharterVoyage = charterOutOption.getCharterStartTime() + charterOutOption.getCharterDuration();
-		final long charterToReturnPortRouteCosts = routeCostProvider.getRouteCost(charterOutOption.getFromCharterPort().getSecond(), //
+		final long charterToReturnPortRouteCosts = routeCostProvider.getRouteCost(charterOutOption.getFromCharterPort().getRoute(), //
 				charterOutPortSlot.getPort(), //
 				originalBallast.getOptions().getToPortSlot().getPort(), //
 				vessel, //
@@ -430,8 +483,8 @@ public class CleanStateIdleTimeEvaluator implements IGeneratedCharterOutEvaluato
 				CostType.Ballast);
 
 		final VoyageOptions charterToReturnPortVoyageOptions = new VoyageOptions(charterOutPortSlot, originalBallast.getOptions().getToPortSlot());
-		charterToReturnPortVoyageOptions.setRoute(charterOutOption.getFromCharterPort().getSecond(), charterOutOption.getFromCharterPort().getFirst(), charterToReturnPortRouteCosts);
-		charterToReturnPortVoyageOptions.setAvailableTime(charterOutOption.getFromCharterPort().getThird());
+		charterToReturnPortVoyageOptions.setRoute(charterOutOption.getFromCharterPort().getRoute(), charterOutOption.getFromCharterPort().getDistance(), charterToReturnPortRouteCosts);
+		charterToReturnPortVoyageOptions.setAvailableTime(charterOutOption.getFromCharterPort().getShortestTime());
 		charterToReturnPortVoyageOptions.setVesselState(VesselState.Ballast);
 		charterToReturnPortVoyageOptions.setVessel(originalBallast.getOptions().getVessel());
 		charterToReturnPortVoyageOptions.setShouldBeCold(originalBallast.getOptions().shouldBeCold());
