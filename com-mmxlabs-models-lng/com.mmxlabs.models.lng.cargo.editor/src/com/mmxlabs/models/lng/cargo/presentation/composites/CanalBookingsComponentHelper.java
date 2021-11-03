@@ -206,7 +206,7 @@ public class CanalBookingsComponentHelper extends BaseComponentHelper {
 
 		addTextColumn(b, "Booking Code", MMXCorePackage.Literals.NAMED_OBJECT__NAME);
 
-		addColumn(b, "Vessel Group", CargoPackage.eINSTANCE.getVesselGroupCanalParameters(), CargoPackage.Literals.VESSEL_GROUP_CANAL_PARAMETERS__VESSEL_GROUP);
+		addColumn(b, "Vessels", CargoPackage.eINSTANCE.getVesselGroupCanalParameters(), CargoPackage.Literals.VESSEL_GROUP_CANAL_PARAMETERS__VESSEL_GROUP);
 
 		b.withAction("Add", (ch, sel) -> {
 			CanalBookings canalBookings = ScenarioModelUtil.getCargoModel((LNGScenarioModel) ch.getModelReference().getInstance()).getCanalBookings();

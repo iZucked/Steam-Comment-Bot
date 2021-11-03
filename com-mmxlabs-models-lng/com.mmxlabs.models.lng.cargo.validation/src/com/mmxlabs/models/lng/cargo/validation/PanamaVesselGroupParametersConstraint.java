@@ -161,54 +161,65 @@ public class PanamaVesselGroupParametersConstraint extends AbstractModelMultiCon
 			final List<VesselGroupCanalParameters> vesselGroupParameters) {
 		final List<PanamaSeasonalityRecord> panamaSeasonalityRecords = canalBookings.getPanamaSeasonalityRecords();
 		for (final VesselGroupCanalParameters vgcp : vesselGroupParameters) {
-			final List<PanamaSeasonalityRecord> fPSR = panamaSeasonalityRecords.stream()//
+			final String name = vgcp.getName();
+			final List<PanamaSeasonalityRecord> matchingRecords = panamaSeasonalityRecords.stream()//
 					.filter(psr -> vgcp.equals(psr.getVesselGroupCanalParameter())).collect(Collectors.toList());
-			if (fPSR.isEmpty()) {
+			if (matchingRecords.isEmpty()) {
 				addValidationError(ctx, statuses, canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__PANAMA_SEASONALITY_RECORDS,//
 						String.format("Vessel group %s has no seasonality record.", vgcp.getName()));
 			}
-		}
-		for (final PanamaSeasonalityRecord psr : panamaSeasonalityRecords) {
-			if (psr.getVesselGroupCanalParameter() == null) {
-				addValidationError(ctx, statuses, canalBookings, CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__VESSEL_GROUP_CANAL_PARAMETER,//
-						String.format("Seasonality record must have an assigned vessel group."));
+			final List<PanamaSeasonalityRecord> matchingAnyRecords = matchingRecords.stream()//
+					.filter(foo -> foo.getStartMonth() == 0).collect(Collectors.toList());
+			final List<PanamaSeasonalityRecord> matchingMonthRecords = matchingRecords.stream()//
+					.filter(foo -> foo.getStartMonth() > 0).collect(Collectors.toList());
+			
+			if (matchingAnyRecords.size() > 1) {
+				addValidationError(ctx, statuses, matchingAnyRecords.get(0), CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__VESSEL_GROUP_CANAL_PARAMETER,//
+						String.format("Only one \'ANY\' month can be set for each vessel group. Booking code: %s", name));
 			}
+			if (!matchingAnyRecords.isEmpty() && !matchingMonthRecords.isEmpty()) {
+				addValidationError(ctx, statuses, matchingAnyRecords.get(0), CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__VESSEL_GROUP_CANAL_PARAMETER,//
+						String.format("\'ANY\' month setting can not be used with a specific month boundary setting. Booking code: %s", name));
+			}
+			if (matchingMonthRecords.size() == 1) {
+				addValidationError(ctx, statuses, matchingMonthRecords.get(0), CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__VESSEL_GROUP_CANAL_PARAMETER,//
+						String.format("At least two specified boundary settings must be provided. Booking code: %s", name));
+			}
+			for (final PanamaSeasonalityRecord psr : matchingRecords) {
+				final List<PanamaSeasonalityRecord> matchingDuplicates = matchingRecords.stream()//
+						.filter(psr2 -> (psr != psr2
+								&& psr.getStartDay() == psr2.getStartDay() //
+								&& psr.getStartMonth() == psr2.getStartMonth() //
+								&& psr.getStartMonth() != 0 //
+								&& psr2.getStartMonth() != 0 //
+								&& psr.getStartYear() == psr2.getStartYear()))//
+						.collect(Collectors.toList());
+				if (!matchingDuplicates.isEmpty()) {
+					addValidationError(ctx, statuses, psr, CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__VESSEL_GROUP_CANAL_PARAMETER,//
+							String.format("Duplicate seasonality record. Booking code: %s", name));
+				}
+			}
+		}
+		
+		for (final PanamaSeasonalityRecord psr : panamaSeasonalityRecords) {
+			final String name;
+			if (psr.getVesselGroupCanalParameter() == null) {
+				addValidationError(ctx, statuses, psr, CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__VESSEL_GROUP_CANAL_PARAMETER,//
+						String.format("Seasonality record must have an assigned vessel group."));
+				name = "<Unknown>";
+			} else {
+				name = psr.getVesselGroupCanalParameter().getName();
+			}
+			
 			if (psr.getStartMonth() > 0) {
 				final Month m = Month.of(psr.getStartMonth());
 				if (psr.getStartDay() > m.maxLength()) {
 					addValidationError(ctx, statuses, canalBookings, CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__START_DAY,//
-							String.format("Seasonality record must have a feasible start day."));
+							String.format("Seasonality record must have a feasible start day. Booking code: %s", name));
 				} else if (psr.getStartDay() < 1) {
 					addValidationError(ctx, statuses, canalBookings, CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__START_MONTH,//
-							String.format("Seasonality record must have a positive value for the start day."));
+							String.format("Seasonality record must have a positive value for the start day. Booking code: %s", name));
 				}
-			}
-			int setMonthGroupCounter = 0;
-			for (final PanamaSeasonalityRecord psr2 : panamaSeasonalityRecords) {
-				if (psr != psr2 && psr.getVesselGroupCanalParameter() == psr2.getVesselGroupCanalParameter()) {
-					if (psr.getStartMonth() == 0 && psr2.getStartMonth() == 0) {
-						addValidationError(ctx, statuses, canalBookings, CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__VESSEL_GROUP_CANAL_PARAMETER,//
-								String.format("Only one \'ANY\' month can be set for each vessel group."));
-					}
-					if (psr.getStartDay() == psr2.getStartDay() && psr.getStartMonth() == psr2.getStartMonth() && psr.getStartYear() == psr2.getStartYear()) {
-						addValidationError(ctx, statuses, canalBookings, CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__VESSEL_GROUP_CANAL_PARAMETER,//
-								String.format("Duplicate seasonality record."));
-					}
-					if ((psr.getStartMonth() == 0 && psr2.getStartMonth() > 0) || (psr.getStartMonth() > 0 && psr2.getStartMonth() == 0)) {
-						addValidationError(ctx, statuses, canalBookings, CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__VESSEL_GROUP_CANAL_PARAMETER,//
-								String.format("\'ANY\' month setting can not be used with a specific month boundary setting."));
-					}
-					if (psr2.getStartMonth() > 0) {
-						setMonthGroupCounter++;
-					}
-				}
-			}
-			if (psr.getStartMonth() > 0) {
-				setMonthGroupCounter++;
-			}
-			if (setMonthGroupCounter == 1) {
-				addValidationError(ctx, statuses, canalBookings, CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__VESSEL_GROUP_CANAL_PARAMETER,//
-						String.format("At least two specified boundary settings must be provided."));
 			}
 		}
 	}
