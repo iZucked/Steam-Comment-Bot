@@ -285,12 +285,6 @@ public class SandboxManualRunner {
 		}
 	}
 
-	public void dispose() {
-		if (helper != null) {
-			// scenarioRunner.getExecutorService().shutdownNow();
-		}
-	}
-
 	private static void filterTasks(final List<BaseCase> tasks) {
 		removeAllSpotBuySpotSellCargoes(tasks);
 		final Set<BaseCase> duplicates = new HashSet<>();
