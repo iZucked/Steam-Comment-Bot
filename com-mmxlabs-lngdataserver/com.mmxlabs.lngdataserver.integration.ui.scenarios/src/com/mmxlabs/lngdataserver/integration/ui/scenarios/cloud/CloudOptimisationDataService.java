@@ -188,8 +188,6 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 							updater.start();
 						}).start();
 					});
-//					updater = new CloudOptimisationDataUpdater(dataFolder, client, serviceModel, CloudOptimisationDataService.this::update);
-//					updater.start();
 				}
 				this.close();
 				return workspace;

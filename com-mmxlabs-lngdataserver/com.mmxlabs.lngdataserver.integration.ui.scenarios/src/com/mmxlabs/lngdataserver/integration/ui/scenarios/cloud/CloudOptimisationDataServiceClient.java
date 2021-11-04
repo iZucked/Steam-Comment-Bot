@@ -10,9 +10,12 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mmxlabs.common.Pair;
@@ -35,11 +38,19 @@ import okio.Okio;
 
 public class CloudOptimisationDataServiceClient {
 
+//	public CloudOptimisationDataServiceClient() {
+//		preferences = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.optimisation.service.url");
+//		optimisationServiceURL = preferences.get("URL", OPTI_CLOUD_BASE_URL);
+//	}
+
 	private static final String LIST_SCENARIOS_URL = "/scenarios";
 	private static final String LIST_RESULTS_URL = "/results";
 	private static final String SCENARIO_RESULT_URL = "/result";
+	private static final String JOB_STATUS_URL = "/status";
 	private static final String SCENARIO_CLOUD_UPLOAD_URL = "/scenario"; //for localhost - "/scenarios/v1/cloud/opti/upload"
 	private static final String OPTI_CLOUD_BASE_URL = "https://gw.mmxlabs.com"; // "https://wzgy9ex061.execute-api.eu-west-2.amazonaws.com/dev/"
+//	private final IEclipsePreferences preferences;
+//	private final String optimisationServiceURL;
 
 	private final OkHttpClient httpClient = com.mmxlabs.hub.common.http.HttpClientUtil.basicBuilder() //
 			.build();
@@ -119,6 +130,46 @@ public class CloudOptimisationDataServiceClient {
 				return true;
 			}
 		}
+	}
+	
+	public String getJobStatus(final @NonNull String jobid) throws IOException {
+		final String requestURL = String.format("%s/%s", JOB_STATUS_URL, jobid);
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(OPTI_CLOUD_BASE_URL, requestURL);
+		if (requestBuilder == null) {
+			return null;
+		}
+
+		final Request request = requestBuilder //
+				.build();
+
+		try (Response response = httpClient.newCall(request).execute()) {
+			if (!response.isSuccessful()) {
+				if (response.code() == 404) {
+					return "Scenario and results are not in s3, please submit again";
+				}
+				throw new IOException("Unexpected code: " + response);
+			}			
+			return response.body().string();
+		}
+	}
+	
+	public boolean isJobComplete(final @NonNull String jobid) throws IOException {
+		final String response = getJobStatus(jobid);
+		final ObjectMapper mapper = new ObjectMapper();
+		try {
+			final JsonNode actualObj = mapper.readTree(response);
+			final String state = actualObj.get("state").textValue();
+			if (state != null) {
+				if ("complete".equalsIgnoreCase(state)) {
+					return true;
+				}
+			} else {
+				throw new IOException("Unexpected error!");
+			}
+		} catch (final IOException e) {
+			throw new IOException("Unexpected error: " + e.getMessage());
+		}
+		return false;
 	}
 
 	/**

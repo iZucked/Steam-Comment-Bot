@@ -41,7 +41,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
-import com.mmxlabs.hub.services.permissions.UserPermissionsService;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataResultRecord;
@@ -210,13 +209,6 @@ public class ScenarioServicePushToCloudAction {
 
 	private static void doUploadScenario(final ScenarioInstance scenarioInstance, final String notes, final EObject optiPlanOrUserSettings, //
 			final boolean optimisation, final List<Slot<?>> targetSlots, final IProgressMonitor parentProgressMonitor) {
-
-		// Check user permission
-		if (UserPermissionsService.INSTANCE.hubSupportsPermissions()) {
-			if (!UserPermissionsService.INSTANCE.isPermitted("basecase", "publish")) {
-				throw new PublishBasecaseException(MSG_ERROR_PUSHING, Type.FAILED_NOT_PERMITTED, new RuntimeException());
-			}
-		}
 		
 		parentProgressMonitor.beginTask("Send scenario", 1000);
 		final SubMonitor progressMonitor = SubMonitor.convert(parentProgressMonitor, 1000);
