@@ -17,6 +17,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 
 import com.mmxlabs.models.common.commandservice.BaseModelCommandProvider;
 import com.mmxlabs.models.common.commandservice.CancelledCommand;
+import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -32,7 +33,8 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.rcp.common.RunnerHelper;
 
 /**
- * Command provider which detects the deletion of cargoes and kills the corresponding entries in any schedule.
+ * Command provider which detects the deletion of cargoes and kills the
+ * corresponding entries in any schedule.
  * 
  * @author hinton
  * 
@@ -62,7 +64,10 @@ public class ScheduleModelInvalidateCommandProvider extends BaseModelCommandProv
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mmxlabs.models.ui.commandservice.BaseModelCommandProvider#objectDeleted (org.eclipse.emf.edit.domain.EditingDomain, com.mmxlabs.models.mmxcore.MMXRootObject, java.lang.Object)
+	 * @see
+	 * com.mmxlabs.models.ui.commandservice.BaseModelCommandProvider#objectDeleted
+	 * (org.eclipse.emf.edit.domain.EditingDomain,
+	 * com.mmxlabs.models.mmxcore.MMXRootObject, java.lang.Object)
 	 */
 	@Override
 	protected Command objectDeleted(final EditingDomain domain, final MMXRootObject rootObject, final Object deleted, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
@@ -74,9 +79,7 @@ public class ScheduleModelInvalidateCommandProvider extends BaseModelCommandProv
 			if (getContext() == Boolean.FALSE) {
 				if (System.getProperty("lingo.suppress.dialogs") == null) {
 					{
-						if (!analyticsModel.getOptimisations().isEmpty()
-								|| !analyticsModel.getBreakevenModels().isEmpty() 
-								|| analyticsModel.getViabilityModel() != null 
+						if (!analyticsModel.getOptimisations().isEmpty() || !analyticsModel.getBreakevenModels().isEmpty() || analyticsModel.getViabilityModel() != null
 								|| analyticsModel.getMtmModel() != null) {
 
 							boolean result = promptClearModels();
@@ -94,7 +97,7 @@ public class ScheduleModelInvalidateCommandProvider extends BaseModelCommandProv
 		return null;
 	}
 
-	//TODO: keep updates in-line with MtMScenarioEditorActionDelegate
+	// TODO: keep updates in-line with MtMScenarioEditorActionDelegate
 	public static Command createClearModelsCommand(final EditingDomain domain, final LNGScenarioModel scenarioModel, final AnalyticsModel analyticsModel) {
 		final List<EObject> delete = new LinkedList<>();
 
@@ -114,6 +117,15 @@ public class ScheduleModelInvalidateCommandProvider extends BaseModelCommandProv
 		if (!analyticsModel.getBreakevenModels().isEmpty()) {
 			delete.addAll(analyticsModel.getBreakevenModels());
 		}
+		// Clear sandbox results, but not the sandbox itself
+		if (!analyticsModel.getOptionModels().isEmpty()) {
+			analyticsModel.getOptionModels().forEach(m -> {
+				AbstractSolutionSet r = m.getResults();
+				if (r != null) {
+					delete.add(r);
+				}
+			});
+		}
 
 		if (delete.isEmpty()) {
 			return null;
@@ -125,7 +137,7 @@ public class ScheduleModelInvalidateCommandProvider extends BaseModelCommandProv
 		boolean result[] = new boolean[1];
 		RunnerHelper.syncExec((display) -> {
 			result[0] = MessageDialog.openConfirm(display.getActiveShell(), "Scenario edit",
-					"This change will remove all results. Press OK to continue, otherwise press cancel and fork the scenario.");
+					"This change will remove nall results. Press OK to continue, otherwise press cancel and fork the scenario.");
 		});
 		return result[0];
 	}
