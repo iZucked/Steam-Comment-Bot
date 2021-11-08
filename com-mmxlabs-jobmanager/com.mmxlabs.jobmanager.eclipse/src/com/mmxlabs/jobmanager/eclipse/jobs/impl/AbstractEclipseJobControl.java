@@ -117,7 +117,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 	private EJobState currentState = EJobState.UNKNOWN;
 	private int progress = 0;
 
-	public AbstractEclipseJobControl(final String jobName) {
+	protected AbstractEclipseJobControl(final String jobName) {
 		this(jobName, Collections.<QualifiedName, Object>emptyMap());
 	}
 
@@ -129,7 +129,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 	 * @param jobName
 	 * @param jobProperties
 	 */
-	public AbstractEclipseJobControl(final String jobName, final Map<QualifiedName, Object> jobProperties) {
+	protected AbstractEclipseJobControl(final String jobName, final Map<QualifiedName, Object> jobProperties) {
 		super();
 		runner = new Runner(jobName);
 		for (final Map.Entry<QualifiedName, Object> entry : jobProperties.entrySet()) {

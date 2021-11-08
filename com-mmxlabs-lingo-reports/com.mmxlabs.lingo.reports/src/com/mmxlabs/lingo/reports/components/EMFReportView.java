@@ -21,7 +21,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
-import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
@@ -30,7 +29,6 @@ import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreePath;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
@@ -97,48 +95,40 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 
 	private final ColumnBlockManager blockManager = new ColumnBlockManager();
 
-	private ScenarioComparisonService selectedScenariosService;
-
-	private ReentrantSelectionManager selectionManager;
-
 	private @NonNull TransformedSelectedDataProvider currentSelectedDataProvider = new TransformedSelectedDataProvider(null);
 
 	protected Image pinImage;
 
-	
 	protected final @NonNull ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 		@Override
 		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
-			final Runnable r = new Runnable() {
-				@Override
-				public void run() {
-					currentSelectedDataProvider = new TransformedSelectedDataProvider(selectedDataProvider);
-					// Add Difference/Change columns when in Pin/Diff mode
-					final boolean pinDiffMode = selectedDataProvider.inPinDiffMode();
-					final boolean isMultiple = selectedDataProvider.getAllScenarioResults().size() > 1;
+			final Runnable r = () -> {
+				currentSelectedDataProvider = new TransformedSelectedDataProvider(selectedDataProvider);
+				// Add Difference/Change columns when in Pin/Diff mode
+				final boolean pinDiffMode = selectedDataProvider.inPinDiffMode();
+				final boolean isMultiple = selectedDataProvider.getAllScenarioResults().size() > 1;
 
-					for (final ColumnBlock handler : getBlockManager().getBlocksInVisibleOrder()) {
-						if (handler != null) {
-							handler.setViewState(isMultiple, pinDiffMode);
-						}
+				for (final ColumnBlock handler : getBlockManager().getBlocksInVisibleOrder()) {
+					if (handler != null) {
+						handler.setViewState(isMultiple, pinDiffMode);
 					}
-
-					final List<Object> rowElements = new LinkedList<>();
-					final IScenarioInstanceElementCollector elementCollector = getElementCollector();
-
-					ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
-					elementCollector.beginCollecting(pinned != null);
-					if (pinned != null) {
-						final Collection<? extends Object> elements = elementCollector.collectElements(pinned, true);
-						rowElements.addAll(elements);
-					}
-					for (final ScenarioResult other : selectedDataProvider.getOtherScenarioResults()) {
-						final Collection<? extends Object> elements = elementCollector.collectElements(other, false);
-						rowElements.addAll(elements);
-					}
-					elementCollector.endCollecting();
-					ViewerHelper.setInput(viewer, true, rowElements);
 				}
+
+				final List<Object> rowElements = new LinkedList<>();
+				final IScenarioInstanceElementCollector elementCollector = getElementCollector();
+
+				ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
+				elementCollector.beginCollecting(pinned != null);
+				if (pinned != null) {
+					final Collection<? extends Object> elements = elementCollector.collectElements(pinned, true);
+					rowElements.addAll(elements);
+				}
+				for (final ScenarioResult other : selectedDataProvider.getOtherScenarioResults()) {
+					final Collection<? extends Object> elements = elementCollector.collectElements(other, false);
+					rowElements.addAll(elements);
+				}
+				elementCollector.endCollecting();
+				ViewerHelper.setInput(viewer, true, rowElements);
 			};
 
 			ViewerHelper.runIfViewerValid(viewer, block, r);
@@ -187,15 +177,7 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 	 */
 	protected ITreeContentProvider getContentProvider() {
 		return new ITreeContentProvider() {
-			@Override
-			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-
-			}
-
-			@Override
-			public void dispose() {
-			}
-
+ 
 			@Override
 			public Object[] getElements(final Object inputElement) {
 
@@ -204,10 +186,10 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 				final Object[] result;
 
 				if (numberOfSchedules > 1 && currentlyPinned) {
-					final List<EObject> objects = new LinkedList<EObject>();
+					final List<EObject> objects = new LinkedList<>();
 					for (final Map.Entry<String, List<EObject>> e : allObjectsByKey.entrySet()) {
 						EObject ref = null;
-						final LinkedHashSet<EObject> objectsToAdd = new LinkedHashSet<EObject>();
+						final LinkedHashSet<EObject> objectsToAdd = new LinkedHashSet<>();
 
 						// Find ref...
 						for (final EObject ca : e.getValue()) {
@@ -283,7 +265,8 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 	}
 
 	/**
-	 * Finds the view index of the specified column handler, i.e. the index from left to right of the column in the grid's display.
+	 * Finds the view index of the specified column handler, i.e. the index from
+	 * left to right of the column in the grid's display.
 	 * 
 	 * @param handler
 	 * @return
@@ -312,8 +295,10 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 	}
 
 	/**
-	 * Sets the column associated with handler <handler> to have a view index of viewIndex. N.B.: this is relative to other columns with the same visibility state; for instance, setting the view index
-	 * to 2 (3rd element) on a visible column will
+	 * Sets the column associated with handler <handler> to have a view index of
+	 * viewIndex. N.B.: this is relative to other columns with the same visibility
+	 * state; for instance, setting the view index to 2 (3rd element) on a visible
+	 * column will
 	 * 
 	 * @param handler
 	 * @param viewIndex
@@ -363,8 +348,8 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 		viewer.getGrid().setColumnOrder(columnOrder);
 	}
 
-	private final HashMap<Object, Object> equivalents = new HashMap<Object, Object>();
-	private final HashSet<Object> contents = new HashSet<Object>();
+	private final HashMap<Object, Object> equivalents = new HashMap<>();
+	private final HashSet<Object> contents = new HashSet<>();
 
 	public void setInputEquivalents(final Object input, final Collection<? extends Object> objectEquivalents) {
 		for (final Object o : objectEquivalents) {
@@ -390,21 +375,6 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 		container.setLayout(layout);
 
 		viewer = new EObjectTableViewer(container, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION) {
-			// @Override
-			// protected void inputChanged(final Object input, final Object oldInput) {
-			// super.inputChanged(input, oldInput);
-			//
-			// final boolean inputEmpty = (input == null) || ((input instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) input).getCollectedElements().isEmpty());
-			// final boolean oldInputEmpty = (oldInput == null)
-			// || ((oldInput instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) oldInput).getCollectedElements().isEmpty());
-			//
-			// if (inputEmpty != oldInputEmpty) {
-			// // Disabled because running this takes up 50% of the runtime when displaying a new schedule (!)
-			// // if (packColumnsAction != null) {
-			// // packColumnsAction.run();
-			// // }
-			// }
-			// };
 
 			@Override
 			protected List<?> getSelectionFromWidget() {
@@ -415,7 +385,8 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 			}
 
 			/**
-			 * Modify @link {AbstractTreeViewer#getTreePathFromItem(Item)} to adapt items before returning selection object.
+			 * Modify @link {AbstractTreeViewer#getTreePathFromItem(Item)} to adapt items
+			 * before returning selection object.
 			 */
 			@Override
 			protected TreePath getTreePathFromItem(Item item) {
@@ -441,10 +412,6 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 
 		// this is very slow on refresh
 		viewer.setDisplayValidationErrors(false);
-
-		// BE
-		// viewer.getSortingSupport().setCategoryFunction(this.rowCategoryFunction);
-		// BE
 
 		if (handleSelections()) {
 			viewer.setComparer(new IElementComparer() {
@@ -485,9 +452,9 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 
 		viewer.init(getContentProvider(), null);
 
-		selectedScenariosService = getSite().getService(ScenarioComparisonService.class);
+		ScenarioComparisonService selectedScenariosService = getSite().getService(ScenarioComparisonService.class);
 
-		selectionManager = new ReentrantSelectionManager(viewer, selectedScenariosServiceListener, selectedScenariosService);
+		ReentrantSelectionManager selectionManager = new ReentrantSelectionManager(viewer, selectedScenariosServiceListener, selectedScenariosService);
 		try {
 			selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 		} catch (Exception e) {
@@ -505,12 +472,7 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 	private void hookContextMenu() {
 		final MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
-		menuMgr.addMenuListener(new IMenuListener() {
-			@Override
-			public void menuAboutToShow(final IMenuManager manager) {
-				EMFReportView.this.fillContextMenu(manager);
-			}
-		});
+		menuMgr.addMenuListener(EMFReportView.this::fillContextMenu);
 		final Menu menu = menuMgr.createContextMenu(viewer.getControl());
 		viewer.getControl().setMenu(menu);
 		getSite().registerContextMenu(menuMgr, viewer);
@@ -595,7 +557,8 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 	}
 
 	/**
-	 * Call from {@link IScenarioInstanceElementCollector#beginCollecting()} to reset pin mode data
+	 * Call from {@link IScenarioInstanceElementCollector#beginCollecting()} to
+	 * reset pin mode data
 	 * 
 	 */
 	public void clearPinModeData() {
@@ -608,7 +571,9 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 	}
 
 	/**
-	 * Call from {@link IScenarioInstanceElementCollector#collectElements(com.mmxlabs.models.mmxcore.MMXRootObject, boolean)} and pass in the list of collected objects rather than raw schedule.
+	 * Call from
+	 * {@link IScenarioInstanceElementCollector#collectElements(com.mmxlabs.models.mmxcore.MMXRootObject, boolean)}
+	 * and pass in the list of collected objects rather than raw schedule.
 	 * 
 	 * @param objects
 	 * @param isPinned
@@ -625,7 +590,7 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 			if (allObjectsByKey.containsKey(key)) {
 				l = allObjectsByKey.get(key);
 			} else {
-				l = new LinkedList<EObject>();
+				l = new LinkedList<>();
 				allObjectsByKey.put(key, l);
 			}
 			l.add(ca);
@@ -668,7 +633,8 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 	}
 
 	/**
-	 * Process the array of elements before they are returned to e.g. map input equivalents
+	 * Process the array of elements before they are returned to e.g. map input
+	 * equivalents
 	 * 
 	 * @param result
 	 */
@@ -678,7 +644,9 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 
 	/**
 	 * 
-	 * Callback to convert the raw data coming out of the table into something usable externally. This is useful when the table data model is custom for the table rather from the real data model.
+	 * Callback to convert the raw data coming out of the table into something
+	 * usable externally. This is useful when the table data model is custom for the
+	 * table rather from the real data model.
 	 * 
 	 */
 	protected List<?> adaptSelectionFromWidget(final List<?> selection) {

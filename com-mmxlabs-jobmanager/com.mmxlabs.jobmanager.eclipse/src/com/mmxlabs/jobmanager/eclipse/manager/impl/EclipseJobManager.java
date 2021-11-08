@@ -33,23 +33,18 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	private IJobMatcher jobMatcher;
 
 	// Need adder/remover methods
-	private final Map<String, IJobManager> jobManagers = new HashMap<String, IJobManager>();
+	private final Map<String, IJobManager> jobManagers = new HashMap<>();
 
-	private final List<IJobDescriptor> jobs = new LinkedList<IJobDescriptor>();
-	private final Map<IJobDescriptor, IJobManager> jobToManager = new HashMap<IJobDescriptor, IJobManager>();
-	private final Map<IJobDescriptor, IJobControl> jobToControls = new HashMap<IJobDescriptor, IJobControl>();
+	private final List<IJobDescriptor> jobs = new LinkedList<>();
+	private final Map<IJobDescriptor, IJobManager> jobToManager = new HashMap<>();
+	private final Map<IJobDescriptor, IJobControl> jobToControls = new HashMap<>();
 
-	private final Map<IJobDescriptor, Object> jobResourceMap = new HashMap<IJobDescriptor, Object>();
+	private final Map<IJobDescriptor, Object> jobResourceMap = new HashMap<>();
 
-	private final Set<IEclipseJobManagerListener> jobManagerListeners = new HashSet<IEclipseJobManagerListener>();
+	private final Set<IEclipseJobManagerListener> jobManagerListeners = new HashSet<>();
 
 	public EclipseJobManager() {
-		setJobMatcher(new IJobMatcher() {
-			@Override
-			public int matchJob(final IJobDescriptor descriptor, final IJobManager jobManager) {
-				return jobManager.getJobs().size();
-			}
-		});
+		setJobMatcher((descriptor, jobManager) -> jobManager.getJobs().size());
 	}
 
 	/*
@@ -65,7 +60,9 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mmxlabs.jobcontroller.core.IJobManager#addJob(com.mmxlabs.jobcontroller .core.IManagedJob)
+	 * @see
+	 * com.mmxlabs.jobcontroller.core.IJobManager#addJob(com.mmxlabs.jobcontroller
+	 * .core.IManagedJob)
 	 */
 	@Override
 	public IJobControl submitJob(final IJobDescriptor job, final Object resource) {
@@ -98,7 +95,8 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mmxlabs.jobcontroller.core.IJobManager#removeJob(com.mmxlabs. jobcontroller.core.IManagedJob)
+	 * @see com.mmxlabs.jobcontroller.core.IJobManager#removeJob(com.mmxlabs.
+	 * jobcontroller.core.IManagedJob)
 	 */
 	@Override
 	public void removeJob(final IJobDescriptor job) {
@@ -124,7 +122,8 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mmxlabs.jobcontroller.core.IJobManager#addJobManagerListener(com. mmxlabs.jobcontroller.core.IJobManagerListener)
+	 * @see com.mmxlabs.jobcontroller.core.IJobManager#addJobManagerListener(com.
+	 * mmxlabs.jobcontroller.core.IJobManagerListener)
 	 */
 	@Override
 	public void addEclipseJobManagerListener(final IEclipseJobManagerListener jobManagerListener) {
@@ -134,7 +133,8 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mmxlabs.jobcontroller.core.IJobManager#removeJobManagerListener(com .mmxlabs.jobcontroller.core.IJobManagerListener)
+	 * @see com.mmxlabs.jobcontroller.core.IJobManager#removeJobManagerListener(com
+	 * .mmxlabs.jobcontroller.core.IJobManagerListener)
 	 */
 	@Override
 	public void removeEclipseJobManagerListener(final IEclipseJobManagerListener jobManagerListener) {
@@ -148,7 +148,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 
 		// Take a copy of the set before iterating over it as it is possible
 		// that the listeners may be changed as a results of the event
-		final Set<IEclipseJobManagerListener> localJobManagerListeners = new HashSet<IEclipseJobManagerListener>(jobManagerListeners);
+		final Set<IEclipseJobManagerListener> localJobManagerListeners = new HashSet<>(jobManagerListeners);
 
 		for (final IEclipseJobManagerListener l : localJobManagerListeners) {
 			l.jobAdded(this, job, jobControl, resource);
@@ -162,7 +162,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 
 		// Take a copy of the set before iterating over it as it is possible
 		// that the listeners may be changed as a results of the event
-		final Set<IEclipseJobManagerListener> localJobManagerListeners = new HashSet<IEclipseJobManagerListener>(jobManagerListeners);
+		final Set<IEclipseJobManagerListener> localJobManagerListeners = new HashSet<>(jobManagerListeners);
 
 		for (final IEclipseJobManagerListener l : localJobManagerListeners) {
 			l.jobRemoved(this, job, jobControl, resource);
@@ -196,7 +196,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 			return jobManagers.values().iterator().next();
 		}
 
-		final SortedSet<MatchResult> results = new TreeSet<MatchResult>();
+		final SortedSet<MatchResult> results = new TreeSet<>();
 		for (final IJobManager mgr : jobManagers.values()) {
 			final int score = jobMatcher.matchJob(job, mgr);
 			results.add(new MatchResult(mgr, score));
@@ -225,7 +225,8 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	}
 
 	/**
-	 * Notify the {@link EclipseJobManager} that an {@link IJobManager} implementation is available to use.
+	 * Notify the {@link EclipseJobManager} that an {@link IJobManager}
+	 * implementation is available to use.
 	 * 
 	 * @param jobManager
 	 */
