@@ -253,7 +253,7 @@ public class DateTreeSetTest {
 	}
 
 	@Test
-	public void testClone() {
+	public void testCopy() {
 		fail("Not yet implemented");
 	}
 

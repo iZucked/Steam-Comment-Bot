@@ -94,7 +94,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 
 	enum StoreType {
 		User, Team
-	};
+	}
 
 	class Change {
 		StoreType storeType;
@@ -102,7 +102,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 		boolean newReport;
 		boolean saved;
 		boolean published;
-	};
+	}
 
 	private HashMap<String, Change> uuidToChangedReports = new HashMap<>();
 
@@ -452,7 +452,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 				logger.error("Unimplemented mode in protected void CustomReportsManagerDialog.handleDiscardBtn(Event event)");
 			}
 			this.current = this.currentBeforeChanges;
-			this.currentBeforeChanges = (CustomReportDefinition) this.current.clone();
+			this.currentBeforeChanges = this.current.copy();
 			updateViewWithReportDefinition(this.current);
 		}
 
@@ -711,7 +711,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			changesMade = true;
 			this.discardBtn.setEnabled(false);
 			// Prevent discard beyond saved state.
-			this.currentBeforeChanges = (CustomReportDefinition) this.current.clone();
+			this.currentBeforeChanges = this.current.copy();
 			this.uuidToChangedReports.get(toSave.getUuid()).saved = true;
 			this.uuidToChangedReports.get(toSave.getUuid()).newReport = false;
 
@@ -1082,7 +1082,7 @@ public class CustomReportsManagerDialog extends TrayDialog {
 			if (selectedReports.size() == 1 && selectedReports.get(0) != this.current && !checkForUnsavedUnpublishedChanges()) {
 				this.currentStoreType = this.userButton.getSelection() ? StoreType.User : StoreType.Team;
 				this.current = selectedReports.get(0);
-				this.currentBeforeChanges = (CustomReportDefinition) this.current.clone();
+				this.currentBeforeChanges = this.current.copy();
 				updateViewWithReportDefinition(selectedReports.get(0));
 			}
 

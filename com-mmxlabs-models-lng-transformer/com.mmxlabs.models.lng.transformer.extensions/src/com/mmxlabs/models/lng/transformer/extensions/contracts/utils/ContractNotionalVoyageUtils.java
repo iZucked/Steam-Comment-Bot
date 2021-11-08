@@ -96,11 +96,11 @@ public class ContractNotionalVoyageUtils {
 		// Now splice the laden part and ballast parts together
 
 		// Load
-		notionalSequence[0] = ((PortDetails) actualSequence[0]).clone();
+		notionalSequence[0] = ((PortDetails) actualSequence[0]).copy();
 		// Laden Voyage
-		notionalSequence[1] = ((VoyageDetails) actualSequence[1]).clone();
+		notionalSequence[1] = ((VoyageDetails) actualSequence[1]).copy();
 		// Discharge
-		notionalSequence[2] = ((PortDetails) actualSequence[2]).clone();
+		notionalSequence[2] = ((PortDetails) actualSequence[2]).copy();
 
 		// Blend across LNG fuel components
 		for (final FuelKey[] fkp : LNGFuelKeys.LNG_In_m3_mmBtu_Pair) {
