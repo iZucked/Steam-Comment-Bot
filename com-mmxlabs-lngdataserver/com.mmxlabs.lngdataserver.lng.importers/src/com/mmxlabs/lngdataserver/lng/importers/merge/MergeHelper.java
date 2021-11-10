@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,7 @@ import com.mmxlabs.lngdataser.lng.importers.merge.support.MergePair;
 import com.mmxlabs.lngdataser.lng.importers.merge.support.MergeRow;
 import com.mmxlabs.lngdataser.lng.importers.merge.support.OverwriteExistingOption;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
+import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -52,12 +54,12 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.CargoEditingHelper;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
-import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -98,7 +100,10 @@ public class MergeHelper implements Closeable {
 		this.targetScenarioInstance = targetScenarioInstance;
 		this.sourceScenarioDataProvider = getScenarioDataProvider(this.sourceScenarioInstance);
 		this.targetScenarioDataProvider = getScenarioDataProvider(this.targetScenarioInstance);
-		this.sourceLNGScenario = EcoreUtil.copy(sourceScenarioDataProvider.getTypedScenario(LNGScenarioModel.class));
+		final LNGScenarioModel copiedSourceLNGScenario = EcoreUtil.copy(sourceScenarioDataProvider.getTypedScenario(LNGScenarioModel.class));
+		clearResults(copiedSourceLNGScenario);
+		resetUUIDs(copiedSourceLNGScenario);
+		this.sourceLNGScenario = copiedSourceLNGScenario;
 		this.targetLNGScenario = targetScenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 		this.editingDomain = targetScenarioDataProvider.getEditingDomain();
 		this.jsonWriter = new ObjectMapper();
@@ -106,6 +111,42 @@ public class MergeHelper implements Closeable {
 		this.ctx = new EMFDeserializationContext(BeanDeserializerFactory.instance);
 		this.jsonReader = createJSONReader();
 		this.cargoEditingHelper = new CargoEditingHelper(editingDomain, targetLNGScenario);
+	}
+
+	private void clearResults(final LNGScenarioModel lngScenarioModel) {
+		final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
+		if (scheduleModel.getSchedule() != null) {
+			scheduleModel.setSchedule(null);
+		}
+		final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(lngScenarioModel);
+
+		if (analyticsModel != null) {
+			if (analyticsModel.getViabilityModel() != null) {
+				analyticsModel.setViabilityModel(null);
+			}
+			if (analyticsModel.getMtmModel() != null) {
+				analyticsModel.setMtmModel(null);
+			}
+			if (!analyticsModel.getOptimisations().isEmpty()) {
+				analyticsModel.getOptimisations().clear();
+			}
+			if (!analyticsModel.getBreakevenModels().isEmpty()) {
+				analyticsModel.getBreakevenModels().clear();
+			}
+		}
+	}
+
+	private void resetUUIDs(final LNGScenarioModel lngScenarioModel) {
+		final Set<UUIDObject> seenObjects = new HashSet<>();
+		final Iterator<EObject> iterScenario = lngScenarioModel.eAllContents();
+		while (iterScenario.hasNext()) {
+			final EObject eObject = iterScenario.next();
+			if (eObject instanceof UUIDObject && !seenObjects.contains(eObject)) {
+				final UUIDObject uuidObject = (UUIDObject) eObject;
+				seenObjects.add(uuidObject);
+				uuidObject.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
+			}
+		}
 	}
 
 	private ObjectMapper createJSONReader() {
@@ -170,19 +211,11 @@ public class MergeHelper implements Closeable {
 			final MergeOption mergeOption = mergePair.getTo();
 			if (mergeOption instanceof AddOption) {
 				final EObject clonedPort = cloneEObject(mergePair.getFrom());
-				if (clonedPort instanceof UUIDObject) {
-					final UUIDObject uuidObject = (UUIDObject) clonedPort;
-					uuidObject.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
-				}
 				toAdd.add(clonedPort);
 			} else if (mergeOption instanceof OverwriteExistingOption) {
 				final EObject oldTargetPort = mergePair.getDefaultTarget();
 				assert oldTargetPort != null;
 				final EObject clonedSourcePort = cloneEObject(mergePair.getFrom());
-				if (clonedSourcePort instanceof UUIDObject) {
-					final UUIDObject uuidObject = (UUIDObject) clonedSourcePort;
-					uuidObject.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
-				}
 				toReplace.add(Pair.of(oldTargetPort, clonedSourcePort));
 
 				// Clean up rest of references on target scenario:
@@ -191,7 +224,9 @@ public class MergeHelper implements Closeable {
 				this.overwrittenObjects.put(oldTargetPort, Boolean.TRUE);
 			} else if (mergeOption instanceof MappingOption) {
 				final MappingOption<Port> mappingOption = (MappingOption<Port>) mergeOption;
-				final EObject newPortInTarget = mappingOption.getElement();
+				final EObject targetPortInstance = mappingOption.getElement();
+				// Using EcoreUtil.copy here because cloneEObject() replaces the target instance in ctx.
+				final EObject newPortInTarget = EcoreUtil.copy(targetPortInstance);
 				updateReferencesViaSet(sourceLNGScenario, mergePair.getFrom(), newPortInTarget);
 			} else if (mergeOption instanceof IgnoreOption) {
 				// Do nothing - What if this port is referenced by something overwritten/added? e.g. contract/slot restrictions.
@@ -257,11 +292,6 @@ public class MergeHelper implements Closeable {
 				switch (ma.getMergeType()) { // eObjects contains eObject with vessel availability, with different vessel.
 				case Add:
 					final EObject clonedEObject = cloneEObject(eo);
-					// Make new UUID
-					if (clonedEObject instanceof UUIDObject) {
-						final UUIDObject uuidObject = (UUIDObject) clonedEObject;
-						uuidObject.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
-					}
 					toAdd.add(clonedEObject);
 
 					// Add the cargo
@@ -275,10 +305,6 @@ public class MergeHelper implements Closeable {
 					// Replace object in target, with version from source:
 					EObject oldObjectToOverwrite = nameToEObjects.get(name);
 					EObject newObjectToReplaceWith = cloneEObject(eo); // Clone to get rid of references to source scenario.
-					if (newObjectToReplaceWith instanceof UUIDObject) {
-						final UUIDObject uuidObject = (UUIDObject) newObjectToReplaceWith;
-						uuidObject.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
-					}
 					toReplace.add(Pair.of(oldObjectToOverwrite, newObjectToReplaceWith));
 
 					// Add the cargo as well if there is one if it is a slot.
@@ -294,14 +320,9 @@ public class MergeHelper implements Closeable {
 					break;
 
 				case Map:
-					if (eo instanceof Vessel) {
-						final Vessel vessel = (Vessel) eo;
-						if (vessel.getName().equalsIgnoreCase("woodside chaney")) {
-							int j = 0;
-						}
-					}
 					// FIXME: A bit flaky perhaps, but seems to work and needs to be like this in case source does not have target object in it.
-					EObject newObjectInTarget = cloneEObject(nameToEObjects.get(ma.getTargetName()));
+					// Using EcoreUtil.copy here because cloneEObject() replaces the target instance in ctx.
+					EObject newObjectInTarget = EcoreUtil.copy(nameToEObjects.get(ma.getTargetName()));
 					updateReferencesViaSet(this.sourceLNGScenario, eo, newObjectInTarget);
 					break;
 

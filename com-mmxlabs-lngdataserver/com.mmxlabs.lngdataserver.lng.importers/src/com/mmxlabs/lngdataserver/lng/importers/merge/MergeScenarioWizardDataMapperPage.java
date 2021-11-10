@@ -131,7 +131,6 @@ public class MergeScenarioWizardDataMapperPage extends WizardPage implements ISc
 					TableViewerColumn viewerColumn = new TableViewerColumn(this.mergeTableViewer, column);
 					viewerColumn.setLabelProvider(new ColumnLabelProvider());
 					viewerColumn.setEditingSupport(new EditingSupport(mergeTableViewer) {
-						
 						List<String> mappableContracts = targetContracts;
 						
 						String[] valuesAddIgnore = new String[2+targetContracts.size()];
