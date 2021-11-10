@@ -31,6 +31,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -226,6 +227,12 @@ public class CargoModelImporter implements ISubmodelImporter {
 					canalBookings.getCanalBookingSlots().add(canalBookingSlot);
 				}
 			}
+			for (final Object o: importObjects) {
+				if (o instanceof PanamaSeasonalityRecord) {
+					final PanamaSeasonalityRecord seasonalityRecord = (PanamaSeasonalityRecord) o;
+					canalBookings.getPanamaSeasonalityRecords().add(seasonalityRecord);
+				}
+			}
 		}
 		return cargoModel;
 	}
@@ -244,6 +251,7 @@ public class CargoModelImporter implements ISubmodelImporter {
 			l.add(canalBookings);
 			l.addAll(canalBookings.getVesselGroupCanalParameters());
 			l.addAll(canalBookings.getCanalBookingSlots());
+			l.addAll(canalBookings.getPanamaSeasonalityRecords());
 			output.put(CANAL_BOOKINGS_KEY, canalBookingsImporter.exportObjects(l, context));
 		}
 	}
