@@ -22,7 +22,7 @@ import com.mmxlabs.scheduler.optimiser.cache.AbstractWriteLockable;
  * @author Simon Goodall
  * 
  */
-public final class VoyagePlan extends AbstractWriteLockable implements Cloneable {
+public final class VoyagePlan extends AbstractWriteLockable {
 
 	public enum VoyagePlanMetrics {
 		VOLUME_VIOLATION_COUNT, // Number of load, discharge or heel violations
@@ -209,15 +209,14 @@ public final class VoyagePlan extends AbstractWriteLockable implements Cloneable
 				.toString();
 	}
 
-	@Override
-	public final VoyagePlan clone() {
+	public final VoyagePlan copy() {
 		final IDetailsSequenceElement[] clonedSequence = new IDetailsSequenceElement[sequence.length];
 		int k = 0;
 		for (final IDetailsSequenceElement o : sequence) {
 			if (o instanceof VoyageDetails) {
-				clonedSequence[k++] = ((VoyageDetails) o).clone();
+				clonedSequence[k++] = ((VoyageDetails) o).copy();
 			} else if (o instanceof PortDetails) {
-				clonedSequence[k++] = ((PortDetails) o).clone();
+				clonedSequence[k++] = ((PortDetails) o).copy();
 			} else {
 				clonedSequence[k++] = o;
 			}

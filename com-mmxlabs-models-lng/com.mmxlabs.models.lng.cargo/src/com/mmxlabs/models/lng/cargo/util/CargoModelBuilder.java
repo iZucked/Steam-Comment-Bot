@@ -7,22 +7,27 @@ package com.mmxlabs.models.lng.cargo.util;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
+import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.Contract;
@@ -392,5 +397,51 @@ public class CargoModelBuilder {
 		cargoModel.getCanalBookings().getCanalBookingSlots().add(booking);
 
 		return booking;
+	}
+	
+	/**
+	 * Initialise the Panama bookings
+	 * Create the "default" vessel group
+	 * And create a year-round seasonality entries for that vessel group
+	 */
+	public void initCanalBookings() {
+		final CanalBookings cb = CargoFactory.eINSTANCE.createCanalBookings();
+		cargoModel.setCanalBookings(cb);
+		
+		final VesselGroupCanalParameters vgcp = createVesselGroupCanalParameters("default");
+		cb.getVesselGroupCanalParameters().add(vgcp);
+		cb.getPanamaSeasonalityRecords().add(createPanamaSeasonalityRecord(vgcp, 0, 0, 0, 0, 0));
+	}
+	
+	/**
+	 * Creates and returns a vessel group with a given name
+	 * @param name
+	 * @return
+	 */
+	public @NonNull VesselGroupCanalParameters createVesselGroupCanalParameters(String name) {
+		final VesselGroupCanalParameters vgcp = CargoFactory.eINSTANCE.createVesselGroupCanalParameters();
+		vgcp.setName(name);
+		return vgcp;
+	}
+	
+	/**
+	 * Creates and returns a panama seasonality record for a given vessel group
+	 * @param vgcp
+	 * @param startDay
+	 * @param startMonth
+	 * @param startYear
+	 * @param nb
+	 * @param sb
+	 * @return
+	 */
+	public @NonNull PanamaSeasonalityRecord createPanamaSeasonalityRecord(final VesselGroupCanalParameters vgcp, int startDay, int startMonth, int startYear, int nb, int sb) {
+		final PanamaSeasonalityRecord psr = CargoFactory.eINSTANCE.createPanamaSeasonalityRecord();
+		psr.setVesselGroupCanalParameter(vgcp);
+		psr.setStartDay(startDay);
+		psr.setStartMonth(startMonth);
+		psr.setStartYear(startYear);
+		psr.setNorthboundWaitingDays(0);
+		psr.setSouthboundWaitingDays(0);
+		return psr;
 	}
 }

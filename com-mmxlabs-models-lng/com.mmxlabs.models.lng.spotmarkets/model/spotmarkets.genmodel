@@ -82,21 +82,30 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterOutMarket/vessels"/>
     </genClasses>
     <genClasses ecoreClass="spotmarkets.ecore#//CharterInMarket">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterInMarket/vessel"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/charterInRate"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/spotCharterCount"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Reference vessel used for each option"
+          propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterInMarket/vessel"/>
+      <genFeatures createChild="false" propertyDescription="Daily charter cost in $/day"
+          ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/charterInRate"/>
+      <genFeatures createChild="false" propertyDescription="The number of charter options available. This is separate to the nominal/MtM options."
+          ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/spotCharterCount"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/overrideInaccessibleRoutes"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/inaccessibleRoutes"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterInMarket/genericCharterContract"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/nominal"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/minDuration"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/maxDuration"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Optional charter contract"
+          propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterInMarket/genericCharterContract"/>
+      <genFeatures createChild="false" propertyDescription="Can this market be used for nominal shipping?"
+          ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/nominal"/>
+      <genFeatures createChild="false" propertyDescription="Minimum duration in days charter options can be used for"
+          ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/minDuration"/>
+      <genFeatures createChild="false" propertyDescription="Maximum duration in days charter options can be used for"
+          ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/maxDuration"/>
       <genFeatures createChild="false" propertyDescription="Specifies default nominal vessel for mark to market report"
           ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/mtm"/>
       <genFeatures notify="false" createChild="false" propertyDescription="Default commercial entity to assign PnL to"
           propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterInMarket/entity"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterInMarket/startAt"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterInMarket/endAt"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Optional delivery port to ballast from"
+          propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterInMarket/startAt"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="Optional set of re-delivery ports. Charter options will return to the first port if not set."
+          propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterInMarket/endAt"/>
       <genOperations ecoreOperation="spotmarkets.ecore#//CharterInMarket/getMarketOrContractMinDuration"/>
       <genOperations ecoreOperation="spotmarkets.ecore#//CharterInMarket/getMarketOrContractMaxDuration"/>
     </genClasses>

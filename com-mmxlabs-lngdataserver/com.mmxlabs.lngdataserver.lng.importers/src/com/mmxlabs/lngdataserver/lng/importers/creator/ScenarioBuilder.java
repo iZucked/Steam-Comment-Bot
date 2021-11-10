@@ -151,6 +151,8 @@ public class ScenarioBuilder {
 		loadDefaultCanalCosts();
 		loadDefaultPortCosts();
 
+		scenarioModelBuilder.getCargoModelBuilder().initCanalBookings();
+		
 		createDefaultCooldownCost("1000000");
 		setDefaultBunkerCosts("400");
 

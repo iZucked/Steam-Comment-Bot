@@ -719,9 +719,9 @@ public class VoyagePlanner implements IVoyagePlanner {
 						for (int i = 0; i < replacementSequence.length; ++i) {
 							IDetailsSequenceElement detailsSequenceElement = oldPair.getFirst().getSequence()[i];
 							if (detailsSequenceElement instanceof PortDetails) {
-								replacementSequence[i] = ((PortDetails) detailsSequenceElement).clone();
+								replacementSequence[i] = ((PortDetails) detailsSequenceElement).copy();
 							} else if (detailsSequenceElement instanceof VoyageDetails) {
-								replacementSequence[i] = ((VoyageDetails) detailsSequenceElement).clone();
+								replacementSequence[i] = ((VoyageDetails) detailsSequenceElement).copy();
 							} else {
 								throw new IllegalStateException("Unknown sequence type");
 							}

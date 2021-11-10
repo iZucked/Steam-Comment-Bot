@@ -1049,8 +1049,8 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 		cargoModel.getCanalBookings().setRelaxedBoundaryOffsetDays(100);
 
 		cargoModel.getCanalBookings().setFlexibleBookingAmountSouthbound(0);
-
-		cargoModel.getCanalBookings().setNorthboundMaxIdleDays(5);
+			
+		//cargoModel.getCanalBookings().setNorthboundMaxIdleDays(5);
 		cargoModel.getCanalBookings().setArrivalMarginHours(12);
 
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");
@@ -1147,7 +1147,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 		cargoModel.getCanalBookings().setRelaxedBoundaryOffsetDays(1);
 
 		cargoModel.getCanalBookings().setFlexibleBookingAmountSouthbound(0);
-		cargoModel.getCanalBookings().setNorthboundMaxIdleDays(5);
+		//cargoModel.getCanalBookings().setNorthboundMaxIdleDays(5);
 		cargoModel.getCanalBookings().setArrivalMarginHours(12);
 
 		final Vessel vessel1 = fleetModelFinder.findVessel("STEAM-145");

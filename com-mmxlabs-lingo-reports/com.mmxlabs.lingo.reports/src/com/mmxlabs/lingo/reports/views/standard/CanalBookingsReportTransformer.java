@@ -163,7 +163,7 @@ public class CanalBookingsReportTransformer {
 						final CanalBookingSlot booking = journey.getCanalBooking();
 						final String canalTravelDirection = PortModelLabeller.getDirection(booking.getCanalEntrance());
 						result.add(new RowData(modelRecord.getName(), pinned, true, booking, journey.getRouteOption(), booking.getBookingDate().atTime(3, 0), canalTravelDirection,
-								(PortVisit) journey.getPreviousEvent(), type, nextSlot, booking.getNotes(), getBookingCode(booking, cargoModel.getCanalBookings()), getVessel(booking, cargoModel.getCanalBookings())));
+								(PortVisit) journey.getPreviousEvent(), type, nextSlot, booking.getNotes(), getBookingCode(booking, cargoModel.getCanalBookings()), getVessel(booking, cargoModel.getCanalBookings(), journey)));
 						existingBookings.remove(booking);
 					} else if (journey.getRouteOption() == RouteOption.PANAMA) {
 						final String canalTravelDirection = PortModelLabeller.getDirection(journey.getCanalEntrance());
@@ -189,7 +189,7 @@ public class CanalBookingsReportTransformer {
 			final String canalTravelDirection = PortModelLabeller.getDirection(booking.getCanalEntrance());
 			if (booking.getBookingDate() != null) {
 				result.add(new RowData(modelRecord.getName(), pinned, true, booking, booking.getRouteOption(), booking.getBookingDate().atTime(3, 0), canalTravelDirection, null, "Unused", null,
-					booking.getNotes(), getBookingCode(booking, cargoModel.getCanalBookings()), getVessel(booking, cargoModel.getCanalBookings())));
+					booking.getNotes(), getBookingCode(booking, cargoModel.getCanalBookings()), getVessel(booking, cargoModel.getCanalBookings(), null)));
 			}
 		}
 
@@ -234,21 +234,19 @@ public class CanalBookingsReportTransformer {
 		return "";
 	}
 	
-	String getVessel(final CanalBookingSlot booking, final CanalBookings bookings) {
+	String getVessel(final CanalBookingSlot booking, final CanalBookings bookings, final @Nullable Journey journey) {
 		if (booking.getVessel() instanceof Vessel || booking.getVessel() instanceof VesselGroup) {
 			return booking.getVessel().getName();
+		} else if (journey != null){
+			return getVesselName(journey);
 		}
-		else {
-			return "";
-		}
+		return "";
 	}
 	
 	String getBookingCode(final CanalBookingSlot booking, final CanalBookings bookings) {
 		if (booking.getBookingCode() != null && booking.getBookingCode().getName() != null) {
 			return booking.getBookingCode().getName();
 		}
-		else {
-			return "";
-		}
+		return "";
 	}
 }

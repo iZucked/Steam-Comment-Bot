@@ -41,11 +41,12 @@ import com.mmxlabs.scheduler.optimiser.moves.handlers.SwapSegmentSequenceMoveHan
 import com.mmxlabs.scheduler.optimiser.moves.handlers.SwapTailsSequenceMoveHandler;
 import com.mmxlabs.scheduler.optimiser.moves.util.impl.BreakPointHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.impl.FollowersAndPrecedersProviderImpl;
+import com.mmxlabs.scheduler.optimiser.moves.util.impl.LazyFollowersAndPrecedersProviderImpl;
 import com.mmxlabs.scheduler.optimiser.moves.util.impl.ParallelFollowersAndPrecedersProviderImpl;
 
 public class MoveGeneratorModule extends AbstractModule {
 
-	private final boolean parallelFollowerAndPreceeders;
+	private final boolean parallelFollowerAndPreceeders ;
 
 	public MoveGeneratorModule() {
 		this(false);
@@ -71,8 +72,10 @@ public class MoveGeneratorModule extends AbstractModule {
 			bind(ParallelFollowersAndPrecedersProviderImpl.class).in(Singleton.class);
 			bind(IFollowersAndPreceders.class).to(ParallelFollowersAndPrecedersProviderImpl.class);
 		} else {
-			bind(FollowersAndPrecedersProviderImpl.class).in(Singleton.class);
-			bind(IFollowersAndPreceders.class).to(FollowersAndPrecedersProviderImpl.class);
+//			bind(FollowersAndPrecedersProviderImpl.class).in(Singleton.class);
+//			bind(IFollowersAndPreceders.class).to(FollowersAndPrecedersProviderImpl.class);
+			bind(LazyFollowersAndPrecedersProviderImpl.class).in(Singleton.class);
+			bind(IFollowersAndPreceders.class).to(LazyFollowersAndPrecedersProviderImpl.class);
 		}
 
 		bind(BreakPointHelper.class).in(Singleton.class);

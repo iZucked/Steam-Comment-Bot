@@ -7,7 +7,7 @@ package com.mmxlabs.lingo.reports.customizable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomReportDefinition implements Cloneable {
+public class CustomReportDefinition {
 	String uuid;
 	String name;
 	String type;
@@ -15,8 +15,7 @@ public class CustomReportDefinition implements Cloneable {
 	final List<String> columns = new ArrayList<>();
 	final List<String> diffOptions = new ArrayList<>();
 
-	@Override
-	public Object clone() {
+	public CustomReportDefinition copy() {
 		CustomReportDefinition rd = new CustomReportDefinition();
 		rd.uuid = uuid;
 		rd.name = name;

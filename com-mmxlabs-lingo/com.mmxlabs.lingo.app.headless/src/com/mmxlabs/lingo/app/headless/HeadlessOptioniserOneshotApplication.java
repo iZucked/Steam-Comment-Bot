@@ -21,6 +21,7 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.jdt.annotation.Nullable;
@@ -66,7 +67,7 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 			return dostart(context);
 		} catch (Throwable t) {
 			t.printStackTrace();
-			return 500;
+			return HeadlessGenericApplication.EXIT_CODE_EXCEPTION;
 		}
 	}
 
@@ -118,6 +119,20 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 		final String outputScenarioFileName = commandLine.getOptionValue(OUTPUT_SCENARIO);
 		final String outputLoggingFolder = commandLine.getOptionValue(OUTPUT_FOLDER);
 
+		File loggingFolder = null;
+		if (outputLoggingFolder != null) {
+			// Create logging folder, or throw an exception if there is a problem
+			loggingFolder = new File(outputLoggingFolder);
+			if (loggingFolder.exists() && !loggingFolder.isDirectory()) {
+				throw new FileNotFoundException("Logging folder is a file not a folder");
+			}
+			if (!loggingFolder.exists()) {
+				if (!loggingFolder.mkdirs()) {
+					throw new FileNotFoundException("Unable to create folder");
+				}
+			}
+		}
+
 		final HeadlessOptioniserJSON json = (new HeadlessOptioniserJSONTransformer()).createJSONResultObject(getDefaultMachineInfo(), options, scenarioFile, numThreads);
 //		writeMetaFields(json, scenarioFile, hOptions, numThreads);
 		{
@@ -133,6 +148,8 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 
 		HeadlessOptioniserRunner runner = new HeadlessOptioniserRunner();
 
+		ConsoleProgressMonitor monitor = new ConsoleProgressMonitor();
+
 		boolean exportLogs = outputLoggingFolder != null;
 		// Get the root object
 
@@ -142,7 +159,7 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 			int startTry = 0;
 			// Get the root object
 			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
-				runner.run(startTry, logger, options, modelRecord, scenarioDataProvider, null);
+				runner.run(startTry, logger, options, modelRecord, scenarioDataProvider, null, SubMonitor.convert(monitor));
 				ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, new File(outputScenarioFileName));
 			});
 
@@ -156,18 +173,16 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 
 //		renameInvalidBsonFields(json.getMetrics().getStages());
 
-		File outFile = null;
-		if (outputLoggingFolder != null) {
-			new File(outputLoggingFolder).mkdirs(); // create directory if necessary
-			outFile = new File(outputLoggingFolder + "/" + UUID.randomUUID().toString() + ".json"); // create output log
+		if (loggingFolder != null) {
 
-			final PrintWriter writer = WriterFactory.getWriter(Paths.get(outputLoggingFolder, "machineData.txt").toString());
+			final PrintWriter writer = WriterFactory.getWriter(Paths.get(loggingFolder.getAbsolutePath(), "machineData.txt").toString());
 			writer.write(String.format("maxCPUs,%s", Runtime.getRuntime().availableProcessors()));
 			writer.close();
 
 		}
 
-		if (logger != null) {
+		if (loggingFolder != null && logger != null) {
+			File outFile = new File(loggingFolder, UUID.randomUUID().toString() + ".json"); // create output log
 			(new HeadlessOptioniserJSONTransformer()).addRunResult(0, logger, json);
 
 			try {
@@ -180,9 +195,7 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 
 				mapper.writerWithDefaultPrettyPrinter().writeValue(outFile, json);
 			} catch (Exception e) {
-				System.err.println("Error writing to file:");
-				e.printStackTrace();
-				return 500;
+				throw new IOException("Error writing log file", e);
 			}
 		}
 

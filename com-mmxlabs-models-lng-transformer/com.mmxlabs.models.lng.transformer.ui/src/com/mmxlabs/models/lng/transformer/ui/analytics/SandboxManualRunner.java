@@ -242,19 +242,11 @@ public class SandboxManualRunner {
 		}
 
 		try {
-			// In constructor?
+			// Evaluate all the partial cases / options. Note the base case is *NOT* evaluated here.
 			///////
 			final List<ISequences> results = new LinkedList<>();
 			helper.withRunner(scenarioInstance, userSettings, originalEditingDomain, hints, (bridge, injector, cores) -> {
 				this.bridge = bridge;
-				// Base Case P&L
-				// if (baseSpecification != null) {
-				// final ScheduleSpecificationTransformer transformer =
-				// injector.getInstance(ScheduleSpecificationTransformer.class);
-				// final ISequences base = transformer.createSequences(baseSpecification,
-				// bridge.getDataTransformer(), false);
-				// results.add(base);
-				// }
 				for (final Pair<BaseCase, ScheduleSpecification> p : specifications) {
 					final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
 					final ISequences base = transformer.createSequences(p.getSecond(), bridge.getDataTransformer(), false);
@@ -267,7 +259,7 @@ public class SandboxManualRunner {
 					progressMonitor.worked(1);
 				}
 			});
-			if (results.size() < 2) {
+			if (results.isEmpty()) {
 				if (System.getProperty("lingo.suppress.dialogs") == null) {
 
 					final Display display = PlatformUI.getWorkbench().getDisplay();
@@ -282,7 +274,7 @@ public class SandboxManualRunner {
 				return null;
 			}
 
-			// Not really the best
+			// We need a non-null solution for the base, but it will be ignored and is not really treated as the base.
 			final ISequences base = results.get(0);
 			final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.stream()//
 					.map(s -> new NonNullPair<ISequences, Map<String, Object>>(s, new HashMap<>())) //
@@ -290,12 +282,6 @@ public class SandboxManualRunner {
 			return new MultiStateResult(new NonNullPair<>(base, new HashMap<>()), solutions);
 		} finally {
 			progressMonitor.done();
-		}
-	}
-
-	public void dispose() {
-		if (helper != null) {
-			// scenarioRunner.getExecutorService().shutdownNow();
 		}
 	}
 

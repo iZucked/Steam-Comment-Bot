@@ -16,6 +16,7 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.jdt.annotation.Nullable;
@@ -26,7 +27,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.mmxlabs.license.ssl.LicenseChecker.InvalidLicenseException;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
@@ -58,12 +58,11 @@ public class HeadlessOptimiserOneshotApplication extends HeadlessGenericApplicat
 			return dostart(context);
 		} catch (Throwable t) {
 			t.printStackTrace();
-			return 500;
+			return HeadlessGenericApplication.EXIT_CODE_EXCEPTION;
 		}
 	}
 
 	public Object dostart(final IApplicationContext context) throws Exception {
-
 		// get the command line
 		readCommandLine();
 		setupBasicFields();
@@ -103,6 +102,20 @@ public class HeadlessOptimiserOneshotApplication extends HeadlessGenericApplicat
 		final String outputScenarioFileName = commandLine.getOptionValue(OUTPUT_SCENARIO);
 		final String outputLoggingFolder = commandLine.getOptionValue(OUTPUT_FOLDER);
 
+		File loggingFolder = null;
+		if (outputLoggingFolder != null) {
+			// Create logging folder, or throw an exception if there is a problem
+			loggingFolder = new File(outputLoggingFolder);
+			if (loggingFolder.exists() && !loggingFolder.isDirectory()) {
+				throw new FileNotFoundException("Logging folder is a file not a folder");
+			}
+			if (!loggingFolder.exists()) {
+				if (!loggingFolder.mkdirs()) {
+					throw new FileNotFoundException("Unable to create folder");
+				}
+			}
+		}
+
 		final HeadlessOptimiserJSON json = (new HeadlessOptimiserJSONTransformer()).createJSONResultObject(getDefaultMachineInfo(), scenarioFile, numThreads);
 //		writeMetaFields(json, scenarioFile, hOptions, numThreads);
 		{
@@ -118,51 +131,42 @@ public class HeadlessOptimiserOneshotApplication extends HeadlessGenericApplicat
 
 		HeadlessOptimiserRunner runner = new HeadlessOptimiserRunner();
 
+		ConsoleProgressMonitor monitor = new ConsoleProgressMonitor();
+
 		boolean exportLogs = outputLoggingFolder != null;
 		// Get the root object
 		try {
 			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
-				runner.doRun(scenarioDataProvider, userSettings, exportLogs, outputScenarioFileName, outputLoggingFolder, json, numThreads);
+				runner.doRun(scenarioDataProvider, userSettings, exportLogs, outputScenarioFileName, outputLoggingFolder, json, numThreads, SubMonitor.convert(monitor));
 			});
 		} catch (Exception e) {
 			throw new IOException("Error running optimisation", e);
-
 		}
 
 		HeadlessRunnerUtils.renameInvalidBsonFields(json.getMetrics().getStages());
 
-		File outFile = null;
-		if (outputLoggingFolder != null) {
-			new File(outputLoggingFolder).mkdirs(); // create directory if necessary
-			outFile = new File(outputLoggingFolder + "/" + UUID.randomUUID().toString() + ".json"); // create output log
+		if (loggingFolder != null) {
+			File outFile = new File(loggingFolder, UUID.randomUUID().toString() + ".json"); // create output log
+
+			try {
+				final ObjectMapper mapper = new ObjectMapper();
+				mapper.registerModule(new JavaTimeModule());
+				mapper.registerModule(new Jdk8Module());
+
+				final CustomTypeResolverBuilder resolver = new CustomTypeResolverBuilder();
+				resolver.init(JsonTypeInfo.Id.CLASS, null);
+				resolver.inclusion(JsonTypeInfo.As.PROPERTY);
+				resolver.typeProperty("@class");
+				mapper.setDefaultTyping(resolver);
+
+				mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+				mapper.disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS);
+
+				mapper.writerWithDefaultPrettyPrinter().writeValue(outFile, json);
+			} catch (final Exception e) {
+				throw new IOException("Error writing log file", e);
+			}
 		}
-
-		try {
-			final ObjectMapper mapper = new ObjectMapper();
-			mapper.registerModule(new JavaTimeModule());
-			mapper.registerModule(new Jdk8Module());
-
-			final CustomTypeResolverBuilder resolver = new CustomTypeResolverBuilder();
-			resolver.init(JsonTypeInfo.Id.CLASS, null);
-			resolver.inclusion(JsonTypeInfo.As.PROPERTY);
-			resolver.typeProperty("@class");
-			mapper.setDefaultTyping(resolver);
-
-			mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-			mapper.disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS);
-
-			mapper.writerWithDefaultPrettyPrinter().writeValue(outFile, json);
-		} catch (final Exception e) {
-			System.err.println("Error writing to file:");
-			e.printStackTrace();
-			return 500;
-		}
-
-//		List<HeadlessApplicationOptions> optionsList = getHeadlessOptions();
-//
-//		for (HeadlessApplicationOptions hOptions : optionsList) {
-//			runScenarioMultipleTimes(hOptions);
-//		}
 
 		return IApplication.EXIT_OK;
 	}
