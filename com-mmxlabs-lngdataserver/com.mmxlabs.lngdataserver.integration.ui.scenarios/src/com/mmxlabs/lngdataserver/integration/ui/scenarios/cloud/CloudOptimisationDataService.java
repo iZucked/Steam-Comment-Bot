@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -260,7 +261,25 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 
 	@Override
 	public void delete(@NonNull Container container) {
-		// do nothing
+		if (serviceModel.isOffline()) {
+			return;
+		}
+		// Note: while this is recursive, we do assume a child first deletion set of calls as defined in DeleteScenarioCommandHandler
+		final List<String> jobIdsToDelete = new LinkedList<>();
+		recursiveDelete(container, jobIdsToDelete);
+		for (final String jobId : jobIdsToDelete) {
+			updater.deleteDownloaded(jobId);
+		}
+	}
+	
+	private void recursiveDelete(final Container parent, final List<String> jobIds) {
+		if (parent instanceof ScenarioInstance) {
+			final ScenarioInstance scenarioInstance = (ScenarioInstance) parent;
+			jobIds.add(scenarioInstance.getExternalID());
+		}
+		for (final Container c : parent.getElements()) {
+			recursiveDelete(c, jobIds);
+		}
 	}
 
 	@Override
@@ -280,13 +299,13 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 
 	@Override
 	public ScenarioInstance copyInto(@NonNull Container parent, @NonNull ScenarioModelRecord tmpRecord, @NonNull String name, @NonNull IProgressMonitor progressMonitor) throws Exception {
-		// TODO Auto-generated method stub
+		// do nothing
 		return null;
 	}
 
 	@Override
 	public ScenarioInstance copyInto(@NonNull Container parent, @NonNull IScenarioDataProvider scenarioDataProvider, @NonNull String name, @NonNull IProgressMonitor progressMonitor) throws Exception {
-		// TODO Auto-generated method stub
+		// do nothing
 		return null;
 	}
 

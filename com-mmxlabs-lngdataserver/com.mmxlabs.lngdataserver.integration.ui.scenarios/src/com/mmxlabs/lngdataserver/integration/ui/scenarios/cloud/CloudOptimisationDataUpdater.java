@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,7 +64,13 @@ public class CloudOptimisationDataUpdater {
 	private final ScenarioService modelRoot;
 
 	private final File basePath;
+	private final File tasksFile;
+	private final File downloadedFile;
+	private final File recordsFile;
 	private boolean purgeCache = false;
+	private enum FileType{
+		MasterRecords, TasksRecords, DownloadedRecords;
+	}
 	
 	private Set<String> warnedLoadFailures = new HashSet<>();
 	
@@ -82,6 +89,9 @@ public class CloudOptimisationDataUpdater {
 			final Consumer<CloudOptimisationDataResultRecord> readyCallback) {
 		this.modelRoot = modelRoot;
 		this.basePath = basePath;
+		this.recordsFile = new File(basePath.getAbsolutePath() + IPath.SEPARATOR + "records.json");
+		this.tasksFile = new File(basePath.getAbsolutePath() + IPath.SEPARATOR + "tasks.json");
+		this.downloadedFile = new File(basePath.getAbsolutePath() + IPath.SEPARATOR + "downloaded.json");
 		this.client = client;
 		this.readyCallback = readyCallback;
 		taskExecutor = Executors.newSingleThreadExecutor();
@@ -228,10 +238,9 @@ public class CloudOptimisationDataUpdater {
 	public void start() {
 		initDownloadedRecords();
 		
-		final File f = new File(basePath.getAbsolutePath() + "/tasks.json");
-		if (f.exists() && f.canRead()) {
+		if (tasksFile.exists() && tasksFile.canRead()) {
 			try {
-				final String json = Files.readString(f.toPath());
+				final String json = Files.readString(tasksFile.toPath());
 				final List<CloudOptimisationDataResultRecord> tasks = CloudOptimisationDataServiceClient.parseRecordsJSONData(json);
 				if (tasks != null && !tasks.isEmpty()) {
 					update(tasks);
@@ -275,7 +284,6 @@ public class CloudOptimisationDataUpdater {
 
 		final Pair<String, Instant> recordsPair = client.listContents(true);
 		if (recordsPair != null) {
-			final File tasksFile = new File(basePath.getAbsolutePath() + IPath.SEPARATOR + "tasks.json");
 			final List<String> tasks = getJobId(recordsPair.getFirst());
 			final List<CloudOptimisationDataResultRecord> records = processRecordsFromTasks(tasks);
 			final String json = CloudOptimisationDataServiceClient.getJSON(records);
@@ -286,10 +294,9 @@ public class CloudOptimisationDataUpdater {
 	}
 	
 	private void initDownloadedRecords() {
-		final File downloaded = new File(basePath.getAbsolutePath() + "/downloaded.json");
-		if (downloaded.exists() && downloaded.canRead()) {
+		if (downloadedFile.exists() && downloadedFile.canRead()) {
 			try {
-				final String json = Files.readString(downloaded.toPath());
+				final String json = Files.readString(downloadedFile.toPath());
 				final List<CloudOptimisationDataResultRecord> tasks = CloudOptimisationDataServiceClient.parseRecordsJSONData(json);
 				tasks.stream().forEach(t -> downloadedRecords.put(t.getJobid(), t.getCreationDate()));
 			} catch (final IOException e) {
@@ -300,16 +307,32 @@ public class CloudOptimisationDataUpdater {
 
 	private synchronized void updateDownloaded(){
 		try {
-			final File downloaded = new File(basePath.getAbsolutePath() + "/downloaded.json");
-			if (downloaded.exists() && downloaded.canWrite() && !downloadedRecords.isEmpty()) {
+			if (downloadedFile.exists() && downloadedFile.canWrite() && !downloadedRecords.isEmpty()) {
 				final List<String> dTasks = new ArrayList(downloadedRecords.keySet());
 				final List<CloudOptimisationDataResultRecord> recs = processRecordsFromTasks(dTasks);
 				final String json = CloudOptimisationDataServiceClient.getJSON(recs);
-				Files.writeString(downloaded.toPath(), json, Charsets.UTF_8);
+				Files.writeString(downloadedFile.toPath(), json, Charsets.UTF_8);
 			}
 		} catch (Exception e) {
 			LOG.error("Error saving list of downloaded records!" + e.getMessage(), e);
 		}
+	}
+	
+	public synchronized boolean deleteDownloaded(final String jobId) {
+		final CloudOptimisationDataResultRecord record = getRecord(jobId);
+		if (record != null) {
+			pause();
+			
+			installedRecords.remove(record.getJobid());
+			
+			if (downloadedRecords.remove(record.getJobid()) != null) {
+				updateDownloaded();
+			}
+			boolean result = deleteRecord(record);
+			resume();
+			return result;
+		}
+		return false;
 	}
 	
 	private List<String> getJobId(final String jobIds){
@@ -333,25 +356,66 @@ public class CloudOptimisationDataUpdater {
 		return results;
 	}
 	
-	private CloudOptimisationDataResultRecord getRecord(final String jobid) {
-		final File recordsFile = new File(basePath.getAbsolutePath() + IPath.SEPARATOR + "records.json");
+	/**
+	 * Returns records from the master list of records.
+	 * Returns null if no record found.
+	 * @param jobId - jobId if next arg is false
+	 * @param isUUID
+	 * @return
+	 */
+	private CloudOptimisationDataResultRecord getRecord(final String jobId) {
+		final List<CloudOptimisationDataResultRecord> records = getRecords();
+		if (records != null && !records.isEmpty()) {
+			for (final CloudOptimisationDataResultRecord record : records) {
+				if (record.getJobid().equalsIgnoreCase(jobId)) {
+					return record;
+				}
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Returns a master list of records
+	 * @return
+	 */
+	private List<CloudOptimisationDataResultRecord> getRecords() {
 		if (recordsFile.exists() && recordsFile.canRead()) {
 			String json;
 			try {
 				json = Files.readString(recordsFile.toPath());
-				final List<CloudOptimisationDataResultRecord> records = CloudOptimisationDataServiceClient.parseRecordsJSONData(json);
-				if (records != null && !records.isEmpty()) {
-					for (final CloudOptimisationDataResultRecord record : records) {
-						if (record.getJobid().equalsIgnoreCase(jobid)) {
-							return record;
-						}
-					}
-				}
+				return CloudOptimisationDataServiceClient.parseRecordsJSONData(json);
 			} catch (final IOException e) {
 				e.printStackTrace();
 			}
 		}
-		return null;
+		return Collections.EMPTY_LIST;
+	}
+	
+	private boolean deleteRecord(final CloudOptimisationDataResultRecord record) {
+		final List<CloudOptimisationDataResultRecord> records = getRecords();
+		if (records.remove(record)) {
+			try {
+				if (recordsFile.exists() && recordsFile.canWrite()) {
+					final String json = CloudOptimisationDataServiceClient.getJSON(records);
+					Files.writeString(recordsFile.toPath(), json, Charsets.UTF_8);
+					boolean amap = false;
+					final File anonymisationMap = new File(String.format("%s/%s.amap", basePath, record.getJobid()));
+					if (anonymisationMap.exists()) {
+						amap = anonymisationMap.delete();
+					}
+					boolean lngFile = false;
+					final File lingoFile = new File(String.format("%s/%s.lingo", basePath, record.getJobid()));
+					if (lingoFile.exists()) {
+						lngFile = lingoFile.delete();
+					}
+					return amap && lngFile;
+				}
+			} catch (Exception e) {
+				LOG.error("Error saving list of downloaded records!" + e.getMessage(), e);
+			}
+		}
+		return false;
 	}
 	
 	private synchronized void purgeLocalRecords() {
@@ -381,7 +445,7 @@ public class CloudOptimisationDataUpdater {
 			final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
 			scenarioInstance.setReadonly(readOnly);
 			scenarioInstance.setUuid(manifest.getUUID());
-			scenarioInstance.setExternalID(record.getUuid());
+			scenarioInstance.setExternalID(record.getJobid());
 
 			scenarioInstance.setRootObjectURI(archiveURI.toString());
 
