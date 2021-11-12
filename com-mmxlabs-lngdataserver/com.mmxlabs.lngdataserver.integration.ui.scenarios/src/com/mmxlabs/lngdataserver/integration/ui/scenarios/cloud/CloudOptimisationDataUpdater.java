@@ -68,9 +68,6 @@ public class CloudOptimisationDataUpdater {
 	private final File downloadedFile;
 	private final File recordsFile;
 	private boolean purgeCache = false;
-	private enum FileType{
-		MasterRecords, TasksRecords, DownloadedRecords;
-	}
 	
 	private Set<String> warnedLoadFailures = new HashSet<>();
 	
