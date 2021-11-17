@@ -1988,7 +1988,7 @@
 		}, {
 			"mmxId": "L_PR_Penue",
 			"name": "Guayanilla",
-			"aliases": ["Guayama", "EcoElectrica", "Penuelas"],
+			"aliases": ["EcoElectrica", "Penuelas"],
 			"geographicPoint": {
 				"lat": 17.972999572753906,
 				"lon": -66.76249694824219,
