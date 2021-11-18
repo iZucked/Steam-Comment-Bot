@@ -9,7 +9,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -24,7 +23,6 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
-import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
@@ -41,9 +39,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan.VoyagePlanMetrics;
  */
 public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
-	
 	public static final boolean ENABLE_CARGO_RUN_DRY = false;
-	
+
 	public static class Record {
 
 		public Record(@Nullable final IResource resource, @NonNull final IVessel vessel, final long[] startHeelRangeInM3, final int[] baseFuelPricesPerMT,
@@ -295,7 +292,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 				}
 			}
 		}
-		
+
 		return currentPlan;
 	}
 
@@ -321,7 +318,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		if (currentSequence == null) {
 			return null;
 		}
-		
+
 		final VoyagePlan currentPlan = new VoyagePlan();
 
 		// Calculate voyage plan
