@@ -648,9 +648,6 @@ public class VoyagePlanner implements IVoyagePlanner {
 				if (iPortSlot instanceof MaintenanceVesselEventPortSlot) {
 					final MaintenanceVesselEventPortSlot maintenancePortSlot = (MaintenanceVesselEventPortSlot) iPortSlot;
 					final IVesselEventPortSlot vesselEventPortSlot = maintenancePortSlot.getFormerPortSlot();
-					if (vesselEventPortSlot.getId().equals("M1")) {
-						int i = 0;
-					}
 				}
 			}
 		}
