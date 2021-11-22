@@ -218,7 +218,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			charterPlans.add(new Pair<>(upToCharterPlan, preCharterAllocation != null ? preCharterAllocation : preCharteringTimes));
 			charterPlans.add(new Pair<>(charterToEndPlan, postCharteringTimes));
 
-			assert bigVoyagePlan.getVoyagePlanMetrics()[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()] == charterPlans.stream().map(Pair::getFirst).mapToLong(lvp -> lvp.getVoyagePlanMetrics()[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()]).sum();
+			// Note: this assertion is not a valid thing to do here. A GCO could generate a violation, e.g. with tight volume limits it could boil-off down to safety before GCO but with GCO there's too much LNG leftover.
+			// assert bigVoyagePlan.getVoyagePlanMetrics()[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()] == charterPlans.stream().map(Pair::getFirst).mapToLong(lvp -> lvp.getVoyagePlanMetrics()[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()]).sum();
 
 			return charterPlans;
 		}
