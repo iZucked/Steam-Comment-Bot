@@ -31,6 +31,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
+import com.mmxlabs.scheduler.optimiser.components.impl.GeneratedCharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.MaintenanceVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
@@ -804,34 +805,24 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	}
 
 	/**
-	 * Given a sequence of {@link IPortDetails} interleaved with
-	 * {@link VoyageDetails}, compute the total base fuel and LNG requirements,
-	 * taking into account initial conditions, load and discharge commitments etc.
-	 * It is assumed that the first and last {@link IPortDetails} will be a Loading
-	 * slot or other slot where the vessel state is set to a known state.
-	 * Intermediate slots are any other type of slot (e.g. one discharge, multiple
-	 * waypoints, etc). If the first slot is a load slot, then this is the only
-	 * reason we should see a discharge slot.
+	 * Given a sequence of {@link IPortDetails} interleaved with {@link VoyageDetails}, compute the total base fuel and LNG requirements, taking into account initial conditions, load and discharge
+	 * commitments etc. It is assumed that the first and last {@link IPortDetails} will be a Loading slot or other slot where the vessel state is set to a known state. Intermediate slots are any other
+	 * type of slot (e.g. one discharge, multiple waypoints, etc). If the first slot is a load slot, then this is the only reason we should see a discharge slot.
 	 * 
-	 * NOTE: this method intentionally ignores the last sequence element when
-	 * calculating the total cost of a voyage plan, in order to avoid
-	 * double-counting elements, since voyage plans are expected to come in A-B-C
-	 * C-D-E E-F-G chains, where the last element of the chain does not get counted.
+	 * NOTE: this method intentionally ignores the last sequence element when calculating the total cost of a voyage plan, in order to avoid double-counting elements, since voyage plans are expected
+	 * to come in A-B-C C-D-E E-F-G chains, where the last element of the chain does not get counted.
 	 * 
 	 * @param sequence
 	 * @param dischargeTime
 	 * @param loadTime
-	 * @return Number of capacity constraints which had to be violated in the
-	 *         allocation
+	 * @return Number of capacity constraints which had to be violated in the allocation
 	 */
 	@Override
 	public final long[] calculateVoyagePlan(final VoyagePlan voyagePlan, final IVessel vessel, final ICharterCostCalculator charterCostCalculator, final long[] startHeelRangeInM3,
 			final int[] baseFuelPricesPerMT, final IPortTimesRecord portTimesRecord, final IDetailsSequenceElement... sequence) {
 		/*
-		 * TODO: instead of taking an interleaved List<Object> as a parameter, this
-		 * would have a far more informative signature (and cleaner logic?) if it passed
-		 * a list of IPortDetails and a list of VoyageDetails as separate parameters.
-		 * Worth doing at some point?
+		 * TODO: instead of taking an interleaved List<Object> as a parameter, this would have a far more informative signature (and cleaner logic?) if it passed a list of IPortDetails and a list of
+		 * VoyageDetails as separate parameters. Worth doing at some point?
 		 */
 
 		// Ensure odd number of elements
@@ -883,13 +874,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				}
 			}
 		}
-//		final long lngCommitmentInM3;
-//		if (((PortDetails) sequence[sequence.length-1]).getOptions().getPortSlot() instanceof MaintenanceVesselEventPortSlot) {
-//			final long maintenanceConsumption = ((MaintenanceVesselEventPortSlot) ((PortDetails) sequence[sequence.length-1]).getOptions().getPortSlot()).getHeelOptionsConsumer().getMinimumHeelAcceptedInM3();
-//			lngCommitmentInM3 = nonEndLngCommitmentInM3 + maintenanceConsumption;
-//		} else {
-//			lngCommitmentInM3 = nonEndLngCommitmentInM3;
-//		}
 
 		long[] voyagePlanMetrics;
 
@@ -940,7 +924,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			}
 			voyagePlanMetrics = returnedViolations;
 		} else {
-			final int endHeelState = getExpectedCargoEndHeelState(vessel.getWarmupTime(), lastVoyageDetailsElement);
+			final int endHeelState;
+			final VoyageDetails endHeelDefiningVoyageDetailsElement = getEndHeelDefiningVoyageDetailsElement(sequence, lastVoyageDetailsElement);
+			endHeelState = getExpectedCargoEndHeelState(vessel.getWarmupTime(), endHeelDefiningVoyageDetailsElement);
 			final int returnedViolations = calculateNonCargoEndState(voyagePlan, lastVoyageDetailsElement, voyageTime, startHeelRangeInM3, lngCommitmentInM3, endHeelState, vessel.getSafetyHeel());
 			if (returnedViolations == Integer.MAX_VALUE) {
 				return null;
@@ -1155,6 +1141,29 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		return voyagePlanMetrics;
 	}
 
+	@Nullable
+	private VoyageDetails getEndHeelDefiningVoyageDetailsElement(final IDetailsSequenceElement[] sequence, @Nullable final VoyageDetails currentLastVoyageDetailsElement) {
+		if (currentLastVoyageDetailsElement != null) {
+			// If using GCO, the last voyage might be defined by a different sequence element
+			int totalVoyageTime = currentLastVoyageDetailsElement.getTravelTime() + currentLastVoyageDetailsElement.getIdleTime();
+			if (totalVoyageTime == 0 && currentLastVoyageDetailsElement.getOptions().getFromPortSlot() instanceof GeneratedCharterOutVesselEventPortSlot) {
+				int i = sequence.length - 2;
+				while (i > 0) {
+					if (sequence[i] == currentLastVoyageDetailsElement) {
+						break;
+					}
+					i = i - 2;
+				}
+				// If we broke in loop above then i >= 1, get (i-2) if i > 1
+				if (i > 1) {
+					return (VoyageDetails) sequence[i-2];
+				}
+			}
+		}
+		// return original argument if we could not find preceeding voyageDetails or it is null
+		return currentLastVoyageDetailsElement;
+	}
+
 	private void calculateCharterCosts(final ICharterCostCalculator charterCostCalculator, final IDetailsSequenceElement[] sequence, final IPortTimesRecord portTimesRecord) {
 		final int voyagePlanStartTimeUTC = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getFirstSlotTime(), portTimesRecord.getFirstSlot());
 		final int offset = sequence.length > 1 ? 1 : 0;
@@ -1290,6 +1299,11 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				} else if (endHeelState == VesselTankState.MUST_BE_COLD) {
 					if (endPortSlot.getPortType() != PortType.Maintenance) {
 						if (remainingHeelInM3 > endPortSlot.getHeelOptionsConsumer().getMaximumHeelAcceptedInM3()) {
+							// We have more heel onboard than the max accepted
+
+							// Reduce remaining heel to zero (should be maxHeelAccepted?)
+							// remainingHeelInM3 = 0L;
+							// voyagePlan.setRemainingHeelInM3(remainingHeelInM3);
 							++violationsCount;
 						} else if (remainingHeelInM3 < endPortSlot.getHeelOptionsConsumer().getMinimumHeelAcceptedInM3()) {
 							// Current heel is too low for the end requirement. Can we increase our start
