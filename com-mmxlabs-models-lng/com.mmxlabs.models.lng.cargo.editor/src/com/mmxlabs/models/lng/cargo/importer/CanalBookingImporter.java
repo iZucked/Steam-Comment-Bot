@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EObject;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord;
 import com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters;
 import com.mmxlabs.models.util.importer.IMMXExportContext;
 import com.mmxlabs.models.util.importer.IMMXImportContext;
@@ -40,6 +41,9 @@ public class CanalBookingImporter extends DefaultClassImporter {
 		}
 		else if (Objects.equals(kind, VesselGroupCanalParameters.class.getSimpleName())) {
 			return super.importObject(parent, CargoPackage.eINSTANCE.getVesselGroupCanalParameters(), row, context);
+		}
+		else if (Objects.equals(kind, PanamaSeasonalityRecord.class.getSimpleName())) {
+			return super.importObject(parent, CargoPackage.eINSTANCE.getPanamaSeasonalityRecord(), row, context);
 		}
 		else {
 			return super.importObject(parent, eClass, row, context);

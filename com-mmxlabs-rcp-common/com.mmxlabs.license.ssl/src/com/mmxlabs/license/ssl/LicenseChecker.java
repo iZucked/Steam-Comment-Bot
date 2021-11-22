@@ -10,7 +10,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.KeyStore;
@@ -28,6 +27,7 @@ import java.util.Objects;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.license.ssl.internal.Activator;
 
@@ -35,12 +35,19 @@ import com.mmxlabs.license.ssl.internal.Activator;
  * A simple class to load a license - a SSL certificate from a disk location and
  * verify it has been signed by the "root" key in the embedded keystore and that
  * it is still in date.
- * 
+ *
  * @author Simon Goodall
  */
 public final class LicenseChecker {
 
 	private static final String LICENSE_FILE_PROPERTY = "lingo.license.file";
+	public static final String USER_HOME_PROPERTY = "user.home";
+	public static final String LICENSE_FOLDER = "license.folder";
+	public static final String MMXLABS_FOLDER = "mmxlabs";
+	public static final String LICENSE_KEYSTORE = "license.p12";
+	public static final String DATAHUB_LICENSE_KEYSTORE = "datahub.p12";
+	public static final String LICENSE_ENDPOINT = "/license";
+	public static final String PKCS12 = "PKCS12";
 
 	@SuppressWarnings("serial")
 	public static class InvalidLicenseException extends Exception {
@@ -75,6 +82,15 @@ public final class LicenseChecker {
 	// Hardcoded keystore password - only storing public key so not really an issue
 	// - although tampering may be an issue
 	private static final String password = "Lok3pDTS";
+
+	/**
+	 * Used by Application.java to avoid duplicating the password
+	 *
+	 * @return the keystore password
+	 */
+	public static String getPassword() {
+		return password;
+	}
 
 	private static final String CACERTS_PATH = System.getProperty("java.home") + File.separatorChar + "lib" + File.separatorChar + "security" + File.separatorChar + "cacerts"; //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$//$NON-NLS-4$
 	private static final String CACERTS_TYPE = "JKS"; //$NON-NLS-1$
@@ -111,12 +127,17 @@ public final class LicenseChecker {
 
 	public static synchronized LicenseState checkLicense() {
 		if (state == null) {
-			state = doCheckLicense();
+			KeyStore licenseKeystore = getLicenseKeystore();
+			state = doCheckLicense(licenseKeystore);
 		}
 		return state;
 	}
 
-	public static synchronized LicenseState doCheckLicense() {
+	public static synchronized LicenseState doCheckLicense(KeyStore licenseKeystore) {
+
+		if (licenseKeystore == null) {
+			return LicenseState.KeystoreNotFound;
+		}
 
 		try {
 			// Load keystore
@@ -133,22 +154,6 @@ public final class LicenseChecker {
 			final Certificate rootCertificate = keyStore.getCertificate("rootca");
 			if (rootCertificate == null) {
 				return LicenseState.Unknown;
-			}
-
-			// Load the license file
-			KeyStore licenseKeystore = null;
-			{
-				licenseKeystore = getLicenseFromSystemProperty();
-				if (licenseKeystore == null) {
-					licenseKeystore = getEclipseHomeLicense();
-				}
-				if (licenseKeystore == null) {
-					licenseKeystore = getUserDataLicense();
-				}
-			}
-
-			if (licenseKeystore == null) {
-				return LicenseState.KeystoreNotFound;
 			}
 
 			// Hardcoded alias name in the keystore as part of generation process
@@ -168,65 +173,13 @@ public final class LicenseChecker {
 				return LicenseState.Unknown;
 			}
 
-			// License is valid, now populate the rest of the keystore
-
 			// Load in existing certificates from default store. We replace the default
 			// store with our own, so make sure other bits of the app using a truststore
 			// still work.
-			{
-				String defaultStorePath = System.getProperty("javax.net.ssl.trustStore");
-				if (defaultStorePath == null) {
-					defaultStorePath = CACERTS_PATH;
-				}
-				String defaultStoreType = System.getProperty("javax.net.ssl.trustStoreType");
-				if (defaultStoreType == null) {
-					defaultStoreType = CACERTS_TYPE;
-				}
+			populateDefaultKeystore(keyStore);
+			createKeystoreCopies(keyStore, licenseKeystore);
 
-				final String defaultStorePassword = System.getProperty("javax.net.ssl.trustStorePassword");
-				final char[] pass = defaultStorePassword == null ? null : defaultStorePassword.toCharArray();
-
-				final KeyStore defaultStore = KeyStore.getInstance(defaultStoreType);
-				if (Objects.equals("NUL", defaultStorePath)) {
-					defaultStore.load(null);
-				} else {
-					try (FileInputStream fis = new FileInputStream(defaultStorePath)) {
-						defaultStore.load(fis, pass);
-					}
-				}
-
-				{
-					final Enumeration<String> enumerator = defaultStore.aliases();
-					while (enumerator.hasMoreElements()) {
-						final String alias = enumerator.nextElement();
-						keyStore.setCertificateEntry(alias, defaultStore.getCertificate(alias));
-					}
-				}
-
-				importExtraCertsFromHome(keyStore);
-				importExtraCertsInstall(keyStore);
-
-				// Create copies of the keystores in a known place on filesystem so we can
-				// reference them
-				final File keyStoreFile = Activator.getDefault().getBundle().getDataFile("local-keystore.jks");
-				final File trustStoreFile = Activator.getDefault().getBundle().getDataFile("local-truststore.jks");
-
-				try (FileOutputStream stream = new FileOutputStream(keyStoreFile)) {
-					licenseKeystore.store(stream, password.toCharArray());
-				}
-				try (FileOutputStream stream = new FileOutputStream(trustStoreFile)) {
-					keyStore.store(stream, password.toCharArray());
-					System.setProperty("javax.net.ssl.keyStore", keyStoreFile.toString());
-					System.setProperty("javax.net.ssl.keyStoreType", "pkcs12");
-					System.setProperty("javax.net.ssl.keyStorePassword", password);
-
-					System.setProperty("javax.net.ssl.trustStore", trustStoreFile.toString());
-					System.setProperty("javax.net.ssl.trustStorePassword", password);
-					System.setProperty("javax.net.ssl.trustStoreType", "pkcs12");
-					return LicenseState.Valid;
-				}
-			}
-
+			return LicenseState.Valid;
 		} catch (final CertificateExpiredException e) {
 			return LicenseState.Expired;
 		} catch (final CertificateNotYetValidException e) {
@@ -237,68 +190,180 @@ public final class LicenseChecker {
 		}
 	}
 
-	private static KeyStore getUserDataLicense() {
+	/**
+	 * Create copies of the default & license keystores and place them in a known place on the filesystem so we can reference them later
+	 *
+	 * @param keyStore
+	 * @param licenseKeystore
+	 * @throws IOException
+	 * @throws FileNotFoundException
+	 * @throws CertificateException
+	 * @throws NoSuchAlgorithmException
+	 * @throws KeyStoreException
+	 */
+	static void createKeystoreCopies(KeyStore keyStore, KeyStore licenseKeystore) throws FileNotFoundException, IOException, KeyStoreException, NoSuchAlgorithmException, CertificateException {
+		final File keyStoreFile = Activator.getDefault().getBundle().getDataFile("local-keystore.jks");
+		final File trustStoreFile = Activator.getDefault().getBundle().getDataFile("local-truststore.jks");
 
-		final String userHome = System.getProperty("user.home");
+		try (FileOutputStream stream = new FileOutputStream(keyStoreFile)) {
+			licenseKeystore.store(stream, password.toCharArray());
+		}
+		try (FileOutputStream stream = new FileOutputStream(trustStoreFile)) {
+			keyStore.store(stream, password.toCharArray());
+			System.setProperty("javax.net.ssl.keyStore", keyStoreFile.toString());
+			System.setProperty("javax.net.ssl.keyStoreType", "pkcs12");
+			System.setProperty("javax.net.ssl.keyStorePassword", password);
+
+			System.setProperty("javax.net.ssl.trustStore", trustStoreFile.toString());
+			System.setProperty("javax.net.ssl.trustStorePassword", password);
+			System.setProperty("javax.net.ssl.trustStoreType", "pkcs12");
+		}
+	}
+
+
+	/**
+	 * Populate the default keystore with the necessary certificates
+	 *
+	 * @param keyStore
+	 * @throws NoSuchAlgorithmException
+	 * @throws CertificateException
+	 * @throws IOException
+	 * @throws KeyStoreException
+	 */
+	private static void populateDefaultKeystore(KeyStore keyStore) throws NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException {
+		String defaultStorePath = System.getProperty("javax.net.ssl.trustStore");
+		if (defaultStorePath == null) {
+			defaultStorePath = CACERTS_PATH;
+		}
+		String defaultStoreType = System.getProperty("javax.net.ssl.trustStoreType");
+		if (defaultStoreType == null) {
+			defaultStoreType = CACERTS_TYPE;
+		}
+
+		final String defaultStorePassword = System.getProperty("javax.net.ssl.trustStorePassword");
+		final char[] pass = defaultStorePassword == null ? null : defaultStorePassword.toCharArray();
+
+		final KeyStore defaultStore = KeyStore.getInstance(defaultStoreType);
+		if (Objects.equals("NUL", defaultStorePath)) {
+			defaultStore.load(null);
+		} else {
+			try (FileInputStream fis = new FileInputStream(defaultStorePath)) {
+				defaultStore.load(fis, pass);
+			}
+		}
+
+		final Enumeration<String> enumerator = defaultStore.aliases();
+		while (enumerator.hasMoreElements()) {
+			final String alias = enumerator.nextElement();
+			keyStore.setCertificateEntry(alias, defaultStore.getCertificate(alias));
+		}
+
+		importExtraCertsFromHome(keyStore);
+		importExtraCertsInstall(keyStore);
+	}
+
+	/**
+	 * Get license keystore from one of the following locations, respectively: system properties, eclipse home, user's mmxlabs folder
+	 *
+	 * @return the license keystore if it exists, otherwise null
+	 */
+	private static KeyStore getLicenseKeystore() {
+		// Load the license file
+		KeyStore licenseKeystore = null;
+
+		try {
+
+			licenseKeystore = getLicenseFromSystemProperty();
+
+			if (licenseKeystore == null) {
+				licenseKeystore = getEclipseHomeLicense();
+			}
+
+			if (licenseKeystore == null) {
+				licenseKeystore = getUserDataLicense();
+			}
+		} catch (CertificateException e) {
+			log.error("failed to get certificate from license keystore: {0}", e.getMessage());
+		}
+		return licenseKeystore;
+	}
+
+	/**
+	 * Get license keystore from user's mmxlabs directory
+	 *
+	 * @return license keystore
+	 */
+	static KeyStore getUserDataLicense() {
+		final String userHome = System.getProperty(USER_HOME_PROPERTY);
 		if (userHome != null) {
-			final File f = new File(userHome + "/mmxlabs/license.p12");
-			try (FileInputStream inStream = new FileInputStream(f)) {
-				final KeyStore instance = KeyStore.getInstance("PKCS12");
-				instance.load(inStream, password.toCharArray());
-				return instance;
-			} catch (IOException | CertificateException | KeyStoreException | NoSuchAlgorithmException e) {
-				// Ignore
-				// Maybe better to catch some of these exception types and feedback to user?
+			final File f = new File(userHome + File.separator + MMXLABS_FOLDER + File.separator + LICENSE_KEYSTORE);
+			if (f.exists()) {
+				try (FileInputStream inStream = new FileInputStream(f)) {
+					final KeyStore instance = KeyStore.getInstance(PKCS12);
+					instance.load(inStream, password.toCharArray());
+					return instance;
+				} catch (IOException | CertificateException | KeyStoreException | NoSuchAlgorithmException e) {
+					// Maybe better to catch some of these exception types and feedback to user?
+					log.error("failed to get license from user's mmxlabs folder: " + e.getMessage());
+				}
 			}
 		}
 		return null;
 	}
 
-	private static KeyStore getLicenseFromSystemProperty() {
 
+	/**
+	 * Get license from system property (as defined in Eclipse runtime program arguments)
+	 *
+	 * @return license keystore
+	 * @throws CertificateException
+	 */
+	static KeyStore getLicenseFromSystemProperty() throws CertificateException {
 		final String licenseFile = System.getProperty(LICENSE_FILE_PROPERTY);
 		if (licenseFile != null) {
 			try {
 				final File f = new File(licenseFile);
 				if (f.exists()) {
-					try {
-						try (InputStream inStream = new FileInputStream(f)) {
-							final KeyStore instance = KeyStore.getInstance("PKCS12");
-							instance.load(inStream, password.toCharArray());
-							return instance;
-						}
-					} catch (final IOException | NoSuchAlgorithmException | KeyStoreException e) {
-						// Ignore
-						// Maybe better to catch some of these exception types and feedback to user?
+					try (InputStream inStream = new FileInputStream(f)) {
+						final KeyStore instance = KeyStore.getInstance(PKCS12);
+						instance.load(inStream, password.toCharArray());
+						return instance;
 					}
 				}
-			} catch (Exception e) {
-				//
+			} catch (final IOException | NoSuchAlgorithmException | KeyStoreException e) {
+				// Maybe better to catch some of these exception types and feedback to user?
+				log.error("failed to get license from system property home: " + e.getMessage());
 			}
 		}
-
 		return null;
 	}
 
-	private static KeyStore getEclipseHomeLicense() throws CertificateException {
+
+	/**
+	 * Get license keystore from Eclipse home directory
+	 * @return
+	 * @throws CertificateException
+	 */
+	static KeyStore getEclipseHomeLicense() throws CertificateException {
 
 		final String userHome = System.getProperty("eclipse.home.location");
 		if (userHome != null) {
 			try {
-				final URL url = new URL(userHome + "/license.p12");
-				try (InputStream inStream = url.openStream()) {
-					final KeyStore instance = KeyStore.getInstance("PKCS12");
-					instance.load(inStream, password.toCharArray());
-					return instance;
+				final File file = new File(userHome + File.separator + LICENSE_KEYSTORE);
+				if (file.exists()) {
+					try (InputStream inStream = new FileInputStream(file)) {
+						final KeyStore instance = KeyStore.getInstance(PKCS12);
+						instance.load(inStream, password.toCharArray());
+						return instance;
+					}
 				}
 			} catch (final IOException | NoSuchAlgorithmException | KeyStoreException e) {
-				// Ignore
-				// Maybe better to catch some of these exception types and feedback to user?
+				log.error("failed to get license from eclipse home: " + e.getMessage());
 			}
 		}
 		return null;
-
 	}
+
 
 	/**
 	 * Loads the client license certificate into memory.
@@ -334,13 +399,13 @@ public final class LicenseChecker {
 
 	public static File getCACertsFileFromEclipseHomeURL(String eclipseHomeLocation) throws URISyntaxException {
 		if (eclipseHomeLocation != null) {
-			final String uriString = (eclipseHomeLocation + "/cacerts/").replaceAll(" ", "%20");
-			return new File(new URI(uriString));
+			final String location = (eclipseHomeLocation + File.separator + "cacerts" + File.separator).replaceAll(" ", "%20");
+			return new File(location);
 		}
 		return null;
 	}
 
-	private static void importExtraCertsFromHome(final KeyStore keystore) {
+	static void importExtraCertsFromHome(final KeyStore keystore) {
 		final String userHome = System.getProperty("eclipse.home.location");
 		try {
 			File f = getCACertsFileFromEclipseHomeURL(userHome);
@@ -363,7 +428,7 @@ public final class LicenseChecker {
 	}
 
 	private static void importExtraCertsInstall(final KeyStore keystore) {
-		final String userHome = System.getProperty("user.home");
+		final String userHome = System.getProperty(USER_HOME_PROPERTY);
 		if (userHome != null) {
 			final File f = new File(userHome + "/mmxlabs/cacerts/");
 			if (f.exists() && f.isDirectory()) {
