@@ -147,8 +147,12 @@ public class DefaultModelEntityMap implements ModelEntityMap, IExternalDateProvi
 
 	@Override
 	public @NonNull ZonedDateTime getEarliestTime() {
-		// TODO Auto-generated method stub
 		return dateHelper.getEarliestTime();
+	}
+
+	@Override
+	public @NonNull ZonedDateTime getLatestTime() {
+		return dateHelper.getLatestTime();
 	}
 
 }

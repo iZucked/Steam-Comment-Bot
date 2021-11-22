@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters;
 import com.mmxlabs.models.lng.commercial.EVesselTankState;
@@ -190,9 +191,12 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		cargoModelFinder.getCargoModel().setCanalBookings(canalBookings);
 
 		final VesselGroupCanalParameters p = CargoFactory.eINSTANCE.createVesselGroupCanalParameters();
-		p.setNorthboundWaitingDays(10);
-		p.setSouthboundWaitingDays(5);
 		canalBookings.getVesselGroupCanalParameters().add(p);
+		final PanamaSeasonalityRecord psr = CargoFactory.eINSTANCE.createPanamaSeasonalityRecord();
+		psr.setNorthboundWaitingDays(10);
+		psr.setSouthboundWaitingDays(5);
+		psr.setVesselGroupCanalParameter(p);
+		canalBookings.getPanamaSeasonalityRecords().add(psr);
 
 		evaluateTestWith(makeCanalBookingService());
 
@@ -227,9 +231,12 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		cargoModelFinder.getCargoModel().setCanalBookings(canalBookings);
 
 		final VesselGroupCanalParameters p = CargoFactory.eINSTANCE.createVesselGroupCanalParameters();
-		p.setNorthboundWaitingDays(15);
-		p.setSouthboundWaitingDays(5);
 		canalBookings.getVesselGroupCanalParameters().add(p);
+		final PanamaSeasonalityRecord psr = CargoFactory.eINSTANCE.createPanamaSeasonalityRecord();
+		psr.setNorthboundWaitingDays(15);
+		psr.setSouthboundWaitingDays(5);
+		psr.setVesselGroupCanalParameter(p);
+		canalBookings.getPanamaSeasonalityRecords().add(psr);
 
 		evaluateTestWith(makeCanalBookingService());
 
@@ -263,9 +270,12 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		cargoModelFinder.getCargoModel().setCanalBookings(canalBookings);
 
 		final VesselGroupCanalParameters p = CargoFactory.eINSTANCE.createVesselGroupCanalParameters();
-		p.setNorthboundWaitingDays(10);
-		p.setSouthboundWaitingDays(5);
 		canalBookings.getVesselGroupCanalParameters().add(p);
+		final PanamaSeasonalityRecord psr = CargoFactory.eINSTANCE.createPanamaSeasonalityRecord();
+		psr.setNorthboundWaitingDays(10);
+		psr.setSouthboundWaitingDays(5);
+		psr.setVesselGroupCanalParameter(p);
+		canalBookings.getPanamaSeasonalityRecords().add(psr);
 		final CanalBookingSlot booking1 = cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2021, Month.MARCH, 12), null);
 
 		evaluateTestWith(makeCanalBookingService());
@@ -312,8 +322,11 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		cargoModelFinder.getCargoModel().setCanalBookings(canalBookings);
 
 		final VesselGroupCanalParameters p = CargoFactory.eINSTANCE.createVesselGroupCanalParameters();
-		p.setNorthboundWaitingDays(10);
-		p.setSouthboundWaitingDays(5);
+		final PanamaSeasonalityRecord psr = CargoFactory.eINSTANCE.createPanamaSeasonalityRecord();
+		psr.setNorthboundWaitingDays(10);
+		psr.setSouthboundWaitingDays(5);
+		psr.setVesselGroupCanalParameter(p);
+		canalBookings.getPanamaSeasonalityRecords().add(psr);
 		canalBookings.getVesselGroupCanalParameters().add(p);
 		final CanalBookingSlot booking1 = cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2021, Month.MARCH, 12), null);
 
@@ -360,8 +373,11 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		cargoModelFinder.getCargoModel().setCanalBookings(canalBookings);
 
 		final VesselGroupCanalParameters p = CargoFactory.eINSTANCE.createVesselGroupCanalParameters();
-		p.setNorthboundWaitingDays(10);
-		p.setSouthboundWaitingDays(5);
+		final PanamaSeasonalityRecord psr = CargoFactory.eINSTANCE.createPanamaSeasonalityRecord();
+		psr.setNorthboundWaitingDays(10);
+		psr.setSouthboundWaitingDays(5);
+		psr.setVesselGroupCanalParameter(p);
+		canalBookings.getPanamaSeasonalityRecords().add(psr);
 
 		canalBookings.getVesselGroupCanalParameters().add(p);
 		canalBookings.setArrivalMarginHours(24);
@@ -407,8 +423,11 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		cargoModelFinder.getCargoModel().setCanalBookings(canalBookings);
 
 		final VesselGroupCanalParameters p = CargoFactory.eINSTANCE.createVesselGroupCanalParameters();
-		p.setNorthboundWaitingDays(10);
-		p.setSouthboundWaitingDays(5);
+		final PanamaSeasonalityRecord psr = CargoFactory.eINSTANCE.createPanamaSeasonalityRecord();
+		psr.setNorthboundWaitingDays(10);
+		psr.setSouthboundWaitingDays(5);
+		psr.setVesselGroupCanalParameter(p);
+		canalBookings.getPanamaSeasonalityRecords().add(psr);
 		canalBookings.getVesselGroupCanalParameters().add(p);
 		final Vessel vessel = record.vesselAvailability.getVessel();
 		final CanalBookingSlot booking1 = cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2021, Month.MARCH, 12), vessel);
@@ -456,8 +475,11 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		cargoModelFinder.getCargoModel().setCanalBookings(canalBookings);
 
 		final VesselGroupCanalParameters p = CargoFactory.eINSTANCE.createVesselGroupCanalParameters();
-		p.setNorthboundWaitingDays(10);
-		p.setSouthboundWaitingDays(5);
+		final PanamaSeasonalityRecord psr = CargoFactory.eINSTANCE.createPanamaSeasonalityRecord();
+		psr.setNorthboundWaitingDays(10);
+		psr.setSouthboundWaitingDays(5);
+		psr.setVesselGroupCanalParameter(p);
+		canalBookings.getPanamaSeasonalityRecords().add(psr);
 		canalBookings.getVesselGroupCanalParameters().add(p);
 		final Vessel vessel = record.vesselAvailability.getVessel();
 
@@ -505,8 +527,11 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		cargoModelFinder.getCargoModel().setCanalBookings(canalBookings);
 
 		final VesselGroupCanalParameters p = CargoFactory.eINSTANCE.createVesselGroupCanalParameters();
-		p.setNorthboundWaitingDays(10);
-		p.setSouthboundWaitingDays(5);
+		final PanamaSeasonalityRecord psr = CargoFactory.eINSTANCE.createPanamaSeasonalityRecord();
+		psr.setNorthboundWaitingDays(10);
+		psr.setSouthboundWaitingDays(5);
+		psr.setVesselGroupCanalParameter(p);
+		canalBookings.getPanamaSeasonalityRecords().add(psr);
 		canalBookings.getVesselGroupCanalParameters().add(p);
 		final Vessel vessel = record.vesselAvailability.getVessel();
 		final CanalBookingSlot booking1 = cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2021, Month.MARCH, 12), vessel);
@@ -553,8 +578,11 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		cargoModelFinder.getCargoModel().setCanalBookings(canalBookings);
 
 		final VesselGroupCanalParameters p = CargoFactory.eINSTANCE.createVesselGroupCanalParameters();
-		p.setNorthboundWaitingDays(10);
-		p.setSouthboundWaitingDays(5);
+		final PanamaSeasonalityRecord psr = CargoFactory.eINSTANCE.createPanamaSeasonalityRecord();
+		psr.setNorthboundWaitingDays(10);
+		psr.setSouthboundWaitingDays(5);
+		psr.setVesselGroupCanalParameter(p);
+		canalBookings.getPanamaSeasonalityRecords().add(psr);
 		canalBookings.getVesselGroupCanalParameters().add(p);
 
 		canalBookings.setArrivalMarginHours(24);
@@ -651,8 +679,8 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		final CanalBookings canalBookings = CargoFactory.eINSTANCE.createCanalBookings();
 		cargoModelFinder.getCargoModel().setCanalBookings(canalBookings);
 
-		final VesselGroupCanalParameters p = CargoFactory.eINSTANCE.createVesselGroupCanalParameters();
-		canalBookings.getVesselGroupCanalParameters().add(p);
+		final VesselGroupCanalParameters vgcp = cargoModelBuilder.createVesselGroupCanalParameters("default");
+		canalBookings.getVesselGroupCanalParameters().add(vgcp);
 
 		// Create UserSettings
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
@@ -666,8 +694,8 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		// Evaluate with zero idle days...
 		int[] charterDurationThenTravelDuration = new int[2];
 		{
-			p.setNorthboundWaitingDays(0);
-			p.setSouthboundWaitingDays(0);
+			canalBookings.getPanamaSeasonalityRecords().add(//
+					cargoModelBuilder.createPanamaSeasonalityRecord(vgcp, 0, 0, 0, 0, 0));
 			evaluateTestWith(userSettings, makeCanalBookingService());
 
 			final Schedule schedule = ScenarioModelUtil.findSchedule(scenarioDataProvider);
@@ -690,8 +718,9 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		// ... then add in the waiting days and expect to see the time shift from the
 		// event duration into the journey time
 		{
-			p.setNorthboundWaitingDays(5);
-			p.setSouthboundWaitingDays(15);
+			canalBookings.getPanamaSeasonalityRecords().clear();
+			final PanamaSeasonalityRecord psr = cargoModelBuilder.createPanamaSeasonalityRecord(vgcp, 0, 0, 0, 5, 15);
+			canalBookings.getPanamaSeasonalityRecords().add(psr);
 			evaluateTestWith(userSettings, makeCanalBookingService());
 
 			final Schedule schedule = ScenarioModelUtil.findSchedule(scenarioDataProvider);
@@ -709,9 +738,8 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 			Assertions.assertEquals(RouteOption.PANAMA, postGCOJourney.getRouteOption());
 			// Expect waiting days to have shifted out of the charter out event and into the
 			// journey+idle time
-			Assertions.assertEquals(charterDurationThenTravelDuration[0] - (p.getNorthboundWaitingDays() * 24), gcoEvent.getDuration());
-			Assertions.assertEquals(charterDurationThenTravelDuration[1] + (p.getNorthboundWaitingDays() * 24), postGCOJourney.getDuration() + postGCOIdle.getDuration());
-
+			Assertions.assertEquals(charterDurationThenTravelDuration[0] - (psr.getNorthboundWaitingDays() * 24), gcoEvent.getDuration());
+			Assertions.assertEquals(charterDurationThenTravelDuration[1] + (psr.getNorthboundWaitingDays() * 24), postGCOJourney.getDuration() + postGCOIdle.getDuration());
 		}
 	}
 
@@ -776,8 +804,8 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		final CanalBookings canalBookings = CargoFactory.eINSTANCE.createCanalBookings();
 		cargoModelFinder.getCargoModel().setCanalBookings(canalBookings);
 
-		final VesselGroupCanalParameters p = CargoFactory.eINSTANCE.createVesselGroupCanalParameters();
-		canalBookings.getVesselGroupCanalParameters().add(p);
+		final VesselGroupCanalParameters vgcp = cargoModelBuilder.createVesselGroupCanalParameters("default");
+		canalBookings.getVesselGroupCanalParameters().add(vgcp);
 
 		// Create UserSettings
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
@@ -787,13 +815,12 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 
 		// Enable charter out system
 		userSettings.setGenerateCharterOuts(true);
-
 		// Evaluate with zero idle days...
 
 		int[] charterDurationThenTravelDuration = new int[2];
 		{
-			p.setNorthboundWaitingDays(0);
-			p.setSouthboundWaitingDays(0);
+			final PanamaSeasonalityRecord psr = cargoModelBuilder.createPanamaSeasonalityRecord(vgcp, 0, 0, 0, 0, 0);
+			canalBookings.getPanamaSeasonalityRecords().add(psr);
 			evaluateTestWith(userSettings, makeCanalBookingService());
 
 			final Schedule schedule = ScenarioModelUtil.findSchedule(scenarioDataProvider);
@@ -818,8 +845,8 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 		// ... then add in the waiting days and expect to see the time shift from the
 		// event duration into the journey time
 		{
-			p.setNorthboundWaitingDays(5);
-			p.setSouthboundWaitingDays(15);
+			canalBookings.getPanamaSeasonalityRecords().clear();
+			final PanamaSeasonalityRecord psr = cargoModelBuilder.createPanamaSeasonalityRecord(vgcp, 0, 0, 0, 5, 15);
 			evaluateTestWith(userSettings, makeCanalBookingService());
 
 			final Schedule schedule = ScenarioModelUtil.findSchedule(scenarioDataProvider);
@@ -838,8 +865,8 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 			Assertions.assertEquals(RouteOption.PANAMA, preGCOJourney.getRouteOption());
 			// Expect waiting days to have shifted out of the charter out event and into the
 			// journey+idle time
-			Assertions.assertEquals(charterDurationThenTravelDuration[0] - (p.getNorthboundWaitingDays() * 24), gcoEvent.getDuration());
-			Assertions.assertEquals(charterDurationThenTravelDuration[1] + (p.getNorthboundWaitingDays() * 24), preGCOJourney.getDuration() + preGCOIdle.getDuration());
+			Assertions.assertEquals(charterDurationThenTravelDuration[0] - (psr.getNorthboundWaitingDays() * 24), gcoEvent.getDuration());
+			Assertions.assertEquals(charterDurationThenTravelDuration[1] + (psr.getNorthboundWaitingDays() * 24), preGCOJourney.getDuration() + preGCOIdle.getDuration());
 
 		}
 	}
@@ -891,8 +918,11 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 
 		final VesselGroupCanalParameters p = CargoFactory.eINSTANCE.createVesselGroupCanalParameters();
 		p.setName("canalParams");
-		p.setNorthboundWaitingDays(2);
-		p.setSouthboundWaitingDays(2);
+		final PanamaSeasonalityRecord psr = CargoFactory.eINSTANCE.createPanamaSeasonalityRecord();
+		psr.setNorthboundWaitingDays(2);
+		psr.setSouthboundWaitingDays(2);
+		psr.setVesselGroupCanalParameter(p);
+		canalBookings.getPanamaSeasonalityRecords().add(psr);
 		p.getVesselGroup().add(vesselGroup);
 		canalBookings.getVesselGroupCanalParameters().add(p);
 
@@ -1024,8 +1054,11 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 
 		final VesselGroupCanalParameters p = CargoFactory.eINSTANCE.createVesselGroupCanalParameters();
 		p.setName("canalParams");
-		p.setNorthboundWaitingDays(2);
-		p.setSouthboundWaitingDays(2);
+		final PanamaSeasonalityRecord psr = CargoFactory.eINSTANCE.createPanamaSeasonalityRecord();
+		psr.setNorthboundWaitingDays(2);
+		psr.setSouthboundWaitingDays(2);
+		psr.setVesselGroupCanalParameter(p);
+		canalBookings.getPanamaSeasonalityRecords().add(psr);
 		p.getVesselGroup().add(vesselGroup);
 		canalBookings.getVesselGroupCanalParameters().add(p);
 

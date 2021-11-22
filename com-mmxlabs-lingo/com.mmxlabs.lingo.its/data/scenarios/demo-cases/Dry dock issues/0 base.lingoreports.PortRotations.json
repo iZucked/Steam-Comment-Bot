@@ -3648,7 +3648,7 @@
   "Volume on board End" : "0",
   "Volume on board Start" : "3,134",
   "ID" : "discharge-cargo-60",
-  "Latest Canal Date" : "17/06/11 02:00",
+  "Latest Canal Date" : "17/06/11 01:00",
   "Route" : "Panama",
   "Canal Cost" : "413,280",
   "Scenario" : "0 base",
@@ -3684,8 +3684,8 @@
   "[Fuels]" : { }
 }, {
   "At Port" : "Point Fortin",
-  "Charter Cost" : "5,012,500",
-  "Duration" : "50:03",
+  "Charter Cost" : "5,016,666",
+  "Duration" : "50:04",
   "End Date" : "27/08/11 14:00 (GMT-04:00)",
   "From Port" : "Point Fortin",
   "Heel Cost" : "0",
@@ -3695,8 +3695,8 @@
   "ID" : "Charter Out - discharge-cargo-60",
   "Port Costs" : "0",
   "Scenario" : "0 base",
-  "Start Date" : "08/07/11 11:00 (GMT-04:00)",
-  "Total Cost" : "5,012,500",
+  "Start Date" : "08/07/11 10:00 (GMT-04:00)",
+  "Total Cost" : "5,016,666",
   "Type" : "Charter Out",
   "Vessel" : "Methane Princess (138k)",
   "[Fuels]" : { }

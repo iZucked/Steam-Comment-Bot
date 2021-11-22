@@ -121,4 +121,9 @@ public class CopiedModelEntityMap implements ModelEntityMap {
 	public @NonNull ZonedDateTime getEarliestTime() {
 		return delegate.getEarliestTime();
 	}
+
+	@Override
+	public @NonNull ZonedDateTime getLatestTime() {
+		return delegate.getLatestTime();
+	}
 }

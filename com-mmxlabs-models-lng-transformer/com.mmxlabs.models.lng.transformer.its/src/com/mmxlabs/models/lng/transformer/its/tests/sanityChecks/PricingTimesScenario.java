@@ -29,7 +29,8 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 /**
- * Creates a simple scenario for testing changes in price indexes and price dating
+ * Creates a simple scenario for testing changes in price indexes and price
+ * dating
  * 
  * @author Alex Churchill
  */
@@ -138,7 +139,8 @@ public class PricingTimesScenario {
 	}
 
 	/*
-	 * Main testing methods to run the created scenario and compare the actual and expected price
+	 * Main testing methods to run the created scenario and compare the actual and
+	 * expected price
 	 */
 	public void testSalesPrice(final double... prices) {
 		LNGOptimisationRunnerBuilder runner = LNGOptimisationBuilder.begin(scenarioDataProvider) //
@@ -146,29 +148,26 @@ public class PricingTimesScenario {
 				.withExtraModule(new TransformerExtensionTestBootstrapModule()) //
 				.withThreadCount(1)//
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
 
-			final Schedule schedule = runner.getScenarioRunner().getSchedule();
-			Assertions.assertNotNull(schedule);
+		runner.evaluateInitialState();
 
-			// Workaround, would prefer to use ca.getInputCargo().getName() but hookup runner.updateScenario() not working
-			final String errorMsg = "Cargo %s has incorrect pricing %2f != %2f";
-			for (int i = 0; i < schedule.getCargoAllocations().size(); i++) {
-				final CargoAllocation ca = schedule.getCargoAllocations().get(i);
-				if (i == 0) {
-					System.out.println("Discharge start:" + ca.getSlotAllocations().get(1).getSlotVisit().getStart().toString());
-					System.out.println("Discharge end:" + ca.getSlotAllocations().get(1).getSlotVisit().getEnd().toString());
-				}
-				final double salePrice = ca.getSlotAllocations().get(1).getPrice();
-				final double expectedPrice = prices[i];
-				System.out.println("Sale price: " + salePrice);
-				System.out.println("Expected price:" + expectedPrice);
-				Assertions.assertEquals(expectedPrice, salePrice, 0.0001, String.format(errorMsg, i, expectedPrice, salePrice));
+		final Schedule schedule = runner.getScenarioRunner().getSchedule();
+		Assertions.assertNotNull(schedule);
+
+		// Workaround, would prefer to use ca.getInputCargo().getName() but hookup
+		// runner.updateScenario() not working
+		final String errorMsg = "Cargo %s has incorrect pricing %2f != %2f";
+		for (int i = 0; i < schedule.getCargoAllocations().size(); i++) {
+			final CargoAllocation ca = schedule.getCargoAllocations().get(i);
+			if (i == 0) {
+				System.out.println("Discharge start:" + ca.getSlotAllocations().get(1).getSlotVisit().getStart().toString());
+				System.out.println("Discharge end:" + ca.getSlotAllocations().get(1).getSlotVisit().getEnd().toString());
 			}
-
-		} finally {
-			runner.dispose();
+			final double salePrice = ca.getSlotAllocations().get(1).getPrice();
+			final double expectedPrice = prices[i];
+			System.out.println("Sale price: " + salePrice);
+			System.out.println("Expected price:" + expectedPrice);
+			Assertions.assertEquals(expectedPrice, salePrice, 0.0001, String.format(errorMsg, i, expectedPrice, salePrice));
 		}
 	}
 

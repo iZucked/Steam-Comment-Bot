@@ -187,12 +187,8 @@ public abstract class AbstractMicroTestCase {
 				.withThreadCount(1) //
 				.buildDefaultRunner();
 
-		try {
-			runnerBuilder.evaluateInitialState();
-			runnerBuilder.run(optimise, checker);
-		} finally {
-			runnerBuilder.dispose();
-		}
+		runnerBuilder.evaluateInitialState();
+		runnerBuilder.run(optimise, checker);
 	}
 
 	public void evaluateTest() {
@@ -219,13 +215,9 @@ public abstract class AbstractMicroTestCase {
 				.withThreadCount(getThreadCount()) //
 				.buildDefaultRunner();
 
-		try {
-			runnerBuilder.evaluateInitialState();
-		} finally {
-			runnerBuilder.dispose();
-		}
+		runnerBuilder.evaluateInitialState();
 	}
-	
+
 	public void evaluateTestWith(UserSettings userSettings) {
 
 		LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
@@ -233,11 +225,7 @@ public abstract class AbstractMicroTestCase {
 				.withThreadCount(getThreadCount()) //
 				.buildDefaultRunner();
 
-		try {
-			runnerBuilder.evaluateInitialState();
-		} finally {
-			runnerBuilder.dispose();
-		}
+		runnerBuilder.evaluateInitialState();
 	}
 
 	public void evaluateTest(@Nullable final Consumer<OptimisationPlan> tweaker, @Nullable final Function<LNGScenarioRunner, IRunnerHook> runnerHookFactory,
@@ -258,12 +246,8 @@ public abstract class AbstractMicroTestCase {
 				.withThreadCount(getThreadCount()) //
 				.buildDefaultRunner();
 
-		try {
-			runnerBuilder.evaluateInitialState();
-			runnerBuilder.run(false, checker);
-		} finally {
-			runnerBuilder.dispose();
-		}
+		runnerBuilder.evaluateInitialState();
+		runnerBuilder.run(false, checker);
 	}
 
 	public void evaluateWithOverrides(final IOptimiserInjectorService localOverrides, @Nullable final Consumer<OptimisationPlan> tweaker, @NonNull final Consumer<LNGScenarioRunner> checker) {
@@ -282,12 +266,8 @@ public abstract class AbstractMicroTestCase {
 				.withThreadCount(1) //
 				.buildDefaultRunner();
 
-		try {
-			runnerBuilder.evaluateInitialState();
-			runnerBuilder.run(false, checker);
-		} finally {
-			runnerBuilder.dispose();
-		}
+		runnerBuilder.evaluateInitialState();
+		runnerBuilder.run(false, checker);
 	}
 
 	protected int getThreadCount() {

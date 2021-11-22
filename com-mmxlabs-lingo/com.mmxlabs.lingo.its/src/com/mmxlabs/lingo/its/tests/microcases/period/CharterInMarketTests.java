@@ -111,36 +111,33 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 				.withThreadCount(1)//
 				.withOptimiseHint() //
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+		runner.evaluateInitialState();
 
-			// Check spot index has been updated
-			LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
-			// Check cargoes removed
-			Assertions.assertEquals(2, optimiserScenario.getCargoModel().getCargoes().size());
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
-			// Check correct cargoes remain and spot index has changed.
-			Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
-			Assertions.assertEquals("L1", optCargo1.getLoadName());
-			Assertions.assertEquals(0, optCargo1.getSpotIndex());
-			Cargo optCargo2 = optimiserScenario.getCargoModel().getCargoes().get(1);
-			Assertions.assertEquals("L2", optCargo2.getLoadName());
-			Assertions.assertEquals(0, optCargo2.getSpotIndex());
+		// Check spot index has been updated
+		LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+		// Check cargoes removed
+		Assertions.assertEquals(2, optimiserScenario.getCargoModel().getCargoes().size());
 
-			// Reduced by one
-			Assertions.assertEquals(1, optimiserScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(0).getSpotCharterCount());
-			// Stays the same
-			Assertions.assertEquals(2, optimiserScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(1).getSpotCharterCount());
+		// Check correct cargoes remain and spot index has changed.
+		Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
+		Assertions.assertEquals("L1", optCargo1.getLoadName());
+		Assertions.assertEquals(0, optCargo1.getSpotIndex());
+		Cargo optCargo2 = optimiserScenario.getCargoModel().getCargoes().get(1);
+		Assertions.assertEquals("L2", optCargo2.getLoadName());
+		Assertions.assertEquals(0, optCargo2.getSpotIndex());
 
-			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+		// Reduced by one
+		Assertions.assertEquals(1, optimiserScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(0).getSpotCharterCount());
+		// Stays the same
+		Assertions.assertEquals(2, optimiserScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(1).getSpotCharterCount());
 
-			// Validate the initial sequences are valid
-			Assertions.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
-		} finally {
-			runner.dispose();
-		}
+		final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+
+		// Validate the initial sequences are valid
+		Assertions.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 	}
 
 	/**
@@ -218,36 +215,33 @@ public class CharterInMarketTests extends AbstractMicroTestCase {
 				.withThreadCount(1)//
 				.withOptimiseHint() //
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+		runner.evaluateInitialState();
 
-			// Check spot index has been updated
-			LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
-			// Check cargoes removed
-			Assertions.assertEquals(2, optimiserScenario.getCargoModel().getCargoes().size());
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
-			// Check correct cargoes remain and spot index has changed.
-			Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
-			Assertions.assertEquals("L1", optCargo1.getLoadName());
-			Assertions.assertEquals(0, optCargo1.getSpotIndex());
-			Cargo optCargo2 = optimiserScenario.getCargoModel().getCargoes().get(1);
-			Assertions.assertEquals("L2", optCargo2.getLoadName());
-			Assertions.assertEquals(0, optCargo2.getSpotIndex());
+		// Check spot index has been updated
+		LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+		// Check cargoes removed
+		Assertions.assertEquals(2, optimiserScenario.getCargoModel().getCargoes().size());
 
-			// Reduced by one
-			Assertions.assertEquals(1, optimiserScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(0).getSpotCharterCount());
-			// Stays the same
-			Assertions.assertEquals(2, optimiserScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(1).getSpotCharterCount());
+		// Check correct cargoes remain and spot index has changed.
+		Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
+		Assertions.assertEquals("L1", optCargo1.getLoadName());
+		Assertions.assertEquals(0, optCargo1.getSpotIndex());
+		Cargo optCargo2 = optimiserScenario.getCargoModel().getCargoes().get(1);
+		Assertions.assertEquals("L2", optCargo2.getLoadName());
+		Assertions.assertEquals(0, optCargo2.getSpotIndex());
 
-			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+		// Reduced by one
+		Assertions.assertEquals(1, optimiserScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(0).getSpotCharterCount());
+		// Stays the same
+		Assertions.assertEquals(2, optimiserScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(1).getSpotCharterCount());
 
-			// Validate the initial sequences are valid
-			Assertions.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
-		} finally {
-			runner.dispose();
-		}
+		final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
+
+		// Validate the initial sequences are valid
+		Assertions.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 	}
 
 	/**

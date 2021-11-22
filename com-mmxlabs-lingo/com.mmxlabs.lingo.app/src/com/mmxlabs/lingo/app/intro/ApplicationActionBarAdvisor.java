@@ -45,7 +45,6 @@ import org.eclipse.ui.menus.CommandContributionItemParameter;
 
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.lingo.app.Activator;
 import com.mmxlabs.lingo.reports.customizable.CustomReportsRegistry;
 import com.mmxlabs.rcp.common.CommonImages;
 import com.mmxlabs.rcp.common.CommonImages.IconMode;
@@ -731,40 +730,15 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	 * Creates and returns the Help menu.
 	 */
 	private MenuManager createHelpMenu() {
-		final MenuManager menu = new MenuManager(IDEWorkbenchMessages.Workbench_help, IWorkbenchActionConstants.M_HELP);
-		addSeparatorOrGroupMarker(menu, "group.intro"); //$NON-NLS-1$
-		// See if a welcome or intro page is specified
-		// if (introAction != null) {
-		// menu.add(introAction);
-		// } else if (quickStartAction != null) {
-		// menu.add(quickStartAction);
-		// }
-		menu.add(new GroupMarker("group.intro.ext")); //$NON-NLS-1$
-		addSeparatorOrGroupMarker(menu, "group.main"); //$NON-NLS-1$
+		final MenuManager menu = new MenuManager(IDEWorkbenchMessages.Workbench_help, "mmx.help");
+		// Add Help Menu
 		menu.add(helpContentsAction);
-		menu.add(helpSearchAction);
-		menu.add(dynamicHelpAction);
-		addSeparatorOrGroupMarker(menu, "group.assist"); //$NON-NLS-1$
-		// // See if a tips and tricks page is specified
-		// if (tipsAndTricksAction != null) {
-		// menu.add(tipsAndTricksAction);
-		// }
-		// HELP_START should really be the first item, but it was after
-		// quickStartAction and tipsAndTricksAction in 2.1.
-		menu.add(new GroupMarker(IWorkbenchActionConstants.HELP_START));
-		menu.add(new GroupMarker("group.main.ext")); //$NON-NLS-1$
-		addSeparatorOrGroupMarker(menu, "group.tutorials"); //$NON-NLS-1$
-		addSeparatorOrGroupMarker(menu, "group.tools"); //$NON-NLS-1$
-		addSeparatorOrGroupMarker(menu, "group.updates"); //$NON-NLS-1$
-		menu.add(new GroupMarker(IWorkbenchActionConstants.HELP_END));
-		addSeparatorOrGroupMarker(menu, IWorkbenchActionConstants.MB_ADDITIONS);
-		// about should always be at the bottom
-		menu.add(new Separator("group.about")); //$NON-NLS-1$
-
+		// Check for updates (needs an icon)
+		menu.add(new CommandContributionItem(new CommandContributionItemParameter(getWindow(), null, "org.eclipse.equinox.p2.ui.sdk.update", CommandContributionItem.STYLE_PUSH)));
+		// About menu
 		final ActionContributionItem aboutItem = new ActionContributionItem(aboutAction);
 		aboutItem.setVisible(!Util.isMac());
 		menu.add(aboutItem);
-		menu.add(new GroupMarker("group.about.ext")); //$NON-NLS-1$
 		return menu;
 	}
 
@@ -1451,7 +1425,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 			final String helpContextId) {
 		final ISharedImages sharedImages = getWindow().getWorkbench().getSharedImages();
 
-		final IActionCommandMappingService acms = (IActionCommandMappingService) getWindow().getService(IActionCommandMappingService.class);
+		final IActionCommandMappingService acms = getWindow().getService(IActionCommandMappingService.class);
 		acms.map(actionId, commandId);
 
 		final CommandContributionItemParameter commandParm = new CommandContributionItemParameter(getWindow(), actionId, commandId, null, sharedImages.getImageDescriptor(image),
@@ -1469,9 +1443,15 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 		final ActionSetRegistry reg = WorkbenchPlugin.getDefault().getActionSetRegistry();
 		final IActionSetDescriptor[] actionSets = reg.getActionSets();
-		final String[] removeActionSets = new String[] { "org.eclipse.search.searchActionSet", "org.eclipse.ui.edit.text.actionSet.navigation",
-				"org.eclipse.ui.edit.text.actionSet.annotationNavigation", "org.eclipse.ui.edit.text.actionSet.convertLineDelimitersTo", "org.eclipse.ui.edit.text.actionSet.openExternalFile",
-				"org.eclipse.ui.externaltools.ExternalToolsSet", "org.eclipse.ui.actionSet.openFiles", };
+		final String[] removeActionSets = new String[] { //
+				"org.eclipse.search.searchActionSet", //
+				"org.eclipse.ui.edit.text.actionSet.navigation", //
+				"org.eclipse.ui.edit.text.actionSet.annotationNavigation", //
+				"org.eclipse.ui.edit.text.actionSet.convertLineDelimitersTo", //
+				"org.eclipse.ui.edit.text.actionSet.openExternalFile", //
+				"org.eclipse.ui.externaltools.ExternalToolsSet", //
+				"org.eclipse.ui.actionSet.openFiles", //
+		};
 
 		for (int i = 0; i < actionSets.length; i++) {
 			boolean found = false;

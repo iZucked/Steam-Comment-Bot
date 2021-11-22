@@ -555,8 +555,6 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		LNGScenarioToOptimiserBridge getScenarioRunner();
 
 		IMultiStateResult run(IProgressMonitor monitor);
-
-		void dispose();
 	}
 
 	public Function<IProgressMonitor, AbstractSolutionSet> createSandboxOptionsFunction(final IScenarioDataProvider sdp, final ScenarioInstance scenarioInstance, final UserSettings userSettings,
@@ -566,8 +564,6 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		sandboxResult.setUseScenarioBase(false);
 
 		return createSandboxFunction(sdp, scenarioInstance, userSettings, model, sandboxResult, (mapper, baseScheduleSpecification) -> {
-
-			final ExtraDataProvider extraDataProvider = mapper.getExtraDataProvider();
 
 			final SandboxManualRunner insertionRunner = new SandboxManualRunner(scenarioInstance, sdp, userSettings, mapper, model);
 
@@ -580,11 +576,6 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 				@Override
 				public IMultiStateResult run(IProgressMonitor monitor) {
 					return insertionRunner.runSandbox(monitor);
-				}
-
-				@Override
-				public void dispose() {
-					insertionRunner.dispose();
 				}
 			};
 		});
@@ -647,11 +638,6 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 				public IMultiStateResult run(IProgressMonitor monitor) {
 					return insertionRunner.runInsertion(new SlotInsertionOptimiserLogger(), monitor);
 				}
-
-				@Override
-				public void dispose() {
-					insertionRunner.dispose();
-				}
 			};
 		});
 	}
@@ -681,11 +667,6 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 				public IMultiStateResult run(IProgressMonitor monitor) {
 					return insertionRunner.runOptimiser(monitor);
 				}
-
-				@Override
-				public void dispose() {
-					insertionRunner.dispose();
-				}
 			};
 		});
 	}
@@ -703,59 +684,53 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 			SandboxJob sandboxJob = jobAction.apply(mapper, baseScheduleSpecification);
 
-			try {
+			final IMultiStateResult results = sandboxJob.run(monitor);
 
-				final IMultiStateResult results = sandboxJob.run(monitor);
+			if (results == null) {
+				sandboxResult.setName("SandboxResult");
+				sandboxResult.setHasDualModeSolutions(dualPNLMode);
+				sandboxResult.setUserSettings(EMFCopier.copy(userSettings));
+				return sandboxResult;
+			}
 
-				if (results == null) {
-					sandboxResult.setName("SandboxResult");
-					sandboxResult.setHasDualModeSolutions(dualPNLMode);
-					sandboxResult.setUserSettings(EMFCopier.copy(userSettings));
-					return sandboxResult;
-				}
+			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = sandboxJob.getScenarioRunner();
+			final JobExecutorFactory jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService();
 
-				final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = sandboxJob.getScenarioRunner();
-				final JobExecutorFactory jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService();
+			final SolutionSetExporterUnit.Util<SolutionOption> exporter = new SolutionSetExporterUnit.Util<>(scenarioToOptimiserBridge, userSettings, AnalyticsFactory.eINSTANCE::createSolutionOption,
+					dualPNLMode, true /* enableChangeDescription */);
 
-				final SolutionSetExporterUnit.Util<SolutionOption> exporter = new SolutionSetExporterUnit.Util<>(scenarioToOptimiserBridge, userSettings,
-						AnalyticsFactory.eINSTANCE::createSolutionOption, dualPNLMode, true /* enableChangeDescription */);
+			exporter.setBreakEvenMode(model.isUseTargetPNL() ? BreakEvenMode.PORTFOLIO : BreakEvenMode.POINT_TO_POINT);
+			sandboxResult.setBaseOption(exporter.useAsBaseSolution(baseScheduleSpecification));
 
-				exporter.setBreakEvenMode(model.isUseTargetPNL() ? BreakEvenMode.PORTFOLIO : BreakEvenMode.POINT_TO_POINT);
-				sandboxResult.setBaseOption(exporter.useAsBaseSolution(baseScheduleSpecification));
+			try (JobExecutor jobExecutor = jobExecutorFactory.begin()) {
 
-				try (JobExecutor jobExecutor = jobExecutorFactory.begin()) {
+				final List<Future<?>> jobs = new LinkedList<>();
 
-					final List<Future<?>> jobs = new LinkedList<>();
+				if (results != null) {
+					List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.getSolutions();
+					for (final NonNullPair<ISequences, Map<String, Object>> p : solutions) {
 
-					if (results != null) {
-						List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.getSolutions();
-						for (final NonNullPair<ISequences, Map<String, Object>> p : solutions) {
+						jobs.add(jobExecutor.submit(() -> {
 
-							jobs.add(jobExecutor.submit(() -> {
-
-								final ISequences seq = p.getFirst();
-								final SolutionOption resultSet = exporter.computeOption(seq);
-								synchronized (sandboxResult) {
-									sandboxResult.getOptions().add(resultSet);
-								}
-
-								return null;
-							}));
-						}
-
-						jobs.forEach(f -> {
-							try {
-								f.get();
-							} catch (final Exception e) {
-								// Ignore exceptions;
+							final ISequences seq = p.getFirst();
+							final SolutionOption resultSet = exporter.computeOption(seq);
+							synchronized (sandboxResult) {
+								sandboxResult.getOptions().add(resultSet);
 							}
-						});
-					}
-					exporter.applyPostTasks(sandboxResult);
-				}
 
-			} finally {
-				sandboxJob.dispose();
+							return null;
+						}));
+					}
+
+					jobs.forEach(f -> {
+						try {
+							f.get();
+						} catch (final Exception e) {
+							// Ignore exceptions;
+						}
+					});
+				}
+				exporter.applyPostTasks(sandboxResult);
 			}
 
 			sandboxResult.setName("SandboxResult");

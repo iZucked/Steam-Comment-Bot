@@ -20,7 +20,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
  * @author Simon Goodall
  * 
  */
-public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
+public final class VoyageDetails implements IDetailsSequenceElement {
 
 	private @NonNull VoyageOptions options;
 
@@ -76,8 +76,7 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 		this.travelCharterCost = travelCharterCost;
 	}
 
-	@Override
-	public VoyageDetails clone() {
+	public VoyageDetails copy() {
 		return new VoyageDetails(idleTime, travelTime, speed, startTime, new VoyageOptions(options), fuelConsumption, routeAdditionalConsumption, fuelUnitPrices, //
 				cooldownPerformed, purgePerformed, purgeHours, //
 				getIdleNBOHours(), getTravelNBOHours(), getRouteAdditionalNBOHours(), this.idleCharterCost, this.purgeCharterCost, this.travelCharterCost);

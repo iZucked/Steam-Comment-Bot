@@ -124,7 +124,7 @@ public class HubTestHelper {
 	// test credentials
 	public static String email = "test@minimaxlabs.com";
 	// TODO update
-	public static String password = "W&MU%Q8@dh3&nDMgo!vVX2jor";
+	public static String password = "xUPffZ76Ef^X28YqQQC%ZyVr#";
 	// javascript actions executed in the browser - tested in IE and Firefox
 	public static String clickUserAnotherAccount = "document.getElementById('" + otherTile + "').click();";
 	public static String fillEmail = "document.getElementsByName('" + emailInputName + "')[0].value = '" + email + "';";

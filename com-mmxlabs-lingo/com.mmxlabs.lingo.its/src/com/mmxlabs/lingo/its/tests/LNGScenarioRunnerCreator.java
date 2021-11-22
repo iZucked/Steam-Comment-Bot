@@ -99,12 +99,9 @@ public class LNGScenarioRunnerCreator {
 				.withOptimiserInjectorService(createITSService()) //
 				.withThreadCount(1)//
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
-			consumer.accept(runner.getScenarioRunner());
-		} finally {
-			runner.dispose();
-		}
+
+		runner.evaluateInitialState();
+		consumer.accept(runner.getScenarioRunner());
 	}
 
 	public static void withEvaluationRunnerWithGCO(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final CheckedConsumer<@NonNull LNGScenarioRunner, Exception> consumer)
@@ -132,12 +129,9 @@ public class LNGScenarioRunnerCreator {
 				.withOptimiserInjectorService(createITSService()) //
 				.withThreadCount(1)//
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
-			consumer.accept(runner.getScenarioRunner());
-		} finally {
-			runner.dispose();
-		}
+
+		runner.evaluateInitialState();
+		consumer.accept(runner.getScenarioRunner());
 	}
 
 	public static <E extends Exception> void withOptimisationRunner(@NonNull final IScenarioDataProvider scenarioDataProvider, @NonNull final OptimisationPlan optimisationPlan,
@@ -158,12 +152,9 @@ public class LNGScenarioRunnerCreator {
 				.withOptimiserInjectorService(optimiserInjectorService) //
 				.withThreadCount(1)//
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
-			consumer.accept(runner.getScenarioRunner());
-		} finally {
-			runner.dispose();
-		}
+
+		runner.evaluateInitialState();
+		consumer.accept(runner.getScenarioRunner());
 	}
 
 	public static <E extends Exception> void withLegacyOptimisationRunner(@NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable final Boolean withGCO,
@@ -196,14 +187,16 @@ public class LNGScenarioRunnerCreator {
 	}
 
 	/**
-	 * Use the {@link IParameterModesRegistry} to extend the existing settings object.
+	 * Use the {@link IParameterModesRegistry} to extend the existing settings
+	 * object.
 	 * 
 	 * @param optimiserSettings
 	 * @return
 	 */
 
 	/**
-	 * Special optimiser injection service to disable special deployment settings during ITS runs
+	 * Special optimiser injection service to disable special deployment settings
+	 * during ITS runs
 	 * 
 	 * @return
 	 */
@@ -222,7 +215,7 @@ public class LNGScenarioRunnerCreator {
 			@Nullable
 			public List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
 				if (moduleType == ModuleType.Module_LNGTransformerModule) {
-					return Collections.<@NonNull Module> singletonList(new AbstractModule() {
+					return Collections.<@NonNull Module>singletonList(new AbstractModule() {
 
 						@Override
 						protected void configure() {
@@ -233,7 +226,7 @@ public class LNGScenarioRunnerCreator {
 					});
 				}
 				if (moduleType == ModuleType.Module_EvaluationParametersModule) {
-					return Collections.<@NonNull Module> singletonList(new AbstractModule() {
+					return Collections.<@NonNull Module>singletonList(new AbstractModule() {
 
 						@Override
 						protected void configure() {

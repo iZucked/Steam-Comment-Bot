@@ -78,16 +78,14 @@ public class AbstractSlotInsertionTests {
 
 		final LNGSchedulerInsertSlotJobRunner runner = new LNGSchedulerInsertSlotJobRunner(null, scenarioDataProvider, LNGSchedulerJobUtils.createLocalEditingDomain(), userSettings, targetSlots,
 				targetEvents, null, null);
-		try {
-			runner.setIteration(iterations);
-			runner.prepare();
+		
+		runner.setIteration(iterations);
+		runner.prepare();
 
-			final IMultiStateResult results = runner.runInsertion(new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
+		final IMultiStateResult results = runner.runInsertion(new SlotInsertionOptimiserLogger(), new NullProgressMonitor());
 
-			solutionChecker.accept(runner.getLNGScenarioRunner(), results);
-		} finally {
-			runner.dispose();
-		}
+		solutionChecker.accept(runner.getLNGScenarioRunner(), results);
+	 
 	}
 
 	protected SlotInsertionOptimiserUnit getSlotInserter(final LNGScenarioRunner scenarioRunner) {

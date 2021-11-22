@@ -128,7 +128,8 @@ public class LNGOptimisationBuilder {
 	}
 
 	/**
-	 * Add the {@link LNGTransformerHelper#HINT_OPTIMISE_LSO} hint and sets evaluationOnly to false.
+	 * Add the {@link LNGTransformerHelper#HINT_OPTIMISE_LSO} hint and sets
+	 * evaluationOnly to false.
 	 * 
 	 * @return
 	 */
@@ -138,7 +139,8 @@ public class LNGOptimisationBuilder {
 	}
 
 	/**
-	 * Flag indicating whether to run the default export stages or just return the {@link IMultiStateResult} without further processing.
+	 * Flag indicating whether to run the default export stages or just return the
+	 * {@link IMultiStateResult} without further processing.
 	 * 
 	 * @return
 	 */
@@ -202,7 +204,8 @@ public class LNGOptimisationBuilder {
 				;
 
 				// IS this needed?
-				// serviceMaker.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_InitialSolution, StrategicScenarioModuleHelper.createEmptySolutionModule());
+				// serviceMaker.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_InitialSolution,
+				// StrategicScenarioModuleHelper.createEmptySolutionModule());
 
 				optimiserInjectorService = serviceMaker.make(optimiserInjectorService);
 			}
@@ -254,7 +257,7 @@ public class LNGOptimisationBuilder {
 				jobExecutorFactory, includeDefaultExportStage, initialHints);
 	}
 
-	public static class LNGOptimisationRunnerBuilder implements AutoCloseable {
+	public static class LNGOptimisationRunnerBuilder {
 		private final LNGOptimisationBuilder builder;
 		private final LNGScenarioRunner scenarioRunner;
 
@@ -304,15 +307,6 @@ public class LNGOptimisationBuilder {
 			return null;
 		}
 
-		@Override
-		public void close() throws Exception {
-			dispose();
-		}
-
-		public void dispose() {
-			
-		}
-
 		public LNGScenarioRunner getScenarioRunner() {
 			return scenarioRunner;
 		}
@@ -334,11 +328,7 @@ public class LNGOptimisationBuilder {
 				.withOptimisationPlan(optimisationPlan) //
 				.buildDefaultRunner();
 
-		try {
-			runner.evaluateInitialState();
-		} finally {
-			runner.dispose();
-		}
+		runner.evaluateInitialState();
 	}
 
 	public static void quickEvaluation(final IScenarioDataProvider scenarioDataProvider, final OptimisationPlan optimisationPlan, final @Nullable Module extraModule) {
@@ -348,11 +338,7 @@ public class LNGOptimisationBuilder {
 				.withOptimisationPlan(optimisationPlan) //
 				.buildDefaultRunner();
 
-		try {
-			runner.evaluateInitialState();
-		} finally {
-			runner.dispose();
-		}
+		runner.evaluateInitialState();
 	}
 
 	public static void quickEvaluationWithUpdateSettings(final IScenarioDataProvider scenarioDataProvider) {
@@ -374,12 +360,8 @@ public class LNGOptimisationBuilder {
 				.withOptimisationPlan(p) //
 				.buildDefaultRunner();
 
-		try {
-			scenarioDataProvider.setLastEvaluationFailed(true);
-			runner.evaluateInitialState();
-			scenarioDataProvider.setLastEvaluationFailed(false);
-		} finally {
-			runner.dispose();
-		}
+		scenarioDataProvider.setLastEvaluationFailed(true);
+		runner.evaluateInitialState();
+		scenarioDataProvider.setLastEvaluationFailed(false);
 	}
 }

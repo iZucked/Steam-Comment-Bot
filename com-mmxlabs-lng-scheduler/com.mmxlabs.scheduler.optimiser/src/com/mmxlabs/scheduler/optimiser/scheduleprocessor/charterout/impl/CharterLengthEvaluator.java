@@ -241,7 +241,7 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 		charterToReturnPortVoyageOptions.setRoute(originalBallast.getOptions().getRoute(), 0, 0);
 
 		// This leg is just the travel values, so clear out any idle portion.
-		final VoyageDetails newTravelToCharterLength = originalBallast.clone();
+		final VoyageDetails newTravelToCharterLength = originalBallast.copy();
 		{
 			newTravelToCharterLength.setOptions(ballastStartToCharterLengthPortVoyageOptions);
 			// Any cooldown or purge details go on the charter length
@@ -274,7 +274,7 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 		}
 
 		// This leg is the idle time that will become the charter length, so clear out any travel elements
-		final VoyageDetails newIdleFromCharterLength = originalBallast.clone();
+		final VoyageDetails newIdleFromCharterLength = originalBallast.copy();
 		{
 			newIdleFromCharterLength.setOptions(charterToReturnPortVoyageOptions);
 			// Clear Travel values
@@ -318,10 +318,10 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 		for (int i = 0; i < ballastIdx; i++) {
 			final Object o = currentSequence[i];
 			if (o instanceof PortDetails) {
-				partialSequenceUpToCharterLength.add(((PortDetails) o).clone());
+				partialSequenceUpToCharterLength.add(((PortDetails) o).copy());
 			} else if (o instanceof VoyageDetails) {
 				final VoyageDetails voyageDetails = (VoyageDetails) o;
-				partialSequenceUpToCharterLength.add(voyageDetails.clone());
+				partialSequenceUpToCharterLength.add(voyageDetails.copy());
 			}
 		}
 		// Now add in new travel leg and final charter length event
@@ -337,10 +337,10 @@ public class CharterLengthEvaluator implements IGeneratedCharterLengthEvaluator 
 		for (int i = ballastIdx + 1; i < currentSequence.length; i++) {
 			final Object o = currentSequence[i];
 			if (o instanceof PortDetails) {
-				partialSequenceFromCharterLength.add(((PortDetails) o).clone());
+				partialSequenceFromCharterLength.add(((PortDetails) o).copy());
 			} else if (o instanceof VoyageDetails) {
 				final VoyageDetails voyageDetails = (VoyageDetails) o;
-				partialSequenceFromCharterLength.add(voyageDetails.clone());
+				partialSequenceFromCharterLength.add(voyageDetails.copy());
 			}
 		}
 

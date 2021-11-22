@@ -21,7 +21,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
  * 
  */
 
-public final class PortDetails implements IDetailsSequenceElement, Cloneable {
+public final class PortDetails implements IDetailsSequenceElement {
 
 	private @NonNull PortOptions options;
 
@@ -115,8 +115,7 @@ public final class PortDetails implements IDetailsSequenceElement, Cloneable {
 		// @formatter:on
 	}
 
-	@Override
-	public PortDetails clone() {
+	public PortDetails copy() {
 		return new PortDetails(new PortOptions(options), fuelConsumption, fuelUnitPrices, portCosts);
 	}
 

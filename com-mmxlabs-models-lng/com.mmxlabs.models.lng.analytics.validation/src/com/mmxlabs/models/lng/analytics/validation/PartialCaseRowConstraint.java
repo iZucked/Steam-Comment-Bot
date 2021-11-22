@@ -47,13 +47,13 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 				portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
 			}
 
-			IScenarioDataProvider scenarioDataProvider = extraContext.getScenarioDataProvider();
-			ModelDistanceProvider modelDistanceProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
+			final IScenarioDataProvider scenarioDataProvider = extraContext.getScenarioDataProvider();
+			final ModelDistanceProvider modelDistanceProvider = scenarioDataProvider.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 
-			long fobPurchaseCount = partialCaseRow.getBuyOptions().stream().filter(AnalyticsBuilder.isFOBPurchase()).count();
-			long desPurchaseCount = partialCaseRow.getBuyOptions().stream().filter(AnalyticsBuilder.isDESPurchase()).count();
-			long fobSaleCount = partialCaseRow.getSellOptions().stream().filter(AnalyticsBuilder.isFOBSale()).count();
-			long desSaleCount = partialCaseRow.getSellOptions().stream().filter(AnalyticsBuilder.isDESSale()).count();
+			final long fobPurchaseCount = partialCaseRow.getBuyOptions().stream().filter(AnalyticsBuilder.isFOBPurchase()).count();
+			final long desPurchaseCount = partialCaseRow.getBuyOptions().stream().filter(AnalyticsBuilder.isDESPurchase()).count();
+			final long fobSaleCount = partialCaseRow.getSellOptions().stream().filter(AnalyticsBuilder.isFOBSale()).count();
+			final long desSaleCount = partialCaseRow.getSellOptions().stream().filter(AnalyticsBuilder.isDESSale()).count();
 
 			if (desPurchaseCount > 0 && fobSaleCount > 0) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
@@ -74,42 +74,42 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 				statuses.add(deco);
 			}
-			int lateness = getLateness(portModel, partialCaseRow, modelDistanceProvider);
+			final int lateness = getLateness(portModel, partialCaseRow, modelDistanceProvider);
 			if (lateness < 0) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
 						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row will create a late cargo", viewName)), IStatus.WARNING);
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 				statuses.add(deco);
 			}
-			int voyageDuration = getVoyageDuration(portModel, partialCaseRow, modelDistanceProvider);
+			final int voyageDuration = getVoyageDuration(portModel, partialCaseRow, modelDistanceProvider);
 			if ((voyageDuration / 24) > 60) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
 						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row has a large travel time", viewName)), IStatus.WARNING);
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 				statuses.add(deco);
 			}
-			boolean volume = getVolumeValid(partialCaseRow);
+			final boolean volume = getVolumeValid(partialCaseRow);
 			if (!volume) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
 						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row has mismatching volume limits", viewName)), IStatus.WARNING);
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 				statuses.add(deco);
 			}
-			boolean cv = getCVValid(partialCaseRow);
+			final boolean cv = getCVValid(partialCaseRow);
 			if (!cv) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
 						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row has mismatching cv limits", viewName)), IStatus.WARNING);
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 				statuses.add(deco);
 			}
-			boolean vesselPorts = getVesselPortRestrictionsValid(partialCaseRow);
+			final boolean vesselPorts = getVesselPortRestrictionsValid(partialCaseRow);
 			if (!vesselPorts) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
 						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row uses a vessel that cannot visit the specified ports", viewName)), IStatus.WARNING);
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 				statuses.add(deco);
 			}
-			boolean ports = getPortRestrictionsValid(partialCaseRow);
+			final boolean ports = getPortRestrictionsValid(partialCaseRow);
 			if (!ports) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
 						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row has incompatible port restrictions", viewName)), IStatus.WARNING);
@@ -119,14 +119,14 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 
 				statuses.add(deco);
 			}
-			boolean vessels = getVesselRestrictionsValid(partialCaseRow);
+			final boolean vessels = getVesselRestrictionsValid(partialCaseRow);
 			if (!vessels) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
 						(IConstraintStatus) ctx.createFailureStatus(String.format("%s - a combination in the row uses a vessel that is restricted by the load slot", viewName)), IStatus.WARNING);
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__PARTIAL_CASE);
 				statuses.add(deco);
 			}
-			for (ShippingOption opt : partialCaseRow.getShipping()) {
+			for (final ShippingOption opt : partialCaseRow.getShipping()) {
 				if (opt.eContainer() == null) {
 					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format("%s - uncontained shipping", viewName)));
 					deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
@@ -141,18 +141,34 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 				deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
 				statuses.add(deco);
 			}
+			if (hasCharterOutOpportunities) {
+				int roundTripCount = 0;
+				int totalCount = 0;
+				for (final ShippingOption shipOpt: partialCaseRow.getShipping()) {
+					if (AnalyticsBuilder.isRoundTripOption(shipOpt)) {
+						roundTripCount++;
+					}
+					totalCount++;
+				}
+				if (roundTripCount > 0 && roundTripCount == totalCount) {
+					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+							(IConstraintStatus) ctx.createFailureStatus(String.format("%s - the row contains charter out opportunities which cannot be used with round-trip shipping options", viewName)));
+					deco.addEObjectAndFeature(partialCaseRow, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
+					statuses.add(deco);
+				}
+			}
 		}
 
 		return Activator.PLUGIN_ID;
 	}
 
-	private int getLateness(PortModel portModel, PartialCaseRow row, ModelDistanceProvider modelDistanceProvider) {
-		for (BuyOption buyOption : row.getBuyOptions()) {
-			for (SellOption sellOption : row.getSellOptions()) {
-				for (ShippingOption option : row.getShipping()) {
+	private int getLateness(final PortModel portModel, final PartialCaseRow row, final ModelDistanceProvider modelDistanceProvider) {
+		for (final BuyOption buyOption : row.getBuyOptions()) {
+			for (final SellOption sellOption : row.getSellOptions()) {
+				for (final ShippingOption option : row.getShipping()) {
 					// test shipping only
 					if (AnalyticsBuilder.isFOBPurchase().test(buyOption) && AnalyticsBuilder.isDESSale().test(sellOption) && AnalyticsBuilder.isShipped(option)) {
-						int lateness = AnalyticsBuilder.calculateLateness(buyOption, sellOption, portModel, AnalyticsBuilder.getVessel(option), modelDistanceProvider);
+						final int lateness = AnalyticsBuilder.calculateLateness(buyOption, sellOption, portModel, AnalyticsBuilder.getVessel(option), modelDistanceProvider);
 						if (lateness < 0) {
 							return lateness;
 						}
@@ -163,10 +179,10 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 		return 0;
 	}
 
-	private int getVoyageDuration(PortModel portModel, PartialCaseRow row, ModelDistanceProvider modelDistanceProvider) {
-		for (BuyOption buyOption : row.getBuyOptions()) {
-			for (SellOption sellOption : row.getSellOptions()) {
-				for (ShippingOption option : row.getShipping()) {
+	private int getVoyageDuration(final PortModel portModel, final PartialCaseRow row, final ModelDistanceProvider modelDistanceProvider) {
+		for (final BuyOption buyOption : row.getBuyOptions()) {
+			for (final SellOption sellOption : row.getSellOptions()) {
+				for (final ShippingOption option : row.getShipping()) {
 					// test shipping only
 					if (AnalyticsBuilder.isFOBPurchase().test(buyOption) && AnalyticsBuilder.isDESSale().test(sellOption) && AnalyticsBuilder.isShipped(option)) {
 
@@ -179,18 +195,18 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 		return 0;
 	}
 
-	private boolean getVolumeValid(PartialCaseRow row) {
-		for (BuyOption buyOption : row.getBuyOptions()) {
-			for (SellOption sellOption : row.getSellOptions()) {
-				for (ShippingOption option : row.getShipping()) {
+	private boolean getVolumeValid(final PartialCaseRow row) {
+		for (final BuyOption buyOption : row.getBuyOptions()) {
+			for (final SellOption sellOption : row.getSellOptions()) {
+				for (final ShippingOption option : row.getShipping()) {
 					// test slot volume
-					boolean checkVolumeAgainstBuyAndSell = SandboxConstraintUtils.checkVolumeAgainstBuyAndSell(buyOption, sellOption);
+					final boolean checkVolumeAgainstBuyAndSell = SandboxConstraintUtils.checkVolumeAgainstBuyAndSell(buyOption, sellOption);
 					if (!checkVolumeAgainstBuyAndSell) {
 						return false;
 					}
 					// test shipping only
 					if (AnalyticsBuilder.isFOBPurchase().test(buyOption) && AnalyticsBuilder.isDESSale().test(sellOption) && AnalyticsBuilder.isShipped(option)) {
-						boolean vesselVolume = SandboxConstraintUtils.checkVolumeAgainstVessel(buyOption, sellOption, option);
+						final boolean vesselVolume = SandboxConstraintUtils.checkVolumeAgainstVessel(buyOption, sellOption, option);
 						if (!vesselVolume) {
 							return false;
 						}
@@ -201,10 +217,10 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 		return true;
 	}
 
-	private boolean getCVValid(PartialCaseRow row) {
-		for (BuyOption buyOption : row.getBuyOptions()) {
-			for (SellOption sellOption : row.getSellOptions()) {
-				boolean checkVolumeAgainstBuyAndSell = SandboxConstraintUtils.checkCVAgainstBuyAndSell(buyOption, sellOption);
+	private boolean getCVValid(final PartialCaseRow row) {
+		for (final BuyOption buyOption : row.getBuyOptions()) {
+			for (final SellOption sellOption : row.getSellOptions()) {
+				final boolean checkVolumeAgainstBuyAndSell = SandboxConstraintUtils.checkCVAgainstBuyAndSell(buyOption, sellOption);
 				if (!checkVolumeAgainstBuyAndSell) {
 					return false;
 				}
@@ -213,13 +229,13 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 		return true;
 	}
 
-	private boolean getVesselPortRestrictionsValid(PartialCaseRow row) {
-		for (BuyOption buyOption : row.getBuyOptions()) {
-			for (SellOption sellOption : row.getSellOptions()) {
-				for (ShippingOption option : row.getShipping()) {
+	private boolean getVesselPortRestrictionsValid(final PartialCaseRow row) {
+		for (final BuyOption buyOption : row.getBuyOptions()) {
+			for (final SellOption sellOption : row.getSellOptions()) {
+				for (final ShippingOption option : row.getShipping()) {
 					// test shipping only
 					if (AnalyticsBuilder.isFOBPurchase().test(buyOption) && AnalyticsBuilder.isDESSale().test(sellOption) && AnalyticsBuilder.isShipped(option)) {
-						boolean vesselVolume = SandboxConstraintUtils.vesselPortRestrictionsValid(buyOption, sellOption, option);
+						final boolean vesselVolume = SandboxConstraintUtils.vesselPortRestrictionsValid(buyOption, sellOption, option);
 						if (!vesselVolume) {
 							return false;
 						}
@@ -230,10 +246,10 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 		return true;
 	}
 
-	private boolean getPortRestrictionsValid(PartialCaseRow row) {
-		for (BuyOption buyOption : row.getBuyOptions()) {
-			for (SellOption sellOption : row.getSellOptions()) {
-				boolean valid = SandboxConstraintUtils.portRestrictionsValid(buyOption, sellOption);
+	private boolean getPortRestrictionsValid(final PartialCaseRow row) {
+		for (final BuyOption buyOption : row.getBuyOptions()) {
+			for (final SellOption sellOption : row.getSellOptions()) {
+				final boolean valid = SandboxConstraintUtils.portRestrictionsValid(buyOption, sellOption);
 				if (!valid) {
 					return false;
 				}
@@ -242,13 +258,13 @@ public class PartialCaseRowConstraint extends AbstractModelMultiConstraint {
 		return true;
 	}
 
-	private boolean getVesselRestrictionsValid(PartialCaseRow row) {
-		for (BuyOption buyOption : row.getBuyOptions()) {
-			for (SellOption sellOption : row.getSellOptions()) {
-				for (ShippingOption option : row.getShipping()) {
+	private boolean getVesselRestrictionsValid(final PartialCaseRow row) {
+		for (final BuyOption buyOption : row.getBuyOptions()) {
+			for (final SellOption sellOption : row.getSellOptions()) {
+				for (final ShippingOption option : row.getShipping()) {
 					// test shipping only
 					if (AnalyticsBuilder.isFOBPurchase().test(buyOption) && AnalyticsBuilder.isDESSale().test(sellOption) && AnalyticsBuilder.isShipped(option)) {
-						boolean vesselVolume = SandboxConstraintUtils.vesselRestrictionsValid(buyOption, sellOption, option);
+						final boolean vesselVolume = SandboxConstraintUtils.vesselRestrictionsValid(buyOption, sellOption, option);
 						if (!vesselVolume) {
 							return false;
 						}

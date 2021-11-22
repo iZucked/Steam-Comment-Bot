@@ -96,17 +96,18 @@ public class HttpClientUtil {
 
 		try {
 
+			final Pair<KeyStore, char[]> trustStorePair = LicenseChecker.loadLocalTruststore();
 			final Pair<KeyStore, char[]> keyStorePair = LicenseChecker.loadLocalKeystore();
-			if (keyStorePair != null) {
-				final KeyStore keyStore = keyStorePair.getFirst();
+
+			if (trustStorePair != null && keyStorePair != null) {
 
 				final SSLContext sslContext = SSLContext.getInstance("TLS");
 
 				final TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-				trustManagerFactory.init(keyStore);
+				trustManagerFactory.init(trustStorePair.getFirst());
 
 				final KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-				keyManagerFactory.init(keyStore, keyStorePair.getSecond());
+				keyManagerFactory.init(keyStorePair.getFirst(), keyStorePair.getSecond());
 				sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), new SecureRandom());
 
 				final TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
@@ -188,7 +189,7 @@ public class HttpClientUtil {
 			final String hostStr = matcher.group(1);
 			final String portStr = matcher.groupCount() > 1 ? matcher.group(2) : null;
 
-			final Pair<KeyStore, char[]> keyStorePair = LicenseChecker.loadLocalKeystore();
+			final Pair<KeyStore, char[]> keyStorePair = LicenseChecker.loadLocalTruststore();
 			final KeyStore keyStore = keyStorePair.getFirst();
 
 			final SSLContext sslContext = SSLContext.getInstance("TLS");

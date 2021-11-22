@@ -33,12 +33,9 @@ public class ScenarioInstanceEvaluator implements IScenarioInstanceEvaluator {
 						.withThreadCount(1) //
 						.withOptimisationPlan(p) //
 						.buildDefaultRunner();
-				try {
-					runnerBuilder.evaluateInitialState();
-					scenarioDataProvider.setLastEvaluationFailed(false);
-				} finally {
-					runnerBuilder.dispose();
-				}
+
+				runnerBuilder.evaluateInitialState();
+				scenarioDataProvider.setLastEvaluationFailed(false);
 			}
 		});
 	}

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
+import java.time.Month;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord;
 import com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -36,7 +38,9 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  * bookings vessel + vessel groups are compatible. 4. Checks that no parameters
  * consist of all empty vessel groups
  * 
- * @author Patrick
+ * @author Patrick, FM
+ * @version 2
+ * @since 14/09/2021
  */
 public class PanamaVesselGroupParametersConstraint extends AbstractModelMultiConstraint {
 
@@ -51,6 +55,7 @@ public class PanamaVesselGroupParametersConstraint extends AbstractModelMultiCon
 			checkNoOverlappingVesselGroups(ctx, statuses, canalBookings, vesselGroupParameters);
 			checkNoIncompatibleVesselBookingCodeBookings(ctx, statuses, canalBookings, vesselGroupParameters);
 			checkNoEmptyVesselGroups(ctx, statuses, canalBookings, vesselGroupParameters);
+			checkSeasonality(ctx, statuses, canalBookings, vesselGroupParameters);
 		}
 		return Activator.PLUGIN_ID;
 	}
@@ -140,7 +145,7 @@ public class PanamaVesselGroupParametersConstraint extends AbstractModelMultiCon
 			final List<VesselGroupCanalParameters> vesselGroupParameters) {
 		if (!isDefaultVesselGroupPresent(vesselGroupParameters)) {
 			addValidationError(ctx, statuses, canalBookings, CargoPackage.Literals.VESSEL_GROUP_CANAL_PARAMETERS__VESSEL_GROUP,
-					"A default booking code with no vessel group and default number of waiting days for Southbound and Northbound unbooked panama crossings must be defined.");
+					"A default booking code with no vessels must be defined.");
 		}
 	}
 
@@ -148,7 +153,74 @@ public class PanamaVesselGroupParametersConstraint extends AbstractModelMultiCon
 			final List<VesselGroupCanalParameters> vesselGroupParameters) {
 		if (!isOnlyOneDefaultVesselGroupPresent(vesselGroupParameters)) {
 			addValidationError(ctx, statuses, canalBookings, CargoPackage.Literals.VESSEL_GROUP_CANAL_PARAMETERS__VESSEL_GROUP,
-					"Only one default vessel group with no vessels and default waiting days can be defined.");
+					"Only one default vessel group with no vessels can be defined.");
+		}
+	}
+	
+	private void checkSeasonality(final IValidationContext ctx, final List<IStatus> statuses, @NonNull final CanalBookings canalBookings,
+			final List<VesselGroupCanalParameters> vesselGroupParameters) {
+		final List<PanamaSeasonalityRecord> panamaSeasonalityRecords = canalBookings.getPanamaSeasonalityRecords();
+		for (final VesselGroupCanalParameters vgcp : vesselGroupParameters) {
+			final String name = vgcp.getName();
+			final List<PanamaSeasonalityRecord> matchingRecords = panamaSeasonalityRecords.stream()//
+					.filter(psr -> vgcp.equals(psr.getVesselGroupCanalParameter())).collect(Collectors.toList());
+			if (matchingRecords.isEmpty()) {
+				addValidationError(ctx, statuses, vgcp, CargoPackage.Literals.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS,//
+						String.format("Vessel group %s has no seasonality record.", vgcp.getName()));
+			}
+			final List<PanamaSeasonalityRecord> matchingAnyRecords = matchingRecords.stream()//
+					.filter(foo -> foo.getStartMonth() == 0).collect(Collectors.toList());
+			final List<PanamaSeasonalityRecord> matchingMonthRecords = matchingRecords.stream()//
+					.filter(foo -> foo.getStartMonth() > 0).collect(Collectors.toList());
+			
+			if (matchingAnyRecords.size() > 1) {
+				addValidationError(ctx, statuses, matchingAnyRecords.get(0), CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__VESSEL_GROUP_CANAL_PARAMETER,//
+						String.format("Only one \'ANY\' month can be set for each vessel group. Booking code: %s", name));
+			}
+			if (!matchingAnyRecords.isEmpty() && !matchingMonthRecords.isEmpty()) {
+				addValidationError(ctx, statuses, matchingAnyRecords.get(0), CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__VESSEL_GROUP_CANAL_PARAMETER,//
+						String.format("\'ANY\' month setting can not be used with a specific month boundary setting. Booking code: %s", name));
+			}
+			if (matchingMonthRecords.size() == 1) {
+				addValidationError(ctx, statuses, matchingMonthRecords.get(0), CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__VESSEL_GROUP_CANAL_PARAMETER,//
+						String.format("At least two specified boundary settings must be provided. Booking code: %s", name));
+			}
+			for (final PanamaSeasonalityRecord psr : matchingRecords) {
+				final List<PanamaSeasonalityRecord> matchingDuplicates = matchingRecords.stream()//
+						.filter(psr2 -> (psr != psr2
+								&& psr.getStartDay() == psr2.getStartDay() //
+								&& psr.getStartMonth() == psr2.getStartMonth() //
+								&& psr.getStartMonth() != 0 //
+								&& psr2.getStartMonth() != 0 //
+								&& psr.getStartYear() == psr2.getStartYear()))//
+						.collect(Collectors.toList());
+				if (!matchingDuplicates.isEmpty()) {
+					addValidationError(ctx, statuses, psr, CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__VESSEL_GROUP_CANAL_PARAMETER,//
+							String.format("Duplicate seasonality record. Booking code: %s", name));
+				}
+			}
+		}
+		
+		for (final PanamaSeasonalityRecord psr : panamaSeasonalityRecords) {
+			final String name;
+			if (psr.getVesselGroupCanalParameter() == null) {
+				addValidationError(ctx, statuses, psr, CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__VESSEL_GROUP_CANAL_PARAMETER,//
+						String.format("Seasonality record must have an assigned vessel group."));
+				name = "<Unknown>";
+			} else {
+				name = psr.getVesselGroupCanalParameter().getName();
+			}
+			
+			if (psr.getStartMonth() > 0) {
+				final Month m = Month.of(psr.getStartMonth());
+				if (psr.getStartDay() > m.maxLength()) {
+					addValidationError(ctx, statuses, psr, CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__START_DAY,//
+							String.format("Seasonality record must have a feasible start day. Booking code: %s", name));
+				} else if (psr.getStartDay() < 1) {
+					addValidationError(ctx, statuses, psr, CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__START_MONTH,//
+							String.format("Seasonality record must have a positive value for the start day. Booking code: %s", name));
+				}
+			}
 		}
 	}
 

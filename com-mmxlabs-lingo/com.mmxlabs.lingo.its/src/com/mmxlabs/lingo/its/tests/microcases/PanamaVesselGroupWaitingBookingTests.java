@@ -36,6 +36,7 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters;
@@ -229,21 +230,30 @@ public class PanamaVesselGroupWaitingBookingTests extends AbstractMicroTestCase 
 		
 		VesselGroupCanalParameters testGroupParams = CargoFactory.eINSTANCE.createVesselGroupCanalParameters();
 		testGroupParams.getVesselGroup().add(vg);
-		testGroupParams.setNorthboundWaitingDays(VG1_WAITING_DAYS);
-		testGroupParams.setSouthboundWaitingDays(VG1_WAITING_DAYS);
 		canalBookings.getVesselGroupCanalParameters().add(testGroupParams);
+		final PanamaSeasonalityRecord psr1 = CargoFactory.eINSTANCE.createPanamaSeasonalityRecord();
+		psr1.setNorthboundWaitingDays(VG1_WAITING_DAYS);
+		psr1.setSouthboundWaitingDays(VG1_WAITING_DAYS);
+		psr1.setVesselGroupCanalParameter(testGroupParams);
+		canalBookings.getPanamaSeasonalityRecords().add(psr1);
 		
 		VesselGroupCanalParameters testGroupParams2 = CargoFactory.eINSTANCE.createVesselGroupCanalParameters();
 		testGroupParams2.getVesselGroup().add(vg2);
-		testGroupParams2.setNorthboundWaitingDays(VG2_WAITING_DAYS);
-		testGroupParams2.setSouthboundWaitingDays(VG2_WAITING_DAYS);
 		canalBookings.getVesselGroupCanalParameters().add(testGroupParams2);
+		final PanamaSeasonalityRecord psr2 = CargoFactory.eINSTANCE.createPanamaSeasonalityRecord();
+		psr2.setNorthboundWaitingDays(VG2_WAITING_DAYS);
+		psr2.setSouthboundWaitingDays(VG2_WAITING_DAYS);
+		psr2.setVesselGroupCanalParameter(testGroupParams2);
+		canalBookings.getPanamaSeasonalityRecords().add(psr2);
 		
 		VesselGroupCanalParameters defaultParams = CargoFactory.eINSTANCE.createVesselGroupCanalParameters();
 		//Default params group has no vessel group or vessels set.
-		defaultParams.setNorthboundWaitingDays(10);
-		defaultParams.setSouthboundWaitingDays(10);
 		canalBookings.getVesselGroupCanalParameters().add(defaultParams);
+		final PanamaSeasonalityRecord dpsr = CargoFactory.eINSTANCE.createPanamaSeasonalityRecord();
+		dpsr.setNorthboundWaitingDays(10);
+		dpsr.setSouthboundWaitingDays(10);
+		dpsr.setVesselGroupCanalParameter(defaultParams);
+		canalBookings.getPanamaSeasonalityRecords().add(dpsr);
 		
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
