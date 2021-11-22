@@ -75,6 +75,7 @@ import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SchedulingTimeWindow;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.CargoTravelTimeUtils;
@@ -286,26 +287,62 @@ public class CPBasedSolver {
 		final Set<LoadSlot> usedLoadSlotsSet = usedLoadSlots.values().stream().flatMap(List::stream).collect(Collectors.toSet());
 
 		final Map<Contract, @NonNull Pair<@NonNull LocalDate, LocalDate>> latestDatePairs = getLatestPreAdpContractDatePairs(sm, loadedContracts, modelDistanceProvider);
+		final Map<Contract, SalesContract> contractMap = getExpectedContracts(loadedContracts, sm);
+		final Map<SalesContract, Contract> reverseContractMap = new HashMap<>();
+		contractMap.entrySet().stream().forEach(e -> reverseContractMap.put(e.getValue(), e.getKey()));
+		final Set<SalesContract> expectedSalesContracts = new HashSet<>(contractMap.values());
 
 		final Map<Contract, Integer> latestLoadDatesConvertedToInt = latestLoadDates.entrySet().stream().collect(Collectors.toMap(Entry::getKey, e -> getDateValue(e.getValue())));
 
 		final Map<String, @NonNull RateabilityConstraint> contractRateabilityConstraints = getRateabilityConstraintsFromInput(input);
 
 		final YearMonth adpStart = sm.getAdpModel().getYearStart();
-		// final List<LoadSlot> openUsableLoadSlots = sm.getCargoModel().getLoadSlots().stream().filter(slot -> !adpStart.isAfter(YearMonth.from(slot.getWindowStart())))
-		// .collect(Collectors.toList());
 		final List<LoadSlot> adpLoadSlots = sm.getCargoModel().getLoadSlots().stream().filter(slot -> !adpStart.isAfter(YearMonth.from(slot.getWindowStart()))).collect(Collectors.toList());
-		// final List<LoadSlot> openLoadSlots = sm.getCargoModel().getLoadSlots().stream().filter(slot -> slot.getCargo() == null).collect(Collectors.toList());
+		final Set<LoadSlot> adpLoadSlotSet = new HashSet<>(adpLoadSlots);
 		final Map<LocalDate, LoadSlot> dateLoadSlotMap = adpLoadSlots.stream().collect(Collectors.toMap(LoadSlot::getWindowStart, Function.identity()));
-		// final Map<LocalDate, LoadSlot> dateLoadSlotMap = openLoadSlots.stream().collect(Collectors.toMap(loadSlot -> loadSlot.getWindowStart(), Function.identity()));
 		final List<LocalDate> loadDates = adpLoadSlots.stream().map(LoadSlot::getWindowStart).collect(Collectors.toList());
-		// final List<LocalDate> loadDates = openLoadSlots.stream().map(LoadSlot::getWindowStart).collect(Collectors.toList());
 
 		final Map<LoadSlot, Contract> loadSlotToContractMap = new HashMap<>();
 		final Map<Contract, @NonNull List<LoadSlot>> usedLoadSlotsToIgnore = new HashMap<>();
 		usedLoadSlots.entrySet().forEach(entry -> entry.getValue().forEach(slot -> loadSlotToContractMap.put(slot, entry.getKey())));
 		for (final Entry<Contract, @NonNull List<LoadSlot>> entry : usedLoadSlots.entrySet()) {
 			loadedContracts.values().stream().filter(c -> c != entry.getKey()).forEach(c -> usedLoadSlotsToIgnore.computeIfAbsent(c, con -> new LinkedList<>()).addAll(entry.getValue()));
+		}
+
+		// load slot contract restrictions
+		for (final LoadSlot loadSlot : adpLoadSlots) {
+			final List<com.mmxlabs.models.lng.commercial.Contract> contractRestrictions = loadSlot.getSlotOrDelegateContractRestrictions();
+			if (!contractRestrictions.isEmpty()) {
+				if (loadSlot.getSlotOrDelegateContractRestrictionsArePermissive()) {
+					final Set<com.mmxlabs.models.lng.commercial.Contract> restrictionsSet = new HashSet<>(contractRestrictions);
+					for (final SalesContract contract : expectedSalesContracts) {
+						if (!restrictionsSet.contains(contract)) {
+							final Contract oContract = reverseContractMap.get(contract);
+							usedLoadSlotsToIgnore.computeIfAbsent(oContract, con -> new LinkedList<>()).add(loadSlot);
+						}
+					}
+				} else {
+					final Set<com.mmxlabs.models.lng.commercial.Contract> restrictionsSet = new HashSet<>(contractRestrictions);
+					for (final SalesContract contract : expectedSalesContracts) {
+						if (restrictionsSet.contains(contract)) {
+							final Contract oContract = reverseContractMap.get(contract);
+							usedLoadSlotsToIgnore.computeIfAbsent(oContract, con -> new LinkedList<>()).add(loadSlot);
+						}
+					}
+				}
+			}
+		}
+
+		// Get load slots used by markets
+		final Set<LoadSlot> unusableLoadSlots = Stream.concat(sm.getCargoModel().getCargoes().stream().filter(cargo -> adpLoadSlotSet.contains((LoadSlot) cargo.getSlots().get(0))).filter(cargo -> {
+			final DischargeSlot dischargeSlot = (DischargeSlot) cargo.getSlots().get(1);
+			return dischargeSlot instanceof SpotDischargeSlot || !expectedSalesContracts.contains(dischargeSlot.getContract());
+		}).map(c -> (LoadSlot) c.getSlots().get(0)), adpLoadSlots.stream().filter(LoadSlot::isLocked)).collect(Collectors.toSet());
+
+		if (!unusableLoadSlots.isEmpty()) {
+			for (final Contract contract : loadedContracts.values()) {
+				usedLoadSlotsToIgnore.computeIfAbsent(contract, con -> new LinkedList<>()).addAll(unusableLoadSlots);
+			}
 		}
 
 		final Map<com.mmxlabs.models.lng.fleet.Vessel, Vessel> eVesselToVesselMap = new HashMap<>();
@@ -344,10 +381,8 @@ public class CPBasedSolver {
 		}
 
 		// Get Dry dock events
-		// sm.getCargoModel().getVesselEvents()
 
 		IntVar[] loadVarsStart = new IntVar[totalTasks];
-		// IntVar[] solverVars = new IntVar[totalTasks];
 		IntVar[] loadVarsEnd = new IntVar[totalTasks];
 		IntervalVar[] loadVarsIntervals = new IntervalVar[totalTasks];
 		IntVar[] cargoEnd = new IntVar[totalTasks];
@@ -450,7 +485,7 @@ public class CPBasedSolver {
 			}
 		}
 
-		// Per load slot constraints
+		// Each load slot can be associated with at most one cargo
 		for (int loadIndex = 0; loadIndex < numLoadSlots; ++loadIndex) {
 			final IntVar[] cargoes = new IntVar[numCargoes];
 			for (int cargoIndex = 0; cargoIndex < numCargoes; ++cargoIndex) {
@@ -460,7 +495,7 @@ public class CPBasedSolver {
 			model.addLessOrEqual(cargoSum, 1L);
 		}
 
-		// Per cargo load slot constraints
+		// Each cargo must be associated with a load slot
 		for (int cargoIndex = 0; cargoIndex < numCargoes; ++cargoIndex) {
 			final IntVar[] loads = new IntVar[numLoadSlots];
 			for (int loadIndex = 0; loadIndex < numLoadSlots; ++loadIndex) {
@@ -470,7 +505,7 @@ public class CPBasedSolver {
 			model.addEquality(loadSum, 1L);
 		}
 
-		// Per cargo disallowed load slots
+		// Load slots must be not be associated with contracts that are excluded from them, e.g. (1) part of fixed cargo
 		for (int cargoIndex = 0; cargoIndex < numCargoes; ++cargoIndex) {
 			final Cargo cargo = orderedCargoes[cargoIndex];
 			final Contract contract = cargo.contract;
@@ -483,7 +518,7 @@ public class CPBasedSolver {
 			}
 		}
 
-		// Per contract allowed load slots
+		// Load slots used by a contract must be associated with a cargo on that contract
 		for (final Entry<Contract, List<LoadSlot>> entry : usedLoadSlots.entrySet()) {
 			final List<Integer> localCargoIndices = contractConnectedCargoIndices.get(entry.getKey());
 			if (localCargoIndices != null) {
@@ -500,8 +535,6 @@ public class CPBasedSolver {
 				}
 			}
 		}
-
-		// dry dock interval vars
 
 		final Map<String, List<Triple<IntVar, IntervalVar, IntVar>>> dryDockIntervalVars = new HashMap<>();
 		final Map<DryDockEvent, Triple<IntVar, IntervalVar, IntVar>> dryDockIntervalVarsMap = new HashMap<>();
@@ -603,7 +636,6 @@ public class CPBasedSolver {
 				// FOB-FOB has to be in current year, FOB-DES can load in previous year.
 				int desDeliveryTime = (c.contract.fob ? 0 : (c.contract.interval / 2 + 1));
 				int startTime = firstLoadDate - desDeliveryTime;
-				// int endTime = lastLoadDate - desDeliveryTime;
 				int endTime = lastLoadDate;
 
 				if (c.minDischargeDate != null) {
@@ -623,7 +655,6 @@ public class CPBasedSolver {
 					endTime = Math.min(maxLoadTime, endTime);
 				}
 
-				// vesselVarsStart[i] = createLoadVar(model, v, c.contract, startTime, endTime, i, desDeliveryTime, loadDates);
 				vesselVarsStart[i] = createLoadVar(model, v, c.contract, startTime, endTime, i, desDeliveryTime, sortedLoadDates);
 				vesselVarsEnd[i] = model.newIntVar(startTime, endTime + c.contract.interval, v.name + "-" + c.contract.name + "-end-" + i);
 				// Cargo spacing per vessel.
@@ -695,15 +726,6 @@ public class CPBasedSolver {
 							model.addGreaterOrEqual(vesselVarsStart[i], latestLoadDateValue);
 						}
 					}
-
-					// final LocalDate latestLoadDate = latestLoadDates.get(c.contract);
-					// if (latestLoadDate != null) {
-					// final int latestLoadDateValue = getDateValue(latestLoadDate);
-					// model.addGreaterOrEqual(vesselVarsStart[i], latestLoadDateValue + c.contract.interval);
-					// if (c.contract.maxInterval != Integer.MAX_VALUE) {
-					// model.addLessOrEqual(vesselVarsStart[i], latestLoadDateValue + c.contract.maxInterval);
-					// }
-					// }
 				}
 
 				// Ensure for example, that JERA cargoes are spaced 30 days apart even though same ship.
@@ -912,6 +934,20 @@ public class CPBasedSolver {
 		} else {
 			return new Feasible(modelPopulationCommand);
 		}
+	}
+
+	private Map<Contract, SalesContract> getExpectedContracts(Map<String, Contract> loadedContracts, LNGScenarioModel sm) {
+		final Map<Contract, SalesContract> contractMap = new HashMap<>();
+		for (final Contract contract : loadedContracts.values()) {
+			final Optional<SalesContract> optSalesContract = sm.getReferenceModel().getCommercialModel().getSalesContracts().stream().filter(sc -> sc.getName().equalsIgnoreCase(contract.getName()))
+					.findAny();
+			if (optSalesContract.isPresent()) {
+				contractMap.put(contract, optSalesContract.get());
+			} else {
+				throw new IllegalStateException(String.format("Could not find sales contract %s", contract.getName()));
+			}
+		}
+		return contractMap;
 	}
 
 	private Map<Contract, @NonNull LocalDate> getLatestPreAdpContractLoadDates(final LNGScenarioModel sm, final Map<String, Contract> expectedContracts) {
