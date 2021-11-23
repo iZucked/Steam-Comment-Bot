@@ -74,7 +74,7 @@ public class RestrictedSlotsConstraintChecker implements IPairwiseConstraintChec
 
 		final boolean result = !restrictedSlotsProvider.getRestrictedFollowerElements(first).contains(second)
 				&& !restrictedSlotsProvider.getRestrictedPrecedingElements(second).contains(first);
-		if (!result)
+		if (!result && messages != null)
 			messages.add(String.format("%s: Slot on sequence element %s is not allowed to be wired to the slot on the sequence element %s!", 
 					this.name, first.getName(), second.getName()));
 		return result;

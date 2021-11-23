@@ -140,6 +140,9 @@ import com.mmxlabs.models.lng.transformer.ui.analytics.EvaluateSolutionSetHelper
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
@@ -590,29 +593,6 @@ public class ChangeSetView extends ViewPart {
 					}
 				}
 			};
-
-		}
-		if (IReportContents.class.isAssignableFrom(adapter)) {
-
-			try {
-				columnHelper.setTextualVesselMarkers(true);
-				// Need to refresh the view to trigger creation of the text labels
-				ViewerHelper.refresh(viewer, true);
-				final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
-
-				final String contents = util.convert();
-				return (T) new IReportContents() {
-
-					@Override
-					public String getHTMLContents() {
-						// Prefix this header for rendering purposes
-						return "<meta charset=\"UTF-8\"/>" + contents;
-					}
-
-				};
-			} finally {
-				columnHelper.setTextualVesselMarkers(false);
-			}
 		}
 		return (T) null;
 	}
@@ -637,7 +617,7 @@ public class ChangeSetView extends ViewPart {
 
 		// Create table
 		viewer = new GridTreeViewer(parent, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
-		GridViewerHelper.configureLookAndFeel(viewer);
+		GridViewerHelper.configureLookAndFeel(viewer, false);
 
 		ColumnViewerToolTipSupport.enableFor(viewer, ToolTip.RECREATE);
 
@@ -1070,7 +1050,7 @@ public class ChangeSetView extends ViewPart {
 				}
 			};
 			filterMenu.setToolTipText("Change filters");
-			filterMenu.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/filter.gif"));
+			filterMenu.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Filter, IconMode.Enabled));
 			getViewSite().getActionBars().getToolBarManager().add(filterMenu);
 		}
 		{
@@ -1792,7 +1772,11 @@ public class ChangeSetView extends ViewPart {
 	@Optional
 	public void onClosingScenario(@UIEventTopic(ScenarioServiceUtils.EVENT_CLOSING_SCENARIO_INSTANCE) final ScenarioInstance scenarioInstance) {
 
-		final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecordChecked(scenarioInstance);
+		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		
+		if (modelRecord == null) {
+			return;
+		}
 
 		final Function<ScenarioResult, Boolean> checker = (sr) -> sr != null && (sr.getModelRecord() == modelRecord || sr.getScenarioInstance() == scenarioInstance);
 		final ViewState viewState = currentViewState;

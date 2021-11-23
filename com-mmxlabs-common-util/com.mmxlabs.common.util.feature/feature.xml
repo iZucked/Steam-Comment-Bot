@@ -8,21 +8,8 @@
 <feature
       id="com.mmxlabs.common.util.feature"
       label="Common Util Feature"
-      version="4.12.50.qualifier"
+      version="4.13.4.qualifier"
       provider-name="Minimax Labs Ltd.">
-
-   <description>
-      Optimiser
-   </description>
-
-   <copyright>
-      Copyright (C) Minimax Labs Ltd., 2010 - 2012
-All rights reserved.
-   </copyright>
-
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
-   </license>
 
    <plugin
          id="com.mmxlabs.common.common-util"

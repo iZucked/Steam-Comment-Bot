@@ -65,6 +65,8 @@ import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
 import com.mmxlabs.models.ui.impl.FeatureFilteringDetailDisplayComposite;
 import com.mmxlabs.models.ui.impl.RowGroupDisplayCompositeLayoutProviderBuilder;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 
@@ -349,7 +351,7 @@ public class SubContractProfileTopLevelComposite extends DefaultTopLevelComposit
 
 						}
 					};
-					action.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE));
+					CommonImages.setImageDescriptors(action, IconPaths.Delete);
 					removeButtonManager.getToolbarManager().add(action);
 					removeButtonManager.getToolbarManager().update(true);
 				});

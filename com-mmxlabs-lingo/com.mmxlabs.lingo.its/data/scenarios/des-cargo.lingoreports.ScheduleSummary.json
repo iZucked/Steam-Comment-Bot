@@ -13,10 +13,6 @@
   "Next event date" : "02/01/11",
   "Next event port" : "Point Fortin",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Europe - Trading)" : "0",
-    "P&L (Europe - Shipping)" : "-68,749"
-  },
   "P&L (Shipping)" : "-68,749",
   "P&L" : "-68,749",
   "P&L (Trading)" : "0",
@@ -33,7 +29,11 @@
   "Port Cost" : "0",
   "Total Cost" : "68,749",
   "Type" : "Start",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[P&L]" : {
+    "P&L (Europe - Trading)" : "0",
+    "P&L (Europe - Shipping)" : "-68,749"
+  }
 }, {
   "Buy/Start Port" : "Damietta",
   "Discharge/End Date" : "22/03/11",
@@ -50,10 +50,6 @@
   "Next event date" : "23/03/11",
   "Next event port" : "Damietta",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Europe - Trading)" : "0",
-    "P&L (Europe - Shipping)" : "-251,818"
-  },
   "P&L (Shipping)" : "-251,818",
   "P&L" : "-251,818",
   "P&L (Trading)" : "0",
@@ -71,7 +67,11 @@
   "Port Cost" : "0",
   "Total Cost" : "251,818",
   "Type" : "Dry Dock",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[P&L]" : {
+    "P&L (Europe - Trading)" : "0",
+    "P&L (Europe - Shipping)" : "-251,818"
+  }
 }, {
   "Buy/Start Port" : "Punta Europa",
   "Discharge/End Date" : "27/08/11",
@@ -84,10 +84,6 @@
   "Load/Start Date" : "27/08/11",
   "Load/Start Time" : "19:00",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Europe - Trading)" : "0",
-    "P&L (Europe - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -104,7 +100,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "End",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[P&L]" : {
+    "P&L (Europe - Trading)" : "0",
+    "P&L (Europe - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Punta Europa",
   "Discharge/End Date" : "27/08/11",
@@ -117,10 +117,6 @@
   "Load/Start Date" : "27/08/11",
   "Load/Start Time" : "19:00",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Europe - Trading)" : "0",
-    "P&L (Europe - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -137,7 +133,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "End",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[P&L]" : {
+    "P&L (Europe - Trading)" : "0",
+    "P&L (Europe - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Point Fortin",
   "Discharge/End Date" : "27/08/11",
@@ -150,10 +150,6 @@
   "Load/Start Date" : "27/08/11",
   "Load/Start Time" : "14:00",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Europe - Trading)" : "0",
-    "P&L (Europe - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -170,7 +166,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "End",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[P&L]" : {
+    "P&L (Europe - Trading)" : "0",
+    "P&L (Europe - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Damietta",
   "Discharge/End Date" : "27/08/11",
@@ -183,10 +183,6 @@
   "Load/Start Date" : "27/08/11",
   "Load/Start Time" : "20:00",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Europe - Trading)" : "0",
-    "P&L (Europe - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -203,7 +199,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "End",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[P&L]" : {
+    "P&L (Europe - Trading)" : "0",
+    "P&L (Europe - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Punta Europa",
   "Discharge/End Date" : "27/08/11",
@@ -216,10 +216,6 @@
   "Load/Start Date" : "27/08/11",
   "Load/Start Time" : "19:00",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Europe - Trading)" : "0",
-    "P&L (Europe - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -236,7 +232,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "End",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[P&L]" : {
+    "P&L (Europe - Trading)" : "0",
+    "P&L (Europe - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Point Fortin",
   "Discharge/End Date" : "27/08/11",
@@ -249,10 +249,6 @@
   "Load/Start Date" : "27/08/11",
   "Load/Start Time" : "14:00",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Europe - Trading)" : "0",
-    "P&L (Europe - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -269,7 +265,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "End",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[P&L]" : {
+    "P&L (Europe - Trading)" : "0",
+    "P&L (Europe - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Punta Europa",
   "Discharge/End Date" : "29/11/10",
@@ -285,10 +285,6 @@
   "Next event date" : "29/11/10",
   "Next event port" : "Punta Europa",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Europe - Trading)" : "0",
-    "P&L (Europe - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -305,7 +301,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "Start",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[P&L]" : {
+    "P&L (Europe - Trading)" : "0",
+    "P&L (Europe - Shipping)" : "0"
+  }
 }, {
   "Buy/Start Port" : "Punta Europa",
   "Discharge/End Date" : "29/11/10",
@@ -321,10 +321,6 @@
   "Next event date" : "21/12/10",
   "Next event port" : "Punta Europa",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Europe - Trading)" : "0",
-    "P&L (Europe - Shipping)" : "-1,332,850"
-  },
   "P&L (Shipping)" : "-1,332,850",
   "P&L" : "-1,332,850",
   "P&L (Trading)" : "0",
@@ -341,7 +337,11 @@
   "Port Cost" : "0",
   "Total Cost" : "1,332,850",
   "Type" : "Start",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[P&L]" : {
+    "P&L (Europe - Trading)" : "0",
+    "P&L (Europe - Shipping)" : "-1,332,850"
+  }
 }, {
   "Buy/Start Port" : "Punta Europa",
   "Discharge/End Date" : "30/12/10",
@@ -357,10 +357,6 @@
   "Next event date" : "31/12/10",
   "Next event port" : "Punta Europa",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Europe - Trading)" : "0",
-    "P&L (Europe - Shipping)" : "-282,850"
-  },
   "P&L (Shipping)" : "-282,850",
   "P&L" : "-282,850",
   "P&L (Trading)" : "0",
@@ -377,7 +373,11 @@
   "Port Cost" : "0",
   "Total Cost" : "282,850",
   "Type" : "Start",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[P&L]" : {
+    "P&L (Europe - Trading)" : "0",
+    "P&L (Europe - Shipping)" : "-282,850"
+  }
 }, {
   "Buy/Start Port" : "Punta Europa",
   "Discharge/End Date" : "08/12/10",
@@ -393,10 +393,6 @@
   "Next event date" : "08/12/10",
   "Next event port" : "Punta Europa",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Europe - Trading)" : "0",
-    "P&L (Europe - Shipping)" : "-12,500"
-  },
   "P&L (Shipping)" : "-12,500",
   "P&L" : "-12,500",
   "P&L (Trading)" : "0",
@@ -413,7 +409,11 @@
   "Port Cost" : "0",
   "Total Cost" : "12,500",
   "Type" : "Start",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[P&L]" : {
+    "P&L (Europe - Trading)" : "0",
+    "P&L (Europe - Shipping)" : "-12,500"
+  }
 }, {
   "Buy/Start Port" : "Point Fortin",
   "Discharge/End Date" : "24/12/10",
@@ -429,10 +429,6 @@
   "Next event date" : "24/12/10",
   "Next event port" : "Point Fortin",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Europe - Trading)" : "0",
-    "P&L (Europe - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
@@ -449,7 +445,11 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "Start",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[P&L]" : {
+    "P&L (Europe - Trading)" : "0",
+    "P&L (Europe - Shipping)" : "0"
+  }
 }, {
   "Ballast LNG Cost" : "0",
   "Ballast LNG (m³)" : "0",
@@ -480,12 +480,6 @@
   "Load/Start Time" : "07:00",
   "Load/Start Window" : "06/05/11",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (US - Trading)" : "0",
-    "P&L (US - Shipping)" : "0",
-    "P&L (Third-parties - Trading)" : "6,328,000",
-    "P&L (Third-parties - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "6,328,000",
   "P&L (Trading)" : "6,328,000",
@@ -509,7 +503,13 @@
   "Port Cost" : "0",
   "Total Cost" : "0",
   "Type" : "Cargo",
-  "Vessel" : "DES Purchase"
+  "Vessel" : "DES Purchase",
+  "[P&L]" : {
+    "P&L (US - Trading)" : "0",
+    "P&L (US - Shipping)" : "0",
+    "P&L (Third-parties - Trading)" : "6,328,000",
+    "P&L (Third-parties - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "10:23",
@@ -548,12 +548,6 @@
   "Next event date" : "23/01/11",
   "Next event port" : "Punta Europa",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Europe - Trading)" : "0",
-    "P&L (Europe - Shipping)" : "0",
-    "P&L (Third-parties - Trading)" : "3,447,547",
-    "P&L (Third-parties - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "3,447,547",
   "P&L (Trading)" : "3,447,547",
@@ -578,7 +572,13 @@
   "Port Cost" : "20,000",
   "Total Cost" : "3,063,511",
   "Type" : "Cargo",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[P&L]" : {
+    "P&L (Europe - Trading)" : "0",
+    "P&L (Europe - Shipping)" : "0",
+    "P&L (Third-parties - Trading)" : "3,447,547",
+    "P&L (Third-parties - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "18:13",
@@ -617,12 +617,6 @@
   "Next event date" : "20/05/11",
   "Next event port" : "Punta Europa",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Asia - Trading)" : "0",
-    "P&L (Asia - Shipping)" : "0",
-    "P&L (Third-parties - Trading)" : "5,181,061",
-    "P&L (Third-parties - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "5,181,061",
   "P&L (Trading)" : "5,181,061",
@@ -647,7 +641,13 @@
   "Port Cost" : "20,000",
   "Total Cost" : "1,562,777",
   "Type" : "Cargo",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[P&L]" : {
+    "P&L (Asia - Trading)" : "0",
+    "P&L (Asia - Shipping)" : "0",
+    "P&L (Third-parties - Trading)" : "5,181,061",
+    "P&L (Third-parties - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "16:04",
@@ -686,12 +686,6 @@
   "Next event date" : "17/05/11",
   "Next event port" : "Punta Europa",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Asia - Trading)" : "0",
-    "P&L (Asia - Shipping)" : "0",
-    "P&L (Third-parties - Trading)" : "6,199,246",
-    "P&L (Third-parties - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "6,199,246",
   "P&L (Trading)" : "6,199,246",
@@ -716,7 +710,13 @@
   "Port Cost" : "20,000",
   "Total Cost" : "1,462,152",
   "Type" : "Cargo",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[P&L]" : {
+    "P&L (Asia - Trading)" : "0",
+    "P&L (Asia - Shipping)" : "0",
+    "P&L (Third-parties - Trading)" : "6,199,246",
+    "P&L (Third-parties - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "44:02",
   "Ballast Travel" : "17:04",
@@ -755,12 +755,6 @@
   "Next event date" : "27/08/11",
   "Next event port" : "Damietta",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (US - Trading)" : "0",
-    "P&L (US - Shipping)" : "0",
-    "P&L (Third-parties - Trading)" : "5,754,469",
-    "P&L (Third-parties - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "5,754,469",
   "P&L (Trading)" : "5,754,469",
@@ -785,7 +779,13 @@
   "Port Cost" : "20,000",
   "Total Cost" : "1,986,029",
   "Type" : "Cargo",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[P&L]" : {
+    "P&L (US - Trading)" : "0",
+    "P&L (US - Shipping)" : "0",
+    "P&L (Third-parties - Trading)" : "5,754,469",
+    "P&L (Third-parties - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "02:18",
   "Ballast Travel" : "28:06",
@@ -828,12 +828,6 @@
   "Next event date" : "20/02/11",
   "Next event port" : "Damietta",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Asia - Trading)" : "0",
-    "P&L (Asia - Shipping)" : "0",
-    "P&L (Third-parties - Trading)" : "4,637,461",
-    "P&L (Third-parties - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "4,637,461",
   "P&L (Trading)" : "4,637,461",
@@ -858,7 +852,13 @@
   "Port Cost" : "20,000",
   "Total Cost" : "2,128,977",
   "Type" : "Cargo",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[P&L]" : {
+    "P&L (Asia - Trading)" : "0",
+    "P&L (Asia - Shipping)" : "0",
+    "P&L (Third-parties - Trading)" : "4,637,461",
+    "P&L (Third-parties - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "02:13",
   "Ballast Travel" : "33:17",
@@ -904,12 +904,6 @@
   "Next event date" : "13/04/11",
   "Next event port" : "Point Fortin",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Asia - Trading)" : "0",
-    "P&L (Asia - Shipping)" : "0",
-    "P&L (Third-parties - Trading)" : "4,244,825",
-    "P&L (Third-parties - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "4,244,825",
   "P&L (Trading)" : "4,244,825",
@@ -934,7 +928,13 @@
   "Port Cost" : "20,000",
   "Total Cost" : "2,499,013",
   "Type" : "Cargo",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[P&L]" : {
+    "P&L (Asia - Trading)" : "0",
+    "P&L (Asia - Shipping)" : "0",
+    "P&L (Third-parties - Trading)" : "4,244,825",
+    "P&L (Third-parties - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "16:20",
   "Ballast Travel" : "10:19",
@@ -973,12 +973,6 @@
   "Next event date" : "02/02/11",
   "Next event port" : "Idku",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Europe - Trading)" : "0",
-    "P&L (Europe - Shipping)" : "0",
-    "P&L (Third-parties - Trading)" : "1,137,631",
-    "P&L (Third-parties - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "1,137,631",
   "P&L (Trading)" : "1,137,631",
@@ -1003,7 +997,13 @@
   "Port Cost" : "20,000",
   "Total Cost" : "5,020,866",
   "Type" : "Cargo",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[P&L]" : {
+    "P&L (Europe - Trading)" : "0",
+    "P&L (Europe - Shipping)" : "0",
+    "P&L (Third-parties - Trading)" : "1,137,631",
+    "P&L (Third-parties - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "48:23",
   "Ballast Travel" : "43:13",
@@ -1042,12 +1042,6 @@
   "Next event date" : "27/08/11",
   "Next event port" : "Point Fortin",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Asia - Trading)" : "0",
-    "P&L (Asia - Shipping)" : "0",
-    "P&L (Third-parties - Trading)" : "3,248,549",
-    "P&L (Third-parties - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "3,248,549",
   "P&L (Trading)" : "3,248,549",
@@ -1072,7 +1066,13 @@
   "Port Cost" : "20,000",
   "Total Cost" : "3,574,389",
   "Type" : "Cargo",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[P&L]" : {
+    "P&L (Asia - Trading)" : "0",
+    "P&L (Asia - Shipping)" : "0",
+    "P&L (Third-parties - Trading)" : "3,248,549",
+    "P&L (Third-parties - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "53:11",
   "Ballast Travel" : "22:13",
@@ -1111,12 +1111,6 @@
   "Next event date" : "27/08/11",
   "Next event port" : "Punta Europa",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Asia - Trading)" : "0",
-    "P&L (Asia - Shipping)" : "0",
-    "P&L (Third-parties - Trading)" : "4,621,743",
-    "P&L (Third-parties - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "4,621,743",
   "P&L (Trading)" : "4,621,743",
@@ -1141,7 +1135,13 @@
   "Port Cost" : "20,000",
   "Total Cost" : "2,201,194",
   "Type" : "Cargo",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[P&L]" : {
+    "P&L (Asia - Trading)" : "0",
+    "P&L (Asia - Shipping)" : "0",
+    "P&L (Third-parties - Trading)" : "4,621,743",
+    "P&L (Third-parties - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "01:20",
   "Ballast Travel" : "22:04",
@@ -1180,12 +1180,6 @@
   "Next event date" : "01/04/11",
   "Next event port" : "Idku",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Asia - Trading)" : "0",
-    "P&L (Asia - Shipping)" : "0",
-    "P&L (Third-parties - Trading)" : "-2,407,458",
-    "P&L (Third-parties - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "-2,407,458",
   "P&L (Trading)" : "-2,407,458",
@@ -1210,7 +1204,13 @@
   "Port Cost" : "20,000",
   "Total Cost" : "8,735,455",
   "Type" : "Cargo",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[P&L]" : {
+    "P&L (Asia - Trading)" : "0",
+    "P&L (Asia - Shipping)" : "0",
+    "P&L (Third-parties - Trading)" : "-2,407,458",
+    "P&L (Third-parties - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "24:08",
@@ -1250,12 +1250,6 @@
   "Next event date" : "19/02/11",
   "Next event port" : "Punta Europa",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Asia - Trading)" : "0",
-    "P&L (Asia - Shipping)" : "0",
-    "P&L (Third-parties - Trading)" : "5,730,470",
-    "P&L (Third-parties - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "5,730,470",
   "P&L (Trading)" : "5,730,470",
@@ -1280,7 +1274,13 @@
   "Port Cost" : "20,000",
   "Total Cost" : "1,874,427",
   "Type" : "Cargo",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[P&L]" : {
+    "P&L (Asia - Trading)" : "0",
+    "P&L (Asia - Shipping)" : "0",
+    "P&L (Third-parties - Trading)" : "5,730,470",
+    "P&L (Third-parties - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "06:23",
   "Ballast Travel" : "32:20",
@@ -1319,12 +1319,6 @@
   "Next event date" : "11/02/11",
   "Next event port" : "Idku",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Asia - Trading)" : "0",
-    "P&L (Asia - Shipping)" : "0",
-    "P&L (Third-parties - Trading)" : "4,893,786",
-    "P&L (Third-parties - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "4,893,786",
   "P&L (Trading)" : "4,893,786",
@@ -1349,7 +1343,13 @@
   "Port Cost" : "20,000",
   "Total Cost" : "1,793,553",
   "Type" : "Cargo",
-  "Vessel" : "Methane Lydon Volney (149k)"
+  "Vessel" : "Methane Lydon Volney (149k)",
+  "[P&L]" : {
+    "P&L (Asia - Trading)" : "0",
+    "P&L (Asia - Shipping)" : "0",
+    "P&L (Third-parties - Trading)" : "4,893,786",
+    "P&L (Third-parties - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "01:16",
   "Ballast Travel" : "18:03",
@@ -1388,12 +1388,6 @@
   "Next event date" : "22/05/11",
   "Next event port" : "Punta Europa",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (US - Trading)" : "0",
-    "P&L (US - Shipping)" : "0",
-    "P&L (Third-parties - Trading)" : "49,023",
-    "P&L (Third-parties - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "49,023",
   "P&L (Trading)" : "49,023",
@@ -1418,7 +1412,13 @@
   "Port Cost" : "20,000",
   "Total Cost" : "6,518,533",
   "Type" : "Cargo",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[P&L]" : {
+    "P&L (US - Trading)" : "0",
+    "P&L (US - Shipping)" : "0",
+    "P&L (Third-parties - Trading)" : "49,023",
+    "P&L (Third-parties - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "23:15",
@@ -1457,12 +1457,6 @@
   "Next event date" : "08/04/11",
   "Next event port" : "Punta Europa",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Asia - Trading)" : "0",
-    "P&L (Asia - Shipping)" : "0",
-    "P&L (Third-parties - Trading)" : "5,486,759",
-    "P&L (Third-parties - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "5,486,759",
   "P&L (Trading)" : "5,486,759",
@@ -1487,7 +1481,13 @@
   "Port Cost" : "20,000",
   "Total Cost" : "2,174,639",
   "Type" : "Cargo",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[P&L]" : {
+    "P&L (Asia - Trading)" : "0",
+    "P&L (Asia - Shipping)" : "0",
+    "P&L (Third-parties - Trading)" : "5,486,759",
+    "P&L (Third-parties - Shipping)" : "0"
+  }
 }, {
   "Buy Entity" : "Third-parties",
   "Buy/Start Port" : "Bonny",
@@ -1495,17 +1495,17 @@
   "L-ID" : "load-cargo-5",
   "Load/Start Window" : "01/04/11",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Third-parties - Trading)" : "0",
-    "P&L (Third-parties - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "0",
   "P&L (Trading)" : "0",
   "P&L (Upstream)" : "0",
   "Purchase Contract" : "JCC Spot Purchase",
   "Scenario" : "des-cargo",
-  "Type" : "Long"
+  "Type" : "Long",
+  "[P&L]" : {
+    "P&L (Third-parties - Trading)" : "0",
+    "P&L (Third-parties - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "55:19",
   "Ballast Travel" : "45:11",
@@ -1547,12 +1547,6 @@
   "Next event date" : "06/06/11",
   "Next event port" : "Point Fortin",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Asia - Trading)" : "0",
-    "P&L (Asia - Shipping)" : "0",
-    "P&L (Third-parties - Trading)" : "-9,462,806",
-    "P&L (Third-parties - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "-9,462,806",
   "P&L (Trading)" : "-9,462,806",
@@ -1577,7 +1571,13 @@
   "Port Cost" : "20,000",
   "Total Cost" : "15,677,804",
   "Type" : "Cargo",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[P&L]" : {
+    "P&L (Asia - Trading)" : "0",
+    "P&L (Asia - Shipping)" : "0",
+    "P&L (Third-parties - Trading)" : "-9,462,806",
+    "P&L (Third-parties - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "35:11",
   "Ballast Travel" : "23:13",
@@ -1616,12 +1616,6 @@
   "Next event date" : "27/08/11",
   "Next event port" : "Point Fortin",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Asia - Trading)" : "0",
-    "P&L (Asia - Shipping)" : "0",
-    "P&L (Third-parties - Trading)" : "-3,947,575",
-    "P&L (Third-parties - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "-3,947,575",
   "P&L (Trading)" : "-3,947,575",
@@ -1646,7 +1640,13 @@
   "Port Cost" : "20,000",
   "Total Cost" : "10,241,672",
   "Type" : "Cargo",
-  "Vessel" : "Methane Princess (138k)"
+  "Vessel" : "Methane Princess (138k)",
+  "[P&L]" : {
+    "P&L (Asia - Trading)" : "0",
+    "P&L (Asia - Shipping)" : "0",
+    "P&L (Third-parties - Trading)" : "-3,947,575",
+    "P&L (Third-parties - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "42:19",
   "Ballast Travel" : "28:01",
@@ -1686,12 +1686,6 @@
   "Next event date" : "27/08/11",
   "Next event port" : "Punta Europa",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Asia - Trading)" : "0",
-    "P&L (Asia - Shipping)" : "0",
-    "P&L (Third-parties - Trading)" : "5,179,412",
-    "P&L (Third-parties - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "5,179,412",
   "P&L (Trading)" : "5,179,412",
@@ -1716,7 +1710,13 @@
   "Port Cost" : "20,000",
   "Total Cost" : "2,561,086",
   "Type" : "Cargo",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[P&L]" : {
+    "P&L (Asia - Trading)" : "0",
+    "P&L (Asia - Shipping)" : "0",
+    "P&L (Third-parties - Trading)" : "5,179,412",
+    "P&L (Third-parties - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "22:20",
@@ -1759,12 +1759,6 @@
   "Next event date" : "07/02/11",
   "Next event port" : "Point Fortin",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Asia - Trading)" : "0",
-    "P&L (Asia - Shipping)" : "0",
-    "P&L (Third-parties - Trading)" : "4,625,484",
-    "P&L (Third-parties - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "4,625,484",
   "P&L (Trading)" : "4,625,484",
@@ -1789,7 +1783,13 @@
   "Port Cost" : "20,000",
   "Total Cost" : "2,979,414",
   "Type" : "Cargo",
-  "Vessel" : "Methane Becki Anne (170k)"
+  "Vessel" : "Methane Becki Anne (170k)",
+  "[P&L]" : {
+    "P&L (Asia - Trading)" : "0",
+    "P&L (Asia - Shipping)" : "0",
+    "P&L (Third-parties - Trading)" : "4,625,484",
+    "P&L (Third-parties - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:23",
   "Ballast Travel" : "25:15",
@@ -1828,12 +1828,6 @@
   "Next event date" : "13/04/11",
   "Next event port" : "Punta Europa",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Asia - Trading)" : "0",
-    "P&L (Asia - Shipping)" : "0",
-    "P&L (Third-parties - Trading)" : "6,012,335",
-    "P&L (Third-parties - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "6,012,335",
   "P&L (Trading)" : "6,012,335",
@@ -1858,7 +1852,13 @@
   "Port Cost" : "20,000",
   "Total Cost" : "1,649,063",
   "Type" : "Cargo",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[P&L]" : {
+    "P&L (Asia - Trading)" : "0",
+    "P&L (Asia - Shipping)" : "0",
+    "P&L (Third-parties - Trading)" : "6,012,335",
+    "P&L (Third-parties - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "26:01",
   "Ballast Travel" : "36:12",
@@ -1897,12 +1897,6 @@
   "Next event date" : "27/08/11",
   "Next event port" : "Punta Europa",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Asia - Trading)" : "0",
-    "P&L (Asia - Shipping)" : "0",
-    "P&L (Third-parties - Trading)" : "-5,757,069",
-    "P&L (Third-parties - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "-5,757,069",
   "P&L (Trading)" : "-5,757,069",
@@ -1927,7 +1921,13 @@
   "Port Cost" : "20,000",
   "Total Cost" : "12,403,727",
   "Type" : "Cargo",
-  "Vessel" : "Bluesky (145k)"
+  "Vessel" : "Bluesky (145k)",
+  "[P&L]" : {
+    "P&L (Asia - Trading)" : "0",
+    "P&L (Asia - Shipping)" : "0",
+    "P&L (Third-parties - Trading)" : "-5,757,069",
+    "P&L (Third-parties - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "00:00",
   "Ballast Travel" : "05:07",
@@ -1967,12 +1967,6 @@
   "Next event date" : "24/04/11",
   "Next event port" : "Point Fortin",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (US - Trading)" : "0",
-    "P&L (US - Shipping)" : "0",
-    "P&L (Third-parties - Trading)" : "5,719,489",
-    "P&L (Third-parties - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "5,719,489",
   "P&L (Trading)" : "5,719,489",
@@ -1997,7 +1991,13 @@
   "Port Cost" : "20,000",
   "Total Cost" : "967,849",
   "Type" : "Cargo",
-  "Vessel" : "Methane Heather Sally (149k)"
+  "Vessel" : "Methane Heather Sally (149k)",
+  "[P&L]" : {
+    "P&L (US - Trading)" : "0",
+    "P&L (US - Shipping)" : "0",
+    "P&L (Third-parties - Trading)" : "5,719,489",
+    "P&L (Third-parties - Shipping)" : "0"
+  }
 }, {
   "Ballast Idle" : "03:11",
   "Ballast Travel" : "20:02",
@@ -2039,12 +2039,6 @@
   "Next event date" : "03/06/11",
   "Next event port" : "Damietta",
   "Addn. P&L" : "0",
-  "[P&L]" : {
-    "P&L (Asia - Trading)" : "0",
-    "P&L (Asia - Shipping)" : "0",
-    "P&L (Third-parties - Trading)" : "6,063,923",
-    "P&L (Third-parties - Shipping)" : "0"
-  },
   "P&L (Shipping)" : "0",
   "P&L" : "6,063,923",
   "P&L (Trading)" : "6,063,923",
@@ -2069,5 +2063,11 @@
   "Port Cost" : "20,000",
   "Total Cost" : "1,597,475",
   "Type" : "Cargo",
-  "Vessel" : "Methane Julia Louise (170k)"
+  "Vessel" : "Methane Julia Louise (170k)",
+  "[P&L]" : {
+    "P&L (Asia - Trading)" : "0",
+    "P&L (Asia - Shipping)" : "0",
+    "P&L (Third-parties - Trading)" : "6,063,923",
+    "P&L (Third-parties - Shipping)" : "0"
+  }
 } ]

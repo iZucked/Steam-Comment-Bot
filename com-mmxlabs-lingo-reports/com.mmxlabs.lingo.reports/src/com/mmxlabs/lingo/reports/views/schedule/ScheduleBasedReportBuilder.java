@@ -211,6 +211,7 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 					block = blockManager.createBlock(COLUMN_BLOCK_PNL, "[P&L]", ColumnType.NORMAL);
 				}
 				block.setPlaceholder(true);
+				block.setForceGroup(true);
 				return null;
 			}
 

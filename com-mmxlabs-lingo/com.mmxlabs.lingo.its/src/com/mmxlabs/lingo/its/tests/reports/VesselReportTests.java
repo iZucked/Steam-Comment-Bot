@@ -39,7 +39,7 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 
 @ExtendWith(ShiroRunner.class)
 public class VesselReportTests extends AbstractOptimisationResultTester {
-	
+
 	@Test
 	@Tag(TestCategories.REPORT_TEST)
 	public void testThreeFleetInstances() throws Exception {
@@ -76,54 +76,41 @@ public class VesselReportTests extends AbstractOptimisationResultTester {
 					.build();
 
 			maker.cargoModelBuilder.makeCargo()
-				//Purchase
-				.makeFOBPurchase("P1", LocalDate.of(2020, 1, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_ONSLOW), null, maker.entity, "1")
-				.withVolumeLimits(100000, 150000, VolumeUnits.M3)
-				.build()
-				//Sale
-				.makeDESSale("S1", LocalDate.of(2020, 1, 15), maker.portFinder.findPortById(InternalDataConstants.PORT_FUTTSU), null, maker.entity, "10")
-				.withVolumeLimits(100000, 150000, VolumeUnits.M3)
-				.build()
-				//Cargo
-				.withVesselAssignment(vesselAvailability_1_1, 0)
-				.build();
+					// Purchase
+					.makeFOBPurchase("P1", LocalDate.of(2020, 1, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_ONSLOW), null, maker.entity, "1")
+					.withVolumeLimits(100000, 150000, VolumeUnits.M3).build()
+					// Sale
+					.makeDESSale("S1", LocalDate.of(2020, 1, 15), maker.portFinder.findPortById(InternalDataConstants.PORT_FUTTSU), null, maker.entity, "10")
+					.withVolumeLimits(100000, 150000, VolumeUnits.M3).build()
+					// Cargo
+					.withVesselAssignment(vesselAvailability_1_1, 0).build();
 			maker.cargoModelBuilder.makeCargo()
-				//Purchase
-				.makeFOBPurchase("P2", LocalDate.of(2020, 2, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_ONSLOW), null, maker.entity, "1")
-				.withVolumeLimits(100000, 150000, VolumeUnits.M3)
-				.build()
-				//Sale
-				.makeDESSale("S2", LocalDate.of(2020, 2, 15), maker.portFinder.findPortById(InternalDataConstants.PORT_FUTTSU), null, maker.entity, "10")
-				.withVolumeLimits(100000, 150000, VolumeUnits.M3)
-				.build()
-				//Cargo
-				.withVesselAssignment(vesselAvailability_1_2, 0)
-				.build();
+					// Purchase
+					.makeFOBPurchase("P2", LocalDate.of(2020, 2, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_ONSLOW), null, maker.entity, "1")
+					.withVolumeLimits(100000, 150000, VolumeUnits.M3).build()
+					// Sale
+					.makeDESSale("S2", LocalDate.of(2020, 2, 15), maker.portFinder.findPortById(InternalDataConstants.PORT_FUTTSU), null, maker.entity, "10")
+					.withVolumeLimits(100000, 150000, VolumeUnits.M3).build()
+					// Cargo
+					.withVesselAssignment(vesselAvailability_1_2, 0).build();
 			maker.cargoModelBuilder.makeCargo()
-				//Purchase
-				.makeFOBPurchase("P3", LocalDate.of(2020, 3, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_ONSLOW), null, maker.entity, "1")
-				.withVolumeLimits(100000, 150000, VolumeUnits.M3)
-				.build()
-				//Sale
-				.makeDESSale("S3", LocalDate.of(2020, 3, 15), maker.portFinder.findPortById(InternalDataConstants.PORT_FUTTSU), null, maker.entity, "10")
-				.withVolumeLimits(100000, 150000, VolumeUnits.M3)
-				.build()
-				//Cargo
-				.withVesselAssignment(vesselAvailability_1_3, 0)
-				.build();
+					// Purchase
+					.makeFOBPurchase("P3", LocalDate.of(2020, 3, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_ONSLOW), null, maker.entity, "1")
+					.withVolumeLimits(100000, 150000, VolumeUnits.M3).build()
+					// Sale
+					.makeDESSale("S3", LocalDate.of(2020, 3, 15), maker.portFinder.findPortById(InternalDataConstants.PORT_FUTTSU), null, maker.entity, "10")
+					.withVolumeLimits(100000, 150000, VolumeUnits.M3).build()
+					// Cargo
+					.withVesselAssignment(vesselAvailability_1_3, 0).build();
 			maker.cargoModelBuilder.makeCargo()
-				//Purchase
-				.makeFOBPurchase("P4", LocalDate.of(2020, 3, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_DARWIN), null, maker.entity, "1")
-				.withVolumeLimits(100000, 150000, VolumeUnits.M3)
-				.build()
-				//Sale
-				.makeDESSale("S4", LocalDate.of(2020, 3, 15), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "10")
-				.withVolumeLimits(100000, 150000, VolumeUnits.M3)
-				.build()
-				//Cargo
-				.withVesselAssignment(vesselAvailability_2_1, 0)
-				.build();
-			
+					// Purchase
+					.makeFOBPurchase("P4", LocalDate.of(2020, 3, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_DARWIN), null, maker.entity, "1")
+					.withVolumeLimits(100000, 150000, VolumeUnits.M3).build()
+					// Sale
+					.makeDESSale("S4", LocalDate.of(2020, 3, 15), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "10")
+					.withVolumeLimits(100000, 150000, VolumeUnits.M3).build()
+					// Cargo
+					.withVesselAssignment(vesselAvailability_2_1, 0).build();
 
 		}, maker -> {
 
@@ -158,53 +145,41 @@ public class VesselReportTests extends AbstractOptimisationResultTester {
 					.build();
 
 			maker.cargoModelBuilder.makeCargo()
-				//Purchase
-				.makeFOBPurchase("P1", LocalDate.of(2020, 1, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_ONSLOW), null, maker.entity, "1")
-				.withVolumeLimits(100000, 150000, VolumeUnits.M3)
-				.build()
-				//Sale
-				.makeDESSale("S1", LocalDate.of(2020, 1, 15), maker.portFinder.findPortById(InternalDataConstants.PORT_FUTTSU), null, maker.entity, "10")
-				.withVolumeLimits(100000, 150000, VolumeUnits.M3)
-				.build()
-				//Cargo
-				.withVesselAssignment(vesselAvailability_1_1, 0)
-				.build();
+					// Purchase
+					.makeFOBPurchase("P1", LocalDate.of(2020, 1, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_ONSLOW), null, maker.entity, "1")
+					.withVolumeLimits(100000, 150000, VolumeUnits.M3).build()
+					// Sale
+					.makeDESSale("S1", LocalDate.of(2020, 1, 15), maker.portFinder.findPortById(InternalDataConstants.PORT_FUTTSU), null, maker.entity, "10")
+					.withVolumeLimits(100000, 150000, VolumeUnits.M3).build()
+					// Cargo
+					.withVesselAssignment(vesselAvailability_1_1, 0).build();
 			maker.cargoModelBuilder.makeCargo()
-				//Purchase
-				.makeFOBPurchase("P2", LocalDate.of(2020, 2, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_ONSLOW), null, maker.entity, "1")
-				.withVolumeLimits(100000, 150000, VolumeUnits.M3)
-				.build()
-				//Sale
-				.makeDESSale("S2", LocalDate.of(2020, 2, 15), maker.portFinder.findPortById(InternalDataConstants.PORT_FUTTSU), null, maker.entity, "10")
-				.withVolumeLimits(100000, 150000, VolumeUnits.M3)
-				.build()
-				//Cargo
-				.withVesselAssignment(vesselAvailability_1_2, 0)
-				.build();
+					// Purchase
+					.makeFOBPurchase("P2", LocalDate.of(2020, 2, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_ONSLOW), null, maker.entity, "1")
+					.withVolumeLimits(100000, 150000, VolumeUnits.M3).build()
+					// Sale
+					.makeDESSale("S2", LocalDate.of(2020, 2, 15), maker.portFinder.findPortById(InternalDataConstants.PORT_FUTTSU), null, maker.entity, "10")
+					.withVolumeLimits(100000, 150000, VolumeUnits.M3).build()
+					// Cargo
+					.withVesselAssignment(vesselAvailability_1_2, 0).build();
 			maker.cargoModelBuilder.makeCargo()
-				//Purchase
-				.makeFOBPurchase("P3", LocalDate.of(2020, 3, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_ONSLOW), null, maker.entity, "1")
-				.withVolumeLimits(100000, 150000, VolumeUnits.M3)
-				.build()
-				//Sale
-				.makeDESSale("S3", LocalDate.of(2020, 3, 15), maker.portFinder.findPortById(InternalDataConstants.PORT_FUTTSU), null, maker.entity, "10")
-				.withVolumeLimits(100000, 150000, VolumeUnits.M3)
-				.build()
-				//Cargo
-				.withVesselAssignment(vesselAvailability_2_1, 0)
-				.build();
+					// Purchase
+					.makeFOBPurchase("P3", LocalDate.of(2020, 3, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_ONSLOW), null, maker.entity, "1")
+					.withVolumeLimits(100000, 150000, VolumeUnits.M3).build()
+					// Sale
+					.makeDESSale("S3", LocalDate.of(2020, 3, 15), maker.portFinder.findPortById(InternalDataConstants.PORT_FUTTSU), null, maker.entity, "10")
+					.withVolumeLimits(100000, 150000, VolumeUnits.M3).build()
+					// Cargo
+					.withVesselAssignment(vesselAvailability_2_1, 0).build();
 			maker.cargoModelBuilder.makeCargo()
-				//Purchase
-				.makeFOBPurchase("P4", LocalDate.of(2020, 3, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_DARWIN), null, maker.entity, "1")
-				.withVolumeLimits(100000, 150000, VolumeUnits.M3)
-				.build()
-				//Sale
-				.makeDESSale("S4", LocalDate.of(2020, 3, 15), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "10")
-				.withVolumeLimits(100000, 150000, VolumeUnits.M3)
-				.build()
-				//Cargo
-				.withVesselAssignment(vesselAvailability_1_3, 0)
-				.build();
+					// Purchase
+					.makeFOBPurchase("P4", LocalDate.of(2020, 3, 1), maker.portFinder.findPortById(InternalDataConstants.PORT_DARWIN), null, maker.entity, "1")
+					.withVolumeLimits(100000, 150000, VolumeUnits.M3).build()
+					// Sale
+					.makeDESSale("S4", LocalDate.of(2020, 3, 15), maker.portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, maker.entity, "10")
+					.withVolumeLimits(100000, 150000, VolumeUnits.M3).build()
+					// Cargo
+					.withVesselAssignment(vesselAvailability_1_3, 0).build();
 		});
 	}
 
@@ -237,8 +212,7 @@ public class VesselReportTests extends AbstractOptimisationResultTester {
 
 		try {
 			final URL url = getClass().getResource("/reports/vessel-report/");
-			ReportTester.testPinDiffReports(pinnedRecord, fromDP, otherRecord, toDP, url, 
-					ReportTesterHelper.VESSEL_REPORT_ID, ReportTesterHelper.VESSEL_REPORT_SHORTNAME, "html");
+			ReportTester.testPinDiffReports(pinnedRecord, fromDP, otherRecord, toDP, url, ReportTesterHelper.VESSEL_REPORT_ID, ReportTesterHelper.VESSEL_REPORT_SHORTNAME, "html");
 		} finally {
 			pinnedRecord.dispose();
 			otherRecord.dispose();
@@ -267,10 +241,7 @@ public class VesselReportTests extends AbstractOptimisationResultTester {
 				.withExtraModule(new TransformerExtensionTestBootstrapModule()) //
 				.withThreadCount(1)//
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
-		} finally {
-			runner.dispose();
-		}
+
+		runner.evaluateInitialState();
 	}
 }

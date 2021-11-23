@@ -336,8 +336,8 @@
 				</para>
 			</listitem>
 			<listitem>
-				<para>&lt;Check Lingo/mmxlabs directories in user home - e.g.
-					lingo.data&gt;</para>
+				<para>&lt;Check LiNGO/mmxlabs directories in user home - e.g.
+					lingo.pks&gt;</para>
 			</listitem>
 		</orderedlist>
 		<para>You can of course just copy across a base case and start afresh,

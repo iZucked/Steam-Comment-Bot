@@ -122,6 +122,9 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.ui.tabular.TableColourPalette;
 import com.mmxlabs.models.ui.tabular.TableColourPalette.ColourElements;
 import com.mmxlabs.models.ui.tabular.TableColourPalette.TableItems;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
@@ -895,6 +898,7 @@ public class SchedulerView extends ViewPart implements
 
 		zoomInAction = new ZoomInAction(viewer.getGanttChart());
 		zoomOutAction = new ZoomOutAction(viewer.getGanttChart());
+		packAction = new PackAction(viewer.getGanttChart());
 
 		highlightAction = new HighlightAction(this, viewer, (EMFScheduleLabelProvider) (viewer.getLabelProvider()));
 
@@ -911,7 +915,6 @@ public class SchedulerView extends ViewPart implements
 
 		sortModeAction = new SortModeAction(this, viewer, (EMFScheduleLabelProvider) viewer.getLabelProvider(), viewerComparator);
 
-		packAction = new PackAction(viewer.getGanttChart());
 
 		saveFullImageAction = new SaveFullImageAction(viewer.getGanttChart());
 
@@ -984,7 +987,7 @@ public class SchedulerView extends ViewPart implements
 		public SortModeAction(final SchedulerView schedulerView, final GanttChartViewer viewer, final EMFScheduleLabelProvider lp, final ScenarioViewerComparator comparator) {
 			super("Sort", IAction.AS_DROP_DOWN_MENU, schedulerView, viewer, lp);
 			this.comparator = comparator;
-			setImageDescriptor(Activator.getImageDescriptor("/icons/alphab_sort_co.gif"));
+			setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Sort, IconMode.Enabled));
 		}
 
 		@Override

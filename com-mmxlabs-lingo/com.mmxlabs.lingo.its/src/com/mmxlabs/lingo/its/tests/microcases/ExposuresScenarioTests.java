@@ -28,7 +28,7 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.its.RequireFeature;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
-import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
+import com.mmxlabs.models.lng.transformer.its.scenario.ITSCSVImporter;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -50,7 +50,7 @@ public class ExposuresScenarioTests extends AbstractMicroTestCase {
 	public static IScenarioDataProvider importReferenceDataForExposures(final String url) throws Exception {
 
 		final @NonNull String urlRoot = AbstractMicroTestCase.class.getResource(url).toString();
-		final CSVImporter importer = new CSVImporter();
+		final ITSCSVImporter importer = new ITSCSVImporter();
 		importer.importPortData(urlRoot);
 		importer.importCostData(urlRoot);
 		importer.importEntityData(urlRoot);

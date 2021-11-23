@@ -285,6 +285,15 @@ public interface CargoFactory extends EFactory {
 	VesselGroupCanalParameters createVesselGroupCanalParameters();
 
 	/**
+	 * Returns a new object of class '<em>Panama Seasonality Record</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Panama Seasonality Record</em>'.
+	 * @generated
+	 */
+	PanamaSeasonalityRecord createPanamaSeasonalityRecord();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -41,8 +41,8 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.impl.Sequences;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeModule;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeModule;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.impl.TimeWindowMaker;
@@ -151,7 +151,7 @@ public class TestCalculations {
 
 		final Injector injector = createTestInjector(volumeAllocator, baseFuelPrices);
 
-		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);) {
+		try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class);) {
 			scope.enter();
 
 			final IVesselBaseFuelCalculator v = injector.getInstance(IVesselBaseFuelCalculator.class);
@@ -491,7 +491,7 @@ public class TestCalculations {
 		final IVolumeAllocator volumeAllocator = Mockito.mock(IVolumeAllocator.class);
 		final Injector injector = createTestInjector(volumeAllocator, baseFuelPrices);
 
-		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);) {
+		try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class);) {
 			scope.enter();
 
 			final SharedPortDistanceDataBuilder portBuilder = injector.getInstance(SharedPortDistanceDataBuilder.class);
@@ -845,7 +845,7 @@ public class TestCalculations {
 
 		final Injector injector = createTestInjector(volumeAllocator, baseFuelPrices);
 
-		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);) {
+		try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class);) {
 			scope.enter();
 
 			final SharedPortDistanceDataBuilder portBuilder = injector.getInstance(SharedPortDistanceDataBuilder.class);
@@ -1177,7 +1177,7 @@ public class TestCalculations {
 
 	private Injector createTestInjector(final IVolumeAllocator volumeAllocator, final int[] baseFuelUnitPrices) {
 
-		return Guice.createInjector(new PerChainUnitScopeModule(), new DataComponentProviderModule(), new AbstractModule() {
+		return Guice.createInjector(new ThreadLocalScopeModule(), new DataComponentProviderModule(), new AbstractModule() {
 
 			@Provides
 			@Singleton

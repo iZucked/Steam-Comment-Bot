@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.impl.PanamaSeasonalityCurve;
 import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProviderEditor;
 
@@ -33,15 +34,13 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 	private static final int MAX_SPEED_TO_CANAL = Integer.MAX_VALUE;
 
 	private ImmutableMap<ECanalEntry, ImmutableList<IRouteOptionBooking>> panamaBookings;
-	private int northboundMaxIdleDays;
-	private int southboundMaxIdleDays;
 	private int arrivalMargin;
-	private Map<IVessel, Integer> vesselToNorthboundMaxIdleDays = new HashMap<>();
-	private Map<IVessel, Integer> vesselToSouthboundMaxIdleDays = new HashMap<>();
 
 	private ImmutableMap<ECanalEntry, ImmutableList<IRouteOptionBooking>> assignedBookings;
 
 	private ImmutableMap<ECanalEntry, ImmutableList<IRouteOptionBooking>> unassignedBookings;
+	
+	private ImmutableList<PanamaSeasonalityCurve> seasonalityCurve;
 
 	@Override
 	public void setBookings(final Map<ECanalEntry, List<IRouteOptionBooking>> bookings) {
@@ -119,42 +118,94 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 	}
 
 	@Override
-	public int getNorthboundMaxIdleDays() {
-		return northboundMaxIdleDays;
-	}
-	
-	@Override
-	public int getSouthboundMaxIdleDays() {
-		return southboundMaxIdleDays;
-	}
-	
-	@Override
-	public void setSouthboundMaxIdleDays(int maxIdleDays) {
-		southboundMaxIdleDays = maxIdleDays;
-	}
-	
-	@Override
-	public void setNorthboundMaxIdleDays(int maxIdleDays) {
-		northboundMaxIdleDays = maxIdleDays;
-	}
-	
-	@Override
-	public int getNorthboundMaxIdleDays(IVessel vessel) {
-		return this.vesselToNorthboundMaxIdleDays.getOrDefault(vessel, this.northboundMaxIdleDays);
+	public int getNorthboundMaxIdleDays(IVessel vessel, int startAtPanamaTZ) {
+		int defaultResult = Integer.MAX_VALUE;
+		for(final PanamaSeasonalityCurve psc : seasonalityCurve) {
+			if (psc.getVessel() == vessel) {
+				return psc.getNorthboundMaxIdleDays(startAtPanamaTZ);
+			} else if (psc.getVessel() == null) {
+				defaultResult = psc.getNorthboundMaxIdleDays(startAtPanamaTZ);
+			}
+		}
+		return defaultResult;
 	}
 
 	@Override
-	public int getSouthboundMaxIdleDays(IVessel vessel) {
-		return this.vesselToSouthboundMaxIdleDays.getOrDefault(vessel, this.southboundMaxIdleDays);
+	public int getSouthboundMaxIdleDays(IVessel vessel, int startAtPanamaTZ) {
+		int defaultResult = Integer.MAX_VALUE;
+		for(final PanamaSeasonalityCurve psc : seasonalityCurve) {
+			if (psc.getVessel() == vessel) {
+				return psc.getSouthboundMaxIdleDays(startAtPanamaTZ);
+			} else if (psc.getVessel() == null) {
+				defaultResult = psc.getSouthboundMaxIdleDays(startAtPanamaTZ);
+			}
+		}
+		return defaultResult;
 	}
 
 	@Override
-	public void setNorthboundMaxIdleDays(IVessel vessel, int maxIdleDays) {
-		this.vesselToNorthboundMaxIdleDays.put(vessel, maxIdleDays);
+	public void setPanamaMaxIdleDays(List<PanamaSeasonalityCurve> seasonalityCurve) {
+		this.seasonalityCurve = ImmutableList.copyOf(seasonalityCurve);
 	}
 
-	@Override
-	public void setSouthboundMaxIdleDays(IVessel vessel, int maxIdleDays) {
-		this.vesselToSouthboundMaxIdleDays.put(vessel, maxIdleDays);		
+	private int getWorstNBMaxIdleDays(IVessel vessel, int startDateInclusive, int endDateExclusive) {
+		int result = Integer.MIN_VALUE;
+		for (int i = startDateInclusive; i < endDateExclusive; i+= 24) {
+			int temp = getNorthboundMaxIdleDays(vessel, i);
+			if (result < temp) {
+				result = temp;
+			}
+		}
+		return result;
 	}
+
+	private int getWorstSBMaxIdleDays(IVessel vessel, int startDateInclusive, int endDateExclusive) {
+		int result = Integer.MIN_VALUE;
+		for (int i = startDateInclusive; i < endDateExclusive; i+= 24) {
+			int temp = getSouthboundMaxIdleDays(vessel, i);
+			if (result < temp) {
+				result = temp;
+			}
+		}
+		return result;
+	}
+
+	public int getWorstIdleHours(IVessel vessel, int startDateInclusive, int endDateExclusive, boolean northbound) {
+		if (northbound) {
+			return getWorstNBMaxIdleDays(vessel, startDateInclusive, endDateExclusive) * 24;
+		} else {
+			return getWorstSBMaxIdleDays(vessel, startDateInclusive, endDateExclusive) * 24;
+		}
+	}
+	
+	private int getBestNBMaxIdleDays(IVessel vessel, int startDateInclusive, int endDateExclusive) {
+		int result = Integer.MAX_VALUE;
+		for (int i = startDateInclusive; i < endDateExclusive; i+= 24) {
+			int temp = getNorthboundMaxIdleDays(vessel, i);
+			if (temp < result) {
+				result = temp;
+			}
+		}
+		return result;
+	}
+
+	private int getBestSBMaxIdleDays(IVessel vessel, int startDateInclusive, int endDateExclusive) {
+		int result = Integer.MAX_VALUE;
+		for (int i = startDateInclusive; i < endDateExclusive; i+= 24) {
+			int temp = getSouthboundMaxIdleDays(vessel, i);
+			if (temp < result) {
+				result = temp;
+			}
+		}
+		return result;
+	}
+
+	public int getBestIdleHours(IVessel vessel, int startDateInclusive, int endDateExclusive, boolean northbound) {
+		if (northbound) {
+			return getBestNBMaxIdleDays(vessel, startDateInclusive, endDateExclusive) * 24;
+		} else {
+			return getBestSBMaxIdleDays(vessel, startDateInclusive, endDateExclusive) * 24;
+		}
+	}
+
 }

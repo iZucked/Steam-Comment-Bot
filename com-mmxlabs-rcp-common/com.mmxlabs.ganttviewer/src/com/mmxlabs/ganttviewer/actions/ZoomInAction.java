@@ -18,8 +18,8 @@ public class ZoomInAction extends Action {
 	public ZoomInAction() {
 		super();
 		setText("Zoom In");
-		setImageDescriptor(Activator.getImageDescriptor("icons/clcl16/zoomin_nav.gif"));
-		setDisabledImageDescriptor(Activator.getImageDescriptor("icons/dlcl16/zoomin_nav.gif"));
+		setImageDescriptor(Activator.getImageDescriptor("icons/clcl16/zoomin_nav.png"));
+		setDisabledImageDescriptor(Activator.getImageDescriptor("icons/dlcl16/zoomin_nav.png"));
 	}
 
 	public ZoomInAction(final GanttChart ganttChart) {

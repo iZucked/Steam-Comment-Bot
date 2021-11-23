@@ -6,11 +6,11 @@
 	<parent>
 		<groupId>com.mmxlabs.lingo.reports</groupId>
 		<artifactId>com.mmxlabs.lingo.reports.parent</artifactId>
-		<version>4.12.50-SNAPSHOT</version>
+		<version>4.13.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.lingo.reports.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
-	<version>4.12.50-SNAPSHOT</version>
+	<version>4.13.4-SNAPSHOT</version>
 	
 	<properties>
 		<sonar.sources></sonar.sources>
@@ -42,7 +42,7 @@
 					<dependencies>
 						<dependency>
 							<type>eclipse-plugin</type>
-							<artifactId>org.eclipse.equinox.ds</artifactId>
+							<artifactId>org.apache.felix.scr</artifactId>
 							<version>0.0.0</version>
 						</dependency>
 						<dependency>
@@ -77,7 +77,7 @@
 						contain the services required for test execution -->
 					<bundleStartLevel>
 						<bundle>
-							<id>org.eclipse.equinox.ds</id>
+							<id>org.apache.felix.scr</id>
 							<level>1</level>
 							<autoStart>true</autoStart>
 						</bundle>

@@ -143,7 +143,7 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 			stageSettings.setConstraintAndFitnessSettings(constraintAndFitnessSettings);
 
 			final ActionableSetsTransformerUnit actionPlanUnit = new ActionableSetsTransformerUnit(dataTransformer, "actionplan", dataTransformer.getUserSettings(), stageSettings,
-					scenarioRunner.getExecutorService(), dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), dataTransformer.getHints());
+					scenarioRunner.getJobExecutorFactory(), dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), dataTransformer.getHints());
 
 			// final Function<Integer, String> nameFactory = changeSetIdx -> {
 			// String newName;
@@ -257,11 +257,6 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 				System.out.println("done in:" + (System.currentTimeMillis() - start));
 			}
 		}
-		// if (scenarioRunner.isFinished()) {
-		// return false;
-		// } else {
-		// return true;
-		// }
 	}
 
 	/*
@@ -275,9 +270,6 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 
 	@Override
 	public void dispose() {
-		if (scenarioRunner != null) {
-			scenarioRunner.getExecutorService().shutdownNow();
-		}
 		if (originalScenarioDataProvider != null) {
 			originalScenarioDataProvider.close();
 		}

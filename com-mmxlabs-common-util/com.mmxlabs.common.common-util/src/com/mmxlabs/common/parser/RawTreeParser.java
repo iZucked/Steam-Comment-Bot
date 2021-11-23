@@ -4,15 +4,15 @@
  */
 package com.mmxlabs.common.parser;
 
-import java.util.List;
-
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.parser.nodes.Node;
 import com.mmxlabs.common.parser.nodes.NodeExpression;
 
 /**
- * Parser for price expressions returning a raw parse tree. NOTE: this class duplicates code in ISeriesParser and its ancestors so it will NOT automatically remain in synch.
+ * Parser for price expressions returning a raw parse tree. NOTE: this class
+ * duplicates code in ISeriesParser and its ancestors so it will NOT
+ * automatically remain in synch.
  * 
  * @author Simon McGregor
  */
@@ -41,8 +41,9 @@ public class RawTreeParser extends ExpressionParser<Node> {
 					return b == '+';
 				case '+':
 					return false;
+				default:
+					throw new IllegalArgumentException("Unknown operator " + a);
 				}
-				return false;
 			}
 
 			@Override
@@ -52,34 +53,22 @@ public class RawTreeParser extends ExpressionParser<Node> {
 
 		});
 
-		setTermFactory(new ITermFactory<Node>() {
+		setTermFactory(term -> new NodeExpression(term, new Node[0]));
 
-			@Override
-			public IExpression<Node> createTerm(final String term) {
-				return new NodeExpression(term, new Node[0]);
+		setFunctionFactory((name, arguments) -> {
+			final @NonNull Node[] children = new Node[arguments.size()];
+
+			for (int i = 0; i < arguments.size(); i++) {
+				children[i] = arguments.get(i).evaluate();
 			}
-		});
 
-		setFunctionFactory(new IFunctionFactory<Node>() {
-			@Override
-			public IExpression<Node> createFunction(final String name, final List<IExpression<Node>> arguments) {
-				final @NonNull Node[] children = new Node[arguments.size()];
-
-				for (int i = 0; i < arguments.size(); i++) {
-					children[i] = arguments.get(i).evaluate();
-				}
-
-				return new NodeExpression(name, children);
-			}
+			return new NodeExpression(name, children);
 		});
 
 		setPrefixOperatorFactory(new IPrefixOperatorFactory<Node>() {
 			@Override
 			public boolean isPrefixOperator(final char operator) {
-				if (operator == '-') {
-					return true;
-				}
-				return false;
+				return operator == '-';
 			}
 
 			@Override
@@ -91,7 +80,7 @@ public class RawTreeParser extends ExpressionParser<Node> {
 
 					return new NodeExpression("-", children);
 				}
-				throw new RuntimeException("Unknown prefix op " + operator);
+				throw new IllegalArgumentException("Unknown prefix op " + operator);
 			}
 		});
 	}

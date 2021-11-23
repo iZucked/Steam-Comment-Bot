@@ -35,6 +35,8 @@ import org.eclipse.ui.part.ViewPart;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.IReportContentsGenerator;
+import com.mmxlabs.lingo.reports.ReportContentsGenerators;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
@@ -214,7 +216,8 @@ public class HeadlineReportView extends ViewPart {
 								if (pPinnedData != null) {
 									rowElements.add(transformer.transform(schedule, other));
 								} else {
-									if ((HeadlineReportView.this.scheduleModel != null && schedule == HeadlineReportView.this.scheduleModel.getSchedule()) || (selectedDataProvider.getOtherScenarioResults().size() == 1 && pinned == null)) {
+									if ((HeadlineReportView.this.scheduleModel != null && schedule == HeadlineReportView.this.scheduleModel.getSchedule())
+											|| (selectedDataProvider.getOtherScenarioResults().size() == 1 && pinned == null)) {
 										rowElements.add(transformer.transform(schedule, other));
 									}
 								}
@@ -644,7 +647,7 @@ public class HeadlineReportView extends ViewPart {
 				final IScenarioServiceEditorInput ssInput = (IScenarioServiceEditorInput) editorInput;
 				final ScenarioInstance scenarioInstance = ssInput.getScenarioInstance();
 				if (scenarioInstance != null) {
-					 
+
 					ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 					if (modelRecord != null && !modelRecord.isLoadFailure()) {
 						this.modelReference = modelRecord.aquireReference("HeadlineReportView:1");
@@ -708,16 +711,8 @@ public class HeadlineReportView extends ViewPart {
 			};
 		}
 
-		if (IReportContents.class.isAssignableFrom(adapter)) {
-
-			final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), true);
-			final String jsonContents = jsonUtil.convert();
-			return (T) new IReportContents() {
-				@Override
-				public String getJSONContents() {
-					return jsonContents;
-				}
-			};
+		if (IReportContentsGenerator.class.isAssignableFrom(adapter)) {
+			return adapter.cast(ReportContentsGenerators.createJSONFor(selectedScenariosServiceListener, viewer.getGrid()));
 		}
 
 		return super.getAdapter(adapter);

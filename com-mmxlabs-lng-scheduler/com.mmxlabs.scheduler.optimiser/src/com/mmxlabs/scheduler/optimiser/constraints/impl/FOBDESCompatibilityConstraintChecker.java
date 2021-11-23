@@ -109,7 +109,7 @@ public class FOBDESCompatibilityConstraintChecker implements IPairwiseConstraint
 			return true;
 		}
 		final boolean result = fobDesCompatibilityProvider.isPermittedOnResource(element, resource);
-		if (!result)
+		if (!result && messages != null)
 			messages.add(String.format("%s: Element %s is not permitted on resource %s", this.name, element.getName(), resource.getName()));
 		return result;
 	}

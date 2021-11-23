@@ -80,7 +80,7 @@ public class CenteringColumnGroupHeaderRenderer extends GridHeaderRenderer {
 		String text = group.getText();
 
 		if (!isWordWrap()) {
-			text = TextUtils.getShortString(gc, text, width);
+			text = TextUtils.getShortStr(gc, text, width, SWT.RIGHT);
 			// y -= gc.getFontMetrics().getHeight();
 		}
 

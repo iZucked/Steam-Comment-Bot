@@ -67,7 +67,7 @@ public class PortCvCompatibilityConstraintChecker extends AbstractPairwiseConstr
 
 			final int cv = loadSlot.getCargoCVValue();
 			final boolean result = (portCVRangeProvider.getPortMinCV(dischargePort) <= cv && portCVRangeProvider.getPortMaxCV(dischargePort) >= cv);
-			if (!result)
+			if (!result && messages != null)
 				messages.add(explain(first, second, resource));
 			return result;
 		}

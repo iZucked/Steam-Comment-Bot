@@ -156,7 +156,10 @@ import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.EMFReportColumnManager;
 import com.mmxlabs.models.ui.tabular.columngeneration.EObjectTableViewerColumnFactory;
 import com.mmxlabs.models.util.emfpath.IEMFPath;
+import com.mmxlabs.rcp.common.CommonImages;
 import com.mmxlabs.rcp.common.SelectionHelper;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
 import com.mmxlabs.rcp.common.handlers.TodayHandler;
@@ -394,7 +397,8 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 
 		final Action addAction = new AddAction("Add", addLoadSlotToDischarge, addDischargeSlotToLoad);
 
-		addAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+		addAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled));
+		addAction.setDisabledImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Disabled));
 		toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
 
 		final List<Action> filterActions = new LinkedList<>();
@@ -414,7 +418,7 @@ public class BulkTradesTablePane extends ScenarioTableViewerPane implements IAda
 
 		if (!filterActions.isEmpty()) {
 			final Action filterAction = new FilterMenuAction("Filter", filterActions.toArray(new Action[filterActions.size()]));
-			filterAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.tabular", "/icons/filter.gif"));
+			filterAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Filter, IconMode.Enabled));
 			toolbar.appendToGroup(VIEW_GROUP, filterAction);
 		}
 		deleteAction = createDeleteAction(null); // TODO: NEW check this

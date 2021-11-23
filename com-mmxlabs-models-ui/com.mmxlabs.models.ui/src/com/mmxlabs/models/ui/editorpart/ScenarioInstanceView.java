@@ -55,7 +55,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(ScenarioInstanceView.class);
 
 	protected ScenarioInstance scenarioInstance;
-	private ScenarioModelRecord modelRecord;
+	protected ScenarioModelRecord modelRecord;
 	private IScenarioDataProvider scenarioDataProvider;
 	protected MMXRootObject rootObject;
 	protected Object targetObject;

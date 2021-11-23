@@ -10,6 +10,7 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.impl.BasicEObjectImpl;
 
 import com.mmxlabs.common.Pair;
 
@@ -21,6 +22,7 @@ import com.mmxlabs.common.Pair;
  * 
  */
 public interface IReferenceValueProvider {
+	public static EObject EUNSET_VALUE = new BasicEObjectImpl() {};
 	/**
 	 * Get the values which are allowed for the given field on the target
 	 * EObject.

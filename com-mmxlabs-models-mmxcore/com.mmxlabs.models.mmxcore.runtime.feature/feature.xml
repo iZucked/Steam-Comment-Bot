@@ -8,21 +8,8 @@
 <feature
       id="com.mmxlabs.models.mmxcore.runtime.feature"
       label="Models: MMXCore Runtime Feature"
-      version="4.12.50.qualifier"
+      version="4.13.4.qualifier"
       provider-name="Minimax Labs">
-
-   <description>
-      MMX Core Model, Edit and Editor plugins
-   </description>
-
-   <copyright>
-      Copyright (C) Minimax Labs Ltd., 2010 - 2012
-All rights reserved.
-   </copyright>
-
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
-   </license>
 
    <plugin
          id="com.mmxlabs.models.mmxcore"

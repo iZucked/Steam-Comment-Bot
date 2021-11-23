@@ -46,7 +46,9 @@ import org.eclipse.ui.menus.CommandContributionItemParameter;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.customizable.CustomReportsRegistry;
-
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 /**
  * 
  * Copy of {@link WorkbenchActionBuilder}. Need to build our own version at some point (rebase on version in history?)
@@ -68,12 +70,12 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	/**
 	 */
 	public static final String DATA_END = "dataEnd";
-
+	
 	public static final String DATA_IMPORT = "dataImport";
 	public static final String DATA_EXPORT = "dataExport";
 	public static final String WINDOW_CUSTOM_START = "windowCustomStart";
 	public static final String WINDOW_CUSTOM_END = "windowCustomEnd";
-
+	
 	private final IWorkbenchWindow window;
 
 	// generic actions
@@ -236,7 +238,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	 * Constructs a new action builder which contributes actions to the given window.
 	 * 
 	 * @param configurer
-	 *            the action bar configurer for the window
+	 *                       the action bar configurer for the window
 	 */
 	public ApplicationActionBarAdvisor(final IActionBarConfigurer configurer) {
 		super(configurer);
@@ -745,9 +747,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	 * useSeparator.MENUID.GROUPID that is set to <code>true</code>.
 	 * 
 	 * @param menu
-	 *            the menu to add to
+	 *                    the menu to add to
 	 * @param groupId
-	 *            the group id for the added separator or group marker
+	 *                    the group id for the added separator or group marker
 	 */
 	private void addSeparatorOrGroupMarker(final MenuManager menu, final String groupId) {
 		final String prefId = "useSeparator." + menu.getId() + "." + groupId; //$NON-NLS-1$ //$NON-NLS-2$
@@ -904,7 +906,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		statusLine.add(statusLineItem);
 		CustomReportsRegistry.getInstance().setStatusLineManager(statusLine);
 	}
-
+	
 	/**
 	 * Creates actions (and contribution items) for the menu bar, toolbar and status line.
 	 */
@@ -939,12 +941,18 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// register(toggleAutoBuildAction);
 
 		saveAction = ActionFactory.SAVE.create(window);
+		saveAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Save, IconMode.Enabled));
+		saveAction.setDisabledImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Save, IconMode.Disabled));
+		
 		register(saveAction);
 
 //		saveAsAction = ActionFactory.SAVE_AS.create(window);
 //		register(saveAsAction);
 
 		saveAllAction = ActionFactory.SAVE_ALL.create(window);
+		saveAllAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Saveall, IconMode.Enabled));
+		saveAllAction.setDisabledImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Saveall, IconMode.Disabled));
+//		saveAllAction.setDisabledImageDescriptor(ImageDescriptor.createWithFlags(Activator.getImageDescriptor("/icons/saveall.png"), SWT.IMAGE_DISABLE));
 		register(saveAllAction);
 
 		newWindowAction = ActionFactory.OPEN_NEW_WINDOW.create(getWindow());
@@ -1381,6 +1389,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		return getItem(ActionFactory.DELETE.getId(), ActionFactory.DELETE.getCommandId(), ISharedImages.IMG_TOOL_DELETE, ISharedImages.IMG_TOOL_DELETE_DISABLED, WorkbenchMessages.Workbench_delete,
 				WorkbenchMessages.Workbench_deleteToolTip, IWorkbenchHelpContextIds.DELETE_RETARGET_ACTION);
 	}
+
 	// private IContributionItem getRevertItem() {
 	// return getItem(ActionFactory.REVERT.getId(), ActionFactory.REVERT.getCommandId(), null, null, WorkbenchMessages.Workbench_revert, WorkbenchMessages.Workbench_revertToolTip, null);
 	// }

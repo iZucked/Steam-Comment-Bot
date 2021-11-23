@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -317,10 +318,11 @@ public class ViabilitySandboxEvaluator {
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
-	public static void evaluate(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, final ViabilityModel model) {
+	public static void evaluate(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, //
+			final ViabilityModel model, final IProgressMonitor progressMonitor) {
 		final long a = System.currentTimeMillis();
 		{
-			singleEval(scenarioDataProvider, scenarioInstance, model);
+			singleEval(scenarioDataProvider, scenarioInstance, model, progressMonitor);
 		}
 
 		final long b = System.currentTimeMillis();
@@ -328,7 +330,8 @@ public class ViabilitySandboxEvaluator {
 
 	}
 	
-	private static void singleEval(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, final ViabilityModel model) {
+	private static void singleEval(final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, //
+			final ViabilityModel model, final IProgressMonitor progressMonitor) {
 
 		final LNGScenarioModel optimiserScenario = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 		final IMapperClass mapper = new Mapper(optimiserScenario, true);
@@ -342,7 +345,7 @@ public class ViabilitySandboxEvaluator {
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
 		ServiceHelper.<IAnalyticsScenarioEvaluator> withServiceConsumer(IAnalyticsScenarioEvaluator.class, evaluator -> {
-			evaluator.evaluateViabilitySandbox(scenarioDataProvider, scenarioInstance, userSettings, model, mapper, shippingMap);
+			evaluator.evaluateViabilitySandbox(scenarioDataProvider, scenarioInstance, userSettings, model, mapper, shippingMap, progressMonitor);
 		});
 	}
 

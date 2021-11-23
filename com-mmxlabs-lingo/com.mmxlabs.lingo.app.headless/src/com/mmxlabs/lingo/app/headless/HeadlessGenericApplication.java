@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.jdt.annotation.NonNull;
+import org.json.JSONObject;
 
 import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.core.io.JsonStringEncoder;
@@ -69,6 +70,8 @@ import com.mmxlabs.rcp.common.json.EMFJacksonModule;
  */
 public abstract class HeadlessGenericApplication implements IApplication {
 
+	public static final int EXIT_CODE_EXCEPTION = 100;
+	
 	/** New exception type for scenario types that can't be handled */
 	@SuppressWarnings("serial")
 	public static class UnhandledScenarioTypeException extends RuntimeException {
@@ -93,6 +96,7 @@ public abstract class HeadlessGenericApplication implements IApplication {
 	protected static final String NUM_RUNS = "numRuns";
 	protected static final String CUSTOM_INFO = "custom";
 	protected static final String USE_CASE = "useCase";
+	protected static final String PARAMS_FILE = "params";
 
 	protected String clientCode;
 	protected String machineInfo;
@@ -525,4 +529,22 @@ public abstract class HeadlessGenericApplication implements IApplication {
 		return null;
 	}
 
+	public static void writeRunFailure(File loggingFolder, Throwable e) {
+		if (loggingFolder != null) {
+			try (StringWriter sw = new StringWriter()) {
+				try (PrintWriter pw = new PrintWriter(sw)) {
+					e.printStackTrace(pw);
+				}
+
+				File outFile = new File(loggingFolder, "failure.json"); // create output log
+				JSONObject obj = new JSONObject();
+				obj.put("error", sw.toString());
+				try (PrintWriter pw = new PrintWriter(outFile)) {
+					obj.write(pw);
+				}
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		}
+	}
 }

@@ -28,7 +28,8 @@ import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.JobExecutor;
+import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -42,6 +43,7 @@ import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_Evaluatio
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScope;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;
@@ -67,19 +69,17 @@ public class PairingOptimiserUnit {
 	@NonNull
 	private final String phase;
 
-	private final Map<Thread, PairingOptimiser> threadCache = new ConcurrentHashMap<>(100);
-
-	private @NonNull CleanableExecutorService executorService;
+	private @NonNull JobExecutorFactory jobExecutorFactory;
 
 	private LNGScenarioModel initialScenario;
 
 	@SuppressWarnings("null")
 	public PairingOptimiserUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String phase, @NonNull final UserSettings userSettings,
-			@NonNull final ConstraintAndFitnessSettings constainAndFitnessSettings, @NonNull final CleanableExecutorService executorService, @NonNull final ISequences initialSequences,
+			@NonNull final ConstraintAndFitnessSettings constainAndFitnessSettings, @NonNull final JobExecutorFactory jobExecutorFactory, @NonNull final ISequences initialSequences,
 			final LNGScenarioModel initialScenario, @NonNull final IMultiStateResult inputState, @NonNull final Collection<String> hints) {
 		this.dataTransformer = dataTransformer;
 		this.phase = phase;
-		this.executorService = executorService;
+		this.jobExecutorFactory = jobExecutorFactory;
 		this.initialScenario = initialScenario;
 
 		final Collection<IOptimiserInjectorService> services = dataTransformer.getModuleServices();
@@ -103,14 +103,10 @@ public class PairingOptimiserUnit {
 			}
 
 			@Provides
+			@ThreadLocalScope
 			private PairingOptimiser providePerThreadBagMover(@NonNull final Injector injector) {
-
-				PairingOptimiser longTermOptimiser = threadCache.get(Thread.currentThread());
-				if (longTermOptimiser == null) {
-					longTermOptimiser = new PairingOptimiser();
-					injector.injectMembers(longTermOptimiser);
-					threadCache.put(Thread.currentThread(), longTermOptimiser);
-				}
+				PairingOptimiser longTermOptimiser = new PairingOptimiser();
+				injector.injectMembers(longTermOptimiser);
 				return longTermOptimiser;
 			}
 
@@ -126,7 +122,7 @@ public class PairingOptimiserUnit {
 
 			final ILongTermSlotsProviderEditor longTermSlotsProviderEditor = injector.getInstance(ILongTermSlotsProviderEditor.class);
 			final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
-			
+
 			final Collection<IPortSlot> allPortSlots = SequencesToPortSlotsUtils.getAllPortSlots(dataTransformer.getOptimisationData().getSequenceElements(), portSlotProvider);
 			allPortSlots.forEach(longTermSlotsProviderEditor::addLongTermSlot);
 			addLongTermOptimiserEvents(longTermSlotsProviderEditor, allPortSlots);
@@ -134,14 +130,14 @@ public class PairingOptimiserUnit {
 			monitor.beginTask("Generate solutions", 100);
 			final CharterInMarket charterInMarket = initialScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(0);
 			final List<Future<Pair<ISequences, Long>>> futures = new LinkedList<>();
-			try {
+			try (JobExecutor jobExecutor = jobExecutorFactory.begin()) {
 
-				futures.add(executorService.submit(() -> {
+				futures.add(jobExecutor.submit(() -> {
 					try {
 						// Bit nasty, but we are still in PoC stages
 
 						final PairingOptimiser calculator = injector.getInstance(PairingOptimiser.class);
-						return calculator.optimise(executorService, dataTransformer, charterInMarket);
+						return calculator.optimise(dataTransformer, charterInMarket);
 					} finally {
 						monitor.worked(1);
 					}

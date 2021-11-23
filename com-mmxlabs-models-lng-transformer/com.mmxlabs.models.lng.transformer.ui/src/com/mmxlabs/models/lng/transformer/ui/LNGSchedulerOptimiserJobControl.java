@@ -56,7 +56,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 	public LNGSchedulerOptimiserJobControl(final LNGSchedulerJobDescriptor jobDescriptor) {
 		super((jobDescriptor.isOptimising() ? "Optimise " : "Evaluate ") + jobDescriptor.getJobName(),
-				CollectionsUtil.<QualifiedName, Object> makeHashMap(IProgressConstants.ICON_PROPERTY, (jobDescriptor.isOptimising() ? imgOpti : imgEval)));
+				CollectionsUtil.<QualifiedName, Object>makeHashMap(IProgressConstants.ICON_PROPERTY, (jobDescriptor.isOptimising() ? imgOpti : imgEval)));
 
 		// Disable optimisation in P&L testing phase
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PHASE_PNL_TESTING)) {
@@ -186,21 +186,8 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.mmxlabs.jobcontroller.core.AbstractManagedJob#kill()
-	 */
-	@Override
-	protected void kill() {
-	}
-
 	@Override
 	public void dispose() {
-
-		if (builder != null) {
-			builder.dispose();
-		}
 
 		if (originalScenarioDataProvider != null) {
 			originalScenarioDataProvider.close();

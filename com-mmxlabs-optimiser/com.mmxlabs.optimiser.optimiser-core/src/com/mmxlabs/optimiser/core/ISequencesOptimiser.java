@@ -9,6 +9,7 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.concurrent.JobExecutor;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IEvaluatedStateConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IInitialSequencesConstraintChecker;
@@ -84,7 +85,7 @@ public interface ISequencesOptimiser extends IOptimiser {
 	@Nullable
 	IAnnotatedSolution getCurrentSolution();
 
-	int step(int percentage);
+	int step(int percentage, JobExecutor jobExecutor);
 
 	boolean isFinished();
 

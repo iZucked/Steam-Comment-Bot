@@ -94,7 +94,7 @@ public class RestrictedElementsConstraintChecker implements IPairwiseConstraintC
 		}
 
 		final boolean result = !restrictedElementsProvider.getRestrictedFollowerElements(first).contains(second) && !restrictedElementsProvider.getRestrictedPrecedingElements(second).contains(first);
-		if (!result)
+		if (!result && messages != null)
 			messages.add(String.format("%s: Sequence element %s is restricted to follow/preceed the sequence element %s!", this.name, first.getName(), second.getName()));
 		return result;
 	}

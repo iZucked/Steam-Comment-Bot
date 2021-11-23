@@ -9,11 +9,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
@@ -30,6 +27,8 @@ import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.concurrent.JobExecutor;
+import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.MTMModel;
@@ -64,7 +63,8 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScope;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -127,20 +127,18 @@ public class MTMSanboxUnit {
 	@NonNull
 	private final String phase;
 
-	private final Map<Thread, MTMSandboxEvaluator> threadCache = new ConcurrentHashMap<>(100);
-
-	private @NonNull ExecutorService executorService;
+	private @NonNull JobExecutorFactory jobExecutorFactory;
 
 	private @NonNull LNGScenarioModel scenarioModel;
 
 	@SuppressWarnings("null")
 	public MTMSanboxUnit(@NonNull final LNGScenarioModel scenarioModel, @NonNull final LNGDataTransformer dataTransformer, @NonNull final String phase, @NonNull final UserSettings userSettings,
-			@NonNull final ConstraintAndFitnessSettings constainAndFitnessSettings, @NonNull final ExecutorService executorService, @NonNull final ISequences initialSequences,
+			@NonNull final ConstraintAndFitnessSettings constainAndFitnessSettings, @NonNull final JobExecutorFactory jobExecutorFactory, @NonNull final ISequences initialSequences,
 			@NonNull final IMultiStateResult inputState, @NonNull final Collection<String> hints) {
 		this.scenarioModel = scenarioModel;
 		this.dataTransformer = dataTransformer;
 		this.phase = phase;
-		this.executorService = executorService;
+		this.jobExecutorFactory = jobExecutorFactory;
 
 		final Collection<IOptimiserInjectorService> services = dataTransformer.getModuleServices();
 
@@ -166,38 +164,27 @@ public class MTMSanboxUnit {
 				bind(IBreakEvenEvaluator.class).to(DefaultBreakEvenEvaluator.class);
 			}
 
-			private final Map<Thread, EvaluationHelper> threadCache_EvaluationHelper = new ConcurrentHashMap<>(100);
-
 			@Provides
+			@ThreadLocalScope
 			private EvaluationHelper provideEvaluationHelper(final Injector injector, @Named(LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE) final boolean isReevaluating,
 					@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) final ISequences initialRawSequences) {
 
-				EvaluationHelper helper = threadCache_EvaluationHelper.get(Thread.currentThread());
-				if (helper == null) {
-					helper = new EvaluationHelper(isReevaluating);
-					injector.injectMembers(helper);
+				EvaluationHelper helper = new EvaluationHelper(isReevaluating);
+				injector.injectMembers(helper);
 
-					final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
-					helper.acceptSequences(initialRawSequences, manipulator.createManipulatedSequences(initialRawSequences));
+				final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
+				helper.acceptSequences(initialRawSequences, manipulator.createManipulatedSequences(initialRawSequences));
 
-					helper.setFlexibleCapacityViolationCount(Integer.MAX_VALUE);
-
-					threadCache_EvaluationHelper.put(Thread.currentThread(), helper);
-				}
+				helper.setFlexibleCapacityViolationCount(Integer.MAX_VALUE);
 				return helper;
 			}
 
 			@Provides
+			@ThreadLocalScope
 			private MTMSandboxEvaluator providePerThreadOptimiser(@NonNull final Injector injector) {
 
-				MTMSandboxEvaluator optimiser = threadCache.get(Thread.currentThread());
-				if (optimiser == null) {
-					final PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);
-					scope.enter();
-					optimiser = new MTMSandboxEvaluator();
-					injector.injectMembers(optimiser);
-					threadCache.put(Thread.currentThread(), optimiser);
-				}
+				MTMSandboxEvaluator optimiser = new MTMSandboxEvaluator();
+				injector.injectMembers(optimiser);
 				return optimiser;
 			}
 		});
@@ -208,9 +195,13 @@ public class MTMSanboxUnit {
 	}
 
 	public void run(final MTMModel model, final IMapperClass mapper, @NonNull final IProgressMonitor monitor) {
-		monitor.beginTask("Generate solutions", IProgressMonitor.UNKNOWN);
-
-		try {
+		monitor.beginTask("Generate MTM solutions", IProgressMonitor.UNKNOWN);
+		final JobExecutorFactory subExecutorFactory = jobExecutorFactory.withDefaultBegin(() -> {
+			final ThreadLocalScopeImpl s = injector.getInstance(ThreadLocalScopeImpl.class);
+			s.enter();
+			return s;
+		});
+		try (JobExecutor jobExecutor = subExecutorFactory.begin()) {
 			try {
 
 				@NonNull
@@ -224,7 +215,7 @@ public class MTMSanboxUnit {
 						row.getRhsResults().clear();
 						row.getLhsResults().clear();
 
-						createOpportunity(model, mapper, monitor, modelEntityMap, futures, row, mapper.getOriginal(row.getSellOption()), mapper.getOriginal(row.getBuyOption()));
+						createOpportunity(model, mapper, monitor, modelEntityMap, futures, row, mapper.getOriginal(row.getSellOption()), mapper.getOriginal(row.getBuyOption()), jobExecutor);
 
 					}
 
@@ -254,14 +245,6 @@ public class MTMSanboxUnit {
 
 		} finally {
 
-			final PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);
-
-			// Clean up thread-locals created in the scope object
-			for (final Thread thread : threadCache.keySet()) {
-				scope.exit(thread);
-				threadCache.clear();
-			}
-
 			// Only keeping the best result
 			for (final MTMRow row : model.getRows()) {
 
@@ -283,10 +266,10 @@ public class MTMSanboxUnit {
 			}
 		}
 	}
-	
+
 	private void createOpportunity(final MTMModel model, final IMapperClass mapper, final IProgressMonitor monitor, final ModelEntityMap modelEntityMap, final List<Future<Runnable>> futures,
-			final MTMRow row, final DischargeSlot discharge, final LoadSlot load) {
-		
+			final MTMRow row, final DischargeSlot discharge, final LoadSlot load, JobExecutor jobExecutor) {
+
 		if (discharge == null && load == null) {
 			return;
 		}
@@ -302,7 +285,7 @@ public class MTMSanboxUnit {
 					if (monitor.isCanceled()) {
 						return null;
 					}
-					
+
 					final MTMResult mtmResult = AnalyticsFactory.eINSTANCE.createMTMResult();
 					final ExistingCharterMarketOption ecmo = AnalyticsFactory.eINSTANCE.createExistingCharterMarketOption();
 					ecmo.setCharterInMarket(shipping);
@@ -313,7 +296,7 @@ public class MTMSanboxUnit {
 					final InternalResult ret = new InternalResult();
 					LoadSlot ls = load;
 					DischargeSlot ds = discharge;
-					
+
 					Slot<?> beTarget = null;
 
 					try {
@@ -360,7 +343,7 @@ public class MTMSanboxUnit {
 									beTarget = ls;
 								}
 							}
-							
+
 							if (ls != null && ds != null) {
 								if (shipped) {
 									timeZone = ls.getPort().getLocation().getTimeZone();
@@ -371,7 +354,7 @@ public class MTMSanboxUnit {
 										timeZone = ds.getPort().getLocation().getTimeZone();
 									}
 								}
-	
+
 								final SingleResult result = doIt(shipped, shipping, ls, ds, beTarget);
 								ret.merge(result);
 								if (!shipped) {
@@ -381,23 +364,22 @@ public class MTMSanboxUnit {
 							}
 
 						}
-						
+
 						if (ret != null && ret.arrivalTime != Integer.MAX_VALUE) {
 							mtmResult.setEarliestETA(modelEntityMap.getDateFromHours(ret.arrivalTime, timeZone).toLocalDate());
 							mtmResult.setEarliestVolume(OptimiserUnitConvertor.convertToExternalVolume(ret.volumeInMMBTU));
 							mtmResult.setEarliestPrice(OptimiserUnitConvertor.convertToExternalPrice(ret.netbackPrice));
-							mtmResult.setShippingCost(
-									OptimiserUnitConvertor.convertToExternalPrice(ret.volumeInMMBTU == 0 ? 0 : //
-										Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(ret.shippingCost, ret.volumeInMMBTU)));
+							mtmResult.setShippingCost(OptimiserUnitConvertor.convertToExternalPrice(ret.volumeInMMBTU == 0 ? 0 : //
+							Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(ret.shippingCost, ret.volumeInMMBTU)));
 						}
-						
-						return new Runnable(){
+
+						return new Runnable() {
 							@Override
-							public void run(){
+							public void run() {
 								if (mtmResult.getEarliestETA() != null) {
 									if (row.getBuyOption() != null) {
 										row.getRhsResults().add(mtmResult);
-									} else if (row.getSellOption() != null){
+									} else if (row.getSellOption() != null) {
 										row.getLhsResults().add(mtmResult);
 									}
 								}
@@ -407,8 +389,8 @@ public class MTMSanboxUnit {
 						monitor.worked(1);
 					}
 				};
-				
-				futures.add(executorService.submit(job));
+
+				futures.add(jobExecutor.submit(job));
 			}
 		}
 	}

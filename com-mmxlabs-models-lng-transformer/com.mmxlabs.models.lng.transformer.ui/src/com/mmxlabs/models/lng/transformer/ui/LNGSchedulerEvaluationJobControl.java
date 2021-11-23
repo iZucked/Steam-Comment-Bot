@@ -64,12 +64,9 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 					// Hack: Add on shipping only hint to avoid generating spot markets during eval.
 					.withHints(LNGTransformerHelper.HINT_SHIPPING_ONLY, LNGTransformerHelper.HINT_EVALUATION_ONLY) //
 					.buildDefaultRunner();
-			try {
-				runner.evaluateInitialState();
-				scenarioDataProvider.setLastEvaluationFailed(false);
-			} finally {
-				runner.dispose();
-			}
+
+			runner.evaluateInitialState();
+			scenarioDataProvider.setLastEvaluationFailed(false);
 
 			setJobState(EJobState.COMPLETED);
 		} catch (final Throwable e) {
@@ -113,7 +110,8 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 
 	@Override
 	public Object getJobOutput() {
-		// Method not actually used and it would require hanging on to the model reference longer...
+		// Method not actually used and it would require hanging on to the model
+		// reference longer...
 		// return jobDescriptor.getJobContext().getInstance();
 		return null;
 	}

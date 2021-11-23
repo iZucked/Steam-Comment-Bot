@@ -40,7 +40,8 @@ public class CounterPartyWindowIdleTimeTest extends AbstractIdleTimeTests {
 	@Tag(TestCategories.MICRO_TEST)
 	public void testDESSaleCounterPartyWindow() {
 
-		// Set all times for ports to UTC, so we don't end up with -2 hours off expected durations.
+		// Set all times for ports to UTC, so we don't end up with -2 hours off expected
+		// durations.
 		portModelBuilder.setAllExistingPortsToUTC();
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
@@ -88,7 +89,8 @@ public class CounterPartyWindowIdleTimeTest extends AbstractIdleTimeTests {
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testCounterPartyWindowInPeriod() {
-		// This test it to make sure a counterpart cargo in the period boundary still keeps it's window setting.
+		// This test it to make sure a counterpart cargo in the period boundary still
+		// keeps it's window setting.
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_STEAM_145);
 
@@ -108,7 +110,8 @@ public class CounterPartyWindowIdleTimeTest extends AbstractIdleTimeTests {
 				.withAssignmentFlags(false, false) //
 				.build();
 
-		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
+		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in
+		// period.
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setMode(OptimisationMode.SHORT_TERM);
 
@@ -132,30 +135,27 @@ public class CounterPartyWindowIdleTimeTest extends AbstractIdleTimeTests {
 				.withThreadCount(1)//
 				.withOptimiseHint() //
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+		runner.evaluateInitialState();
 
-			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
-			// Check locked flags
-			boolean foundD1 = false;
-			final Cargo period_cargo = optimiserScenario.getCargoModel().getCargoes().get(0);
-			for (Slot<?> slot : period_cargo.getSlots()) {
-				Assertions.assertTrue(slot.isLocked());
-				if ("D1".equals(slot.getName())) {
-					Assertions.assertTrue(slot.isWindowCounterParty());
-					Assertions.assertEquals(4, slot.getWindowSize());
-					Assertions.assertEquals(TimePeriod.DAYS, slot.getWindowSizeUnits());
-					foundD1 = true;
-				}
+		final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
+		// Check locked flags
+		boolean foundD1 = false;
+		final Cargo period_cargo = optimiserScenario.getCargoModel().getCargoes().get(0);
+		for (Slot<?> slot : period_cargo.getSlots()) {
+			Assertions.assertTrue(slot.isLocked());
+			if ("D1".equals(slot.getName())) {
+				Assertions.assertTrue(slot.isWindowCounterParty());
+				Assertions.assertEquals(4, slot.getWindowSize());
+				Assertions.assertEquals(TimePeriod.DAYS, slot.getWindowSizeUnits());
+				foundD1 = true;
 			}
-			Assertions.assertTrue(foundD1);
 
-		} finally {
-			runner.dispose();
 		}
+		Assertions.assertTrue(foundD1);
+
 	}
 }

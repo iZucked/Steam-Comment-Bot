@@ -50,7 +50,8 @@ public class SpotToSpotConstraintChecker extends AbstractPairwiseConstraintCheck
 				return true;
 			}
 			if (spotMarketSlots.isSpotMarketSlot(first) && spotMarketSlots.isSpotMarketSlot(second)) {
-				messages.add(explain(first, second, resource));
+				if (messages != null)
+					messages.add(explain(first, second, resource));
 				return false;
 			} else {
 				return true;

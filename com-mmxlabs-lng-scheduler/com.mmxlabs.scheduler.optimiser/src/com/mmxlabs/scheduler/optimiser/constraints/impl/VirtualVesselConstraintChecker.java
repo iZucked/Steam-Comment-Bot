@@ -121,11 +121,11 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 		if (vesselAvailability.getVesselInstanceType() != VesselInstanceType.FOB_SALE && vesselAvailability.getVesselInstanceType() != VesselInstanceType.DES_PURCHASE) {
 
 			if (virtualVesselSlotProvider.getVesselAvailabilityForElement(first) != null) {
-				messages.add(String.format("%s: Sequence element %s has no vessel availability!", this.name, first.getName()));
+				addMessage(messages, "%s: Sequence element %s has no vessel availability!", first);
 				return false;
 			}
 			if (virtualVesselSlotProvider.getVesselAvailabilityForElement(second) != null) {
-				messages.add(String.format("%s: Sequence element %s has no vessel availability!", this.name, second.getName()));
+				addMessage(messages, "%s: Sequence element %s has no vessel availability!", second);
 				return false;
 			}
 
@@ -145,33 +145,34 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 		final ISequenceElement elementForVessel = virtualVesselSlotProvider.getElementForVesselAvailability(vesselAvailability);
 
 		final PortType elementForVesselType = portTypeProvider.getPortType(elementForVessel);
+		final String message = "%s: Sequence element %s has wrong event order!";
 		if (elementForVesselType == PortType.Load) {
 			// DES Purchase
 			if (firstType == PortType.Start) {
 				if (first != startElement) {
-					messages.add(String.format("%s: Sequence element %s has wrong event order!", this.name, first.getName()));
+					addMessage(messages, message, first);
 					return false;
 				}
 				if (second != elementForVessel) {
-					messages.add(String.format("%s: Sequence element %s has wrong event order!", this.name, second.getName()));
+					addMessage(messages, message, second);
 					return false;
 				}
 				return true;
 			}
 			if (firstType == PortType.Load) {
 				if (first != elementForVessel) {
-					messages.add(String.format("%s: Sequence element %s has wrong event order!", this.name, first.getName()));
+					addMessage(messages, message, first);
 					return false;
 				}
 				if (secondType != PortType.Discharge) {
-					messages.add(String.format("%s: Sequence element %s has wrong event order!", this.name, second.getName()));
+					addMessage(messages, message, second);
 					return false;
 				}
 				return true;
 			}
 			if (firstType == PortType.Discharge) {
 				if (second != endElement) {
-					messages.add(String.format("%s: Sequence element %s has wrong event order!", this.name, second.getName()));
+					addMessage(messages, message, second);
 					return false;
 				}
 				return true;
@@ -180,31 +181,37 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 			// FOB Sale
 			if (firstType == PortType.Start) {
 				if (first != startElement) {
-					messages.add(String.format("%s: Sequence element %s has wrong event order!", this.name, first.getName()));
+					addMessage(messages, message, first);
 					return false;
 				}
 				if (secondType != PortType.Load) {
-					messages.add(String.format("%s: Sequence element %s has wrong event order!", this.name, second.getName()));
+					addMessage(messages, message, second);
 					return false;
 				}
 				return true;
 			}
 			if (firstType == PortType.Load) {
 				if (second != elementForVessel) {
-					messages.add(String.format("%s: Sequence element %s has wrong event order!", this.name, second.getName()));
+					addMessage(messages, message, second);
 					return false;
 				}
 				return true;
 			}
 			if (firstType == PortType.Discharge) {
 				if (second != endElement) {
-					messages.add(String.format("%s: Sequence element %s has wrong event order!", this.name, second.getName()));
+					addMessage(messages, message, second);
 					return false;
 				}
 				return true;
 			}
 		}
-		messages.add(String.format("%s: Sequence element %s has failed the constraint check!", this.name, first.getName()));
+		addMessage(messages, "%s: Sequence element %s has failed the constraint check!", first);
 		return false;
+	}
+
+	private void addMessage(final List<String> messages, final String pattern, final ISequenceElement sequenceElement) {
+		if (messages != null) {
+			messages.add(String.format(pattern, this.name, sequenceElement.getName()));
+		}
 	}
 }

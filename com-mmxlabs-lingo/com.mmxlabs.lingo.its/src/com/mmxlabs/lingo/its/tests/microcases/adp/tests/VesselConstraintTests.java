@@ -53,7 +53,9 @@ public class VesselConstraintTests extends AbstractADPAndLightWeightTests {
 	// }
 
 	/**
-	 * Test has two vessels and 12 cargoes. The cargoes have a wide volume, so with no preference weightings we would expect the cargoes to be put on the largest vessel
+	 * Test has two vessels and 12 cargoes. The cargoes have a wide volume, so with
+	 * no preference weightings we would expect the cargoes to be put on the largest
+	 * vessel
 	 * 
 	 * @param contraintWeight
 	 * @param targetVessel
@@ -89,24 +91,22 @@ public class VesselConstraintTests extends AbstractADPAndLightWeightTests {
 				.withOptimiseHint() //
 				.withThreadCount(1) //
 				.buildDefaultRunner();
-		try {
-			runnerBuilder.evaluateInitialState();
-			runnerBuilder.run(false, runner -> {
-				// Run, get result and store to schedule model for inspection at EMF level if needed
-				final IMultiStateResult result = runner.runAndApplyBest();
-				// Simple verification, have these slots been used?
-				final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
-				for (int i = 0; i < lngScenarioModel.getCargoModel().getLoadSlots().size(); i++) {
-					LoadSlot loadSlot = lngScenarioModel.getCargoModel().getLoadSlots().get(i);
-					System.out.println(loadSlot.getName());
-					verifier.withAnySolutionResultChecker().withUsedLoad(loadSlot.getName()).onFleetVessel(targetVessel).build();
-				}
-				verifier.withAnySolutionResultChecker().withCargoCount(12, false).build();
-				verifier.verifySingleOptimisationResult(result, msg -> Assertions.fail(msg));
-			});
-		} finally {
-			runnerBuilder.dispose();
-		}
+
+		runnerBuilder.evaluateInitialState();
+		runnerBuilder.run(false, runner -> {
+			// Run, get result and store to schedule model for inspection at EMF level if
+			// needed
+			final IMultiStateResult result = runner.runAndApplyBest();
+			// Simple verification, have these slots been used?
+			final OptimiserResultVerifier verifier = OptimiserResultVerifier.begin(runner);
+			for (int i = 0; i < lngScenarioModel.getCargoModel().getLoadSlots().size(); i++) {
+				LoadSlot loadSlot = lngScenarioModel.getCargoModel().getLoadSlots().get(i);
+				System.out.println(loadSlot.getName());
+				verifier.withAnySolutionResultChecker().withUsedLoad(loadSlot.getName()).onFleetVessel(targetVessel).build();
+			}
+			verifier.withAnySolutionResultChecker().withCargoCount(12, false).build();
+			verifier.verifySingleOptimisationResult(result, msg -> Assertions.fail(msg));
+		});
 	}
 
 	private void setContractsAndCargoes(final int limit, final ADPModelBuilder adpModelBuilder) {

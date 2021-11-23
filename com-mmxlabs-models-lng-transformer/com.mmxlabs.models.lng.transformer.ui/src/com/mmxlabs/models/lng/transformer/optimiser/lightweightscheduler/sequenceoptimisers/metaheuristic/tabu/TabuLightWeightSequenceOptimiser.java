@@ -22,7 +22,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.JobExecutor;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightConstraintChecker;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightFitnessFunction;
 import com.mmxlabs.models.lng.transformer.lightweightscheduler.optimiser.ILightWeightOptimisationData;
@@ -49,7 +49,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 
 	@Override
 	public List<List<Integer>> optimise(ILightWeightOptimisationData lightWeightOptimisationData, List<ILightWeightConstraintChecker> constraintCheckers,
-			List<ILightWeightFitnessFunction> fitnessFunctions, CleanableExecutorService executorService, IProgressMonitor monitor) {
+			List<ILightWeightFitnessFunction> fitnessFunctions, JobExecutor jobExecutor, IProgressMonitor monitor) {
 		int cargoCount = lightWeightOptimisationData.getShippedCargoes().size();
 		int vesselCount = lightWeightOptimisationData.getVessels().size();
 
@@ -111,7 +111,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 				List<TabuSolution> tabuSolutions = getNewCandidateSolutions(currentSolution.schedule, unusedCargoes, usedCargoes, random, mapping);
 
 				// Evaluate solutions
-				evaluateTabuSolutions(lightWeightOptimisationData, constraintCheckers, fitnessFunctions, cargoCount, tabuSolutions, executorService);
+				evaluateTabuSolutions(lightWeightOptimisationData, constraintCheckers, fitnessFunctions, cargoCount, tabuSolutions, jobExecutor);
 
 				// Set the new base solution for the next iteration
 				int currentIndex = getBestUniqueValidIndex(currentSolution, tabuSolutions);
@@ -148,10 +148,10 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 	}
 
 	private void evaluateTabuSolutions(ILightWeightOptimisationData lightWeightOptimisationData, List<ILightWeightConstraintChecker> constraintCheckers,
-			List<ILightWeightFitnessFunction> fitnessFunctions, int cargoCount, List<TabuSolution> tabuSolutions, CleanableExecutorService executorService) {
+			List<ILightWeightFitnessFunction> fitnessFunctions, int cargoCount, List<TabuSolution> tabuSolutions, JobExecutor jobExecutor) {
 
 		List<Future<Long>> tasks = tabuSolutions.stream()
-				.map(s -> executorService.submit(() -> s.fitness = evaluate(s.schedule, cargoCount, lightWeightOptimisationData, constraintCheckers, fitnessFunctions, false)))
+				.map(s -> jobExecutor.submit(() -> s.fitness = evaluate(s.schedule, cargoCount, lightWeightOptimisationData, constraintCheckers, fitnessFunctions, false)))
 				.collect(Collectors.toList());
 
 		for (Future<?> f : tasks) {
@@ -179,8 +179,7 @@ public class TabuLightWeightSequenceOptimiser implements ILightWeightSequenceOpt
 	}
 
 	/**
-	 * Applies pertubations to an initial solution TODO: not threadsafe. Cannot use
-	 * a parallel stream due to the random object being reused.
+	 * Applies pertubations to an initial solution TODO: not threadsafe. Cannot use a parallel stream due to the random object being reused.
 	 * 
 	 * @param schedule
 	 * @param unusedCargoes

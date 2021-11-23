@@ -303,7 +303,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 		hookContextMenu();
 		contributeToActionBars();
 
-		selectionManager = new ReentrantSelectionManager(viewer, selectedScenariosServiceListener, selectedScenariosService);
+		selectionManager = new ReentrantSelectionManager(viewer, selectedScenariosServiceListener, selectedScenariosService, false);
 		try {
 			selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 		} catch (Exception e) {

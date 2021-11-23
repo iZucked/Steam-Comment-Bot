@@ -402,6 +402,12 @@ public class CargoSwitch<@Nullable T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CargoPackage.PANAMA_SEASONALITY_RECORD: {
+				PanamaSeasonalityRecord panamaSeasonalityRecord = (PanamaSeasonalityRecord)theEObject;
+				T1 result = casePanamaSeasonalityRecord(panamaSeasonalityRecord);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -913,6 +919,21 @@ public class CargoSwitch<@Nullable T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseVesselGroupCanalParameters(VesselGroupCanalParameters object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Panama Seasonality Record</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Panama Seasonality Record</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 casePanamaSeasonalityRecord(PanamaSeasonalityRecord object) {
 		return null;
 	}
 

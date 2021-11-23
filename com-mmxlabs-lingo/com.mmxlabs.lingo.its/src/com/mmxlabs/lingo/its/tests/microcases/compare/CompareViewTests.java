@@ -589,7 +589,8 @@ public class CompareViewTests {
 			Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.After));
 
 			// P&L Sanity check -- no missing components in P&L
-			// NOTE: This is different to other test cases as second D sales revenue is shown on the second D row rather than the cargo row.
+			// NOTE: This is different to other test cases as second D sales revenue is
+			// shown on the second D row rather than the cargo row.
 			double totalBeforePNL = 0.0;
 			double totalBeforePNLSum = 0.0;
 			double totalAfterPNL = 0.0;
@@ -702,10 +703,8 @@ public class CompareViewTests {
 				.withExtraModule(new TransformerExtensionTestBootstrapModule()) //
 				.withThreadCount(1)//
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
-		} finally {
-			runner.dispose();
-		}
+
+		runner.evaluateInitialState();
+
 	}
 }

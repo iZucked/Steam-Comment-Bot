@@ -74,7 +74,7 @@ public class CounterPartyVolumeChecker implements IPairwiseConstraintChecker, II
 	private Set<Pair<IPortSlot, IPortSlot>> pairing = new HashSet();
 
 	@Override
-	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, @NonNull final List<@NonNull String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final Collection<@NonNull IResource> changedResources, final List<String> messages) {
 
 		final Collection<@NonNull IResource> loopResources;
 		if (changedResources == null) {
@@ -143,7 +143,8 @@ public class CounterPartyVolumeChecker implements IPairwiseConstraintChecker, II
 						if (record) {
 							pairing.add(thisPair);
 						} else {
-							messages.add(String.format(
+							if (messages != null)
+								messages.add(String.format(
 									"%s: Counterparty volume nomination for buy %s and sell %s. Min load volume (%d) "
 									+ "is less than min discharge volume (%d). Nominated vessel (%s) capacity is %d"
 									, this.name, load.getId(), discharge.getId(), minLoadVolume, minDischargeVolume, 
@@ -159,7 +160,8 @@ public class CounterPartyVolumeChecker implements IPairwiseConstraintChecker, II
 						if (record) {
 							pairing.add(thisPair);
 						} else {
-							messages.add(String.format(
+							if (messages != null)
+								messages.add(String.format(
 									"%s: Counterparty volume nomination for buy %s and sell %s. Max load volume (%d) "
 									+ "is greater than max discharge volume (%d). Nominated vessel (%s) capacity is %d"
 									, this.name, load.getId(), discharge.getId(), maxLoadVolume, maxDischargeVolume, 
@@ -174,7 +176,7 @@ public class CounterPartyVolumeChecker implements IPairwiseConstraintChecker, II
 	}
 
 	@Override
-	public void sequencesAccepted(@NonNull ISequences rawSequences, @NonNull ISequences fullSequences, @NonNull final List<String> messages) {
+	public void sequencesAccepted(@NonNull ISequences rawSequences, @NonNull ISequences fullSequences, final List<String> messages) {
 		pairing.clear();
 		final Collection<@NonNull IResource> loopResources = rawSequences.getResources();
 
@@ -191,7 +193,7 @@ public class CounterPartyVolumeChecker implements IPairwiseConstraintChecker, II
 	}
 
 	@Override
-	public boolean checkPairwiseConstraint(@NonNull ISequenceElement first, @NonNull ISequenceElement second, @NonNull IResource resource, @NonNull final List<@NonNull String> messages) {
+	public boolean checkPairwiseConstraint(@NonNull ISequenceElement first, @NonNull ISequenceElement second, @NonNull IResource resource, final List<String> messages) {
 		return checkPairwiseConstraint(first, second, resource, false, messages);
 	}
 }

@@ -40,7 +40,6 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.components.impl.MaintenanceVesselEventPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.VesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
@@ -649,9 +648,6 @@ public class VoyagePlanner implements IVoyagePlanner {
 				if (iPortSlot instanceof MaintenanceVesselEventPortSlot) {
 					final MaintenanceVesselEventPortSlot maintenancePortSlot = (MaintenanceVesselEventPortSlot) iPortSlot;
 					final IVesselEventPortSlot vesselEventPortSlot = maintenancePortSlot.getFormerPortSlot();
-					if (vesselEventPortSlot.getId().equals("M1")) {
-						int i = 0;
-					}
 				}
 			}
 		}
@@ -669,9 +665,9 @@ public class VoyagePlanner implements IVoyagePlanner {
 			// (sequences are broken on loads).
 			final Pair<@NonNull VoyagePlan, @NonNull IAllocationAnnotation> p = beIter.next();
 			// Since only the first voyage plan can involve a cargo, all remaining break even evaluations should be null
-			while (beIter.hasNext()) {
-				assert beIter.next() == null;
-			}
+			beIter.forEachRemaining(pair -> {
+				assert pair == null;
+			});
 			beVoyagePlanPtrPair = p;
 		} else {
 			beVoyagePlanPtrPair = null;
@@ -720,9 +716,9 @@ public class VoyagePlanner implements IVoyagePlanner {
 						for (int i = 0; i < replacementSequence.length; ++i) {
 							IDetailsSequenceElement detailsSequenceElement = oldPair.getFirst().getSequence()[i];
 							if (detailsSequenceElement instanceof PortDetails) {
-								replacementSequence[i] = ((PortDetails) detailsSequenceElement).clone();
+								replacementSequence[i] = ((PortDetails) detailsSequenceElement).copy();
 							} else if (detailsSequenceElement instanceof VoyageDetails) {
-								replacementSequence[i] = ((VoyageDetails) detailsSequenceElement).clone();
+								replacementSequence[i] = ((VoyageDetails) detailsSequenceElement).copy();
 							} else {
 								throw new IllegalStateException("Unknown sequence type");
 							}

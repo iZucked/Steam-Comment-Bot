@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,9 +87,13 @@ public class LegalSequencingChecker {
 	 */
 	public boolean allowSequence(final ISequenceElement e1, final ISequenceElement e2, final IResource resource) {
 		// Check with hard constraints like resource allocation and ordered elements
-
-		final List<String> messages = new ArrayList<>();
-		messages.add(String.format("%s: allowSequence", this.getClass().getName()));
+		final List<@Nullable String> messages;
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
+			messages = new ArrayList<>();
+			messages.add(String.format("%s: allowSequence", this.getClass().getName()));
+		} else {
+			messages = null;
+		}
 		if (!resourceAllocationChecker.checkPairwiseConstraint(e1, e2, resource, messages)) {
 			if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 				messages.stream().forEach(log::debug);
@@ -107,8 +112,13 @@ public class LegalSequencingChecker {
 
 	public List<String> getSequencingProblems(final ISequenceElement e1, final ISequenceElement e2, final IResource resource) {
 		final List<String> result = new ArrayList<>();
-		final List<String> messages = new ArrayList<>();
-		messages.add(String.format("%s: getSequencingProblems", this.getClass().getName()));
+		final List<@Nullable String> messages;
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
+			messages = new ArrayList<>();
+			messages.add(String.format("%s: getSequencingProblems", this.getClass().getName()));
+		} else {
+			messages = null;
+		}
 		for (final IPairwiseConstraintChecker pairwiseChecker : pairwiseCheckers) {
 			if (!pairwiseChecker.checkPairwiseConstraint(e1, e2, resource, messages)) {
 				result.add(pairwiseChecker.getName() + " says " + pairwiseChecker.explain(e1, e2, resource));

@@ -82,7 +82,8 @@ public final class OrderedSequenceElementsConstraintChecker implements IPairwise
 					final ISequenceElement expected = provider.getNextElement(prevElement);
 					// If null, any element is allowed to follow.
 					if (expected != null && expected != element) {
-						messages.add(String.format("%s: current element %s is not the expected one %s!", this.name, element.getName(), expected.getName()));
+						if (messages != null)
+							messages.add(String.format("%s: current element %s is not the expected one %s!", this.name, element.getName(), expected.getName()));
 						return false;
 					}
 				}
@@ -90,7 +91,8 @@ public final class OrderedSequenceElementsConstraintChecker implements IPairwise
 					final ISequenceElement expected = provider.getPreviousElement(element);
 					// If null, any element is allowed to follow.
 					if (expected != null && expected != prevElement) {
-						messages.add(String.format("%s: previous element %s is not the expected one %s!", this.name, prevElement.getName(), expected.getName()));
+						if (messages != null)
+							messages.add(String.format("%s: previous element %s is not the expected one %s!", this.name, prevElement.getName(), expected.getName()));
 						return false;
 					}
 				}
@@ -103,7 +105,8 @@ public final class OrderedSequenceElementsConstraintChecker implements IPairwise
 			final ISequenceElement expected = provider.getNextElement(prevElement);
 			// If not null, we expected another element, but there is none.
 			if (expected != null) {
-				messages.add(String.format("%s: last element %s is unexpectedly followed by element %s!", this.name, prevElement.getName(), expected.getName()));
+				if (messages != null)
+					messages.add(String.format("%s: last element %s is unexpectedly followed by element %s!", this.name, prevElement.getName(), expected.getName()));
 				return false;
 			}
 		}
@@ -115,13 +118,15 @@ public final class OrderedSequenceElementsConstraintChecker implements IPairwise
 	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final List<String> messages) {
 		final ISequenceElement afterFirst = provider.getNextElement(first);
 		if (afterFirst != null && afterFirst != second) {
-			messages.add(String.format("%s: element %s must follow %s, but is followed by %s!", this.name, second.getName(), first.getName(), afterFirst.getName()));
+			if (messages != null)
+				messages.add(String.format("%s: element %s must follow %s, but is followed by %s!", this.name, second.getName(), first.getName(), afterFirst.getName()));
 			return false;
 		}
 
 		final ISequenceElement beforeSecond = provider.getPreviousElement(second);
 		if (beforeSecond != null && first != beforeSecond) {
-			messages.add(String.format("%s: element %s must follow %s, but is follows %s!", this.name, first.getName(), second.getName(), beforeSecond.getName()));
+			if (messages != null)
+				messages.add(String.format("%s: element %s must follow %s, but is follows %s!", this.name, first.getName(), second.getName(), beforeSecond.getName()));
 			return false;
 		}
 		return true;

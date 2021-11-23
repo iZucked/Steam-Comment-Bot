@@ -87,6 +87,10 @@ public class SharedWorkspaceScenarioService extends AbstractScenarioService {
 					final Path target = Paths.get(baseCaseFolder.getAbsolutePath(), String.format("%s.lingo", uuid));
 					Files.copy(f.toPath(), target);
 				}
+			} catch (IOException e) {
+				RunnerHelper.asyncExec(display -> MessageDialog.openError(display.getActiveShell(), "Error copying  scenario",
+						"Unable to copy a scenario into team folder. See error log for more details"));
+				log.error("Error copying scenario into team folder " + e.getMessage(), e);
 			} finally {
 				updater.resume();
 				if (f != null) {

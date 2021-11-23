@@ -56,7 +56,7 @@ public class CopyTreeToClipboardAction extends Action {
 		setText("Copy");
 		setDescription("Copies tree data into the clipboard");
 		setToolTipText("Copies tree data into the clipboard");
-		setImageDescriptor(Activator.getImageDescriptor("/icons/copy.gif"));
+		setImageDescriptor(Activator.getImageDescriptor("/icons/copy.png"));
 	}
 
 	@Override

@@ -161,7 +161,7 @@ public class SlotInsertionTests extends AbstractMicroTestCase {
 
 		final InsertionOptimisationStage stage = ScenarioUtils.createDefaultInsertionSettings();
 
-		final SlotInsertionOptimiserUnit slotInserter = new SlotInsertionOptimiserUnit(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(), stage, scenarioRunner.getExecutorService(),
+		final SlotInsertionOptimiserUnit slotInserter = new SlotInsertionOptimiserUnit(dataTransformer, "pairing-stage", dataTransformer.getUserSettings(), stage, scenarioRunner.getJobExecutorFactory(),
 				dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), Collections.emptyList());
 		return slotInserter;
 	}

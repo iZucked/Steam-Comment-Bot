@@ -155,6 +155,9 @@ import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.TextualEnumAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.TextualSingleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
@@ -356,7 +359,7 @@ public class ContractPage extends ADPComposite {
 
 						}
 					};
-					deleteSlotAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE));
+					deleteSlotAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled));
 					if (actionBars != null) {
 						actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteSlotAction);
 					}
@@ -377,7 +380,7 @@ public class ContractPage extends ADPComposite {
 							}
 						};
 
-						ResourceLocator.imageDescriptorFromBundle("com.mmxlabs.rcp.common", "/icons/pack.gif").ifPresent(packAction::setImageDescriptor);
+						packAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Pack, IconMode.Enabled));
 
 						removeButtonManager.getToolbarManager().add(packAction);
 					}
@@ -421,7 +424,7 @@ public class ContractPage extends ADPComposite {
 							}
 						};
 
-						ResourceLocator.imageDescriptorFromBundle("com.mmxlabs.rcp.common", "/icons/pack.gif").ifPresent(packAction::setImageDescriptor);
+						packAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Pack, IconMode.Enabled));
 
 						toolbarManager.getToolbarManager().add(packAction);
 

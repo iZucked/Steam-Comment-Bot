@@ -15,6 +15,7 @@ import java.util.function.BiConsumer;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -26,7 +27,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSchedulerInsertSlotJobRunner;
-import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.CopiedCSVImporter;
+import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.CSVImporter;
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.HeadlessOptimiserJSON;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.rcp.common.ServiceHelper;
@@ -61,8 +62,10 @@ public class HeadlessOptioniserRunner {
 	}
 
 	/**
-	 * Runs the optioniser on the specified scenario, using the specified starting seed, with the specified options. The optioniser output is logged to the logger, which can then be used to extract
-	 * information about the optioniser run.
+	 * Runs the optioniser on the specified scenario, using the specified starting
+	 * seed, with the specified options. The optioniser output is logged to the
+	 * logger, which can then be used to extract information about the optioniser
+	 * run.
 	 * 
 	 * @param startTry
 	 * @param lingoFile
@@ -75,57 +78,27 @@ public class HeadlessOptioniserRunner {
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) throws Exception {
 		// Get the root object
 		ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(lingoFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
-			run(startTry, logger, options, modelRecord, scenarioDataProvider, completedHook);
+			run(startTry, logger, options, modelRecord, scenarioDataProvider, completedHook, new NullProgressMonitor());
 		});
 	}
 
 	public void runFromCSVDirectory(final int startTry, final File csvDirectory, final SlotInsertionOptimiserLogger logger, final Options options,
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) {
 
-		try {
-			URL urlRoot = csvDirectory.toURI().toURL();
-			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
-				try (IScenarioDataProvider scenarioDataProvider = CopiedCSVImporter.importCSVScenario(urlRoot.toString())) {
-					run(startTry, logger, options, null, scenarioDataProvider, completedHook);
-				}
-			});
-		} catch (MalformedURLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return;
-		}
-
+		CSVImporter.runFromCSVDirectory(csvDirectory, sdp -> run(startTry, logger, options, null, sdp, completedHook, new NullProgressMonitor()));
 	}
 
 	public void runFromCsvZipFile(final int startTry, final File zipFile, final SlotInsertionOptimiserLogger logger, final Options options,
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) {
 
-		try {
-			String zipUriString = String.format("archive:%s!", zipFile.toURI().toString());
-			ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
-				try (IScenarioDataProvider scenarioDataProvider = CopiedCSVImporter.importCSVScenario(zipUriString)) {
-					run(startTry, logger, options, null, scenarioDataProvider, completedHook);
-				}
-			});
-		} catch (MalformedURLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return;
-		}
-
+		CSVImporter.runFromCSVZipFile(zipFile, sdp -> run(startTry, logger, options, null, sdp, completedHook, new NullProgressMonitor()));
 	}
 
 	public void run(final int startTry, final SlotInsertionOptimiserLogger logger, final Options options, final ScenarioModelRecord scenarioModelRecord, @NonNull final IScenarioDataProvider sdp,
-			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) {
+			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, IProgressMonitor monitor) {
 		final LNGScenarioModel lngScenarioModel = sdp.getTypedScenario(LNGScenarioModel.class);
 
 		final UserSettings userSettings = OptimisationHelper.promptForInsertionUserSettings(lngScenarioModel, false, false, false, null, null);
-
-		// Reset settings not supplied to the user
-		userSettings.setShippingOnly(false);
-		userSettings.setBuildActionSets(false);
-		userSettings.setCleanSlateOptimisation(false);
-		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
 		if (options.periodStart != null) {
 			userSettings.setPeriodStartDate(options.periodStart);
@@ -154,23 +127,21 @@ public class HeadlessOptioniserRunner {
 				});
 
 		// Override iterations
-		insertionRunner.setIteration(options.iterations);
-
-		final IMultiStateResult results = insertionRunner.runInsertion(logger, new NullProgressMonitor());
-		// Includes starting solution, so take off one.
-		if (logger != null) {
-			logger.setSolutionsFound(results.getSolutions().size() - 1);
+		if (options.iterations > 0) {
+			insertionRunner.setIteration(options.iterations);
 		}
 
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
+
+		final IMultiStateResult results = insertionRunner.runInsertion(logger, subMonitor.split(90));
+
 		if (options.exportResults) {
-			insertionRunner.exportSolutions(results, 0L, new NullProgressMonitor());
+			insertionRunner.exportSolutions(results, 0L, subMonitor.split(10));
 		}
 
 		if (completedHook != null) {
 			completedHook.accept(scenarioModelRecord, sdp);
 		}
-
-		insertionRunner.dispose();
 	}
 
 }

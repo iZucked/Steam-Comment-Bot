@@ -53,7 +53,7 @@ public class CopyTableToClipboardAction extends Action {
 		setText("Copy");
 		setDescription("Copies table data into the clipboard");
 		setToolTipText("Copies table data into the clipboard");
-		setImageDescriptor(Activator.getImageDescriptor("/icons/copy.gif"));
+		setImageDescriptor(Activator.getImageDescriptor("/icons/copy.png"));
 	}
 
 	@Override

@@ -321,11 +321,10 @@
           ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/arrivalMarginHours"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/flexibleBookingAmountNorthbound"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/flexibleBookingAmountSouthbound"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/northboundMaxIdleDays"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/southboundMaxIdleDays"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CanalBookings/bookingExemptVessels"/>
       <genFeatures notify="false" createChild="false" propertyDescription="Number of hours arrival margin prior Panama booking date or expected crossing time."
           propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CanalBookings/vesselGroupCanalParameters"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CanalBookings/panamaSeasonalityRecords"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//ScheduleSpecification">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//ScheduleSpecification/vesselScheduleSpecifications"/>
@@ -384,9 +383,15 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//DealSet/paperDeals"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//VesselGroupCanalParameters">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselGroupCanalParameters/northboundWaitingDays"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselGroupCanalParameters/southboundWaitingDays"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselGroupCanalParameters/vesselGroup"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//PanamaSeasonalityRecord">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//PanamaSeasonalityRecord/vesselGroupCanalParameter"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PanamaSeasonalityRecord/startDay"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PanamaSeasonalityRecord/startMonth"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PanamaSeasonalityRecord/startYear"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PanamaSeasonalityRecord/northboundWaitingDays"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PanamaSeasonalityRecord/southboundWaitingDays"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
@@ -28,7 +27,6 @@ import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBoot
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.types.PortCapability;
@@ -174,14 +172,14 @@ public class PeriodOptimiserTest {
 		tester.cargoB1.getSlots().get(0).getRestrictedVessels().add(tester.vesselAvailabilities[0].getVessel());
 		tester.cargoB2.getSlots().get(0).getRestrictedVessels().add(tester.vesselAvailabilities[0].getVessel());
 		tester.cargoB3.getSlots().get(0).getRestrictedVessels().add(tester.vesselAvailabilities[0].getVessel());
-		
+
 		tester.cargoA1.getSlots().get(0).setRestrictedVesselsArePermissive(true);
 		tester.cargoA2.getSlots().get(0).setRestrictedVesselsArePermissive(true);
 		tester.cargoA3.getSlots().get(0).setRestrictedVesselsArePermissive(true);
 		tester.cargoB1.getSlots().get(0).setRestrictedVesselsArePermissive(true);
 		tester.cargoB2.getSlots().get(0).setRestrictedVesselsArePermissive(true);
 		tester.cargoB3.getSlots().get(0).setRestrictedVesselsArePermissive(true);
-		
+
 		tester.cargoA1.getSlots().get(0).setRestrictedVesselsOverride(true);
 		tester.cargoA2.getSlots().get(0).setRestrictedVesselsOverride(true);
 		tester.cargoA3.getSlots().get(0).setRestrictedVesselsOverride(true);
@@ -308,21 +306,20 @@ public class PeriodOptimiserTest {
 			cargoB2.getSlots().get(0).getRestrictedVessels().add(vesselAvailabilities[1].getVessel());
 			cargoB3.getSlots().get(0).getRestrictedVessels().add(vesselAvailabilities[1].getVessel());
 
-
 			cargoA1.getSlots().get(0).setRestrictedVesselsArePermissive(true);
 			cargoA2.getSlots().get(0).setRestrictedVesselsArePermissive(true);
 			cargoA3.getSlots().get(0).setRestrictedVesselsArePermissive(true);
 			cargoB1.getSlots().get(0).setRestrictedVesselsArePermissive(true);
 			cargoB2.getSlots().get(0).setRestrictedVesselsArePermissive(true);
 			cargoB3.getSlots().get(0).setRestrictedVesselsArePermissive(true);
-			
+
 			cargoA1.getSlots().get(0).setRestrictedVesselsOverride(true);
 			cargoA2.getSlots().get(0).setRestrictedVesselsOverride(true);
 			cargoA3.getSlots().get(0).setRestrictedVesselsOverride(true);
 			cargoB1.getSlots().get(0).setRestrictedVesselsOverride(true);
 			cargoB2.getSlots().get(0).setRestrictedVesselsOverride(true);
 			cargoB3.getSlots().get(0).setRestrictedVesselsOverride(true);
-			
+
 			// Set volumes
 			cargoA1.getSlots().get(0).setMaxQuantity(bigQty);
 			cargoA2.getSlots().get(0).setMaxQuantity(bigQty);
@@ -359,7 +356,6 @@ public class PeriodOptimiserTest {
 		}
 
 		public void optimise() throws Exception {
-			final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
 			try {
 
 				final OptimisationPlan plan = getPlan();
@@ -384,8 +380,6 @@ public class PeriodOptimiserTest {
 				// this exception should not occur
 				// Assertions.fail("Scenario runner failed to initialise scenario");
 				throw er;
-			} finally {
-				executorService.shutdownNow();
 			}
 		}
 
@@ -401,8 +395,6 @@ public class PeriodOptimiserTest {
 		}
 
 		public void periodOptimise(final LocalDate start, final YearMonth end) throws Exception {
-			final CleanableExecutorService executorService = LNGScenarioChainBuilder.createExecutorService(1);
-
 			try {
 
 				final OptimisationPlan plan = getPlan();
@@ -431,8 +423,6 @@ public class PeriodOptimiserTest {
 				// this exception should not occur
 				// Assertions.fail("Scenario runner failed to initialise scenario: " + er.getMessage());
 				throw er;
-			} finally {
-				executorService.shutdownNow();
 			}
 		}
 	}

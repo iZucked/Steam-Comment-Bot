@@ -31,7 +31,8 @@ import com.google.inject.Injector;
 import com.google.inject.name.Named;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.JobExecutor;
+import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -61,17 +62,11 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
- * An "optimiser" to generate the sequence of steps required by a user to go
- * from one {@link ISequences} state to another one. I.e. from a pre-optimised
- * state to an optimised state.
+ * An "optimiser" to generate the sequence of steps required by a user to go from one {@link ISequences} state to another one. I.e. from a pre-optimised state to an optimised state.
  * 
- * This process generates changes and groups them into change sets. A change is
- * a single change to move closer to the target state. This may be a single slot
- * swap or moving a cargo pair onto the correct vessel. A change set is the
- * minimal set of changes required to pass the constraint checkers and other
- * criteria (such as positive P&L change). A single change may create invalid
- * solutions. Overall we aim to generate a list of change sets to get between
- * the initial and target solutions.
+ * This process generates changes and groups them into change sets. A change is a single change to move closer to the target state. This may be a single slot swap or moving a cargo pair onto the
+ * correct vessel. A change set is the minimal set of changes required to pass the constraint checkers and other criteria (such as positive P&L change). A single change may create invalid solutions.
+ * Overall we aim to generate a list of change sets to get between the initial and target solutions.
  * 
  * The process is a constructive stochastic search.
  * 
@@ -101,9 +96,6 @@ public class BagOptimiser {
 	@Inject
 	@NonNull
 	private IFitnessCombiner fitnessCombiner;
-
-	@Inject
-	private CleanableExecutorService executorService;
 
 	@Inject
 	private IPortTypeProvider portTypeProvider;
@@ -178,226 +170,225 @@ public class BagOptimiser {
 	}
 
 	/**
-	 * Performs a constructive stochastic search. Algorithm works as follows: Sample
-	 * a large number of changesets. Store valid changesets as P For each, p in P
-	 * While (population of nodes does not contain a leaf mode) Add new randomly
-	 * constructed changesets to end of node Check if nodes are valid Keep the top n
-	 * valid nodes
+	 * Performs a constructive stochastic search. Algorithm works as follows: Sample a large number of changesets. Store valid changesets as P For each, p in P While (population of nodes does not
+	 * contain a leaf mode) Add new randomly constructed changesets to end of node Check if nodes are valid Keep the top n valid nodes
 	 * 
 	 * @param targetRawSequences
 	 * @param progressMonitor
 	 * @param maxLeafs
 	 * @return
 	 */
-	public IMultiStateResult optimise(@NonNull final ISequences targetRawSequences, @NonNull final ISimpleProgressMonitor progressMonitor, final int maxLeafs) {
+	public IMultiStateResult optimise(@NonNull final ISequences targetRawSequences, @NonNull final ISimpleProgressMonitor progressMonitor, final int maxLeafs, JobExecutorFactory jobExecutorFactory) {
 
-		init(progressMonitor, maxLeafs);
+		try (JobExecutor jobExecutor = jobExecutorFactory.begin()) {
+			init(progressMonitor, maxLeafs);
 
-		final long time1 = System.currentTimeMillis();
+			final long time1 = System.currentTimeMillis();
 
-		// Prep Fitness cores based on original initial scenario - for
-		// lateness/similarity etc.
-		evaluateSolution(initialRawSequences);
-		final SimilarityState targetSimilarityState = injector.getInstance(SimilarityState.class);
+			// Prep Fitness cores based on original initial scenario - for
+			// lateness/similarity etc.
+			evaluateSolution(initialRawSequences);
+			final SimilarityState targetSimilarityState = injector.getInstance(SimilarityState.class);
 
-		final long bestFitness;
+			final long bestFitness;
 
-		// Generate the similarity data structures to the target solution
-		bestFitness = initSimiliarityTarget(targetRawSequences, targetSimilarityState);
+			// Generate the similarity data structures to the target solution
+			bestFitness = initSimiliarityTarget(targetRawSequences, targetSimilarityState);
 
-		try {
-			// Prepare initial solution state
-			final IModifiableSequences initialFullSequences = sequencesManipulator.createManipulatedSequences(initialRawSequences);
-
-			final int changesCount = getChangedElements(targetSimilarityState, initialRawSequences).size();
-			if (DEBUG) {
-				// Debugging -- get initial change count
-				System.out.println("Initial changes " + changesCount);
-			}
-
-			if (changesCount == 0) {
-				final List<NonNullPair<ISequences, Map<String, Object>>> processedSolution = new LinkedList<>();
-
-				// Evaluate initial state.
-				// Return an evaluated state for ITS
-				processedSolution.add(evaluateSolution(initialRawSequences));
-
-				final IMultiStateResult r = new MultiStateResult(processedSolution.get(processedSolution.size() - 1), processedSolution);
-				return r;
-			}
-
-			final IEvaluationState initialEvaluationState = evaluateAndGetScheduledSequences(initialFullSequences);
-
-			assert initialEvaluationState != null;
-			final ProfitAndLossSequences initialVolumeAllocatedSequences = initialEvaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, ProfitAndLossSequences.class);
-			assert initialVolumeAllocatedSequences != null;
-			final ProfitAndLossSequences initialProfitAndLossSequences = initialEvaluationState.getData(SchedulerEvaluationProcess.PROFIT_AND_LOSS_SEQUENCES, ProfitAndLossSequences.class);
-			assert initialProfitAndLossSequences != null;
-
-			final long initialUnusedCompulsarySlot = evaluationHelper.calculateUnusedCompulsarySlot(initialRawSequences);
-			final long initialLateness = evaluationHelper.calculateScheduleLateness(initialVolumeAllocatedSequences);
-			final long initialCapacity = evaluationHelper.calculateScheduleCapacity(initialVolumeAllocatedSequences);
-			final long initialPNL = evaluationHelper.calculateSchedulePNL(initialFullSequences, initialProfitAndLossSequences);
-			// Generate the initial set of changes, one level deep
-			final List<ChangeSet> changeSets = new LinkedList<>();
-			final List<Change> changes = new LinkedList<>();
-			final long time2 = System.currentTimeMillis();
-
-			if (actionSetLogger != null) {
-				actionSetLogger.setInitialPnL(initialPNL / Calculator.ScaleFactor);
-			}
-			targetSimilarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()] = initialLateness;
-			targetSimilarityState.getBaseMetrics()[MetricType.CAPACITY.ordinal()] = initialCapacity;
-			targetSimilarityState.getBaseMetrics()[MetricType.PNL.ordinal()] = initialPNL;
-			targetSimilarityState.getBaseMetrics()[MetricType.COMPULSARY_SLOT.ordinal()] = initialUnusedCompulsarySlot;
-
-			final ChangeChecker changeChecker = injector.getInstance(ChangeChecker.class);
-			changeChecker.init(null, targetSimilarityState, initialRawSequences);
-			final List<JobState> currentSearchStates = getInitialSearchStates(initialRawSequences, initialUnusedCompulsarySlot, initialLateness, initialCapacity, initialPNL, changeSets, changes,
-					changeChecker);
-
-			final List<JobState> finalPopulation = new LinkedList<>();
-			final List<JobState> allLimitedStates = new LinkedList<>();
-			final boolean betterSolutionFound = false;
-			progressMonitor.beginTask("Generate Action Sets", 100);
-			int initialDepthLimitStart = 0;
-			int initialDepthLimitEnd = 3;
 			try {
-				while (!shouldTerminate(actionSetOptimisationData)) {
-					// bagMover.setDepthRange(initialDepthLimitStart, initialDepthLimitEnd);
-					depthStart = initialDepthLimitStart;
-					depthEnd = initialDepthLimitEnd;
-					actionSetOptimisationData.startNewRun();
-					final List<JobState> promisingLimitedStates = new LinkedList<>();
-					final List<List<JobState>> savedPopulations = new LinkedList<>();
+				// Prepare initial solution state
+				final IModifiableSequences initialFullSequences = sequencesManipulator.createManipulatedSequences(initialRawSequences);
 
-					// Find initial change set roots
-					final List<JobState> initialPopulation = addChangeSetLevel(targetSimilarityState, currentSearchStates, initialPopulationSize);
-					logInitialPopulation(initialPopulation);
-					allLimitedStates.addAll(initialPopulation);
-					if (initialPopulation.isEmpty()) {
-						initialDepthLimitStart = initialDepthLimitEnd;
-						initialDepthLimitEnd++;
-						continue;
-					}
+				final int changesCount = getChangedElements(targetSimilarityState, initialRawSequences).size();
+				if (DEBUG) {
+					// Debugging -- get initial change count
+					System.out.println("Initial changes " + changesCount);
+				}
 
-					if (DEBUG) {
-						System.out.println("initial pop");
-						printJobStates(initialPopulation);
-						System.out.println("evaluations [after initialPopulation] : " + actionSetOptimisationData.getTotalEvaluations());
-						System.out.println("constraint failed evaluations [after initialPopulation] : " + actionSetOptimisationData.actualConstraintEvaluations);
-						System.out.println("pnl failed evaluations [after initialPopulation] : " + actionSetOptimisationData.actualPNLEvaluations);
-					}
+				if (changesCount == 0) {
+					final List<NonNullPair<ISequences, Map<String, Object>>> processedSolution = new LinkedList<>();
 
-					for (final JobState root : initialPopulation) {
-						checkIfCancelled(progressMonitor);
-						if (shouldTerminate(actionSetOptimisationData)) {
-							break;
-						}
+					// Evaluate initial state.
+					// Return an evaluated state for ITS
+					processedSolution.add(evaluateSolution(initialRawSequences));
+
+					final IMultiStateResult r = new MultiStateResult(processedSolution.get(processedSolution.size() - 1), processedSolution);
+					return r;
+				}
+
+				final IEvaluationState initialEvaluationState = evaluateAndGetScheduledSequences(initialFullSequences);
+
+				assert initialEvaluationState != null;
+				final ProfitAndLossSequences initialVolumeAllocatedSequences = initialEvaluationState.getData(SchedulerEvaluationProcess.VOLUME_ALLOCATED_SEQUENCES, ProfitAndLossSequences.class);
+				assert initialVolumeAllocatedSequences != null;
+				final ProfitAndLossSequences initialProfitAndLossSequences = initialEvaluationState.getData(SchedulerEvaluationProcess.PROFIT_AND_LOSS_SEQUENCES, ProfitAndLossSequences.class);
+				assert initialProfitAndLossSequences != null;
+
+				final long initialUnusedCompulsarySlot = evaluationHelper.calculateUnusedCompulsarySlot(initialRawSequences);
+				final long initialLateness = evaluationHelper.calculateScheduleLateness(initialVolumeAllocatedSequences);
+				final long initialCapacity = evaluationHelper.calculateScheduleCapacity(initialVolumeAllocatedSequences);
+				final long initialPNL = evaluationHelper.calculateSchedulePNL(initialFullSequences, initialProfitAndLossSequences);
+				// Generate the initial set of changes, one level deep
+				final List<ChangeSet> changeSets = new LinkedList<>();
+				final List<Change> changes = new LinkedList<>();
+				final long time2 = System.currentTimeMillis();
+
+				if (actionSetLogger != null) {
+					actionSetLogger.setInitialPnL(initialPNL / Calculator.ScaleFactor);
+				}
+				targetSimilarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()] = initialLateness;
+				targetSimilarityState.getBaseMetrics()[MetricType.CAPACITY.ordinal()] = initialCapacity;
+				targetSimilarityState.getBaseMetrics()[MetricType.PNL.ordinal()] = initialPNL;
+				targetSimilarityState.getBaseMetrics()[MetricType.COMPULSARY_SLOT.ordinal()] = initialUnusedCompulsarySlot;
+
+				final ChangeChecker changeChecker = injector.getInstance(ChangeChecker.class);
+				changeChecker.init(null, targetSimilarityState, initialRawSequences);
+				final List<JobState> currentSearchStates = getInitialSearchStates(initialRawSequences, initialUnusedCompulsarySlot, initialLateness, initialCapacity, initialPNL, changeSets, changes,
+						changeChecker);
+
+				final List<JobState> finalPopulation = new LinkedList<>();
+				final List<JobState> allLimitedStates = new LinkedList<>();
+				final boolean betterSolutionFound = false;
+				progressMonitor.beginTask("Generate Action Sets", 100);
+				int initialDepthLimitStart = 0;
+				int initialDepthLimitEnd = 3;
+				try {
+					while (!shouldTerminate(actionSetOptimisationData)) {
+						// bagMover.setDepthRange(initialDepthLimitStart, initialDepthLimitEnd);
+						depthStart = initialDepthLimitStart;
+						depthEnd = initialDepthLimitEnd;
 						actionSetOptimisationData.startNewRun();
-						// main loop - search from a change set root. Will add LEAFs to finalPopulation
-						// and others to limitedStates
-						searchChangeSetRoot(progressMonitor, maxLeafs, targetSimilarityState, finalPopulation, promisingLimitedStates, allLimitedStates, savedPopulations, root);
-						if (DEBUG) {
-							System.out.println("evaluations [after rootNode] : " + actionSetOptimisationData.getTotalEvaluations());
-							System.out.println("constraint failed evaluations [after rootNode] : " + actionSetOptimisationData.actualConstraintEvaluations);
-							System.out.println("pnl failed evaluations [after rootNode] : " + actionSetOptimisationData.actualPNLEvaluations);
-						}
-						if (finalPopulation.size() > maxLeafs) { // Do not commit - move up
-							break;
-						}
-					}
+						final List<JobState> promisingLimitedStates = new LinkedList<>();
+						final List<List<JobState>> savedPopulations = new LinkedList<>();
 
-					checkIfCancelled(progressMonitor);
-					if (!shouldTerminate(actionSetOptimisationData)) {
-						for (final JobState promising : promisingLimitedStates) {
+						// Find initial change set roots
+						final List<JobState> initialPopulation = addChangeSetLevel(targetSimilarityState, currentSearchStates, initialPopulationSize, jobExecutor);
+						logInitialPopulation(initialPopulation);
+						allLimitedStates.addAll(initialPopulation);
+						if (initialPopulation.isEmpty()) {
+							initialDepthLimitStart = initialDepthLimitEnd;
+							initialDepthLimitEnd++;
+							continue;
+						}
+
+						if (DEBUG) {
+							System.out.println("initial pop");
+							printJobStates(initialPopulation);
+							System.out.println("evaluations [after initialPopulation] : " + actionSetOptimisationData.getTotalEvaluations());
+							System.out.println("constraint failed evaluations [after initialPopulation] : " + actionSetOptimisationData.actualConstraintEvaluations);
+							System.out.println("pnl failed evaluations [after initialPopulation] : " + actionSetOptimisationData.actualPNLEvaluations);
+						}
+
+						for (final JobState root : initialPopulation) {
+							checkIfCancelled(progressMonitor);
 							if (shouldTerminate(actionSetOptimisationData)) {
 								break;
 							}
 							actionSetOptimisationData.startNewRun();
-							finalPopulation.addAll(expandNode(promising, 250, targetSimilarityState));
-							actionSetOptimisationData.numberOfLeafs = finalPopulation.size();
+							// main loop - search from a change set root. Will add LEAFs to finalPopulation
+							// and others to limitedStates
+							searchChangeSetRoot(progressMonitor, maxLeafs, targetSimilarityState, finalPopulation, promisingLimitedStates, allLimitedStates, savedPopulations, root, jobExecutor);
+							if (DEBUG) {
+								System.out.println("evaluations [after rootNode] : " + actionSetOptimisationData.getTotalEvaluations());
+								System.out.println("constraint failed evaluations [after rootNode] : " + actionSetOptimisationData.actualConstraintEvaluations);
+								System.out.println("pnl failed evaluations [after rootNode] : " + actionSetOptimisationData.actualPNLEvaluations);
+							}
+							if (finalPopulation.size() > maxLeafs) { // Do not commit - move up
+								break;
+							}
 						}
-					}
-					if (DEBUG) {
-						System.out.println("evaluations [after expanding promising] : " + actionSetOptimisationData.getTotalEvaluations());
-						System.out.println("constraint failed evaluations [after expanding promising] : " + actionSetOptimisationData.actualConstraintEvaluations);
-						System.out.println("pnl failed evaluations [after expanding promising] : " + actionSetOptimisationData.actualPNLEvaluations);
-						System.out.println("LEAFS [after expanding promising] : " + actionSetOptimisationData.numberOfLeafs);
-					}
-					actionSetOptimisationData.startNewRun();
-					while (savedPopulations.size() > 0 && !shouldTerminate(actionSetOptimisationData) && !shouldTerminateInRun(actionSetOptimisationData)) {
+
 						checkIfCancelled(progressMonitor);
-						// main loop - search from a change set root. Will add LEAFs to finalPopulation
-						// and others to limitedStates
-						searchChangeSetPopulation(progressMonitor, maxLeafs, targetSimilarityState, finalPopulation, promisingLimitedStates, allLimitedStates, savedPopulations,
-								savedPopulations.remove(0));
+						if (!shouldTerminate(actionSetOptimisationData)) {
+							for (final JobState promising : promisingLimitedStates) {
+								if (shouldTerminate(actionSetOptimisationData)) {
+									break;
+								}
+								actionSetOptimisationData.startNewRun();
+								finalPopulation.addAll(expandNode(promising, 250, targetSimilarityState, jobExecutor));
+								actionSetOptimisationData.numberOfLeafs = finalPopulation.size();
+							}
+						}
 						if (DEBUG) {
-							System.out.println("evaluations [after savedPopulation] : " + actionSetOptimisationData.getTotalEvaluations());
-							System.out.println("constraint failed evaluations [after savedPopulation] : " + actionSetOptimisationData.actualConstraintEvaluations);
-							System.out.println("pnl failed evaluations [after savedPopulation] : " + actionSetOptimisationData.actualPNLEvaluations);
+							System.out.println("evaluations [after expanding promising] : " + actionSetOptimisationData.getTotalEvaluations());
+							System.out.println("constraint failed evaluations [after expanding promising] : " + actionSetOptimisationData.actualConstraintEvaluations);
+							System.out.println("pnl failed evaluations [after expanding promising] : " + actionSetOptimisationData.actualPNLEvaluations);
+							System.out.println("LEAFS [after expanding promising] : " + actionSetOptimisationData.numberOfLeafs);
 						}
-						if (finalPopulation.size() > maxLeafs) {
-							break;
+						actionSetOptimisationData.startNewRun();
+						while (savedPopulations.size() > 0 && !shouldTerminate(actionSetOptimisationData) && !shouldTerminateInRun(actionSetOptimisationData)) {
+							checkIfCancelled(progressMonitor);
+							// main loop - search from a change set root. Will add LEAFs to finalPopulation
+							// and others to limitedStates
+							searchChangeSetPopulation(progressMonitor, maxLeafs, targetSimilarityState, finalPopulation, promisingLimitedStates, allLimitedStates, savedPopulations,
+									savedPopulations.remove(0), jobExecutor);
+							if (DEBUG) {
+								System.out.println("evaluations [after savedPopulation] : " + actionSetOptimisationData.getTotalEvaluations());
+								System.out.println("constraint failed evaluations [after savedPopulation] : " + actionSetOptimisationData.actualConstraintEvaluations);
+								System.out.println("pnl failed evaluations [after savedPopulation] : " + actionSetOptimisationData.actualPNLEvaluations);
+							}
+							if (finalPopulation.size() > maxLeafs) {
+								break;
+							}
 						}
+						initialDepthLimitStart = initialDepthLimitEnd;
+						initialDepthLimitEnd++;
 					}
-					initialDepthLimitStart = initialDepthLimitEnd;
-					initialDepthLimitEnd++;
-				}
-				logLimiteds(allLimitedStates);
-				logFinalPopulation(finalPopulation);
-				/**
-				 * Add everything else if we couldn't finish
-				 */
-				if (finalPopulation.size() == 0 && allLimitedStates.size() > 0) {
-					final JobState bestSolution = reduceAndSortStatesTotalPNL(allLimitedStates).get(0);
-					final ChangeSet changeSet = new ChangeSet(new LinkedList<>());
-					changeSet.setRawSequences(targetRawSequences);
-					final List<ChangeSet> finalSolutionChangeSets = new LinkedList<>(bestSolution.changeSetsAsList);
-					finalSolutionChangeSets.add(changeSet);
-					final JobState finalSolution = new JobState(targetRawSequences, finalSolutionChangeSets, Collections.<Change>emptyList(), new LinkedList<>());
-					finalSolution.mode = JobStateMode.LEAF;
-					finalPopulation.add(finalSolution);
-					actionSetOptimisationData.numberOfLeafs = finalPopulation.size();
-				}
-
-				// TODO: Sort by changeset P&L and group size.
-				final List<JobState> sortedChangeStates = getSortedLeafStates(finalPopulation);
-				if (actionSetLogger != null) {
-					actionSetLogger.setSortedChangeStates(getSortedLeafStates(finalPopulation));
-				}
-
-				if (DEBUG) {
-					printPopulationInfo(sortedChangeStates);
-				}
-
-				if (!sortedChangeStates.isEmpty()) {
-					if (BUILD_DEPENDANCY_GRAPH) {
-						buildDependencyGraph(targetSimilarityState, initialRawSequences, sortedChangeStates);
+					logLimiteds(allLimitedStates);
+					logFinalPopulation(finalPopulation);
+					/**
+					 * Add everything else if we couldn't finish
+					 */
+					if (finalPopulation.size() == 0 && allLimitedStates.size() > 0) {
+						final JobState bestSolution = reduceAndSortStatesTotalPNL(allLimitedStates).get(0);
+						final ChangeSet changeSet = new ChangeSet(new LinkedList<>());
+						changeSet.setRawSequences(targetRawSequences);
+						final List<ChangeSet> finalSolutionChangeSets = new LinkedList<>(bestSolution.changeSetsAsList);
+						finalSolutionChangeSets.add(changeSet);
+						final JobState finalSolution = new JobState(targetRawSequences, finalSolutionChangeSets, Collections.<Change> emptyList(), new LinkedList<>());
+						finalSolution.mode = JobStateMode.LEAF;
+						finalPopulation.add(finalSolution);
+						actionSetOptimisationData.numberOfLeafs = finalPopulation.size();
 					}
-					processAndStoreBreakdownSolution(sortedChangeStates.get(0), initialRawSequences, bestFitness);
-				}
-				if (sortedChangeStates.isEmpty()) {
-					LOG.error("Unable to find action sets");
-				}
 
-			} catch (final InterruptedException e) {
-				e.printStackTrace();
-			} catch (final ExecutionException e) {
-				e.printStackTrace();
+					// TODO: Sort by changeset P&L and group size.
+					final List<JobState> sortedChangeStates = getSortedLeafStates(finalPopulation);
+					if (actionSetLogger != null) {
+						actionSetLogger.setSortedChangeStates(getSortedLeafStates(finalPopulation));
+					}
+
+					if (DEBUG) {
+						printPopulationInfo(sortedChangeStates);
+					}
+
+					if (!sortedChangeStates.isEmpty()) {
+						if (BUILD_DEPENDANCY_GRAPH) {
+							buildDependencyGraph(targetSimilarityState, initialRawSequences, sortedChangeStates);
+						}
+						processAndStoreBreakdownSolution(sortedChangeStates.get(0), initialRawSequences, bestFitness);
+					}
+					if (sortedChangeStates.isEmpty()) {
+						LOG.error("Unable to find action sets");
+					}
+
+				} catch (final InterruptedException e) {
+					e.printStackTrace();
+				} catch (final ExecutionException e) {
+					e.printStackTrace();
+				} catch (final Exception e) {
+					e.printStackTrace();
+				}
+				final long time3 = System.currentTimeMillis();
+
+				System.out.printf("AS: Setup time %d -- Search time %d\n", (time2 - time1) / 1000L, (time3 - time2) / 1000L);
+				logFinish();
+				return getBestSolution();
 			} catch (final Exception e) {
 				e.printStackTrace();
+				return null;
+			} finally {
+				progressMonitor.done();
 			}
-			final long time3 = System.currentTimeMillis();
-
-			System.out.printf("AS: Setup time %d -- Search time %d\n", (time2 - time1) / 1000L, (time3 - time2) / 1000L);
-			logFinish();
-			return getBestSolution();
-		} catch (final Exception e) {
-			e.printStackTrace();
-			return null;
-		} finally {
-			progressMonitor.done();
 		}
 	}
 
@@ -490,7 +481,7 @@ public class BagOptimiser {
 	}
 
 	private void searchChangeSetRoot(final ISimpleProgressMonitor progressMonitor, final int maxLeafs, final SimilarityState targetSimilarityState, final Collection<JobState> finalPopulation,
-			final Collection<JobState> promisingLimitedStates, final Collection<JobState> allLimitedStates, final List<List<JobState>> savedPopulations, final JobState root)
+			final Collection<JobState> promisingLimitedStates, final Collection<JobState> allLimitedStates, final List<List<JobState>> savedPopulations, final JobState root, JobExecutor jobExecutor)
 			throws InterruptedException, ExecutionException {
 		final long startTime = System.currentTimeMillis();
 		final int startConstraintEvals = actionSetOptimisationData.actualConstraintEvaluations;
@@ -511,7 +502,7 @@ public class BagOptimiser {
 				if (DEBUG) {
 					System.out.println("--------------------------- root ----------------- " + (rootIndex++));
 				}
-				final List<JobState> returnedPopulation = addChangeSetLevel(targetSimilarityState, states, 10);
+				final List<JobState> returnedPopulation = addChangeSetLevel(targetSimilarityState, states, 10, jobExecutor);
 				if (returnedPopulation.size() == 0) {
 					savedPopulations.add(states);
 					bestPopulation.addAll(states);
@@ -543,7 +534,7 @@ public class BagOptimiser {
 		if (actionSetLogger != null) {
 			final int leafs = getLeafs(bestPopulation).size();
 			final JobState best = getBestSolutionForLogger(bestPopulation);
-			List<Difference> diffs = Collections.<Difference>emptyList();
+			List<Difference> diffs = Collections.<Difference> emptyList();
 			if (best != null) {
 				Collections.sort(bestPopulation, new Comparator<JobState>() {
 					@Override
@@ -606,8 +597,8 @@ public class BagOptimiser {
 	}
 
 	private void searchChangeSetPopulation(final ISimpleProgressMonitor progressMonitor, final int maxLeafs, final SimilarityState targetSimilarityState, final Collection<JobState> finalPopulation,
-			final Collection<JobState> promisingLimitedStates, final Collection<JobState> allLimitedStates, final List<List<JobState>> savedPopulations, final List<JobState> population)
-			throws InterruptedException, ExecutionException {
+			final Collection<JobState> promisingLimitedStates, final Collection<JobState> allLimitedStates, final List<List<JobState>> savedPopulations, final List<JobState> population,
+			JobExecutor jobExecutor) throws InterruptedException, ExecutionException {
 		int rootIndex = 0;
 		List<JobState> states = new LinkedList<>(population);
 		while (!foundLeaf(states) && states.size() != 0) {
@@ -615,7 +606,7 @@ public class BagOptimiser {
 			if (DEBUG) {
 				System.out.println("--------------------------- root ----------------- " + (rootIndex++));
 			}
-			final List<JobState> returnedPopulation = addChangeSetLevel(targetSimilarityState, states, 10);
+			final List<JobState> returnedPopulation = addChangeSetLevel(targetSimilarityState, states, 10, jobExecutor);
 			if (returnedPopulation.size() == 0) {
 				savedPopulations.add(states);
 			}
@@ -633,19 +624,20 @@ public class BagOptimiser {
 		actionSetOptimisationData.numberOfLeafs = finalPopulation.size();
 	}
 
-	List<JobState> addChangeSetLevel(final SimilarityState targetSimilarityState, final List<JobState> currentStates, final int maxStates) throws InterruptedException, ExecutionException {
+	List<JobState> addChangeSetLevel(final SimilarityState targetSimilarityState, final List<JobState> currentStates, final int maxStates, JobExecutor jobExecutor)
+			throws InterruptedException, ExecutionException {
 		List<JobState> states = new LinkedList<>(currentStates);
 		if (states.isEmpty()) {
 			return states;
 		}
-		List<JobState> fullChangesSets = findChangeSets(targetSimilarityState, states, maxStates, depthStart, depthEnd);
+		List<JobState> fullChangesSets = findChangeSets(targetSimilarityState, states, maxStates, depthStart, depthEnd, jobExecutor);
 		int retryCount = 0;
 		while (fullChangesSets.size() == 0) {
 			states = new LinkedList<>();
 			for (int i = 0; i < retrySearchSize; i++) {
 				states.add(new JobState(currentStates.get(rdm.nextInt(currentStates.size()))));
 			}
-			fullChangesSets = findChangeSets(targetSimilarityState, states, maxStates, depthStart, depthEnd);
+			fullChangesSets = findChangeSets(targetSimilarityState, states, maxStates, depthStart, depthEnd, jobExecutor);
 			++retryCount;
 			if (DEBUG) {
 				System.out.println("retry:" + (retryCount));
@@ -763,14 +755,14 @@ public class BagOptimiser {
 		return promising;
 	}
 
-	private Collection<JobState> expandNode(final JobState node, final int initialIterations, final SimilarityState targetSimilarityState) {
+	private Collection<JobState> expandNode(final JobState node, final int initialIterations, final SimilarityState targetSimilarityState, JobExecutor jobExecutor) {
 		List<JobState> states = new LinkedList<>();
 		for (int i = 0; i < initialIterations; i++) {
 			states.add(new JobState(node));
 		}
 		try {
 			while (!foundLeaf(states) && states.size() != 0) {
-				states = addChangeSetLevel(targetSimilarityState, states, 10);
+				states = addChangeSetLevel(targetSimilarityState, states, 10, jobExecutor);
 			}
 		} catch (final Exception e) {
 			assert false;
@@ -862,9 +854,9 @@ public class BagOptimiser {
 	}
 
 	@NonNull
-	List<JobState> findChangeSets(@NonNull final SimilarityState similarityState, final List<JobState> currentStates, final int maxStates, final int depthStart, final int depthEnd)
-			throws InterruptedException, ExecutionException {
-		final Collection<JobState> states = runJobs(similarityState, currentStates, null, depthStart, depthEnd);
+	List<JobState> findChangeSets(@NonNull final SimilarityState similarityState, final List<JobState> currentStates, final int maxStates, final int depthStart, final int depthEnd,
+			JobExecutor jobExecutor) throws InterruptedException, ExecutionException {
+		final Collection<JobState> states = runJobs(similarityState, currentStates, null, depthStart, depthEnd, jobExecutor);
 		List<JobState> reducedStates = reduceAndSortStatesMetric(states);
 		if (DEBUG) {
 			int order = 0;
@@ -973,12 +965,12 @@ public class BagOptimiser {
 	}
 
 	@NonNull
-	protected Collection<JobState> runJobs(@NonNull final SimilarityState similarityState, final List<JobState> sortedJobStates, final JobStore jobStore, final int depthStart, final int depthEnd)
-			throws InterruptedException {
+	protected Collection<JobState> runJobs(@NonNull final SimilarityState similarityState, final List<JobState> sortedJobStates, final JobStore jobStore, final int depthStart, final int depthEnd,
+			JobExecutor jobExectuor) throws InterruptedException {
 		// Create a batcher, which produces small batches of jobs that we can then
 		// spread among cores
 		// but keep the progress log accurate and maintain repeatablility
-		final JobBatcher jobBatcher = new JobBatcher(executorService, sortedJobStates, 100, depthStart, depthEnd);
+		final JobBatcher jobBatcher = new JobBatcher(jobExectuor, sortedJobStates, 100, depthStart, depthEnd);
 
 		final List<JobState> states = new LinkedList<>();
 		List<Future<Collection<JobState>>> futures;

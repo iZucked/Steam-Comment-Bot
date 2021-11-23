@@ -67,9 +67,9 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 @SuppressWarnings({ "unused", "null" })
 @ExtendWith(ShiroRunner.class)
 public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCase {
-	
+
 	protected static final String TEST_CHARTER_CURVE_NAME = "TestCharterCurve";
-	
+
 	@Override
 	protected int getThreadCount() {
 		return 4;
@@ -78,21 +78,18 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 	@Override
 	public IScenarioDataProvider importReferenceData() throws Exception {
 		return importReferenceData("/referencedata/reference-data-2/");
-	}	
-	
+	}
+
 	@BeforeEach
 	public void setSimpleDistances() {
 		distanceModelBuilder.setAllDistances(RouteOption.DIRECT, 1000.0);
 	}
-	
+
 	protected CharterCurve createCharterPriceCurve() {
-		return pricingModelBuilder.makeCharterDataCurve(TEST_CHARTER_CURVE_NAME, "$", "mmBtu") 
-				.addIndexPoint(YearMonth.of(2015, 12), 100000) 
-				.addIndexPoint(YearMonth.of(2016, 1), 500000) 
-				.addIndexPoint(YearMonth.of(2016, 2), 1000000)
-				.build();
+		return pricingModelBuilder.makeCharterDataCurve(TEST_CHARTER_CURVE_NAME, "$", "mmBtu").addIndexPoint(YearMonth.of(2015, 12), 100000).addIndexPoint(YearMonth.of(2016, 1), 500000)
+				.addIndexPoint(YearMonth.of(2016, 2), 1000000).build();
 	}
-	
+
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testMultipleHubsFindCheapest() throws Exception {
@@ -124,7 +121,8 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
 				.build();
 
-		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8)//
+		final LoadSlot load_FOB1 = cargoModelBuilder
+				.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8)//
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.build();
 		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
@@ -135,14 +133,14 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo.setVesselAssignmentType(vesselAvailability);
 		Port portSakai = portFinder.findPortById(InternalDataConstants.PORT_SAKAI);
-		
+
 		YearMonth[] yms = new YearMonth[] { YearMonth.of(2015, 12), YearMonth.of(2016, 1), YearMonth.of(2016, 2) };
 		NextPortType[] nextPortTypes = new NextPortType[] { NextPortType.NEAREST_HUB, NextPortType.NEAREST_HUB, NextPortType.NEAREST_HUB };
 		String[] pctFuelRates = new String[] { "10", "75", "0" };
 		String[] pctCharterRates = new String[] { "25", "0", "95" };
 		final GenericCharterContract ballastBonusContract = this.createMonthlyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))),
-				20.0, "20000", "100", true, false, Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY), portFinder.findPortById(InternalDataConstants.PORT_YUNG_AN)),
-				 yms, nextPortTypes, pctFuelRates, pctCharterRates);
+				20.0, "20000", "100", true, false, Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY), portFinder.findPortById(InternalDataConstants.PORT_YUNG_AN)), yms,
+				nextPortTypes, pctFuelRates, pctCharterRates);
 		vesselAvailability.setGenericCharterContract(ballastBonusContract);
 
 		evaluateTest(null, null, scenarioRunner -> {
@@ -157,9 +155,10 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 
 			final List<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
 			final EndEvent end = getEndEvent(vesselAvailability);
-			
-			// -distance/(hoursInDay*speed)*pctCharterRate*hireExpression (for February 2016 value)
-			final long endEventPNL = (long) (-1000/(24*20.0)*0.95*20_000);
+
+			// -distance/(hoursInDay*speed)*pctCharterRate*hireExpression (for February 2016
+			// value)
+			final long endEventPNL = (long) (-1000 / (24 * 20.0) * 0.95 * 20_000);
 			final long actualPnL = end.getGroupProfitAndLoss().getProfitAndLoss();
 			Assertions.assertEquals(endEventPNL, actualPnL);
 			Assertions.assertEquals(cargoPNL + endEventPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
@@ -196,22 +195,18 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 				.withStartWindow(LocalDateTime.of(2015, 11, 2, 0, 0, 0, 0), LocalDateTime.of(2015, 11, 6, 0, 0, 0, 0))//
 				.withEndWindow(LocalDateTime.of(2016, 4, 6, 0, 0, 0, 0))//
 				.build();
-		
-		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase1", LocalDate.of(2015, 11, 5), 
-				portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8)//
+
+		final LoadSlot load_FOB1 = cargoModelBuilder
+				.makeFOBPurchase("FOB_Purchase1", LocalDate.of(2015, 11, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8)//
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.build();
-		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale1", LocalDate.of(2016, 1, 5), 
-				portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
+		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale1", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
 
-		final LoadSlot load_FOB2 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase2", LocalDate.of(2016, 2, 5), 
-				portFinder.findPortById(InternalDataConstants.PORT_DARWIN), null, entity, "5", 22.8)//
+		final LoadSlot load_FOB2 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase2", LocalDate.of(2016, 2, 5), portFinder.findPortById(InternalDataConstants.PORT_DARWIN), null, entity, "5", 22.8)//
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.build();
-		final DischargeSlot discharge_DES2 = cargoModelBuilder.makeDESSale("DES_Sale2", LocalDate.of(2016, 3, 5), 
-				portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
+		final DischargeSlot discharge_DES2 = cargoModelBuilder.makeDESSale("DES_Sale2", LocalDate.of(2016, 3, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
 
-		
 		final CapabilityGroup allDischarge = portFinder.getPortModel().getSpecialPortGroups().stream().filter(p -> p.getName().equals("All DISCHARGE Ports")).findFirst().get();
 		vesselAvailability.getEndAt().add(allDischarge);
 		@NonNull
@@ -220,17 +215,18 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 
 		cargo.setVesselAssignmentType(vesselAvailability);
 		cargo2.setVesselAssignmentType(vesselAvailability);
-		
+
 		YearMonth[] yms = new YearMonth[] { YearMonth.of(2015, 11), YearMonth.of(2015, 12), YearMonth.of(2016, 1), YearMonth.of(2016, 2) };
 		NextPortType[] nextPortTypes = new NextPortType[] { NextPortType.LOAD_PORT, NextPortType.LOAD_PORT, NextPortType.LOAD_PORT, NextPortType.LOAD_PORT };
 		String[] pctFuelRates = new String[] { "100", "10", "75", "0" };
 		String[] pctCharterRates = new String[] { "100", "25", "0", "95" };
 		final GenericCharterContract ballastBonusContract = this.createMonthlyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))),
-				20.0, "20000", "100", true, false, Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY), portFinder.findPortById(InternalDataConstants.PORT_YUNG_AN)),
-				 yms, nextPortTypes, pctFuelRates, pctCharterRates);
+				20.0, "20000", "100", true, false, Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY), portFinder.findPortById(InternalDataConstants.PORT_YUNG_AN)), yms,
+				nextPortTypes, pctFuelRates, pctCharterRates);
 		vesselAvailability.setContainedCharterContract(ballastBonusContract);
 
-		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
+		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in
+		// period.
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
@@ -252,38 +248,33 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 				.withThreadCount(1)//
 				.withOptimiseHint() //
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
 
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
+		runner.evaluateInitialState();
 
-			final LNGScenarioModel scenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
+		final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = runner.getScenarioRunner().getScenarioToOptimiserBridge();
 
-			final @Nullable Schedule schedule = runner.getScenarioRunner().getSchedule();
-			assert schedule != null;
+		final LNGScenarioModel scenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
 
-			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(cargo.getLoadName(), schedule);
-			Assertions.assertNotNull(cargoAllocation);
-			final CargoAllocation cargoAllocation2 = ScheduleTools.findCargoAllocation(cargo2.getLoadName(), schedule);
-			Assertions.assertNotNull(cargoAllocation2);
+		final @Nullable Schedule schedule = runner.getScenarioRunner().getSchedule();
+		assert schedule != null;
 
-			final long cargoPNL = cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss() +
-					cargoAllocation2.getGroupProfitAndLoss().getProfitAndLoss();
+		final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(cargo.getLoadName(), schedule);
+		Assertions.assertNotNull(cargoAllocation);
+		final CargoAllocation cargoAllocation2 = ScheduleTools.findCargoAllocation(cargo2.getLoadName(), schedule);
+		Assertions.assertNotNull(cargoAllocation2);
 
-			final List<SlotAllocation> slotAllocations = schedule.getSlotAllocations();
-			final EndEvent end = getEndEvent(vesselAvailability);
-			
-			final long endEventPNL = -62_499;
-			final long actualPnL = end.getGroupProfitAndLoss().getProfitAndLoss();
+		final long cargoPNL = cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss() + cargoAllocation2.getGroupProfitAndLoss().getProfitAndLoss();
 
-			System.out.println("Actual PnL period opti = " + actualPnL);
-			Assertions.assertEquals(endEventPNL, actualPnL);
-			Assertions.assertEquals(cargoPNL + endEventPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
-		} finally {
-			runner.dispose();
-		}
+		final List<SlotAllocation> slotAllocations = schedule.getSlotAllocations();
+		final EndEvent end = getEndEvent(vesselAvailability);
+
+		final long endEventPNL = -62_499;
+		final long actualPnL = end.getGroupProfitAndLoss().getProfitAndLoss();
+
+		System.out.println("Actual PnL period opti = " + actualPnL);
+		Assertions.assertEquals(endEventPNL, actualPnL);
+		Assertions.assertEquals(cargoPNL + endEventPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 	}
-
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
@@ -315,20 +306,17 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 				.withStartWindow(LocalDateTime.of(2015, 11, 2, 0, 0, 0, 0), LocalDateTime.of(2015, 11, 6, 0, 0, 0, 0))//
 				.withEndWindow(LocalDateTime.of(2016, 4, 6, 0, 0, 0, 0))//
 				.build();
-		
-		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase1", LocalDate.of(2015, 11, 5), 
-				portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8)//
-				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
-				.build();
-		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale1", LocalDate.of(2016, 1, 5), 
-				portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
 
-		final LoadSlot load_FOB2 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase2", LocalDate.of(2016, 2, 5), 
-				portFinder.findPortById(InternalDataConstants.PORT_DARWIN), null, entity, "5", 22.8)//
+		final LoadSlot load_FOB1 = cargoModelBuilder
+				.makeFOBPurchase("FOB_Purchase1", LocalDate.of(2015, 11, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8)//
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.build();
-		final DischargeSlot discharge_DES2 = cargoModelBuilder.makeDESSale("DES_Sale2", LocalDate.of(2016, 3, 5), 
-				portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
+		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale1", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
+
+		final LoadSlot load_FOB2 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase2", LocalDate.of(2016, 2, 5), portFinder.findPortById(InternalDataConstants.PORT_DARWIN), null, entity, "5", 22.8)//
+				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
+				.build();
+		final DischargeSlot discharge_DES2 = cargoModelBuilder.makeDESSale("DES_Sale2", LocalDate.of(2016, 3, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
 
 		final CapabilityGroup allDischarge = portFinder.getPortModel().getSpecialPortGroups().stream().filter(p -> p.getName().equals("All DISCHARGE Ports")).findFirst().get();
 		vesselAvailability.getEndAt().add(allDischarge);
@@ -339,14 +327,14 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 		cargo.setVesselAssignmentType(vesselAvailability);
 		cargo2.setVesselAssignmentType(vesselAvailability);
 		Port portSakai = portFinder.findPortById(InternalDataConstants.PORT_SAKAI);
-		
+
 		YearMonth[] yms = new YearMonth[] { YearMonth.of(2015, 11), YearMonth.of(2015, 12), YearMonth.of(2016, 1), YearMonth.of(2016, 2) };
 		NextPortType[] nextPortTypes = new NextPortType[] { NextPortType.LOAD_PORT, NextPortType.LOAD_PORT, NextPortType.LOAD_PORT, NextPortType.LOAD_PORT };
 		String[] pctFuelRates = new String[] { "100", "10", "75", "0" };
 		String[] pctCharterRates = new String[] { "100", "25", "0", "95" };
 		final GenericCharterContract ballastBonusContract = this.createMonthlyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))),
-				20.0, "20000", "100", true, false, Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY), portFinder.findPortById(InternalDataConstants.PORT_YUNG_AN)),
-				 yms, nextPortTypes, pctFuelRates, pctCharterRates);
+				20.0, "20000", "100", true, false, Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY), portFinder.findPortById(InternalDataConstants.PORT_YUNG_AN)), yms,
+				nextPortTypes, pctFuelRates, pctCharterRates);
 		vesselAvailability.setGenericCharterContract(ballastBonusContract);
 
 		evaluateTest(null, null, scenarioRunner -> {
@@ -359,19 +347,18 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 			final CargoAllocation cargoAllocation2 = ScheduleTools.findCargoAllocation(cargo2.getLoadName(), schedule);
 			Assertions.assertNotNull(cargoAllocation2);
 
-			final long cargoPNL = cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss() +
-					cargoAllocation2.getGroupProfitAndLoss().getProfitAndLoss();
+			final long cargoPNL = cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss() + cargoAllocation2.getGroupProfitAndLoss().getProfitAndLoss();
 
 			final List<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
 			final EndEvent end = getEndEvent(vesselAvailability);
-			
+
 			final long endEventPNL = -62_499;
 			final long actualPnL = end.getGroupProfitAndLoss().getProfitAndLoss();
 			Assertions.assertEquals(endEventPNL, actualPnL);
 			Assertions.assertEquals(cargoPNL + endEventPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
-		});		
-	}	
-	
+		});
+	}
+
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testPastCurvesDate() throws Exception {
@@ -402,7 +389,8 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
 				.build();
 
-		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8)//
+		final LoadSlot load_FOB1 = cargoModelBuilder
+				.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8)//
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.build();
 		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
@@ -419,8 +407,8 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 		String[] pctFuelRates = new String[] { "10", "75", "100" };
 		String[] pctCharterRates = new String[] { "25", "0", "100" };
 		final GenericCharterContract ballastBonusContract = this.createMonthlyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))),
-				20.0, "20000", "100", true, false, Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY), portFinder.findPortById(InternalDataConstants.PORT_YUNG_AN)),
-				yms, nextPortTypes, pctFuelRates, pctCharterRates);
+				20.0, "20000", "100", true, false, Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY), portFinder.findPortById(InternalDataConstants.PORT_YUNG_AN)), yms,
+				nextPortTypes, pctFuelRates, pctCharterRates);
 		vesselAvailability.setGenericCharterContract(ballastBonusContract);
 
 		evaluateTest(null, null, scenarioRunner -> {
@@ -443,15 +431,13 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 		});
 	}
 
-	
 	public @NonNull GenericCharterContract createMonthlyBallastBonusContract(final @NonNull Collection<@NonNull APortSet<Port>> redeliveryPorts, final double speed,
 			final @NonNull String hireExpression, final @NonNull String fuelExpression, final boolean includeCanalFees, final boolean includeCanalTime,
-			final @NonNull Collection<@NonNull APortSet<Port>> returnPorts,
-			YearMonth[] months, NextPortType[] nextPortTypes, String[] pctFuelRates, String[] pctCharterRates) {
+			final @NonNull Collection<@NonNull APortSet<Port>> returnPorts, YearMonth[] months, NextPortType[] nextPortTypes, String[] pctFuelRates, String[] pctCharterRates) {
 		final GenericCharterContract ballastBonusContract = CommercialFactory.eINSTANCE.createGenericCharterContract();
 		final MonthlyBallastBonusContainer container = CommercialFactory.eINSTANCE.createMonthlyBallastBonusContainer();
 		container.getHubs().addAll(returnPorts);
-		
+
 		for (int i = 0; i < months.length; i++) {
 			final MonthlyBallastBonusTerm monthlyBBLine = CommercialFactory.eINSTANCE.createMonthlyBallastBonusTerm();
 			YearMonth ym = months[i];
@@ -470,7 +456,7 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 			monthlyBBLine.setIncludeCanal(includeCanalFees);
 			monthlyBBLine.setIncludeCanalTime(includeCanalTime);
 			monthlyBBLine.setSpeed(speed);
-			
+
 			container.getTerms().add(monthlyBBLine);
 		}
 		ballastBonusContract.setBallastBonusTerms(container);
@@ -478,7 +464,6 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 		return ballastBonusContract;
 	}
 
-	
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void testReturnToLoadPort() throws Exception {
@@ -510,7 +495,8 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
 				.build();
 
-		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8)//
+		final LoadSlot load_FOB1 = cargoModelBuilder
+				.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8)//
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.build();
 		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
@@ -521,14 +507,14 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo.setVesselAssignmentType(vesselAvailability);
 		Port portSakai = portFinder.findPortById(InternalDataConstants.PORT_SAKAI);
-		
+
 		YearMonth[] yms = new YearMonth[] { YearMonth.of(2015, 9), YearMonth.of(2015, 10), YearMonth.of(2015, 11) };
 		NextPortType[] nextPortTypes = new NextPortType[] { NextPortType.LOAD_PORT, NextPortType.LOAD_PORT, NextPortType.LOAD_PORT };
 		String[] pctFuelRates = new String[] { "10", "75", "100" };
 		String[] pctCharterRates = new String[] { "25", "0", "100" };
 		final GenericCharterContract ballastBonusContract = this.createMonthlyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))),
-				20.0, "20000", "100", true, false, Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY), portFinder.findPortById(InternalDataConstants.PORT_YUNG_AN)),
-				 yms, nextPortTypes, pctFuelRates, pctCharterRates);
+				20.0, "20000", "100", true, false, Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY), portFinder.findPortById(InternalDataConstants.PORT_YUNG_AN)), yms,
+				nextPortTypes, pctFuelRates, pctCharterRates);
 		vesselAvailability.setGenericCharterContract(ballastBonusContract);
 
 		evaluateTest(null, null, scenarioRunner -> {
@@ -543,7 +529,7 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 
 			final List<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
 			final EndEvent end = getEndEvent(vesselAvailability);
-			
+
 			final long endEventPNL = -62_499;
 			final long actualPnL = end.getGroupProfitAndLoss().getProfitAndLoss();
 			Assertions.assertEquals(endEventPNL, actualPnL);
@@ -582,7 +568,8 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 				.withEndWindow(LocalDateTime.of(2016, 2, 6, 0, 0, 0, 0))//
 				.build();
 
-		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8)//
+		final LoadSlot load_FOB1 = cargoModelBuilder
+				.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8)//
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.build();
 		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
@@ -593,14 +580,14 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo.setVesselAssignmentType(vesselAvailability);
 		Port portSakai = portFinder.findPortById(InternalDataConstants.PORT_SAKAI);
-		
+
 		YearMonth[] yms = new YearMonth[] { YearMonth.of(2015, 9), YearMonth.of(2015, 10), YearMonth.of(2015, 11) };
 		NextPortType[] nextPortTypes = new NextPortType[] { NextPortType.LOAD_PORT, NextPortType.LOAD_PORT, NextPortType.NEAREST_HUB };
 		String[] pctFuelRates = new String[] { "10", "75", "100" };
 		String[] pctCharterRates = new String[] { "25", "0", "100" };
 		final GenericCharterContract ballastBonusContract = this.createMonthlyBallastBonusContract(Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))),
-				20.0, "20000", "100", true, false, Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY), portFinder.findPortById(InternalDataConstants.PORT_YUNG_AN)),
-				 yms, nextPortTypes, pctFuelRates, pctCharterRates);
+				20.0, "20000", "100", true, false, Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY), portFinder.findPortById(InternalDataConstants.PORT_YUNG_AN)), yms,
+				nextPortTypes, pctFuelRates, pctCharterRates);
 		vesselAvailability.setGenericCharterContract(ballastBonusContract);
 
 		evaluateTest(null, null, scenarioRunner -> {
@@ -615,14 +602,14 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 
 			final List<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
 			final EndEvent end = getEndEvent(vesselAvailability);
-			
+
 			final long endEventPNL = -62_499;
 			final long actualPnL = end.getGroupProfitAndLoss().getProfitAndLoss();
 			Assertions.assertEquals(endEventPNL, actualPnL);
 			Assertions.assertEquals(cargoPNL + endEventPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 		});
 	}
-	
+
 	private StartEvent getStartEvent(final VesselAvailability vesselAvailability) {
 		final Sequence sequence = lngScenarioModel.getScheduleModel().getSchedule().getSequences().stream().filter(s -> s.getVesselAvailability().equals(vesselAvailability)).findFirst().get();
 		final Event event = sequence.getEvents().get(0);

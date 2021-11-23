@@ -3,16 +3,16 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.mmxlabs.jobmanager</groupId>
-	<artifactId>com.mmxlabs.jobmanager.parent</artifactId>
-	<version>4.12.50-SNAPSHOT</version>
-	<packaging>pom</packaging>
 
 	<parent>
 		<groupId>com.mmxlabs.lingo.master</groupId>
 		<artifactId>com.mmxlabs.lingo.master.parent</artifactId>
-		<version>4.12.50-SNAPSHOT</version>
+		<version>4.13.4-SNAPSHOT</version>
 	</parent>
+
+	<groupId>com.mmxlabs.jobmanager</groupId>
+	<artifactId>com.mmxlabs.jobmanager.parent</artifactId>
+	<packaging>pom</packaging>
 
 	<modules>
 		<module>com.mmxlabs.jobmanager</module>
@@ -23,49 +23,4 @@
 
 		<module>com.mmxlabs.jobmanager.tests</module>
 	</modules>
-
-	<build>
-		<plugins>
-
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-maven-plugin</artifactId>
-				<!-- Enable tycho packaging types -->
-				<extensions>true</extensions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>target-platform-configuration</artifactId>
-				<configuration>
-					<resolver>p2</resolver>
-
-					<target>
-						<artifact>
-							<groupId>com.mmxlabs.lingo.common.target</groupId>
-							<artifactId>com.mmxlabs.lingo.common.target-definition</artifactId>
-							<version>${project.version}</version>
-						</artifact>
-					</target>
-
-
-					<environments>
-
-						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
-							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86_64</arch>
-						</environment>
-					</environments>
-				</configuration>
-			</plugin>
-		</plugins>
-
-	</build>
-
 </project>
