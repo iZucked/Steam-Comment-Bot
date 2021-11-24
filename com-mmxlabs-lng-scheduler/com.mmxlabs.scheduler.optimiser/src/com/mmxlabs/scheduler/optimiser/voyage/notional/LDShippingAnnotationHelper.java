@@ -10,6 +10,7 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
 import com.mmxlabs.scheduler.optimiser.voyage.LNGFuelKeys;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -108,7 +109,7 @@ public class LDShippingAnnotationHelper {
 
 		shippingAnnotation.ballastRoute = ballastLeg.getOptions().getRoute();
 		shippingAnnotation.ballastDistance = ballastLeg.getOptions().getDistance();
-		shippingAnnotation.ballastHireHours = ballastLeg.getTravelTime() + ballastLeg.getIdleTime() + ballastLeg.getPurgeDuration();
+		shippingAnnotation.ballastHireHours = ballastLeg.getTravelTime() + ballastLeg.getIdleTime() + ballastLeg.getOptions().getExtraIdleTime(ExplicitIdleTime.PURGE);
 		shippingAnnotation.ballastSpeed = ballastLeg.getSpeed();
 		shippingAnnotation.ballastCanalCosts = ballastLeg.getOptions().getRouteCost();
 

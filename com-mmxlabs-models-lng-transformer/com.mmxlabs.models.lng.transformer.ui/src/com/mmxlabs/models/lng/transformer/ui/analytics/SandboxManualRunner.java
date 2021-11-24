@@ -166,6 +166,7 @@ public class SandboxManualRunner {
 			final List<BaseCase> tasks = new LinkedList<>();
 			recursiveTaskCreator(0, combinations, model, templateBaseCase, tasks);
 			filterTasks(tasks);
+
 			if (tasks.isEmpty()) {
 				if (System.getProperty("lingo.suppress.dialogs") == null) {
 
@@ -202,7 +203,6 @@ public class SandboxManualRunner {
 	}
 
 	private boolean checkSequenceSatifiesConstraints(final @NonNull LNGDataTransformer dataTransformer, final @NonNull ISequences rawSequences) {
-
 		final ModifiableSequences emptySequences = new ModifiableSequences(new LinkedList<>());
 
 		final LNGEvaluationTransformerUnit evaluationTransformerUnit = new LNGEvaluationTransformerUnit(dataTransformer, emptySequences, emptySequences, dataTransformer.getHints());

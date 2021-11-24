@@ -65,6 +65,8 @@ public class IdleComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_ladenEditor(detailComposite, topClass);
+		add_bufferHoursEditor(detailComposite, topClass);
+		add_panamaHoursEditor(detailComposite, topClass);
 		add_contingencyHoursEditor(detailComposite, topClass);
 	}
 
@@ -75,6 +77,24 @@ public class IdleComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_ladenEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.IDLE__LADEN));
+	}
+
+	/**
+	 * Create the editor for the bufferHours feature on Idle
+	 *
+	 * @generated
+	 */
+	protected void add_bufferHoursEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.IDLE__BUFFER_HOURS));
+	}
+
+	/**
+	 * Create the editor for the panamaHours feature on Idle
+	 *
+	 * @generated
+	 */
+	protected void add_panamaHoursEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.IDLE__PANAMA_HOURS));
 	}
 
 	/**

@@ -14,11 +14,16 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
- * A small class storing the port arrival time and visit duration for a {@link VoyagePlan}. This class may or may not include the times for the last element in the plan depending on how it is created.
- * For scheduling purposes the end element should be included. Often for pricing purposes the end element can be ignored.
+ * A small class storing the port arrival time and visit duration for a
+ * {@link VoyagePlan}. This class may or may not include the times for the last
+ * element in the plan depending on how it is created. For scheduling purposes
+ * the end element should be included. Often for pricing purposes the end
+ * element can be ignored.
  * 
- * Note, the order slots are added is important. They should be added in scheduled order. The calls to {@link #getFirstSlotTime()} and {@link #getFirstSlot()} are expected to be bound the first slot
- * added to the instance.
+ * Note, the order slots are added is important. They should be added in
+ * scheduled order. The calls to {@link #getFirstSlotTime()} and
+ * {@link #getFirstSlot()} are expected to be bound the first slot added to the
+ * instance.
  * 
  * @author Simon Goodall
  * 
@@ -36,11 +41,13 @@ public interface IPortTimesRecord {
 
 	int getSlotTime(IPortSlot slot);
 
-	int getSlotExtraIdleTime(IPortSlot slot);
+	int getSlotExtraIdleTime(IPortSlot slot, ExplicitIdleTime type);
+
+	int getSlotTotalExtraIdleTime(IPortSlot slot);
 
 	void setSlotTime(IPortSlot slot, int time);
 
-	void setSlotExtraIdleTime(IPortSlot slot, int time);
+	void setSlotExtraIdleTime(IPortSlot slot, ExplicitIdleTime type, int time);
 
 	int getSlotDuration(IPortSlot slot);
 

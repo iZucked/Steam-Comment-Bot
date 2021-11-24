@@ -327,7 +327,7 @@ public class PNLBasedWindowTrimmerUtils {
 						int speed = minSpeed;
 
 						final int baseTime = lastSlotArrivalTime + ptwr.getSlotDuration(fromPortSlot) //
-								+ ptwr.getSlotExtraIdleTime(fromPortSlot) //
+								+ ptwr.getSlotTotalExtraIdleTime(fromPortSlot) //
 								+ routeCostProvider.getRouteTransitTime(dme.getRoute(), vessel);
 
 						// Window bounds will be taken care of later.
@@ -405,7 +405,7 @@ public class PNLBasedWindowTrimmerUtils {
 						final int nbotravelTime = ptwr.getSlotDuration(fromPortSlot) //
 								+ Calculator.getTimeFromSpeedDistance(nboSpeed, dme.getDistance()) //
 								+ routeCostProvider.getRouteTransitTime(dme.getRoute(), vessel) //
-								+ ptwr.getSlotExtraIdleTime(fromPortSlot) //
+								+ ptwr.getSlotTotalExtraIdleTime(fromPortSlot) //
 						;
 
 						final int t = lastSlotArrivalTime;
@@ -578,7 +578,7 @@ public class PNLBasedWindowTrimmerUtils {
 								final int maxSpeedTravelTime = (distanceFromCanal == 0) ? 0 : Calculator.getTimeFromSpeedDistance(vessel.getMaxSpeed(), distanceFromCanal);
 
 								final int transitTime = routeCostProvider.getRouteTransitTime(dme.getRoute(), vessel);
-								final int extraIdleTime = record.getSlotExtraIdleTime(lastSlot);
+								final int extraIdleTime = record.getSlotTotalExtraIdleTime(lastSlot);
 
 								// Feasible trimmer should have made sure this is valid.
 								// assert lastSlotArrivalTime + visitDuration + timeToCanal < bookingDate - arrivalMargin;
@@ -599,7 +599,7 @@ public class PNLBasedWindowTrimmerUtils {
 								final int nboTravelTime = (dme.getDistance() == 0) ? 0
 										: Calculator.getTimeFromSpeedDistance(nboSpeed, dme.getDistance()) + routeCostProvider.getRouteTransitTime(dme.getRoute(), vessel);
 
-								final int totalTravelTime = record.getSlotDuration(lastSlot) + nboTravelTime + record.getSlotExtraIdleTime(lastSlot);
+								final int totalTravelTime = record.getSlotDuration(lastSlot) + nboTravelTime + record.getSlotTotalExtraIdleTime(lastSlot);
 
 								for (final TimeChoice lastSlotArrivalTime : lastIntervals) {
 									final int fastestArrivalTime = lastSlotArrivalTime.time + travelTimeData.getTravelTime(dme.getRoute(), elementIndex - 1);
@@ -736,7 +736,7 @@ public class PNLBasedWindowTrimmerUtils {
 						final int nboTravelTime = dme.getDistance() == 0 ? 0
 								: Calculator.getTimeFromSpeedDistance(nboSpeed, dme.getDistance()) + routeCostProvider.getRouteTransitTime(dme.getRoute(), vessel);
 
-						final int totalTravelTime = record.getSlotDuration(lastSlot) + nboTravelTime + record.getSlotExtraIdleTime(lastSlot);
+						final int totalTravelTime = record.getSlotDuration(lastSlot) + nboTravelTime + record.getSlotTotalExtraIdleTime(lastSlot);
 						for (final TimeChoice t2 : intervalMap.get(slot)) {
 							final int t = Math.max(0, t2.time - totalTravelTime);
 							if (lastSlot.getTimeWindow() == null || (t >= lTW.getInclusiveStart() && t < lTW.getExclusiveEnd())) {

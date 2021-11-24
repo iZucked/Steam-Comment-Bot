@@ -173,6 +173,8 @@
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//Idle">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Idle/laden"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Idle/bufferHours"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Idle/panamaHours"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Idle/contingencyHours"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//PortVisit">
@@ -199,6 +201,7 @@
     <genClasses ecoreClass="schedule.ecore#//CharterLengthEvent">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//CharterLengthEvent/duration"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//CharterLengthEvent/laden"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//CharterLengthEvent/contingencyHours"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//Cooldown">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Cooldown/volume"/>

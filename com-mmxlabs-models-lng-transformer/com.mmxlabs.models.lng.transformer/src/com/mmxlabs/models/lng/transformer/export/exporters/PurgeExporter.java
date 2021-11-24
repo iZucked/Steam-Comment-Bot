@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.schedule.Purge;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
+import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 
 public class PurgeExporter {
@@ -37,8 +38,9 @@ public class PurgeExporter {
 			final Purge purge = ScheduleFactory.eINSTANCE.createPurge();
 			purge.setPort(ePort);
 
+			int purgeDuration = voyageDetails.getOptions().getExtraIdleTime(ExplicitIdleTime.PURGE);
 			purge.setStart(modelEntityMap.getDateFromHours(currentTime, ePort));
-			purge.setEnd(modelEntityMap.getDateFromHours(currentTime + voyageDetails.getPurgeDuration(), ePort));
+			purge.setEnd(modelEntityMap.getDateFromHours(currentTime + purgeDuration, ePort));
 
 			return purge;
 		}

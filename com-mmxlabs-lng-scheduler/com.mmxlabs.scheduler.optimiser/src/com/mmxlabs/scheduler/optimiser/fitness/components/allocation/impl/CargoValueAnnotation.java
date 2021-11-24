@@ -17,11 +17,14 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 /**
- * Implementation of {@link ICargoValueAnnotation} wrapping a pre-existing {@link IAllocationAnnotation} instance adding on the {@link ICargoValueAnnotation} specific data items. Internally very
- * similar to {@link AllocationAnnotation}.
+ * Implementation of {@link ICargoValueAnnotation} wrapping a pre-existing
+ * {@link IAllocationAnnotation} instance adding on the
+ * {@link ICargoValueAnnotation} specific data items. Internally very similar to
+ * {@link AllocationAnnotation}.
  * 
  * @author Simon Goodall.
  * 
@@ -75,7 +78,7 @@ public final class CargoValueAnnotation extends AbstractWriteLockable implements
 		if (allocation == null) {
 			checkWritable();
 			allocation = new SlotAllocationAnnotation();
-			slotAllocations = ImmutableMap.<IPortSlot, SlotAllocationAnnotation> builder().putAll(slotAllocations).put(slot, allocation).build();
+			slotAllocations = ImmutableMap.<IPortSlot, SlotAllocationAnnotation>builder().putAll(slotAllocations).put(slot, allocation).build();
 
 		}
 		return allocation;
@@ -226,8 +229,13 @@ public final class CargoValueAnnotation extends AbstractWriteLockable implements
 	}
 
 	@Override
-	public int getSlotExtraIdleTime(final IPortSlot slot) {
-		return allocationAnnotation.getSlotExtraIdleTime(slot);
+	public int getSlotTotalExtraIdleTime(final IPortSlot slot) {
+		return allocationAnnotation.getSlotTotalExtraIdleTime(slot);
+	}
+
+	@Override
+	public int getSlotExtraIdleTime(final IPortSlot slot, final ExplicitIdleTime type) {
+		return allocationAnnotation.getSlotExtraIdleTime(slot, type);
 	}
 
 	@Override
@@ -252,7 +260,7 @@ public final class CargoValueAnnotation extends AbstractWriteLockable implements
 	}
 
 	@Override
-	public void setSlotExtraIdleTime(final IPortSlot slot, final int extraIdleTime) {
+	public void setSlotExtraIdleTime(final IPortSlot slot, final ExplicitIdleTime type, final int extraIdleTime) {
 		throwNotChangableException();
 	}
 
@@ -290,7 +298,7 @@ public final class CargoValueAnnotation extends AbstractWriteLockable implements
 		return totalProfitAndLoss;
 	}
 
-	public void setTotalProfitAndLoss(long totalProfitAndLoss) {
+	public void setTotalProfitAndLoss(final long totalProfitAndLoss) {
 		checkWritable();
 
 		this.totalProfitAndLoss = totalProfitAndLoss;
@@ -307,42 +315,42 @@ public final class CargoValueAnnotation extends AbstractWriteLockable implements
 	}
 
 	@Override
-	public @Nullable IRouteOptionBooking getRouteOptionBooking(IPortSlot slot) {
+	public @Nullable IRouteOptionBooking getRouteOptionBooking(final IPortSlot slot) {
 		return allocationAnnotation.getRouteOptionBooking(slot);
 	}
 
 	@Override
-	public void setRouteOptionBooking(IPortSlot slot, @Nullable IRouteOptionBooking routeOptionBooking) {
+	public void setRouteOptionBooking(final IPortSlot slot, @Nullable final IRouteOptionBooking routeOptionBooking) {
 		throwNotChangableException();
 	}
 
 	@Override
-	public AvailableRouteChoices getSlotNextVoyageOptions(@NonNull IPortSlot slot) {
+	public AvailableRouteChoices getSlotNextVoyageOptions(@NonNull final IPortSlot slot) {
 		return allocationAnnotation.getSlotNextVoyageOptions(slot);
 	}
 
 	@Override
-	public void setSlotNextVoyageOptions(@NonNull IPortSlot slot, @NonNull AvailableRouteChoices nextVoyageRoute) {
+	public void setSlotNextVoyageOptions(@NonNull final IPortSlot slot, @NonNull final AvailableRouteChoices nextVoyageRoute) {
 		throwNotChangableException();
 	}
 
 	@Override
-	public int getSlotAdditionaPanamaIdleHours(@NonNull IPortSlot slot) {
+	public int getSlotAdditionaPanamaIdleHours(@NonNull final IPortSlot slot) {
 		return allocationAnnotation.getSlotAdditionaPanamaIdleHours(slot);
 	}
 
 	@Override
-	public int getSlotMaxAdditionaPanamaIdleHours(@NonNull IPortSlot slot) {
+	public int getSlotMaxAdditionaPanamaIdleHours(@NonNull final IPortSlot slot) {
 		return allocationAnnotation.getSlotMaxAdditionaPanamaIdleHours(slot);
 	}
 
 	@Override
-	public void setSlotMaxAvailablePanamaIdleHours(@NonNull IPortSlot from, int maxIdleTimeAvailable) {
+	public void setSlotMaxAvailablePanamaIdleHours(@NonNull final IPortSlot from, final int maxIdleTimeAvailable) {
 		throwNotChangableException();
 	}
 
 	@Override
-	public void setSlotAdditionalPanamaIdleHours(@NonNull IPortSlot from, int additionalPanamaTime) {
+	public void setSlotAdditionalPanamaIdleHours(@NonNull final IPortSlot from, final int additionalPanamaTime) {
 		throwNotChangableException();
 	}
 

@@ -189,8 +189,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 					usedCharterInMarkets.add(sequence.getCharterInMarket());
 				}
 				for (final Event event : sequence.getEvents()) {
-					if (event instanceof VesselEventVisit) {
-						final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
+					if (event instanceof VesselEventVisit vesselEventVisit) {
 						usedVesselEvents.add(vesselEventVisit.getVesselEvent());
 					}
 				}
@@ -614,16 +613,14 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			}
 
 			for (final EObject obj : objectsToInsert) {
-				if (obj instanceof Slot) {
-					final Slot<?> slot = (Slot<?>) obj;
+				if (obj instanceof Slot<?> slot) {
 					if (slot instanceof SpotSlot) {
 						// Ignore spot market slots.
 						continue;
 					}
 					targetSlots.add(slot);
 					sandboxResult.getSlotsInserted().add(slot);
-				} else if (obj instanceof VesselEvent) {
-					final VesselEvent vesselEvent = (VesselEvent) obj;
+				} else if (obj instanceof VesselEvent vesselEvent) {
 					targetEvents.add(vesselEvent);
 					sandboxResult.getEventsInserted().add(vesselEvent);
 				}

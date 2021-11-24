@@ -16,6 +16,7 @@ import com.mmxlabs.scheduler.optimiser.cache.IWriteLockable;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
@@ -74,29 +75,6 @@ public final class AllocationAnnotation extends AbstractWriteLockable implements
 		checkWritable();
 		this.fuelVolumeInM3 = fuelVolume;
 	}
-	//
-	// @Override
-	// public String toString() {
-	// final StringBuilder builder = new StringBuilder();
-	// final String slotFormat = "%s@%d (%s %d)";
-	// boolean firstLoop = true;
-	// for (final IPortSlot slot : portTimesRecord.getSlots()) {
-	// final SlotAllocationAnnotation slotAllocation = slotAllocations.get(slot);
-	// if (!firstLoop) {
-	// builder.append(" to ");
-	// } else {
-	// firstLoop = false;
-	// }
-	//
-	// final String action = (slot instanceof IDischargeOption) ? "discharged" : (slot instanceof ILoadOption ? "loaded" : "???");
-	// final long volume = getCommercialSlotVolumeInM3(slot);
-	// builder.append(String.format(slotFormat, slot.getId(), slotAllocation.startTime, action, volume));
-	// }
-	//
-	// final String endFormat = ", used %d for fuel, remaining heel %d";
-	// builder.append(String.format(endFormat, getFuelVolumeInM3(), getRemainingHeelVolumeInM3()));
-	// return builder.toString();
-	// }
 
 	@Override
 	public long getRemainingHeelVolumeInM3() {
@@ -118,7 +96,7 @@ public final class AllocationAnnotation extends AbstractWriteLockable implements
 		if (allocation == null) {
 			checkWritable();
 			allocation = new SlotAllocationAnnotation();
-			slotAllocations = ImmutableMap.<IPortSlot, SlotAllocationAnnotation> builder().putAll(slotAllocations).put(slot, allocation).build();
+			slotAllocations = ImmutableMap.<IPortSlot, SlotAllocationAnnotation>builder().putAll(slotAllocations).put(slot, allocation).build();
 
 		}
 		return allocation;
@@ -135,12 +113,17 @@ public final class AllocationAnnotation extends AbstractWriteLockable implements
 	}
 
 	@Override
-	public int getSlotExtraIdleTime(final IPortSlot slot) {
-		return portTimesRecord.getSlotExtraIdleTime(slot);
+	public int getSlotExtraIdleTime(final IPortSlot slot, ExplicitIdleTime type) {
+		return portTimesRecord.getSlotExtraIdleTime(slot, type);
 	}
 
 	@Override
-	public void setSlotExtraIdleTime(final IPortSlot slot, final int extraIdleTime) {
+	public int getSlotTotalExtraIdleTime(final IPortSlot slot) {
+		return portTimesRecord.getSlotTotalExtraIdleTime(slot);
+	}
+
+	@Override
+	public void setSlotExtraIdleTime(final IPortSlot slot, ExplicitIdleTime type, final int extraIdleTime) {
 		throwNotChangableException();
 	}
 

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -15,6 +16,7 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.cache.AbstractWriteLockable;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
+import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 /**
@@ -25,7 +27,7 @@ public final class PortTimeWindowsRecord extends AbstractWriteLockable implement
 
 	private static class SlotWindowRecord {
 		private int duration;
-		private int extraIdleTime;
+		private int[] extraIdleTimes = new int[ExplicitIdleTime.values().length];
 		private int index;
 		private AvailableRouteChoices nextVoyageRoute = AvailableRouteChoices.OPTIMAL;
 		private @Nullable IRouteOptionBooking routeOptionBooking = null;
@@ -41,12 +43,12 @@ public final class PortTimeWindowsRecord extends AbstractWriteLockable implement
 			if (obj instanceof SlotWindowRecord) {
 				final SlotWindowRecord other = (SlotWindowRecord) obj;
 				return duration == other.duration //
-						&& extraIdleTime == other.extraIdleTime //
 						&& index == other.index //
 						&& nextVoyageRoute == other.nextVoyageRoute //
 						&& routeOptionBooking == other.routeOptionBooking //
 						&& additionalPanamaIdleTimeInHours == other.additionalPanamaIdleTimeInHours //
 						&& isConstrainedPanamaJourney == other.isConstrainedPanamaJourney //
+						&& Arrays.equals(extraIdleTimes, other.extraIdleTimes) //
 						&& Objects.equals(feasibleWindow, other.feasibleWindow) //
 				;
 			}
@@ -77,10 +79,12 @@ public final class PortTimeWindowsRecord extends AbstractWriteLockable implement
 	public PortTimeWindowsRecord(final IPortTimeWindowsRecord other) {
 		for (final IPortSlot slot : other.getSlots()) {
 			this.setSlot(slot, other.getSlotFeasibleTimeWindow(slot), other.getSlotDuration(slot), other.getIndex(slot));
-			this.setSlotExtraIdleTime(slot, other.getSlotExtraIdleTime(slot));
 			this.setSlotNextVoyageOptions(slot, other.getSlotNextVoyageOptions(slot));
 			this.setSlotAdditionalPanamaDetails(slot, other.getSlotIsNextVoyageConstrainedPanama(slot), other.getSlotAdditionalPanamaIdleHours(slot));
 			this.setRouteOptionBooking(slot, other.getRouteOptionBooking(slot));
+			for (var type : ExplicitIdleTime.values()) {
+				this.setSlotExtraIdleTime(slot, type, other.getSlotExtraIdleTime(slot, type));
+			}
 			this.slotRecords.get(slot).index = other.getIndex(slot);
 		}
 		final IPortSlot otherReturnSlot = other.getReturnSlot();
@@ -121,8 +125,8 @@ public final class PortTimeWindowsRecord extends AbstractWriteLockable implement
 		if (allocation == null) {
 			checkWritable();
 			allocation = new SlotWindowRecord();
-			slots = ImmutableList.<IPortSlot> builder().addAll(slots).add(slot).build();
-			slotRecords = ImmutableMap.<IPortSlot, SlotWindowRecord> builder().putAll(slotRecords).put(slot, allocation).build();
+			slots = ImmutableList.<IPortSlot>builder().addAll(slots).add(slot).build();
+			slotRecords = ImmutableMap.<IPortSlot, SlotWindowRecord>builder().putAll(slotRecords).put(slot, allocation).build();
 		}
 		return allocation;
 	}
@@ -162,7 +166,7 @@ public final class PortTimeWindowsRecord extends AbstractWriteLockable implement
 		setSlotFeasibleTimeWindow(slot, timeWindow);
 		// Return slot should not be in list
 		if (slots.contains(slot)) {
-			slots = ImmutableList.<IPortSlot> builder().addAll(slots.stream().filter(s -> s != slot).iterator()).build();
+			slots = ImmutableList.<IPortSlot>builder().addAll(slots.stream().filter(s -> s != slot).iterator()).build();
 		}
 		this.returnSlot = slot;
 	}
@@ -174,7 +178,7 @@ public final class PortTimeWindowsRecord extends AbstractWriteLockable implement
 		setSlot(slot, timeWindow, duration, index);
 		// Return slot should not be in list
 		if (slots.contains(slot)) {
-			slots = ImmutableList.<IPortSlot> builder().addAll(slots.stream().filter(s -> s != slot).iterator()).build();
+			slots = ImmutableList.<IPortSlot>builder().addAll(slots.stream().filter(s -> s != slot).iterator()).build();
 		}
 		this.returnSlot = slot;
 	}
@@ -196,18 +200,31 @@ public final class PortTimeWindowsRecord extends AbstractWriteLockable implement
 	}
 
 	@Override
-	public int getSlotExtraIdleTime(final IPortSlot slot) {
+	public int getSlotExtraIdleTime(final IPortSlot slot, ExplicitIdleTime type) {
 		final SlotWindowRecord allocation = slotRecords.get(slot);
 		if (allocation != null) {
-			return allocation.extraIdleTime;
+			return allocation.extraIdleTimes[type.ordinal()];
 		}
 		return 0;
 	}
 
 	@Override
-	public void setSlotExtraIdleTime(final IPortSlot slot, final int extraIdleTime) {
+	public int getSlotTotalExtraIdleTime(final IPortSlot slot) {
+		final SlotWindowRecord allocation = slotRecords.get(slot);
+		if (allocation != null) {
+			int sum = 0;
+			for (var type : ExplicitIdleTime.values()) {
+				sum += allocation.extraIdleTimes[type.ordinal()];
+			}
+			return sum;
+		}
+		return 0;
+	}
+
+	@Override
+	public void setSlotExtraIdleTime(final IPortSlot slot, ExplicitIdleTime type, final int extraIdleTime) {
 		checkWritable();
-		getOrCreateSlotRecord(slot).extraIdleTime = extraIdleTime;
+		getOrCreateSlotRecord(slot).extraIdleTimes[type.ordinal()] = extraIdleTime;
 	}
 
 	@Override
@@ -280,6 +297,7 @@ public final class PortTimeWindowsRecord extends AbstractWriteLockable implement
 	@Override
 	public void setSlotAdditionalPanamaDetails(final IPortSlot slot, final boolean isConstrainedPanamaJourney, final int additionalPanamaIdleTimeInHours) {
 		checkWritable();
+		assert additionalPanamaIdleTimeInHours >= 0;
 		getOrCreateSlotRecord(slot).isConstrainedPanamaJourney = isConstrainedPanamaJourney;
 		getOrCreateSlotRecord(slot).additionalPanamaIdleTimeInHours = additionalPanamaIdleTimeInHours;
 	}

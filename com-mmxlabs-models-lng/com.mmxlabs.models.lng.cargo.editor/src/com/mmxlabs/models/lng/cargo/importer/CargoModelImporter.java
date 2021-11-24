@@ -216,20 +216,17 @@ public class CargoModelImporter implements ISubmodelImporter {
 				}
 			}
 			for (final Object o : importObjects) {
-				if (o instanceof VesselGroupCanalParameters) {
-					final VesselGroupCanalParameters vesselGroupCanalParameters = (VesselGroupCanalParameters) o;
+				if (o instanceof VesselGroupCanalParameters vesselGroupCanalParameters) {
 					canalBookings.getVesselGroupCanalParameters().add(vesselGroupCanalParameters);
 				}
 			}
 			for (final Object o : importObjects) {
-				if (o instanceof CanalBookingSlot) {
-					final CanalBookingSlot canalBookingSlot = (CanalBookingSlot) o;
+				if (o instanceof CanalBookingSlot canalBookingSlot) {
 					canalBookings.getCanalBookingSlots().add(canalBookingSlot);
 				}
 			}
 			for (final Object o: importObjects) {
-				if (o instanceof PanamaSeasonalityRecord) {
-					final PanamaSeasonalityRecord seasonalityRecord = (PanamaSeasonalityRecord) o;
+				if (o instanceof PanamaSeasonalityRecord seasonalityRecord) {
 					canalBookings.getPanamaSeasonalityRecords().add(seasonalityRecord);
 				}
 			}

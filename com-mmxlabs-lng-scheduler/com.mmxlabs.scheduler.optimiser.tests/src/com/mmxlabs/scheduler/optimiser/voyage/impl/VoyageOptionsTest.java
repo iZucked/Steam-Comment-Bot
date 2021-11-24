@@ -13,6 +13,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
+import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
 import com.mmxlabs.scheduler.optimiser.voyage.IdleFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 
@@ -31,9 +32,30 @@ public class VoyageOptionsTest {
 	public void testGetSetExtraIdleTime() {
 		final int value = 100;
 		final VoyageOptions options = new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class));
-		Assertions.assertEquals(0, options.getExtraIdleTime());
-		options.setExtraIdleTime(value);
-		Assertions.assertEquals(value, options.getExtraIdleTime());
+		for (var type : ExplicitIdleTime.values()) {
+			Assertions.assertEquals(0, options.getExtraIdleTime(type));
+			options.setExtraIdleTime(type, value);
+			Assertions.assertEquals(value, options.getExtraIdleTime(type));
+			Assertions.assertEquals(value, options.getTotalExtraIdleTime());
+			options.setExtraIdleTime(type, 0);
+		}
+
+	}
+
+	@Test
+	public void testGetTotalExtraIdleTime() {
+		int value = 1;
+		int sum = 0;
+		final VoyageOptions options = new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class));
+		for (var type : ExplicitIdleTime.values()) {
+			options.setExtraIdleTime(type, value);
+			// Update expected sum
+			sum += value;
+			// Increase value be x10 so that we end up with e.g. 1111 for 4 enums
+			value *= 10;
+		}
+		Assertions.assertEquals(sum, options.getTotalExtraIdleTime());
+
 	}
 
 	@Test
@@ -69,7 +91,7 @@ public class VoyageOptionsTest {
 		final long cost = 2000L;
 		final VoyageOptions options = new VoyageOptions(Mockito.mock(IPortSlot.class), Mockito.mock(IPortSlot.class));
 		Assertions.assertEquals(ERouteOption.DIRECT, options.getRoute()); // Default route for Null analysis
-		options.setRoute(route, distance, cost);
+		options.setRoute(route, distance, cost, 0);
 		Assertions.assertSame(route, options.getRoute());
 		Assertions.assertEquals(distance, options.getDistance());
 		Assertions.assertEquals(cost, options.getRouteCost());
@@ -187,7 +209,7 @@ public class VoyageOptionsTest {
 		o.setNBOSpeed(nboSpeed);
 		o.setTravelFuelChoice(travelFuelChoice);
 		o.setIdleFuelChoice(idleFuelChoice);
-		o.setRoute(route, distance, routeCost);
+		o.setRoute(route, distance, routeCost, 0);
 		o.setVesselState(vesselState);
 
 		return o;

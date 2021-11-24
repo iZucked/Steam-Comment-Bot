@@ -57,6 +57,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.scheduling.PNLBasedWindowTrimmerUtils.TimeChoice;
+import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
@@ -435,8 +436,10 @@ public class PNLBasedWindowTrimmer {
 			final int visitDuration = portTimeWindowsRecord.getSlotDuration(slot);
 			basePortTimesRecord.setSlotDuration(slot, visitDuration);
 
-			final int extraIdleTime = portTimeWindowsRecord.getSlotExtraIdleTime(slot);
-			basePortTimesRecord.setSlotExtraIdleTime(slot, extraIdleTime);
+			for (var type: ExplicitIdleTime.values()) {
+				final int extraIdleTime = portTimeWindowsRecord.getSlotExtraIdleTime(slot, type);
+				basePortTimesRecord.setSlotExtraIdleTime(slot, type, extraIdleTime);
+			}
 		}
 
 		basePortTimesRecord.setSlotTime(basePortTimesRecord.getFirstSlot(), key.spi.getPlanStartTime());
@@ -548,8 +551,10 @@ public class PNLBasedWindowTrimmer {
 			final int visitDuration = portTimeWindowsRecord.getSlotDuration(slot);
 			basePortTimesRecord.setSlotDuration(slot, visitDuration);
 
-			final int extraIdleTime = portTimeWindowsRecord.getSlotExtraIdleTime(slot);
-			basePortTimesRecord.setSlotExtraIdleTime(slot, extraIdleTime);
+			for (var type: ExplicitIdleTime.values()) {
+				final int extraIdleTime = portTimeWindowsRecord.getSlotExtraIdleTime(slot, type);
+				basePortTimesRecord.setSlotExtraIdleTime(slot, type, extraIdleTime);
+			}
 		}
 
 		for (final TimeChoice tc : intervalMap.get(portTimeWindowsRecord.getFirstSlot())) {
