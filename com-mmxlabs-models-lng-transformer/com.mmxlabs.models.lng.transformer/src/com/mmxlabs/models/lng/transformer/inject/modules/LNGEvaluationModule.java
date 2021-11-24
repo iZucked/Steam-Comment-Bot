@@ -100,18 +100,7 @@ public class LNGEvaluationModule extends AbstractModule {
 
 		if (hints != null) {
 
-			boolean isCleanState = false;
-			for (final String hint : hints) {
-				if (LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR.equals(hint)) {
-					bind(IGeneratedCharterOutEvaluator.class).to(CleanStateIdleTimeEvaluator.class);
-					isCleanState = true;
-					break;
-
-				}
-			}
-
-			// GCO and Clean state are not compatible with each other
-			if (!isCleanState && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_CHARTER_OUT_GENERATION) && hints.contains(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS)) {
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_CHARTER_OUT_GENERATION) && hints.contains(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS)) {
 				bind(IGeneratedCharterOutEvaluator.class).to(DefaultGeneratedCharterOutEvaluator.class);
 			}
 

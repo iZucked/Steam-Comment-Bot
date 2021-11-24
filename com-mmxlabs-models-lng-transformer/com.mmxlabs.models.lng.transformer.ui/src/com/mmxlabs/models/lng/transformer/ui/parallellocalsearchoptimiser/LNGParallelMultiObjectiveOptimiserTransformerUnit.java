@@ -67,7 +67,6 @@ public class LNGParallelMultiObjectiveOptimiserTransformerUnit extends AbstractL
 		@NonNull
 		final Collection<@NonNull String> hints = new HashSet<>(chainBuilder.getDataTransformer().getHints());
 		LNGTransformerHelper.updateHintsFromUserSettings(userSettings, hints);
-		hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
 		return AbstractLNGOptimiserTransformerUnit.chain(chainBuilder, stage, userSettings, jobExecutorFactory, progressTicks, hints, (initialSequences, inputState, monitor) -> {
 			LNGParallelMultiObjectiveOptimiserTransformerUnit unit = new LNGParallelMultiObjectiveOptimiserTransformerUnit(chainBuilder.getDataTransformer(), stage, userSettings, stageSettings,
