@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.IntConsumer;
+import java.util.function.ObjLongConsumer;
+import java.util.function.ToLongFunction;
 
 import javax.inject.Inject;
 
@@ -15,7 +19,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.name.Named;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -186,11 +189,12 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		 */
 		calculateRouteAdditionalFuelRequirements(options, output, vessel, vesselState, additionalRouteTimeInHours, nboAvailableInM3);
 
-		final long minBaseFuelConsumptionInMT = Calculator.quantityFromRateTime(vessel.getMinBaseFuelConsumptionInMTPerDay(), additionalRouteTimeInHours) / 24L;
-		if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS && output.getRouteAdditionalConsumption(vessel.getSupplementalTravelBaseFuelInMT()) > minBaseFuelConsumptionInMT) {
-			// Ran out of LNG in canal travel, calculate travel (which should also run out
-			// but has run dry logic) first
-			output.setTravelNBOHours(0); // Reset NBO hours
+		if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS && output.isRouteAdditionalTravelRanDry()) {
+			// Vessel ran dry in canal travel, calculate travel first since running dry in
+			// canal should, in general, mean that the run dry happened during travel and we
+			// arrive at the canal without LNG.
+
+			output.resetRouteAdditionalTravelFuelRequirements(vessel);
 			calculateTravelFuelRequirements(options, output, vessel, vesselState, travelTimeInHours, speed, nboAvailableInM3);
 			if (nboAvailableInM3 != Long.MAX_VALUE) { // Keep Max_Value at Max_Value
 				nboAvailableInM3 -= output.getFuelConsumption(LNGFuelKeys.NBO_In_m3);
@@ -201,7 +205,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				nboAvailableInM3 -= output.getRouteAdditionalConsumption(LNGFuelKeys.NBO_In_m3);
 				nboAvailableInM3 -= output.getRouteAdditionalConsumption(LNGFuelKeys.FBO_In_m3);
 			}
-
+			// At this point travelRanDry should be true. routeAdditionalTravelRanDry should
+			// generally be true as well but it can be false from data that is not bad but
+			// is unrealistic.
 		} else {
 			// Did not run out of LNG in the canal calculation - update available NBO and
 			// calculate travel fuel consumption
@@ -258,150 +264,11 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	protected final void calculateRouteAdditionalFuelRequirements(final VoyageOptions options, final VoyageDetails output, final IVessel vessel, final VesselState vesselState,
 			final int additionalRouteTimeInHours, final long nboAvailableInM3) {
 
-		final IBaseFuel baseFuel = vessel.getTravelBaseFuel();
+		final long nboRouteRateInM3PerDay = routeCostProvider.getRouteNBORate(options.getRoute(), vessel, vesselState);
+		final long consumptionRateInMTPerDay = routeCostProvider.getRouteFuelUsage(options.getRoute(), vessel, vesselState);
 
-		final int equivalenceFactorMMBTuToMT = baseFuel.getEquivalenceFactor();
-
-		final long routeRequiredConsumptionInMT = Calculator.quantityFromRateTime(routeCostProvider.getRouteFuelUsage(options.getRoute(), vessel, vesselState), additionalRouteTimeInHours) / 24L;
-		final int cargoCVValue = options.getCargoCVValue();
-
-		// Reset the field
-		output.setRouteAdditionalNBOHours(0);
-
-		if (routeRequiredConsumptionInMT > 0) {
-
-			// if no nboAvailable, have to use bunkers irrespective of fuel choice
-			if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS && nboAvailableInM3 > 0) {
-
-				final long nboRouteRateInM3PerDay = routeCostProvider.getRouteNBORate(options.getRoute(), vessel, vesselState);
-
-				/**
-				 * How much NBO is produced while in the canal (M3)
-				 */
-				final long routeNboRequestedInM3 = Calculator.quantityFromRateTime(nboRouteRateInM3PerDay, additionalRouteTimeInHours) / 24L;
-
-				int nboHours = additionalRouteTimeInHours;
-				boolean ranDry = false;
-				if (routeNboRequestedInM3 > nboAvailableInM3) {
-					// Ran dry
-					nboHours = Calculator.getTimeFromRateQuantity(nboRouteRateInM3PerDay, nboAvailableInM3 * 24L);
-					ranDry = true;
-
-				}
-
-				output.setRouteAdditionalNBOHours(nboHours);
-
-				// Check that we actually have enough lng to make the NBO journey
-				final long routeNboProvidedInM3 = routeNboRequestedInM3 <= nboAvailableInM3 ? routeNboRequestedInM3 : nboAvailableInM3;
-				/**
-				 * How much NBO is produced while in the canal (MTBFE)
-				 */
-
-				final long routeNboProvidedInMT = Calculator.convertM3ToMT(routeNboProvidedInM3, cargoCVValue, equivalenceFactorMMBTuToMT);
-
-				final long leftoverLngInM3 = nboAvailableInM3 - routeNboProvidedInM3;
-
-				final long leftoverNboAvailableInM3 = nboAvailableInM3 - routeNboProvidedInM3;
-				final long leftoverNboAvailableInMT = Calculator.convertM3ToMT(leftoverNboAvailableInM3, cargoCVValue, equivalenceFactorMMBTuToMT);
-				/**
-				 * How much FBO is produced while in the canal (M3)
-				 */
-				long routeFboProvidedInM3 = 0;
-				/**
-				 * How much FBO is produced while in the canal (MTBFE)
-				 */
-				long routeFboProvidedInMT = 0;
-				long supplementalBaseInMT = 0;
-
-				/**
-				 * Consumed pilot light
-				 */
-				long pilotLightConsumptionInMT = 0;
-
-				boolean usePilotLight = false;
-				/**
-				 * How much supplement is needed over and above NBO while in the canal (in MT)
-				 */
-				final long routeDiffInMT = routeRequiredConsumptionInMT - routeNboProvidedInMT;
-
-				if (routeDiffInMT > 0) {
-					// Need to supplement
-					if (options.getTravelFuelChoice() == TravelFuelChoice.NBO_PLUS_FBO) {
-						routeFboProvidedInMT = routeDiffInMT;
-						routeFboProvidedInM3 = Calculator.convertMTToM3(routeFboProvidedInMT, cargoCVValue, equivalenceFactorMMBTuToMT);
-						if (routeFboProvidedInM3 > leftoverLngInM3) {
-							// We do not have enough lng to make the journey
-							// Use up remainder of lng and use base fuel
-							final long routeFboActualInM3 = leftoverLngInM3;
-							final long routeFboActualInMT = Calculator.convertM3ToMT(routeFboActualInM3, cargoCVValue, equivalenceFactorMMBTuToMT);
-							routeFboProvidedInM3 = routeFboActualInM3;
-							routeFboProvidedInMT = routeFboActualInMT;
-							final long leftoverDiffInMT = routeDiffInMT - routeFboProvidedInMT;
-							assert leftoverDiffInMT > 0;
-							supplementalBaseInMT = leftoverDiffInMT;
-						} else {
-							usePilotLight = true;
-						}
-					} else {
-						assert options.getTravelFuelChoice() == TravelFuelChoice.NBO_PLUS_BUNKERS;
-
-						// Reliq vessels should not use base fuel supplement.
-						assert (!vessel.hasReliqCapability());
-
-						supplementalBaseInMT = routeDiffInMT;
-					}
-
-				} else {
-					// ...therefore will be pure NBO regardless of fuel choice
-					assert routeNboProvidedInMT >= routeRequiredConsumptionInMT;
-
-					// NB: Still need pilot light, if running on only NBO as not using bunkers.
-					usePilotLight = true;
-				}
-
-				if (usePilotLight) {
-					final long pilotLightRateInMTPerDay = vessel.getPilotLightRate();
-					if (pilotLightRateInMTPerDay > 0) {
-						pilotLightConsumptionInMT = Calculator.quantityFromRateTime(pilotLightRateInMTPerDay, additionalRouteTimeInHours) / 24L;
-					}
-				}
-
-				output.setRouteAdditionalConsumption(LNGFuelKeys.NBO_In_m3, routeNboProvidedInM3);
-				output.setRouteAdditionalConsumption(LNGFuelKeys.NBO_In_MT, routeNboProvidedInMT);
-				output.setRouteAdditionalConsumption(LNGFuelKeys.FBO_In_m3, routeFboProvidedInM3);
-				output.setRouteAdditionalConsumption(LNGFuelKeys.FBO_In_MT, routeFboProvidedInMT);
-				output.setRouteAdditionalConsumption(vessel.getSupplementalTravelBaseFuelInMT(), supplementalBaseInMT);
-				output.setRouteAdditionalConsumption(vessel.getPilotLightFuelInMT(), pilotLightConsumptionInMT);
-
-				output.setRouteAdditionalNBOHours(nboHours);
-
-			} else {
-				// Base fuel only
-				output.setRouteAdditionalConsumption(vessel.getTravelBaseFuelInMT(), routeRequiredConsumptionInMT);
-				output.setRouteAdditionalConsumption(LNGFuelKeys.NBO_In_m3, 0);
-				output.setRouteAdditionalConsumption(LNGFuelKeys.NBO_In_MT, 0);
-				output.setRouteAdditionalConsumption(LNGFuelKeys.NBO_In_MT, 0);
-				output.setRouteAdditionalConsumption(LNGFuelKeys.FBO_In_MT, 0);
-				output.setRouteAdditionalConsumption(vessel.getPilotLightFuelInMT(), 0);
-				// Reset these values since they might be set on previous calls to this method
-				output.setRouteAdditionalConsumption(vessel.getSupplementalTravelBaseFuelInMT(), 0);
-				output.setRouteAdditionalConsumption(vessel.getPilotLightFuelInMT(), 0);
-			}
-
-		}
-
-		final long minBaseFuelConsumptionInMT = Calculator.quantityFromRateTime(vessel.getMinBaseFuelConsumptionInMTPerDay(), additionalRouteTimeInHours) / 24L;
-		// Check if there is NBO available for which the pilot light would be needed
-		if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS && nboAvailableInM3 > 0) {
-			if (output.getRouteAdditionalConsumption(vessel.getSupplementalTravelBaseFuelInMT()) < minBaseFuelConsumptionInMT) {
-				output.setRouteAdditionalConsumption(vessel.getSupplementalTravelBaseFuelInMT(), minBaseFuelConsumptionInMT);
-			}
-		} else {
-			if (output.getRouteAdditionalConsumption(vessel.getTravelBaseFuelInMT()) < minBaseFuelConsumptionInMT) {
-				output.setRouteAdditionalConsumption(vessel.getTravelBaseFuelInMT(), minBaseFuelConsumptionInMT);
-			}
-		}
-
+		calculateTravelOrCanalFuelRequirements(options, vessel, additionalRouteTimeInHours, nboAvailableInM3, nboRouteRateInM3PerDay, consumptionRateInMTPerDay, output::setRouteAdditionalNBOHours,
+				output::setRouteAdditionalConsumption, output::getRouteAdditionalConsumption, output::setRouteAdditionalTravelRanDry);
 	}
 
 	protected final void calculateIdleFuelRequirements(final VoyageOptions options, final VoyageDetails output, final IVessel vessel, final VesselState vesselState, final int idleTimeInHours,
@@ -422,7 +289,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				// Ran dry
 				nboHours = Calculator.getTimeFromRateQuantity(idleNBORateInM3PerDay, nboAvailableInM3 * 24L);
 				ranDry = true;
-
 			}
 
 			output.setIdleNBOHours(nboHours);
@@ -442,6 +308,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				final long pilotLightConsumptionInMT = Calculator.quantityFromRateTime(pilotLightRateINMTPerDay, nboHours) / 24L;
 				output.setFuelConsumption(vessel.getIdlePilotLightFuelInMT(), pilotLightConsumptionInMT);
 			}
+			output.setIdleRanDry(ranDry);
 		}
 
 		final int baseHours = idleTimeInHours - nboHours;
@@ -450,110 +317,144 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		output.setFuelConsumption(vessel.getIdleBaseFuelInMT(), Math.max(idleConsumptionInMT, minBaseConsumptionInMT));
 	}
 
-	protected final void calculateTravelFuelRequirements(final VoyageOptions options, final VoyageDetails output, final IVessel vessel, final VesselState vesselState, final int travelTimeInHours,
+	protected final void calculateTravelFuelRequirements(final VoyageOptions options, final VoyageDetails output, final IVessel vessel, final VesselState vesselState, final int timeInHours,
 			final int speed, final long nboAvailableInM3) {
 
-		final IBaseFuel baseFuel = vessel.getTravelBaseFuel();
-		final int equivalenceFactorMMBTuToMT = baseFuel.getEquivalenceFactor();
-
-		final int cargoCVValue = options.getCargoCVValue();
-
-		final long nboAvailableInMT = nboAvailableInM3 == Long.MAX_VALUE ? Long.MAX_VALUE : Calculator.convertM3ToMT(nboAvailableInM3, cargoCVValue, equivalenceFactorMMBTuToMT);
-
+		final long nboRateInM3PerDay = vessel.getNBORate(vesselState);
 		/**
 		 * The number of MT of base fuel or MT-equivalent of LNG required per hour
 		 * during this journey
 		 */
 		final long consumptionRateInMTPerDay = speed == 0 ? 0 : vessel.getConsumptionRate(vesselState).getRate(speed);
+		calculateTravelOrCanalFuelRequirements(options, vessel, timeInHours, nboAvailableInM3, nboRateInM3PerDay, consumptionRateInMTPerDay, output::setTravelNBOHours, output::setFuelConsumption,
+				output::getFuelConsumption, output::setTravelRanDry);
+	}
 
-		final int minBaseFuelConsumptionInMTPerDay = vessel.getMinBaseFuelConsumptionInMTPerDay();
+	/**
+	 * Used to set travel or canal fuel requirements. VoyageOptions travel vs canal
+	 * attributes are similar. The functions/consumer arguments should be setting
+	 * the canal/travel collection of attributes on VoyageOptions - doing otherwise
+	 * causes undefined behaviour.
+	 * 
+	 * Precondition: The fuel data in options is in a clear state, i.e. all fuel
+	 * consumption values that could be set are zero and the run dry flag is set to
+	 * false. This method does not calculate anything when timeInHours=0, i.e. it
+	 * will not reset values.
+	 * 
+	 * @param options
+	 * @param vessel
+	 * @param timeInHours               >= 0
+	 * @param nboAvailableInM3          >= 0
+	 * @param nboRateInM3PerDay         >= 0
+	 * @param consumptionRateInMTPerDay >= 0
+	 * @param setTravelNBOHours
+	 * @param setFuelConsumption
+	 * @param getFuelConsumption
+	 * @param setRanDry
+	 */
+	protected final void calculateTravelOrCanalFuelRequirements(final VoyageOptions options, final IVessel vessel, final int timeInHours, final long nboAvailableInM3, final long nboRateInM3PerDay,
+			final long consumptionRateInMTPerDay, final IntConsumer setTravelNBOHours, final ObjLongConsumer<@NonNull FuelKey> setFuelConsumption,
+			final ToLongFunction<@NonNull FuelKey> getFuelConsumption, final Consumer<Boolean> setRanDry) {
+		// If timeInHours=0, then this method is equal to setting all corresponding fuel
+		// consumptions to zero (and doing a lot of multiplication by zero) and setting
+		// the runDry flag to false (assumed to be the starting
+		// state, see precondition).
+		if (timeInHours > 0) {
+			final IBaseFuel baseFuel = vessel.getTravelBaseFuel();
+			final int equivalenceFactorMMBTuToMT = baseFuel.getEquivalenceFactor();
 
-		/**
-		 * The total number of MT of base fuel OR MT-equivalent of LNG required for this
-		 * journey, excluding any extra required for canals
-		 */
-		final long requiredConsumptionInMT = Calculator.quantityFromRateTime(consumptionRateInMTPerDay, travelTimeInHours) / 24L;
-		final long nboRateInM3PerDay = vessel.getNBORate(vesselState);
-		int nboHours = 0;
-		if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS) {
-			nboHours = travelTimeInHours;
-			boolean ranDry = false;
-			final long totalTravelTimeNBOInM3 = Calculator.quantityFromRateTime(nboRateInM3PerDay, nboHours) / 24L;
-			if (totalTravelTimeNBOInM3 > nboAvailableInM3 // NBO Exceeds available quantity
-					|| requiredConsumptionInMT > nboAvailableInMT) { // Not enough gas onboard to cover the fuel requirements
-				// Ran dry
-				if (options.getTravelFuelChoice() == TravelFuelChoice.NBO_PLUS_FBO) {
-					final long nboRateInMTPerDay = Calculator.convertM3ToMT(nboRateInM3PerDay, cargoCVValue, equivalenceFactorMMBTuToMT);
-					nboHours = Calculator.getTimeFromRateQuantity(Math.max(nboRateInMTPerDay, consumptionRateInMTPerDay), nboAvailableInMT * 24L);
-				} else {
-					nboHours = Calculator.getTimeFromRateQuantity(nboRateInM3PerDay, nboAvailableInM3 * 24L);
+			final int cargoCVValue = options.getCargoCVValue();
+
+			final long nboAvailableInMT = nboAvailableInM3 == Long.MAX_VALUE ? Long.MAX_VALUE : Calculator.convertM3ToMT(nboAvailableInM3, cargoCVValue, equivalenceFactorMMBTuToMT);
+
+			final int minBaseFuelConsumptionInMTPerDay = vessel.getMinBaseFuelConsumptionInMTPerDay();
+
+			/**
+			 * The total number of MT of base fuel OR MT-equivalent of LNG required for this
+			 * journey, excluding any extra required for canals
+			 */
+			final long requiredConsumptionInMT = Calculator.quantityFromRateTime(consumptionRateInMTPerDay, timeInHours) / 24L;
+			int nboHours = 0;
+			if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS) {
+				nboHours = timeInHours;
+				boolean ranDry = false;
+				final long totalTravelTimeNBOInM3 = Calculator.quantityFromRateTime(nboRateInM3PerDay, nboHours) / 24L;
+				if (totalTravelTimeNBOInM3 > nboAvailableInM3 // NBO Exceeds available quantity
+						|| requiredConsumptionInMT > nboAvailableInMT) { // Not enough gas onboard to cover the fuel requirements
+					// Ran dry
+					if (options.getTravelFuelChoice() == TravelFuelChoice.NBO_PLUS_FBO) {
+						final long nboRateInMTPerDay = Calculator.convertM3ToMT(nboRateInM3PerDay, cargoCVValue, equivalenceFactorMMBTuToMT);
+						nboHours = Calculator.getTimeFromRateQuantity(Math.max(nboRateInMTPerDay, consumptionRateInMTPerDay), nboAvailableInMT * 24L);
+					} else {
+						nboHours = Calculator.getTimeFromRateQuantity(nboRateInM3PerDay, nboAvailableInM3 * 24L);
+					}
+					ranDry = true;
 				}
-				ranDry = true;
-			}
+				setTravelNBOHours.accept(nboHours);
 
-			output.setTravelNBOHours(nboHours);
+				long nboInM3 = Calculator.quantityFromRateTime(nboRateInM3PerDay, nboHours) / 24L;
 
-			long nboInM3 = Calculator.quantityFromRateTime(nboRateInM3PerDay, nboHours) / 24L;
+				final long nboInMT = Calculator.convertM3ToMT(nboInM3, cargoCVValue, equivalenceFactorMMBTuToMT);
 
-			final long nboInMT = Calculator.convertM3ToMT(nboInM3, cargoCVValue, equivalenceFactorMMBTuToMT);
+				setFuelConsumption.accept(LNGFuelKeys.NBO_In_m3, nboInM3);
+				setFuelConsumption.accept(LNGFuelKeys.NBO_In_MT, nboInMT);
 
-			output.setFuelConsumption(LNGFuelKeys.NBO_In_m3, nboInM3);
-			output.setFuelConsumption(LNGFuelKeys.NBO_In_MT, nboInMT);
+				final long nboPerDayInMT = Calculator.convertM3ToMT(nboRateInM3PerDay, cargoCVValue, equivalenceFactorMMBTuToMT);
+				final long baseConsumptionInMTForNBOHours = Calculator.quantityFromRateTime(consumptionRateInMTPerDay, nboHours) / 24L;
 
-			final long nboPerDayInMT = Calculator.convertM3ToMT(nboRateInM3PerDay, cargoCVValue, equivalenceFactorMMBTuToMT);
-			final long baseConsumptionInMTForNBOHours = Calculator.quantityFromRateTime(consumptionRateInMTPerDay, nboHours) / 24L;
+				boolean usePilotLight = false;
+				final long diffInMT = baseConsumptionInMTForNBOHours - nboInMT;
+				long fboInM3 = 0L;
+				if (diffInMT > 0) {
+					if (options.getTravelFuelChoice() == TravelFuelChoice.NBO_PLUS_FBO) {
+						final long fboInMT = diffInMT;
+						fboInM3 = Calculator.convertMTToM3(fboInMT, cargoCVValue, equivalenceFactorMMBTuToMT);
 
-			boolean usePilotLight = false;
-			final long diffInMT = baseConsumptionInMTForNBOHours - nboInMT;
-			long fboInM3 = 0L;
-			if (diffInMT > 0) {
-				if (options.getTravelFuelChoice() == TravelFuelChoice.NBO_PLUS_FBO) {
-					final long fboInMT = diffInMT;
-					fboInM3 = Calculator.convertMTToM3(fboInMT, cargoCVValue, equivalenceFactorMMBTuToMT);
-
-					output.setFuelConsumption(LNGFuelKeys.FBO_In_m3, fboInM3);
-					output.setFuelConsumption(LNGFuelKeys.FBO_In_MT, fboInMT);
-					usePilotLight = true;
-				} else {
-					if (nboPerDayInMT >= consumptionRateInMTPerDay) {
-						// NBO + Base, but NBO is high, so no base used - need pilot light
+						setFuelConsumption.accept(LNGFuelKeys.FBO_In_m3, fboInM3);
+						setFuelConsumption.accept(LNGFuelKeys.FBO_In_MT, fboInMT);
 						usePilotLight = true;
 					} else {
-						final long supplementalBaseInMT = diffInMT;
-						output.setFuelConsumption(vessel.getSupplementalTravelBaseFuelInMT(), supplementalBaseInMT);
+						if (nboPerDayInMT >= consumptionRateInMTPerDay) {
+							// NBO + Base, but NBO is high, so no base used - need pilot light
+							usePilotLight = true;
+						} else {
+							final long supplementalBaseInMT = diffInMT;
+							setFuelConsumption.accept(vessel.getSupplementalTravelBaseFuelInMT(), supplementalBaseInMT);
+						}
+					}
+				} else {
+					usePilotLight = true;
+				}
+
+				if (ranDry && ((nboInM3 + fboInM3) < nboAvailableInM3 && nboAvailableInM3 != Long.MAX_VALUE)) {
+					// Handle volume -> hours -> vol rounding.
+					// Make sure we use up all the available LNG if we run dry.
+					// Direct m3 -> mt conversion may be out a little.
+					nboInM3 = nboAvailableInM3 - fboInM3;
+					setFuelConsumption.accept(LNGFuelKeys.NBO_In_m3, nboInM3);
+				}
+
+				if (usePilotLight) {
+					final long pilotLightRateINMTPerDay = vessel.getPilotLightRate();
+					if (pilotLightRateINMTPerDay > 0) {
+						final long pilotLightConsumptionInMT = Calculator.quantityFromRateTime(pilotLightRateINMTPerDay, nboHours) / 24L;
+						setFuelConsumption.accept(vessel.getPilotLightFuelInMT(), pilotLightConsumptionInMT);
 					}
 				}
-			} else {
-				usePilotLight = true;
-			}
-
-			if (ranDry && ((nboInM3 + fboInM3) < nboAvailableInM3 && nboAvailableInM3 != Long.MAX_VALUE)) {
-				// Handle volume -> hours -> vol rounding.
-				// Make sure we use up all the available LNG if we run dry.
-				// Direct m3 -> mt conversion may be out a little.
-				nboInM3 = nboAvailableInM3 - fboInM3;
-				output.setFuelConsumption(LNGFuelKeys.NBO_In_m3, nboInM3);
-			}
-
-			if (usePilotLight) {
-				final long pilotLightRateINMTPerDay = vessel.getPilotLightRate();
-				if (pilotLightRateINMTPerDay > 0) {
-					final long pilotLightConsumptionInMT = Calculator.quantityFromRateTime(pilotLightRateINMTPerDay, nboHours) / 24L;
-					output.setFuelConsumption(vessel.getPilotLightFuelInMT(), pilotLightConsumptionInMT);
+				if (minBaseFuelConsumptionInMTPerDay > 0) {
+					final long supplemental = getFuelConsumption.applyAsLong(vessel.getSupplementalTravelBaseFuelInMT());
+					final long minBaseConsumptionInMT = Calculator.quantityFromRateTime(minBaseFuelConsumptionInMTPerDay, nboHours) / 24L;
+					if (minBaseConsumptionInMT > supplemental) {
+						setFuelConsumption.accept(vessel.getSupplementalTravelBaseFuelInMT(), minBaseConsumptionInMT);
+					}
 				}
+				setRanDry.accept(ranDry);
 			}
-			if (minBaseFuelConsumptionInMTPerDay > 0) {
-				final long supplemental = output.getFuelConsumption(vessel.getSupplementalTravelBaseFuelInMT());
-				final long minBaseConsumptionInMT = Calculator.quantityFromRateTime(minBaseFuelConsumptionInMTPerDay, nboHours) / 24L;
-				if (minBaseConsumptionInMT > supplemental) {
-					output.setFuelConsumption(vessel.getSupplementalTravelBaseFuelInMT(), minBaseConsumptionInMT);
-				}
+			final int baseHours = timeInHours - nboHours;
+			if (baseHours > 0) {
+				final long baseConsumptionInMT = Calculator.quantityFromRateTime(Math.max(consumptionRateInMTPerDay, minBaseFuelConsumptionInMTPerDay), baseHours) / 24L;
+				setFuelConsumption.accept(vessel.getTravelBaseFuelInMT(), baseConsumptionInMT);
 			}
-		}
-		final int baseHours = travelTimeInHours - nboHours;
-		if (baseHours > 0) {
-			final long baseConsumptionInMT = Calculator.quantityFromRateTime(Math.max(consumptionRateInMTPerDay, minBaseFuelConsumptionInMTPerDay), baseHours) / 24L;
-			output.setFuelConsumption(vessel.getTravelBaseFuelInMT(), baseConsumptionInMT);
 		}
 	}
 
