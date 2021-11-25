@@ -10,6 +10,7 @@ Bundle-Vendor: Minimax Labs
 Export-Package: com.mmxlabs.hub,
  com.mmxlabs.hub.auth,
  com.mmxlabs.hub.common.http,
+ com.mmxlabs.hub.license,
  com.mmxlabs.hub.preferences,
  com.mmxlabs.hub.services.permissions,
  com.mmxlabs.hub.services.users,
@@ -33,7 +34,8 @@ Require-Bundle: org.eclipse.ui,
  javax.annotation;bundle-version="1.2.0",
  org.eclipse.e4.core.di,
  wrapped.com.squareup.okhttp3.okhttp;bundle-version="3.14.2";visibility:=reexport,
- wrapped.com.squareup.okio.okio;bundle-version="1.17.4";visibility:=reexport
+ wrapped.com.squareup.okio.okio;bundle-version="1.17.4";visibility:=reexport,
+ org.eclipse.core.resources;bundle-version="3.7.101"
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Eclipse-BuddyPolicy: registered

@@ -30,14 +30,12 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import com.mmxlabs.hub.DataHubActivator;
 import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.UpstreamUrlProvider;
-import com.mmxlabs.hub.auth.BasicAuthenticationManager;
 import com.mmxlabs.hub.preferences.DataHubPreferenceConstants;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 
 @Testcontainers
 @Tag(TestCategories.HUB_TEST)
 public class BasicAuthenticationTests {
-	private static BasicAuthenticationManager basicAuthenticationManager = BasicAuthenticationManager.getInstance();
 	private static DataHubServiceProvider datahubServiceProvider = DataHubServiceProvider.getInstance();
 	static final Logger logger = LoggerFactory.getLogger(BasicAuthenticationTests.class);
 

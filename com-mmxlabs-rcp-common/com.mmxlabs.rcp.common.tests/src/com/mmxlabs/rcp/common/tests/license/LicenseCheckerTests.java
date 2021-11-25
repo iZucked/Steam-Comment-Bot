@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
-package com.mmxlabs.license.ssl;
+package com.mmxlabs.rcp.common.tests.license;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,6 +21,7 @@ import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.license.ssl.LicenseChecker;
 import com.mmxlabs.rcp.common.tests.internal.Activator;
 
 class LicenseCheckerTests {
@@ -63,21 +64,19 @@ class LicenseCheckerTests {
 
 	@Test
 	void licenseFromSystemProperty() throws CertificateException {
-		KeyStore keystore = LicenseChecker.getLicenseFromSystemProperty();
-		Assertions.assertNotNull(keystore);
+		Assertions.assertNotNull(LicenseChecker.getLicenseFromSystemProperty());
 	}
 
-	@Test
-	void licenseFromEclipseHome() throws CertificateException {
-		KeyStore keystore = LicenseChecker.getEclipseHomeLicense();
-		Assertions.assertNotNull(keystore);
-	}
-
-	@Test
-	void licenseFromUserData() {
-		KeyStore keystore = LicenseChecker.getUserDataLicense();
-		Assertions.assertNotNull(keystore);
-	}
+	// TODO add user.home and eclipse.home.location properties to build job
+	// @Test
+	// void licenseFromEclipseHome() throws CertificateException {
+	// Assertions.assertNotNull(LicenseChecker.getEclipseHomeLicense());
+	// }
+	//
+	// @Test
+	// void licenseFromUserData() {
+	// Assertions.assertNotNull(LicenseChecker.getUserDataLicense());
+	// }
 
 	@Test
 	void createKeystoreCopies() {
