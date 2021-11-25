@@ -103,7 +103,6 @@ public class GuidedMoveTransformerUnit implements ILNGStateTransformerUnit {
 				@NonNull
 				final Collection<@NonNull String> hints = new HashSet<>(dataTransformer.getHints());
 				LNGTransformerHelper.updateHintsFromUserSettings(userSettings, hints);
-				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
 				monitor.beginTask("", 100 * seeds.length);
 				try {

@@ -42,7 +42,6 @@ public final class LicenseChecker {
 
 	private static final String LICENSE_FILE_PROPERTY = "lingo.license.file";
 	public static final String USER_HOME_PROPERTY = "user.home";
-	public static final String LICENSE_FOLDER = "license.folder";
 	public static final String MMXLABS_FOLDER = "mmxlabs";
 	public static final String LICENSE_KEYSTORE = "license.p12";
 	public static final String DATAHUB_LICENSE_KEYSTORE = "datahub.p12";
@@ -108,9 +107,9 @@ public final class LicenseChecker {
 		}
 		return null;
 	}
-	
+
 	public static @Nullable Pair<KeyStore, char[]> loadLocalKeystore() throws Exception {
-		
+
 		// Trigger license check to ensure the data store is created.
 		if (checkLicense() == LicenseState.Valid) {
 			final File trustStoreFile = Activator.getDefault().getBundle().getDataFile("local-keystore.jks");
@@ -201,7 +200,7 @@ public final class LicenseChecker {
 	 * @throws NoSuchAlgorithmException
 	 * @throws KeyStoreException
 	 */
-	static void createKeystoreCopies(KeyStore keyStore, KeyStore licenseKeystore) throws FileNotFoundException, IOException, KeyStoreException, NoSuchAlgorithmException, CertificateException {
+	public static void createKeystoreCopies(KeyStore keyStore, KeyStore licenseKeystore) throws FileNotFoundException, IOException, KeyStoreException, NoSuchAlgorithmException, CertificateException {
 		final File keyStoreFile = Activator.getDefault().getBundle().getDataFile("local-keystore.jks");
 		final File trustStoreFile = Activator.getDefault().getBundle().getDataFile("local-truststore.jks");
 
@@ -267,6 +266,7 @@ public final class LicenseChecker {
 	 *
 	 * @return the license keystore if it exists, otherwise null
 	 */
+	@Nullable
 	private static KeyStore getLicenseKeystore() {
 		// Load the license file
 		KeyStore licenseKeystore = null;
@@ -293,7 +293,8 @@ public final class LicenseChecker {
 	 *
 	 * @return license keystore
 	 */
-	static KeyStore getUserDataLicense() {
+	@Nullable
+	public static KeyStore getUserDataLicense() {
 		final String userHome = System.getProperty(USER_HOME_PROPERTY);
 		if (userHome != null) {
 			final File f = new File(userHome + File.separator + MMXLABS_FOLDER + File.separator + LICENSE_KEYSTORE);
@@ -318,7 +319,8 @@ public final class LicenseChecker {
 	 * @return license keystore
 	 * @throws CertificateException
 	 */
-	static KeyStore getLicenseFromSystemProperty() throws CertificateException {
+	@Nullable
+	public static KeyStore getLicenseFromSystemProperty() throws CertificateException {
 		final String licenseFile = System.getProperty(LICENSE_FILE_PROPERTY);
 		if (licenseFile != null) {
 			try {
@@ -344,7 +346,8 @@ public final class LicenseChecker {
 	 * @return
 	 * @throws CertificateException
 	 */
-	static KeyStore getEclipseHomeLicense() throws CertificateException {
+	@Nullable
+	public static KeyStore getEclipseHomeLicense() throws CertificateException {
 
 		final String userHome = System.getProperty("eclipse.home.location");
 		if (userHome != null) {
@@ -367,7 +370,7 @@ public final class LicenseChecker {
 
 	/**
 	 * Loads the client license certificate into memory.
-	 * 
+	 *
 	 * @return The certificate, or null if there were problems other than exceptions
 	 * @throws CertificateException
 	 * @throws FileNotFoundException
@@ -405,7 +408,7 @@ public final class LicenseChecker {
 		return null;
 	}
 
-	static void importExtraCertsFromHome(final KeyStore keystore) {
+	public static void importExtraCertsFromHome(final KeyStore keystore) {
 		final String userHome = System.getProperty("eclipse.home.location");
 		try {
 			File f = getCACertsFileFromEclipseHomeURL(userHome);
