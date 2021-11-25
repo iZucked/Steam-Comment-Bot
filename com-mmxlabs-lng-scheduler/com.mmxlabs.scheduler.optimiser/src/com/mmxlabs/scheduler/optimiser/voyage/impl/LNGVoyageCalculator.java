@@ -190,20 +190,11 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		calculateRouteAdditionalFuelRequirements(options, output, vessel, vesselState, additionalRouteTimeInHours, nboAvailableInM3);
 
 		if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS && output.isRouteAdditionalTravelRanDry()) {
-			// Vessel ran dry in canal travel, calculate travel first since running dry in canal should, in general, mean that the run dry happened during travel and we arrive at the canal without
-			// LNG.
+			// Vessel ran dry in canal travel, calculate travel first since running dry in
+			// canal should, in general, mean that the run dry happened during travel and we
+			// arrive at the canal without LNG.
 
-			// Reset route additional attributes to start from clean slate
-			output.setRouteAdditionalNBOHours(0);
-			output.setRouteAdditionalConsumption(LNGFuelKeys.NBO_In_m3, 0);
-			output.setRouteAdditionalConsumption(LNGFuelKeys.NBO_In_MT, 0);
-			output.setRouteAdditionalConsumption(LNGFuelKeys.FBO_In_m3, 0);
-			output.setRouteAdditionalConsumption(LNGFuelKeys.FBO_In_MT, 0);
-			output.setRouteAdditionalConsumption(vessel.getTravelBaseFuelInMT(), 0);
-			output.setRouteAdditionalConsumption(vessel.getSupplementalTravelBaseFuelInMT(), 0);
-			output.setRouteAdditionalConsumption(vessel.getPilotLightFuelInMT(), 0);
-			output.setRouteAdditionalTravelRanDry(false);
-
+			output.resetRouteAdditionalTravelFuelRequirements(vessel);
 			calculateTravelFuelRequirements(options, output, vessel, vesselState, travelTimeInHours, speed, nboAvailableInM3);
 			if (nboAvailableInM3 != Long.MAX_VALUE) { // Keep Max_Value at Max_Value
 				nboAvailableInM3 -= output.getFuelConsumption(LNGFuelKeys.NBO_In_m3);
@@ -214,7 +205,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				nboAvailableInM3 -= output.getRouteAdditionalConsumption(LNGFuelKeys.NBO_In_m3);
 				nboAvailableInM3 -= output.getRouteAdditionalConsumption(LNGFuelKeys.FBO_In_m3);
 			}
-			// At this point travelRanDry should be true. routeAdditionalTravelRanDry should generally be true as well but it can be false from data that is not bad but is unrealistic.
+			// At this point travelRanDry should be true. routeAdditionalTravelRanDry should
+			// generally be true as well but it can be false from data that is not bad but
+			// is unrealistic.
 		} else {
 			// Did not run out of LNG in the canal calculation - update available NBO and
 			// calculate travel fuel consumption
@@ -274,7 +267,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		final long nboRouteRateInM3PerDay = routeCostProvider.getRouteNBORate(options.getRoute(), vessel, vesselState);
 		final long consumptionRateInMTPerDay = routeCostProvider.getRouteFuelUsage(options.getRoute(), vessel, vesselState);
 
-		calculateFuelRequirements(options, vessel, additionalRouteTimeInHours, nboAvailableInM3, nboRouteRateInM3PerDay, consumptionRateInMTPerDay, output::setRouteAdditionalNBOHours,
+		calculateTravelOrCanalFuelRequirements(options, vessel, additionalRouteTimeInHours, nboAvailableInM3, nboRouteRateInM3PerDay, consumptionRateInMTPerDay, output::setRouteAdditionalNBOHours,
 				output::setRouteAdditionalConsumption, output::getRouteAdditionalConsumption, output::setRouteAdditionalTravelRanDry);
 	}
 
@@ -328,115 +321,144 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		output.setFuelConsumption(vessel.getIdleBaseFuelInMT(), Math.max(idleConsumptionInMT, minBaseConsumptionInMT));
 	}
 
-	protected final void calculateTravelFuelRequirements(final VoyageOptions options, final VoyageDetails output, final IVessel vessel, final VesselState vesselState, final int travelTimeInHours,
+	protected final void calculateTravelFuelRequirements(final VoyageOptions options, final VoyageDetails output, final IVessel vessel, final VesselState vesselState, final int timeInHours,
 			final int speed, final long nboAvailableInM3) {
 
 		final long nboRateInM3PerDay = vessel.getNBORate(vesselState);
 		/**
-		 * The number of MT of base fuel or MT-equivalent of LNG required per hour during this journey
+		 * The number of MT of base fuel or MT-equivalent of LNG required per hour
+		 * during this journey
 		 */
 		final long consumptionRateInMTPerDay = speed == 0 ? 0 : vessel.getConsumptionRate(vesselState).getRate(speed);
-		calculateFuelRequirements(options, vessel, travelTimeInHours, nboAvailableInM3, nboRateInM3PerDay, consumptionRateInMTPerDay, output::setTravelNBOHours, output::setFuelConsumption,
+		calculateTravelOrCanalFuelRequirements(options, vessel, timeInHours, nboAvailableInM3, nboRateInM3PerDay, consumptionRateInMTPerDay, output::setTravelNBOHours, output::setFuelConsumption,
 				output::getFuelConsumption, output::setTravelRanDry);
 	}
 
-	protected final void calculateFuelRequirements(final VoyageOptions options, final IVessel vessel, final int travelTimeInHours, final long nboAvailableInM3, final long nboRateInM3PerDay,
+	/**
+	 * Used to set travel or canal fuel requirements. VoyageOptions travel vs canal
+	 * attributes are similar. The functions/consumer arguments should be setting
+	 * the canal/travel collection of attributes on VoyageOptions - doing otherwise
+	 * causes undefined behaviour.
+	 * 
+	 * Precondition: The fuel data in options is in a clear state, i.e. all fuel
+	 * consumption values that could be set are zero and the run dry flag is set to
+	 * false. This method does not calculate anything when timeInHours=0, i.e. it
+	 * will not reset values.
+	 * 
+	 * @param options
+	 * @param vessel
+	 * @param timeInHours               >= 0
+	 * @param nboAvailableInM3          >= 0
+	 * @param nboRateInM3PerDay         >= 0
+	 * @param consumptionRateInMTPerDay >= 0
+	 * @param setTravelNBOHours
+	 * @param setFuelConsumption
+	 * @param getFuelConsumption
+	 * @param setRanDry
+	 */
+	protected final void calculateTravelOrCanalFuelRequirements(final VoyageOptions options, final IVessel vessel, final int timeInHours, final long nboAvailableInM3, final long nboRateInM3PerDay,
 			final long consumptionRateInMTPerDay, final IntConsumer setTravelNBOHours, final ObjLongConsumer<@NonNull FuelKey> setFuelConsumption,
 			final ToLongFunction<@NonNull FuelKey> getFuelConsumption, final Consumer<Boolean> setRanDry) {
-		final IBaseFuel baseFuel = vessel.getTravelBaseFuel();
-		final int equivalenceFactorMMBTuToMT = baseFuel.getEquivalenceFactor();
+		// If timeInHours=0, then this method is equal to setting all corresponding fuel
+		// consumptions to zero (and doing a lot of multiplication by zero) and setting
+		// the runDry flag to false (assumed to be the starting
+		// state, see precondition).
+		if (timeInHours > 0) {
+			final IBaseFuel baseFuel = vessel.getTravelBaseFuel();
+			final int equivalenceFactorMMBTuToMT = baseFuel.getEquivalenceFactor();
 
-		final int cargoCVValue = options.getCargoCVValue();
+			final int cargoCVValue = options.getCargoCVValue();
 
-		final long nboAvailableInMT = nboAvailableInM3 == Long.MAX_VALUE ? Long.MAX_VALUE : Calculator.convertM3ToMT(nboAvailableInM3, cargoCVValue, equivalenceFactorMMBTuToMT);
+			final long nboAvailableInMT = nboAvailableInM3 == Long.MAX_VALUE ? Long.MAX_VALUE : Calculator.convertM3ToMT(nboAvailableInM3, cargoCVValue, equivalenceFactorMMBTuToMT);
 
-		final int minBaseFuelConsumptionInMTPerDay = vessel.getMinBaseFuelConsumptionInMTPerDay();
+			final int minBaseFuelConsumptionInMTPerDay = vessel.getMinBaseFuelConsumptionInMTPerDay();
 
-		/**
-		 * The total number of MT of base fuel OR MT-equivalent of LNG required for this
-		 * journey, excluding any extra required for canals
-		 */
-		final long requiredConsumptionInMT = Calculator.quantityFromRateTime(consumptionRateInMTPerDay, travelTimeInHours) / 24L;
-		int nboHours = 0;
-		if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS) {
-			nboHours = travelTimeInHours;
-			boolean ranDry = false;
-			final long totalTravelTimeNBOInM3 = Calculator.quantityFromRateTime(nboRateInM3PerDay, nboHours) / 24L;
-			if (totalTravelTimeNBOInM3 > nboAvailableInM3 // NBO Exceeds available quantity
-					|| requiredConsumptionInMT > nboAvailableInMT) { // Not enough gas onboard to cover the fuel requirements
-				// Ran dry
-				if (options.getTravelFuelChoice() == TravelFuelChoice.NBO_PLUS_FBO) {
-					final long nboRateInMTPerDay = Calculator.convertM3ToMT(nboRateInM3PerDay, cargoCVValue, equivalenceFactorMMBTuToMT);
-					nboHours = Calculator.getTimeFromRateQuantity(Math.max(nboRateInMTPerDay, consumptionRateInMTPerDay), nboAvailableInMT * 24L);
-				} else {
-					nboHours = Calculator.getTimeFromRateQuantity(nboRateInM3PerDay, nboAvailableInM3 * 24L);
+			/**
+			 * The total number of MT of base fuel OR MT-equivalent of LNG required for this
+			 * journey, excluding any extra required for canals
+			 */
+			final long requiredConsumptionInMT = Calculator.quantityFromRateTime(consumptionRateInMTPerDay, timeInHours) / 24L;
+			int nboHours = 0;
+			if (options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS) {
+				nboHours = timeInHours;
+				boolean ranDry = false;
+				final long totalTravelTimeNBOInM3 = Calculator.quantityFromRateTime(nboRateInM3PerDay, nboHours) / 24L;
+				if (totalTravelTimeNBOInM3 > nboAvailableInM3 // NBO Exceeds available quantity
+						|| requiredConsumptionInMT > nboAvailableInMT) { // Not enough gas onboard to cover the fuel requirements
+					// Ran dry
+					if (options.getTravelFuelChoice() == TravelFuelChoice.NBO_PLUS_FBO) {
+						final long nboRateInMTPerDay = Calculator.convertM3ToMT(nboRateInM3PerDay, cargoCVValue, equivalenceFactorMMBTuToMT);
+						nboHours = Calculator.getTimeFromRateQuantity(Math.max(nboRateInMTPerDay, consumptionRateInMTPerDay), nboAvailableInMT * 24L);
+					} else {
+						nboHours = Calculator.getTimeFromRateQuantity(nboRateInM3PerDay, nboAvailableInM3 * 24L);
+					}
+					ranDry = true;
 				}
-				ranDry = true;
-			}
-			setTravelNBOHours.accept(nboHours);
+				setTravelNBOHours.accept(nboHours);
 
-			long nboInM3 = Calculator.quantityFromRateTime(nboRateInM3PerDay, nboHours) / 24L;
+				long nboInM3 = Calculator.quantityFromRateTime(nboRateInM3PerDay, nboHours) / 24L;
 
-			final long nboInMT = Calculator.convertM3ToMT(nboInM3, cargoCVValue, equivalenceFactorMMBTuToMT);
+				final long nboInMT = Calculator.convertM3ToMT(nboInM3, cargoCVValue, equivalenceFactorMMBTuToMT);
 
-			setFuelConsumption.accept(LNGFuelKeys.NBO_In_m3, nboInM3);
-			setFuelConsumption.accept(LNGFuelKeys.NBO_In_MT, nboInMT);
+				setFuelConsumption.accept(LNGFuelKeys.NBO_In_m3, nboInM3);
+				setFuelConsumption.accept(LNGFuelKeys.NBO_In_MT, nboInMT);
 
-			final long nboPerDayInMT = Calculator.convertM3ToMT(nboRateInM3PerDay, cargoCVValue, equivalenceFactorMMBTuToMT);
-			final long baseConsumptionInMTForNBOHours = Calculator.quantityFromRateTime(consumptionRateInMTPerDay, nboHours) / 24L;
+				final long nboPerDayInMT = Calculator.convertM3ToMT(nboRateInM3PerDay, cargoCVValue, equivalenceFactorMMBTuToMT);
+				final long baseConsumptionInMTForNBOHours = Calculator.quantityFromRateTime(consumptionRateInMTPerDay, nboHours) / 24L;
 
-			boolean usePilotLight = false;
-			final long diffInMT = baseConsumptionInMTForNBOHours - nboInMT;
-			long fboInM3 = 0L;
-			if (diffInMT > 0) {
-				if (options.getTravelFuelChoice() == TravelFuelChoice.NBO_PLUS_FBO) {
-					final long fboInMT = diffInMT;
-					fboInM3 = Calculator.convertMTToM3(fboInMT, cargoCVValue, equivalenceFactorMMBTuToMT);
+				boolean usePilotLight = false;
+				final long diffInMT = baseConsumptionInMTForNBOHours - nboInMT;
+				long fboInM3 = 0L;
+				if (diffInMT > 0) {
+					if (options.getTravelFuelChoice() == TravelFuelChoice.NBO_PLUS_FBO) {
+						final long fboInMT = diffInMT;
+						fboInM3 = Calculator.convertMTToM3(fboInMT, cargoCVValue, equivalenceFactorMMBTuToMT);
 
-					setFuelConsumption.accept(LNGFuelKeys.FBO_In_m3, fboInM3);
-					setFuelConsumption.accept(LNGFuelKeys.FBO_In_MT, fboInMT);
-					usePilotLight = true;
-				} else {
-					if (nboPerDayInMT >= consumptionRateInMTPerDay) {
-						// NBO + Base, but NBO is high, so no base used - need pilot light
+						setFuelConsumption.accept(LNGFuelKeys.FBO_In_m3, fboInM3);
+						setFuelConsumption.accept(LNGFuelKeys.FBO_In_MT, fboInMT);
 						usePilotLight = true;
 					} else {
-						final long supplementalBaseInMT = diffInMT;
-						setFuelConsumption.accept(vessel.getSupplementalTravelBaseFuelInMT(), supplementalBaseInMT);
+						if (nboPerDayInMT >= consumptionRateInMTPerDay) {
+							// NBO + Base, but NBO is high, so no base used - need pilot light
+							usePilotLight = true;
+						} else {
+							final long supplementalBaseInMT = diffInMT;
+							setFuelConsumption.accept(vessel.getSupplementalTravelBaseFuelInMT(), supplementalBaseInMT);
+						}
+					}
+				} else {
+					usePilotLight = true;
+				}
+
+				if (ranDry && ((nboInM3 + fboInM3) < nboAvailableInM3 && nboAvailableInM3 != Long.MAX_VALUE)) {
+					// Handle volume -> hours -> vol rounding.
+					// Make sure we use up all the available LNG if we run dry.
+					// Direct m3 -> mt conversion may be out a little.
+					nboInM3 = nboAvailableInM3 - fboInM3;
+					setFuelConsumption.accept(LNGFuelKeys.NBO_In_m3, nboInM3);
+				}
+
+				if (usePilotLight) {
+					final long pilotLightRateINMTPerDay = vessel.getPilotLightRate();
+					if (pilotLightRateINMTPerDay > 0) {
+						final long pilotLightConsumptionInMT = Calculator.quantityFromRateTime(pilotLightRateINMTPerDay, nboHours) / 24L;
+						setFuelConsumption.accept(vessel.getPilotLightFuelInMT(), pilotLightConsumptionInMT);
 					}
 				}
-			} else {
-				usePilotLight = true;
-			}
-
-			if (ranDry && ((nboInM3 + fboInM3) < nboAvailableInM3 && nboAvailableInM3 != Long.MAX_VALUE)) {
-				// Handle volume -> hours -> vol rounding.
-				// Make sure we use up all the available LNG if we run dry.
-				// Direct m3 -> mt conversion may be out a little.
-				nboInM3 = nboAvailableInM3 - fboInM3;
-				setFuelConsumption.accept(LNGFuelKeys.NBO_In_m3, nboInM3);
-			}
-
-			if (usePilotLight) {
-				final long pilotLightRateINMTPerDay = vessel.getPilotLightRate();
-				if (pilotLightRateINMTPerDay > 0) {
-					final long pilotLightConsumptionInMT = Calculator.quantityFromRateTime(pilotLightRateINMTPerDay, nboHours) / 24L;
-					setFuelConsumption.accept(vessel.getPilotLightFuelInMT(), pilotLightConsumptionInMT);
+				if (minBaseFuelConsumptionInMTPerDay > 0) {
+					final long supplemental = getFuelConsumption.applyAsLong(vessel.getSupplementalTravelBaseFuelInMT());
+					final long minBaseConsumptionInMT = Calculator.quantityFromRateTime(minBaseFuelConsumptionInMTPerDay, nboHours) / 24L;
+					if (minBaseConsumptionInMT > supplemental) {
+						setFuelConsumption.accept(vessel.getSupplementalTravelBaseFuelInMT(), minBaseConsumptionInMT);
+					}
 				}
+				setRanDry.accept(ranDry);
 			}
-			if (minBaseFuelConsumptionInMTPerDay > 0) {
-				final long supplemental = getFuelConsumption.applyAsLong(vessel.getSupplementalTravelBaseFuelInMT());
-				final long minBaseConsumptionInMT = Calculator.quantityFromRateTime(minBaseFuelConsumptionInMTPerDay, nboHours) / 24L;
-				if (minBaseConsumptionInMT > supplemental) {
-					setFuelConsumption.accept(vessel.getSupplementalTravelBaseFuelInMT(), minBaseConsumptionInMT);
-				}
+			final int baseHours = timeInHours - nboHours;
+			if (baseHours > 0) {
+				final long baseConsumptionInMT = Calculator.quantityFromRateTime(Math.max(consumptionRateInMTPerDay, minBaseFuelConsumptionInMTPerDay), baseHours) / 24L;
+				setFuelConsumption.accept(vessel.getTravelBaseFuelInMT(), baseConsumptionInMT);
 			}
-			setRanDry.accept(ranDry);
-		}
-		final int baseHours = travelTimeInHours - nboHours;
-		if (baseHours > 0) {
-			final long baseConsumptionInMT = Calculator.quantityFromRateTime(Math.max(consumptionRateInMTPerDay, minBaseFuelConsumptionInMTPerDay), baseHours) / 24L;
-			setFuelConsumption.accept(vessel.getTravelBaseFuelInMT(), baseConsumptionInMT);
 		}
 	}
 
@@ -684,24 +706,34 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	}
 
 	/**
-	 * Given a sequence of {@link IPortDetails} interleaved with {@link VoyageDetails}, compute the total base fuel and LNG requirements, taking into account initial conditions, load and discharge
-	 * commitments etc. It is assumed that the first and last {@link IPortDetails} will be a Loading slot or other slot where the vessel state is set to a known state. Intermediate slots are any other
-	 * type of slot (e.g. one discharge, multiple waypoints, etc). If the first slot is a load slot, then this is the only reason we should see a discharge slot.
+	 * Given a sequence of {@link IPortDetails} interleaved with
+	 * {@link VoyageDetails}, compute the total base fuel and LNG requirements,
+	 * taking into account initial conditions, load and discharge commitments etc.
+	 * It is assumed that the first and last {@link IPortDetails} will be a Loading
+	 * slot or other slot where the vessel state is set to a known state.
+	 * Intermediate slots are any other type of slot (e.g. one discharge, multiple
+	 * waypoints, etc). If the first slot is a load slot, then this is the only
+	 * reason we should see a discharge slot.
 	 * 
-	 * NOTE: this method intentionally ignores the last sequence element when calculating the total cost of a voyage plan, in order to avoid double-counting elements, since voyage plans are expected
-	 * to come in A-B-C C-D-E E-F-G chains, where the last element of the chain does not get counted.
+	 * NOTE: this method intentionally ignores the last sequence element when
+	 * calculating the total cost of a voyage plan, in order to avoid
+	 * double-counting elements, since voyage plans are expected to come in A-B-C
+	 * C-D-E E-F-G chains, where the last element of the chain does not get counted.
 	 * 
 	 * @param sequence
 	 * @param dischargeTime
 	 * @param loadTime
-	 * @return Number of capacity constraints which had to be violated in the allocation
+	 * @return Number of capacity constraints which had to be violated in the
+	 *         allocation
 	 */
 	@Override
 	public final long[] calculateVoyagePlan(final VoyagePlan voyagePlan, final IVessel vessel, final ICharterCostCalculator charterCostCalculator, final long[] startHeelRangeInM3,
 			final int[] baseFuelPricesPerMT, final IPortTimesRecord portTimesRecord, final IDetailsSequenceElement... sequence) {
 		/*
-		 * TODO: instead of taking an interleaved List<Object> as a parameter, this would have a far more informative signature (and cleaner logic?) if it passed a list of IPortDetails and a list of
-		 * VoyageDetails as separate parameters. Worth doing at some point?
+		 * TODO: instead of taking an interleaved List<Object> as a parameter, this
+		 * would have a far more informative signature (and cleaner logic?) if it passed
+		 * a list of IPortDetails and a list of VoyageDetails as separate parameters.
+		 * Worth doing at some point?
 		 */
 
 		// Ensure odd number of elements
@@ -1023,7 +1055,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	@Nullable
 	private VoyageDetails getEndHeelDefiningVoyageDetailsElement(final IDetailsSequenceElement[] sequence, @Nullable final VoyageDetails currentLastVoyageDetailsElement) {
 		if (currentLastVoyageDetailsElement != null) {
-			// If using GCO, the last voyage might be defined by a different sequence element
+			// If using GCO, the last voyage might be defined by a different sequence
+			// element
 			int totalVoyageTime = currentLastVoyageDetailsElement.getTravelTime() + currentLastVoyageDetailsElement.getIdleTime();
 			if (totalVoyageTime == 0 && currentLastVoyageDetailsElement.getOptions().getFromPortSlot() instanceof GeneratedCharterOutVesselEventPortSlot) {
 				int i = sequence.length - 2;
@@ -1035,11 +1068,12 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				}
 				// If we broke in loop above then i >= 1, get (i-2) if i > 1
 				if (i > 1) {
-					return (VoyageDetails) sequence[i-2];
+					return (VoyageDetails) sequence[i - 2];
 				}
 			}
 		}
-		// return original argument if we could not find preceeding voyageDetails or it is null
+		// return original argument if we could not find preceeding voyageDetails or it
+		// is null
 		return currentLastVoyageDetailsElement;
 	}
 

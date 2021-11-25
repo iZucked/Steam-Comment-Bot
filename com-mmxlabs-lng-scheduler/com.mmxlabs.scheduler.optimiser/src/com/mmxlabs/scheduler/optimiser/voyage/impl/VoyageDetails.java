@@ -10,9 +10,11 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.mmxlabs.common.impl.LongFastEnumEnumMap;
 import com.mmxlabs.common.impl.LongFastEnumMap;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
+import com.mmxlabs.scheduler.optimiser.voyage.LNGFuelKeys;
 
 /**
  * Implementation of {@link VoyageDetails}.
@@ -52,15 +54,16 @@ public final class VoyageDetails implements IDetailsSequenceElement {
 	private boolean travelRanDry;
 	private boolean routeAdditionalTravelRanDry;
 	private boolean idleRanDry;
-	
+
 	public VoyageDetails(@NonNull final VoyageOptions options) {
 		this.options = options;
 	}
 
 	private VoyageDetails(final int idleTime2, final int travelTime2, final int speed2, final int startTime2, final @NonNull VoyageOptions options,
 			final LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption2, final @NonNull LongFastEnumEnumMap<FuelComponent, FuelUnit> routeAdditionalConsumption2,
-			final @NonNull LongFastEnumMap<FuelComponent> fuelUnitPrices2, final boolean cooldownPerformed, final boolean purgePerformed, int purgeHours, int idleNBOHours, 
-			int travelNBOHours, int routeAdditionalNBOHours, long idleCharterCost, long purgeCharterCost, long travelCharterCost, final boolean travelRanDry, final boolean routeAdditionalTravelRanDry, final boolean idleRanDry) {
+			final @NonNull LongFastEnumMap<FuelComponent> fuelUnitPrices2, final boolean cooldownPerformed, final boolean purgePerformed, int purgeHours, int idleNBOHours, int travelNBOHours,
+			int routeAdditionalNBOHours, long idleCharterCost, long purgeCharterCost, long travelCharterCost, final boolean travelRanDry, final boolean routeAdditionalTravelRanDry,
+			final boolean idleRanDry) {
 		this.idleTime = idleTime2;
 		this.travelTime = travelTime2;
 		this.speed = speed2;
@@ -86,7 +89,8 @@ public final class VoyageDetails implements IDetailsSequenceElement {
 	public VoyageDetails copy() {
 		return new VoyageDetails(idleTime, travelTime, speed, startTime, new VoyageOptions(options), fuelConsumption, routeAdditionalConsumption, fuelUnitPrices, //
 				cooldownPerformed, purgePerformed, purgeHours, //
-				getIdleNBOHours(), getTravelNBOHours(), getRouteAdditionalNBOHours(), this.idleCharterCost, this.purgeCharterCost, this.travelCharterCost, this.travelRanDry, this.routeAdditionalTravelRanDry, this.idleRanDry);
+				getIdleNBOHours(), getTravelNBOHours(), getRouteAdditionalNBOHours(), this.idleCharterCost, this.purgeCharterCost, this.travelCharterCost, this.travelRanDry,
+				this.routeAdditionalTravelRanDry, this.idleRanDry);
 	}
 
 	public final long getFuelConsumption(final @NonNull FuelKey fuelKey) {
@@ -310,5 +314,18 @@ public final class VoyageDetails implements IDetailsSequenceElement {
 
 	public void setIdleRanDry(final boolean idleRanDry) {
 		this.idleRanDry = idleRanDry;
+	}
+
+	public void resetRouteAdditionalTravelFuelRequirements(@NonNull final IVessel vessel) {
+		this.setRouteAdditionalNBOHours(0);
+		// Not clearing routeAdditionalConsumption since idle requirements could be set.
+		// At time of writing idle values on routeAdditionalConsumption should not be set.
+		for (final FuelKey fuelKey : LNGFuelKeys.Travel_LNG) {
+			this.setRouteAdditionalConsumption(fuelKey, 0L);
+		}
+		for (final FuelKey fuelKey : vessel.getTravelFuelKeys()) {
+			this.setRouteAdditionalConsumption(fuelKey, 0L);
+		}
+		this.setRouteAdditionalTravelRanDry(false);
 	}
 }
