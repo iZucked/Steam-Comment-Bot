@@ -32,6 +32,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BaseCaseRowImpl#getSellOption <em>Sell Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BaseCaseRowImpl#getVesselEventOption <em>Vessel Event Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BaseCaseRowImpl#getShipping <em>Shipping</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.BaseCaseRowImpl#isOptionise <em>Optionise</em>}</li>
  * </ul>
  *
  * @generated
@@ -76,6 +77,26 @@ public class BaseCaseRowImpl extends EObjectImpl implements BaseCaseRow {
 	 * @ordered
 	 */
 	protected ShippingOption shipping;
+
+	/**
+	 * The default value of the '{@link #isOptionise() <em>Optionise</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isOptionise()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean OPTIONISE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isOptionise() <em>Optionise</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isOptionise()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean optionise = OPTIONISE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -262,6 +283,29 @@ public class BaseCaseRowImpl extends EObjectImpl implements BaseCaseRow {
 	 * @generated
 	 */
 	@Override
+	public boolean isOptionise() {
+		return optionise;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setOptionise(boolean newOptionise) {
+		boolean oldOptionise = optionise;
+		optionise = newOptionise;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.BASE_CASE_ROW__OPTIONISE, oldOptionise, optionise));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case AnalyticsPackage.BASE_CASE_ROW__BUY_OPTION:
@@ -276,6 +320,8 @@ public class BaseCaseRowImpl extends EObjectImpl implements BaseCaseRow {
 			case AnalyticsPackage.BASE_CASE_ROW__SHIPPING:
 				if (resolve) return getShipping();
 				return basicGetShipping();
+			case AnalyticsPackage.BASE_CASE_ROW__OPTIONISE:
+				return isOptionise();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -299,6 +345,9 @@ public class BaseCaseRowImpl extends EObjectImpl implements BaseCaseRow {
 				return;
 			case AnalyticsPackage.BASE_CASE_ROW__SHIPPING:
 				setShipping((ShippingOption)newValue);
+				return;
+			case AnalyticsPackage.BASE_CASE_ROW__OPTIONISE:
+				setOptionise((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -324,6 +373,9 @@ public class BaseCaseRowImpl extends EObjectImpl implements BaseCaseRow {
 			case AnalyticsPackage.BASE_CASE_ROW__SHIPPING:
 				setShipping((ShippingOption)null);
 				return;
+			case AnalyticsPackage.BASE_CASE_ROW__OPTIONISE:
+				setOptionise(OPTIONISE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -344,8 +396,26 @@ public class BaseCaseRowImpl extends EObjectImpl implements BaseCaseRow {
 				return vesselEventOption != null;
 			case AnalyticsPackage.BASE_CASE_ROW__SHIPPING:
 				return shipping != null;
+			case AnalyticsPackage.BASE_CASE_ROW__OPTIONISE:
+				return optionise != OPTIONISE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (optionise: ");
+		result.append(optionise);
+		result.append(')');
+		return result.toString();
 	}
 
 } //BaseCaseRowImpl
