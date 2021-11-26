@@ -263,8 +263,12 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 					msg = "Data Hub URL is not valid or unreachable";
 					break;
 				case UNKNOWN_ERROR:
-					msg = state.getMessage() + " (see error log for details)";
-					LOGGER.error(state.getException().getMessage(), state.getException());
+					if (state.getException() != null) {
+						msg = state.getMessage() + " (see error log for details)";
+						LOGGER.error(state.getException().getMessage(), state.getException());
+					} else {
+						msg = state.getMessage();
+					}
 					break;
 				case HUB_ONLINE:
 					msg = "Data Hub is online";
