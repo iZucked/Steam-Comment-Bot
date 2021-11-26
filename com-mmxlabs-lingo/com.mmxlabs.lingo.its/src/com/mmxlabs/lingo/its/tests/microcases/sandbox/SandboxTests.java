@@ -249,7 +249,8 @@ public class SandboxTests extends AbstractSandboxTestCase {
 	}
 
 	/**
-	 * Test case to check whether we can schedule a cargo OR a vessel event (but not both).
+	 * Test case to check whether we can schedule a cargo OR a vessel event (but not
+	 * both).
 	 */
 	@Test
 	public void testEventOrCargoCase() {
@@ -303,8 +304,7 @@ public class SandboxTests extends AbstractSandboxTestCase {
 			if (option.getScheduleModel().getSchedule().getCargoAllocations().isEmpty()) {
 				for (final Sequence seq : option.getScheduleModel().getSchedule().getSequences()) {
 					for (final Event evt : seq.getEvents()) {
-						if (evt instanceof VesselEventVisit) {
-							final VesselEventVisit vesselEventVisit = (VesselEventVisit) evt;
+						if (evt instanceof VesselEventVisit vesselEventVisit) {
 							if (vesselEventVisit.getVesselEvent() instanceof CharterOutEvent) {
 								foundEventSolution = true;
 								continue LOOP_SOLUTIONS;
@@ -331,7 +331,8 @@ public class SandboxTests extends AbstractSandboxTestCase {
 	}
 
 	/**
-	 * Regression test: Sandbox optioniser fails as sandbox DES purchase is transformed twice.
+	 * Regression test: Sandbox optioniser fails as sandbox DES purchase is
+	 * transformed twice.
 	 */
 	@Test
 	public void testDESPurchaseOptioniserInPeriod() {
@@ -365,8 +366,9 @@ public class SandboxTests extends AbstractSandboxTestCase {
 				.build();
 		final SellOption sell2 = sandboxBuilder.createSellReference(existingDischarge);
 
-		sandboxBuilder.createBaseCaseRow(null, sell1, null);
-		sandboxBuilder.createBaseCaseRow(buy1, null, null);
+		sandboxBuilder.createBaseCaseRow(null, sell1, null).setOptionise(true);
+		sandboxBuilder.createBaseCaseRow(buy1, null, null).setOptionise(true);
+		;
 
 		UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setPeriodStartDate(LocalDate.of(2020, 3, 15));
@@ -636,7 +638,8 @@ public class SandboxTests extends AbstractSandboxTestCase {
 	}
 
 	/**
-	 * Based on fogbugz 5137 where a bug was introduced in the {@link ScheduleSpecificationTransformer} and the sandbox failed to evaluate.
+	 * Based on fogbugz 5137 where a bug was introduced in the
+	 * {@link ScheduleSpecificationTransformer} and the sandbox failed to evaluate.
 	 */
 	@Test
 	public void testPortfolioWithUnusedOptions() {
@@ -759,7 +762,8 @@ public class SandboxTests extends AbstractSandboxTestCase {
 				.withShippingOptions(ship1) //
 				.build();
 
-		// We really need to pass through settings in API, but code will fall back to here otherwise.
+		// We really need to pass through settings in API, but code will fall back to
+		// here otherwise.
 		UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
 		userSettings.setWithCharterLength(true);
 		scenarioDataProvider.getTypedScenario(LNGScenarioModel.class).setUserSettings(userSettings);
@@ -838,7 +842,8 @@ public class SandboxTests extends AbstractSandboxTestCase {
 		CharterOutMarket gcoMarket = spotMarketsModelBuilder.createCharterOutMarket("GCO", vessel, "80000", 30);
 		gcoMarket.setEnabled(true);
 
-		// We really need to pass through settings in API, but code will fall back to here otherwise.
+		// We really need to pass through settings in API, but code will fall back to
+		// here otherwise.
 		UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setGenerateCharterOuts(true);
 		scenarioDataProvider.getTypedScenario(LNGScenarioModel.class).setUserSettings(userSettings);
@@ -893,8 +898,8 @@ public class SandboxTests extends AbstractSandboxTestCase {
 	private List<GeneratedCharterOut> findGCOEvents(Sequence sequence) {
 		List<GeneratedCharterOut> charterOuts = new ArrayList<>();
 		for (Event e : sequence.getEvents()) {
-			if (e instanceof GeneratedCharterOut) {
-				charterOuts.add((GeneratedCharterOut) e);
+			if (e instanceof GeneratedCharterOut gco) {
+				charterOuts.add(gco);
 			}
 		}
 		return charterOuts;
