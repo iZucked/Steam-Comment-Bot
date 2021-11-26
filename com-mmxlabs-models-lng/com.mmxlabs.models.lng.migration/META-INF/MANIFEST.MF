@@ -18,3 +18,4 @@ Require-Bundle: com.mmxlabs.models.migration;bundle-version="[4.13.4,5.0.0)",
 Export-Package: com.mmxlabs.models.lng.migration,
  com.mmxlabs.models.lng.migration.units
 Automatic-Module-Name: com.mmxlabs.models.lng.migration
+Import-Package: org.slf4j

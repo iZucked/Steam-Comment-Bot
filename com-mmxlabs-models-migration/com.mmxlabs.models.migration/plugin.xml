@@ -15,6 +15,7 @@
    <extension-point id="DefaultClientMigrationContext" name="DefaultClientMigrationContext" schema="schema/DefaultClientMigrationContext.exsd"/>
    <extension-point id="ClientMigrationContext" name="ClientMigrationContext" schema="schema/ClientMigrationContext.exsd"/>
    <extension-point id="ClientMigrationUnit" name="ClientMigrationUnit" schema="schema/ClientMigrationUnit.exsd"/>
+   <extension-point id="MigrationProvider" name="MigrationProvider" schema="schema/MigrationProvider.exsd"/>
    <extension
          point="org.eclipse.ui.startup">
       <startup
