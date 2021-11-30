@@ -20,7 +20,6 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -57,34 +56,31 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.core.commands.IHandler#execute(org.eclipse.core.commands.ExecutionEvent)
+	 * @see org.eclipse.core.commands.IHandler#execute(org.eclipse.core.commands.
+	 * ExecutionEvent)
 	 */
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
-		final Exception exceptions[] = new Exception[1];
-		BusyIndicator.showWhile(HandlerUtil.getActiveShellChecked(event).getDisplay(), new Runnable() {
+		final Exception[] exceptions = new Exception[1];
+		BusyIndicator.showWhile(HandlerUtil.getActiveShellChecked(event).getDisplay(), () -> {
+			final ISelection selection = activePage.getSelection();
 
-			@Override
-			public void run() {
-				final ISelection selection = activePage.getSelection();
+			final Container container = getContainer(selection);
 
-				final Container container = getContainer(selection);
+			if (container == null) {
+				return;
+			}
 
-				if (container == null) {
-					return;
+			final Clipboard clipboard = new Clipboard(HandlerUtil.getActiveWorkbenchWindow(event).getShell().getDisplay());
+			try {
+				if (!pasteLocal(clipboard, container)) {
+					pasteFromFiles(clipboard, container);
 				}
-
-				final Clipboard clipboard = new Clipboard(HandlerUtil.getActiveWorkbenchWindow(event).getShell().getDisplay());
-				try {
-					if (!pasteLocal(clipboard, container)) {
-						pasteFromFiles(clipboard, container);
-					}
-				} catch (final IOException e) {
-					exceptions[0] = e;
-				} finally {
-					clipboard.dispose();
-				}
+			} catch (final IOException e) {
+				exceptions[0] = e;
+			} finally {
+				clipboard.dispose();
 			}
 		});
 
@@ -113,8 +109,9 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 				dialog.run(true, true, new IRunnableWithProgress() {
 
 					@Override
-					public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					public void run(final IProgressMonitor parentMonitor) throws InvocationTargetException, InterruptedException {
 
+						SubMonitor monitor = SubMonitor.convert(parentMonitor);
 						monitor.beginTask("Copying", 3 * numTasks);
 						try {
 							for (final Object o : iterable) {
@@ -123,7 +120,7 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 									monitor.subTask("Copying " + scenarioInstance.getName());
 									log.debug("Local paste " + scenarioInstance.getName());
 									try {
-										final ScenarioInstance duplicate = ScenarioServiceUtils.copyScenario(scenarioInstance, container, existingNames, new SubProgressMonitor(monitor, 2));
+										final ScenarioInstance duplicate = ScenarioServiceUtils.copyScenario(scenarioInstance, container, existingNames, monitor.split(2));
 										if (duplicate != null) {
 											existingNames.add(duplicate.getName());
 										}
@@ -138,10 +135,7 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 						}
 					}
 				});
-			} catch (final InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (final InterruptedException e) {
+			} catch (final InvocationTargetException | InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -159,7 +153,7 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 				if (f == null) {
 					continue;
 				}
-				if (f.isFile() && Files.getFileExtension(f.getName()).toLowerCase().equals("lingo")) {
+				if (f.isFile() && Files.getFileExtension(f.getName()).equalsIgnoreCase("lingo")) {
 					scenarioFiles.add(f);
 					scenarioContainerMap.put(f, container);
 				} else if (f.isDirectory()) {
@@ -199,7 +193,7 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 				final Map<File, Container> scenarioContainerMap = new HashMap<>();
 				for (final String filePath : files) {
 					final File f = new File(filePath);
-					if (f.isFile() && Files.getFileExtension(f.getName()).toLowerCase().equals("lingo")) {
+					if (f.isFile() && Files.getFileExtension(f.getName()).equalsIgnoreCase("lingo")) {
 						scenarioFiles.add(f);
 						scenarioContainerMap.put(f, container);
 					} else if (f.isDirectory()) {
