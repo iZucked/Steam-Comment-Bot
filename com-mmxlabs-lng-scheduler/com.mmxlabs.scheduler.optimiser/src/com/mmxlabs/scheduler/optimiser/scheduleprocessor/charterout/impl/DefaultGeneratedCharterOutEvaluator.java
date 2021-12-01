@@ -415,10 +415,9 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		ERouteOption ladenRoute = null;
 		for (int i = 0; i < ballastIdx; i++) {
 			final Object o = currentSequence[i];
-			if (o instanceof PortDetails) {
-				newRawSequence.add(((PortDetails) o).getOptions().copy());
-			} else if (o instanceof VoyageDetails) {
-				final VoyageDetails voyageDetails = (VoyageDetails) o;
+			if (o instanceof PortDetails pd) {
+				newRawSequence.add(pd.getOptions().copy());
+			} else if (o instanceof VoyageDetails voyageDetails) {
 				newRawSequence.add(voyageDetails.getOptions().copy());
 				if (voyageDetails.getOptions().getVesselState() == VesselState.Laden) {
 					ladenRoute = voyageDetails.getOptions().getRoute();
@@ -654,9 +653,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 	private boolean isFirstSequenceElementIsLoadSlot(final ExtendedCharterOutSequence bigSequence) {
 		final IOptionsSequenceElement foo = bigSequence.getSequence().get(0);
-		if (foo instanceof PortOptions) {
-			final PortOptions bar = (PortOptions) foo;
-			if (bar.getPortSlot().getPortType() == PortType.Load) {
+		if (foo instanceof PortOptions portOptions) {
+			if (portOptions.getPortSlot().getPortType() == PortType.Load) {
 				return true;
 			}
 		}
@@ -728,8 +726,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	private long getTotalBoilOffInSequence(final IDetailsSequenceElement[] sequence) {
 		long totalBoilOff = 0;
 		for (final IDetailsSequenceElement sequenceElement : sequence) {
-			if (sequenceElement instanceof VoyageDetails) {
-				totalBoilOff += getTotalBoilOffForVoyage((VoyageDetails) sequenceElement);
+			if (sequenceElement instanceof VoyageDetails vd) {
+				totalBoilOff += getTotalBoilOffForVoyage(vd);
 			}
 		}
 		return totalBoilOff;
@@ -760,17 +758,17 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		int cv = 0;
 
 		final IDetailsSequenceElement startOfSequence = sequence[0];
-		if (startOfSequence instanceof PortDetails) {
-			final IPortSlot portSlot = ((PortDetails) startOfSequence).getOptions().getPortSlot();
-			if (portSlot instanceof IHeelOptionSupplierPortSlot) {
-				heelPriceCalculator = ((IHeelOptionSupplierPortSlot) portSlot).getHeelOptionsSupplier().getHeelPriceCalculator();
-				cv = ((IHeelOptionSupplierPortSlot) portSlot).getHeelOptionsSupplier().getHeelCVValue();
-			} else if (portSlot instanceof ILoadSlot) {
+		if (startOfSequence instanceof PortDetails pd) {
+			final IPortSlot portSlot = pd.getOptions().getPortSlot();
+			if (portSlot instanceof IHeelOptionSupplierPortSlot hospt) {
+				heelPriceCalculator = hospt.getHeelOptionsSupplier().getHeelPriceCalculator();
+				cv = hospt.getHeelOptionsSupplier().getHeelCVValue();
+			} else if (portSlot instanceof ILoadSlot loadSlot) {
 				IDischargeSlot discharge = null;
 				for (int i = sequence.length - 1; i >= 0; i--) {
-					if (sequence[i] instanceof PortDetails) {
-						if (((PortDetails) sequence[i]).getOptions().getPortSlot() instanceof IDischargeSlot) {
-							discharge = (IDischargeSlot) ((PortDetails) sequence[i]).getOptions().getPortSlot();
+					if (sequence[i] instanceof PortDetails pdi) {
+						if (pdi.getOptions().getPortSlot() instanceof IDischargeSlot ds) {
+							discharge = ds;
 							break;
 						}
 					}
@@ -778,7 +776,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				if (discharge != null) {
 					heelPriceCalculator = new ConstantHeelPriceCalculator(discharge.getDischargePriceCalculator().estimateSalesUnitPrice(discharge, portTimesRecord, null));
 				}
-				cv = ((ILoadSlot) portSlot).getCargoCVValue();
+				cv = loadSlot.getCargoCVValue();
 			} else {
 				heelPriceCalculator = new ConstantHeelPriceCalculator(0);
 			}
