@@ -17,7 +17,6 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.CellEditor;
@@ -43,6 +42,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.mmxlabs.common.util.TriConsumer;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.BasicAttributeInlineEditor;
@@ -106,7 +106,7 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 		/**
 		 * The action to apply when the button is pressed
 		 */
-		private BiConsumer<ICommandHandler, ISelection> action;
+		private TriConsumer<Object, ICommandHandler, ISelection> action;
 		/**
 		 * Optional event handler when the table selection changes. E.g. to activate or deactivate the button
 		 */
@@ -208,7 +208,7 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 			return new ColDefBuilder(this, name, f);
 		}
 
-		public Builder withAction(final String name, final BiConsumer<ICommandHandler, ISelection> action) {
+		public Builder withAction(final String name, final TriConsumer<Object, ICommandHandler, ISelection> action) {
 
 			final ButtonDef d = new ButtonDef();
 			d.name = name;
@@ -219,7 +219,7 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 			return this;
 		}
 
-		public Builder withAction(final String name, final BiConsumer<ICommandHandler, ISelection> action, final boolean enabledState,
+		public Builder withAction(final String name, final TriConsumer<Object, ICommandHandler, ISelection> action, final boolean enabledState,
 				final BiConsumer<Button, IStructuredSelection> selectionChanged) {
 
 			final ButtonDef d = new ButtonDef();
@@ -348,7 +348,7 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 				b.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(final SelectionEvent e) {
-						d.action.accept(commandHandler, tableViewer.getSelection());
+						d.action.accept(input, commandHandler, tableViewer.getSelection());
 					}
 				});
 				if (d.selectionChanged != null) {

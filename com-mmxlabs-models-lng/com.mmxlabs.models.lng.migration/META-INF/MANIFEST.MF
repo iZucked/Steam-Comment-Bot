@@ -4,7 +4,7 @@ Bundle-Name: Models LNG: Migration
 Bundle-SymbolicName: com.mmxlabs.models.lng.migration;singleton:=true
 Bundle-Version: 4.13.4.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-16
 Require-Bundle: com.mmxlabs.models.migration;bundle-version="[4.13.4,5.0.0)",
  com.mmxlabs.models.lng.scenario.model;bundle-version="[4.13.4,5.0.0)",
  com.google.guava;bundle-version="10.0.1",
@@ -18,3 +18,4 @@ Require-Bundle: com.mmxlabs.models.migration;bundle-version="[4.13.4,5.0.0)",
 Export-Package: com.mmxlabs.models.lng.migration,
  com.mmxlabs.models.lng.migration.units
 Automatic-Module-Name: com.mmxlabs.models.lng.migration
+Import-Package: org.slf4j

@@ -118,7 +118,7 @@ public class CanalBookingsComponentHelper extends BaseComponentHelper {
 		addSingleReferenceColumn(b, "Booking code", CargoPackage.Literals.CANAL_BOOKING_SLOT__BOOKING_CODE);
 		addTextColumn(b, "Notes", CargoPackage.Literals.CANAL_BOOKING_SLOT__NOTES);
 		
-		b.withAction("Add", (ch, sel) -> {
+		b.withAction("Add", (input, ch, sel) -> {
 			CanalBookings canalBookings = ScenarioModelUtil.getCargoModel((LNGScenarioModel) ch.getModelReference().getInstance()).getCanalBookings();
 			CanalBookingSlot cbs = CargoFactory.eINSTANCE.createCanalBookingSlot();
 			Command c = AddCommand.create(ch.getEditingDomain(), canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__CANAL_BOOKING_SLOTS, cbs);
@@ -126,7 +126,7 @@ public class CanalBookingsComponentHelper extends BaseComponentHelper {
 
 		});
 		
-		b.withAction("Delete", (ch, sel) -> {
+		b.withAction("Delete", (input, ch, sel) -> {
 			if (sel instanceof IStructuredSelection) {
 				IStructuredSelection ss = (IStructuredSelection) sel;
 				if (!ss.isEmpty()) {
@@ -208,13 +208,13 @@ public class CanalBookingsComponentHelper extends BaseComponentHelper {
 
 		addColumn(b, "Vessels", CargoPackage.eINSTANCE.getVesselGroupCanalParameters(), CargoPackage.Literals.VESSEL_GROUP_CANAL_PARAMETERS__VESSEL_GROUP);
 
-		b.withAction("Add", (ch, sel) -> {
+		b.withAction("Add", (input, ch, sel) -> {
 			CanalBookings canalBookings = ScenarioModelUtil.getCargoModel((LNGScenarioModel) ch.getModelReference().getInstance()).getCanalBookings();
 			VesselGroupCanalParameters vgcp = CargoFactory.eINSTANCE.createVesselGroupCanalParameters();
 			Command c = AddCommand.create(ch.getEditingDomain(), canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS, vgcp);
 			ch.handleCommand(c, vgcp, CargoPackage.Literals.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS);
 		});
-		b.withAction("Delete", (ch, sel) -> {
+		b.withAction("Delete", (input, ch, sel) -> {
 
 			if (sel instanceof IStructuredSelection) {
 				IStructuredSelection ss = (IStructuredSelection) sel;
@@ -251,7 +251,7 @@ public class CanalBookingsComponentHelper extends BaseComponentHelper {
 		
 		addNumericColumn(b, "Southbound", CargoPackage.Literals.PANAMA_SEASONALITY_RECORD__SOUTHBOUND_WAITING_DAYS);
 		
-		b.withAction("Add", (ch, sel) -> {
+		b.withAction("Add", (input, ch, sel) -> {
 			CanalBookings canalBookings = ScenarioModelUtil.getCargoModel((LNGScenarioModel) ch.getModelReference().getInstance()).getCanalBookings();
 			PanamaSeasonalityRecord psr = CargoFactory.eINSTANCE.createPanamaSeasonalityRecord();
 			Command c = AddCommand.create(ch.getEditingDomain(), canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__PANAMA_SEASONALITY_RECORDS, psr);
@@ -259,7 +259,7 @@ public class CanalBookingsComponentHelper extends BaseComponentHelper {
 
 		});
 		
-		b.withAction("Delete", (ch, sel) -> {
+		b.withAction("Delete", (input, ch, sel) -> {
 
 			if (sel instanceof IStructuredSelection) {
 				IStructuredSelection ss = (IStructuredSelection) sel;

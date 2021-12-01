@@ -9,11 +9,11 @@
 		<artifactId>com.mmxlabs.lingo.master.parent</artifactId>
 		<version>4.13.4-SNAPSHOT</version>
 	</parent>
-
+	
 	<groupId>com.mmxlabs.rcp.common</groupId>
 	<artifactId>com.mmxlabs.rcp.common.parent</artifactId>
 	<packaging>pom</packaging>
-
+ 
 	<modules>
 		<module>com.mmxlabs.rcp.common</module>
 		<module>com.mmxlabs.rcp.common.win32</module>

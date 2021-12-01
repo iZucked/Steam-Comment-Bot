@@ -10,6 +10,12 @@ import com.mmxlabs.models.migration.PackageData;
  */
 public final class ModelsLNGMigrationConstants {
 
+	public static final String MIGRATION_UNIT_PREFIX = "com.mmxlabs.models.lng.migration.units.MigrateToV";
+
+	public static String getMigrationUnitID(int version) {
+		return MIGRATION_UNIT_PREFIX + Integer.toString(version);
+	}
+
 	// Context under which migration units
 	// DO NOT CHANGE
 	public static final String Context = "com.mmxlabs.lingo";

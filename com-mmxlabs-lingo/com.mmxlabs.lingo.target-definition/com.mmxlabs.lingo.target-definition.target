@@ -4,7 +4,7 @@
 <locations>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="jre.feature.feature.group" version="0.0.0"/>
-<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/jre/jre.p2/11.2.0.2020a/jre.p2-11.2.0.2020a.zip-unzip/"/>
+<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/jre/jre.p2/16.2.0.2021e/jre.p2-16.2.0.2021e.zip-unzip/"/>
 </location>
 </locations>
 </target>

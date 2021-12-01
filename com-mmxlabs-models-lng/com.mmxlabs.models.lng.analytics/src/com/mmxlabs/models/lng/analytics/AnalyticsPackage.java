@@ -977,13 +977,22 @@ s	 * <!-- end-user-doc -->
 	int BASE_CASE_ROW__SHIPPING = 3;
 
 	/**
+	 * The feature id for the '<em><b>Optionise</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE_ROW__OPTIONISE = 4;
+
+	/**
 	 * The number of structural features of the '<em>Base Case Row</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_CASE_ROW_FEATURE_COUNT = 4;
+	int BASE_CASE_ROW_FEATURE_COUNT = 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowImpl <em>Partial Case Row</em>}' class.
@@ -4822,6 +4831,17 @@ s	 * <!-- end-user-doc -->
 	EReference getBaseCaseRow_Shipping();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#isOptionise <em>Optionise</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Optionise</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BaseCaseRow#isOptionise()
+	 * @see #getBaseCaseRow()
+	 * @generated
+	 */
+	EAttribute getBaseCaseRow_Optionise();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.PartialCaseRow <em>Partial Case Row</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7360,6 +7380,14 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference BASE_CASE_ROW__SHIPPING = eINSTANCE.getBaseCaseRow_Shipping();
+
+		/**
+		 * The meta object literal for the '<em><b>Optionise</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BASE_CASE_ROW__OPTIONISE = eINSTANCE.getBaseCaseRow_Optionise();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowImpl <em>Partial Case Row</em>}' class.

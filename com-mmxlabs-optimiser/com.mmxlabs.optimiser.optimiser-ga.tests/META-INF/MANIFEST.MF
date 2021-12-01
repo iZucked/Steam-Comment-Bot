@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Optimiser - GA
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-16
 Bundle-SymbolicName: com.mmxlabs.optimiser.optimiser-ga.tests
 Automatic-Module-Name: com.mmxlabs.optimiser.optimiser-ga.tests
 Bundle-Vendor: Minimax Labs Ltd.

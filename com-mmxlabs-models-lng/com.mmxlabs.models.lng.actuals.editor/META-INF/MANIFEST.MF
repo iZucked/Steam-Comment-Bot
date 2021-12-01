@@ -7,7 +7,7 @@ Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.models.lng.actuals.presentation.ActualsEditorPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-16
 Export-Package: com.mmxlabs.models.lng.actuals.importer,
  com.mmxlabs.models.lng.actuals.presentation,
  com.mmxlabs.models.lng.actuals.ui.editorpart

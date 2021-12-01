@@ -26,7 +26,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.mmxlabs.scenario.service.util,
  com.mmxlabs.models.lng.adp,
  com.mmxlabs.models.lng.scenario.model
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-16
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.models.ui.tabular,
  com.mmxlabs.models.ui.tabular.columngeneration,

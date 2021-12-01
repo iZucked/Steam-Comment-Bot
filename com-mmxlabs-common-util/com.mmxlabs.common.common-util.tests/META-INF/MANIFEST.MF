@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Common-Util: tests
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-16
 Bundle-SymbolicName: com.mmxlabs.common.common-util.tests
 Automatic-Module-Name: com.mmxlabs.common.common-util.tests
 Bundle-Vendor: Minimax Labs Ltd.

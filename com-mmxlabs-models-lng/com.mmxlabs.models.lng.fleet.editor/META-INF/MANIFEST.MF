@@ -8,7 +8,7 @@ Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.models.lng.fleet.presentation.FleetEditorPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-16
 Export-Package: com.mmxlabs.models.lng.fleet.importer,
  com.mmxlabs.models.lng.fleet.presentation,
  com.mmxlabs.models.lng.fleet.ui.inlineeditors

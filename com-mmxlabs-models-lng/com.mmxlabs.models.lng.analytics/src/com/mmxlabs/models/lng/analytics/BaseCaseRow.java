@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#getSellOption <em>Sell Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#getVesselEventOption <em>Vessel Event Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#getShipping <em>Shipping</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#isOptionise <em>Optionise</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getBaseCaseRow()
@@ -131,5 +132,27 @@ public interface BaseCaseRow extends EObject {
 	 * @generated
 	 */
 	void setShipping(ShippingOption value);
+
+	/**
+	 * Returns the value of the '<em><b>Optionise</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Optionise</em>' attribute.
+	 * @see #setOptionise(boolean)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getBaseCaseRow_Optionise()
+	 * @model
+	 * @generated
+	 */
+	boolean isOptionise();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#isOptionise <em>Optionise</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Optionise</em>' attribute.
+	 * @see #isOptionise()
+	 * @generated
+	 */
+	void setOptionise(boolean value);
 
 } // BaseCaseRow

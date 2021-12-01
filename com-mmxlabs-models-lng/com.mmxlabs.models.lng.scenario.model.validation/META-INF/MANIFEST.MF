@@ -15,6 +15,6 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.mmxlabs.common.common-util,
  com.mmxlabs.models.lng.pricing.validation,
  com.mmxlabs.license.features
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-16
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: com.mmxlabs.models.lng.scenario.model.validation

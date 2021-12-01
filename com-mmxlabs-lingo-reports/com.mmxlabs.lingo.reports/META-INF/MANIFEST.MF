@@ -127,5 +127,5 @@ Import-Package: com.mmxlabs.models.lng.nominations.utils,
  org.json,
  org.slf4j;version="1.6.4"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-16
 Service-Component: OSGI-INF/*.xml

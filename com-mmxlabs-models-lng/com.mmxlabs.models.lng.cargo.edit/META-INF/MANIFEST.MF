@@ -8,7 +8,7 @@ Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.models.lng.cargo.provider.CargoEditPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-16
 Export-Package: com.mmxlabs.models.lng.cargo.edit.utils,
  com.mmxlabs.models.lng.cargo.provider
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",

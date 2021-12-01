@@ -1064,6 +1064,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				final OptionAnalysisModel m = currentModel;
 				if (m != null) {
 					final int mode = combo.getSelectionIndex();
+					baseCaseComponent.setMode(mode);
 					partialCaseComponent.setVisible(mode == 0);
 					if (beModeToggle != null) {
 						beModeToggle.setVisible(mode != 1);
@@ -1091,6 +1092,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				if (beModeToggle != null) {
 					beModeToggle.setVisible(mode != SandboxModeConstants.MODE_OPTIMISE);
 				}
+				baseCaseComponent.setMode(mode);
 				refreshSections(true, EnumSet.of(SectionType.MIDDLE));
 			}
 		});

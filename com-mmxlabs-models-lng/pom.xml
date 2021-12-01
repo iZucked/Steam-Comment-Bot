@@ -99,7 +99,7 @@
 		<module>com.mmxlabs.models.lng.migration.tests</module>
 
 		<module>com.mmxlabs.models.lng.feature</module>
-		
+
 		<module>com.mmxlabs.models.lng.scenario.ui.tests</module>
 		<module>com.mmxlabs.models.lng.cargo.editor.tests</module>
 	</modules>

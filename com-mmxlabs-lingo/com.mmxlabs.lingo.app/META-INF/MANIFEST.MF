@@ -35,7 +35,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.mmxlabs.lingo.reports,
  com.mmxlabs.hub;bundle-version="4.13.4",
  org.apache.felix.scr;bundle-version="2.1.24"
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-16
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.lingo.app,
  com.mmxlabs.lingo.app.intro

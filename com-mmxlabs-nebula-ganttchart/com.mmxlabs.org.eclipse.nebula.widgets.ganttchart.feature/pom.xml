@@ -3,10 +3,6 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.eclipse.nebula.widgets</groupId>
-	<artifactId>com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.feature</artifactId>
-	<version>4.13.4-SNAPSHOT</version>
-	<packaging>eclipse-feature</packaging>
 
 	<parent>
 		<groupId>org.eclipse.nebula.widgets</groupId>
@@ -14,6 +10,9 @@
 		<version>4.13.4-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
-
+	
+	<groupId>org.eclipse.nebula.widgets</groupId>
+	<artifactId>com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.feature</artifactId>
+	<packaging>eclipse-feature</packaging>
 
 </project>

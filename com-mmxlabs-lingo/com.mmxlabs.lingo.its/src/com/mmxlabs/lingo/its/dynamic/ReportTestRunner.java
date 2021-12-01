@@ -61,7 +61,13 @@ public class ReportTestRunner {
 										Files.writeString(reportFile.toPath(), actual);
 									} else if (TestingModes.ReportTestMode == TestMode.Run) {
 										final String expected = Files.readString(reportFile.toPath());
-										Assertions.assertEquals(expected.replaceAll("\\r\\n", "\n"), actual.replaceAll("\\r\\n", "\n"), String.format("Mismatching result: %s for %s", reportID, f.getName()));
+										Assertions.assertEquals(expected.replaceAll("\\r\\n", "\n")
+												.replaceAll("Sep([^t])", "Sept$1") // Java 16 Compat
+												.replaceAll("\\(EET\\)", "(TRT)") // Java 16 Compat (New turkey timezone)
+												, actual.replaceAll("\\r\\n", "\n")
+												.replaceAll("Sep([^t])", "Sept$1") // Java 16 Compat
+												.replaceAll("\\(EET\\)", "(TRT)") // Java 16 Compat (New turkey timezone)
+												, String.format("Mismatching result: %s for %s", reportID, f.getName()));
 									}
 								});
 							}));

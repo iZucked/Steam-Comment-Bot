@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -20,6 +21,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEventPortSlot;
@@ -72,11 +74,14 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan.VoyagePlanMetrics;
 
 @NonNullByDefault
 public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOutEvaluator {
 
+	@Inject
+	@Named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)
+	private boolean checkPanamaCanalBookings = false;
+	
 	@Inject
 	private ILNGVoyageCalculator voyageCalculator;
 
@@ -343,7 +348,12 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				if (backwards) {
 					latestPanamaWindowEnd = startOfTheJourney + availableTime - travelTimeFromPanama;
 				}
-				panamaIdleHours = getWorstMaxIdleHours(vessel, panamaCanalEntry == ECanalEntry.SouthSide, startOfTheJourney + travelTimeToPanama, latestPanamaWindowEnd + 1);
+				if (checkPanamaCanalBookings) {
+					panamaIdleHours = getWorstMaxIdleHours(vessel, panamaCanalEntry == ECanalEntry.SouthSide, 
+						startOfTheJourney + travelTimeToPanama, latestPanamaWindowEnd + 1);
+				} else {
+					panamaIdleHours = 0;
+				}
 				if (panamaIdleHours == Integer.MIN_VALUE || panamaIdleHours < 0) {
 					throw new IllegalStateException(String.format("Journey from %s to %s via Panama Canal has an Panama waiting time in %s direction", fromPort.getName(), toPort.getName(),
 							panamaCanalEntry == ECanalEntry.SouthSide ? "northbound" : "southbound"));
