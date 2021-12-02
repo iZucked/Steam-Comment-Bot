@@ -310,7 +310,7 @@ public class ScheduleModelUtils {
 		return slot;
 	}
 
-	public static DischargeSlot getDischargeSlot(final Object allocation) {
+	public static @Nullable DischargeSlot getDischargeSlot(final Object allocation) {
 		DischargeSlot slot = null;
 		if (allocation instanceof CargoAllocation) {
 			final CargoAllocation ca = (CargoAllocation) allocation;
