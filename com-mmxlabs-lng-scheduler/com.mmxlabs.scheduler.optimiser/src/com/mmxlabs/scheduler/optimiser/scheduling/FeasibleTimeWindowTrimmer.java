@@ -219,19 +219,9 @@ public class FeasibleTimeWindowTrimmer {
 		for (final ISequenceElement element : sequence) {
 			final PortType portType = portTypeProvider.getPortType(element);
 			switch (portType) {
-			case Load:
-				records[idx].breakSequence = !isRoundTripSequence && (idx > 0); // don't break on first load port
-				break;
-			case CharterOut:
-			case DryDock:
-			case Other:
-			case End:
-			case Round_Trip_Cargo_End:
-				records[idx].breakSequence = true;
-				break;
-			default:
-				records[idx].breakSequence = false;
-				break;
+			case Load -> records[idx].breakSequence = !isRoundTripSequence && (idx > 0); // don't break on first load port
+			case CharterOut, DryDock, Other, End, Round_Trip_Cargo_End -> records[idx].breakSequence = true;
+			default -> records[idx].breakSequence = false;
 			}
 			idx++;
 		}
