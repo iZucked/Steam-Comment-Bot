@@ -62,6 +62,10 @@ public class FeasibleTimeWindowTrimmer {
 	@Inject
 	@Named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)
 	private boolean checkPanamaCanalBookings = false;
+	
+	@Inject
+	@Named(SchedulerConstants.Key_UseBestPanamaCanalIdleDaysWindowTrimming)
+	private boolean useBestCanalIdleDays = false;
 
 	/**
 	 * How long to let empty time windows be. Since these mostly happen at the end of sequences we make this zero.
@@ -642,9 +646,9 @@ public class FeasibleTimeWindowTrimmer {
 									// further down the line (however, northbound Panama may be allowed)
 									
 									final int earliestPanamaArrivalTime = windowStartTime[fromElementIndex] + panamaSegments.travelTimeToCanalWithoutMargin;
-									final int latestPanamaArrivalTime = windowEndTime[fromElementIndex + 1] - panamaSegments.travelTimeFromCanal;
+									final int latestPanamaArrivalTime = Math.max(earliestPanamaArrivalTime + 1, windowEndTime[toElementIndex] - panamaSegments.travelTimeFromCanal);
 									
-									final int waitingTime = getWorstMaxIdleHours(vessel, panamaSegments.isNorthbound, //
+									final int waitingTime = getMaxIdleHours(vessel, panamaSegments.isNorthbound, //
 											earliestPanamaArrivalTime, latestPanamaArrivalTime);
 									
 									travelTimeData.setMinTravelTime(fromElementIndex, Math.min(Math.min(suezTravelTime, directTravelTime), panamaTravelTime + waitingTime));
@@ -686,7 +690,7 @@ public class FeasibleTimeWindowTrimmer {
 										// with less lateness than we would have if we just used wait days.
 										final int earliestPanamaArrivalTime = windowStartTime[fromElementIndex] + panamaSegments.travelTimeToCanalWithoutMargin;
 										final int latestPanamaArrivalTime = windowEndTime[fromElementIndex + 1] - panamaSegments.travelTimeFromCanal;
-										final int waitingTime = getWorstMaxIdleHours(vessel, panamaSegments.isNorthbound,
+										final int waitingTime = getMaxIdleHours(vessel, panamaSegments.isNorthbound,
 												earliestPanamaArrivalTime, latestPanamaArrivalTime);
 										final int delayedPanamaTravelTime = panamaTravelTime + waitingTime;
 										if (delayedPanamaTravelTime < Math.min(directTravelTime, suezTravelTime)) {
@@ -809,8 +813,8 @@ public class FeasibleTimeWindowTrimmer {
 								int latestPanamaTime = endTime - panamaSegments.travelTimeFromCanal;
 								// Removing for now to account for the season end points
 								final int earliestPanamaArrivalTime = windowStartTime[toElementIndex - 1] + panamaSegments.travelTimeToCanalWithoutMargin;
-								final int latestPanamaArrivalTime = windowEndTime[toElementIndex] - panamaSegments.travelTimeFromCanal;
-								final int waitingTime = getWorstMaxIdleHours(vessel, panamaSegments.isNorthbound,
+								final int latestPanamaArrivalTime = Math.max(earliestPanamaArrivalTime + 1, windowEndTime[toElementIndex] - panamaSegments.travelTimeFromCanal);
+								final int waitingTime = getMaxIdleHours(vessel, panamaSegments.isNorthbound,
 										earliestPanamaArrivalTime, latestPanamaArrivalTime);
 								latestPanamaTime -= waitingTime;
 								
@@ -951,9 +955,9 @@ public class FeasibleTimeWindowTrimmer {
 		// Note: panamaTravelTime include any previous extra idle time and does not need to be re-added here, unlike in the booking code path
 		// allways assume the worst case:
 		final int earliestPanamaArrivalTime = windowStartTime[fromElementIndex] + panamaSegments.travelTimeToCanalWithoutMargin;
-		final int latestPanamaArrivalTime = windowEndTime[fromElementIndex + 1] - panamaSegments.travelTimeFromCanal;
+		final int latestPanamaArrivalTime = Math.max(earliestPanamaArrivalTime + 1, windowEndTime[fromElementIndex + 1] - panamaSegments.travelTimeFromCanal);
 		assert earliestPanamaArrivalTime < latestPanamaArrivalTime;
-		final int waitingTime = getWorstMaxIdleHours(vessel, panamaSegments.isNorthbound, earliestPanamaArrivalTime, latestPanamaArrivalTime);
+		final int waitingTime = getMaxIdleHours(vessel, panamaSegments.isNorthbound, earliestPanamaArrivalTime, latestPanamaArrivalTime);
 		final int delayedPanamaTravelTime = panamaTravelTime + waitingTime;
 		if (delayedPanamaTravelTime < Math.min(directTravelTime, suezTravelTime)) {
 			travelTimeData.setMinTravelTime(fromElementIndex, delayedPanamaTravelTime);
@@ -971,12 +975,11 @@ public class FeasibleTimeWindowTrimmer {
 		return changed;
 	}
 	
-	private int getWorstMaxIdleHours(final IVessel vessel, final boolean northbound, int startDateInclusive, int endDateExclusive) {
+	private int getMaxIdleHours(final IVessel vessel, final boolean northbound, int startDateInclusive, int endDateExclusive) {
+		if (useBestCanalIdleDays) {
+			return panamaBookingsProvider.getBestIdleHours(vessel, startDateInclusive, endDateExclusive, northbound);
+		}
 		return panamaBookingsProvider.getWorstIdleHours(vessel, startDateInclusive, endDateExclusive, northbound);
-	}
-	
-	private int getBestMaxIdleHours(final IVessel vessel, final boolean northbound, int startDateInclusive, int endDateExclusive) {
-		return panamaBookingsProvider.getBestIdleHours(vessel, startDateInclusive, endDateExclusive, northbound);
 	}
 
 	/**

@@ -83,6 +83,10 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	private boolean checkPanamaCanalBookings = false;
 	
 	@Inject
+	@Named(SchedulerConstants.Key_UseBestPanamaCanalIdleDaysWindowTrimming)
+	private boolean useBestCanalIdleDays = false;
+	
+	@Inject
 	private ILNGVoyageCalculator voyageCalculator;
 
 	@Inject
@@ -349,7 +353,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 					latestPanamaWindowEnd = startOfTheJourney + availableTime - travelTimeFromPanama;
 				}
 				if (checkPanamaCanalBookings) {
-					panamaIdleHours = getWorstMaxIdleHours(vessel, panamaCanalEntry == ECanalEntry.SouthSide, 
+					panamaIdleHours = getMaxIdleHours(vessel, panamaCanalEntry == ECanalEntry.SouthSide, 
 						startOfTheJourney + travelTimeToPanama, latestPanamaWindowEnd + 1);
 				} else {
 					panamaIdleHours = 0;
@@ -386,13 +390,12 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		}
 		return new GeneratedCharterOutLeg(distance, route, shortestTime, panamaIdleHours);
 	}
-
-	private int getWorstMaxIdleHours(final IVessel vessel, final boolean northbound, int startDateInclusive, int endDateExclusive) {
+	
+	private int getMaxIdleHours(final IVessel vessel, final boolean northbound, int startDateInclusive, int endDateExclusive) {
+		if (useBestCanalIdleDays) {
+			return panamaBookingsProvider.getBestIdleHours(vessel, startDateInclusive, endDateExclusive, northbound);
+		}
 		return panamaBookingsProvider.getWorstIdleHours(vessel, startDateInclusive, endDateExclusive, northbound);
-	}
-
-	private int getBestMaxIdleHours(final IVessel vessel, final boolean northbound, int startDateInclusive, int endDateExclusive) {
-		return panamaBookingsProvider.getBestIdleHours(vessel, startDateInclusive, endDateExclusive, northbound);
 	}
 
 	/**
