@@ -81,11 +81,11 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	@Inject
 	@Named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)
 	private boolean checkPanamaCanalBookings = false;
-	
+
 	@Inject
 	@Named(SchedulerConstants.Key_UseBestPanamaCanalIdleDaysWindowTrimming)
 	private boolean useBestCanalIdleDays = false;
-	
+
 	@Inject
 	private ILNGVoyageCalculator voyageCalculator;
 
@@ -227,15 +227,21 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			charterPlans.add(new Pair<>(upToCharterPlan, preCharterAllocation != null ? preCharterAllocation : preCharteringTimes));
 			charterPlans.add(new Pair<>(charterToEndPlan, postCharteringTimes));
 
-			// Note: this assertion is not a valid thing to do here. A GCO could generate a violation, e.g. with tight volume limits it could boil-off down to safety before GCO but with GCO there's too much LNG leftover.
-			// assert bigVoyagePlan.getVoyagePlanMetrics()[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()] == charterPlans.stream().map(Pair::getFirst).mapToLong(lvp -> lvp.getVoyagePlanMetrics()[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()]).sum();
+			// Note: this assertion is not a valid thing to do here. A GCO could generate a
+			// violation, e.g. with tight volume limits it could boil-off down to safety
+			// before GCO but with GCO there's too much LNG leftover.
+			// assert
+			// bigVoyagePlan.getVoyagePlanMetrics()[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()]
+			// == charterPlans.stream().map(Pair::getFirst).mapToLong(lvp ->
+			// lvp.getVoyagePlanMetrics()[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()]).sum();
 
 			return charterPlans;
 		}
 	}
 
 	/**
-	 * Finds a charter out option that maximises charter out time, considering travel time to the charter out port
+	 * Finds a charter out option that maximises charter out time, considering
+	 * travel time to the charter out port
 	 * 
 	 * @param ballastStartTime
 	 * @param availableTime
@@ -340,21 +346,31 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			if (travelTime == Integer.MAX_VALUE) {
 				continue;
 			}
-
+			// Check this route is possible in the available time
+			if (travelTime > availableTime) {
+				continue;
+			}
 			if (routeOption == ERouteOption.PANAMA) {
 				if (travelTimeToPanama == Integer.MAX_VALUE || travelTimeFromPanama == Integer.MAX_VALUE) {
 					continue;
 				}
 				// If Panama, make sure we take into account the idle days
-				// It might include the high season when chartering out, whereas we might never actually reach it
+				// It might include the high season when chartering out, whereas we might never
+				// actually reach it
 				travelTime = travelTimeToPanama;
 				int latestPanamaWindowEnd = startOfTheJourney + travelTimeToPanama;
 				if (backwards) {
-					latestPanamaWindowEnd = startOfTheJourney + availableTime - travelTimeFromPanama;
+					int t = startOfTheJourney + availableTime - travelTimeFromPanama;
+					if (latestPanamaWindowEnd > t) {
+						// Is there enough time to go via panama?
+						// Should be covered by previous check, but the split voyage could contain a
+						// little rounding.
+						continue;
+					}
+					latestPanamaWindowEnd = t;
 				}
 				if (checkPanamaCanalBookings) {
-					panamaIdleHours = getMaxIdleHours(vessel, panamaCanalEntry == ECanalEntry.SouthSide, 
-						startOfTheJourney + travelTimeToPanama, latestPanamaWindowEnd + 1);
+					panamaIdleHours = getMaxIdleHours(vessel, panamaCanalEntry == ECanalEntry.SouthSide, startOfTheJourney + travelTimeToPanama, latestPanamaWindowEnd + 1);
 				} else {
 					panamaIdleHours = 0;
 				}
@@ -390,7 +406,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		}
 		return new GeneratedCharterOutLeg(distance, route, shortestTime, panamaIdleHours);
 	}
-	
+
 	private int getMaxIdleHours(final IVessel vessel, final boolean northbound, int startDateInclusive, int endDateExclusive) {
 		if (useBestCanalIdleDays) {
 			return panamaBookingsProvider.getBestIdleHours(vessel, startDateInclusive, endDateExclusive, northbound);
@@ -399,7 +415,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	}
 
 	/**
-	 * Produces a new large sequence including a generated charter out and a ballast to and from the charter out port
+	 * Produces a new large sequence including a generated charter out and a ballast
+	 * to and from the charter out port
 	 * 
 	 * @param currentSequence
 	 * @param charterOutOption
@@ -550,7 +567,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	}
 
 	/**
-	 * Create the port times record for a new large sequence that includes the generated charter out
+	 * Create the port times record for a new large sequence that includes the
+	 * generated charter out
 	 * 
 	 * @param existing
 	 * @param slotsToAdd
@@ -747,7 +765,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	}
 
 	/**
-	 * Loop through the first voyage plan (up to the GCO) and find an element to extract heel options information
+	 * Loop through the first voyage plan (up to the GCO) and find an element to
+	 * extract heel options information
 	 * 
 	 * @param generatedCharterOutVesselEvent
 	 * @param sequence
@@ -769,8 +788,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			} else if (portSlot instanceof ILoadSlot loadSlot) {
 				IDischargeSlot discharge = null;
 				for (int i = sequence.length - 1; i >= 0; i--) {
-					if (sequence[i] instanceof PortDetails pdi) {
-						if (pdi.getOptions().getPortSlot() instanceof IDischargeSlot ds) {
+					if (sequence[i]instanceof PortDetails pdi) {
+						if (pdi.getOptions().getPortSlot()instanceof IDischargeSlot ds) {
 							discharge = ds;
 							break;
 						}
