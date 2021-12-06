@@ -408,6 +408,19 @@ public class CargoSwitch<@Nullable T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CargoPackage.GROUPED_SLOTS_CONSTRAINT: {
+				GroupedSlotsConstraint<?, ?> groupedSlotsConstraint = (GroupedSlotsConstraint<?, ?>)theEObject;
+				T1 result = caseGroupedSlotsConstraint(groupedSlotsConstraint);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CargoPackage.GROUPED_DISCHARGE_SLOTS_CONSTRAINT: {
+				GroupedDischargeSlotsConstraint groupedDischargeSlotsConstraint = (GroupedDischargeSlotsConstraint)theEObject;
+				T1 result = caseGroupedDischargeSlotsConstraint(groupedDischargeSlotsConstraint);
+				if (result == null) result = caseGroupedSlotsConstraint(groupedDischargeSlotsConstraint);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -934,6 +947,36 @@ public class CargoSwitch<@Nullable T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 casePanamaSeasonalityRecord(PanamaSeasonalityRecord object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Grouped Slots Constraint</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Grouped Slots Constraint</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public <U extends Contract, T extends Slot<U>> T1 caseGroupedSlotsConstraint(GroupedSlotsConstraint<U, T> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Grouped Discharge Slots Constraint</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Grouped Discharge Slots Constraint</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseGroupedDischargeSlotsConstraint(GroupedDischargeSlotsConstraint object) {
 		return null;
 	}
 
