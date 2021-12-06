@@ -124,13 +124,15 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 				.filter(e -> validElementTypes.contains(portTypeProvider.getPortType(e))) //
 				.collect(Collectors.toList());
 		
-		allTargetElements = Collections.singletonList(allE.get(random.nextInt(allE.size())));
+		if (!allE.isEmpty()) {
+			allTargetElements = Collections.singletonList(allE.get(random.nextInt(allE.size())));
 		
-		final long[] initialMetrics = evaluationHelper.evaluateState(providedRawSequences, sequenceManipulator.createManipulatedSequences(providedRawSequences), null, true,
-				options.isCheckEvaluatedState(), null, null);
-		final MoveResult p = generateMove(rawSequences, random, Collections.emptyList(), initialMetrics, options);
-		if (p != null) {
-			return p.move;
+			final long[] initialMetrics = evaluationHelper.evaluateState(providedRawSequences, sequenceManipulator.createManipulatedSequences(providedRawSequences), null, true,
+					options.isCheckEvaluatedState(), null, null);
+			final MoveResult p = generateMove(rawSequences, random, Collections.emptyList(), initialMetrics, options);
+			if (p != null) {
+				return p.move;
+			}
 		}
 		return null;
 	}
