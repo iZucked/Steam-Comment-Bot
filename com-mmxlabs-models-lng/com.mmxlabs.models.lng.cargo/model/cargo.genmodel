@@ -52,6 +52,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/dealSets"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/cargoesForExposures"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/cargoesForHedging"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/groupedDischargeSlots"/>
       <genOperations ecoreOperation="cargo.ecore#//CargoModel/getLoadSlotByName">
         <genParameters ecoreParameter="cargo.ecore#//CargoModel/getLoadSlotByName/name"/>
       </genOperations>
@@ -393,5 +394,12 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PanamaSeasonalityRecord/northboundWaitingDays"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PanamaSeasonalityRecord/southboundWaitingDays"/>
     </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//GroupedSlotsConstraint">
+      <genTypeParameters ecoreTypeParameter="cargo.ecore#//GroupedSlotsConstraint/U"/>
+      <genTypeParameters ecoreTypeParameter="cargo.ecore#//GroupedSlotsConstraint/T"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//GroupedSlotsConstraint/slots"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//GroupedSlotsConstraint/minimumBound"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//GroupedDischargeSlotsConstraint"/>
   </genPackages>
 </genmodel:GenModel>

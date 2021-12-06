@@ -100,7 +100,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	
 	@com.google.inject.Inject(optional = true)
 	@Named(LSO_MOVES_GUIDED)
-	private boolean enableGuidedMoveGenerator = false;
+	private boolean enableGuidedMoveGenerator = true;
 
  
 	@Inject

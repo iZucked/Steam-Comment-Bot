@@ -130,6 +130,7 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.ComplexCargoAction;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.actions.DefaultMenuCreatorAction;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.TradesTableContextMenuExtensionUtil;
+import com.mmxlabs.models.lng.cargo.ui.inlineeditors.GroupedSlotsDialog;
 import com.mmxlabs.models.lng.cargo.ui.util.TimeWindowHelper;
 import com.mmxlabs.models.lng.cargo.util.CargoEditorFilterUtils;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
@@ -962,9 +963,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		 */
 
 		final Action addAction = new AddAction("Add");
-//		addAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+		// addAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
 		addAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled));
-		addAction.setDisabledImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Disabled));		
+		addAction.setDisabledImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Disabled));
 		toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
 
 		final Action filterAction = new FilterMenuAction("Filter");
@@ -1010,6 +1011,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		if (deleteAction != null) {
 			toolbar.appendToGroup(ADD_REMOVE_GROUP, deleteAction);
 		}
+		final Action editConstraintsAction = new EditConstraintsAction("Constraints");
+		toolbar.appendToGroup(ADD_REMOVE_GROUP, editConstraintsAction);
 		if (actionBars != null) {
 			actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
 		}
@@ -1782,8 +1785,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), c, CargoPackage.eINSTANCE.getAssignableElement_Locked(), Boolean.FALSE));
 						setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), c, CargoPackage.eINSTANCE.getAssignableElement_SequenceHint(), SetCommand.UNSET_VALUE));
 						setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), c, CargoPackage.eINSTANCE.getAssignableElement_SpotIndex(), SetCommand.UNSET_VALUE));
-						
-						// A Source Only FOB sale needs matching ports on both sides. Market FOB Sales may have a set of valid ports. Automatically update if possible. 
+
+						// A Source Only FOB sale needs matching ports on both sides. Market FOB Sales may have a set of valid ports. Automatically update if possible.
 						if (dischargeSide.getDischargeSlot().getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.SOURCE_ONLY //
 								&& loadSide.loadSlot.getPort() != dischargeSide.getDischargeSlot().getPort()) {
 							if (dischargeSide.dischargeSlot instanceof SpotSlot) {
@@ -1792,16 +1795,17 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 								if (market instanceof FOBSalesMarket) {
 									FOBSalesMarket fobSalesMarket = (FOBSalesMarket) market;
 									if (SetUtils.getObjects(fobSalesMarket.getOriginPorts()).contains(loadSide.getLoadSlot().getPort())) {
-										setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSide.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_Port(), loadSide.loadSlot.getPort()));
+										setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSide.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_Port(),
+												loadSide.loadSlot.getPort()));
 									}
 								}
-								
+
 							}
 						}
 					}
 					if (c != null && loadSide.loadSlot.isDESPurchase()) {
-						
-						// A Dest Only DES purchase needs matching ports on both sides. Market DES purchases may have a set of valid ports. Automatically update if possible. 
+
+						// A Dest Only DES purchase needs matching ports on both sides. Market DES purchases may have a set of valid ports. Automatically update if possible.
 						if (loadSide.getLoadSlot().getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DEST_ONLY //
 								&& loadSide.loadSlot.getPort() != dischargeSide.getDischargeSlot().getPort()) {
 							if (loadSide.loadSlot instanceof SpotSlot) {
@@ -1810,10 +1814,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 								if (market instanceof DESPurchaseMarket) {
 									DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) market;
 									if (SetUtils.getObjects(desPurchaseMarket.getDestinationPorts()).contains(dischargeSide.getDischargeSlot().getPort())) {
-										setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), loadSide.loadSlot , CargoPackage.eINSTANCE.getSlot_Port(), dischargeSide.dischargeSlot.getPort()));
+										setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), loadSide.loadSlot, CargoPackage.eINSTANCE.getSlot_Port(),
+												dischargeSide.dischargeSlot.getPort()));
 									}
 								}
-								
+
 							}
 						}
 					}
@@ -2208,7 +2213,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 				@Override
 				protected void populate(final Menu menu) {
-					
+
 					final Action currentAction = new Action("Today onwards") {
 						@Override
 						public void run() {
@@ -2227,7 +2232,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						}
 					};
 					addActionToMenu(promptAction, menu);
-					
+
 					new MenuItem(menu, SWT.SEPARATOR);
 
 					buildMonth(earliest, latest, menu);
@@ -2388,6 +2393,36 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			collection.clear();
 		}
 
+	}
+
+	private class EditConstraintsAction extends Action {
+		public EditConstraintsAction(final String label) {
+			super(label);
+		}
+
+		@Override
+		public void run() {
+			final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
+			try {
+				editorLock.lock();
+				try {
+					scenarioEditingLocation.setDisableUpdates(true);
+					final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
+					if (rootObject instanceof LNGScenarioModel) {
+						final GroupedSlotsDialog d = new GroupedSlotsDialog(scenarioEditingLocation.getShell(), scenarioEditingLocation);
+						if (d.open() == Window.OK) {
+							// clicked ok
+						}
+					} else {
+						setEnabled(false);
+					}
+				} finally {
+					scenarioEditingLocation.setDisableUpdates(false);
+				}
+			} finally {
+				editorLock.unlock();
+			}
+		}
 	}
 
 	private class AddAction extends DefaultMenuCreatorAction {
@@ -2677,8 +2712,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			super(label, IAction.AS_DROP_DOWN_MENU);
 			setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.rcp.common", "icons/plusplus.png"));
 			setDisabledImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.rcp.common", "icons/plusplus_disabled.png"));
-//			setImageDescriptor(LngUIActivator.getDefault().getImageRegistry().getDescriptor(ImageConstants.IMAGE_DUPLICATE));
-//			setDisabledImageDescriptor(LngUIActivator.getDefault().getImageRegistry().getDescriptor(ImageConstants.IMAGE_DUPLICATE_DISABLED));
+			// setImageDescriptor(LngUIActivator.getDefault().getImageRegistry().getDescriptor(ImageConstants.IMAGE_DUPLICATE));
+			// setDisabledImageDescriptor(LngUIActivator.getDefault().getImageRegistry().getDescriptor(ImageConstants.IMAGE_DUPLICATE_DISABLED));
 		}
 
 		@Override

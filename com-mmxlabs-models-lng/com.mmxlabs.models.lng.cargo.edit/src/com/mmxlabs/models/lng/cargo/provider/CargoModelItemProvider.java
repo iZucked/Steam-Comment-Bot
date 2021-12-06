@@ -52,6 +52,7 @@ public class CargoModelItemProvider
 			addInventoryModelsPropertyDescriptor(object);
 			addCargoesForExposuresPropertyDescriptor(object);
 			addCargoesForHedgingPropertyDescriptor(object);
+			addGroupedDischargeSlotsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -114,6 +115,28 @@ public class CargoModelItemProvider
 				 getString("_UI_CargoModel_cargoesForHedging_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_CargoModel_cargoesForHedging_feature", "_UI_CargoModel_type"),
 				 CargoPackage.Literals.CARGO_MODEL__CARGOES_FOR_HEDGING,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Grouped Discharge Slots feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addGroupedDischargeSlotsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoModel_groupedDischargeSlots_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoModel_groupedDischargeSlots_feature", "_UI_CargoModel_type"),
+				 CargoPackage.Literals.CARGO_MODEL__GROUPED_DISCHARGE_SLOTS,
 				 true,
 				 false,
 				 true,

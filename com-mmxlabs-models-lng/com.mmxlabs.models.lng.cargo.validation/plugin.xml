@@ -653,6 +653,38 @@
                </target>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.GroupedDischargeSlotConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.GroupedDischargeSlotConstraint"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Grouped Slots Constraints"
+                  severity="ERROR"
+                  statusCode="0">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="GroupedSlotsConstraint">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.GroupedDischargeSlotNonDuplicateConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.GroupedDischargeSlotNonDuplicateConstraint"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Non-Duplicate Grouped Slots Constraint"
+                  severity="ERROR"
+                  statusCode="0">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="CargoModel">
+               </target>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.SensibleAvailabilityDateConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.SensibleAvailabilityDateConstraint"
                   lang="Java"
