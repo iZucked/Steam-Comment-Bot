@@ -191,6 +191,7 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(FeasibleTimeWindowTrimmer.class);
 
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)).toInstance(Boolean.FALSE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseBestPanamaCanalIdleDaysWindowTrimming)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.TRUE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePNLBasedWindowTrimming)).toInstance(Boolean.TRUE);
 

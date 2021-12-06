@@ -10,7 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -19,8 +18,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.inject.Injector;
 import com.mmxlabs.common.NonNullPair;
@@ -29,9 +26,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
-import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
-import com.mmxlabs.models.lng.analytics.BuyReference;
 import com.mmxlabs.models.lng.analytics.OpenBuy;
 import com.mmxlabs.models.lng.analytics.OpenSell;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
@@ -57,6 +52,7 @@ import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
+import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.rcp.common.ecore.EMFCopier;
@@ -65,8 +61,6 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
 
 public class SandboxManualRunner {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(SandboxManualRunner.class);
 
 	private final IScenarioDataProvider originalScenarioDataProvider;
 
@@ -79,9 +73,7 @@ public class SandboxManualRunner {
 
 	private final @Nullable ScenarioInstance scenarioInstance;
 
-	private final IMapperClass mapper;
-
-	private LNGScenarioToOptimiserBridge bridge;
+	private LNGScenarioToOptimiserBridge scenarioToOptimiserBridge;
 
 	private List<Pair<BaseCase, ScheduleSpecification>> specifications;
 
@@ -92,7 +84,6 @@ public class SandboxManualRunner {
 
 		this.scenarioInstance = scenarioInstance;
 		this.originalScenarioDataProvider = scenarioDataProvider;
-		this.mapper = mapper;
 		this.originalEditingDomain = scenarioDataProvider.getEditingDomain();
 		this.userSettings = userSettings;
 		this.model = model;
@@ -194,7 +185,7 @@ public class SandboxManualRunner {
 
 				specifications = tasks.stream() //
 						.map(baseCase -> new Pair<>(baseCase, builder.generate(baseCase))) //
-						.collect(Collectors.toList());
+						.toList();
 
 			} else {
 
@@ -203,7 +194,7 @@ public class SandboxManualRunner {
 
 				specifications = tasks.stream() //
 						.map(baseCase -> new Pair<>(baseCase, builder.generate(baseCase))) //
-						.collect(Collectors.toList());
+						.toList();
 			}
 		}
 		helper = new ScheduleSpecificationHelper(scenarioDataProvider);
@@ -212,8 +203,9 @@ public class SandboxManualRunner {
 
 	private boolean checkSequenceSatifiesConstraints(final @NonNull LNGDataTransformer dataTransformer, final @NonNull ISequences rawSequences) {
 
-		final LNGEvaluationTransformerUnit evaluationTransformerUnit = new LNGEvaluationTransformerUnit(dataTransformer, dataTransformer.getInitialSequences(), dataTransformer.getInitialSequences(),
-				dataTransformer.getHints());
+		final ModifiableSequences emptySequences = new ModifiableSequences(new LinkedList<>());
+
+		final LNGEvaluationTransformerUnit evaluationTransformerUnit = new LNGEvaluationTransformerUnit(dataTransformer, emptySequences, emptySequences, dataTransformer.getHints());
 
 		final Injector injector = evaluationTransformerUnit.getInjector();
 
@@ -242,11 +234,12 @@ public class SandboxManualRunner {
 		}
 
 		try {
-			// Evaluate all the partial cases / options. Note the base case is *NOT* evaluated here.
+			// Evaluate all the partial cases / options. Note the base case is *NOT*
+			// evaluated here.
 			///////
 			final List<ISequences> results = new LinkedList<>();
 			helper.withRunner(scenarioInstance, userSettings, originalEditingDomain, hints, (bridge, injector, cores) -> {
-				this.bridge = bridge;
+				this.scenarioToOptimiserBridge = bridge;
 				for (final Pair<BaseCase, ScheduleSpecification> p : specifications) {
 					final ScheduleSpecificationTransformer transformer = injector.getInstance(ScheduleSpecificationTransformer.class);
 					final ISequences base = transformer.createSequences(p.getSecond(), bridge.getDataTransformer(), false);
@@ -274,11 +267,12 @@ public class SandboxManualRunner {
 				return null;
 			}
 
-			// We need a non-null solution for the base, but it will be ignored and is not really treated as the base.
+			// We need a non-null solution for the base, but it will be ignored and is not
+			// really treated as the base.
 			final ISequences base = results.get(0);
 			final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.stream()//
 					.map(s -> new NonNullPair<ISequences, Map<String, Object>>(s, new HashMap<>())) //
-					.collect(Collectors.toList());
+					.toList();
 			return new MultiStateResult(new NonNullPair<>(base, new HashMap<>()), solutions);
 		} finally {
 			progressMonitor.done();
@@ -350,7 +344,7 @@ public class SandboxManualRunner {
 				if (row.getVesselEventOption() != null) {
 					if (row.getBuyOption() != null && AnalyticsBuilder.getDate(row.getBuyOption()) != null) {
 						final BaseCaseRow extra = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
-						BuyOption buyOption = row.getBuyOption();
+						final BuyOption buyOption = row.getBuyOption();
 						if (!(buyOption instanceof BuyMarket)) {
 							extra.setBuyOption(buyOption);
 							copy.getBaseCase().add(extra);
@@ -359,7 +353,7 @@ public class SandboxManualRunner {
 					}
 					if (row.getSellOption() != null && AnalyticsBuilder.getDate(row.getSellOption()) != null) {
 						final BaseCaseRow extra = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
-						SellOption sellOption = row.getSellOption();
+						final SellOption sellOption = row.getSellOption();
 						if (!(sellOption instanceof SellMarket)) {
 							extra.setSellOption(sellOption);
 							copy.getBaseCase().add(extra);
@@ -418,6 +412,6 @@ public class SandboxManualRunner {
 	}
 
 	public LNGScenarioToOptimiserBridge getBridge() {
-		return bridge;
+		return scenarioToOptimiserBridge;
 	}
 }
