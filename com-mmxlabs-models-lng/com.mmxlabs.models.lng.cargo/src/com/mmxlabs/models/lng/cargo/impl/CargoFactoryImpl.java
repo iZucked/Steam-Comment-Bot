@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.impl;
 
 import com.mmxlabs.models.lng.cargo.*;
+import com.mmxlabs.models.lng.commercial.Contract;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -123,6 +124,8 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 			case CargoPackage.DEAL_SET: return createDealSet();
 			case CargoPackage.VESSEL_GROUP_CANAL_PARAMETERS: return createVesselGroupCanalParameters();
 			case CargoPackage.PANAMA_SEASONALITY_RECORD: return createPanamaSeasonalityRecord();
+			case CargoPackage.GROUPED_SLOTS_CONSTRAINT: return createGroupedSlotsConstraint();
+			case CargoPackage.GROUPED_DISCHARGE_SLOTS_CONSTRAINT: return createGroupedDischargeSlotsConstraint();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -506,6 +509,28 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	public PanamaSeasonalityRecord createPanamaSeasonalityRecord() {
 		PanamaSeasonalityRecordImpl panamaSeasonalityRecord = new PanamaSeasonalityRecordImpl();
 		return panamaSeasonalityRecord;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public <U extends Contract, T extends Slot<U>> GroupedSlotsConstraint<U, T> createGroupedSlotsConstraint() {
+		GroupedSlotsConstraintImpl<U, T> groupedSlotsConstraint = new GroupedSlotsConstraintImpl<U, T>();
+		return groupedSlotsConstraint;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public GroupedDischargeSlotsConstraint createGroupedDischargeSlotsConstraint() {
+		GroupedDischargeSlotsConstraintImpl groupedDischargeSlotsConstraint = new GroupedDischargeSlotsConstraintImpl();
+		return groupedDischargeSlotsConstraint;
 	}
 
 	/**
