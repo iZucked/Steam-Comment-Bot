@@ -42,10 +42,10 @@ public class GroupedSlotsConstraintChecker implements IConstraintChecker {
 		final Set<ISequenceElement> unusedSet = getUnusedSet(fullSequences);
 		final List<GroupedSlotsConstraintInfo<IDischargeOption>> allDischargeCounts = groupedSlotsDataProvider.getAllMinDischargeGroupCounts();
 		for (final GroupedSlotsConstraintInfo<IDischargeOption> constraint : allDischargeCounts) {
-			int unusedMembershipCount = 0;
 			final int maxUnusedSlots = constraint.getSlots().size() - constraint.getBound();
+			final long minimumUnusedSlotsNeededToViolate = maxUnusedSlots + 1L;
 			final long shortCircuitedActualUnusedCount = constraint.getSlots().stream().unordered().filter(dischargeOption -> unusedSet.contains(portSlotProvider.getElement(dischargeOption)))
-					.limit(maxUnusedSlots).count();
+					.limit(minimumUnusedSlotsNeededToViolate).count();
 			if (maxUnusedSlots < shortCircuitedActualUnusedCount) {
 				if (messages != null) {
 					messages.add(String.format("%s: Some grouped slot bounds are violated", this.name));
