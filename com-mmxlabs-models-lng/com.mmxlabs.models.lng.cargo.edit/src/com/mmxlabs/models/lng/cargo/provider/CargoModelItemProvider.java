@@ -168,6 +168,7 @@ public class CargoModelItemProvider
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__CHARTER_IN_MARKET_OVERRIDES);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__PAPER_DEALS);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__DEAL_SETS);
+			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__GROUPED_DISCHARGE_SLOTS);
 		}
 		return childrenFeatures;
 	}
@@ -233,6 +234,7 @@ public class CargoModelItemProvider
 			case CargoPackage.CARGO_MODEL__CHARTER_IN_MARKET_OVERRIDES:
 			case CargoPackage.CARGO_MODEL__PAPER_DEALS:
 			case CargoPackage.CARGO_MODEL__DEAL_SETS:
+			case CargoPackage.CARGO_MODEL__GROUPED_DISCHARGE_SLOTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -329,6 +331,11 @@ public class CargoModelItemProvider
 			(createChildParameter
 				(CargoPackage.Literals.CARGO_MODEL__DEAL_SETS,
 				 CargoFactory.eINSTANCE.createDealSet()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CargoPackage.Literals.CARGO_MODEL__GROUPED_DISCHARGE_SLOTS,
+				 CargoFactory.eINSTANCE.createGroupedDischargeSlotsConstraint()));
 	}
 
 }

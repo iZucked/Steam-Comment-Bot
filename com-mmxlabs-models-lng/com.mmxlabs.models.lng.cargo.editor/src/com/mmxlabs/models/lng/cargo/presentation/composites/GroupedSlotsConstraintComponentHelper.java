@@ -78,7 +78,6 @@ public class GroupedSlotsConstraintComponentHelper extends BaseComponentHelper {
 	protected void add_slotsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.GROUPED_SLOTS_CONSTRAINT__SLOTS));
 	}
-
 	/**
 	 * Create the editor for the minimumBound feature on GroupedSlotsConstraint
 	 *
