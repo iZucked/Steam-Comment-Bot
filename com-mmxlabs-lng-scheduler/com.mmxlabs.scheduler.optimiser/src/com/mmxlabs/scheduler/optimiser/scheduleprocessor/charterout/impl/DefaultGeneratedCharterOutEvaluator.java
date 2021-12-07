@@ -285,13 +285,18 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				}
 			}
 			for (final IPort charterOutPort : ports) {
-				final GeneratedCharterOutLeg toCharterPort = calculateShortestTimeToPort(discharge, charterOutPort, vesselAvailability.getVessel(), dischargeSlot, ballastStartTime,
-						Math.min(availableTime, option.getMaxDuration()), false);
+				final GeneratedCharterOutLeg toCharterPort = calculateShortestTimeToPort(discharge, charterOutPort, //
+						vesselAvailability.getVessel(), ballastStartTime, 
+						null, //
+						0 /* this value is not used when we compute forward shortest time */, false);
 				if (toCharterPort == null) {
 					continue;
 				}
-				final GeneratedCharterOutLeg fromCharterPort = calculateShortestTimeToPort(charterOutPort, nextLoad, vesselAvailability.getVessel(), dischargeSlot,
-						ballastStartTime + toCharterPort.getShortestTime(), Math.min(availableTime - toCharterPort.getShortestTime(), option.getMaxDuration()), true);
+				final GeneratedCharterOutLeg fromCharterPort = calculateShortestTimeToPort(charterOutPort, nextLoad, //
+						vesselAvailability.getVessel(), //
+						ballastStartTime + toCharterPort.getShortestTime(), //
+						option,
+						availableTime - toCharterPort.getShortestTime(), true);
 				if (fromCharterPort == null) {
 					continue;
 				}
@@ -320,8 +325,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	}
 
 	@Nullable
-	private GeneratedCharterOutLeg calculateShortestTimeToPort(final IPort fromPort, final IPort toPort, final IVessel vessel, final IPortSlot fromPortSlot, //
-			final int startOfTheJourney, final int availableTime, boolean backwards) {
+	private GeneratedCharterOutLeg calculateShortestTimeToPort(final IPort fromPort, final IPort toPort, final IVessel vessel, //
+			final int startOfTheJourney, final @Nullable CharterMarketOptions option, final int backwardLegAvailbleTime, boolean backwards) {
 		int distance = Integer.MAX_VALUE;
 		int shortestTime = Integer.MAX_VALUE;
 		ERouteOption route = ERouteOption.DIRECT;
@@ -346,31 +351,37 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			if (travelTime == Integer.MAX_VALUE) {
 				continue;
 			}
-			// Check this route is possible in the available time
-			if (travelTime > availableTime) {
-				continue;
-			}
 			if (routeOption == ERouteOption.PANAMA) {
 				if (travelTimeToPanama == Integer.MAX_VALUE || travelTimeFromPanama == Integer.MAX_VALUE) {
 					continue;
 				}
 				// If Panama, make sure we take into account the idle days
 				// It might include the high season when chartering out, whereas we might never
-				// actually reach it
+				// actually reach it				
 				travelTime = travelTimeToPanama;
-				int latestPanamaWindowEnd = startOfTheJourney + travelTimeToPanama;
-				if (backwards) {
-					int t = startOfTheJourney + availableTime - travelTimeFromPanama;
-					if (latestPanamaWindowEnd > t) {
-						// Is there enough time to go via panama?
-						// Should be covered by previous check, but the split voyage could contain a
-						// little rounding.
-						continue;
-					}
-					latestPanamaWindowEnd = t;
-				}
+                int latestPanamaWindowStart = startOfTheJourney + travelTimeToPanama;
+                int latestPanamaWindowEnd = latestPanamaWindowStart;
+                if (backwards) {
+                    
+                    if ( option.getMaxDuration()!= Integer.MAX_VALUE) {
+                          latestPanamaWindowEnd = startOfTheJourney  + backwardLegAvailbleTime - travelTimeFromPanama;
+                          
+                          latestPanamaWindowStart = startOfTheJourney  + option.getMaxDuration() + travelTimeToPanama;
+                          if (latestPanamaWindowStart > latestPanamaWindowEnd) {
+                              latestPanamaWindowStart = latestPanamaWindowEnd;
+                          }
+                        
+                    } else {
+                        
+                          latestPanamaWindowStart = startOfTheJourney   + backwardLegAvailbleTime - travelTimeFromPanama;
+                          latestPanamaWindowEnd = latestPanamaWindowStart;
+                    }
+                }
+				
 				if (checkPanamaCanalBookings) {
-					panamaIdleHours = getMaxIdleHours(vessel, panamaCanalEntry == ECanalEntry.SouthSide, startOfTheJourney + travelTimeToPanama, latestPanamaWindowEnd + 1);
+					panamaIdleHours = getMaxIdleHours(vessel, panamaCanalEntry == ECanalEntry.SouthSide,
+							latestPanamaWindowStart,
+							latestPanamaWindowEnd + 1);
 				} else {
 					panamaIdleHours = 0;
 				}
