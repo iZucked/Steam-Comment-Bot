@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
+import java.util.Arrays;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.base.MoreObjects;
@@ -13,18 +15,22 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.VesselTankState;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
+import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
 import com.mmxlabs.scheduler.optimiser.voyage.IdleFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 
 /**
- * Default implementation of {@link VoyageOptions}. This is @link {Cloneable} for use with @link{VoyagePlanOptimiser} use.
+ * Default implementation of {@link VoyageOptions}. This is @link {Cloneable}
+ * for use with @link{VoyagePlanOptimiser} use.
  * 
  * @author Simon Goodall
  * 
  */
 public final class VoyageOptions implements IOptionsSequenceElement {
 	private int availableTime;
-	private int extraIdleTime;
+	private final int[] extraIdleTimes = new int[ExplicitIdleTime.values().length];
+	private int panamaIdleHours;
+
 	private int distance;
 	private long routeCost;
 	private IVessel vessel;
@@ -38,17 +44,20 @@ public final class VoyageOptions implements IOptionsSequenceElement {
 	private int cargoCV;
 
 	/**
-	 * If shouldBeCold is true: If true, a cooldown will be considered If false, enough heel will be retained to avoid warming up If shouldBeCold is false, this should be false and will be ignored
-	 * (vessel will be allowed to warm up).
+	 * If shouldBeCold is true: If true, a cooldown will be considered If false,
+	 * enough heel will be retained to avoid warming up If shouldBeCold is false,
+	 * this should be false and will be ignored (vessel will be allowed to warm up).
 	 */
 	private boolean cooldown;
 	/**
-	 * If true, the vessel should be cold at the end of the voyage + idle. If false, it doesn't matter.
+	 * If true, the vessel should be cold at the end of the voyage + idle. If false,
+	 * it doesn't matter.
 	 */
 	private VesselTankState shouldBeCold;
 
 	/**
-	 * If true, the vessel is warm at the start of this voyage, because it is coming out of a drydock or something similar.
+	 * If true, the vessel is warm at the start of this voyage, because it is coming
+	 * out of a drydock or something similar.
 	 */
 	private boolean startWarm;
 
@@ -65,12 +74,14 @@ public final class VoyageOptions implements IOptionsSequenceElement {
 		this.fromPortSlot = options.getFromPortSlot();
 		this.toPortSlot = options.getToPortSlot();
 		setAvailableTime(options.getAvailableTime());
-		setExtraIdleTime(options.getExtraIdleTime());
+		for (final ExplicitIdleTime t : ExplicitIdleTime.values()) {
+			setExtraIdleTime(t, options.getExtraIdleTime(t));
+		}
 		setVessel(options.getVessel());
 		setNBOSpeed(options.getNBOSpeed());
 		setTravelFuelChoice(options.getTravelFuelChoice());
 		setIdleFuelChoice(options.getIdleFuelChoice());
-		setRoute(options.getRoute(), options.getDistance(), options.getRouteCost());
+		setRoute(options.getRoute(), options.getDistance(), options.getRouteCost(), options.getPanamaIdleHours());
 		setVesselState(options.getVesselState());
 		setAllowCooldown(options.getAllowCooldown());
 		setShouldBeCold(options.shouldBeCold());
@@ -90,8 +101,10 @@ public final class VoyageOptions implements IOptionsSequenceElement {
 			// @formatter:off
 			return Objects.equal(travelFuelChoice, vo.travelFuelChoice) //
 					&& Objects.equal(idleFuelChoice, vo.idleFuelChoice) && Objects.equal(availableTime, vo.availableTime) //
-					&& Objects.equal(extraIdleTime, vo.extraIdleTime) //
-					&& Objects.equal(distance, vo.distance) && Objects.equal(routeCost, vo.routeCost) //
+					&& Arrays.equals(extraIdleTimes, vo.extraIdleTimes) //
+					&& Objects.equal(panamaIdleHours, vo.panamaIdleHours) //
+					&& Objects.equal(distance, vo.distance) // 
+					&& Objects.equal(routeCost, vo.routeCost) //
 					&& Objects.equal(nboSpeed, vo.nboSpeed) //
 					&& Objects.equal(vesselState, vo.vesselState) //
 					&& Objects.equal(route, vo.route) //
@@ -112,7 +125,7 @@ public final class VoyageOptions implements IOptionsSequenceElement {
 		// @formatter:off
 		return MoreObjects.toStringHelper(VoyageOptions.class) //
 				.add("availableTime", availableTime) //
-				.add("extraIdleTime", extraIdleTime) //
+				.add("extraIdleTimes", extraIdleTimes) //
 				.add("distance", distance).add("vessel", vessel) //
 				.add("fromPortSlot", fromPortSlot) //
 				.add("toPortSlot", toPortSlot) //
@@ -134,8 +147,16 @@ public final class VoyageOptions implements IOptionsSequenceElement {
 		return availableTime;
 	}
 
-	public int getExtraIdleTime() {
-		return extraIdleTime;
+	public int getExtraIdleTime(final ExplicitIdleTime type) {
+		return extraIdleTimes[type.ordinal()];
+	}
+
+	public int getTotalExtraIdleTime() {
+		int sum = 0;
+		for (final var type : ExplicitIdleTime.values()) {
+			sum += extraIdleTimes[type.ordinal()];
+		}
+		return sum;
 	}
 
 	public final int getDistance() {
@@ -182,8 +203,8 @@ public final class VoyageOptions implements IOptionsSequenceElement {
 		this.availableTime = availableTime;
 	}
 
-	public final void setExtraIdleTime(int extraIdleTime) {
-		this.extraIdleTime = extraIdleTime;
+	public final void setExtraIdleTime(final ExplicitIdleTime type, final int extraIdleTime) {
+		this.extraIdleTimes[type.ordinal()] = extraIdleTime;
 	}
 
 	public final void setVessel(final IVessel vessel) {
@@ -195,15 +216,19 @@ public final class VoyageOptions implements IOptionsSequenceElement {
 		this.fromPortSlot = fromPortSlot;
 	}
 
-	@Deprecated // Only used for Client E and Charter Length Evaluator (so quite important really)
+	@Deprecated // Only used for Client E and Charter Length Evaluator (so quite important
+				// really)
 	public final void setToPortSlot(final @NonNull IPortSlot toPortSlot) {
 		this.toPortSlot = toPortSlot;
 	}
 
-	public final void setRoute(final @NonNull ERouteOption route, final int distance, final long routeCost) {
+	public final void setRoute(final @NonNull ERouteOption route, final int distance, final long routeCost, int panamaIdleHours) {
 		this.route = route;
 		this.distance = distance;
 		this.routeCost = routeCost;
+		this.panamaIdleHours = panamaIdleHours;
+		assert panamaIdleHours >= 0;
+		assert panamaIdleHours == 0 || route == ERouteOption.PANAMA;  
 	}
 
 	public final void setVesselState(final VesselState vesselState) {
@@ -219,7 +244,8 @@ public final class VoyageOptions implements IOptionsSequenceElement {
 	}
 
 	/**
-	 * If true, the vessel should be cold at the end of this voyage, possibly by triggering a cooldown.
+	 * If true, the vessel should be cold at the end of this voyage, possibly by
+	 * triggering a cooldown.
 	 * 
 	 * @return
 	 */
@@ -251,7 +277,7 @@ public final class VoyageOptions implements IOptionsSequenceElement {
 		return idleFuelChoice;
 	}
 
-	public void setIdleFuelChoice(@NonNull IdleFuelChoice idleFuelChoice) {
+	public void setIdleFuelChoice(@NonNull final IdleFuelChoice idleFuelChoice) {
 		this.idleFuelChoice = idleFuelChoice;
 	}
 
@@ -259,7 +285,11 @@ public final class VoyageOptions implements IOptionsSequenceElement {
 		return travelFuelChoice;
 	}
 
-	public void setTravelFuelChoice(@NonNull TravelFuelChoice travelFuelChoice) {
+	public void setTravelFuelChoice(@NonNull final TravelFuelChoice travelFuelChoice) {
 		this.travelFuelChoice = travelFuelChoice;
+	}
+
+	public int getPanamaIdleHours() {
+		return panamaIdleHours;
 	}
 }

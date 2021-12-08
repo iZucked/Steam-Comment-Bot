@@ -36,12 +36,11 @@ import com.mmxlabs.scheduler.optimiser.evaluation.IVoyagePlanEvaluator;
 import com.mmxlabs.scheduler.optimiser.evaluation.PreviousHeelRecord;
 import com.mmxlabs.scheduler.optimiser.evaluation.ScheduledVoyagePlanResult;
 import com.mmxlabs.scheduler.optimiser.moves.util.MetricType;
-import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider.RouteOptionDirection;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.PanamaBookingHelper;
 import com.mmxlabs.scheduler.optimiser.scheduling.MinTravelTimeData;
+import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.util.SchedulerCalculationUtils;
@@ -746,15 +745,15 @@ public class TimeWindowsTrimming {
 		// updated with arrival times and then cloned for each evaluation
 		final PortTimesRecord portTimesRecord = new PortTimesRecord();
 		for (final IPortSlot slot : portTimeWindowsRecord.getSlots()) {
+			assert slot != null;
 			portTimesRecord.setRouteOptionBooking(slot, portTimeWindowsRecord.getRouteOptionBooking(slot));
 			portTimesRecord.setSlotNextVoyageOptions(slot, portTimeWindowsRecord.getSlotNextVoyageOptions(slot));
 
-			final int visitDuration = portTimeWindowsRecord.getSlotDuration(slot);
-			final int extraIdleTime = portTimeWindowsRecord.getSlotExtraIdleTime(slot);
-
 			portTimesRecord.setSlotTime(slot, 0);
-			portTimesRecord.setSlotDuration(slot, visitDuration);
-			portTimesRecord.setSlotExtraIdleTime(slot, extraIdleTime);
+			portTimesRecord.setSlotDuration(slot, portTimeWindowsRecord.getSlotDuration(slot));
+			for (var type : ExplicitIdleTime.values()) {
+				portTimesRecord.setSlotExtraIdleTime(slot, type, portTimeWindowsRecord.getSlotExtraIdleTime(slot, type));
+			}
 		}
 		portTimesRecord.setReturnSlotTime(endSlot, 0);
 

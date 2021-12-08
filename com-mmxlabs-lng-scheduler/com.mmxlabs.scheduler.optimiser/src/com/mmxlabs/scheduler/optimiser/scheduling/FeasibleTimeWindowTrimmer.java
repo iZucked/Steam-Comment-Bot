@@ -45,6 +45,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.schedule.PanamaBookingHelper;
+import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimeWindowsRecord;
@@ -89,7 +90,7 @@ public class FeasibleTimeWindowTrimmer {
 		int worstWaitingTime;
 
 		int visitDuration;
-		int extraIdleTime;
+		int[] extraIdleTimes = new int[ExplicitIdleTime.values().length];
 
 		/**
 		 * Whether or not the {@link PortType} of any {@link PortSlot} associated with
@@ -311,18 +312,22 @@ public class FeasibleTimeWindowTrimmer {
 			if (prevElement != null) {
 				assert prevPortSlot != null;
 
-				records[index - 1].extraIdleTime = actualsDataProvider.hasActuals(thisPortSlot) ? 0 : extraIdleTimeProvider.getExtraIdleTimeInHours(prevPortSlot, thisPortSlot);
+				records[index - 1].extraIdleTimes[ExplicitIdleTime.CONTINGENCY.ordinal()] = actualsDataProvider.hasActuals(thisPortSlot) ? 0
+						: extraIdleTimeProvider.getContingencyIdleTimeInHours(prevPortSlot, thisPortSlot);
+				records[index - 1].extraIdleTimes[ExplicitIdleTime.MARKET_BUFFER.ordinal()] = actualsDataProvider.hasActuals(thisPortSlot) ? 0
+						: extraIdleTimeProvider.getBufferIdleTimeInHours(thisPortSlot);
 				if (purgeSchedulingEnabled) {
 					if (portTypeProvider.getPortType(prevElement) == PortType.DryDock) {
-						records[index - 1].extraIdleTime += vesselPurgeTime;
+						records[index - 1].extraIdleTimes[ExplicitIdleTime.PURGE.ordinal()] = vesselPurgeTime;
 					} else if (portTypeProvider.getPortType(element) == PortType.Load) {
 						if (scheduledPurgeProvider.isPurgeScheduled(thisPortSlot)) {
-							records[index - 1].extraIdleTime += vesselPurgeTime;
+							records[index - 1].extraIdleTimes[ExplicitIdleTime.PURGE.ordinal()] = vesselPurgeTime;
 						}
 					}
 				}
-				portTimeWindowsRecord.setSlotExtraIdleTime(prevPortSlot, records[index - 1].extraIdleTime);
-
+				for (var type : ExplicitIdleTime.values()) {
+					portTimeWindowsRecord.setSlotExtraIdleTime(prevPortSlot, type, records[index - 1].extraIdleTimes[type.ordinal()]);
+				}
 			}
 
 			records[index].isRoundTripEnd = false;
@@ -365,18 +370,6 @@ public class FeasibleTimeWindowTrimmer {
 			if (prevElement != null) {
 				assert prevPortSlot != null;
 
-				records[index - 1].extraIdleTime = actualsDataProvider.hasActuals(thisPortSlot) ? 0 : extraIdleTimeProvider.getExtraIdleTimeInHours(prevPortSlot, thisPortSlot);
-
-				if (purgeSchedulingEnabled) {
-					if (portTypeProvider.getPortType(prevElement) == PortType.DryDock) {
-						records[index - 1].extraIdleTime += vesselPurgeTime;
-					} else if (portTypeProvider.getPortType(element) == PortType.Load) {
-						if (scheduledPurgeProvider.isPurgeScheduled(thisPortSlot)) {
-							records[index - 1].extraIdleTime += vesselPurgeTime;
-						}
-					}
-				}
-
 				final IPort prevPort = portProvider.getPortForElement(prevElement);
 				final IPort port = portProvider.getPortForElement(element);
 
@@ -386,14 +379,19 @@ public class FeasibleTimeWindowTrimmer {
 				suezTravelTime = distanceProvider.getTravelTime(ERouteOption.SUEZ, vesselAvailability.getVessel(), prevPort, port, vesselMaxSpeed);
 				panamaTravelTime = distanceProvider.getTravelTime(ERouteOption.PANAMA, vesselAvailability.getVessel(), prevPort, port, vesselMaxSpeed);
 
+				int extraIdleTime = 0;
+				for (var type : ExplicitIdleTime.values()) {
+					extraIdleTime += records[index - 1].extraIdleTimes[type.ordinal()];
+				}
+
 				if (directTravelTime != Integer.MAX_VALUE) {
-					directTravelTime += prevVisitDuration + records[index - 1].extraIdleTime;
+					directTravelTime += prevVisitDuration + extraIdleTime;
 				}
 				if (suezTravelTime != Integer.MAX_VALUE) {
-					suezTravelTime += prevVisitDuration + records[index - 1].extraIdleTime;
+					suezTravelTime += prevVisitDuration + extraIdleTime;
 				}
 				if (panamaTravelTime != Integer.MAX_VALUE) {
-					panamaTravelTime += prevVisitDuration + records[index - 1].extraIdleTime;
+					panamaTravelTime += prevVisitDuration + extraIdleTime;
 				}
 
 				final int minTravelTime = Math.min(directTravelTime, Math.min(panamaTravelTime, suezTravelTime));
@@ -1265,8 +1263,13 @@ public class FeasibleTimeWindowTrimmer {
 
 		segments.travelTimeToCanalWithMargin = records[toElementIndex - 1].visitDuration + panamaBookingsHelper.getTravelTimeToCanal(vessel, fromPortSlot.getPort(), true);
 		segments.travelTimeToCanalWithoutMargin = records[toElementIndex - 1].visitDuration + panamaBookingsHelper.getTravelTimeToCanal(vessel, fromPortSlot.getPort(), false);
+
+		int extraIdleTime = 0;
+		for (var type : ExplicitIdleTime.values()) {
+			extraIdleTime += records[toElementIndex - 1].extraIdleTimes[type.ordinal()];
+		}
 		segments.travelTimeFromCanal = panamaBookingsHelper.getTravelTimeFromCanalEntry(vessel, segments.canalEntranceUsed, toPortSlot.getPort()) //
-				+ records[toElementIndex - 1].extraIdleTime; // make sure purge, contingency, spot market idle time etc is still included.
+				+ extraIdleTime; // make sure purge, contingency, spot market idle time etc is still included.
 
 		return segments;
 	}

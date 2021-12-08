@@ -95,7 +95,7 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 		final VoyageOptions voyageOptions = new VoyageOptions(from, to);
 		voyageOptions.setAvailableTime(availableTime);
 		voyageOptions.setAllowCooldown(false);
-		voyageOptions.setRoute(route, distance, routeCost);
+		voyageOptions.setRoute(route, distance, routeCost, /* panama idle days */ 0 );
 		voyageOptions.setShouldBeCold(VesselTankState.MUST_BE_COLD);
 		voyageOptions.setTravelFuelChoice(TravelFuelChoice.NBO_PLUS_FBO);
 		voyageOptions.setIdleFuelChoice(IdleFuelChoice.NBO);

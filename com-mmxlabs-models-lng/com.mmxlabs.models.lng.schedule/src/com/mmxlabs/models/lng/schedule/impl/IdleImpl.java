@@ -35,6 +35,8 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.IdleImpl#getFuels <em>Fuels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.IdleImpl#isLaden <em>Laden</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.IdleImpl#getBufferHours <em>Buffer Hours</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.IdleImpl#getPanamaHours <em>Panama Hours</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.IdleImpl#getContingencyHours <em>Contingency Hours</em>}</li>
  * </ul>
  *
@@ -69,6 +71,46 @@ public class IdleImpl extends EventImpl implements Idle {
 	 * @ordered
 	 */
 	protected boolean laden = LADEN_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getBufferHours() <em>Buffer Hours</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBufferHours()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int BUFFER_HOURS_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getBufferHours() <em>Buffer Hours</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBufferHours()
+	 * @generated
+	 * @ordered
+	 */
+	protected int bufferHours = BUFFER_HOURS_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getPanamaHours() <em>Panama Hours</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPanamaHours()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int PANAMA_HOURS_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getPanamaHours() <em>Panama Hours</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPanamaHours()
+	 * @generated
+	 * @ordered
+	 */
+	protected int panamaHours = PANAMA_HOURS_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getContingencyHours() <em>Contingency Hours</em>}' attribute.
@@ -151,6 +193,52 @@ public class IdleImpl extends EventImpl implements Idle {
 	 * @generated
 	 */
 	@Override
+	public int getBufferHours() {
+		return bufferHours;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setBufferHours(int newBufferHours) {
+		int oldBufferHours = bufferHours;
+		bufferHours = newBufferHours;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.IDLE__BUFFER_HOURS, oldBufferHours, bufferHours));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getPanamaHours() {
+		return panamaHours;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setPanamaHours(int newPanamaHours) {
+		int oldPanamaHours = panamaHours;
+		panamaHours = newPanamaHours;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.IDLE__PANAMA_HOURS, oldPanamaHours, panamaHours));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public int getContingencyHours() {
 		return contingencyHours;
 	}
@@ -208,6 +296,10 @@ public class IdleImpl extends EventImpl implements Idle {
 				return getFuels();
 			case SchedulePackage.IDLE__LADEN:
 				return isLaden();
+			case SchedulePackage.IDLE__BUFFER_HOURS:
+				return getBufferHours();
+			case SchedulePackage.IDLE__PANAMA_HOURS:
+				return getPanamaHours();
 			case SchedulePackage.IDLE__CONTINGENCY_HOURS:
 				return getContingencyHours();
 		}
@@ -230,6 +322,12 @@ public class IdleImpl extends EventImpl implements Idle {
 			case SchedulePackage.IDLE__LADEN:
 				setLaden((Boolean)newValue);
 				return;
+			case SchedulePackage.IDLE__BUFFER_HOURS:
+				setBufferHours((Integer)newValue);
+				return;
+			case SchedulePackage.IDLE__PANAMA_HOURS:
+				setPanamaHours((Integer)newValue);
+				return;
 			case SchedulePackage.IDLE__CONTINGENCY_HOURS:
 				setContingencyHours((Integer)newValue);
 				return;
@@ -251,6 +349,12 @@ public class IdleImpl extends EventImpl implements Idle {
 			case SchedulePackage.IDLE__LADEN:
 				setLaden(LADEN_EDEFAULT);
 				return;
+			case SchedulePackage.IDLE__BUFFER_HOURS:
+				setBufferHours(BUFFER_HOURS_EDEFAULT);
+				return;
+			case SchedulePackage.IDLE__PANAMA_HOURS:
+				setPanamaHours(PANAMA_HOURS_EDEFAULT);
+				return;
 			case SchedulePackage.IDLE__CONTINGENCY_HOURS:
 				setContingencyHours(CONTINGENCY_HOURS_EDEFAULT);
 				return;
@@ -270,6 +374,10 @@ public class IdleImpl extends EventImpl implements Idle {
 				return fuels != null && !fuels.isEmpty();
 			case SchedulePackage.IDLE__LADEN:
 				return laden != LADEN_EDEFAULT;
+			case SchedulePackage.IDLE__BUFFER_HOURS:
+				return bufferHours != BUFFER_HOURS_EDEFAULT;
+			case SchedulePackage.IDLE__PANAMA_HOURS:
+				return panamaHours != PANAMA_HOURS_EDEFAULT;
 			case SchedulePackage.IDLE__CONTINGENCY_HOURS:
 				return contingencyHours != CONTINGENCY_HOURS_EDEFAULT;
 		}
@@ -350,6 +458,10 @@ public class IdleImpl extends EventImpl implements Idle {
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (laden: ");
 		result.append(laden);
+		result.append(", bufferHours: ");
+		result.append(bufferHours);
+		result.append(", panamaHours: ");
+		result.append(panamaHours);
 		result.append(", contingencyHours: ");
 		result.append(contingencyHours);
 		result.append(')');

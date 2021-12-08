@@ -21,6 +21,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
@@ -31,8 +32,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan.VoyagePlanMetrics;
 
 /**
- * The {@link VoyagePlanOptimiser} performs an exhaustive search through the choices in a {@link VoyagePlan}. {@link IVoyagePlanChoice} implementations are provided in a set order which edit the
- * voyage plan objects.
+ * The {@link VoyagePlanOptimiser} performs an exhaustive search through the
+ * choices in a {@link VoyagePlan}. {@link IVoyagePlanChoice} implementations
+ * are provided in a set order which edit the voyage plan objects.
  * 
  * @author Simon Goodall
  * 
@@ -79,7 +81,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 		public @Nullable VoyagePlan bestPlan = null;
 		/**
-		 * True iff {@link #bestPlan} meets the requirement that every voyage uses less than or equal to the available time for that voyage
+		 * True iff {@link #bestPlan} meets the requirement that every voyage uses less
+		 * than or equal to the available time for that voyage
 		 */
 		public boolean bestPlanFitsInAvailableTime = false;
 	}
@@ -118,8 +121,11 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	}
 
 	/**
-	 * Recursive function to iterate through all the possible combinations of {@link IVoyagePlanChoice}s. For each set of choices, calculate a {@link VoyagePlan} and store the cheapest cost plan. The
-	 * {@link VoyageOptions} objects will be modified, but cloned into each {@link VoyagePlan} calculated.
+	 * Recursive function to iterate through all the possible combinations of
+	 * {@link IVoyagePlanChoice}s. For each set of choices, calculate a
+	 * {@link VoyagePlan} and store the cheapest cost plan. The
+	 * {@link VoyageOptions} objects will be modified, but cloned into each
+	 * {@link VoyagePlan} calculated.
 	 * 
 	 * @param i
 	 */
@@ -169,8 +175,11 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	}
 
 	/**
-	 * Recursive function to iterate through all the possible combinations of {@link IVoyagePlanChoice}s. For each set of choices, calculate a {@link VoyagePlan} and store the cheapest cost plan. The
-	 * {@link VoyageOptions} objects will be modified, but cloned into each {@link VoyagePlan} calculated.
+	 * Recursive function to iterate through all the possible combinations of
+	 * {@link IVoyagePlanChoice}s. For each set of choices, calculate a
+	 * {@link VoyagePlan} and store the cheapest cost plan. The
+	 * {@link VoyageOptions} objects will be modified, but cloned into each
+	 * {@link VoyagePlan} calculated.
 	 * 
 	 * @param i
 	 */
@@ -182,7 +191,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			evaluateVoyagePlan(record, state, ILNGVoyageCalculator.CargoRunDryMode.OFF);
 
 			if (ENABLE_CARGO_RUN_DRY && record.portTimesRecord.getFirstSlot() instanceof ILoadOption) {
-				// if (currentPlan.getViolationsCount() > 0 ||currentPlan.getCooldownCost() != 0)
+				// if (currentPlan.getViolationsCount() > 0 ||currentPlan.getCooldownCost() !=
+				// 0)
 				{
 					evaluateVoyagePlan(record, state, ILNGVoyageCalculator.CargoRunDryMode.PREFER_MAX_MAX);
 					evaluateVoyagePlan(record, state, ILNGVoyageCalculator.CargoRunDryMode.PREFER_MAX_MIN);
@@ -203,7 +213,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	}
 
 	/**
-	 * Evaluates the current sequences from the current choice set and updates the best. Returns the current plab.
+	 * Evaluates the current sequences from the current choice set and updates the
+	 * best. Returns the current plab.
 	 */
 	private VoyagePlan evaluateVoyagePlan(final Record record, final InternalState state, ILNGVoyageCalculator.CargoRunDryMode cargoRunDry) {
 
@@ -228,7 +239,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		// determine whether the plan is OK in that respect
 
 		/**
-		 * True iff the current plan ensures that every voyage fits in the available time for that voyage.
+		 * True iff the current plan ensures that every voyage fits in the available
+		 * time for that voyage.
 		 */
 		boolean currentPlanFitsInAvailableTime = true;
 		if (currentPlan == null) {
@@ -238,7 +250,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 				if (obj instanceof VoyageDetails) {
 					final VoyageDetails details = (VoyageDetails) obj;
 
-					if ((details.getTravelTime() + details.getIdleTime() + details.getPurgeDuration()) //
+					if ((details.getTravelTime() + details.getIdleTime() + details.getOptions().getExtraIdleTime(ExplicitIdleTime.PURGE)) //
 							> details.getOptions().getAvailableTime()) {
 						// this plan is bad. If the old plan was not bad, we
 						// should stick with the old plan even though this one

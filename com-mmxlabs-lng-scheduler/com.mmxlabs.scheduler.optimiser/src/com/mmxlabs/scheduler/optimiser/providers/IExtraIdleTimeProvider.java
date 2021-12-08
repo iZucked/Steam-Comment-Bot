@@ -16,7 +16,8 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 @NonNullByDefault
 public interface IExtraIdleTimeProvider extends IDataComponentProvider {
 
-	int getExtraIdleTimeInHours(IPortSlot fromPortSlot, IPortSlot toPortSlot);
+	int getContingencyIdleTimeInHours(IPortSlot fromPortSlot, IPortSlot toPortSlot);
+	int getBufferIdleTimeInHours( IPortSlot toPortSlot);
 
 //	int getExtraIdleTimeInHours(ISequenceElement fromElement, ISequenceElement toElement);
 

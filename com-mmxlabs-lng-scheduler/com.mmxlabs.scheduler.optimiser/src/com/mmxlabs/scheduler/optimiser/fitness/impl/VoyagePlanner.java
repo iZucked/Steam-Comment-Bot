@@ -62,6 +62,7 @@ import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCh
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.maintenance.IMaintenanceEvaluator;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
+import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
@@ -130,8 +131,9 @@ public class VoyagePlanner implements IVoyagePlanner {
 	private ILNGVoyageCalculator voyageCalculator;
 
 	/**
-	 * Returns a voyage options object and extends the current VPO with appropriate choices for a particular journey. TODO: refactor this if possible to simplify it and make it stateless (it currently
-	 * messes with the VPO).
+	 * Returns a voyage options object and extends the current VPO with appropriate
+	 * choices for a particular journey. TODO: refactor this if possible to simplify
+	 * it and make it stateless (it currently messes with the VPO).
 	 * 
 	 * @param portTimesRecord
 	 * 
@@ -145,7 +147,7 @@ public class VoyagePlanner implements IVoyagePlanner {
 	 * @return
 	 */
 	private VoyageOptions getVoyageOptionsAndSetVpoChoices(final IVesselAvailability vesselAvailability, final IPortTimesRecord portTimesRecord, final VesselState vesselState,
-			final int voyageStartTime, final int availableTime, final int extraIdleTime, final IPortSlot prevPortSlot, final IPortSlot thisPortSlot, final @Nullable VoyageOptions previousOptions,
+			final int voyageStartTime, final int availableTime, final int[] extraIdleTimes, final IPortSlot prevPortSlot, final IPortSlot thisPortSlot, final @Nullable VoyageOptions previousOptions,
 			final List<IVoyagePlanChoice> vpoChoices, boolean useNBO) {
 
 		@NonNull
@@ -159,7 +161,9 @@ public class VoyagePlanner implements IVoyagePlanner {
 		options.setVessel(vessel);
 		options.setVesselState(vesselState);
 		options.setAvailableTime(availableTime);
-		options.setExtraIdleTime(extraIdleTime);
+		for (var type : ExplicitIdleTime.values()) {
+			options.setExtraIdleTime(type, extraIdleTimes[type.ordinal()]);
+		}
 
 		// Flag to force NBO use over cost choice - e.g. for cases where there is
 		// already a heel onboard
@@ -370,10 +374,10 @@ public class VoyagePlanner implements IVoyagePlanner {
 			} else {
 				costType = CostType.Ballast;
 			}
-
-			options.setRoute(d.getRoute(), d.getDistance(), routeCostProvider.getRouteCost(d.getRoute(), d.getFrom(), d.getTo(), vessel, voyageStartTime, costType));
+			int panamaIdleHours = d.getRoute() == ERouteOption.PANAMA ? portTimesRecord.getSlotAdditionaPanamaIdleHours(prevPortSlot) : 0;
+			options.setRoute(d.getRoute(), d.getDistance(), routeCostProvider.getRouteCost(d.getRoute(), d.getFrom(), d.getTo(), vessel, voyageStartTime, costType), panamaIdleHours);
 		} else {
-			vpoChoices.add(new RouteVoyagePlanChoice(previousOptions, options, distances, vessel, voyageStartTime, routeCostProvider));
+			vpoChoices.add(new RouteVoyagePlanChoice(previousOptions, options, distances, vessel, voyageStartTime, routeCostProvider, portTimesRecord.getSlotAdditionaPanamaIdleHours(prevPortSlot)));
 		}
 
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER && thisPortSlot.getPortType() == PortType.End) {
@@ -393,7 +397,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 	}
 
 	/**
-	 * Should this ballast voyage be forced to use NBO for travel and idle? (Laden is always NBO);
+	 * Should this ballast voyage be forced to use NBO for travel and idle? (Laden
+	 * is always NBO);
 	 * 
 	 * @param prevPortSlot
 	 * @param toPortSlot
@@ -577,7 +582,7 @@ public class VoyagePlanner implements IVoyagePlanner {
 					totalRouteCost += routeCosts;
 
 					voyageOptions.setRoute(actualsDataProvider.getNextVoyageRoute(voyageOptions.getFromPortSlot()), actualsDataProvider.getNextVoyageDistance(voyageOptions.getFromPortSlot()),
-							routeCosts);
+							routeCosts, 0);
 
 					detailedSequence[idx] = voyageDetails;
 				}
@@ -890,7 +895,6 @@ public class VoyagePlanner implements IVoyagePlanner {
 		// return the end heel of the last plan (for the generated charter out case
 		// there will be more than one plan)
 		return plans.get(plans.size() - 1).getEndHeelVolumeInM3();
-
 	}
 
 	/**
@@ -963,10 +967,13 @@ public class VoyagePlanner implements IVoyagePlanner {
 				}
 
 				final int voyageStartTime = prevArrivalTime + portTimesRecord.getSlotDuration(prevPortSlot);
-				final int extraIdleTime = portTimesRecord.getSlotExtraIdleTime(prevPortSlot);
+				final int[] extraIdleTimes = new int[ExplicitIdleTime.values().length];
+				for (var type : ExplicitIdleTime.values()) {
+					extraIdleTimes[type.ordinal()] = portTimesRecord.getSlotExtraIdleTime(prevPortSlot, type);
+				}
 
 				final VesselState vesselState = findVesselState(portTimesRecord, prevPortSlot);
-				final VoyageOptions options = getVoyageOptionsAndSetVpoChoices(vesselAvailability, portTimesRecord, vesselState, voyageStartTime, availableTravelTime, extraIdleTime, prevPortSlot,
+				final VoyageOptions options = getVoyageOptionsAndSetVpoChoices(vesselAvailability, portTimesRecord, vesselState, voyageStartTime, availableTravelTime, extraIdleTimes, prevPortSlot,
 						thisPortSlot, previousOptions, vpoChoices, useNBO);
 				useNBO = options.getTravelFuelChoice() != TravelFuelChoice.BUNKERS;
 				voyageOrPortOptions.add(options);
@@ -1170,8 +1177,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 	/**
 	 * Returns a VoyagePlan produced by the optimiser from a cargo itinerary.
 	 * 
-	 * @param voyageOrPortOptionsSubsequence
-	 *            An alternating list of PortOptions and VoyageOptions objects
+	 * @param voyageOrPortOptionsSubsequence An alternating list of PortOptions and
+	 *                                       VoyageOptions objects
 	 * @param arrivalTimes
 	 * @param optimiser
 	 * @param startHeelVolumeInM3
@@ -1199,7 +1206,7 @@ public class VoyagePlanner implements IVoyagePlanner {
 
 				// Take voyage details time as this can be larger than
 				// available time e.g. due to reaching max speed.
-				final int duration = details.getTravelTime() + details.getIdleTime() + details.getPurgeDuration();
+				final int duration = details.getTravelTime() + details.getIdleTime() + details.getOptions().getExtraIdleTime(ExplicitIdleTime.PURGE);
 
 				// assert duration >= (availableTime - 1) :
 				// "Duration should exceed available time less one, but is "
@@ -1217,7 +1224,9 @@ public class VoyagePlanner implements IVoyagePlanner {
 	}
 
 	/**
-	 * Returns an array of vessel states determining, for each index of the vessel location sequence, whether the vessel arrives at that location with LNG cargo on board for resale or not
+	 * Returns an array of vessel states determining, for each index of the vessel
+	 * location sequence, whether the vessel arrives at that location with LNG cargo
+	 * on board for resale or not
 	 * 
 	 * @param sequence
 	 * @return
@@ -1260,7 +1269,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 	}
 
 	/**
-	 * Here, a single a voyage plan is evaluated, which may be part of what used to be a single voyage plan, e.g. if a charter out event was generated.
+	 * Here, a single a voyage plan is evaluated, which may be part of what used to
+	 * be a single voyage plan, e.g. if a charter out event was generated.
 	 * 
 	 * @return
 	 */
