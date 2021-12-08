@@ -2395,7 +2395,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	}
 
-	private class EditConstraintsAction extends Action {
+	private class EditConstraintsAction extends LockableAction {
 		public EditConstraintsAction(final String label) {
 			super(label);
 		}
