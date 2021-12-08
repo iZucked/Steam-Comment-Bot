@@ -3,11 +3,11 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Fragment-Host: com.mmxlabs.models.ui
 Bundle-SymbolicName: com.mmxlabs.models.ui.test;singleton:=true
-Bundle-Version: 4.13.3.qualifier
+Bundle-Version: 4.13.4.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-16
 Export-Package: com.mmxlabs.models.ui.test.model,
  com.mmxlabs.models.ui.test.model.impl,
  com.mmxlabs.models.ui.test.model.util

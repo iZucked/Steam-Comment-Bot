@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Sets;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
@@ -95,14 +96,14 @@ import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
  * 
  */
 public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, IActionDelegate2 {
-	
-	private static class MtMBuyCriterion{
+
+	private static class MtMBuyCriterion {
 
 		public double salePrice = Double.MIN_VALUE;
 		public int saleVolume = Integer.MIN_VALUE;
 		public double shippingMargin = Double.MIN_VALUE;
 		public MTMResult bestResult = null;
-		
+
 		public void setNewValues(double salePrice, int saleVolume, double shippingMargin, final MTMResult result) {
 			this.salePrice = salePrice;
 			this.saleVolume = saleVolume;
@@ -110,15 +111,15 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 			this.bestResult = result;
 		}
 	}
-	
-	private static class MtMSellCriterion{
+
+	private static class MtMSellCriterion {
 
 		public double buyPrice = Double.MAX_VALUE;
 		public int purchaseVolume = Integer.MAX_VALUE;
 		public double shippingMargin = Double.MAX_VALUE;
-		
+
 		public MTMResult bestResult = null;
-		
+
 		public void setNewValues(double buyPrice, int purchaseVolume, double shippingMargin, final MTMResult result) {
 			this.buyPrice = buyPrice;
 			this.purchaseVolume = purchaseVolume;
@@ -126,9 +127,9 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 			this.bestResult = result;
 		}
 	}
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(MtMScenarioEditorActionDelegate.class);
-	
+
 	// make decision based on PNL
 	private static final boolean OLD_MTM = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MTM_OLD);
 
@@ -178,12 +179,12 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 		final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(sdp);
 		final EditingDomain editingDomain = sdp.getEditingDomain();
-		
+
 		progressMonitor.worked(200);
 		progressMonitor.subTask("Checking the schedule model");
 		final Set<String> usedIDStrings = getUsedIDs(cargoModel);
 		final Map<Slot<?>, SlotAllocation> s2sa = populateSlotAllocationsFromScheduleModel(scenarioModel.getScheduleModel());
-		
+
 		progressMonitor.worked(100);
 		if (!promptClearModels()) {
 			progressMonitor.done();
@@ -202,8 +203,6 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 
 		final List<Command> setCommands = new LinkedList();
 		final List<EObject> deleteObjects = new LinkedList();
-		
-		
 
 		progressMonitor.worked(200);
 		progressMonitor.subTask("Creating MtM model");
@@ -233,8 +232,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 
 		progressMonitor.worked(200);
 		progressMonitor.subTask("Looking for the best solutions in the MtM model");
-		
-		
+
 		for (final MTMRow row : model[0].getRows()) {
 			if (row.getBuyOption() != null) {
 				final BuyOption bo = row.getBuyOption();
@@ -245,20 +243,20 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 				} else {
 					continue;
 				}
-				
+
 				MtMBuyCriterion criterion = new MtMBuyCriterion();
-				
+
 				double loadCV = loadSlot.getSlotOrDelegateCV();
-				
+
 				int purchaseVolume = getPurchaseVolume(criterion, s2sa, loadSlot, loadCV);
-				
+
 				// make sure that there's a vessel availability
 				for (final MTMResult result : row.getRhsResults()) {
 					if (result.getEarliestETA() == null)
 						continue;
-					
+
 					final int vesselCapacity = getVesselCapacity(result, loadCV);
-					
+
 					if (criterion.salePrice == Double.MIN_VALUE || criterion.shippingMargin == Double.MIN_VALUE || criterion.saleVolume == Integer.MIN_VALUE) {
 						criterion.setNewValues(result.getEarliestPrice(), result.getEarliestVolume(), result.getShippingCost(), result);
 					} else {
@@ -313,16 +311,16 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 				} else {
 					continue;
 				}
-				
+
 				final MtMSellCriterion criterion = new MtMSellCriterion();
-				
+
 				int saleVolume = getSaleVolume(criterion, s2sa, dischargeSlot);
 
 				// make sure that there's a vessel availability
 				for (final MTMResult result : row.getLhsResults()) {
 					if (result.getEarliestETA() == null)
 						continue;
-					
+
 					if (criterion.buyPrice == Double.MAX_VALUE || criterion.shippingMargin == Double.MAX_VALUE || criterion.purchaseVolume == Integer.MAX_VALUE) {
 						criterion.setNewValues(result.getEarliestPrice(), result.getEarliestVolume(), result.getShippingCost(), result);
 					} else {
@@ -334,7 +332,7 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 							chooseNewBestBuy(result, criterion, saleVolume);
 						}
 					}
-					
+
 				}
 
 				if (criterion.bestResult != null) {
@@ -429,13 +427,13 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 	private static int getPurchaseVolume(MtMBuyCriterion criterion, final Map<Slot<?>, SlotAllocation> s2sa, final LoadSlot loadSlot, double loadCV) {
 		int purchaseVolume = loadSlot.getSlotOrDelegateMaxQuantity();
 		if (loadSlot.getSlotOrDelegateVolumeLimitsUnit() == VolumeUnits.M3) {
-			purchaseVolume *=  (int) (loadCV);
+			purchaseVolume *= (int) (loadCV);
 		}
 
 		// getting the price of the original cargo
 		if (!s2sa.isEmpty()) {
 			final SlotAllocation sa = s2sa.get(loadSlot);
-			
+
 			if (sa instanceof SlotAllocation) {
 				criterion.salePrice = sa.getPrice();
 				criterion.saleVolume = sa.getEnergyTransferred();
@@ -489,9 +487,10 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 	}
 
 	/**
-	 * Populates the maps of discharge allocations for corresponding load slots
-	 * And map of load allocations for the corresponding discharge slots from the
+	 * Populates the maps of discharge allocations for corresponding load slots And
+	 * map of load allocations for the corresponding discharge slots from the
 	 * pre-existing cargoes
+	 * 
 	 * @param sm
 	 * @param discharges
 	 * @param loads
@@ -525,11 +524,12 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 			}
 		}
 	}
-	
+
 	/**
-	 * Populates the maps of discharge allocations for corresponding load slots
-	 * And map of load allocations for the corresponding discharge slots from the
+	 * Populates the maps of discharge allocations for corresponding load slots And
+	 * map of load allocations for the corresponding discharge slots from the
 	 * pre-existing cargoes
+	 * 
 	 * @param sm
 	 * @param discharges
 	 * @param loads
@@ -567,7 +567,9 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 	}
 
 	/**
-	 * Compute the buy mtm price of the current MTMResult and compare it with the existing criterion
+	 * Compute the buy mtm price of the current MTMResult and compare it with the
+	 * existing criterion
+	 * 
 	 * @param result
 	 * @param criterion
 	 * @param saleVolume
@@ -577,19 +579,21 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 		double shippingCost = criterion.shippingMargin * saleVolume;
 		double buyPlusShip = purchaseCost + shippingCost;
 		double mtm = buyPlusShip / (double) saleVolume;
-		
+
 		double cPurchaseCost = result.getEarliestPrice() * result.getEarliestVolume();
 		double cShippingCost = result.getShippingCost() * result.getEarliestVolume();
 		double cBuyPlusShip = cPurchaseCost + cShippingCost;
 		double cMtM = cBuyPlusShip / (double) saleVolume;
-		
+
 		if (mtm < cMtM) {
 			criterion.setNewValues(result.getEarliestPrice(), result.getEarliestVolume(), result.getShippingCost(), result);
 		}
 	}
 
 	/**
-	 * Compute the sell mtm price of the current MTMResult and compare it with the existing criterion
+	 * Compute the sell mtm price of the current MTMResult and compare it with the
+	 * existing criterion
+	 * 
 	 * @param result
 	 * @param criterion
 	 * @param purchaseVolume
@@ -600,12 +604,12 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 		double shippingCost = criterion.shippingMargin * criterion.saleVolume;
 		double saleMinusShip = revenue - shippingCost;
 		double mtm = saleMinusShip / (double) Math.min(vesselCapacity, purchaseVolume);
-		
+
 		double cRevenue = result.getEarliestPrice() * result.getEarliestVolume();
 		double cShippingCost = result.getShippingCost() * result.getEarliestVolume();
 		double cSaleMinusShip = cRevenue - cShippingCost;
 		double cMtM = cSaleMinusShip / (double) Math.min(vesselCapacity, purchaseVolume);
-		
+
 		if (mtm < cMtM) {
 			criterion.setNewValues(result.getEarliestPrice(), result.getEarliestVolume(), result.getShippingCost(), result);
 		}
@@ -680,6 +684,15 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 		if (!analyticsModel.getBreakevenModels().isEmpty()) {
 			delete.addAll(analyticsModel.getBreakevenModels());
 		}
+		// Clear sandbox results, but not the sandbox itself
+		if (!analyticsModel.getOptionModels().isEmpty()) {
+			analyticsModel.getOptionModels().forEach(m -> {
+				AbstractSolutionSet r = m.getResults();
+				if (r != null) {
+					delete.add(r);
+				}
+			});
+		}
 
 		if (delete.isEmpty()) {
 			return null;
@@ -695,10 +708,11 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 		});
 		return result[0];
 	}
-	
+
 	/**
-	 * Get the total shipping cost of the cargoAllocation.
-	 * Shipping cost is for the round trip journey
+	 * Get the total shipping cost of the cargoAllocation. Shipping cost is for the
+	 * round trip journey
+	 * 
 	 * @param cargoAllocation
 	 * @return
 	 */
@@ -756,9 +770,10 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 		}
 		return shippingCost;
 	}
-	
+
 	/**
 	 * Get the fuel cost
+	 * 
 	 * @param fuelUser
 	 * @param fuels
 	 * @return
@@ -776,10 +791,11 @@ public class MtMScenarioEditorActionDelegate implements IEditorActionDelegate, I
 		}
 		return sum;
 	}
-	
+
 	/**
-	 * Looks up the usable vessel capacity if CharterInMarket is present on the MTMResult
-	 * Returns Integer.MAX_VALUE if no result present
+	 * Looks up the usable vessel capacity if CharterInMarket is present on the
+	 * MTMResult Returns Integer.MAX_VALUE if no result present
+	 * 
 	 * @param result
 	 * @return
 	 */

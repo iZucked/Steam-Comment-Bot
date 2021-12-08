@@ -39,6 +39,7 @@ import com.mmxlabs.optimiser.common.events.OptimisationLifecycleModule;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
+import com.mmxlabs.optimiser.core.inject.scopes.NotInjectedScopeModule;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeModule;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -82,6 +83,7 @@ public class LNGDataTransformer {
 
 		// Prepare the main modules with the re-usable data for any further work.
 		modules.add(new ThreadLocalScopeModule());
+		modules.add(new NotInjectedScopeModule());
 		modules.add(new OptimisationLifecycleModule());
 		modules.add(new LNGSharedDataTransformerModule(scenarioDataProvider, new SharedDataTransformerService()));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new DataComponentProviderModule(), services, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule, hints));

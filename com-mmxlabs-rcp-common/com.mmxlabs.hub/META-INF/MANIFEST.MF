@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: MMXLabs Hub Support
 Bundle-SymbolicName: com.mmxlabs.hub;singleton:=true
-Bundle-Version: 4.13.3.qualifier
+Bundle-Version: 4.13.4.qualifier
 Bundle-ClassPath: .,
  lib/json-20140107.jar
 Bundle-Activator: com.mmxlabs.hub.DataHubActivator
@@ -10,6 +10,7 @@ Bundle-Vendor: Minimax Labs
 Export-Package: com.mmxlabs.hub,
  com.mmxlabs.hub.auth,
  com.mmxlabs.hub.common.http,
+ com.mmxlabs.hub.license,
  com.mmxlabs.hub.preferences,
  com.mmxlabs.hub.services.permissions,
  com.mmxlabs.hub.services.users,
@@ -19,7 +20,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.license.ssl,
- com.mmxlabs.common.common-util;bundle-version="4.13.3",
+ com.mmxlabs.common.common-util;bundle-version="4.13.4",
  org.eclipse.equinox.security,
  com.fasterxml.jackson.core.jackson-databind,
  com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.10.0",
@@ -33,8 +34,9 @@ Require-Bundle: org.eclipse.ui,
  javax.annotation;bundle-version="1.2.0",
  org.eclipse.e4.core.di,
  wrapped.com.squareup.okhttp3.okhttp;bundle-version="3.14.2";visibility:=reexport,
- wrapped.com.squareup.okio.okio;bundle-version="1.17.4";visibility:=reexport
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+ wrapped.com.squareup.okio.okio;bundle-version="1.17.4";visibility:=reexport,
+ org.eclipse.core.resources;bundle-version="3.7.101"
+Bundle-RequiredExecutionEnvironment: JavaSE-16
 Bundle-ActivationPolicy: lazy
 Eclipse-BuddyPolicy: registered
 Automatic-Module-Name: com.mmxlabs.hub

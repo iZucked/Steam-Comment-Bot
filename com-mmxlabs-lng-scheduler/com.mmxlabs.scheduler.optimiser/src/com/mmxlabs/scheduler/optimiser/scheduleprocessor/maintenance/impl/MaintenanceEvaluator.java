@@ -297,7 +297,7 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 		int currentMaintenanceIndex = maintenanceIndexIter.next();
 
 		// Pre-visit ballast
-		final VoyageDetails newTravelToFirstMaintenance = ((VoyageDetails) currentSequence[currentMaintenanceIndex - 1]).clone();
+		final VoyageDetails newTravelToFirstMaintenance = ((VoyageDetails) currentSequence[currentMaintenanceIndex - 1]).copy();
 		newTravelToFirstMaintenance.getOptions().setToPortSlot(maintenancePortSlots[0]);
 		newTravelsToMaintenance[0] = newTravelToFirstMaintenance;
 		// Port
@@ -310,7 +310,7 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 		// Post-visit ballast
 		final VoyageOptions firstMaintenanceToNextPortVoyageOptions = ((VoyageDetails) currentSequence[currentMaintenanceIndex + 1]).getOptions().copy();
 		firstMaintenanceToNextPortVoyageOptions.setFromPortSlot(maintenancePortSlots[0]);
-		newTravelsFromMaintenance[0] = ((VoyageDetails) currentSequence[currentMaintenanceIndex + 1]).clone();
+		newTravelsFromMaintenance[0] = ((VoyageDetails) currentSequence[currentMaintenanceIndex + 1]).copy();
 		newTravelsFromMaintenance[0].setOptions(firstMaintenanceToNextPortVoyageOptions);
 		for (int i = 1; i < maintenanceIndices.size(); ++i) {
 			// pre-visit ballast
@@ -326,7 +326,7 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 			// Post-visit ballast
 			final VoyageOptions currentMaintenanceToNextPortVoyageOptions = ((VoyageDetails) currentSequence[currentMaintenanceIndex + 1]).getOptions().copy();
 			currentMaintenanceToNextPortVoyageOptions.setFromPortSlot(maintenancePortSlots[i]);
-			newTravelsFromMaintenance[i] = ((VoyageDetails) currentSequence[currentMaintenanceIndex + 1]).clone();
+			newTravelsFromMaintenance[i] = ((VoyageDetails) currentSequence[currentMaintenanceIndex + 1]).copy();
 			newTravelsFromMaintenance[i].setOptions(currentMaintenanceToNextPortVoyageOptions);
 		}
 
@@ -337,9 +337,9 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 		for (int i = 0; i < currentMaintenanceIndex - 1; ++i) {
 			final IDetailsSequenceElement o = currentSequence[i];
 			if (o instanceof PortDetails) {
-				firstSequence.add(((PortDetails) o).clone());
+				firstSequence.add(((PortDetails) o).copy());
 			} else if (o instanceof VoyageDetails) {
-				firstSequence.add(((VoyageDetails) o).clone());
+				firstSequence.add(((VoyageDetails) o).copy());
 			}
 		}
 		firstSequence.add(newTravelsToMaintenance[0]);
@@ -361,9 +361,9 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 		for (int i = currentMaintenanceIndex + 2; i < currentSequence.length; ++i) {
 			final IDetailsSequenceElement o = currentSequence[i];
 			if (o instanceof PortDetails) {
-				finalSequence.add(((PortDetails) o).clone());
+				finalSequence.add(((PortDetails) o).copy());
 			} else if (o instanceof VoyageDetails) {
-				finalSequence.add(((VoyageDetails) o).clone());
+				finalSequence.add(((VoyageDetails) o).copy());
 			}
 		}
 		newSequences.add(finalSequence);

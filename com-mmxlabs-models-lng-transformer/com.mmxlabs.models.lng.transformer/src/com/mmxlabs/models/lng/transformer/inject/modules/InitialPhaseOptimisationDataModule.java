@@ -23,10 +23,4 @@ public class InitialPhaseOptimisationDataModule extends AbstractModule {
 		phaseOptimisationData.setResources(optimisationData.getResources());
 		return phaseOptimisationData;
 	}
-
-	@Override
-	protected void configure() {
-
-	}
-
 }

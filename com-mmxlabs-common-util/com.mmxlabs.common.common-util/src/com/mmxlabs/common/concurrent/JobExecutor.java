@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 public class JobExecutor implements AutoCloseable {
+	private static final String MSG_NOT_CALLED_BEGIN = "Not called #begin";
 	private ExecutorService delegate;
 	private final List<Future<?>> futures = new LinkedList<>();
 	private int threads;
@@ -40,7 +41,7 @@ public class JobExecutor implements AutoCloseable {
 
 	public synchronized void waitUntilComplete(long timeout, TimeUnit unit) {
 		if (!inScope) {
-			throw new IllegalStateException("Not called begin");
+			throw new IllegalStateException(MSG_NOT_CALLED_BEGIN);
 		}
 		// Wait for task list to complete.
 		delegate.shutdown();
@@ -70,7 +71,7 @@ public class JobExecutor implements AutoCloseable {
 	private synchronized <T> Future<T> storeAndReturn(final Future<T> f) {
 
 		if (!inScope) {
-			throw new IllegalStateException("Not called begin");
+			throw new IllegalStateException(MSG_NOT_CALLED_BEGIN);
 		}
 
 		futures.add(f);
@@ -80,7 +81,7 @@ public class JobExecutor implements AutoCloseable {
 	public synchronized void removeCompleted() {
 
 		if (!inScope) {
-			throw new IllegalStateException("Not called begin");
+			throw new IllegalStateException(MSG_NOT_CALLED_BEGIN);
 		}
 
 		final Iterator<Future<?>> iterator = futures.iterator();

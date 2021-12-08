@@ -35,8 +35,6 @@ public final class VoyageOptions implements IOptionsSequenceElement {
 	private @NonNull TravelFuelChoice travelFuelChoice = TravelFuelChoice.BUNKERS;
 	private @NonNull IdleFuelChoice idleFuelChoice = IdleFuelChoice.BUNKERS;
 
-	private boolean charterOutIdleTime;
-
 	private int cargoCV;
 
 	/**
@@ -58,8 +56,6 @@ public final class VoyageOptions implements IOptionsSequenceElement {
 
 	private VesselState vesselState;
 
-	private int charterOutDailyRate;
-
 	public VoyageOptions(@NonNull final IPortSlot from, @NonNull final IPortSlot to) {
 		this.fromPortSlot = from;
 		this.toPortSlot = to;
@@ -78,8 +74,6 @@ public final class VoyageOptions implements IOptionsSequenceElement {
 		setVesselState(options.getVesselState());
 		setAllowCooldown(options.getAllowCooldown());
 		setShouldBeCold(options.shouldBeCold());
-		setCharterOutDailyRate(options.getCharterOutDailyRate());
-		setCharterOutIdleTime(options.isCharterOutIdleTime());
 		setCargoCVValue(options.getCargoCVValue());
 	}
 
@@ -94,8 +88,7 @@ public final class VoyageOptions implements IOptionsSequenceElement {
 			final VoyageOptions vo = (VoyageOptions) obj;
 
 			// @formatter:off
-			return Objects.equal(charterOutIdleTime, vo.charterOutIdleTime) //
-					&& Objects.equal(travelFuelChoice, vo.travelFuelChoice) //
+			return Objects.equal(travelFuelChoice, vo.travelFuelChoice) //
 					&& Objects.equal(idleFuelChoice, vo.idleFuelChoice) && Objects.equal(availableTime, vo.availableTime) //
 					&& Objects.equal(extraIdleTime, vo.extraIdleTime) //
 					&& Objects.equal(distance, vo.distance) && Objects.equal(routeCost, vo.routeCost) //
@@ -120,8 +113,6 @@ public final class VoyageOptions implements IOptionsSequenceElement {
 		return MoreObjects.toStringHelper(VoyageOptions.class) //
 				.add("availableTime", availableTime) //
 				.add("extraIdleTime", extraIdleTime) //
-				.add("charterOutIdleTime", charterOutIdleTime) //
-				.add("charterOutDailyRate", charterOutDailyRate) //
 				.add("distance", distance).add("vessel", vessel) //
 				.add("fromPortSlot", fromPortSlot) //
 				.add("toPortSlot", toPortSlot) //
@@ -246,28 +237,6 @@ public final class VoyageOptions implements IOptionsSequenceElement {
 
 	public final void setWarm(final boolean startWarm) {
 		this.startWarm = startWarm;
-	}
-
-	/**
-	 * @return
-	 */
-	public boolean isCharterOutIdleTime() {
-		return charterOutIdleTime;
-	}
-
-	/**
-	 * @param charterOutIdleTime
-	 */
-	public void setCharterOutIdleTime(final boolean charterOutIdleTime) {
-		this.charterOutIdleTime = charterOutIdleTime;
-	}
-
-	public int getCharterOutDailyRate() {
-		return charterOutDailyRate;
-	}
-
-	public void setCharterOutDailyRate(final int charterOutDailyRate) {
-		this.charterOutDailyRate = charterOutDailyRate;
 	}
 
 	public int getCargoCVValue() {

@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.analytics.OpenBuy;
 import com.mmxlabs.models.lng.analytics.OpenSell;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellMarket;
+import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ShippingType;
@@ -61,9 +62,8 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 			final ShippingType nonShipped = AnalyticsBuilder.isNonShipped(baseCaseRow);
 			if (nonShipped == ShippingType.Shipped) {
 				if (baseCaseRow.getBuyOption() != null && baseCaseRow.getSellOption() != null //
-						&& !(baseCaseRow.getBuyOption() instanceof OpenBuy) && !(baseCaseRow.getSellOption() instanceof OpenSell)  
-						) {
-					if (baseCaseRow.getShipping() == null ) {
+						&& !(baseCaseRow.getBuyOption() instanceof OpenBuy) && !(baseCaseRow.getSellOption() instanceof OpenSell)) {
+					if (baseCaseRow.getShipping() == null) {
 						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
 								(IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point - no shipping option defined."));
 						deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
@@ -140,6 +140,14 @@ public class BaseCaseRowConstraint extends AbstractModelMultiConstraint {
 				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 				statuses.add(deco);
 			}
+			if (baseCaseRow.getVesselEventOption() instanceof CharterOutOpportunity && AnalyticsBuilder.isRoundTripOption(baseCaseRow.getShipping())) {
+
+				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point: charter out opportunity with round-trip shipping option"));
+				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+				statuses.add(deco);
+			}
+
 			if ((baseCaseRow.getBuyOption() == null || baseCaseRow.getBuyOption() instanceof OpenBuy) && baseCaseRow.getSellOption() instanceof SellMarket) {
 				final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Sandbox|Starting point: cannot leave market sell open"));
 				deco.addEObjectAndFeature(baseCaseRow, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);

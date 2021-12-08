@@ -349,7 +349,14 @@ public class UpstreamUrlProvider {
 
 		try (final Response pingResponse = httpClient.newCall(pingRequest).execute()) {
 			if (pingResponse.isSuccessful()) {
+				// Clear any logged errors
+				reportedError.remove(url);
 				return OnlineState.online();
+			} else {
+				// Check for specific error codes
+				if (pingResponse.code() == 502) {
+					return OnlineState.error("Error finding Data Hub endpoint - bad gateway", null);
+				}
 			}
 		} catch (final UnknownHostException e) {
 			if (!reportedError.containsKey(url)) {
@@ -388,7 +395,7 @@ public class UpstreamUrlProvider {
 		// Clear any logged errors
 		reportedError.remove(url);
 
-		return OnlineState.online();
+		return OnlineState.error("Error finding Data Hub endpoint", null);
 	}
 
 	public boolean isAvailable() {

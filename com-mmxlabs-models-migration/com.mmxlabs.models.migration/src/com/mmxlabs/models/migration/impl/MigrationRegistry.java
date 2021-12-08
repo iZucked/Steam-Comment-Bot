@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.models.migration.IClientMigrationUnit;
+import com.mmxlabs.models.migration.IMigrationProvider;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.IMigrationUnit;
 import com.mmxlabs.models.migration.IMigrationUnitExtension;
@@ -33,12 +34,14 @@ import com.mmxlabs.models.migration.extensions.ClientMigrationUnitExtensionPoint
 import com.mmxlabs.models.migration.extensions.DefaultClientMigrationContextExtensionPoint;
 import com.mmxlabs.models.migration.extensions.DefaultMigrationContextExtensionPoint;
 import com.mmxlabs.models.migration.extensions.MigrationContextExtensionPoint;
+import com.mmxlabs.models.migration.extensions.MigrationProviderExtensionPoint;
 import com.mmxlabs.models.migration.extensions.MigrationUnitExtensionExtensionPoint;
 import com.mmxlabs.models.migration.extensions.MigrationUnitExtensionPoint;
 import com.mmxlabs.models.migration.internal.MigrationActivationModule;
 
 /**
- * An implementation of {@link IMigrationRegistry} populated by extensions points.
+ * An implementation of {@link IMigrationRegistry} populated by extensions
+ * points.
  * 
  * @author Simon Goodall
  * 
@@ -58,25 +61,30 @@ public class MigrationRegistry implements IMigrationRegistry {
 	private final Map<IClientMigrationUnit, String> clientMigrationExtPointIDMap = new HashMap<>();
 	private String defaultClientContext;
 
-	
 	public void activate() {
 		final BundleContext bc = FrameworkUtil.getBundle(MigrationRegistry.class).getBundleContext();
 		final Injector inj = Guice.createInjector(Peaberry.osgiModule(bc, EclipseRegistry.eclipseRegistry()), new MigrationActivationModule());
 		inj.injectMembers(this);
 	}
-	
+
 	/**
-	 * Initialise the registry with the initial set of migration units and contexts. There should be a single defaultMigrationContext
+	 * Initialise the registry with the initial set of migration units and contexts.
+	 * There should be a single defaultMigrationContext
 	 * 
 	 * @param defaultMigrationContexts
 	 * @param migrationContexts
 	 * @param migrationUnits
 	 */
 	@Inject
-	public void init(final Iterable<MigrationContextExtensionPoint> migrationContexts, final Iterable<MigrationUnitExtensionPoint> migrationUnits,
-			final Iterable<MigrationUnitExtensionExtensionPoint> migrationUnitExtensions, final Iterable<DefaultMigrationContextExtensionPoint> defaultMigrationContexts,
-			final Iterable<ClientMigrationContextExtensionPoint> clientMigrationContexts, final Iterable<ClientMigrationUnitExtensionPoint> clientMigrationUnits,
-			final Iterable<DefaultClientMigrationContextExtensionPoint> defaultClientMigrationContexts) {
+	public void init(final Iterable<MigrationContextExtensionPoint> migrationContexts, //
+			final Iterable<MigrationUnitExtensionPoint> migrationUnits, //
+			final Iterable<MigrationUnitExtensionExtensionPoint> migrationUnitExtensions, //
+			final Iterable<DefaultMigrationContextExtensionPoint> defaultMigrationContexts, //
+			final Iterable<ClientMigrationContextExtensionPoint> clientMigrationContexts, //
+			final Iterable<ClientMigrationUnitExtensionPoint> clientMigrationUnits, //
+			final Iterable<DefaultClientMigrationContextExtensionPoint> defaultClientMigrationContexts, //
+			final Iterable<MigrationProviderExtensionPoint> migrationProvideExtensions //
+	) {
 
 		for (final MigrationContextExtensionPoint ext : migrationContexts) {
 			final String contextName = ext.getContextName();
@@ -147,6 +155,11 @@ public class MigrationRegistry implements IMigrationRegistry {
 				LOG.error("There is already a default client migration context set - " + defaultClientContext + ". Context " + ext.getClientContext() + " will not be set as the default.");
 			}
 		}
+
+		for (final MigrationProviderExtensionPoint ext : migrationProvideExtensions) {
+			IMigrationProvider provider = ext.createMigrationProvider();
+			provider.register(this);
+		}
 	}
 
 	@Override
@@ -179,7 +192,8 @@ public class MigrationRegistry implements IMigrationRegistry {
 			throw new IllegalArgumentException("Context not registered: " + scenarioContext);
 		}
 
-		// Search through the map finding a set of IMigrationUnits to transform between the desired versions.
+		// Search through the map finding a set of IMigrationUnits to transform between
+		// the desired versions.
 		final List<IMigrationUnit> chain = new ArrayList<>(Math.min(1, Math.abs(toScenarioVersion - fromScenarioVersion) + Math.abs(toClientVersion - fromClientVersion)));
 		final Map<Integer, List<IMigrationUnit>> scenarioFroms = fromVersionMap.get(scenarioContext);
 		final Map<Integer, List<IClientMigrationUnit>> clientFroms = clientFromVersionMap.get(clientContext);
@@ -197,14 +211,16 @@ public class MigrationRegistry implements IMigrationRegistry {
 					final List<IClientMigrationUnit> nextUnits = clientFroms.get(currentClientVersion);
 					// Is there another unit?
 					if (nextUnits == null || nextUnits.isEmpty()) {
-						throw new RuntimeException(String.format("Unable to find migration chain between versions %d and %d for client context %s.", fromClientVersion, toClientVersion, clientContext));
+						throw new RuntimeException(
+								String.format("Unable to find migration chain between versions %d and %d for client context %s.", fromClientVersion, toClientVersion, clientContext));
 					}
 
 					boolean foundUnit = false;
 					for (final IClientMigrationUnit unit : nextUnits) {
 
 						if (unit.getScenarioDestinationVersion() != currentScenarioVersion) {
-							// Assume we need to perform a new scenario migration, thus break out of this loop and head on to the scenario migration code path.
+							// Assume we need to perform a new scenario migration, thus break out of this
+							// loop and head on to the scenario migration code path.
 							continue;
 						}
 
@@ -344,11 +360,29 @@ public class MigrationRegistry implements IMigrationRegistry {
 	 */
 	public void registerClientContext(@NonNull final String context, final int latestVersion) {
 
+		registerClientContext(context, latestVersion, false);
+	}
+
+	/**
+	 * Register a migration context and the latest version of the context.
+	 * 
+	 * @param context
+	 * @param latestVersion
+	 */
+	public void registerClientContext(@NonNull final String context, final int latestVersion, boolean makeDefault) {
+
 		if (clientContexts.containsKey(context)) {
 			throw new IllegalStateException("Client Context already registered: " + context);
 		}
 		clientContexts.put(context, latestVersion);
 		clientFromVersionMap.put(context, new HashMap<>());
+
+		if (makeDefault) {
+			if (defaultClientContext != null) {
+				throw new IllegalStateException("Default client context already registered: " + defaultClientContext);
+			}
+			defaultClientContext = context;
+		}
 	}
 
 	/**
@@ -359,13 +393,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 	public void registerClientMigrationUnit(@NonNull final IClientMigrationUnit unit) {
 		final Map<Integer, List<IClientMigrationUnit>> map = clientFromVersionMap.get(unit.getClientContext());
 		final int clientSourceVersion = unit.getClientSourceVersion();
-		final List<IClientMigrationUnit> units;
-		if (map.containsKey(clientSourceVersion)) {
-			units = map.get(clientSourceVersion);
-		} else {
-			units = new LinkedList<>();
-			map.put(clientSourceVersion, units);
-		}
+		final List<IClientMigrationUnit> units = map.computeIfAbsent(clientSourceVersion, k -> new LinkedList<>());
 		units.add(unit);
 	}
 
@@ -390,7 +418,8 @@ public class MigrationRegistry implements IMigrationRegistry {
 
 	@Override
 	public int getLatestClientContextVersion(@NonNull final String context) {
-		// Scenarios may not have a context, so return 0 here rather than throw exception later.
+		// Scenarios may not have a context, so return 0 here rather than throw
+		// exception later.
 		if (context == null || context.isEmpty()) {
 			return 0;
 		}

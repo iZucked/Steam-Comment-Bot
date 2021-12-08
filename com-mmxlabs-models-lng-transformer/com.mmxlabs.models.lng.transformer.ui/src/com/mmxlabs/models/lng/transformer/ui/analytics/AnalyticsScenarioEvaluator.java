@@ -41,6 +41,7 @@ import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.concurrent.JobExecutor;
 import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.common.util.TriConsumer;
+import com.mmxlabs.common.util.exceptions.UserFeedbackException;
 import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
@@ -594,6 +595,9 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 			final List<EObject> objectsToInsert = new LinkedList<>();
 			for (final BaseCaseRow row : model.getBaseCase().getBaseCase()) {
+				if (!row.isOptionise()) {
+					continue;
+				}
 				if (row.getVesselEventOption() != null) {
 					objectsToInsert.add(mapper.getOriginal(row.getVesselEventOption()));
 				}
@@ -603,6 +607,10 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 				if (row.getSellOption() != null) {
 					objectsToInsert.add(mapper.getOriginal(row.getSellOption()));
 				}
+			}
+			
+			if (objectsToInsert.isEmpty()) {
+				throw new UserFeedbackException("No targets are selected to optionise");
 			}
 
 			for (final EObject obj : objectsToInsert) {

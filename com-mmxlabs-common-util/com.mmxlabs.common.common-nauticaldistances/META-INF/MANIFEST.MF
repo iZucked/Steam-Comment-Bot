@@ -4,11 +4,11 @@ Bundle-Description: Project containing commonly used classes and utility
 Bundle-DocURL: http://www.minimaxlabs.com/
 Bundle-ManifestVersion: 2
 Bundle-Name: common-nauticaldistances
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-16
 Bundle-SymbolicName: com.mmxlabs.common.common-nauticaldistances
 Automatic-Module-Name: com.mmxlabs.common.common-nauticaldistances
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 4.13.3.qualifier
+Bundle-Version: 4.13.4.qualifier
 Export-Package: com.mmxlabs.common.nauticaldistances
 Import-Package: javax.imageio,
  org.slf4j;version="[1.5,2)"

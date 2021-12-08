@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.mmxlabs.lingo.master</groupId>
 		<artifactId>com.mmxlabs.lingo.master.parent</artifactId>
-		<version>4.13.3-SNAPSHOT</version>
+		<version>4.13.4-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.mmxlabs.models.lng</groupId>
@@ -98,7 +98,7 @@
 		<module>com.mmxlabs.models.lng.migration.tests</module>
 
 		<module>com.mmxlabs.models.lng.feature</module>
-		
+
 		<module>com.mmxlabs.models.lng.scenario.ui.tests</module>
 		<module>com.mmxlabs.models.lng.cargo.editor.tests</module>
 	</modules>

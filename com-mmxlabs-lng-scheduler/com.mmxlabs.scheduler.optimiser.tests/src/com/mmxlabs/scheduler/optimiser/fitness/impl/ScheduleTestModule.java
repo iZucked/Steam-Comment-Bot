@@ -140,6 +140,7 @@ public class ScheduleTestModule extends AbstractModule {
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePNLBasedWindowTrimming)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)).toInstance(Boolean.FALSE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseBestPanamaCanalIdleDaysWindowTrimming)).toInstance(Boolean.FALSE);
 
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.OPTIMISE_PAPER_PNL)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)).toInstance(Boolean.FALSE);

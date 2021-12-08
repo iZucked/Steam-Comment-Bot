@@ -432,7 +432,7 @@ public final class VoyagePlannerTest {
 	//
 	// // The NBO travel options will have completed the setup of previous
 	// // options (options1) filling in distance info.
-	// final VoyageOptions expectedVoyageOptions1a = expectedVoyageOptions1.clone();
+	// final VoyageOptions expectedVoyageOptions1a = expectedVoyageOptions1.copy();
 	// expectedVoyageOptions1a.setRoute(ERouteOption.DIRECT, 400, 0L);
 	//
 	// final VoyageOptions expectedVoyageOptions2 = new VoyageOptions();
@@ -446,7 +446,7 @@ public final class VoyagePlannerTest {
 	// expectedVoyageOptions2.setVesselState(VesselState.Ballast);
 	// expectedVoyageOptions2.setNBOSpeed(15000);
 	// expectedVoyageOptions2.setShouldBeCold(true);
-	// final VoyageOptions expectedVoyageOptions2a = expectedVoyageOptions2.clone();
+	// final VoyageOptions expectedVoyageOptions2a = expectedVoyageOptions2.copy();
 	// expectedVoyageOptions2a.setRoute(ERouteOption.DIRECT, 400, 0L);
 	//
 	// final PortDetails expectedPortDetails1 = new PortDetails();

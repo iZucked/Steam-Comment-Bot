@@ -4,15 +4,20 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.views;
 
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Point;
 
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -63,6 +68,14 @@ public class EditObjectMouseListener implements MouseListener {
 					target = row.getSellOption();
 				} else if (cell.getColumnIndex() == 3) {
 					target = row.getShipping();
+				} else if (cell.getColumnIndex() == 4) {
+					Command c = SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__OPTIONISE, !row.isOptionise());
+					DetailCompositeDialogUtil.editInlock(scenarioEditingLocation, () -> {
+						final CommandStack commandStack = scenarioEditingLocation.getEditingDomain().getCommandStack();
+						commandStack.execute(c);
+						return Window.OK;
+					});
+					return;					
 				}
 				if (target != null) {
 					DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, target);

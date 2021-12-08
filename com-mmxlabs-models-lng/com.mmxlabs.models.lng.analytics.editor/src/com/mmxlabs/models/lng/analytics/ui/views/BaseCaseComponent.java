@@ -32,11 +32,13 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescriptionFormatter;
+import com.mmxlabs.models.lng.analytics.ui.views.formatters.OptioniseDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.SellOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.VesselEventOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.AbstractSandboxComponent;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.BaseCaseContentProvider;
+import com.mmxlabs.models.lng.analytics.util.SandboxModeConstants;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
@@ -46,6 +48,7 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 
 	private GridTreeViewer baseCaseViewer;
 	private BaseCaseWiringDiagram baseCaseDiagram;
+	private GridViewerColumn optioniseCol;	
 
 	protected BaseCaseComponent(@NonNull final IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors,
 			@NonNull final Supplier<OptionAnalysisModel> modelProvider) {
@@ -126,6 +129,8 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 
 		createColumn(baseCaseViewer, "Sell", new SellOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
 		createColumn(baseCaseViewer, "Shipping", new ShippingOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
+		optioniseCol = createColumn(baseCaseViewer, "Opt", new OptioniseDescriptionFormatter(), false);
+		optioniseCol.getColumn().setHeaderTooltip("Select rows to use of optionise targets. Other rows will be included in search scope");
 
 		baseCaseViewer.getGrid().setCellSelectionEnabled(true);
 
@@ -143,6 +148,16 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(baseCaseViewer.getGrid(), grid -> grid.setEnabled(!locked)));
 
 		return baseCaseViewer.getGrid();
+	}
+
+	public void setMode(int mode) {
+		if (mode == SandboxModeConstants.MODE_DERIVE) {
+			optioniseCol.getColumn().setVisible(false);
+		} else if (mode == SandboxModeConstants.MODE_OPTIMISE) {
+			optioniseCol.getColumn().setVisible(false);
+		} else if (mode == SandboxModeConstants.MODE_OPTIONISE) {
+			optioniseCol.getColumn().setVisible(true);
+		}
 	}
 
 	@Override
