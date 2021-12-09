@@ -23,7 +23,7 @@ public abstract class AbstractCache<K, V> {
 
 	protected final @NonNull IKeyEvaluator<K, V> evaluator;
 
-	public AbstractCache(final @NonNull String name, final @NonNull IKeyEvaluator<K, V> evaluator) {
+	protected AbstractCache(final @NonNull String name, final @NonNull IKeyEvaluator<K, V> evaluator) {
 		this.evaluator = evaluator;
 		this.name = name;
 	}

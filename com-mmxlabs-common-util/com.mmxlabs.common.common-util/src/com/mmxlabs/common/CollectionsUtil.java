@@ -7,6 +7,7 @@ package com.mmxlabs.common;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -118,29 +119,7 @@ public final class CollectionsUtil {
 	public static <T> List<T> makeArrayList(final T... elements) {
 
 		final List<T> collection = new ArrayList<>(elements.length);
-
-		for (final T e : elements) {
-			collection.add(e);
-		}
-
-		return collection;
-	}
-
-	/**
-	 * Create a {@link ArrayList} of objects from an unbounded list.
-	 * 
-	 * @param <T>
-	 * @param sequences
-	 * @return
-	 */
-	public static <T> List<T> makeArrayList2(final Class<T> cls, final T... elements) {
-
-		final List<T> collection = new ArrayList<>(elements.length);
-
-		for (final T e : elements) {
-			collection.add(e);
-		}
-
+		Collections.addAll(collection, elements);
 		return collection;
 	}
 
@@ -212,18 +191,13 @@ public final class CollectionsUtil {
 	 */
 	public static <T> Set<T> makeLinkedHashSet(final T... elements) {
 		final Set<T> result = new LinkedHashSet<>();
-		for (int i = 0; i < elements.length; i++) {
-			result.add(elements[i]);
-		}
+		Collections.addAll(result, elements);
 		return result;
 	}
 
 	public static <T> LinkedList<T> makeLinkedList(final T... elements) {
 		LinkedList<T> newList = new LinkedList<>();
-		for (T el : elements) {
-			newList.add(el);
-		}
-
+		Collections.addAll(newList, elements);
 		return newList;
 	}
 
