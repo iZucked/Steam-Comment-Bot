@@ -129,4 +129,4 @@ Export-Package: com.mmxlabs.lingo.its,
  com.mmxlabs.lingo.its.uat.suite.utils,
  com.mmxlabs.lingo.its.verifier
 Automatic-Module-Name: com.mmxlabs.lingo.its
-Eclipse-RegisterBuddy: org.apache.log4j
+Eclipse-RegisterBuddy: org.apache.logging.log4j.log4j-core

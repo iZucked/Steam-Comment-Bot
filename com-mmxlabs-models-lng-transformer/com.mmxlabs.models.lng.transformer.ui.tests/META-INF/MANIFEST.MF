@@ -8,7 +8,7 @@ Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-16
 Require-Bundle: org.mockito.mockito-core;bundle-version="1.9.5",
  org.eclipse.swtbot.swt.finder,
- org.apache.log4j;bundle-version="1.2.15",
+ org.apache.logging.log4j.log4j-core;bundle-version="2.15.0",
  com.mmxlabs.models.lng.transformer.ui;bundle-version="[4.13.4,5.0.0)",
  javax.annotation;bundle-version="1.2.0",
  org.objenesis;bundle-version="2.6.0",
