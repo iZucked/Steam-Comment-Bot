@@ -20,6 +20,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
+import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -54,7 +55,7 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	 * @author Simon Goodall
 	 * 
 	 */
-	public static enum EndLocationRule {
+	public enum EndLocationRule {
 		/**
 		 * No special rules to apply.
 		 */
@@ -107,10 +108,6 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	@Inject
 	private ICharterMarketProvider charterMarketProvider;
 
-	public EndLocationSequenceManipulator() {
-
-	}
-
 	/**
 	 */
 	@Inject
@@ -122,21 +119,24 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 				setEndLocationRule(resource, EndLocationRule.NONE);
 			} else if (vesselInstanceType == VesselInstanceType.ROUND_TRIP) {
 				setEndLocationRule(resource, EndLocationRule.REMOVE);
-			} else if (vesselInstanceType.equals(VesselInstanceType.SPOT_CHARTER) && vesselProvider.getVesselAvailability(resource).getCharterContract() == null) {
-				setEndLocationRule(resource, EndLocationRule.RETURN_TO_FIRST_LOAD);
 			} else {
-				// Some fleet vessels will have an existing end location
-				// requirement;
-				// return to last load does not apply there
-				// however, fleet vessels which do not have an end location requirement
-				// should return to their last load port.
+				final IEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
 
-				final IStartEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
-				if (!endRequirement.hasPortRequirement()) {
-					// choose between returning to last load port or a charter out port
-					setNoRequirementEndLocationRule(resource);
-				} else if (endRequirement.hasPortRequirement() && endRequirement.getLocation() == null) {
-					setEndLocationRule(resource, EndLocationRule.RETURN_TO_CLOSEST_IN_SET);
+				if (vesselInstanceType.equals(VesselInstanceType.SPOT_CHARTER) && !endRequirement.hasPortRequirement()) {
+					setEndLocationRule(resource, EndLocationRule.RETURN_TO_FIRST_LOAD);
+				} else {
+					// Some fleet vessels will have an existing end location
+					// requirement.
+					// return to last load does not apply there
+					// however, fleet vessels which do not have an end location requirement
+					// should return to their last load port.
+
+					if (!endRequirement.hasPortRequirement()) {
+						// choose between returning to last load port or a charter out port
+						setNoRequirementEndLocationRule(resource);
+					} else if (endRequirement.hasPortRequirement() && endRequirement.getLocation() == null) {
+						setEndLocationRule(resource, EndLocationRule.RETURN_TO_CLOSEST_IN_SET);
+					}
 				}
 			}
 		}
@@ -166,8 +166,7 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 
 	private @NonNull IVessel getVessel(final @NonNull IResource resource) {
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-		final IVessel vessel = vesselAvailability.getVessel();
-		return vessel;
+		return vesselAvailability.getVessel();
 	}
 
 	@Override
