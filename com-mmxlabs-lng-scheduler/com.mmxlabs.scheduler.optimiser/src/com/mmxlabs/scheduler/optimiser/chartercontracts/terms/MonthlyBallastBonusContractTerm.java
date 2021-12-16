@@ -26,6 +26,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
@@ -67,7 +68,7 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 	}
 
 	@Override
-	public long calculateCost(final IPort firstLoad, final IPortSlot lastSlot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {
+	public long calculateCost(IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability, int vesselStartTime, IPort vesselStartPort) {
 
 		final int voyageStartTime = vesselEndTime;
 
@@ -103,8 +104,7 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 	}
 
 	@Override
-	public ICharterContractTermAnnotation annotate(final IPort firstLoad, final IPortSlot lastSlot, final IVesselAvailability vesselAvailability, final int vesselStartTime,
-			final int vesselEndTime) {
+	public ICharterContractTermAnnotation annotate(IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability, int vesselStartTime, IPort vesselStartPort) {
 
 		final int voyageStartTime = vesselEndTime;
 
@@ -177,7 +177,7 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 	}
 
 	@Override
-	public boolean match(final IPort loadPort, final IPortSlot slot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {	
+	public boolean match(IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability, int vesselStartTime, IPort vesselStartPort) {	
 		if (monthStartInclusive <= vesselEndTime && vesselEndTime < monthEndExclusive) {
 			return getRedeliveryPorts().contains(slot.getPort()) || getRedeliveryPorts().isEmpty();
 		}

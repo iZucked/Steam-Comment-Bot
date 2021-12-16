@@ -157,11 +157,11 @@ public class CharterContractValidationUtils {
 
 	
 	public static boolean originPortValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures,
-			final RepositioningFeeTerm term) {
+			final OriginPortRepositioningFeeTerm term) {
 		if (term.getOriginPort() == null) {
 			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-					(IConstraintStatus) ctx.createFailureStatus(String.format("Origin port is invalid")));
-			dcsd.addEObjectAndFeature(term, CommercialPackage.Literals.REPOSITIONING_FEE_TERM__ORIGIN_PORT);
+					(IConstraintStatus) ctx.createFailureStatus("Origin port is not set"));
+			dcsd.addEObjectAndFeature(term, CommercialPackage.Literals.ORIGIN_PORT_REPOSITIONING_FEE_TERM__ORIGIN_PORT);
 			failures.add(dcsd);
 			return false;
 		}

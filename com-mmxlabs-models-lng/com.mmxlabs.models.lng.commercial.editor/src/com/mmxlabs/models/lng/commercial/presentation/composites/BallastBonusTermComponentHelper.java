@@ -69,6 +69,7 @@ public class BallastBonusTermComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_redeliveryPortsEditor(detailComposite, topClass);
 	}
+
 	/**
 	 * Create the editor for the redeliveryPorts feature on BallastBonusTerm
 	 *

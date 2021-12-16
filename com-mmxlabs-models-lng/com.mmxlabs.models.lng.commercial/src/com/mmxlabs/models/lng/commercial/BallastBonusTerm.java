@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.EObject;
  * @generated
  */
 public interface BallastBonusTerm extends EObject {
+
 	/**
 	 * Returns the value of the '<em><b>Redelivery Ports</b></em>' reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}<code>&lt;com.mmxlabs.models.lng.port.Port&gt;</code>.

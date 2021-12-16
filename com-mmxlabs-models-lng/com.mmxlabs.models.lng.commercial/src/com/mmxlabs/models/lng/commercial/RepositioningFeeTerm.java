@@ -7,6 +7,8 @@
 package com.mmxlabs.models.lng.commercial;
 
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.APortSet;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -18,7 +20,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.commercial.RepositioningFeeTerm#getOriginPort <em>Origin Port</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.RepositioningFeeTerm#getStartPorts <em>Start Ports</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getRepositioningFeeTerm()
@@ -27,25 +29,15 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface RepositioningFeeTerm extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Origin Port</b></em>' reference.
+	 * Returns the value of the '<em><b>Start Ports</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}<code>&lt;com.mmxlabs.models.lng.port.Port&gt;</code>.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Origin Port</em>' reference.
-	 * @see #setOriginPort(Port)
-	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getRepositioningFeeTerm_OriginPort()
+	 * @return the value of the '<em>Start Ports</em>' reference list.
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getRepositioningFeeTerm_StartPorts()
 	 * @model
 	 * @generated
 	 */
-	Port getOriginPort();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.RepositioningFeeTerm#getOriginPort <em>Origin Port</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Origin Port</em>' reference.
-	 * @see #getOriginPort()
-	 * @generated
-	 */
-	void setOriginPort(Port value);
+	EList<APortSet<Port>> getStartPorts();
 
 } // RepositioningFeeTerm

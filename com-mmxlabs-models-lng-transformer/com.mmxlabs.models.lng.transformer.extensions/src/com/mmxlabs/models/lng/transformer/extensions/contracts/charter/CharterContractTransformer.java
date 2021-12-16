@@ -52,7 +52,7 @@ import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.ICharterContract;
-import com.mmxlabs.scheduler.optimiser.chartercontracts.ICharterContractTerm;
+import com.mmxlabs.scheduler.optimiser.chartercontracts.IBallastBonusTerm;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.impl.DefaultCharterContract;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.impl.MonthlyBallastBonusContract;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.terms.DefaultLumpSumBallastBonusContractTerm;
@@ -89,7 +89,7 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 	@Inject
 	@Named(SchedulerConstants.Parser_Charter)
 	private SeriesParser charterIndices;
-	
+
 	@Inject
 	private IPortProvider portProvider;
 
@@ -114,7 +114,7 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 	}
 
 	@Override
-	public ICharterContract createCharterContract(GenericCharterContract eCharterContract) {
+	public ICharterContract createCharterContract(final GenericCharterContract eCharterContract) {
 		if (eCharterContract == null) {
 			return null;
 		}
@@ -123,8 +123,8 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 		if (oCharterContract != null) {
 			return oCharterContract;
 		}
-		
-		final List<ICharterContractTerm> terms = new LinkedList<>();
+
+		final List<IBallastBonusTerm> terms = new LinkedList<>();
 		final IBallastBonus ballastBonus = eCharterContract.getBallastBonusTerms();
 		if (ballastBonus != null) {
 			if (eCharterContract.getBallastBonusTerms() instanceof MonthlyBallastBonusContainer) {
@@ -155,34 +155,34 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 
 	}
 
-	private List<ICharterContractTerm> processMonthlyBallastBonus(GenericCharterContract eCharterContract) {
+	private List<IBallastBonusTerm> processMonthlyBallastBonus(final GenericCharterContract eCharterContract) {
 		final MonthlyBallastBonusContainer ballastBonus = (MonthlyBallastBonusContainer) eCharterContract.getBallastBonusTerms();
 		final EList<APortSet<Port>> hubs = ballastBonus.getHubs();
-		final List<ICharterContractTerm> terms = new LinkedList<>();
-		for(final MonthlyBallastBonusTerm term : ballastBonus.getTerms()) {
-			Set<IPort> redeliveryPorts = transformPorts(term.getRedeliveryPorts());
-			YearMonth ym = term.getMonth();
-			int oStartYMInclusive = this.dateHelper.convertTime(ym);
-			YearMonth ymNext = ym.plusMonths(1);
-			int oEndYMExclusive = this.dateHelper.convertTime(ymNext);
-			
-			NextPortType ballastBonusTo = term.getBallastBonusTo();
-			//Use BigDecimal to avoid loss of precision :-)
-			BigDecimal pctCharterRate = new BigDecimal(term.getBallastBonusPctCharter());
-			BigDecimal pctFuelRate = new BigDecimal(term.getBallastBonusPctFuel());
-			long oPctCharterRate = OptimiserUnitConvertor.convertToInternalPercentage(pctCharterRate) / 100;
-			long oPctFuelRate = OptimiserUnitConvertor.convertToInternalPercentage(pctFuelRate) / 100;
-			String priceExpression = term.getLumpSumPriceExpression();
-			ILongCurve lumpSumCurve = getPriceCurveFromExpression(priceExpression, charterIndices);
-			String fuelPriceExpression = term.getFuelPriceExpression();
-			ICurve fuelCurve = getBaseFuelPriceCurveFromExpression(fuelPriceExpression, fuelIndices);
-			String charterPriceExpression = term.getHirePriceExpression();
-			ILongCurve charterCurve = getPriceCurveFromExpression(charterPriceExpression, charterIndices);
-			int speed = OptimiserUnitConvertor.convertToInternalSpeed(term.getSpeed());
-			boolean includeCanalTime = term.isIncludeCanalTime();	
-			
+		final List<IBallastBonusTerm> terms = new LinkedList<>();
+		for (final MonthlyBallastBonusTerm term : ballastBonus.getTerms()) {
+			final Set<IPort> redeliveryPorts = transformPorts(term.getRedeliveryPorts());
+			final YearMonth ym = term.getMonth();
+			final int oStartYMInclusive = this.dateHelper.convertTime(ym);
+			final YearMonth ymNext = ym.plusMonths(1);
+			final int oEndYMExclusive = this.dateHelper.convertTime(ymNext);
+
+			final NextPortType ballastBonusTo = term.getBallastBonusTo();
+			// Use BigDecimal to avoid loss of precision :-)
+			final BigDecimal pctCharterRate = new BigDecimal(term.getBallastBonusPctCharter());
+			final BigDecimal pctFuelRate = new BigDecimal(term.getBallastBonusPctFuel());
+			final long oPctCharterRate = OptimiserUnitConvertor.convertToInternalPercentage(pctCharterRate) / 100;
+			final long oPctFuelRate = OptimiserUnitConvertor.convertToInternalPercentage(pctFuelRate) / 100;
+			final String priceExpression = term.getLumpSumPriceExpression();
+			final ILongCurve lumpSumCurve = getPriceCurveFromExpression(priceExpression, charterIndices);
+			final String fuelPriceExpression = term.getFuelPriceExpression();
+			final ICurve fuelCurve = getBaseFuelPriceCurveFromExpression(fuelPriceExpression, fuelIndices);
+			final String charterPriceExpression = term.getHirePriceExpression();
+			final ILongCurve charterCurve = getPriceCurveFromExpression(charterPriceExpression, charterIndices);
+			final int speed = OptimiserUnitConvertor.convertToInternalSpeed(term.getSpeed());
+			final boolean includeCanalTime = term.isIncludeCanalTime();
+
 			Set<IPort> returnPorts = null;
-			
+
 			switch (ballastBonusTo) {
 			case NEAREST_HUB:
 				returnPorts = transformPorts(hubs);
@@ -191,112 +191,117 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 				returnPorts = null;
 				break;
 			}
-			
-			ICharterContractTerm tt = new MonthlyBallastBonusContractTerm(oStartYMInclusive, oEndYMExclusive, oPctCharterRate, //
+
+			final IBallastBonusTerm tt = new MonthlyBallastBonusContractTerm(oStartYMInclusive, oEndYMExclusive, oPctCharterRate, //
 					oPctFuelRate, redeliveryPorts, lumpSumCurve, fuelCurve, charterCurve, returnPorts, term.isIncludeCanal(), includeCanalTime, speed);
-			
+
 			assert tt != null;
 			injector.injectMembers(tt);
 			terms.add(tt);
 		}
 		return terms;
 	}
-	
-	private List<ICharterContractTerm> processSimpleBallastBonus(GenericCharterContract eCharterContract) {
+
+	private List<IBallastBonusTerm> processSimpleBallastBonus(final GenericCharterContract eCharterContract) {
 		final SimpleBallastBonusContainer ballastBonus = (SimpleBallastBonusContainer) eCharterContract.getBallastBonusTerms();
-		
-		final List<ICharterContractTerm> terms = new LinkedList<>();
-		for(final BallastBonusTerm term : ballastBonus.getTerms()) {
-			Set<IPort> redeliveryPorts = transformPorts(term.getRedeliveryPorts());
-			ICharterContractTerm tt = null;
+
+		final List<IBallastBonusTerm> terms = new LinkedList<>();
+		for (final BallastBonusTerm term : ballastBonus.getTerms()) {
+			final Set<IPort> redeliveryPorts = transformPorts(term.getRedeliveryPorts());
+			IBallastBonusTerm tt = null;
 			if (term instanceof LumpSumBallastBonusTerm) {
-				String priceExpression = ((LumpSumBallastBonusTerm)term).getPriceExpression();
-				ILongCurve lumpSumCurve = getPriceCurveFromExpression(priceExpression, charterIndices);
+				final String priceExpression = ((LumpSumBallastBonusTerm) term).getPriceExpression();
+				final ILongCurve lumpSumCurve = getPriceCurveFromExpression(priceExpression, charterIndices);
 				tt = new DefaultLumpSumBallastBonusContractTerm(redeliveryPorts, lumpSumCurve);
 			} else if (term instanceof NotionalJourneyBallastBonusTerm) {
 				final NotionalJourneyBallastBonusTerm t = (NotionalJourneyBallastBonusTerm) term;
-				String priceExpression = t.getLumpSumPriceExpression();
-				ILongCurve lumpSumCurve = getPriceCurveFromExpression(priceExpression, charterIndices);
-				String fuelPriceExpression = t.getFuelPriceExpression();
-				ICurve fuelCurve = getBaseFuelPriceCurveFromExpression(fuelPriceExpression, fuelIndices);
-				String charterPriceExpression = t.getHirePriceExpression();
-				ILongCurve charterCurve = getPriceCurveFromExpression(charterPriceExpression, charterIndices);
-				Set<IPort> returnPorts = transformPorts(t.getReturnPorts());
-				int speed = OptimiserUnitConvertor.convertToInternalSpeed(t.getSpeed());
-				boolean includeCanalTime = t.isIncludeCanalTime();
+				final String priceExpression = t.getLumpSumPriceExpression();
+				final ILongCurve lumpSumCurve = getPriceCurveFromExpression(priceExpression, charterIndices);
+				final String fuelPriceExpression = t.getFuelPriceExpression();
+				final ICurve fuelCurve = getBaseFuelPriceCurveFromExpression(fuelPriceExpression, fuelIndices);
+				final String charterPriceExpression = t.getHirePriceExpression();
+				final ILongCurve charterCurve = getPriceCurveFromExpression(charterPriceExpression, charterIndices);
+				final Set<IPort> returnPorts = transformPorts(t.getReturnPorts());
+				final int speed = OptimiserUnitConvertor.convertToInternalSpeed(t.getSpeed());
+				final boolean includeCanalTime = t.isIncludeCanalTime();
 				tt = new DefaultNotionalJourneyBallastBonusContractTerm(redeliveryPorts, lumpSumCurve, fuelCurve, //
 						charterCurve, returnPorts, t.isIncludeCanal(), includeCanalTime, speed);
 			} else {
 				throw new IllegalArgumentException("Not implemented yet. Please contact Minimax support.");
 			}
-			
+
 			assert tt != null;
 			injector.injectMembers(tt);
 			terms.add(tt);
 		}
 		return terms;
 	}
-	
-	private List<ICharterContractTerm> processSimpleRepositioningFee(GenericCharterContract eCharterContract) {
+
+	private List<IBallastBonusTerm> processSimpleRepositioningFee(final GenericCharterContract eCharterContract) {
 		final SimpleRepositioningFeeContainer repositioningFee = (SimpleRepositioningFeeContainer) eCharterContract.getRepositioningFeeTerms();
-		
-		final List<ICharterContractTerm> terms = new LinkedList<>();
-		for(final RepositioningFeeTerm term : repositioningFee.getTerms()) {
-			
-			ICharterContractTerm tt = null;
-			if (term instanceof LumpSumRepositioningFeeTerm) {
-				final LumpSumRepositioningFeeTerm t = (LumpSumRepositioningFeeTerm) term;
-				String priceExpression = t.getPriceExpression();
-				ILongCurve lumpSumCurve = getPriceCurveFromExpression(priceExpression, charterIndices);
-				IPort originPort = transformPort(t.getOriginPort());
-				tt = new DefaultLumpSumRepositioningFeeContractTerm(originPort, lumpSumCurve);
-			} else if (term instanceof OriginPortRepositioningFeeTerm) {
-				final OriginPortRepositioningFeeTerm t = (OriginPortRepositioningFeeTerm) term;
-				String priceExpression = t.getLumpSumPriceExpression();
-				ILongCurve lumpSumCurve = getPriceCurveFromExpression(priceExpression, charterIndices);
-				String fuelPriceExpression = t.getFuelPriceExpression();
-				ICurve fuelCurve = getBaseFuelPriceCurveFromExpression(fuelPriceExpression, fuelIndices);
-				String charterPriceExpression = t.getHirePriceExpression();
-				ILongCurve charterCurve = getPriceCurveFromExpression(charterPriceExpression, charterIndices);
-				IPort originPort = transformPort(t.getOriginPort());
-				int speed = OptimiserUnitConvertor.convertToInternalSpeed(t.getSpeed());
-				boolean includeCanalTime = t.isIncludeCanalTime();
+
+		final List<IBallastBonusTerm> terms = new LinkedList<>();
+		for (final RepositioningFeeTerm term : repositioningFee.getTerms()) {
+
+			IBallastBonusTerm tt = null;
+			if (term instanceof final LumpSumRepositioningFeeTerm t) {
+				final String priceExpression = t.getPriceExpression();
+				final ILongCurve lumpSumCurve = getPriceCurveFromExpression(priceExpression, charterIndices);
+				
+				assert lumpSumCurve != null;
+				
+				final  Set<IPort> startPorts = transformPorts(t.getStartPorts());
+				
+				tt = new DefaultLumpSumRepositioningFeeContractTerm(startPorts, lumpSumCurve);
+				
+			} else if (term instanceof final OriginPortRepositioningFeeTerm t) {
+				final String priceExpression = t.getLumpSumPriceExpression();
+				final ILongCurve lumpSumCurve = getPriceCurveFromExpression(priceExpression, charterIndices);
+				final String fuelPriceExpression = t.getFuelPriceExpression();
+				final ICurve fuelCurve = getBaseFuelPriceCurveFromExpression(fuelPriceExpression, fuelIndices);
+				final String charterPriceExpression = t.getHirePriceExpression();
+				final ILongCurve charterCurve = getPriceCurveFromExpression(charterPriceExpression, charterIndices);
+				final IPort originPort = transformPort(t.getOriginPort());
+				final int speed = OptimiserUnitConvertor.convertToInternalSpeed(t.getSpeed());
+				final boolean includeCanalTime = t.isIncludeCanalTime();
+				
 				tt = new DefaultOriginPortRepositioningFeeContractTerm(originPort, lumpSumCurve, fuelCurve, charterCurve, t.isIncludeCanal(), includeCanalTime, speed);
 			} else {
 				throw new IllegalArgumentException("Not implemented yet. Please contact Minimax support.");
 			}
-			
+
 			assert tt != null;
 			injector.injectMembers(tt);
 			terms.add(tt);
 		}
 		return terms;
 	}
-	
-	private @NonNull Set<IPort> transformPorts(Collection<APortSet<Port>> redeliveryPorts) {
-		Set<IPort> ports = new LinkedHashSet<>();
-		for (Port ePort : (SetUtils.getObjects(redeliveryPorts))) {
+
+	private @NonNull Set<IPort> transformPorts(final Collection<APortSet<Port>> redeliveryPorts) {
+		final Set<IPort> ports = new LinkedHashSet<>();
+		for (final Port ePort : (SetUtils.getObjects(redeliveryPorts))) {
 			@NonNull
+			final
 			IPort oPort = modelEntityMap.getOptimiserObjectNullChecked(ePort, IPort.class);
 			ports.add(oPort);
 		}
 		return ports;
 	}
-	
-	private @NonNull IPort transformPort(Port originPort) {
+
+	private @NonNull IPort transformPort(final Port originPort) {
 		if (originPort == null) {
 			return portProvider.getAnywherePort();
 		}
 		return modelEntityMap.getOptimiserObjectNullChecked(originPort, IPort.class);
 	}
 
-	private final ICurve getBaseFuelPriceCurveFromExpression(final String expression, SeriesParser indices) {
-		ICurve result = dateHelper.generateExpressionCurve(expression, indices);
+	private final ICurve getBaseFuelPriceCurveFromExpression(final String expression, final SeriesParser indices) {
+		final ICurve result = dateHelper.generateExpressionCurve(expression, indices);
 		return result;
 	}
 
-	private final ILongCurve getPriceCurveFromExpression(final String expression, SeriesParser indices) {
-		ILongCurve result = dateHelper.generateLongExpressionCurve(expression, indices);
+	private final ILongCurve getPriceCurveFromExpression(final String expression, final SeriesParser indices) {
+		final ILongCurve result = dateHelper.generateLongExpressionCurve(expression, indices);
 		return result;
 	}
 

@@ -67,14 +67,14 @@ public class RepositioningFeeTermComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_originPortEditor(detailComposite, topClass);
+		add_startPortsEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the originPort feature on RepositioningFeeTerm
+	 * Create the editor for the startPorts feature on RepositioningFeeTerm
 	 *
 	 * @generated
 	 */
-	protected void add_originPortEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.REPOSITIONING_FEE_TERM__ORIGIN_PORT));
+	protected void add_startPortsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.REPOSITIONING_FEE_TERM__START_PORTS));
 	}
 }

@@ -25,9 +25,10 @@ import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
-public class DefaultNotionalJourneyBallastBonusContractTerm extends BallastBonusContractTerm{
+public class DefaultNotionalJourneyBallastBonusContractTerm extends BallastBonusContractTerm {
 	private final @NonNull ILongCurve lumpSumCurve;
 	private final @NonNull ICurve fuelPriceCurve;
 	private final @NonNull ILongCurve charterRateCurve;
@@ -60,7 +61,7 @@ public class DefaultNotionalJourneyBallastBonusContractTerm extends BallastBonus
 	}
 
 	@Override
-	public boolean match(final IPort loadPort, final IPortSlot slot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {
+	public boolean match(IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability, int vesselStartTime, IPort vesselStartPort) {
 		return slot.getPortType() == PortType.End && (getRedeliveryPorts().contains(slot.getPort()) || getRedeliveryPorts().isEmpty());
 	}
 
@@ -69,7 +70,7 @@ public class DefaultNotionalJourneyBallastBonusContractTerm extends BallastBonus
 	}
 
 	@Override
-	public long calculateCost(IPort firstLoad, IPortSlot lastSlot, IVesselAvailability vesselAvailability, int vesselStartTime, int vesselEndTime) {
+	public long calculateCost(IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability, int vesselStartTime, IPort vesselStartPort) {
 		final int voyageStartTime = vesselEndTime;
 
 		final long lumpSum = computeLumpSum(voyageStartTime);
@@ -99,7 +100,7 @@ public class DefaultNotionalJourneyBallastBonusContractTerm extends BallastBonus
 	}
 
 	@Override
-	public ICharterContractTermAnnotation annotate(IPort firstLoad, IPortSlot lastSlot, IVesselAvailability vesselAvailability, int vesselStartTime, int vesselEndTime) {
+	public ICharterContractTermAnnotation annotate(IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability, int vesselStartTime, IPort vesselStartPorte) {
 
 		final int voyageStartTime = vesselEndTime;
 

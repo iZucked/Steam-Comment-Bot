@@ -4,24 +4,31 @@
  */
 package com.mmxlabs.scheduler.optimiser.chartercontracts.impl;
 
-import org.eclipse.jdt.annotation.NonNull;
+import java.util.Set;
 
-import com.mmxlabs.scheduler.optimiser.chartercontracts.ICharterContractTerm;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
+import com.mmxlabs.scheduler.optimiser.chartercontracts.IRepositioningFeeTerm;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 
 /***
  * A repositioning contract rule
+ * 
  * @author FM
  *
  */
-public abstract class RepositioningFeeContractTerm implements ICharterContractTerm {
-	private final @NonNull IPort originPort;
-	
-	public RepositioningFeeContractTerm(final @NonNull IPort originPort) {
-		this.originPort = originPort;
+@NonNullByDefault
+public abstract class RepositioningFeeContractTerm implements IRepositioningFeeTerm {
+	/**
+	 * The collections of ports the vessel can start at to match this term.
+	 */
+	private final Set<IPort> startPorts;
+
+	protected RepositioningFeeContractTerm(final Set<IPort> startPorts) {
+		this.startPorts = startPorts;
 	}
-	
-	public IPort getOriginPort() {
-		return originPort;
+
+	public Set<IPort> getStartPorts() {
+		return startPorts;
 	}
 }
