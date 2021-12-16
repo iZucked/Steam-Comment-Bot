@@ -31,7 +31,6 @@ public class PanamaSlotsModule extends PeaberryActivationModule {
 	@Override
 	protected void configure() {
 
-		bindService(PanamaSlotsConstraintCheckerFactory.class).export();
 		bindService(PanamaSlotsInjectorService.class).export();
 		bindService(PanamaSlotsTransformerFactory.class).export();
 	}
