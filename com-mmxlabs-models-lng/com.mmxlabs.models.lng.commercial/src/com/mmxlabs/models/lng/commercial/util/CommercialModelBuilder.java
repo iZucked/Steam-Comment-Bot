@@ -164,7 +164,8 @@ public class CommercialModelBuilder {
 	}
 
 	/**
-	 * Replaces existing tax rates with a copy new entry for the standard entity books.
+	 * Replaces existing tax rates with a copy new entry for the standard entity
+	 * books.
 	 * 
 	 * @param book
 	 * @param rate
@@ -180,7 +181,7 @@ public class CommercialModelBuilder {
 		final LumpSumBallastBonusTerm lumpSumBallastBonus = CommercialFactory.eINSTANCE.createLumpSumBallastBonusTerm();
 		lumpSumBallastBonus.getRedeliveryPorts().add(redeliveryPort);
 		lumpSumBallastBonus.setPriceExpression(priceExpression);
-		
+
 		final SimpleBallastBonusContainer ballastBonus = CommercialFactory.eINSTANCE.createSimpleBallastBonusContainer();
 		ballastBonus.getTerms().add(lumpSumBallastBonus);
 
@@ -190,10 +191,9 @@ public class CommercialModelBuilder {
 		return charterContract;
 	}
 
-	public @NonNull GenericCharterContract createLumpSumBallastBonusCharterContract(@NonNull final Port redeliveryPort, @NonNull final String priceExpression,
-			@NonNull final String repositioningFee) {
+	public @NonNull GenericCharterContract createLumpSumBallastBonusCharterContract(@NonNull final Port redeliveryPort, @NonNull final String priceExpression, @NonNull final String repositioningFee) {
 		final GenericCharterContract ballastBonusCharterContract = createSimpleLumpSumBallastBonusContract(redeliveryPort, priceExpression);
-		
+
 		if (!repositioningFee.isEmpty()) {
 			final LumpSumRepositioningFeeTerm lumpSumRepositioiningFee = CommercialFactory.eINSTANCE.createLumpSumRepositioningFeeTerm();
 			lumpSumRepositioiningFee.setPriceExpression(repositioningFee);
@@ -201,7 +201,7 @@ public class CommercialModelBuilder {
 			repositioningFeeContainer.getTerms().add(lumpSumRepositioiningFee);
 			ballastBonusCharterContract.setRepositioningFeeTerms(repositioningFeeContainer);
 		}
-		
+
 		return ballastBonusCharterContract;
 	}
 
@@ -217,7 +217,7 @@ public class CommercialModelBuilder {
 		notionalJourneyBallastBonusContractLine.setIncludeCanal(includeCanalFees);
 		notionalJourneyBallastBonusContractLine.setIncludeCanalTime(includeCanalTime);
 		notionalJourneyBallastBonusContractLine.setSpeed(speed);
-		
+
 		final SimpleBallastBonusContainer ballastBonus = CommercialFactory.eINSTANCE.createSimpleBallastBonusContainer();
 		ballastBonus.getTerms().add(notionalJourneyBallastBonusContractLine);
 
@@ -242,7 +242,8 @@ public class CommercialModelBuilder {
 	}
 
 	/**
-	 * Initialise an entity created elsewhere with standard bits and add to the data model
+	 * Initialise an entity created elsewhere with standard bits and add to the data
+	 * model
 	 * 
 	 * @param entity
 	 * @param name
@@ -256,5 +257,10 @@ public class CommercialModelBuilder {
 
 		commercialModel.getEntities().add(entity);
 
+	}
+
+	public CharterContractBuilder makeCharterContract() {
+
+		return new CharterContractBuilder(commercialModel);
 	}
 }
