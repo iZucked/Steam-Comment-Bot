@@ -134,13 +134,13 @@ public class BaseCaseToScheduleSpecification {
 				}
 
 				final BaseCaseRowOptions options = row.getOptions();
-				
+
 				final SlotSpecification loadSpec = CargoFactory.eINSTANCE.createSlotSpecification();
 				loadSpec.setSlot(loadSlot);
 				if (options != null && options.isSetLoadDate()) {
 					loadSpec.setArrivalDate(options.getLoadDate());
 				}
-				
+
 				final SlotSpecification dischargeSpec = CargoFactory.eINSTANCE.createSlotSpecification();
 				dischargeSpec.setSlot(dischargeSlot);
 				if (options != null && options.isSetDischargeDate()) {
@@ -178,10 +178,10 @@ public class BaseCaseToScheduleSpecification {
 				final TriConsumer<EObject, BaseCaseRowOptions, ScheduleSpecificationEvent> applyOptions = (target, options, slotSpec) -> {
 					if (options != null) {
 						if (target instanceof LoadSlot) {
-							if (options.getLadenRoute() != null) {
+							if (options.isSetLadenRoute()) {
 								voyageSpecs.computeIfAbsent(target, builder).setRouteOption(options.getLadenRoute());
 							}
-							if (options.getLadenFuelChoice() != null) {
+							if (options.isSetLadenFuelChoice()) {
 								voyageSpecs.computeIfAbsent(target, builder).setFuelChoice(options.getLadenFuelChoice());
 							}
 							if (options.getLoadDate() != null) {
@@ -190,10 +190,10 @@ public class BaseCaseToScheduleSpecification {
 
 						}
 						if (target instanceof DischargeSlot) {
-							if (options.getBallastRoute() != null) {
+							if (options.isSetBallastRoute()) {
 								voyageSpecs.computeIfAbsent(target, builder).setRouteOption(options.getBallastRoute());
 							}
-							if (options.getBallastFuelChoice() != null) {
+							if (options.isSetBallastFuelChoice()) {
 								voyageSpecs.computeIfAbsent(target, builder).setFuelChoice(options.getBallastFuelChoice());
 							}
 							if (options.getDischargeDate() != null) {
@@ -201,10 +201,10 @@ public class BaseCaseToScheduleSpecification {
 							}
 						}
 						if (target instanceof VesselEvent) {
-							if (options.getBallastRoute() != null) {
+							if (options.isSetLadenRoute()) {
 								voyageSpecs.computeIfAbsent(target, builder).setRouteOption(options.getLadenRoute());
 							}
-							if (options.getBallastFuelChoice() != null) {
+							if (options.isSetLadenFuelChoice()) {
 								voyageSpecs.computeIfAbsent(target, builder).setFuelChoice(options.getLadenFuelChoice());
 							}
 							if (options.getLoadDate() != null) {
