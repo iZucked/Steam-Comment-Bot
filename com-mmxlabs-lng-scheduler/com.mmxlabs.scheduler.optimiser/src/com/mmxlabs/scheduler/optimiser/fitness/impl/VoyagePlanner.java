@@ -679,11 +679,6 @@ public class VoyagePlanner implements IVoyagePlanner {
 					annotatedSolution);
 			if (lp != null) {
 				runningVoyagePlanPtrPairs = lp;
-				final IPortSlot iPortSlot = lp.get(0).getSecond().getReturnSlot();
-				if (iPortSlot instanceof MaintenanceVesselEventPortSlot) {
-					final MaintenanceVesselEventPortSlot maintenancePortSlot = (MaintenanceVesselEventPortSlot) iPortSlot;
-					final IVesselEventPortSlot vesselEventPortSlot = maintenancePortSlot.getFormerPortSlot();
-				}
 			}
 		}
 
