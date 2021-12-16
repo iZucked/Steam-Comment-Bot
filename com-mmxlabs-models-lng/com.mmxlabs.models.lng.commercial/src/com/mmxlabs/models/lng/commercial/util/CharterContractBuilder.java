@@ -4,6 +4,7 @@ import java.time.YearMonth;
 import java.util.Collection;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
@@ -21,26 +22,37 @@ import com.mmxlabs.models.lng.commercial.SimpleRepositioningFeeContainer;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
 
+@NonNullByDefault
 public class CharterContractBuilder {
 
-	private final CommercialModel commercialModel;
+	private final @Nullable CommercialModel commercialModel;
 
 	private final GenericCharterContract contract;
 
-	public CharterContractBuilder(final CommercialModel commercialModel) {
+	public CharterContractBuilder(final @Nullable CommercialModel commercialModel) {
 		this.commercialModel = commercialModel;
 		contract = CommercialFactory.eINSTANCE.createGenericCharterContract();
 	}
 
 	public GenericCharterContract build() {
-		commercialModel.getCharterContracts().add(contract);
+		return build(true);
+	}
 
+	public GenericCharterContract build(boolean addToCommercialModel) {
+		if (addToCommercialModel) {
+			assert commercialModel != null;
+			commercialModel.getCharterContracts().add(contract);
+		}
 		return contract;
 	}
 
 	public CharterContractBuilder withName(final String name) {
 		contract.setName(name);
 		return this;
+	}
+
+	public RepositioningMaker withStandardRepositioning() {
+		return new RepositioningMaker();
 	}
 
 	public BallastBonusMaker withStandardBallastBonus() {
@@ -51,8 +63,8 @@ public class CharterContractBuilder {
 		return new MonthlyBallastBonusMaker();
 	}
 
-	class RepositioningMaker {
-		private SimpleRepositioningFeeContainer container;
+	public class RepositioningMaker {
+		private final SimpleRepositioningFeeContainer container;
 
 		public RepositioningMaker() {
 			container = CommercialFactory.eINSTANCE.createSimpleRepositioningFeeContainer();
@@ -64,9 +76,11 @@ public class CharterContractBuilder {
 			return CharterContractBuilder.this;
 		}
 
-		public RepositioningMaker addLumpSumRule(final Port originPort, final String expression) {
+		public RepositioningMaker addLumpSumRule(final @Nullable Port originPort, final String expression) {
 			final LumpSumRepositioningFeeTerm term = CommercialFactory.eINSTANCE.createLumpSumRepositioningFeeTerm();
-			term.setOriginPort(originPort);
+			if (originPort != null) {
+				term.setOriginPort(originPort);
+			}
 			term.setPriceExpression(expression);
 			container.getTerms().add(term);
 
@@ -91,7 +105,7 @@ public class CharterContractBuilder {
 		}
 	}
 
-	class BallastBonusMaker {
+	public class BallastBonusMaker {
 		private final SimpleBallastBonusContainer ballastBonusContainer;
 
 		public BallastBonusMaker() {
@@ -114,7 +128,7 @@ public class CharterContractBuilder {
 			return this;
 		}
 
-		public BallastBonusMaker addLumpSumRule(final Collection<@NonNull APortSet<Port>> redeliveryPorts, final String expression) {
+		public BallastBonusMaker addLumpSumRule(final Collection<APortSet<Port>> redeliveryPorts, final String expression) {
 			final LumpSumBallastBonusTerm term = CommercialFactory.eINSTANCE.createLumpSumBallastBonusTerm();
 
 			term.getRedeliveryPorts().addAll(redeliveryPorts);
@@ -123,8 +137,8 @@ public class CharterContractBuilder {
 			return this;
 		}
 
-		public BallastBonusMaker addNotionalRule(final @NonNull Collection<@NonNull APortSet<Port>> redeliveryPorts, final double speed, final @NonNull String hireExpression,
-				final @NonNull String fuelExpression, final boolean includeCanalFees, final boolean includeCanalTime, final @NonNull Collection<@NonNull APortSet<Port>> returnPorts) {
+		public BallastBonusMaker addNotionalRule(final Collection<APortSet<Port>> redeliveryPorts, final double speed, final String hireExpression, final String fuelExpression,
+				final boolean includeCanalFees, final boolean includeCanalTime, final Collection<APortSet<Port>> returnPorts) {
 			final NotionalJourneyBallastBonusTerm term = CommercialFactory.eINSTANCE.createNotionalJourneyBallastBonusTerm();
 
 			term.getRedeliveryPorts().addAll(redeliveryPorts);
@@ -141,7 +155,7 @@ public class CharterContractBuilder {
 
 	}
 
-	class MonthlyBallastBonusMaker {
+	public class MonthlyBallastBonusMaker {
 		private final MonthlyBallastBonusContainer ballastBonusContainer;
 
 		public MonthlyBallastBonusMaker() {
@@ -154,11 +168,16 @@ public class CharterContractBuilder {
 			return CharterContractBuilder.this;
 		}
 
-		public MonthlyBallastBonusMaker addTerm(final YearMonth ym, final NextPortType nextPortType, final String pctFuelRate, final String pctCharterRate,
-				final @NonNull Collection<@NonNull APortSet<Port>> redeliveryPorts, final double speed, final @NonNull String hireExpression, final @NonNull String fuelExpression,
-				final boolean includeCanalFees, final boolean includeCanalTime, final @NonNull Collection<@NonNull APortSet<Port>> returnPorts) {
+		public MonthlyBallastBonusMaker withHubPorts(final Collection<APortSet<Port>> hubPorts) {
+			ballastBonusContainer.getHubs().addAll(hubPorts);
+			return this;
+		}
 
-			for (var term : ballastBonusContainer.getTerms()) {
+		public MonthlyBallastBonusMaker addTerm(final YearMonth ym, final NextPortType nextPortType, final String pctFuelRate, final String pctCharterRate,
+				final Collection<APortSet<Port>> redeliveryPorts, final double speed, final String hireExpression, final String fuelExpression, final boolean includeCanalFees,
+				final boolean includeCanalTime, final Collection<APortSet<Port>> returnPorts) {
+
+			for (final var term : ballastBonusContainer.getTerms()) {
 				if (ym.equals(term.getMonth())) {
 					throw new IllegalArgumentException("Duplicate month: " + ym);
 				}
@@ -181,6 +200,20 @@ public class CharterContractBuilder {
 
 			ballastBonusContainer.getTerms().add(term);
 
+			return this;
+		}
+
+		public MonthlyBallastBonusMaker withTerms(final Collection<APortSet<Port>> redeliveryPorts, final double speed, final String hireExpression, final String fuelExpression,
+				final boolean includeCanalFees, final boolean includeCanalTime, final Collection<APortSet<Port>> returnPorts, final YearMonth[] months, final NextPortType[] nextPortTypes,
+				final String[] pctFuelRates, final String[] pctCharterRates) {
+
+			for (int i = 0; i < months.length; i++) {
+				final YearMonth ym = months[i];
+				final NextPortType nextPortType = nextPortTypes[i];
+				final String pctFuelRate = pctFuelRates[i];
+				final String pctCharterRate = pctCharterRates[i];
+				addTerm(ym, nextPortType, pctFuelRate, pctCharterRate, redeliveryPorts, speed, hireExpression, fuelExpression, includeCanalFees, includeCanalTime, returnPorts);
+			}
 			return this;
 		}
 

@@ -226,10 +226,7 @@ public class MiscCostsTests extends AbstractLegacyMicroTestCase {
 	}
 
 	private StartEvent getStartEvent(final VesselAvailability vesselAvailability) {
-		Sequence sequence = lngScenarioModel.getScheduleModel().getSchedule().getSequences().stream().filter(s -> s.getVesselAvailability().equals(vesselAvailability)).findFirst().get();
-		Event event = sequence.getEvents().get(0);
-		assert event instanceof StartEvent;
-		return (StartEvent) event;
+		return ScheduleModelUtils.getStartEvent(vesselAvailability, lngScenarioModel.getScheduleModel().getSchedule());
 	}
 
 }
