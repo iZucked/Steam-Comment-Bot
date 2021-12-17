@@ -78,6 +78,12 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okio.BufferedSource;
 
+/**
+ * 
+ * openssl dgst -sha256 -verify my-pub.pem -signature in.txt.sha256 in.txt 
+ * 
+ *
+ */
 public class LiNGOUpdater {
 
 	public static RSAPublicKey readPublicKey(String resource) throws Exception {
@@ -239,6 +245,8 @@ public class LiNGOUpdater {
 				m.subTask("Verifying download");
 
 				if (!verifyDownload(updateVersion, m.split(5))) {
+					// Download signature or checksum failed
+					MessageDialog.openError(Display.getDefault().getActiveShell(), "Download failure", "Failed to verify download.");
 					return;
 				}
 				m.setWorkRemaining(50);
@@ -258,9 +266,7 @@ public class LiNGOUpdater {
 				}
 			}
 
-		} catch (
-
-		final Exception e) {
+		} catch (final Exception e) {
 			// Message dialog!
 			e.printStackTrace();
 
