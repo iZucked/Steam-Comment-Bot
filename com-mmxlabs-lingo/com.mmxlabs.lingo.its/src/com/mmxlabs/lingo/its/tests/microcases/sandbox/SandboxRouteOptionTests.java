@@ -586,7 +586,7 @@ public class SandboxRouteOptionTests extends AbstractSandboxTestCase {
 				.withBuyOptions(buy1) //
 				.withSellOptions(sell1) //
 				.withShippingOptions(shipping) //
-				.withDischargeDates(LocalDateTime.of(2019, 7, 1, 0, 0, 0)) //
+				.withDischargeDates(LocalDateTime.of(2019, 6, 1, 0, 0, 0)) //
 				.build();
 
 		evaluateSandbox(sandboxBuilder.getOptionAnalysisModel());
@@ -614,6 +614,8 @@ public class SandboxRouteOptionTests extends AbstractSandboxTestCase {
 
 			// Actual date is after requested date as there is not enough time.
 			// TODO: Should this case be filtered out as invalid?
+			System.out.println(row.getOptions().getDischargeDates().get(i).getDateTime());
+			System.out.println(sca.getDischargeAllocation().getSlotVisit().getStart().toLocalDateTime());
 			Assertions.assertTrue(row.getOptions().getDischargeDates().get(i).getDateTime().isBefore(sca.getDischargeAllocation().getSlotVisit().getStart().toLocalDateTime()));
 		}
 	}
