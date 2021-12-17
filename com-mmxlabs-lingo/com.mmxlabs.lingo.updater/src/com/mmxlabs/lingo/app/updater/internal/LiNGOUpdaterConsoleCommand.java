@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * All rights reserved.
+ */
 package com.mmxlabs.lingo.app.updater.internal;
 
 import org.eclipse.jface.dialogs.MessageDialog;
