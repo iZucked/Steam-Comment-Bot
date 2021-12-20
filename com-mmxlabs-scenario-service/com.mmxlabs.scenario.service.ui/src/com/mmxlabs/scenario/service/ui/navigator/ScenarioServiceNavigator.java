@@ -13,6 +13,14 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.IContributionManager;
+import org.eclipse.jface.action.IContributionManagerOverrides;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IStatusLineManager;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
@@ -23,6 +31,9 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.CoolBar;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
@@ -37,16 +48,21 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
+import org.eclipse.ui.internal.navigator.actions.CollapseAllAction;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.ui.services.IServiceLocator;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.rcp.common.CommonImages;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.IScenarioServiceSelectionChangedListener;
 import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ScenarioResult;
@@ -95,9 +111,9 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 		@Override
 		public void partClosed(final IWorkbenchPart part) {
-			// If the selection tracks editor, then get the scenario instance and make it the only selection.
-			if (part instanceof IEditorPart) {
-				final IEditorPart editorPart = (IEditorPart) part;
+			// If the selection tracks editor, then get the scenario instance and make it
+			// the only selection.
+			if (part instanceof IEditorPart editorPart) {
 				final IEditorInput editorInput = editorPart.getEditorInput();
 				final ScenarioInstance scenarioInstance = editorInput.getAdapter(ScenarioInstance.class);
 				if (scenarioInstance != null) {
@@ -115,8 +131,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 		@Override
 		public void partActivated(final IWorkbenchPart part) {
-			if (part instanceof IEditorPart) {
-				final IEditorPart editorPart = (IEditorPart) part;
+			if (part instanceof IEditorPart editorPart) {
 				final IEditorInput editorInput = editorPart.getEditorInput();
 				final ScenarioInstance scenarioInstance = editorInput.getAdapter(ScenarioInstance.class);
 				if (scenarioInstance != null) {
@@ -142,7 +157,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		tracker.open();
 
 		Activator.getDefault().getScenarioServiceSelectionProvider().addSelectionChangedListener(selectionChangedListener);
-		showColumnImage = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif").createImage();
+		showColumnImage = CommonImages.getImageDescriptor(IconPaths.Console, IconMode.Enabled).createImage();
 		statusColumnImage = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/base-flag.png").createImage();
 	}
 
@@ -234,7 +249,8 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 			/*
 			 * (non-Javadoc)
 			 * 
-			 * @see org.eclipse.swt.events.MouseAdapter#mouseDown(org.eclipse.swt.events.MouseEvent)
+			 * @see org.eclipse.swt.events.MouseAdapter#mouseDown(org.eclipse.swt.events.
+			 * MouseEvent)
 			 */
 			@Override
 			public void mouseDown(final MouseEvent e) {
@@ -325,15 +341,19 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		 * 
 		 * selectionModeTrackEditor = !selectionModeTrackEditor;
 		 * 
-		 * if (selectionModeTrackEditor) { partListener.partActivated(getSite().getPage().getActiveEditor()); } } }; a.setImageDescriptor(Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID,
+		 * if (selectionModeTrackEditor) {
+		 * partListener.partActivated(getSite().getPage().getActiveEditor()); } } };
+		 * a.setImageDescriptor(Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID,
 		 * "/icons/synced.gif")); a.setChecked(selectionModeTrackEditor);
 		 * 
 		 * getViewSite().getActionBars().getToolBarManager().add(a);
 		 */
 		// getViewSite().getActionBars().getToolBarManager().update(true);
 
-		// We cannot set this programatically for a common navigator. Instead look in the plugin.xml!
-		// PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.View_Navigator");
+		// We cannot set this programatically for a common navigator. Instead look in
+		// the plugin.xml!
+		// PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(),
+		// "com.mmxlabs.lingo.doc.View_Navigator");
 
 		return viewer;
 	}
@@ -343,7 +363,10 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		// Initialise this here as normally the action in instantiated within th
 		linkHelper = new ScenarioServiceNavigatorLinkHelper(this, viewer, getLinkHelperService());
 		linkHelper.setChecked(true);
-		return super.createCommonActionGroup();
+		ActionGroup actionGroup = super.createCommonActionGroup();
+		setCollapseAllIcons(actionGroup);
+
+		return actionGroup;
 	}
 
 	@Override
@@ -368,7 +391,8 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 	}
 
 	/**
-	 * This accesses a cached version of the property sheet. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * This accesses a cached version of the property sheet. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
 	 * @generated
 	 */
@@ -377,11 +401,6 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 			@Override
 			public void setSelectionToViewer(final List<?> selection) {
 				ScenarioServiceNavigator.this.setFocus();
-			}
-
-			@Override
-			public void setActionBars(final IActionBars actionBars) {
-				super.setActionBars(actionBars);
 			}
 		};
 		propertySheetPage.setPropertySourceProvider(new AdapterFactoryContentProvider(adapterFactory));
@@ -415,5 +434,382 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		} else {
 			super.handleDoubleClick(anEvent);
 		}
+	}
+
+	/**
+	 * Super hacky attempt to set the collapse all icon from it's default icon.
+	 * Pretend to be an action bar and check the instanceof the action passed to one
+	 * of the add method.
+	 * 
+	 * @param actionGroup
+	 */
+	private void setCollapseAllIcons(ActionGroup actionGroup) {
+		actionGroup.fillActionBars(new IActionBars() {
+
+			@Override
+			public void clearGlobalActionHandlers() {
+
+			}
+
+			@Override
+			public IAction getGlobalActionHandler(String actionId) {
+				return null;
+			}
+
+			@Override
+			public IMenuManager getMenuManager() {
+				return new IMenuManager() {
+
+					@Override
+					public void update(String id) {
+
+					}
+
+					@Override
+					public void update() {
+
+					}
+
+					@Override
+					public void setVisible(boolean visible) {
+
+					}
+
+					@Override
+					public void setParent(IContributionManager parent) {
+
+					}
+
+					@Override
+					public void saveWidgetState() {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public boolean isVisible() {
+						return false;
+					}
+
+					@Override
+					public boolean isSeparator() {
+						return false;
+					}
+
+					@Override
+					public boolean isGroupMarker() {
+						return false;
+					}
+
+					@Override
+					public boolean isDynamic() {
+						return false;
+					}
+
+					@Override
+					public String getId() {
+						return null;
+					}
+
+					@Override
+					public void fill(CoolBar parent, int index) {
+
+					}
+
+					@Override
+					public void fill(ToolBar parent, int index) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void fill(Menu parent, int index) {
+
+					}
+
+					@Override
+					public void fill(Composite parent) {
+
+					}
+
+					@Override
+					public void dispose() {
+
+					}
+
+					@Override
+					public void update(boolean force) {
+
+					}
+
+					@Override
+					public void removeAll() {
+
+					}
+
+					@Override
+					public IContributionItem remove(IContributionItem item) {
+						return null;
+					}
+
+					@Override
+					public IContributionItem remove(String id) {
+						return null;
+					}
+
+					@Override
+					public void prependToGroup(String groupName, IContributionItem item) {
+
+					}
+
+					@Override
+					public void prependToGroup(String groupName, IAction action) {
+
+					}
+
+					@Override
+					public void markDirty() {
+
+					}
+
+					@Override
+					public boolean isEmpty() {
+						return false;
+					}
+
+					@Override
+					public boolean isDirty() {
+						return false;
+					}
+
+					@Override
+					public void insertBefore(String id, IContributionItem item) {
+
+					}
+
+					@Override
+					public void insertBefore(String id, IAction action) {
+
+					}
+
+					@Override
+					public void insertAfter(String id, IContributionItem item) {
+
+					}
+
+					@Override
+					public void insertAfter(String id, IAction action) {
+
+					}
+
+					@Override
+					public IContributionManagerOverrides getOverrides() {
+						return null;
+					}
+
+					@Override
+					public IContributionItem[] getItems() {
+						return null;
+					}
+
+					@Override
+					public IContributionItem find(String id) {
+						return null;
+					}
+
+					@Override
+					public void appendToGroup(String groupName, IContributionItem item) {
+
+					}
+
+					@Override
+					public void appendToGroup(String groupName, IAction action) {
+
+					}
+
+					@Override
+					public void add(IContributionItem item) {
+
+					}
+
+					@Override
+					public void add(IAction action) {
+
+					}
+
+					@Override
+					public void updateAll(boolean force) {
+
+					}
+
+					@Override
+					public void setRemoveAllWhenShown(boolean removeAll) {
+
+					}
+
+					@Override
+					public void removeMenuListener(IMenuListener listener) {
+
+					}
+
+					@Override
+					public boolean isEnabled() {
+						return false;
+					}
+
+					@Override
+					public boolean getRemoveAllWhenShown() {
+						return false;
+					}
+
+					@Override
+					public IContributionItem findUsingPath(String path) {
+						return null;
+					}
+
+					@Override
+					public IMenuManager findMenuUsingPath(String path) {
+						return null;
+					}
+
+					@Override
+					public void addMenuListener(IMenuListener listener) {
+
+					}
+				};
+			}
+
+			@Override
+			public IServiceLocator getServiceLocator() {
+				return null;
+			}
+
+			@Override
+			public IStatusLineManager getStatusLineManager() {
+				return null;
+			}
+
+			@Override
+			public IToolBarManager getToolBarManager() {
+				return new IToolBarManager() {
+
+					@Override
+					public void update(boolean force) {
+
+					}
+
+					@Override
+					public void removeAll() {
+
+					}
+
+					@Override
+					public IContributionItem remove(IContributionItem item) {
+						return null;
+					}
+
+					@Override
+					public IContributionItem remove(String id) {
+						return null;
+					}
+
+					@Override
+					public void prependToGroup(String groupName, IContributionItem item) {
+
+					}
+
+					@Override
+					public void prependToGroup(String groupName, IAction action) {
+
+					}
+
+					@Override
+					public void markDirty() {
+
+					}
+
+					@Override
+					public boolean isEmpty() {
+						return false;
+					}
+
+					@Override
+					public boolean isDirty() {
+						return false;
+					}
+
+					@Override
+					public void insertBefore(String id, IContributionItem item) {
+
+					}
+
+					@Override
+					public void insertBefore(String id, IAction action) {
+
+					}
+
+					@Override
+					public void insertAfter(String id, IContributionItem item) {
+
+					}
+
+					@Override
+					public void insertAfter(String id, IAction action) {
+
+					}
+
+					@Override
+					public IContributionManagerOverrides getOverrides() {
+						return null;
+					}
+
+					@Override
+					public IContributionItem[] getItems() {
+						return null;
+					}
+
+					@Override
+					public IContributionItem find(String id) {
+						return null;
+					}
+
+					@Override
+					public void appendToGroup(String groupName, IContributionItem item) {
+
+					}
+
+					@Override
+					public void appendToGroup(String groupName, IAction action) {
+
+					}
+
+					@Override
+					public void add(IContributionItem item) {
+
+					}
+
+					@Override
+					public void add(IAction action) {
+						if (action instanceof CollapseAllAction ca) {
+							CommonImages.setImageDescriptors(ca, IconPaths.CollapseAll, true);
+							CommonImages.setImageDescriptors(ca, IconPaths.CollapseAll);
+						}
+					}
+				};
+			}
+
+			@Override
+			public void setGlobalActionHandler(String actionId, IAction handler) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void updateActionBars() {
+				// TODO Auto-generated method stub
+
+			}
+
+		});
 	}
 }

@@ -1014,7 +1014,7 @@ public class ChangeSetView extends ViewPart {
 					}
 				}
 			});
-			reEvaluateAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/iu_update_obj.gif"));
+			CommonImages.setImageDescriptors(reEvaluateAction, IconPaths.ReEvaluate16);
 			reEvaluateAction.setToolTipText("Re-evaluate the solution(s) using current scenario data");
 			reEvaluateActionItem = new ActionContributionItem(reEvaluateAction);
 		}
@@ -1433,8 +1433,7 @@ public class ChangeSetView extends ViewPart {
 				final EvaluateSolutionSetHelper ssHelper = new EvaluateSolutionSetHelper(scenarioResult.getScenarioDataProvider());
 
 				final AnalyticsSolution solution = currentViewState.lastSolution;
-				if (solution != null && solution.getSolution() instanceof SandboxResult) {
-					final SandboxResult sandboxResult = (SandboxResult) solution.getSolution();
+				if (solution != null && solution.getSolution() instanceof SandboxResult sandboxResult) {
 
 					UserSettings userSettings = null;
 
@@ -1512,7 +1511,7 @@ public class ChangeSetView extends ViewPart {
 
 				}
 			});
-			action.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/iu_update_obj.gif"));
+			CommonImages.setImageDescriptors(action, IconPaths.ReEvaluate16);
 			helper.addAction(action);
 			showMenu = true;
 			return showMenu;
@@ -1531,8 +1530,7 @@ public class ChangeSetView extends ViewPart {
 				if (showAlternativeChangeModel && ChangeSetView.this.viewMode == ViewMode.INSERTIONS) {
 					// Only offer this for dual model insertions.
 					final ScenarioResult scenarioResult = changeSetTableGroup.getCurrentScenario();
-					if (scenarioResult.getResultRoot() instanceof ScheduleModel) {
-						final ScheduleModel scheduleModel = (ScheduleModel) scenarioResult.getResultRoot();
+					if (scenarioResult.getResultRoot() instanceof ScheduleModel scheduleModel) {
 						if (scheduleModel.eContainer() instanceof SolutionOptionMicroCase) {
 							final BiConsumer<LNGScenarioModel, Schedule> modelCustomiser = EvaluateSolutionSetHelper.createModelCustomiser();
 							helper.addAction(new ExportChangeAction(changeSetTableGroup, name, true, modelCustomiser));

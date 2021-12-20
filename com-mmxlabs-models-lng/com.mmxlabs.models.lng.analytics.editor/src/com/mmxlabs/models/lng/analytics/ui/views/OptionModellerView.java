@@ -60,7 +60,6 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.events.IExpansionListener;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
@@ -943,7 +942,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 	private Composite createDisplayButton(final Composite parent) {
 		//
-		final ImageDescriptor generateDesc = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "icons/console_view.gif");
+		final ImageDescriptor generateDesc = CommonImages.getImageDescriptor(IconPaths.Console, IconMode.Enabled);
 		final Image imageGenerate = generateDesc.createImage();
 
 		final Composite generateComposite = new Composite(parent, SWT.NONE);
@@ -995,14 +994,12 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		final Composite generateComposite = new Composite(parent, SWT.NONE);
 		GridDataFactory.generate(generateComposite, 1, 1);
 		generateComposite.setLayout(new GridLayout(1, true));
-		
-
 
 		final Label generateButton = new Label(generateComposite, SWT.NONE);
 		generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.RIGHT, SWT.CENTER).grab(false, false).create());
-		
+
 		final Image imageGenerate = CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled).createImage();
-		generateButton.addDisposeListener(e -> imageGenerate.dispose()); 
+		generateButton.addDisposeListener(e -> imageGenerate.dispose());
 		generateButton.setImage(imageGenerate);
 
 		generateButton.setToolTipText("Delete current results");

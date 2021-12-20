@@ -46,7 +46,9 @@ import com.mmxlabs.models.lng.analytics.util.SandboxModeConstants;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
+import com.mmxlabs.rcp.common.CommonImages;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 
 public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerView, OptionAnalysisModel> {
 
@@ -137,7 +139,10 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 		createColumn(baseCaseViewer, "Sell", new SellOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
 		createColumn(baseCaseViewer, "Shipping", new ShippingOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
 
-		optioniseCol = createColumn(baseCaseViewer, "Opt", new OptioniseDescriptionFormatter(), false);
+		optioniseCol = createColumn(baseCaseViewer, "", new OptioniseDescriptionFormatter(), false);
+		optioniseCol.getColumn().setAlignment(SWT.CENTER);
+		CommonImages.setImage(optioniseCol.getColumn(), IconPaths.Play_16);
+		
 		optioniseCol.getColumn().setHeaderTooltip("Select rows to use of optionise targets. Other rows will be included in search scope");
 		optioniseCol.getColumn().setWidth(40);
 		optioniseCol.getColumn().setVisible(false);
