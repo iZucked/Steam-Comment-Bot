@@ -155,11 +155,14 @@ public class MigrationRegistry implements IMigrationRegistry {
 				LOG.error("There is already a default client migration context set - " + defaultClientContext + ". Context " + ext.getClientContext() + " will not be set as the default.");
 			}
 		}
-
+		List<IMigrationProvider> providers = new LinkedList<>();
 		for (final MigrationProviderExtensionPoint ext : migrationProvideExtensions) {
 			IMigrationProvider provider = ext.createMigrationProvider();
-			provider.register(this);
+			providers.add(provider);
 		}
+
+		providers.sort((a, b) -> Integer.compare(a.priority(), b.priority()));
+		providers.forEach(p -> p.register(MigrationRegistry.this));
 	}
 
 	@Override

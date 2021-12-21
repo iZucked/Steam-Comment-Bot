@@ -38,6 +38,11 @@ public abstract class AbstractMigrationProvider implements IMigrationProvider {
 
 	private final List<Entry> entries = new LinkedList<>();
 
+	@Override
+	public int priority() {
+		return PRIORITY_CLIENT;
+	}
+	
 	/**
 	 * Subclasses should implement this method to register the different client
 	 * metamodel versions. Versions are expected to be registered in order
