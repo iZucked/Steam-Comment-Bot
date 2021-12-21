@@ -6,7 +6,7 @@ package com.mmxlabs.models.lng.migration.units;
 
 import org.junit.jupiter.api.Test;
 
-public class AbstractMigrationTestClass {
+public class StubTests {
 
 	// Stub class for the project
 	@Test
