@@ -40,27 +40,10 @@ public class MigrateToV26 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected MetamodelLoader getSourceMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (sourceLoader == null) {
-			sourceLoader = MetamodelVersionsUtil.createV25Loader(extraPackages);
-		}
-		return sourceLoader;
-	}
-
-	@Override
-	protected MetamodelLoader getDestinationMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (destinationLoader == null) {
-			destinationLoader = MetamodelVersionsUtil.createV26Loader(extraPackages);
-		}
-		return destinationLoader;
-	}
-
-	@Override
 	protected void doMigration(final MigrationModelRecord modelRecord) {
 
-		final MetamodelLoader modelLoader = getMigrationLoader(null);
+		final MetamodelLoader modelLoader = modelRecord.getMetamodelLoader();
 		unsetCargoID(modelLoader, modelRecord.getModelRoot());
-
 	}
 
 	private void unsetCargoID(final MetamodelLoader modelLoader, final EObject model) {

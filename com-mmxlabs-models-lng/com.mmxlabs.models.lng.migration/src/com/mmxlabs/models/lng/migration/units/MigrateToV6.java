@@ -4,10 +4,7 @@
  */
 package com.mmxlabs.models.lng.migration.units;
 
-import java.util.Map;
-
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -15,10 +12,8 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
-import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
 import com.mmxlabs.models.migration.MigrationModelRecord;
-import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.models.migration.utils.EObjectWrapper;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
@@ -43,51 +38,35 @@ public class MigrateToV6 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected MetamodelLoader getSourceMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (sourceLoader == null) {
-			sourceLoader = MetamodelVersionsUtil.createV5Loader(extraPackages);
-		}
-		return sourceLoader;
-	}
-
-	@Override
-	protected MetamodelLoader getDestinationMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (destinationLoader == null) {
-			destinationLoader = MetamodelVersionsUtil.createV6Loader(extraPackages);
-		}
-		return destinationLoader;
-	}
-
-	@Override
 	protected void doMigration(final MigrationModelRecord modelRecord) {
 		final EObjectWrapper model = modelRecord.getModelRoot();
+
+		// This should get the cached loader instance
+		final MetamodelLoader loader = modelRecord.getMetamodelLoader();
 
 		// Nothing to do - model is forward compatible.
 
 		// Step 1:
 		// Perform AssingmentModel migration.
-		migrateAssignmentModel(model);
+		migrateAssignmentModel(model, loader);
 
 		// Step 2: Clean out old deprecated fields
 		// DES Purchase Spot Market / FOB Sale origin ports
-		removeSpotMarketFields(model);
+		removeSpotMarketFields(model, loader);
 		// OptimiserSettings
-		removeOptimiserSettingsFields(model);
+		removeOptimiserSettingsFields(model, loader);
 
 		// LNG ScenarioModel (params)
-		removeScenario_ParamsModel(model);
+		removeScenario_ParamsModel(model, loader);
 		// Daily Hire rate on Sequence
-		removeDailyHireRate(model);
+		removeDailyHireRate(model, loader);
 		// Base fuel price fields
-		removeBaseFuelCost_Price(model);
+		removeBaseFuelCost_Price(model, loader);
 
 		// Next step - clean up the ecore models - add v7
 	}
 
-	private void migrateAssignmentModel(final EObject model) {
-
-		// This should get the cached loader instance
-		final MetamodelLoader loader = getDestinationMetamodelLoader(null);
+	private void migrateAssignmentModel(final EObject model, final MetamodelLoader loader) {
 
 		final EPackage package_ScenarioModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
 		final EClass class_LNGScenarioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGScenarioModel");
@@ -144,10 +123,7 @@ public class MigrateToV6 extends AbstractMigrationUnit {
 		}
 	}
 
-	private void removeDailyHireRate(final EObject model) {
-
-		// This should get the cached loader instance
-		final MetamodelLoader loader = getDestinationMetamodelLoader(null);
+	private void removeDailyHireRate(final EObject model, final MetamodelLoader loader) {
 
 		final EPackage package_ScenarioModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
 		final EPackage package_ScheduleModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScheduleModel);
@@ -182,10 +158,7 @@ public class MigrateToV6 extends AbstractMigrationUnit {
 		}
 	}
 
-	private void removeScenario_ParamsModel(final EObject model) {
-
-		// This should get the cached loader instance
-		final MetamodelLoader loader = getDestinationMetamodelLoader(null);
+	private void removeScenario_ParamsModel(final EObject model, final MetamodelLoader loader) {
 
 		final EPackage package_ScenarioModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
 		final EClass class_LNGScenarioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGScenarioModel");
@@ -194,10 +167,7 @@ public class MigrateToV6 extends AbstractMigrationUnit {
 		model.eUnset(reference_LNGScenarioModel_parametersModel);
 	}
 
-	private void removeBaseFuelCost_Price(final EObject model) {
-
-		// This should get the cached loader instance
-		final MetamodelLoader loader = getDestinationMetamodelLoader(null);
+	private void removeBaseFuelCost_Price(final EObject model, final MetamodelLoader loader) {
 
 		final EPackage package_ScenarioModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
 		final EPackage package_PricingModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_PricingModel);
@@ -228,10 +198,7 @@ public class MigrateToV6 extends AbstractMigrationUnit {
 		}
 	}
 
-	private void removeSpotMarketFields(final EObject model) {
-
-		// This should get the cached loader instance
-		final MetamodelLoader loader = getDestinationMetamodelLoader(null);
+	private void removeSpotMarketFields(final EObject model, final MetamodelLoader loader) {
 
 		final EPackage package_ScenarioModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
 		final EPackage package_SpotMarketsModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_SpotMarketsModel);
@@ -281,10 +248,7 @@ public class MigrateToV6 extends AbstractMigrationUnit {
 
 	}
 
-	private void removeOptimiserSettingsFields(final EObject model) {
-
-		// This should get the cached loader instance
-		final MetamodelLoader loader = getDestinationMetamodelLoader(null);
+	private void removeOptimiserSettingsFields(final EObject model, final MetamodelLoader loader) {
 
 		final EPackage package_ScenarioModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
 		final EPackage package_ParametersModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ParametersModel);
