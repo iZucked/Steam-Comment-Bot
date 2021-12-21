@@ -73,6 +73,8 @@ public class PortModelComponentHelper extends BaseComponentHelper {
 		add_portVersionRecordEditor(detailComposite, topClass);
 		add_portGroupVersionRecordEditor(detailComposite, topClass);
 		add_distanceVersionRecordEditor(detailComposite, topClass);
+		add_mmxDistanceVersionEditor(detailComposite, topClass);
+		add_manualDistancesEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the ports feature on PortModel
@@ -152,5 +154,23 @@ public class PortModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_distanceVersionRecordEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT_MODEL__DISTANCE_VERSION_RECORD));
+	}
+
+	/**
+	 * Create the editor for the mmxDistanceVersion feature on PortModel
+	 *
+	 * @generated
+	 */
+	protected void add_mmxDistanceVersionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT_MODEL__MMX_DISTANCE_VERSION));
+	}
+
+	/**
+	 * Create the editor for the manualDistances feature on PortModel
+	 *
+	 * @generated
+	 */
+	protected void add_manualDistancesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT_MODEL__MANUAL_DISTANCES));
 	}
 }
