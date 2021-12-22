@@ -35,8 +35,6 @@ import com.mmxlabs.scenario.service.model.util.ResourceHelper;
  */
 public abstract class AbstractClientMigrationUnit implements IClientMigrationUnit {
 
-	protected Map<URI, PackageData> extraPackages;
-
 	public abstract int getScenarioVersion();
 
 	@Override
@@ -65,7 +63,7 @@ public abstract class AbstractClientMigrationUnit implements IClientMigrationUni
 	 * @return
 	 */
 	protected MetamodelLoader getMigrationLoader(@Nullable final Map<URI, PackageData> extraPackages) {
-		return MetamodelVersionsUtil.createVNLoader(getScenarioDestinationVersion(), this.extraPackages);
+		return MetamodelVersionsUtil.createVNLoader(getScenarioDestinationVersion(), extraPackages);
 	}
 
 	/**
