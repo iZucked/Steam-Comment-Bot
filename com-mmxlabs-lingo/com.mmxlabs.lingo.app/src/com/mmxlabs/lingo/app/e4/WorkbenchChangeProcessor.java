@@ -36,7 +36,9 @@ public class WorkbenchChangeProcessor {
 		Map<String, String> iconMapping = new HashMap<>();
 		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports.scheduleview/icons/schedule_view.gif", "platform:/plugin/com.mmxlabs.lingo.reports.scheduleview/icons/schedule_view.png");
 		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/VerticalReport.gif", "platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/vertical_schedule.png");
+		iconMapping.put("platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/changes_view.gif", "platform:/plugin/com.mmxlabs.lingo.reports/icons/compare.png");
 
+		
 		mapIcons(application, iconMapping);
 //		
 //		platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/changes_view.gif

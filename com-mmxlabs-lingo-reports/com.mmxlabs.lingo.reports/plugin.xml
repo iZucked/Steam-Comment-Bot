@@ -1121,14 +1121,14 @@
             allowMultiple="false"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView"
-            icon="icons/cview16/changes_view.gif"
+            icon="icons/compare.png"
             id="com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView"
             name="Changes">
       </view>
       <view
       		category="com.mmxlabs.models.lng.views.tools"
             class="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView"
-            icon="icons/cview16/changes_view.gif"
+            icon="icons/compare.png"
             id="com.mmxlabs.lingo.reports.views.changeset.OptimisationsView"
             name="Optimisations"
             restorable="true">
