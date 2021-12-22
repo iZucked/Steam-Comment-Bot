@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Web Navigator UI
 Bundle-SymbolicName: com.mmxlabs.lngdataserver.integration.ui;singleton:=true
-Bundle-Version: 4.13.6.qualifier
+Bundle-Version: 4.13.6.RELEASE
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jetty.io;bundle-version="9.3.9",
  org.eclipse.jetty.security;bundle-version="9.3.9",
