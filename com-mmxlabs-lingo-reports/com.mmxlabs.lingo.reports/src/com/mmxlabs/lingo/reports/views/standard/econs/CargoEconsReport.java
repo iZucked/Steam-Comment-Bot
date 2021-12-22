@@ -107,8 +107,9 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 /**
- * The {@link CargoEconsReport} is a vertical report similar in concept to the Properties View. This table is the transpose of most other tables. Columns represent the input data and rows are
- * pre-defined.
+ * The {@link CargoEconsReport} is a vertical report similar in concept to the
+ * Properties View. This table is the transpose of most other tables. Columns
+ * represent the input data and rows are pre-defined.
  * 
  * @author Simon Goodall
  * 
@@ -225,10 +226,14 @@ public class CargoEconsReport extends ViewPart {
 			showPnLCalcs.setChecked(true);
 			getViewSite().getActionBars().getMenuManager().add(showPnLCalcs);
 
-			final Action showOnlyDiff = new RunnableAction("Δ", () -> {
-				toggleShowDiffOnly();
-				rebuild();
-			});
+			final Action showOnlyDiff = new Action("Δ", SWT.TOGGLE) {
+				@Override
+				public void run() {
+					toggleShowDiffOnly();
+					setChecked(onlyDiffMode);
+					rebuild();
+				}
+			};
 			getViewSite().getActionBars().getToolBarManager().add(showOnlyDiff);
 
 			// Default to sales volume
@@ -300,6 +305,7 @@ public class CargoEconsReport extends ViewPart {
 			public int getBorders(final GridItem item, final int i) {
 				return 0;
 			}
+
 		});
 		getViewSite().getActionBars().getToolBarManager().add(packAction);
 		getViewSite().getActionBars().getToolBarManager().add(copyAction);
@@ -354,7 +360,8 @@ public class CargoEconsReport extends ViewPart {
 	}
 
 	/**
-	 * The {@link FieldType} is the row data. Each enum is a different row. Currently there is no table sorter so enum order is display order
+	 * The {@link FieldType} is the row data. Each enum is a different row.
+	 * Currently there is no table sorter so enum order is display order
 	 * 
 	 */
 
@@ -380,7 +387,9 @@ public class CargoEconsReport extends ViewPart {
 	}
 
 	/**
-	 * Label Provider created for each column. Returns text for the given {@link CargoEconsReportRow} enum (as the input element) for the {@link IFieldTypeMapper} object passed in during creation.
+	 * Label Provider created for each column. Returns text for the given
+	 * {@link CargoEconsReportRow} enum (as the input element) for the
+	 * {@link IFieldTypeMapper} object passed in during creation.
 	 * 
 	 */
 	private class FieldTypeMapperLabelProvider extends ColumnLabelProvider {
@@ -465,7 +474,9 @@ public class CargoEconsReport extends ViewPart {
 	}
 
 	/**
-	 * This method processes an {@link ISelection} object and return a list of objects that this report knows how to process. Currently we try to find associated {@link CargoAllocation} objects.
+	 * This method processes an {@link ISelection} object and return a list of
+	 * objects that this report knows how to process. Currently we try to find
+	 * associated {@link CargoAllocation} objects.
 	 * 
 	 * @param selection
 	 * @return
@@ -518,7 +529,8 @@ public class CargoEconsReport extends ViewPart {
 		validObjects.remove(null);
 
 		if (validObjects.isEmpty()) {
-			// No valid schedule model elements, maybe it is a selection from e.g. trades table so look up matching data from default schedule model.
+			// No valid schedule model elements, maybe it is a selection from e.g. trades
+			// table so look up matching data from default schedule model.
 
 			// Lazily computed caches (if coming from editor selection)
 			Map<PaperDeal, PaperDealAllocation> paperDealMap = null;
@@ -807,7 +819,8 @@ public class CargoEconsReport extends ViewPart {
 		// Extract relevant selected objects.
 		final List<Object> validObjects = processSelection(selectedDataProvider == null ? Collections.emptyList() : selectedDataProvider.getSelectedObjects());
 
-		// Dispose old data columns - clone list to try to avoid concurrent modification exceptions
+		// Dispose old data columns - clone list to try to avoid concurrent modification
+		// exceptions
 		final List<GridViewerColumn> oldColumns = new ArrayList<>(dataColumns);
 		dataColumns.clear();
 
