@@ -73,7 +73,7 @@ public class OAuthDialog extends Window {
 	protected Control createContents(Composite _parent) {
 
 		_parent.setLayout(new FillLayout());
-		Composite oauthComposite = new Composite(_parent, SWT.DEFAULT | SWT.BORDER);
+		Composite oauthComposite = new Composite(_parent, SWT.BORDER);
 		oauthComposite.setLayout(getLayout());
 
 		ToolBar toolBar = new ToolBar(oauthComposite, SWT.FLAT | SWT.RIGHT);
