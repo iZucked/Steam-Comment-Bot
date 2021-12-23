@@ -144,7 +144,7 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 		CommonImages.setImage(optioniseCol.getColumn(), IconPaths.Play_16);
 		
 		optioniseCol.getColumn().setHeaderTooltip("Select rows to use of optionise targets. Other rows will be included in search scope");
-		optioniseCol.getColumn().setWidth(40);
+		optioniseCol.getColumn().setWidth(30);
 		optioniseCol.getColumn().setVisible(false);
 
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TEMP_SANDBOX_VOYAGE_OPTIONS)) {
