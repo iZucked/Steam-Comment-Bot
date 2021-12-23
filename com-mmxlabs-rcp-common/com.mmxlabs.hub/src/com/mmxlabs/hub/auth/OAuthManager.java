@@ -141,7 +141,7 @@ public class OAuthManager extends AbstractAuthenticationManager {
 		deleteFromSecurePreferences(COOKIE);
 		// delete cookie from swt browser
 		// doesn't work if the user clicks "stay logged in"
-		Browser.setCookie("JSESSIONID", url);
-		Browser.setCookie("authenticated", url + "/authenticated");
+//		Browser.setCookie("JSESSIONID=;", url);
+//		Browser.setCookie("authenticated=;", url + "/authenticated");
 	}
 }

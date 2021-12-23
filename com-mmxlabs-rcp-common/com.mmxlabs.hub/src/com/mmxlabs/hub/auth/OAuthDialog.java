@@ -6,6 +6,7 @@ package com.mmxlabs.hub.auth;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.window.Window;
@@ -99,8 +100,13 @@ public class OAuthDialog extends Window {
 		// Make sure the URL isn't editable
 		txtLocation.setEnabled(false);
 		txtLocation.setEditable(false);
-
-		browser = new Browser(oauthComposite, SWT.NONE);
+		// TODO: Set the system property AND/OR add a preference page entry.
+		// org.eclipse.swt.browser.DefaultType=edge
+		// Needs webview2 
+		// see https://docs.microsoft.com/en-us/microsoft-edge/webview2/concepts/distribution
+		// see https://developer.microsoft.com/en-us/microsoft-edge/webview2/#webview-title
+		// (SG used the Evergreen Bootstrapper)
+		browser = new Browser(oauthComposite, SWT.EDGE);
 
 		GridData gd_browser = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		gd_browser.heightHint = 691;
@@ -155,12 +161,22 @@ public class OAuthDialog extends Window {
 		});
 
 		browser.setUrl(baseUrl + fragment);
-
+		// Edge doesn't retain the cookie between runs
+		Optional<String> value = AuthenticationManager.getInstance().retrieveFromSecurePreferences(OAuthManager.COOKIE);
+		if (value.isPresent()) {
+			Browser.setCookie(value.get(), baseUrl);
+		}
 		return oauthComposite;
 	}
 
 	@Override
 	public boolean close() {
+		// Clear cookies *before* we close the browser instance
+		if (fragment.equals(UpstreamUrlProvider.LOGOUT_PATH)) {
+			Browser.setCookie("JSESSIONID=;", baseUrl);
+			Browser.setCookie("authenticated=;", baseUrl + "/authenticated");
+		}
+
 		try {
 			disposeHandlers.forEach(Runnable::run);
 		} catch (Exception e) {
