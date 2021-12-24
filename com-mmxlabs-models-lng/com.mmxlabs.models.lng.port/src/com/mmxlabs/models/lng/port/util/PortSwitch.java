@@ -119,6 +119,13 @@ public class PortSwitch<@Nullable T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case PortPackage.MANUAL_ROUTE_LINE: {
+				ManualRouteLine manualRouteLine = (ManualRouteLine)theEObject;
+				T1 result = caseManualRouteLine(manualRouteLine);
+				if (result == null) result = caseMMXObject(manualRouteLine);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case PortPackage.PORT_MODEL: {
 				PortModel portModel = (PortModel)theEObject;
 				T1 result = casePortModel(portModel);
@@ -239,6 +246,21 @@ public class PortSwitch<@Nullable T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseRouteLine(RouteLine object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Manual Route Line</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Manual Route Line</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseManualRouteLine(ManualRouteLine object) {
 		return null;
 	}
 

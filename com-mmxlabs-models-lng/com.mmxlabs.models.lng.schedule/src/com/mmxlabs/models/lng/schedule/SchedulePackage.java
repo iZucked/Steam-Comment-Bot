@@ -2653,13 +2653,31 @@ public interface SchedulePackage extends EPackage {
 	int IDLE__LADEN = EVENT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Buffer Hours</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IDLE__BUFFER_HOURS = EVENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Panama Hours</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IDLE__PANAMA_HOURS = EVENT_FEATURE_COUNT + 3;
+
+	/**
 	 * The feature id for the '<em><b>Contingency Hours</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int IDLE__CONTINGENCY_HOURS = EVENT_FEATURE_COUNT + 2;
+	int IDLE__CONTINGENCY_HOURS = EVENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Idle</em>' class.
@@ -2668,7 +2686,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int IDLE_FEATURE_COUNT = EVENT_FEATURE_COUNT + 3;
+	int IDLE_FEATURE_COUNT = EVENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -4022,13 +4040,22 @@ public interface SchedulePackage extends EPackage {
 	int CHARTER_LENGTH_EVENT__LADEN = PORT_VISIT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Contingency Hours</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS = PORT_VISIT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Charter Length Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_LENGTH_EVENT_FEATURE_COUNT = PORT_VISIT_FEATURE_COUNT + 6;
+	int CHARTER_LENGTH_EVENT_FEATURE_COUNT = PORT_VISIT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -8549,6 +8576,28 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getIdle_Laden();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Idle#getBufferHours <em>Buffer Hours</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Buffer Hours</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Idle#getBufferHours()
+	 * @see #getIdle()
+	 * @generated
+	 */
+	EAttribute getIdle_BufferHours();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Idle#getPanamaHours <em>Panama Hours</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Panama Hours</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Idle#getPanamaHours()
+	 * @see #getIdle()
+	 * @generated
+	 */
+	EAttribute getIdle_PanamaHours();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Idle#getContingencyHours <em>Contingency Hours</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8622,6 +8671,17 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getCharterLengthEvent_Laden();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.CharterLengthEvent#getContingencyHours <em>Contingency Hours</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Contingency Hours</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.CharterLengthEvent#getContingencyHours()
+	 * @see #getCharterLengthEvent()
+	 * @generated
+	 */
+	EAttribute getCharterLengthEvent_ContingencyHours();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.FuelUsage <em>Fuel Usage</em>}'.
@@ -11331,6 +11391,22 @@ public interface SchedulePackage extends EPackage {
 		EAttribute IDLE__LADEN = eINSTANCE.getIdle_Laden();
 
 		/**
+		 * The meta object literal for the '<em><b>Buffer Hours</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute IDLE__BUFFER_HOURS = eINSTANCE.getIdle_BufferHours();
+
+		/**
+		 * The meta object literal for the '<em><b>Panama Hours</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute IDLE__PANAMA_HOURS = eINSTANCE.getIdle_PanamaHours();
+
+		/**
 		 * The meta object literal for the '<em><b>Contingency Hours</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -11389,6 +11465,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CHARTER_LENGTH_EVENT__LADEN = eINSTANCE.getCharterLengthEvent_Laden();
+
+		/**
+		 * The meta object literal for the '<em><b>Contingency Hours</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS = eINSTANCE.getCharterLengthEvent_ContingencyHours();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.FuelUsageImpl <em>Fuel Usage</em>}' class.

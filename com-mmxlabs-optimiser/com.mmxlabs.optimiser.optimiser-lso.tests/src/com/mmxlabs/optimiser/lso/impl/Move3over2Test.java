@@ -20,6 +20,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListModifiableSequence;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 
 public class Move3over2Test {
@@ -145,8 +146,8 @@ public class Move3over2Test {
 		final Map<IResource, ISequence> sequenceMap_r1 = CollectionsUtil.makeHashMap(resource1, sequence1);
 		final Map<IResource, ISequence> sequenceMap_r2 = CollectionsUtil.makeHashMap(resource2, sequence2);
 
-		Assertions.assertFalse(move.validate(new Sequences(Collections.singletonList(resource2), sequenceMap_r2)));
-		Assertions.assertFalse(move.validate(new Sequences(Collections.singletonList(resource1), sequenceMap_r1)));
+		Assertions.assertFalse(move.validate(new Sequences(Collections.singletonList(resource2), sequenceMap_r2, Collections.emptyList(), new SequencesAttributesProviderImpl())));
+		Assertions.assertFalse(move.validate(new Sequences(Collections.singletonList(resource1), sequenceMap_r1, Collections.emptyList(),  new SequencesAttributesProviderImpl())));
 
 		Assertions.assertTrue(move.validate(sequences));
 

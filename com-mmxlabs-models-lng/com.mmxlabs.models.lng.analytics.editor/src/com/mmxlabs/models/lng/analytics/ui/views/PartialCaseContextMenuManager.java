@@ -9,6 +9,7 @@ import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -35,6 +36,7 @@ import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.PartialCaseRowOptions;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
@@ -120,6 +122,19 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 			}
 
 			if (column != null) {
+				if (column.getText().equals("Options")) {
+
+					mgr.add(new RunnableAction("Edit options", () -> {
+
+						if (row.getOptions() == null) {
+							PartialCaseRowOptions options = AnalyticsFactory.eINSTANCE.createPartialCaseRowOptions();
+							Command c = SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__OPTIONS, options);
+							DetailCompositeDialogUtil.editNewObjectWithUndoOnCancel(scenarioEditingLocation, options, c);
+						} else {
+							DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, row.getOptions());
+						}
+					}));
+				}
 
 				if (column.getText().equals("Buy")) {
 
@@ -286,8 +301,10 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 						}));
 						// mgr.add(new RunnableAction("Copy shipping to templates", () -> {
 						// scenarioEditingLocation.getDefaultCommandHandler()
-						// .handleCommand(AddCommand.create(scenarioEditingLocation.getEditingDomain(), optionAnalysisModel,
-						// AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES, EcoreUtil.copy(row.getShipping())), optionAnalysisModel,
+						// .handleCommand(AddCommand.create(scenarioEditingLocation.getEditingDomain(),
+						// optionAnalysisModel,
+						// AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES,
+						// EcoreUtil.copy(row.getShipping())), optionAnalysisModel,
 						// AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
 						//
 						// }));
@@ -302,19 +319,25 @@ public class PartialCaseContextMenuManager implements MenuDetectListener {
 						}));
 					} else if (AnalyticsBuilder.isNonShipped(row) == ShippingType.Shipped) {
 						// mgr.add(new RunnableAction("Create RT", () -> {
-						// final RoundTripShippingOption o = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
+						// final RoundTripShippingOption o =
+						// AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
 						// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-						// SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, o), row,
+						// SetCommand.create(scenarioEditingLocation.getEditingDomain(), row,
+						// AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, o), row,
 						// AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
-						// DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
+						// DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new
+						// StructuredSelection(o));
 						// }));
 						// mgr.add(new RunnableAction("Create fleet", () -> {
-						// final FleetShippingOption o = AnalyticsFactory.eINSTANCE.createFleetShippingOption();
+						// final FleetShippingOption o =
+						// AnalyticsFactory.eINSTANCE.createFleetShippingOption();
 						// AnalyticsBuilder.setDefaultEntity(scenarioEditingLocation, o);
 						// scenarioEditingLocation.getDefaultCommandHandler().handleCommand(
-						// SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, o), row,
+						// SetCommand.create(scenarioEditingLocation.getEditingDomain(), row,
+						// AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING, o), row,
 						// AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING);
-						// DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(o));
+						// DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new
+						// StructuredSelection(o));
 						// }));
 					}
 				}

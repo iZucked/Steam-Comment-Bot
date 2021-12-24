@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.port.CapabilityGroup;
 import com.mmxlabs.models.lng.port.ContingencyMatrix;
+import com.mmxlabs.models.lng.port.ManualRouteLine;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortCountryGroup;
 import com.mmxlabs.models.lng.port.PortGroup;
@@ -43,6 +44,8 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getPortVersionRecord <em>Port Version Record</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getPortGroupVersionRecord <em>Port Group Version Record</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getDistanceVersionRecord <em>Distance Version Record</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getMmxDistanceVersion <em>Mmx Distance Version</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getManualDistances <em>Manual Distances</em>}</li>
  * </ul>
  *
  * @generated
@@ -137,6 +140,36 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * @ordered
 	 */
 	protected VersionRecord distanceVersionRecord;
+
+	/**
+	 * The default value of the '{@link #getMmxDistanceVersion() <em>Mmx Distance Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMmxDistanceVersion()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String MMX_DISTANCE_VERSION_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getMmxDistanceVersion() <em>Mmx Distance Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMmxDistanceVersion()
+	 * @generated
+	 * @ordered
+	 */
+	protected String mmxDistanceVersion = MMX_DISTANCE_VERSION_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getManualDistances() <em>Manual Distances</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getManualDistances()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<ManualRouteLine> manualDistances;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -408,6 +441,42 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * @generated
 	 */
 	@Override
+	public String getMmxDistanceVersion() {
+		return mmxDistanceVersion;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setMmxDistanceVersion(String newMmxDistanceVersion) {
+		String oldMmxDistanceVersion = mmxDistanceVersion;
+		mmxDistanceVersion = newMmxDistanceVersion;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT_MODEL__MMX_DISTANCE_VERSION, oldMmxDistanceVersion, mmxDistanceVersion));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<ManualRouteLine> getManualDistances() {
+		if (manualDistances == null) {
+			manualDistances = new EObjectContainmentEList<ManualRouteLine>(ManualRouteLine.class, this, PortPackage.PORT_MODEL__MANUAL_DISTANCES);
+		}
+		return manualDistances;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case PortPackage.PORT_MODEL__PORTS:
@@ -428,6 +497,8 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 				return basicSetPortGroupVersionRecord(null, msgs);
 			case PortPackage.PORT_MODEL__DISTANCE_VERSION_RECORD:
 				return basicSetDistanceVersionRecord(null, msgs);
+			case PortPackage.PORT_MODEL__MANUAL_DISTANCES:
+				return ((InternalEList<?>)getManualDistances()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -458,6 +529,10 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 				return getPortGroupVersionRecord();
 			case PortPackage.PORT_MODEL__DISTANCE_VERSION_RECORD:
 				return getDistanceVersionRecord();
+			case PortPackage.PORT_MODEL__MMX_DISTANCE_VERSION:
+				return getMmxDistanceVersion();
+			case PortPackage.PORT_MODEL__MANUAL_DISTANCES:
+				return getManualDistances();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -503,6 +578,13 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 			case PortPackage.PORT_MODEL__DISTANCE_VERSION_RECORD:
 				setDistanceVersionRecord((VersionRecord)newValue);
 				return;
+			case PortPackage.PORT_MODEL__MMX_DISTANCE_VERSION:
+				setMmxDistanceVersion((String)newValue);
+				return;
+			case PortPackage.PORT_MODEL__MANUAL_DISTANCES:
+				getManualDistances().clear();
+				getManualDistances().addAll((Collection<? extends ManualRouteLine>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -542,6 +624,12 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 			case PortPackage.PORT_MODEL__DISTANCE_VERSION_RECORD:
 				setDistanceVersionRecord((VersionRecord)null);
 				return;
+			case PortPackage.PORT_MODEL__MMX_DISTANCE_VERSION:
+				setMmxDistanceVersion(MMX_DISTANCE_VERSION_EDEFAULT);
+				return;
+			case PortPackage.PORT_MODEL__MANUAL_DISTANCES:
+				getManualDistances().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -572,8 +660,28 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 				return portGroupVersionRecord != null;
 			case PortPackage.PORT_MODEL__DISTANCE_VERSION_RECORD:
 				return distanceVersionRecord != null;
+			case PortPackage.PORT_MODEL__MMX_DISTANCE_VERSION:
+				return MMX_DISTANCE_VERSION_EDEFAULT == null ? mmxDistanceVersion != null : !MMX_DISTANCE_VERSION_EDEFAULT.equals(mmxDistanceVersion);
+			case PortPackage.PORT_MODEL__MANUAL_DISTANCES:
+				return manualDistances != null && !manualDistances.isEmpty();
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (mmxDistanceVersion: ");
+		result.append(mmxDistanceVersion);
+		result.append(')');
+		return result.toString();
 	}
 
 } //PortModelImpl

@@ -112,8 +112,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		for (int i = 0; i < sequence.length - adjust; ++i) {
 			final IDetailsSequenceElement element = sequence[i];
 
-			if (element instanceof PortDetails) {
-				final PortDetails pd = (PortDetails) element;
+			if (element instanceof PortDetails pd) {
 				final IPortSlot slot = pd.getOptions().getPortSlot();
 
 				// Special case for FOB/DES

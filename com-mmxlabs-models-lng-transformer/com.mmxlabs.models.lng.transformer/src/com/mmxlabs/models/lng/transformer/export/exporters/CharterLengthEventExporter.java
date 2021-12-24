@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.FuelExportHelper;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
+import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
@@ -32,8 +33,7 @@ public class CharterLengthEventExporter {
 	private ModelEntityMap modelEntityMap;
 
 	public void update(CharterLengthEvent event, final VoyageDetails voyageDetails, VolumeAllocatedSequence volumeAllocatedSequence, int currentTime) {
-		@NonNull
-		VoyageOptions options = voyageDetails.getOptions();
+		final @NonNull VoyageOptions options = voyageDetails.getOptions();
 		Port ePort = modelEntityMap.getModelObject(options.getToPortSlot().getPort(), Port.class);
 
 		// TODO this is a bit of a kludge; the ANYWHERE port does not
@@ -52,6 +52,8 @@ public class CharterLengthEventExporter {
 		event.setLaden(VesselState.Laden.equals(options.getVesselState()));
 
 		event.getFuels().addAll(exportFuelData(voyageDetails));
+		
+		event.setContingencyHours(voyageDetails.getOptions().getExtraIdleTime(ExplicitIdleTime.CONTINGENCY));
 	}
 
 	private List<FuelQuantity> exportFuelData(VoyageDetails details) {

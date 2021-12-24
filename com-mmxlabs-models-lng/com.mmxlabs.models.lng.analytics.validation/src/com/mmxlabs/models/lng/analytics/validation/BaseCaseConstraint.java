@@ -18,6 +18,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.SellOption;
@@ -102,6 +103,9 @@ public class BaseCaseConstraint extends AbstractModelMultiConstraint {
 				if (optioniseTargetsFound == 0) {
 					final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Sandbox|Base case - optionise mode needs a target"));
 					deco.addEObjectAndFeature(baseCase, AnalyticsPackage.Literals.BASE_CASE__BASE_CASE);
+					for (BaseCaseRow row : baseCase.getBaseCase()) {
+						deco.addEObjectAndFeature(row, AnalyticsPackage.Literals.BASE_CASE_ROW__OPTIONISE);
+					}
 					statuses.add(deco);
 				}
 				if (optioniseTargetsFound > 3) {

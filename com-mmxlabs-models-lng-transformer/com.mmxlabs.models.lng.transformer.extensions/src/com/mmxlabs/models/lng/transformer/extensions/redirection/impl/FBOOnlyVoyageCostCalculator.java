@@ -82,9 +82,6 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 		portTimesRecord.setSlotDuration(notionalLoadSlot, loadDuration);
 		portTimesRecord.setSlotDuration(notionalDischargeSlot, dischargeDuration);
 
-		portTimesRecord.setSlotExtraIdleTime(notionalLoadSlot, 0);
-		portTimesRecord.setSlotExtraIdleTime(notionalDischargeSlot, 0);
-
 		// Calculate new voyage requirements
 		{
 			final long ladenRouteCosts = routeCostProvider.getRouteCost(route, loadPort, dischargePort, vessel, loadTime + loadDuration, CostType.Laden);
@@ -150,9 +147,6 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 		portTimesRecord.setSlotDuration(notionalLoadSlot, loadDuration);
 		portTimesRecord.setSlotDuration(notionalDischargeSlot, dischargeDuration);
-
-		portTimesRecord.setSlotExtraIdleTime(notionalLoadSlot, 0);
-		portTimesRecord.setSlotExtraIdleTime(notionalDischargeSlot, 0);
 
 		// Calculate new voyage requirements
 		{

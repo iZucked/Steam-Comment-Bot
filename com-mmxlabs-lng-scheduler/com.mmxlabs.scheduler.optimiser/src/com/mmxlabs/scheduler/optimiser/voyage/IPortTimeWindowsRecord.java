@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
@@ -14,7 +14,8 @@ import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 /**
- * A similar class to {@link IPortTimesRecord}, created before arrival times have been scheduled. TODO: Replace {@link IPortTimesRecord} with this
+ * A similar class to {@link IPortTimesRecord}, created before arrival times
+ * have been scheduled. TODO: Replace {@link IPortTimesRecord} with this
  * 
  * @author achurchill
  *
@@ -39,9 +40,11 @@ public interface IPortTimeWindowsRecord {
 
 	void setSlotDuration(IPortSlot slot, int duration);
 
-	int getSlotExtraIdleTime(IPortSlot slot);
+	int getSlotExtraIdleTime(IPortSlot slot, ExplicitIdleTime type);
+	
+	int getSlotTotalExtraIdleTime(IPortSlot slot);
 
-	void setSlotExtraIdleTime(IPortSlot slot, int extraIdleTime);
+	void setSlotExtraIdleTime(IPortSlot slot, ExplicitIdleTime type, int extraIdleTime);
 
 	/**
 	 * Should be expected to do equivalent of "ptr.getSlotTime(ptr.getFirstSlot())"
@@ -67,7 +70,7 @@ public interface IPortTimeWindowsRecord {
 
 	int getIndex(IPortSlot slot);
 
-	AvailableRouteChoices getSlotNextVoyageOptions(IPortSlot slot);
+	@NonNull AvailableRouteChoices getSlotNextVoyageOptions(IPortSlot slot);
 
 	void setSlotNextVoyageOptions(IPortSlot slot, AvailableRouteChoices nextVoyageRoute);
 

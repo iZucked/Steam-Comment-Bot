@@ -73,6 +73,7 @@ public class CharterLengthEventComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_durationEditor(detailComposite, topClass);
 		add_ladenEditor(detailComposite, topClass);
+		add_contingencyHoursEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the duration feature on CharterLengthEvent
@@ -90,5 +91,14 @@ public class CharterLengthEventComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_ladenEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CHARTER_LENGTH_EVENT__LADEN));
+	}
+
+	/**
+	 * Create the editor for the contingencyHours feature on CharterLengthEvent
+	 *
+	 * @generated
+	 */
+	protected void add_contingencyHoursEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS));
 	}
 }

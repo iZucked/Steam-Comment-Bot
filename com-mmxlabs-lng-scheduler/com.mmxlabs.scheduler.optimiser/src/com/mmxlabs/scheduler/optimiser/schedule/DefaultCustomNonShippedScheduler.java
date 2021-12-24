@@ -116,8 +116,8 @@ public class DefaultCustomNonShippedScheduler implements ICustomNonShippedSchedu
 					portTimesRecord.setSlotDuration(buyOption, actualsDataProvider.getVisitDuration(buyOption));
 					portTimesRecord.setSlotDuration(sellOption, actualsDataProvider.getVisitDuration(sellOption));
 
-					portTimesRecord.setSlotExtraIdleTime(buyOption, 0);
-					portTimesRecord.setSlotExtraIdleTime(sellOption, 0);
+//					portTimesRecord.setSlotExtraIdleTime(buyOption, 0);
+//					portTimesRecord.setSlotExtraIdleTime(sellOption, 0);
 				} else {
 					// Adjust for notional speed
 					assert nominatedVessel != null;
@@ -145,8 +145,8 @@ public class DefaultCustomNonShippedScheduler implements ICustomNonShippedSchedu
 					portTimesRecord.setSlotDuration(buyOption, durationProvider.getElementDuration(portSlotProvider.getElement(buyOption), resource));
 					portTimesRecord.setSlotDuration(sellOption, durationProvider.getElementDuration(portSlotProvider.getElement(sellOption), resource));
 
-					portTimesRecord.setSlotExtraIdleTime(buyOption, 0);
-					portTimesRecord.setSlotExtraIdleTime(sellOption, 0);
+//					portTimesRecord.setSlotExtraIdleTime(buyOption, 0);
+//					portTimesRecord.setSlotExtraIdleTime(sellOption, 0);
 				}
 			}
 		}

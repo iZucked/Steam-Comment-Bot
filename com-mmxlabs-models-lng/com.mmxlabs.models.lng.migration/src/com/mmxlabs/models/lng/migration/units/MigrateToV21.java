@@ -41,25 +41,9 @@ public class MigrateToV21 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected MetamodelLoader getSourceMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (sourceLoader == null) {
-			sourceLoader = MetamodelVersionsUtil.createV20Loader(extraPackages);
-		}
-		return sourceLoader;
-	}
-
-	@Override
-	protected MetamodelLoader getDestinationMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (destinationLoader == null) {
-			destinationLoader = MetamodelVersionsUtil.createV21Loader(extraPackages);
-		}
-		return destinationLoader;
-	}
-
-	@Override
 	protected void doMigration(final MigrationModelRecord modelRecord) {
 
-		final MetamodelLoader modelLoader = getDestinationMetamodelLoader(null);
+		final MetamodelLoader modelLoader = modelRecord.getMetamodelLoader();
 		EObjectWrapper model = modelRecord.getModelRoot();
 
 		modifyEquivalenceFactor(modelLoader, model);
@@ -82,7 +66,8 @@ public class MigrateToV21 extends AbstractMigrationUnit {
 
 		final EClass class_CooldownPrice = MetamodelUtils.getEClass(package_PricingModel, "CooldownPrice");
 		final EClass class_PortsExpressionMap = MetamodelUtils.getEClass(package_PricingModel, "PortsExpressionMap");
-		// final EClass class_CooldownPrice = MetamodelUtils.getEClass(package_PricingModel, "CooldownPrice");
+		// final EClass class_CooldownPrice =
+		// MetamodelUtils.getEClass(package_PricingModel, "CooldownPrice");
 
 		final EReference reference_PricingModel_cooldownPrices = MetamodelUtils.getReference(class_PricingModel, "cooldownPrices");
 

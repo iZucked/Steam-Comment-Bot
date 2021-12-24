@@ -6318,13 +6318,22 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_EVENT_SPECIFICATION__VESSEL_EVENT = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Arrival Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_SPECIFICATION__ARRIVAL_DATE = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Vessel Event Specification</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_SPECIFICATION_FEATURE_COUNT = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 1;
+	int VESSEL_EVENT_SPECIFICATION_FEATURE_COUNT = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Vessel Event Specification</em>' class.
@@ -6346,13 +6355,31 @@ public interface CargoPackage extends EPackage {
 	int VOYAGE_SPECIFICATION = 26;
 
 	/**
+	 * The feature id for the '<em><b>Route Option</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOYAGE_SPECIFICATION__ROUTE_OPTION = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Fuel Choice</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOYAGE_SPECIFICATION__FUEL_CHOICE = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Voyage Specification</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VOYAGE_SPECIFICATION_FEATURE_COUNT = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 0;
+	int VOYAGE_SPECIFICATION_FEATURE_COUNT = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Voyage Specification</em>' class.
@@ -6383,13 +6410,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT_SPECIFICATION__SLOT = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Arrival Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_SPECIFICATION__ARRIVAL_DATE = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Slot Specification</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_SPECIFICATION_FEATURE_COUNT = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 1;
+	int SLOT_SPECIFICATION_FEATURE_COUNT = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Slot Specification</em>' class.
@@ -7507,6 +7543,16 @@ public interface CargoPackage extends EPackage {
 	int PAPER_PRICING_TYPE = 41;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.FuelChoice <em>Fuel Choice</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.FuelChoice
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getFuelChoice()
+	 * @generated
+	 */
+	int FUEL_CHOICE = 42;
+
+	/**
 	 * The meta object id for the '<em>Scheduling Time Window</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7514,7 +7560,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSchedulingTimeWindow()
 	 * @generated
 	 */
-	int SCHEDULING_TIME_WINDOW = 42;
+	int SCHEDULING_TIME_WINDOW = 43;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.Cargo <em>Cargo</em>}'.
@@ -9908,6 +9954,17 @@ public interface CargoPackage extends EPackage {
 	EReference getVesselEventSpecification_VesselEvent();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselEventSpecification#getArrivalDate <em>Arrival Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Arrival Date</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselEventSpecification#getArrivalDate()
+	 * @see #getVesselEventSpecification()
+	 * @generated
+	 */
+	EAttribute getVesselEventSpecification_ArrivalDate();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.VoyageSpecification <em>Voyage Specification</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9916,6 +9973,28 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getVoyageSpecification();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VoyageSpecification#getRouteOption <em>Route Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Route Option</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VoyageSpecification#getRouteOption()
+	 * @see #getVoyageSpecification()
+	 * @generated
+	 */
+	EAttribute getVoyageSpecification_RouteOption();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VoyageSpecification#getFuelChoice <em>Fuel Choice</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Fuel Choice</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VoyageSpecification#getFuelChoice()
+	 * @see #getVoyageSpecification()
+	 * @generated
+	 */
+	EAttribute getVoyageSpecification_FuelChoice();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.SlotSpecification <em>Slot Specification</em>}'.
@@ -9937,6 +10016,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSlotSpecification_Slot();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.SlotSpecification#getArrivalDate <em>Arrival Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Arrival Date</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.SlotSpecification#getArrivalDate()
+	 * @see #getSlotSpecification()
+	 * @generated
+	 */
+	EAttribute getSlotSpecification_ArrivalDate();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CharterInMarketOverride <em>Charter In Market Override</em>}'.
@@ -10469,6 +10559,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getPaperPricingType();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.cargo.FuelChoice <em>Fuel Choice</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Fuel Choice</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.FuelChoice
+	 * @generated
+	 */
+	EEnum getFuelChoice();
 
 	/**
 	 * Returns the meta object for data type '{@link com.mmxlabs.models.lng.cargo.SchedulingTimeWindow <em>Scheduling Time Window</em>}'.
@@ -12340,6 +12440,14 @@ public interface CargoPackage extends EPackage {
 		EReference VESSEL_EVENT_SPECIFICATION__VESSEL_EVENT = eINSTANCE.getVesselEventSpecification_VesselEvent();
 
 		/**
+		 * The meta object literal for the '<em><b>Arrival Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_EVENT_SPECIFICATION__ARRIVAL_DATE = eINSTANCE.getVesselEventSpecification_ArrivalDate();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.VoyageSpecificationImpl <em>Voyage Specification</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -12348,6 +12456,22 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EClass VOYAGE_SPECIFICATION = eINSTANCE.getVoyageSpecification();
+
+		/**
+		 * The meta object literal for the '<em><b>Route Option</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VOYAGE_SPECIFICATION__ROUTE_OPTION = eINSTANCE.getVoyageSpecification_RouteOption();
+
+		/**
+		 * The meta object literal for the '<em><b>Fuel Choice</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VOYAGE_SPECIFICATION__FUEL_CHOICE = eINSTANCE.getVoyageSpecification_FuelChoice();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.SlotSpecificationImpl <em>Slot Specification</em>}' class.
@@ -12366,6 +12490,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SLOT_SPECIFICATION__SLOT = eINSTANCE.getSlotSpecification_Slot();
+
+		/**
+		 * The meta object literal for the '<em><b>Arrival Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT_SPECIFICATION__ARRIVAL_DATE = eINSTANCE.getSlotSpecification_ArrivalDate();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CharterInMarketOverrideImpl <em>Charter In Market Override</em>}' class.
@@ -12794,6 +12926,16 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum PAPER_PRICING_TYPE = eINSTANCE.getPaperPricingType();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.FuelChoice <em>Fuel Choice</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.FuelChoice
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getFuelChoice()
+		 * @generated
+		 */
+		EEnum FUEL_CHOICE = eINSTANCE.getFuelChoice();
 
 		/**
 		 * The meta object literal for the '<em>Scheduling Time Window</em>' data type.

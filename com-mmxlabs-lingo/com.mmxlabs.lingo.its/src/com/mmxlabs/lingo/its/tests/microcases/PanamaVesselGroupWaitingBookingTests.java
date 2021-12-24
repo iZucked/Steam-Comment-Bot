@@ -54,8 +54,6 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
-import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsConstraintChecker;
-import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
@@ -85,20 +83,7 @@ public class PanamaVesselGroupWaitingBookingTests extends AbstractMicroTestCase 
 	private static final int DEFAULT_WAITING_DAYS = 10;
 	private static final int VG1_WAITING_DAYS = 5;
 	private static final int VG2_WAITING_DAYS = 8;
-
-	
-	@Test
-	@Tag(TestCategories.MICRO_TEST)	
-	public void pnlBasedTWS_panamaVesselGroupTest_Constraint() {
-		runPanamaVesselGroupConstraintTest(false);
-	}
-
-	@Test
-	@Tag(TestCategories.MICRO_TEST)
-	public void pricedBasedTWS_panamaVesselGroupTest_Constraint() {
-		runPanamaVesselGroupConstraintTest(true);
-	}
-	
+ 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void priceBasedTWSVesselGroupWaitingDaysTest() {
@@ -308,43 +293,6 @@ public class PanamaVesselGroupWaitingBookingTests extends AbstractMicroTestCase 
 				.withCharterRate("100000") //Make expensive to make schedule longer.
 				.build();
 		return vesselAvailability;
-	}
-	
-	private void runPanamaVesselGroupConstraintTest(boolean priceBasedTimeWindowScheduler) {
-
-		final VesselAvailability vesselAvailability = getVesselAvailability(InternalDataConstants.REF_VESSEL_STEAM_145);
-
-		final Cargo cargo = createFobDesCargo(1, vesselAvailability);
-
-		evaluateWithLSOTest(scenarioRunner -> {
-
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-			LNGDataTransformer dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
-			final Injector injector = MicroTestUtils.createEvaluationInjector(dataTransformer);
-
-			try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
-				scope.enter();
-
-				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
-				scheduler.setUseCanalBasedWindowTrimming(true);
-				scheduler.setUsePriceBasedWindowTrimming(priceBasedTimeWindowScheduler);
-				
-				final PanamaSlotsConstraintChecker checker = new PanamaSlotsConstraintChecker(PanamaSlotsConstraintCheckerFactory.NAME);//
-				injector.injectMembers(checker);
-
-				// Set blank sequences as initial state
-				checker.sequencesAccepted(SequenceHelper.createSequences(dataTransformer.getInjector()), SequenceHelper.createSequences(dataTransformer.getInjector()), new ArrayList<>());
-
-				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
-				@NonNull
-				final IModifiableSequences manipulatedSequences = sequencesManipulator
-						.createManipulatedSequences(SequenceHelper.createSequences(dataTransformer.getInjector(), vesselAvailability, cargo));
-				
-				// At the moment, we should expect this to always pass, since we introduce waiting time for unbooked Panama slots and this constraint is currently disabled.
-				checker.checkConstraints(SequenceHelper.createSequences(dataTransformer.getInjector()), null, new ArrayList<>());
-				assertTrue(checker.checkConstraints(manipulatedSequences, null, new ArrayList<>()));
-			}
-		});
 	}
 
 	/**

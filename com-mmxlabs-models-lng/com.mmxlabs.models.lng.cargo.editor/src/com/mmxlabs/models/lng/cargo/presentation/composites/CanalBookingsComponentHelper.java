@@ -6,6 +6,22 @@
  */
 package com.mmxlabs.models.lng.cargo.presentation.composites;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
+
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.DeleteCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
+
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -13,8 +29,6 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord;
 import com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters;
 import com.mmxlabs.models.lng.port.CanalEntry;
-import com.mmxlabs.models.lng.port.PortModel;
-import com.mmxlabs.models.lng.port.ui.editorpart.MultiplePortReferenceManipulator;
 import com.mmxlabs.models.lng.port.ui.editors.CanalEntryAttributeManipulator;
 import com.mmxlabs.models.lng.port.util.PortModelLabeller;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -27,28 +41,11 @@ import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.dates.MonthAttributeManipulator;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.tabular.TabularDataInlineEditor;
-import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
-import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.StringAttributeManipulator;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Function;
-
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.RemoveCommand;
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
 
 /**
  * A component helper for CanalBookings instances
@@ -127,11 +124,10 @@ public class CanalBookingsComponentHelper extends BaseComponentHelper {
 		});
 		
 		b.withAction("Delete", (input, ch, sel) -> {
-			if (sel instanceof IStructuredSelection) {
-				IStructuredSelection ss = (IStructuredSelection) sel;
+			if (sel instanceof IStructuredSelection ss) {
 				if (!ss.isEmpty()) {
 					CanalBookings canalBookings = ScenarioModelUtil.getCargoModel((LNGScenarioModel) ch.getModelReference().getInstance()).getCanalBookings();
-					Command c = RemoveCommand.create(ch.getEditingDomain(), canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__CANAL_BOOKING_SLOTS, ss.toList());
+					Command c = DeleteCommand.create(ch.getEditingDomain(), ss.toList());
 					ch.handleCommand(c, canalBookings, CargoPackage.Literals.CANAL_BOOKINGS__CANAL_BOOKING_SLOTS);
 				}
 			}

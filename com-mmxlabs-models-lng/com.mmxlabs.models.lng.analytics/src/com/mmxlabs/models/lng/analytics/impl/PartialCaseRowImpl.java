@@ -9,14 +9,21 @@ package com.mmxlabs.models.lng.analytics.impl;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.PartialCaseRowOptions;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 
 import com.mmxlabs.models.lng.analytics.VesselEventOption;
+import com.mmxlabs.models.lng.port.RouteOption;
 import java.util.Collection;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 /**
@@ -31,6 +38,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowImpl#getSellOptions <em>Sell Options</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowImpl#getVesselEventOptions <em>Vessel Event Options</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowImpl#getShipping <em>Shipping</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowImpl#getOptions <em>Options</em>}</li>
  * </ul>
  *
  * @generated
@@ -75,6 +83,16 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 	 * @ordered
 	 */
 	protected EList<ShippingOption> shipping;
+
+	/**
+	 * The cached value of the '{@link #getOptions() <em>Options</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOptions()
+	 * @generated
+	 * @ordered
+	 */
+	protected PartialCaseRowOptions options;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -153,6 +171,65 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 	 * @generated
 	 */
 	@Override
+	public PartialCaseRowOptions getOptions() {
+		return options;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetOptions(PartialCaseRowOptions newOptions, NotificationChain msgs) {
+		PartialCaseRowOptions oldOptions = options;
+		options = newOptions;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AnalyticsPackage.PARTIAL_CASE_ROW__OPTIONS, oldOptions, newOptions);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setOptions(PartialCaseRowOptions newOptions) {
+		if (newOptions != options) {
+			NotificationChain msgs = null;
+			if (options != null)
+				msgs = ((InternalEObject)options).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.PARTIAL_CASE_ROW__OPTIONS, null, msgs);
+			if (newOptions != null)
+				msgs = ((InternalEObject)newOptions).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AnalyticsPackage.PARTIAL_CASE_ROW__OPTIONS, null, msgs);
+			msgs = basicSetOptions(newOptions, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.PARTIAL_CASE_ROW__OPTIONS, newOptions, newOptions));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case AnalyticsPackage.PARTIAL_CASE_ROW__OPTIONS:
+				return basicSetOptions(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case AnalyticsPackage.PARTIAL_CASE_ROW__BUY_OPTIONS:
@@ -163,6 +240,8 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 				return getVesselEventOptions();
 			case AnalyticsPackage.PARTIAL_CASE_ROW__SHIPPING:
 				return getShipping();
+			case AnalyticsPackage.PARTIAL_CASE_ROW__OPTIONS:
+				return getOptions();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -192,6 +271,9 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 				getShipping().clear();
 				getShipping().addAll((Collection<? extends ShippingOption>)newValue);
 				return;
+			case AnalyticsPackage.PARTIAL_CASE_ROW__OPTIONS:
+				setOptions((PartialCaseRowOptions)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -216,6 +298,9 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 			case AnalyticsPackage.PARTIAL_CASE_ROW__SHIPPING:
 				getShipping().clear();
 				return;
+			case AnalyticsPackage.PARTIAL_CASE_ROW__OPTIONS:
+				setOptions((PartialCaseRowOptions)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -236,6 +321,8 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 				return vesselEventOptions != null && !vesselEventOptions.isEmpty();
 			case AnalyticsPackage.PARTIAL_CASE_ROW__SHIPPING:
 				return shipping != null && !shipping.isEmpty();
+			case AnalyticsPackage.PARTIAL_CASE_ROW__OPTIONS:
+				return options != null;
 		}
 		return super.eIsSet(featureID);
 	}

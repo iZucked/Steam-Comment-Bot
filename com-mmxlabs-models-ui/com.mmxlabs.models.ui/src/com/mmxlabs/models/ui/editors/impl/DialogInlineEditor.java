@@ -19,6 +19,10 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
+
 public abstract class DialogInlineEditor extends UnsettableInlineEditor {
 	public DialogInlineEditor(final EStructuralFeature feature) {
 		super(feature);
@@ -41,7 +45,7 @@ public abstract class DialogInlineEditor extends UnsettableInlineEditor {
 		this.description = toolkit.createLabel(contents, "", SWT.WRAP);
 		description.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
 
-		final ImageDescriptor d = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui", "icons/edit.png");
+		final ImageDescriptor d = CommonImages.getImageDescriptor(IconPaths.Edit, IconMode.Enabled);
 		this.button = toolkit.createButton(contents, "", SWT.NONE);
 		final Image img = d.createImage();
 		button.setImage(img);

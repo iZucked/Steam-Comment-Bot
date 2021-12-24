@@ -14,6 +14,7 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.ISequencesAttributesProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -37,11 +38,11 @@ public class PriceBasedWindowTrimmer {
 
 		for (int seqIndex = 0; seqIndex < fullSequences.size(); seqIndex++) {
 			final IResource resource = fullSequences.getResources().get(seqIndex);
-			trimWindows(resource, trimmedWindows.get(resource), travelTimeDataMap.get(resource));
+			trimWindows(resource, trimmedWindows.get(resource), travelTimeDataMap.get(resource), fullSequences.getProviders());
 		}
 	}
 
-	public void trimWindows(IResource resource, List<IPortTimeWindowsRecord> trimmedWindows, final MinTravelTimeData travelTimeData) {
+	public void trimWindows(IResource resource, List<IPortTimeWindowsRecord> trimmedWindows, final MinTravelTimeData travelTimeData, ISequencesAttributesProvider sequencesAttributesProvider) {
 
 		final int vesselStartTime = 0;// arrivalTimes[seqIndex][0];
 		ITimeWindow lastFeasibleWindow = new TimeWindow(0, 1);
@@ -54,7 +55,7 @@ public class PriceBasedWindowTrimmer {
 				setFeasibleTimeWindowsUsingPrevious(portTimeWindowsRecord, travelTimeData, lastFeasibleWindow);
 			}
 
-			timeWindowsTrimming.processCargo(resource, portTimeWindowsRecord, vesselStartTime, portTimeWindowsRecordStart, travelTimeData);
+			timeWindowsTrimming.processCargo(resource, portTimeWindowsRecord, vesselStartTime, portTimeWindowsRecordStart, travelTimeData, sequencesAttributesProvider);
 
 			@NonNull
 			final IPortSlot lastSlot = portTimeWindowsRecord.getSlots().get(portTimeWindowsRecord.getSlots().size() - 1);
@@ -82,7 +83,8 @@ public class PriceBasedWindowTrimmer {
 	}
 
 	/**
-	 * The previous cargo will have changed the constraints on the time windows, so we must find the new feasible time windows before choosing an arrival time
+	 * The previous cargo will have changed the constraints on the time windows, so
+	 * we must find the new feasible time windows before choosing an arrival time
 	 * 
 	 * @param portTimeWindowsRecord
 	 * @param seqIndex

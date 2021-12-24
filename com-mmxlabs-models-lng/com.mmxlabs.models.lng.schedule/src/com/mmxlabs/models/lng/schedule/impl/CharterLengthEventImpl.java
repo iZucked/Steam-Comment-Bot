@@ -53,6 +53,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CharterLengthEventImpl#getFuels <em>Fuels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CharterLengthEventImpl#getDuration <em>Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CharterLengthEventImpl#isLaden <em>Laden</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CharterLengthEventImpl#getContingencyHours <em>Contingency Hours</em>}</li>
  * </ul>
  *
  * @generated
@@ -137,6 +138,26 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 	 * @ordered
 	 */
 	protected boolean laden = LADEN_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getContingencyHours() <em>Contingency Hours</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getContingencyHours()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int CONTINGENCY_HOURS_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getContingencyHours() <em>Contingency Hours</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getContingencyHours()
+	 * @generated
+	 * @ordered
+	 */
+	protected int contingencyHours = CONTINGENCY_HOURS_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -293,6 +314,29 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 	 * @generated
 	 */
 	@Override
+	public int getContingencyHours() {
+		return contingencyHours;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setContingencyHours(int newContingencyHours) {
+		int oldContingencyHours = contingencyHours;
+		contingencyHours = newContingencyHours;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS, oldContingencyHours, contingencyHours));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public double getFuelCost() {
 		int sum = 0;
 		for (final FuelQuantity fq : getFuels()) {
@@ -382,6 +426,8 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 				return getDuration();
 			case SchedulePackage.CHARTER_LENGTH_EVENT__LADEN:
 				return isLaden();
+			case SchedulePackage.CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS:
+				return getContingencyHours();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -416,6 +462,9 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 			case SchedulePackage.CHARTER_LENGTH_EVENT__LADEN:
 				setLaden((Boolean)newValue);
 				return;
+			case SchedulePackage.CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS:
+				setContingencyHours((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -446,6 +495,9 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 			case SchedulePackage.CHARTER_LENGTH_EVENT__LADEN:
 				setLaden(LADEN_EDEFAULT);
 				return;
+			case SchedulePackage.CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS:
+				setContingencyHours(CONTINGENCY_HOURS_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -470,6 +522,8 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 				return duration != DURATION_EDEFAULT;
 			case SchedulePackage.CHARTER_LENGTH_EVENT__LADEN:
 				return laden != LADEN_EDEFAULT;
+			case SchedulePackage.CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS:
+				return contingencyHours != CONTINGENCY_HOURS_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -586,6 +640,8 @@ public class CharterLengthEventImpl extends PortVisitImpl implements CharterLeng
 		result.append(duration);
 		result.append(", laden: ");
 		result.append(laden);
+		result.append(", contingencyHours: ");
+		result.append(contingencyHours);
 		result.append(')');
 		return result.toString();
 	}

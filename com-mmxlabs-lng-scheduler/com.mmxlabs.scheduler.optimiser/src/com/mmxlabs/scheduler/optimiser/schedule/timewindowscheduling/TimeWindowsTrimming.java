@@ -19,6 +19,7 @@ import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequencesAttributesProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
@@ -36,18 +37,18 @@ import com.mmxlabs.scheduler.optimiser.evaluation.IVoyagePlanEvaluator;
 import com.mmxlabs.scheduler.optimiser.evaluation.PreviousHeelRecord;
 import com.mmxlabs.scheduler.optimiser.evaluation.ScheduledVoyagePlanResult;
 import com.mmxlabs.scheduler.optimiser.moves.util.MetricType;
-import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider.RouteOptionDirection;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.PanamaBookingHelper;
 import com.mmxlabs.scheduler.optimiser.scheduling.MinTravelTimeData;
+import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.util.SchedulerCalculationUtils;
 
 /**
- * Methods to trim time windows based on purchase and sales prices and canal costs
+ * Methods to trim time windows based on purchase and sales prices and canal
+ * costs
  * 
  * @author achurchill
  *
@@ -85,7 +86,7 @@ public class TimeWindowsTrimming {
 	 * @return
 	 */
 	public @NonNull IPortTimeWindowsRecord processCargo(final @NonNull IResource resource, final @NonNull IPortTimeWindowsRecord portTimeWindowRecord, final int vesselStartTime,
-			final @NonNull IPortTimeWindowsRecord portTimeWindowRecordStart, MinTravelTimeData minTravelTimeData) {
+			final @NonNull IPortTimeWindowsRecord portTimeWindowRecordStart, MinTravelTimeData minTravelTimeData, ISequencesAttributesProvider sequencesAttributesProvider) {
 		boolean seenLoad = false;
 		boolean seenDischarge = false;
 		boolean complexCargo = false;
@@ -142,7 +143,7 @@ public class TimeWindowsTrimming {
 			final IDischargeOption discharge = slots.getSecond();
 			final IEndPortSlot end = portTimeWindowRecord.getReturnSlot() instanceof IEndPortSlot ? (IEndPortSlot) portTimeWindowRecord.getReturnSlot() : null;
 			// process and set time windows
-			processTimeWindowsForCargo(resource, portTimeWindowRecord, vesselStartTime, load, discharge, end, portTimeWindowRecordStart, minTravelTimeData);
+			processTimeWindowsForCargo(resource, portTimeWindowRecord, vesselStartTime, load, discharge, end, portTimeWindowRecordStart, minTravelTimeData, sequencesAttributesProvider);
 		}
 		return portTimeWindowRecord;
 	}
@@ -162,7 +163,8 @@ public class TimeWindowsTrimming {
 	}
 
 	/**
-	 * Process time windows for slots in a cargo, with different rules for different pricing date combinations.
+	 * Process time windows for slots in a cargo, with different rules for different
+	 * pricing date combinations.
 	 * 
 	 * @param portTimeWindowRecord
 	 * @param vesselStartTime
@@ -171,7 +173,8 @@ public class TimeWindowsTrimming {
 	 * @param end
 	 */
 	private void processTimeWindowsForCargo(final @NonNull IResource resource, final @NonNull IPortTimeWindowsRecord portTimeWindowRecord, final int vesselStartTime, final @Nullable ILoadOption load,
-			final @Nullable IDischargeOption discharge, final IEndPortSlot end, final @NonNull IPortTimeWindowsRecord portTimeWindowRecordStart, MinTravelTimeData minTravelTimeData) {
+			final @Nullable IDischargeOption discharge, final IEndPortSlot end, final @NonNull IPortTimeWindowsRecord portTimeWindowRecordStart, MinTravelTimeData minTravelTimeData,
+			ISequencesAttributesProvider sequencesAttributesProvider) {
 
 		// Always off for now
 		boolean detailedEndSchedulingMode = false;
@@ -211,7 +214,7 @@ public class TimeWindowsTrimming {
 			long charterRateForDecision = priceIntervalProviderHelper.getCharterRateForTimePickingDecision(portTimeWindowRecord, portTimeWindowRecordStart, resource);
 
 			if (detailedEndSchedulingMode && end != null) {
-				trimCargoAndLastReturnWithRouteChoice(resource, portTimeWindowRecord, load, discharge, end, portTimeWindowRecordStart, minTravelTimeData);
+				trimCargoAndLastReturnWithRouteChoice(resource, portTimeWindowRecord, load, discharge, end, portTimeWindowRecordStart, minTravelTimeData, sequencesAttributesProvider);
 			} else if ((priceIntervalProviderHelper.isLoadPricingEventTime(load, portTimeWindowRecord)
 					|| priceIntervalProviderHelper.isPricingDateSpecified(load, PriceIntervalProviderHelper.getPriceEventFromSlotOrContract(load, portTimeWindowRecord)))
 					&& (priceIntervalProviderHelper.isDischargePricingEventTime(discharge, portTimeWindowRecord)
@@ -273,8 +276,7 @@ public class TimeWindowsTrimming {
 	 * @param loadIntervals
 	 * @param dischargeIntervals
 	 * @param boiloffPricingIntervals
-	 * @param charterRateForTimePickingDecision
-	 *            TODO
+	 * @param charterRateForTimePickingDecision TODO
 	 * @param switched
 	 */
 	private void trimLoadAndDischargeWindowsWithRouteChoice(final @NonNull IResource resource, final @NonNull IPortTimeWindowsRecord portTimeWindowRecord, final @NonNull ILoadOption load,
@@ -375,7 +377,8 @@ public class TimeWindowsTrimming {
 	}
 
 	/**
-	 * Loops through the different pairs of purchase and sales pricing buckets and finds the option with the best margin
+	 * Loops through the different pairs of purchase and sales pricing buckets and
+	 * finds the option with the best margin
 	 * 
 	 * @param vessel
 	 * @param load
@@ -431,7 +434,9 @@ public class TimeWindowsTrimming {
 	}
 
 	/**
-	 * Loops through the different pairs of purchase and sales pricing buckets and finds the option with the best margin with the purchase and sales intervals inverted
+	 * Loops through the different pairs of purchase and sales pricing buckets and
+	 * finds the option with the best margin with the purchase and sales intervals
+	 * inverted
 	 * 
 	 * @param vessel
 	 * @param load
@@ -616,7 +621,8 @@ public class TimeWindowsTrimming {
 	}
 
 	/**
-	 * Get price intervals for the end element. Bounded at the start either by window or the end of the previous interval
+	 * Get price intervals for the end element. Bounded at the start either by
+	 * window or the end of the previous interval
 	 * 
 	 * @param portTimeWindowRecord
 	 * @param discharge
@@ -650,7 +656,8 @@ public class TimeWindowsTrimming {
 	}
 
 	/**
-	 * Makes sure the end of a time window is in the proper format. Takes as input the inclusive end and outputs the correct format.
+	 * Makes sure the end of a time window is in the proper format. Takes as input
+	 * the inclusive end and outputs the correct format.
 	 * 
 	 * @param end
 	 * @return
@@ -662,7 +669,7 @@ public class TimeWindowsTrimming {
 
 	@NonNullByDefault
 	private void trimCargoAndLastReturnWithRouteChoice(final IResource resource, final IPortTimeWindowsRecord portTimeWindowsRecord, ILoadOption load, final IDischargeOption discharge,
-			final IEndPortSlot endSlot, final IPortTimeWindowsRecord portTimeWindowsRecordStart, MinTravelTimeData travelTimeData) {
+			final IEndPortSlot endSlot, final IPortTimeWindowsRecord portTimeWindowsRecordStart, MinTravelTimeData travelTimeData, ISequencesAttributesProvider sequencesAttributesProvider) {
 
 		final IVesselAvailability vesselAvailability = schedulerCalculationUtils.getVesselAvailabilityFromResource(resource);
 
@@ -746,15 +753,15 @@ public class TimeWindowsTrimming {
 		// updated with arrival times and then cloned for each evaluation
 		final PortTimesRecord portTimesRecord = new PortTimesRecord();
 		for (final IPortSlot slot : portTimeWindowsRecord.getSlots()) {
+			assert slot != null;
 			portTimesRecord.setRouteOptionBooking(slot, portTimeWindowsRecord.getRouteOptionBooking(slot));
 			portTimesRecord.setSlotNextVoyageOptions(slot, portTimeWindowsRecord.getSlotNextVoyageOptions(slot));
 
-			final int visitDuration = portTimeWindowsRecord.getSlotDuration(slot);
-			final int extraIdleTime = portTimeWindowsRecord.getSlotExtraIdleTime(slot);
-
 			portTimesRecord.setSlotTime(slot, 0);
-			portTimesRecord.setSlotDuration(slot, visitDuration);
-			portTimesRecord.setSlotExtraIdleTime(slot, extraIdleTime);
+			portTimesRecord.setSlotDuration(slot, portTimeWindowsRecord.getSlotDuration(slot));
+			for (var type : ExplicitIdleTime.values()) {
+				portTimesRecord.setSlotExtraIdleTime(slot, type, portTimeWindowsRecord.getSlotExtraIdleTime(slot, type));
+			}
 		}
 		portTimesRecord.setReturnSlotTime(endSlot, 0);
 
@@ -781,7 +788,7 @@ public class TimeWindowsTrimming {
 					// than needing to manage this here.
 					List<ScheduledVoyagePlanResult> result = voyagePlanEvaluator.evaluateShipped(resource, vesselAvailability, //
 							vesselAvailability.getCharterCostCalculator(), //
-							0, null, previousHeelRecord, portTimesRecord.copy(), true, false, false, null);
+							0, null, previousHeelRecord, portTimesRecord.copy(), true, false, false, sequencesAttributesProvider, null);
 
 					// Is this the best solution found so far?
 					if (bestMetrics == null || MetricType.betterThan(result.get(0).metrics, bestMetrics)) {

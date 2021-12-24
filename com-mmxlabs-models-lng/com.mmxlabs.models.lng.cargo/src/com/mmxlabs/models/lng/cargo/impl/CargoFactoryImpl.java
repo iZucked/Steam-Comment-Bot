@@ -149,6 +149,8 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 				return createInventoryFrequencyFromString(eDataType, initialValue);
 			case CargoPackage.PAPER_PRICING_TYPE:
 				return createPaperPricingTypeFromString(eDataType, initialValue);
+			case CargoPackage.FUEL_CHOICE:
+				return createFuelChoiceFromString(eDataType, initialValue);
 			case CargoPackage.SCHEDULING_TIME_WINDOW:
 				return createSchedulingTimeWindowFromString(eDataType, initialValue);
 			default:
@@ -174,6 +176,8 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 				return convertInventoryFrequencyToString(eDataType, instanceValue);
 			case CargoPackage.PAPER_PRICING_TYPE:
 				return convertPaperPricingTypeToString(eDataType, instanceValue);
+			case CargoPackage.FUEL_CHOICE:
+				return convertFuelChoiceToString(eDataType, instanceValue);
 			case CargoPackage.SCHEDULING_TIME_WINDOW:
 				return convertSchedulingTimeWindowToString(eDataType, instanceValue);
 			default:
@@ -630,6 +634,26 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * @generated
 	 */
 	public String convertPaperPricingTypeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public FuelChoice createFuelChoiceFromString(EDataType eDataType, String initialValue) {
+		FuelChoice result = FuelChoice.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertFuelChoiceToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

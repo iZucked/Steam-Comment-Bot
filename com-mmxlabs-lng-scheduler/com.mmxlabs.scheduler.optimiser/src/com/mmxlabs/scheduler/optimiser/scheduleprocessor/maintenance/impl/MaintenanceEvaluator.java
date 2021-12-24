@@ -32,6 +32,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.maintenance.IMaintenanceEvaluator;
+import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
@@ -77,7 +78,8 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 			return null;
 		}
 		// TODO: sanity checks (see CharterLengthEvaluator for inspiration)
-		assert vp.getVoyagePlanMetrics()[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()] == newVoyagePlans.stream().map(Pair::getFirst).mapToLong(lvp -> lvp.getVoyagePlanMetrics()[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()]).sum();
+		assert vp.getVoyagePlanMetrics()[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()] == newVoyagePlans.stream().map(Pair::getFirst)
+				.mapToLong(lvp -> lvp.getVoyagePlanMetrics()[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()]).sum();
 
 		return newVoyagePlans;
 	}
@@ -113,7 +115,8 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 		final Iterator<List<IDetailsSequenceElement>> sequencesIter = newSequences.iterator();
 
 		List<IDetailsSequenceElement> currentNewSequence = sequencesIter.next();
-		// Breaking currentSequence duplicates each maintenancePortSlot between sequences, have to add 1 to count return port
+		// Breaking currentSequence duplicates each maintenancePortSlot between
+		// sequences, have to add 1 to count return port
 		assert currentSequence.length == newSequences.stream().mapToInt(List::size).sum() - newSequences.size() + 1;
 
 		final List<Pair<VoyagePlan, IPortTimesRecord>> maintenancePlans = new LinkedList<>();
@@ -124,7 +127,8 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 
 		{
 			final PortTimesRecord firstPortTimesRecord = new PortTimesRecord();
-			// Breaking at maintenance events so any VesselEventPortSlot associated with a maintenance event should not be copied across
+			// Breaking at maintenance events so any VesselEventPortSlot associated with a
+			// maintenance event should not be copied across
 			for (int i = 0; i < originalPortTimesRecord.getSlots().size(); ++i) {
 				final IPortSlot portSlot = originalPortTimesRecord.getSlots().get(i);
 				if (portSlot.getPortType() == PortType.Maintenance) {
@@ -132,7 +136,9 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 				}
 				firstPortTimesRecord.setSlotTime(portSlot, originalPortTimesRecord.getSlotTime(portSlot));
 				firstPortTimesRecord.setSlotDuration(portSlot, originalPortTimesRecord.getSlotDuration(portSlot));
-				firstPortTimesRecord.setSlotExtraIdleTime(portSlot, originalPortTimesRecord.getSlotExtraIdleTime(portSlot));
+				for (var type : ExplicitIdleTime.values()) {
+					firstPortTimesRecord.setSlotExtraIdleTime(portSlot, type, originalPortTimesRecord.getSlotExtraIdleTime(portSlot, type));
+				}
 				firstPortTimesRecord.setSlotNextVoyageOptions(portSlot, originalPortTimesRecord.getSlotNextVoyageOptions(portSlot));
 			}
 			firstPortTimesRecord.setReturnSlotTime(maintenancePortSlots[0], originalPortTimesRecord.getSlotTime(maintenancePortSlots[0].getFormerPortSlot()));
@@ -169,8 +175,9 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 			final PortTimesRecord currentPortTimesRecord = new PortTimesRecord();
 			currentPortTimesRecord.setSlotTime(maintenancePortSlots[i], originalPortTimesRecord.getSlotTime(maintenancePortSlots[i].getFormerPortSlot()));
 			currentPortTimesRecord.setSlotDuration(maintenancePortSlots[i], originalPortTimesRecord.getSlotDuration(maintenancePortSlots[i].getFormerPortSlot()));
-			currentPortTimesRecord.setSlotExtraIdleTime(maintenancePortSlots[i], originalPortTimesRecord.getSlotExtraIdleTime(maintenancePortSlots[i].getFormerPortSlot()));
-
+			for (var type : ExplicitIdleTime.values()) {
+				currentPortTimesRecord.setSlotExtraIdleTime(maintenancePortSlots[i], type, originalPortTimesRecord.getSlotExtraIdleTime(maintenancePortSlots[i].getFormerPortSlot(), type));
+			}
 			currentPortTimesRecord.setSlotNextVoyageOptions(maintenancePortSlots[i], originalPortTimesRecord.getSlotNextVoyageOptions(maintenancePortSlots[i].getFormerPortSlot()));
 			currentPortTimesRecord.setReturnSlotTime(maintenancePortSlots[i + 1], originalPortTimesRecord.getSlotTime(maintenancePortSlots[i + 1].getFormerPortSlot()));
 
@@ -198,8 +205,10 @@ public class MaintenanceEvaluator implements IMaintenanceEvaluator {
 			finalPortTimesRecord.setSlotTime(maintenancePortSlots[numMaintenanceEvents - 1], originalPortTimesRecord.getSlotTime(maintenancePortSlots[numMaintenanceEvents - 1].getFormerPortSlot()));
 			finalPortTimesRecord.setSlotDuration(maintenancePortSlots[numMaintenanceEvents - 1],
 					originalPortTimesRecord.getSlotDuration(maintenancePortSlots[numMaintenanceEvents - 1].getFormerPortSlot()));
-			finalPortTimesRecord.setSlotExtraIdleTime(maintenancePortSlots[numMaintenanceEvents - 1],
-					originalPortTimesRecord.getSlotExtraIdleTime(maintenancePortSlots[numMaintenanceEvents - 1].getFormerPortSlot()));
+			for (var type : ExplicitIdleTime.values()) {
+				finalPortTimesRecord.setSlotExtraIdleTime(maintenancePortSlots[numMaintenanceEvents - 1], type,
+						originalPortTimesRecord.getSlotExtraIdleTime(maintenancePortSlots[numMaintenanceEvents - 1].getFormerPortSlot(), type));
+			}
 
 			finalPortTimesRecord.setSlotNextVoyageOptions(maintenancePortSlots[numMaintenanceEvents - 1],
 					originalPortTimesRecord.getSlotNextVoyageOptions(maintenancePortSlots[numMaintenanceEvents - 1].getFormerPortSlot()));

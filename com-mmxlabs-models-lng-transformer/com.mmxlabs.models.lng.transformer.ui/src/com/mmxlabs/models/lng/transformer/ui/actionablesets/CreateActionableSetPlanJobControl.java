@@ -71,9 +71,6 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 
 	private final IScenarioDataProvider originalScenarioDataProvider;
 
-	private static final ImageDescriptor imgOpti = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/elcl16/resume_co.gif");
-	private static final ImageDescriptor imgEval = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/evaluate_schedule.gif");
-
 	private final LNGScenarioRunner scenarioRunner;
 
 	private final EditingDomain originalEditingDomain;

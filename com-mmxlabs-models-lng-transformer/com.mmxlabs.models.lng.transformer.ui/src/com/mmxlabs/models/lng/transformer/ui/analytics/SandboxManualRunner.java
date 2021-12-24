@@ -9,7 +9,9 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -25,12 +27,15 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.BaseCaseRowOptions;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOption;
+import com.mmxlabs.models.lng.analytics.LocalDateTimeHolder;
 import com.mmxlabs.models.lng.analytics.OpenBuy;
 import com.mmxlabs.models.lng.analytics.OpenSell;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.PartialCaseRowOptions;
 import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
@@ -39,8 +44,10 @@ import com.mmxlabs.models.lng.analytics.ui.views.evaluators.BaseCaseToScheduleSp
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.ExistingBaseCaseToScheduleSpecification;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.IMapperClass;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.AnalyticsBuilder;
+import com.mmxlabs.models.lng.cargo.FuelChoice;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGEvaluationTransformerUnit;
@@ -52,6 +59,7 @@ import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
+import com.mmxlabs.optimiser.core.exceptions.InfeasibleSolutionException;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
@@ -96,6 +104,7 @@ public class SandboxManualRunner {
 			final List<List<Runnable>> combinations = new LinkedList<>();
 			for (final PartialCaseRow r : model.getPartialCase().getPartialCase()) {
 				final BaseCaseRow bcr = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
+				bcr.setOptions(AnalyticsFactory.eINSTANCE.createBaseCaseRowOptions());
 
 				// If we mix vessel events AND cargoes in the same row, we ensure we always have
 				// a null vessel event combination. Later on this will be handled in the
@@ -160,12 +169,75 @@ public class SandboxManualRunner {
 				} else if (r.getShipping().size() == 1) {
 					bcr.setShipping(r.getShipping().get(0));
 				}
+				final PartialCaseRowOptions rowOptions = r.getOptions();
+				if (rowOptions != null) {
+					if (rowOptions.getLadenRoutes().size() > 1) {
+						final List<Runnable> options = new LinkedList<>();
+						for (final RouteOption ro : rowOptions.getLadenRoutes()) {
+							options.add(() -> bcr.getOptions().setLadenRoute(ro));
+						}
+						combinations.add(options);
+					} else if (rowOptions.getLadenRoutes().size() == 1) {
+						bcr.getOptions().setLadenRoute(rowOptions.getLadenRoutes().get(0));
+					}
+					if (rowOptions.getBallastRoutes().size() > 1) {
+						final List<Runnable> options = new LinkedList<>();
+						for (final RouteOption ro : rowOptions.getBallastRoutes()) {
+							options.add(() -> bcr.getOptions().setBallastRoute(ro));
+						}
+						combinations.add(options);
+					} else if (rowOptions.getBallastRoutes().size() == 1) {
+						bcr.getOptions().setBallastRoute(rowOptions.getBallastRoutes().get(0));
+					}
+
+					if (rowOptions.getLadenFuelChoices().size() > 1) {
+						final List<Runnable> options = new LinkedList<>();
+						for (final FuelChoice ro : rowOptions.getLadenFuelChoices()) {
+							options.add(() -> bcr.getOptions().setLadenFuelChoice(ro));
+						}
+						combinations.add(options);
+					} else if (rowOptions.getLadenFuelChoices().size() == 1) {
+						bcr.getOptions().setLadenFuelChoice(rowOptions.getLadenFuelChoices().get(0));
+					}
+
+					if (rowOptions.getBallastFuelChoices().size() > 1) {
+						final List<Runnable> options = new LinkedList<>();
+						for (final FuelChoice ro : rowOptions.getBallastFuelChoices()) {
+							options.add(() -> bcr.getOptions().setBallastFuelChoice(ro));
+						}
+						combinations.add(options);
+					} else if (rowOptions.getBallastFuelChoices().size() == 1) {
+						bcr.getOptions().setBallastFuelChoice(rowOptions.getBallastFuelChoices().get(0));
+					}
+
+					if (rowOptions.getLoadDates().size() > 1) {
+						final List<Runnable> options = new LinkedList<>();
+						for (final LocalDateTimeHolder ro : rowOptions.getLoadDates()) {
+							options.add(() -> bcr.getOptions().setLoadDate(ro.getDateTime()));
+						}
+						combinations.add(options);
+					} else if (rowOptions.getLoadDates().size() == 1) {
+						bcr.getOptions().setLoadDate(rowOptions.getLoadDates().get(0).getDateTime());
+					}
+					if (rowOptions.getDischargeDates().size() > 1) {
+						final List<Runnable> options = new LinkedList<>();
+						for (final LocalDateTimeHolder ro : rowOptions.getDischargeDates()) {
+							options.add(() -> bcr.getOptions().setDischargeDate(ro.getDateTime()));
+						}
+						combinations.add(options);
+					} else if (rowOptions.getDischargeDates().size() == 1) {
+						bcr.getOptions().setDischargeDate(rowOptions.getDischargeDates().get(0).getDateTime());
+					}
+
+				}
+
 				templateBaseCase.getBaseCase().add(bcr);
 			}
 
 			final List<BaseCase> tasks = new LinkedList<>();
-			recursiveTaskCreator(0, combinations, model, templateBaseCase, tasks);
+			recursiveTaskCreator(0, combinations, templateBaseCase, tasks);
 			filterTasks(tasks);
+
 			if (tasks.isEmpty()) {
 				if (System.getProperty("lingo.suppress.dialogs") == null) {
 
@@ -177,7 +249,7 @@ public class SandboxManualRunner {
 				}
 				skipRun = true;
 			}
-
+//tasks.add(0, model.getBaseCase());
 			// ScheduleSpecification baseSpecification;
 			if (model.getBaseCase().isKeepExistingScenario()) {
 				final ExistingBaseCaseToScheduleSpecification builder = new ExistingBaseCaseToScheduleSpecification(originalScenarioDataProvider, mapper);
@@ -202,7 +274,6 @@ public class SandboxManualRunner {
 	}
 
 	private boolean checkSequenceSatifiesConstraints(final @NonNull LNGDataTransformer dataTransformer, final @NonNull ISequences rawSequences) {
-
 		final ModifiableSequences emptySequences = new ModifiableSequences(new LinkedList<>());
 
 		final LNGEvaluationTransformerUnit evaluationTransformerUnit = new LNGEvaluationTransformerUnit(dataTransformer, emptySequences, emptySequences, dataTransformer.getHints());
@@ -234,6 +305,11 @@ public class SandboxManualRunner {
 		}
 
 		try {
+			// Counter for solutions with constraint checker violations
+			final AtomicInteger violationCount = new AtomicInteger();
+			// Counter for solutions throwing infeasible exceptions.
+			final AtomicInteger infeasibleCount = new AtomicInteger();
+
 			// Evaluate all the partial cases / options. Note the base case is *NOT*
 			// evaluated here.
 			///////
@@ -245,8 +321,15 @@ public class SandboxManualRunner {
 					final ISequences base = transformer.createSequences(p.getSecond(), bridge.getDataTransformer(), false);
 
 					// Check hard constraints are fine
-					if (checkSequenceSatifiesConstraints(bridge.getDataTransformer(), base)) {
-						results.add(base);
+					try {
+						if (checkSequenceSatifiesConstraints(bridge.getDataTransformer(), base)) {
+							results.add(base);
+						} else {
+							violationCount.incrementAndGet();
+						}
+					} catch (final InfeasibleSolutionException e) {
+						// Ignore and continue.
+						infeasibleCount.incrementAndGet();
 					}
 
 					progressMonitor.worked(1);
@@ -257,8 +340,15 @@ public class SandboxManualRunner {
 
 					final Display display = PlatformUI.getWorkbench().getDisplay();
 					if (display != null) {
-						display.syncExec(() -> MessageDialog.openWarning(display.getActiveShell(), "No solutions found",
-								String.format("Sandbox \"%s\": No solutions found - most likely due to constraint violations. Please check validation messages.", model.getName())));
+						String msg;
+						if (infeasibleCount.get() > 0 && violationCount.get() == 0) {
+							// Infeasible exceptions currently only for missing distance when a route is
+							// specified.
+							msg = String.format("Sandbox \"%s\": No solutions found - most likely due to missing distances for routes specified.", model.getName());
+						} else {
+							msg = String.format("Sandbox \"%s\": No solutions found - most likely due to constraint violations. Please check validation messages.", model.getName());
+						}
+						display.syncExec(() -> MessageDialog.openWarning(display.getActiveShell(), "No solutions found", msg));
 					}
 				}
 
@@ -268,7 +358,7 @@ public class SandboxManualRunner {
 			}
 
 			// We need a non-null solution for the base, but it will be ignored and is not
-			// really treated as the base.
+			// really treated as the base. The base is handled separately during the export
 			final ISequences base = results.get(0);
 			final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.stream()//
 					.map(s -> new NonNullPair<ISequences, Map<String, Object>>(s, new HashMap<>())) //
@@ -291,15 +381,37 @@ public class SandboxManualRunner {
 					final BaseCaseRow baseCase1Row = baseCase1.getBaseCase().get(i);
 					final BaseCaseRow baseCase2Row = baseCase2.getBaseCase().get(i);
 
-					if (baseCase1Row.getBuyOption() != baseCase2Row.getBuyOption() || baseCase1Row.getSellOption() != baseCase2Row.getSellOption()
-							|| baseCase1Row.getVesselEventOption() != baseCase2Row.getVesselEventOption() || baseCase1Row.getShipping() != baseCase2Row.getShipping()) {
+					// Check main attributes
+					if (baseCase1Row.getBuyOption() != baseCase2Row.getBuyOption() //
+							|| baseCase1Row.getSellOption() != baseCase2Row.getSellOption() //
+							|| baseCase1Row.getVesselEventOption() != baseCase2Row.getVesselEventOption() //
+							|| baseCase1Row.getShipping() != baseCase2Row.getShipping()) {
 						continue DUPLICATE_TEST;
 					}
+
+					// Check optional extra options
+					final BaseCaseRowOptions baseCase1RowOptions = baseCase1Row.getOptions();
+					final BaseCaseRowOptions baseCase2RowOptions = baseCase2Row.getOptions();
+					if (baseCase1RowOptions != null && baseCase2RowOptions != null) {
+
+						if (baseCase1RowOptions.getLadenRoute() != baseCase2RowOptions.getLadenRoute() //
+								|| baseCase1RowOptions.getBallastRoute() != baseCase2RowOptions.getBallastRoute() //
+								|| baseCase1RowOptions.getLadenFuelChoice() != baseCase2RowOptions.getLadenFuelChoice() //
+								|| baseCase1RowOptions.getBallastFuelChoice() != baseCase2RowOptions.getBallastFuelChoice() //
+								|| !Objects.equals(baseCase1RowOptions.getLoadDate(), baseCase2RowOptions.getLoadDate())
+								|| !Objects.equals(baseCase1RowOptions.getDischargeDate(), baseCase2RowOptions.getDischargeDate())
+
+						) {
+							continue DUPLICATE_TEST;
+						}
+					}
+
 				}
 				duplicates.add(baseCase2);
 			}
 		}
 		tasks.removeAll(duplicates);
+
 	}
 
 	private static void removeAllSpotBuySpotSellCargoes(final List<BaseCase> tasks) {
@@ -329,10 +441,9 @@ public class SandboxManualRunner {
 	}
 
 	private static void recursiveTaskCreator(final int listIdx, final List<List<Runnable>> combinations,
-
-			final OptionAnalysisModel model, final BaseCase baseCase, final List<BaseCase> tasks) {
+			final BaseCase templateBaseCase, final List<BaseCase> tasks) {
 		if (listIdx == combinations.size()) {
-			final BaseCase copy = EMFCopier.copy(baseCase);
+			final BaseCase copy = EMFCopier.copy(templateBaseCase);
 
 			final Set<Object> seenItems = new HashSet<>();
 			final List<BaseCaseRow> data = new LinkedList<>(copy.getBaseCase());
@@ -389,7 +500,7 @@ public class SandboxManualRunner {
 		final List<Runnable> options = combinations.get(listIdx);
 		for (final Runnable r : options) {
 			r.run();
-			recursiveTaskCreator(listIdx + 1, combinations, model, baseCase, tasks);
+			recursiveTaskCreator(listIdx + 1, combinations, templateBaseCase, tasks);
 		}
 	}
 

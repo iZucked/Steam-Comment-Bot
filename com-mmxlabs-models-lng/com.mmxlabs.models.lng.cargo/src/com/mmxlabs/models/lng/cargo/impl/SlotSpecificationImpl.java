@@ -10,6 +10,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SlotSpecification;
 
+import java.time.LocalDateTime;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
@@ -26,6 +27,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotSpecificationImpl#getSlot <em>Slot</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotSpecificationImpl#getArrivalDate <em>Arrival Date</em>}</li>
  * </ul>
  *
  * @generated
@@ -40,6 +42,25 @@ public class SlotSpecificationImpl extends ScheduleSpecificationEventImpl implem
 	 * @ordered
 	 */
 	protected Slot slot;
+
+	/**
+	 * The default value of the '{@link #getArrivalDate() <em>Arrival Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getArrivalDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final LocalDateTime ARRIVAL_DATE_EDEFAULT = null;
+	/**
+	 * The cached value of the '{@link #getArrivalDate() <em>Arrival Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getArrivalDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected LocalDateTime arrivalDate = ARRIVAL_DATE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -106,11 +127,36 @@ public class SlotSpecificationImpl extends ScheduleSpecificationEventImpl implem
 	 * @generated
 	 */
 	@Override
+	public LocalDateTime getArrivalDate() {
+		return arrivalDate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setArrivalDate(LocalDateTime newArrivalDate) {
+		LocalDateTime oldArrivalDate = arrivalDate;
+		arrivalDate = newArrivalDate;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT_SPECIFICATION__ARRIVAL_DATE, oldArrivalDate, arrivalDate));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case CargoPackage.SLOT_SPECIFICATION__SLOT:
 				if (resolve) return getSlot();
 				return basicGetSlot();
+			case CargoPackage.SLOT_SPECIFICATION__ARRIVAL_DATE:
+				return getArrivalDate();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -125,6 +171,9 @@ public class SlotSpecificationImpl extends ScheduleSpecificationEventImpl implem
 		switch (featureID) {
 			case CargoPackage.SLOT_SPECIFICATION__SLOT:
 				setSlot((Slot)newValue);
+				return;
+			case CargoPackage.SLOT_SPECIFICATION__ARRIVAL_DATE:
+				setArrivalDate((LocalDateTime)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -141,6 +190,9 @@ public class SlotSpecificationImpl extends ScheduleSpecificationEventImpl implem
 			case CargoPackage.SLOT_SPECIFICATION__SLOT:
 				setSlot((Slot)null);
 				return;
+			case CargoPackage.SLOT_SPECIFICATION__ARRIVAL_DATE:
+				setArrivalDate(ARRIVAL_DATE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -155,8 +207,26 @@ public class SlotSpecificationImpl extends ScheduleSpecificationEventImpl implem
 		switch (featureID) {
 			case CargoPackage.SLOT_SPECIFICATION__SLOT:
 				return slot != null;
+			case CargoPackage.SLOT_SPECIFICATION__ARRIVAL_DATE:
+				return ARRIVAL_DATE_EDEFAULT == null ? arrivalDate != null : !ARRIVAL_DATE_EDEFAULT.equals(arrivalDate);
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (arrivalDate: ");
+		result.append(arrivalDate);
+		result.append(')');
+		return result.toString();
 	}
 
 } //SlotSpecificationImpl

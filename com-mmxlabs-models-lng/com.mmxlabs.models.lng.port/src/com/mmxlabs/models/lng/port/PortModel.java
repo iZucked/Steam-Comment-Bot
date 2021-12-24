@@ -27,6 +27,8 @@ import com.mmxlabs.models.mmxcore.VersionRecord;
  *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getPortVersionRecord <em>Port Version Record</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getPortGroupVersionRecord <em>Port Group Version Record</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getDistanceVersionRecord <em>Distance Version Record</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getMmxDistanceVersion <em>Mmx Distance Version</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getManualDistances <em>Manual Distances</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getPortModel()
@@ -217,5 +219,39 @@ public interface PortModel extends UUIDObject {
 	 * @generated
 	 */
 	void setDistanceVersionRecord(VersionRecord value);
+
+	/**
+	 * Returns the value of the '<em><b>Mmx Distance Version</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Mmx Distance Version</em>' attribute.
+	 * @see #setMmxDistanceVersion(String)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getPortModel_MmxDistanceVersion()
+	 * @model
+	 * @generated
+	 */
+	String getMmxDistanceVersion();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.PortModel#getMmxDistanceVersion <em>Mmx Distance Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Mmx Distance Version</em>' attribute.
+	 * @see #getMmxDistanceVersion()
+	 * @generated
+	 */
+	void setMmxDistanceVersion(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Manual Distances</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.port.ManualRouteLine}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Manual Distances</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getPortModel_ManualDistances()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<ManualRouteLine> getManualDistances();
 
 } // PortModel

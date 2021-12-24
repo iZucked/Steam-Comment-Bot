@@ -352,13 +352,11 @@ public final class LicenseChecker {
 		final String userHome = System.getProperty("eclipse.home.location");
 		if (userHome != null) {
 			try {
-				final File file = new File(userHome + File.separator + LICENSE_KEYSTORE);
-				if (file.exists()) {
-					try (InputStream inStream = new FileInputStream(file)) {
-						final KeyStore instance = KeyStore.getInstance(PKCS12);
-						instance.load(inStream, password.toCharArray());
-						return instance;
-					}
+				final URL url = new URL(userHome + LICENSE_KEYSTORE);
+				try (InputStream inStream = url.openStream()) {
+					final KeyStore instance = KeyStore.getInstance("PKCS12");
+					instance.load(inStream, password.toCharArray());
+					return instance;
 				}
 			} catch (final IOException | NoSuchAlgorithmException | KeyStoreException e) {
 				log.error("failed to get license from eclipse home: " + e.getMessage());

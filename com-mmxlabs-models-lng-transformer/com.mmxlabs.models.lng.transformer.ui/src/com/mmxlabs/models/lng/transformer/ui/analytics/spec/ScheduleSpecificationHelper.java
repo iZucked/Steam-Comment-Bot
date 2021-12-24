@@ -185,6 +185,7 @@ public class ScheduleSpecificationHelper {
 		@NonNull
 		final Collection<@NonNull String> hints = new LinkedList<>(initialHints);
 		hints.add(LNGTransformerHelper.HINT_DISABLE_CACHES);
+		hints.add(LNGTransformerHelper.HINT_EVALUATION_ONLY);
 
 		final SolutionBuilderSettings solutionBuilderSettings = ParametersFactory.eINSTANCE.createSolutionBuilderSettings();
 		solutionBuilderSettings.setConstraintAndFitnessSettings(ScenarioUtils.createDefaultConstraintAndFitnessSettings());
