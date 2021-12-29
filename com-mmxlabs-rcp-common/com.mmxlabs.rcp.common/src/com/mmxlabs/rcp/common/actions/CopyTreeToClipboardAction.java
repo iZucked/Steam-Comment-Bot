@@ -17,6 +17,8 @@ import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 
 import com.mmxlabs.common.csv.CSVWriter;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.internal.Activator;
 
 /**
@@ -56,7 +58,7 @@ public class CopyTreeToClipboardAction extends Action {
 		setText("Copy");
 		setDescription("Copies tree data into the clipboard");
 		setToolTipText("Copies tree data into the clipboard");
-		setImageDescriptor(Activator.getImageDescriptor("/icons/copy.gif"));
+		CommonImages.setImageDescriptors(this, IconPaths.Copy);
 	}
 
 	@Override

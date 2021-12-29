@@ -6,7 +6,9 @@ package com.mmxlabs.scheduler.optimiser.fitness.components;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
@@ -22,7 +24,13 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.providers.ConstraintInfo;
+import com.mmxlabs.scheduler.optimiser.providers.IMaxSlotCountConstraintDataProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
@@ -32,6 +40,12 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
  * @since 2.0
  */
 public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessComponent {
+
+	@Inject
+	private IMaxSlotCountConstraintDataProvider maxSlotCountConstraintProvider;
+
+	@Inject
+	private IPortSlotProvider portSlotProvider;
 
 	@NonNull
 	private final String name;
@@ -57,6 +71,20 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 		interestingElements.removeAll(phaseOptimisationData.getOptionalElements());
 		// Make sure these are retained
 		interestingElements.addAll(phaseOptimisationData.getSoftRequiredElements());
+		// Remove constrained slots - if not running ADP optimiser, should stream should be empty.
+		streamConstrainedSlots().map(portSlotProvider::getElement).forEach(interestingElements::remove);
+	}
+
+	private Stream<@NonNull IPortSlot> streamConstrainedSlots() {
+		return Stream.concat(
+				Stream.concat(
+						((List<ConstraintInfo<?, ?, ILoadOption>>) maxSlotCountConstraintProvider.getAllMinLoadGroupCounts()).stream().flatMap(c -> c.getSlots().stream()).map(IPortSlot.class::cast),
+						((List<ConstraintInfo<?, ?, ILoadOption>>) maxSlotCountConstraintProvider.getAllMaxLoadGroupCounts()).stream().flatMap(c -> c.getSlots().stream()).map(IPortSlot.class::cast)),
+				Stream.concat(
+						((List<ConstraintInfo<?, ?, IDischargeOption>>) maxSlotCountConstraintProvider.getAllMinDischargeGroupCounts()).stream().map(ConstraintInfo::getSlots).flatMap(Set::stream)
+								.map(IPortSlot.class::cast),
+						((List<ConstraintInfo<?, ?, IDischargeOption>>) maxSlotCountConstraintProvider.getAllMaxDischargeGroupCounts()).stream().flatMap(c -> c.getSlots().stream())
+								.map(IPortSlot.class::cast)));
 	}
 
 	@Override

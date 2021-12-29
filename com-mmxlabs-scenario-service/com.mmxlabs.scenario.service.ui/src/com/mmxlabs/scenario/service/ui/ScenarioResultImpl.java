@@ -71,12 +71,12 @@ public class ScenarioResultImpl implements ScenarioResult {
 	}
 
 	public ScenarioResultImpl(final @NonNull ScenarioInstance instance, @NonNull final MMXResultRoot resultRoot) {
-		this(SSDataManager.Instance.getModelRecord(instance), resultRoot);
+		this(SSDataManager.Instance.getModelRecordChecked(instance), resultRoot);
 		this.scenarioInstance = instance;
 	}
 
 	public ScenarioResultImpl(@NonNull final ScenarioInstance instance) {
-		this(SSDataManager.Instance.getModelRecord(instance));
+		this(SSDataManager.Instance.getModelRecordChecked(instance));
 		this.scenarioInstance = instance;
 	}
 

@@ -38,6 +38,7 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
+import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -310,7 +311,7 @@ public class ScheduleModelUtils {
 		return slot;
 	}
 
-	public static DischargeSlot getDischargeSlot(final Object allocation) {
+	public static @Nullable DischargeSlot getDischargeSlot(final Object allocation) {
 		DischargeSlot slot = null;
 		if (allocation instanceof CargoAllocation) {
 			final CargoAllocation ca = (CargoAllocation) allocation;
@@ -334,7 +335,7 @@ public class ScheduleModelUtils {
 		}
 		return slot;
 	}
-	
+
 	public static DischargeSlot getDischargeSlotFromCargo(final Cargo cargo) {
 		DischargeSlot slot = null;
 		if (cargo != null) {
@@ -346,7 +347,7 @@ public class ScheduleModelUtils {
 		}
 		return slot;
 	}
-	
+
 	public static LoadSlot getLoadSlotFromCargo(final Cargo cargo) {
 		LoadSlot slot = null;
 		if (cargo != null) {
@@ -421,6 +422,17 @@ public class ScheduleModelUtils {
 		return null;
 	}
 
+	public static String getVesselNameFromAllocation(final Object allocation) {
+		if (allocation instanceof CargoAllocation) {
+			final CargoAllocation cargoAllocation = (CargoAllocation) allocation;
+			final Vessel v = getVessel(cargoAllocation.getSequence());
+			if (v != null) {
+				return v.getName();
+			}
+		}
+		return "";
+	}
+
 	private static int getFuelCost(final FuelUsage fuelUser, final Fuel... fuels) {
 		final Set<Fuel> fuelsOfInterest = Sets.newHashSet(fuels);
 		int sum = 0;
@@ -434,15 +446,17 @@ public class ScheduleModelUtils {
 		}
 		return sum;
 	}
-	
+
 	/**
 	 * Returns the journey legs' duration in days (rounded to the next full integer)
+	 * 
 	 * @param cargoAllocation
-	 * @return 0-Laden; 1-Ballast; 2-Laden(Idle); 3-Ballast(Idle); 4-Discharge; 5-Loading; 6-Total
+	 * @return 0-Laden; 1-Ballast; 2-Laden(Idle); 3-Ballast(Idle); 4-Discharge;
+	 *         5-Loading; 6-Total
 	 * 
 	 */
 	public static int[] getJourneyDays(final CargoAllocation cargoAllocation, final boolean includeCharterOutInBallastIdle) {
-		int[] result = new int[7];
+		final int[] result = new int[7];
 		if (cargoAllocation != null) {
 			Event lastEvent = null;
 			for (final Event e : cargoAllocation.getEvents()) {
@@ -487,12 +501,14 @@ public class ScheduleModelUtils {
 
 	/**
 	 * Returns the journey legs' duration in days (real values)
+	 * 
 	 * @param cargoAllocation
-	 * @return 0-Laden; 1-Ballast; 2-Laden(Idle); 3-Ballast(Idle); 4-Discharge; 5-Loading; 6-Total
+	 * @return 0-Laden; 1-Ballast; 2-Laden(Idle); 3-Ballast(Idle); 4-Discharge;
+	 *         5-Loading; 6-Total
 	 * 
 	 */
 	public static double[] getRawJourneyDays(final CargoAllocation cargoAllocation, final boolean includeCharterOutInBallastIdle) {
-		double[] result = new double[7];
+		final double[] result = new double[7];
 		if (cargoAllocation != null) {
 			Event lastEvent = null;
 			for (final Event e : cargoAllocation.getEvents()) {
@@ -533,5 +549,39 @@ public class ScheduleModelUtils {
 			result[i] = result[i] / 24.0;
 		}
 		return result;
+	}
+
+	public static StartEvent getStartEvent(final VesselAvailability vesselAvailability, final Schedule schedule) {
+		final Sequence sequence = schedule.getSequences().stream().filter(s -> s.getVesselAvailability().equals(vesselAvailability)).findFirst().get();
+		final Event event = sequence.getEvents().get(0);
+		assert event instanceof StartEvent;
+		return (StartEvent) event;
+	}
+
+	public static EndEvent getEndEvent(final VesselAvailability vesselAvailability, final Schedule schedule) {
+		final Sequence sequence = schedule.getSequences().stream().filter(s -> s.getVesselAvailability().equals(vesselAvailability)).findFirst().get();
+		final Event event = sequence.getEvents().get(sequence.getEvents().size() - 1);
+		assert event instanceof EndEvent;
+		return (EndEvent) event;
+	}
+
+	public static StartEvent getStartEvent(final CharterInMarket charterInMarket, final int spotIndex, final Schedule schedule) {
+		final Sequence sequence = schedule.getSequences().stream() //
+				.filter(s -> s.getCharterInMarket().equals(charterInMarket)) //
+				.filter(s -> s.getSpotIndex() == spotIndex) //
+				.findFirst().get();
+		final Event event = sequence.getEvents().get(0);
+		assert event instanceof StartEvent;
+		return (StartEvent) event;
+	}
+
+	public static EndEvent getEndEvent(final CharterInMarket charterInMarket, final int spotIndex, final Schedule schedule) {
+		final Sequence sequence = schedule.getSequences().stream() //
+				.filter(s -> s.getCharterInMarket().equals(charterInMarket)) //
+				.filter(s -> s.getSpotIndex() == spotIndex) //
+				.findFirst().get();
+		final Event event = sequence.getEvents().get(sequence.getEvents().size() - 1);
+		assert event instanceof EndEvent;
+		return (EndEvent) event;
 	}
 }

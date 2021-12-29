@@ -8,6 +8,9 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.TreeColumn;
 
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.internal.Activator;
 
 public class PackTreeColumnsAction extends Action {
@@ -16,7 +19,7 @@ public class PackTreeColumnsAction extends Action {
 
 	public PackTreeColumnsAction(final TreeViewer viewer) {
 		super("Pack Columns");
-		setImageDescriptor(Activator.getImageDescriptor("/icons/pack.gif"));
+		setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Pack, IconMode.Enabled));
 		this.viewer = viewer;
 	}
 

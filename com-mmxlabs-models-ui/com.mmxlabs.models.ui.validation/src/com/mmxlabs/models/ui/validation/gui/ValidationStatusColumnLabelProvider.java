@@ -13,10 +13,14 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.ui.validation.internal.Activator;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 /**
- * Simple label provider for {@link IStatus} objects showing the message and an icon based on severity.
+ * Simple label provider for {@link IStatus} objects showing the message and an
+ * icon based on severity.
  * 
  * @author Simon Goodall
  * 
@@ -29,9 +33,9 @@ public class ValidationStatusColumnLabelProvider extends ColumnLabelProvider {
 
 	public ValidationStatusColumnLabelProvider() {
 
-		imgError = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/error.gif").createImage();
-		imgWarn = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/warning.gif").createImage();
-		imgInfo = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/information.gif").createImage();
+		imgError = CommonImages.getImageDescriptor(IconPaths.Error, IconMode.Enabled).createImage();
+		imgWarn = CommonImages.getImageDescriptor(IconPaths.Warning, IconMode.Enabled).createImage();
+		imgInfo = CommonImages.getImageDescriptor(IconPaths.Information, IconMode.Enabled).createImage();
 	}
 
 	@Override

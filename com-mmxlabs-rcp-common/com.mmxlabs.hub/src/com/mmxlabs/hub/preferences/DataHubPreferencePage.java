@@ -48,7 +48,7 @@ import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.UpstreamUrlProvider.StateReason;
 import com.mmxlabs.hub.auth.AuthenticationManager;
-import com.mmxlabs.hub.auth.OAuthAuthenticationManager;
+import com.mmxlabs.hub.auth.OAuthManager;
 import com.mmxlabs.hub.common.http.HttpClientUtil;
 import com.mmxlabs.hub.common.http.HttpClientUtil.CertInfo;
 import com.mmxlabs.license.features.LicenseFeatures;
@@ -126,6 +126,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	}
 
 	public void disableLogin() {
+		LOGGER.info("disableLogin event fired");
 
 		detailsValid = false;
 
@@ -135,6 +136,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 	}
 
 	public void enableLogin() {
+		LOGGER.info("enableLogin event fired");
 
 		detailsValid = true;
 
@@ -210,7 +212,7 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 
 		loginButton = new Button(c, SWT.PUSH);
 		loginButton.setText("Login");
-		loginButton.setData("loginButtonId"); // this id is used in swtbot tests
+		loginButton.setData("org.eclipse.swtbot.widget.key", "login"); // this id is used in swtbot tests
 		loginButton.setLayoutData(GridDataFactory.fillDefaults().span(1, 1).create());
 
 		loginButton.addSelectionListener(new SelectionAdapter() {
@@ -218,17 +220,18 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 			public void widgetSelected(final SelectionEvent se) {
 
 				if (loginButton.getText().equals(loginButtonText)) {
-					final Shell shell = getShell();
+					// why create this shell here? The Window#create() will create a shell
+					// final Shell shell = getShell();
 					if (!authenticationManager.isAuthenticated()) {
-						authenticationManager.run(shell);
+						authenticationManager.run((Shell) null);
 					}
 				} else if (loginButton.getText().equals(logoutButtonText)) {
 					authenticationManager.logout(getShell());
 				}
 
-				if (authenticationManager.isAuthenticated()) {
+				if (authenticationManager.isAuthenticated() && !loginButton.isDisposed()) {
 					loginButton.setText("Logout");
-				} else {
+				} else if (!loginButton.isDisposed()) {
 					loginButton.setText("Login");
 				}
 
@@ -260,8 +263,12 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 					msg = "Data Hub URL is not valid or unreachable";
 					break;
 				case UNKNOWN_ERROR:
-					msg = state.getMessage() + " (see error log for details)";
-					LOGGER.error(state.getException().getMessage(), state.getException());
+					if (state.getException() != null) {
+						msg = state.getMessage() + " (see error log for details)";
+						LOGGER.error(state.getException().getMessage(), state.getException());
+					} else {
+						msg = state.getMessage();
+					}
 					break;
 				case HUB_ONLINE:
 					msg = "Data Hub is online";
@@ -274,8 +281,8 @@ public class DataHubPreferencePage extends FieldEditorPreferencePage implements 
 
 						boolean oAuthEnabled = authenticationManager.isOAuthEnabled() && !authenticationManager.forceBasicAuthentication.get();
 						if (oAuthEnabled) {
-							if (OAuthAuthenticationManager.getInstance().hasToken()) {
-								boolean tokenValid = OAuthAuthenticationManager.getInstance().isTokenValid(UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable());
+							if (OAuthManager.getInstance().hasToken()) {
+								boolean tokenValid = OAuthManager.getInstance().isTokenValid(UpstreamUrlProvider.INSTANCE.getBaseUrlIfAvailable());
 								if (!tokenValid) {
 									MessageDialog.openError(getShell(), "Connection check", msg + "\n\nInvalid/Expired SSO token found.");
 								} else {

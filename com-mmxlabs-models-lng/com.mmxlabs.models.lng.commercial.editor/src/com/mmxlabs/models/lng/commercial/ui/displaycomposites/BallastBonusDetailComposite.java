@@ -27,8 +27,9 @@ import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 public class BallastBonusDetailComposite extends BallastBonusTermsDetailComposite {
 	protected GenericCharterContract oldContract = null;
 
-	public BallastBonusDetailComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, final FormToolkit toolkit, Runnable resizeAction) {
-		super(parent, style, dialogContext, toolkit, resizeAction);
+	public BallastBonusDetailComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, final FormToolkit toolkit, //
+			Runnable resizeAction, final EObject object) {
+		super(parent, style, dialogContext, toolkit, resizeAction, object);
 	}
 
 	@Override

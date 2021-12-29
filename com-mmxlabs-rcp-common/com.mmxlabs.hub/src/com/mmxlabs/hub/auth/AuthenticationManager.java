@@ -42,7 +42,7 @@ public class AuthenticationManager {
 	}
 
 	private BasicAuthenticationManager basicAuthenticationManager = BasicAuthenticationManager.getInstance();
-	private OAuthAuthenticationManager oauthAuthenticationManager = OAuthAuthenticationManager.getInstance();
+	private OAuthManager oauthManager = OAuthManager.getInstance();
 
 	private String authenticationScheme = "basic";
 	private String upstreamURL = null;
@@ -66,7 +66,7 @@ public class AuthenticationManager {
 		boolean authenticated = false;
 
 		if (isOAuthEnabled() && !forceBasicAuthentication.get()) {
-			authenticated = oauthAuthenticationManager.isAuthenticated(upstreamURL);
+			authenticated = oauthManager.isAuthenticated(upstreamURL);
 		} else {
 			authenticated = basicAuthenticationManager.isAuthenticated(upstreamURL);
 		}
@@ -76,25 +76,25 @@ public class AuthenticationManager {
 
 	public void logout(@Nullable Shell shell) {
 		if (isOAuthEnabled() && !forceBasicAuthentication.get()) {
-			oauthAuthenticationManager.logout(upstreamURL, shell);
+			oauthManager.logout(upstreamURL, shell);
 		} else {
 			basicAuthenticationManager.logout(upstreamURL, shell);
 		}
 	}
 
 	public void logoutAll(@Nullable Shell shell) {
-		oauthAuthenticationManager.logout(upstreamURL, shell);
+		oauthManager.logout(upstreamURL, shell);
 		basicAuthenticationManager.logout(upstreamURL, shell);
 	}
 
 	public void clearCookies(String url) {
 		basicAuthenticationManager.clearCookies(url);
-		oauthAuthenticationManager.clearCookies(url);
+		oauthManager.clearCookies(url);
 	}
 
 	public void run(@Nullable Shell optionalShell) {
 		if (isOAuthEnabled() && !forceBasicAuthentication.get()) {
-			oauthAuthenticationManager.run(upstreamURL, optionalShell);
+			oauthManager.run(upstreamURL, optionalShell);
 		} else {
 			basicAuthenticationManager.run(upstreamURL, optionalShell);
 		}
@@ -102,7 +102,7 @@ public class AuthenticationManager {
 
 	protected void startAuthenticationShell(@Nullable Shell optionalShell) {
 		if (isOAuthEnabled() && !forceBasicAuthentication.get()) {
-			oauthAuthenticationManager.run(upstreamURL, optionalShell);
+			oauthManager.run(upstreamURL, optionalShell);
 		} else {
 			basicAuthenticationManager.run(upstreamURL, optionalShell);
 		}
@@ -114,7 +114,7 @@ public class AuthenticationManager {
 
 	public Request.Builder buildRequest() {
 		if (isOAuthEnabled() && !forceBasicAuthentication.get()) {
-			Optional<Builder> buildRequestWithToken = oauthAuthenticationManager.buildRequestWithToken();
+			Optional<Builder> buildRequestWithToken = oauthManager.buildRequestWithToken();
 			if (buildRequestWithToken.isPresent()) {
 				return buildRequestWithToken.get();
 			} else {

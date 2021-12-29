@@ -17,11 +17,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -50,8 +48,6 @@ import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils.PriceIndexType;
 public class ModelMarketCurveProvider extends EContentAdapter {
 
 	private final @NonNull PricingModel pricingModel;
-
-	private static Map<String, String> marketIndexNames;
 
 	private SoftReference<Map<@NonNull PriceIndexType, @NonNull SeriesParser>> cache = new SoftReference<>(null);
 
@@ -443,27 +439,13 @@ public class ModelMarketCurveProvider extends EContentAdapter {
 		return null;
 	}
 
-	public static String getMarketIndexName(final PricingModel pm, final String curveName) {
-		if (marketIndexNames == null) {
-			marketIndexNames = new HashMap<>();
+	public static Map<String, String> getCurveToIndexMap(final PricingModel pm) {
+		final Map<String, String> result = new HashMap<>();
+		for (final CommodityCurve cc : pm.getCommodityCurves()) {
+			if (cc.getMarketIndex() != null) {
+				result.put(cc.getName().toLowerCase(), cc.getMarketIndex().getName().toLowerCase());
+			}
 		}
-		String result = marketIndexNames.get(curveName);
-		if (result != null) {
-			return result;
-		}
-		final EList<CommodityCurve> indices = pm.getCommodityCurves();
-
-		List<CommodityCurve> inc = indices.stream()//
-				.filter(e -> e.getName().equalsIgnoreCase(curveName)).collect(Collectors.toList());
-
-		if (inc.isEmpty() || inc.size() > 1) {
-			return null;
-		}
-		if (inc.get(0).getMarketIndex() == null) {
-			return null;
-		}
-		result = inc.get(0).getMarketIndex().getName();
-		marketIndexNames.put(curveName, result);
 		return result;
 	}
 

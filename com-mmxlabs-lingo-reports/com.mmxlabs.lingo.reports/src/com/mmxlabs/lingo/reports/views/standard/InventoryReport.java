@@ -502,8 +502,7 @@ public class InventoryReport extends ViewPart {
 							o -> generateDailySortValue(o, MullDailyInformation::getAllocatedEntitlement));
 					createMullDailyColumn("Running Overlift", 150, o -> generateDailyDiffString(o, m -> -1 * m.getActualEntitlement()),
 							o -> generateDailySortValue(o, MullDailyInformation::getActualEntitlement));
-					createMullDailyColumn("Lifting", 150, o -> o.getFirst().lifting ? "Y" : "",
-							o -> o.getFirst().lifting);
+					createMullDailyColumn("Lifting", 150, o -> o.getFirst().lifting ? "Y" : "", o -> o.getFirst().lifting);
 					mullDailyItem.setControl(mullDailyTableViewer.getControl());
 				}
 			}
@@ -751,7 +750,8 @@ public class InventoryReport extends ViewPart {
 														final Map<BaseLegalEntity, Iterator<LocalDate>> iterPinnedLiftingDates = new HashMap<>();
 														final Map<BaseLegalEntity, LocalDate> pinnedNextLiftingDates = new HashMap<>();
 														pinnedLiftingDates.forEach((e, l) -> iterPinnedLiftingDates.put(e, l.iterator()));
-														iterPinnedLiftingDates.entrySet().stream().filter(e -> e.getValue().hasNext()).forEach(e -> pinnedNextLiftingDates.put(e.getKey(), e.getValue().next()));
+														iterPinnedLiftingDates.entrySet().stream().filter(e -> e.getValue().hasNext())
+																.forEach(e -> pinnedNextLiftingDates.put(e.getKey(), e.getValue().next()));
 
 														pinnedMullDailyList.forEach(m -> {
 															final LocalDate nextLiftingDate = pinnedNextLiftingDates.get(m.entity);
@@ -846,19 +846,21 @@ public class InventoryReport extends ViewPart {
 																	}
 																	grey = !grey;
 																}
-																
+
 																final Map<BaseLegalEntity, List<LocalDate>> otherLiftingDates = new HashMap<>();
 																for (final BaseLegalEntity entity : entitiesOrdered) {
 																	otherLiftingDates.put(entity, new LinkedList<>());
 																}
 																for (final CargoAllocation alloc : sortedOtherCargoAllocations) {
 																	final SlotAllocation slotAlloc = alloc.getSlotAllocations().get(0);
-																	otherLiftingDates.get(slotAlloc.getSlot().getEntity()).add(slotAlloc.getSlotVisit().getStart().toLocalDate());
+																	otherLiftingDates.get(reverseEntityEntityMap.get(slotAlloc.getSlot().getEntity()))
+																			.add(slotAlloc.getSlotVisit().getStart().toLocalDate());
 																}
 																final Map<BaseLegalEntity, Iterator<LocalDate>> iterOtherLiftingDates = new HashMap<>();
 																final Map<BaseLegalEntity, LocalDate> otherNextLiftingDates = new HashMap<>();
 																otherLiftingDates.forEach((e, l) -> iterOtherLiftingDates.put(e, l.iterator()));
-																iterOtherLiftingDates.entrySet().stream().filter(e -> e.getValue().hasNext()).forEach(e -> otherNextLiftingDates.put(e.getKey(), e.getValue().next()));
+																iterOtherLiftingDates.entrySet().stream().filter(e -> e.getValue().hasNext())
+																		.forEach(e -> otherNextLiftingDates.put(e.getKey(), e.getValue().next()));
 
 																otherMullDailyList.forEach(m -> {
 																	final LocalDate nextLiftingDate = otherNextLiftingDates.get(m.entity);
@@ -1012,7 +1014,8 @@ public class InventoryReport extends ViewPart {
 														final Map<BaseLegalEntity, Iterator<LocalDate>> iterOtherLiftingDates = new HashMap<>();
 														final Map<BaseLegalEntity, LocalDate> otherNextLiftingDates = new HashMap<>();
 														otherLiftingDates.forEach((e, l) -> iterOtherLiftingDates.put(e, l.iterator()));
-														iterOtherLiftingDates.entrySet().stream().filter(e -> e.getValue().hasNext()).forEach(e -> otherNextLiftingDates.put(e.getKey(), e.getValue().next()));
+														iterOtherLiftingDates.entrySet().stream().filter(e -> e.getValue().hasNext())
+																.forEach(e -> otherNextLiftingDates.put(e.getKey(), e.getValue().next()));
 
 														otherMullDailyList.forEach(m -> {
 															final LocalDate nextLiftingDate = otherNextLiftingDates.get(m.entity);

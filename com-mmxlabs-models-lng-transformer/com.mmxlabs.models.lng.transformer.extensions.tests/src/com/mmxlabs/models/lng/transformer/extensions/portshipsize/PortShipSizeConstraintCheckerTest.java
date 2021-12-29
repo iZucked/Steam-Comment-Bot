@@ -27,6 +27,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -121,7 +122,7 @@ public class PortShipSizeConstraintCheckerTest {
 		Mockito.when(portShipSizeProvider.isCompatible(vessel1, element2)).thenReturn(true);
 		Mockito.when(portShipSizeProvider.isCompatible(vessel1, element3)).thenReturn(true);
 		ISequence sequence = new ListSequence(List.of(element1, element2, element3));
-		final ISequences sequences = new Sequences(Collections.singletonList(resource1), CollectionsUtil.makeHashMap(resource1, sequence));
+		final ISequences sequences = new Sequences(Collections.singletonList(resource1), CollectionsUtil.makeHashMap(resource1, sequence), Collections.emptyList(), new SequencesAttributesProviderImpl());
 		Collection<@NonNull IResource> changedResources = Set.of(resource1);
 		
 		Assertions.assertTrue(checker.checkConstraints(sequences, changedResources, new ArrayList<>()));
@@ -153,7 +154,7 @@ public class PortShipSizeConstraintCheckerTest {
 		Mockito.when(portShipSizeProvider.isCompatible(vessel1, element2)).thenReturn(true);
 		Mockito.when(portShipSizeProvider.isCompatible(vessel1, element3)).thenReturn(false);
 		ISequence sequence = new ListSequence(List.of(element1, element2, element3));
-		final ISequences sequences = new Sequences(Collections.singletonList(resource1), CollectionsUtil.makeHashMap(resource1, sequence));
+		final ISequences sequences = new Sequences(Collections.singletonList(resource1), CollectionsUtil.makeHashMap(resource1, sequence), Collections.emptyList(), new SequencesAttributesProviderImpl());
 		Collection<@NonNull IResource> changedResources = Set.of(resource1);
 		
 		Assertions.assertFalse(checker.checkConstraints(sequences, changedResources, new ArrayList<>()));

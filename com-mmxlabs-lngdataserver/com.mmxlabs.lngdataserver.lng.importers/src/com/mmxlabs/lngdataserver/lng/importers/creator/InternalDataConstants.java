@@ -34,6 +34,7 @@ public class InternalDataConstants {
 	public static final String PORT_BONNY = "L_NG_Bonny";
 	public static final String PORT_MANZANILLO = "L_MX_Manza";
 	public static final String PORT_COLON = "L_CP_Colon";
+	public static final String PORT_BALBOA = "L_CP_Balbo";
 	public static final String PORT_QUINTERO = "L_CL_Quint";
 	public static final String PORT_MINA_AL_AHMADI = "L_KW_MinaA";
 	public static final String PORT_RAS_LAFFAN = "L_QA_RasLa";
@@ -46,6 +47,7 @@ public class InternalDataConstants {
 	public static final String PORT_DAS_ISLAND = "L_AE_AbuDh";
 	public static final String PORT_QALHAT = "L_OM_Qalha";
 	public static final String PORT_BORYEONG = "L_KR_Borye";
+	public static final String PORT_ALTAMIRA = "L_MX_Altam";
 	
 	public static final String PORT_ISLE_OF_GRAIN = "L_GB_Isleo";
 	public static final String PORT_DRAGON = "L_GB_Drago";

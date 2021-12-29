@@ -34,15 +34,18 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -87,6 +90,10 @@ public class ScenarioStorageUtil {
 			super(e);
 		}
 
+		public EncryptedScenarioException(String message) {
+			super(message);
+		}
+
 	}
 
 	public static final @NonNull String DEFAULT_CONTENT_TYPE = "com.mmxlabs.shiplingo.platform.models.manifest.scnfile";
@@ -114,14 +121,18 @@ public class ScenarioStorageUtil {
 			// if (storageDirectory.delete()) {
 			// storageDirectory.mkdir();
 			// }
-			// TODO should we delete this on finalize? if the user has copied something she would expect
-			// it to remain copied so perhaps we should delete all but the most recent copied thing?
+			// TODO should we delete this on finalize? if the user has copied something she
+			// would expect
+			// it to remain copied so perhaps we should delete all but the most recent
+			// copied thing?
 			// Is that a job for the copy handler anyway?
 
 			final boolean secureDelete = LicenseFeatures.isPermitted(FileDeleter.LICENSE_FEATURE__SECURE_DELETE);
 
-			// Define a function here to try and avoid class not found exceptions later on when running the shutdown hook.
-			// Hopefully this means the class is still referenced after the common util plugin has stopped.
+			// Define a function here to try and avoid class not found exceptions later on
+			// when running the shutdown hook.
+			// Hopefully this means the class is still referenced after the common util
+			// plugin has stopped.
 			final CheckedBiFunction<File, Boolean, Boolean, IOException> d = FileDeleter::delete;
 
 			Runtime.getRuntime().addShutdownHook(new Thread("Cleanup hook") {
@@ -347,7 +358,9 @@ public class ScenarioStorageUtil {
 					final String name = archiveURI.trimFileExtension().lastSegment();
 					final String uuid = manifest.getUUID();
 
-					// how to get dependent data into the model record? (load function will trigger migration.... and changes to manifest, and version data,, -- are these reflected here?
+					// how to get dependent data into the model record? (load function will trigger
+					// migration.... and changes to manifest, and version data,, -- are these
+					// reflected here?
 					// version data is updated
 					final LinkedList<File> tmpFilesList = new LinkedList<>();
 
@@ -405,7 +418,9 @@ public class ScenarioStorageUtil {
 				}
 			}
 		} catch (final CharConversionException e) {
-			throw new EncryptedScenarioException(e);
+			return ScenarioModelRecord.forException(new EncryptedScenarioException(e));
+		} catch (final Exception e) {
+			return ScenarioModelRecord.forException(e);
 		}
 		return null;
 	}
@@ -506,14 +521,16 @@ public class ScenarioStorageUtil {
 					archiveURI = originalArchiveURI;
 				}
 
-				// log.debug("Instance " + scenarioInstance.getName() + " (" + scenarioInstance.getUuid() + ") needs loading");
+				// log.debug("Instance " + scenarioInstance.getName() + " (" +
+				// scenarioInstance.getUuid() + ") needs loading");
 
 				if (migrationCallback != null) {
 					migrationCallback.accept(modelRecord, archiveURI, monitor);
 				}
 				monitor.setTaskName("Loading scenario");
 
-				// log.debug("Instance " + scenarioInstance.getName() + " (" + scenarioInstance.getUuid() + ") needs loading");
+				// log.debug("Instance " + scenarioInstance.getName() + " (" +
+				// scenarioInstance.getUuid() + ") needs loading");
 
 				// acquire sub models
 				log.debug("Loading rootObject from " + archiveURI);
@@ -605,13 +622,23 @@ public class ScenarioStorageUtil {
 						final File tempFile = Files.createTempFile("lingo-", ".debug").toFile();
 						ServiceHelper.withOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
 
-							// Skip the normal save process and manually encrypt into a memory byte buffer then save use ZIP API rather than go through EMF
+							// Skip the normal save process and manually encrypt into a memory byte buffer
+							// then save use ZIP API rather than go through EMF
 							try {
 
 								byte[] scenarioContent;
 								try (ByteArrayOutputStream fos = new ByteArrayOutputStream()) {
 									try (OutputStream os = scenarioCipherProvider.getSharedCipher().encrypt(fos)) {
-										resource.save(os, null);
+										Map<String, String> options = new HashMap<>();
+										// Record the dangling refs instead of throwing an exception
+										options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_RECORD);
+										resource.save(os, options);
+										// There should be no need to do this as the #checkModelConsistency should
+										// produce the same info
+//										EList<Diagnostic> errors = resource.getErrors();
+//										for (var e : errors) {
+//											System.out.println(e.getMessage());
+//										}
 									}
 									fos.flush();
 									scenarioContent = fos.toByteArray();
@@ -863,7 +890,8 @@ public class ScenarioStorageUtil {
 
 			final @NonNull EClass eClass = next.eClass();
 			for (final EReference ref : eClass.getEAllReferences()) {
-				// We only want to check non-contained references to make sure they have a container in the same resource
+				// We only want to check non-contained references to make sure they have a
+				// container in the same resource
 				if (ref.isContainment() || ref.isTransient()) {
 					continue;
 				}

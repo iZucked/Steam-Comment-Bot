@@ -301,6 +301,22 @@
                      class="VesselEventReference">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.analytics.validation.CharterOutOpportunityConstraint"
+                  id="com.mmxlabs.models.lng.analytics.validation.CharterOutOpportunityConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="CharterOutOpportunityConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="CharterOutOpportunity">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>

@@ -13,7 +13,6 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -56,7 +55,6 @@ public class CopyScenarioCommandHandler extends AbstractHandler {
 							final ScenarioInstance instance = (ScenarioInstance) element;
 							instances.add(instance);
 							try {
-								@NonNull
 								final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 								tempFiles.add(ScenarioStorageUtil.storeToTemporaryFile(modelRecord).getAbsolutePath());
 							} catch (final IOException e) {

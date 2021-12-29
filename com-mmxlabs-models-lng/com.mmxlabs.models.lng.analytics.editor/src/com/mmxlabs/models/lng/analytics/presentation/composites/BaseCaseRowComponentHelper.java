@@ -71,6 +71,9 @@ public class BaseCaseRowComponentHelper extends BaseComponentHelper {
 		add_sellOptionEditor(detailComposite, topClass);
 		add_vesselEventOptionEditor(detailComposite, topClass);
 		add_shippingEditor(detailComposite, topClass);
+		add_optioniseEditor(detailComposite, topClass);
+		add_optionsEditor(detailComposite, topClass);
+		add_freezeEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the buyOption feature on BaseCaseRow
@@ -104,5 +107,32 @@ public class BaseCaseRowComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_shippingEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING));
+	}
+
+	/**
+	 * Create the editor for the options feature on BaseCaseRow
+	 *
+	 * @generated
+	 */
+	protected void add_optionsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.BASE_CASE_ROW__OPTIONS));
+	}
+
+	/**
+	 * Create the editor for the optionise feature on BaseCaseRow
+	 *
+	 * @generated
+	 */
+	protected void add_optioniseEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.BASE_CASE_ROW__OPTIONISE));
+	}
+
+	/**
+	 * Create the editor for the freeze feature on BaseCaseRow
+	 *
+	 * @generated
+	 */
+	protected void add_freezeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.BASE_CASE_ROW__FREEZE));
 	}
 }

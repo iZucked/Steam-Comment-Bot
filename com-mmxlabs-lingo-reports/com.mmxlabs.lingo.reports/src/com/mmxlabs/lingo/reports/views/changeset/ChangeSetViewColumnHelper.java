@@ -38,10 +38,10 @@ import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.widgets.grid.DefaultCellRenderer;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.nebula.widgets.grid.GridItem;
-import org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -58,6 +58,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.common.util.ToLongTriFunction;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetKPIUtil.ResultType;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetView.ViewState;
@@ -145,7 +146,8 @@ public class ChangeSetViewColumnHelper {
 	private GridViewerColumn column_Violations;
 
 	/**
-	 * Display textual vessel change markers - used for unit testing where graphics are not captured in data dump.
+	 * Display textual vessel change markers - used for unit testing where graphics
+	 * are not captured in data dump.
 	 */
 	private boolean textualVesselMarkers = false;
 
@@ -471,7 +473,9 @@ public class ChangeSetViewColumnHelper {
 			this.violationColumn.getColumn().setVisible(showCompareColumns);
 		}
 
-		createNominationBreaksColumn();
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_NOMINATIONS)) {
+			createNominationBreaksColumn();
+		}
 
 		// Space col
 		createSpacerColumn();
@@ -920,7 +924,6 @@ public class ChangeSetViewColumnHelper {
 		};
 	}
 
-	@SuppressWarnings("restriction")
 	protected DefaultCellRenderer createGrayCellRenderer() {
 		return new DefaultCellRenderer() {
 
@@ -1197,7 +1200,8 @@ public class ChangeSetViewColumnHelper {
 						} else {
 
 							final Function<Event, LocalDate> dateFunc = (e) -> {
-								// Does it make sense to use the user defined window here instead of the scheduled date?
+								// Does it make sense to use the user defined window here instead of the
+								// scheduled date?
 								// if (e instanceof VesselEventVisit) {
 								// VesselEventVisit visit = (VesselEventVisit)e;
 								// return visit.getVesselEvent().getStartAfter().toLocalDate();

@@ -31,7 +31,9 @@ import com.mmxlabs.scheduler.optimiser.shared.port.IDistanceMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 /**
- * A {@link IDataComponentProvider} implementation combining raw distance information with route availability information and offering basic travel time calculation APIs
+ * A {@link IDataComponentProvider} implementation combining raw distance
+ * information with route availability information and offering basic travel
+ * time calculation APIs
  * 
  * TODO: Mixing logic and data here -> break up?
  * 
@@ -48,14 +50,14 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 
 	@Inject
 	private IRouteExclusionProvider routeExclusionProvider;
-	
+
 	@Inject
 	private IExtraIdleTimeProvider routeContingencyProvider;
 
 	// Pair<North Entrance, South entrance>
 	private final Map<ERouteOption, Pair<IPort, IPort>> routeOptionEntryPoints = new HashMap<>();
 	private final Map<ERouteOption, Integer> canalDistances = new HashMap<>();
-	
+
 	// cache
 	private final Map<Pair<IPort, ERouteOption>, IPort> nearestRouteOptionEntryPort = new ConcurrentHashMap<>();
 	private final Map<Pair<IPort, ERouteOption>, ECanalEntry> nearestRouteOptionEntry = new ConcurrentHashMap<>();
@@ -143,7 +145,8 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 			return Integer.MAX_VALUE;
 		}
 
-		// Need to get exit port as only direct distances available from exit to destination
+		// Need to get exit port as only direct distances available from exit to
+		// destination
 		// (not via panama, since through already).
 		IPort exitPort = this.getRouteOptionExitPort(entryPort, route);
 		if (exitPort == null) {
@@ -165,18 +168,18 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 		final int transitTime = routeCostProvider.getRouteTransitTime(route, vessel);
 		return baseTime + transitTime;
 	}
-    
-    private int getCanalDistance(final ERouteOption route) {
-    	return canalDistances.get(route);
-    }
-   
+
+	private int getCanalDistance(final ERouteOption route) {
+		return canalDistances.get(route);
+	}
+
 	@Override
 	public Pair<ERouteOption, Integer> getQuickestTravelTime(@NonNull final IVessel vessel, final IPort from, final IPort to, final int speed, AvailableRouteChoices availableRouteChoices) {
 
 		ERouteOption bestRoute = null;
 		int bestTime = Integer.MAX_VALUE;
 		for (final ERouteOption route : getRoutes()) {
-			
+
 			if (!isRouteValid(route, availableRouteChoices)) {
 				continue;
 			}
@@ -195,18 +198,20 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 
 		return new Pair<>(bestRoute, bestTime);
 	}
-	
+
 	@Override
-	public Pair<ERouteOption, Integer> getQuickestTravelTimeWithContingency(@NonNull final IVessel vessel, final IPortSlot from, final IPortSlot to, final int speed, AvailableRouteChoices availableRouteChoices) {
+	public Pair<ERouteOption, Integer> getQuickestTravelTimeWithContingency(@NonNull final IVessel vessel, final IPortSlot from, final IPortSlot to, final int speed,
+			AvailableRouteChoices availableRouteChoices) {
 
 		Pair<ERouteOption, Integer> result = getQuickestTravelTime(vessel, from.getPort(), to.getPort(), speed, availableRouteChoices);
 
 		int bestTime = result.getSecond();
 		if (bestTime != Integer.MAX_VALUE) {
-			bestTime += routeContingencyProvider.getExtraIdleTimeInHours(from, to);
+			bestTime += routeContingencyProvider.getContingencyIdleTimeInHours(from, to);
+			bestTime += routeContingencyProvider.getBufferIdleTimeInHours(to);
 		}
 		result.setSecond(bestTime);
-		
+
 		return result;
 	}
 
@@ -219,22 +224,21 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 	public void setEntryPointsForRouteOption(ERouteOption route, IPort northEntrance, IPort southEntrance) {
 		routeOptionEntryPoints.put(route, new Pair<>(northEntrance, southEntrance));
 	}
-	
+
 	@Override
 	public void setCanalDistance(ERouteOption route, int distance) {
 		canalDistances.put(route, distance);
 	}
 
 	private IPort getRouteOptionExitPort(IPort entryPort, ERouteOption routeOption) {
-		Pair<IPort,IPort> entryPoints = routeOptionEntryPoints.get(routeOption);
+		Pair<IPort, IPort> entryPoints = routeOptionEntryPoints.get(routeOption);
 		if (entryPoints != null) {
 			return entryPoints.getFirst().equals(entryPort) ? entryPoints.getSecond() : entryPoints.getFirst();
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
-	
+
 	@Override
 	public IPort getRouteOptionEntryPort(IPort port, ERouteOption routeOption) {
 		return nearestRouteOptionEntryPort.computeIfAbsent(new Pair<IPort, ERouteOption>(port, routeOption), pair -> {

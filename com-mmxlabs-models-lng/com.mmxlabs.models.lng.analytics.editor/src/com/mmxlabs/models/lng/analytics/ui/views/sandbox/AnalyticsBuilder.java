@@ -423,7 +423,7 @@ public class AnalyticsBuilder {
 	}
 
 	public static int calculateTravelHoursForLoad(final PortModel portModel, final LoadSlot loadSlot, final DischargeSlot dischargeSlot, final ShippingOption shippingOption,
-			ModelDistanceProvider modelDistanceProvider) {
+			final ModelDistanceProvider modelDistanceProvider) {
 
 		final Port fromPort = loadSlot.getPort();
 		final Port toPort = dischargeSlot.getPort();
@@ -441,7 +441,7 @@ public class AnalyticsBuilder {
 	}
 
 	public static int calculateTravelHoursForDischarge(final PortModel portModel, final LoadSlot loadSlot, final DischargeSlot dischargeSlot, final ShippingOption shippingOption,
-			ModelDistanceProvider modelDistanceProvider) {
+			final ModelDistanceProvider modelDistanceProvider) {
 		final Port fromPort = loadSlot.getPort();
 		final Port toPort = dischargeSlot.getPort();
 
@@ -458,7 +458,7 @@ public class AnalyticsBuilder {
 	}
 
 	public static int calculateLateness(final @Nullable BuyOption buyOption, final @Nullable SellOption sellOption, final PortModel portModel, final @Nullable Vessel vessel,
-			ModelDistanceProvider modelDistanceProvider) {
+			final ModelDistanceProvider modelDistanceProvider) {
 		if (buyOption == null || sellOption == null) {
 			return 0;
 		}
@@ -483,7 +483,7 @@ public class AnalyticsBuilder {
 	}
 
 	public static int calculateVoyageDurationInHours(final @Nullable BuyOption buyOption, final @Nullable SellOption sellOption, final PortModel portModel, final @Nullable Vessel vessel,
-			ModelDistanceProvider modelDistanceProvider) {
+			final ModelDistanceProvider modelDistanceProvider) {
 		if (buyOption == null || sellOption == null) {
 			return 0;
 		}
@@ -495,7 +495,7 @@ public class AnalyticsBuilder {
 			final ZonedDateTime windowEndDate = AnalyticsBuilder.getWindowEndDate(sellOption);
 
 			if (windowStartDate != null && windowEndDate != null) {
-				int loadDuration = AnalyticsBuilder.getDuration(buyOption);
+				final int loadDuration = AnalyticsBuilder.getDuration(buyOption);
 				final int availableTime = Hours.between(windowStartDate, windowEndDate) - loadDuration;
 				return availableTime;
 			}
@@ -759,7 +759,7 @@ public class AnalyticsBuilder {
 						break;
 					}
 				} else if (opt instanceof CharterOutOpportunity) {
-					CharterOutOpportunity charterOutOpportunity = (CharterOutOpportunity) opt;
+					final CharterOutOpportunity charterOutOpportunity = (CharterOutOpportunity) opt;
 
 				}
 			}
@@ -773,7 +773,7 @@ public class AnalyticsBuilder {
 	}
 
 	public static ShippingOption applyShipping(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel optionAnalysisModel, final PartialCaseRow row, final Cargo cargo,
-			final LoadSlot load, final DischargeSlot dischargeSlot, boolean portfolioMode, final CompoundCommand cmd) {
+			final LoadSlot load, final DischargeSlot dischargeSlot, final boolean portfolioMode, final CompoundCommand cmd) {
 
 		final ShippingOption opt = AnalyticsBuilder.getOrCreateShippingOption(cargo, load, dischargeSlot, portfolioMode, optionAnalysisModel);
 		if (opt.eContainer() == null) {
@@ -787,7 +787,7 @@ public class AnalyticsBuilder {
 	 * Execute within a command
 	 */
 	public static void applyShipping(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel optionAnalysisModel, final BaseCaseRow row, final Cargo cargo,
-			final LoadSlot load, final DischargeSlot dischargeSlot, boolean portfolioMode, final CompoundCommand cmd) {
+			final LoadSlot load, final DischargeSlot dischargeSlot, final boolean portfolioMode, final CompoundCommand cmd) {
 
 		final ShippingOption opt = AnalyticsBuilder.getOrCreateShippingOption(cargo, load, dischargeSlot, portfolioMode, optionAnalysisModel);
 		if (opt != null) {
@@ -799,7 +799,7 @@ public class AnalyticsBuilder {
 	}
 
 	public static void applyShipping(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel optionAnalysisModel, final BaseCaseRow row, final VesselEvent vesselEvent,
-			boolean portfolioMode, final CompoundCommand cmd) {
+			final boolean portfolioMode, final CompoundCommand cmd) {
 
 		final ShippingOption opt = AnalyticsBuilder.getOrCreateShippingOption(vesselEvent, portfolioMode, optionAnalysisModel);
 		if (opt != null) {
@@ -811,7 +811,7 @@ public class AnalyticsBuilder {
 	}
 
 	public static ShippingOption applyShipping(final IScenarioEditingLocation scenarioEditingLocation, final OptionAnalysisModel optionAnalysisModel, final PartialCaseRow row,
-			final VesselEvent vesselEvent, boolean portfolioMode, final CompoundCommand cmd) {
+			final VesselEvent vesselEvent, final boolean portfolioMode, final CompoundCommand cmd) {
 
 		final ShippingOption opt = AnalyticsBuilder.getOrCreateShippingOption(vesselEvent, portfolioMode, optionAnalysisModel);
 		if (opt != null) {
@@ -823,7 +823,7 @@ public class AnalyticsBuilder {
 		return opt;
 	}
 
-	public static ShippingOption getOrCreateShippingOption(final Cargo cargo, final LoadSlot load, final DischargeSlot dischargeSlot, boolean portfolioMode,
+	public static ShippingOption getOrCreateShippingOption(final Cargo cargo, final LoadSlot load, final DischargeSlot dischargeSlot, final boolean portfolioMode,
 			final AbstractAnalysisModel optionAnalysisModel) {
 
 		if (cargo != null) {
@@ -834,7 +834,7 @@ public class AnalyticsBuilder {
 					if (portfolioMode) {
 						for (final ShippingOption shipOpt : optionAnalysisModel.getShippingTemplates()) {
 							if (shipOpt instanceof ExistingVesselCharterOption) {
-								ExistingVesselCharterOption opt = (ExistingVesselCharterOption) shipOpt;
+								final ExistingVesselCharterOption opt = (ExistingVesselCharterOption) shipOpt;
 								if (opt.getVesselCharter() == vesselAvailability) {
 									return opt;
 								}
@@ -907,7 +907,7 @@ public class AnalyticsBuilder {
 					if (portfolioMode) {
 						for (final ShippingOption shipOpt : optionAnalysisModel.getShippingTemplates()) {
 							if (shipOpt instanceof ExistingCharterMarketOption) {
-								ExistingCharterMarketOption opt = (ExistingCharterMarketOption) shipOpt;
+								final ExistingCharterMarketOption opt = (ExistingCharterMarketOption) shipOpt;
 								if (opt.getCharterInMarket() == charterInMarket && opt.getSpotIndex() == cargo.getSpotIndex()) {
 									return opt;
 								}
@@ -982,7 +982,7 @@ public class AnalyticsBuilder {
 		return null;
 	}
 
-	public static ShippingOption getOrCreateShippingOption(final VesselEvent vesselEvent, boolean portfolioMode, final AbstractAnalysisModel optionAnalysisModel) {
+	public static ShippingOption getOrCreateShippingOption(final VesselEvent vesselEvent, final boolean portfolioMode, final AbstractAnalysisModel optionAnalysisModel) {
 
 		if (vesselEvent != null) {
 			final VesselAssignmentType vat = vesselEvent.getVesselAssignmentType();
@@ -991,7 +991,7 @@ public class AnalyticsBuilder {
 				if (portfolioMode) {
 					for (final ShippingOption shipOpt : optionAnalysisModel.getShippingTemplates()) {
 						if (shipOpt instanceof ExistingVesselCharterOption) {
-							ExistingVesselCharterOption opt = (ExistingVesselCharterOption) shipOpt;
+							final ExistingVesselCharterOption opt = (ExistingVesselCharterOption) shipOpt;
 							if (opt.getVesselCharter() == vesselAvailability) {
 								return opt;
 							}
@@ -1063,7 +1063,7 @@ public class AnalyticsBuilder {
 				if (portfolioMode) {
 					for (final ShippingOption shipOpt : optionAnalysisModel.getShippingTemplates()) {
 						if (shipOpt instanceof ExistingCharterMarketOption) {
-							ExistingCharterMarketOption opt = (ExistingCharterMarketOption) shipOpt;
+							final ExistingCharterMarketOption opt = (ExistingCharterMarketOption) shipOpt;
 							if (opt.getCharterInMarket() == charterInMarket && opt.getSpotIndex() == vesselEvent.getSpotIndex()) {
 								return opt;
 							}
@@ -1205,7 +1205,7 @@ public class AnalyticsBuilder {
 		menuHelper.addAction(new RunnableAction("New", () -> {
 			final RoundTripShippingOption opt = AnalyticsFactory.eINSTANCE.createRoundTripShippingOption();
 			opt.setVessel(vessel);
-			CommercialModel cm = ScenarioModelUtil.getCommercialModel(scenarioEditingLocation.getScenarioDataProvider());
+			final CommercialModel cm = ScenarioModelUtil.getCommercialModel(scenarioEditingLocation.getScenarioDataProvider());
 			if (cm.getEntities().size() == 1) {
 				opt.setEntity(cm.getEntities().get(0));
 			}
@@ -1537,7 +1537,7 @@ public class AnalyticsBuilder {
 
 	public static double[] getCargoCVRange(final SellOption option) {
 		if (option instanceof SellOpportunity) {
-			SellOpportunity sellOpportunity = (SellOpportunity) option;
+			final SellOpportunity sellOpportunity = (SellOpportunity) option;
 			if (sellOpportunity.getPort() != null) {
 				return new double[] { sellOpportunity.getPort().getMinCvValue(), sellOpportunity.getPort().getMaxCvValue() };
 			}
@@ -1632,11 +1632,20 @@ public class AnalyticsBuilder {
 		if (option == null) {
 			return Collections.emptyList();
 		} else if (option instanceof SimpleVesselCharterOption) {
-			return ((SimpleVesselCharterOption) option).getVessel().getVesselOrDelegateInaccessiblePorts();
+			final Vessel vessel = ((SimpleVesselCharterOption) option).getVessel();
+			if (vessel != null) {
+				return vessel.getVesselOrDelegateInaccessiblePorts();
+			}
 		} else if (option instanceof RoundTripShippingOption) {
-			return ((RoundTripShippingOption) option).getVessel().getVesselOrDelegateInaccessiblePorts();
+			final Vessel vessel = ((RoundTripShippingOption) option).getVessel();
+			if (vessel != null) {
+				return vessel.getVesselOrDelegateInaccessiblePorts();
+			}
 		} else if (option instanceof NominatedShippingOption) {
-			((NominatedShippingOption) option).getNominatedVessel().getVesselOrDelegateInaccessiblePorts();
+			final Vessel nominatedVessel = ((NominatedShippingOption) option).getNominatedVessel();
+			if (nominatedVessel != null) {
+				nominatedVessel.getVesselOrDelegateInaccessiblePorts();
+			}
 		}
 		return Collections.emptyList();
 	}
@@ -1753,13 +1762,17 @@ public class AnalyticsBuilder {
 		return NominatedShippingOption.class::isInstance;
 	}
 
-	public static VesselEvent makeVesselEvent(VesselEventOption vesselEventOption, LNGScenarioModel scenarioModel) {
+	public static boolean isRoundTripOption(final ShippingOption opt) {
+		return opt instanceof RoundTripShippingOption;
+	}
+
+	public static VesselEvent makeVesselEvent(final VesselEventOption vesselEventOption, final LNGScenarioModel scenarioModel) {
 
 		if (vesselEventOption instanceof VesselEventReference) {
-			VesselEventReference vesselEventReference = (VesselEventReference) vesselEventOption;
+			final VesselEventReference vesselEventReference = (VesselEventReference) vesselEventOption;
 			return vesselEventReference.getEvent();
 		} else if (vesselEventOption instanceof CharterOutOpportunity) {
-			CharterOutOpportunity opportunity = (CharterOutOpportunity) vesselEventOption;
+			final CharterOutOpportunity opportunity = (CharterOutOpportunity) vesselEventOption;
 
 			final String baseName = vesselEventOptionDescriptionFormatter.render(opportunity);
 
@@ -1789,7 +1802,7 @@ public class AnalyticsBuilder {
 		return null;
 	}
 
-	public static boolean isSpot(BuyOption buy) {
+	public static boolean isSpot(final BuyOption buy) {
 		if (buy instanceof BuyReference) {
 			final BuyReference ref = (BuyReference) buy;
 			return ref.getSlot() instanceof SpotSlot;
@@ -1799,7 +1812,7 @@ public class AnalyticsBuilder {
 		return false;
 	}
 
-	public static boolean isSpot(SellOption sell) {
+	public static boolean isSpot(final SellOption sell) {
 		if (sell instanceof SellReference) {
 			final SellReference ref = (SellReference) sell;
 			return ref.getSlot() instanceof SpotSlot;
@@ -1810,7 +1823,7 @@ public class AnalyticsBuilder {
 	}
 
 	public static GenericCharterContract createCharterTerms(final String sRepositioningFee, final String sBallastBonus) {
-		GenericCharterContract gcc = CommercialFactory.eINSTANCE.createGenericCharterContract();
+		final GenericCharterContract gcc = CommercialFactory.eINSTANCE.createGenericCharterContract();
 		if (sRepositioningFee != null) {
 			final IRepositioningFee repositioningFee = CommercialFactory.eINSTANCE.createSimpleRepositioningFeeContainer();
 			final LumpSumRepositioningFeeTerm term = CommercialFactory.eINSTANCE.createLumpSumRepositioningFeeTerm();
@@ -1828,11 +1841,11 @@ public class AnalyticsBuilder {
 		return gcc;
 	}
 
-	public static boolean isNullOrOpen(BuyOption opt) {
+	public static boolean isNullOrOpen(final BuyOption opt) {
 		return opt == null || opt instanceof OpenBuy;
 	}
 
-	public static boolean isNullOrOpen(SellOption opt) {
+	public static boolean isNullOrOpen(final SellOption opt) {
 		return opt == null || opt instanceof OpenSell;
 	}
 }

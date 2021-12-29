@@ -5,9 +5,7 @@
 package com.mmxlabs.models.lng.migration.units;
 
 import java.util.List;
-import java.util.Map;
 
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -15,10 +13,8 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
-import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
 import com.mmxlabs.models.migration.MigrationModelRecord;
-import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
 
@@ -40,36 +36,20 @@ public class MigrateToV10 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	public MetamodelLoader getSourceMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (sourceLoader == null) {
-			sourceLoader = MetamodelVersionsUtil.createV9Loader(extraPackages);
-		}
-		return sourceLoader;
-	}
-
-	@Override
-	public MetamodelLoader getDestinationMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (destinationLoader == null) {
-			destinationLoader = MetamodelVersionsUtil.createV10Loader(extraPackages);
-		}
-		return destinationLoader;
-	}
-
-	@Override
 	protected void doMigration(MigrationModelRecord modelRecord) {
-		// This should get the cached loader instance
-		final MetamodelLoader loader = getDestinationMetamodelLoader(null);
-
+		final MetamodelLoader loader = modelRecord.getMetamodelLoader();
 		migrateEntityBooksl(loader, modelRecord.getModelRoot());
 	}
 
 	protected void migrateEntityBooksl(final MetamodelLoader loader, final EObject model) {
 
-		// final EPackage mmxCorePackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_MMXCore);
+		// final EPackage mmxCorePackage =
+		// loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_MMXCore);
 
 		final EPackage package_ScenarioModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
 		final EClass class_LNGScenarioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGScenarioModel");
-		// final EClass class_LNGPortfolioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGPortfolioModel");
+		// final EClass class_LNGPortfolioModel =
+		// MetamodelUtils.getEClass(package_ScenarioModel, "LNGPortfolioModel");
 		final EReference reference_LNGScenarioModel_commercialModel = MetamodelUtils.getReference(class_LNGScenarioModel, "commercialModel");
 
 		final EPackage package_CommercialModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_CommercialModel);

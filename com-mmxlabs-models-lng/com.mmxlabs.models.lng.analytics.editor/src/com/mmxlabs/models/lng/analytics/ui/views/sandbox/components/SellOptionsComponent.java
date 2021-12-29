@@ -82,7 +82,7 @@ public class SellOptionsComponent extends AbstractSandboxComponent<Object, Abstr
 
 				@Override
 				public void mouseEnter(final MouseEvent e) {
-					addSellButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
+					addSellButton.setImage(sandboxUIHelper.image_add);
 				}
 			});
 			addSellButton.addMouseListener(OptionMenuHelper.createNewSellOptionMenuListener(addSellButton.getParent(), scenarioEditingLocation, modelProvider));

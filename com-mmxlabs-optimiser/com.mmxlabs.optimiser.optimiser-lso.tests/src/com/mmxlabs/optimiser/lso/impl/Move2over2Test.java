@@ -26,10 +26,10 @@ public class Move2over2Test {
 		final IResource resource1 = Mockito.mock(IResource.class, "resource1");
 		final IResource resource2 = Mockito.mock(IResource.class, "resource2");
 
-		final IModifiableSequence sequence1 = new ListModifiableSequence(CollectionsUtil.makeArrayList2(ISequenceElement.class, new IntegerElement(1), new IntegerElement(2), new IntegerElement(3),
-				new IntegerElement(4), new IntegerElement(5)));
-		final IModifiableSequence sequence2 = new ListModifiableSequence(CollectionsUtil.makeArrayList2(ISequenceElement.class, new IntegerElement(6), new IntegerElement(7), new IntegerElement(8),
-				new IntegerElement(9), new IntegerElement(10), new IntegerElement(11)));
+		final IModifiableSequence sequence1 = new ListModifiableSequence(
+				CollectionsUtil.makeArrayList(new IntegerElement(1), new IntegerElement(2), new IntegerElement(3), new IntegerElement(4), new IntegerElement(5)));
+		final IModifiableSequence sequence2 = new ListModifiableSequence(
+				CollectionsUtil.makeArrayList(new IntegerElement(6), new IntegerElement(7), new IntegerElement(8), new IntegerElement(9), new IntegerElement(10), new IntegerElement(11)));
 
 		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
@@ -62,10 +62,10 @@ public class Move2over2Test {
 		final IResource resource1 = Mockito.mock(IResource.class, "resource1");
 		final IResource resource2 = Mockito.mock(IResource.class, "resource2");
 
-		final IModifiableSequence sequence1 = new ListModifiableSequence(CollectionsUtil.makeArrayList2(ISequenceElement.class, new IntegerElement(1), new IntegerElement(2), new IntegerElement(3),
-				new IntegerElement(4), new IntegerElement(5)));
-		final IModifiableSequence sequence2 = new ListModifiableSequence(CollectionsUtil.makeArrayList2(ISequenceElement.class, new IntegerElement(6), new IntegerElement(7), new IntegerElement(8),
-				new IntegerElement(9), new IntegerElement(10), new IntegerElement(11)));
+		final IModifiableSequence sequence1 = new ListModifiableSequence(
+				CollectionsUtil.makeArrayList(new IntegerElement(1), new IntegerElement(2), new IntegerElement(3), new IntegerElement(4), new IntegerElement(5)));
+		final IModifiableSequence sequence2 = new ListModifiableSequence(
+				CollectionsUtil.makeArrayList(new IntegerElement(6), new IntegerElement(7), new IntegerElement(8), new IntegerElement(9), new IntegerElement(10), new IntegerElement(11)));
 
 		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
 
@@ -86,11 +86,11 @@ public class Move2over2Test {
 
 		move.apply(sequences);
 
-		final List<ISequenceElement> expectedSequence1 = CollectionsUtil.makeArrayList2(ISequenceElement.class, new IntegerElement(1), new IntegerElement(2), new IntegerElement(3),
-				new IntegerElement(10), new IntegerElement(5));
+		final List<ISequenceElement> expectedSequence1 = CollectionsUtil.makeArrayList(new IntegerElement(1), new IntegerElement(2), new IntegerElement(3), new IntegerElement(10),
+				new IntegerElement(5));
 
-		final List<ISequenceElement> expectedSequence2 = CollectionsUtil.makeArrayList2(ISequenceElement.class, new IntegerElement(6), new IntegerElement(7), new IntegerElement(8),
-				new IntegerElement(9), new IntegerElement(4), new IntegerElement(11));
+		final List<ISequenceElement> expectedSequence2 = CollectionsUtil.makeArrayList(new IntegerElement(6), new IntegerElement(7), new IntegerElement(8), new IntegerElement(9),
+				new IntegerElement(4), new IntegerElement(11));
 
 		Assertions.assertEquals(expectedSequence1.size(), sequence1.size());
 		Assertions.assertEquals(expectedSequence2.size(), sequence2.size());

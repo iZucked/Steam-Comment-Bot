@@ -3,6 +3,7 @@
   "Date" : "11/02/11",
   "Direction" : "Southbound",
   "Vessel" : "Methane Lydon Volney",
+  "Booking Code" : "default",
   "Event" : "load-cargo-48",
   "Next Event" : "discharge-cargo-48",
   "Next Port" : "Pyeongtaek",

@@ -7,7 +7,8 @@ package com.mmxlabs.ganttviewer.actions;
 import org.eclipse.jface.action.Action;
 import org.eclipse.nebula.widgets.ganttchart.GanttChart;
 
-import com.mmxlabs.ganttviewer.internal.Activator;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 
 /**
  */
@@ -18,8 +19,7 @@ public class ZoomOutAction extends Action {
 	public ZoomOutAction() {
 		super();
 		setText("Zoom Out");
-		setImageDescriptor(Activator.getImageDescriptor("icons/clcl16/zoomout_nav.gif"));
-		setDisabledImageDescriptor(Activator.getImageDescriptor("icons/dlcl16/zoomout_nav.gif"));
+		CommonImages.setImageDescriptors(this, IconPaths.ZoomOut);
 	}
 
 	public ZoomOutAction(final GanttChart ganttChart) {

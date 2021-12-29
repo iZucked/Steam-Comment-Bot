@@ -59,6 +59,10 @@ public final class SchedulerConstants {
 	public static final String Key_UsePriceBasedWindowTrimming = "scheduler-use-price-based-window-trimming";
 	public static final String Key_UsePNLBasedWindowTrimming = "scheduler-use-pnl-based-window-trimming";
 	public static final String Key_UseCanalSlotBasedWindowTrimming = "scheduler-use-canal-slot-based-window-trimming";
+	/**
+	 * A key to use the best Panama canal Idle days
+	 */
+	public static final String Key_UseBestPanamaCanalIdleDaysWindowTrimming = "scheduler-use-best-panama-canal-idle-days-window-trimming";
 
 	public static final String Key_SchedulePurges = "schedule-purges";
 
@@ -88,4 +92,9 @@ public final class SchedulerConstants {
 	
 	public static final String COMMERCIAL_VOLUME_OVERCAPACITY = "COMMERCIAL_VOLUME_OVERCAPACITY";
 
+	
+	/**
+	 * Ignore small capacity violations e.g. 5 units (which would be 5_000).
+	 */
+	public static final long CAPACITY_VIOLATION_THRESHOLD = 0L;
 }

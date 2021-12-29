@@ -48,8 +48,9 @@ import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.impl.DefaultB
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterLengthEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.CharterLengthEvaluator;
-import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.CleanStateIdleTimeEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.DefaultGeneratedCharterOutEvaluator;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.maintenance.IMaintenanceEvaluator;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.maintenance.impl.MaintenanceEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduling.IArrivalTimeScheduler;
 import com.mmxlabs.scheduler.optimiser.scheduling.PNLBasedWindowTrimmer;
 import com.mmxlabs.scheduler.optimiser.scheduling.PNLBasedWindowTrimmerUtils;
@@ -97,19 +98,7 @@ public class LNGEvaluationModule extends AbstractModule {
 		bind(IArrivalTimeScheduler.class).to(TimeWindowScheduler.class);
 
 		if (hints != null) {
-
-			boolean isCleanState = false;
-			for (final String hint : hints) {
-				if (LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR.equals(hint)) {
-					bind(IGeneratedCharterOutEvaluator.class).to(CleanStateIdleTimeEvaluator.class);
-					isCleanState = true;
-					break;
-
-				}
-			}
-
-			// GCO and Clean state are not compatible with each other
-			if (!isCleanState && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_CHARTER_OUT_GENERATION) && hints.contains(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS)) {
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_CHARTER_OUT_GENERATION) && hints.contains(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS)) {
 				bind(IGeneratedCharterOutEvaluator.class).to(DefaultGeneratedCharterOutEvaluator.class);
 			}
 
@@ -121,6 +110,8 @@ public class LNGEvaluationModule extends AbstractModule {
 				// See LNGTransformerModule for parameters
 				bind(IGeneratedCharterLengthEvaluator.class).to(CharterLengthEvaluator.class);
 			}
+
+			bind(IMaintenanceEvaluator.class).to(MaintenanceEvaluator.class);
 		}
 
 		// Needed for LegalSequencingChecker

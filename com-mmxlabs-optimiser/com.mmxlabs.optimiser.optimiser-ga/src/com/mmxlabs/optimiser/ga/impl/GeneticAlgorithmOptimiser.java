@@ -9,6 +9,7 @@ import java.util.Collection;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.concurrent.JobExecutor;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -46,7 +47,7 @@ public class GeneticAlgorithmOptimiser extends AbstractSequencesOptimiser implem
 	}
 
 	@Override
-	public int step(final int percentage) {
+	public int step(final int percentage, JobExecutor jobExecutor) {
 
 		throw new UnsupportedOperationException("Not yet implemented");
 	}

@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.analytics.ui.views.mtm;
 
 import java.time.LocalDate;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.license.features.KnownFeatures;
@@ -130,14 +131,14 @@ public final class MTMUtils {
 	
 	public static MTMModel evaluateMTMModel(final LNGScenarioModel scenarioModel, final ScenarioInstance scenarioInstance, 
 			final IScenarioDataProvider sdp, final boolean allowCargoes, final String modelName, final boolean allowSpotCargoes, 
-			final LocalDate start, final LocalDate end) {
+			final LocalDate start, final LocalDate end, IProgressMonitor progressMonitor) {
 		final MTMModel model = MTMUtils.createModelFromScenario(scenarioModel, modelName, allowCargoes, allowSpotCargoes, start, end);
-		MTMSandboxEvaluator.evaluate(sdp, scenarioInstance, model);
+		MTMSandboxEvaluator.evaluate(sdp, scenarioInstance, model, progressMonitor);
 		return model;
 	}
 	
-	public static void evaluateMTMModel(final MTMModel model, final ScenarioInstance scenarioInstance, final IScenarioDataProvider sdp) {
-		MTMSandboxEvaluator.evaluate(sdp, scenarioInstance, model);
+	public static void evaluateMTMModel(final MTMModel model, final ScenarioInstance scenarioInstance, final IScenarioDataProvider sdp, IProgressMonitor progressMonitor) {
+		MTMSandboxEvaluator.evaluate(sdp, scenarioInstance, model, progressMonitor);
 	}
 	
 }

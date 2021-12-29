@@ -101,7 +101,7 @@ public final class CurrentBookingData {
 				// .. and it is this sequence's vessel
 				.filter(e -> e.getVessels().contains(vessel)) //
 				.collect(Collectors.toList());
-
+		
 		return vesselBookings;
 	}
 

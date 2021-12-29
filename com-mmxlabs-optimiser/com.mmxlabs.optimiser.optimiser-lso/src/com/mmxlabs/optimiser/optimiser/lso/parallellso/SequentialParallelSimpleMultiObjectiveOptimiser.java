@@ -17,7 +17,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.JobExecutor;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.common.components.impl.IncrementingRandomSeed;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -35,9 +35,6 @@ public class SequentialParallelSimpleMultiObjectiveOptimiser extends SimpleMulti
 	private long seed;
 
 	@Inject
-	private CleanableExecutorService executorService;
-
-	@Inject
 	@Named(ParallelLSOConstants.PARALLEL_MOO_BATCH_SIZE)
 	private int batchSize;
 
@@ -51,7 +48,7 @@ public class SequentialParallelSimpleMultiObjectiveOptimiser extends SimpleMulti
 	}
 
 	@Override
-	protected int step(final int percentage, @NonNull final ModifiableSequences pinnedPotentialRawSequences, @NonNull final ModifiableSequences pinnedCurrentRawSequences) {
+	protected int step(final int percentage, @NonNull final ModifiableSequences pinnedPotentialRawSequences, @NonNull final ModifiableSequences pinnedCurrentRawSequences, JobExecutor jobExecutor) {
 
 		final int iterationsThisStep = Math.min(Math.max(1, (getNumberOfIterations() * percentage) / 100), getNumberOfIterations() - getNumberOfIterationsCompleted());
 		int i = 0;
@@ -66,7 +63,7 @@ public class SequentialParallelSimpleMultiObjectiveOptimiser extends SimpleMulti
 				final NonDominatedSolution nonDominatedSolution = getNonDominatedSolution(seedd);
 				final MultiObjectiveOptimiserJob job = new MultiObjectiveOptimiserJob(injector, nonDominatedSolution.getSequences(), nonDominatedSolution.getManager(), getMoveGenerator(), seedd,
 						failedInitialConstraintCheckers);
-				futures.add(executorService.submit(job));
+				futures.add(jobExecutor.submit(job));
 			}
 			int futureIdx = 0;
 			for (final Future<MultiObjectiveJobState> f : futures) {
@@ -94,7 +91,7 @@ public class SequentialParallelSimpleMultiObjectiveOptimiser extends SimpleMulti
 				i++;
 				futureIdx++;
 				// clean up executor
-				this.executorService.removeCompleted();
+				jobExecutor.removeCompleted();
 			}
 		}
 		if (DEBUG) {

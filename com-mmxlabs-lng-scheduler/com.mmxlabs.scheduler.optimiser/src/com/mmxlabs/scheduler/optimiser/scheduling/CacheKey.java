@@ -12,6 +12,7 @@ import java.util.Objects;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequencesAttributesProvider;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 
@@ -19,14 +20,16 @@ public class CacheKey {
 
 	final IResource resource;
 	final ISequence sequence;
+	final ISequencesAttributesProvider sequencesAttributesProvider;
 	// This data is used as the key
 	private final Map<ECanalEntry, List<IRouteOptionBooking>> unusedBookings;
 	// This data will be modified by the scheduler
 	final CurrentBookingData currentBookingData;
 
-	public CacheKey(final IResource resource, final ISequence sequence, final CurrentBookingData _currentBookingData) {
+	public CacheKey(final IResource resource, final ISequence sequence, final CurrentBookingData _currentBookingData, ISequencesAttributesProvider sequencesAttributesProvider) {
 		this.resource = resource;
 		this.sequence = sequence;
+		this.sequencesAttributesProvider = sequencesAttributesProvider;
 		// Copy unassigned elements for use in key
 		this.unusedBookings = new HashMap<>();
 		for (ECanalEntry e : ECanalEntry.values()) {
@@ -38,7 +41,7 @@ public class CacheKey {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(resource, sequence, unusedBookings);
+		return Objects.hash(resource, sequence, unusedBookings, sequencesAttributesProvider);
 	}
 
 	@Override
@@ -50,7 +53,8 @@ public class CacheKey {
 			final CacheKey other = (CacheKey) obj;
 			return resource == other.resource //
 					&& Objects.equals(sequence, other.sequence) //
-					&& Objects.equals(unusedBookings, other.unusedBookings);
+					&& Objects.equals(unusedBookings, other.unusedBookings) //
+					&& Objects.equals(sequencesAttributesProvider, other.sequencesAttributesProvider);
 
 		}
 		return false;

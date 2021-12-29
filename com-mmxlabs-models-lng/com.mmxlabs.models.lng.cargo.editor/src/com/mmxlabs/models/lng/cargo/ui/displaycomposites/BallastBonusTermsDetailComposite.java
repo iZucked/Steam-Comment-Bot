@@ -71,7 +71,8 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 	};
 	private Runnable resizeAction;
 
-	public BallastBonusTermsDetailComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, final FormToolkit toolkit, Runnable resizeAction) {
+	public BallastBonusTermsDetailComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, final FormToolkit toolkit, //
+			Runnable resizeAction, final EObject object) {
 		super(parent, style, dialogContext, toolkit);
 		this.resizeAction = resizeAction;
 
@@ -94,7 +95,8 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 		endHeelComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		endHeelComposite.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 		
-		if (!dialogContext.isMultiEdit() && LicenseFeatures.isPermitted("features:monthly-ballast-bonus")) {
+		if (!dialogContext.isMultiEdit() && LicenseFeatures.isPermitted("features:monthly-ballast-bonus")
+				&& checkEObject(object)) {
 			Composite bottomComposite = toolkit.createComposite(this, SWT.NONE);
 			GridLayout gridLayoutCheckbox = new GridLayout(3, false);
 			bottomComposite.setLayout(gridLayoutCheckbox);
@@ -117,6 +119,18 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 				}
 			});
 		}
+	}
+	
+	private boolean checkEObject(final EObject object) {
+		if (object instanceof VesselAvailability) {
+			final VesselAvailability va = (VesselAvailability) object;
+			if (va.getContainedCharterContract() != null) {
+				return true;
+			}
+		} else if (object instanceof GenericCharterContract) {
+			return true;
+		}
+		return false;
 	}
 
 	protected boolean changeBallastBonusType() {
@@ -208,7 +222,7 @@ public class BallastBonusTermsDetailComposite extends DefaultTopLevelComposite i
 	}
 
 	protected void doDisplay(IDialogEditingContext dialogContext, MMXRootObject root, EMFDataBindingContext dbc, final GenericCharterContract gcc) {
-		if (!dialogContext.isMultiEdit() && gcc != null && gcc.getName() != null) {
+		if (!dialogContext.isMultiEdit() && gcc != null) {
 			if (gcc.getBallastBonusTerms() instanceof MonthlyBallastBonusContainer) {
 				final MonthlyBallastBonusContainer mbbc = (MonthlyBallastBonusContainer) gcc.getBallastBonusTerms();
 				Composite hubsComp = toolkit.createComposite(owner);

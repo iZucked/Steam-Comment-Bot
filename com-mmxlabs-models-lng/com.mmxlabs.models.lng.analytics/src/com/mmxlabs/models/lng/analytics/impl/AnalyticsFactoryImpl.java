@@ -75,7 +75,9 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.VESSEL_EVENT_REFERENCE: return createVesselEventReference();
 			case AnalyticsPackage.CHARTER_OUT_OPPORTUNITY: return createCharterOutOpportunity();
 			case AnalyticsPackage.BASE_CASE_ROW: return createBaseCaseRow();
+			case AnalyticsPackage.BASE_CASE_ROW_OPTIONS: return createBaseCaseRowOptions();
 			case AnalyticsPackage.PARTIAL_CASE_ROW: return createPartialCaseRow();
+			case AnalyticsPackage.PARTIAL_CASE_ROW_OPTIONS: return createPartialCaseRowOptions();
 			case AnalyticsPackage.SHIPPING_OPTION: return createShippingOption();
 			case AnalyticsPackage.SIMPLE_VESSEL_CHARTER_OPTION: return createSimpleVesselCharterOption();
 			case AnalyticsPackage.OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION: return createOptionalSimpleVesselCharterOption();
@@ -118,6 +120,7 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.BREAK_EVEN_ANALYSIS_ROW: return createBreakEvenAnalysisRow();
 			case AnalyticsPackage.BREAK_EVEN_ANALYSIS_RESULT_SET: return createBreakEvenAnalysisResultSet();
 			case AnalyticsPackage.BREAK_EVEN_ANALYSIS_RESULT: return createBreakEvenAnalysisResult();
+			case AnalyticsPackage.LOCAL_DATE_TIME_HOLDER: return createLocalDateTimeHolder();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -306,9 +309,31 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 * @generated
 	 */
 	@Override
+	public BaseCaseRowOptions createBaseCaseRowOptions() {
+		BaseCaseRowOptionsImpl baseCaseRowOptions = new BaseCaseRowOptionsImpl();
+		return baseCaseRowOptions;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public PartialCaseRow createPartialCaseRow() {
 		PartialCaseRowImpl partialCaseRow = new PartialCaseRowImpl();
 		return partialCaseRow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public PartialCaseRowOptions createPartialCaseRowOptions() {
+		PartialCaseRowOptionsImpl partialCaseRowOptions = new PartialCaseRowOptionsImpl();
+		return partialCaseRowOptions;
 	}
 
 	/**
@@ -727,6 +752,17 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	public BreakEvenAnalysisResult createBreakEvenAnalysisResult() {
 		BreakEvenAnalysisResultImpl breakEvenAnalysisResult = new BreakEvenAnalysisResultImpl();
 		return breakEvenAnalysisResult;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public LocalDateTimeHolder createLocalDateTimeHolder() {
+		LocalDateTimeHolderImpl localDateTimeHolder = new LocalDateTimeHolderImpl();
+		return localDateTimeHolder;
 	}
 
 	/**

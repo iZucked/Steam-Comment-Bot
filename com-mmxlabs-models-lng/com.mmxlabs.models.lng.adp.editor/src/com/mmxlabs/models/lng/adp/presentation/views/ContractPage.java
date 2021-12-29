@@ -25,7 +25,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.function.IntUnaryOperator;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -135,6 +134,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioElementNameHelper;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.ui.commands.ScheduleModelInvalidateCommandProvider;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
@@ -155,6 +155,9 @@ import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.TextualEnumAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.TextualSingleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
@@ -356,7 +359,7 @@ public class ContractPage extends ADPComposite {
 
 						}
 					};
-					deleteSlotAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE));
+					deleteSlotAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled));
 					if (actionBars != null) {
 						actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteSlotAction);
 					}
@@ -377,7 +380,7 @@ public class ContractPage extends ADPComposite {
 							}
 						};
 
-						ResourceLocator.imageDescriptorFromBundle("com.mmxlabs.rcp.common", "/icons/pack.gif").ifPresent(packAction::setImageDescriptor);
+						packAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Pack, IconMode.Enabled));
 
 						removeButtonManager.getToolbarManager().add(packAction);
 					}
@@ -421,7 +424,7 @@ public class ContractPage extends ADPComposite {
 							}
 						};
 
-						ResourceLocator.imageDescriptorFromBundle("com.mmxlabs.rcp.common", "/icons/pack.gif").ifPresent(packAction::setImageDescriptor);
+						packAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Pack, IconMode.Enabled));
 
 						toolbarManager.getToolbarManager().add(packAction);
 
@@ -442,10 +445,9 @@ public class ContractPage extends ADPComposite {
 								mullSummaryViewer.expandToLevel(++mullSummaryExpandLevel);
 							}
 						};
-						ResourceLocator.imageDescriptorFromBundle("com.mmxlabs.rcp.common", "/icons/collapseall.gif").ifPresent(collapseOneLevel::setImageDescriptor);
-						ResourceLocator.imageDescriptorFromBundle("com.mmxlabs.rcp.common", "/icons/expandall.gif").ifPresent(expandOneLevel::setImageDescriptor);
-						// collapseOneLevel.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/collapseall.gif"));
-						// expandOneLevel.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/expandall.gif"));
+						
+						CommonImages.setImageDescriptors(collapseOneLevel, IconPaths.CollapseAll);
+						CommonImages.setImageDescriptors(expandOneLevel, IconPaths.ExpandAll);
 
 						toolbarManager.getToolbarManager().add(collapseOneLevel);
 						toolbarManager.getToolbarManager().add(expandOneLevel);
@@ -743,12 +745,12 @@ public class ContractPage extends ADPComposite {
 
 			// Build ins and outs
 			final TreeMap<LocalDateTime, InventoryDateTimeEvent> currentInsAndOuts = getInventoryInsAndOutsHourly(currentInventory, sm, startDateTime, endDateTimeExclusive);
-			int totalInventoryVolume = 0;
+			// int totalInventoryVolume = 0;
+			int preAdpStartTankVolume = 0;
 			while (currentInsAndOuts.firstKey().isBefore(startDateTime)) {
 				final InventoryDateTimeEvent event = currentInsAndOuts.remove(currentInsAndOuts.firstKey());
-				totalInventoryVolume += event.getNetVolumeIn();
+				preAdpStartTankVolume += event.getNetVolumeIn();
 			}
-			currentInsAndOuts.firstEntry().getValue().addVolume(totalInventoryVolume);
 			phase1InventoryHourlyInsAndOuts.put(currentInventory, currentInsAndOuts);
 
 			// Flagged existing cargo dates
@@ -764,7 +766,7 @@ public class ContractPage extends ADPComposite {
 
 			// Phase 1 should not use fixed cargoes to get an accurate picture of expected numbers for the year in question.
 			final int inventoryLoadDuration = inventoryPort.getLoadDuration();
-			phase1InventoryRollingWindows.put(currentInventory, new RollingLoadWindow(inventoryLoadDuration, hourlyIter, inventoryLoadDuration));
+			phase1InventoryRollingWindows.put(currentInventory, new RollingLoadWindow(inventoryLoadDuration, hourlyIter, inventoryLoadDuration, preAdpStartTankVolume));
 		}
 		final Set<Vessel> phase1FirstPartyVessels = phase1MullContainers.entrySet().stream() //
 				.flatMap(e -> e.getValue().getMUDContainers().stream()) //
@@ -975,12 +977,11 @@ public class ContractPage extends ADPComposite {
 						.forEach(vessel -> phase1aVesselToMostRecentUseDateTime.put(vessel, dateTimeBeforeADPStart));
 			}
 			final TreeMap<LocalDateTime, InventoryDateTimeEvent> currentInsAndOuts = getInventoryInsAndOutsHourly(currentInventory, sm, startDateTime, endDateTimeExclusive);
-			int totalInventoryVolume = 0;
+			int preAdpStartTankVolume = 0;
 			while (currentInsAndOuts.firstKey().isBefore(startDateTime)) {
 				final InventoryDateTimeEvent event = currentInsAndOuts.remove(currentInsAndOuts.firstKey());
-				totalInventoryVolume += event.getNetVolumeIn();
+				preAdpStartTankVolume += event.getNetVolumeIn();
 			}
-			currentInsAndOuts.firstEntry().getValue().addVolume(totalInventoryVolume);
 			phase1aInventoryHourlyInsAndOuts.put(currentInventory, currentInsAndOuts);
 
 			final Port inventoryPort = currentInventory.getPort();
@@ -992,7 +993,7 @@ public class ContractPage extends ADPComposite {
 			phase1aCargoBluePrintsToGenerate.put(currentInventory, new LinkedList<>());
 
 			final int inventoryLoadDuration = inventoryPort.getLoadDuration();
-			phase1aInventoryRollingWindows.put(currentInventory, new RollingLoadWindow(inventoryLoadDuration, hourlyIter, inventoryLoadDuration));
+			phase1aInventoryRollingWindows.put(currentInventory, new RollingLoadWindow(inventoryLoadDuration, hourlyIter, inventoryLoadDuration, preAdpStartTankVolume));
 		}
 		for (final Entry<Inventory, MULLContainer> entry : phase1aMullContainers.entrySet()) {
 			final Inventory inventory = entry.getKey();
@@ -1004,7 +1005,6 @@ public class ContractPage extends ADPComposite {
 					phase1aMonthEndAllocationTrackerEntitlements.get(inventory).put(alloc, new HashMap<>());
 				}
 			}
-
 		}
 		phase1aMullContainers.entrySet().stream().flatMap(e -> e.getValue().getMUDContainers().stream()).flatMap(mudContainer -> mudContainer.getAllocationTrackers().stream())
 				.forEach(allocationTracker -> allocationTracker.setVesselSharing(phase1FirstPartyVessels));
@@ -1401,8 +1401,7 @@ public class ContractPage extends ADPComposite {
 					monthMappedEntityCargoBlueprints.get(inventory).get(selectedEntity).computeIfAbsent(fromYM, k -> new HashSet<>()).add(selectedCargoBlueprint);
 					// We've moved cargoes for a different entity and the current entity have to update their reference entitlements to accomodate this.
 					// Using matched cargoblueprint for volume - this might be a bad assumption
-					final Predicate<YearMonth> loopContinueCheck = releasingYearMonth.equals(toYM) ? ym -> ym.isBefore(finalReleasingYm) : ym -> !finalReleasingYm.isAfter(ym);
-					for (YearMonth ym = acceptingYearMonth; loopContinueCheck.test(ym); ym = ym.plusMonths(1)) {
+					for (YearMonth ym = acceptingYearMonth; ym.isBefore(finalReleasingYm); ym = ym.plusMonths(1)) {
 						final long newEntitlement = phase1aMonthEndEntitlements.get(inventory).get(selectedEntity).get(ym).longValue() - selectedCargoBlueprint.getAllocatedVolume();
 						phase1aMonthEndEntitlements.get(inventory).get(selectedEntity).put(ym, newEntitlement);
 						final long newEntitlementForFixedCargo = phase1aMonthEndEntitlements.get(inventory).get(entity).get(ym).longValue() + fixedCargoMatchedBlueprint.getAllocatedVolume();
@@ -1528,8 +1527,7 @@ public class ContractPage extends ADPComposite {
 					monthMappedCargoBlueprints.get(inventory).computeIfAbsent(acceptingYearMonth, k -> new HashSet<>()).add(selectedCargoBlueprint);
 					monthMappedEntityCargoBlueprints.get(inventory).get(selectedEntity).computeIfAbsent(acceptingYearMonth, k -> new HashSet<>()).add(selectedCargoBlueprint);
 
-					final Predicate<YearMonth> loopContinueCheck = releasingYearMonth.equals(toYM) ? ym -> ym.isAfter(finalReleasingYm) : ym -> !finalReleasingYm.isBefore(ym);
-					for (YearMonth ym = acceptingYearMonth; loopContinueCheck.test(ym); ym = ym.minusMonths(1)) {
+					for (YearMonth ym = acceptingYearMonth; ym.isAfter(finalReleasingYm); ym = ym.minusMonths(1)) {
 						final long newEntitlement = phase1aMonthEndEntitlements.get(inventory).get(selectedEntity).get(ym).longValue() + selectedCargoBlueprint.getAllocatedVolume();
 						phase1aMonthEndEntitlements.get(inventory).get(selectedEntity).put(ym, newEntitlement);
 						final long newEntitlementForFixedCargo = phase1aMonthEndEntitlements.get(inventory).get(entity).get(ym).longValue() - fixedCargoMatchedBlueprint.getAllocatedVolume();
@@ -2123,32 +2121,10 @@ public class ContractPage extends ADPComposite {
 			inventoryHourlyInsAndOuts.put(inventory, getInventoryInsAndOutsHourly(inventory, sm, startDateTime, endDateTimeExclusive));
 		}
 
-		for (final MullSubprofile sProfile : profile.getInventories()) {
-			int totalInventoryVolume = 0;
-			final Inventory currentInventory = sProfile.getInventory();
-			final TreeMap<LocalDateTime, InventoryDateTimeEvent> currentInsAndOuts = inventoryHourlyInsAndOuts.get(currentInventory);
-			while (currentInsAndOuts.firstKey().isBefore(startDateTime)) {
-				final InventoryDateTimeEvent event = currentInsAndOuts.remove(currentInsAndOuts.firstKey());
-				totalInventoryVolume += event.getNetVolumeIn();
-			}
-			currentInsAndOuts.firstEntry().getValue().addVolume(totalInventoryVolume);
-		}
-
 		final Map<Inventory, TreeMap<LocalDateTime, InventoryDateTimeEvent>> newInventoryHourlyInsAndOuts = new HashMap<>();
 		for (final MullSubprofile sProfile : profile.getInventories()) {
 			final Inventory inventory = sProfile.getInventory();
 			newInventoryHourlyInsAndOuts.put(inventory, getInventoryInsAndOutsHourly(inventory, sm, startDateTime, endDateTimeExclusive));
-		}
-
-		for (final MullSubprofile sProfile : harmonisationMullProfile.getInventories()) {
-			int totalInventoryVolume = 0;
-			final Inventory currentInventory = sProfile.getInventory();
-			final TreeMap<LocalDateTime, InventoryDateTimeEvent> currentInsAndOuts = newInventoryHourlyInsAndOuts.get(currentInventory);
-			while (currentInsAndOuts.firstKey().isBefore(startDateTime)) {
-				final InventoryDateTimeEvent event = currentInsAndOuts.remove(currentInsAndOuts.firstKey());
-				totalInventoryVolume += event.getNetVolumeIn();
-			}
-			currentInsAndOuts.firstEntry().getValue().addVolume(totalInventoryVolume);
 		}
 
 		final LocalDate dayBeforeStart = startDate.minusDays(1);
@@ -2171,6 +2147,14 @@ public class ContractPage extends ADPComposite {
 		final Map<Inventory, Entry<LocalDateTime, Cargo>> nextFixedCargoes = new HashMap<>();
 		for (final MullSubprofile sProfile : profile.getInventories()) {
 			final Inventory inventory = sProfile.getInventory();
+
+			int preAdpStartTankVolume = 0;
+			final TreeMap<LocalDateTime, InventoryDateTimeEvent> currentInsAndOuts = inventoryHourlyInsAndOuts.get(inventory);
+			while (currentInsAndOuts.firstKey().isBefore(startDateTime)) {
+				final InventoryDateTimeEvent event = currentInsAndOuts.remove(currentInsAndOuts.firstKey());
+				preAdpStartTankVolume += event.getNetVolumeIn();
+			}
+
 			final Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>> hourlyIter = inventoryHourlyInsAndOuts.get(inventory).entrySet().iterator();
 			newIterSwap.add(Pair.of(inventory, hourlyIter));
 
@@ -2225,9 +2209,10 @@ public class ContractPage extends ADPComposite {
 			final OptionalInt optMaxLoadSlotDuration = existingCargoes.entrySet().stream().map(Entry::getValue).map(c -> c.getSlots().get(0))
 					.mapToInt(loadSlot -> loadSlot.isSetDuration() ? loadSlot.getDuration() : inventoryLoadDuration).max();
 			if (optMaxLoadSlotDuration.isPresent()) {
-				inventoryRollingWindows.put(sProfile.getInventory(), new RollingLoadWindow(inventoryLoadDuration, hourlyIter, Math.max(inventoryLoadDuration, optMaxLoadSlotDuration.getAsInt())));
+				inventoryRollingWindows.put(sProfile.getInventory(),
+						new RollingLoadWindow(inventoryLoadDuration, hourlyIter, Math.max(inventoryLoadDuration, optMaxLoadSlotDuration.getAsInt()), preAdpStartTankVolume));
 			} else {
-				inventoryRollingWindows.put(sProfile.getInventory(), new RollingLoadWindow(inventoryLoadDuration, hourlyIter, inventoryLoadDuration));
+				inventoryRollingWindows.put(sProfile.getInventory(), new RollingLoadWindow(inventoryLoadDuration, hourlyIter, inventoryLoadDuration, preAdpStartTankVolume));
 			}
 		}
 
@@ -2240,6 +2225,14 @@ public class ContractPage extends ADPComposite {
 		final Map<Inventory, Entry<LocalDateTime, Cargo>> newNextFixedCargoes = new HashMap<>();
 		for (final MullSubprofile sProfile : harmonisationMullProfile.getInventories()) {
 			final Inventory inventory = sProfile.getInventory();
+
+			int preAdpStartTankVolume = 0;
+			final TreeMap<LocalDateTime, InventoryDateTimeEvent> currentInsAndOuts = newInventoryHourlyInsAndOuts.get(inventory);
+			while (currentInsAndOuts.firstKey().isBefore(startDateTime)) {
+				final InventoryDateTimeEvent event = currentInsAndOuts.remove(currentInsAndOuts.firstKey());
+				preAdpStartTankVolume += event.getNetVolumeIn();
+			}
+
 			final Iterator<Entry<LocalDateTime, InventoryDateTimeEvent>> hourlyIter = newInventoryHourlyInsAndOuts.get(inventory).entrySet().iterator();
 			newNewIterSwap.add(Pair.of(inventory, hourlyIter));
 
@@ -2297,9 +2290,10 @@ public class ContractPage extends ADPComposite {
 			final OptionalInt optMaxLoadSlotDuration = existingCargoes.entrySet().stream().map(Entry::getValue).map(c -> c.getSlots().get(0))
 					.mapToInt(loadSlot -> loadSlot.isSetDuration() ? loadSlot.getDuration() : inventoryLoadDuration).max();
 			if (optMaxLoadSlotDuration.isPresent()) {
-				newInventoryRollingWindows.put(sProfile.getInventory(), new RollingLoadWindow(inventoryLoadDuration, hourlyIter, Math.max(inventoryLoadDuration, optMaxLoadSlotDuration.getAsInt())));
+				newInventoryRollingWindows.put(sProfile.getInventory(),
+						new RollingLoadWindow(inventoryLoadDuration, hourlyIter, Math.max(inventoryLoadDuration, optMaxLoadSlotDuration.getAsInt()), preAdpStartTankVolume));
 			} else {
-				newInventoryRollingWindows.put(sProfile.getInventory(), new RollingLoadWindow(inventoryLoadDuration, hourlyIter, inventoryLoadDuration));
+				newInventoryRollingWindows.put(sProfile.getInventory(), new RollingLoadWindow(inventoryLoadDuration, hourlyIter, inventoryLoadDuration, preAdpStartTankVolume));
 			}
 			existingCargoesContainer.put(inventory, existingCargoes);
 		}
@@ -3132,6 +3126,7 @@ public class ContractPage extends ADPComposite {
 		// }
 
 		final IScenarioDataProvider sdp = editorData.getScenarioDataProvider();
+		final Command deleteModelsCommand = ScheduleModelInvalidateCommandProvider.createClearModelsCommand(editingDomain, sm, ScenarioModelUtil.getAnalyticsModel(sm));
 
 		final List<Cargo> cargoesToDelete;
 		final List<LoadSlot> loadSlotsToDelete;
@@ -3178,6 +3173,9 @@ public class ContractPage extends ADPComposite {
 		if (cmd.isEmpty()) {
 			return IdentityCommand.INSTANCE;
 		} else {
+			if (deleteModelsCommand != null) {
+				editorData.getDefaultCommandHandler().handleCommand(deleteModelsCommand);
+			}
 			try {
 				editorData.setDisableUpdates(true);
 				editorData.getDefaultCommandHandler().handleCommand(cmd, profile, null);

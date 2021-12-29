@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -27,6 +26,8 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.mmxlabs.common.concurrent.JobExecutor;
+import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.common.util.TriConsumer;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.SlotType;
@@ -132,11 +133,11 @@ public class ScheduleSpecificationHelper {
 
 			TriConsumer<LNGScenarioToOptimiserBridge, Injector, Integer> action = (bridge, injector, cores) -> {
 
-				ExecutorService executor = LNGScenarioChainBuilder.createExecutorService(cores);
-				try {
+				JobExecutorFactory jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService(cores);
+				try (JobExecutor jobExecutor = jobExecutorFactory.begin()) {
 					List<Future<?>> futures = new ArrayList<>(jobs.size());
 					List<Supplier<Command>> commandSuppliers = new LinkedList<>();
-					jobs.forEach(c -> futures.add(executor.submit(() -> {
+					jobs.forEach(c -> futures.add(jobExecutor.submit(() -> {
 						Supplier<Command> cc = c.apply(bridge, injector);
 						if (cc != null) {
 							synchronized (commandSuppliers) {
@@ -166,8 +167,6 @@ public class ScheduleSpecificationHelper {
 							commandStack.execute(cmd);
 						});
 					}
-				} finally {
-					executor.shutdownNow();
 				}
 			};
 			withRunner(scenarioInstance, userSettings, editingDomain, initialHints, action);
@@ -186,13 +185,13 @@ public class ScheduleSpecificationHelper {
 		@NonNull
 		final Collection<@NonNull String> hints = new LinkedList<>(initialHints);
 		hints.add(LNGTransformerHelper.HINT_DISABLE_CACHES);
+		hints.add(LNGTransformerHelper.HINT_EVALUATION_ONLY);
 
 		final SolutionBuilderSettings solutionBuilderSettings = ParametersFactory.eINSTANCE.createSolutionBuilderSettings();
 		solutionBuilderSettings.setConstraintAndFitnessSettings(ScenarioUtils.createDefaultConstraintAndFitnessSettings());
 		// Ignore objectives
 		solutionBuilderSettings.getConstraintAndFitnessSettings().getObjectives().clear();
-		
-		
+
 		final int cores = LNGScenarioChainBuilder.getNumberOfAvailableCores();
 		final LNGScenarioToOptimiserBridge bridge = new LNGScenarioToOptimiserBridge(scenarioDataProvider, //
 				scenarioInstance, //

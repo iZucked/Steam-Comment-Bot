@@ -22,6 +22,9 @@ public class DuplicateAction extends ScenarioModifyingAction {
 
 	public DuplicateAction(final IScenarioEditingLocation part) {
 		super("Duplicate selection");
+//		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.rcp.common", "/icons/16x16/plusplus.png"));
+//		setDisabledImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.rcp.common", "icons/16x16/plusplus_disabled.png"));
+
 		setImageDescriptor(LngUIActivator.getDefault().getImageRegistry().getDescriptor(ImageConstants.IMAGE_DUPLICATE));
 		setDisabledImageDescriptor(LngUIActivator.getDefault().getImageRegistry().getDescriptor(ImageConstants.IMAGE_DUPLICATE_DISABLED));
 		this.part = part;

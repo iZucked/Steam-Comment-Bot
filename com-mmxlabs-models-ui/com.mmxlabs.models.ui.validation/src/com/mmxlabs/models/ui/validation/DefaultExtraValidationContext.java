@@ -40,9 +40,10 @@ public class DefaultExtraValidationContext implements IExtraValidationContext {
 
 	private final boolean validatingClone;
 	private boolean relaxedValidation;
+	private boolean fullModelValidation = false;
 
 	/**
-	 * @param relaxedValidation 
+	 * @param relaxedValidation
 	 */
 	public DefaultExtraValidationContext(IScenarioDataProvider scenarioDataProvider, boolean validatingClone, boolean relaxedValidation) {
 		this.rootObject = scenarioDataProvider != null ? scenarioDataProvider.getTypedScenario(MMXRootObject.class) : null;
@@ -190,14 +191,23 @@ public class DefaultExtraValidationContext implements IExtraValidationContext {
 	public boolean isValidatingClone() {
 		return validatingClone;
 	}
-	
+
 	@Override
 	public boolean isRelaxedChecking() {
 		return relaxedValidation;
 	}
-	
+
 	@Override
 	public IScenarioDataProvider getScenarioDataProvider() {
 		return scenarioDataProvider;
+	}
+
+	@Override
+	public boolean isFullModelValidation() {
+		return fullModelValidation;
+	}
+
+	public void setFullModelValidation(boolean isFullModelValidation) {
+		this.fullModelValidation = isFullModelValidation;
 	}
 }

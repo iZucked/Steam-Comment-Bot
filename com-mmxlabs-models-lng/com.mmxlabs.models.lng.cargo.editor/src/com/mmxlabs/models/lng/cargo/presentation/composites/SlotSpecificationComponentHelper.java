@@ -69,6 +69,7 @@ public class SlotSpecificationComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_slotEditor(detailComposite, topClass);
+		add_arrivalDateEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the slot feature on SlotSpecification
@@ -77,5 +78,14 @@ public class SlotSpecificationComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_slotEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT_SPECIFICATION__SLOT));
+	}
+
+	/**
+	 * Create the editor for the arrivalDate feature on SlotSpecification
+	 *
+	 * @generated
+	 */
+	protected void add_arrivalDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT_SPECIFICATION__ARRIVAL_DATE));
 	}
 }

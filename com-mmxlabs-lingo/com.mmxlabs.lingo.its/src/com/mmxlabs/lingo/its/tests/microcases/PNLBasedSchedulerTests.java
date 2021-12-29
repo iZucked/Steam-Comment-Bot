@@ -5,34 +5,43 @@
 package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.YearMonth;
 import java.util.Collections;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
+import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import com.mmxlabs.common.time.Days;
+import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
 import com.mmxlabs.lngdataserver.lng.importers.creator.ScenarioBuilder;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
+import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -571,6 +580,68 @@ public class PNLBasedSchedulerTests extends AbstractMicroTestCase {
 		Assertions.assertTrue(dayOfMonth >= 8 && dayOfMonth < 16);
 		// Check the price.
 		Assertions.assertEquals(7.093, dischargeAllocation.getPrice(), 0.01);
+	}
+
+	/**
+	 * 
+	 * 
+	 * Based on 1-1 base where the min duration was not respected. Several issues feeding into this in the PNL scheduler. Main issue was min duration check is only applied to the last plan *AFTER* we
+	 * have picked the return times - thus better P&L with violations could have replaced all the no min-violation plans. Secondary issues were the time interval creation did not explicitly add in
+	 * values for min/max duration and it did not update the earliest feasible arrival time. Thus we had some enforced idle time, (minimising the min duration violation) but not enought to meet the
+	 * constraint.
+	 */
+	@Test
+	public void testMinDurationIssue() {
+
+		final Vessel vessel = fleetModelFinder.findVessel("<TFDE_165>");
+
+		VesselAvailability vesselAvailability = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+				.withCharterRate("35000") //
+				.withStartPort(portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS)) //
+				.withStartWindow(LocalDateTime.of(2017, 4, 1, 0, 0, 0), LocalDateTime.of(2071, 4, 20, 0, 0, 0))//
+				.withMinDuration(30) //
+				.withMaxDuration(70) //
+				.withEndPorts(portFinder.getCapabilityPortsGroup(PortCapability.DISCHARGE)) //
+
+				.build();
+
+		// Ballast bonus
+		GenericCharterContract gcc = commercialModelBuilder.createSimpleNotionalJourneyBallastBonusContract(Collections.emptySet(), 16.0, "35000", "200", false, false,
+				Collections.singleton(portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS)));
+		vesselAvailability.setCharterContractOverride(true);
+		vesselAvailability.setContainedCharterContract(gcc);
+
+		cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("Load", LocalDate.of(2017, 4, 1), portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS), null, entity, "3") //
+				.withWindowSize(1, TimePeriod.MONTHS) //
+				.withWindowStartTime(0) //
+				.build() //
+				//
+				.makeDESSale("Sell", LocalDate.of(2017, 5, 1), portFinder.findPortById(InternalDataConstants.PORT_OGISHIMA), null, entity, "8.5") //
+				.withWindowSize(1, TimePeriod.MONTHS) //
+				.withWindowStartTime(0) //
+				.build() //
+				//
+				.withVesselAssignment(vesselAvailability, 0) //
+				.build();
+
+		evaluateTestWith(OptimiserInjectorServiceMaker.begin() //
+				.withModuleOverrideBindNamedInstance(ModuleType.Module_LNGTransformerModule, SchedulerConstants.Key_UsePNLBasedWindowTrimming, boolean.class, Boolean.TRUE) //
+				.make()//
+		);
+
+		final Schedule schedule = ScenarioModelUtil.findSchedule(scenarioDataProvider);
+		Assertions.assertNotNull(schedule);
+		Assertions.assertEquals(1, schedule.getCargoAllocations().size());
+
+		final CargoAllocation cargoAllocation = schedule.getCargoAllocations().get(0);
+		EList<Event> events = cargoAllocation.getSequence().getEvents();
+		Event first = events.get(0);
+		Event last = events.get(events.size() - 1);
+		// This is the main check
+		Assertions.assertTrue(Days.between(first.getStart(), last.getEnd()) >= vesselAvailability.getMinDuration());
+		// Sanity check the max bound is still respected.
+		Assertions.assertTrue(Days.between(first.getStart(), last.getEnd()) <= vesselAvailability.getMaxDuration());
 	}
 
 }

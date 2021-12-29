@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.NonNullPair;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.chain.IChainRunner;
@@ -53,16 +53,16 @@ public class LNGScenarioRunner {
 	@Nullable
 	private final ScenarioInstance scenarioInstance;
 
-	private final @NonNull CleanableExecutorService executorService;
+	private final @NonNull JobExecutorFactory jobExecutorFactory;
 
-	public LNGScenarioRunner(@NonNull final CleanableExecutorService executorService, //
+	public LNGScenarioRunner(@NonNull final JobExecutorFactory executorService, //
 			@NonNull final IScenarioDataProvider scenarioDataProvider, //
 			@Nullable final ScenarioInstance scenarioInstance, //
 			@NonNull final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, //
 			@NonNull final IChainRunner chainRunner, //
 			@Nullable final IRunnerHook runnerHook) {
 
-		this.executorService = executorService;
+		this.jobExecutorFactory = executorService;
 		this.scenarioDataProvider = scenarioDataProvider;
 		this.scenarioInstance = scenarioInstance;
 		this.scenarioToOptimiserBridge = scenarioToOptimiserBridge;
@@ -147,7 +147,7 @@ public class LNGScenarioRunner {
 		scenarioToOptimiserBridge.getDataTransformer().setRunnerHook(runnerHook);
 	}
 
-	public CleanableExecutorService getExecutorService() {
-		return executorService;
+	public JobExecutorFactory getJobExecutorFactory() {
+		return jobExecutorFactory;
 	}
 }

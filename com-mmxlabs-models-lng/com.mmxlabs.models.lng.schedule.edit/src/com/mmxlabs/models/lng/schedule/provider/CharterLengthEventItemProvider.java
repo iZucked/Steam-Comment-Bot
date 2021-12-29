@@ -57,6 +57,7 @@ public class CharterLengthEventItemProvider extends PortVisitItemProvider {
 			addEventsPropertyDescriptor(object);
 			addDurationPropertyDescriptor(object);
 			addLadenPropertyDescriptor(object);
+			addContingencyHoursPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -150,6 +151,28 @@ public class CharterLengthEventItemProvider extends PortVisitItemProvider {
 	}
 
 	/**
+	 * This adds a property descriptor for the Contingency Hours feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addContingencyHoursPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterLengthEvent_contingencyHours_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterLengthEvent_contingencyHours_feature", "_UI_CharterLengthEvent_type"),
+				 SchedulePackage.Literals.CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -222,6 +245,7 @@ public class CharterLengthEventItemProvider extends PortVisitItemProvider {
 		switch (notification.getFeatureID(CharterLengthEvent.class)) {
 			case SchedulePackage.CHARTER_LENGTH_EVENT__DURATION:
 			case SchedulePackage.CHARTER_LENGTH_EVENT__LADEN:
+			case SchedulePackage.CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SchedulePackage.CHARTER_LENGTH_EVENT__GROUP_PROFIT_AND_LOSS:

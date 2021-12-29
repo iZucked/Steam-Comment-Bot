@@ -51,6 +51,8 @@ public class IdleItemProvider
 			super.getPropertyDescriptors(object);
 
 			addLadenPropertyDescriptor(object);
+			addBufferHoursPropertyDescriptor(object);
+			addPanamaHoursPropertyDescriptor(object);
 			addContingencyHoursPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -74,6 +76,50 @@ public class IdleItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Buffer Hours feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addBufferHoursPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Idle_bufferHours_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Idle_bufferHours_feature", "_UI_Idle_type"),
+				 SchedulePackage.Literals.IDLE__BUFFER_HOURS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Panama Hours feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPanamaHoursPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Idle_panamaHours_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Idle_panamaHours_feature", "_UI_Idle_type"),
+				 SchedulePackage.Literals.IDLE__PANAMA_HOURS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -169,6 +215,8 @@ public class IdleItemProvider
 
 		switch (notification.getFeatureID(Idle.class)) {
 			case SchedulePackage.IDLE__LADEN:
+			case SchedulePackage.IDLE__BUFFER_HOURS:
+			case SchedulePackage.IDLE__PANAMA_HOURS:
 			case SchedulePackage.IDLE__CONTINGENCY_HOURS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

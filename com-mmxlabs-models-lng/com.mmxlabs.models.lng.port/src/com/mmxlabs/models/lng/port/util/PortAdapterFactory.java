@@ -98,6 +98,10 @@ public class PortAdapterFactory extends AdapterFactoryImpl {
 				return createRouteLineAdapter();
 			}
 			@Override
+			public Adapter caseManualRouteLine(ManualRouteLine object) {
+				return createManualRouteLineAdapter();
+			}
+			@Override
 			public Adapter casePortModel(PortModel object) {
 				return createPortModelAdapter();
 			}
@@ -222,6 +226,20 @@ public class PortAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createRouteLineAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.port.ManualRouteLine <em>Manual Route Line</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.port.ManualRouteLine
+	 * @generated
+	 */
+	public Adapter createManualRouteLineAdapter() {
 		return null;
 	}
 

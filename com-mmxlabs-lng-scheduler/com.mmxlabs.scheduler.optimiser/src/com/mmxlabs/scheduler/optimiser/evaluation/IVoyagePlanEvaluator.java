@@ -10,6 +10,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.common.collect.ImmutableList;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequencesAttributesProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
@@ -22,23 +23,25 @@ public interface IVoyagePlanEvaluator {
 			IVesselAvailability vesselAvailability, //
 			ICharterCostCalculator charterCostCalculator, //
 			int vesselStartTime, //
-			@Nullable IPort firstLoadPort,
-			PreviousHeelRecord previousHeelRecord, //
+			@Nullable IPort firstLoadPort, PreviousHeelRecord previousHeelRecord, //
 			IPortTimesRecord portTimesRecord, //
 			boolean lastPlan, //
 			boolean returnAll, //
 			boolean keepDetails, //
+			ISequencesAttributesProvider sequencesAttributesProvider, //
 			@Nullable IAnnotatedSolution annotatedSolution);
-	
+
 	public ImmutableList<ScheduledVoyagePlanResult> evaluateRoundTrip(IResource resource, //
 			IVesselAvailability vesselAvailability, //
 			ICharterCostCalculator charterCostCalculator, //
 			IPortTimesRecord portTimesRecord, //
 			boolean returnAll, //
 			boolean keepDetails, //
+			ISequencesAttributesProvider sequencesAttributesProvider, //
 			@Nullable IAnnotatedSolution annotatedSolution);
 
 	ScheduledVoyagePlanResult evaluateNonShipped(IResource resource, IVesselAvailability vesselAvailability, IPortTimesRecord portTimesRecord, boolean keepDetails,
+			ISequencesAttributesProvider sequencesAttributesProvider,
 			@Nullable IAnnotatedSolution annotatedSolution);
 
 }

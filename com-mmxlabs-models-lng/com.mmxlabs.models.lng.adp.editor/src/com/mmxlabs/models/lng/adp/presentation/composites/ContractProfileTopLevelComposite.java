@@ -52,6 +52,9 @@ import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 
 /**
@@ -76,7 +79,7 @@ public class ContractProfileTopLevelComposite extends DefaultTopLevelComposite {
 
 	@Override
 	public void display(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
-		final ImageDescriptor baseAdd = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD);
+		final ImageDescriptor baseAdd = CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled);
 		final ImageDescriptor image_grey_add = ImageDescriptor.createWithFlags(baseAdd, SWT.IMAGE_GRAY);
 
 		this.eClass = object.eClass();
@@ -164,7 +167,7 @@ public class ContractProfileTopLevelComposite extends DefaultTopLevelComposite {
 
 						}
 					};
-					action.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE));
+					CommonImages.setImageDescriptors(action, IconPaths.Delete);
 					removeButtonManager.getToolbarManager().add(action);
 					removeButtonManager.getToolbarManager().update(true);
 					toolkit.adapt(removeButtonManager.getToolbarManager().getControl());
@@ -202,7 +205,7 @@ public class ContractProfileTopLevelComposite extends DefaultTopLevelComposite {
 					}
 
 				};
-				action.setHoverImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+				action.setHoverImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled));
 				action.setImageDescriptor(image_grey_add);
 
 				addButtonManager.getToolbarManager().add(action);

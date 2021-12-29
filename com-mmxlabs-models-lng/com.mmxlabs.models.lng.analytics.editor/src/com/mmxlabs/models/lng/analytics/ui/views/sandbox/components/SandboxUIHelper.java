@@ -28,6 +28,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
+
 /**
  * Helper class for common images colours etc in the Sandbox.
  * 
@@ -51,6 +55,7 @@ public class SandboxUIHelper {
 	public final Image imgShippingFleet;
 	public final Image imgModel;
 
+	public final Image image_add;
 	public final Image image_grey_add;
 
 	public final Font normalFont;
@@ -62,7 +67,9 @@ public class SandboxUIHelper {
 	public final Image imgSPOT_FOB;
 	public final Image imgSPOT_DES;
 
-	/** Pass in a control - when it is disposed so will this classes UI resources. */
+	/**
+	 * Pass in a control - when it is disposed so will this classes UI resources.
+	 */
 
 	public SandboxUIHelper(final @NonNull Control owner) {
 
@@ -73,9 +80,9 @@ public class SandboxUIHelper {
 		imgSPOT_FOB = images.createImage(getImageDescriptor("com.mmxlabs.models.lng.analytics.editor", "/icons/SPOT_FOB.png"));
 		imgSPOT_DES = images.createImage(getImageDescriptor("com.mmxlabs.models.lng.analytics.editor", "/icons/SPOT_DES.png"));
 
-		imgError = images.createImage(getImageDescriptor("com.mmxlabs.models.ui.validation", "/icons/error.gif"));
-		imgWarn = images.createImage(getImageDescriptor("com.mmxlabs.models.ui.validation", "/icons/warning.gif"));
-		imgInfo = images.createImage(getImageDescriptor("com.mmxlabs.models.ui.validation", "/icons/information.gif"));
+		imgError = images.createImage(CommonImages.getImageDescriptor(IconPaths.Error, IconMode.Enabled));
+		imgWarn = images.createImage(CommonImages.getImageDescriptor(IconPaths.Warning, IconMode.Enabled));
+		imgInfo = images.createImage(CommonImages.getImageDescriptor(IconPaths.Information, IconMode.Enabled));
 
 		colourError = images.createColor(new RGB(255, 100, 100));
 		colourWarn = images.createColor(new RGB(255, 255, 200));
@@ -84,7 +91,7 @@ public class SandboxUIHelper {
 		// Shipping type icons
 		imgShippingRoundTrip = images.createImage(getImageDescriptor("com.mmxlabs.models.lng.analytics.editor", "/icons/roundtrip.png"));
 		imgShippingFleet = images.createImage(getImageDescriptor("com.mmxlabs.models.lng.analytics.editor", "/icons/fleet.png"));
-		imgModel = images.createImage(getImageDescriptor("com.mmxlabs.models.lng.analytics.editor", "/icons/console_view.gif"));
+		imgModel = images.createImage(CommonImages.getImageDescriptor(IconPaths.Console, IconMode.Enabled));
 
 		final Font systemFont = Display.getDefault().getSystemFont();
 
@@ -92,7 +99,8 @@ public class SandboxUIHelper {
 		this.largeFont = images.createFont(FontDescriptor.createFrom(systemFont).increaseHeight(2));
 		this.boldFont = images.createFont(FontDescriptor.createFrom(systemFont).setStyle(SWT.BOLD));
 
-		final ImageDescriptor baseAdd = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD);
+		final ImageDescriptor baseAdd = CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled);
+		image_add = images.createImage(baseAdd);
 		image_grey_add = images.createImage(ImageDescriptor.createWithFlags(baseAdd, SWT.IMAGE_GRAY));
 	}
 

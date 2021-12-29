@@ -122,6 +122,9 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.ui.tabular.TableColourPalette;
 import com.mmxlabs.models.ui.tabular.TableColourPalette.ColourElements;
 import com.mmxlabs.models.ui.tabular.TableColourPalette.TableItems;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
@@ -867,11 +870,8 @@ public class SchedulerView extends ViewPart implements
 	}
 
 	private void fillLocalPullDown(final IMenuManager manager) {
-		manager.add(zoomInAction);
-		manager.add(zoomOutAction);
-		manager.add(saveFullImageAction);
+		// manager.add(saveFullImageAction);
 		manager.add(toggleLegend);
-		manager.add(toggleShowDaysOnEvents);
 	}
 
 	private void fillContextMenu(final IMenuManager manager) {
@@ -898,13 +898,15 @@ public class SchedulerView extends ViewPart implements
 
 		zoomInAction = new ZoomInAction(viewer.getGanttChart());
 		zoomOutAction = new ZoomOutAction(viewer.getGanttChart());
-
-		highlightAction = new HighlightAction(this, viewer, (EMFScheduleLabelProvider) (viewer.getLabelProvider()));
+		packAction = new PackAction(viewer.getGanttChart());
 
 		if (!Activator.getDefault().getPreferenceStore().getBoolean(SCHEDULER_VIEW_HIDE_COLOUR_SCHEME_ACTION)) {
 
 			colourSchemeAction = new ColourSchemeAction(this, (EMFScheduleLabelProvider) (viewer.getLabelProvider()), viewer);
 		}
+		
+		highlightAction = new HighlightAction(this, viewer, (EMFScheduleLabelProvider) (viewer.getLabelProvider()));
+		
 		toggleLegend = new RunnableAction("Legend", SWT.CHECK, () -> {
 			final boolean b = viewer.getGanttChart().getGanttComposite().isShowLegend();
 			viewer.getGanttChart().getGanttComposite().setShowLegend(!b);
@@ -912,16 +914,8 @@ public class SchedulerView extends ViewPart implements
 		});
 		toggleLegend.setChecked(viewer.getGanttChart().getGanttComposite().isShowLegend());
 
-		toggleShowDaysOnEvents = new RunnableAction("Show days on events", SWT.CHECK, () -> {
-			final boolean b = viewer.getGanttChart().getGanttComposite().isShowingDaysOnEvents();
-			viewer.getGanttChart().getGanttComposite().setShowDaysOnEvents(!b);
-			viewer.getGanttChart().getGanttComposite().redraw();
-		});
-		toggleShowDaysOnEvents.setChecked(viewer.getGanttChart().getGanttComposite().isShowingDaysOnEvents());
-
 		sortModeAction = new SortModeAction(this, viewer, (EMFScheduleLabelProvider) viewer.getLabelProvider(), viewerComparator);
 
-		packAction = new PackAction(viewer.getGanttChart());
 
 		saveFullImageAction = new SaveFullImageAction(viewer.getGanttChart());
 
@@ -994,7 +988,7 @@ public class SchedulerView extends ViewPart implements
 		public SortModeAction(final SchedulerView schedulerView, final GanttChartViewer viewer, final EMFScheduleLabelProvider lp, final ScenarioViewerComparator comparator) {
 			super("Sort", IAction.AS_DROP_DOWN_MENU, schedulerView, viewer, lp);
 			this.comparator = comparator;
-			setImageDescriptor(Activator.getImageDescriptor("/icons/alphab_sort_co.gif"));
+			setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Sort, IconMode.Enabled));
 		}
 
 		@Override
@@ -1228,5 +1222,4 @@ public class SchedulerView extends ViewPart implements
 	};
 
 	private RunnableAction toggleLegend;
-	private RunnableAction toggleShowDaysOnEvents;
 }

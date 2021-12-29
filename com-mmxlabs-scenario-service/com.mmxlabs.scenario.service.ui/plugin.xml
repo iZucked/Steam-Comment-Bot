@@ -165,7 +165,8 @@
          point="org.eclipse.ui.commandImages">
       <image
             commandId="com.mmxlabs.scenario.service.ui.fork"
-            icon="icons/fork.gif">
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/24x24/fork.png"
+            disabledIcon="platform:/plugin/com.mmxlabs.rcp.common/icons/24x24/fork_disabled.png">
       </image>
       <image
             commandId="com.mmxlabs.scenario.service.ui.lock"
@@ -455,6 +456,7 @@
          </command>
          <command
                commandId="org.eclipse.ui.edit.copy"
+               icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/copy.png"
                label="Copy"
                style="push">
             <visibleWhen>
@@ -477,11 +479,13 @@
          </command>
          <command
                commandId="org.eclipse.ui.edit.paste"
+               icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/paste.png"
                label="Paste"
                style="push">
          </command>
          <command
                commandId="org.eclipse.ui.edit.delete"
+               icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/delete.png"
                label="Delete"
                style="push">
          </command>
@@ -512,6 +516,7 @@
          -->
          <command
                commandId="com.mmxlabs.scenario.service.ui.fork"
+               icon="platform:/plugin/com.mmxlabs.rcp.common/icons/24x24/fork.png"
                label="Fork"
                style="push">
             <visibleWhen
@@ -543,6 +548,7 @@
          </separator>
          <command
                commandId="com.mmxlabs.scenario.service.ui.pin"
+               icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/pin.png"
                label="Pin"
                style="push">
             <visibleWhen
@@ -571,6 +577,7 @@
          </command>
          <command
                commandId="com.mmxlabs.scenario.service.ui.pin"
+               icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/pin.png"
                label="Unpin"
                style="push">
             <visibleWhen
@@ -717,7 +724,7 @@
          <action
                class="com.mmxlabs.scenario.service.ui.editor.actions.PinStateEditorActionDelegate"
                definitionId="com.mmxlabs.scenario.service.ui.pin"
-               icon="icons/pin_editor.gif"
+               icon="icons/pin_scenario.png"
                id="com.mmxlabs.scenario.service.ui.togglePin"
                label="Toggle pin for this scenario"
                style="toggle"

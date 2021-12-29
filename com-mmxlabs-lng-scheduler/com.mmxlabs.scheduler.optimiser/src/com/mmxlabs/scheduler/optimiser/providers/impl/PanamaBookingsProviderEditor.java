@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.IntUnaryOperator;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -20,6 +21,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.impl.PanamaSeasonalityCurve;
 import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 import com.mmxlabs.scheduler.optimiser.providers.IPanamaBookingsProviderEditor;
 
@@ -33,15 +35,13 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 	private static final int MAX_SPEED_TO_CANAL = Integer.MAX_VALUE;
 
 	private ImmutableMap<ECanalEntry, ImmutableList<IRouteOptionBooking>> panamaBookings;
-	private int northboundMaxIdleDays;
-	private int southboundMaxIdleDays;
 	private int arrivalMargin;
-	private Map<IVessel, Integer> vesselToNorthboundMaxIdleDays = new HashMap<>();
-	private Map<IVessel, Integer> vesselToSouthboundMaxIdleDays = new HashMap<>();
 
 	private ImmutableMap<ECanalEntry, ImmutableList<IRouteOptionBooking>> assignedBookings;
 
 	private ImmutableMap<ECanalEntry, ImmutableList<IRouteOptionBooking>> unassignedBookings;
+	
+	private ImmutableList<PanamaSeasonalityCurve> seasonalityCurve;
 
 	@Override
 	public void setBookings(final Map<ECanalEntry, List<IRouteOptionBooking>> bookings) {
@@ -119,42 +119,102 @@ public class PanamaBookingsProviderEditor implements IPanamaBookingsProviderEdit
 	}
 
 	@Override
-	public int getNorthboundMaxIdleDays() {
-		return northboundMaxIdleDays;
-	}
-	
-	@Override
-	public int getSouthboundMaxIdleDays() {
-		return southboundMaxIdleDays;
-	}
-	
-	@Override
-	public void setSouthboundMaxIdleDays(int maxIdleDays) {
-		southboundMaxIdleDays = maxIdleDays;
-	}
-	
-	@Override
-	public void setNorthboundMaxIdleDays(int maxIdleDays) {
-		northboundMaxIdleDays = maxIdleDays;
-	}
-	
-	@Override
-	public int getNorthboundMaxIdleDays(IVessel vessel) {
-		return this.vesselToNorthboundMaxIdleDays.getOrDefault(vessel, this.northboundMaxIdleDays);
+	public int getNorthboundMaxIdleDays(IVessel vessel, int startAtPanamaTZ) {
+		int defaultResult = Integer.MAX_VALUE;
+		for(final PanamaSeasonalityCurve psc : seasonalityCurve) {
+			if (psc.getVessel() == vessel) {
+				return psc.getNorthboundMaxIdleDays(startAtPanamaTZ);
+			} else if (psc.getVessel() == null) {
+				defaultResult = psc.getNorthboundMaxIdleDays(startAtPanamaTZ);
+			}
+		}
+		return defaultResult;
 	}
 
 	@Override
-	public int getSouthboundMaxIdleDays(IVessel vessel) {
-		return this.vesselToSouthboundMaxIdleDays.getOrDefault(vessel, this.southboundMaxIdleDays);
+	public int getSouthboundMaxIdleDays(IVessel vessel, int startAtPanamaTZ) {
+		int defaultResult = Integer.MAX_VALUE;
+		for(final PanamaSeasonalityCurve psc : seasonalityCurve) {
+			if (psc.getVessel() == vessel) {
+				return psc.getSouthboundMaxIdleDays(startAtPanamaTZ);
+			} else if (psc.getVessel() == null) {
+				defaultResult = psc.getSouthboundMaxIdleDays(startAtPanamaTZ);
+			}
+		}
+		return defaultResult;
 	}
 
 	@Override
-	public void setNorthboundMaxIdleDays(IVessel vessel, int maxIdleDays) {
-		this.vesselToNorthboundMaxIdleDays.put(vessel, maxIdleDays);
+	public void setPanamaMaxIdleDays(List<PanamaSeasonalityCurve> seasonalityCurve) {
+		this.seasonalityCurve = ImmutableList.copyOf(seasonalityCurve);
 	}
 
-	@Override
-	public void setSouthboundMaxIdleDays(IVessel vessel, int maxIdleDays) {
-		this.vesselToSouthboundMaxIdleDays.put(vessel, maxIdleDays);		
+	private int getWorstMaxIdleDays(IVessel vessel, int startDateInclusive, int endDateExclusive, IntUnaryOperator operator) {
+		int result = Integer.MIN_VALUE;
+		// We want to bind the end date value by three month after the start date
+		endDateExclusive = Math.min(endDateExclusive, startDateInclusive + 1 + (90 * 24));
+		for (int i = startDateInclusive; i < endDateExclusive; i+= 24) {
+			int temp = operator.applyAsInt(i);
+			if (result < temp) {
+				result = temp;
+			}
+		}
+		return result;
 	}
+	
+	private int getWorstNBMaxIdleDays(IVessel vessel, int startDateInclusive, int endDateExclusive) {
+		return getWorstMaxIdleDays(vessel, startDateInclusive, endDateExclusive, (time) -> getNorthboundMaxIdleDays(vessel, time));
+	}
+
+	private int getWorstSBMaxIdleDays(IVessel vessel, int startDateInclusive, int endDateExclusive) {
+		return getWorstMaxIdleDays(vessel, startDateInclusive, endDateExclusive, (time) -> getSouthboundMaxIdleDays(vessel, time));
+	}
+
+	public int getWorstIdleHours(IVessel vessel, int startDateInclusive, int endDateExclusive, boolean northbound) {
+		assert startDateInclusive < endDateExclusive;
+		int days;
+		if (northbound) {
+			days = getWorstNBMaxIdleDays(vessel, startDateInclusive, endDateExclusive);
+		} else {
+			days = getWorstSBMaxIdleDays(vessel, startDateInclusive, endDateExclusive);
+		}
+		assert days >= 0;
+		assert days != Integer.MAX_VALUE;
+		return days * 24;
+	}
+	
+	private int getBestMaxIdleDays(IVessel vessel, int startDateInclusive, int endDateExclusive, IntUnaryOperator operator) {
+		int result = Integer.MAX_VALUE;
+		// We want to bind the end date value by three month after the start date
+		endDateExclusive = Math.min(endDateExclusive, startDateInclusive + 1 + (90 * 24));
+		for (int i = startDateInclusive; i < endDateExclusive; i+= 24) {
+			int temp = operator.applyAsInt(i);
+			if (temp < result) {
+				result = temp;
+			}
+		}
+		return result;
+	}
+	
+	private int getBestNBMaxIdleDays(IVessel vessel, int startDateInclusive, int endDateExclusive) {
+		return getBestMaxIdleDays(vessel, startDateInclusive, endDateExclusive, (time) -> getNorthboundMaxIdleDays(vessel, time));
+	}
+
+	private int getBestSBMaxIdleDays(IVessel vessel, int startDateInclusive, int endDateExclusive) {
+		return getBestMaxIdleDays(vessel, startDateInclusive, endDateExclusive, (time) -> getSouthboundMaxIdleDays(vessel, time));
+	}
+
+	public int getBestIdleHours(IVessel vessel, int startDateInclusive, int endDateExclusive, boolean northbound) {
+		assert startDateInclusive < endDateExclusive;
+		int days;
+		if (northbound) {
+			days = getBestNBMaxIdleDays(vessel, startDateInclusive, endDateExclusive);
+		} else {
+			days = getBestSBMaxIdleDays(vessel, startDateInclusive, endDateExclusive);
+		}
+		assert days >= 0;
+		assert days != Integer.MAX_VALUE;
+		return days;
+	}
+
 }

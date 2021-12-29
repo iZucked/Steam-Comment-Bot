@@ -36,6 +36,9 @@ import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.UnsettableInlineEditor;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 import com.mmxlabs.rcp.common.menus.SubLocalMenuHelper;
@@ -87,7 +90,7 @@ public class NominatedVesselInlineEditor extends UnsettableInlineEditor {
 			final GridData gd = GridDataFactory.fillDefaults().hint(150, SWT.DEFAULT).grab(true, false).create();
 			label.setLayoutData(gd);
 		}
-		final ImageDescriptor d = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "icons/edit.png");
+		final ImageDescriptor d = CommonImages.getImageDescriptor(IconPaths.Edit, IconMode.Enabled);
 		button = toolkit.createButton(buttonAndLabel, "", SWT.NONE);
 		final Image img = d.createImage();
 		button.setImage(img);

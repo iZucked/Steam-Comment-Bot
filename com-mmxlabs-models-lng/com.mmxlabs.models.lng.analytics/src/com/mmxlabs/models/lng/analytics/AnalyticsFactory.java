@@ -142,6 +142,15 @@ public interface AnalyticsFactory extends EFactory {
 	BaseCaseRow createBaseCaseRow();
 
 	/**
+	 * Returns a new object of class '<em>Base Case Row Options</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Base Case Row Options</em>'.
+	 * @generated
+	 */
+	BaseCaseRowOptions createBaseCaseRowOptions();
+
+	/**
 	 * Returns a new object of class '<em>Partial Case Row</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -149,6 +158,15 @@ public interface AnalyticsFactory extends EFactory {
 	 * @generated
 	 */
 	PartialCaseRow createPartialCaseRow();
+
+	/**
+	 * Returns a new object of class '<em>Partial Case Row Options</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Partial Case Row Options</em>'.
+	 * @generated
+	 */
+	PartialCaseRowOptions createPartialCaseRowOptions();
 
 	/**
 	 * Returns a new object of class '<em>Shipping Option</em>'.
@@ -527,6 +545,15 @@ public interface AnalyticsFactory extends EFactory {
 	 * @generated
 	 */
 	BreakEvenAnalysisResult createBreakEvenAnalysisResult();
+
+	/**
+	 * Returns a new object of class '<em>Local Date Time Holder</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Local Date Time Holder</em>'.
+	 * @generated
+	 */
+	LocalDateTimeHolder createLocalDateTimeHolder();
 
 	/**
 	 * Returns the package supported by this factory.

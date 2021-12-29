@@ -39,8 +39,9 @@ import com.mmxlabs.optimiser.common.events.OptimisationLifecycleModule;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeModule;
+import com.mmxlabs.optimiser.core.inject.scopes.NotInjectedScopeModule;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeModule;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -81,7 +82,8 @@ public class LNGDataTransformer {
 		final List<@NonNull Module> modules = new LinkedList<>();
 
 		// Prepare the main modules with the re-usable data for any further work.
-		modules.add(new PerChainUnitScopeModule());
+		modules.add(new ThreadLocalScopeModule());
+		modules.add(new NotInjectedScopeModule());
 		modules.add(new OptimisationLifecycleModule());
 		modules.add(new LNGSharedDataTransformerModule(scenarioDataProvider, new SharedDataTransformerService()));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new DataComponentProviderModule(), services, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule, hints));
@@ -107,7 +109,7 @@ public class LNGDataTransformer {
 			modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGInitialSequencesModule(), services, IOptimiserInjectorService.ModuleType.Module_InitialSolution, hints));
 			modules2.add(new InitialPhaseOptimisationDataModule());
 			final Injector initialSolutionInjector = parentInjector.createChildInjector(modules2);
-			final PerChainUnitScopeImpl scope = initialSolutionInjector.getInstance(PerChainUnitScopeImpl.class);
+			final ThreadLocalScopeImpl scope = initialSolutionInjector.getInstance(ThreadLocalScopeImpl.class);
 			try {
 				scope.enter();
 				solutionBuilderResult = initialSolutionInjector.getInstance(Key.get(IMultiStateResult.class, Names.named(LNGInitialSequencesModule.KEY_GENERATED_SOLUTION_PAIR)));

@@ -15,8 +15,9 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Widget;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.swt.finder.exceptions.WidgetNotFoundException;
+import org.eclipse.swtbot.swt.finder.keyboard.Keystrokes;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.eclipse.swtbot.swt.finder.waits.Conditions;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
@@ -29,12 +30,14 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.DockerComposeContainer;
-import org.testcontainers.containers.wait.Wait;
+import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.mmxlabs.hub.DataHubActivator;
-import com.mmxlabs.hub.auth.AuthenticationManager;
+import com.mmxlabs.hub.UpstreamUrlProvider;
+import com.mmxlabs.hub.auth.BasicAuthenticationManager;
+import com.mmxlabs.hub.auth.OAuthManager;
 import com.mmxlabs.hub.preferences.DataHubPreferenceConstants;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 
@@ -63,7 +66,8 @@ public class HubTests {
 	static String basicUpstreamUrl;
 	static String oauthUpstreamUrl;
 
-	private static AuthenticationManager authenticationManager = AuthenticationManager.getInstance();
+	private static BasicAuthenticationManager basicAuthenticationManager = BasicAuthenticationManager.getInstance();
+	private static OAuthManager oauthManager = OAuthManager.getInstance();
 
 	@BeforeAll
 	private static void beforeAll() {
@@ -75,9 +79,20 @@ public class HubTests {
 		basicUpstreamUrl = String.format("http://%s:%s", datahubBasicHost, datahubBasicPort);
 		oauthUpstreamUrl = String.format("http://%s:%s", datahubOAuthHost, datahubOAuthPort);
 		bot = new SWTWorkbenchBot();
+		enableBasicAuthentication();
 		setDatahubUrl(basicUpstreamUrl);
+		// force trigger refresh
+		UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
+		// slow down tests' playback speed to 500ms
+		// SWTBotPreferences.PLAYBACK_DELAY = 500;
+		// increase timeout to 10 seconds
+		SWTBotPreferences.TIMEOUT = 20000;
 		// keyboard layout necessary as we type text in tests: https://wiki.eclipse.org/SWTBot/Keyboard_Layouts
 		SWTBotPreferences.KEYBOARD_LAYOUT = "EN_US";
+	}
+
+	public static void enableBasicAuthentication() {
+		DataHubActivator.getDefault().getPreferenceStore().setValue(DataHubPreferenceConstants.P_FORCE_BASIC_AUTH, true);
 	}
 
 	public static void setDatahubUrl(String upstreamUrl) {
@@ -99,11 +114,13 @@ public class HubTests {
 	@AfterAll
 	public static void afterAll() {
 		bot.resetWorkbench();
+		bot = null;
 	}
 
 	@BeforeEach
 	public void beforeEach() {
 		bot.resetWorkbench();
+		basicAuthenticationManager.logout(basicUpstreamUrl, null);
 	}
 
 	public static void openDatahubPreferencePage() {
@@ -117,50 +134,53 @@ public class HubTests {
 	@Test
 	public void changingHubsUpdatesLoginState() throws InterruptedException {
 		openDatahubPreferencePage();
-		if (!authenticationManager.isAuthenticated()) {
+		if (!basicAuthenticationManager.isAuthenticated(basicUpstreamUrl)) {
 			basicLogin();
 		}
-		Thread.sleep(1000);
+		Thread.sleep(2000);
+		Matcher<Widget> urlTextField = withText("&URL");
+		bot.waitUntil(Conditions.waitForWidget(urlTextField));
 		bot.textWithLabel("&URL").setText(oauthUpstreamUrl);
 		bot.button("Apply").click();
-		// user is not authenticated in oauth hub
-		assertFalse(authenticationManager.isAuthenticated());
-
-		// user should still be authenticated in basic hub
-		bot.textWithLabel("&URL").setText(basicUpstreamUrl);
-		bot.button("Apply and Close").click();
-		Thread.sleep(1000);
-		assertTrue(authenticationManager.isAuthenticated());
+		// logout if necessary
+		if ("Logout".equals(bot.buttonWithId("login").getText())) {
+			bot.buttonWithId("login").click();
+			Thread.sleep(2000);
+		}
+		assertTrue(basicAuthenticationManager.isAuthenticated(basicUpstreamUrl));
+		assertFalse(oauthManager.isAuthenticated(oauthUpstreamUrl));
 	}
 
 	@Test
 	public void changingAuthSchemeUpdatesLoginState() throws InterruptedException {
 		openDatahubPreferencePage();
-		boolean basicAuthenticated = authenticationManager.isAuthenticated();
+		boolean basicAuthenticated = basicAuthenticationManager.isAuthenticated(basicUpstreamUrl);
+		Matcher<Widget> urlTextField = withText("&URL");
+		bot.waitUntil(Conditions.waitForWidget(urlTextField));
 		bot.textWithLabel("&URL").setText(oauthUpstreamUrl);
 		bot.button("Apply").click();
 		Thread.sleep(1000);
 		bot.checkBox("Force local authentication").click();
 		bot.button("Apply and Close").click();
 		if (basicAuthenticated) {
-			assertTrue(authenticationManager.isAuthenticated());
+			assertTrue(basicAuthenticationManager.isAuthenticated(basicUpstreamUrl));
 		} else {
-			assertFalse(authenticationManager.isAuthenticated());
+			assertFalse(basicAuthenticationManager.isAuthenticated(basicUpstreamUrl));
 		}
 	}
 
 	@Test
-	public void changeUrlWithoutApplyingDisablesLoginButton() throws InterruptedException {
-		boolean basicAuthenticated = authenticationManager.isAuthenticated();
+	public void changingUrlWithoutApplyingDisablesLoginButton() throws InterruptedException {
 		openDatahubPreferencePage();
 		// type backspace character to trigger change
-		bot.textWithLabel("&URL").typeText("anything");
-		Thread.sleep(1000);
-		if (basicAuthenticated) {
-			assertFalse(bot.button("Logout").isEnabled());
-		} else {
-			assertFalse(bot.button("Login").isEnabled());
-		}
+		Matcher<Widget> urlTextField = withText("&URL");
+		bot.waitUntil(Conditions.waitForWidget(urlTextField));
+		logger.info(Boolean.toString(bot.buttonWithId("login").isEnabled()));
+		// FIXME typeText is supposed to notify event listeners...
+		bot.textWithLabel("&URL").typeText("anything").pressShortcut(Keystrokes.CR);
+		logger.info(Boolean.toString(bot.buttonWithId("login").isEnabled()));
+		Thread.sleep(3000);
+		assertFalse(bot.buttonWithId("login").isEnabled());
 	}
 
 	@Test
@@ -168,10 +188,6 @@ public class HubTests {
 		openDatahubPreferencePage();
 		bot.checkBox("Force local authentication").click();
 		Thread.sleep(1000);
-		try {
-			assertFalse(bot.button("Login").isEnabled());
-		} catch (WidgetNotFoundException e) {
-			assertFalse(bot.button("Logout").isEnabled());
-		}
+		assertFalse(bot.buttonWithId("login").isEnabled());
 	}
 }

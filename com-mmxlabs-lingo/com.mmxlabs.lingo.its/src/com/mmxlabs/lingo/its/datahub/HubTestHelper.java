@@ -13,7 +13,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testcontainers.containers.DockerComposeContainer;
 
 import com.mmxlabs.hub.DataHubActivator;
 import com.mmxlabs.hub.UpstreamUrlProvider;
@@ -25,46 +24,31 @@ public class HubTestHelper {
 	static final Logger logger = LoggerFactory.getLogger(HubTestHelper.class);
 	public static final String HOST = "localhost";
 
-	private DockerComposeContainer environment;
-
-	private String baseUrl;
-
-	public HubTestHelper() {
-	}
-
-	public String getTestURL() {
-		return baseUrl;
-	}
-
-	public void configureHub(String url, boolean enableBaseCase, boolean enableTeam) {
+	public static void configureHub(String url, boolean enableBaseCase, boolean enableTeam) {
 		DataHubActivator.getDefault().getPreferenceStore().setValue(DataHubPreferenceConstants.P_DATAHUB_URL_KEY, url);
 	}
 
-	public void configueHubDefaults() {
-		configureHub(getTestURL(), true, true);
-	}
-
-	public void asStandardUser() {
+	public static void asStandardUser() {
 		BasicAuthenticationManager.getInstance().withCredentials("u_users", "u_users");
 		UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
 	}
 
-	public void asBaseCaseUser() {
+	public static void asBaseCaseUser() {
 		BasicAuthenticationManager.getInstance().withCredentials("u_basecase", "u_basecase");
 		UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
 	}
 
-	public void asSuperUser() {
+	public static void asSuperUser() {
 		BasicAuthenticationManager.getInstance().withCredentials("u_full", "u_full");
 		UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
 	}
 
-	public void asAlternativeStandardUser() {
+	public static void asAlternativeStandardUser() {
 		BasicAuthenticationManager.getInstance().withCredentials("simon", "simon");
 		UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
 	}
 
-	public void asAlternativeBaseCaseUser() {
+	public static void asAlternativeBaseCaseUser() {
 		BasicAuthenticationManager.getInstance().withCredentials("simon", "simon");
 		UpstreamUrlProvider.INSTANCE.isUpstreamAvailable();
 	}
@@ -104,10 +88,10 @@ public class HubTestHelper {
 				.findAny();
 		// @formatter:on
 		if (availablePort.isPresent()) {
-			System.out.println(String.format("Port %s is available", availablePort.get()));
+			logger.info(String.format("Port %s is available", availablePort.get()));
 			return availablePort.get();
 		} else {
-			System.out.println("There are no available ports at the moment...");
+			logger.info("There are no available ports at the moment...");
 			return -1;
 		}
 	}
@@ -135,17 +119,24 @@ public class HubTestHelper {
 	public static String emailInputName = "loginfmt";
 	public static String passwordInputName = "passwd";
 	public static String nextButtonId = "idSIButton9";
+	public static String noButtonId = "idBtn_Back";
 
 	// test credentials
 	public static String email = "test@minimaxlabs.com";
-	public static String password = "SESGcK7E@U95@^rZ7Uc6ZMzRu";
+	// TODO update
+	public static String password = "xUPffZ76Ef^X28YqQQC%ZyVr#";
 	// javascript actions executed in the browser - tested in IE and Firefox
-	public static String clickUserAnotherAccount = "document.getElementById('" + otherTile + "').click()";
+	public static String clickUserAnotherAccount = "document.getElementById('" + otherTile + "').click();";
 	public static String fillEmail = "document.getElementsByName('" + emailInputName + "')[0].value = '" + email + "';";
 	public static String focusEmail = "var email = document.getElementsByName('" + emailInputName
 			+ "')[0]; var inputEvent = document.createEvent('KeyboardEvent'); inputEvent.initEvent('input', true, false, null, false, false, false, false, 0, 0); email.dispatchEvent(inputEvent);";
 	public static String clickNext = "document.getElementById('" + nextButtonId + "').click();";
 	public static String fillPassword = "document.getElementsByName('" + passwordInputName + "')[0].value = '" + password + "';";
 	public static String focusPassword = "var password = document.getElementsByName('" + passwordInputName
-			+ "')[0]; var inputEvent2 = document.createEvent('KeyboardEvent'); inputEvent2.initEvent('input', true, false, null, false, false, false, false, 0, 0); password.dispatchEvent(inputEvent2)";
+			+ "')[0]; var inputEvent2 = document.createEvent('KeyboardEvent'); inputEvent2.initEvent('input', true, false, null, false, false, false, false, 0, 0); password.dispatchEvent(inputEvent2);";
+
+	// check if the user is signed in
+	public static String userIsSignedIn = "document.querySelector('div[data-test-id=" + email + "]') !== null ? document.querySelector('div[data-test-id=" + email + "]').click() : false;";
+	public static String clickSignedIn = "document.querySelector('div[data-test-id=" + email + "]').click();";
+	public static String clickNo = "document.getElementById('" + noButtonId + "').click();";
 }

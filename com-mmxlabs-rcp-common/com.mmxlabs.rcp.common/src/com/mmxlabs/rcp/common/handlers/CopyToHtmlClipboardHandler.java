@@ -19,6 +19,8 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.osgi.framework.FrameworkUtil;
 
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
 
@@ -44,8 +46,8 @@ public class CopyToHtmlClipboardHandler {
 		command.setElementId(COMMAND_ID);
 
 		final MHandledToolItem element = MMenuFactory.INSTANCE.createHandledToolItem();
-		element.setLabel("Pack");
-		element.setIconURI(FrameworkUtil.getBundle(CopyToHtmlClipboardHandler.class).getEntry("/icons/copy.gif").toString());
+		element.setLabel("Copy");
+		element.setIconURI(CommonImages.getImageURI(IconPaths.Copy));
 		final String location = FrameworkUtil.getBundle(CopyToHtmlClipboardHandler.class).getSymbolicName();
 		element.setContributorURI(location);
 		element.setCommand(command);

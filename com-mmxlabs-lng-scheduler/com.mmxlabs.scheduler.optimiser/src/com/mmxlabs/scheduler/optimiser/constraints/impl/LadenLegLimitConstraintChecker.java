@@ -160,7 +160,8 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 			if (tw2.getInclusiveStart() - tw1.getExclusiveEnd() > maxLadenDuration) {
 				// Violation! Check whitelist to see if we can ignore it.
 				if (mode == Mode.APPLY && !whitelistedSlots.contains(slot1)) {
-					messages.add(String.format("%s: Travel time from last discharge port %s (slot %s) to the next load port %s (slot %s) is longer than allowed %d hours.", 
+					if (messages != null)
+						messages.add(String.format("%s: Travel time from last discharge port %s (slot %s) to the next load port %s (slot %s) is longer than allowed %d hours.", 
 							this.name, slot1.getPort().getName(), slot1.getId(), slot2.getPort().getName(), slot2.getId(), maxLadenDuration));
 					return false;
 				} else if (mode == Mode.RECORD) {
@@ -182,7 +183,7 @@ public class LadenLegLimitConstraintChecker implements IPairwiseConstraintChecke
 	}
 
 	@Override
-	public void sequencesAccepted(@NonNull ISequences rawSequences, @NonNull ISequences fullSequences, @NonNull final List<String> messages) {
+	public void sequencesAccepted(@NonNull ISequences rawSequences, @NonNull ISequences fullSequences, final List<String> messages) {
 		whitelistedSlots.clear();
 		checkConstraints(fullSequences, null, Mode.RECORD, messages);
 	}

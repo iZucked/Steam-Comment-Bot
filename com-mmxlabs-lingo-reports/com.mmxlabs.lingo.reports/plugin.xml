@@ -49,42 +49,42 @@
       </category>
       <view
             name="Volume Tracking"
-            icon="icons/cview16/exec_statistic_view.gif"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_statistic_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.VolumeTrackingReportView"
             id="com.mmxlabs.shiplingo.platform.reports.views.VolumeTrackingReportView">
       </view>
       <view
             name="Schedule Summary"
-            icon="icons/cview16/exec_statistic_view.gif"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_statistic_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport"
             id="com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport">
       </view>
       <view
             name="Costs Breakdown"
-            icon="icons/cview16/exec_flow_view.gif"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_flow_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.TotalsHierarchyView"
             id="com.mmxlabs.shiplingo.platform.reports.views.TotalsHierarchyView">
       </view>
       <view
             name="Totals"
-            icon="icons/cview16/exec_flow_view.gif"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_flow_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.TotalsReportView"
             id="com.mmxlabs.shiplingo.platform.reports.views.TotalsReportView">
       </view>
       <view
             name="Port Rotation"
-            icon="icons/cview16/exec_flow_view.gif"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_flow_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.portrotation.PortRotationReportView"
             id="com.mmxlabs.shiplingo.platform.reports.views.PortRotationReportView">
       </view>
       <view
             name="Lateness"
-            icon="icons/cview16/exec_flow_view.gif"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_flow_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.LatenessReportView"
             id="com.mmxlabs.shiplingo.platform.reports.views.LatenessReportView">
@@ -92,7 +92,7 @@
       <!--
       <view
             name="Excess Idle"
-            icon="icons/cview16/exec_flow_view.gif"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_flow_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.ExcessIdleTimeReportView"
             id="com.mmxlabs.shiplingo.platform.reports.views.ExcessIdleTimeReportView">
@@ -100,14 +100,14 @@
       -->
       <view
             name="Cooldown"
-            icon="icons/cview16/exec_flow_view.gif"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_flow_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.CooldownReportView"
             id="com.mmxlabs.shiplingo.platform.reports.views.CooldownReportView">
       </view>
       <view
             name="Vessel Summary"
-            icon="icons/cview16/exec_flow_view.gif"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_flow_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.fleet.ConfigurableVesselSummaryReport"
             restorable="true"
@@ -115,28 +115,28 @@
       </view>
       <view
             name="KPI"
-            icon="icons/cview16/exec_flow_view.gif"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_flow_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.KPIReportView"
             id="com.mmxlabs.shiplingo.platform.reports.views.KPIReportView">
       </view>
       <view
             name="Headline"
-            icon="icons/cview16/exec_flow_view.gif"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_flow_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.headline.HeadlineReportView"
             id="com.mmxlabs.shiplingo.platform.reports.views.HorizontalKPIReportView">
       </view>
       <view
             name="Volume Issues"
-            icon="icons/cview16/exec_flow_view.gif"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_flow_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.VolumeIssuesReportView"
             id="com.mmxlabs.shiplingo.platform.reports.views.CapacityViolationReportView">
       </view>
       <view
             name="PnL Details"
-            icon="icons/cview16/exec_flow_view.gif"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_flow_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.PNLDetailsReport"
             id="com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport">
@@ -144,7 +144,7 @@
       <view
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.econs.CargoEconsReport"
-            icon="icons/cview16/exec_statistic_view.gif"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_statistic_view.gif"
             id="com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport"
             name="Econs"
             restorable="true">
@@ -152,7 +152,7 @@
       <view
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.CanalBookingsReport"
-            icon="icons/cview16/exec_statistic_view.gif"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_statistic_view.gif"
             id="com.mmxlabs.lingo.reports.views.standard.CanalBookingsReport"
             name="Panama Bookings Report"
             restorable="true">
@@ -160,7 +160,7 @@
       <view
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.incomestatement.IncomeStatementByContract"
-            icon="icons/cview16/exec_statistic_view.gif"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_statistic_view.gif"
             id="com.mmxlabs.lingo.reports.views.standard.incomestatement.IncomeStatementByContract"
             name="Income Statement (Contract)"
             restorable="true">
@@ -168,7 +168,7 @@
       <view
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.incomestatement.IncomeStatementByRegion"
-            icon="icons/cview16/exec_statistic_view.gif"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_statistic_view.gif"
             id="com.mmxlabs.lingo.reports.views.standard.incomestatement.IncomeStatementByRegion"
             name="Income Statement (Region)"
             restorable="true">
@@ -176,7 +176,7 @@
       <view
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.pnlcalcs.PNLCalcsReport"
-            icon="icons/cview16/exec_statistic_view.gif"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_statistic_view.gif"
             id="com.mmxlabs.lingo.reports.views.standard.pnlcalcs.PNLCalcsReport"
             name="PNL Calcs"
             restorable="true">
@@ -876,10 +876,6 @@
    <extension
          point="com.mmxlabs.license.features.PluginXMLEnablement">
       <PluginXMLEnablement
-            feature="difftools"
-            plugin.xml="difftools.plugin.xml">
-      </PluginXMLEnablement>
-      <PluginXMLEnablement
             feature="exposures"
             plugin.xml="exposures.plugin.xml">
       </PluginXMLEnablement>
@@ -909,7 +905,7 @@
       <ReplaceableView
             viewId="com.mmxlabs.lingo.reports.verticalreport"
             name="Vertical Schedule"
-            icon="icons/cview16/VerticalReport.gif"
+            icon="icons/cview16/vertical_schedule.png"
             category="com.mmxlabs.scheduleview"
             class="com.mmxlabs.lingo.reports.views.vertical.DefaultVerticalReportView">
       </ReplaceableView>
@@ -1047,25 +1043,6 @@
       </package>
    </extension>
    <extension
-         id="id1"
-         point="org.eclipse.e4.workbench.model">
-      <processor
-            apply="always"
-            beforefragment="true"
-            class="com.mmxlabs.lingo.reports.internal.FixActionSetsModelProcessor">
-      </processor>
-      <processor
-            apply="always"
-            beforefragment="false"
-            class="com.mmxlabs.lingo.reports.views.changeset.ActionPlanModuleProcessor">
-      </processor>
-      <processor
-            apply="always"
-            beforefragment="false"
-            class="com.mmxlabs.lingo.reports.views.changeset.CompareModuleProcessor">
-      </processor>
-   </extension>
-   <extension
          point="org.eclipse.ui.commands">
       <command
             defaultHandler="com.mmxlabs.lingo.reports.views.changeset.handlers.CompareScenariosHandler"
@@ -1144,19 +1121,59 @@
             allowMultiple="false"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView"
-            icon="icons/cview16/changes_view.gif"
+            icon="icons/compare.png"
             id="com.mmxlabs.lingo.reports.views.changeset.ChangeSetsView"
             name="Changes">
       </view>
       <view
       		category="com.mmxlabs.models.lng.views.tools"
             class="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView"
-            icon="icons/cview16/changes_view.gif"
+            icon="icons/compare.png"
             id="com.mmxlabs.lingo.reports.views.changeset.OptimisationsView"
             name="Optimisations"
             restorable="true">
       </view>
    </extension>
+<extension point="org.eclipse.ui.perspectives">
+		<perspective class="com.mmxlabs.lingo.reports.diff.DiffPerspective"
+			id="com.mmxlabs.lingo.reports.diff.DiffPerspective" name="Compare"
+			icon="icons/compare.png">
+		</perspective>
+	</extension>
 
-
+	<extension point="org.eclipse.ui.actionSets">
+		<actionSet id="com.mmxlabs.lingo.reports.diff.actionset"
+			label="Change Set Tools">
+			<action
+				class="com.mmxlabs.lingo.reports.services.handlers.FilterScheduleReportBySelectionAction"
+				icon="icons/FilterScheduleReport.png"
+				disabledIcon="icons/FilterScheduleReport_disabled.png"
+				id="com.mmxlabs.lingo.reports.services.handlers.FilterScheduleReportBySelectionAction"
+         label="Filter Schedule Summary"
+         style="toggle"
+         toolbarPath="additions">
+			</action>
+			<action
+				class="com.mmxlabs.lingo.reports.services.handlers.FilterScheduleChartBySelectionAction"
+				icon="icons/FilterScheduleChart.png"
+				disabledIcon="icons/FilterScheduleChart_disabled.png"
+				id="com.mmxlabs.lingo.reports.services.handlers.FilterScheduleReportBySelectionAction"
+         label="Filter Schedule Chart"
+         style="toggle"
+         toolbarPath="additions">
+			</action>
+		</actionSet>
+	</extension>
+	<extension point="org.eclipse.ui.perspectiveExtensions">
+		<perspectiveExtension targetID="*">
+			<perspectiveShortcut id="com.mmxlabs.lingo.reports.diff.DiffPerspective">
+			</perspectiveShortcut>
+		</perspectiveExtension>
+	</extension>
+	<extension point="com.mmxlabs.lingo.reports.FleetBasedColumn">
+		<FleetBasedColumn
+			handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
+			id="com.mmxlabs.lingo.reports.components.columns.fleet.diff_selection_gco">
+		</FleetBasedColumn>
+	</extension>
 </plugin>

@@ -10,13 +10,18 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.ETypedElement;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.IReportContentsGenerator;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
+import com.mmxlabs.lingo.reports.ReportContents;
+import com.mmxlabs.lingo.reports.ReportContentsGenerators;
 import com.mmxlabs.lingo.reports.ScheduledEventCollector;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
+import com.mmxlabs.lingo.reports.services.SelectedDataProviderImpl;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -195,22 +200,8 @@ public class CooldownReportView extends EMFReportView {
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
 
-		if (IReportContents.class.isAssignableFrom(adapter)) {
-
-			if (IReportContents.class.isAssignableFrom(adapter)) {
-
-				final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), true);
-				final String jsonContents = jsonUtil.convert();
-				return (T) new IReportContents() {
-
-					@Override
-					public String getJSONContents() {
-						return jsonContents;
-					}
-				};
-
-			}
-
+		if (IReportContentsGenerator.class.isAssignableFrom(adapter)) {
+			return adapter.cast(ReportContentsGenerators.createJSONFor(selectedScenariosServiceListener, viewer.getGrid()));
 		}
 		return super.getAdapter(adapter);
 	}

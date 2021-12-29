@@ -8,21 +8,8 @@
 <feature
       id="com.mmxlabs.models.lng.transformer.feature"
       label="Models: LNG Transformer Feature"
-      version="4.12.38.qualifier"
+      version="4.13.6.qualifier"
       provider-name="Minimax Labs Ltd.">
-
-   <description>
-      LNG Types optimisation transformer.
-   </description>
-
-   <copyright>
-      Copyright (C) Minimax Labs Ltd., 2010 - 2014
-All rights reserved.
-   </copyright>
-
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
-   </license>
 
    <plugin
          id="com.mmxlabs.models.lng.transformer"

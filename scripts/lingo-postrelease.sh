@@ -29,10 +29,10 @@ fi
 ## Set devel version number
 for repo in com*/; do
         pushd $repo
-        mvn -Dtycho.mode=maven -DnewVersion=$DEVELOPMENT_VERSION org.eclipse.tycho:tycho-versions-plugin:0.18.0:set-version
+        mvn -Dtycho.mode=maven -DnewVersion=$DEVELOPMENT_VERSION org.eclipse.tycho:tycho-versions-plugin::2.4.0:set-version
         popd
 done
-mvn -Dtycho.mode=maven -DnewVersion=$DEVELOPMENT_VERSION org.eclipse.tycho:tycho-versions-plugin:0.18.0:set-version
+mvn -Dtycho.mode=maven -DnewVersion=$DEVELOPMENT_VERSION org.eclipse.tycho:tycho-versions-plugin::2.4.0:set-version
 git commit -a -m "Bump version to $DEVELOPMENT_VERSION in prep for next development iteration"
 
 SHORTVERSION=`echo $DEVELOPMENT_VERSION | sed -e "s/-SNAPSHOT//"`

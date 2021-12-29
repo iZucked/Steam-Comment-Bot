@@ -36,7 +36,7 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 	@Override
 	public boolean performFinish() {
 
-		ScenarioModelRecord currentScenarioModelRecord = SSDataManager.Instance.getModelRecord(currentScenario);
+		ScenarioModelRecord currentScenarioModelRecord = SSDataManager.Instance.getModelRecordChecked(currentScenario);
 		List<ScenarioModelRecord> destinationScenarioModelRecords = destinationPage.getSelectedScenarios().stream() //
 				.map(SSDataManager.Instance::getModelRecord) //
 				.collect(Collectors.toList());

@@ -4,7 +4,10 @@
  */
 package com.mmxlabs.optimiser.core.impl;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,8 +32,11 @@ public class SequencesTest {
 		final IResource resource2 = Mockito.mock(IResource.class, "resource-2");
 
 		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
-
-		final Sequences sequences = new Sequences(resources);
+		Map<IResource, ISequence> sequenceMap = new HashMap<>();
+		for (final IResource resource : resources) {
+			sequenceMap.put(resource, new ListSequence(new LinkedList<>()));
+		}
+		final Sequences sequences = new Sequences(resources, sequenceMap, Collections.emptyList(), new SequencesAttributesProviderImpl());
 
 		Assertions.assertEquals(2, sequences.size());
 
@@ -64,7 +70,7 @@ public class SequencesTest {
 
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final Sequences sequences = new Sequences(resources, map);
+		final Sequences sequences = new Sequences(resources, map, Collections.emptyList(), new SequencesAttributesProviderImpl());
 
 		Assertions.assertEquals(2, sequences.size());
 
@@ -95,7 +101,7 @@ public class SequencesTest {
 
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final Sequences initialSequences = new Sequences(resources, map);
+		final Sequences initialSequences = new Sequences(resources, map, Collections.emptyList(), new SequencesAttributesProviderImpl());
 
 		Mockito.when(sequence1.iterator()).thenReturn(Mockito.mock(Iterator.class));
 		Mockito.when(sequence2.iterator()).thenReturn(Mockito.mock(Iterator.class));
@@ -127,8 +133,11 @@ public class SequencesTest {
 		final IResource resource2 = Mockito.mock(IResource.class, "resource-2");
 
 		final List<IResource> resources = CollectionsUtil.makeArrayList(resource1, resource2);
-
-		final Sequences sequences = new Sequences(resources);
+		Map<IResource, ISequence> sequenceMap = new HashMap<>();
+		for (final IResource resource : resources) {
+			sequenceMap.put(resource, new ListSequence(new LinkedList<>()));
+		}
+		final Sequences sequences = new Sequences(resources, sequenceMap, Collections.emptyList(), new SequencesAttributesProviderImpl());
 
 		Assertions.assertEquals(2, sequences.size());
 
@@ -153,7 +162,7 @@ public class SequencesTest {
 
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final Sequences sequences = new Sequences(resources, map);
+		final Sequences sequences = new Sequences(resources, map, Collections.emptyList(), new SequencesAttributesProviderImpl());
 
 		Assertions.assertEquals(2, sequences.size());
 
@@ -178,7 +187,7 @@ public class SequencesTest {
 
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final Sequences sequences = new Sequences(resources, map);
+		final Sequences sequences = new Sequences(resources, map, Collections.emptyList(), new SequencesAttributesProviderImpl());
 
 		Assertions.assertEquals(2, sequences.size());
 
@@ -203,7 +212,7 @@ public class SequencesTest {
 
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final Sequences sequences = new Sequences(resources, map);
+		final Sequences sequences = new Sequences(resources, map, Collections.emptyList(), new SequencesAttributesProviderImpl());
 
 		Assertions.assertEquals(2, sequences.size());
 
@@ -231,7 +240,7 @@ public class SequencesTest {
 
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(resource1, sequence1, resource2, sequence2);
 
-		final Sequences sequences = new Sequences(resources, map);
+		final Sequences sequences = new Sequences(resources, map, Collections.emptyList(), new SequencesAttributesProviderImpl());
 
 		Assertions.assertEquals(2, sequences.size());
 	}

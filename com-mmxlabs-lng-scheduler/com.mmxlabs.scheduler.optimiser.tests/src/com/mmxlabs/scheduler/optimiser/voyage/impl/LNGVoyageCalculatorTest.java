@@ -81,7 +81,7 @@ public class LNGVoyageCalculatorTest {
 		options.setIdleFuelChoice(IdleFuelChoice.NBO);
 
 		options.setAvailableTime(48);
-		options.setRoute(ERouteOption.DIRECT, 15 * 48, 0L);
+		options.setRoute(ERouteOption.DIRECT, 15 * 48, 0L, 0);
 
 		final VoyageDetails details = new VoyageDetails(options);
 
@@ -121,7 +121,7 @@ public class LNGVoyageCalculatorTest {
 		options.setIdleFuelChoice(IdleFuelChoice.NBO);
 
 		options.setAvailableTime(48);
-		options.setRoute(ERouteOption.DIRECT, 15 * 48, 0L);
+		options.setRoute(ERouteOption.DIRECT, 15 * 48, 0L, 0);
 
 		final VoyageDetails details = new VoyageDetails(options);
 
@@ -162,7 +162,7 @@ public class LNGVoyageCalculatorTest {
 		options.setIdleFuelChoice(IdleFuelChoice.NBO);
 
 		options.setAvailableTime(96);
-		options.setRoute(ERouteOption.DIRECT, 15 * 48, 0L);
+		options.setRoute(ERouteOption.DIRECT, 15 * 48, 0L, 0);
 
 		final VoyageDetails details = new VoyageDetails(options);
 
@@ -204,7 +204,7 @@ public class LNGVoyageCalculatorTest {
 
 		options.setAvailableTime(96);
 		final ERouteOption route = ERouteOption.DIRECT;
-		options.setRoute(route, 15 * 48, 0L);
+		options.setRoute(route, 15 * 48, 0L, 0);
 
 		final VoyageDetails details = new VoyageDetails(options);
 
@@ -250,7 +250,7 @@ public class LNGVoyageCalculatorTest {
 		final int expectedIdleTime = 72;
 
 		assert expectedTravelTime + expectedIdleTime == options.getAvailableTime();
-		options.setRoute(ERouteOption.DIRECT, 15 * expectedTravelTime, 0L);
+		options.setRoute(ERouteOption.DIRECT, 15 * expectedTravelTime, 0L, 0);
 
 		final VoyageDetails details = new VoyageDetails(options);
 
@@ -293,7 +293,7 @@ public class LNGVoyageCalculatorTest {
 		options.setIdleFuelChoice(IdleFuelChoice.NBO);
 
 		options.setAvailableTime(36);
-		options.setRoute(ERouteOption.DIRECT, 15 * 48, 0L);
+		options.setRoute(ERouteOption.DIRECT, 15 * 48, 0L, 0);
 
 		final VoyageDetails details = new VoyageDetails(options);
 
@@ -333,7 +333,7 @@ public class LNGVoyageCalculatorTest {
 		options.setIdleFuelChoice(IdleFuelChoice.NBO);
 
 		options.setAvailableTime(36);
-		options.setRoute(ERouteOption.DIRECT, 15 * 48, 0L);
+		options.setRoute(ERouteOption.DIRECT, 15 * 48, 0L, 0);
 
 		final VoyageDetails details = new VoyageDetails(options);
 
@@ -374,7 +374,7 @@ public class LNGVoyageCalculatorTest {
 		options.setIdleFuelChoice(IdleFuelChoice.NBO);
 
 		options.setAvailableTime(20);
-		options.setRoute(ERouteOption.DIRECT, 15 * 48, 0L);
+		options.setRoute(ERouteOption.DIRECT, 15 * 48, 0L, 0);
 
 		final VoyageDetails details = new VoyageDetails(options);
 
@@ -433,7 +433,7 @@ public class LNGVoyageCalculatorTest {
 		options.setIdleFuelChoice(IdleFuelChoice.NBO);
 
 		options.setAvailableTime(48);
-		options.setRoute(ERouteOption.DIRECT, 0, 0L);
+		options.setRoute(ERouteOption.DIRECT, 0, 0L, 0);
 
 		final VoyageDetails details = new VoyageDetails(options);
 
@@ -477,7 +477,7 @@ public class LNGVoyageCalculatorTest {
 		options.setAvailableTime(48);
 		final ERouteOption routeName = ERouteOption.SUEZ;
 		final ILongCurve routeCost = new ConstantValueLongCurve(200000L);
-		options.setRoute(routeName, 15 * 24, routeCost.getValueAtPoint(0));
+		options.setRoute(routeName, 15 * 24, routeCost.getValueAtPoint(0), 0);
 
 		final VoyageDetails details = new VoyageDetails(options);
 
@@ -540,7 +540,7 @@ public class LNGVoyageCalculatorTest {
 		final IVessel vessel = options.getVessel();
 
 		final ILongCurve routeCost = new ConstantValueLongCurve(200000L);
-		options.setRoute(routeName, 15 * 24, routeCost.getValueAtPoint(0));
+		options.setRoute(routeName, 15 * 24, routeCost.getValueAtPoint(0), 0);
 
 		routeCostProvider.setDefaultRouteCost(routeName, routeCost);
 		routeCostProvider.setRouteTransitTime(routeName, vessel, 24);
@@ -710,7 +710,6 @@ public class LNGVoyageCalculatorTest {
 		expectedPlan.setIgnoreEnd(true);
 		expectedPlan.setRemainingHeelInM3(0);
 		expectedPlan.setStartingHeelInM3(0);
-		expectedPlan.setViolationsCount(0);
 		expectedPlan.setTotalRouteCost(0);
 
 		Assertions.assertEquals(expectedPlan, plan);

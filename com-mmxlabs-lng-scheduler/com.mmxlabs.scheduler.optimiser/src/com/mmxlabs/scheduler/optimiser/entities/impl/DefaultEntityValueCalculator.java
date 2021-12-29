@@ -73,8 +73,10 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * 
- * For each VoyagePlan in the schedule the evaluate(...) methods work out: - discharge and purchase prices for the VP, then the - "additionalPnL" (e.g. upside calculations). - calculate shipping cost
- * (from VP contents) - calculates charter-out P&L (from VP contents)
+ * For each VoyagePlan in the schedule the evaluate(...) methods work out: -
+ * discharge and purchase prices for the VP, then the - "additionalPnL" (e.g.
+ * upside calculations). - calculate shipping cost (from VP contents) -
+ * calculates charter-out P&L (from VP contents)
  * 
  * Two evaluate methods cover cargo and non-cargo VoyagePlans.
  * 
@@ -108,7 +110,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	private IActualsDataProvider actualsDataProvider;
 
 	/**
-	 * Evaluate the group value of the given cargo. This method first calculates sales prices, then purchase prices and additional P&L, then shipping costs and charter out revenue.
+	 * Evaluate the group value of the given cargo. This method first calculates
+	 * sales prices, then purchase prices and additional P&L, then shipping costs
+	 * and charter out revenue.
 	 * 
 	 * @param plan
 	 * @param currentAllocation
@@ -348,7 +352,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	}
 
 	/**
-	 * Allow subclasses to post-process the P&L books before final data extraction occurs. E.g. allow custom books to be merged
+	 * Allow subclasses to post-process the P&L books before final data extraction
+	 * occurs. E.g. allow custom books to be merged
 	 * 
 	 * @param entityPreTaxProfit
 	 * @param entityPostTaxProfit
@@ -405,7 +410,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	}
 
 	/**
-	 * Evaluate the group value of this plan, which is not carrying a cargo. It may just be a big cost to shipping.
+	 * Evaluate the group value of this plan, which is not carrying a cargo. It may
+	 * just be a big cost to shipping.
 	 * 
 	 * TODO implement charter out revenues
 	 * 
@@ -549,7 +555,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	}
 
 	/**
-	 * Calculate shipping costs for the purposes of P&L. This should be overridden in subclasses to implement shipping book transfer pricing
+	 * Calculate shipping costs for the purposes of P&L. This should be overridden
+	 * in subclasses to implement shipping book transfer pricing
 	 * 
 	 * @param entityPreTaxProfit
 	 * @param vesselAvailability
@@ -648,52 +655,42 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		long heelCost = 0;
 
 		if (vp != null) {
-			final boolean first = true;
-
-			final PortDetails lastPortDetails = null;
 			for (final IDetailsSequenceElement e : vp.getSequence()) {
 				//
 				if (vp.isIgnoreEnd() && e == vp.getSequence()[vp.getSequence().length - 1]) {
 					continue;
 				}
 
-				if (e instanceof PortDetails) {
-
-					final PortDetails portDetails = (PortDetails) e;
+				if (e instanceof PortDetails portDetails) {
 					final IPortSlot slot = portDetails.getOptions().getPortSlot();
 
 					if (!portTimesRecord.getSlots().contains(slot)) {
 						continue;
 					}
 
-					if (slot instanceof IHeelOptionConsumerPortSlot) {
-						final IHeelOptionConsumerPortSlot heelOptionConsumerPortSlot = (IHeelOptionConsumerPortSlot) slot;
+					if (slot instanceof IHeelOptionConsumerPortSlot heelOptionConsumerPortSlot) {
 						final IHeelOptionConsumer heelOptions = heelOptionConsumerPortSlot.getHeelOptionsConsumer();
-
-						// long currentHeelInM3 = vp.getStartingHeelInM3();
 						long currentHeelInM3 = heelRecords.get(slot).portHeelRecord.getHeelAtStartInM3();
-						if (portTimesRecord instanceof IAllocationAnnotation) {
-							final IAllocationAnnotation iAllocationAnnotation = (IAllocationAnnotation) portTimesRecord;
+						if (portTimesRecord instanceof IAllocationAnnotation iAllocationAnnotation) {
 							currentHeelInM3 = iAllocationAnnotation.getStartHeelVolumeInM3();
 						}
 
 						final int heelTime = portTimesRecord.getSlotTime(slot);
 
-						final int pricePerMMBTU = heelOptions.isUseLastPrice() ? lastHeelPricePerMMBTU :
-
-								heelOptions.getHeelPriceCalculator().getHeelPrice(currentHeelInM3, heelTime, slot.getPort());
+						final int pricePerMMBTU = heelOptions.isUseLastPrice() //
+								? lastHeelPricePerMMBTU //
+								: heelOptions.getHeelPriceCalculator().getHeelPrice(currentHeelInM3, heelTime, slot.getPort());
 
 						final int cv = portDetails.getOptions().getCargoCVValue();
 						final long heelInMMBTU = Calculator.convertM3ToMMBTu(currentHeelInM3, cv);
-						final HeelValueRecord record = HeelValueRecord.withRevenue(Calculator.costFromConsumption(heelInMMBTU, pricePerMMBTU), pricePerMMBTU);
-						heelMap.merge(slot, record, HeelValueRecord::merge);
-						heelRevenue += record.getHeelRevenue();
-						heelCost += record.getHeelCost();
+						final HeelValueRecord hvRecord = HeelValueRecord.withRevenue(Calculator.costFromConsumption(heelInMMBTU, pricePerMMBTU), pricePerMMBTU);
+						heelMap.merge(slot, hvRecord, HeelValueRecord::merge);
+						heelRevenue += hvRecord.getHeelRevenue();
+						heelCost += hvRecord.getHeelCost();
 
 					}
 
-					if (slot instanceof IHeelOptionSupplierPortSlot) {
-						final IHeelOptionSupplierPortSlot heelOptionSupplierPortSlot = (IHeelOptionSupplierPortSlot) slot;
+					if (slot instanceof IHeelOptionSupplierPortSlot heelOptionSupplierPortSlot) {
 						final IHeelOptionSupplier heelOptions = heelOptionSupplierPortSlot.getHeelOptionsSupplier();
 
 						// This is wrong! should be vp.getStarintHeel in this case.
@@ -701,8 +698,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 						// long currentHeelInM3 = vp.getRemainingHeelInM3();
 
-						if (portTimesRecord instanceof IAllocationAnnotation) {
-							final IAllocationAnnotation iAllocationAnnotation = (IAllocationAnnotation) portTimesRecord;
+						if (portTimesRecord instanceof IAllocationAnnotation iAllocationAnnotation) {
 							currentHeelInM3 = iAllocationAnnotation.getRemainingHeelVolumeInM3();
 						}
 						final int heelTime = portTimesRecord.getSlotTime(slot) + portTimesRecord.getSlotDuration(slot);
@@ -711,10 +707,10 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 						final int cv = heelOptions.getHeelCVValue();
 						final long heelInMMBTU = Calculator.convertM3ToMMBTu(currentHeelInM3, cv);
-						final HeelValueRecord record = HeelValueRecord.withCost(Calculator.costFromConsumption(heelInMMBTU, pricePerMMBTU), pricePerMMBTU);
-						heelMap.merge(slot, record, HeelValueRecord::merge);
-						heelRevenue += record.getHeelRevenue();
-						heelCost += record.getHeelCost();
+						final HeelValueRecord hvRecord = HeelValueRecord.withCost(Calculator.costFromConsumption(heelInMMBTU, pricePerMMBTU), pricePerMMBTU);
+						heelMap.merge(slot, hvRecord, HeelValueRecord::merge);
+						heelRevenue += hvRecord.getHeelRevenue();
+						heelCost += hvRecord.getHeelCost();
 					}
 				}
 

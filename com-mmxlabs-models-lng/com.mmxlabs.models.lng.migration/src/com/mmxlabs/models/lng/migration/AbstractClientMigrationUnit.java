@@ -35,10 +35,6 @@ import com.mmxlabs.scenario.service.model.util.ResourceHelper;
  */
 public abstract class AbstractClientMigrationUnit implements IClientMigrationUnit {
 
-	protected MetamodelLoader sourceLoader;
-	protected MetamodelLoader destinationLoader;
-	protected Map<URI, PackageData> extraPackages;
-
 	public abstract int getScenarioVersion();
 
 	@Override
@@ -52,43 +48,13 @@ public abstract class AbstractClientMigrationUnit implements IClientMigrationUni
 	}
 
 	/**
-	 * Returns a {@link MetamodelLoader} for the {@link IMigrationUnit#getSourceVersion()}.
-	 * 
-	 * @return
-	 */
-	protected MetamodelLoader getSourceMetamodelLoader(@Nullable final Map<URI, PackageData> extraPackages) {
-		if (extraPackages != null) {
-			this.extraPackages = extraPackages;
-		}
-		if (sourceLoader == null) {
-			sourceLoader = MetamodelVersionsUtil.createVNLoader(getScenarioSourceVersion(), this.extraPackages);
-		}
-		return sourceLoader;
-	}
-
-	/**
-	 * Returns a {@link MetamodelLoader} for the {@link IMigrationUnit#getDestinationVersion()}
-	 * 
-	 * @param extraPackages
-	 * 
-	 * @return
-	 */
-	protected MetamodelLoader getDestinationMetamodelLoader(@Nullable final Map<URI, PackageData> extraPackages) {
-		if (extraPackages != null) {
-			this.extraPackages = extraPackages;
-		}
-		if (destinationLoader == null) {
-			destinationLoader = MetamodelVersionsUtil.createVNLoader(getScenarioDestinationVersion(), this.extraPackages);
-		}
-		return destinationLoader;
-	}
-
-	/**
 	 * Perform the migration. Root object instance references are not expected to be changed.
 	 * 
 	 * @param models
 	 */
-	protected abstract void doMigration(@NonNull final MigrationModelRecord modelRecord);
+	protected void doMigration(@NonNull final MigrationModelRecord modelRecord) {
+		
+	}
 
 	/**
 	 * Overrideable method to allow sub-classes to choose which meta-model version to load the datamodel under.
@@ -97,7 +63,7 @@ public abstract class AbstractClientMigrationUnit implements IClientMigrationUni
 	 * @return
 	 */
 	protected MetamodelLoader getMigrationLoader(@Nullable final Map<URI, PackageData> extraPackages) {
-		return getDestinationMetamodelLoader(extraPackages);
+		return MetamodelVersionsUtil.createVNLoader(getScenarioDestinationVersion(), extraPackages);
 	}
 
 	/**

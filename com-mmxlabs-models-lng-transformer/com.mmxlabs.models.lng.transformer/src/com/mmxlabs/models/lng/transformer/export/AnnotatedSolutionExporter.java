@@ -51,7 +51,6 @@ import com.mmxlabs.models.lng.transformer.IOutputScheduleProcessor;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.exporters.CharterLengthEventExporter;
 import com.mmxlabs.models.lng.transformer.export.exporters.CooldownExporter;
-import com.mmxlabs.models.lng.transformer.export.exporters.GeneratedCharterOutEventExporter;
 import com.mmxlabs.models.lng.transformer.export.exporters.IdleEventExporter;
 import com.mmxlabs.models.lng.transformer.export.exporters.JourneyEventExporter;
 import com.mmxlabs.models.lng.transformer.export.exporters.PurgeExporter;
@@ -63,7 +62,6 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
-import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -81,6 +79,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.util.SequenceEvaluationUtils;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 
@@ -118,9 +117,6 @@ public class AnnotatedSolutionExporter {
 
 	@Inject
 	private IdleEventExporter idleDetailsExporter;
-
-	@Inject
-	private GeneratedCharterOutEventExporter gcoDetailsExporter;
 
 	@Inject
 	private CharterLengthEventExporter charterLengthEventExporter;
@@ -661,7 +657,7 @@ public class AnnotatedSolutionExporter {
 					charterLengthEvent.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(details.getIdleCharterCost()));
 					lastEvent = charterLengthEvent;
 
-				} else if (!details.getOptions().isCharterOutIdleTime()) {
+				} else {
 					final Idle idle = idleDetailsExporter.export(details, scheduledSequence, voyage_currentTime);
 					if (idle != null) {
 						events.add(idle);
@@ -675,24 +671,8 @@ public class AnnotatedSolutionExporter {
 						idle.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(details.getIdleCharterCost()));
 						lastEvent = idle;
 					}
-				} else {
-					// We should NOT get here
-					final GeneratedCharterOut event = gcoDetailsExporter.export(details, scheduledSequence, voyage_currentTime);
-					if (event != null) {
-						events.add(event);
-						// Heel tracking
-						final HeelRecord heelRecord = vpr.getNextIdleHeelRecord(details.getOptions().getFromPortSlot());
-						if (heelRecord != null) {
-							event.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtStartInM3()));
-							event.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(heelRecord.getHeelAtEndInM3()));
-						}
-						//event.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(details.get));
-						//TODO: tidy up below method.
-						event.setRevenue(
-								OptimiserUnitConvertor.convertToExternalFixedCost(Calculator.quantityFromRateTime(details.getOptions().getCharterOutDailyRate(), details.getIdleTime()) / 24L));
-						lastEvent = event;
-					}
 				}
+				// Purge time taken out
 				voyage_currentTime += details.getIdleTime();
 
 				final Purge purge = purgeDetailsExporter.export(details, scheduledSequence, voyage_currentTime);
@@ -706,7 +686,8 @@ public class AnnotatedSolutionExporter {
 					}
 					purge.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(details.getPurgeCharterCost()));
 
-					voyage_currentTime += details.getPurgeDuration();
+					int purgeDuration = details.getOptions().getExtraIdleTime(ExplicitIdleTime.PURGE);
+					voyage_currentTime += purgeDuration;
 				}
 				final Cooldown cooldown = cooldownDetailsExporter.export(details, scheduledSequence, voyage_currentTime);
 				if (cooldown != null) {

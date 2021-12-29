@@ -281,7 +281,7 @@ public class CargoEditorMenuHelper {
 				createDeleteSlotMenu(manager, dischargeSlot);
 				if (dischargeSlot.isFOBSale()) {
 					createAssignmentMenus(manager, dischargeSlot);
-					createPanamaAssignmentMenus(manager, dischargeSlot);
+//					createPanamaAssignmentMenus(manager, dischargeSlot);
 				} else if (dischargeSlot.getCargo() != null) {
 
 					boolean foundDESPurchase = false;
@@ -316,7 +316,7 @@ public class CargoEditorMenuHelper {
 				}
 
 				if (cargoModel.getCanalBookings() != null) {
-					panamaAssignmentMenu(manager, dischargeSlot);
+//					panamaAssignmentMenu(manager, dischargeSlot);
 				}
 			}
 
@@ -716,7 +716,7 @@ public class CargoEditorMenuHelper {
 			createDeleteSlotMenu(manager, loadSlot);
 			if (loadSlot.isDESPurchase()) {
 				createAssignmentMenus(manager, loadSlot);
-				createPanamaAssignmentMenus(manager, loadSlot);
+//				createPanamaAssignmentMenus(manager, loadSlot);
 			} else if (loadSlot.getCargo() != null) {
 				boolean foundFobSale = false;
 				for (final Slot<?> s : loadSlot.getCargo().getSlots()) {
@@ -749,7 +749,7 @@ public class CargoEditorMenuHelper {
 				createFOBDESSwitchMenu(manager, loadSlot);
 			}
 			if (cargoModel.getCanalBookings() != null) {
-				panamaAssignmentMenu(manager, loadSlot);
+//				panamaAssignmentMenu(manager, loadSlot);
 			}
 
 		};

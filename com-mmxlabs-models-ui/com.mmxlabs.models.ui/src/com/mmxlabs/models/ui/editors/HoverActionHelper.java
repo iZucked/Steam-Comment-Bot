@@ -18,6 +18,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 
 public class HoverActionHelper {
@@ -29,7 +32,9 @@ public class HoverActionHelper {
 		final Label c = new Label(parent, SWT.NONE);
 
 		c.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).hint(16, 16).grab(true, false).create());
-		final ImageDescriptor baseAdd = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD);
+		final ImageDescriptor baseAdd = CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled);
+		final Image imageAdd = baseAdd.createImage();  
+		parent.addDisposeListener(e -> imageAdd.dispose());
 		final Image imageGreyAdd = ImageDescriptor.createWithFlags(baseAdd, SWT.IMAGE_GRAY).createImage();
 		c.setImage(imageGreyAdd);
 		parent.addDisposeListener(e -> imageGreyAdd.dispose());
@@ -43,7 +48,8 @@ public class HoverActionHelper {
 
 			@Override
 			public void mouseEnter(final MouseEvent e) {
-				c.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ADD));
+				
+				c.setImage(imageAdd);
 			}
 		});
 		c.addMouseListener(new MouseAdapter() {

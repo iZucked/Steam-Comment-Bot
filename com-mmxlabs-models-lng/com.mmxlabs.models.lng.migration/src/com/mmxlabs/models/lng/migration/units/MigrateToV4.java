@@ -43,27 +43,11 @@ public class MigrateToV4 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected MetamodelLoader getSourceMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (sourceLoader == null) {
-			sourceLoader = MetamodelVersionsUtil.createV3Loader(extraPackages);
-		}
-		return sourceLoader;
-	}
-
-	@Override
-	protected MetamodelLoader getDestinationMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (destinationLoader == null) {
-			destinationLoader = MetamodelVersionsUtil.createV4Loader(extraPackages);
-		}
-		return destinationLoader;
-	}
-
-	@Override
 	protected void doMigration(final MigrationModelRecord modelRecord) {
 		final EObjectWrapper model = modelRecord.getModelRoot();
 
 		// This should get the cached loader instance
-		final MetamodelLoader loader = getDestinationMetamodelLoader(null);
+		final MetamodelLoader loader = modelRecord.getMetamodelLoader();
 
 		migrateDailyHireRate(loader, model);
 	}

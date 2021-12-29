@@ -20,9 +20,9 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Composite;
 
 import com.google.inject.Inject;
-import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.IReportContentsGenerator;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
-import com.mmxlabs.lingo.reports.ReportContents;
+import com.mmxlabs.lingo.reports.ReportContentsGenerators;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
@@ -41,7 +41,6 @@ import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
 import com.mmxlabs.rcp.common.ViewerHelper;
-import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
 import com.mmxlabs.scenario.service.ScenarioResult;
 
 /**
@@ -76,7 +75,7 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 		@Override
-		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
+		public synchronized void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
 
 			ViewerHelper.setInput(viewer, block, () -> {
 
@@ -302,7 +301,7 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 				final List<ColumnHandler> handlers = block.getColumnHandlers();
 				for (final ColumnHandler handler : handlers) {
 					if (handler.column != null) {
-						sortingSupport.sortColumnsBy(handler.column.getColumn());
+						sortingSupport.sortColumnsBy(handler.column.getColumn(), false);
 					}
 				}
 			}
@@ -322,36 +321,33 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
 
-		if (IReportContents.class.isAssignableFrom(adapter)) {
+		if (IReportContentsGenerator.class.isAssignableFrom(adapter)) {
+
 			// Set a more repeatable sort order
-			{
-				final ColumnBlock[] initialReverseSortOrder = { getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.startdate"),
-						getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.vessel"),
-						getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.schedule") };
+			final ColumnBlock[] initialReverseSortOrder = { getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.startdate"),
+					getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.vessel"),
+					getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.schedule") };
 
-				if (includeAllColumnsForITS) {
-					// Sort columns by ID
-					List<String> blockIDOrder = new ArrayList<>(getBlockManager().getBlockIDOrder());
-					Collections.sort(blockIDOrder);
-					getBlockManager().setBlockIDOrder(blockIDOrder);
-				}
+			if (includeAllColumnsForITS) {
+				// Sort columns by ID
+				List<String> blockIDOrder = new ArrayList<>(getBlockManager().getBlockIDOrder());
+				Collections.sort(blockIDOrder);
+				getBlockManager().setBlockIDOrder(blockIDOrder);
+			}
 
-				// go through in reverse order as latest is set to primary sort
-				for (final ColumnBlock block : initialReverseSortOrder) {
-					if (block != null) {
-						final List<ColumnHandler> handlers = block.getColumnHandlers();
-						for (final ColumnHandler handler : handlers) {
-							if (handler.column != null) {
-								sortingSupport.sortColumnsBy(handler.column.getColumn());
-							}
+			// go through in reverse order as latest is set to primary sort
+			for (final ColumnBlock block : initialReverseSortOrder) {
+				if (block != null) {
+					final List<ColumnHandler> handlers = block.getColumnHandlers();
+					for (final ColumnHandler handler : handlers) {
+						if (handler.column != null) {
+							sortingSupport.sortColumnsBy(handler.column.getColumn(), false);
 						}
 					}
 				}
 			}
 
-			final CopyGridToJSONUtil jsonUtil = new CopyGridToJSONUtil(viewer.getGrid(), true);
-			final String jsonContents = jsonUtil.convert();
-			return adapter.cast(ReportContents.makeJSON(jsonContents));
+			return adapter.cast(ReportContentsGenerators.createJSONFor(selectedScenariosServiceListener, viewer.getGrid()));
 		}
 		return super.getAdapter(adapter);
 	}

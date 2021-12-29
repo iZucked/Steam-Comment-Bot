@@ -18,6 +18,7 @@ import com.mmxlabs.models.migration.extensions.ClientMigrationUnitExtensionPoint
 import com.mmxlabs.models.migration.extensions.DefaultClientMigrationContextExtensionPoint;
 import com.mmxlabs.models.migration.extensions.DefaultMigrationContextExtensionPoint;
 import com.mmxlabs.models.migration.extensions.MigrationContextExtensionPoint;
+import com.mmxlabs.models.migration.extensions.MigrationProviderExtensionPoint;
 import com.mmxlabs.models.migration.extensions.MigrationUnitExtensionExtensionPoint;
 import com.mmxlabs.models.migration.extensions.MigrationUnitExtensionPoint;
 import com.mmxlabs.models.migration.impl.MigrationRegistry;
@@ -38,6 +39,7 @@ public class MigrationActivationModule extends AbstractModule {
 		bind(iterable(MigrationUnitExtensionPoint.class)).toProvider(service(MigrationUnitExtensionPoint.class).multiple());
 		bind(iterable(MigrationUnitExtensionExtensionPoint.class)).toProvider(service(MigrationUnitExtensionExtensionPoint.class).multiple());
 		bind(iterable(DefaultMigrationContextExtensionPoint.class)).toProvider(service(DefaultMigrationContextExtensionPoint.class).multiple());
+		bind(iterable(MigrationProviderExtensionPoint.class)).toProvider(service(MigrationProviderExtensionPoint.class).multiple());
 
 		bind(iterable(ClientMigrationContextExtensionPoint.class)).toProvider(service(ClientMigrationContextExtensionPoint.class).multiple());
 		bind(iterable(ClientMigrationUnitExtensionPoint.class)).toProvider(service(ClientMigrationUnitExtensionPoint.class).multiple());

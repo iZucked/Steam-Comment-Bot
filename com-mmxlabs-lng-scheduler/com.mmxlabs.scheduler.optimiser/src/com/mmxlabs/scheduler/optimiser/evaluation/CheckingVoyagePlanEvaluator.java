@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableList;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequencesAttributesProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterCostCalculator;
@@ -45,24 +46,23 @@ public class CheckingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 
 	@Override
 	public @NonNull ImmutableList<@NonNull ScheduledVoyagePlanResult> evaluateRoundTrip(@NonNull IResource resource, @NonNull IVesselAvailability vesselAvailability,
-			@NonNull ICharterCostCalculator charterCostCalculator, @NonNull IPortTimesRecord portTimesRecord, boolean returnAll, boolean keepDetails, @Nullable IAnnotatedSolution annotatedSolution) {
+			@NonNull ICharterCostCalculator charterCostCalculator, @NonNull IPortTimesRecord portTimesRecord, boolean returnAll, boolean keepDetails,
+			ISequencesAttributesProvider sequencesAttributesProvider, @Nullable IAnnotatedSolution annotatedSolution) {
 
-		return delegate.evaluateRoundTrip(resource, vesselAvailability, charterCostCalculator, portTimesRecord, returnAll, keepDetails, annotatedSolution);
+		return delegate.evaluateRoundTrip(resource, vesselAvailability, charterCostCalculator, portTimesRecord, returnAll, keepDetails, sequencesAttributesProvider, annotatedSolution);
 	}
 
 	@Override
-	public @NonNull ImmutableList<@NonNull ScheduledVoyagePlanResult> evaluateShipped(@NonNull IResource resource, @NonNull IVesselAvailability vesselAvailability, ICharterCostCalculator charterCostCalculator,
-			int vesselStartTime, IPort firstLoadPort, @NonNull PreviousHeelRecord previousHeelRecord, @NonNull IPortTimesRecord portTimesRecord, boolean lastPlan, boolean returnAll, boolean keepDetails,
-			@Nullable IAnnotatedSolution annotatedSolution) {
+	public @NonNull ImmutableList<@NonNull ScheduledVoyagePlanResult> evaluateShipped(@NonNull IResource resource, @NonNull IVesselAvailability vesselAvailability,
+			ICharterCostCalculator charterCostCalculator, int vesselStartTime, IPort firstLoadPort, @NonNull PreviousHeelRecord previousHeelRecord, @NonNull IPortTimesRecord portTimesRecord,
+			boolean lastPlan, boolean returnAll, boolean keepDetails, ISequencesAttributesProvider sequencesAttributesProvider, @Nullable IAnnotatedSolution annotatedSolution) {
 
 		long a = System.currentTimeMillis();
-		final ImmutableList<ScheduledVoyagePlanResult> value_d = delegate.evaluateShipped(resource, vesselAvailability, charterCostCalculator, vesselStartTime, 
-				firstLoadPort, previousHeelRecord, portTimesRecord, lastPlan,
-				returnAll, keepDetails, annotatedSolution);
+		final ImmutableList<ScheduledVoyagePlanResult> value_d = delegate.evaluateShipped(resource, vesselAvailability, charterCostCalculator, vesselStartTime, firstLoadPort, previousHeelRecord,
+				portTimesRecord, lastPlan, returnAll, keepDetails, sequencesAttributesProvider, annotatedSolution);
 		long b = System.currentTimeMillis();
-		final ImmutableList<ScheduledVoyagePlanResult> value_r = reference.evaluateShipped(resource, vesselAvailability, charterCostCalculator, vesselStartTime,
-				firstLoadPort, previousHeelRecord, portTimesRecord, lastPlan,
-				returnAll, keepDetails, annotatedSolution);
+		final ImmutableList<ScheduledVoyagePlanResult> value_r = reference.evaluateShipped(resource, vesselAvailability, charterCostCalculator, vesselStartTime, firstLoadPort, previousHeelRecord,
+				portTimesRecord, lastPlan, returnAll, keepDetails, sequencesAttributesProvider, annotatedSolution);
 		long c = System.currentTimeMillis();
 
 		delegateSeconds += (b - a);
@@ -96,11 +96,11 @@ public class CheckingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 
 	@Override
 	public @NonNull ScheduledVoyagePlanResult evaluateNonShipped(@NonNull IResource resource, @NonNull IVesselAvailability vesselAvailability, @NonNull IPortTimesRecord portTimesRecord,
-			boolean keepDetails, @Nullable IAnnotatedSolution annotatedSolution) {
+			boolean keepDetails, ISequencesAttributesProvider sequencesAttributesProvider, @Nullable IAnnotatedSolution annotatedSolution) {
 		long a = System.currentTimeMillis();
-		final ScheduledVoyagePlanResult value_d = delegate.evaluateNonShipped(resource, vesselAvailability, portTimesRecord, keepDetails, annotatedSolution);
+		final ScheduledVoyagePlanResult value_d = delegate.evaluateNonShipped(resource, vesselAvailability, portTimesRecord, keepDetails, sequencesAttributesProvider, annotatedSolution);
 		long b = System.currentTimeMillis();
-		final ScheduledVoyagePlanResult value_r = reference.evaluateNonShipped(resource, vesselAvailability, portTimesRecord, keepDetails, annotatedSolution);
+		final ScheduledVoyagePlanResult value_r = reference.evaluateNonShipped(resource, vesselAvailability, portTimesRecord, keepDetails, sequencesAttributesProvider, annotatedSolution);
 		long c = System.currentTimeMillis();
 
 		delegateSeconds += (b - a);

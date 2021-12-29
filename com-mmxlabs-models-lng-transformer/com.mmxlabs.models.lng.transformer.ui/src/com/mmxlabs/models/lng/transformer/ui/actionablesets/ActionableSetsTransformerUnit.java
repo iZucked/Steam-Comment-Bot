@@ -8,8 +8,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
@@ -21,7 +19,8 @@ import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.name.Names;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.JobExecutor;
+import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.actionplan.LNGParameters_ActionPlanSettingsModule;
@@ -44,8 +43,8 @@ import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScope;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.impl.thresholders.GreedyThresholder;
 import com.mmxlabs.scheduler.optimiser.actionableset.ActionableSetMover;
@@ -65,17 +64,10 @@ public class ActionableSetsTransformerUnit implements ILNGStateTransformerUnit {
 
 	@NonNull
 	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final UserSettings userSettings, @NonNull ActionPlanOptimisationStage stageSettings,
-			@Nullable final CleanableExecutorService executorService, final int progressTicks) {
+			@Nullable final JobExecutorFactory jobExecutorFactory, final int progressTicks) {
 		final IChainLink link = new IChainLink() {
 
 			private ActionableSetsTransformerUnit t;
-
-			// @Override
-			// public IMultiStateResult run() {
-			// if (t == null) {
-			// throw new IllegalStateException("#init has not been called");
-			// }
-			// }
 
 			@Override
 			public IMultiStateResult run(SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
@@ -84,9 +76,8 @@ public class ActionableSetsTransformerUnit implements ILNGStateTransformerUnit {
 				@NonNull
 				Collection<@NonNull String> hints = new HashSet<>(dt.getHints());
 				LNGTransformerHelper.updateHintsFromUserSettings(userSettings, hints);
-				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
-				t = new ActionableSetsTransformerUnit(dt, phase, userSettings, stageSettings, executorService, initialSequences.getSequences(), inputState, hints);
+				t = new ActionableSetsTransformerUnit(dt, phase, userSettings, stageSettings, jobExecutorFactory, initialSequences.getSequences(), inputState, hints);
 				return t.run(monitor);
 			}
 
@@ -95,13 +86,6 @@ public class ActionableSetsTransformerUnit implements ILNGStateTransformerUnit {
 				return progressTicks;
 			}
 
-			// @Override
-			// public IMultiStateResult getInputState() {
-			// if (t == null) {
-			// throw new IllegalStateException("#init has not been called");
-			// }
-			// return t.getInputState();
-			// }
 		};
 		chainBuilder.addLink(link);
 		return link;
@@ -109,7 +93,7 @@ public class ActionableSetsTransformerUnit implements ILNGStateTransformerUnit {
 
 	@NonNull
 	public static IChainLink chainFake(final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final UserSettings userSettings, @NonNull ActionPlanOptimisationStage stageSettings,
-			@Nullable final CleanableExecutorService executorService, final int progressTicks) {
+			@Nullable final JobExecutorFactory jobExecutorFactory, final int progressTicks) {
 		final IChainLink link = new IChainLink() {
 
 			private ActionableSetsTransformerUnit t;
@@ -117,7 +101,7 @@ public class ActionableSetsTransformerUnit implements ILNGStateTransformerUnit {
 			@Override
 			public IMultiStateResult run(SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
 				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
-				t = new ActionableSetsTransformerUnit(dt, phase, userSettings, stageSettings, executorService, initialSequences.getSequences(), inputState, dt.getHints());
+				t = new ActionableSetsTransformerUnit(dt, phase, userSettings, stageSettings, jobExecutorFactory, initialSequences.getSequences(), inputState, dt.getHints());
 				t.run(monitor);
 				return inputState;
 			}
@@ -143,14 +127,15 @@ public class ActionableSetsTransformerUnit implements ILNGStateTransformerUnit {
 	@NonNull
 	private final String phase;
 
-	private final Map<Thread, ActionableSetMover> threadCache = new ConcurrentHashMap<>(100);
+	private @Nullable JobExecutorFactory jobExecutorFactory;
 
 	@SuppressWarnings("null")
 	public ActionableSetsTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String phase, @NonNull final UserSettings userSettings,
-			@NonNull ActionPlanOptimisationStage stageSettings, @Nullable final CleanableExecutorService executorService, @NonNull ISequences initialSequences,
+			@NonNull ActionPlanOptimisationStage stageSettings, @Nullable final JobExecutorFactory jobExecutorFactory, @NonNull ISequences initialSequences,
 			@NonNull final IMultiStateResult inputState, @NonNull final Collection<String> hints) {
 		this.dataTransformer = dataTransformer;
 		this.phase = phase;
+		this.jobExecutorFactory = jobExecutorFactory;
 
 		final Collection<IOptimiserInjectorService> services = dataTransformer.getModuleServices();
 
@@ -159,7 +144,7 @@ public class ActionableSetsTransformerUnit implements ILNGStateTransformerUnit {
 
 			@Override
 			protected void configure() {
-//				binder().requireExplicitBindings();
+				// binder().requireExplicitBindings();
 
 			}
 		});
@@ -178,27 +163,17 @@ public class ActionableSetsTransformerUnit implements ILNGStateTransformerUnit {
 			@Override
 			protected void configure() {
 
-				assert executorService != null;
-				bind(EvaluationHelper.class).in(PerChainUnitScope.class);
-
-				bind(FitnessCalculator.class).in(PerChainUnitScope.class);
-				bind(ActionableSetOptimiser.class).in(PerChainUnitScope.class);
-				bind(CleanableExecutorService.class).toInstance(executorService);
+				bind(EvaluationHelper.class).in(ThreadLocalScope.class);
+				bind(FitnessCalculator.class).in(ThreadLocalScope.class);
+				bind(ActionableSetOptimiser.class).in(ThreadLocalScope.class);
 				bind(ILookupManager.class).to(LookupManager.class);
 			}
 
 			@Provides
+			@ThreadLocalScope
 			private ActionableSetMover providePerThreadMover(@NonNull final Injector injector) {
-
-				ActionableSetMover mover = threadCache.get(Thread.currentThread());
-				if (mover == null) {
-					final PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);
-					scope.enter();
-					mover = new ActionableSetMover();
-					injector.injectMembers(mover);
-					threadCache.put(Thread.currentThread(), mover);
-					// System.out.println("thread:" + Thread.currentThread().getId());
-				}
+				ActionableSetMover mover = new ActionableSetMover();
+				injector.injectMembers(mover);
 				return mover;
 			}
 
@@ -225,10 +200,17 @@ public class ActionableSetsTransformerUnit implements ILNGStateTransformerUnit {
 
 	@Override
 	public IMultiStateResult run(@NonNull final IProgressMonitor monitor) {
-		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+		
+		final JobExecutorFactory subExecutorFactory = jobExecutorFactory.withDefaultBegin(() -> {
+			final ThreadLocalScopeImpl s = injector.getInstance(ThreadLocalScopeImpl.class);
+			s.enter();
+			return s;
+		});
+		
+		try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 			scope.enter();
 
-			try {
+			try (JobExecutor jobExecutor = subExecutorFactory.begin()) {
 
 				final ActionableSetOptimiser instance = injector.getInstance(ActionableSetOptimiser.class);
 				final ISequences inputRawSequences = injector.getInstance(Key.get(ISequences.class, Names.named(OptimiserConstants.SEQUENCE_TYPE_INPUT)));
@@ -250,7 +232,7 @@ public class ActionableSetsTransformerUnit implements ILNGStateTransformerUnit {
 						monitor.beginTask("Generate actionable sets", totalWork);
 
 					}
-				});
+				}, jobExecutor);
 				if (result != null) {
 					return result.iterator().next();
 				}
@@ -260,11 +242,6 @@ public class ActionableSetsTransformerUnit implements ILNGStateTransformerUnit {
 				throw new RuntimeException(e);
 			} finally {
 				monitor.done();
-				// Clean up thread-locals created in the scope object
-				for (final Thread thread : threadCache.keySet()) {
-					scope.exit(thread);
-				}
-				threadCache.clear();
 			}
 		}
 	}

@@ -15,6 +15,7 @@ import javax.inject.Singleton;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Lists;
@@ -46,7 +47,7 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
@@ -62,6 +63,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -86,8 +88,11 @@ import com.mmxlabs.scheduler.optimiser.providers.IExternalDateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IInternalDateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.maintenance.IMaintenanceEvaluator;
 import com.mmxlabs.scheduler.optimiser.shared.SharedDataModule;
 import com.mmxlabs.scheduler.optimiser.shared.SharedPortDistanceDataBuilder;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * Test class to run a "system" test of the LSO to optimise a sequence of elements based upon distance. I.e. find minimum travel distance for each resource.
@@ -159,11 +164,11 @@ public class SimpleSchedulerTest {
 		IHeelOptionConsumer heelOptionConsumer = new HeelOptionConsumer(0, 0, VesselTankState.MUST_BE_WARM, new ConstantHeelPriceCalculator(0), false);
 
 		builder.createVesselAvailability(vessel1, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, false, new TimeWindow(0, 1), null),
-				builder.createEndRequirement(Collections.singleton(port2), false, new MutableTimeWindow(0, Integer.MAX_VALUE), heelOptionConsumer, false), null, new ConstantValueLongCurve(0), false);
+				builder.createEndRequirement(Collections.singleton(port2), false, new MutableTimeWindow(0, Integer.MAX_VALUE), heelOptionConsumer), null, new ConstantValueLongCurve(0), false);
 		builder.createVesselAvailability(vessel2, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, false, new TimeWindow(0, 1), null),
-				builder.createEndRequirement(Collections.singleton(port2), false, new MutableTimeWindow(0, Integer.MAX_VALUE), heelOptionConsumer, false), null, new ConstantValueLongCurve(0), false);
+				builder.createEndRequirement(Collections.singleton(port2), false, new MutableTimeWindow(0, Integer.MAX_VALUE), heelOptionConsumer), null, new ConstantValueLongCurve(0), false);
 		builder.createVesselAvailability(vessel3, new ConstantValueLongCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, false, new TimeWindow(0, 1), null),
-				builder.createEndRequirement(Collections.singleton(port6), false, new MutableTimeWindow(0, Integer.MAX_VALUE), heelOptionConsumer, false), null, new ConstantValueLongCurve(0), false);
+				builder.createEndRequirement(Collections.singleton(port6), false, new MutableTimeWindow(0, Integer.MAX_VALUE), heelOptionConsumer), null, new ConstantValueLongCurve(0), false);
 
 		final ITimeWindow tw1 = TimeWindowMaker.createInclusiveExclusive(5, 6, 0, false);
 		final ITimeWindow tw2 = TimeWindowMaker.createInclusiveExclusive(10, 11, 0, false);
@@ -287,7 +292,7 @@ public class SimpleSchedulerTest {
 		// Build opt data
 		final ScheduleTestModule m = new ScheduleTestModule(data, pData);
 		final Injector injector = parentInjector.createChildInjector(m);
-		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+		try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 			scope.enter();
 
 			// Generate initial state
@@ -353,7 +358,7 @@ public class SimpleSchedulerTest {
 
 			Assertions.assertFalse(initialFitness == Long.MAX_VALUE);
 
-			optimiser.optimise(context);
+			optimiser.optimise(context, null);
 
 			final long finalFitness = linearFitnessEvaluator.getBestFitness();
 			System.out.println("Final fitness " + finalFitness);
@@ -385,6 +390,11 @@ public class SimpleSchedulerTest {
 						bind(ICharterRateCalculator.class).to(VoyagePlanStartDateCharterRateCalculator.class);
 						bind(ICharterCostCalculator.class).to(CharterRateToCharterCostCalculator.class);
 						bind(Integer.class).annotatedWith(Names.named(SchedulerConstants.CONCURRENCY_LEVEL)).toInstance(1);
+
+						final IMaintenanceEvaluator maintenanceEvaluator = Mockito.mock(IMaintenanceEvaluator.class);
+						Mockito.when(maintenanceEvaluator.processSchedule(ArgumentMatchers.any(long[].class), ArgumentMatchers.any(IVesselAvailability.class), ArgumentMatchers.any(VoyagePlan.class),
+								ArgumentMatchers.any(IPortTimesRecord.class), ArgumentMatchers.nullable(IAnnotatedSolution.class))).thenReturn(null);
+						bind(IMaintenanceEvaluator.class).toInstance(maintenanceEvaluator);
 					}
 				});
 	}

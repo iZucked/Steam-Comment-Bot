@@ -58,7 +58,7 @@ public class NewLNGVoyageCalculatorTest {
 		// Set distance/time to give the expected speed exactly
 		final int expectedSpeed = VESSEL_NBO_SPEED + 1;
 		options.setAvailableTime(48);
-		options.setRoute(ERouteOption.DIRECT, expectedSpeed * 48, 0L);
+		options.setRoute(ERouteOption.DIRECT, expectedSpeed * 48, 0L, 0);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -84,7 +84,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		// Set distance time so that the speed would be below the expected min speed
 		options.setAvailableTime(48 * 3);
-		options.setRoute(ERouteOption.DIRECT, expectedMinSpeed * 48, 0L);
+		options.setRoute(ERouteOption.DIRECT, expectedMinSpeed * 48, 0L, 0);
 
 		// Sanity check that inputs will yield a speed lower than the expected min speed
 		Assertions.assertTrue(options.getDistance() / options.getAvailableTime() < expectedMinSpeed);
@@ -115,7 +115,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		// Set distance time so that the speed would be below the expected min speed
 		options.setAvailableTime(48 * 15);
-		options.setRoute(ERouteOption.DIRECT, expectedMinSpeed * 48, 0L);
+		options.setRoute(ERouteOption.DIRECT, expectedMinSpeed * 48, 0L, 0);
 
 		// Sanity check that inputs will yield a speed lower than the expected min speed
 		Assertions.assertTrue(options.getDistance() / options.getAvailableTime() < expectedMinSpeed);
@@ -146,9 +146,10 @@ public class NewLNGVoyageCalculatorTest {
 
 		// Set distance time so that the speed would be below the expected min speed
 		options.setAvailableTime(48 / 2);
-		options.setRoute(ERouteOption.DIRECT, expectedMaxSpeed * 48, 0L);
+		options.setRoute(ERouteOption.DIRECT, expectedMaxSpeed * 48, 0L, 0);
 
-		// Sanity check that inputs will yield a speed higher than the expected max speed
+		// Sanity check that inputs will yield a speed higher than the expected max
+		// speed
 		Assertions.assertTrue(options.getDistance() / options.getAvailableTime() > expectedMaxSpeed);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
@@ -177,7 +178,7 @@ public class NewLNGVoyageCalculatorTest {
 		final int expectedSpeed = 0;
 
 		options.setAvailableTime(48);
-		options.setRoute(ERouteOption.DIRECT, 0, 0L);
+		options.setRoute(ERouteOption.DIRECT, 0, 0L, 0);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -204,7 +205,7 @@ public class NewLNGVoyageCalculatorTest {
 		final int expectedMinSpeed = VESSEL_MIN_SPEED;
 
 		options.setAvailableTime(48);
-		options.setRoute(ERouteOption.DIRECT, 1, 0L);
+		options.setRoute(ERouteOption.DIRECT, 1, 0L, 0);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -221,7 +222,8 @@ public class NewLNGVoyageCalculatorTest {
 	@Test
 	public void testCalculateTravelFuelRequirements_NBOOnly() {
 
-		// In this test, we check that we only use travel NBO - speed is lower than NBO speed.
+		// In this test, we check that we only use travel NBO - speed is lower than NBO
+		// speed.
 
 		final VoyageOptions options = createSampleVoyageOptions();
 
@@ -233,9 +235,10 @@ public class NewLNGVoyageCalculatorTest {
 		final int speed = VESSEL_NBO_SPEED - 1;
 		final int travelTime = 48;
 		options.setAvailableTime(travelTime);
-		options.setRoute(ERouteOption.DIRECT, speed * travelTime, 0L);
+		options.setRoute(ERouteOption.DIRECT, speed * travelTime, 0L, 0);
 
-		// Sanity check that we are travelling slower than NBO rate so there will be no supplement
+		// Sanity check that we are travelling slower than NBO rate so there will be no
+		// supplement
 		Assertions.assertTrue(OptimiserUnitConvertor.convertToInternalSpeed(speed) < options.getNBOSpeed());
 
 		final VoyageDetails details = new VoyageDetails(options);
@@ -277,9 +280,10 @@ public class NewLNGVoyageCalculatorTest {
 		final int speed = VESSEL_NBO_SPEED + 1;
 		final int travelTime = 48;
 		options.setAvailableTime(travelTime);
-		options.setRoute(ERouteOption.DIRECT, speed * travelTime, 0L);
+		options.setRoute(ERouteOption.DIRECT, speed * travelTime, 0L, 0);
 
-		// Sanity check that we are travelling slower than NBO rate so there will be no supplement
+		// Sanity check that we are travelling slower than NBO rate so there will be no
+		// supplement
 		final int internalSpeed = OptimiserUnitConvertor.convertToInternalSpeed(speed);
 		Assertions.assertTrue(internalSpeed > options.getNBOSpeed());
 
@@ -331,9 +335,10 @@ public class NewLNGVoyageCalculatorTest {
 		final int speed = VESSEL_NBO_SPEED + 1;
 		final int travelTime = 48;
 		options.setAvailableTime(travelTime);
-		options.setRoute(ERouteOption.DIRECT, speed * travelTime, 0L);
+		options.setRoute(ERouteOption.DIRECT, speed * travelTime, 0L, 0);
 
-		// Sanity check that we are travelling slower than NBO rate so there will be no supplement
+		// Sanity check that we are travelling slower than NBO rate so there will be no
+		// supplement
 		final int internalSpeed = OptimiserUnitConvertor.convertToInternalSpeed(speed);
 		Assertions.assertTrue(internalSpeed > options.getNBOSpeed());
 
@@ -381,9 +386,10 @@ public class NewLNGVoyageCalculatorTest {
 		final int speed = VESSEL_NBO_SPEED + 1;
 		final int travelTime = 48;
 		options.setAvailableTime(travelTime);
-		options.setRoute(ERouteOption.DIRECT, speed * travelTime, 0L);
+		options.setRoute(ERouteOption.DIRECT, speed * travelTime, 0L, 0);
 
-		// Sanity check that we are travelling slower than NBO rate so there will be no supplement
+		// Sanity check that we are travelling slower than NBO rate so there will be no
+		// supplement
 		final int internalSpeed = OptimiserUnitConvertor.convertToInternalSpeed(speed);
 		Assertions.assertTrue(internalSpeed > options.getNBOSpeed());
 
@@ -416,7 +422,8 @@ public class NewLNGVoyageCalculatorTest {
 	@Test
 	public void testCalculateIdleFuelRequirements_NBO() {
 
-		// In this test, we check that we only use travel NBO - speed is lower than NBO speed.
+		// In this test, we check that we only use travel NBO - speed is lower than NBO
+		// speed.
 
 		final VoyageOptions options = createSampleVoyageOptions();
 
@@ -458,7 +465,8 @@ public class NewLNGVoyageCalculatorTest {
 	@Test
 	public void testCalculateIdleFuelRequirements_HotelLoad_NoHeel() {
 
-		// In this test, we check that we only use travel NBO - speed is lower than NBO speed.
+		// In this test, we check that we only use travel NBO - speed is lower than NBO
+		// speed.
 
 		final VoyageOptions options = createSampleVoyageOptions();
 
@@ -497,7 +505,8 @@ public class NewLNGVoyageCalculatorTest {
 	@Test
 	public void testCalculateIdleFuelRequirements_Cooldown_Required() {
 
-		// In this test, we check that we only use travel NBO - speed is lower than NBO speed.
+		// In this test, we check that we only use travel NBO - speed is lower than NBO
+		// speed.
 
 		final VoyageOptions options = createSampleVoyageOptions();
 
@@ -530,7 +539,8 @@ public class NewLNGVoyageCalculatorTest {
 	@Test
 	public void testCalculateIdleFuelRequirements_Cooldown_BelowWarmupTime() {
 
-		// In this test, we check that we only use travel NBO - speed is lower than NBO speed.
+		// In this test, we check that we only use travel NBO - speed is lower than NBO
+		// speed.
 
 		final VoyageOptions options = createSampleVoyageOptions();
 
@@ -563,7 +573,8 @@ public class NewLNGVoyageCalculatorTest {
 	@Test
 	public void testCalculateIdleFuelRequirements_Cooldown_NotRequired_IdleNBO() {
 
-		// In this test, we check that we only use travel NBO - speed is lower than NBO speed.
+		// In this test, we check that we only use travel NBO - speed is lower than NBO
+		// speed.
 
 		final VoyageOptions options = createSampleVoyageOptions();
 
@@ -624,7 +635,8 @@ public class NewLNGVoyageCalculatorTest {
 	@Test
 	public void testCalculateRouteAdditionalFuelRequirements_NBOOnly() {
 
-		// In this test, we check that we only use travel NBO - speed is lower than NBO speed.
+		// In this test, we check that we only use travel NBO - speed is lower than NBO
+		// speed.
 
 		final VoyageOptions options = createSampleVoyageOptions();
 
@@ -648,7 +660,7 @@ public class NewLNGVoyageCalculatorTest {
 		final long nboRate = OptimiserUnitConvertor.convertToInternalDailyRate(50);
 		final long expectedBaseConsumption = OptimiserUnitConvertor.convertToInternalDailyRate(150);
 		final long routeCost = 100000;
-		options.setRoute(ERouteOption.DIRECT, 0, routeCost);
+		options.setRoute(ERouteOption.DIRECT, 0, routeCost, 0);
 
 		final IVessel vessel = options.getVessel();
 		final IBaseFuel baseFuel = vessel.getTravelBaseFuel();
@@ -659,7 +671,7 @@ public class NewLNGVoyageCalculatorTest {
 		Mockito.when(mockRouteCostProvider.getRouteNBORate(options.getRoute(), options.getVessel(), vesselState)).thenReturn(nboRate);
 		Mockito.when(mockRouteCostProvider.getRouteFuelUsage(options.getRoute(), options.getVessel(), vesselState)).thenReturn(expectedBaseConsumption);
 
-		calc.calculateRouteAdditionalFuelRequirements(options, details, options.getVessel(), vesselState, additionalRouteTime);
+		calc.calculateRouteAdditionalFuelRequirements(options, details, options.getVessel(), vesselState, additionalRouteTime, Long.MAX_VALUE);
 
 		// Check results
 		final long pilotLightRate = options.getVessel().getPilotLightRate();
@@ -703,14 +715,15 @@ public class NewLNGVoyageCalculatorTest {
 		final long nboRate = OptimiserUnitConvertor.convertToInternalDailyRate(50);
 		final long expectedBaseConsumption = OptimiserUnitConvertor.convertToInternalDailyRate(50);
 		final long routeCost = 100000;
-		options.setRoute(ERouteOption.DIRECT, 0, routeCost);
+		options.setRoute(ERouteOption.DIRECT, 0, routeCost, 0);
 
 		Mockito.when(mockRouteCostProvider.getRouteTransitTime(options.getRoute(), options.getVessel())).thenReturn(additionalRouteTime);
-		// Mockito.when(mockRouteCostProvider.getRouteCost(options.getRoute(), options.getVessel(), costType)).thenReturn(routeCost);
+		// Mockito.when(mockRouteCostProvider.getRouteCost(options.getRoute(),
+		// options.getVessel(), costType)).thenReturn(routeCost);
 		Mockito.when(mockRouteCostProvider.getRouteNBORate(options.getRoute(), options.getVessel(), vesselState)).thenReturn(nboRate);
 		Mockito.when(mockRouteCostProvider.getRouteFuelUsage(options.getRoute(), options.getVessel(), vesselState)).thenReturn(expectedBaseConsumption);
 
-		calc.calculateRouteAdditionalFuelRequirements(options, details, options.getVessel(), vesselState, additionalRouteTime);
+		calc.calculateRouteAdditionalFuelRequirements(options, details, options.getVessel(), vesselState, additionalRouteTime, Long.MAX_VALUE);
 
 		final IVessel vessel = options.getVessel();
 		final long pilotLightRate = vessel.getPilotLightRate();
@@ -752,10 +765,11 @@ public class NewLNGVoyageCalculatorTest {
 		final long expectedBaseConsumption = OptimiserUnitConvertor.convertToInternalDailyRate(50);
 		final long routeCost = 100000;
 
-		options.setRoute(ERouteOption.SUEZ, 0, routeCost);
+		options.setRoute(ERouteOption.SUEZ, 0, routeCost, 0);
 
 		Mockito.when(mockRouteCostProvider.getRouteTransitTime(options.getRoute(), options.getVessel())).thenReturn(additionalRouteTime);
-		// Mockito.when(mockRouteCostProvider.getRouteCost(options.getRoute(), options.getVessel(), costType)).thenReturn(routeCost);
+		// Mockito.when(mockRouteCostProvider.getRouteCost(options.getRoute(),
+		// options.getVessel(), costType)).thenReturn(routeCost);
 		Mockito.when(mockRouteCostProvider.getRouteNBORate(options.getRoute(), options.getVessel(), vesselState)).thenReturn(nboRate);
 		Mockito.when(mockRouteCostProvider.getRouteFuelUsage(options.getRoute(), options.getVessel(), vesselState)).thenReturn(expectedBaseConsumption);
 
@@ -763,7 +777,7 @@ public class NewLNGVoyageCalculatorTest {
 		calc.setPortCVProvider(mockPortCVProvider);
 		final IVessel vessel = options.getVessel();
 
-		calc.calculateRouteAdditionalFuelRequirements(options, details, options.getVessel(), vesselState, additionalRouteTime);
+		calc.calculateRouteAdditionalFuelRequirements(options, details, options.getVessel(), vesselState, additionalRouteTime, Long.MAX_VALUE);
 
 		Assertions.assertEquals(nboRate * additionalRouteTime / 24, details.getRouteAdditionalConsumption(LNGFuelKeys.NBO_In_m3));
 		// Some supplement expected
@@ -802,14 +816,14 @@ public class NewLNGVoyageCalculatorTest {
 		final long expectedBaseConsumption = OptimiserUnitConvertor.convertToInternalDailyRate(50);
 		final long routeCost = 100000;
 
-		options.setRoute(ERouteOption.DIRECT, 0, routeCost);
+		options.setRoute(ERouteOption.DIRECT, 0, routeCost, 0);
 
 		Mockito.when(mockRouteCostProvider.getRouteTransitTime(options.getRoute(), options.getVessel())).thenReturn(additionalRouteTime);
 		Mockito.when(mockRouteCostProvider.getRouteNBORate(options.getRoute(), options.getVessel(), vesselState)).thenReturn(nboRate);
 		Mockito.when(mockRouteCostProvider.getRouteFuelUsage(options.getRoute(), options.getVessel(), vesselState)).thenReturn(expectedBaseConsumption);
 		final IVessel vessel = options.getVessel();
 
-		calc.calculateRouteAdditionalFuelRequirements(options, details, options.getVessel(), vesselState, additionalRouteTime);
+		calc.calculateRouteAdditionalFuelRequirements(options, details, options.getVessel(), vesselState, additionalRouteTime, Long.MAX_VALUE);
 
 		Assertions.assertEquals(expectedBaseConsumption * additionalRouteTime / 24, details.getRouteAdditionalConsumption(vessel.getTravelBaseFuelInMT()));
 
@@ -914,7 +928,9 @@ public class NewLNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		// Set fuel consumptions with a special pattern - each subsequent details object has a x10 multiplier to the previous value -= this makes it easy to add up for the expectations
+		// Set fuel consumptions with a special pattern - each subsequent details object
+		// has a x10 multiplier to the previous value -= this makes it easy to add up
+		// for the expectations
 		loadDetails.setFuelConsumption(vessel.getTravelBaseFuelInMT(), 1);
 		loadDetails.setFuelConsumption(LNGFuelKeys.NBO_In_m3, 2);
 		loadDetails.setFuelConsumption(LNGFuelKeys.FBO_In_m3, 3);
@@ -982,7 +998,9 @@ public class NewLNGVoyageCalculatorTest {
 		final IPortCooldownDataProvider portCooldownDataProvider = Mockito.mock(IPortCooldownDataProvider.class);
 		calc.setPortCooldownProvider(portCooldownDataProvider);
 
-		// Set fuel consumptions with a special pattern - each subsequent details object has a x10 multiplier to the previous value -= this makes it easy to add up for the expectations
+		// Set fuel consumptions with a special pattern - each subsequent details object
+		// has a x10 multiplier to the previous value -= this makes it easy to add up
+		// for the expectations
 		fromPortDetails.setFuelConsumption(LNGFuelKeys.Cooldown_In_m3, 9);
 
 		voyageDetails.setFuelConsumption(LNGFuelKeys.Cooldown_In_m3, 90);
@@ -1044,7 +1062,9 @@ public class NewLNGVoyageCalculatorTest {
 		final IPortCooldownDataProvider portCooldownDataProvider = Mockito.mock(IPortCooldownDataProvider.class);
 		calc.setPortCooldownProvider(portCooldownDataProvider);
 
-		// Set fuel consumptions with a special pattern - each subsequent details object has a x10 multiplier to the previous value -= this makes it easy to add up for the expectations
+		// Set fuel consumptions with a special pattern - each subsequent details object
+		// has a x10 multiplier to the previous value -= this makes it easy to add up
+		// for the expectations
 		fromPortDetails.setFuelConsumption(LNGFuelKeys.Cooldown_In_m3, 9);
 
 		voyageDetails.setFuelConsumption(LNGFuelKeys.Cooldown_In_m3, 90);
@@ -1105,7 +1125,9 @@ public class NewLNGVoyageCalculatorTest {
 		final IPortCooldownDataProvider portCooldownDataProvider = Mockito.mock(IPortCooldownDataProvider.class);
 		calc.setPortCooldownProvider(portCooldownDataProvider);
 
-		// Set fuel consumptions with a special pattern - each subsequent details object has a x10 multiplier to the previous value -= this makes it easy to add up for the expectations
+		// Set fuel consumptions with a special pattern - each subsequent details object
+		// has a x10 multiplier to the previous value -= this makes it easy to add up
+		// for the expectations
 		fromPortDetails.setFuelConsumption(LNGFuelKeys.Cooldown_In_m3, 9);
 
 		voyageDetails.setFuelConsumption(LNGFuelKeys.Cooldown_In_m3, 90);

@@ -4,12 +4,12 @@
  */
 package com.mmxlabs.lingo.its.datahub;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import org.eclipse.swt.widgets.Shell;
@@ -55,7 +55,7 @@ public class CustomTeamReportsTests {
 
 	// @formatter:off
 	@Container
-	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer("docker.mmxlabs.com/datahub-v:1.8.1-SNAPSHOT")
+	public static GenericContainer datahubContainer = new FixedHostPortGenericContainer("docker.mmxlabs.com/datahub-v:1.9.1-SNAPSHOT")
 	.withFixedExposedPort(availablePort, DATAHUB_PORT)
 	.withExposedPorts(DATAHUB_PORT)
 	.withEnv("PORT", Integer.toString(DATAHUB_PORT))
@@ -82,7 +82,7 @@ public class CustomTeamReportsTests {
 	private static void beforeAll() {
 		datahubHost = datahubContainer.getHost();
 		upstreamUrl = String.format("http://%s:%s", datahubHost, availablePort);
-		System.out.println(upstreamUrl);
+		logger.info(upstreamUrl);
 		bot = new SWTWorkbenchBot();
 		HubTestHelper.setDatahubUrl(upstreamUrl);
 		// login with basic auth
@@ -212,29 +212,23 @@ public class CustomTeamReportsTests {
 	public void createUserReportThenAddToTeam() throws IOException {
 		openUserReportsManager();
 		createUserReport("test2");
-
-		// add user report to team reports
 		bot.table().select("test2");
+		bot.button("Save");
+		logger.info(Integer.toString(bot.tableWithId("customReportsViewer").rowCount()));
 		bot.button("Add to Team").click();
-		bot.button("OK").click();
-		CustomReportsRegistry.getInstance().refreshTeamReports();
-		List<CustomReportDefinition> teamReports = CustomReportsRegistry.getInstance().readTeamCustomReportDefinitions();
-		// @formatter:off
-		Optional<CustomReportDefinition> optionalTeamReport = teamReports.stream()
-				.filter(teamReport -> teamReport.getName().equals("test2"))
-				.findFirst();
-		// @formatter:on
-
-		assertTrue(optionalTeamReport.isPresent());
+		bot.radio("Team reports").click();
+		logger.info(Integer.toString(bot.tableWithId("customReportsViewer").rowCount()));
+		assertTrue(bot.tableWithId("customReportsViewer").containsItem("test2"));
 	}
 
 	/**
 	 * Create a team report then copy it and save
 	 *
 	 * @throws IOException
+	 * @throws InterruptedException
 	 */
 	@Test
-	public void copyTeamReport() throws IOException {
+	public void copyTeamReport() throws IOException, InterruptedException {
 		openTeamReportsManager();
 		createCustomTeamReport("test3");
 		bot.table().select("test3");
@@ -242,18 +236,7 @@ public class CustomTeamReportsTests {
 		bot.button("Copy").click();
 		bot.button("OK").click();
 		bot.button("Publish").click();
-		// FIXME @Farukh fix team report issue where readTeamCustomReportDefinitions doesn't return the correct number of reports until the team reports dialog is closed
-		// when fixed remove the two lines below
-		bot.button("OK").click();
-		bot.button("Later").click();
-		// end FIXME
-		CustomReportsRegistry.getInstance().refreshTeamReports();
-		List<CustomReportDefinition> teamReports = CustomReportsRegistry.getInstance().readTeamCustomReportDefinitions();
-		// @formatter:off
-		Long numberOfTeamReports = teamReports.stream()
-				.count();
-		// @formatter:on
-		assertTrue(Objects.equals(numberOfTeamReports, 2L));
+		assertEquals(bot.table().rowCount(), 2L);
 	}
 
 	/**

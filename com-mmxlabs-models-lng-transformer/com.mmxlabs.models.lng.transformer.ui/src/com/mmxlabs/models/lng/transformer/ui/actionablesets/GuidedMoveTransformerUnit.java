@@ -28,7 +28,8 @@ import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.NonNullPair;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.JobExecutor;
+import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -55,8 +56,8 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScope;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.impl.thresholders.GreedyThresholder;
 import com.mmxlabs.scheduler.optimiser.actionableset.ActionableSetMover;
@@ -70,11 +71,9 @@ public class GuidedMoveTransformerUnit implements ILNGStateTransformerUnit {
 
 	private static final Logger LOG = LoggerFactory.getLogger(GuidedMoveTransformerUnit.class);
 
-	private final Map<Thread, ActionableSetMover> threadCache = new ConcurrentHashMap<>(100);
-
 	@NonNull
 	public static IChainLink chainPool(@NonNull final ChainBuilder chainBuilder, @NonNull final String stage, @NonNull final UserSettings userSettings,
-			@NonNull final LocalSearchOptimisationStage stageSettings, final int progressTicks, @NonNull final CleanableExecutorService executorService, final int... seeds) {
+			@NonNull final LocalSearchOptimisationStage stageSettings, final int progressTicks, @NonNull final JobExecutorFactory jobExecutorFactory, final int... seeds) {
 		final IChainLink link = new IChainLink() {
 
 			@Override
@@ -104,7 +103,6 @@ public class GuidedMoveTransformerUnit implements ILNGStateTransformerUnit {
 				@NonNull
 				final Collection<@NonNull String> hints = new HashSet<>(dataTransformer.getHints());
 				LNGTransformerHelper.updateHintsFromUserSettings(userSettings, hints);
-				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
 				monitor.beginTask("", 100 * seeds.length);
 				try {
@@ -113,7 +111,7 @@ public class GuidedMoveTransformerUnit implements ILNGStateTransformerUnit {
 
 					final int jobId = 0;
 					final GuidedMoveTransformerUnit t = new GuidedMoveTransformerUnit(dataTransformer, stage, jobId, userSettings, copyStageSettings, initialSequences.getSequences(),
-							inputState.getBestSolution().getFirst(), executorService, hints);
+							inputState.getBestSolution().getFirst(), jobExecutorFactory, hints);
 					IMultiStateResult result = t.run(new SubProgressMonitor(monitor, 100));
 
 					// final List<NonNullPair<ISequences, Map<String, Object>>> output = new LinkedList<>();
@@ -189,11 +187,14 @@ public class GuidedMoveTransformerUnit implements ILNGStateTransformerUnit {
 	@NonNull
 	private final String stage;
 
+	private JobExecutorFactory jobExecutorFactory;
+
 	public GuidedMoveTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String stage, final int jobID, @NonNull final UserSettings userSettings,
-			@NonNull final LocalSearchOptimisationStage stageSettings, @NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences, CleanableExecutorService executorService,
+			@NonNull final LocalSearchOptimisationStage stageSettings, @NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences, JobExecutorFactory jobExecutorFactory,
 			@NonNull final Collection<@NonNull String> hints) {
 		this.dataTransformer = dataTransformer;
 		this.stage = stage;
+		this.jobExecutorFactory = jobExecutorFactory;
 
 		final Collection<IOptimiserInjectorService> services = dataTransformer.getModuleServices();
 
@@ -229,26 +230,19 @@ public class GuidedMoveTransformerUnit implements ILNGStateTransformerUnit {
 			@Override
 			protected void configure() {
 
-				assert executorService != null;
-				bind(EvaluationHelper.class).in(PerChainUnitScope.class);
+				bind(EvaluationHelper.class).in(ThreadLocalScope.class);
 
-				bind(FitnessCalculator.class).in(PerChainUnitScope.class);
-				bind(GuidedMoveMultipleSolutionOptimiser.class).in(PerChainUnitScope.class);
-				bind(CleanableExecutorService.class).toInstance(executorService);
+				bind(FitnessCalculator.class).in(ThreadLocalScope.class);
+				bind(GuidedMoveMultipleSolutionOptimiser.class).in(ThreadLocalScope.class);
 				bind(ILookupManager.class).to(LookupManager.class);
 			}
 
 			@Provides
+			@ThreadLocalScope
 			private ActionableSetMover providePerThreadMover(@NonNull final Injector injector) {
 
-				ActionableSetMover mover = threadCache.get(Thread.currentThread());
-				if (mover == null) {
-					final PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);
-					scope.enter();
-					mover = new ActionableSetMover();
-					injector.injectMembers(mover);
-					threadCache.put(Thread.currentThread(), mover);
-				}
+				ActionableSetMover mover = new ActionableSetMover();
+				injector.injectMembers(mover);
 				return mover;
 			}
 
@@ -277,10 +271,16 @@ public class GuidedMoveTransformerUnit implements ILNGStateTransformerUnit {
 
 	@Override
 	public IMultiStateResult run(@NonNull final IProgressMonitor monitor) {
-		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+		try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 			scope.enter();
 
-			try {
+
+			final JobExecutorFactory subExecutorFactory = jobExecutorFactory.withDefaultBegin(() -> {
+				final ThreadLocalScopeImpl s = injector.getInstance(ThreadLocalScopeImpl.class);
+				s.enter();
+				return s;
+			});
+			try (JobExecutor jobExecutor = subExecutorFactory.begin()) {
 
 				final GuidedMoveMultipleSolutionOptimiser instance = injector.getInstance(GuidedMoveMultipleSolutionOptimiser.class);
 				final ISequences inputRawSequences = injector.getInstance(Key.get(ISequences.class, Names.named(OptimiserConstants.SEQUENCE_TYPE_INPUT)));
@@ -302,7 +302,7 @@ public class GuidedMoveTransformerUnit implements ILNGStateTransformerUnit {
 						monitor.beginTask("Generate actionable sets", totalWork);
 
 					}
-				});
+				}, jobExecutor);
 				List<NonNullPair<ISequences, Map<String, Object>>> solutions = new LinkedList<>();
 				NonNullPair<ISequences, Map<String, Object>> best = null;
 				if (result != null) {
@@ -322,11 +322,6 @@ public class GuidedMoveTransformerUnit implements ILNGStateTransformerUnit {
 				throw new RuntimeException(e);
 			} finally {
 				monitor.done();
-				// Clean up thread-locals created in the scope object
-				for (final Thread thread : threadCache.keySet()) {
-					scope.exit(thread);
-				}
-				threadCache.clear();
 			}
 		}
 	}

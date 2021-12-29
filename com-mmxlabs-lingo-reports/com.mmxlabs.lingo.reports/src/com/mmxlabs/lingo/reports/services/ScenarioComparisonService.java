@@ -498,10 +498,22 @@ public class ScenarioComparisonService implements IScenarioServiceSelectionProvi
 		public void selectionChanged(final MPart part, final Object selectedObject) {
 
 			if (part != null) {
-
+				// Black list views as selection providers
 				final String elementID = part.getElementId();
 
+				if ("com.mmxlabs.scenario.service.ui.navigator".equals(elementID)) {
+					return;
+				}
 				if ("com.mmxlabs.scheduleview.views.SchedulerView".equals(elementID)) {
+					return;
+				}
+				if ("com.mmxlabs.shiplingo.platform.reports.views.HorizontalKPIReportView".equals(elementID)) {
+					return;
+				}
+				if ("com.mmxlabs.models.ui.validation.views.ValidationProblemsView".equals(elementID)) {
+					return;
+				}
+				if ("org.eclipse.pde.runtime.LogView".equals(elementID)) {
 					return;
 				}
 			}

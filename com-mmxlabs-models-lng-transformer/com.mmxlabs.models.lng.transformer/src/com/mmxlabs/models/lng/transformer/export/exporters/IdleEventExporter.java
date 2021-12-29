@@ -18,6 +18,9 @@ import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.FuelExportHelper;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.fitness.VolumeAllocatedSequence;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
+import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
@@ -58,8 +61,15 @@ public class IdleEventExporter {
 
 		idle.getFuels().addAll(exportFuelData(voyageDetails));
 
-		//TODO check does not include purge time.
-		idle.setContingencyHours(voyageDetails.getOptions().getExtraIdleTime());
+		//Purge handled in purge event.
+		idle.setContingencyHours(voyageDetails.getOptions().getExtraIdleTime(ExplicitIdleTime.CONTINGENCY));
+		idle.setBufferHours(voyageDetails.getOptions().getExtraIdleTime(ExplicitIdleTime.MARKET_BUFFER));
+
+		
+		final IPortTimesRecord ptr = volumeAllocatedSequence.getPortTimesRecord(options.getFromPortSlot());
+		if (voyageDetails.getOptions().getRoute() == ERouteOption.PANAMA) {
+			idle.setPanamaHours(ptr.getSlotAdditionaPanamaIdleHours(options.getFromPortSlot()));
+		}
 		
 		return idle;
 	}

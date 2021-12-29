@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.scheduleview.views;
 
-
 import java.util.List;
 
 import org.eclipse.jface.action.Action;
@@ -18,13 +17,13 @@ import com.mmxlabs.lingo.reports.scheduleview.internal.Activator;
 class ColourSchemeAction extends SchedulerViewAction {
 
 	public ColourSchemeAction(SchedulerView schedulerView, final EMFScheduleLabelProvider lp, GanttChartViewer viewer) {
-		super("Colour Scheme", IAction.AS_DROP_DOWN_MENU, schedulerView, viewer, lp);
-		setImageDescriptor(Activator.getImageDescriptor("/icons/colour_scheme.gif"));
+		super("Label", IAction.AS_DROP_DOWN_MENU, schedulerView, viewer, lp);
+		setImageDescriptor(Activator.getImageDescriptor("/icons/label.png"));
 	}
-	
+
 	@Override
 	public void run() {
-	
+
 		// cycle to next colour scheme
 		final List<IScheduleViewColourScheme> colourSchemes = lp.getColourSchemes();
 		final IScheduleViewColourScheme currentScheme = lp.getCurrentScheme();
@@ -36,39 +35,13 @@ class ColourSchemeAction extends SchedulerViewAction {
 		if (nextIdx != -1) {
 			lp.setScheme(colourSchemes.get(nextIdx));
 		}
-	
+
 		viewer.setInput(viewer.getInput());
 		schedulerView.redraw();
 	}
 
 	@Override
 	protected void createMenuItems(final Menu menu) {
-		
-		final List<IScheduleViewColourScheme> colourSchemes = lp.getColourSchemes();
-	
-		for (final IScheduleViewColourScheme scheme : colourSchemes) {
-	
-			final Action a = new Action(scheme.getName(), IAction.AS_RADIO_BUTTON) {
-	
-	
-				@Override
-				public void run() {
-					lp.setScheme(scheme);
-					viewer.setInput(viewer.getInput());
-					schedulerView.redraw();
-				}
-			};
-	
-			// a.setActionDefinitionId(mode.toString());
-			final ActionContributionItem actionContributionItem = new ActionContributionItem(a);
-			actionContributionItem.fill(menu, -1);
-	
-			// Set initially checked item.
-			if (lp.getCurrentScheme() == scheme) {
-				a.setChecked(true);
-			}
-		}
-		
 		final Action canalAction = new Action("Show Canals", IAction.AS_CHECK_BOX) {
 			@Override
 			public void run() {
@@ -77,9 +50,20 @@ class ColourSchemeAction extends SchedulerViewAction {
 				viewer.setInput(viewer.getInput());
 				schedulerView.redraw();
 			}
-		};			
+		};
 		canalAction.setChecked(lp.showCanals());
 		final ActionContributionItem actionContributionItem = new ActionContributionItem(canalAction);
-		actionContributionItem.fill(menu, -1);			
+		actionContributionItem.fill(menu, -1);
+		final Action showDaysOnEventsAction = new Action("Show Days on Events", IAction.AS_CHECK_BOX) {
+			@Override
+			public void run() {
+				final boolean b = viewer.getGanttChart().getGanttComposite().isShowingDaysOnEvents();
+				viewer.getGanttChart().getGanttComposite().setShowDaysOnEvents(!b);
+				viewer.getGanttChart().getGanttComposite().redraw();
+			}
+		};
+		showDaysOnEventsAction.setChecked(viewer.getGanttChart().getGanttComposite().isShowingDaysOnEvents());
+		final ActionContributionItem showDaysAci = new ActionContributionItem(showDaysOnEventsAction);
+		showDaysAci.fill(menu, -1);
 	}
 }

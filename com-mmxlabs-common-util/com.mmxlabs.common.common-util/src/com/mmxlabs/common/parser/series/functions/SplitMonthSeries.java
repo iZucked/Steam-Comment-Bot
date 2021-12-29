@@ -21,7 +21,7 @@ import com.mmxlabs.common.parser.series.SeriesParserData;
 public class SplitMonthSeries implements ISeries {
 	protected static final int[] NONE = new int[0];
 
-	private @NonNull final CalendarMonthMapper mapper;
+	private final @NonNull CalendarMonthMapper mapper;
 	private final ISeries series1;
 	private final ISeries series2;
 	private final int splitPoint;
@@ -43,24 +43,18 @@ public class SplitMonthSeries implements ISeries {
 		return days * pointEquivalenceFactor;
 	}
 
-	/*
-	 * private int compareNumbers(Number a, Number b) { return new BigDecimal(a.toString()).compareTo(new BigDecimal(b.toString())); }
-	 * 
-	 * private int getSeriesDurationInMonth(ISeries series) { return 0; }
-	 */
-
 	@Override
 	public int[] getChangePoints() {
-		final int ic = -1;
 
 		if (earliestAndLatestTime == null) {
 			return NONE;
 		}
 
 		int startMonth = mapper.mapChangePointToMonth(0);
-		// Add some extra months past the latest date to catch stragglers (i.e. lateness).
+		// Add some extra months past the latest date to catch stragglers (i.e.
+		// lateness).
 		final int endMonth = 2 + startMonth + ((int) ChronoUnit.MONTHS.between(earliestAndLatestTime.getFirst(), earliestAndLatestTime.getSecond()));
-		
+
 		// Find the earliest date in the source date
 		if (series1.getChangePoints().length != 0 && series2.getChangePoints().length != 0) {
 			final int startTime = Math.min(series1.getChangePoints()[0], series2.getChangePoints()[0]);

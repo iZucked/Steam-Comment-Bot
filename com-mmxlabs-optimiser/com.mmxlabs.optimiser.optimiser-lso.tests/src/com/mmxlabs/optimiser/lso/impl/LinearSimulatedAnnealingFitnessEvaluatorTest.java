@@ -5,6 +5,7 @@
 package com.mmxlabs.optimiser.lso.impl;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -24,6 +25,7 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
@@ -53,7 +55,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 	public void testCheckSequences() {
 
 		final List<IResource> resources = Collections.emptyList();
-		final ISequences source = new Sequences(resources);
+		final ISequences source = new Sequences(resources, new HashMap<>(), Collections.emptyList(),  new SequencesAttributesProviderImpl());
 
 		final IThresholder thresholder = Mockito.mock(IThresholder.class);
 		final IFitnessCombiner fitnessCombiner = Mockito.mock(IFitnessCombiner.class);
@@ -146,7 +148,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		assert evaluationState != null;
 
 		final List<IResource> resources = Collections.emptyList();
-		final ISequences source = new Sequences(resources);
+		final ISequences source = new Sequences(resources, new HashMap<>(), Collections.emptyList(),  new SequencesAttributesProviderImpl());
 
 		final List<IFitnessComponent> fitnessComponents = Collections.emptyList();
 		assert fitnessComponents != null;

@@ -71,7 +71,7 @@ public class ValidationTestUtil {
 		final MMXRootObject root = scenarioDataProvider.getTypedScenario(MMXRootObject.class);
 		final IStatus status = ServiceHelper.withOptionalService(IValidationService.class, helper -> {
 			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(scenarioDataProvider, false, relaxedValidation);
-			return helper.runValidation(validator, extraContext, root);
+			return helper.runValidation(validator, extraContext, root, null);
 		});
 
 		return status;

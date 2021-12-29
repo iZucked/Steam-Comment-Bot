@@ -155,7 +155,7 @@ public class ColumnImageCenterHeaderRenderer extends GridHeaderRenderer {
 		String text = column.getText();
 
 		if (!isWordWrap()) {
-			text = TextUtils.getShortString(gc, text, width);
+			text = TextUtils.getShortStr(gc, text, width,  SWT.RIGHT);
 			// y -= gc.getFontMetrics().getHeight();
 		}
 

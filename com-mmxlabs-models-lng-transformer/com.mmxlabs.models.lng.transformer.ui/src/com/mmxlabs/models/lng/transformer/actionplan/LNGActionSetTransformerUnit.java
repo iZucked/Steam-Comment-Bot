@@ -8,8 +8,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
@@ -23,7 +21,7 @@ import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
@@ -41,7 +39,8 @@ import com.mmxlabs.models.lng.transformer.ui.WrappedProgressMonitor;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScope;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.scheduler.optimiser.actionplan.BagMover;
 import com.mmxlabs.scheduler.optimiser.actionplan.BagOptimiser;
 import com.mmxlabs.scheduler.optimiser.moves.util.EvaluationHelper;
@@ -57,7 +56,7 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 
 	@NonNull
 	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final UserSettings userSettings, @NonNull final ActionPlanOptimisationStage stageSettings,
-			@Nullable final CleanableExecutorService executorService, final int progressTicks) {
+			@Nullable final JobExecutorFactory jobExecutorFactory, final int progressTicks) {
 		final IChainLink link = new IChainLink() {
 
 			@Override
@@ -67,9 +66,8 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 				@NonNull
 				final Collection<@NonNull String> hints = new HashSet<>(dt.getHints());
 				LNGTransformerHelper.updateHintsFromUserSettings(userSettings, hints);
-				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
-				final LNGActionSetTransformerUnit t = new LNGActionSetTransformerUnit(dt, phase, userSettings, stageSettings, executorService, initialSequences.getSequences(), inputState, hints);
+				final LNGActionSetTransformerUnit t = new LNGActionSetTransformerUnit(dt, phase, userSettings, stageSettings, jobExecutorFactory, initialSequences.getSequences(), inputState, hints);
 				return t.run(monitor);
 			}
 
@@ -92,13 +90,13 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 
 	@NonNull
 	public static IChainLink chainFake(final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final UserSettings userSettings, @NonNull final ActionPlanOptimisationStage stageSettings,
-			@Nullable final CleanableExecutorService executorService, final int progressTicks) {
+			@Nullable final JobExecutorFactory jobExecutorFactory, final int progressTicks) {
 		final IChainLink link = new IChainLink() {
 
 			@Override
 			public IMultiStateResult run(final SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
 				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
-				final LNGActionSetTransformerUnit t = new LNGActionSetTransformerUnit(dt, phase, userSettings, stageSettings, executorService, initialSequences.getSequences(), inputState,
+				final LNGActionSetTransformerUnit t = new LNGActionSetTransformerUnit(dt, phase, userSettings, stageSettings, jobExecutorFactory, initialSequences.getSequences(), inputState,
 						dt.getHints());
 				t.run(monitor);
 				return inputState;
@@ -125,14 +123,15 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 	@NonNull
 	private final String phase;
 
-	private final Map<Thread, BagMover> threadCache = new ConcurrentHashMap<>(100);
+	private @Nullable JobExecutorFactory jobExecutorFactory;
 
 	@SuppressWarnings("null")
 	public LNGActionSetTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String phase, @NonNull final UserSettings userSettings,
-			@NonNull final ActionPlanOptimisationStage stageSettings, @Nullable final CleanableExecutorService executorService, @NonNull final ISequences initialSequences,
+			@NonNull final ActionPlanOptimisationStage stageSettings, @Nullable final JobExecutorFactory jobExecutorFactory, @NonNull final ISequences initialSequences,
 			@NonNull final IMultiStateResult inputState, @NonNull final Collection<String> hints) {
 		this.dataTransformer = dataTransformer;
 		this.phase = phase;
+		this.jobExecutorFactory = jobExecutorFactory;
 
 		final Collection<IOptimiserInjectorService> services = dataTransformer.getModuleServices();
 
@@ -151,23 +150,16 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 
 			@Override
 			protected void configure() {
-				// bind(BagMover.class).in(PerChainUnitScope.class);
-				assert executorService != null;
-				bind(CleanableExecutorService.class).toInstance(executorService);
+
 			}
 
 			@Provides
+			@ThreadLocalScope
 			private BagMover providePerThreadBagMover(@NonNull final Injector injector) {
 
-				BagMover bagMover = threadCache.get(Thread.currentThread());
-				if (bagMover == null) {
-					final PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);
-					scope.enter();
-					bagMover = new BagMover();
-					injector.injectMembers(bagMover);
-					threadCache.put(Thread.currentThread(), bagMover);
-					// System.out.println("thread:" + Thread.currentThread().getId());
-				}
+				final BagMover bagMover = new BagMover();
+				injector.injectMembers(bagMover);
+
 				return bagMover;
 			}
 
@@ -195,14 +187,19 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 	@Override
 	public IMultiStateResult run(@NonNull final IProgressMonitor monitor) {
 
-		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+		try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 			scope.enter();
 			monitor.beginTask("", 100);
 			try {
+				final JobExecutorFactory subExecutorFactory = jobExecutorFactory.withDefaultBegin(() -> {
+					final ThreadLocalScopeImpl s = injector.getInstance(ThreadLocalScopeImpl.class);
+					s.enter();
+					return s;
+				});
 
 				final BagOptimiser instance = injector.getInstance(BagOptimiser.class);
 				final ISequences inputRawSequences = injector.getInstance(Key.get(ISequences.class, Names.named(OptimiserConstants.SEQUENCE_TYPE_INPUT)));
-				final IMultiStateResult result = instance.optimise(inputRawSequences, new WrappedProgressMonitor(new SubProgressMonitor(monitor, 95)), 1000);
+				final IMultiStateResult result = instance.optimise(inputRawSequences, new WrappedProgressMonitor(new SubProgressMonitor(monitor, 95)), 1000, subExecutorFactory);
 				if (result != null) {
 					return result;
 				}
@@ -212,11 +209,6 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 				throw e;
 			} finally {
 				monitor.done();
-				// Clean up thread-locals created in the scope object
-				for (final Thread thread : threadCache.keySet()) {
-					scope.exit(thread);
-				}
-				threadCache.clear();
 			}
 		}
 	}

@@ -12,6 +12,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.BaseCaseRowOptions;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOption;
 import com.mmxlabs.models.lng.analytics.BuyReference;
@@ -20,6 +21,7 @@ import com.mmxlabs.models.lng.analytics.OpenBuy;
 import com.mmxlabs.models.lng.analytics.OpenSell;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.PartialCaseRowOptions;
 import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOption;
@@ -177,9 +179,12 @@ public class SandboxModelBuilder {
 
 	public BaseCaseRow createBaseCaseRow(final BuyOption buy, final SellOption sell, final ShippingOption shipping) {
 		final BaseCaseRow row = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
+		final BaseCaseRowOptions options = AnalyticsFactory.eINSTANCE.createBaseCaseRowOptions();
 		row.setBuyOption(buy);
 		row.setSellOption(sell);
 		row.setShipping(shipping);
+
+		row.setOptions(options);
 
 		this.optionAnalysisModel.getBaseCase().getBaseCase().add(row);
 		return row;
@@ -188,7 +193,11 @@ public class SandboxModelBuilder {
 
 	public BaseCaseRow createBaseCaseRow(final VesselEventOption event, @Nullable final ShippingOption shipping) {
 		final BaseCaseRow row = AnalyticsFactory.eINSTANCE.createBaseCaseRow();
+		final BaseCaseRowOptions options = AnalyticsFactory.eINSTANCE.createBaseCaseRowOptions();
+
 		row.setVesselEventOption(event);
+
+		row.setOptions(options);
 
 		this.optionAnalysisModel.getBaseCase().getBaseCase().add(row);
 		return row;
@@ -197,6 +206,7 @@ public class SandboxModelBuilder {
 
 	public PartialCaseRow createPartialCaseRow(final BuyOption buy, final SellOption sell, final ShippingOption shipping) {
 		final PartialCaseRow row = AnalyticsFactory.eINSTANCE.createPartialCaseRow();
+		final PartialCaseRowOptions options = AnalyticsFactory.eINSTANCE.createPartialCaseRowOptions();
 		if (buy != null) {
 			row.getBuyOptions().add(buy);
 		}
@@ -206,6 +216,8 @@ public class SandboxModelBuilder {
 		if (shipping != null) {
 			row.getShipping().add(shipping);
 		}
+		row.setOptions(options);
+
 		this.optionAnalysisModel.getPartialCase().getPartialCase().add(row);
 		return row;
 
@@ -213,12 +225,15 @@ public class SandboxModelBuilder {
 
 	public PartialCaseRow createPartialCaseRow(final VesselEventOption event, final ShippingOption shipping) {
 		final PartialCaseRow row = AnalyticsFactory.eINSTANCE.createPartialCaseRow();
+		final PartialCaseRowOptions options = AnalyticsFactory.eINSTANCE.createPartialCaseRowOptions();
+
 		if (event != null) {
 			row.getVesselEventOptions().add(event);
 		}
 		if (shipping != null) {
 			row.getShipping().add(shipping);
 		}
+		row.setOptions(options);
 
 		this.optionAnalysisModel.getPartialCase().getPartialCase().add(row);
 		return row;
@@ -227,4 +242,5 @@ public class SandboxModelBuilder {
 	public PartialCaseRowMaker makePartialCaseRow() {
 		return new PartialCaseRowMaker(this);
 	}
+
 }

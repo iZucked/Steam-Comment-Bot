@@ -196,7 +196,7 @@ public class ExposureDetailReportView extends ViewPart {
 
 		selectedScenariosService = getSite().getService(ScenarioComparisonService.class);
 
-		selectionManager = new ReentrantSelectionManager(viewer, selectedScenariosServiceListener, selectedScenariosService);
+		selectionManager = new ReentrantSelectionManager(viewer, selectedScenariosServiceListener, selectedScenariosService, false);
 		makeActions();
 		try {
 			selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
@@ -277,47 +277,80 @@ public class ExposureDetailReportView extends ViewPart {
 					final EObject eObject = (EObject) element;
 					if (reference instanceof EAttribute) {
 						if (eObject.eClass().getEAllAttributes().contains(reference)) {
-							final Object o = ((EObject) element).eGet(reference);
-							if (o == null) {
-								cell.setText("");
-							} else if (reference == SchedulePackage.Literals.EXPOSURE_DETAIL__UNIT_PRICE) {
-								cell.setText(String.format("%,.3f", (Double) o));
-							} else if (reference.getEType() == EcorePackage.Literals.EDOUBLE) {
-								cell.setText(String.format("%,.1f", (Double) o));
-							} else {
-								cell.setText(o.toString());
-							}
+							updateCellForEAttributeReference(cell, element, reference);
 						}
 					} else {
 						if (eObject.eClass().getEAllReferences().contains(reference)) {
 							try {
-								final Object o = ((EObject) element).eGet(reference);
-								if (o instanceof Slot) {
-									final Slot<?> slot = (Slot<?>) o;
-									cell.setText(slot.getName());
-								} else if (o instanceof AbstractYearMonthCurve) {
-									final AbstractYearMonthCurve idx = (AbstractYearMonthCurve) o;
-									cell.setText(idx.getName());
-								} else if (element instanceof ExposureDetail) {
-									if (reference == SchedulePackage.Literals.EXPOSURE_DETAIL__UNIT_PRICE) {
-										cell.setText(String.format("%,.3f", (Double) o));
-									} else if (reference.getEType() == EcorePackage.Literals.EDOUBLE) {
-										cell.setText(String.format("%,.1f", (Double) o));
-									} else {
-										cell.setText(o.toString());
-									}
-								}
-							} catch (final Throwable e) {
+								updateCellWithEGET(cell, element, reference);
+							} catch (final Exception e) {
+								System.out.println(e.getMessage());
+							} finally {
 								cell.setText("");
 							}
 						}
 					}
 				}
 			}
+
 		});
 
 		col.getColumn().setWidth(120);
 		return col;
+	}
+	
+	private void updateCellForEAttributeReference(final ViewerCell cell, final Object element, final EStructuralFeature reference) {
+		final Object o = ((EObject) element).eGet(reference);
+		if (o == null) {
+			cell.setText("");
+		} else if (reference == SchedulePackage.Literals.EXPOSURE_DETAIL__UNIT_PRICE) {
+			cell.setText(String.format("%,.3f", (Double) o));
+		} else if (reference.getEType() == EcorePackage.Literals.EDOUBLE) {
+			cell.setText(String.format("%,.1f", (Double) o));
+		} else if (reference == SchedulePackage.Literals.EXPOSURE_DETAIL__INDEX_NAME) {
+			if ("physical".equalsIgnoreCase(o.toString())) {
+				cell.setText(o.toString());
+			} else {
+				cell.setText(o.toString().toUpperCase());
+			}
+		} else if (reference == SchedulePackage.Literals.EXPOSURE_DETAIL__VOLUME_UNIT) { 
+			switch(o.toString().toLowerCase()) {
+			case "mmbtu" :
+				cell.setText("mmBtu");
+				break;
+			case "mwh" :
+				cell.setText("MWh");
+				break;
+			case "bbl" :
+				cell.setText("bbl");
+				break;
+			case "therm" :
+				cell.setText("therm");
+				break;
+			default: cell.setText(o.toString());
+			}
+		} else {
+			cell.setText(o.toString());
+		}
+	}
+	
+	private void updateCellWithEGET(final ViewerCell cell, final Object element, final EStructuralFeature reference) {
+		final Object o = ((EObject) element).eGet(reference);
+		if (o instanceof Slot) {
+			final Slot<?> slot = (Slot<?>) o;
+			cell.setText(slot.getName());
+		} else if (o instanceof AbstractYearMonthCurve) {
+			final AbstractYearMonthCurve idx = (AbstractYearMonthCurve) o;
+			cell.setText(idx.getName());
+		} else if (element instanceof ExposureDetail) {
+			if (reference == SchedulePackage.Literals.EXPOSURE_DETAIL__UNIT_PRICE) {
+				cell.setText(String.format("%,.3f", (Double) o));
+			} else if (reference.getEType() == EcorePackage.Literals.EDOUBLE) {
+				cell.setText(String.format("%,.1f", (Double) o));
+			} else {
+				cell.setText(o.toString());
+			}
+		}
 	}
 
 	private ISelection selection;
@@ -379,7 +412,6 @@ public class ExposureDetailReportView extends ViewPart {
 	@Override
 	public void setFocus() {
 		ViewerHelper.setFocus(viewer);
-
 	}
 
 }

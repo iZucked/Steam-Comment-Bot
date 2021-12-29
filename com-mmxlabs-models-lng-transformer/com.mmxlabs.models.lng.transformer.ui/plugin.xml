@@ -254,8 +254,8 @@
                locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=optimisation">
                <command
                      commandId="com.mmxlabs.commands.optimisation.play"
-                     disabledIcon="icons/dlcl16/resume_co.gif"
-                     icon="icons/elcl16/resume_co.gif"
+                     icon="platform:/plugin/com.mmxlabs.rcp.common/icons/24x24/optimise.png"
+               		 disabledIcon="platform:/plugin/com.mmxlabs.rcp.common/icons/24x24/optimise_disabled.png"
                      id="com.mmxlabs.scenario.service.toolbars.optimisation.play"
                      label="Optimise"
                      style="push"
@@ -303,19 +303,19 @@
             <action
                   class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.StopOptimisationEditorActionDelegate"
                   definitionId="com.mmxlabs.commands.optimisation.terminate"
-                  disabledIcon="icons/dlcl16/terminate_co.gif"
-                  icon="icons/elcl16/terminate_co.gif"
+                  icon="platform:/plugin/com.mmxlabs.rcp.common/icons/24x24/terminate.png"
+                  disabledIcon="platform:/plugin/com.mmxlabs.rcp.common/icons/24x24/terminate_disabled.png"
                   id="com.mmxlabs.shiplingo.platform.models.optimisation.stop"
                   label="Stop Optimisation"
                   style="push"
                   toolbarPath="optimisationgroup"
-                  tooltip="Terminate optimisation">
+                  tooltip="Stop optimisation">
             </action>
             <action
                   class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.StartOptimisationEditorActionDelegate"
                   definitionId="com.mmxlabs.commands.optimisation.play"
-                  disabledIcon="icons/dlcl16/resume_co.gif"
-                  icon="icons/elcl16/resume_co.gif"
+                  icon="platform:/plugin/com.mmxlabs.rcp.common/icons/24x24/optimise.png"
+                  disabledIcon="platform:/plugin/com.mmxlabs.rcp.common/icons/24x24/optimise_disabled.png"
                   id="com.mmxlabs.shiplingo.platform.models.optimisation.play"
                   label="Start Optimisation"
                   toolbarPath="optimisationgroup"
@@ -324,8 +324,8 @@
             <action
                   class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.EvaluateOptimisationEditorActionDelegate"
                   definitionId="com.mmxlabs.commands.optimisation.evaluate"
-                  disabledIcon="icons/evaluate_schedule2_disabled.png"
-                  icon="icons/evaluate_schedule2.png"
+                  icon="icons/evaluate_schedule.png"
+                  disabledIcon="icons/evaluate_schedule_disabled.png"
                   id="com.mmxlabs.shiplingo.platform.models.optimisation.action3"
                   label="Evaluate"
                   toolbarPath="evaluategroup3"
@@ -333,7 +333,8 @@
             </action>
             <action
                   class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.LiveEvaluatorStateEditorActionDelegate"
-                  icon="icons/auto_evaluate2.png"
+                  icon="icons/auto_evaluate.png"
+                  disabledIcon="icons/auto_evaluate_disabled.png"
                   id="com.mmxlabs.scenario.service.ui.autoeval"
                   label="Auto-evaluate on/off"
                   style="toggle"
@@ -342,7 +343,8 @@
             <action
                   class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.ForkScenarioEditorActionDelegate"
                   definitionId="com.mmxlabs.scenario.service.ui.fork"
-                  icon="icons/fork.gif"
+                  icon="platform:/plugin/com.mmxlabs.rcp.common/icons/24x24/fork.png"
+                  disabledIcon="platform:/plugin/com.mmxlabs.rcp.common/icons/24x24/fork_disabled.png"
                   id="com.mmxlabs.scenario.service.ui.fork"
                   label="Fork"
                   style="push"

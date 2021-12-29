@@ -71,9 +71,6 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 
 	private final IScenarioDataProvider originalScenarioDataProvider;
 
-	private static final ImageDescriptor imgOpti = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/elcl16/resume_co.gif");
-	private static final ImageDescriptor imgEval = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/evaluate_schedule.gif");
-
 	private final LNGScenarioRunner scenarioRunner;
 
 	private final EditingDomain originalEditingDomain;
@@ -86,7 +83,7 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 		this.jobDescriptor = jobDescriptor;
 		this.scenarioInstance = jobDescriptor.getJobContext();
 		@NonNull
-		ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecordChecked(scenarioInstance);
 		this.originalScenarioDataProvider = modelRecord.aquireScenarioDataProvider("LNGActionPlanJobControl");
 		originalEditingDomain = originalScenarioDataProvider.getEditingDomain();
 
@@ -143,7 +140,7 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 			stageSettings.setConstraintAndFitnessSettings(constraintAndFitnessSettings);
 
 			final ActionableSetsTransformerUnit actionPlanUnit = new ActionableSetsTransformerUnit(dataTransformer, "actionplan", dataTransformer.getUserSettings(), stageSettings,
-					scenarioRunner.getExecutorService(), dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), dataTransformer.getHints());
+					scenarioRunner.getJobExecutorFactory(), dataTransformer.getInitialSequences(), dataTransformer.getInitialResult(), dataTransformer.getHints());
 
 			// final Function<Integer, String> nameFactory = changeSetIdx -> {
 			// String newName;
@@ -257,11 +254,6 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 				System.out.println("done in:" + (System.currentTimeMillis() - start));
 			}
 		}
-		// if (scenarioRunner.isFinished()) {
-		// return false;
-		// } else {
-		// return true;
-		// }
 	}
 
 	/*
@@ -275,9 +267,6 @@ public class CreateActionableSetPlanJobControl extends AbstractEclipseJobControl
 
 	@Override
 	public void dispose() {
-		if (scenarioRunner != null) {
-			scenarioRunner.getExecutorService().shutdownNow();
-		}
 		if (originalScenarioDataProvider != null) {
 			originalScenarioDataProvider.close();
 		}

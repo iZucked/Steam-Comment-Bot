@@ -34,20 +34,6 @@ public class CollectionsUtilTest {
 	}
 
 	@Test
-	public void makeArrayList2Test() {
-
-		final List<Number> list = CollectionsUtil.makeArrayList2(Number.class, 5, 4, 3, 2, 1);
-
-		Assertions.assertEquals(5, list.size());
-
-		Assertions.assertEquals(Integer.valueOf(5), list.get(0));
-		Assertions.assertEquals(Integer.valueOf(4), list.get(1));
-		Assertions.assertEquals(Integer.valueOf(3), list.get(2));
-		Assertions.assertEquals(Integer.valueOf(2), list.get(3));
-		Assertions.assertEquals(Integer.valueOf(1), list.get(4));
-	}
-
-	@Test
 	public void makeHashMapTest() {
 
 		// TODO: We should test the actual object instances rather than rely

@@ -36,6 +36,7 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters;
@@ -53,8 +54,6 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
-import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsConstraintChecker;
-import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
@@ -64,7 +63,7 @@ import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -84,20 +83,7 @@ public class PanamaVesselGroupWaitingBookingTests extends AbstractMicroTestCase 
 	private static final int DEFAULT_WAITING_DAYS = 10;
 	private static final int VG1_WAITING_DAYS = 5;
 	private static final int VG2_WAITING_DAYS = 8;
-
-	
-	@Test
-	@Tag(TestCategories.MICRO_TEST)	
-	public void pnlBasedTWS_panamaVesselGroupTest_Constraint() {
-		runPanamaVesselGroupConstraintTest(false);
-	}
-
-	@Test
-	@Tag(TestCategories.MICRO_TEST)
-	public void pricedBasedTWS_panamaVesselGroupTest_Constraint() {
-		runPanamaVesselGroupConstraintTest(true);
-	}
-	
+ 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
 	public void priceBasedTWSVesselGroupWaitingDaysTest() {
@@ -229,21 +215,30 @@ public class PanamaVesselGroupWaitingBookingTests extends AbstractMicroTestCase 
 		
 		VesselGroupCanalParameters testGroupParams = CargoFactory.eINSTANCE.createVesselGroupCanalParameters();
 		testGroupParams.getVesselGroup().add(vg);
-		testGroupParams.setNorthboundWaitingDays(VG1_WAITING_DAYS);
-		testGroupParams.setSouthboundWaitingDays(VG1_WAITING_DAYS);
 		canalBookings.getVesselGroupCanalParameters().add(testGroupParams);
+		final PanamaSeasonalityRecord psr1 = CargoFactory.eINSTANCE.createPanamaSeasonalityRecord();
+		psr1.setNorthboundWaitingDays(VG1_WAITING_DAYS);
+		psr1.setSouthboundWaitingDays(VG1_WAITING_DAYS);
+		psr1.setVesselGroupCanalParameter(testGroupParams);
+		canalBookings.getPanamaSeasonalityRecords().add(psr1);
 		
 		VesselGroupCanalParameters testGroupParams2 = CargoFactory.eINSTANCE.createVesselGroupCanalParameters();
 		testGroupParams2.getVesselGroup().add(vg2);
-		testGroupParams2.setNorthboundWaitingDays(VG2_WAITING_DAYS);
-		testGroupParams2.setSouthboundWaitingDays(VG2_WAITING_DAYS);
 		canalBookings.getVesselGroupCanalParameters().add(testGroupParams2);
+		final PanamaSeasonalityRecord psr2 = CargoFactory.eINSTANCE.createPanamaSeasonalityRecord();
+		psr2.setNorthboundWaitingDays(VG2_WAITING_DAYS);
+		psr2.setSouthboundWaitingDays(VG2_WAITING_DAYS);
+		psr2.setVesselGroupCanalParameter(testGroupParams2);
+		canalBookings.getPanamaSeasonalityRecords().add(psr2);
 		
 		VesselGroupCanalParameters defaultParams = CargoFactory.eINSTANCE.createVesselGroupCanalParameters();
 		//Default params group has no vessel group or vessels set.
-		defaultParams.setNorthboundWaitingDays(10);
-		defaultParams.setSouthboundWaitingDays(10);
 		canalBookings.getVesselGroupCanalParameters().add(defaultParams);
+		final PanamaSeasonalityRecord dpsr = CargoFactory.eINSTANCE.createPanamaSeasonalityRecord();
+		dpsr.setNorthboundWaitingDays(10);
+		dpsr.setSouthboundWaitingDays(10);
+		dpsr.setVesselGroupCanalParameter(defaultParams);
+		canalBookings.getPanamaSeasonalityRecords().add(dpsr);
 		
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -298,43 +293,6 @@ public class PanamaVesselGroupWaitingBookingTests extends AbstractMicroTestCase 
 				.withCharterRate("100000") //Make expensive to make schedule longer.
 				.build();
 		return vesselAvailability;
-	}
-	
-	private void runPanamaVesselGroupConstraintTest(boolean priceBasedTimeWindowScheduler) {
-
-		final VesselAvailability vesselAvailability = getVesselAvailability(InternalDataConstants.REF_VESSEL_STEAM_145);
-
-		final Cargo cargo = createFobDesCargo(1, vesselAvailability);
-
-		evaluateWithLSOTest(scenarioRunner -> {
-
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-			LNGDataTransformer dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
-			final Injector injector = MicroTestUtils.createEvaluationInjector(dataTransformer);
-
-			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
-				scope.enter();
-
-				final TimeWindowScheduler scheduler = injector.getInstance(TimeWindowScheduler.class);
-				scheduler.setUseCanalBasedWindowTrimming(true);
-				scheduler.setUsePriceBasedWindowTrimming(priceBasedTimeWindowScheduler);
-				
-				final PanamaSlotsConstraintChecker checker = new PanamaSlotsConstraintChecker(PanamaSlotsConstraintCheckerFactory.NAME);//
-				injector.injectMembers(checker);
-
-				// Set blank sequences as initial state
-				checker.sequencesAccepted(SequenceHelper.createSequences(dataTransformer.getInjector()), SequenceHelper.createSequences(dataTransformer.getInjector()), new ArrayList<>());
-
-				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
-				@NonNull
-				final IModifiableSequences manipulatedSequences = sequencesManipulator
-						.createManipulatedSequences(SequenceHelper.createSequences(dataTransformer.getInjector(), vesselAvailability, cargo));
-				
-				// At the moment, we should expect this to always pass, since we introduce waiting time for unbooked Panama slots and this constraint is currently disabled.
-				checker.checkConstraints(SequenceHelper.createSequences(dataTransformer.getInjector()), null, new ArrayList<>());
-				assertTrue(checker.checkConstraints(manipulatedSequences, null, new ArrayList<>()));
-			}
-		});
 	}
 
 	/**

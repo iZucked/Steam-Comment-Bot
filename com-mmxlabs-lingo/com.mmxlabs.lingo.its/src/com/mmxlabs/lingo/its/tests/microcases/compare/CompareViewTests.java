@@ -23,7 +23,6 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.reports.services.SelectedDataProviderImpl;
@@ -46,7 +45,6 @@ import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.lng.transformer.its.RequireFeature;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
@@ -63,7 +61,6 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
 @ExtendWith(ShiroRunner.class)
-@RequireFeature(KnownFeatures.FEATURE_MODULE_DIFF_TOOLS)
 public class CompareViewTests {
 
 	@Test
@@ -592,7 +589,8 @@ public class CompareViewTests {
 			Assertions.assertEquals(0, ChangeSetKPIUtil.getCargoOtherPNL(row2, ResultType.After));
 
 			// P&L Sanity check -- no missing components in P&L
-			// NOTE: This is different to other test cases as second D sales revenue is shown on the second D row rather than the cargo row.
+			// NOTE: This is different to other test cases as second D sales revenue is
+			// shown on the second D row rather than the cargo row.
 			double totalBeforePNL = 0.0;
 			double totalBeforePNLSum = 0.0;
 			double totalAfterPNL = 0.0;
@@ -705,10 +703,8 @@ public class CompareViewTests {
 				.withExtraModule(new TransformerExtensionTestBootstrapModule()) //
 				.withThreadCount(1)//
 				.buildDefaultRunner();
-		try {
-			runner.evaluateInitialState();
-		} finally {
-			runner.dispose();
-		}
+
+		runner.evaluateInitialState();
+
 	}
 }

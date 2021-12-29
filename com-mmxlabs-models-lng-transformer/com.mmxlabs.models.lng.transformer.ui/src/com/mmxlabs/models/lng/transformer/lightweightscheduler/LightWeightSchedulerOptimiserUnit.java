@@ -10,8 +10,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -29,8 +27,9 @@ import com.google.inject.Module;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
-import com.mmxlabs.common.concurrent.SimpleCleanableExecutorService;
+import com.mmxlabs.common.concurrent.DefaultJobExecutorFactory;
+import com.mmxlabs.common.concurrent.JobExecutor;
+import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -63,6 +62,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.exceptions.InfeasibleSolutionException;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -76,21 +76,19 @@ public class LightWeightSchedulerOptimiserUnit {
 	@NonNull
 	private final LNGDataTransformer dataTransformer;
 
-	private final Map<Thread, LightWeightSchedulerOptimiser> threadCache = new ConcurrentHashMap<>(100);
+	private final @NonNull ConstraintAndFitnessSettings constraintAndFitnessSettings;
 
-	private @NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings;
+	private final @NonNull UserSettings userSettings;
 
-	private @NonNull final UserSettings userSettings;
-
-	private @NonNull final Collection<String> hints;
+	private final @NonNull Collection<String> hints;
 
 	private CleanStateOptimisationStage stage;
 
-	private @NonNull CleanableExecutorService executorService;
+	private @NonNull JobExecutorFactory jobExecutorFactory;
 
 	@NonNull
 	public static IChainLink chain(@NonNull final ChainBuilder chainBuilder, @NonNull final LNGScenarioToOptimiserBridge optimiserBridge, @NonNull final String stage,
-			@NonNull final UserSettings userSettings, @NonNull final CleanStateOptimisationStage stageSettings, final int progressTicks, @NonNull final CleanableExecutorService executorService,
+			@NonNull final UserSettings userSettings, @NonNull final CleanStateOptimisationStage stageSettings, final int progressTicks, @NonNull final JobExecutorFactory jobExecutorFactory,
 			final int seed) {
 		final IChainLink link = new IChainLink() {
 
@@ -121,14 +119,13 @@ public class LightWeightSchedulerOptimiserUnit {
 				@NonNull
 				final Collection<@NonNull String> hints = new HashSet<>(dataTransformer.getHints());
 				LNGTransformerHelper.updateHintsFromUserSettings(userSettings, hints);
-				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
 				try {
 					final CleanStateOptimisationStage copyStageSettings = EcoreUtil.copy(stageSettings);
 					copyStageSettings.setSeed(seed);
 
 					final LightWeightSchedulerOptimiserUnit t = new LightWeightSchedulerOptimiserUnit(dataTransformer, userSettings, copyStageSettings,
-							copyStageSettings.getConstraintAndFitnessSettings(), executorService, (LNGScenarioModel) (optimiserBridge.getOptimiserScenario().getScenario()), hints);
+							copyStageSettings.getConstraintAndFitnessSettings(), jobExecutorFactory, (LNGScenarioModel) (optimiserBridge.getOptimiserScenario().getScenario()), hints);
 					final IMultiStateResult result;
 					if (userSettings.isNominalOnly()) {
 						ISequences seq = t.computeNominalADP(initialSequencesContainer.getSequences(), monitor);
@@ -174,13 +171,13 @@ public class LightWeightSchedulerOptimiserUnit {
 	}
 
 	public LightWeightSchedulerOptimiserUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final UserSettings userSettings, CleanStateOptimisationStage stage,
-			@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings, @NonNull final CleanableExecutorService executorService, final LNGScenarioModel initialScenario,
+			@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings, @NonNull final JobExecutorFactory jobExecutorFactory, final LNGScenarioModel initialScenario,
 			@NonNull final Collection<String> hints) {
 		this.dataTransformer = dataTransformer;
 		this.userSettings = userSettings;
 		this.stage = stage;
 		this.constraintAndFitnessSettings = constraintAndFitnessSettings;
-		this.executorService = executorService;
+		this.jobExecutorFactory = jobExecutorFactory;
 		this.hints = hints;
 	}
 
@@ -230,14 +227,12 @@ public class LightWeightSchedulerOptimiserUnit {
 
 		final LightWeightOptimisationDataFactory scheduler = stage1Injector.getInstance(LightWeightOptimisationDataFactory.class);
 
-		final CleanableExecutorService localExecutorService = new SimpleCleanableExecutorService(Executors.newFixedThreadPool(1), 1);
+		final JobExecutorFactory localExecutorService = new DefaultJobExecutorFactory(1);
 
 		try {
 			return scheduler.createSlotPairingMatrix(pnlVessel, calculator, localExecutorService, monitor);
 		} catch (Exception e) {
 			return null;
-		} finally {
-			localExecutorService.shutdown();
 		}
 	}
 
@@ -251,7 +246,7 @@ public class LightWeightSchedulerOptimiserUnit {
 			}
 		});
 		modules.add(new LWSTabuOptimiserModule(stage.getCleanStateSettings()));
-		modules.add(new LightWeightSchedulerStage2Module(threadCache));
+		modules.add(new LightWeightSchedulerStage2Module());
 
 		return stage1Injector.createChildInjector(modules);
 	}
@@ -292,13 +287,9 @@ public class LightWeightSchedulerOptimiserUnit {
 
 		final LightWeightOptimisationDataFactory scheduler = stage1Injector.getInstance(LightWeightOptimisationDataFactory.class);
 
-		final CleanableExecutorService localExecutorService = new SimpleCleanableExecutorService(Executors.newFixedThreadPool(1), 1);
+		final JobExecutorFactory localExecutorService = new DefaultJobExecutorFactory(1);
 
-		try {
-			return scheduler.createLightWeightOptimisationData(pnlVessel, calculator, localExecutorService, monitor);
-		} finally {
-			localExecutorService.shutdown();
-		}
+		return scheduler.createLightWeightOptimisationData(pnlVessel, calculator, localExecutorService, monitor);
 
 	}
 
@@ -314,28 +305,32 @@ public class LightWeightSchedulerOptimiserUnit {
 
 		final LightWeightOptimisationDataFactory scheduler = stage1Injector.getInstance(LightWeightOptimisationDataFactory.class);
 
-		final CleanableExecutorService localExecutorService = new SimpleCleanableExecutorService(Executors.newFixedThreadPool(1), 1);
+		final JobExecutorFactory localExecutorService = new DefaultJobExecutorFactory(1);
 
-		try {
-			return scheduler.createNominalADP(pnlVessel, calculator, localExecutorService, monitor);
-		} finally {
-			localExecutorService.shutdown();
-		}
-
+		return scheduler.createNominalADP(pnlVessel, calculator, localExecutorService, monitor);
 	}
 
 	public @NonNull IMultiStateResult runStage2(final @NonNull IVesselAvailability pnlVessel, @NonNull final Injector stage2Injector, final @NonNull IProgressMonitor monitor) {
-		try {
 
-			final LightWeightSchedulerOptimiser calculator = stage2Injector.getInstance(LightWeightSchedulerOptimiser.class);
-			final Pair<ISequences, Long> result = calculator.optimise(pnlVessel, executorService, monitor);
+		final JobExecutorFactory subExecutorFactory = jobExecutorFactory.withDefaultBegin(() -> {
+			final ThreadLocalScopeImpl s = stage2Injector.getInstance(ThreadLocalScopeImpl.class);
+			s.enter();
+			return s;
+		});
+		try (final ThreadLocalScopeImpl s = stage2Injector.getInstance(ThreadLocalScopeImpl.class)) {
+			s.enter();
+			try (JobExecutor jobExecutor = subExecutorFactory.begin()) {
 
-			final List<NonNullPair<ISequences, Map<String, Object>>> solutions = new LinkedList<>();
-			solutions.add(new NonNullPair<>(result.getFirst(), new HashMap<>()));
+				final LightWeightSchedulerOptimiser calculator = stage2Injector.getInstance(LightWeightSchedulerOptimiser.class);
+				final Pair<ISequences, Long> result = calculator.optimise(pnlVessel, monitor, jobExecutor);
 
-			return new MultiStateResult(solutions.get(0), solutions);
-		} finally {
-			monitor.done();
+				final List<NonNullPair<ISequences, Map<String, Object>>> solutions = new LinkedList<>();
+				solutions.add(new NonNullPair<>(result.getFirst(), new HashMap<>()));
+
+				return new MultiStateResult(solutions.get(0), solutions);
+			} finally {
+				monitor.done();
+			}
 		}
 	}
 

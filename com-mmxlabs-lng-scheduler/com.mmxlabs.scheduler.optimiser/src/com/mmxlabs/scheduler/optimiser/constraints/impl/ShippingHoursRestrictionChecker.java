@@ -123,14 +123,16 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 					final int shippingHours = shippingHoursRestrictionProvider.getShippingHoursRestriction(first);
 					if (shippingHours == IShippingHoursRestrictionProvider.RESTRICTION_UNDEFINED) {
 						// No
-						messages.add(String.format("%s: DES purchase %s and DES sale %s have no shipping hours restriction set!", 
+						if (messages != null)
+							messages.add(String.format("%s: DES purchase %s and DES sale %s have no shipping hours restriction set!", 
 								this.getName(), desPurchase.getId(), desSale.getId()));
 						return false;
 					}
 					final ITimeWindow fobLoadDate = shippingHoursRestrictionProvider.getBaseTime(first);
 					if (fobLoadDate == null) {
 						// Should have a date!
-						messages.add(String.format("%s: DES purchase %s have no load date set!", 
+						if (messages != null)
+							messages.add(String.format("%s: DES purchase %s have no load date set!", 
 								this.getName(), desPurchase.getId()));
 						return false;
 					}
@@ -138,19 +140,22 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 					@Nullable
 					final IVessel nominatedVessel = nominatedVesselProvider.getNominatedVessel(first);
 					if (nominatedVessel == null) {
-						messages.add(String.format("%s: DES purchase %s and DES sale %s have no nominated vessel set!", 
+						if (messages != null)
+							messages.add(String.format("%s: DES purchase %s and DES sale %s have no nominated vessel set!", 
 								this.getName(), desPurchase.getId(), desSale.getId()));
 						return false;
 					}
 					final Pair<Integer, Integer> desTimes = dischargeTimeCalculator.getDivertibleDESTimes(desPurchase, desSale, nominatedVessel, resource);
 					if (desTimes == null) {
-						messages.add(String.format("%s: DES purchase %s and DES sale %s have no DES times!", 
+						if (messages != null)
+							messages.add(String.format("%s: DES purchase %s and DES sale %s have no DES times!", 
 								this.getName(), desPurchase.getId(), desSale.getId()));
 						return false;
 					}
 					final int returnTime = desTimes.getSecond();
 					if (returnTime - fobLoadDate.getInclusiveStart() > shippingHours) {
-						messages.add(String.format("%s: Travel time between DES purchase %s and DES sale %s is too long!", 
+						if (messages != null)
+							messages.add(String.format("%s: Travel time between DES purchase %s and DES sale %s is too long!", 
 								this.getName(), desPurchase.getId(), desSale.getId()));
 						return false;
 					}
@@ -169,19 +174,21 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 						ITimeWindow tw1 = fobPurchase.getTimeWindow();
 						ITimeWindow tw2 = fobSale.getTimeWindow();
 						if (tw1 != null && tw2 != null) {
-							if (!tw1.overlaps(tw2))
+							if (!tw1.overlaps(tw2) && messages != null)
 								messages.add(String.format("%s: FOB purchase %s and FOB sale %s time windows don't overlap!", 
 										this.getName(), fobPurchase.getId(), fobSale.getId()));
 							return tw1.overlaps(tw2);
 						}
-						messages.add(String.format("%s: FOB purchase %s or FOB sale %s has no time window!", 
+						if (messages != null)
+							messages.add(String.format("%s: FOB purchase %s or FOB sale %s has no time window!", 
 								this.getName(), fobPurchase.getId(), fobSale.getId()));
 						return false;
 					}
 					final ITimeWindow fobSaleWindow = shippingHoursRestrictionProvider.getBaseTime(second);
 					if (fobSaleWindow == null) {
 						// Should have a date!
-						messages.add(String.format("%s: FOB purchase %s has no load date!", 
+						if (messages != null)
+							messages.add(String.format("%s: FOB purchase %s has no load date!", 
 								this.getName(), fobPurchase.getId(), fobSale.getId()));
 						return false;
 					}
@@ -189,19 +196,22 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 					@Nullable
 					final IVessel nominatedVessel = nominatedVesselProvider.getNominatedVessel(second);
 					if (nominatedVessel == null) {
-						messages.add(String.format("%s: FOB purchase %s and FOB sale %s have no nominated vessel set!", 
+						if (messages != null)
+							messages.add(String.format("%s: FOB purchase %s and FOB sale %s have no nominated vessel set!", 
 								this.getName(), fobPurchase.getId(), fobSale.getId()));
 						return false;
 					}
 					final Triple<Integer, Integer, Integer> desTimes = fobSaleTimeCalculator.getDivertibleFOBTimes(fobPurchase, fobSale, nominatedVessel, resource);
 					if (desTimes == null) {
-						messages.add(String.format("%s: FOB purchase %s and FOB sale %s have no DES times!", 
+						if (messages != null)
+							messages.add(String.format("%s: FOB purchase %s and FOB sale %s have no DES times!", 
 								this.getName(), fobPurchase.getId(), fobSale.getId()));
 						return false;
 					}
 					final int returnTime = desTimes.getThird();
 					if (returnTime - desTimes.getFirst() > shippingHours) {
-						messages.add(String.format("%s: Travel from FOB purchase %s to FOB sale %s is too long!", 
+						if (messages != null)
+							messages.add(String.format("%s: Travel from FOB purchase %s to FOB sale %s is too long!", 
 								this.getName(), fobPurchase.getId(), fobSale.getId()));
 						return false;
 					}

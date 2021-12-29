@@ -8,6 +8,10 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
+
 /**
  * @author Simon Goodall
  * 
@@ -34,9 +38,9 @@ public class UpdateItemLabelProvider extends ColumnLabelProvider {
 	public UpdateItemLabelProvider(int colIdx) {
 		this.colIdx = colIdx;
 
-		imgError = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.lngdataserver.lng.importers", "/icons/error.gif").createImage();
-		imgWarn = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.lngdataserver.lng.importers", "/icons/warning.gif").createImage();
-		imgInfo = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.lngdataserver.lng.importers", "/icons/information.gif").createImage();
+		imgError = CommonImages.getImageDescriptor(IconPaths.Error, IconMode.Enabled).createImage();
+		imgWarn = CommonImages.getImageDescriptor(IconPaths.Warning, IconMode.Enabled).createImage();
+		imgInfo = CommonImages.getImageDescriptor(IconPaths.Information, IconMode.Enabled).createImage();
 	}
 
 	@Override

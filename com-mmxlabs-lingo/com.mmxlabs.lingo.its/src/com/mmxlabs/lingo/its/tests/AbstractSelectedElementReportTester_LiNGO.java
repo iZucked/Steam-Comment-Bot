@@ -49,6 +49,7 @@ public abstract class AbstractSelectedElementReportTester_LiNGO extends Abstract
 		final URL url = getClass().getResource(key.getSecond());
 
 		ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(url, (modelRecord, scenarioDataProvider) -> {
+			String testReportsWithElement_New = ReportTester.runReportsTestWithElement(modelRecord, scenarioDataProvider, reportID, type, shortName);
 			ReportTester.testReportsWithElement(modelRecord, scenarioDataProvider, url, reportID, shortName, type, elementID, preAction);
 		});
 	}

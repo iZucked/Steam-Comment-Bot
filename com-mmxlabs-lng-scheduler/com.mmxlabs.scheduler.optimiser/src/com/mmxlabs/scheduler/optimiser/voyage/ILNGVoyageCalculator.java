@@ -26,12 +26,23 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public interface ILNGVoyageCalculator {
 
 	/**
+	 * Enum to select a mode for modelling run dry during a travel or idle leg. This assumes a standard L-D cargo.
+	 */
+	enum CargoRunDryMode {
+		OFF, // Run dry not permitted
+		PREFER_MAX_MIN, // Run dry estimating available BOG based on max load and min discharge
+		PREFER_MAX_MAX, // Run dry estimating available BOG based on max load and max discharge
+		PREFER_MIN_MIN, // Run dry estimating available BOG based on min load and min discharge
+		PREFER_MIN_MAX // Run dry estimating available BOG based on min load and max discharge
+	}
+
+	/**
 	 * Calculate the fuel requirements, speed and times for the port to port journey options defined in {@link VoyageOptions} and store the results in {@link VoyageDetails}.
 	 * 
 	 * @param options
 	 * @param output
 	 */
-	void calculateVoyageFuelRequirements(VoyageOptions options, VoyageDetails output, long nboAvailableInM3);
+	long calculateVoyageFuelRequirements(VoyageOptions options, VoyageDetails output, long nboAvailableInM3);
 
 	/**
 	 * Given an alternating sequence of {@link IPortDetails} and {@link IVoyageDetails}, populate a {@link VoyagePlan} object with the group voyage details. E.g. calculate load and discharge
@@ -53,7 +64,8 @@ public interface ILNGVoyageCalculator {
 	 * @param sequence
 	 * @return Returns zero for a feasible journey, or a positive integer indicating a relative ranking of problems due to e.g. capacity violations. Returns a negative for a infeasible journey.
 	 */
-	int calculateVoyagePlan(VoyagePlan voyagePlan, IVessel vessel, ICharterCostCalculator charterCostCalculator, long[] startHeelRangeInM3, int[] baseFuelPricePerMT, IPortTimesRecord voyageRecord, IDetailsSequenceElement... sequence);
+	long[] calculateVoyagePlan(VoyagePlan voyagePlan, IVessel vessel, ICharterCostCalculator charterCostCalculator, long[] startHeelRangeInM3, int[] baseFuelPricePerMT, IPortTimesRecord voyageRecord,
+			IDetailsSequenceElement... sequence);
 
 	/**
 	 * Given a sequence containing {@link IPortDetails}, {@link IVoyageOptions} and other objects, create and return a new sequence with fuel cost information attached to corresponding appropriate
@@ -63,5 +75,6 @@ public interface ILNGVoyageCalculator {
 	 * @param sequence
 	 * @return Returns a new sequence of appropriate Details objects with fuel cost information attached
 	 */
-	List<IDetailsSequenceElement> generateFuelCostCalculatedSequence(IOptionsSequenceElement... sequence);
+	List<IDetailsSequenceElement> generateFuelCostCalculatedSequence(IVessel vessel, CargoRunDryMode cargoSequence, long[] startHeelInM3, IOptionsSequenceElement... baseSequence);
+
 }

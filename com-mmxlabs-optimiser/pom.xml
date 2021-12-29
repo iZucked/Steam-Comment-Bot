@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.mmxlabs.optimiser</groupId>
-	<artifactId>optimiser-parent</artifactId>
-	<packaging>pom</packaging>
-	<name>Optimiser - Parent</name>
-	<version>4.12.38-SNAPSHOT</version>
-	<description>Parent maven project for core optimisation projects</description>
 
 	<parent>
 		<groupId>com.mmxlabs.lingo.master</groupId>
 		<artifactId>com.mmxlabs.lingo.master.parent</artifactId>
-		<version>4.12.38-SNAPSHOT</version>
+		<version>4.13.6-SNAPSHOT</version>
 	</parent>
+	
+	<groupId>com.mmxlabs.optimiser</groupId>
+	<artifactId>optimiser-parent</artifactId>
+	<packaging>pom</packaging>
+	<name>Optimiser - Parent</name>
+	<description>Parent maven project for core optimisation projects</description>
 
 	<modules>
 		<module>com.mmxlabs.optimiser.optimiser-core</module>
@@ -29,49 +30,4 @@
 		<module>com.mmxlabs.optimiser.feature</module>
 	</modules>
 
-	<build>
-		<!-- Required for some tycho workaround - may no longer be needed -->
-		<sourceDirectory>src</sourceDirectory>
-
-		<plugins>
-
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-maven-plugin</artifactId>
-				<!-- Enable tycho packaging types -->
-				<extensions>true</extensions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>target-platform-configuration</artifactId>
-				<configuration>
-
-					<resolver>p2</resolver>
-
-					<target>
-						<artifact>
-							<groupId>com.mmxlabs.lingo.common.target</groupId>
-							<artifactId>com.mmxlabs.lingo.common.target-definition</artifactId>
-							<version>${project.version}</version>
-						</artifact>						
-					</target>
-
-					<environments>
-
-						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
-							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86_64</arch>
-						</environment>
-					</environments>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 </project>

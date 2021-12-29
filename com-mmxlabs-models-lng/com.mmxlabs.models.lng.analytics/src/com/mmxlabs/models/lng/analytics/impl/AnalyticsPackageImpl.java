@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.BaseCaseRowOptions;
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisModel;
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResult;
 import com.mmxlabs.models.lng.analytics.BreakEvenAnalysisResultSet;
@@ -44,6 +45,7 @@ import com.mmxlabs.models.lng.analytics.MTMResult;
 import com.mmxlabs.models.lng.analytics.MTMRow;
 import com.mmxlabs.models.lng.analytics.MarketVesselAllocationDescriptor;
 import com.mmxlabs.models.lng.analytics.FullVesselCharterOption;
+import com.mmxlabs.models.lng.analytics.LocalDateTimeHolder;
 import com.mmxlabs.models.lng.analytics.NominatedShippingOption;
 import com.mmxlabs.models.lng.analytics.OpenBuy;
 import com.mmxlabs.models.lng.analytics.OpenSell;
@@ -53,6 +55,7 @@ import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.PartialCase;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.PartialCaseRowOptions;
 import com.mmxlabs.models.lng.analytics.PositionDescriptor;
 import com.mmxlabs.models.lng.analytics.ProfitAndLossResult;
 import com.mmxlabs.models.lng.analytics.RealSlotDescriptor;
@@ -206,7 +209,21 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass baseCaseRowOptionsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass partialCaseRowEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass partialCaseRowOptionsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -501,6 +518,13 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	private EClass breakEvenAnalysisResultEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass localDateTimeHolderEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1264,6 +1288,106 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
+	public EAttribute getBaseCaseRow_Optionise() {
+		return (EAttribute)baseCaseRowEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getBaseCaseRow_Options() {
+		return (EReference)baseCaseRowEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getBaseCaseRow_Freeze() {
+		return (EAttribute)baseCaseRowEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getBaseCaseRowOptions() {
+		return baseCaseRowOptionsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getBaseCaseRowOptions_LadenRoute() {
+		return (EAttribute)baseCaseRowOptionsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getBaseCaseRowOptions_BallastRoute() {
+		return (EAttribute)baseCaseRowOptionsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getBaseCaseRowOptions_LadenFuelChoice() {
+		return (EAttribute)baseCaseRowOptionsEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getBaseCaseRowOptions_BallastFuelChoice() {
+		return (EAttribute)baseCaseRowOptionsEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getBaseCaseRowOptions_LoadDate() {
+		return (EAttribute)baseCaseRowOptionsEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getBaseCaseRowOptions_DischargeDate() {
+		return (EAttribute)baseCaseRowOptionsEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getPartialCaseRow() {
 		return partialCaseRowEClass;
 	}
@@ -1306,6 +1430,86 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	@Override
 	public EReference getPartialCaseRow_Shipping() {
 		return (EReference)partialCaseRowEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPartialCaseRow_Options() {
+		return (EReference)partialCaseRowEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getPartialCaseRowOptions() {
+		return partialCaseRowOptionsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPartialCaseRowOptions_LadenRoutes() {
+		return (EAttribute)partialCaseRowOptionsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPartialCaseRowOptions_BallastRoutes() {
+		return (EAttribute)partialCaseRowOptionsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPartialCaseRowOptions_LadenFuelChoices() {
+		return (EAttribute)partialCaseRowOptionsEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPartialCaseRowOptions_BallastFuelChoices() {
+		return (EAttribute)partialCaseRowOptionsEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPartialCaseRowOptions_LoadDates() {
+		return (EReference)partialCaseRowOptionsEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPartialCaseRowOptions_DischargeDates() {
+		return (EReference)partialCaseRowOptionsEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -2904,6 +3108,26 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
+	public EClass getLocalDateTimeHolder() {
+		return localDateTimeHolderEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getLocalDateTimeHolder_DateTime() {
+		return (EAttribute)localDateTimeHolderEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getSolutionOption() {
 		return solutionOptionEClass;
 	}
@@ -3205,12 +3429,32 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(baseCaseRowEClass, BASE_CASE_ROW__SELL_OPTION);
 		createEReference(baseCaseRowEClass, BASE_CASE_ROW__VESSEL_EVENT_OPTION);
 		createEReference(baseCaseRowEClass, BASE_CASE_ROW__SHIPPING);
+		createEAttribute(baseCaseRowEClass, BASE_CASE_ROW__OPTIONISE);
+		createEReference(baseCaseRowEClass, BASE_CASE_ROW__OPTIONS);
+		createEAttribute(baseCaseRowEClass, BASE_CASE_ROW__FREEZE);
+
+		baseCaseRowOptionsEClass = createEClass(BASE_CASE_ROW_OPTIONS);
+		createEAttribute(baseCaseRowOptionsEClass, BASE_CASE_ROW_OPTIONS__LADEN_ROUTE);
+		createEAttribute(baseCaseRowOptionsEClass, BASE_CASE_ROW_OPTIONS__BALLAST_ROUTE);
+		createEAttribute(baseCaseRowOptionsEClass, BASE_CASE_ROW_OPTIONS__LADEN_FUEL_CHOICE);
+		createEAttribute(baseCaseRowOptionsEClass, BASE_CASE_ROW_OPTIONS__BALLAST_FUEL_CHOICE);
+		createEAttribute(baseCaseRowOptionsEClass, BASE_CASE_ROW_OPTIONS__LOAD_DATE);
+		createEAttribute(baseCaseRowOptionsEClass, BASE_CASE_ROW_OPTIONS__DISCHARGE_DATE);
 
 		partialCaseRowEClass = createEClass(PARTIAL_CASE_ROW);
 		createEReference(partialCaseRowEClass, PARTIAL_CASE_ROW__BUY_OPTIONS);
 		createEReference(partialCaseRowEClass, PARTIAL_CASE_ROW__SELL_OPTIONS);
 		createEReference(partialCaseRowEClass, PARTIAL_CASE_ROW__VESSEL_EVENT_OPTIONS);
 		createEReference(partialCaseRowEClass, PARTIAL_CASE_ROW__SHIPPING);
+		createEReference(partialCaseRowEClass, PARTIAL_CASE_ROW__OPTIONS);
+
+		partialCaseRowOptionsEClass = createEClass(PARTIAL_CASE_ROW_OPTIONS);
+		createEAttribute(partialCaseRowOptionsEClass, PARTIAL_CASE_ROW_OPTIONS__LADEN_ROUTES);
+		createEAttribute(partialCaseRowOptionsEClass, PARTIAL_CASE_ROW_OPTIONS__BALLAST_ROUTES);
+		createEAttribute(partialCaseRowOptionsEClass, PARTIAL_CASE_ROW_OPTIONS__LADEN_FUEL_CHOICES);
+		createEAttribute(partialCaseRowOptionsEClass, PARTIAL_CASE_ROW_OPTIONS__BALLAST_FUEL_CHOICES);
+		createEReference(partialCaseRowOptionsEClass, PARTIAL_CASE_ROW_OPTIONS__LOAD_DATES);
+		createEReference(partialCaseRowOptionsEClass, PARTIAL_CASE_ROW_OPTIONS__DISCHARGE_DATES);
 
 		shippingOptionEClass = createEClass(SHIPPING_OPTION);
 
@@ -3435,6 +3679,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEAttribute(breakEvenAnalysisResultEClass, BREAK_EVEN_ANALYSIS_RESULT__ETA);
 		createEAttribute(breakEvenAnalysisResultEClass, BREAK_EVEN_ANALYSIS_RESULT__REFERENCE_PRICE);
 
+		localDateTimeHolderEClass = createEClass(LOCAL_DATE_TIME_HOLDER);
+		createEAttribute(localDateTimeHolderEClass, LOCAL_DATE_TIME_HOLDER__DATE_TIME);
+
 		// Create enums
 		volumeModeEEnum = createEEnum(VOLUME_MODE);
 		slotTypeEEnum = createEEnum(SLOT_TYPE);
@@ -3616,12 +3863,32 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getBaseCaseRow_SellOption(), this.getSellOption(), null, "sellOption", null, 0, 1, BaseCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getBaseCaseRow_VesselEventOption(), this.getVesselEventOption(), null, "vesselEventOption", null, 0, 1, BaseCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getBaseCaseRow_Shipping(), this.getShippingOption(), null, "shipping", null, 0, 1, BaseCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBaseCaseRow_Optionise(), ecorePackage.getEBoolean(), "optionise", null, 0, 1, BaseCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBaseCaseRow_Options(), this.getBaseCaseRowOptions(), null, "options", null, 0, 1, BaseCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBaseCaseRow_Freeze(), ecorePackage.getEBoolean(), "freeze", null, 0, 1, BaseCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(baseCaseRowOptionsEClass, BaseCaseRowOptions.class, "BaseCaseRowOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getBaseCaseRowOptions_LadenRoute(), thePortPackage.getRouteOption(), "ladenRoute", null, 0, 1, BaseCaseRowOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBaseCaseRowOptions_BallastRoute(), thePortPackage.getRouteOption(), "ballastRoute", null, 0, 1, BaseCaseRowOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBaseCaseRowOptions_LadenFuelChoice(), theCargoPackage.getFuelChoice(), "ladenFuelChoice", null, 0, 1, BaseCaseRowOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBaseCaseRowOptions_BallastFuelChoice(), theCargoPackage.getFuelChoice(), "ballastFuelChoice", null, 0, 1, BaseCaseRowOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBaseCaseRowOptions_LoadDate(), theDateTimePackage.getLocalDateTime(), "loadDate", null, 0, 1, BaseCaseRowOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBaseCaseRowOptions_DischargeDate(), theDateTimePackage.getLocalDateTime(), "dischargeDate", null, 0, 1, BaseCaseRowOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(partialCaseRowEClass, PartialCaseRow.class, "PartialCaseRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPartialCaseRow_BuyOptions(), this.getBuyOption(), null, "buyOptions", null, 0, -1, PartialCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPartialCaseRow_SellOptions(), this.getSellOption(), null, "sellOptions", null, 0, -1, PartialCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPartialCaseRow_VesselEventOptions(), this.getVesselEventOption(), null, "vesselEventOptions", null, 0, -1, PartialCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPartialCaseRow_Shipping(), this.getShippingOption(), null, "shipping", null, 0, -1, PartialCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPartialCaseRow_Options(), this.getPartialCaseRowOptions(), null, "options", null, 0, 1, PartialCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(partialCaseRowOptionsEClass, PartialCaseRowOptions.class, "PartialCaseRowOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getPartialCaseRowOptions_LadenRoutes(), thePortPackage.getRouteOption(), "ladenRoutes", null, 0, -1, PartialCaseRowOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPartialCaseRowOptions_BallastRoutes(), thePortPackage.getRouteOption(), "ballastRoutes", null, 0, -1, PartialCaseRowOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPartialCaseRowOptions_LadenFuelChoices(), theCargoPackage.getFuelChoice(), "ladenFuelChoices", null, 0, -1, PartialCaseRowOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPartialCaseRowOptions_BallastFuelChoices(), theCargoPackage.getFuelChoice(), "ballastFuelChoices", null, 0, -1, PartialCaseRowOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPartialCaseRowOptions_LoadDates(), this.getLocalDateTimeHolder(), null, "loadDates", null, 0, -1, PartialCaseRowOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPartialCaseRowOptions_DischargeDates(), this.getLocalDateTimeHolder(), null, "dischargeDates", null, 0, -1, PartialCaseRowOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(shippingOptionEClass, ShippingOption.class, "ShippingOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -3845,6 +4112,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEAttribute(getBreakEvenAnalysisResult_Price(), ecorePackage.getEDouble(), "price", null, 0, 1, BreakEvenAnalysisResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBreakEvenAnalysisResult_Eta(), theDateTimePackage.getLocalDate(), "eta", null, 0, 1, BreakEvenAnalysisResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBreakEvenAnalysisResult_ReferencePrice(), ecorePackage.getEDouble(), "referencePrice", null, 0, 1, BreakEvenAnalysisResult.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(localDateTimeHolderEClass, LocalDateTimeHolder.class, "LocalDateTimeHolder", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getLocalDateTimeHolder_DateTime(), theDateTimePackage.getLocalDateTime(), "dateTime", null, 0, 1, LocalDateTimeHolder.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(volumeModeEEnum, VolumeMode.class, "VolumeMode");

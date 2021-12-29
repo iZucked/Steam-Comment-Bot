@@ -64,8 +64,8 @@ public class SandboxOptimiserRunner {
 			LNGEvaluationModule.HINT_PORTFOLIO_BREAKEVEN };
 
 	private static final String[] hint_without_breakeven = { LNGTransformerHelper.HINT_OPTIMISE_LSO, //
-			//LNGTransformerHelper.HINT_KEEP_NOMINALS_IN_PROMPT 
-			};
+			// LNGTransformerHelper.HINT_KEEP_NOMINALS_IN_PROMPT
+	};
 
 	private final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge;
 
@@ -167,21 +167,14 @@ public class SandboxOptimiserRunner {
 		scenarioRunner.evaluateInitialState();
 	}
 
-	 
-
 	public IMultiStateResult runOptimiser(final IProgressMonitor progressMonitor) {
 		return scenarioRunner.runWithProgress(progressMonitor);
 	}
-
-	 
 
 	public LNGScenarioRunner getLNGScenarioRunner() {
 		return scenarioRunner;
 	}
 
 	public void dispose() {
-		if (scenarioRunner != null) {
-			scenarioRunner.getExecutorService().shutdownNow();
-		}
 	}
 }

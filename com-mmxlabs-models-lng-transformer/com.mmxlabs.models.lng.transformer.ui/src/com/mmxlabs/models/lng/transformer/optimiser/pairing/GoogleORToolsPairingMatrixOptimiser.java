@@ -74,17 +74,17 @@ public class GoogleORToolsPairingMatrixOptimiser<P, C> implements IPairingMatrix
 			}
 		}
 
-		// Set up symmettry reward - default 0
+		// Set up symmetry reward - default 0
 		double[][] symmetryPenalty = new double[no_loads][no_discharges];
 
-		// Add symmettry reward
+		// Add symmetry reward
 		for (int load_id = 0; load_id < no_loads; load_id++) {
 			for (int discharge_id = 0; discharge_id < no_discharges; discharge_id++) {
 				symmetryPenalty[load_id][discharge_id] = (((double) load_id) + .1) * (((double) discharge_id) + .1) * SYMMETRY_CONSTANT;
 			}
 		}
 
-		/** google initialization */
+		/** google initialisation */
 		MPSolver solver = createSolver();
 
 		/** variables */
@@ -192,7 +192,7 @@ public class GoogleORToolsPairingMatrixOptimiser<P, C> implements IPairingMatrix
 		System.out.println("\t" + solver.wallTime() + " milliseconds");
 
 		int cargoes = 0;
-		double[][] ds= new double[no_loads][no_discharges];
+		double[][] ds = new double[no_loads][no_discharges];
 		for (int i = 0; i < no_loads; i++) {
 			for (int j = 0; j < no_discharges; j++) {
 				ds[i][j] = vars[i][j].solutionValue();

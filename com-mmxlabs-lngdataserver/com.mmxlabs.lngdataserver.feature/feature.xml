@@ -8,21 +8,8 @@
 <feature
       id="com.mmxlabs.lngdataserver.feature"
       label="LNG Data Server"
-      version="4.12.38.qualifier"
+      version="4.13.6.qualifier"
       provider-name="Minimax Labs Ltd.">
-
-   <description>
-      LNG Dataserver Components
-   </description>
-
-   <copyright>
-      Copyright (C) Minimax Labs Ltd., 2010 - 2012
-All rights reserved.
-   </copyright>
-
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
-   </license>
 
    <plugin
          id="com.mmxlabs.lngdataserver.integration.distances"

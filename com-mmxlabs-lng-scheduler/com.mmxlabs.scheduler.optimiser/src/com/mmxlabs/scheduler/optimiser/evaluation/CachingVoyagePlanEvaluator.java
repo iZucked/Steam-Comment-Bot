@@ -19,6 +19,7 @@ import com.mmxlabs.optimiser.common.events.OptimisationPhaseEndEvent;
 import com.mmxlabs.optimiser.common.events.OptimisationPhaseStartEvent;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequencesAttributesProvider;
 import com.mmxlabs.scheduler.optimiser.cache.CacheVerificationFailedException;
 import com.mmxlabs.scheduler.optimiser.cache.GeneralCacheSettings;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -57,7 +58,7 @@ public final class CachingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 								record.firstLoadPort, record.previousHeelRecord, record.portTimesRecord, record.lastPlan, //
 								false, // Just return the best options
 								record.keepDetails, // Keep all the details
-								null // No annotated solution
+								record.sequencesAttributesProvider, null // No annotated solution
 						);
 						return Optional.ofNullable(result);
 					}
@@ -70,7 +71,7 @@ public final class CachingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 						final ScheduledVoyagePlanResult result = delegate.evaluateNonShipped(record.resource, record.vesselAvailability, //
 								record.portTimesRecord, //
 								record.keepDetails, // Keep all the details
-								null // No annotated solution
+								record.sequencesAttributesProvider, null // No annotated solution
 						);
 						return Optional.ofNullable(result);
 					}
@@ -82,23 +83,24 @@ public final class CachingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 	@Override
 	public @NonNull ImmutableList<@NonNull ScheduledVoyagePlanResult> evaluateRoundTrip(@NonNull final IResource resource, @NonNull final IVesselAvailability vesselAvailability,
 			@NonNull final ICharterCostCalculator charterCostCalculator, @NonNull final IPortTimesRecord portTimesRecord, final boolean returnAll, final boolean keepDetails,
-			@Nullable final IAnnotatedSolution annotatedSolution) {
+			ISequencesAttributesProvider sequencesAttributesProvider, @Nullable final IAnnotatedSolution annotatedSolution) {
 
 		// Default implementation of this method wraps around #evaluateShipped
-		return delegate.evaluateRoundTrip(resource, vesselAvailability, charterCostCalculator, portTimesRecord, returnAll, keepDetails, annotatedSolution);
+		return delegate.evaluateRoundTrip(resource, vesselAvailability, charterCostCalculator, portTimesRecord, returnAll, keepDetails, sequencesAttributesProvider, annotatedSolution);
 	}
 
 	@Override
 	public ImmutableList<ScheduledVoyagePlanResult> evaluateShipped(@NonNull final IResource resource, @NonNull final IVesselAvailability vesselAvailability,
 			final ICharterCostCalculator charterCostCalculator, final int vesselStartTime, final IPort firstLoadPort, @NonNull final PreviousHeelRecord previousHeelRecord,
-			@NonNull final IPortTimesRecord portTimesRecord, final boolean lastPlan, final boolean returnAll, final boolean keepDetails, @Nullable final IAnnotatedSolution annotatedSolution) {
+			@NonNull final IPortTimesRecord portTimesRecord, final boolean lastPlan, final boolean returnAll, final boolean keepDetails, ISequencesAttributesProvider sequencesAttributesProvider,
+			@Nullable final IAnnotatedSolution annotatedSolution) {
 
 		if (annotatedSolution != null) {
 			return delegate.evaluateShipped(resource, vesselAvailability, charterCostCalculator, vesselStartTime, firstLoadPort, previousHeelRecord, portTimesRecord, lastPlan, returnAll, keepDetails,
-					annotatedSolution);
+					sequencesAttributesProvider, annotatedSolution);
 		}
 		final ShippedVoyagePlanCacheKey key = new ShippedVoyagePlanCacheKey(resource, vesselAvailability, charterCostCalculator, vesselStartTime, firstLoadPort, previousHeelRecord, portTimesRecord,
-				lastPlan, keepDetails);
+				lastPlan, keepDetails, sequencesAttributesProvider);
 
 		final Optional<ImmutableList<ScheduledVoyagePlanResult>> optional = shippedCache.getUnchecked(key);
 
@@ -106,7 +108,7 @@ public final class CachingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 			final ImmutableList<ScheduledVoyagePlanResult> actual = optional.get();
 			if (GeneralCacheSettings.ENABLE_RANDOM_VERIFICATION && randomForVerification.nextDouble() < GeneralCacheSettings.VERIFICATION_CHANCE) {
 				final ImmutableList<ScheduledVoyagePlanResult> expected = delegate.evaluateShipped(resource, vesselAvailability, charterCostCalculator, vesselStartTime, firstLoadPort,
-						previousHeelRecord, portTimesRecord, lastPlan, returnAll, keepDetails, annotatedSolution);
+						previousHeelRecord, portTimesRecord, lastPlan, returnAll, keepDetails, sequencesAttributesProvider, annotatedSolution);
 
 				if (expected.size() != actual.size()) {
 					throw new CacheVerificationFailedException();
@@ -126,20 +128,21 @@ public final class CachingVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 
 	@Override
 	public @NonNull ScheduledVoyagePlanResult evaluateNonShipped(@NonNull final IResource resource, @NonNull final IVesselAvailability vesselAvailability,
-			@NonNull final IPortTimesRecord portTimesRecord, final boolean keepDetails, @Nullable final IAnnotatedSolution annotatedSolution) {
+			@NonNull final IPortTimesRecord portTimesRecord, final boolean keepDetails, ISequencesAttributesProvider sequencesAttributesProvider,
+			@Nullable final IAnnotatedSolution annotatedSolution) {
 
 		if (annotatedSolution != null) {
-			return delegate.evaluateNonShipped(resource, vesselAvailability, portTimesRecord, keepDetails, annotatedSolution);
+			return delegate.evaluateNonShipped(resource, vesselAvailability, portTimesRecord, keepDetails, sequencesAttributesProvider, annotatedSolution);
 		}
 
-		final NonShippedVoyagePlanCacheKey key = new NonShippedVoyagePlanCacheKey(resource, vesselAvailability, portTimesRecord, keepDetails);
+		final NonShippedVoyagePlanCacheKey key = new NonShippedVoyagePlanCacheKey(resource, vesselAvailability, portTimesRecord, keepDetails, sequencesAttributesProvider);
 
 		final Optional<ScheduledVoyagePlanResult> optional = nonShippedCache.getUnchecked(key);
 
 		if (optional.isPresent()) {
 
 			if (GeneralCacheSettings.ENABLE_RANDOM_VERIFICATION && randomForVerification.nextDouble() < GeneralCacheSettings.VERIFICATION_CHANCE) {
-				final ScheduledVoyagePlanResult expected = delegate.evaluateNonShipped(resource, vesselAvailability, portTimesRecord, keepDetails, annotatedSolution);
+				final ScheduledVoyagePlanResult expected = delegate.evaluateNonShipped(resource, vesselAvailability, portTimesRecord, keepDetails, sequencesAttributesProvider, annotatedSolution);
 
 				if (!expected.isEqual(optional.get())) {
 					throw new CacheVerificationFailedException();

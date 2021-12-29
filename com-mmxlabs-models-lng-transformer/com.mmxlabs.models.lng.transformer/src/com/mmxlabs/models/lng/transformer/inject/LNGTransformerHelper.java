@@ -50,12 +50,15 @@ public class LNGTransformerHelper {
 	public static final @NonNull String HINT_OPTIMISE_LSO = "hint-lngtransformer-optimise-lso";
 	public static final @NonNull String HINT_OPTIMISE_INSERTION = "hint-lngtransformer-optimise-insertion";
 	/**
+	 * Hint to indicate this is for evaluation only
+	 */
+	public static final @NonNull String HINT_EVALUATION_ONLY = "hint-lngtransformer-evaluation";
+	/**
 	 */
 	public static final @NonNull String HINT_OPTIMISE_BREAKDOWN = "hint-lngtransformer-optimise-breakdown";
 
 	public static final @NonNull String HINT_GENERATE_CHARTER_OUTS = "hint-lngtransformer-generate-charter-outs";
 	public static final @NonNull String HINT_CHARTER_LENGTH = "hint-lngtransformer-charter-length";
-	public static final @NonNull String HINT_CLEAN_STATE_EVALUATOR = "hint-lngtransformer-clean-state-evaluator";
 
 	public static final @NonNull String HINT_SHIPPING_ONLY = "hint-lngtransformer-shipping-only";
 	public static final @NonNull String HINT_SPOT_CARGO_MARKETS = "hint-lngtransformer-spot-cargo-markets";

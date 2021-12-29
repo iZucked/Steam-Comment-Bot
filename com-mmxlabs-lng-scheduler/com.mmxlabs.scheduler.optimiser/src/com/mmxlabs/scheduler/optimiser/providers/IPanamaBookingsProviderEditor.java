@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.impl.PanamaSeasonalityCurve;
 
 /**
  * An editor interface for {@link IPanamaBookingsProvider}
@@ -23,11 +23,5 @@ public interface IPanamaBookingsProviderEditor extends IPanamaBookingsProvider {
 
 	void setArrivalMargin(int margin);
 	
-	void setNorthboundMaxIdleDays(int maxIdleDays);
-
-	void setSouthboundMaxIdleDays(int maxIdleDays);
-	
-	void setNorthboundMaxIdleDays(IVessel vessel, int maxIdleDays);
-
-	void setSouthboundMaxIdleDays(IVessel vessel, int maxIdleDays);
+	void setPanamaMaxIdleDays(List<PanamaSeasonalityCurve> seasonalityCurve);
 }

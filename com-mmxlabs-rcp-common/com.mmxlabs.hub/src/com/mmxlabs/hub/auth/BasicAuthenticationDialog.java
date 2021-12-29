@@ -40,7 +40,7 @@ public class BasicAuthenticationDialog extends Dialog {
 
 	@Override
 	protected void configureShell(final Shell newShell) {
-		super.configureShell(newShell);
+		newShell.setLayout(super.getLayout());
 		newShell.setText("Data Hub Basic Login");
 	}
 

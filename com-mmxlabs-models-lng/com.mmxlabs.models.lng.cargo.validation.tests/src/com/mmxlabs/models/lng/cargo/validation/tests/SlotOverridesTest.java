@@ -33,6 +33,7 @@ public class SlotOverridesTest {
 		final PurchaseContract otherPurchaseContract = CommercialFactory.eINSTANCE.createPurchaseContract();
 		final SalesContract otherSalesContract = CommercialFactory.eINSTANCE.createSalesContract();
 
+		// Do not set override flag since a null contract slot should default to checking the slot restrictions
 		loadSlot.getRestrictedPorts().add(dischargePort);
 		loadSlot.setRestrictedPortsArePermissive(true);
 
@@ -54,6 +55,7 @@ public class SlotOverridesTest {
 		final PurchaseContract otherPurchaseContract = CommercialFactory.eINSTANCE.createPurchaseContract();
 		final SalesContract otherSalesContract = CommercialFactory.eINSTANCE.createSalesContract();
 
+		// Do not set override flag since a null contract slot should default to checking the slot restrictions
 		loadSlot.getRestrictedContracts().add(dischargeContract);
 		loadSlot.setRestrictedContractsArePermissive(true);
 
@@ -77,6 +79,7 @@ public class SlotOverridesTest {
 
 		Vessel vessel = FleetFactory.eINSTANCE.createVessel();
 
+		// Do not set override flag since a null contract slot should default to checking the slot restrictions
 		loadSlot.getRestrictedVessels().add(vessel);
 		loadSlot.setRestrictedVesselsArePermissive(true);
 

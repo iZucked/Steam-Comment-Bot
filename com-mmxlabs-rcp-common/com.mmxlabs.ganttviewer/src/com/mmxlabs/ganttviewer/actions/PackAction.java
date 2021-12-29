@@ -16,7 +16,9 @@ import org.eclipse.nebula.widgets.ganttchart.ISettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Rectangle;
 
-import com.mmxlabs.ganttviewer.internal.Activator;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 
 /**
  */
@@ -26,8 +28,8 @@ public class PackAction extends Action {
 	public PackAction(final GanttChart ganttChart) {
 		super();
 		setText("Fit");
-		setImageDescriptor(Activator.getImageDescriptor("/icons/pack.gif"));
 		this.ganttChart = ganttChart;
+		CommonImages.setImageDescriptors(this, IconPaths.Pack);
 	}
 
 	@Override

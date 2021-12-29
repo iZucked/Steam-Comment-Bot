@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
@@ -21,7 +22,35 @@ import com.mmxlabs.scheduler.optimiser.cache.AbstractWriteLockable;
  * @author Simon Goodall
  * 
  */
-public final class VoyagePlan extends AbstractWriteLockable implements Cloneable {
+public final class VoyagePlan extends AbstractWriteLockable {
+
+	public enum VoyagePlanMetrics {
+		VOLUME_VIOLATION_COUNT, // Number of load, discharge or heel violations
+		VOLUME_VIOLATION_QUANTITY, // Quantity over or under of the load or discharge violations
+		COOLDOWN_COUNT // Number of cooldown violations
+	}
+
+	private static Comparator<long[]> SimpleMetricComparator = (a, b) -> {
+
+		long aW = a[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()] * 2 + a[VoyagePlanMetrics.COOLDOWN_COUNT.ordinal()];
+		long bW = b[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()] * 2 + b[VoyagePlanMetrics.COOLDOWN_COUNT.ordinal()];
+
+		return Long.compare(aW, bW);
+	};
+
+	private static Comparator<long[]> VolumeBasedMetricComparator = (a, b) -> {
+
+		int c = Long.compare(a[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()], b[VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()]);
+		if (c == 0) {
+			c = Long.compare(a[VoyagePlanMetrics.COOLDOWN_COUNT.ordinal()], b[VoyagePlanMetrics.COOLDOWN_COUNT.ordinal()]);
+		}
+		if (c == 0) {
+			c = Long.compare(a[VoyagePlanMetrics.VOLUME_VIOLATION_QUANTITY.ordinal()], b[VoyagePlanMetrics.VOLUME_VIOLATION_QUANTITY.ordinal()]);
+		}
+		return c;
+	};
+
+	public static Comparator<long[]> MetricComparator = SimpleMetricComparator;
 
 	private IDetailsSequenceElement[] sequence;
 	private long lngFuelVolume;
@@ -31,7 +60,7 @@ public final class VoyagePlan extends AbstractWriteLockable implements Cloneable
 	private long totalRouteCost;
 	private long startHeelCost;
 
-	private int violationsCount;
+	private long[] voyagePlanMetrics = new long[VoyagePlanMetrics.values().length];
 	private boolean ignoreEnd;
 
 	private long startingHeelInM3;
@@ -41,12 +70,12 @@ public final class VoyagePlan extends AbstractWriteLockable implements Cloneable
 		ignoreEnd = true;
 	}
 
-	protected VoyagePlan(final IDetailsSequenceElement[] sequence, final long fuelVolume, final int violationsCount, final boolean ignoreEnd, final long startingHeelInM3,
+	protected VoyagePlan(final IDetailsSequenceElement[] sequence, final long fuelVolume, final long[] voyagePlanMetrics, final boolean ignoreEnd, final long startingHeelInM3,
 			final long remainingHeelInM3) {
 		super();
 		this.sequence = sequence;
 		this.lngFuelVolume = fuelVolume;
-		this.violationsCount = violationsCount;
+		this.voyagePlanMetrics = Arrays.copyOf(voyagePlanMetrics, voyagePlanMetrics.length);
 		this.ignoreEnd = ignoreEnd;
 		this.startingHeelInM3 = startingHeelInM3;
 		this.remainingHeelInM3 = remainingHeelInM3;
@@ -101,15 +130,20 @@ public final class VoyagePlan extends AbstractWriteLockable implements Cloneable
 
 	/**
 	 */
-	public final int getViolationsCount() {
-		return violationsCount;
+	public final long[] getVoyagePlanMetrics() {
+		return voyagePlanMetrics;
+	}
+
+	public final long getWeightedVoyagePlanMetrics() {
+		// Note: This was the LNGVoyageCalculator weighting
+		return getVoyagePlanMetrics()[VoyagePlan.VoyagePlanMetrics.VOLUME_VIOLATION_COUNT.ordinal()] * 2 + getVoyagePlanMetrics()[VoyagePlan.VoyagePlanMetrics.COOLDOWN_COUNT.ordinal()];
 	}
 
 	/**
 	 */
-	public final void setViolationsCount(final int violationsCount) {
+	public final void setVoyagePlanMetrics(final long[] voyagePlanMetrics) {
 		checkWritable();
-		this.violationsCount = violationsCount;
+		this.voyagePlanMetrics = voyagePlanMetrics;
 	}
 
 	/**
@@ -140,11 +174,11 @@ public final class VoyagePlan extends AbstractWriteLockable implements Cloneable
 					&& Objects.equal(lngFuelCost, plan.lngFuelCost)
 					&& Objects.equal(cooldownCost, plan.cooldownCost)
 					&& Objects.equal(baseFuelCost, plan.baseFuelCost)
-					&& Objects.equal(violationsCount, plan.violationsCount)
 					&& Objects.equal(startingHeelInM3, plan.startingHeelInM3)
 					&& Objects.equal(totalRouteCost, plan.totalRouteCost)
 					&& Objects.equal(remainingHeelInM3, plan.remainingHeelInM3)
 					&& Objects.equal(startHeelCost, plan.startHeelCost)
+					&& Arrays.equals(voyagePlanMetrics, plan.voyagePlanMetrics)
 					&& Arrays.deepEquals(sequence, plan.sequence)
 					;
 			// @formatter:on
@@ -168,27 +202,26 @@ public final class VoyagePlan extends AbstractWriteLockable implements Cloneable
 				.add("lngFuelCost", lngFuelCost) //
 				.add("cooldownCost", cooldownCost) //
 				.add("baseFuelCost", baseFuelCost) //
-				.add("violationsCount", violationsCount) //
+				.add("voyagePlanMetrics", voyagePlanMetrics) //
 				.add("startingHeelInM3", startingHeelInM3) //
 				.add("remainingHeelInM3", remainingHeelInM3) //
 				.add("ignoreEnd", ignoreEnd) //
 				.toString();
 	}
 
-	@Override
-	public final VoyagePlan clone() {
+	public final VoyagePlan copy() {
 		final IDetailsSequenceElement[] clonedSequence = new IDetailsSequenceElement[sequence.length];
 		int k = 0;
 		for (final IDetailsSequenceElement o : sequence) {
 			if (o instanceof VoyageDetails) {
-				clonedSequence[k++] = ((VoyageDetails) o).clone();
+				clonedSequence[k++] = ((VoyageDetails) o).copy();
 			} else if (o instanceof PortDetails) {
-				clonedSequence[k++] = ((PortDetails) o).clone();
+				clonedSequence[k++] = ((PortDetails) o).copy();
 			} else {
 				clonedSequence[k++] = o;
 			}
 		}
-		return new VoyagePlan(clonedSequence, lngFuelVolume, violationsCount, ignoreEnd, startingHeelInM3, remainingHeelInM3);
+		return new VoyagePlan(clonedSequence, lngFuelVolume, voyagePlanMetrics, ignoreEnd, startingHeelInM3, remainingHeelInM3);
 	}
 
 	/**

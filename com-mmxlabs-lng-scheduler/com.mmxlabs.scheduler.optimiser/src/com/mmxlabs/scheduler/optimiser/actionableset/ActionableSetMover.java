@@ -64,8 +64,13 @@ public class ActionableSetMover {
 		sequencesManipulator.manipulate(currentFullSequences);
 
 		failedInitialConstraintCheckers = false;
-		final List<String> messages = new ArrayList<>();
-		messages.add(String.format("%s: initSearchProcesses", this.getClass().getName()));
+		final List<@Nullable String> messages;
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
+			messages = new ArrayList<>();
+			messages.add(String.format("%s: initSearchProcesses", this.getClass().getName()));
+		} else {
+			messages = null;
+		}
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
 			if (!checker.checkConstraints(currentFullSequences, null, messages)) {
@@ -130,8 +135,13 @@ public class ActionableSetMover {
 
 		final Collection<@NonNull IResource> changedResources = failedInitialConstraintCheckers ? null : move.getAffectedResources();
 
-		final List<String> messages = new ArrayList<>();
-		messages.add(String.format("%s: search", this.getClass().getName()));
+		final List<@Nullable String> messages;
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
+			messages = new ArrayList<>();
+			messages.add(String.format("%s: search", this.getClass().getName()));
+		} else {
+			messages = null;
+		}
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
 			if (!checker.checkConstraints(currentFullSequences, changedResources, messages)) {

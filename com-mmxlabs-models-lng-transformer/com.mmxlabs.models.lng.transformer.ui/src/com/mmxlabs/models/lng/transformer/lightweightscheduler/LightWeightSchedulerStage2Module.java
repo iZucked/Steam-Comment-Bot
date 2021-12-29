@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.DefaultL
 import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.ILightWeightPostOptimisationStateModifier;
 import com.mmxlabs.models.lng.transformer.longterm.lightweightscheduler.ISequenceElementFilter;
 import com.mmxlabs.models.lng.transformer.optimiser.lightweightscheduler.sequenceoptimisers.metaheuristic.tabu.TabuLightWeightSequenceOptimiser;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScope;
 
 public class LightWeightSchedulerStage2Module extends AbstractModule {
 	public static final String LIGHTWEIGHT_FITNESS_FUNCTION_NAMES = "LIGHTWEIGHT_FITNESS_FUNCTION_NAMES";
@@ -38,12 +39,6 @@ public class LightWeightSchedulerStage2Module extends AbstractModule {
 	public static final String LIGHTWEIGHT_DESIRED_VESSEL_CARGO_COUNT = "LIGHTWEIGHT_DESIRED_VESSEL_CARGO_COUNT";
 	public static final String LIGHTWEIGHT_DESIRED_VESSEL_CARGO_WEIGHT = "LIGHTWEIGHT_DESIRED_VESSEL_CARGO_WEIGHT";
 	public static final boolean DEBUG = false;
-
-	private Map<Thread, LightWeightSchedulerOptimiser> threadCache;
-
-	public LightWeightSchedulerStage2Module(Map<Thread, LightWeightSchedulerOptimiser> threadCache) {
-		this.threadCache = threadCache;
-	}
 
 	@Override
 	protected void configure() {
@@ -54,14 +49,11 @@ public class LightWeightSchedulerStage2Module extends AbstractModule {
 	}
 
 	@Provides
+	@ThreadLocalScope
 	private LightWeightSchedulerOptimiser providePerThreadBagMover(@NonNull final Injector injector) {
 
-		LightWeightSchedulerOptimiser lightweightSchedulerOptimiser = threadCache.get(Thread.currentThread());
-		if (lightweightSchedulerOptimiser == null) {
-			lightweightSchedulerOptimiser = new LightWeightSchedulerOptimiser();
-			injector.injectMembers(lightweightSchedulerOptimiser);
-			threadCache.put(Thread.currentThread(), lightweightSchedulerOptimiser);
-		}
+		LightWeightSchedulerOptimiser lightweightSchedulerOptimiser = new LightWeightSchedulerOptimiser();
+		injector.injectMembers(lightweightSchedulerOptimiser);
 		return lightweightSchedulerOptimiser;
 	}
 

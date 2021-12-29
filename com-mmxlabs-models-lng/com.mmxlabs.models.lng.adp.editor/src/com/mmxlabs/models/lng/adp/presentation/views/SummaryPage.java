@@ -82,8 +82,11 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioElementNameHelper;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.ui.editors.DetailToolbarManager;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
+import com.mmxlabs.rcp.common.CommonImages;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
@@ -460,7 +463,7 @@ public class SummaryPage extends ADPComposite {
 				}
 			};
 
-			ResourceLocator.imageDescriptorFromBundle("com.mmxlabs.rcp.common", "/icons/pack.gif").ifPresent(packAction::setImageDescriptor);
+			packAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Pack, IconMode.Enabled));
 			toolbarManager.getToolbarManager().add(packAction);
 
 			final CopyGridToClipboardAction constraintsViewerCopyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(constraintsViewer);
@@ -481,10 +484,8 @@ public class SummaryPage extends ADPComposite {
 					constraintsViewer.expandToLevel(++constraintsSummaryExpandLevel);
 				}
 			};
-			ResourceLocator.imageDescriptorFromBundle("com.mmxlabs.rcp.common", "/icons/collapseall.gif").ifPresent(collapseOneLevel::setImageDescriptor);
-			ResourceLocator.imageDescriptorFromBundle("com.mmxlabs.rcp.common", "/icons/expandall.gif").ifPresent(expandOneLevel::setImageDescriptor);
-			// collapseOneLevel.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/collapseall.gif"));
-			// expandOneLevel.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/expandall.gif"));
+			CommonImages.setImageDescriptors(collapseOneLevel, IconPaths.CollapseAll);
+			CommonImages.setImageDescriptors(expandOneLevel, IconPaths.ExpandAll);
 
 			toolbarManager.getToolbarManager().add(collapseOneLevel);
 			toolbarManager.getToolbarManager().add(expandOneLevel);

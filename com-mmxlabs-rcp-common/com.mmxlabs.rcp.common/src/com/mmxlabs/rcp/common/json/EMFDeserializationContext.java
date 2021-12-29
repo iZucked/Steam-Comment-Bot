@@ -33,6 +33,7 @@ import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.deser.DefaultDeserializationContext;
 import com.fasterxml.jackson.databind.deser.DeserializerCache;
 import com.fasterxml.jackson.databind.deser.DeserializerFactory;
+import com.fasterxml.jackson.databind.deser.DefaultDeserializationContext.Impl;
 import com.fasterxml.jackson.databind.util.ClassUtil;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.util.ToBooleanBiFunction;
@@ -87,7 +88,7 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 			registerType(ref.getClassType(), ref.getGlobalId(), ref.getName(), eObject);
 		}
 	}
-	
+
 	public void registerType(final String type, final String id, final String name, final Object value) {
 		if (name != null) {
 			state.nameMap.put(new Pair<>(type, name), value);
@@ -100,7 +101,7 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 	public Object lookupType(final JSONReference ref) {
 		final Object idValue = state.idMap.get(new Pair<>(ref.getClassType(), ref.getGlobalId()));
 		List<Object> vas = state.idMap.values().stream().filter(p -> p.getClass().getSimpleName().contains("VesselAvailability")).collect(Collectors.toList());
-		
+
 		if (idValue != null) {
 			return idValue;
 		}
@@ -172,8 +173,7 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 	}
 
 	/**
-	 * Default constructor for a blueprint object, which will use the standard
-	 * {@link DeserializerCache}, given factory.
+	 * Default constructor for a blueprint object, which will use the standard {@link DeserializerCache}, given factory.
 	 */
 	public EMFDeserializationContext(final DeserializerFactory df) {
 		super(df, null);
@@ -197,6 +197,11 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 		this.state = src.state;
 	}
 
+	  private EMFDeserializationContext(EMFDeserializationContext src, DeserializationConfig config) {
+          super(src, config);
+          this.state = src.state;
+      }
+	
 	@Override
 	public EMFDeserializationContext copy() {
 		ClassUtil.verifyMustOverride(Impl.class, this, "copy");
@@ -211,6 +216,12 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 	@Override
 	public EMFDeserializationContext with(final DeserializerFactory factory) {
 		return new EMFDeserializationContext(this, factory);
+	}
+
+	@Override
+	public EMFDeserializationContext createDummyInstance(DeserializationConfig config) {
+		// need to be careful to create "real", not blue-print, instance
+		return new EMFDeserializationContext(this, config);
 	}
 
 	// Pulled from gmf-runtime

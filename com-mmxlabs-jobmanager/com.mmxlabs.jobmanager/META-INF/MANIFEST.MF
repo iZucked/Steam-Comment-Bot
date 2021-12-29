@@ -2,12 +2,13 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Jobmanager
 Bundle-SymbolicName: com.mmxlabs.jobmanager
-Bundle-Version: 4.12.38.qualifier
+Bundle-Version: 4.13.6.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-16
 Export-Package: com.mmxlabs.jobmanager.jobs,
  com.mmxlabs.jobmanager.jobs.impl,
  com.mmxlabs.jobmanager.manager,
  com.mmxlabs.jobmanager.manager.impl
-Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)"
+Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
+ org.eclipse.emf.ecore
 Automatic-Module-Name: com.mmxlabs.jobmanager

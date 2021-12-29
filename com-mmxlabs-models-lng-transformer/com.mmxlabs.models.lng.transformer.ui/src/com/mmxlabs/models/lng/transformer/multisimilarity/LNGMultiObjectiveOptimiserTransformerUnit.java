@@ -37,7 +37,8 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.NonNullPair;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.JobExecutor;
+import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
@@ -67,7 +68,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.core.fitness.IMultiObjectiveFitnessEvaluator;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
@@ -82,7 +83,7 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 
 	@NonNull
 	public static IChainLink chainPool(@NonNull final ChainBuilder chainBuilder, @NonNull final String stage, @NonNull final UserSettings userSettings,
-			@NonNull final LocalSearchOptimisationStage stageSettings, final int progressTicks, @NonNull final CleanableExecutorService executorService, final int... seeds) {
+			@NonNull final LocalSearchOptimisationStage stageSettings, final int progressTicks, @NonNull final JobExecutorFactory jobExecutorFactory, final int... seeds) {
 		final IChainLink link = new IChainLink() {
 
 			@Override
@@ -112,19 +113,18 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 				@NonNull
 				final Collection<@NonNull String> hints = new HashSet<>(lDataTransformer.getHints());
 				LNGTransformerHelper.updateHintsFromUserSettings(userSettings, hints);
-				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
 				monitor.beginTask("", 100 * seeds.length);
 				final List<Future<IMultiStateResult>> results = new ArrayList<>(seeds.length);
-				try {
+				try (JobExecutor jobExecutor = jobExecutorFactory.begin()) {
 					for (int i = 0; i < seeds.length; ++i) {
 						final LocalSearchOptimisationStage copyStageSettings = EcoreUtil.copy(stageSettings);
 						copyStageSettings.setSeed(seeds[i]);
 
 						final int jobId = i;
-						results.add(executorService.submit(() -> {
+						results.add(jobExecutor.submit(() -> {
 							final LNGMultiObjectiveOptimiserTransformerUnit t = new LNGMultiObjectiveOptimiserTransformerUnit(lDataTransformer, stage, jobId, userSettings, copyStageSettings,
-									initialSequences.getSequences(), inputState.getBestSolution().getFirst(), hints);
+									initialSequences.getSequences(), inputState.getBestSolution().getFirst(), hints, jobExecutorFactory);
 							return t.run(new SubProgressMonitor(monitor, 100));
 						}));
 					}
@@ -228,7 +228,7 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 
 	@NonNull
 	public static IChainLink chainPoolFake(@NonNull final ChainBuilder chainBuilder, @NonNull final String stage, @NonNull final UserSettings userSettings,
-			@NonNull final LocalSearchOptimisationStage stageSettings, final int progressTicks, @NonNull final CleanableExecutorService executorService, final int... seeds) {
+			@NonNull final LocalSearchOptimisationStage stageSettings, final int progressTicks, @NonNull final JobExecutorFactory jobExecutorFactory, final int... seeds) {
 		final IChainLink link = new IChainLink() {
 
 			@Override
@@ -258,20 +258,20 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 				@NonNull
 				final Collection<@NonNull String> hints = new HashSet<>(lDataTransformer.getHints());
 				LNGTransformerHelper.updateHintsFromUserSettings(userSettings, hints);
-				hints.remove(LNGTransformerHelper.HINT_CLEAN_STATE_EVALUATOR);
 
 				monitor.beginTask("", 100 * seeds.length);
+
 				final List<Future<IMultiStateResult>> results = new ArrayList<>(seeds.length);
-				try {
+				try (JobExecutor jobExecutor = jobExecutorFactory.begin()) {
 					for (int i = 0; i < seeds.length; ++i) {
 						final LocalSearchOptimisationStage copyStageSettings = EcoreUtil.copy(stageSettings);
 						copyStageSettings.setSeed(seeds[i]);
 						copyStageSettings.getAnnealingSettings().setIterations(copyStageSettings.getAnnealingSettings().getIterations() / 2);
 
 						final int jobId = i;
-						results.add(executorService.submit(() -> {
+						results.add(jobExecutor.submit(() -> {
 							final LNGMultiObjectiveOptimiserTransformerUnit t = new LNGMultiObjectiveOptimiserTransformerUnit(lDataTransformer, stage, jobId, userSettings, copyStageSettings,
-									initialSequences.getSequences(), inputState.getBestSolution().getFirst(), hints);
+									initialSequences.getSequences(), inputState.getBestSolution().getFirst(), hints, jobExecutorFactory);
 							t.run(new SubProgressMonitor(monitor, 100));
 							return inputState;
 						}));
@@ -385,12 +385,15 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 
 	private final int jobID;
 
+	private JobExecutorFactory jobExecutorFactory;
+
 	public LNGMultiObjectiveOptimiserTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final String stage, final int jobID, @NonNull final UserSettings userSettings,
 			@NonNull final LocalSearchOptimisationStage stageSettings, @NonNull final ISequences initialSequences, @NonNull final ISequences inputSequences,
-			@NonNull final Collection<@NonNull String> hints) {
+			@NonNull final Collection<@NonNull String> hints, JobExecutorFactory jobExecutorFactory) {
 		this.dataTransformer = dataTransformer;
 		this.stage = stage;
 		this.jobID = jobID;
+		this.jobExecutorFactory = jobExecutorFactory;
 
 		final Collection<@NonNull IOptimiserInjectorService> services = dataTransformer.getModuleServices();
 
@@ -470,7 +473,7 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 			runnerHook.beginStageJob(stage, jobID, injector);
 		}
 
-		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+		try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 			scope.enter();
 			TypeLiteral<List<IFitnessComponent>> list = new TypeLiteral<List<IFitnessComponent>>() {
 			};
@@ -506,18 +509,23 @@ public class LNGMultiObjectiveOptimiserTransformerUnit implements ILNGStateTrans
 	public IMultiStateResult run(final @NonNull IProgressMonitor monitor) {
 		final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
 
-		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+		try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 			scope.enter();
 
 			monitor.beginTask("", 100);
-			try {
+			final JobExecutorFactory subExecutorFactory = jobExecutorFactory.withDefaultBegin(() -> {
+				final ThreadLocalScopeImpl s = injector.getInstance(ThreadLocalScopeImpl.class);
+				s.enter();
+				return s;
+			});
+			try (JobExecutor jobExecutor = subExecutorFactory.begin()) {
 
 				// Main Optimisation Loop
 				while (!optimiser.isFinished()) {
 					if (monitor.isCanceled()) {
 						throw new OperationCanceledException();
 					}
-					optimiser.step(1);
+					optimiser.step(1, jobExecutor);
 					monitor.worked(1);
 				}
 				assert optimiser.isFinished();

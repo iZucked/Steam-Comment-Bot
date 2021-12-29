@@ -118,14 +118,8 @@ public class CreateSandboxHandler extends AbstractHandler {
 								@Override
 								public void run() {
 									final IEditorPart part = openEditor(activePage, instance);
-									if (part instanceof IPartGotoTarget) {
-										((IPartGotoTarget) part).gotoTarget(model);
-									} else {
-										final Object adapter = part.getAdapter(IPartGotoTarget.class);
-										if (adapter != null) {
-											((IPartGotoTarget) adapter).gotoTarget(model);
-										}
-									}
+									
+									SandboxScenario.open(instance, model);
 								}
 							});
 

@@ -45,7 +45,7 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 	static {
 		AnalyticsPackage einstance = AnalyticsPackage.eINSTANCE;
 	}
-	
+
 	/**
 	 * Check basic source sandbox data copies across ok.
 	 * 
@@ -88,7 +88,7 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 		sandboxBuilder.createPartialCaseRow(event1, shipping1);
 
 		OptionAnalysisModel sourceModel = sandboxBuilder.getOptionAnalysisModel();
-
+ 
 		// Create a second copy!
 		try (IScenarioDataProvider targetSDP = importReferenceData()) {
 
@@ -123,7 +123,8 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 	}
 
 	/**
-	 * Test case to ensure generated solution with a round-trip shipping option works correctly.
+	 * Test case to ensure generated solution with a round-trip shipping option
+	 * works correctly.
 	 * 
 	 * @throws Exception
 	 */
@@ -160,7 +161,7 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 
 		sandboxBuilder.createBaseCaseRow(buy1, sell1, shipping1);
 		sandboxBuilder.createPartialCaseRow(buy2, sell1, null);
-		sandboxBuilder.createPartialCaseRow(event1, shipping1);
+//		sandboxBuilder.createPartialCaseRow(event1, shipping1);
 
 		OptionAnalysisModel sourceModel = sandboxBuilder.getOptionAnalysisModel();
 
@@ -168,6 +169,14 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 		IAnalyticsScenarioEvaluator evaluator = new AnalyticsScenarioEvaluator();
 		evaluator.runSandboxOptions(scenarioDataProvider, null, sourceModel, sourceModel::setResults, false);
 
+		
+		{
+			AbstractSolutionSet results = sourceModel.getResults();
+			Assertions.assertNotNull(results);
+			Assertions.assertNotNull(results.getBaseOption());
+			Assertions.assertEquals(1, results.getOptions().size());
+		}
+		
 		// Create a second copy!
 		try (IScenarioDataProvider targetSDP = importReferenceData()) {
 
@@ -197,6 +206,11 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 				PartialCaseRow targetRow = targetModel.getPartialCase().getPartialCase().get(i);
 
 			}
+			
+			AbstractSolutionSet results = targetModel.getResults();
+			Assertions.assertNotNull(results);
+			Assertions.assertNotNull(results.getBaseOption());
+			Assertions.assertEquals(1, results.getOptions().size());
 		}
 	}
 

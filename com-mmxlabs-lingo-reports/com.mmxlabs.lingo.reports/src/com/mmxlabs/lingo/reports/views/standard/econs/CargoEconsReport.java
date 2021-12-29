@@ -107,8 +107,9 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 /**
- * The {@link CargoEconsReport} is a vertical report similar in concept to the Properties View. This table is the transpose of most other tables. Columns represent the input data and rows are
- * pre-defined.
+ * The {@link CargoEconsReport} is a vertical report similar in concept to the
+ * Properties View. This table is the transpose of most other tables. Columns
+ * represent the input data and rows are pre-defined.
  * 
  * @author Simon Goodall
  * 
@@ -225,10 +226,14 @@ public class CargoEconsReport extends ViewPart {
 			showPnLCalcs.setChecked(true);
 			getViewSite().getActionBars().getMenuManager().add(showPnLCalcs);
 
-			final Action showOnlyDiff = new RunnableAction("Δ", () -> {
-				toggleShowDiffOnly();
-				rebuild();
-			});
+			final Action showOnlyDiff = new Action("Δ", SWT.TOGGLE) {
+				@Override
+				public void run() {
+					toggleShowDiffOnly();
+					setChecked(onlyDiffMode);
+					rebuild();
+				}
+			};
 			getViewSite().getActionBars().getToolBarManager().add(showOnlyDiff);
 
 			// Default to sales volume
@@ -300,6 +305,7 @@ public class CargoEconsReport extends ViewPart {
 			public int getBorders(final GridItem item, final int i) {
 				return 0;
 			}
+
 		});
 		getViewSite().getActionBars().getToolBarManager().add(packAction);
 		getViewSite().getActionBars().getToolBarManager().add(copyAction);
@@ -354,7 +360,8 @@ public class CargoEconsReport extends ViewPart {
 	}
 
 	/**
-	 * The {@link FieldType} is the row data. Each enum is a different row. Currently there is no table sorter so enum order is display order
+	 * The {@link FieldType} is the row data. Each enum is a different row.
+	 * Currently there is no table sorter so enum order is display order
 	 * 
 	 */
 
@@ -380,7 +387,9 @@ public class CargoEconsReport extends ViewPart {
 	}
 
 	/**
-	 * Label Provider created for each column. Returns text for the given {@link CargoEconsReportRow} enum (as the input element) for the {@link IFieldTypeMapper} object passed in during creation.
+	 * Label Provider created for each column. Returns text for the given
+	 * {@link CargoEconsReportRow} enum (as the input element) for the
+	 * {@link IFieldTypeMapper} object passed in during creation.
 	 * 
 	 */
 	private class FieldTypeMapperLabelProvider extends ColumnLabelProvider {
@@ -465,7 +474,9 @@ public class CargoEconsReport extends ViewPart {
 	}
 
 	/**
-	 * This method processes an {@link ISelection} object and return a list of objects that this report knows how to process. Currently we try to find associated {@link CargoAllocation} objects.
+	 * This method processes an {@link ISelection} object and return a list of
+	 * objects that this report knows how to process. Currently we try to find
+	 * associated {@link CargoAllocation} objects.
 	 * 
 	 * @param selection
 	 * @return
@@ -518,7 +529,8 @@ public class CargoEconsReport extends ViewPart {
 		validObjects.remove(null);
 
 		if (validObjects.isEmpty()) {
-			// No valid schedule model elements, maybe it is a selection from e.g. trades table so look up matching data from default schedule model.
+			// No valid schedule model elements, maybe it is a selection from e.g. trades
+			// table so look up matching data from default schedule model.
 
 			// Lazily computed caches (if coming from editor selection)
 			Map<PaperDeal, PaperDealAllocation> paperDealMap = null;
@@ -537,7 +549,7 @@ public class CargoEconsReport extends ViewPart {
 							event = (VesselEvent) obj;
 						} else if (obj instanceof Cargo) {
 							cargo = (Cargo) obj;
-						}  else if (obj instanceof PaperDeal) {
+						} else if (obj instanceof PaperDeal) {
 							final PaperDeal paperDeal = (PaperDeal) obj;
 							if (schedule != null) {
 								if (paperDealMap == null) {
@@ -560,7 +572,6 @@ public class CargoEconsReport extends ViewPart {
 								slot = (DischargeSlot) obj;
 							}
 						}
-
 
 						if (cargo != null && schedule != null) {
 							if (cargoMap == null) {
@@ -605,7 +616,7 @@ public class CargoEconsReport extends ViewPart {
 								validObjects.add(vesselEventVisit);
 							}
 						}
-					}					
+					}
 				}
 			}
 		}
@@ -685,9 +696,10 @@ public class CargoEconsReport extends ViewPart {
 				final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editorInput;
 				final ScenarioInstance scenarioInstance = scenarioServiceEditorInput.getScenarioInstance();
 				if (scenarioInstance != null) {
-					@NonNull
 					final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
-					return modelRecord.aquireReference("CargoEconsReport");
+					if (modelRecord != null) {
+						return modelRecord.aquireReference("CargoEconsReport");
+					}
 				}
 			}
 		}
@@ -706,9 +718,8 @@ public class CargoEconsReport extends ViewPart {
 		if (IReportContentsGenerator.class.isAssignableFrom(adapter)) {
 			dummyDataCol.getColumn().dispose();
 
-			
 			return adapter.cast(new IReportContentsGenerator() {
-				public IReportContents getReportContents(final ScenarioResult pin, final ScenarioResult other, final @Nullable  List<Object> selectedObjects) {
+				public IReportContents getReportContents(final ScenarioResult pin, final ScenarioResult other, final @Nullable List<Object> selectedObjects) {
 					final SelectedDataProviderImpl provider = new SelectedDataProviderImpl();
 					if (pin != null) {
 						provider.addScenario(pin);
@@ -717,11 +728,11 @@ public class CargoEconsReport extends ViewPart {
 					if (other != null) {
 						provider.addScenario(other);
 					}
-					
+
 					if (selectedObjects != null) {
 						provider.setSelectedObjects(null, new StructuredSelection(selectedObjects));
 					}
-					
+
 					// Request a blocking update ...
 					listener.selectedDataProviderChanged(provider, true);
 					// ... so the data is ready to be read here.
@@ -808,7 +819,8 @@ public class CargoEconsReport extends ViewPart {
 		// Extract relevant selected objects.
 		final List<Object> validObjects = processSelection(selectedDataProvider == null ? Collections.emptyList() : selectedDataProvider.getSelectedObjects());
 
-		// Dispose old data columns - clone list to try to avoid concurrent modification exceptions
+		// Dispose old data columns - clone list to try to avoid concurrent modification
+		// exceptions
 		final List<GridViewerColumn> oldColumns = new ArrayList<>(dataColumns);
 		dataColumns.clear();
 
@@ -1053,18 +1065,18 @@ public class CargoEconsReport extends ViewPart {
 				}
 			} else if (selectedObject instanceof GroupedCharterOutEvent) {
 				final GroupedCharterOutEvent charterLengthEvent = (GroupedCharterOutEvent) selectedObject;
-				
+
 				final GridColumnGroup gridColumnGroup = gridColumnGroupsMap.get(charterLengthEvent.name());
 				final GridColumn gc = new GridColumn(gridColumnGroup, SWT.NONE);
 				final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
 				GridViewerHelper.configureLookAndFeel(gvc);
 				// Mark column for disposal on selection change
 				dataColumns.add(gvc);
-				
+
 				gvc.getColumn().setText("");
 				gvc.setLabelProvider(new FieldTypeMapperLabelProvider(selectedObject));
 				gvc.getColumn().setWidth(100);
-				
+
 				if (selectedDataProvider != null && selectedDataProvider.isPinnedObject(charterLengthEvent)) {
 					gvc.getColumn().setHeaderRenderer(columnImageHeaderCenteredRenderer);
 					gvc.getColumn().setImage(pinImage);

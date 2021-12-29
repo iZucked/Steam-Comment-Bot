@@ -314,9 +314,11 @@ public class UpstreamUrlProvider {
 			connectionValid = true;
 
 			return OnlineState.online();
+		} catch (final NullPointerException npe) {
+			LOGGER.error("Failed to get url from secure preferences: " + npe.getMessage());
+			return OnlineState.error("Unknown error", npe);
 		} catch (final Exception e) {
-			// Ignore...?
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 			return OnlineState.error("Unknown error", e);
 		} finally {
 			// Set state to invalid if we didn't complete the checks successfully
@@ -347,7 +349,14 @@ public class UpstreamUrlProvider {
 
 		try (final Response pingResponse = httpClient.newCall(pingRequest).execute()) {
 			if (pingResponse.isSuccessful()) {
+				// Clear any logged errors
+				reportedError.remove(url);
 				return OnlineState.online();
+			} else {
+				// Check for specific error codes
+				if (pingResponse.code() == 502) {
+					return OnlineState.error("Error finding Data Hub endpoint - bad gateway", null);
+				}
 			}
 		} catch (final UnknownHostException e) {
 			if (!reportedError.containsKey(url)) {
@@ -386,7 +395,7 @@ public class UpstreamUrlProvider {
 		// Clear any logged errors
 		reportedError.remove(url);
 
-		return OnlineState.online();
+		return OnlineState.error("Error finding Data Hub endpoint", null);
 	}
 
 	public boolean isAvailable() {

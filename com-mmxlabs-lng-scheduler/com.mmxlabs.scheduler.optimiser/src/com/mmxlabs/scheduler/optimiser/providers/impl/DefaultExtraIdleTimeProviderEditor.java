@@ -11,6 +11,8 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IExtraIdleTimeProviderEditor;
@@ -22,13 +24,17 @@ public class DefaultExtraIdleTimeProviderEditor implements IExtraIdleTimeProvide
 
 	private final Map<Pair<IPort, IPort>, Integer> portPairSlotToIdleTime = new HashMap<>();
 	private final Map<IPortSlot, Integer> portSlotToIdleTimeBeforeVisit = new HashMap<>();
-	//private final Map<ISequenceElement, Integer> elementToIdleTime = new HashMap<>();
 
 	@Override
-	public int getExtraIdleTimeInHours(final IPortSlot fromPortSlot, final IPortSlot toPortSlot) {
+	public int getContingencyIdleTimeInHours(final IPortSlot fromPortSlot, final IPortSlot toPortSlot) {
 		int portPairSlotIdleTime = portPairSlotToIdleTime.getOrDefault(new Pair<>(fromPortSlot.getPort(), toPortSlot.getPort()), ZERO);
+		return portPairSlotIdleTime;
+	}
+
+	@Override
+	public int getBufferIdleTimeInHours(final IPortSlot toPortSlot) {
 		int toPortSlotIdleTimeBeforeVisit = portSlotToIdleTimeBeforeVisit.getOrDefault(toPortSlot, ZERO);
-		return portPairSlotIdleTime + toPortSlotIdleTimeBeforeVisit;
+		return toPortSlotIdleTimeBeforeVisit;
 	}
 
 	@Override
@@ -38,7 +44,8 @@ public class DefaultExtraIdleTimeProviderEditor implements IExtraIdleTimeProvide
 
 	@Override
 	public void setExtraIdleTimeBeforeVisit(final ISequenceElement element, final IPortSlot toPortSlot, final int extraIdleTimeInHours) {
-		//TODO add mapping from sequence element to extraIdleTime if getter added for this.
+		// TODO add mapping from sequence element to extraIdleTime if getter added for
+		// this.
 		portSlotToIdleTimeBeforeVisit.put(toPortSlot, extraIdleTimeInHours);
 	}
 }

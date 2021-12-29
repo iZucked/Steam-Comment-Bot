@@ -19,9 +19,10 @@ public final class KnownFeatures {
 	}
 
 	public static final String FEATURE_REENCRYPT = "features:reencrypt";
-
 	
-	public static final String FEATURE_MODULE_DIFF_TOOLS = "features:difftools";
+	
+	public static final String FEATURE_TEMP_SANDBOX_VOYAGE_OPTIONS = "features:sandbox-voyage-opts";
+
 	
 	/**
 	 * Enable parallelisation in optimiser
@@ -83,6 +84,8 @@ public final class KnownFeatures {
 	
 	public static final String FEATURE_MTM_SELL_SIDE = "features:mtm-sell-side";
 	
+	public static final String FEATURE_MTM_OLD = "features:mtm-old";
+	
 	/**
 	 * Enable the charter length evaluation mode
 	 */
@@ -114,6 +117,8 @@ public final class KnownFeatures {
 	public static final String FEATURE_DATAHUB_BASECASE_NOTES = "features:datahub-basecase-notes";
 
 	public static final String FEATURE_DATAHUB_STARTUP_CHECK = "features:datahub-lingo-startup-check";
+
+	public static final String FEATURE_DATAHUB_LICENSE_MANAGEMENT = "features:datahub-license-management";
 
 	public static final String FEATURE_SHOW_TRADING_SHIPPING_SPLIT = "features:headline-trading-shipping-split";
 

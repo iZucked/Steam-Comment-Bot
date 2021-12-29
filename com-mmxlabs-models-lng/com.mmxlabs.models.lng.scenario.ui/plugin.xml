@@ -48,7 +48,6 @@
       <wizard
             category="com.mmxlabs.models.lng.demo.importWizards.sampleCategory"
             class="com.mmxlabs.models.lng.scenario.importWizards.ImportCSVWizard"
-            icon="icons/sample.gif"
             id="com.mmxlabs.models.lng.demo.importWizards.ImportCSVWizard"
             name="Import CSV">
          <description>
@@ -513,7 +512,8 @@
             point="org.eclipse.ui.commandImages">
          <image
                commandId="com.mmxlabs.models.lng.scenario.ui.rollforward"
-               icon="icons/roll_forward.gif">
+               icon="icons/roll_forward.png"
+               disabledIcon="icons/roll_forward_disabled.png">
          </image>
       </extension>      
       <extension
@@ -575,5 +575,15 @@
                   </visibleWhen>
       </command>
    </menuContribution>
+</extension>
+<extension
+      point="org.eclipse.emf.validation.traversal">
+   <traversalStrategy
+         class="com.mmxlabs.models.lng.scenario.LNGRecursiveValidationStrategy"
+         namespaceUri="http://www.mmxlabs.com/models/lng/scenario/1/">
+      <eclass
+            name="LNGScenarioModel">
+      </eclass>
+   </traversalStrategy>
 </extension>      
 </plugin>

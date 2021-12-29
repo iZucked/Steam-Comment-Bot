@@ -25,10 +25,9 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getArrivalMarginHours <em>Arrival Margin Hours</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleBookingAmountNorthbound <em>Flexible Booking Amount Northbound</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getFlexibleBookingAmountSouthbound <em>Flexible Booking Amount Southbound</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getNorthboundMaxIdleDays <em>Northbound Max Idle Days</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getSouthboundMaxIdleDays <em>Southbound Max Idle Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getBookingExemptVessels <em>Booking Exempt Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getVesselGroupCanalParameters <em>Vessel Group Canal Parameters</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CanalBookings#getPanamaSeasonalityRecords <em>Panama Seasonality Records</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookings()
@@ -118,7 +117,7 @@ public interface CanalBookings extends MMXObject {
 	 * @return the value of the '<em>Arrival Margin Hours</em>' attribute.
 	 * @see #setArrivalMarginHours(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookings_ArrivalMarginHours()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hours'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hours' formatString='##,##0'"
 	 * @generated
 	 */
 	int getArrivalMarginHours();
@@ -186,54 +185,6 @@ public interface CanalBookings extends MMXObject {
 	void setFlexibleBookingAmountSouthbound(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Northbound Max Idle Days</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Northbound Max Idle Days</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Northbound Max Idle Days</em>' attribute.
-	 * @see #setNorthboundMaxIdleDays(int)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookings_NorthboundMaxIdleDays()
-	 * @model
-	 * @generated
-	 */
-	int getNorthboundMaxIdleDays();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getNorthboundMaxIdleDays <em>Northbound Max Idle Days</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Northbound Max Idle Days</em>' attribute.
-	 * @see #getNorthboundMaxIdleDays()
-	 * @generated
-	 */
-	void setNorthboundMaxIdleDays(int value);
-
-	/**
-	 * Returns the value of the '<em><b>Southbound Max Idle Days</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Southbound Max Idle Days</em>' attribute.
-	 * @see #setSouthboundMaxIdleDays(int)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookings_SouthboundMaxIdleDays()
-	 * @model
-	 * @generated
-	 */
-	int getSouthboundMaxIdleDays();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.CanalBookings#getSouthboundMaxIdleDays <em>Southbound Max Idle Days</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Southbound Max Idle Days</em>' attribute.
-	 * @see #getSouthboundMaxIdleDays()
-	 * @generated
-	 */
-	void setSouthboundMaxIdleDays(int value);
-
-	/**
 	 * Returns the value of the '<em><b>Booking Exempt Vessels</b></em>' reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.fleet.Vessel}.
 	 * <!-- begin-user-doc -->
@@ -256,5 +207,17 @@ public interface CanalBookings extends MMXObject {
 	 * @generated
 	 */
 	EList<VesselGroupCanalParameters> getVesselGroupCanalParameters();
+
+	/**
+	 * Returns the value of the '<em><b>Panama Seasonality Records</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Panama Seasonality Records</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCanalBookings_PanamaSeasonalityRecords()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	EList<PanamaSeasonalityRecord> getPanamaSeasonalityRecords();
 
 } // CanalBookings

@@ -44,8 +44,6 @@ import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
-import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsConstraintChecker;
-import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
@@ -54,7 +52,7 @@ import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
@@ -146,52 +144,6 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
-	public void panamaSlotAvailableTest_Constraint() {
-		// map into same timezone to make expectations easier
-		portModelBuilder.setAllExistingPortsToUTC();
-
-		final CanalBookingSlot d1 = cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JUNE, 7), null);
-
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
-
-		@NonNull
-		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
-
-		@NonNull
-		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_QUINTERO);
-
-		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
-		final LocalDateTime dischargeDate = loadDate.plusDays(13);
-
-		final Cargo cargo = createFobDesCargo(1, vesselAvailability, port1, port2, loadDate, dischargeDate);
-
-		evaluateWithLSOTest(scenarioRunner -> {
-
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-			LNGDataTransformer dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
-			final Injector injector = MicroTestUtils.createEvaluationInjector(dataTransformer);
-
-			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
-				scope.enter();
-
-				final PanamaSlotsConstraintChecker checker = new PanamaSlotsConstraintChecker(PanamaSlotsConstraintCheckerFactory.NAME);//
-				injector.injectMembers(checker);
-
-				// Set blank sequences as initial state
-				checker.sequencesAccepted(SequenceHelper.createSequences(dataTransformer.getInjector()), SequenceHelper.createSequences(dataTransformer.getInjector()), new ArrayList<>());
-
-				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
-				@NonNull
-				final IModifiableSequences manipulatedSequences = sequencesManipulator
-						.createManipulatedSequences(SequenceHelper.createSequences(dataTransformer.getInjector(), vesselAvailability, cargo));
-				checker.checkConstraints(SequenceHelper.createSequences(dataTransformer.getInjector()), null, new ArrayList<>());
-				assertTrue(checker.checkConstraints(manipulatedSequences, null, new ArrayList<>()));
-			}
-		});
-	}
-
-	@Test
-	@Tag(TestCategories.MICRO_TEST)
 	public void panamaSlotNoDoubleAssignmentTest() {
 		// map into same timezone to make expectations easier
 		portModelBuilder.setAllExistingPortsToUTC();
@@ -226,7 +178,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 
 			LNGDataTransformer dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
 			final Injector injector = MicroTestUtils.createEvaluationInjector(dataTransformer);
-			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 				scope.enter();
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
@@ -278,7 +230,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final Injector injector = MicroTestUtils.createEvaluationInjector(scenarioToOptimiserBridge.getDataTransformer());
-			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 				scope.enter();
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
@@ -327,7 +279,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 
 			final Injector injector = MicroTestUtils.createEvaluationInjector(scenarioToOptimiserBridge.getDataTransformer());
 
-			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 				scope.enter();
 
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
@@ -377,7 +329,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final Injector injector = MicroTestUtils.createEvaluationInjector(scenarioToOptimiserBridge.getDataTransformer());
-			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 				scope.enter();
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
@@ -425,7 +377,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 			final Injector injector = MicroTestUtils.createEvaluationInjector(scenarioToOptimiserBridge.getDataTransformer());
-			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 				scope.enter();
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
@@ -479,7 +431,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 			final Injector injector = MicroTestUtils.createEvaluationInjector(scenarioToOptimiserBridge.getDataTransformer());
-			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 				scope.enter();
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
@@ -546,7 +498,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 
 			LNGDataTransformer dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
 			final Injector injector = MicroTestUtils.createEvaluationInjector(dataTransformer);
-			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 				scope.enter();
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
@@ -600,7 +552,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 
 			final Injector injector = MicroTestUtils.createEvaluationInjector(scenarioToOptimiserBridge.getDataTransformer());
 
-			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 				scope.enter();
 
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
@@ -652,7 +604,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final Injector injector = MicroTestUtils.createEvaluationInjector(scenarioToOptimiserBridge.getDataTransformer());
-			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 				scope.enter();
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
@@ -704,7 +656,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final Injector injector = MicroTestUtils.createEvaluationInjector(scenarioToOptimiserBridge.getDataTransformer());
-			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 				scope.enter();
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
@@ -789,7 +741,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final Injector injector = MicroTestUtils.createEvaluationInjector(scenarioToOptimiserBridge.getDataTransformer());
-			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 				scope.enter();
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
@@ -866,7 +818,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final Injector injector = MicroTestUtils.createEvaluationInjector(scenarioToOptimiserBridge.getDataTransformer());
-			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 				scope.enter();
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
@@ -900,6 +852,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2017, 7, 1));
 
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
+		cargoModelBuilder.initCanalBookings();
 		final CanalBookings canalBookings = cargoModel.getCanalBookings();
 
 		canalBookings.setStrictBoundaryOffsetDays(0);
@@ -908,7 +861,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		canalBookings.setFlexibleBookingAmountSouthbound(0);
 
 		// Need at least 5 days of idle time to allow it to go through.
-		canalBookings.setSouthboundMaxIdleDays(5);
+		//canalBookings.setSouthboundMaxIdleDays(5);
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 		vesselAvailability.getVessel().setMaxSpeed(16.0);
@@ -924,6 +877,19 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 
 		// Direct is twice as far as panama
 		distanceModelBuilder.setPortToPortDistance(loadPort, dischargePort, 10 * 16 * 24 * 2, Integer.MAX_VALUE, 10 * 16 * 24, true);
+		
+		@NonNull
+		final Port panama_entrance = portFinder.findPortById(InternalDataConstants.PORT_COLON);
+		@NonNull
+		final Port panama_exit = portFinder.findPortById(InternalDataConstants.PORT_BALBOA);
+
+		// Load port to Panama canal entrance distance
+		distanceModelBuilder.setPortToPortDistance(loadPort, panama_entrance, RouteOption.DIRECT, 10 * 16 * 12,true);
+		// Distance from Panama canal exit to the discharge port 
+		// we set it to zero, so it's not double accounted when compute travel time from Panama Canal Entrance port to the discharge port
+		distanceModelBuilder.setPortToPortDistance(panama_exit, dischargePort, RouteOption.DIRECT, 0, true);
+		// Distance from Panama canal entrance to the discharge via Panama canal
+		distanceModelBuilder.setPortToPortDistance(panama_entrance, dischargePort, RouteOption.PANAMA, 10 * 16 * 12,true);
 
 		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L", loadDate.toLocalDate(), loadPort, null, entity, "5", 22.6) //
 				.withWindowStartTime(0) //
@@ -942,7 +908,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final Injector injector = MicroTestUtils.createEvaluationInjector(scenarioToOptimiserBridge.getDataTransformer());
-			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 				scope.enter();
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
@@ -991,7 +957,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		canalBookings.setFlexibleBookingAmountSouthbound(0);
 
 		// Need at least 5 days of idle time to allow it to go through.
-		canalBookings.setSouthboundMaxIdleDays(5);
+		//canalBookings.setSouthboundMaxIdleDays(5);
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 		vesselAvailability.getVessel().setMaxSpeed(16.0);
@@ -1025,7 +991,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final Injector injector = MicroTestUtils.createEvaluationInjector(scenarioToOptimiserBridge.getDataTransformer());
-			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 				scope.enter();
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
@@ -1043,12 +1009,6 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(1);
 
 				assertEquals(AvailableRouteChoices.PANAMA_ONLY, ptr_r0_cargo.getSlotNextVoyageOptions(ptr_r0_cargo.getFirstSlot()));
-
-				final PanamaSlotsConstraintChecker checker = new PanamaSlotsConstraintChecker(PanamaSlotsConstraintCheckerFactory.NAME);//
-				injector.injectMembers(checker);
-
-				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector()), null, new ArrayList<>());
-				assertTrue(checker.checkConstraints(manipulatedSequences, null, new ArrayList<>()));
 			}
 		});
 	}
@@ -1119,6 +1079,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2017, 7, 1));
 
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
+		cargoModelBuilder.initCanalBookings();
 		final CanalBookings canalBookings = cargoModel.getCanalBookings();
 
 		canalBookings.setStrictBoundaryOffsetDays(0);
@@ -1141,6 +1102,18 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 
 		// Direct is twice as far as panama
 		distanceModelBuilder.setPortToPortDistance(loadPort, dischargePort, 10 * 16 * 24 * 2, Integer.MAX_VALUE, 10 * 16 * 24, true);
+		@NonNull
+		final Port panama_entrance = portFinder.findPortById(InternalDataConstants.PORT_COLON);
+		@NonNull
+		final Port panama_exit = portFinder.findPortById(InternalDataConstants.PORT_BALBOA);
+
+		// Load port to Panama canal entrance distance
+		distanceModelBuilder.setPortToPortDistance(loadPort, panama_entrance, RouteOption.DIRECT, 10 * 16 * 12,true);
+		// Distance from Panama canal exit to the discharge port 
+		// we set it to zero, so it's not double accounted when compute travel time from Panama Canal Entrance port to the discharge port
+		distanceModelBuilder.setPortToPortDistance(panama_exit, dischargePort, RouteOption.DIRECT, 0, true);
+		// Distance from Panama canal entrance to the discharge via Panama canal
+		distanceModelBuilder.setPortToPortDistance(panama_entrance, dischargePort, RouteOption.PANAMA, 10 * 16 * 12,true);
 
 		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L", loadDate.toLocalDate(), loadPort, null, entity, "5", 22.6) //
 				.withWindowStartTime(0) //
@@ -1159,7 +1132,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final Injector injector = MicroTestUtils.createEvaluationInjector(scenarioToOptimiserBridge.getDataTransformer());
-			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 				scope.enter();
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
@@ -1177,12 +1150,6 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(1);
 
 				assertEquals(AvailableRouteChoices.PANAMA_ONLY, ptr_r0_cargo.getSlotNextVoyageOptions(ptr_r0_cargo.getFirstSlot()));
-
-				final PanamaSlotsConstraintChecker checker = new PanamaSlotsConstraintChecker(PanamaSlotsConstraintCheckerFactory.NAME);//
-				injector.injectMembers(checker);
-
-				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector()), null, new ArrayList<>());
-				assertTrue(checker.checkConstraints(manipulatedSequences, null, new ArrayList<>()));
 			}
 		});
 	}
@@ -1255,11 +1222,12 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2017, 7, 1));
 
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
+		cargoModelBuilder.initCanalBookings();
 		final CanalBookings canalBookings = cargoModel.getCanalBookings();
 
 		canalBookings.setStrictBoundaryOffsetDays(0);
 		canalBookings.setRelaxedBoundaryOffsetDays(60);
-		canalBookings.setNorthboundMaxIdleDays(5);
+		//canalBookings.setNorthboundMaxIdleDays(5);
 
 		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
 		vesselAvailability.getVessel().setMaxSpeed(16.0);
@@ -1279,6 +1247,19 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		// Direct is twice as far as panama
 		distanceModelBuilder.setPortToPortDistance(loadPort, dischargePort, 20 * 16 * 24, Integer.MAX_VALUE, 10 * 16 * 24, true);
 
+		@NonNull
+		final Port panama_entrance = portFinder.findPortById(InternalDataConstants.PORT_BALBOA);
+		@NonNull
+		final Port panama_exit = portFinder.findPortById(InternalDataConstants.PORT_COLON);
+
+		// Load port to Panama canal entrance distance
+		distanceModelBuilder.setPortToPortDistance(loadPort, panama_entrance, RouteOption.DIRECT, 10 * 16 * 12,true);
+		// Distance from Panama canal exit to the discharge port 
+		// we set it to zero, so it's not double accounted when compute travel time from Panama Canal Entrance port to the discharge port
+		distanceModelBuilder.setPortToPortDistance(panama_exit, dischargePort, RouteOption.DIRECT, 0, true);
+		// Distance from Panama canal entrance to the discharge via Panama canal
+		distanceModelBuilder.setPortToPortDistance(panama_entrance, dischargePort, RouteOption.PANAMA, 10 * 16 * 12,true);
+		
 		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L", loadDate.toLocalDate(), loadPort, null, entity, "5", 22.6) //
 				.withWindowStartTime(0) //
 				.withVisitDuration(0) //
@@ -1296,7 +1277,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final Injector injector = MicroTestUtils.createEvaluationInjector(scenarioToOptimiserBridge.getDataTransformer());
-			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 				scope.enter();
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
@@ -1331,6 +1312,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		lngScenarioModel.setPromptPeriodStart(LocalDate.of(2017, 7, 1));
 
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
+		cargoModelBuilder.initCanalBookings();
 		final CanalBookings canalBookings = cargoModel.getCanalBookings();
 
 		canalBookings.setStrictBoundaryOffsetDays(0);
@@ -1345,6 +1327,10 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		final Port loadPort = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
 		@NonNull
 		final Port dischargePort = portFinder.findPortById(InternalDataConstants.PORT_QUINTERO);
+		@NonNull
+		final Port panama_entrance = portFinder.findPortById(InternalDataConstants.PORT_COLON);
+		@NonNull
+		final Port panama_exit = portFinder.findPortById(InternalDataConstants.PORT_BALBOA);		
 
 		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JULY, 1, 0, 0, 0);
 		// journey could be made direct
@@ -1352,6 +1338,13 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 
 		// Direct is twice as far as panama
 		distanceModelBuilder.setPortToPortDistance(loadPort, dischargePort, 10 * 16 * 24 * 2, Integer.MAX_VALUE, 10 * 16 * 24, true);
+		// Load port to Panama canal entrance distance
+		distanceModelBuilder.setPortToPortDistance(loadPort, panama_entrance, RouteOption.DIRECT, 10 * 16 * 12,true);
+		// Distance from Panama canal exit to the discharge port 
+		// we set it to zero, so it's not double accounted when compute travel time from Panama Canal Entrance port to the discharge port
+		distanceModelBuilder.setPortToPortDistance(panama_exit, dischargePort, RouteOption.DIRECT, 0, true);
+		// Distance from Panama canal entrance to the discharge via Panama canal
+		distanceModelBuilder.setPortToPortDistance(panama_entrance, dischargePort, RouteOption.PANAMA, 10 * 16 * 12,true);
 
 		final LoadSlot loadSlot = cargoModelBuilder.makeFOBPurchase("L", loadDate.toLocalDate(), loadPort, null, entity, "5", 22.6) //
 				.withWindowStartTime(0) //
@@ -1370,7 +1363,7 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 
 			final Injector injector = MicroTestUtils.createEvaluationInjector(scenarioToOptimiserBridge.getDataTransformer());
-			try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 				scope.enter();
 				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
 				@NonNull
@@ -1388,12 +1381,6 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(1);
 
 				assertEquals(AvailableRouteChoices.PANAMA_ONLY, ptr_r0_cargo.getSlotNextVoyageOptions(ptr_r0_cargo.getFirstSlot()));
-
-				final PanamaSlotsConstraintChecker checker = new PanamaSlotsConstraintChecker(PanamaSlotsConstraintCheckerFactory.NAME);//
-				injector.injectMembers(checker);
-
-				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector()), null, new ArrayList<>());
-				assertTrue(checker.checkConstraints(manipulatedSequences, null, new ArrayList<>()));
 			}
 		});
 	}

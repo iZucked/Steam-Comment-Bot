@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.transformer.ui;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -19,7 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.JobExecutor;
+import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.common.util.CheckedBiConsumer;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
@@ -56,7 +56,7 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 	private static final ImageDescriptor imgEval = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/evaluate_schedule.gif");
 
 	private final List<SimilarityFuture> jobs;
-	private final CleanableExecutorService controlService;
+	private final JobExecutorFactory jobExecutorFactory;
 
 	private class SimilarityFuture implements Runnable {
 
@@ -110,9 +110,6 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 			if (lock != null) {
 				lock.unlock();
 			}
-			if (runner != null) {
-				runner.getExecutorService().shutdownNow();
-			}
 			if (forkScenarioDataProvider != null) {
 				forkScenarioDataProvider.close();
 			}
@@ -140,7 +137,7 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 		final int numberOfThreads = getNumberOfThreads();
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
 		// This executor is for the futures we create and execute here...
-		controlService = LNGScenarioChainBuilder.createExecutorService(numberOfThreads);
+		jobExecutorFactory = LNGScenarioChainBuilder.createExecutorService(numberOfThreads);
 		// Disable optimisation in P&L testing phase
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PHASE_PNL_TESTING) || LicenseFeatures.isPermitted(KnownFeatures.FEATURE_PHASE_LIMITED_TESTING)) {
 			throw new RuntimeException("Optimisation is disabled during the P&L testing phase.");
@@ -162,7 +159,6 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 		for (final SimilarityFuture job : jobs) {
 			job.init();
 		}
-
 	}
 
 	@Override
@@ -172,9 +168,6 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 
 	@Override
 	public void dispose() {
-		if (!controlService.isShutdown()) {
-			controlService.shutdownNow();
-		}
 		// Clean up
 		for (final SimilarityFuture job : jobs) {
 			try {
@@ -210,23 +203,17 @@ public abstract class AbstractLNGRunMultipleForkedJobsControl extends AbstractEc
 		System.out.println(startTime);
 		try {
 			progressMonitor.beginTask("Optimise", jobs.size() * 100);
-			for (final SimilarityFuture job : jobs) {
-				job.setParentProgressMonitor(progressMonitor, 100);
-				controlService.submit(job);
-			}
-			// Block until jobs completed
-			controlService.shutdown();
-			try {
-				while (!controlService.awaitTermination(100, TimeUnit.MILLISECONDS))
-					;
-			} catch (final InterruptedException e) {
-				LOG.error(e.getMessage(), e);
+			try (JobExecutor jobExecutor = jobExecutorFactory.begin()) {
+				for (final SimilarityFuture job : jobs) {
+					job.setParentProgressMonitor(progressMonitor, 100);
+					jobExecutor.submit(job);
+				}
+				// Block until jobs completed
+				jobExecutor.waitUntilComplete();
+
 			}
 		} finally {
 			progressMonitor.done();
-			if (!controlService.isShutdown()) {
-				controlService.shutdownNow();
-			}
 			// Clean up
 			for (final SimilarityFuture job : jobs) {
 				try {

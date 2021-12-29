@@ -21,7 +21,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
  * 
  */
 
-public final class PortDetails implements IDetailsSequenceElement, Cloneable {
+public final class PortDetails implements IDetailsSequenceElement {
 
 	private @NonNull PortOptions options;
 
@@ -41,24 +41,14 @@ public final class PortDetails implements IDetailsSequenceElement, Cloneable {
 		this.fuelUnitPrices.putAll(fuelPrice);
 	}
 
-	public final void resetFuelConsumption() {
-		// fuelConsumption.clear();
-	}
 
 	public final long getFuelConsumption(final FuelKey fuelKey) {
-//		assert !fuelKey.getBaseFuel().getName().contains("fake");
-
 		return fuelConsumption.get(fuelKey.getFuelComponent(), fuelKey.getFuelUnit());
 	}
 
 	public void setFuelConsumption(@NonNull FuelKey fk, long consumption) {
-//		assert !fk.getBaseFuel().getName().contains("fake");
 		fuelConsumption.put(fk.getFuelComponent(), fk.getFuelUnit(), consumption);
 	}
-
-	// public Collection<FuelKey> getFuelConsumptionKeys() {
-	// return fuelConsumption.keySet();
-	// }
 
 	/**
 	 */
@@ -115,8 +105,7 @@ public final class PortDetails implements IDetailsSequenceElement, Cloneable {
 		// @formatter:on
 	}
 
-	@Override
-	public PortDetails clone() {
+	public PortDetails copy() {
 		return new PortDetails(new PortOptions(options), fuelConsumption, fuelUnitPrices, portCosts);
 	}
 

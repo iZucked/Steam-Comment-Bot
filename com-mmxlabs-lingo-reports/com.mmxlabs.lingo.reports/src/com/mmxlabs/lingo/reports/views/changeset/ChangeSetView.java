@@ -140,6 +140,9 @@ import com.mmxlabs.models.lng.transformer.ui.analytics.EvaluateSolutionSetHelper
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
@@ -590,29 +593,6 @@ public class ChangeSetView extends ViewPart {
 					}
 				}
 			};
-
-		}
-		if (IReportContents.class.isAssignableFrom(adapter)) {
-
-			try {
-				columnHelper.setTextualVesselMarkers(true);
-				// Need to refresh the view to trigger creation of the text labels
-				ViewerHelper.refresh(viewer, true);
-				final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
-
-				final String contents = util.convert();
-				return (T) new IReportContents() {
-
-					@Override
-					public String getHTMLContents() {
-						// Prefix this header for rendering purposes
-						return "<meta charset=\"UTF-8\"/>" + contents;
-					}
-
-				};
-			} finally {
-				columnHelper.setTextualVesselMarkers(false);
-			}
 		}
 		return (T) null;
 	}
@@ -637,7 +617,7 @@ public class ChangeSetView extends ViewPart {
 
 		// Create table
 		viewer = new GridTreeViewer(parent, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
-		GridViewerHelper.configureLookAndFeel(viewer);
+		GridViewerHelper.configureLookAndFeel(viewer, false);
 
 		ColumnViewerToolTipSupport.enableFor(viewer, ToolTip.RECREATE);
 
@@ -718,69 +698,7 @@ public class ChangeSetView extends ViewPart {
 				}
 			}
 
-			private void selectRow(final Set<Object> selectedElements, final ChangeSetTableRow tableRow) {
-				selectedElements.add(tableRow);
-				selectRow(selectedElements, tableRow.getLhsBefore());
-				selectRow(selectedElements, tableRow.getLhsAfter());
-				selectRow(selectedElements, tableRow.getRhsBefore());
-				selectRow(selectedElements, tableRow.getRhsAfter());
-			}
-
-			private void selectRow(final Set<Object> selectedElements, final ChangeSetRowData rowData) {
-				if (rowData == null) {
-					return;
-				}
-				selectedElements.add(rowData);
-				selectedElements.add(rowData.getLoadSlot());
-				selectedElements.add(rowData.getDischargeSlot());
-				if (rowData.getLoadAllocation() != null) {
-					selectedElements.add(rowData.getLoadAllocation());
-					final SlotVisit slotVisit = rowData.getLoadAllocation().getSlotVisit();
-					selectedElements.add(slotVisit);
-					if (slotVisit != null) {
-						selectedElements.add(slotVisit.getSequence());
-					}
-				}
-				if (rowData.getDischargeAllocation() != null) {
-					selectedElements.add(rowData.getDischargeAllocation());
-					final SlotVisit slotVisit = rowData.getDischargeAllocation().getSlotVisit();
-					selectedElements.add(slotVisit);
-					if (slotVisit != null) {
-						selectedElements.add(slotVisit.getSequence());
-					}
-				}
-
-				selectedElements.add(rowData.getLhsGroupProfitAndLoss());
-				selectedElements.add(rowData.getRhsGroupProfitAndLoss());
-
-				selectedElements.add(rowData.getLhsEvent());
-				selectedElements.add(rowData.getRhsEvent());
-				//
-				final EventGrouping eventGrouping = rowData.getEventGrouping();
-				if (eventGrouping != null) {
-					selectedElements.add(eventGrouping);
-					selectedElements.addAll(eventGrouping.getEvents());
-				}
-				if (eventGrouping instanceof Event) {
-					final Event event = (Event) eventGrouping;
-					selectedElements.add(event.getSequence());
-				}
-				if (eventGrouping instanceof CargoAllocation) {
-					final Sequence sequence = ((CargoAllocation) eventGrouping).getSequence();
-					if (sequence != null) {
-						selectedElements.add(((CargoAllocation) eventGrouping).getSequence());
-					}
-				}
-				// //
-				if (rowData.getOpenLoadAllocation() != null) {
-					selectedElements.add(rowData.getOpenLoadAllocation());
-					selectedElements.add(rowData.getOpenLoadAllocation().getSlot());
-				}
-				if (rowData.getOpenDischargeAllocation() != null) {
-					selectedElements.add(rowData.getOpenDischargeAllocation());
-					selectedElements.add(rowData.getOpenDischargeAllocation().getSlot());
-				}
-			}
+			
 		});
 
 		final ViewerFilter[] filters = new ViewerFilter[2];
@@ -1070,7 +988,7 @@ public class ChangeSetView extends ViewPart {
 				}
 			};
 			filterMenu.setToolTipText("Change filters");
-			filterMenu.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/filter.gif"));
+			filterMenu.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Filter, IconMode.Enabled));
 			getViewSite().getActionBars().getToolBarManager().add(filterMenu);
 		}
 		{
@@ -1096,7 +1014,7 @@ public class ChangeSetView extends ViewPart {
 					}
 				}
 			});
-			reEvaluateAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/iu_update_obj.gif"));
+			CommonImages.setImageDescriptors(reEvaluateAction, IconPaths.ReEvaluate16);
 			reEvaluateAction.setToolTipText("Re-evaluate the solution(s) using current scenario data");
 			reEvaluateActionItem = new ActionContributionItem(reEvaluateAction);
 		}
@@ -1368,6 +1286,69 @@ public class ChangeSetView extends ViewPart {
 			boolean showMenu = false;
 			final Set<ChangeSetTableRow> directSelectedRows = new LinkedHashSet<>();
 			final Set<ChangeSetTableGroup> directSelectedGroups = new LinkedHashSet<>();
+			if (false && items.length == 2) {
+				// Experimental code.  Select two change set and right-click
+				// Pin/diff against the selected two change-sets.
+				
+				ChangeSetTableGroup groupA = null;
+				ChangeSetTableGroup groupB = null;
+				
+				final Iterator<?> itr = selection.iterator();
+				while (itr.hasNext()) {
+					final Object obj = itr.next();
+
+					if (obj instanceof ChangeSetTableGroup) {
+						ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) obj;
+						if (groupA == null) {
+							groupA = changeSetTableGroup;
+						} else {
+							groupB = changeSetTableGroup;
+							break;
+						}
+					}
+				}
+				
+				if (groupA != null && groupB != null) {
+					
+					
+					// Extract out the selected ChangeSet, ChangeSet group and explicitly selected rows
+					ISelection newSelection;
+					{
+						final Set<Object> selectedElements = new LinkedHashSet<>();
+						{
+						final List<ChangeSetTableRow> rows = groupA.getRows();
+						for (final ChangeSetTableRow changeSetRow : rows) {
+							selectAfterRows(selectedElements, changeSetRow);
+						}}{
+						final List<ChangeSetTableRow> rows = groupB.getRows();
+						for (final ChangeSetTableRow changeSetRow : rows) {
+							selectAfterRows(selectedElements, changeSetRow);
+						}}
+						while (selectedElements.remove(null))
+							;
+
+						newSelection = new StructuredSelection(new ArrayList<>(selectedElements));
+					}
+
+					
+					// Set the flag so we don't end up in compare mode.
+					if (inChangingChangeSetSelection.compareAndSet(false, true)) {
+						try {
+							ISelection ss = null;
+							// This is a bit inefficient if we are just changing selected row(s) rather than change set.
+							scenarioComparisonService.setSelection(newSelection);
+							scenarioComparisonService.setPinnedPair(groupA.getCurrentScenario(), groupB.getCurrentScenario(), newSelection, true);
+						} finally {
+							inChangingChangeSetSelection.set(false);
+						}
+					}
+					
+				}
+				
+			}
+			
+			
+			
 			if (items.length >= 1) {
 				final Set<ChangeSetTableGroup> selectedSets = new LinkedHashSet<>();
 				final Iterator<?> itr = selection.iterator();
@@ -1452,8 +1433,7 @@ public class ChangeSetView extends ViewPart {
 				final EvaluateSolutionSetHelper ssHelper = new EvaluateSolutionSetHelper(scenarioResult.getScenarioDataProvider());
 
 				final AnalyticsSolution solution = currentViewState.lastSolution;
-				if (solution != null && solution.getSolution() instanceof SandboxResult) {
-					final SandboxResult sandboxResult = (SandboxResult) solution.getSolution();
+				if (solution != null && solution.getSolution() instanceof SandboxResult sandboxResult) {
 
 					UserSettings userSettings = null;
 
@@ -1531,7 +1511,7 @@ public class ChangeSetView extends ViewPart {
 
 				}
 			});
-			action.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/iu_update_obj.gif"));
+			CommonImages.setImageDescriptors(action, IconPaths.ReEvaluate16);
 			helper.addAction(action);
 			showMenu = true;
 			return showMenu;
@@ -1550,8 +1530,7 @@ public class ChangeSetView extends ViewPart {
 				if (showAlternativeChangeModel && ChangeSetView.this.viewMode == ViewMode.INSERTIONS) {
 					// Only offer this for dual model insertions.
 					final ScenarioResult scenarioResult = changeSetTableGroup.getCurrentScenario();
-					if (scenarioResult.getResultRoot() instanceof ScheduleModel) {
-						final ScheduleModel scheduleModel = (ScheduleModel) scenarioResult.getResultRoot();
+					if (scenarioResult.getResultRoot() instanceof ScheduleModel scheduleModel) {
 						if (scheduleModel.eContainer() instanceof SolutionOptionMicroCase) {
 							final BiConsumer<LNGScenarioModel, Schedule> modelCustomiser = EvaluateSolutionSetHelper.createModelCustomiser();
 							helper.addAction(new ExportChangeAction(changeSetTableGroup, name, true, modelCustomiser));
@@ -1792,7 +1771,11 @@ public class ChangeSetView extends ViewPart {
 	@Optional
 	public void onClosingScenario(@UIEventTopic(ScenarioServiceUtils.EVENT_CLOSING_SCENARIO_INSTANCE) final ScenarioInstance scenarioInstance) {
 
-		final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		
+		if (modelRecord == null) {
+			return;
+		}
 
 		final Function<ScenarioResult, Boolean> checker = (sr) -> sr != null && (sr.getModelRecord() == modelRecord || sr.getScenarioInstance() == scenarioInstance);
 		final ViewState viewState = currentViewState;
@@ -1941,6 +1924,77 @@ public class ChangeSetView extends ViewPart {
 			columnHelper.showCompareColumns(false);
 		} else {
 			columnHelper.showCompareColumns(true);
+		}
+	}
+	
+	private void selectRow(final Set<Object> selectedElements, final ChangeSetTableRow tableRow) {
+		selectedElements.add(tableRow);
+		selectRow(selectedElements, tableRow.getLhsBefore());
+		selectRow(selectedElements, tableRow.getLhsAfter());
+		selectRow(selectedElements, tableRow.getRhsBefore());
+		selectRow(selectedElements, tableRow.getRhsAfter());
+	}
+	private void selectAfterRows(final Set<Object> selectedElements, final ChangeSetTableRow tableRow) {
+		selectedElements.add(tableRow);
+//		selectRow(selectedElements, tableRow.getLhsBefore());
+		selectRow(selectedElements, tableRow.getLhsAfter());
+//		selectRow(selectedElements, tableRow.getRhsBefore());
+		selectRow(selectedElements, tableRow.getRhsAfter());
+	}
+
+	private void selectRow(final Set<Object> selectedElements, final ChangeSetRowData rowData) {
+		if (rowData == null) {
+			return;
+		}
+		selectedElements.add(rowData);
+		selectedElements.add(rowData.getLoadSlot());
+		selectedElements.add(rowData.getDischargeSlot());
+		if (rowData.getLoadAllocation() != null) {
+			selectedElements.add(rowData.getLoadAllocation());
+			final SlotVisit slotVisit = rowData.getLoadAllocation().getSlotVisit();
+			selectedElements.add(slotVisit);
+			if (slotVisit != null) {
+				selectedElements.add(slotVisit.getSequence());
+			}
+		}
+		if (rowData.getDischargeAllocation() != null) {
+			selectedElements.add(rowData.getDischargeAllocation());
+			final SlotVisit slotVisit = rowData.getDischargeAllocation().getSlotVisit();
+			selectedElements.add(slotVisit);
+			if (slotVisit != null) {
+				selectedElements.add(slotVisit.getSequence());
+			}
+		}
+
+		selectedElements.add(rowData.getLhsGroupProfitAndLoss());
+		selectedElements.add(rowData.getRhsGroupProfitAndLoss());
+
+		selectedElements.add(rowData.getLhsEvent());
+		selectedElements.add(rowData.getRhsEvent());
+		//
+		final EventGrouping eventGrouping = rowData.getEventGrouping();
+		if (eventGrouping != null) {
+			selectedElements.add(eventGrouping);
+			selectedElements.addAll(eventGrouping.getEvents());
+		}
+		if (eventGrouping instanceof Event) {
+			final Event event = (Event) eventGrouping;
+			selectedElements.add(event.getSequence());
+		}
+		if (eventGrouping instanceof CargoAllocation) {
+			final Sequence sequence = ((CargoAllocation) eventGrouping).getSequence();
+			if (sequence != null) {
+				selectedElements.add(((CargoAllocation) eventGrouping).getSequence());
+			}
+		}
+		// //
+		if (rowData.getOpenLoadAllocation() != null) {
+			selectedElements.add(rowData.getOpenLoadAllocation());
+			selectedElements.add(rowData.getOpenLoadAllocation().getSlot());
+		}
+		if (rowData.getOpenDischargeAllocation() != null) {
+			selectedElements.add(rowData.getOpenDischargeAllocation());
+			selectedElements.add(rowData.getOpenDischargeAllocation().getSlot());
 		}
 	}
 }

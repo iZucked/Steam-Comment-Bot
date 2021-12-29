@@ -121,7 +121,7 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 		endStuff.setEditorWrapper(editorWrapper);
 		endStuff.display(dialogContext, root, object, range, dbc);
 		
-		ballastBonusComposite = new BallastBonusTermsDetailComposite(g3, SWT.NONE, dialogContext, toolkit, defaultResizeAction());
+		ballastBonusComposite = new BallastBonusTermsDetailComposite(g3, SWT.NONE, dialogContext, toolkit, defaultResizeAction(), object);
 		ballastBonusComposite.setCommandHandler(commandHandler);
 		ballastBonusComposite.setEditorWrapper(editorWrapper);
 		ballastBonusComposite.display(dialogContext, root, object, range, dbc);
@@ -213,9 +213,9 @@ public class VesselAvailabilityTopLevelComposite extends DefaultTopLevelComposit
 			if (gcc != null) {
 				return "Reset";
 			} else {
-				return "Override";
+				return "Create";
 			}
 		}
-		return "Override";
+		return "Create";
 	}
 }

@@ -31,6 +31,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -215,15 +216,18 @@ public class CargoModelImporter implements ISubmodelImporter {
 				}
 			}
 			for (final Object o : importObjects) {
-				if (o instanceof VesselGroupCanalParameters) {
-					final VesselGroupCanalParameters vesselGroupCanalParameters = (VesselGroupCanalParameters) o;
+				if (o instanceof VesselGroupCanalParameters vesselGroupCanalParameters) {
 					canalBookings.getVesselGroupCanalParameters().add(vesselGroupCanalParameters);
 				}
 			}
 			for (final Object o : importObjects) {
-				if (o instanceof CanalBookingSlot) {
-					final CanalBookingSlot canalBookingSlot = (CanalBookingSlot) o;
+				if (o instanceof CanalBookingSlot canalBookingSlot) {
 					canalBookings.getCanalBookingSlots().add(canalBookingSlot);
+				}
+			}
+			for (final Object o: importObjects) {
+				if (o instanceof PanamaSeasonalityRecord seasonalityRecord) {
+					canalBookings.getPanamaSeasonalityRecords().add(seasonalityRecord);
 				}
 			}
 		}
@@ -244,6 +248,7 @@ public class CargoModelImporter implements ISubmodelImporter {
 			l.add(canalBookings);
 			l.addAll(canalBookings.getVesselGroupCanalParameters());
 			l.addAll(canalBookings.getCanalBookingSlots());
+			l.addAll(canalBookings.getPanamaSeasonalityRecords());
 			output.put(CANAL_BOOKINGS_KEY, canalBookingsImporter.exportObjects(l, context));
 		}
 	}

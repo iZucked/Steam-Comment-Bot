@@ -197,11 +197,11 @@ public class PeriodTestUtils {
 	}
 
 	public static Port createPort(final LNGScenarioModel scenarioModel, final String name) {
-		final Location location= PortFactory.eINSTANCE.createLocation();
+		final Location location = PortFactory.eINSTANCE.createLocation();
 		location.setName(name);
 		location.setMmxId(name);
 		location.setTimeZone("UTC");
-		
+
 		final Port port = PortFactory.eINSTANCE.createPort();
 		port.setName(name);
 		port.setLocation(location);
@@ -213,7 +213,7 @@ public class PeriodTestUtils {
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
 		scenarioModel.getCargoModel().getCargoes().add(cargo);
 
-		for (final Slot slot : slots) {
+		for (final Slot<?> slot : slots) {
 			cargo.getSlots().add(slot);
 		}
 
@@ -226,11 +226,13 @@ public class PeriodTestUtils {
 
 		final LoadSlot loadSlot = createLoadSlot(scenarioModel, name + "-load");
 		loadSlot.setWindowStart(loadDate);
+		loadSlot.setPort(loadPort);
 		cargo.getSlots().add(loadSlot);
 		scenarioModel.getCargoModel().getLoadSlots().add(loadSlot);
 
 		final DischargeSlot dischargeSlot = createDischargeSlot(scenarioModel, name + "-discharge");
 		dischargeSlot.setWindowStart(dischargeDate);
+		dischargeSlot.setPort(dischargePort);
 		cargo.getSlots().add(dischargeSlot);
 		scenarioModel.getCargoModel().getDischargeSlots().add(dischargeSlot);
 
@@ -331,6 +333,26 @@ public class PeriodTestUtils {
 	public static PortVisit createPortVisit(final Port port, final ZonedDateTime date) {
 
 		final PortVisit portVisit = ScheduleFactory.eINSTANCE.createPortVisit();
+		portVisit.setPort(port);
+		portVisit.setStart(date);
+		portVisit.setEnd(date);
+
+		return portVisit;
+	}
+
+	public static StartEvent createStartEvent(final Port port, final ZonedDateTime date) {
+
+		final StartEvent portVisit = ScheduleFactory.eINSTANCE.createStartEvent();
+		portVisit.setPort(port);
+		portVisit.setStart(date);
+		portVisit.setEnd(date);
+
+		return portVisit;
+	}
+
+	public static EndEvent createEndEvent(final Port port, final ZonedDateTime date) {
+
+		final EndEvent portVisit = ScheduleFactory.eINSTANCE.createEndEvent();
 		portVisit.setPort(port);
 		portVisit.setStart(date);
 		portVisit.setEnd(date);

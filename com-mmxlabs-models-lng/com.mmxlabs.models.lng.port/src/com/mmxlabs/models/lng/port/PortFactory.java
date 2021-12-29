@@ -60,6 +60,15 @@ public interface PortFactory extends EFactory {
 	RouteLine createRouteLine();
 
 	/**
+	 * Returns a new object of class '<em>Manual Route Line</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Manual Route Line</em>'.
+	 * @generated
+	 */
+	ManualRouteLine createManualRouteLine();
+
+	/**
 	 * Returns a new object of class '<em>Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

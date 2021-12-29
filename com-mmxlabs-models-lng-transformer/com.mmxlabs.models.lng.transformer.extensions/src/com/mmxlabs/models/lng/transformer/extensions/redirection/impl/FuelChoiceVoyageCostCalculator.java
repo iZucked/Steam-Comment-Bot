@@ -188,9 +188,6 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 		portTimesRecord.setSlotDuration(notionalLoadSlot, loadDuration);
 		portTimesRecord.setSlotDuration(notionalDischargeSlot, dischargeDuration);
 
-		portTimesRecord.setSlotExtraIdleTime(notionalLoadSlot, 0);
-		portTimesRecord.setSlotExtraIdleTime(notionalDischargeSlot, 0);
-
 		return portTimesRecord;
 	}
 

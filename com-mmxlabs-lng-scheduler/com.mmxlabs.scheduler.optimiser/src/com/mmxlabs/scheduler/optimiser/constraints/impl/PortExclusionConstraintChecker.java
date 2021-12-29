@@ -61,7 +61,7 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 		return name;
 	}
 
-	public boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource, @NonNull final List<String> messages) {
+	public boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource, final List<String> messages) {
 		if (portExclusionProvider.hasNoExclusions()) {
 			return true;
 		}
@@ -81,7 +81,8 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 		for (int j = 0; j < sequence.size(); j++) {
 			IPort portForElement = portProvider.getPortForElement(sequence.get(j));
 			if (excludedPorts.contains(portForElement)) {
-				messages.add(this.name + ": Vessel " + vesselProvider.getVesselAvailability(resource).getVessel().getName() + " is excluded from port "
+				if (messages != null)
+					messages.add(this.name + ": Vessel " + vesselProvider.getVesselAvailability(resource).getVessel().getName() + " is excluded from port "
 						+ (portForElement == null ? "(unknown port)" : portForElement.getName()));
 				return false;
 			}
@@ -132,7 +133,7 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 		final IPort firstPort = portProvider.getPortForElement(first);
 		final IPort secondPort = portProvider.getPortForElement(second);
 		final boolean result = !(exclusions.contains(firstPort) || exclusions.contains(secondPort));
-		if (!result) {
+		if (!result && messages != null) {
 			messages.add(String.format("%s: Vessel %s is exluded from ports %s or %s.", this.name, vessel.getName(), firstPort.getName(), secondPort.getName()));
 		}
 		return result;

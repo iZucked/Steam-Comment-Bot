@@ -43,18 +43,7 @@ public class DefaultSandboxLabelProvider extends CellFormatterLabelProvider {
 		this.validationErrors = validationErrors;
 		this.name = name;
 	}
-	//
-	// protected Image imgError = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/error.gif").createImage();
-	// protected Image imgWarn = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/warning.gif").createImage();
-	// protected Image imgInfo = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/information.gif").createImage();
-	// protected Image imgShippingRoundTrip = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/roundtrip.png").createImage();
-	// protected Image imgShippingFleet = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/fleet.png").createImage();
-	// protected Image imgModel = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "/icons/console_view.gif").createImage();
-	//
-	// protected Color colour_error = new Color(Display.getDefault(), new RGB(255, 100, 100));
-	// protected Color colour_warn = new Color(Display.getDefault(), new RGB(255, 255, 200));
-	// protected Color colour_info = new Color(Display.getDefault(), new RGB(200, 240, 240));
-
+ 
 	@Override
 	protected @Nullable Image getImage(@NonNull final ViewerCell cell, @Nullable final Object element) {
 

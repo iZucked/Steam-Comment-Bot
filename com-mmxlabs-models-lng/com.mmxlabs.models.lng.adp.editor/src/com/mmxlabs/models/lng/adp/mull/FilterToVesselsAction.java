@@ -4,17 +4,18 @@
  */
 package com.mmxlabs.models.lng.adp.mull;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.function.Consumer;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuCreator;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
+
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 
 public class FilterToVesselsAction extends Action implements IMenuCreator {
 
@@ -32,15 +33,7 @@ public class FilterToVesselsAction extends Action implements IMenuCreator {
 				filterToVesselsAction.accept(showingVessels);
 			}
 		};
-		try {
-			setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.models.ui.tabular/icons/filter.gif")));
-		} catch (final MalformedURLException ex) {
-			
-		}
-		
-//		ResourceLocator.imageDescriptorFromBundle("com.mmxlabs.rcp.common", "/icons/filter.gif").ifPresent(img -> {
-//			setImageDescriptor(img);
-//		});
+		setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Filter, IconMode.Enabled));
 	}
 
 	@Override

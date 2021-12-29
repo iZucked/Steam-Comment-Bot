@@ -296,7 +296,6 @@
      <valueProvider
            factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CanalBookingBookingCodeValueProviderFactory"
            id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CanalBookingBookingCodeValueProviderFactory_BookingCode"
-           ownerEClass="com.mmxlabs.models.lng.cargo.CanalBookingSlot"
            referenceEClass="com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters">
      </valueProvider>
      <valueProvider
@@ -348,6 +347,12 @@
           eClass="com.mmxlabs.models.lng.cargo.PaperDeal"
           factory="com.mmxlabs.models.lng.cargo.ui.displaycomposites.PaperCompositeFactory"
           id="com.mmxlabs.models.lng.cargo.ui.displaycomposites.PaperCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.cargo.CanalBookings"
+          factory="com.mmxlabs.models.lng.cargo.ui.displaycomposites.CanalBookingsCompositeFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.displaycomposites.CanalBookingsCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
  </extension>
@@ -590,6 +595,16 @@
           <EDataTypeIs
                 EDataTypeName="CanalEntry"
                 EDataTypeURI="http://www.mmxlabs.com/models/lng/port/1/">
+          </EDataTypeIs>
+       </FeatureAnyOf>
+    </editorFactory>
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.cargo.ui.inlineeditors.FuelChoiceInlineEditorFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.inlineeditors.FuelChoiceInlineEditorFactory">
+       <FeatureAnyOf>
+          <EDataTypeIs
+                EDataTypeName="FuelChoice"
+                EDataTypeURI="http://www.mmxlabs.com/models/lng/cargo/1/">
           </EDataTypeIs>
        </FeatureAnyOf>
     </editorFactory>

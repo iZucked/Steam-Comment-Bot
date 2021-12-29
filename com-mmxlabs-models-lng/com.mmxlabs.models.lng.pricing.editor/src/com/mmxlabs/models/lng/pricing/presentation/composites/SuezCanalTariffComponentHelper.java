@@ -239,14 +239,14 @@ public class SuezCanalTariffComponentHelper extends BaseComponentHelper {
 				.withRMMaker((ed, rvp) -> new NumericAttributeManipulator(PricingPackage.Literals.SUEZ_CANAL_ROUTE_REBATE__REBATE, ed)) //
 				.build();
 
-		b.withAction("Add", (ch, sel) -> {
+		b.withAction("Add", (input, ch, sel) -> {
 			SuezCanalTariff tariff = ScenarioModelUtil.getCostModel((LNGScenarioModel) ch.getModelReference().getInstance()).getSuezCanalTariff();
 			SuezCanalRouteRebate rebate = PricingFactory.eINSTANCE.createSuezCanalRouteRebate();
 			Command c = AddCommand.create(ch.getEditingDomain(), tariff, PricingPackage.Literals.SUEZ_CANAL_TARIFF__ROUTE_REBATES, rebate);
 			ch.handleCommand(c, tariff, PricingPackage.Literals.SUEZ_CANAL_TARIFF__ROUTE_REBATES);
 
 		});
-		b.withAction("Delete", (ch, sel) -> {
+		b.withAction("Delete", (input, ch, sel) -> {
 
 			if (sel instanceof IStructuredSelection) {
 				IStructuredSelection ss = (IStructuredSelection) sel;

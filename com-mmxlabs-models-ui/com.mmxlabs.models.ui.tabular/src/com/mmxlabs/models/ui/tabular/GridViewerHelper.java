@@ -31,19 +31,27 @@ public final class GridViewerHelper {
 	public static final int FLAGS_ROW_HOVER = 1;
 
 	public static void configureLookAndFeel(final @NonNull GridTableViewer viewer) {
+		configureLookAndFeel(viewer, true);
+	}
+
+	public static void configureLookAndFeel(final @NonNull GridTableViewer viewer, boolean checkFocus) {
 		viewer.getGrid().setRowHeaderRenderer(new RowHeaderRenderer());
 		viewer.getGrid().setTopLeftRenderer(new TopLeftRenderer());
 		viewer.getGrid().setEmptyColumnHeaderRenderer(new EmptyColumnHeaderRenderer());
 		viewer.getGrid().setEmptyRowHeaderRenderer(new EmptyRowHeaderRenderer());
-		viewer.getGrid().setEmptyCellRenderer(new EmptyCellRenderer());
+		viewer.getGrid().setEmptyCellRenderer(new EmptyCellRenderer(checkFocus));
 	}
 
 	public static void configureLookAndFeel(final @NonNull GridTreeViewer viewer) {
+		configureLookAndFeel(viewer, true);
+	}
+
+	public static void configureLookAndFeel(final @NonNull GridTreeViewer viewer, boolean checkFocus) {
 		viewer.getGrid().setRowHeaderRenderer(new RowHeaderRenderer());
 		viewer.getGrid().setTopLeftRenderer(new TopLeftRenderer());
 		viewer.getGrid().setEmptyColumnHeaderRenderer(new EmptyColumnHeaderRenderer());
 		viewer.getGrid().setEmptyRowHeaderRenderer(new EmptyRowHeaderRenderer());
-		viewer.getGrid().setEmptyCellRenderer(new EmptyCellRenderer());
+		viewer.getGrid().setEmptyCellRenderer(new EmptyCellRenderer(checkFocus));
 	}
 
 	public static void configureLookAndFeel(final @NonNull GridViewerColumn column) {

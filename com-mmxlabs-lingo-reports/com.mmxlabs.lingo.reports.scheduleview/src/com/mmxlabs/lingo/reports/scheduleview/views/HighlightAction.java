@@ -18,7 +18,7 @@ class HighlightAction extends SchedulerViewAction {
 
 	public HighlightAction(SchedulerView schedulerView, GanttChartViewer viewer, final EMFScheduleLabelProvider lp) {
 		super("Highlight", IAction.AS_DROP_DOWN_MENU, schedulerView, viewer, lp);
-		setImageDescriptor(Activator.getImageDescriptor("/icons/highlight.gif"));
+		setImageDescriptor(Activator.getImageDescriptor("/icons/highlighter.png"));
 	}
 
 	@Override

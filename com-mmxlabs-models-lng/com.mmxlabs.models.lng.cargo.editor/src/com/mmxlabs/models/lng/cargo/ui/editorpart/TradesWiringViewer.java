@@ -65,11 +65,11 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.widgets.grid.DefaultCellRenderer;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridCellRenderer;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridItem;
-import org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.dnd.DND;
@@ -95,14 +95,12 @@ import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.menus.IMenuService;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.service.event.EventHandler;
 
 import com.mmxlabs.common.Equality;
@@ -158,8 +156,6 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
-import com.mmxlabs.models.lng.ui.ImageConstants;
-import com.mmxlabs.models.lng.ui.LngUIActivator;
 import com.mmxlabs.models.lng.ui.actions.DuplicateAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
@@ -189,6 +185,9 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.util.emfpath.EMFMultiPath;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 import com.mmxlabs.models.util.emfpath.IEMFPath;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
@@ -574,7 +573,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 
 			@Override
-			@SuppressWarnings("restriction")
 			protected GridCellRenderer createCellRenderer() {
 				return new DefaultCellRenderer();
 			}
@@ -959,11 +957,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		 */
 
 		final Action addAction = new AddAction("Add");
-		addAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+//		addAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+		addAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Enabled));
+		addAction.setDisabledImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Plus, IconMode.Disabled));		
 		toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
 
 		final Action filterAction = new FilterMenuAction("Filter");
-		filterAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.tabular", "/icons/filter.gif"));
+		filterAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Filter, IconMode.Enabled));
 		toolbar.appendToGroup(VIEW_GROUP, filterAction);
 
 		// add extension points to toolbar
@@ -2670,8 +2670,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		public CreateStripMenuAction(final String label) {
 			super(label, IAction.AS_DROP_DOWN_MENU);
-			setImageDescriptor(LngUIActivator.getDefault().getImageRegistry().getDescriptor(ImageConstants.IMAGE_DUPLICATE));
-			setDisabledImageDescriptor(LngUIActivator.getDefault().getImageRegistry().getDescriptor(ImageConstants.IMAGE_DUPLICATE_DISABLED));
+			CommonImages.setImageDescriptors(this, IconPaths.Plusplus);
 		}
 
 		@Override

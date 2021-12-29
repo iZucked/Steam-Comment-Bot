@@ -36,7 +36,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessHelper;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeModule;
+import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeModule;
 import com.mmxlabs.optimiser.core.modules.ConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.EvaluatedStateConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.EvaluationProcessInstantiatorModule;
@@ -93,7 +93,7 @@ public class ScheduleTestModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		install(new PerChainUnitScopeModule());
+		install(new ThreadLocalScopeModule());
 		install(new OptimiserContextModule());
 		install(new ConstraintCheckerInstantiatorModule());
 		install(new FitnessFunctionInstantiatorModule());
@@ -129,7 +129,6 @@ public class ScheduleTestModule extends AbstractModule {
 
 		bind(IEntityValueCalculator.class).to(DefaultEntityValueCalculator.class);
 		bind(IVoyagePlanEvaluator.class).to(DefaultVoyagePlanEvaluator.class);
-		bind(IEndEventScheduler.class).to(DefaultEndEventScheduler.class);
 		bind(IBoilOffHelper.class).toInstance(new InPortBoilOffHelper(true));
 
 		bind(IArrivalTimeScheduler.class).to(TimeWindowScheduler.class);
@@ -141,6 +140,7 @@ public class ScheduleTestModule extends AbstractModule {
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePNLBasedWindowTrimming)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)).toInstance(Boolean.FALSE);
+		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseBestPanamaCanalIdleDaysWindowTrimming)).toInstance(Boolean.FALSE);
 
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.OPTIMISE_PAPER_PNL)).toInstance(Boolean.FALSE);
 		bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)).toInstance(Boolean.FALSE);
@@ -156,7 +156,6 @@ public class ScheduleTestModule extends AbstractModule {
 		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VoyagePlanEvaluatorCache)).toInstance(CacheMode.Off);
 		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_PNLBasedWindowTrimmerCache)).toInstance(CacheMode.Off);
 		bind(boolean.class).annotatedWith(Names.named("hint-lngtransformer-disable-caches")).toInstance(Boolean.FALSE);
-		bind(boolean.class).annotatedWith(Names.named(IEndEventScheduler.ENABLE_HIRE_COST_ONLY_END_RULE)).toInstance(Boolean.TRUE);
 
 		bind(int.class).annotatedWith(Names.named(SchedulerConstants.CHARTER_LENGTH_MIN_IDLE_HOURS)).toInstance(Integer.MAX_VALUE);
 		bind(int.class).annotatedWith(Names.named(SchedulerConstants.COOLDOWN_MIN_IDLE_HOURS)).toInstance(Integer.MAX_VALUE);

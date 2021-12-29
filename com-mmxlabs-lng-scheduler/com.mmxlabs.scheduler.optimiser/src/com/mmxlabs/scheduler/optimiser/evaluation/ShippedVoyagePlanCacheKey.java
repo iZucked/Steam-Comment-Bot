@@ -12,6 +12,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequencesAttributesProvider;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -49,13 +50,16 @@ public final class ShippedVoyagePlanCacheKey {
 	private int effectiveLastHeelPricePerMMBTU;
 	private int effectiveLastHeelCV;
 	public final IVesselAvailability vesselAvailability;
+	public final ISequencesAttributesProvider sequencesAttributesProvider;
 
 	// Not part of cache
 	public final IResource resource;
 
 	public ShippedVoyagePlanCacheKey(final IResource resource, final IVesselAvailability vesselAvailability, ICharterCostCalculator charterCostCalculator, final int vesselStartTime,
-			@Nullable final IPort firstLoadPort, final PreviousHeelRecord previousHeelRecord, final IPortTimesRecord portTimesRecord, boolean lastPlan, boolean keepDetails) {
+			@Nullable final IPort firstLoadPort, final PreviousHeelRecord previousHeelRecord, final IPortTimesRecord portTimesRecord, boolean lastPlan, boolean keepDetails,
+			ISequencesAttributesProvider sequencesAttributesProvider) {
 
+		this.sequencesAttributesProvider = sequencesAttributesProvider;
 		// Spot market vessels are equivalent
 		ISpotCharterInMarket spotCharterInMarket = vesselAvailability.getSpotCharterInMarket();
 		if (!keepDetails && spotCharterInMarket != null && vesselAvailability.getSpotIndex() >= 0) {
@@ -84,7 +88,8 @@ public final class ShippedVoyagePlanCacheKey {
 		}
 		isCargo = portTimesRecord.getSlots().get(0) instanceof ILoadOption;
 
-		// These values have no impact on a cargo - heel volume is the important field going into a cargo.
+		// These values have no impact on a cargo - heel volume is the important field
+		// going into a cargo.
 		effectiveLastHeelPricePerMMBTU = isCargo ? 0 : previousHeelRecord.lastHeelPricePerMMBTU;
 		effectiveLastHeelCV = isCargo ? 0 : previousHeelRecord.lastCV;
 		this.hash = Objects.hash(lastPlan, keepDetails, //
@@ -126,6 +131,7 @@ public final class ShippedVoyagePlanCacheKey {
 					&& effectiveLastHeelCV == other.effectiveLastHeelCV //
 					&& effectiveLastHeelPricePerMMBTU == other.effectiveLastHeelPricePerMMBTU //
 					&& previousHeelRecord.forcedCooldown == other.previousHeelRecord.forcedCooldown //
+					&& Objects.equals(sequencesAttributesProvider, other.sequencesAttributesProvider) //
 					&& Objects.equals(vesselKey, other.vesselKey); //
 
 			if (!partA) {
@@ -133,14 +139,16 @@ public final class ShippedVoyagePlanCacheKey {
 			}
 
 			if (!keepDetails) {
-				// Perform simple equivalence checks as we don't store the fully built up data structures.
+				// Perform simple equivalence checks as we don't store the fully built up data
+				// structures.
 				// Spot market slots and charter in vessel options can be equivalent.
 				return Objects.equals(slotsIds, other.slotsIds) //
 						&& Objects.equals(slotTimes, other.slotTimes) //
 						&& Objects.equals(canalBookings, other.canalBookings) //
 						&& Objects.equals(voyageKeys, other.voyageKeys);
 			} else {
-				// With keep details, we need to ensure exact matches rather than just equivalence
+				// With keep details, we need to ensure exact matches rather than just
+				// equivalence
 				if (vesselAvailability != other.vesselAvailability) {
 					return false;
 				}

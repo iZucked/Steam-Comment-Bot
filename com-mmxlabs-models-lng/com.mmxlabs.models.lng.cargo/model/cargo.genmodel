@@ -36,6 +36,10 @@
       <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//PaperPricingType/CALENDAR"/>
       <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//PaperPricingType/INSTRUMENT"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="cargo.ecore#//FuelChoice">
+      <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//FuelChoice/NBO_FBO"/>
+      <genEnumLiterals ecoreEnumLiteral="cargo.ecore#//FuelChoice/NBO_BUNKERS"/>
+    </genEnums>
     <genDataTypes ecoreDataType="cargo.ecore#//SchedulingTimeWindow"/>
     <genClasses ecoreClass="cargo.ecore#//CargoModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/loadSlots"/>
@@ -52,6 +56,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/dealSets"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/cargoesForExposures"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/cargoesForHedging"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CargoModel/groupedDischargeSlots"/>
       <genOperations ecoreOperation="cargo.ecore#//CargoModel/getLoadSlotByName">
         <genParameters ecoreParameter="cargo.ecore#//CargoModel/getLoadSlotByName/name"/>
       </genOperations>
@@ -321,11 +326,10 @@
           ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/arrivalMarginHours"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/flexibleBookingAmountNorthbound"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/flexibleBookingAmountSouthbound"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/northboundMaxIdleDays"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//CanalBookings/southboundMaxIdleDays"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CanalBookings/bookingExemptVessels"/>
       <genFeatures notify="false" createChild="false" propertyDescription="Number of hours arrival margin prior Panama booking date or expected crossing time."
           propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CanalBookings/vesselGroupCanalParameters"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//CanalBookings/panamaSeasonalityRecords"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//ScheduleSpecification">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//ScheduleSpecification/vesselScheduleSpecifications"/>
@@ -343,10 +347,15 @@
     <genClasses ecoreClass="cargo.ecore#//ScheduleSpecificationEvent"/>
     <genClasses ecoreClass="cargo.ecore#//VesselEventSpecification">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselEventSpecification/vesselEvent"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselEventSpecification/arrivalDate"/>
     </genClasses>
-    <genClasses ecoreClass="cargo.ecore#//VoyageSpecification"/>
+    <genClasses ecoreClass="cargo.ecore#//VoyageSpecification">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VoyageSpecification/routeOption"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VoyageSpecification/fuelChoice"/>
+    </genClasses>
     <genClasses ecoreClass="cargo.ecore#//SlotSpecification">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//SlotSpecification/slot"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//SlotSpecification/arrivalDate"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//CharterInMarketOverride">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//CharterInMarketOverride/charterInMarket"/>
@@ -384,9 +393,22 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//DealSet/paperDeals"/>
     </genClasses>
     <genClasses ecoreClass="cargo.ecore#//VesselGroupCanalParameters">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselGroupCanalParameters/northboundWaitingDays"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselGroupCanalParameters/southboundWaitingDays"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselGroupCanalParameters/vesselGroup"/>
     </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//PanamaSeasonalityRecord">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//PanamaSeasonalityRecord/vesselGroupCanalParameter"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PanamaSeasonalityRecord/startDay"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PanamaSeasonalityRecord/startMonth"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PanamaSeasonalityRecord/startYear"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PanamaSeasonalityRecord/northboundWaitingDays"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//PanamaSeasonalityRecord/southboundWaitingDays"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//GroupedSlotsConstraint">
+      <genTypeParameters ecoreTypeParameter="cargo.ecore#//GroupedSlotsConstraint/U"/>
+      <genTypeParameters ecoreTypeParameter="cargo.ecore#//GroupedSlotsConstraint/T"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//GroupedSlotsConstraint/slots"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//GroupedSlotsConstraint/minimumBound"/>
+    </genClasses>
+    <genClasses ecoreClass="cargo.ecore#//GroupedDischargeSlotsConstraint"/>
   </genPackages>
 </genmodel:GenModel>

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -47,8 +48,13 @@ public class LSOMover extends AbstractLSOMover {
 		final IModifiableSequences potentialFullSequences = new ModifiableSequences(rawSequences);
 		sequencesManipulator.manipulate(potentialFullSequences);
 
-		final List<String> messages = new ArrayList<>();
-		messages.add(String.format("%s: search", this.getClass().getName()));
+		final List<@Nullable String> messages;
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
+			messages = new ArrayList<>();
+			messages.add(String.format("%s: search", this.getClass().getName()));
+		} else {
+			messages = null;
+		}
 		// check hard constraints
 		for (final IConstraintChecker checker : constraintCheckers) {
 			// For constraint checker changed resources functions, if initial solution is invalid, we want to always perform a full constraint checker set of checks until we accept a valid

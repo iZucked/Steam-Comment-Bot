@@ -10,9 +10,11 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.mmxlabs.common.impl.LongFastEnumEnumMap;
 import com.mmxlabs.common.impl.LongFastEnumMap;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
+import com.mmxlabs.scheduler.optimiser.voyage.LNGFuelKeys;
 
 /**
  * Implementation of {@link VoyageDetails}.
@@ -20,7 +22,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
  * @author Simon Goodall
  * 
  */
-public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
+public final class VoyageDetails implements IDetailsSequenceElement {
 
 	private @NonNull VoyageOptions options;
 
@@ -42,28 +44,33 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 	 */
 	private int idleNBOHours;
 	private int travelNBOHours;
-	private int purgeHours;
+	private int routeAdditionalNBOHours;
 
 	private long idleCharterCost;
 	private long purgeCharterCost;
 	private long travelCharterCost;
-	
+
+	private boolean travelRanDry;
+	private boolean routeAdditionalTravelRanDry;
+	private boolean idleRanDry;
+
 	public VoyageDetails(@NonNull final VoyageOptions options) {
 		this.options = options;
 	}
 
 	private VoyageDetails(final int idleTime2, final int travelTime2, final int speed2, final int startTime2, final @NonNull VoyageOptions options,
 			final LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption2, final @NonNull LongFastEnumEnumMap<FuelComponent, FuelUnit> routeAdditionalConsumption2,
-			final @NonNull LongFastEnumMap<FuelComponent> fuelUnitPrices2, final boolean cooldownPerformed, final boolean purgePerformed, int purgeHours, int idleNBOHours, 
-			int travelNBOHours, long idleCharterCost, long purgeCharterCost, long travelCharterCost) {
+			final @NonNull LongFastEnumMap<FuelComponent> fuelUnitPrices2, final boolean cooldownPerformed, final boolean purgePerformed, int idleNBOHours, int travelNBOHours,
+			int routeAdditionalNBOHours, long idleCharterCost, long purgeCharterCost, long travelCharterCost, final boolean travelRanDry, final boolean routeAdditionalTravelRanDry,
+			final boolean idleRanDry) {
 		this.idleTime = idleTime2;
 		this.travelTime = travelTime2;
 		this.speed = speed2;
 		this.startTime = startTime2;
 		this.options = options;
-		this.purgeHours = purgeHours;
-		this.setIdleNBOHours(idleNBOHours);
-		this.setTravelNBOHours(travelNBOHours);
+		this.idleNBOHours = idleNBOHours;
+		this.travelNBOHours = travelNBOHours;
+		this.routeAdditionalNBOHours = routeAdditionalNBOHours;
 		this.fuelConsumption.putAll(fuelConsumption2);
 		this.fuelUnitPrices.putAll(fuelUnitPrices2);
 		this.routeAdditionalConsumption.putAll(routeAdditionalConsumption2);
@@ -72,13 +79,16 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 		this.idleCharterCost = idleCharterCost;
 		this.purgeCharterCost = purgeCharterCost;
 		this.travelCharterCost = travelCharterCost;
+		this.travelRanDry = travelRanDry;
+		this.routeAdditionalTravelRanDry = routeAdditionalTravelRanDry;
+		this.idleRanDry = idleRanDry;
 	}
 
-	@Override
-	public VoyageDetails clone() {
+	public VoyageDetails copy() {
 		return new VoyageDetails(idleTime, travelTime, speed, startTime, new VoyageOptions(options), fuelConsumption, routeAdditionalConsumption, fuelUnitPrices, //
-				cooldownPerformed, purgePerformed, purgeHours, //
-				getIdleNBOHours(), getTravelNBOHours(), this.idleCharterCost, this.purgeCharterCost, this.travelCharterCost);
+				cooldownPerformed, purgePerformed, //
+				getIdleNBOHours(), getTravelNBOHours(), getRouteAdditionalNBOHours(), this.idleCharterCost, this.purgeCharterCost, this.travelCharterCost, this.travelRanDry,
+				this.routeAdditionalTravelRanDry, this.idleRanDry);
 	}
 
 	public final long getFuelConsumption(final @NonNull FuelKey fuelKey) {
@@ -158,19 +168,22 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 			return speed == d.speed
 				&& cooldownPerformed == d.cooldownPerformed
 				&& purgePerformed == d.purgePerformed
-				&& idleTime ==  d.idleTime
-				&& travelTime ==  d.travelTime
 				&& startTime ==  d.startTime
-				&& purgeHours ==  d.purgeHours
+				&& travelTime ==  d.travelTime
+				&& idleTime ==  d.idleTime
 				&& Objects.equal(options,  d.options)
 				&& Objects.equal(fuelUnitPrices,  d.fuelUnitPrices)
 				&& Objects.equal(fuelConsumption,  d.fuelConsumption)
 				&& Objects.equal(routeAdditionalConsumption,  d.routeAdditionalConsumption)
 				&& Objects.equal(getIdleNBOHours(),  d.getIdleNBOHours())
 				&& Objects.equal(getTravelNBOHours(),  d.getTravelNBOHours())
+				&& Objects.equal(getRouteAdditionalNBOHours(),  d.getRouteAdditionalNBOHours())
 				&& this.idleCharterCost == d.idleCharterCost
 				&& this.purgeCharterCost == d.purgeCharterCost
 				&& this.travelCharterCost == d.travelCharterCost
+				&& this.travelRanDry == d.travelRanDry
+				&& this.routeAdditionalTravelRanDry == d.routeAdditionalTravelRanDry
+				&& this.idleRanDry == d.idleRanDry
 				;
 				// @formatter:on
 		}
@@ -187,7 +200,6 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 				.add("fuelUnitPrices", fuelUnitPrices)
 				.add("cooldownPerformed", cooldownPerformed)
 				.add("purgePerformed", purgePerformed)
-				.add("purgeHours", purgeHours)
 				.add("idleTime", idleTime)
 				.add("travelTime", travelTime)
 				.add("speed", speed)
@@ -197,6 +209,9 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 				.add("idleCharterCost",  getIdleCharterCost())
 				.add("purgeCharterCost",  getPurgeCharterCost())
 				.add("travelCharterCost", getTravelCharterCost())
+				.add("travelRanDry", isTravelRanDry())
+				.add("routeAdditionalTravelRanDry", isRouteAdditionalTravelRanDry())
+				.add("idleRanDry", isIdleRanDry())
 				.toString();
 		// @formatter:on
 	}
@@ -225,20 +240,20 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 		this.travelNBOHours = travelNBOHours;
 	}
 
+	public int getRouteAdditionalNBOHours() {
+		return routeAdditionalNBOHours;
+	}
+
+	public void setRouteAdditionalNBOHours(int routeAdditionalNBOHours) {
+		this.routeAdditionalNBOHours = routeAdditionalNBOHours;
+	}
+
 	public boolean isPurgePerformed() {
 		return purgePerformed;
 	}
 
 	public void setPurgePerformed(boolean purgePerformed) {
 		this.purgePerformed = purgePerformed;
-	}
-
-	public int getPurgeDuration() {
-		return purgeHours;
-	}
-
-	public void setPurgeDuration(int hours) {
-		purgeHours = hours;
 	}
 
 	public long getIdleCharterCost() {
@@ -263,5 +278,42 @@ public final class VoyageDetails implements IDetailsSequenceElement, Cloneable {
 
 	public void setTravelCharterCost(long travelCharterCost) {
 		this.travelCharterCost = travelCharterCost;
+	}
+
+	public boolean isTravelRanDry() {
+		return travelRanDry;
+	}
+
+	public void setTravelRanDry(final boolean travelRanDry) {
+		this.travelRanDry = travelRanDry;
+	}
+
+	public boolean isRouteAdditionalTravelRanDry() {
+		return routeAdditionalTravelRanDry;
+	}
+
+	public void setRouteAdditionalTravelRanDry(final boolean routeAdditionalTravelRanDry) {
+		this.routeAdditionalTravelRanDry = routeAdditionalTravelRanDry;
+	}
+
+	public boolean isIdleRanDry() {
+		return idleRanDry;
+	}
+
+	public void setIdleRanDry(final boolean idleRanDry) {
+		this.idleRanDry = idleRanDry;
+	}
+
+	public void resetRouteAdditionalTravelFuelRequirements(@NonNull final IVessel vessel) {
+		this.setRouteAdditionalNBOHours(0);
+		// Not clearing routeAdditionalConsumption since idle requirements could be set.
+		// At time of writing idle values on routeAdditionalConsumption should not be set.
+		for (final FuelKey fuelKey : LNGFuelKeys.Travel_LNG) {
+			this.setRouteAdditionalConsumption(fuelKey, 0L);
+		}
+		for (final FuelKey fuelKey : vessel.getTravelFuelKeys()) {
+			this.setRouteAdditionalConsumption(fuelKey, 0L);
+		}
+		this.setRouteAdditionalTravelRanDry(false);
 	}
 }

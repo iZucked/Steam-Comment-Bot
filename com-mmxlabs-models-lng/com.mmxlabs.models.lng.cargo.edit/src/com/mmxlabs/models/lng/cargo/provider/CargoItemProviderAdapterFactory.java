@@ -755,6 +755,75 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PanamaSeasonalityRecordItemProvider panamaSeasonalityRecordItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPanamaSeasonalityRecordAdapter() {
+		if (panamaSeasonalityRecordItemProvider == null) {
+			panamaSeasonalityRecordItemProvider = new PanamaSeasonalityRecordItemProvider(this);
+		}
+
+		return panamaSeasonalityRecordItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.GroupedSlotsConstraint} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected GroupedSlotsConstraintItemProvider groupedSlotsConstraintItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.GroupedSlotsConstraint}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createGroupedSlotsConstraintAdapter() {
+		if (groupedSlotsConstraintItemProvider == null) {
+			groupedSlotsConstraintItemProvider = new GroupedSlotsConstraintItemProvider(this);
+		}
+
+		return groupedSlotsConstraintItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.GroupedDischargeSlotsConstraint} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected GroupedDischargeSlotsConstraintItemProvider groupedDischargeSlotsConstraintItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.GroupedDischargeSlotsConstraint}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createGroupedDischargeSlotsConstraintAdapter() {
+		if (groupedDischargeSlotsConstraintItemProvider == null) {
+			groupedDischargeSlotsConstraintItemProvider = new GroupedDischargeSlotsConstraintItemProvider(this);
+		}
+
+		return groupedDischargeSlotsConstraintItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -909,6 +978,9 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 		if (sellPaperDealItemProvider != null) sellPaperDealItemProvider.dispose();
 		if (dealSetItemProvider != null) dealSetItemProvider.dispose();
 		if (vesselGroupCanalParametersItemProvider != null) vesselGroupCanalParametersItemProvider.dispose();
+		if (panamaSeasonalityRecordItemProvider != null) panamaSeasonalityRecordItemProvider.dispose();
+		if (groupedSlotsConstraintItemProvider != null) groupedSlotsConstraintItemProvider.dispose();
+		if (groupedDischargeSlotsConstraintItemProvider != null) groupedDischargeSlotsConstraintItemProvider.dispose();
 	}
 
 }

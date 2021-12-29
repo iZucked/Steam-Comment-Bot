@@ -18,6 +18,9 @@ import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.osgi.framework.FrameworkUtil;
 
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
+
 /**
  * Eclipse e4 command handler to pack columns in parts adapting to a {@link Grid}.
  * 
@@ -41,7 +44,7 @@ public class PackGridHandler {
 
 		final MHandledToolItem element = MMenuFactory.INSTANCE.createHandledToolItem();
 		element.setLabel("Pack");
-		element.setIconURI(FrameworkUtil.getBundle(PackGridHandler.class).getEntry("/icons/pack.gif").toString());
+		element.setIconURI(CommonImages.getImageURI(IconPaths.Pack));
 		final String location = FrameworkUtil.getBundle(PackGridHandler.class).getSymbolicName();
 		element.setContributorURI(location);
 		element.setCommand(command);

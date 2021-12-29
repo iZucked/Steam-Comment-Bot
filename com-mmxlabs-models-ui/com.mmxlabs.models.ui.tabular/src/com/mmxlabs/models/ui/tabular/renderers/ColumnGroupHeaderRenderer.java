@@ -75,7 +75,7 @@ public class ColumnGroupHeaderRenderer extends GridHeaderRenderer {
 
 		gc.setForeground(TableColourPalette.getInstance().getColourFor(TableItems.ColumnGroupHeaders, ColourElements.Foreground));
 		if (!isWordWrap()) {
-			gc.drawString(TextUtils.getShortString(gc, group.getText(), width), getBounds().x + x, getBounds().y + topMargin);
+			gc.drawString(TextUtils.getShortStr(gc, group.getText(), width, SWT.RIGHT), getBounds().x + x, getBounds().y + topMargin);
 		} else {
 			getTextLayout(gc, group);
 			textLayout.setWidth(width < 1 ? 1 : width);
@@ -239,7 +239,7 @@ public class ColumnGroupHeaderRenderer extends GridHeaderRenderer {
 		if (textLayout == null) {
 			textLayout = new TextLayout(gc.getDevice());
 			textLayout.setFont(gc.getFont());
-			group.getParent().addDisposeListener( e -> textLayout.dispose());
+			group.getParent().addDisposeListener(e -> textLayout.dispose());
 		}
 	}
 }

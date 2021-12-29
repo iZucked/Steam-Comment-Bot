@@ -76,13 +76,14 @@ public class ToggleCharterLengthEditorActionDelegate extends ActionDelegate impl
 				final IScenarioServiceEditorInput iScenarioServiceEditorInput = (IScenarioServiceEditorInput) editorInput;
 				final ScenarioInstance instance = iScenarioServiceEditorInput.getScenarioInstance();
 
-				final @NonNull ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
-
-				try (final IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("ToggleCharterLengthEditorActionDelegate")) {
-					this.currentModel = sdp.getTypedScenario(LNGScenarioModel.class);
-					this.currentModel.eAdapters().add(notificationAdapter);
-					this.currentSettings = currentModel.getUserSettings();
-					this.editingDomain = sdp.getEditingDomain();
+				final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+				if (modelRecord != null) {
+					try (final IScenarioDataProvider sdp = modelRecord.aquireScenarioDataProvider("ToggleCharterLengthEditorActionDelegate")) {
+						this.currentModel = sdp.getTypedScenario(LNGScenarioModel.class);
+						this.currentModel.eAdapters().add(notificationAdapter);
+						this.currentSettings = currentModel.getUserSettings();
+						this.editingDomain = sdp.getEditingDomain();
+					}
 				}
 			}
 		}

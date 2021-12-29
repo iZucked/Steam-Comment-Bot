@@ -977,13 +977,113 @@ s	 * <!-- end-user-doc -->
 	int BASE_CASE_ROW__SHIPPING = 3;
 
 	/**
+	 * The feature id for the '<em><b>Optionise</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE_ROW__OPTIONISE = 4;
+
+	/**
+	 * The feature id for the '<em><b>Options</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE_ROW__OPTIONS = 5;
+
+	/**
+	 * The feature id for the '<em><b>Freeze</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE_ROW__FREEZE = 6;
+
+	/**
 	 * The number of structural features of the '<em>Base Case Row</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_CASE_ROW_FEATURE_COUNT = 4;
+	int BASE_CASE_ROW_FEATURE_COUNT = 7;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.BaseCaseRowOptionsImpl <em>Base Case Row Options</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.BaseCaseRowOptionsImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBaseCaseRowOptions()
+	 * @generated
+	 */
+	int BASE_CASE_ROW_OPTIONS = 15;
+
+	/**
+	 * The feature id for the '<em><b>Laden Route</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE_ROW_OPTIONS__LADEN_ROUTE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Route</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE_ROW_OPTIONS__BALLAST_ROUTE = 1;
+
+	/**
+	 * The feature id for the '<em><b>Laden Fuel Choice</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE_ROW_OPTIONS__LADEN_FUEL_CHOICE = 2;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Fuel Choice</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE_ROW_OPTIONS__BALLAST_FUEL_CHOICE = 3;
+
+	/**
+	 * The feature id for the '<em><b>Load Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE_ROW_OPTIONS__LOAD_DATE = 4;
+
+	/**
+	 * The feature id for the '<em><b>Discharge Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE_ROW_OPTIONS__DISCHARGE_DATE = 5;
+
+	/**
+	 * The number of structural features of the '<em>Base Case Row Options</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_CASE_ROW_OPTIONS_FEATURE_COUNT = 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowImpl <em>Partial Case Row</em>}' class.
@@ -993,7 +1093,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPartialCaseRow()
 	 * @generated
 	 */
-	int PARTIAL_CASE_ROW = 15;
+	int PARTIAL_CASE_ROW = 16;
 
 	/**
 	 * The feature id for the '<em><b>Buy Options</b></em>' reference list.
@@ -1032,13 +1132,95 @@ s	 * <!-- end-user-doc -->
 	int PARTIAL_CASE_ROW__SHIPPING = 3;
 
 	/**
+	 * The feature id for the '<em><b>Options</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_CASE_ROW__OPTIONS = 4;
+
+	/**
 	 * The number of structural features of the '<em>Partial Case Row</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTIAL_CASE_ROW_FEATURE_COUNT = 4;
+	int PARTIAL_CASE_ROW_FEATURE_COUNT = 5;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowOptionsImpl <em>Partial Case Row Options</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.PartialCaseRowOptionsImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPartialCaseRowOptions()
+	 * @generated
+	 */
+	int PARTIAL_CASE_ROW_OPTIONS = 17;
+
+	/**
+	 * The feature id for the '<em><b>Laden Routes</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_CASE_ROW_OPTIONS__LADEN_ROUTES = 0;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Routes</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_CASE_ROW_OPTIONS__BALLAST_ROUTES = 1;
+
+	/**
+	 * The feature id for the '<em><b>Laden Fuel Choices</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_CASE_ROW_OPTIONS__LADEN_FUEL_CHOICES = 2;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Fuel Choices</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_CASE_ROW_OPTIONS__BALLAST_FUEL_CHOICES = 3;
+
+	/**
+	 * The feature id for the '<em><b>Load Dates</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_CASE_ROW_OPTIONS__LOAD_DATES = 4;
+
+	/**
+	 * The feature id for the '<em><b>Discharge Dates</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_CASE_ROW_OPTIONS__DISCHARGE_DATES = 5;
+
+	/**
+	 * The number of structural features of the '<em>Partial Case Row Options</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_CASE_ROW_OPTIONS_FEATURE_COUNT = 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ShippingOptionImpl <em>Shipping Option</em>}' class.
@@ -1048,7 +1230,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getShippingOption()
 	 * @generated
 	 */
-	int SHIPPING_OPTION = 16;
+	int SHIPPING_OPTION = 18;
 
 	/**
 	 * The number of structural features of the '<em>Shipping Option</em>' class.
@@ -1067,7 +1249,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSimpleVesselCharterOption()
 	 * @generated
 	 */
-	int SIMPLE_VESSEL_CHARTER_OPTION = 17;
+	int SIMPLE_VESSEL_CHARTER_OPTION = 19;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1140,7 +1322,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptionalSimpleVesselCharterOption()
 	 * @generated
 	 */
-	int OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION = 18;
+	int OPTIONAL_SIMPLE_VESSEL_CHARTER_OPTION = 20;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1267,7 +1449,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getRoundTripShippingOption()
 	 * @generated
 	 */
-	int ROUND_TRIP_SHIPPING_OPTION = 19;
+	int ROUND_TRIP_SHIPPING_OPTION = 21;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1331,7 +1513,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getNominatedShippingOption()
 	 * @generated
 	 */
-	int NOMINATED_SHIPPING_OPTION = 20;
+	int NOMINATED_SHIPPING_OPTION = 22;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1377,7 +1559,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getFullVesselCharterOption()
 	 * @generated
 	 */
-	int FULL_VESSEL_CHARTER_OPTION = 21;
+	int FULL_VESSEL_CHARTER_OPTION = 23;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1423,7 +1605,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getExistingVesselCharterOption()
 	 * @generated
 	 */
-	int EXISTING_VESSEL_CHARTER_OPTION = 22;
+	int EXISTING_VESSEL_CHARTER_OPTION = 24;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1469,7 +1651,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAnalysisResultDetail()
 	 * @generated
 	 */
-	int ANALYSIS_RESULT_DETAIL = 23;
+	int ANALYSIS_RESULT_DETAIL = 25;
 
 	/**
 	 * The number of structural features of the '<em>Analysis Result Detail</em>' class.
@@ -1488,7 +1670,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getProfitAndLossResult()
 	 * @generated
 	 */
-	int PROFIT_AND_LOSS_RESULT = 24;
+	int PROFIT_AND_LOSS_RESULT = 26;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -1516,7 +1698,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenResult()
 	 * @generated
 	 */
-	int BREAK_EVEN_RESULT = 25;
+	int BREAK_EVEN_RESULT = 27;
 
 	/**
 	 * The feature id for the '<em><b>Price</b></em>' attribute.
@@ -1562,7 +1744,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAbstractAnalysisModel()
 	 * @generated
 	 */
-	int ABSTRACT_ANALYSIS_MODEL = 26;
+	int ABSTRACT_ANALYSIS_MODEL = 28;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1644,7 +1826,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptionAnalysisModel()
 	 * @generated
 	 */
-	int OPTION_ANALYSIS_MODEL = 27;
+	int OPTION_ANALYSIS_MODEL = 29;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1771,7 +1953,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBaseCase()
 	 * @generated
 	 */
-	int BASE_CASE = 29;
+	int BASE_CASE = 31;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseImpl <em>Partial Case</em>}' class.
@@ -1781,7 +1963,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPartialCase()
 	 * @generated
 	 */
-	int PARTIAL_CASE = 30;
+	int PARTIAL_CASE = 32;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ExistingCharterMarketOptionImpl <em>Existing Charter Market Option</em>}' class.
@@ -1791,7 +1973,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getExistingCharterMarketOption()
 	 * @generated
 	 */
-	int EXISTING_CHARTER_MARKET_OPTION = 31;
+	int EXISTING_CHARTER_MARKET_OPTION = 33;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.AbstractSolutionSetImpl <em>Abstract Solution Set</em>}' class.
@@ -1801,7 +1983,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getAbstractSolutionSet()
 	 * @generated
 	 */
-	int ABSTRACT_SOLUTION_SET = 32;
+	int ABSTRACT_SOLUTION_SET = 34;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ActionableSetPlanImpl <em>Actionable Set Plan</em>}' class.
@@ -1811,7 +1993,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getActionableSetPlan()
 	 * @generated
 	 */
-	int ACTIONABLE_SET_PLAN = 33;
+	int ACTIONABLE_SET_PLAN = 35;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SlotInsertionOptionsImpl <em>Slot Insertion Options</em>}' class.
@@ -1821,7 +2003,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotInsertionOptions()
 	 * @generated
 	 */
-	int SLOT_INSERTION_OPTIONS = 34;
+	int SLOT_INSERTION_OPTIONS = 36;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SolutionOptionImpl <em>Solution Option</em>}' class.
@@ -1831,7 +2013,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSolutionOption()
 	 * @generated
 	 */
-	int SOLUTION_OPTION = 35;
+	int SOLUTION_OPTION = 37;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ChangeDescriptionImpl <em>Change Description</em>}' class.
@@ -1841,7 +2023,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getChangeDescription()
 	 * @generated
 	 */
-	int CHANGE_DESCRIPTION = 39;
+	int CHANGE_DESCRIPTION = 41;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ChangeImpl <em>Change</em>}' class.
@@ -1851,7 +2033,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getChange()
 	 * @generated
 	 */
-	int CHANGE = 40;
+	int CHANGE = 42;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OpenSlotChangeImpl <em>Open Slot Change</em>}' class.
@@ -1861,7 +2043,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOpenSlotChange()
 	 * @generated
 	 */
-	int OPEN_SLOT_CHANGE = 41;
+	int OPEN_SLOT_CHANGE = 43;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.CargoChangeImpl <em>Cargo Change</em>}' class.
@@ -1871,7 +2053,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCargoChange()
 	 * @generated
 	 */
-	int CARGO_CHANGE = 42;
+	int CARGO_CHANGE = 44;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VesselEventChangeImpl <em>Vessel Event Change</em>}' class.
@@ -1881,7 +2063,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVesselEventChange()
 	 * @generated
 	 */
-	int VESSEL_EVENT_CHANGE = 43;
+	int VESSEL_EVENT_CHANGE = 45;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VesselEventDescriptorImpl <em>Vessel Event Descriptor</em>}' class.
@@ -1891,7 +2073,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVesselEventDescriptor()
 	 * @generated
 	 */
-	int VESSEL_EVENT_DESCRIPTOR = 44;
+	int VESSEL_EVENT_DESCRIPTOR = 46;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SlotDescriptorImpl <em>Slot Descriptor</em>}' class.
@@ -1901,7 +2083,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotDescriptor()
 	 * @generated
 	 */
-	int SLOT_DESCRIPTOR = 45;
+	int SLOT_DESCRIPTOR = 47;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.RealSlotDescriptorImpl <em>Real Slot Descriptor</em>}' class.
@@ -1911,7 +2093,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getRealSlotDescriptor()
 	 * @generated
 	 */
-	int REAL_SLOT_DESCRIPTOR = 46;
+	int REAL_SLOT_DESCRIPTOR = 48;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SpotMarketSlotDescriptorImpl <em>Spot Market Slot Descriptor</em>}' class.
@@ -1921,7 +2103,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSpotMarketSlotDescriptor()
 	 * @generated
 	 */
-	int SPOT_MARKET_SLOT_DESCRIPTOR = 47;
+	int SPOT_MARKET_SLOT_DESCRIPTOR = 49;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.VesselAllocationDescriptorImpl <em>Vessel Allocation Descriptor</em>}' class.
@@ -1931,7 +2113,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVesselAllocationDescriptor()
 	 * @generated
 	 */
-	int VESSEL_ALLOCATION_DESCRIPTOR = 48;
+	int VESSEL_ALLOCATION_DESCRIPTOR = 50;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.MarketVesselAllocationDescriptorImpl <em>Market Vessel Allocation Descriptor</em>}' class.
@@ -1941,7 +2123,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMarketVesselAllocationDescriptor()
 	 * @generated
 	 */
-	int MARKET_VESSEL_ALLOCATION_DESCRIPTOR = 49;
+	int MARKET_VESSEL_ALLOCATION_DESCRIPTOR = 51;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.FleetVesselAllocationDescriptorImpl <em>Fleet Vessel Allocation Descriptor</em>}' class.
@@ -1951,7 +2133,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getFleetVesselAllocationDescriptor()
 	 * @generated
 	 */
-	int FLEET_VESSEL_ALLOCATION_DESCRIPTOR = 50;
+	int FLEET_VESSEL_ALLOCATION_DESCRIPTOR = 52;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.PositionDescriptorImpl <em>Position Descriptor</em>}' class.
@@ -1961,7 +2143,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPositionDescriptor()
 	 * @generated
 	 */
-	int POSITION_DESCRIPTOR = 51;
+	int POSITION_DESCRIPTOR = 53;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OptimisationResultImpl <em>Optimisation Result</em>}' class.
@@ -1971,7 +2153,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getOptimisationResult()
 	 * @generated
 	 */
-	int OPTIMISATION_RESULT = 36;
+	int OPTIMISATION_RESULT = 38;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.DualModeSolutionOptionImpl <em>Dual Mode Solution Option</em>}' class.
@@ -1981,7 +2163,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getDualModeSolutionOption()
 	 * @generated
 	 */
-	int DUAL_MODE_SOLUTION_OPTION = 37;
+	int DUAL_MODE_SOLUTION_OPTION = 39;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2126,7 +2308,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSandboxResult()
 	 * @generated
 	 */
-	int SANDBOX_RESULT = 28;
+	int SANDBOX_RESULT = 30;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -2892,7 +3074,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSolutionOptionMicroCase()
 	 * @generated
 	 */
-	int SOLUTION_OPTION_MICRO_CASE = 38;
+	int SOLUTION_OPTION_MICRO_CASE = 40;
 
 	/**
 	 * The feature id for the '<em><b>Schedule Specification</b></em>' containment reference.
@@ -3262,7 +3444,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getViabilityModel()
 	 * @generated
 	 */
-	int VIABILITY_MODEL = 52;
+	int VIABILITY_MODEL = 54;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -3362,7 +3544,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getViabilityRow()
 	 * @generated
 	 */
-	int VIABILITY_ROW = 53;
+	int VIABILITY_ROW = 55;
 
 	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
@@ -3471,7 +3653,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getViabilityResult()
 	 * @generated
 	 */
-	int VIABILITY_RESULT = 54;
+	int VIABILITY_RESULT = 56;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -3553,7 +3735,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMModel()
 	 * @generated
 	 */
-	int MTM_MODEL = 55;
+	int MTM_MODEL = 57;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -3662,7 +3844,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMResult()
 	 * @generated
 	 */
-	int MTM_RESULT = 56;
+	int MTM_RESULT = 58;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -3735,7 +3917,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getMTMRow()
 	 * @generated
 	 */
-	int MTM_ROW = 57;
+	int MTM_ROW = 59;
 
 	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
@@ -3835,7 +4017,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisModel()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_MODEL = 58;
+	int BREAK_EVEN_ANALYSIS_MODEL = 60;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -3935,7 +4117,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisRow()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_ROW = 59;
+	int BREAK_EVEN_ANALYSIS_ROW = 61;
 
 	/**
 	 * The feature id for the '<em><b>Buy Option</b></em>' reference.
@@ -4017,7 +4199,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisResultSet()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_RESULT_SET = 60;
+	int BREAK_EVEN_ANALYSIS_RESULT_SET = 62;
 
 	/**
 	 * The feature id for the '<em><b>Based On</b></em>' reference.
@@ -4063,7 +4245,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBreakEvenAnalysisResult()
 	 * @generated
 	 */
-	int BREAK_EVEN_ANALYSIS_RESULT = 61;
+	int BREAK_EVEN_ANALYSIS_RESULT = 63;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -4111,6 +4293,34 @@ s	 * <!-- end-user-doc -->
 	int BREAK_EVEN_ANALYSIS_RESULT_FEATURE_COUNT = 4;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.LocalDateTimeHolderImpl <em>Local Date Time Holder</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.LocalDateTimeHolderImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getLocalDateTimeHolder()
+	 * @generated
+	 */
+	int LOCAL_DATE_TIME_HOLDER = 64;
+
+	/**
+	 * The feature id for the '<em><b>Date Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCAL_DATE_TIME_HOLDER__DATE_TIME = 0;
+
+	/**
+	 * The number of structural features of the '<em>Local Date Time Holder</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCAL_DATE_TIME_HOLDER_FEATURE_COUNT = 1;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.VolumeMode <em>Volume Mode</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4118,7 +4328,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVolumeMode()
 	 * @generated
 	 */
-	int VOLUME_MODE = 62;
+	int VOLUME_MODE = 65;
 
 
 	/**
@@ -4129,7 +4339,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotType()
 	 * @generated
 	 */
-	int SLOT_TYPE = 63;
+	int SLOT_TYPE = 66;
 
 
 	/**
@@ -4822,6 +5032,115 @@ s	 * <!-- end-user-doc -->
 	EReference getBaseCaseRow_Shipping();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#isOptionise <em>Optionise</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Optionise</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BaseCaseRow#isOptionise()
+	 * @see #getBaseCaseRow()
+	 * @generated
+	 */
+	EAttribute getBaseCaseRow_Optionise();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#getOptions <em>Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Options</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BaseCaseRow#getOptions()
+	 * @see #getBaseCaseRow()
+	 * @generated
+	 */
+	EReference getBaseCaseRow_Options();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#isFreeze <em>Freeze</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Freeze</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BaseCaseRow#isFreeze()
+	 * @see #getBaseCaseRow()
+	 * @generated
+	 */
+	EAttribute getBaseCaseRow_Freeze();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.BaseCaseRowOptions <em>Base Case Row Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Base Case Row Options</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BaseCaseRowOptions
+	 * @generated
+	 */
+	EClass getBaseCaseRowOptions();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BaseCaseRowOptions#getLadenRoute <em>Laden Route</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Laden Route</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BaseCaseRowOptions#getLadenRoute()
+	 * @see #getBaseCaseRowOptions()
+	 * @generated
+	 */
+	EAttribute getBaseCaseRowOptions_LadenRoute();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BaseCaseRowOptions#getBallastRoute <em>Ballast Route</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ballast Route</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BaseCaseRowOptions#getBallastRoute()
+	 * @see #getBaseCaseRowOptions()
+	 * @generated
+	 */
+	EAttribute getBaseCaseRowOptions_BallastRoute();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BaseCaseRowOptions#getLadenFuelChoice <em>Laden Fuel Choice</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Laden Fuel Choice</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BaseCaseRowOptions#getLadenFuelChoice()
+	 * @see #getBaseCaseRowOptions()
+	 * @generated
+	 */
+	EAttribute getBaseCaseRowOptions_LadenFuelChoice();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BaseCaseRowOptions#getBallastFuelChoice <em>Ballast Fuel Choice</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ballast Fuel Choice</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BaseCaseRowOptions#getBallastFuelChoice()
+	 * @see #getBaseCaseRowOptions()
+	 * @generated
+	 */
+	EAttribute getBaseCaseRowOptions_BallastFuelChoice();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BaseCaseRowOptions#getLoadDate <em>Load Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Load Date</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BaseCaseRowOptions#getLoadDate()
+	 * @see #getBaseCaseRowOptions()
+	 * @generated
+	 */
+	EAttribute getBaseCaseRowOptions_LoadDate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BaseCaseRowOptions#getDischargeDate <em>Discharge Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Discharge Date</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.BaseCaseRowOptions#getDischargeDate()
+	 * @see #getBaseCaseRowOptions()
+	 * @generated
+	 */
+	EAttribute getBaseCaseRowOptions_DischargeDate();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.PartialCaseRow <em>Partial Case Row</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4874,6 +5193,93 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EReference getPartialCaseRow_Shipping();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getOptions <em>Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Options</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.PartialCaseRow#getOptions()
+	 * @see #getPartialCaseRow()
+	 * @generated
+	 */
+	EReference getPartialCaseRow_Options();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.PartialCaseRowOptions <em>Partial Case Row Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Partial Case Row Options</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.PartialCaseRowOptions
+	 * @generated
+	 */
+	EClass getPartialCaseRowOptions();
+
+	/**
+	 * Returns the meta object for the attribute list '{@link com.mmxlabs.models.lng.analytics.PartialCaseRowOptions#getLadenRoutes <em>Laden Routes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Laden Routes</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.PartialCaseRowOptions#getLadenRoutes()
+	 * @see #getPartialCaseRowOptions()
+	 * @generated
+	 */
+	EAttribute getPartialCaseRowOptions_LadenRoutes();
+
+	/**
+	 * Returns the meta object for the attribute list '{@link com.mmxlabs.models.lng.analytics.PartialCaseRowOptions#getBallastRoutes <em>Ballast Routes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Ballast Routes</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.PartialCaseRowOptions#getBallastRoutes()
+	 * @see #getPartialCaseRowOptions()
+	 * @generated
+	 */
+	EAttribute getPartialCaseRowOptions_BallastRoutes();
+
+	/**
+	 * Returns the meta object for the attribute list '{@link com.mmxlabs.models.lng.analytics.PartialCaseRowOptions#getLadenFuelChoices <em>Laden Fuel Choices</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Laden Fuel Choices</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.PartialCaseRowOptions#getLadenFuelChoices()
+	 * @see #getPartialCaseRowOptions()
+	 * @generated
+	 */
+	EAttribute getPartialCaseRowOptions_LadenFuelChoices();
+
+	/**
+	 * Returns the meta object for the attribute list '{@link com.mmxlabs.models.lng.analytics.PartialCaseRowOptions#getBallastFuelChoices <em>Ballast Fuel Choices</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Ballast Fuel Choices</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.PartialCaseRowOptions#getBallastFuelChoices()
+	 * @see #getPartialCaseRowOptions()
+	 * @generated
+	 */
+	EAttribute getPartialCaseRowOptions_BallastFuelChoices();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.PartialCaseRowOptions#getLoadDates <em>Load Dates</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Load Dates</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.PartialCaseRowOptions#getLoadDates()
+	 * @see #getPartialCaseRowOptions()
+	 * @generated
+	 */
+	EReference getPartialCaseRowOptions_LoadDates();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.PartialCaseRowOptions#getDischargeDates <em>Discharge Dates</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Discharge Dates</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.PartialCaseRowOptions#getDischargeDates()
+	 * @see #getPartialCaseRowOptions()
+	 * @generated
+	 */
+	EReference getPartialCaseRowOptions_DischargeDates();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ShippingOption <em>Shipping Option</em>}'.
@@ -6584,6 +6990,27 @@ s	 * <!-- end-user-doc -->
 	EAttribute getBreakEvenAnalysisResult_ReferencePrice();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.LocalDateTimeHolder <em>Local Date Time Holder</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Local Date Time Holder</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.LocalDateTimeHolder
+	 * @generated
+	 */
+	EClass getLocalDateTimeHolder();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.LocalDateTimeHolder#getDateTime <em>Date Time</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Date Time</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.LocalDateTimeHolder#getDateTime()
+	 * @see #getLocalDateTimeHolder()
+	 * @generated
+	 */
+	EAttribute getLocalDateTimeHolder_DateTime();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SolutionOption <em>Solution Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7362,6 +7789,88 @@ s	 * <!-- end-user-doc -->
 		EReference BASE_CASE_ROW__SHIPPING = eINSTANCE.getBaseCaseRow_Shipping();
 
 		/**
+		 * The meta object literal for the '<em><b>Optionise</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BASE_CASE_ROW__OPTIONISE = eINSTANCE.getBaseCaseRow_Optionise();
+
+		/**
+		 * The meta object literal for the '<em><b>Options</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BASE_CASE_ROW__OPTIONS = eINSTANCE.getBaseCaseRow_Options();
+
+		/**
+		 * The meta object literal for the '<em><b>Freeze</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BASE_CASE_ROW__FREEZE = eINSTANCE.getBaseCaseRow_Freeze();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.BaseCaseRowOptionsImpl <em>Base Case Row Options</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.BaseCaseRowOptionsImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBaseCaseRowOptions()
+		 * @generated
+		 */
+		EClass BASE_CASE_ROW_OPTIONS = eINSTANCE.getBaseCaseRowOptions();
+
+		/**
+		 * The meta object literal for the '<em><b>Laden Route</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BASE_CASE_ROW_OPTIONS__LADEN_ROUTE = eINSTANCE.getBaseCaseRowOptions_LadenRoute();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Route</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BASE_CASE_ROW_OPTIONS__BALLAST_ROUTE = eINSTANCE.getBaseCaseRowOptions_BallastRoute();
+
+		/**
+		 * The meta object literal for the '<em><b>Laden Fuel Choice</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BASE_CASE_ROW_OPTIONS__LADEN_FUEL_CHOICE = eINSTANCE.getBaseCaseRowOptions_LadenFuelChoice();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Fuel Choice</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BASE_CASE_ROW_OPTIONS__BALLAST_FUEL_CHOICE = eINSTANCE.getBaseCaseRowOptions_BallastFuelChoice();
+
+		/**
+		 * The meta object literal for the '<em><b>Load Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BASE_CASE_ROW_OPTIONS__LOAD_DATE = eINSTANCE.getBaseCaseRowOptions_LoadDate();
+
+		/**
+		 * The meta object literal for the '<em><b>Discharge Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BASE_CASE_ROW_OPTIONS__DISCHARGE_DATE = eINSTANCE.getBaseCaseRowOptions_DischargeDate();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowImpl <em>Partial Case Row</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -7402,6 +7911,72 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference PARTIAL_CASE_ROW__SHIPPING = eINSTANCE.getPartialCaseRow_Shipping();
+
+		/**
+		 * The meta object literal for the '<em><b>Options</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARTIAL_CASE_ROW__OPTIONS = eINSTANCE.getPartialCaseRow_Options();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowOptionsImpl <em>Partial Case Row Options</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.PartialCaseRowOptionsImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getPartialCaseRowOptions()
+		 * @generated
+		 */
+		EClass PARTIAL_CASE_ROW_OPTIONS = eINSTANCE.getPartialCaseRowOptions();
+
+		/**
+		 * The meta object literal for the '<em><b>Laden Routes</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PARTIAL_CASE_ROW_OPTIONS__LADEN_ROUTES = eINSTANCE.getPartialCaseRowOptions_LadenRoutes();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Routes</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PARTIAL_CASE_ROW_OPTIONS__BALLAST_ROUTES = eINSTANCE.getPartialCaseRowOptions_BallastRoutes();
+
+		/**
+		 * The meta object literal for the '<em><b>Laden Fuel Choices</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PARTIAL_CASE_ROW_OPTIONS__LADEN_FUEL_CHOICES = eINSTANCE.getPartialCaseRowOptions_LadenFuelChoices();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Fuel Choices</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PARTIAL_CASE_ROW_OPTIONS__BALLAST_FUEL_CHOICES = eINSTANCE.getPartialCaseRowOptions_BallastFuelChoices();
+
+		/**
+		 * The meta object literal for the '<em><b>Load Dates</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARTIAL_CASE_ROW_OPTIONS__LOAD_DATES = eINSTANCE.getPartialCaseRowOptions_LoadDates();
+
+		/**
+		 * The meta object literal for the '<em><b>Discharge Dates</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARTIAL_CASE_ROW_OPTIONS__DISCHARGE_DATES = eINSTANCE.getPartialCaseRowOptions_DischargeDates();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ShippingOptionImpl <em>Shipping Option</em>}' class.
@@ -8756,6 +9331,24 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute BREAK_EVEN_ANALYSIS_RESULT__REFERENCE_PRICE = eINSTANCE.getBreakEvenAnalysisResult_ReferencePrice();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.LocalDateTimeHolderImpl <em>Local Date Time Holder</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.LocalDateTimeHolderImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getLocalDateTimeHolder()
+		 * @generated
+		 */
+		EClass LOCAL_DATE_TIME_HOLDER = eINSTANCE.getLocalDateTimeHolder();
+
+		/**
+		 * The meta object literal for the '<em><b>Date Time</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LOCAL_DATE_TIME_HOLDER__DATE_TIME = eINSTANCE.getLocalDateTimeHolder_DateTime();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SolutionOptionImpl <em>Solution Option</em>}' class.

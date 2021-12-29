@@ -138,7 +138,8 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 		final ITimeWindow secondTimeWindow = secondSlot.getTimeWindow();
 		if (firstTimeWindow != null && secondTimeWindow != null) {
 			if (secondTimeWindow.getExclusiveEnd() <= firstTimeWindow.getInclusiveStart()) {
-				messages.add(explain(first, second, resource));
+				if (messages != null)
+					messages.add(explain(first, second, resource));
 				return false;
 			}
 		}

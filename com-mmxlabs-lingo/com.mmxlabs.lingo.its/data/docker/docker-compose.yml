@@ -1,13 +1,13 @@
 version: '3'
 services:
   datahub-basic:
-    image: docker.mmxlabs.com/datahub-v:1.8.1-SNAPSHOT
+    image: docker.mmxlabs.com/datahub-v:1.9.1-SNAPSHOT
     env_file: datahub-basic.env
     ports:
       - 8091:8091
 
   datahub-oauth:
-    image: docker.mmxlabs.com/datahub-v:1.8.1-SNAPSHOT
+    image: docker.mmxlabs.com/datahub-v:1.9.1-SNAPSHOT
     env_file: datahub-oauth.env
     ports:
       - 8090:8090

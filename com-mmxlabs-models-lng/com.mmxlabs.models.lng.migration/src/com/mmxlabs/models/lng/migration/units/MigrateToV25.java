@@ -44,25 +44,9 @@ public class MigrateToV25 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected MetamodelLoader getSourceMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (sourceLoader == null) {
-			sourceLoader = MetamodelVersionsUtil.createV24Loader(extraPackages);
-		}
-		return sourceLoader;
-	}
-
-	@Override
-	protected MetamodelLoader getDestinationMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (destinationLoader == null) {
-			destinationLoader = MetamodelVersionsUtil.createV25Loader(extraPackages);
-		}
-		return destinationLoader;
-	}
-
-	@Override
 	protected void doMigration(final MigrationModelRecord modelRecord) {
 
-		final MetamodelLoader loader = getDestinationMetamodelLoader(null);
+		final MetamodelLoader loader = modelRecord.getMetamodelLoader();
 
 		final EPackage package_ScenarioModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
 

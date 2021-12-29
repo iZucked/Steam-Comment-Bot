@@ -87,14 +87,10 @@ public class MTMSandboxEvaluator {
 
 		// might want different volume for the shipping cost
 		if (target instanceof LoadOption) {
-			final int netbackPrice = slotPricePerMMBTu + shippingCostPerMMBTu;
-
-			return saveResult(netbackPrice, arrivalTime, volumeInMMBTU, shippingCost);
+			return saveResult(slotPricePerMMBTu, arrivalTime, volumeInMMBTU, shippingCost);
 		}
 		if (target instanceof DischargeOption) {
-			final int netbackPrice = slotPricePerMMBTu - shippingCostPerMMBTu;
-
-			return saveResult(netbackPrice, arrivalTime, volumeInMMBTU, shippingCost);
+			return saveResult(slotPricePerMMBTu, arrivalTime, volumeInMMBTU, shippingCost);
 		}
 
 		if (cargoValueAnnotation != null) {

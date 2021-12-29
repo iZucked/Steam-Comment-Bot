@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableList;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequencesAttributesProvider;
 import com.mmxlabs.scheduler.optimiser.cache.IWriteLockable;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterLengthEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionConsumerPortSlot;
@@ -80,9 +81,9 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 	public ScheduledVoyagePlanResult evaluateNonShipped(final IResource resource, final IVesselAvailability vesselAvailability, //
 			final IPortTimesRecord portTimesRecord, //
 			final boolean keepDetails, //
-			@Nullable final IAnnotatedSolution annotatedSolution) {
+			ISequencesAttributesProvider sequencesAttributesProvider, @Nullable final IAnnotatedSolution annotatedSolution) {
 
-		final Pair<VoyagePlan, IAllocationAnnotation> p = voyagePlanner.makeNonShippedVoyagePlan(resource, portTimesRecord, true, annotatedSolution);
+		final Pair<VoyagePlan, IAllocationAnnotation> p = voyagePlanner.makeNonShippedVoyagePlan(resource, portTimesRecord, true, sequencesAttributesProvider, annotatedSolution);
 		final VoyagePlan vp = p.getFirst();
 		final IAllocationAnnotation allocationAnnotation = p.getSecond();
 		assert allocationAnnotation != null;
@@ -99,7 +100,7 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 		assert cargoValueAnnotation != null;
 		final long[] metrics = new long[MetricType.values().length];
 		metrics[MetricType.PNL.ordinal()] += cargoValueAnnotation.getTotalProfitAndLoss();
-		metrics[MetricType.CAPACITY.ordinal()] += vp.getViolationsCount();
+		metrics[MetricType.CAPACITY.ordinal()] += vp.getWeightedVoyagePlanMetrics();
 		metrics[MetricType.COMPULSARY_SLOT.ordinal()] = 0; // Always zero
 
 		final VoyagePlanRecord vpr = new VoyagePlanRecord(vp, cargoValueAnnotation);
@@ -151,6 +152,7 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 			final IPortTimesRecord initialPortTimesRecord, //
 			final boolean returnAll, //
 			final boolean keepDetails, //
+			final ISequencesAttributesProvider sequencesAttributesProvider, //
 			@Nullable final IAnnotatedSolution annotatedSolution) {
 
 		// Some defaults for a round trip
@@ -159,7 +161,7 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 		final boolean lastPlan = true;
 
 		return evaluateShipped(resource, vesselAvailability, charterCostCalculator, vesselStartTime, null, previousHeelRecord, initialPortTimesRecord, lastPlan, returnAll, keepDetails,
-				annotatedSolution);
+				sequencesAttributesProvider, annotatedSolution);
 	}
 
 	@Override
@@ -173,7 +175,7 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 			final boolean lastPlan, //
 			final boolean returnAll, //
 			final boolean keepDetails, //
-			@Nullable final IAnnotatedSolution annotatedSolution) {
+			ISequencesAttributesProvider sequencesAttributesProvider, @Nullable final IAnnotatedSolution annotatedSolution) {
 
 		IWriteLockable.writeLock(initialPortTimesRecord);
 
@@ -284,7 +286,7 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 
 				voyagePlanRecords.add(vpr);
 
-				metrics[MetricType.CAPACITY.ordinal()] += vp.getViolationsCount();
+				metrics[MetricType.CAPACITY.ordinal()] += vp.getWeightedVoyagePlanMetrics();
 				metrics[MetricType.COMPULSARY_SLOT.ordinal()] = 0; // Always zero
 
 				final PreviousHeelRecord planHeelRecord = new PreviousHeelRecord(lastHeelVolumeInM3, lastHeelPricePerMMBTU, lastCV, forcedCooldown);
@@ -348,7 +350,7 @@ public class DefaultVoyagePlanEvaluator implements IVoyagePlanEvaluator {
 		}
 
 		voyagePlanner.makeShippedVoyagePlans(resource, charterCostCalculator, initialPortTimesRecord, heelVolumeRangeInM3, previousHeelRecord.lastCV, lastPlan, returnAll, true, hook,
-				annotatedSolution);
+				sequencesAttributesProvider, annotatedSolution);
 
 		return ImmutableList.copyOf(results);
 

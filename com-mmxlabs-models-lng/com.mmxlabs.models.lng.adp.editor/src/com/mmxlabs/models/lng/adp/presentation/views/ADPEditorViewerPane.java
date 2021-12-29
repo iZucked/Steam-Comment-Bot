@@ -47,10 +47,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.google.common.base.Objects;
 import com.mmxlabs.license.features.KnownFeatures;
@@ -70,6 +68,9 @@ import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IValidationService;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -90,7 +91,7 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 
 	@Override
 	public Viewer createViewer(final Composite parent) {
-		imgError = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/error.gif").createImage();
+		imgError = CommonImages.getImageDescriptor(IconPaths.Error, IconMode.Enabled).createImage();
 
 		editorData = new ADPEditorData(this.scenarioEditingLocation);
 
@@ -127,7 +128,10 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 				{
 					deleteScenarioButton = new Button(toolbarComposite, SWT.PUSH);
 					// deleteScenarioButton.setText("X");
-					deleteScenarioButton.setImage(PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ETOOL_DELETE));
+
+					final Image img = CommonImages.getImageDescriptor(IconPaths.Delete, IconMode.Enabled).createImage();
+					deleteScenarioButton.addDisposeListener(e -> img.dispose());
+					deleteScenarioButton.setImage(img);
 					deleteScenarioButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.END, SWT.CENTER).create());
 
 					deleteScenarioButton.setToolTipText("Delete current ADP");
@@ -459,7 +463,7 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 		final MMXRootObject rootObject = scenarioDataProvider.getTypedScenario(MMXRootObject.class);
 		final IStatus status = ServiceHelper.withOptionalService(IValidationService.class, helper -> {
 			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(scenarioDataProvider, false, false);
-			return helper.runValidation(validator, extraContext, rootObject);
+			return helper.runValidation(validator, extraContext, rootObject, null);
 		});
 
 		if (status == null) {

@@ -30,7 +30,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Injector;
 import com.google.inject.name.Named;
-import com.mmxlabs.common.concurrent.CleanableExecutorService;
+import com.mmxlabs.common.concurrent.JobExecutorFactory;
 import com.mmxlabs.models.lng.adp.ContractProfile;
 import com.mmxlabs.models.lng.adp.PeriodDistribution;
 import com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint;
@@ -65,12 +65,12 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.util.MonthlyDistributionConstraint.Row;
 import com.mmxlabs.scheduler.optimiser.providers.ConstraintInfo;
+import com.mmxlabs.scheduler.optimiser.providers.ConstraintInfo.ViolationType;
 import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.ConstraintInfo.ViolationType;
 
 public class LightWeightOptimisationDataFactory {
 
@@ -103,9 +103,9 @@ public class LightWeightOptimisationDataFactory {
 	private Injector injector;
 
 	public ILightWeightOptimisationData createLightWeightOptimisationData(final IVesselAvailability pnlVessel, final LoadDischargePairValueCalculatorStep calculator,
-			final CleanableExecutorService executorService, final IProgressMonitor monitor) {
+			final JobExecutorFactory jobExecutorFactory, final IProgressMonitor monitor) {
 		// get the slot pairing matrix as a sparse binary matrix (sum of each row and column <= 1)
-		final boolean[][] pairingsMatrix = createSlotPairingMatrix(pnlVessel, calculator, executorService, monitor);
+		final boolean[][] pairingsMatrix = createSlotPairingMatrix(pnlVessel, calculator, jobExecutorFactory, monitor);
 
 		if (pairingsMatrix == null) {
 			return null;
@@ -194,10 +194,10 @@ public class LightWeightOptimisationDataFactory {
 		return lightWeightOptimisationData;
 	}
 
-	public ISequences createNominalADP(final IVesselAvailability pnlVessel, final LoadDischargePairValueCalculatorStep calculator, final CleanableExecutorService executorService,
+	public ISequences createNominalADP(final IVesselAvailability pnlVessel, final LoadDischargePairValueCalculatorStep calculator, final JobExecutorFactory jobExecutorFactory,
 			final IProgressMonitor monitor) {
 		// get the slot pairing matrix as a sparse binary matrix (sum of each row and column <= 1)
-		final boolean[][] pairingsMatrix = createSlotPairingMatrix(pnlVessel, calculator, executorService, monitor);
+		final boolean[][] pairingsMatrix = createSlotPairingMatrix(pnlVessel, calculator, jobExecutorFactory, monitor);
 
 		if (pairingsMatrix == null) {
 			return null;
@@ -342,7 +342,7 @@ public class LightWeightOptimisationDataFactory {
 	 * @param monitor
 	 * @return
 	 */
-	public boolean[][] createSlotPairingMatrix(final IVesselAvailability pnlVessel, final LoadDischargePairValueCalculatorStep calculator, final CleanableExecutorService executorService,
+	public boolean[][] createSlotPairingMatrix(final IVesselAvailability pnlVessel, final LoadDischargePairValueCalculatorStep calculator, final JobExecutorFactory jobExecutorFactory,
 			final IProgressMonitor monitor) {
 		// (1) Identify LT slots
 		@NonNull
@@ -353,7 +353,7 @@ public class LightWeightOptimisationDataFactory {
 		optimiserRecorder.init(longtermLoads, longTermDischarges);
 
 		// (2) Generate Slot to Slot bindings matrix for LT slots
-		calculator.run(pnlVessel, optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), new ProfitAndLossExtractor(optimiserRecorder), executorService, monitor,
+		calculator.run(pnlVessel, optimiserRecorder.getSortedLoads(), optimiserRecorder.getSortedDischarges(), new ProfitAndLossExtractor(optimiserRecorder), jobExecutorFactory, monitor,
 				getAllVessels());
 
 		// (3) Optimise matrix
