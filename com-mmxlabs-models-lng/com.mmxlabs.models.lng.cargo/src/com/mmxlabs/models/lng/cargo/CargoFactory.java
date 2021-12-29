@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo;
 
+import com.mmxlabs.models.lng.commercial.Contract;
 import org.eclipse.emf.ecore.EFactory;
 
 /**
@@ -292,6 +293,24 @@ public interface CargoFactory extends EFactory {
 	 * @generated
 	 */
 	PanamaSeasonalityRecord createPanamaSeasonalityRecord();
+
+	/**
+	 * Returns a new object of class '<em>Grouped Slots Constraint</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Grouped Slots Constraint</em>'.
+	 * @generated
+	 */
+	<U extends Contract, T extends Slot<U>> GroupedSlotsConstraint<U, T> createGroupedSlotsConstraint();
+
+	/**
+	 * Returns a new object of class '<em>Grouped Discharge Slots Constraint</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Grouped Discharge Slots Constraint</em>'.
+	 * @generated
+	 */
+	GroupedDischargeSlotsConstraint createGroupedDischargeSlotsConstraint();
 
 	/**
 	 * Returns the package supported by this factory.

@@ -136,8 +136,16 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createBaseCaseRowAdapter();
 			}
 			@Override
+			public Adapter caseBaseCaseRowOptions(BaseCaseRowOptions object) {
+				return createBaseCaseRowOptionsAdapter();
+			}
+			@Override
 			public Adapter casePartialCaseRow(PartialCaseRow object) {
 				return createPartialCaseRowAdapter();
+			}
+			@Override
+			public Adapter casePartialCaseRowOptions(PartialCaseRowOptions object) {
+				return createPartialCaseRowOptionsAdapter();
 			}
 			@Override
 			public Adapter caseShippingOption(ShippingOption object) {
@@ -322,6 +330,10 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseBreakEvenAnalysisResult(BreakEvenAnalysisResult object) {
 				return createBreakEvenAnalysisResultAdapter();
+			}
+			@Override
+			public Adapter caseLocalDateTimeHolder(LocalDateTimeHolder object) {
+				return createLocalDateTimeHolderAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -566,6 +578,20 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.BaseCaseRowOptions <em>Base Case Row Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.BaseCaseRowOptions
+	 * @generated
+	 */
+	public Adapter createBaseCaseRowOptionsAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.PartialCaseRow <em>Partial Case Row</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -576,6 +602,20 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPartialCaseRowAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.PartialCaseRowOptions <em>Partial Case Row Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.PartialCaseRowOptions
+	 * @generated
+	 */
+	public Adapter createPartialCaseRowOptionsAdapter() {
 		return null;
 	}
 
@@ -1164,6 +1204,20 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createBreakEvenAnalysisResultAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.LocalDateTimeHolder <em>Local Date Time Holder</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.LocalDateTimeHolder
+	 * @generated
+	 */
+	public Adapter createLocalDateTimeHolderAdapter() {
 		return null;
 	}
 

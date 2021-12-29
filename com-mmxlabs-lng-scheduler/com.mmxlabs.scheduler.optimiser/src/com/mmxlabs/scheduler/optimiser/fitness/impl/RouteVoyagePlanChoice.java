@@ -12,13 +12,15 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
 /**
- * Implementation of {@link IVoyagePlanChoice} to change the route used between ports.
+ * Implementation of {@link IVoyagePlanChoice} to change the route used between
+ * ports.
  * 
  * @author Simon Goodall
  * 
@@ -39,14 +41,18 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 
 	private int voyageStartTime;
 
+	private int panamaIdleHours;
+
 	public RouteVoyagePlanChoice(@Nullable final VoyageOptions previousOptions, @NonNull final VoyageOptions options, @NonNull final List<@NonNull DistanceMatrixEntry> routeOptions,
-			@NonNull final IVessel vessel, int voyageStartTime, @NonNull final IRouteCostProvider routeCostProvider) {
+			@NonNull final IVessel vessel, int voyageStartTime, @NonNull final IRouteCostProvider routeCostProvider, int panamaIdleHours) {
 		this.previousOptions = previousOptions;
 		this.options = options;
 		this.routeOptions = routeOptions;
 		this.vessel = vessel;
 		this.voyageStartTime = voyageStartTime;
 		this.routeCostProvider = routeCostProvider;
+		this.panamaIdleHours = panamaIdleHours;
+		assert panamaIdleHours >= 0;
 	}
 
 	@Override
@@ -104,7 +110,7 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 
 		final long routeCost = routeCostProvider.getRouteCost(entry.getRoute(), options.getFromPortSlot().getPort(), options.getToPortSlot().getPort(), vessel, voyageStartTime, costType);
 
-		options.setRoute(entry.getRoute(), entry.getDistance(), routeCost);
+		options.setRoute(entry.getRoute(), entry.getDistance(), routeCost, entry.getRoute() == ERouteOption.PANAMA ? panamaIdleHours : 0);
 
 		return true;
 

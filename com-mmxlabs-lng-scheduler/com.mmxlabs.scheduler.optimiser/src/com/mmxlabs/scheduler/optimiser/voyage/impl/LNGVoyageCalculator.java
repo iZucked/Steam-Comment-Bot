@@ -46,6 +46,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IScheduledPurgeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelKey;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
@@ -139,31 +140,27 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		 * by an alternative route.
 		 */
 		final int additionalRouteTimeInHours = routeCostProvider.getRouteTransitTime(options.getRoute(), vessel);
-		final int extraIdleTime = options.getExtraIdleTime();
-
+		final int extraIdleTime = options.getTotalExtraIdleTime();
+		final int panamaIdle = options.getPanamaIdleHours();
 		/**
 		 * How much time is available to cover the distance, excluding time which must
 		 * be spent traversing any canals
 		 */
-		final int availableTimeInHours = options.getAvailableTime() - additionalRouteTimeInHours - extraIdleTime;
+		final int availableTimeInHours = options.getAvailableTime() - additionalRouteTimeInHours - extraIdleTime - panamaIdle;
 
 		// Calculate the appropriate speed
 		final int speed = calculateSpeed(options, availableTimeInHours);
 		output.setSpeed(speed);
 
 		// Check purge
-		int purgeTime = 0;
+		int purgeTime = options.getExtraIdleTime(ExplicitIdleTime.PURGE);
 
 		if (purgeSchedulingEnabled) {
 			if (options.getFromPortSlot().getPortType() == PortType.DryDock) {
-				purgeTime = vessel.getPurgeTime();
 				output.setPurgePerformed(true);
-				output.setPurgeDuration(purgeTime);
 			} else if (options.getToPortSlot().getPortType() == PortType.Load) {
 				if (scheduledPurgeProvider.isPurgeScheduled(options.getToPortSlot())) {
-					purgeTime = vessel.getPurgeTime();
 					output.setPurgePerformed(true);
-					output.setPurgeDuration(purgeTime);
 				}
 			}
 		}
@@ -174,7 +171,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		final int travelTimeInHours = speed == 0 ? 0 : Calculator.getTimeFromSpeedDistance(speed, distance);
 		// If idle time is negative, then there is not enough time for this voyage! This
 		// should be caught by the caller
-		final int idleTimeInHours = extraIdleTime + Math.max(0, availableTimeInHours - travelTimeInHours) - purgeTime;
+		// Take off purge time - not idle, not travel, it is another block of time.
+		final int idleTimeInHours = extraIdleTime + panamaIdle + Math.max(0, availableTimeInHours - travelTimeInHours) - purgeTime;
 
 		// We output travel time + canal time, but the calculations
 		// below only need to care about travel time
@@ -1092,7 +1090,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 				// Calculate purge charter cost.
 				eventStartTime = time;
-				duration = details.getPurgeDuration();
+				duration = details.getOptions().getExtraIdleTime(ExplicitIdleTime.PURGE);
 				charterCost = charterCostCalculator.getCharterCost(voyagePlanStartTimeUTC, eventStartTime, duration);
 				details.setPurgeCharterCost(charterCost);
 				time += duration;
@@ -1554,7 +1552,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * 
 	 */
 	@Override
-	public final List<IDetailsSequenceElement> generateFuelCostCalculatedSequence(final IVessel vessel, final CargoRunDryMode cargoRunDry, final long[] startHeelInM3, final IOptionsSequenceElement... baseSequence) {
+	public final List<IDetailsSequenceElement> generateFuelCostCalculatedSequence(final IVessel vessel, final CargoRunDryMode cargoRunDry, final long[] startHeelInM3,
+			final IOptionsSequenceElement... baseSequence) {
 		final List<IDetailsSequenceElement> result = new ArrayList<>(baseSequence.length);
 
 		boolean incNBO = false;
@@ -1567,9 +1566,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 			// Loop through basic elements, calculating voyage requirements
 			// to build up basic voyage plan details.
-			if (element instanceof VoyageOptions) {
-				final VoyageOptions options = (VoyageOptions) element;
-
+			if (element instanceof VoyageOptions options) {
 				final VoyageDetails voyageDetails = new VoyageDetails(options);
 				// Calculate voyage cost
 				nboAvailableInM3 = calculateVoyageFuelRequirements(options, voyageDetails, nboAvailableInM3);
@@ -1580,15 +1577,14 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					}
 				}
 				result.add(voyageDetails);
-			} else if (element instanceof PortOptions) {
-				final PortOptions options = ((PortOptions) element).copy();
+			} else if (element instanceof PortOptions originalOptions) {
+				final PortOptions options = originalOptions.copy();
 
 				final PortDetails details = new PortDetails(options);
 				calculatePortFuelRequirements(options, details);
 
 				if (idx == 0) {
-					if (options.getPortSlot() instanceof IHeelOptionSupplierPortSlot) {
-						final IHeelOptionSupplierPortSlot heelOptionSupplierPortSlot = (IHeelOptionSupplierPortSlot) options.getPortSlot();
+					if (options.getPortSlot()instanceof IHeelOptionSupplierPortSlot heelOptionSupplierPortSlot) {
 						// This enables "running dry"
 						nboAvailableInM3 = heelOptionSupplierPortSlot.getHeelOptionsSupplier().getMaximumHeelAvailableInM3();
 					}

@@ -17,6 +17,7 @@ import org.eclipse.ui.views.properties.IPropertySourceProvider;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView;
+import com.mmxlabs.models.lng.analytics.ui.views.SandboxScenario;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.rcp.common.editors.IPartGotoTarget;
 
@@ -73,18 +74,23 @@ public class AnalyticsModelEditorContribution extends BaseJointModelEditorContri
 			// }
 
 			// Activate change set view
-			final MPart part = partService.showPart("com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView", PartState.ACTIVATE);
-			if (part != null && part.getObject() != null) {
-				Object oPart = part.getObject();
-				if (oPart instanceof CompatibilityView) {
-					oPart = ((CompatibilityView) oPart).getView();
-
-				}
-				if (oPart instanceof OptionModellerView) {
-					final OptionModellerView sandboxView = (OptionModellerView) oPart;
-					sandboxView.setInput(optionAnalysisModel);
-				}
-			}
+//			final MPart part = partService.showPart("com.mmxlabs.models.lng.analytics.ui.views.OptionModellerView", PartState.ACTIVATE);
+//			if (part != null && part.getObject() != null) {
+//				Object oPart = part.getObject();
+//				if (oPart instanceof CompatibilityView) {
+//					oPart = ((CompatibilityView) oPart).getView();
+//
+//				}
+//				if (oPart instanceof OptionModellerView) {
+//					final OptionModellerView sandboxView = (OptionModellerView) oPart;
+//					
+//					SandboxScenario ss = new SandboxScenario(instance, optionAnalysisModel);
+//
+//					
+//					sandboxView.setInput(optionAnalysisModel);
+//					sandboxView.openSandboxScenario(ss);
+//				}
+//			}
 		}
 
 	}

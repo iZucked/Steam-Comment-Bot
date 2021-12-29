@@ -14,6 +14,8 @@ package com.mmxlabs.models.lng.schedule;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Idle#isLaden <em>Laden</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Idle#getBufferHours <em>Buffer Hours</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Idle#getPanamaHours <em>Panama Hours</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Idle#getContingencyHours <em>Contingency Hours</em>}</li>
  * </ul>
  *
@@ -48,6 +50,50 @@ public interface Idle extends Event, FuelUsage {
 	 * @generated
 	 */
 	void setLaden(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Buffer Hours</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Buffer Hours</em>' attribute.
+	 * @see #setBufferHours(int)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getIdle_BufferHours()
+	 * @model
+	 * @generated
+	 */
+	int getBufferHours();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Idle#getBufferHours <em>Buffer Hours</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Buffer Hours</em>' attribute.
+	 * @see #getBufferHours()
+	 * @generated
+	 */
+	void setBufferHours(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Panama Hours</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Panama Hours</em>' attribute.
+	 * @see #setPanamaHours(int)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getIdle_PanamaHours()
+	 * @model
+	 * @generated
+	 */
+	int getPanamaHours();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Idle#getPanamaHours <em>Panama Hours</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Panama Hours</em>' attribute.
+	 * @see #getPanamaHours()
+	 * @generated
+	 */
+	void setPanamaHours(int value);
 
 	/**
 	 * Returns the value of the '<em><b>Contingency Hours</b></em>' attribute.

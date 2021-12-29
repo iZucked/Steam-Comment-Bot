@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EStructuralFeature.Setting;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil;
@@ -51,26 +52,16 @@ public class MigrateToV2 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected MetamodelLoader getSourceMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (sourceLoader == null) {
-			sourceLoader = MetamodelVersionsUtil.createV1Loader(extraPackages);
-		}
-		return sourceLoader;
-	}
-
-	@Override
-	protected MetamodelLoader getDestinationMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (destinationLoader == null) {
-			destinationLoader = MetamodelVersionsUtil.createV1_V2_IntermediateLoader(extraPackages);
-		}
-		return destinationLoader;
+	protected MetamodelLoader createMetamodelLoader(@Nullable Map<URI, PackageData> extraPackages) {
+		return MetamodelVersionsUtil.createV1_V2_IntermediateLoader(extraPackages);
 	}
 
 	@Override
 	protected void doMigration(final MigrationModelRecord modelRecord) {
 
 		// This should get the cached loader instance
-		final MetamodelLoader loader = getDestinationMetamodelLoader(null);
+		final MetamodelLoader loader = modelRecord.getMetamodelLoader();
+		
 		final EObjectWrapper model = modelRecord.getModelRoot();
 
 		fixSpotMarketGroups(loader, model);
@@ -150,8 +141,10 @@ public class MigrateToV2 extends AbstractMigrationUnit {
 	}
 
 	/**
-	 * Update the commodity and charter indices data structures and replace references to these objects. This requires an intermediate ecore model set where we use UUIDObject references rather than
-	 * real type so we can load both versions of the data model under the saem ecore.
+	 * Update the commodity and charter indices data structures and replace
+	 * references to these objects. This requires an intermediate ecore model set
+	 * where we use UUIDObject references rather than real type so we can load both
+	 * versions of the data model under the saem ecore.
 	 * 
 	 * @return
 	 */

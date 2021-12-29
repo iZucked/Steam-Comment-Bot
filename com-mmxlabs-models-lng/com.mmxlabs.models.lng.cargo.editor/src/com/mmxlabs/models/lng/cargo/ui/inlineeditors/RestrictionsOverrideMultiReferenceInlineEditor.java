@@ -46,6 +46,9 @@ import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.BasicAttributeInlineEditor;
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
 
 /**
@@ -104,7 +107,7 @@ public class RestrictionsOverrideMultiReferenceInlineEditor extends BasicAttribu
 			label.setLayoutData(gd);
 		}
 
-		final ImageDescriptor d = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui", "icons/edit.png");
+		final ImageDescriptor d = CommonImages.getImageDescriptor(IconPaths.Edit, IconMode.Enabled);
 		button = toolkit.createButton(buttonAndLabel, "", SWT.NONE);
 		final Image img = d.createImage();
 		button.setImage(img);

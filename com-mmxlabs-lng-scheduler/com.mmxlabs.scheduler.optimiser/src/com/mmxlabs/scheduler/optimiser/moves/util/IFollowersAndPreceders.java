@@ -4,16 +4,15 @@
  */
 package com.mmxlabs.scheduler.optimiser.moves.util;
 
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.providers.Followers;
 
+@NonNullByDefault
 public interface IFollowersAndPreceders {
 
-	@NonNull
-	Followers<@NonNull  ISequenceElement> getValidFollowers(@NonNull ISequenceElement e);
+	Followers<ISequenceElement> getValidFollowers(ISequenceElement e);
 
-	@NonNull
-	Followers<@NonNull  ISequenceElement> getValidPreceders(@NonNull ISequenceElement e);
+	Followers<ISequenceElement> getValidPreceders(ISequenceElement e);
 }

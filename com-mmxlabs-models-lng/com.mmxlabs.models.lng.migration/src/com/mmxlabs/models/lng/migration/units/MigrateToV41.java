@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.migration.units;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
-import com.mmxlabs.models.migration.MigrationModelRecord;
 
 public class MigrateToV41 extends AbstractMigrationUnit {
 
@@ -24,9 +23,4 @@ public class MigrateToV41 extends AbstractMigrationUnit {
 	public int getScenarioDestinationVersion() {
 		return 41;
 	}
-
-	@Override
-	protected void doMigration(final MigrationModelRecord modelRecord) {
-	}
-
 }

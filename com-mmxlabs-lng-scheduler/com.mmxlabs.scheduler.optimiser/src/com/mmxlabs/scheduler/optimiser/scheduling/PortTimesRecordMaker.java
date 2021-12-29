@@ -17,6 +17,7 @@ import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.optimiser.core.ISequencesAttributesProvider;
 import com.mmxlabs.scheduler.optimiser.cache.IWriteLockable;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
@@ -37,13 +38,17 @@ import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvid
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.schedule.ICustomNonShippedScheduler;
+import com.mmxlabs.scheduler.optimiser.sequenceproviders.IVoyageSpecificationProvider;
+import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 
 /**
- * The {@link PortTimesRecordMaker} creates the initial {@link IPortTimesRecord}s for a {@link ISequence} and a provided arrival time array from an {@link ISequenceScheduler}
+ * The {@link PortTimesRecordMaker} creates the initial
+ * {@link IPortTimesRecord}s for a {@link ISequence} and a provided arrival time
+ * array from an {@link ISequenceScheduler}
  */
 public class PortTimesRecordMaker {
 
@@ -69,14 +74,16 @@ public class PortTimesRecordMaker {
 	private IElementDurationProvider durationProvider;
 
 	/**
-	 * This method replaces the normal shipped cargo calculation path with one specific to DES purchase or FOB sale cargoes. However this currently merges in behaviour from other classes - such as
-	 * scheduling and volume allocation - which should really stay in those other classes.
+	 * This method replaces the normal shipped cargo calculation path with one
+	 * specific to DES purchase or FOB sale cargoes. However this currently merges
+	 * in behaviour from other classes - such as scheduling and volume allocation -
+	 * which should really stay in those other classes.
 	 * 
 	 * @param resource
 	 * @param sequence
 	 * @return
 	 */
-	public final @Nullable IPortTimesRecord makeDESOrFOBPortTimesRecord(final @NonNull IResource resource, final @NonNull ISequence sequence) {
+	public final @Nullable IPortTimesRecord makeDESOrFOBPortTimesRecord(final @NonNull IResource resource, final @NonNull ISequence sequence, ISequencesAttributesProvider sequencesAttributesProvider) {
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
@@ -100,6 +107,8 @@ public class PortTimesRecordMaker {
 			}
 		}
 
+		IVoyageSpecificationProvider voyageSpecProvider = sequencesAttributesProvider.getProvider(IVoyageSpecificationProvider.class);
+
 		boolean startSet = false;
 		int startTime = 0;
 		for (final ISequenceElement element : sequence) {
@@ -115,7 +124,9 @@ public class PortTimesRecordMaker {
 			// Set duration to get correct slot order in port times
 			final int loadDuration = durationProvider.getElementDuration(portSlotProvider.getElement(thisPortSlot));
 			portTimesRecord.setSlotDuration(thisPortSlot, loadDuration);
-			portTimesRecord.setSlotExtraIdleTime(thisPortSlot, 0);
+			for (var type : ExplicitIdleTime.values()) {
+				portTimesRecord.setSlotExtraIdleTime(thisPortSlot, type, 0);
+			}
 
 			// Determine transfer time
 			if (!startSet && !(thisPortSlot instanceof StartPortSlot)) {
@@ -134,15 +145,23 @@ public class PortTimesRecordMaker {
 						if (actualsDataProvider.hasActuals(thisPortSlot)) {
 							startTime = actualsDataProvider.getArrivalTime(thisPortSlot);
 						} else {
-							if (localisedPort != null && !(loadOption instanceof ILoadSlot)) {
-								final ITimeWindow tw = loadOption.getLocalisedTimeWindowForPort(localisedPort);
-								if (tw != null) {
-									timeWindow = tw;
-								}
+							Integer timeOverride = null;
+							if (voyageSpecProvider != null) {
+								timeOverride = voyageSpecProvider.getArrivalTime(thisPortSlot);
 							}
+							if (timeOverride != null) {
+								startTime = Math.max(timeOverride, startTime);
+							} else {
+								if (localisedPort != null && !(loadOption instanceof ILoadSlot)) {
+									final ITimeWindow tw = loadOption.getLocalisedTimeWindowForPort(localisedPort);
+									if (tw != null) {
+										timeWindow = tw;
+									}
+								}
 
-							final int windowStart = timeWindow.getInclusiveStart();
-							startTime = Math.max(windowStart, startTime);
+								final int windowStart = timeWindow.getInclusiveStart();
+								startTime = Math.max(windowStart, startTime);
+							}
 						}
 					}
 				}
@@ -150,20 +169,29 @@ public class PortTimesRecordMaker {
 					final IDischargeOption dischargeOption = (IDischargeOption) thisPortSlot;
 					if (actualsDataProvider.hasActuals(thisPortSlot)) {
 						startTime = actualsDataProvider.getArrivalTime(thisPortSlot);
+
 					} else {
-						// Divertible FOB has sales time window
-						// TODO: Consider ship days restriction...
-						if (!shippingHoursRestrictionProvider.isDivertible(element)) {
+						Integer timeOverride = null;
+						if (voyageSpecProvider != null) {
+							timeOverride = voyageSpecProvider.getArrivalTime(thisPortSlot);
+						}
+						if (timeOverride != null) {
+							startTime = Math.max(timeOverride, startTime);
+						} else {
+							// Divertible FOB has sales time window
+							// TODO: Consider ship days restriction...
+							if (!shippingHoursRestrictionProvider.isDivertible(element)) {
 
-							if (localisedPort != null && !(dischargeOption instanceof IDischargeSlot)) {
-								final ITimeWindow tw = dischargeOption.getLocalisedTimeWindowForPort(localisedPort);
-								if (tw != null) {
-									timeWindow = tw;
+								if (localisedPort != null && !(dischargeOption instanceof IDischargeSlot)) {
+									final ITimeWindow tw = dischargeOption.getLocalisedTimeWindowForPort(localisedPort);
+									if (tw != null) {
+										timeWindow = tw;
+									}
 								}
-							}
 
-							final int windowStart = timeWindow.getInclusiveStart();
-							startTime = Math.max(windowStart, startTime);
+								final int windowStart = timeWindow.getInclusiveStart();
+								startTime = Math.max(windowStart, startTime);
+							}
 						}
 					}
 				}
@@ -195,8 +223,10 @@ public class PortTimesRecordMaker {
 	}
 
 	/**
-	 * Returns a list of voyage plans based on breaking up a sequence of vessel real or virtual destinations into single conceptual cargo voyages. (used by the price scheduler) Works out the earliest
-	 * arrival time within the trimmed window based on distances/travel time and previous arrivals.
+	 * Returns a list of voyage plans based on breaking up a sequence of vessel real
+	 * or virtual destinations into single conceptual cargo voyages. (used by the
+	 * price scheduler) Works out the earliest arrival time within the trimmed
+	 * window based on distances/travel time and previous arrivals.
 	 * 
 	 * @param resource
 	 * @param sequence
@@ -237,21 +267,21 @@ public class PortTimesRecordMaker {
 				portTimesRecord.setRouteOptionBooking(slot, record.getRouteOptionBooking(slot));
 				portTimesRecord.setSlotNextVoyageOptions(slot, record.getSlotNextVoyageOptions(slot));
 
-				final int visitDuration = record.getSlotDuration(slot);
-				final int extraIdleTime = record.getSlotExtraIdleTime(slot);
-
 				// Pick based on earliest time
 				final int arrivalTime = Math.max(record.getSlotFeasibleTimeWindow(slot).getInclusiveStart(), lastNextExpectedArrivalTime);
 
 				assert !actualsDataProvider.hasActuals(slot) || actualsDataProvider.getArrivalTime(slot) == arrivalTime;
 
 				portTimesRecord.setSlotTime(slot, arrivalTime);
-				portTimesRecord.setSlotDuration(slot, visitDuration);
-				portTimesRecord.setSlotExtraIdleTime(slot, extraIdleTime);
+				portTimesRecord.setSlotDuration(slot, record.getSlotDuration(slot));
+				for (var type : ExplicitIdleTime.values()) {
+					portTimesRecord.setSlotExtraIdleTime(slot, type, record.getSlotExtraIdleTime(slot, type));
+				}
 				// What is the next travel time?
 				lastNextExpectedArrivalTime = arrivalTime + /* visitDuration already included in min travel time + */travelTimeData.getMinTravelTime(record.getIndex(slot));
 
-				// These parts update records from the previous iteration on the first slot only.
+				// These parts update records from the previous iteration on the first slot
+				// only.
 				if (recordToUpdateReturnTime != null) {
 					recordToUpdateReturnTime.setReturnSlotTime(slot, arrivalTime);
 					recordToUpdateReturnTime = null;
@@ -285,7 +315,7 @@ public class PortTimesRecordMaker {
 							record.getSlotNextVoyageOptions(prevPortSlot) //
 					).getSecond();
 					final int roundTripReturnArrivalTime = prevArrivalTime + prevVisitDuration + availableTime //
-							+ prevPanamaIdleTime + record.getSlotExtraIdleTime(prevPortSlot);
+							+ prevPanamaIdleTime + record.getSlotTotalExtraIdleTime(prevPortSlot);
 
 					portTimesRecord.setReturnSlotTime(returnSlot, roundTripReturnArrivalTime);
 					updatePortTimesRecordWithPanamaRestrictions(distanceProvider, vesselAvailability.getVessel(), record, portTimesRecord);
@@ -339,7 +369,7 @@ public class PortTimesRecordMaker {
 					endPortTimesRecord.setSlotTime(returnSlot, arrivalTime);
 					endPortTimesRecord.setSlotDuration(returnSlot, 0);
 					portTimesRecords.add(endPortTimesRecord);
-		 
+
 					// We need to update the start time after the end event is scheduled, to make
 					// the min/max duration adjustments
 					updateRecord(isRoundTripSequence, vesselAvailability, portTimesRecords, trimmedWindows, travelTimeData);
@@ -390,7 +420,8 @@ public class PortTimesRecordMaker {
 			}
 			final int newStartTime = firstRecord.getSlotTime(from);
 			/**
-			 * Min requirement padding In case we don't meet the minimal duration but still have some time left after the end or before the start
+			 * Min requirement padding In case we don't meet the minimal duration but still
+			 * have some time left after the end or before the start
 			 **/
 			final IEndRequirement endReq = vesselAvailability.getEndRequirement();
 			if (endReq.isMinDurationSet()) {
@@ -461,8 +492,11 @@ public class PortTimesRecordMaker {
 	}
 
 	/**
-	 * Returns a list of voyage plans based on breaking up a sequence of vessel real or virtual destinations into single conceptual cargo voyages. This variant assumes there is a
-	 * IPortTimeWindowsRecord for the end event and the window start is the correct time to use. Used by the PNL time windows scheduler and assumes window start is the arrival time.
+	 * Returns a list of voyage plans based on breaking up a sequence of vessel real
+	 * or virtual destinations into single conceptual cargo voyages. This variant
+	 * assumes there is a IPortTimeWindowsRecord for the end event and the window
+	 * start is the correct time to use. Used by the PNL time windows scheduler and
+	 * assumes window start is the arrival time.
 	 * 
 	 * @param resource
 	 * @param sequence
@@ -496,17 +530,16 @@ public class PortTimesRecordMaker {
 				portTimesRecord.setRouteOptionBooking(slot, record.getRouteOptionBooking(slot));
 				portTimesRecord.setSlotNextVoyageOptions(slot, record.getSlotNextVoyageOptions(slot));
 
-				final int visitDuration = record.getSlotDuration(slot);
-				final int extraIdleTime = record.getSlotExtraIdleTime(slot); // contingency matrix.
-
 				// Pick based on earliest time
 				final int arrivalTime = record.getSlotFeasibleTimeWindow(slot).getInclusiveStart();
 
 				assert !actualsDataProvider.hasActuals(slot) || actualsDataProvider.getArrivalTime(slot) == arrivalTime;
 
 				portTimesRecord.setSlotTime(slot, arrivalTime);
-				portTimesRecord.setSlotDuration(slot, visitDuration);
-				portTimesRecord.setSlotExtraIdleTime(slot, extraIdleTime);
+				portTimesRecord.setSlotDuration(slot, record.getSlotDuration(slot));
+				for (var type : ExplicitIdleTime.values()) {
+					portTimesRecord.setSlotExtraIdleTime(slot, type, record.getSlotExtraIdleTime(slot, type));
+				}
 				// What is the next travel time?
 
 				if (recordToUpdateReturnTime != null) {
@@ -536,7 +569,8 @@ public class PortTimesRecordMaker {
 			}
 		}
 
-		// In case something changes and the end event has a journey on it in the future.
+		// In case something changes and the end event has a journey on it in the
+		// future.
 		if (recordPairToUpdateWithPanama != null) {
 			updatePortTimesRecordWithPanamaRestrictions(distanceProvider, vesselAvailability.getVessel(), recordPairToUpdateWithPanama.getFirst(), recordPairToUpdateWithPanama.getSecond());
 		}
@@ -547,7 +581,8 @@ public class PortTimesRecordMaker {
 	}
 
 	/**
-	 * Excludes Panama in the case where it is not fast enough to reach destination, now that we have assigned a start time for the journey.
+	 * Excludes Panama in the case where it is not fast enough to reach destination,
+	 * now that we have assigned a start time for the journey.
 	 * 
 	 * @param distanceProvider
 	 * @param vessel
@@ -557,7 +592,8 @@ public class PortTimesRecordMaker {
 	public static void updatePortTimesRecordWithPanamaRestrictions(final IDistanceProvider distanceProvider, final IVessel vessel, final IPortTimeWindowsRecord portTimeWindowsRecord,
 			final PortTimesRecord recordCopy) {
 		final List<IPortSlot> allSlots = new LinkedList<>(recordCopy.getSlots());
-		// returnSlot was null in recordCopy so get from PortTimeWindowsRecord instead, as seems more reliable.
+		// returnSlot was null in recordCopy so get from PortTimeWindowsRecord instead,
+		// as seems more reliable.
 		if (recordCopy.getReturnSlot() != null) {
 			allSlots.add(recordCopy.getReturnSlot());
 		}
@@ -576,7 +612,8 @@ public class PortTimesRecordMaker {
 					// Total time for travel and idling
 					final int availableTravelTime = arrivalTime - departureTime;
 
-					// Calculate if time to go via Panama or not including any additional idle time required for waiting for a slot if no booking.
+					// Calculate if time to go via Panama or not including any additional idle time
+					// required for waiting for a slot if no booking.
 					int panamaTime = distanceProvider.getTravelTime(ERouteOption.PANAMA, vessel, from.getPort(), to.getPort(), vessel.getMaxSpeed());
 
 					if (panamaTime == Integer.MAX_VALUE) {
@@ -588,13 +625,16 @@ public class PortTimesRecordMaker {
 						panamaTime += additionalPanamaTime;
 
 						// Is there still time to go via Panama? Exclude if not
-						// If it's an end of the round trip cargo, we ALLWAYS have a time to go via Panama
+						// If it's an end of the round trip cargo, we ALLWAYS have a time to go via
+						// Panama
 						if ((panamaTime > availableTravelTime) && to.getPortType() != PortType.Round_Trip_Cargo_End) {
 							// It has all gone wrong if we hit this assert
 							assert recordCopy.getSlotNextVoyageOptions(from) != AvailableRouteChoices.PANAMA_ONLY;
 							recordCopy.setSlotNextVoyageOptions(from, AvailableRouteChoices.EXCLUDE_PANAMA);
 						} else {
-							// System.out.println("For "+from.getId()+" additionalPanamaTime = "+additionalPanamaTime+" max available = "+(availableTravelTime - (panamaTime - additionalPanamaTime)));
+							// System.out.println("For "+from.getId()+" additionalPanamaTime =
+							// "+additionalPanamaTime+" max available = "+(availableTravelTime - (panamaTime
+							// - additionalPanamaTime)));
 							recordCopy.setSlotAdditionalPanamaIdleHours(from, additionalPanamaTime);
 							recordCopy.setSlotMaxAvailablePanamaIdleHours(from, availableTravelTime - (panamaTime - additionalPanamaTime));
 						}

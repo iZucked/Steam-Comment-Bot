@@ -24,9 +24,4 @@ public class MigrateToV58 extends AbstractMigrationUnit {
 	public int getScenarioDestinationVersion() {
 		return 58;
 	}
-
-	@Override
-	protected void doMigration(final MigrationModelRecord modelRecord) {
-		// Nothing to do
-	}
 }

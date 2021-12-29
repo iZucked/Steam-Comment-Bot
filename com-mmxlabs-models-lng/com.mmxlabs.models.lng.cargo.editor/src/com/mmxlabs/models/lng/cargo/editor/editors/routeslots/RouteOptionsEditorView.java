@@ -34,12 +34,12 @@ import com.mmxlabs.models.ui.editors.EmbeddedDetailComposite;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
-public class RouteOptionsEditorView extends ScenarioInstanceView implements CommandStackListener{
+public class RouteOptionsEditorView extends ScenarioInstanceView implements CommandStackListener {
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
 	public static final String ID = "com.mmxlabs.models.lng.cargo.editor.views.RouteOptionsEditorView";
-	
+
 	private EmbeddedDetailComposite bookingsParametersComposite;
 	protected Composite childComposite;
 	private UndoAction undoAction;
@@ -49,8 +49,7 @@ public class RouteOptionsEditorView extends ScenarioInstanceView implements Comm
 	protected EObject getInput(final MMXRootObject rootObject) {
 		if (rootObject != null) {
 			CanalBookings canalBookingsModel = null;
-			if (rootObject instanceof LNGScenarioModel) {
-				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+			if (rootObject instanceof LNGScenarioModel lngScenarioModel) {
 				@NonNull
 				CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
 				canalBookingsModel = cargoModel.getCanalBookings();
@@ -70,21 +69,19 @@ public class RouteOptionsEditorView extends ScenarioInstanceView implements Comm
 			openStatus(status.getChildren()[0]);
 		}
 
-		if (status instanceof DetailConstraintStatusDecorator) {
-
-			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
+		if (status instanceof DetailConstraintStatusDecorator dcsd) {
 			final EObject target = dcsd.getTarget();
 			if (target instanceof CanalBookingSlot) {
 				getSite().getPage().activate(this);
 				// extend the EmbeddedDetailComposite to support the setSelection and setStatus
-				//setSelection(new StructuredSelection(target), true);
+				// setSelection(new StructuredSelection(target), true);
 			}
 		}
 	}
 
 	@Override
 	public void createPartControl(Composite parent) {
-		
+
 		this.childComposite = new Composite(parent, SWT.NONE);
 
 		final IActionBars actionBars = getViewSite().getActionBars();
@@ -101,9 +98,9 @@ public class RouteOptionsEditorView extends ScenarioInstanceView implements Comm
 		updateActions(null);
 
 		listenToScenarioSelection();
-		
+
 	}
-	
+
 	@Override
 	protected void displayScenarioInstance(final ScenarioInstance instance, @Nullable final MMXRootObject rootObject, @Nullable final Object targetObject) {
 
@@ -135,7 +132,7 @@ public class RouteOptionsEditorView extends ScenarioInstanceView implements Comm
 			updateActions(getEditingDomain());
 		}
 	}
-	
+
 	protected void cleanUpInstance(final ScenarioInstance instance) {
 
 	}

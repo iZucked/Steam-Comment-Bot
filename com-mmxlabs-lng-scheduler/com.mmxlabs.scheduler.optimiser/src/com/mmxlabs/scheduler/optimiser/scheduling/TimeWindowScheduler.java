@@ -31,6 +31,7 @@ import com.mmxlabs.optimiser.common.events.OptimisationPhaseStartEvent;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.ISequencesAttributesProvider;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.cache.CacheMode;
 import com.mmxlabs.scheduler.optimiser.cache.CacheVerificationFailedException;
@@ -116,7 +117,7 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 
 					@Override
 					public Pair<List<IPortTimeWindowsRecord>, MinTravelTimeData> load(final CacheKey key) throws Exception {
-						return doTrimming(key.resource, key.sequence, key.currentBookingData);
+						return doTrimming(key.resource, key.sequence, key.currentBookingData, key.sequencesAttributesProvider);
 
 					}
 
@@ -146,7 +147,7 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 			if (hintEnableCache && cacheMode != CacheMode.Off) {
 
 				@Nullable
-				final Pair<List<IPortTimeWindowsRecord>, MinTravelTimeData> p = cache.getUnchecked(new CacheKey(resource, sequence, data.copy()));
+				final Pair<List<IPortTimeWindowsRecord>, MinTravelTimeData> p = cache.getUnchecked(new CacheKey(resource, sequence, data.copy(), sequences.getProviders()));
 				if (p != null) {
 					list = p.getFirst();
 					travelTimeDataMap.put(resource, p.getSecond());
@@ -156,7 +157,7 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 
 				// VERIFY
 				if (cacheMode == CacheMode.Verify || (GeneralCacheSettings.ENABLE_RANDOM_VERIFICATION && randomForVerification.nextDouble() < GeneralCacheSettings.VERIFICATION_CHANCE)) {
-					final Pair<List<IPortTimeWindowsRecord>, MinTravelTimeData> p2 = doTrimming(resource, sequence, data);
+					final Pair<List<IPortTimeWindowsRecord>, MinTravelTimeData> p2 = doTrimming(resource, sequence, data, sequences.getProviders());
 					final List<IPortTimeWindowsRecord> list2 = p2.getFirst();
 
 					if (list != null) {
@@ -166,7 +167,7 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 					}
 				}
 			} else {
-				final Pair<List<IPortTimeWindowsRecord>, MinTravelTimeData> p = doTrimming(resource, sequence, data);
+				final Pair<List<IPortTimeWindowsRecord>, MinTravelTimeData> p = doTrimming(resource, sequence, data, sequences.getProviders());
 				list = p.getFirst();
 				travelTimeDataMap.put(resource, p.getSecond());
 			}
@@ -176,8 +177,10 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 			// We copy the booking data as we don't know whether or not cache will hit or
 			// miss.
 			// Modify the original to remove used bookings
-			// The reason for the below code appears to be in case of a cache hit, the booking data passed in won't have been updated with used bookings
-			// and unassigned bookings utilised moves to assigned bookings etc. Sometimes it will already be updated, sometimes not.
+			// The reason for the below code appears to be in case of a cache hit, the
+			// booking data passed in won't have been updated with used bookings
+			// and unassigned bookings utilised moves to assigned bookings etc. Sometimes it
+			// will already be updated, sometimes not.
 			if (list != null) {
 				for (final IPortTimeWindowsRecord rr : list) {
 					for (final IPortSlot slot : rr.getSlots()) {
@@ -237,7 +240,7 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 
 			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 
-				final IPortTimesRecord record = portTimesRecordMaker.makeDESOrFOBPortTimesRecord(resource, sequence);
+				final IPortTimesRecord record = portTimesRecordMaker.makeDESOrFOBPortTimesRecord(resource, sequence, fullSequences.getProviders());
 				if (record != null) {
 					portTimeRecords.put(resource, Lists.newArrayList(record));
 				}
@@ -283,12 +286,13 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 		clearCaches();
 	}
 
-	private Pair<List<IPortTimeWindowsRecord>, MinTravelTimeData> doTrimming(final IResource resource, final ISequence sequence, final CurrentBookingData data) {
+	private Pair<List<IPortTimeWindowsRecord>, MinTravelTimeData> doTrimming(final IResource resource, final ISequence sequence, final CurrentBookingData data,
+			ISequencesAttributesProvider sequencesAttributesProvider) {
 
 		final FeasibleTimeWindowTrimmer feasibleTimeWindowTrimmer = timeWindowTrimmerProvider.get();
 		feasibleTimeWindowTrimmer.setTrimByPanamaCanalBookings(useCanalBasedWindowTrimming);
 		final MinTravelTimeData minTimeData = new MinTravelTimeData(resource, sequence);
-		final List<IPortTimeWindowsRecord> list = feasibleTimeWindowTrimmer.generateTrimmedWindows(resource, sequence, minTimeData, data);
+		final List<IPortTimeWindowsRecord> list = feasibleTimeWindowTrimmer.generateTrimmedWindows(resource, sequence, minTimeData, data, sequencesAttributesProvider);
 		final ICustomTimeWindowTrimmer customTrimmer = customTimeTrimmer == null ? null : customTimeTrimmer;
 
 		if (customTrimmer != null) {
@@ -296,9 +300,9 @@ public class TimeWindowScheduler implements IArrivalTimeScheduler {
 		}
 
 		if (!(isADPScenario || isLongTermScenario) && usePNLBasedWindowTrimming && pnlBasedWindowTrimmerProvider != null) {
-			pnlBasedWindowTrimmerProvider.trimWindows(resource, list, minTimeData);
+			pnlBasedWindowTrimmerProvider.trimWindows(resource, list, minTimeData, sequencesAttributesProvider);
 		} else if (usePriceBasedWindowTrimming && priceBasedWindowTrimmerProvider != null) {
-			priceBasedWindowTrimmerProvider.trimWindows(resource, list, minTimeData);
+			priceBasedWindowTrimmerProvider.trimWindows(resource, list, minTimeData, sequencesAttributesProvider);
 		}
 
 		return new Pair<>(list, minTimeData);

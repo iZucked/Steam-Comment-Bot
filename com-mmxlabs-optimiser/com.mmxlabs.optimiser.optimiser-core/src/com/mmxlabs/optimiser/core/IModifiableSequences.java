@@ -8,13 +8,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
- * Extended version of the {@link ISequences} interface allowing access to {@link IModifiableSequence} instances rather than the read-only {@link ISequence} instances.
+ * Extended version of the {@link ISequences} interface allowing access to
+ * {@link IModifiableSequence} instances rather than the read-only
+ * {@link ISequence} instances.
  * 
  * @author Simon Goodall
  * 
  */
+@NonNullByDefault
 public interface IModifiableSequences extends ISequences {
 	/**
 	 * Returns the {@link IModifiableSequence} for the given {@link IResource}.
@@ -22,8 +26,8 @@ public interface IModifiableSequences extends ISequences {
 	 * @param resource
 	 * @return
 	 */
-	@NonNull
-	IModifiableSequence getModifiableSequence(@NonNull IResource resource);
+
+	IModifiableSequence getModifiableSequence(IResource resource);
 
 	/**
 	 * Returns the {@link IModifiableSequence} for the given resource index.
@@ -31,18 +35,18 @@ public interface IModifiableSequences extends ISequences {
 	 * @param index
 	 * @return
 	 */
-	@NonNull
+
 	IModifiableSequence getModifiableSequence(int index);
 
 	/**
 	 * @return
 	 */
-	@NonNull
-	Map<@NonNull IResource, @NonNull IModifiableSequence> getModifiableSequences();
+
+	Map<IResource, IModifiableSequence> getModifiableSequences();
 
 	/**
 	 * @return a modifiable list of unused elements.
 	 */
-	@NonNull
-	List<@NonNull ISequenceElement> getModifiableUnusedElements();
+
+	List<ISequenceElement> getModifiableUnusedElements();
 }

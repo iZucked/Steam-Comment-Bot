@@ -66,6 +66,12 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//RouteLine/provider"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//RouteLine/errorCode"/>
     </genClasses>
+    <genClasses ecoreClass="port.ecore#//ManualRouteLine">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//ManualRouteLine/routeOption"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference port.ecore#//ManualRouteLine/from"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference port.ecore#//ManualRouteLine/to"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//ManualRouteLine/distance"/>
+    </genClasses>
     <genClasses ecoreClass="port.ecore#//PortModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/ports"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/portGroups"/>
@@ -76,6 +82,8 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/portVersionRecord"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/portGroupVersionRecord"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/distanceVersionRecord"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//PortModel/mmxDistanceVersion"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//PortModel/manualDistances"/>
     </genClasses>
     <genClasses ecoreClass="port.ecore#//CapabilityGroup">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//CapabilityGroup/capability"/>

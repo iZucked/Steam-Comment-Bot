@@ -43,25 +43,9 @@ public class MigrateToV19 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected MetamodelLoader getSourceMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (sourceLoader == null) {
-			sourceLoader = MetamodelVersionsUtil.createV18Loader(extraPackages);
-		}
-		return sourceLoader;
-	}
-
-	@Override
-	protected MetamodelLoader getDestinationMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (destinationLoader == null) {
-			destinationLoader = MetamodelVersionsUtil.createV19Loader(extraPackages);
-		}
-		return destinationLoader;
-	}
-
-	@Override
 	protected void doMigration(final MigrationModelRecord modelRecord) {
 
-		final MetamodelLoader modelLoader = getDestinationMetamodelLoader(null);
+		final MetamodelLoader modelLoader = modelRecord.getMetamodelLoader();
 		// Set the new PricingEvent values
 		EObjectWrapper model = modelRecord.getModelRoot();
 		setContractDefaults(modelLoader, model);

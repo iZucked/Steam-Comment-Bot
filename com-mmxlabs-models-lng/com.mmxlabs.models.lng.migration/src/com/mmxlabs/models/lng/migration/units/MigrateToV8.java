@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -23,10 +22,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.UsageCrossReferencer;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
-import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
 import com.mmxlabs.models.migration.MigrationModelRecord;
-import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.models.migration.utils.EObjectWrapper;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
@@ -51,27 +48,11 @@ public class MigrateToV8 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected MetamodelLoader getSourceMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (sourceLoader == null) {
-			sourceLoader = MetamodelVersionsUtil.createV7Loader(extraPackages);
-		}
-		return sourceLoader;
-	}
-
-	@Override
-	protected MetamodelLoader getDestinationMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (destinationLoader == null) {
-			destinationLoader = MetamodelVersionsUtil.createV8Loader(extraPackages);
-		}
-		return destinationLoader;
-	}
-
-	@Override
 	protected void doMigration(final MigrationModelRecord modelRecord) {
 		final EObjectWrapper model = modelRecord.getModelRoot();
 
 		// This should get the cached loader instance
-		final MetamodelLoader loader = getDestinationMetamodelLoader(null);
+		final MetamodelLoader loader = modelRecord.getMetamodelLoader();
 
 		migrateEntities(loader, model);
 

@@ -96,7 +96,7 @@ public class RepositioningAndBallastBonusesTests extends AbstractMicroTestCase {
 			final long cargoPNL = cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
 
 			StartEvent start = getStartEvent(vesselAvailability);
-			Assertions.assertEquals(0,start.getGroupProfitAndLoss().getProfitAndLoss());
+			Assertions.assertEquals(0, start.getGroupProfitAndLoss().getProfitAndLoss());
 			Assertions.assertEquals(cargoPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 		});
 	}
@@ -156,9 +156,9 @@ public class RepositioningAndBallastBonusesTests extends AbstractMicroTestCase {
 			CargoAllocation cargoAllocation = lngScenarioModel.getScheduleModel().getSchedule().getCargoAllocations().stream().filter(c -> ScheduleModelUtils.matchingSlots(cargo, c)).findFirst()
 					.get();
 			assert cargoAllocation != null;
-			
+
 			final long cargoPNL = cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
-			
+
 			StartEvent start = getStartEvent(vesselAvailability);
 			Assertions.assertEquals(-1_000_000, start.getGroupProfitAndLoss().getProfitAndLoss());
 			Assertions.assertEquals(cargoPNL - 1_000_000, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
@@ -166,10 +166,7 @@ public class RepositioningAndBallastBonusesTests extends AbstractMicroTestCase {
 	}
 
 	private StartEvent getStartEvent(final VesselAvailability vesselAvailability) {
-		Sequence sequence = lngScenarioModel.getScheduleModel().getSchedule().getSequences().stream().filter(s -> s.getVesselAvailability().equals(vesselAvailability)).findFirst().get();
-		Event event = sequence.getEvents().get(0);
-		assert event instanceof StartEvent;
-		return (StartEvent) event;
+		return ScheduleModelUtils.getStartEvent(vesselAvailability, lngScenarioModel.getScheduleModel().getSchedule());
 	}
 
 }

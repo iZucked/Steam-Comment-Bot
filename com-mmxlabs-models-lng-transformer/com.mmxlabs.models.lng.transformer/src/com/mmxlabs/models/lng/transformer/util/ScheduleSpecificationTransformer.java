@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.util;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -32,12 +34,13 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
+import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ListModifiableSequence;
-import com.mmxlabs.optimiser.core.impl.Sequences;
+import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
@@ -45,11 +48,15 @@ import com.mmxlabs.scheduler.optimiser.components.ISpotMarket;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.insertion.SequencesHitchHikerHelper;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
+import com.mmxlabs.scheduler.optimiser.sequenceproviders.IVoyageSpecificationProvider;
+import com.mmxlabs.scheduler.optimiser.sequenceproviders.VoyageSpecificationProviderImpl;
+import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 
 @NonNullByDefault
 public class ScheduleSpecificationTransformer {
@@ -66,7 +73,10 @@ public class ScheduleSpecificationTransformer {
 	@Inject
 	private IVirtualVesselSlotProvider virtualVesselSlotProvider;
 
-	public ISequences createSequences(final ScheduleSpecification scheduleSpecification, final LNGDataTransformer dataTransformer, boolean includeSpotSlots) {
+	@Inject
+	private DateAndCurveHelper internalDateProvider;
+
+	public ISequences createSequences(final ScheduleSpecification scheduleSpecification, final LNGDataTransformer dataTransformer, final boolean includeSpotSlots) {
 
 		@NonNull
 		final ModelEntityMap mem = dataTransformer.getModelEntityMap();
@@ -74,12 +84,16 @@ public class ScheduleSpecificationTransformer {
 		return createSequences(scheduleSpecification, mem, optimisationData, dataTransformer.getInjector(), includeSpotSlots);
 	}
 
-	public ISequences createSequences(final ScheduleSpecification scheduleSpecification, final ModelEntityMap mem, IOptimisationData optimisationData, Injector injector, boolean includeSpotSlots) {
+	public ISequences createSequences(final ScheduleSpecification scheduleSpecification, final ModelEntityMap mem, final IOptimisationData optimisationData, final Injector injector,
+			final boolean includeSpotSlots) {
 
 		final Set<ISequenceElement> usedElements = new HashSet<>();
 
 		final List<IResource> orderedResources = new LinkedList<>();
-		final Map<IResource, ISequence> sequences = new HashMap<>();
+		final Map<IResource, IModifiableSequence> sequences = new HashMap<>();
+
+		final VoyageSpecificationProviderImpl voyageSpecificationProvider = new VoyageSpecificationProviderImpl();
+
 		final List<ISequenceElement> unusedElements = new LinkedList<>();
 		for (final VesselScheduleSpecification vesselSpecificiation : scheduleSpecification.getVesselScheduleSpecifications()) {
 			final VesselAssignmentType vesselAllocation = vesselSpecificiation.getVesselAllocation();
@@ -127,21 +141,76 @@ public class ScheduleSpecificationTransformer {
 			final ISequenceElement startElement = startEndRequirementProvider.getStartElement(resource);
 			elements.add(startElement);
 
+			IPortSlot lastSlot = null;
 			for (final ScheduleSpecificationEvent event : vesselSpecificiation.getEvents()) {
 				if (event instanceof SlotSpecification) {
 					final SlotSpecification slotSpecification = (SlotSpecification) event;
-					final Slot e_slot = slotSpecification.getSlot();
+					final Slot<?> e_slot = slotSpecification.getSlot();
 					final IPortSlot o_slot = mem.getOptimiserObjectNullChecked(e_slot, IPortSlot.class);
 					final ISequenceElement e = portSlotProvider.getElement(o_slot);
 					elements.add(e);
+
+					LocalDateTime arrivalTime = slotSpecification.getArrivalDate();
+					if (arrivalTime != null) {
+						if (e_slot.getPort() != null) {
+							voyageSpecificationProvider.setArrivalTime(o_slot, internalDateProvider.convertTime(arrivalTime.atZone(e_slot.getPort().getZoneId())));
+						} else {
+							voyageSpecificationProvider.setArrivalTime(o_slot, internalDateProvider.convertTime(arrivalTime.atZone(ZoneId.of("Etc/UTC"))));
+						}
+					}
+
+					lastSlot = o_slot;
 				} else if (event instanceof VesselEventSpecification) {
 					final VesselEventSpecification vesselEventSpecification = (VesselEventSpecification) event;
 					final VesselEvent e_vesselEvent = vesselEventSpecification.getVesselEvent();
 					final IVesselEventPortSlot o_slot = mem.getOptimiserObjectNullChecked(e_vesselEvent, IVesselEventPortSlot.class);
 					elements.addAll(o_slot.getEventSequenceElements());
+
+					
+					LocalDateTime arrivalTime = vesselEventSpecification.getArrivalDate();
+					if (arrivalTime != null) {
+						// Get first slot in event sequence rather than the last one.
+						IPortSlot t = o_slot.getEventPortSlots().get(0);
+						if (e_vesselEvent.getPort() != null) {
+							voyageSpecificationProvider.setArrivalTime(t, internalDateProvider.convertTime(arrivalTime.atZone(e_vesselEvent.getPort().getZoneId())));
+						} else {
+							voyageSpecificationProvider.setArrivalTime(t, internalDateProvider.convertTime(arrivalTime.atZone(ZoneId.of("Etc/UTC"))));
+						}
+					}
+					
+					lastSlot = o_slot;
 				} else if (event instanceof VoyageSpecification) {
 					final VoyageSpecification voyageSpecification = (VoyageSpecification) event;
 
+					if (lastSlot != null && voyageSpecification.getRouteOption() != null) {
+						switch (voyageSpecification.getRouteOption()) {
+						case DIRECT:
+							voyageSpecificationProvider.setVoyageRouteOption(lastSlot, ERouteOption.DIRECT);
+							break;
+						case PANAMA:
+							voyageSpecificationProvider.setVoyageRouteOption(lastSlot, ERouteOption.PANAMA);
+							break;
+						case SUEZ:
+							voyageSpecificationProvider.setVoyageRouteOption(lastSlot, ERouteOption.SUEZ);
+							break;
+						default:
+							break;
+
+						}
+					}
+					if (lastSlot != null && voyageSpecification.getFuelChoice() != null) {
+						switch (voyageSpecification.getFuelChoice()) {
+						case NBO_BUNKERS:
+							voyageSpecificationProvider.setFuelChoice(lastSlot, TravelFuelChoice.NBO_PLUS_BUNKERS);
+							break;
+						case NBO_FBO:
+							voyageSpecificationProvider.setFuelChoice(lastSlot, TravelFuelChoice.NBO_PLUS_FBO);
+							break;
+						default:
+							break;
+
+						}
+					}
 					// Not supported
 				} else {
 					assert false;
@@ -172,6 +241,16 @@ public class ScheduleSpecificationTransformer {
 				final ISequenceElement e = portSlotProvider.getElement(o_slot);
 				elements.add(e);
 
+				LocalDateTime arrivalTime = slotSpecification.getArrivalDate();
+				if (arrivalTime != null) {
+					if (e_slot.getPort() != null) {
+						voyageSpecificationProvider.setArrivalTime(o_slot, internalDateProvider.convertTime(arrivalTime.atZone(e_slot.getPort().getZoneId())));
+					} else {
+						voyageSpecificationProvider.setArrivalTime(o_slot, internalDateProvider.convertTime(arrivalTime.atZone(ZoneId.of("Etc/UTC"))));
+					}
+				}
+
+				
 				final IVesselAvailability o_vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(e);
 				if (o_vesselAvailability != null) {
 					resource = vesselProvider.getResource(o_vesselAvailability);
@@ -205,12 +284,12 @@ public class ScheduleSpecificationTransformer {
 				final ISequenceElement e = portSlotProvider.getElement(o_slot);
 				unusedElements.add(e);
 
-				IVesselAvailability va = virtualVesselSlotProvider.getVesselAvailabilityForElement(e);
+				final IVesselAvailability va = virtualVesselSlotProvider.getVesselAvailabilityForElement(e);
 				if (va != null) {
-					IResource resource = vesselProvider.getResource(va);
+					final IResource resource = vesselProvider.getResource(va);
 
 					orderedResources.add(resource);
-					List<ISequenceElement> elements = new LinkedList<>();
+					final List<ISequenceElement> elements = new LinkedList<>();
 					final ISequenceElement startElement = startEndRequirementProvider.getStartElement(resource);
 					elements.add(0, startElement);
 
@@ -232,20 +311,20 @@ public class ScheduleSpecificationTransformer {
 
 		// Optionally - add in spot market slots?
 		{
-			ISpotMarketSlotsProvider spotMarketSlotsProvider = injector.getInstance(ISpotMarketSlotsProvider.class);
-			for (SpotMarket sm : mem.getAllModelObjects(SpotMarket.class)) {
-				ISpotMarket oSM = mem.getOptimiserObjectNullChecked(sm, ISpotMarket.class);
-				for (ISequenceElement e : spotMarketSlotsProvider.getElementsFor(oSM)) {
+			final ISpotMarketSlotsProvider spotMarketSlotsProvider = injector.getInstance(ISpotMarketSlotsProvider.class);
+			for (final SpotMarket sm : mem.getAllModelObjects(SpotMarket.class)) {
+				final ISpotMarket oSM = mem.getOptimiserObjectNullChecked(sm, ISpotMarket.class);
+				for (final ISequenceElement e : spotMarketSlotsProvider.getElementsFor(oSM)) {
 					if (usedElements.contains(e)) {
 						continue;
 					}
 					unusedElements.add(e);
-					IVesselAvailability va = virtualVesselSlotProvider.getVesselAvailabilityForElement(e);
+					final IVesselAvailability va = virtualVesselSlotProvider.getVesselAvailabilityForElement(e);
 					if (va != null) {
-						IResource resource = vesselProvider.getResource(va);
+						final IResource resource = vesselProvider.getResource(va);
 
 						orderedResources.add(resource);
-						List<ISequenceElement> elements = new LinkedList<>();
+						final List<ISequenceElement> elements = new LinkedList<>();
 						final ISequenceElement startElement = startEndRequirementProvider.getStartElement(resource);
 						elements.add(0, startElement);
 
@@ -257,8 +336,11 @@ public class ScheduleSpecificationTransformer {
 				}
 			}
 		}
-		final ISequences seq = new Sequences(orderedResources, sequences, unusedElements);
 
+		final SequencesAttributesProviderImpl providers = new SequencesAttributesProviderImpl();
+		providers.addProvider(IVoyageSpecificationProvider.class, voyageSpecificationProvider);
+
+		final ModifiableSequences seq = new ModifiableSequences(orderedResources, sequences, unusedElements, providers);
 		assert SequencesHitchHikerHelper.checkValidSequences(seq);
 
 		return seq;

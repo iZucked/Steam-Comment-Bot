@@ -1119,8 +1119,28 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
-	public EAttribute getIdle_ContingencyHours() {
+	public EAttribute getIdle_BufferHours() {
 		return (EAttribute)idleEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getIdle_PanamaHours() {
+		return (EAttribute)idleEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getIdle_ContingencyHours() {
+		return (EAttribute)idleEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -1181,6 +1201,16 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	@Override
 	public EAttribute getCharterLengthEvent_Laden() {
 		return (EAttribute)charterLengthEventEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCharterLengthEvent_ContingencyHours() {
+		return (EAttribute)charterLengthEventEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -3445,6 +3475,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		idleEClass = createEClass(IDLE);
 		createEAttribute(idleEClass, IDLE__LADEN);
+		createEAttribute(idleEClass, IDLE__BUFFER_HOURS);
+		createEAttribute(idleEClass, IDLE__PANAMA_HOURS);
 		createEAttribute(idleEClass, IDLE__CONTINGENCY_HOURS);
 
 		portVisitEClass = createEClass(PORT_VISIT);
@@ -3469,6 +3501,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		charterLengthEventEClass = createEClass(CHARTER_LENGTH_EVENT);
 		createEAttribute(charterLengthEventEClass, CHARTER_LENGTH_EVENT__DURATION);
 		createEAttribute(charterLengthEventEClass, CHARTER_LENGTH_EVENT__LADEN);
+		createEAttribute(charterLengthEventEClass, CHARTER_LENGTH_EVENT__CONTINGENCY_HOURS);
 
 		cooldownEClass = createEClass(COOLDOWN);
 		createEAttribute(cooldownEClass, COOLDOWN__VOLUME);
@@ -3900,6 +3933,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		initEClass(idleEClass, Idle.class, "Idle", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getIdle_Laden(), ecorePackage.getEBoolean(), "laden", null, 1, 1, Idle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getIdle_BufferHours(), ecorePackage.getEInt(), "bufferHours", null, 0, 1, Idle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getIdle_PanamaHours(), ecorePackage.getEInt(), "panamaHours", null, 0, 1, Idle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getIdle_ContingencyHours(), ecorePackage.getEInt(), "contingencyHours", null, 0, 1, Idle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(portVisitEClass, PortVisit.class, "PortVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -3924,6 +3959,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEClass(charterLengthEventEClass, CharterLengthEvent.class, "CharterLengthEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCharterLengthEvent_Duration(), ecorePackage.getEInt(), "duration", null, 0, 1, CharterLengthEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterLengthEvent_Laden(), ecorePackage.getEBoolean(), "laden", null, 1, 1, CharterLengthEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterLengthEvent_ContingencyHours(), ecorePackage.getEInt(), "contingencyHours", null, 0, 1, CharterLengthEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(cooldownEClass, Cooldown.class, "Cooldown", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCooldown_Volume(), ecorePackage.getEInt(), "volume", null, 1, 1, Cooldown.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

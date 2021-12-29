@@ -141,7 +141,8 @@ public class PanamaSlotsTransformer implements ITransformerExtension {
 			final List<PanamaSeasonalityRecord> seasonalityRecords = this.canalBookings.getPanamaSeasonalityRecords();
 			final List<PanamaSeasonalityCurve> seasonalityCurve = new ArrayList<PanamaSeasonalityCurve>();
 			int startYear = modelEntityMap.getEarliestTime().toLocalDate().getYear();
-			int endYear = modelEntityMap.getLatestTime().toLocalDate().getYear() + 1;
+			//adding couple of more years as a buffer
+			int endYear = modelEntityMap.getLatestTime().toLocalDate().getYear() + 2;
 			
 			for (final VesselGroupCanalParameters vesselGroupsMaxIdles : this.canalBookings.getVesselGroupCanalParameters()) {
 				

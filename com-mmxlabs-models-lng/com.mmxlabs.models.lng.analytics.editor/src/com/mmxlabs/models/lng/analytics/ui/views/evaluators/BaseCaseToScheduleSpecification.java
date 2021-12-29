@@ -5,15 +5,21 @@
 package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.common.time.Months;
+import com.mmxlabs.common.util.TriConsumer;
 import com.mmxlabs.models.lng.analytics.BaseCase;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.BaseCaseRowOptions;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.BuyOption;
@@ -40,12 +46,14 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.NonShippedCargoSpecification;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
+import com.mmxlabs.models.lng.cargo.ScheduleSpecificationEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SlotSpecification;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.VesselEventSpecification;
 import com.mmxlabs.models.lng.cargo.VesselScheduleSpecification;
+import com.mmxlabs.models.lng.cargo.VoyageSpecification;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.EVesselTankState;
@@ -73,10 +81,14 @@ public class BaseCaseToScheduleSpecification {
 
 		final ScheduleSpecification specification = CargoFactory.eINSTANCE.createScheduleSpecification();
 
+		final Map<EObject, VoyageSpecification> voyageSpecs = new HashMap<>();
+
+		final Map<ShippingOption, VesselScheduleSpecification> shippingToScheduleSpec = new HashMap<>();
+
 		for (final BaseCaseRow row : baseCase.getBaseCase()) {
 
 			if (row.getVesselEventOption() == null && (row.getBuyOption() == null || row.getSellOption() == null)) {
-				SlotSpecification slotSpecification = CargoFactory.eINSTANCE.createSlotSpecification();
+				final SlotSpecification slotSpecification = CargoFactory.eINSTANCE.createSlotSpecification();
 
 				Slot<?> slot = null;
 				if (row.getBuyOption() != null) {
@@ -121,19 +133,87 @@ public class BaseCaseToScheduleSpecification {
 					loadSlot = getOrCreate(row.getBuyOption());
 				}
 
+				final BaseCaseRowOptions options = row.getOptions();
+
 				final SlotSpecification loadSpec = CargoFactory.eINSTANCE.createSlotSpecification();
 				loadSpec.setSlot(loadSlot);
+				if (options != null && options.isSetLoadDate()) {
+					loadSpec.setArrivalDate(options.getLoadDate());
+				}
+
 				final SlotSpecification dischargeSpec = CargoFactory.eINSTANCE.createSlotSpecification();
 				dischargeSpec.setSlot(dischargeSlot);
+				if (options != null && options.isSetDischargeDate()) {
+					dischargeSpec.setArrivalDate(options.getDischargeDate());
+				}
 
 				spec.getSlotSpecifications().add(loadSpec);
 				spec.getSlotSpecifications().add(dischargeSpec);
 
 				specification.getNonShippedCargoSpecifications().add(spec);
 			} else if (shippingType == ShippingType.Shipped) {
-				final VesselScheduleSpecification spec = CargoFactory.eINSTANCE.createVesselScheduleSpecification();
-
 				final ShippingOption shipping = row.getShipping();
+
+				boolean newRecord = true;
+				final VesselScheduleSpecification vesselScheduleSpecification;
+				if (shipping instanceof RoundTripShippingOption) {
+					// Always new
+					vesselScheduleSpecification = CargoFactory.eINSTANCE.createVesselScheduleSpecification();
+
+				} else {
+					if (shippingToScheduleSpec.containsKey(shipping)) {
+						vesselScheduleSpecification = shippingToScheduleSpec.get(shipping);
+						newRecord = false;
+					} else {
+						vesselScheduleSpecification = CargoFactory.eINSTANCE.createVesselScheduleSpecification();
+						shippingToScheduleSpec.put(shipping, vesselScheduleSpecification);
+					}
+				}
+
+				final Function<EObject, VoyageSpecification> builder = k -> {
+					final VoyageSpecification spec = CargoFactory.eINSTANCE.createVoyageSpecification();
+					vesselScheduleSpecification.getEvents().add(spec);
+					return spec;
+				};
+				final TriConsumer<EObject, BaseCaseRowOptions, ScheduleSpecificationEvent> applyOptions = (target, options, slotSpec) -> {
+					if (options != null) {
+						if (target instanceof LoadSlot) {
+							if (options.isSetLadenRoute()) {
+								voyageSpecs.computeIfAbsent(target, builder).setRouteOption(options.getLadenRoute());
+							}
+							if (options.isSetLadenFuelChoice()) {
+								voyageSpecs.computeIfAbsent(target, builder).setFuelChoice(options.getLadenFuelChoice());
+							}
+							if (options.getLoadDate() != null) {
+								((SlotSpecification) slotSpec).setArrivalDate(options.getLoadDate());
+							}
+
+						}
+						if (target instanceof DischargeSlot) {
+							if (options.isSetBallastRoute()) {
+								voyageSpecs.computeIfAbsent(target, builder).setRouteOption(options.getBallastRoute());
+							}
+							if (options.isSetBallastFuelChoice()) {
+								voyageSpecs.computeIfAbsent(target, builder).setFuelChoice(options.getBallastFuelChoice());
+							}
+							if (options.getDischargeDate() != null) {
+								((SlotSpecification) slotSpec).setArrivalDate(options.getDischargeDate());
+							}
+						}
+						if (target instanceof VesselEvent) {
+							if (options.isSetLadenRoute()) {
+								voyageSpecs.computeIfAbsent(target, builder).setRouteOption(options.getLadenRoute());
+							}
+							if (options.isSetLadenFuelChoice()) {
+								voyageSpecs.computeIfAbsent(target, builder).setFuelChoice(options.getLadenFuelChoice());
+							}
+							if (options.getLoadDate() != null) {
+								((VesselEventSpecification) slotSpec).setArrivalDate(options.getLoadDate());
+							}
+						}
+					}
+				};
+
 				// TODO: This should be cached!
 				if (shipping instanceof RoundTripShippingOption) {
 					final RoundTripShippingOption roundTripShippingOption = (RoundTripShippingOption) shipping;
@@ -148,22 +228,25 @@ public class BaseCaseToScheduleSpecification {
 					newMarket.setEntity(entity);
 					newMarket.setNominal(true);
 					// { // From old sandbox code
-					// final String baseName = SHIPPING_OPTION_DESCRIPTION_FORMATTER.render(roundTripShippingOption);
+					// final String baseName =
+					// SHIPPING_OPTION_DESCRIPTION_FORMATTER.render(roundTripShippingOption);
 					// @NonNull
-					// final Set<String> usedIDStrings = clone.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().stream().map(c -> c.getName()).collect(Collectors.toSet());
+					// final Set<String> usedIDStrings =
+					// clone.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().stream().map(c
+					// -> c.getName()).collect(Collectors.toSet());
 					// final String id = AnalyticsBuilder.getUniqueID(baseName, usedIDStrings);
 					// market.setName(id);
 					// }
 					newMarket.setName(vessel.getName() + " @" + hireCost);
 
-					spec.setVesselAllocation(newMarket);
-					spec.setSpotIndex(-1);
+					vesselScheduleSpecification.setVesselAllocation(newMarket);
+					vesselScheduleSpecification.setSpotIndex(-1);
 
 					mapper.addMapping(roundTripShippingOption, newMarket);
 				} else if (shipping instanceof ExistingCharterMarketOption) {
-					ExistingCharterMarketOption option = (ExistingCharterMarketOption) shipping;
-					spec.setVesselAllocation(option.getCharterInMarket());
-					spec.setSpotIndex(option.getSpotIndex());
+					final ExistingCharterMarketOption option = (ExistingCharterMarketOption) shipping;
+					vesselScheduleSpecification.setVesselAllocation(option.getCharterInMarket());
+					vesselScheduleSpecification.setSpotIndex(option.getSpotIndex());
 					// mapper.addMapping(option, newMarket);
 				} else if (shipping instanceof OptionalSimpleVesselCharterOption) {
 					final OptionalSimpleVesselCharterOption optionalAvailabilityShippingOption = (OptionalSimpleVesselCharterOption) shipping;
@@ -187,10 +270,14 @@ public class BaseCaseToScheduleSpecification {
 							vesselAvailability.getEndHeel().setTankState(EVesselTankState.MUST_BE_COLD);
 						}
 
-						vesselAvailability.setStartAfter(optionalAvailabilityShippingOption.getStart().atStartOfDay());
-						vesselAvailability.setStartBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
-						vesselAvailability.setEndAfter(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
-						vesselAvailability.setEndBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
+						if (optionalAvailabilityShippingOption.getStart() != null) {
+							vesselAvailability.setStartAfter(optionalAvailabilityShippingOption.getStart().atStartOfDay());
+							vesselAvailability.setStartBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
+						}
+						if (optionalAvailabilityShippingOption.getEnd() != null) {
+							vesselAvailability.setEndAfter(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
+							vesselAvailability.setEndBy(optionalAvailabilityShippingOption.getEnd().atStartOfDay());
+						}
 						vesselAvailability.setOptional(true);
 						vesselAvailability.setContainedCharterContract(AnalyticsBuilder.createCharterTerms(optionalAvailabilityShippingOption.getRepositioningFee(), //
 								optionalAvailabilityShippingOption.getBallastBonus()));
@@ -198,14 +285,14 @@ public class BaseCaseToScheduleSpecification {
 							vesselAvailability.setStartAt(optionalAvailabilityShippingOption.getStartPort());
 						}
 						if (optionalAvailabilityShippingOption.getEndPort() != null) {
-							EList<APortSet<Port>> endAt = vesselAvailability.getEndAt();
+							final EList<APortSet<Port>> endAt = vesselAvailability.getEndAt();
 							endAt.clear();
 							endAt.add(optionalAvailabilityShippingOption.getEndPort());
 						}
 
 						mapper.addMapping(optionalAvailabilityShippingOption, vesselAvailability);
 					}
-					spec.setVesselAllocation(vesselAvailability);
+					vesselScheduleSpecification.setVesselAllocation(vesselAvailability);
 				} else if (shipping instanceof SimpleVesselCharterOption) {
 					final SimpleVesselCharterOption fleetShippingOption = (SimpleVesselCharterOption) shipping;
 					VesselAvailability vesselAvailability = mapper.get(fleetShippingOption);
@@ -232,25 +319,26 @@ public class BaseCaseToScheduleSpecification {
 
 						mapper.addMapping(fleetShippingOption, vesselAvailability);
 					}
-					spec.setVesselAllocation(vesselAvailability);
+					vesselScheduleSpecification.setVesselAllocation(vesselAvailability);
 				} else if (shipping instanceof ExistingVesselCharterOption) {
 					final ExistingVesselCharterOption fleetShippingOption = (ExistingVesselCharterOption) shipping;
-					VesselAvailability vesselAvailability = fleetShippingOption.getVesselCharter();
+					final VesselAvailability vesselAvailability = fleetShippingOption.getVesselCharter();
 					mapper.addMapping(fleetShippingOption, vesselAvailability);
-					spec.setVesselAllocation(vesselAvailability);
+					vesselScheduleSpecification.setVesselAllocation(vesselAvailability);
 				} else if (shipping instanceof FullVesselCharterOption) {
 					final FullVesselCharterOption fleetShippingOption = (FullVesselCharterOption) shipping;
-					VesselAvailability vesselAvailability = fleetShippingOption.getVesselCharter();
+					final VesselAvailability vesselAvailability = fleetShippingOption.getVesselCharter();
 					mapper.addMapping(fleetShippingOption, vesselAvailability);
-					spec.setVesselAllocation(vesselAvailability);
+					vesselScheduleSpecification.setVesselAllocation(vesselAvailability);
 				} else {
 					assert false;
 				}
 
 				if (row.getVesselEventOption() != null) {
-					VesselEventSpecification eventSpec = CargoFactory.eINSTANCE.createVesselEventSpecification();
+					final VesselEventSpecification eventSpec = CargoFactory.eINSTANCE.createVesselEventSpecification();
 					eventSpec.setVesselEvent(getOrCreate(row.getVesselEventOption()));
-					spec.getEvents().add(eventSpec);
+					vesselScheduleSpecification.getEvents().add(eventSpec);
+					applyOptions.accept(eventSpec.getVesselEvent(), row.getOptions(), eventSpec);
 
 				} else {
 					DischargeSlot dischargeSlot = null;
@@ -269,15 +357,21 @@ public class BaseCaseToScheduleSpecification {
 
 					final SlotSpecification loadSpec = CargoFactory.eINSTANCE.createSlotSpecification();
 					loadSpec.setSlot(loadSlot);
+					vesselScheduleSpecification.getEvents().add(loadSpec);
+
+					applyOptions.accept(loadSlot, row.getOptions(), loadSpec);
+
 					final SlotSpecification dischargeSpec = CargoFactory.eINSTANCE.createSlotSpecification();
 					dischargeSpec.setSlot(dischargeSlot);
+					vesselScheduleSpecification.getEvents().add(dischargeSpec);
 
-					spec.getEvents().add(loadSpec);
-					spec.getEvents().add(dischargeSpec);
+					applyOptions.accept(dischargeSlot, row.getOptions(), dischargeSpec);
 
 				}
-				specification.getVesselScheduleSpecifications().add(spec);
 
+				if (newRecord) {
+					specification.getVesselScheduleSpecifications().add(vesselScheduleSpecification);
+				}
 			} else {
 				// ?
 			}

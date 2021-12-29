@@ -20,6 +20,8 @@ import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.models.ui.properties.views.DetailPropertiesView;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.application.TogglePinSelection;
 
 public class PNLDetailsReport extends DetailPropertiesView<PNLDetailsReportComponent> {
@@ -76,8 +78,9 @@ public class PNLDetailsReport extends DetailPropertiesView<PNLDetailsReportCompo
 				viewer.expandToLevel(++expandLevel);
 			}
 		};
-		collapseOneLevel.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/collapseall.gif"));
-		expandOneLevel.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/expandall.gif"));
+
+		CommonImages.setImageDescriptors(collapseOneLevel, IconPaths.CollapseAll);
+		CommonImages.setImageDescriptors(expandOneLevel, IconPaths.ExpandAll);
 
 		final Action togglePinSelection = new Action("Pin selection", Action.AS_CHECK_BOX) {
 
@@ -91,7 +94,7 @@ public class PNLDetailsReport extends DetailPropertiesView<PNLDetailsReportCompo
 			}
 		};
 		getViewSite().getActionBars().getToolBarManager().add(togglePinSelection);
-		togglePinSelection.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/Pinned.gif"));
+		CommonImages.setImageDescriptors(togglePinSelection, IconPaths.Pin);
 
 		getViewSite().getActionBars().getToolBarManager().add(collapseOneLevel);
 		getViewSite().getActionBars().getToolBarManager().add(expandOneLevel);

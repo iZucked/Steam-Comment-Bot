@@ -29,15 +29,17 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
-import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
-import com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.SellOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.VesselEventOptionDescriptionFormatter;
+import com.mmxlabs.models.lng.analytics.ui.views.formatters.VoyageOptionsDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.AbstractSandboxComponent;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.SandboxUIHelper;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.PartialCaseContentProvider;
@@ -49,9 +51,7 @@ import com.mmxlabs.rcp.common.RunnerHelper;
 public class PartialCaseCompoment extends AbstractSandboxComponent<OptionModellerView, OptionAnalysisModel> {
 
 	private GridTreeViewer partialCaseViewer;
-	private PartialCaseWiringDiagram partialCaseDiagram;
 
-	private boolean partialCaseValid = true;
 	private ExpandableComposite expandable;
 
 	private SandboxUIHelper sandboxHelper;
@@ -99,7 +99,6 @@ public class PartialCaseCompoment extends AbstractSandboxComponent<OptionModelle
 		partialCaseViewer.getGrid().setAutoHeight(true);
 		partialCaseViewer.getGrid().setRowHeaderVisible(true);
 
-		// createColumn(partialCaseViewer, "Buy", new BuyOptionDescriptionFormatter(), false).getColumn().setWordWrap(true);
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(partialCaseViewer, SWT.CENTER | SWT.WRAP);
 			gvc.getColumn().setTree(false);
@@ -133,8 +132,7 @@ public class PartialCaseCompoment extends AbstractSandboxComponent<OptionModelle
 						}
 					}
 
-					if (cell.getElement() instanceof PartialCaseRow) {
-						final PartialCaseRow row = (PartialCaseRow) cell.getElement();
+					if (cell.getElement() instanceof PartialCaseRow row) {
 						String lbl = "";
 						if (!row.getBuyOptions().isEmpty()) {
 							lbl = new BuyOptionDescriptionFormatter().render(row.getBuyOptions());
@@ -167,6 +165,7 @@ public class PartialCaseCompoment extends AbstractSandboxComponent<OptionModelle
 			});
 
 		}
+		PartialCaseWiringDiagram partialCaseDiagram;
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(partialCaseViewer, SWT.CENTER);
 			gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer());
@@ -174,13 +173,14 @@ public class PartialCaseCompoment extends AbstractSandboxComponent<OptionModelle
 			gvc.getColumn().setResizeable(false);
 			gvc.getColumn().setWidth(100);
 			gvc.setLabelProvider(createWiringColumnLabelProvider());
-			this.partialCaseDiagram = new PartialCaseWiringDiagram(partialCaseViewer.getGrid(), gvc);
-			// gvc.getColumn().setCellRenderer(createCellRenderer());
+			partialCaseDiagram = new PartialCaseWiringDiagram(partialCaseViewer.getGrid(), gvc);
 		}
 
-		createColumn(partialCaseViewer, "Sell", new SellOptionDescriptionFormatter(), false).getColumn().setWordWrap(true);
-		createColumn(partialCaseViewer, "Shipping", new ShippingOptionDescriptionFormatter(), false).getColumn().setWordWrap(true);
-
+		createColumn(partialCaseViewer, "Sell", new SellOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS).getColumn().setWordWrap(true);
+		createColumn(partialCaseViewer, "Shipping", new ShippingOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING).getColumn().setWordWrap(true);
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TEMP_SANDBOX_VOYAGE_OPTIONS)) {
+			createColumn(partialCaseViewer, "Options", new VoyageOptionsDescriptionFormatter(), false, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__OPTIONS).getColumn().setWordWrap(true);
+		}
 		partialCaseViewer.setContentProvider(new PartialCaseContentProvider());
 
 		final MenuManager mgr = new MenuManager();
@@ -192,9 +192,7 @@ public class PartialCaseCompoment extends AbstractSandboxComponent<OptionModelle
 		inputWants.add(partialCaseViewer::setInput);
 		inputWants.add(partialCaseDiagram::setRoot);
 
-		lockedListeners.add(locked -> {
-			RunnerHelper.runAsyncIfControlValid(partialCaseViewer.getGrid(), grid -> grid.setEnabled(!locked));
-		});
+		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(partialCaseViewer.getGrid(), grid -> grid.setEnabled(!locked)));
 
 		hookDragSource(partialCaseViewer);
 		return partialCaseViewer.getGrid();
@@ -204,10 +202,6 @@ public class PartialCaseCompoment extends AbstractSandboxComponent<OptionModelle
 	public void refresh() {
 		partialCaseViewer.refresh();
 		GridViewerHelper.recalculateRowHeights(partialCaseViewer.getGrid());
-	}
-
-	public void setPartialCaseValid(final boolean valid) {
-		partialCaseValid = valid;
 	}
 
 	public void setVisible(boolean visible) {

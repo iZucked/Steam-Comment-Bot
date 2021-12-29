@@ -35,6 +35,9 @@ import org.eclipse.ui.dialogs.ListSelectionDialog;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 
 /**
  * An editor for picking multiple values from an enum.
@@ -75,7 +78,7 @@ public class MultiEnumInlineEditor extends UnsettableInlineEditor {
 			label.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 		}
 
-		final ImageDescriptor d = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui", "icons/edit.png");
+		final ImageDescriptor d = CommonImages.getImageDescriptor(IconPaths.Edit, IconMode.Enabled);
 		Button button = toolkit.createButton(buttonAndLabel, "", SWT.NONE);
 		final Image img = d.createImage();
 		button.setImage(img);

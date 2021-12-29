@@ -12,6 +12,8 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Display;
 
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.internal.Activator;
 
 /**
@@ -41,7 +43,7 @@ public class CopyGridToHtmlClipboardAction extends Action{
 		setText("Copy");
 		setDescription("Copies grid data into the clipboard");
 		setToolTipText("Copies grid data into the clipboard");
-		setImageDescriptor(Activator.getImageDescriptor("/icons/copy.png"));
+		CommonImages.setImageDescriptors(this, IconPaths.Copy);
 	}
 	
 	public void setShowForegroundColours(final boolean showForegroundColours) {

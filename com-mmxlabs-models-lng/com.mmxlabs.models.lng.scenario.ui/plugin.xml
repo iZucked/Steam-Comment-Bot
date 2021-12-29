@@ -48,7 +48,6 @@
       <wizard
             category="com.mmxlabs.models.lng.demo.importWizards.sampleCategory"
             class="com.mmxlabs.models.lng.scenario.importWizards.ImportCSVWizard"
-            icon="icons/sample.gif"
             id="com.mmxlabs.models.lng.demo.importWizards.ImportCSVWizard"
             name="Import CSV">
          <description>

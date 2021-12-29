@@ -27,6 +27,7 @@ import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
+import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.util.PortAdapterFactory;
 
@@ -176,6 +177,29 @@ public class PortItemProviderAdapterFactory extends PortAdapterFactory implement
 		}
 
 		return routeLineItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.port.ManualRouteLine} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ManualRouteLineItemProvider manualRouteLineItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.port.ManualRouteLine}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createManualRouteLineAdapter() {
+		if (manualRouteLineItemProvider == null) {
+			manualRouteLineItemProvider = new ManualRouteLineItemProvider(this);
+		}
+
+		return manualRouteLineItemProvider;
 	}
 
 	/**
@@ -469,6 +493,7 @@ public class PortItemProviderAdapterFactory extends PortAdapterFactory implement
 		if (routeItemProvider != null) routeItemProvider.dispose();
 		if (portGroupItemProvider != null) portGroupItemProvider.dispose();
 		if (routeLineItemProvider != null) routeLineItemProvider.dispose();
+		if (manualRouteLineItemProvider != null) manualRouteLineItemProvider.dispose();
 		if (portModelItemProvider != null) portModelItemProvider.dispose();
 		if (capabilityGroupItemProvider != null) capabilityGroupItemProvider.dispose();
 		if (locationItemProvider != null) locationItemProvider.dispose();

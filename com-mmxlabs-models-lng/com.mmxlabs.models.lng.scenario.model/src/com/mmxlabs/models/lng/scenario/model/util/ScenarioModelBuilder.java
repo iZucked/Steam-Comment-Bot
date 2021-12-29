@@ -14,6 +14,8 @@ import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.util.ADPModelBuilder;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.cargo.PanamaSeasonalityRecord;
+import com.mmxlabs.models.lng.cargo.VesselGroupCanalParameters;
 import com.mmxlabs.models.lng.cargo.util.CargoModelBuilder;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.util.CommercialModelBuilder;
@@ -66,8 +68,20 @@ public final class ScenarioModelBuilder {
 		rootObject.setScheduleModel(ScheduleFactory.eINSTANCE.createScheduleModel());
 		rootObject.setAnalyticsModel(AnalyticsFactory.eINSTANCE.createAnalyticsModel());
 		rootObject.setNominationsModel(NominationsFactory.eINSTANCE.createNominationsModel());
+
+		rootObject.getCargoModel().setCanalBookings(CargoFactory.eINSTANCE.createCanalBookings());
+		{
+			final VesselGroupCanalParameters vgcp = CargoFactory.eINSTANCE.createVesselGroupCanalParameters();
+			vgcp.setName("default");
+			rootObject.getCargoModel().getCanalBookings().getVesselGroupCanalParameters().add(vgcp);
+
+			final PanamaSeasonalityRecord psr = CargoFactory.eINSTANCE.createPanamaSeasonalityRecord();
+			psr.setVesselGroupCanalParameter(vgcp);
+			rootObject.getCargoModel().getCanalBookings().getPanamaSeasonalityRecords().add(psr);
+		}
+
 		rootObject.getNominationsModel().setNominationParameters(NominationsFactory.eINSTANCE.createNominationsParameters());
-		
+
 		final LNGReferenceModel referenceModel = LNGScenarioFactory.eINSTANCE.createLNGReferenceModel();
 		referenceModel.setPortModel(PortFactory.eINSTANCE.createPortModel());
 		referenceModel.setFleetModel(FleetFactory.eINSTANCE.createFleetModel());

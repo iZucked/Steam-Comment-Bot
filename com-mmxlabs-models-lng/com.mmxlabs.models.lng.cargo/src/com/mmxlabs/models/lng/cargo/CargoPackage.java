@@ -258,13 +258,22 @@ public interface CargoPackage extends EPackage {
 	int CARGO_MODEL__CARGOES_FOR_HEDGING = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
 
 	/**
+	 * The feature id for the '<em><b>Grouped Discharge Slots</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_MODEL__GROUPED_DISCHARGE_SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
+	int CARGO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -6309,13 +6318,22 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_EVENT_SPECIFICATION__VESSEL_EVENT = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Arrival Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_SPECIFICATION__ARRIVAL_DATE = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Vessel Event Specification</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_SPECIFICATION_FEATURE_COUNT = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 1;
+	int VESSEL_EVENT_SPECIFICATION_FEATURE_COUNT = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Vessel Event Specification</em>' class.
@@ -6337,13 +6355,31 @@ public interface CargoPackage extends EPackage {
 	int VOYAGE_SPECIFICATION = 26;
 
 	/**
+	 * The feature id for the '<em><b>Route Option</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOYAGE_SPECIFICATION__ROUTE_OPTION = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Fuel Choice</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOYAGE_SPECIFICATION__FUEL_CHOICE = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Voyage Specification</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VOYAGE_SPECIFICATION_FEATURE_COUNT = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 0;
+	int VOYAGE_SPECIFICATION_FEATURE_COUNT = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Voyage Specification</em>' class.
@@ -6374,13 +6410,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT_SPECIFICATION__SLOT = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Arrival Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_SPECIFICATION__ARRIVAL_DATE = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Slot Specification</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_SPECIFICATION_FEATURE_COUNT = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 1;
+	int SLOT_SPECIFICATION_FEATURE_COUNT = SCHEDULE_SPECIFICATION_EVENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Slot Specification</em>' class.
@@ -7353,6 +7398,98 @@ public interface CargoPackage extends EPackage {
 	int PANAMA_SEASONALITY_RECORD_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.GroupedSlotsConstraintImpl <em>Grouped Slots Constraint</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.GroupedSlotsConstraintImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getGroupedSlotsConstraint()
+	 * @generated
+	 */
+	int GROUPED_SLOTS_CONSTRAINT = 35;
+
+	/**
+	 * The feature id for the '<em><b>Slots</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_SLOTS_CONSTRAINT__SLOTS = 0;
+
+	/**
+	 * The feature id for the '<em><b>Minimum Bound</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_SLOTS_CONSTRAINT__MINIMUM_BOUND = 1;
+
+	/**
+	 * The number of structural features of the '<em>Grouped Slots Constraint</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_SLOTS_CONSTRAINT_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Grouped Slots Constraint</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_SLOTS_CONSTRAINT_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.GroupedDischargeSlotsConstraintImpl <em>Grouped Discharge Slots Constraint</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.GroupedDischargeSlotsConstraintImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getGroupedDischargeSlotsConstraint()
+	 * @generated
+	 */
+	int GROUPED_DISCHARGE_SLOTS_CONSTRAINT = 36;
+
+	/**
+	 * The feature id for the '<em><b>Slots</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_DISCHARGE_SLOTS_CONSTRAINT__SLOTS = GROUPED_SLOTS_CONSTRAINT__SLOTS;
+
+	/**
+	 * The feature id for the '<em><b>Minimum Bound</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_DISCHARGE_SLOTS_CONSTRAINT__MINIMUM_BOUND = GROUPED_SLOTS_CONSTRAINT__MINIMUM_BOUND;
+
+	/**
+	 * The number of structural features of the '<em>Grouped Discharge Slots Constraint</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_DISCHARGE_SLOTS_CONSTRAINT_FEATURE_COUNT = GROUPED_SLOTS_CONSTRAINT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Grouped Discharge Slots Constraint</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUPED_DISCHARGE_SLOTS_CONSTRAINT_OPERATION_COUNT = GROUPED_SLOTS_CONSTRAINT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7360,7 +7497,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCargoType()
 	 * @generated
 	 */
-	int CARGO_TYPE = 35;
+	int CARGO_TYPE = 37;
 
 
 	/**
@@ -7371,7 +7508,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselType()
 	 * @generated
 	 */
-	int VESSEL_TYPE = 36;
+	int VESSEL_TYPE = 38;
 
 
 	/**
@@ -7382,7 +7519,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryFacilityType()
 	 * @generated
 	 */
-	int INVENTORY_FACILITY_TYPE = 37;
+	int INVENTORY_FACILITY_TYPE = 39;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.InventoryFrequency <em>Inventory Frequency</em>}' enum.
@@ -7392,7 +7529,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getInventoryFrequency()
 	 * @generated
 	 */
-	int INVENTORY_FREQUENCY = 38;
+	int INVENTORY_FREQUENCY = 40;
 
 
 	/**
@@ -7403,7 +7540,17 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getPaperPricingType()
 	 * @generated
 	 */
-	int PAPER_PRICING_TYPE = 39;
+	int PAPER_PRICING_TYPE = 41;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.FuelChoice <em>Fuel Choice</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.FuelChoice
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getFuelChoice()
+	 * @generated
+	 */
+	int FUEL_CHOICE = 42;
 
 	/**
 	 * The meta object id for the '<em>Scheduling Time Window</em>' data type.
@@ -7413,7 +7560,7 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getSchedulingTimeWindow()
 	 * @generated
 	 */
-	int SCHEDULING_TIME_WINDOW = 40;
+	int SCHEDULING_TIME_WINDOW = 43;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.Cargo <em>Cargo</em>}'.
@@ -8565,6 +8712,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getCargoModel_CargoesForHedging();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getGroupedDischargeSlots <em>Grouped Discharge Slots</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Grouped Discharge Slots</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getGroupedDischargeSlots()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_GroupedDischargeSlots();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.CargoModel#getLoadSlotByName(java.lang.String) <em>Get Load Slot By Name</em>}' operation.
@@ -9796,6 +9954,17 @@ public interface CargoPackage extends EPackage {
 	EReference getVesselEventSpecification_VesselEvent();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselEventSpecification#getArrivalDate <em>Arrival Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Arrival Date</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselEventSpecification#getArrivalDate()
+	 * @see #getVesselEventSpecification()
+	 * @generated
+	 */
+	EAttribute getVesselEventSpecification_ArrivalDate();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.VoyageSpecification <em>Voyage Specification</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9804,6 +9973,28 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getVoyageSpecification();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VoyageSpecification#getRouteOption <em>Route Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Route Option</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VoyageSpecification#getRouteOption()
+	 * @see #getVoyageSpecification()
+	 * @generated
+	 */
+	EAttribute getVoyageSpecification_RouteOption();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VoyageSpecification#getFuelChoice <em>Fuel Choice</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Fuel Choice</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VoyageSpecification#getFuelChoice()
+	 * @see #getVoyageSpecification()
+	 * @generated
+	 */
+	EAttribute getVoyageSpecification_FuelChoice();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.SlotSpecification <em>Slot Specification</em>}'.
@@ -9825,6 +10016,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSlotSpecification_Slot();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.SlotSpecification#getArrivalDate <em>Arrival Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Arrival Date</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.SlotSpecification#getArrivalDate()
+	 * @see #getSlotSpecification()
+	 * @generated
+	 */
+	EAttribute getSlotSpecification_ArrivalDate();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CharterInMarketOverride <em>Charter In Market Override</em>}'.
@@ -10267,6 +10469,48 @@ public interface CargoPackage extends EPackage {
 	EAttribute getPanamaSeasonalityRecord_SouthboundWaitingDays();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.GroupedSlotsConstraint <em>Grouped Slots Constraint</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Grouped Slots Constraint</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.GroupedSlotsConstraint
+	 * @generated
+	 */
+	EClass getGroupedSlotsConstraint();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.GroupedSlotsConstraint#getSlots <em>Slots</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Slots</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.GroupedSlotsConstraint#getSlots()
+	 * @see #getGroupedSlotsConstraint()
+	 * @generated
+	 */
+	EReference getGroupedSlotsConstraint_Slots();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.GroupedSlotsConstraint#getMinimumBound <em>Minimum Bound</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Minimum Bound</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.GroupedSlotsConstraint#getMinimumBound()
+	 * @see #getGroupedSlotsConstraint()
+	 * @generated
+	 */
+	EAttribute getGroupedSlotsConstraint_MinimumBound();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.GroupedDischargeSlotsConstraint <em>Grouped Discharge Slots Constraint</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Grouped Discharge Slots Constraint</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.GroupedDischargeSlotsConstraint
+	 * @generated
+	 */
+	EClass getGroupedDischargeSlotsConstraint();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10315,6 +10559,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getPaperPricingType();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.cargo.FuelChoice <em>Fuel Choice</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Fuel Choice</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.FuelChoice
+	 * @generated
+	 */
+	EEnum getFuelChoice();
 
 	/**
 	 * Returns the meta object for data type '{@link com.mmxlabs.models.lng.cargo.SchedulingTimeWindow <em>Scheduling Time Window</em>}'.
@@ -11214,6 +11468,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CARGO_MODEL__CARGOES_FOR_HEDGING = eINSTANCE.getCargoModel_CargoesForHedging();
+
+		/**
+		 * The meta object literal for the '<em><b>Grouped Discharge Slots</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__GROUPED_DISCHARGE_SLOTS = eINSTANCE.getCargoModel_GroupedDischargeSlots();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Load Slot By Name</b></em>' operation.
@@ -12178,6 +12440,14 @@ public interface CargoPackage extends EPackage {
 		EReference VESSEL_EVENT_SPECIFICATION__VESSEL_EVENT = eINSTANCE.getVesselEventSpecification_VesselEvent();
 
 		/**
+		 * The meta object literal for the '<em><b>Arrival Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_EVENT_SPECIFICATION__ARRIVAL_DATE = eINSTANCE.getVesselEventSpecification_ArrivalDate();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.VoyageSpecificationImpl <em>Voyage Specification</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -12186,6 +12456,22 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EClass VOYAGE_SPECIFICATION = eINSTANCE.getVoyageSpecification();
+
+		/**
+		 * The meta object literal for the '<em><b>Route Option</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VOYAGE_SPECIFICATION__ROUTE_OPTION = eINSTANCE.getVoyageSpecification_RouteOption();
+
+		/**
+		 * The meta object literal for the '<em><b>Fuel Choice</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VOYAGE_SPECIFICATION__FUEL_CHOICE = eINSTANCE.getVoyageSpecification_FuelChoice();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.SlotSpecificationImpl <em>Slot Specification</em>}' class.
@@ -12204,6 +12490,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SLOT_SPECIFICATION__SLOT = eINSTANCE.getSlotSpecification_Slot();
+
+		/**
+		 * The meta object literal for the '<em><b>Arrival Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT_SPECIFICATION__ARRIVAL_DATE = eINSTANCE.getSlotSpecification_ArrivalDate();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CharterInMarketOverrideImpl <em>Charter In Market Override</em>}' class.
@@ -12548,6 +12842,42 @@ public interface CargoPackage extends EPackage {
 		EAttribute PANAMA_SEASONALITY_RECORD__SOUTHBOUND_WAITING_DAYS = eINSTANCE.getPanamaSeasonalityRecord_SouthboundWaitingDays();
 
 		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.GroupedSlotsConstraintImpl <em>Grouped Slots Constraint</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.GroupedSlotsConstraintImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getGroupedSlotsConstraint()
+		 * @generated
+		 */
+		EClass GROUPED_SLOTS_CONSTRAINT = eINSTANCE.getGroupedSlotsConstraint();
+
+		/**
+		 * The meta object literal for the '<em><b>Slots</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference GROUPED_SLOTS_CONSTRAINT__SLOTS = eINSTANCE.getGroupedSlotsConstraint_Slots();
+
+		/**
+		 * The meta object literal for the '<em><b>Minimum Bound</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute GROUPED_SLOTS_CONSTRAINT__MINIMUM_BOUND = eINSTANCE.getGroupedSlotsConstraint_MinimumBound();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.GroupedDischargeSlotsConstraintImpl <em>Grouped Discharge Slots Constraint</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.GroupedDischargeSlotsConstraintImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getGroupedDischargeSlotsConstraint()
+		 * @generated
+		 */
+		EClass GROUPED_DISCHARGE_SLOTS_CONSTRAINT = eINSTANCE.getGroupedDischargeSlotsConstraint();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -12596,6 +12926,16 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum PAPER_PRICING_TYPE = eINSTANCE.getPaperPricingType();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.FuelChoice <em>Fuel Choice</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.FuelChoice
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getFuelChoice()
+		 * @generated
+		 */
+		EEnum FUEL_CHOICE = eINSTANCE.getFuelChoice();
 
 		/**
 		 * The meta object literal for the '<em>Scheduling Time Window</em>' data type.

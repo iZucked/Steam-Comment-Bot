@@ -28,8 +28,8 @@ public class PackAction extends Action {
 	public PackAction(final GanttChart ganttChart) {
 		super();
 		setText("Fit");
- 		setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Pack, IconMode.Enabled));	
 		this.ganttChart = ganttChart;
+		CommonImages.setImageDescriptors(this, IconPaths.Pack);
 	}
 
 	@Override

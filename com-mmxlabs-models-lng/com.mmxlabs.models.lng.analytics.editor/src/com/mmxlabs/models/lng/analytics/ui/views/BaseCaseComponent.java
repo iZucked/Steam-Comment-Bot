@@ -28,27 +28,35 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.BuyOptionDescriptionFormatter;
+import com.mmxlabs.models.lng.analytics.ui.views.formatters.FreezeDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.OptioniseDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.SellOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.ShippingOptionDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.formatters.VesselEventOptionDescriptionFormatter;
+import com.mmxlabs.models.lng.analytics.ui.views.formatters.VoyageOptionsDescriptionFormatter;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.AbstractSandboxComponent;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.providers.BaseCaseContentProvider;
 import com.mmxlabs.models.lng.analytics.util.SandboxModeConstants;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
+import com.mmxlabs.rcp.common.CommonImages;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 
 public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerView, OptionAnalysisModel> {
 
 	private GridTreeViewer baseCaseViewer;
 	private BaseCaseWiringDiagram baseCaseDiagram;
-	private GridViewerColumn optioniseCol;	
+	private GridViewerColumn optioniseCol;
+//	private GridViewerColumn freezeCol;
+	private GridViewerColumn optionsCol;
 
 	protected BaseCaseComponent(@NonNull final IScenarioEditingLocation scenarioEditingLocation, final Map<Object, IStatus> validationErrors,
 			@NonNull final Supplier<OptionAnalysisModel> modelProvider) {
@@ -100,11 +108,12 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 				public void update(ViewerCell cell) {
 					final DataVisualizer dv = baseCaseViewer.getGrid().getDataVisualizer();
 					final GridItem item = (GridItem) cell.getItem();
+					// Reset any colouring
+					item.setBackground(null);
 					final int i = cell.getColumnIndex();
 					dv.setColumnSpan(item, i, 1);
 
-					if (cell.getElement() instanceof BaseCaseRow) {
-						BaseCaseRow baseCaseRow = (BaseCaseRow) cell.getElement();
+					if (cell.getElement() instanceof BaseCaseRow baseCaseRow) {
 						if (baseCaseRow.getVesselEventOption() != null) {
 							dv.setColumnSpan(item, i, 2);
 							cell.setText(new VesselEventOptionDescriptionFormatter().render(baseCaseRow.getVesselEventOption()));
@@ -129,8 +138,27 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 
 		createColumn(baseCaseViewer, "Sell", new SellOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.BASE_CASE_ROW__SELL_OPTION);
 		createColumn(baseCaseViewer, "Shipping", new ShippingOptionDescriptionFormatter(), false, AnalyticsPackage.Literals.BASE_CASE_ROW__SHIPPING);
-		optioniseCol = createColumn(baseCaseViewer, "Opt", new OptioniseDescriptionFormatter(), false);
+
+		optioniseCol = createColumn(baseCaseViewer, "", new OptioniseDescriptionFormatter(), false);
+		optioniseCol.getColumn().setAlignment(SWT.CENTER);
+		CommonImages.setImage(optioniseCol.getColumn(), IconPaths.Play_16);
+		
 		optioniseCol.getColumn().setHeaderTooltip("Select rows to use of optionise targets. Other rows will be included in search scope");
+		optioniseCol.getColumn().setWidth(30);
+		optioniseCol.getColumn().setVisible(false);
+
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TEMP_SANDBOX_VOYAGE_OPTIONS)) {
+			// Mode specific columns
+			optionsCol = createColumn(baseCaseViewer, "Options", new VoyageOptionsDescriptionFormatter(), false, AnalyticsPackage.Literals.BASE_CASE_ROW__OPTIONS);
+
+			// freezeCol = createColumn(baseCaseViewer, "Lock", new
+			// FreezeDescriptionFormatter(), false);
+			// freezeCol.getColumn().setWidth(40);
+
+			// Hide by default
+			optionsCol.getColumn().setVisible(false);
+			// freezeCol.getColumn().setVisible(false);
+		}
 
 		baseCaseViewer.getGrid().setCellSelectionEnabled(true);
 
@@ -151,12 +179,23 @@ public class BaseCaseComponent extends AbstractSandboxComponent<OptionModellerVi
 	}
 
 	public void setMode(int mode) {
-		if (mode == SandboxModeConstants.MODE_DERIVE) {
-			optioniseCol.getColumn().setVisible(false);
-		} else if (mode == SandboxModeConstants.MODE_OPTIMISE) {
-			optioniseCol.getColumn().setVisible(false);
-		} else if (mode == SandboxModeConstants.MODE_OPTIONISE) {
-			optioniseCol.getColumn().setVisible(true);
+
+		optioniseCol.getColumn().setVisible(mode == SandboxModeConstants.MODE_OPTIONISE);
+
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_TEMP_SANDBOX_VOYAGE_OPTIONS)) {
+			if (mode == SandboxModeConstants.MODE_DERIVE) {
+				optionsCol.getColumn().setVisible(true);
+				// freezeCol.getColumn().setVisible(false);
+			} else if (mode == SandboxModeConstants.MODE_OPTIMISE) {
+				optionsCol.getColumn().setVisible(false);
+				// freezeCol.getColumn().setVisible(true);
+			} else if (mode == SandboxModeConstants.MODE_OPTIONISE) {
+				optionsCol.getColumn().setVisible(false);
+				// freezeCol.getColumn().setVisible(true);
+			} else {
+				optionsCol.getColumn().setVisible(false);
+				// freezeCol.getColumn().setVisible(false);
+			}
 		}
 	}
 

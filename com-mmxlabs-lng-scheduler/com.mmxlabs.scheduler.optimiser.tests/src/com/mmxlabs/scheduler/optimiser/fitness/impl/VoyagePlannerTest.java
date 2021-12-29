@@ -193,7 +193,7 @@ public final class VoyagePlannerTest {
 		// The NBO travel options will have completed the setup of previous
 		// options (options1) filling in distance info.
 		final VoyageOptions expectedVoyageOptions1a = expectedVoyageOptions1.copy();
-		expectedVoyageOptions1a.setRoute(ERouteOption.DIRECT, 400, 0L);
+		expectedVoyageOptions1a.setRoute(ERouteOption.DIRECT, 400, 0L, 0);
 
 		final VoyageOptions expectedVoyageOptions2 = new VoyageOptions(dischargeSlot1, loadSlot2);
 		expectedVoyageOptions2.setAvailableTime(4);
@@ -204,7 +204,7 @@ public final class VoyagePlannerTest {
 		expectedVoyageOptions2.setNBOSpeed(15000);
 		expectedVoyageOptions2.setShouldBeCold(VesselTankState.MUST_BE_COLD);
 		final VoyageOptions expectedVoyageOptions2a = expectedVoyageOptions2.copy();
-		expectedVoyageOptions2a.setRoute(ERouteOption.DIRECT, 400, 0L);
+		expectedVoyageOptions2a.setRoute(ERouteOption.DIRECT, 400, 0L, 0);
 
 		final VoyageOptions expectedVoyageOptions3 = new VoyageOptions(loadSlot2, dischargeSlot2);
 		expectedVoyageOptions3.setAvailableTime(4);
@@ -215,7 +215,7 @@ public final class VoyagePlannerTest {
 		expectedVoyageOptions3.setNBOSpeed(15000);
 
 		final VoyageOptions expectedVoyageOptions3a = expectedVoyageOptions3.copy();
-		expectedVoyageOptions3a.setRoute(ERouteOption.DIRECT, 400, 0L);
+		expectedVoyageOptions3a.setRoute(ERouteOption.DIRECT, 400, 0L, 0);
 
 		final PortOptions expectedPortOptions1 = new PortOptions(1, vessel, loadSlot1);
 		final PortDetails expectedPortDetails1 = new PortDetails(expectedPortOptions1);

@@ -1092,6 +1092,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.TRUE)) //
 				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePNLBasedWindowTrimming)).toInstance(Boolean.TRUE)) //
 				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)).toInstance(Boolean.TRUE)) //
+				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseBestPanamaCanalIdleDaysWindowTrimming)).toInstance(Boolean.FALSE)) //
 				.buildOverride(ModuleType.Module_LNGTransformerModule)//
 				.make();
 
@@ -1230,6 +1231,7 @@ public class DurationConstraintTests extends AbstractLegacyMicroTestCase {
 				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePNLBasedWindowTrimming)).toInstance(Boolean.TRUE)) //
 				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UsePriceBasedWindowTrimming)).toInstance(Boolean.TRUE)) //
 				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseCanalSlotBasedWindowTrimming)).toInstance(canalTrimming)) //
+				.with(binder -> binder.bind(boolean.class).annotatedWith(Names.named(SchedulerConstants.Key_UseBestPanamaCanalIdleDaysWindowTrimming)).toInstance(Boolean.FALSE)) //
 				.buildOverride(ModuleType.Module_LNGTransformerModule)//
 				.make();
 		return localOverrides;

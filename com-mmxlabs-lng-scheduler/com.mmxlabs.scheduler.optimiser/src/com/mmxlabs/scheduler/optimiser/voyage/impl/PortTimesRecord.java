@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -15,14 +16,20 @@ import com.google.common.collect.ImmutableMap;
 import com.mmxlabs.scheduler.optimiser.cache.AbstractWriteLockable;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
+import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 /**
- * A small class storing the port arrival time and visit duration for a {@link VoyagePlan}. This class may or may not include the times for the last element in the plan depending on how it is created.
- * For scheduling purposes the end element should be included. Often for pricing purposes the end element can be ignored.
+ * A small class storing the port arrival time and visit duration for a
+ * {@link VoyagePlan}. This class may or may not include the times for the last
+ * element in the plan depending on how it is created. For scheduling purposes
+ * the end element should be included. Often for pricing purposes the end
+ * element can be ignored.
  * 
- * Note, the order slots are added is important. They should be added in scheduled order. The calls to {@link #getFirstSlotTime()} and {@link #getFirstSlot()} are expected to be bound the first slot
- * added to the instance.
+ * Note, the order slots are added is important. They should be added in
+ * scheduled order. The calls to {@link #getFirstSlotTime()} and
+ * {@link #getFirstSlot()} are expected to be bound the first slot added to the
+ * instance.
  * 
  * @author Simon Goodall
  * 
@@ -35,7 +42,7 @@ public final class PortTimesRecord extends AbstractWriteLockable implements IPor
 	private static final class SlotVoyageRecord {
 		private int startTime;
 		private int duration;
-		private int extraIdleTime;
+		private int[] extraIdleTimes = new int[ExplicitIdleTime.values().length];
 		private AvailableRouteChoices nextVoyageRoute = AvailableRouteChoices.OPTIMAL;
 		private int additionalPanamaIdleTime;
 		private int maxAdditionalPanamaIdleTime;
@@ -49,7 +56,7 @@ public final class PortTimesRecord extends AbstractWriteLockable implements IPor
 				final SlotVoyageRecord other = (SlotVoyageRecord) obj;
 				return startTime == other.startTime //
 						&& duration == other.duration //
-						&& extraIdleTime == other.extraIdleTime //
+						&& Arrays.equals(extraIdleTimes, other.extraIdleTimes) //
 						&& nextVoyageRoute == other.nextVoyageRoute //
 						&& additionalPanamaIdleTime == other.additionalPanamaIdleTime //
 						&& maxAdditionalPanamaIdleTime == other.maxAdditionalPanamaIdleTime //
@@ -60,7 +67,7 @@ public final class PortTimesRecord extends AbstractWriteLockable implements IPor
 
 		@Override
 		public int hashCode() {
-			return Objects.hash(startTime, duration, extraIdleTime, nextVoyageRoute);
+			return Objects.hash(startTime, duration, nextVoyageRoute);
 		}
 	}
 
@@ -83,11 +90,13 @@ public final class PortTimesRecord extends AbstractWriteLockable implements IPor
 		for (final IPortSlot slot : other.getSlots()) {
 			this.setSlotTime(slot, other.getSlotTime(slot));
 			this.setSlotDuration(slot, other.getSlotDuration(slot));
-			this.setSlotExtraIdleTime(slot, other.getSlotExtraIdleTime(slot));
 			this.setSlotAdditionalPanamaIdleHours(slot, other.getSlotAdditionaPanamaIdleHours(slot));
 			this.setSlotMaxAvailablePanamaIdleHours(slot, other.getSlotMaxAdditionaPanamaIdleHours(slot));
 			this.setRouteOptionBooking(slot, other.getRouteOptionBooking(slot));
 			this.setSlotNextVoyageOptions(slot, other.getSlotNextVoyageOptions(slot));
+			for (var type : ExplicitIdleTime.values()) {
+				this.setSlotExtraIdleTime(slot, type, other.getSlotExtraIdleTime(slot, type));
+			}
 		}
 		final IPortSlot otherReturnSlot = other.getReturnSlot();
 		if (otherReturnSlot != null) {
@@ -134,8 +143,8 @@ public final class PortTimesRecord extends AbstractWriteLockable implements IPor
 		if (allocation == null) {
 			checkWritable();
 			allocation = new SlotVoyageRecord();
-			slots = ImmutableList.<IPortSlot> builder().addAll(slots).add(slot).build();
-			slotRecords = ImmutableMap.<IPortSlot, SlotVoyageRecord> builder().putAll(slotRecords).put(slot, allocation).build();
+			slots = ImmutableList.<IPortSlot>builder().addAll(slots).add(slot).build();
+			slotRecords = ImmutableMap.<IPortSlot, SlotVoyageRecord>builder().putAll(slotRecords).put(slot, allocation).build();
 		}
 		return allocation;
 	}
@@ -155,7 +164,7 @@ public final class PortTimesRecord extends AbstractWriteLockable implements IPor
 		setSlotTime(slot, time);
 		// Return slot should not be in list
 		if (slots.contains(slot)) {
-			slots = ImmutableList.<IPortSlot> builder().addAll(slots.stream().filter(s -> s != slot).iterator()).build();
+			slots = ImmutableList.<IPortSlot>builder().addAll(slots.stream().filter(s -> s != slot).iterator()).build();
 		}
 		this.returnSlot = slot;
 	}
@@ -187,10 +196,23 @@ public final class PortTimesRecord extends AbstractWriteLockable implements IPor
 	}
 
 	@Override
-	public int getSlotExtraIdleTime(final IPortSlot slot) {
+	public int getSlotExtraIdleTime(final IPortSlot slot, ExplicitIdleTime type) {
 		final SlotVoyageRecord allocation = slotRecords.get(slot);
 		if (allocation != null) {
-			return allocation.extraIdleTime;
+			return allocation.extraIdleTimes[type.ordinal()];
+		}
+		return 0;
+	}
+
+	@Override
+	public int getSlotTotalExtraIdleTime(final IPortSlot slot) {
+		final SlotVoyageRecord allocation = slotRecords.get(slot);
+		if (allocation != null) {
+			int sum = 0;
+			for (var type : ExplicitIdleTime.values()) {
+				sum += allocation.extraIdleTimes[type.ordinal()];
+			}
+			return sum;
 		}
 		return 0;
 	}
@@ -204,11 +226,11 @@ public final class PortTimesRecord extends AbstractWriteLockable implements IPor
 	}
 
 	@Override
-	public void setSlotExtraIdleTime(final IPortSlot slot, final int extraIdleTime) {
+	public void setSlotExtraIdleTime(final IPortSlot slot, ExplicitIdleTime type, final int extraIdleTime) {
 
 		checkWritable();
 
-		getOrCreateSlotRecord(slot).extraIdleTime = extraIdleTime;
+		getOrCreateSlotRecord(slot).extraIdleTimes[type.ordinal()] = extraIdleTime;
 	}
 
 	@Override
@@ -286,12 +308,14 @@ public final class PortTimesRecord extends AbstractWriteLockable implements IPor
 	@Override
 	public void setSlotMaxAvailablePanamaIdleHours(final IPortSlot from, final int maxIdleTimeAvailable) {
 		checkWritable();
+		assert maxIdleTimeAvailable >= 0;
 		getOrCreateSlotRecord(from).maxAdditionalPanamaIdleTime = maxIdleTimeAvailable;
 	}
 
 	@Override
 	public void setSlotAdditionalPanamaIdleHours(final IPortSlot from, final int additionalPanamaTime) {
 		checkWritable();
+		assert additionalPanamaTime >= 0;
 		getOrCreateSlotRecord(from).additionalPanamaIdleTime = additionalPanamaTime;
 	}
 

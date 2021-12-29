@@ -9,6 +9,8 @@ package com.mmxlabs.models.lng.cargo.provider;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 
+import com.mmxlabs.models.lng.cargo.SlotSpecification;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -17,6 +19,8 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.cargo.SlotSpecification} object.
@@ -47,6 +51,7 @@ public class SlotSpecificationItemProvider extends ScheduleSpecificationEventIte
 			super.getPropertyDescriptors(object);
 
 			addSlotPropertyDescriptor(object);
+			addArrivalDatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -74,6 +79,28 @@ public class SlotSpecificationItemProvider extends ScheduleSpecificationEventIte
 	}
 
 	/**
+	 * This adds a property descriptor for the Arrival Date feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addArrivalDatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SlotSpecification_arrivalDate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotSpecification_arrivalDate_feature", "_UI_SlotSpecification_type"),
+				 CargoPackage.Literals.SLOT_SPECIFICATION__ARRIVAL_DATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns SlotSpecification.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -92,7 +119,11 @@ public class SlotSpecificationItemProvider extends ScheduleSpecificationEventIte
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_SlotSpecification_type");
+		LocalDateTime labelValue = ((SlotSpecification)object).getArrivalDate();
+		String label = labelValue == null ? null : labelValue.toString();
+		return label == null || label.length() == 0 ?
+			getString("_UI_SlotSpecification_type") :
+			getString("_UI_SlotSpecification_type") + " " + label;
 	}
 	
 
@@ -106,6 +137,12 @@ public class SlotSpecificationItemProvider extends ScheduleSpecificationEventIte
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(SlotSpecification.class)) {
+			case CargoPackage.SLOT_SPECIFICATION__ARRIVAL_DATE:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 

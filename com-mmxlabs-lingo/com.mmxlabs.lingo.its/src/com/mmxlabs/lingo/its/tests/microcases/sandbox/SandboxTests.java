@@ -21,6 +21,9 @@ import com.mmxlabs.lngdataserver.lng.importers.creator.ScenarioBuilder;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.BuyMarket;
 import com.mmxlabs.models.lng.analytics.BuyOption;
+import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.PartialCaseRowOptions;
+import com.mmxlabs.models.lng.analytics.RoundTripShippingOption;
 import com.mmxlabs.models.lng.analytics.SellMarket;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
@@ -368,7 +371,6 @@ public class SandboxTests extends AbstractSandboxTestCase {
 
 		sandboxBuilder.createBaseCaseRow(null, sell1, null).setOptionise(true);
 		sandboxBuilder.createBaseCaseRow(buy1, null, null).setOptionise(true);
-		;
 
 		UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setPeriodStartDate(LocalDate.of(2020, 3, 15));

@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -23,20 +24,12 @@ import com.mmxlabs.models.lng.nominations.Side;
 import com.mmxlabs.models.lng.types.TimePeriod;
 import com.mmxlabs.models.migration.MigrationModelRecord;
 import com.mmxlabs.models.migration.utils.EObjectWrapper;
+import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
 
 public class MigrateToV109 extends AbstractMigrationUnit {
 
-	private final static String[] nominationTypes = { "window", "volume", "vessel", "port", "portLoad" };
-	EEnum timePeriodEnum;
-	EEnumLiteral timePeriodMonthLiteral;
-	EEnumLiteral timePeriodDayLiteral;
-
-	EEnum datePeriodPriorEnum;
-	EEnumLiteral datePeriodPriorMonthLiteral;
-	EEnumLiteral datePeriodPriorDayLiteral;
-
-	final HashMap<String, EObjectWrapper> contractName_NominationTypeToNominationSpec = new HashMap<>();
+	private static final String[] nominationTypes = { "window", "volume", "vessel", "port", "portLoad" };
 
 	@Override
 	public String getScenarioContext() {
@@ -56,7 +49,8 @@ public class MigrateToV109 extends AbstractMigrationUnit {
 	@Override
 	protected void doMigration(@NonNull final MigrationModelRecord modelRecord) {
 
-		contractName_NominationTypeToNominationSpec.clear();
+		final Map<String, EObjectWrapper> contractName_NominationTypeToNominationSpec = new HashMap<>();
+
 		final EObjectWrapper scenarioModel = modelRecord.getModelRoot();
 		final EObjectWrapper referenceModel = scenarioModel.getRef("referenceModel");
 
@@ -68,15 +62,6 @@ public class MigrateToV109 extends AbstractMigrationUnit {
 		final EEnum sideEnum = MetamodelUtils.getEEnum(nominationsPackage, "Side");
 		final EEnumLiteral buyLiteral = MetamodelUtils.getEEnum_Literal(sideEnum, "Buy");
 		final EEnumLiteral sellLiteral = MetamodelUtils.getEEnum_Literal(sideEnum, "Sell");
-
-		final EPackage typesPackage = modelRecord.getMetamodelLoader().getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_LNGTypes);
-		timePeriodEnum = MetamodelUtils.getEEnum(typesPackage, "TimePeriod");
-		timePeriodMonthLiteral = MetamodelUtils.getEEnum_Literal(timePeriodEnum, "MONTHS");
-		timePeriodDayLiteral = MetamodelUtils.getEEnum_Literal(timePeriodEnum, "DAYS");
-
-		datePeriodPriorEnum = MetamodelUtils.getEEnum(nominationsPackage, "DatePeriodPrior");
-		datePeriodPriorMonthLiteral = MetamodelUtils.getEEnum_Literal(datePeriodPriorEnum, "MonthsPrior");
-		datePeriodPriorDayLiteral = MetamodelUtils.getEEnum_Literal(datePeriodPriorEnum, "DaysPrior");
 
 		EObjectWrapper nominationsModel = scenarioModel.getRef("nominationsModel");
 
@@ -91,7 +76,7 @@ public class MigrateToV109 extends AbstractMigrationUnit {
 //			nominationParameters = (EObjectWrapper) nominationsFactory.create(nominationsParametersClass);
 //			nominationsModel.setRef("nominationParameters", nominationParameters);
 //		}
-				
+
 		// Process contracts first of all.
 		final EPackage commercialPackage = modelRecord.getMetamodelLoader().getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_CommercialModel);
 		final EClass commercialModelClass = MetamodelUtils.getEClass(commercialPackage, "CommercialModel");
@@ -102,77 +87,78 @@ public class MigrateToV109 extends AbstractMigrationUnit {
 		final EClass slotNominationSpecClass = MetamodelUtils.getEClass(nominationsPackage, "SlotNominationSpec");
 
 		final List<EObjectWrapper> slotNominationSpecs = new LinkedList<>();
-		processContracts(buyLiteral, purchaseContracts, nominationsFactory, slotNominationSpecClass, slotNominationSpecs);
+		processContracts(buyLiteral, purchaseContracts, nominationsFactory, slotNominationSpecClass, slotNominationSpecs, contractName_NominationTypeToNominationSpec,
+				modelRecord.getMetamodelLoader());
 
 		final List<EObjectWrapper> salesContracts = commercialModel.getRefAsList("salesContracts");
 
-		processContracts(sellLiteral, salesContracts, nominationsFactory, slotNominationSpecClass, slotNominationSpecs);
+		processContracts(sellLiteral, salesContracts, nominationsFactory, slotNominationSpecClass, slotNominationSpecs, contractName_NominationTypeToNominationSpec, modelRecord.getMetamodelLoader());
 
 		nominationsModel.setRef("nominationSpecs", slotNominationSpecs);
 
 		// Copy across old nominations into nominations model.
 		final EPackage cargoPackage = modelRecord.getMetamodelLoader().getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_CargoModel);
 		final EClass cargoModelClass = MetamodelUtils.getEClass(cargoPackage, "CargoModel");
-		final EObjectWrapper cargoModel = scenarioModel.getRef("cargoModel");	
+		final EObjectWrapper cargoModel = scenarioModel.getRef("cargoModel");
 		final List<EObjectWrapper> slotNominations = new LinkedList<>();
 
 		final List<EObjectWrapper> loadSlots = cargoModel.getRefAsList("loadSlots");
-		processSlots(buyLiteral, loadSlots, nominationsFactory, slotNominationClass, slotNominations);
+		processSlots(buyLiteral, loadSlots, nominationsFactory, slotNominationClass, slotNominations, contractName_NominationTypeToNominationSpec);
 
 		final List<EObjectWrapper> dischargeSlots = cargoModel.getRefAsList("dischargeSlots");
-		processSlots(sellLiteral, dischargeSlots, nominationsFactory, slotNominationClass, slotNominations);
+		processSlots(sellLiteral, dischargeSlots, nominationsFactory, slotNominationClass, slotNominations, contractName_NominationTypeToNominationSpec);
 
 		nominationsModel.setRef("nominations", slotNominations);
 
-		//remove old nominations features on contracts.
+		// remove old nominations features on contracts.
 		purchaseContracts.forEach(pc -> removeObsoleteNominationFeaturesFromContract(pc));
 		salesContracts.forEach(sc -> removeObsoleteNominationFeaturesFromContract(sc));
-		
-		//remove old nominations features on slots.
+
+		// remove old nominations features on slots.
 		loadSlots.forEach(ls -> removeObsoleteNominationFeaturesFromSlot(ls));
 		dischargeSlots.forEach(ds -> removeObsoleteNominationFeaturesFromSlot(ds));
 	}
 
 	private void removeObsoleteNominationFeaturesFromSlot(EObjectWrapper slot) {
-		for (final String nominationType: nominationTypes) {
-			slot.unsetFeature(nominationType+"NominationDate");
+		for (final String nominationType : nominationTypes) {
+			slot.unsetFeature(nominationType + "NominationDate");
 			if (nominationType.equals("window")) {
-				slot.unsetFeature(nominationType+"NominationIsDone");
+				slot.unsetFeature(nominationType + "NominationIsDone");
+			} else {
+				slot.unsetFeature(nominationType + "NominationDone");
 			}
-			else {
-				slot.unsetFeature(nominationType+"NominationDone");
-			}
-			slot.unsetFeature(nominationType+"NominationCounterparty");
-			slot.unsetFeature(nominationType+"NominationComment");
-		}		
+			slot.unsetFeature(nominationType + "NominationCounterparty");
+			slot.unsetFeature(nominationType + "NominationComment");
+		}
 	}
 
 	private void removeObsoleteNominationFeaturesFromContract(EObjectWrapper contract) {
-		for (final String nominationType: nominationTypes) {
-			contract.unsetFeature(nominationType+"NominationSize");
-			contract.unsetFeature(nominationType+"NominationSizeUnits");
-			contract.unsetFeature(nominationType+"NominationCounterparty");
+		for (final String nominationType : nominationTypes) {
+			contract.unsetFeature(nominationType + "NominationSize");
+			contract.unsetFeature(nominationType + "NominationSizeUnits");
+			contract.unsetFeature(nominationType + "NominationCounterparty");
 		}
 	}
 
 	private void processContracts(final EEnumLiteral side, final List<EObjectWrapper> contracts, final EFactory nominationsFactory, final EClass nominationSpecClass,
-			final List<EObjectWrapper> nominationSpecs) {
+			final List<EObjectWrapper> nominationSpecs, Map<String, EObjectWrapper> contractName_NominationTypeToNominationSpec, MetamodelLoader loader) {
 		for (final EObjectWrapper contract : contracts) {
 			for (final String nominationType : nominationTypes) {
-				final EObjectWrapper nominationSpec = getNominationSpecFromContract(side, contract, nominationType, nominationsFactory, nominationSpecClass);
+				final EObjectWrapper nominationSpec = getNominationSpecFromContract(side, contract, nominationType, nominationsFactory, nominationSpecClass, loader);
 				if (nominationSpec != null) {
 					nominationSpecs.add(nominationSpec);
 					final String name = contract.getAttrib("name");
-					this.contractName_NominationTypeToNominationSpec.put(name + "_" + nominationType, nominationSpec);
+					contractName_NominationTypeToNominationSpec.put(name + "_" + nominationType, nominationSpec);
 				}
 			}
 		}
 	}
 
-	private void processSlots(final EEnumLiteral side, final List<EObjectWrapper> slots, final EFactory nominationsFactory, final EClass nominationClass, final List<EObjectWrapper> nominations) {
+	private void processSlots(final EEnumLiteral side, final List<EObjectWrapper> slots, final EFactory nominationsFactory, final EClass nominationClass, final List<EObjectWrapper> nominations,
+			Map<String, EObjectWrapper> contractName_NominationTypeToNominationSpec) {
 		for (final EObjectWrapper slot : slots) {
 			for (final String nominationType : nominationTypes) {
-				final EObjectWrapper nomination = getNominationFromSlot(side, slot, nominationType, nominationsFactory, nominationClass);
+				final EObjectWrapper nomination = getNominationFromSlot(side, slot, nominationType, nominationsFactory, nominationClass, contractName_NominationTypeToNominationSpec);
 				if (nomination != null) {
 					nominations.add(nomination);
 				}
@@ -180,7 +166,8 @@ public class MigrateToV109 extends AbstractMigrationUnit {
 		}
 	}
 
-	private EObjectWrapper getNominationFromSlot(final EEnumLiteral side, final EObjectWrapper slot, final String nominationType, final EFactory nominationsFactory, final EClass nominationClass) {
+	private EObjectWrapper getNominationFromSlot(final EEnumLiteral side, final EObjectWrapper slot, final String nominationType, final EFactory nominationsFactory, final EClass nominationClass,
+			Map<String, EObjectWrapper> contractName_NominationTypeToNominationSpec) {
 		EObjectWrapper nomination = null;
 
 		// Check if slot has a contract associated with it.
@@ -188,7 +175,7 @@ public class MigrateToV109 extends AbstractMigrationUnit {
 		EObjectWrapper spec = null;
 		if (contract != null) {
 			// Get the spec.
-			spec = this.contractName_NominationTypeToNominationSpec.get(contract.getAttrib("name") + "_" + nominationType);
+			spec = contractName_NominationTypeToNominationSpec.get(contract.getAttrib("name") + "_" + nominationType);
 		}
 
 		// Get any nominations fields which have been set on the slot for this
@@ -275,11 +262,30 @@ public class MigrateToV109 extends AbstractMigrationUnit {
 	}
 
 	private EObjectWrapper getNominationSpecFromContract(final EEnumLiteral side, final EObjectWrapper contract, final String nominationType, final EFactory nominationsFactory,
-			final EClass nominationSpecClass) {
+			final EClass nominationSpecClass, MetamodelLoader loader) {
 		final Object size = contract.getAttrib(nominationType + "NominationSize");
 		if ((Integer) size == 0) {
 			return null;
 		}
+
+		final EPackage typesPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_LNGTypes);
+		final EPackage nominationsPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_NominationsModel);
+
+		EEnum timePeriodEnum;
+		EEnumLiteral timePeriodMonthLiteral;
+		EEnumLiteral timePeriodDayLiteral;
+
+		EEnum datePeriodPriorEnum;
+		EEnumLiteral datePeriodPriorMonthLiteral;
+		EEnumLiteral datePeriodPriorDayLiteral;
+		timePeriodEnum = MetamodelUtils.getEEnum(typesPackage, "TimePeriod");
+		timePeriodMonthLiteral = MetamodelUtils.getEEnum_Literal(timePeriodEnum, "MONTHS");
+		timePeriodDayLiteral = MetamodelUtils.getEEnum_Literal(timePeriodEnum, "DAYS");
+
+		datePeriodPriorEnum = MetamodelUtils.getEEnum(nominationsPackage, "DatePeriodPrior");
+		datePeriodPriorMonthLiteral = MetamodelUtils.getEEnum_Literal(datePeriodPriorEnum, "MonthsPrior");
+		datePeriodPriorDayLiteral = MetamodelUtils.getEEnum_Literal(datePeriodPriorEnum, "DaysPrior");
+
 		final EObjectWrapper nominationSpec = (EObjectWrapper) nominationsFactory.create(nominationSpecClass);
 		nominationSpec.setAttrib("uuid", EcoreUtil.generateUUID());
 		nominationSpec.setAttrib("type", getNominationTypeName(side.getValue(), nominationType));
@@ -291,15 +297,15 @@ public class MigrateToV109 extends AbstractMigrationUnit {
 		final EEnumLiteral tp = contract.getAttrib(nominationType + "NominationSizeUnits");
 		switch (tp.getValue()) {
 		case TimePeriod.MONTHS_VALUE:
-			nominationSpec.setAttrib("sizeUnits", this.datePeriodPriorMonthLiteral);
+			nominationSpec.setAttrib("sizeUnits", datePeriodPriorMonthLiteral);
 			nominationSpec.setAttrib("alertSize", (Integer) size + 1);
-			nominationSpec.setAttrib("alertSizeUnits", this.datePeriodPriorMonthLiteral);
+			nominationSpec.setAttrib("alertSizeUnits", datePeriodPriorMonthLiteral);
 			break;
 		case TimePeriod.DAYS_VALUE:
 		case TimePeriod.HOURS_VALUE:
-			nominationSpec.setAttrib("sizeUnits", this.datePeriodPriorDayLiteral);
+			nominationSpec.setAttrib("sizeUnits", datePeriodPriorDayLiteral);
 			nominationSpec.setAttrib("alertSize", (Integer) size + 10);
-			nominationSpec.setAttrib("alertSizeUnits", this.datePeriodPriorDayLiteral);
+			nominationSpec.setAttrib("alertSizeUnits", datePeriodPriorDayLiteral);
 			break;
 		}
 		nominationSpec.setAttrib("side", side);

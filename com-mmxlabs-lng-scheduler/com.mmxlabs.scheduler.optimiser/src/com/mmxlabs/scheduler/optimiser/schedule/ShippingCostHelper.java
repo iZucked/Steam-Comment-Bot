@@ -20,7 +20,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
+import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -83,7 +83,7 @@ public class ShippingCostHelper {
 				final VoyageDetails voyageDetails = (VoyageDetails) o;
 				planDuration += voyageDetails.getTravelTime();
 				planDuration += voyageDetails.getIdleTime();
-				planDuration += voyageDetails.getPurgeDuration();
+				planDuration += voyageDetails.getOptions().getExtraIdleTime(ExplicitIdleTime.PURGE);
 			} else {
 				planDuration += ((PortDetails) o).getOptions().getVisitDuration();
 			}

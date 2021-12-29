@@ -59,9 +59,13 @@ import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 /**
- * The {@link LNGScenarioToOptimiserBridge} creates and maintains the mapping between the original {@link LNGScenarioModel} and the optimiser data structures to allow saving of the results. This class
- * also handles the Period Optimisation transformation. Call {@link #overwrite(int, ISequences, Map)} to save into the current {@link ScenarioInstance}. Call
- * {@link #storeAsCopy(ISequences, String, Container, Map)} to save the result in a copy of the {@link ScenarioInstance}
+ * The {@link LNGScenarioToOptimiserBridge} creates and maintains the mapping
+ * between the original {@link LNGScenarioModel} and the optimiser data
+ * structures to allow saving of the results. This class also handles the Period
+ * Optimisation transformation. Call {@link #overwrite(int, ISequences, Map)} to
+ * save into the current {@link ScenarioInstance}. Call
+ * {@link #storeAsCopy(ISequences, String, Container, Map)} to save the result
+ * in a copy of the {@link ScenarioInstance}
  * 
  * 
  * @author Simon Goodall
@@ -98,12 +102,16 @@ public class LNGScenarioToOptimiserBridge {
 	@NonNull
 	private final LNGDataTransformer originalDataTransformer;
 
-	// Flag to check we can still export as copy. calls to #overwrite can invalidate the state
+	// Flag to check we can still export as copy. calls to #overwrite can invalidate
+	// the state
 	private boolean canExportAsCopy = true;
 	/**
-	 * Integer to count "undo" state of the scenario. Each overwrite evaluation should increment this value. Calls to {@link LNGSchedulerJobUtils#undoPreviousOptimsationStep(EditingDomain, int)}
-	 * should decrement it. Ideally we would track the current state of the command stack, but the API does not appear to permit this (maybe a command stack listener? - can we tell if a command is
-	 * undo/redo?).
+	 * Integer to count "undo" state of the scenario. Each overwrite evaluation
+	 * should increment this value. Calls to
+	 * {@link LNGSchedulerJobUtils#undoPreviousOptimsationStep(EditingDomain, int)}
+	 * should decrement it. Ideally we would track the current state of the command
+	 * stack, but the API does not appear to permit this (maybe a command stack
+	 * listener? - can we tell if a command is undo/redo?).
 	 */
 	private int overwriteCommandStackCounter = 0;
 
@@ -129,7 +137,8 @@ public class LNGScenarioToOptimiserBridge {
 
 		originalDataTransformer = new LNGDataTransformer(this.originalScenarioDataProvider, extraDataProvider, userSettings, solutionBuilderSettings, concurrencyLevel, hints, services);
 
-		// TODO: These ideally should be final, but #overwrite currently needs these variables set.
+		// TODO: These ideally should be final, but #overwrite currently needs these
+		// variables set.
 		this.optimiserEditingDomain = originalEditingDomain;
 		this.optimiserDataTransformer = originalDataTransformer;
 		this.optimiserScenarioDataProvider = originalScenarioDataProvider;
@@ -138,7 +147,8 @@ public class LNGScenarioToOptimiserBridge {
 		if (!evaluationOnly) {
 			final PeriodTransformData t = initPeriodOptimisationData(scenarioInstance, originalScenarioDataProvider, extraDataProvider, originalEditingDomain, userSettings);
 
-			// TODO: Replaces the above with that return in the triple (this could be original or optimiser)
+			// TODO: Replaces the above with that return in the triple (this could be
+			// original or optimiser)
 			this.optimiserScenarioDataProvider = t.sdp;
 			this.optimiserEditingDomain = t.editingDomain;
 			this.periodMapping = t.periodMapping;
@@ -147,11 +157,13 @@ public class LNGScenarioToOptimiserBridge {
 		} else {
 			this.periodMapping = null;
 		}
-		// If we are in a period optimisation, then create a LNGDataTransformer for the period data
+		// If we are in a period optimisation, then create a LNGDataTransformer for the
+		// period data
 		IScenarioEntityMapping pPeriodMapping = this.periodMapping;
 		if (pPeriodMapping != null) {
 
-			// Create a stub command here so match the initial evaluation command update for undo() calls later
+			// Create a stub command here so match the initial evaluation command update for
+			// undo() calls later
 			final CompoundCommand wrapper = LNGSchedulerJobUtils.createBlankCommand(0);
 			wrapper.append(IdentityCommand.INSTANCE);
 			optimiserEditingDomain.getCommandStack().execute(wrapper);
@@ -164,7 +176,8 @@ public class LNGScenarioToOptimiserBridge {
 			periodExporter = new PeriodExporter(originalDataTransformer, optimiserDataTransformer, pPeriodMapping);
 		}
 
-		// Reset flag as calls to #overwrite will have set this to false, but these should not have invalidated the internal state
+		// Reset flag as calls to #overwrite will have set this to false, but these
+		// should not have invalidated the internal state
 		canExportAsCopy = true;
 	}
 
@@ -273,8 +286,10 @@ public class LNGScenarioToOptimiserBridge {
 	}
 
 	/**
-	 * Save the sequences in a complete copy of the scenario. *Ensure* the current scenario is in it's original state (excluding Schedule model and Parameters model changes) -- that is the data model
-	 * still represents the initial solution..
+	 * Save the sequences in a complete copy of the scenario. *Ensure* the current
+	 * scenario is in it's original state (excluding Schedule model and Parameters
+	 * model changes) -- that is the data model still represents the initial
+	 * solution..
 	 *
 	 * @param rawSequences
 	 * @param extraAnnotations
@@ -370,7 +385,8 @@ public class LNGScenarioToOptimiserBridge {
 		// Save the scenario as a fork.
 		try {
 			// TODO: Be-more efficient and avoid extra copies
-			// return LNGScenarioRunnerUtils.saveNewScenario(pScenarioInstance, parent, copy, newName);
+			// return LNGScenarioRunnerUtils.saveNewScenario(pScenarioInstance, parent,
+			// copy, newName);
 			return LNGScenarioRunnerUtils.saveScenarioAsChild(pScenarioInstance, parent, cloneDataProvider, newName);
 		} catch (final Exception e) {
 			throw new RuntimeException("Unable to store changeset scenario: " + e.getMessage(), e);
@@ -392,7 +408,8 @@ public class LNGScenarioToOptimiserBridge {
 	}
 
 	/**
-	 * Returns the scenario used by the optimisation. This method is intended for use in test cases rather than the main application.
+	 * Returns the scenario used by the optimisation. This method is intended for
+	 * use in test cases rather than the main application.
 	 * 
 	 * @return
 	 */
@@ -419,7 +436,7 @@ public class LNGScenarioToOptimiserBridge {
 		{
 			final Collection<@NonNull IOptimiserInjectorService> services = originalDataTransformer.getModuleServices();
 			final List<Module> modules = new LinkedList<>();
-			modules.add(new InitialSequencesModule(originalDataTransformer.getInitialSequences()));
+			modules.add(new InitialSequencesModule(rawSequences));
 			modules.add(new InputSequencesModule(rawSequences));
 			modules.add(new InitialPhaseOptimisationDataModule());
 			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(

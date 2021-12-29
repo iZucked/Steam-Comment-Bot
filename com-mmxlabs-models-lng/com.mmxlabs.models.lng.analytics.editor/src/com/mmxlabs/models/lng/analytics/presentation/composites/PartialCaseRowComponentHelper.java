@@ -71,6 +71,7 @@ public class PartialCaseRowComponentHelper extends BaseComponentHelper {
 		add_sellOptionsEditor(detailComposite, topClass);
 		add_vesselEventOptionsEditor(detailComposite, topClass);
 		add_shippingEditor(detailComposite, topClass);
+		add_optionsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the buyOptions feature on PartialCaseRow
@@ -106,5 +107,14 @@ public class PartialCaseRowComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_shippingEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING));
+	}
+
+	/**
+	 * Create the editor for the options feature on PartialCaseRow
+	 *
+	 * @generated
+	 */
+	protected void add_optionsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__OPTIONS));
 	}
 }

@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil;
@@ -50,26 +51,15 @@ public class MigrateToV3 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected MetamodelLoader getSourceMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (sourceLoader == null) {
-			sourceLoader = MetamodelVersionsUtil.createV2Loader(extraPackages);
-		}
-		return sourceLoader;
-	}
-
-	@Override
-	protected MetamodelLoader getDestinationMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (destinationLoader == null) {
-			destinationLoader = MetamodelVersionsUtil.createV2_V3Loader(extraPackages);
-		}
-		return destinationLoader;
+	protected MetamodelLoader createMetamodelLoader(@Nullable Map<URI, PackageData> extraPackages) {
+		return MetamodelVersionsUtil.createV2_V3Loader(extraPackages);
 	}
 
 	@Override
 	protected void doMigration(final MigrationModelRecord modelRecord) {
 
 		// This should get the cached loader instance
-		final MetamodelLoader loader = getDestinationMetamodelLoader(null);
+		final MetamodelLoader loader = modelRecord.getMetamodelLoader();
 		final EObjectWrapper model = modelRecord.getModelRoot();
 
 		migrateFOBSales(loader, model);

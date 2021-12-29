@@ -32,7 +32,7 @@ public class CanalBookingImporter extends DefaultClassImporter {
 	@Override
 	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IMMXImportContext context) {
 		final String marginValue = row.get(KEY_MARGIN);
-		final String kind = row.get(super.KIND_KEY);
+		final String kind = row.get(DefaultClassImporter.KIND_KEY);
 		
 		if (marginValue != null && !marginValue.trim().isEmpty()) {
 			final CanalBookings canalBookings = CargoFactory.eINSTANCE.createCanalBookings();
@@ -57,9 +57,8 @@ public class CanalBookingImporter extends DefaultClassImporter {
 
 		final List<EObject> generalExportObject = new LinkedList<>();
 		for (final EObject obj : objects) {
-			if (obj instanceof CanalBookings) {
-				final CanalBookings canalBookings = (CanalBookings) obj;
-				final Map<String, String> rowData = new LinkedHashMap<String, String>();
+			if (obj instanceof CanalBookings canalBookings) {
+				final Map<String, String> rowData = new LinkedHashMap<>();
 				rowData.put(KEY_MARGIN, Integer.toString(canalBookings.getArrivalMarginHours()));
 				exportedObjects.add(rowData);
 			} else {

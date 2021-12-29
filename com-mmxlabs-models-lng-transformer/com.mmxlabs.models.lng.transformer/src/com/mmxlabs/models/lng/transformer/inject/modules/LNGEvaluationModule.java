@@ -98,7 +98,6 @@ public class LNGEvaluationModule extends AbstractModule {
 		bind(IArrivalTimeScheduler.class).to(TimeWindowScheduler.class);
 
 		if (hints != null) {
-
 			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_CHARTER_OUT_GENERATION) && hints.contains(LNGTransformerHelper.HINT_GENERATE_CHARTER_OUTS)) {
 				bind(IGeneratedCharterOutEvaluator.class).to(DefaultGeneratedCharterOutEvaluator.class);
 			}

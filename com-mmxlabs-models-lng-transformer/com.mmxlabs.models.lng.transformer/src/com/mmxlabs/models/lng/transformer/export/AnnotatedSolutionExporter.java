@@ -62,7 +62,6 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
-import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -80,6 +79,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.util.SequenceEvaluationUtils;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 
@@ -672,6 +672,7 @@ public class AnnotatedSolutionExporter {
 						lastEvent = idle;
 					}
 				}
+				// Purge time taken out
 				voyage_currentTime += details.getIdleTime();
 
 				final Purge purge = purgeDetailsExporter.export(details, scheduledSequence, voyage_currentTime);
@@ -685,7 +686,8 @@ public class AnnotatedSolutionExporter {
 					}
 					purge.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(details.getPurgeCharterCost()));
 
-					voyage_currentTime += details.getPurgeDuration();
+					int purgeDuration = details.getOptions().getExtraIdleTime(ExplicitIdleTime.PURGE);
+					voyage_currentTime += purgeDuration;
 				}
 				final Cooldown cooldown = cooldownDetailsExporter.export(details, scheduledSequence, voyage_currentTime);
 				if (cooldown != null) {

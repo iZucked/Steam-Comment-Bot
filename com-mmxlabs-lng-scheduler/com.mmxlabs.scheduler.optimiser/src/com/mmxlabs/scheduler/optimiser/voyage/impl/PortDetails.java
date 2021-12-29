@@ -41,24 +41,14 @@ public final class PortDetails implements IDetailsSequenceElement {
 		this.fuelUnitPrices.putAll(fuelPrice);
 	}
 
-	public final void resetFuelConsumption() {
-		// fuelConsumption.clear();
-	}
 
 	public final long getFuelConsumption(final FuelKey fuelKey) {
-//		assert !fuelKey.getBaseFuel().getName().contains("fake");
-
 		return fuelConsumption.get(fuelKey.getFuelComponent(), fuelKey.getFuelUnit());
 	}
 
 	public void setFuelConsumption(@NonNull FuelKey fk, long consumption) {
-//		assert !fk.getBaseFuel().getName().contains("fake");
 		fuelConsumption.put(fk.getFuelComponent(), fk.getFuelUnit(), consumption);
 	}
-
-	// public Collection<FuelKey> getFuelConsumptionKeys() {
-	// return fuelConsumption.keySet();
-	// }
 
 	/**
 	 */

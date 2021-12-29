@@ -20,6 +20,10 @@ public final class KnownFeatures {
 
 	public static final String FEATURE_REENCRYPT = "features:reencrypt";
 	
+	
+	public static final String FEATURE_TEMP_SANDBOX_VOYAGE_OPTIONS = "features:sandbox-voyage-opts";
+
+	
 	/**
 	 * Enable parallelisation in optimiser
 	 */
