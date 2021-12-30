@@ -908,8 +908,9 @@ public class FeasibleTimeWindowTrimmer {
 								// If the new panama time is the fastest, update the window.
 								final int newPanamaTime = endTime - (latestPanamaTime - panamaSegments.travelTimeToCanalWithoutMargin);
 								if (newPanamaTime < Math.min(directTravelTime, suezTravelTime)) {
-									if (endTime - newPanamaTime < records[fromElementIndex].windowEndTime) {
-										records[fromElementIndex].windowEndTime = endTime - newPanamaTime;
+									final int newFromWindowEndTime = endTime - newPanamaTime;
+									if (newFromWindowEndTime > records[fromElementIndex].windowStartTime && newFromWindowEndTime < records[fromElementIndex].windowEndTime) {
+										records[fromElementIndex].windowEndTime = newFromWindowEndTime;
 										// Mark current pass as changed. If pass 0 then we may have caused more forced
 										// voyages.
 										changed = true;
