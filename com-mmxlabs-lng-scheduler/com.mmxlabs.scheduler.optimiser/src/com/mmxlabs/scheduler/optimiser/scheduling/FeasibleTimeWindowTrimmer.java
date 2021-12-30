@@ -697,8 +697,8 @@ public class FeasibleTimeWindowTrimmer {
 								// Booking allocated, time windows should have been updated, no need to check
 								// for other bookings or idle times.
 								changed = true;
-							} else if (records[fromElementIndex].windowStartTime + directTravelTime < records[toElementIndex].windowEndTime //
-									|| (records[fromElementIndex].windowStartTime + suezTravelTime < records[toElementIndex].windowEndTime && suezTravelTime != Integer.MAX_VALUE) //
+							} else if ((directTravelTime != Integer.MAX_VALUE && records[fromElementIndex].windowStartTime + directTravelTime < records[toElementIndex].windowEndTime) //
+									|| (suezTravelTime != Integer.MAX_VALUE && records[fromElementIndex].windowStartTime + suezTravelTime < records[toElementIndex].windowEndTime && suezTravelTime != Integer.MAX_VALUE) //
 									|| directTravelTime <= panamaTravelTime) {
 
 								if (phase != 0) {
