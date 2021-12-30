@@ -158,7 +158,7 @@ public class CloudOptimisationDataServiceClient {
 		final ObjectMapper mapper = new ObjectMapper();
 		try {
 			final JsonNode actualObj = mapper.readTree(response);
-			final String state = actualObj.get("state").textValue();
+			final String state = actualObj.get("status").textValue();
 			if (state != null) {
 				if ("complete".equalsIgnoreCase(state)) {
 					return true;
@@ -200,7 +200,7 @@ public class CloudOptimisationDataServiceClient {
 			if (!response.isSuccessful()) {
 				throw new IOException("Unexpected code: " + response);
 			}
-			// Only update the last successful access time, only if we list acomplished tasks
+			// Only update the last successful access time, only if we list accomplished tasks
 			if (listFinished) {
 				lastSuccessfulAccess = Instant.now();
 			}
