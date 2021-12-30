@@ -698,7 +698,7 @@ public class FeasibleTimeWindowTrimmer {
 								// for other bookings or idle times.
 								changed = true;
 							} else if ((directTravelTime != Integer.MAX_VALUE && records[fromElementIndex].windowStartTime + directTravelTime < records[toElementIndex].windowEndTime) //
-									|| (suezTravelTime != Integer.MAX_VALUE && records[fromElementIndex].windowStartTime + suezTravelTime < records[toElementIndex].windowEndTime && suezTravelTime != Integer.MAX_VALUE) //
+									|| (suezTravelTime != Integer.MAX_VALUE && records[fromElementIndex].windowStartTime + suezTravelTime < records[toElementIndex].windowEndTime) //
 									|| directTravelTime <= panamaTravelTime) {
 
 								if (phase != 0) {
