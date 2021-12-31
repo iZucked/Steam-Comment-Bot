@@ -40,7 +40,7 @@ public class OAuthDialog extends Window {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(OAuthDialog.class);
 
-	private static Browser browser;
+	private Browser browser;
 	private static final OkHttpClient httpClient = HttpClientUtil.basicBuilder().build();
 
 	private String baseUrl;
@@ -173,8 +173,13 @@ public class OAuthDialog extends Window {
 	public boolean close() {
 		// Clear cookies *before* we close the browser instance
 		if (fragment.equals(UpstreamUrlProvider.LOGOUT_PATH)) {
-			Browser.setCookie("JSESSIONID=;", baseUrl);
-			Browser.setCookie("authenticated=;", baseUrl + "/authenticated");
+			Browser.clearSessions();
+			// edge doesn't support getCookie() and setCookie()
+			// see https://www.eclipse.org/swt/faq.php#edgelimitations
+			if ("ie".equals(browser.getBrowserType())) {
+				Browser.setCookie("JSESSIONID=;", baseUrl);
+				Browser.setCookie("authenticated=;", baseUrl + "/authenticated");
+			}
 		}
 
 		try {
