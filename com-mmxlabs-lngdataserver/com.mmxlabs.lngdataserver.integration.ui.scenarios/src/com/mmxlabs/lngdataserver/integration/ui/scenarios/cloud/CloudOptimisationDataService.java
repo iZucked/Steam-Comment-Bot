@@ -125,31 +125,33 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 	
 	public synchronized boolean updateRecords(final CloudOptimisationDataResultRecord record) {
 		updater.pause();
+		boolean result = true;
+
+		final File recordsFile = new File(dataFolder.getAbsolutePath() + IPath.SEPARATOR + "records.json");
+		String json = "";
+		if (recordsFile.exists()) {
+			try {
+				json = Files.readString(recordsFile.toPath());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		final List<CloudOptimisationDataResultRecord> records = CloudOptimisationDataServiceClient.parseRecordsJSONData(json);
+		records.add(record);
+		final String output = CloudOptimisationDataServiceClient.getJSON(records);
+		if (output != null) {
+			try {
+				Files.writeString(recordsFile.toPath(), output, Charsets.UTF_8);
+			} catch (IOException e) {
+				e.printStackTrace();
+				result = false;
+			}
+		}
 		if (!dataList.contains(record)) {
-			final File recordsFile = new File(dataFolder.getAbsolutePath() + IPath.SEPARATOR + "records.json");
-			String json = "";
-			if (recordsFile.exists()) {
-				try {
-					json = Files.readString(recordsFile.toPath());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			final List<CloudOptimisationDataResultRecord> records = CloudOptimisationDataServiceClient.parseRecordsJSONData(json);
-			records.add(record);
-			final String output = CloudOptimisationDataServiceClient.getJSON(records);
-			if (output != null) {
-				try {
-					Files.writeString(recordsFile.toPath(), output, Charsets.UTF_8);
-				} catch (IOException e) {
-					e.printStackTrace();
-					return false;
-				}
-			}
 			dataList.add(record);
 		}
 		updater.resume();
-		return true;
+		return result;
 	}
 
 	public void start() {
