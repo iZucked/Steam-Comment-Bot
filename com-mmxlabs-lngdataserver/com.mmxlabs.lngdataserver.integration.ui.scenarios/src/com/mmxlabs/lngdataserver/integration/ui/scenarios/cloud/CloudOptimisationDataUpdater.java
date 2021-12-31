@@ -262,7 +262,9 @@ public class CloudOptimisationDataUpdater {
 					}
 
 					try {
-						Thread.sleep(10_000);
+						// Set to 60_000 for any OneShot or Beta builds
+						// During release - two to five minutes
+						Thread.sleep(60_000);
 					} catch (final InterruptedException e) {
 						interrupt(); // preserve interruption status
 						return;

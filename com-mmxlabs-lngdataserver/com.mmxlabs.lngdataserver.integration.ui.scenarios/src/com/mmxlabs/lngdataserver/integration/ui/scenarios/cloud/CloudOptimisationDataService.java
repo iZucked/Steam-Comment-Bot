@@ -126,7 +126,7 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 	public synchronized boolean updateRecords(final CloudOptimisationDataResultRecord record) {
 		updater.pause();
 		boolean result = true;
-
+		
 		final File recordsFile = new File(dataFolder.getAbsolutePath() + IPath.SEPARATOR + "records.json");
 		String json = "";
 		if (recordsFile.exists()) {
