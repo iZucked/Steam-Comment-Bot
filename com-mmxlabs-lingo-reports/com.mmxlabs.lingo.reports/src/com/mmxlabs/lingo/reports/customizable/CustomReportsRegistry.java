@@ -42,8 +42,8 @@ public class CustomReportsRegistry {
 
 	private static final String USER_REPORTS_CATEGORY_ID = "com.mmxlabs.lingo.reports.customizable.user";
 
-	private static final Logger logger = LoggerFactory.getLogger(ScheduleSummaryReport.class);
-	
+	private static final Logger logger = LoggerFactory.getLogger(CustomReportsRegistry.class);
+
 	public static final String USER_REPORTS_DIR = "reports";
 
 	public static final String TEAM_REPORTS_DIR = "team-reports";
