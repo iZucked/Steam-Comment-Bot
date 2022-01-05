@@ -8,16 +8,18 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.YearMonthSerializer;
 
-public class OpimisationSettings {
+public class OptimisationSettings {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@JsonSerialize(using = LocalDateSerializer.class)
-	LocalDate periodStartDate;
+	public LocalDate periodStartDate;
+	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM")
 	@JsonSerialize(using = YearMonthSerializer.class)
-	YearMonth periodEnd;
-	Boolean shippingOnly;
-	Boolean generateCharterOuts;
-	Boolean withCharterLength;
-	Boolean withSpotCargoMarkets;
-	String similarityMode;
+	public YearMonth periodEnd;
+	
+	public Boolean shippingOnly;
+	public Boolean generateCharterOuts;
+	public Boolean withCharterLength;
+	public Boolean withSpotCargoMarkets;
+	public String similarityMode;
 }

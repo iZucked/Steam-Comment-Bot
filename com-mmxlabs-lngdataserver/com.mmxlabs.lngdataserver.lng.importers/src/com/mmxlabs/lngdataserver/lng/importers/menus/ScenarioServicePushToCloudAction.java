@@ -410,7 +410,7 @@ public class ScenarioServicePushToCloudAction {
 		if (plan instanceof OptimisationPlan) {
 			final UserSettings us = ((OptimisationPlan) plan).getUserSettings();
 			if (us != null) {
-				OpimisationSettings settings = new OpimisationSettings();
+				OptimisationSettings settings = new OptimisationSettings();
 				settings.periodStartDate = us.getPeriodStartDate();
 				settings.periodEnd = us.getPeriodEnd();
 				settings.shippingOnly = us.isShippingOnly();
