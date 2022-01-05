@@ -113,8 +113,13 @@ public class ConfigurableVesselSummaryReport extends AbstractConfigurableGridRep
 		builder.setBlockManager(getBlockManager());
 	}
 
-	public void toggleDiffMode() {
+	public boolean toggleDiffMode() {
 		diffMode = !diffMode;
+		return diffMode;
+	}
+	
+	public boolean isDiffMode() {
+		return diffMode;
 	}
 
 	public ViewerComparator getGroupDeltaComparator() {
@@ -396,8 +401,7 @@ public class ConfigurableVesselSummaryReport extends AbstractConfigurableGridRep
 
 						}
 						return false;
-					} else if (element instanceof Row) {
-						final Row row = (Row) element;
+					} else if (element instanceof Row row) {
 
 						if (diffMode) {
 							return false;
@@ -418,8 +422,7 @@ public class ConfigurableVesselSummaryReport extends AbstractConfigurableGridRep
 					}
 				}
 
-				if (element instanceof Row) {
-					final Row row = (Row) element;
+				if (element instanceof Row row) {
 					//
 					if (diffMode) {
 						return false;

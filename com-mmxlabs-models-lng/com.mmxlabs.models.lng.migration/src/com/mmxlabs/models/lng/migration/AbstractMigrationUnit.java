@@ -33,25 +33,9 @@ import com.mmxlabs.scenario.service.model.util.ResourceHelper;
  * 
  */
 public abstract class AbstractMigrationUnit implements IMigrationUnit {
-	protected MetamodelLoader sourceLoader;
-	protected MetamodelLoader destinationLoader;
-	protected Map<URI, PackageData> extraPackages;
-
-	/**
-	 * Returns a {@link MetamodelLoader} for the {@link IMigrationUnit#getSourceVersion()}.
-	 * 
-	 * @return
-	 */
-	protected MetamodelLoader getSourceMetamodelLoader(@Nullable final Map<URI, PackageData> extraPackages) {
-		if (extraPackages != null) {
-			this.extraPackages = extraPackages;
-		}
-		if (sourceLoader == null) {
-			sourceLoader = MetamodelVersionsUtil.createVNLoader(getScenarioSourceVersion(), this.extraPackages);
-		}
-		return sourceLoader;
-	}
-
+//	protected MetamodelLoader destinationLoader;
+//	protected Map<URI, PackageData> extraPackages;
+ 
 	/**
 	 * Returns a {@link MetamodelLoader} for the {@link IMigrationUnit#getDestinationVersion()}
 	 * 
@@ -59,14 +43,11 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 	 * 
 	 * @return
 	 */
-	protected MetamodelLoader getDestinationMetamodelLoader(@Nullable final Map<URI, PackageData> extraPackages) {
-		if (extraPackages != null) {
-			this.extraPackages = extraPackages;
-		}
-		if (destinationLoader == null) {
-			destinationLoader = MetamodelVersionsUtil.createVNLoader(getScenarioDestinationVersion(), this.extraPackages);
-		}
-		return destinationLoader;
+	protected MetamodelLoader createMetamodelLoader(@Nullable final Map<URI, PackageData> extraPackages) {
+//		if (extraPackages != null) {
+//			this.extraPackages = extraPackages;
+//		}
+		return  MetamodelVersionsUtil.createVNLoader(getScenarioDestinationVersion(), extraPackages);
 	}
 
 	/**
@@ -74,24 +55,17 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 	 * 
 	 * @param models
 	 */
-	protected abstract void doMigration(@NonNull final MigrationModelRecord modelRecord);
-
-	/**
-	 * Overrideable method to allow sub-classes to choose which meta-model version to load the datamodel under.
-	 * 
-	 * @param extraPackages
-	 * @return
-	 */
-	protected MetamodelLoader getMigrationLoader(@Nullable final Map<URI, PackageData> extraPackages) {
-		return getDestinationMetamodelLoader(extraPackages);
+	protected void doMigration(@NonNull final MigrationModelRecord modelRecord) {
+		// Do nothing be default
 	}
+ 
 
 	/**
 	 */
 	@Override
-	public void migrate(@Nullable final Map<URI, PackageData> extraPackages, final @NonNull DataManifest dataManifest) throws Exception {
-
-		final MetamodelLoader metamodelLoader = getMigrationLoader(extraPackages);
+	public final void migrate(@Nullable final Map<URI, PackageData> extraPackages, final @NonNull DataManifest dataManifest) throws Exception {
+		
+		final MetamodelLoader metamodelLoader = createMetamodelLoader(extraPackages);
 
 		// Load all the current model versions
 		final ResourceSet resourceSet = metamodelLoader.getResourceSet();

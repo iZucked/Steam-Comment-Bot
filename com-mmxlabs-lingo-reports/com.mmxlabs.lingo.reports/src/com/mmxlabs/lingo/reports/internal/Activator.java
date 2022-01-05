@@ -34,6 +34,9 @@ import com.mmxlabs.models.lng.schedule.provider.ScheduleEditPlugin;
 import com.mmxlabs.models.lng.spotmarkets.provider.SpotMarketsEditPlugin;
 import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
 import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
 
 /**
@@ -167,7 +170,7 @@ public final class Activator extends EMFPlugin {
 
 		protected void initializeImageRegistry(final ImageRegistry reg) {
 
-			final ImageDescriptor importImageDescriptor = getImageDescriptor("icons/full/obj16/PinnedRow.gif");
+			final ImageDescriptor importImageDescriptor = CommonImages.getImageDescriptor(IconPaths.PinnedRow, IconMode.Enabled);
 			getImageRegistry().put(IMAGE_PINNED_ROW, importImageDescriptor);
 
 		}

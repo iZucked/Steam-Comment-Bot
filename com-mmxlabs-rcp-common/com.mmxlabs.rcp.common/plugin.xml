@@ -17,7 +17,7 @@
             targetID="org.eclipse.ui.views.PropertySheet">
          <action
                class="com.mmxlabs.rcp.common.actions.CopyPropertySheetToClipboardActionDelegate"
-               icon="icons/copy.png"
+               icon="icons/16x16/copy.png"
                id="com.mmxlabs.rcp.common.actions.CopyPropertySheetToClipboardActionDelegate"
                label="Copy to Clipboard"
                style="push"
@@ -49,7 +49,7 @@
             defaultHandler="com.mmxlabs.rcp.common.handlers.TodayHandler"
             id="com.mmxlabs.rcp.common.TodayHandler"
             name="Snap to today"
-            icon="icons/today.png">
+            icon="icons/24x24/today.png">
       </command>
    </extension>
     <extension
@@ -62,8 +62,8 @@
           <command
                 commandId="com.mmxlabs.rcp.common.TodayHandler"
                 label="Today"
-            	icon="icons/today.png"
-            	disabledIcon="icons/today_disabled.png"
+            	icon="icons/24x24/today.png"
+            	disabledIcon="icons/24x24/today_disabled.png"
                 style="push">
           </command>
        </toolbar>

@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.port.ContingencyMatrix;
 import com.mmxlabs.models.lng.port.ContingencyMatrixEntry;
 import com.mmxlabs.models.lng.port.EntryPoint;
 import com.mmxlabs.models.lng.port.Location;
+import com.mmxlabs.models.lng.port.ManualRouteLine;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortCountryGroup;
 import com.mmxlabs.models.lng.port.PortFactory;
@@ -66,6 +67,13 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	private EClass routeLineEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass manualRouteLineEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -522,6 +530,56 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getManualRouteLine() {
+		return manualRouteLineEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getManualRouteLine_RouteOption() {
+		return (EAttribute)manualRouteLineEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getManualRouteLine_From() {
+		return (EReference)manualRouteLineEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getManualRouteLine_To() {
+		return (EReference)manualRouteLineEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getManualRouteLine_Distance() {
+		return (EAttribute)manualRouteLineEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getPortModel() {
 		return portModelEClass;
 	}
@@ -614,6 +672,26 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	@Override
 	public EReference getPortModel_DistanceVersionRecord() {
 		return (EReference)portModelEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPortModel_MmxDistanceVersion() {
+		return (EAttribute)portModelEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPortModel_ManualDistances() {
+		return (EReference)portModelEClass.getEStructuralFeatures().get(10);
 	}
 
 	/**
@@ -891,6 +969,12 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEAttribute(routeLineEClass, ROUTE_LINE__PROVIDER);
 		createEAttribute(routeLineEClass, ROUTE_LINE__ERROR_CODE);
 
+		manualRouteLineEClass = createEClass(MANUAL_ROUTE_LINE);
+		createEAttribute(manualRouteLineEClass, MANUAL_ROUTE_LINE__ROUTE_OPTION);
+		createEReference(manualRouteLineEClass, MANUAL_ROUTE_LINE__FROM);
+		createEReference(manualRouteLineEClass, MANUAL_ROUTE_LINE__TO);
+		createEAttribute(manualRouteLineEClass, MANUAL_ROUTE_LINE__DISTANCE);
+
 		portModelEClass = createEClass(PORT_MODEL);
 		createEReference(portModelEClass, PORT_MODEL__PORTS);
 		createEReference(portModelEClass, PORT_MODEL__PORT_GROUPS);
@@ -901,6 +985,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEReference(portModelEClass, PORT_MODEL__PORT_VERSION_RECORD);
 		createEReference(portModelEClass, PORT_MODEL__PORT_GROUP_VERSION_RECORD);
 		createEReference(portModelEClass, PORT_MODEL__DISTANCE_VERSION_RECORD);
+		createEAttribute(portModelEClass, PORT_MODEL__MMX_DISTANCE_VERSION);
+		createEReference(portModelEClass, PORT_MODEL__MANUAL_DISTANCES);
 
 		capabilityGroupEClass = createEClass(CAPABILITY_GROUP);
 		createEAttribute(capabilityGroupEClass, CAPABILITY_GROUP__CAPABILITY);
@@ -976,6 +1062,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		g1.getETypeArguments().add(g2);
 		portGroupEClass.getEGenericSuperTypes().add(g1);
 		routeLineEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		manualRouteLineEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		portModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
 		g2 = createEGenericType(this.getPort());
@@ -1033,6 +1120,12 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEAttribute(getRouteLine_Provider(), ecorePackage.getEString(), "provider", null, 0, 1, RouteLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getRouteLine_ErrorCode(), ecorePackage.getEString(), "errorCode", null, 0, 1, RouteLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(manualRouteLineEClass, ManualRouteLine.class, "ManualRouteLine", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getManualRouteLine_RouteOption(), this.getRouteOption(), "routeOption", null, 0, 1, ManualRouteLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getManualRouteLine_From(), this.getPort(), null, "from", null, 1, 1, ManualRouteLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getManualRouteLine_To(), this.getPort(), null, "to", null, 1, 1, ManualRouteLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getManualRouteLine_Distance(), ecorePackage.getEDouble(), "distance", null, 1, 1, ManualRouteLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(portModelEClass, PortModel.class, "PortModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPortModel_Ports(), this.getPort(), null, "ports", null, 0, -1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPortModel_PortGroups(), this.getPortGroup(), null, "portGroups", null, 0, -1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1043,6 +1136,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEReference(getPortModel_PortVersionRecord(), theMMXCorePackage.getVersionRecord(), null, "portVersionRecord", null, 0, 1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPortModel_PortGroupVersionRecord(), theMMXCorePackage.getVersionRecord(), null, "portGroupVersionRecord", null, 0, 1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPortModel_DistanceVersionRecord(), theMMXCorePackage.getVersionRecord(), null, "distanceVersionRecord", null, 0, 1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPortModel_MmxDistanceVersion(), ecorePackage.getEString(), "mmxDistanceVersion", null, 0, 1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPortModel_ManualDistances(), this.getManualRouteLine(), null, "manualDistances", null, 0, -1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(capabilityGroupEClass, CapabilityGroup.class, "CapabilityGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCapabilityGroup_Capability(), theTypesPackage.getPortCapability(), "capability", null, 1, 1, CapabilityGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

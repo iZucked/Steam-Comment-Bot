@@ -25,6 +25,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.base.Functions;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.AtoBviaCLookupRecord;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.DataManifest;
+import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.DistanceDataVersion;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.Entry;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model.LocationsVersion;
 import com.mmxlabs.lngdataserver.lng.importers.distanceupdate.ui.UpdateDistancesWizard;
@@ -58,6 +59,11 @@ public class LingoDistanceUpdater {
 
 		final TypeReference<List<AtoBviaCLookupRecord>> TYPE_LIST = new TypeReference<List<AtoBviaCLookupRecord>>() {
 		};
+		// This code is was never really used in production, so just adding a stub version class for api changes
+		// We should really find the version from the file.
+		final DistanceDataVersion distanceDataVersion = new DistanceDataVersion();
+		distanceDataVersion.setVersion("manual");
+		
 		final LocationsVersion locationsVersion;
 		final List<AtoBviaCLookupRecord> distanceRecords;
 		try (InputStream inputStream = uc.createInputStream(URI.createURI(baseURI + "/" + entries.get("basic-locations").getPath()))) {
@@ -67,7 +73,7 @@ public class LingoDistanceUpdater {
 			distanceRecords = mapper.readValue(inputStream, TYPE_LIST);
 		}
 
-		importIntoScenario(scenarioInstance, locationsVersion, distanceRecords, null);
+		importIntoScenario(scenarioInstance, distanceDataVersion, locationsVersion, distanceRecords, null);
 	}
 
 	public static void importLocalIntoScenario(final ScenarioInstance scenarioInstance) throws IOException {
@@ -76,9 +82,13 @@ public class LingoDistanceUpdater {
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		mapper.registerModule(new JavaTimeModule());
 
+		final DistanceDataVersion dataVersion;
 		final LocationsVersion locationsVersion;
 		final List<AtoBviaCLookupRecord> distanceRecords;
 		final List<AtoBviaCLookupRecord> manualDistanceRecords;
+		try (InputStream inputStream = LingoDistanceUpdater.class.getResourceAsStream("/distances-version.json")) {
+			dataVersion = mapper.readValue(inputStream, DistanceDataVersion.class);
+		}
 		try (InputStream inputStream = LingoDistanceUpdater.class.getResourceAsStream("/ports.json")) {
 			locationsVersion = mapper.readValue(inputStream, LocationsVersion.class);
 		}
@@ -89,10 +99,11 @@ public class LingoDistanceUpdater {
 			manualDistanceRecords = mapper.readValue(inputStream, TYPE_LIST);
 		}
 
-		importIntoScenario(scenarioInstance, locationsVersion, distanceRecords, manualDistanceRecords);
+		importIntoScenario(scenarioInstance, dataVersion, locationsVersion, distanceRecords, manualDistanceRecords);
 	}
 
-	public static void importIntoScenario(final ScenarioInstance scenarioInstance, final LocationsVersion locationsVersion, final List<AtoBviaCLookupRecord> distanceRecords, final List<AtoBviaCLookupRecord> manualRecords) throws IOException {
+	public static void importIntoScenario(final ScenarioInstance scenarioInstance, final DistanceDataVersion dataVersion, final LocationsVersion locationsVersion,
+			final List<AtoBviaCLookupRecord> distanceRecords, final List<AtoBviaCLookupRecord> manualRecords) throws IOException {
 		// Check for null inputs
 		if (locationsVersion == null || distanceRecords == null) {
 			return;
@@ -107,7 +118,7 @@ public class LingoDistanceUpdater {
 				modelReference.executeWithLock(true, () -> {
 					try {
 
-						final UpdateDistancesWizard wizard = new UpdateDistancesWizard(modelReference, locationsVersion, distanceRecords, manualRecords);
+						final UpdateDistancesWizard wizard = new UpdateDistancesWizard(modelReference, dataVersion, locationsVersion, distanceRecords, manualRecords);
 						if (activeWorkbenchWindow == null) {
 							// action has been disposed
 							return;

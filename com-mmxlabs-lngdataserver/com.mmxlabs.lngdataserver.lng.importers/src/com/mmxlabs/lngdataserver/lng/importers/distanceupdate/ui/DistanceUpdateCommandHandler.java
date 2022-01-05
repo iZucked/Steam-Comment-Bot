@@ -23,8 +23,8 @@ public class DistanceUpdateCommandHandler extends AbstractHandler {
 
 		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 		IStructuredSelection selectionToPass = StructuredSelection.EMPTY;
-		if (selection instanceof IStructuredSelection) {
-			selectionToPass = (IStructuredSelection) selection;
+		if (selection instanceof IStructuredSelection ss) {
+			selectionToPass = ss;
 		}
 		return selectionToPass;
 	}
@@ -37,8 +37,7 @@ public class DistanceUpdateCommandHandler extends AbstractHandler {
 		if (selection.size() == 1) {
 
 			final Object obj = selection.getFirstElement();
-			if (obj instanceof ScenarioInstance) {
-				final ScenarioInstance scenarioInstance = (ScenarioInstance) obj;
+			if (obj instanceof ScenarioInstance scenarioInstance) {
 				try {
 					LingoDistanceUpdater.importLocalIntoScenario(scenarioInstance);
 				} catch (final IOException e) {

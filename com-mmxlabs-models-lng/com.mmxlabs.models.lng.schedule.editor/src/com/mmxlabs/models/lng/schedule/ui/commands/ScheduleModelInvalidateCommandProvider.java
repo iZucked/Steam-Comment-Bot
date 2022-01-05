@@ -19,6 +19,7 @@ import com.mmxlabs.models.common.commandservice.BaseModelCommandProvider;
 import com.mmxlabs.models.common.commandservice.CancelledCommand;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
+import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -53,7 +54,8 @@ public class ScheduleModelInvalidateCommandProvider extends BaseModelCommandProv
 				|| deletedObject instanceof Slot //
 				|| deletedObject instanceof SpotMarket //
 				|| deletedObject instanceof Port //
-				|| deletedObject instanceof VesselAvailability) {
+				|| deletedObject instanceof VesselAvailability //
+				|| deletedObject instanceof CanalBookingSlot) {
 			setContext(Boolean.FALSE);
 			return true;
 		}
@@ -72,14 +74,16 @@ public class ScheduleModelInvalidateCommandProvider extends BaseModelCommandProv
 	@Override
 	protected Command objectDeleted(final EditingDomain domain, final MMXRootObject rootObject, final Object deleted, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
 
-		if (rootObject instanceof LNGScenarioModel) {
-			final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
+		if (rootObject instanceof LNGScenarioModel scenarioModel) {
 			final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
 
 			if (getContext() == Boolean.FALSE) {
 				if (System.getProperty("lingo.suppress.dialogs") == null) {
 					{
-						if (!analyticsModel.getOptimisations().isEmpty() || !analyticsModel.getBreakevenModels().isEmpty() || analyticsModel.getViabilityModel() != null
+						if (!analyticsModel.getOptimisations().isEmpty() //
+								|| !analyticsModel.getBreakevenModels().isEmpty() //
+								|| !analyticsModel.getOptionModels().isEmpty() //
+								|| analyticsModel.getViabilityModel() != null
 								|| analyticsModel.getMtmModel() != null) {
 
 							boolean result = promptClearModels();
@@ -137,7 +141,7 @@ public class ScheduleModelInvalidateCommandProvider extends BaseModelCommandProv
 		boolean result[] = new boolean[1];
 		RunnerHelper.syncExec((display) -> {
 			result[0] = MessageDialog.openConfirm(display.getActiveShell(), "Scenario edit",
-					"This change will remove nall results. Press OK to continue, otherwise press cancel and fork the scenario.");
+					"This change will remove all results. Press OK to continue, otherwise press cancel and fork the scenario.");
 		});
 		return result[0];
 	}

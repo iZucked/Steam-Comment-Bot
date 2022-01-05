@@ -16,6 +16,8 @@ import com.mmxlabs.lingo.reports.customizable.CustomReportDefinition;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.OptionInfo;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlockManager;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 
 public class ScheduleSummaryReport extends AbstractConfigurableScheduleReportView {
 	
@@ -56,8 +58,8 @@ public class ScheduleSummaryReport extends AbstractConfigurableScheduleReportVie
 		final IActionBars bars = getViewSite().getActionBars();
 		final IToolBarManager toolbar = bars.getToolBarManager();
 	   
-		//final ImageDescriptor refreshImage = AbstractUIPlugin.imageDescriptorFromPlugin(PLUGIN_ID, "/icons/iu_update_obj.gif");
-		//refreshButton.setImageDescriptor(refreshImage);
+		CommonImages.setImageDescriptors(refreshButton, IconPaths.ReEvaluate16);
+
 		toolbar.appendToGroup("edit", saveToJSONButton);
 		toolbar.update(true);	
 		*/	

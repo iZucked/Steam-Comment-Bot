@@ -22,7 +22,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.notify.Notification;
@@ -129,8 +129,10 @@ public class FileScenarioService extends AbstractScenarioService {
 	}
 
 	/**
-	 * Creates a complete backup of the file scenario service data. First we create a local archive as the rest of the application will block to avoid data modification issues. Then we copy to the
-	 * remote location after releasing the lock.
+	 * Creates a complete backup of the file scenario service data. First we create
+	 * a local archive as the rest of the application will block to avoid data
+	 * modification issues. Then we copy to the remote location after releasing the
+	 * lock.
 	 */
 	private void backupWorkspace() throws InterruptedException {
 
@@ -156,7 +158,8 @@ public class FileScenarioService extends AbstractScenarioService {
 			// Get the zip file name
 			final String targetName = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_NAME_KEY);
 
-			// Use the URI to resolve to the scenario-service directory (or what ever is currently defined in the service properties).
+			// Use the URI to resolve to the scenario-service directory (or what ever is
+			// currently defined in the service properties).
 			final URI resolveURI = resolveURI(targetName);
 			final File localArchive = new File(resolveURI.toFileString());
 
@@ -185,7 +188,8 @@ public class FileScenarioService extends AbstractScenarioService {
 			createArchiveJob.setRule(rule);
 			createArchiveJob.schedule(0);
 
-			// Second job to copy archive to remote mapped location then "secure" delete the archive
+			// Second job to copy archive to remote mapped location then "secure" delete the
+			// archive
 			final String dest = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH_KEY);
 			final File destinationLocation = new File(dest);
 			if (destinationLocation.exists() && destinationLocation.isDirectory()) {
@@ -193,11 +197,12 @@ public class FileScenarioService extends AbstractScenarioService {
 				moveJob = new Job("Storing scenario data backup in " + destinationLocation.toString()) {
 
 					@Override
-					public IStatus run(final IProgressMonitor monitor) {
+					public IStatus run(final IProgressMonitor parentMonitor) {
+						final SubMonitor monitor = SubMonitor.convert(parentMonitor);
 						monitor.beginTask("Storing scenario data backup in " + destinationLocation.toString(), 10);
 						try {
 							final File destFile = new File(destinationLocation + "/" + targetName);
-							moveLocalArchive(localArchive, destFile, new SubProgressMonitor(monitor, 10));
+							moveLocalArchive(localArchive, destFile, monitor.split(10));
 						} catch (final IOException e) {
 							log.error("Error moving archive to remote " + e.getMessage(), e);
 						} finally {
@@ -265,7 +270,8 @@ public class FileScenarioService extends AbstractScenarioService {
 			try {
 				final ProgressMonitorDialog p = new ProgressMonitorDialog(null);
 
-				final IRunnableWithProgress runnable = monitor -> {
+				final IRunnableWithProgress runnable = parentMonitor -> {
+					SubMonitor monitor = SubMonitor.convert(parentMonitor);
 					monitor.beginTask("Backup scenario data", 20);
 					try {
 
@@ -273,19 +279,21 @@ public class FileScenarioService extends AbstractScenarioService {
 						// Get the zip file name
 						final String targetName = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_NAME_KEY);
 
-						// Use the URI to resolve to the scenario-service directory (or what ever is currently defined in the service properties).
+						// Use the URI to resolve to the scenario-service directory (or what ever is
+						// currently defined in the service properties).
 						final URI resolveURI = resolveURI(targetName);
 						final File localArchive = new File(resolveURI.toFileString());
 
 						new FileScenarioServiceBackup().backup(localArchive, localArchive.getParentFile());
 						monitor.worked(10);
 						monitor.subTask("Move archive to destination");
-						// Second job to copy archive to remote mapped location then "secure" delete the archive
+						// Second job to copy archive to remote mapped location then "secure" delete the
+						// archive
 						final String dest = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH_KEY);
 						final File destinationLocation = new File(dest);
 						if (destinationLocation.exists() && destinationLocation.isDirectory()) {
 							final File destFile = new File(destinationLocation + File.pathSeparator + targetName);
-							moveLocalArchive(localArchive, destFile, new SubProgressMonitor(monitor, 10));
+							moveLocalArchive(localArchive, destFile, monitor.split(10));
 						}
 					} catch (final Exception e) {
 						log.error("Error performing backup: " + e.getMessage(), e);

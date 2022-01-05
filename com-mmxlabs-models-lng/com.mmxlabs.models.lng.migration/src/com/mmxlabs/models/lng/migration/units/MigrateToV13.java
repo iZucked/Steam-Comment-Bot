@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil;
@@ -40,30 +41,16 @@ public class MigrateToV13 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected MetamodelLoader getSourceMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (sourceLoader == null) {
-			sourceLoader = MetamodelVersionsUtil.createV11Loader(extraPackages);
-		}
-		return sourceLoader;
-	}
-
-	@Override
-	protected MetamodelLoader getDestinationMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (destinationLoader == null) {
-			destinationLoader = MetamodelVersionsUtil.createV12Loader(extraPackages);
-		}
-		return destinationLoader;
+	protected MetamodelLoader createMetamodelLoader(@Nullable Map<URI, PackageData> extraPackages) {
+		// uses v12 loader really.
+		return MetamodelVersionsUtil.createVNLoader(12, extraPackages);
 	}
 
 	@Override
 	protected void doMigration(final MigrationModelRecord modelRecord) {
 
-		migrateTimeCharterRate(modelRecord.getModelRoot());
-	}
-
-	private void migrateTimeCharterRate(final EObject model) {
-
-		final MetamodelLoader modelLoader = getDestinationMetamodelLoader(null);
+		final EObject model = modelRecord.getModelRoot();
+		final MetamodelLoader modelLoader = modelRecord.getMetamodelLoader();
 
 		final EPackage package_ScenarioModel = modelLoader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
 		final EPackage package_CargoModel = modelLoader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_CargoModel);

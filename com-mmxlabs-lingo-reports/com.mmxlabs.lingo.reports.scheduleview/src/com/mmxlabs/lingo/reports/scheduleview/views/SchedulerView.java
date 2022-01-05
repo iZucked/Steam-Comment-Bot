@@ -900,12 +900,13 @@ public class SchedulerView extends ViewPart implements
 		zoomOutAction = new ZoomOutAction(viewer.getGanttChart());
 		packAction = new PackAction(viewer.getGanttChart());
 
-		highlightAction = new HighlightAction(this, viewer, (EMFScheduleLabelProvider) (viewer.getLabelProvider()));
-
 		if (!Activator.getDefault().getPreferenceStore().getBoolean(SCHEDULER_VIEW_HIDE_COLOUR_SCHEME_ACTION)) {
 
 			colourSchemeAction = new ColourSchemeAction(this, (EMFScheduleLabelProvider) (viewer.getLabelProvider()), viewer);
 		}
+		
+		highlightAction = new HighlightAction(this, viewer, (EMFScheduleLabelProvider) (viewer.getLabelProvider()));
+		
 		toggleLegend = new RunnableAction("Legend", SWT.CHECK, () -> {
 			final boolean b = viewer.getGanttChart().getGanttComposite().isShowLegend();
 			viewer.getGanttChart().getGanttComposite().setShowLegend(!b);

@@ -17,6 +17,8 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import com.mmxlabs.common.csv.CSVWriter;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.internal.Activator;
 
 /**
@@ -53,7 +55,7 @@ public class CopyTableToClipboardAction extends Action {
 		setText("Copy");
 		setDescription("Copies table data into the clipboard");
 		setToolTipText("Copies table data into the clipboard");
-		setImageDescriptor(Activator.getImageDescriptor("/icons/copy.png"));
+		CommonImages.setImageDescriptors(this, IconPaths.Copy);
 	}
 
 	@Override

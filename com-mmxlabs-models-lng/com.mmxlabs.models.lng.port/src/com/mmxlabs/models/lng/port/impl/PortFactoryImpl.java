@@ -69,6 +69,7 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 			case PortPackage.ROUTE: return createRoute();
 			case PortPackage.PORT_GROUP: return createPortGroup();
 			case PortPackage.ROUTE_LINE: return createRouteLine();
+			case PortPackage.MANUAL_ROUTE_LINE: return createManualRouteLine();
 			case PortPackage.PORT_MODEL: return createPortModel();
 			case PortPackage.CAPABILITY_GROUP: return createCapabilityGroup();
 			case PortPackage.LOCATION: return createLocation();
@@ -157,6 +158,17 @@ public class PortFactoryImpl extends EFactoryImpl implements PortFactory {
 	public RouteLine createRouteLine() {
 		RouteLineImpl routeLine = new RouteLineImpl();
 		return routeLine;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ManualRouteLine createManualRouteLine() {
+		ManualRouteLineImpl manualRouteLine = new ManualRouteLineImpl();
+		return manualRouteLine;
 	}
 
 	/**

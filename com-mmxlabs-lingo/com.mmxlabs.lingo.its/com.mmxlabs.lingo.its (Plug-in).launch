@@ -106,7 +106,7 @@
         <setEntry value="org.apache.httpcomponents.httpclient@default:default"/>
         <setEntry value="org.apache.httpcomponents.httpcore@default:default"/>
         <setEntry value="org.apache.jasper.glassfish@default:default"/>
-        <setEntry value="org.apache.logging.log4j.log4j-core@default:default"/>
+        <setEntry value="org.apache.log4j@default:default"/>
         <setEntry value="org.apache.lucene.analyzers-common@default:default"/>
         <setEntry value="org.apache.lucene.analyzers-smartcn@default:default"/>
         <setEntry value="org.apache.lucene.core@default:default"/>

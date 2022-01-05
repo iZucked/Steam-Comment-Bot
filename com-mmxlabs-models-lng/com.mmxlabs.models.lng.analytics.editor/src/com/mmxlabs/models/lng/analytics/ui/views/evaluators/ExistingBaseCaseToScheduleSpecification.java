@@ -508,48 +508,47 @@ public class ExistingBaseCaseToScheduleSpecification {
 					return spec;
 				};
 
-				TriConsumer<EObject, BaseCaseRowOptions, ScheduleSpecificationEvent> applyOptions = (target, options, slotSpec) -> {
+				TriConsumer<EObject, BaseCaseRowOptions, ScheduleSpecificationEvent> applyOptions = (target, options, scheduleSpec) -> {
 					if (options != null) {
 						if (target instanceof LoadSlot) {
-							if (options.getLadenRoute() != null) {
+							if (options.isSetLadenRoute()) {
 								voyageSpecs.computeIfAbsent(target, builder).setRouteOption(options.getLadenRoute());
 							}
-							if (options.getLadenFuelChoice() != null) {
+							if (options.isSetLadenFuelChoice()) {
 								voyageSpecs.computeIfAbsent(target, builder).setFuelChoice(options.getLadenFuelChoice());
 							}
 							if (options.getLoadDate() != null) {
-								((SlotSpecification) slotSpec).setArrivalDate(options.getLoadDate());
+								((SlotSpecification) scheduleSpec).setArrivalDate(options.getLoadDate());
 							}
 
 						}
 						if (target instanceof DischargeSlot) {
-							if (options.getBallastRoute() != null) {
+							if (options.isSetBallastRoute()) {
 								voyageSpecs.computeIfAbsent(target, builder).setRouteOption(options.getBallastRoute());
 							}
-							if (options.getBallastFuelChoice() != null) {
+							if (options.isSetBallastFuelChoice()) {
 								voyageSpecs.computeIfAbsent(target, builder).setFuelChoice(options.getBallastFuelChoice());
 							}
-							if (options.getDischargeDate() != null && slotSpec instanceof SlotSpecification) {
-								((SlotSpecification) slotSpec).setArrivalDate(options.getDischargeDate());
+							if (options.getDischargeDate() != null && scheduleSpec instanceof SlotSpecification ) {
+								((SlotSpecification) scheduleSpec).setArrivalDate(options.getDischargeDate());
 							}
 						}
 						if (target instanceof VesselEvent) {
-							if (options.getBallastRoute() != null) {
+							if (options.isSetLadenRoute()) {
 								voyageSpecs.computeIfAbsent(target, builder).setRouteOption(options.getLadenRoute());
 							}
-							if (options.getBallastFuelChoice() != null) {
+							if (options.isSetLadenFuelChoice()) {
 								voyageSpecs.computeIfAbsent(target, builder).setFuelChoice(options.getLadenFuelChoice());
 							}
 							if (options.getLoadDate() != null) {
-								((VesselEventSpecification) slotSpec).setArrivalDate(options.getLoadDate());
+								((VesselEventSpecification) scheduleSpec).setArrivalDate(options.getLoadDate());
 							}
 						}
 					}
 				};
 
 				for (final AssignableElement assignedObject : seq.getAssignedObjects()) {
-					if (assignedObject instanceof Cargo) {
-						final Cargo cargo = (Cargo) assignedObject;
+					if (assignedObject instanceof Cargo cargo) {
 						assert cargo.getCargoType() == CargoType.FLEET;
 
 						for (final Slot<?> slot : cargo.getSortedSlots()) {

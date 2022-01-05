@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.lingo.its.feature"
       label="Lingo ITS"
-      version="4.13.4.qualifier"
+      version="4.13.8.qualifier"
       provider-name="Minimax Labs Ltd."
       plugin="com.mmxlabs.lingo.app">
 
@@ -159,13 +159,5 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
-     <plugin
-         id="org.apache.logging.log4j.log4j-core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
 
 </feature>

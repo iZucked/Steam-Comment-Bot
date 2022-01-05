@@ -42,8 +42,8 @@ public class CustomReportsRegistry {
 
 	private static final String USER_REPORTS_CATEGORY_ID = "com.mmxlabs.lingo.reports.customizable.user";
 
-	private static final Logger logger = LoggerFactory.getLogger(ScheduleSummaryReport.class);
-	
+	private static final Logger logger = LoggerFactory.getLogger(CustomReportsRegistry.class);
+
 	public static final String USER_REPORTS_DIR = "reports";
 
 	public static final String TEAM_REPORTS_DIR = "team-reports";
@@ -203,7 +203,7 @@ public class CustomReportsRegistry {
 		"       <view\r\n" + 
 		"             category=\""+categoryId+"\"\r\n" + 
 		"             class=\"org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport\"\r\n" + 
-		"             icon=\"icons/cview16/exec_statistic_view.gif\"\r\n" + 
+		"             icon=\"platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_statistic_view.gif\"\r\n" + 
 		"             id=\"");
 		out.print(rd.getUuid());
 		out.print("\"\r\n" + 

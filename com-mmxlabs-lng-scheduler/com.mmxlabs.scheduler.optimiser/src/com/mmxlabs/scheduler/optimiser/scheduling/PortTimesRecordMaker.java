@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.scheduling;
 
-import java.lang.annotation.AnnotationTypeMismatchException;
 import java.util.LinkedList;
 import java.util.List;
 

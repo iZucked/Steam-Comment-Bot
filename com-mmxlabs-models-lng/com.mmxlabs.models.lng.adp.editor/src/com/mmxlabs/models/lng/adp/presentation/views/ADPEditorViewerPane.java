@@ -47,10 +47,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.google.common.base.Objects;
 import com.mmxlabs.license.features.KnownFeatures;
@@ -71,9 +69,9 @@ import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IValidationService;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
 import com.mmxlabs.rcp.common.CommonImages;
-import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.CommonImages.IconMode;
 import com.mmxlabs.rcp.common.CommonImages.IconPaths;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
@@ -93,7 +91,7 @@ public class ADPEditorViewerPane extends ScenarioViewerPane {
 
 	@Override
 	public Viewer createViewer(final Composite parent) {
-		imgError = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.validation", "/icons/error.gif").createImage();
+		imgError = CommonImages.getImageDescriptor(IconPaths.Error, IconMode.Enabled).createImage();
 
 		editorData = new ADPEditorData(this.scenarioEditingLocation);
 

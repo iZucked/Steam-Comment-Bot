@@ -69,11 +69,7 @@ public class FilterField implements ModifyListener, DisposeListener, KeyListener
 					{
 						setChecked(false);
 						setText("Filter table");
-						setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Filter, IconMode.Enabled));
-//	OLD ImDesc			try {
-//							setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.models.ui.tabular/icons/filter.png")));
-//						} catch (final MalformedURLException ex) {
-//						}
+						CommonImages.setImageDescriptors(this, IconPaths.Filter);
 					}
 
 					@Override
