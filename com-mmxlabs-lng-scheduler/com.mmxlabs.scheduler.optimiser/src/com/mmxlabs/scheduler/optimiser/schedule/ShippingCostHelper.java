@@ -21,6 +21,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -140,27 +141,38 @@ public class ShippingCostHelper {
 		return shippingCosts + portCosts + hireCosts + capacityCosts + crewBonusCosts + insuranceCosts;
 	}
 
-	public long getShippingCharterContractCost(final @NonNull IPortSlot portSlot, final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, final IPort firstLoadPort,
+	public long getShippingCharterContractCost(final IPortTimesRecord portTimesRecord, final @NonNull IPortSlot portSlot, final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, final IPort firstLoadPort,
 			final int vesselEndTime) {
 		if (portSlot.getPortType() == PortType.End || portSlot.getPortType() == PortType.Start) {
 			@Nullable
 			ICharterContract charterContract = vesselAvailability.getCharterContract();
 			if (charterContract != null) {
-				return charterContract.calculateCost(firstLoadPort, portSlot, vesselAvailability, vesselStartTime, vesselEndTime);
+				if (portSlot.getPortType() == PortType.End) {
+					return charterContract.calculateBBCost(portTimesRecord, firstLoadPort, portSlot, vesselAvailability, vesselStartTime, vesselEndTime);
+				} else {
+					return charterContract.calculateRFRevenue(portTimesRecord, firstLoadPort, portSlot, vesselAvailability, vesselStartTime, vesselEndTime);
+				}
 			}
 		}
 		return 0L;
 	}
 
-	public void addCharterContractAnnotation(DetailTree shippingDetails, IPortSlot portSlot, @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, IPort firstLoadPort,
+	public void addCharterContractAnnotation(final IPortTimesRecord portTimesRecord, DetailTree shippingDetails, IPortSlot portSlot, @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, IPort firstLoadPort,
 			int vesselEndTime) {
 		final boolean bb = portSlot.getPortType() == PortType.End;
 		if (portSlot.getPortType() == PortType.End || portSlot.getPortType() == PortType.Start) {
 			@Nullable
 			ICharterContract charterContract = vesselAvailability.getCharterContract();
 			if (charterContract != null) {
-				ICharterContractAnnotation annotation = charterContract.annotate(firstLoadPort, portSlot, vesselAvailability, vesselStartTime, vesselEndTime);
-				shippingDetails.addChild(bb ? CharterContractConstants.BALLAST_BONUS_KEY : CharterContractConstants.REPOSITIONING_FEE_KEY, annotation);
+				ICharterContractAnnotation annotation = null;
+				if (portSlot.getPortType() == PortType.End) {
+					annotation = charterContract.annotateBB(portTimesRecord, firstLoadPort, portSlot, vesselAvailability, vesselStartTime, vesselEndTime);
+				} else {
+					annotation = charterContract.annotateBB(portTimesRecord, firstLoadPort, portSlot, vesselAvailability, vesselStartTime, vesselEndTime);
+				}
+				if (annotation != null) {
+					shippingDetails.addChild(bb ? CharterContractConstants.BALLAST_BONUS_KEY : CharterContractConstants.REPOSITIONING_FEE_KEY, annotation);
+				}
 			}
 		}
 	}

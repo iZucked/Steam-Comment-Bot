@@ -52,6 +52,7 @@ import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.ICharterContract;
+import com.mmxlabs.scheduler.optimiser.chartercontracts.IRepositioningFeeTerm;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.IBallastBonusTerm;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.impl.DefaultCharterContract;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.impl.MonthlyBallastBonusContract;
@@ -124,13 +125,14 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 			return oCharterContract;
 		}
 
-		final List<IBallastBonusTerm> terms = new LinkedList<>();
+		final List<IBallastBonusTerm> bbTerms = new LinkedList<>();
+		final List<IRepositioningFeeTerm> rfTerms = new LinkedList<>();
 		final IBallastBonus ballastBonus = eCharterContract.getBallastBonusTerms();
 		if (ballastBonus != null) {
 			if (eCharterContract.getBallastBonusTerms() instanceof MonthlyBallastBonusContainer) {
-				terms.addAll(processMonthlyBallastBonus(eCharterContract));
+				bbTerms.addAll(processMonthlyBallastBonus(eCharterContract));
 			} else if (eCharterContract.getBallastBonusTerms() instanceof SimpleBallastBonusContainer) {
-				terms.addAll(processSimpleBallastBonus(eCharterContract));
+				bbTerms.addAll(processSimpleBallastBonus(eCharterContract));
 			} else {
 				throw new IllegalArgumentException("Not implemented yet. Please contact Minimax Labs support.");
 			}
@@ -139,16 +141,16 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 		final IRepositioningFee repositioningFee = eCharterContract.getRepositioningFeeTerms();
 		if (repositioningFee != null) {
 			if (eCharterContract.getRepositioningFeeTerms() instanceof SimpleRepositioningFeeContainer) {
-				terms.addAll(processSimpleRepositioningFee(eCharterContract));
+				rfTerms.addAll(processSimpleRepositioningFee(eCharterContract));
 			} else {
 				throw new IllegalArgumentException("Not implemented yet. Please contact Minimax Labs support.");
 			}
 		}
 
 		if (eCharterContract.getBallastBonusTerms() instanceof MonthlyBallastBonusContainer) {
-			oCharterContract = new MonthlyBallastBonusContract(terms);
+			oCharterContract = new MonthlyBallastBonusContract(bbTerms, rfTerms);
 		} else {
-			oCharterContract = new DefaultCharterContract(terms);
+			oCharterContract = new DefaultCharterContract(bbTerms, rfTerms);
 		}
 		modelEntityMap.addModelObject(eCharterContract, oCharterContract);
 		return oCharterContract;
@@ -237,13 +239,13 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 		return terms;
 	}
 
-	private List<IBallastBonusTerm> processSimpleRepositioningFee(final GenericCharterContract eCharterContract) {
+	private List<IRepositioningFeeTerm> processSimpleRepositioningFee(final GenericCharterContract eCharterContract) {
 		final SimpleRepositioningFeeContainer repositioningFee = (SimpleRepositioningFeeContainer) eCharterContract.getRepositioningFeeTerms();
 
-		final List<IBallastBonusTerm> terms = new LinkedList<>();
+		final List<IRepositioningFeeTerm> terms = new LinkedList<>();
 		for (final RepositioningFeeTerm term : repositioningFee.getTerms()) {
 
-			IBallastBonusTerm tt = null;
+			IRepositioningFeeTerm tt = null;
 			if (term instanceof final LumpSumRepositioningFeeTerm t) {
 				final String priceExpression = t.getPriceExpression();
 				final ILongCurve lumpSumCurve = getPriceCurveFromExpression(priceExpression, charterIndices);
@@ -264,8 +266,9 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 				final IPort originPort = transformPort(t.getOriginPort());
 				final int speed = OptimiserUnitConvertor.convertToInternalSpeed(t.getSpeed());
 				final boolean includeCanalTime = t.isIncludeCanalTime();
+				final  Set<IPort> startPorts = transformPorts(t.getStartPorts());
 				
-				tt = new DefaultOriginPortRepositioningFeeContractTerm(originPort, lumpSumCurve, fuelCurve, charterCurve, t.isIncludeCanal(), includeCanalTime, speed);
+				tt = new DefaultOriginPortRepositioningFeeContractTerm(originPort, startPorts, lumpSumCurve, fuelCurve, charterCurve, t.isIncludeCanal(), includeCanalTime, speed);
 			} else {
 				throw new IllegalArgumentException("Not implemented yet. Please contact Minimax support.");
 			}
