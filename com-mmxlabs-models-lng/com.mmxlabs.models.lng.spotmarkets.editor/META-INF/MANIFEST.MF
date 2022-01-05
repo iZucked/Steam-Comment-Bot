@@ -5,7 +5,7 @@ Bundle-SymbolicName: com.mmxlabs.models.lng.spotmarkets.editor;singleton:=true
 Bundle-Version: 5.3.9.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-RequiredExecutionEnvironment: JavaSE-16
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: com.mmxlabs.models.lng.spotmarkets.editor.importers,
  com.mmxlabs.models.lng.spotmarkets.editor.modelfactories,
  com.mmxlabs.models.lng.spotmarkets.editor.valueproviders

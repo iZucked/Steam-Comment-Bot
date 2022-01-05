@@ -66,7 +66,7 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.models.lng.analytics.editor,
  com.mmxlabs.optimiser.optimiser-core,
  com.mmxlabs.scenario.service.util;bundle-version="5.3.9"
-Bundle-RequiredExecutionEnvironment: JavaSE-16
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Import-Package: com.mmxlabs.models.lng.analytics.ui.utils,
  com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor,
  org.slf4j

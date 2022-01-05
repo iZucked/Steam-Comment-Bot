@@ -5,7 +5,7 @@ Bundle-SymbolicName: com.mmxlabs.lingo.reports.tests;singleton:=true
 Fragment-Host: com.mmxlabs.lingo.reports
 Bundle-Version: 5.3.9.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-RequiredExecutionEnvironment: JavaSE-16
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: com.mmxlabs.models.lng.types;bundle-version="[5.3.9,6.0.0)",
  com.mmxlabs.models.lng.cargo;bundle-version="[5.3.9,6.0.0)",
  com.mmxlabs.models.lng.commercial;bundle-version="[5.3.9,6.0.0)",

@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-RequiredExecutionEnvironment: JavaSE-16
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-SymbolicName: com.mmxlabs.optimiser.optimiser-common.tests
 Automatic-Module-Name: com.mmxlabs.optimiser.optimiser-common.tests
 Bundle-Vendor: Minimax Labs Ltd.

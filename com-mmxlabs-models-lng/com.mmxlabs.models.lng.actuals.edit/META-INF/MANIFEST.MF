@@ -7,7 +7,7 @@ Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.models.lng.actuals.provider.ActualsEditPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-16
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: com.mmxlabs.models.lng.actuals.provider
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.actuals;bundle-version="[5.3.9,6.0.0)";visibility:=reexport,

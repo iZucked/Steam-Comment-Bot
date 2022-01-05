@@ -7,7 +7,7 @@ Bundle-Version: 5.3.9.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-16
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: com.mmxlabs.models.lng.parameters,
  com.mmxlabs.models.lng.parameters.impl,
  com.mmxlabs.models.lng.parameters.util
