@@ -649,10 +649,6 @@
             ID="com.mmxlabs.models.lng.cargo.editor.attributeImporter1"
             attributeImporterClass="com.mmxlabs.models.util.importer.impl.DefaultAttributeImporter">
          <dataType
-               attributeTypeName="EVesselTankState"
-               attributeTypeURI="http://www.mmxlabs.com/models/lng/cargo/1/">
-         </dataType>
-         <dataType
                attributeTypeName="InventoryFrequency"
                attributeTypeURI="http://www.mmxlabs.com/models/lng/cargo/1/">
          </dataType>
