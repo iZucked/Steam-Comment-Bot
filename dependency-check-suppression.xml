@@ -86,7 +86,12 @@
    ]]></notes>
    <cve>CVE-2009-5046</cve>
 </suppress>
- 
+ <suppress>
+   <notes><![CDATA[
+   Ignore p2 mitm
+   ]]></notes>
+   <cve>CVE-2021-41033</cve>
+</suppress>
  <suppress>
    <notes><![CDATA[
    Ignore MediaWiki vulnerability
