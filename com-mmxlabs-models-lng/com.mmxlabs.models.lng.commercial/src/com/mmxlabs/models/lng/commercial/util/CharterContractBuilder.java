@@ -83,9 +83,9 @@ public class CharterContractBuilder {
 
 		public RepositioningMaker addLumpSumRule(final @Nullable Port originPort, final String expression) {
 			final LumpSumRepositioningFeeTerm term = CommercialFactory.eINSTANCE.createLumpSumRepositioningFeeTerm();
-			if (originPort != null) {
-				term.setOriginPort(originPort);
-			}
+//			if (originPort != null) {
+//				term.setOriginPort(originPort);
+//			}
 			term.setPriceExpression(expression);
 			container.getTerms().add(term);
 
