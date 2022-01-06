@@ -64,7 +64,8 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
 /**
- * A builder to create {@link IPhaseOptimisationData} instances for Scheduler problems.
+ * A builder to create {@link IPhaseOptimisationData} instances for Scheduler
+ * problems.
  * 
  * @author Simon Goodall
  * 
@@ -73,14 +74,16 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 public interface ISchedulerBuilder {
 
 	/**
-	 * Add an {@link IBuilderExtension} to this builder. The extension ought to be added before any other builder methods are used.
+	 * Add an {@link IBuilderExtension} to this builder. The extension ought to be
+	 * added before any other builder methods are used.
 	 * 
 	 * @param extension
 	 */
 	void addBuilderExtension(@NonNull IBuilderExtension extension);
 
 	/**
-	 * Finalise build process and return an {@link IPhaseOptimisationData} instance. The builder should not be used after calling this method.
+	 * Finalise build process and return an {@link IPhaseOptimisationData} instance.
+	 * The builder should not be used after calling this method.
 	 * 
 	 * @return
 	 */
@@ -91,18 +94,15 @@ public interface ISchedulerBuilder {
 	 * Create a new vessel
 	 * 
 	 * @param name
-	 * @param minSpeed
-	 *            Minimum vessel speed in scaled knots
-	 * @param maxSpeed
-	 *            Maximum vessel speed in scaled knots
-	 * @param capacity
-	 *            Maximum loadable cargo quantity in scaled M3
-	 * @param safetyHeel
-	 *            Minimum heel to retain (when appropriate) in scaled M3
-	 * @param baseFuelUnitPrice
-	 *            Price of base fuel in scaled $/MT
-	 * @param baseFuelEquivalenceInM3TOMT
-	 *            Scaled Conversion factor to convert M3 LNG to equivalent MT base fuel
+	 * @param minSpeed                    Minimum vessel speed in scaled knots
+	 * @param maxSpeed                    Maximum vessel speed in scaled knots
+	 * @param capacity                    Maximum loadable cargo quantity in scaled
+	 *                                    M3
+	 * @param safetyHeel                  Minimum heel to retain (when appropriate)
+	 *                                    in scaled M3
+	 * @param baseFuelUnitPrice           Price of base fuel in scaled $/MT
+	 * @param baseFuelEquivalenceInM3TOMT Scaled Conversion factor to convert M3 LNG
+	 *                                    to equivalent MT base fuel
 	 * @return
 	 */
 	@NonNull
@@ -115,18 +115,24 @@ public interface ISchedulerBuilder {
 	 * 
 	 * @param vessel
 	 * @param state
-	 * @param nboRateInM3PerHour
-	 *            Hourly scaled M3 of LNG rate of boil-off when travelling
-	 * @param idleNBORateInM3PerHour
-	 *            Hourly scaled M3 of LNG rate of boil-off when idling
-	 * @param idleConsumptionRateInMTPerHour
-	 *            Hourly scaled MT of base fuel consumption rate when idle
-	 * @param inPortConsumptionRateInMTPerHour
-	 *            Hourly scale MT of base fuel consumption when in port.
-	 * @param consumptionRateCalculatorInMTPerHour
-	 *            {@link IConsumptionRateCalculator} returning hourly scaled MT of base fuel consumption rate when travelling based upon speed.
-	 * @param nboSpeed
-	 *            Scaled speed in knots indicating the speed at which the vessel can travel to use up all NBO when travelling. * @param serviceSpeed Service speed of vessel in scaled knots
+	 * @param nboRateInM3PerHour                   Hourly scaled M3 of LNG rate of
+	 *                                             boil-off when travelling
+	 * @param idleNBORateInM3PerHour               Hourly scaled M3 of LNG rate of
+	 *                                             boil-off when idling
+	 * @param idleConsumptionRateInMTPerHour       Hourly scaled MT of base fuel
+	 *                                             consumption rate when idle
+	 * @param inPortConsumptionRateInMTPerHour     Hourly scale MT of base fuel
+	 *                                             consumption when in port.
+	 * @param consumptionRateCalculatorInMTPerHour {@link IConsumptionRateCalculator}
+	 *                                             returning hourly scaled MT of
+	 *                                             base fuel consumption rate when
+	 *                                             travelling based upon speed.
+	 * @param nboSpeed                             Scaled speed in knots indicating
+	 *                                             the speed at which the vessel can
+	 *                                             travel to use up all NBO when
+	 *                                             travelling. * @param serviceSpeed
+	 *                                             Service speed of vessel in scaled
+	 *                                             knots
 	 */
 	void setVesselStateParameters(@NonNull IVessel vessel, @NonNull VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour, int idleConsumptionRateInMTPerHour,
 			@NonNull IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, int serviceSpeed, int inPortNBORateInM3PerHour);
@@ -136,8 +142,8 @@ public interface ISchedulerBuilder {
 	 * 
 	 * @param vessel
 	 * @param portType
-	 * @param inPortConsumptionRateInMTPerHour
-	 *            Hourly scale MT of base fuel consumption when in port.
+	 * @param inPortConsumptionRateInMTPerHour Hourly scale MT of base fuel
+	 *                                         consumption when in port.
 	 */
 	void setVesselPortTypeParameters(@NonNull IVessel vessel, @NonNull PortType portType, int inPortConsumptionRateInMTPerDay);
 
@@ -154,16 +160,12 @@ public interface ISchedulerBuilder {
 	/**
 	 * Create a charter out event
 	 * 
-	 * @param id
-	 *            the ID of the charter out
-	 * @param arrivalTimeWindow
-	 *            a time window in which the vessel must arrive at the port
-	 * @param startPort
-	 *            the port where the client is collecting the vessel
-	 * @param endPort
-	 *            the port where the vessel is being returned to
-	 * @param durationHours
-	 *            how long the charter out is for, in hours
+	 * @param id                the ID of the charter out
+	 * @param arrivalTimeWindow a time window in which the vessel must arrive at the
+	 *                          port
+	 * @param startPort         the port where the client is collecting the vessel
+	 * @param endPort           the port where the vessel is being returned to
+	 * @param durationHours     how long the charter out is for, in hours
 	 * @param optional
 	 * 
 	 * @return
@@ -175,14 +177,11 @@ public interface ISchedulerBuilder {
 	/**
 	 * Create a dry dock event
 	 * 
-	 * @param id
-	 *            the ID of the dry dock
-	 * @param arrivalTimeWindow
-	 *            the time window in which the vessel must arrive at the port
-	 * @param port
-	 *            the port where the dry dock is
-	 * @param durationHours
-	 *            the number of hours the dry dock will take
+	 * @param id                the ID of the dry dock
+	 * @param arrivalTimeWindow the time window in which the vessel must arrive at
+	 *                          the port
+	 * @param port              the port where the dry dock is
+	 * @param durationHours     the number of hours the dry dock will take
 	 * @return
 	 */
 	@NonNull
@@ -191,14 +190,11 @@ public interface ISchedulerBuilder {
 	/**
 	 * Create a maintenance event
 	 * 
-	 * @param id
-	 *            the ID of the maintenance
-	 * @param arrivalTimeWindow
-	 *            the time window in which the vessel must arrive at the port
-	 * @param port
-	 *            the port where the maintenance is
-	 * @param durationHours
-	 *            the number of hours the maintenance will take
+	 * @param id                the ID of the maintenance
+	 * @param arrivalTimeWindow the time window in which the vessel must arrive at
+	 *                          the port
+	 * @param port              the port where the maintenance is
+	 * @param durationHours     the number of hours the maintenance will take
 	 * @return
 	 */
 	@NonNull
@@ -227,7 +223,8 @@ public interface ISchedulerBuilder {
 			@NonNull IEndRequirement end, ICharterContract charterContract, ILongCurve repositioningFee, boolean isOptional);
 
 	/**
-	 * Boolean flag to indicate hard start time window. If false, provider timeWindow is a notional start date.
+	 * Boolean flag to indicate hard start time window. If false, provider
+	 * timeWindow is a notional start date.
 	 * 
 	 * @param fixedPort
 	 * @param hasTimeRequirement
@@ -239,7 +236,9 @@ public interface ISchedulerBuilder {
 	IStartRequirement createStartRequirement(@Nullable IPort fixedPort, boolean hasTimeRequirement, @Nullable ITimeWindow timeWindow, @Nullable IHeelOptionSupplier heelSupplierOptions);
 
 	/**
-	 * Boolean flag to indicate hard end time window. If false, provider timeWindow is a notional end date and should be an instanceof of a {@link MutableTimeWindow}.
+	 * Boolean flag to indicate hard end time window. If false, provider timeWindow
+	 * is a notional end date and should be an instanceof of a
+	 * {@link MutableTimeWindow}.
 	 * 
 	 * @param fixedPort
 	 * @param hasTimeRequirement
@@ -259,10 +258,11 @@ public interface ISchedulerBuilder {
 	void setPortCooldownData(@NonNull IPort port, boolean arriveCold, @Nullable final ICooldownCalculator cooldownCalculator);
 
 	/**
-	 * Create a cargo with the initial port slots. If allowRewiring is false, bind the slot sequence.
+	 * Create a cargo with the initial port slots. If allowRewiring is false, bind
+	 * the slot sequence.
 	 * 
-	 * @param slots
-	 *            A {@link Collection} of {@link ILoadOption}s and {@link IDischargeOption}s
+	 * @param slots A {@link Collection} of {@link ILoadOption}s and
+	 *              {@link IDischargeOption}s
 	 * @return
 	 */
 	@NonNull
@@ -286,43 +286,37 @@ public interface ISchedulerBuilder {
 	/**
 	 * Set the default toll associated with passing by a given route
 	 * 
-	 * @param route
-	 *            the route name
-	 * @param defaultPrice
-	 *            the associated toll in dollars
+	 * @param route        the route name
+	 * @param defaultPrice the associated toll in dollars
 	 */
 	void setDefaultRouteCost(@NonNull ERouteOption route, @NonNull ILongCurve defaultPrice);
 
 	/**
-	 * Set the extra time and fuel required for the given vessel to travel by the given route
+	 * Set the extra time and fuel required for the given vessel to travel by the
+	 * given route
 	 * 
-	 * @param route
-	 *            the route
-	 * @param vessel
-	 *            the vessel
-	 * @param vesselState
-	 *            the vessel state
-	 * @param baseFuelInScaledMT
-	 *            the extra base fuel or equivalent required, in up-scaled MT (see {@link Calculator#ScaleFactor})
-	 * @param nboRateInScaledM3
-	 *            the NBO rate in up-scaled M3 (see {@link Calculator#ScaleFactor})
+	 * @param route              the route
+	 * @param vessel             the vessel
+	 * @param vesselState        the vessel state
+	 * @param baseFuelInScaledMT the extra base fuel or equivalent required, in
+	 *                           up-scaled MT (see {@link Calculator#ScaleFactor})
+	 * @param nboRateInScaledM3  the NBO rate in up-scaled M3 (see
+	 *                           {@link Calculator#ScaleFactor})
 	 */
 	void setVesselRouteFuel(@NonNull ERouteOption route, @NonNull IVessel vessel, VesselState vesselState, long baseFuelInScaledMT, long nboRateInScaledM3);
 
 	/**
 	 * Set the extra time required for the given vessel to travel by the given route
 	 * 
-	 * @param name
-	 *            the name of the route
-	 * @param vessel
-	 *            the vessel
-	 * @param time
-	 *            the extra transit time required, in hours
+	 * @param name   the name of the route
+	 * @param vessel the vessel
+	 * @param time   the extra transit time required, in hours
 	 */
 	void setVesselRouteTransitTime(@NonNull ERouteOption route, @NonNull IVessel vessel, int timeInHours);
 
 	/**
-	 * Specify an amount of time a given {@link IResource} must incur if assigned to the given {@link ISequenceElement}.
+	 * Specify an amount of time a given {@link IResource} must incur if assigned to
+	 * the given {@link ISequenceElement}.
 	 * 
 	 * @param element
 	 * @param resource
@@ -331,21 +325,18 @@ public interface ISchedulerBuilder {
 	void setElementDurations(@NonNull ISequenceElement element, @NonNull IResource resource, int duration);
 
 	/**
-	 * Create a new {@link ILoadSlot} instance. This is currently expected to be assigned to a cargo.
+	 * Create a new {@link ILoadSlot} instance. This is currently expected to be
+	 * assigned to a cargo.
 	 * 
 	 * @param id
 	 * @param port
 	 * @param window
-	 * @param minVolume
-	 *            Scaled minimum loadable quantity of LNG in M3
-	 * @param maxVolume
-	 *            Scaled maximum loadable quantity of LNG in M3
-	 * @param cargoCVValue
-	 *            Scaled conversion factor to convert from M3 to MMBTU of LNG
-	 * @param slotIsLocked
-	 *            TODO
-	 * @param price
-	 *            Scaled purchase price in $/MMBTu
+	 * @param minVolume    Scaled minimum loadable quantity of LNG in M3
+	 * @param maxVolume    Scaled maximum loadable quantity of LNG in M3
+	 * @param cargoCVValue Scaled conversion factor to convert from M3 to MMBTU of
+	 *                     LNG
+	 * @param slotIsLocked TODO
+	 * @param price        Scaled purchase price in $/MMBTu
 	 * @return
 	 */
 	@NonNull
@@ -361,17 +352,17 @@ public interface ISchedulerBuilder {
 			boolean slotIsLocked);
 
 	/**
-	 * Create a new {@link IDischargeSlot} instance. This is currently expected to be assigned to a cargo.
+	 * Create a new {@link IDischargeSlot} instance. This is currently expected to
+	 * be assigned to a cargo.
 	 * 
 	 * @param id
 	 * @param port
 	 * @param window
-	 * @param minVolume
-	 *            Scaled minimum dischargable quantity of LNG in M3 (TODO: this may need to be MMBTu, perhaps add a {@link FuelUnit}?)
-	 * @param maxVolume
-	 *            Scaled maximum dischargable quantity of LNG in M3 (TODO: this may need to be MMBTu, perhaps add a {@link FuelUnit}?)
-	 * @param price
-	 *            Scaled sales price in $/MMBTu
+	 * @param minVolume Scaled minimum dischargable quantity of LNG in M3 (TODO:
+	 *                  this may need to be MMBTu, perhaps add a {@link FuelUnit}?)
+	 * @param maxVolume Scaled maximum dischargable quantity of LNG in M3 (TODO:
+	 *                  this may need to be MMBTu, perhaps add a {@link FuelUnit}?)
+	 * @param price     Scaled sales price in $/MMBTu
 	 * @return
 	 */
 	@NonNull
@@ -396,16 +387,18 @@ public interface ISchedulerBuilder {
 			boolean isVolumeLimitInM3, boolean slotIsCancelled);
 
 	/**
-	 * Clean up builder resources. TODO: We assume the opt-data object owns the data providers. However, the builder will own them until then. Dispose should selectively clean these
-	 * upbaseFuelConversionFactor.
+	 * Clean up builder resources. TODO: We assume the opt-data object owns the data
+	 * providers. However, the builder will own them until then. Dispose should
+	 * selectively clean these upbaseFuelConversionFactor.
 	 */
 	void dispose();
 
 	/**
-	 * Create {@code count} spot charter vessels of the given type. The ith vessel will be named namePrefix-i. The vessels are created by the {@code createVessel()} method.
+	 * Create {@code count} spot charter vessels of the given type. The ith vessel
+	 * will be named namePrefix-i. The vessels are created by the
+	 * {@code createVessel()} method.
 	 * 
-	 * @param namePrefix
-	 *            the common prefix for all these vessels' names
+	 * @param namePrefix          the common prefix for all these vessels' names
 	 * @param spotCharterInMarket
 	 * @return
 	 */
@@ -413,8 +406,10 @@ public interface ISchedulerBuilder {
 	List<IVesselAvailability> createSpotVessels(@NonNull String namePrefix, @NonNull ISpotCharterInMarket spotCharterInMarket);
 
 	/**
-	 * Create a single spot vessel of the given class, with the given name. This is equivalent to
-	 * {@code createVessel(name, vesselClass, VesselInstanceType.SPOT_CHARTER, createStartEndRequirement(), createStartEndRequirement())} .
+	 * Create a single spot vessel of the given class, with the given name. This is
+	 * equivalent to
+	 * {@code createVessel(name, vesselClass, VesselInstanceType.SPOT_CHARTER, createStartEndRequirement(), createStartEndRequirement())}
+	 * .
 	 * 
 	 * @param name
 	 * @return
@@ -432,25 +427,31 @@ public interface ISchedulerBuilder {
 
 	/**
 	 * <p>
-	 * Constraints the given port slots to be adjacent to one another in the solution, in the order that they occur as arguments here.
+	 * Constraints the given port slots to be adjacent to one another in the
+	 * solution, in the order that they occur as arguments here.
 	 * </p>
 	 * <p>
 	 * Notes:
 	 * <ol>
-	 * <li>This does nothing to ensure the compatibility of other constraints, so if you constrain two slots to be adjacent and then restrict them to different vessels with
-	 * {@link #constrainSlotToVesselAvailabilities(IPortSlot, IVessel)} (for example) you will have an unsolvable scenario.</li>
-	 * <li>Slots do not always relate directly to sequence elements; slots which produce a redirection, like some charter outs, can result in the creation of several sequence elements (although those
-	 * elements have their own slots, they are internal). This method does account for that, so if you constrain something to come before a charter out with a redirection the virtual elements
-	 * introduced for the redirection won't be a problem.</li>
-	 * <li>Passing null for either argument removes any existing constraint set with the non-null argument in the same position, so
-	 * <code>constrainSlotAdjacency(x, y); constrainSlotAdjacency(null, y);</code> is an identity operation.</li>
+	 * <li>This does nothing to ensure the compatibility of other constraints, so if
+	 * you constrain two slots to be adjacent and then restrict them to different
+	 * vessels with {@link #constrainSlotToVesselAvailabilities(IPortSlot, IVessel)}
+	 * (for example) you will have an unsolvable scenario.</li>
+	 * <li>Slots do not always relate directly to sequence elements; slots which
+	 * produce a redirection, like some charter outs, can result in the creation of
+	 * several sequence elements (although those elements have their own slots, they
+	 * are internal). This method does account for that, so if you constrain
+	 * something to come before a charter out with a redirection the virtual
+	 * elements introduced for the redirection won't be a problem.</li>
+	 * <li>Passing null for either argument removes any existing constraint set with
+	 * the non-null argument in the same position, so
+	 * <code>constrainSlotAdjacency(x, y); constrainSlotAdjacency(null, y);</code>
+	 * is an identity operation.</li>
 	 * </ol>
 	 * </p>
 	 * 
-	 * @param firstSlot
-	 *            this slot will always precede secondSlot
-	 * @param secondSlot
-	 *            this slot will always after firstSlot
+	 * @param firstSlot  this slot will always precede secondSlot
+	 * @param secondSlot this slot will always after firstSlot
 	 */
 	void constrainSlotAdjacency(@Nullable IPortSlot firstSlot, @Nullable IPortSlot secondSlot);
 
@@ -473,7 +474,9 @@ public interface ISchedulerBuilder {
 	void setPortCost(@NonNull IPort port, @NonNull IVessel vessel, @NonNull PortType portType, long cost);
 
 	/**
-	 * Permit all real discharge slots which are located at one of the {@link IPort}s in the provided {@link Collection} to be re-wired to the given DES Purchase.
+	 * Permit all real discharge slots which are located at one of the
+	 * {@link IPort}s in the provided {@link Collection} to be re-wired to the given
+	 * DES Purchase.
 	 * 
 	 * @param desPurchase
 	 * @param dischargePorts
@@ -481,7 +484,8 @@ public interface ISchedulerBuilder {
 	void bindDischargeSlotsToDESPurchase(@NonNull ILoadOption desPurchase, @NonNull Map<IPort, ITimeWindow> dischargePorts);
 
 	/**
-	 * Permit all real load slots at the given {@link IPort}s to be re-wired to the given FOB Sale.
+	 * Permit all real load slots at the given {@link IPort}s to be re-wired to the
+	 * given FOB Sale.
 	 * 
 	 * @param desPurchase
 	 * @param dischargePorts
@@ -489,7 +493,8 @@ public interface ISchedulerBuilder {
 	void bindLoadSlotsToFOBSale(@NonNull IDischargeOption fobSale, @NonNull Map<IPort, ITimeWindow> loadPorts);
 
 	/**
-	 * Place a {@link Collection} of {@link IPortSlot}s into a "count" group - that is a group in which only the count number of elements may be used.
+	 * Place a {@link Collection} of {@link IPortSlot}s into a "count" group - that
+	 * is a group in which only the count number of elements may be used.
 	 * 
 	 * @param slots
 	 * @param count
@@ -503,20 +508,17 @@ public interface ISchedulerBuilder {
 	void setEarliestDate(@NonNull ZonedDateTime earliestTime);
 
 	/**
-	 * @param vessel
-	 *            The {@link IVessel} this data applies to
-	 * @param charterOutCurve
-	 *            The hourly charter out price curve
-	 * @param minDuration
-	 *            The minimum duration in hours a charter out can be.
-	 * @param maxDuration
-	 *            The maximum duration in hours a charter out can be.
+	 * @param vessel          The {@link IVessel} this data applies to
+	 * @param charterOutCurve The hourly charter out price curve
+	 * @param minDuration     The minimum duration in hours a charter out can be.
+	 * @param maxDuration     The maximum duration in hours a charter out can be.
 	 */
 	void createCharterOutCurve(@NonNull IVessel vessel, @NonNull ILongCurve charterOutCurve, int minDuration, int maxDuration, @NonNull Set<IPort> allowedPorts, @NonNull ISpotCharterOutMarket market);
 
 	/**
-	 * Set a flag to indicate that the given {@link IPortSlot} is to be treated as "soft required". That is generally optional, but not entirely. For example a fitness component may penalise such
-	 * slots for not being used.
+	 * Set a flag to indicate that the given {@link IPortSlot} is to be treated as
+	 * "soft required". That is generally optional, but not entirely. For example a
+	 * fitness component may penalise such slots for not being used.
 	 * 
 	 * @param slot
 	 */
@@ -526,8 +528,7 @@ public interface ISchedulerBuilder {
 	 * Set the default CV value for a port.
 	 * 
 	 * @param port
-	 * @param cv
-	 *            value
+	 * @param cv   value
 	 */
 	void setPortCV(@NonNull IPort port, int cv);
 
@@ -535,8 +536,7 @@ public interface ISchedulerBuilder {
 	 * Set the Min CV value for a port.
 	 * 
 	 * @param port
-	 * @param cv
-	 *            value
+	 * @param cv   value
 	 */
 	void setPortMinCV(@NonNull IPort port, int cv);
 
@@ -544,27 +544,29 @@ public interface ISchedulerBuilder {
 	 * Set the Max CV value for a port.
 	 * 
 	 * @param port
-	 * @param cv
-	 *            value
+	 * @param cv   value
 	 */
 	void setPortMaxCV(@NonNull IPort port, int cv);
 
 	/**
-	 * Create a Mark-To-Market market for DES Purchases valid against the given set of {@link IPort}s
+	 * Create a Mark-To-Market market for DES Purchases valid against the given set
+	 * of {@link IPort}s
 	 * 
 	 */
 	@NonNull
 	IMarkToMarket createDESPurchaseMTM(@NonNull Set<IPort> marketPorts, int cargoCVValue, @NonNull ILoadPriceCalculator priceCalculator, @NonNull IEntity entity);
 
 	/**
-	 * Create a Mark-To-Market market for FOB sales valid against the given set of {@link IPort}s
+	 * Create a Mark-To-Market market for FOB sales valid against the given set of
+	 * {@link IPort}s
 	 * 
 	 */
 	@NonNull
 	IMarkToMarket createFOBSaleMTM(@NonNull Set<IPort> marketPorts, @NonNull ISalesPriceCalculator priceCalculator, @NonNull IEntity entity);
 
 	/**
-	 * Create a Mark-To-Market market for FOB Purchases valid against the given set of {@link IPort}s
+	 * Create a Mark-To-Market market for FOB Purchases valid against the given set
+	 * of {@link IPort}s
 	 * 
 	 * @param cargoCVValue
 	 * 
@@ -573,7 +575,8 @@ public interface ISchedulerBuilder {
 	IMarkToMarket createFOBPurchaseMTM(@NonNull Set<IPort> marketPorts, int cargoCVValue, @NonNull ILoadPriceCalculator priceCalculator, @NonNull IEntity entity);
 
 	/**
-	 * Create a Mark-To-Market market for DES sales valid against the given set of {@link IPort}s
+	 * Create a Mark-To-Market market for DES sales valid against the given set of
+	 * {@link IPort}s
 	 * 
 	 */
 	@NonNull
@@ -588,7 +591,8 @@ public interface ISchedulerBuilder {
 	void setNominatedVessel(@NonNull IPortSlot slot, @NonNull IVessel vessel);
 
 	/**
-	 * For DES Purchases and FOB Sales specify the restriction on shipping for redirection basis.
+	 * For DES Purchases and FOB Sales specify the restriction on shipping for
+	 * redirection basis.
 	 * 
 	 * @param slot
 	 * @param hours
@@ -598,8 +602,10 @@ public interface ISchedulerBuilder {
 	void setShippingDaysRestrictionReferenceSpeed(@NonNull IPortSlot slot, @NonNull IVessel vessel, @NonNull VesselState vesselState, int referenceSpeed);
 
 	/**
-	 * Freeze a {@link IPortSlot} to a single {@link IVesselAvailability}. Unlike {@link #constrainSlotToVesselAvailabilities(IPortSlot, Set)} which still permits allocations to special vessels, this
-	 * method restricts purely to the specified {@link IVessel}
+	 * Freeze a {@link IPortSlot} to a single {@link IVesselAvailability}. Unlike
+	 * {@link #constrainSlotToVesselAvailabilities(IPortSlot, Set)} which still
+	 * permits allocations to special vessels, this method restricts purely to the
+	 * specified {@link IVessel}
 	 * 
 	 * @param portSlot
 	 * @param vesselAvailability
@@ -621,7 +627,7 @@ public interface ISchedulerBuilder {
 	void setGeneratedCharterOutEndTime(int charterOutEndTime);
 
 	@NonNull
-	ISpotCharterInMarket createSpotCharterInMarket(@NonNull String name, @NonNull IVessel oVessel, @NonNull ILongCurve charterInCurve, int charterCount, //
+	ISpotCharterInMarket createSpotCharterInMarket(@NonNull String name, @NonNull IVessel oVessel, @NonNull ILongCurve charterInCurve, boolean nominal, int charterCount, //
 			IStartRequirement startRequirement, IEndRequirement endRequirement, ICharterContract charterContract, ILongCurve repositioningFee);
 
 	/***
@@ -649,7 +655,8 @@ public interface ISchedulerBuilder {
 	/**
 	 * 
 	 * 
-	 * Register a time window with an open end date that needs to be adjusted to sync up with optimisation end date
+	 * Register a time window with an open end date that needs to be adjusted to
+	 * sync up with optimisation end date
 	 * 
 	 * @param window
 	 */

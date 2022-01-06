@@ -211,8 +211,12 @@ import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEva
 import com.mmxlabs.scheduler.optimiser.shared.port.IPortProvider;
 
 /**
- * Wrapper for an EMF LNG Scheduling {@link MMXRootObject}, providing utility methods to convert it into an optimisation job. Typical usage is to construct an LNGScenarioTransformer with a given
- * Scenario, and then call the {@link createOptimisationData} method. It is only expected that an instance will be used once. I.e. a single call to {@link #createOptimisationData(ModelEntityMap)}
+ * Wrapper for an EMF LNG Scheduling {@link MMXRootObject}, providing utility
+ * methods to convert it into an optimisation job. Typical usage is to construct
+ * an LNGScenarioTransformer with a given Scenario, and then call the
+ * {@link createOptimisationData} method. It is only expected that an instance
+ * will be used once. I.e. a single call to
+ * {@link #createOptimisationData(ModelEntityMap)}
  * 
  * @author hinton, Simon Goodall
  * 
@@ -220,7 +224,8 @@ import com.mmxlabs.scheduler.optimiser.shared.port.IPortProvider;
 public class LNGScenarioTransformer {
 
 	/**
-	 * Constant used to inject a limit for spot slot creation. Negative numbers do not apply a cap.
+	 * Constant used to inject a limit for spot slot creation. Negative numbers do
+	 * not apply a cap.
 	 */
 	public static final String LIMIT_SPOT_SLOT_CREATION = "limit-spot-slot-creation";
 
@@ -327,13 +332,15 @@ public class LNGScenarioTransformer {
 	private ILockedCargoProviderEditor lockedCargoProviderEditor;
 
 	/**
-	 * Contains the contract transformers for each known contract type, by the EClass of the contract they transform.
+	 * Contains the contract transformers for each known contract type, by the
+	 * EClass of the contract they transform.
 	 */
 	@NonNull
 	private final Map<EClass, IContractTransformer> contractTransformersByEClass = new LinkedHashMap<>();
 
 	/**
-	 * A set of all contract transformers being used; these should be mapped to in {@link #contractTransformersByEClass}
+	 * A set of all contract transformers being used; these should be mapped to in
+	 * {@link #contractTransformersByEClass}
 	 */
 	@NonNull
 	private final Set<IContractTransformer> contractTransformers = new LinkedHashSet<>();
@@ -351,7 +358,8 @@ public class LNGScenarioTransformer {
 	private final Set<IVesselAvailabilityTransformer> vesselAvailabilityTransformers = new LinkedHashSet<>();
 
 	/**
-	 * A set of all transformer extensions being used (should contain {@link #contractTransformers})
+	 * A set of all transformer extensions being used (should contain
+	 * {@link #contractTransformers})
 	 */
 	@NonNull
 	private final Set<ITransformerExtension> allTransformerExtensions = new LinkedHashSet<>();
@@ -367,13 +375,16 @@ public class LNGScenarioTransformer {
 	private final Map<Vessel, IVessel> allVessels = new HashMap<>();
 
 	/**
-	 * The {@link Set} of ID strings already used. The UI should restrict user entered data items from clashing, but generated ID's may well clash with user ones.
+	 * The {@link Set} of ID strings already used. The UI should restrict user
+	 * entered data items from clashing, but generated ID's may well clash with user
+	 * ones.
 	 */
 	@NonNull
 	private final Set<String> usedIDStrings = new HashSet<>();
 
 	/**
-	 * A {@link Map} of existing spot market slots by ID. This map is used later when building the spot market options.
+	 * A {@link Map} of existing spot market slots by ID. This map is used later
+	 * when building the spot market options.
 	 */
 	@NonNull
 	private final Map<String, @NonNull Slot<?>> marketSlotsByID = new HashMap<>();
@@ -431,7 +442,9 @@ public class LNGScenarioTransformer {
 	private final Set<ISlotTransformer> slotTransformers = new LinkedHashSet<>();
 
 	/**
-	 * Create a transformer for the given scenario; the class holds a reference, so changes made to the scenario after construction will be reflected in calls to the various helper methods.
+	 * Create a transformer for the given scenario; the class holds a reference, so
+	 * changes made to the scenario after construction will be reflected in calls to
+	 * the various helper methods.
 	 * 
 	 * @param scenario
 	 */
@@ -443,7 +456,8 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * Get any {@link ITransformerExtension} and {@link IContractTransformer}s from the platform's registry.
+	 * Get any {@link ITransformerExtension} and {@link IContractTransformer}s from
+	 * the platform's registry.
 	 */
 	@Inject
 	public boolean addPlatformTransformerExtensions() {
@@ -515,7 +529,8 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * Instantiates and returns an {@link IOptimisationData} isomorphic to the contained scenario.
+	 * Instantiates and returns an {@link IOptimisationData} isomorphic to the
+	 * contained scenario.
 	 * 
 	 * @return
 	 * @throws IncompleteScenarioException
@@ -525,7 +540,9 @@ public class LNGScenarioTransformer {
 
 		timeZoneToUtcOffsetProvider.setTimeZeroInMillis(Instant.from(dateHelper.getEarliestTime()).toEpochMilli());
 
-		// Use Math.max(0, arg) to avoid negative time values for prompt/horizon dates which are earlier than time zero. E.g. the scheduling horizon feeds into time windows
+		// Use Math.max(0, arg) to avoid negative time values for prompt/horizon dates
+		// which are earlier than time zero. E.g. the scheduling horizon feeds into time
+		// windows
 
 		if (rootObject.getPromptPeriodStart() != null) {
 			promptPeriodProviderEditor.setStartOfPromptPeriod(Math.max(0, dateHelper.convertTime(rootObject.getPromptPeriodStart())));
@@ -654,7 +671,8 @@ public class LNGScenarioTransformer {
 		}
 
 		/**
-		 * Bidirectionally maps EMF {@link Port} Models to {@link IPort}s in the builder.
+		 * Bidirectionally maps EMF {@link Port} Models to {@link IPort}s in the
+		 * builder.
 		 */
 		final Association<Port, IPort> portAssociation = new Association<>();
 		/**
@@ -667,7 +685,9 @@ public class LNGScenarioTransformer {
 		final Map<IPort, Integer> portIndices = new HashMap<>();
 
 		/*
-		 * Construct ports for each port in the scenario port model, and keep them in a two-way lookup table (the two-way lookup is needed to do things like setting distances later).
+		 * Construct ports for each port in the scenario port model, and keep them in a
+		 * two-way lookup table (the two-way lookup is needed to do things like setting
+		 * distances later).
 		 */
 		final PortModel portModel = rootObject.getReferenceModel().getPortModel();
 
@@ -773,7 +793,9 @@ public class LNGScenarioTransformer {
 
 		final CommercialModel commercialModel = rootObject.getReferenceModel().getCommercialModel();
 
-		// Any NPE's in the following code are likely due to missing associations between a IContractTransformer and the EMF AContract object. IContractTransformer instances are typically OSGi
+		// Any NPE's in the following code are likely due to missing associations
+		// between a IContractTransformer and the EMF AContract object.
+		// IContractTransformer instances are typically OSGi
 		// services. Ensure their bundles have been started!
 		for (final SalesContract c : commercialModel.getSalesContracts()) {
 			final LNGPriceCalculatorParameters priceInfo = c.getPriceInfo();
@@ -875,8 +897,10 @@ public class LNGScenarioTransformer {
 
 		buildSpotCargoMarkets(builder, portAssociation, modelEntityMap, vesselAssociation);
 
-		// Disable this completely as MTM mapping clashes with spot market mapping in modelEntityMap
-		// buildMarkToMarkets(builder, portAssociation, contractTransformers, modelEntityMap);
+		// Disable this completely as MTM mapping clashes with spot market mapping in
+		// modelEntityMap
+		// buildMarkToMarkets(builder, portAssociation, contractTransformers,
+		// modelEntityMap);
 
 		setNominatedVessels(builder, modelEntityMap);
 
@@ -983,7 +1007,8 @@ public class LNGScenarioTransformer {
 
 	private void freezeAssignmentModel(@NonNull final ISchedulerBuilder builder, @NonNull final ModelEntityMap modelEntityMap) {
 
-		// TODO: Freeze as part of the buildXXX methods when object is created rather than here.
+		// TODO: Freeze as part of the buildXXX methods when object is created rather
+		// than here.
 
 		final Set<AssignableElement> assignableElements = new LinkedHashSet<>();
 		assignableElements.addAll(rootObject.getCargoModel().getCargoes());
@@ -1116,7 +1141,8 @@ public class LNGScenarioTransformer {
 				final long ballastBonus = OptimiserUnitConvertor.convertToInternalFixedCost(charterOut.getBallastBonus());
 
 				final IHeelOptionConsumer heelConsumer = createHeelConsumer(charterOut.getRequiredHeel());
-				// IHeelOptionConsumer heelConsumer = new HeelOptionConsumer(0L, Long.MAX_VALUE, VesselTankState.EITHER, new ConstantHeelPriceCalculator(0));
+				// IHeelOptionConsumer heelConsumer = new HeelOptionConsumer(0L, Long.MAX_VALUE,
+				// VesselTankState.EITHER, new ConstantHeelPriceCalculator(0));
 				final IHeelOptionSupplier heelSupplier = createHeelSupplier(charterOut.getAvailableHeel());
 
 				builderSlot = builder.createCharterOutEvent(event.getName(), window, port, endPort, durationHours, heelConsumer, heelSupplier, totalHireRevenue, repositioning, ballastBonus,
@@ -1147,8 +1173,8 @@ public class LNGScenarioTransformer {
 	/**
 	 * Extract the cargoes from the scenario and add them to the given builder.
 	 * 
-	 * @param builder
-	 *            current builder. should already have ports/distances/vessels built
+	 * @param builder              current builder. should already have
+	 *                             ports/distances/vessels built
 	 * @param indexAssociation
 	 * @param contractTransformers
 	 * @param modelEntityMap
@@ -1216,7 +1242,8 @@ public class LNGScenarioTransformer {
 			}
 
 			boolean isSoftRequired = false;
-			// Compulsary slots on nominals are considered to be unused. This marks all slots in the prompt as compulsary too.
+			// Compulsary slots on nominals are considered to be unused. This marks all
+			// slots in the prompt as compulsary too.
 			// TODO: Is this really a good idea?
 			if (noNominalsInPrompt) {
 				if (eCargo.getSpotIndex() == NOMINAL_CARGO_INDEX) {
@@ -1260,7 +1287,8 @@ public class LNGScenarioTransformer {
 				}
 
 				// remember any slots which were part of a ship-to-ship transfer
-				// but don't do anything with them yet, because we need to wait until all slots have been processed
+				// but don't do anything with them yet, because we need to wait until all slots
+				// have been processed
 				if (isTransfer) {
 					transferSlotMap.put(slot, slotMap.get(slot));
 				}
@@ -1428,7 +1456,8 @@ public class LNGScenarioTransformer {
 				final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
 				for (final IPort port : marketPorts) {
 
-					// Re-use the real date objects to map back to integer timezones to avoid mismatching windows caused by half hour timezone shifts
+					// Re-use the real date objects to map back to integer timezones to avoid
+					// mismatching windows caused by half hour timezone shifts
 					final ZonedDateTime portWindowStart = dischargeSlot.getSchedulingTimeWindow().getStart().withZoneSameLocal(ZoneId.of(port.getTimeZoneId()));
 					final ZonedDateTime portWindowEnd = dischargeSlot.getSchedulingTimeWindow().getEndWithFlex().withZoneSameLocal(ZoneId.of(port.getTimeZoneId()));
 
@@ -1503,7 +1532,8 @@ public class LNGScenarioTransformer {
 
 				final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
 				for (final IPort port : marketPorts) {
-					// Re-use the real date objects to map back to integer timezones to avoid mismatching windows caused by half hour timezone shifts
+					// Re-use the real date objects to map back to integer timezones to avoid
+					// mismatching windows caused by half hour timezone shifts
 					final ZonedDateTime portWindowStart = loadSlot.getSchedulingTimeWindow().getStart().withZoneSameLocal(ZoneId.of(port.getTimeZoneId()));// .atTime,
 					final ZonedDateTime portWindowEnd = loadSlot.getSchedulingTimeWindow().getEndWithFlex().withZoneSameLocal(ZoneId.of(port.getTimeZoneId()));// .atTime,
 
@@ -1666,12 +1696,17 @@ public class LNGScenarioTransformer {
 			}
 
 			/*
-			 * if (dischargeSlot.isSetContract()) { final SalesContract salesContract = (SalesContract) dischargeSlot.getContract();
+			 * if (dischargeSlot.isSetContract()) { final SalesContract salesContract =
+			 * (SalesContract) dischargeSlot.getContract();
 			 * 
-			 * if (salesContract.isSetMinCvValue()) { minCv = OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract.getMinCvValue()); } else { minCv = 0; }
+			 * if (salesContract.isSetMinCvValue()) { minCv =
+			 * OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract.
+			 * getMinCvValue()); } else { minCv = 0; }
 			 * 
-			 * if (salesContract.isSetMaxCvValue()) { maxCv = OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract.getMaxCvValue()); } else { maxCv = Long.MAX_VALUE; } } else { minCv
-			 * = 0; maxCv = Long.MAX_VALUE; }
+			 * if (salesContract.isSetMaxCvValue()) { maxCv =
+			 * OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract.
+			 * getMaxCvValue()); } else { maxCv = Long.MAX_VALUE; } } else { minCv = 0;
+			 * maxCv = Long.MAX_VALUE; }
 			 */
 
 			final boolean slotLocked = dischargeSlot.isLocked() || shippingOnly && dischargeSlot.getCargo() == null;
@@ -2096,8 +2131,12 @@ public class LNGScenarioTransformer {
 							int offset = 0;
 							for (int i = 0; i < remaining; ++i) {
 
-								// As we have no port we create two timewindows. One is pure UTC which we base the EMF Slot date on and shift for the slot binding. The second is UTC with a -12/+14
-								// flex for timezones passed into the optimiser slot. This combination allows the slot to be matched against any slot in the same month in any timezone, but be
+								// As we have no port we create two timewindows. One is pure UTC which we base
+								// the EMF Slot date on and shift for the slot binding. The second is UTC with a
+								// -12/+14
+								// flex for timezones passed into the optimiser slot. This combination allows
+								// the slot to be matched against any slot in the same month in any timezone,
+								// but be
 								// restricted to match the month boundary in that timezone.
 								final int trimmedStart = Math.max(promptPeriodProviderEditor.getStartOfPromptPeriod(),
 										Math.max(promptPeriodProviderEditor.getStartOfOptimisationPeriod(), dateHelper.convertTime(tzStartTime)));
@@ -2105,7 +2144,9 @@ public class LNGScenarioTransformer {
 								final int end = dateHelper.convertTime(tzEndTime);
 								assert end > trimmedStart;
 
-								// This should probably be fixed in ScheduleBuilder#matchingWindows and elsewhere if needed, but subtract one to avoid e.g. 1st Feb 00:00 being permitted in the Jan
+								// This should probably be fixed in ScheduleBuilder#matchingWindows and
+								// elsewhere if needed, but subtract one to avoid e.g. 1st Feb 00:00 being
+								// permitted in the Jan
 								// month block
 								final ITimeWindow twUTC = TimeWindowMaker.createInclusiveExclusive(trimmedStart, end, 0, false);
 								final ITimeWindow twUTCPlus = createUTCPlusTimeWindow(trimmedStart, end);
@@ -2152,7 +2193,8 @@ public class LNGScenarioTransformer {
 
 								final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
 								for (final IPort port : marketPorts) {
-									// Re-use the real date objects to map back to integer timezones to avoid mismatching windows caused by half hour timezone shifts
+									// Re-use the real date objects to map back to integer timezones to avoid
+									// mismatching windows caused by half hour timezone shifts
 									final ZonedDateTime portWindowStart = desSlot.getWindowStart().atStartOfDay(ZoneId.of(port.getTimeZoneId()));
 									final ZonedDateTime portWindowEnd = portWindowStart.plusHours(desSlot.getSchedulingTimeWindow().getSizeInHours());
 									// Re-check against opt start date.
@@ -2257,8 +2299,12 @@ public class LNGScenarioTransformer {
 						if (remaining > 0) {
 							int offset = 0;
 							for (int i = 0; i < remaining; ++i) {
-								// As we have no port we create two timewindows. One is pure UTC which we base the EMF Slot date on and shift for the slot binding. The second is UTC with a +/- 12 flex
-								// for timezones passed into the optimiser slot. This combination allows the slot to be matched against any slot in the same month in any timezone, but be restricted to
+								// As we have no port we create two timewindows. One is pure UTC which we base
+								// the EMF Slot date on and shift for the slot binding. The second is UTC with a
+								// +/- 12 flex
+								// for timezones passed into the optimiser slot. This combination allows the
+								// slot to be matched against any slot in the same month in any timezone, but be
+								// restricted to
 								// match the month boundary in that timezone.
 
 								final int trimmedStart = Math.max(promptPeriodProviderEditor.getStartOfPromptPeriod(),
@@ -2266,7 +2312,9 @@ public class LNGScenarioTransformer {
 								final int end = dateHelper.convertTime(tzEndTime);
 								assert end > trimmedStart;
 
-								// This should probably be fixed in ScheduleBuilder#matchingWindows and elsewhere if needed, but subtract one to avoid e.g. 1st Feb 00:00 being permitted in the Jan
+								// This should probably be fixed in ScheduleBuilder#matchingWindows and
+								// elsewhere if needed, but subtract one to avoid e.g. 1st Feb 00:00 being
+								// permitted in the Jan
 								// month block
 								final ITimeWindow twUTC = TimeWindowMaker.createInclusiveExclusive(trimmedStart, end, 0, false);
 								final ITimeWindow twUTCPlus = createUTCPlusTimeWindow(trimmedStart, end);
@@ -2314,7 +2362,8 @@ public class LNGScenarioTransformer {
 								final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
 								for (final IPort port : marketPorts) {
 
-									// Re-use the real date objects to map back to integer timezones to avoid mismatching windows caused by half hour timezone shifts
+									// Re-use the real date objects to map back to integer timezones to avoid
+									// mismatching windows caused by half hour timezone shifts
 									final ZonedDateTime portWindowStart = fobSlot.getWindowStart().atStartOfDay(ZoneId.of(port.getTimeZoneId()));
 									final ZonedDateTime portWindowEnd = portWindowStart.plusHours(fobSlot.getSchedulingTimeWindow().getSizeInHours());
 									// Re-check against opt start date.
@@ -2354,7 +2403,8 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * Given a UTC based time window, extend it's range to cover the whole range of possible UTC offsets from UTC-12 to UTC+14
+	 * Given a UTC based time window, extend it's range to cover the whole range of
+	 * possible UTC offsets from UTC-12 to UTC+14
 	 * 
 	 * @param builder
 	 * @param startTime
@@ -2821,14 +2871,11 @@ public class LNGScenarioTransformer {
 	/**
 	 * Create the distance matrix for the given builder.
 	 * 
-	 * @param builder
-	 *            the builder we are working with
-	 * @param portAssociation
-	 *            an association between ports in the EMF model and IPorts in the builder
-	 * @param allPorts
-	 *            the list of all IPorts constructed so far
-	 * @param portIndices
-	 *            a reverse-lookup for the ports in allPorts
+	 * @param builder           the builder we are working with
+	 * @param portAssociation   an association between ports in the EMF model and
+	 *                          IPorts in the builder
+	 * @param allPorts          the list of all IPorts constructed so far
+	 * @param portIndices       a reverse-lookup for the ports in allPorts
 	 * @param vesselAssociation
 	 * @throws IncompleteScenarioException
 	 */
@@ -2890,7 +2937,8 @@ public class LNGScenarioTransformer {
 		}
 
 		/*
-		 * Now fill out the distances from the distance model. Firstly we need to create the default distance matrix.
+		 * Now fill out the distances from the distance model. Firstly we need to create
+		 * the default distance matrix.
 		 */
 		final Set<RouteOption> seenRoutes = new HashSet<>();
 		for (final Route r : portModel.getRoutes()) {
@@ -3101,10 +3149,10 @@ public class LNGScenarioTransformer {
 	/**
 	 * Construct the fleet model for the scenario
 	 * 
-	 * @param builder
-	 *            a builder which has had its ports and distances instantiated
-	 * @param portAssociation
-	 *            the Port <-> IPort association to connect EMF Ports with builder IPorts
+	 * @param builder         a builder which has had its ports and distances
+	 *                        instantiated
+	 * @param portAssociation the Port <-> IPort association to connect EMF Ports
+	 *                        with builder IPorts
 	 * @param modelEntityMap
 	 * @return
 	 */
@@ -3123,7 +3171,8 @@ public class LNGScenarioTransformer {
 
 		for (final Vessel eVessel : fleetModel.getVessels()) {
 			assert eVessel != null;
-			// TODO: TEMPORARY FIX: Populate fleet data with default values for additional fuel types.
+			// TODO: TEMPORARY FIX: Populate fleet data with default values for additional
+			// fuel types.
 
 			final IBaseFuel oTravelBaseFuel = modelEntityMap.getOptimiserObjectNullChecked(eVessel.getVesselOrDelegateBaseFuel(), IBaseFuel.class);
 			IBaseFuel oIdleBaseFuel = null;
@@ -3218,7 +3267,8 @@ public class LNGScenarioTransformer {
 			assert endHeel != null;
 			final IHeelOptionConsumer heelConsumer = createHeelConsumer(endHeel);
 			final Set<Port> endPorts = SetUtils.getObjects(eVesselAvailability.getEndAt());
-			// Assume validation ensures at least one valid port will remain if initial set has ports present.
+			// Assume validation ensures at least one valid port will remain if initial set
+			// has ports present.
 			endPorts.removeAll(SetUtils.getObjects(eVessel.getVesselOrDelegateInaccessiblePorts()));
 			final IEndRequirement endRequirement = createEndRequirement(builder, portAssociation, endAfter, endBy, endPorts, heelConsumer);
 
@@ -3346,8 +3396,8 @@ public class LNGScenarioTransformer {
 					}
 				}
 
-				final ISpotCharterInMarket spotCharterInMarket = builder.createSpotCharterInMarket(charterInMarket.getName(), oVessel, charterInCurve, charterCount, charterInStartRule,
-						charterInEndRule, oCharterContract, new ConstantValueLongCurve(0));
+				final ISpotCharterInMarket spotCharterInMarket = builder.createSpotCharterInMarket(charterInMarket.getName(), oVessel, charterInCurve, charterInMarket.isNominal(), charterCount,
+						charterInStartRule, charterInEndRule, oCharterContract, new ConstantValueLongCurve(0));
 				modelEntityMap.addModelObject(charterInMarket, spotCharterInMarket);
 
 				// spot charter in market nominal
@@ -3551,7 +3601,8 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * Convert a PortAndTime from the EMF to an IStartEndRequirement for internal use; may be subject to change later.
+	 * Convert a PortAndTime from the EMF to an IStartEndRequirement for internal
+	 * use; may be subject to change later.
 	 * 
 	 * @param builder
 	 * @param portAssociation
@@ -3578,7 +3629,8 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * Convert a PortAndTime from the EMF to an IStartEndRequirement for internal use; may be subject to change later.
+	 * Convert a PortAndTime from the EMF to an IStartEndRequirement for internal
+	 * use; may be subject to change later.
 	 * 
 	 * @param builder
 	 * @param portAssociation
@@ -3605,7 +3657,8 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * Convert a PortAndTime from the EMF to an IStartEndRequirement for internal use; may be subject to change later.
+	 * Convert a PortAndTime from the EMF to an IStartEndRequirement for internal
+	 * use; may be subject to change later.
 	 * 
 	 * @param builder
 	 * @param portAssociation
@@ -3646,7 +3699,7 @@ public class LNGScenarioTransformer {
 		for (final Port p : ports) {
 			portSet.add(portAssociation.lookup(p));
 		}
-		
+
 		if (ports.isEmpty()) {
 			return builder.createEndRequirement(null, !isOpenEnded, window, heelConsumer);
 		} else {
@@ -3766,7 +3819,8 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * Given the number spot slots available to create, optionally limit this number.
+	 * Given the number spot slots available to create, optionally limit this
+	 * number.
 	 * 
 	 * @param count
 	 * @return
