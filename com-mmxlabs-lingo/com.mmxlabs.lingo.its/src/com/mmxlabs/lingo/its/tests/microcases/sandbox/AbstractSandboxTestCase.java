@@ -6,6 +6,7 @@ package com.mmxlabs.lingo.its.tests.microcases.sandbox;
 
 import java.util.function.Consumer;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
@@ -21,13 +22,13 @@ public abstract class AbstractSandboxTestCase extends AbstractMicroTestCase {
 		Consumer<IAnalyticsScenarioEvaluator> func = null;
 		switch (model.getMode()) {
 		case SandboxModeConstants.MODE_DERIVE:
-			func = evaluator -> evaluator.runSandboxOptions(scenarioDataProvider, null, model, model::setResults, false);
+			func = evaluator -> evaluator.runSandboxOptions(scenarioDataProvider, null, model, null, model::setResults, false, new NullProgressMonitor());
 			break;
 		case SandboxModeConstants.MODE_OPTIMISE:
-			func = evaluator -> evaluator.runSandboxOptimisation(scenarioDataProvider, null, model, model::setResults, false);
+			func = evaluator -> evaluator.runSandboxOptimisation(scenarioDataProvider, null, model, null, model::setResults, false, new NullProgressMonitor());
 			break;
 		case SandboxModeConstants.MODE_OPTIONISE:
-			func = evaluator -> evaluator.runSandboxInsertion(scenarioDataProvider, null, model, model::setResults, false);
+			func = evaluator -> evaluator.runSandboxInsertion(scenarioDataProvider, null, model, null, model::setResults, false, new NullProgressMonitor());
 			break;
 		}
 

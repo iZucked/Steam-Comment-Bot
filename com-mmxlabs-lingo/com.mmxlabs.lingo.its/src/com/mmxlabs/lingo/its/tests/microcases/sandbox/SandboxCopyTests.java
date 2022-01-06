@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.its.tests.microcases.sandbox;
 import java.time.LocalDate;
 import java.util.function.Consumer;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -88,7 +89,7 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 		sandboxBuilder.createPartialCaseRow(event1, shipping1);
 
 		OptionAnalysisModel sourceModel = sandboxBuilder.getOptionAnalysisModel();
- 
+
 		// Create a second copy!
 		try (IScenarioDataProvider targetSDP = importReferenceData()) {
 
@@ -167,16 +168,15 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 
 		// Evaluate initial case
 		IAnalyticsScenarioEvaluator evaluator = new AnalyticsScenarioEvaluator();
-		evaluator.runSandboxOptions(scenarioDataProvider, null, sourceModel, sourceModel::setResults, false);
+		evaluator.runSandboxOptions(scenarioDataProvider, null, sourceModel, null, sourceModel::setResults, false, new NullProgressMonitor());
 
-		
 		{
 			AbstractSolutionSet results = sourceModel.getResults();
 			Assertions.assertNotNull(results);
 			Assertions.assertNotNull(results.getBaseOption());
 			Assertions.assertEquals(1, results.getOptions().size());
 		}
-		
+
 		// Create a second copy!
 		try (IScenarioDataProvider targetSDP = importReferenceData()) {
 
@@ -206,7 +206,7 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 				PartialCaseRow targetRow = targetModel.getPartialCase().getPartialCase().get(i);
 
 			}
-			
+
 			AbstractSolutionSet results = targetModel.getResults();
 			Assertions.assertNotNull(results);
 			Assertions.assertNotNull(results.getBaseOption());
