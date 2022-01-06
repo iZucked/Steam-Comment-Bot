@@ -238,7 +238,7 @@ public class AbstractSequencesOptimiserTest {
 		final Map<IResource, ISequence> seqMap1 = CollectionsUtil.makeHashMap(r1, seq1, r2, seq2);
 		final Map<IResource, IModifiableSequence> seqMap2 = CollectionsUtil.makeHashMap(r1, seq3, r2, seq4);
 
-		final Sequences source = new Sequences(resList, seqMap1);
+		final Sequences source = new Sequences(resList, seqMap1, Collections.emptyList(),  new SequencesAttributesProviderImpl());
 		final ModifiableSequences destination = new ModifiableSequences(resList, seqMap2);
 
 		final List<IResource> affectedResources = CollectionsUtil.makeArrayList(r2);

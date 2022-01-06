@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.mmxlabs.lingo.master</groupId>
 		<artifactId>com.mmxlabs.lingo.master.parent</artifactId>
-		<version>4.13.4-SNAPSHOT</version>
+		<version>4.13.8-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.mmxlabs.lngdataserver</groupId>

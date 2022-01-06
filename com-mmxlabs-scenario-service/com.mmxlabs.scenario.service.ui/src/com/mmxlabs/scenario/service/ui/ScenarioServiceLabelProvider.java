@@ -22,6 +22,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.util.tracker.ServiceTracker;
 
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.model.Metadata;
@@ -52,8 +55,8 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 	public ScenarioServiceLabelProvider() {
 		super(ScenarioServiceComposedAdapterFactory.getAdapterFactory());
 		selectionProviderTracker.open();
-		showEnabledImage = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif").createImage();
-		showDisabledImage = ImageDescriptor.createWithFlags(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif"), SWT.IMAGE_DISABLE).createImage();
+		showEnabledImage = CommonImages.getImageDescriptor(IconPaths.Console, IconMode.Enabled).createImage(); 
+		showDisabledImage = CommonImages.getImageDescriptor(IconPaths.Console, IconMode.Disabled).createImage(); 
 		pinImage = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/pin_scenario.png").createImage();
 
 		final Font systemFont = Display.getDefault().getSystemFont();

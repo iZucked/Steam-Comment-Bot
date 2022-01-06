@@ -496,8 +496,8 @@ public class RelativeDateRangeNominationsViewerPane extends AbstractNominationsV
 			}
 		};
 
-		final ImageDescriptor refreshImage = AbstractUIPlugin.imageDescriptorFromPlugin(PLUGIN_ID, "/icons/iu_update_obj.gif");
-		refreshButton.setImageDescriptor(refreshImage);
+		CommonImages.setImageDescriptors(refreshButton, IconPaths.ReEvaluate16);
+
 		toolbar.appendToGroup(EDIT_GROUP, refreshButton);
 		toolbar.update(true);
 

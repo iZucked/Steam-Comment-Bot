@@ -643,6 +643,106 @@ public interface PortPackage extends EPackage {
 	int ROUTE_LINE_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.ManualRouteLineImpl <em>Manual Route Line</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.port.impl.ManualRouteLineImpl
+	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getManualRouteLine()
+	 * @generated
+	 */
+	int MANUAL_ROUTE_LINE = 4;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MANUAL_ROUTE_LINE__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Route Option</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MANUAL_ROUTE_LINE__ROUTE_OPTION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>From</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MANUAL_ROUTE_LINE__FROM = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>To</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MANUAL_ROUTE_LINE__TO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Distance</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MANUAL_ROUTE_LINE__DISTANCE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The number of structural features of the '<em>Manual Route Line</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MANUAL_ROUTE_LINE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MANUAL_ROUTE_LINE___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MANUAL_ROUTE_LINE___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MANUAL_ROUTE_LINE___ECONTAINER_OP = MMXCorePackage.MMX_OBJECT___ECONTAINER_OP;
+
+	/**
+	 * The number of operations of the '<em>Manual Route Line</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MANUAL_ROUTE_LINE_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.PortModelImpl <em>Model</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -650,7 +750,7 @@ public interface PortPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getPortModel()
 	 * @generated
 	 */
-	int PORT_MODEL = 4;
+	int PORT_MODEL = 5;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -752,13 +852,31 @@ public interface PortPackage extends EPackage {
 	int PORT_MODEL__DISTANCE_VERSION_RECORD = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
+	 * The feature id for the '<em><b>Mmx Distance Version</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_MODEL__MMX_DISTANCE_VERSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+
+	/**
+	 * The feature id for the '<em><b>Manual Distances</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_MODEL__MANUAL_DISTANCES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+	int PORT_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -804,7 +922,7 @@ public interface PortPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getCapabilityGroup()
 	 * @generated
 	 */
-	int CAPABILITY_GROUP = 5;
+	int CAPABILITY_GROUP = 6;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -904,7 +1022,7 @@ public interface PortPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getLocation()
 	 * @generated
 	 */
-	int LOCATION = 6;
+	int LOCATION = 7;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1040,7 +1158,7 @@ public interface PortPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getPortCountryGroup()
 	 * @generated
 	 */
-	int PORT_COUNTRY_GROUP = 7;
+	int PORT_COUNTRY_GROUP = 8;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1131,7 +1249,7 @@ public interface PortPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getEntryPoint()
 	 * @generated
 	 */
-	int ENTRY_POINT = 8;
+	int ENTRY_POINT = 9;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1213,7 +1331,7 @@ public interface PortPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getContingencyMatrix()
 	 * @generated
 	 */
-	int CONTINGENCY_MATRIX = 9;
+	int CONTINGENCY_MATRIX = 10;
 
 	/**
 	 * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -1259,7 +1377,7 @@ public interface PortPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getContingencyMatrixEntry()
 	 * @generated
 	 */
-	int CONTINGENCY_MATRIX_ENTRY = 10;
+	int CONTINGENCY_MATRIX_ENTRY = 11;
 
 	/**
 	 * The feature id for the '<em><b>From Port</b></em>' reference.
@@ -1314,7 +1432,7 @@ public interface PortPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getRouteOption()
 	 * @generated
 	 */
-	int ROUTE_OPTION = 11;
+	int ROUTE_OPTION = 12;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.CanalEntry <em>Canal Entry</em>}' enum.
@@ -1324,7 +1442,7 @@ public interface PortPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getCanalEntry()
 	 * @generated
 	 */
-	int CANAL_ENTRY = 12;
+	int CANAL_ENTRY = 13;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.Port <em>Port</em>}'.
@@ -1673,6 +1791,60 @@ public interface PortPackage extends EPackage {
 	EAttribute getRouteLine_ErrorCode();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.ManualRouteLine <em>Manual Route Line</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Manual Route Line</em>'.
+	 * @see com.mmxlabs.models.lng.port.ManualRouteLine
+	 * @generated
+	 */
+	EClass getManualRouteLine();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.ManualRouteLine#getRouteOption <em>Route Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Route Option</em>'.
+	 * @see com.mmxlabs.models.lng.port.ManualRouteLine#getRouteOption()
+	 * @see #getManualRouteLine()
+	 * @generated
+	 */
+	EAttribute getManualRouteLine_RouteOption();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.port.ManualRouteLine#getFrom <em>From</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>From</em>'.
+	 * @see com.mmxlabs.models.lng.port.ManualRouteLine#getFrom()
+	 * @see #getManualRouteLine()
+	 * @generated
+	 */
+	EReference getManualRouteLine_From();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.port.ManualRouteLine#getTo <em>To</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>To</em>'.
+	 * @see com.mmxlabs.models.lng.port.ManualRouteLine#getTo()
+	 * @see #getManualRouteLine()
+	 * @generated
+	 */
+	EReference getManualRouteLine_To();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.ManualRouteLine#getDistance <em>Distance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Distance</em>'.
+	 * @see com.mmxlabs.models.lng.port.ManualRouteLine#getDistance()
+	 * @see #getManualRouteLine()
+	 * @generated
+	 */
+	EAttribute getManualRouteLine_Distance();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.PortModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1780,6 +1952,28 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getPortModel_DistanceVersionRecord();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.PortModel#getMmxDistanceVersion <em>Mmx Distance Version</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Mmx Distance Version</em>'.
+	 * @see com.mmxlabs.models.lng.port.PortModel#getMmxDistanceVersion()
+	 * @see #getPortModel()
+	 * @generated
+	 */
+	EAttribute getPortModel_MmxDistanceVersion();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.port.PortModel#getManualDistances <em>Manual Distances</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Manual Distances</em>'.
+	 * @see com.mmxlabs.models.lng.port.PortModel#getManualDistances()
+	 * @see #getPortModel()
+	 * @generated
+	 */
+	EReference getPortModel_ManualDistances();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.CapabilityGroup <em>Capability Group</em>}'.
@@ -2290,6 +2484,48 @@ public interface PortPackage extends EPackage {
 		EAttribute ROUTE_LINE__ERROR_CODE = eINSTANCE.getRouteLine_ErrorCode();
 
 		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.ManualRouteLineImpl <em>Manual Route Line</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.port.impl.ManualRouteLineImpl
+		 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getManualRouteLine()
+		 * @generated
+		 */
+		EClass MANUAL_ROUTE_LINE = eINSTANCE.getManualRouteLine();
+
+		/**
+		 * The meta object literal for the '<em><b>Route Option</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MANUAL_ROUTE_LINE__ROUTE_OPTION = eINSTANCE.getManualRouteLine_RouteOption();
+
+		/**
+		 * The meta object literal for the '<em><b>From</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MANUAL_ROUTE_LINE__FROM = eINSTANCE.getManualRouteLine_From();
+
+		/**
+		 * The meta object literal for the '<em><b>To</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MANUAL_ROUTE_LINE__TO = eINSTANCE.getManualRouteLine_To();
+
+		/**
+		 * The meta object literal for the '<em><b>Distance</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MANUAL_ROUTE_LINE__DISTANCE = eINSTANCE.getManualRouteLine_Distance();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.PortModelImpl <em>Model</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2370,6 +2606,22 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PORT_MODEL__DISTANCE_VERSION_RECORD = eINSTANCE.getPortModel_DistanceVersionRecord();
+
+		/**
+		 * The meta object literal for the '<em><b>Mmx Distance Version</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT_MODEL__MMX_DISTANCE_VERSION = eINSTANCE.getPortModel_MmxDistanceVersion();
+
+		/**
+		 * The meta object literal for the '<em><b>Manual Distances</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PORT_MODEL__MANUAL_DISTANCES = eINSTANCE.getPortModel_ManualDistances();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.CapabilityGroupImpl <em>Capability Group</em>}' class.

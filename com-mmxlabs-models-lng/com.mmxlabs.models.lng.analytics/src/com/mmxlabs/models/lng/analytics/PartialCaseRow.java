@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.analytics;
 
+import com.mmxlabs.models.lng.port.RouteOption;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
@@ -22,6 +23,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getSellOptions <em>Sell Options</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getVesselEventOptions <em>Vessel Event Options</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getShipping <em>Shipping</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getOptions <em>Options</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getPartialCaseRow()
@@ -92,5 +94,27 @@ public interface PartialCaseRow extends EObject {
 	 * @generated
 	 */
 	EList<ShippingOption> getShipping();
+
+	/**
+	 * Returns the value of the '<em><b>Options</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Options</em>' containment reference.
+	 * @see #setOptions(PartialCaseRowOptions)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getPartialCaseRow_Options()
+	 * @model containment="true"
+	 * @generated
+	 */
+	PartialCaseRowOptions getOptions();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getOptions <em>Options</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Options</em>' containment reference.
+	 * @see #getOptions()
+	 * @generated
+	 */
+	void setOptions(PartialCaseRowOptions value);
 
 } // PartialCaseRow

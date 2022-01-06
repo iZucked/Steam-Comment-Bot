@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.analytics.ui.views.evaluators;
 
 import java.util.function.Consumer;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -58,9 +59,9 @@ public class WhatIfEvaluator {
 		};
 		Consumer<IAnalyticsScenarioEvaluator> f1 = evaluator -> {
 			if (isOptionise) {
-				evaluator.runSandboxInsertion(sdp, scenarioInstance, model, action, true);
+				evaluator.runSandboxInsertion(sdp, scenarioInstance, model, null, action, true, new NullProgressMonitor());
 			} else {
-				evaluator.runSandboxOptimisation(sdp, scenarioInstance, model, action, true);
+				evaluator.runSandboxOptimisation(sdp, scenarioInstance, model, null, action, true, new NullProgressMonitor());
 			}
 		};
 
@@ -102,7 +103,7 @@ public class WhatIfEvaluator {
 		};
 
 		Consumer<IAnalyticsScenarioEvaluator> f1 = evaluator -> {
-			evaluator.runSandboxOptions(sdp, scenarioInstance, model, action, true);
+			evaluator.runSandboxOptions(sdp, scenarioInstance, model, null, action, true, new NullProgressMonitor());
 		};
 
 		ServiceHelper.withServiceConsumer(IAnalyticsScenarioEvaluator.class, f1);

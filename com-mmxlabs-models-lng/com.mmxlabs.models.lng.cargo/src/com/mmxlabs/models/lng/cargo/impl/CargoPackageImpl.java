@@ -31,6 +31,7 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DealSet;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
+import com.mmxlabs.models.lng.cargo.FuelChoice;
 import com.mmxlabs.models.lng.cargo.GroupedDischargeSlotsConstraint;
 import com.mmxlabs.models.lng.cargo.GroupedSlotsConstraint;
 import com.mmxlabs.models.lng.cargo.Inventory;
@@ -369,6 +370,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	private EEnum paperPricingTypeEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum fuelChoiceEEnum = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -2674,8 +2682,38 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getVesselEventSpecification_ArrivalDate() {
+		return (EAttribute)vesselEventSpecificationEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getVoyageSpecification() {
 		return voyageSpecificationEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getVoyageSpecification_RouteOption() {
+		return (EAttribute)voyageSpecificationEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getVoyageSpecification_FuelChoice() {
+		return (EAttribute)voyageSpecificationEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -2696,6 +2734,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	@Override
 	public EReference getSlotSpecification_Slot() {
 		return (EReference)slotSpecificationEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSlotSpecification_ArrivalDate() {
+		return (EAttribute)slotSpecificationEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -3204,6 +3252,16 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	@Override
+	public EEnum getFuelChoice() {
+		return fuelChoiceEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EDataType getSchedulingTimeWindow() {
 		return schedulingTimeWindowEDataType;
 	}
@@ -3485,11 +3543,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		vesselEventSpecificationEClass = createEClass(VESSEL_EVENT_SPECIFICATION);
 		createEReference(vesselEventSpecificationEClass, VESSEL_EVENT_SPECIFICATION__VESSEL_EVENT);
+		createEAttribute(vesselEventSpecificationEClass, VESSEL_EVENT_SPECIFICATION__ARRIVAL_DATE);
 
 		voyageSpecificationEClass = createEClass(VOYAGE_SPECIFICATION);
+		createEAttribute(voyageSpecificationEClass, VOYAGE_SPECIFICATION__ROUTE_OPTION);
+		createEAttribute(voyageSpecificationEClass, VOYAGE_SPECIFICATION__FUEL_CHOICE);
 
 		slotSpecificationEClass = createEClass(SLOT_SPECIFICATION);
 		createEReference(slotSpecificationEClass, SLOT_SPECIFICATION__SLOT);
+		createEAttribute(slotSpecificationEClass, SLOT_SPECIFICATION__ARRIVAL_DATE);
 
 		charterInMarketOverrideEClass = createEClass(CHARTER_IN_MARKET_OVERRIDE);
 		createEReference(charterInMarketOverrideEClass, CHARTER_IN_MARKET_OVERRIDE__CHARTER_IN_MARKET);
@@ -3551,6 +3613,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		inventoryFacilityTypeEEnum = createEEnum(INVENTORY_FACILITY_TYPE);
 		inventoryFrequencyEEnum = createEEnum(INVENTORY_FREQUENCY);
 		paperPricingTypeEEnum = createEEnum(PAPER_PRICING_TYPE);
+		fuelChoiceEEnum = createEEnum(FUEL_CHOICE);
 
 		// Create data types
 		schedulingTimeWindowEDataType = createEDataType(SCHEDULING_TIME_WINDOW);
@@ -3989,11 +4052,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		initEClass(vesselEventSpecificationEClass, VesselEventSpecification.class, "VesselEventSpecification", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getVesselEventSpecification_VesselEvent(), this.getVesselEvent(), null, "vesselEvent", null, 0, 1, VesselEventSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselEventSpecification_ArrivalDate(), theDateTimePackage.getLocalDateTime(), "arrivalDate", null, 0, 1, VesselEventSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(voyageSpecificationEClass, VoyageSpecification.class, "VoyageSpecification", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getVoyageSpecification_RouteOption(), thePortPackage.getRouteOption(), "routeOption", null, 0, 1, VoyageSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVoyageSpecification_FuelChoice(), this.getFuelChoice(), "fuelChoice", null, 0, 1, VoyageSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(slotSpecificationEClass, SlotSpecification.class, "SlotSpecification", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSlotSpecification_Slot(), this.getSlot(), null, "slot", null, 0, 1, SlotSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlotSpecification_ArrivalDate(), theDateTimePackage.getLocalDateTime(), "arrivalDate", null, 0, 1, SlotSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(charterInMarketOverrideEClass, CharterInMarketOverride.class, "CharterInMarketOverride", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCharterInMarketOverride_CharterInMarket(), theSpotMarketsPackage.getCharterInMarket(), null, "charterInMarket", null, 0, 1, CharterInMarketOverride.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -4086,6 +4153,10 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		addEEnumLiteral(paperPricingTypeEEnum, PaperPricingType.PERIOD_AVG);
 		addEEnumLiteral(paperPricingTypeEEnum, PaperPricingType.CALENDAR);
 		addEEnumLiteral(paperPricingTypeEEnum, PaperPricingType.INSTRUMENT);
+
+		initEEnum(fuelChoiceEEnum, FuelChoice.class, "FuelChoice");
+		addEEnumLiteral(fuelChoiceEEnum, FuelChoice.NBO_FBO);
+		addEEnumLiteral(fuelChoiceEEnum, FuelChoice.NBO_BUNKERS);
 
 		// Initialize data types
 		initEDataType(schedulingTimeWindowEDataType, SchedulingTimeWindow.class, "SchedulingTimeWindow", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

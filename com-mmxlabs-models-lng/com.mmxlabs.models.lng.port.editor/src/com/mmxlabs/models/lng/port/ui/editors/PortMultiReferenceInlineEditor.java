@@ -39,6 +39,9 @@ import com.mmxlabs.models.ui.editors.impl.UnsettableInlineEditor;
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 
 /**
  * An inline editor for editing multi-value references. Pops up a dialog.
@@ -110,7 +113,7 @@ public class PortMultiReferenceInlineEditor extends UnsettableInlineEditor {
 		label.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
 		
-		final ImageDescriptor d = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.port.editor", "icons/edit.png");
+		final ImageDescriptor d = CommonImages.getImageDescriptor(IconPaths.Edit, IconMode.Enabled);
 		button = toolkit.createButton(buttonAndLabel, "", SWT.NONE);
 		final Image img = d.createImage();
 		button.setImage(img);

@@ -484,10 +484,8 @@ public class SummaryPage extends ADPComposite {
 					constraintsViewer.expandToLevel(++constraintsSummaryExpandLevel);
 				}
 			};
-			ResourceLocator.imageDescriptorFromBundle("com.mmxlabs.rcp.common", "/icons/collapseall.gif").ifPresent(collapseOneLevel::setImageDescriptor);
-			ResourceLocator.imageDescriptorFromBundle("com.mmxlabs.rcp.common", "/icons/expandall.gif").ifPresent(expandOneLevel::setImageDescriptor);
-			// collapseOneLevel.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/collapseall.gif"));
-			// expandOneLevel.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/expandall.gif"));
+			CommonImages.setImageDescriptors(collapseOneLevel, IconPaths.CollapseAll);
+			CommonImages.setImageDescriptors(expandOneLevel, IconPaths.ExpandAll);
 
 			toolbarManager.getToolbarManager().add(collapseOneLevel);
 			toolbarManager.getToolbarManager().add(expandOneLevel);

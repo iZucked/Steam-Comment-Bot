@@ -18,7 +18,7 @@ class ColourSchemeAction extends SchedulerViewAction {
 
 	public ColourSchemeAction(SchedulerView schedulerView, final EMFScheduleLabelProvider lp, GanttChartViewer viewer) {
 		super("Label", IAction.AS_DROP_DOWN_MENU, schedulerView, viewer, lp);
-		setImageDescriptor(Activator.getImageDescriptor("/icons/colour_scheme.gif"));
+		setImageDescriptor(Activator.getImageDescriptor("/icons/label.png"));
 	}
 
 	@Override
@@ -42,7 +42,6 @@ class ColourSchemeAction extends SchedulerViewAction {
 
 	@Override
 	protected void createMenuItems(final Menu menu) {
-
 		final Action canalAction = new Action("Show Canals", IAction.AS_CHECK_BOX) {
 			@Override
 			public void run() {
@@ -55,7 +54,6 @@ class ColourSchemeAction extends SchedulerViewAction {
 		canalAction.setChecked(lp.showCanals());
 		final ActionContributionItem actionContributionItem = new ActionContributionItem(canalAction);
 		actionContributionItem.fill(menu, -1);
-
 		final Action showDaysOnEventsAction = new Action("Show Days on Events", IAction.AS_CHECK_BOX) {
 			@Override
 			public void run() {

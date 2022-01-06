@@ -44,8 +44,6 @@ import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
-import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsConstraintChecker;
-import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
@@ -142,52 +140,6 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 		vesselAvailability.setStartAt(port2);
 		vesselAvailability.setStartBy(vesselStartDate);
 		return vesselAvailability;
-	}
-
-	@Test
-	@Tag(TestCategories.MICRO_TEST)
-	public void panamaSlotAvailableTest_Constraint() {
-		// map into same timezone to make expectations easier
-		portModelBuilder.setAllExistingPortsToUTC();
-
-		final CanalBookingSlot d1 = cargoModelBuilder.makeCanalBooking(RouteOption.PANAMA, CanalEntry.NORTHSIDE, LocalDate.of(2017, Month.JUNE, 7), null);
-
-		final VesselAvailability vesselAvailability = getDefaultVesselAvailability();
-
-		@NonNull
-		final Port port1 = portFinder.findPortById(InternalDataConstants.PORT_SABINE_PASS);
-
-		@NonNull
-		final Port port2 = portFinder.findPortById(InternalDataConstants.PORT_QUINTERO);
-
-		final LocalDateTime loadDate = LocalDateTime.of(2017, Month.JUNE, 1, 0, 0, 0);
-		final LocalDateTime dischargeDate = loadDate.plusDays(13);
-
-		final Cargo cargo = createFobDesCargo(1, vesselAvailability, port1, port2, loadDate, dischargeDate);
-
-		evaluateWithLSOTest(scenarioRunner -> {
-
-			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-			LNGDataTransformer dataTransformer = scenarioToOptimiserBridge.getDataTransformer();
-			final Injector injector = MicroTestUtils.createEvaluationInjector(dataTransformer);
-
-			try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
-				scope.enter();
-
-				final PanamaSlotsConstraintChecker checker = new PanamaSlotsConstraintChecker(PanamaSlotsConstraintCheckerFactory.NAME);//
-				injector.injectMembers(checker);
-
-				// Set blank sequences as initial state
-				checker.sequencesAccepted(SequenceHelper.createSequences(dataTransformer.getInjector()), SequenceHelper.createSequences(dataTransformer.getInjector()), new ArrayList<>());
-
-				final ISequencesManipulator sequencesManipulator = injector.getInstance(ISequencesManipulator.class);
-				@NonNull
-				final IModifiableSequences manipulatedSequences = sequencesManipulator
-						.createManipulatedSequences(SequenceHelper.createSequences(dataTransformer.getInjector(), vesselAvailability, cargo));
-				checker.checkConstraints(SequenceHelper.createSequences(dataTransformer.getInjector()), null, new ArrayList<>());
-				assertTrue(checker.checkConstraints(manipulatedSequences, null, new ArrayList<>()));
-			}
-		});
 	}
 
 	@Test
@@ -1057,12 +1009,6 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(1);
 
 				assertEquals(AvailableRouteChoices.PANAMA_ONLY, ptr_r0_cargo.getSlotNextVoyageOptions(ptr_r0_cargo.getFirstSlot()));
-
-				final PanamaSlotsConstraintChecker checker = new PanamaSlotsConstraintChecker(PanamaSlotsConstraintCheckerFactory.NAME);//
-				injector.injectMembers(checker);
-
-				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector()), null, new ArrayList<>());
-				assertTrue(checker.checkConstraints(manipulatedSequences, null, new ArrayList<>()));
 			}
 		});
 	}
@@ -1204,12 +1150,6 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(1);
 
 				assertEquals(AvailableRouteChoices.PANAMA_ONLY, ptr_r0_cargo.getSlotNextVoyageOptions(ptr_r0_cargo.getFirstSlot()));
-
-				final PanamaSlotsConstraintChecker checker = new PanamaSlotsConstraintChecker(PanamaSlotsConstraintCheckerFactory.NAME);//
-				injector.injectMembers(checker);
-
-				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector()), null, new ArrayList<>());
-				assertTrue(checker.checkConstraints(manipulatedSequences, null, new ArrayList<>()));
 			}
 		});
 	}
@@ -1441,12 +1381,6 @@ public class PanamaSlotBookingsTests extends AbstractLegacyMicroTestCase {
 				final IPortTimeWindowsRecord ptr_r0_cargo = records.get(r0).get(1);
 
 				assertEquals(AvailableRouteChoices.PANAMA_ONLY, ptr_r0_cargo.getSlotNextVoyageOptions(ptr_r0_cargo.getFirstSlot()));
-
-				final PanamaSlotsConstraintChecker checker = new PanamaSlotsConstraintChecker(PanamaSlotsConstraintCheckerFactory.NAME);//
-				injector.injectMembers(checker);
-
-				checker.checkConstraints(SequenceHelper.createSequences(scenarioToOptimiserBridge.getDataTransformer().getInjector()), null, new ArrayList<>());
-				assertTrue(checker.checkConstraints(manipulatedSequences, null, new ArrayList<>()));
 			}
 		});
 	}

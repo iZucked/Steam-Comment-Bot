@@ -5,7 +5,7 @@
 package com.mmxlabs.models.migration.scenario;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -22,7 +22,8 @@ public class ScenarioMigrationService implements IScenarioMigrationService {
 	private IScenarioCipherProvider scenarioCipherProvider;
 
 	@Override
-	public void migrateScenario(URI archiveURI, @NonNull final Manifest manifest, final @NonNull IProgressMonitor monitor) throws Exception {
+	public void migrateScenario(URI archiveURI, @NonNull final Manifest manifest, final @NonNull IProgressMonitor parentMonitor) throws Exception {
+		SubMonitor monitor =  SubMonitor.convert(parentMonitor);
 		monitor.beginTask("Migrate Scenario", 100);
 		try {
 			{
@@ -56,7 +57,7 @@ public class ScenarioMigrationService implements IScenarioMigrationService {
 				if (latestScenarioVersion < 0 || scenarioVersion < latestScenarioVersion || latestClientVersion < 0 || clientVersion < latestClientVersion) {
 
 					final ScenarioInstanceMigrator migrator = new ScenarioInstanceMigrator(getMigrationRegistry(), getScenarioCipherProvider());
-					migrator.performMigration(archiveURI, manifest, new SubProgressMonitor(monitor, 100));
+					migrator.performMigration(archiveURI, manifest, monitor.split(100));
 				}
 			}
 		} finally {

@@ -1,0 +1,46 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: LiNGO Updater
+Bundle-SymbolicName: com.mmxlabs.lingo.updater;singleton:=true
+Bundle-Version: 4.13.8.qualifier
+Bundle-Activator: com.mmxlabs.lingo.app.updater.internal.Activator
+Bundle-Vendor: Minimax Labs Ltd.
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
+ org.eclipse.core.resources;bundle-version="3.7.101",
+ org.eclipse.core.filesystem;bundle-version="1.3.100",
+ com.mmxlabs.license.ssl;bundle-version="[4.13.8,5.0.0)",
+ com.mmxlabs.rcp.common;bundle-version="[4.13.8,5.0.0)",
+ com.mmxlabs.license.features;bundle-version="[4.13.8,5.0.0)",
+ org.eclipse.equinox.p2.core;bundle-version="2.1.1",
+ org.eclipse.equinox.p2.garbagecollector;bundle-version="1.0.200",
+ org.eclipse.equinox.p2.engine;bundle-version="2.1.1",
+ org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
+ com.google.guava,
+ com.mmxlabs.common.common-util,
+ org.apache.felix.scr;bundle-version="2.1.24",
+ org.eclipse.equinox.p2.artifact.repository;bundle-version="1.4.200",
+ org.eclipse.equinox.p2.director;bundle-version="2.5.100",
+ org.eclipse.equinox.p2.metadata;bundle-version="2.6.100",
+ org.eclipse.equinox.p2.metadata.repository;bundle-version="1.4.0",
+ org.eclipse.equinox.p2.operations;bundle-version="2.6.0",
+ org.eclipse.equinox.p2.repository;bundle-version="2.5.200",
+ org.eclipse.equinox.p2.ui;bundle-version="2.7.200",
+ org.eclipse.equinox.p2.ui.importexport;bundle-version="1.3.200",
+ org.eclipse.equinox.p2.updatechecker;bundle-version="1.3.0",
+ org.eclipse.equinox.p2.updatesite;bundle-version="1.2.100",
+ com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.12.5",
+ com.fasterxml.jackson.core.jackson-core;bundle-version="2.12.5",
+ com.fasterxml.jackson.core.jackson-databind;bundle-version="2.12.5",
+ org.bouncycastle.bcpkix,
+ org.bouncycastle.bcprov,
+ org.eclipse.swt,
+ wrapped.com.squareup.okio.okio,
+ com.mmxlabs.hub,
+ org.eclipse.jface,
+ org.eclipse.ui.workbench
+Bundle-RequiredExecutionEnvironment: JavaSE-16
+Bundle-ActivationPolicy: lazy
+Automatic-Module-Name: com.mmxlabs.lingo.updater
+Import-Package: org.slf4j, org.bouncycastle.util.encoders
+Bundle-ClassPath: .,
+ certs/

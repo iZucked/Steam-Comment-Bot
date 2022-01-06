@@ -42,6 +42,9 @@ import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.BasicAttributeInlineEditor;
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 
 /**
  * An inline editor for editing multi-value references. Pops up a dialog.
@@ -103,7 +106,7 @@ public class RestrictionsOverridePortMultiReferenceInlineEditor extends BasicAtt
 			label.setLayoutData(gd);
 		}
 
-		final ImageDescriptor d = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui", "icons/edit.png");
+		final ImageDescriptor d = CommonImages.getImageDescriptor(IconPaths.Edit, IconMode.Enabled);
 		button = toolkit.createButton(buttonAndLabel, "", SWT.NONE);
 		final Image img = d.createImage();
 		button.setImage(img);

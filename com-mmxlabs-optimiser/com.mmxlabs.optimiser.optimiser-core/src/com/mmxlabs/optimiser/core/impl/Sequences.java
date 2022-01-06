@@ -12,64 +12,49 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.common.base.Objects;
+import com.google.common.collect.ImmutableMap;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.ISequencesAttributesProvider;
 
 /**
- * Default implementation of {@link ISequences}. Uses {@link ListSequence} instances when required.
+ * Default implementation of {@link ISequences}. Uses {@link ListSequence}
+ * instances when required.
  * 
  * 
  * @author Simon Goodall
  * 
  */
+@NonNullByDefault
 public final class Sequences implements ISequences {
 
-	private final List<@NonNull IResource> resources;
+	private final List<IResource> resources;
 
-	private final Map<@NonNull IResource, @NonNull ISequence> sequenceMap;
+	private final Map<IResource, ISequence> sequenceMap;
 
-	private final List<@NonNull ISequenceElement> unusedElements = new ArrayList<>();
+	private final List<ISequenceElement> unusedElements = new ArrayList<>();
 
-	/**
-	 * Constructor taking a list of {@link IResource} instances. The {@link ISequence} instances will be created automatically. The resources list is copied to maintain internal consistency with the
-	 * sequence map.
-	 * 
-	 * @param resources
-	 */
-	public Sequences(final @NonNull List<@NonNull IResource> resources) {
-		// Copy the list as we do not track changes
-		this.resources = new ArrayList<>(resources);
-		sequenceMap = new HashMap<>();
-		for (final IResource resource : resources) {
-			sequenceMap.put(resource, new ListSequence(new LinkedList<>()));
-		}
-	}
+	private final ISequencesAttributesProvider providers;
 
-	/**
-	 * Constructor taking both the ordered list of resources and a {@link Map} containing the initial sequences. References are maintained to both objects.
-	 * 
-	 * @param resources
-	 * @param sequenceMap
-	 */
-	public Sequences(final List<@NonNull IResource> resources, final Map<@NonNull IResource, @NonNull ISequence> sequenceMap) {
-		this.resources = resources;
-		this.sequenceMap = sequenceMap;
-	}
-
-	public Sequences(final List<@NonNull IResource> resources, final Map<@NonNull IResource, @NonNull ISequence> sequenceMap, final @NonNull List<@NonNull ISequenceElement> unusedElements) {
+	public Sequences(final List<IResource> resources, final Map<IResource, ISequence> sequenceMap, final List<ISequenceElement> unusedElements, ISequencesAttributesProvider providers) {
 		this.resources = resources;
 		this.sequenceMap = sequenceMap;
 		this.unusedElements.addAll(unusedElements);
+		this.providers = providers;
 	}
 
 	/**
-	 * Constructor which creates a deep copy of the input {@link ISequences} object. This includes creating new {@link ISequence} objects, but not the sequence elements.
+	 * Constructor which creates a deep copy of the input {@link ISequences} object.
+	 * This includes creating new {@link ISequence} objects, but not the sequence
+	 * elements.
 	 * 
-	 * @param sequences
-	 *            Source {@link ISequences} object
+	 * @param sequences Source {@link ISequences} object
 	 */
 	public Sequences(final ISequences sequences) {
 
@@ -87,6 +72,7 @@ public final class Sequences implements ISequences {
 			sequenceMap.put(r, sequence);
 		}
 		this.unusedElements.addAll(sequences.getUnusedElements());
+		this.providers = sequences.getProviders();
 	}
 
 	@Override
@@ -132,19 +118,21 @@ public final class Sequences implements ISequences {
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public boolean equals(final @Nullable Object obj) {
 
-		if (obj instanceof Sequences) {
-			return sequenceMap.equals(((Sequences) obj).sequenceMap);
-		} else if (obj instanceof ISequences) {
-			final ISequences seq = (ISequences) obj;
-			if (size() != seq.size()) {
+		if (obj instanceof ISequences) {
+			final ISequences other = (ISequences) obj;
+			if (size() != other.size()) {
 				return false;
 			}
 
-			if (!seq.getSequences().equals(this.getSequences())) {
+			if (!Objects.equal(providers, other.getProviders())) {
 				return false;
 			}
+			if (!Objects.equal(getSequences(), other.getSequences())) {
+				return false;
+			}
+
 			return true;
 
 		}
@@ -161,5 +149,10 @@ public final class Sequences implements ISequences {
 	@NonNull
 	public List<@NonNull ISequenceElement> getUnusedElements() {
 		return Collections.unmodifiableList(unusedElements);
+	}
+
+	@Override
+	public ISequencesAttributesProvider getProviders() {
+		return providers;
 	}
 }

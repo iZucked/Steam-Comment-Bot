@@ -19,6 +19,7 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.StatusLineContributionItem;
 import org.eclipse.jface.internal.provisional.action.IToolBarContributionItem;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.util.Util;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -49,9 +50,11 @@ import com.mmxlabs.lingo.reports.customizable.CustomReportsRegistry;
 import com.mmxlabs.rcp.common.CommonImages;
 import com.mmxlabs.rcp.common.CommonImages.IconMode;
 import com.mmxlabs.rcp.common.CommonImages.IconPaths;
+
 /**
  * 
- * Copy of {@link WorkbenchActionBuilder}. Need to build our own version at some point (rebase on version in history?)
+ * Copy of {@link WorkbenchActionBuilder}. Need to build our own version at some
+ * point (rebase on version in history?)
  * 
  * 
  */
@@ -70,12 +73,12 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	/**
 	 */
 	public static final String DATA_END = "dataEnd";
-	
+
 	public static final String DATA_IMPORT = "dataImport";
 	public static final String DATA_EXPORT = "dataExport";
 	public static final String WINDOW_CUSTOM_START = "windowCustomStart";
 	public static final String WINDOW_CUSTOM_END = "windowCustomEnd";
-	
+
 	private final IWorkbenchWindow window;
 
 	// generic actions
@@ -235,10 +238,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	// private MenuManager coolbarPopupMenuManager;
 
 	/**
-	 * Constructs a new action builder which contributes actions to the given window.
+	 * Constructs a new action builder which contributes actions to the given
+	 * window.
 	 * 
-	 * @param configurer
-	 *                       the action bar configurer for the window
+	 * @param configurer the action bar configurer for the window
 	 */
 	public ApplicationActionBarAdvisor(final IActionBarConfigurer configurer) {
 		super(configurer);
@@ -253,7 +256,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	}
 
 	// /**
-	// * Hooks listeners on the preference store and the window's page, perspective and selection services.
+	// * Hooks listeners on the preference store and the window's page, perspective
+	// and selection services.
 	// */
 	// private void hookListeners() {
 	//
@@ -307,9 +311,11 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	// }
 	// };
 	// /*
-	// * In order to ensure that the pin action toolbar sets its size correctly, the pin action should set its visiblity before we call updatePinActionToolbar().
+	// * In order to ensure that the pin action toolbar sets its size correctly, the
+	// pin action should set its visiblity before we call updatePinActionToolbar().
 	// *
-	// * In other words we always want the PinActionContributionItem to be notified before the WorkbenchActionBuilder.
+	// * In other words we always want the PinActionContributionItem to be notified
+	// before the WorkbenchActionBuilder.
 	// */
 	// WorkbenchPlugin.getDefault().getPreferenceStore().addPropertyChangeListener(propPrefListener);
 	// listen for project description changes, which can affect enablement
@@ -358,8 +364,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// // coolbarPopupMenuManager.add(new
 		// // ActionContributionItem(editActionSetAction));
 		// coolBar.setContextMenuManager(coolbarPopupMenuManager);
-		// final IMenuService menuService = (IMenuService) window.getService(IMenuService.class);
-		// menuService.populateContributionManager(coolbarPopupMenuManager, "popup:windowCoolbarContextMenu"); //$NON-NLS-1$
+		// final IMenuService menuService = (IMenuService)
+		// window.getService(IMenuService.class);
+		// menuService.populateContributionManager(coolbarPopupMenuManager,
+		// "popup:windowCoolbarContextMenu"); //$NON-NLS-1$
 		// }
 		coolBar.add(new GroupMarker(IIDEActionConstants.GROUP_FILE));
 		{ // File Group
@@ -463,7 +471,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// final String newText = IDEWorkbenchMessages.Workbench_new;
 		// final String newId = ActionFactory.NEW.getId();
 		// final MenuManager newMenu = new MenuManager(newText, newId);
-		// newMenu.setActionDefinitionId("org.eclipse.ui.file.newQuickMenu"); //$NON-NLS-1$
+		// newMenu.setActionDefinitionId("org.eclipse.ui.file.newQuickMenu");
+		// //$NON-NLS-1$
 		// newMenu.add(new Separator(newId));
 		// this.newWizardMenu = new NewWizardMenu(getWindow());
 		// newMenu.add(this.newWizardMenu);
@@ -471,7 +480,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// menu.add(newMenu);
 		// }
 
-		// Disable this to hide the "import projects from filesystem" which does not go away with activity bindings.
+		// Disable this to hide the "import projects from filesystem" which does not go
+		// away with activity bindings.
 		// menu.add(new GroupMarker(IWorkbenchActionConstants.NEW_EXT));
 		// menu.add(new Separator());
 
@@ -705,7 +715,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	// * Adds the keyboard navigation submenu to the specified menu.
 	// */
 	// private void addKeyboardShortcuts(final MenuManager menu) {
-	// final MenuManager subMenu = new MenuManager(IDEWorkbenchMessages.Workbench_shortcuts, "shortcuts"); //$NON-NLS-1$
+	// final MenuManager subMenu = new
+	// MenuManager(IDEWorkbenchMessages.Workbench_shortcuts, "shortcuts");
+	// //$NON-NLS-1$
 	// menu.add(subMenu);
 	// // subMenu.add(showPartPaneMenuAction);
 	// // subMenu.add(showViewMenuAction);
@@ -743,13 +755,13 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	}
 
 	/**
-	 * Adds a <code>GroupMarker</code> or <code>Separator</code> to a menu. The test for whether a separator should be added is done by checking for the existence of a preference matching the string
-	 * useSeparator.MENUID.GROUPID that is set to <code>true</code>.
+	 * Adds a <code>GroupMarker</code> or <code>Separator</code> to a menu. The test
+	 * for whether a separator should be added is done by checking for the existence
+	 * of a preference matching the string useSeparator.MENUID.GROUPID that is set
+	 * to <code>true</code>.
 	 * 
-	 * @param menu
-	 *                    the menu to add to
-	 * @param groupId
-	 *                    the group id for the added separator or group marker
+	 * @param menu    the menu to add to
+	 * @param groupId the group id for the added separator or group marker
 	 */
 	private void addSeparatorOrGroupMarker(final MenuManager menu, final String groupId) {
 		final String prefId = "useSeparator." + menu.getId() + "." + groupId; //$NON-NLS-1$ //$NON-NLS-2$
@@ -762,7 +774,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	}
 
 	/**
-	 * Disposes any resources and unhooks any listeners that are no longer needed. Called when the window is closed.
+	 * Disposes any resources and unhooks any listeners that are no longer needed.
+	 * Called when the window is closed.
 	 */
 	@Override
 	public void dispose() {
@@ -770,7 +783,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 			return;
 		}
 		isDisposed = true;
-		// final IMenuService menuService = (IMenuService) window.getService(IMenuService.class);
+		// final IMenuService menuService = (IMenuService)
+		// window.getService(IMenuService.class);
 		// menuService.releaseContributions(coolbarPopupMenuManager);
 		// coolbarPopupMenuManager.dispose();
 
@@ -872,7 +886,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	}
 
 	/**
-	 * Returns true if the menu with the given ID should be considered as an OLE container menu. Container menus are preserved in OLE menu merging.
+	 * Returns true if the menu with the given ID should be considered as an OLE
+	 * container menu. Container menus are preserved in OLE menu merging.
 	 */
 	@Override
 	public boolean isApplicationMenu(final String menuId) {
@@ -886,7 +901,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	}
 
 	/**
-	 * Return whether or not given id matches the id of the coolitems that the workbench creates.
+	 * Return whether or not given id matches the id of the coolitems that the
+	 * workbench creates.
 	 */
 	public boolean isWorkbenchCoolItemId(final String id) {
 		if (IWorkbenchActionConstants.TOOLBAR_FILE.equalsIgnoreCase(id)) {
@@ -906,9 +922,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		statusLine.add(statusLineItem);
 		CustomReportsRegistry.getInstance().setStatusLineManager(statusLine);
 	}
-	
+
 	/**
-	 * Creates actions (and contribution items) for the menu bar, toolbar and status line.
+	 * Creates actions (and contribution items) for the menu bar, toolbar and status
+	 * line.
 	 */
 	@Override
 	protected void makeActions(final IWorkbenchWindow window) {
@@ -921,7 +938,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// newWizardAction = ActionFactory.NEW.create(window);
 		// register(newWizardAction);
 
-		// newWizardDropDownAction = IDEActionFactory.NEW_WIZARD_DROP_DOWN.create(window);
+		// newWizardDropDownAction =
+		// IDEActionFactory.NEW_WIZARD_DROP_DOWN.create(window);
 		// register(newWizardDropDownAction);
 
 		// importResourcesAction = ActionFactory.IMPORT.create(window);
@@ -943,16 +961,14 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		saveAction = ActionFactory.SAVE.create(window);
 		saveAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Save, IconMode.Enabled));
 		saveAction.setDisabledImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Save, IconMode.Disabled));
-		
+
 		register(saveAction);
 
 //		saveAsAction = ActionFactory.SAVE_AS.create(window);
 //		register(saveAsAction);
 
 		saveAllAction = ActionFactory.SAVE_ALL.create(window);
-		saveAllAction.setImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Saveall, IconMode.Enabled));
-		saveAllAction.setDisabledImageDescriptor(CommonImages.getImageDescriptor(IconPaths.Saveall, IconMode.Disabled));
-//		saveAllAction.setDisabledImageDescriptor(ImageDescriptor.createWithFlags(Activator.getImageDescriptor("/icons/saveall.png"), SWT.IMAGE_DISABLE));
+		CommonImages.setImageDescriptors(saveAllAction, IconPaths.Saveall);
 		register(saveAllAction);
 
 		newWindowAction = ActionFactory.OPEN_NEW_WINDOW.create(getWindow());
@@ -1098,7 +1114,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// openWorkspaceAction = IDEActionFactory.OPEN_WORKSPACE.create(window);
 		// register(openWorkspaceAction);
 		//
-		// projectPropertyDialogAction = IDEActionFactory.OPEN_PROJECT_PROPERTIES.create(window);
+		// projectPropertyDialogAction =
+		// IDEActionFactory.OPEN_PROJECT_PROPERTIES.create(window);
 		// register(projectPropertyDialogAction);
 		//
 		// if (window.getWorkbench().getIntroManager().hasIntro()) {
@@ -1116,7 +1133,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// };
 		// register(showInQuickMenu);
 
-		// final String newQuickMenuId = "org.eclipse.ui.file.newQuickMenu"; //$NON-NLS-1$
+		// final String newQuickMenuId = "org.eclipse.ui.file.newQuickMenu";
+		// //$NON-NLS-1$
 		// newQuickMenu = new QuickMenuAction(newQuickMenuId) {
 		// protected void fillMenu(IMenuManager menu) {
 		// menu.add(new NewWizardMenu(window));
@@ -1195,7 +1213,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	// *
 	// * @param infos
 	// * the infos
-	// * @return <code>true</code> if a welcome page was found, <code>false</code> if not
+	// * @return <code>true</code> if a welcome page was found, <code>false</code>
+	// if not
 	// */
 	// private boolean hasWelcomePage(final AboutInfo[] infos) {
 	// for (int i = 0; i < infos.length; i++) {
@@ -1211,7 +1230,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	// *
 	// * @param infos
 	// * the infos
-	// * @return <code>true</code> if tips and tricks were found, <code>false</code> if not
+	// * @return <code>true</code> if tips and tricks were found, <code>false</code>
+	// if not
 	// */
 	// private boolean hasTipsAndTricks(final AboutInfo[] infos) {
 	// for (int i = 0; i < infos.length; i++) {
@@ -1258,7 +1278,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	// .find(IWorkbenchActionConstants.TOOLBAR_FILE);
 	// if (!(cbItem instanceof IToolBarContributionItem)) {
 	// // This should not happen
-	// IDEWorkbenchPlugin.log("File toolbar contribution item is missing"); //$NON-NLS-1$
+	// IDEWorkbenchPlugin.log("File toolbar contribution item is missing");
+	// //$NON-NLS-1$
 	// return;
 	// }
 	// IToolBarContributionItem toolBarItem = (IToolBarContributionItem) cbItem;
@@ -1337,23 +1358,24 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	// }
 
 	private IContributionItem getCutItem() {
-		return getItem(ActionFactory.CUT.getId(), ActionFactory.CUT.getCommandId(), ISharedImages.IMG_TOOL_CUT, ISharedImages.IMG_TOOL_CUT_DISABLED, WorkbenchMessages.Workbench_cut,
-				WorkbenchMessages.Workbench_cutToolTip, null);
+		return getItem(ActionFactory.CUT.getId(), ActionFactory.CUT.getCommandId(), CommonImages.IconPaths.Cut, WorkbenchMessages.Workbench_cut, WorkbenchMessages.Workbench_cutToolTip, null);
 	}
 
 	private IContributionItem getCopyItem() {
-		return getItem(ActionFactory.COPY.getId(), ActionFactory.COPY.getCommandId(), ISharedImages.IMG_TOOL_COPY, ISharedImages.IMG_TOOL_COPY_DISABLED, WorkbenchMessages.Workbench_copy,
-				WorkbenchMessages.Workbench_copyToolTip, null);
+		return getItem(ActionFactory.COPY.getId(), ActionFactory.COPY.getCommandId(), CommonImages.IconPaths.Copy, WorkbenchMessages.Workbench_copy, WorkbenchMessages.Workbench_copyToolTip, null);
 	}
 
 	private IContributionItem getPasteItem() {
-		return getItem(ActionFactory.PASTE.getId(), ActionFactory.PASTE.getCommandId(), ISharedImages.IMG_TOOL_PASTE, ISharedImages.IMG_TOOL_PASTE_DISABLED, WorkbenchMessages.Workbench_paste,
-				WorkbenchMessages.Workbench_pasteToolTip, null);
+		return getItem(ActionFactory.PASTE.getId(), ActionFactory.PASTE.getCommandId(), CommonImages.IconPaths.Paste, WorkbenchMessages.Workbench_paste, WorkbenchMessages.Workbench_pasteToolTip,
+				null);
 	}
 
 	// private IContributionItem getPrintItem() {
-	// return getItem(ActionFactory.PRINT.getId(), ActionFactory.PRINT.getCommandId(), ISharedImages.IMG_ETOOL_PRINT_EDIT, ISharedImages.IMG_ETOOL_PRINT_EDIT_DISABLED,
-	// WorkbenchMessages.Workbench_print, WorkbenchMessages.Workbench_printToolTip, null);
+	// return getItem(ActionFactory.PRINT.getId(),
+	// ActionFactory.PRINT.getCommandId(), ISharedImages.IMG_ETOOL_PRINT_EDIT,
+	// ISharedImages.IMG_ETOOL_PRINT_EDIT_DISABLED,
+	// WorkbenchMessages.Workbench_print, WorkbenchMessages.Workbench_printToolTip,
+	// null);
 	// }
 
 	private IContributionItem getSelectAllItem() {
@@ -1386,25 +1408,36 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	// }
 	//
 	private IContributionItem getDeleteItem() {
-		return getItem(ActionFactory.DELETE.getId(), ActionFactory.DELETE.getCommandId(), ISharedImages.IMG_TOOL_DELETE, ISharedImages.IMG_TOOL_DELETE_DISABLED, WorkbenchMessages.Workbench_delete,
-				WorkbenchMessages.Workbench_deleteToolTip, IWorkbenchHelpContextIds.DELETE_RETARGET_ACTION);
+		return getItem(ActionFactory.DELETE.getId(), ActionFactory.DELETE.getCommandId(), CommonImages.IconPaths.Delete, WorkbenchMessages.Workbench_delete, WorkbenchMessages.Workbench_deleteToolTip,
+				IWorkbenchHelpContextIds.DELETE_RETARGET_ACTION);
 	}
 
 	// private IContributionItem getRevertItem() {
-	// return getItem(ActionFactory.REVERT.getId(), ActionFactory.REVERT.getCommandId(), null, null, WorkbenchMessages.Workbench_revert, WorkbenchMessages.Workbench_revertToolTip, null);
+	// return getItem(ActionFactory.REVERT.getId(),
+	// ActionFactory.REVERT.getCommandId(), null, null,
+	// WorkbenchMessages.Workbench_revert,
+	// WorkbenchMessages.Workbench_revertToolTip, null);
 	// }
 
 	// private IContributionItem getRefreshItem() {
-	// return getItem(ActionFactory.REFRESH.getId(), ActionFactory.REFRESH.getCommandId(), null, null, WorkbenchMessages.Workbench_refresh, WorkbenchMessages.Workbench_refreshToolTip, null);
+	// return getItem(ActionFactory.REFRESH.getId(),
+	// ActionFactory.REFRESH.getCommandId(), null, null,
+	// WorkbenchMessages.Workbench_refresh,
+	// WorkbenchMessages.Workbench_refreshToolTip, null);
 	// }
 	//
 	// private IContributionItem getPropertiesItem() {
-	// return getItem(ActionFactory.PROPERTIES.getId(), ActionFactory.PROPERTIES.getCommandId(), null, null, WorkbenchMessages.Workbench_properties, WorkbenchMessages.Workbench_propertiesToolTip,
+	// return getItem(ActionFactory.PROPERTIES.getId(),
+	// ActionFactory.PROPERTIES.getCommandId(), null, null,
+	// WorkbenchMessages.Workbench_properties,
+	// WorkbenchMessages.Workbench_propertiesToolTip,
 	// null);
 	// }
 	//
 	// private IContributionItem getMoveItem() {
-	// return getItem(ActionFactory.MOVE.getId(), ActionFactory.MOVE.getCommandId(), null, null, WorkbenchMessages.Workbench_move, WorkbenchMessages.Workbench_moveToolTip, null);
+	// return getItem(ActionFactory.MOVE.getId(), ActionFactory.MOVE.getCommandId(),
+	// null, null, WorkbenchMessages.Workbench_move,
+	// WorkbenchMessages.Workbench_moveToolTip, null);
 	// }
 
 	private IContributionItem getRenameItem() {
@@ -1412,12 +1445,16 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	}
 
 	// private IContributionItem getOpenProjectItem() {
-	// return getItem(IDEActionFactory.OPEN_PROJECT.getId(), IDEActionFactory.OPEN_PROJECT.getCommandId(), null, null, IDEWorkbenchMessages.OpenResourceAction_text,
+	// return getItem(IDEActionFactory.OPEN_PROJECT.getId(),
+	// IDEActionFactory.OPEN_PROJECT.getCommandId(), null, null,
+	// IDEWorkbenchMessages.OpenResourceAction_text,
 	// IDEWorkbenchMessages.OpenResourceAction_toolTip, null);
 	// }
 	//
 	// private IContributionItem getCloseProjectItem() {
-	// return getItem(IDEActionFactory.CLOSE_PROJECT.getId(), IDEActionFactory.CLOSE_PROJECT.getCommandId(), null, null, IDEWorkbenchMessages.CloseResourceAction_text,
+	// return getItem(IDEActionFactory.CLOSE_PROJECT.getId(),
+	// IDEActionFactory.CLOSE_PROJECT.getCommandId(), null, null,
+	// IDEWorkbenchMessages.CloseResourceAction_text,
 	// IDEWorkbenchMessages.CloseResourceAction_text, null);
 	// }
 
@@ -1433,11 +1470,28 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		return new CommandContributionItem(commandParm);
 	}
 
+	private IContributionItem getItem(final String actionId, final String commandId, final CommonImages.IconPaths image, final String label, final String tooltip, final String helpContextId) {
+		final ISharedImages sharedImages = getWindow().getWorkbench().getSharedImages();
+
+		final IActionCommandMappingService acms = getWindow().getService(IActionCommandMappingService.class);
+		acms.map(actionId, commandId);
+
+		ImageDescriptor enabledImage = CommonImages.getImageDescriptor(image, IconMode.Enabled);
+		ImageDescriptor disabledImage = CommonImages.getImageDescriptor(image, IconMode.Disabled);
+
+		final CommandContributionItemParameter commandParm = new CommandContributionItemParameter(getWindow(), actionId, commandId, null, enabledImage, disabledImage, null, label, null, tooltip,
+				CommandContributionItem.STYLE_PUSH, null, false);
+		return new CommandContributionItem(commandParm);
+	}
+
 	/**
-	 * @See http://random-eclipse-tips.blogspot.com/2009/02/eclipse-rcp-removing- unwanted_02.html
+	 * @See http://random-eclipse-tips.blogspot.com/2009/02/eclipse-rcp-removing-
+	 *      unwanted_02.html
 	 * 
-	 *      This method can seemingly go in numerous places. However, I suspect none of them will work should a plugin get loaded after this method has been called. This should be hooked into a bundle
-	 *      activator listener of some kind.
+	 *      This method can seemingly go in numerous places. However, I suspect none
+	 *      of them will work should a plugin get loaded after this method has been
+	 *      called. This should be hooked into a bundle activator listener of some
+	 *      kind.
 	 */
 	private void hideUnwantedActionSets() {
 

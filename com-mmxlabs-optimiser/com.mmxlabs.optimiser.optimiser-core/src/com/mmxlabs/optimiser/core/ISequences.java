@@ -7,14 +7,16 @@ package com.mmxlabs.optimiser.core;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
- * {@link ISequences} objects define a collection of {@link ISequence} objects and their {@link IResource} allocations.
+ * {@link ISequences} objects define a collection of {@link ISequence} objects
+ * and their {@link IResource} allocations.
  * 
  * @author Simon Goodall
  * 
  */
+@NonNullByDefault
 public interface ISequences {
 
 	/**
@@ -23,8 +25,8 @@ public interface ISequences {
 	 * @param resource
 	 * @return
 	 */
-	@NonNull
-	ISequence getSequence(@NonNull IResource resource);
+
+	ISequence getSequence(IResource resource);
 
 	/**
 	 * Returns the {@link ISequence} for the given resource index.
@@ -32,7 +34,7 @@ public interface ISequences {
 	 * @param index
 	 * @return
 	 */
-	@NonNull
+
 	ISequence getSequence(int index);
 
 	/**
@@ -40,29 +42,34 @@ public interface ISequences {
 	 * 
 	 * @return
 	 */
-	@NonNull
-	Map<@NonNull IResource, @NonNull ISequence> getSequences();
+
+	Map<IResource, ISequence> getSequences();
 
 	/**
 	 * Returns the elements in the solution which are not used anywhere
 	 * 
 	 * @return
 	 */
-	@NonNull
-	List<@NonNull ISequenceElement> getUnusedElements();
+
+	List<ISequenceElement> getUnusedElements();
 
 	/**
-	 * Returns an indexed list of resources for which resources are keyed off. The index of each resource can be passed to the {@link #getSequence(int)} method.
+	 * Returns an indexed list of resources for which resources are keyed off. The
+	 * index of each resource can be passed to the {@link #getSequence(int)} method.
 	 * 
 	 * @return
 	 */
-	@NonNull
-	List<@NonNull IResource> getResources();
+
+	List<IResource> getResources();
 
 	/**
-	 * Returns the number of {@link IResource}s / {@link ISequence}s contained in this object.
+	 * Returns the number of {@link IResource}s / {@link ISequence}s contained in
+	 * this object.
 	 * 
 	 * @return
 	 */
 	int size();
+
+	ISequencesAttributesProvider getProviders();
+
 }

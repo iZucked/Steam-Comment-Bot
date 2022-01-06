@@ -22,6 +22,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#getVesselEventOption <em>Vessel Event Option</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#getShipping <em>Shipping</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#isOptionise <em>Optionise</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#getOptions <em>Options</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#isFreeze <em>Freeze</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getBaseCaseRow()
@@ -154,5 +156,49 @@ public interface BaseCaseRow extends EObject {
 	 * @generated
 	 */
 	void setOptionise(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Options</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Options</em>' containment reference.
+	 * @see #setOptions(BaseCaseRowOptions)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getBaseCaseRow_Options()
+	 * @model containment="true"
+	 * @generated
+	 */
+	BaseCaseRowOptions getOptions();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#getOptions <em>Options</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Options</em>' containment reference.
+	 * @see #getOptions()
+	 * @generated
+	 */
+	void setOptions(BaseCaseRowOptions value);
+
+	/**
+	 * Returns the value of the '<em><b>Freeze</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Freeze</em>' attribute.
+	 * @see #setFreeze(boolean)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getBaseCaseRow_Freeze()
+	 * @model
+	 * @generated
+	 */
+	boolean isFreeze();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.BaseCaseRow#isFreeze <em>Freeze</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Freeze</em>' attribute.
+	 * @see #isFreeze()
+	 * @generated
+	 */
+	void setFreeze(boolean value);
 
 } // BaseCaseRow

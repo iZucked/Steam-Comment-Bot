@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -78,7 +80,7 @@ public class PortTypeConstraintCheckerTest {
 		Mockito.when(va.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 
 		final Map<IResource, ISequence> m = CollectionsUtil.makeHashMap(r, sequence);
-		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r), m);
+		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r), m, Collections.emptyList(), new SequencesAttributesProviderImpl());
 
 		Assertions.assertTrue(checker.checkConstraints(sequences, null, new ArrayList<>()));
 	}
@@ -115,7 +117,7 @@ public class PortTypeConstraintCheckerTest {
 		Mockito.when(va.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 
 		final Map<IResource, ISequence> m = CollectionsUtil.makeHashMap(r, sequence);
-		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r), m);
+		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r), m, Collections.emptyList(), new SequencesAttributesProviderImpl());
 
 		Assertions.assertFalse(checker.checkConstraints(sequences, null, new ArrayList<>()));
 	}
@@ -152,7 +154,7 @@ public class PortTypeConstraintCheckerTest {
 		Mockito.when(va.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 
 		final Map<IResource, ISequence> m = CollectionsUtil.makeHashMap(r, sequence);
-		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r), m);
+		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r), m, Collections.emptyList(), new SequencesAttributesProviderImpl());
 
 		final List<String> messages = new ArrayList<String>(1);
 		Assertions.assertTrue(checker.checkConstraints(sequences, null, messages));
@@ -190,7 +192,7 @@ public class PortTypeConstraintCheckerTest {
 		Mockito.when(va.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 
 		final Map<IResource, ISequence> m = CollectionsUtil.makeHashMap(r, sequence);
-		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r), m);
+		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r), m, Collections.emptyList(), new SequencesAttributesProviderImpl());
 
 		final List<String> messages = new ArrayList<String>(1);
 		Assertions.assertFalse(checker.checkConstraints(sequences, null, messages));
@@ -683,7 +685,7 @@ public class PortTypeConstraintCheckerTest {
 		});
 		return injector.getInstance(PortTypeConstraintChecker.class);
 	}
-	
+
 	@Test
 	public void testCheckSpotCharterIn() {
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
@@ -704,7 +706,7 @@ public class PortTypeConstraintCheckerTest {
 
 		Assertions.assertEquals(0, messages.size());
 	}
-	
+
 	@Test
 	public void testCheckSpotCharterInFailsWithOnlyEnd() {
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
@@ -722,7 +724,7 @@ public class PortTypeConstraintCheckerTest {
 
 		Assertions.assertEquals(1, messages.size());
 	}
-	
+
 	@Test
 	public void testCheckRoundtripWithOnlyEnd() {
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
@@ -737,7 +739,7 @@ public class PortTypeConstraintCheckerTest {
 
 		Assertions.assertEquals(0, messages.size());
 	}
-	
+
 	@Test
 	public void testCheckRoundtripWithLoadDischargeEnd() {
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
@@ -748,11 +750,11 @@ public class PortTypeConstraintCheckerTest {
 		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
 		final ISequenceElement o2 = Mockito.mock(ISequenceElement.class, "2");
 		final ISequenceElement o3 = Mockito.mock(ISequenceElement.class, "3");
-		
+
 		portTypeProvider.setPortType(o1, PortType.Load);
 		portTypeProvider.setPortType(o2, PortType.Discharge);
 		portTypeProvider.setPortType(o3, PortType.Round_Trip_Cargo_End);
-		
+
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3));
 
 		final List<String> messages = new ArrayList<String>(1);

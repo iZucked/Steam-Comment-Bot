@@ -387,6 +387,29 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.BaseCaseRowOptions} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected BaseCaseRowOptionsItemProvider baseCaseRowOptionsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.BaseCaseRowOptions}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createBaseCaseRowOptionsAdapter() {
+		if (baseCaseRowOptionsItemProvider == null) {
+			baseCaseRowOptionsItemProvider = new BaseCaseRowOptionsItemProvider(this);
+		}
+
+		return baseCaseRowOptionsItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.PartialCaseRow} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -407,6 +430,29 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		}
 
 		return partialCaseRowItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.PartialCaseRowOptions} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PartialCaseRowOptionsItemProvider partialCaseRowOptionsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.PartialCaseRowOptions}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPartialCaseRowOptionsAdapter() {
+		if (partialCaseRowOptionsItemProvider == null) {
+			partialCaseRowOptionsItemProvider = new PartialCaseRowOptionsItemProvider(this);
+		}
+
+		return partialCaseRowOptionsItemProvider;
 	}
 
 	/**
@@ -1284,6 +1330,29 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.LocalDateTimeHolder} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected LocalDateTimeHolderItemProvider localDateTimeHolderItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.LocalDateTimeHolder}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createLocalDateTimeHolderAdapter() {
+		if (localDateTimeHolderItemProvider == null) {
+			localDateTimeHolderItemProvider = new LocalDateTimeHolderItemProvider(this);
+		}
+
+		return localDateTimeHolderItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SolutionOption} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1522,7 +1591,9 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (vesselEventReferenceItemProvider != null) vesselEventReferenceItemProvider.dispose();
 		if (charterOutOpportunityItemProvider != null) charterOutOpportunityItemProvider.dispose();
 		if (baseCaseRowItemProvider != null) baseCaseRowItemProvider.dispose();
+		if (baseCaseRowOptionsItemProvider != null) baseCaseRowOptionsItemProvider.dispose();
 		if (partialCaseRowItemProvider != null) partialCaseRowItemProvider.dispose();
+		if (partialCaseRowOptionsItemProvider != null) partialCaseRowOptionsItemProvider.dispose();
 		if (shippingOptionItemProvider != null) shippingOptionItemProvider.dispose();
 		if (simpleVesselCharterOptionItemProvider != null) simpleVesselCharterOptionItemProvider.dispose();
 		if (optionalSimpleVesselCharterOptionItemProvider != null) optionalSimpleVesselCharterOptionItemProvider.dispose();
@@ -1565,6 +1636,7 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (breakEvenAnalysisRowItemProvider != null) breakEvenAnalysisRowItemProvider.dispose();
 		if (breakEvenAnalysisResultSetItemProvider != null) breakEvenAnalysisResultSetItemProvider.dispose();
 		if (breakEvenAnalysisResultItemProvider != null) breakEvenAnalysisResultItemProvider.dispose();
+		if (localDateTimeHolderItemProvider != null) localDateTimeHolderItemProvider.dispose();
 	}
 
 }

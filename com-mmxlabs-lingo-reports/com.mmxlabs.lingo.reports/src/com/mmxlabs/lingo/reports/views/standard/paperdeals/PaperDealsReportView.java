@@ -48,6 +48,8 @@ import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.IComparableProvider;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
@@ -173,17 +175,21 @@ public class PaperDealsReportView extends ViewPart implements org.eclipse.e4.ui.
 	}
 
 	private Action createExpandButton() {
-		return new Action("Collapse", AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/collapseall.gif")) {
+		Action action = new Action("Collapse") {
 			@Override
 			public void run() {
 				expand = !expand;
 				processExpand();
 				setText(expand ? "Collapse" : "Expand");
 				setToolTipText(expand ? "Collapse" : "Expand");
-				setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, expand ? "icons/collapseall.gif" : "icons/expandall.gif"));
+				CommonImages.setImageDescriptors(this, expand ? IconPaths.CollapseAll : IconPaths.ExpandAll);
 				getViewSite().getActionBars().updateActionBars();
 			}
 		};
+
+		CommonImages.setImageDescriptors(action, IconPaths.CollapseAll);
+
+		return action;
 	}
 
 	private GridViewerColumn createColumn(final String title, final GridColumnGroup colGroup, final EStructuralFeature reference) {

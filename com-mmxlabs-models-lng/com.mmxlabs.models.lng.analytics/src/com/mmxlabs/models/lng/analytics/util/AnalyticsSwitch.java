@@ -197,9 +197,21 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case AnalyticsPackage.BASE_CASE_ROW_OPTIONS: {
+				BaseCaseRowOptions baseCaseRowOptions = (BaseCaseRowOptions)theEObject;
+				T result = caseBaseCaseRowOptions(baseCaseRowOptions);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case AnalyticsPackage.PARTIAL_CASE_ROW: {
 				PartialCaseRow partialCaseRow = (PartialCaseRow)theEObject;
 				T result = casePartialCaseRow(partialCaseRow);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.PARTIAL_CASE_ROW_OPTIONS: {
+				PartialCaseRowOptions partialCaseRowOptions = (PartialCaseRowOptions)theEObject;
+				T result = casePartialCaseRowOptions(partialCaseRowOptions);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -549,6 +561,12 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case AnalyticsPackage.LOCAL_DATE_TIME_HOLDER: {
+				LocalDateTimeHolder localDateTimeHolder = (LocalDateTimeHolder)theEObject;
+				T result = caseLocalDateTimeHolder(localDateTimeHolder);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -779,6 +797,21 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Base Case Row Options</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Base Case Row Options</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseBaseCaseRowOptions(BaseCaseRowOptions object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Partial Case Row</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -790,6 +823,21 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T casePartialCaseRow(PartialCaseRow object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Partial Case Row Options</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Partial Case Row Options</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePartialCaseRowOptions(PartialCaseRowOptions object) {
 		return null;
 	}
 
@@ -1420,6 +1468,21 @@ public class AnalyticsSwitch<@Nullable T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseBreakEvenAnalysisResult(BreakEvenAnalysisResult object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Local Date Time Holder</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Local Date Time Holder</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseLocalDateTimeHolder(LocalDateTimeHolder object) {
 		return null;
 	}
 

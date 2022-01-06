@@ -194,17 +194,6 @@ public class AbstractSolutionSetItemProvider extends UUIDObjectItemProvider {
 	}
 
 	/**
-	 * This returns AbstractSolutionSet.gif.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/AbstractSolutionSet"));
-	}
-
-	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

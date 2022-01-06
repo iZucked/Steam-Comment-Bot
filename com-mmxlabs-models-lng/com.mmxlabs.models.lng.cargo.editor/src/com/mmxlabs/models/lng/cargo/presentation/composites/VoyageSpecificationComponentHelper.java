@@ -68,5 +68,25 @@ public class VoyageSpecificationComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_routeOptionEditor(detailComposite, topClass);
+		add_fuelChoiceEditor(detailComposite, topClass);
+	}
+
+	/**
+	 * Create the editor for the routeOption feature on VoyageSpecification
+	 *
+	 * @generated
+	 */
+	protected void add_routeOptionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VOYAGE_SPECIFICATION__ROUTE_OPTION));
+	}
+
+	/**
+	 * Create the editor for the fuelChoice feature on VoyageSpecification
+	 *
+	 * @generated
+	 */
+	protected void add_fuelChoiceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VOYAGE_SPECIFICATION__FUEL_CHOICE));
 	}
 }

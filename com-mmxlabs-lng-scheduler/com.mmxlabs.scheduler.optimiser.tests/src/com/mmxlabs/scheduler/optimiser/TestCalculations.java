@@ -40,6 +40,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
+import com.mmxlabs.optimiser.core.impl.SequencesAttributesProviderImpl;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeModule;
@@ -301,7 +302,7 @@ public class TestCalculations {
 
 			// Schedule sequence
 			final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
-			final ISequences sequences = new Sequences(Collections.singletonList(resource), CollectionsUtil.<IResource, ISequence> makeHashMap(resource, sequence));
+			final ISequences sequences = new Sequences(Collections.singletonList(resource), CollectionsUtil.<IResource, ISequence> makeHashMap(resource, sequence), Collections.emptyList(), new SequencesAttributesProviderImpl());
 
 			final IEvaluationContext context = Mockito.mock(IEvaluationContext.class);
 			final IEvaluationState state = Mockito.mock(IEvaluationState.class);
@@ -591,7 +592,7 @@ public class TestCalculations {
 			final List<ISequenceElement> sequenceList = CollectionsUtil.makeArrayList(startElement, loadElement, dischargeElement, endElement);
 
 			final ISequence sequence = new ListSequence(sequenceList);
-			final ISequences sequences = new Sequences(Collections.singletonList(resource), CollectionsUtil.<IResource, ISequence> makeHashMap(resource, sequence));
+			final ISequences sequences = new Sequences(Collections.singletonList(resource), CollectionsUtil.<IResource, ISequence> makeHashMap(resource, sequence), Collections.emptyList(), new SequencesAttributesProviderImpl());
 
 			final IAllocationAnnotation allocationAnnotation = Mockito.mock(IAllocationAnnotation.class);
 			final PortTimesRecord expectedPTR1 = new PortTimesRecord();
@@ -994,7 +995,7 @@ public class TestCalculations {
 			Mockito.when(allocationAnnotation.getFuelVolumeInM3()).thenReturn(4150L);
 
 			// Schedule sequence
-			final ISequences sequences = new Sequences(Collections.singletonList(resource), CollectionsUtil.<IResource, ISequence> makeHashMap(resource, sequence));
+			final ISequences sequences = new Sequences(Collections.singletonList(resource), CollectionsUtil.<IResource, ISequence> makeHashMap(resource, sequence), Collections.emptyList(), new SequencesAttributesProviderImpl());
 
 			final Map<IResource, List<IPortTimesRecord>> allPortTimeRecords = CollectionsUtil.makeHashMap(resource, Lists.newArrayList(expectedPTR1, expectedPTR2, expectedPTR3));
 

@@ -13,25 +13,29 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
+import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Point;
 
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BaseCaseRow;
+import com.mmxlabs.models.lng.analytics.BaseCaseRowOptions;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
+import com.mmxlabs.models.lng.analytics.PartialCaseRowOptions;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialogUtil;
 
 /**
- * Mouse listener to handle the editing dialog for the {@link OptionModellerView} viewer cells.
+ * Mouse listener to handle the editing dialog for the
+ * {@link OptionModellerView} viewer cells.
  * 
  * Note -- hardcoded column indicies!
  * 
  * @author Simon Goodall
  *
  */
-public class EditObjectMouseListener implements MouseListener {
+public class EditObjectMouseListener extends MouseAdapter {
 
 	private final @NonNull GridTreeViewer viewer;
 	private final @NonNull IScenarioEditingLocation scenarioEditingLocation;
@@ -42,24 +46,13 @@ public class EditObjectMouseListener implements MouseListener {
 	}
 
 	@Override
-	public void mouseUp(final MouseEvent e) {
-
-	}
-
-	@Override
-	public void mouseDown(final MouseEvent e) {
-
-	}
-
-	@Override
 	public void mouseDoubleClick(final MouseEvent e) {
 
 		final ViewerCell cell = viewer.getCell(new Point(e.x, e.y));
 		if (cell != null) {
 			final Object element = cell.getElement();
 			EObject target = null;
-			if (element instanceof BaseCaseRow) {
-				final BaseCaseRow row = (BaseCaseRow) element;
+			if (element instanceof final BaseCaseRow row) {
 				if (cell.getColumnIndex() == 0) {
 					target = row.getBuyOption();
 				} else if (cell.getColumnIndex() == 1) {
@@ -69,19 +62,38 @@ public class EditObjectMouseListener implements MouseListener {
 				} else if (cell.getColumnIndex() == 3) {
 					target = row.getShipping();
 				} else if (cell.getColumnIndex() == 4) {
-					Command c = SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__OPTIONISE, !row.isOptionise());
+					final Command c = SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__OPTIONISE, !row.isOptionise());
 					DetailCompositeDialogUtil.editInlock(scenarioEditingLocation, () -> {
 						final CommandStack commandStack = scenarioEditingLocation.getEditingDomain().getCommandStack();
 						commandStack.execute(c);
 						return Window.OK;
 					});
-					return;					
+					return;
+				} else if (cell.getColumnIndex() == 5) {
+					if (row.getOptions() == null) {
+						final BaseCaseRowOptions options = AnalyticsFactory.eINSTANCE.createBaseCaseRowOptions();
+						final Command c = SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__OPTIONS, options);
+						DetailCompositeDialogUtil.editNewObjectWithUndoOnCancel(scenarioEditingLocation, options, c);
+					} else {
+						DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, row.getOptions());
+					}
+					viewer.refresh(row);
+					return;
+				} else if (cell.getColumnIndex() == 6) {
+					final Command c = SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.BASE_CASE_ROW__FREEZE, !row.isFreeze());
+					DetailCompositeDialogUtil.editInlock(scenarioEditingLocation, () -> {
+						final CommandStack commandStack = scenarioEditingLocation.getEditingDomain().getCommandStack();
+						commandStack.execute(c);
+						return Window.OK;
+					});
+					return;
 				}
+
 				if (target != null) {
 					DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, target);
 				}
-			} else if (element instanceof PartialCaseRow) {
-				final PartialCaseRow row = (PartialCaseRow) element;
+
+			} else if (element instanceof final PartialCaseRow row) {
 				if (cell.getColumnIndex() == 0) {
 					DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(row.getBuyOptions()));
 				} else if (cell.getColumnIndex() == 1) {
@@ -90,9 +102,18 @@ public class EditObjectMouseListener implements MouseListener {
 					DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(row.getSellOptions()));
 				} else if (cell.getColumnIndex() == 3) {
 					DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, new StructuredSelection(row.getShipping()));
+				} else if (cell.getColumnIndex() == 4) {
+					if (row.getOptions() == null) {
+						final PartialCaseRowOptions options = AnalyticsFactory.eINSTANCE.createPartialCaseRowOptions();
+						final Command c = SetCommand.create(scenarioEditingLocation.getEditingDomain(), row, AnalyticsPackage.Literals.PARTIAL_CASE_ROW__OPTIONS, options);
+						DetailCompositeDialogUtil.editNewObjectWithUndoOnCancel(scenarioEditingLocation, options, c);
+					} else {
+						DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, row.getOptions());
+					}
+					viewer.refresh(row);
 				}
-			} else if (element instanceof EObject) {
-				DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, (EObject) element);
+			} else if (element instanceof final EObject eObj) {
+				DetailCompositeDialogUtil.editSingleObject(scenarioEditingLocation, eObj);
 			}
 		}
 	}

@@ -7,7 +7,8 @@ package com.mmxlabs.ganttviewer.actions;
 import org.eclipse.jface.action.Action;
 import org.eclipse.nebula.widgets.ganttchart.GanttChart;
 
-import com.mmxlabs.ganttviewer.internal.Activator;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 
 /**
  */
@@ -18,8 +19,7 @@ public class ZoomInAction extends Action {
 	public ZoomInAction() {
 		super();
 		setText("Zoom In");
-		setImageDescriptor(Activator.getImageDescriptor("icons/clcl16/zoomin_nav.png"));
-		setDisabledImageDescriptor(Activator.getImageDescriptor("icons/dlcl16/zoomin_nav.png"));
+		CommonImages.setImageDescriptors(this, IconPaths.ZoomIn);
 	}
 
 	public ZoomInAction(final GanttChart ganttChart) {

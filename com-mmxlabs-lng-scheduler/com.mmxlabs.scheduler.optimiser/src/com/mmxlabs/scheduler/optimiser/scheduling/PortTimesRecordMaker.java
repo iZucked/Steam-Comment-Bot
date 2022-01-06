@@ -17,6 +17,7 @@ import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.optimiser.core.ISequencesAttributesProvider;
 import com.mmxlabs.scheduler.optimiser.cache.IWriteLockable;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
@@ -37,6 +38,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvid
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.schedule.ICustomNonShippedScheduler;
+import com.mmxlabs.scheduler.optimiser.sequenceproviders.IVoyageSpecificationProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
@@ -81,7 +83,7 @@ public class PortTimesRecordMaker {
 	 * @param sequence
 	 * @return
 	 */
-	public final @Nullable IPortTimesRecord makeDESOrFOBPortTimesRecord(final @NonNull IResource resource, final @NonNull ISequence sequence) {
+	public final @Nullable IPortTimesRecord makeDESOrFOBPortTimesRecord(final @NonNull IResource resource, final @NonNull ISequence sequence, ISequencesAttributesProvider sequencesAttributesProvider) {
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
@@ -104,6 +106,8 @@ public class PortTimesRecordMaker {
 				localisedPort = thisPortSlot.getPort();
 			}
 		}
+
+		IVoyageSpecificationProvider voyageSpecProvider = sequencesAttributesProvider.getProvider(IVoyageSpecificationProvider.class);
 
 		boolean startSet = false;
 		int startTime = 0;
@@ -141,15 +145,23 @@ public class PortTimesRecordMaker {
 						if (actualsDataProvider.hasActuals(thisPortSlot)) {
 							startTime = actualsDataProvider.getArrivalTime(thisPortSlot);
 						} else {
-							if (localisedPort != null && !(loadOption instanceof ILoadSlot)) {
-								final ITimeWindow tw = loadOption.getLocalisedTimeWindowForPort(localisedPort);
-								if (tw != null) {
-									timeWindow = tw;
-								}
+							Integer timeOverride = null;
+							if (voyageSpecProvider != null) {
+								timeOverride = voyageSpecProvider.getArrivalTime(thisPortSlot);
 							}
+							if (timeOverride != null) {
+								startTime = Math.max(timeOverride, startTime);
+							} else {
+								if (localisedPort != null && !(loadOption instanceof ILoadSlot)) {
+									final ITimeWindow tw = loadOption.getLocalisedTimeWindowForPort(localisedPort);
+									if (tw != null) {
+										timeWindow = tw;
+									}
+								}
 
-							final int windowStart = timeWindow.getInclusiveStart();
-							startTime = Math.max(windowStart, startTime);
+								final int windowStart = timeWindow.getInclusiveStart();
+								startTime = Math.max(windowStart, startTime);
+							}
 						}
 					}
 				}
@@ -157,20 +169,29 @@ public class PortTimesRecordMaker {
 					final IDischargeOption dischargeOption = (IDischargeOption) thisPortSlot;
 					if (actualsDataProvider.hasActuals(thisPortSlot)) {
 						startTime = actualsDataProvider.getArrivalTime(thisPortSlot);
+
 					} else {
-						// Divertible FOB has sales time window
-						// TODO: Consider ship days restriction...
-						if (!shippingHoursRestrictionProvider.isDivertible(element)) {
+						Integer timeOverride = null;
+						if (voyageSpecProvider != null) {
+							timeOverride = voyageSpecProvider.getArrivalTime(thisPortSlot);
+						}
+						if (timeOverride != null) {
+							startTime = Math.max(timeOverride, startTime);
+						} else {
+							// Divertible FOB has sales time window
+							// TODO: Consider ship days restriction...
+							if (!shippingHoursRestrictionProvider.isDivertible(element)) {
 
-							if (localisedPort != null && !(dischargeOption instanceof IDischargeSlot)) {
-								final ITimeWindow tw = dischargeOption.getLocalisedTimeWindowForPort(localisedPort);
-								if (tw != null) {
-									timeWindow = tw;
+								if (localisedPort != null && !(dischargeOption instanceof IDischargeSlot)) {
+									final ITimeWindow tw = dischargeOption.getLocalisedTimeWindowForPort(localisedPort);
+									if (tw != null) {
+										timeWindow = tw;
+									}
 								}
-							}
 
-							final int windowStart = timeWindow.getInclusiveStart();
-							startTime = Math.max(windowStart, startTime);
+								final int windowStart = timeWindow.getInclusiveStart();
+								startTime = Math.max(windowStart, startTime);
+							}
 						}
 					}
 				}

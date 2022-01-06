@@ -29,7 +29,6 @@ import org.eclipse.ui.IMemento;
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.ganttviewer.IGanttChartColourProvider;
 import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
-import com.mmxlabs.lingo.reports.scheduleview.internal.Activator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
@@ -78,6 +77,9 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.models.ui.date.DateTimeFormatsProvider;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.scenario.service.ScenarioResult;
 
 /**
@@ -105,7 +107,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	private final ScenarioComparisonService selectedScenariosService;
 
 	private final VesselAssignmentFormatter vesselFormatter = new VesselAssignmentFormatter();
-	Image pinImage = null;
+	private Image pinImage = null;
 
 	public EMFScheduleLabelProvider(final GanttChartViewer viewer, final IMemento memento, @NonNull final ScenarioComparisonService selectedScenariosService) {
 		this.viewer = viewer;
@@ -113,7 +115,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		this.selectedScenariosService = selectedScenariosService;
 		this.showCanals = memento.getBoolean(Show_Canals);
 
-		final ImageDescriptor imageDescriptor = Activator.getImageDescriptor("icons/PinnedRow.gif");
+		final ImageDescriptor imageDescriptor = CommonImages.getImageDescriptor(IconPaths.PinnedRow, IconMode.Enabled);
 		pinImage = imageDescriptor.createImage();
 	}
 
@@ -562,7 +564,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			final String start = dateOnlyToString(evt.getStart());
 			return String.format("%s available from %s", evt.getLinkedSequence().getName(), start);
 		}
-		if (element instanceof CharterAvailableToEvent evt ) {
+		if (element instanceof CharterAvailableToEvent evt) {
 			final String start = dateOnlyToString(evt.getStart());
 			return String.format("%s available until %s", evt.getLinkedSequence().getName(), start);
 		}
@@ -612,7 +614,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			return (port == null) ? "" : ("At " + port + " ") + (sv.getSlotAllocation().getSlot() instanceof LoadSlot ? "(Load)" : "(Discharge)");
 
 		} else if (element instanceof InventoryChangeEvent evt) {
-			if (evt.eContainer() instanceof InventoryEvents inventoryEvents) {
+			if (evt.eContainer()instanceof InventoryEvents inventoryEvents) {
 				final Inventory facility = inventoryEvents.getFacility();
 				if (facility != null) {
 					return "Inventory at " + facility.getName();
@@ -689,7 +691,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	private Integer getPnL(final Object object) {
 		ProfitAndLossContainer container = null;
 
-		if (object instanceof CargoAllocation ) {
+		if (object instanceof CargoAllocation) {
 			container = (CargoAllocation) object;
 		}
 		if (object instanceof SlotVisit slotVisit) {
