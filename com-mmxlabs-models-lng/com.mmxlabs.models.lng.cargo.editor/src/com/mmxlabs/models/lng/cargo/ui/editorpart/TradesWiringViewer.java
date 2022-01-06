@@ -107,6 +107,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.service.event.EventHandler;
 
 import com.mmxlabs.common.Equality;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -1011,8 +1012,12 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		if (deleteAction != null) {
 			toolbar.appendToGroup(ADD_REMOVE_GROUP, deleteAction);
 		}
-		final Action editConstraintsAction = new EditConstraintsAction("Constraints");
-		toolbar.appendToGroup(ADD_REMOVE_GROUP, editConstraintsAction);
+
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GROUPED_OPTIONAL_SLOTS_CONSTRAINTS)) {
+			final Action editConstraintsAction = new EditConstraintsAction("Constraints");
+			toolbar.appendToGroup(ADD_REMOVE_GROUP, editConstraintsAction);
+		}
+
 		if (actionBars != null) {
 			actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
 		}

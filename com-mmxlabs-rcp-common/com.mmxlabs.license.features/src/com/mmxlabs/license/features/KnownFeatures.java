@@ -120,6 +120,8 @@ public final class KnownFeatures {
 
 	public static final String FEATURE_ADP_PROFILE_CONSTRAINTS_SUMMARY = "features:adp-profile-constraints-summary";
 
+	public static final String FEATURE_GROUPED_OPTIONAL_SLOTS_CONSTRAINTS = "features:grouped-optional-slots-constraints";
+
 	/**
 	 * Scenario repair features
 	 */

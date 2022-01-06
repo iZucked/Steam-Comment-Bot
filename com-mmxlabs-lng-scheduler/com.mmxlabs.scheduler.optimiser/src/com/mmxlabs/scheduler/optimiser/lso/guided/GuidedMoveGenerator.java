@@ -99,8 +99,6 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 
 		final GuideMoveGeneratorOptions options = GuideMoveGeneratorOptions.createDefault();
 		options.setStrictOptional(false);
-		
-		
 
 		final Random optionsRnd = random;
 		// For seed 0->4095 this will always return true, so kick it now it start introducing "more randomness"..
