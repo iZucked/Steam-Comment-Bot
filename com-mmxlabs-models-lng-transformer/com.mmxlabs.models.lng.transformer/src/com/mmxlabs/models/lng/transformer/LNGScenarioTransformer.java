@@ -1143,7 +1143,7 @@ public class LNGScenarioTransformer {
 				final IHeelOptionConsumer heelConsumer = createHeelConsumer(charterOut.getRequiredHeel());
 				// IHeelOptionConsumer heelConsumer = new HeelOptionConsumer(0L, Long.MAX_VALUE,
 				// VesselTankState.EITHER, new ConstantHeelPriceCalculator(0));
-				final IHeelOptionSupplier heelSupplier = createHeelSupplier(charterOut.getAvailableHeel());
+				final IHeelOptionSupplier heelSupplier = createHeelSupplier(charterOut.getAvailableHeel(), null);
 
 				builderSlot = builder.createCharterOutEvent(event.getName(), window, port, endPort, durationHours, heelConsumer, heelSupplier, totalHireRevenue, repositioning, ballastBonus,
 						charterOut.isOptional());
@@ -3249,7 +3249,7 @@ public class LNGScenarioTransformer {
 
 			final StartHeelOptions startHeel = eVesselAvailability.getStartHeel();
 			assert startHeel != null;
-			final IHeelOptionSupplier heelSupplier = createHeelSupplier(startHeel);
+			final IHeelOptionSupplier heelSupplier = createHeelSupplier(startHeel, null);
 			final IStartRequirement startRequirement = createStartRequirement(builder, portAssociation, eVesselAvailability.isSetStartAfter() ? eVesselAvailability.getStartAfterAsDateTime() : null,
 					eVesselAvailability.isSetStartBy() ? eVesselAvailability.getStartByAsDateTime() : null, startingPort, heelSupplier);
 
@@ -3362,14 +3362,17 @@ public class LNGScenarioTransformer {
 					startHeel = eCharterContract.getStartHeel();
 					endHeel = eCharterContract.getEndHeel();
 					if (startHeel != null) {
-						heelSupplier = createHeelSupplier(startHeel);
+						// Check override
+						final Integer startCV = charterInMarket.isSetStartHeelCV() ? OptimiserUnitConvertor.convertToInternalConversionFactor(charterInMarket.getStartHeelCV()) : null;
+						heelSupplier = createHeelSupplier(startHeel, startCV);
 					}
 					if (endHeel != null) {
 						heelConsumer = createHeelConsumer(endHeel);
 					}
 				}
 				if (heelSupplier == null) {
-					heelSupplier = new HeelOptionSupplier(oVessel.getSafetyHeel(), oVessel.getSafetyHeel(), 0, new ConstantHeelPriceCalculator(0));
+					final int startCV = charterInMarket.isSetStartHeelCV() ? OptimiserUnitConvertor.convertToInternalConversionFactor(charterInMarket.getStartHeelCV()) : 0;
+					heelSupplier = new HeelOptionSupplier(oVessel.getSafetyHeel(), oVessel.getSafetyHeel(), startCV, new ConstantHeelPriceCalculator(0));
 				}
 				if (heelConsumer == null) {
 					heelConsumer = new HeelOptionConsumer(oVessel.getSafetyHeel(), oVessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0), false);
@@ -3457,7 +3460,7 @@ public class LNGScenarioTransformer {
 						}
 						IHeelOptionSupplier heelOptions;
 						if (charterInMarketOverride.getStartHeel() != null) {
-							heelOptions = createHeelSupplier(charterInMarketOverride.getStartHeel());
+							heelOptions = createHeelSupplier(charterInMarketOverride.getStartHeel(), null);
 						} else {
 							heelOptions = builder.createHeelSupplier(oVessel.getSafetyHeel(), oVessel.getSafetyHeel(), 0, new ConstantHeelPriceCalculator(0));
 						}
@@ -3894,10 +3897,10 @@ public class LNGScenarioTransformer {
 		return builder.createHeelConsumer(minimumEndHeelInM3, maximumEndHeelInM3, vesselTankState, heelPriceCalculator, useLastPrice);
 	}
 
-	private @NonNull IHeelOptionSupplier createHeelSupplier(@NonNull final StartHeelOptions heelOptions) {
+	private @NonNull IHeelOptionSupplier createHeelSupplier(@NonNull final StartHeelOptions heelOptions, Integer startCV) {
 		final long minimumHeelInM3 = OptimiserUnitConvertor.convertToInternalVolume(heelOptions.getMinVolumeAvailable());
 		final long maximumHeelInM3 = OptimiserUnitConvertor.convertToInternalVolume(heelOptions.getMaxVolumeAvailable());
-		final int cargoCV = OptimiserUnitConvertor.convertToInternalConversionFactor(heelOptions.getCvValue());
+		final int cargoCV = startCV != null ? startCV : OptimiserUnitConvertor.convertToInternalConversionFactor(heelOptions.getCvValue());
 		final IHeelPriceCalculator heelPriceCalculator;
 		final String expression = heelOptions.getPriceExpression();
 		if (expression == null || expression.isEmpty()) {
