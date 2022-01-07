@@ -72,7 +72,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	@com.google.inject.Inject(optional = true)
 	private IPhaseOptimisationData phaseOptimisationData;
 
-	@com.google.inject.Inject(optional = true)
+	@Inject
 	private Injector injector;
 
 	@Inject
