@@ -55,6 +55,12 @@
 </suppress>
 <suppress>
    <notes><![CDATA[
+   False positive against eclipse URI scheme
+   ]]></notes>
+   <cve>CVE-2020-27225</cve>
+</suppress>
+<suppress>
+   <notes><![CDATA[
    Many false psoitives against junit. (CVE is for eclipse help)
    ]]></notes>
    <filePath regex="true">.*junit.*\.jar</filePath>     
