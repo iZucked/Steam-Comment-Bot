@@ -28,6 +28,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#isOffline <em>Offline</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#getLockedBy <em>Locked By</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#isLocked <em>Locked</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#getImage <em>Image</em>}</li>
  * </ul>
  *
  * @generated
@@ -250,6 +251,26 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	@Override
 	public void setLocked(boolean newLocked) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioService_Locked(), newLocked);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object getImage() {
+		return (Object) eGet(ScenarioServicePackage.eINSTANCE.getScenarioService_Image(), true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setImage(Object newImage) {
+		eSet(ScenarioServicePackage.eINSTANCE.getScenarioService_Image(), newImage);
 	}
 
 } //ScenarioServiceImpl

@@ -36,6 +36,9 @@ import com.google.common.base.Charsets;
 import com.mmxlabs.hub.IUpstreamDetailChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.IProgressListener;
+import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.locking.WellKnownTriggers;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -324,6 +327,10 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 		serviceModel.setLocal(false);
 		serviceModel.setOffline(false);
 		serviceModel.setServiceID(getSerivceID());
+		
+		// This image needs disposing
+		serviceModel.setImage(CommonImages.getImageDescriptor(IconPaths.Cloud_16, IconMode.Enabled).createImage());
+		
 		return serviceModel;
 	}
 
