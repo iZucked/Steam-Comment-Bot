@@ -109,7 +109,7 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider {
 				ScenarioServicePackage.eINSTANCE.getScenarioInstance_VersionContext(), true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
-	/**	
+	/**
 	 * This adds a property descriptor for the Readonly feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -218,7 +218,7 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider {
 	 * This returns ScenarioInstance.png.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Object getImage(Object object) {

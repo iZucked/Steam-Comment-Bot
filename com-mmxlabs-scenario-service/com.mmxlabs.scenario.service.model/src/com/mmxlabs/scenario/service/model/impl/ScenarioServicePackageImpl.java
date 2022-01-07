@@ -377,6 +377,16 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * @generated
 	 */
 	@Override
+	public EAttribute getScenarioService_Image() {
+		return (EAttribute) scenarioServiceEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getScenarioInstance() {
 		return scenarioInstanceEClass;
 	}
@@ -706,6 +716,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		createEAttribute(scenarioServiceEClass, SCENARIO_SERVICE__OFFLINE);
 		createEAttribute(scenarioServiceEClass, SCENARIO_SERVICE__LOCKED_BY);
 		createEAttribute(scenarioServiceEClass, SCENARIO_SERVICE__LOCKED);
+		createEAttribute(scenarioServiceEClass, SCENARIO_SERVICE__IMAGE);
 
 		scenarioInstanceEClass = createEClass(SCENARIO_INSTANCE);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__UUID);
@@ -822,6 +833,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		initEAttribute(getScenarioService_LockedBy(), ecorePackage.getEString(), "lockedBy", null, 0, 1, ScenarioService.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
 				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getScenarioService_Locked(), ecorePackage.getEBoolean(), "locked", null, 0, 1, ScenarioService.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScenarioService_Image(), ecorePackage.getEJavaObject(), "image", null, 0, 1, ScenarioService.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
 				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(scenarioInstanceEClass, ScenarioInstance.class, "ScenarioInstance", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

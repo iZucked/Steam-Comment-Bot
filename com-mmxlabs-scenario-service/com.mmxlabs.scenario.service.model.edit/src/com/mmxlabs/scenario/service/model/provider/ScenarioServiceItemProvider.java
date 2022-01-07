@@ -55,6 +55,7 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider {
 			addOfflinePropertyDescriptor(object);
 			addLockedByPropertyDescriptor(object);
 			addLockedPropertyDescriptor(object);
+			addImagePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -180,6 +181,18 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider {
 	}
 
 	/**
+	 * This adds a property descriptor for the Image feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addImagePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioService_image_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioService_image_feature", "_UI_ScenarioService_type"),
+				ScenarioServicePackage.eINSTANCE.getScenarioService_Image(), true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+	}
+
+	/**
 	 * This returns ScenarioService.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -189,6 +202,12 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider {
 	public Object getImage(Object object) {
 		if (object instanceof ScenarioService) {
 			ScenarioService scenarioService = (ScenarioService) object;
+			Object img = scenarioService.getImage();
+			if (img != null ) {
+				return overlayImage(object, img);
+			}
+			
+			
 			if (scenarioService.isOffline()) {
 				return overlayImage(object, getResourceLocator().getImage("full/obj16/ScenarioServiceOffline"));
 			}
@@ -234,6 +253,7 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider {
 		case ScenarioServicePackage.SCENARIO_SERVICE__OFFLINE:
 		case ScenarioServicePackage.SCENARIO_SERVICE__LOCKED_BY:
 		case ScenarioServicePackage.SCENARIO_SERVICE__LOCKED:
+		case ScenarioServicePackage.SCENARIO_SERVICE__IMAGE:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		}
