@@ -16,7 +16,10 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -54,6 +57,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.scenario.actions.anonymisation.AnonymisationRecord;
 import com.mmxlabs.models.lng.scenario.actions.anonymisation.AnonymisationUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -225,11 +229,24 @@ public class ScenarioServicePushToCloudAction {
 			LNGScenarioModel scenarioModel = null;
 			File anonymisationMap = null;
 
+			final List<Slot<?>> anonymisedTargetSlots = new ArrayList<>(targetSlots.size());
+
 			try (IScenarioDataProvider o_scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
 				final LNGScenarioModel o_scenarioModel = o_scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 				final EcoreUtil.Copier copier = new Copier();
 				scenarioModel = (LNGScenarioModel) copier.copy(o_scenarioModel);
+				final Map<String, LoadSlot> newLoadSlots = ScenarioModelUtil.getCargoModel(scenarioModel).getLoadSlots().stream().collect(Collectors.toMap(LoadSlot::getName, Function.identity()));
+				final Map<String, DischargeSlot> newDischargeSlots = ScenarioModelUtil.getCargoModel(scenarioModel).getDischargeSlots().stream().collect(Collectors.toMap(DischargeSlot::getName, Function.identity()));
+				for (final Slot<?> slot : targetSlots) {
+					final Slot<?> replacementSlot;
+					if (slot instanceof LoadSlot) {
+						replacementSlot = newLoadSlots.get(slot.getName());
+					} else {
+						replacementSlot = newDischargeSlots.get(slot.getName());
+					}
+					anonymisedTargetSlots.add(replacementSlot);
+				}
 
 				copier.copyReferences();
 				final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
@@ -246,7 +263,7 @@ public class ScenarioServicePushToCloudAction {
 				record.setAnonyMapFileName(scenarioInstance.getUuid() + ".amap");
 				anonymisationMap = new File(amfName);
 				
-				final CompoundCommand cmd = AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, new HashSet(), new ArrayList(), true, anonymisationMap);
+				final CompoundCommand cmd = AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, new HashSet<>(), new ArrayList<>(), true, anonymisationMap);
 				if (cmd != null && !cmd.isEmpty()) {
 					editingDomain.getCommandStack().execute(cmd);
 				}
@@ -299,11 +316,11 @@ public class ScenarioServicePushToCloudAction {
 			final List<File> filesToZip = new ArrayList<File>(4);
 			filesToZip.add(tmpScenarioFile);
 			filesToZip.add(createJVMOptions());
-			filesToZip.add(createManifest(tmpScenarioFile.getName(), true));
+			filesToZip.add(createManifest(tmpScenarioFile.getName(), optimisation));
 			if (optimisation) {
 				filesToZip.add(createOptimisationSettingsJson(optiPlanOrUserSettings));
 			} else {
-				filesToZip.add(createOptioniserSettingsJson(optiPlanOrUserSettings, targetSlots));
+				filesToZip.add(createOptioniserSettingsJson(optiPlanOrUserSettings, anonymisedTargetSlots));
 			}
 			File zipToUpload = null;
 			try {
@@ -436,7 +453,7 @@ public class ScenarioServicePushToCloudAction {
 		if (plan instanceof UserSettings) {
 			final UserSettings us = (UserSettings) plan;
 			OptioniserSettings settings = new OptioniserSettings();
-			settings.periodStartDate = us.getPeriodStartDate();
+			settings.periodStart = us.getPeriodStartDate();
 			settings.periodEnd = us.getPeriodEnd();
 			settings.iterations = 10000;
 			settings.loadIds = new ArrayList<>();
