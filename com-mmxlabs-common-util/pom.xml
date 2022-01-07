@@ -19,8 +19,6 @@
 		<module>com.mmxlabs.common.common-util</module>
 		<module>com.mmxlabs.common.common-util.tests</module>
 
-		<module>com.mmxlabs.common.common-nauticaldistances</module>
-
 		<module>com.mmxlabs.common.util.feature</module>
 	</modules>
 
