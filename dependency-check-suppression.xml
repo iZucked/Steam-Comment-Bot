@@ -15,6 +15,19 @@
 </suppress>
 <suppress>
    <notes><![CDATA[
+   Applies to docker, not java api
+   ]]></notes>
+   <cve>CVE-2018-10892</cve>   
+   <cve>CVE-2019-13139</cve>
+   <cve>CVE-2019-13509</cve>
+   <cve>CVE-2019-16884</cve>
+   <cve>CVE-2019-5736</cve>
+   <cve>CVE-2020-27534</cve>
+   <cve>CVE-2021-21284</cve>
+   <cve>CVE-2021-21285</cve>
+</suppress>
+<suppress>
+   <notes><![CDATA[
    file name:    com.google.guava.failureaccess-1.0.1.jar
    ]]></notes>
    <filePath regex="true">.*com\.google\.guava\.failureaccess-1\.0\.1\.jar</filePath>     
