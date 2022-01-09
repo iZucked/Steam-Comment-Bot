@@ -464,8 +464,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo.setVesselAssignmentType(charterInMarket_1);
 
-		final GenericCharterContract s = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "2000000");
-
+		final GenericCharterContract s = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), "2000000");
 		charterInMarket_1.setGenericCharterContract(s);
 
 		evaluateTest(null, null, scenarioRunner -> {
@@ -509,9 +508,8 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		final @NonNull Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo.setVesselAssignmentType(charterInMarket_1);
 
-		final GenericCharterContract s = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), "2000000");
-
-		charterInMarket_1.setGenericCharterContract(s);
+		final GenericCharterContract bb = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "2000000");
+		charterInMarket_1.setGenericCharterContract(bb);
 
 		evaluateTest(null, null, scenarioRunner -> {
 
@@ -640,7 +638,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
 		@NonNull
-		final GenericCharterContract s = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "2000000");
+		final GenericCharterContract s = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), "2000000");
 		charterInMarket_1.setGenericCharterContract(s);
 
 		optimiseWithLSOTest(scenarioRunner -> {

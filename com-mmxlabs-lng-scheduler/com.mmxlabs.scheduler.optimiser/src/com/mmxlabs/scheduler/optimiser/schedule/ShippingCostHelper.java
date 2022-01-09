@@ -168,7 +168,7 @@ public class ShippingCostHelper {
 				if (portSlot.getPortType() == PortType.End) {
 					annotation = charterContract.annotateBB(portTimesRecord, firstLoadPort, portSlot, vesselAvailability, vesselStartTime, vesselEndTime);
 				} else {
-					annotation = charterContract.annotateBB(portTimesRecord, firstLoadPort, portSlot, vesselAvailability, vesselStartTime, vesselEndTime);
+					annotation = charterContract.annotateRF(portTimesRecord, firstLoadPort, portSlot, vesselAvailability, vesselStartTime, vesselEndTime);
 				}
 				if (annotation != null) {
 					shippingDetails.addChild(bb ? CharterContractConstants.BALLAST_BONUS_KEY : CharterContractConstants.REPOSITIONING_FEE_KEY, annotation);
