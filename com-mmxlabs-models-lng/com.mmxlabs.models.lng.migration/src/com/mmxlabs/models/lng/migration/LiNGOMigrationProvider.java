@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.migration;
 
 import java.util.LinkedList;
@@ -20,7 +24,7 @@ public class LiNGOMigrationProvider implements IMigrationProvider {
 	 * reflective class loader to work.
 	 */
 
-	private static final int CURRENT_VERSION = 150;
+	private static final int CURRENT_VERSION = 151;
 
 	@Override
 	public int priority() {

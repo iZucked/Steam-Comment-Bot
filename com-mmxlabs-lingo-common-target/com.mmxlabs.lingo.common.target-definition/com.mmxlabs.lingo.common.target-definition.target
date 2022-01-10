@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="79">
+<target name="LiNGO Common Platform Target - (Mars SR1)" sequenceNumber="80">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.equinox.compendium.sdk.feature.group" version="0.0.0"/>
@@ -11,7 +11,7 @@
 <unit id="org.eclipse.platform.sdk" version="0.0.0"/>
 <unit id="org.eclipse.sdk.ide" version="0.0.0"/>
 <unit id="org.eclipse.swt.tools.feature.feature.group" version="0.0.0"/>
-<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.updates/R-4.21-202109060500/org.eclipse.updates-R-4.21-202109060500.zip-unzip/"/>
+<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.updates/R-4.22-202111241800/org.eclipse.updates-R-4.22-202111241800.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.ecf.core.feature.feature.group" version="0.0.0"/>
@@ -35,8 +35,8 @@
 <unit id="org.eclipse.pde.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.rcp.source.feature.group" version="0.0.0"/>
 <unit id="javax.activation" version="1.1.0.v201211130549"/>
-<unit id="javax.servlet" version="3.1.0.v201410161800"/>
-<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.release/202109151000/org.eclipse.release-202109151000.zip-unzip/"/>
+<unit id="javax.servlet" version="3.0.0.v201112011016"/>
+<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/org.eclipse.release/202112081000/org.eclipse.release-202112081000.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="ch.qos.logback.classic" version="0.0.0"/>
@@ -54,7 +54,7 @@
 <unit id="org.apache.commons.lang" version="2.6.0.v201404270220"/>
 <unit id="org.apache.commons.logging" version="1.1.1.v201101211721"/>
 <unit id="org.apache.commons.math" version="0.0.0"/>
-<unit id="org.apache.commons.compress" version="1.20.0.v20210713-1928"/>
+<unit id="org.apache.commons.compress" version="1.21.0.v20211103-2100"/>
 <unit id="org.apache.log4j" version="0.0.0"/>
 <unit id="org.dom4j" version="1.6.1.v20190321-1528"/>
 <unit id="org.hamcrest" version="1.1.0.v20090501071000"/>
@@ -81,7 +81,7 @@
 	<unit id="org.bouncycastle.bcpg" version="0.0.0"/>
 	<unit id="org.bouncycastle.bcpkix" version="0.0.0"/>
 	<unit id="org.bouncycastle.bcprov" version="0.0.0"/>
-<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/orbit/orbit-buildrepo/R20210825222808/orbit-buildrepo-R20210825222808.zip-unzip/"/>
+<repository location="http://nexus.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/orbit/orbit-buildrepo/R20211213173813/orbit-buildrepo-R20211213173813.zip-unzip/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.nebula.widgets.grid" version="0.0.0"/>
