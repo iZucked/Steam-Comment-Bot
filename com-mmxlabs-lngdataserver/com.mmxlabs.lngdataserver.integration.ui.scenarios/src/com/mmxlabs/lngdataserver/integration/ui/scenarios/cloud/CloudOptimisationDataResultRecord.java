@@ -74,15 +74,14 @@ public class CloudOptimisationDataResultRecord {
 		if (obj == this) {
 			return true;
 		}
-		if (obj instanceof CloudOptimisationDataResultRecord) {
-			CloudOptimisationDataResultRecord other = (CloudOptimisationDataResultRecord) obj;
-			return Objects.equals(uuid, other.getUuid());
+		if (obj instanceof CloudOptimisationDataResultRecord other) {
+			return Objects.equals(jobid, other.getJobid());
 		}
 		return false;
 	}
 	
 	@Override
 	public int hashCode() {
-		return uuid.hashCode();
+		return jobid.hashCode();
 	}
 }
