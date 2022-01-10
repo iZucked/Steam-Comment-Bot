@@ -500,20 +500,6 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 		final String taskName = "Sandbox result";
 
-		final EObject object = scenarioDataProvider.getScenario();
-		if (userSettings == null && object instanceof LNGScenarioModel root) {
-
-			UserSettings previousSettings = null;
-			if (model.getResults() != null) {
-				previousSettings = model.getResults().getUserSettings();
-			}
-			if (previousSettings == null) {
-				previousSettings = root.getUserSettings();
-			}
-			final boolean promptUser = System.getProperty("lingo.suppress.dialogs") == null;
-
-			userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, promptUser, false, null, previousSettings);
-		}
 		if (userSettings == null) {
 			return;
 		}
@@ -841,20 +827,6 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 		final String taskName = "Sandbox result";
 
-		final EObject object = scenarioDataProvider.getScenario();
-		if (userSettings == null && object instanceof LNGScenarioModel root) {
-
-			UserSettings previousSettings = null;
-			if (model.getResults() != null) {
-				previousSettings = model.getResults().getUserSettings();
-			}
-			if (previousSettings == null) {
-				previousSettings = root.getUserSettings();
-			}
-			final boolean promptUser = System.getProperty("lingo.suppress.dialogs") == null;
-
-			userSettings = OptimisationHelper.promptForUserSettings(root, false, promptUser, false, null, previousSettings);
-		}
 		if (userSettings == null) {
 			return;
 		}
