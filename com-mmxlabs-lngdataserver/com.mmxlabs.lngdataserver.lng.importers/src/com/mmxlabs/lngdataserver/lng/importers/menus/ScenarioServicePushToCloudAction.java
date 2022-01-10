@@ -46,6 +46,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
+import com.mmxlabs.hub.services.users.UsernameProvider;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataResultRecord;
@@ -303,7 +304,8 @@ public class ScenarioServicePushToCloudAction {
 			final CloudOptimisationDataResultRecord record = new CloudOptimisationDataResultRecord();
 			record.setUuid(scenarioInstance.getUuid());
 			record.setCreationDate(Instant.now());
-			record.setCreator("Foo Bar");
+			// This is the Data Hub user ID. It should be different. 
+			record.setCreator(UsernameProvider.INSTANCE.getUserID());
 			record.setOriginalName(scenarioInstance.getName());
 			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 
