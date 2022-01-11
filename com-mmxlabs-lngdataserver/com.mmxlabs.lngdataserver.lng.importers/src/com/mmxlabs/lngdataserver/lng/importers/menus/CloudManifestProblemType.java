@@ -3,7 +3,7 @@ package com.mmxlabs.lngdataserver.lng.importers.menus;
 import org.eclipse.jdt.annotation.NonNull;
 
 public enum CloudManifestProblemType {
-	OPTIMISATION("optimisation"), OPTIONISATION("optionisation"), SANDBOX("sandbox");
+	OPTIMISATION("optimisation"), OPTIONISER("optioniser"), SANDBOX("sandbox");
 
 	@NonNull
 	private final String manifestString;

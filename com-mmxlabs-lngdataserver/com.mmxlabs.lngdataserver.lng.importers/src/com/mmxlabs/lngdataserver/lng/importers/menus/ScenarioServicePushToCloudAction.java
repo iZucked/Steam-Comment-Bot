@@ -283,7 +283,7 @@ public class ScenarioServicePushToCloudAction {
 			if (sandboxModel != null) {
 				throw new PublishBasecaseException("Unable to derive cloud optimisation type", Type.FAILED_UNKNOWN_ERROR);
 			}
-			return CloudManifestProblemType.OPTIONISATION;
+			return CloudManifestProblemType.OPTIONISER;
 		} else if (sandboxModel != null) {
 			return CloudManifestProblemType.SANDBOX;
 		} else {
@@ -319,7 +319,7 @@ public class ScenarioServicePushToCloudAction {
 
 				final EcoreUtil.Copier copier = new Copier();
 				scenarioModel = (LNGScenarioModel) copier.copy(o_scenarioModel);
-				if (problemType == CloudManifestProblemType.OPTIONISATION) {
+				if (problemType == CloudManifestProblemType.OPTIONISER) {
 					anonymisedTargetSlots = new ArrayList<>(targetSlots.size());
 					final Map<String, LoadSlot> newLoadSlots = ScenarioModelUtil.getCargoModel(scenarioModel).getLoadSlots().stream().collect(Collectors.toMap(LoadSlot::getName, Function.identity()));
 					final Map<String, DischargeSlot> newDischargeSlots = ScenarioModelUtil.getCargoModel(scenarioModel).getDischargeSlots().stream()
@@ -436,7 +436,7 @@ public class ScenarioServicePushToCloudAction {
 			case OPTIMISATION:
 				filesToZip.add(createOptimisationSettingsJson(optiPlanOrUserSettings));
 				break;
-			case OPTIONISATION:
+			case OPTIONISER:
 				assert anonymisedTargetSlots != null;
 				filesToZip.add(createOptioniserSettingsJson(optiPlanOrUserSettings, anonymisedTargetSlots));
 				break;
