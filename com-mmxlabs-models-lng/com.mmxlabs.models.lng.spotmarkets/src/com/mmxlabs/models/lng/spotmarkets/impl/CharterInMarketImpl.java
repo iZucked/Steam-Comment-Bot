@@ -58,6 +58,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getStartAt <em>Start At</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getEndAt <em>End At</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl#getStartHeelCV <em>Start Heel CV</em>}</li>
  * </ul>
  *
  * @generated
@@ -328,6 +329,35 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 	 * @ordered
 	 */
 	protected EList<APortSet<Port>> endAt;
+
+	/**
+	 * The default value of the '{@link #getStartHeelCV() <em>Start Heel CV</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getStartHeelCV()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double START_HEEL_CV_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getStartHeelCV() <em>Start Heel CV</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getStartHeelCV()
+	 * @generated
+	 * @ordered
+	 */
+	protected double startHeelCV = START_HEEL_CV_EDEFAULT;
+
+	/**
+	 * This is true if the Start Heel CV attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean startHeelCVESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -713,6 +743,56 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 /**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public double getStartHeelCV() {
+		return startHeelCV;
+	}
+
+/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setStartHeelCV(double newStartHeelCV) {
+		double oldStartHeelCV = startHeelCV;
+		startHeelCV = newStartHeelCV;
+		boolean oldStartHeelCVESet = startHeelCVESet;
+		startHeelCVESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_IN_MARKET__START_HEEL_CV, oldStartHeelCV, startHeelCV, !oldStartHeelCVESet));
+	}
+
+/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetStartHeelCV() {
+		double oldStartHeelCV = startHeelCV;
+		boolean oldStartHeelCVESet = startHeelCVESet;
+		startHeelCV = START_HEEL_CV_EDEFAULT;
+		startHeelCVESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, SpotMarketsPackage.CHARTER_IN_MARKET__START_HEEL_CV, oldStartHeelCV, START_HEEL_CV_EDEFAULT, oldStartHeelCVESet));
+	}
+
+/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetStartHeelCV() {
+		return startHeelCVESet;
+	}
+
+/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public int getMarketOrContractMinDuration() {
@@ -972,6 +1052,8 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 				return basicGetStartAt();
 			case SpotMarketsPackage.CHARTER_IN_MARKET__END_AT:
 				return getEndAt();
+			case SpotMarketsPackage.CHARTER_IN_MARKET__START_HEEL_CV:
+				return getStartHeelCV();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1033,6 +1115,9 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 				getEndAt().clear();
 				getEndAt().addAll((Collection<? extends APortSet<Port>>)newValue);
 				return;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__START_HEEL_CV:
+				setStartHeelCV((Double)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1090,6 +1175,9 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 			case SpotMarketsPackage.CHARTER_IN_MARKET__END_AT:
 				unsetEndAt();
 				return;
+			case SpotMarketsPackage.CHARTER_IN_MARKET__START_HEEL_CV:
+				unsetStartHeelCV();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1132,6 +1220,8 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 				return isSetStartAt();
 			case SpotMarketsPackage.CHARTER_IN_MARKET__END_AT:
 				return isSetEndAt();
+			case SpotMarketsPackage.CHARTER_IN_MARKET__START_HEEL_CV:
+				return isSetStartHeelCV();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1218,6 +1308,8 @@ public class CharterInMarketImpl extends SpotCharterMarketImpl implements Charte
 		if (maxDurationESet) result.append(maxDuration); else result.append("<unset>");
 		result.append(", mtm: ");
 		result.append(mtm);
+		result.append(", startHeelCV: ");
+		if (startHeelCVESet) result.append(startHeelCV); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

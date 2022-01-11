@@ -5,33 +5,28 @@
 package com.mmxlabs.scheduler.optimiser.providers.impl;
 
 import java.util.HashMap;
+import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
+import com.mmxlabs.common.Triple;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.providers.IShortCargoReturnElementProviderEditor;
 
-/**
- * 
- * 
- */
+@NonNullByDefault
 public class HashMapShortCargoReturnElementProviderEditor implements IShortCargoReturnElementProviderEditor {
 
-	final private HashMap<ILoadOption, ISequenceElement> loadOptionMap = new HashMap<ILoadOption, ISequenceElement>();
-	final private HashMap<ISequenceElement, ISequenceElement> loadElementMap = new HashMap<ISequenceElement, ISequenceElement>();
+	private final Map<Triple<IResource, ISequenceElement, IPort>, ISequenceElement> loadElementMap = new HashMap<>();
 
 	@Override
-	public ISequenceElement getReturnElement(ILoadOption loadOption) {
-		return loadOptionMap.get(loadOption);
+	public ISequenceElement getReturnElement(IResource resource, ISequenceElement loadElement, IPort port) {
+		return loadElementMap.get(Triple.of(resource, loadElement, port));
 	}
 
 	@Override
-	public ISequenceElement getReturnElement(ISequenceElement loadElement) {
-		return loadElementMap.get(loadElement);
-	}
-
-	@Override
-	public void setReturnElement(ISequenceElement loadElement, ILoadOption loadOption, ISequenceElement returnElement) {
-		loadElementMap.put(loadElement, returnElement);
-		loadOptionMap.put(loadOption, returnElement);
+	public void setReturnElement(IResource resource, ISequenceElement loadElement, IPort port, ISequenceElement returnElement) {
+		loadElementMap.put(Triple.of(resource, loadElement, port), returnElement);
 	}
 }

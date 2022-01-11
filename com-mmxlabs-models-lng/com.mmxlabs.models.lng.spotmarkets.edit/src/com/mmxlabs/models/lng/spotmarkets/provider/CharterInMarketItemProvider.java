@@ -66,6 +66,7 @@ public class CharterInMarketItemProvider
 			addEntityPropertyDescriptor(object);
 			addStartAtPropertyDescriptor(object);
 			addEndAtPropertyDescriptor(object);
+			addStartHeelCVPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -291,6 +292,28 @@ public class CharterInMarketItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Start Heel CV feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addStartHeelCVPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterInMarket_startHeelCV_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterInMarket_startHeelCV_feature", "_UI_CharterInMarket_type"),
+				 SpotMarketsPackage.Literals.CHARTER_IN_MARKET__START_HEEL_CV,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Spot Charter Count feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -476,6 +499,7 @@ public class CharterInMarketItemProvider
 			case SpotMarketsPackage.CHARTER_IN_MARKET__MIN_DURATION:
 			case SpotMarketsPackage.CHARTER_IN_MARKET__MAX_DURATION:
 			case SpotMarketsPackage.CHARTER_IN_MARKET__MTM:
+			case SpotMarketsPackage.CHARTER_IN_MARKET__START_HEEL_CV:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SpotMarketsPackage.CHARTER_IN_MARKET__EXTENSIONS:

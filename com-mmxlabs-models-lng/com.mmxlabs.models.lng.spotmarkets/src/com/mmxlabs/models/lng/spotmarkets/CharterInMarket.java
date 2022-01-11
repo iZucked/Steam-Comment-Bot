@@ -39,6 +39,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getStartAt <em>Start At</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getEndAt <em>End At</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getStartHeelCV <em>Start Heel CV</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket()
@@ -358,6 +359,56 @@ public interface CharterInMarket extends SpotCharterMarket, VesselAssignmentType
 	 * @generated
 	 */
 	boolean isSetEndAt();
+
+	/**
+	 * Returns the value of the '<em><b>Start Heel CV</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Start Heel CV</em>' attribute.
+	 * @see #isSetStartHeelCV()
+	 * @see #unsetStartHeelCV()
+	 * @see #setStartHeelCV(double)
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterInMarket_StartHeelCV()
+	 * @model unsettable="true" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='#0.###'"
+	 * @generated
+	 */
+	double getStartHeelCV();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getStartHeelCV <em>Start Heel CV</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Start Heel CV</em>' attribute.
+	 * @see #isSetStartHeelCV()
+	 * @see #unsetStartHeelCV()
+	 * @see #getStartHeelCV()
+	 * @generated
+	 */
+	void setStartHeelCV(double value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getStartHeelCV <em>Start Heel CV</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetStartHeelCV()
+	 * @see #getStartHeelCV()
+	 * @see #setStartHeelCV(double)
+	 * @generated
+	 */
+	void unsetStartHeelCV();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket#getStartHeelCV <em>Start Heel CV</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Start Heel CV</em>' attribute is set.
+	 * @see #unsetStartHeelCV()
+	 * @see #getStartHeelCV()
+	 * @see #setStartHeelCV(double)
+	 * @generated
+	 */
+	boolean isSetStartHeelCV();
 
 	/**
 	 * <!-- begin-user-doc -->
