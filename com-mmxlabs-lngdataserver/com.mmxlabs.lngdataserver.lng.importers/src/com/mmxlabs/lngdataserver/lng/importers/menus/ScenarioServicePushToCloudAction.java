@@ -32,6 +32,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -50,13 +52,18 @@ import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisatio
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataServiceWrapper;
 import com.mmxlabs.lngdataserver.lng.importers.menus.PublishBasecaseException.Type;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
+import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsBuildHelper;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolutionHelper;
+import com.mmxlabs.models.lng.analytics.util.SandboxModeConstants;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper.NameProvider;
 import com.mmxlabs.models.lng.scenario.actions.anonymisation.AnonymisationRecord;
 import com.mmxlabs.models.lng.scenario.actions.anonymisation.AnonymisationUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -65,7 +72,6 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
-import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper.NameProvider;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.migration.scenario.ScenarioMigrationException;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -115,15 +121,49 @@ public class ScenarioServicePushToCloudAction {
 		if (doPublish) {
 			final EObject optPlanOrUsrSettings;
 			if (optimisation) {
-				optPlanOrUsrSettings = getOptimisationPlanForOptimisaiton(scenarioInstance);
+				optPlanOrUsrSettings = getOptimisationPlanForOptimisation(scenarioInstance);
 			} else {
 				optPlanOrUsrSettings = getOptimisationPlanForInsertion(scenarioInstance, targetSlots);
 			}
-			uploadScenario(scenarioInstance, notes, optPlanOrUsrSettings, optimisation, targetSlots);
+			uploadScenario(scenarioInstance, notes, optPlanOrUsrSettings, optimisation, targetSlots, null);
 		}
 	}
 
-	private static OptimisationPlan getOptimisationPlanForOptimisaiton(final ScenarioInstance scenarioInstance) {
+	public static void uploadScenario(final ScenarioInstance scenarioInstance, @NonNull final OptionAnalysisModel sandboxModel) {
+		boolean doPublish = false;
+		String notes = null;
+
+		final Shell activeShell = Display.getDefault().getActiveShell();
+
+		final String sandboxModeStr;
+		switch(sandboxModel.getMode()) {
+		case SandboxModeConstants.MODE_OPTIONISE:
+			sandboxModeStr = "optionisation";
+			break;
+		case SandboxModeConstants.MODE_OPTIMISE:
+			sandboxModeStr = "optimisation";
+			break;
+		case SandboxModeConstants.MODE_DERIVE:
+		default:
+			sandboxModeStr = "define";
+		}
+		final String sendMessage = String.format("Send %s for cloud sandbox %s?", sandboxModel.getName(), sandboxModeStr);
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_BASECASE_NOTES)) {
+			final InputDialog dialog = new InputDialog(activeShell, "Confirm sending the sandbox", String.format("%s Please enter notes.", sendMessage), "", null);
+			doPublish = dialog.open() == InputDialog.OK;
+			if (doPublish) {
+				notes = dialog.getValue();
+			}
+		} else {
+			doPublish = MessageDialog.openQuestion(activeShell, "Confirm sending the sandbox", sendMessage);
+		}
+		if (doPublish) {
+			final UserSettings userSettings = getSandboxUserSettings(scenarioInstance, sandboxModel);
+			uploadScenario(scenarioInstance, notes, userSettings, false, null, sandboxModel);
+		}
+	}
+
+	private static OptimisationPlan getOptimisationPlanForOptimisation(final ScenarioInstance scenarioInstance) {
 		Set<String> existingNames = new HashSet<>();
 		scenarioInstance.getFragments().forEach(f -> existingNames.add(f.getName()));
 		scenarioInstance.getElements().forEach(f -> existingNames.add(f.getName()));
@@ -135,6 +175,27 @@ public class ScenarioServicePushToCloudAction {
 			LOG.error("Error getting the optimisation plan: " + e.getMessage(), e);
 		}
 		return null;
+	}
+
+	private static UserSettings getSandboxUserSettings(final ScenarioInstance scenarioInstance, final OptionAnalysisModel model) {
+		final Set<String> existingNames = new HashSet<>();
+		scenarioInstance.getFragments().forEach(f -> existingNames.add(f.getName()));
+		scenarioInstance.getElements().forEach(f -> existingNames.add(f.getName()));
+		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		try (IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
+			final LNGScenarioModel root = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+			final UserSettings previousSettings = AnalyticsBuildHelper.getSandboxPreviousSettings(model, root);
+			final boolean promptUser = System.getProperty("lingo.suppress.dialogs") == null;
+			switch(model.getMode()) {
+			case SandboxModeConstants.MODE_OPTIONISE:
+				return UserSettingsHelper.promptForInsertionUserSettings(root, false, promptUser, true, new NameProvider("Optimisation", existingNames), previousSettings);
+			case SandboxModeConstants.MODE_OPTIMISE:
+				return UserSettingsHelper.promptForUserSettings(root, false, promptUser, true, new NameProvider("Optimisation", existingNames), previousSettings);
+			case SandboxModeConstants.MODE_DERIVE:
+			default:
+				return UserSettingsHelper.promptForSandboxUserSettings(root, false, promptUser, true, new NameProvider("Optimisation", existingNames), previousSettings);
+			}
+		}
 	}
 
 	private static UserSettings getOptimisationPlanForInsertion(final ScenarioInstance scenarioInstance, final List<Slot<?>> targetSlots) {
@@ -153,8 +214,8 @@ public class ScenarioServicePushToCloudAction {
 					scenarioInstance.getFragments().forEach(f -> existingNames.add(f.getName()));
 					scenarioInstance.getElements().forEach(f -> existingNames.add(f.getName()));
 
-					NameProvider nameProvider = new NameProvider(taskName, existingNames);
-					userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false, nameProvider);
+					final NameProvider nameProvider = new NameProvider(taskName, existingNames);
+					userSettings = UserSettingsHelper.promptForInsertionUserSettings(root, false, true, false, nameProvider);
 					taskName = nameProvider.getNameSuggestion();
 				}
 			}
@@ -170,10 +231,10 @@ public class ScenarioServicePushToCloudAction {
 	}
 
 	public static void uploadScenario(final ScenarioInstance scenarioInstance, final String notes, final EObject optiPlanOrUserSettings, //
-			final boolean optimisation, final List<Slot<?>> targetSlots) {
+			final boolean optimisation, final List<Slot<?>> targetSlots, final OptionAnalysisModel sandboxModel) {
 		final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 		try {
-			dialog.run(true, false, m -> doUploadScenario(scenarioInstance, notes, optiPlanOrUserSettings, optimisation, targetSlots, m));
+			dialog.run(true, false, m -> doUploadScenario(scenarioInstance, notes, optiPlanOrUserSettings, optimisation, targetSlots, sandboxModel, m));
 		} catch (final InvocationTargetException e) {
 			LOG.error(e.getMessage(), e);
 			final Throwable cause = e.getCause();
@@ -210,10 +271,31 @@ public class ScenarioServicePushToCloudAction {
 
 	}
 
+	@NonNull
+	private static CloudManifestProblemType getProblemType(final boolean optimisation, @Nullable final List<Slot<?>> targetSlots, @Nullable final OptionAnalysisModel sandboxModel) {
+		if (optimisation) {
+			if (targetSlots != null || sandboxModel != null) {
+				throw new PublishBasecaseException("Unable to derive cloud optimisation type", Type.FAILED_UNKNOWN_ERROR);
+			}
+			return CloudManifestProblemType.OPTIMISATION;
+		} else if (targetSlots != null) {
+			if (sandboxModel != null) {
+				throw new PublishBasecaseException("Unable to derive cloud optimisation type", Type.FAILED_UNKNOWN_ERROR);
+			}
+			return CloudManifestProblemType.OPTIONISATION;
+		} else if (sandboxModel != null) {
+			return CloudManifestProblemType.SANDBOX;
+		} else {
+			throw new PublishBasecaseException("Unable to derive cloud optimisation type", Type.FAILED_UNKNOWN_ERROR);
+		}
+		
+	}
+
 	private static void doUploadScenario(final ScenarioInstance scenarioInstance, final String notes, final EObject optiPlanOrUserSettings, //
-			final boolean optimisation, final List<Slot<?>> targetSlots, final IProgressMonitor parentProgressMonitor) {
+			final boolean optimisation, @Nullable final List<Slot<?>> targetSlots, @Nullable final OptionAnalysisModel originalSandboxModel, final IProgressMonitor parentProgressMonitor) {
 
 		parentProgressMonitor.beginTask("Send scenario", 1000);
+		final CloudManifestProblemType problemType = getProblemType(optimisation, targetSlots, originalSandboxModel);
 		final SubMonitor progressMonitor = SubMonitor.convert(parentProgressMonitor, 1000);
 		try {
 			progressMonitor.subTask("Prepare scenario");
@@ -229,13 +311,14 @@ public class ScenarioServicePushToCloudAction {
 			File anonymisationMap = null;
 
 			List<Slot<?>> anonymisedTargetSlots = null;
+			OptionAnalysisModel sandboxModelCopy = null;
 
 			try (IScenarioDataProvider o_scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
 				final LNGScenarioModel o_scenarioModel = o_scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 				final EcoreUtil.Copier copier = new Copier();
 				scenarioModel = (LNGScenarioModel) copier.copy(o_scenarioModel);
-				if (targetSlots != null) {
+				if (problemType == CloudManifestProblemType.OPTIONISATION) {
 					anonymisedTargetSlots = new ArrayList<>(targetSlots.size());
 					final Map<String, LoadSlot> newLoadSlots = ScenarioModelUtil.getCargoModel(scenarioModel).getLoadSlots().stream().collect(Collectors.toMap(LoadSlot::getName, Function.identity()));
 					final Map<String, DischargeSlot> newDischargeSlots = ScenarioModelUtil.getCargoModel(scenarioModel).getDischargeSlots().stream()
@@ -253,9 +336,31 @@ public class ScenarioServicePushToCloudAction {
 
 				copier.copyReferences();
 				final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
+				if (problemType != CloudManifestProblemType.SANDBOX) {
+					// Strip optimisation result
+					LNGSchedulerJobUtils.clearAnalyticsResults(analyticsModel);
+				} else {
+					for (final OptionAnalysisModel optionAnalysisModel : analyticsModel.getOptionModels()) {
+						if (optionAnalysisModel.getUuid().equals(originalSandboxModel.getUuid())) {
+							sandboxModelCopy = optionAnalysisModel;
+							break;
+						}
+					}
+					assert sandboxModelCopy != null;
+					// Strip everything but model of interest
+					analyticsModel.getOptimisations().clear();
+					analyticsModel.getBreakevenModels().clear();
 
-				// Strip optimisation result
-				LNGSchedulerJobUtils.clearAnalyticsResults(analyticsModel);
+					analyticsModel.setViabilityModel(null);
+					analyticsModel.setMtmModel(null);
+
+					// clear option models and re-add the model we want to keep
+					analyticsModel.getOptionModels().clear();
+					analyticsModel.getOptionModels().add(sandboxModelCopy);
+
+					// clear results since sending is unnecessary
+					sandboxModelCopy.setResults(null);
+				}
 
 				scenarioDataProvider = SimpleScenarioDataProvider.make(EcoreUtil.copy(modelRecord.getManifest()), scenarioModel);
 				final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
@@ -280,6 +385,7 @@ public class ScenarioServicePushToCloudAction {
 				} else {
 					optiPlan = OptimisationHelper.getOptimiserSettings(o_scenarioModel, true, null, false, false, null);
 				}
+
 				assert optiPlan != null;
 
 				// Hack: Add on shipping only hint to avoid generating spot markets during eval.
@@ -316,15 +422,23 @@ public class ScenarioServicePushToCloudAction {
 				throw new PublishBasecaseException(MSG_ERROR_SAVING, Type.FAILED_TO_SAVE, e);
 			}
 
-			final List<File> filesToZip = new ArrayList<File>(4);
+			final List<File> filesToZip = new ArrayList<>(4);
 			filesToZip.add(tmpScenarioFile);
 			filesToZip.add(createJVMOptions());
-			filesToZip.add(createManifest(tmpScenarioFile.getName(), optimisation));
-			if (optimisation) {
+			filesToZip.add(createManifest(tmpScenarioFile.getName(), problemType));
+			switch (problemType) {
+			case OPTIMISATION:
 				filesToZip.add(createOptimisationSettingsJson(optiPlanOrUserSettings));
-			} else {
+				break;
+			case OPTIONISATION:
 				assert anonymisedTargetSlots != null;
 				filesToZip.add(createOptioniserSettingsJson(optiPlanOrUserSettings, anonymisedTargetSlots));
+				break;
+			case SANDBOX:
+				filesToZip.add(createSandboxSettingsJson(optiPlanOrUserSettings, sandboxModelCopy));
+				break;
+			default:
+				throw new PublishBasecaseException("Unknown cloud optimisation problem type", Type.FAILED_UNKNOWN_ERROR);
 			}
 			File zipToUpload = null;
 			try {
@@ -486,10 +600,37 @@ public class ScenarioServicePushToCloudAction {
 		return null;
 	}
 
-	private static File createManifest(final String scenarioName, final boolean optimisation) {
+	private static File createSandboxSettingsJson(final EObject plan, final OptionAnalysisModel sandboxModel) {
+		if (plan instanceof UserSettings) {
+			final SandboxParametersDescription description = new SandboxParametersDescription();
+			description.sandboxUUID = sandboxModel.getUuid();
+			
+			final UserSettings us = (UserSettings) plan;
+			SandboxSettings settings = new SandboxSettings();
+			settings.periodStartDate = us.getPeriodStartDate();
+			settings.periodEnd = us.getPeriodEnd();
+			settings.shippingOnly = us.isShippingOnly();
+			settings.generateCharterOuts = us.isGenerateCharterOuts();
+			settings.withCharterLength = us.isWithCharterLength();
+			settings.withSpotCargoMarkets = us.isWithSpotCargoMarkets();
+			settings.similarityMode = us.getSimilarityMode().getLiteral();
+			description.userSettings = settings;
+			final ObjectMapper objectMapper = new ObjectMapper();
+			try {
+				final File file = new File("parameters.json");
+				objectMapper.writeValue(file, description);
+				return file;
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+
+	private static File createManifest(final String scenarioName, @NonNull final CloudManifestProblemType problemType) {
 		final ManifestDescription md = new ManifestDescription();
 		md.scenario = scenarioName;
-		md.type = optimisation ? "optimisation" : "optioniser";
+		md.type = problemType.getManifestString();
 		md.parameters = "parameters.json";
 		md.jvmConfig = "jvm.options";
 		md.version = "4.13.1";
