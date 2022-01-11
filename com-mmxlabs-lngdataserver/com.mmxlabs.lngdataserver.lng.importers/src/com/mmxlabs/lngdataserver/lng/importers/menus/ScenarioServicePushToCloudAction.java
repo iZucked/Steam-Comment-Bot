@@ -74,6 +74,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisat
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.migration.scenario.ScenarioMigrationException;
+import com.mmxlabs.rcp.common.appversion.VersionHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -136,7 +137,7 @@ public class ScenarioServicePushToCloudAction {
 		final Shell activeShell = Display.getDefault().getActiveShell();
 
 		final String sandboxModeStr;
-		switch(sandboxModel.getMode()) {
+		switch (sandboxModel.getMode()) {
 		case SandboxModeConstants.MODE_OPTIONISE:
 			sandboxModeStr = "optionisation";
 			break;
@@ -186,7 +187,7 @@ public class ScenarioServicePushToCloudAction {
 			final LNGScenarioModel root = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 			final UserSettings previousSettings = AnalyticsBuildHelper.getSandboxPreviousSettings(model, root);
 			final boolean promptUser = System.getProperty("lingo.suppress.dialogs") == null;
-			switch(model.getMode()) {
+			switch (model.getMode()) {
 			case SandboxModeConstants.MODE_OPTIONISE:
 				return UserSettingsHelper.promptForInsertionUserSettings(root, false, promptUser, true, new NameProvider("Optimisation", existingNames), previousSettings);
 			case SandboxModeConstants.MODE_OPTIMISE:
@@ -288,7 +289,7 @@ public class ScenarioServicePushToCloudAction {
 		} else {
 			throw new PublishBasecaseException("Unable to derive cloud optimisation type", Type.FAILED_UNKNOWN_ERROR);
 		}
-		
+
 	}
 
 	private static void doUploadScenario(final ScenarioInstance scenarioInstance, final String notes, final EObject optiPlanOrUserSettings, //
@@ -425,7 +426,12 @@ public class ScenarioServicePushToCloudAction {
 			final List<File> filesToZip = new ArrayList<>(4);
 			filesToZip.add(tmpScenarioFile);
 			filesToZip.add(createJVMOptions());
-			filesToZip.add(createManifest(tmpScenarioFile.getName(), problemType));
+
+			try {
+				filesToZip.add(createManifest(tmpScenarioFile.getName(), problemType));
+			} catch (final PublishBasecaseException e) {
+				throw e;
+			}
 			switch (problemType) {
 			case OPTIMISATION:
 				filesToZip.add(createOptimisationSettingsJson(optiPlanOrUserSettings));
@@ -604,7 +610,7 @@ public class ScenarioServicePushToCloudAction {
 		if (plan instanceof UserSettings) {
 			final SandboxParametersDescription description = new SandboxParametersDescription();
 			description.sandboxUUID = sandboxModel.getUuid();
-			
+
 			final UserSettings us = (UserSettings) plan;
 			SandboxSettings settings = new SandboxSettings();
 			settings.periodStartDate = us.getPeriodStartDate();
@@ -634,7 +640,10 @@ public class ScenarioServicePushToCloudAction {
 		md.parameters = "parameters.json";
 		md.jvmConfig = "jvm.options";
 		md.version = "4.13.1";
-		md.clientCode = "v";
+		md.clientCode = VersionHelper.getInstance().getClientCode();
+		if (md.clientCode == null) {
+			throw new PublishBasecaseException("Can not read the version file! Please contaxt MMX", Type.FAILED_TO_SAVE, new IOException());
+		}
 		md.dev = true;
 
 		final ObjectMapper objectMapper = new ObjectMapper();
