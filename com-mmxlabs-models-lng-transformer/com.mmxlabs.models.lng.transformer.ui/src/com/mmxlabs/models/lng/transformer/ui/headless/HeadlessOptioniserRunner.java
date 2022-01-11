@@ -5,8 +5,6 @@
 package com.mmxlabs.models.lng.transformer.ui.headless;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.LinkedList;
@@ -21,20 +19,16 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.CargoModelFinder;
-import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSchedulerInsertSlotJobRunner;
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.CSVImporter;
-import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.HeadlessOptimiserJSON;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
-import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
-import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
 
 public class HeadlessOptioniserRunner {
@@ -98,7 +92,7 @@ public class HeadlessOptioniserRunner {
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, IProgressMonitor monitor) {
 		final LNGScenarioModel lngScenarioModel = sdp.getTypedScenario(LNGScenarioModel.class);
 
-		final UserSettings userSettings = OptimisationHelper.promptForInsertionUserSettings(lngScenarioModel, false, false, false, null, null);
+		final UserSettings userSettings = UserSettingsHelper.promptForInsertionUserSettings(lngScenarioModel, false, false, false, null, null);
 
 		if (options.periodStart != null) {
 			userSettings.setPeriodStartDate(options.periodStart);

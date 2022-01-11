@@ -17,15 +17,10 @@ import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.command.BasicCommandStack;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
-import org.eclipse.emf.validation.model.Category;
-import org.eclipse.emf.validation.model.EvaluationMode;
-import org.eclipse.emf.validation.service.IBatchValidator;
-import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -60,13 +55,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarketParameters;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
-import com.mmxlabs.models.ui.validation.IValidationService;
-import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
-import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ecore.EMFCopier;
-import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public final class UserSettingsHelper {
 
@@ -96,12 +85,7 @@ public final class UserSettingsHelper {
 
 	public static final String BREAK_EVEN_MARKER = "?";
 
-	public static final String PARAMETER_MODE_CUSTOM = "Custom";
-
 	private static final Logger log = LoggerFactory.getLogger(UserSettingsHelper.class);
-
-	public static final int EPOCH_LENGTH_PERIOD = 10_000;
-	public static final int EPOCH_LENGTH_FULL = 10_000;
 
 	// Note: SWTBOT ids are linked to the display string for radio buttons
 	public static final String SWTBOT_SHIPPING_ONLY_PREFIX = "swtbot.shippingonly";
@@ -510,22 +494,6 @@ public final class UserSettingsHelper {
 		return copy;
 	}
 
-//	private static boolean shouldDisableActionSets(final SimilarityMode mode, final LocalDate periodStart, final YearMonth periodEnd) {
-//		if (periodStart == null || periodEnd == null) {
-//			return true;
-//		}
-//		if (mode == SimilarityMode.LOW && Months.between(periodStart, periodEnd) > 3) {
-//			return true;
-//		} else if (mode == SimilarityMode.MEDIUM && Months.between(periodStart, periodEnd) > 6) {
-//			return true;
-//		} else if (mode == SimilarityMode.HIGH && Months.between(periodStart, periodEnd) > 6) {
-//			return true;
-//		} else if (mode == SimilarityMode.OFF) {
-//			return true;
-//		}
-//		return false;
-//	}
-
 	private static void resetDisabledFeatures(@NonNull final UserSettings copy) {
 		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_ACTIONSET)) {
 			copy.setBuildActionSets(false);
@@ -668,51 +636,6 @@ public final class UserSettingsHelper {
 		return true;
 	}
 
-//	private static Objective findObjective(final String objective, final ConstraintAndFitnessSettings settings) {
-//		for (final Objective o : settings.getObjectives()) {
-//			if (Objects.equals(objective, o.getName())) {
-//				return o;
-//			}
-//		}
-//		return null;
-//	}
-
-//	private static YearMonth getPeriodEndOrDefault(final YearMonth periodEnd, final LNGScenarioModel scenario) {
-//		if (periodEnd != null) {
-//			return periodEnd;
-//		} else if (scenario == null) {
-//			return periodEnd;
-//		} else {
-//			final List<LoadSlot> loadSlots = new LinkedList<>(scenario.getCargoModel().getLoadSlots());
-//			Collections.sort(loadSlots, (o1, o2) -> {
-//				return o1.getSchedulingTimeWindow().getEndWithFlex().compareTo(o2.getSchedulingTimeWindow().getEndWithFlex()) * -1;
-//			});
-//			if (loadSlots.isEmpty()) {
-//				return YearMonth.of(2000, 1);
-//			}
-//			return YearMonth.of(loadSlots.get(0).getSchedulingTimeWindow().getStart().getYear(), loadSlots.get(0).getSchedulingTimeWindow().getStart().getMonth());
-//		}
-//	}
-
-//	private static LocalDate getPeriodStartOrDefault(final LocalDate periodStart, final LNGScenarioModel scenario) {
-//		if (periodStart != null) {
-//			return periodStart;
-//		} else if (scenario == null) {
-//			return periodStart;
-//		} else {
-//			final List<LoadSlot> loadSlots = new LinkedList<>(scenario.getCargoModel().getLoadSlots());
-//			Collections.sort(loadSlots, (o1, o2) -> {
-//				return o1.getSchedulingTimeWindow().getStart().compareTo(o2.getSchedulingTimeWindow().getStart());
-//			});
-//			if (loadSlots.isEmpty()) {
-//				// FIXME: (SG) This is not always a good idea... I have seen arrays created to
-//				// hold data from 2000 to now - and this can take a long time.
-//				return LocalDate.of(2000, 1, 1);
-//			}
-//			return loadSlots.get(0).getSchedulingTimeWindow().getStart().toLocalDate();
-//		}
-//	}
-
 	public static boolean isAllowedGCO(final LNGScenarioModel lngScenarioModel) {
 		if (lngScenarioModel == null) {
 			return false;
@@ -732,72 +655,14 @@ public final class UserSettingsHelper {
 		return false;
 	}
 
-	public static boolean validateScenario(final IScenarioDataProvider scenarioDataProvider, @Nullable EObject extraTarget, final boolean optimising, final boolean displayErrors,
-			final boolean relaxedValidation, Set<String> extraCategories) {
-		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
-		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
-
-		validator.addConstraintFilter((constraint, target) -> {
-			for (final Category cat : constraint.getCategories()) {
-				if (cat.getId().endsWith(".base")) {
-					return true;
-				} else if (optimising && cat.getId().endsWith(".optimisation")) {
-					return true;
-				} else if (!optimising && cat.getId().endsWith(".evaluation")) {
-					return true;
-				}
-				// Any extra validation category suffixes to include e.g. for sandbox
-				for (String catSuffix : extraCategories) {
-					if (cat.getId().endsWith(catSuffix)) {
-						return true;
-					}
-				}
-			}
-
-			return false;
-		});
-
-		final MMXRootObject rootObject = scenarioDataProvider.getTypedScenario(MMXRootObject.class);
-		final IStatus status = ServiceHelper.withOptionalService(IValidationService.class, helper -> {
-			final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(scenarioDataProvider, false, relaxedValidation);
-			return helper.runValidation(validator, extraContext, rootObject, extraTarget);
-		});
-
-		if (status == null) {
+	public static boolean checkForBreakEven(final @Nullable LNGScenarioModel lngScenarioModel) {
+		if (lngScenarioModel != null) {
+			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
+			return UserSettingsHelper.checkBreakEvenInSlot(cargoModel.getLoadSlots()) //
+					|| UserSettingsHelper.checkBreakEvenInSlot(cargoModel.getDischargeSlots());
+		} else {
 			return false;
 		}
-
-		if (!status.isOK()) {
-
-			if (optimising || status.getSeverity() == IStatus.ERROR) {
-
-				// See if this command was executed in the UI thread - if so fire up the dialog
-				// box.
-				if (displayErrors) {
-					final boolean[] res = new boolean[1];
-					Display.getDefault().syncExec(() -> {
-						final ValidationStatusDialog dialog = new ValidationStatusDialog(Display.getDefault().getActiveShell(), status, status.getSeverity() != IStatus.ERROR);
-
-						// Wait for use to press a button before continuing.
-						dialog.setBlockOnOpen(true);
-
-						if (dialog.open() == Window.CANCEL) {
-							res[0] = false;
-						} else {
-							res[0] = true;
-						}
-					});
-					if (!res[0]) {
-						return false;
-					}
-				}
-			}
-		}
-		if (status.getSeverity() == IStatus.ERROR) {
-			return false;
-		}
-
-		return true;
 	}
 
 	private static void createNominalOnlyOption(final UserSettings defaultSettings, final boolean[] optionsAdded, final EditingDomain editingDomain, final ParameterModesDialog dialog,
@@ -833,13 +698,13 @@ public final class UserSettingsHelper {
 		});
 	}
 
-//	public static SimilaritySettings createSimilaritySettings(final SimilarityMode mode, final LocalDate periodStart, final YearMonth periodEnd) {
-//		if (periodStart == null || periodEnd == null || mode == null || mode == SimilarityMode.OFF) {
-//			return ScenarioUtils.createOffSimilaritySettings();
-//		} else {
-//			return SimilarityUIParameters.getSimilaritySettings(mode, periodStart, periodEnd);
-//		}
-//	}
+	// public static SimilaritySettings createSimilaritySettings(final SimilarityMode mode, final LocalDate periodStart, final YearMonth periodEnd) {
+	// if (periodStart == null || periodEnd == null || mode == null || mode == SimilarityMode.OFF) {
+	// return ScenarioUtils.createOffSimilaritySettings();
+	// } else {
+	// return SimilarityUIParameters.getSimilaritySettings(mode, periodStart, periodEnd);
+	// }
+	// }
 
 	private static void createTraderBasedInsertionsOption(final UserSettings defaultSettings, final EditingDomain editingDomain, final ParameterModesDialog dialog, final UserSettings copy,
 			final boolean[] optionsAdded) {
@@ -974,11 +839,11 @@ public final class UserSettingsHelper {
 				@Override
 				protected IStatus validate() {
 					LocalDate periodStart = null;
-					if (values[0].getValue() instanceof LocalDate castedPeriodStart) {
+					if (values[0].getValue()instanceof LocalDate castedPeriodStart) {
 						periodStart = castedPeriodStart;
 					}
 					YearMonth periodEnd = null;
-					if (values[1].getValue() instanceof YearMonth castedPeriodEnd) {
+					if (values[1].getValue()instanceof YearMonth castedPeriodEnd) {
 						periodEnd = castedPeriodEnd;
 					}
 					if (periodStart != null && periodEnd != null) {
@@ -1250,16 +1115,6 @@ public final class UserSettingsHelper {
 		}
 		copy.setPeriodEnd(YearMonth.from(temp.plusMonths(3)));
 	}
-
-//	private static boolean checkForBreakEven(final @Nullable LNGScenarioModel lngScenarioModel) {
-//		if (lngScenarioModel != null) {
-//			final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(lngScenarioModel);
-//			return checkBreakEvenInSlot(cargoModel.getLoadSlots()) //
-//					|| checkBreakEvenInSlot(cargoModel.getDischargeSlots());
-//		} else {
-//			return false;
-//		}
-//	}
 
 	@NonNull
 	public static UserSettings createDefaultUserSettings() {

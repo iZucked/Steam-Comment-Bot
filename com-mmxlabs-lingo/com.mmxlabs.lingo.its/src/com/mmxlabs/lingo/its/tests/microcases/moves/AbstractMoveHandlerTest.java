@@ -15,6 +15,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.transformer.chain.impl.InitialSequencesModule;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
@@ -60,7 +61,7 @@ public abstract class AbstractMoveHandlerTest extends AbstractMicroTestCase {
 			modules.add(new InputSequencesModule(initialRawSequences));
 			modules.add(new InitialPhaseOptimisationDataModule());
 			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(
-					new LNGParameters_EvaluationSettingsModule(ScenarioUtils.createDefaultUserSettings(), ScenarioUtils.createDefaultConstraintAndFitnessSettings()), services,
+					new LNGParameters_EvaluationSettingsModule(UserSettingsHelper.createDefaultUserSettings(), ScenarioUtils.createDefaultConstraintAndFitnessSettings()), services,
 					IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
 			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
 			modules.add(new AbstractModule() {

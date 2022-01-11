@@ -35,10 +35,10 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.events.IVesselEventsTableContextMenuExtension;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper.NameProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
-import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper.NameProvider;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationJobRunner;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -155,11 +155,11 @@ public class InsertEventContextMenuExtension implements IVesselEventsTableContex
 
 					if (object instanceof LNGScenarioModel) {
 						final LNGScenarioModel root = (LNGScenarioModel) object;
-						Set<String> existingNames = new HashSet<>();
+						final Set<String> existingNames = new HashSet<>();
 						original.getFragments().forEach(f -> existingNames.add(f.getName()));
 						original.getElements().forEach(f -> existingNames.add(f.getName()));
-						NameProvider nameProvider = new NameProvider(taskName, existingNames);
-						userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false, nameProvider);
+						final NameProvider nameProvider = new NameProvider(taskName, existingNames);
+						userSettings = UserSettingsHelper.promptForInsertionUserSettings(root, false, true, false, nameProvider);
 						taskName = nameProvider.getNameSuggestion();
 					}
 				}

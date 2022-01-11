@@ -8,6 +8,7 @@ Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-16
 Export-Package: 
+ com.mmxlabs.models.lng.parameters.editor.ui,
  com.mmxlabs.models.lng.parameters.editor.util
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.models.lng.parameters.editor.internal.Activator

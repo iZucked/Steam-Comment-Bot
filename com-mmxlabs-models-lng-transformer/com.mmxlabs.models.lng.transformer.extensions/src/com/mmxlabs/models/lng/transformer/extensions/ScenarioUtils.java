@@ -27,7 +27,6 @@ import com.mmxlabs.models.lng.parameters.InsertionOptimisationStage;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.MultipleSolutionSimilarityOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Objective;
-import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParallelOptimisationStage;
@@ -36,7 +35,7 @@ import com.mmxlabs.models.lng.parameters.SimilarityInterval;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.SimilaritySettings;
 import com.mmxlabs.models.lng.parameters.SolutionBuilderSettings;
-import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.transformer.extensions.portshipsizeconstraint.PortShipSizeConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedslots.RestrictedSlotsConstraintCheckerFactory;
@@ -112,7 +111,7 @@ public class ScenarioUtils {
 
 		final OptimisationPlan plan = ParametersFactory.eINSTANCE.createOptimisationPlan();
 
-		plan.setUserSettings(createDefaultUserSettings());
+		plan.setUserSettings(UserSettingsHelper.createDefaultUserSettings());
 
 		plan.setSolutionBuilderSettings(createDefaultSolutionBuilderSettings());
 
@@ -169,20 +168,6 @@ public class ScenarioUtils {
 		interval.setWeight(weight);
 
 		return interval;
-	}
-
-	@NonNull
-	public static UserSettings createDefaultUserSettings() {
-		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-
-		userSettings.setMode(OptimisationMode.SHORT_TERM);
-		userSettings.setBuildActionSets(false);
-		userSettings.setGenerateCharterOuts(false);
-		userSettings.setShippingOnly(false);
-		userSettings.setWithSpotCargoMarkets(true);
-		userSettings.setSimilarityMode(SimilarityMode.OFF);
-		userSettings.setFloatingDaysLimit(15);
-		return userSettings;
 	}
 
 	public static @NonNull LocalSearchOptimisationStage createDefaultLSOParameters(@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings, boolean parallelise) {

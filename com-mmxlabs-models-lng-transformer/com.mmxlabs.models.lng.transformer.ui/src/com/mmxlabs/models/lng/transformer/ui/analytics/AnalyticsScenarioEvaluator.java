@@ -83,6 +83,7 @@ import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -458,7 +459,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			}
 			final boolean promptUser = System.getProperty("lingo.suppress.dialogs") == null;
 
-			userSettings = OptimisationHelper.promptForSandboxUserSettings(root, false, promptUser, false, null, previousSettings);
+			userSettings = UserSettingsHelper.promptForSandboxUserSettings(root, false, promptUser, false, null, previousSettings);
 		}
 		if (userSettings == null) {
 			return;
