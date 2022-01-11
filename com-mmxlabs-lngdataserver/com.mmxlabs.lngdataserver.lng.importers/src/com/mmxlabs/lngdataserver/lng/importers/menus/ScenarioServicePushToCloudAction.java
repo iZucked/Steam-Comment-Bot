@@ -68,6 +68,7 @@ import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper.NameProvider;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.migration.scenario.ScenarioMigrationException;
+import com.mmxlabs.rcp.common.appversion.VersionHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ModelReference;
@@ -319,7 +320,11 @@ public class ScenarioServicePushToCloudAction {
 			final List<File> filesToZip = new ArrayList<File>(4);
 			filesToZip.add(tmpScenarioFile);
 			filesToZip.add(createJVMOptions());
-			filesToZip.add(createManifest(tmpScenarioFile.getName(), optimisation));
+			try {
+				filesToZip.add(createManifest(tmpScenarioFile.getName(), optimisation));
+			} catch (final PublishBasecaseException e) {
+				throw e;
+			}
 			if (optimisation) {
 				filesToZip.add(createOptimisationSettingsJson(optiPlanOrUserSettings));
 			} else {
@@ -493,7 +498,10 @@ public class ScenarioServicePushToCloudAction {
 		md.parameters = "parameters.json";
 		md.jvmConfig = "jvm.options";
 		md.version = "4.13.1";
-		md.clientCode = "v";
+		md.clientCode = VersionHelper.getInstance().getClientCode();
+		if (md.clientCode == null) {
+			throw new PublishBasecaseException("Can not read the version file! Please contaxt MMX", Type.FAILED_TO_SAVE, new IOException());
+		}
 		md.dev = true;
 
 		final ObjectMapper objectMapper = new ObjectMapper();

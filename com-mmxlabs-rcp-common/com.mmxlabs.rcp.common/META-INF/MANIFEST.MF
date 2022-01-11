@@ -37,6 +37,7 @@ Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.rcp.common,
  com.mmxlabs.rcp.common.actions,
  com.mmxlabs.rcp.common.application,
+ com.mmxlabs.rcp.common.appversion,
  com.mmxlabs.rcp.common.celleditors,
  com.mmxlabs.rcp.common.controls,
  com.mmxlabs.rcp.common.dialogs,
