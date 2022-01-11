@@ -145,7 +145,7 @@ public class CloudOptimisationDataServiceClient {
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
 				if (response.code() == 404) {
-					return "Scenario and results are not in s3, please submit again";
+					return "{ \"status\": \"notfound\" }";//return "Scenario and results are not in s3, please submit again";
 				}
 				throw new IOException("Unexpected code: " + response);
 			}			
@@ -227,7 +227,7 @@ public class CloudOptimisationDataServiceClient {
 				e.printStackTrace();
 			}
 		}
-		return new ArrayList();
+		return new ArrayList<>();
 	}
 	
 	public static String getJSON(final List<CloudOptimisationDataResultRecord> records) {

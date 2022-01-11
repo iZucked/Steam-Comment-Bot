@@ -13,6 +13,6 @@ public class CloudOptimisationDataServiceWrapper {
 	}
 
 	public static void updateRecords(CloudOptimisationDataResultRecord record) {
-		CloudOptimisationDataService.INSTANCE.updateRecords(record);
+		CloudOptimisationDataService.INSTANCE.addRecord(record);
 	}
 }

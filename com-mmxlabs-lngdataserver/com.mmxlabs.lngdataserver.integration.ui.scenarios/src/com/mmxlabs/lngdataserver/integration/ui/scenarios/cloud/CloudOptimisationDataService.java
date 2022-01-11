@@ -6,8 +6,6 @@ package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,14 +25,6 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.base.Charsets;
-import com.mmxlabs.hub.IUpstreamDetailChangedListener;
-import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.common.http.IProgressListener;
 import com.mmxlabs.rcp.common.CommonImages;
 import com.mmxlabs.rcp.common.CommonImages.IconMode;
@@ -60,29 +50,20 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 
 	private CloudOptimisationDataServiceClient client;
 	private CloudOptimisationDataUpdater updater;
-	
-	private ConcurrentLinkedQueue<CloudOptimisationDataResultRecord> dataList;
+
 	private ConcurrentLinkedQueue<IUpdateListener> listeners = new ConcurrentLinkedQueue<>();
-	// Set used to emit load failure messages once
-	
-	private final IUpstreamDetailChangedListener upstreamDetailsChangedListener;
-	
-	public CloudOptimisationDataService() {
+
+	private CloudOptimisationDataService() {
 		super("Online Tasks");
-		dataList = new ConcurrentLinkedQueue<>();
-		upstreamDetailsChangedListener = dataList::clear;
 		start();
 	}
 
 	public Collection<CloudOptimisationDataResultRecord> getRecords() {
-		return dataList;
+		return updater.getRecords();
 	}
 
-	private void update(final CloudOptimisationDataResultRecord record) {
-		if (!dataList.contains(record)) {
-			dataList.add(record);
-			fireListeners();
-		}
+	private void update(final CloudOptimisationDataResultRecord cRecord) {
+		fireListeners();
 	}
 
 	private void fireListeners() {
@@ -97,7 +78,7 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 	public @Nullable File getDataFile(final String uuid) {
 		return new File(String.format("%s/%s.data", dataFolder.getAbsoluteFile(), uuid));
 	}
-	
+
 	public String uploadData(final File dataFile, //
 			final String checksum, //
 			final String scenarioName, //
@@ -109,7 +90,7 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 				updater.pause();
 				response = //
 						client.upload(dataFile, checksum, scenarioName, progressListener);
-			} catch (final Exception e){
+			} catch (final Exception e) {
 				LOGGER.error(e.getMessage());
 			} finally {
 				updater.resume();
@@ -125,36 +106,20 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 		}
 		return response;
 	}
-	
-	public synchronized boolean updateRecords(final CloudOptimisationDataResultRecord record) {
+
+	public synchronized boolean addRecord(final CloudOptimisationDataResultRecord record) {
 		updater.pause();
-		boolean result = true;
-		
-		final File recordsFile = new File(dataFolder.getAbsolutePath() + IPath.SEPARATOR + "records.json");
-		String json = "";
-		if (recordsFile.exists()) {
-			try {
-				json = Files.readString(recordsFile.toPath());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		try {
+			// Mark as available upstream
+			record.setStatus(ResultStatus.submitted());
+			record.setRemote(true);
+
+			updater.addNewlySubmittedOptimisationRecord(record);
+			boolean result = true;
+			return result;
+		} finally {
+			updater.resume();
 		}
-		final List<CloudOptimisationDataResultRecord> records = CloudOptimisationDataServiceClient.parseRecordsJSONData(json);
-		records.add(record);
-		final String output = CloudOptimisationDataServiceClient.getJSON(records);
-		if (output != null) {
-			try {
-				Files.writeString(recordsFile.toPath(), output, Charsets.UTF_8);
-			} catch (IOException e) {
-				e.printStackTrace();
-				result = false;
-			}
-		}
-		if (!dataList.contains(record)) {
-			dataList.add(record);
-		}
-		updater.resume();
-		return result;
 	}
 
 	public void start() {
@@ -180,7 +145,7 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 					}
 
 					client = new CloudOptimisationDataServiceClient();
-					
+
 					getServiceModel();
 					setReady();
 					WellKnownTriggers.WORKSPACE_DATA_ENCRYPTION_CHECK.delayUntilTriggered(() -> {
@@ -203,11 +168,9 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 
 	public void stop() {
 
-		UpstreamUrlProvider.INSTANCE.deregisterDetailsChangedLister(upstreamDetailsChangedListener);
 		if (updater != null) {
 			updater.stop();
 		}
-		dataList.clear();
 	}
 
 	public interface IUpdateListener {
@@ -223,41 +186,24 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 	public void removeListener(IUpdateListener l) {
 		listeners.remove(l);
 	}
-	
-	public static @NonNull ObjectMapper createObjectMapper() {
-		final JsonFactory jsonFactory = new JsonFactory();
-		jsonFactory.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
 
-		final ObjectMapper objectMapper = new ObjectMapper(jsonFactory);
-		objectMapper.registerModule(new Jdk8Module());
-		objectMapper.registerModule(new JavaTimeModule());
-		return objectMapper;
-	}
-
-	public static CloudOptimisationDataResultRecord read(final InputStream is) throws IOException {
-		final ObjectMapper mapper = createObjectMapper();
-		return mapper.readValue(is, CloudOptimisationDataResultRecord.class);
-	}
-	
-	public void refresh()  throws IOException {
+	public void refresh() throws IOException {
 		if (updater != null) {
 			updater.pause();
 			try {
 				updater.refresh();
-			} catch(Exception e) {
+			} finally {
 				updater.resume();
-				throw e;
 			}
-			updater.resume();
 		}
 	}
-	
+
 	public void pause() {
 		if (updater != null) {
 			updater.pause();
 		}
 	}
-	
+
 	public void resume() {
 		if (updater != null) {
 			updater.resume();
@@ -269,17 +215,26 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 		if (serviceModel.isOffline()) {
 			return;
 		}
-		// Note: while this is recursive, we do assume a child first deletion set of calls as defined in DeleteScenarioCommandHandler
+		// Note: while this is recursive, we do assume a child first deletion set of
+		// calls as defined in DeleteScenarioCommandHandler
 		final List<String> jobIdsToDelete = new LinkedList<>();
 		recursiveDelete(container, jobIdsToDelete);
-		for (final String jobId : jobIdsToDelete) {
-			updater.deleteDownloaded(jobId);
-		}
+		updater.deleteDownloaded(jobIdsToDelete);
 	}
 	
+	public void delete(Collection <String> jobIdsToDelete) {
+//		if (serviceModel.isOffline()) {
+//			return;
+//		}
+//		// Note: while this is recursive, we do assume a child first deletion set of
+//		// calls as defined in DeleteScenarioCommandHandler
+//		final List<String> jobIdsToDelete = new LinkedList<>();
+//		recursiveDelete(container, jobIdsToDelete);
+		updater.deleteDownloaded(jobIdsToDelete);
+	}
+
 	private void recursiveDelete(final Container parent, final List<String> jobIds) {
-		if (parent instanceof ScenarioInstance) {
-			final ScenarioInstance scenarioInstance = (ScenarioInstance) parent;
+		if (parent instanceof ScenarioInstance scenarioInstance) {
 			jobIds.add(scenarioInstance.getExternalID());
 		}
 		for (final Container c : parent.getElements()) {
@@ -327,10 +282,10 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 		serviceModel.setLocal(false);
 		serviceModel.setOffline(false);
 		serviceModel.setServiceID(getSerivceID());
-		
+
 		// This image needs disposing
 		serviceModel.setImage(CommonImages.getImageDescriptor(IconPaths.Cloud_16, IconMode.Enabled).createImage());
-		
+
 		return serviceModel;
 	}
 

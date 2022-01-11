@@ -50,7 +50,9 @@ Require-Bundle: org.eclipse.core.runtime,
  com.google.guava;bundle-version="21.0.0",
  com.mmxlabs.lngdataserver.integration.pricing,
  com.mmxlabs.lngdataserver.integration.vessels;bundle-version="4.13.8",
- javax.annotation;bundle-version="1.2.0"
+ javax.annotation;bundle-version="1.2.0",
+ com.mmxlabs.models.ui.tabular,
+ com.mmxlabs.models.lng.migration
 Bundle-RequiredExecutionEnvironment: JavaSE-16
 Import-Package: com.fasterxml.jackson.datatype.jdk8;version="2.12.5",
  com.mmxlabs.models.lng.scenario.actions.anonymisation,

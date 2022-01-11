@@ -222,7 +222,7 @@ public class Activator extends AbstractUIPlugin {
 				// Already enabled
 				return;
 			}
-			cloudOptimisationService = new CloudOptimisationDataService();
+			cloudOptimisationService = CloudOptimisationDataService.INSTANCE;
 			if (scenarioCipherProviderTracker != null) {
 				cloudOptimisationService.setScenarioCipherProvider(scenarioCipherProviderTracker.getService());
 			}

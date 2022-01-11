@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2021
+    All rights reserved.
+
+-->
+<?eclipse version="3.0"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.CloudManagerView"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/cloud.png"
+            id="com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view.CloudManagerView"
+            name="Cloud Manager"
+            restorable="true">
+      </view>
+   </extension>
+</plugin>
