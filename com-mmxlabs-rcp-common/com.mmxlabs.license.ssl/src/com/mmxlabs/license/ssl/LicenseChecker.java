@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.KeyStore;
@@ -401,7 +402,7 @@ public final class LicenseChecker {
 	public static File getCACertsFileFromEclipseHomeURL(String eclipseHomeLocation) throws URISyntaxException {
 		if (eclipseHomeLocation != null) {
 			final String location = (eclipseHomeLocation + File.separator + "cacerts" + File.separator).replaceAll(" ", "%20");
-			return new File(location);
+			return new File(new URI(location));
 		}
 		return null;
 	}
