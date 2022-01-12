@@ -15,6 +15,7 @@ public class VersionHelper {
 	
 	private String version = null;
 	private String code = null;
+	private boolean workspaceVersion = true;
 	private boolean isFileRead = false;
 	
 	private static VersionHelper instance = new VersionHelper();
@@ -56,6 +57,8 @@ public class VersionHelper {
 				version = json.getString("version");
 				code = json.getString("code");
 				isFileRead = true;
+				
+				workspaceVersion = false;
 			} catch (final IOException e) {
 				// Ignore
 				// Maybe better to catch some of these exception types and feedback to user?
@@ -65,5 +68,13 @@ public class VersionHelper {
 	
 	public static VersionHelper getInstance() {
 		return instance;
+	}
+
+	/**
+	 * Returns true if build is running from workspace. Implied by lack of a version.json in runtime root folder.
+	 * @return
+	 */
+	public boolean isWorkspaceVersion() {
+		return workspaceVersion;
 	}
 }
