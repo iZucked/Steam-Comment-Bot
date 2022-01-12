@@ -321,7 +321,7 @@ public class CloudOptimisationDataUpdater {
 				// Keep old status if there is some kind of exception.
 			}
 			// Is the record still available upstream?
-			r.setRemote(!r.getStatus().isNotFound());
+			r.setRemote(r.getStatus() != null && !r.getStatus().isNotFound());
 
 			if (oldStatus != null && !oldStatus.isComplete() && r.getStatus().isComplete()) {
 				Instant n = Instant.now();
