@@ -181,7 +181,10 @@ public class ScenarioServicePushToCloudAction {
 		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 		try (IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
 			final LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-			return OptimisationHelper.getOptimiserSettings(scenarioModel, false, "Custom", true, true, null).getUserSettings();
+			OptimisationPlan plan = OptimisationHelper.getOptimiserSettings(scenarioModel, false, "Custom", true, true, null);
+			if (plan != null) {
+				return plan.getUserSettings();
+			}
 		} catch (final Exception e) {
 			LOG.error("Error getting the optimisation plan: " + e.getMessage(), e);
 		}
