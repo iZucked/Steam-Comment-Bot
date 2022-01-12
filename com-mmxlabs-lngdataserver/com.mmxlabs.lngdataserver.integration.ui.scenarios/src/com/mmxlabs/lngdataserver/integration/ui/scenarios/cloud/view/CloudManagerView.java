@@ -282,7 +282,7 @@ public class CloudManagerView extends ViewPart {
 				boolean stopEnabled = false;
 				for (Object obj : ss) {
 					if (obj instanceof CloudOptimisationDataResultRecord cRecord) {
-						if (cRecord.getStatus().isRunning()) {
+						if (cRecord.getStatus() != null && cRecord.getStatus().isRunning()) {
 							// No upstream API yet
 //								stopEnabled = true;
 						}

@@ -315,7 +315,11 @@ public class CloudOptimisationDataUpdater {
 			final boolean oldRemote = r.isRemote();
 			final ResultStatus oldStatus = r.getStatus();
 			// What is the status?
-			r.setStatus(ResultStatus.from(client.getJobStatus(r.getJobid()), oldStatus));
+			try {
+				r.setStatus(ResultStatus.from(client.getJobStatus(r.getJobid()), oldStatus));
+			} catch (Exception e) {
+				// Keep old status if there is some kind of exception.
+			}
 			// Is the record still available upstream?
 			r.setRemote(!r.getStatus().isNotFound());
 
@@ -383,7 +387,7 @@ public class CloudOptimisationDataUpdater {
 	 * @param isUUID
 	 * @return
 	 */
-	private CloudOptimisationDataResultRecord getRecord(final String jobId) {
+	private synchronized CloudOptimisationDataResultRecord getRecord(final String jobId) {
 		final List<CloudOptimisationDataResultRecord> records = getRecords();
 		if (records != null && !records.isEmpty()) {
 			for (final CloudOptimisationDataResultRecord record : records) {
@@ -500,7 +504,7 @@ public class CloudOptimisationDataUpdater {
 		return null;
 	}
 
-	private void saveAndUpdateCurrentRecords(final List<CloudOptimisationDataResultRecord> newList) {
+	private synchronized void saveAndUpdateCurrentRecords(final List<CloudOptimisationDataResultRecord> newList) {
 		try {
 			final String json = CloudOptimisationDataServiceClient.getJSON(newList);
 			Files.writeString(tasksFile.toPath(), json, StandardCharsets.UTF_8);

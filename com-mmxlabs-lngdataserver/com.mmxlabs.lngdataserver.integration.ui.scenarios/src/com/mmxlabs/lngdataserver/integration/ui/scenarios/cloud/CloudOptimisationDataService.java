@@ -7,6 +7,7 @@ package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -59,7 +60,7 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 	}
 
 	public Collection<CloudOptimisationDataResultRecord> getRecords() {
-		return updater.getRecords();
+		return updater == null ? Collections.emptyList() : updater.getRecords();
 	}
 
 	private void update(final CloudOptimisationDataResultRecord cRecord) {

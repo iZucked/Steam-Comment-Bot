@@ -141,7 +141,7 @@ public class CloudOptimisationDataResultRecord {
 		r.originalName = this.originalName;
 		r.remote = this.remote;
 		r.result = this.result;
-		r.status = this.status;
+		r.status = this.status == null ? null : this.status.copy();
 		r.uuid = this.uuid;
 		
 		return r;
