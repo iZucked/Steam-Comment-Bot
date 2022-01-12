@@ -195,12 +195,12 @@ public class ScenarioServicePushToCloudAction {
 			final boolean promptUser = System.getProperty("lingo.suppress.dialogs") == null;
 			switch (model.getMode()) {
 			case SandboxModeConstants.MODE_OPTIONISE:
-				return UserSettingsHelper.promptForInsertionUserSettings(root, false, promptUser, true, new NameProvider("Optimisation", existingNames), previousSettings);
+				return UserSettingsHelper.promptForInsertionUserSettings(root, false, promptUser, true, null, previousSettings);
 			case SandboxModeConstants.MODE_OPTIMISE:
-				return UserSettingsHelper.promptForUserSettings(root, false, promptUser, true, new NameProvider("Optimisation", existingNames), previousSettings);
+				return UserSettingsHelper.promptForUserSettings(root, false, promptUser, true, null, previousSettings);
 			case SandboxModeConstants.MODE_DERIVE:
 			default:
-				return UserSettingsHelper.promptForSandboxUserSettings(root, false, promptUser, true, new NameProvider("Optimisation", existingNames), previousSettings);
+				return UserSettingsHelper.promptForSandboxUserSettings(root, false, promptUser, true, null, previousSettings);
 			}
 		}
 	}
