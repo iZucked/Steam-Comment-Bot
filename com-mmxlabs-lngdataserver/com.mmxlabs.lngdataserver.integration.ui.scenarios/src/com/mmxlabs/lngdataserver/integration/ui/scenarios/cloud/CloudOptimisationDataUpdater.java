@@ -283,7 +283,7 @@ public class CloudOptimisationDataUpdater {
 					updateLock.lock();
 					try {
 						refresh();
-					} catch (final IOException e1) {
+					} catch (final Throwable e1) {
 						e1.printStackTrace();
 					} finally {
 						updateLock.unlock();
