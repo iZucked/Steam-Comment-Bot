@@ -26,6 +26,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.hub.common.http.IProgressListener;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.rcp.common.CommonImages;
 import com.mmxlabs.rcp.common.CommonImages.IconMode;
 import com.mmxlabs.rcp.common.CommonImages.IconPaths;
@@ -55,7 +57,9 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 
 	private CloudOptimisationDataService() {
 		super("Online Tasks");
-		start();
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_CLOUD_OPTIMISATION)) {
+			start();
+		}
 	}
 
 	public Collection<CloudOptimisationDataResultRecord> getRecords() {
@@ -221,15 +225,15 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 		recursiveDelete(container, jobIdsToDelete);
 		updater.deleteDownloaded(jobIdsToDelete);
 	}
-	
-	public void delete(Collection <String> jobIdsToDelete) {
-//		if (serviceModel.isOffline()) {
-//			return;
-//		}
-//		// Note: while this is recursive, we do assume a child first deletion set of
-//		// calls as defined in DeleteScenarioCommandHandler
-//		final List<String> jobIdsToDelete = new LinkedList<>();
-//		recursiveDelete(container, jobIdsToDelete);
+
+	public void delete(Collection<String> jobIdsToDelete) {
+		// if (serviceModel.isOffline()) {
+		// return;
+		// }
+		// // Note: while this is recursive, we do assume a child first deletion set of
+		// // calls as defined in DeleteScenarioCommandHandler
+		// final List<String> jobIdsToDelete = new LinkedList<>();
+		// recursiveDelete(container, jobIdsToDelete);
 		updater.deleteDownloaded(jobIdsToDelete);
 	}
 

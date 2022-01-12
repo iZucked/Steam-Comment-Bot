@@ -17,6 +17,8 @@ import org.osgi.util.tracker.ServiceTracker;
 import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.IUpstreamServiceChangedListener;
 import com.mmxlabs.hub.UpstreamUrlProvider;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.hub.IUpstreamServiceChangedListener.Service;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.BaseCaseScenarioService;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.SharedWorkspaceScenarioService;
@@ -217,7 +219,7 @@ public class Activator extends AbstractUIPlugin {
 			props.put("component.id", teamService.getSerivceID());
 
 			teamServiceRegistration = getBundle().getBundleContext().registerService(IScenarioService.class, teamService, props);
-		} else if (serviceType == Service.CloudOptimisation) {
+		} else if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_CLOUD_OPTIMISATION) && serviceType == Service.CloudOptimisation) {
 			if (cloudOptimisationService != null || cloudOptimisationServiceRegistration != null) {
 				// Already enabled
 				return;

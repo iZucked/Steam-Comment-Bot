@@ -300,7 +300,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				final Composite generateButton = createRunButton(c);
 				GridDataFactory.defaultsFor(generateButton).span(1, 1).align(SWT.LEFT, SWT.CENTER).applyTo(generateButton);
 
-				if (pushToCloudRunner != null) {
+				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_CLOUD_OPTIMISATION) && pushToCloudRunner != null) {
 					final Composite cloudRunButton = createCloudRunButton(c);
 					GridDataFactory.defaultsFor(sandboxModeSelector).span(1, 1).align(SWT.LEFT, SWT.CENTER).applyTo(cloudRunButton);
 				}
