@@ -222,16 +222,13 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 		recursiveDelete(container, jobIdsToDelete);
 		updater.deleteDownloaded(jobIdsToDelete);
 	}
-	
-	public void delete(Collection <String> jobIdsToDelete) {
-//		if (serviceModel.isOffline()) {
-//			return;
-//		}
-//		// Note: while this is recursive, we do assume a child first deletion set of
-//		// calls as defined in DeleteScenarioCommandHandler
-//		final List<String> jobIdsToDelete = new LinkedList<>();
-//		recursiveDelete(container, jobIdsToDelete);
+
+	public void delete(Collection<String> jobIdsToDelete) {
 		updater.deleteDownloaded(jobIdsToDelete);
+	}
+
+	public void setLocalRuntime(String jobId, long runtime) {
+		updater.setLocalRuntime(jobId, runtime);
 	}
 
 	private void recursiveDelete(final Container parent, final List<String> jobIds) {

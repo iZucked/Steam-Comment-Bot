@@ -323,6 +323,11 @@ public class CloudOptimisationDataUpdater {
 			// Is the record still available upstream?
 			r.setRemote(!r.getStatus().isNotFound());
 
+			if (oldStatus != null && !oldStatus.isComplete() && r.getStatus().isComplete()) {
+				Instant n = Instant.now();
+				r.setCloudRuntime(n.toEpochMilli() - r.getCreationDate().toEpochMilli());
+			}
+
 			changed |= oldRemote != r.isRemote();
 			changed |= !Objects.equals(oldStatus, r.getStatus());
 
@@ -367,16 +372,6 @@ public class CloudOptimisationDataUpdater {
 		} finally {
 			resume();
 		}
-	}
-
-	private List<String> getJobId(final String jobIds) {
-		final ObjectMapper mapper = new ObjectMapper();
-		try {
-			return mapper.readValue(jobIds, List.class);
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-		return Collections.emptyList();
 	}
 
 	/**
@@ -512,5 +507,13 @@ public class CloudOptimisationDataUpdater {
 
 		}
 		currentRecords = ImmutableList.copyOf(newList);
+	}
+
+	public synchronized void setLocalRuntime(String jobId, long runtime) {
+		CloudOptimisationDataResultRecord record = getRecord(jobId);
+		if (record != null) {
+			record.setLocalRuntime(runtime);
+		}
+		readyCallback.accept(record);
 	}
 }

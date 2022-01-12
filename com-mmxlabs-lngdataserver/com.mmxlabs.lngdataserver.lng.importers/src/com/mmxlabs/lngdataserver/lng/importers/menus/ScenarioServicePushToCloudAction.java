@@ -49,7 +49,9 @@ import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
 import com.mmxlabs.hub.services.users.UsernameProvider;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationConstants;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataResultRecord;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataService;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataServiceWrapper;
 import com.mmxlabs.lngdataserver.lng.importers.menus.PublishBasecaseException.Type;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
@@ -65,7 +67,6 @@ import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper.NameProvider;
-import com.mmxlabs.models.lng.scenario.actions.anonymisation.AnonymisationRecord;
 import com.mmxlabs.models.lng.scenario.actions.anonymisation.AnonymisationUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -120,6 +121,11 @@ public class ScenarioServicePushToCloudAction {
 		} else {
 			doPublish = MessageDialog.openQuestion(activeShell, "Confirm sending the scenario", String.format("Send scenario %s for online optimisation?", scenarioInstance.getName()));
 		}
+		boolean localOpti = false;
+		if (doPublish && optimisation && CloudOptimisationConstants.RUN_LOCAL_BENCHMARK) {
+			localOpti = MessageDialog.openQuestion(activeShell, "Confirm sending the scenario", "Run locally for runtime comparison?");
+		}
+
 		if (doPublish) {
 			final EObject optPlanOrUsrSettings;
 			if (optimisation) {
@@ -127,7 +133,7 @@ public class ScenarioServicePushToCloudAction {
 			} else {
 				optPlanOrUsrSettings = getOptimisationPlanForInsertion(scenarioInstance, targetSlots);
 			}
-			uploadScenario(scenarioInstance, notes, optPlanOrUsrSettings, optimisation, targetSlots, null);
+			uploadScenario(scenarioInstance, notes, optPlanOrUsrSettings, optimisation, targetSlots, null, localOpti);
 		}
 	}
 
@@ -161,12 +167,12 @@ public class ScenarioServicePushToCloudAction {
 		}
 		if (doPublish) {
 			final UserSettings userSettings = getSandboxUserSettings(scenarioInstance, sandboxModel);
-			uploadScenario(scenarioInstance, notes, userSettings, false, null, sandboxModel);
+			uploadScenario(scenarioInstance, notes, userSettings, false, null, sandboxModel, false);
 		}
 	}
 
 	private static OptimisationPlan getOptimisationPlanForOptimisation(final ScenarioInstance scenarioInstance) {
-		Set<String> existingNames = new HashSet<>();
+		final Set<String> existingNames = new HashSet<>();
 		scenarioInstance.getFragments().forEach(f -> existingNames.add(f.getName()));
 		scenarioInstance.getElements().forEach(f -> existingNames.add(f.getName()));
 		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
@@ -212,7 +218,7 @@ public class ScenarioServicePushToCloudAction {
 
 				if (object instanceof LNGScenarioModel) {
 					final LNGScenarioModel root = (LNGScenarioModel) object;
-					Set<String> existingNames = new HashSet<>();
+					final Set<String> existingNames = new HashSet<>();
 					scenarioInstance.getFragments().forEach(f -> existingNames.add(f.getName()));
 					scenarioInstance.getElements().forEach(f -> existingNames.add(f.getName()));
 
@@ -233,10 +239,10 @@ public class ScenarioServicePushToCloudAction {
 	}
 
 	public static void uploadScenario(final ScenarioInstance scenarioInstance, final String notes, final EObject optiPlanOrUserSettings, //
-			final boolean optimisation, final List<Slot<?>> targetSlots, final OptionAnalysisModel sandboxModel) {
+			final boolean optimisation, final List<Slot<?>> targetSlots, final OptionAnalysisModel sandboxModel, boolean runLocal) {
 		final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 		try {
-			dialog.run(true, false, m -> doUploadScenario(scenarioInstance, notes, optiPlanOrUserSettings, optimisation, targetSlots, sandboxModel, m));
+			dialog.run(true, false, m -> doUploadScenario(scenarioInstance, notes, optiPlanOrUserSettings, optimisation, targetSlots, sandboxModel, m, runLocal));
 		} catch (final InvocationTargetException e) {
 			LOG.error(e.getMessage(), e);
 			final Throwable cause = e.getCause();
@@ -294,7 +300,8 @@ public class ScenarioServicePushToCloudAction {
 	}
 
 	private static void doUploadScenario(final ScenarioInstance scenarioInstance, final String notes, final EObject optiPlanOrUserSettings, //
-			final boolean optimisation, @Nullable final List<Slot<?>> targetSlots, @Nullable final OptionAnalysisModel originalSandboxModel, final IProgressMonitor parentProgressMonitor) {
+			final boolean optimisation, @Nullable final List<Slot<?>> targetSlots, @Nullable final OptionAnalysisModel originalSandboxModel, final IProgressMonitor parentProgressMonitor,
+			boolean runLocal) {
 
 		parentProgressMonitor.beginTask("Send scenario", 1000);
 		final CloudManifestProblemType problemType = getProblemType(optimisation, targetSlots, originalSandboxModel);
@@ -304,9 +311,10 @@ public class ScenarioServicePushToCloudAction {
 			final CloudOptimisationDataResultRecord record = new CloudOptimisationDataResultRecord();
 			record.setUuid(scenarioInstance.getUuid());
 			record.setCreationDate(Instant.now());
-			// This is the Data Hub user ID. It should be different. 
+			// This is the Data Hub user ID. It should be different.
 			record.setCreator(UsernameProvider.INSTANCE.getUserID());
 			record.setOriginalName(scenarioInstance.getName());
+
 			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 
 			IScenarioDataProvider scenarioDataProvider = null;
@@ -416,7 +424,7 @@ public class ScenarioServicePushToCloudAction {
 			}
 
 			// CreateFile
-			File tmpScenarioFile = new File("scenario.lingo");
+			final File tmpScenarioFile = new File("scenario.lingo");
 			try {
 				ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, tmpScenarioFile);
 			} catch (final IOException e) {
@@ -496,18 +504,76 @@ public class ScenarioServicePushToCloudAction {
 				deleteAnonyMap(anonymisationMap);
 				throw new PublishBasecaseException(MSG_ERROR_UPLOADING, Type.FAILED_TO_UPLOAD_BASECASE, new IllegalStateException("Unexpected server response: " + e.getMessage()));
 			}
-			try {
-				CloudOptimisationDataServiceWrapper.updateRecords(record);
-			} catch (final Exception e) {
-				deleteAnonyMap(anonymisationMap);
-				throw new PublishBasecaseException(MSG_ERROR_UPLOADING, Type.FAILED_TO_UPLOAD_BASECASE, e);
+			CloudOptimisationDataServiceWrapper.updateRecords(record);
+
+			if (CloudOptimisationConstants.RUN_LOCAL_BENCHMARK && runLocal) {
+				try {
+					runLocalOptimisation(scenarioInstance, optiPlanOrUserSettings, targetSlots, problemType, progressMonitor, record, scenarioDataProvider, anonymisationMap);
+				} catch (Exception e) {
+					// Ignore - internal debug use only
+				}
 			}
 		} finally {
 			progressMonitor.done();
 		}
 	}
 
-	private static void deleteAnonyMap(File anonymisationMap) {
+	private static void runLocalOptimisation(final ScenarioInstance scenarioInstance, final EObject optiPlanOrUserSettings, final List<Slot<?>> targetSlots, final CloudManifestProblemType problemType,
+			final SubMonitor progressMonitor, final CloudOptimisationDataResultRecord record, IScenarioDataProvider scenarioDataProvider, File anonymisationMap) {
+		try {
+			progressMonitor.setWorkRemaining(500);
+			progressMonitor.setTaskName("Running benchmark local optimisation");
+			progressMonitor.subTask(problemType.toString());
+			final long a = System.currentTimeMillis();
+
+			if (problemType == CloudManifestProblemType.OPTIMISATION) {
+				final LNGOptimisationBuilder optiBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, scenarioInstance) //
+						.withThreadCount(1) //
+						.withOptimiseHint() //
+				;
+				if (optiPlanOrUserSettings instanceof final UserSettings us) {
+					optiBuilder.withUserSettings(us);//
+				} else if (optiPlanOrUserSettings instanceof final OptimisationPlan op) {
+					optiBuilder.withOptimisationPlan(op);//
+
+				}
+
+				final LNGOptimisationRunnerBuilder runnerBuilder = optiBuilder.buildDefaultRunner();
+				runnerBuilder.getScenarioRunner().runWithProgress(progressMonitor.split(500));
+			} else if (problemType == CloudManifestProblemType.OPTIONISER) {
+				// Not yet supported
+
+//				final List<Slot<?>> atargetSlots = new LinkedList<>();
+//				final List<VesselEvent> atargetEvents = new LinkedList<>();
+//
+//				final CargoModelFinder cargoFinder = new CargoModelFinder(ScenarioModelUtil.getCargoModel(scenarioDataProvider));
+////					options.loadIds.forEach(id -> atargetSlots.add(cargoFinder.findLoadSlot(id)));
+////					options.dischargeIds.forEach(id -> atargetSlots.add(cargoFinder.findDischargeSlot(id)));
+////					options.eventsIds.forEach(id -> atargetEvents.add(cargoFinder.findVesselEvent(id)));
+////
+//				final LNGSchedulerInsertSlotJobRunner insertionRunner = new LNGSchedulerInsertSlotJobRunner(null, // ScenarioInstance
+//						scenarioDataProvider, scenarioDataProvider.getEditingDomain(), (UserSettings) optiPlanOrUserSettings, //
+//						targetSlots, targetEvents, //
+//						null, // Optional extra data provider.
+//						null, // Alternative initial solution provider
+//						builder -> {
+////						if (options.maxWorkerThreads > 0) {
+////							builder.withThreadCount(options.maxWorkerThreads);
+////						}
+//						});
+//
+//				final IMultiStateResult results = insertionRunner.runInsertion(null, progressMonitor.split(500));
+
+			}
+			final long b = System.currentTimeMillis();
+			CloudOptimisationDataService.INSTANCE.setLocalRuntime(record.getJobid(), b - a);
+
+		} catch (final Exception e) {
+			// Ignore/
+		}
+	}
+
+	private static void deleteAnonyMap(final File anonymisationMap) {
 		if (anonymisationMap != null) {
 			anonymisationMap.delete();
 		}
@@ -524,12 +590,12 @@ public class ScenarioServicePushToCloudAction {
 			for (final File file : files) {
 				doArchive(zos, file);
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			LOG.error("Can't write the ZIP archive", e);
 		}
 	}
 
-	private static void doArchive(ZipOutputStream zos, final File file) throws IOException {
+	private static void doArchive(final ZipOutputStream zos, final File file) throws IOException {
 		try (FileInputStream fis = new FileInputStream(file)) {
 			zos.putNextEntry(new ZipEntry(file.getName()));
 
@@ -605,12 +671,12 @@ public class ScenarioServicePushToCloudAction {
 	}
 
 	private static File createSandboxSettingsJson(final EObject plan, final OptionAnalysisModel sandboxModel) {
-		if (plan instanceof UserSettings) {
+
+		if (plan instanceof UserSettings us) {
 			final SandboxParametersDescription description = new SandboxParametersDescription();
 			description.sandboxUUID = sandboxModel.getUuid();
 
-			final UserSettings us = (UserSettings) plan;
-			SandboxSettings settings = new SandboxSettings();
+			final SandboxSettings settings = new SandboxSettings();
 			settings.periodStartDate = us.getPeriodStartDate();
 			settings.periodEnd = us.getPeriodEnd();
 			settings.shippingOnly = us.isShippingOnly();
