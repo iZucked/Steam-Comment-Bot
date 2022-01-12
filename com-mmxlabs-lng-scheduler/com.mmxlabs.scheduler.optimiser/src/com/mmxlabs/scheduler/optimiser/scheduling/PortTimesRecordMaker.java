@@ -1,5 +1,4 @@
-/**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
+/** Copyright (C) Minimax Labs Ltd., 2010 - 2021
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.scheduling;
@@ -83,7 +82,8 @@ public class PortTimesRecordMaker {
 	 * @param sequence
 	 * @return
 	 */
-	public final @Nullable IPortTimesRecord makeDESOrFOBPortTimesRecord(final @NonNull IResource resource, final @NonNull ISequence sequence, ISequencesAttributesProvider sequencesAttributesProvider) {
+	public final @Nullable IPortTimesRecord makeDESOrFOBPortTimesRecord(final @NonNull IResource resource, final @NonNull ISequence sequence,
+			ISequencesAttributesProvider sequencesAttributesProvider) {
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
@@ -137,9 +137,7 @@ public class PortTimesRecordMaker {
 				ITimeWindow timeWindow = thisPortSlot.getTimeWindow();
 				assert timeWindow != null;
 
-				if (thisPortSlot instanceof ILoadOption) {
-
-					final ILoadOption loadOption = (ILoadOption) thisPortSlot;
+				if (thisPortSlot instanceof ILoadOption loadOption) {
 					// Divertible DES has real time window.
 					if (!shippingHoursRestrictionProvider.isDivertible(element)) {
 						if (actualsDataProvider.hasActuals(thisPortSlot)) {
@@ -165,8 +163,7 @@ public class PortTimesRecordMaker {
 						}
 					}
 				}
-				if (thisPortSlot instanceof IDischargeOption) {
-					final IDischargeOption dischargeOption = (IDischargeOption) thisPortSlot;
+				if (thisPortSlot instanceof IDischargeOption dischargeOption) {
 					if (actualsDataProvider.hasActuals(thisPortSlot)) {
 						startTime = actualsDataProvider.getArrivalTime(thisPortSlot);
 
@@ -309,11 +306,13 @@ public class PortTimesRecordMaker {
 					final int prevArrivalTime = portTimesRecord.getSlotTime(prevPortSlot);
 					final int prevVisitDuration = portTimesRecord.getSlotDuration(prevPortSlot);
 					final int prevPanamaIdleTime = record.getSlotAdditionalPanamaIdleHours(prevPortSlot);
-					final int availableTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), //
+					Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), //
 							prevPortSlot.getPort(), startPortSlot.getPort(), //
 							vesselAvailability.getVessel().getMaxSpeed(), //
 							record.getSlotNextVoyageOptions(prevPortSlot) //
-					).getSecond();
+					);
+					portTimesRecord.setSlotNextVoyageOptions(prevPortSlot, mapToChoice(quickestTravelTime.getFirst()));
+					final int availableTime = quickestTravelTime.getSecond();
 					final int roundTripReturnArrivalTime = prevArrivalTime + prevVisitDuration + availableTime //
 							+ prevPanamaIdleTime + record.getSlotTotalExtraIdleTime(prevPortSlot);
 
@@ -642,6 +641,18 @@ public class PortTimesRecordMaker {
 				}
 			}
 		}
+	}
+
+	private static AvailableRouteChoices mapToChoice(ERouteOption opt) {
+		switch (opt) {
+		case DIRECT:
+			return AvailableRouteChoices.DIRECT_ONLY;
+		case SUEZ:
+			return AvailableRouteChoices.SUEZ_ONLY;
+		case PANAMA:
+			return AvailableRouteChoices.PANAMA_ONLY;
+		}
+		throw new IllegalArgumentException();
 	}
 
 }
