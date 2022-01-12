@@ -576,12 +576,10 @@ public class ScenarioServicePushToCloudAction {
 	}
 
 	private static File createOptioniserSettingsJson(final EObject plan, final List<Slot<?>> targetSlots) {
-		if (plan instanceof UserSettings) {
-			final UserSettings us = (UserSettings) plan;
+		if (plan instanceof UserSettings us) {
 			OptioniserSettings settings = new OptioniserSettings();
 			settings.periodStart = us.getPeriodStartDate();
 			settings.periodEnd = us.getPeriodEnd();
-			settings.iterations = 10000;
 			settings.loadIds = new ArrayList<>();
 			settings.dischargeIds = new ArrayList<>();
 			settings.eventsIds = new ArrayList<>();
@@ -593,8 +591,6 @@ public class ScenarioServicePushToCloudAction {
 					settings.dischargeIds.add(s.getName());
 				}
 			}
-
-			settings.exportResults = true;
 
 			final ObjectMapper objectMapper = new ObjectMapper();
 			try {

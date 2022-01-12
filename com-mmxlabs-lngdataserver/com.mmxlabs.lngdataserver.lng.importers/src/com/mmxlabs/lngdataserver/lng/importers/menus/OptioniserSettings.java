@@ -10,15 +10,16 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.YearMonthSerializer;
 
 public class OptioniserSettings {
+	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@JsonSerialize(using = LocalDateSerializer.class)
 	public LocalDate periodStart;
+	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM")
 	@JsonSerialize(using = YearMonthSerializer.class)
 	public YearMonth periodEnd;
-	public Integer iterations;
+	
 	public List<String> loadIds;
 	public List<String> dischargeIds;
 	public List<String> eventsIds;
-	public Boolean exportResults;
 }
