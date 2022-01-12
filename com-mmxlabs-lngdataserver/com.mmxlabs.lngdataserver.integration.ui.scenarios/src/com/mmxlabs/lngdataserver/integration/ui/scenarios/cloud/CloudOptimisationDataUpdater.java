@@ -506,7 +506,7 @@ public class CloudOptimisationDataUpdater {
 			final String json = CloudOptimisationDataServiceClient.getJSON(newList);
 			Files.writeString(tasksFile.toPath(), json, StandardCharsets.UTF_8);
 		} catch (final Exception e) {
-
+			int ii = 0;
 		}
 		currentRecords = ImmutableList.copyOf(newList);
 	}

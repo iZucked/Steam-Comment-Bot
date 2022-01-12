@@ -129,13 +129,13 @@ public class ScenarioServicePushToCloudAction {
 		}
 
 		if (doPublish) {
-			final EObject optPlanOrUsrSettings;
+			final UserSettings userSettings;
 			if (optimisation) {
-				optPlanOrUsrSettings = getOptimisationPlanForOptimisation(scenarioInstance);
+				userSettings = getOptimisationPlanForOptimisation(scenarioInstance);
 			} else {
-				optPlanOrUsrSettings = getOptimisationPlanForInsertion(scenarioInstance, targetSlots);
+				userSettings = getOptimisationPlanForInsertion(scenarioInstance, targetSlots);
 			}
-			uploadScenario(scenarioInstance, notes, optPlanOrUsrSettings, optimisation, targetSlots, null, localOpti);
+			uploadScenario(scenarioInstance, notes, userSettings, optimisation, targetSlots, null, localOpti);
 		}
 	}
 
@@ -173,14 +173,11 @@ public class ScenarioServicePushToCloudAction {
 		}
 	}
 
-	private static OptimisationPlan getOptimisationPlanForOptimisation(final ScenarioInstance scenarioInstance) {
-		final Set<String> existingNames = new HashSet<>();
-		scenarioInstance.getFragments().forEach(f -> existingNames.add(f.getName()));
-		scenarioInstance.getElements().forEach(f -> existingNames.add(f.getName()));
+	private static UserSettings getOptimisationPlanForOptimisation(final ScenarioInstance scenarioInstance) {
 		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 		try (IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
 			final LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-			return OptimisationHelper.getOptimiserSettings(scenarioModel, false, "Custom", true, true, new NameProvider("Optimisation", existingNames));
+			return OptimisationHelper.getOptimiserSettings(scenarioModel, false, "Custom", true, true, null).getUserSettings();
 		} catch (final Exception e) {
 			LOG.error("Error getting the optimisation plan: " + e.getMessage(), e);
 		}
@@ -240,16 +237,15 @@ public class ScenarioServicePushToCloudAction {
 		return userSettings;
 	}
 
-	public static void uploadScenario(final ScenarioInstance scenarioInstance, final String notes, final EObject optiPlanOrUserSettings, //
+	public static void uploadScenario(final ScenarioInstance scenarioInstance, final String notes, final UserSettings userSettings, //
 			final boolean optimisation, final List<Slot<?>> targetSlots, final OptionAnalysisModel sandboxModel, boolean runLocal) {
 		final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 		try {
-			dialog.run(true, false, m -> doUploadScenario(scenarioInstance, notes, optiPlanOrUserSettings, optimisation, targetSlots, sandboxModel, m, runLocal));
+			dialog.run(true, false, m -> doUploadScenario(scenarioInstance, notes, userSettings, optimisation, targetSlots, sandboxModel, m, runLocal));
 		} catch (final InvocationTargetException e) {
 			LOG.error(e.getMessage(), e);
 			final Throwable cause = e.getCause();
-			if (cause instanceof PublishBasecaseException) {
-				final PublishBasecaseException publishBasecaseException = (PublishBasecaseException) cause;
+			if (cause instanceof PublishBasecaseException publishBasecaseException) {
 				switch (publishBasecaseException.getType()) {
 				case FAILED_UNKNOWN_ERROR:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING,
@@ -301,7 +297,7 @@ public class ScenarioServicePushToCloudAction {
 
 	}
 
-	private static void doUploadScenario(final ScenarioInstance scenarioInstance, final String notes, final EObject optiPlanOrUserSettings, //
+	private static void doUploadScenario(final ScenarioInstance scenarioInstance, final String notes, final UserSettings userSettings, //
 			final boolean optimisation, @Nullable final List<Slot<?>> targetSlots, @Nullable final OptionAnalysisModel originalSandboxModel, final IProgressMonitor parentProgressMonitor,
 			boolean runLocal) {
 
@@ -391,20 +387,10 @@ public class ScenarioServicePushToCloudAction {
 
 				progressMonitor.subTask("Evaluate scenario");
 
-				// Evaluate scenario
-				final OptimisationPlan optiPlan;
-				if (optiPlanOrUserSettings instanceof OptimisationPlan) {
-					optiPlan = (OptimisationPlan) optiPlanOrUserSettings;
-				} else {
-					optiPlan = OptimisationHelper.getOptimiserSettings(o_scenarioModel, true, null, false, false, null);
-				}
-
-				assert optiPlan != null;
-
 				// Hack: Add on shipping only hint to avoid generating spot markets during eval.
 				final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, scenarioInstance) //
 						.withThreadCount(1) //
-						.withOptimisationPlan(optiPlan) //
+						.withUserSettings(userSettings) //
 						.withHints(LNGTransformerHelper.HINT_SHIPPING_ONLY) //
 						.buildDefaultRunner();
 
@@ -446,14 +432,14 @@ public class ScenarioServicePushToCloudAction {
 			}
 			switch (problemType) {
 			case OPTIMISATION:
-				filesToZip.add(Pair.of("parameters.json", createOptimisationSettingsJson(optiPlanOrUserSettings)));
+				filesToZip.add(Pair.of("parameters.json", createOptimisationSettingsJson(userSettings)));
 				break;
 			case OPTIONISER:
 				assert anonymisedTargetSlots != null;
-				filesToZip.add(Pair.of("parameters.json", createOptioniserSettingsJson(optiPlanOrUserSettings, anonymisedTargetSlots)));
+				filesToZip.add(Pair.of("parameters.json", createOptioniserSettingsJson(userSettings, anonymisedTargetSlots)));
 				break;
 			case SANDBOX:
-				filesToZip.add(Pair.of("parameters.json", createSandboxSettingsJson(optiPlanOrUserSettings, sandboxModelCopy)));
+				filesToZip.add(Pair.of("parameters.json", createSandboxSettingsJson(userSettings, sandboxModelCopy)));
 				break;
 			default:
 				throw new PublishBasecaseException("Unknown cloud optimisation problem type", Type.FAILED_UNKNOWN_ERROR);
@@ -511,7 +497,7 @@ public class ScenarioServicePushToCloudAction {
 
 			if (CloudOptimisationConstants.RUN_LOCAL_BENCHMARK && runLocal) {
 				try {
-					runLocalOptimisation(scenarioInstance, optiPlanOrUserSettings, targetSlots, problemType, progressMonitor, record, scenarioDataProvider, anonymisationMap);
+					runLocalOptimisation(scenarioInstance, userSettings, targetSlots, problemType, progressMonitor, record, scenarioDataProvider, anonymisationMap);
 				} catch (Exception e) {
 					// Ignore - internal debug use only
 				}
@@ -630,65 +616,58 @@ public class ScenarioServicePushToCloudAction {
 		}
 	}
 
-	private static String createOptimisationSettingsJson(final EObject plan) {
-		if (plan instanceof OptimisationPlan) {
-			final UserSettings us = ((OptimisationPlan) plan).getUserSettings();
-			if (us != null) {
-				final ObjectMapper objectMapper = new ObjectMapper();
-				objectMapper.addMixIn(UserSettingsImpl.class, UserSettingsMixin.class);
-				objectMapper.addMixIn(UserSettings.class, UserSettingsMixin.class);
-				try {
-					return objectMapper.writeValueAsString(us);
-				} catch (final Exception e) {
-					e.printStackTrace();
-				}
+	private static String createOptimisationSettingsJson(final UserSettings us) {
+
+		final ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.addMixIn(UserSettingsImpl.class, UserSettingsMixin.class);
+		objectMapper.addMixIn(UserSettings.class, UserSettingsMixin.class);
+		try {
+			return objectMapper.writeValueAsString(us);
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	private static String createOptioniserSettingsJson(final UserSettings us, final List<Slot<?>> targetSlots) {
+		OptioniserSettings settings = new OptioniserSettings();
+		settings.periodStart = us.getPeriodStartDate();
+		settings.periodEnd = us.getPeriodEnd();
+		settings.loadIds = new ArrayList<>();
+		settings.dischargeIds = new ArrayList<>();
+		settings.eventsIds = new ArrayList<>();
+
+		for (final Slot<?> s : targetSlots) {
+			if (s instanceof LoadSlot) {
+				settings.loadIds.add(s.getName());
+			} else if (s instanceof DischargeSlot) {
+				settings.dischargeIds.add(s.getName());
 			}
+		}
+
+		final ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			return objectMapper.writeValueAsString(settings);
+		} catch (final Exception e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
 
-	private static String createOptioniserSettingsJson(final EObject plan, final List<Slot<?>> targetSlots) {
-		if (plan instanceof UserSettings us) {
-			OptioniserSettings settings = new OptioniserSettings();
-			settings.periodStart = us.getPeriodStartDate();
-			settings.periodEnd = us.getPeriodEnd();
-			settings.loadIds = new ArrayList<>();
-			settings.dischargeIds = new ArrayList<>();
-			settings.eventsIds = new ArrayList<>();
+	private static String createSandboxSettingsJson(final UserSettings us, final OptionAnalysisModel sandboxModel) {
 
-			for (final Slot<?> s : targetSlots) {
-				if (s instanceof LoadSlot) {
-					settings.loadIds.add(s.getName());
-				} else if (s instanceof DischargeSlot) {
-					settings.dischargeIds.add(s.getName());
-				}
-			}
-
-			final ObjectMapper objectMapper = new ObjectMapper();
-			try {
-				return objectMapper.writeValueAsString(settings);
-			} catch (final Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return null;
-	}
-
-	private static String createSandboxSettingsJson(final EObject plan, final OptionAnalysisModel sandboxModel) {
-
-		if (plan instanceof UserSettingsImpl us) {
-			final HeadlessSandboxOptions description = new HeadlessSandboxOptions();
-			description.sandboxUUID = sandboxModel.getUuid();
-			description.userSettings = us;
-			final ObjectMapper objectMapper = new ObjectMapper();
-			objectMapper.addMixIn(UserSettingsImpl.class, UserSettingsMixin.class);
-			objectMapper.addMixIn(UserSettings.class, UserSettingsMixin.class);
-			try {
-				String json = objectMapper.writeValueAsString(description);
-				return json;
-			} catch (final Exception e) {
-				e.printStackTrace();
-			}
+		final HeadlessSandboxOptions description = new HeadlessSandboxOptions();
+		description.sandboxUUID = sandboxModel.getUuid();
+		description.userSettings = (UserSettingsImpl) us;
+		final ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.addMixIn(UserSettingsImpl.class, UserSettingsMixin.class);
+		objectMapper.addMixIn(UserSettings.class, UserSettingsMixin.class);
+		try {
+			String json = objectMapper.writeValueAsString(description);
+			return json;
+		} catch (final Exception e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
