@@ -359,12 +359,14 @@ public class CloudOptimisationDataUpdater {
 				final CloudOptimisationDataResultRecord cRecord = getRecord(jobId);
 				if (cRecord != null) {
 					final ScenarioInstance instance = installedRecords.remove(cRecord.getJobid());
-					RunnerHelper.syncExecDisplayOptional(() -> {
-						// We could already be in a container, so lets remove it first...
-						if (instance.eContainer() != null) {
-							((Container) instance.eContainer()).getElements().remove(instance);
-						}
-					});
+					if (instance != null) {
+						RunnerHelper.syncExecDisplayOptional(() -> {
+							// We could already be in a container, so lets remove it first...
+							if (instance.eContainer() != null) {
+								((Container) instance.eContainer()).getElements().remove(instance);
+							}
+						});
+					}
 					final boolean result = deleteRecord(cRecord);
 				}
 			}

@@ -14,6 +14,7 @@ public class ResultStatus {
 	public static final String STATUS_SUBMITTED = "submitted";
 	public static final String STATUS_COMPLETE = "complete";
 	public static final String STATUS_RUNNING = "running";
+	public static final String STATUS_FAILED = "failed";
 	public static final String STATUS_NOTFOUND = "notfound";
 
 	public static ResultStatus submitted() {
@@ -24,6 +25,7 @@ public class ResultStatus {
 	}
 
 	private String status;
+	private String reason;
 
 	private double progress;
 
@@ -47,11 +49,16 @@ public class ResultStatus {
 		final ResultStatus rs = new ResultStatus();
 		rs.progress = this.progress;
 		rs.status = this.status;
+		rs.reason = this.reason;
 		return rs;
 	}
 
 	public boolean isRunning() {
 		return STATUS_RUNNING.equalsIgnoreCase(status);
+	}
+
+	public boolean isFailed() {
+		return STATUS_FAILED.equalsIgnoreCase(status);
 	}
 
 	public boolean isComplete() {
@@ -73,6 +80,9 @@ public class ResultStatus {
 		if (o.has("progress")) {
 			rs.progress = o.getDouble("progress");
 		}
+		if (o.has("reason")) {
+			rs.reason = o.getString("reason");
+		}
 		// AWS Eventually consistent means we can get out of order progress updates!
 		// We want to keep the highest progress value found
 		if (rs.isRunning()) {
@@ -90,6 +100,14 @@ public class ResultStatus {
 			return Objects.equals(status, other.status) && progress == other.progress;
 		}
 		return false;
+	}
+
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
 	}
 
 }

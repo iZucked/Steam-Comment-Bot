@@ -5,13 +5,12 @@
 package com.mmxlabs.lngdataserver.lng.importers.menus;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -45,6 +44,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.ByteStreams;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
 import com.mmxlabs.hub.services.users.UsernameProvider;
 import com.mmxlabs.license.features.KnownFeatures;
@@ -67,6 +67,7 @@ import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper.NameProvider;
+import com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl;
 import com.mmxlabs.models.lng.scenario.actions.anonymisation.AnonymisationUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -74,6 +75,7 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
+import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessSandboxOptions;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.migration.scenario.ScenarioMigrationException;
 import com.mmxlabs.rcp.common.appversion.VersionHelper;
@@ -433,25 +435,25 @@ public class ScenarioServicePushToCloudAction {
 				throw new PublishBasecaseException(MSG_ERROR_SAVING, Type.FAILED_TO_SAVE, e);
 			}
 
-			final List<File> filesToZip = new ArrayList<>(4);
-			filesToZip.add(tmpScenarioFile);
-			filesToZip.add(createJVMOptions());
+			final List<Pair<String, Object>> filesToZip = new ArrayList<>(4);
+			filesToZip.add(Pair.of("scenario.lingo", tmpScenarioFile));
+			filesToZip.add(Pair.of("jvm.options", createJVMOptions()));
 
 			try {
-				filesToZip.add(createManifest(tmpScenarioFile.getName(), problemType));
+				filesToZip.add(Pair.of("manifest.json", createManifest(tmpScenarioFile.getName(), problemType)));
 			} catch (final PublishBasecaseException e) {
 				throw e;
 			}
 			switch (problemType) {
 			case OPTIMISATION:
-				filesToZip.add(createOptimisationSettingsJson(optiPlanOrUserSettings));
+				filesToZip.add(Pair.of("parameters.json", createOptimisationSettingsJson(optiPlanOrUserSettings)));
 				break;
 			case OPTIONISER:
 				assert anonymisedTargetSlots != null;
-				filesToZip.add(createOptioniserSettingsJson(optiPlanOrUserSettings, anonymisedTargetSlots));
+				filesToZip.add(Pair.of("parameters.json", createOptioniserSettingsJson(optiPlanOrUserSettings, anonymisedTargetSlots)));
 				break;
 			case SANDBOX:
-				filesToZip.add(createSandboxSettingsJson(optiPlanOrUserSettings, sandboxModelCopy));
+				filesToZip.add(Pair.of("parameters.json", createSandboxSettingsJson(optiPlanOrUserSettings, sandboxModelCopy)));
 				break;
 			default:
 				throw new PublishBasecaseException("Unknown cloud optimisation problem type", Type.FAILED_UNKNOWN_ERROR);
@@ -492,6 +494,7 @@ public class ScenarioServicePushToCloudAction {
 			try {
 				final JsonNode actualObj = mapper.readTree(response);
 				final String jobid = actualObj.get("jobid").textValue();
+				System.out.println(jobid);
 				if (jobid != null) {
 					record.setJobid(jobid);
 					final File temp = new File(CLOUD_OPTI_PATH + IPath.SEPARATOR + jobid + ".amap");
@@ -585,29 +588,27 @@ public class ScenarioServicePushToCloudAction {
 	 * @param targetFile
 	 * @param files
 	 */
-	private static void archive(final File targetFile, final List<File> files) {
+	private static void archive(final File targetFile, final List<Pair<String, Object>> files) {
 		try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(targetFile))) {
-			for (final File file : files) {
-				doArchive(zos, file);
+			for (final var p : files) {
+
+				if (p.getSecond() instanceof File f) {
+					doArchive(zos, p.getFirst(), f);
+				} else if (p.getSecond() instanceof String str) {
+					doArchive(zos, p.getFirst(), str);
+				} else {
+					throw new IllegalArgumentException();
+				}
 			}
 		} catch (final Exception e) {
 			LOG.error("Can't write the ZIP archive", e);
 		}
 	}
 
-	private static void doArchive(final ZipOutputStream zos, final File file) throws IOException {
+	private static void doArchive(final ZipOutputStream zos, String filename, final File file) throws IOException {
 		try (FileInputStream fis = new FileInputStream(file)) {
-			zos.putNextEntry(new ZipEntry(file.getName()));
-
-			byte[] data;
-			try (ByteArrayOutputStream bytesOut = new ByteArrayOutputStream()) {
-				ByteStreams.copy(fis, bytesOut);
-				data = bytesOut.toByteArray();
-			}
-
-			try (ByteArrayInputStream bytesIn = new ByteArrayInputStream(data)) {
-				ByteStreams.copy(bytesIn, zos);
-			}
+			zos.putNextEntry(new ZipEntry(filename));
+			ByteStreams.copy(fis, zos);
 		} catch (final Exception e) {
 			LOG.error(String.format("Can't add %s into the archive", file.getAbsolutePath()), e);
 		} finally {
@@ -615,24 +616,29 @@ public class ScenarioServicePushToCloudAction {
 		}
 	}
 
-	private static File createOptimisationSettingsJson(final EObject plan) {
+	private static void doArchive(final ZipOutputStream zos, String filename, String content) throws IOException {
+		try {
+			zos.putNextEntry(new ZipEntry(filename));
+
+			try (ByteArrayInputStream bytesIn = new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8))) {
+				ByteStreams.copy(bytesIn, zos);
+			}
+		} catch (final Exception e) {
+			LOG.error(String.format("Can't add %s into the archive", filename), e);
+		} finally {
+			zos.closeEntry();
+		}
+	}
+
+	private static String createOptimisationSettingsJson(final EObject plan) {
 		if (plan instanceof OptimisationPlan) {
 			final UserSettings us = ((OptimisationPlan) plan).getUserSettings();
 			if (us != null) {
-				OptimisationSettings settings = new OptimisationSettings();
-				settings.periodStartDate = us.getPeriodStartDate();
-				settings.periodEnd = us.getPeriodEnd();
-				settings.shippingOnly = us.isShippingOnly();
-				settings.generateCharterOuts = us.isGenerateCharterOuts();
-				settings.withCharterLength = us.isWithCharterLength();
-				settings.withSpotCargoMarkets = us.isWithSpotCargoMarkets();
-				settings.similarityMode = us.getSimilarityMode().getLiteral();
-
 				final ObjectMapper objectMapper = new ObjectMapper();
+				objectMapper.addMixIn(UserSettingsImpl.class, UserSettingsMixin.class);
+				objectMapper.addMixIn(UserSettings.class, UserSettingsMixin.class);
 				try {
-					final File file = new File("parameters.json");
-					objectMapper.writeValue(file, settings);
-					return file;
+					return objectMapper.writeValueAsString(us);
 				} catch (final Exception e) {
 					e.printStackTrace();
 				}
@@ -641,7 +647,7 @@ public class ScenarioServicePushToCloudAction {
 		return null;
 	}
 
-	private static File createOptioniserSettingsJson(final EObject plan, final List<Slot<?>> targetSlots) {
+	private static String createOptioniserSettingsJson(final EObject plan, final List<Slot<?>> targetSlots) {
 		if (plan instanceof UserSettings us) {
 			OptioniserSettings settings = new OptioniserSettings();
 			settings.periodStart = us.getPeriodStartDate();
@@ -660,9 +666,7 @@ public class ScenarioServicePushToCloudAction {
 
 			final ObjectMapper objectMapper = new ObjectMapper();
 			try {
-				final File file = new File("parameters.json");
-				objectMapper.writeValue(file, settings);
-				return file;
+				return objectMapper.writeValueAsString(settings);
 			} catch (final Exception e) {
 				e.printStackTrace();
 			}
@@ -670,26 +674,18 @@ public class ScenarioServicePushToCloudAction {
 		return null;
 	}
 
-	private static File createSandboxSettingsJson(final EObject plan, final OptionAnalysisModel sandboxModel) {
+	private static String createSandboxSettingsJson(final EObject plan, final OptionAnalysisModel sandboxModel) {
 
-		if (plan instanceof UserSettings us) {
-			final SandboxParametersDescription description = new SandboxParametersDescription();
+		if (plan instanceof UserSettingsImpl us) {
+			final HeadlessSandboxOptions description = new HeadlessSandboxOptions();
 			description.sandboxUUID = sandboxModel.getUuid();
-
-			final SandboxSettings settings = new SandboxSettings();
-			settings.periodStartDate = us.getPeriodStartDate();
-			settings.periodEnd = us.getPeriodEnd();
-			settings.shippingOnly = us.isShippingOnly();
-			settings.generateCharterOuts = us.isGenerateCharterOuts();
-			settings.withCharterLength = us.isWithCharterLength();
-			settings.withSpotCargoMarkets = us.isWithSpotCargoMarkets();
-			settings.similarityMode = us.getSimilarityMode().getLiteral();
-			description.userSettings = settings;
+			description.userSettings = us;
 			final ObjectMapper objectMapper = new ObjectMapper();
+			objectMapper.addMixIn(UserSettingsImpl.class, UserSettingsMixin.class);
+			objectMapper.addMixIn(UserSettings.class, UserSettingsMixin.class);
 			try {
-				final File file = new File("parameters.json");
-				objectMapper.writeValue(file, description);
-				return file;
+				String json = objectMapper.writeValueAsString(description);
+				return json;
 			} catch (final Exception e) {
 				e.printStackTrace();
 			}
@@ -697,7 +693,7 @@ public class ScenarioServicePushToCloudAction {
 		return null;
 	}
 
-	private static File createManifest(final String scenarioName, @NonNull final CloudManifestProblemType problemType) {
+	private static String createManifest(final String scenarioName, @NonNull final CloudManifestProblemType problemType) {
 		final ManifestDescription md = new ManifestDescription();
 		md.scenario = scenarioName;
 		md.type = problemType.getManifestString();
@@ -712,29 +708,15 @@ public class ScenarioServicePushToCloudAction {
 
 		final ObjectMapper objectMapper = new ObjectMapper();
 		try {
-			final File file = new File("manifest.json");
-			objectMapper.writeValue(file, md);
-			return file;
+			return objectMapper.writeValueAsString(md);
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
-	private static File createJVMOptions() {
-		try {
-			final File file = new File("jvm.options");
-			try (PrintWriter pw = new PrintWriter(new FileOutputStream(file))) {
-				pw.println("-Xms40m");
-				pw.println("-Xmx4g");
-			} catch (final Exception e) {
-				e.printStackTrace();
-			}
-			return file;
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-		return null;
+	private static String createJVMOptions() {
+		return "-Xms40m\n-Xmx4g\n";
 	}
 
 }
