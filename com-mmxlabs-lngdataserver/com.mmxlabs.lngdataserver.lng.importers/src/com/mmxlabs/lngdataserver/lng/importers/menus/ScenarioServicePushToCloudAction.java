@@ -254,6 +254,12 @@ public class ScenarioServicePushToCloudAction {
 		} catch (final InvocationTargetException e) {
 			LOG.error(e.getMessage(), e);
 			final Throwable cause = e.getCause();
+			
+			// TODO: Handle gateway errors.
+			// E.g. 502 - bad gateway
+			//      400 - bad request
+			//  Hostname/dns  errors / timeots
+			
 			if (cause instanceof PublishBasecaseException publishBasecaseException) {
 				switch (publishBasecaseException.getType()) {
 				case FAILED_UNKNOWN_ERROR:
