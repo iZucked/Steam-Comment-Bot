@@ -135,7 +135,9 @@ public class ScenarioServicePushToCloudAction {
 			} else {
 				userSettings = getOptimisationPlanForInsertion(scenarioInstance, targetSlots);
 			}
-			uploadScenario(scenarioInstance, notes, userSettings, optimisation, targetSlots, null, localOpti);
+			if (userSettings != null) {
+				uploadScenario(scenarioInstance, notes, userSettings, optimisation, targetSlots, null, localOpti);
+			}
 		}
 	}
 
@@ -169,7 +171,9 @@ public class ScenarioServicePushToCloudAction {
 		}
 		if (doPublish) {
 			final UserSettings userSettings = getSandboxUserSettings(scenarioInstance, sandboxModel);
-			uploadScenario(scenarioInstance, notes, userSettings, false, null, sandboxModel, false);
+			if (userSettings != null) {
+				uploadScenario(scenarioInstance, notes, userSettings, false, null, sandboxModel, false);
+			}
 		}
 	}
 
