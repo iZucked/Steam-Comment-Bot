@@ -23,6 +23,8 @@ import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.common.http.IProgressListener;
 import com.mmxlabs.hub.common.http.ProgressRequestBody;
 import com.mmxlabs.hub.common.http.ProgressResponseBody;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.preferences.CloudOptimiserPreferenceConstants;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.Activator;
 
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -48,7 +50,7 @@ public class CloudOptimisationDataServiceClient {
 	private static final String SCENARIO_RESULT_URL = "/result";
 	private static final String JOB_STATUS_URL = "/status";
 	private static final String SCENARIO_CLOUD_UPLOAD_URL = "/scenario"; //for localhost - "/scenarios/v1/cloud/opti/upload"
-	private static final String OPTI_CLOUD_BASE_URL = "https://gw.mmxlabs.com"; // "https://wzgy9ex061.execute-api.eu-west-2.amazonaws.com/dev/"
+//	private static final String OPTI_CLOUD_BASE_URL = "https://gw.mmxlabs.com"; // "https://wzgy9ex061.execute-api.eu-west-2.amazonaws.com/dev/"
 //	private final IEclipsePreferences preferences;
 //	private final String optimisationServiceURL;
 
@@ -63,6 +65,15 @@ public class CloudOptimisationDataServiceClient {
 		return this.lastSuccessfulAccess;
 	}
 
+	private String getGateway() {
+		String gateway = Activator.getDefault().getPreferenceStore().getString(CloudOptimiserPreferenceConstants.P_GATEWAY_URL_KEY);
+		if (gateway != null && gateway.endsWith("/")) {
+			gateway = gateway.substring(0, gateway.length() - 1);
+		}
+		return gateway;
+		
+	}
+	
 	public String upload(final File scenario, //
 			final String checksum, //
 			final String scenarioName, //
@@ -78,7 +89,7 @@ public class CloudOptimisationDataServiceClient {
 			requestBody = new ProgressRequestBody(requestBody, progressListener);
 		}
 
-		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(OPTI_CLOUD_BASE_URL, SCENARIO_CLOUD_UPLOAD_URL);
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(getGateway(), SCENARIO_CLOUD_UPLOAD_URL);
 		if (requestBuilder == null) {
 			return null;
 		}
@@ -110,7 +121,7 @@ public class CloudOptimisationDataServiceClient {
 				.build();
 
 		final String requestURL = String.format("%s/%s", SCENARIO_RESULT_URL, jobid);
-		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(OPTI_CLOUD_BASE_URL, requestURL);
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(getGateway(), requestURL);
 		if (requestBuilder == null) {
 			return false;
 		}
@@ -134,7 +145,7 @@ public class CloudOptimisationDataServiceClient {
 	
 	public String getJobStatus(final @NonNull String jobid) throws IOException {
 		final String requestURL = String.format("%s/%s", JOB_STATUS_URL, jobid);
-		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(OPTI_CLOUD_BASE_URL, requestURL);
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(getGateway(), requestURL);
 		if (requestBuilder == null) {
 			return null;
 		}
@@ -188,7 +199,7 @@ public class CloudOptimisationDataServiceClient {
 			url = LIST_SCENARIOS_URL;
 		}
 
-		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(OPTI_CLOUD_BASE_URL, url);
+		final Request.Builder requestBuilder = DataHubServiceProvider.getInstance().makeRequestBuilder(getGateway(), url);
 		if (requestBuilder == null) {
 			return null;
 		}

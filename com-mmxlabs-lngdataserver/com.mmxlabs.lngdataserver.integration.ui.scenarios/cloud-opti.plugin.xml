@@ -17,4 +17,21 @@
             restorable="true">
       </view>
    </extension>
+   
+   
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.preferences.CloudOptimiserPreferencePage"
+            id="com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.preferences.CloudOptimiserPreferencePage"
+            name="Cloud Optimiser">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.preferences.CloudOptimiserPreferenceInitializer">
+      </initializer>
+   </extension>
+   
 </plugin>

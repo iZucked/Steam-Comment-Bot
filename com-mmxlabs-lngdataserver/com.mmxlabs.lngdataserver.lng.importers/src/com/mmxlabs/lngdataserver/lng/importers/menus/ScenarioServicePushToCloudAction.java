@@ -53,6 +53,8 @@ import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisatio
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataResultRecord;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataService;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataServiceWrapper;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.preferences.CloudOptimiserPreferenceConstants;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.Activator;
 import com.mmxlabs.lngdataserver.lng.importers.menus.PublishBasecaseException.Type;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
@@ -685,16 +687,27 @@ public class ScenarioServicePushToCloudAction {
 		md.type = problemType.getManifestString();
 		md.parameters = "parameters.json";
 		md.jvmConfig = "jvm.options";
-		md.version = "4.13.1";
+		md.dev = false;
+		String devVersion = Activator.getDefault().getPreferenceStore().getString(CloudOptimiserPreferenceConstants.P_DEV_VERSION);
+		if (devVersion != null && !devVersion.isBlank()) {
+			md.version = devVersion.trim();
+			md.dev = true;
+		}
+		if (md.version == null) {
+			md.version = VersionHelper.getInstance().getClientVersion();
+		}
+		if (md.version == null) {
+			throw new PublishBasecaseException("Unable to determine LiNGO version.", Type.FAILED_UNKNOWN_ERROR, new IOException());
+		}
 		md.clientCode = VersionHelper.getInstance().getClientCode();
 		if (md.clientCode == null) {
-			throw new PublishBasecaseException("Can not read the version file! Please contaxt MMX", Type.FAILED_TO_SAVE, new IOException());
+			throw new PublishBasecaseException("Unable to determine version code.", Type.FAILED_UNKNOWN_ERROR, new IOException());
 		}
-		md.dev = true;
 
 		final ObjectMapper objectMapper = new ObjectMapper();
 		try {
-			return objectMapper.writeValueAsString(md);
+			String json = objectMapper.writeValueAsString(md);
+			return json;
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}

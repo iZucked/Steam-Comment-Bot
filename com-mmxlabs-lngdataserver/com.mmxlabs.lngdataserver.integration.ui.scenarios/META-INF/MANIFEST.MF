@@ -67,6 +67,7 @@ Bundle-Activator: com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.Ac
 Export-Package: com.mmxlabs.lngdataserver.integration.ui.scenarios,
  com.mmxlabs.lngdataserver.integration.ui.scenarios.api,
  com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud,
+ com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.preferences,
  com.mmxlabs.lngdataserver.integration.ui.scenarios.extensions,
  com.mmxlabs.lngdataserver.integration.ui.scenarios.internal
 Bundle-ClassPath: .
