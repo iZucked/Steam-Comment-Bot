@@ -7,6 +7,7 @@ package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -63,7 +64,7 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 	}
 
 	public Collection<CloudOptimisationDataResultRecord> getRecords() {
-		return updater.getRecords();
+		return updater == null ? Collections.emptyList() : updater.getRecords();
 	}
 
 	private void update(final CloudOptimisationDataResultRecord cRecord) {
@@ -227,14 +228,11 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 	}
 
 	public void delete(Collection<String> jobIdsToDelete) {
-		// if (serviceModel.isOffline()) {
-		// return;
-		// }
-		// // Note: while this is recursive, we do assume a child first deletion set of
-		// // calls as defined in DeleteScenarioCommandHandler
-		// final List<String> jobIdsToDelete = new LinkedList<>();
-		// recursiveDelete(container, jobIdsToDelete);
 		updater.deleteDownloaded(jobIdsToDelete);
+	}
+
+	public void setLocalRuntime(String jobId, long runtime) {
+		updater.setLocalRuntime(jobId, runtime);
 	}
 
 	private void recursiveDelete(final Container parent, final List<String> jobIds) {

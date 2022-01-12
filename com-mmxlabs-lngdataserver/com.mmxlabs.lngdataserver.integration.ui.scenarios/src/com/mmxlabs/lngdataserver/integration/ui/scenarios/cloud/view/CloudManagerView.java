@@ -10,6 +10,7 @@ import java.time.format.FormatStyle;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
@@ -17,12 +18,14 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
@@ -31,13 +34,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.part.ViewPart;
-import org.json.JSONObject;
 
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationConstants;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataResultRecord;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataService;
-import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.ResultStatus;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataService.IUpdateListener;
-import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataUpdater;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.ResultStatus;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.rcp.common.CommonImages;
 import com.mmxlabs.rcp.common.CommonImages.IconPaths;
@@ -45,53 +47,6 @@ import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 
 public class CloudManagerView extends ViewPart {
-	private final class ITableLabelProviderImplementation extends LabelProvider implements ITableLabelProvider {
-
-		@Override
-		public String getColumnText(Object element, int columnIndex) {
-
-			if (element instanceof CloudOptimisationDataResultRecord rec) {
-				if (columnIndex == 0) {
-					return rec.getOriginalName();
-				}
-				if (columnIndex == 1) {
-					return rec.getCreationDate().atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT));
-				}
-				if (columnIndex == 2) {
-					ResultStatus status = rec.getStatus();
-					if (status != null) {
-						return status.getStatus();
-					}
-				}
-				if (columnIndex == 3) {
-					ResultStatus status = rec.getStatus();
-					if (status != null) {
-						if (status.isRunning()) {
-							return String.format("%.0f%%", rec.getStatus().getProgress());
-						}
-					}
-				}
-			}
-
-			return null;
-		}
-
-		@Override
-		public Image getColumnImage(Object element, int columnIndex) {
-			if (columnIndex == 3) {
-				if (element instanceof CloudOptimisationDataResultRecord rec) {
-					ResultStatus status = rec.getStatus();
-					if (status != null) {
-						if (status.isRunning()) {
-							return PieChartRenderer.renderPie(rec.getStatus().getProgress() / 100.0);
-						}
-					}
-				}
-			}
-
-			return null;
-		}
-	}
 
 	//
 //	/**
@@ -101,7 +56,7 @@ public class CloudManagerView extends ViewPart {
 //
 	private GridTableViewer viewer;
 	private Action packAction;
-	private Action stopAction;
+//	private Action stopAction;
 	private Action removeAction;
 
 	private IUpdateListener listener;
@@ -115,26 +70,87 @@ public class CloudManagerView extends ViewPart {
 
 		GridViewerHelper.configureLookAndFeel(viewer);
 
-		final GridViewerColumn tvc0 = new GridViewerColumn(viewer, SWT.None);
-		tvc0.getColumn().setText("Name");
-		tvc0.getColumn().setWidth(200);
-		GridViewerHelper.configureLookAndFeel(tvc0);
+		{
+			final GridViewerColumn tvc0 = new GridViewerColumn(viewer, SWT.None);
+			tvc0.getColumn().setText("Name");
+			tvc0.getColumn().setWidth(200);
+			tvc0.setLabelProvider(createLP(CloudOptimisationDataResultRecord::getOriginalName));
+			GridViewerHelper.configureLookAndFeel(tvc0);
+		}
+		{
+			final GridViewerColumn tvc1 = new GridViewerColumn(viewer, SWT.None);
+			tvc1.getColumn().setText("Submitted");
+			tvc1.getColumn().setWidth(100);
+			tvc1.setLabelProvider(createLP(rec -> rec.getCreationDate().atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT))));
+			GridViewerHelper.configureLookAndFeel(tvc1);
+		}
+		{
+			final GridViewerColumn tvc2 = new GridViewerColumn(viewer, SWT.None);
+			tvc2.getColumn().setText("Status");
+			tvc2.getColumn().setWidth(75);
+			tvc2.setLabelProvider(createLP(rec -> {
+				final ResultStatus status = rec.getStatus();
+				if (status != null) {
+					return status.getStatus();
+				}
+				return null;
+			}));
 
-		final GridViewerColumn tvc1 = new GridViewerColumn(viewer, SWT.None);
-		tvc1.getColumn().setText("Submitted");
-		tvc1.getColumn().setWidth(100);
-		GridViewerHelper.configureLookAndFeel(tvc1);
-
-		final GridViewerColumn tvc2 = new GridViewerColumn(viewer, SWT.None);
-		tvc2.getColumn().setText("Status");
-		tvc2.getColumn().setWidth(75);
-		GridViewerHelper.configureLookAndFeel(tvc2);
-
-		final GridViewerColumn tvc3 = new GridViewerColumn(viewer, SWT.None);
-		tvc3.getColumn().setText("Progress");
-		tvc3.getColumn().setWidth(60);
-		GridViewerHelper.configureLookAndFeel(tvc3);
-
+			GridViewerHelper.configureLookAndFeel(tvc2);
+		}
+		{
+			final GridViewerColumn tvc3 = new GridViewerColumn(viewer, SWT.None);
+			tvc3.getColumn().setText("Progress");
+			tvc3.getColumn().setWidth(60);
+			tvc3.setLabelProvider(createLP(rec -> {
+				final ResultStatus status = rec.getStatus();
+				if (status != null) {
+					if (status.isRunning()) {
+						return String.format("%.0f%%", rec.getStatus().getProgress());
+					}
+				}
+				return null;
+			}, rec -> {
+				final ResultStatus status = rec.getStatus();
+				if (status != null) {
+					if (status.isRunning()) {
+						return PieChartRenderer.renderPie(rec.getStatus().getProgress() / 100.0);
+					}
+				}
+				return null;
+			}));
+			GridViewerHelper.configureLookAndFeel(tvc3);
+		}
+		if (CloudOptimisationConstants.RUN_LOCAL_BENCHMARK) {
+			{
+				final GridViewerColumn tvc3 = new GridViewerColumn(viewer, SWT.None);
+				tvc3.getColumn().setText("Local Runtime");
+				tvc3.getColumn().setHeaderTooltip("Runtime in seconds");
+				tvc3.getColumn().setWidth(60);
+				tvc3.setLabelProvider(createLP(rec -> {
+					final ResultStatus status = rec.getStatus();
+					if (status != null) {
+						return String.format("%,d", rec.getLocalRuntime() / 1000);
+					}
+					return null;
+				}));
+				GridViewerHelper.configureLookAndFeel(tvc3);
+			}
+			{
+				final GridViewerColumn tvc3 = new GridViewerColumn(viewer, SWT.None);	
+				tvc3.getColumn().setText("Cloud Runtime");
+				tvc3.getColumn().setHeaderTooltip("Runtime in seconds from time submitted to reported complete");
+				tvc3.getColumn().setWidth(60);
+				tvc3.setLabelProvider(createLP(rec -> {
+					final ResultStatus status = rec.getStatus();
+					if (status != null) {
+						return String.format("%,d", rec.getCloudRuntime() / 1000);
+					}
+					return null;
+				}));
+				GridViewerHelper.configureLookAndFeel(tvc3);
+			}
+		}
 //		final GridViewerColumn tvc4 = new GridViewerColumn(viewer, SWT.None);
 //		tvc4.getColumn().setText("Remote");
 //		tvc4.getColumn().setWidth(50);
@@ -156,14 +172,14 @@ public class CloudManagerView extends ViewPart {
 		viewer.setContentProvider(new ArrayContentProvider());
 
 		listener = () -> {
-			List<CloudOptimisationDataResultRecord> content = new LinkedList<>(CloudOptimisationDataService.INSTANCE.getRecords());
+			final List<CloudOptimisationDataResultRecord> content = new LinkedList<>(CloudOptimisationDataService.INSTANCE.getRecords());
 			Collections.sort(content, (a, b) -> a.getCreationDate().compareTo(b.getCreationDate()));
 			ViewerHelper.setInputThen(viewer, false, content, () -> updateActionEnablement(viewer.getSelection()));
 		};
 		CloudOptimisationDataService.INSTANCE.addListener(listener);
 // 
 
-		viewer.setLabelProvider(new ITableLabelProviderImplementation());
+//		viewer.setLabelProvider(new ITableLabelProviderImplementation());
 		// Create the help context id for the viewer's control
 //		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.jobmanager.viewer");
 
@@ -171,15 +187,11 @@ public class CloudManagerView extends ViewPart {
 		hookContextMenu();
 		contributeToActionBars();
 //
-		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
+		viewer.addSelectionChangedListener(event -> {
 
-			@Override
-			public void selectionChanged(final SelectionChangedEvent event) {
+			final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
 
-				final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
-
-				updateActionEnablement(selection);
-			}
+			updateActionEnablement(selection);
 		});
 
 		listener.updated();
@@ -225,7 +237,7 @@ public class CloudManagerView extends ViewPart {
 
 	private void fillLocalToolBar(final IToolBarManager manager) {
 		manager.add(packAction);
-		manager.add(stopAction);
+//		manager.add(stopAction);
 		manager.add(removeAction);
 	}
 
@@ -233,24 +245,24 @@ public class CloudManagerView extends ViewPart {
 
 		packAction = PackActionFactory.createPackColumnsAction(viewer);
 
-		stopAction = new Action() {
-			@Override
-			public void run() {
-
-			}
-		};
-		stopAction.setText("Abort");
-		stopAction.setToolTipText("Abort Job");
-		CommonImages.setImageDescriptors(stopAction, IconPaths.Terminate);
+//		stopAction = new Action() {
+//			@Override
+//			public void run() {
+//
+//			}
+//		};
+//		stopAction.setText("Abort");
+//		stopAction.setToolTipText("Abort Job");
+//		CommonImages.setImageDescriptors(stopAction, IconPaths.Terminate);
 
 		removeAction = new Action() {
 			@Override
 			public void run() {
-				ISelection selection = viewer.getSelection();
-				if (selection instanceof IStructuredSelection ss) {
-					List<String> jobs = new LinkedList<>();
-					for (Object obj : ss) {
-						if (obj instanceof CloudOptimisationDataResultRecord cRecord) {
+				final ISelection selection = viewer.getSelection();
+				if (selection instanceof final IStructuredSelection ss) {
+					final List<String> jobs = new LinkedList<>();
+					for (final Object obj : ss) {
+						if (obj instanceof final CloudOptimisationDataResultRecord cRecord) {
 							jobs.add(cRecord.getJobid());
 						}
 					}
@@ -275,20 +287,20 @@ public class CloudManagerView extends ViewPart {
 	}
 
 	private void updateActionEnablement(final ISelection selection) {
-		stopAction.setEnabled(false);
+//		stopAction.setEnabled(false);
 		removeAction.setEnabled(false);
 		if (!selection.isEmpty()) {
-			if (selection instanceof IStructuredSelection ss) {
-				boolean stopEnabled = false;
-				for (Object obj : ss) {
-					if (obj instanceof CloudOptimisationDataResultRecord cRecord) {
-						if (cRecord.getStatus().isRunning()) {
+			if (selection instanceof final IStructuredSelection ss) {
+				final boolean stopEnabled = false;
+				for (final Object obj : ss) {
+					if (obj instanceof final CloudOptimisationDataResultRecord cRecord) {
+						if (cRecord.getStatus() != null && cRecord.getStatus().isRunning()) {
 							// No upstream API yet
 //								stopEnabled = true;
 						}
 					}
 				}
-				stopAction.setEnabled(stopEnabled);
+//				stopAction.setEnabled(stopEnabled);
 				removeAction.setEnabled(!ss.isEmpty());
 			}
 
@@ -301,6 +313,38 @@ public class CloudManagerView extends ViewPart {
 		CloudOptimisationDataService.INSTANCE.removeListener(listener);
 
 		super.dispose();
+	}
+
+	private CellLabelProvider createLP(final Function<CloudOptimisationDataResultRecord, String> func) {
+		return new CellLabelProvider() {
+			@Override
+			public void update(final ViewerCell cell) {
+				final Object element = cell.getElement();
+				if (element instanceof final CloudOptimisationDataResultRecord rec) {
+					cell.setText(func.apply(rec));
+				} else {
+					cell.setText(null);
+				}
+
+			}
+		};
+	}
+
+	private CellLabelProvider createLP(final Function<CloudOptimisationDataResultRecord, String> func, final Function<CloudOptimisationDataResultRecord, Image> imgFunc) {
+		return new CellLabelProvider() {
+			@Override
+			public void update(final ViewerCell cell) {
+				final Object element = cell.getElement();
+				if (element instanceof final CloudOptimisationDataResultRecord rec) {
+					cell.setText(func.apply(rec));
+					cell.setImage(imgFunc.apply(rec));
+				} else {
+					cell.setText(null);
+					cell.setImage(null);
+				}
+
+			}
+		};
 	}
 
 }

@@ -315,9 +315,18 @@ public class CloudOptimisationDataUpdater {
 			final boolean oldRemote = r.isRemote();
 			final ResultStatus oldStatus = r.getStatus();
 			// What is the status?
-			r.setStatus(ResultStatus.from(client.getJobStatus(r.getJobid()), oldStatus));
+			try {
+				r.setStatus(ResultStatus.from(client.getJobStatus(r.getJobid()), oldStatus));
+			} catch (Exception e) {
+				// Keep old status if there is some kind of exception.
+			}
 			// Is the record still available upstream?
 			r.setRemote(!r.getStatus().isNotFound());
+
+			if (oldStatus != null && !oldStatus.isComplete() && r.getStatus().isComplete()) {
+				Instant n = Instant.now();
+				r.setCloudRuntime(n.toEpochMilli() - r.getCreationDate().toEpochMilli());
+			}
 
 			changed |= oldRemote != r.isRemote();
 			changed |= !Objects.equals(oldStatus, r.getStatus());
@@ -365,16 +374,6 @@ public class CloudOptimisationDataUpdater {
 		}
 	}
 
-	private List<String> getJobId(final String jobIds) {
-		final ObjectMapper mapper = new ObjectMapper();
-		try {
-			return mapper.readValue(jobIds, List.class);
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-		return Collections.emptyList();
-	}
-
 	/**
 	 * Returns records from the master list of records. Returns null if no record
 	 * found.
@@ -383,7 +382,7 @@ public class CloudOptimisationDataUpdater {
 	 * @param isUUID
 	 * @return
 	 */
-	private CloudOptimisationDataResultRecord getRecord(final String jobId) {
+	private synchronized CloudOptimisationDataResultRecord getRecord(final String jobId) {
 		final List<CloudOptimisationDataResultRecord> records = getRecords();
 		if (records != null && !records.isEmpty()) {
 			for (final CloudOptimisationDataResultRecord record : records) {
@@ -500,7 +499,7 @@ public class CloudOptimisationDataUpdater {
 		return null;
 	}
 
-	private void saveAndUpdateCurrentRecords(final List<CloudOptimisationDataResultRecord> newList) {
+	private synchronized void saveAndUpdateCurrentRecords(final List<CloudOptimisationDataResultRecord> newList) {
 		try {
 			final String json = CloudOptimisationDataServiceClient.getJSON(newList);
 			Files.writeString(tasksFile.toPath(), json, StandardCharsets.UTF_8);
@@ -508,5 +507,13 @@ public class CloudOptimisationDataUpdater {
 
 		}
 		currentRecords = ImmutableList.copyOf(newList);
+	}
+
+	public synchronized void setLocalRuntime(String jobId, long runtime) {
+		CloudOptimisationDataResultRecord record = getRecord(jobId);
+		if (record != null) {
+			record.setLocalRuntime(runtime);
+		}
+		readyCallback.accept(record);
 	}
 }

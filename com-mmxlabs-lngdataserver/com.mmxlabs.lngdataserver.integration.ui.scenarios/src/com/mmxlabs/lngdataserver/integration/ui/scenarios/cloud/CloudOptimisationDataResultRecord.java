@@ -24,14 +24,16 @@ public class CloudOptimisationDataResultRecord {
 
 	private String originalName;
 
-	
 	private boolean remote;
-	
+
 	private boolean deleted;
-	
+
+	private long localRuntime;
+	private long cloudRuntime;
+
 	@JsonIgnore
 	private ResultStatus status;
-	
+
 	@JsonIgnore
 	private File result;
 
@@ -130,7 +132,7 @@ public class CloudOptimisationDataResultRecord {
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
-	
+
 	public CloudOptimisationDataResultRecord copy() {
 		CloudOptimisationDataResultRecord r = new CloudOptimisationDataResultRecord();
 		r.anonyMapFileName = this.anonyMapFileName;
@@ -141,9 +143,28 @@ public class CloudOptimisationDataResultRecord {
 		r.originalName = this.originalName;
 		r.remote = this.remote;
 		r.result = this.result;
-		r.status = this.status;
+		r.cloudRuntime = this.cloudRuntime;
+		r.localRuntime = this.localRuntime;
+		r.status = this.status == null ? null : this.status.copy();
 		r.uuid = this.uuid;
-		
+
 		return r;
+	}
+
+	public void setLocalRuntime(long l) {
+		this.localRuntime = l;
+
+	}
+
+	public long getLocalRuntime() {
+		return localRuntime;
+	}
+
+	public long getCloudRuntime() {
+		return cloudRuntime;
+	}
+
+	public void setCloudRuntime(long cloudRuntime) {
+		this.cloudRuntime = cloudRuntime;
 	}
 }
