@@ -673,6 +673,8 @@ public class ScenarioServicePushToCloudAction {
 		}
 
 		final ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.addMixIn(UserSettingsImpl.class, UserSettingsMixin.class);
+		objectMapper.addMixIn(UserSettings.class, UserSettingsMixin.class);
 		try {
 			return objectMapper.writeValueAsString(settings);
 		} catch (final Exception e) {
