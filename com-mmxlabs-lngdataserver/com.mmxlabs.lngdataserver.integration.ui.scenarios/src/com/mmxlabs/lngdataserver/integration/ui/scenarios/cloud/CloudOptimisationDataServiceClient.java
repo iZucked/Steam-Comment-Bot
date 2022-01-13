@@ -15,10 +15,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.hub.common.http.IProgressListener;
 import com.mmxlabs.hub.common.http.ProgressRequestBody;
 import com.mmxlabs.hub.common.http.ProgressResponseBody;
@@ -172,7 +170,7 @@ public class CloudOptimisationDataServiceClient {
 		try (Response response = httpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
 				if (response.code() == 404) {
-					return "{ \"status\": \"notfound\" }";// return "Scenario and results are not in s3, please submit again";
+					return "{ \"status\": \"" + ResultStatus.STATUS_NOTFOUND + "\" }";// return "Scenario and results are not in s3, please submit again";
 				}
 				throw new IOException("Unexpected code: " + response);
 			}
@@ -180,62 +178,7 @@ public class CloudOptimisationDataServiceClient {
 		}
 	}
 
-	public boolean isJobComplete(final @NonNull String jobid) throws IOException {
-		final String response = getJobStatus(jobid);
-		final ObjectMapper mapper = new ObjectMapper();
-		try {
-			final JsonNode actualObj = mapper.readTree(response);
-			final String state = actualObj.get("status").textValue();
-			if (state != null) {
-				if ("complete".equalsIgnoreCase(state)) {
-					return true;
-				}
-			} else {
-				throw new IOException("Unexpected error!");
-			}
-		} catch (final IOException e) {
-			throw new IOException("Unexpected error: " + e.getMessage());
-		}
-		return false;
-	}
-
-	/**
-	 * Lists scenarios in the job queue -OR- Lists scenarios which have been
-	 * optimised
-	 * 
-	 * @return
-	 * @throws IOException
-	 */
-	public Pair<String, Instant> listContents(final boolean listFinished) throws IOException {
-
-		final String url;
-		if (listFinished) {
-			url = LIST_RESULTS_URL;
-		} else {
-			url = LIST_SCENARIOS_URL;
-		}
-
-		final Request.Builder requestBuilder = makeRequestBuilder(getGateway(), url);
-		if (requestBuilder == null) {
-			return null;
-		}
-
-		final Request request = requestBuilder //
-				.build();
-
-		try (Response response = httpClient.newCall(request).execute()) {
-			if (!response.isSuccessful()) {
-				throw new IOException("Unexpected code: " + response);
-			}
-			// Only update the last successful access time, only if we list accomplished
-			// tasks
-			if (listFinished) {
-				lastSuccessfulAccess = Instant.now();
-			}
-			final String jsonData = response.body().string();
-			return new Pair<>(jsonData, lastSuccessfulAccess);
-		}
-	}
+ 
 
 	//
 	private static final TypeReference<List<CloudOptimisationDataResultRecord>> TYPE_GDR_LIST = new TypeReference<List<CloudOptimisationDataResultRecord>>() {

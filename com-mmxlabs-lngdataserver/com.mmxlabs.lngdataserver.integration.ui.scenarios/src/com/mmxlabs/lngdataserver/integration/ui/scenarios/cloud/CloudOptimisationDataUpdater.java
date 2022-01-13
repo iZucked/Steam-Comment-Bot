@@ -11,7 +11,6 @@ import java.nio.file.Files;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -37,9 +36,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
 import com.mmxlabs.models.lng.migration.ModelsLNGVersionMaker;
 import com.mmxlabs.models.lng.scenario.actions.anonymisation.AnonymisationUtils;
@@ -82,6 +79,9 @@ public class CloudOptimisationDataUpdater {
 
 	private ImmutableList<CloudOptimisationDataResultRecord> currentRecords = ImmutableList.of();
 
+	private boolean shortPoll = false;
+	private boolean runUpdateThread = false;
+
 	public CloudOptimisationDataUpdater(final File basePath, final CloudOptimisationDataServiceClient client, final ScenarioService modelRoot,
 			final Consumer<CloudOptimisationDataResultRecord> readyCallback) {
 		this.modelRoot = modelRoot;
@@ -102,7 +102,7 @@ public class CloudOptimisationDataUpdater {
 			for (final CloudOptimisationDataResultRecord cRecord : records) {
 				if (!installedRecords.containsKey(cRecord.getJobid()) && cRecord.getResult() == null) {
 					try {
-						if (client.isJobComplete(cRecord.getJobid())) {
+						if (cRecord.getStatus().isComplete()) {
 							taskExecutor.execute(new DownloadTask(cRecord));
 						}
 					} catch (final Exception e) {
@@ -246,6 +246,7 @@ public class CloudOptimisationDataUpdater {
 	}
 
 	public void stop() {
+		runUpdateThread = false;
 		if (updateThread != null) {
 			updateThread.interrupt();
 			updateThread = null;
@@ -274,12 +275,12 @@ public class CloudOptimisationDataUpdater {
 				e.printStackTrace();
 			}
 		}
-
+		runUpdateThread = true;
 		updateThread = new Thread("CloudOptimisationUpdaterThread") {
 			@Override
 			public void run() {
 
-				while (true) {
+				while (runUpdateThread) {
 					updateLock.lock();
 					try {
 						refresh();
@@ -290,12 +291,20 @@ public class CloudOptimisationDataUpdater {
 					}
 
 					try {
-						// Set to 60_000 for any OneShot or Beta builds
-						// During release - two to five minutes
-						Thread.sleep(1_000);
+						if (shortPoll) {
+							// There is an active task, poll on a short interval
+							Thread.sleep(1_000);
+						} else {
+							// No currently active tasks, so poll less frequently
+							// .. do we need to poll at all?
+							Thread.sleep(30_000);
+						}
 					} catch (final InterruptedException e) {
-						interrupt(); // preserve interruption status
-						return;
+						// We can interrupt to wake up the thread or to kill it.
+						if (!runUpdateThread) {
+							interrupt(); // preserve interruption status
+							return;
+						}
 					}
 				}
 			}
@@ -307,6 +316,8 @@ public class CloudOptimisationDataUpdater {
 	public synchronized void refresh() throws IOException {
 
 		boolean changed = false;
+
+		shortPoll = false;
 
 		final List<CloudOptimisationDataResultRecord> newList = new LinkedList<>();
 		for (final CloudOptimisationDataResultRecord originalR : currentRecords) {
@@ -332,6 +343,8 @@ public class CloudOptimisationDataUpdater {
 			changed |= !Objects.equals(oldStatus, r.getStatus());
 
 			newList.add(r);
+
+			shortPoll |= r.isActive();
 		}
 		changed |= currentRecords.size() != newList.size();
 		if (changed) {
@@ -353,6 +366,9 @@ public class CloudOptimisationDataUpdater {
 		
 		readyCallback.accept(r);
 
+		// Tell refresh job to wake up
+		shortPoll = true;
+		updateThread.interrupt();
 	}
 
 	public synchronized void deleteDownloaded(final Collection<String> jobIds) {
@@ -510,6 +526,7 @@ public class CloudOptimisationDataUpdater {
 			Files.writeString(tasksFile.toPath(), json, StandardCharsets.UTF_8);
 		} catch (final Exception e) {
 			int ii = 0;
+			e.printStackTrace();
 		}
 		currentRecords = ImmutableList.copyOf(newList);
 	}

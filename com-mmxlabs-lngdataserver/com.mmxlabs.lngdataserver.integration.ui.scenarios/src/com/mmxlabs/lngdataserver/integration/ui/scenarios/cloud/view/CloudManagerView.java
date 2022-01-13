@@ -123,6 +123,9 @@ public class CloudManagerView extends ViewPart {
 			}, rec -> {
 				final ResultStatus status = rec.getStatus();
 				if (status != null) {
+					if (status.isSubmitted()) {
+						return PieChartRenderer.renderPie(0.0);
+					}
 					if (status.isRunning()) {
 						return PieChartRenderer.renderPie(rec.getStatus().getProgress() / 100.0);
 					}

@@ -6,8 +6,11 @@ package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud;
 
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.json.JSONObject;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ResultStatus {
 
@@ -17,10 +20,17 @@ public class ResultStatus {
 	public static final String STATUS_FAILED = "failed";
 	public static final String STATUS_NOTFOUND = "notfound";
 
-	public static ResultStatus submitted() {
+	public static @NonNull ResultStatus submitted() {
 		final ResultStatus rs = new ResultStatus();
 		rs.progress = 0.0;
 		rs.status = STATUS_SUBMITTED;
+		return rs;
+	}
+
+	public static @NonNull ResultStatus notfound() {
+		final ResultStatus rs = new ResultStatus();
+		rs.progress = 0.0;
+		rs.status = STATUS_NOTFOUND;
 		return rs;
 	}
 
@@ -45,6 +55,7 @@ public class ResultStatus {
 		this.progress = progress;
 	}
 
+	@JsonIgnore
 	public ResultStatus copy() {
 		final ResultStatus rs = new ResultStatus();
 		rs.progress = this.progress;
@@ -53,20 +64,30 @@ public class ResultStatus {
 		return rs;
 	}
 
+	@JsonIgnore
 	public boolean isRunning() {
 		return STATUS_RUNNING.equalsIgnoreCase(status);
 	}
 
+	@JsonIgnore
 	public boolean isFailed() {
 		return STATUS_FAILED.equalsIgnoreCase(status);
 	}
 
+	@JsonIgnore
 	public boolean isComplete() {
 		return STATUS_COMPLETE.equalsIgnoreCase(status);
 	}
 
+	@JsonIgnore
 	public boolean isNotFound() {
 		return STATUS_NOTFOUND.equalsIgnoreCase(status);
+	}
+
+	@JsonIgnore
+	public boolean isSubmitted() {
+		return STATUS_SUBMITTED.equalsIgnoreCase(status);
+
 	}
 
 	public static ResultStatus from(final String str, @Nullable final ResultStatus previous) {

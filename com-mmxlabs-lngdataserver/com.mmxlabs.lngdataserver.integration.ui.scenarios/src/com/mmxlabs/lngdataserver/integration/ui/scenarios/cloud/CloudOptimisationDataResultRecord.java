@@ -8,6 +8,8 @@ import java.io.File;
 import java.time.Instant;
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class CloudOptimisationDataResultRecord {
@@ -31,8 +33,7 @@ public class CloudOptimisationDataResultRecord {
 	private long localRuntime;
 	private long cloudRuntime;
 
-	@JsonIgnore
-	private ResultStatus status;
+	private @NonNull ResultStatus status = ResultStatus.notfound();
 
 	@JsonIgnore
 	private File result;
@@ -105,7 +106,7 @@ public class CloudOptimisationDataResultRecord {
 		return status;
 	}
 
-	public void setStatus(ResultStatus status) {
+	public void setStatus(@NonNull ResultStatus status) {
 		this.status = status;
 	}
 
@@ -145,7 +146,7 @@ public class CloudOptimisationDataResultRecord {
 		r.result = this.result;
 		r.cloudRuntime = this.cloudRuntime;
 		r.localRuntime = this.localRuntime;
-		r.status = this.status == null ? null : this.status.copy();
+		r.status = this.status.copy();
 		r.uuid = this.uuid;
 
 		return r;
@@ -166,5 +167,15 @@ public class CloudOptimisationDataResultRecord {
 
 	public void setCloudRuntime(long cloudRuntime) {
 		this.cloudRuntime = cloudRuntime;
+	}
+
+	/**
+	 * Returns true if the tasks has been submitted or is currently running
+	 * 
+	 * @return
+	 */
+	@JsonIgnore
+	public boolean isActive() {
+		return status != null && (status.isSubmitted() || status.isRunning());
 	}
 }
