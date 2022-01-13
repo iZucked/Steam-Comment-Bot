@@ -716,11 +716,11 @@ public class ScenarioServicePushToCloudAction {
 			md.version = VersionHelper.getInstance().getClientVersion();
 		}
 		if (md.version == null) {
-			throw new CloudOptimisationPushException("Unable to determine LiNGO version.", Type.FAILED_UNKNOWN_ERROR, new IOException());
+			throw new CloudOptimisationPushException("Unable to determine LiNGO version.", Type.FAILED_UNSUPPORTED_VERSION, new IOException());
 		}
 		md.clientCode = VersionHelper.getInstance().getClientCode();
 		if (md.clientCode == null) {
-			throw new CloudOptimisationPushException("Unable to determine version code.", Type.FAILED_UNKNOWN_ERROR, new IOException());
+			throw new CloudOptimisationPushException("Unable to determine version code.", Type.FAILED_WRONG_CLIENT_CODE, new IOException());
 		}
 
 		final ObjectMapper objectMapper = new ObjectMapper();
