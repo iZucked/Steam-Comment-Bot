@@ -29,12 +29,11 @@ import com.mmxlabs.models.lng.parameters.OptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParallelOptimisationStage;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
-import com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
-import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
@@ -72,8 +71,8 @@ public class HeadessOptimiserRunnerConsoleCommand implements CommandProvider {
 							options.outputScenarioFileName = "required";
 							// options.outputLoggingFolder = outputPath;
 
-							UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
-							options.setUserSettings((UserSettingsImpl) userSettings);
+							UserSettings userSettings = UserSettingsHelper.createDefaultUserSettings();
+							options.setUserSettings(userSettings);
 							userSettings.setMode(OptimisationMode.STRATEGIC);
 							userSettings.setSimilarityMode(SimilarityMode.OFF);
 							userSettings.setWithCharterLength(true);

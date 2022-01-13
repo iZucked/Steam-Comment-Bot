@@ -17,7 +17,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.json.simple.JSONArray;
@@ -27,10 +26,10 @@ import com.google.inject.Module;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.config.OptimiserConfigurationOptions;
-import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
@@ -91,7 +90,7 @@ public class HeadlessOptimiserRunner {
 			result = new OptimiserConfigurationOptions();
 
 			final UserSettings optionSettings = options.getUserSettingsContent();
-			final @NonNull UserSettings userSettings = (optionSettings == null ? ScenarioUtils.createDefaultUserSettings() : optionSettings);
+			final @NonNull UserSettings userSettings = (optionSettings == null ? UserSettingsHelper.createDefaultUserSettings() : optionSettings);
 			result.plan = OptimisationHelper.transformUserSettings(userSettings, null, sdp.getTypedScenario(LNGScenarioModel.class));
 			result.overrideNumThreads(LNGScenarioChainBuilder.getNumberOfAvailableCores());
 

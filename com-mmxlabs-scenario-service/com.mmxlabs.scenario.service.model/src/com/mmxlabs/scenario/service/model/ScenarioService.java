@@ -25,6 +25,7 @@ import com.mmxlabs.scenario.service.IScenarioService;
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#isOffline <em>Offline</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#getLockedBy <em>Locked By</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#isLocked <em>Locked</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#getImage <em>Image</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioService()
@@ -293,5 +294,27 @@ public interface ScenarioService extends Container {
 	 * @generated
 	 */
 	void setLocked(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Image</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Image</em>' attribute.
+	 * @see #setImage(Object)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioService_Image()
+	 * @model transient="true"
+	 * @generated
+	 */
+	Object getImage();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioService#getImage <em>Image</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Image</em>' attribute.
+	 * @see #getImage()
+	 * @generated
+	 */
+	void setImage(Object value);
 
 } // ScenarioService

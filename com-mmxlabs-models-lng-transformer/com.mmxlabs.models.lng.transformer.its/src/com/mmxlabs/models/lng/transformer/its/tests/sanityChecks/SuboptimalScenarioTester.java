@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -259,7 +260,7 @@ public class SuboptimalScenarioTester {
 	// semantics
 	public void testConstraintChecker(final boolean expectedResult, final AbstractPairwiseConstraintChecker checker) {
 
-		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
 		final Set<String> hints = LNGTransformerHelper.getHints(settings);
 		final LNGDataTransformer transformer = new LNGDataTransformer(scenarioDataProvider, null, settings, ScenarioUtils.createDefaultSolutionBuilderSettings(), 1, hints,
 				LNGTransformerHelper.getOptimiserInjectorServices(new TransformerExtensionTestBootstrapModule(), null));

@@ -13,7 +13,8 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Control;
 
 /**
- * Helper class for standard {@link Viewer} methods that require the UI thread and various null or disposed checks.
+ * Helper class for standard {@link Viewer} methods that require the UI thread
+ * and various null or disposed checks.
  * 
  * @author Simon Goodall
  *
@@ -21,7 +22,8 @@ import org.eclipse.swt.widgets.Control;
 public final class ViewerHelper {
 
 	/**
-	 * Functional interface to use with #setInput to wrap up input creation in a lambda
+	 * Functional interface to use with #setInput to wrap up input creation in a
+	 * lambda
 	 *
 	 */
 	@FunctionalInterface
@@ -83,6 +85,20 @@ public final class ViewerHelper {
 		RunnerHelper.exec(runnable, syncExec);
 	}
 
+	public static void setInputThen(@Nullable final Viewer viewer, final boolean syncExec, @Nullable final Object input, @NonNull Runnable then) {
+		if (viewer == null) {
+			return;
+		}
+		final Runnable runnable = () -> {
+			final Control control = viewer.getControl();
+			if (control != null && !control.isDisposed()) {
+				viewer.setInput(input);
+				then.run();
+			}
+		};
+		RunnerHelper.exec(runnable, syncExec);
+	}
+
 	public static void refresh(@Nullable final Viewer viewer, final boolean syncExec) {
 		if (viewer == null) {
 			return;
@@ -97,7 +113,8 @@ public final class ViewerHelper {
 	}
 
 	/**
-	 * If the viewer has been created and has not been disposed, call a refresh then execute the supplied runnable
+	 * If the viewer has been created and has not been disposed, call a refresh then
+	 * execute the supplied runnable
 	 * 
 	 * @param viewer
 	 * @param syncExec

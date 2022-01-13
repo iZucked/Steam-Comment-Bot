@@ -16,9 +16,9 @@ import org.eclipse.ui.actions.ActionDelegate;
 
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
-import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -127,7 +127,7 @@ public class ToggleGeneratedPapersInPNLEditorActionDelegate extends ActionDelega
 
 		UserSettings settings = currentModel.getUserSettings();
 		if (settings == null) {
-			settings = ScenarioUtils.createDefaultUserSettings();
+			settings = UserSettingsHelper.createDefaultUserSettings();
 			cmd.append(SetCommand.create(editingDomain, currentModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_UserSettings(), settings));
 		}
 		cmd.append(SetCommand.create(editingDomain, settings, ParametersPackage.eINSTANCE.getUserSettings_GeneratedPapersInPNL(), !settings.isGeneratedPapersInPNL()));

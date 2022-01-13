@@ -33,13 +33,13 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.parameters.editor.ui.ParameterModesDialog;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
-import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
-import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 
 public class ParameterModesDialogTest {
 
@@ -64,95 +64,96 @@ public class ParameterModesDialogTest {
 
 	@Test
 	public void testSetShippingOnly_On() throws Exception {
-		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
 		settings.setShippingOnly(false);
 
-		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_SHIPPING_ONLY_ON).click(), u -> {
+		executeValidTest(settings, b -> b.radioWithId(UserSettingsHelper.SWTBOT_SHIPPING_ONLY_ON).click(), u -> {
 			Assertions.assertTrue(u.isShippingOnly());
-			OptimisationHelper.mergeFields(u, settings);
+			UserSettingsHelper.mergeFields(u, settings);
 			Assertions.assertTrue(settings.isShippingOnly());
 		});
 	}
 
 	@Test
 	public void testSetShippingOnly_Off() throws Exception {
-		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
 		settings.setShippingOnly(true);
 
-		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_SHIPPING_ONLY_OFF).click(), u -> {
+		executeValidTest(settings, b -> b.radioWithId(UserSettingsHelper.SWTBOT_SHIPPING_ONLY_OFF).click(), u -> {
 			Assertions.assertFalse(u.isShippingOnly());
-			OptimisationHelper.mergeFields(u, settings);
+			UserSettingsHelper.mergeFields(u, settings);
 			Assertions.assertFalse(settings.isShippingOnly());
 		});
 	}
 
 	@Test
 	public void testSetWithSpotCargoMarkets_On() throws Exception {
-		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
 		settings.setWithSpotCargoMarkets(false);
 
-		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_WITH_SPOT_CARGO_MARKETS_ON).click(), u -> {
+		executeValidTest(settings, b -> b.radioWithId(UserSettingsHelper.SWTBOT_WITH_SPOT_CARGO_MARKETS_ON).click(), u -> {
 			Assertions.assertTrue(u.isWithSpotCargoMarkets());
-			OptimisationHelper.mergeFields(u, settings);
+			UserSettingsHelper.mergeFields(u, settings);
 			Assertions.assertTrue(settings.isWithSpotCargoMarkets());
 		});
 	}
 
 	@Test
 	public void testSetWithSpotCargoMarkets_Off() throws Exception {
-		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
 		settings.setWithSpotCargoMarkets(true);
 
-		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_WITH_SPOT_CARGO_MARKETS_OFF).click(), u -> {
+		executeValidTest(settings, b -> b.radioWithId(UserSettingsHelper.SWTBOT_WITH_SPOT_CARGO_MARKETS_OFF).click(), u -> {
 			Assertions.assertFalse(u.isWithSpotCargoMarkets());
-			OptimisationHelper.mergeFields(u, settings);
+			UserSettingsHelper.mergeFields(u, settings);
 			Assertions.assertFalse(settings.isWithSpotCargoMarkets());
 		});
 	}
 
 	@Test
 	public void testSetGenerateCharterOuts_On() throws Exception {
-		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
 		settings.setGenerateCharterOuts(false);
 
-		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_CHARTEROUTGENERATION_ON).click(), u -> {
+		executeValidTest(settings, b -> b.radioWithId(UserSettingsHelper.SWTBOT_CHARTEROUTGENERATION_ON).click(), u -> {
 			Assertions.assertTrue(u.isGenerateCharterOuts());
-			OptimisationHelper.mergeFields(u, settings);
+			UserSettingsHelper.mergeFields(u, settings);
 			Assertions.assertTrue(settings.isGenerateCharterOuts());
 		});
 	}
 
 	@Test
 	public void testSetGenerateCharterOuts_Off() throws Exception {
-		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
 		settings.setGenerateCharterOuts(true);
 
-		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_CHARTEROUTGENERATION_OFF).click(), u -> {
+		executeValidTest(settings, b -> b.radioWithId(UserSettingsHelper.SWTBOT_CHARTEROUTGENERATION_OFF).click(), u -> {
 			Assertions.assertFalse(u.isGenerateCharterOuts());
-			OptimisationHelper.mergeFields(u, settings);
+			UserSettingsHelper.mergeFields(u, settings);
 			Assertions.assertFalse(settings.isGenerateCharterOuts());
 		});
 	}
+
 	@Test
 	public void testSetCharterLength_On() throws Exception {
-		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
 		settings.setWithCharterLength(false);
-		
-		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_CHARTERLENGTH_ON).click(), u -> {
+
+		executeValidTest(settings, b -> b.radioWithId(UserSettingsHelper.SWTBOT_CHARTERLENGTH_ON).click(), u -> {
 			Assertions.assertTrue(u.isWithCharterLength());
-			OptimisationHelper.mergeFields(u, settings);
+			UserSettingsHelper.mergeFields(u, settings);
 			Assertions.assertTrue(settings.isWithCharterLength());
 		});
 	}
-	
+
 	@Test
 	public void testSetCharterLength_Off() throws Exception {
-		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
 		settings.setWithCharterLength(true);
-		
-		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_CHARTERLENGTH_OFF).click(), u -> {
+
+		executeValidTest(settings, b -> b.radioWithId(UserSettingsHelper.SWTBOT_CHARTERLENGTH_OFF).click(), u -> {
 			Assertions.assertFalse(u.isWithCharterLength());
-			OptimisationHelper.mergeFields(u, settings);
+			UserSettingsHelper.mergeFields(u, settings);
 			Assertions.assertFalse(settings.isWithCharterLength());
 		});
 	}
@@ -160,12 +161,12 @@ public class ParameterModesDialogTest {
 	@Disabled("Feature no longer in use")
 	@Test
 	public void testSetSimilarityMode_Low() throws Exception {
-		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
 		settings.setSimilarityMode(SimilarityMode.OFF);
 
-		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_LOW).click(), u -> {
+		executeValidTest(settings, b -> b.radioWithId(UserSettingsHelper.SWTBOT_SIMILARITY_PREFIX_LOW).click(), u -> {
 			Assertions.assertEquals(SimilarityMode.LOW, u.getSimilarityMode());
-			OptimisationHelper.mergeFields(u, settings);
+			UserSettingsHelper.mergeFields(u, settings);
 			Assertions.assertEquals(SimilarityMode.LOW, settings.getSimilarityMode());
 		});
 	}
@@ -173,12 +174,12 @@ public class ParameterModesDialogTest {
 	@Disabled("Feature no longer in use")
 	@Test
 	public void testSetSimilarityMode_Medium() throws Exception {
-		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
 		settings.setSimilarityMode(SimilarityMode.OFF);
 
-		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_MEDIUM).click(), u -> {
+		executeValidTest(settings, b -> b.radioWithId(UserSettingsHelper.SWTBOT_SIMILARITY_PREFIX_MEDIUM).click(), u -> {
 			Assertions.assertEquals(SimilarityMode.MEDIUM, u.getSimilarityMode());
-			OptimisationHelper.mergeFields(u, settings);
+			UserSettingsHelper.mergeFields(u, settings);
 			Assertions.assertEquals(SimilarityMode.MEDIUM, settings.getSimilarityMode());
 		});
 	}
@@ -186,50 +187,50 @@ public class ParameterModesDialogTest {
 	@Disabled("Feature no longer in use")
 	@Test
 	public void testSetSimilarityMode_High() throws Exception {
-		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
 		settings.setSimilarityMode(SimilarityMode.OFF);
 
-		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_HIGH).click(), u -> {
+		executeValidTest(settings, b -> b.radioWithId(UserSettingsHelper.SWTBOT_SIMILARITY_PREFIX_HIGH).click(), u -> {
 			Assertions.assertEquals(SimilarityMode.HIGH, u.getSimilarityMode());
-			OptimisationHelper.mergeFields(u, settings);
+			UserSettingsHelper.mergeFields(u, settings);
 			Assertions.assertEquals(SimilarityMode.HIGH, settings.getSimilarityMode());
 		});
 	}
 
 	@Test
 	public void testSetSimilarityMode_On() throws Exception {
-		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
 		settings.setSimilarityMode(SimilarityMode.OFF);
 
-		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_ON).click(), u -> {
+		executeValidTest(settings, b -> b.radioWithId(UserSettingsHelper.SWTBOT_SIMILARITY_PREFIX_ON).click(), u -> {
 			Assertions.assertEquals(SimilarityMode.ALL, u.getSimilarityMode());
-			OptimisationHelper.mergeFields(u, settings);
+			UserSettingsHelper.mergeFields(u, settings);
 			Assertions.assertEquals(SimilarityMode.ALL, settings.getSimilarityMode());
 		});
 	}
-	
+
 	@Test
 	public void testSetSimilarityMode_Off() throws Exception {
-		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
 		settings.setSimilarityMode(SimilarityMode.ALL);
-		
-		executeValidTest(settings, b -> b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_OFF).click(), u -> {
+
+		executeValidTest(settings, b -> b.radioWithId(UserSettingsHelper.SWTBOT_SIMILARITY_PREFIX_OFF).click(), u -> {
 			Assertions.assertEquals(SimilarityMode.OFF, u.getSimilarityMode());
-			OptimisationHelper.mergeFields(u, settings);
+			UserSettingsHelper.mergeFields(u, settings);
 			Assertions.assertEquals(SimilarityMode.OFF, settings.getSimilarityMode());
 		});
 	}
-	
+
 	@Test
 	public void testSetPeriodStart() throws Exception {
-		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
 		settings.unsetPeriodStartDate();
 		settings.unsetPeriodEnd();
 
-		executeValidTest(settings, b -> b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("05/02/2015"), u -> {
+		executeValidTest(settings, b -> b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_START).setText("05/02/2015"), u -> {
 			Assertions.assertEquals(LocalDate.of(2015, 2, 5), u.getPeriodStartDate()); //
 			Assertions.assertFalse(u.isSetPeriodEnd()); //
-			OptimisationHelper.mergeFields(u, settings); //
+			UserSettingsHelper.mergeFields(u, settings); //
 			Assertions.assertEquals(LocalDate.of(2015, 2, 5), settings.getPeriodStartDate()); //
 			Assertions.assertFalse(settings.isSetPeriodEnd()); //
 
@@ -238,16 +239,16 @@ public class ParameterModesDialogTest {
 
 	@Test
 	public void testSetPeriodEnd() throws Exception {
-		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
 		settings.unsetPeriodStartDate();
 		settings.unsetPeriodEnd();
 
 		executeValidTest(settings, b -> {
-			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_END).setText("04/2015");//
+			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_END).setText("04/2015");//
 		}, u -> {
 			Assertions.assertFalse(u.isSetPeriodStartDate()); //
 			Assertions.assertEquals(YearMonth.of(2015, 4), u.getPeriodEnd()); //
-			OptimisationHelper.mergeFields(u, settings); //
+			UserSettingsHelper.mergeFields(u, settings); //
 			Assertions.assertFalse(settings.isSetPeriodStartDate()); //
 			Assertions.assertEquals(YearMonth.of(2015, 4), settings.getPeriodEnd()); //
 
@@ -256,17 +257,17 @@ public class ParameterModesDialogTest {
 
 	@Test
 	public void testSetPeriodStartEnd() throws Exception {
-		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
 		settings.unsetPeriodStartDate();
 		settings.unsetPeriodEnd();
 
 		executeValidTest(settings, b -> {
-			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("01/02/2015");//
-			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_END).setText("04/2015");//
+			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_START).setText("01/02/2015");//
+			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_END).setText("04/2015");//
 		}, u -> {
 			Assertions.assertEquals(LocalDate.of(2015, 2, 1), u.getPeriodStartDate()); //
 			Assertions.assertEquals(YearMonth.of(2015, 4), u.getPeriodEnd()); //
-			OptimisationHelper.mergeFields(u, settings); //
+			UserSettingsHelper.mergeFields(u, settings); //
 			Assertions.assertEquals(LocalDate.of(2015, 2, 1), settings.getPeriodStartDate()); //
 			Assertions.assertEquals(YearMonth.of(2015, 4), settings.getPeriodEnd()); //
 
@@ -276,14 +277,14 @@ public class ParameterModesDialogTest {
 	@Test
 	@Disabled("Action set not enabled")
 	public void testActionSet_Off_NoPeriod() throws Exception {
-		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
 		settings.unsetPeriodStartDate();
 		settings.unsetPeriodEnd();
 		settings.setSimilarityMode(SimilarityMode.OFF);
 		settings.setBuildActionSets(false);
 
 		executeInvalidTest(settings, b -> {
-			b.radioWithId(OptimisationHelper.SWTBOT_ACTION_SET_ON).click(); //
+			b.radioWithId(UserSettingsHelper.SWTBOT_ACTION_SET_ON).click(); //
 		}, b -> {
 			Assertions.assertFalse(b.button("OK").isEnabled());
 		});
@@ -292,23 +293,23 @@ public class ParameterModesDialogTest {
 	@Test
 	@Disabled("Action set not enabled")
 	public void testActionSet_Low_1mPeriod() throws Exception {
-		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
 		settings.unsetPeriodStartDate();
 		settings.unsetPeriodEnd();
 		settings.setSimilarityMode(SimilarityMode.OFF);
 		settings.setBuildActionSets(false);
 
 		executeValidTest(settings, b -> {
-			b.radioWithId(OptimisationHelper.SWTBOT_ACTION_SET_ON).click(); //
-			b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_LOW).click(); //
-			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("01/01/2015"); //
-			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_END).setText("02/2015"); //
+			b.radioWithId(UserSettingsHelper.SWTBOT_ACTION_SET_ON).click(); //
+			b.radioWithId(UserSettingsHelper.SWTBOT_SIMILARITY_PREFIX_LOW).click(); //
+			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_START).setText("01/01/2015"); //
+			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_END).setText("02/2015"); //
 		}, u -> {
 			Assertions.assertTrue(u.isBuildActionSets());//
 			Assertions.assertEquals(SimilarityMode.LOW, u.getSimilarityMode()); //
 			Assertions.assertEquals(LocalDate.of(2015, 1, 1), u.getPeriodStartDate()); //
 			Assertions.assertEquals(YearMonth.of(2015, 2), u.getPeriodEnd()); //
-			OptimisationHelper.mergeFields(u, settings);
+			UserSettingsHelper.mergeFields(u, settings);
 			Assertions.assertTrue(settings.isBuildActionSets());//
 			Assertions.assertEquals(SimilarityMode.LOW, settings.getSimilarityMode()); //
 			Assertions.assertEquals(LocalDate.of(2015, 1, 1), settings.getPeriodStartDate()); //
@@ -320,23 +321,23 @@ public class ParameterModesDialogTest {
 	@Test
 	@Disabled("Action set not enabled")
 	public void testActionSet_Low_3mPeriod() throws Exception {
-		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
 		settings.unsetPeriodStartDate();
 		settings.unsetPeriodEnd();
 		settings.setSimilarityMode(SimilarityMode.OFF);
 		settings.setBuildActionSets(false);
 
 		executeValidTest(settings, b -> {
-			b.radioWithId(OptimisationHelper.SWTBOT_ACTION_SET_ON).click(); //
-			b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_LOW).click(); //
-			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("01/01/2015"); //
-			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_END).setText("04/2015"); //
+			b.radioWithId(UserSettingsHelper.SWTBOT_ACTION_SET_ON).click(); //
+			b.radioWithId(UserSettingsHelper.SWTBOT_SIMILARITY_PREFIX_LOW).click(); //
+			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_START).setText("01/01/2015"); //
+			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_END).setText("04/2015"); //
 		}, u -> {
 			Assertions.assertTrue(u.isBuildActionSets());//
 			Assertions.assertEquals(SimilarityMode.LOW, u.getSimilarityMode()); //
 			Assertions.assertEquals(LocalDate.of(2015, 1, 1), u.getPeriodStartDate()); //
 			Assertions.assertEquals(YearMonth.of(2015, 4), u.getPeriodEnd()); //
-			OptimisationHelper.mergeFields(u, settings);
+			UserSettingsHelper.mergeFields(u, settings);
 			Assertions.assertTrue(settings.isBuildActionSets());//
 			Assertions.assertEquals(SimilarityMode.LOW, settings.getSimilarityMode()); //
 			Assertions.assertEquals(LocalDate.of(2015, 1, 1), settings.getPeriodStartDate()); //
@@ -348,23 +349,23 @@ public class ParameterModesDialogTest {
 	@Test
 	@Disabled("Action set not enabled")
 	public void testActionSet_Medium_6mPeriod() throws Exception {
-		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
 		settings.unsetPeriodStartDate();
 		settings.unsetPeriodEnd();
 		settings.setSimilarityMode(SimilarityMode.OFF);
 		settings.setBuildActionSets(false);
 
 		executeValidTest(settings, b -> {
-			b.radioWithId(OptimisationHelper.SWTBOT_ACTION_SET_ON).click(); //
-			b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_MEDIUM).click(); //
-			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("01/01/2015"); //
-			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_END).setText("07/2015"); //
+			b.radioWithId(UserSettingsHelper.SWTBOT_ACTION_SET_ON).click(); //
+			b.radioWithId(UserSettingsHelper.SWTBOT_SIMILARITY_PREFIX_MEDIUM).click(); //
+			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_START).setText("01/01/2015"); //
+			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_END).setText("07/2015"); //
 		}, u -> {
 			Assertions.assertTrue(u.isBuildActionSets());//
 			Assertions.assertEquals(SimilarityMode.MEDIUM, u.getSimilarityMode()); //
 			Assertions.assertEquals(LocalDate.of(2015, 1, 1), u.getPeriodStartDate()); //
 			Assertions.assertEquals(YearMonth.of(2015, 7), u.getPeriodEnd()); //
-			OptimisationHelper.mergeFields(u, settings);
+			UserSettingsHelper.mergeFields(u, settings);
 			Assertions.assertTrue(settings.isBuildActionSets());//
 			Assertions.assertEquals(SimilarityMode.MEDIUM, settings.getSimilarityMode()); //
 			Assertions.assertEquals(LocalDate.of(2015, 1, 1), settings.getPeriodStartDate()); //
@@ -376,23 +377,23 @@ public class ParameterModesDialogTest {
 	@Test
 	@Disabled("Action set not enabled")
 	public void testActionSet_High_6mPeriod() throws Exception {
-		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
 		settings.unsetPeriodStartDate();
 		settings.unsetPeriodEnd();
 		settings.setSimilarityMode(SimilarityMode.OFF);
 		settings.setBuildActionSets(false);
 
 		executeValidTest(settings, b -> {
-			b.radioWithId(OptimisationHelper.SWTBOT_ACTION_SET_ON).click(); //
-			b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_HIGH).click(); //
-			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("01/01/2015"); //
-			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_END).setText("07/2015"); //
+			b.radioWithId(UserSettingsHelper.SWTBOT_ACTION_SET_ON).click(); //
+			b.radioWithId(UserSettingsHelper.SWTBOT_SIMILARITY_PREFIX_HIGH).click(); //
+			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_START).setText("01/01/2015"); //
+			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_END).setText("07/2015"); //
 		}, u -> {
 			Assertions.assertTrue(u.isBuildActionSets());//
 			Assertions.assertEquals(SimilarityMode.HIGH, u.getSimilarityMode()); //
 			Assertions.assertEquals(LocalDate.of(2015, 1, 1), u.getPeriodStartDate()); //
 			Assertions.assertEquals(YearMonth.of(2015, 7), u.getPeriodEnd()); //
-			OptimisationHelper.mergeFields(u, settings);
+			UserSettingsHelper.mergeFields(u, settings);
 			Assertions.assertTrue(settings.isBuildActionSets());//
 			Assertions.assertEquals(SimilarityMode.HIGH, settings.getSimilarityMode()); //
 			Assertions.assertEquals(LocalDate.of(2015, 1, 1), settings.getPeriodStartDate()); //
@@ -404,17 +405,17 @@ public class ParameterModesDialogTest {
 	@Test
 	@Disabled("Action set not enabled")
 	public void testActionSet_Low_4mPeriod() throws Exception {
-		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
 		settings.unsetPeriodStartDate();
 		settings.unsetPeriodEnd();
 		settings.setSimilarityMode(SimilarityMode.OFF);
 		settings.setBuildActionSets(false);
 
 		executeInvalidTest(settings, b -> {
-			b.radioWithId(OptimisationHelper.SWTBOT_ACTION_SET_ON).click(); //
-			b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_LOW).click(); //
-			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("01/2015"); //
-			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_END).setText("04/2015"); //
+			b.radioWithId(UserSettingsHelper.SWTBOT_ACTION_SET_ON).click(); //
+			b.radioWithId(UserSettingsHelper.SWTBOT_SIMILARITY_PREFIX_LOW).click(); //
+			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_START).setText("01/2015"); //
+			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_END).setText("04/2015"); //
 		}, b -> {
 			Assertions.assertFalse(b.button("OK").isEnabled());
 		});
@@ -423,17 +424,17 @@ public class ParameterModesDialogTest {
 	@Test
 	@Disabled("Action set not enabled")
 	public void testActionSet_Med_7mPeriod() throws Exception {
-		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
 		settings.unsetPeriodStartDate();
 		settings.unsetPeriodEnd();
 		settings.setSimilarityMode(SimilarityMode.OFF);
 		settings.setBuildActionSets(false);
 
 		executeInvalidTest(settings, b -> {
-			b.radioWithId(OptimisationHelper.SWTBOT_ACTION_SET_ON).click(); //
-			b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_MEDIUM).click(); //
-			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("01/2015"); //
-			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_END).setText("08/2015"); //
+			b.radioWithId(UserSettingsHelper.SWTBOT_ACTION_SET_ON).click(); //
+			b.radioWithId(UserSettingsHelper.SWTBOT_SIMILARITY_PREFIX_MEDIUM).click(); //
+			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_START).setText("01/2015"); //
+			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_END).setText("08/2015"); //
 		}, b -> {
 			Assertions.assertFalse(b.button("OK").isEnabled());
 		});
@@ -442,17 +443,17 @@ public class ParameterModesDialogTest {
 	@Test
 	@Disabled("Action set not enabled")
 	public void testActionSet_High_7mPeriod() throws Exception {
-		final UserSettings settings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings settings = UserSettingsHelper.createDefaultUserSettings();
 		settings.unsetPeriodStartDate();
 		settings.unsetPeriodEnd();
 		settings.setSimilarityMode(SimilarityMode.OFF);
 		settings.setBuildActionSets(false);
 
 		executeInvalidTest(settings, b -> {
-			b.radioWithId(OptimisationHelper.SWTBOT_ACTION_SET_ON).click(); //
-			b.radioWithId(OptimisationHelper.SWTBOT_SIMILARITY_PREFIX_HIGH).click(); //
-			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_START).setText("01/2015"); //
-			b.textWithId(OptimisationHelper.SWTBOT_PERIOD_END).setText("08/2015"); //
+			b.radioWithId(UserSettingsHelper.SWTBOT_ACTION_SET_ON).click(); //
+			b.radioWithId(UserSettingsHelper.SWTBOT_SIMILARITY_PREFIX_HIGH).click(); //
+			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_START).setText("01/2015"); //
+			b.textWithId(UserSettingsHelper.SWTBOT_PERIOD_END).setText("08/2015"); //
 		}, b -> {
 			Assertions.assertFalse(b.button("OK").isEnabled());
 		});
@@ -531,7 +532,7 @@ public class ParameterModesDialogTest {
 
 					UserSettings settings[] = new UserSettings[1];
 					Realm.runWithDefault(SWTObservables.getRealm(display), () -> {
-						settings[0] = OptimisationHelper.openUserDialog(dummyModel, display, shell, false, initialSettings, initialSettings, false, null, false);
+						settings[0] = UserSettingsHelper.openUserDialog(dummyModel, display, shell, false, initialSettings, initialSettings, false, null, false);
 					});
 					return settings[0];
 				} catch (final Exception e) {

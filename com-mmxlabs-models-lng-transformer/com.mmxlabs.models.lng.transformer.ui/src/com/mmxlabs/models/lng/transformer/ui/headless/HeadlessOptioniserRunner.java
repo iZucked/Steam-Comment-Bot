@@ -20,9 +20,9 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.CargoModelFinder;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSchedulerInsertSlotJobRunner;
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.CSVImporter;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
@@ -125,7 +125,7 @@ public class HeadlessOptioniserRunner {
 			@NonNull final IScenarioDataProvider sdp, final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, IProgressMonitor monitor) {
 		final LNGScenarioModel lngScenarioModel = sdp.getTypedScenario(LNGScenarioModel.class);
 
-		final UserSettings userSettings = OptimisationHelper.promptForInsertionUserSettings(lngScenarioModel, false, false, false, null, null);
+		final UserSettings userSettings = UserSettingsHelper.promptForInsertionUserSettings(lngScenarioModel, false, false, false, null, null);
 
 		if (options.periodStart != null) {
 			userSettings.setPeriodStartDate(options.periodStart);

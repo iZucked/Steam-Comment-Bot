@@ -47,6 +47,8 @@ public final class CommonImages {
 		Pin("icons/16x16/pin.png"), //
 		
 		Play_16("icons/16x16/optimise.png", true), //
+		CloudPlay_16("icons/16x16/cloud_run.png"), //
+		Cloud_16("icons/16x16/cloud.png"), //
 		ZoomIn("icons/16x16/zoomin.png"), //
 		ZoomOut("icons/16x16/zoomout.png"), //
 		PinnedRow("icons/legacy/16x16/PinnedRow.gif"), //
@@ -60,6 +62,9 @@ public final class CommonImages {
 		
 		//24x24
 		Play("icons/24x24/optimise.png", true), //
+		CloudPlay_24("icons/24x24/cloud_run.png"), //
+		Cloud_24("icons/24x24/cloudpng"), //
+
 //		Resume("icons/24x24/terminate.png", true), //
 		Terminate("icons/24x24/terminate.png", true), //
 		Fork("icons/24x24/fork.png", true), //

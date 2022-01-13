@@ -6,7 +6,7 @@ import com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl;
 
 public class HeadlessSandboxOptions {
 	public String sandboxUUID;
-	
+
 	@JsonDeserialize(as = UserSettingsImpl.class)
 	public UserSettings userSettings;
 }

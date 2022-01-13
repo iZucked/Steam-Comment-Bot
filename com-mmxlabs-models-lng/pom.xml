@@ -55,6 +55,7 @@
 
 		<module>com.mmxlabs.models.lng.parameters</module>
 		<module>com.mmxlabs.models.lng.parameters.edit</module>
+		<module>com.mmxlabs.models.lng.parameters.editor</module>
 
 		<module>com.mmxlabs.models.lng.spotmarkets</module>
 		<module>com.mmxlabs.models.lng.spotmarkets.edit</module>

@@ -28,7 +28,7 @@ public class AnalyticsSolutionHelper {
 		return "Optionise: " + Joiner.on(", ").join(names);
 	}
 
-	public static String generateInsertionName(final List<? extends NamedObject> objects) {
+	public static String generateInsertionName(boolean cloud, final List<? extends NamedObject> objects) {
 
 		final List<String> names = new LinkedList<>();
 		for (final NamedObject s : objects) {
@@ -36,7 +36,11 @@ public class AnalyticsSolutionHelper {
 		}
 		while (names.remove(null))
 			;
-		return "Optionise: \"" + Joiner.on(", ").join(names) + "\"";
+		String optionise = "Optionise";
+		if (cloud) {
+			optionise += " on a cloud";
+		}
+		return optionise + ": \"" + Joiner.on(", ").join(names) + "\"";
 	}
 
 	public static String generateName(final ActionableSetPlan plan) {

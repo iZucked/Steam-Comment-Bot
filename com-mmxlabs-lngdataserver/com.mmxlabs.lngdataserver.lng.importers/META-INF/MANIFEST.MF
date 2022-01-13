@@ -59,11 +59,17 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.models.lng.cargo,
  com.mmxlabs.models.ui,
  com.mmxlabs.models.ui.tabular,
+ com.mmxlabs.models.lng.parameters.editor,
  org.ops4j.peaberry;bundle-version="1.3.0",
  org.ops4j.peaberry.activation,
- org.ops4j.peaberry.eclipse;bundle-version="1.3.0"
+ org.ops4j.peaberry.eclipse;bundle-version="1.3.0",
+ com.mmxlabs.models.lng.analytics.editor,
+ com.mmxlabs.optimiser.optimiser-core,
+ com.mmxlabs.scenario.service.util;bundle-version="4.13.8"
 Bundle-RequiredExecutionEnvironment: JavaSE-16
-Import-Package: org.slf4j
+Import-Package: com.mmxlabs.models.lng.analytics.ui.utils,
+ com.mmxlabs.models.lng.cargo.editor.bulk.cargobulkeditor,
+ org.slf4j
 Bundle-ActivationPolicy: lazy
 Bundle-Module: com.mmxlabs.lngdataserver.lng.importers.internal.DataserverImportersActivationModule
 Bundle-Vendor: Minimax Labs Ltd.
@@ -73,6 +79,7 @@ Export-Package: com.mmxlabs.lngdataserver.lng.importers.creator,
  com.mmxlabs.lngdataserver.lng.importers.distanceupdate,
  com.mmxlabs.lngdataserver.lng.importers.distanceupdate.model,
  com.mmxlabs.lngdataserver.lng.importers.lingodata.wizard,
+ com.mmxlabs.lngdataserver.lng.importers.menus,
  com.mmxlabs.lngdataserver.lng.io.bunkerfuels,
  com.mmxlabs.lngdataserver.lng.io.distances,
  com.mmxlabs.lngdataserver.lng.io.port,

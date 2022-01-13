@@ -233,6 +233,11 @@
          </command>
          <command
                categoryId="com.mmxlabs.commands.category.optimisation"
+               id="com.mmxlabs.commands.optimisation.cloud"
+               name="Start Cloud Optimisation">
+         </command>
+         <command
+               categoryId="com.mmxlabs.commands.category.optimisation"
                id="com.mmxlabs.commands.optimisation.terminate"
                name="Terminate Optimisation">
          </command>
