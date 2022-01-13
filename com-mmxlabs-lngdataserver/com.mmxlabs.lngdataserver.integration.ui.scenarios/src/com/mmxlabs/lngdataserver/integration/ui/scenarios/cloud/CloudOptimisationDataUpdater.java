@@ -348,6 +348,9 @@ public class CloudOptimisationDataUpdater {
 				.addAll(currentRecords) //
 				.add(r) //
 				.build();
+		
+		saveAndUpdateCurrentRecords(currentRecords);
+		
 		readyCallback.accept(r);
 
 	}
