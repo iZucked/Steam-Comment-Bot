@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions;
@@ -255,7 +256,7 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 					newOpt.eventsIds = options.eventsIds;
 
 					// Create a default user settings object
-					UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
+					UserSettings userSettings = UserSettingsHelper.createDefaultUserSettings();
 
 					if (options.periodStart != null) {
 						userSettings.setPeriodStartDate(options.periodStart);
