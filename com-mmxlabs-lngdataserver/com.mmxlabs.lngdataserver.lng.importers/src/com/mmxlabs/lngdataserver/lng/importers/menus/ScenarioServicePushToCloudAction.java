@@ -55,7 +55,7 @@ import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisatio
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataServiceWrapper;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.preferences.CloudOptimiserPreferenceConstants;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.Activator;
-import com.mmxlabs.lngdataserver.lng.importers.menus.PublishBasecaseException.Type;
+import com.mmxlabs.lngdataserver.lng.importers.menus.CloudOptimisationPushException.Type;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsBuildHelper;
@@ -260,11 +260,11 @@ public class ScenarioServicePushToCloudAction {
 			//      400 - bad request
 			//  Hostname/dns  errors / timeots
 			
-			if (cause instanceof PublishBasecaseException publishBasecaseException) {
-				switch (publishBasecaseException.getType()) {
+			if (cause instanceof CloudOptimisationPushException copException) {
+				switch (copException.getType()) {
 				case FAILED_UNKNOWN_ERROR:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING,
-							"Failed to send scenario with unknown error. " + publishBasecaseException.getCause().getMessage());
+							"Failed to send scenario with unknown error. " + copException.getCause().getMessage());
 					break;
 				case FAILED_NOT_PERMITTED:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_FAILED_PUSHING, "Insufficient permissions to send the scenario.");
@@ -278,7 +278,7 @@ public class ScenarioServicePushToCloudAction {
 				case FAILED_TO_SAVE:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING, "Failed to save the scenario to a temporary file. Unable to send.");
 					break;
-				case FAILED_TO_UPLOAD_BASECASE:
+				case FAILED_TO_UPLOAD:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING, "Failed to upload the scenario. Unable to send.");
 					break;
 				default:
@@ -296,18 +296,18 @@ public class ScenarioServicePushToCloudAction {
 	private static CloudManifestProblemType getProblemType(final boolean optimisation, @Nullable final List<Slot<?>> targetSlots, @Nullable final OptionAnalysisModel sandboxModel) {
 		if (optimisation) {
 			if (targetSlots != null || sandboxModel != null) {
-				throw new PublishBasecaseException("Unable to derive cloud optimisation type", Type.FAILED_UNKNOWN_ERROR);
+				throw new CloudOptimisationPushException("Unable to derive cloud optimisation type", Type.FAILED_UNKNOWN_ERROR);
 			}
 			return CloudManifestProblemType.OPTIMISATION;
 		} else if (targetSlots != null) {
 			if (sandboxModel != null) {
-				throw new PublishBasecaseException("Unable to derive cloud optimisation type", Type.FAILED_UNKNOWN_ERROR);
+				throw new CloudOptimisationPushException("Unable to derive cloud optimisation type", Type.FAILED_UNKNOWN_ERROR);
 			}
 			return CloudManifestProblemType.OPTIONISER;
 		} else if (sandboxModel != null) {
 			return CloudManifestProblemType.SANDBOX;
 		} else {
-			throw new PublishBasecaseException("Unable to derive cloud optimisation type", Type.FAILED_UNKNOWN_ERROR);
+			throw new CloudOptimisationPushException("Unable to derive cloud optimisation type", Type.FAILED_UNKNOWN_ERROR);
 		}
 
 	}
@@ -415,15 +415,15 @@ public class ScenarioServicePushToCloudAction {
 					scenarioDataProvider.setLastEvaluationFailed(false);
 				} catch (final Exception e) {
 					deleteAnonyMap(anonymisationMap);
-					throw new PublishBasecaseException(MSG_ERROR_EVALUATING, Type.FAILED_TO_EVALUATE);
+					throw new CloudOptimisationPushException(MSG_ERROR_EVALUATING, Type.FAILED_TO_EVALUATE);
 				}
 			} catch (final RuntimeException e) {
 				deleteAnonyMap(anonymisationMap);
 				if (e.getCause() instanceof ScenarioMigrationException) {
 					final ScenarioMigrationException ee = (ScenarioMigrationException) e.getCause();
-					throw new PublishBasecaseException(MSG_ERROR_EVALUATING, Type.FAILED_TO_MIGRATE, ee);
+					throw new CloudOptimisationPushException(MSG_ERROR_EVALUATING, Type.FAILED_TO_MIGRATE, ee);
 				}
-				throw new PublishBasecaseException(MSG_ERROR_EVALUATING, Type.FAILED_UNKNOWN_ERROR, e);
+				throw new CloudOptimisationPushException(MSG_ERROR_EVALUATING, Type.FAILED_UNKNOWN_ERROR, e);
 			}
 
 			// CreateFile
@@ -433,7 +433,7 @@ public class ScenarioServicePushToCloudAction {
 			} catch (final IOException e) {
 				deleteAnonyMap(anonymisationMap);
 				e.printStackTrace();
-				throw new PublishBasecaseException(MSG_ERROR_SAVING, Type.FAILED_TO_SAVE, e);
+				throw new CloudOptimisationPushException(MSG_ERROR_SAVING, Type.FAILED_TO_SAVE, e);
 			}
 
 			final List<Pair<String, Object>> filesToZip = new ArrayList<>(4);
@@ -442,7 +442,7 @@ public class ScenarioServicePushToCloudAction {
 
 			try {
 				filesToZip.add(Pair.of("manifest.json", createManifest(tmpScenarioFile.getName(), problemType)));
-			} catch (final PublishBasecaseException e) {
+			} catch (final CloudOptimisationPushException e) {
 				throw e;
 			}
 			switch (problemType) {
@@ -457,7 +457,7 @@ public class ScenarioServicePushToCloudAction {
 				filesToZip.add(Pair.of("parameters.json", createSandboxSettingsJson(userSettings, sandboxModelCopy)));
 				break;
 			default:
-				throw new PublishBasecaseException("Unknown cloud optimisation problem type", Type.FAILED_UNKNOWN_ERROR);
+				throw new CloudOptimisationPushException("Unknown cloud optimisation problem type", Type.FAILED_UNKNOWN_ERROR);
 			}
 			File zipToUpload = null;
 			try {
@@ -465,7 +465,7 @@ public class ScenarioServicePushToCloudAction {
 			} catch (final IOException e) {
 				deleteAnonyMap(anonymisationMap);
 				e.printStackTrace();
-				throw new PublishBasecaseException(MSG_ERROR_SAVING, Type.FAILED_TO_SAVE, e);
+				throw new CloudOptimisationPushException(MSG_ERROR_SAVING, Type.FAILED_TO_SAVE, e);
 			}
 			archive(zipToUpload, filesToZip);
 
@@ -482,7 +482,7 @@ public class ScenarioServicePushToCloudAction {
 				deleteAnonyMap(anonymisationMap);
 				System.out.println(MSG_ERROR_UPLOADING);
 				e.printStackTrace();
-				throw new PublishBasecaseException(MSG_ERROR_UPLOADING, Type.FAILED_TO_UPLOAD_BASECASE, e);
+				throw new CloudOptimisationPushException(MSG_ERROR_UPLOADING, Type.FAILED_TO_UPLOAD, e);
 			} finally {
 				uploadMonitor.done();
 			}
@@ -502,11 +502,11 @@ public class ScenarioServicePushToCloudAction {
 					anonymisationMap.renameTo(temp);
 				} else {
 					deleteAnonyMap(anonymisationMap);
-					throw new PublishBasecaseException(MSG_ERROR_UPLOADING, Type.FAILED_TO_UPLOAD_BASECASE, new IllegalStateException());
+					throw new CloudOptimisationPushException(MSG_ERROR_UPLOADING, Type.FAILED_TO_UPLOAD, new IllegalStateException());
 				}
 			} catch (final IOException e) {
 				deleteAnonyMap(anonymisationMap);
-				throw new PublishBasecaseException(MSG_ERROR_UPLOADING, Type.FAILED_TO_UPLOAD_BASECASE, new IllegalStateException("Unexpected server response: " + e.getMessage()));
+				throw new CloudOptimisationPushException(MSG_ERROR_UPLOADING, Type.FAILED_TO_UPLOAD, new IllegalStateException("Unexpected server response: " + e.getMessage()));
 			}
 			CloudOptimisationDataServiceWrapper.updateRecords(record);
 
@@ -703,11 +703,11 @@ public class ScenarioServicePushToCloudAction {
 			md.version = VersionHelper.getInstance().getClientVersion();
 		}
 		if (md.version == null) {
-			throw new PublishBasecaseException("Unable to determine LiNGO version.", Type.FAILED_UNKNOWN_ERROR, new IOException());
+			throw new CloudOptimisationPushException("Unable to determine LiNGO version.", Type.FAILED_UNKNOWN_ERROR, new IOException());
 		}
 		md.clientCode = VersionHelper.getInstance().getClientCode();
 		if (md.clientCode == null) {
-			throw new PublishBasecaseException("Unable to determine version code.", Type.FAILED_UNKNOWN_ERROR, new IOException());
+			throw new CloudOptimisationPushException("Unable to determine version code.", Type.FAILED_UNKNOWN_ERROR, new IOException());
 		}
 
 		final ObjectMapper objectMapper = new ObjectMapper();
