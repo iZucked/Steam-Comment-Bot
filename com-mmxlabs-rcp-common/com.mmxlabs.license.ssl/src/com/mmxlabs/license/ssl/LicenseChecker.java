@@ -401,7 +401,7 @@ public final class LicenseChecker {
 
 	public static File getCACertsFileFromEclipseHomeURL(String eclipseHomeLocation) throws URISyntaxException {
 		if (eclipseHomeLocation != null) {
-			final String location = (eclipseHomeLocation + File.separator + "cacerts" + File.separator).replaceAll(" ", "%20");
+			final String location = (eclipseHomeLocation + "/cacerts/").replaceAll(" ", "%20");
 			return new File(new URI(location));
 		}
 		return null;
