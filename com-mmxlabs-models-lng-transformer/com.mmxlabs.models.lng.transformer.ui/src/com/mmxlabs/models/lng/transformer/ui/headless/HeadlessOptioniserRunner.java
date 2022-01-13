@@ -5,8 +5,6 @@
 package com.mmxlabs.models.lng.transformer.ui.headless;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.LinkedList;
@@ -21,20 +19,16 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.CargoModelFinder;
-import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSchedulerInsertSlotJobRunner;
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.CSVImporter;
-import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.HeadlessOptimiserJSON;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
-import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
-import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
 
 public class HeadlessOptioniserRunner {
@@ -74,7 +68,8 @@ public class HeadlessOptioniserRunner {
 	 * @param completedHook
 	 * @throws Exception
 	 */
-	public void run(final int startTry, final File lingoFile, final SlotInsertionOptimiserLogger logger, final Options options,
+
+	public void run(final int startTry, final File lingoFile, final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserRunner.Options options,
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) throws Exception {
 		// Get the root object
 		ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(lingoFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
@@ -82,20 +77,52 @@ public class HeadlessOptioniserRunner {
 		});
 	}
 
-	public void runFromCSVDirectory(final int startTry, final File csvDirectory, final SlotInsertionOptimiserLogger logger, final Options options,
+	public void runFromCSVDirectory(final int startTry, final File csvDirectory, final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserRunner.Options options,
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) {
 
 		CSVImporter.runFromCSVDirectory(csvDirectory, sdp -> run(startTry, logger, options, null, sdp, completedHook, new NullProgressMonitor()));
 	}
 
-	public void runFromCsvZipFile(final int startTry, final File zipFile, final SlotInsertionOptimiserLogger logger, final Options options,
+	public void runFromCsvZipFile(final int startTry, final File zipFile, final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserRunner.Options options,
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) {
 
 		CSVImporter.runFromCSVZipFile(zipFile, sdp -> run(startTry, logger, options, null, sdp, completedHook, new NullProgressMonitor()));
 	}
 
-	public void run(final int startTry, final SlotInsertionOptimiserLogger logger, final Options options, final ScenarioModelRecord scenarioModelRecord, @NonNull final IScenarioDataProvider sdp,
+	public void run(final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserOptions options, final ScenarioModelRecord scenarioModelRecord, @NonNull final IScenarioDataProvider sdp,
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, IProgressMonitor monitor) {
+
+		UserSettings userSettings = options.userSettings;
+//		 
+
+		final List<Slot<?>> targetSlots = new LinkedList<>();
+		final List<VesselEvent> targetEvents = new LinkedList<>();
+
+		final CargoModelFinder cargoFinder = new CargoModelFinder(ScenarioModelUtil.getCargoModel(sdp));
+		options.loadIds.forEach(id -> targetSlots.add(cargoFinder.findLoadSlot(id)));
+		options.dischargeIds.forEach(id -> targetSlots.add(cargoFinder.findDischargeSlot(id)));
+		options.eventsIds.forEach(id -> targetEvents.add(cargoFinder.findVesselEvent(id)));
+
+		final LNGSchedulerInsertSlotJobRunner insertionRunner = new LNGSchedulerInsertSlotJobRunner(null, // ScenarioInstance
+				sdp, sdp.getEditingDomain(), userSettings, //
+				targetSlots, targetEvents, //
+				null, // Optional extra data provider.
+				null, // Alternative initial solution provider
+				null);
+
+		SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
+
+		final IMultiStateResult results = insertionRunner.runInsertion(logger, subMonitor.split(90));
+
+		insertionRunner.exportSolutions(results, 0L, subMonitor.split(10));
+
+		if (completedHook != null) {
+			completedHook.accept(scenarioModelRecord, sdp);
+		}
+	}
+
+	public void run(final int startTry, final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserRunner.Options options, final ScenarioModelRecord scenarioModelRecord,
+			@NonNull final IScenarioDataProvider sdp, final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, IProgressMonitor monitor) {
 		final LNGScenarioModel lngScenarioModel = sdp.getTypedScenario(LNGScenarioModel.class);
 
 		final UserSettings userSettings = OptimisationHelper.promptForInsertionUserSettings(lngScenarioModel, false, false, false, null, null);
