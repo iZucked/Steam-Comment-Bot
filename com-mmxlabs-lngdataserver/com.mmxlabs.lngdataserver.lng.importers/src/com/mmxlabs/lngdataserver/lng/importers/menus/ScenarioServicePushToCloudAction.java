@@ -64,6 +64,7 @@ import com.mmxlabs.models.lng.analytics.util.SandboxModeConstants;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
@@ -73,6 +74,7 @@ import com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl;
 import com.mmxlabs.models.lng.scenario.actions.anonymisation.AnonymisationUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
@@ -254,12 +256,12 @@ public class ScenarioServicePushToCloudAction {
 		} catch (final InvocationTargetException e) {
 			LOG.error(e.getMessage(), e);
 			final Throwable cause = e.getCause();
-			
+
 			// TODO: Handle gateway errors.
 			// E.g. 502 - bad gateway
-			//      400 - bad request
-			//  Hostname/dns  errors / timeots
-			
+			// 400 - bad request
+			// Hostname/dns errors / timeots
+
 			if (cause instanceof PublishBasecaseException publishBasecaseException) {
 				switch (publishBasecaseException.getType()) {
 				case FAILED_UNKNOWN_ERROR:
@@ -335,6 +337,7 @@ public class ScenarioServicePushToCloudAction {
 			File anonymisationMap = null;
 
 			List<Slot<?>> anonymisedTargetSlots = null;
+			List<VesselEvent> anonymisedEvents = null;
 			OptionAnalysisModel sandboxModelCopy = null;
 
 			try (IScenarioDataProvider o_scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
@@ -451,7 +454,7 @@ public class ScenarioServicePushToCloudAction {
 				break;
 			case OPTIONISER:
 				assert anonymisedTargetSlots != null;
-				filesToZip.add(Pair.of("parameters.json", createOptioniserSettingsJson(userSettings, anonymisedTargetSlots)));
+				filesToZip.add(Pair.of("parameters.json", createOptioniserSettingsJson(userSettings, anonymisedTargetSlots, anonymisedEvents)));
 				break;
 			case SANDBOX:
 				filesToZip.add(Pair.of("parameters.json", createSandboxSettingsJson(userSettings, sandboxModelCopy)));
@@ -645,19 +648,27 @@ public class ScenarioServicePushToCloudAction {
 		return null;
 	}
 
-	private static String createOptioniserSettingsJson(final UserSettings us, final List<Slot<?>> targetSlots) {
+	private static String createOptioniserSettingsJson(final UserSettings us, final List<Slot<?>> targetSlots, final List<VesselEvent> targetEvents) {
+
+		// TODO: Replace with HeadlessOptioniserOptions when merged with master
 		OptioniserSettings settings = new OptioniserSettings();
-		settings.periodStart = us.getPeriodStartDate();
-		settings.periodEnd = us.getPeriodEnd();
+		settings.userSettings = us;
 		settings.loadIds = new ArrayList<>();
 		settings.dischargeIds = new ArrayList<>();
 		settings.eventsIds = new ArrayList<>();
 
-		for (final Slot<?> s : targetSlots) {
-			if (s instanceof LoadSlot) {
-				settings.loadIds.add(s.getName());
-			} else if (s instanceof DischargeSlot) {
-				settings.dischargeIds.add(s.getName());
+		if (targetSlots != null) {
+			for (final Slot<?> s : targetSlots) {
+				if (s instanceof LoadSlot) {
+					settings.loadIds.add(s.getName());
+				} else if (s instanceof DischargeSlot) {
+					settings.dischargeIds.add(s.getName());
+				}
+			}
+		}
+		if (targetEvents != null) {
+			for (final VesselEvent vesselEvent : targetEvents) {
+				settings.eventsIds.add(vesselEvent.getName());
 			}
 		}
 
