@@ -16,6 +16,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.CargoModelFinder;
@@ -89,7 +90,7 @@ public class HeadlessOptioniserRunner {
 		CSVImporter.runFromCSVZipFile(zipFile, sdp -> run(startTry, logger, options, null, sdp, completedHook, new NullProgressMonitor()));
 	}
 
-	public void run(final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserOptions options, final ScenarioModelRecord scenarioModelRecord, @NonNull final IScenarioDataProvider sdp,
+	public SlotInsertionOptions run(final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserOptions options, final ScenarioModelRecord scenarioModelRecord, @NonNull final IScenarioDataProvider sdp,
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, IProgressMonitor monitor) {
 
 		UserSettings userSettings = options.userSettings;
@@ -114,11 +115,13 @@ public class HeadlessOptioniserRunner {
 
 		final IMultiStateResult results = insertionRunner.runInsertion(logger, subMonitor.split(90));
 
-		insertionRunner.exportSolutions(results, 0L, subMonitor.split(10));
+		SlotInsertionOptions result = insertionRunner.exportSolutions(results, 0L, subMonitor.split(10));
 
 		if (completedHook != null) {
 			completedHook.accept(scenarioModelRecord, sdp);
 		}
+		
+		return result;
 	}
 
 	public void run(final int startTry, final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserRunner.Options options, final ScenarioModelRecord scenarioModelRecord,
