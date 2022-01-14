@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.lngdataserver.feature"
       label="LNG Data Server"
-      version="4.13.8.qualifier"
+      version="5.1.1.RELEASE"
       provider-name="Minimax Labs Ltd.">
 
    <plugin

@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.jobmanager.parent</artifactId>
 		<groupId>com.mmxlabs.jobmanager</groupId>
-		<version>4.13.8-SNAPSHOT</version>
+		<version>5.1.1.RELEASE</version>
 	</parent>
 	<artifactId>com.mmxlabs.jobmanager.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
