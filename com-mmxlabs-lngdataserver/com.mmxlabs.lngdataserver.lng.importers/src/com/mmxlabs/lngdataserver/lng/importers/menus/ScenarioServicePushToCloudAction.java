@@ -74,11 +74,11 @@ import com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl;
 import com.mmxlabs.models.lng.scenario.actions.anonymisation.AnonymisationUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
+import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessOptioniserOptions;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessSandboxOptions;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.migration.scenario.ScenarioMigrationException;
@@ -651,7 +651,7 @@ public class ScenarioServicePushToCloudAction {
 	private static String createOptioniserSettingsJson(final UserSettings us, final List<Slot<?>> targetSlots, final List<VesselEvent> targetEvents) {
 
 		// TODO: Replace with HeadlessOptioniserOptions when merged with master
-		OptioniserSettings settings = new OptioniserSettings();
+		HeadlessOptioniserOptions settings = new HeadlessOptioniserOptions();
 		settings.userSettings = us;
 		settings.loadIds = new ArrayList<>();
 		settings.dischargeIds = new ArrayList<>();
