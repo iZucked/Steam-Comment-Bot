@@ -65,19 +65,50 @@ public class EMFDeserializer<T extends EObject> extends StdDeserializer<T> {
 			final Entry<String, JsonNode> e = fieldsItrs.next();
 			final EStructuralFeature f = eClass.getEStructuralFeature(e.getKey());
 			if (f != null) {
-				if (f instanceof EReference) {
-					final EReference eReference = (EReference) f;
+				if (f instanceof final EReference eReference) {
+					final Class<?> instanceClass = eReference.getEReferenceType().getInstanceClass();
 					if (f.isMany()) {
 						if (eReference.isContainment()) {
+
+							final EClassifier eType = eReference.getEType();
 							final List<Object> newList = new LinkedList<>();
-							for (final JsonNode c : e.getValue()) {
-								final JsonParser parser = c.traverse();
-								parser.setCodec(jp.getCodec());
-								final Object obj = parser.readValueAs(eReference.getEReferenceType().getInstanceClass());
-								if (ctx != null) {
-									ctx.registerType(obj);
+							// Special case for EMap
+							if ("java.util.Map$Entry".equals(eType.getInstanceTypeName()) && eType instanceof final EClass cls) {
+
+								for (final JsonNode c : e.getValue()) {
+									final JsonParser parser = c.traverse();
+									parser.setCodec(jp.getCodec());
+									final java.util.Map.Entry<String, String> obj = (java.util.Map.Entry<String, String>) parser.readValueAs(instanceClass);
+
+									final EObject value = eType.getEPackage().getEFactoryInstance().create(cls);
+
+									final EStructuralFeature keyFeature = cls.getEStructuralFeature("key");
+									final EStructuralFeature valueFeature = cls.getEStructuralFeature("value");
+
+									Object attribValue = obj.getKey();
+									Object valueValue = obj.getValue();
+									// TODO: What about references 
+									if (keyFeature instanceof final EAttribute eAttrib) {
+										attribValue = eAttrib.getEAttributeType().getEPackage().getEFactoryInstance().createFromString(eAttrib.getEAttributeType(), (String) attribValue);
+									}
+									if (valueFeature instanceof final EAttribute eAttrib) {
+										valueValue = eAttrib.getEAttributeType().getEPackage().getEFactoryInstance().createFromString(eAttrib.getEAttributeType(), (String) valueValue);
+									}
+									value.eSet(keyFeature, attribValue);
+									value.eSet(valueFeature, valueValue);
+									newList.add(value);
 								}
-								newList.add(obj);
+							} else {
+
+								for (final JsonNode c : e.getValue()) {
+									final JsonParser parser = c.traverse();
+									parser.setCodec(jp.getCodec());
+									final Object obj = parser.readValueAs(instanceClass);
+									if (ctx != null) {
+										ctx.registerType(obj);
+									}
+									newList.add(obj);
+								}
 							}
 							result.eSet(f, newList);
 						} else {
@@ -93,7 +124,7 @@ public class EMFDeserializer<T extends EObject> extends StdDeserializer<T> {
 						if (eReference.isContainment()) {
 							final JsonParser parser = e.getValue().traverse();
 							parser.setCodec(jp.getCodec());
-							final Object obj = parser.readValueAs(eReference.getEReferenceType().getInstanceClass());
+							final Object obj = parser.readValueAs(instanceClass);
 							if (ctx != null) {
 								ctx.registerType(obj);
 							}
@@ -105,8 +136,7 @@ public class EMFDeserializer<T extends EObject> extends StdDeserializer<T> {
 							ctx.deferLookup(ref, (EObject) result, eReference);
 						}
 					}
-				} else if (f instanceof EAttribute) {
-					final EAttribute eAttribute = (EAttribute) f;
+				} else if (f instanceof final EAttribute eAttribute) {
 					if (f.isMany()) {
 						final List<Object> newList = new LinkedList<>();
 						for (final JsonNode c : e.getValue()) {
@@ -126,10 +156,9 @@ public class EMFDeserializer<T extends EObject> extends StdDeserializer<T> {
 		}
 		if (ctx != null) {
 			if (node.has(JSONConstants.LOOKUP_ID)) {
-				String lookupId = node.get(JSONConstants.LOOKUP_ID).asText();
+				final String lookupId = node.get(JSONConstants.LOOKUP_ID).asText();
 				ctx.registerType(lookupId, result);
-			}
-			else {
+			} else {
 				ctx.registerType(result);
 			}
 		}
@@ -146,8 +175,7 @@ public class EMFDeserializer<T extends EObject> extends StdDeserializer<T> {
 		final EPackage ePackage = outputEClass.getEPackage();
 		// find a subclass with the right name
 		for (final EClassifier classifier : ePackage.getEClassifiers()) {
-			if (classifier instanceof EClass) {
-				final EClass possibleSubClass = (EClass) classifier;
+			if (classifier instanceof final EClass possibleSubClass) {
 				if (outputEClass.isSuperTypeOf(possibleSubClass) && (possibleSubClass.isAbstract() == false) && possibleSubClass.getName().equalsIgnoreCase(kind)) {
 					return (EClass) classifier;
 				}
@@ -155,11 +183,9 @@ public class EMFDeserializer<T extends EObject> extends StdDeserializer<T> {
 		}
 		// All registry packages...
 		for (final Object obj : Registry.INSTANCE.values()) {
-			if (obj instanceof EPackage) {
-				final EPackage ePackage2 = (EPackage) obj;
+			if (obj instanceof final EPackage ePackage2) {
 				for (final EClassifier classifier : ePackage2.getEClassifiers()) {
-					if (classifier instanceof EClass) {
-						final EClass possibleSubClass = (EClass) classifier;
+					if (classifier instanceof final EClass possibleSubClass) {
 						// EObject is not listed in supertypes?
 						final boolean superTypeOf = outputEClass == EcorePackage.Literals.EOBJECT || outputEClass.isSuperTypeOf(possibleSubClass);
 						final boolean b = possibleSubClass.isAbstract() == false;
