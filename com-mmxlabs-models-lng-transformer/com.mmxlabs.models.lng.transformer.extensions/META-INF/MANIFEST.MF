@@ -28,8 +28,6 @@ Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.models.ui.properties,
  com.mmxlabs.models.lng.commercial.editor;bundle-version="[4.13.8,5.0.0)",
  com.mmxlabs.scenario.service.model;bundle-version="[4.13.8,5.0.0)",
- com.mmxlabs.models.lng.commercial.editor;bundle-version="[4.13.8,5.0.0)",
- com.mmxlabs.scenario.service.model;bundle-version="[4.13.8,5.0.0)",
  com.mmxlabs.rcp.common,
  com.mmxlabs.models.lng.cargo,
  com.mmxlabs.models.lng.parameters.editor
