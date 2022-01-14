@@ -5,5 +5,5 @@ public final class CloudOptimisationConstants {
 	private CloudOptimisationConstants() {
 	}
 
-	public static final boolean RUN_LOCAL_BENCHMARK = true;
+	public static final boolean RUN_LOCAL_BENCHMARK = false;
 }
