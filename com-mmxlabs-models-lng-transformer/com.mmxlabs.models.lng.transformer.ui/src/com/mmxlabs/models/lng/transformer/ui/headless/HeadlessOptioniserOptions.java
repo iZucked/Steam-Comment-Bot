@@ -7,10 +7,13 @@ package com.mmxlabs.models.lng.transformer.ui.headless;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl;
 
+@JsonInclude(Include.NON_NULL)
 public class HeadlessOptioniserOptions {
 
 	public List<String> loadIds = new LinkedList<>();
