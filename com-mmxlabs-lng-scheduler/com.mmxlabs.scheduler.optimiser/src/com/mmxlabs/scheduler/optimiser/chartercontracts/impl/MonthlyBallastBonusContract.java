@@ -24,19 +24,21 @@ public class MonthlyBallastBonusContract extends DefaultCharterContract {
 	}
 	
 	@Override
-	public long calculateBBCost(final IPortTimesRecord portTimesRecord, final IPort loadPort, final IPortSlot lastSlot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {
-		if (lastSlot.getPortType() == PortType.End) {
-			IBallastBonusTerm matchingRule = getMatchingRule(portTimesRecord, lastSlot, vesselAvailability, vesselStartTime, vesselEndTime);
+	public long calculateBBCost(final IPortTimesRecord portTimesRecord, final IPortSlot portSlot, final IVesselAvailability vesselAvailability, 
+			final int vesselStartTime, final IPort firstLoadPort) {
+		if (portSlot.getPortType() == PortType.End) {
+			IBallastBonusTerm matchingRule = getMatchingRule(portTimesRecord, firstLoadPort, portSlot, vesselAvailability, vesselStartTime);
 			if (matchingRule != null) {
-				return matchingRule.calculateCost(portTimesRecord, vesselAvailability, vesselStartTime, lastSlot.getPort());
+				return matchingRule.calculateCost(portTimesRecord, vesselAvailability, vesselStartTime, firstLoadPort);
 			}
 		}
 		return 0L;
 	}
 
-	private IBallastBonusTerm getMatchingRule(final IPortTimesRecord portTimesRecord, final IPortSlot lastSlot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {
+	private IBallastBonusTerm getMatchingRule(final IPortTimesRecord portTimesRecord, final IPort firstLoadPort, final IPortSlot portSlot, 
+			final IVesselAvailability vesselAvailability, final int vesselStartTime) {
 		for (final IBallastBonusTerm rule : bbTerms) {
-			if (rule.match(portTimesRecord, vesselAvailability, vesselStartTime, lastSlot.getPort())) {
+			if (rule.match(portTimesRecord, vesselAvailability, vesselStartTime, firstLoadPort)) {
 				return rule;
 			}
 		}
@@ -46,7 +48,7 @@ public class MonthlyBallastBonusContract extends DefaultCharterContract {
 		
 		for (final IBallastBonusTerm rule : bbTerms) {
 			if (rule instanceof MonthlyBallastBonusContractTerm mmRule) {
-				if (mmRule.matchWithoutDates(lastSlot, vesselAvailability, vesselEndTime, vesselEndTime)) {
+				if (mmRule.matchWithoutDates(portSlot)) {
 					if (vesselStartTime >= mmRule.getMonthStartInclusive() && (latestRule == null || mmRule.getMonthStartInclusive() >= latestRule.getMonthStartInclusive())) {
 						latestRule = mmRule;
 					}
@@ -59,17 +61,18 @@ public class MonthlyBallastBonusContract extends DefaultCharterContract {
 	
 	
 	@Override
-	public ICharterContractAnnotation annotateBB(final IPortTimesRecord portTimesRecord, final IPort firstLoadPort, final IPortSlot lastSlot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {
+	public ICharterContractAnnotation annotateBB(final IPortTimesRecord portTimesRecord, final IPortSlot portSlot, final IVesselAvailability vesselAvailability, 
+			final int vesselStartTime, final IPort firstLoadPort) {
 
 		final CharterContractAnnotation ballastBonusAnnotation = new CharterContractAnnotation();
-		if (lastSlot.getPortType() == PortType.End) {
-			IBallastBonusTerm rule = getMatchingRule(portTimesRecord, lastSlot, vesselAvailability, vesselStartTime, vesselEndTime);
+		if (portSlot.getPortType() == PortType.End) {
+			IBallastBonusTerm rule = getMatchingRule(portTimesRecord, firstLoadPort, portSlot, vesselAvailability, vesselStartTime);
 			if (rule == null) {
 				throw new UserFeedbackException("Missing matching monthly ballast bonus contract rule.");
 			}
-			ballastBonusAnnotation.cost = rule.calculateCost(portTimesRecord, vesselAvailability, vesselStartTime, lastSlot.getPort());
-			ballastBonusAnnotation.matchedPort = lastSlot.getPort();
-			ballastBonusAnnotation.termAnnotation = rule.annotate(portTimesRecord, vesselAvailability, vesselStartTime, lastSlot.getPort());
+			ballastBonusAnnotation.cost = rule.calculateCost(portTimesRecord, vesselAvailability, vesselStartTime, firstLoadPort);
+			ballastBonusAnnotation.matchedPort = portSlot.getPort();
+			ballastBonusAnnotation.termAnnotation = rule.annotate(portTimesRecord, vesselAvailability, vesselStartTime, firstLoadPort);
 		}
 		return ballastBonusAnnotation;
 	}

@@ -20,11 +20,11 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 @NonNullByDefault
 public interface ICharterContract {
 
-	ICharterContractAnnotation annotateBB(IPortTimesRecord portTimesRecord, IPort firstLoad, IPortSlot lastSlot, IVesselAvailability vesselAvailability, int vesselStartTime, int vesselEndTime);
+	ICharterContractAnnotation annotateBB(IPortTimesRecord portTimesRecord, IPortSlot portSlot, IVesselAvailability vesselAvailability, int vesselStartTime, final IPort firstLoadPort);
 
-	long calculateBBCost(IPortTimesRecord portTimesRecord, IPort firstLoad, IPortSlot lastSlot, IVesselAvailability vesselAvailability, int vesselStartTime, int vesselEndTime);
+	long calculateBBCost(IPortTimesRecord portTimesRecord, IPortSlot portSlot, IVesselAvailability vesselAvailability, int vesselStartTime, final IPort firstLoadPort);
 	
-	ICharterContractAnnotation annotateRF(IPortTimesRecord portTimesRecord, IPort firstLoad, IPortSlot lastSlot, IVesselAvailability vesselAvailability, int vesselStartTime, int vesselEndTime);
+	ICharterContractAnnotation annotateRF(IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability);
 
-	long calculateRFRevenue(IPortTimesRecord portTimesRecord, IPort firstLoad, IPortSlot lastSlot, IVesselAvailability vesselAvailability, int vesselStartTime, int vesselEndTime);
+	long calculateRFRevenue(IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability);
 }

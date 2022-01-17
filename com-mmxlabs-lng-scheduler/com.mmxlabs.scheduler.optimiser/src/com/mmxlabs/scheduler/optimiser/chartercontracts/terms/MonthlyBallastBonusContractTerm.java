@@ -189,7 +189,7 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 		return false;
 	}
 
-	public boolean matchWithoutDates(IPortSlot lastSlot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {
+	public boolean matchWithoutDates(IPortSlot lastSlot) {
 		return getRedeliveryPorts().contains(lastSlot.getPort()) || getRedeliveryPorts().isEmpty();
 	}
 

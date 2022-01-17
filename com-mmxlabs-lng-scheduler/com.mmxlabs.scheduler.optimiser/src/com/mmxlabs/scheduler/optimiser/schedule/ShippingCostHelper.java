@@ -148,9 +148,9 @@ public class ShippingCostHelper {
 			ICharterContract charterContract = vesselAvailability.getCharterContract();
 			if (charterContract != null) {
 				if (portSlot.getPortType() == PortType.End) {
-					return charterContract.calculateBBCost(portTimesRecord, firstLoadPort, portSlot, vesselAvailability, vesselStartTime, vesselEndTime);
+					return charterContract.calculateBBCost(portTimesRecord, portSlot, vesselAvailability, vesselStartTime, firstLoadPort);
 				} else {
-					return charterContract.calculateRFRevenue(portTimesRecord, firstLoadPort, portSlot, vesselAvailability, vesselStartTime, vesselEndTime);
+					return charterContract.calculateRFRevenue(portTimesRecord, vesselAvailability);
 				}
 			}
 		}
@@ -166,9 +166,9 @@ public class ShippingCostHelper {
 			if (charterContract != null) {
 				ICharterContractAnnotation annotation = null;
 				if (portSlot.getPortType() == PortType.End) {
-					annotation = charterContract.annotateBB(portTimesRecord, firstLoadPort, portSlot, vesselAvailability, vesselStartTime, vesselEndTime);
+					annotation = charterContract.annotateBB(portTimesRecord, portSlot, vesselAvailability, vesselStartTime, firstLoadPort);
 				} else {
-					annotation = charterContract.annotateRF(portTimesRecord, firstLoadPort, portSlot, vesselAvailability, vesselStartTime, vesselEndTime);
+					annotation = charterContract.annotateRF(portTimesRecord, vesselAvailability);
 				}
 				if (annotation != null) {
 					shippingDetails.addChild(bb ? CharterContractConstants.BALLAST_BONUS_KEY : CharterContractConstants.REPOSITIONING_FEE_KEY, annotation);
