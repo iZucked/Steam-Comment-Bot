@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -103,6 +104,11 @@ public class ScenarioServicePushToCloudAction {
 
 	private static final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 	private static final String CLOUD_OPTI_PATH = workspaceLocation.toOSString() + IPath.SEPARATOR + "cloud-opti";
+
+	private static final String MANIFEST_NAME = "manifest.json";
+	private static final String MF_PARAMETERS_NAME = "parameters.json";
+	private static final String MF_JVM_OPTS_NAME = "jvm.opts";
+	private static final String MF_SCENARIO_NAME = "scenario.lingo";
 
 	private ScenarioServicePushToCloudAction() {
 	}
@@ -331,6 +337,9 @@ public class ScenarioServicePushToCloudAction {
 			cRecord.setCreator(UsernameProvider.INSTANCE.getUserID());
 			cRecord.setOriginalName(scenarioInstance.getName());
 			cRecord.setType(problemType.toString());
+			if (originalSandboxModel != null) {
+				cRecord.setComponentUUID(originalSandboxModel.getUuid());
+			}
 
 			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 
@@ -442,31 +451,31 @@ public class ScenarioServicePushToCloudAction {
 			}
 
 			final List<Pair<String, Object>> filesToZip = new ArrayList<>(4);
-			filesToZip.add(Pair.of("scenario.lingo", tmpScenarioFile));
-			filesToZip.add(Pair.of("jvm.options", createJVMOptions()));
+			filesToZip.add(Pair.of(MF_SCENARIO_NAME, tmpScenarioFile));
+			filesToZip.add(Pair.of(MF_JVM_OPTS_NAME, createJVMOptions()));
 
 			try {
-				filesToZip.add(Pair.of("manifest.json", createManifest(tmpScenarioFile.getName(), problemType)));
+				filesToZip.add(Pair.of(MANIFEST_NAME, createManifest(tmpScenarioFile.getName(), problemType)));
 			} catch (final CloudOptimisationPushException e) {
 				throw e;
 			}
 			switch (problemType) {
 			case OPTIMISATION:
-				filesToZip.add(Pair.of("parameters.json", createOptimisationSettingsJson(userSettings)));
+				filesToZip.add(Pair.of(MF_PARAMETERS_NAME, createOptimisationSettingsJson(userSettings)));
 				break;
 			case OPTIONISER:
 				assert anonymisedTargetSlots != null;
-				filesToZip.add(Pair.of("parameters.json", createOptioniserSettingsJson(userSettings, anonymisedTargetSlots, anonymisedEvents)));
+				filesToZip.add(Pair.of(MF_PARAMETERS_NAME, createOptioniserSettingsJson(userSettings, anonymisedTargetSlots, anonymisedEvents)));
 				break;
 			case SANDBOX:
-				filesToZip.add(Pair.of("parameters.json", createSandboxSettingsJson(userSettings, sandboxModelCopy)));
+				filesToZip.add(Pair.of(MF_PARAMETERS_NAME, createSandboxSettingsJson(userSettings, sandboxModelCopy)));
 				break;
 			default:
 				throw new CloudOptimisationPushException("Unknown cloud optimisation problem type", Type.FAILED_UNKNOWN_ERROR);
 			}
 			File zipToUpload = null;
 			try {
-				zipToUpload = ScenarioStorageUtil.getTempDirectory().createTempFile("archive_", ".zip");
+				zipToUpload = Files.createTempFile(ScenarioStorageUtil.getTempDirectory().toPath(), "archive_", ".zip").toFile();
 			} catch (final IOException e) {
 				deleteAnonyMap(anonymisationMap);
 				e.printStackTrace();
@@ -704,8 +713,8 @@ public class ScenarioServicePushToCloudAction {
 		final ManifestDescription md = new ManifestDescription();
 		md.scenario = scenarioName;
 		md.type = problemType.getManifestString();
-		md.parameters = "parameters.json";
-		md.jvmConfig = "jvm.options";
+		md.parameters = MF_PARAMETERS_NAME;
+		md.jvmConfig = MF_PARAMETERS_NAME;
 		md.dev = false;
 		String devVersion = Activator.getDefault().getPreferenceStore().getString(CloudOptimiserPreferenceConstants.P_DEV_VERSION);
 		if (devVersion != null && !devVersion.isBlank()) {

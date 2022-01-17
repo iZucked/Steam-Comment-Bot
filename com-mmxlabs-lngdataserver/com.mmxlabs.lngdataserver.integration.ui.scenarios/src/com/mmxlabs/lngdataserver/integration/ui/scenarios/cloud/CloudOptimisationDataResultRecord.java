@@ -14,7 +14,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class CloudOptimisationDataResultRecord {
 
+	/**
+	 * UUID of original scenario
+	 */
 	private String uuid;
+	/**
+	 * Display name of original scenario
+	 */
+	private String originalName;
 
 	private String jobid;
 
@@ -24,9 +31,11 @@ public class CloudOptimisationDataResultRecord {
 
 	private String anonyMapFileName;
 
-	private String originalName;
-
+	// Type of optimisation
 	private String type;
+
+	// UUID of component e.g. sandbox
+	private String componentUUID;
 
 	private boolean remote;
 
@@ -40,6 +49,27 @@ public class CloudOptimisationDataResultRecord {
 	@JsonIgnore
 	private File result;
 
+	public CloudOptimisationDataResultRecord copy() {
+		CloudOptimisationDataResultRecord r = new CloudOptimisationDataResultRecord();
+		r.anonyMapFileName = this.anonyMapFileName;
+		r.creationDate = this.creationDate;
+		r.creator = this.creator;
+		r.deleted = this.deleted;
+		r.jobid = this.jobid;
+		r.originalName = this.originalName;
+		r.remote = this.remote;
+		r.result = this.result;
+		r.cloudRuntime = this.cloudRuntime;
+		r.localRuntime = this.localRuntime;
+		r.status = this.status.copy();
+		r.uuid = this.uuid;
+		r.type = this.type;
+		r.componentUUID = this.componentUUID;
+
+		return r;
+	}
+
+	
 	public String getUuid() {
 		return uuid;
 	}
@@ -136,25 +166,7 @@ public class CloudOptimisationDataResultRecord {
 		this.deleted = deleted;
 	}
 
-	public CloudOptimisationDataResultRecord copy() {
-		CloudOptimisationDataResultRecord r = new CloudOptimisationDataResultRecord();
-		r.anonyMapFileName = this.anonyMapFileName;
-		r.creationDate = this.creationDate;
-		r.creator = this.creator;
-		r.deleted = this.deleted;
-		r.jobid = this.jobid;
-		r.originalName = this.originalName;
-		r.remote = this.remote;
-		r.result = this.result;
-		r.cloudRuntime = this.cloudRuntime;
-		r.localRuntime = this.localRuntime;
-		r.status = this.status.copy();
-		r.uuid = this.uuid;
-		r.type = this.type;
-
-		return r;
-	}
-
+	
 	public void setLocalRuntime(long l) {
 		this.localRuntime = l;
 
@@ -188,6 +200,14 @@ public class CloudOptimisationDataResultRecord {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public String getComponentUUID() {
+		return componentUUID;
+	}
+
+	public void setComponentUUID(String componentUUID) {
+		this.componentUUID = componentUUID;
 	}
 
 }

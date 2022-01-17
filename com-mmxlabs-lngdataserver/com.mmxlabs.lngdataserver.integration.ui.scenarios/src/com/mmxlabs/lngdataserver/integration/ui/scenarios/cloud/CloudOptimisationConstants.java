@@ -9,5 +9,8 @@ public final class CloudOptimisationConstants {
 	private CloudOptimisationConstants() {
 	}
 
+	
+	public static final String ROOT_MODEL_URI = "http://rootObject.xmi";
+	
 	public static final boolean RUN_LOCAL_BENCHMARK = false;
 }

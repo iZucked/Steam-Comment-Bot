@@ -85,6 +85,13 @@ public class CloudManagerView extends ViewPart {
 			GridViewerHelper.configureLookAndFeel(tvc0);
 		}
 		{
+			final GridViewerColumn tvc0 = new GridViewerColumn(viewer, SWT.None);
+			tvc0.getColumn().setText("Type");
+			tvc0.getColumn().setWidth(200);
+			tvc0.setLabelProvider(createLP(CloudOptimisationDataResultRecord::getType));
+			GridViewerHelper.configureLookAndFeel(tvc0);
+		}
+		{
 			final GridViewerColumn tvc1 = new GridViewerColumn(viewer, SWT.None);
 			tvc1.getColumn().setText("Submitted");
 			tvc1.getColumn().setWidth(100);

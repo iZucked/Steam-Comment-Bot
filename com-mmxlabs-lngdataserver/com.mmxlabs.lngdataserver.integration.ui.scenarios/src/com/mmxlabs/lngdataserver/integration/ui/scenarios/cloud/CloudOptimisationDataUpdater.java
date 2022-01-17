@@ -37,6 +37,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -157,8 +158,6 @@ public class CloudOptimisationDataUpdater {
 							final ScenarioModelRecord modelRecord = ScenarioStorageUtil.loadInstanceFromURI(URI.createFileURI(temp.getAbsolutePath()), true, true, true, scenarioCipherProvider);
 							try (IScenarioDataProvider tempDP = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
 								final LNGScenarioModel copy = tempDP.getTypedScenario(LNGScenarioModel.class);
-//								final LNGScenarioModel copy = EcoreUtil.copy(origScenarioModel);
-//								final IScenarioDataProvider tempDP = SimpleScenarioDataProvider.make(ModelsLNGVersionMaker.createDefaultManifest(), copy);
 
 								final EditingDomain editingDomain = tempDP.getEditingDomain();
 
@@ -181,15 +180,9 @@ public class CloudOptimisationDataUpdater {
 									if (cRecord.getType() != null) {
 										final String type = cRecord.getType();
 										switch (type) {
-										case "SANDBOX" -> {
-											result = m.getOptionModels().get(0).getResults();
-										}
-										case "OPTIMISATION" -> {
-											result = m.getOptimisations().get(0);
-										}
-										case "OPTIONISER" -> {
-											result = m.getOptimisations().get(0);
-										}
+										case "SANDBOX" -> result = m.getOptionModels().get(0).getResults();
+										case "OPTIMISATION" -> result = m.getOptimisations().get(0);
+										case "OPTIONISER" -> result = m.getOptimisations().get(0);
 										}
 									}
 
@@ -197,7 +190,7 @@ public class CloudOptimisationDataUpdater {
 										// Replace the root model URI to a well known string for reloading later
 										for (final var r : editingDomain.getResourceSet().getResources()) {
 											if (r.getContents().get(0) instanceof LNGScenarioModel) {
-												r.setURI(URI.createURI("http://rootObject.xmi"));
+												r.setURI(URI.createURI(CloudOptimisationConstants.ROOT_MODEL_URI));
 											}
 										}
 
@@ -247,7 +240,7 @@ public class CloudOptimisationDataUpdater {
 									// xmi can resolve
 									for (final var r : ed.getResourceSet().getResources()) {
 										if (r.getContents().get(0) instanceof LNGScenarioModel) {
-											ed.getResourceSet().getURIConverter().getURIMap().put(URI.createURI("http://rootObject.xmi"), r.getURI());
+											ed.getResourceSet().getURIConverter().getURIMap().put(URI.createURI(CloudOptimisationConstants.ROOT_MODEL_URI), r.getURI());
 										}
 									}
 
@@ -265,8 +258,16 @@ public class CloudOptimisationDataUpdater {
 										final String type = cRecord.getType();
 										switch (type) {
 										case "SANDBOX" -> {
-											// Ah, we don't know which sandbox....
-//													ed.getCommandStack().execute(SetCommand.create(editingDomain, rr, res, type))
+											for (var om : am.getOptionModels()) {
+
+												if (Objects.equals(cRecord.getComponentUUID(), om.getUuid())) {
+													RunnerHelper.exec(() -> {
+														ed.getCommandStack().execute(SetCommand.create(ed, om, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULTS, res));
+													}, true);
+													break;
+												}
+											}
+
 										}
 										case "OPTIMISATION" -> {
 											RunnerHelper.exec(() -> {
@@ -289,7 +290,7 @@ public class CloudOptimisationDataUpdater {
 									// Remove the obsolete resource
 									ed.getResourceSet().getResources().remove(rr);
 									// Clear the mapping
-									ed.getResourceSet().getURIConverter().getURIMap().remove(URI.createURI("http://rootObject.xmi"));
+									ed.getResourceSet().getURIConverter().getURIMap().remove(URI.createURI(CloudOptimisationConstants.ROOT_MODEL_URI));
 
 								}
 							}
