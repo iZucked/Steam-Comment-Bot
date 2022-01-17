@@ -24,6 +24,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
@@ -48,6 +49,9 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 
 	@Inject
 	private IRouteCostProvider routeCostProvider;
+	
+	@Inject
+	private ITimeZoneToUtcOffsetProvider utcOffsetProvider;
 
 	public MonthlyBallastBonusContractTerm(int oYMStartInclusive, int oYMEndExclusive, long pctCharterRate, long pctFuelRate, Set<IPort> redeliveryPorts, ILongCurve lumpSumCurve,
 			ICurve fuelPriceCurve, ILongCurve charterRateCurve, Set<IPort> returnPorts, boolean includeCanalFees, boolean includeCanalTime, int speedInKnots) {
@@ -71,9 +75,10 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 	public long calculateCost(IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability, int vesselStartTime, IPort vesselStartPort) {
 
 		IPortSlot slot = portTimesRecord.getFirstSlot();
-		int vesselEndTime = portTimesRecord.getFirstSlotTime() + portTimesRecord.getSlotDuration(slot);
+		int voyageStartTime = portTimesRecord.getFirstSlotTime() + portTimesRecord.getSlotDuration(slot);
+		int voyageStartTimeUTC = utcOffsetProvider.UTC(voyageStartTime, slot);
 
-		final long lumpSum = computeLumpSum(vesselEndTime);
+		final long lumpSum = computeLumpSum(voyageStartTimeUTC);
 		long minCost = Long.MAX_VALUE;
 		for (final IPort returnPort : getReturnPorts(vesselStartPort)) {
 			@NonNull
@@ -90,9 +95,9 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 			} else { // canal time not included.
 				hireTime = journeyTravelTime;
 			}
-			final long canalCost = routeCostProvider.getRouteCost(route, slot.getPort(), returnPort, vesselAvailability.getVessel(), vesselEndTime, CostType.Ballast);
-			final long hireCost = Calculator.percentageLow(this.pctCharterRate, (charterRateCurve.getValueAtPoint(vesselEndTime) * hireTime) / 24L);
-			final long fuelCost = Calculator.percentageLow(this.pctFuelRate, Calculator.costFromConsumption(fuelUsedJourney + fuelUsedCanal, fuelPriceCurve.getValueAtPoint(vesselEndTime)));
+			final long canalCost = routeCostProvider.getRouteCost(route, slot.getPort(), returnPort, vesselAvailability.getVessel(), voyageStartTimeUTC, CostType.Ballast);
+			final long hireCost = Calculator.percentageLow(this.pctCharterRate, (charterRateCurve.getValueAtPoint(voyageStartTimeUTC) * hireTime) / 24L);
+			final long fuelCost = Calculator.percentageLow(this.pctFuelRate, Calculator.costFromConsumption(fuelUsedJourney + fuelUsedCanal, fuelPriceCurve.getValueAtPoint(voyageStartTimeUTC)));
 			final long cost = lumpSum + fuelCost + (includeCanalFees ? canalCost : 0L) + hireCost;
 			minCost = Math.min(minCost, cost);
 		}
@@ -179,18 +184,22 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 	}
 
 	@Override
+	/**
+	 * portTimesRecord - end port
+	 */
 	public boolean match(IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability, int vesselStartTime, IPort vesselStartPort) {	
+		// 
 		IPortSlot slot = portTimesRecord.getFirstSlot();
-		int vesselEndTime = portTimesRecord.getFirstSlotTime() + portTimesRecord.getSlotDuration(slot);
+		int vesselStartTimeUTC = utcOffsetProvider.UTC(vesselStartTime, vesselStartPort);
 		
-		if (monthStartInclusive <= vesselEndTime && vesselEndTime < monthEndExclusive) {
-			return getRedeliveryPorts().contains(slot.getPort()) || getRedeliveryPorts().isEmpty();
+		if (monthStartInclusive <= vesselStartTimeUTC && vesselStartTimeUTC < monthEndExclusive) {
+			return getRedeliveryPorts().isEmpty() || getRedeliveryPorts().contains(slot.getPort());
 		}
 		return false;
 	}
 
 	public boolean matchWithoutDates(IPortSlot lastSlot) {
-		return getRedeliveryPorts().contains(lastSlot.getPort()) || getRedeliveryPorts().isEmpty();
+		return getRedeliveryPorts().isEmpty() || getRedeliveryPorts().contains(lastSlot.getPort());
 	}
 
 	public int getMonthStartInclusive() {
