@@ -29,20 +29,29 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
-import com.mmxlabs.models.lng.migration.ModelsLNGVersionMaker;
+import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
+import com.mmxlabs.models.lng.analytics.AnalyticsModel;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.scenario.actions.anonymisation.AnonymisationUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
+import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Metadata;
@@ -53,7 +62,6 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
-import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 import com.mmxlabs.scenario.service.model.util.encryption.ScenarioEncryptionException;
 
@@ -127,6 +135,9 @@ public class CloudOptimisationDataUpdater {
 
 		@Override
 		public void run() {
+
+			final boolean importResultXMI = false;
+
 			final File f = new File(String.format("%s/%s.lingo", basePath, cRecord.getJobid()));
 			if (!f.exists()) {
 				try {
@@ -138,27 +149,156 @@ public class CloudOptimisationDataUpdater {
 					} else {
 
 						final File anonymisationMap = new File(String.format("%s/%s.amap", basePath, cRecord.getJobid()));
-						if (anonymisationMap.exists()) {
 
-							ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
-								final ScenarioModelRecord modelRecord = ScenarioStorageUtil.loadInstanceFromURI(URI.createFileURI(temp.getAbsolutePath()), true, true, true, scenarioCipherProvider);
-								try (IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
-									final LNGScenarioModel origScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-									if (origScenarioModel.isAnonymised()) {
-										final LNGScenarioModel copy = EcoreUtil.copy(origScenarioModel);
-										final IScenarioDataProvider tempDP = SimpleScenarioDataProvider.make(ModelsLNGVersionMaker.createDefaultManifest(), copy);
+						final File solutionFile = new File(String.format("%s/%s.xmi", basePath, cRecord.getJobid()));
+						final URI solutionFileURI = URI.createFileURI(solutionFile.getAbsolutePath());
 
-										final EditingDomain editingDomain = tempDP.getEditingDomain();
-										final CompoundCommand cmd = AnonymisationUtils.createAnonymisationCommand(copy, editingDomain, new HashSet<>(), new ArrayList<>(), false, anonymisationMap);
+						ServiceHelper.withCheckedOptionalServiceConsumer(IScenarioCipherProvider.class, scenarioCipherProvider -> {
+							final ScenarioModelRecord modelRecord = ScenarioStorageUtil.loadInstanceFromURI(URI.createFileURI(temp.getAbsolutePath()), true, true, true, scenarioCipherProvider);
+							try (IScenarioDataProvider tempDP = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
+								final LNGScenarioModel copy = tempDP.getTypedScenario(LNGScenarioModel.class);
+//								final LNGScenarioModel copy = EcoreUtil.copy(origScenarioModel);
+//								final IScenarioDataProvider tempDP = SimpleScenarioDataProvider.make(ModelsLNGVersionMaker.createDefaultManifest(), copy);
 
-										if (cmd != null && !cmd.isEmpty()) {
-											editingDomain.getCommandStack().execute(cmd);
+								final EditingDomain editingDomain = tempDP.getEditingDomain();
+
+								// De-anonymise scenario
+								if (copy.isAnonymised() && anonymisationMap.exists()) {
+									final CompoundCommand cmd = AnonymisationUtils.createAnonymisationCommand(copy, editingDomain, new HashSet<>(), new ArrayList<>(), false, anonymisationMap);
+
+									if (cmd != null && !cmd.isEmpty()) {
+										RunnerHelper.exec(() -> editingDomain.getCommandStack().execute(cmd), true);
+									}
+									// Save the result
+									ScenarioStorageUtil.storeCopyToFile(tempDP, temp);
+								}
+
+								if (importResultXMI) {
+									// Assume scenario was stripped first, we grab the first result depending on
+									// query type.
+									final AnalyticsModel m = ScenarioModelUtil.getAnalyticsModel(tempDP);
+									AbstractSolutionSet result = null;
+									if (cRecord.getType() != null) {
+										final String type = cRecord.getType();
+										switch (type) {
+										case "SANDBOX" -> {
+											result = m.getOptionModels().get(0).getResults();
 										}
-										ScenarioStorageUtil.storeCopyToFile(tempDP, temp);
+										case "OPTIMISATION" -> {
+											result = m.getOptimisations().get(0);
+										}
+										case "OPTIONISER" -> {
+											result = m.getOptimisations().get(0);
+										}
+										}
+									}
+
+									if (result != null) {
+										// Replace the root model URI to a well known string for reloading later
+										for (final var r : editingDomain.getResourceSet().getResources()) {
+											if (r.getContents().get(0) instanceof LNGScenarioModel) {
+												r.setURI(URI.createURI("http://rootObject.xmi"));
+											}
+										}
+
+										// Save the solution into it's own file. References to the root model will be
+										// based on the URI set above.
+										final Resource r = editingDomain.getResourceSet().createResource(solutionFileURI);
+										r.getContents().add(result);
+										r.save(null);
 									}
 								}
+							}
+						});
+						if (importResultXMI) {
+
+							// Look up the original scenario.
+							final ScenarioInstance[] instanceRef = new ScenarioInstance[1];
+							ServiceHelper.withAllServices(IScenarioService.class, null, ss -> {
+								// Really want to make sure this is the "My Scenarios" services, but local is a
+								// good proxy for now.
+								if (ss.getServiceModel().isLocal()) {
+									// Does the UUID exist in the service?
+									if (ss.exists(cRecord.getUuid())) {
+										final TreeIterator<EObject> itr = ss.getServiceModel().eAllContents();
+										while (itr.hasNext()) {
+											final EObject obj = itr.next();
+											if (obj instanceof final ScenarioInstance si) {
+												if (Objects.equals(cRecord.getUuid(), si.getUuid())) {
+													instanceRef[0] = si;
+													return false;
+												}
+											}
+										}
+									}
+
+								}
+								return false;
 							});
+
+							if (instanceRef[0] != null) {
+								final ScenarioModelRecord mr = SSDataManager.Instance.getModelRecord(instanceRef[0]);
+								try (IScenarioDataProvider sdp = mr.aquireScenarioDataProvider("DownloadTask:patchScenario")) {
+									final AnalyticsModel am = ScenarioModelUtil.getAnalyticsModel(sdp);
+
+									final EditingDomain ed = sdp.getEditingDomain();
+
+									// Find the root object and create a URI mapping to the real URI so the result
+									// xmi can resolve
+									for (final var r : ed.getResourceSet().getResources()) {
+										if (r.getContents().get(0) instanceof LNGScenarioModel) {
+											ed.getResourceSet().getURIConverter().getURIMap().put(URI.createURI("http://rootObject.xmi"), r.getURI());
+										}
+									}
+
+									// Load in the result.
+									final Resource rr = ed.getResourceSet().createResource(solutionFileURI);
+									rr.load(null);
+									final AbstractSolutionSet res = (AbstractSolutionSet) rr.getContents().get(0);
+									assert res != null;
+
+									// "Resolve" the references. The result references to the main scenario may be
+									// "proxy" objects
+									EcoreUtil.resolveAll(ed.getResourceSet());
+
+									if (cRecord.getType() != null) {
+										final String type = cRecord.getType();
+										switch (type) {
+										case "SANDBOX" -> {
+											// Ah, we don't know which sandbox....
+//													ed.getCommandStack().execute(SetCommand.create(editingDomain, rr, res, type))
+										}
+										case "OPTIMISATION" -> {
+											RunnerHelper.exec(() -> {
+												final Command cmd = AddCommand.create(ed, am, AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS, res);
+												if (cmd.canExecute()) {
+													ed.getCommandStack().execute(cmd);
+												} else {
+													final int ii = 0;
+												}
+											}, true);
+										}
+										case "OPTIONISER" -> {
+											RunnerHelper.exec(() -> {
+												ed.getCommandStack().execute(AddCommand.create(ed, am, AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS, res));
+											}, true);
+										}
+										}
+									}
+
+									// Remove the obsolete resource
+									ed.getResourceSet().getResources().remove(rr);
+									// Clear the mapping
+									ed.getResourceSet().getURIConverter().getURIMap().remove(URI.createURI("http://rootObject.xmi"));
+
+								}
+							}
 						}
+
+						if (solutionFile.exists()) {
+							solutionFile.delete();
+						}
+
 						// Move the temp file
 						temp.renameTo(f);
 						cRecord.setResult(f);
@@ -328,14 +468,14 @@ public class CloudOptimisationDataUpdater {
 			// What is the status?
 			try {
 				r.setStatus(ResultStatus.from(client.getJobStatus(r.getJobid()), oldStatus));
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				// Keep old status if there is some kind of exception.
 			}
 			// Is the record still available upstream?
 			r.setRemote(r.getStatus() != null && !r.getStatus().isNotFound());
 
 			if (oldStatus != null && !oldStatus.isComplete() && r.getStatus().isComplete()) {
-				Instant n = Instant.now();
+				final Instant n = Instant.now();
 				r.setCloudRuntime(n.toEpochMilli() - r.getCreationDate().toEpochMilli());
 			}
 
@@ -361,9 +501,9 @@ public class CloudOptimisationDataUpdater {
 				.addAll(currentRecords) //
 				.add(r) //
 				.build();
-		
+
 		saveAndUpdateCurrentRecords(currentRecords);
-		
+
 		readyCallback.accept(r);
 
 		// Tell refresh job to wake up
@@ -525,14 +665,14 @@ public class CloudOptimisationDataUpdater {
 			final String json = CloudOptimisationDataServiceClient.getJSON(newList);
 			Files.writeString(tasksFile.toPath(), json, StandardCharsets.UTF_8);
 		} catch (final Exception e) {
-			int ii = 0;
+			final int ii = 0;
 			e.printStackTrace();
 		}
 		currentRecords = ImmutableList.copyOf(newList);
 	}
 
-	public synchronized void setLocalRuntime(String jobId, long runtime) {
-		CloudOptimisationDataResultRecord record = getRecord(jobId);
+	public synchronized void setLocalRuntime(final String jobId, final long runtime) {
+		final CloudOptimisationDataResultRecord record = getRecord(jobId);
 		if (record != null) {
 			record.setLocalRuntime(runtime);
 		}
