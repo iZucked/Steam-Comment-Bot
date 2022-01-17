@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
@@ -181,7 +182,7 @@ public class ScenarioServicePushToCloudAction {
 		}
 	}
 
-	private static UserSettings getOptimisationPlanForOptimisation(final ScenarioInstance scenarioInstance) {
+	private static @Nullable UserSettings getOptimisationPlanForOptimisation(final ScenarioInstance scenarioInstance) {
 		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 		try (IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
 			final LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
@@ -190,7 +191,7 @@ public class ScenarioServicePushToCloudAction {
 				return plan.getUserSettings();
 			}
 		} catch (final Exception e) {
-			LOG.error("Error getting the optimisation plan: " + e.getMessage(), e);
+			throw new RuntimeException("Error getting the optimisation plan: " + e.getMessage(), e);
 		}
 		return null;
 	}
@@ -226,8 +227,7 @@ public class ScenarioServicePushToCloudAction {
 
 				final EObject object = modelReference.getInstance();
 
-				if (object instanceof LNGScenarioModel) {
-					final LNGScenarioModel root = (LNGScenarioModel) object;
+				if (object instanceof LNGScenarioModel root) {
 					final Set<String> existingNames = new HashSet<>();
 					scenarioInstance.getFragments().forEach(f -> existingNames.add(f.getName()));
 					scenarioInstance.getElements().forEach(f -> existingNames.add(f.getName()));
@@ -259,14 +259,13 @@ public class ScenarioServicePushToCloudAction {
 
 			// TODO: Handle gateway errors.
 			// E.g. 502 - bad gateway
-			//      400 - bad request
-			//  Hostname/dns  errors / timeots
-			
+			// 400 - bad request
+			// Hostname/dns errors / timeots
+
 			if (cause instanceof CloudOptimisationPushException copException) {
 				switch (copException.getType()) {
 				case FAILED_UNKNOWN_ERROR:
-					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING,
-							"Failed to send scenario with unknown error. " + copException.getCause().getMessage());
+					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING, "Failed to send scenario with unknown error. " + copException.getCause().getMessage());
 					break;
 				case FAILED_NOT_PERMITTED:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_FAILED_PUSHING, "Insufficient permissions to send the scenario.");
@@ -287,6 +286,8 @@ public class ScenarioServicePushToCloudAction {
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING, "Unknown error occurred. Unable to send.");
 					break;
 				}
+			} else {
+				MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING, "Unknown error occurred. Unable to send. " + e.getMessage());
 			}
 		} catch (final InterruptedException e) {
 			LOG.error(e.getMessage(), e);
@@ -323,12 +324,13 @@ public class ScenarioServicePushToCloudAction {
 		final SubMonitor progressMonitor = SubMonitor.convert(parentProgressMonitor, 1000);
 		try {
 			progressMonitor.subTask("Prepare scenario");
-			final CloudOptimisationDataResultRecord record = new CloudOptimisationDataResultRecord();
-			record.setUuid(scenarioInstance.getUuid());
-			record.setCreationDate(Instant.now());
+			final CloudOptimisationDataResultRecord cRecord = new CloudOptimisationDataResultRecord();
+			cRecord.setUuid(scenarioInstance.getUuid());
+			cRecord.setCreationDate(Instant.now());
 			// This is the Data Hub user ID. It should be different.
-			record.setCreator(UsernameProvider.INSTANCE.getUserID());
-			record.setOriginalName(scenarioInstance.getName());
+			cRecord.setCreator(UsernameProvider.INSTANCE.getUserID());
+			cRecord.setOriginalName(scenarioInstance.getName());
+			cRecord.setType(problemType.toString());
 
 			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 
@@ -395,7 +397,7 @@ public class ScenarioServicePushToCloudAction {
 				progressMonitor.subTask("Anonymise scenario");
 
 				final String amfName = CLOUD_OPTI_PATH + IPath.SEPARATOR + scenarioInstance.getUuid() + ".amap";
-				record.setAnonyMapFileName(scenarioInstance.getUuid() + ".amap");
+				cRecord.setAnonyMapFileName(scenarioInstance.getUuid() + ".amap");
 				anonymisationMap = new File(amfName);
 
 				final CompoundCommand cmd = AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, new HashSet<>(), new ArrayList<>(), true, anonymisationMap);
@@ -500,7 +502,7 @@ public class ScenarioServicePushToCloudAction {
 				final String jobid = actualObj.get("jobid").textValue();
 				System.out.println(jobid);
 				if (jobid != null) {
-					record.setJobid(jobid);
+					cRecord.setJobid(jobid);
 					final File temp = new File(CLOUD_OPTI_PATH + IPath.SEPARATOR + jobid + ".amap");
 					anonymisationMap.renameTo(temp);
 				} else {
@@ -511,11 +513,11 @@ public class ScenarioServicePushToCloudAction {
 				deleteAnonyMap(anonymisationMap);
 				throw new CloudOptimisationPushException(MSG_ERROR_UPLOADING, Type.FAILED_TO_UPLOAD, new IllegalStateException("Unexpected server response: " + e.getMessage()));
 			}
-			CloudOptimisationDataServiceWrapper.updateRecords(record);
+			CloudOptimisationDataServiceWrapper.updateRecords(cRecord);
 
 			if (CloudOptimisationConstants.RUN_LOCAL_BENCHMARK && runLocal) {
 				try {
-					runLocalOptimisation(scenarioInstance, userSettings, targetSlots, problemType, progressMonitor, record, scenarioDataProvider, anonymisationMap);
+					runLocalOptimisation(scenarioInstance, userSettings, targetSlots, problemType, progressMonitor, cRecord, scenarioDataProvider, anonymisationMap);
 				} catch (Exception e) {
 					// Ignore - internal debug use only
 				}
@@ -605,7 +607,7 @@ public class ScenarioServicePushToCloudAction {
 				}
 			}
 		} catch (final Exception e) {
-			LOG.error("Can't write the ZIP archive", e);
+			throw new RuntimeException("Can't write the ZIP archive", e);
 		}
 	}
 
@@ -614,7 +616,7 @@ public class ScenarioServicePushToCloudAction {
 			zos.putNextEntry(new ZipEntry(filename));
 			ByteStreams.copy(fis, zos);
 		} catch (final Exception e) {
-			LOG.error(String.format("Can't add %s into the archive", file.getAbsolutePath()), e);
+			throw new RuntimeException(String.format("Can't add %s into the archive", file.getAbsolutePath()), e);
 		} finally {
 			zos.closeEntry();
 		}
@@ -628,29 +630,33 @@ public class ScenarioServicePushToCloudAction {
 				ByteStreams.copy(bytesIn, zos);
 			}
 		} catch (final Exception e) {
-			LOG.error(String.format("Can't add %s into the archive", filename), e);
+			throw new RuntimeException(String.format("Can't add %s into the archive", filename), e);
 		} finally {
 			zos.closeEntry();
 		}
 	}
 
-	private static String createOptimisationSettingsJson(final UserSettings us) {
-
+	private static ObjectMapper createUserSettingsMapper() {
 		final ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.registerModule(new JavaTimeModule());
 		objectMapper.addMixIn(UserSettingsImpl.class, UserSettingsMixin.class);
 		objectMapper.addMixIn(UserSettings.class, UserSettingsMixin.class);
+
+		return objectMapper;
+	}
+
+	private static String createOptimisationSettingsJson(final UserSettings us) {
+
+		final ObjectMapper objectMapper = createUserSettingsMapper();
 		try {
 			return objectMapper.writeValueAsString(us);
 		} catch (final Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
-
-		return null;
 	}
 
 	private static String createOptioniserSettingsJson(final UserSettings us, final List<Slot<?>> targetSlots, final List<VesselEvent> targetEvents) {
 
-		// TODO: Replace with HeadlessOptioniserOptions when merged with master
 		HeadlessOptioniserOptions settings = new HeadlessOptioniserOptions();
 		settings.userSettings = us;
 		settings.loadIds = new ArrayList<>();
@@ -672,15 +678,12 @@ public class ScenarioServicePushToCloudAction {
 			}
 		}
 
-		final ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.addMixIn(UserSettingsImpl.class, UserSettingsMixin.class);
-		objectMapper.addMixIn(UserSettings.class, UserSettingsMixin.class);
+		final ObjectMapper objectMapper = createUserSettingsMapper();
 		try {
 			return objectMapper.writeValueAsString(settings);
 		} catch (final Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
-		return null;
 	}
 
 	private static String createSandboxSettingsJson(final UserSettings us, final OptionAnalysisModel sandboxModel) {
@@ -688,16 +691,13 @@ public class ScenarioServicePushToCloudAction {
 		final HeadlessSandboxOptions description = new HeadlessSandboxOptions();
 		description.sandboxUUID = sandboxModel.getUuid();
 		description.userSettings = (UserSettingsImpl) us;
-		final ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.addMixIn(UserSettingsImpl.class, UserSettingsMixin.class);
-		objectMapper.addMixIn(UserSettings.class, UserSettingsMixin.class);
+		final ObjectMapper objectMapper = createUserSettingsMapper();
 		try {
 			String json = objectMapper.writeValueAsString(description);
 			return json;
 		} catch (final Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
-		return null;
 	}
 
 	private static String createManifest(final String scenarioName, @NonNull final CloudManifestProblemType problemType) {
@@ -728,9 +728,8 @@ public class ScenarioServicePushToCloudAction {
 			String json = objectMapper.writeValueAsString(md);
 			return json;
 		} catch (final Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
-		return null;
 	}
 
 	private static String createJVMOptions() {

@@ -26,6 +26,8 @@ public class CloudOptimisationDataResultRecord {
 
 	private String originalName;
 
+	private String type;
+
 	private boolean remote;
 
 	private boolean deleted;
@@ -148,6 +150,7 @@ public class CloudOptimisationDataResultRecord {
 		r.localRuntime = this.localRuntime;
 		r.status = this.status.copy();
 		r.uuid = this.uuid;
+		r.type = this.type;
 
 		return r;
 	}
@@ -178,4 +181,13 @@ public class CloudOptimisationDataResultRecord {
 	public boolean isActive() {
 		return status != null && (status.isSubmitted() || status.isRunning());
 	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 }
