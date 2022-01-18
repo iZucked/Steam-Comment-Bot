@@ -5,11 +5,13 @@
 package com.mmxlabs.models.lng.transformer.lightweightscheduler;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.UnaryOperator;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -57,10 +59,16 @@ import com.mmxlabs.models.lng.transformer.optimiser.valuepair.LoadDischargePairV
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.transformerunits.TransformerUnitsHelper;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
+import com.mmxlabs.optimiser.core.IModifiableSequence;
+import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.exceptions.InfeasibleSolutionException;
+import com.mmxlabs.optimiser.core.impl.ListModifiableSequence;
+import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.inject.scopes.ThreadLocalScopeImpl;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -68,6 +76,9 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.providers.ILongTermSlotsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class LightWeightSchedulerOptimiserUnit {
 
@@ -82,9 +93,9 @@ public class LightWeightSchedulerOptimiserUnit {
 
 	private final @NonNull Collection<String> hints;
 
-	private CleanStateOptimisationStage stage;
+	private final CleanStateOptimisationStage stage;
 
-	private @NonNull JobExecutorFactory jobExecutorFactory;
+	private @NonNull final JobExecutorFactory jobExecutorFactory;
 
 	@NonNull
 	public static IChainLink chain(@NonNull final ChainBuilder chainBuilder, @NonNull final LNGScenarioToOptimiserBridge optimiserBridge, @NonNull final String stage,
@@ -128,14 +139,14 @@ public class LightWeightSchedulerOptimiserUnit {
 							copyStageSettings.getConstraintAndFitnessSettings(), jobExecutorFactory, (LNGScenarioModel) (optimiserBridge.getOptimiserScenario().getScenario()), hints);
 					final IMultiStateResult result;
 					if (userSettings.isNominalOnly()) {
-						ISequences seq = t.computeNominalADP(initialSequencesContainer.getSequences(), monitor);
+						final ISequences seq = t.computeNominalADP(initialSequencesContainer.getSequences(), monitor);
 						if (seq == null) {
 							throw new InfeasibleSolutionException("No feasible solution found");
 						}
 
-						result = new MultiStateResult(seq, new HashMap<>());
+						result = mapInternalADPVesselToOriginal(dataTransformer, new MultiStateResult(seq, new HashMap<>()));
 					} else {
-						result = t.runAll(initialSequencesContainer.getSequences(), monitor);
+						result = mapInternalADPVesselToOriginal(dataTransformer, t.runAll(initialSequencesContainer.getSequences(), monitor));
 					}
 
 					// Check monitor state
@@ -170,7 +181,7 @@ public class LightWeightSchedulerOptimiserUnit {
 		return link;
 	}
 
-	public LightWeightSchedulerOptimiserUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final UserSettings userSettings, CleanStateOptimisationStage stage,
+	public LightWeightSchedulerOptimiserUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final UserSettings userSettings, final CleanStateOptimisationStage stage,
 			@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings, @NonNull final JobExecutorFactory jobExecutorFactory, final LNGScenarioModel initialScenario,
 			@NonNull final Collection<String> hints) {
 		this.dataTransformer = dataTransformer;
@@ -191,7 +202,7 @@ public class LightWeightSchedulerOptimiserUnit {
 		prepareLongTermData(stage1Injector, referenceSequences);
 		progress.worked(1);
 
-		final IVesselAvailability pnlVessel = stage1Injector.getInstance(Key.get(IVesselAvailability.class, Names.named(OptimiserConstants.DEFAULT_VESSEL)));
+		final IVesselAvailability pnlVessel = stage1Injector.getInstance(Key.get(IVesselAvailability.class, Names.named(OptimiserConstants.DEFAULT_INTERNAL_VESSEL)));
 
 		final ILightWeightOptimisationData lwOptimsdationData = computeStage1Data(stage1Injector, pnlVessel, progress.split(29));
 
@@ -221,7 +232,7 @@ public class LightWeightSchedulerOptimiserUnit {
 		prepareLongTermData(stage1Injector, referenceSequences);
 		progress.worked(1);
 
-		final IVesselAvailability pnlVessel = stage1Injector.getInstance(Key.get(IVesselAvailability.class, Names.named(OptimiserConstants.DEFAULT_VESSEL)));
+		final IVesselAvailability pnlVessel = stage1Injector.getInstance(Key.get(IVesselAvailability.class, Names.named(OptimiserConstants.DEFAULT_INTERNAL_VESSEL)));
 
 		final LoadDischargePairValueCalculatorStep calculator = SlotValueHelper.createLoadDischargeCalculatorUnit(dataTransformer);
 
@@ -231,14 +242,14 @@ public class LightWeightSchedulerOptimiserUnit {
 
 		try {
 			return scheduler.createSlotPairingMatrix(pnlVessel, calculator, localExecutorService, monitor);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			return null;
 		}
 	}
 
 	@NonNullByDefault
 	private Injector buildStage2Injector(final Injector stage1Injector, final ILightWeightOptimisationData lwOptimsdationData) {
-		List<Module> modules = new LinkedList<>();
+		final List<Module> modules = new LinkedList<>();
 		modules.add(new AbstractModule() {
 			@Override
 			protected void configure() {
@@ -299,7 +310,7 @@ public class LightWeightSchedulerOptimiserUnit {
 
 		prepareLongTermData(stage1Injector, referenceSequences);
 
-		final IVesselAvailability pnlVessel = stage1Injector.getInstance(Key.get(IVesselAvailability.class, Names.named(OptimiserConstants.DEFAULT_VESSEL)));
+		final IVesselAvailability pnlVessel = stage1Injector.getInstance(Key.get(IVesselAvailability.class, Names.named(OptimiserConstants.DEFAULT_INTERNAL_VESSEL)));
 
 		final LoadDischargePairValueCalculatorStep calculator = SlotValueHelper.createLoadDischargeCalculatorUnit(dataTransformer);
 
@@ -338,6 +349,87 @@ public class LightWeightSchedulerOptimiserUnit {
 	private IMultiStateResult modifyResult(final Injector stage2Injector, final IMultiStateResult result) {
 		final ISequenceElementFilter filter = stage2Injector.getInstance(ISequenceElementFilter.class);
 		return TransformerUnitsHelper.removeExcessSlots(result, filter);
+	}
+
+	/**
+	 * Returns a new result moving all the elements from the internal vessel to the
+	 * external vessel. A resource for the external vessel will be added if it is
+	 * not already in the solution. The internal vessel will be removed if the
+	 * sequence is left empty (as would be expected).
+	 * 
+	 * @param dataTransformer
+	 * @param internalResult
+	 * @return
+	 */
+	private static IMultiStateResult mapInternalADPVesselToOriginal(final LNGDataTransformer dataTransformer, final IMultiStateResult internalResult) {
+		final IVesselAvailability internalVessel = (IVesselAvailability) dataTransformer.getModelEntityMap().getNamedOptimiserObject(OptimiserConstants.DEFAULT_INTERNAL_VESSEL);
+		assert internalVessel != null;
+		final IVesselAvailability externalVessel = (IVesselAvailability) dataTransformer.getModelEntityMap().getNamedOptimiserObject(OptimiserConstants.DEFAULT_EXTERNAL_VESSEL);
+		assert externalVessel != null;
+
+		final IVesselProvider vesselProvider = dataTransformer.getInjector().getInstance(IVesselProvider.class);
+		final IPortSlotProvider portSlotProvider = dataTransformer.getInjector().getInstance(IPortSlotProvider.class);
+		final IStartEndRequirementProvider startEndRequirementProvider = dataTransformer.getInjector().getInstance(IStartEndRequirementProvider.class);
+
+		final IResource internalResource = vesselProvider.getResource(internalVessel);
+		final IResource externalResource = vesselProvider.getResource(externalVessel);
+
+		final UnaryOperator<NonNullPair<ISequences, Map<String, Object>>> doMapping = solution -> {
+			final ISequences sequences = solution.getFirst();
+			final IModifiableSequences newSequences = new ModifiableSequences(sequences);
+
+			final List<IResource> resources = new LinkedList<>(newSequences.getResources());
+			if (!resources.contains(externalResource)) {
+				resources.add(externalResource);
+			}
+			final Map<@NonNull IResource, @NonNull IModifiableSequence> m = newSequences.getModifiableSequences();
+
+			final IModifiableSequence externalVesselSequence;
+			if (m.containsKey(externalResource)) {
+				externalVesselSequence = m.get(externalResource);
+			} else {
+				final List<ISequenceElement> elements = new LinkedList<>();
+				elements.add(startEndRequirementProvider.getStartElement(externalResource));
+				elements.add(startEndRequirementProvider.getEndElement(externalResource));
+				m.put(externalResource, new ListModifiableSequence(elements));
+
+				externalVesselSequence = m.get(externalResource);
+			}
+			final IModifiableSequence internalVesselSequence = m.get(internalResource);
+
+			// Add all elements from the list except for start/end events
+			final List<ISequenceElement> elementsToMove = new LinkedList<>();
+			for (final var e : internalVesselSequence) {
+				final IPortSlot portSlot = portSlotProvider.getPortSlot(e);
+				// Skip start and end port slots
+				if (portSlot.getPortType() == PortType.Start || portSlot.getPortType() == PortType.End) {
+					continue;
+				}
+				elementsToMove.add(e);
+			}
+			// Remove the elements from the internal vessel
+			elementsToMove.forEach(internalVesselSequence::remove);
+			// Reverse sort so we can re-use the same insertion position.
+			Collections.reverse(elementsToMove);
+			// Find the end of the sequence, taking into account insertion before the End
+			// event.
+			final int pos = externalVesselSequence.size() - 1 /* before last element */;
+			elementsToMove.forEach(e -> externalVesselSequence.insert(pos, e));
+
+			// A size of two is implied by just the start and end event left.
+			if (internalVesselSequence.size() == 2) {
+				resources.remove(internalResource);
+				m.remove(internalResource);
+			}
+
+			final ModifiableSequences finalSequences = new ModifiableSequences(resources, m, newSequences.getUnusedElements(), newSequences.getProviders());
+			return new NonNullPair<>(finalSequences, solution.getSecond());
+		};
+
+		final List<NonNullPair<ISequences, Map<String, Object>>> newSolutions = internalResult.getSolutions().stream() //
+				.map(doMapping) //
+				.toList();
+		return new MultiStateResult(doMapping.apply(internalResult.getBestSolution()), newSolutions);
 	}
 
 }

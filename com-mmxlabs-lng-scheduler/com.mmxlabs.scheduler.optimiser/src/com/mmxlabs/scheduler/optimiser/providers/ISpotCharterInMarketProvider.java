@@ -6,7 +6,7 @@ package com.mmxlabs.scheduler.optimiser.providers;
 
 import java.util.Collection;
 
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
@@ -16,13 +16,12 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
  * Provider for spot charter in markets.
  *
  */
+@NonNullByDefault
 public interface ISpotCharterInMarketProvider extends IDataComponentProvider {
 
-	@NonNull
-	Collection<@NonNull ISpotCharterInMarket> getSpotCharterInMarkets();
+	Collection<ISpotCharterInMarket> getSpotCharterInMarkets();
 
-	int getSpotCharterInMarketCount(@NonNull ISpotCharterInMarket market);
+	int getSpotCharterInMarketCount(ISpotCharterInMarket market);
 
-	@NonNull
-	IVesselAvailability getSpotMarketAvailability(@NonNull ISpotCharterInMarket market, int spotIndex);
+	IVesselAvailability getSpotMarketAvailability(ISpotCharterInMarket market, int spotIndex);
 }

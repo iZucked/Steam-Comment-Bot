@@ -312,7 +312,7 @@ public class CharterContractValidationUtils {
 	
 	private static boolean monthlyBallastBonusTermsValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures, 
 			String topFeatureMessage, final MonthlyBallastBonusTerm term) {
-		notionalJourneyTermsValidation(ctx, extraContext, failures, topFeatureMessage, (NotionalJourneyTerm) term);
+		notionalJourneyTermsValidation(ctx, extraContext, failures, topFeatureMessage, term);
 		
 		boolean valid = true;
 
@@ -335,7 +335,7 @@ public class CharterContractValidationUtils {
 	
 	public static void ballastBonusCheckPortGroups(final IValidationContext ctx, final IExtraValidationContext extraContext, final DetailConstraintStatusFactory baseFactory,
 			final List<IStatus> failures, final VesselAvailability va, final SimpleBallastBonusContainer ballastBonusContainer) {
-		final Set<APortSet<Port>> coveredPorts = new HashSet<APortSet<Port>>();
+		final Set<APortSet<Port>> coveredPorts = new HashSet<>();
 		final List<APortSet<Port>> endAtPorts = new LinkedList<>();
 		boolean anywhere = false;
 		if (va.getEndAt().isEmpty()) {

@@ -56,8 +56,8 @@ public class LegalSequencingChecker {
 
 		for (final IConstraintCheckerFactory factory : context.getConstraintCheckerRegistry().getConstraintCheckerFactories(context.getConstraintCheckers())) {
 			final IConstraintChecker checker = factory.instantiate();
-			if (checker instanceof IPairwiseConstraintChecker) {
-				pairwiseCheckers.add((IPairwiseConstraintChecker) checker);
+			if (checker instanceof IPairwiseConstraintChecker pChecker) {
+				pairwiseCheckers.add(pChecker);
 			}
 		}
 

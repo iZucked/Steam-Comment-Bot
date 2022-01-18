@@ -26,8 +26,7 @@ public class DefaultCharterContract implements ICharterContract {
 	}
 
 	@Override
-	public long calculateBBCost(final IPortTimesRecord portTimesRecord, IPortSlot portSlot, IVesselAvailability vesselAvailability
-			, int vesselStartTime, final IPort firstLoadPort) {
+	public long calculateBBCost(final IPortTimesRecord portTimesRecord, final IPortSlot portSlot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final IPort firstLoadPort) {
 		for (final IBallastBonusTerm term : bbTerms) {
 			if (term.match(portTimesRecord, vesselAvailability, vesselStartTime, firstLoadPort)) {
 				return term.calculateCost(portTimesRecord, vesselAvailability, vesselStartTime, firstLoadPort);
@@ -35,10 +34,10 @@ public class DefaultCharterContract implements ICharterContract {
 		}
 		return 0L;
 	}
-	
+
 	@Override
-	public long calculateRFRevenue(final IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability) {
-		for (final IRepositioningFeeTerm term: rfTerms) {
+	public long calculateRFRevenue(final IPortTimesRecord portTimesRecord, final IVesselAvailability vesselAvailability) {
+		for (final IRepositioningFeeTerm term : rfTerms) {
 			if (term.match(portTimesRecord, vesselAvailability)) {
 				return term.calculateCost(portTimesRecord, vesselAvailability);
 			}
@@ -47,9 +46,9 @@ public class DefaultCharterContract implements ICharterContract {
 	}
 
 	@Override
-	public ICharterContractAnnotation annotateBB(final IPortTimesRecord portTimesRecord, final IPortSlot portSlot, final IVesselAvailability vesselAvailability
-			, final int vesselStartTime, final IPort firstLoadPort) {
-		
+	public ICharterContractAnnotation annotateBB(final IPortTimesRecord portTimesRecord, final IPortSlot portSlot, final IVesselAvailability vesselAvailability, final int vesselStartTime,
+			final IPort firstLoadPort) {
+
 		final CharterContractAnnotation charterContractAnnotation = new CharterContractAnnotation();
 		for (final IBallastBonusTerm term : bbTerms) {
 			if (term.match(portTimesRecord, vesselAvailability, vesselStartTime, firstLoadPort)) {
@@ -61,11 +60,11 @@ public class DefaultCharterContract implements ICharterContract {
 		}
 		return charterContractAnnotation;
 	}
-	
+
 	@Override
 	public ICharterContractAnnotation annotateRF(final IPortTimesRecord portTimesRecord, final IVesselAvailability vesselAvailability) {
 		final CharterContractAnnotation charterContractAnnotation = new CharterContractAnnotation();
-		for (final IRepositioningFeeTerm term: rfTerms) {
+		for (final IRepositioningFeeTerm term : rfTerms) {
 			if (term.match(portTimesRecord, vesselAvailability)) {
 				charterContractAnnotation.cost = term.calculateCost(portTimesRecord, vesselAvailability);
 				charterContractAnnotation.matchedPort = portTimesRecord.getFirstSlot().getPort();

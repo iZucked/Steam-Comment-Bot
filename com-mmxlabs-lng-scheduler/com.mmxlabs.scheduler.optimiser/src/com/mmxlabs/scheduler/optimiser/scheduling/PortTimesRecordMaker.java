@@ -301,17 +301,16 @@ public class PortTimesRecordMaker {
 			final IPortSlot returnSlot = record.getReturnSlot();
 			if (returnSlot != null) {
 				if (returnSlot.getPortType() == PortType.Round_Trip_Cargo_End) {
-					// TODO: Delegate to endEventScheduler so it can be customised
-					final IPortSlot startPortSlot = portTimesRecord.getSlots().get(0);
 					final IPortSlot prevPortSlot = portTimesRecord.getSlots().get(portTimesRecord.getSlots().size() - 1);
 					final int prevArrivalTime = portTimesRecord.getSlotTime(prevPortSlot);
 					final int prevVisitDuration = portTimesRecord.getSlotDuration(prevPortSlot);
 					final int prevPanamaIdleTime = record.getSlotAdditionalPanamaIdleHours(prevPortSlot);
 					Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), //
-							prevPortSlot.getPort(), startPortSlot.getPort(), //
+							prevPortSlot.getPort(), returnSlot.getPort(), //
 							vesselAvailability.getVessel().getMaxSpeed(), //
 							record.getSlotNextVoyageOptions(prevPortSlot) //
 					);
+
 					portTimesRecord.setSlotNextVoyageOptions(prevPortSlot, mapToChoice(quickestTravelTime.getFirst()));
 					final int availableTime = quickestTravelTime.getSecond();
 					final int roundTripReturnArrivalTime = prevArrivalTime + prevVisitDuration + availableTime //
@@ -327,7 +326,6 @@ public class PortTimesRecordMaker {
 					final ITimeWindow window = record.getSlotFeasibleTimeWindow(returnSlot);
 
 					// Pick based on earliest time
-					// TODO: Extract into injectable component
 					int arrivalTime = window == null ? lastNextExpectedArrivalTime : Math.max(window.getInclusiveStart(), lastNextExpectedArrivalTime);
 
 					/**
@@ -616,8 +614,9 @@ public class PortTimesRecordMaker {
 					// required for waiting for a slot if no booking.
 					int panamaTime = distanceProvider.getTravelTime(ERouteOption.PANAMA, vessel, from.getPort(), to.getPort(), vessel.getMaxSpeed());
 
-					if (panamaTime == Integer.MAX_VALUE) {
+					if (panamaTime == Integer.MAX_VALUE || availableTravelTime < panamaTime) {
 						// Normally expect to have had Panama restricted earlier, but just in case....
+						// Nominal/Round-trip cargoes can get here.
 						recordCopy.setSlotNextVoyageOptions(from, AvailableRouteChoices.EXCLUDE_PANAMA);
 					} else {
 						// Add on waiting time

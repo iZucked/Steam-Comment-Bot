@@ -57,7 +57,6 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
-
 @SuppressWarnings("unused")
 @ExtendWith(value = ShiroRunner.class)
 public class LightWeightSchedulerTests extends AbstractMicroTestCase {
@@ -87,8 +86,8 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 		charterInMarket_1.setNominal(true);
 
-		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("Bonny", LocalDate.of(2016, 1, 1), portFinder.findPortById(InternalDataConstants.PORT_DARWIN), null, entity, "5", 22.8).withWindowSize(1, TimePeriod.MONTHS)
-				.build();
+		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("Bonny", LocalDate.of(2016, 1, 1), portFinder.findPortById(InternalDataConstants.PORT_DARWIN), null, entity, "5", 22.8)
+				.withWindowSize(1, TimePeriod.MONTHS).build();
 		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_BARCELONA), null, entity, "7")
 				.withWindowSize(1, TimePeriod.MONTHS).build();
 
@@ -134,8 +133,8 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
 		charterInMarket_1.setNominal(true);
 
-		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("Bonny", LocalDate.of(2016, 1, 1), portFinder.findPortById(InternalDataConstants.PORT_DARWIN), null, entity, "5", 22.8).withWindowSize(1, TimePeriod.MONTHS)
-				.build();
+		final LoadSlot load_FOB1 = cargoModelBuilder.makeFOBPurchase("Bonny", LocalDate.of(2016, 1, 1), portFinder.findPortById(InternalDataConstants.PORT_DARWIN), null, entity, "5", 22.8)
+				.withWindowSize(1, TimePeriod.MONTHS).build();
 		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 2, 1), portFinder.findPortById(InternalDataConstants.PORT_BARCELONA), null, entity, "7")
 				.withWindowSize(1, TimePeriod.MONTHS).build();
 
@@ -159,12 +158,16 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 			Assertions.assertNotNull(result1);
 			Assertions.assertArrayEquals(new boolean[][] { { false, true }, { true, false } }, result1);
 			// Assertions.assertTrue(result1.getSolutions().size() == 2);
-			// assert result1.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
+			// assert
+			// result1.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
 			//
-			// final IMultiStateResult result2 = lightWeightSchedulerOptimiserUnit.runAll(initialResult.getBestSolution().getFirst(), new NullProgressMonitor());
+			// final IMultiStateResult result2 =
+			// lightWeightSchedulerOptimiserUnit.runAll(initialResult.getBestSolution().getFirst(),
+			// new NullProgressMonitor());
 			// Assertions.assertNotNull(result2);
 			// Assertions.assertTrue(result2.getSolutions().size() == 2);
-			// assert result2.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
+			// assert
+			// result2.getSolutions().get(1).getFirst().getUnusedElements().isEmpty();
 		}, OptimiserInjectorServiceMaker.begin()//
 				.withModuleOverride(IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, createExtraDataModule(charterInMarket_1))//
 				.make());
@@ -188,8 +191,8 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 
 		ScenarioUtils.createOrUpdateContraints(LadenLegLimitConstraintCheckerFactory.NAME, true, constraintAndFitnessSettings);
 		CleanStateOptimisationStage cleanStateParameters = ScenarioUtils.createDefaultCleanStateParameters(constraintAndFitnessSettings);
-		final LightWeightSchedulerOptimiserUnit slotInserter = new LightWeightSchedulerOptimiserUnit(dataTransformer, dataTransformer.getUserSettings(), cleanStateParameters, constraintAndFitnessSettings,
-				scenarioRunner.getJobExecutorFactory(), lngScenarioModel, Collections.emptyList());
+		final LightWeightSchedulerOptimiserUnit slotInserter = new LightWeightSchedulerOptimiserUnit(dataTransformer, dataTransformer.getUserSettings(), cleanStateParameters,
+				constraintAndFitnessSettings, scenarioRunner.getJobExecutorFactory(), lngScenarioModel, Collections.emptyList());
 
 		return slotInserter;
 	}
@@ -206,28 +209,16 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 		return new AbstractModule() {
 
 			@Provides
-			@Named(OptimiserConstants.DEFAULT_VESSEL)
+			@Named(OptimiserConstants.DEFAULT_INTERNAL_VESSEL)
 			private IVesselAvailability provideDefaultVessel(ModelEntityMap modelEntityMap, IVesselProvider vesselProvider, IOptimisationData optimisationData) {
-				final ISpotCharterInMarket market = modelEntityMap.getOptimiserObjectNullChecked(defaultMarket, ISpotCharterInMarket.class);
 
-				for (final IResource o_resource : optimisationData.getResources()) {
-					final IVesselAvailability o_vesselAvailability = vesselProvider.getVesselAvailability(o_resource);
-					if (o_vesselAvailability.getSpotCharterInMarket() != market) {
-						continue;
-					}
-					if (o_vesselAvailability.getSpotIndex() == -1) {
-						return o_vesselAvailability;
-					}
-
+				final IVesselAvailability va = (IVesselAvailability) modelEntityMap.getNamedOptimiserObject(OptimiserConstants.DEFAULT_INTERNAL_VESSEL);
+				if (va != null) {
+					return va;
 				}
 				throw new IllegalStateException();
 			}
 
-			@Override
-			protected void configure() {
-				// TODO Auto-generated method stub
-
-			}
 		};
 	}
 

@@ -109,24 +109,15 @@ public class StrategicScenarioModuleHelper {
 			}
 
 			@Provides
-			@Named(OptimiserConstants.DEFAULT_VESSEL)
+			@Named(OptimiserConstants.DEFAULT_INTERNAL_VESSEL)
 			private IVesselAvailability provideDefaultVessel(final ModelEntityMap modelEntityMap, //
 					final IVesselProvider vesselProvider, //
 					final IOptimisationData optimisationData, // )
 					@Named(KEY_DEFAULT_MARKET) CharterInMarket market) {
 
-				ISpotCharterInMarket o_market = modelEntityMap.getOptimiserObjectNullChecked(market, ISpotCharterInMarket.class);
-
-				for (final IResource o_resource : optimisationData.getResources()) {
-					final IVesselAvailability o_vesselAvailability = vesselProvider.getVesselAvailability(o_resource);
-
-					if (o_vesselAvailability.getSpotCharterInMarket() != o_market) {
-						continue;
-					}
-
-					if (o_vesselAvailability.getSpotIndex() == -1) {
-						return o_vesselAvailability;
-					}
+				final IVesselAvailability va = (IVesselAvailability) modelEntityMap.getNamedOptimiserObject(OptimiserConstants.DEFAULT_INTERNAL_VESSEL);
+				if (va != null) {
+					return va;
 				}
 				throw new IllegalStateException();
 			}
@@ -136,11 +127,6 @@ public class StrategicScenarioModuleHelper {
 			@Singleton
 			private List<CharterInMarket> provideDefaultVessel(@Named(KEY_DEFAULT_MARKET) CharterInMarket market) {
 				return Collections.singletonList(market);
-			}
-
-			@Override
-			protected void configure() {
-				// Nothing to bind by default
 			}
 		};
 	}

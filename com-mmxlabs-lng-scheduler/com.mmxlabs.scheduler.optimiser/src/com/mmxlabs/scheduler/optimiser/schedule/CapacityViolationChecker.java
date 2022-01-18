@@ -112,11 +112,8 @@ public class CapacityViolationChecker {
 
 				final long startHeelInM3 = heelRecord.getHeelAtStartInM3();
 				final long endHeelInM3 = heelRecord.getHeelAtEndInM3();
-				if (portSlot instanceof IHeelOptionConsumerPortSlot) {
-					final IHeelOptionConsumerPortSlot heelOptionConsumerPortSlot = (IHeelOptionConsumerPortSlot) portSlot;
-
-					@NonNull
-					final IHeelOptionConsumer heelOptionsConsumer = heelOptionConsumerPortSlot.getHeelOptionsConsumer();
+				if (portSlot instanceof IHeelOptionConsumerPortSlot heelOptionConsumerPortSlot) {
+					final @NonNull IHeelOptionConsumer heelOptionsConsumer = heelOptionConsumerPortSlot.getHeelOptionsConsumer();
 
 					VesselTankState expectedTankState = heelOptionsConsumer.getExpectedTankState();
 					if (expectedTankState == VesselTankState.EITHER) {

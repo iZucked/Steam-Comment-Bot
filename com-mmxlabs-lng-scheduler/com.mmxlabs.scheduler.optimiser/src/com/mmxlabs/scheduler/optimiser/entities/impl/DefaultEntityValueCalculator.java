@@ -281,6 +281,36 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			calculateCargoShippingEntityCosts(entityPreTaxProfit, vesselAvailability, plan, cargoPNLData, baseEntity, shippingEntity, entityBookDetailTreeMap);
 		}
 
+		{
+			IPortSlot returnSlot = currentAllocation.getReturnSlot();
+			if (returnSlot != null) {
+
+				if (returnSlot.getPortType() == PortType.Round_Trip_Cargo_End) {
+					IPortSlot firstPortSlot = currentAllocation.getFirstSlot();
+					int vesselStartTime = currentAllocation.getFirstSlotTime();
+					// Repos
+					long additionalCost1 = shippingCostHelper.calculateRFRevenue(currentAllocation, firstPortSlot, vesselAvailability);
+					// Ballast
+					long additionalCost2 = shippingCostHelper.calculateBBCost(currentAllocation, returnSlot, vesselAvailability, vesselStartTime, returnSlot.getPort());
+
+					addEntityBookProfit(entityPreTaxProfit, baseEntity.getTradingBook(), -additionalCost1);
+					addEntityBookProfit(entityPreTaxProfit, baseEntity.getTradingBook(), -additionalCost2);
+
+					if (annotatedSolution != null) {
+
+						DetailTree shippingDetails = shippingDetails = new DetailTree();
+						entityBookDetailTreeMap.put(baseEntity.getTradingBook(), shippingDetails);
+						// Add in positioning costs
+						shippingCostHelper.annotateRF(currentAllocation, shippingDetails, firstPortSlot, vesselAvailability);
+
+						// Add in ballast bonus
+						shippingCostHelper.annotateBB(currentAllocation, shippingDetails, returnSlot, vesselAvailability, vesselStartTime, returnSlot.getPort());
+					}
+				}
+
+			}
+		}
+
 		calculateExtraPreTaxItems(entityPreTaxProfit, vesselAvailability, plan, cargoPNLData, baseEntity, shippingEntity, entityBookDetailTreeMap);
 
 		// Taxed P&L
@@ -456,11 +486,18 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				revenue = 0;
 			}
 
-			if (firstPortSlot.getPortType() == PortType.Start || firstPortSlot.getPortType() == PortType.End) {
-				final int vesselEndTime = utcOffsetProvider.UTC(portTimesRecord.getSlotTime(firstPortSlot), firstPortSlot);
-				additionalCost += shippingCostHelper.getShippingCharterContractCost(portTimesRecord, firstPortSlot, vesselAvailability, vesselStartTime, firstLoadPort, vesselEndTime);
+			// Repositioning on a start event
+			if (firstPortSlot.getPortType() == PortType.Start) {
+				additionalCost += shippingCostHelper.calculateRFRevenue(portTimesRecord, firstPortSlot, vesselAvailability);
 				if (annotatedSolution != null) {
-					shippingCostHelper.addCharterContractAnnotation(portTimesRecord, shippingDetails, firstPortSlot, vesselAvailability, vesselStartTime, firstLoadPort, vesselEndTime);
+					shippingCostHelper.annotateRF(portTimesRecord, shippingDetails, firstPortSlot, vesselAvailability);
+				}
+			}
+			// Ballast bonus on end event
+			if (firstPortSlot.getPortType() == PortType.End) {
+				additionalCost += shippingCostHelper.calculateBBCost(portTimesRecord, firstPortSlot, vesselAvailability, vesselStartTime, firstLoadPort);
+				if (annotatedSolution != null) {
+					shippingCostHelper.annotateBB(portTimesRecord, shippingDetails, firstPortSlot, vesselAvailability, vesselStartTime, firstLoadPort);
 				}
 			}
 
