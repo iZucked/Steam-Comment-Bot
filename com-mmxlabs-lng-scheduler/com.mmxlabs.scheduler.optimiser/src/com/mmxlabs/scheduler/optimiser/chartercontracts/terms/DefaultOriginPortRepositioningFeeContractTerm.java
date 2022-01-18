@@ -60,7 +60,7 @@ public class DefaultOriginPortRepositioningFeeContractTerm extends DefaultLumpSu
 
 		final long lumpSum = super.calculateCost(portTimesRecord, vesselAvailability);
 
-		final IPort startPort = getFirstPort(portTimesRecord);
+		final IPort startPort = getFirstPort(vesselAvailability, portTimesRecord);
 		assert startPort != null;
 
 		final Pair<ERouteOption, Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), originPort, startPort, speedInKnots,
@@ -95,7 +95,7 @@ public class DefaultOriginPortRepositioningFeeContractTerm extends DefaultLumpSu
 
 		final long lumpSum = super.calculateCost(portTimesRecord, vesselAvailability);
 
-		final IPort startPort = getFirstPort(portTimesRecord);
+		final IPort startPort = getFirstPort(vesselAvailability, portTimesRecord);
 		assert startPort != null;
 
 		final Pair<ERouteOption, Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), originPort, startPort, speedInKnots,
@@ -144,5 +144,4 @@ public class DefaultOriginPortRepositioningFeeContractTerm extends DefaultLumpSu
 
 		return termAnnotation;
 	}
-
 }

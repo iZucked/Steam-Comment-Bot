@@ -10,24 +10,26 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.commercial.BallastBonusTerm;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
+import com.mmxlabs.models.lng.commercial.RepositioningFeeTerm;
 import com.mmxlabs.models.lng.commercial.SimpleBallastBonusContainer;
+import com.mmxlabs.models.lng.commercial.SimpleRepositioningFeeContainer;
 import com.mmxlabs.models.lng.commercial.StartHeelOptions;
+import com.mmxlabs.models.lng.port.CapabilityGroup;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioElementNameHelper;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
-import com.mmxlabs.models.lng.spotmarkets.validation.internal.Activator;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -41,16 +43,11 @@ public class CharterInMarketConstraint extends AbstractModelMultiConstraint {
 		if (target instanceof final CharterInMarket spotMarket) {
 			final GenericCharterContract charterContract = spotMarket.getGenericCharterContract();
 			if (charterContract != null) {
-				if (spotMarket.isNominal()) {
-					// nominals
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx
-							.createFailureStatus(String.format("[Charter in market vessel | %s] has nominals enabled and a ballast bonus chartering contract.", spotMarket.getName())));
-					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterInMarkets());
-					failures.add(dsd);
-				} else {
-					if (charterContract.getBallastBonusTerms() instanceof final SimpleBallastBonusContainer bbContainer) {
-						ballastBonusCheckPortGroups(ctx, failures, spotMarket, bbContainer);
-					}
+				if (charterContract.getBallastBonusTerms() instanceof final SimpleBallastBonusContainer container) {
+					ballastBonusCheckPortGroups(ctx, failures, spotMarket, container);
+				}
+				if (charterContract.getRepositioningFeeTerms() instanceof final SimpleRepositioningFeeContainer container) {
+					repositioningCheckPortGroups(ctx, (LNGScenarioModel) extraContext.getRootObject(), failures, spotMarket, container);
 				}
 			}
 
@@ -95,16 +92,6 @@ public class CharterInMarketConstraint extends AbstractModelMultiConstraint {
 
 			final int minDurationInHours = spotMarket.getMarketOrContractMinDuration();
 			final int maxDurationInHours = spotMarket.getMarketOrContractMaxDuration();
-
-			if (minDurationInHours != 0 || maxDurationInHours != 0) {
-				if (spotMarket.isNominal()) {
-					// nominals
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-							(IConstraintStatus) ctx.createFailureStatus(String.format("[Charter in market vessel | %s] has nominals enabled and a min or max duration.", spotMarket.getName())));
-					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterInMarkets());
-					failures.add(dsd);
-				}
-			}
 			if (minDurationInHours != 0 && maxDurationInHours != 0) {
 				if (minDurationInHours > maxDurationInHours) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
@@ -155,7 +142,58 @@ public class CharterInMarketConstraint extends AbstractModelMultiConstraint {
 								.createFailureStatus((String.format("%s is not covered by the ballast bonus rules (note the vessel can end anywhere)", ScenarioElementNameHelper.getName(endAtPort)))));
 					} else {
 						dsd = new DetailConstraintStatusDecorator(
-								(IConstraintStatus) ctx.createFailureStatus((String.format("%s is not covered by the ballast bonus rules", ScenarioElementNameHelper.getName(endAtPort)))));
+								(IConstraintStatus) ctx.createFailureStatus(String.format("%s is not covered by the ballast bonus rules", ScenarioElementNameHelper.getName(endAtPort))));
+					}
+					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__GENERIC_CHARTER_CONTRACT);
+					failures.add(dsd);
+					return;
+				}
+			}
+		}
+	}
+
+	private void repositioningCheckPortGroups(final IValidationContext ctx, LNGScenarioModel scenarioModel, final List<IStatus> failures, final CharterInMarket spotMarket,
+			final SimpleRepositioningFeeContainer container) {
+		final Set<Port> coveredPorts = new HashSet<>();
+		final List<Port> startAtPorts = new LinkedList<>();
+		boolean anywhere = false;
+		if (spotMarket.isNominal()) {
+
+			for (CapabilityGroup g : scenarioModel.getReferenceModel().getPortModel().getSpecialPortGroups()) {
+				if (g.getCapability() == PortCapability.LOAD) {
+					startAtPorts.addAll(SetUtils.getObjects(g));
+				}
+			}
+
+		}
+
+		if (spotMarket.getStartAt() == null) {
+			// could end anywhere - add all ports
+			anywhere = true;
+		} else {
+			if (!startAtPorts.contains(spotMarket.getStartAt())) {
+				startAtPorts.add(spotMarket.getStartAt());
+			}
+		}
+		if (!container.getTerms().isEmpty()) {
+			for (final RepositioningFeeTerm term : container.getTerms()) {
+				final EList<APortSet<Port>> termStartPorts = term.getStartPorts();
+				if (termStartPorts.isEmpty()) {
+					// This covers any port
+					return;
+				} else {
+					coveredPorts.addAll(SetUtils.getObjects(termStartPorts));
+				}
+			}
+			for (final Port port : startAtPorts) {
+				if (!coveredPorts.contains(port)) {
+					final DetailConstraintStatusDecorator dsd;
+					if (anywhere) {
+						dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx
+								.createFailureStatus((String.format("%s is not covered by the repositioning rules (note the vessel can start anywhere - nominals can start at any load port)", ScenarioElementNameHelper.getName(port)))));
+					} else {
+						dsd = new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus(String.format("%s is not covered by the repositioning rules", ScenarioElementNameHelper.getName(port))));
 					}
 					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__GENERIC_CHARTER_CONTRACT);
 					failures.add(dsd);

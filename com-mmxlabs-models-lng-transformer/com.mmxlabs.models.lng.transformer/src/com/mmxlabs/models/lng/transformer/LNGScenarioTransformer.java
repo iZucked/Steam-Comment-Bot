@@ -29,6 +29,7 @@ import java.util.TreeSet;
 import javax.inject.Named;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
@@ -47,6 +48,7 @@ import com.mmxlabs.common.curves.StepwiseLongCurve;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -142,6 +144,7 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -3279,9 +3282,31 @@ public class LNGScenarioTransformer {
 			if (extraCharterInMarkets != null) {
 				charterInMarkets.addAll(extraCharterInMarkets);
 			}
+			Pair<CharterInMarket, CharterInMarket> adpOriginalToClone = null;
+			ADPModel adpModel = rootObject.getAdpModel();
+			if (adpModel != null) {
+				CharterInMarket defaultNominalMarket = adpModel.getFleetProfile().getDefaultNominalMarket();
+				CharterInMarket simpleMarket = EcoreUtil.copy(defaultNominalMarket);
+
+				// Reset various fields
+				simpleMarket.unsetStartAt();
+				simpleMarket.unsetEndAt();
+				simpleMarket.unsetGenericCharterContract();
+				simpleMarket.unsetMaxDuration();
+				simpleMarket.unsetMinDuration();
+				simpleMarket.unsetStartHeelCV();
+
+				simpleMarket.setSpotCharterCount(0);
+
+				adpOriginalToClone = Pair.of(defaultNominalMarket, simpleMarket);
+
+				charterInMarkets.add(simpleMarket);
+			}
+
 			for (final CharterInMarket charterInMarket : charterInMarkets) {
 				final Vessel eVessel = charterInMarket.getVessel();
 				assert eVessel != null;
+
 				final IVessel oVessel = vesselAssociation.lookupNullChecked(eVessel);
 
 				final ILongCurve charterInCurve;
@@ -3290,8 +3315,8 @@ public class LNGScenarioTransformer {
 				} else {
 					charterInCurve = new ConstantValueLongCurve(0);
 				}
-
 				assert charterInCurve != null;
+
 				final int charterCount = charterInMarket.getSpotCharterCount();
 				final GenericCharterContract eCharterContract = charterInMarket.getGenericCharterContract();
 				final @Nullable ICharterContract oCharterContract = createAndGetCharterContract(eCharterContract);
@@ -3352,6 +3377,7 @@ public class LNGScenarioTransformer {
 
 				final ISpotCharterInMarket spotCharterInMarket = builder.createSpotCharterInMarket(charterInMarket.getName(), oVessel, charterInCurve, charterInMarket.isNominal(), charterCount,
 						charterInStartRule, charterInEndRule, oCharterContract, new ConstantValueLongCurve(0));
+
 				modelEntityMap.addModelObject(charterInMarket, spotCharterInMarket);
 
 				// spot charter in market nominal
@@ -3361,6 +3387,18 @@ public class LNGScenarioTransformer {
 					final NonNullPair<CharterInMarket, Integer> key = new NonNullPair<>(charterInMarket, NOMINAL_CARGO_INDEX);
 					spotCharterInToAvailability.put(key, roundTripOption);
 					allVesselAvailabilities.add(roundTripOption);
+
+					if (adpOriginalToClone != null && charterInMarket == adpOriginalToClone.getSecond()) {
+						// During export, look up the original market, not the temporary clone.
+						modelEntityMap.addOptimiserToModelOnlyMapping(spotCharterInMarket, adpOriginalToClone.getFirst());
+
+						// Bind this market to the ADP model. Really we could do with some "tags" for
+						// special named items.
+						modelEntityMap.addNamedOptimiserObject(OptimiserConstants.DEFAULT_INTERNAL_VESSEL, roundTripOption);
+					}
+					if (adpOriginalToClone != null && charterInMarket == adpOriginalToClone.getFirst()) {
+						modelEntityMap.addNamedOptimiserObject(OptimiserConstants.DEFAULT_EXTERNAL_VESSEL, roundTripOption);
+					}
 				}
 
 				// spot charter in market vessel availability

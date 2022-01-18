@@ -39,11 +39,14 @@ import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.NullGen
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 
 /**
- * The {@link EndLocationSequenceManipulator} replaces the end location with another location in two possible ways; either the vessel's end location is adjust to be the same as its first load port, or
- * the same as its last load port. These two cases are intended for spot and fleet vessels respectively.
+ * The {@link EndLocationSequenceManipulator} replaces the end location with
+ * another location in two possible ways; either the vessel's end location is
+ * adjust to be the same as its first load port, or the same as its last load
+ * port. These two cases are intended for spot and fleet vessels respectively.
  * 
- * This class uses an {@link IReturnElementProvider} to get a unique new sequence element for each vessel / port combination. The end element is then swapped out for an appropriate one of these
- * elements.
+ * This class uses an {@link IReturnElementProvider} to get a unique new
+ * sequence element for each vessel / port combination. The end element is then
+ * swapped out for an appropriate one of these elements.
  * 
  * @author Simon Goodall, significantly modified by Tom Hinton
  * 
@@ -207,7 +210,8 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	}
 
 	/**
-	 * Find and return the last element in the sequence with {@link PortType} PortType.Load
+	 * Find and return the last element in the sequence with {@link PortType}
+	 * PortType.Load
 	 * 
 	 * @param sequence
 	 */
@@ -239,7 +243,8 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	}
 
 	/**
-	 * Return to the closest charter out port to the last in the port in the sequence
+	 * Return to the closest charter out port to the last in the port in the
+	 * sequence
 	 * 
 	 * @param resource
 	 * @param sequence
@@ -249,7 +254,8 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	}
 
 	/**
-	 * Swap the dummy element in for the given sequence, and set its location to the given port.
+	 * Swap the dummy element in for the given sequence, and set its location to the
+	 * given port.
 	 * 
 	 * @param resource
 	 * @param sequence
@@ -295,7 +301,8 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	}
 
 	/**
-	 * Swap the dummy element in for the given sequence, and set its location to the given port.
+	 * Swap the dummy element in for the given sequence, and set its location to the
+	 * given port.
 	 * 
 	 * @param resource
 	 * 
@@ -307,7 +314,8 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 			return;
 		}
 		/*
-		 * Look up the port we are returning to, and then set that as the port for the dummy element.
+		 * Look up the port we are returning to, and then set that as the port for the
+		 * dummy element.
 		 */
 		final IPort returnPort = portProvider.getPortForElement(returnElement);
 
@@ -325,7 +333,8 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	}
 
 	/**
-	 * Find and return the first element in the sequence with {@link PortType} PortType.Load
+	 * Find and return the first element in the sequence with {@link PortType}
+	 * PortType.Load
 	 * 
 	 * @param sequence
 	 */
@@ -357,7 +366,8 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	}
 
 	/**
-	 * Returns the {@link EndLocationRule} set for this {@link IResource}. Returns {@link EndLocationRule#NONE} if nothing has been set.
+	 * Returns the {@link EndLocationRule} set for this {@link IResource}. Returns
+	 * {@link EndLocationRule#NONE} if nothing has been set.
 	 * 
 	 * @param resource
 	 * @return

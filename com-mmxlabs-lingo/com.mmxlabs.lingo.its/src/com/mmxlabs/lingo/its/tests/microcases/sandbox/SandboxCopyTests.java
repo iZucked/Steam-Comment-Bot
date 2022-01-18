@@ -278,7 +278,7 @@ public class SandboxCopyTests extends AbstractSandboxTestCase {
 
 			final AbstractSolutionSet result = targetModel.getResults();
 
-			Consumer<Boolean> checkResult = (expectSchedule) -> {
+			Consumer<Boolean> checkResult = expectSchedule -> {
 				//
 				Assertions.assertNotNull(result);
 				//

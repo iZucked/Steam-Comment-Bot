@@ -26,7 +26,6 @@ import com.mmxlabs.models.lng.commercial.SimpleRepositioningFeeContainer;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
 
-
 @NonNullByDefault
 public class CharterContractBuilder {
 
@@ -59,7 +58,7 @@ public class CharterContractBuilder {
 	public RepositioningMaker withStandardRepositioning() {
 		return new RepositioningMaker();
 	}
-	
+
 	public BallastBonusMaker withStandardBallastBonus() {
 		return new BallastBonusMaker();
 	}
@@ -80,7 +79,7 @@ public class CharterContractBuilder {
 
 			return CharterContractBuilder.this;
 		}
-		
+
 		public RepositioningMaker addLumpSumRuleForSingleStart(@Nullable final Port startPort, final String expression) {
 			final LumpSumRepositioningFeeTerm term = CommercialFactory.eINSTANCE.createLumpSumRepositioningFeeTerm();
 			if (startPort != null) {
@@ -103,8 +102,8 @@ public class CharterContractBuilder {
 			return this;
 		}
 
-		public RepositioningMaker addOriginRule(final Collection<APortSet<Port>> startPorts, final @Nullable Port originPort, final double speed, final @NonNull String hireExpression, final @NonNull String fuelExpression, final boolean includeCanalFees,
-				final boolean includeCanalTime, final String lumpSumExpression) {
+		public RepositioningMaker addOriginRule(final Collection<APortSet<Port>> startPorts, final @Nullable Port originPort, final double speed, final @NonNull String hireExpression,
+				final String fuelExpression, final boolean includeCanalFees, final boolean includeCanalTime, final @Nullable String lumpSumExpression) {
 
 			final OriginPortRepositioningFeeTerm term = CommercialFactory.eINSTANCE.createOriginPortRepositioningFeeTerm();
 
@@ -118,7 +117,30 @@ public class CharterContractBuilder {
 			term.setHirePriceExpression(hireExpression);
 			term.setIncludeCanal(includeCanalFees);
 			term.setIncludeCanalTime(includeCanalTime);
-			
+
+			container.getTerms().add(term);
+
+			return this;
+		}
+
+		public RepositioningMaker addOriginRule(final Port startPort, final @Nullable Port originPort, final double speed, final String hireExpression, final @NonNull String fuelExpression,
+				final boolean includeCanalFees, final boolean includeCanalTime, final @Nullable String lumpSumExpression) {
+
+			final OriginPortRepositioningFeeTerm term = CommercialFactory.eINSTANCE.createOriginPortRepositioningFeeTerm();
+
+			term.getStartPorts().add(startPort);
+			if (originPort != null) {
+				term.setOriginPort(originPort);
+			}
+			if (lumpSumExpression != null) {
+				term.setLumpSumPriceExpression(lumpSumExpression);
+			}
+			term.setSpeed(speed);
+			term.setFuelPriceExpression(fuelExpression);
+			term.setHirePriceExpression(hireExpression);
+			term.setIncludeCanal(includeCanalFees);
+			term.setIncludeCanalTime(includeCanalTime);
+
 			container.getTerms().add(term);
 
 			return this;

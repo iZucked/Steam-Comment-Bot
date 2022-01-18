@@ -16,7 +16,9 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.providers.IExternalDateProvider;
 
 /**
- * Class which maps model entities to classes; the {@link LNGScenarioTransformer} should populate one of these, which maps every PortSlot to the URI of a Slot in the EMF, and similarly for vessels, vessel
+ * Class which maps model entities to classes; the
+ * {@link LNGScenarioTransformer} should populate one of these, which maps every
+ * PortSlot to the URI of a Slot in the EMF, and similarly for vessels, vessel
  * classes, etc etc.
  * 
  * @author hinton
@@ -64,4 +66,19 @@ public interface ModelEntityMap extends IExternalDateProvider {
 	 */
 	@NonNull
 	ZonedDateTime getDateFromHours(final int hours, @Nullable final Port port);
+
+	/**
+	 * Add/override a mapping from an internal object to an external object. This
+	 * can be used to add an export mapping to an alternative object that may not
+	 * have been used to create it. Should generally be call after #addModelObject
+	 * 
+	 * @param internalObject
+	 * @param modelObject
+	 */
+	void addOptimiserToModelOnlyMapping(@NonNull Object internalObject, @NonNull EObject modelObject);
+
+	@Nullable
+	Object getNamedOptimiserObject(String name);
+
+	void addNamedOptimiserObject(String name, @NonNull Object object);
 }

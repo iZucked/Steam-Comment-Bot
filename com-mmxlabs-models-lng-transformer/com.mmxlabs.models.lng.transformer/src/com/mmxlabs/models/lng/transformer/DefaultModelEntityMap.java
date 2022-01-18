@@ -42,6 +42,8 @@ public class DefaultModelEntityMap implements ModelEntityMap, IExternalDateProvi
 	@NonNull
 	private final Map<Object, Object> optimiserToModel = new HashMap<>();
 
+	private final Map<String, Object> nameToOptimiserObject = new HashMap<>();
+
 	@Inject
 	public DefaultModelEntityMap(@NonNull final DateAndCurveHelper dateHelper) {
 		this.dateHelper = dateHelper;
@@ -70,6 +72,21 @@ public class DefaultModelEntityMap implements ModelEntityMap, IExternalDateProvi
 		optimiserToModel.put(internalObject, modelObject);
 	}
 
+	@Override
+	public void addOptimiserToModelOnlyMapping(@NonNull final Object internalObject, @NonNull final EObject modelObject) {
+		optimiserToModel.put(internalObject, modelObject);
+	}
+
+	@Override
+	public void addNamedOptimiserObject(String name, @NonNull final Object object) {
+		nameToOptimiserObject.put(name, object);
+	}
+
+	@Override
+	public @Nullable Object getNamedOptimiserObject(String name) {
+		return nameToOptimiserObject.get(name);
+	}
+
 	@SuppressWarnings("null")
 	@NonNull
 	public <T> T getOptimiserObjectNullChecked(@Nullable final EObject modelObject, final Class<? extends T> clz) {
@@ -86,11 +103,6 @@ public class DefaultModelEntityMap implements ModelEntityMap, IExternalDateProvi
 	@Nullable
 	public <T> T getOptimiserObject(@NonNull final EObject modelObject, @NonNull final Class<? extends T> clz) {
 		return clz.cast(modelToOptimiser.get(modelObject));
-	}
-
-	public void dispose() {
-		modelToOptimiser.clear();
-		optimiserToModel.clear();
 	}
 
 	/**

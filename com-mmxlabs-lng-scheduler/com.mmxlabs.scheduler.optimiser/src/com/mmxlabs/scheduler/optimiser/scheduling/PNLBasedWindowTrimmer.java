@@ -170,11 +170,12 @@ public class PNLBasedWindowTrimmer {
 			return;
 		}
 
-		IWriteLockable.writeLock(trimmedWindowRecords);
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
 		final ImmutableMap<IPortSlot, ImmutableList<TimeChoice>> intervalMap = trimmerUtils.computeDefaultIntervals(trimmedWindowRecords, resource, travelTimeData);
+		
+		IWriteLockable.writeLock(trimmedWindowRecords);
 
 		for (int idx = 0; idx < trimmedWindowRecords.size(); idx++) {
 
@@ -215,6 +216,11 @@ public class PNLBasedWindowTrimmer {
 				final MutableTimeWindow feasibleTimeWindow = new MutableTimeWindow(t, t + 1);
 				copy.setSlotFeasibleTimeWindow(slot, feasibleTimeWindow);
 			}
+			
+			final int t = newPrev.returnTime;
+			final MutableTimeWindow feasibleTimeWindow = new MutableTimeWindow(t, t + 1);
+			copy.setSlotFeasibleTimeWindow(nextSlot, feasibleTimeWindow);
+			
 		}
 	}
 

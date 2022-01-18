@@ -27,9 +27,11 @@ import com.mmxlabs.lingo.reports.views.standard.econs.EconsOptions.MarginBy;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.CharterContractFeeDetails;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
@@ -44,8 +46,12 @@ import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.LumpSumBallastBonusTermDetails;
+import com.mmxlabs.models.lng.schedule.LumpSumRepositioningFeeTermDetails;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
+import com.mmxlabs.models.lng.schedule.NotionalJourneyBallastBonusTermDetails;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.OriginPortRepositioningFeeTermDetails;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocationEntry;
 import com.mmxlabs.models.lng.schedule.PortVisit;
@@ -78,31 +84,69 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		boolean containsEndEvent = false;
 		boolean containsOpenSlot = false;
 		boolean containsPaperDeals = false;
+		boolean containsInCharterBallastBonus = false;
+		boolean containsInCharterRepositioning = false;
 
 		if (targets == null || targets.isEmpty()) {
 			containsCargo = true;
 		} else {
 			for (final Object target : targets) {
-				if (target instanceof CargoAllocation) {
+				if (target instanceof final CargoAllocation cargoAllocation) {
+					final Sequence sequence = cargoAllocation.getSequence();
+					if (sequence != null && sequence.getCharterInMarket() != null && sequence.getSpotIndex() < 0) {
+						final GenericCharterContract genericCharterContract = sequence.getCharterInMarket().getGenericCharterContract();
+						if (genericCharterContract != null) {
+							containsInCharterBallastBonus = true;
+							containsInCharterRepositioning = true;
+						}
+					}
 					containsCargo = true;
 				}
 				if (target instanceof OpenSlotAllocation) {
 					containsOpenSlot = true;
 				}
-				if (target instanceof StartEvent) {
+				if (target instanceof final StartEvent evt) {
 					containsStartEvent = true;
+					final Sequence sequence = evt.getSequence();
+					if (sequence != null && sequence.getVesselAvailability() != null) {
+						final GenericCharterContract genericCharterContract = sequence.getVesselAvailability().getGenericCharterContract();
+						if (genericCharterContract != null) {
+							containsInCharterBallastBonus = true;
+							containsInCharterRepositioning = true;
+						}
+					}
+					if (sequence != null && sequence.getCharterInMarket() != null && sequence.getSpotIndex() >= 0) {
+						final GenericCharterContract genericCharterContract = sequence.getCharterInMarket().getGenericCharterContract();
+						if (genericCharterContract != null) {
+							containsInCharterBallastBonus = true;
+							containsInCharterRepositioning = true;
+						}
+					}
 				}
-				if (target instanceof EndEvent) {
+				if (target instanceof final EndEvent evt) {
 					containsEndEvent = true;
+					final Sequence sequence = evt.getSequence();
+					if (sequence != null && sequence.getVesselAvailability() != null) {
+						final GenericCharterContract genericCharterContract = sequence.getVesselAvailability().getGenericCharterContract();
+						if (genericCharterContract != null) {
+							containsInCharterBallastBonus = true;
+							containsInCharterRepositioning = true;
+						}
+					}
+					if (sequence != null && sequence.getCharterInMarket() != null && sequence.getSpotIndex() >= 0) {
+						final GenericCharterContract genericCharterContract = sequence.getCharterInMarket().getGenericCharterContract();
+						if (genericCharterContract != null) {
+							containsInCharterBallastBonus = true;
+							containsInCharterRepositioning = true;
+						}
+					}
 				}
-				if (target instanceof VesselEventVisit) {
-					final VesselEventVisit vesselEventVisit = (VesselEventVisit) target;
+				if (target instanceof final VesselEventVisit vesselEventVisit) {
 					if (vesselEventVisit.getVesselEvent() instanceof CharterOutEvent) {
 						containsCharterOut = true;
 					}
 				}
-				if (target instanceof EventGrouping) {
-					EventGrouping eg = (EventGrouping) target;
+				if (target instanceof final EventGrouping eg) {
 					for (final Event e : eg.getEvents()) {
 						if (e instanceof StartEvent) {
 							containsStartEvent = true;
@@ -137,37 +181,48 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			rows.add(createRow(32, "Charter Revenue", true, "$", "", createShippingCharterRevenue(options, RowType.REVENUE)));
 			rows.add(createRow(34, "    Hire Rate", true, "$", "/day", createMeanCharterRatePerDay(options, RowType.REVENUE)));
 			rows.add(createRow(36, "    Charter Duration", true, "", "", createCharterDays(options, RowType.REVENUE)));
-			rows.add(createRow(38, "Repositioning", true, "$", "", createShippingRepositioning(options, RowType.REVENUE)));
-			rows.add(createRow(39, "Ballast bonus", true, "$", "", createShippingBallastBonus(options, RowType.REVENUE)));
-		}		
-		if (containsCargo || containsCharterOut || containsCooldown || containsGeneratedCharterOut || containsOpenSlot || containsPurge || containsStartEvent || containsVesselEvent) {
-			rows.add(createRow(40, "Shipping", true, "$", "", createShippingCosts(options, RowType.COST)));
-			rows.add(createRow(50, "    Bunkers", true, "$", "", createShippingBunkersTotal(options, RowType.COST)));
-			rows.add(createRow(60, "    Port", true, "$", "", createShippingPortCosts(options, RowType.COST)));
-			rows.add(createRow(70, "    Canal", true, "$", "", createShippingCanalCosts(options, RowType.COST)));
-			rows.add(createRow(80, "    Boil-off", true, "$", "", createShippingBOGTotal(options, RowType.COST), createBOGColourProvider(options)));
-			rows.add(createRow(90, "    Charter Cost", true, "$", "", createShippingCharterCosts(options, RowType.COST), createCharterFeesColourProvider(options)));
+			rows.add(createRow(38, "Charter Repositioning", true, "$", "", createCharterOutRepositioning(options, RowType.REVENUE)));
+			rows.add(createRow(39, "Charter Ballast bonus", true, "$", "", createCharterOutBallastBonus(options, RowType.REVENUE)));
 		}
-		if (containsCargo) {
-			final CargoEconsReportRow row = createRow(91, "    $/mmBtu", true, "$", "", createShippingCostsByMMBTU(options, RowType.COST));
-			row.tooltip = () -> {
-				switch (options.marginBy) {
-				case PURCHASE_VOLUME:
-					return "Cost by purchase volume";
-				case SALE_VOLUME:
-					return "Cost by sales volume";
-				default:
-					return null;
 
-				}
-			};
-			rows.add(row);
-		}
-		if (containsPurge) {
-			rows.add(createRow(92, "    Purge Cost", true, "$", "", createShippingPurgeCosts(options, RowType.COST)));
-		}
-		if (containsCooldown) {
-			rows.add(createRow(93, "    Cooldown Cost", true, "$", "", createShippingCooldownCosts(options, RowType.COST)));
+		boolean containsShippingEvent = containsCargo || containsCharterOut || containsCooldown || containsGeneratedCharterOut || containsPurge || containsStartEvent || containsVesselEvent;
+		if (containsShippingEvent || containsEndEvent) {
+			rows.add(createRow(40, "Shipping", true, "$", "", createShippingCosts(options, RowType.COST)));
+			if (containsShippingEvent) {
+				rows.add(createRow(50, "    Bunkers", true, "$", "", createShippingBunkersTotal(options, RowType.COST)));
+				rows.add(createRow(60, "    Port", true, "$", "", createShippingPortCosts(options, RowType.COST)));
+				rows.add(createRow(70, "    Canal", true, "$", "", createShippingCanalCosts(options, RowType.COST)));
+				rows.add(createRow(80, "    Boil-off", true, "$", "", createShippingBOGTotal(options, RowType.COST), createBOGColourProvider(options)));
+				rows.add(createRow(90, "    Charter Cost", true, "$", "", createShippingCharterCosts(options, RowType.COST), createCharterFeesColourProvider(options)));
+			}
+			if (containsInCharterRepositioning) {
+				rows.add(createRow(92, "    Repositioning", true, "$", "", createCharterInRepositioning(options, RowType.COST)));
+			}
+			if (containsInCharterBallastBonus) {
+				rows.add(createRow(94, "    Ballast bonus", true, "$", "", createCharterInBallastBonus(options, RowType.COST)));
+			}
+
+			if (containsCargo) {
+				final CargoEconsReportRow row = createRow(96, "    $/mmBtu", true, "$", "", createShippingCostsByMMBTU(options, RowType.COST));
+				row.tooltip = () -> {
+					switch (options.marginBy) {
+					case PURCHASE_VOLUME:
+						return "Cost by purchase volume";
+					case SALE_VOLUME:
+						return "Cost by sales volume";
+					default:
+						return null;
+
+					}
+				};
+				rows.add(row);
+			}
+			if (containsPurge) {
+				rows.add(createRow(98, "    Purge Cost", true, "$", "", createShippingPurgeCosts(options, RowType.COST)));
+			}
+			if (containsCooldown) {
+				rows.add(createRow(100, "    Cooldown Cost", true, "$", "", createShippingCooldownCosts(options, RowType.COST)));
+			}
 		}
 		if (containsCargo) {
 			rows.add(createRow(140, "Sale", true, "$", "", createSellValuePrice(options, RowType.REVENUE)));
@@ -181,7 +236,8 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		if (containsOpenSlot) {
 			rows.add(createRow(185, "Cancellation", true, "$", "", createCancellationCosts(options, RowType.COST)));
 		}
-		if (containsCargo || containsCharterOut || containsCooldown || containsGeneratedCharterOut || containsOpenSlot || containsPurge || containsStartEvent || containsVesselEvent || containsEndEvent) {
+		if (containsCargo || containsCharterOut || containsCooldown || containsGeneratedCharterOut || containsOpenSlot || containsPurge || containsStartEvent || containsVesselEvent
+				|| containsEndEvent) {
 			rows.add(createRow(190, "P&L", true, "$", "", createPNLTotal(options, RowType.REVENUE)));
 		}
 		if (containsCargo) {
@@ -249,9 +305,9 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 					// Theoretical shipping cost
 					// Real Shipping cost
 
-					Function<FuelUsage, Integer> fuelCostFunc = fu -> getFuelCost(fu, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
-					Function<SlotVisit, Integer> portCostFunc = SlotVisit::getPortCost;
-					Function<Object, Integer> func2 = object -> getShippingCost(object, portCostFunc, fuelCostFunc);
+					final Function<FuelUsage, Integer> fuelCostFunc = fu -> getFuelCost(fu, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
+					final Function<SlotVisit, Integer> portCostFunc = SlotVisit::getPortCost;
+					final Function<Object, Integer> func2 = object -> getShippingCost(object, portCostFunc, fuelCostFunc);
 
 					rows.add(createRow(400, "Real shipping cost", false, "$", "",
 							createBasicFormatter(options, RowType.COST, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, func2))));
@@ -349,8 +405,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 	private double getPaperMtMPrice(final PaperDealAllocation pda) {
 		double price = 0.0;
-		if (pda.eContainer() instanceof Schedule) {
-			final Schedule schedule = (Schedule) pda.eContainer();
+		if (pda.eContainer() instanceof Schedule schedule) {
 			if (schedule.getGeneratedPaperDeals().contains(pda.getPaperDeal())) {
 				if (pda.getPaperDeal() != null)
 					price = pda.getPaperDeal().getPrice();
@@ -364,8 +419,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 	private double getPaperFloatPrice(final PaperDealAllocation pda) {
 		double price = 0.0;
-		if (pda.eContainer() instanceof Schedule) {
-			final Schedule schedule = (Schedule) pda.eContainer();
+		if (pda.eContainer() instanceof Schedule schedule) {
 			if (!schedule.getGeneratedPaperDeals().contains(pda.getPaperDeal())) {
 				if (pda.getPaperDeal() != null)
 					price = pda.getPaperDeal().getPrice();
@@ -379,8 +433,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 	private static String getFloatCurve(final PaperDealAllocation pda) {
 		String curveName = "N/A";
-		if (pda.eContainer() instanceof Schedule) {
-			final Schedule schedule = (Schedule) pda.eContainer();
+		if (pda.eContainer() instanceof Schedule schedule) {
 			if (schedule.getGeneratedPaperDeals().contains(pda.getPaperDeal())) {
 				curveName = pda.getPaperDeal().getIndex();
 			}
@@ -388,12 +441,12 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		return curveName;
 	}
 
-	private static int getAverageDailyCharterRate(Event visit, Event travel, Event idle) {
-		int totalCharterCost = getOrZero(visit, Event::getCharterCost) + getOrZero(travel, Event::getCharterCost) + getOrZero(idle, Event::getCharterCost);
-		int totalDuration = getOrZero(visit, Event::getDuration) + getOrZero(travel, Event::getDuration) + getOrZero(idle, Event::getDuration);
+	private static int getAverageDailyCharterRate(final Event visit, final Event travel, final Event idle) {
+		final int totalCharterCost = getOrZero(visit, Event::getCharterCost) + getOrZero(travel, Event::getCharterCost) + getOrZero(idle, Event::getCharterCost);
+		final int totalDuration = getOrZero(visit, Event::getDuration) + getOrZero(travel, Event::getDuration) + getOrZero(idle, Event::getDuration);
 		return totalDuration == 0.0 ? 0 : (int) ((double) totalCharterCost * 24.0 / (double) totalDuration);
 	}
-	
+
 	private @Nullable IColorProvider createBOGColourProvider(final EconsOptions options) {
 
 		return new IColorProvider() {
@@ -419,14 +472,12 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			@Override
 			public Color getForeground(final Object element) {
 
-				if (element instanceof CargoAllocation) {
-					final CargoAllocation cargoAllocation = (CargoAllocation) element;
+				if (element instanceof CargoAllocation cargoAllocation) {
 					final boolean isFleet = cargoAllocation.getSequence() != null && (!(cargoAllocation.getSequence().isSpotVessel() || cargoAllocation.getSequence().isTimeCharterVessel()));
 					if (isFleet) {
 						return Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 					}
-				} else if (element instanceof VesselEventVisit) {
-					final VesselEventVisit vesselEventVisit = (VesselEventVisit) element;
+				} else if (element instanceof VesselEventVisit vesselEventVisit) {
 					final boolean isFleet = vesselEventVisit.getSequence() != null && (!(vesselEventVisit.getSequence().isSpotVessel() || vesselEventVisit.getSequence().isTimeCharterVessel()));
 					if (isFleet) {
 						return Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
@@ -448,16 +499,14 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 		final Function<Object, Long> helper = object -> {
 			Long cost = 0L;
-			if (object instanceof CargoAllocation) {
-				final CargoAllocation cargoAllocation = (CargoAllocation) object;
+			if (object instanceof CargoAllocation cargoAllocation) {
 
 				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
 					if (allocation.getSlotAllocationType() == SlotAllocationType.PURCHASE || allocation.getSlot() instanceof LoadSlot) {
 						cost += allocation.getVolumeValue();
 					}
 				}
-			} else if (object instanceof MarketAllocation) {
-				final MarketAllocation marketAllocation = (MarketAllocation) object;
+			} else if (object instanceof MarketAllocation marketAllocation) {
 				final SlotAllocation allocation = marketAllocation.getSlotAllocation();
 				cost += allocation.getVolumeValue();
 			}
@@ -469,16 +518,13 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 	private @NonNull ICellRenderer createBuyPrice(final EconsOptions options, final RowType rowType) {
 		final Function<Object, Double> helper = object -> {
-			if (object instanceof CargoAllocation) {
-				final CargoAllocation cargoAllocation = (CargoAllocation) object;
-
+			if (object instanceof CargoAllocation cargoAllocation) {
 				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
 					if (allocation.getSlotAllocationType() == SlotAllocationType.PURCHASE || allocation.getSlot() instanceof LoadSlot) {
 						return allocation.getPrice();
 					}
 				}
-			} else if (object instanceof MarketAllocation) {
-				final MarketAllocation marketAllocation = (MarketAllocation) object;
+			} else if (object instanceof MarketAllocation marketAllocation) {
 				final SlotAllocation allocation = marketAllocation.getSlotAllocation();
 				return allocation.getPrice();
 			}
@@ -490,16 +536,14 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 	private @NonNull ICellRenderer createSellPrice(final EconsOptions options, final RowType rowType) {
 		final Function<Object, Double> helper = object -> {
-			if (object instanceof CargoAllocation) {
-				final CargoAllocation cargoAllocation = (CargoAllocation) object;
+			if (object instanceof CargoAllocation cargoAllocation) {
 
 				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
 					if (allocation.getSlotAllocationType() == SlotAllocationType.SALE || allocation.getSlot() instanceof DischargeSlot) {
 						return allocation.getPrice();
 					}
 				}
-			} else if (object instanceof MarketAllocation) {
-				final MarketAllocation marketAllocation = (MarketAllocation) object;
+			} else if (object instanceof MarketAllocation marketAllocation) {
 				final SlotAllocation allocation = marketAllocation.getSlotAllocation();
 				return allocation.getPrice();
 			}
@@ -513,16 +557,14 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 		final Function<Object, @Nullable Long> helper = object -> {
 			Long cost = 0L;
-			if (object instanceof CargoAllocation) {
-				final CargoAllocation cargoAllocation = (CargoAllocation) object;
+			if (object instanceof CargoAllocation cargoAllocation) {
 
 				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
 					if (allocation.getSlotAllocationType() == SlotAllocationType.SALE || allocation.getSlot() instanceof DischargeSlot) {
 						cost += allocation.getVolumeValue();
 					}
 				}
-			} else if (object instanceof MarketAllocation) {
-				final MarketAllocation marketAllocation = (MarketAllocation) object;
+			} else if (object instanceof MarketAllocation marketAllocation) {
 				final SlotAllocation allocation = marketAllocation.getSlotAllocation();
 				cost += allocation.getVolumeValue();
 			}
@@ -536,16 +578,14 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 		final Function<Object, @Nullable Long> helper = object -> {
 			Long cost = 0L;
-			if (object instanceof CargoAllocation) {
-				final CargoAllocation cargoAllocation = (CargoAllocation) object;
+			if (object instanceof CargoAllocation cargoAllocation) {
 
 				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
 					if (allocation.getSlotAllocationType() == SlotAllocationType.PURCHASE || allocation.getSlot() instanceof LoadSlot) {
 						cost += allocation.getEnergyTransferred();
 					}
 				}
-			} else if (object instanceof MarketAllocation) {
-				final MarketAllocation marketAllocation = (MarketAllocation) object;
+			} else if (object instanceof MarketAllocation marketAllocation) {
 				final SlotAllocation allocation = marketAllocation.getSlotAllocation();
 				cost += allocation.getEnergyTransferred();
 			}
@@ -559,8 +599,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 		final Function<Object, @Nullable Long> helper = object -> {
 			Long volume = 0L;
-			if (object instanceof PaperDealAllocation) {
-				final PaperDealAllocation paperDealAllocation = (PaperDealAllocation) object;
+			if (object instanceof PaperDealAllocation paperDealAllocation) {
 				for (final PaperDealAllocationEntry allocation : paperDealAllocation.getEntries()) {
 					volume += (int) allocation.getQuantity();
 				}
@@ -574,16 +613,13 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 	private @NonNull ICellRenderer createSellVolumeMMBTuPrice(final EconsOptions options, final RowType rowType) {
 		final Function<Object, @Nullable Long> helper = object -> {
 			Long cost = 0L;
-			if (object instanceof CargoAllocation) {
-				final CargoAllocation cargoAllocation = (CargoAllocation) object;
-
+			if (object instanceof CargoAllocation cargoAllocation) {
 				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
 					if (allocation.getSlotAllocationType() == SlotAllocationType.SALE || allocation.getSlot() instanceof DischargeSlot) {
 						cost += allocation.getEnergyTransferred();
 					}
 				}
-			} else if (object instanceof MarketAllocation) {
-				final MarketAllocation marketAllocation = (MarketAllocation) object;
+			} else if (object instanceof MarketAllocation marketAllocation) {
 				final SlotAllocation allocation = marketAllocation.getSlotAllocation();
 				cost += allocation.getEnergyTransferred();
 			}
@@ -641,9 +677,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 	private @NonNull ICellRenderer createPNLPerMMBTU(final EconsOptions options, final RowType rowType) {
 
 		final Function<Object, @Nullable Double> helper = object -> {
-			if (object instanceof CargoAllocation) {
-				final CargoAllocation cargoAllocation = (CargoAllocation) object;
-
+			if (object instanceof CargoAllocation cargoAllocation) {
 				final Integer pnl = getPNLValue(cargoAllocation);
 				if (pnl == null) {
 					return 0.0;
@@ -655,9 +689,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 				}
 
 				return (double) pnl / volume;
-			} else if (object instanceof MarketAllocation) {
-				final MarketAllocation marketAllocation = (MarketAllocation) object;
-
+			} else if (object instanceof MarketAllocation marketAllocation) {
 				final Integer pnl = getPNLValue(marketAllocation);
 				if (pnl != null) {
 					final SlotAllocation allocation = marketAllocation.getSlotAllocation();
@@ -672,11 +704,9 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		};
 
 		final Function<Object, @Nullable Double> transformer = object -> {
-			if (object instanceof CargoAllocation) {
-				final CargoAllocation cargoAllocation = (CargoAllocation) object;
+			if (object instanceof CargoAllocation cargoAllocation) {
 				return helper.apply(cargoAllocation);
-			} else if (object instanceof MarketAllocation) {
-				final MarketAllocation marketAllocation = (MarketAllocation) object;
+			} else if (object instanceof MarketAllocation marketAllocation) {
 				return helper.apply(marketAllocation);
 			} else if (object instanceof CargoAllocationPair) {
 				return getFromDeltaPair(Double.class, helper, object);
@@ -715,13 +745,10 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 	}
 
 	private static int genericShippingBOGTotalHelper(final Object object) {
-		if (object instanceof EventGrouping) {
+		if (object instanceof EventGrouping grouping) {
 			int cost = 0;
-
-			final EventGrouping grouping = (EventGrouping) object;
 			for (final Event event : grouping.getEvents()) {
-				if (event instanceof FuelUsage) {
-					final FuelUsage fuelUsage = (FuelUsage) event;
+				if (event instanceof FuelUsage fuelUsage) {
 					cost += getFuelCost(fuelUsage, Fuel.NBO, Fuel.FBO);
 				}
 			}
@@ -737,12 +764,10 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 	private static int genericShippingBunkersTotalHelper(final Object object) {
 
-		if (object instanceof EventGrouping) {
+		if (object instanceof EventGrouping grouping) {
 			int cost = 0;
-			final EventGrouping grouping = (EventGrouping) object;
 			for (final Event event : grouping.getEvents()) {
-				if (event instanceof FuelUsage) {
-					final FuelUsage fuelUsage = (FuelUsage) event;
+				if (event instanceof FuelUsage fuelUsage) {
 					cost += getFuelCost(fuelUsage, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
 				}
 			}
@@ -758,13 +783,10 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 	private static int genericShippingPortCostsHelper(final Object object) {
 
-		if (object instanceof EventGrouping) {
-			final EventGrouping grouping = (EventGrouping) object;
-
+		if (object instanceof EventGrouping grouping) {
 			int cost = 0;
 			for (final Event event : grouping.getEvents()) {
-				if (event instanceof PortVisit) {
-					final PortVisit portVisit = (PortVisit) event;
+				if (event instanceof PortVisit portVisit) {
 					cost += portVisit.getPortCost();
 				}
 			}
@@ -780,13 +802,10 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 	}
 
 	private static int genericShippingCanalCostsHelper(final Object object) {
-		if (object instanceof EventGrouping) {
-			final EventGrouping grouping = (EventGrouping) object;
-
+		if (object instanceof EventGrouping grouping) {
 			int cost = 0;
 			for (final Event event : grouping.getEvents()) {
-				if (event instanceof Journey) {
-					final Journey journey = (Journey) event;
+				if (event instanceof Journey journey) {
 					cost += journey.getToll();
 				}
 			}
@@ -801,8 +820,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 	private static int genericShippingCharterCostsHelper(final Object object) {
 
-		if (object instanceof EventGrouping) {
-			final EventGrouping grouping = (EventGrouping) object;
+		if (object instanceof EventGrouping grouping) {
 			int cost = 0;
 			for (final Event event : grouping.getEvents()) {
 				cost += event.getCharterCost();
@@ -819,12 +837,10 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 	private @NonNull ICellRenderer createShippingPurgeCosts(final EconsOptions options, final RowType rowType) {
 		return createBasicFormatter(options, rowType, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, object -> {
-			if (object instanceof EventGrouping) {
-				final EventGrouping eventGrouping = (EventGrouping) object;
+			if (object instanceof EventGrouping eventGrouping) {
 
 				for (final Event evt : eventGrouping.getEvents()) {
-					if (evt instanceof Purge) {
-						final Purge purge = (Purge) evt;
+					if (evt instanceof Purge purge) {
 						return purge.getCost();
 					}
 				}
@@ -835,12 +851,9 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 	private @NonNull ICellRenderer createPaperDealStartDate(final EconsOptions options, final RowType rowType) {
 		return createBasicFormatter(options, rowType, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, object -> {
-			if (object instanceof EventGrouping) {
-				final EventGrouping eventGrouping = (EventGrouping) object;
-
+			if (object instanceof EventGrouping eventGrouping) {
 				for (final Event evt : eventGrouping.getEvents()) {
-					if (evt instanceof Purge) {
-						final Purge purge = (Purge) evt;
+					if (evt instanceof Purge purge) {
 						return purge.getCost();
 					}
 				}
@@ -851,8 +864,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 	private @NonNull ICellRenderer createCancellationCosts(final EconsOptions options, final RowType rowType) {
 		return createBasicFormatter(options, rowType, Long.class, DollarsFormat::format, createMappingFunction(Long.class, object -> {
-			if (object instanceof ProfitAndLossContainer) {
-				ProfitAndLossContainer profitAndLossContainer = (ProfitAndLossContainer) object;
+			if (object instanceof ProfitAndLossContainer profitAndLossContainer) {
 				return ScheduleModelKPIUtils.getCancellationFees(profitAndLossContainer);
 			}
 			return 0L;
@@ -861,12 +873,9 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 	private @NonNull ICellRenderer createShippingCooldownCosts(final EconsOptions options, final RowType rowType) {
 		return createBasicFormatter(options, rowType, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, object -> {
-			if (object instanceof EventGrouping) {
-				final EventGrouping eventGrouping = (EventGrouping) object;
-
+			if (object instanceof EventGrouping eventGrouping) {
 				for (final Event evt : eventGrouping.getEvents()) {
-					if (evt instanceof Cooldown) {
-						final Cooldown cooldown = (Cooldown) evt;
+					if (evt instanceof Cooldown cooldown) {
 						return cooldown.getCost();
 					}
 				}
@@ -878,15 +887,12 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 	private static int vesselEventVisitShippingCharterRevenueHelper(final Object object) {
 		int revenue = 0;
 
-		if (object instanceof VesselEventVisit) {
-			final VesselEventVisit cargoAllocation = (VesselEventVisit) object;
-			if (cargoAllocation.getVesselEvent() instanceof CharterOutEvent) {
-				final CharterOutEvent charterOutEvent = (CharterOutEvent) cargoAllocation.getVesselEvent();
+		if (object instanceof VesselEventVisit vev) {
+			if (vev.getVesselEvent() instanceof CharterOutEvent charterOutEvent) {
 				revenue = charterOutEvent.getHireRate() * charterOutEvent.getDurationInDays();
 			}
 		}
-		if (object instanceof GeneratedCharterOut) {
-			GeneratedCharterOut gco = (GeneratedCharterOut) object;
+		if (object instanceof GeneratedCharterOut gco) {
 			revenue = gco.getRevenue();
 		}
 		return revenue;
@@ -901,32 +907,30 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 	private static long vesselEventVisitShippingBallastBonusHelper(final Object object) {
 		long ballastBonus = 0;
 
-		if (object instanceof VesselEventVisit) {
-			final VesselEventVisit cargoAllocation = (VesselEventVisit) object;
-			if (cargoAllocation.getVesselEvent() instanceof CharterOutEvent) {
-				final CharterOutEvent charterOutEvent = (CharterOutEvent) cargoAllocation.getVesselEvent();
+		if (object instanceof VesselEventVisit vev) {
+			if (vev.getVesselEvent() instanceof CharterOutEvent charterOutEvent) {
 				ballastBonus = charterOutEvent.getBallastBonus();
 			}
-		}
-		if (object instanceof EndEvent) {
-			EndEvent ee = (EndEvent) object;
-			ballastBonus = ee.getBallastBonusFee();
 		}
 		return ballastBonus;
 	}
 
-	private @NonNull ICellRenderer createShippingBallastBonus(final EconsOptions options, final RowType rowType) {
+	private @NonNull ICellRenderer createCharterOutBallastBonus(final EconsOptions options, final RowType rowType) {
 		return createBasicFormatter(options, rowType, Long.class, DollarsFormat::format, createMappingFunction(Long.class, StandardEconsRowFactory::vesselEventVisitShippingBallastBonusHelper));
 	}
-	
+
+	private @NonNull ICellRenderer createCharterInBallastBonus(final EconsOptions options, final RowType rowType) {
+		return createBasicFormatter(options, rowType, Long.class, DollarsFormat::format, createMappingFunction(Long.class, StandardEconsRowFactory::charterInBallastBonusHelper));
+	}
+
 	private static int vesselEventVisitAverageCharterRateHelper(final Object object) {
-		int durationInHours = vesselEventVisitCharterDurationInHoursHelper(object);
-		int charterRevenue = vesselEventVisitShippingCharterRevenueHelper(object);
+		final int durationInHours = vesselEventVisitCharterDurationInHoursHelper(object);
+		final int charterRevenue = vesselEventVisitShippingCharterRevenueHelper(object);
 		if (durationInHours > 0) {
 			return (charterRevenue * 24) / durationInHours;
-		}
-		else {
-			// Avoid divide by zero, if zero duration, there is effectively no charter out, so no charter rate.
+		} else {
+			// Avoid divide by zero, if zero duration, there is effectively no charter out,
+			// so no charter rate.
 			return 0;
 		}
 	}
@@ -934,47 +938,67 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 	private static int vesselEventVisitCharterDurationInHoursHelper(final Object object) {
 		int durationInHours = 0;
 
-		if (object instanceof VesselEventVisit) {
-			final VesselEventVisit cargoAllocation = (VesselEventVisit) object;
-			if (cargoAllocation.getVesselEvent() instanceof CharterOutEvent) {
-				final CharterOutEvent charterOutEvent = (CharterOutEvent) cargoAllocation.getVesselEvent();
+		if (object instanceof VesselEventVisit vev) {
+			if (vev.getVesselEvent() instanceof CharterOutEvent charterOutEvent) {
 				durationInHours = charterOutEvent.getDurationInDays() * 24;
 			}
 		}
-		if (object instanceof GeneratedCharterOut) {
-			GeneratedCharterOut gco = (GeneratedCharterOut) object;
+		if (object instanceof GeneratedCharterOut gco) {
 			durationInHours = gco.getDuration();
 		}
 		return durationInHours;
 	}
-	
+
 	private @NonNull ICellRenderer createCharterDays(final EconsOptions options, final RowType rowType) {
 		return createIntegerDaysFromHoursFormatter(options, rowType, createMappingFunction(Integer.class, StandardEconsRowFactory::vesselEventVisitCharterDurationInHoursHelper));
 	}
 
 	private @NonNull ICellRenderer createMeanCharterRatePerDay(final EconsOptions options, final RowType rowType) {
-		return createBasicFormatter(options, rowType, Integer.class, DollarsFormat::format,
-				createMappingFunction(Integer.class,  StandardEconsRowFactory::vesselEventVisitAverageCharterRateHelper));
+		return createBasicFormatter(options, rowType, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::vesselEventVisitAverageCharterRateHelper));
 	}
-	
+
 	private static int vesselEventVisitShippingRepositioningHelper(final Object object) {
 		int revenue = 0;
 
-		if (object instanceof VesselEventVisit) {
-			final VesselEventVisit cargoAllocation = (VesselEventVisit) object;
-			if (cargoAllocation.getVesselEvent() instanceof CharterOutEvent) {
-				final CharterOutEvent charterOutEvent = (CharterOutEvent) cargoAllocation.getVesselEvent();
+		if (object instanceof VesselEventVisit vev) {
+			if (vev .getVesselEvent() instanceof CharterOutEvent charterOutEvent) {
 				revenue = charterOutEvent.getRepositioningFee();
 			}
-		}
-		if (object instanceof StartEvent) {
-			// While start events have repositioning fees, this method is used for charter out events where the repositioning fee is a revenue.
 		}
 		return revenue;
 	}
 
-	private @NonNull ICellRenderer createShippingRepositioning(final EconsOptions options, final RowType rowType) {
+	private static int charterInRepositiongHelper(final Object object) {
+		int value = 0;
+
+		if (object instanceof final StartEvent startEvent) {
+			value += startEvent.getRepositioningFee();
+		}
+		if (object instanceof final CargoAllocation cargoAllocation) {
+			value += cargoAllocation.getRepositioningFee();
+		}
+		return value;
+	}
+
+	private static long charterInBallastBonusHelper(final Object object) {
+		long value = 0;
+
+		if (object instanceof final EndEvent endEvent) {
+			value += endEvent.getBallastBonusFee();
+
+		}
+		if (object instanceof final CargoAllocation cargoAllocation) {
+			value += cargoAllocation.getBallastBonusFee();
+		}
+		return value;
+	}
+
+	private @NonNull ICellRenderer createCharterOutRepositioning(final EconsOptions options, final RowType rowType) {
 		return createBasicFormatter(options, rowType, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::vesselEventVisitShippingRepositioningHelper));
+	}
+
+	private @NonNull ICellRenderer createCharterInRepositioning(final EconsOptions options, final RowType rowType) {
+		return createBasicFormatter(options, rowType, Integer.class, DollarsFormat::format, createMappingFunction(Integer.class, StandardEconsRowFactory::charterInRepositiongHelper));
 	}
 
 	private @NonNull ICellRenderer createShippingCostsByMMBTU(final EconsOptions options, final RowType rowType) {
@@ -982,14 +1006,11 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		final Function<Object, @Nullable Double> helper = object -> getShippingCostByMMBTU(options, object);
 
 		final Function<Object, @Nullable Double> transformer = object -> {
-			if (object instanceof CargoAllocation) {
-				final CargoAllocation cargoAllocation = (CargoAllocation) object;
+			if (object instanceof CargoAllocation cargoAllocation) {
 				return helper.apply(cargoAllocation);
-			} else if (object instanceof MarketAllocation) {
-				final MarketAllocation marketAllocation = (MarketAllocation) object;
+			} else if (object instanceof MarketAllocation marketAllocation) {
 				return helper.apply(marketAllocation);
-			} else if (object instanceof VesselEventVisit) {
-				final VesselEventVisit eventVisit = (VesselEventVisit) object;
+			} else if (object instanceof VesselEventVisit eventVisit) {
 				return helper.apply(eventVisit);
 			} else if (object instanceof DeltaPair) {
 				return getFromDeltaPair(Double.class, helper, object);
@@ -1037,20 +1058,20 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 	}
 
 	private static List<Event> getEvents(final Object object) {
-		if (object instanceof EventGrouping) {
-			return ((EventGrouping) object).getEvents();
-		} else if (object instanceof Purge) {
-			return Collections.singletonList((Purge) object);
+		if (object instanceof EventGrouping eg) {
+			return eg.getEvents();
+		} else if (object instanceof Purge purge) {
+			return Collections.singletonList(purge);
 		} else {
 			return null;
 		}
 	}
 
 	private static Sequence getSequence(final Object object) {
-		if (object instanceof Event) {
-			return ((Event) object).getSequence();
-		} else if (object instanceof CargoAllocation) {
-			return ((CargoAllocation) object).getSequence();
+		if (object instanceof Event evt) {
+			return evt.getSequence();
+		} else if (object instanceof CargoAllocation ca) {
+			return ca.getSequence();
 		} else {
 			return null;
 		}
@@ -1062,8 +1083,8 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			return 0;
 		}
 
-		Sequence sequence = getSequence(object);
-		List<Event> events = getEvents(object);
+		final Sequence sequence = getSequence(object);
+		final List<Event> events = getEvents(object);
 
 		if (sequence == null || events == null) {
 			return 0;
@@ -1076,32 +1097,55 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 			charterCost += event.getCharterCost();
 
-			if (event instanceof SlotVisit) {
-				final SlotVisit slotVisit = (SlotVisit) event;
+			if (event instanceof SlotVisit slotVisit) {
 				// Port Costs
 				shippingCost += slotVisit.getPortCost();
 			}
 
-			if (event instanceof Journey) {
-				final Journey journey = (Journey) event;
+			if (event instanceof Journey journey) {
 				// Canal Costs
 				shippingCost += journey.getToll();
 			}
 
-			if (event instanceof FuelUsage) {
-				final FuelUsage fuelUsage = (FuelUsage) event;
+			if (event instanceof FuelUsage fuelUsage) {
 				// Base fuel costs
 				shippingCost += getFuelCost(fuelUsage, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
 			}
 
-			if (event instanceof Purge) {
-				final Purge purge = (Purge) event;
+			if (event instanceof Purge purge) {
 				shippingCost += purge.getCost();
 			}
-			if (event instanceof Cooldown) {
-				final Cooldown cooldown = (Cooldown) event;
+			if (event instanceof Cooldown cooldown) {
 				shippingCost += cooldown.getCost();
 			}
+		}
+
+		if (sequence.getCharterInMarket() != null && sequence.getSpotIndex() < 0) {
+
+			if (object instanceof CargoAllocation cargoAllocation) {
+
+				final GenericCharterContract genericCharterContract = sequence.getCharterInMarket().getGenericCharterContract();
+				if (genericCharterContract != null) {
+					for (final var d : cargoAllocation.getGeneralPNLDetails()) {
+						if (d instanceof CharterContractFeeDetails feeDetails) {
+							if (feeDetails.getMatchingContractDetails() instanceof NotionalJourneyBallastBonusTermDetails
+									|| feeDetails.getMatchingContractDetails() instanceof LumpSumBallastBonusTermDetails) {
+								// Revenue
+								shippingCost -= feeDetails.getFee();
+							}
+
+//							cehck cost or revenue?
+
+							if (feeDetails.getMatchingContractDetails() instanceof OriginPortRepositioningFeeTermDetails
+									|| feeDetails.getMatchingContractDetails() instanceof LumpSumRepositioningFeeTermDetails) {
+								shippingCost += feeDetails.getFee();
+							}
+						}
+					}
+				}
+
+			}
+
 		}
 
 		// Add on chartering costs
@@ -1113,8 +1157,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 	}
 
 	private static Integer getEquityPNLValue(final Object object) {
-		if (object instanceof ProfitAndLossContainer) {
-			final ProfitAndLossContainer container = (ProfitAndLossContainer) object;
+		if (object instanceof ProfitAndLossContainer container) {
 
 			int equityPNL = 0;
 			final GroupProfitAndLoss dataWithKey = container.getGroupProfitAndLoss();
@@ -1134,19 +1177,17 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 	private static Integer getAdditionalPNLValue(final Object object) {
 
-		if (object instanceof ProfitAndLossContainer) {
+		if (object instanceof ProfitAndLossContainer container) {
 			int addnPNL = 0;
-			final ProfitAndLossContainer container = (ProfitAndLossContainer) object;
 			final GroupProfitAndLoss dataWithKey = container.getGroupProfitAndLoss();
 			if (dataWithKey != null) {
 				for (final GeneralPNLDetails generalPNLDetails : container.getGeneralPNLDetails()) {
-					if (generalPNLDetails instanceof SlotPNLDetails) {
-						final SlotPNLDetails slotPNLDetails = (SlotPNLDetails) generalPNLDetails;
+					if (generalPNLDetails instanceof SlotPNLDetails slotPNLDetails) {
 						for (final GeneralPNLDetails details : slotPNLDetails.getGeneralPNLDetails()) {
-							if (details instanceof BasicSlotPNLDetails) {
-								addnPNL += ((BasicSlotPNLDetails) details).getAdditionalPNL();
-								addnPNL += ((BasicSlotPNLDetails) details).getExtraShippingPNL();
-								addnPNL += ((BasicSlotPNLDetails) details).getExtraUpsidePNL();
+							if (details instanceof BasicSlotPNLDetails basicDetails) {
+								addnPNL += basicDetails.getAdditionalPNL();
+								addnPNL += basicDetails.getExtraShippingPNL();
+								addnPNL += basicDetails.getExtraUpsidePNL();
 							}
 						}
 					}
@@ -1166,8 +1207,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 	 * @return
 	 */
 	private static Integer getPNLValue(final Object object) {
-		if (object instanceof ProfitAndLossContainer) {
-			final ProfitAndLossContainer container = (ProfitAndLossContainer) object;
+		if (object instanceof ProfitAndLossContainer container) {
 			final GroupProfitAndLoss groupProfitAndLoss = container.getGroupProfitAndLoss();
 			if (groupProfitAndLoss == null) {
 				return null;
@@ -1178,14 +1218,14 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		return null;
 	}
 
-	private static Integer getShippingCost(final Object object, Function<SlotVisit, Integer> slotVisitFunc, Function<FuelUsage, Integer> fuelUsageFunc) {
+	private static Integer getShippingCost(final Object object, final Function<SlotVisit, Integer> slotVisitFunc, final Function<FuelUsage, Integer> fuelUsageFunc) {
 
 		if (object == null) {
 			return null;
 		}
 
-		Sequence sequence = getSequence(object);
-		List<Event> events = getEvents(object);
+		final Sequence sequence = getSequence(object);
+		final List<Event> events = getEvents(object);
 
 		if (sequence == null || events == null) {
 			return null;
@@ -1197,30 +1237,25 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 			charterCost += event.getCharterCost();
 
-			if (event instanceof SlotVisit) {
-				final SlotVisit slotVisit = (SlotVisit) event;
+			if (event instanceof SlotVisit slotVisit) {
 				// Port Costs
 				shippingCost += slotVisitFunc.apply(slotVisit);
 			}
 
-			if (event instanceof Journey) {
-				final Journey journey = (Journey) event;
+			if (event instanceof Journey journey) {
 				// Canal Costs
 				shippingCost += journey.getToll();
 			}
 
-			if (event instanceof FuelUsage) {
-				final FuelUsage fuelUsage = (FuelUsage) event;
+			if (event instanceof FuelUsage fuelUsage) {
 				// Base fuel costs
 				shippingCost += fuelUsageFunc.apply(fuelUsage);
 			}
 
-			if (event instanceof Purge) {
-				final Purge purge = (Purge) event;
+			if (event instanceof Purge purge) {
 				shippingCost += purge.getCost();
 			}
-			if (event instanceof Cooldown) {
-				final Cooldown cooldown = (Cooldown) event;
+			if (event instanceof Cooldown cooldown) {
 				shippingCost += cooldown.getCost();
 			}
 		}
@@ -1251,30 +1286,25 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 
 			charterCost += event.getCharterCost();
 
-			if (event instanceof PortVisit) {
-				final PortVisit portVisit = (PortVisit) event;
+			if (event instanceof PortVisit portVisit) {
 				// Port Costs
 				shippingCost += portVisit.getPortCost();
 			}
 
-			if (event instanceof Journey) {
-				final Journey journey = (Journey) event;
+			if (event instanceof Journey journey) {
 				// Canal Costs
 				shippingCost += journey.getToll();
 			}
 
-			if (event instanceof FuelUsage) {
-				final FuelUsage fuelUsage = (FuelUsage) event;
+			if (event instanceof FuelUsage fuelUsage) {
 				// Base fuel costs
 				shippingCost += getFuelCost(fuelUsage, Fuel.BASE_FUEL, Fuel.PILOT_LIGHT);
 			}
 
-			if (event instanceof Purge) {
-				final Purge purge = (Purge) event;
+			if (event instanceof Purge purge) {
 				shippingCost += purge.getCost();
 			}
-			if (event instanceof Cooldown) {
-				final Cooldown cooldown = (Cooldown) event;
+			if (event instanceof Cooldown cooldown) {
 				shippingCost += cooldown.getCost();
 			}
 		}
@@ -1334,7 +1364,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 		return 0;
 	}
 
-	private static Integer getPortCost(@Nullable PortVisit visit) {
+	private static Integer getPortCost(@Nullable final PortVisit visit) {
 		if (visit != null) {
 			return visit.getPortCost();
 		}

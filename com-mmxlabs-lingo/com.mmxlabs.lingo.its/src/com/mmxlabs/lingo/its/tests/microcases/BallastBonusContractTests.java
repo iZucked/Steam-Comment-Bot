@@ -161,6 +161,8 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 			final List<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
 			final EndEvent end = getEndEvent(vesselAvailability);
 			final long endEventPNL = -1_000_000;
+			Assertions.assertEquals(-endEventPNL, end.getBallastBonusFee());
+			
 			Assertions.assertEquals(endEventPNL, end.getGroupProfitAndLoss().getProfitAndLoss());
 			Assertions.assertEquals(cargoPNL + endEventPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 		});

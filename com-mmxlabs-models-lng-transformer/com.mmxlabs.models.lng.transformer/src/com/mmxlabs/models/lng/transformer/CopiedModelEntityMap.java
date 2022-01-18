@@ -12,6 +12,7 @@ import java.util.Map;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.port.Port;
@@ -25,8 +26,11 @@ public class CopiedModelEntityMap implements ModelEntityMap {
 	private final Map<EObject, EObject> originalToNewCopy = new HashMap<>();
 	private final Map<EObject, EObject> newCopyToOriginal = new HashMap<>();
 
+	private final Map<String, Object> nameToOptimiserObject = new HashMap<>();
+
 	/**
-	 * Constructor. <b>Note we will call {@link EcoreUtil.Copier#copyReferences()} so do not do this externally</b>
+	 * Constructor. <b>Note we will call {@link EcoreUtil.Copier#copyReferences()}
+	 * so do not do this externally</b>
 	 * 
 	 * @param delegate
 	 * @param copier
@@ -46,7 +50,9 @@ public class CopiedModelEntityMap implements ModelEntityMap {
 				newCopyToOriginal.put(u, ss);
 			}
 		}
-		// Copy references for newly copied objects. Note this will also copy references for object copied previously. This can lead to reference lists being populated twice!
+		// Copy references for newly copied objects. Note this will also copy references
+		// for object copied previously. This can lead to reference lists being
+		// populated twice!
 		copier.copyReferences();
 	}
 
@@ -80,7 +86,6 @@ public class CopiedModelEntityMap implements ModelEntityMap {
 	@Override
 	public void addModelObject(final EObject modelObject, final Object internalObject) {
 		throw new UnsupportedOperationException();
-
 	}
 
 	@Override
@@ -125,4 +130,20 @@ public class CopiedModelEntityMap implements ModelEntityMap {
 	public @NonNull ZonedDateTime getLatestTime() {
 		return delegate.getLatestTime();
 	}
+
+	@Override
+	public void addOptimiserToModelOnlyMapping(@NonNull Object internalObject, @NonNull EObject modelObject) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public @Nullable Object getNamedOptimiserObject(String name) {
+		return nameToOptimiserObject.get(name);
+	}
+
+	@Override
+	public void addNamedOptimiserObject(String name, @NonNull Object object) {
+		nameToOptimiserObject.put(name, object);
+	}
+
 }

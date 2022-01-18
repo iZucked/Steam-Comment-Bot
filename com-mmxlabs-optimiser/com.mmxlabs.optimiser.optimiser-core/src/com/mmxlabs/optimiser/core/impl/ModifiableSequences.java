@@ -142,7 +142,7 @@ public class ModifiableSequences implements IModifiableSequences {
 	public List<IResource> getResources() {
 		return Collections.unmodifiableList(resources);
 	}
-
+	
 	@Override
 	@NonNull
 	public ISequence getSequence(final IResource resource) {
@@ -197,8 +197,7 @@ public class ModifiableSequences implements IModifiableSequences {
 		if (obj == this) {
 			return true;
 		}
-		if (obj instanceof ISequences) {
-			final ISequences other = (ISequences) obj;
+		if (obj instanceof ISequences other) {
 			if (size() != other.size()) {
 				return false;
 			}

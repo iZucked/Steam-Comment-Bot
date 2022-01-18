@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.BiConsumer;
 
 import javax.inject.Named;
 
@@ -33,6 +34,7 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
@@ -41,6 +43,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.IEndPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.RoundTripCargoEnd;
 import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
@@ -55,7 +58,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceIntervalProviderHelper;
-import com.mmxlabs.scheduler.optimiser.scheduling.PNLBasedWindowTrimmerUtils.TimeChoice;
 import com.mmxlabs.scheduler.optimiser.shared.port.DistanceMatrixEntry;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
@@ -111,7 +113,8 @@ public class PNLBasedWindowTrimmerUtils {
 		}
 
 		/**
-		 * Filter out unimportant times if there exists the same time as an important option.
+		 * Filter out unimportant times if there exists the same time as an important
+		 * option.
 		 */
 		public static void filter(final Collection<TimeChoice> times) {
 			final Collection<Integer> importantTimes = new TreeSet<>();
@@ -230,6 +233,14 @@ public class PNLBasedWindowTrimmerUtils {
 
 		}
 		if (slot instanceof IEndPortSlot) {
+			final ITimeWindow tw = portTimeWindowsRecord.getSlotFeasibleTimeWindow(slot);
+			final List<TimeChoice> arrivalTimeIntervals = new LinkedList<>();
+			arrivalTimeIntervals.add(TimeChoice.forImportant(tw.getInclusiveStart()));
+			if (tw.getExclusiveEnd() != Integer.MAX_VALUE) {
+				arrivalTimeIntervals.add(TimeChoice.forImportant(tw.getExclusiveEnd() - 1));
+			}
+			return arrivalTimeIntervals;
+		} else if (slot instanceof RoundTripCargoEnd) {
 			final ITimeWindow tw = portTimeWindowsRecord.getSlotFeasibleTimeWindow(slot);
 			final List<TimeChoice> arrivalTimeIntervals = new LinkedList<>();
 			arrivalTimeIntervals.add(TimeChoice.forImportant(tw.getInclusiveStart()));
@@ -531,7 +542,12 @@ public class PNLBasedWindowTrimmerUtils {
 				lastRouteChoices = AvailableRouteChoices.OPTIMAL;
 			}
 
-			for (final IPortSlot slot : record.getSlots()) {
+			List<IPortSlot> recordSlots = new LinkedList<>(record.getSlots());
+			IPortSlot returnSlot = record.getReturnSlot();
+			if (roundTripCargo && returnSlot != null) {
+				recordSlots.add(returnSlot);
+			}
+			for (final IPortSlot slot : recordSlots) {
 				slotToRecords.put(slot, record);
 				slots.add(slot);
 
@@ -560,7 +576,9 @@ public class PNLBasedWindowTrimmerUtils {
 								continue;
 							}
 
-							// If we have a Panama booking allocated, the booking date constrains the departure and arrival times. The min travel time data is unable to accurately encode this for
+							// If we have a Panama booking allocated, the booking date constrains the
+							// departure and arrival times. The min travel time data is unable to accurately
+							// encode this for
 							// Panama.
 							if (dme.getRoute() == ERouteOption.PANAMA //
 									&& record.getSlotNextVoyageOptions(lastSlot) == AvailableRouteChoices.PANAMA_ONLY //
@@ -581,9 +599,11 @@ public class PNLBasedWindowTrimmerUtils {
 								final int extraIdleTime = record.getSlotTotalExtraIdleTime(lastSlot);
 
 								// Feasible trimmer should have made sure this is valid.
-								// assert lastSlotArrivalTime + visitDuration + timeToCanal < bookingDate - arrivalMargin;
+								// assert lastSlotArrivalTime + visitDuration + timeToCanal < bookingDate -
+								// arrivalMargin;
 
-								// This is the fixed time components to add on to the booking date before we add on the speed based elements.
+								// This is the fixed time components to add on to the booking date before we add
+								// on the speed based elements.
 								final int baseTime = bookingDate + transitTime + extraIdleTime;
 
 								final int fastestArrivalTime = baseTime + maxSpeedTravelTime;
@@ -642,7 +662,7 @@ public class PNLBasedWindowTrimmerUtils {
 		// Re-align to midnight, local time
 		intervalMap.entrySet().forEach(e -> alignTimeChoicesToMidnightLocalTime(e.getValue(), 0, e.getKey()));
 
-		if (!roundTripCargo && PRE_BACKWARDS_NBO_TIME) {
+		if (PRE_BACKWARDS_NBO_TIME) {
 
 			final IStartRequirement startRequirement = startEndRequirementProvider.getStartRequirement(resource);
 
@@ -652,6 +672,11 @@ public class PNLBasedWindowTrimmerUtils {
 			for (int i = slots.size() - 1; i > 0; --i) {
 
 				lastSlot = slots.get(i - 1);
+
+				if (lastSlot instanceof RoundTripCargoEnd) {
+					continue;
+				}
+
 				final IPortSlot slot = slots.get(i);
 				final IPortTimeWindowsRecord record = slotToRecords.get(lastSlot);
 				lastRouteChoices = record.getSlotNextVoyageOptions(lastSlot);
@@ -673,7 +698,7 @@ public class PNLBasedWindowTrimmerUtils {
 					}
 				}
 
-				if (i == 1) {
+				if (i == 1 || (roundTripCargo && slot instanceof ILoadSlot)) {
 					// Remove the start time of 0 as it is typically a default value that is not
 					// much use
 					if (startRequirement != null && !startRequirement.hasTimeRequirement()) {
@@ -691,7 +716,9 @@ public class PNLBasedWindowTrimmerUtils {
 					}
 					final int nboSpeed = Math.min(Math.max(getNBOSpeed(vessel, vesselState, calculationCV), vessel.getMinSpeed()), vessel.getMaxSpeed());
 
-					// If we have a Panama booking allocated, the booking date constrains the departure and arrival times. The min travel time data is unable to accurately encode this for
+					// If we have a Panama booking allocated, the booking date constrains the
+					// departure and arrival times. The min travel time data is unable to accurately
+					// encode this for
 					// Panama.
 					if (dme.getRoute() == ERouteOption.PANAMA //
 							&& record.getSlotNextVoyageOptions(lastSlot) == AvailableRouteChoices.PANAMA_ONLY //
@@ -715,7 +742,8 @@ public class PNLBasedWindowTrimmerUtils {
 
 						final int visitDuration = record.getSlotDuration(lastSlot);
 
-						// Calculate the arrival time of the from slot - work backwards from the booking date. These are the fixed components, travel time added next
+						// Calculate the arrival time of the from slot - work backwards from the booking
+						// date. These are the fixed components, travel time added next
 						final int baseTime = bookingDate - arrivalMargin - visitDuration;
 						{
 							// NBO based arrival time
@@ -751,67 +779,77 @@ public class PNLBasedWindowTrimmerUtils {
 		// Re-align to midnight, local time
 		intervalMap.entrySet().forEach(e -> alignTimeChoicesToMidnightLocalTime(e.getValue(), 0, e.getKey()));
 
-		if (!roundTripCargo) {
+		{
 
 			final IStartRequirement startRequirement = startEndRequirementProvider.getStartRequirement(resource);
 			final IEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
 
 			if (endRequirement != null) {
-				final IPortTimeWindowsRecord firstRecord = records.get(0);
-				final IPortTimeWindowsRecord endRecord = records.get(records.size() - 1);
 
-				final IPortSlot firstSlot = firstRecord.getFirstSlot();
-				final IPortSlot endSlot = endRecord.getFirstSlot();
+				BiConsumer<IPortTimeWindowsRecord, IPortTimeWindowsRecord> action = (firstRecord, endRecord) -> {
 
-				final ITimeWindow endFeasibleTW = endRecord.getSlotFeasibleTimeWindow(endSlot);
+					final IPortSlot firstSlot = firstRecord.getFirstSlot();
+					final IPortSlot endSlot = roundTripCargo ? endRecord.getReturnSlot() : endRecord.getFirstSlot();
+					final ITimeWindow endFeasibleTW = endRecord.getSlotFeasibleTimeWindow(endSlot);
 
-				//
-				// final int twStart = endFeasibleTW.getInclusiveStart();
-				final int twEndSlotEnd = endFeasibleTW.getExclusiveEnd() - 1;
-				//
-				int newStartTime = -1;
-				if (endRequirement.isMinDurationSet()) {
-					final ITimeWindow startEventFeasibleTimeWindow = firstRecord.getFirstSlotFeasibleTimeWindow();
-					final int earliestStartTime = startEventFeasibleTimeWindow.getInclusiveStart();
+					//
+					final int twEndSlotEnd = endFeasibleTW.getExclusiveEnd() - 1;
+					//
+					int newStartTime = -1;
+					if (endRequirement.isMinDurationSet()) {
+						final ITimeWindow startEventFeasibleTimeWindow = firstRecord.getFirstSlotFeasibleTimeWindow();
+						final int earliestStartTime = startEventFeasibleTimeWindow.getInclusiveStart();
 
-					// Add in valid start times to cover min duration to all end dates.
-					for (final TimeChoice t : intervalMap.get(endSlot)) {
-						final int newT = t.time - endRequirement.getMinDurationInHours();
-						if (startEventFeasibleTimeWindow.contains(newT)) {
-							intervalMap.get(firstSlot).add(TimeChoice.forNormal(newT));
-						}
-					}
-					// Make sure there is an end time for the min duration from all the start times.
-					for (final TimeChoice t : intervalMap.get(firstSlot)) {
-						intervalMap.get(endSlot).add(TimeChoice.forImportant(t.time + endRequirement.getMinDurationInHours()));
-						intervalMap.get(endSlot).add(TimeChoice.forImportant(t.time + endRequirement.getMaxDurationInHours()));
-					}
-
-					final int minEndTime = earliestStartTime + endRequirement.getMinDurationInHours();
-					if (minEndTime > twEndSlotEnd) {
-						// Too much time for given end window. Do we have some padding left at start?
-						newStartTime = twEndSlotEnd - endRequirement.getMinDurationInHours();
-
-						if (startRequirement != null && startRequirement.hasTimeRequirement()) {
-							final ITimeWindow startTW = startRequirement.getTimeWindow();
-							if (startTW != null) {
-								final int inclusiveStart = startTW.getInclusiveStart();
-								// Do not start before we are allowed to pick up the vessel
-								newStartTime = Math.max(newStartTime, inclusiveStart);
+						// Add in valid start times to cover min duration to all end dates.
+						for (final TimeChoice t : intervalMap.get(endSlot)) {
+							final int newT = t.time - endRequirement.getMinDurationInHours();
+							if (startEventFeasibleTimeWindow.contains(newT)) {
+								intervalMap.get(firstSlot).add(TimeChoice.forNormal(newT));
 							}
 						}
-						newStartTime = Math.max(newStartTime, 0);
+						// Make sure there is an end time for the min duration from all the start times.
+						for (final TimeChoice t : intervalMap.get(firstSlot)) {
+							intervalMap.get(endSlot).add(TimeChoice.forImportant(t.time + endRequirement.getMinDurationInHours()));
+							intervalMap.get(endSlot).add(TimeChoice.forImportant(t.time + endRequirement.getMaxDurationInHours()));
+						}
 
-						final int pNewStartTime = newStartTime;
-						final Collection<TimeChoice> collection = intervalMap.get(firstSlot);
-						collection.removeIf(t -> t.time > pNewStartTime);
+						final int minEndTime = earliestStartTime + endRequirement.getMinDurationInHours();
+						if (minEndTime > twEndSlotEnd) {
+							// Too much time for given end window. Do we have some padding left at start?
+							newStartTime = twEndSlotEnd - endRequirement.getMinDurationInHours();
 
-						// Update start window
-						// Sg: Is this a bug? Probably shouldn't be doing this?
-						final ITimeWindow tw = firstRecord.getFirstSlotFeasibleTimeWindow();
-						final MutableTimeWindow ftw = new MutableTimeWindow(Math.min(tw.getInclusiveStart(), pNewStartTime), Math.max(pNewStartTime + 1, tw.getExclusiveEnd()));
-						firstRecord.setSlotFeasibleTimeWindow(firstSlot, ftw);
+							if (startRequirement != null && startRequirement.hasTimeRequirement()) {
+								final ITimeWindow startTW = startRequirement.getTimeWindow();
+								if (startTW != null) {
+									final int inclusiveStart = startTW.getInclusiveStart();
+									// Do not start before we are allowed to pick up the vessel
+									newStartTime = Math.max(newStartTime, inclusiveStart);
+								}
+							}
+							newStartTime = Math.max(newStartTime, 0);
+
+							final int pNewStartTime = newStartTime;
+							final Collection<TimeChoice> collection = intervalMap.get(firstSlot);
+							collection.removeIf(t -> t.time > pNewStartTime);
+
+							// Update start window
+							// Sg: Is this a bug? Probably shouldn't be doing this?
+							final ITimeWindow tw = firstRecord.getFirstSlotFeasibleTimeWindow();
+							final MutableTimeWindow ftw = new MutableTimeWindow(Math.min(tw.getInclusiveStart(), pNewStartTime), Math.max(pNewStartTime + 1, tw.getExclusiveEnd()));
+							firstRecord.setSlotFeasibleTimeWindow(firstSlot, ftw);
+						}
 					}
+				};
+
+				if (roundTripCargo) {
+					// Each ptwr needs to be adjusted separately
+					for (IPortTimeWindowsRecord ptwr : records) {
+						action.accept(ptwr, ptwr);
+					}
+				} else {
+					final IPortTimeWindowsRecord firstRecord = records.get(0);
+					final IPortTimeWindowsRecord endRecord = records.get(records.size() - 1);
+					action.accept(firstRecord, endRecord);
 				}
 			}
 		}
@@ -837,8 +875,10 @@ public class PNLBasedWindowTrimmerUtils {
 	}
 
 	/**
-	 * For each time option, add in midnight localtime before and after the option. Important options are retained, otherwise discarded. The intention of this code is to regularise arrival times
-	 * (better for caching, better for users) and avoid tring 1am, 2am, 3am etc.
+	 * For each time option, add in midnight localtime before and after the option.
+	 * Important options are retained, otherwise discarded. The intention of this
+	 * code is to regularise arrival times (better for caching, better for users)
+	 * and avoid tring 1am, 2am, 3am etc.
 	 * 
 	 * @param input
 	 * @param x

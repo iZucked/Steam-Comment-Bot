@@ -198,8 +198,7 @@ public class PortRotationBasedReportBuilder extends AbstractReportBuilder {
 
 			@Override
 			public Double getDoubleValue(final Object object) {
-				if (object instanceof FuelUsage) {
-					final FuelUsage mix = (FuelUsage) object;
+				if (object instanceof FuelUsage mix) {
 					double total = 0.0;
 					for (final FuelQuantity q : mix.getFuels()) {
 						BaseFuel baseFuel = q.getBaseFuel();
@@ -226,8 +225,7 @@ public class PortRotationBasedReportBuilder extends AbstractReportBuilder {
 		ColumnHandler ch2 = blockManager.createColumn(block, fuelName + " Unit Price", new NumberOfDPFormatter(2) {
 			@Override
 			public Double getDoubleValue(final Object object) {
-				if (object instanceof FuelUsage) {
-					final FuelUsage mix = (FuelUsage) object;
+				if (object instanceof FuelUsage mix) {
 					for (final FuelQuantity q : mix.getFuels()) {
 						BaseFuel f = q.getBaseFuel();
 						if (f != null && fuelName.equals(f.getName())) {
