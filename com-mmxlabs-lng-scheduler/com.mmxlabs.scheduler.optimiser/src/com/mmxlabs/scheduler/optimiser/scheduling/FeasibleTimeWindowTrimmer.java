@@ -49,7 +49,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.schedule.PanamaBookingHelper;
 import com.mmxlabs.scheduler.optimiser.sequenceproviders.IVoyageSpecificationProvider;
-import com.mmxlabs.scheduler.optimiser.sequenceproviders.VoyageSpecificationProviderImpl;
 import com.mmxlabs.scheduler.optimiser.voyage.ExplicitIdleTime;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
@@ -202,6 +201,8 @@ public class FeasibleTimeWindowTrimmer {
 
 		for (int idx = 0; idx < portTimeWindowRecords.size(); idx++) {
 			final IPortTimeWindowsRecord portTimeWindowsRecord = portTimeWindowRecords.get(idx);
+			assert portTimeWindowsRecord != null;
+
 			if (isSequentialVessel(resource)) {
 				final boolean isLastRecord = idx == portTimeWindowRecords.size() - 1;
 				setFeasibleTimeWindowsUsingPrevious(portTimeWindowsRecord, travelTimeData, isLastRecord);
@@ -400,6 +401,13 @@ public class FeasibleTimeWindowTrimmer {
 				if (voyageSpecProvider != null) {
 					ERouteOption routeOverride = voyageSpecProvider.getVoyageRouteOption(prevPortSlot, thisPortSlot);
 					if (routeOverride != null) {
+						// There is a case were there is no distance between elements. I.e. same port or
+						// one of them is the ANYWHERE port. In this case, we always need to use the
+						// DIRECT distance otherwise canal transit times etc will be applied. We use
+						// travel time as a proxy for distance here.
+						if (directTravelTime == 0 && routeOverride != ERouteOption.DIRECT) {
+							routeOverride = ERouteOption.DIRECT;
+						}
 						switch (routeOverride) {
 						case DIRECT:
 							suezTravelTime = Integer.MAX_VALUE;
@@ -418,7 +426,7 @@ public class FeasibleTimeWindowTrimmer {
 						}
 					}
 				}
-				
+
 				int extraIdleTime = 0;
 				for (var type : ExplicitIdleTime.values()) {
 					extraIdleTime += records[index - 1].extraIdleTimes[type.ordinal()];

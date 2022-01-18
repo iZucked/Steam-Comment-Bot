@@ -150,9 +150,10 @@ public class VoyagePlanner implements IVoyagePlanner {
 	 */
 	private VoyageOptions getVoyageOptionsAndSetVpoChoices(final IVesselAvailability vesselAvailability, final IPortTimesRecord portTimesRecord, final VesselState vesselState,
 			final int voyageStartTime, final int availableTime, final int[] extraIdleTimes, final IPortSlot prevPortSlot, final IPortSlot thisPortSlot, final @Nullable VoyageOptions previousOptions,
-			final List<IVoyagePlanChoice> vpoChoices, boolean useNBO, ISequencesAttributesProvider sequencesAttributesProvider) {
+			final List<IVoyagePlanChoice> vpoChoices, boolean useNBO, final ISequencesAttributesProvider sequencesAttributesProvider) {
 
-	@Nullable	IVoyageSpecificationProvider voyageSpecProvider = sequencesAttributesProvider.getProvider(IVoyageSpecificationProvider.class);
+		@Nullable
+		final IVoyageSpecificationProvider voyageSpecProvider = sequencesAttributesProvider.getProvider(IVoyageSpecificationProvider.class);
 
 		@NonNull
 		final IVessel vessel = vesselAvailability.getVessel();
@@ -165,7 +166,7 @@ public class VoyagePlanner implements IVoyagePlanner {
 		options.setVessel(vessel);
 		options.setVesselState(vesselState);
 		options.setAvailableTime(availableTime);
-		for (var type : ExplicitIdleTime.values()) {
+		for (final var type : ExplicitIdleTime.values()) {
 			options.setExtraIdleTime(type, extraIdleTimes[type.ordinal()]);
 		}
 
@@ -218,7 +219,7 @@ public class VoyagePlanner implements IVoyagePlanner {
 
 		TravelFuelChoice fuelChoice = null;
 		if (voyageSpecProvider != null) {
-		  fuelChoice = voyageSpecProvider.getFuelChoice(prevPortSlot, thisPortSlot);
+			fuelChoice = voyageSpecProvider.getFuelChoice(prevPortSlot, thisPortSlot);
 		}
 		if (fuelChoice != null) {
 			options.setTravelFuelChoice(fuelChoice);
@@ -378,7 +379,18 @@ public class VoyagePlanner implements IVoyagePlanner {
 				ERouteOption routeOverride = voyageSpecProvider.getVoyageRouteOption(prevPortSlot, thisPortSlot);
 
 				if (routeOverride != null) {
-					Predicate<DistanceMatrixEntry> filter = entry -> entry.getRoute() != routeOverride;
+					// There is a case were there is no distance between elements. I.e. same port or
+					// one of them is the ANYWHERE port. In this case, we always need to use the
+					// DIRECT distance otherwise canal transit times etc will be applied.
+					if (routeOverride != ERouteOption.DIRECT) {
+						final int distance = distanceProvider.getDistance(ERouteOption.DIRECT, prevPort, thisPort, vessel);
+						if (distance == 0) {
+							routeOverride = ERouteOption.DIRECT;
+						}
+					}
+
+					final ERouteOption pRouteOverride = routeOverride;
+					final Predicate<DistanceMatrixEntry> filter = entry -> entry.getRoute() != pRouteOverride;
 					// Remove forbidden route options.
 					distances.removeIf(filter);
 				}
@@ -403,7 +415,7 @@ public class VoyagePlanner implements IVoyagePlanner {
 			} else {
 				costType = CostType.Ballast;
 			}
-			int panamaIdleHours = d.getRoute() == ERouteOption.PANAMA ? portTimesRecord.getSlotAdditionaPanamaIdleHours(prevPortSlot) : 0;
+			final int panamaIdleHours = d.getRoute() == ERouteOption.PANAMA ? portTimesRecord.getSlotAdditionaPanamaIdleHours(prevPortSlot) : 0;
 			options.setRoute(d.getRoute(), d.getDistance(), routeCostProvider.getRouteCost(d.getRoute(), d.getFrom(), d.getTo(), vessel, voyageStartTime, costType), panamaIdleHours);
 		} else {
 			vpoChoices.add(new RouteVoyagePlanChoice(previousOptions, options, distances, vessel, voyageStartTime, routeCostProvider, portTimesRecord.getSlotAdditionaPanamaIdleHours(prevPortSlot)));
@@ -661,8 +673,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 	}
 
 	private long evaluateExtendedVoyagePlan(final IVesselAvailability vesselAvailability, final List<Pair<VoyagePlan, IPortTimesRecord>> voyagePlansMap, final List<VoyagePlan> voyagePlansList,
-			final IPortTimesRecord portTimesRecord, final long[] heelVolumeRangeInM3, final VoyagePlan originalPlan, ISequencesAttributesProvider sequencesAttributesProvider,
-			@Nullable IAnnotatedSolution annotatedSolution) {
+			final IPortTimesRecord portTimesRecord, final long[] heelVolumeRangeInM3, final VoyagePlan originalPlan, final ISequencesAttributesProvider sequencesAttributesProvider,
+			@Nullable final IAnnotatedSolution annotatedSolution) {
 
 		// Take a copy so we can retain isIgnoreEnd flag later on
 		// TODO: remove
@@ -696,7 +708,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 			// only that one can include a cargo
 			// (sequences are broken on loads).
 			final Pair<@NonNull VoyagePlan, @NonNull IAllocationAnnotation> p = beIter.next();
-			// Since only the first voyage plan can involve a cargo, all remaining break even evaluations should be null
+			// Since only the first voyage plan can involve a cargo, all remaining break
+			// even evaluations should be null
 			beIter.forEachRemaining(pair -> {
 				assert pair == null;
 			});
@@ -750,7 +763,7 @@ public class VoyagePlanner implements IVoyagePlanner {
 						final VoyagePlan replacementVoyagePlan = new VoyagePlan();
 						final IDetailsSequenceElement[] replacementSequence = new IDetailsSequenceElement[oldPair.getFirst().getSequence().length];
 						for (int i = 0; i < replacementSequence.length; ++i) {
-							IDetailsSequenceElement detailsSequenceElement = oldPair.getFirst().getSequence()[i];
+							final IDetailsSequenceElement detailsSequenceElement = oldPair.getFirst().getSequence()[i];
 							if (detailsSequenceElement instanceof PortDetails) {
 								replacementSequence[i] = ((PortDetails) detailsSequenceElement).copy();
 							} else if (detailsSequenceElement instanceof VoyageDetails) {
@@ -938,8 +951,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 	 */
 	@Override
 	public void makeShippedVoyagePlans(@NonNull final IResource resource, final ICharterCostCalculator charterCostCalculator, @NonNull final IPortTimesRecord portTimesRecord,
-			final long[] initialHeelVolumeRangeInM3, final int lastCV, final boolean lastPlan, final boolean evaluateAll, boolean extendedEvaluation,
-			final Consumer<List<Pair<VoyagePlan, IPortTimesRecord>>> hook, ISequencesAttributesProvider sequencesAttributesProvider, @Nullable IAnnotatedSolution annotatedSolution) {
+			final long[] initialHeelVolumeRangeInM3, final int lastCV, final boolean lastPlan, final boolean evaluateAll, final boolean extendedEvaluation,
+			final Consumer<List<Pair<VoyagePlan, IPortTimesRecord>>> hook, final ISequencesAttributesProvider sequencesAttributesProvider, @Nullable final IAnnotatedSolution annotatedSolution) {
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		final boolean isRoundTripSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP;
@@ -976,7 +989,7 @@ public class VoyagePlanner implements IVoyagePlanner {
 				// overwrite previous heel (assume lost) and replace with a new heel value
 				// TODO: Move (back?)into VPO code
 				if (thisPortSlot instanceof IHeelOptionSupplierPortSlot) {
-					IHeelOptionSupplierPortSlot supplier = (IHeelOptionSupplierPortSlot) thisPortSlot;
+					final IHeelOptionSupplierPortSlot supplier = (IHeelOptionSupplierPortSlot) thisPortSlot;
 					heelInM3Range[0] = supplier.getHeelOptionsSupplier().getMinimumHeelAvailableInM3();
 					heelInM3Range[1] = supplier.getHeelOptionsSupplier().getMaximumHeelAvailableInM3();
 					assert heelInM3Range[0] >= 0;
@@ -999,7 +1012,7 @@ public class VoyagePlanner implements IVoyagePlanner {
 
 				final int voyageStartTime = prevArrivalTime + portTimesRecord.getSlotDuration(prevPortSlot);
 				final int[] extraIdleTimes = new int[ExplicitIdleTime.values().length];
-				for (var type : ExplicitIdleTime.values()) {
+				for (final var type : ExplicitIdleTime.values()) {
 					extraIdleTimes[type.ordinal()] = portTimesRecord.getSlotExtraIdleTime(prevPortSlot, type);
 				}
 
@@ -1171,8 +1184,8 @@ public class VoyagePlanner implements IVoyagePlanner {
 	}
 
 	@Override
-	public Pair<VoyagePlan, IAllocationAnnotation> makeNonShippedVoyagePlan(final IResource resource, final IPortTimesRecord portTimesRecord, boolean extendedEvaluation,
-			ISequencesAttributesProvider sequencesAttributesProvider, @Nullable IAnnotatedSolution annotatedSolution) {
+	public Pair<VoyagePlan, IAllocationAnnotation> makeNonShippedVoyagePlan(final IResource resource, final IPortTimesRecord portTimesRecord, final boolean extendedEvaluation,
+			final ISequencesAttributesProvider sequencesAttributesProvider, @Nullable final IAnnotatedSolution annotatedSolution) {
 
 		final VoyagePlan currentPlan = makeDESOrFOBVoyagePlan(resource, portTimesRecord);
 
