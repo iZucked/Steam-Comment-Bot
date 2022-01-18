@@ -14,50 +14,51 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class JSONConverter {
-	
-	public static Map<String, Object> jsonToMap(JSONObject json) {
-	    Map<String, Object> retMap = new HashMap<>();
 
-	    if(json.isEmpty()) {
-	        retMap = toMap(json);
-	    }
-	    return retMap;
+	private JSONConverter() {
+
 	}
 
-	public static Map<String, Object> toMap(JSONObject object) {
-	    Map<String, Object> map = new HashMap<>();
+	public static Map<String, Object> jsonToMap(final JSONObject json) {
+		Map<String, Object> retMap = new HashMap<>();
 
-	    Iterator<Object> keysItr = object.keySet().iterator();
-	    while(keysItr.hasNext()) {
-	        String key = (String)keysItr.next();
-	        Object value = object.get(key);
-
-	        if(value instanceof JSONArray) {
-//	            value = toList((JSONArray) value);
-	        	value = (JSONArray) value;
-	        }
-
-	        else if(value instanceof JSONObject) {
-	            value = toMap((JSONObject) value);
-	        }
-	        map.put(key, value);
-	    }
-	    return map;
+		if (json.isEmpty()) {
+			retMap = toMap(json);
+		}
+		return retMap;
 	}
 
-	public static List<Object> toList(JSONArray array) {
-	    List<Object> list = new ArrayList<>();
-	    for(int i = 0; i < array.size(); i++) {
-	        Object value = array.get(i);
-	        if(value instanceof JSONArray) {
-	            value = toList((JSONArray) value);
-	        }
+	public static Map<String, Object> toMap(final JSONObject object) {
+		final Map<String, Object> map = new HashMap<>();
 
-	        else if(value instanceof JSONObject) {
-	            value = toMap((JSONObject) value);
-	        }
-	        list.add(value);
-	    }
-	    return list;
+		final Iterator<?> keysItr = object.keySet().iterator();
+		while (keysItr.hasNext()) {
+			final String key = (String) keysItr.next();
+			Object value = object.get(key);
+
+			if (value instanceof final JSONArray jArr) {
+				value = jArr;
+			} else if (value instanceof final JSONObject jObj) {
+				value = toMap(jObj);
+			}
+			map.put(key, value);
+		}
+		return map;
+	}
+
+	public static List<Object> toList(final JSONArray array) {
+		final List<Object> list = new ArrayList<>();
+		for (int i = 0; i < array.size(); i++) {
+			Object value = array.get(i);
+			if (value instanceof final JSONArray jArr) {
+				value = toList(jArr);
+			}
+
+			else if (value instanceof final JSONObject jObj) {
+				value = toMap(jObj);
+			}
+			list.add(value);
+		}
+		return list;
 	}
 }

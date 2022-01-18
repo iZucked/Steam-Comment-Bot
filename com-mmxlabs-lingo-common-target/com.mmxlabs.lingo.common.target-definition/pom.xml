@@ -9,7 +9,6 @@
 		<version>5.1.4-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
-	<version>5.1.4-SNAPSHOT</version>
 	<artifactId>com.mmxlabs.lingo.common.target-definition</artifactId>
 	<packaging>eclipse-target-definition</packaging>
 </project>

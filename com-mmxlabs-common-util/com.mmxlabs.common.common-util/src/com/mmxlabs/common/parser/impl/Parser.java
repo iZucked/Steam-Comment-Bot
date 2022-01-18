@@ -16,7 +16,7 @@ import com.mmxlabs.common.parser.series.functions.*;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
   */
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings({"rawtypes", "null"})
 public class Parser extends java_cup.runtime.lr_parser {
 
  public final Class getSymbolContainer() {
