@@ -112,15 +112,13 @@ public class AnonymisationUtils {
 	}
 
 	private static String getSlotPrefix(final Slot<?> slot) {
-		if (slot instanceof LoadSlot) {
-			final LoadSlot ls = (LoadSlot) slot;
+		if (slot instanceof LoadSlot ls) {
 			if (ls.isDESPurchase()) {
 				return "DP";
 			} else {
 				return "FP";
 			}
-		} else if (slot instanceof DischargeSlot) {
-			final DischargeSlot ds = (DischargeSlot) slot;
+		} else if (slot instanceof DischargeSlot ds) {
 			if (ds.isFOBSale()) {
 				return "FS";
 			} else {
