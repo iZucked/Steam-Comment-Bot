@@ -17,7 +17,7 @@ public abstract class ColumnManager<T> {
 
 	private final String name;
 
-	public ColumnManager(final String name) {
+	protected ColumnManager(final String name) {
 		this.name = name;
 	}
 
