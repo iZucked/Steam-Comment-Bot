@@ -49,7 +49,7 @@ public class VesselAssignmentFormatter extends BaseFormatter {
 						}
 					}
 				}
-				break;
+				return getSequenceLabel(cargoAllocation.getSequence());
 			case FOB:
 				for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 					final Slot<?> slot = slotAllocation.getSlot();
@@ -63,10 +63,9 @@ public class VesselAssignmentFormatter extends BaseFormatter {
 						}
 					}
 				}
-				break;
+				return getSequenceLabel(cargoAllocation.getSequence());
 			case FLEET:
-				final Sequence sequence = cargoAllocation.getSequence();
-				return getSequenceLabel(sequence);
+				return getSequenceLabel(cargoAllocation.getSequence());
 			default:
 				break;
 			}
