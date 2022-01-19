@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.common;
 
+import java.util.Objects;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 /**
@@ -11,10 +13,8 @@ import org.eclipse.jdt.annotation.NonNull;
  * 
  * @author hinton
  * 
- * @param <A>
- *            the type of the first item
- * @param <B>
- *            the type of the second item
+ * @param <A> the type of the first item
+ * @param <B> the type of the second item
  */
 public class Pair<A, B> {
 	private A first;
@@ -82,37 +82,15 @@ public class Pair<A, B> {
 			return true;
 		}
 
-		if (obj == null) {
-			return false;
+		if (obj instanceof final Pair<?, ?> other) {
+			return Objects.equals(this.first, other.first) //
+					&& Objects.equals(this.second, other.second);
 		}
 
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-
-		final A pFirst = first;
-		final B pSecond = second;
-
-		@SuppressWarnings("rawtypes")
-		final Pair other = (Pair) obj;
-		if (pFirst == null) {
-			if (other.first != null) {
-				return false;
-			}
-		} else if (!pFirst.equals(other.first)) {
-			return false;
-		}
-		if (pSecond == null) {
-			if (other.second != null) {
-				return false;
-			}
-		} else if (!pSecond.equals(other.second)) {
-			return false;
-		}
-		return true;
+		return false;
 	}
 
-	public static <A, B> @NonNull Pair<A, B> of(A a, B b) {
+	public static <A, B> @NonNull Pair<A, B> of(final A a, final B b) {
 		return new Pair<>(a, b);
 	}
 }
