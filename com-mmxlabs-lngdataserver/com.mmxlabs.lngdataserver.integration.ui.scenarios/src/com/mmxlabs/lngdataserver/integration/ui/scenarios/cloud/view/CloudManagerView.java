@@ -78,44 +78,6 @@ public class CloudManagerView extends ViewPart {
 			GridViewerHelper.configureLookAndFeel(tvc0);
 		}
 		{
-			final GridViewerColumn tvc0 = new GridViewerColumn(viewer, SWT.None);
-			tvc0.getColumn().setText("Job ID");
-			tvc0.getColumn().setWidth(200);
-			tvc0.setLabelProvider(createLP(CloudOptimisationDataResultRecord::getJobid));
-			GridViewerHelper.configureLookAndFeel(tvc0);
-		}
-		{
-			final GridViewerColumn tvc0 = new GridViewerColumn(viewer, SWT.None);
-			tvc0.getColumn().setText("Type");
-			tvc0.getColumn().setWidth(200);
-			tvc0.setLabelProvider(createLP(CloudOptimisationDataResultRecord::getType));
-			GridViewerHelper.configureLookAndFeel(tvc0);
-		}
-		{
-			final GridViewerColumn tvc1 = new GridViewerColumn(viewer, SWT.None);
-			tvc1.getColumn().setText("Submitted");
-			tvc1.getColumn().setWidth(100);
-			tvc1.setLabelProvider(createLP(rec -> rec.getCreationDate().atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT))));
-			GridViewerHelper.configureLookAndFeel(tvc1);
-		}
-		{
-			final GridViewerColumn tvc2 = new GridViewerColumn(viewer, SWT.None);
-			tvc2.getColumn().setText("Status");
-			tvc2.getColumn().setWidth(75);
-			tvc2.setLabelProvider(createLP(rec -> {
-				final ResultStatus status = rec.getStatus();
-				if (status != null) {
-					if (status.isFailed()) {
-						return status.getReason();
-					}
-					return status.getStatus();
-				}
-				return null;
-			}));
-
-			GridViewerHelper.configureLookAndFeel(tvc2);
-		}
-		{
 			final GridViewerColumn tvc3 = new GridViewerColumn(viewer, SWT.None);
 			tvc3.getColumn().setText("Progress");
 			tvc3.getColumn().setWidth(60);
@@ -141,6 +103,47 @@ public class CloudManagerView extends ViewPart {
 			}));
 			GridViewerHelper.configureLookAndFeel(tvc3);
 		}
+		{
+			final GridViewerColumn tvc2 = new GridViewerColumn(viewer, SWT.None);
+			tvc2.getColumn().setText("Status");
+			tvc2.getColumn().setWidth(75);
+			tvc2.setLabelProvider(createLP(rec -> {
+				final ResultStatus status = rec.getStatus();
+				if (status != null) {
+					if (status.isFailed()) {
+						return status.getReason();
+					}
+					return status.getStatus();
+				}
+				return null;
+			}));
+
+			GridViewerHelper.configureLookAndFeel(tvc2);
+		}
+		{
+			final GridViewerColumn tvc1 = new GridViewerColumn(viewer, SWT.None);
+			tvc1.getColumn().setText("Submitted");
+			tvc1.getColumn().setWidth(100);
+			tvc1.setLabelProvider(createLP(rec -> rec.getCreationDate().atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT))));
+			GridViewerHelper.configureLookAndFeel(tvc1);
+		}
+		{
+			final GridViewerColumn tvc0 = new GridViewerColumn(viewer, SWT.None);
+			tvc0.getColumn().setText("Job ID");
+			tvc0.getColumn().setWidth(200);
+			tvc0.setLabelProvider(createLP(CloudOptimisationDataResultRecord::getJobid));
+			GridViewerHelper.configureLookAndFeel(tvc0);
+		}
+		{
+			final GridViewerColumn tvc0 = new GridViewerColumn(viewer, SWT.None);
+			tvc0.getColumn().setText("Type");
+			tvc0.getColumn().setWidth(200);
+			tvc0.setLabelProvider(createLP(CloudOptimisationDataResultRecord::getType));
+			GridViewerHelper.configureLookAndFeel(tvc0);
+		}
+
+		
+		
 		if (CloudOptimisationConstants.RUN_LOCAL_BENCHMARK) {
 			{
 				final GridViewerColumn tvc3 = new GridViewerColumn(viewer, SWT.None);
