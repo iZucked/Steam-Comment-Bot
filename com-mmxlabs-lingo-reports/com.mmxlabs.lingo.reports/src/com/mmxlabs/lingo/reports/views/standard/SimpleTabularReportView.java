@@ -43,7 +43,7 @@ import org.eclipse.ui.part.ViewPart;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
-import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer.ColumnManager;
+import com.mmxlabs.lingo.reports.components.ColumnManager;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
@@ -88,61 +88,59 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 		@Override
 		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
 
-			final Runnable r = new Runnable() {
-				@Override
-				public void run() {
-					final AbstractSimpleTabularReportTransformer<T> transformer = createTransformer();
+			final Runnable r = () -> {
+				final AbstractSimpleTabularReportTransformer<T> transformer = createTransformer();
 
-					columnManagers.clear();
+				columnManagers.clear();
 
-					int numberOfSchedules = 0;
-					Pair<Schedule, ScenarioResult> pinnedPair = null;
-					List<Pair<Schedule, ScenarioResult>> otherPairs = new LinkedList<>();
-					ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
-					if (pinned != null) {
-						final ScheduleModel scheduleModel = pinned.getTypedResult(ScheduleModel.class);
-						if (scheduleModel != null) {
-							final Schedule schedule = scheduleModel.getSchedule();
-							if (schedule != null) {
-								pinnedPair = new Pair<>(schedule, pinned);
-								numberOfSchedules++;
-							}
+				int numberOfSchedules = 0;
+				Pair<Schedule, ScenarioResult> pinnedPair = null;
+				List<Pair<Schedule, ScenarioResult>> otherPairs = new LinkedList<>();
+				ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
+				if (pinned != null) {
+					final ScheduleModel scheduleModel = pinned.getTypedResult(ScheduleModel.class);
+					if (scheduleModel != null) {
+						final Schedule schedule = scheduleModel.getSchedule();
+						if (schedule != null) {
+							pinnedPair = new Pair<>(schedule, pinned);
+							numberOfSchedules++;
 						}
 					}
-					for (final ScenarioResult other : selectedDataProvider.getOtherScenarioResults()) {
-						final ScheduleModel scheduleModel = other.getTypedResult(ScheduleModel.class);
-						if (scheduleModel != null) {
-							final Schedule schedule = scheduleModel.getSchedule();
-							if (schedule != null) {
-								otherPairs.add(new Pair<>(schedule, other));
-								numberOfSchedules++;
-							}
+				}
+				for (final ScenarioResult other : selectedDataProvider.getOtherScenarioResults()) {
+					final ScheduleModel scheduleModel = other.getTypedResult(ScheduleModel.class);
+					if (scheduleModel != null) {
+						final Schedule schedule = scheduleModel.getSchedule();
+						if (schedule != null) {
+							otherPairs.add(new Pair<>(schedule, other));
+							numberOfSchedules++;
 						}
 					}
-					final Object[] expanded = viewer.getExpandedElements();
-					final List<T> rowElements = transformer.createData(pinnedPair, otherPairs);
+				}
+				final Object[] expanded = viewer.getExpandedElements();
+				final List<T> rowElements = transformer.createData(pinnedPair, otherPairs);
 
-					columnManagers.addAll(transformer.getColumnManagers(selectedDataProvider));
-					clearColumns();
-					addColumns();
-					setShowColumns(pinned != null, numberOfSchedules);
+				columnManagers.addAll(transformer.getColumnManagers(selectedDataProvider));
+				clearColumns();
+				addColumns();
+				setShowColumns(pinned != null, numberOfSchedules);
 
-					viewer.getLabelProvider().dispose();
-					viewer.setLabelProvider(new ViewLabelProvider());
+				viewer.getLabelProvider().dispose();
+				viewer.setLabelProvider(new ViewLabelProvider());
 
-					ViewerHelper.setInput(viewer, true, rowElements);
+				ViewerHelper.setInput(viewer, true, rowElements);
 
-					if (!rowElements.isEmpty()) {
-						applyExpansionOnNewElements(expanded, rowElements);
-						if (packColumnsAction != null) {
-							packColumnsAction.run();
-						}
+				if (!rowElements.isEmpty()) {
+					applyExpansionOnNewElements(expanded, rowElements);
+					if (packColumnsAction != null) {
+						packColumnsAction.run();
 					}
 				}
 			};
 			ViewerHelper.runIfViewerValid(viewer, block, r);
 		}
 
+		@Override
 		public void selectedObjectChanged(org.eclipse.e4.ui.model.application.ui.basic.MPart source, org.eclipse.jface.viewers.ISelection selection) {
 			doSelectionChanged(source, selection);
 		}
@@ -150,7 +148,8 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	};
 
 	/**
-	 * Allows to use array of previously expanded elements to expand the newly generated row elements
+	 * Allows to use array of previously expanded elements to expand the newly
+	 * generated row elements
 	 * 
 	 * @param expanded
 	 * @param rowElements
@@ -160,15 +159,6 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	}
 
 	public class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, ITableFontProvider, ITableColorProvider {
-
-		@Override
-		public void dispose() {
-			for (final ColumnManager<T> manager : columnManagers) {
-				manager.dispose();
-			}
-
-			super.dispose();
-		}
 
 		@SuppressWarnings("unchecked")
 		@Override
@@ -272,8 +262,10 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 		// List<ColumnManager<T>> columnManagers = contentProvider.getColumnManagers();
 
 		/*
-		 * // add corresponding columns to the report for (ColumnManager<T> cv: columnManagers) { String name = cv.getName(); GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE); GridColumn
-		 * gc = gvc.getColumn(); gc.setText(name); gc.pack(); addSortSelectionListener(gc, cv); }
+		 * // add corresponding columns to the report for (ColumnManager<T> cv:
+		 * columnManagers) { String name = cv.getName(); GridViewerColumn gvc = new
+		 * GridViewerColumn(viewer, SWT.NONE); GridColumn gc = gvc.getColumn();
+		 * gc.setText(name); gc.pack(); addSortSelectionListener(gc, cv); }
 		 */
 
 		viewer.setLabelProvider(new ViewLabelProvider());
@@ -312,8 +304,10 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	}
 
 	/**
-	 * Must be implemented by descendant classes to produce a SimpleContentAndColumnProvider object, which will provide column manager information (a list of columns with: names, sort comparators, and
-	 * methods to get display text from a row object)
+	 * Must be implemented by descendant classes to produce a
+	 * SimpleContentAndColumnProvider object, which will provide column manager
+	 * information (a list of columns with: names, sort comparators, and methods to
+	 * get display text from a row object)
 	 * 
 	 * @return
 	 */

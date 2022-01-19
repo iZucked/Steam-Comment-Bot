@@ -18,31 +18,28 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 
 public class VesselAssignmentFormatter extends BaseFormatter {
-	
+
 	private final boolean useShortenedNames;
-	
+
 	public VesselAssignmentFormatter() {
 		super();
 		this.useShortenedNames = false;
 	}
-	
-	public VesselAssignmentFormatter(boolean useShortenedNames) {
+
+	public VesselAssignmentFormatter(final boolean useShortenedNames) {
 		super();
 		this.useShortenedNames = useShortenedNames;
 	}
-	
+
 	@Override
 	public String render(final Object object) {
 
-		if (object instanceof CargoAllocation) {
-			final CargoAllocation cargoAllocation = (CargoAllocation) object;
-
+		if (object instanceof final CargoAllocation cargoAllocation) {
 			switch (cargoAllocation.getCargoType()) {
 			case DES:
 				for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
-					Slot slot = slotAllocation.getSlot();
-					if (slot instanceof LoadSlot) {
-						final LoadSlot loadSlot = (LoadSlot) slot;
+					final Slot<?> slot = slotAllocation.getSlot();
+					if (slot instanceof final LoadSlot loadSlot) {
 						if (loadSlot.isDESPurchase()) {
 							final Vessel assignment = slot.getNominatedVessel();
 							if (assignment != null) {
@@ -52,11 +49,11 @@ public class VesselAssignmentFormatter extends BaseFormatter {
 						}
 					}
 				}
+				break;
 			case FOB:
 				for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
-					Slot slot = slotAllocation.getSlot();
-					if (slot instanceof DischargeSlot) {
-						final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+					final Slot<?> slot = slotAllocation.getSlot();
+					if (slot instanceof final DischargeSlot dischargeSlot) {
 						if (dischargeSlot.isFOBSale()) {
 							final Vessel assignment = slot.getNominatedVessel();
 							if (assignment != null) {
@@ -66,30 +63,24 @@ public class VesselAssignmentFormatter extends BaseFormatter {
 						}
 					}
 				}
-				// TODO Check this against master results!
-				// break;
+				break;
 			case FLEET:
-				Sequence sequence = cargoAllocation.getSequence();
+				final Sequence sequence = cargoAllocation.getSequence();
 				return getSequenceLabel(sequence);
 			default:
 				break;
 			}
 			return null;
-
-		} else if (object instanceof Event) {
-			final Event event = (Event) object;
+		} else if (object instanceof final Event event) {
 			final Sequence sequence = event.getSequence();
 			if (sequence != null) {
 				return getSequenceLabel(sequence);
 			}
-		} else if (object instanceof Sequence) {
-			final Sequence sequence = (Sequence) object;
+		} else if (object instanceof final Sequence sequence) {
 			return getSequenceLabel(sequence);
-		} else if (object instanceof Vessel) {
-			Vessel vessel = (Vessel) object;
+		} else if (object instanceof final Vessel vessel) {
 			return AssignmentLabelProvider.getLabelFor(vessel, !useShortenedNames);
 		}
-
 
 		return null;
 	}
@@ -104,27 +95,13 @@ public class VesselAssignmentFormatter extends BaseFormatter {
 			}
 		} else if (sequence.isSetVesselAvailability()) {
 			final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-			return AssignmentLabelProvider.getLabelFor(vesselAvailability, !useShortenedNames);// + " - " + vesselAvailability.getCharterNumber();
+			return AssignmentLabelProvider.getLabelFor(vesselAvailability, !useShortenedNames);
 		}
 		return sequence.getName();
 	}
 
 	@Override
 	public Comparable<?> getComparable(final Object object) {
-
-		// if (object instanceof CargoAllocation) {
-		// final CargoAllocation cargoAllocation = (CargoAllocation) object;
-		// final Sequence sequence = cargoAllocation.getSequence();
-		// if (sequence != null) {
-		// return sequence.getName();
-		// }
-		// } else if (object instanceof Event) {
-		// final Event event = (Event) object;
-		// final Sequence sequence = event.getSequence();
-		// if (sequence != null) {
-		// return sequence.getName();
-		// }
-		// }
 		return render(object);
 	}
 }

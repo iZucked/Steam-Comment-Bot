@@ -1957,8 +1957,7 @@ public class ChangeSetViewColumnHelper {
 			@Override
 			public String getToolTipText(final Object element) {
 
-				if (element instanceof ChangeSetTableRow) {
-					final ChangeSetTableRow change = (ChangeSetTableRow) element;
+				if (element instanceof ChangeSetTableRow change) {
 
 					final Set<CapacityViolationType> beforeViolations = ScheduleModelKPIUtils.getCapacityViolations(ChangeSetKPIUtil.getEventGrouping(change, ResultType.Before));
 					final Set<CapacityViolationType> afterViolations = ScheduleModelKPIUtils.getCapacityViolations(ChangeSetKPIUtil.getEventGrouping(change, ResultType.After));
@@ -1970,14 +1969,13 @@ public class ChangeSetViewColumnHelper {
 
 					final String vesselBefore = change.getBeforeVesselShortName();
 					final String vesselAfter = change.getAfterVesselShortName();
-					String vesselAfterType = "";
 					final ChangeSetVesselType afterVesselType = change.getAfterVesselType();
 
+					String vesselAfterType;
 					switch (afterVesselType) {
-					case FLEET:
-						vesselAfterType = "charter ";
-					case MARKET:
-						vesselAfterType = "market vessel ";
+					case FLEET -> vesselAfterType = "charter ";
+					case MARKET -> vesselAfterType = "market vessel ";
+					default -> vesselAfterType = "";
 					}
 
 					final long capacityDelta = afterViolations.size() - beforeViolations.size();

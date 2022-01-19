@@ -26,14 +26,12 @@ import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.mmxlabs.common.Equality;
-import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.services.TransformedSelectedDataProvider;
 import com.mmxlabs.models.ui.tabular.BaseFormatter;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
-import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.scenario.service.ScenarioResult;
@@ -47,25 +45,18 @@ public abstract class AbstractReportView extends ViewPart implements org.eclipse
 	protected @NonNull TransformedSelectedDataProvider currentSelectedDataProvider = new TransformedSelectedDataProvider(null);
 
 	@NonNull
-	protected final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
-		@Override
-		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
+	protected final ISelectedScenariosServiceListener selectedScenariosServiceListener = (selectedDataProvider, block) -> {
 
-			final Runnable r = new Runnable() {
-				@Override
-				public void run() {
-					clearInputEquivalents();
-					currentSelectedDataProvider = new TransformedSelectedDataProvider(selectedDataProvider);
+		final Runnable r = () -> {
+			clearInputEquivalents();
+			currentSelectedDataProvider = new TransformedSelectedDataProvider(selectedDataProvider);
 
-					final Object newInput = doSelectionChanged(currentSelectedDataProvider, currentSelectedDataProvider.getPinnedScenarioResult(),
-							currentSelectedDataProvider.getOtherScenarioResults());
+			final Object newInput = doSelectionChanged(currentSelectedDataProvider, currentSelectedDataProvider.getPinnedScenarioResult(), currentSelectedDataProvider.getOtherScenarioResults());
 
-					ViewerHelper.setInput(getViewer(), true, newInput);
-				}
-			};
+			ViewerHelper.setInput(getViewer(), true, newInput);
+		};
 
-			ViewerHelper.runIfViewerValid(getViewer(), block, r);
-		}
+		ViewerHelper.runIfViewerValid(getViewer(), block, r);
 	};
 
 	protected final ICellRenderer containingScheduleFormatter = new BaseFormatter() {
@@ -79,10 +70,10 @@ public abstract class AbstractReportView extends ViewPart implements org.eclipse
 		}
 	};
 
-	private final HashMap<Object, Object> equivalents = new HashMap<Object, Object>();
-	private final HashSet<Object> contents = new HashSet<Object>();
+	private final HashMap<Object, Object> equivalents = new HashMap<>();
+	private final HashSet<Object> contents = new HashSet<>();
 
-	public void setInputEquivalents(final Object input, final Collection<? extends Object> objectEquivalents) {
+	public void setInputEquivalents(final Object input, final Collection<Object> objectEquivalents) {
 		for (final Object o : objectEquivalents) {
 			if (o != null) {
 				equivalents.put(o, input);
@@ -108,7 +99,8 @@ public abstract class AbstractReportView extends ViewPart implements org.eclipse
 			}
 
 			/**
-			 * Modify @link {AbstractTreeViewer#getTreePathFromItem(Item)} to adapt items before returning selection object.
+			 * Modify @link {AbstractTreeViewer#getTreePathFromItem(Item)} to adapt items
+			 * before returning selection object.
 			 */
 			@Override
 			protected TreePath getTreePathFromItem(Item item) {
@@ -225,7 +217,8 @@ public abstract class AbstractReportView extends ViewPart implements org.eclipse
 	}
 
 	/**
-	 * Process the array of elements before they are returned to e.g. map input equivalents
+	 * Process the array of elements before they are returned to e.g. map input
+	 * equivalents
 	 * 
 	 * @param result
 	 */
@@ -235,7 +228,9 @@ public abstract class AbstractReportView extends ViewPart implements org.eclipse
 
 	/**
 	 * 
-	 * Callback to convert the raw data coming out of the table into something usable externally. This is useful when the table data model is custom for the table rather from the real data model.
+	 * Callback to convert the raw data coming out of the table into something
+	 * usable externally. This is useful when the table data model is custom for the
+	 * table rather from the real data model.
 	 * 
 	 */
 	protected List<?> adaptSelectionFromWidget(final List<?> selection) {

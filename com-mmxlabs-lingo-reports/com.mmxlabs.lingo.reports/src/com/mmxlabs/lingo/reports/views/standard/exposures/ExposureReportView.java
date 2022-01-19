@@ -18,7 +18,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -35,9 +34,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
@@ -50,6 +46,7 @@ import com.mmxlabs.lingo.reports.IReportContentsGenerator;
 import com.mmxlabs.lingo.reports.ReportContents;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
+import com.mmxlabs.lingo.reports.components.ColumnManager;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.SelectedDataProviderImpl;
@@ -71,19 +68,14 @@ import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PaperDealAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
-import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.rcp.common.CommonImages;
-import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.CommonImages.IconMode;
 import com.mmxlabs.rcp.common.CommonImages.IconPaths;
+import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
-
-/**
- */
 
 public class ExposureReportView extends SimpleTabularReportView<IndexExposureData> {
 
@@ -107,11 +99,11 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 
 	// -------------------------------------Transformer class
 	// starts-------------------------------------
-	protected class ExposureData extends AbstractSimpleTabularReportTransformer<IndexExposureData> {
+	protected class ExposureData implements AbstractSimpleTabularReportTransformer<IndexExposureData> {
 		@Override
 		public List<ColumnManager<IndexExposureData>> getColumnManagers(@NonNull final ISelectedDataProvider selectedDataProvider) {
 
-			final ArrayList<ColumnManager<IndexExposureData>> result = new ArrayList<ColumnManager<IndexExposureData>>();
+			final ArrayList<ColumnManager<IndexExposureData>> result = new ArrayList<>();
 			if (selectedDataProvider.getAllScenarioResults().isEmpty()) {
 				return result;
 			}
@@ -155,7 +147,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					}
 
 					@Override
-					public Image getColumnImage(final IndexExposureData ied) {
+					public @Nullable Image getColumnImage(final IndexExposureData ied) {
 						if (!useImage(ied))
 							return null;
 						if (!pinnedMode)
@@ -172,12 +164,12 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					}
 
 					@Override
-					public Color getBackground(final IndexExposureData element) {
+					public @Nullable Color getBackground(final IndexExposureData element) {
 						return colorByType(element, columnName);
 					}
 
 					@Override
-					public Font getFont(final IndexExposureData element) {
+					public @Nullable Font getFont(final IndexExposureData element) {
 						return fontByType(element);
 					}
 
@@ -216,7 +208,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			return true;
 		}
 
-		protected Color colorByType(final IndexExposureData ied, final String customColumnName) {
+		protected @Nullable Color colorByType(final IndexExposureData ied, final String customColumnName) {
 			if (IndexExposureType.ANNUAL.equals(ied.type)) {
 				return colourBlue;
 			} else if (IndexExposureType.QUARTERLY.equals(ied.type)) {
@@ -326,7 +318,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 		}
 
 		@Override
-		public @NonNull List<@NonNull IndexExposureData> createData(@Nullable final Pair<@NonNull Schedule, @NonNull ScenarioResult> pinnedPair,
+		public List<IndexExposureData> createData(@Nullable final Pair<@NonNull Schedule, @NonNull ScenarioResult> pinnedPair,
 				@NonNull final List<@NonNull Pair<@NonNull Schedule, @NonNull ScenarioResult>> otherPairs) {
 			final List<IndexExposureData> output = new LinkedList<>();
 
@@ -387,10 +379,10 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			final List<IndexExposureData> output = new LinkedList<>();
 			final IScenarioDataProvider sdp = scenarioResult.getScenarioDataProvider();
 			final Map<String, String> curve2Index = ModelMarketCurveProvider.getCurveToIndexMap(ScenarioModelUtil.getPricingModel(sdp));
-			
+
 			for (YearMonth cym = ymStart; cym.isBefore(ymEnd.plusMonths(1)); cym = cym.plusMonths(1)) {
-				IndexExposureData exposuresByMonth = ExposuresTransformer.getExposuresByMonth(scenarioResult, sdp, schedule, cym, mode, selected, 
-						selectedEntity, selectedFiscalYear, selectedAssetType, showGenerated, curve2Index);
+				IndexExposureData exposuresByMonth = ExposuresTransformer.getExposuresByMonth(scenarioResult, sdp, schedule, cym, mode, selected, selectedEntity, selectedFiscalYear, selectedAssetType,
+						showGenerated, curve2Index);
 				if (inspectChildrenAndExposures(exposuresByMonth)) {
 					output.add(exposuresByMonth);
 				}

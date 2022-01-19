@@ -578,7 +578,7 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 	 * @param objects
 	 * @param isPinned
 	 */
-	public void collectPinModeElements(final Collection<? extends EObject> objects, final boolean isPinned) {
+	public void collectPinModeElements(final Collection<EObject> objects, final boolean isPinned) {
 		currentlyPinned |= isPinned;
 		++numberOfSchedules;
 
