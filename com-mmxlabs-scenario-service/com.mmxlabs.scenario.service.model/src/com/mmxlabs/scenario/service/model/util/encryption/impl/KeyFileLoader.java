@@ -45,7 +45,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.options.InvalidArgumentException;
 import com.mmxlabs.scenario.service.model.util.encryption.impl.keyfiles.KeyFileLegacy;
 import com.mmxlabs.scenario.service.model.util.encryption.impl.keyfiles.KeyFileV1;
 import com.mmxlabs.scenario.service.model.util.encryption.impl.keyfiles.KeyFileV2;
@@ -201,7 +200,7 @@ public final class KeyFileLoader {
 				break;
 			}
 			default:
-				throw new InvalidArgumentException("Unknown password type: " + header.passwordType);
+				throw new IllegalArgumentException("Unknown password type: " + header.passwordType);
 			}
 
 			// Next check the version of the key file and pass off to the relevant decoder
@@ -214,7 +213,7 @@ public final class KeyFileLoader {
 				break;
 			}
 			default:
-				throw new InvalidArgumentException("Unknown keyfile version: " + header.version);
+				throw new IllegalArgumentException("Unknown keyfile version: " + header.version);
 			}
 		} finally {
 			// Blank array to avoid password hanging around in memory too long
