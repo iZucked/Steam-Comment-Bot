@@ -80,31 +80,46 @@ public class CharterContractBuilder {
 
 			return CharterContractBuilder.this;
 		}
-
-		public RepositioningMaker addLumpSumRule(final @Nullable Port originPort, final String expression) {
+		
+		public RepositioningMaker addLumpSumRuleForSingleStart(@Nullable final Port startPort, final String expression) {
 			final LumpSumRepositioningFeeTerm term = CommercialFactory.eINSTANCE.createLumpSumRepositioningFeeTerm();
-//			if (originPort != null) {
-//				term.setOriginPort(originPort);
-//			}
+			if (startPort != null) {
+				term.getStartPorts().add(startPort);
+			}
 			term.setPriceExpression(expression);
 			container.getTerms().add(term);
 
 			return this;
-
 		}
 
-		public RepositioningMaker addNotionalRule(final Port originPort, final double speed, final @NonNull String hireExpression, final @NonNull String fuelExpression, final boolean includeCanalFees,
+		public RepositioningMaker addLumpSumRule(final Collection<APortSet<Port>> startPorts, final String expression) {
+			final LumpSumRepositioningFeeTerm term = CommercialFactory.eINSTANCE.createLumpSumRepositioningFeeTerm();
+			if (startPorts != null && startPorts.isEmpty()) {
+				term.getStartPorts().addAll(startPorts);
+			}
+			term.setPriceExpression(expression);
+			container.getTerms().add(term);
+
+			return this;
+		}
+
+		public RepositioningMaker addOriginRule(final Collection<APortSet<Port>> startPorts, final @Nullable Port originPort, final double speed, final @NonNull String hireExpression, final @NonNull String fuelExpression, final boolean includeCanalFees,
 				final boolean includeCanalTime, final String lumpSumExpression) {
 
 			final OriginPortRepositioningFeeTerm term = CommercialFactory.eINSTANCE.createOriginPortRepositioningFeeTerm();
 
-			term.setOriginPort(originPort);
+			term.getStartPorts().addAll(startPorts);
+			if (originPort != null) {
+				term.setOriginPort(originPort);
+			}
 			term.setLumpSumPriceExpression(lumpSumExpression);
 			term.setSpeed(speed);
 			term.setFuelPriceExpression(fuelExpression);
 			term.setHirePriceExpression(hireExpression);
 			term.setIncludeCanal(includeCanalFees);
 			term.setIncludeCanalTime(includeCanalTime);
+			
+			container.getTerms().add(term);
 
 			return this;
 		}
