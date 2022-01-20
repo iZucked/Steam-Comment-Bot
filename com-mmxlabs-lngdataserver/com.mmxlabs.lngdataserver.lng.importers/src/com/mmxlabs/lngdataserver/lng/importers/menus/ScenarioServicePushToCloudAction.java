@@ -81,10 +81,12 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
+import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSchedulerInsertSlotJobRunner;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessOptioniserOptions;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessSandboxOptions;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.migration.scenario.ScenarioMigrationException;
+import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.rcp.common.appversion.VersionHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -136,7 +138,7 @@ public class ScenarioServicePushToCloudAction {
 			doPublish = MessageDialog.openQuestion(activeShell, "Confirm sending the scenario", String.format("Send scenario %s for online optimisation?", scenarioInstance.getName()));
 		}
 		boolean localOpti = false;
-		if (doPublish && optimisation && CloudOptimisationConstants.RUN_LOCAL_BENCHMARK) {
+		if (doPublish && CloudOptimisationConstants.RUN_LOCAL_BENCHMARK) {
 			localOpti = MessageDialog.openQuestion(activeShell, "Confirm sending the scenario", "Run locally for runtime comparison?");
 		}
 
@@ -551,7 +553,7 @@ public class ScenarioServicePushToCloudAction {
 	}
 
 	private static void runLocalOptimisation(final ScenarioInstance scenarioInstance, final EObject optiPlanOrUserSettings, final List<Slot<?>> targetSlots, final CloudManifestProblemType problemType,
-			final SubMonitor progressMonitor, final CloudOptimisationDataResultRecord record, IScenarioDataProvider scenarioDataProvider, File anonymisationMap) {
+			final SubMonitor progressMonitor, final CloudOptimisationDataResultRecord record, final IScenarioDataProvider scenarioDataProvider, final File anonymisationMap) {
 		try {
 			progressMonitor.setWorkRemaining(500);
 			progressMonitor.setTaskName("Running benchmark local optimisation");
@@ -560,7 +562,6 @@ public class ScenarioServicePushToCloudAction {
 
 			if (problemType == CloudManifestProblemType.OPTIMISATION) {
 				final LNGOptimisationBuilder optiBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, scenarioInstance) //
-						.withThreadCount(1) //
 						.withOptimiseHint() //
 				;
 				if (optiPlanOrUserSettings instanceof final UserSettings us) {
@@ -573,28 +574,21 @@ public class ScenarioServicePushToCloudAction {
 				final LNGOptimisationRunnerBuilder runnerBuilder = optiBuilder.buildDefaultRunner();
 				runnerBuilder.getScenarioRunner().runWithProgress(progressMonitor.split(500));
 			} else if (problemType == CloudManifestProblemType.OPTIONISER) {
-				// Not yet supported
+				final List<VesselEvent> targetEvents = new LinkedList<>();
 
-//				final List<Slot<?>> atargetSlots = new LinkedList<>();
-//				final List<VesselEvent> atargetEvents = new LinkedList<>();
-//
-//				final CargoModelFinder cargoFinder = new CargoModelFinder(ScenarioModelUtil.getCargoModel(scenarioDataProvider));
-////					options.loadIds.forEach(id -> atargetSlots.add(cargoFinder.findLoadSlot(id)));
-////					options.dischargeIds.forEach(id -> atargetSlots.add(cargoFinder.findDischargeSlot(id)));
-////					options.eventsIds.forEach(id -> atargetEvents.add(cargoFinder.findVesselEvent(id)));
-////
-//				final LNGSchedulerInsertSlotJobRunner insertionRunner = new LNGSchedulerInsertSlotJobRunner(null, // ScenarioInstance
-//						scenarioDataProvider, scenarioDataProvider.getEditingDomain(), (UserSettings) optiPlanOrUserSettings, //
-//						targetSlots, targetEvents, //
-//						null, // Optional extra data provider.
-//						null, // Alternative initial solution provider
-//						builder -> {
-////						if (options.maxWorkerThreads > 0) {
-////							builder.withThreadCount(options.maxWorkerThreads);
-////						}
-//						});
-//
-//				final IMultiStateResult results = insertionRunner.runInsertion(null, progressMonitor.split(500));
+				final LNGSchedulerInsertSlotJobRunner insertionRunner = new LNGSchedulerInsertSlotJobRunner(null, // ScenarioInstance
+						scenarioDataProvider, scenarioDataProvider.getEditingDomain(), (UserSettings) optiPlanOrUserSettings, //
+						targetSlots, targetEvents, //
+						null, // Optional extra data provider.
+						null, // Alternative initial solution provider
+						builder -> {
+//						if (options.maxWorkerThreads > 0) {
+//							builder.withThreadCount(options.maxWorkerThreads);
+//						}
+						});
+
+				final IMultiStateResult results = insertionRunner.runInsertion(null, progressMonitor.split(400));
+				 insertionRunner.exportSolutions(results, progressMonitor.split(100));
 
 			}
 			final long b = System.currentTimeMillis();
