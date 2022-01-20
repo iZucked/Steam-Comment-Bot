@@ -74,26 +74,26 @@ public class HeadlessOptioniserRunner {
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) throws Exception {
 		// Get the root object
 		ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(lingoFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
-			run(startTry, logger, options, modelRecord, scenarioDataProvider, completedHook, new NullProgressMonitor());
+			run(logger, options, modelRecord, scenarioDataProvider, completedHook, new NullProgressMonitor());
 		});
 	}
 
 	public void runFromCSVDirectory(final int startTry, final File csvDirectory, final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserRunner.Options options,
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) {
 
-		CSVImporter.runFromCSVDirectory(csvDirectory, sdp -> run(startTry, logger, options, null, sdp, completedHook, new NullProgressMonitor()));
+		CSVImporter.runFromCSVDirectory(csvDirectory, sdp -> run(logger, options, null, sdp, completedHook, new NullProgressMonitor()));
 	}
 
 	public void runFromCsvZipFile(final int startTry, final File zipFile, final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserRunner.Options options,
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook) {
 
-		CSVImporter.runFromCSVZipFile(zipFile, sdp -> run(startTry, logger, options, null, sdp, completedHook, new NullProgressMonitor()));
+		CSVImporter.runFromCSVZipFile(zipFile, sdp -> run(logger, options, null, sdp, completedHook, new NullProgressMonitor()));
 	}
 
-	public SlotInsertionOptions run(final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserOptions options, final ScenarioModelRecord scenarioModelRecord, @NonNull final IScenarioDataProvider sdp,
-			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, IProgressMonitor monitor) {
+	public SlotInsertionOptions run(final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserOptions options, final ScenarioModelRecord scenarioModelRecord,
+			@NonNull final IScenarioDataProvider sdp, final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, final IProgressMonitor monitor) {
 
-		UserSettings userSettings = options.userSettings;
+		final UserSettings userSettings = options.userSettings;
 //		 
 
 		final List<Slot<?>> targetSlots = new LinkedList<>();
@@ -111,21 +111,21 @@ public class HeadlessOptioniserRunner {
 				null, // Alternative initial solution provider
 				null);
 
-		SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
+		final SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
 
 		final IMultiStateResult results = insertionRunner.runInsertion(logger, subMonitor.split(90));
 
-		SlotInsertionOptions result = insertionRunner.exportSolutions(results, 0L, subMonitor.split(10));
+		final SlotInsertionOptions result = insertionRunner.exportSolutions(results, subMonitor.split(10));
 
 		if (completedHook != null) {
 			completedHook.accept(scenarioModelRecord, sdp);
 		}
-		
+
 		return result;
 	}
 
-	public void run(final int startTry, final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserRunner.Options options, final ScenarioModelRecord scenarioModelRecord,
-			@NonNull final IScenarioDataProvider sdp, final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, IProgressMonitor monitor) {
+	public void run(final SlotInsertionOptimiserLogger logger, final HeadlessOptioniserRunner.Options options, final ScenarioModelRecord scenarioModelRecord, @NonNull final IScenarioDataProvider sdp,
+			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, final IProgressMonitor monitor) {
 		final LNGScenarioModel lngScenarioModel = sdp.getTypedScenario(LNGScenarioModel.class);
 
 		final UserSettings userSettings = UserSettingsHelper.promptForInsertionUserSettings(lngScenarioModel, false, false, false, null, null);
@@ -161,12 +161,12 @@ public class HeadlessOptioniserRunner {
 			insertionRunner.setIteration(options.iterations);
 		}
 
-		SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
+		final SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
 
 		final IMultiStateResult results = insertionRunner.runInsertion(logger, subMonitor.split(90));
 
 		if (options.exportResults) {
-			insertionRunner.exportSolutions(results, 0L, subMonitor.split(10));
+			insertionRunner.exportSolutions(results, subMonitor.split(10));
 		}
 
 		if (completedHook != null) {
