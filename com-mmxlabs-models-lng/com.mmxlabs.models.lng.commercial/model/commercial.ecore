@@ -308,10 +308,16 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RepositioningFeeTerm">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="originPort" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="startPorts" upperBound="-1">
+      <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
+        <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+      </eGenericType>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LumpSumRepositioningFeeTerm" eSuperTypes="#//RepositioningFeeTerm #//LumpSumTerm"/>
-  <eClassifiers xsi:type="ecore:EClass" name="OriginPortRepositioningFeeTerm" eSuperTypes="#//RepositioningFeeTerm #//NotionalJourneyTerm"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OriginPortRepositioningFeeTerm" eSuperTypes="#//RepositioningFeeTerm #//NotionalJourneyTerm">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="originPort" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EndHeelOptions">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="tankState" eType="#//EVesselTankState"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minimumEndHeel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">

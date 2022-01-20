@@ -54,25 +54,25 @@ public class RepositioningFeeTermItemProvider extends ItemProviderAdapter implem
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addOriginPortPropertyDescriptor(object);
+			addStartPortsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Origin Port feature.
+	 * This adds a property descriptor for the Start Ports feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addOriginPortPropertyDescriptor(Object object) {
+	protected void addStartPortsPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_RepositioningFeeTerm_originPort_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_RepositioningFeeTerm_originPort_feature", "_UI_RepositioningFeeTerm_type"),
-				 CommercialPackage.Literals.REPOSITIONING_FEE_TERM__ORIGIN_PORT,
+				 getString("_UI_RepositioningFeeTerm_startPorts_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_RepositioningFeeTerm_startPorts_feature", "_UI_RepositioningFeeTerm_type"),
+				 CommercialPackage.Literals.REPOSITIONING_FEE_TERM__START_PORTS,
 				 true,
 				 false,
 				 true,

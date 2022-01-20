@@ -4,7 +4,10 @@
  */
 package com.mmxlabs.scheduler.optimiser.chartercontracts.terms;
 
-import org.eclipse.jdt.annotation.NonNull;
+import java.util.Set;
+
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.ICharterContractTermAnnotation;
@@ -14,30 +17,62 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
-public class DefaultLumpSumRepositioningFeeContractTerm extends RepositioningFeeContractTerm{
-	private final @NonNull ILongCurve lumpSumCurve;
+@NonNullByDefault
+public class DefaultLumpSumRepositioningFeeContractTerm extends RepositioningFeeContractTerm {
+	private final ILongCurve lumpSumCurve;
 
-	public DefaultLumpSumRepositioningFeeContractTerm(final @NonNull IPort originPort, final @NonNull ILongCurve lumpSumCurve) {
-		super(originPort);
+	public DefaultLumpSumRepositioningFeeContractTerm(final Set<IPort> startPorts, final ILongCurve lumpSumCurve) {
+		super(startPorts);
 		this.lumpSumCurve = lumpSumCurve;
 	}
-	
+
 	@Override
-	public long calculateCost(IPort firstLoad, IPortSlot lastSlot, IVesselAvailability vesselAvailability, int vesselStartTime, int vesselEndTime) {
-		return lumpSumCurve.getValueAtPoint(vesselStartTime);
+	public boolean match(final IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability) {
+		if (getStartPorts().isEmpty()) {
+			// Matches against anything
+			return true;
+		}
+		IPort port = getFirstPort(portTimesRecord);
+		if (port != null) {
+			return getStartPorts().contains(port);
+		}
+		return false;
+	}
+
+	protected @Nullable IPort getFirstPort(final IPortTimesRecord portTimesRecord) {
+		IPortSlot slot = portTimesRecord.getFirstSlot();
+		if (slot.getPortType() == PortType.Start) {
+			// We may be starting "anywhere", in which case we need to look at the next slot
+			// to get the start port.
+			if ("ANYWHERE".equalsIgnoreCase(slot.getPort().getName())) {
+				if (portTimesRecord.getSlots().size() > 1) {
+					slot = portTimesRecord.getSlots().get(1);
+				} else {
+					slot = portTimesRecord.getReturnSlot();
+				}
+			}
+
+			if (slot != null) {
+				return slot.getPort();
+			}
+		}
+		return null;
 	}
 
 	@Override
-	public ICharterContractTermAnnotation annotate(IPort firstLoad, IPortSlot lastSlot, IVesselAvailability vesselAvailability, int vesselStartTime, int vesselEndTime) {
+	public long calculateCost(final IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability) {
+		return lumpSumCurve.getValueAtPoint(portTimesRecord.getFirstSlotTime());
+	}
+
+	@Override
+	public ICharterContractTermAnnotation annotate(final IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability) {
 		final LumpSumRepositioningFeeTermAnnotation annotation = new LumpSumRepositioningFeeTermAnnotation();
-		annotation.lumpSum = calculateCost(firstLoad, lastSlot, vesselAvailability, vesselStartTime, vesselEndTime);
-		annotation.originPort = getOriginPort();
+		annotation.lumpSum = calculateCost(portTimesRecord, vesselAvailability);
+		annotation.matchingPort = getFirstPort(portTimesRecord);
+
 		return annotation;
 	}
 
-	@Override
-	public boolean match(final IPort loadPort, IPortSlot slot, IVesselAvailability vesselAvailability, int vesselStartTime, int vesselEndTime) {
-		return slot.getPortType() == PortType.Start && (getOriginPort() != slot.getPort() || "ANYWHERE".equalsIgnoreCase(getOriginPort().getName()));
-	}
 }

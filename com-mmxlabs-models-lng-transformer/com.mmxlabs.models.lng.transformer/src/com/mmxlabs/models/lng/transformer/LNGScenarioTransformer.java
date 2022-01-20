@@ -25,7 +25,6 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 import javax.inject.Named;
 
@@ -472,24 +471,19 @@ public class LNGScenarioTransformer {
 			assert transformer != null;
 			addTransformerExtension(transformer);
 
-			if (transformer instanceof IContractTransformer) {
-				final IContractTransformer contractTransformer = (IContractTransformer) transformer;
+			if (transformer instanceof IContractTransformer contractTransformer) {
 				addContractTransformer(contractTransformer);
 			}
-			if (transformer instanceof ISlotTransformer) {
-				final ISlotTransformer slotTransformer = (ISlotTransformer) transformer;
+			if (transformer instanceof ISlotTransformer slotTransformer) {
 				addSlotTransformer(slotTransformer);
 			}
-			if (transformer instanceof IVesselAvailabilityTransformer) {
-				final IVesselAvailabilityTransformer vesselAvailabilityTransformer = (IVesselAvailabilityTransformer) transformer;
+			if (transformer instanceof IVesselAvailabilityTransformer vesselAvailabilityTransformer) {
 				addVesselAvailabilityTransformer(vesselAvailabilityTransformer);
 			}
-			if (transformer instanceof IVesselEventTransformer) {
-				final IVesselEventTransformer vesselEventTransformer = (IVesselEventTransformer) transformer;
+			if (transformer instanceof IVesselEventTransformer vesselEventTransformer) {
 				addVesselEventTransformer(vesselEventTransformer);
 			}
-			if (transformer instanceof ICharterContractTransformer) {
-				final ICharterContractTransformer ballastBonusContractTransformer = (ICharterContractTransformer) transformer;
+			if (transformer instanceof ICharterContractTransformer ballastBonusContractTransformer) {
 				addBallastBonusContractTransformer(ballastBonusContractTransformer);
 			}
 		}
@@ -718,8 +712,8 @@ public class LNGScenarioTransformer {
 			cooldownCalculators.put(price, cooldownCalculator);
 
 			for (final APortSet<Port> portSet : price.getPorts()) {
-				if (portSet instanceof Port) {
-					portToCooldownMap.put((Port) portSet, price);
+				if (portSet instanceof Port port) {
+					portToCooldownMap.put(port, price);
 				}
 			}
 		}
@@ -785,8 +779,8 @@ public class LNGScenarioTransformer {
 				assert vesselAvailabilityTransformer != null;
 
 				// This can be null if the availability is generated from a Spot option
-				if (eVesselAvailability instanceof VesselAvailability) {
-					vesselAvailabilityTransformer.vesselAvailabilityTransformed((VesselAvailability) eVesselAvailability, oVesselAvailability);
+				if (eVesselAvailability instanceof VesselAvailability vesselAvailability) {
+					vesselAvailabilityTransformer.vesselAvailabilityTransformed(vesselAvailability, oVesselAvailability);
 				}
 			}
 		}
@@ -840,9 +834,8 @@ public class LNGScenarioTransformer {
 		// Override with specific costs
 		for (final PortCost portCost : costModel.getPortCosts()) {
 			for (final APortSet<Port> portSet : portCost.getPorts()) {
-				if (portSet instanceof Port) {
+				if (portSet instanceof Port port) {
 
-					final Port port = (Port) portSet;
 					for (final PortCostEntry pce : portCost.getEntries()) {
 						if (pce.getCost() != 0) {
 							portToPortCostMap.put(new Pair<>(port, pce.getActivity()), pce);
@@ -918,17 +911,6 @@ public class LNGScenarioTransformer {
 		builder.setEarliestDate(dateHelper.getEarliestTime());
 
 		return builder.getOptimisationData();
-	}
-
-	private void transformCharterContract(final IVesselAvailability vesselAvailability, final GenericCharterContract eBallastBonusContract) {
-		if (eBallastBonusContract != null) {
-			for (final ICharterContractTransformer ballastBonusContractTransformer : ballastBonusContractTransformers) {
-				// This can be null if the availability is generated from a Spot option
-				@Nullable
-				final ICharterContract ballastBonusContract = ballastBonusContractTransformer.createCharterContract(eBallastBonusContract);
-				vesselAvailability.setCharterContract(ballastBonusContract);
-			}
-		}
 	}
 
 	private @Nullable ICharterContract createAndGetCharterContract(final GenericCharterContract eBallastBonusContract) {
@@ -1024,18 +1006,16 @@ public class LNGScenarioTransformer {
 
 			boolean isNominalVessel = false;
 			IVesselAvailability vesselAvailability = null;
-			if (vesselAssignmentType instanceof VesselAvailability) {
-				final VesselAvailability va = (VesselAvailability) vesselAssignmentType;
+			if (vesselAssignmentType instanceof VesselAvailability va) {
 				vesselAvailability = modelEntityMap.getOptimiserObject(va, IVesselAvailability.class);
-			} else if (vesselAssignmentType instanceof CharterInMarketOverride) {
-				final CharterInMarketOverride charterInMarketOverride = (CharterInMarketOverride) vesselAssignmentType;
+			} else if (vesselAssignmentType instanceof CharterInMarketOverride charterInMarketOverride) {
 				vesselAvailability = modelEntityMap.getOptimiserObject(charterInMarketOverride, IVesselAvailability.class);
-			} else if (vesselAssignmentType instanceof CharterInMarket) {
+			} else if (vesselAssignmentType instanceof CharterInMarket charterInMarket) {
 				final int spotIndex = assignableElement.getSpotIndex();
-				final NonNullPair<CharterInMarket, Integer> key = new NonNullPair<>((CharterInMarket) vesselAssignmentType, spotIndex);
+				final NonNullPair<CharterInMarket, Integer> key = new NonNullPair<>(charterInMarket, spotIndex);
 				vesselAvailability = spotCharterInToAvailability.get(key);
 				if (vesselAvailability == null) {
-					vesselAvailability = spotCharterInToShortCargoAvailability.get(vesselAssignmentType);
+					vesselAvailability = spotCharterInToShortCargoAvailability.get(charterInMarket);
 				}
 				isNominalVessel = spotIndex == NOMINAL_CARGO_INDEX;
 			}
@@ -1052,8 +1032,7 @@ public class LNGScenarioTransformer {
 			final Set<Slot<?>> lockedSlots = checkAndCollectLockedSlots(assignableElement);
 			final boolean freezeElements = (!(!freeze && lockedSlots.isEmpty()));
 
-			if (assignableElement instanceof Cargo) {
-				final Cargo cargo = (Cargo) assignableElement;
+			if (assignableElement instanceof Cargo cargo) {
 				final List<IPortSlot> allOptimiserSlots = new LinkedList<>();
 				Slot<?> prevSlot = null;
 				IPortSlot prevPortSlot = null;
@@ -1098,8 +1077,7 @@ public class LNGScenarioTransformer {
 	private Set<@NonNull Slot<?>> checkAndCollectLockedSlots(@NonNull final AssignableElement assignableElement) {
 		final Set<@NonNull Slot<?>> lockedSlots = new HashSet<>();
 
-		if (assignableElement instanceof Cargo) {
-			final Cargo cargo = (Cargo) assignableElement;
+		if (assignableElement instanceof Cargo cargo) {
 			for (final Slot<?> slot : cargo.getSortedSlots()) {
 				if (slot.isLocked()) {
 					lockedSlots.add(slot);
@@ -1132,8 +1110,7 @@ public class LNGScenarioTransformer {
 			final IPort port = portAssociation.lookupNullChecked(event.getPort());
 			final int durationHours = event.getDurationInDays() * 24;
 			final IVesselEventPortSlot builderSlot;
-			if (event instanceof CharterOutEvent) {
-				final CharterOutEvent charterOut = (CharterOutEvent) event;
+			if (event instanceof CharterOutEvent charterOut) {
 				final IPort endPort = portAssociation.lookupNullChecked(charterOut.isSetRelocateTo() ? charterOut.getRelocateTo() : charterOut.getPort());
 
 				final long totalHireRevenue = OptimiserUnitConvertor.convertToInternalDailyCost(charterOut.getHireRate()) * (long) charterOut.getDurationInDays();
@@ -1217,25 +1194,18 @@ public class LNGScenarioTransformer {
 			final List<@NonNull IPortSlot> slots = new ArrayList<>(eCargo.getSortedSlots().size());
 			final Map<Slot<?>, IPortSlot> slotMap = new HashMap<>();
 			for (final Slot<?> slot : eCargo.getSortedSlots()) {
-				if (slot instanceof LoadSlot) {
-					final LoadSlot loadSlot = (LoadSlot) slot;
-					{
-						final ILoadOption load = createLoadOption(builder, portAssociation, vesselAssociation, contractTransformers, modelEntityMap, loadSlot);
-						usedLoadSlots.add(loadSlot);
-						loadOptions.add(load);
-						slotMap.put(loadSlot, load);
-						slots.add(load);
-					}
-
-				} else if (slot instanceof DischargeSlot) {
-					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
-					{
-						final IDischargeOption discharge = createDischargeOption(builder, portAssociation, vesselAssociation, contractTransformers, modelEntityMap, dischargeSlot);
-						usedDischargeSlots.add(dischargeSlot);
-						dischargeOptions.add(discharge);
-						slotMap.put(dischargeSlot, discharge);
-						slots.add(discharge);
-					}
+				if (slot instanceof LoadSlot loadSlot) {
+					final ILoadOption load = createLoadOption(builder, portAssociation, vesselAssociation, contractTransformers, modelEntityMap, loadSlot);
+					usedLoadSlots.add(loadSlot);
+					loadOptions.add(load);
+					slotMap.put(loadSlot, load);
+					slots.add(load);
+				} else if (slot instanceof DischargeSlot dischargeSlot) {
+					final IDischargeOption discharge = createDischargeOption(builder, portAssociation, vesselAssociation, contractTransformers, modelEntityMap, dischargeSlot);
+					usedDischargeSlots.add(dischargeSlot);
+					dischargeOptions.add(discharge);
+					slotMap.put(dischargeSlot, discharge);
+					slots.add(discharge);
 				} else {
 					throw new IllegalArgumentException("Unexpected Slot type");
 				}
@@ -1265,8 +1235,7 @@ public class LNGScenarioTransformer {
 			for (final Slot<?> slot : eCargo.getSortedSlots()) {
 				boolean isTransfer = false;
 
-				if (slot instanceof LoadSlot) {
-					final LoadSlot loadSlot = (LoadSlot) slot;
+				if (slot instanceof LoadSlot loadSlot) {
 					// Bind FOB/DES slots to resource
 					final ILoadOption load = (ILoadOption) slotMap.get(loadSlot);
 					assert loadSlot != null;
@@ -1275,8 +1244,7 @@ public class LNGScenarioTransformer {
 					if (isSoftRequired) {
 						setSlotAsSoftRequired(builder, slot, load);
 					}
-				} else if (slot instanceof DischargeSlot) {
-					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+				} else if (slot instanceof DischargeSlot dischargeSlot) {
 					final IDischargeOption discharge = (IDischargeOption) slotMap.get(dischargeSlot);
 					assert discharge != null;
 					configureDischargeSlotRestrictions(builder, portAssociation, allLoadPorts, dischargeSlot, discharge);
@@ -1303,10 +1271,10 @@ public class LNGScenarioTransformer {
 			final Slot<?> slot = entry.getKey();
 			final IPortSlot portSlot = entry.getValue();
 			Slot<?> converse = null;
-			if (slot instanceof DischargeSlot) {
-				converse = ((DischargeSlot) slot).getTransferTo();
-			} else if (slot instanceof LoadSlot) {
-				converse = ((LoadSlot) slot).getTransferFrom();
+			if (slot instanceof DischargeSlot dischargeSlot) {
+				converse = dischargeSlot.getTransferTo();
+			} else if (slot instanceof LoadSlot loadSlot) {
+				converse = loadSlot.getTransferFrom();
 			}
 
 			shipToShipBindingProvider.setConverseTransferElement(portSlot, transferSlotMap.get(converse));
@@ -1395,8 +1363,7 @@ public class LNGScenarioTransformer {
 			// This should only be called from the non-shipped code path.
 			// Should assume to be the same as DES.DEST_WITH_SOURCE or FOB.SOURCE_WITH_DEST
 			extendWindows = true;
-		} else if (modelSlot instanceof LoadSlot) {
-			final LoadSlot slot = (LoadSlot) modelSlot;
+		} else if (modelSlot instanceof LoadSlot slot) {
 			if (slot.isDESPurchase()) {
 				if (slot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) {
 					// return getTimewindowAsUTCWithFlex(slot);
@@ -1404,8 +1371,7 @@ public class LNGScenarioTransformer {
 					extendWindows = true;
 				}
 			}
-		} else if (modelSlot instanceof DischargeSlot) {
-			final DischargeSlot slot = (DischargeSlot) modelSlot;
+		} else if (modelSlot instanceof DischargeSlot slot) {
 			if (slot.isFOBSale()) {
 				if (slot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.DIVERT_TO_DEST) {
 					// return getTimewindowAsUTCWithFlex(slot);
@@ -1440,8 +1406,7 @@ public class LNGScenarioTransformer {
 
 			if (dischargeSlot.getSlotOrDelegateFOBSaleDealType() == FOBSaleDealType.SOURCE_WITH_DEST || dischargeSlot instanceof SpotDischargeSlot) {
 				final Set<IPort> marketPorts = new HashSet<>();
-				if (dischargeSlot instanceof SpotDischargeSlot) {
-					final SpotDischargeSlot spotSlot = (SpotDischargeSlot) dischargeSlot;
+				if (dischargeSlot instanceof SpotDischargeSlot spotSlot) {
 					final FOBSalesMarket fobSaleMarket = (FOBSalesMarket) spotSlot.getMarket();
 					final Set<Port> portSet = SetUtils.getObjects(fobSaleMarket.getOriginPorts());
 					for (final Port ap : portSet) {
@@ -1512,11 +1477,9 @@ public class LNGScenarioTransformer {
 					|| loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERTIBLE //
 					|| loadSlot instanceof SpotLoadSlot) {
 				final Set<IPort> marketPorts = new HashSet<>();
-				if (loadSlot instanceof SpotLoadSlot) {
-					final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) loadSlot;
+				if (loadSlot instanceof SpotLoadSlot spotLoadSlot) {
 					final SpotMarket market = spotLoadSlot.getMarket();
-					if (market instanceof DESPurchaseMarket) {
-						final DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) market;
+					if (market instanceof DESPurchaseMarket desPurchaseMarket) {
 						final Set<Port> portSet = SetUtils.getObjects(desPurchaseMarket.getDestinationPorts());
 						for (final Port ap : portSet) {
 							final IPort ip = portAssociation.lookup(ap);
@@ -1636,8 +1599,7 @@ public class LNGScenarioTransformer {
 				dischargePriceCalculator = new PriceExpressionContract(curve, priceIntervals);
 				injector.injectMembers(dischargePriceCalculator);
 			}
-		} else if (dischargeSlot instanceof SpotSlot) {
-			final SpotSlot spotSlot = (SpotSlot) dischargeSlot;
+		} else if (dischargeSlot instanceof SpotSlot spotSlot) {
 			final SpotMarket market = spotSlot.getMarket();
 
 			final LNGPriceCalculatorParameters priceInfo = market.getPriceInfo();
@@ -1670,8 +1632,7 @@ public class LNGScenarioTransformer {
 			final String name = elementName;
 			final long minVolume;
 			final long maxVolume;
-			if (dischargeSlot instanceof SpotSlot) {
-				final SpotSlot spotSlot = (SpotSlot) dischargeSlot;
+			if (dischargeSlot instanceof SpotSlot spotSlot) {
 				final SpotMarket market = spotSlot.getMarket();
 				minVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity());
 				maxVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity());
@@ -1751,10 +1712,10 @@ public class LNGScenarioTransformer {
 		}
 
 		// Register as spot market slot
-		if (dischargeSlot instanceof SpotSlot) {
+		if (dischargeSlot instanceof SpotSlot spotSlot) {
 			registerSpotMarketSlot(modelEntityMap, dischargeSlot, discharge);
 			marketSlotsByID.put(elementName, dischargeSlot);
-			addSpotSlotToCount((SpotSlot) dischargeSlot);
+			addSpotSlotToCount(spotSlot);
 		}
 
 		modelEntityMap.addModelObject(dischargeSlot, discharge);
@@ -1844,8 +1805,7 @@ public class LNGScenarioTransformer {
 
 			}
 
-		} else if (loadSlot instanceof SpotSlot) {
-			final SpotSlot spotSlot = (SpotSlot) loadSlot;
+		} else if (loadSlot instanceof SpotSlot spotSlot) {
 			final SpotMarket market = spotSlot.getMarket();
 
 			final LNGPriceCalculatorParameters priceInfo = market.getPriceInfo();
@@ -1876,8 +1836,7 @@ public class LNGScenarioTransformer {
 
 		final long minVolume;
 		final long maxVolume;
-		if (loadSlot instanceof SpotSlot) {
-			final SpotSlot spotSlot = (SpotSlot) loadSlot;
+		if (loadSlot instanceof SpotSlot spotSlot) {
 			final SpotMarket market = spotSlot.getMarket();
 			minVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity());
 			maxVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity());
@@ -1932,10 +1891,10 @@ public class LNGScenarioTransformer {
 		modelEntityMap.addModelObject(loadSlot, load);
 
 		// Register as spot market slot
-		if (loadSlot instanceof SpotSlot) {
+		if (loadSlot instanceof SpotSlot spotSlot) {
 			registerSpotMarketSlot(modelEntityMap, loadSlot, load);
 			marketSlotsByID.put(elementName, loadSlot);
-			addSpotSlotToCount((SpotSlot) loadSlot);
+			addSpotSlotToCount(spotSlot);
 		}
 
 		for (final ISlotTransformer slotTransformer : slotTransformers) {
@@ -2099,9 +2058,7 @@ public class LNGScenarioTransformer {
 
 				for (final SpotMarket market : desPurchaseSpotMarket.getMarkets()) {
 					assert market instanceof DESPurchaseMarket;
-					if (market instanceof DESPurchaseMarket && market.isEnabled()) {
-						final DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) market;
-
+					if (market instanceof DESPurchaseMarket desPurchaseMarket && desPurchaseMarket.isEnabled()) {
 						final LNGPriceCalculatorParameters priceInfo = desPurchaseMarket.getPriceInfo();
 						assert priceInfo != null;
 						final IContractTransformer transformer = contractTransformersByEClass.get(priceInfo.eClass());
@@ -2268,8 +2225,7 @@ public class LNGScenarioTransformer {
 
 				for (final SpotMarket market : fobSalesSpotMarket.getMarkets()) {
 					assert market instanceof FOBSalesMarket;
-					if (market instanceof FOBSalesMarket && market.isEnabled()) {
-						final FOBSalesMarket fobSaleMarket = (FOBSalesMarket) market;
+					if (market instanceof FOBSalesMarket fobSaleMarket && fobSaleMarket.isEnabled()) {
 
 						final LNGPriceCalculatorParameters priceInfo = fobSaleMarket.getPriceInfo();
 						assert priceInfo != null;
@@ -2427,8 +2383,7 @@ public class LNGScenarioTransformer {
 
 			for (final SpotMarket market : desSalesSpotMarket.getMarkets()) {
 				assert market instanceof DESSalesMarket;
-				if (market instanceof DESSalesMarket && market.isEnabled()) {
-					final DESSalesMarket desSalesMarket = (DESSalesMarket) market;
+				if (market instanceof DESSalesMarket desSalesMarket && desSalesMarket.isEnabled()) {
 
 					final LNGPriceCalculatorParameters priceInfo = desSalesMarket.getPriceInfo();
 					assert priceInfo != null;
@@ -2565,9 +2520,7 @@ public class LNGScenarioTransformer {
 
 			for (final SpotMarket market : fobPurchaseSpotMarket.getMarkets()) {
 				assert market instanceof FOBPurchasesMarket;
-				if (market instanceof FOBPurchasesMarket && market.isEnabled()) {
-					final FOBPurchasesMarket fobPurchaseMarket = (FOBPurchasesMarket) market;
-
+				if (market instanceof FOBPurchasesMarket fobPurchaseMarket && fobPurchaseMarket.isEnabled()) {
 					final LNGPriceCalculatorParameters priceInfo = fobPurchaseMarket.getPriceInfo();
 					assert priceInfo != null;
 
@@ -2744,8 +2697,7 @@ public class LNGScenarioTransformer {
 
 			for (final SpotMarket market : marketGroup.getMarkets()) {
 				assert market instanceof DESPurchaseMarket;
-				if (market instanceof DESPurchaseMarket) {
-					final DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) market;
+				if (market instanceof DESPurchaseMarket desPurchaseMarket) {
 					final Set<Port> portSet = SetUtils.getObjects(desPurchaseMarket.getDestinationPorts());
 
 					final Set<IPort> marketPorts = new HashSet<>();
@@ -2778,8 +2730,7 @@ public class LNGScenarioTransformer {
 
 			for (final SpotMarket market : marketGroup.getMarkets()) {
 				assert market instanceof DESSalesMarket;
-				if (market instanceof DESSalesMarket) {
-					final DESSalesMarket desSalesMarket = (DESSalesMarket) market;
+				if (market instanceof DESSalesMarket desSalesMarket) {
 					final Set<Port> portSet = Collections.singleton(desSalesMarket.getNotionalPort());
 
 					final Set<IPort> marketPorts = new HashSet<>();
@@ -2811,8 +2762,7 @@ public class LNGScenarioTransformer {
 
 			for (final SpotMarket market : marketGroup.getMarkets()) {
 				assert market instanceof FOBSalesMarket;
-				if (market instanceof FOBSalesMarket) {
-					final FOBSalesMarket fobSalesMarket = (FOBSalesMarket) market;
+				if (market instanceof FOBSalesMarket fobSalesMarket) {
 					final Set<Port> portSet = SetUtils.getObjects(fobSalesMarket.getOriginPorts());
 
 					final Set<IPort> marketPorts = new HashSet<>();
@@ -2841,8 +2791,7 @@ public class LNGScenarioTransformer {
 
 			for (final SpotMarket market : marketGroup.getMarkets()) {
 				assert market instanceof FOBPurchasesMarket;
-				if (market instanceof FOBPurchasesMarket) {
-					final FOBPurchasesMarket fobPurchaseMarket = (FOBPurchasesMarket) market;
+				if (market instanceof FOBPurchasesMarket fobPurchaseMarket) {
 					final Set<Port> portSet = SetUtils.getObjects(fobPurchaseMarket.getMarketPorts());
 
 					final Set<IPort> marketPorts = new HashSet<>();
@@ -2954,8 +2903,7 @@ public class LNGScenarioTransformer {
 					continue;
 				}
 				for (final AVesselSet<Vessel> vesselSet : routeCost.getVessels()) {
-					if (vesselSet instanceof Vessel) {
-						final Vessel eVessel = (Vessel) vesselSet;
+					if (vesselSet instanceof Vessel eVessel) {
 						final ERouteOption mappedRouteOption = mapRouteOption(routeCost.getRouteOption());
 						final IVessel oVessel = vesselAssociation.lookup(eVessel);
 						assert oVessel != null;
@@ -2974,7 +2922,7 @@ public class LNGScenarioTransformer {
 		// Register route parameters
 		for (final IVessel oVessel : optimiserVessels) {
 			assert oVessel != null;
-			final Vessel eVessel = vesselAssociation.reverseLookup(oVessel);
+			final Vessel eVessel = vesselAssociation.reverseLookupNullChecked(oVessel);
 			for (final VesselClassRouteParameters routeParameters : eVessel.getVesselOrDelegateRouteParameters()) {
 				final ERouteOption mappedRouteOption = mapRouteOption(routeParameters.getRouteOption());
 				builder.setVesselRouteTransitTime(mappedRouteOption, oVessel, routeParameters.getExtraTransitTime());
@@ -3005,7 +2953,7 @@ public class LNGScenarioTransformer {
 
 		for (final IVessel vessel : vessels) {
 			assert vessel != null;
-			final Vessel eVessel = vesselAssociation.reverseLookup(vessel);
+			final Vessel eVessel = vesselAssociation.reverseLookupNullChecked(vessel);
 			final int capacityInM3 = eVessel.getVesselOrDelegateCapacity();
 
 			double totalLadenCost = 0.0;
@@ -3309,7 +3257,7 @@ public class LNGScenarioTransformer {
 			}
 		}
 
-		// Spot market generation
+		// Spot charter market generation
 		{
 			final SpotMarketsModel spotMarketsModel = rootObject.getReferenceModel().getSpotMarketsModel();
 
@@ -3351,8 +3299,6 @@ public class LNGScenarioTransformer {
 				final int charterCount = charterInMarket.getSpotCharterCount();
 				final GenericCharterContract eCharterContract = charterInMarket.getGenericCharterContract();
 				final @Nullable ICharterContract oCharterContract = createAndGetCharterContract(eCharterContract);
-				;
-				final Port startingPort = charterInMarket.getStartAt();
 
 				StartHeelOptions startHeel = null;
 				IHeelOptionSupplier heelSupplier = null;
@@ -3377,16 +3323,25 @@ public class LNGScenarioTransformer {
 				if (heelConsumer == null) {
 					heelConsumer = new HeelOptionConsumer(oVessel.getSafetyHeel(), oVessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0), false);
 				}
+				final Port startingPort = charterInMarket.getStartAt();
 				final IStartRequirement charterInStartRule = builder.createStartRequirement(portAssociation.lookup(startingPort), false, null, heelSupplier);
 
-				final Set<Port> endPorts = SetUtils.getObjects(charterInMarket.getEndAt());
-				if (endPorts.isEmpty()) {
-					endPorts.addAll(modelEntityMap.getAllModelObjects(Port.class).stream().filter(p -> p.getCapabilities().contains(PortCapability.DISCHARGE)).collect(Collectors.toSet()));
+				final IEndRequirement charterInEndRule;
+				{
+
+					final Set<Port> endPorts = SetUtils.getObjects(charterInMarket.getEndAt());
+					if (endPorts.isEmpty()) {
+						charterInEndRule = builder.createEndRequirement(null, false, new TimeWindow(0, Integer.MAX_VALUE), heelConsumer);
+					} else {
+						// user defined set of ports
+						endPorts.removeAll(SetUtils.getObjects(eVessel.getVesselOrDelegateInaccessiblePorts()));
+						final Set<IPort> portSet = new LinkedHashSet<>();
+						for (final Port p : endPorts) {
+							portSet.add(portAssociation.lookup(p));
+						}
+						charterInEndRule = builder.createEndRequirement(portSet, false, new TimeWindow(0, Integer.MAX_VALUE), heelConsumer);
+					}
 				}
-
-				endPorts.removeAll(SetUtils.getObjects(eVessel.getVesselOrDelegateInaccessiblePorts()));
-
-				final IEndRequirement charterInEndRule = createSpotEndRequirement(builder, portAssociation, endPorts, heelConsumer);
 
 				final int minDurationInDays = charterInMarket.getMarketOrContractMinDuration();
 				final int maxDurationInDays = charterInMarket.getMarketOrContractMaxDuration();
@@ -3519,8 +3474,7 @@ public class LNGScenarioTransformer {
 							new ConstantValueLongCurve(0L), true);
 
 					// FIX API!
-					if (spotAvailability instanceof DefaultVesselAvailability) {
-						final DefaultVesselAvailability defaultVesselAvailability = (DefaultVesselAvailability) spotAvailability;
+					if (spotAvailability instanceof DefaultVesselAvailability defaultVesselAvailability) {
 						if (spotCharterInMarket != null) {
 							defaultVesselAvailability.setSpotCharterInMarket(spotCharterInMarket);
 							defaultVesselAvailability.setSpotIndex(charterInMarketOverride.getSpotIndex());
@@ -3575,15 +3529,6 @@ public class LNGScenarioTransformer {
 		}
 
 		return vesselAssociation;
-	}
-
-	private IEndRequirement createDefaultCharterInEndRequirement(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final ModelEntityMap modelEntityMap,
-			final IVessel oVessel, @Nullable final Set<Port> ports) {
-		@NonNull
-		final IEndRequirement allDischargeCharterInEndRequirement = createSpotEndRequirement(builder, portAssociation,
-				modelEntityMap.getAllModelObjects(Port.class).stream().filter(p -> p.getCapabilities().contains(PortCapability.DISCHARGE)).collect(Collectors.toSet()),
-				new HeelOptionConsumer(oVessel.getSafetyHeel(), oVessel.getSafetyHeel(), VesselTankState.MUST_BE_COLD, new ConstantHeelPriceCalculator(0), false));
-		return allDischargeCharterInEndRequirement;
 	}
 
 	private void getAndSetInaccessibleRoutesForVessel(final ISchedulerBuilder builder, final Vessel eVessel, final IVessel vessel) {

@@ -24,8 +24,10 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.AvailableRouteChoices;
 
 public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
@@ -47,6 +49,9 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 
 	@Inject
 	private IRouteCostProvider routeCostProvider;
+	
+	@Inject
+	private ITimeZoneToUtcOffsetProvider utcOffsetProvider;
 
 	public MonthlyBallastBonusContractTerm(int oYMStartInclusive, int oYMEndExclusive, long pctCharterRate, long pctFuelRate, Set<IPort> redeliveryPorts, ILongCurve lumpSumCurve,
 			ICurve fuelPriceCurve, ILongCurve charterRateCurve, Set<IPort> returnPorts, boolean includeCanalFees, boolean includeCanalTime, int speedInKnots) {
@@ -67,15 +72,17 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 	}
 
 	@Override
-	public long calculateCost(final IPort firstLoad, final IPortSlot lastSlot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {
+	public long calculateCost(IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability, int vesselStartTime, IPort vesselStartPort) {
 
-		final int voyageStartTime = vesselEndTime;
+		IPortSlot slot = portTimesRecord.getFirstSlot();
+		int voyageStartTime = portTimesRecord.getFirstSlotTime() + portTimesRecord.getSlotDuration(slot);
+		int voyageStartTimeUTC = utcOffsetProvider.UTC(voyageStartTime, slot);
 
-		final long lumpSum = computeLumpSum(voyageStartTime);
+		final long lumpSum = computeLumpSum(voyageStartTimeUTC);
 		long minCost = Long.MAX_VALUE;
-		for (final IPort returnPort : getReturnPorts(firstLoad)) {
+		for (final IPort returnPort : getReturnPorts(vesselStartPort)) {
 			@NonNull
-			final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), lastSlot.getPort(), returnPort,
+			final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), slot.getPort(), returnPort,
 					speedInKnots, AvailableRouteChoices.OPTIMAL);
 			final ERouteOption route = quickestTravelTime.getFirst();
 			final int routeTransitTime = routeCostProvider.getRouteTransitTime(route, vesselAvailability.getVessel());
@@ -88,9 +95,9 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 			} else { // canal time not included.
 				hireTime = journeyTravelTime;
 			}
-			final long canalCost = routeCostProvider.getRouteCost(route, lastSlot.getPort(), returnPort, vesselAvailability.getVessel(), voyageStartTime, CostType.Ballast);
-			final long hireCost = Calculator.percentageLow(this.pctCharterRate, (charterRateCurve.getValueAtPoint(voyageStartTime) * hireTime) / 24L);
-			final long fuelCost = Calculator.percentageLow(this.pctFuelRate, Calculator.costFromConsumption(fuelUsedJourney + fuelUsedCanal, fuelPriceCurve.getValueAtPoint(voyageStartTime)));
+			final long canalCost = routeCostProvider.getRouteCost(route, slot.getPort(), returnPort, vesselAvailability.getVessel(), voyageStartTimeUTC, CostType.Ballast);
+			final long hireCost = Calculator.percentageLow(this.pctCharterRate, (charterRateCurve.getValueAtPoint(voyageStartTimeUTC) * hireTime) / 24L);
+			final long fuelCost = Calculator.percentageLow(this.pctFuelRate, Calculator.costFromConsumption(fuelUsedJourney + fuelUsedCanal, fuelPriceCurve.getValueAtPoint(voyageStartTimeUTC)));
 			final long cost = lumpSum + fuelCost + (includeCanalFees ? canalCost : 0L) + hireCost;
 			minCost = Math.min(minCost, cost);
 		}
@@ -103,12 +110,12 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 	}
 
 	@Override
-	public ICharterContractTermAnnotation annotate(final IPort firstLoad, final IPortSlot lastSlot, final IVesselAvailability vesselAvailability, final int vesselStartTime,
-			final int vesselEndTime) {
+	public ICharterContractTermAnnotation annotate(IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability, int vesselStartTime, IPort vesselStartPort) {
 
-		final int voyageStartTime = vesselEndTime;
+		IPortSlot slot = portTimesRecord.getFirstSlot();
+		int vesselEndTime = portTimesRecord.getFirstSlotTime() + portTimesRecord.getSlotDuration(slot);
 
-		final long lumpSum = computeLumpSum(voyageStartTime);
+		final long lumpSum = computeLumpSum(vesselEndTime);
 		long minTotalCost = Long.MAX_VALUE;
 		Pair<@NonNull ERouteOption, @NonNull Integer> minTravel = null;
 		long minfuelUsed = Long.MAX_VALUE;
@@ -116,9 +123,9 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 		long minHireCost = Long.MAX_VALUE;
 		long minFuelCost = Long.MAX_VALUE;
 		IPort minReturnPort = null;
-		for (final IPort returnPort : getReturnPorts(firstLoad)) {
+		for (final IPort returnPort : getReturnPorts(vesselStartPort)) {
 			@NonNull
-			final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), lastSlot.getPort(), returnPort,
+			final Pair<@NonNull ERouteOption, @NonNull Integer> quickestTravelTime = distanceProvider.getQuickestTravelTime(vesselAvailability.getVessel(), slot.getPort(), returnPort,
 					speedInKnots, AvailableRouteChoices.OPTIMAL);
 			final ERouteOption route = quickestTravelTime.getFirst();
 			final int routeTransitTime = routeCostProvider.getRouteTransitTime(route, vesselAvailability.getVessel());
@@ -132,9 +139,9 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 			} else {
 				hireTime = journeyTravelTime;
 			}
-			final long canalCost = routeCostProvider.getRouteCost(route, lastSlot.getPort(), returnPort, vesselAvailability.getVessel(), voyageStartTime, CostType.Ballast);
-			final long hireCost = Calculator.percentageLow(this.pctCharterRate, (charterRateCurve.getValueAtPoint(voyageStartTime) * hireTime) / 24L);
-			final long fuelCost = Calculator.percentageLow(this.pctFuelRate, Calculator.costFromConsumption(fuelUsedJourney + fuelUsedCanal, fuelPriceCurve.getValueAtPoint(voyageStartTime)));
+			final long canalCost = routeCostProvider.getRouteCost(route, slot.getPort(), returnPort, vesselAvailability.getVessel(), vesselEndTime, CostType.Ballast);
+			final long hireCost = Calculator.percentageLow(this.pctCharterRate, (charterRateCurve.getValueAtPoint(vesselEndTime) * hireTime) / 24L);
+			final long fuelCost = Calculator.percentageLow(this.pctFuelRate, Calculator.costFromConsumption(fuelUsedJourney + fuelUsedCanal, fuelPriceCurve.getValueAtPoint(vesselEndTime)));
 			final long cost = lumpSum + fuelCost + (includeCanalFees ? canalCost : 0L) + hireCost;
 			if (cost < minTotalCost) {
 				minTotalCost = cost;
@@ -155,12 +162,12 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 			notionalJourneyBallastBonusRuleAnnotation = new NotionalJourneyBallastBonusTermAnnotation();
 			notionalJourneyBallastBonusRuleAnnotation.lumpSum = lumpSum;
 			notionalJourneyBallastBonusRuleAnnotation.returnPort = minReturnPort;
-			notionalJourneyBallastBonusRuleAnnotation.distance = distanceProvider.getDistance(minTravel.getFirst(), lastSlot.getPort(), minReturnPort, vesselAvailability.getVessel());
+			notionalJourneyBallastBonusRuleAnnotation.distance = distanceProvider.getDistance(minTravel.getFirst(), slot.getPort(), minReturnPort, vesselAvailability.getVessel());
 			notionalJourneyBallastBonusRuleAnnotation.totalTimeInHours = minTravel.getSecond();
 			notionalJourneyBallastBonusRuleAnnotation.totalFuelUsed = minfuelUsed;
-			notionalJourneyBallastBonusRuleAnnotation.fuelPrice = (int) Calculator.percentageLow(this.pctFuelRate, (long) fuelPriceCurve.getValueAtPoint(voyageStartTime));
+			notionalJourneyBallastBonusRuleAnnotation.fuelPrice = (int) Calculator.percentageLow(this.pctFuelRate, (long) fuelPriceCurve.getValueAtPoint(vesselEndTime));
 			notionalJourneyBallastBonusRuleAnnotation.totalFuelCost = minFuelCost;
-			notionalJourneyBallastBonusRuleAnnotation.hireRate = Calculator.percentageLow(this.pctCharterRate, charterRateCurve.getValueAtPoint(voyageStartTime));
+			notionalJourneyBallastBonusRuleAnnotation.hireRate = Calculator.percentageLow(this.pctCharterRate, charterRateCurve.getValueAtPoint(vesselEndTime));
 			notionalJourneyBallastBonusRuleAnnotation.totalHireCost = minHireCost;
 			notionalJourneyBallastBonusRuleAnnotation.route = minTravel.getFirst();
 			notionalJourneyBallastBonusRuleAnnotation.canalCost = minCanalCost;
@@ -177,15 +184,22 @@ public class MonthlyBallastBonusContractTerm extends BallastBonusContractTerm{
 	}
 
 	@Override
-	public boolean match(final IPort loadPort, final IPortSlot slot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {	
-		if (monthStartInclusive <= vesselEndTime && vesselEndTime < monthEndExclusive) {
-			return getRedeliveryPorts().contains(slot.getPort()) || getRedeliveryPorts().isEmpty();
+	/**
+	 * portTimesRecord - end port
+	 */
+	public boolean match(IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability, int vesselStartTime, IPort vesselStartPort) {	
+		// 
+		IPortSlot slot = portTimesRecord.getFirstSlot();
+		int vesselStartTimeUTC = utcOffsetProvider.UTC(vesselStartTime, vesselStartPort);
+		
+		if (monthStartInclusive <= vesselStartTimeUTC && vesselStartTimeUTC < monthEndExclusive) {
+			return getRedeliveryPorts().isEmpty() || getRedeliveryPorts().contains(slot.getPort());
 		}
 		return false;
 	}
 
-	public boolean matchWithoutDates(IPortSlot lastSlot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {
-		return getRedeliveryPorts().contains(lastSlot.getPort()) || getRedeliveryPorts().isEmpty();
+	public boolean matchWithoutDates(IPortSlot lastSlot) {
+		return getRedeliveryPorts().isEmpty() || getRedeliveryPorts().contains(lastSlot.getPort());
 	}
 
 	public int getMonthStartInclusive() {

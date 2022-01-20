@@ -2195,13 +2195,13 @@ public interface CommercialPackage extends EPackage {
 	int REPOSITIONING_FEE_TERM = 27;
 
 	/**
-	 * The feature id for the '<em><b>Origin Port</b></em>' reference.
+	 * The feature id for the '<em><b>Start Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int REPOSITIONING_FEE_TERM__ORIGIN_PORT = 0;
+	int REPOSITIONING_FEE_TERM__START_PORTS = 0;
 
 	/**
 	 * The number of structural features of the '<em>Repositioning Fee Term</em>' class.
@@ -2223,13 +2223,13 @@ public interface CommercialPackage extends EPackage {
 	int LUMP_SUM_REPOSITIONING_FEE_TERM = 28;
 
 	/**
-	 * The feature id for the '<em><b>Origin Port</b></em>' reference.
+	 * The feature id for the '<em><b>Start Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LUMP_SUM_REPOSITIONING_FEE_TERM__ORIGIN_PORT = REPOSITIONING_FEE_TERM__ORIGIN_PORT;
+	int LUMP_SUM_REPOSITIONING_FEE_TERM__START_PORTS = REPOSITIONING_FEE_TERM__START_PORTS;
 
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
@@ -2260,13 +2260,13 @@ public interface CommercialPackage extends EPackage {
 	int ORIGIN_PORT_REPOSITIONING_FEE_TERM = 29;
 
 	/**
-	 * The feature id for the '<em><b>Origin Port</b></em>' reference.
+	 * The feature id for the '<em><b>Start Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ORIGIN_PORT_REPOSITIONING_FEE_TERM__ORIGIN_PORT = REPOSITIONING_FEE_TERM__ORIGIN_PORT;
+	int ORIGIN_PORT_REPOSITIONING_FEE_TERM__START_PORTS = REPOSITIONING_FEE_TERM__START_PORTS;
 
 	/**
 	 * The feature id for the '<em><b>Speed</b></em>' attribute.
@@ -2323,13 +2323,22 @@ public interface CommercialPackage extends EPackage {
 	int ORIGIN_PORT_REPOSITIONING_FEE_TERM__LUMP_SUM_PRICE_EXPRESSION = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Origin Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORIGIN_PORT_REPOSITIONING_FEE_TERM__ORIGIN_PORT = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Origin Port Repositioning Fee Term</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ORIGIN_PORT_REPOSITIONING_FEE_TERM_FEATURE_COUNT = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 6;
+	int ORIGIN_PORT_REPOSITIONING_FEE_TERM_FEATURE_COUNT = REPOSITIONING_FEE_TERM_FEATURE_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.EndHeelOptionsImpl <em>End Heel Options</em>}' class.
@@ -3574,15 +3583,15 @@ public interface CommercialPackage extends EPackage {
 	EClass getRepositioningFeeTerm();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.RepositioningFeeTerm#getOriginPort <em>Origin Port</em>}'.
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.RepositioningFeeTerm#getStartPorts <em>Start Ports</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Origin Port</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.RepositioningFeeTerm#getOriginPort()
+	 * @return the meta object for the reference list '<em>Start Ports</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RepositioningFeeTerm#getStartPorts()
 	 * @see #getRepositioningFeeTerm()
 	 * @generated
 	 */
-	EReference getRepositioningFeeTerm_OriginPort();
+	EReference getRepositioningFeeTerm_StartPorts();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.LumpSumRepositioningFeeTerm <em>Lump Sum Repositioning Fee Term</em>}'.
@@ -3603,6 +3612,17 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getOriginPortRepositioningFeeTerm();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.OriginPortRepositioningFeeTerm#getOriginPort <em>Origin Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Origin Port</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.OriginPortRepositioningFeeTerm#getOriginPort()
+	 * @see #getOriginPortRepositioningFeeTerm()
+	 * @generated
+	 */
+	EReference getOriginPortRepositioningFeeTerm_OriginPort();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.EndHeelOptions <em>End Heel Options</em>}'.
@@ -4650,12 +4670,12 @@ public interface CommercialPackage extends EPackage {
 		EClass REPOSITIONING_FEE_TERM = eINSTANCE.getRepositioningFeeTerm();
 
 		/**
-		 * The meta object literal for the '<em><b>Origin Port</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Start Ports</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference REPOSITIONING_FEE_TERM__ORIGIN_PORT = eINSTANCE.getRepositioningFeeTerm_OriginPort();
+		EReference REPOSITIONING_FEE_TERM__START_PORTS = eINSTANCE.getRepositioningFeeTerm_StartPorts();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.LumpSumRepositioningFeeTermImpl <em>Lump Sum Repositioning Fee Term</em>}' class.
@@ -4676,6 +4696,14 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EClass ORIGIN_PORT_REPOSITIONING_FEE_TERM = eINSTANCE.getOriginPortRepositioningFeeTerm();
+
+		/**
+		 * The meta object literal for the '<em><b>Origin Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ORIGIN_PORT_REPOSITIONING_FEE_TERM__ORIGIN_PORT = eINSTANCE.getOriginPortRepositioningFeeTerm_OriginPort();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.EndHeelOptionsImpl <em>End Heel Options</em>}' class.

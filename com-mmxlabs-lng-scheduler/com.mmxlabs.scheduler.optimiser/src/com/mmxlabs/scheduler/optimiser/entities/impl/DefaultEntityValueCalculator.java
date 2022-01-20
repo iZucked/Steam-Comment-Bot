@@ -458,9 +458,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 			if (firstPortSlot.getPortType() == PortType.Start || firstPortSlot.getPortType() == PortType.End) {
 				final int vesselEndTime = utcOffsetProvider.UTC(portTimesRecord.getSlotTime(firstPortSlot), firstPortSlot);
-				additionalCost += shippingCostHelper.getShippingCharterContractCost(firstPortSlot, vesselAvailability, vesselStartTime, firstLoadPort, vesselEndTime);
+				additionalCost += shippingCostHelper.getShippingCharterContractCost(portTimesRecord, firstPortSlot, vesselAvailability, vesselStartTime, firstLoadPort, vesselEndTime);
 				if (annotatedSolution != null) {
-					shippingCostHelper.addCharterContractAnnotation(shippingDetails, firstPortSlot, vesselAvailability, vesselStartTime, firstLoadPort, vesselEndTime);
+					shippingCostHelper.addCharterContractAnnotation(portTimesRecord, shippingDetails, firstPortSlot, vesselAvailability, vesselStartTime, firstLoadPort, vesselEndTime);
 				}
 			}
 

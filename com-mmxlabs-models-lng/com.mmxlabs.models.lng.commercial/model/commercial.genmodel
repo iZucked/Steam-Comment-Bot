@@ -165,10 +165,12 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//MonthlyBallastBonusTerm/ballastBonusPctCharter"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//RepositioningFeeTerm">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//RepositioningFeeTerm/originPort"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//RepositioningFeeTerm/startPorts"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//LumpSumRepositioningFeeTerm"/>
-    <genClasses ecoreClass="commercial.ecore#//OriginPortRepositioningFeeTerm"/>
+    <genClasses ecoreClass="commercial.ecore#//OriginPortRepositioningFeeTerm">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//OriginPortRepositioningFeeTerm/originPort"/>
+    </genClasses>
     <genClasses ecoreClass="commercial.ecore#//EndHeelOptions">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//EndHeelOptions/tankState"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//EndHeelOptions/minimumEndHeel"/>

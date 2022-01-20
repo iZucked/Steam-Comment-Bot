@@ -11,13 +11,17 @@ import com.mmxlabs.models.lng.commercial.RepositioningFeeTerm;
 
 import com.mmxlabs.models.lng.port.Port;
 
+import com.mmxlabs.models.lng.types.APortSet;
+import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -27,22 +31,21 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.RepositioningFeeTermImpl#getOriginPort <em>Origin Port</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.RepositioningFeeTermImpl#getStartPorts <em>Start Ports</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class RepositioningFeeTermImpl extends EObjectImpl implements RepositioningFeeTerm {
 	/**
-	 * The cached value of the '{@link #getOriginPort() <em>Origin Port</em>}' reference.
+	 * The cached value of the '{@link #getStartPorts() <em>Start Ports</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getOriginPort()
+	 * @see #getStartPorts()
 	 * @generated
 	 * @ordered
 	 */
-	protected Port originPort;
-
+	protected EList<APortSet<Port>> startPorts;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -68,38 +71,11 @@ public class RepositioningFeeTermImpl extends EObjectImpl implements Repositioni
 	 * @generated
 	 */
 	@Override
-	public Port getOriginPort() {
-		if (originPort != null && originPort.eIsProxy()) {
-			InternalEObject oldOriginPort = (InternalEObject)originPort;
-			originPort = (Port)eResolveProxy(oldOriginPort);
-			if (originPort != oldOriginPort) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CommercialPackage.REPOSITIONING_FEE_TERM__ORIGIN_PORT, oldOriginPort, originPort));
-			}
+	public EList<APortSet<Port>> getStartPorts() {
+		if (startPorts == null) {
+			startPorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, CommercialPackage.REPOSITIONING_FEE_TERM__START_PORTS);
 		}
-		return originPort;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Port basicGetOriginPort() {
-		return originPort;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setOriginPort(Port newOriginPort) {
-		Port oldOriginPort = originPort;
-		originPort = newOriginPort;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.REPOSITIONING_FEE_TERM__ORIGIN_PORT, oldOriginPort, originPort));
+		return startPorts;
 	}
 
 	/**
@@ -110,9 +86,8 @@ public class RepositioningFeeTermImpl extends EObjectImpl implements Repositioni
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case CommercialPackage.REPOSITIONING_FEE_TERM__ORIGIN_PORT:
-				if (resolve) return getOriginPort();
-				return basicGetOriginPort();
+			case CommercialPackage.REPOSITIONING_FEE_TERM__START_PORTS:
+				return getStartPorts();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -122,11 +97,13 @@ public class RepositioningFeeTermImpl extends EObjectImpl implements Repositioni
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case CommercialPackage.REPOSITIONING_FEE_TERM__ORIGIN_PORT:
-				setOriginPort((Port)newValue);
+			case CommercialPackage.REPOSITIONING_FEE_TERM__START_PORTS:
+				getStartPorts().clear();
+				getStartPorts().addAll((Collection<? extends APortSet<Port>>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -140,8 +117,8 @@ public class RepositioningFeeTermImpl extends EObjectImpl implements Repositioni
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case CommercialPackage.REPOSITIONING_FEE_TERM__ORIGIN_PORT:
-				setOriginPort((Port)null);
+			case CommercialPackage.REPOSITIONING_FEE_TERM__START_PORTS:
+				getStartPorts().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -155,8 +132,8 @@ public class RepositioningFeeTermImpl extends EObjectImpl implements Repositioni
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case CommercialPackage.REPOSITIONING_FEE_TERM__ORIGIN_PORT:
-				return originPort != null;
+			case CommercialPackage.REPOSITIONING_FEE_TERM__START_PORTS:
+				return startPorts != null && !startPorts.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
