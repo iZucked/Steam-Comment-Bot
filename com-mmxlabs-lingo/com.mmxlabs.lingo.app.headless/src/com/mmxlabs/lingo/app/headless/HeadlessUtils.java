@@ -4,17 +4,29 @@
  */
 package com.mmxlabs.lingo.app.headless;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.license.features.pluginxml.PluginRegistryHook;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationConstants;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.rcp.common.viewfactory.ReplaceableViewManager;
+import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 
 public class HeadlessUtils {
 
 	/**
-	 * Returns an {@link Options} object with the default required options for an OSGI application.
+	 * Returns an {@link Options} object with the default required options for an
+	 * OSGI application.
 	 * 
 	 * @return
 	 */
@@ -32,9 +44,12 @@ public class HeadlessUtils {
 		options.addOption("data", true, "(OSGi) OSGi instance area");
 		options.addOption(OptionBuilder.withLongOpt("debug").withDescription("[options file] (OSGi) debug mode").hasOptionalArg().create());
 		options.addOption(OptionBuilder.withLongOpt("dev").withDescription("[entires] (OSGi) dev mode").hasOptionalArg().create());
-		// options.addOption("eclipse.keyring", true, "(Equinox) Set to override location of the default secure storage");
+		// options.addOption("eclipse.keyring", true, "(Equinox) Set to override
+		// location of the default secure storage");
 		// options.addOption("eclipse.password", true,
-		// "(Equinox) If specified, the secure storage treats contents of the file as a default password. When not set, password providers are used to obtain a password.");
+		// "(Equinox) If specified, the secure storage treats contents of the file as a
+		// default password. When not set, password providers are used to obtain a
+		// password.");
 		options.addOption("feature", true, "(Equinox) equivalent to setting eclipse.product to <feature id>");
 		options.addOption("framework", true, "(Equinox) equivalent to setting osgi.framework to <location>");
 		options.addOption("initialize", false,
@@ -66,7 +81,8 @@ public class HeadlessUtils {
 		options.addOption(OptionBuilder.withLongOpt("vmargs").withDescription("(OSGi) Java VM arguments").hasArgs().create());
 		options.addOption("ws", true, "(OSGi) Set window system");
 
-		// Memory command line args (Not used by headless, but added to maintain compat with main laucher arg set.
+		// Memory command line args (Not used by headless, but added to maintain compat
+		// with main laucher arg set.
 		options.addOption("automem", false, "(LiNGO) Automatically determine upper bound for heap size");
 		options.addOption("noautomem", false, "(LiNGO) Do not automatically determine upper bound for heap size");
 
@@ -84,6 +100,28 @@ public class HeadlessUtils {
 		PluginRegistryHook.initialisePluginXMLEnablements();
 
 		ReplaceableViewManager.initialiseReplaceableViews();
+	}
+
+	@NonNullByDefault
+	public static void saveResult(EObject result, IScenarioDataProvider scenarioDataProvider, File resultOutput) throws IOException {
+
+		final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
+
+		// Set the place holder root model URI prior to saving
+		for (final var r : editingDomain.getResourceSet().getResources()) {
+			if (!r.getContents().isEmpty() && r.getContents().get(0) instanceof LNGScenarioModel) {
+				r.setURI(URI.createURI(CloudOptimisationConstants.ROOT_MODEL_URI));
+			}
+		}
+
+		// Convert to a URI for EMF
+		final URI resultURI = URI.createFileURI(resultOutput.getAbsolutePath());
+		// Create a resource in the resource set. This should allow cross resource
+		// referencing and hook in the encryption code path
+		final Resource r = editingDomain.getResourceSet().createResource(resultURI);
+		r.getContents().add(result);
+		
+		r.save(null);
 	}
 
 }

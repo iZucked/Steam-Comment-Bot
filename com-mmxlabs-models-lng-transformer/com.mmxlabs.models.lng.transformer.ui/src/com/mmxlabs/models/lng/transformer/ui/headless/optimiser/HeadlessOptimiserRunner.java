@@ -13,22 +13,30 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.OptionalLong;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.json.simple.JSONArray;
 
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
+import com.mmxlabs.models.lng.analytics.OptimisationResult;
 import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.transformer.chain.IChainLink;
+import com.mmxlabs.models.lng.transformer.chain.SequencesContainer;
 import com.mmxlabs.models.lng.transformer.config.OptimiserConfigurationOptions;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
@@ -37,6 +45,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
+import com.mmxlabs.models.lng.transformer.ui.common.SolutionSetExporterUnit;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions;
 import com.mmxlabs.models.lng.transformer.ui.headless.LSOLoggingExporter;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
@@ -120,7 +129,7 @@ public class HeadlessOptimiserRunner {
 		// Create logging module
 		final Map<String, LSOLogger> phaseToLoggerMap = new ConcurrentHashMap<>();
 
-		final boolean doesActionSet = optimisationPlan.getStages().stream().anyMatch(stage -> (stage instanceof ActionPlanOptimisationStage));
+		final boolean doesActionSet = optimisationPlan.getStages().stream().anyMatch(ActionPlanOptimisationStage.class::isInstance);
 		final ActionSetLogger actionSetLogger = doesActionSet ? new ActionSetLogger() : null;
 
 		final AbstractRunnerHook runnerHook = !exportLogs ? null : new AbstractRunnerHook() {
@@ -243,6 +252,141 @@ public class HeadlessOptimiserRunner {
 		}
 
 		return false;
+	}
+
+	public AbstractSolutionSet doRun(final IScenarioDataProvider sdp, UserSettings userSettings, boolean exportLogs, String outputLoggingFolder, HeadlessOptimiserJSON jsonOutput, int numThreads,
+			@NonNull IProgressMonitor monitor) {
+		// Default logging parameters
+		LoggingParameters loggingParameters = new LoggingParameters();
+		loggingParameters.loggingInterval = 5000;
+		loggingParameters.metricsToLog = new String[0];
+
+		final JSONArray jsonStagesStorage = new JSONArray(); // array for output data at present
+
+		if (jsonOutput != null) {
+			jsonOutput.getMetrics().setStages(jsonStagesStorage);
+		}
+
+		// Create logging module
+		final Map<String, LSOLogger> phaseToLoggerMap = new ConcurrentHashMap<>();
+
+		final AbstractRunnerHook runnerHook = !exportLogs ? null : new AbstractRunnerHook() {
+
+			@Override
+			protected void doEndStageJob(@NonNull final String stage, final int jobID, @Nullable final Injector injector) {
+
+				final String stageAndJobID = getStageAndJobID();
+				final LSOLogger logger = phaseToLoggerMap.remove(stageAndJobID);
+				if (logger != null) {
+					final LSOLoggingExporter lsoLoggingExporter = new LSOLoggingExporter(jsonStagesStorage, stageAndJobID, logger);
+					lsoLoggingExporter.exportData("best-fitness", "current-fitness");
+				}
+			}
+
+		};
+
+		// Create logging module
+		final IOptimiserInjectorService localOverrides = (exportLogs == false) ? null : new IOptimiserInjectorService() {
+			@Override
+			public Module requestModule(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
+				return null;
+			}
+
+			@Override
+			@Nullable
+			public List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
+
+				if (moduleType == ModuleType.Module_OptimisationParametersModule) {
+					return Collections.<@NonNull Module>singletonList(new OptimisationSettingsOverrideModule());
+				}
+				if (moduleType == ModuleType.Module_Optimisation) {
+					final LinkedList<@NonNull Module> modules = new LinkedList<>();
+					if (exportLogs) {
+						modules.add(createLoggingModule(loggingParameters, phaseToLoggerMap, null, runnerHook));
+					}
+
+					return modules;
+				}
+				return null;
+			}
+		};
+
+		final List<String> hints = new LinkedList<>();
+		hints.add(LNGTransformerHelper.HINT_OPTIMISE_LSO);
+
+		try {
+
+			final LNGOptimisationBuilder runnerBuilder = LNGOptimisationBuilder.begin(sdp) //
+					.withRunnerHook(runnerHook) //
+					.withOptimiserInjectorService(localOverrides) //
+					.withHints(hints.toArray(new String[hints.size()])) //
+					.withUserSettings(userSettings) //
+					.withThreadCount(numThreads) //
+					.withOptimiseHint() //
+					.withIncludeDefaultExportStage(false) // disable export and do it manually later
+					.withOptimisationPlanCustomiser(plan -> {
+						// Set a default name is there is none
+						if (plan.getResultName() == null || plan.getResultName().isBlank()) {
+							plan.setResultName("Optimisation");
+						}
+						if (jsonOutput != null) {
+							jsonOutput.setOptimisationPlan(plan);
+						}
+					}) //
+			;
+			if (localOverrides != null) {
+				runnerBuilder.withOptimiserInjectorService(localOverrides);
+			}
+			final LNGScenarioRunner runner = runnerBuilder //
+					.buildDefaultRunner() //
+					.getScenarioRunner();
+
+			final long startTime = System.currentTimeMillis();
+			runner.evaluateInitialState();
+			IMultiStateResult result = runner.runWithProgress(monitor);
+
+			final long runTime = System.currentTimeMillis() - startTime;
+
+			if (result == null) {
+				throw new RuntimeException("Error optimising scenario - null result");
+			}
+
+			System.out.println("\truntime=" + runTime + ",");
+			if (jsonOutput != null) {
+				jsonOutput.getMetrics().setRuntime(runTime);
+			}
+
+			System.err.println("Optimised!");
+
+			final boolean dualModeInsertions = userSettings.isDualMode();
+
+			final OptionalLong portfolioBreakEvenTarget = OptionalLong.empty();
+			OptimisationResult options = AnalyticsFactory.eINSTANCE.createOptimisationResult();
+			options.setName("Optimisation");
+			options.setUserSettings(EcoreUtil.copy(userSettings));
+			final IChainLink link = SolutionSetExporterUnit.exportMultipleSolutions(null, 1, runner.getScenarioToOptimiserBridge(), () -> options, dualModeInsertions, portfolioBreakEvenTarget);
+
+			final SequencesContainer initialSequencesContainer = new SequencesContainer(runner.getScenarioToOptimiserBridge().getDataTransformer().getInitialResult().getBestSolution());
+			link.run(initialSequencesContainer, result, new NullProgressMonitor());
+
+//			if (outputScenarioFileName != null) {
+//				// TODO: make this work when there is no parent file specified
+//				File parentDirectory = new File(outputScenarioFileName).getParentFile();
+//
+//				if (parentDirectory != null) {
+//					parentDirectory.mkdirs();
+//				}
+//
+//				saveScenario(outputScenarioFileName, sdp);
+//			}
+			if (exportLogs) {
+				exportData(phaseToLoggerMap, null, outputLoggingFolder, false);
+			}
+
+			return options;
+		} catch (final Exception e) {
+			throw new RuntimeException("Error during optimisation", e);
+		}
 	}
 
 	public boolean doRun(final IScenarioDataProvider sdp, UserSettings userSettings, boolean exportLogs, String outputScenarioFileName, String outputLoggingFolder,

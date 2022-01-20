@@ -29,9 +29,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
-import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessOptioniserJSON;
@@ -60,7 +60,7 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 	public Object start(final IApplicationContext context) throws IOException {
 		try {
 			return dostart(context);
-		} catch (Throwable t) {
+		} catch (final Throwable t) {
 			t.printStackTrace();
 			return HeadlessGenericApplication.EXIT_CODE_EXCEPTION;
 		}
@@ -135,26 +135,26 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 			json.getParams().setCores(numThreads);
 		}
 
-		HeadlessOptioniserRunner runner = new HeadlessOptioniserRunner();
+		final HeadlessOptioniserRunner runner = new HeadlessOptioniserRunner();
 
-		ConsoleProgressMonitor monitor = new ConsoleProgressMonitor();
+		final ConsoleProgressMonitor monitor = new ConsoleProgressMonitor();
 
-		boolean exportLogs = outputLoggingFolder != null;
+		final boolean exportLogs = outputLoggingFolder != null;
 		// Get the root object
 
-		SlotInsertionOptimiserLogger logger = exportLogs ? new SlotInsertionOptimiserLogger() : null;
+		final SlotInsertionOptimiserLogger logger = exportLogs ? new SlotInsertionOptimiserLogger() : null;
 
 		try {
 			// Get the root object
 			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
-				runner.run(logger, options, modelRecord, scenarioDataProvider, null, SubMonitor.convert(monitor));
+				final SlotInsertionOptions result = runner.run(logger, options, modelRecord, scenarioDataProvider, null, SubMonitor.convert(monitor));
+
+				final File resultOutput = new File(outputScenarioFileName + ".xmi");
+				HeadlessUtils.saveResult(result, scenarioDataProvider, resultOutput);
+
 				ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, new File(outputScenarioFileName));
 			});
-
-//			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
-//				runner.doRun(scenarioDataProvider, userSettings, exportLogs, outputScenarioFileName, outputLoggingFolder, json, numThreads);
-//			});
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new IOException("Error running optioniser", e);
 
 		}
@@ -170,11 +170,11 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 		}
 
 		if (loggingFolder != null && logger != null) {
-			File outFile = new File(loggingFolder, UUID.randomUUID().toString() + ".json"); // create output log
+			final File outFile = new File(loggingFolder, UUID.randomUUID().toString() + ".json"); // create output log
 			(new HeadlessOptioniserJSONTransformer()).addRunResult(0, logger, json);
 
 			try {
-				ObjectMapper mapper = new ObjectMapper();
+				final ObjectMapper mapper = new ObjectMapper();
 				mapper.registerModule(new JavaTimeModule());
 				mapper.registerModule(new Jdk8Module());
 
@@ -182,7 +182,7 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 				mapper.disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS);
 
 				mapper.writerWithDefaultPrettyPrinter().writeValue(outFile, json);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				throw new IOException("Error writing log file", e);
 			}
 		}
@@ -242,21 +242,21 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 			mapper.registerModule(new Jdk8Module());
 			mapper.enable(Feature.ALLOW_COMMENTS);
 			try {
-				String content = Files.readString(file.toPath());
+				final String content = Files.readString(file.toPath());
 
 				if (content.contains("userSettings")) {
 					return mapper.readValue(content, HeadlessOptioniserOptions.class);
 
 				} else {
-					HeadlessOptioniserRunner.Options options = mapper.readValue(content, HeadlessOptioniserRunner.Options.class);
-					HeadlessOptioniserOptions newOpt = new HeadlessOptioniserOptions();
+					final HeadlessOptioniserRunner.Options options = mapper.readValue(content, HeadlessOptioniserRunner.Options.class);
+					final HeadlessOptioniserOptions newOpt = new HeadlessOptioniserOptions();
 					// Copy ids across
 					newOpt.loadIds = options.loadIds;
 					newOpt.dischargeIds = options.dischargeIds;
 					newOpt.eventsIds = options.eventsIds;
 
 					// Create a default user settings object
-					UserSettings userSettings = UserSettingsHelper.createDefaultUserSettings();
+					final UserSettings userSettings = UserSettingsHelper.createDefaultUserSettings();
 
 					if (options.periodStart != null) {
 						userSettings.setPeriodStartDate(options.periodStart);
