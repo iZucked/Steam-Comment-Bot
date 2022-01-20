@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -30,7 +31,6 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -63,6 +63,7 @@ import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsBuildHelper;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolutionHelper;
 import com.mmxlabs.models.lng.analytics.util.SandboxModeConstants;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -192,7 +193,7 @@ public class ScenarioServicePushToCloudAction {
 		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 		try (IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
 			final LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-			OptimisationPlan plan = OptimisationHelper.getOptimiserSettings(scenarioModel, false, "Custom", true, true, null);
+			final OptimisationPlan plan = OptimisationHelper.getOptimiserSettings(scenarioModel, false, "Custom", true, true, null);
 			if (plan != null) {
 				return plan.getUserSettings();
 			}
@@ -233,7 +234,7 @@ public class ScenarioServicePushToCloudAction {
 
 				final EObject object = modelReference.getInstance();
 
-				if (object instanceof LNGScenarioModel root) {
+				if (object instanceof final LNGScenarioModel root) {
 					final Set<String> existingNames = new HashSet<>();
 					scenarioInstance.getFragments().forEach(f -> existingNames.add(f.getName()));
 					scenarioInstance.getElements().forEach(f -> existingNames.add(f.getName()));
@@ -255,7 +256,7 @@ public class ScenarioServicePushToCloudAction {
 	}
 
 	public static void uploadScenario(final ScenarioInstance scenarioInstance, final String notes, final UserSettings userSettings, //
-			final boolean optimisation, final List<Slot<?>> targetSlots, final OptionAnalysisModel sandboxModel, boolean runLocal) {
+			final boolean optimisation, final List<Slot<?>> targetSlots, final OptionAnalysisModel sandboxModel, final boolean runLocal) {
 		final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 		try {
 			dialog.run(true, false, m -> doUploadScenario(scenarioInstance, notes, userSettings, optimisation, targetSlots, sandboxModel, m, runLocal));
@@ -268,7 +269,7 @@ public class ScenarioServicePushToCloudAction {
 			// 400 - bad request
 			// Hostname/dns errors / timeots
 
-			if (cause instanceof CloudOptimisationPushException copException) {
+			if (cause instanceof final CloudOptimisationPushException copException) {
 				switch (copException.getType()) {
 				case FAILED_UNKNOWN_ERROR:
 					MessageDialog.openError(Display.getDefault().getActiveShell(), MSG_ERROR_PUSHING, "Failed to send scenario with unknown error. " + copException.getCause().getMessage());
@@ -323,7 +324,7 @@ public class ScenarioServicePushToCloudAction {
 
 	private static void doUploadScenario(final ScenarioInstance scenarioInstance, final String notes, final UserSettings userSettings, //
 			final boolean optimisation, @Nullable final List<Slot<?>> targetSlots, @Nullable final OptionAnalysisModel originalSandboxModel, final IProgressMonitor parentProgressMonitor,
-			boolean runLocal) {
+			final boolean runLocal) {
 
 		parentProgressMonitor.beginTask("Send scenario", 1000);
 		final CloudManifestProblemType problemType = getProblemType(optimisation, targetSlots, originalSandboxModel);
@@ -348,19 +349,28 @@ public class ScenarioServicePushToCloudAction {
 			File anonymisationMap = null;
 
 			List<Slot<?>> anonymisedTargetSlots = null;
-			List<VesselEvent> anonymisedEvents = null;
+			final List<VesselEvent> anonymisedEvents = null;
 			OptionAnalysisModel sandboxModelCopy = null;
 
-			try (IScenarioDataProvider o_scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
-				final LNGScenarioModel o_scenarioModel = o_scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
+			try (IScenarioDataProvider originalScenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
+				final LNGScenarioModel originalScenarioModel = originalScenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
-				final EcoreUtil.Copier copier = new Copier();
-				scenarioModel = (LNGScenarioModel) copier.copy(o_scenarioModel);
+				scenarioModel = EcoreUtil.copy(originalScenarioModel);
+
+				// Optioniser needs the slot id's to run. Anonymisation changes the id's, so
+				// here we need to get the mapping from the original instance to the copied
+				// instance prior to anoymising.
+				// Note: EcoreUtil.copier is a map between old and new. We could use that
+				// instead of the ID mapping.
 				if (problemType == CloudManifestProblemType.OPTIONISER) {
 					anonymisedTargetSlots = new ArrayList<>(targetSlots.size());
-					final Map<String, LoadSlot> newLoadSlots = ScenarioModelUtil.getCargoModel(scenarioModel).getLoadSlots().stream().collect(Collectors.toMap(LoadSlot::getName, Function.identity()));
-					final Map<String, DischargeSlot> newDischargeSlots = ScenarioModelUtil.getCargoModel(scenarioModel).getDischargeSlots().stream()
+					final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(scenarioModel);
+					final Map<String, LoadSlot> newLoadSlots = cargoModel.getLoadSlots().stream() //
+							.collect(Collectors.toMap(LoadSlot::getName, Function.identity()));
+
+					final Map<String, DischargeSlot> newDischargeSlots = cargoModel.getDischargeSlots().stream() //
 							.collect(Collectors.toMap(DischargeSlot::getName, Function.identity()));
+
 					for (final Slot<?> slot : targetSlots) {
 						final Slot<?> replacementSlot;
 						if (slot instanceof LoadSlot) {
@@ -372,12 +382,13 @@ public class ScenarioServicePushToCloudAction {
 					}
 				}
 
-				copier.copyReferences();
 				final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(scenarioModel);
 				if (problemType != CloudManifestProblemType.SANDBOX) {
-					// Strip optimisation result
+					// Strip all existing optimisation results and sandboxes
 					LNGSchedulerJobUtils.clearAnalyticsResults(analyticsModel);
 				} else {
+					// Strip all existing optimisation results and sandboxes except for the one we
+					// are using.
 					for (final OptionAnalysisModel optionAnalysisModel : analyticsModel.getOptionModels()) {
 						if (optionAnalysisModel.getUuid().equals(originalSandboxModel.getUuid())) {
 							sandboxModelCopy = optionAnalysisModel;
@@ -433,16 +444,17 @@ public class ScenarioServicePushToCloudAction {
 				}
 			} catch (final RuntimeException e) {
 				deleteAnonyMap(anonymisationMap);
-				if (e.getCause() instanceof ScenarioMigrationException) {
-					final ScenarioMigrationException ee = (ScenarioMigrationException) e.getCause();
+				if (e.getCause() instanceof final ScenarioMigrationException ee) {
 					throw new CloudOptimisationPushException(MSG_ERROR_EVALUATING, Type.FAILED_TO_MIGRATE, ee);
 				}
 				throw new CloudOptimisationPushException(MSG_ERROR_EVALUATING, Type.FAILED_UNKNOWN_ERROR, e);
 			}
 
 			// CreateFile
-			final File tmpScenarioFile = new File("scenario.lingo");
+			final File tmpScenarioFile;
+
 			try {
+				tmpScenarioFile = Files.createTempFile(ScenarioStorageUtil.getTempDirectory().toPath(), "archive_", ".lingo").toFile();
 				ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, tmpScenarioFile);
 			} catch (final IOException e) {
 				deleteAnonyMap(anonymisationMap);
@@ -451,14 +463,14 @@ public class ScenarioServicePushToCloudAction {
 			}
 
 			final List<Pair<String, Object>> filesToZip = new ArrayList<>(4);
+			// Add the manifest entry
+			filesToZip.add(Pair.of(MANIFEST_NAME, createManifest(MF_SCENARIO_NAME, problemType)));
+			// Add the scenario
 			filesToZip.add(Pair.of(MF_SCENARIO_NAME, tmpScenarioFile));
+			// Add (unused) jvm options
 			filesToZip.add(Pair.of(MF_JVM_OPTS_NAME, createJVMOptions()));
 
-			try {
-				filesToZip.add(Pair.of(MANIFEST_NAME, createManifest(tmpScenarioFile.getName(), problemType)));
-			} catch (final CloudOptimisationPushException e) {
-				throw e;
-			}
+			// Add in the parameters
 			switch (problemType) {
 			case OPTIMISATION:
 				filesToZip.add(Pair.of(MF_PARAMETERS_NAME, createOptimisationSettingsJson(userSettings)));
@@ -473,18 +485,20 @@ public class ScenarioServicePushToCloudAction {
 			default:
 				throw new CloudOptimisationPushException("Unknown cloud optimisation problem type", Type.FAILED_UNKNOWN_ERROR);
 			}
+
+			// Create the zip file bundle to send to the opti-server
 			File zipToUpload = null;
 			try {
 				zipToUpload = Files.createTempFile(ScenarioStorageUtil.getTempDirectory().toPath(), "archive_", ".zip").toFile();
+				archive(zipToUpload, filesToZip);
 			} catch (final IOException e) {
 				deleteAnonyMap(anonymisationMap);
 				e.printStackTrace();
 				throw new CloudOptimisationPushException(MSG_ERROR_SAVING, Type.FAILED_TO_SAVE, e);
 			}
-			archive(zipToUpload, filesToZip);
 
 			progressMonitor.worked(200);
-			progressMonitor.subTask("Upload base case");
+			progressMonitor.subTask("Sending optimisation");
 
 			// UploadFile
 			String response = null;
@@ -526,8 +540,8 @@ public class ScenarioServicePushToCloudAction {
 
 			if (CloudOptimisationConstants.RUN_LOCAL_BENCHMARK && runLocal) {
 				try {
-					runLocalOptimisation(scenarioInstance, userSettings, targetSlots, problemType, progressMonitor, cRecord, scenarioDataProvider, anonymisationMap);
-				} catch (Exception e) {
+					runLocalOptimisation(scenarioInstance, userSettings, anonymisedTargetSlots, problemType, progressMonitor, cRecord, scenarioDataProvider, anonymisationMap);
+				} catch (final Exception e) {
 					// Ignore - internal debug use only
 				}
 			}
@@ -607,9 +621,9 @@ public class ScenarioServicePushToCloudAction {
 		try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(targetFile))) {
 			for (final var p : files) {
 
-				if (p.getSecond() instanceof File f) {
+				if (p.getSecond() instanceof final File f) {
 					doArchive(zos, p.getFirst(), f);
-				} else if (p.getSecond() instanceof String str) {
+				} else if (p.getSecond() instanceof final String str) {
 					doArchive(zos, p.getFirst(), str);
 				} else {
 					throw new IllegalArgumentException();
@@ -620,7 +634,7 @@ public class ScenarioServicePushToCloudAction {
 		}
 	}
 
-	private static void doArchive(final ZipOutputStream zos, String filename, final File file) throws IOException {
+	private static void doArchive(final ZipOutputStream zos, final String filename, final File file) throws IOException {
 		try (FileInputStream fis = new FileInputStream(file)) {
 			zos.putNextEntry(new ZipEntry(filename));
 			ByteStreams.copy(fis, zos);
@@ -631,7 +645,7 @@ public class ScenarioServicePushToCloudAction {
 		}
 	}
 
-	private static void doArchive(final ZipOutputStream zos, String filename, String content) throws IOException {
+	private static void doArchive(final ZipOutputStream zos, final String filename, final String content) throws IOException {
 		try {
 			zos.putNextEntry(new ZipEntry(filename));
 
@@ -666,7 +680,7 @@ public class ScenarioServicePushToCloudAction {
 
 	private static String createOptioniserSettingsJson(final UserSettings us, final List<Slot<?>> targetSlots, final List<VesselEvent> targetEvents) {
 
-		HeadlessOptioniserOptions settings = new HeadlessOptioniserOptions();
+		final HeadlessOptioniserOptions settings = new HeadlessOptioniserOptions();
 		settings.userSettings = us;
 		settings.loadIds = new ArrayList<>();
 		settings.dischargeIds = new ArrayList<>();
@@ -702,7 +716,7 @@ public class ScenarioServicePushToCloudAction {
 		description.userSettings = (UserSettingsImpl) us;
 		final ObjectMapper objectMapper = createUserSettingsMapper();
 		try {
-			String json = objectMapper.writeValueAsString(description);
+			final String json = objectMapper.writeValueAsString(description);
 			return json;
 		} catch (final Exception e) {
 			throw new RuntimeException(e);
@@ -716,7 +730,7 @@ public class ScenarioServicePushToCloudAction {
 		md.parameters = MF_PARAMETERS_NAME;
 		md.jvmConfig = MF_PARAMETERS_NAME;
 		md.dev = false;
-		String devVersion = Activator.getDefault().getPreferenceStore().getString(CloudOptimiserPreferenceConstants.P_DEV_VERSION);
+		final String devVersion = Activator.getDefault().getPreferenceStore().getString(CloudOptimiserPreferenceConstants.P_DEV_VERSION);
 		if (devVersion != null && !devVersion.isBlank()) {
 			md.version = devVersion.trim();
 			md.dev = true;
@@ -734,7 +748,7 @@ public class ScenarioServicePushToCloudAction {
 
 		final ObjectMapper objectMapper = new ObjectMapper();
 		try {
-			String json = objectMapper.writeValueAsString(md);
+			final String json = objectMapper.writeValueAsString(md);
 			return json;
 		} catch (final Exception e) {
 			throw new RuntimeException(e);
