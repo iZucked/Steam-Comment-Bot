@@ -38,7 +38,7 @@ import com.mmxlabs.models.lng.types.VolumeUnits;
  *
  */
 @ExtendWith(ShiroRunner.class)
-public class RepositioningAndBallastBonusesTests extends AbstractMicroTestCase {
+public class RepositioningFeeContractTests extends AbstractMicroTestCase {
 
 	@Test
 	@Tag(TestCategories.MICRO_TEST)
