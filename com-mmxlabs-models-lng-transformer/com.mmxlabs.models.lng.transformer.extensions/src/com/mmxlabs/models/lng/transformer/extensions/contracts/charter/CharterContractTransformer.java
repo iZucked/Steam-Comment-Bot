@@ -243,9 +243,11 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 		final SimpleRepositioningFeeContainer repositioningFee = (SimpleRepositioningFeeContainer) eCharterContract.getRepositioningFeeTerms();
 
 		final List<IRepositioningFeeTerm> terms = new LinkedList<>();
+		final List<IRepositioningFeeTerm> anyPortTerms = new LinkedList<>();
 		for (final RepositioningFeeTerm term : repositioningFee.getTerms()) {
 
 			IRepositioningFeeTerm tt = null;
+			boolean isAnyPort = false;
 			if (term instanceof final LumpSumRepositioningFeeTerm t) {
 				final String priceExpression = t.getPriceExpression();
 				final ILongCurve lumpSumCurve = getPriceCurveFromExpression(priceExpression, charterIndices);
@@ -253,6 +255,7 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 				assert lumpSumCurve != null;
 				
 				final  Set<IPort> startPorts = transformPorts(t.getStartPorts());
+				isAnyPort = t.getStartPorts().isEmpty();
 				
 				tt = new DefaultLumpSumRepositioningFeeContractTerm(startPorts, lumpSumCurve);
 				
@@ -267,6 +270,7 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 				final int speed = OptimiserUnitConvertor.convertToInternalSpeed(t.getSpeed());
 				final boolean includeCanalTime = t.isIncludeCanalTime();
 				final  Set<IPort> startPorts = transformPorts(t.getStartPorts());
+				isAnyPort = t.getStartPorts().isEmpty();
 				
 				tt = new DefaultOriginPortRepositioningFeeContractTerm(originPort, startPorts, lumpSumCurve, fuelCurve, charterCurve, t.isIncludeCanal(), includeCanalTime, speed);
 			} else {
@@ -275,7 +279,14 @@ public class CharterContractTransformer implements ICharterContractTransformer {
 
 			assert tt != null;
 			injector.injectMembers(tt);
-			terms.add(tt);
+			if (isAnyPort) {
+				anyPortTerms.add(tt);
+			} else {
+				terms.add(tt);
+			}
+		}
+		if (!anyPortTerms.isEmpty()) {
+			terms.addAll(anyPortTerms);
 		}
 		return terms;
 	}
