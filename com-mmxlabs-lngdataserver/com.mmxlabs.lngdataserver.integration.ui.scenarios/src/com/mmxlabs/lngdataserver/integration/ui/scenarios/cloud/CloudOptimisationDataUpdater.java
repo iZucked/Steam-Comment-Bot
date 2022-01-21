@@ -4,7 +4,11 @@
  */
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -17,6 +21,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
@@ -75,6 +80,7 @@ public class CloudOptimisationDataUpdater {
 
 	private final File basePath;
 	private final File tasksFile;
+	private File userIdFile;
 
 	private final Set<String> warnedLoadFailures = new HashSet<>();
 
@@ -96,6 +102,7 @@ public class CloudOptimisationDataUpdater {
 		this.modelRoot = modelRoot;
 		this.basePath = basePath;
 		this.tasksFile = new File(basePath.getAbsolutePath() + IPath.SEPARATOR + "tasks.json");
+		this.userIdFile = new File(basePath.getAbsolutePath() + IPath.SEPARATOR + "userId.txt");
 		this.client = client;
 		this.readyCallback = readyCallback;
 		taskExecutor = Executors.newSingleThreadExecutor();
@@ -395,6 +402,7 @@ public class CloudOptimisationDataUpdater {
 	}
 
 	public void start() {
+		createUserIdFile();
 
 		if (tasksFile.exists() && tasksFile.canRead()) {
 			try {
@@ -452,6 +460,29 @@ public class CloudOptimisationDataUpdater {
 
 		};
 		updateThread.start();
+	}
+
+	public void createUserIdFile() {
+		String userid = "";
+		if (!userIdFile.exists()) {
+			UUID userId = UUID.randomUUID();
+			client.setUserId(userId.toString());
+			try (BufferedWriter writer = new BufferedWriter(new FileWriter(userIdFile))) {
+				writer.write(userId.toString());
+				userid = userId.toString();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else if (userIdFile.canRead()) {
+			try (BufferedReader reader = new BufferedReader(new FileReader(userIdFile))) {
+				userid = reader.readLine();
+				client.setUserId(userid);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			LOG.error("Unable to read/write to user id file in cloud-opti folder");
+		}
 	}
 
 	public synchronized void refresh() throws IOException {

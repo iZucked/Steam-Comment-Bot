@@ -47,9 +47,11 @@ public class CloudOptimisationDataServiceClient {
 	private static final String SCENARIO_RESULT_URL = "/result";
 	private static final String JOB_STATUS_URL = "/status";
 	private static final String SCENARIO_CLOUD_UPLOAD_URL = "/scenario"; // for localhost - "/scenarios/v1/cloud/opti/upload"
-//	private static final String OPTI_CLOUD_BASE_URL = "https://gw.mmxlabs.com"; // "https://wzgy9ex061.execute-api.eu-west-2.amazonaws.com/dev/"
-//	private final IEclipsePreferences preferences;
-//	private final String optimisationServiceURL;
+	//	private static final String OPTI_CLOUD_BASE_URL = "https://gw.mmxlabs.com"; // "https://wzgy9ex061.execute-api.eu-west-2.amazonaws.com/dev/"
+	//	private final IEclipsePreferences preferences;
+	//	private final String optimisationServiceURL;
+
+	private String userid;
 
 	private final OkHttpClient httpClient = com.mmxlabs.hub.common.http.HttpClientUtil.basicBuilder() //
 			.build();
@@ -85,7 +87,10 @@ public class CloudOptimisationDataServiceClient {
 			gateway = gateway.substring(0, gateway.length() - 1);
 		}
 		return gateway;
+	}
 
+	public void setUserId(String userid) {
+		this.userid = userid;
 	}
 
 	public String upload(final File scenario, //
@@ -96,14 +101,15 @@ public class CloudOptimisationDataServiceClient {
 				.setType(MultipartBody.FORM) //
 				.addFormDataPart("sha256", checksum) //
 				.addFormDataPart("scenario", scenarioName + ".zip", RequestBody.create(mediaType, scenario)) //
-		;
+				;
 		RequestBody requestBody = builder.build();
 
 		if (progressListener != null) {
 			requestBody = new ProgressRequestBody(requestBody, progressListener);
 		}
 
-		final Request.Builder requestBuilder = makeRequestBuilder(getGateway(), SCENARIO_CLOUD_UPLOAD_URL);
+		final String uploadURL = String.format("%s/%s", SCENARIO_CLOUD_UPLOAD_URL, this.userid);
+		final Request.Builder requestBuilder = makeRequestBuilder(getGateway(), uploadURL);
 		if (requestBuilder == null) {
 			return null;
 		}
@@ -134,7 +140,7 @@ public class CloudOptimisationDataServiceClient {
 		final OkHttpClient localHttpClient = clientBuilder //
 				.build();
 
-		final String requestURL = String.format("%s/%s", SCENARIO_RESULT_URL, jobid);
+		final String requestURL = String.format("%s/%s/%s", SCENARIO_RESULT_URL, jobid, this.userid);
 		final Request.Builder requestBuilder = makeRequestBuilder(getGateway(), requestURL);
 		if (requestBuilder == null) {
 			return false;
@@ -158,7 +164,7 @@ public class CloudOptimisationDataServiceClient {
 	}
 
 	public String getJobStatus(final @NonNull String jobid) throws IOException {
-		final String requestURL = String.format("%s/%s", JOB_STATUS_URL, jobid);
+		final String requestURL = String.format("%s/%s/%s", JOB_STATUS_URL, jobid, this.userid);
 		final Request.Builder requestBuilder = makeRequestBuilder(getGateway(), requestURL);
 		if (requestBuilder == null) {
 			return null;
