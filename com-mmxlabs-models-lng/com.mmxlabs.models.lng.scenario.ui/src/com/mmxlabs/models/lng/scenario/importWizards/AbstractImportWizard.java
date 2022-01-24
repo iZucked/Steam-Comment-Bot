@@ -47,7 +47,7 @@ public abstract class AbstractImportWizard extends Wizard implements IImportWiza
 		setWindowTitle(windowTitle);
 		guided = false;
 	}
-	
+
 	public AbstractImportWizard(final ScenarioInstance scenarioInstance, final String windowTitle, final String importFilename) {
 		currentScenario = scenarioInstance;
 		setWindowTitle(windowTitle);
@@ -63,7 +63,7 @@ public abstract class AbstractImportWizard extends Wizard implements IImportWiza
 	}
 
 	protected abstract AbstractImportPage getImportPage(final String pageName, final ScenarioInstance currentScenario);
-	
+
 	@Override
 	public void addPages() {
 		super.addPages();
@@ -128,12 +128,12 @@ public abstract class AbstractImportWizard extends Wizard implements IImportWiza
 
 	void doImport(final List<ScenarioInstance> instances, final String filename, final char listSeparator, final char decimalSeparator, final IProgressMonitor monitor) {
 		monitor.beginTask("Import", instances.size());
-		final Set<String> uniqueProblems = new HashSet<String>();
-		final List<String> allProblems = new ArrayList<String>();
+		final Set<String> uniqueProblems = new HashSet<>();
+		final List<String> allProblems = new ArrayList<>();
 		try {
 
 			for (final ScenarioInstance instance : instances) {
-				if (instance.isReadonly()) {
+				if (instance.isReadonly() || instance.isCloudLocked()) {
 					allProblems.add(String.format("Scenario %s is read-only, skipping", instance.getName()));
 					continue;
 				}
@@ -179,7 +179,7 @@ public abstract class AbstractImportWizard extends Wizard implements IImportWiza
 			final ImportAction.ImportHooksProvider ihp = new DefaultImportHooksProvider(modelRecord.getScenarioInstance(), modelReference, getShell(), filename, listSeparator, decimalSeparator);
 
 			final ImportAction action = getImportAction(ihp, scenarioDataProvider);
-			
+
 			final DefaultImportContext context = action.safelyImport();
 			for (final IImportProblem problem : context.getProblems()) {
 				final String description = problem.getProblemDescription();
@@ -197,6 +197,6 @@ public abstract class AbstractImportWizard extends Wizard implements IImportWiza
 			}
 		}
 	}
-	
+
 	protected abstract ImportAction getImportAction(final ImportAction.ImportHooksProvider ihp, final IScenarioDataProvider scenarioDataProvider);
 }

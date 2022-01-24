@@ -17,8 +17,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
@@ -26,8 +24,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 import com.mmxlabs.scenario.service.manifest.Manifest;
@@ -35,9 +31,6 @@ import com.mmxlabs.scenario.service.manifest.ManifestFactory;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager.PostChangeType;
-import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil.EncryptedScenarioException;
-import com.mmxlabs.scenario.service.model.util.MMXAdaptersAwareCommandStack;
-import com.mmxlabs.scenario.service.model.util.ResourceHelper;
 import com.mmxlabs.scenario.service.model.util.ScenarioServiceUtils;
 import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 
@@ -105,7 +98,7 @@ public final class ScenarioModelRecord extends ModelRecord {
 		if (!validationListeners.isEmpty()) {
 			// The ValidatingDecorator is often still attached.
 			// SG: Not sure how to remove listener, except with a service listener?
-			int ii = 0;
+			final int ii = 0;
 		}
 		// assert validationListeners.isEmpty();
 	}
@@ -149,6 +142,9 @@ public final class ScenarioModelRecord extends ModelRecord {
 			if (msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Readonly()) {
 				setReadOnly(msg.getNewBooleanValue());
 			}
+			if (msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_CloudLocked()) {
+				setExternalLock(msg.getNewBooleanValue());
+			}
 		};
 	};
 
@@ -163,11 +159,12 @@ public final class ScenarioModelRecord extends ModelRecord {
 			this.validationStatus = new Status(scenarioInstance.getValidationStatusCode(), "com.mmxlabs.scenario.service.model", "(Open scenario to refresh validation status)");
 			scenarioInstance.eAdapters().add(readOnlyAdapter);
 			setReadOnly(scenarioInstance.isReadonly());
+			setExternalLock(scenarioInstance.isCloudLocked());
 		}
 	}
 
-	public void addExtraDataRecord(final ISharedDataModelType<?> key, final ModelRecord record) {
-		this.extraDataRecords.put(key, record);
+	public void addExtraDataRecord(final ISharedDataModelType<?> key, final ModelRecord mr) {
+		this.extraDataRecords.put(key, mr);
 	}
 
 	public @NonNull ModelRecord getExtraDataRecord(final ISharedDataModelType<?> key) {
@@ -239,8 +236,10 @@ public final class ScenarioModelRecord extends ModelRecord {
 	}
 
 	/**
-	 * Create a new {@link IScenarioDataProvider} from this {@link ScenarioModelRecord}. This will obtain a {@link ModelReference} and load the model if required. The returned
-	 * {@link IScenarioDataProvider} should be disposed to release the model reference.
+	 * Create a new {@link IScenarioDataProvider} from this
+	 * {@link ScenarioModelRecord}. This will obtain a {@link ModelReference} and
+	 * load the model if required. The returned {@link IScenarioDataProvider} should
+	 * be disposed to release the model reference.
 	 * 
 	 * @param referenceID
 	 * @return
@@ -249,7 +248,7 @@ public final class ScenarioModelRecord extends ModelRecord {
 		return new ModelRecordScenarioDataProvider(this, referenceID, new NullProgressMonitor());
 	}
 
-	public @NonNull IScenarioDataProvider aquireScenarioDataProvider(final String referenceID, IProgressMonitor progressMonitor) {
+	public @NonNull IScenarioDataProvider aquireScenarioDataProvider(final String referenceID, final IProgressMonitor progressMonitor) {
 		return new ModelRecordScenarioDataProvider(this, referenceID, progressMonitor);
 	}
 
@@ -262,18 +261,14 @@ public final class ScenarioModelRecord extends ModelRecord {
 		}
 	}
 
-	public static ScenarioModelRecord forException(Exception e) {
+	public static ScenarioModelRecord forException(final Exception e) {
 
-		BiFunction<ModelRecord, IProgressMonitor, InstanceData> loadFunc = (record, monitor) -> {
-			record.setLoadFailure(e);
+		final BiFunction<ModelRecord, IProgressMonitor, InstanceData> loadFunc = (mr, monitor) -> {
+			mr.setLoadFailure(e);
 			return null;
 		};
-		Manifest m = ManifestFactory.eINSTANCE.createManifest();
-
-		ScenarioModelRecord record = new ScenarioModelRecord(m, loadFunc);
-
-		// TODO Auto-generated method stub
-		return record;
+		final Manifest m = ManifestFactory.eINSTANCE.createManifest();
+		return new ScenarioModelRecord(m, loadFunc);
 	}
 
 }

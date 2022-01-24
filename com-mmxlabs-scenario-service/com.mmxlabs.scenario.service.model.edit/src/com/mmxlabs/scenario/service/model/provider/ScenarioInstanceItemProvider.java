@@ -54,6 +54,7 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider {
 			addClientScenarioVersionPropertyDescriptor(object);
 			addClientVersionContextPropertyDescriptor(object);
 			addReadonlyPropertyDescriptor(object);
+			addCloudLockedPropertyDescriptor(object);
 			addValidationStatusCodePropertyDescriptor(object);
 			addManifestPropertyDescriptor(object);
 			addExternalIDPropertyDescriptor(object);
@@ -119,6 +120,18 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_ScenarioInstance_readonly_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_readonly_feature", "_UI_ScenarioInstance_type"),
 				ScenarioServicePackage.eINSTANCE.getScenarioInstance_Readonly(), true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Cloud Locked feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCloudLockedPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioInstance_cloudLocked_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_cloudLocked_feature", "_UI_ScenarioInstance_type"),
+				ScenarioServicePackage.eINSTANCE.getScenarioInstance_CloudLocked(), true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -256,6 +269,7 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider {
 		case ScenarioServicePackage.SCENARIO_INSTANCE__CLIENT_SCENARIO_VERSION:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__CLIENT_VERSION_CONTEXT:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__READONLY:
+		case ScenarioServicePackage.SCENARIO_INSTANCE__CLOUD_LOCKED:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__VALIDATION_STATUS_CODE:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__EXTERNAL_ID:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

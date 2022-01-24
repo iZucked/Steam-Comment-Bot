@@ -26,6 +26,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getClientVersionContext <em>Client Version Context</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getFragments <em>Fragments</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isReadonly <em>Readonly</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isCloudLocked <em>Cloud Locked</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getValidationStatusCode <em>Validation Status Code</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getManifest <em>Manifest</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getExternalID <em>External ID</em>}</li>
@@ -207,6 +208,28 @@ public interface ScenarioInstance extends Container {
 	 * @generated
 	 */
 	void setReadonly(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Cloud Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cloud Locked</em>' attribute.
+	 * @see #setCloudLocked(boolean)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance_CloudLocked()
+	 * @model
+	 * @generated
+	 */
+	boolean isCloudLocked();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isCloudLocked <em>Cloud Locked</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cloud Locked</em>' attribute.
+	 * @see #isCloudLocked()
+	 * @generated
+	 */
+	void setCloudLocked(boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Validation Status Code</b></em>' attribute.

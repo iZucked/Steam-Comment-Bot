@@ -14,8 +14,7 @@ import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 public class ScenarioInstanceFlagsPropertyTester extends PropertyTester {
 	@Override
 	public boolean test(final Object receiver, final String property, final Object[] args, final Object expectedValue) {
-		if (receiver instanceof ScenarioInstance) {
-			final ScenarioInstance scenarioInstance = (ScenarioInstance) receiver;
+		if (receiver instanceof ScenarioInstance scenarioInstance) {
 			if (property.equals("readonly")) {
 				return scenarioInstance.isReadonly();
 			} else if (property.equals("dirty")) {

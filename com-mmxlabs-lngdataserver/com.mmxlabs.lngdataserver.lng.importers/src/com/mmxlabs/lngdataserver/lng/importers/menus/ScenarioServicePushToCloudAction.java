@@ -24,6 +24,8 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import javax.crypto.spec.RC2ParameterSpec;
+
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -34,7 +36,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.widgets.Display;
@@ -49,12 +50,9 @@ import com.google.common.io.ByteStreams;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
 import com.mmxlabs.hub.services.users.UsernameProvider;
-import com.mmxlabs.license.features.KnownFeatures;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationConstants;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataResultRecord;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataService;
-import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataServiceWrapper;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.preferences.CloudOptimiserPreferenceConstants;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.Activator;
 import com.mmxlabs.lngdataserver.lng.importers.menus.CloudOptimisationPushException.Type;
@@ -117,8 +115,6 @@ public class ScenarioServicePushToCloudAction {
 	}
 
 	public static void uploadScenario(final ScenarioInstance scenarioInstance, final boolean optimisation, final List<Slot<?>> targetSlots) {
-		boolean doPublish = false;
-		String notes = null;
 
 		final Shell activeShell = Display.getDefault().getActiveShell();
 
@@ -127,37 +123,31 @@ public class ScenarioServicePushToCloudAction {
 			return;
 		}
 
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_BASECASE_NOTES)) {
-			final InputDialog dialog = new InputDialog(activeShell, "Confirm sending the scenario",
-					String.format("Send scenario %s for online optimisation? Please enter notes.", scenarioInstance.getName()), "", null);
-			doPublish = dialog.open() == InputDialog.OK;
-			if (doPublish) {
-				notes = dialog.getValue();
-			}
-		} else {
-			doPublish = MessageDialog.openQuestion(activeShell, "Confirm sending the scenario", String.format("Send scenario %s for online optimisation?", scenarioInstance.getName()));
+		if (!MessageDialog.openQuestion(activeShell, "Confirm sending the scenario", String.format("Send scenario %s for online optimisation?", scenarioInstance.getName()))) {
+			return;
 		}
+
 		boolean localOpti = false;
-		if (doPublish && CloudOptimisationConstants.RUN_LOCAL_BENCHMARK) {
+		if (CloudOptimisationConstants.RUN_LOCAL_BENCHMARK) {
 			localOpti = MessageDialog.openQuestion(activeShell, "Confirm sending the scenario", "Run locally for runtime comparison?");
 		}
 
-		if (doPublish) {
-			final UserSettings userSettings;
-			if (optimisation) {
-				userSettings = getOptimisationPlanForOptimisation(scenarioInstance);
-			} else {
-				userSettings = getOptimisationPlanForInsertion(scenarioInstance, targetSlots);
-			}
-			if (userSettings != null) {
-				uploadScenario(scenarioInstance, notes, userSettings, optimisation, targetSlots, null, localOpti);
-			}
+		String resultName = null;
+		final UserSettings userSettings;
+		if (optimisation) {
+			final var p = getOptimisationPlanForOptimisation(scenarioInstance);
+			userSettings = p.getFirst();
+			resultName = p.getSecond();
+		} else {
+			userSettings = getOptimisationPlanForInsertion(scenarioInstance, targetSlots);
+		}
+		if (userSettings != null) {
+			uploadScenario(scenarioInstance, resultName, userSettings, optimisation, targetSlots, null, localOpti);
 		}
 	}
 
 	public static void uploadScenario(final ScenarioInstance scenarioInstance, @NonNull final OptionAnalysisModel sandboxModel) {
 		boolean doPublish = false;
-		String notes = null;
 
 		final Shell activeShell = Display.getDefault().getActiveShell();
 
@@ -174,30 +164,30 @@ public class ScenarioServicePushToCloudAction {
 			sandboxModeStr = "define";
 		}
 		final String sendMessage = String.format("Send %s for cloud sandbox %s?", sandboxModel.getName(), sandboxModeStr);
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_DATAHUB_BASECASE_NOTES)) {
-			final InputDialog dialog = new InputDialog(activeShell, "Confirm sending the sandbox", String.format("%s Please enter notes.", sendMessage), "", null);
-			doPublish = dialog.open() == InputDialog.OK;
-			if (doPublish) {
-				notes = dialog.getValue();
-			}
-		} else {
-			doPublish = MessageDialog.openQuestion(activeShell, "Confirm sending the sandbox", sendMessage);
-		}
+
+		doPublish = MessageDialog.openQuestion(activeShell, "Confirm sending the sandbox", sendMessage);
+
 		if (doPublish) {
 			final UserSettings userSettings = getSandboxUserSettings(scenarioInstance, sandboxModel);
 			if (userSettings != null) {
-				uploadScenario(scenarioInstance, notes, userSettings, false, null, sandboxModel, false);
+				uploadScenario(scenarioInstance, sandboxModel.getName(), userSettings, false, null, sandboxModel, false);
 			}
 		}
 	}
 
-	private static @Nullable UserSettings getOptimisationPlanForOptimisation(final ScenarioInstance scenarioInstance) {
+	private static @Nullable Pair<UserSettings, String> getOptimisationPlanForOptimisation(final ScenarioInstance scenarioInstance) {
 		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 		try (IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
 			final LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
-			final OptimisationPlan plan = OptimisationHelper.getOptimiserSettings(scenarioModel, false, "Custom", true, true, null);
+
+			final Set<String> existingNames = new HashSet<>();
+			scenarioInstance.getFragments().forEach(f -> existingNames.add(f.getName()));
+			scenarioInstance.getElements().forEach(f -> existingNames.add(f.getName()));
+
+			final NameProvider p = new NameProvider("Optimisation", existingNames);
+			final OptimisationPlan plan = OptimisationHelper.getOptimiserSettings(scenarioModel, false, "Custom", true, true, p);
 			if (plan != null) {
-				return plan.getUserSettings();
+				return Pair.of(plan.getUserSettings(), plan.getResultName());
 			}
 		} catch (final Exception e) {
 			throw new RuntimeException("Error getting the optimisation plan: " + e.getMessage(), e);
@@ -257,17 +247,17 @@ public class ScenarioServicePushToCloudAction {
 		return userSettings;
 	}
 
-	public static void uploadScenario(final ScenarioInstance scenarioInstance, final String notes, final UserSettings userSettings, //
+	public static void uploadScenario(final ScenarioInstance scenarioInstance, @Nullable final String resultName, final UserSettings userSettings, //
 			final boolean optimisation, final List<Slot<?>> targetSlots, final OptionAnalysisModel sandboxModel, final boolean runLocal) {
 		final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 		try {
-			dialog.run(true, false, m -> doUploadScenario(scenarioInstance, notes, userSettings, optimisation, targetSlots, sandboxModel, m, runLocal));
+			dialog.run(true, false, m -> doUploadScenario(scenarioInstance, resultName, userSettings, optimisation, targetSlots, sandboxModel, m, runLocal));
 		} catch (final InvocationTargetException e) {
 			LOG.error(e.getMessage(), e);
 			final Throwable cause = e.getCause();
 
 			// TODO: Handle gateway errors.
-			// E.g. 502 - bad gateway
+			// E.g. 502 - bad gateway, 500, 504 (timeout)
 			// 400 - bad request
 			// Hostname/dns errors / timeots
 
@@ -324,7 +314,7 @@ public class ScenarioServicePushToCloudAction {
 
 	}
 
-	private static void doUploadScenario(final ScenarioInstance scenarioInstance, final String notes, final UserSettings userSettings, //
+	private static void doUploadScenario(final ScenarioInstance scenarioInstance, final String resultName, final UserSettings userSettings, //
 			final boolean optimisation, @Nullable final List<Slot<?>> targetSlots, @Nullable final OptionAnalysisModel originalSandboxModel, final IProgressMonitor parentProgressMonitor,
 			final boolean runLocal) {
 
@@ -336,14 +326,27 @@ public class ScenarioServicePushToCloudAction {
 			final CloudOptimisationDataResultRecord cRecord = new CloudOptimisationDataResultRecord();
 			cRecord.setUuid(scenarioInstance.getUuid());
 			cRecord.setCreationDate(Instant.now());
+			if (resultName != null) {
+				cRecord.setResultName(resultName);
+			}
 			// This is the Data Hub user ID. It should be different.
 			cRecord.setCreator(UsernameProvider.INSTANCE.getUserID());
 			cRecord.setOriginalName(scenarioInstance.getName());
 			cRecord.setType(problemType.toString());
+			
+			if (originalSandboxModel != null) {
+				switch (originalSandboxModel.getMode()) {
+				case SandboxModeConstants.MODE_DERIVE -> cRecord.setSubType("Define");
+				case SandboxModeConstants.MODE_OPTIMISE -> cRecord.setSubType("Optimise");
+				case SandboxModeConstants.MODE_OPTIONISE -> cRecord.setSubType("Optionise");
+				}
+			}
+			
 			if (originalSandboxModel != null) {
 				cRecord.setComponentUUID(originalSandboxModel.getUuid());
 			}
-
+			cRecord.setScenarioInstance(scenarioInstance);
+			
 			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 
 			IScenarioDataProvider scenarioDataProvider = null;
@@ -506,7 +509,7 @@ public class ScenarioServicePushToCloudAction {
 			String response = null;
 			final SubMonitor uploadMonitor = progressMonitor.split(500);
 			try {
-				response = CloudOptimisationDataServiceWrapper.uploadData(zipToUpload, "checksum", scenarioInstance.getName(), //
+				response = CloudOptimisationDataService.INSTANCE.uploadData(zipToUpload, "checksum", scenarioInstance.getName(), //
 						WrappedProgressMonitor.wrapMonitor(uploadMonitor));
 			} catch (final Exception e) {
 				deleteAnonyMap(anonymisationMap);
@@ -538,7 +541,8 @@ public class ScenarioServicePushToCloudAction {
 				deleteAnonyMap(anonymisationMap);
 				throw new CloudOptimisationPushException(MSG_ERROR_UPLOADING, Type.FAILED_TO_UPLOAD, new IllegalStateException("Unexpected server response: " + e.getMessage()));
 			}
-			CloudOptimisationDataServiceWrapper.updateRecords(cRecord);
+			// Register the task
+			CloudOptimisationDataService.INSTANCE.addRecord(cRecord);
 
 			if (CloudOptimisationConstants.RUN_LOCAL_BENCHMARK && runLocal) {
 				try {
@@ -588,7 +592,7 @@ public class ScenarioServicePushToCloudAction {
 						});
 
 				final IMultiStateResult results = insertionRunner.runInsertion(null, progressMonitor.split(400));
-				 insertionRunner.exportSolutions(results, progressMonitor.split(100));
+				insertionRunner.exportSolutions(results, progressMonitor.split(100));
 
 			}
 			final long b = System.currentTimeMillis();

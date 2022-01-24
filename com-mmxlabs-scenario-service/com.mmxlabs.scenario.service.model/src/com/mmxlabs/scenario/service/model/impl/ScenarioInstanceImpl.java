@@ -32,6 +32,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getClientVersionContext <em>Client Version Context</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getFragments <em>Fragments</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#isReadonly <em>Readonly</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#isCloudLocked <em>Cloud Locked</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getValidationStatusCode <em>Validation Status Code</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getManifest <em>Manifest</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getExternalID <em>External ID</em>}</li>
@@ -189,6 +190,26 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	@Override
 	public void setReadonly(boolean newReadonly) {
 		eSet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Readonly(), newReadonly);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isCloudLocked() {
+		return (Boolean) eGet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_CloudLocked(), true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCloudLocked(boolean newCloudLocked) {
+		eSet(ScenarioServicePackage.eINSTANCE.getScenarioInstance_CloudLocked(), newCloudLocked);
 	}
 
 	/**

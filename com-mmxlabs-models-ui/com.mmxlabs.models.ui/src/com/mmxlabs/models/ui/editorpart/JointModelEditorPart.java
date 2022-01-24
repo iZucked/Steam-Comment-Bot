@@ -191,6 +191,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 			}
 			if (msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Readonly()) {
 				updateLocked();
+			} else if (msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_CloudLocked()) {
+				updateLocked();
 			} else if (msg.getFeature() == ScenarioServicePackage.eINSTANCE.getContainer_Name()) {
 				RunnerHelper.asyncExec(() -> setPartName(msg.getNewStringValue()));
 			}
@@ -209,7 +211,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	 */
 	private MMXRootObject rootObject;
 	/**
-	 * The editing domain for controls to use. This is pretty standard, but hooks command creation to allow extra things there
+	 * The editing domain for controls to use. This is pretty standard, but hooks
+	 * command creation to allow extra things there
 	 */
 	private CommandProviderAwareEditingDomain editingDomain;
 	private AdapterFactory adapterFactory;
@@ -235,7 +238,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 				String title = getEditorInput().getName();
 
-				final boolean newLock = scenarioInstance2.isReadonly() || modelReference.isLocked();
+				final boolean newLock = scenarioInstance2.isReadonly() || scenarioInstance2.isCloudLocked() || modelReference.isLocked();
 				if (scenarioInstance2.isReadonly()) {
 					title += " (read-only)";
 				} else {
@@ -435,7 +438,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 			if (t instanceof InvocationTargetException) {
 				if (t.getCause() != null) {
 					t = t.getCause();
-					// reasonProvider = (IReasonProvider) Platform.getAdapterManager().loadAdapter(t.getCause(), IReasonProvider.class.getCanonicalName());
+					// reasonProvider = (IReasonProvider)
+					// Platform.getAdapterManager().loadAdapter(t.getCause(),
+					// IReasonProvider.class.getCanonicalName());
 				}
 			}
 			if (t instanceof RuntimeException) {
@@ -532,7 +537,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getExtraValidationContext()
+	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#
+	 * getExtraValidationContext()
 	 */
 	@Override
 	public IExtraValidationContext getExtraValidationContext() {
@@ -542,7 +548,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#pushExtraValidationContext(com.mmxlabs.models.ui.validation.IExtraValidationContext)
+	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#
+	 * pushExtraValidationContext(com.mmxlabs.models.ui.validation.
+	 * IExtraValidationContext)
 	 */
 	@Override
 	public void pushExtraValidationContext(final IExtraValidationContext context) {
@@ -552,7 +560,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#popExtraValidationContext()
+	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#
+	 * popExtraValidationContext()
 	 */
 	@Override
 	public void popExtraValidationContext() {
@@ -640,7 +649,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getEditingDomain()
+	 * @see
+	 * com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getEditingDomain()
 	 */
 	@Override
 	public EditingDomain getEditingDomain() {
@@ -711,7 +721,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getAdapterFactory()
+	 * @see
+	 * com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getAdapterFactory()
 	 */
 	@Override
 	public AdapterFactory getAdapterFactory() {
@@ -721,7 +732,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getReferenceValueProviderCache()
+	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#
+	 * getReferenceValueProviderCache()
 	 */
 	@Override
 	public IReferenceValueProviderProvider getReferenceValueProviderCache() {
@@ -729,7 +741,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	}
 
 	/**
-	 * Get a reference value provider for the given reference on the given EClass. Delegates to the result of {@link #getReferenceValueProviderCache()}
+	 * Get a reference value provider for the given reference on the given EClass.
+	 * Delegates to the result of {@link #getReferenceValueProviderCache()}
 	 * 
 	 * @param owner
 	 * @param reference
@@ -742,7 +755,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getDefaultCommandHandler()
+	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#
+	 * getDefaultCommandHandler()
 	 */
 	@Override
 	public ICommandHandler getDefaultCommandHandler() {
@@ -752,7 +766,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getRootObject()
+	 * @see
+	 * com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getRootObject()
 	 */
 	@Override
 	public MMXRootObject getRootObject() {
@@ -786,7 +801,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#setDisableCommandProviders(boolean)
+	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#
+	 * setDisableCommandProviders(boolean)
 	 */
 	@Override
 	public void setDisableCommandProviders(final boolean disable) {
@@ -796,7 +812,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#setDisableUpdates(boolean)
+	 * @see
+	 * com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#setDisableUpdates(
+	 * boolean)
 	 */
 	@Override
 	public void setDisableUpdates(final boolean disable) {
@@ -806,7 +824,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#setCurrentViewer(org.eclipse.jface.viewers.Viewer)
+	 * @see
+	 * com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#setCurrentViewer(
+	 * org.eclipse.jface.viewers.Viewer)
 	 */
 	@Override
 	public void setCurrentViewer(final Viewer viewer) {
@@ -852,7 +872,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getScenarioInstance()
+	 * @see
+	 * com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation#getScenarioInstance
+	 * ()
 	 */
 	@Override
 	public ScenarioInstance getScenarioInstance() {

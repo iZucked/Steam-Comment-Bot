@@ -11,6 +11,7 @@ import java.util.Objects;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class CloudOptimisationDataResultRecord {
 
@@ -23,6 +24,17 @@ public class CloudOptimisationDataResultRecord {
 	 */
 	private String originalName;
 
+	/**
+	 * The optimisation result name as this is not passed to the cloud and back
+	 */
+	private String resultName;
+
+	/**
+	 * The UUID of the resulting optimisation (not needed for a sandbox) once
+	 * saved..
+	 */
+	private String resultUUID;
+
 	private String jobid;
 
 	private String creator;
@@ -33,6 +45,7 @@ public class CloudOptimisationDataResultRecord {
 
 	// Type of optimisation
 	private String type;
+	private String subType;
 
 	// UUID of component e.g. sandbox
 	private String componentUUID;
@@ -44,32 +57,16 @@ public class CloudOptimisationDataResultRecord {
 	private long localRuntime;
 	private long cloudRuntime;
 
+	private boolean localJob;
+
 	private @NonNull ResultStatus status = ResultStatus.notfound();
 
 	@JsonIgnore
 	private File result;
-
-	public CloudOptimisationDataResultRecord copy() {
-		CloudOptimisationDataResultRecord r = new CloudOptimisationDataResultRecord();
-		r.anonyMapFileName = this.anonyMapFileName;
-		r.creationDate = this.creationDate;
-		r.creator = this.creator;
-		r.deleted = this.deleted;
-		r.jobid = this.jobid;
-		r.originalName = this.originalName;
-		r.remote = this.remote;
-		r.result = this.result;
-		r.cloudRuntime = this.cloudRuntime;
-		r.localRuntime = this.localRuntime;
-		r.status = this.status.copy();
-		r.uuid = this.uuid;
-		r.type = this.type;
-		r.componentUUID = this.componentUUID;
-
-		return r;
-	}
-
 	
+	@JsonIgnore
+	private ScenarioInstance scenarioInstance;
+
 	public String getUuid() {
 		return uuid;
 	}
@@ -166,7 +163,6 @@ public class CloudOptimisationDataResultRecord {
 		this.deleted = deleted;
 	}
 
-	
 	public void setLocalRuntime(long l) {
 		this.localRuntime = l;
 
@@ -208,6 +204,46 @@ public class CloudOptimisationDataResultRecord {
 
 	public void setComponentUUID(String componentUUID) {
 		this.componentUUID = componentUUID;
+	}
+
+	public String getResultName() {
+		return resultName;
+	}
+
+	public void setResultName(String resultName) {
+		this.resultName = resultName;
+	}
+
+	public String getResultUUID() {
+		return resultUUID;
+	}
+
+	public void setResultUUID(String resultUUID) {
+		this.resultUUID = resultUUID;
+	}
+
+	public boolean isLocalJob() {
+		return localJob;
+	}
+
+	public void setLocalJob(boolean localJob) {
+		this.localJob = localJob;
+	}
+
+	public ScenarioInstance getScenarioInstance() {
+		return scenarioInstance;
+	}
+
+	public void setScenarioInstance(ScenarioInstance scenarioInstance) {
+		this.scenarioInstance = scenarioInstance;
+	}
+
+	public String getSubType() {
+		return subType;
+	}
+
+	public void setSubType(String subType) {
+		this.subType = subType;
 	}
 
 }

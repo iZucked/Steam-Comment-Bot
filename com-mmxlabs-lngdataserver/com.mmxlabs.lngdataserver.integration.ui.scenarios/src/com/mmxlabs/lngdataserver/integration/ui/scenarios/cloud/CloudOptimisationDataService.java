@@ -5,18 +5,13 @@
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -26,38 +21,40 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.hub.common.http.IProgressListener;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
+import com.mmxlabs.jobmanager.jobs.EJobState;
+import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.rcp.common.CommonImages;
-import com.mmxlabs.rcp.common.CommonImages.IconMode;
-import com.mmxlabs.rcp.common.CommonImages.IconPaths;
+import com.mmxlabs.models.lng.analytics.OptionAnalysisModel;
+import com.mmxlabs.models.lng.transformer.ui.analytics.LNGSandboxJobDescriptor;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.locking.WellKnownTriggers;
-import com.mmxlabs.scenario.service.model.Container;
+import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioService;
-import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
-import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
-import com.mmxlabs.scenario.service.util.AbstractScenarioService;
+import com.mmxlabs.scenario.service.ui.IProgressProvider;
 
-public class CloudOptimisationDataService extends AbstractScenarioService {
+public class CloudOptimisationDataService implements IProgressProvider {
 
 	public static final int CURRENT_MODEL_VERSION = 1;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CloudOptimisationDataService.class);
 	public static final CloudOptimisationDataService INSTANCE = new CloudOptimisationDataService();
 
-	private File dataFolder;
-	private String serviceName;
-
 	private CloudOptimisationDataServiceClient client;
 	private CloudOptimisationDataUpdater updater;
 
-	private ConcurrentLinkedQueue<IUpdateListener> listeners = new ConcurrentLinkedQueue<>();
+	private final ConcurrentLinkedQueue<IUpdateListener> listeners = new ConcurrentLinkedQueue<>();
 
 	private CloudOptimisationDataService() {
-		super("Online Tasks");
 		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_CLOUD_OPTIMISATION)) {
 			start();
 		}
@@ -68,20 +65,20 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 	}
 
 	private void update(final CloudOptimisationDataResultRecord cRecord) {
-		fireListeners();
+		fireListeners(cRecord);
 	}
 
-	private void fireListeners() {
+	private void fireListeners(@Nullable CloudOptimisationDataResultRecord cRecord) {
 		try {
-			listeners.forEach(IUpdateListener::updated);
-		} catch (Exception e) {
+			listeners.forEach(l -> l.updated(cRecord));
+
+			final ScenarioInstance instanceRef = cRecord.getScenarioInstance();
+
+			RunnerHelper.asyncExec(() -> progressListeners.forEach(p -> p.changed(instanceRef)));
+		} catch (final Exception e) {
 			LOGGER.error(e.getMessage(), e);
 		}
 
-	}
-
-	public @Nullable File getDataFile(final String uuid) {
-		return new File(String.format("%s/%s.data", dataFolder.getAbsoluteFile(), uuid));
 	}
 
 	public String uploadData(final File dataFile, //
@@ -90,38 +87,31 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 			final IProgressListener progressListener) throws Exception {
 		String response = null;
 		try {
-
-			try {
-				updater.pause();
-				response = //
-						client.upload(dataFile, checksum, scenarioName, progressListener);
-			} catch (final Exception e) {
-				LOGGER.error(e.getMessage());
-			} finally {
-				updater.resume();
-			}
-			try {
-				updater.pause();
-				updater.refresh();
-			} finally {
-				updater.resume();
-			}
-		} catch (Exception e) {
-			throw e;
+			updater.pause();
+			response = client.upload(dataFile, checksum, scenarioName, progressListener);
+		} catch (final Exception e) {
+			LOGGER.error(e.getMessage());
+		} finally {
+			updater.resume();
+		}
+		try {
+			updater.pause();
+			updater.refresh();
+		} finally {
+			updater.resume();
 		}
 		return response;
 	}
 
-	public synchronized boolean addRecord(final CloudOptimisationDataResultRecord record) {
+	public synchronized boolean addRecord(final CloudOptimisationDataResultRecord cRecord) {
 		updater.pause();
 		try {
 			// Mark as available upstream
-			record.setStatus(ResultStatus.submitted());
-			record.setRemote(true);
+			cRecord.setStatus(ResultStatus.submitted());
+			cRecord.setRemote(true);
 
-			updater.addNewlySubmittedOptimisationRecord(record);
-			boolean result = true;
-			return result;
+			updater.addNewlySubmittedOptimisationRecord(cRecord);
+			return true;
 		} finally {
 			updater.resume();
 		}
@@ -144,23 +134,19 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 					final IPath workspaceLocation = workspace.getRoot().getLocation();
 					final File workspaceLocationFile = workspaceLocation.toFile();
 
-					dataFolder = new File(workspaceLocationFile.getAbsolutePath() + File.separator + "cloud-opti");
+					final File dataFolder = new File(workspaceLocationFile.getAbsolutePath() + File.separator + "cloud-opti");
 					if (!dataFolder.exists()) {
 						dataFolder.mkdirs();
 					}
 
 					client = new CloudOptimisationDataServiceClient();
 
-					getServiceModel();
-					setReady();
 					WellKnownTriggers.WORKSPACE_DATA_ENCRYPTION_CHECK.delayUntilTriggered(() -> {
 
 						// Initial model load
 						new Thread(() -> {
 
-							getServiceModel();
-							setReady();
-							updater = new CloudOptimisationDataUpdater(dataFolder, client, serviceModel, CloudOptimisationDataService.this::update);
+							updater = new CloudOptimisationDataUpdater(dataFolder, client, CloudOptimisationDataService.this::update);
 							updater.start();
 						}).start();
 					});
@@ -179,120 +165,96 @@ public class CloudOptimisationDataService extends AbstractScenarioService {
 	}
 
 	public interface IUpdateListener {
-		void updated();
+		void updated(@Nullable CloudOptimisationDataResultRecord cRecord);
 	}
 
-	public void addListener(IUpdateListener l) {
+	public void addListener(final IUpdateListener l) {
 		if (!listeners.contains(l)) {
 			listeners.add(l);
 		}
 	}
 
-	public void removeListener(IUpdateListener l) {
+	public void removeListener(final IUpdateListener l) {
 		listeners.remove(l);
 	}
 
-	public void refresh() throws IOException {
-		if (updater != null) {
-			updater.pause();
-			try {
-				updater.refresh();
-			} finally {
-				updater.resume();
-			}
-		}
-	}
-
-	public void pause() {
-		if (updater != null) {
-			updater.pause();
-		}
-	}
-
-	public void resume() {
-		if (updater != null) {
-			updater.resume();
-		}
-	}
-
-	@Override
-	public void delete(@NonNull Container container) {
-		if (serviceModel.isOffline()) {
-			return;
-		}
-		// Note: while this is recursive, we do assume a child first deletion set of
-		// calls as defined in DeleteScenarioCommandHandler
-		final List<String> jobIdsToDelete = new LinkedList<>();
-		recursiveDelete(container, jobIdsToDelete);
+	public void delete(final Collection<String> jobIdsToDelete) {
 		updater.deleteDownloaded(jobIdsToDelete);
 	}
 
-	public void delete(Collection<String> jobIdsToDelete) {
-		updater.deleteDownloaded(jobIdsToDelete);
-	}
-
-	public void setLocalRuntime(String jobId, long runtime) {
+	public void setLocalRuntime(final String jobId, final long runtime) {
 		updater.setLocalRuntime(jobId, runtime);
 	}
 
-	private void recursiveDelete(final Container parent, final List<String> jobIds) {
-		if (parent instanceof ScenarioInstance scenarioInstance) {
-			jobIds.add(scenarioInstance.getExternalID());
+	@Override
+	public @Nullable Pair<Double, RunType> getProgress(final ScenarioInstance scenarioInstance, final ScenarioFragment fragment) {
+
+		for (final var cRecord : getRecords()) {
+			if (Objects.equals(cRecord.getUuid(), scenarioInstance.getUuid())) {
+				if (cRecord.isActive()) {
+					if (fragment == null) {
+						return Pair.of(cRecord.getStatus().getProgress() / 100.0, RunType.Cloud);
+					} else if (fragment.getFragment() instanceof final OptionAnalysisModel sandbox) {
+						if (Objects.equals(sandbox.getUuid(), cRecord.getComponentUUID())) {
+							return Pair.of(cRecord.getStatus().getProgress() / 100.0, RunType.Cloud);
+						}
+					}
+				}
+			}
 		}
-		for (final Container c : parent.getElements()) {
-			recursiveDelete(c, jobIds);
+// TODO; move!
+		ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecordChecked(scenarioInstance);
+		if (modelRecord != null) {
+			return ServiceHelper.withService(IEclipseJobManager.class, jobManager -> {
+
+				try (final ModelReference modelReference = modelRecord.aquireReferenceIfLoaded("CloudOptimisationDataService")) {
+					if (modelReference != null) {
+						final Object object = modelReference.getInstance();
+						if (object instanceof MMXRootObject) {
+							final String uuid = scenarioInstance.getUuid();
+
+							final IJobDescriptor job = jobManager.findJobForResource(uuid);
+							if (job != null) {
+								boolean returnProgress = false;
+								if (fragment == null) {
+									returnProgress = true;
+								} else if (fragment.getFragment() instanceof final OptionAnalysisModel sandbox) {
+									if (job instanceof LNGSandboxJobDescriptor desc) {
+										if (sandbox == desc.getExtraValidationTarget()) {
+											returnProgress = true;
+										}
+									}
+								}
+								if (returnProgress) {
+									final IJobControl control = jobManager.getControlForJob(job);
+									if (control != null) {
+										if (control.getJobState() == EJobState.RUNNING) {
+											double p = control.getProgress();
+											return Pair.of(p / 100.0, RunType.Local);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				return null;
+			});
 		}
-	}
-
-	@Override
-	public void moveInto(@NonNull List<Container> elements, @NonNull Container destination) {
-		// do nothing
-	}
-
-	@Override
-	public void makeFolder(@NonNull Container parent, @NonNull String name) {
-		// do nothing
-	}
-
-	@Override
-	public String getSerivceID() {
-		return "cloud-workspace-" + serviceName;
-	}
-
-	@Override
-	public ScenarioInstance copyInto(@NonNull Container parent, @NonNull ScenarioModelRecord tmpRecord, @NonNull String name, @NonNull IProgressMonitor progressMonitor) throws Exception {
-		// do nothing
 		return null;
+
+	}
+
+	private final ConcurrentLinkedQueue<IProgressChanged> progressListeners = new ConcurrentLinkedQueue<IProgressProvider.IProgressChanged>();
+
+	@Override
+	public void removeChangedListener(final IProgressChanged listener) {
+		progressListeners.remove(listener);
 	}
 
 	@Override
-	public ScenarioInstance copyInto(@NonNull Container parent, @NonNull IScenarioDataProvider scenarioDataProvider, @NonNull String name, @NonNull IProgressMonitor progressMonitor) throws Exception {
-		// do nothing
-		return null;
+	public void addChangedListener(final IProgressChanged listener) {
+		progressListeners.add(listener);
 	}
 
-	@Override
-	public void fireEvent(final ScenarioServiceEvent event, final ScenarioInstance scenarioInstance) {
-		super.fireEvent(event, scenarioInstance);
-	}
-
-	@Override
-	protected ScenarioService initServiceModel() {
-		final ScenarioService serviceModel = ScenarioServiceFactory.eINSTANCE.createScenarioService();
-		serviceModel.setName(serviceName);
-		serviceModel.setDescription("Online tasks results");
-		serviceModel.setLocal(false);
-		serviceModel.setOffline(false);
-		serviceModel.setServiceID(getSerivceID());
-
-		// This image needs disposing
-		serviceModel.setImage(CommonImages.getImageDescriptor(IconPaths.Cloud_16, IconMode.Enabled).createImage());
-
-		return serviceModel;
-	}
-
-	@Override
-	public URI resolveURI(final String uri) {
-		return URI.createURI(uri);
-	}
 }

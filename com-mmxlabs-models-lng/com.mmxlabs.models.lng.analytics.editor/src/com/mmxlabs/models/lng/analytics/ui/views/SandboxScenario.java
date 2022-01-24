@@ -59,8 +59,17 @@ public class SandboxScenario {
 		eventBroker.post("create-sandbox-view", this);
 	}
 
+	public void openAndShowResult() {
+		final IEventBroker eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
+		eventBroker.post("create-sandbox-view-with-result", this);
+	}
+
 	public static void open(final ScenarioInstance instance, final OptionAnalysisModel model) {
 		new SandboxScenario(instance, model).open();
+	}
+
+	public static void openAndShowResult(final ScenarioInstance instance, final OptionAnalysisModel model) {
+		new SandboxScenario(instance, model).openAndShowResult();
 	}
 
 	public @Nullable MMXRootObject getRootObject() {

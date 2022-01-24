@@ -21,12 +21,7 @@ import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 public class ScenarioInstanceStatusProvider extends DefaultStatusProvider {
 	private ScenarioModelRecord modelRecord;
 
-	private final @NonNull IScenarioValidationListener validationListener = new IScenarioValidationListener() {
-		@Override
-		public void validationChanged(@NonNull ScenarioModelRecord modelRecord, @NonNull IStatus status) {
-			fireStatusChanged(status);
-		}
-	};
+	private final @NonNull IScenarioValidationListener validationListener = (modelRecord, status) -> fireStatusChanged(status);
 
 	public ScenarioInstanceStatusProvider(final @NonNull ScenarioInstance scenarioInstance) {
 		this.modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);

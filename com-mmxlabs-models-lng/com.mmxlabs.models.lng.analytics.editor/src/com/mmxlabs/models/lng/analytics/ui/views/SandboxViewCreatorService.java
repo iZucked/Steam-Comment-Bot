@@ -21,12 +21,21 @@ import com.mmxlabs.rcp.common.RunnerHelper;
 public class SandboxViewCreatorService {
 
 	public static final String ChangeSetViewCreatorService_Topic = "create-sandbox-view";
+	public static final String ChangeSetViewCreatorService_TopicWithResult = "create-sandbox-view-with-result";
 
 	private static final Logger log = LoggerFactory.getLogger(SandboxViewCreatorService.class);
 	private final EventHandler eventHandler = event -> {
 		try {
 			final SandboxScenario solution = (SandboxScenario) event.getProperty(IEventBroker.DATA);
-			openView(solution);
+			openView(solution, false);
+		} catch (final Exception e) {
+			log.error("Error handling create change set view event", e);
+		}
+	};
+	private final EventHandler eventHandler2 = event -> {
+		try {
+			final SandboxScenario solution = (SandboxScenario) event.getProperty(IEventBroker.DATA);
+			openView(solution, true);
 		} catch (final Exception e) {
 			log.error("Error handling create change set view event", e);
 		}
@@ -50,10 +59,12 @@ public class SandboxViewCreatorService {
 				// Here the workbench has been marked as running. But it may not be really.
 				// https://bugs.eclipse.org/bugs/show_bug.cgi?id=49316
 				// This suggests running on the display thread to guarantee this.
-				// Note: The previous code got to a point where the workbench service locator was null during an ITS run.
+				// Note: The previous code got to a point where the workbench service locator
+				// was null during an ITS run.
 				RunnerHelper.asyncExec(() -> {
 					eventBroker = PlatformUI.getWorkbench().getService(IEventBroker.class);
 					eventBroker.subscribe(ChangeSetViewCreatorService_Topic, eventHandler);
+					eventBroker.subscribe(ChangeSetViewCreatorService_TopicWithResult, eventHandler2);
 				});
 			};
 		}.start();
@@ -66,10 +77,7 @@ public class SandboxViewCreatorService {
 		}
 	}
 
-	private void openView(final SandboxScenario sandboxScenario) {
-		final EPartService partService = PlatformUI.getWorkbench().getService(EPartService.class);
-		final EModelService modelService = PlatformUI.getWorkbench().getService(EModelService.class);
-		final MApplication application = PlatformUI.getWorkbench().getService(MApplication.class);
+	private void openView(final SandboxScenario sandboxScenario, boolean showResult) {
 
 		RunnerHelper.asyncExec(() -> {
 
@@ -77,9 +85,8 @@ public class SandboxViewCreatorService {
 			try {
 				// No colon in id strings
 				final IViewPart part = activePage.showView(OptionModellerView.ID, null, IWorkbenchPage.VIEW_VISIBLE);
-				if (part instanceof OptionModellerView) {
-					final OptionModellerView sandboxView = (OptionModellerView) part;
-					sandboxView.openSandboxScenario(sandboxScenario);
+				if (part instanceof OptionModellerView sandboxView) {
+					sandboxView.openSandboxScenario(sandboxScenario, showResult);
 				}
 				return;
 			} catch (final PartInitException e) {

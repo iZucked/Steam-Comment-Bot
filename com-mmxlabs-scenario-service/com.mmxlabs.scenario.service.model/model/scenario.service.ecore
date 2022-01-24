@@ -59,6 +59,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="fragments" upperBound="-1"
         eType="#//ScenarioFragment" transient="true" containment="true" eOpposite="#//ScenarioFragment/scenarioInstance"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="readonly" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cloudLocked" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="validationStatusCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="manifest" eType="ecore:EClass ../../com.mmxlabs.scenario.service.manifest/model/scenariomanifest.ecore#//Manifest"
         transient="true"/>

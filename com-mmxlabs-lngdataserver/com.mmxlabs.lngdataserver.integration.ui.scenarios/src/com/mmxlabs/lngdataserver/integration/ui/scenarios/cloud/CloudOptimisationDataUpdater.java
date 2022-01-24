@@ -34,7 +34,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
@@ -62,7 +61,6 @@ import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
@@ -71,12 +69,11 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 import com.mmxlabs.scenario.service.model.util.encryption.ScenarioEncryptionException;
 
-public class CloudOptimisationDataUpdater {
+class CloudOptimisationDataUpdater {
 
 	private final CloudOptimisationDataServiceClient client;
 
 	private final ExecutorService taskExecutor;
-	private final ScenarioService modelRoot;
 
 	private final File basePath;
 	private final File tasksFile;
@@ -97,9 +94,7 @@ public class CloudOptimisationDataUpdater {
 	private boolean shortPoll = false;
 	private boolean runUpdateThread = false;
 
-	public CloudOptimisationDataUpdater(final File basePath, final CloudOptimisationDataServiceClient client, final ScenarioService modelRoot,
-			final Consumer<CloudOptimisationDataResultRecord> readyCallback) {
-		this.modelRoot = modelRoot;
+	public CloudOptimisationDataUpdater(final File basePath, final CloudOptimisationDataServiceClient client, final Consumer<CloudOptimisationDataResultRecord> readyCallback) {
 		this.basePath = basePath;
 		this.tasksFile = new File(basePath.getAbsolutePath() + IPath.SEPARATOR + "tasks.json");
 		this.userIdFile = new File(basePath.getAbsolutePath() + IPath.SEPARATOR + "userId.txt");
@@ -125,26 +120,21 @@ public class CloudOptimisationDataUpdater {
 						LOG.error(e.getMessage(), e);
 					}
 				}
-				if (!installedRecords.containsKey(cRecord.getJobid())) {
-					taskExecutor.execute(new InstallTask(cRecord));
-				}
 			}
 		}
 	}
 
 	private class DownloadTask implements Runnable {
 		private final CloudOptimisationDataResultRecord cRecord;
-		private final Container parent;
 
 		public DownloadTask(final CloudOptimisationDataResultRecord cRecord) {
 			this.cRecord = cRecord;
-			this.parent = modelRoot;
 		}
 
 		@Override
 		public void run() {
 
-			final boolean importResultXMI = false;
+			final boolean importResultXMI = true;
 
 			final File f = new File(String.format("%s/%s.lingo", basePath, cRecord.getJobid()));
 			if (!f.exists()) {
@@ -153,8 +143,13 @@ public class CloudOptimisationDataUpdater {
 					final File temp = new File(String.format("%s/%s-temp.lingo", basePath, cRecord.getJobid()));
 					if (!downloadData(cRecord, temp)) {
 						// Failed!
+
+						temp.delete();
+
 						return;
 					} else {
+
+						System.out.println("Downloaded " + temp);
 
 						final File anonymisationMap = new File(String.format("%s/%s.amap", basePath, cRecord.getJobid()));
 
@@ -213,31 +208,10 @@ public class CloudOptimisationDataUpdater {
 						if (importResultXMI) {
 
 							// Look up the original scenario.
-							final ScenarioInstance[] instanceRef = new ScenarioInstance[1];
-							ServiceHelper.withAllServices(IScenarioService.class, null, ss -> {
-								// Really want to make sure this is the "My Scenarios" services, but local is a
-								// good proxy for now.
-								if (ss.getServiceModel().isLocal()) {
-									// Does the UUID exist in the service?
-									if (ss.exists(cRecord.getUuid())) {
-										final TreeIterator<EObject> itr = ss.getServiceModel().eAllContents();
-										while (itr.hasNext()) {
-											final EObject obj = itr.next();
-											if (obj instanceof final ScenarioInstance si) {
-												if (Objects.equals(cRecord.getUuid(), si.getUuid())) {
-													instanceRef[0] = si;
-													return false;
-												}
-											}
-										}
-									}
+							final ScenarioInstance instanceRef = cRecord.getScenarioInstance();
 
-								}
-								return false;
-							});
-
-							if (instanceRef[0] != null) {
-								final ScenarioModelRecord mr = SSDataManager.Instance.getModelRecord(instanceRef[0]);
+							if (instanceRef != null) {
+								final ScenarioModelRecord mr = SSDataManager.Instance.getModelRecord(instanceRef);
 								try (IScenarioDataProvider sdp = mr.aquireScenarioDataProvider("DownloadTask:patchScenario")) {
 									final AnalyticsModel am = ScenarioModelUtil.getAnalyticsModel(sdp);
 
@@ -255,49 +229,48 @@ public class CloudOptimisationDataUpdater {
 									final Resource rr = ed.getResourceSet().createResource(solutionFileURI);
 									rr.load(null);
 									final AbstractSolutionSet res = (AbstractSolutionSet) rr.getContents().get(0);
+
+									if (cRecord.getResultName() != null && !cRecord.getResultName().isBlank()) {
+										res.setName(cRecord.getResultName());
+									}
+
 									assert res != null;
 
 									// "Resolve" the references. The result references to the main scenario may be
 									// "proxy" objects
 									EcoreUtil.resolveAll(ed.getResourceSet());
 
+									// Remove the obsolete resource
+									ed.getResourceSet().getResources().remove(rr);
+									// Clear the mapping
+									ed.getResourceSet().getURIConverter().getURIMap().remove(URI.createURI(CloudOptimisationConstants.ROOT_MODEL_URI));
+
+									rr.getContents().clear();
+
 									if (cRecord.getType() != null) {
 										final String type = cRecord.getType();
 										switch (type) {
 										case "SANDBOX" -> {
 											for (var om : am.getOptionModels()) {
-
 												if (Objects.equals(cRecord.getComponentUUID(), om.getUuid())) {
-													RunnerHelper.exec(() -> {
-														ed.getCommandStack().execute(SetCommand.create(ed, om, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULTS, res));
-													}, true);
+													RunnerHelper.exec(() -> ed.getCommandStack().execute(SetCommand.create(ed, om, AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULTS, res)),
+															true);
 													break;
 												}
 											}
+										}
+										case "OPTIMISATION" -> RunnerHelper
+												.exec(() -> ed.getCommandStack().execute(AddCommand.create(ed, am, AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS, res)), true);
 
-										}
-										case "OPTIMISATION" -> {
-											RunnerHelper.exec(() -> {
-												final Command cmd = AddCommand.create(ed, am, AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS, res);
-												if (cmd.canExecute()) {
-													ed.getCommandStack().execute(cmd);
-												} else {
-													final int ii = 0;
-												}
-											}, true);
-										}
-										case "OPTIONISER" -> {
-											RunnerHelper.exec(() -> {
-												ed.getCommandStack().execute(AddCommand.create(ed, am, AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS, res));
-											}, true);
-										}
+										case "OPTIONISER" -> RunnerHelper
+												.exec(() -> ed.getCommandStack().execute(AddCommand.create(ed, am, AnalyticsPackage.Literals.ANALYTICS_MODEL__OPTIMISATIONS, res)), true);
+
 										}
 									}
 
-									// Remove the obsolete resource
-									ed.getResourceSet().getResources().remove(rr);
-									// Clear the mapping
-									ed.getResourceSet().getURIConverter().getURIMap().remove(URI.createURI(CloudOptimisationConstants.ROOT_MODEL_URI));
+//									IS THIS THE SAME INSTANCE?```
+									System.out.println(res.getUuid());
+									cRecord.setResultUUID(res.getUuid());
 
 								}
 							}
@@ -311,8 +284,6 @@ public class CloudOptimisationDataUpdater {
 						temp.renameTo(f);
 						cRecord.setResult(f);
 
-						// trigger install straight away
-						new InstallTask(cRecord).run();
 						readyCallback.accept(cRecord);
 					}
 				} catch (final Exception e) {
@@ -355,44 +326,6 @@ public class CloudOptimisationDataUpdater {
 		}
 	}
 
-	private class InstallTask implements Runnable {
-		private final CloudOptimisationDataResultRecord record;
-		private final Container parent;
-
-		public InstallTask(final CloudOptimisationDataResultRecord record) {
-			this.record = record;
-			this.parent = modelRoot;
-		}
-
-		@Override
-		public void run() {
-			final File f = new File(String.format("%s/%s.lingo", basePath, record.getJobid()));
-
-			if (f.exists() && f.canRead() && !installedRecords.containsKey(record.getJobid())) {
-				final ScenarioInstance instance = loadScenarioFrom(f, record, true);
-				if (instance != null) {
-					RunnerHelper.syncExecDisplayOptional(() -> {
-						instance.setName(record.getOriginalName());
-//						// We could already be in a container, so lets remove it first...
-//						if (instance.eContainer() != null) {
-//							((Container) instance.eContainer()).getElements().remove(instance);
-//						}
-
-						// ... then re-add it to the new (or existing) parent.
-						parent.getElements().add(instance);
-						installedRecords.put(record.getJobid(), instance);
-
-					});
-				}
-			}
-
-			if (record.getCreationDate() != null) {
-				readyCallback.accept(record);
-			}
-		}
-
-	}
-
 	public void stop() {
 		runUpdateThread = false;
 		if (updateThread != null) {
@@ -408,6 +341,7 @@ public class CloudOptimisationDataUpdater {
 			try {
 				final String json = Files.readString(tasksFile.toPath());
 				final List<CloudOptimisationDataResultRecord> tasks = CloudOptimisationDataServiceClient.parseRecordsJSONData(json);
+				final List<CloudOptimisationDataResultRecord> obsoleteTasks = new LinkedList<>();
 				if (tasks != null && !tasks.isEmpty()) {
 					// Update downloaded state
 					for (final var r : tasks) {
@@ -415,10 +349,45 @@ public class CloudOptimisationDataUpdater {
 						if (lingoFile.exists()) {
 							r.setResult(lingoFile);
 						}
+
+						final ScenarioInstance[] instanceRef = new ScenarioInstance[1];
+						ServiceHelper.withAllServices(IScenarioService.class, null, ss -> {
+							// Really want to make sure this is the "My Scenarios" services, but local is a
+							// good proxy for now.
+							if (ss.getServiceModel().isLocal()) {
+								// Does the UUID exist in the service?
+								if (ss.exists(r.getUuid())) {
+									final TreeIterator<EObject> itr = ss.getServiceModel().eAllContents();
+									while (itr.hasNext()) {
+										final EObject obj = itr.next();
+										if (obj instanceof final ScenarioInstance si) {
+											if (Objects.equals(r.getUuid(), si.getUuid())) {
+												instanceRef[0] = si;
+												return false;
+											}
+										}
+									}
+								}
+
+							}
+							return false;
+						});
+						if (instanceRef[0] == null) {
+							obsoleteTasks.add(r);
+						} else {
+							r.setScenarioInstance(instanceRef[0]);
+						}
 					}
+
+					tasks.removeAll(obsoleteTasks);
 
 					currentRecords = ImmutableList.copyOf(tasks);
 					runDownloadAndInstallTasks(currentRecords);
+
+					currentRecords.forEach(this::setScenarioCloudLocked);
+
+					// Trigger UI update
+					readyCallback.accept(null);
 				}
 			} catch (final IOException e) {
 				e.printStackTrace();
@@ -493,7 +462,7 @@ public class CloudOptimisationDataUpdater {
 
 		final List<CloudOptimisationDataResultRecord> newList = new LinkedList<>();
 		for (final CloudOptimisationDataResultRecord originalR : currentRecords) {
-			final CloudOptimisationDataResultRecord r = originalR.copy();
+			final CloudOptimisationDataResultRecord r = originalR;// .copy();
 
 			final boolean oldRemote = r.isRemote();
 			final ResultStatus oldStatus = r.getStatus();
@@ -512,16 +481,31 @@ public class CloudOptimisationDataUpdater {
 			}
 
 			changed |= oldRemote != r.isRemote();
-			changed |= !Objects.equals(oldStatus, r.getStatus());
+			if (!r.isActive()) {
+				changed |= !Objects.equals(oldStatus, r.getStatus());
+			}
+
+			if (r.getStatus().isComplete() && r.getResult() == null) {
+				// Result not downloaded, so mark as changed.
+				changed = true;
+				shortPoll = true;
+			}
 
 			newList.add(r);
 
 			shortPoll |= r.isActive();
+
+			if (r.isActive()) {
+				readyCallback.accept(r);
+			}
 		}
 		changed |= currentRecords.size() != newList.size();
 		if (changed) {
 			saveAndUpdateCurrentRecords(newList);
 			runDownloadAndInstallTasks(currentRecords);
+
+			currentRecords.forEach(this::setScenarioCloudLocked);
+
 			// Trigger UI update
 			readyCallback.accept(null);
 		}
@@ -535,8 +519,10 @@ public class CloudOptimisationDataUpdater {
 				.build();
 
 		saveAndUpdateCurrentRecords(currentRecords);
+		setScenarioCloudLocked(r);
 
-		readyCallback.accept(r);
+		// Refresh all
+		readyCallback.accept(null);
 
 		// Tell refresh job to wake up
 		shortPoll = true;
@@ -596,12 +582,12 @@ public class CloudOptimisationDataUpdater {
 		return currentRecords;
 	}
 
-	private synchronized boolean deleteRecord(final CloudOptimisationDataResultRecord record) {
+	private synchronized boolean deleteRecord(final CloudOptimisationDataResultRecord cRecord) {
 
-		record.setDeleted(true);
-		if (currentRecords.contains(record)) {
+		cRecord.setDeleted(true);
+		if (currentRecords.contains(cRecord)) {
 			final List<CloudOptimisationDataResultRecord> l = new LinkedList<>(currentRecords);
-			while (l.remove(record))
+			while (l.remove(cRecord))
 				;
 			currentRecords = ImmutableList.copyOf(l);
 			try {
@@ -613,7 +599,7 @@ public class CloudOptimisationDataUpdater {
 
 			boolean amap = false;
 			try {
-				final File anonymisationMap = new File(String.format("%s/%s.amap", basePath, record.getJobid()));
+				final File anonymisationMap = new File(String.format("%s/%s.amap", basePath, cRecord.getJobid()));
 				if (anonymisationMap.exists()) {
 					amap = anonymisationMap.delete();
 				}
@@ -623,7 +609,7 @@ public class CloudOptimisationDataUpdater {
 
 			boolean lngFile = false;
 			try {
-				final File lingoFile = new File(String.format("%s/%s.lingo", basePath, record.getJobid()));
+				final File lingoFile = new File(String.format("%s/%s.lingo", basePath, cRecord.getJobid()));
 				if (lingoFile.exists()) {
 					lngFile = lingoFile.delete();
 				}
@@ -709,5 +695,26 @@ public class CloudOptimisationDataUpdater {
 			record.setLocalRuntime(runtime);
 		}
 		readyCallback.accept(record);
+	}
+
+	private void setScenarioCloudLocked(CloudOptimisationDataResultRecord cRecord) {
+		// Look up the original scenario.
+		final ScenarioInstance instanceRef = cRecord.getScenarioInstance();
+
+		if (instanceRef != null) {
+			if (instanceRef.isCloudLocked()) {
+				if (cRecord.isDeleted()) {
+					RunnerHelper.exec(() -> instanceRef.setCloudLocked(false), false);
+				} else {
+					if ((cRecord.getStatus().isComplete() && cRecord.getResult() == null) || cRecord.getStatus().isFailed()) {
+						RunnerHelper.exec(() -> instanceRef.setCloudLocked(false), false);
+					}
+				}
+			}
+			if (cRecord.getStatus().isSubmitted() || cRecord.getStatus().isRunning()) {
+				RunnerHelper.exec(() -> instanceRef.setCloudLocked(true), false);
+			}
+		}
+
 	}
 }

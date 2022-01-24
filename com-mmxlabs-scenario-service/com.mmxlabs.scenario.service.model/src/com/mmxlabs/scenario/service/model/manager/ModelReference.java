@@ -103,19 +103,17 @@ public class ModelReference implements Closeable {
 		lock.lock();
 
 		try {
-			CommandProviderAwareEditingDomain commandProviderEditingDomain = null;
+			final EditingDomain editingDomain = getEditingDomain();
 			try {
 				if (disableCommandProviders) {
-					final EditingDomain editingDomain = getEditingDomain();
-					if (editingDomain instanceof CommandProviderAwareEditingDomain) {
-						commandProviderEditingDomain = (CommandProviderAwareEditingDomain) editingDomain;
+					if (editingDomain instanceof CommandProviderAwareEditingDomain commandProviderEditingDomain) {
 						commandProviderEditingDomain.setCommandProvidersDisabled(true);
 					}
 				}
 
 				hook.run();
 			} finally {
-				if (commandProviderEditingDomain != null) {
+				if (editingDomain instanceof CommandProviderAwareEditingDomain commandProviderEditingDomain) {
 					commandProviderEditingDomain.setCommandProvidersDisabled(false);
 				}
 			}
@@ -131,19 +129,17 @@ public class ModelReference implements Closeable {
 		final ScenarioLock lock = getLock();
 		if (lock.tryLock()) {
 			try {
-				CommandProviderAwareEditingDomain commandProviderEditingDomain = null;
+				final EditingDomain editingDomain = getEditingDomain();
 				try {
 					if (disableCommandProviders) {
-						final EditingDomain editingDomain = getEditingDomain();
-						if (editingDomain instanceof CommandProviderAwareEditingDomain) {
-							commandProviderEditingDomain = (CommandProviderAwareEditingDomain) editingDomain;
+						if (editingDomain instanceof CommandProviderAwareEditingDomain commandProviderEditingDomain) {
 							commandProviderEditingDomain.setCommandProvidersDisabled(true);
 						}
 					}
 
 					hook.run();
 				} finally {
-					if (commandProviderEditingDomain != null) {
+					if (editingDomain instanceof CommandProviderAwareEditingDomain commandProviderEditingDomain) {
 						commandProviderEditingDomain.setCommandProvidersDisabled(false);
 					}
 				}

@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Control;
 
@@ -107,6 +108,19 @@ public final class ViewerHelper {
 			final Control control = viewer.getControl();
 			if (control != null && !control.isDisposed()) {
 				viewer.refresh();
+			}
+		};
+		RunnerHelper.exec(runnable, syncExec);
+	}
+
+	public static void refresh(@Nullable final StructuredViewer viewer, Object element, final boolean syncExec) {
+		if (viewer == null) {
+			return;
+		}
+		final Runnable runnable = () -> {
+			final Control control = viewer.getControl();
+			if (control != null && !control.isDisposed()) {
+				viewer.refresh(element);
 			}
 		};
 		RunnerHelper.exec(runnable, syncExec);

@@ -30,14 +30,13 @@ public class ReadOnlyScenarioHook implements IPostChangeHook {
 			if (ref != null) {
 				@NonNull
 				final EObject instance = ref.getInstance();
-				if (instance instanceof LNGScenarioModel) {
-					final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance;
+				if (instance instanceof LNGScenarioModel lngScenarioModel) {
 					final AnalyticsModel analyticsModel = ScenarioModelUtil.getAnalyticsModel(lngScenarioModel);
 					if (analyticsModel == null) {
 						return;
 					}
-					final boolean makeReadOnly =false // !analyticsModel.getInsertionOptions().isEmpty() //
-							//|| !analyticsModel.getActionableSetPlans().isEmpty() //
+					final boolean makeReadOnly = false // !analyticsModel.getInsertionOptions().isEmpty() //
+					// || !analyticsModel.getActionableSetPlans().isEmpty() //
 					;
 
 					if (makeReadOnly) {
