@@ -4,11 +4,14 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
-import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
-/**
- */
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
+
+@NonNullByDefault
 public interface IShortCargoReturnElementProviderEditor extends IShortCargoReturnElementProvider {
-	public void setReturnElement(ISequenceElement loadElement, ILoadOption loadOption, ISequenceElement returnElement);
+
+	void setReturnElement(IResource resource, ISequenceElement loadElement, IPort port, ISequenceElement returnElement);
 }

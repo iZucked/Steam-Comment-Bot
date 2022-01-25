@@ -37,9 +37,9 @@ import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper.NameProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
-import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper.NameProvider;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -112,7 +112,7 @@ public class CreateActionableSetPlanContextMenuExtension implements ITradesTable
 					final Set<String> existingNames = new HashSet<>();
 					instance.getFragments().forEach(f -> existingNames.add(f.getName()));
 					instance.getElements().forEach(f -> existingNames.add(f.getName()));
-					final UserSettings userSettings = OptimisationHelper.promptForUserSettings(root, false, true, false, new NameProvider("Action set", existingNames), null);
+					final UserSettings userSettings = UserSettingsHelper.promptForUserSettings(root, false, true, false, new NameProvider("Action set", existingNames), null);
 					new Thread("CreateActionableSetThread") {
 
 						@Override

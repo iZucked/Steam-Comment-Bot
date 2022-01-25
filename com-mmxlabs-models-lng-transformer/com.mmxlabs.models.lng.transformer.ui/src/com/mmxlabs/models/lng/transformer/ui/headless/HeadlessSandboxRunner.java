@@ -27,7 +27,7 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 public class HeadlessSandboxRunner {
 
-	public void run(final HeadlessSandboxOptions options, final ScenarioModelRecord scenarioModelRecord, @NonNull final IScenarioDataProvider sdp,
+	public AbstractSolutionSet run(final HeadlessSandboxOptions options, final ScenarioModelRecord scenarioModelRecord, @NonNull final IScenarioDataProvider sdp,
 			final BiConsumer<ScenarioModelRecord, IScenarioDataProvider> completedHook, final IProgressMonitor monitor) {
 		final LNGScenarioModel lngScenarioModel = sdp.getTypedScenario(LNGScenarioModel.class);
 
@@ -68,6 +68,8 @@ public class HeadlessSandboxRunner {
 		case SandboxModeConstants.MODE_DERIVE -> evaluator.runSandboxOptions(sdp, null, model, userSettings, action, false, subMonitor);
 
 		}
+		
+		return model.getResults();
 
 	}
 

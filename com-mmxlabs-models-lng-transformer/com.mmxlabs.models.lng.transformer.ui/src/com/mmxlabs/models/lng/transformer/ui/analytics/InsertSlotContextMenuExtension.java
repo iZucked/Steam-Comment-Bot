@@ -40,10 +40,10 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowDa
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper.NameProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
-import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
-import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper.NameProvider;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationJobRunner;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -187,7 +187,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 		private final IScenarioEditingLocation scenarioEditingLocation;
 
 		public InsertSlotAction(final IScenarioEditingLocation scenarioEditingLocation, final List<Slot<?>> targetSlots) {
-			super(AnalyticsSolutionHelper.generateInsertionName(targetSlots));
+			super(AnalyticsSolutionHelper.generateInsertionName(false, targetSlots));
 			this.scenarioEditingLocation = scenarioEditingLocation;
 			this.targetSlots = targetSlots;
 		}
@@ -200,7 +200,7 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 			final ScenarioInstance original = scenarioEditingLocation.getScenarioInstance();
 			UserSettings userSettings = null;
 			final ScenarioModelRecord originalModelRecord = SSDataManager.Instance.getModelRecord(original);
-			String taskName = AnalyticsSolutionHelper.generateInsertionName(targetSlots);
+			String taskName = AnalyticsSolutionHelper.generateInsertionName(false, targetSlots);
 			{
 
 				try (final ModelReference modelReference = originalModelRecord.aquireReference("InsertSlotContextMenuExtension:1")) {
@@ -213,8 +213,8 @@ public class InsertSlotContextMenuExtension implements ITradesTableContextMenuEx
 						original.getFragments().forEach(f -> existingNames.add(f.getName()));
 						original.getElements().forEach(f -> existingNames.add(f.getName()));
 
-						NameProvider nameProvider = new NameProvider(taskName, existingNames);
-						userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, true, false, nameProvider);
+						final NameProvider nameProvider = new NameProvider(taskName, existingNames);
+						userSettings = UserSettingsHelper.promptForInsertionUserSettings(root, false, true, false, nameProvider);
 						taskName = nameProvider.getNameSuggestion();
 					}
 				}

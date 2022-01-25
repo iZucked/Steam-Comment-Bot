@@ -8,7 +8,6 @@ import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorInput;
@@ -17,9 +16,9 @@ import org.eclipse.ui.actions.ActionDelegate;
 
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
-import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
@@ -128,7 +127,7 @@ public class ToggleCharterOutEditorActionDelegate extends ActionDelegate impleme
 
 		UserSettings settings = currentModel.getUserSettings();
 		if (settings == null) {
-			settings = ScenarioUtils.createDefaultUserSettings();
+			settings = UserSettingsHelper.createDefaultUserSettings();
 			cmd.append(SetCommand.create(editingDomain, currentModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_UserSettings(), settings));
 		}
 		cmd.append(SetCommand.create(editingDomain, settings, ParametersPackage.eINSTANCE.getUserSettings_GenerateCharterOuts(), !settings.isGenerateCharterOuts()));

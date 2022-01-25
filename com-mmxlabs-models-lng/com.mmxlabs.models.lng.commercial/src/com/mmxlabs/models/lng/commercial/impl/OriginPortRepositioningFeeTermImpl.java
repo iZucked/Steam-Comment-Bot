@@ -10,10 +10,12 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.NotionalJourneyTerm;
 import com.mmxlabs.models.lng.commercial.OriginPortRepositioningFeeTerm;
 
+import com.mmxlabs.models.lng.port.Port;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
@@ -30,6 +32,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.OriginPortRepositioningFeeTermImpl#isIncludeCanal <em>Include Canal</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.OriginPortRepositioningFeeTermImpl#isIncludeCanalTime <em>Include Canal Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.OriginPortRepositioningFeeTermImpl#getLumpSumPriceExpression <em>Lump Sum Price Expression</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.OriginPortRepositioningFeeTermImpl#getOriginPort <em>Origin Port</em>}</li>
  * </ul>
  *
  * @generated
@@ -154,6 +157,16 @@ public class OriginPortRepositioningFeeTermImpl extends RepositioningFeeTermImpl
 	 * @ordered
 	 */
 	protected String lumpSumPriceExpression = LUMP_SUM_PRICE_EXPRESSION_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getOriginPort() <em>Origin Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOriginPort()
+	 * @generated
+	 * @ordered
+	 */
+	protected Port originPort;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -318,6 +331,46 @@ public class OriginPortRepositioningFeeTermImpl extends RepositioningFeeTermImpl
 	 * @generated
 	 */
 	@Override
+	public Port getOriginPort() {
+		if (originPort != null && originPort.eIsProxy()) {
+			InternalEObject oldOriginPort = (InternalEObject)originPort;
+			originPort = (Port)eResolveProxy(oldOriginPort);
+			if (originPort != oldOriginPort) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__ORIGIN_PORT, oldOriginPort, originPort));
+			}
+		}
+		return originPort;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Port basicGetOriginPort() {
+		return originPort;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setOriginPort(Port newOriginPort) {
+		Port oldOriginPort = originPort;
+		originPort = newOriginPort;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__ORIGIN_PORT, oldOriginPort, originPort));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__SPEED:
@@ -332,6 +385,9 @@ public class OriginPortRepositioningFeeTermImpl extends RepositioningFeeTermImpl
 				return isIncludeCanalTime();
 			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__LUMP_SUM_PRICE_EXPRESSION:
 				return getLumpSumPriceExpression();
+			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__ORIGIN_PORT:
+				if (resolve) return getOriginPort();
+				return basicGetOriginPort();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -361,6 +417,9 @@ public class OriginPortRepositioningFeeTermImpl extends RepositioningFeeTermImpl
 				return;
 			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__LUMP_SUM_PRICE_EXPRESSION:
 				setLumpSumPriceExpression((String)newValue);
+				return;
+			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__ORIGIN_PORT:
+				setOriginPort((Port)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -392,6 +451,9 @@ public class OriginPortRepositioningFeeTermImpl extends RepositioningFeeTermImpl
 			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__LUMP_SUM_PRICE_EXPRESSION:
 				setLumpSumPriceExpression(LUMP_SUM_PRICE_EXPRESSION_EDEFAULT);
 				return;
+			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__ORIGIN_PORT:
+				setOriginPort((Port)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -416,6 +478,8 @@ public class OriginPortRepositioningFeeTermImpl extends RepositioningFeeTermImpl
 				return includeCanalTime != INCLUDE_CANAL_TIME_EDEFAULT;
 			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__LUMP_SUM_PRICE_EXPRESSION:
 				return LUMP_SUM_PRICE_EXPRESSION_EDEFAULT == null ? lumpSumPriceExpression != null : !LUMP_SUM_PRICE_EXPRESSION_EDEFAULT.equals(lumpSumPriceExpression);
+			case CommercialPackage.ORIGIN_PORT_REPOSITIONING_FEE_TERM__ORIGIN_PORT:
+				return originPort != null;
 		}
 		return super.eIsSet(featureID);
 	}

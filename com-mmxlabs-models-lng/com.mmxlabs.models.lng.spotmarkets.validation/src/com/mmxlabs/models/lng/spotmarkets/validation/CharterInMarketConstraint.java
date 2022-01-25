@@ -16,10 +16,12 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.commercial.BallastBonusTerm;
 import com.mmxlabs.models.lng.commercial.GenericCharterContract;
 import com.mmxlabs.models.lng.commercial.SimpleBallastBonusContainer;
+import com.mmxlabs.models.lng.commercial.StartHeelOptions;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioElementNameHelper;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -27,20 +29,18 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.spotmarkets.validation.internal.Activator;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
+import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
-public class CharterInMarketConstraint extends AbstractModelConstraint {
-
+public class CharterInMarketConstraint extends AbstractModelMultiConstraint {
 	@Override
-	public IStatus validate(final IValidationContext ctx) {
+	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
-		final List<IStatus> failures = new LinkedList<IStatus>();
-
-		if (target instanceof CharterInMarket) {
-			final CharterInMarket spotMarket = (CharterInMarket) target;
-			if (spotMarket.getGenericCharterContract() != null && spotMarket.getGenericCharterContract() instanceof GenericCharterContract) {
-				GenericCharterContract charterContract = (GenericCharterContract) spotMarket.getGenericCharterContract();
+		if (target instanceof final CharterInMarket spotMarket) {
+			final GenericCharterContract charterContract = spotMarket.getGenericCharterContract();
+			if (charterContract != null) {
 				if (spotMarket.isNominal()) {
 					// nominals
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx
@@ -48,21 +48,53 @@ public class CharterInMarketConstraint extends AbstractModelConstraint {
 					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterInMarkets());
 					failures.add(dsd);
 				} else {
-					if (charterContract.getBallastBonusTerms() instanceof SimpleBallastBonusContainer) {
-						ballastBonusCheckPortGroups(ctx, failures, spotMarket, (SimpleBallastBonusContainer) charterContract.getBallastBonusTerms());
+					if (charterContract.getBallastBonusTerms() instanceof final SimpleBallastBonusContainer bbContainer) {
+						ballastBonusCheckPortGroups(ctx, failures, spotMarket, bbContainer);
 					}
 				}
 			}
 
+			if (spotMarket.isSetStartHeelCV() && spotMarket.getStartHeelCV() == 0.0) {
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus(String.format("[Charter in market | %s] has a CV of zero.", spotMarket.getName())));
+				dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getCharterInMarket_StartHeelCV());
+				failures.add(dsd);
+			}
+			if (spotMarket.isSetStartAt()) {
+				boolean cvFound = spotMarket.isSetStartHeelCV();
+				if (!cvFound && charterContract != null) {
+					final StartHeelOptions startHeel = charterContract.getStartHeel();
+					if (startHeel != null) {
+						final double cvValue = startHeel.getCvValue();
+						cvFound = cvValue != 0.0;
+					}
+				}
+
+				if (!cvFound) {
+					if (charterContract != null) {
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx
+								.createFailureStatus(String.format("[Charter in market | %s] has a start port but no start heel CV set and contract CV is zero.", spotMarket.getName())));
+						dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getCharterInMarket_StartHeelCV());
+						failures.add(dsd);
+					} else {
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus(String.format("[Charter in market | %s] has a start port but no start heel CV set.", spotMarket.getName())));
+						dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getCharterInMarket_StartHeelCV());
+						failures.add(dsd);
+					}
+				}
+
+			}
+
 			if (spotMarket.getEntity() == null) {
-				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx
-						.createFailureStatus(String.format("[Charter in market vessel | %s] needs an entity set.", spotMarket.getName())));
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus(String.format("[Charter in market vessel | %s] needs an entity set.", spotMarket.getName())));
 				dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharterInMarkets());
 				failures.add(dsd);
 			}
-			
-			int minDurationInHours = spotMarket.getMarketOrContractMinDuration();
-			int maxDurationInHours = spotMarket.getMarketOrContractMaxDuration();
+
+			final int minDurationInHours = spotMarket.getMarketOrContractMinDuration();
+			final int maxDurationInHours = spotMarket.getMarketOrContractMaxDuration();
 
 			if (minDurationInHours != 0 || maxDurationInHours != 0) {
 				if (spotMarket.isNominal()) {
@@ -94,15 +126,10 @@ public class CharterInMarketConstraint extends AbstractModelConstraint {
 				}
 			}
 		}
-		final MultiStatus multi = new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, null, null);
-		for (final IStatus s : failures) {
-			multi.add(s);
-		}
-		return multi;
 	}
-	
+
 	private void ballastBonusCheckPortGroups(final IValidationContext ctx, final List<IStatus> failures, final CharterInMarket spotMarket, final SimpleBallastBonusContainer ballastBonusContainer) {
-		final Set<APortSet<Port>> coveredPorts = new HashSet<APortSet<Port>>();
+		final Set<APortSet<Port>> coveredPorts = new HashSet<>();
 		final List<APortSet<Port>> endAtPorts = new LinkedList<>();
 		boolean anywhere = false;
 		if (spotMarket.getEndAt().isEmpty()) {
@@ -124,11 +151,11 @@ public class CharterInMarketConstraint extends AbstractModelConstraint {
 				if (!coveredPorts.contains(endAtPort)) {
 					final DetailConstraintStatusDecorator dsd;
 					if (anywhere) {
-						dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(
-								(String.format("%s is not covered by the ballast bonus rules (note the vessel can end anywhere)", ScenarioElementNameHelper.getName(endAtPort)))));
+						dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx
+								.createFailureStatus((String.format("%s is not covered by the ballast bonus rules (note the vessel can end anywhere)", ScenarioElementNameHelper.getName(endAtPort)))));
 					} else {
-						dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(
-								(String.format("%s is not covered by the ballast bonus rules", ScenarioElementNameHelper.getName(endAtPort)))));
+						dsd = new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus((String.format("%s is not covered by the ballast bonus rules", ScenarioElementNameHelper.getName(endAtPort)))));
 					}
 					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__GENERIC_CHARTER_CONTRACT);
 					failures.add(dsd);

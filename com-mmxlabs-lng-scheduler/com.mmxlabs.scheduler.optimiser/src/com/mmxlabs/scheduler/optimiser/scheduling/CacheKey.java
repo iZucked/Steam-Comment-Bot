@@ -16,15 +16,16 @@ import com.mmxlabs.optimiser.core.ISequencesAttributesProvider;
 import com.mmxlabs.scheduler.optimiser.components.IRouteOptionBooking;
 import com.mmxlabs.scheduler.optimiser.providers.ECanalEntry;
 
-public class CacheKey {
+public final class CacheKey {
 
-	final IResource resource;
-	final ISequence sequence;
-	final ISequencesAttributesProvider sequencesAttributesProvider;
+	public final IResource resource;
+	public final ISequence sequence;
+	public final ISequencesAttributesProvider sequencesAttributesProvider;
+	// This data will be modified by the scheduler
+	public final CurrentBookingData currentBookingData;
+	
 	// This data is used as the key
 	private final Map<ECanalEntry, List<IRouteOptionBooking>> unusedBookings;
-	// This data will be modified by the scheduler
-	final CurrentBookingData currentBookingData;
 
 	public CacheKey(final IResource resource, final ISequence sequence, final CurrentBookingData _currentBookingData, ISequencesAttributesProvider sequencesAttributesProvider) {
 		this.resource = resource;
@@ -49,8 +50,7 @@ public class CacheKey {
 		if (obj == this) {
 			return true;
 		}
-		if (obj instanceof CacheKey) {
-			final CacheKey other = (CacheKey) obj;
+		if (obj instanceof CacheKey other) {
 			return resource == other.resource //
 					&& Objects.equals(sequence, other.sequence) //
 					&& Objects.equals(unusedBookings, other.unusedBookings) //

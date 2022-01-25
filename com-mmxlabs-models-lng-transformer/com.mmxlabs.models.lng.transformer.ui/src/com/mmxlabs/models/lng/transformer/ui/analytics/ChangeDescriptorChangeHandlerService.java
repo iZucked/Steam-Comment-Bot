@@ -25,10 +25,10 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.ScheduleSpecification;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
-import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.analytics.spec.ChangeModelToScheduleSpecification;
 import com.mmxlabs.rcp.common.ecore.EMFCopier;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -67,7 +67,7 @@ public class ChangeDescriptorChangeHandlerService implements IScenarioInstanceCh
 						}
 
 						final UserSettings userSettings = changeDescriptionSource.getUserSettings() != null ? EMFCopier.copy(changeDescriptionSource.getUserSettings())
-								: ScenarioUtils.createDefaultUserSettings();
+								: UserSettingsHelper.createDefaultUserSettings();
 
 						result.setUserSettings(userSettings);
 

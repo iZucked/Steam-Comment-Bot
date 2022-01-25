@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessSandboxJSON;
@@ -135,7 +136,11 @@ public class HeadlessSandboxOneshotApplication extends HeadlessGenericApplicatio
 		// Get the root object
 		try {
 			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
-				runner.run(options, modelRecord, scenarioDataProvider, null, monitor);
+				AbstractSolutionSet result = runner.run(options, modelRecord, scenarioDataProvider, null, monitor);
+				
+				final File resultOutput = new File(outputScenarioFileName + ".xmi");
+				HeadlessUtils.saveResult(result, scenarioDataProvider, resultOutput);
+				
 				ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, new File(outputScenarioFileName));
 
 			});

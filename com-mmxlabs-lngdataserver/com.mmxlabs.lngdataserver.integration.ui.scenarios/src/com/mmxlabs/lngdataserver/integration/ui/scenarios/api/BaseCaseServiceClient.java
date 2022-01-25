@@ -43,6 +43,8 @@ public class BaseCaseServiceClient {
 	private static final String LOCK_STATE_URL = "/scenarios/v1/basecase/lockState";
 	private static final String UNLOCK_URL = "/scenarios/v1/basecase/unlock";
 	private static final String FORCE_UNLOCK_URL = "/scenarios/v1/basecase/forceunlock";
+	
+	private static final String SCENARIO_CLOUD_UPLOAD_URL = "/scenarios/v1/cloud/opti/upload";
 
 	private final OkHttpClient httpClient = HttpClientUtil.basicBuilder()//
 			.build();

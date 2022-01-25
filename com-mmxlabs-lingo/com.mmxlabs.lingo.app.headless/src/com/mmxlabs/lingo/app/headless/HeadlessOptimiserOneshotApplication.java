@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
@@ -137,7 +138,12 @@ public class HeadlessOptimiserOneshotApplication extends HeadlessGenericApplicat
 		// Get the root object
 		try {
 			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
-				runner.doRun(scenarioDataProvider, userSettings, exportLogs, outputScenarioFileName, outputLoggingFolder, json, numThreads, SubMonitor.convert(monitor));
+				AbstractSolutionSet result = runner.doRun(scenarioDataProvider, userSettings, exportLogs, outputLoggingFolder, json, numThreads, SubMonitor.convert(monitor));
+				
+				final File resultOutput = new File(outputScenarioFileName + ".xmi");
+				HeadlessUtils.saveResult(result, scenarioDataProvider, resultOutput);
+				
+				ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, new File(outputScenarioFileName));
 			});
 		} catch (Exception e) {
 			throw new IOException("Error running optimisation", e);

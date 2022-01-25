@@ -45,6 +45,7 @@ import com.mmxlabs.license.ssl.LicenseChecker.InvalidLicenseException;
 import com.mmxlabs.license.ssl.LicenseChecker.LicenseState;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessGenericJSON;
+import com.mmxlabs.rcp.common.appversion.VersionHelper;
 import com.mmxlabs.rcp.common.json.EMFJacksonModule;
 
 /**
@@ -71,7 +72,7 @@ import com.mmxlabs.rcp.common.json.EMFJacksonModule;
 public abstract class HeadlessGenericApplication implements IApplication {
 
 	public static final int EXIT_CODE_EXCEPTION = 100;
-	
+
 	/** New exception type for scenario types that can't be handled */
 	@SuppressWarnings("serial")
 	public static class UnhandledScenarioTypeException extends RuntimeException {
@@ -274,18 +275,14 @@ public abstract class HeadlessGenericApplication implements IApplication {
 	 * @throws InvalidCommandLineException
 	 */
 	protected void setupBasicFields() throws InvalidCommandLineException {
-		// get the client code from the command line
-		if (commandLine.hasOption(CLIENT_CODE)) {
-			clientCode = commandLine.getOptionValue(CLIENT_CODE);
-		} else {
-			System.err.println("Command line must specify client code.");
-			throw new InvalidCommandLineException();
-		}
+
+		clientCode = VersionHelper.getInstance().getClientCode();
+		buildVersion = VersionHelper.getInstance().getClientVersion();
 
 		// get the build version from the command line
 		if (commandLine.hasOption(BUILD_VERSION)) {
 			buildVersion = commandLine.getOptionValue(BUILD_VERSION);
-		} else {
+		} else if (buildVersion == null) {
 			buildVersion = "Dev";
 		}
 

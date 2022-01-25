@@ -196,8 +196,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private final List<MutableTimeWindow> fullyOpenEndDateWindows = new LinkedList<>();
 
 	/**
-	 * A "virtual" port which is zero distance from all other ports, to be used in cases where a vessel can be in any location. This can be replaced with a real location at a later date, after running
-	 * an optimisation.
+	 * A "virtual" port which is zero distance from all other ports, to be used in
+	 * cases where a vessel can be in any location. This can be replaced with a real
+	 * location at a later date, after running an optimisation.
 	 */
 	private IPort ANYWHERE;
 
@@ -213,23 +214,28 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private final List<ISequenceElement> unshippedElements = new ArrayList<>();
 
 	/*
-	 * Constraint-tracking data structures; constraints created through the builder are applied at the very end, in case they affect things created after them.
+	 * Constraint-tracking data structures; constraints created through the builder
+	 * are applied at the very end, in case they affect things created after them.
 	 */
 
 	/**
-	 * Tracks forward adjacency constraints; value must follow key. The reverse of {@link #reverseAdjacencyConstraints}
+	 * Tracks forward adjacency constraints; value must follow key. The reverse of
+	 * {@link #reverseAdjacencyConstraints}
 	 */
 	@NonNull
 	private final Map<IPortSlot, IPortSlot> forwardAdjacencyConstraints = new HashMap<>();
 
 	/**
-	 * Tracks forward adjacency constraints; key must follow value. The reverse of {@link #forwardAdjacencyConstraints}
+	 * Tracks forward adjacency constraints; key must follow value. The reverse of
+	 * {@link #forwardAdjacencyConstraints}
 	 */
 	@NonNull
 	private final Map<IPortSlot, IPortSlot> reverseAdjacencyConstraints = new HashMap<>();
 
 	/**
-	 * The slots for vessel events which have been generated; these are stored so that in {@link #buildVesselEvents()} they can have some extra post-processing done to set up any constraints
+	 * The slots for vessel events which have been generated; these are stored so
+	 * that in {@link #buildVesselEvents()} they can have some extra post-processing
+	 * done to set up any constraints
 	 */
 	@NonNull
 	private final List<IVesselEventPortSlot> vesselEvents = new LinkedList<>();
@@ -370,7 +376,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private ICharterRateCalculator charterRateCalculator;
 
 	/**
-	 * Constant used during end date of scenario calculations - {@link #minDaysFromLastEventToEnd} days extra after last date. See code in {@link SchedulerBuilder#getOptimisationData()}
+	 * Constant used during end date of scenario calculations -
+	 * {@link #minDaysFromLastEventToEnd} days extra after last date. See code in
+	 * {@link SchedulerBuilder#getOptimisationData()}
 	 * 
 	 */
 	public static int minDaysFromLastEventToEnd = 10;
@@ -381,7 +389,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private IVessel virtualVessel;
 
 	/**
-	 * Map between a virtual sequence element and the virtual {@link IVesselEvent} instance representing it.
+	 * Map between a virtual sequence element and the virtual {@link IVesselEvent}
+	 * instance representing it.
 	 */
 
 	private final @NonNull Map<ISequenceElement, IVesselAvailability> virtualVesselAvailabilityMap = new HashMap<>();
@@ -390,7 +399,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		indexingContext.registerType(SequenceElement.class);
 		indexingContext.registerType(Resource.class);
 		indexingContext.registerType(IBaseFuel.class);
-		// Manual "hack" to get index 0 for the LNG base fuel before other versions are registered
+		// Manual "hack" to get index 0 for the LNG base fuel before other versions are
+		// registered
 		final int lngIndex = indexingContext.assignIndex(IBaseFuel.LNG);
 		assert lngIndex == IBaseFuel.LNG.getIndex();
 	}
@@ -593,7 +603,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		final Cargo cargo = new Cargo(new ArrayList<>(slots));
 		cargoes.add(cargo);
 
-		// Fix slot pairing if we disallow re-wiring or this is a complex cargo (more than just one load and one discharge)
+		// Fix slot pairing if we disallow re-wiring or this is a complex cargo (more
+		// than just one load and one discharge)
 		if (!allowRewiring || slots.size() > 2) {
 
 			IPortSlot prevSlot = null;
@@ -686,7 +697,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * Create several spot vessels (see also {@code createSpotVessel}), named like namePrefix-1, namePrefix-2, etc
+	 * Create several spot vessels (see also {@code createSpotVessel}), named like
+	 * namePrefix-1, namePrefix-2, etc
 	 * 
 	 * @param namePrefix
 	 * @param vesselClass
@@ -703,7 +715,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * Create a spot charter vessel with no fixed start/end requirements and vessel instance type SPOT_CHARTER
+	 * Create a spot charter vessel with no fixed start/end requirements and vessel
+	 * instance type SPOT_CHARTER
 	 * 
 	 * @param name
 	 * @param vesselClass
@@ -828,7 +841,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		if (end.hasTimeRequirement() == false) {
 			// put end slot into list of slots to patch up later.
-			// Fleet vessels and spot vessels both run to the end of the optimisation if they don't have an end date.
+			// Fleet vessels and spot vessels both run to the end of the optimisation if
+			// they don't have an end date.
 			if (!vesselInstanceType.equals(VesselInstanceType.SPOT_CHARTER) && !vesselInstanceType.equals(VesselInstanceType.ROUND_TRIP)) {
 				if (end.isMinDurationSet() || end.isMaxDurationSet()) {
 					partiallyOpenEndDateWindows.add((MutableTimeWindow) end.getTimeWindow());
@@ -851,9 +865,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		portSlotsProvider.setPortSlot(endElement, endSlot);
 
 		resourceAllocationProvider.setAllowedResources(startElement, Collections.singleton(resource));
-		// BugzID: 576 allow end element on any vessel, to prevent ResourceAllocationConstraint from disallowing 2opt2s at end
+		// BugzID: 576 allow end element on any vessel, to prevent
+		// ResourceAllocationConstraint from disallowing 2opt2s at end
 
-		// resourceAllocationProvider.setAllowedResources(endElement, Collections.singleton(resource));
+		// resourceAllocationProvider.setAllowedResources(endElement,
+		// Collections.singleton(resource));
 
 		startEndRequirementProvider.setStartEndRequirements(resource, start, end);
 		startEndRequirementProvider.setStartEndElements(resource, startElement, endElement);
@@ -979,7 +995,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 			if (rule == 0) {
 				/**
-				 * The shortest time which the slowest vessel in the fleet can take to get from the latest discharge back to the load for that discharge.
+				 * The shortest time which the slowest vessel in the fleet can take to get from
+				 * the latest discharge back to the load for that discharge.
 				 */
 				int maxFastReturnTime = 0;
 				if ((dischargePort != null) && (loadPort != null)) {
@@ -1000,7 +1017,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				latestTime = Math.max(endOfLatestWindow + (24 * minDaysFromLastEventToEnd), maxFastReturnTime + latestDischarge);
 			} else if (rule == 1) {
 				/**
-				 * The shortest time which the slowest vessel in the fleet can take to get from the latest discharge back to the load for that discharge.
+				 * The shortest time which the slowest vessel in the fleet can take to get from
+				 * the latest discharge back to the load for that discharge.
 				 */
 				int maxFastReturnTime = 0;
 				if ((dischargePort != null)) {
@@ -1030,7 +1048,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				latestTime = Math.max(endOfLatestWindow, latestDischarge) + 60 * 24;
 			} else if (rule == 4) {
 
-				// Include all time windows *except* spot market slots (These need to be registered externally)
+				// Include all time windows *except* spot market slots (These need to be
+				// registered externally)
 				final OptionalInt optionalMax = sequenceElements.stream() //
 						.filter(element -> !spotMarketSlots.isSpotMarketSlot(element)) //
 						.map(element -> portSlotsProvider.getPortSlot(element)) //
@@ -1065,7 +1084,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			}
 		}
 
-		// Generate DES Purchase and FOB Sale slot bindings before applying vessel restriction constraints
+		// Generate DES Purchase and FOB Sale slot bindings before applying vessel
+		// restriction constraints
 		doBindDischargeSlotsToDESPurchase();
 		doBindLoadSlotsToFOBSale();
 
@@ -1073,19 +1093,23 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		applyAdjacencyConstraints();
 
 		linkMarkToMarkets();
-		// set the self-self distance to zero for all ports to make sure indexed DCP has seen every element.
+		// set the self-self distance to zero for all ports to make sure indexed DCP has
+		// seen every element.
 
 		// this is no good, because it makes lots of canal choices happen.
 		// for (final String s : portDistanceProvider.getKeySet()) {
-		// final IMatrixEditor<IPort, Integer> matrix = (IMatrixEditor<IPort, Integer>) portDistanceProvider.get(s);
+		// final IMatrixEditor<IPort, Integer> matrix = (IMatrixEditor<IPort, Integer>)
+		// portDistanceProvider.get(s);
 		// for (final IPort port : ports) {
 		// matrix.set(port, port, 0);
 		// }
 		// }
 
-		// Tell the optional element provider about non-optional elements it may not have seen
+		// Tell the optional element provider about non-optional elements it may not
+		// have seen
 		// if this seems a bit ridiculous, yes, it is.
-		// TODO think about how this connects with return elements - they aren't optional
+		// TODO think about how this connects with return elements - they aren't
+		// optional
 		// but they also aren't all required.
 		// for (final ISequenceElement element : sequenceElements) {
 		// boolean elementOptional = optionalElements.isElementOptional(element);
@@ -1110,29 +1134,39 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * Generate a new return option for each load port in the solution.
 	 */
 	private void createRoundtripCargoReturnElements() {
+
 		for (final ILoadOption loadOption : loadSlots) {
 			final ISequenceElement loadElement = portSlotsProvider.getElement(loadOption);
+			for (final IPort port : portProvider.getAllPorts()) {
+				final String name = "short-return-to-" + loadElement.getName() + "-" + port.getName();
+				for (final ISpotCharterInMarket market : spotCharterInMarketProviderEditor.getSpotCharterInMarkets()) {
 
-			final String name = "short-return-to-" + loadElement.getName();
-			final IPort port = loadOption.getPort();
-			final RoundTripCargoEnd returnPortSlot = new RoundTripCargoEnd(name, port);
+					if (!market.isNominal()) {
+						continue;
+					}
 
-			final SequenceElement returnElement = new SequenceElement(indexingContext, name);
+					final IVesselAvailability availability = spotCharterInMarketProviderEditor.getSpotMarketAvailability(market, -1);
+					final RoundTripCargoEnd returnPortSlot = new RoundTripCargoEnd(name, port, market.getEndRequirement().getHeelOptions());
 
-			elementDurationsProvider.setElementDuration(returnElement, 0);
+					final SequenceElement returnElement = new SequenceElement(indexingContext, name);
 
-			elementPortProvider.setPortForElement(port, returnElement);
-			portSlotsProvider.setPortSlot(returnElement, returnPortSlot);
-			portTypeProvider.setPortType(returnElement, returnPortSlot.getPortType());
+					elementDurationsProvider.setElementDuration(returnElement, 0);
 
-			shortCargoReturnElementProviderEditor.setReturnElement(loadElement, loadOption, returnElement);
+					elementPortProvider.setPortForElement(port, returnElement);
+					portSlotsProvider.setPortSlot(returnElement, returnPortSlot);
+					portTypeProvider.setPortType(returnElement, returnPortSlot.getPortType());
+
+					shortCargoReturnElementProviderEditor.setReturnElement(vesselProvider.getResource(availability), loadElement, port, returnElement);
+				}
+			}
 		}
 	}
 
 	@NonNull
 	private IVesselAvailability createVirtualVesselAvailability(@NonNull final ISequenceElement element, @NonNull final VesselInstanceType type) {
 		assert type == VesselInstanceType.DES_PURCHASE || type == VesselInstanceType.FOB_SALE;
-		// create a new resource for each of these guys, and bind them to their resources
+		// create a new resource for each of these guys, and bind them to their
+		// resources
 		assert virtualVessel != null;
 		final IVesselAvailability virtualVesselAvailability = createVesselAvailability(virtualVessel, "virtual-" + element.getName(), new ZeroLongCurve(), type, createStartRequirement(),
 				createEndRequirement(), null, new ZeroLongCurve(), true);
@@ -1280,9 +1314,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			final VesselEventPortSlot redirectSlot = new VesselEventPortSlot("redirect-" + id, PortType.Virtual, ANYWHERE, null, event, redirectConsumer);
 
 			final SplitCharterOutVesselEventEndPortSlot endSlot = new SplitCharterOutVesselEventEndPortSlot(id, PortType.CharterOut, event.getEndPort(), event.getTimeWindow(), event);
-			// final VesselEventPortSlot startSlot = new CharterOutVesselEventPortSlot("start-" + slot.getId(), PortType.Other, vesselEvent.getStartPort(), slot.getTimeWindow(),
+			// final VesselEventPortSlot startSlot = new
+			// CharterOutVesselEventPortSlot("start-" + slot.getId(), PortType.Other,
+			// vesselEvent.getStartPort(), slot.getTimeWindow(),
 			// charterOutVesselEventPortSlot.getVesselEvent());
-			// final VesselEventPortSlot redirectSlot = new VesselEventPortSlot("redirect-" + slot.getId(), PortType.Virtual, ANYWHERE, null, vesselEvent);
+			// final VesselEventPortSlot redirectSlot = new VesselEventPortSlot("redirect-"
+			// + slot.getId(), PortType.Virtual, ANYWHERE, null, vesselEvent);
 
 			final SequenceElement startElement = new SequenceElement(indexingContext, startSlot.getId());
 			final SequenceElement redirectElement = new SequenceElement(indexingContext, redirectSlot.getId());
@@ -1432,7 +1469,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * Set up the {@link #orderedSequenceElementsEditor} to apply the constraints described in {@link #forwardAdjacencyConstraints} and {@link #reverseAdjacencyConstraints};
+	 * Set up the {@link #orderedSequenceElementsEditor} to apply the constraints
+	 * described in {@link #forwardAdjacencyConstraints} and
+	 * {@link #reverseAdjacencyConstraints};
 	 */
 	private void applyAdjacencyConstraints() {
 		for (final Map.Entry<IPortSlot, IPortSlot> entry : forwardAdjacencyConstraints.entrySet()) {
@@ -1475,7 +1514,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private final Map<ILoadOption, Map<IPort, ITimeWindow>> desPurchasesToDischargePorts = new HashMap<>();
 
 	/**
-	 * A {@link Set} of {@link IPortSlot} which cannot be moved to another vessel/resource. This is populated be calls to {@link #freezeSlotToVessel(IPortSlot, IVessel)}.
+	 * A {@link Set} of {@link IPortSlot} which cannot be moved to another
+	 * vessel/resource. This is populated be calls to
+	 * {@link #freezeSlotToVessel(IPortSlot, IVessel)}.
 	 */
 	private final Set<IPortSlot> frozenSlots = new HashSet<>();
 
@@ -1824,9 +1865,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	@NonNull
 	public ISpotCharterInMarket createSpotCharterInMarket(@NonNull final String name, @NonNull final IVessel vessel, @NonNull final ILongCurve dailyCharterInRateCurve, //
-			final int availabilityCount, @Nullable IStartRequirement startRequirement, @Nullable IEndRequirement endRequirement, //
+			final boolean nominal, final int availabilityCount, @Nullable IStartRequirement startRequirement, @Nullable IEndRequirement endRequirement, //
 			@Nullable ICharterContract charterContract, final ILongCurve repositioningFee) {
-		return new DefaultSpotCharterInMarket(name, vessel, dailyCharterInRateCurve, availabilityCount, startRequirement, endRequirement, charterContract, repositioningFee);
+		return new DefaultSpotCharterInMarket(name, vessel, dailyCharterInRateCurve, nominal, availabilityCount, startRequirement, endRequirement, charterContract, repositioningFee);
 	}
 
 	@Override

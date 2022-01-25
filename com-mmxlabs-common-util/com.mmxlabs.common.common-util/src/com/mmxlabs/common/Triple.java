@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.common;
 
+import java.util.Objects;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 /**
@@ -12,12 +14,9 @@ import org.eclipse.jdt.annotation.NonNull;
  * @author Tom Hinton, Simon Goodall
  * 
  * 
- * @param <A>
- *            the type of the first item
- * @param <B>
- *            the type of the second item
- * @param <C>
- *            the type of the third item
+ * @param <A> the type of the first item
+ * @param <B> the type of the second item
+ * @param <C> the type of the third item
  * @since 2.0
  */
 public class Triple<A, B, C> {
@@ -43,7 +42,7 @@ public class Triple<A, B, C> {
 		this.third = copy.getThird();
 	}
 
-	public static <A, B, C> Triple<A, B, C> of(A first, B second, C third) {
+	public static <A, B, C> @NonNull Triple<A, B, C> of(A first, B second, C third) {
 		return new Triple<>(first, second, third);
 	}
 
@@ -105,40 +104,13 @@ public class Triple<A, B, C> {
 			return true;
 		}
 
-		if (obj == null) {
-			return false;
+		if (obj instanceof final Triple<?, ?, ?> other) {
+			return Objects.equals(this.first, other.first) //
+					&& Objects.equals(this.second, other.second) //
+					&& Objects.equals(this.third, other.third);
 		}
 
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-
-		final A pFirst = first;
-		final B pSecond = second;
-		final C pThird = third;
-		@SuppressWarnings("rawtypes")
-		final Triple other = (Triple) obj;
-		if (pFirst == null) {
-			if (other.first != null) {
-				return false;
-			}
-		} else if (!pFirst.equals(other.first)) {
-			return false;
-		}
-		if (pSecond == null) {
-			if (other.second != null) {
-				return false;
-			}
-		} else if (!pSecond.equals(other.second)) {
-			return false;
-		}
-		if (pThird == null) {
-			if (other.third != null) {
-				return false;
-			}
-		} else if (!pThird.equals(other.third)) {
-			return false;
-		}
-		return true;
+		return false;
 	}
+
 }

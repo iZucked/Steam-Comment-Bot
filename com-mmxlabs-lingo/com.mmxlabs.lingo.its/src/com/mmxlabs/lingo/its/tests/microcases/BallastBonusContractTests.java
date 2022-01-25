@@ -92,6 +92,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 				.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8) //
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.build();
+
 		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
 
 		vesselAvailability.getEndAt().add(portFinder.getCapabilityPortsGroup(PortCapability.DISCHARGE));
@@ -341,6 +342,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		final GenericCharterContract ballastBonusContract = commercialModelBuilder.createSimpleNotionalJourneyBallastBonusContract(
 				Lists.newLinkedList(Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_SAKAI))), 20.0, "20000", "100", false, true,
 				Lists.newArrayList(portFinder.findPortById(InternalDataConstants.PORT_BONNY)));
+
 		vesselAvailability.setGenericCharterContract(ballastBonusContract);
 
 		evaluateTest(null, null, scenarioRunner -> {
@@ -447,11 +449,13 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel("STEAM-145");
 		vessel.setCapacity(140_000);
+
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 1);
 		final LoadSlot load_FOB1 = cargoModelBuilder
 				.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8)//
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
 				.build();
+
 		final DischargeSlot discharge_DES1 = cargoModelBuilder.makeDESSale("DES_Sale", LocalDate.of(2016, 1, 5), portFinder.findPortById(InternalDataConstants.PORT_SAKAI), null, entity, "7").build();
 
 		BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
@@ -460,7 +464,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		final Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo.setVesselAssignmentType(charterInMarket_1);
 
-		final GenericCharterContract s = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "2000000");
+		final GenericCharterContract s = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), "2000000");
 		charterInMarket_1.setGenericCharterContract(s);
 
 		evaluateTest(null, null, scenarioRunner -> {
@@ -492,6 +496,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		vessel.setCapacity(140_000);
 
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 1);
+
 		final LoadSlot load_FOB1 = cargoModelBuilder
 				.makeFOBPurchase("FOB_Purchase", LocalDate.of(2015, 12, 5), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5", 22.8)//
 				.withVolumeLimits(0, 140000, VolumeUnits.M3)//
@@ -503,8 +508,8 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		final @NonNull Cargo cargo = cargoModelBuilder.createCargo(load_FOB1, discharge_DES1);
 		cargo.setVesselAssignmentType(charterInMarket_1);
 
-		final GenericCharterContract s = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), "2000000");
-		charterInMarket_1.setGenericCharterContract(s);
+		final GenericCharterContract bb = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "2000000");
+		charterInMarket_1.setGenericCharterContract(bb);
 
 		evaluateTest(null, null, scenarioRunner -> {
 
@@ -518,7 +523,9 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 			final long cargoPNL = cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
 
 			final List<SlotAllocation> slotAllocations = schedule.getSlotAllocations();
+
 			final EndEvent end = getEndEvent(charterInMarket_1, 0);
+
 			Assertions.assertEquals(0, end.getGroupProfitAndLoss().getProfitAndLoss());
 			Assertions.assertEquals(cargoPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
 		});
@@ -631,7 +638,7 @@ public class BallastBonusContractTests extends AbstractLegacyMicroTestCase {
 		BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
 
 		@NonNull
-		final GenericCharterContract s = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_SAKAI), "2000000");
+		final GenericCharterContract s = commercialModelBuilder.createSimpleLumpSumBallastBonusContract(portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), "2000000");
 		charterInMarket_1.setGenericCharterContract(s);
 
 		optimiseWithLSOTest(scenarioRunner -> {

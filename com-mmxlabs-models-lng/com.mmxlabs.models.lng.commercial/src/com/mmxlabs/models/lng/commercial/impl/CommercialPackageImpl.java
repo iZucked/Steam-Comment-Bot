@@ -1400,7 +1400,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	@Override
-	public EReference getRepositioningFeeTerm_OriginPort() {
+	public EReference getRepositioningFeeTerm_StartPorts() {
 		return (EReference)repositioningFeeTermEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -1422,6 +1422,16 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	@Override
 	public EClass getOriginPortRepositioningFeeTerm() {
 		return originPortRepositioningFeeTermEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getOriginPortRepositioningFeeTerm_OriginPort() {
+		return (EReference)originPortRepositioningFeeTermEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -1731,11 +1741,12 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEAttribute(monthlyBallastBonusTermEClass, MONTHLY_BALLAST_BONUS_TERM__BALLAST_BONUS_PCT_CHARTER);
 
 		repositioningFeeTermEClass = createEClass(REPOSITIONING_FEE_TERM);
-		createEReference(repositioningFeeTermEClass, REPOSITIONING_FEE_TERM__ORIGIN_PORT);
+		createEReference(repositioningFeeTermEClass, REPOSITIONING_FEE_TERM__START_PORTS);
 
 		lumpSumRepositioningFeeTermEClass = createEClass(LUMP_SUM_REPOSITIONING_FEE_TERM);
 
 		originPortRepositioningFeeTermEClass = createEClass(ORIGIN_PORT_REPOSITIONING_FEE_TERM);
+		createEReference(originPortRepositioningFeeTermEClass, ORIGIN_PORT_REPOSITIONING_FEE_TERM__ORIGIN_PORT);
 
 		endHeelOptionsEClass = createEClass(END_HEEL_OPTIONS);
 		createEAttribute(endHeelOptionsEClass, END_HEEL_OPTIONS__TANK_STATE);
@@ -1968,11 +1979,15 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getMonthlyBallastBonusTerm_BallastBonusPctCharter(), ecorePackage.getEString(), "ballastBonusPctCharter", null, 0, 1, MonthlyBallastBonusTerm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(repositioningFeeTermEClass, RepositioningFeeTerm.class, "RepositioningFeeTerm", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getRepositioningFeeTerm_OriginPort(), thePortPackage.getPort(), null, "originPort", null, 0, 1, RepositioningFeeTerm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(theTypesPackage.getAPortSet());
+		g2 = createEGenericType(thePortPackage.getPort());
+		g1.getETypeArguments().add(g2);
+		initEReference(getRepositioningFeeTerm_StartPorts(), g1, null, "startPorts", null, 0, -1, RepositioningFeeTerm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(lumpSumRepositioningFeeTermEClass, LumpSumRepositioningFeeTerm.class, "LumpSumRepositioningFeeTerm", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(originPortRepositioningFeeTermEClass, OriginPortRepositioningFeeTerm.class, "OriginPortRepositioningFeeTerm", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getOriginPortRepositioningFeeTerm_OriginPort(), thePortPackage.getPort(), null, "originPort", null, 0, 1, OriginPortRepositioningFeeTerm.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(endHeelOptionsEClass, EndHeelOptions.class, "EndHeelOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getEndHeelOptions_TankState(), this.getEVesselTankState(), "tankState", null, 0, 1, EndHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

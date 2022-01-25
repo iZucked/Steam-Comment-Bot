@@ -14,13 +14,19 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.InventoryEvents;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.util.CombinedSequence;
 
 /**
- * {@link ViewerComparator} to sort the {@link SchedulerView} contents. Implementation sort vessels alphabetically grouped into fleet and spot vessels. There are currently two sort modes on top of
- * this; {@link Mode#STACK} will show multiple scenarios in sequence. {@link Mode#INTERLEAVE} will show the same vessel for multiple scenarios side-by-side.
+ * {@link ViewerComparator} to sort the {@link SchedulerView} contents.
+ * Implementation sort vessels alphabetically grouped into fleet and spot
+ * vessels. There are currently two sort modes on top of this;
+ * {@link Mode#STACK} will show multiple scenarios in sequence.
+ * {@link Mode#INTERLEAVE} will show the same vessel for multiple scenarios
+ * side-by-side.
  * 
  * @author Simon Goodall
  * 
@@ -65,24 +71,22 @@ public class ScenarioViewerComparator extends ViewerComparator {
 	@Override
 	public int category(Object element) {
 
-		if (element instanceof CombinedSequence) {
-			final CombinedSequence combinedSequence = (CombinedSequence) element;
-			if (combinedSequence.getSequences().size() > 0) {
+		if (element instanceof CombinedSequence combinedSequence) {
+			if (!combinedSequence.getSequences().isEmpty()) {
 				element = combinedSequence.getSequences().get(0);
 			}
 		}
 
 		// Use hashcode of resource as sort key
-		if (element instanceof EObject) {
-			return ((EObject) element).eContainer().hashCode();
+		if (element instanceof EObject eObj) {
+			return eObj.eContainer().hashCode();
 		}
 
 		return super.category(element);
 	}
 
 	private @NonNull String getSequenceName(final Object obj) {
-		if (obj instanceof CombinedSequence) {
-			final CombinedSequence combinedSequence = (CombinedSequence) obj;
+		if (obj instanceof final CombinedSequence combinedSequence) {
 			final Vessel vessel = combinedSequence.getVessel();
 			if (vessel != null) {
 				final String name = vessel.getName();
@@ -90,9 +94,14 @@ public class ScenarioViewerComparator extends ViewerComparator {
 					return name;
 				}
 			}
-		} else if (obj instanceof Sequence) {
-			final Sequence s = (Sequence) obj;
-			final String name = s.getVesselAvailability() == null ? s.getName() : s.getVesselAvailability().getVessel().getName();
+		} else if (obj instanceof final Sequence s) {
+			String name = s.getVesselAvailability() == null ? s.getName() : s.getVesselAvailability().getVessel().getName();
+
+			if (s.getSequenceType() == SequenceType.ROUND_TRIP) {
+				// Add the event name to help sort order
+				final Event event = s.getEvents().get(0);
+				name += event.name();
+			}
 
 			if (name != null) {
 				return name + s.getSpotIndex();
@@ -104,8 +113,7 @@ public class ScenarioViewerComparator extends ViewerComparator {
 	private Type getSequenceType(final Object obj) {
 		if (obj instanceof CombinedSequence) {
 			return Type.FLEET;
-		} else if (obj instanceof Sequence) {
-			final Sequence s = (Sequence) obj;
+		} else if (obj instanceof final Sequence s) {
 			if (s.isFleetVessel()) {
 				return Type.FLEET;
 			} else if (s.isSetCharterInMarket()) {
@@ -152,8 +160,7 @@ public class ScenarioViewerComparator extends ViewerComparator {
 			{
 				// Add scenario instance name to field if multiple scenarios are selected
 				final Object input = viewer.getInput();
-				if (input instanceof Collection<?>) {
-					final Collection<?> collection = (Collection<?>) input;
+				if (input instanceof Collection<?> collection) {
 
 					if (collection.size() > 1) {
 						if (selectedScenariosService.getPinned() != null) {
@@ -161,9 +168,8 @@ public class ScenarioViewerComparator extends ViewerComparator {
 							if (selectedDataProvider != null) {
 
 								final EObject e1Obj;
-								if (e1 instanceof CombinedSequence) {
-									final CombinedSequence combinedSequence = (CombinedSequence) e1;
-									if (combinedSequence.getSequences().size() > 0) {
+								if (e1 instanceof CombinedSequence combinedSequence) {
+									if (!combinedSequence.getSequences().isEmpty()) {
 										e1Obj = combinedSequence.getSequences().get(0);
 									} else {
 										e1Obj = null;
@@ -176,9 +182,8 @@ public class ScenarioViewerComparator extends ViewerComparator {
 
 								final EObject e2Obj;
 
-								if (e2 instanceof CombinedSequence) {
-									final CombinedSequence combinedSequence = (CombinedSequence) e2;
-									if (combinedSequence.getSequences().size() > 0) {
+								if (e2 instanceof CombinedSequence combinedSequence) {
+									if (!combinedSequence.getSequences().isEmpty()) {
 										e2Obj = combinedSequence.getSequences().get(0);
 									} else {
 										e2Obj = null;
@@ -231,8 +236,7 @@ public class ScenarioViewerComparator extends ViewerComparator {
 				{
 					// Add scenario instance name to field if multiple scenarios are selected
 					final Object input = viewer.getInput();
-					if (input instanceof Collection<?>) {
-						final Collection<?> collection = (Collection<?>) input;
+					if (input instanceof Collection<?> collection) {
 
 						if (collection.size() > 1) {
 							if (selectedScenariosService.getPinned() != null) {
@@ -240,9 +244,8 @@ public class ScenarioViewerComparator extends ViewerComparator {
 								if (selectedDataProvider != null) {
 
 									final EObject e1Obj;
-									if (e1 instanceof CombinedSequence) {
-										final CombinedSequence combinedSequence = (CombinedSequence) e1;
-										if (combinedSequence.getSequences().size() > 0) {
+									if (e1 instanceof CombinedSequence combinedSequence) {
+										if (!combinedSequence.getSequences().isEmpty()) {
 											e1Obj = combinedSequence.getSequences().get(0);
 										} else {
 											e1Obj = null;
@@ -255,9 +258,8 @@ public class ScenarioViewerComparator extends ViewerComparator {
 
 									final EObject e2Obj;
 
-									if (e2 instanceof CombinedSequence) {
-										final CombinedSequence combinedSequence = (CombinedSequence) e2;
-										if (combinedSequence.getSequences().size() > 0) {
+									if (e2 instanceof CombinedSequence combinedSequence) {
+										if (!combinedSequence.getSequences().isEmpty()) {
 											e2Obj = combinedSequence.getSequences().get(0);
 										} else {
 											e2Obj = null;

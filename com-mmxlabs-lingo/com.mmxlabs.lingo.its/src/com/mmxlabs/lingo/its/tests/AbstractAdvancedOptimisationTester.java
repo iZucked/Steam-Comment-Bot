@@ -32,6 +32,7 @@ import com.mmxlabs.common.time.Months;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
@@ -142,7 +143,7 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 		};
 		provider.execute(originalScenarioDataProvider -> {
 
-			final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
+			final UserSettings userSettings = UserSettingsHelper.createDefaultUserSettings();
 
 			if (periodStart != null) {
 				userSettings.setPeriodStartDate(periodStart);

@@ -19,7 +19,6 @@ import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -28,14 +27,12 @@ import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.common.CumulativeMap;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IReportContentsGenerator;
-import com.mmxlabs.lingo.reports.ReportContents;
 import com.mmxlabs.lingo.reports.ReportContentsGenerators;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
+import com.mmxlabs.lingo.reports.components.ColumnManager;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
-import com.mmxlabs.lingo.reports.services.SelectedDataProviderImpl;
 import com.mmxlabs.lingo.reports.views.standard.SimpleTabularReportView;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -48,8 +45,6 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils.ShippingCostType;
-import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
-import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
 import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
@@ -101,7 +96,8 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 		return new AbstractSimpleTabularReportTransformer<IncomeStatementData>() {
 
 			/**
-			 * Returns the list of year / month labels for the entire known exposure data range. This may conceivably include months in which no transactions occur.
+			 * Returns the list of year / month labels for the entire known exposure data
+			 * range. This may conceivably include months in which no transactions occur.
 			 * 
 			 * @return
 			 */
@@ -232,7 +228,7 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 				return result;
 			}
 
-			private com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer.ColumnManager<IncomeStatementData> createMonthColumn(final YearMonth date) {
+			private ColumnManager<IncomeStatementData> createMonthColumn(final YearMonth date) {
 				return new ColumnManager<IncomeStatementData>(String.format("%d-%02d", date.getYear(), date.getMonthValue())) {
 					@Override
 					public String getColumnText(final IncomeStatementData data) {
@@ -254,7 +250,7 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 				};
 			}
 
-			private com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer.ColumnManager<IncomeStatementData> createYearTotalColumn(final List<YearMonth> currentYear) {
+			private ColumnManager<IncomeStatementData> createYearTotalColumn(final List<YearMonth> currentYear) {
 				return new ColumnManager<IncomeStatementData>(String.format("%d", currentYear.get(0).getYear())) {
 					private final List<YearMonth> thisYear = new ArrayList<>(currentYear);
 
@@ -286,12 +282,12 @@ public abstract class AbstractIncomeStatement<T> extends SimpleTabularReportView
 			}
 
 			@Override
-			public @NonNull List<@NonNull IncomeStatementData> createData(@Nullable final Pair<@NonNull Schedule, @NonNull ScenarioResult> pinnedPair,
+			public List<IncomeStatementData> createData(@Nullable final Pair<@NonNull Schedule, @NonNull ScenarioResult> pinnedPair,
 					@NonNull final List<@NonNull Pair<@NonNull Schedule, @NonNull ScenarioResult>> otherPairs) {
 				resetData();
 				overallIncomeMonths.clear();
 
-				final List<@NonNull IncomeStatementData> output = new LinkedList<>();
+				final List<IncomeStatementData> output = new LinkedList<>();
 				{
 					if (pinnedPair != null) {
 						output.addAll(createData(pinnedPair.getFirst(), pinnedPair.getSecond()));

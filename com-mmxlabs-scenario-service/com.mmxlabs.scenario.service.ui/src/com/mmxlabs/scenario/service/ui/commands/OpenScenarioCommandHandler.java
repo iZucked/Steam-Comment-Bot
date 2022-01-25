@@ -48,14 +48,12 @@ public class OpenScenarioCommandHandler extends AbstractHandler {
 			@Override
 			public void run() {
 				final ISelection selection = activePage.getSelection();
-				if (selection instanceof IStructuredSelection) {
-					final IStructuredSelection strucSelection = (IStructuredSelection) selection;
+				if (selection instanceof IStructuredSelection strucSelection) {
 					for (final Iterator<?> iterator = strucSelection.iterator(); iterator.hasNext();) {
 						final Object element = iterator.next();
 						if (element instanceof ScenarioInstance) {
 							openEditor(activePage, element);
-						} else if (element instanceof ScenarioFragment) {
-							final ScenarioFragment scenarioFragment = (ScenarioFragment) element;
+						} else if (element instanceof ScenarioFragment scenarioFragment) {
 
 							// There is a delay between loading a scenario and the Scenario Fragment being correctly populated.
 							// Use a completable future to wait about a second for this to happen after the scenario is loaded.

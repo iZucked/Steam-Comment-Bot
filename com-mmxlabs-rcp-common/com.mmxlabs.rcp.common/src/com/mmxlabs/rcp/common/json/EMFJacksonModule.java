@@ -22,11 +22,9 @@ public class EMFJacksonModule extends SimpleModule {
 		super();
 
 		for (final Object obj : Registry.INSTANCE.values()) {
-			if (obj instanceof EPackage) {
-				final EPackage ePackage = (EPackage) obj;
+			if (obj instanceof EPackage ePackage) {
 				for (final EClassifier classifier : ePackage.getEClassifiers()) {
-					if (classifier instanceof EClass) {
-						EClass eClass = (EClass) classifier;
+					if (classifier instanceof EClass eClass) {
 						addSerializer(new EMFSerializer(eClass, eClass.getInstanceClass(), serialisationConfig));
 						addDeserializer(eClass.getInstanceClass(), new EMFDeserializer(eClass, eClass.getInstanceClass()));
 					}

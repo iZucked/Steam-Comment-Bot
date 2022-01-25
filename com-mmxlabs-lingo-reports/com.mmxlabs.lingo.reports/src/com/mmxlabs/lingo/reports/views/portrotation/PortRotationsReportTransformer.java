@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EObject;
+
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduledEventCollector;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -43,11 +45,11 @@ public class PortRotationsReportTransformer {
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioResult, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean pinned) {
+			protected Collection<EObject> collectElements(final ScenarioResult scenarioResult, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean pinned) {
 				numberOfSchedules++;
 				rootObjects.add(scenarioModel);
 				isPinned |= pinned;
-				final Collection<? extends Object> collectElements = super.collectElements(scenarioResult, scenarioModel, schedule, pinned);
+				final Collection<EObject> collectElements = super.collectElements(scenarioResult, scenarioModel, schedule, pinned);
 				elementList.addAll(collectElements);
 				return collectElements;
 			}

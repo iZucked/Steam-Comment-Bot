@@ -137,7 +137,7 @@ public class StandardEconsRowFactory extends AbstractEconsRowFactory {
 			rows.add(createRow(32, "Charter Revenue", true, "$", "", createShippingCharterRevenue(options, RowType.REVENUE)));
 			rows.add(createRow(34, "    Hire Rate", true, "$", "/day", createMeanCharterRatePerDay(options, RowType.REVENUE)));
 			rows.add(createRow(36, "    Charter Duration", true, "", "", createCharterDays(options, RowType.REVENUE)));
-			rows.add(createRow(38, "Repositioning", true, "$", "", createShippingRepositioning(options, RowType.COST)));
+			rows.add(createRow(38, "Repositioning", true, "$", "", createShippingRepositioning(options, RowType.REVENUE)));
 			rows.add(createRow(39, "Ballast bonus", true, "$", "", createShippingBallastBonus(options, RowType.REVENUE)));
 		}		
 		if (containsCargo || containsCharterOut || containsCooldown || containsGeneratedCharterOut || containsOpenSlot || containsPurge || containsStartEvent || containsVesselEvent) {

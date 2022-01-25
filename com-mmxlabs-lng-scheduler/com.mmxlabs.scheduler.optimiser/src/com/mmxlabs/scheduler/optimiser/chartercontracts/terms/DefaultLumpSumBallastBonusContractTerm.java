@@ -6,7 +6,8 @@ package com.mmxlabs.scheduler.optimiser.chartercontracts.terms;
 
 import java.util.Set;
 
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.curves.ILongCurve;
 import com.mmxlabs.scheduler.optimiser.chartercontracts.ICharterContractTermAnnotation;
@@ -16,29 +17,37 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
-public class DefaultLumpSumBallastBonusContractTerm extends BallastBonusContractTerm{
-	private final @NonNull ILongCurve lumpSumCurve;
+@NonNullByDefault
+public class DefaultLumpSumBallastBonusContractTerm extends BallastBonusContractTerm {
+	private final ILongCurve lumpSumCurve;
 
-	public DefaultLumpSumBallastBonusContractTerm(final Set<IPort> redeliveryPorts, final @NonNull ILongCurve lumpSumCurve) {
+	public DefaultLumpSumBallastBonusContractTerm(final Set<IPort> redeliveryPorts, final ILongCurve lumpSumCurve) {
 		super(redeliveryPorts);
 		this.lumpSumCurve = lumpSumCurve;
 	}
 
 	@Override
-	public boolean match(final IPort loadPort, final IPortSlot slot, final IVesselAvailability vesselAvailability, final int vesselStartTime, final int vesselEndTime) {
+	public boolean match(IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability, int vesselStartTime, IPort vesselStartPort) {
+		IPortSlot slot = portTimesRecord.getFirstSlot();
+
 		return slot.getPortType() == PortType.End && (getRedeliveryPorts().contains(slot.getPort()) || getRedeliveryPorts().isEmpty());
 	}
 
 	@Override
-	public long calculateCost(IPort firstLoad, IPortSlot lastSlot, IVesselAvailability vesselAvailability, int vesselStartTime, int vesselEndTime) {
+	public long calculateCost(IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability, int vesselStartTime, IPort vesselStartPort) {
+		IPortSlot slot = portTimesRecord.getFirstSlot();
+
+		int vesselEndTime = portTimesRecord.getFirstSlotTime() + portTimesRecord.getSlotDuration(slot);
+
 		return lumpSumCurve.getValueAtPoint(vesselEndTime);
 	}
 
 	@Override
-	public ICharterContractTermAnnotation annotate(IPort firstLoad, IPortSlot lastSlot, IVesselAvailability vesselAvailability, int vesselStartTime, int vesselEndTime) {
+	public @Nullable ICharterContractTermAnnotation annotate(IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability, int vesselStartTime, IPort vesselStartPort) {
 		final LumpSumBallastBonusTermAnnotation lumpSumBallastBonusRuleAnnotation = new LumpSumBallastBonusTermAnnotation();
-		lumpSumBallastBonusRuleAnnotation.lumpSum = calculateCost(null, lastSlot, vesselAvailability, vesselStartTime, vesselEndTime);
+		lumpSumBallastBonusRuleAnnotation.lumpSum = calculateCost(portTimesRecord, vesselAvailability, vesselStartTime, vesselStartPort);
 		return lumpSumBallastBonusRuleAnnotation;
 	}
 }

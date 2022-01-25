@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>com.mmxlabs.lingo.master</groupId>
 		<artifactId>com.mmxlabs.lingo.master.parent</artifactId>
-		<version>4.13.8-SNAPSHOT</version>
+		<version>5.1.2-SNAPSHOT</version>
 	</parent>
 
 	<description>Project containing commonly used classes and utility functions.</description>
@@ -18,8 +18,6 @@
 	<modules>
 		<module>com.mmxlabs.common.common-util</module>
 		<module>com.mmxlabs.common.common-util.tests</module>
-
-		<module>com.mmxlabs.common.common-nauticaldistances</module>
 
 		<module>com.mmxlabs.common.util.feature</module>
 	</modules>

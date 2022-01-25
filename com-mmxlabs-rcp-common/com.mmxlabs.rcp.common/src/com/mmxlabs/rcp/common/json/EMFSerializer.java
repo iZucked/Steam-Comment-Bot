@@ -71,17 +71,20 @@ public class EMFSerializer<T extends EObject> extends StdSerializer<T> {
 					jgen.writeArrayFieldStart(f.getName());
 
 					for (final Object obj : (List<?>) value.eGet(f)) {
-						if (f instanceof EReference) {
-							final EReference ref = (EReference) f;
+						if (f instanceof EReference ref) {
 							if (ref.isContainment()) {
 								jgen.writeObject(obj);
 							} else {
 								jgen.writeObject(JSONReference.of((EObject) obj));
 							}
-						} else if (f instanceof EAttribute) {
-							final EAttribute eAtrib = (EAttribute) f;
-							final String v = eAtrib.getEAttributeType().getEPackage().getEFactoryInstance().convertToString(eAtrib.getEAttributeType(), obj);
-							jgen.writeString(v);
+						} else if (f instanceof EAttribute eAtrib) {
+							if (obj == null) {
+								// Value may be "set" as null
+								jgen.writeString("null");
+							} else {
+								final String v = eAtrib.getEAttributeType().getEPackage().getEFactoryInstance().convertToString(eAtrib.getEAttributeType(), obj);
+								jgen.writeString(v);
+							}
 						}
 					}
 
@@ -89,17 +92,20 @@ public class EMFSerializer<T extends EObject> extends StdSerializer<T> {
 
 				} else {
 					final Object obj = value.eGet(f);
-					if (f instanceof EReference) {
-						final EReference ref = (EReference) f;
+					if (f instanceof EReference ref) {
 						if (ref.isContainment()) {
 							jgen.writeObjectField(f.getName(), obj);
 						} else {
 							jgen.writeObjectField(f.getName(), JSONReference.of((EObject) obj));
 						}
-					} else if (f instanceof EAttribute) {
-						final EAttribute eAtrib = (EAttribute) f;
-						final String v = eAtrib.getEAttributeType().getEPackage().getEFactoryInstance().convertToString(eAtrib.getEAttributeType(), obj);
-						jgen.writeStringField(f.getName(), v);
+					} else if (f instanceof EAttribute eAtrib) {
+						if (obj == null) {
+							// Value may be "set" as null
+							jgen.writeStringField(f.getName(), "null");
+						} else {
+							final String v = eAtrib.getEAttributeType().getEPackage().getEFactoryInstance().convertToString(eAtrib.getEAttributeType(), obj);
+							jgen.writeStringField(f.getName(), v);
+						}
 					}
 				}
 
