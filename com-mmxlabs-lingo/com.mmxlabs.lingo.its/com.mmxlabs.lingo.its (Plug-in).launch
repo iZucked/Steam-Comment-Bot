@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.pde.ui.JunitLaunchConfig">
     <setAttribute key="additional_plugins">
-        <setEntry value="org.eclipse.jdt.junit5.runtime:1.0.1300.v20210320-1132:default:true:default:default"/>
+        <setEntry value="org.eclipse.jdt.junit5.runtime:1.0.1400.v20211108-0640:default:true:default:default"/>
         <setEntry value="org.ops4j.peaberry.activation:1.3.0:default:true:1:true"/>
     </setAttribute>
     <booleanAttribute key="append.args" value="true"/>
