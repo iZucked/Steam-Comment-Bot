@@ -356,9 +356,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//LumpSumDetails/lumpSum"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//LumpSumBallastBonusTermDetails"/>
-    <genClasses ecoreClass="schedule.ecore#//LumpSumRepositioningFeeTermDetails">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//LumpSumRepositioningFeeTermDetails/originPort"/>
-    </genClasses>
+    <genClasses ecoreClass="schedule.ecore#//LumpSumRepositioningFeeTermDetails"/>
     <genClasses ecoreClass="schedule.ecore#//NotionalJourneyDetails">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NotionalJourneyDetails/distance"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//NotionalJourneyDetails/totalTimeInDays"/>

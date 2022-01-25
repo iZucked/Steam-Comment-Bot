@@ -77,7 +77,6 @@ public class CharterContractDetailProperties extends AbstractDetailPropertyFacto
 					LumpSumRepositioningFeeTermDetails rule = (LumpSumRepositioningFeeTermDetails) charterContractFeeDetails.getMatchingContractDetails();
 					addDetailProperty("Type", "", "", "", "Lump sum", new StringFormatLabelProvider("%s"), details);
 					addDetailProperty("Load port", "", "", "", rule.getMatchedPort(), new StringFormatLabelProvider("%s"), details);
-					addDetailProperty("Origin port", "", "", "", rule.getOriginPort(), new StringFormatLabelProvider("%s"), details);
 				}
 			}
 		}
