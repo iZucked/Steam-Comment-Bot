@@ -35,13 +35,11 @@ public class GroupedSlotsPeriodTransformerExtension implements IPeriodTransforme
 					dischargeSlotsToRemove.add(dischargeSlot);
 				}
 				final Cargo cargo = dischargeSlot.getCargo();
-				if (cargo != null) {
-					// reduce bound by 1 --> Check with Simon, if discharge slot is excluded, should cargo be excluded?
-					if (excludedCargoes.contains(cargo)) {
-						// discharge slot is also excluded
-						dischargeSlotsToRemove.add(dischargeSlot);
-						++boundReduction;
-					}
+				if (cargo != null && excludedCargoes.contains(cargo)) {
+					// discharge slot is also excluded
+					dischargeSlotsToRemove.add(dischargeSlot);
+					// reduce bound by 1
+					++boundReduction;
 				}
 			}
 			final int newBound = groupedDischargeSlotsConstraint.getMinimumBound() - boundReduction;
@@ -59,7 +57,9 @@ public class GroupedSlotsPeriodTransformerExtension implements IPeriodTransforme
 				groupedDischargeSlotsConstraintsToRemove.add(groupedDischargeSlotsConstraint);
 			}
 		}
-		if (!groupedDischargeSlotsConstraintsToRemove.isEmpty()) {
+		if (!groupedDischargeSlotsConstraintsToRemove.isEmpty())
+
+		{
 			cargoModel.getGroupedDischargeSlots().removeAll(groupedDischargeSlotsConstraintsToRemove);
 		}
 	}
