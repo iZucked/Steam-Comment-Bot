@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 
 /**
@@ -18,5 +17,5 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
  */
 @NonNullByDefault
 public interface IGroupedSlotsConstraintDataProviderEditor extends IGroupedSlotsConstraintDataProvider {
-	void addMinDischargeSlots(List<Pair<IDischargeOption, Integer>> slots, int limit);
+	void addMinDischargeSlots(List<IDischargeOption> slots, int limit);
 }
