@@ -277,8 +277,6 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 	private IScenarioVersionService.IChangedListener changeListenerScenarios = this::refresh;
 	private IBaseCaseVersionsProvider.IBaseCaseChanged changeListenerBaseCase = this::refresh;
 	private IProgressProvider.IProgressChanged changeListenerProgress = element -> {
-		System.out.println("Updated");
-
 		if (element != null) {
 			ViewerHelper.refresh(getViewer(), element, false);
 		} else {

@@ -51,8 +51,9 @@ public class CloudOptimisationDataResultRecord {
 	private String componentUUID;
 
 	private boolean remote;
-
 	private boolean deleted;
+
+	private boolean hasError;
 
 	private long localRuntime;
 	private long cloudRuntime;
@@ -244,6 +245,14 @@ public class CloudOptimisationDataResultRecord {
 
 	public void setSubType(String subType) {
 		this.subType = subType;
+	}
+
+	public boolean isHasError() {
+		return hasError;
+	}
+
+	public void setHasError(boolean hasError) {
+		this.hasError = hasError;
 	}
 
 }

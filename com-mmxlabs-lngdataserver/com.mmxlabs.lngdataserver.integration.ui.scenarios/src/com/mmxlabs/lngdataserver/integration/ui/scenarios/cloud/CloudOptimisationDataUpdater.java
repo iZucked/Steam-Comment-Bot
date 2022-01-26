@@ -134,7 +134,11 @@ class CloudOptimisationDataUpdater {
 		@Override
 		public void run() {
 
-			final boolean importResultXMI = true;
+			if (cRecord.isHasError()) {
+				return;
+			}
+			
+			boolean importResultXMI = true;
 
 			final File f = new File(String.format("%s/%s.lingo", basePath, cRecord.getJobid()));
 			if (!f.exists()) {
@@ -203,6 +207,11 @@ class CloudOptimisationDataUpdater {
 										r.save(null);
 									}
 								}
+							} catch (Exception e) {
+								cRecord.setHasError(true);
+								cRecord.setStatus(ResultStatus.from("{ \"status\" : \"failed\", \"reason\" : \"Result load failure\"  }", null));
+								readyCallback.accept(cRecord);
+								throw e;
 							}
 						});
 						if (importResultXMI) {
@@ -464,6 +473,11 @@ class CloudOptimisationDataUpdater {
 		for (final CloudOptimisationDataResultRecord originalR : currentRecords) {
 			final CloudOptimisationDataResultRecord r = originalR;// .copy();
 
+			if (r.isHasError()) {
+				newList.add(r);
+				continue;
+			}
+			
 			final boolean oldRemote = r.isRemote();
 			final ResultStatus oldStatus = r.getStatus();
 			// What is the status?

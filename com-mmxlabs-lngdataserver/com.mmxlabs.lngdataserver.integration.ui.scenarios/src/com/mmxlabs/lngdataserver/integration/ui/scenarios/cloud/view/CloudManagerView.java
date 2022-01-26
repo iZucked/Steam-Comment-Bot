@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view;
 
-import java.io.StringWriter;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -15,8 +14,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -53,13 +50,12 @@ import com.mmxlabs.models.lng.analytics.ui.views.SandboxScenario;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.rcp.common.CommonImages;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
 import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.PieChartRenderer;
-import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.RunnableAction;
-import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
@@ -80,11 +76,16 @@ public class CloudManagerView extends ViewPart {
 
 	private IUpdateListener listener;
 
+	private Image imgError;
+
 	/**
 	 * This is a callback that will allow us to create the viewer and initialise it.
 	 */
 	@Override
 	public void createPartControl(final Composite parent) {
+
+		imgError = CommonImages.getImageDescriptor(IconPaths.Error, IconMode.Enabled).createImage();
+
 		viewer = new GridTableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 
 		GridViewerHelper.configureLookAndFeel(viewer);
@@ -125,6 +126,9 @@ public class CloudManagerView extends ViewPart {
 					}
 					if (status.isRunning()) {
 						return PieChartRenderer.renderPie(rec.getStatus().getProgress() / 100.0);
+					}
+					if (status.isFailed()) {
+						return imgError;
 					}
 				}
 				return null;
@@ -410,7 +414,7 @@ public class CloudManagerView extends ViewPart {
 	public void dispose() {
 
 		CloudOptimisationDataService.INSTANCE.removeListener(listener);
-
+		imgError.dispose();
 		super.dispose();
 	}
 
