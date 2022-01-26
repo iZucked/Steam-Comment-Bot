@@ -44,7 +44,7 @@ public class GroupedSlotsConstraintChecker implements IConstraintChecker {
 		for (final GroupedSlotsConstraintInfo<IDischargeOption> constraint : allDischargeCounts) {
 			final int maxUnusedSlots = constraint.getSlots().size() - constraint.getBound();
 			final long minimumUnusedSlotsNeededToViolate = maxUnusedSlots + 1L;
-			final long shortCircuitedActualUnusedCount = constraint.getSlots().stream().unordered().filter(dischargeOption -> unusedSet.contains(portSlotProvider.getElement(dischargeOption)))
+			final long shortCircuitedActualUnusedCount = constraint.getSlots().stream().unordered().map(portSlotProvider::getElement).filter(unusedSet::contains)
 					.limit(minimumUnusedSlotsNeededToViolate).count();
 			if (maxUnusedSlots < shortCircuitedActualUnusedCount) {
 				if (messages != null) {
