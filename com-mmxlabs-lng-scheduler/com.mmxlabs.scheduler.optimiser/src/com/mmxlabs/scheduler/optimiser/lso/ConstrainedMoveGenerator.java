@@ -14,8 +14,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Injector;
 import com.google.inject.Provider;
-import com.mmxlabs.license.features.KnownFeatures;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.optimiser.common.components.ILookupManager;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
@@ -155,7 +153,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 			this.optionalMoveGenerator = null;
 		}
 
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GROUPED_OPTIONAL_SLOTS_CONSTRAINTS) && groupedSlotsProvider != null) {
+		if (groupedSlotsProvider != null) {
 			enableGuidedMoveGenerator |= !groupedSlotsProvider.getAllMinDischargeGroupCounts().isEmpty();
 		}
 	}
