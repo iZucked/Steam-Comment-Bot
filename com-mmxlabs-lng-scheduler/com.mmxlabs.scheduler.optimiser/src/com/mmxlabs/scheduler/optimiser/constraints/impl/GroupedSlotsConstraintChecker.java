@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
@@ -25,11 +25,12 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
  * @author miten
  *
  */
+@NonNullByDefault
 public class GroupedSlotsConstraintChecker implements IConstraintChecker {
 
-	private final @NonNull String name;
+	private final String name;
 
-	public GroupedSlotsConstraintChecker(@NonNull final String name) {
+	public GroupedSlotsConstraintChecker(final String name) {
 		this.name = name;
 	}
 
@@ -40,12 +41,12 @@ public class GroupedSlotsConstraintChecker implements IConstraintChecker {
 	private IGroupedSlotsConstraintDataProvider groupedSlotsDataProvider;
 
 	@Override
-	public @NonNull String getName() {
+	public String getName() {
 		return name;
 	}
 
 	@Override
-	public boolean checkConstraints(@NonNull ISequences fullSequences, @Nullable Collection<@NonNull IResource> changedResources, @Nullable List<@Nullable String> messages) {
+	public boolean checkConstraints(final ISequences fullSequences, @Nullable final Collection<IResource> changedResources, @Nullable final List<@Nullable String> messages) {
 		// Implementation below finds the minimum number of slots that can be unused and does a short circuiting check against this minimum.
 		final Set<ISequenceElement> unusedSet = getUnusedSet(fullSequences);
 		final List<GroupedSlotsConstraintInfo<IDischargeOption>> allDischargeCounts = groupedSlotsDataProvider.getAllMinDischargeGroupCounts();
@@ -64,7 +65,7 @@ public class GroupedSlotsConstraintChecker implements IConstraintChecker {
 		return true;
 	}
 
-	private Set<ISequenceElement> getUnusedSet(@NonNull final ISequences sequences) {
+	private Set<ISequenceElement> getUnusedSet(final ISequences sequences) {
 		return new HashSet<>(sequences.getUnusedElements());
 	}
 

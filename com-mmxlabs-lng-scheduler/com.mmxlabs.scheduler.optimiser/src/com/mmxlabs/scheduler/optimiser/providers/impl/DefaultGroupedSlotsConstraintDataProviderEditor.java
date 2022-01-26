@@ -9,14 +9,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.providers.GroupedSlotsConstraintInfo;
 import com.mmxlabs.scheduler.optimiser.providers.IGroupedSlotsConstraintDataProviderEditor;
 
+@NonNullByDefault
 public class DefaultGroupedSlotsConstraintDataProviderEditor implements IGroupedSlotsConstraintDataProviderEditor {
 
-	private List<GroupedSlotsConstraintInfo<IDischargeOption>> dischargeRestrictions = new LinkedList<>();
+	private final List<GroupedSlotsConstraintInfo<IDischargeOption>> dischargeRestrictions = new LinkedList<>();
 
 	@Override
 	public List<GroupedSlotsConstraintInfo<IDischargeOption>> getAllMinDischargeGroupCounts() {
@@ -24,7 +27,7 @@ public class DefaultGroupedSlotsConstraintDataProviderEditor implements IGrouped
 	}
 
 	@Override
-	public void addMinDischargeSlots(List<Pair<IDischargeOption, Integer>> slots, int limit) {
+	public void addMinDischargeSlots(final List<Pair<IDischargeOption, Integer>> slots, final int limit) {
 		final Set<IDischargeOption> set = slots.stream().map(Pair::getFirst).collect(Collectors.toSet());
 		dischargeRestrictions.add(new GroupedSlotsConstraintInfo<>(set, limit));
 	}

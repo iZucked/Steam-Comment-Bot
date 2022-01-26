@@ -6,14 +6,17 @@ package com.mmxlabs.scheduler.optimiser.providers;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 
 /**
  * Provides groups of slots to apply count restrictions to.
- * @author alex
+ * @author miten
  *
  */
+@NonNullByDefault
 public interface IGroupedSlotsConstraintDataProviderEditor extends IGroupedSlotsConstraintDataProvider {
 	void addMinDischargeSlots(List<Pair<IDischargeOption, Integer>> slots, int limit);
 }
