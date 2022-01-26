@@ -72,7 +72,8 @@ public class CloudOptimisationDataService implements IProgressProvider {
 		try {
 			listeners.forEach(l -> l.updated(cRecord));
 
-			final ScenarioInstance instanceRef = cRecord.getScenarioInstance();
+			
+			final ScenarioInstance instanceRef = cRecord == null ? null : cRecord.getScenarioInstance();
 
 			RunnerHelper.asyncExec(() -> progressListeners.forEach(p -> p.changed(instanceRef)));
 		} catch (final Exception e) {
