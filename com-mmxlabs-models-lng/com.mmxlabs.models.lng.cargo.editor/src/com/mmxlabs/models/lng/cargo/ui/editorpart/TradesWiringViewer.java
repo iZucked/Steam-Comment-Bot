@@ -2402,25 +2402,25 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		@Override
 		public void run() {
-			final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
-			try {
-				editorLock.lock();
-				try {
-					scenarioEditingLocation.setDisableUpdates(true);
-					final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
-					if (rootObject instanceof LNGScenarioModel) {
-						final GroupedSlotsDialog d = new GroupedSlotsDialog(scenarioEditingLocation.getShell(), scenarioEditingLocation);
-						if (d.open() == Window.OK) {
-							// clicked ok
+			if (!scenarioViewer.isLocked()) {
+				final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
+				if (editorLock.tryLock(500)) {
+					try {
+						scenarioEditingLocation.setDisableUpdates(true);
+						final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
+						if (rootObject instanceof LNGScenarioModel) {
+							final GroupedSlotsDialog d = new GroupedSlotsDialog(scenarioEditingLocation.getShell(), scenarioEditingLocation);
+							if (d.open() == Window.OK) {
+								// clicked ok
+							}
+						} else {
+							setEnabled(false);
 						}
-					} else {
-						setEnabled(false);
+					} finally {
+						scenarioEditingLocation.setDisableUpdates(false);
+						editorLock.unlock();
 					}
-				} finally {
-					scenarioEditingLocation.setDisableUpdates(false);
 				}
-			} finally {
-				editorLock.unlock();
 			}
 		}
 	}
