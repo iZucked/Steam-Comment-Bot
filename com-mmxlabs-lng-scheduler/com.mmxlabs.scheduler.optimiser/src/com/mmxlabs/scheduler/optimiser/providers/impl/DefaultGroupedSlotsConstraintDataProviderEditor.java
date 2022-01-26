@@ -9,25 +9,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.eclipse.jdt.annotation.NonNull;
-
-import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.parser.series.CalendarMonthMapper;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.providers.GroupedSlotsConstraintInfo;
 import com.mmxlabs.scheduler.optimiser.providers.IGroupedSlotsConstraintDataProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 
 public class DefaultGroupedSlotsConstraintDataProviderEditor implements IGroupedSlotsConstraintDataProviderEditor {
 
-	@Inject
-	private CalendarMonthMapper calendarMonthMapper;
-
-	@Inject
-	private @NonNull ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
-	
-	List<GroupedSlotsConstraintInfo<IDischargeOption>> dischargeRestrictions = new LinkedList<>();
+	private List<GroupedSlotsConstraintInfo<IDischargeOption>> dischargeRestrictions = new LinkedList<>();
 
 	@Override
 	public List<GroupedSlotsConstraintInfo<IDischargeOption>> getAllMinDischargeGroupCounts() {
