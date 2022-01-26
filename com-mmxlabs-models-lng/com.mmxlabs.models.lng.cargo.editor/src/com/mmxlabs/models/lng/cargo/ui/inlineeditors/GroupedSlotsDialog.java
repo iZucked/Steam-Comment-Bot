@@ -96,8 +96,8 @@ public class GroupedSlotsDialog extends FormDialog {
 					final GroupedDischargeSlotsConstraint newConstraint = CargoFactory.eINSTANCE.createGroupedDischargeSlotsConstraint();
 					cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), ((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getCargoModel(), CargoPackage.Literals.CARGO_MODEL__GROUPED_DISCHARGE_SLOTS, newConstraint));
 					if (!cmd.isEmpty()) {
-						scenarioEditingLocation.getDefaultCommandHandler().handleCommand(cmd);
-						tableViewer.refresh();
+						final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
+						ed.getCommandStack().execute(cmd);
 					}
 				}
 			};
