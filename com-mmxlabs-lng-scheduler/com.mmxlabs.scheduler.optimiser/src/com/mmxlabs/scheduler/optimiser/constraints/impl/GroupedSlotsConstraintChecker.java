@@ -18,6 +18,13 @@ import com.mmxlabs.scheduler.optimiser.providers.GroupedSlotsConstraintInfo;
 import com.mmxlabs.scheduler.optimiser.providers.IGroupedSlotsConstraintDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
+/**
+ * Constraint checker that ensures grouped discharge slot constraints are satisfied by sequences. Each constraint is a discharge slot collection and a lower amount that must be associated with
+ * cargoes.
+ * 
+ * @author miten
+ *
+ */
 public class GroupedSlotsConstraintChecker implements IConstraintChecker {
 
 	private final @NonNull String name;
@@ -39,6 +46,7 @@ public class GroupedSlotsConstraintChecker implements IConstraintChecker {
 
 	@Override
 	public boolean checkConstraints(@NonNull ISequences fullSequences, @Nullable Collection<@NonNull IResource> changedResources, @Nullable List<@Nullable String> messages) {
+		// Implementation below finds the minimum number of slots that can be unused and does a short circuiting check against this minimum.
 		final Set<ISequenceElement> unusedSet = getUnusedSet(fullSequences);
 		final List<GroupedSlotsConstraintInfo<IDischargeOption>> allDischargeCounts = groupedSlotsDataProvider.getAllMinDischargeGroupCounts();
 		for (final GroupedSlotsConstraintInfo<IDischargeOption> constraint : allDischargeCounts) {
