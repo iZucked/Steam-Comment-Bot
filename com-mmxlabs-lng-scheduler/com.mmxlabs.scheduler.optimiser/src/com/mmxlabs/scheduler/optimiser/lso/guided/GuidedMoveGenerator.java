@@ -109,32 +109,27 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 		options.setExtendSearch(true);
 		// options.setStrictOptional(true);
 		options.setStrictOptional(optionsRnd.nextBoolean());
-		options.setCheckEvaluatedState(false);//optionsRnd.nextBoolean());
+		options.setCheckEvaluatedState(false);// optionsRnd.nextBoolean());
 		options.setIgnoreUsedElements(false);
 		options.setInsertCanRemove(true);
 		options.setNum_tries(5);
 
-
-		
 		providedRawSequences = lookupManager.getRawSequences();
 
 		List<ISequenceElement> allE = phaseOptimisationData.getSequenceElements().stream() //
 				.filter(e -> validElementTypes.contains(portTypeProvider.getPortType(e))) //
 				.collect(Collectors.toList());
-		
-		if (!allE.isEmpty()) {
-			allTargetElements = Collections.singletonList(allE.get(random.nextInt(allE.size())));
-		
-			final long[] initialMetrics = evaluationHelper.evaluateState(providedRawSequences, sequenceManipulator.createManipulatedSequences(providedRawSequences), null, true,
-					options.isCheckEvaluatedState(), null, null);
-			final MoveResult p = generateMove(rawSequences, random, Collections.emptyList(), initialMetrics, options);
-			if (p != null) {
-				return p.move;
-			}
+
+		allTargetElements = Collections.singletonList(allE.get(random.nextInt(allE.size())));
+
+		final long[] initialMetrics = evaluationHelper.evaluateState(providedRawSequences, sequenceManipulator.createManipulatedSequences(providedRawSequences), null, true,
+				options.isCheckEvaluatedState(), null, null);
+		final MoveResult p = generateMove(rawSequences, random, Collections.emptyList(), initialMetrics, options);
+		if (p != null) {
+			return p.move;
 		}
 		return null;
 	}
-	
 
 	public static class MoveResult {
 		public MoveResult(final IMove move, final HintManager hintManager, final long[] metrics) {
