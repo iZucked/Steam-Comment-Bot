@@ -6,8 +6,6 @@ package com.mmxlabs.models.lng.transformer.extensions.modules;
 
 import org.ops4j.peaberry.activation.util.PeaberryActivationModule;
 
-import com.mmxlabs.license.features.KnownFeatures;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.transformer.extensions.actuals.ActualsTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.adp.ADPTransformerModule;
 import com.mmxlabs.models.lng.transformer.extensions.contingencytime.ContingencyIdleTimeModule;
@@ -48,9 +46,7 @@ public class TransformerExtensionsActivatorModule extends PeaberryActivationModu
 		install(new ContingencyIdleTimeModule());
 		install(new PanamaSlotsModule());
 		install(new ADPTransformerModule());
-		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GROUPED_OPTIONAL_SLOTS_CONSTRAINTS)) {
-			install(new GroupedSlotsTransformerModule());
-		}
+		install(new GroupedSlotsTransformerModule());
 		install(new ShippingTypeRequirementModule());
 		install(new FullCargoLotModule());
 		install(new ExposureDataModule());

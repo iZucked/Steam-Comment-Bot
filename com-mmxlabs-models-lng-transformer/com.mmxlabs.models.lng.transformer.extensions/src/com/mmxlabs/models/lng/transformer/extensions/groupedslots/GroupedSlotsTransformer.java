@@ -3,6 +3,8 @@ package com.mmxlabs.models.lng.transformer.extensions.groupedslots;
 import java.util.List;
 
 import com.google.inject.Inject;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.GroupedSlotsConstraint;
@@ -32,6 +34,9 @@ public class GroupedSlotsTransformer implements ITransformerExtension {
 
 	@Override
 	public void finishTransforming() {
+		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GROUPED_OPTIONAL_SLOTS_CONSTRAINTS)) {
+			return;
+		}
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(rootObject);
 		for (final GroupedSlotsConstraint<SalesContract, DischargeSlot> eConstraint : cargoModel.getGroupedDischargeSlots()) {
 			final List<IDischargeOption> oSlots = eConstraint.getSlots().stream().map(s -> modelEntityMap.getOptimiserObjectNullChecked(s, IDischargeOption.class)).toList();

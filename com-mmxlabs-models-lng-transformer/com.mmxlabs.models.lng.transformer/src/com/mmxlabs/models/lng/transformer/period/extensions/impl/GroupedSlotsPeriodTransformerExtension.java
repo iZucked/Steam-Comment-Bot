@@ -8,6 +8,8 @@ import java.util.Set;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -25,6 +27,9 @@ public class GroupedSlotsPeriodTransformerExtension implements IPeriodTransforme
 
 	@Override
 	public void processSlotInclusionsAndExclusions(@NonNull CargoModel cargoModel, @NonNull Schedule schedule, @NonNull Collection<Slot<?>> excludedSlots, @NonNull Collection<Cargo> excludedCargoes) {
+		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GROUPED_OPTIONAL_SLOTS_CONSTRAINTS)) {
+			return;
+		}
 		final List<GroupedDischargeSlotsConstraint> groupedDischargeSlotsConstraints = cargoModel.getGroupedDischargeSlots();
 		final Set<GroupedDischargeSlotsConstraint> groupedDischargeSlotsConstraintsToRemove = new HashSet<>();
 		for (final GroupedDischargeSlotsConstraint groupedDischargeSlotsConstraint : groupedDischargeSlotsConstraints) {
@@ -57,9 +62,7 @@ public class GroupedSlotsPeriodTransformerExtension implements IPeriodTransforme
 				groupedDischargeSlotsConstraintsToRemove.add(groupedDischargeSlotsConstraint);
 			}
 		}
-		if (!groupedDischargeSlotsConstraintsToRemove.isEmpty())
-
-		{
+		if (!groupedDischargeSlotsConstraintsToRemove.isEmpty()) {
 			cargoModel.getGroupedDischargeSlots().removeAll(groupedDischargeSlotsConstraintsToRemove);
 		}
 	}
