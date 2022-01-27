@@ -38,6 +38,7 @@ public class RowGroupDisplayCompositeLayoutProviderBuilder {
 		private List<EStructuralFeature> orderedFeatures = new LinkedList<>();
 		private Map<EStructuralFeature, Integer> spans = new HashMap<>();
 		private Map<EStructuralFeature, Integer> widthHints = new HashMap<>();
+		private Map<EStructuralFeature, String> labels = new HashMap<>();
 
 		/**
 		 * If called, use this String as the label for the start of the row. Hide labels for the other controls
@@ -55,6 +56,15 @@ public class RowGroupDisplayCompositeLayoutProviderBuilder {
 		 */
 		public RowBuilder withFeature(EStructuralFeature feature) {
 			orderedFeatures.add(feature);
+			return this;
+		}
+		
+		/**
+		 * Define a feature for the row with a label override. Calling #withLabel will override this behaviour
+		 */
+		public RowBuilder withFeature(EStructuralFeature feature, String label) {
+			orderedFeatures.add(feature);
+			labels.put(feature,  label);
 			return this;
 		}
 
@@ -134,6 +144,13 @@ public class RowGroupDisplayCompositeLayoutProviderBuilder {
 								}
 								editor.setLabel(null);
 							} else {
+								editor.setLabel(null);
+							}
+						} else if (row.labels.containsKey(feature)) {
+							final Label label = editor.getLabel();
+							if (label != null) {
+								label.setText(row.labels.get(feature));
+								// Set as null to avoid later code overwriting the label.
 								editor.setLabel(null);
 							}
 						}

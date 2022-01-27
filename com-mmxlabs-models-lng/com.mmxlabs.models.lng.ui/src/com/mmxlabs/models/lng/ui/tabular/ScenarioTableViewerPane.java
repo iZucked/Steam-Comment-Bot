@@ -188,8 +188,7 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 	protected void enableOpenListener() {
 		scenarioViewer.addOpenListener(event -> {
 			final ISelection selection = scenarioViewer.getSelection();
-			if (selection instanceof IStructuredSelection) {
-				final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+			if (selection instanceof IStructuredSelection structuredSelection) {
 				DetailCompositeDialogUtil.editSelection(scenarioEditingLocation, structuredSelection);
 			}
 		});
@@ -207,13 +206,23 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 		return scenarioViewer.addColumn(columnName, renderer, manipulator, pathObjects);
 	}
 
+	protected GridViewerColumn withTooltip(final String tooltip, final GridViewerColumn c) {
+		c.getColumn().setHeaderTooltip(tooltip);
+		return c;
+	}
+
+	protected GridViewerColumn withWidth(final int width, final GridViewerColumn c) {
+		c.getColumn().setWidth(width);
+		return c;
+	}
+
 	protected GridViewerColumn addNameManipulator(final String nameName) {
 		return addTypicalColumn(nameName, new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getCommandHandler()));
 	}
 
 	protected Action createAddAction(final EReference containment) {
 		final Action duplicateAction = createDuplicateAction();
-		final List<Action> eal = new ArrayList<Action>();
+		final List<Action> eal = new ArrayList<>();
 		if (duplicateAction != null) {
 			eal.add(duplicateAction);
 		}
@@ -280,9 +289,11 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 
 		if (addAction != null) {
 			/*
-			 * // if we can't add one, we can't duplicate one either. final Action dupAction = createDuplicateAction();
+			 * // if we can't add one, we can't duplicate one either. final Action dupAction
+			 * = createDuplicateAction();
 			 * 
-			 * if (dupAction != null) { toolbar.appendToGroup(ADD_REMOVE_GROUP, dupAction); }
+			 * if (dupAction != null) { toolbar.appendToGroup(ADD_REMOVE_GROUP, dupAction);
+			 * }
 			 */
 
 			toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
@@ -295,7 +306,7 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 			actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
 		}
 
-		Action copyToClipboardAction = createCopyToClipboardAction();
+		final Action copyToClipboardAction = createCopyToClipboardAction();
 
 		if (copyToClipboardAction != null) {
 			toolbar.add(copyToClipboardAction);
@@ -329,7 +340,8 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 
 	@Override
 	protected void requestActivation() {
-		// This call #setFocus() in the first child. This breaks cell editing if the first child is not the control being edited.
+		// This call #setFocus() in the first child. This breaks cell editing if the
+		// first child is not the control being edited.
 		// super.requestActivation();
 		scenarioEditingLocation.setCurrentViewer(scenarioViewer);
 
@@ -351,11 +363,12 @@ public class ScenarioTableViewerPane extends ScenarioViewerPane {
 	}
 
 	/**
-	 * Subclasses can override this to filter out object from deletion. Each dummmy UI objects that are in the selection.
+	 * Subclasses can override this to filter out object from deletion. Each dummmy
+	 * UI objects that are in the selection.
 	 * 
 	 * @param uniqueObjects
 	 */
-	protected void filterObjectsToDelete(Set<Object> uniqueObjects) {
+	protected void filterObjectsToDelete(final Set<Object> uniqueObjects) {
 		// TODO Auto-generated method stub
 
 	}

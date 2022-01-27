@@ -206,6 +206,12 @@
    <extension
          point="com.mmxlabs.models.ui.displaycompositefactories">
       <displayCompositeFactory
+            eClass="com.mmxlabs.models.lng.spotmarkets.CharterInMarket"
+            factory="com.mmxlabs.models.lng.spotmarkets.editor.displaycomposites.CharterInMarketDetailCompositeFactory"
+            id="com.mmxlabs.models.lng.spotmarkets.editor.displaycomposites.CharterInMarketDetailCompositeFactory"
+            inheritable="true">
+      </displayCompositeFactory>
+      <displayCompositeFactory
             eClass="com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket"
             factory="com.mmxlabs.models.lng.spotmarkets.editor.displaycomposites.SpotMarketsCompositeFactory"
             id="com.mmxlabs.models.lng.spotmarkets.editor.displaycomposites.SpotMarketsCompositeFactory_DP"
