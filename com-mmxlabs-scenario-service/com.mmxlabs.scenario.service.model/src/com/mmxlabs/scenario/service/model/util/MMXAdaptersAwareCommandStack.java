@@ -20,7 +20,8 @@ import com.mmxlabs.scenario.service.model.manager.InstanceData;
 import com.mmxlabs.scenario.service.model.manager.ScenarioLock;
 
 /**
- * Extended version of {@link BasicCommandStack} which overrides undo/redo to disable the {@link MMXAdapterImpl} instances while processing the commands.
+ * Extended version of {@link BasicCommandStack} which overrides undo/redo to
+ * disable the {@link MMXAdapterImpl} instances while processing the commands.
  * 
  * @author Simon Goodall
  * 
@@ -64,18 +65,10 @@ public class MMXAdaptersAwareCommandStack extends CommandWrappingCommandStack {
 				throwExceptionOnBadCommand(command);
 			}
 			synchronized (lockableObject) {
-				final boolean isEnabled = editingDomain.isEnabled();
-				if (isEnabled) {
-					editingDomain.setAdaptersEnabled(false);
-				}
-				try {
+				editingDomain.withAdaptersDisabled(() -> {
 					stackDepth.incrementAndGet();
 					super.execute(command);
-				} finally {
-					if (isEnabled) {
-						editingDomain.setAdaptersEnabled(true);
-					}
-				}
+				});
 			}
 		} finally {
 			stackDepth.decrementAndGet();
@@ -84,8 +77,7 @@ public class MMXAdaptersAwareCommandStack extends CommandWrappingCommandStack {
 
 	private void throwExceptionOnBadCommand(final Command command) {
 
-		if (command instanceof CompoundCommand) {
-			final CompoundCommand compoundCommand = (CompoundCommand) command;
+		if (command instanceof CompoundCommand compoundCommand) {
 			for (final Command cmd : compoundCommand.getCommandList()) {
 				throwExceptionOnBadCommand(cmd);
 			}
@@ -102,7 +94,9 @@ public class MMXAdaptersAwareCommandStack extends CommandWrappingCommandStack {
 	}
 
 	/**
-	 * Perform undo aquiring the named lock. If the named lock is null, then perform undo with no locking at all - i.e. this is being called from within an existing lock.
+	 * Perform undo aquiring the named lock. If the named lock is null, then perform
+	 * undo with no locking at all - i.e. this is being called from within an
+	 * existing lock.
 	 * 
 	 * @param lockKey
 	 */
@@ -141,17 +135,7 @@ public class MMXAdaptersAwareCommandStack extends CommandWrappingCommandStack {
 		stackDepth.incrementAndGet();
 		try {
 			if (editingDomain != null) {
-				final boolean isEnabled = editingDomain.isEnabled();
-				if (isEnabled) {
-					editingDomain.setAdaptersEnabled(false);
-				}
-				try {
-					super.undo();
-				} finally {
-					if (isEnabled) {
-						editingDomain.setAdaptersEnabled(true);
-					}
-				}
+				editingDomain.withAdaptersDisabled(super::undo);
 			} else {
 				super.undo();
 			}
@@ -176,17 +160,7 @@ public class MMXAdaptersAwareCommandStack extends CommandWrappingCommandStack {
 			stackDepth.incrementAndGet();
 			try {
 				if (editingDomain != null) {
-					final boolean isEnabled = editingDomain.isEnabled();
-					if (isEnabled) {
-						editingDomain.setAdaptersEnabled(false);
-					}
-					try {
-						super.redo();
-					} finally {
-						if (isEnabled) {
-							editingDomain.setAdaptersEnabled(true);
-						}
-					}
+					editingDomain.withAdaptersDisabled(super::redo);
 				} else {
 					super.redo();
 				}

@@ -7,7 +7,8 @@ package com.mmxlabs.license.features;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
- * This really should not be here.... but a shared place to store feature constants.
+ * This really should not be here.... but a shared place to store feature
+ * constants.
  * 
  * @author Simon Goodall
  *
@@ -19,11 +20,9 @@ public final class KnownFeatures {
 	}
 
 	public static final String FEATURE_REENCRYPT = "features:reencrypt";
-	
-	
+
 	public static final String FEATURE_TEMP_SANDBOX_VOYAGE_OPTIONS = "features:sandbox-voyage-opts";
 
-	
 	/**
 	 * Enable parallelisation in optimiser
 	 */
@@ -34,7 +33,6 @@ public final class KnownFeatures {
 	public static final String FEATURE_OPTIMISATION_PERIOD = "features:optimisation-period";
 	public static final String FEATURE_OPTIMISATION_CHARTER_OUT_GENERATION = "features:optimisation-charter-out-generation";
 	public static final String FEATURE_OPTIMISATION_SIMILARITY = "features:optimisation-similarity";
-	public static final String FEATURE_OPTIMISATION_NO_NOMINALS_IN_PROMPT = "features:no-nominal-in-prompt";
 
 	public static final String FEATURE_OPTIONISER = "features:options-suggester";
 	public static final String FEATURE_OPTIONISER_EVENTS = "features:options-suggester-events";
@@ -66,7 +64,7 @@ public final class KnownFeatures {
 	public static final String FEATURE_EXPOSURES_CUTOFF_AT_PROMPT_START = "features:exposures-cutoff-at-prompt-start";
 
 	public static final String FEATURE_INVENTORY_MODEL = "features:inventory-model";
-	
+
 	public static final String FEATURE_MULL_SLOT_GENERATION = "features:mull-slot-generation";
 
 	public static final String FEATURE_PAPER_DEALS = "features:paperdeals";
@@ -81,13 +79,15 @@ public final class KnownFeatures {
 	public static final String FEATURE_DEAL_SETS_GENERATE_FROM_CURVES = "features:deal-sets-generate-from-curves";
 
 	public static final String FEATURE_DEAL_SETS_GENERATE_FROM_INDICES = "features:deal-sets-generate-from-indices";
-	
+
 	public static final String FEATURE_INDIVIDUAL_EXPOSURES = "features:individual-exposures";
-	
+
 	public static final String FEATURE_MTM_SELL_SIDE = "features:mtm-sell-side";
-	
+
 	public static final String FEATURE_MTM_OLD = "features:mtm-old";
 	
+	public static final String FEATURE_MTM = "features:mtm";
+
 	/**
 	 * Enable the charter length evaluation mode
 	 */
@@ -103,7 +103,7 @@ public final class KnownFeatures {
 	public static final String FEATURE_RE_EVALUATE_SOLUTIONS = "features:re-evaluate-solutions";
 
 	public static final String FEATURE_SANDBOX = "features:sandbox";
-	
+
 	public static final String FEATURE_SANDBOX_CHARTER_INS = "features:sandbox-charter-ins";
 
 	public static final String FEATURE_BREAK_EVEN_TABLE = "features:break-even-table";
@@ -131,13 +131,13 @@ public final class KnownFeatures {
 	/**
 	 * Scenario repair features
 	 */
-	
+
 	public static final String FEATURE_REPAIR_DELETE_ALL_EMPTY_CARGOES = "features:repair-delete-all-empty-cargoes";
-	
-	/** 
+
+	/**
 	 * Headline report entries
 	 */
-	
+
 	public static final String FEATURE_HEADLINE_CHARTER_LENGTH = "features:headline-charter-length";
 	public static final String FEATURE_HEADLINE_NOMINALS = "features:headline-nominals";
 	public static final String FEATURE_HEADLINE_UPSIDE = "features:report-headline-upside";
@@ -145,5 +145,5 @@ public final class KnownFeatures {
 	public static final String FEATURE_HEADLINE_EQUITY_BOOK = "features:report-equity-book";
 	public static final String FEATURE_HEADLINE_IDLE_DAYS = "features:headline-idle-days";
 	public static final String FEATURE_HEADLINE_PURCHASE_COST = "features:headline-purchase-cost";
-	
+
 }

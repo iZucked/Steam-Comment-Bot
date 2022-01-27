@@ -18,7 +18,6 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintC
 import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxSlotGroupConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxVolumeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 
 public class SlotValueHelper {
@@ -28,9 +27,6 @@ public class SlotValueHelper {
 		final Iterator<Constraint> iterator = constraintAndFitnessSettings.getConstraints().iterator();
 		while (iterator.hasNext()) {
 			final Constraint constraint = iterator.next();
-			if (constraint.getName().equals(PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
-				iterator.remove();
-			}
 			if (constraint.getName().equals(RoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
 				iterator.remove();
 			}

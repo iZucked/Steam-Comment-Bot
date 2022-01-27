@@ -203,11 +203,10 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider {
 		if (object instanceof ScenarioService) {
 			ScenarioService scenarioService = (ScenarioService) object;
 			Object img = scenarioService.getImage();
-			if (img != null ) {
+			if (img != null) {
 				return overlayImage(object, img);
 			}
-			
-			
+
 			if (scenarioService.isOffline()) {
 				return overlayImage(object, getResourceLocator().getImage("full/obj16/ScenarioServiceOffline"));
 			}

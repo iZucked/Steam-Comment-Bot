@@ -514,7 +514,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		// handle enablement
 		validate();
 
-		if (location.getScenarioInstance().isReadonly() || readOnly) {
+		if (location.getScenarioInstance().isReadonly() || location.getScenarioInstance().isCloudLocked() || readOnly) {
 			final String text2 = getShell().getText();
 			getShell().setText(text2 + " (Read-only)");
 			disableControls(displayComposite.getComposite());
@@ -871,7 +871,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		final IScenarioEditingLocation sel = location;
 		dialogValidationSupport = new DialogValidationSupport(sel.getExtraValidationContext());
 		this.rootObject = rootObject;
-		lockedForEditing = false | location.getScenarioInstance().isReadonly();
+		lockedForEditing = false || location.getScenarioInstance().isReadonly() || location.getScenarioInstance().isCloudLocked();
 		this.inputs.clear();
 		this.originalToDuplicate.clear();
 		this.duplicateToOriginal.clear();
@@ -955,7 +955,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		dialogValidationSupport = new DialogValidationSupport(sel.getExtraValidationContext());
 		sel.pushExtraValidationContext(dialogValidationSupport.getValidationContext());
 		this.rootObject = rootObject;
-		lockedForEditing = locked | location.getScenarioInstance().isReadonly();
+		lockedForEditing = locked || location.getScenarioInstance().isReadonly() || location.getScenarioInstance().isCloudLocked();
 		this.inputs.clear();
 		this.inputs.addAll(objects);
 
@@ -976,8 +976,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 						final EObject original = entry.getKey();
 						final EObject duplicate = entry.getValue();
 
-						if (duplicate instanceof UUIDObject) {
-							((UUIDObject) duplicate).eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
+						if (duplicate instanceof UUIDObject uuidObject) {
+							uuidObject.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 						}
 
 						final EObject eContainer = original.eContainer();

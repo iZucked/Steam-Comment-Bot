@@ -365,8 +365,18 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		}
 	}
 
-	public synchronized void openSandboxScenario(@Nullable final SandboxScenario sandboxScenario) {
+	public synchronized void openSandboxScenario(@Nullable final SandboxScenario sandboxScenario, boolean showResult) {
 		displayScenarioInstance(sandboxScenario.getScenarioInstance(), sandboxScenario.getRootObject(), sandboxScenario.getSandboxModel());
+
+		if (showResult) {
+			OptionAnalysisModel m = sandboxScenario.getSandboxModel();
+			BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> {
+				if (m != null && m.getResults() != null) {
+					final AnalyticsSolution data = new AnalyticsSolution(getScenarioInstance(), m.getResults(), m.getName());
+					data.open();
+				}
+			});
+		}
 	}
 
 	@Override
@@ -679,13 +689,12 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	}
 
 	public void packAll(final Control c) {
-		if ((c instanceof Composite)) {
-			final Composite composite = (Composite) c;
-			((Composite) c).layout(true);
+		if ((c instanceof Composite composite)) {
+			composite.layout(true);
 			for (final Control child : composite.getChildren()) {
 				packAll(child);
 			}
-			((Composite) c).layout(true);
+			composite.layout(true);
 		}
 	}
 
@@ -806,21 +815,23 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	@Override
 	public void setLocked(final boolean locked) {
 
+		final boolean thisLocked = locked || (scenarioInstance != null && scenarioInstance.isCloudLocked());
+
 		// Disable while locked.
-		if (locked) {
+		if (thisLocked) {
 			updateActions(null);
 		} else {
 			updateActions(getEditingDomain());
 		}
 
-		baseCaseComponent.setLocked(locked);
-		partialCaseComponent.setLocked(locked);
+		baseCaseComponent.setLocked(thisLocked);
+		partialCaseComponent.setLocked(thisLocked);
 		buyComponent.setLocked(locked);
-		sellComponent.setLocked(locked);
-		eventsComponent.setLocked(locked);
-		shippingOptionsComponent.setLocked(locked);
+		sellComponent.setLocked(thisLocked);
+		eventsComponent.setLocked(thisLocked);
+		shippingOptionsComponent.setLocked(thisLocked);
 
-		lockedListeners.forEach(e -> e.accept(locked));
+		lockedListeners.forEach(e -> e.accept(thisLocked));
 
 		super.setLocked(locked);
 	}
@@ -841,17 +852,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 				@Override
 				public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature) {
-
-					if (domain instanceof CommandProviderAwareEditingDomain) {
-						final CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) domain;
-						commandProviderAwareEditingDomain.disableAdapters(currentModel);
-					}
-					superHandler.handleCommand(command, target, feature);
-					if (domain instanceof CommandProviderAwareEditingDomain) {
-						final CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) domain;
-						commandProviderAwareEditingDomain.enableAdapters(currentModel, false);
-					}
-
+					CommandProviderAwareEditingDomain.withAdaptersDisabled(domain, currentModel, () -> superHandler.handleCommand(command, target, feature));
 				}
 
 				@Override
@@ -1010,7 +1011,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 							// break;
 							// }
 							// if (m != null && m.getResults() != null) {
-							// final AnalyticsSolution data = new AnalyticsSolution(getScenarioInstance(), m.getResults(), m.getName());
+							// final AnalyticsSolution data = new AnalyticsSolution(getScenarioInstance(),
+							// m.getResults(), m.getName());
 							// data.open();
 							// }
 							// });

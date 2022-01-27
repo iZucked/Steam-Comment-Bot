@@ -323,17 +323,7 @@ public class MTMView extends ScenarioInstanceView implements CommandStackListene
 
 				@Override
 				public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature) {
-
-					if (domain instanceof CommandProviderAwareEditingDomain) {
-						final CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) domain;
-						commandProviderAwareEditingDomain.disableAdapters(currentModel);
-					}
-					superHandler.handleCommand(command, target, feature);
-					if (domain instanceof CommandProviderAwareEditingDomain) {
-						final CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) domain;
-						commandProviderAwareEditingDomain.enableAdapters(currentModel, false);
-					}
-
+					CommandProviderAwareEditingDomain.withAdaptersDisabled(domain, currentModel, () -> superHandler.handleCommand(command, target, feature));
 				}
 
 				@Override

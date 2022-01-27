@@ -33,6 +33,7 @@ public class ModelRecord {
 	protected int referenceCount = 0;
 
 	protected boolean readOnly = false;
+	protected boolean externalLock = false;
 
 	protected @Nullable InstanceData data = null;
 
@@ -87,6 +88,10 @@ public class ModelRecord {
 				triggerLoadCallback = true;
 
 				data.setReadOnly(readOnly);
+				
+				if (externalLock) {
+					sharedReference.getLock().lock();
+				}
 			}
 			if (loadFailure != null) {
 				throw new RuntimeException(loadFailure);
@@ -285,5 +290,25 @@ public class ModelRecord {
 
 	public boolean isReadOnly() {
 		return readOnly;
+	}
+	
+	public void setExternalLock(boolean externalLock) {
+		
+		if (this.externalLock != externalLock) {
+			if (sharedReference != null) {
+			if (externalLock) {
+				sharedReference.getLock().lock();
+				} else {
+					sharedReference.getLock().unlock();
+				}
+			}
+		}
+		
+		this.externalLock = externalLock;
+		
+	}
+	
+	public boolean isExternalLock() {
+		return externalLock;
 	}
 }

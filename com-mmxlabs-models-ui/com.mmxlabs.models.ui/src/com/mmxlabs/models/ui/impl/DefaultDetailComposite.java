@@ -34,7 +34,8 @@ import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 
 /**
- * The default detail composite implementation; does not do anything about having child composites.
+ * The default detail composite implementation; does not do anything about
+ * having child composites.
  * 
  * @author hinton
  * 
@@ -88,6 +89,8 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 		toolkit.adapt(this);
 		setDefaultHelpContext(object);
 
+		sortEditors(editors);
+
 		for (final IInlineEditor editor : editors) {
 			Label label = null;
 
@@ -111,6 +114,33 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 		}
 	}
 
+	/**
+	 * Sub classes can sort the editor list prior to rendering. for example
+	 * 
+	 * <pre>
+	 *  // Make sure these features are ordered first, remaining feature retain the existing order.
+		List<EStructuralFeature> orderedFeatures = Lists.newArrayList( //
+				MMXCorePackage.Literals.NAMED_OBJECT__NAME, //
+				SpotMarketsPackage.Literals.CHARTER_IN_MARKET__VESSEL, //
+		
+		);
+		// Reverse the list so that we can move the editors to the head of the list
+		Collections.reverse(orderedFeatures);
+		for (var feature : orderedFeatures) {
+			for (var editor : editors) {
+				if (editor.getFeature() == feature) {
+					editors.remove(editor);
+					editors.add(0, editor);
+					break;
+				}
+			}
+		}
+	 * </pre>
+	 */
+	protected void sortEditors(List<IInlineEditor> editors) {
+		// Left empty for sub-classes
+	}
+
 	protected void setDefaultHelpContext(final EObject object) {
 		final EClass eClass = object.eClass();
 		final String helpContextId = String.format("com.mmxlabs.lingo.doc.DataModel_%s_%s", eClass.getEPackage().getNsPrefix().replaceAll("\\.", "_"), eClass.getName());
@@ -120,7 +150,8 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	/**
 	 * Display the given EObject in this container.
 	 * 
-	 * Recreates the controls if the object's eClass is different to what we had before.
+	 * Recreates the controls if the object's eClass is different to what we had
+	 * before.
 	 * 
 	 * @param object
 	 */

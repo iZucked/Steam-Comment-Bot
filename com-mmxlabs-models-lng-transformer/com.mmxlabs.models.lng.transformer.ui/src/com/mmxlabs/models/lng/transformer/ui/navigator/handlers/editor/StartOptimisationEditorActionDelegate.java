@@ -25,7 +25,8 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 /**
- * A {@link IEditorActionDelegate} implementation to start or resume an optimisation.
+ * A {@link IEditorActionDelegate} implementation to start or resume an
+ * optimisation.
  * 
  * @see org.eclipse.core.commands.IHandler
  * @see org.eclipse.core.commands.AbstractHandler
@@ -57,10 +58,8 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 		super.setActiveEditor(action, targetEditor);
 
 		final boolean enabled = false;
-		if (targetEditor != null && targetEditor.getEditorInput() instanceof IScenarioServiceEditorInput) {
+		if (targetEditor != null && targetEditor.getEditorInput() instanceof IScenarioServiceEditorInput iScenarioServiceEditorInput) {
 			final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
-
-			final IScenarioServiceEditorInput iScenarioServiceEditorInput = (IScenarioServiceEditorInput) targetEditor.getEditorInput();
 
 			final ScenarioInstance instance = iScenarioServiceEditorInput.getScenarioInstance();
 			if (instance == null) {
@@ -68,13 +67,13 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 				return;
 			}
 
- 			ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+			ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
 			if (modelRecord == null) {
 				action.setEnabled(false);
 				return;
 			}
-			
-			if (instance.isReadonly()) {
+
+			if (instance.isReadonly() || instance.isCloudLocked()) {
 				action.setEnabled(false);
 				return;
 			}
@@ -112,7 +111,8 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 			}
 		}
 		if (action != null) {
-			// TODO: Exceptions can be thrown here on application shutdown. It appears the eclipse code does not check for disposed state.
+			// TODO: Exceptions can be thrown here on application shutdown. It appears the
+			// eclipse code does not check for disposed state.
 			action.setEnabled(enabled);
 		}
 	}

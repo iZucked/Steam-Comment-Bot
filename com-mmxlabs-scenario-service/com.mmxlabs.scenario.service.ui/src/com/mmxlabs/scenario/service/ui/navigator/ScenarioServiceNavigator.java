@@ -58,11 +58,18 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
+import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
+import com.mmxlabs.jobmanager.jobs.EJobState;
+import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobControlListener;
+import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.jobmanager.manager.IJobManager;
 import com.mmxlabs.rcp.common.CommonImages;
-import com.mmxlabs.rcp.common.RunnerHelper;
-import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.CommonImages.IconMode;
 import com.mmxlabs.rcp.common.CommonImages.IconPaths;
+import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.scenario.service.IScenarioServiceSelectionChangedListener;
 import com.mmxlabs.scenario.service.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ScenarioResult;
@@ -156,6 +163,8 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		tracker = new ServiceTracker<>(Activator.getDefault().getBundle().getBundleContext(), ScenarioServiceRegistry.class, null);
 		tracker.open();
 
+//		Activator.getDefault().getEclipseJobManager().addEclipseJobManagerListener(jobManagerListener);
+
 		Activator.getDefault().getScenarioServiceSelectionProvider().addSelectionChangedListener(selectionChangedListener);
 		showColumnImage = CommonImages.getImageDescriptor(IconPaths.Console, IconMode.Enabled).createImage();
 		statusColumnImage = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/base-flag.png").createImage();
@@ -165,6 +174,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 	public void dispose() {
 		tracker.close();
 		Activator.getDefault().getScenarioServiceSelectionProvider().removeSelectionChangedListener(selectionChangedListener);
+//		Activator.getDefault().getEclipseJobManager().removeEclipseJobManagerListener(jobManagerListener);
 
 		showColumnImage.dispose();
 		statusColumnImage.dispose();
@@ -800,16 +810,63 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 			@Override
 			public void setGlobalActionHandler(String actionId, IAction handler) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void updateActionBars() {
-				// TODO Auto-generated method stub
 
 			}
 
 		});
 	}
+
+	private final IEclipseJobManagerListener jobManagerListener = new IEclipseJobManagerListener() {
+
+		private final IJobControlListener jobControlListener = new IJobControlListener() {
+			@Override
+			public boolean jobStateChanged(final IJobControl job, final EJobState oldState, final EJobState newState) {
+				if (job.getJobDescriptor().getJobContext() instanceof ScenarioInstance instance) {
+					ViewerHelper.refresh(viewer, instance, false);
+				}
+				return true;
+			}
+
+			@Override
+			public boolean jobProgressUpdated(final IJobControl job, final int progressDelta) {
+				if (job.getJobDescriptor().getJobContext() instanceof ScenarioInstance instance) {
+					ViewerHelper.refresh(viewer, instance, false);
+				}
+				return true;
+			}
+		};
+
+		@Override
+		public void jobRemoved(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
+			if (control != null) {
+				control.removeListener(jobControlListener);
+			}
+			if (job.getJobContext() instanceof ScenarioInstance instance) {
+				ViewerHelper.refresh(viewer, instance, false);
+			}
+		}
+
+		@Override
+		public void jobManagerRemoved(final IEclipseJobManager eclipseJobManager, final IJobManager jobManager) {
+
+		}
+
+		@Override
+		public void jobManagerAdded(final IEclipseJobManager eclipseJobManager, final IJobManager jobManager) {
+
+		}
+
+		@Override
+		public void jobAdded(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
+			control.addListener(jobControlListener);
+			if (job.getJobContext() instanceof ScenarioInstance instance) {
+				ViewerHelper.refresh(viewer, instance, false);
+			}
+		}
+	};
 }

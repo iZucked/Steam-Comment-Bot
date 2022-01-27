@@ -467,7 +467,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * @generated
 	 */
 	@Override
-	public EAttribute getScenarioInstance_ValidationStatusCode() {
+	public EAttribute getScenarioInstance_CloudLocked() {
 		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(9);
 	}
 
@@ -477,8 +477,18 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * @generated
 	 */
 	@Override
+	public EAttribute getScenarioInstance_ValidationStatusCode() {
+		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EReference getScenarioInstance_Manifest() {
-		return (EReference) scenarioInstanceEClass.getEStructuralFeatures().get(10);
+		return (EReference) scenarioInstanceEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -488,7 +498,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 */
 	@Override
 	public EAttribute getScenarioInstance_ExternalID() {
-		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(11);
+		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(12);
 	}
 
 	/**
@@ -728,6 +738,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__CLIENT_VERSION_CONTEXT);
 		createEReference(scenarioInstanceEClass, SCENARIO_INSTANCE__FRAGMENTS);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__READONLY);
+		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__CLOUD_LOCKED);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__VALIDATION_STATUS_CODE);
 		createEReference(scenarioInstanceEClass, SCENARIO_INSTANCE__MANIFEST);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__EXTERNAL_ID);
@@ -856,6 +867,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 				!IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getScenarioInstance_Readonly(), ecorePackage.getEBoolean(), "readonly", null, 0, 1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
 				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScenarioInstance_CloudLocked(), ecorePackage.getEBoolean(), "cloudLocked", null, 0, 1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+				!IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getScenarioInstance_ValidationStatusCode(), ecorePackage.getEInt(), "validationStatusCode", null, 0, 1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
 				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getScenarioInstance_Manifest(), theManifestPackage.getManifest(), null, "manifest", null, 0, 1, ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,

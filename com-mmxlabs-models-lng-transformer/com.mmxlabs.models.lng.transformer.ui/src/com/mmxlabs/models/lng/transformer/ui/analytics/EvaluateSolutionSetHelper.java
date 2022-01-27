@@ -145,8 +145,7 @@ public class EvaluateSolutionSetHelper {
 
 	public void generateResults(final ScenarioInstance scenarioInstance, final UserSettings userSettings, final EditingDomain editingDomain, IProgressMonitor monitor) {
 
-		List<String> hints = Lists.newArrayList(LNGTransformerHelper.HINT_DISABLE_CACHES, //
-				LNGTransformerHelper.HINT_KEEP_NOMINALS_IN_PROMPT //
+		List<String> hints = Lists.newArrayList(LNGTransformerHelper.HINT_DISABLE_CACHES //
 		// LNGEvaluationModule.HINT_PORTFOLIO_BREAKEVEN, //
 		);
 

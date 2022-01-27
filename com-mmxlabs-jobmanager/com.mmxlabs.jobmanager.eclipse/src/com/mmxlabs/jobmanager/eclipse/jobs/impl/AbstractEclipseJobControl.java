@@ -40,6 +40,66 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractEclipseJobControl.class);
 
+	public class WrappedProgressMonitor implements IProgressMonitor {
+
+		private double dtotal = 0.0;
+		private int totalWork;
+		private IProgressMonitor delegate;
+
+		private WrappedProgressMonitor(IProgressMonitor delegate) {
+			this.delegate = delegate;
+
+		}
+
+		@Override
+		public void worked(int work) {
+			AbstractEclipseJobControl.this.setProgress(progress + (int) work);
+
+			double w = (double) work / (double) totalWork;
+			internalWorked(w);
+			delegate.worked(work);
+		}
+
+		@Override
+		public void subTask(String name) {
+			delegate.subTask(name);
+		}
+
+		@Override
+		public void setTaskName(String name) {
+			delegate.setTaskName(name);
+		}
+
+		@Override
+		public void setCanceled(boolean canceled) {
+			delegate.setCanceled(canceled);
+		}
+
+		@Override
+		public boolean isCanceled() {
+			return delegate.isCanceled();
+		}
+
+		@Override
+		public void internalWorked(double work) {
+			dtotal += work;
+			delegate.internalWorked(work);
+			AbstractEclipseJobControl.this.setProgress(progress + work);
+
+		}
+
+		@Override
+		public void done() {
+			delegate.done();
+		}
+
+		@Override
+		public void beginTask(String name, int totalWork) {
+			delegate.beginTask(name, totalWork);
+			this.totalWork = totalWork;
+		}
+	}
+
 	private class Runner extends Job {
 
 		public Runner(final String name) {
@@ -50,13 +110,9 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 		public IStatus run(final IProgressMonitor monitor) {
 			monitor.beginTask("", 100);
 			try {
-				doRunJob(new SubProgressMonitor(monitor, 100) {
-					@Override
-					public void worked(final int work) {
-						super.worked(work);
-						AbstractEclipseJobControl.this.setProgress(progress + work);
-					}
-				});
+				setJobState(EJobState.RUNNING);
+
+				doRunJob(new WrappedProgressMonitor(monitor));
 				if (monitor.isCanceled()) {
 					kill();
 					setJobState(EJobState.CANCELLED);
@@ -115,7 +171,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 	private final List<IJobControlListener> listeners = new LinkedList<>();
 	private final Runner runner;
 	private EJobState currentState = EJobState.UNKNOWN;
-	private int progress = 0;
+	private double progress = 0;
 
 	protected AbstractEclipseJobControl(final String jobName) {
 		this(jobName, Collections.<QualifiedName, Object>emptyMap());
@@ -252,17 +308,17 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 
 	@Override
 	public int getProgress() {
-		return progress;
+		return (int) Math.round(progress);
 	}
 
-	protected void setProgress(final int newProgress) {
-		final int delta = newProgress - progress;
+	protected void setProgress(final double newProgress) {
+		final double delta = newProgress - progress;
 		progress = newProgress;
 		// Take copy to avoid concurrent modification exceptions.
 		final List<IJobControlListener> copy = new ArrayList<>(listeners);
 
 		for (final IJobControlListener mjl : copy) {
-			if (!mjl.jobProgressUpdated(this, delta)) {
+			if (!mjl.jobProgressUpdated(this, (int) Math.round(delta))) {
 				listeners.remove(mjl);
 			}
 		}

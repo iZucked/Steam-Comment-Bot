@@ -95,12 +95,10 @@ public class LNGSchedulerInsertSlotJobRunner {
 	private static final String[] hint_with_breakeven = { LNGTransformerHelper.HINT_OPTIMISE_LSO, //
 			LNGTransformerHelper.HINT_OPTIMISE_INSERTION, //
 			LNGTransformerHelper.HINT_DISABLE_CACHES, //
-			LNGTransformerHelper.HINT_KEEP_NOMINALS_IN_PROMPT, //
 			LNGEvaluationModule.HINT_PORTFOLIO_BREAKEVEN };
 
 	private static final String[] hint_without_breakeven = { LNGTransformerHelper.HINT_OPTIMISE_LSO, //
-			LNGTransformerHelper.HINT_OPTIMISE_INSERTION, //
-			LNGTransformerHelper.HINT_KEEP_NOMINALS_IN_PROMPT };
+			LNGTransformerHelper.HINT_OPTIMISE_INSERTION };
 
 	private final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge;
 

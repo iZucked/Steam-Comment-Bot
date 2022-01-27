@@ -10,7 +10,6 @@
 	</parent>
 
 	<artifactId>com.mmxlabs.models.mmxcore</artifactId>
-	<version>5.1.4-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 
 	<properties>

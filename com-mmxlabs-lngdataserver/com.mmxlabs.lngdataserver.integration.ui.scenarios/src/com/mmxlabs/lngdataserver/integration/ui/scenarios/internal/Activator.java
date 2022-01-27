@@ -16,16 +16,17 @@ import org.osgi.util.tracker.ServiceTracker;
 
 import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.IUpstreamServiceChangedListener;
+import com.mmxlabs.hub.IUpstreamServiceChangedListener.Service;
 import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.hub.IUpstreamServiceChangedListener.Service;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.BaseCaseScenarioService;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.SharedWorkspaceScenarioService;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataService;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 import com.mmxlabs.scenario.service.ui.IBaseCaseVersionsProvider;
+import com.mmxlabs.scenario.service.ui.IProgressProvider;
 import com.mmxlabs.scenario.service.ui.IScenarioVersionService;
 
 public class Activator extends AbstractUIPlugin {
@@ -41,7 +42,8 @@ public class Activator extends AbstractUIPlugin {
 	private ServiceRegistration<IScenarioVersionService> scenarioVersionsServiceRegistration = null;
 	private ServiceRegistration<IScenarioService> baseCaseServiceRegistration = null;
 	private ServiceRegistration<IScenarioService> teamServiceRegistration = null;
-	private ServiceRegistration<IScenarioService> cloudOptimisationServiceRegistration = null;
+	private ServiceRegistration<CloudOptimisationDataService> cloudOptimisationServiceRegistration = null;
+	private ServiceRegistration<IProgressProvider> cloudOptimisationProgressServiceRegistration = null;
 
 	private BaseCaseVersionsProviderService baseCaseVersionsProviderService = null;
 	private BaseCaseScenarioService baseCaseService = null;
@@ -85,9 +87,6 @@ public class Activator extends AbstractUIPlugin {
 				if (teamService != null) {
 					teamService.setScenarioCipherProvider(provider);
 				}
-				if (cloudOptimisationService != null) {
-					cloudOptimisationService.setScenarioCipherProvider(provider);
-				}
 				return provider;
 			}
 
@@ -98,9 +97,6 @@ public class Activator extends AbstractUIPlugin {
 				}
 				if (teamService != null) {
 					teamService.setScenarioCipherProvider(null);
-				}
-				if (cloudOptimisationService != null) {
-					cloudOptimisationService.setScenarioCipherProvider(null);
 				}
 				super.removedService(reference, provider);
 			}
@@ -142,6 +138,16 @@ public class Activator extends AbstractUIPlugin {
 		if (baseCaseVersionsProviderServiceRegistration != null) {
 			baseCaseVersionsProviderServiceRegistration.unregister();
 			baseCaseVersionsProviderServiceRegistration = null;
+		}
+		
+		if (cloudOptimisationServiceRegistration != null) {
+			cloudOptimisationServiceRegistration.unregister();
+			cloudOptimisationServiceRegistration = null;
+		}
+		
+		if (cloudOptimisationProgressServiceRegistration != null) {
+			cloudOptimisationProgressServiceRegistration.unregister();
+			cloudOptimisationProgressServiceRegistration = null;
 		}
 
 	}
@@ -225,15 +231,13 @@ public class Activator extends AbstractUIPlugin {
 				return;
 			}
 			cloudOptimisationService = CloudOptimisationDataService.INSTANCE;
-			if (scenarioCipherProviderTracker != null) {
-				cloudOptimisationService.setScenarioCipherProvider(scenarioCipherProviderTracker.getService());
-			}
 
 			final Hashtable<String, String> props = new Hashtable<>();
 			// used internally by eclipse/OSGi
-			props.put("component.id", cloudOptimisationService.getSerivceID());
+			props.put("component.id", CloudOptimisationDataService.class.getCanonicalName());
 
-			cloudOptimisationServiceRegistration = getBundle().getBundleContext().registerService(IScenarioService.class, cloudOptimisationService, props);
+			cloudOptimisationServiceRegistration = getBundle().getBundleContext().registerService(CloudOptimisationDataService.class, cloudOptimisationService, props);
+			cloudOptimisationProgressServiceRegistration = getBundle().getBundleContext().registerService(IProgressProvider.class, cloudOptimisationService, props);
 		}
 
 	}

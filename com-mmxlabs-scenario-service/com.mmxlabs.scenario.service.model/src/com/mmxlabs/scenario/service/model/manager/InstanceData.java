@@ -160,8 +160,7 @@ public final class InstanceData {
 	 */
 	public void setReadOnly(final boolean readOnly) {
 		// Mark resources as read-only
-		if (editingDomain instanceof AdapterFactoryEditingDomain) {
-			final AdapterFactoryEditingDomain adapterFactoryEditingDomain = (AdapterFactoryEditingDomain) editingDomain;
+		if (editingDomain instanceof AdapterFactoryEditingDomain adapterFactoryEditingDomain) {
 			Map<Resource, Boolean> resourceToReadOnlyMap = adapterFactoryEditingDomain.getResourceToReadOnlyMap();
 			// Init map if needed.
 			if (resourceToReadOnlyMap == null) {

@@ -13,18 +13,19 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
+@NonNullByDefault
 public class RouletteWheel<T> {
 
 	private final LinkedHashMap<T, Double> wheel = new LinkedHashMap<>();
 
-	public RouletteWheel(@NonNull final Collection<@NonNull T> validMoves, final Map<String, Double> distribution, final boolean equalDistributions) {
+	public RouletteWheel(final Collection<T> validMoves, final Map<String, Double> distribution, final boolean equalDistributions) {
 
 		final double divisions = validMoves.size();
 		final double segment = 1 / divisions;
 
-		final Iterator<@NonNull T> itr = validMoves.iterator();
+		final Iterator<T> itr = validMoves.iterator();
 		double currentTotal = 0.0;
 
 		while (itr.hasNext()) {
@@ -33,8 +34,9 @@ public class RouletteWheel<T> {
 			if (equalDistributions) {
 				wheel.put(itr.next(), currentTotal);
 			} else {
-				@NonNull
+
 				final T element = itr.next();
+				assert element != null;
 				final double value = getCorrespondingDistribution(element.toString(), distribution);
 				wheel.put(element, value);
 			}
@@ -50,7 +52,7 @@ public class RouletteWheel<T> {
 				return entry.getKey();
 			}
 		}
-		return null; // Something has gone wrong;
+		throw new IllegalStateException();
 	}
 
 	public List<T> getMoves() {

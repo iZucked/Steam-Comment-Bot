@@ -533,13 +533,22 @@ public interface ScenarioServicePackage extends EPackage {
 	int SCENARIO_INSTANCE__READONLY = CONTAINER_FEATURE_COUNT + 8;
 
 	/**
+	 * The feature id for the '<em><b>Cloud Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_INSTANCE__CLOUD_LOCKED = CONTAINER_FEATURE_COUNT + 9;
+
+	/**
 	 * The feature id for the '<em><b>Validation Status Code</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE__VALIDATION_STATUS_CODE = CONTAINER_FEATURE_COUNT + 9;
+	int SCENARIO_INSTANCE__VALIDATION_STATUS_CODE = CONTAINER_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Manifest</b></em>' reference.
@@ -548,7 +557,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE__MANIFEST = CONTAINER_FEATURE_COUNT + 10;
+	int SCENARIO_INSTANCE__MANIFEST = CONTAINER_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>External ID</b></em>' attribute.
@@ -557,7 +566,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE__EXTERNAL_ID = CONTAINER_FEATURE_COUNT + 11;
+	int SCENARIO_INSTANCE__EXTERNAL_ID = CONTAINER_FEATURE_COUNT + 12;
 
 	/**
 	 * The number of structural features of the '<em>Scenario Instance</em>' class.
@@ -567,7 +576,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 12;
+	int SCENARIO_INSTANCE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 13;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.MetadataImpl <em>Metadata</em>}' class.
@@ -1061,6 +1070,17 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getScenarioInstance_Readonly();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isCloudLocked <em>Cloud Locked</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cloud Locked</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#isCloudLocked()
+	 * @see #getScenarioInstance()
+	 * @generated
+	 */
+	EAttribute getScenarioInstance_CloudLocked();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getValidationStatusCode <em>Validation Status Code</em>}'.

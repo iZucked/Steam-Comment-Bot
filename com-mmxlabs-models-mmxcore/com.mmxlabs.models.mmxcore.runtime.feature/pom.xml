@@ -9,7 +9,6 @@
 		<version>5.1.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.models.mmxcore.runtime.feature</artifactId>
-	<version>5.1.4-SNAPSHOT</version>
 	<packaging>eclipse-feature</packaging>
 
 </project>

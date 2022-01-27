@@ -1,8 +1,4 @@
-/**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
- * All rights reserved.
- */
-package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.view;
+package com.mmxlabs.rcp.common;
 
 import java.util.Arrays;
 
@@ -15,7 +11,7 @@ import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
-import com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.Activator;
+import com.mmxlabs.rcp.common.internal.Activator;
 
 /**
  * Draws pie chart icons for the navigator progress indicator.

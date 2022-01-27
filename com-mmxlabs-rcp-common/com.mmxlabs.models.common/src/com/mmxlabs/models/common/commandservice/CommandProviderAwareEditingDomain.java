@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +27,8 @@ import com.mmxlabs.models.mmxcore.IMMXAdapter;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
- * EditingDomain implementation which is aware of {@link IModelCommandProvider}s and provides a mechanism to enable or disable their execution.
+ * EditingDomain implementation which is aware of {@link IModelCommandProvider}s
+ * and provides a mechanism to enable or disable their execution.
  * 
  */
 public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDomain {
@@ -65,13 +67,14 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 	}
 
 	/**
-	 * Do not call this directly - use {@link #setAdaptersEnabled(boolean)} instead. This method is exposed so transient references can be processed.
+	 * Do not call this directly - use {@link #setAdaptersEnabled(boolean)} instead.
+	 * This method is exposed so transient references can be processed.
 	 */
 	public void disableAdapters(final EObject top) {
 
 		for (final Adapter a : top.eAdapters().toArray(new Adapter[top.eAdapters().size()])) {
-			if (a instanceof IMMXAdapter) {
-				((IMMXAdapter) a).disable();
+			if (a instanceof final IMMXAdapter mmxAdapter) {
+				mmxAdapter.disable();
 			}
 		}
 		for (final EObject o : top.eContents()) {
@@ -82,8 +85,8 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 	private void enableAdapters(final EObject top) {
 
 		for (final Adapter a : top.eAdapters().toArray(new Adapter[top.eAdapters().size()])) {
-			if (a instanceof IMMXAdapter) {
-				((IMMXAdapter) a).enable();
+			if (a instanceof final IMMXAdapter mmxAdapter) {
+				mmxAdapter.enable();
 			}
 		}
 		for (final EObject o : top.eContents()) {
@@ -92,12 +95,13 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 	}
 
 	/**
-	 * Do not call this directly - use {@link #setAdaptersEnabled(boolean)} instead. This method is exposed so transient references can be processed.
+	 * Do not call this directly - use {@link #setAdaptersEnabled(boolean)} instead.
+	 * This method is exposed so transient references can be processed.
 	 */
 	public void enableAdapters(final EObject top, final boolean skip) {
 		for (final Adapter a : top.eAdapters().toArray(new Adapter[top.eAdapters().size()])) {
-			if (a instanceof IMMXAdapter) {
-				((IMMXAdapter) a).enable(skip);
+			if (a instanceof final IMMXAdapter mmxAdapter) {
+				mmxAdapter.enable(skip);
 			}
 		}
 		for (final EObject o : top.eContents()) {
@@ -106,9 +110,13 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 	}
 
 	/**
-	 * Notify command providers that a new set of related command is about to be executed. Normally this is invoked as part of a command creation call along with a matching call to
-	 * {@link #endBatchCommand()}. External clients can manually invoked this pair of methods when multiple related commands are being created. The {@link BaseModelCommandProvider} keeps track of the
-	 * depth of these calls and will clear caches when the depth returns to zero. Clients can call this pair of method to avoid early cache clearing.
+	 * Notify command providers that a new set of related command is about to be
+	 * executed. Normally this is invoked as part of a command creation call along
+	 * with a matching call to {@link #endBatchCommand()}. External clients can
+	 * manually invoked this pair of methods when multiple related commands are
+	 * being created. The {@link BaseModelCommandProvider} keeps track of the depth
+	 * of these calls and will clear caches when the depth returns to zero. Clients
+	 * can call this pair of method to avoid early cache clearing.
 	 * 
 	 * 
 	 */
@@ -120,7 +128,8 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 	}
 
 	/**
-	 * To be called after command creation as part of a pair of calls with {@link #startBatchCommand()}
+	 * To be called after command creation as part of a pair of calls with
+	 * {@link #startBatchCommand()}
 	 * 
 	 */
 	public void endBatchCommand() {
@@ -221,6 +230,34 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 
 	public boolean isEnabled() {
 		return enabled;
+	}
+
+	public void withAdaptersDisabled(final Runnable r) {
+
+		final boolean isEnabled = isEnabled();
+		if (isEnabled) {
+			setAdaptersEnabled(false);
+		}
+		try {
+			r.run();
+		} finally {
+			if (isEnabled) {
+				setAdaptersEnabled(true);
+			}
+		}
+	}
+
+	public static void withAdaptersDisabled(final EditingDomain editingDomain, final EObject top, final Runnable r) {
+		if (editingDomain instanceof final CommandProviderAwareEditingDomain commandProviderAwareEditingDomain) {
+			commandProviderAwareEditingDomain.disableAdapters(top);
+		}
+		try {
+			r.run();
+		} finally {
+			if (editingDomain instanceof final CommandProviderAwareEditingDomain commandProviderAwareEditingDomain) {
+				commandProviderAwareEditingDomain.enableAdapters(top, false);
+			}
+		}
 	}
 
 }

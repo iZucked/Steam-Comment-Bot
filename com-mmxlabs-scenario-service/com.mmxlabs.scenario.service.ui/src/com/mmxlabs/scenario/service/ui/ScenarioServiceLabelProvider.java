@@ -86,8 +86,7 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 		case ScenarioServiceNavigator.COLUMN_NAME_IDX:
 			String text = super.getColumnText(object, columnIndex);
 
-			if (object instanceof ScenarioInstance) {
-				final ScenarioInstance scenarioInstance = (ScenarioInstance) object;
+			if (object instanceof ScenarioInstance scenarioInstance) {
 				final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 				if (modelRecord != null) {
 					// We can be blocked on migration if we are loading when checking for a reference
