@@ -63,7 +63,7 @@ public final class CommonImages {
 		//24x24
 		Play("icons/24x24/optimise.png", true), //
 		CloudPlay_24("icons/24x24/cloud_run.png"), //
-		Cloud_24("icons/24x24/cloudpng"), //
+		Cloud_24("icons/24x24/cloud.png"), //
 
 //		Resume("icons/24x24/terminate.png", true), //
 		Terminate("icons/24x24/terminate.png", true), //
