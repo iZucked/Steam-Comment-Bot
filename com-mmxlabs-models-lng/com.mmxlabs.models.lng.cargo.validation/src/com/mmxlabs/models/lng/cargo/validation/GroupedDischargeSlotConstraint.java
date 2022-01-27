@@ -61,7 +61,7 @@ public class GroupedDischargeSlotConstraint extends AbstractModelMultiConstraint
 				}
 			}
 
-			if (bound == 0) {
+			if (bound <= 0) {
 				factory.copyName().withMessage("Minimum bound must be positive.").withObjectAndFeature(groupedSlotsConstraint, CargoPackage.eINSTANCE.getGroupedSlotsConstraint_Slots()).make(ctx,
 						statuses);
 			}
