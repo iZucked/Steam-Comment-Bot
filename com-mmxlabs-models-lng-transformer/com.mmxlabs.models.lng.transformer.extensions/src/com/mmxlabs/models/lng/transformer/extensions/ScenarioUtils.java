@@ -56,7 +56,6 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxSlotGroupConstrain
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortCvCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ShippingHoursRestrictionCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.SpotToSpotConstraintCheckerFactory;
@@ -360,9 +359,6 @@ public class ScenarioUtils {
 			final Iterator<Constraint> iterator = constraintAndFitnessSettings.getConstraints().iterator();
 			while (iterator.hasNext()) {
 				final Constraint constraint = iterator.next();
-				if (constraint.getName().equals(PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
-					iterator.remove();
-				}
 				if (constraint.getName().equals(RoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
 					iterator.remove();
 				}
@@ -407,7 +403,6 @@ public class ScenarioUtils {
 			constraints.add(createConstraint(ResourceAllocationConstraintCheckerFactory.NAME, true));
 			if (includeRoundTrip) {
 				constraints.add(createConstraint(RoundTripVesselPermissionConstraintCheckerFactory.NAME, true));
-				constraints.add(createConstraint(PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME, true));
 			}
 			constraints.add(createConstraint(AllowedVesselPermissionConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(PortExclusionConstraintCheckerFactory.NAME, true));

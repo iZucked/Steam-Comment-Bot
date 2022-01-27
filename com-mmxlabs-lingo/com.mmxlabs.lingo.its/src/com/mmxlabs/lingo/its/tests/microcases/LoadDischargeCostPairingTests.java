@@ -34,7 +34,6 @@ import com.mmxlabs.models.lng.transformer.ui.SequenceHelper;
 import com.mmxlabs.models.lng.types.DESPurchaseDealType;
 import com.mmxlabs.models.lng.types.FOBSaleDealType;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 
 @SuppressWarnings("unused")
@@ -92,9 +91,6 @@ public class LoadDischargeCostPairingTests extends AbstractMicroTestCase {
 			final Iterator<Constraint> iterator = constraintAndFitnessSettings.getConstraints().iterator();
 			while (iterator.hasNext()) {
 				final Constraint constraint = iterator.next();
-				if (constraint.getName().equals(PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
-					iterator.remove();
-				}
 				if (constraint.getName().equals(RoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
 					iterator.remove();
 				}

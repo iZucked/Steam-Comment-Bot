@@ -42,9 +42,6 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 @SuppressWarnings({ "unused", "null" })
 public class MultipleBaseFuelTestCase extends AbstractLegacyMicroTestCase {
 
-	private static List<String> requiredFeatures = Lists.newArrayList("no-nominal-in-prompt");
-	private static List<String> addedFeatures = new LinkedList<>();
-
 	final int ROUNDING_EPSILON = 100;
 	private Vessel vessel;
 	private VesselAvailability vesselAvailability1;
@@ -61,25 +58,7 @@ public class MultipleBaseFuelTestCase extends AbstractLegacyMicroTestCase {
 	private CostModelBuilder costModelBuilder;
 
 	private final boolean writeScenario = false;
-
-	@BeforeAll
-	public static void hookIn() {
-		for (final String feature : requiredFeatures) {
-			if (!LicenseFeatures.isPermitted("features:" + feature)) {
-				LicenseFeatures.addFeatureEnablements(feature);
-				addedFeatures.add(feature);
-			}
-		}
-	}
-
-	@AfterAll
-	public static void hookOut() {
-		for (final String feature : addedFeatures) {
-			LicenseFeatures.removeFeatureEnablements(feature);
-		}
-		addedFeatures.clear();
-	}
-
+ 
 	@BeforeEach
 	@Override
 	public void constructor() throws Exception {

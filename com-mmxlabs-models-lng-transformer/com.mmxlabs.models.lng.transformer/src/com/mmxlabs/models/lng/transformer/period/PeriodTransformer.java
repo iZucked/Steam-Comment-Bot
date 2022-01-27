@@ -396,11 +396,6 @@ public class PeriodTransformer {
 					} else {
 						// Partially optimisable cargo.
 
-						// For nominal cargoes in the prompt, we do not constrain as they will be "open" positions from the optimisation point of view.
-						if (isNominalInPrompt(cargo, periodRecord)) {
-							continue;
-						}
-
 						// Will be set to true if any of the slots are IN the period
 						boolean oneIsIn = false;
 						final List<Slot<?>> slots = new LinkedList<>(cargo.getSortedSlots());
@@ -933,20 +928,6 @@ public class PeriodTransformer {
 			slot.setRestrictedVesselsArePermissive(true);
 		}
 		slot.setLocked(true);
-	}
-
-	private boolean isNominalInPrompt(@NonNull final Cargo cargo, @NonNull final PeriodRecord periodRecord) {
-
-		if (!isInPrompt(cargo, periodRecord)) {
-			return false;
-		}
-		final VesselAssignmentType vesselAssignmentType = cargo.getVesselAssignmentType();
-		if (vesselAssignmentType instanceof CharterInMarket) {
-			if (cargo.getSpotIndex() == NOMINAL_INDEX && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_NO_NOMINALS_IN_PROMPT)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	private boolean isInPrompt(@NonNull final Cargo cargo, @NonNull final PeriodRecord periodRecord) {
