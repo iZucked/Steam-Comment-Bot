@@ -13,12 +13,14 @@ import java.util.Map.Entry;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
+import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.GroupedDischargeSlotsConstraint;
-import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -26,9 +28,11 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class GroupedDischargeSlotNonDuplicateConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(@NonNull IValidationContext ctx, @NonNull IExtraValidationContext extraContext, @NonNull List<IStatus> statuses) {
+		if (!LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GROUPED_OPTIONAL_SLOTS_CONSTRAINTS)) {
+			return;
+		}
 		final EObject object = ctx.getTarget();
-
 		if (object instanceof CargoModel cargoModel) {
 			final Map<DischargeSlot, List<GroupedDischargeSlotsConstraint>> seenDischargeSlots = new HashMap<>();
 			final Map<DischargeSlot, List<GroupedDischargeSlotsConstraint>> overlappingDischargeSlots = new HashMap<>();
@@ -57,7 +61,5 @@ public class GroupedDischargeSlotNonDuplicateConstraint extends AbstractModelMul
 				currentFactory.make(ctx, statuses);
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 }
