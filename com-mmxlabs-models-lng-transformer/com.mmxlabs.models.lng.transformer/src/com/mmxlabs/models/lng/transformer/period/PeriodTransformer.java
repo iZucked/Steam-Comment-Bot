@@ -299,7 +299,7 @@ public class PeriodTransformer {
 		// List of new vessel availabilities for cargoes outside normal range
 		final List<VesselAvailability> newVesselAvailabilities = new LinkedList<>();
 		// Custom phase
-		if (false) {
+		if (true) {
 			// TODO: This code needs to be re-introduced. This is where any dependents to the P&L calculation need to have their status changed to "ReAdded" if they are marked ToRemove.
 			// Any cloned vessel availabilities should be configured here too. These will typically be a copy of the original vessel with the start and end heel set to match the boundary conditions of
 			// the cargo to allow an identical P&l calculation.
@@ -308,8 +308,21 @@ public class PeriodTransformer {
 			checkIfRemovedSlotsAreStillNeeded(records, newVesselAvailabilities);
 
 			if (extensions != null) {
+				final Set<Slot<?>> excludedSlots = new HashSet<>();
+				final Set<Cargo> excludedCargoes = new HashSet<>();
+				for (final InclusionRecord rec : records.values()) {
+					if (rec.object instanceof Cargo cargo) {
+						if (rec.status == Status.ToRemove) {
+							excludedCargoes.add(cargo);
+						}
+					} else if (rec.object instanceof Slot<?> slot) {
+						if (rec.status == Status.ToRemove) {
+							excludedSlots.add(slot);
+						}
+					}
+				}
 				for (final IPeriodTransformerExtension ext : extensions) {
-					// ext.processSlotInclusionsAndExclusions(cargoModel, schedule, records);
+					ext.processSlotInclusionsAndExclusions(cargoModel, schedule, excludedSlots, excludedCargoes);
 				}
 			}
 		}

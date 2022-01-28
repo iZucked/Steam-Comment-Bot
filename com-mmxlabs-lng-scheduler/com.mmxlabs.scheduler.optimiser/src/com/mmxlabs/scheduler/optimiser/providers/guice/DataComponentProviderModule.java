@@ -33,6 +33,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultDistanceProviderImp
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultExposureDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultExtraIdleTimeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultFOBDESCompatibilityProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultGroupedSlotsConstraintDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultLockedCargoProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultLongTermVesselSlotCountFitnessProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultMaxSlotConstraintDataProviderEditor;
@@ -350,7 +351,11 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(DefaultCounterPartyVolumeProvider.class).in(Singleton.class);
 		bind(ICounterPartyVolumeProvider.class).to(DefaultCounterPartyVolumeProvider.class);
 		bind(ICounterPartyVolumeProviderEditor.class).to(DefaultCounterPartyVolumeProvider.class);
-		
+
+		// Grouped slots constraints provider
+		bind(DefaultGroupedSlotsConstraintDataProviderEditor.class).in(Singleton.class);
+		bind(IGroupedSlotsConstraintDataProvider.class).to(DefaultGroupedSlotsConstraintDataProviderEditor.class);
+		bind(IGroupedSlotsConstraintDataProviderEditor.class).to(DefaultGroupedSlotsConstraintDataProviderEditor.class);
 
 	}
 }

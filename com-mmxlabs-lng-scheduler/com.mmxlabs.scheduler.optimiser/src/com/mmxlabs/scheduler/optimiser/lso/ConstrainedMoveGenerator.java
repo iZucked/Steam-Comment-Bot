@@ -25,6 +25,7 @@ import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveHandlerWrapper;
 import com.mmxlabs.scheduler.optimiser.lso.guided.GuidedMoveTypes;
 import com.mmxlabs.scheduler.optimiser.lso.guided.MoveTypesAnnotation;
 import com.mmxlabs.scheduler.optimiser.moves.handlers.ShuffleElementsMoveHandler;
+import com.mmxlabs.scheduler.optimiser.providers.IGroupedSlotsConstraintDataProvider;
 
 /**
  * <p>
@@ -73,6 +74,9 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 
 	@Inject
 	private Injector injector;
+
+	@Inject
+	private IGroupedSlotsConstraintDataProvider groupedSlotsProvider;
 
 	public static final String LSO_MOVES_SCMG = "CMG_LSOMovesSCGM";
 
@@ -147,6 +151,10 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 			}
 		} else {
 			this.optionalMoveGenerator = null;
+		}
+
+		if (groupedSlotsProvider != null) {
+			enableGuidedMoveGenerator |= !groupedSlotsProvider.getAllMinDischargeGroupCounts().isEmpty();
 		}
 	}
 

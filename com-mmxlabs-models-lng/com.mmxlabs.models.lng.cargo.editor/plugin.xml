@@ -204,6 +204,12 @@
           referenceEClass="com.mmxlabs.models.lng.commercial.Contract">
     </valueProvider>
     <valueProvider
+          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.GroupedDischargeSlotsConstraintsSlotsValueProviderFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.valueproviders.GroupedDischargeSlotsConstraintsSlotsValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.cargo.GroupedDischargeSlotsConstraint"
+          referenceEClass="com.mmxlabs.models.lng.cargo.Slot">
+    </valueProvider>
+    <valueProvider
           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory"
           id="com.mmxlabs.models.lng.cargo.editor.cargoValueProvider"
           referenceEClass="com.mmxlabs.models.lng.cargo.Cargo">
