@@ -68,11 +68,10 @@ public class CloudOptimisationDataService implements IProgressProvider {
 		fireListeners(cRecord);
 	}
 
-	private void fireListeners(@Nullable CloudOptimisationDataResultRecord cRecord) {
+	private void fireListeners(@Nullable final CloudOptimisationDataResultRecord cRecord) {
 		try {
 			listeners.forEach(l -> l.updated(cRecord));
 
-			
 			final ScenarioInstance instanceRef = cRecord == null ? null : cRecord.getScenarioInstance();
 
 			RunnerHelper.asyncExec(() -> progressListeners.forEach(p -> p.changed(instanceRef)));
@@ -203,8 +202,9 @@ public class CloudOptimisationDataService implements IProgressProvider {
 				}
 			}
 		}
-// TODO; move!
-		ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecordChecked(scenarioInstance);
+		// TODO; move into separate service and iterate over all services rather than
+		// expecting one.
+		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 		if (modelRecord != null) {
 			return ServiceHelper.withService(IEclipseJobManager.class, jobManager -> {
 
@@ -220,7 +220,7 @@ public class CloudOptimisationDataService implements IProgressProvider {
 								if (fragment == null) {
 									returnProgress = true;
 								} else if (fragment.getFragment() instanceof final OptionAnalysisModel sandbox) {
-									if (job instanceof LNGSandboxJobDescriptor desc) {
+									if (job instanceof final LNGSandboxJobDescriptor desc) {
 										if (sandbox == desc.getExtraValidationTarget()) {
 											returnProgress = true;
 										}
@@ -230,7 +230,7 @@ public class CloudOptimisationDataService implements IProgressProvider {
 									final IJobControl control = jobManager.getControlForJob(job);
 									if (control != null) {
 										if (control.getJobState() == EJobState.RUNNING) {
-											double p = control.getProgress();
+											final double p = control.getProgress();
 											return Pair.of(p / 100.0, RunType.Local);
 										}
 									}

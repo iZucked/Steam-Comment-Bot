@@ -153,6 +153,8 @@ public class SchedulerView extends ViewPart implements
 
 	private Action sortModeAction;
 
+	private RunnableAction toggleLegend;
+	protected EMFScheduleContentProvider contentProvider;
 	private ScenarioViewerComparator viewerComparator;
 
 	private IMemento memento;
@@ -168,8 +170,11 @@ public class SchedulerView extends ViewPart implements
 
 	private ReentrantSelectionManager selectionManager;
 
+	boolean showNominalsByDefault = false;
+
 	@Nullable
 	private ISelectedDataProvider currentSelectedDataProvider = new TransformedSelectedDataProvider(null);
+
 	private static final List<ILegendItem> legendItems = Lists.newArrayList( //
 			new LegendItemImpl("Laden travel/idle", ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Journey, ColourPalette.ColourElements.Background),
 					ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Idle, ColourPalette.ColourElements.Background)),
@@ -191,21 +196,29 @@ public class SchedulerView extends ViewPart implements
 		this.memento = memento;
 
 		if (memento != null) {
-			if (memento.getString(SCHEDULER_VIEW_COLOUR_SCHEME) == null) {
-				memento.putString(SCHEDULER_VIEW_COLOUR_SCHEME, Activator.getDefault().getPreferenceStore().getString(SCHEDULER_VIEW_COLOUR_SCHEME));
+			if (memento.getString(SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME) == null) {
+				memento.putString(SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME, Activator.getDefault().getPreferenceStore().getString(SCHEDULER_VIEW_COLOUR_SCHEME));
 			}
-			if (memento.getBoolean(Show_Canals) == null) {
-				memento.putBoolean(Show_Canals, Activator.getDefault().getPreferenceStore().getBoolean(Show_Canals));
+			if (memento.getBoolean(SchedulerViewConstants.Show_Canals) == null) {
+				memento.putBoolean(SchedulerViewConstants.Show_Canals, Activator.getDefault().getPreferenceStore().getBoolean(Show_Canals));
+			}
+			if (memento.getBoolean(SchedulerViewConstants.Show_Nominals) == null) {
+				memento.putBoolean(SchedulerViewConstants.Show_Nominals, Activator.getDefault().getPreferenceStore().getBoolean(SchedulerViewConstants.Show_Nominals));
 			}
 			if (memento.getChild(Highlight_) == null) {
 				memento.createChild(Highlight_);
 			}
+
+			this.showNominalsByDefault = memento.getBoolean(SchedulerViewConstants.Show_Nominals);
 		}
 		super.init(site, memento);
 	}
 
 	@Override
 	public void saveState(final IMemento memento) {
+		this.memento.putBoolean(SchedulerViewConstants.Show_Nominals, this.showNominalsByDefault);
+		memento.putBoolean(SchedulerViewConstants.Show_Nominals, this.showNominalsByDefault);
+
 		super.saveState(memento);
 		memento.putMemento(this.memento);
 	}
@@ -417,7 +430,7 @@ public class SchedulerView extends ViewPart implements
 							final Object d = ganttSection.getData();
 							if (d instanceof final Sequence sequence) {
 								if (sequence.getSequenceType() == SequenceType.ROUND_TRIP) {
-									visible = false;
+									visible = showNominalsByDefault;
 									if (selectedSections.contains(ganttSection)) {
 										visible = true;
 									}
@@ -436,7 +449,7 @@ public class SchedulerView extends ViewPart implements
 						final Object d = ganttSection.getData();
 						if (d instanceof final Sequence sequence) {
 							if (sequence.getSequenceType() == SequenceType.ROUND_TRIP) {
-								visible = false;
+								visible = showNominalsByDefault;
 								if (selectedSections.contains(ganttSection)) {
 									visible = true;
 								}
@@ -493,7 +506,7 @@ public class SchedulerView extends ViewPart implements
 		final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
 		prefs.addPreferenceChangeListener(this);
 
-		final EMFScheduleContentProvider contentProvider = new EMFScheduleContentProvider() {
+		contentProvider = new EMFScheduleContentProvider() {
 
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
@@ -1121,7 +1134,7 @@ public class SchedulerView extends ViewPart implements
 
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
-		
+
 		public void selectedDataProviderChanged(final ISelectedDataProvider selectedDataProvider, final boolean block) {
 			ViewerHelper.runIfViewerValid(viewer, block, () -> {
 				SchedulerView.this.currentSelectedDataProvider = selectedDataProvider;
@@ -1209,5 +1222,4 @@ public class SchedulerView extends ViewPart implements
 		}
 	};
 
-	private RunnableAction toggleLegend;
 }
