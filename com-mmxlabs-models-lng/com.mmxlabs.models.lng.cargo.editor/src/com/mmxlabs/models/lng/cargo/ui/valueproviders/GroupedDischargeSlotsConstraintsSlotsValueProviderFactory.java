@@ -62,8 +62,10 @@ public class GroupedDischargeSlotsConstraintsSlotsValueProviderFactory implement
 						final ArrayList<Pair<String, EObject>> filteredList = new ArrayList<>();
 						for (final Pair<String, EObject> value : delegateValue) {
 							final EObject valueEObject = value.getSecond();
-							if (valueEObject instanceof DischargeSlot dischargeSlot && (!(dischargeSlot instanceof SpotSlot) || selectedSlots.contains(dischargeSlot))) {
-								filteredList.add(value);
+							if (valueEObject instanceof DischargeSlot dischargeSlot) {
+								if (!(dischargeSlot instanceof SpotSlot) || selectedSlots.contains(dischargeSlot)) {
+									filteredList.add(value);
+								}
 							}
 						}
 						return filteredList;
