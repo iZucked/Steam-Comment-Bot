@@ -265,7 +265,10 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 			baseCaseTracker.close();
 		}
 		if (progressProviderTracker != null) {
-			progressProviderTracker.getService().removeChangedListener(changeListenerProgress);
+			IProgressProvider service = progressProviderTracker.getService();
+			if (service != null) {
+				service.removeChangedListener(changeListenerProgress);
+			}
 			progressProviderTracker.close();
 		}
 		if (bcImage != null) {
