@@ -17,6 +17,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import com.mmxlabs.models.common.commandservice.AbstractModelCommandProvider;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
@@ -59,14 +60,20 @@ public class AssignableElementCommandProvider extends AbstractModelCommandProvid
 				|| (parameter.getFeature() == CargoPackage.Literals.SLOT__WINDOW_SIZE_UNITS) //
 				|| (parameter.getFeature() == CargoPackage.Literals.SLOT__WINDOW_START) //
 				|| (parameter.getFeature() == CargoPackage.Literals.SLOT__WINDOW_START_TIME) //
-				|| (parameter.getFeature() == CargoPackage.Literals.SLOT__DURATION)) {
+				|| (parameter.getFeature() == CargoPackage.Literals.SLOT__DURATION)
+				|| (parameter.getFeature() == CargoPackage.Literals.SLOT__COUNTERPARTY)) {
 			final Slot slot = (Slot) parameter.getOwner();
 			if (slot.getCargo() != null) {
 				return SetCommand.create(editingDomain, slot.getCargo(), CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, SetCommand.UNSET_VALUE);
 			}
 
+		} else if ((parameter.getFeature() == CargoPackage.Literals.VESSEL_EVENT__DURATION_IN_DAYS)
+				|| (parameter.getFeature() == CargoPackage.Literals.VESSEL_EVENT__START_AFTER)
+				|| (parameter.getFeature() == CargoPackage.Literals.VESSEL_EVENT__START_BY)
+				|| (parameter.getFeature() == CargoPackage.Literals.VESSEL_EVENT__PORT)) {
+			final VesselEvent vesselEvent = (VesselEvent) parameter.getOwner();
+			return SetCommand.create(editingDomain, vesselEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, SetCommand.UNSET_VALUE);
 		}
-
 		return null;
 	}
 
