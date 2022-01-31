@@ -229,7 +229,7 @@ class CloudOptimisationDataUpdater {
 									// Find the root object and create a URI mapping to the real URI so the result
 									// xmi can resolve
 									for (final var r : ed.getResourceSet().getResources()) {
-										if (r.getContents().get(0) instanceof LNGScenarioModel) {
+										if (!r.getContents().isEmpty() && r.getContents().get(0) instanceof LNGScenarioModel) {
 											ed.getResourceSet().getURIConverter().getURIMap().put(URI.createURI(CloudOptimisationConstants.ROOT_MODEL_URI), r.getURI());
 										}
 									}
