@@ -27,6 +27,11 @@
 		<url>http://build.mmxlabs.com/job/master/job/LiNGO-master/</url>
 	</ciManagement>
 
+	<properties>
+		<tycho-extras-version>2.6.0</tycho-extras-version>
+	    <tycho.version>2.6.0</tycho.version>
+	</properties>
+
 	<modules>
 		<module>com-mmxlabs-lingo-common-target</module>
 		<module>com-mmxlabs-common-util</module>
