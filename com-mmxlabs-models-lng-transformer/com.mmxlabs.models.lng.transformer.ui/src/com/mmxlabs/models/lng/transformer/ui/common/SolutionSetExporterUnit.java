@@ -60,6 +60,7 @@ import com.mmxlabs.models.lng.transformer.ui.analytics.spec.ScheduleModelToSched
 import com.mmxlabs.models.lng.transformer.util.ScheduleSpecificationTransformer;
 import com.mmxlabs.optimiser.core.IMultiStateResult;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.exceptions.InfeasibleSolutionException;
 import com.mmxlabs.optimiser.core.impl.MultiStateResult;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ecore.EMFCopier;
@@ -133,7 +134,7 @@ public class SolutionSetExporterUnit {
 				if (changeSet.getFirst() == null) {
 					continue;
 				}
-				try { 
+				try {
 					final ISequences sequences = spotUndoHelper.undoSpotMarketSwaps(initialSequences.getSequences(), changeSet.getFirst());
 
 					// Perform a portfolio break-even if requested.
@@ -177,8 +178,7 @@ public class SolutionSetExporterUnit {
 							plan.getExtraVesselAvailabilities().add(va);
 						}
 						for (Event evt : seq.getEvents()) {
-							if (evt instanceof VesselEventVisit) {
-								VesselEventVisit vesselEventVisit = (VesselEventVisit) evt;
+							if (evt instanceof VesselEventVisit vesselEventVisit) {
 								VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
 								if (vesselEvent != null && vesselEvent.eContainer() == null) {
 									plan.getExtraVesselEvents().add(vesselEvent);
@@ -291,7 +291,8 @@ public class SolutionSetExporterUnit {
 				changeTransformer = null;
 			}
 
-			final T resultSet = optionFactory.get();
+			@Nullable
+			T resultSet = null;
 			try {
 
 				final Schedule schedule = bridge.createSchedule(sequences, Collections.emptyMap(), null);
@@ -300,16 +301,20 @@ public class SolutionSetExporterUnit {
 				final ScheduleModel scheduleModel = ScheduleFactory.eINSTANCE.createScheduleModel();
 				scheduleModel.setSchedule(schedule);
 				scheduleModel.setDirty(false);
-				resultSet.setScheduleModel(scheduleModel);
 				if (scheduleSpecification == null) {
 					scheduleSpecification = scheduleTransformer.generateScheduleSpecifications(scheduleModel);
 
 				}
+				resultSet = optionFactory.get();
+				resultSet.setScheduleModel(scheduleModel);
 				resultSet.setScheduleSpecification(scheduleSpecification);
 
 				if (breakEvenMode == BreakEvenMode.PORTFOLIO && targetProfitAndLoss == null) {
 					targetProfitAndLoss = ScheduleModelKPIUtils.getScheduleProfitAndLoss(schedule);
 				}
+			} catch (InfeasibleSolutionException e) {
+				// Ignore these errors. A typical cause of this error is sandbox forced route
+				// selection with e.g. Panama when there is no Panama distance.
 			} catch (final Throwable e) {
 				e.printStackTrace();
 				return null;
@@ -318,7 +323,9 @@ public class SolutionSetExporterUnit {
 		}
 
 		public @Nullable T computeOption(@NonNull final ISequences sequences, @Nullable ScheduleSpecification scheduleSpecification) {
-			final @NonNull T resultSet = optionFactory.get();
+
+			@Nullable
+			T resultSet = null;
 			try {
 
 				final Schedule schedule = bridge.createSchedule(sequences, Collections.emptyMap(), targetProfitAndLoss);
@@ -329,12 +336,13 @@ public class SolutionSetExporterUnit {
 				final ScheduleModel scheduleModel = ScheduleFactory.eINSTANCE.createScheduleModel();
 				scheduleModel.setSchedule(schedule);
 				scheduleModel.setDirty(false);
-				resultSet.setScheduleModel(scheduleModel);
 
 				if (scheduleSpecification == null) {
 					scheduleSpecification = scheduleTransformer.generateScheduleSpecifications(scheduleModel);
-
 				}
+
+				resultSet = optionFactory.get();
+				resultSet.setScheduleModel(scheduleModel);
 				resultSet.setScheduleSpecification(scheduleSpecification);
 
 				// Convert from period to full sequences if needed
@@ -345,7 +353,9 @@ public class SolutionSetExporterUnit {
 				if (changeTransformer != null) {
 					resultSet.setChangeDescription(changeTransformer.generateChangeDescription(seq));
 				}
-
+			} catch (InfeasibleSolutionException e) {
+				// Ignore these errors. A typical cause of this error is sandbox forced route
+				// selection with e.g. Panama when there is no Panama distance.
 			} catch (final Throwable e) {
 				e.printStackTrace();
 
@@ -387,8 +397,7 @@ public class SolutionSetExporterUnit {
 			long a = ScheduleModelKPIUtils.getScheduleProfitAndLoss(result.getBaseOption().getScheduleModel().getSchedule());
 			for (SolutionOption option : result.getOptions()) {
 
-				if (option instanceof DualModeSolutionOption) {
-					DualModeSolutionOption dualOption = (DualModeSolutionOption) option;
+				if (option instanceof DualModeSolutionOption dualOption) {
 
 					OtherPNL optionPNL = ScheduleFactory.eINSTANCE.createOtherPNL();
 					ScheduleModelKPIUtils.updateOtherPNL(optionPNL, option.getScheduleModel().getSchedule(), ScheduleModelKPIUtils.Mode.INCREMENT);

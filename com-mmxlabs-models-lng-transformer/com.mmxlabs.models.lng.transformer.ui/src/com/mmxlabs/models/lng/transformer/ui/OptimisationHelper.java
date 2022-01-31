@@ -72,7 +72,6 @@ import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenIdleTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxSlotGroupConstraintCheckerFactory;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.VesselUtilisationFitnessCoreFactory;
@@ -276,10 +275,7 @@ public final class OptimisationHelper {
 
 		// Disable nominal vessel rules (well constraints here...) in ADP
 		if (userSettings.getMode() == OptimisationMode.ADP) {
-			ScenarioUtils.removeAllConstraints(plan, PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME);
 			ScenarioUtils.removeAllConstraints(plan, RoundTripVesselPermissionConstraintCheckerFactory.NAME);
-
-			ScenarioUtils.removeConstraints(PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME, baseConstraintAndFitnessSettings);
 			ScenarioUtils.removeConstraints(RoundTripVesselPermissionConstraintCheckerFactory.NAME, baseConstraintAndFitnessSettings);
 		}
 

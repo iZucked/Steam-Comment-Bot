@@ -402,10 +402,6 @@ public class LNGScenarioTransformer {
 	private boolean shippingOnly;
 
 	@Inject
-	@Named(LNGTransformerHelper.HINT_NO_NOMINALS_IN_PROMPT)
-	private boolean noNominalsInPrompt;
-
-	@Inject
 	@Named(LNGTransformerHelper.HINT_SPOT_CARGO_MARKETS)
 	private boolean withSpotCargoMarkets;
 
@@ -1215,22 +1211,22 @@ public class LNGScenarioTransformer {
 			// Compulsary slots on nominals are considered to be unused. This marks all
 			// slots in the prompt as compulsary too.
 			// TODO: Is this really a good idea?
-			if (noNominalsInPrompt) {
-				if (eCargo.getSpotIndex() == NOMINAL_CARGO_INDEX) {
-					if (!eCargo.isLocked()) { // Locked cargoes will not be unpaired
-						final LocalDate promptPeriodEnd = rootObject.getPromptPeriodEnd();
-						if (promptPeriodEnd != null) {
-							final List<Slot<?>> sortedSlots = eCargo.getSortedSlots();
-							if (!sortedSlots.isEmpty()) {
-								final Slot<?> slot = sortedSlots.get(0);
-								if (slot.getSchedulingTimeWindow().getStart().toLocalDate().isBefore(promptPeriodEnd)) {
-									isSoftRequired = true;
-								}
-							}
-						}
-					}
-				}
-			}
+//			if (noNominalsInPrompt) {
+//				if (eCargo.getSpotIndex() == NOMINAL_CARGO_INDEX) {
+//					if (!eCargo.isLocked()) { // Locked cargoes will not be unpaired
+//						final LocalDate promptPeriodEnd = rootObject.getPromptPeriodEnd();
+//						if (promptPeriodEnd != null) {
+//							final List<Slot<?>> sortedSlots = eCargo.getSortedSlots();
+//							if (!sortedSlots.isEmpty()) {
+//								final Slot<?> slot = sortedSlots.get(0);
+//								if (slot.getSchedulingTimeWindow().getStart().toLocalDate().isBefore(promptPeriodEnd)) {
+//									isSoftRequired = true;
+//								}
+//							}
+//						}
+//					}
+//				}
+//			}
 
 			for (final Slot<?> slot : eCargo.getSortedSlots()) {
 				boolean isTransfer = false;

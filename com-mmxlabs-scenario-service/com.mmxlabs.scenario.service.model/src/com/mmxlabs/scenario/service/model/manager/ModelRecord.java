@@ -88,7 +88,7 @@ public class ModelRecord {
 				triggerLoadCallback = true;
 
 				data.setReadOnly(readOnly);
-				
+
 				if (externalLock) {
 					sharedReference.getLock().lock();
 				}
@@ -243,8 +243,9 @@ public class ModelRecord {
 	public void dispose() {
 		// Right now we are asserting that we have been cleaned-up properly
 		if (data != null) {
-			// One known cause of this is the force closure of base case editor when a new scenario is downloaded.
-			
+			// One known cause of this is the force closure of base case editor when a new
+			// scenario is downloaded.
+
 			LOG.error("ModelRecord #disposed before unloaded");
 		}
 		// assert data == null;
@@ -291,23 +292,21 @@ public class ModelRecord {
 	public boolean isReadOnly() {
 		return readOnly;
 	}
-	
+
 	public void setExternalLock(boolean externalLock) {
-		
+
 		if (this.externalLock != externalLock) {
 			if (sharedReference != null) {
-			if (externalLock) {
-				sharedReference.getLock().lock();
+				if (externalLock) {
+					sharedReference.getLock().lock();
 				} else {
 					sharedReference.getLock().unlock();
 				}
 			}
 		}
-		
 		this.externalLock = externalLock;
-		
 	}
-	
+
 	public boolean isExternalLock() {
 		return externalLock;
 	}

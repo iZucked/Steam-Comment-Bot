@@ -100,7 +100,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 		@Override
 		public @Nullable List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
 			if (moduleType == ModuleType.Module_LNGTransformerModule) {
-				return Collections.<@NonNull Module> singletonList(new AbstractModule() {
+				return Collections.<@NonNull Module>singletonList(new AbstractModule() {
 					@Override
 					protected void configure() {
 						if (minMaxVolumeAllocator)
@@ -872,7 +872,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				.build();
 
 		optimiseWithLSOTest(scenarioRunner -> {
-			
+
 			// Check schedule
 			{
 				final Schedule schedule = scenarioRunner.getSchedule();
@@ -886,7 +886,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				final VesselEventVisit vev = (VesselEventVisit) e;
 				Assertions.assertEquals(500, vev.getHeelAtStart());
 				Assertions.assertEquals(6_100, vev.getHeelAtEnd());
-				
+
 				Assertions.assertEquals(1_024_800, vev.getHeelCost());
 				Assertions.assertEquals(68_400, vev.getHeelRevenue());
 			}
@@ -935,7 +935,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 					Assertions.assertEquals(-500 * 22.8 * 5 * 1000, vpr.getProfitAndLoss(), 0.0001);
 
 				}
-				//Charter out part
+				// Charter out part
 				{
 					final VoyagePlanRecord vpr = seq.getVoyagePlanRecords().get(1);
 					{
@@ -1442,11 +1442,11 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				final VesselEventVisit vev = (VesselEventVisit) e;
 				Assertions.assertEquals(500, vev.getHeelAtStart());
 				Assertions.assertEquals(1_000, vev.getHeelAtEnd());
-				
+
 				Assertions.assertEquals(168_000, vev.getHeelCost());
 				Assertions.assertEquals(68_400, vev.getHeelRevenue());
 			}
-			
+
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 			// Check spot index has been updated
 			final LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario().getTypedScenario(LNGScenarioModel.class);
@@ -1470,7 +1470,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 
 				final VolumeAllocatedSequence seq = volumeAllocatedSequences.getScheduledSequenceForResource(resource);
 
-				// Start event 
+				// Start event
 				{
 					final VoyagePlanRecord vpr = seq.getVoyagePlanRecords().get(0);
 
@@ -1491,7 +1491,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				}
 				// Charter out (2 plans)
 				{
-					
+
 					final VoyagePlanRecord vpr = seq.getVoyagePlanRecords().get(1);
 					{
 						final IPortSlot charterOutPortSlot = vpr.getPortTimesRecord().getFirstSlot();
@@ -1592,7 +1592,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				final VesselEventVisit vev = (VesselEventVisit) e;
 				Assertions.assertEquals(500, vev.getHeelAtStart());
 				Assertions.assertEquals(6_100, vev.getHeelAtEnd());
-				
+
 				Assertions.assertEquals(1_024_800, vev.getHeelCost());
 				Assertions.assertEquals(68_400, vev.getHeelRevenue());
 			}
@@ -1745,7 +1745,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				//
 				.withVesselAssignment(vesselAvailability1, 1) //
 				.build();
-		
+
 		cargoModelBuilder.initCanalBookings();
 
 		evaluateWithLSOTest(true, p -> p.getUserSettings().setGenerateCharterOuts(true), null, scenarioRunner -> {
@@ -1908,7 +1908,7 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 				//
 				.withVesselAssignment(vesselAvailability1, 1) //
 				.build();
-		
+
 		cargoModelBuilder.initCanalBookings();
 
 		evaluateWithLSOTest(true, p -> p.getUserSettings().setGenerateCharterOuts(true), null, scenarioRunner -> {
@@ -2443,72 +2443,4 @@ public class CapacityViolationTests extends AbstractLegacyMicroTestCase {
 			});
 		});
 	}
-
-	/**
-	 * If we have a min/max load/discharge violation on a nominal cargo in the prompt, we will often remove this from the initial solution. Make sure we can place it back on the fleet. 8
-	 * 
-	 * @throws Exception
-	 */
-
-	@Test
-	@Tag(TestCategories.MICRO_TEST)
-	public void testNominalCargoViolationCanMoveToVessel() throws Exception {
-		LicenseFeatures.addFeatureEnablements("no-nominal-in-prompt");
-		try {
-
-			scenarioModelBuilder.setPromptPeriod(LocalDate.of(2017, 9, 1), LocalDate.of(2018, 1, 1));
-			// Create the required basic elements
-			vessel = fleetModelFinder.findVessel("STEAM-145");
-
-			vesselAvailability1 = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
-					.withStartWindow(LocalDateTime.of(2017, 9, 1, 0, 0, 0)) //
-					.withEndWindow(LocalDateTime.of(2018, 1, 1, 0, 0, 0)) //
-					.withStartHeel(0, 10_000, 22.5, "0") //
-					.withEndHeel(0, 10_000, EVesselTankState.EITHER, null) //
-					.build();
-
-			final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vessel, entity, "50000", 0);
-
-			// Create a nominal cargo in the prompt
-			final Cargo cargo1 = cargoModelBuilder.makeCargo() //
-					.makeFOBPurchase("L1", LocalDate.of(2017, 9, 2), portFinder.findPortById(InternalDataConstants.PORT_POINT_FORTIN), null, entity, "5") //
-					.withVolumeLimits(3_000_000, 4_000_000, VolumeUnits.M3) //
-					.build() //
-					.makeDESSale("D1", LocalDate.of(2017, 10, 2), portFinder.findPortById(InternalDataConstants.PORT_COVE_POINT), null, entity, "7") //
-					.withVolumeLimits(0, 140_000, VolumeUnits.M3) //
-					.build() //
-					.withVesselAssignment(charterInMarket_1, -1, 1) // -1 is nominal
-					.withAssignmentFlags(false, false) //
-					.build();
-
-			optimiseWithLSOTest(scenarioRunner -> {
-
-				Assertions.assertEquals(vesselAvailability1, cargo1.getVesselAssignmentType());
-
-				// Should be the same as the updateScenario as we have only called
-				// ScenarioRunner#init()
-				final Schedule schedule = scenarioRunner.getSchedule();
-				Assertions.assertNotNull(schedule);
-
-				final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocation(cargo1.getLoadName(), schedule);
-				Assertions.assertNotNull(cargoAllocation);
-
-				boolean foundViolation = false;
-				// Is there is min/max load or discharge violation?
-				// At the time of writing this is a MIN_LOAD violation. It could be something
-				// else along these lines if the volume allocator changes.
-				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
-					if (allocation.getSlotAllocationType() == SlotAllocationType.PURCHASE) {
-						foundViolation |= allocation.getSlotVisit().getViolations().containsKey(com.mmxlabs.models.lng.schedule.CapacityViolationType.MIN_LOAD);
-					}
-
-				}
-				Assertions.assertTrue(foundViolation);
-			});
-
-		} finally {
-			LicenseFeatures.removeFeatureEnablements("no-nominal-in-prompt");
-		}
-	}
-
 }

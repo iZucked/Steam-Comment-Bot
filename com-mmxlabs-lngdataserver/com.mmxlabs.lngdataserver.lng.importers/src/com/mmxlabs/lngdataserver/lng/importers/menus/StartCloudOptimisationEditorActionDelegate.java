@@ -14,6 +14,9 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.actions.ActionDelegate;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.manager.ModelReference;
+import com.mmxlabs.scenario.service.model.manager.SSDataManager;
+import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 /**
@@ -38,11 +41,19 @@ public class StartCloudOptimisationEditorActionDelegate extends ActionDelegate i
 	protected IEditorPart targetEditor;
 	protected IAction action;
 	protected ScenarioInstance currentScenarioInstance;
-	
+
 	@Override
 	public void run(IAction action) {
 		BusyIndicator.showWhile(Display.getDefault(), () -> {
-			ScenarioServicePushToCloudAction.uploadScenario(currentScenarioInstance, true, null);
+			final ScenarioInstance si = currentScenarioInstance;
+			if (si != null) {
+				final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(si);
+				try (ModelReference mr = modelRecord.aquireReference("StartCloudOptimisationEditorActionDelegate::run")) {
+					if (!mr.isLocked()) {
+						ScenarioServicePushToCloudAction.uploadScenario(si, true, null);
+					}
+				}
+			}
 		});
 	}
 
@@ -51,14 +62,44 @@ public class StartCloudOptimisationEditorActionDelegate extends ActionDelegate i
 		this.targetEditor = targetEditor;
 		this.action = action;
 
+		boolean enabled = false;
 		if (this.targetEditor != null) {
 			final IEditorInput editorInput = targetEditor.getEditorInput();
-			if (editorInput instanceof IScenarioServiceEditorInput) {
-				final IScenarioServiceEditorInput iScenarioServiceEditorInput = (IScenarioServiceEditorInput) editorInput;
+			if (editorInput instanceof IScenarioServiceEditorInput iScenarioServiceEditorInput) {
 				final @NonNull ScenarioInstance instance = iScenarioServiceEditorInput.getScenarioInstance();
 				this.currentScenarioInstance = instance;
+
+				if (instance == null) {
+					action.setEnabled(false);
+					return;
+				}
+
+				ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
+				if (modelRecord == null) {
+					action.setEnabled(false);
+					return;
+				}
+
+				if (instance.isReadonly() || instance.isCloudLocked()) {
+					action.setEnabled(false);
+					return;
+				}
+
+				if (modelRecord.isLoadFailure()) {
+					action.setEnabled(false);
+					return;
+				}
+
+				enabled = true;
 			}
 		}
+
+		if (action != null) {
+			// TODO: Exceptions can be thrown here on application shutdown. It appears the
+			// eclipse code does not check for disposed state.
+			action.setEnabled(enabled);
+		}
+
 	}
 
 }

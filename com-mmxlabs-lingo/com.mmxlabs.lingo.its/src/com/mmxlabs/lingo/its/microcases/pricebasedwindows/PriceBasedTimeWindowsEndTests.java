@@ -6,13 +6,12 @@ package com.mmxlabs.lingo.its.microcases.pricebasedwindows;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroCaseUtils;
@@ -25,8 +24,6 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.inject.modules.InitialPhaseOptimisationDataModule;
-import com.mmxlabs.models.lng.transformer.its.RequireFeature;
-import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.types.TimePeriod;
@@ -41,8 +38,6 @@ import com.mmxlabs.scheduler.optimiser.scheduling.ScheduledTimeWindows;
 import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
-@ExtendWith(ShiroRunner.class)
-@RequireFeature({ KnownFeatures.FEATURE_OPTIMISATION_NO_NOMINALS_IN_PROMPT })
 public class PriceBasedTimeWindowsEndTests extends AbstractMicroTestCase {
 
 	private static String vesselName = "vessel";

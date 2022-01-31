@@ -39,7 +39,6 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.FOBDESCompatibilityConstraintChecker;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VesselEventConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.providers.IAllowedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IFOBDESCompatibilityProvider;
