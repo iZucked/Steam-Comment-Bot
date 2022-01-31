@@ -23,11 +23,4 @@
             </action>
          </editorContribution>
  </extension>
- <extension
-            point="com.mmxlabs.license.features.PluginXMLEnablement">
-         <PluginXMLEnablement
-               feature="options-suggester"
-               plugin.xml="cloud-optioniser.plugin.xml">
-         </PluginXMLEnablement>
-      </extension>
 </plugin>
