@@ -38,11 +38,14 @@ public class StartCloudOptimisationEditorActionDelegate extends ActionDelegate i
 	protected IEditorPart targetEditor;
 	protected IAction action;
 	protected ScenarioInstance currentScenarioInstance;
-	
+
 	@Override
 	public void run(IAction action) {
 		BusyIndicator.showWhile(Display.getDefault(), () -> {
-			ScenarioServicePushToCloudAction.uploadScenario(currentScenarioInstance, true, null);
+			final ScenarioInstance si = currentScenarioInstance;
+			if (si != null) {
+				ScenarioServicePushToCloudAction.uploadScenario(si, true, null);
+			}
 		});
 	}
 
@@ -53,8 +56,7 @@ public class StartCloudOptimisationEditorActionDelegate extends ActionDelegate i
 
 		if (this.targetEditor != null) {
 			final IEditorInput editorInput = targetEditor.getEditorInput();
-			if (editorInput instanceof IScenarioServiceEditorInput) {
-				final IScenarioServiceEditorInput iScenarioServiceEditorInput = (IScenarioServiceEditorInput) editorInput;
+			if (editorInput instanceof IScenarioServiceEditorInput iScenarioServiceEditorInput) {
 				final @NonNull ScenarioInstance instance = iScenarioServiceEditorInput.getScenarioInstance();
 				this.currentScenarioInstance = instance;
 			}
