@@ -378,9 +378,11 @@ public class AssignmentEditorHelper {
 		boolean isBefore = false;
 		boolean isAfter = false;
 
+		// if a earliest end <= b latest start
 		if (!a.getEndWindow().getFirst().isAfter(b.getStartWindow().getSecond())) {
 			isBefore = true;
 		}
+		// if b earliest end <= a latest start
 		if (!b.getEndWindow().getFirst().isAfter(a.getStartWindow().getSecond())) {
 			isAfter = true;
 		}
