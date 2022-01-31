@@ -137,7 +137,7 @@ class CloudOptimisationDataUpdater {
 			if (cRecord.isHasError()) {
 				return;
 			}
-			
+
 			boolean importResultXMI = true;
 
 			final File f = new File(String.format("%s/%s.lingo", basePath, cRecord.getJobid()));
@@ -351,6 +351,7 @@ class CloudOptimisationDataUpdater {
 				final String json = Files.readString(tasksFile.toPath());
 				final List<CloudOptimisationDataResultRecord> tasks = CloudOptimisationDataServiceClient.parseRecordsJSONData(json);
 				final List<CloudOptimisationDataResultRecord> obsoleteTasks = new LinkedList<>();
+				Set<String> linkedScenarioUUID = new HashSet<>();
 				if (tasks != null && !tasks.isEmpty()) {
 					// Update downloaded state
 					for (final var r : tasks) {
@@ -358,6 +359,7 @@ class CloudOptimisationDataUpdater {
 						if (lingoFile.exists()) {
 							r.setResult(lingoFile);
 						}
+						linkedScenarioUUID.add(r.getUuid());
 
 						final ScenarioInstance[] instanceRef = new ScenarioInstance[1];
 						ServiceHelper.withAllServices(IScenarioService.class, null, ss -> {
@@ -387,6 +389,27 @@ class CloudOptimisationDataUpdater {
 							r.setScenarioInstance(instanceRef[0]);
 						}
 					}
+
+					// Find any scenario which is cloud locked, but not known by the tasks list and
+					// unlock them.
+					ServiceHelper.withAllServices(IScenarioService.class, null, ss -> {
+						// Really want to make sure this is the "My Scenarios" services, but local is a
+						// good proxy for now.
+						if (ss.getServiceModel().isLocal()) {
+							// Does the UUID exist in the service?
+							final TreeIterator<EObject> itr = ss.getServiceModel().eAllContents();
+							while (itr.hasNext()) {
+								final EObject obj = itr.next();
+								if (obj instanceof final ScenarioInstance si) {
+									if (si.isCloudLocked() && !linkedScenarioUUID.contains(si.getUuid())) {
+										RunnerHelper.asyncExec(() -> si.setCloudLocked(false));
+									}
+								}
+							}
+
+						}
+						return false;
+					});
 
 					tasks.removeAll(obsoleteTasks);
 
@@ -477,7 +500,7 @@ class CloudOptimisationDataUpdater {
 				newList.add(r);
 				continue;
 			}
-			
+
 			final boolean oldRemote = r.isRemote();
 			final ResultStatus oldStatus = r.getStatus();
 			// What is the status?
@@ -599,6 +622,9 @@ class CloudOptimisationDataUpdater {
 	private synchronized boolean deleteRecord(final CloudOptimisationDataResultRecord cRecord) {
 
 		cRecord.setDeleted(true);
+
+		setScenarioCloudLocked(cRecord);
+
 		if (currentRecords.contains(cRecord)) {
 			final List<CloudOptimisationDataResultRecord> l = new LinkedList<>(currentRecords);
 			while (l.remove(cRecord))
@@ -724,11 +750,11 @@ class CloudOptimisationDataUpdater {
 						RunnerHelper.exec(() -> instanceRef.setCloudLocked(false), false);
 					}
 				}
-			}
-			if (cRecord.getStatus().isSubmitted() || cRecord.getStatus().isRunning()) {
-				RunnerHelper.exec(() -> instanceRef.setCloudLocked(true), false);
+			} else {
+				if (cRecord.getStatus().isSubmitted() || cRecord.getStatus().isRunning()) {
+					RunnerHelper.exec(() -> instanceRef.setCloudLocked(true), false);
+				}
 			}
 		}
-
 	}
 }
