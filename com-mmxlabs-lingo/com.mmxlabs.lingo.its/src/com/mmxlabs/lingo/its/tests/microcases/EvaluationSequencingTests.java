@@ -89,7 +89,7 @@ public class EvaluationSequencingTests extends AbstractMicroTestCase {
 				continue;
 			}
 			if (event instanceof VesselEventVisit vev) {
-				Assertions.assertEquals(maintenanceEvent, vev);
+				Assertions.assertEquals(maintenanceEvent, vev.getVesselEvent());
 				Assertions.assertFalse(seenLoad);
 				Assertions.assertFalse(seenDischarge);
 				Assertions.assertFalse(seenMaintenance);
@@ -104,7 +104,7 @@ public class EvaluationSequencingTests extends AbstractMicroTestCase {
 					seenLoad = true;
 				} else {
 					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
-					Assertions.assertEquals(cargo.getSlots().get(0), dischargeSlot);
+					Assertions.assertEquals(cargo.getSlots().get(1), dischargeSlot);
 					Assertions.assertTrue(seenMaintenance);
 					Assertions.assertTrue(seenLoad);
 					Assertions.assertFalse(seenDischarge);
