@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.util.Collection;
+import java.util.Objects;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EAttribute;
@@ -33,7 +34,7 @@ public class VesselEventVesselsManipulator extends MultipleReferenceManipulator 
 	public void doSetValue(final Object object, final Object value) {
 
 		final Object currentValue = getValue(object);
-		if (Equality.isEqual(currentValue, value)) {
+		if (Objects.equals(currentValue, value)) {
 			return;
 		}
 

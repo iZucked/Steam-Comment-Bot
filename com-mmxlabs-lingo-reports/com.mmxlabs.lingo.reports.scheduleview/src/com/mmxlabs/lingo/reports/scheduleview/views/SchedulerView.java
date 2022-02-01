@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiPredicate;
 
@@ -592,7 +593,7 @@ public class SchedulerView extends ViewPart implements
 				if (!contents.contains(b) && equivalents.containsKey(b)) {
 					b = equivalents.get(b);
 				}
-				return Equality.isEqual(a, b);
+				return Objects.equals(a, b);
 			}
 		});
 

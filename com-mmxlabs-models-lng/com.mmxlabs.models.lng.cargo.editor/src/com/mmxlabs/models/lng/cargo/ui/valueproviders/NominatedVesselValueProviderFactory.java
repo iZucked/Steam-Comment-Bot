@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.cargo.ui.valueproviders;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.emf.common.notify.Notifier;
@@ -16,7 +17,6 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -92,7 +92,7 @@ public class NominatedVesselValueProviderFactory implements IReferenceValueProvi
 
 						// Always show the option if the option is the null option
 						// or the current value for the cargo is set to this vessel-set
-						if (Equality.isEqual(vessel, currentValue) || vessel == null) {
+						if (Objects.equals(vessel, currentValue) || vessel == null) {
 							display = true;
 						}
 

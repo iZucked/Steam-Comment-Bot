@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -442,7 +443,7 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 					return true;
 				}
 
-				return Equality.isEqual(a, b);
+				return Objects.equals(a, b);
 			}
 
 			private Set<Object> getObjectSet(final Object a) {

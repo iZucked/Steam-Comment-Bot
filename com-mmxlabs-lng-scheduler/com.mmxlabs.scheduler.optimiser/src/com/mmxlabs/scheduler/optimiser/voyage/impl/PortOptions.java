@@ -4,10 +4,10 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
+import java.util.Objects;
+
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.google.common.base.Objects;
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 
@@ -79,10 +79,10 @@ public final class PortOptions implements IOptionsSequenceElement {
 				return false;
 			}
 
-			if (!Equality.isEqual(vessel, vo.vessel)) {
+			if (!Objects.equals(vessel, vo.vessel)) {
 				return false;
 			}
-			if (!Equality.isEqual(portSlot, vo.portSlot)) {
+			if (!Objects.equals(portSlot, vo.portSlot)) {
 				return false;
 			}
 
@@ -103,7 +103,7 @@ public final class PortOptions implements IOptionsSequenceElement {
 
 	@Override
 	public final int hashCode() {
-		return Objects.hashCode(visitDuration, portSlot, vessel, cargoCV);
+		return Objects.hash(visitDuration, portSlot, vessel, cargoCV);
 	}
 
 	public int getCargoCVValue() {

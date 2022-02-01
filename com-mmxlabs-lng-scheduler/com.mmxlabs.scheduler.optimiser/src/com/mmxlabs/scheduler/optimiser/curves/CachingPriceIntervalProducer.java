@@ -61,9 +61,10 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 		 */
 		@Override
 		public final boolean equals(final Object obj) {
-			if (obj instanceof CacheKey) {
-				final CacheKey other = (CacheKey) obj;
-				return this.startTime == other.startTime && this.endTime == other.endTime && Equality.shallowEquals(this.determiningSlots, other.determiningSlots)
+			if (obj instanceof CacheKey other) {
+				return this.startTime == other.startTime //
+						&& this.endTime == other.endTime //
+						&& Equality.shallowEquals(this.determiningSlots, other.determiningSlots) //
 						&& Equality.shallowEquals(this.allSlots, other.allSlots);
 			}
 			return false;
@@ -200,7 +201,8 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 	}
 
 	/**
-	 * Return the max of the window end and the feasible end (if late). Add 1 hour if start == end
+	 * Return the max of the window end and the feasible end (if late). Add 1 hour
+	 * if start == end
 	 * 
 	 * @param windowStart
 	 * @param feasibleStart

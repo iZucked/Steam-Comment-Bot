@@ -17,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -35,7 +36,6 @@ import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.common.csv.FieldMap;
 import com.mmxlabs.common.csv.IFieldMap;
@@ -350,8 +350,8 @@ public class DefaultClassImporter extends AbstractClassImporter {
 				public boolean equals(final Object obj) {
 					if (obj instanceof IImportProblem) {
 						final IImportProblem other = (IImportProblem) obj;
-						return Equality.isEqual(getProblemDescription(), other.getProblemDescription()) && Equality.isEqual(getLineNumber(), other.getLineNumber())
-								&& Equality.isEqual(getFilename(), other.getFilename()) && Equality.isEqual(getField(), other.getField());
+						return Objects.equals(getProblemDescription(), other.getProblemDescription()) && Objects.equals(getLineNumber(), other.getLineNumber())
+								&& Objects.equals(getFilename(), other.getFilename()) && Objects.equals(getField(), other.getField());
 					} else {
 						return false;
 					}

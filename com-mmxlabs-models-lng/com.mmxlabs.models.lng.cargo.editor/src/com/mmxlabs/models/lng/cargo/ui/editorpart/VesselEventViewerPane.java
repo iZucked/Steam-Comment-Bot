@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
@@ -26,7 +27,6 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
@@ -143,7 +143,7 @@ public class VesselEventViewerPane extends ScenarioTableViewerPane {
 				final VesselEvent c1 = getVesselEvent(a);
 				final VesselEvent c2 = getVesselEvent(b);
 
-				return Equality.isEqual(c1, c2);
+				return Objects.equals(c1, c2);
 			}
 
 			private VesselEvent getVesselEvent(final Object o) {

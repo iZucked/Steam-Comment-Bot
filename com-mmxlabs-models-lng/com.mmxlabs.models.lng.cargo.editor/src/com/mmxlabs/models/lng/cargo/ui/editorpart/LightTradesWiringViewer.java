@@ -17,6 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -625,13 +626,12 @@ public class LightTradesWiringViewer extends ScenarioTableViewerPane {
 					return true;
 				}
 
-				return Equality.isEqual(a, b);
+				return Objects.equals(a, b);
 			}
 
 			private Set<Object> getObjectSet(final Object a) {
 				final Set<Object> aSet = new HashSet<>();
-				if (a instanceof RowData) {
-					final RowData rd = (RowData) a;
+				if (a instanceof RowData rd) {
 					aSet.add(rd);
 					aSet.add(rd.cargo);
 					aSet.add(rd.loadSlot);

@@ -191,7 +191,7 @@ public class MultiDateAttributeInlineEditor extends DialogInlineEditor {
 //	@Override
 //	public void doSetValue(final Object object, final Object value) {
 //		final Object currentValue = getValue(object);
-//		if (Equality.isEqual(currentValue, value)) {
+//		if (Objects.equals(currentValue, value)) {
 //			return;
 //		}
 //		commandHandler.handleCommand(CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), (EObject) object, field, (Collection<?>) value), (EObject) object, field);

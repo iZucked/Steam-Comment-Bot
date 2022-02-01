@@ -49,11 +49,11 @@ public class BaseFuel extends IndexedObject implements IBaseFuel {
 //		if (obj instanceof BaseFuel) {
 //			final BaseFuel p = (BaseFuel) obj;
 //			return index == p.getIndex();
-//			// if (!Equality.isEqual(name, p.getName())) {
+//			// if (!Objects.equals(name, p.getName())) {
 //			// return false;
 //			// }
 //			//
-//			// if (!Equality.isEqual(getEquivalenceFactor(), p.getEquivalenceFactor())) {
+//			// if (!Objects.equals(getEquivalenceFactor(), p.getEquivalenceFactor())) {
 //			// return false;
 //			// }
 //			// return true;
