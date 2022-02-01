@@ -10,29 +10,39 @@ import java.util.TimeZone;
 
 /**
  * Methods to help move between timezones.
+ * 
  * @author achurchill
  *
  */
-public class TimeZoneHelper {
+public final class TimeZoneHelper {
+
+	private TimeZoneHelper() {
+
+	}
+
 	/**
-	 * Helper method to create a new Date, preserving everything but changing the timezone. In effect this will shift the time.
+	 * Helper method to create a new Date, preserving everything but changing the
+	 * timezone. In effect this will shift the time.
+	 * 
 	 * @param originalDate
 	 * @param originalTimeZone
 	 * @param newTimeZone
 	 * @return
 	 */
-	public static Date createTimeZoneShiftedDate(Date originalDate, String originalTimeZone, String newTimeZone) {
+	public static Date createTimeZoneShiftedDate(final Date originalDate, final String originalTimeZone, final String newTimeZone) {
 		return createTimeZoneShiftedCalendar(originalDate, originalTimeZone, newTimeZone).getTime();
 	}
-	
+
 	/**
-	 * Helper method to create a new Calendar, preserving everything but changing the timezone. In effect this will shift the time.
+	 * Helper method to create a new Calendar, preserving everything but changing
+	 * the timezone. In effect this will shift the time.
+	 * 
 	 * @param originalDate
 	 * @param originalTimeZone
 	 * @param newTimeZone
 	 * @return
 	 */
-	public static Calendar createTimeZoneShiftedCalendar(Date originalDate, String originalTimeZone, String newTimeZone) {
+	public static Calendar createTimeZoneShiftedCalendar(final Date originalDate, final String originalTimeZone, final String newTimeZone) {
 		final Calendar oldCalendar = Calendar.getInstance(TimeZone.getTimeZone(originalTimeZone));
 		oldCalendar.setTime(originalDate);
 		final Calendar newCalendar = Calendar.getInstance(TimeZone.getTimeZone(newTimeZone));
@@ -46,15 +56,17 @@ public class TimeZoneHelper {
 
 		return newCalendar;
 	}
-	
+
 	/**
-	 * Helper method to create a new Calendar, preserving everything but changing the timezone. In effect this will shift the time.
+	 * Helper method to create a new Calendar, preserving everything but changing
+	 * the timezone. In effect this will shift the time.
+	 * 
 	 * @param originalDate
 	 * @param originalTimeZone
 	 * @param newTimeZone
 	 * @return
 	 */
-	public static Calendar createTimeZoneShiftedCalendar(Calendar originalDate, String originalTimeZone, String newTimeZone) {
+	public static Calendar createTimeZoneShiftedCalendar(final Calendar originalDate, final String originalTimeZone, final String newTimeZone) {
 		return createTimeZoneShiftedCalendar(originalDate.getTime(), originalTimeZone, newTimeZone);
 	}
 }
