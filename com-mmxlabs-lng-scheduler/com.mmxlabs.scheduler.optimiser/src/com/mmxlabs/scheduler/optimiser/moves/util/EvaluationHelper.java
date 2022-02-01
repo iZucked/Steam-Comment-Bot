@@ -38,7 +38,6 @@ import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.CapacityEvaluatedStateChecker;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.evaluation.VoyagePlanRecord;
@@ -139,17 +138,6 @@ public class EvaluationHelper {
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
 
-			if (!isStrictChecking()) {
-				// For the action set threads, we do not want this constraint checker to apply
-
-				// Should be feature check? (no-nominal-in-prompt)
-
-				// TODO: Use marker interface?
-				if (checker instanceof PromptRoundTripVesselPermissionConstraintChecker) {
-					continue;
-				}
-			}
-
 			if (!checker.checkConstraints(currentFullSequences, currentChangedResources, messages)) {
 				if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 					messages.stream().forEach(LOG::debug);
@@ -177,9 +165,6 @@ public class EvaluationHelper {
 		// Apply hard constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
 
-			if (checker instanceof PromptRoundTripVesselPermissionConstraintChecker) {
-				continue;
-			}
 			if (checker instanceof RoundTripVesselPermissionConstraintChecker) {
 				continue;
 			}

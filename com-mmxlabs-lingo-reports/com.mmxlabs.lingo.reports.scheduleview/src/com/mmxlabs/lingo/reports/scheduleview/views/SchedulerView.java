@@ -14,7 +14,6 @@ import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstant
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
@@ -154,6 +153,8 @@ public class SchedulerView extends ViewPart implements
 
 	private Action sortModeAction;
 
+	private RunnableAction toggleLegend;
+	protected EMFScheduleContentProvider contentProvider;
 	private ScenarioViewerComparator viewerComparator;
 
 	private IMemento memento;
@@ -165,15 +166,15 @@ public class SchedulerView extends ViewPart implements
 
 	private int numberOfSchedules;
 
-	private IEclipseContext e4Context;
 	private ScenarioComparisonService scenarioComparisonService;
-
-	private final boolean showConnections = true;
 
 	private ReentrantSelectionManager selectionManager;
 
+	boolean showNominalsByDefault = false;
+
 	@Nullable
 	private ISelectedDataProvider currentSelectedDataProvider = new TransformedSelectedDataProvider(null);
+
 	private static final List<ILegendItem> legendItems = Lists.newArrayList( //
 			new LegendItemImpl("Laden travel/idle", ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Journey, ColourPalette.ColourElements.Background),
 					ColourPalette.getInstance().getColourFor(ColourPaletteItems.Voyage_Laden_Idle, ColourPalette.ColourElements.Background)),
@@ -195,21 +196,29 @@ public class SchedulerView extends ViewPart implements
 		this.memento = memento;
 
 		if (memento != null) {
-			if (memento.getString(SCHEDULER_VIEW_COLOUR_SCHEME) == null) {
-				memento.putString(SCHEDULER_VIEW_COLOUR_SCHEME, Activator.getDefault().getPreferenceStore().getString(SCHEDULER_VIEW_COLOUR_SCHEME));
+			if (memento.getString(SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME) == null) {
+				memento.putString(SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME, Activator.getDefault().getPreferenceStore().getString(SCHEDULER_VIEW_COLOUR_SCHEME));
 			}
-			if (memento.getBoolean(Show_Canals) == null) {
-				memento.putBoolean(Show_Canals, Activator.getDefault().getPreferenceStore().getBoolean(Show_Canals));
+			if (memento.getBoolean(SchedulerViewConstants.Show_Canals) == null) {
+				memento.putBoolean(SchedulerViewConstants.Show_Canals, Activator.getDefault().getPreferenceStore().getBoolean(Show_Canals));
+			}
+			if (memento.getBoolean(SchedulerViewConstants.Show_Nominals) == null) {
+				memento.putBoolean(SchedulerViewConstants.Show_Nominals, Activator.getDefault().getPreferenceStore().getBoolean(SchedulerViewConstants.Show_Nominals));
 			}
 			if (memento.getChild(Highlight_) == null) {
 				memento.createChild(Highlight_);
 			}
+
+			this.showNominalsByDefault = memento.getBoolean(SchedulerViewConstants.Show_Nominals);
 		}
 		super.init(site, memento);
 	}
 
 	@Override
 	public void saveState(final IMemento memento) {
+		this.memento.putBoolean(SchedulerViewConstants.Show_Nominals, this.showNominalsByDefault);
+		memento.putBoolean(SchedulerViewConstants.Show_Nominals, this.showNominalsByDefault);
+
 		super.saveState(memento);
 		memento.putMemento(this.memento);
 	}
@@ -220,7 +229,7 @@ public class SchedulerView extends ViewPart implements
 	@Override
 	public void createPartControl(final Composite parent) {
 
-		e4Context = getSite().getService(IEclipseContext.class);
+		final IEclipseContext e4Context = getSite().getService(IEclipseContext.class);
 		this.scenarioComparisonService = e4Context.getActive(ScenarioComparisonService.class);
 
 		// Inject the extension points
@@ -238,7 +247,8 @@ public class SchedulerView extends ViewPart implements
 				final List<Object> l = new LinkedList<>(providedSelection);
 				final boolean emptyInput = providedSelection.isEmpty();
 
-				if (showConnections) {
+				// Render the connections between events
+				{
 					ganttChart.getGanttComposite().getGanttConnections().clear();
 
 					final BiPredicate<SlotAllocation, SlotAllocation> differentSequenceChecker = (r1, r2) -> {
@@ -276,7 +286,8 @@ public class SchedulerView extends ViewPart implements
 												ganttChart.getGanttComposite().addConnection(oldEvent, newEvent, lineColour);
 											}
 
-											// If the selection was initially empty, then add in all objects from the ChangeSetTableRow
+											// If the selection was initially empty, then add in all objects from the
+											// ChangeSetTableRow
 											if (emptyInput) {
 												l.add(oldAllocation.getSlotVisit());
 												l.add(newAllocation.getSlotVisit());
@@ -298,7 +309,8 @@ public class SchedulerView extends ViewPart implements
 												ganttChart.getGanttComposite().addConnection(oldEvent, newEvent, lineColour);
 											}
 
-											// If the selection was initially empty, then add in all objects from the ChangeSetTableRow
+											// If the selection was initially empty, then add in all objects from the
+											// ChangeSetTableRow
 											if (emptyInput) {
 												l.add(oldAllocation.getSlotVisit());
 												l.add(newAllocation.getSlotVisit());
@@ -367,7 +379,8 @@ public class SchedulerView extends ViewPart implements
 									if (ge.getGanttSection() != null) {
 										selectedSections.add(ge.getGanttSection());
 									}
-									// ge.setStatusAlpha(getLabelProviderAlpha((ILabelProvider) getLabelProvider(), obj));
+									// ge.setStatusAlpha(getLabelProviderAlpha((ILabelProvider) getLabelProvider(),
+									// obj));
 
 								} else if (getComparer() != null) {
 									for (final Map.Entry<Object, GanttEvent> e : internalMap.entrySet()) {
@@ -377,8 +390,10 @@ public class SchedulerView extends ViewPart implements
 											if (ge.getGanttSection() != null) {
 												selectedSections.add(ge.getGanttSection());
 											}
-											// e.getValue().setStatusAlpha(getLabelProviderAlpha((ILabelProvider) getLabelProvider(), e.getKey()));
-											// ge.setStatusAlpha(getLabelProviderAlpha((ILabelProvider) getLabelProvider(), e.getKey()));
+											// e.getValue().setStatusAlpha(getLabelProviderAlpha((ILabelProvider)
+											// getLabelProvider(), e.getKey()));
+											// ge.setStatusAlpha(getLabelProviderAlpha((ILabelProvider) getLabelProvider(),
+											// e.getKey()));
 										}
 									}
 								}
@@ -396,8 +411,7 @@ public class SchedulerView extends ViewPart implements
 						final GanttSection ganttSection = itr.next();
 						final Set<GanttEvent> events = new HashSet<>(ganttSection.getEvents());
 						for (final Object o : ganttSection.getEvents()) {
-							if (o instanceof GanttGroup) {
-								final GanttGroup ganttGroup = (GanttGroup) o;
+							if (o instanceof final GanttGroup ganttGroup) {
 								events.addAll(ganttGroup.getEventMembers());
 							}
 						}
@@ -414,10 +428,9 @@ public class SchedulerView extends ViewPart implements
 						} else {
 							boolean visible = true;
 							final Object d = ganttSection.getData();
-							if (d instanceof Sequence) {
-								final Sequence sequence = (Sequence) d;
+							if (d instanceof final Sequence sequence) {
 								if (sequence.getSequenceType() == SequenceType.ROUND_TRIP) {
-									visible = false;
+									visible = showNominalsByDefault;
 									if (selectedSections.contains(ganttSection)) {
 										visible = true;
 									}
@@ -434,10 +447,9 @@ public class SchedulerView extends ViewPart implements
 						boolean visible = true;
 
 						final Object d = ganttSection.getData();
-						if (d instanceof Sequence) {
-							final Sequence sequence = (Sequence) d;
+						if (d instanceof final Sequence sequence) {
 							if (sequence.getSequenceType() == SequenceType.ROUND_TRIP) {
-								visible = false;
+								visible = showNominalsByDefault;
 								if (selectedSections.contains(ganttSection)) {
 									visible = true;
 								}
@@ -494,7 +506,7 @@ public class SchedulerView extends ViewPart implements
 		final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
 		prefs.addPreferenceChangeListener(this);
 
-		final EMFScheduleContentProvider contentProvider = new EMFScheduleContentProvider() {
+		contentProvider = new EMFScheduleContentProvider() {
 
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
@@ -508,25 +520,22 @@ public class SchedulerView extends ViewPart implements
 				final Object[] result = super.getChildren(parent);
 				if (result != null) {
 					for (final Object event : result) {
-						if (event instanceof SlotVisit) {
-							final SlotVisit slotVisit = (SlotVisit) event;
-							setInputEquivalents(event,
-									Arrays.asList(new Object[] { slotVisit.getSlotAllocation(), slotVisit.getSlotAllocation().getSlot(), slotVisit.getSlotAllocation().getCargoAllocation() }));
+						if (event instanceof final SlotVisit slotVisit) {
+							setInputEquivalents(event, Lists.newArrayList(slotVisit.getSlotAllocation(), slotVisit.getSlotAllocation().getSlot(), slotVisit.getSlotAllocation().getCargoAllocation()));
 
-						} else if (event instanceof CargoAllocation) {
-							final CargoAllocation allocation = (CargoAllocation) event;
+						} else if (event instanceof final CargoAllocation allocation) {
 
-							final List<Object> equivalents = new ArrayList<>();
+							final List<Object> localEquivalents = new ArrayList<>();
 							for (final SlotAllocation sa : allocation.getSlotAllocations()) {
-								equivalents.add(sa.getSlotVisit());
-								equivalents.add(sa.getSlot());
+								localEquivalents.add(sa.getSlotVisit());
+								localEquivalents.add(sa.getSlot());
 							}
-							equivalents.addAll(allocation.getEvents());
+							localEquivalents.addAll(allocation.getEvents());
 
-							setInputEquivalents(allocation, equivalents);
+							setInputEquivalents(allocation, localEquivalents);
 
-						} else if (event instanceof VesselEventVisit) {
-							setInputEquivalents(event, Arrays.asList(new Object[] { ((VesselEventVisit) event).getVesselEvent() }));
+						} else if (event instanceof final VesselEventVisit vev) {
+							setInputEquivalents(event, Collections.singletonList(vev.getVesselEvent()));
 						} else {
 							setInputEquivalents(event, Collections.emptyList());
 						}
@@ -537,12 +546,10 @@ public class SchedulerView extends ViewPart implements
 
 			@Override
 			public IScenarioDataProvider getScenarioDataProviderFor(final Object obj) {
-				if (obj instanceof EObject) {
-					final EObject eObject = (EObject) obj;
+				if (obj instanceof final EObject eObject) {
 
 					if (currentSelectedDataProvider != null) {
-						@Nullable
-						final ScenarioResult scenarioResult = currentSelectedDataProvider.getScenarioResult(eObject);
+						final @Nullable ScenarioResult scenarioResult = currentSelectedDataProvider.getScenarioResult(eObject);
 						if (scenarioResult != null) {
 							return scenarioResult.getScenarioDataProvider();
 						}
@@ -557,20 +564,16 @@ public class SchedulerView extends ViewPart implements
 
 		for (final ISchedulerViewColourSchemeExtension ext : this.colourSchemeExtensions) {
 			final IScheduleViewColourScheme cs = ext.createInstance();
-			final String ID = ext.getID();
-			cs.setID(ID);
+			final String extID = ext.getID();
+			cs.setID(extID);
 			if (ext.isHighlighter().equalsIgnoreCase("true")) {
-				labelProvider.addHighlighter(ID, cs);
+				labelProvider.addHighlighter(extID, cs);
 			} else {
-				labelProvider.addColourScheme(ID, cs);
+				labelProvider.addColourScheme(extID, cs);
 			}
 		}
 
 		viewer.setLabelProvider(labelProvider);
-		// TODO: Hook up action to alter sort behaviour
-		// Then refresh
-		// E.g. mode?
-		// Move into separate class
 		viewerComparator = new ScenarioViewerComparator(scenarioComparisonService);
 		viewer.setComparator(viewerComparator);
 
@@ -844,7 +847,8 @@ public class SchedulerView extends ViewPart implements
 	@Override
 	public void dispose() {
 
-		// final ESelectionService service = getSite().getService(ESelectionService.class);
+		// final ESelectionService service =
+		// getSite().getService(ESelectionService.class);
 		// service.removePostSelectionListener(this);
 
 		// stop this view from listening to preference changes
@@ -870,7 +874,6 @@ public class SchedulerView extends ViewPart implements
 	}
 
 	private void fillLocalPullDown(final IMenuManager manager) {
-		// manager.add(saveFullImageAction);
 		manager.add(toggleLegend);
 	}
 
@@ -904,9 +907,9 @@ public class SchedulerView extends ViewPart implements
 
 			colourSchemeAction = new ColourSchemeAction(this, (EMFScheduleLabelProvider) (viewer.getLabelProvider()), viewer);
 		}
-		
+
 		highlightAction = new HighlightAction(this, viewer, (EMFScheduleLabelProvider) (viewer.getLabelProvider()));
-		
+
 		toggleLegend = new RunnableAction("Legend", SWT.CHECK, () -> {
 			final boolean b = viewer.getGanttChart().getGanttComposite().isShowLegend();
 			viewer.getGanttChart().getGanttComposite().setShowLegend(!b);
@@ -915,7 +918,6 @@ public class SchedulerView extends ViewPart implements
 		toggleLegend.setChecked(viewer.getGanttChart().getGanttComposite().isShowLegend());
 
 		sortModeAction = new SortModeAction(this, viewer, (EMFScheduleLabelProvider) viewer.getLabelProvider(), viewerComparator);
-
 
 		saveFullImageAction = new SaveFullImageAction(viewer.getGanttChart());
 
@@ -969,7 +971,8 @@ public class SchedulerView extends ViewPart implements
 	}
 
 	/**
-	 * Create a new {@link PropertySheetPage} instance hooked up to the default EMF adapter factory.
+	 * Create a new {@link PropertySheetPage} instance hooked up to the default EMF
+	 * adapter factory.
 	 * 
 	 * @return
 	 */
@@ -1001,7 +1004,7 @@ public class SchedulerView extends ViewPart implements
 			comparator.setMode(mode);
 
 			viewer.setInput(viewer.getInput());
-		};
+		}
 
 		@Override
 		protected void createMenuItems(final Menu menu) {
@@ -1043,7 +1046,8 @@ public class SchedulerView extends ViewPart implements
 	}
 
 	/**
-	 * Helper method to expand cargo selections to include the whole set of events representing the cargo
+	 * Helper method to expand cargo selections to include the whole set of events
+	 * representing the cargo
 	 * 
 	 * @param selectedObjects
 	 * @return
@@ -1052,11 +1056,9 @@ public class SchedulerView extends ViewPart implements
 		final Set<Object> newSelection = new HashSet<>(selectedObjects.size());
 		for (final Object o : selectedObjects) {
 			newSelection.add(o);
-			if (o instanceof Slot<?>) {
-				final Slot<?> slot = (Slot<?>) o;
+			if (o instanceof final Slot<?> slot) {
 				final Object object = equivalents.get(slot);
-				if (object instanceof SlotVisit) {
-					final SlotVisit slotVisit = (SlotVisit) object;
+				if (object instanceof final SlotVisit slotVisit) {
 					newSelection.add(slotVisit);
 					final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
 					newSelection.add(slotAllocation);
@@ -1080,7 +1082,8 @@ public class SchedulerView extends ViewPart implements
 	}
 
 	/**
-	 * Call from {@link IScenarioInstanceElementCollector#beginCollecting()} to reset pin mode data
+	 * Call from {@link IScenarioInstanceElementCollector#beginCollecting()} to
+	 * reset pin mode data
 	 * 
 	 */
 	private void clearPinModeData() {
@@ -1092,7 +1095,7 @@ public class SchedulerView extends ViewPart implements
 		return new ScheduleElementCollector() {
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioInstance, final LNGScenarioModel scenarioModel, final Schedule schedule) {
+			protected Collection<EObject> collectElements(final ScenarioResult scenarioInstance, final LNGScenarioModel scenarioModel, final Schedule schedule) {
 
 				numberOfSchedules++;
 				return Collections.singleton(schedule);
@@ -1105,7 +1108,7 @@ public class SchedulerView extends ViewPart implements
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioInstance, final LNGScenarioModel scenarioModel, final Schedule schedule, final boolean isPinned) {
+			protected Collection<EObject> collectElements(final ScenarioResult scenarioInstance, final LNGScenarioModel scenarioModel, final Schedule schedule, final boolean isPinned) {
 				numberOfSchedules++;
 				final List<Event> interestingEvents = new LinkedList<>();
 				for (final Sequence sequence : schedule.getSequences()) {
@@ -1131,6 +1134,7 @@ public class SchedulerView extends ViewPart implements
 
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
+
 		public void selectedDataProviderChanged(final ISelectedDataProvider selectedDataProvider, final boolean block) {
 			ViewerHelper.runIfViewerValid(viewer, block, () -> {
 				SchedulerView.this.currentSelectedDataProvider = selectedDataProvider;
@@ -1196,18 +1200,15 @@ public class SchedulerView extends ViewPart implements
 		@Override
 		public void selectedObjectChanged(@Nullable final MPart source, @NonNull ISelection selection) {
 
-			if (selection instanceof IStructuredSelection) {
-				final IStructuredSelection sel = (IStructuredSelection) selection;
+			if (selection instanceof final IStructuredSelection sel) {
 				List<Object> objects = new ArrayList<>(sel.toList().size());
 				for (final Object o : sel.toList()) {
-					if (o instanceof CargoAllocation) {
-						final CargoAllocation allocation = (CargoAllocation) o;
+					if (o instanceof final CargoAllocation allocation) {
 						objects.addAll(allocation.getEvents());
 						for (final SlotAllocation sa : allocation.getSlotAllocations()) {
 							objects.add(sa.getSlotVisit());
 						}
-					} else if (o instanceof Cargo) {
-						final Cargo cargo = (Cargo) o;
+					} else if (o instanceof final Cargo cargo) {
 						objects.add(cargo);
 						objects.addAll(cargo.getSlots());
 					} else {
@@ -1221,5 +1222,4 @@ public class SchedulerView extends ViewPart implements
 		}
 	};
 
-	private RunnableAction toggleLegend;
 }

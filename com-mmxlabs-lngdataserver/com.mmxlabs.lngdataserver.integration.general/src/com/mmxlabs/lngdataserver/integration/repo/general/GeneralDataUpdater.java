@@ -6,13 +6,12 @@ package com.mmxlabs.lngdataserver.integration.repo.general;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantLock;
@@ -206,7 +205,7 @@ public class GeneralDataUpdater {
 		if (f.exists()) {
 			String json;
 			try {
-				json = Files.toString(f, Charsets.UTF_8);
+				json = Files.asCharSource(f, StandardCharsets.UTF_8).read();
 				final List<GeneralDataRecord> records = client.parseRecordsJSONData(typeRecord, json);
 				if (records != null) {
 					update(typeRecord, records);

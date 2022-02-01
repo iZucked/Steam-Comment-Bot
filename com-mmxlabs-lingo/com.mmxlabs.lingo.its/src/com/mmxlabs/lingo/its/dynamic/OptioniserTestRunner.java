@@ -56,7 +56,7 @@ public class OptioniserTestRunner {
 					final HeadlessOptioniserRunner.Options options = getOptioniserSettings(paramsFile);
 
 					HeadlessOptioniserRunner runner = new HeadlessOptioniserRunner();
-					runner.run(0, (SlotInsertionOptimiserLogger) null, options, modelRecord, scenarioDataProvider, null, new NullProgressMonitor());
+					runner.run((SlotInsertionOptimiserLogger) null, options, modelRecord, scenarioDataProvider, null, new NullProgressMonitor());
 					AnalyticsSolution as = new AnalyticsSolution(modelRecord, analyticsModel.getOptimisations().get(0), "Test");
 					String reportID = as.getID();
 					Display.getDefault().syncExec(() -> as.open());

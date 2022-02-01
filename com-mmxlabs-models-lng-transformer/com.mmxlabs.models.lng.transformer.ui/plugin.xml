@@ -233,6 +233,11 @@
          </command>
          <command
                categoryId="com.mmxlabs.commands.category.optimisation"
+               id="com.mmxlabs.commands.optimisation.cloud"
+               name="Start Cloud Optimisation">
+         </command>
+         <command
+               categoryId="com.mmxlabs.commands.category.optimisation"
                id="com.mmxlabs.commands.optimisation.terminate"
                name="Terminate Optimisation">
          </command>
@@ -408,10 +413,6 @@
          <PluginXMLEnablement
                feature="optimisation-charter-out-generation"
                plugin.xml="gco.plugin.xml">
-         </PluginXMLEnablement>
-         <PluginXMLEnablement
-               feature="options-suggester"
-               plugin.xml="options-suggester.plugin.xml">
          </PluginXMLEnablement>
          <PluginXMLEnablement
                feature="actionable-set-optimiser"

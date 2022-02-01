@@ -29,6 +29,7 @@ import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
+import com.mmxlabs.lingo.reports.components.ColumnManager;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -42,7 +43,9 @@ import com.mmxlabs.scenario.service.ScenarioResult;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 
 /**
- * Class to display a report describing the total volume of gas transactions for each contract (purchase & sales) for each gas year (with additional rows for "other purchase" and "other sales").
+ * Class to display a report describing the total volume of gas transactions for
+ * each contract (purchase & sales) for each gas year (with additional rows for
+ * "other purchase" and "other sales").
  * 
  * @author Simon McGregor
  */
@@ -52,7 +55,9 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 	private final Pair<Temporal, Temporal> dateRange = new Pair<>();
 
 	private enum ValueMode {
-		VOLUME_MMBTU, VOLUME_M3, VOLUME_CARGO /* VOLUME_NATIVE -- link to exposures calcs, needs volume unit set on contract */
+		VOLUME_MMBTU, VOLUME_M3, VOLUME_CARGO /*
+												 * VOLUME_NATIVE -- link to exposures calcs, needs volume unit set on contract
+												 */
 	}
 
 	private ValueMode mode = ValueMode.VOLUME_MMBTU;
@@ -86,7 +91,8 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 	}
 
 	/**
-	 * Returns the gas year for a particular calendar date. The gas year starts in October and is based on UTC.
+	 * Returns the gas year for a particular calendar date. The gas year starts in
+	 * October and is based on UTC.
 	 * 
 	 * @param calendar
 	 * @return
@@ -100,7 +106,8 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 			gasYearMonth = Month.of(1 + contract.getContractYearStart());
 		}
 
-		// subtract one year from the reported year for dates prior to october ( or whatever month it is)
+		// subtract one year from the reported year for dates prior to october ( or
+		// whatever month it is)
 		final int yearOffset = (utc.getMonthValue() < gasYearMonth.getValue()) ? -1 : 0;
 
 		return Year.of(utc.getYear() + yearOffset);
@@ -135,7 +142,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 
 		return new AbstractSimpleTabularReportTransformer<VolumeData>() {
 			@Override
-			public @NonNull List<@NonNull VolumeData> createData(@Nullable final Pair<@NonNull Schedule, @NonNull ScenarioResult> pinnedPair,
+			public List<VolumeData> createData(@Nullable final Pair<@NonNull Schedule, @NonNull ScenarioResult> pinnedPair,
 					@NonNull final List<@NonNull Pair<@NonNull Schedule, @NonNull ScenarioResult>> otherPairs) {
 
 				dateRange.setBoth(null, null);

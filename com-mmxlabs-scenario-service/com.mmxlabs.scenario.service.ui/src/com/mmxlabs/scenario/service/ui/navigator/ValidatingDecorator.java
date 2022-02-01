@@ -18,7 +18,10 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.mmxlabs.rcp.common.CommonImages;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.validation.IValidationApplicableProvider;
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -33,7 +36,6 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
 
 /**
- * TODO: Handle new services being added. TODO: Common navigator only updates with a single column! TODO: Common navigator does not update until refreshed.
  * 
  * @author Simon Goodall
  * 
@@ -43,7 +45,7 @@ public class ValidatingDecorator extends LabelProvider implements ILightweightLa
 	private final @NonNull IScenarioValidationListener validationListener = new IScenarioValidationListener() {
 
 		@Override
-		public void validationChanged(@NonNull final ScenarioModelRecord scenarioModelRecord, @NonNull final IStatus status) {
+		public void validationChanged(final ScenarioModelRecord scenarioModelRecord, @NonNull final IStatus status) {
 			if (scenarioModelRecord != null) {
 				List<Object> targets = new LinkedList<>();
 				targets.add(scenarioModelRecord);
@@ -57,9 +59,7 @@ public class ValidatingDecorator extends LabelProvider implements ILightweightLa
 
 		@Override
 		public void dirtyStatusChanged(@NonNull final ModelRecord modelRecord, final boolean isDirty) {
-			if (modelRecord instanceof ScenarioModelRecord) {
-
-				final ScenarioModelRecord scenarioModelRecord = (ScenarioModelRecord) modelRecord;
+			if (modelRecord instanceof ScenarioModelRecord scenarioModelRecord) {
 				final LabelProviderChangedEvent event = new LabelProviderChangedEvent(ValidatingDecorator.this, scenarioModelRecord.getScenarioInstance());
 				RunnerHelper.asyncExec(() -> fireLabelProviderChanged(event));
 			}
@@ -69,9 +69,7 @@ public class ValidatingDecorator extends LabelProvider implements ILightweightLa
 	private final @NonNull IScenarioLockListener lockListener = new IScenarioLockListener() {
 		@Override
 		public void lockStateChanged(@NonNull final ModelRecord modelRecord, final boolean writeLocked) {
-			if (modelRecord instanceof ScenarioModelRecord) {
-
-				final ScenarioModelRecord scenarioModelRecord = (ScenarioModelRecord) modelRecord;
+			if (modelRecord instanceof ScenarioModelRecord scenarioModelRecord) {
 				final LabelProviderChangedEvent event = new LabelProviderChangedEvent(ValidatingDecorator.this, scenarioModelRecord.getScenarioInstance());
 				RunnerHelper.asyncExec(() -> fireLabelProviderChanged(event));
 			}
@@ -80,9 +78,6 @@ public class ValidatingDecorator extends LabelProvider implements ILightweightLa
 	};
 
 	private final Collection<ScenarioModelRecord> listenerRefs = new ConcurrentLinkedQueue<>();
-
-	public ValidatingDecorator() {
-	}
 
 	@Override
 	public void dispose() {
@@ -99,16 +94,22 @@ public class ValidatingDecorator extends LabelProvider implements ILightweightLa
 
 	@Override
 	public void decorate(final Object element, final IDecoration decoration) {
-		if (element instanceof ScenarioService) {
-			ScenarioService scenarioService = (ScenarioService) element;
+		if (element instanceof ScenarioService scenarioService) {
 			if (!scenarioService.isLocal()) {
 				decoration.addOverlay(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/overlays/remote.gif"), IDecoration.BOTTOM_RIGHT);
 			}
-		} else if (element instanceof ScenarioInstance) {
-			final ScenarioInstance scenarioInstance = (ScenarioInstance) element;
+		} else if (element instanceof ScenarioInstance scenarioInstance) {
 
 			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 			if (modelRecord != null) {
+
+				if (scenarioInstance.isCloudLocked()) {
+
+					// This trumps the other icons
+//					decoration.addOverlay(CommonImages.getImageDescriptor(IconPaths.CloudPlay_16, IconMode.Enabled), IDecoration.TOP_LEFT);
+//					return;
+				}
+
 				if (modelRecord.getValidationStatusSeverity() == IStatus.ERROR) {
 					decoration.addOverlay(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/overlays/error.gif"), IDecoration.BOTTOM_RIGHT);
 				} else if (modelRecord.getValidationStatusSeverity() == IStatus.WARNING) {
@@ -117,9 +118,12 @@ public class ValidatingDecorator extends LabelProvider implements ILightweightLa
 					decoration.addOverlay(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/overlays/info.gif"), IDecoration.BOTTOM_RIGHT);
 				}
 
-				try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("ValidatingDecorator")) {
-					if (ref != null && ref.isLocked()) {
-						decoration.addOverlay(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/overlays/lock_optimising.gif"), IDecoration.TOP_LEFT);
+				else {
+					try (ModelReference ref = modelRecord.aquireReferenceIfLoaded("ValidatingDecorator")) {
+						if (ref != null && ref.isLocked()) {
+							decoration.addOverlay(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/overlays/lock_optimising.gif"), IDecoration.TOP_LEFT);
+
+						}
 					}
 				}
 
@@ -127,8 +131,7 @@ public class ValidatingDecorator extends LabelProvider implements ILightweightLa
 					addContentAdapter(modelRecord);
 				}
 			}
-		} else if (element instanceof ScenarioFragment) {
-			ScenarioFragment scenarioFragment = (ScenarioFragment) element;
+		} else if (element instanceof ScenarioFragment scenarioFragment) {
 			ScenarioInstance scenarioInstance = scenarioFragment.getScenarioInstance();
 			if (scenarioInstance != null) {
 
@@ -171,8 +174,7 @@ public class ValidatingDecorator extends LabelProvider implements ILightweightLa
 				newSeverity = Math.max(newSeverity, getObjectToStatus(s, newSeverity, target));
 			}
 		}
-		if (status instanceof IValidationApplicableProvider) {
-			IValidationApplicableProvider p = (IValidationApplicableProvider) status;
+		if (status instanceof IValidationApplicableProvider p) {
 			if (p.doesValidationApplyToChildOf(target)) {
 				newSeverity = Math.max(newSeverity, status.getSeverity());
 			}

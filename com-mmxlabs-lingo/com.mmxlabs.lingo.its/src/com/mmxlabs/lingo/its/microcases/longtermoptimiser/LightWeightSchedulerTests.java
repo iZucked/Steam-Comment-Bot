@@ -12,21 +12,17 @@ import java.util.List;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractMicroTestCase;
 import com.mmxlabs.lngdataserver.lng.importers.creator.InternalDataConstants;
@@ -56,7 +52,6 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintCheckerFactory;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserInjectorServiceMaker;
@@ -69,27 +64,6 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 	@Override
 	protected int getThreadCount() {
 		return 4;
-	}
-
-	private static List<String> requiredFeatures = Lists.newArrayList("no-nominal-in-prompt", "optimisation-actionset");
-	private static List<String> addedFeatures = new LinkedList<>();
-
-	@BeforeAll
-	public static void hookIn() {
-		for (final String feature : requiredFeatures) {
-			if (!LicenseFeatures.isPermitted("features:" + feature)) {
-				LicenseFeatures.addFeatureEnablements(feature);
-				addedFeatures.add(feature);
-			}
-		}
-	}
-
-	@AfterAll
-	public static void hookOut() {
-		for (final String feature : addedFeatures) {
-			LicenseFeatures.removeFeatureEnablements(feature);
-		}
-		addedFeatures.clear();
 	}
 
 	@BeforeEach
@@ -207,9 +181,6 @@ public class LightWeightSchedulerTests extends AbstractMicroTestCase {
 		final Iterator<Constraint> iterator = constraintAndFitnessSettings.getConstraints().iterator();
 		while (iterator.hasNext()) {
 			final Constraint constraint = iterator.next();
-			if (constraint.getName().equals(PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
-				iterator.remove();
-			}
 			if (constraint.getName().equals(RoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
 				iterator.remove();
 			}

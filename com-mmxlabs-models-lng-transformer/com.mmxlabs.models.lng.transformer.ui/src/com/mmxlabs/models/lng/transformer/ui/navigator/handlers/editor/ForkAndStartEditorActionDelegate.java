@@ -58,10 +58,8 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 		this.action = action;
 
 		final boolean enabled = false;
-		if (action != null && targetEditor != null && targetEditor.getEditorInput() instanceof IScenarioServiceEditorInput) {
+		if (action != null && targetEditor != null && targetEditor.getEditorInput() instanceof IScenarioServiceEditorInput iScenarioServiceEditorInput) {
 			final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
-
-			final IScenarioServiceEditorInput iScenarioServiceEditorInput = (IScenarioServiceEditorInput) targetEditor.getEditorInput();
 
 			final ScenarioInstance instance = iScenarioServiceEditorInput.getScenarioInstance();
  			ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
@@ -69,7 +67,7 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 				action.setEnabled(false);
 				return;
 			}
-			if (instance.isReadonly()) {
+			if (instance.isReadonly() || instance.isCloudLocked()) {
 				action.setEnabled(false);
 				return;
 			}
@@ -78,8 +76,7 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 				while (c != null && !(c instanceof ScenarioService)) {
 					c = c.getParent();
 				}
-				if (c instanceof ScenarioService) {
-					final ScenarioService scenarioService = (ScenarioService) c;
+				if (c instanceof ScenarioService scenarioService) {
 					if (!scenarioService.isSupportsForking()) {
 						action.setEnabled(false);
 						return;
@@ -92,8 +89,7 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 
 			try (final IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ForkAndStartEditorActionDelegate")) {
 				final Object object = scenarioDataProvider.getScenario();
-				if (object instanceof MMXRootObject) {
-					final MMXRootObject root = (MMXRootObject) object;
+				if (object instanceof MMXRootObject root) {
 					final String uuid = instance.getUuid();
 
 					final IJobDescriptor job = jobManager.findJobForResource(uuid);

@@ -83,6 +83,7 @@ import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -120,7 +121,6 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AllowedVesselPermissionConstraintCheckerFactory;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -189,7 +189,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 					usedCharterInMarkets.add(sequence.getCharterInMarket());
 				}
 				for (final Event event : sequence.getEvents()) {
-					if (event instanceof VesselEventVisit vesselEventVisit) {
+					if (event instanceof final VesselEventVisit vesselEventVisit) {
 						usedVesselEvents.add(vesselEventVisit.getVesselEvent());
 					}
 				}
@@ -359,7 +359,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 	@Override
 	public void evaluateMTMSandbox(@NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance scenarioInstance, @NonNull final UserSettings userSettings,
-			final MTMModel model, final IMapperClass mapper, IProgressMonitor progressMonitor) {
+			final MTMModel model, final IMapperClass mapper, final IProgressMonitor progressMonitor) {
 		final LNGScenarioModel lngScenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 		OptimisationPlan optimisationPlan = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 
@@ -401,9 +401,6 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		final Iterator<Constraint> iterator = constraintAndFitnessSettings.getConstraints().iterator();
 		while (iterator.hasNext()) {
 			final Constraint constraint = iterator.next();
-			if (constraint.getName().equals(PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
-				iterator.remove();
-			}
 			if (constraint.getName().equals(RoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
 				iterator.remove();
 			}
@@ -441,13 +438,12 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 	@Override
 	public void runSandboxOptions(@NonNull final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, final OptionAnalysisModel model,
-			final Consumer<AbstractSolutionSet> action, boolean runAsync) {
+			@Nullable UserSettings userSettings, final Consumer<AbstractSolutionSet> action, final boolean runAsync, IProgressMonitor progressMonitor) {
 
-		String taskName = "Sandbox result";
+		final String taskName = "Sandbox result";
 
 		final EObject object = scenarioDataProvider.getScenario();
-		UserSettings userSettings = null;
-		if (object instanceof LNGScenarioModel) {
+		if (userSettings == null && object instanceof LNGScenarioModel) {
 			final LNGScenarioModel root = (LNGScenarioModel) object;
 
 			UserSettings previousSettings = null;
@@ -457,9 +453,9 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			if (previousSettings == null) {
 				previousSettings = root.getUserSettings();
 			}
-			boolean promptUser = System.getProperty("lingo.suppress.dialogs") == null;
+			final boolean promptUser = System.getProperty("lingo.suppress.dialogs") == null;
 
-			userSettings = OptimisationHelper.promptForSandboxUserSettings(root, false, promptUser, false, null, previousSettings);
+			userSettings = UserSettingsHelper.promptForSandboxUserSettings(root, false, promptUser, false, null, previousSettings);
 		}
 		if (userSettings == null) {
 			return;
@@ -489,34 +485,18 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			final ScenarioModelRecord originalModelRecord = SSDataManager.Instance.getModelRecordChecked(scenarioInstance);
 			jobRunner.run(taskName, scenarioInstance, originalModelRecord, null, createJobDescriptorCallback, jobCompletedCallback);
 		} else {
-			AbstractSolutionSet result = createSandboxOptionsFunction(scenarioDataProvider, scenarioInstance, pUserSettings, model).apply(new NullProgressMonitor());
+			final AbstractSolutionSet result = createSandboxOptionsFunction(scenarioDataProvider, scenarioInstance, pUserSettings, model).apply(progressMonitor);
 			action.accept(result);
 		}
 
 	}
 
 	@Override
-	public void runSandboxInsertion(@NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, final OptionAnalysisModel model,
-			final Consumer<AbstractSolutionSet> action, boolean runAsync) {
+	public void runSandboxInsertion(@NonNull final IScenarioDataProvider scenarioDataProvider, @Nullable final ScenarioInstance scenarioInstance, final OptionAnalysisModel model,
+			@Nullable UserSettings userSettings, final Consumer<AbstractSolutionSet> action, final boolean runAsync, IProgressMonitor progressMonitor) {
 
-		String taskName = "Sandbox result";
+		final String taskName = "Sandbox result";
 
-		final EObject object = scenarioDataProvider.getScenario();
-		UserSettings userSettings = null;
-		if (object instanceof LNGScenarioModel) {
-			final LNGScenarioModel root = (LNGScenarioModel) object;
-
-			UserSettings previousSettings = null;
-			if (model.getResults() != null) {
-				previousSettings = model.getResults().getUserSettings();
-			}
-			if (previousSettings == null) {
-				previousSettings = root.getUserSettings();
-			}
-			boolean promptUser = System.getProperty("lingo.suppress.dialogs") == null;
-
-			userSettings = OptimisationHelper.promptForInsertionUserSettings(root, false, promptUser, false, null, previousSettings);
-		}
 		if (userSettings == null) {
 			return;
 		}
@@ -545,7 +525,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			final ScenarioModelRecord originalModelRecord = SSDataManager.Instance.getModelRecordChecked(scenarioInstance);
 			jobRunner.run(taskName, scenarioInstance, originalModelRecord, null, createJobDescriptorCallback, jobCompletedCallback);
 		} else {
-			AbstractSolutionSet result = createSandboxInsertionFunction(scenarioDataProvider, scenarioInstance, pUserSettings, model).apply(new NullProgressMonitor());
+			final AbstractSolutionSet result = createSandboxInsertionFunction(scenarioDataProvider, scenarioInstance, pUserSettings, model).apply(progressMonitor);
 			action.accept(result);
 		}
 
@@ -574,7 +554,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 				}
 
 				@Override
-				public IMultiStateResult run(IProgressMonitor monitor) {
+				public IMultiStateResult run(final IProgressMonitor monitor) {
 					return insertionRunner.runSandbox(monitor);
 				}
 			};
@@ -607,20 +587,20 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 					objectsToInsert.add(mapper.getOriginal(row.getSellOption()));
 				}
 			}
-			
+
 			if (objectsToInsert.isEmpty()) {
 				throw new UserFeedbackException("No targets are selected to optionise");
 			}
 
 			for (final EObject obj : objectsToInsert) {
-				if (obj instanceof Slot<?> slot) {
+				if (obj instanceof final Slot<?> slot) {
 					if (slot instanceof SpotSlot) {
 						// Ignore spot market slots.
 						continue;
 					}
 					targetSlots.add(slot);
 					sandboxResult.getSlotsInserted().add(slot);
-				} else if (obj instanceof VesselEvent vesselEvent) {
+				} else if (obj instanceof final VesselEvent vesselEvent) {
 					targetEvents.add(vesselEvent);
 					sandboxResult.getEventsInserted().add(vesselEvent);
 				}
@@ -640,7 +620,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 				}
 
 				@Override
-				public IMultiStateResult run(IProgressMonitor monitor) {
+				public IMultiStateResult run(final IProgressMonitor monitor) {
 					return insertionRunner.runInsertion(new SlotInsertionOptimiserLogger(), monitor);
 				}
 			};
@@ -669,7 +649,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 				}
 
 				@Override
-				public IMultiStateResult run(IProgressMonitor monitor) {
+				public IMultiStateResult run(final IProgressMonitor monitor) {
 					return insertionRunner.runOptimiser(monitor);
 				}
 			};
@@ -677,7 +657,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 	}
 
 	public Function<IProgressMonitor, AbstractSolutionSet> createSandboxFunction(final IScenarioDataProvider sdp, final ScenarioInstance scenarioInstance, final UserSettings userSettings,
-			final OptionAnalysisModel model, AbstractSolutionSet sandboxResult, BiFunction<IMapperClass, ScheduleSpecification, SandboxJob> jobAction) {
+			final OptionAnalysisModel model, final AbstractSolutionSet sandboxResult, final BiFunction<IMapperClass, ScheduleSpecification, SandboxJob> jobAction) {
 
 		return monitor -> {
 
@@ -685,9 +665,9 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 			final LNGScenarioModel lngScenarioModel = sdp.getTypedScenario(LNGScenarioModel.class);
 			final IMapperClass mapper = new Mapper(lngScenarioModel, false);
-			ScheduleSpecification baseScheduleSpecification = createBaseScheduleSpecification(sdp, model, mapper);
+			final ScheduleSpecification baseScheduleSpecification = createBaseScheduleSpecification(sdp, model, mapper);
 
-			SandboxJob sandboxJob = jobAction.apply(mapper, baseScheduleSpecification);
+			final SandboxJob sandboxJob = jobAction.apply(mapper, baseScheduleSpecification);
 
 			final IMultiStateResult results = sandboxJob.run(monitor);
 
@@ -712,7 +692,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 				final List<Future<?>> jobs = new LinkedList<>();
 
 				if (results != null) {
-					List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.getSolutions();
+					final List<NonNullPair<ISequences, Map<String, Object>>> solutions = results.getSolutions();
 					for (final NonNullPair<ISequences, Map<String, Object>> p : solutions) {
 
 						jobs.add(jobExecutor.submit(() -> {
@@ -840,26 +820,10 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 
 	@Override
 	public void runSandboxOptimisation(@NonNull final IScenarioDataProvider scenarioDataProvider, final @Nullable ScenarioInstance scenarioInstance, final OptionAnalysisModel model,
-			final Consumer<AbstractSolutionSet> action, boolean runAsync) {
+			@Nullable UserSettings userSettings, final Consumer<AbstractSolutionSet> action, final boolean runAsync, IProgressMonitor progressMonitor) {
 
-		String taskName = "Sandbox result";
+		final String taskName = "Sandbox result";
 
-		final EObject object = scenarioDataProvider.getScenario();
-		UserSettings userSettings = null;
-		if (object instanceof LNGScenarioModel) {
-			final LNGScenarioModel root = (LNGScenarioModel) object;
-
-			UserSettings previousSettings = null;
-			if (model.getResults() != null) {
-				previousSettings = model.getResults().getUserSettings();
-			}
-			if (previousSettings == null) {
-				previousSettings = root.getUserSettings();
-			}
-			boolean promptUser = System.getProperty("lingo.suppress.dialogs") == null;
-
-			userSettings = OptimisationHelper.promptForUserSettings(root, false, promptUser, false, null, previousSettings);
-		}
 		if (userSettings == null) {
 			return;
 		}
@@ -884,7 +848,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			final OptimisationJobRunner jobRunner = new OptimisationJobRunner();
 			jobRunner.run(taskName, scenarioInstance, originalModelRecord, null, createJobDescriptorCallback, jobCompletedCallback);
 		} else {
-			AbstractSolutionSet result = createSandboxOptimiserFunction(scenarioDataProvider, scenarioInstance, pUserSettings, model).apply(new NullProgressMonitor());
+			final AbstractSolutionSet result = createSandboxOptimiserFunction(scenarioDataProvider, scenarioInstance, pUserSettings, model).apply(progressMonitor);
 			action.accept(result);
 		}
 	}

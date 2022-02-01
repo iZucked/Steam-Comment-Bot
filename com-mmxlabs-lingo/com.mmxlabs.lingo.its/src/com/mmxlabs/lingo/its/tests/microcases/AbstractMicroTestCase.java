@@ -33,6 +33,7 @@ import com.mmxlabs.models.lng.pricing.util.PricingModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
+import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelFinder;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
@@ -191,6 +192,23 @@ public abstract class AbstractMicroTestCase {
 		runnerBuilder.run(optimise, checker);
 	}
 
+	public @Nullable Schedule evaluateAndReturnSchedule() {
+		// Create UserSettings
+		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
+		userSettings.setBuildActionSets(false);
+		userSettings.setGenerateCharterOuts(false);
+		userSettings.setShippingOnly(false);
+		userSettings.setSimilarityMode(SimilarityMode.OFF);
+
+		final LNGOptimisationRunnerBuilder runnerBuilder = LNGOptimisationBuilder.begin(scenarioDataProvider, null) //
+				.withUserSettings(userSettings) //
+				.withExtraModule(new TransformerExtensionTestBootstrapModule()) //
+				.buildDefaultRunner();
+
+		return runnerBuilder.getScenarioRunner().evaluateInitialState();
+	}
+
+	
 	public void evaluateTest() {
 		evaluateTest(null, null, runner -> {
 		});

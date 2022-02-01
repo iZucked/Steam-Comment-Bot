@@ -7,15 +7,14 @@ package com.mmxlabs.lingo.its.microcases.pricebasedwindows;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.google.inject.Injector;
 import com.mmxlabs.common.NonNullPair;
-import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.lingo.its.tests.category.TestCategories;
 import com.mmxlabs.lingo.its.tests.microcases.AbstractLegacyMicroTestCase;
 import com.mmxlabs.lingo.its.tests.microcases.MicroCaseDateUtils;
@@ -37,8 +36,6 @@ import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.util.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
-import com.mmxlabs.models.lng.transformer.its.RequireFeature;
-import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
@@ -61,8 +58,6 @@ import com.mmxlabs.scheduler.optimiser.scheduling.ScheduledTimeWindows;
 import com.mmxlabs.scheduler.optimiser.scheduling.TimeWindowScheduler;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
-@ExtendWith(ShiroRunner.class)
-@RequireFeature({ KnownFeatures.FEATURE_OPTIMISATION_NO_NOMINALS_IN_PROMPT })
 public class PriceBasedTimeWindowsTests extends AbstractLegacyMicroTestCase {
 
 	private static String vesselName = "vessel";

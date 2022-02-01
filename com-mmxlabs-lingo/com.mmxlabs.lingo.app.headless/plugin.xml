@@ -60,4 +60,17 @@
          </run>
       </application>
    </extension>
+   <extension
+         id="com.mmxlabs.lingo.app.headless.HeadlessSandboxOneshotApplication"
+         name="Oneshot sandbox"
+         point="org.eclipse.core.runtime.applications">
+      <application
+            cardinality="singleton-global"
+            thread="main"
+            visible="true">
+         <run
+               class="com.mmxlabs.lingo.app.headless.HeadlessSandboxOneshotApplication">
+         </run>
+      </application>
+   </extension>
 </plugin>

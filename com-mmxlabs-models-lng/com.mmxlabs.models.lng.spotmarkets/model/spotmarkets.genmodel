@@ -106,6 +106,8 @@
           propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterInMarket/startAt"/>
       <genFeatures notify="false" createChild="false" propertyDescription="Optional set of re-delivery ports. Charter options will return to the first port if not set."
           propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterInMarket/endAt"/>
+      <genFeatures createChild="false" propertyDescription="Optional starting heel CV. A CV is needed here or in the charter contract if a start port is also specified."
+          ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterInMarket/startHeelCV"/>
       <genOperations ecoreOperation="spotmarkets.ecore#//CharterInMarket/getMarketOrContractMinDuration"/>
       <genOperations ecoreOperation="spotmarkets.ecore#//CharterInMarket/getMarketOrContractMaxDuration"/>
     </genClasses>

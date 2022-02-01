@@ -233,8 +233,7 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 					result = objects.toArray();
 
 				} else {
-					if (inputElement instanceof Collection<?>) {
-						final Collection<?> collection = (Collection<?>) inputElement;
+					if (inputElement instanceof Collection<?> collection) {
 						result = collection.toArray();
 					} else {
 						result = new Object[0];
@@ -578,7 +577,7 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 	 * @param objects
 	 * @param isPinned
 	 */
-	public void collectPinModeElements(final Collection<? extends EObject> objects, final boolean isPinned) {
+	public void collectPinModeElements(final Collection<EObject> objects, final boolean isPinned) {
 		currentlyPinned |= isPinned;
 		++numberOfSchedules;
 
@@ -626,8 +625,8 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 	 * @return
 	 */
 	public String getElementKey(final EObject element) {
-		if (element instanceof NamedObject) {
-			return ((NamedObject) element).getName();
+		if (element instanceof NamedObject namedObject) {
+			return namedObject.getName();
 		}
 		return element.toString();
 	}

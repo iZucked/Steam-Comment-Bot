@@ -16,13 +16,17 @@ import org.osgi.util.tracker.ServiceTracker;
 
 import com.mmxlabs.hub.DataHubServiceProvider;
 import com.mmxlabs.hub.IUpstreamServiceChangedListener;
-import com.mmxlabs.hub.UpstreamUrlProvider;
 import com.mmxlabs.hub.IUpstreamServiceChangedListener.Service;
+import com.mmxlabs.hub.UpstreamUrlProvider;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.BaseCaseScenarioService;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.SharedWorkspaceScenarioService;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.CloudOptimisationDataService;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.util.encryption.IScenarioCipherProvider;
 import com.mmxlabs.scenario.service.ui.IBaseCaseVersionsProvider;
+import com.mmxlabs.scenario.service.ui.IProgressProvider;
 import com.mmxlabs.scenario.service.ui.IScenarioVersionService;
 
 public class Activator extends AbstractUIPlugin {
@@ -38,6 +42,8 @@ public class Activator extends AbstractUIPlugin {
 	private ServiceRegistration<IScenarioVersionService> scenarioVersionsServiceRegistration = null;
 	private ServiceRegistration<IScenarioService> baseCaseServiceRegistration = null;
 	private ServiceRegistration<IScenarioService> teamServiceRegistration = null;
+	private ServiceRegistration<CloudOptimisationDataService> cloudOptimisationServiceRegistration = null;
+	private ServiceRegistration<IProgressProvider> cloudOptimisationProgressServiceRegistration = null;
 
 	private BaseCaseVersionsProviderService baseCaseVersionsProviderService = null;
 	private BaseCaseScenarioService baseCaseService = null;
@@ -45,6 +51,7 @@ public class Activator extends AbstractUIPlugin {
 	private ScenarioVersionsService scenarioVersionsService = null;
 
 	private SharedWorkspaceScenarioService teamService = null;
+	private CloudOptimisationDataService cloudOptimisationService = null;
 
 	private ServiceTracker<IScenarioCipherProvider, IScenarioCipherProvider> scenarioCipherProviderTracker = null;
 
@@ -80,7 +87,6 @@ public class Activator extends AbstractUIPlugin {
 				if (teamService != null) {
 					teamService.setScenarioCipherProvider(provider);
 				}
-
 				return provider;
 			}
 
@@ -100,6 +106,7 @@ public class Activator extends AbstractUIPlugin {
 		UpstreamUrlProvider.INSTANCE.registerServiceChangedLister(listener);
 		updateService(IUpstreamServiceChangedListener.Service.BaseCaseWorkspace);
 		updateService(IUpstreamServiceChangedListener.Service.TeamWorkspace);
+		updateService(IUpstreamServiceChangedListener.Service.CloudOptimisation);
 
 	}
 
@@ -116,7 +123,8 @@ public class Activator extends AbstractUIPlugin {
 		UpstreamUrlProvider.INSTANCE.deregisterServiceChangedLister(listener);
 		stopService(IUpstreamServiceChangedListener.Service.BaseCaseWorkspace);
 		stopService(IUpstreamServiceChangedListener.Service.TeamWorkspace);
-
+		stopService(IUpstreamServiceChangedListener.Service.CloudOptimisation);
+		
 		if (scenarioCipherProviderTracker != null) {
 			scenarioCipherProviderTracker.close();
 			scenarioCipherProviderTracker = null;
@@ -130,6 +138,16 @@ public class Activator extends AbstractUIPlugin {
 		if (baseCaseVersionsProviderServiceRegistration != null) {
 			baseCaseVersionsProviderServiceRegistration.unregister();
 			baseCaseVersionsProviderServiceRegistration = null;
+		}
+		
+		if (cloudOptimisationServiceRegistration != null) {
+			cloudOptimisationServiceRegistration.unregister();
+			cloudOptimisationServiceRegistration = null;
+		}
+		
+		if (cloudOptimisationProgressServiceRegistration != null) {
+			cloudOptimisationProgressServiceRegistration.unregister();
+			cloudOptimisationProgressServiceRegistration = null;
 		}
 
 	}
@@ -207,6 +225,19 @@ public class Activator extends AbstractUIPlugin {
 			props.put("component.id", teamService.getSerivceID());
 
 			teamServiceRegistration = getBundle().getBundleContext().registerService(IScenarioService.class, teamService, props);
+		} else if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_CLOUD_OPTIMISATION) && serviceType == Service.CloudOptimisation) {
+			if (cloudOptimisationService != null || cloudOptimisationServiceRegistration != null) {
+				// Already enabled
+				return;
+			}
+			cloudOptimisationService = CloudOptimisationDataService.INSTANCE;
+
+			final Hashtable<String, String> props = new Hashtable<>();
+			// used internally by eclipse/OSGi
+			props.put("component.id", CloudOptimisationDataService.class.getCanonicalName());
+
+			cloudOptimisationServiceRegistration = getBundle().getBundleContext().registerService(CloudOptimisationDataService.class, cloudOptimisationService, props);
+			cloudOptimisationProgressServiceRegistration = getBundle().getBundleContext().registerService(IProgressProvider.class, cloudOptimisationService, props);
 		}
 
 	}
@@ -231,6 +262,15 @@ public class Activator extends AbstractUIPlugin {
 				teamService.stop();
 				teamService = null;
 			}
+		} else if (serviceType == Service.CloudOptimisation) {
+			if (cloudOptimisationServiceRegistration != null) {
+				cloudOptimisationServiceRegistration.unregister();
+				cloudOptimisationServiceRegistration = null;
+			}
+			if (cloudOptimisationService != null) {
+				cloudOptimisationService.stop();
+				cloudOptimisationService = null;
+			}
 		}
 	}
 
@@ -247,6 +287,8 @@ public class Activator extends AbstractUIPlugin {
 			} else {
 				stopService(serviceType);
 			}
+		} else if (serviceType == Service.CloudOptimisation) {
+			enableService(serviceType);
 		}
 
 	}

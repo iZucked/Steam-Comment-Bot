@@ -13,7 +13,6 @@ import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IReportContentsGenerator;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ReportContentsGenerators;
@@ -32,7 +31,6 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
-import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
 import com.mmxlabs.scenario.service.ScenarioResult;
 
 /**
@@ -138,15 +136,10 @@ public class ExcessIdleTimeReportView extends EMFReportView {
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioResult, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean pinned) {
+			protected Collection<EObject> collectElements(final ScenarioResult scenarioResult, LNGScenarioModel scenarioModel, final Schedule schedule, final boolean pinned) {
 
-				final Collection<? extends Object> collectedElements = super.collectElements(scenarioResult, scenarioModel, schedule, pinned);
-				final List<EObject> elements = new ArrayList<>(collectedElements.size());
-				for (final Object o : collectedElements) {
-					if (o instanceof EObject) {
-						elements.add((EObject) o);
-					}
-				}
+				final Collection<EObject> collectedElements = super.collectElements(scenarioResult, scenarioModel, schedule, pinned);
+				final List<EObject> elements = new ArrayList<>(collectedElements);
 				collectPinModeElements(elements, pinned);
 				return collectedElements;
 			}

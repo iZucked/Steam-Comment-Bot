@@ -42,10 +42,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllo
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.MinMaxUnconstrainedVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
-public class InPortBoilOffTests extends AbstractLegacyMicroTestCase {
-
-	private static List<String> requiredFeatures = Lists.newArrayList("no-nominal-in-prompt", "optimisation-actionset");
-	private static List<String> addedFeatures = new LinkedList<>();
+public abstract class InPortBoilOffTests extends AbstractLegacyMicroTestCase {
 
 	// Need largish epsilon as summed LNG fuel use has rounding applied to each component.
 	final int ROUNDING_EPSILON = 5;
@@ -94,24 +91,6 @@ public class InPortBoilOffTests extends AbstractLegacyMicroTestCase {
 			}
 			return null;
 		}
-	}
-
-	@BeforeAll
-	public static void hookIn() {
-		for (final String feature : requiredFeatures) {
-			if (!LicenseFeatures.isPermitted("features:" + feature)) {
-				LicenseFeatures.addFeatureEnablements(feature);
-				addedFeatures.add(feature);
-			}
-		}
-	}
-
-	@AfterAll
-	public static void hookOut() {
-		for (final String feature : addedFeatures) {
-			LicenseFeatures.removeFeatureEnablements(feature);
-		}
-		addedFeatures.clear();
 	}
 
 	@BeforeEach

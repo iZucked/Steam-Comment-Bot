@@ -30,11 +30,6 @@ public interface IAnalyticsScenarioEvaluator {
 		POINT_TO_POINT, PORTFOLIO
 	}
 
-	// void evaluateBaseCase(@NonNull IScenarioDataProvider scenarioDataProvider, @NonNull UserSettings userSettings, @Nullable ScenarioInstance parentForFork, boolean fork, String forkName);
-
-	// void multiEvaluate(@Nullable ScenarioInstance scenarioInstance, EditingDomain editingDomain, @NonNull IScenarioDataProvider scenarioDataProvider, @NonNull UserSettings userSettings,
-	// long targetProfitAndLoss, BreakEvenMode breakEvenMode, List<Pair<BaseCase, ScheduleSpecification>> baseCases, IMapperClass mapper, BiConsumer<BaseCase, Schedule> resultHandler);
-
 	ScenarioInstance exportResult(ScenarioResult result, String name);
 
 	void evaluateViabilitySandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull UserSettings userSettings, ViabilityModel model,
@@ -46,17 +41,12 @@ public interface IAnalyticsScenarioEvaluator {
 	void evaluateBreakEvenSandbox(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull UserSettings userSettings, BreakEvenAnalysisModel model,
 			IMapperClass mapper, Map<ShippingOption, VesselAssignmentType> shippingMap, CompoundCommand cmd);
 
-	// void multiEvaluate(ScenarioInstance scenarioInstance, EditingDomain editingDomain, @NonNull IScenarioDataProvider scenarioDataProvider, @NonNull UserSettings userSettings,
-	// Long targetProfitAndLoss, BreakEvenMode breakEvenMode, boolean dualPNLMode, Pair<BaseCase, ScheduleSpecification> baseCase, List<Pair<BaseCase, ScheduleSpecification>> baseCases,
-	// SandboxResult plan, IMapperClass mapper, BiConsumer<BaseCase, ResultSet> resultHandler);
+	void runSandboxOptions(@NonNull IScenarioDataProvider scenarioDataProvider, ScenarioInstance scenarioInstance, OptionAnalysisModel model, @Nullable final UserSettings userSettings,
+			Consumer<AbstractSolutionSet> action, boolean runAsync, IProgressMonitor monitor);
 
-	void runSandboxOptions(@NonNull IScenarioDataProvider scenarioDataProvider, ScenarioInstance scenarioInstance, OptionAnalysisModel model, Consumer<AbstractSolutionSet> action, boolean runAsync);
+	void runSandboxInsertion(@NonNull IScenarioDataProvider scenarioDataProvider, ScenarioInstance scenarioInstance, OptionAnalysisModel model, @Nullable final UserSettings userSettings,
+			Consumer<AbstractSolutionSet> action, boolean runAsync, IProgressMonitor monitor);
 
-	void runSandboxInsertion(@NonNull IScenarioDataProvider scenarioDataProvider, ScenarioInstance scenarioInstance, OptionAnalysisModel model, Consumer<AbstractSolutionSet> action, boolean runAsync);
-
-	void runSandboxOptimisation(@NonNull IScenarioDataProvider scenarioDataProvider, ScenarioInstance scenarioInstance, OptionAnalysisModel model, Consumer<AbstractSolutionSet> action,
-			boolean runAsync);
-
-	// AbstractSolutionSet runSandboxOptimisation(@NonNull IScenarioDataProvider scenarioDataProvider, @Nullable ScenarioInstance scenarioInstance, @NonNull UserSettings userSettings,
-	// OptionAnalysisModel model, IMapperClass mapper);
+	void runSandboxOptimisation(@NonNull IScenarioDataProvider scenarioDataProvider, ScenarioInstance scenarioInstance, OptionAnalysisModel model, @Nullable final UserSettings userSettings,
+			Consumer<AbstractSolutionSet> action, boolean runAsync, IProgressMonitor monitor);
 }

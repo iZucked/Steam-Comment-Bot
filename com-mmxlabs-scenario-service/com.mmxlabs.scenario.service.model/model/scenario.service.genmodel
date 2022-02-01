@@ -41,6 +41,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioService/offline"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioService/lockedBy"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioService/locked"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioService/image"/>
     </genClasses>
     <genClasses ecoreClass="scenario.service.ecore#//ScenarioInstance">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/uuid"/>
@@ -54,6 +55,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/clientVersionContext"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.service.ecore#//ScenarioInstance/fragments"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/readonly"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/cloudLocked"/>
       <genFeatures property="Readonly" createChild="false" propertyDescription="Last recorded validation status recorded as an IStatus severity code "
           ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/validationStatusCode"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference scenario.service.ecore#//ScenarioInstance/manifest"/>

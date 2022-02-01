@@ -95,12 +95,10 @@ public class LNGSchedulerInsertSlotJobRunner {
 	private static final String[] hint_with_breakeven = { LNGTransformerHelper.HINT_OPTIMISE_LSO, //
 			LNGTransformerHelper.HINT_OPTIMISE_INSERTION, //
 			LNGTransformerHelper.HINT_DISABLE_CACHES, //
-			LNGTransformerHelper.HINT_KEEP_NOMINALS_IN_PROMPT, //
 			LNGEvaluationModule.HINT_PORTFOLIO_BREAKEVEN };
 
 	private static final String[] hint_without_breakeven = { LNGTransformerHelper.HINT_OPTIMISE_LSO, //
-			LNGTransformerHelper.HINT_OPTIMISE_INSERTION, //
-			LNGTransformerHelper.HINT_KEEP_NOMINALS_IN_PROMPT };
+			LNGTransformerHelper.HINT_OPTIMISE_INSERTION };
 
 	private final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge;
 
@@ -307,9 +305,6 @@ public class LNGSchedulerInsertSlotJobRunner {
 		final long start = System.currentTimeMillis();
 		final SubMonitor subMonitor = SubMonitor.convert(progressMonitor, "Inserting option(s)", 100);
 		try {
-			final Schedule schedule = ScenarioModelUtil.getScheduleModel(scenarioToOptimiserBridge.getOptimiserScenario()).getSchedule();
-			final long targetPNL = performBreakEven ? ScheduleModelKPIUtils.getScheduleProfitAndLoss(schedule) : 0L;
-
 			final IMultiStateResult results = runInsertion(null, subMonitor.split(90));
 			if (results == null) {
 				System.out.println("Found no solutions");
@@ -326,7 +321,7 @@ public class LNGSchedulerInsertSlotJobRunner {
 				return null;
 			}
 
-			return exportSolutions(results, targetPNL, subMonitor.split(10));
+			return exportSolutions(results, subMonitor.split(10));
 		} finally {
 			SubMonitor.done(progressMonitor);
 			if (true) {
@@ -344,7 +339,13 @@ public class LNGSchedulerInsertSlotJobRunner {
 		return slotInserter.run(targetOptimiserSlots, targetOptimiserEvents, logger, progressMonitor);
 	}
 
-	public SlotInsertionOptions exportSolutions(final @NonNull IMultiStateResult results, final long targetPNL, final @NonNull IProgressMonitor monitor) {
+	public SlotInsertionOptions exportSolutions(final @NonNull IMultiStateResult results, final @NonNull IProgressMonitor monitor) {
+		final Schedule schedule = ScenarioModelUtil.getScheduleModel(scenarioToOptimiserBridge.getOptimiserScenario()).getSchedule();
+		final long targetPNL = performBreakEven ? ScheduleModelKPIUtils.getScheduleProfitAndLoss(schedule) : 0L;
+		return exportSolutions(results, targetPNL, monitor);
+	}
+
+	private SlotInsertionOptions exportSolutions(final @NonNull IMultiStateResult results, final long targetPNL, final @NonNull IProgressMonitor monitor) {
 		final SlotInsertionOptions slotInsertionOptions = AnalyticsFactory.eINSTANCE.createSlotInsertionOptions();
 		// Make sure this is the original, not the optimiser
 		slotInsertionOptions.getSlotsInserted().addAll(targetSlots);

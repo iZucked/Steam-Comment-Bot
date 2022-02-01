@@ -32,6 +32,7 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -372,7 +373,7 @@ public class ScenarioTools {
 			}
 		}
 
-		final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings userSettings = UserSettingsHelper.createDefaultUserSettings();
 		userSettings.setGenerateCharterOuts(withCharterOutGeneration);
 		final Set<String> hints = LNGTransformerHelper.getHints(userSettings);
 		

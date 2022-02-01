@@ -27,7 +27,6 @@ import com.mmxlabs.models.lng.parameters.InsertionOptimisationStage;
 import com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.MultipleSolutionSimilarityOptimisationStage;
 import com.mmxlabs.models.lng.parameters.Objective;
-import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParallelOptimisationStage;
@@ -36,7 +35,7 @@ import com.mmxlabs.models.lng.parameters.SimilarityInterval;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.SimilaritySettings;
 import com.mmxlabs.models.lng.parameters.SolutionBuilderSettings;
-import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.transformer.extensions.portshipsizeconstraint.PortShipSizeConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedslots.RestrictedSlotsConstraintCheckerFactory;
@@ -50,13 +49,13 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.ContractCvConstraintChec
 import com.mmxlabs.scheduler.optimiser.constraints.impl.CounterPartyVolumeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.DifferentSTSVesselsConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.FOBDESCompatibilityConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.GroupedSlotsConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenIdleTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.LadenLegLimitConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.MinMaxSlotGroupConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortCvCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.PromptRoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RoundTripVesselPermissionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ShippingHoursRestrictionCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.SpotToSpotConstraintCheckerFactory;
@@ -112,7 +111,7 @@ public class ScenarioUtils {
 
 		final OptimisationPlan plan = ParametersFactory.eINSTANCE.createOptimisationPlan();
 
-		plan.setUserSettings(createDefaultUserSettings());
+		plan.setUserSettings(UserSettingsHelper.createDefaultUserSettings());
 
 		plan.setSolutionBuilderSettings(createDefaultSolutionBuilderSettings());
 
@@ -169,20 +168,6 @@ public class ScenarioUtils {
 		interval.setWeight(weight);
 
 		return interval;
-	}
-
-	@NonNull
-	public static UserSettings createDefaultUserSettings() {
-		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-
-		userSettings.setMode(OptimisationMode.SHORT_TERM);
-		userSettings.setBuildActionSets(false);
-		userSettings.setGenerateCharterOuts(false);
-		userSettings.setShippingOnly(false);
-		userSettings.setWithSpotCargoMarkets(true);
-		userSettings.setSimilarityMode(SimilarityMode.OFF);
-		userSettings.setFloatingDaysLimit(15);
-		return userSettings;
 	}
 
 	public static @NonNull LocalSearchOptimisationStage createDefaultLSOParameters(@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings, boolean parallelise) {
@@ -374,9 +359,6 @@ public class ScenarioUtils {
 			final Iterator<Constraint> iterator = constraintAndFitnessSettings.getConstraints().iterator();
 			while (iterator.hasNext()) {
 				final Constraint constraint = iterator.next();
-				if (constraint.getName().equals(PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
-					iterator.remove();
-				}
 				if (constraint.getName().equals(RoundTripVesselPermissionConstraintCheckerFactory.NAME)) {
 					iterator.remove();
 				}
@@ -421,7 +403,6 @@ public class ScenarioUtils {
 			constraints.add(createConstraint(ResourceAllocationConstraintCheckerFactory.NAME, true));
 			if (includeRoundTrip) {
 				constraints.add(createConstraint(RoundTripVesselPermissionConstraintCheckerFactory.NAME, true));
-				constraints.add(createConstraint(PromptRoundTripVesselPermissionConstraintCheckerFactory.NAME, true));
 			}
 			constraints.add(createConstraint(AllowedVesselPermissionConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(PortExclusionConstraintCheckerFactory.NAME, true));
@@ -451,6 +432,9 @@ public class ScenarioUtils {
 			constraints.add(createConstraint(ShippingHoursRestrictionCheckerFactory.NAME, true));
 			constraints.add(createConstraint(LockedUnusedElementsConstraintCheckerFactory.NAME, true));
 			// constraints.add(createConstraint(PanamaSlotsConstraintCheckerFactory.NAME, true));
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GROUPED_OPTIONAL_SLOTS_CONSTRAINTS)) {
+				constraints.add(createConstraint(GroupedSlotsConstraintCheckerFactory.NAME, true));
+			}
 		}
 
 		// create objectives

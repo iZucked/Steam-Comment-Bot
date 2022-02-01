@@ -789,6 +789,16 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * @generated
 	 */
 	@Override
+	public EAttribute getCharterInMarket_StartHeelCV() {
+		return (EAttribute)charterInMarketEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getSpotCharterMarket() {
 		return spotCharterMarketEClass;
 	}
@@ -994,6 +1004,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		createEReference(charterInMarketEClass, CHARTER_IN_MARKET__ENTITY);
 		createEReference(charterInMarketEClass, CHARTER_IN_MARKET__START_AT);
 		createEReference(charterInMarketEClass, CHARTER_IN_MARKET__END_AT);
+		createEAttribute(charterInMarketEClass, CHARTER_IN_MARKET__START_HEEL_CV);
 
 		spotCharterMarketEClass = createEClass(SPOT_CHARTER_MARKET);
 		createEAttribute(spotCharterMarketEClass, SPOT_CHARTER_MARKET__ENABLED);
@@ -1157,6 +1168,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		g2 = createEGenericType(thePortPackage.getPort());
 		g1.getETypeArguments().add(g2);
 		initEReference(getCharterInMarket_EndAt(), g1, null, "endAt", null, 0, -1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterInMarket_StartHeelCV(), ecorePackage.getEDouble(), "startHeelCV", null, 1, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(charterInMarketEClass, ecorePackage.getEInt(), "getMarketOrContractMinDuration", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -1245,6 +1257,12 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		   new String[] {
 			   "unit", "days",
 			   "formatString", "##0"
+		   });
+		addAnnotation
+		  (getCharterInMarket_StartHeelCV(),
+		   source,
+		   new String[] {
+			   "formatString", "#0.###"
 		   });
 	}
 

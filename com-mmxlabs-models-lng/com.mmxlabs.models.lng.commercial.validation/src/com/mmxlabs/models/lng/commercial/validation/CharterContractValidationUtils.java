@@ -157,11 +157,11 @@ public class CharterContractValidationUtils {
 
 	
 	public static boolean originPortValidation(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures,
-			final RepositioningFeeTerm term) {
+			final OriginPortRepositioningFeeTerm term) {
 		if (term.getOriginPort() == null) {
 			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
-					(IConstraintStatus) ctx.createFailureStatus(String.format("Origin port is invalid")));
-			dcsd.addEObjectAndFeature(term, CommercialPackage.Literals.REPOSITIONING_FEE_TERM__ORIGIN_PORT);
+					(IConstraintStatus) ctx.createFailureStatus("Origin port is not set"));
+			dcsd.addEObjectAndFeature(term, CommercialPackage.Literals.ORIGIN_PORT_REPOSITIONING_FEE_TERM__ORIGIN_PORT);
 			failures.add(dcsd);
 			return false;
 		}
@@ -172,10 +172,12 @@ public class CharterContractValidationUtils {
 			final SimpleRepositioningFeeContainer repositioningFeeContainer, final EObject topLevelEObject, final EStructuralFeature topFeature, String topFeatureMessage,
 			final @Nullable YearMonth earliestDate) {
 		boolean atLeastOneProblem = false;
+		int lsAnyPort = 0;
+		int opAnyPort = 0;
 		for (final RepositioningFeeTerm repositioningFeeTerm : repositioningFeeContainer.getTerms()) {
-			if (repositioningFeeTerm instanceof LumpSumTerm) {
+			if (repositioningFeeTerm instanceof LumpSumTerm lsTerm) {
 				if (earliestDate != null) {
-					final String repositioningFee = ((LumpSumTerm) repositioningFeeTerm).getPriceExpression();
+					final String repositioningFee = lsTerm.getPriceExpression();
 					if (repositioningFee != null && !repositioningFee.trim().isEmpty()) {
 						for (final AbstractYearMonthCurve index : PriceExpressionUtils.getLinkedCurves(repositioningFee)) {
 							@Nullable
@@ -194,11 +196,35 @@ public class CharterContractValidationUtils {
 				if (!lumpSumValidation(ctx, extraContext, failures, topFeatureMessage, (LumpSumTerm) repositioningFeeTerm)) {
 					atLeastOneProblem = true;
 				}
-			} else if (repositioningFeeTerm instanceof OriginPortRepositioningFeeTerm) {
-				if (!notionalJourneyTermsValidation(ctx, extraContext, failures, topFeatureMessage, (NotionalJourneyTerm) repositioningFeeTerm)) {
+				if (repositioningFeeTerm.getStartPorts().isEmpty()) {
+					lsAnyPort++;
+				}
+			} else if (repositioningFeeTerm instanceof OriginPortRepositioningFeeTerm term) {
+				if (!notionalJourneyTermsValidation(ctx, extraContext, failures, topFeatureMessage, term)) {
 					atLeastOneProblem = true;
 				}
+				if (repositioningFeeTerm.getStartPorts().isEmpty()) {
+					lsAnyPort++;
+				}
 			}
+		}
+		if (atLeastOneProblem) {
+			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
+				(IConstraintStatus) ctx.createFailureStatus(String.format("[%s] contains a repositioning fee containter with at least one error", topFeatureMessage)));
+			dcsd.addEObjectAndFeature(topLevelEObject, topFeature);
+			failures.add(dcsd);
+		}
+		if (lsAnyPort > 1) {
+			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
+					(IConstraintStatus) ctx.createFailureStatus(String.format("[%s]: Only one lump sum repositioning fee rule with no defined start ports is allowed", topFeatureMessage)));
+				dcsd.addEObjectAndFeature(topLevelEObject, topFeature);
+				failures.add(dcsd);
+		}
+		if (opAnyPort > 1) {
+			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator(
+					(IConstraintStatus) ctx.createFailureStatus(String.format("[%s]: Only one origin port repositioning fee rule with no defined start ports is allowed", topFeatureMessage)));
+				dcsd.addEObjectAndFeature(topLevelEObject, topFeature);
+				failures.add(dcsd);
 		}
 	}
 	

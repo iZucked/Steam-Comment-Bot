@@ -158,12 +158,12 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 			final List<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
 			final EndEvent end = getEndEvent(vesselAvailability);
 
-			// -distance/(hoursInDay*speed)*pctCharterRate*hireExpression (for February 2016
-			// value)
-			final long endEventPNL = (long) (-1000 / (24 * 20.0) * 0.95 * 20_000);
+			// -distance/(hoursInDay * speed) * (pctCharterRate * hireExpression + fuelConsumption * pctFuelRate * fuelPrice)
+			// (for December 2015 value)
+			final long endEventPNL = (long) (-1000.0 / (24.0 * 20.0) * ((0.25 * 20_000.0) + (100.0 * 0.1 * 100.0)));
 			final long actualPnL = end.getGroupProfitAndLoss().getProfitAndLoss();
-			Assertions.assertEquals(endEventPNL, actualPnL);
-			Assertions.assertEquals(cargoPNL + endEventPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
+			Assertions.assertEquals(endEventPNL, actualPnL, 1);
+			Assertions.assertEquals(cargoPNL + endEventPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()), 1);
 		});
 	}
 
@@ -270,7 +270,7 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 		final List<SlotAllocation> slotAllocations = schedule.getSlotAllocations();
 		final EndEvent end = getEndEvent(vesselAvailability);
 
-		final long endEventPNL = -62_499;
+		final long endEventPNL = -62_499; //Since vessel stays at the last port
 		final long actualPnL = end.getGroupProfitAndLoss().getProfitAndLoss();
 
 		System.out.println("Actual PnL period opti = " + actualPnL);
@@ -354,7 +354,7 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 			final List<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
 			final EndEvent end = getEndEvent(vesselAvailability);
 
-			final long endEventPNL = -62_499;
+			final long endEventPNL = -62_499; //Since vessel stays at the last port
 			final long actualPnL = end.getGroupProfitAndLoss().getProfitAndLoss();
 			Assertions.assertEquals(endEventPNL, actualPnL);
 			Assertions.assertEquals(cargoPNL + endEventPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));
@@ -512,7 +512,7 @@ public class MonthlyBallastBonusContractTests extends AbstractLegacyMicroTestCas
 			final List<SlotAllocation> slotAllocations = scenarioRunner.getSchedule().getSlotAllocations();
 			final EndEvent end = getEndEvent(vesselAvailability);
 
-			final long endEventPNL = -62_499;
+			final long endEventPNL = -62_499; //Since vessel stays at the last port
 			final long actualPnL = end.getGroupProfitAndLoss().getProfitAndLoss();
 			Assertions.assertEquals(endEventPNL, actualPnL);
 			Assertions.assertEquals(cargoPNL + endEventPNL, ScheduleModelKPIUtils.getScheduleProfitAndLoss(lngScenarioModel.getScheduleModel().getSchedule()));

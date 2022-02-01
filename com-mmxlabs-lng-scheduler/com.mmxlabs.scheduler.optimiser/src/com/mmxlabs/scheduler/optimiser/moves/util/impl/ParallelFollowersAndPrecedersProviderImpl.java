@@ -46,11 +46,11 @@ public class ParallelFollowersAndPrecedersProviderImpl implements IFollowersAndP
 
 	@Inject
 	private IStartEndRequirementProvider startEndRequirementProvider;
-public ParallelFollowersAndPrecedersProviderImpl() {
-	System.out.println("New impl");
-}
+
 	/**
-	 * A structure caching the output of the {@link LegalSequencingChecker}. If an element x is in the set mapped to by key y, x can legally follow y under some circumstance
+	 * A structure caching the output of the {@link LegalSequencingChecker}. If an
+	 * element x is in the set mapped to by key y, x can legally follow y under some
+	 * circumstance
 	 */
 	private final Map<@NonNull ISequenceElement, @NonNull Followers<@NonNull ISequenceElement>> validFollowers = new ConcurrentHashMap<>();
 	private final Map<@NonNull ISequenceElement, @NonNull Followers<@NonNull ISequenceElement>> validPreceders = new ConcurrentHashMap<>();
@@ -129,7 +129,8 @@ public ParallelFollowersAndPrecedersProviderImpl() {
 							continue;
 						}
 
-						// Check for special cargo elements. A special element can only go on one resource and all three elements in the set must be on the same one.
+						// Check for special cargo elements. A special element can only go on one
+						// resource and all three elements in the set must be on the same one.
 						if (spotElementMap.containsKey(e1) && spotElementMap.containsKey(e2)) {
 							final IResource r1 = spotElementMap.get(e1);
 							final IResource r2 = spotElementMap.get(e2);
@@ -138,7 +139,8 @@ public ParallelFollowersAndPrecedersProviderImpl() {
 							}
 						}
 
-						// Check for special cargo elements. A special element can only go on one resource and all three elements in the set must be on the same one.
+						// Check for special cargo elements. A special element can only go on one
+						// resource and all three elements in the set must be on the same one.
 						boolean expectFalse = false;
 						if (terminalElementMap.containsKey(e1) && terminalElementMap.containsKey(e2)) {
 							final IResource r1 = terminalElementMap.get(e1);
@@ -150,7 +152,8 @@ public ParallelFollowersAndPrecedersProviderImpl() {
 						}
 						// This code segment yields a large speed up, but breaks ITS
 
-						// If any of e1 or e2 is a special spot element then there is only one resource it is permitted to go on. Ignore the rest for sequencing checks.
+						// If any of e1 or e2 is a special spot element then there is only one resource
+						// it is permitted to go on. Ignore the rest for sequencing checks.
 						IResource spotResource = null;
 						if (spotElementMap.containsKey(e1)) {
 							spotResource = spotElementMap.get(e1);
@@ -185,7 +188,8 @@ public ParallelFollowersAndPrecedersProviderImpl() {
 		}
 	}
 
-	// A copy from LNGScenarioChainBuilder! (assume if using parallel version, we are licensed to , so that check is missing - awkward on deps otherwise)
+	// A copy from LNGScenarioChainBuilder! (assume if using parallel version, we
+	// are licensed to , so that check is missing - awkward on deps otherwise)
 
 	public static final String PROPERTY_MMX_NUMBER_OF_CORES = "MMX_NUMBER_OF_CORES";
 

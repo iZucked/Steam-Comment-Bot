@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
@@ -189,7 +190,7 @@ public class CommercialModelBuilder {
 
 		if (!repositioningFee.isEmpty()) {
 			builder.withStandardRepositioning() //
-					.addLumpSumRule(null, repositioningFee) //
+					.addLumpSumRuleForSingleStart(null, repositioningFee) //
 					.build();
 		}
 
@@ -206,6 +207,41 @@ public class CommercialModelBuilder {
 				.build() // Build Ballast bonus
 				.build();
 
+	}
+	
+	public @NonNull GenericCharterContract createSimpleLumpSumRepositioningContract(@NonNull final String priceExpression) {
+
+		return makeCharterContract() //
+				.withStandardRepositioning() //
+				.addLumpSumRuleForSingleStart(null, priceExpression).build() // Build Repositioning
+				.build();
+	}
+	
+	public @NonNull GenericCharterContract createSimpleLumpSumRepositioningContract(final @Nullable Port startPort, @NonNull final String priceExpression) {
+
+		return makeCharterContract() //
+				.withStandardRepositioning() //
+				.addLumpSumRuleForSingleStart(startPort, priceExpression).build() // Build Repositioning
+				.build();
+	}
+	
+	public @NonNull GenericCharterContract createSimpleLumpSumRepositioningContract(final @NonNull Collection<@NonNull APortSet<Port>> startPorts, @NonNull final String priceExpression) {
+
+		return makeCharterContract() //
+				.withStandardRepositioning() //
+				.addLumpSumRule(startPorts, priceExpression).build() // Build Repositioning
+				.build();
+	}
+	
+	public @NonNull GenericCharterContract createSimpleOriginRepositioningContract(final @NonNull Collection<@NonNull APortSet<Port>> startPorts,//
+			final @Nullable Port originPort, final double speed, @NonNull final String hireExpression, @NonNull final String fuelExpression, //
+			boolean includeCanalFee, boolean includeCanalTime, @NonNull final String lumpSumExpression) {
+
+		return makeCharterContract() //
+				.withStandardRepositioning() //
+				.addOriginRule(startPorts, originPort, speed, hireExpression, fuelExpression, includeCanalFee, includeCanalTime, lumpSumExpression)
+				.build() // Build Repositioning
+				.build();
 	}
 
 	public @NonNull LegalEntity createEntity(@NonNull final String name) {

@@ -17,7 +17,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -215,8 +214,9 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 
 								@SuppressWarnings("deprecation")
 								@Override
-								public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+								public void run(final IProgressMonitor parentMonitor) throws InvocationTargetException, InterruptedException {
 
+									final SubMonitor monitor = SubMonitor.convert(parentMonitor);
 									monitor.beginTask("Copying", 100 * containers.size());
 									try {
 										for (final Container c : containers) {
@@ -226,7 +226,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 											monitor.setTaskName("Copying " + c.getName());
 											if (c instanceof Folder) {
 												try {
-													copyFolder(container, (Folder) c, new SubProgressMonitor(monitor, 100));
+													copyFolder(container, (Folder) c, monitor.split(100));
 												} catch (final Exception e) {
 													log.error(e.getMessage(), e);
 													RunnerHelper.asyncExec((display) -> {
@@ -236,12 +236,13 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 												}
 											} else {
 												try {
-													copyScenario(container, (ScenarioInstance) c, new SubProgressMonitor(monitor, 100));
+													copyScenario(container, (ScenarioInstance) c, monitor.split(100));
+													Thread.sleep(1000);
 												} catch (final Exception e) {
 													log.error(e.getMessage(), e);
 												}
 											}
-											monitor.worked(1);
+											//monitor.worked(1);
 										}
 									} finally {
 										monitor.done();
@@ -271,8 +272,9 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 							dialog.run(true, true, new IRunnableWithProgress() {
 
 								@Override
-								public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+								public void run(final IProgressMonitor parentMonitor) throws InvocationTargetException, InterruptedException {
 
+									final SubMonitor monitor = SubMonitor.convert(parentMonitor);
 									monitor.beginTask("Copying", 10 * files.length);
 									try {
 
@@ -286,13 +288,17 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 											final String scenarioName = ScenarioServiceUtils.stripFileExtension(file.getName());
 											// final EObject rootObjectCopy;
 											final URL scenarioURL = file.toURI().toURL();
+											// SubMonitor - remember to be careful, only one #split monitor will work at a
+											// time.
 											ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioURL, (modelRecord, modelReference) -> {
 												try {
-													ScenarioServiceUtils.copyScenario(modelRecord, container, scenarioName, existingNames, new SubProgressMonitor(monitor, 4));
+													// This is the *second* progress monitor. This is expected to be called once the
+													// other #split monitor has completed.
+													ScenarioServiceUtils.copyScenario(modelRecord, container, scenarioName, existingNames, monitor.split(4));
 												} catch (final Exception e) {
 													log.error(e.getMessage(), e);
 												}
-											}, SubMonitor.convert(monitor, 5));
+											}, monitor.split(5));
 
 											monitor.worked(1);
 										}
@@ -327,7 +333,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 							return !handled;
 						});
 					} else if (e instanceof IChangeSource) {
-						IChangeSource iChangeSource = (IChangeSource) e;
+						final IChangeSource iChangeSource = (IChangeSource) e;
 						ServiceHelper.withAllServices(IScenarioInstanceChangeHandler.class, null, handler -> {
 							final boolean handled = handler.applyChange(scenarioInstance, iChangeSource);
 							return !handled;
@@ -383,10 +389,11 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 		return Status.CANCEL_STATUS;
 	}
 
-	private void copyScenario(@NonNull final Container container, @NonNull final ScenarioInstance scenario, @NonNull final IProgressMonitor monitor) throws Exception {
+	private void copyScenario(@NonNull final Container container, @NonNull final ScenarioInstance scenario, @NonNull final IProgressMonitor parentMonitor) throws Exception {
+		final SubMonitor monitor = SubMonitor.convert(parentMonitor);
 		monitor.beginTask("Copying " + scenario.getName(), 20);
 		try {
-			final ScenarioInstance instance = ScenarioServiceModelUtils.copyScenario(scenario, container, ScenarioServiceUtils.getExistingNames(container), new SubProgressMonitor(monitor, 10));
+			final ScenarioInstance instance = ScenarioServiceModelUtils.copyScenario(scenario, container, ScenarioServiceUtils.getExistingNames(container), monitor.split(10));
 
 			if (instance != null) {
 				for (final Container c : scenario.getElements()) {
@@ -395,9 +402,9 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 					}
 					monitor.subTask("Copying " + c.getName());
 					if (c instanceof Folder) {
-						copyFolder(instance, (Folder) c, new SubProgressMonitor(monitor, 10));
+						copyFolder(instance, (Folder) c, monitor.split(10));
 					} else {
-						copyScenario(instance, (ScenarioInstance) c, new SubProgressMonitor(monitor, 10));
+						copyScenario(instance, (ScenarioInstance) c, monitor.split(10));
 					}
 				}
 			}
@@ -406,7 +413,8 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 		}
 	}
 
-	private void copyFolder(@NonNull final Container container, @NonNull final Folder folder, @NonNull final IProgressMonitor monitor) throws Exception {
+	private void copyFolder(@NonNull final Container container, @NonNull final Folder folder, @NonNull final IProgressMonitor parentMonitor) throws Exception {
+		final SubMonitor monitor = SubMonitor.convert(parentMonitor);
 
 		// move all of thing into ScenarioServiceModelUtisl
 		monitor.beginTask("Copying " + folder.getName(), 10 * folder.getElements().size());
@@ -421,9 +429,9 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 				}
 				monitor.subTask("Copying " + c.getName());
 				if (c instanceof Folder) {
-					copyFolder(f, (Folder) c, new SubProgressMonitor(monitor, 10));
+					copyFolder(f, (Folder) c, monitor.split(10));
 				} else {
-					copyScenario(f, (ScenarioInstance) c, new SubProgressMonitor(monitor, 10));
+					copyScenario(f, (ScenarioInstance) c, monitor.split(10));
 				}
 				monitor.worked(1);
 			}

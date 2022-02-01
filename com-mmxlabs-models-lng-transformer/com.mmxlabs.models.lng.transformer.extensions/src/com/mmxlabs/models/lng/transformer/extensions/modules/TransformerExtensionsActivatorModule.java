@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerE
 import com.mmxlabs.models.lng.transformer.extensions.exposures.ExposureDataModule;
 import com.mmxlabs.models.lng.transformer.extensions.exposures.ExposuresExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.fcl.FullCargoLotModule;
+import com.mmxlabs.models.lng.transformer.extensions.groupedslots.GroupedSlotsTransformerModule;
 import com.mmxlabs.models.lng.transformer.extensions.inventory.InventoryLevelsOutputScheduleProcessorFactory;
 import com.mmxlabs.models.lng.transformer.extensions.panamaslots.PanamaSlotsModule;
 import com.mmxlabs.models.lng.transformer.extensions.paperdeals.PaperDealDataModule;
@@ -42,9 +43,10 @@ public class TransformerExtensionsActivatorModule extends PeaberryActivationModu
 		install(new PortShipSizeModule());
 		install(new RestrictedElementsModule());
 		install(new RestrictedSlotsModule());
-		install(new ContingencyIdleTimeModule());		
+		install(new ContingencyIdleTimeModule());
 		install(new PanamaSlotsModule());
 		install(new ADPTransformerModule());
+		install(new GroupedSlotsTransformerModule());
 		install(new ShippingTypeRequirementModule());
 		install(new FullCargoLotModule());
 		install(new ExposureDataModule());
@@ -58,14 +60,14 @@ public class TransformerExtensionsActivatorModule extends PeaberryActivationModu
 		bindService(TradingExporterExtensionFactory.class).export();
 		bindService(BasicSlotPNLExporterExtensionFactory.class).export();
 		bindService(CharterContractExporterExtensionFactory.class).export();
-		
+
 		bindService(ExposuresExporterExtensionFactory.class).export();
 		bindService(PaperDealsExporterExtensionFactory.class).export();
-		
+
 		bindService(ActualsTransformerFactory.class).export();
-		
+
 		bindService(VesselAvailabilityEntityTransformerExtensionFactory.class).export();
-		
+
 		bindService(InventoryLevelsOutputScheduleProcessorFactory.class).export();
 	}
 

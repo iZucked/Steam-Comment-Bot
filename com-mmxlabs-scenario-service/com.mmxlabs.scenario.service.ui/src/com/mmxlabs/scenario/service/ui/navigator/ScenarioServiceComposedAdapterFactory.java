@@ -15,15 +15,22 @@ import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory
 import com.mmxlabs.scenario.service.model.provider.ScenarioServiceItemProviderAdapterFactory;
 
 /**
- * Utility class to create a shared {@link ComposedAdapterFactory} instance with the {@link ScenarioServiceItemProviderAdapterFactory} the basic item provider adapter factories.
+ * Utility class to create a shared {@link ComposedAdapterFactory} instance with
+ * the {@link ScenarioServiceItemProviderAdapterFactory} the basic item provider
+ * adapter factories.
  * 
  * @author Simon Goodall
  * 
  */
 public class ScenarioServiceComposedAdapterFactory {
+
+	private ScenarioServiceComposedAdapterFactory() {
+
+	}
+
 	private static ComposedAdapterFactory instance;
 
-	public final static ComposedAdapterFactory getAdapterFactory() {
+	public static final ComposedAdapterFactory getAdapterFactory() {
 		if (instance == null) {
 			instance = createNewAdapterFactory();
 		}
@@ -39,7 +46,7 @@ public class ScenarioServiceComposedAdapterFactory {
 		return factory;
 	}
 
-	public final static List<AdapterFactory> createFactoryList() {
+	public static final List<AdapterFactory> createFactoryList() {
 		final List<AdapterFactory> factories = new ArrayList<>();
 		factories.add(new ResourceItemProviderAdapterFactory());
 		factories.add(new ScenarioServiceItemProviderAdapterFactory());

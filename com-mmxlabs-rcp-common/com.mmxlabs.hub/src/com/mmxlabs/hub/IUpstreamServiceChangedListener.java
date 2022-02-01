@@ -6,7 +6,7 @@ package com.mmxlabs.hub;
 
 public interface IUpstreamServiceChangedListener {
 	enum Service {
-		BaseCaseWorkspace, TeamWorkspace,
+		BaseCaseWorkspace, TeamWorkspace, CloudOptimisation,
 	}
 
 	void changed(Service service);

@@ -13,6 +13,7 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
@@ -21,6 +22,7 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editors.impl.PlaceholderInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -83,6 +85,7 @@ public class CharterInMarketComponentHelper extends BaseComponentHelper {
 		add_entityEditor(detailComposite, topClass);
 		add_startAtEditor(detailComposite, topClass);
 		add_endAtEditor(detailComposite, topClass);
+		add_startHeelCVEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the vessel feature on CharterInMarket
@@ -126,8 +129,10 @@ public class CharterInMarketComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_mtmEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		if(LicenseFeatures.isPermitted("features:mtm")) {
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MTM)) {
 			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__MTM));
+		} else {
+			detailComposite.addInlineEditor(new PlaceholderInlineEditor(SpotMarketsPackage.Literals.CHARTER_IN_MARKET__MTM));
 		}
 	}
 
@@ -156,6 +161,15 @@ public class CharterInMarketComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_endAtEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__END_AT));
+	}
+
+	/**
+	 * Create the editor for the startHeelCV feature on CharterInMarket
+	 *
+	 * @generated
+	 */
+	protected void add_startHeelCVEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__START_HEEL_CV));
 	}
 
 	/**

@@ -24,12 +24,12 @@ import com.mmxlabs.models.lng.analytics.ui.views.sandbox.ExtraDataProvider;
 import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.chain.IChainRunner;
-import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.adp.ADPScenarioModuleHelper;
 import com.mmxlabs.models.lng.transformer.ui.strategic.StrategicScenarioModuleHelper;
@@ -235,7 +235,7 @@ public class LNGOptimisationBuilder {
 	private UserSettings buildUserSettings() {
 		final @NonNull UserSettings localUserSettings;
 		if (this.userSettings == null) {
-			localUserSettings = ScenarioUtils.createDefaultUserSettings();
+			localUserSettings = UserSettingsHelper.createDefaultUserSettings();
 		} else {
 			localUserSettings = EMFCopier.copy(this.userSettings);
 		}

@@ -99,8 +99,6 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 
 		final GuideMoveGeneratorOptions options = GuideMoveGeneratorOptions.createDefault();
 		options.setStrictOptional(false);
-		
-		
 
 		final Random optionsRnd = random;
 		// For seed 0->4095 this will always return true, so kick it now it start introducing "more randomness"..
@@ -111,21 +109,19 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 		options.setExtendSearch(true);
 		// options.setStrictOptional(true);
 		options.setStrictOptional(optionsRnd.nextBoolean());
-		options.setCheckEvaluatedState(false);//optionsRnd.nextBoolean());
+		options.setCheckEvaluatedState(false);// optionsRnd.nextBoolean());
 		options.setIgnoreUsedElements(false);
 		options.setInsertCanRemove(true);
 		options.setNum_tries(5);
 
-
-		
 		providedRawSequences = lookupManager.getRawSequences();
 
 		List<ISequenceElement> allE = phaseOptimisationData.getSequenceElements().stream() //
 				.filter(e -> validElementTypes.contains(portTypeProvider.getPortType(e))) //
 				.collect(Collectors.toList());
-		
+
 		allTargetElements = Collections.singletonList(allE.get(random.nextInt(allE.size())));
-		
+
 		final long[] initialMetrics = evaluationHelper.evaluateState(providedRawSequences, sequenceManipulator.createManipulatedSequences(providedRawSequences), null, true,
 				options.isCheckEvaluatedState(), null, null);
 		final MoveResult p = generateMove(rawSequences, random, Collections.emptyList(), initialMetrics, options);
@@ -134,7 +130,6 @@ public class GuidedMoveGenerator implements IMoveGenerator {
 		}
 		return null;
 	}
-	
 
 	public static class MoveResult {
 		public MoveResult(final IMove move, final HintManager hintManager, final long[] metrics) {

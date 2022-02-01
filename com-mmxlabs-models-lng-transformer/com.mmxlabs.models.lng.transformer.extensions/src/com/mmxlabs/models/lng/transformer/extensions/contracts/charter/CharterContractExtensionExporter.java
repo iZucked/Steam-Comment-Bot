@@ -98,7 +98,6 @@ public class CharterContractExtensionExporter implements IExporterExtension {
 								final LumpSumRepositioningFeeTermDetails ruleDetails = ScheduleFactory.eINSTANCE.createLumpSumRepositioningFeeTermDetails();
 								ruleDetails.setMatchedPort(annotation.matchedPort.getName());
 
-								ruleDetails.setOriginPort(ruleA.originPort.getName());
 								ruleDetails.setLumpSum(OptimiserUnitConvertor.convertToExternalFixedCost(ruleA.lumpSum));
 								details.setMatchingContractDetails(ruleDetails);
 							}

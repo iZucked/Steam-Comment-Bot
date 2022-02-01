@@ -3080,16 +3080,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
-	public EAttribute getLumpSumRepositioningFeeTermDetails_OriginPort() {
-		return (EAttribute)lumpSumRepositioningFeeTermDetailsEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getNotionalJourneyDetails() {
 		return notionalJourneyDetailsEClass;
 	}
@@ -3659,7 +3649,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		lumpSumBallastBonusTermDetailsEClass = createEClass(LUMP_SUM_BALLAST_BONUS_TERM_DETAILS);
 
 		lumpSumRepositioningFeeTermDetailsEClass = createEClass(LUMP_SUM_REPOSITIONING_FEE_TERM_DETAILS);
-		createEAttribute(lumpSumRepositioningFeeTermDetailsEClass, LUMP_SUM_REPOSITIONING_FEE_TERM_DETAILS__ORIGIN_PORT);
 
 		notionalJourneyDetailsEClass = createEClass(NOTIONAL_JOURNEY_DETAILS);
 		createEAttribute(notionalJourneyDetailsEClass, NOTIONAL_JOURNEY_DETAILS__DISTANCE);
@@ -4118,7 +4107,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEClass(lumpSumBallastBonusTermDetailsEClass, LumpSumBallastBonusTermDetails.class, "LumpSumBallastBonusTermDetails", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(lumpSumRepositioningFeeTermDetailsEClass, LumpSumRepositioningFeeTermDetails.class, "LumpSumRepositioningFeeTermDetails", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getLumpSumRepositioningFeeTermDetails_OriginPort(), ecorePackage.getEString(), "originPort", "", 1, 1, LumpSumRepositioningFeeTermDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(notionalJourneyDetailsEClass, NotionalJourneyDetails.class, "NotionalJourneyDetails", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getNotionalJourneyDetails_Distance(), ecorePackage.getEInt(), "distance", "0", 1, 1, NotionalJourneyDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -4239,12 +4227,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		   source,
 		   new String[] {
 			   "type", "commodity"
-		   });
-		addAnnotation
-		  (getLumpSumRepositioningFeeTermDetails_OriginPort(),
-		   source,
-		   new String[] {
-			   "type", "basefuel"
 		   });
 		addAnnotation
 		  (getNotionalJourneyDetails_RouteTaken(),

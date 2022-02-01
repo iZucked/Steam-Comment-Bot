@@ -6,12 +6,8 @@ package com.mmxlabs.lingo.reports.components;
 
 import java.util.List;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.Image;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
@@ -24,57 +20,10 @@ import com.mmxlabs.scenario.service.ScenarioResult;
  * @author Simon McGregor
  * 
  */
-public abstract class AbstractSimpleTabularReportTransformer<T> {
+@NonNullByDefault
+public interface AbstractSimpleTabularReportTransformer<T> {
 
-	public static class ColumnManager<T> {
-		private final String name;
+	List<ColumnManager<T>> getColumnManagers(ISelectedDataProvider selectedDataProvider);
 
-		public ColumnManager(final String name) {
-			this.name = name;
-		}
-
-		public String getColumnText(final T obj) {
-			return "";
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public void dispose() {
-
-		}
-		public Font getFont(final T element) {
-			return null;
-		}
-		
-		public Image getColumnImage(final T obj) {
-			return null;
-		}
-
-		public Color getBackground(final T element) {
-			return null;
-		}
-
-		public Color getForeground(final T element) {
-			return null;
-		}
-
-		public int compare(final T obj1, final T obj2) {
-			return 0;
-		}
-
-		public boolean isTree() {
-			return false;
-		}
-
-		public String getTooltip() {
-			return null;
-		}
-	}
-
-	public abstract List<ColumnManager<T>> getColumnManagers(@NonNull ISelectedDataProvider selectedDataProvider);
-
-	@NonNullByDefault
-	public abstract List<@NonNull T> createData(@Nullable Pair<Schedule, ScenarioResult> pinnedPair, List<Pair<Schedule, ScenarioResult>> otherPairs);
+	List<T> createData(@Nullable Pair<Schedule, ScenarioResult> pinnedPair, List<Pair<Schedule, ScenarioResult>> otherPairs);
 }

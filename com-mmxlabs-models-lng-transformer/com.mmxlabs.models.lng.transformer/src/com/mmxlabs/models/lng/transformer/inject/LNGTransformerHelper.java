@@ -27,7 +27,6 @@ import com.google.inject.Module;
 import com.google.inject.util.Modules;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
@@ -62,10 +61,6 @@ public class LNGTransformerHelper {
 
 	public static final @NonNull String HINT_SHIPPING_ONLY = "hint-lngtransformer-shipping-only";
 	public static final @NonNull String HINT_SPOT_CARGO_MARKETS = "hint-lngtransformer-spot-cargo-markets";
-	public static final @NonNull String HINT_NO_NOMINALS_IN_PROMPT = "hint-lngtransformer-no-nominals-in-prompt";
-
-	// Used to override the license feature linked HINT_NO_NOMINALS_IN_PROMPT
-	public static final @NonNull String HINT_KEEP_NOMINALS_IN_PROMPT = "hint-lngtransformer-keep-nominals-in-prompt";
 
 	public static final @NonNull String HINT_DISABLE_CACHES = "hint-lngtransformer-disable-caches";
 	public static final @NonNull String HINT_PORTFOLIO_BREAKEVEN = "hint-portfolio-breakeven";
@@ -102,13 +97,6 @@ public class LNGTransformerHelper {
 			hints.add(HINT_SHIPPING_ONLY);
 		} else if (userSettings.isWithSpotCargoMarkets()) {
 			hints.add(HINT_SPOT_CARGO_MARKETS);
-		}
-		if (userSettings.getMode() != OptimisationMode.ADP && LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_NO_NOMINALS_IN_PROMPT)) {
-			hints.add(HINT_NO_NOMINALS_IN_PROMPT);
-		}
-		// If HINT_KEEP_NOMINALS_IN_PROMPT is set, override the HINT_NO_NOMINALS_IN_PROMPT hint
-		if (hints.contains(HINT_KEEP_NOMINALS_IN_PROMPT)) {
-			hints.remove(HINT_NO_NOMINALS_IN_PROMPT);
 		}
 
 		// Too late for LNGScenarioRunner, but add to hints for modules in case it is needed in the future.

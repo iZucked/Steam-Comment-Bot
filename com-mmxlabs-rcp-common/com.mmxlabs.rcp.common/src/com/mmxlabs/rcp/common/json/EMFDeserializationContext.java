@@ -69,8 +69,7 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 
 	public void registerType(final Object value) {
 
-		if (value instanceof EObject) {
-			final EObject eObject = (EObject) value;
+		if (value instanceof EObject eObject) {
 
 			final JSONReference ref = JSONReference.of(eObject);
 
@@ -80,8 +79,7 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 
 	public void registerType(final String lookupId, final Object value) {
 
-		if (value instanceof EObject) {
-			final EObject eObject = (EObject) value;
+		if (value instanceof EObject eObject) {
 
 			final JSONReference ref = JSONReference.of(lookupId, eObject);
 
@@ -100,7 +98,6 @@ public class EMFDeserializationContext extends DefaultDeserializationContext {
 
 	public Object lookupType(final JSONReference ref) {
 		final Object idValue = state.idMap.get(new Pair<>(ref.getClassType(), ref.getGlobalId()));
-		List<Object> vas = state.idMap.values().stream().filter(p -> p.getClass().getSimpleName().contains("VesselAvailability")).collect(Collectors.toList());
 
 		if (idValue != null) {
 			return idValue;

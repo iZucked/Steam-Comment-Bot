@@ -24,7 +24,6 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.lingo.reports.IReportContentsGenerator;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
-import com.mmxlabs.lingo.reports.ReportContents;
 import com.mmxlabs.lingo.reports.ReportContentsGenerators;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
@@ -49,7 +48,6 @@ import com.mmxlabs.models.ui.tabular.columngeneration.ColumnBlock;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnHandler;
 import com.mmxlabs.models.ui.tabular.columngeneration.ColumnType;
 import com.mmxlabs.models.ui.tabular.generic.GenericEMFTableDataModel;
-import com.mmxlabs.rcp.common.actions.CopyGridToJSONUtil;
 import com.mmxlabs.scenario.service.ScenarioResult;
 
 /**
@@ -77,8 +75,7 @@ public class VolumeIssuesReportView extends EMFReportView {
 
 		@Override
 		public Image getImage(final Object element) {
-			if (element instanceof EObject) {
-				final EObject eObject = (EObject) element;
+			if (element instanceof EObject eObject) {
 				final Boolean pinned = (Boolean) eObject.eGet(attribRowPinned);
 				if (Boolean.TRUE.equals(pinned) && pinImage != null && !pinImage.isDisposed()) {
 					return pinImage;
@@ -90,8 +87,7 @@ public class VolumeIssuesReportView extends EMFReportView {
 
 		@Override
 		public String render(final Object object) {
-			if (object instanceof EObject) {
-				final EObject eObject = (EObject) object;
+			if (object instanceof EObject eObject) {
 				return (String) eObject.eGet(attribRowScenarioName);
 			}
 			return null;
@@ -116,8 +112,7 @@ public class VolumeIssuesReportView extends EMFReportView {
 			@Override
 			public String render(final Object object) {
 
-				if (object instanceof CapacityViolationType) {
-					final CapacityViolationType capacityViolationType = (CapacityViolationType) object;
+				if (object instanceof CapacityViolationType capacityViolationType) {
 					switch (capacityViolationType) {
 					case FORCED_COOLDOWN:
 						return "Forced Cooldown";
@@ -167,8 +162,7 @@ public class VolumeIssuesReportView extends EMFReportView {
 	protected void processInputs(final Object[] result) {
 
 		for (final Object obj : result) {
-			if (obj instanceof EObject) {
-				final EObject row = (EObject) obj;
+			if (obj instanceof EObject row) {
 				final Event event = (Event) row.eGet(refRowOwner);
 				setInputEquivalents(row, expandEvent(event));
 			}
@@ -221,14 +215,13 @@ public class VolumeIssuesReportView extends EMFReportView {
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioResult scenarioResult, final LNGScenarioModel scenarioModel, final Schedule schedule, final boolean pinned) {
+			protected Collection<EObject> collectElements(final ScenarioResult scenarioResult, final LNGScenarioModel scenarioModel, final Schedule schedule, final boolean pinned) {
 				final String scenarioName = scenarioResult.getModelRecord().getName();
 				final List<EObject> rows = new LinkedList<>();
 
 				for (final Sequence sequence : schedule.getSequences()) {
 					for (final Event event : sequence.getEvents()) {
-						if (event instanceof CapacityViolationsHolder) {
-							final CapacityViolationsHolder capacityViolationsHolder = (CapacityViolationsHolder) event;
+						if (event instanceof CapacityViolationsHolder capacityViolationsHolder) {
 							final EMap<CapacityViolationType, Long> violationMap = capacityViolationsHolder.getViolations();
 							if (!violationMap.isEmpty()) {
 								for (final CapacityViolationType cvt : CapacityViolationType.values()) {

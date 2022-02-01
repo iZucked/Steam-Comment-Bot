@@ -49,31 +49,8 @@ public class LumpSumRepositioningFeeTermDetailsItemProvider extends LumpSumDetai
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addOriginPortPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Origin Port feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addOriginPortPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_LumpSumRepositioningFeeTermDetails_originPort_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_LumpSumRepositioningFeeTermDetails_originPort_feature", "_UI_LumpSumRepositioningFeeTermDetails_type"),
-				 SchedulePackage.Literals.LUMP_SUM_REPOSITIONING_FEE_TERM_DETAILS__ORIGIN_PORT,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -112,12 +89,6 @@ public class LumpSumRepositioningFeeTermDetailsItemProvider extends LumpSumDetai
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
-
-		switch (notification.getFeatureID(LumpSumRepositioningFeeTermDetails.class)) {
-			case SchedulePackage.LUMP_SUM_REPOSITIONING_FEE_TERM_DETAILS__ORIGIN_PORT:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
-		}
 		super.notifyChanged(notification);
 	}
 

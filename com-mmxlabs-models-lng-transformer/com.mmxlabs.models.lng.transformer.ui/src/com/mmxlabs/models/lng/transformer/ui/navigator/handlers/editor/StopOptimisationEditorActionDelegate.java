@@ -24,11 +24,10 @@ public class StopOptimisationEditorActionDelegate extends AbstractOptimisationEd
 	@Override
 	public void run(final IAction action) {
 
-		if (editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
-			final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
+		if (editor.getEditorInput() instanceof IScenarioServiceEditorInput scenarioServiceEditorInput) {
 			final ScenarioInstance instance = scenarioServiceEditorInput.getScenarioInstance();
 
-			if (instance.isReadonly()) {
+			if (instance.isReadonly() || instance.isCloudLocked()) {
 				action.setEnabled(false);
 				return;
 			}

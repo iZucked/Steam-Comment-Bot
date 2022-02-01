@@ -7360,22 +7360,13 @@ public interface SchedulePackage extends EPackage {
 	int LUMP_SUM_REPOSITIONING_FEE_TERM_DETAILS__LUMP_SUM = LUMP_SUM_DETAILS__LUMP_SUM;
 
 	/**
-	 * The feature id for the '<em><b>Origin Port</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LUMP_SUM_REPOSITIONING_FEE_TERM_DETAILS__ORIGIN_PORT = LUMP_SUM_DETAILS_FEATURE_COUNT + 0;
-
-	/**
 	 * The number of structural features of the '<em>Lump Sum Repositioning Fee Term Details</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LUMP_SUM_REPOSITIONING_FEE_TERM_DETAILS_FEATURE_COUNT = LUMP_SUM_DETAILS_FEATURE_COUNT + 1;
+	int LUMP_SUM_REPOSITIONING_FEE_TERM_DETAILS_FEATURE_COUNT = LUMP_SUM_DETAILS_FEATURE_COUNT + 0;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -10685,17 +10676,6 @@ public interface SchedulePackage extends EPackage {
 	EClass getLumpSumRepositioningFeeTermDetails();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.LumpSumRepositioningFeeTermDetails#getOriginPort <em>Origin Port</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Origin Port</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.LumpSumRepositioningFeeTermDetails#getOriginPort()
-	 * @see #getLumpSumRepositioningFeeTermDetails()
-	 * @generated
-	 */
-	EAttribute getLumpSumRepositioningFeeTermDetails_OriginPort();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.NotionalJourneyDetails <em>Notional Journey Details</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -13045,14 +13025,6 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EClass LUMP_SUM_REPOSITIONING_FEE_TERM_DETAILS = eINSTANCE.getLumpSumRepositioningFeeTermDetails();
-
-		/**
-		 * The meta object literal for the '<em><b>Origin Port</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute LUMP_SUM_REPOSITIONING_FEE_TERM_DETAILS__ORIGIN_PORT = eINSTANCE.getLumpSumRepositioningFeeTermDetails_OriginPort();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.NotionalJourneyDetailsImpl <em>Notional Journey Details</em>}' class.

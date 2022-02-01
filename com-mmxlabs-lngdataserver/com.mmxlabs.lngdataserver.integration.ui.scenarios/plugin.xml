@@ -29,4 +29,11 @@
             apply="always">
       </fragment>
    </extension>
+ 	<extension
+            point="com.mmxlabs.license.features.PluginXMLEnablement">
+         <PluginXMLEnablement
+               feature="cloud-optimisation"
+               plugin.xml="cloud-opti.plugin.xml">
+         </PluginXMLEnablement>
+      </extension>   
 </plugin>

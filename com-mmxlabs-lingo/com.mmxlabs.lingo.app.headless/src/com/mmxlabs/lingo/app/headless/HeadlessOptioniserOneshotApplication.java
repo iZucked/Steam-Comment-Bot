@@ -8,10 +8,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.cli.CommandLine;
@@ -25,23 +23,20 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.jdt.annotation.Nullable;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import com.fasterxml.jackson.core.JsonParser.Feature;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectMapper.DefaultTypeResolverBuilder;
-import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.mmxlabs.license.ssl.LicenseChecker.InvalidLicenseException;
-import com.mmxlabs.models.lng.parameters.OptimisationStage;
+import com.mmxlabs.models.lng.analytics.SlotInsertionOptions;
+import com.mmxlabs.models.lng.parameters.UserSettings;
+import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessApplicationOptions;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessOptioniserJSON;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessOptioniserJSONTransformer;
+import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessOptioniserOptions;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessOptioniserRunner;
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.WriterFactory;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
@@ -65,7 +60,7 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 	public Object start(final IApplicationContext context) throws IOException {
 		try {
 			return dostart(context);
-		} catch (Throwable t) {
+		} catch (final Throwable t) {
 			t.printStackTrace();
 			return HeadlessGenericApplication.EXIT_CODE_EXCEPTION;
 		}
@@ -85,7 +80,7 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 
 		final int numThreads = LNGScenarioChainBuilder.getNumberOfAvailableCores();
 
-		final HeadlessOptioniserRunner.Options options;
+		final HeadlessOptioniserOptions options;
 		{
 			final String paramsFile = commandLine.getOptionValue(PARAMS_FILE);
 			final File f = new File(paramsFile);
@@ -98,12 +93,6 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 				throw new FileNotFoundException("Parameters file is missing");
 			}
 		}
-		// Make sure we save the optimiser results in the scenario
-		options.exportResults = true;
-
-		// Set to zero take take LiNGO defaults
-		options.maxWorkerThreads = 0;
-		options.iterations = 0;
 
 		final String scenarioFilename = commandLine.getOptionValue(INPUT_SCENARIO);
 		if (scenarioFilename == null || scenarioFilename.isEmpty()) {
@@ -146,27 +135,26 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 			json.getParams().setCores(numThreads);
 		}
 
-		HeadlessOptioniserRunner runner = new HeadlessOptioniserRunner();
+		final HeadlessOptioniserRunner runner = new HeadlessOptioniserRunner();
 
-		ConsoleProgressMonitor monitor = new ConsoleProgressMonitor();
+		final ConsoleProgressMonitor monitor = new ConsoleProgressMonitor();
 
-		boolean exportLogs = outputLoggingFolder != null;
+		final boolean exportLogs = outputLoggingFolder != null;
 		// Get the root object
 
-		SlotInsertionOptimiserLogger logger = exportLogs ? new SlotInsertionOptimiserLogger() : null;
+		final SlotInsertionOptimiserLogger logger = exportLogs ? new SlotInsertionOptimiserLogger() : null;
 
 		try {
-			int startTry = 0;
 			// Get the root object
 			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
-				runner.run(startTry, logger, options, modelRecord, scenarioDataProvider, null, SubMonitor.convert(monitor));
+				final SlotInsertionOptions result = runner.run(logger, options, modelRecord, scenarioDataProvider, null, SubMonitor.convert(monitor));
+
+				final File resultOutput = new File(outputScenarioFileName + ".xmi");
+				HeadlessUtils.saveResult(result, scenarioDataProvider, resultOutput);
+
 				ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, new File(outputScenarioFileName));
 			});
-
-//			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
-//				runner.doRun(scenarioDataProvider, userSettings, exportLogs, outputScenarioFileName, outputLoggingFolder, json, numThreads);
-//			});
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new IOException("Error running optioniser", e);
 
 		}
@@ -182,11 +170,11 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 		}
 
 		if (loggingFolder != null && logger != null) {
-			File outFile = new File(loggingFolder, UUID.randomUUID().toString() + ".json"); // create output log
+			final File outFile = new File(loggingFolder, UUID.randomUUID().toString() + ".json"); // create output log
 			(new HeadlessOptioniserJSONTransformer()).addRunResult(0, logger, json);
 
 			try {
-				ObjectMapper mapper = new ObjectMapper();
+				final ObjectMapper mapper = new ObjectMapper();
 				mapper.registerModule(new JavaTimeModule());
 				mapper.registerModule(new Jdk8Module());
 
@@ -194,7 +182,7 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 				mapper.disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS);
 
 				mapper.writerWithDefaultPrettyPrinter().writeValue(outFile, json);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				throw new IOException("Error writing log file", e);
 			}
 		}
@@ -243,7 +231,7 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 		}
 	}
 
-	public static HeadlessOptioniserRunner.@Nullable Options getOptioniserSettings(final File file) {
+	public static @Nullable HeadlessOptioniserOptions getOptioniserSettings(final File file) {
 
 		if (!file.exists()) {
 			return null;
@@ -253,9 +241,34 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 			mapper.registerModule(new JavaTimeModule());
 			mapper.registerModule(new Jdk8Module());
 			mapper.enable(Feature.ALLOW_COMMENTS);
-
 			try {
-				return mapper.readValue(file, HeadlessOptioniserRunner.Options.class);
+				final String content = Files.readString(file.toPath());
+
+				if (content.contains("userSettings")) {
+					return mapper.readValue(content, HeadlessOptioniserOptions.class);
+
+				} else {
+					final HeadlessOptioniserRunner.Options options = mapper.readValue(content, HeadlessOptioniserRunner.Options.class);
+					final HeadlessOptioniserOptions newOpt = new HeadlessOptioniserOptions();
+					// Copy ids across
+					newOpt.loadIds = options.loadIds;
+					newOpt.dischargeIds = options.dischargeIds;
+					newOpt.eventsIds = options.eventsIds;
+
+					// Create a default user settings object
+					final UserSettings userSettings = UserSettingsHelper.createDefaultUserSettings();
+
+					if (options.periodStart != null) {
+						userSettings.setPeriodStartDate(options.periodStart);
+					}
+					if (options.periodEnd != null) {
+						userSettings.setPeriodEnd(options.periodEnd);
+					}
+
+					newOpt.userSettings = userSettings;
+
+					return newOpt;
+				}
 			} catch (final IOException e) {
 				e.printStackTrace();
 				return null;

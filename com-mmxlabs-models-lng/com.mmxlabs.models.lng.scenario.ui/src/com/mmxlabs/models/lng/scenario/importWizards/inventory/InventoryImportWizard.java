@@ -127,12 +127,12 @@ public class InventoryImportWizard extends Wizard implements IImportWizard {
 
 	void doImport(final List<ScenarioInstance> instances, final String filename, final char listSeparator, final char decimalSeparator, final IProgressMonitor monitor) {
 		monitor.beginTask("Import", instances.size());
-		final Set<String> uniqueProblems = new HashSet<String>();
-		final List<String> allProblems = new ArrayList<String>();
+		final Set<String> uniqueProblems = new HashSet<>();
+		final List<String> allProblems = new ArrayList<>();
 		try {
 
 			for (final ScenarioInstance instance : instances) {
-				if (instance.isReadonly()) {
+				if (instance.isReadonly() || instance.isCloudLocked()) {
 					allProblems.add(String.format("Scenario %s is read-only, skipping", instance.getName()));
 					continue;
 				}

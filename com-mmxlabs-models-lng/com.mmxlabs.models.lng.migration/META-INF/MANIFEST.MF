@@ -2,19 +2,19 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Models LNG: Migration
 Bundle-SymbolicName: com.mmxlabs.models.lng.migration;singleton:=true
-Bundle-Version: 4.13.7.qualifier
+Bundle-Version: 5.1.5.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-16
-Require-Bundle: com.mmxlabs.models.migration;bundle-version="[4.13.7,5.0.0)",
- com.mmxlabs.models.lng.scenario.model;bundle-version="[4.13.7,5.0.0)",
+Require-Bundle: com.mmxlabs.models.migration;bundle-version="[5.1.5,6.0.0)",
+ com.mmxlabs.models.lng.scenario.model;bundle-version="[5.1.5,6.0.0)",
  com.google.guava;bundle-version="10.0.1",
- com.mmxlabs.scenario.service.util;bundle-version="[4.13.7,5.0.0)",
+ com.mmxlabs.scenario.service.util;bundle-version="[5.1.5,6.0.0)",
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
- com.mmxlabs.scenario.service.manifest;bundle-version="[4.13.7,5.0.0)",
- com.mmxlabs.common.common-util;bundle-version="[4.13.7,5.0.0)",
- com.mmxlabs.rcp.common;bundle-version="[4.13.7,5.0.0)",
+ com.mmxlabs.scenario.service.manifest;bundle-version="[5.1.5,6.0.0)",
+ com.mmxlabs.common.common-util;bundle-version="[5.1.5,6.0.0)",
+ com.mmxlabs.rcp.common;bundle-version="[5.1.5,6.0.0)",
  com.mmxlabs.models.lng.nominations,
- com.mmxlabs.hub;bundle-version="4.13.7"
+ com.mmxlabs.hub;bundle-version="5.1.5"
 Export-Package: com.mmxlabs.models.lng.migration,
  com.mmxlabs.models.lng.migration.units
 Automatic-Module-Name: com.mmxlabs.models.lng.migration

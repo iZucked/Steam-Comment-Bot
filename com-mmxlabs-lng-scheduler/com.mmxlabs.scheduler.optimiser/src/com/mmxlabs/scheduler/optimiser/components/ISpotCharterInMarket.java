@@ -20,6 +20,8 @@ public interface ISpotCharterInMarket {
 	@NonNull
 	ILongCurve getDailyCharterInRateCurve();
 
+	boolean isNominal();
+	
 	int getAvailabilityCount();
 	
 	IStartRequirement getStartRequirement();

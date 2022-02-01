@@ -15,8 +15,10 @@ import com.mmxlabs.optimiser.core.ISegment;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.impl.DisconnectedSegment;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShortCargoReturnElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -30,6 +32,9 @@ public class ShortCargoSequenceManipulator implements ISequencesManipulator {
 
 	@Inject
 	private IPortTypeProvider portTypeProvider;
+
+	@Inject
+	private IPortSlotProvider portSlotProvider;
 
 	@Inject
 	private IVesselProvider vesselProvider;
@@ -50,7 +55,8 @@ public class ShortCargoSequenceManipulator implements ISequencesManipulator {
 					final ISequenceElement element = seq.get(i);
 					final PortType portType = portTypeProvider.getPortType(element);
 					if (portType == PortType.Load) {
-						final ISequenceElement returnElement = shortCargoReturnElementProvider.getReturnElement(element);
+						IPort loadPort = portSlotProvider.getPortSlot(element).getPort();
+						final ISequenceElement returnElement = shortCargoReturnElementProvider.getReturnElement(resource, element, loadPort);
 
 						// If element is null we expect that a constraint checker will mark the solution as invalid.... (if not, then expect some sort of failure in the PortTimesPlanner/VoyagePlanner
 						// classes)

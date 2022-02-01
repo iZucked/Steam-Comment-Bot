@@ -42,9 +42,6 @@ import com.mmxlabs.models.lng.types.VesselAssignmentType;
 @ExtendWith(ShiroRunner.class)
 public class CharterOutTests extends AbstractMicroTestCase {
 
-	private static List<String> requiredFeatures = Lists.newArrayList("no-nominal-in-prompt", "optimisation-actionset");
-	private static List<String> addedFeatures = new LinkedList<>();
-
 	/**
 	 * Test: Test if the optimisation charter out a vessel if assigned i.e There is not cargo but only a charter out event
 	 * 

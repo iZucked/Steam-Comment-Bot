@@ -116,7 +116,8 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 
 	// private EmbeddedReportComponent econsComponent;
 	// private EmbeddedReportComponent pnlDetailsComponent;
-	// private WeakHashMap<OptionAnalysisModel, WeakReference<OptionAnalysisModel>> navigationHistory = new WeakHashMap<>();
+	// private WeakHashMap<OptionAnalysisModel, WeakReference<OptionAnalysisModel>>
+	// navigationHistory = new WeakHashMap<>();
 
 	private WeakReference<BreakEvenAnalysisModel> currentRoot = null;
 
@@ -212,7 +213,8 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 					// .align(SWT.FILL, SWT.FILL) //
 					.span(1, 1) //
 					.create());
-			// centralScrolledComposite.setLayout(GridLayoutFactory.fillDefaults().spacing(0, 20).create());
+			// centralScrolledComposite.setLayout(GridLayoutFactory.fillDefaults().spacing(0,
+			// 20).create());
 			centralScrolledComposite.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
 			centralScrolledComposite.setLayout(new GridLayout());
@@ -259,7 +261,8 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 		}
 		// {
 		//
-		// rhsScrolledComposite = new ScrolledComposite(mainComposite, SWT.V_SCROLL | SWT.V_SCROLL);
+		// rhsScrolledComposite = new ScrolledComposite(mainComposite, SWT.V_SCROLL |
+		// SWT.V_SCROLL);
 		// rhsScrolledComposite.setLayoutData(GridDataFactory.fillDefaults()//
 		// .grab(false, true)//
 		// .hint(200, SWT.DEFAULT) //
@@ -273,7 +276,8 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 		// rhsScrolledComposite.setExpandVertical(true);
 		// // lhsScrolledComposite.setMinSize(400, 400);
 		// rhsComposite = new Composite(rhsScrolledComposite, SWT.NONE);
-		// // centralComposite.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		// //
+		// centralComposite.setBackground(PlatformUI.getWorkbench().getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		// // centralComposite.setBackgroundMode(SWT.INHERIT_FORCE);
 		// rhsScrolledComposite.setBackgroundMode(SWT.INHERIT_FORCE);
 		// rhsScrolledComposite.setContent(rhsComposite);
@@ -284,7 +288,8 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 		// @Override
 		// public void expansionStateChanged(final ExpansionEvent e) {
 		// rhsComposite.layout(true);
-		// rhsScrolledComposite.setMinSize(rhsComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		// rhsScrolledComposite.setMinSize(rhsComposite.computeSize(SWT.DEFAULT,
+		// SWT.DEFAULT));
 		// }
 		// };
 		//
@@ -321,7 +326,7 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 
 	@Override
 	protected void doDisplayScenarioInstance(@Nullable final ScenarioInstance scenarioInstance, @Nullable final MMXRootObject rootObject, @Nullable Object target) {
-		doDisplayScenarioInstance2(scenarioInstance, rootObject,(BreakEvenAnalysisModel) target);
+		doDisplayScenarioInstance2(scenarioInstance, rootObject, (BreakEvenAnalysisModel) target);
 
 		updateActions(getEditingDomain());
 	}
@@ -402,7 +407,8 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 					if (root == null || (root != null && root.get() == null)) {
 						setCurrentRoot(new WeakReference<BreakEvenAnalysisModel>(analyticsModel.getBreakevenModels().get(0)));
 					}
-					// WeakReference<BreakEvenAnalysisModel> modelToUse = navigationHistory.get(getCurrentRoot().get());
+					// WeakReference<BreakEvenAnalysisModel> modelToUse =
+					// navigationHistory.get(getCurrentRoot().get());
 					WeakReference<BreakEvenAnalysisModel> modelToUse = getCurrentRoot();
 					setModel(modelToUse == null || (modelToUse != null && modelToUse.get() == null) ? rootOptionsModel : modelToUse.get());
 				}
@@ -446,11 +452,13 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 					}
 				}
 			}
-			// if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getOptionAnalysisModel_Children()) {
+			// if (notification.getFeature() ==
+			// AnalyticsPackage.eINSTANCE.getOptionAnalysisModel_Children()) {
 			// if (notification.getEventType() == Notification.REMOVE) {
 			// if (model != null && notification.getOldValue() == model) {
 			// displayScenarioInstance(getScenarioInstance());
-			// } else if (rootOptionsModel != null && notification.getOldValue() == rootOptionsModel) {
+			// } else if (rootOptionsModel != null && notification.getOldValue() ==
+			// rootOptionsModel) {
 			// displayScenarioInstance(getScenarioInstance());
 			// }
 			// }
@@ -516,19 +524,26 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 			} else if (notification.getFeature() == AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES) {
 				return new Pair<>(true, EnumSet.of(SectionType.VESSEL));
 
-				// } else if (notification.getFeature() == AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS) {
+				// } else if (notification.getFeature() ==
+				// AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULT_SETS) {
 				// return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));
-				// } else if (notification.getFeature() == AnalyticsPackage.Literals.BASE_CASE__BASE_CASE) {
+				// } else if (notification.getFeature() ==
+				// AnalyticsPackage.Literals.BASE_CASE__BASE_CASE) {
 				// return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));
-				// } else if (notification.getFeature() == AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS) {
+				// } else if (notification.getFeature() ==
+				// AnalyticsPackage.Literals.PARTIAL_CASE_ROW__BUY_OPTIONS) {
 				// return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));
-				// } else if (notification.getFeature() == AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS) {
+				// } else if (notification.getFeature() ==
+				// AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SELL_OPTIONS) {
 				// return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));
-				// } else if (notification.getFeature() == AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING) {
+				// } else if (notification.getFeature() ==
+				// AnalyticsPackage.Literals.PARTIAL_CASE_ROW__SHIPPING) {
 				// return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));
-				// } else if (notification.getFeature() == AnalyticsPackage.Literals.BASE_CASE__PROFIT_AND_LOSS) {
+				// } else if (notification.getFeature() ==
+				// AnalyticsPackage.Literals.BASE_CASE__PROFIT_AND_LOSS) {
 				// return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));
-				// } else if (notification.getFeature() == AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE) {
+				// } else if (notification.getFeature() ==
+				// AnalyticsPackage.Literals.PARTIAL_CASE__PARTIAL_CASE) {
 				// return new Pair<>(true, EnumSet.of(SectionType.MIDDLE));
 				// } else if (notification.getNotifier() instanceof BaseCaseRow) {
 				// return new Pair<>(false, EnumSet.of(SectionType.MIDDLE));
@@ -536,7 +551,8 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 				// return new Pair<>(false, EnumSet.of(SectionType.MIDDLE));
 			} else if (notification.getNotifier() instanceof BuyOption) {
 				return new Pair<>(false, EnumSet.of(SectionType.BUYS, SectionType.MIDDLE));
-				// } else if (notification.getFeature() == AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__CHILDREN) {
+				// } else if (notification.getFeature() ==
+				// AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__CHILDREN) {
 				// return new Pair<>(true, EnumSet.of(SectionType.BUYS));
 			} else if (notification.getFeature() == MMXCorePackage.Literals.NAMED_OBJECT__NAME && notification.getNotifier() instanceof OptionAnalysisModel) {
 				return new Pair<>(false, EnumSet.of(SectionType.BUYS));
@@ -623,7 +639,8 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 
 	private BreakEvenAnalysisModel getRootOptionsModel(@Nullable final BreakEvenAnalysisModel optionModel) {
 		BreakEvenAnalysisModel optionAnalysisModel = optionModel;
-		// while (optionAnalysisModel != null && optionAnalysisModel.eContainer() != null && optionAnalysisModel.eContainer() instanceof OptionAnalysisModel) {
+		// while (optionAnalysisModel != null && optionAnalysisModel.eContainer() !=
+		// null && optionAnalysisModel.eContainer() instanceof OptionAnalysisModel) {
 		// optionAnalysisModel = (OptionAnalysisModel) optionAnalysisModel.eContainer();
 		// }
 		// if (optionAnalysisModel != null && optionAnalysisModel.getName() == null) {
@@ -674,13 +691,15 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 			}
 
 			// packAll(rhsComposite);
-			// rhsScrolledComposite.setMinSize(rhsComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+			// rhsScrolledComposite.setMinSize(rhsComposite.computeSize(SWT.DEFAULT,
+			// SWT.DEFAULT));
 		});
 	}
 
 	public void repackResults() {
 		// packAll(rhsComposite);
-		// rhsScrolledComposite.setMinSize(rhsComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		// rhsScrolledComposite.setMinSize(rhsComposite.computeSize(SWT.DEFAULT,
+		// SWT.DEFAULT));
 	}
 
 	public void packAll(final Control c) {
@@ -846,17 +865,7 @@ public class BreakEvenModellerView extends ScenarioInstanceView implements Comma
 
 				@Override
 				public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature) {
-
-					if (domain instanceof CommandProviderAwareEditingDomain) {
-						final CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) domain;
-						commandProviderAwareEditingDomain.disableAdapters(model);
-					}
-					superHandler.handleCommand(command, target, feature);
-					if (domain instanceof CommandProviderAwareEditingDomain) {
-						final CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) domain;
-						commandProviderAwareEditingDomain.enableAdapters(model, false);
-					}
-
+					CommandProviderAwareEditingDomain.withAdaptersDisabled(domain, model, () -> superHandler.handleCommand(command, target, feature));
 				}
 
 				@Override

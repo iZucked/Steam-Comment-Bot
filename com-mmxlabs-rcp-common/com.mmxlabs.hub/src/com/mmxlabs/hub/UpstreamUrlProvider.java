@@ -466,4 +466,8 @@ public class UpstreamUrlProvider {
 
 		return authenticationManager.buildRequest().url(baseUrlIfAvailable + urlPath);
 	}
+	
+	public @Nullable Builder makeRequestBuilder(@NonNull final String baseUrl, @NonNull final String urlPath) {
+		return authenticationManager.buildRequest().url(baseUrl + urlPath);
+	}
 }

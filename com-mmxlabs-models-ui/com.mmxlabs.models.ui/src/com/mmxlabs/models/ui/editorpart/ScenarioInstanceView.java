@@ -10,6 +10,8 @@ import java.util.Stack;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.BasicNotifierImpl.EAdapterList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -41,7 +43,9 @@ import com.mmxlabs.models.ui.validation.gui.IValidationStatusGoto;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ecore.SafeAdapterImpl;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
 import com.mmxlabs.scenario.service.model.manager.IScenarioLockListener;
 import com.mmxlabs.scenario.service.model.manager.ModelRecordScenarioDataProvider;
@@ -68,9 +72,23 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	private boolean locked;
 
 	private final IScenarioLockListener lockListener = (pModelRecord, writeLocked) -> RunnerHelper
-			.runNowOrAsync(() -> setLocked(writeLocked || (scenarioInstance != null && scenarioInstance.isReadonly())));
+			.runNowOrAsync(() -> setLocked(writeLocked || (scenarioInstance != null && (scenarioInstance.isReadonly() || scenarioInstance.isCloudLocked()))));
 
 	private IPartListener partListener;
+
+	private final SafeAdapterImpl cloudLockedAdapter = new SafeAdapterImpl() {
+
+		@Override
+		protected void safeNotifyChanged(final Notification msg) {
+			if (msg.isTouch()) {
+				return;
+			}
+			if (msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_CloudLocked()) {
+				RunnerHelper.runNowOrAsync(() -> setLocked(locked));
+			}
+
+		}
+	};
 
 	protected void listenToScenarioSelection() {
 		partListener = new IPartListener() {
@@ -86,8 +104,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 			@Override
 			public void partActivated(final IWorkbenchPart part) {
-				if (part instanceof IEditorPart) {
-					final IEditorPart editorPart = (IEditorPart) part;
+				if (part instanceof final IEditorPart editorPart) {
 					final IEditorInput editorInput = editorPart.getEditorInput();
 					final ScenarioInstance editorEcenarioInstance = editorInput.getAdapter(ScenarioInstance.class);
 					lastPart = part;
@@ -117,7 +134,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 		getSite().getPage().addPartListener(partListener);
 		try {
 			partListener.partActivated(getSite().getPage().getActiveEditor());
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			LOGGER.error("Error initialising view: " + e.getMessage(), e);
 		}
 	}
@@ -179,8 +196,10 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 			this.scenarioDataProvider = new ModelRecordScenarioDataProvider(this.modelRecord);
 			this.scenarioDataProvider.getModelReference().getLock().addLockListener(lockListener);
 
+			scenarioInstance.eAdapters().add(cloudLockedAdapter);
+
 			scenarioInstanceStatusProvider = createScenarioValidationProvider(instance);
-			setLocked(this.scenarioDataProvider.getModelReference().isLocked() || instance.isReadonly());
+			setLocked(this.scenarioDataProvider.getModelReference().isLocked() || instance.isReadonly() );
 
 			this.valueProviderCache = new ReferenceValueProviderCache(rootObject);
 
@@ -221,6 +240,10 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 			scenarioDataProvider = null;
 		}
 
+		if (scenarioInstance != null) {
+			scenarioInstance.eAdapters().remove(cloudLockedAdapter);
+		}
+
 		scenarioInstance = null;
 		modelRecord = null;
 	}
@@ -231,7 +254,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 	@Override
 	public boolean isLocked() {
-		return locked;
+		return locked || (scenarioInstance != null && scenarioInstance.isCloudLocked());
 	}
 
 	public void setLocked(final boolean locked) {
@@ -274,8 +297,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	public AdapterFactory getAdapterFactory() {
 
 		final EditingDomain editingDomain = getEditingDomain();
-		if (editingDomain instanceof CommandProviderAwareEditingDomain) {
-			final CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) editingDomain;
+		if (editingDomain instanceof CommandProviderAwareEditingDomain commandProviderAwareEditingDomain) {
 			return commandProviderAwareEditingDomain.getAdapterFactory();
 		}
 
@@ -323,16 +345,16 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	@Override
 	public void setDisableCommandProviders(final boolean disable) {
 		final EditingDomain editingDomain = getEditingDomain();
-		if (editingDomain instanceof CommandProviderAwareEditingDomain) {
-			((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(disable);
+		if (editingDomain instanceof final CommandProviderAwareEditingDomain cpaEditingDomain) {
+			cpaEditingDomain.setCommandProvidersDisabled(disable);
 		}
 	}
 
 	@Override
 	public void setDisableUpdates(final boolean disable) {
 		final EditingDomain editingDomain = getEditingDomain();
-		if (editingDomain instanceof CommandProviderAwareEditingDomain) {
-			((CommandProviderAwareEditingDomain) editingDomain).setAdaptersEnabled(!disable);
+		if (editingDomain instanceof final CommandProviderAwareEditingDomain cpaEditingDomain) {
+			cpaEditingDomain.setAdaptersEnabled(!disable);
 		}
 	}
 

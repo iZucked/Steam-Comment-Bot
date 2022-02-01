@@ -22,6 +22,7 @@ public final class DefaultSpotCharterInMarket implements ISpotCharterInMarket {
 	private final @NonNull String name;
 	private final @NonNull IVessel vessel;
 	private final @NonNull ILongCurve dailyCharterInRateCurve;
+	private final boolean nominal;
 	private final int availabilityCount;
 	private final ICharterContract charterContract;
 	private final IStartRequirement start;
@@ -29,11 +30,12 @@ public final class DefaultSpotCharterInMarket implements ISpotCharterInMarket {
 	private final ILongCurve repositioningFee;
 	
 	public DefaultSpotCharterInMarket(@NonNull final String name, @NonNull final IVessel vessel, @NonNull final ILongCurve dailyCharterInRateCurve, //
-			final int availabilityCount, final IStartRequirement start, IEndRequirement end,
+			final boolean nominal, final int availabilityCount, final IStartRequirement start, IEndRequirement end,
 			ICharterContract charterContract, final ILongCurve repositioningFee) {
 		this.name = name;
 		this.vessel = vessel;
 		this.dailyCharterInRateCurve = dailyCharterInRateCurve;
+		this.nominal = nominal;
 		this.availabilityCount = availabilityCount;
 		this.start = start;
 		this.end = end;
@@ -82,5 +84,10 @@ public final class DefaultSpotCharterInMarket implements ISpotCharterInMarket {
 	@Override
 	public IStartRequirement getStartRequirement() {
 		return start;
+	}
+
+	@Override
+	public boolean isNominal() {
+		return nominal;
 	}
 }

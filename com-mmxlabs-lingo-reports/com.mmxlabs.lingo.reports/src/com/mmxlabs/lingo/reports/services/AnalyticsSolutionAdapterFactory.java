@@ -28,8 +28,7 @@ public class AnalyticsSolutionAdapterFactory implements IAdapterFactory {
 	private IScenarioFragmentOpenHandler openSolution() {
 		return (fragment, scenarioInstance) -> {
 			final Object object = fragment.getFragment();
-			if (object instanceof AbstractSolutionSet) {
-				final AbstractSolutionSet solutionSet = (AbstractSolutionSet) object;
+			if (object instanceof AbstractSolutionSet solutionSet) {
 				new AnalyticsSolution(scenarioInstance, solutionSet, solutionSet.getName()).openAndSwitchScreen();
 			}
 		};

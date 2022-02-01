@@ -227,7 +227,6 @@ public class ScenarioServicePublishAction {
 						.withOptimisationPlan(optimisationPlan) //
 						.withHints(LNGTransformerHelper.HINT_SHIPPING_ONLY) //
 						.buildDefaultRunner();
-
 				try {
 					scenarioDataProvider.setLastEvaluationFailed(true);
 					runnerBuilder.evaluateInitialState();

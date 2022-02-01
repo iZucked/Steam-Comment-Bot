@@ -81,6 +81,7 @@ import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 import com.mmxlabs.models.lng.analytics.VesselEventOption;
+import com.mmxlabs.models.lng.analytics.services.IAnalyticsPushToCloudRunner;
 import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.WhatIfEvaluator;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.AbstractSandboxComponent;
@@ -150,6 +151,13 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private PartialCaseCompoment partialCaseComponent;
 
 	protected Collection<Consumer<Boolean>> lockedListeners = Sets.newConcurrentHashSet();
+
+	private IAnalyticsPushToCloudRunner pushToCloudRunner;
+
+	public OptionModellerView() {
+		super();
+		this.pushToCloudRunner = PlatformUI.getWorkbench().getService(IAnalyticsPushToCloudRunner.class);
+	}
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -292,6 +300,11 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				final Composite generateButton = createRunButton(c);
 				GridDataFactory.defaultsFor(generateButton).span(1, 1).align(SWT.LEFT, SWT.CENTER).applyTo(generateButton);
 
+				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_CLOUD_OPTIMISATION) && pushToCloudRunner != null) {
+					final Composite cloudRunButton = createCloudRunButton(c);
+					GridDataFactory.defaultsFor(sandboxModeSelector).span(1, 1).align(SWT.LEFT, SWT.CENTER).applyTo(cloudRunButton);
+				}
+
 				final Composite displayButton = createDisplayButton(c);
 				GridDataFactory.defaultsFor(displayButton).span(1, 1).align(SWT.LEFT, SWT.CENTER).applyTo(displayButton);
 
@@ -352,8 +365,18 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		}
 	}
 
-	public synchronized void openSandboxScenario(@Nullable final SandboxScenario sandboxScenario) {
+	public synchronized void openSandboxScenario(@Nullable final SandboxScenario sandboxScenario, boolean showResult) {
 		displayScenarioInstance(sandboxScenario.getScenarioInstance(), sandboxScenario.getRootObject(), sandboxScenario.getSandboxModel());
+
+		if (showResult) {
+			OptionAnalysisModel m = sandboxScenario.getSandboxModel();
+			BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> {
+				if (m != null && m.getResults() != null) {
+					final AnalyticsSolution data = new AnalyticsSolution(getScenarioInstance(), m.getResults(), m.getName());
+					data.open();
+				}
+			});
+		}
 	}
 
 	@Override
@@ -666,13 +689,12 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	}
 
 	public void packAll(final Control c) {
-		if ((c instanceof Composite)) {
-			final Composite composite = (Composite) c;
-			((Composite) c).layout(true);
+		if ((c instanceof Composite composite)) {
+			composite.layout(true);
 			for (final Control child : composite.getChildren()) {
 				packAll(child);
 			}
-			((Composite) c).layout(true);
+			composite.layout(true);
 		}
 	}
 
@@ -793,21 +815,23 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	@Override
 	public void setLocked(final boolean locked) {
 
+		final boolean thisLocked = locked || (scenarioInstance != null && scenarioInstance.isCloudLocked());
+
 		// Disable while locked.
-		if (locked) {
+		if (thisLocked) {
 			updateActions(null);
 		} else {
 			updateActions(getEditingDomain());
 		}
 
-		baseCaseComponent.setLocked(locked);
-		partialCaseComponent.setLocked(locked);
+		baseCaseComponent.setLocked(thisLocked);
+		partialCaseComponent.setLocked(thisLocked);
 		buyComponent.setLocked(locked);
-		sellComponent.setLocked(locked);
-		eventsComponent.setLocked(locked);
-		shippingOptionsComponent.setLocked(locked);
+		sellComponent.setLocked(thisLocked);
+		eventsComponent.setLocked(thisLocked);
+		shippingOptionsComponent.setLocked(thisLocked);
 
-		lockedListeners.forEach(e -> e.accept(locked));
+		lockedListeners.forEach(e -> e.accept(thisLocked));
 
 		super.setLocked(locked);
 	}
@@ -828,17 +852,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 				@Override
 				public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature) {
-
-					if (domain instanceof CommandProviderAwareEditingDomain) {
-						final CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) domain;
-						commandProviderAwareEditingDomain.disableAdapters(currentModel);
-					}
-					superHandler.handleCommand(command, target, feature);
-					if (domain instanceof CommandProviderAwareEditingDomain) {
-						final CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) domain;
-						commandProviderAwareEditingDomain.enableAdapters(currentModel, false);
-					}
-
+					CommandProviderAwareEditingDomain.withAdaptersDisabled(domain, currentModel, () -> superHandler.handleCommand(command, target, feature));
 				}
 
 				@Override
@@ -920,6 +934,88 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 									data.open();
 								}
 							});
+						}
+					}
+				}
+			}
+		});
+
+		//
+		generateButton.addDisposeListener(e -> {
+			if (imageGenerate != null) {
+				imageGenerate.dispose();
+			}
+		});
+
+		lockedListeners.add(locked -> RunnerHelper.runAsyncIfControlValid(generateButton, btn -> btn.setEnabled(currentModel != null && !locked)));
+
+		inputWants.add(m -> generateButton.setEnabled(m != null && !isLocked()));
+
+		return generateComposite;
+	}
+
+	private Composite createCloudRunButton(final Composite parent) {
+		//
+		final ImageDescriptor generateDesc = CommonImages.getImageDescriptor(IconPaths.CloudPlay_24, IconMode.Enabled);
+		final Image imageGenerate = generateDesc.createImage();
+
+		final Composite generateComposite = new Composite(parent, SWT.NONE);
+		GridDataFactory.generate(generateComposite, 2, 1);
+
+		generateComposite.setLayout(new GridLayout(1, true));
+
+		final Label generateButton = new Label(generateComposite, SWT.NONE);
+		generateButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(false, false).create());
+		generateButton.setImage(imageGenerate);
+		generateButton.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseDown(final MouseEvent e) {
+				if (isLocked()) {
+					return;
+				}
+
+				{
+					final ADPModel adpModel = ScenarioModelUtil.getADPModel(getScenarioDataProvider());
+					if (adpModel != null) {
+						MessageDialog.openError(getShell(), "Unable to evaluate", "Sandbox scenarios cannot be used with ADP scenarios");
+						// Cannot use sandbox with ADP
+						return;
+					}
+
+				}
+
+				final OptionAnalysisModel m = currentModel;
+				if (m != null) {
+					final int mode = m.getMode();
+					if (mode == SandboxModeConstants.MODE_OPTIMISE && !m.getBaseCase().isKeepExistingScenario()) {
+						// BusyIndicator.showWhgile(PlatformUI.getWorkbench().getDisplay(),
+						MessageDialog.openError(PlatformUI.getWorkbench().getDisplay().getActiveShell(), "Error running sandbox", "Optimise mode needs portfolio link enabled");
+					} else {
+
+						if (mode != SandboxModeConstants.MODE_DERIVE || partialCaseValid) {
+							if (pushToCloudRunner != null) {
+								pushToCloudRunner.run(scenarioInstance, m);
+							}
+							// BusyIndicator.showWhile(PlatformUI.getWorkbench().getDisplay(), () -> {
+							// switch (mode) {
+							// case SandboxModeConstants.MODE_OPTIONISE:
+							// WhatIfEvaluator.doOptimise(OptionModellerView.this, m, true);
+							// break;
+							// case SandboxModeConstants.MODE_OPTIMISE:
+							// WhatIfEvaluator.doOptimise(OptionModellerView.this, m, false);
+							// break;
+							// case SandboxModeConstants.MODE_DERIVE:
+							// default:
+							// WhatIfEvaluator.evaluate(OptionModellerView.this, m);
+							// break;
+							// }
+							// if (m != null && m.getResults() != null) {
+							// final AnalyticsSolution data = new AnalyticsSolution(getScenarioInstance(),
+							// m.getResults(), m.getName());
+							// data.open();
+							// }
+							// });
 						}
 					}
 				}

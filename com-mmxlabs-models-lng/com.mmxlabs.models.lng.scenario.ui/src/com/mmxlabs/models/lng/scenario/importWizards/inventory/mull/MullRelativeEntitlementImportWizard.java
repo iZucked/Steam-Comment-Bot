@@ -122,11 +122,11 @@ public class MullRelativeEntitlementImportWizard extends Wizard implements IImpo
 		final List<String> allProblems = new ArrayList<>();
 
 		try {
-			if (instance.isReadonly()) {
+			if (instance.isReadonly() || instance.isCloudLocked()) {
 				allProblems.add(String.format("Scenario %s is read-only, skipping", instance.getName()));
 			} else {
 				final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(instance);
-				modelRecord.execute(ref -> ref.executeWithLock(true,  () -> {
+				modelRecord.execute(ref -> ref.executeWithLock(true, () -> {
 					doImportAction(filename, listSeparator, decimalSeparator, instance, uniqueProblems, allProblems);
 				}));
 				monitor.worked(1);
@@ -200,7 +200,8 @@ public class MullRelativeEntitlementImportWizard extends Wizard implements IImpo
 		};
 	}
 
-	private void doImportAction(final String filename, final char listSeparator, final char decimalSeparator, final ScenarioInstance instance, final Set<String> uniqueProblems, final List<String> allProblems) {
+	private void doImportAction(final String filename, final char listSeparator, final char decimalSeparator, final ScenarioInstance instance, final Set<String> uniqueProblems,
+			final List<String> allProblems) {
 		@NonNull
 		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecordChecked(instance);
 		try (final ModelReference modelReference = modelRecord.aquireReference("MullRelativeEntitlmentImportWizard")) {
