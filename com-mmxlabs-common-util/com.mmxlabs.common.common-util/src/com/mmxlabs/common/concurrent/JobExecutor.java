@@ -15,13 +15,13 @@ import java.util.function.Supplier;
 
 public class JobExecutor implements AutoCloseable {
 	private static final String MSG_NOT_CALLED_BEGIN = "Not called #begin";
-	private ExecutorService delegate;
+	private final ExecutorService delegate;
 	private final List<Future<?>> futures = new LinkedList<>();
 	private int threads;
 
 	private boolean inScope;
 
-	public JobExecutor(Thread parentThread, int threads, Supplier<AutoCloseable> action) {
+	public JobExecutor(final Thread parentThread, final int threads, final Supplier<AutoCloseable> action) {
 		this.delegate = NamedExecutorService.createFixedPool(parentThread, threads, action);
 		inScope = true;
 	}
@@ -33,13 +33,14 @@ public class JobExecutor implements AutoCloseable {
 			delegate.shutdownNow();
 			try {
 				delegate.awaitTermination(1, TimeUnit.DAYS);
-			} catch (InterruptedException e) {
+			} catch (final InterruptedException e) {
+				Thread.currentThread().interrupt();
 				throw new RuntimeException(e);
 			}
 		}
 	}
 
-	public synchronized void waitUntilComplete(long timeout, TimeUnit unit) {
+	public synchronized void waitUntilComplete(final long timeout, final TimeUnit unit) {
 		if (!inScope) {
 			throw new IllegalStateException(MSG_NOT_CALLED_BEGIN);
 		}
@@ -50,7 +51,8 @@ public class JobExecutor implements AutoCloseable {
 			delegate.awaitTermination(timeout, unit);
 
 			inScope = false;
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
 			throw new RuntimeException(e);
 		}
 
