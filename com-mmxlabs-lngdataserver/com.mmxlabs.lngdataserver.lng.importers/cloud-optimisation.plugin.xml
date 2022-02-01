@@ -16,6 +16,7 @@
                   class="com.mmxlabs.lngdataserver.lng.importers.menus.StartCloudOptimisationEditorActionDelegate"
                   definitionId="com.mmxlabs.commands.optimisation.cloud"
                   icon="platform:/plugin/com.mmxlabs.rcp.common/icons/24x24/cloud_run.png"
+                  disabledIcon="platform:/plugin/com.mmxlabs.rcp.common/icons/24x24/cloud_run_disabled.png"
                   id="com.mmxlabs.shiplingo.platform.models.optimisation.cloud"
                   label="Start Online Optimisation"
                   toolbarPath="optimisationgroup"

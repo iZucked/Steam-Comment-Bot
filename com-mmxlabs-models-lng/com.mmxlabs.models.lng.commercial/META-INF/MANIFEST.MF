@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.lng.commercial;singleton:=true
 Automatic-Module-Name: com.mmxlabs.models.lng.commercial
-Bundle-Version: 5.1.4.qualifier
+Bundle-Version: 5.1.5.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
@@ -15,10 +15,10 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.eclipse.emf.ecore;bundle-version="2.7.0";visibility:=reexport,
  com.mmxlabs.models.datetime;bundle-version="[2.1.0,3.0.0)";visibility:=reexport,
  com.mmxlabs.models.lng.fleet;visibility:=reexport,
- com.mmxlabs.models.lng.types;bundle-version="[5.1.4,6.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.types;bundle-version="[5.1.5,6.0.0)";visibility:=reexport,
  com.mmxlabs.models.mmxcore;visibility:=reexport,
- com.mmxlabs.models.lng.port;bundle-version="[5.1.4,6.0.0)";visibility:=reexport,
- com.mmxlabs.models.lng.pricing;bundle-version="[5.1.4,6.0.0)",
+ com.mmxlabs.models.lng.port;bundle-version="[5.1.5,6.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.pricing;bundle-version="[5.1.5,6.0.0)",
  org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.common.common-util,
  com.mmxlabs.rcp.common
