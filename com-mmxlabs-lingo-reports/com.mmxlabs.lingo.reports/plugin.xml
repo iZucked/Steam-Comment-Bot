@@ -56,7 +56,7 @@
       </view>
       <view
             name="Schedule"
-            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_statistic_view.gif"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/schedule_summary.png"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.schedule.ScheduleSummaryReport"
             id="com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport">
@@ -100,7 +100,7 @@
       -->
       <view
             name="Cooldown"
-            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_flow_view.gif"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/table.png"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.CooldownReportView"
             id="com.mmxlabs.shiplingo.platform.reports.views.CooldownReportView">
@@ -160,7 +160,7 @@
       <view
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.incomestatement.IncomeStatementByContract"
-            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_statistic_view.gif"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/table.png"
             id="com.mmxlabs.lingo.reports.views.standard.incomestatement.IncomeStatementByContract"
             name="Income Statement (Contract)"
             restorable="true">
@@ -168,7 +168,7 @@
       <view
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.lingo.reports.views.standard.incomestatement.IncomeStatementByRegion"
-            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/legacy/16x16/exec_statistic_view.gif"
+            icon="platform:/plugin/com.mmxlabs.rcp.common/icons/16x16/table.png"
             id="com.mmxlabs.lingo.reports.views.standard.incomestatement.IncomeStatementByRegion"
             name="Income Statement (Region)"
             restorable="true">

@@ -38,7 +38,7 @@ public final class CommonImages {
 		Delete("icons/16x16/delete.png", true), //
 		Filter("icons/16x16/filter.png"), //
 		Sort("icons/16x16/sort.png"), //
-		Copy("icons/16x16/copy.png"), //
+		Copy("icons/16x16/copy.png", true), //
 		Paste("icons/16x16/paste.png"), //
 		CollapseAll("icons/16x16/collapseall.png"), //
 		ExpandAll("icons/16x16/expandall.png"), //
@@ -47,14 +47,14 @@ public final class CommonImages {
 		Pin("icons/16x16/pin.png"), //
 		
 		Play_16("icons/16x16/optimise.png", true), //
-		CloudPlay_16("icons/16x16/cloud_run.png"), //
+		CloudPlay_16("icons/16x16/cloud_run.png", true), //
 		Cloud_16("icons/16x16/cloud.png"), //
 		ZoomIn("icons/16x16/zoomin.png"), //
 		ZoomOut("icons/16x16/zoomout.png"), //
-		PinnedRow("icons/legacy/16x16/PinnedRow.gif"), //
+		PinnedRow("icons/8x8/PinnedRow.png"), //
 		Console("icons/legacy/16x16/console.gif"), //
 		
-		
+
 		Error("icons/legacy/16x16/error.gif"), //
 		Warning("icons/legacy/16x16/warning.gif"), //
 		Information("icons/legacy/16x16/information.gif"), //
@@ -62,7 +62,7 @@ public final class CommonImages {
 		
 		//24x24
 		Play("icons/24x24/optimise.png", true), //
-		CloudPlay_24("icons/24x24/cloud_run.png"), //
+		CloudPlay_24("icons/24x24/cloud_run.png", true), //
 		Cloud_24("icons/24x24/cloud.png"), //
 
 //		Resume("icons/24x24/terminate.png", true), //
