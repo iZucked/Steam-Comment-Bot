@@ -138,7 +138,7 @@ public class CollectionsUtilTest {
 	public void toArrayListShortTest() {
 
 		final short[] arr = new short[] { 1, 2, 3 };
-		final ArrayList<Short> arrayList = CollectionsUtil.toArrayList(arr);
+		final List<Short> arrayList = CollectionsUtil.toArrayList(arr);
 
 		Assertions.assertEquals(arr.length, arrayList.size());
 
@@ -151,7 +151,7 @@ public class CollectionsUtilTest {
 	public void toArrayListIntegerTest() {
 
 		final int[] arr = new int[] { 1, 2, 3 };
-		final ArrayList<Integer> arrayList = CollectionsUtil.toArrayList(arr);
+		final List<Integer> arrayList = CollectionsUtil.toArrayList(arr);
 
 		Assertions.assertEquals(arr.length, arrayList.size());
 
@@ -164,7 +164,7 @@ public class CollectionsUtilTest {
 	public void toArrayListLongTest() {
 
 		final long[] arr = new long[] { 1, 2, 3 };
-		final ArrayList<Long> arrayList = CollectionsUtil.toArrayList(arr);
+		final List<Long> arrayList = CollectionsUtil.toArrayList(arr);
 
 		Assertions.assertEquals(arr.length, arrayList.size());
 
