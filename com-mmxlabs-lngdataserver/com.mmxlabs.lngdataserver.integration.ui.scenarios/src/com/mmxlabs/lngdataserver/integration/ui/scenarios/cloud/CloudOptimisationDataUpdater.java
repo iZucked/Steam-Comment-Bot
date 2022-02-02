@@ -276,9 +276,6 @@ class CloudOptimisationDataUpdater {
 
 										}
 									}
-
-//									IS THIS THE SAME INSTANCE?```
-									System.out.println(res.getUuid());
 									cRecord.setResultUUID(res.getUuid());
 
 								}
