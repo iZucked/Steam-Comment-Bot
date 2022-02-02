@@ -113,7 +113,11 @@ public class CloudManagerView extends ViewPart {
 					String msg = status.getStatus();
 					// Mapping to a more user friendly string
 					if ("complete".equals(msg)) {
-						return "Done";
+						if (rec.isComplete()) {
+							return "Done";
+						} else {
+							return "Importing result";
+						}
 					}
 					return msg;
 				}
