@@ -152,6 +152,7 @@ public class CloudOptimisationDataServiceClient {
 		try (Response response = localHttpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
 				response.body().close();
+				// Handle 410 Gone (old result)
 				throw new IOException("Unexpected code: " + response);
 			}
 			try (BufferedSource bufferedSource = response.body().source()) {
