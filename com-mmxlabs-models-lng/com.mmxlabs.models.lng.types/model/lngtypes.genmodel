@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel"
-    copyrightText="Copyright (C) Minimax Labs Ltd., 2010 - 2015&#xD;&#xA;All rights reserved."
+    copyrightText="Copyright (C) Minimax Labs Ltd., 2010 - 2022&#xD;&#xA;All rights reserved."
     modelDirectory="/com.mmxlabs.models.lng.types/src" editorDirectory="" modelPluginID="com.mmxlabs.models.lng.types"
     templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.sdk.template/templates/"
     dynamicTemplates="true" modelName="LNGTypes" featureMapWrapperInternalInterface=""
     featureMapWrapperClass="" codeFormatting="true" testsDirectory="" booleanFlagsField=""
-    importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0" copyrightFields="false"
-    runtimeVersion="2.11" language="" usedGenPackages="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore platform:/plugin/com.mmxlabs.models.datetime/model/datetime.genmodel#//datetime"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="16.0" copyrightFields="false"
+    runtimeVersion="2.28" language="" usedGenPackages="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore platform:/plugin/com.mmxlabs.models.datetime/model/datetime.genmodel#//datetime"
     operationReflection="true">
   <foreignModel>lngtypes.ecore</foreignModel>
   <genPackages prefix="Types" basePackage="com.mmxlabs.models.lng" disposableProviderFactory="true"

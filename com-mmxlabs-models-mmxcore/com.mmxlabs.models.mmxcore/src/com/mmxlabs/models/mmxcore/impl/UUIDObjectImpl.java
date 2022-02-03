@@ -70,6 +70,7 @@ public class UUIDObjectImpl extends MMXObjectImpl implements UUIDObject {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getUuid() {
 		return uuid;
 	}

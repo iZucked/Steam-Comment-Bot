@@ -37,7 +37,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @see com.mmxlabs.models.lng.fleet.FleetPackage
  * @generated
  */
-public class FleetSwitch<@Nullable T1> extends Switch<T1> {
+public class FleetSwitch<T1> extends Switch<T1> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->

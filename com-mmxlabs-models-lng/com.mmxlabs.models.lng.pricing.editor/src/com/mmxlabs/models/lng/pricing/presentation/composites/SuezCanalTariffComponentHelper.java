@@ -73,7 +73,7 @@ public class SuezCanalTariffComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, PricingPackage.Literals.SUEZ_CANAL_TARIFF);
+		addEditorsToComposite(detailComposite, PricingPackage.Literals.SUEZ_CANAL_TARIFF);	
 	}
 
 	/**
@@ -83,15 +83,14 @@ public class SuezCanalTariffComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		for (final IComponentHelper helper : superClassesHelpers)
-			helper.addEditorsToComposite(detailComposite, topClass);
+		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_bandsEditor(detailComposite, topClass);
+		add_tugBandsEditor(detailComposite, topClass);
+		add_routeRebatesEditor(detailComposite, topClass);
 		add_tugCostEditor(detailComposite, topClass);
 		add_fixedCostsEditor(detailComposite, topClass);
 		add_discountFactorEditor(detailComposite, topClass);
 		add_sdrToUSDEditor(detailComposite, topClass);
-		add_bandsEditor(detailComposite, topClass);
-		add_tugBandsEditor(detailComposite, topClass);
-		add_routeRebatesEditor(detailComposite, topClass);
 	}
 
 	/**

@@ -9,6 +9,7 @@ package com.mmxlabs.models.lng.nominations.presentation.composites;
 import com.mmxlabs.models.lng.nominations.NominationsPackage;
 
 import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 
@@ -28,7 +29,8 @@ import org.eclipse.emf.ecore.EClass;
  * @generated
  */
 public class AbstractNominatedValueComponentHelper extends BaseComponentHelper {
-	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
+
+	protected List<IComponentHelper> superClassesHelpers = new ArrayList<>();
 
 	/**
 	 * Construct a new instance, using the platform adapter manager

@@ -79,8 +79,8 @@ public class PortAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected PortSwitch<@Nullable Adapter> modelSwitch =
-		new PortSwitch<@Nullable Adapter>() {
+	protected PortSwitch<Adapter> modelSwitch =
+		new PortSwitch<Adapter>() {
 			@Override
 			public Adapter casePort(Port object) {
 				return createPortAdapter();

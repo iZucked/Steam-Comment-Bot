@@ -64,6 +64,7 @@ public class OtherNamesObjectImpl extends NamedObjectImpl implements OtherNamesO
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<String> getOtherNames() {
 		if (otherNames == null) {
 			otherNames = new EDataTypeUniqueEList<String>(String.class, this, MMXCorePackage.OTHER_NAMES_OBJECT__OTHER_NAMES);

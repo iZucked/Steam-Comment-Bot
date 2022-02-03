@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.types.util;
 
+import com.mmxlabs.models.lng.types.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
@@ -74,7 +75,7 @@ public class TypesAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected TypesSwitch<@Nullable Adapter> modelSwitch = new TypesSwitch<@Nullable Adapter>() {
+	protected TypesSwitch<Adapter> modelSwitch = new TypesSwitch<Adapter>() {
 		@Override
 		public <T extends ObjectSet<T, U>, U> Adapter caseObjectSet(ObjectSet<T, U> object) {
 			return createObjectSetAdapter();

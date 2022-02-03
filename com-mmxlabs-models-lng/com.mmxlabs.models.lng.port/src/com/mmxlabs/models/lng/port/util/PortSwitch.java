@@ -37,7 +37,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @see com.mmxlabs.models.lng.port.PortPackage
  * @generated
  */
-public class PortSwitch<@Nullable T1> extends Switch<T1> {
+public class PortSwitch<T1> extends Switch<T1> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->

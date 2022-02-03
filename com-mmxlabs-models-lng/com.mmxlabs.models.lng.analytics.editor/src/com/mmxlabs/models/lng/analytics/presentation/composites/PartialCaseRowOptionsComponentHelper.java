@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.analytics.PartialCaseRowOptions;
 import com.mmxlabs.models.lng.analytics.ui.editors.FuelChoiceInlineEditorHelper;
 import com.mmxlabs.models.lng.analytics.ui.editors.RouteChoiceInlineEditorHelper;
 import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
