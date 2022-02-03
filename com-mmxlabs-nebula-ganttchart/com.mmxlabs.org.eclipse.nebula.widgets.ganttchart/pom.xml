@@ -3,10 +3,6 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.eclipse.nebula.widgets</groupId>
-	<artifactId>com.mmxlabs.org.eclipse.nebula.widgets.ganttchart</artifactId>
-	<version>5.1.5-SNAPSHOT</version>
-	<packaging>eclipse-plugin</packaging>
 
 	<parent>
 		<groupId>org.eclipse.nebula.widgets</groupId>
@@ -15,18 +11,6 @@
 		<relativePath>..</relativePath>
 	</parent>
 
-	<build>
-
-		<sourceDirectory>src</sourceDirectory>
-
-		<plugins>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-maven-plugin</artifactId>
-				<extensions>true</extensions>
-			</plugin>
-		</plugins>
-	</build>
-
-
+	<artifactId>com.mmxlabs.org.eclipse.nebula.widgets.ganttchart</artifactId>
+	<packaging>eclipse-plugin</packaging>
 </project>
