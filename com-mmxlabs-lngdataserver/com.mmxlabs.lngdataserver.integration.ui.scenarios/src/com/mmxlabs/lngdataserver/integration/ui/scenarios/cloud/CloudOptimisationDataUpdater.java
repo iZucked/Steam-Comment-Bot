@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantLock;
@@ -60,7 +58,6 @@ import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.manifest.Manifest;
-import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
@@ -583,15 +580,6 @@ class CloudOptimisationDataUpdater {
 			for (final String jobId : jobIds) {
 				final CloudOptimisationDataResultRecord cRecord = getRecord(jobId);
 				if (cRecord != null) {
-					final ScenarioInstance instance = cRecord.getScenarioInstance();
-					if (instance != null) {
-						RunnerHelper.syncExecDisplayOptional(() -> {
-							// We could already be in a container, so lets remove it first...
-							if (instance.eContainer() != null) {
-								((Container) instance.eContainer()).getElements().remove(instance);
-							}
-						});
-					}
 					final boolean result = deleteRecord(cRecord);
 				}
 			}
