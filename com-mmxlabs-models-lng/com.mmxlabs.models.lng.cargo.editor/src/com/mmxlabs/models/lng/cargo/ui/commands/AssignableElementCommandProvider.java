@@ -61,7 +61,7 @@ public class AssignableElementCommandProvider extends AbstractModelCommandProvid
 				|| (parameter.getFeature() == CargoPackage.Literals.SLOT__WINDOW_START) //
 				|| (parameter.getFeature() == CargoPackage.Literals.SLOT__WINDOW_START_TIME) //
 				|| (parameter.getFeature() == CargoPackage.Literals.SLOT__DURATION)
-				|| (parameter.getFeature() == CargoPackage.Literals.SLOT__COUNTERPARTY)) {
+				|| (parameter.getFeature() == CargoPackage.Literals.SLOT__WINDOW_COUNTER_PARTY)) {
 			final Slot slot = (Slot) parameter.getOwner();
 			if (slot.getCargo() != null) {
 				return SetCommand.create(editingDomain, slot.getCargo(), CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, SetCommand.UNSET_VALUE);
