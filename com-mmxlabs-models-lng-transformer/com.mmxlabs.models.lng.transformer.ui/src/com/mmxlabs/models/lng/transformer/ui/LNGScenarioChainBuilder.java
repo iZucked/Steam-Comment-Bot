@@ -36,7 +36,6 @@ import com.mmxlabs.models.lng.transformer.ui.common.SolutionSetExporterUnit;
 public class LNGScenarioChainBuilder {
 
 	public static final String PROPERTY_MMX_NUMBER_OF_CORES = "MMX_NUMBER_OF_CORES";
-	public static final String PROPERTY_MMX_DISABLE_SECOND_ACTION_SET_RUN = "MMX_DISABLE_SECOND_ACTION_SET_RUN";
 
 	/**
 	 * Creates a {@link IChainRunner} for the "standard" optimisation process (as of

@@ -53,8 +53,6 @@ import com.mmxlabs.models.lng.transformer.ui.parallellocalsearchoptimiser.LNGPar
 public class LNGScenarioChainUnitFactory {
 
 	public static final String PROPERTY_MMX_NUMBER_OF_CORES = "MMX_NUMBER_OF_CORES";
-	public static final String PROPERTY_MMX_DISABLE_SECOND_ACTION_SET_RUN = "MMX_DISABLE_SECOND_ACTION_SET_RUN";
-	public static final String PROPERTY_MMX_DISABLE_SECOND_LSO_RUN = "MMX_DISABLE_SECOND_LSO_RUN";
 
 	private static final int PROGRESS_CLEAN_STATE = 25;
 	private static final int PROGRESS_OPTIMISATION = 100;
@@ -62,8 +60,8 @@ public class LNGScenarioChainUnitFactory {
 	private static final int PROGRESS_ACTION_SET_OPTIMISATION = 20;
 	private static final int PROGRESS_ACTION_SET_SAVE = 5;
 
-	public static @Nullable BiConsumer<LNGScenarioToOptimiserBridge, String> chainUp(final @NonNull ChainBuilder builder, @NonNull LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, final @NonNull JobExecutorFactory jobExecutorFactory,
-			final @NonNull OptimisationStage template, final int jobCount, final @NonNull UserSettings userSettings) {
+	public static @Nullable BiConsumer<LNGScenarioToOptimiserBridge, String> chainUp(final @NonNull ChainBuilder builder, @NonNull LNGScenarioToOptimiserBridge scenarioToOptimiserBridge,
+			final @NonNull JobExecutorFactory jobExecutorFactory, final @NonNull OptimisationStage template, final int jobCount, final @NonNull UserSettings userSettings) {
 		if (template instanceof CleanStateOptimisationStage) {
 			final CleanStateOptimisationStage stage = (CleanStateOptimisationStage) template;
 			if (stage.getAnnealingSettings().getIterations() > 0) {
@@ -73,57 +71,35 @@ public class LNGScenarioChainUnitFactory {
 		} else if (template instanceof MultiobjectiveSimilarityOptimisationStage) {
 			final MultiobjectiveSimilarityOptimisationStage stage = (MultiobjectiveSimilarityOptimisationStage) template;
 			if (stage.getAnnealingSettings().getIterations() > 0) {
-				final boolean doSecondRun = doSecondLSORun(userSettings);
 				final int[] seeds = new int[jobCount];
 				for (int i = 0; i < jobCount; ++i) {
 					seeds[i] = stage.getSeed() + i;
 				}
 				if (template instanceof ParallelMultiobjectiveSimilarityOptimisationStage) {
-					if (doSecondRun) {
-						LNGMultiObjectiveOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, jobExecutorFactory, seeds);
-						LNGParallelMultiObjectiveOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, jobExecutorFactory, PROGRESS_OPTIMISATION, true);
-					} else {
-						LNGParallelMultiObjectiveOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, jobExecutorFactory, PROGRESS_OPTIMISATION, true);
-					}
+					LNGParallelMultiObjectiveOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, jobExecutorFactory, PROGRESS_OPTIMISATION, true);
 				} else {
-					if (doSecondRun) {
-						LNGMultiObjectiveOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, jobExecutorFactory, seeds);
-						LNGMultiObjectiveOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION - (PROGRESS_OPTIMISATION / 3), jobExecutorFactory, seeds);
-					} else {
-						LNGMultiObjectiveOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION, jobExecutorFactory, seeds);
-					}
+					LNGMultiObjectiveOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION - (PROGRESS_OPTIMISATION / 3), jobExecutorFactory, seeds);
 				}
 			}
 		} else if (template instanceof MultipleSolutionSimilarityOptimisationStage) {
 			final MultipleSolutionSimilarityOptimisationStage stage = (MultipleSolutionSimilarityOptimisationStage) template;
 			if (stage.getAnnealingSettings().getIterations() > 0) {
-				final boolean doSecondRun = doSecondLSORun(userSettings);
 				final int[] seeds = new int[jobCount];
 				for (int i = 0; i < jobCount; ++i) {
 					seeds[i] = stage.getSeed() + i;
 				}
 				if (template instanceof ParallelMultipleSolutionSimilarityOptimisationStage) {
-					if (doSecondRun) {
-						LNGMultiObjectiveOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, jobExecutorFactory, seeds);
-						LNGParallelMultiObjectiveOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, jobExecutorFactory, PROGRESS_OPTIMISATION, false);
-					} else {
-						LNGParallelMultiObjectiveOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, jobExecutorFactory, PROGRESS_OPTIMISATION, false);
-					}
+					LNGParallelMultiObjectiveOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, jobExecutorFactory, PROGRESS_OPTIMISATION, false);
 				} else {
-					if (doSecondRun) {
-						LNGMultiObjectiveOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, jobExecutorFactory, seeds);
-						LNGMultiObjectiveOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION - (PROGRESS_OPTIMISATION / 3), jobExecutorFactory, seeds);
-					} else {
-						LNGMultiObjectiveOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION, jobExecutorFactory, seeds);
-					}
+					LNGMultiObjectiveOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION, jobExecutorFactory, seeds);
 				}
 				return (bridge, name) -> {
-					SolutionSetExporterUnit.exportMultipleSolutions(builder, PROGRESS_ACTION_SET_SAVE, bridge, () -> {
+					SolutionSetExporterUnit.exportMultipleSolutions(builder, 5, bridge, () -> {
 						OptimisationResult options = AnalyticsFactory.eINSTANCE.createOptimisationResult();
 						options.setName(name);
 						options.setUserSettings(EcoreUtil.copy(userSettings));
 						return options;
-					},  false, OptionalLong.empty());
+					}, false, OptionalLong.empty());
 				};
 			}
 		} else if (template instanceof LocalSearchOptimisationStage) {
@@ -133,21 +109,10 @@ public class LNGScenarioChainUnitFactory {
 				for (int i = 0; i < jobCount; ++i) {
 					seeds[i] = stage.getSeed() + i;
 				}
-				final boolean doSecondRun = doSecondLSORun(userSettings);
 				if (template instanceof ParallelLocalSearchOptimisationStage) {
-					if (doSecondRun) {
-						LNGLSOOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, jobExecutorFactory, seeds);
-						LNGParallelOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, jobExecutorFactory, PROGRESS_OPTIMISATION);
-					} else {
-						LNGParallelOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, jobExecutorFactory, PROGRESS_OPTIMISATION);
-					}
+					LNGParallelOptimiserTransformerUnit.chain(builder, stage.getName(), userSettings, stage, jobExecutorFactory, PROGRESS_OPTIMISATION);
 				} else {
-					if (doSecondRun) {
-						LNGLSOOptimiserTransformerUnit.chainPoolFake(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION / 3, jobExecutorFactory, seeds);
-						LNGLSOOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION - (PROGRESS_OPTIMISATION / 3), jobExecutorFactory, seeds);
-					} else {
-						LNGLSOOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION, jobExecutorFactory, seeds);
-					}
+					LNGLSOOptimiserTransformerUnit.chainPool(builder, stage.getName(), userSettings, stage, PROGRESS_OPTIMISATION, jobExecutorFactory, seeds);
 				}
 			}
 			return null;
@@ -176,13 +141,7 @@ public class LNGScenarioChainUnitFactory {
 			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_ACTIONSET)) {
 				if (stage.getTotalEvaluations() > 0) {
 					// Run the action set post optimisation
-					final boolean doSecondRun = doSecondActionSetRun(userSettings);
-					if (doSecondRun) {
-						LNGActionSetTransformerUnit.chainFake(builder, stage.getName(), userSettings, stage, jobExecutorFactory, PROGRESS_ACTION_SET_OPTIMISATION / 2);
-						LNGActionSetTransformerUnit.chain(builder, stage.getName(), userSettings, stage, jobExecutorFactory, PROGRESS_ACTION_SET_OPTIMISATION / 2);
-					} else {
 						LNGActionSetTransformerUnit.chain(builder, stage.getName(), userSettings, stage, jobExecutorFactory, PROGRESS_ACTION_SET_OPTIMISATION);
-					}
 				}
 				return (bridge, name) -> {
 					SolutionSetExporterUnit.exportMultipleSolutions(builder, PROGRESS_ACTION_SET_SAVE, bridge, () -> {
@@ -200,39 +159,12 @@ public class LNGScenarioChainUnitFactory {
 			final ReduceSequencesStage stageSettings = (ReduceSequencesStage) template;
 			LNGReduceToBestSolutionUnit.chain(builder, stageSettings.getName(), 1);
 		} else if (template instanceof InsertionOptimisationStage) {
-			// Currently we directly construct the chain up code, particularly due to the extra inputs required.
-			 return null;
+			// Currently we directly construct the chain up code, particularly due to the
+			// extra inputs required.
+			return null;
 		} else {
 			throw new IllegalArgumentException("Unknown stage type");
 		}
 		return null;
-	}
-
-	protected static boolean doSecondActionSetRun(@NonNull final UserSettings userSettings) {
-		if (System.getProperty(PROPERTY_MMX_DISABLE_SECOND_ACTION_SET_RUN) != null) {
-			return false;
-		}
-		boolean over3Months = false;
-		if (!userSettings.isSetPeriodStartDate() || !userSettings.isSetPeriodEnd()) {
-			over3Months = true;
-		} else {
-			final LocalDate after = userSettings.getPeriodStartDate();
-			final YearMonth before = userSettings.getPeriodEnd();
-			if (after == null || before == null) {
-				over3Months = true;
-
-			} else if (Months.between(after, before) > 3) {
-				over3Months = true;
-			}
-		}
-		return over3Months;
-	}
-
-	protected static boolean doSecondLSORun(@NonNull final UserSettings userSettings) {
-
-		if (System.getProperty(PROPERTY_MMX_DISABLE_SECOND_LSO_RUN) != null) {
-			return false;
-		}
-		return LicenseFeatures.isPermitted("features:optimiser-second-lso-stage");
 	}
 }
