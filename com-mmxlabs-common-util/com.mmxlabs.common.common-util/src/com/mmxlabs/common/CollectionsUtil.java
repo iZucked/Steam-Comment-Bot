@@ -70,7 +70,7 @@ public final class CollectionsUtil {
 	 * @param a
 	 * @return
 	 */
-	public static ArrayList<Integer> toArrayList(final int[] a) {
+	public static List<Integer> toArrayList(final int[] a) {
 		final ArrayList<Integer> list = new ArrayList<>(a.length);
 		for (final int v : a) {
 			list.add(v);
@@ -86,7 +86,7 @@ public final class CollectionsUtil {
 	 * @return
 	 */
 
-	public static final ArrayList<Long> toArrayList(final long[] a) {
+	public static final List<Long> toArrayList(final long[] a) {
 		final ArrayList<Long> list = new ArrayList<>(a.length);
 		for (final long v : a) {
 			list.add(v);
@@ -101,7 +101,7 @@ public final class CollectionsUtil {
 	 * @param a
 	 * @return
 	 */
-	public static ArrayList<Short> toArrayList(final short[] a) {
+	public static List<Short> toArrayList(final short[] a) {
 		final ArrayList<Short> list = new ArrayList<>(a.length);
 		for (final short v : a) {
 			list.add(v);
@@ -176,9 +176,7 @@ public final class CollectionsUtil {
 	 */
 	public static <T> Set<T> makeHashSet(final T... elements) {
 		final Set<T> result = new HashSet<>();
-		for (int i = 0; i < elements.length; i++) {
-			result.add(elements[i]);
-		}
+		Collections.addAll(result, elements);
 		return result;
 	}
 
@@ -195,7 +193,7 @@ public final class CollectionsUtil {
 		return result;
 	}
 
-	public static <T> LinkedList<T> makeLinkedList(final T... elements) {
+	public static <T> List<T> makeLinkedList(final T... elements) {
 		LinkedList<T> newList = new LinkedList<>();
 		Collections.addAll(newList, elements);
 		return newList;

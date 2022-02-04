@@ -18,6 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -160,7 +161,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 						final Iterator<VolumeData> otherIterator = other.iterator();
 						while (otherIterator.hasNext()) {
 							final VolumeData otherData = otherIterator.next();
-							if (Equality.isEqual(refData.contract, otherData.contract) && refData.purchase == otherData.purchase) {
+							if (Objects.equals(refData.contract, otherData.contract) && refData.purchase == otherData.purchase) {
 
 								output.add(createDiffData(refData, otherData));
 								otherIterator.remove();

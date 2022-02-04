@@ -143,8 +143,7 @@ public class ScheduleSpecificationTransformer {
 
 			IPortSlot lastSlot = null;
 			for (final ScheduleSpecificationEvent event : vesselSpecificiation.getEvents()) {
-				if (event instanceof SlotSpecification) {
-					final SlotSpecification slotSpecification = (SlotSpecification) event;
+				if (event instanceof SlotSpecification slotSpecification) {
 					final Slot<?> e_slot = slotSpecification.getSlot();
 					final IPortSlot o_slot = mem.getOptimiserObjectNullChecked(e_slot, IPortSlot.class);
 					final ISequenceElement e = portSlotProvider.getElement(o_slot);
@@ -160,8 +159,7 @@ public class ScheduleSpecificationTransformer {
 					}
 
 					lastSlot = o_slot;
-				} else if (event instanceof VesselEventSpecification) {
-					final VesselEventSpecification vesselEventSpecification = (VesselEventSpecification) event;
+				} else if (event instanceof VesselEventSpecification vesselEventSpecification) {
 					final VesselEvent e_vesselEvent = vesselEventSpecification.getVesselEvent();
 					final IVesselEventPortSlot o_slot = mem.getOptimiserObjectNullChecked(e_vesselEvent, IVesselEventPortSlot.class);
 					elements.addAll(o_slot.getEventSequenceElements());
@@ -179,10 +177,8 @@ public class ScheduleSpecificationTransformer {
 					}
 					
 					lastSlot = o_slot;
-				} else if (event instanceof VoyageSpecification) {
-					final VoyageSpecification voyageSpecification = (VoyageSpecification) event;
-
-					if (lastSlot != null && voyageSpecification.getRouteOption() != null) {
+				} else if (event instanceof VoyageSpecification voyageSpecification) {
+					if (lastSlot != null && voyageSpecification.isSetRouteOption()) {
 						switch (voyageSpecification.getRouteOption()) {
 						case DIRECT:
 							voyageSpecificationProvider.setVoyageRouteOption(lastSlot, ERouteOption.DIRECT);
@@ -198,7 +194,7 @@ public class ScheduleSpecificationTransformer {
 
 						}
 					}
-					if (lastSlot != null && voyageSpecification.getFuelChoice() != null) {
+					if (lastSlot != null && voyageSpecification.isSetFuelChoice()) {
 						switch (voyageSpecification.getFuelChoice()) {
 						case NBO_BUNKERS:
 							voyageSpecificationProvider.setFuelChoice(lastSlot, TravelFuelChoice.NBO_PLUS_BUNKERS);

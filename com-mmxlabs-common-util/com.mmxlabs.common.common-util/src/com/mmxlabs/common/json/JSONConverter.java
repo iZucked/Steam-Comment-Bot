@@ -36,9 +36,7 @@ public class JSONConverter {
 			final String key = (String) keysItr.next();
 			Object value = object.get(key);
 
-			if (value instanceof final JSONArray jArr) {
-				value = jArr;
-			} else if (value instanceof final JSONObject jObj) {
+			if (value instanceof final JSONObject jObj) {
 				value = toMap(jObj);
 			}
 			map.put(key, value);
@@ -52,9 +50,7 @@ public class JSONConverter {
 			Object value = array.get(i);
 			if (value instanceof final JSONArray jArr) {
 				value = toList(jArr);
-			}
-
-			else if (value instanceof final JSONObject jObj) {
+			} else if (value instanceof final JSONObject jObj) {
 				value = toMap(jObj);
 			}
 			list.add(value);

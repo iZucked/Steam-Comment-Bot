@@ -4,7 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
-import com.mmxlabs.common.Equality;
+import java.util.Objects;
+
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.voyage.IdleFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
@@ -83,7 +84,7 @@ public final class IdleNBOVoyagePlanChoice implements IVoyagePlanChoice {
 
 			final IdleNBOVoyagePlanChoice other = (IdleNBOVoyagePlanChoice) obj;
 
-			if (!Equality.isEqual(options, other.options)) {
+			if (!Objects.equals(options, other.options)) {
 				return false;
 			}
 

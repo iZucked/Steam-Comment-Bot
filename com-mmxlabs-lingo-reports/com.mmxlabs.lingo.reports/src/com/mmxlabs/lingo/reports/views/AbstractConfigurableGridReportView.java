@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -299,7 +300,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 						if (!contents.contains(b) && equivalents.containsKey(b)) {
 							b = equivalents.get(b);
 						}
-						return Equality.isEqual(a, b);
+						return Objects.equals(a, b);
 					}
 				});
 			}

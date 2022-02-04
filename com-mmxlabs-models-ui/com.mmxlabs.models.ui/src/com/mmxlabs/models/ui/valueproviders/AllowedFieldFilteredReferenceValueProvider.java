@@ -5,6 +5,7 @@
 package com.mmxlabs.models.ui.valueproviders;
 
 import java.util.Collection;
+import java.util.Objects;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -49,7 +50,7 @@ public abstract class AllowedFieldFilteredReferenceValueProvider<FieldType> exte
 
 		for (FieldType fieldValue: allowed) {
 			// permit a value which is explicitly in the allowed values list
-			if (Equality.isEqual(fieldValue, queryValue)) {
+			if (Objects.equals(fieldValue, queryValue)) {
 				return true;
 			}
 			// permit a value which is included in a selection from the allowed values list

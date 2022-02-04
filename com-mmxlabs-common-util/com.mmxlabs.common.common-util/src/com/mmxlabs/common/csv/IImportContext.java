@@ -10,8 +10,10 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 /**
- * A single instance of this will be used whenever some importing is happening. It tracks all of the named objects that may be referenced, and handles setting up any deferred processing which has to
- * happen after the main importing is done.
+ * A single instance of this will be used whenever some importing is happening.
+ * It tracks all of the named objects that may be referenced, and handles
+ * setting up any deferred processing which has to happen after the main
+ * importing is done.
  * 
  * @author hinton
  * 
@@ -19,52 +21,53 @@ import org.eclipse.jdt.annotation.Nullable;
 public interface IImportContext {
 
 	/**
-	 * Process a deferment later; these are executed in order of {@link IDeferment#getStage()}.
+	 * Process a deferment later; these are executed in order of
+	 * {@link IDeferment#getStage()}.
 	 * 
 	 * 
 	 * @param deferment
 	 */
-	public void doLater(@NonNull final IDeferment deferment);
+	void doLater(@NonNull IDeferment deferment);
 
 	/**
-	 * Add a reader to the reader stack; this is used to find error locations in {@link #addProblem(String, boolean, boolean)}
+	 * Add a reader to the reader stack; this is used to find error locations in
+	 * {@link #addProblem(String, boolean, boolean)}
 	 * 
 	 * @param reader
 	 */
-	public void pushReader(@NonNull CSVReader reader);
+	void pushReader(@NonNull CSVReader reader);
 
 	/**
 	 * Pop a reader from the reader stack; see also {@link #pushReader(CSVReader)}
 	 */
 	@Nullable
-	public CSVReader popReader();
+	CSVReader popReader();
 
 	/**
-	 * Add a problem message to the list of problems. See also {@link #pushReader(CSVReader)} and {@link #popReader()}
+	 * Add a problem message to the list of problems. See also
+	 * {@link #pushReader(CSVReader)} and {@link #popReader()}
 	 * 
 	 * @param string
-	 * @param trackFile
-	 *            if true record the file that was open when this happened
-	 * @param trackField
-	 *            if true record the last field read when this happened
+	 * @param trackFile  if true record the file that was open when this happened
+	 * @param trackField if true record the last field read when this happened
 	 */
 	@NonNull
-	public IImportProblem createProblem(final String string, final boolean trackFile, final boolean trackLine, final boolean trackField);
+	IImportProblem createProblem(String string, boolean trackFile, boolean trackLine, boolean trackField);
 
-	public void addProblem(@NonNull IImportProblem problem);
+	void addProblem(@NonNull IImportProblem problem);
 
 	/**
 	 * Returns a list of the problems which have happened so far
 	 * 
 	 * @return
 	 */
-	public List<IImportProblem> getProblems();
+	List<IImportProblem> getProblems();
 
 	/**
 	 * @return the current reader
 	 */
 	@Nullable
-	public CSVReader peekReader();
+	CSVReader peekReader();
 
-	public char getDecimalSeparator();
+	char getDecimalSeparator();
 }

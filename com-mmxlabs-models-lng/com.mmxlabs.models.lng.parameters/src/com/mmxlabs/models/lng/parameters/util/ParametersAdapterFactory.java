@@ -76,8 +76,8 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ParametersSwitch<@Nullable Adapter> modelSwitch =
-		new ParametersSwitch<@Nullable Adapter>() {
+	protected ParametersSwitch<Adapter> modelSwitch =
+		new ParametersSwitch<Adapter>() {
 			@Override
 			public Adapter caseUserSettings(UserSettings object) {
 				return createUserSettingsAdapter();

@@ -72,7 +72,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>This method is used to initialize {@link ManifestPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -86,7 +86,8 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 		if (isInited) return (ManifestPackage)EPackage.Registry.INSTANCE.getEPackage(ManifestPackage.eNS_URI);
 
 		// Obtain or create and register package
-		ManifestPackageImpl theManifestPackage = (ManifestPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ManifestPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new ManifestPackageImpl());
+		Object registeredManifestPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		ManifestPackageImpl theManifestPackage = registeredManifestPackage instanceof ManifestPackageImpl ? (ManifestPackageImpl)registeredManifestPackage : new ManifestPackageImpl();
 
 		isInited = true;
 
@@ -99,7 +100,6 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 		// Mark meta-data to indicate it can't be changed
 		theManifestPackage.freeze();
 
-  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(ManifestPackage.eNS_URI, theManifestPackage);
 		return theManifestPackage;
@@ -270,6 +270,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getModelArtifact_DisplayName() {
 		return (EAttribute)modelArtifactEClass.getEStructuralFeatures().get(5);
 	}

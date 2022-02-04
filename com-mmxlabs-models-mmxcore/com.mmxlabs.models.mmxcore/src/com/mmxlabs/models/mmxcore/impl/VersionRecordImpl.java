@@ -118,6 +118,7 @@ public class VersionRecordImpl extends EObjectImpl implements VersionRecord {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getCreatedBy() {
 		return createdBy;
 	}
@@ -127,6 +128,7 @@ public class VersionRecordImpl extends EObjectImpl implements VersionRecord {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCreatedBy(String newCreatedBy) {
 		String oldCreatedBy = createdBy;
 		createdBy = newCreatedBy;
@@ -139,6 +141,7 @@ public class VersionRecordImpl extends EObjectImpl implements VersionRecord {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Instant getCreatedAt() {
 		return createdAt;
 	}
@@ -148,6 +151,7 @@ public class VersionRecordImpl extends EObjectImpl implements VersionRecord {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCreatedAt(Instant newCreatedAt) {
 		Instant oldCreatedAt = createdAt;
 		createdAt = newCreatedAt;
@@ -160,6 +164,7 @@ public class VersionRecordImpl extends EObjectImpl implements VersionRecord {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getVersion() {
 		return version;
 	}
@@ -169,6 +174,7 @@ public class VersionRecordImpl extends EObjectImpl implements VersionRecord {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVersion(String newVersion) {
 		String oldVersion = version;
 		version = newVersion;

@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.validation;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
@@ -12,7 +13,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -120,7 +120,7 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 				CargoPackage.Literals.SLOT__PORT };
 
 		for (final EStructuralFeature feature : features) {
-			if (!Equality.isEqual(loadSlot.eGet(feature), dischargeSlot.eGet(feature))) {
+			if (!Objects.equals(loadSlot.eGet(feature), dischargeSlot.eGet(feature))) {
 				final String failureMessage = String.format("Ship to Ship %s must be in sync", feature.getName());
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
 				dsd.addEObjectAndFeature(loadSlot, feature);
@@ -129,7 +129,7 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 			}
 		}
 
-		if (!Equality.isEqual(loadSlot.getSlotOrDelegateMaxQuantity(), dischargeSlot.getSlotOrDelegateMaxQuantity())) {
+		if (!Objects.equals(loadSlot.getSlotOrDelegateMaxQuantity(), dischargeSlot.getSlotOrDelegateMaxQuantity())) {
 			final String failureMessage = String.format("Ship to Ship %s must be in sync", "Max Quantity");
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
 			dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
@@ -137,7 +137,7 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 			failures.add(dsd);
 		}
 
-		if (!Equality.isEqual(loadSlot.getSlotOrDelegateMinQuantity(), dischargeSlot.getSlotOrDelegateMinQuantity())) {
+		if (!Objects.equals(loadSlot.getSlotOrDelegateMinQuantity(), dischargeSlot.getSlotOrDelegateMinQuantity())) {
 			final String failureMessage = String.format("Ship to Ship %s must be in sync", "Min Quantity");
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
 			dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
@@ -156,7 +156,7 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 		if (loadCargo != null && dischargeCargo != null) {
 
 			// Check different cargoes
-			if (Equality.isEqual(loadCargo, dischargeCargo)) {
+			if (Objects.equals(loadCargo, dischargeCargo)) {
 				final String failureMessage = String.format("Ship to Ship cargoes must be different");
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
 				dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_Cargo());

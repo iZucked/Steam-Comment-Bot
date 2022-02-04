@@ -12,6 +12,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.core.databinding.ObservablesManager;
@@ -486,7 +487,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 					gotValue = true;
 					value = mValue;
 				} else {
-					if (!Equality.isEqual(value, mValue)) {
+					if (!Objects.equals(value, mValue)) {
 						continue attribute_loop;
 					}
 				}

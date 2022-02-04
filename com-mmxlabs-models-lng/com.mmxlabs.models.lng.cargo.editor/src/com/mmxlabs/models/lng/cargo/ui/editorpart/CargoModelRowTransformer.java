@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
@@ -19,7 +20,6 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -394,10 +394,9 @@ public class CargoModelRowTransformer {
 		@Override
 		public boolean equals(final Object obj) {
 
-			if (obj instanceof RowData) {
-				final RowData other = (RowData) obj;
-				return Equality.isEqual(cargo, other.cargo) && Equality.isEqual(loadSlot, other.loadSlot) && Equality.isEqual(dischargeSlot, other.dischargeSlot)
-						&& Equality.isEqual(marketAllocation, other.marketAllocation) && Equality.isEqual(openSlotAllocation, other.openSlotAllocation);
+			if (obj instanceof RowData other) {
+				return Objects.equals(cargo, other.cargo) && Objects.equals(loadSlot, other.loadSlot) && Objects.equals(dischargeSlot, other.dischargeSlot)
+						&& Objects.equals(marketAllocation, other.marketAllocation) && Objects.equals(openSlotAllocation, other.openSlotAllocation);
 			}
 
 			return false;

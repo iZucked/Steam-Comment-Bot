@@ -32,7 +32,7 @@ import org.eclipse.jdt.annotation.Nullable;
  * @see com.mmxlabs.models.lng.adp.ADPPackage
  * @generated
  */
-public class ADPSwitch<@Nullable T1> extends Switch<T1> {
+public class ADPSwitch<T1> extends Switch<T1> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->

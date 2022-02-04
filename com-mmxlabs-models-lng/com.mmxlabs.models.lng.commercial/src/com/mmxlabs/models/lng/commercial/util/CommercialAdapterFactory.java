@@ -100,8 +100,8 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected CommercialSwitch<@Nullable Adapter> modelSwitch =
-		new CommercialSwitch<@Nullable Adapter>() {
+	protected CommercialSwitch<Adapter> modelSwitch =
+		new CommercialSwitch<Adapter>() {
 			@Override
 			public Adapter caseCommercialModel(CommercialModel object) {
 				return createCommercialModelAdapter();

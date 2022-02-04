@@ -42,7 +42,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage
  * @generated
  */
-public class CommercialSwitch<@Nullable T> extends Switch<T> {
+public class CommercialSwitch<T> extends Switch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->

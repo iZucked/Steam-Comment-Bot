@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
@@ -103,7 +104,6 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.menus.IMenuService;
 import org.osgi.service.event.EventHandler;
 
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -773,7 +773,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					return true;
 				}
 
-				return Equality.isEqual(a, b);
+				return Objects.equals(a, b);
 			}
 
 			private Set<Object> getObjectSet(final Object a) {

@@ -147,6 +147,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getMMXObject() {
 		return mmxObjectEClass;
 	}
@@ -156,6 +157,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getMMXObject_Extensions() {
 		return (EReference)mmxObjectEClass.getEStructuralFeatures().get(0);
 	}
@@ -165,6 +167,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getMMXObject__GetUnsetValue__EStructuralFeature() {
 		return mmxObjectEClass.getEOperations().get(0);
 	}
@@ -174,6 +177,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getMMXObject__EGetWithDefault__EStructuralFeature() {
 		return mmxObjectEClass.getEOperations().get(1);
 	}
@@ -183,6 +187,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getMMXObject__EContainerOp() {
 		return mmxObjectEClass.getEOperations().get(2);
 	}
@@ -192,6 +197,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getNamedObject() {
 		return namedObjectEClass;
 	}
@@ -201,6 +207,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getNamedObject_Name() {
 		return (EAttribute)namedObjectEClass.getEStructuralFeatures().get(0);
 	}
@@ -211,6 +218,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getOtherNamesObject() {
 		return otherNamesObjectEClass;
 	}
@@ -221,6 +229,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getOtherNamesObject_OtherNames() {
 		return (EAttribute)otherNamesObjectEClass.getEStructuralFeatures().get(0);
 	}
@@ -230,6 +239,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getUUIDObject() {
 		return uuidObjectEClass;
 	}
@@ -239,6 +249,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUUIDObject_Uuid() {
 		return (EAttribute)uuidObjectEClass.getEStructuralFeatures().get(0);
 	}
@@ -248,6 +259,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getMMXRootObject() {
 		return mmxRootObjectEClass;
 	}
@@ -257,6 +269,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getMMXResultRoot() {
 		return mmxResultRootEClass;
 	}
@@ -266,6 +279,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getVersionRecord() {
 		return versionRecordEClass;
 	}
@@ -275,6 +289,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getVersionRecord_CreatedBy() {
 		return (EAttribute)versionRecordEClass.getEStructuralFeatures().get(0);
 	}
@@ -284,6 +299,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getVersionRecord_CreatedAt() {
 		return (EAttribute)versionRecordEClass.getEStructuralFeatures().get(1);
 	}
@@ -293,6 +309,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getVersionRecord_Version() {
 		return (EAttribute)versionRecordEClass.getEStructuralFeatures().get(2);
 	}
@@ -302,6 +319,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MMXCoreFactory getMMXCoreFactory() {
 		return (MMXCoreFactory)getEFactoryInstance();
 	}

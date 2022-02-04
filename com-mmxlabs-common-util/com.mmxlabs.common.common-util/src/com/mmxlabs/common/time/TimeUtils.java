@@ -8,12 +8,18 @@ import java.time.ZonedDateTime;
 import java.time.temporal.Temporal;
 import java.util.function.BiPredicate;
 
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.NonNullPair;
 
-public class TimeUtils {
+@NonNullByDefault
+public final class TimeUtils {
+
+	private TimeUtils() {
+
+	}
+
 	public static boolean overlaps(@Nullable final NonNullPair<ZonedDateTime, ZonedDateTime> a, @Nullable final NonNullPair<ZonedDateTime, ZonedDateTime> b) {
 		return overlaps(a, b, ZonedDateTime::isBefore);
 	}
@@ -28,27 +34,24 @@ public class TimeUtils {
 				within(b, a.getFirst(), beforeFunction);// || within(b, a.getSecond());
 	}
 
-	public static <T extends Temporal> boolean within(final NonNullPair<T, T> p, @NonNull T date, BiPredicate<T, T> beforeFunction) {
+	public static <T extends Temporal> boolean within(final NonNullPair<T, T> p, T date, BiPredicate<T, T> beforeFunction) {
 		return (!beforeFunction.test(date, p.getFirst()) && beforeFunction.test(date, p.getSecond()));
 	}
 
-	@NonNull
-	public static NonNullPair<ZonedDateTime, ZonedDateTime> intersect(@NonNull final NonNullPair<ZonedDateTime, ZonedDateTime> a, @NonNull final NonNullPair<ZonedDateTime, ZonedDateTime> b) {
+	public static NonNullPair<ZonedDateTime, ZonedDateTime> intersect(final NonNullPair<ZonedDateTime, ZonedDateTime> a, final NonNullPair<ZonedDateTime, ZonedDateTime> b) {
 		final ZonedDateTime s = latest(a.getFirst(), b.getFirst());
 		final ZonedDateTime e = earliest(a.getSecond(), b.getSecond());
 		return new NonNullPair<>(s, e);
 	}
 
-	@NonNull
-	public static ZonedDateTime earliest(@NonNull final ZonedDateTime a, @NonNull final ZonedDateTime b) {
+	public static ZonedDateTime earliest(final ZonedDateTime a, final ZonedDateTime b) {
 		if (a.isBefore(b)) {
 			return a;
 		}
 		return b;
 	}
 
-	@NonNull
-	public static ZonedDateTime latest(@NonNull final ZonedDateTime a, @NonNull final ZonedDateTime b) {
+	public static ZonedDateTime latest(final ZonedDateTime a, final ZonedDateTime b) {
 		if (a.isAfter(b)) {
 			return a;
 		}

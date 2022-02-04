@@ -34,7 +34,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  * @see com.mmxlabs.models.lng.parameters.ParametersPackage
  * @generated
  */
-public class ParametersSwitch<@Nullable T1> extends Switch<T1> {
+public class ParametersSwitch<T1> extends Switch<T1> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->

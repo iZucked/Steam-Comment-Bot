@@ -51,7 +51,7 @@ public final class Tuple<I> implements Comparable<Tuple<I>> {
 				return false;
 			}
 
-			if (!Equality.isEqual(t.i, i)) {
+			if (!Objects.equals(t.i, i)) {
 				return false;
 			}
 			return true;

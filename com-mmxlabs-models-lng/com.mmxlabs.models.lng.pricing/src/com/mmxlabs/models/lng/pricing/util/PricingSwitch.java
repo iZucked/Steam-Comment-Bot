@@ -41,7 +41,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @see com.mmxlabs.models.lng.pricing.PricingPackage
  * @generated
  */
-public class PricingSwitch<@Nullable T> extends Switch<T> {
+public class PricingSwitch<T> extends Switch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->

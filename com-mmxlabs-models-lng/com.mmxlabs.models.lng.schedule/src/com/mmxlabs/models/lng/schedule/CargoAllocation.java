@@ -20,6 +20,8 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getSlotAllocations <em>Slot Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getSequence <em>Sequence</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getCargoType <em>Cargo Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getBallastBonusFee <em>Ballast Bonus Fee</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getRepositioningFee <em>Repositioning Fee</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCargoAllocation()
@@ -126,6 +128,50 @@ public interface CargoAllocation extends MMXObject, ProfitAndLossContainer, Even
 	 * @generated
 	 */
 	void setCargoType(CargoType value);
+
+	/**
+	 * Returns the value of the '<em><b>Ballast Bonus Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Ballast Bonus Fee</em>' attribute.
+	 * @see #setBallastBonusFee(long)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCargoAllocation_BallastBonusFee()
+	 * @model
+	 * @generated
+	 */
+	long getBallastBonusFee();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getBallastBonusFee <em>Ballast Bonus Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Ballast Bonus Fee</em>' attribute.
+	 * @see #getBallastBonusFee()
+	 * @generated
+	 */
+	void setBallastBonusFee(long value);
+
+	/**
+	 * Returns the value of the '<em><b>Repositioning Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Repositioning Fee</em>' attribute.
+	 * @see #setRepositioningFee(long)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCargoAllocation_RepositioningFee()
+	 * @model
+	 * @generated
+	 */
+	long getRepositioningFee();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getRepositioningFee <em>Repositioning Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Repositioning Fee</em>' attribute.
+	 * @see #getRepositioningFee()
+	 * @generated
+	 */
+	void setRepositioningFee(long value);
 
 	/**
 	 * <!-- begin-user-doc -->

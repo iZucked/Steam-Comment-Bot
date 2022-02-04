@@ -29,7 +29,7 @@ public final class ArrayIndexMap<T extends IIndexedObject, U> implements IIndexM
 	/**
 	 * The default capacity when not specified in constructor.
 	 */
-	private static final int defaultInitialCapacity = 128;
+	private static final int DEFAULT_INITIAL_CAPACITY = 128;
 
 	@SuppressWarnings("unchecked")
 	public ArrayIndexMap(final int initialCapacity) {
@@ -38,7 +38,7 @@ public final class ArrayIndexMap<T extends IIndexedObject, U> implements IIndexM
 	}
 
 	public ArrayIndexMap() {
-		this(defaultInitialCapacity);
+		this(DEFAULT_INITIAL_CAPACITY);
 	}
 
 	private synchronized void ensure(final int index) {
@@ -90,48 +90,42 @@ public final class ArrayIndexMap<T extends IIndexedObject, U> implements IIndexM
 
 	@Override
 	public Iterable<U> getValues() {
-		return new Iterable<U>() {
-			@Override
-			public Iterator<U> iterator() {
-				return new Iterator<U>() {
-					private void advance() {
-						index++;
-						while ((index < isSet.length) && !isSet[index]) {
-							index++;
-						}
-					}
-
-					private int index = 0;
-
-					@Override
-					public boolean hasNext() {
-						return ((index < isSet.length) && isSet[index]);
-					}
-
-					@Override
-					public U next() {
-						if (!hasNext()) {
-							throw new NoSuchElementException();
-						}
-						final U result = contents[index];
-						advance();
-						return result;
-					}
-
-					@Override
-					public void remove() {
-						throw new UnsupportedOperationException();
-					}
-				};
+		return () -> new Iterator<U>() {
+			private void advance() {
+				index++;
+				while ((index < isSet.length) && !isSet[index]) {
+					index++;
+				}
 			}
 
+			private int index = 0;
+
+			@Override
+			public boolean hasNext() {
+				return ((index < isSet.length) && isSet[index]);
+			}
+
+			@Override
+			public U next() {
+				if (!hasNext()) {
+					throw new NoSuchElementException();
+				}
+				final U result = contents[index];
+				advance();
+				return result;
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
 		};
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public synchronized void clear() {
-		contents = (U[]) new Object[defaultInitialCapacity];
-		isSet = new boolean[defaultInitialCapacity];
+		contents = (U[]) new Object[DEFAULT_INITIAL_CAPACITY];
+		isSet = new boolean[DEFAULT_INITIAL_CAPACITY];
 	}
 }

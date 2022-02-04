@@ -149,8 +149,8 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
 				final SlotInsertionOptions result = runner.run(logger, options, modelRecord, scenarioDataProvider, null, SubMonitor.convert(monitor));
 
-				final File resultOutput = new File(outputScenarioFileName + ".xmi");
-				HeadlessUtils.saveResult(result, scenarioDataProvider, resultOutput);
+//				final File resultOutput = new File(outputScenarioFileName + ".xmi");
+//				HeadlessUtils.saveResult(result, scenarioDataProvider, resultOutput);
 
 				ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, new File(outputScenarioFileName));
 			});

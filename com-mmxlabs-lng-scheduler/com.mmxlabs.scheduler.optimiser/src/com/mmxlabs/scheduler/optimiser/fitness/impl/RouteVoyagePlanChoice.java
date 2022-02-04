@@ -5,11 +5,11 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
@@ -126,11 +126,11 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 
 			final RouteVoyagePlanChoice other = (RouteVoyagePlanChoice) obj;
 
-			if (!Equality.isEqual(routeOptions, other.routeOptions)) {
+			if (!Objects.equals(routeOptions, other.routeOptions)) {
 				return false;
 			}
 
-			if (!Equality.isEqual(options, other.options)) {
+			if (!Objects.equals(options, other.options)) {
 				return false;
 			}
 

@@ -69,6 +69,8 @@ public class CargoAllocationComponentHelper extends BaseComponentHelper {
 		add_slotAllocationsEditor(detailComposite, topClass);
 		add_sequenceEditor(detailComposite, topClass);
 		add_cargoTypeEditor(detailComposite, topClass);
+		add_ballastBonusFeeEditor(detailComposite, topClass);
+		add_repositioningFeeEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the slotAllocations feature on CargoAllocation
@@ -95,5 +97,23 @@ public class CargoAllocationComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_cargoTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__CARGO_TYPE));
+	}
+
+	/**
+	 * Create the editor for the ballastBonusFee feature on CargoAllocation
+	 *
+	 * @generated
+	 */
+	protected void add_ballastBonusFeeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__BALLAST_BONUS_FEE));
+	}
+
+	/**
+	 * Create the editor for the repositioningFee feature on CargoAllocation
+	 *
+	 * @generated
+	 */
+	protected void add_repositioningFeeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__REPOSITIONING_FEE));
 	}
 }

@@ -79,8 +79,8 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected FleetSwitch<@Nullable Adapter> modelSwitch =
-		new FleetSwitch<@Nullable Adapter>() {
+	protected FleetSwitch<Adapter> modelSwitch =
+		new FleetSwitch<Adapter>() {
 			@Override
 			public Adapter caseFleetModel(FleetModel object) {
 				return createFleetModelAdapter();

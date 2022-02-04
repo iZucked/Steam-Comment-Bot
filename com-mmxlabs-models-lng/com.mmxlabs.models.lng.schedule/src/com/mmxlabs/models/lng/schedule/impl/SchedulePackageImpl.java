@@ -1389,6 +1389,26 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	@Override
+	public EAttribute getCargoAllocation_BallastBonusFee() {
+		return (EAttribute)cargoAllocationEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCargoAllocation_RepositioningFee() {
+		return (EAttribute)cargoAllocationEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EOperation getCargoAllocation__GetName() {
 		return cargoAllocationEClass.getEOperations().get(0);
 	}
@@ -3377,6 +3397,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__SLOT_ALLOCATIONS);
 		createEReference(cargoAllocationEClass, CARGO_ALLOCATION__SEQUENCE);
 		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__CARGO_TYPE);
+		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__BALLAST_BONUS_FEE);
+		createEAttribute(cargoAllocationEClass, CARGO_ALLOCATION__REPOSITIONING_FEE);
 		createEOperation(cargoAllocationEClass, CARGO_ALLOCATION___GET_NAME);
 
 		marketAllocationEClass = createEClass(MARKET_ALLOCATION);
@@ -3823,6 +3845,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEReference(getCargoAllocation_SlotAllocations(), this.getSlotAllocation(), this.getSlotAllocation_CargoAllocation(), "slotAllocations", null, 1, -1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoAllocation_Sequence(), this.getSequence(), null, "sequence", null, 1, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCargoAllocation_CargoType(), theCargoPackage.getCargoType(), "cargoType", null, 0, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCargoAllocation_BallastBonusFee(), ecorePackage.getELong(), "ballastBonusFee", null, 0, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCargoAllocation_RepositioningFee(), ecorePackage.getELong(), "repositioningFee", null, 0, 1, CargoAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getCargoAllocation__GetName(), ecorePackage.getEString(), "getName", 1, 1, IS_UNIQUE, IS_ORDERED);
 

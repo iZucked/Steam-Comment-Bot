@@ -82,8 +82,8 @@ public class SpotMarketsAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected SpotMarketsSwitch<@Nullable Adapter> modelSwitch =
-		new SpotMarketsSwitch<@Nullable Adapter>() {
+	protected SpotMarketsSwitch<Adapter> modelSwitch =
+		new SpotMarketsSwitch<Adapter>() {
 			@Override
 			public Adapter caseSpotMarketsModel(SpotMarketsModel object) {
 				return createSpotMarketsModelAdapter();

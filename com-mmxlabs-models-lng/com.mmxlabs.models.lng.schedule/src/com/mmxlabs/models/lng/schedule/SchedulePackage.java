@@ -582,13 +582,31 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_ALLOCATION__CARGO_TYPE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Ballast Bonus Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__BALLAST_BONUS_FEE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Repositioning Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__REPOSITIONING_FEE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
+
+	/**
 	 * The number of structural features of the '<em>Cargo Allocation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int CARGO_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -8856,6 +8874,28 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getCargoAllocation_CargoType();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getBallastBonusFee <em>Ballast Bonus Fee</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ballast Bonus Fee</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getBallastBonusFee()
+	 * @see #getCargoAllocation()
+	 * @generated
+	 */
+	EAttribute getCargoAllocation_BallastBonusFee();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getRepositioningFee <em>Repositioning Fee</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Repositioning Fee</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getRepositioningFee()
+	 * @see #getCargoAllocation()
+	 * @generated
+	 */
+	EAttribute getCargoAllocation_RepositioningFee();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getName() <em>Get Name</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11599,6 +11639,22 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CARGO_ALLOCATION__CARGO_TYPE = eINSTANCE.getCargoAllocation_CargoType();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Bonus Fee</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CARGO_ALLOCATION__BALLAST_BONUS_FEE = eINSTANCE.getCargoAllocation_BallastBonusFee();
+
+		/**
+		 * The meta object literal for the '<em><b>Repositioning Fee</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CARGO_ALLOCATION__REPOSITIONING_FEE = eINSTANCE.getCargoAllocation_RepositioningFee();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Name</b></em>' operation.
