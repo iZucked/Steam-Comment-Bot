@@ -84,6 +84,8 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//CargoAllocation/slotAllocations"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//CargoAllocation/sequence"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//CargoAllocation/cargoType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//CargoAllocation/ballastBonusFee"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//CargoAllocation/repositioningFee"/>
       <genOperations ecoreOperation="schedule.ecore#//CargoAllocation/getName"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//MarketAllocation">

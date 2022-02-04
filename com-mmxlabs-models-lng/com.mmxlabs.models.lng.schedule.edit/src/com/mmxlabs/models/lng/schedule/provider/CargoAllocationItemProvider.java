@@ -56,6 +56,8 @@ public class CargoAllocationItemProvider
 			addSlotAllocationsPropertyDescriptor(object);
 			addSequencePropertyDescriptor(object);
 			addCargoTypePropertyDescriptor(object);
+			addBallastBonusFeePropertyDescriptor(object);
+			addRepositioningFeePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -171,6 +173,50 @@ public class CargoAllocationItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Ballast Bonus Fee feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addBallastBonusFeePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_ballastBonusFee_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_ballastBonusFee_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__BALLAST_BONUS_FEE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Repositioning Fee feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRepositioningFeePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoAllocation_repositioningFee_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_repositioningFee_feature", "_UI_CargoAllocation_type"),
+				 SchedulePackage.Literals.CARGO_ALLOCATION__REPOSITIONING_FEE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -239,6 +285,8 @@ public class CargoAllocationItemProvider
 
 		switch (notification.getFeatureID(CargoAllocation.class)) {
 			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
+			case SchedulePackage.CARGO_ALLOCATION__BALLAST_BONUS_FEE:
+			case SchedulePackage.CARGO_ALLOCATION__REPOSITIONING_FEE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SchedulePackage.CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS:
