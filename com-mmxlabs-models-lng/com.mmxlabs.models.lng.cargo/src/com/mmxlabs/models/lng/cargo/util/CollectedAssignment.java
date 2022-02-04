@@ -170,7 +170,7 @@ public class CollectedAssignment {
 		}
 
 		final int aToBTravelTime = CargoTravelTimeUtils.getFobMinTimeInHours(a.getEndPort(), b.getStartPort(), a.getAssignableElement().getVesselAssignmentType(), portModel, 0, modelDistanceProvider, bufferTime);
-		final ZonedDateTime bArrivalTime = a.getEndWindow().getFirst().plusHours(aToBTravelTime).withZoneSameInstant(b.getStartWindow().getFirst().getZone());
+		final ZonedDateTime bArrivalTime = a.getEndWindow().getFirst().plusHours(aToBTravelTime);
 		return Math.max(0L, Hours.between(b.getStartWindow().getSecond(), bArrivalTime));
 	}
 
