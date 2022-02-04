@@ -56,15 +56,35 @@ public class EvaluationSequencingTests extends AbstractMicroTestCase {
 
 		final Vessel vessel = fleetModelFinder.findVessel(InternalDataConstants.REF_VESSEL_TFDE_160);
 
-		final VesselAvailability va = cargoModelBuilder.makeVesselAvailability(vessel, entity).withCharterRate("10000").withStartWindow(LocalDateTime.of(2022, 4, 24, 0, 0))
-				.withEndWindow(LocalDateTime.of(2022, 7, 31, 15, 0)).withStartHeel(2_000, 7_000, 23, "").withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, false).build();
+		final VesselAvailability va = cargoModelBuilder.makeVesselAvailability(vessel, entity) //
+				.withCharterRate("10000") //
+				.withStartWindow(LocalDateTime.of(2022, 4, 24, 0, 0)) //
+				.withEndWindow(LocalDateTime.of(2022, 7, 31, 15, 0)) //
+				.withStartHeel(2_000, 7_000, 23, "") //
+				.withEndHeel(500, 500, EVesselTankState.MUST_BE_COLD, false) //
+				.build();
 
-		final MaintenanceEvent maintenanceEvent = cargoModelBuilder.makeMaintenanceEvent("MaintenanceEvent", LocalDateTime.of(2022, 5, 1, 0, 0), LocalDateTime.of(2022, 6, 15, 0, 0), maintenancePort)
-				.withDurationInDays(5).withVesselAssignment(va, 0).build();
+		final LocalDateTime mStartAfter = LocalDateTime.of(2022, 5, 1, 0, 0);
+		final LocalDateTime mStartBy = LocalDateTime.of(2022, 6, 15, 0, 0);
+		final MaintenanceEvent maintenanceEvent = cargoModelBuilder.makeMaintenanceEvent("MaintenanceEvent", mStartAfter, mStartBy, maintenancePort) //
+				.withDurationInDays(5) //
+				.withVesselAssignment(va, 0) //
+				.build();
 
-		final Cargo cargo = cargoModelBuilder.makeCargo().makeFOBPurchase("Load", LocalDate.of(2022, 5, 29), loadPort, null, entity, "9.5").withVolumeLimits(125_000, 174_000, VolumeUnits.M3)
-				.withWindowStartTime(18).withWindowSize(0, TimePeriod.DAYS).withVisitDuration(30).build().makeDESSale("Discharge", LocalDate.of(2022, 6, 1), dischargePort, null, entity, "10.26")
-				.withVolumeLimits(130_000, 180_000, VolumeUnits.M3).withWindowStartTime(0).withWindowSize(1, TimePeriod.MONTHS).withVisitDuration(144).build().withVesselAssignment(va, 0).build();
+		final Cargo cargo = cargoModelBuilder.makeCargo() //
+				.makeFOBPurchase("Load", LocalDate.of(2022, 5, 29), loadPort, null, entity, "9.5") //
+				.withVolumeLimits(125_000, 174_000, VolumeUnits.M3) //
+				.withWindowStartTime(18) //
+				.withWindowSize(0, TimePeriod.DAYS) //
+				.withVisitDuration(30) //
+				.build() //
+				.makeDESSale("Discharge", LocalDate.of(2022, 6, 1), dischargePort, null, entity, "10.26") //
+				.withVolumeLimits(130_000, 180_000, VolumeUnits.M3) //
+				.withWindowStartTime(0).withWindowSize(1, TimePeriod.MONTHS) //
+				.withVisitDuration(144) //
+				.build() //
+				.withVesselAssignment(va, 0) //
+				.build();
 
 		Assertions.assertEquals(0, maintenanceEvent.getSequenceHint());
 		Assertions.assertEquals(0, cargo.getSequenceHint());
