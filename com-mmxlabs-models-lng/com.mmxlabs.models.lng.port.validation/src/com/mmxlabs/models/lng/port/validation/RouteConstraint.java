@@ -24,8 +24,7 @@ public class RouteConstraint extends AbstractModelMultiConstraint {
 	protected void doValidate(@NonNull IValidationContext ctx, @NonNull IExtraValidationContext extraContext, @NonNull List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
-		if (target instanceof Route) {
-			Route route = (Route) target;
+		if (target instanceof Route route) {
 
 			if (route.getRouteOption() != null && route.getRouteOption() != RouteOption.DIRECT) {
 				DetailConstraintStatusFactory factory = DetailConstraintStatusFactory.makeStatus().withTypedName("Canal", route.getName());
