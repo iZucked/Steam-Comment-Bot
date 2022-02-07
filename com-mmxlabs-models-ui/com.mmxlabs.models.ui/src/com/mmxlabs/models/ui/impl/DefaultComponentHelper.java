@@ -7,6 +7,7 @@ package com.mmxlabs.models.ui.impl;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,13 +24,14 @@ import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 public class DefaultComponentHelper implements IComponentHelper {
-	
+
 	protected final List<IComponentHelper> superClassesHelpers = new ArrayList<>();
-	
+
 	/**
-	 * The class for this component helper. Separate to the topClass in the method parameters which are the top level class whe are querying.
+	 * The class for this component helper. Separate to the topClass in the method
+	 * parameters which are the top level class whe are querying.
 	 */
-	protected final  EClass targetClass;
+	protected final EClass targetClass;
 
 	protected final Set<EStructuralFeature> ignoreFeatures = new HashSet<>();
 
@@ -51,7 +53,18 @@ public class DefaultComponentHelper implements IComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, targetClass);
+		final List<IInlineEditor> editors = new LinkedList<>();
+		// Create a dummy implementation to gather the editors allowing changes to the
+		// order before callign the real class.
+		final IInlineEditorContainer container = editor -> {
+			editors.add(editor);
+			return editor;
+		};
+		addEditorsToComposite(container, targetClass);
+
+		sortEditors(editors);
+
+		editors.forEach(detailComposite::addInlineEditor);
 	}
 
 	/**
@@ -85,5 +98,9 @@ public class DefaultComponentHelper implements IComponentHelper {
 				}
 			}
 		}
+	}
+
+	protected void sortEditors(final List<IInlineEditor> editors) {
+		// Left empty for sub-classes
 	}
 }
