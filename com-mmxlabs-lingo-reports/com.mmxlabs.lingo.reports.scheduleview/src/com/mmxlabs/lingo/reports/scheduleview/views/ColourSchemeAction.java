@@ -71,7 +71,7 @@ class ColourSchemeAction extends SchedulerViewAction {
 			actionContributionItem.fill(menu, -1);
 		}
 		{
-			final Action toggleShowNominalsByDefaultAction = new Action("Show nominals", SWT.CHECK) {
+			final Action toggleShowNominalsByDefaultAction = new Action("Show Nominals", SWT.CHECK) {
 				@Override
 				public void run() {
 					// TODO: Tidy all this state up.
