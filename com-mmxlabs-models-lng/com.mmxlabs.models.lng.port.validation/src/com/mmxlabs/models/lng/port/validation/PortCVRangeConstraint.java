@@ -21,11 +21,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class PortCVRangeConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof Port) {
-			final Port port = (Port) target;
+		if (target instanceof Port port) {
 			DetailConstraintStatusDecorator rangeCheckDSD = checkRange(port, ctx);
 			if (rangeCheckDSD != null) {
 				failures.add(rangeCheckDSD);
@@ -39,8 +38,6 @@ public class PortCVRangeConstraint extends AbstractModelMultiConstraint {
 				failures.add(maxCheck);
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 
 	private DetailConstraintStatusDecorator checkRange(Port port, final IValidationContext ctx) {

@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
-import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -23,11 +22,9 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class PortIDConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
-		if (target instanceof PortModel) {
-			final PortModel portModel = (PortModel) target;
-
+		if (target instanceof PortModel portModel) {
 			final Map<String, List<Port>> groupedById = portModel.getPorts().stream() //
 					.filter(p -> p.getLocation() != null) //
 					.filter(p -> p.getLocation().getMmxId() != null) //
@@ -38,7 +35,7 @@ public class PortIDConstraint extends AbstractModelMultiConstraint {
 				if (e.getValue().size() > 1) {
 
 					final String names = e.getValue().stream() //
-							.map(p -> p.getName()) //
+							.map(Port::getName) //
 							.sorted() //
 							.collect(Collectors.joining(", "));
 
@@ -54,6 +51,5 @@ public class PortIDConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 		}
-		return Activator.PLUGIN_ID;
 	}
 }

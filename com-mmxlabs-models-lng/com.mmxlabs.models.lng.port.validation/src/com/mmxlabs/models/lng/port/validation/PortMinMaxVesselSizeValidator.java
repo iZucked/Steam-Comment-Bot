@@ -19,16 +19,15 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * Check minimum and maximum vessel sizes on a Port are sensible. 
+ * Check minimum and maximum vessel sizes on a Port are sensible.
  */
 public class PortMinMaxVesselSizeValidator extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof Port) {
-			final Port port = (Port) target;
+		if (target instanceof Port port) {
 			DetailConstraintStatusDecorator rangeCheckDSD = checkRange(port, ctx);
 			if (rangeCheckDSD != null) {
 				failures.add(rangeCheckDSD);
@@ -43,7 +42,6 @@ public class PortMinMaxVesselSizeValidator extends AbstractModelMultiConstraint 
 			}
 		}
 
-		return Activator.PLUGIN_ID;
 	}
 
 	private DetailConstraintStatusDecorator checkRange(Port port, final IValidationContext ctx) {

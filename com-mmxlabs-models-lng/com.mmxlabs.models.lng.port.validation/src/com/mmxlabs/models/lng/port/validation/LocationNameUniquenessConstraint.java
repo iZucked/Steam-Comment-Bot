@@ -28,8 +28,7 @@ public class LocationNameUniquenessConstraint extends AbstractModelMultiConstrai
 
 		final EObject target = ctx.getTarget();
 
-		if (target instanceof Location) {
-			Location location = (Location) target;
+		if (target instanceof Location location) {
 
 			Port containerPort = (Port) location.eContainer();
 			if (containerPort == null) {
@@ -45,8 +44,7 @@ public class LocationNameUniquenessConstraint extends AbstractModelMultiConstrai
 
 				final Set<String> temp = new HashSet<>();
 				for (final EObject eObj : objects) {
-					if (eObj instanceof Port) {
-						Port p = (Port) eObj;
+					if (eObj instanceof Port p) {
 						Location no = p.getLocation();
 						if (no != null) {
 							final String n = (String) no.eGet(MMXCorePackage.eINSTANCE.getNamedObject_Name());

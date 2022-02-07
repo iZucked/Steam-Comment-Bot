@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.APortSet;
@@ -78,20 +79,15 @@ public class ScenarioElementNameHelper {
 	}
 
 	public static @NonNull String getName(final @Nullable EObject target, @NonNull final String defaultName) {
-		if (target instanceof Cargo) {
-			final Cargo cargo = (Cargo) target;
+		if (target instanceof Cargo cargo) {
 			return String.format("%s \"%s\"", TYPE_CARGO.toLowerCase(), getNonNullString(cargo.getLoadName()));
-		} else if (target instanceof Slot) {
-			final Slot<?> slot = (Slot<?>) target;
+		} else if (target instanceof Slot slot) {
 			return String.format("%s \"%s\"", TYPE_SLOT.toLowerCase(), getNonNullString(slot.getName()));
-		} else if (target instanceof VesselEvent) {
-			final VesselEvent vesselEvent = (VesselEvent) target;
+		} else if (target instanceof VesselEvent vesselEvent) {
 			return String.format("%s \"%s\"", TYPE_VESSEL_EVENT.toLowerCase(), getNonNullString(vesselEvent.getName()));
-		} else if (target instanceof APortSet) {
-			final APortSet<?> port = (APortSet<?>) target;
+		} else if (target instanceof APortSet<?> port) {
 			return String.format("%s \"%s\"", TYPE_PORT.toLowerCase(), getNonNullString(port.getName()));
-		} else if (target instanceof NamedObject) {
-			final NamedObject namedObject = (NamedObject) target;
+		} else if (target instanceof NamedObject namedObject) {
 			return String.format("%s \"%s\"", getTypeName(namedObject).toLowerCase(), getNonNullString(namedObject.getName()));
 		}
 		return defaultName;
