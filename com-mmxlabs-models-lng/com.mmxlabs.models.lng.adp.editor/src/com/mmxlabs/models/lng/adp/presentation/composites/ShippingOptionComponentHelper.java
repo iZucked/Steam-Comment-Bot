@@ -8,93 +8,18 @@ package com.mmxlabs.models.lng.adp.presentation.composites;
 
 import com.mmxlabs.models.lng.adp.ADPPackage;
 import com.mmxlabs.models.lng.adp.presentation.editors.ADPSpotIndexInlineEditor;
-import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
-
-import org.eclipse.emf.ecore.EClass;
+import com.mmxlabs.models.ui.impl.DefaultComponentHelper;
 
 /**
  * A component helper for ShippingOption instances
  *
- * @generated
+ * @generated NOT
  */
-public class ShippingOptionComponentHelper extends BaseComponentHelper {
-	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
+public class ShippingOptionComponentHelper extends DefaultComponentHelper {
 
-	/**
-	 * Construct a new instance, using the platform adapter manager
-	 *
-	 * @generated
-	 */
 	public ShippingOptionComponentHelper() {
-		this(Platform.getAdapterManager());
-	}
+		super(ADPPackage.Literals.SHIPPING_OPTION);
 
-	/**
-	 * Construct a new instance of this helper
-	 *
-	 * @generated
-	 */
-	public ShippingOptionComponentHelper(IAdapterManager adapterManager) {
-		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(ADPPackage.Literals.SUB_PROFILE_CONSTRAINT));
-	}
-	
-	/**
-	 * add editors to a composite, using ShippingOption as the supertype
-	 *
-	 * @generated
-	 */
-	 @Override
-	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, ADPPackage.Literals.SHIPPING_OPTION);	
-	}
-	
-	/**
-	 * Create the editors for features on this class directly, and superclass' features.
-	 *
-	 * @generated
-	 */
-	@Override
-	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_vesselAssignmentTypeEditor(detailComposite, topClass);
-		add_spotIndexEditor(detailComposite, topClass);
-		add_vesselEditor(detailComposite, topClass);
-	}
-	/**
-	 * Create the editor for the vesselAssignmentType feature on ShippingOption
-	 *
-	 * @generated
-	 */
-	protected void add_vesselAssignmentTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.SHIPPING_OPTION__VESSEL_ASSIGNMENT_TYPE));
-	}
-	/**
-	 * Create the editor for the spotIndex feature on ShippingOption
-	 *
-	 * @generated NOT
-	 */
-	protected void add_spotIndexEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.SHIPPING_OPTION__SPOT_INDEX));
-		detailComposite.addInlineEditor(new ADPSpotIndexInlineEditor(ADPPackage.Literals.SHIPPING_OPTION__SPOT_INDEX));
-	}
-	/**
-	 * Create the editor for the vessel feature on ShippingOption
-	 *
-	 * @generated
-	 */
-	protected void add_vesselEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.SHIPPING_OPTION__VESSEL));
+		addEditor(ADPPackage.Literals.SHIPPING_OPTION__SPOT_INDEX, topClass -> new ADPSpotIndexInlineEditor(ADPPackage.Literals.SHIPPING_OPTION__SPOT_INDEX));
 	}
 }

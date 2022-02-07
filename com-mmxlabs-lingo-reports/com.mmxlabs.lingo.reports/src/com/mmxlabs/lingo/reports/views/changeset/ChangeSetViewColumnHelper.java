@@ -75,7 +75,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
-import com.mmxlabs.models.lng.nominations.presentation.composites.TimeWindowHolder;
+import com.mmxlabs.models.lng.nominations.ui.editor.TimeWindowHolder;
 import com.mmxlabs.models.lng.nominations.utils.NominationTypeRegistry;
 import com.mmxlabs.models.lng.nominations.utils.NominationsModelUtils;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;

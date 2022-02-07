@@ -16,8 +16,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-import com.mmxlabs.models.lng.cargo.presentation.CargoEditorPlugin;
-
 public class TradesTablePreferencesPage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public TradesTablePreferencesPage() {

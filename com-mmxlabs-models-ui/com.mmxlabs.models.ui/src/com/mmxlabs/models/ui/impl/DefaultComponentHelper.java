@@ -5,6 +5,7 @@
 package com.mmxlabs.models.ui.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -16,11 +17,14 @@ import java.util.function.Function;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.IInlineEditorEnablementWrapper;
+import com.mmxlabs.models.ui.editors.impl.ReadOnlyInlineEditorWrapper;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 public class DefaultComponentHelper implements IComponentHelper {
@@ -35,17 +39,78 @@ public class DefaultComponentHelper implements IComponentHelper {
 
 	protected final Set<EStructuralFeature> ignoreFeatures = new HashSet<>();
 
-	protected final Map<EStructuralFeature, Function<EClass, IInlineEditor>> editorFactories = new HashMap<>();
+	protected final Map<EStructuralFeature, Function<EClass, List<IInlineEditor>>> editorFactories = new HashMap<>();
 
 	public DefaultComponentHelper(final EClass targetClass) {
 		this.targetClass = targetClass;
 
+		addSuperClassHelpers(targetClass);
+		// Always ignore this feature. Subclass can always remove this declaration.
+		ignoreFeatures.add(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid());
+	}
+
+	/**
+	 * This is called from the constructor so it can be overridden.
+	 * 
+	 * @param targetClass
+	 */
+	protected void addSuperClassHelpers(final EClass targetClass) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		for (final EClass parent : targetClass.getESuperTypes()) {
 			superClassesHelpers.addAll(registry.getComponentHelpers(parent));
 		}
-		// Always ignore this feature. Subclass can always remove this declaration.
-		ignoreFeatures.add(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid());
+	}
+
+	protected void addEditors(final EStructuralFeature feature, final Function<EClass, List<IInlineEditor>> factory) {
+		editorFactories.put(feature, factory);
+	}
+
+	protected void addEditor(final EStructuralFeature feature, final Function<EClass, IInlineEditor> factory) {
+		editorFactories.put(feature, topClass -> {
+			final IInlineEditor editor = factory.apply(topClass);
+			if (editor != null) {
+				return Collections.singletonList(editor);
+			}
+			return null;
+		});
+	}
+
+	protected void addDefaultReadonlyEditor(final EStructuralFeature feature) {
+		addDefaultEditorWithWrapper(feature, ReadOnlyInlineEditorWrapper::new);
+	}
+
+	protected void addDefaultEditorWithWrapper(final EStructuralFeature feature, Function<IInlineEditor, IInlineEditorEnablementWrapper> wrapperFactory) {
+		editorFactories.put(feature, topClass -> {
+			final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, feature);
+			if (editor != null) {
+				return Collections.singletonList(wrapperFactory.apply(editor));
+			}
+			return null;
+		});
+	}
+
+	protected void addDefaultEditorForLicenseFeature(final String featureName, final EStructuralFeature feature) {
+		editorFactories.put(feature, topClass -> {
+			if (LicenseFeatures.isPermitted(featureName)) {
+				final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, feature);
+				if (editor != null) {
+					return Collections.singletonList(editor);
+				}
+			}
+			return null;
+		});
+	}
+
+	protected void addEditorForLicenseFeature(final String featureName, final EStructuralFeature feature, final Function<EClass, IInlineEditor> factory) {
+		editorFactories.put(feature, topClass -> {
+			if (LicenseFeatures.isPermitted(featureName)) {
+				final IInlineEditor editor = factory.apply(topClass);
+				if (editor != null) {
+					return Collections.singletonList(editor);
+				}
+			}
+			return null;
+		});
 	}
 
 	/**
@@ -86,17 +151,72 @@ public class DefaultComponentHelper implements IComponentHelper {
 			}
 
 			if (editorFactories.containsKey(feature)) {
-				final IInlineEditor editor = editorFactories.get(feature).apply(topClass);
-				if (editor != null) {
-					detailComposite.addInlineEditor(editor);
+				final List<IInlineEditor> editors = editorFactories.get(feature).apply(topClass);
+				if (editors != null) {
+					editors.forEach(detailComposite::addInlineEditor);
 				}
 			} else {
-
 				final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, feature);
 				if (editor != null) {
 					detailComposite.addInlineEditor(editor);
 				}
 			}
+		}
+	}
+
+	/**
+	 * Move the beforeFeature to before the afterfeature
+	 * 
+	 * @param editors
+	 * @param beforeFeature
+	 * @param afterFeature
+	 */
+	protected void sortEditorBeforeOtherEditor(final List<IInlineEditor> editors, EStructuralFeature beforeFeature, EStructuralFeature afterFeature) {
+
+		// There may be multiple editors for the same featire, so gather them here...
+		final List<IInlineEditor> editorsForFeature = new LinkedList<>();
+		IInlineEditor afterEditor = null;
+		for (final var editor : editors) {
+			if (editor.getFeature() == beforeFeature) {
+				editorsForFeature.add(editor);
+			}
+			if (afterEditor == null && editor.getFeature() == afterFeature) {
+				afterEditor = editor;
+			}
+		}
+
+		if (afterEditor != null && !editorsForFeature.isEmpty()) {
+			editors.removeAll(editorsForFeature);
+			int idx = editors.indexOf(afterEditor);
+			editors.addAll(idx, editorsForFeature);
+		}
+	}
+
+	/**
+	 * Sorts the editors list so that editors are ordered first by the
+	 * orderedFeatures list then by anything else. Multiple editors for the same
+	 * feature should still be in the same order.
+	 * 
+	 * @param editors
+	 * @param orderedFeatures
+	 */
+	protected void sortEditors(final List<IInlineEditor> editors, final List<EStructuralFeature> orderedFeatures) {
+
+		// Reverse the list so that we can move the editors to the head of the list
+		Collections.reverse(orderedFeatures);
+		for (final var feature : orderedFeatures) {
+			// There may be multiple editors for the same featire, so gather them here...
+			final List<IInlineEditor> editorsForFeature = new LinkedList<>();
+			for (final var editor : editors) {
+				if (editor.getFeature() == feature) {
+					editorsForFeature.add(editor);
+				}
+			}
+			// Then move them to the start of the editors list in order.
+			if (!editorsForFeature.isEmpty()) {
+				editors.removeAll(editorsForFeature);
+			}
+			editors.addAll(0, editorsForFeature);
 		}
 	}
 

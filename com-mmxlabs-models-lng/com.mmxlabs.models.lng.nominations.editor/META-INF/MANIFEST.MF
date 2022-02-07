@@ -1,16 +1,14 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: %pluginName
+Bundle-Name: Nominations Editor
 Bundle-SymbolicName: com.mmxlabs.models.lng.nominations.editor;singleton:=true
 Bundle-Version: 5.1.5.qualifier
 Bundle-ClassPath: .
-Bundle-Activator: com.mmxlabs.models.lng.nominations.presentation.NominationsEditorPlugin$Implementation
-Bundle-Vendor: %providerName
-Bundle-Localization: plugin
+Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-16
 Export-Package: com.mmxlabs.models.lng.nominations.importer,
- com.mmxlabs.models.lng.nominations.presentation,
  com.mmxlabs.models.lng.nominations.presentation.composites,
+ com.mmxlabs.models.lng.nominations.ui.editor,
  com.mmxlabs.models.lng.nominations.utils
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.eclipse.core.resources;bundle-version="3.7.101";visibility:=reexport,

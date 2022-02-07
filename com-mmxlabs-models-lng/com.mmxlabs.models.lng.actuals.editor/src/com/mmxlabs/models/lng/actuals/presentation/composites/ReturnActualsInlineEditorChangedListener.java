@@ -24,7 +24,8 @@ import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
 
 /**
- * Implementation of {@link IInlineEditorExternalNotificationListener} to disable editors depending upon FOB/DES status
+ * Implementation of {@link IInlineEditorExternalNotificationListener} to
+ * disable editors depending upon FOB/DES status
  * 
  * @author Simon Goodall
  * 
@@ -36,7 +37,9 @@ public class ReturnActualsInlineEditorChangedListener implements IInlineEditorEx
 
 	@Override
 	public void notifyChanged(final Notification notification) {
-		// if (notification.getFeature() == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase() || notification.getFeature() == CargoPackage.eINSTANCE.getDischargeSlot_FOBSale()) {
+		// if (notification.getFeature() ==
+		// CargoPackage.eINSTANCE.getLoadSlot_DESPurchase() || notification.getFeature()
+		// == CargoPackage.eINSTANCE.getDischargeSlot_FOBSale()) {
 		//
 		// if (input instanceof LoadSlot) {
 		// final LoadSlot loadSlot = (LoadSlot) input;
@@ -64,13 +67,11 @@ public class ReturnActualsInlineEditorChangedListener implements IInlineEditorEx
 	public void postDisplay(final IInlineEditor editor, final IDialogEditingContext dialogContext, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
 		this.editor = editor;
 		this.input = object;
-		if (input instanceof ReturnActuals) {
+		if (input instanceof ReturnActuals returnActuals) {
 			boolean enabled = false;
-			ReturnActuals returnActuals = (ReturnActuals) input;
 
 			EObject container = returnActuals.eContainer();
-			if (container instanceof CargoActuals) {
-				CargoActuals cargoActuals = (CargoActuals) container;
+			if (container instanceof CargoActuals cargoActuals) {
 				Cargo cargo = cargoActuals.getCargo();
 				if (cargo != null && cargo.getCargoType() == CargoType.FLEET) {
 					enabled = true;
@@ -78,8 +79,7 @@ public class ReturnActualsInlineEditorChangedListener implements IInlineEditorEx
 					EList<SlotActuals> actuals = cargoActuals.getActuals();
 					for (SlotActuals slotActuals : actuals) {
 						Slot slot = slotActuals.getSlot();
-						if (slot instanceof LoadSlot) {
-							LoadSlot loadSlot = (LoadSlot) slot;
+						if (slot instanceof LoadSlot loadSlot) {
 							if (loadSlot.isDESPurchase() && loadSlot.getSlotOrDelegateDESPurchaseDealType() == DESPurchaseDealType.DIVERT_FROM_SOURCE) {
 								enabled = true;
 								break;

@@ -21,8 +21,6 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.ValueListInlineEditor;
 
-/**
- */
 public class SpotIndexInlineEditor extends ValueListInlineEditor {
 	private static @NonNull List<Pair<String, Object>> defaultValues = getDefaultValues();
 
@@ -35,11 +33,9 @@ public class SpotIndexInlineEditor extends ValueListInlineEditor {
 
 		List<Pair<String, Object>> values = getDefaultValues();
 
-		if (input instanceof AssignableElement) {
-			final AssignableElement assignableElement = (AssignableElement) input;
+		if (input instanceof AssignableElement assignableElement) {
 			final VesselAssignmentType vesselAssignmentType = assignableElement.getVesselAssignmentType();
-			if (vesselAssignmentType instanceof CharterInMarket) {
-				final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
+			if (vesselAssignmentType instanceof CharterInMarket charterInMarket) {
 				values = getValues(charterInMarket, assignableElement.getSpotIndex());
 			}
 		}
@@ -50,23 +46,24 @@ public class SpotIndexInlineEditor extends ValueListInlineEditor {
 
 	private static @NonNull List<Pair<String, Object>> getDefaultValues() {
 		final ArrayList<Pair<String, Object>> result = new ArrayList<>();
-		result.add(new Pair<String, Object>("Unknown", Integer.valueOf(0)));
+		result.add(Pair.of("Unknown", Integer.valueOf(0)));
 		return result;
 	}
 
 	private static @NonNull List<Pair<String, Object>> getValues(final CharterInMarket market, final int currentIndex) {
 		final ArrayList<Pair<String, Object>> result = new ArrayList<>();
-		// Always show nominal if current index, even if not licensed otherwise we may get null pointer or array index exceptions.
+		// Always show nominal if current index, even if not licensed otherwise we may
+		// get null pointer or array index exceptions.
 		if (currentIndex == -1 || (LicenseFeatures.isPermitted("features:nominals") && market.isNominal())) {
-			result.add(new Pair<String, Object>("Nominal", Integer.valueOf(-1)));
+			result.add(Pair.of("Nominal", Integer.valueOf(-1)));
 		}
 		if (market.isEnabled()) {
 			for (int i = 0; i < market.getSpotCharterCount(); ++i) {
-				result.add(new Pair<String, Object>(String.format("%d", 1 + i), Integer.valueOf(i)));
+				result.add(Pair.of(String.format("%d", 1 + i), Integer.valueOf(i)));
 			}
 		}
 		if (currentIndex != -1 && (!market.isEnabled() || currentIndex >= market.getSpotCharterCount())) {
-			result.add(new Pair<String, Object>(String.format("%d", 1 + currentIndex), Integer.valueOf(currentIndex)));
+			result.add(Pair.of(String.format("%d", 1 + currentIndex), Integer.valueOf(currentIndex)));
 		}
 		return result;
 	}

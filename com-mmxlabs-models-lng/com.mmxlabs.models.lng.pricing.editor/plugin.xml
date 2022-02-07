@@ -48,43 +48,6 @@
 </extension>
 	<extension
 		point="com.mmxlabs.models.ui.componenthelpers">
-		
-		<componentHelper
-			id="com.mmxlabs.models.lng.pricing.helpers.PricingModel"
-			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.PricingModelComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.pricing.PricingModel" />
-		
-		<componentHelper
-			id="com.mmxlabs.models.lng.pricing.helpers.DataIndex"
-			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.DataIndexComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.pricing.DataIndex" />
-		
-		<componentHelper
-			id="com.mmxlabs.models.lng.pricing.helpers.DerivedIndex"
-			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.DerivedIndexComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.pricing.DerivedIndex" />
-		
-		<componentHelper
-			id="com.mmxlabs.models.lng.pricing.helpers.IndexPoint"
-			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.IndexPointComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.pricing.IndexPoint" />
-			
-		<componentHelper
-			id="com.mmxlabs.models.lng.pricing.helpers.YearMonthPoint"
-			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.YearMonthPointComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.pricing.YearMonthPoint" />
-			
-		<componentHelper
-			id="com.mmxlabs.models.lng.pricing.helpers.Index"
-			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.IndexComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.pricing.Index" />
-		
 		<componentHelper
 			id="com.mmxlabs.models.lng.pricing.helpers.RouteCost"
 			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.RouteCostComponentHelper"
@@ -109,60 +72,7 @@
         inheritable="true"        
         modelClass="com.mmxlabs.models.lng.pricing.PortCost">
   </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.CommodityCurveComponentHelper"
-        id="com.mmxlabs.models.lng.pricing.presentation.composites.CommodityCurveComponentHelper"
-        inheritable="true"        
-        modelClass="com.mmxlabs.models.lng.pricing.CommodityCurve">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.CharterCurveComponentHelper"
-        id="com.mmxlabs.models.lng.pricing.presentation.composites.CharterCurveComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.pricing.CharterCurve">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.BunkerFuelCurveComponentHelper"
-        id="com.mmxlabs.models.lng.pricing.presentation.composites.BunkerFuelCurveComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.pricing.BunkerFuelCurve">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.AbstractYearMonthCurveComponentHelper"
-        id="com.mmxlabs.models.lng.pricing.presentation.composites.AbstractYearMonthCurveComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.pricing.AbstractYearMonthCurve">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.PortsExpressionMapComponentHelper"
-        id="com.mmxlabs.models.lng.pricing.presentation.composites.PortsExpressionMapComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.pricing.PortsExpressionMap">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.CurrencyCurveComponentHelper"
-        id="com.mmxlabs.models.lng.pricing.presentation.composites.CurrencyIndexComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.pricing.CurrencyCurve">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.UnitConversionComponentHelper"
-        id="com.mmxlabs.models.lng.pricing.presentation.composites.UnitConversionComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.pricing.UnitConversion">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.YearMonthPointComponentHelper"
-        id="com.mmxlabs.models.lng.pricing.presentation.composites.YearMonthPointComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.pricing.YearMonthPoint">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.YearMonthPointContainerComponentHelper"
-        id="com.mmxlabs.models.lng.pricing.presentation.composites.YearMonthPointContainerComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.pricing.YearMonthPointContainer">
-  </componentHelper>
+       
 		
 	</extension>
  <extension
@@ -382,30 +292,7 @@
           inheritable="true"
           modelClass="com.mmxlabs.models.lng.pricing.SettleStrategy">
     </componentHelper>
-    <componentHelper
-		id="com.mmxlabs.models.lng.pricing.presentation.composites.HolidayCalendarComponentHelper"
-		helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.HolidayCalendarComponentHelper"
-		inheritable="true"
-		modelClass="com.mmxlabs.models.lng.pricing.HolidayCalendar">
-    </componentHelper>
-    <componentHelper
-		id="com.mmxlabs.models.lng.pricing.presentation.composites.HolidayCalendarEntryComponentHelper"
-		helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.HolidayCalendarEntryComponentHelper"
-		inheritable="true"
-		modelClass="com.mmxlabs.models.lng.pricing.HolidayCalendarEntry">
-    </componentHelper>
-    <componentHelper
-		id="com.mmxlabs.models.lng.pricing.presentation.composites.PricingCalendarComponentHelper"
-		helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.PricingCalendarComponentHelper"
-		inheritable="true"
-		modelClass="com.mmxlabs.models.lng.pricing.PricingCalendar">
-    </componentHelper>
-    <componentHelper
-		id="com.mmxlabs.models.lng.pricing.presentation.composites.PricingCalendarEntryComponentHelper"
-		helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.PricingCalendarEntryComponentHelper"
-		inheritable="true"
-		modelClass="com.mmxlabs.models.lng.pricing.PricingCalendarEntry">
-    </componentHelper>
+   
  </extension>
  <extension
        point="com.mmxlabs.models.util.import.classes">
@@ -456,17 +343,7 @@
           id="com.mmxlabs.models.lng.pricing.ui.commands.BaseFuelCostModelCommandProvider">
     </ModelCommandProvider>
  </extension>
-   <extension point="org.eclipse.ui.editors">
-      <!-- @generated pricing -->
-      <editor
-            id="com.mmxlabs.models.lng.pricing.presentation.PricingEditorID"
-            name="%_UI_PricingEditor_label"
-            icon="icons/full/obj16/PricingModelFile.gif"
-            extensions="pricing"
-            class="com.mmxlabs.models.lng.pricing.presentation.PricingEditor"
-            contributorClass="com.mmxlabs.models.lng.pricing.presentation.PricingActionBarContributor">
-      </editor>
-   </extension>
+   
    <extension
          point="com.mmxlabs.scenario.service.model.WrappedCommandExtension">
       <WrappedCommandExtension

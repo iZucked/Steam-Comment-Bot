@@ -1,18 +1,15 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: %pluginName
+Bundle-Name: Cargo Editor
 Bundle-SymbolicName: com.mmxlabs.models.lng.cargo.editor;singleton:=true
 Automatic-Module-Name: com.mmxlabs.models.lng.cargo.editor
 Bundle-Version: 5.1.5.qualifier
 Bundle-ClassPath: .
-Bundle-Activator: com.mmxlabs.models.lng.cargo.presentation.CargoEditorPlugin$Implementation
-Bundle-Vendor: %providerName
-Bundle-Localization: plugin
+Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-16
 Export-Package: com.mmxlabs.models.lng.cargo.editor,
  com.mmxlabs.models.lng.cargo.editor.utils,
  com.mmxlabs.models.lng.cargo.importer,
- com.mmxlabs.models.lng.cargo.presentation,
  com.mmxlabs.models.lng.cargo.ui.commands,
  com.mmxlabs.models.lng.cargo.ui.displaycomposites,
  com.mmxlabs.models.lng.cargo.ui.editorpart,
@@ -74,3 +71,4 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.inject;version="1.0.0",
  org.slf4j;version="1.6.4"
+Bundle-Activator: com.mmxlabs.models.lng.cargo.editor.CargoEditorPlugin
