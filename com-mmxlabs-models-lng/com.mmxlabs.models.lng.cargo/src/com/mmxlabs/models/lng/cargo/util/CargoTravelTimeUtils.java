@@ -78,6 +78,15 @@ public class CargoTravelTimeUtils {
 		return getMinTimeFromAllowedRoutes(from, to, vesselAssignmentTypeData.getFirst(), maxSpeed, allowedRoutes, modelDistanceProvider);
 	}
 
+	public static int getFobMinTimeInHours(final Port from, final Port to, final VesselAssignmentType vesselAssignmentType, final PortModel portModel, final double referenceSpeed,
+			final ModelDistanceProvider modelDistanceProvider, final int bufferTime) {
+		final List<Route> allowedRoutes = getAllowedRoutes(vesselAssignmentType, portModel);
+		final Pair<Vessel, List<RouteOption>> vesselAssignmentTypeData = getVesselAssignmentTypeData(vesselAssignmentType);
+		final Vessel vessel = vesselAssignmentTypeData.getFirst();
+		final double maxSpeed = vessel != null ? vessel.getVesselOrDelegateMaxSpeed() : referenceSpeed;
+		return getMinTimeFromAllowedRoutes(from, to, vesselAssignmentTypeData.getFirst(), maxSpeed, allowedRoutes, modelDistanceProvider, bufferTime);
+	}
+
 	public static int getMinTimeFromAllowedRoutes(final Slot<?> from, final Slot<?> to, final Vessel vessel, final double referenceSpeed, final Collection<Route> allowedRoutes,
 			final ModelDistanceProvider modelDistanceProvider) {
 		int minDuration = Integer.MAX_VALUE;
@@ -93,8 +102,25 @@ public class CargoTravelTimeUtils {
 		return minDuration;
 	}
 
-	public static int getTimeForRoute(final @Nullable Vessel vessel, final double referenceSpeed, final @NonNull RouteOption routeOptions, final @NonNull Slot<?> fromSlot, final @NonNull Slot<?> toSlot,
-			ModelDistanceProvider modelDistanceProvider) {
+	public static int getMinTimeFromAllowedRoutes(final Port from, final Port to, final Vessel vessel, final double referenceSpeed, final Collection<Route> allowedRoutes,
+			final ModelDistanceProvider modelDistanceProvider, final int bufferTime) {
+		int minDuration = Integer.MAX_VALUE;
+		for (final Route route : allowedRoutes) {
+			assert route != null;
+			int totalTime = getTimeForRoute(vessel, referenceSpeed, route.getRouteOption(), from, to, modelDistanceProvider);
+			if (totalTime != Integer.MAX_VALUE) {
+				totalTime += bufferTime;
+			}
+			if (totalTime < minDuration) {
+				minDuration = totalTime;
+			}
+		}
+
+		return minDuration;
+	}
+
+	public static int getTimeForRoute(final @Nullable Vessel vessel, final double referenceSpeed, final @NonNull RouteOption routeOptions, final @NonNull Slot<?> fromSlot,
+			final @NonNull Slot<?> toSlot, ModelDistanceProvider modelDistanceProvider) {
 		final Port fromPort = fromSlot.getPort();
 		final Port toPort = toSlot.getPort();
 		int bufferTime = toSlot.getSlotOrDelegateDaysBuffer() * 24;
@@ -102,16 +128,14 @@ public class CargoTravelTimeUtils {
 			int timeForRoute = getTimeForRoute(vessel, referenceSpeed, routeOptions, fromPort, toPort, modelDistanceProvider);
 			if (timeForRoute != Integer.MAX_VALUE) {
 				return timeForRoute + bufferTime;
+			} else {
+				return Integer.MAX_VALUE; // do not add on bufferTime, as would cause extreme -ve time for route.
 			}
-			else {
-				return Integer.MAX_VALUE; //do not add on bufferTime, as would cause extreme -ve time for route.
-			}
-		}
-		else {
+		} else {
 			return Integer.MAX_VALUE;
 		}
 	}
-	
+
 	public static int getTimeForRoute(final @Nullable Vessel vessel, final double referenceSpeed, final @NonNull RouteOption routeOptions, final @NonNull Port fromPort, final @NonNull Port toPort,
 			ModelDistanceProvider modelDistanceProvider) {
 
@@ -135,15 +159,15 @@ public class CargoTravelTimeUtils {
 
 		return totalTime;
 	}
-	
-	private static int getDistance( final @NonNull RouteOption routeOptions, @NonNull final Port from, @NonNull final Port to, @NonNull ModelDistanceProvider modelDistanceProvider) {
-		return modelDistanceProvider.getDistance(from, to,  routeOptions);
+
+	private static int getDistance(final @NonNull RouteOption routeOptions, @NonNull final Port from, @NonNull final Port to, @NonNull ModelDistanceProvider modelDistanceProvider) {
+		return modelDistanceProvider.getDistance(from, to, routeOptions);
 	}
 
 	private static int getContingencyIdleTimeInHours(@NonNull final Port from, @NonNull final Port to, @NonNull ModelDistanceProvider modelDistanceProvider) {
 		return modelDistanceProvider.getPortToPortContingencyIdleTimeInHours(from, to);
 	}
-	
+
 	private static List<Route> getAllowedRoutes(final VesselAssignmentType vesselAssignmentType, final PortModel portModel) {
 		if (vesselAssignmentType == null) {
 			// allow all routes if not on a vessel
