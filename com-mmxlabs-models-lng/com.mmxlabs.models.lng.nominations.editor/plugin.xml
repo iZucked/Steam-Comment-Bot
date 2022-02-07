@@ -96,11 +96,6 @@
    <!-- define what elements are added to editor dialogs. -->
 	<extension point="com.mmxlabs.models.ui.componenthelpers">	
 		<componentHelper
-			id="com.mmxlabs.models.lng.nominations.presentations.composites.NominationsModelComponentHelper"
-			helperClass="com.mmxlabs.models.lng.nominations.presentation.composites.NominationsModelComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.nominations.NominationsModel" />
-		<componentHelper
 			id="com.mmxlabs.models.lng.nominations.presentations.composites.AbstractNominationSpecComponentHelper"
 			helperClass="com.mmxlabs.models.lng.nominations.presentation.composites.AbstractNominationSpecComponentHelper"
 			inheritable="false"
@@ -135,19 +130,6 @@
           id="com.mmxlabs.models.lng.nominations.ui.commands.ContractUpdatingCommandProvider">
     </ModelCommandProvider>
  </extension>
-
-   <extension point="org.eclipse.ui.editors">
-      <!-- @generated nominations -->
-      <editor
-            id="com.mmxlabs.models.lng.nominations.presentation.NominationsEditorID"
-            name="%_UI_NominationsEditor_label"
-            icon="icons/full/obj16/NominationsModelFile.gif"
-            extensions="nominations"
-            class="com.mmxlabs.models.lng.nominations.presentation.NominationsEditor"
-            contributorClass="com.mmxlabs.models.lng.nominations.presentation.NominationsActionBarContributor">
-      </editor>
-   </extension>
-
  <extension
        point="com.mmxlabs.models.ui.modelfactories">
     <factory

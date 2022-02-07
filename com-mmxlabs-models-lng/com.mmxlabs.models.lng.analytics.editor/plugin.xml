@@ -15,17 +15,10 @@
 -->
 
 <plugin>
-
-
-	
 	<extension
 		point="com.mmxlabs.models.ui.componenthelpers">
 		
-		<componentHelper
-			id="com.mmxlabs.models.lng.analytics.helpers.AnalyticsModel"
-			helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.AnalyticsModelComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.analytics.AnalyticsModel" />
+	 
   <componentHelper
         helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.BuyOpportunityComponentHelper"
         id="com.mmxlabs.models.lng.analytics.presentation.composites.BuyOpportunityComponentHelper"
@@ -37,42 +30,6 @@
         id="com.mmxlabs.models.lng.analytics.presentation.composites.SellOpportunityComponentHelper"
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.analytics.SellOpportunity">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.BuyOptionComponentHelper"
-        id="com.mmxlabs.models.lng.analytics.presentation.composites.BuyOptionComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.analytics.BuyOption">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.SellOptionComponentHelper"
-        id="com.mmxlabs.models.lng.analytics.presentation.composites.SellOptionComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.analytics.SellOption">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.BuyReferenceComponentHelper"
-        id="com.mmxlabs.models.lng.analytics.presentation.composites.BuyReferenceComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.analytics.BuyReference">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.SellReferenceComponentHelper"
-        id="com.mmxlabs.models.lng.analytics.presentation.composites.SellReferenceComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.analytics.SellReference">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.SellMarketComponentHelper"
-        id="com.mmxlabs.models.lng.analytics.presentation.composites.SellMarketComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.analytics.SellMarket">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.BuyMarketComponentHelper"
-        id="com.mmxlabs.models.lng.analytics.presentation.composites.BuyMarketComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.analytics.BuyMarket">
   </componentHelper>
   <componentHelper
         helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.NominatedShippingOptionComponentHelper"
@@ -87,42 +44,6 @@
         modelClass="com.mmxlabs.models.lng.analytics.RoundTripShippingOption">
   </componentHelper>
   <componentHelper
-        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.ShippingOptionComponentHelper"
-        id="com.mmxlabs.models.lng.analytics.presentation.composites.ShippingOptionComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.analytics.ShippingOption">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.BaseCaseRowComponentHelper"
-        id="com.mmxlabs.models.lng.analytics.presentation.composites.BaseCaseRowComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.analytics.BaseCaseRow">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.PartialCaseRowComponentHelper"
-        id="com.mmxlabs.models.lng.analytics.presentation.composites.PartialCaseRowComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.analytics.PartialCaseRow">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.SimpleVesselCharterOptionComponentHelper"
-        id="com.mmxlabs.models.lng.analytics.presentation.composites.SimpleVesselCharterOptionComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.analytics.SimpleVesselCharterOption">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.OptionalSimpleVesselCharterOptionComponentHelper"
-        id="com.mmxlabs.models.lng.analytics.presentation.composites.OptionalSimpleVesselCharterOptionComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.analytics.OptionalSimpleVesselCharterOption">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.ExistingVesselCharterOptionComponentHelper"
-        id="com.mmxlabs.models.lng.analytics.presentation.composites.ExistingVesselCharterOptionComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption">
-  </componentHelper>
-  <componentHelper
         helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.ExistingCharterMarketOptionComponentHelper"
         id="com.mmxlabs.models.lng.analytics.presentation.composites.ExistingCharterMarketOptionComponentHelper"
         inheritable="true"
@@ -134,12 +55,7 @@
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.analytics.FullVesselCharterOption">
   </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.VesselEventReferenceComponentHelper"
-        id="com.mmxlabs.models.lng.analytics.presentation.composites.VesselEventReferenceComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.analytics.VesselEventReference">
-  </componentHelper>
+  
   <componentHelper
         helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.CharterOutOpportunityComponentHelper"
         id="com.mmxlabs.models.lng.analytics.presentation.composites.CharterOutOpportunityComponentHelper"
@@ -152,12 +68,7 @@
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.analytics.PartialCaseRowOptions">
   </componentHelper>
-   <componentHelper
-         helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.BaseCaseRowOptionsComponentHelper"
-         id="com.mmxlabs.models.lng.analytics.presentation.composites.BaseCaseRowOptionsComponentHelper"
-         inheritable="true"
-         modelClass="com.mmxlabs.models.lng.analytics.BaseCaseRowOptions">
-   </componentHelper>
+  
 	</extension>
  <extension
        point="com.mmxlabs.models.util.import.submodels">
@@ -247,17 +158,7 @@
        </FeatureAnyOf>
     </editorFactory>
  </extension>
-   <extension point="org.eclipse.ui.editors">
-      <!-- @generated analytics -->
-      <editor
-            id="com.mmxlabs.models.lng.analytics.presentation.AnalyticsEditorID"
-            name="%_UI_AnalyticsEditor_label"
-            icon="icons/full/obj16/AnalyticsModelFile.gif"
-            extensions="analytics"
-            class="com.mmxlabs.models.lng.analytics.presentation.AnalyticsEditor"
-            contributorClass="com.mmxlabs.models.lng.analytics.presentation.AnalyticsActionBarContributor">
-      </editor>
-   </extension>
+   
    <extension
          point="com.mmxlabs.license.features.PluginXMLEnablement">
       <PluginXMLEnablement

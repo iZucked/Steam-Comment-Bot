@@ -11,19 +11,6 @@
 -->
 
 <plugin>
-
-   <extension point="org.eclipse.ui.editors">
-      <!-- @generated actuals -->
-      <editor
-            id="com.mmxlabs.models.lng.actuals.presentation.ActualsEditorID"
-            name="%_UI_ActualsEditor_label"
-            icon="icons/full/obj16/ActualsModelFile.gif"
-            extensions="actuals"
-            class="com.mmxlabs.models.lng.actuals.presentation.ActualsEditor"
-            contributorClass="com.mmxlabs.models.lng.actuals.presentation.ActualsActionBarContributor">
-      </editor>
-   </extension>
-
    <extension
          point="com.mmxlabs.models.ui.displaycompositefactories">
       <displayCompositeFactory
@@ -40,24 +27,6 @@
             id="com.mmxlabs.models.lng.actuals.presentation.composites.CargoActualsComponentHelper"
             inheritable="true"
             modelClass="com.mmxlabs.models.lng.actuals.CargoActuals">
-      </componentHelper>
-      <componentHelper
-            helperClass="com.mmxlabs.models.lng.actuals.presentation.composites.SlotActualsComponentHelper"
-            id="com.mmxlabs.models.lng.actuals.presentation.composites.SlotActualsComponentHelper"
-            inheritable="true"
-            modelClass="com.mmxlabs.models.lng.actuals.SlotActuals">
-      </componentHelper>
-      <componentHelper
-            helperClass="com.mmxlabs.models.lng.actuals.presentation.composites.DischargeActualsComponentHelper"
-            id="com.mmxlabs.models.lng.actuals.presentation.composites.DischargeActualsComponentHelper"
-            inheritable="true"
-            modelClass="com.mmxlabs.models.lng.actuals.DischargeActuals">
-      </componentHelper>
-      <componentHelper
-            helperClass="com.mmxlabs.models.lng.actuals.presentation.composites.LoadActualsComponentHelper"
-            id="com.mmxlabs.models.lng.actuals.presentation.composites.LoadActualsComponentHelper"
-            inheritable="true"
-            modelClass="com.mmxlabs.models.lng.actuals.LoadActuals">
       </componentHelper>
       <componentHelper
             helperClass="com.mmxlabs.models.lng.actuals.presentation.composites.ReturnActualsComponentHelper"

@@ -21,79 +21,30 @@
 	<extension
 		point="com.mmxlabs.models.ui.componenthelpers">
 		
-		<componentHelper
-			id="com.mmxlabs.models.lng.spotmarkets.helpers.SpotMarketsModel"
-			helperClass="com.mmxlabs.models.lng.spotmarkets.presentation.composites.SpotMarketsModelComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel" />
-		
+	 
 		<componentHelper
 			id="com.mmxlabs.models.lng.spotmarkets.presentation.composites.CharterInMarketComponentHelper"
 			helperClass="com.mmxlabs.models.lng.spotmarkets.presentation.composites.CharterInMarketComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.spotmarkets.CharterInMarket" />
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.spotmarkets.presentation.composites.CharterOutMarketComponentHelper"
-        id="com.mmxlabs.models.lng.spotmarkets.presentation.composites.CharterOutMarketComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.spotmarkets.CharterOutMarket">
-  </componentHelper>
-		
-		<componentHelper
-			id="com.mmxlabs.models.lng.spotmarkets.helpers.SpotMarketGroup"
-			helperClass="com.mmxlabs.models.lng.spotmarkets.presentation.composites.SpotMarketGroupComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup" />
-		
+  
 		<componentHelper
 			id="com.mmxlabs.models.lng.spotmarkets.helpers.SpotMarket"
 			helperClass="com.mmxlabs.models.lng.spotmarkets.presentation.composites.SpotMarketComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.spotmarkets.SpotMarket" />
-		
-		<componentHelper
-			id="com.mmxlabs.models.lng.spotmarkets.helpers.DESPurchaseMarket"
-			helperClass="com.mmxlabs.models.lng.spotmarkets.presentation.composites.DESPurchaseMarketComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket" />
-		
-		<componentHelper
-			id="com.mmxlabs.models.lng.spotmarkets.helpers.DESSalesMarket"
-			helperClass="com.mmxlabs.models.lng.spotmarkets.presentation.composites.DESSalesMarketComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.spotmarkets.DESSalesMarket" />
-		
+	  
 		<componentHelper
 			id="com.mmxlabs.models.lng.spotmarkets.helpers.FOBPurchasesMarket"
 			helperClass="com.mmxlabs.models.lng.spotmarkets.presentation.composites.FOBPurchasesMarketComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket" />
-		
-		<componentHelper
-			id="com.mmxlabs.models.lng.spotmarkets.helpers.FOBSalesMarket"
-			helperClass="com.mmxlabs.models.lng.spotmarkets.presentation.composites.FOBSalesMarketComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket" />
-		
+	 
 		<componentHelper
 			id="com.mmxlabs.models.lng.spotmarkets.helpers.SpotAvailability"
 			helperClass="com.mmxlabs.models.lng.spotmarkets.presentation.composites.SpotAvailabilityComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.spotmarkets.SpotAvailability" />
-
-    <componentHelper
-        helperClass="com.mmxlabs.models.lng.spotmarkets.presentation.composites.CharterOutMarketParametersComponentHelper"
-        id="com.mmxlabs.models.lng.spotmarkets.presentation.composites.CharterOutMarketParametersComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.spotmarkets.CharterOutMarketParameters">
-  </componentHelper>
-  
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.spotmarkets.presentation.composites.SpotCharterMarketComponentHelper"
-        id="com.mmxlabs.models.lng.spotmarkets.presentation.composites.SpotCharterMarketComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket">
-  </componentHelper>
 		
 	</extension>
   <extension
@@ -184,17 +135,7 @@
           referenceEClass="com.mmxlabs.models.lng.spotmarkets.DESSalesMarket">
     </valueProvider>
  </extension>
-   <extension point="org.eclipse.ui.editors">
-      <!-- @generated spotmarkets -->
-      <editor
-            id="com.mmxlabs.models.lng.spotmarkets.presentation.SpotMarketsEditorID"
-            name="%_UI_SpotMarketsEditor_label"
-            icon="icons/full/obj16/SpotMarketsModelFile.gif"
-            extensions="spotmarkets"
-            class="com.mmxlabs.models.lng.spotmarkets.presentation.SpotMarketsEditor"
-            contributorClass="com.mmxlabs.models.lng.spotmarkets.presentation.SpotMarketsActionBarContributor">
-      </editor>
-   </extension>
+ 
    <extension
          point="com.mmxlabs.models.util.import.submodels">
       <submodelImporter

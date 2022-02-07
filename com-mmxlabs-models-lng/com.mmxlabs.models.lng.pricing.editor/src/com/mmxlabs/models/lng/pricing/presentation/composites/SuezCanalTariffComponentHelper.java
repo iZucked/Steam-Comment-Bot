@@ -47,9 +47,9 @@ public class SuezCanalTariffComponentHelper extends DefaultComponentHelper {
 	public SuezCanalTariffComponentHelper() {
 		super(PricingPackage.Literals.SUEZ_CANAL_TARIFF);
 
-		editorFactories.put(PricingPackage.Literals.SUEZ_CANAL_TARIFF__BANDS, createBandsEditor());
-		editorFactories.put(PricingPackage.Literals.SUEZ_CANAL_TARIFF__TUG_BANDS, createTugBandsEditor());
-		editorFactories.put(PricingPackage.Literals.SUEZ_CANAL_TARIFF__ROUTE_REBATES, createRouteRebatesEditor());
+		addEditor(PricingPackage.Literals.SUEZ_CANAL_TARIFF__BANDS, createBandsEditor());
+		addEditor(PricingPackage.Literals.SUEZ_CANAL_TARIFF__TUG_BANDS, createTugBandsEditor());
+		addEditor(PricingPackage.Literals.SUEZ_CANAL_TARIFF__ROUTE_REBATES, createRouteRebatesEditor());
 
 	}
 
