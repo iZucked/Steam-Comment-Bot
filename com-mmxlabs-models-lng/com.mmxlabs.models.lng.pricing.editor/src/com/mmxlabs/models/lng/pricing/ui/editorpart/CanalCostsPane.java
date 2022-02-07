@@ -9,7 +9,6 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
@@ -53,6 +52,8 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 
 	private CostModel costModel;
 
+	private CTabItem fixedCostsTabItem;
+
 	public CanalCostsPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
 	}
@@ -64,8 +65,8 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 		final NonEditableColumn routeManipulator = new NonEditableColumn() {
 			@Override
 			public String render(final Object object) {
-				if (object instanceof RouteCost) {
-					final RouteOption routeOption = ((RouteCost) object).getRouteOption();
+				if (object instanceof RouteCost routeCost) {
+					final RouteOption routeOption = routeCost.getRouteOption();
 					if (routeOption != null) {
 						return PortModelLabeller.getName(routeOption);
 					}
@@ -125,12 +126,14 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 			tabItem.setControl(panamaDetailComposite.getComposite());
 		}
 		{
-			final CTabItem tabItem = new CTabItem(folder, SWT.NONE);
+			CTabItem tabItem = new CTabItem(folder, SWT.NONE);
 			tabItem.setText("Fixed costs");
 			tabItem.setToolTipText("Legacy fixed canal costs");
 
 			final ScenarioTableViewer v = super.createViewer(folder);
 			tabItem.setControl(v.getControl());
+
+			fixedCostsTabItem = tabItem;
 			return v;
 		}
 	}
@@ -142,8 +145,15 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 		}
 
 		this.costModel = costModel;
+		if (!costModel.getRouteCosts().isEmpty()) {
+			getViewer().setInput(costModel);
+		} else {
+			if (fixedCostsTabItem != null) {
+				fixedCostsTabItem.dispose();
+				fixedCostsTabItem = null;
+			}
 
-		getViewer().setInput(costModel);
+		}
 		suezDetailComposite.setInput(suezCanalTariff);
 		panamaDetailComposite.setInput(panamaCanalTariff);
 
