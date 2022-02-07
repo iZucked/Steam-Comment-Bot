@@ -131,11 +131,14 @@ public class CollectedAssignment {
 					}
 				}
 
-				final long aToBLateness = calculateHoursLate(a, b, portModel, modelDistanceProvider);
-				final long bToALateness = calculateHoursLate(b, a, portModel, modelDistanceProvider);
-				c = Long.compare(aToBLateness, bToALateness);
-				if (c != 0) {
-					return c;
+				// portModel should only should be null for CollectedAssignmentTest usage
+				if (portModel != null) {
+					final long aToBLateness = calculateHoursLate(a, b, portModel, modelDistanceProvider);
+					final long bToALateness = calculateHoursLate(b, a, portModel, modelDistanceProvider);
+					c = Long.compare(aToBLateness, bToALateness);
+					if (c != 0) {
+						return c;
+					}
 				}
 
 				c = a.getStartWindow().getSecond().compareTo(b.getStartWindow().getSecond());
@@ -157,19 +160,21 @@ public class CollectedAssignment {
 		return comparator;
 	}
 
-	private static long calculateHoursLate(@NonNull final WrappedAssignableElement a, @NonNull final WrappedAssignableElement b, final PortModel portModel, final ModelDistanceProvider modelDistanceProvider) {
+	private static long calculateHoursLate(@NonNull final WrappedAssignableElement a, @NonNull final WrappedAssignableElement b, final PortModel portModel,
+			final ModelDistanceProvider modelDistanceProvider) {
 		final int bufferTime;
 
 		if (b.getAssignableElement()instanceof Cargo cargo) {
 			bufferTime = cargo.getSlots().get(1).getSlotOrDelegateDaysBuffer();
-		} else if (b.getAssignableElement() instanceof FakeCargo fakeCargo) {
+		} else if (b.getAssignableElement()instanceof FakeCargo fakeCargo) {
 			final List<Slot<?>> slots = fakeCargo.getSlots();
 			bufferTime = slots.get(slots.size() - 1).getSlotOrDelegateDaysBuffer();
 		} else {
 			bufferTime = 0;
 		}
 
-		final int aToBTravelTime = CargoTravelTimeUtils.getFobMinTimeInHours(a.getEndPort(), b.getStartPort(), a.getAssignableElement().getVesselAssignmentType(), portModel, 0, modelDistanceProvider, bufferTime);
+		final int aToBTravelTime = CargoTravelTimeUtils.getFobMinTimeInHours(a.getEndPort(), b.getStartPort(), a.getAssignableElement().getVesselAssignmentType(), portModel, 0, modelDistanceProvider,
+				bufferTime);
 		final ZonedDateTime bArrivalTime = a.getEndWindow().getFirst().plusHours(aToBTravelTime);
 		return Math.max(0L, Hours.between(b.getStartWindow().getSecond(), bArrivalTime));
 	}
