@@ -11,6 +11,5 @@
 	</parent>
 
 	<artifactId>com.mmxlabs.models.lng.actuals.validation</artifactId>
-	<version>5.1.5-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 </project>
