@@ -48,6 +48,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 import com.mmxlabs.hub.common.http.WrappedProgressMonitor;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.gatewayresponse.IGatewayResponse;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
@@ -130,6 +131,9 @@ class CloudOptimisationDataUpdater {
 		@Override
 		public void run() {
 
+			if (cRecord.isComplete()) {
+				return;
+			}
 			if (cRecord.isHasError()) {
 				// Error, mark is complete and return;
 				cRecord.setComplete(true);
@@ -139,14 +143,23 @@ class CloudOptimisationDataUpdater {
 			try {
 				final File temp = new File(String.format("%s/%s.lingo", basePath, cRecord.getJobid()));
 				temp.getParentFile().mkdirs();
-				if (!downloadData(cRecord, temp)) {
+				final IGatewayResponse downloadResult = downloadData(cRecord, temp);
+				if (downloadResult == null) {
 					// Failed!
 					temp.delete();
-
+					return;
+				} else if (!downloadResult.isResultDownloaded()) {
+					temp.delete();
+					if (!downloadResult.shouldPollAgain()) {
+						cRecord.setHasError(downloadResult.isError());
+						cRecord.setComplete(true);
+						cRecord.setStatus(ResultStatus.from(String.format("{ \"status\" : \"complete\", \"reason\" : \"%s\"  }", downloadResult.getResultReason()), null));
+						readyCallback.accept(cRecord);
+					}
 					return;
 				} else {
 
-//					System.out.println("Downloaded " + temp);
+					// System.out.println("Downloaded " + temp);
 
 					final File anonymisationMap = new File(String.format("%s/%s.amap", basePath, cRecord.getJobid()));
 
@@ -213,19 +226,18 @@ class CloudOptimisationDataUpdater {
 								}
 							}
 						} catch (Exception e) {
-//							if (e.getCause() instanceof RuntimeException rt) {
-								if (e.getCause() instanceof IOWrappedException we) {
-									if (we.getCause() instanceof FeatureNotFoundException fnfe) {
-										cRecord.setHasError(true);
-										cRecord.setComplete(true);
-										cRecord.setStatus(ResultStatus.from("{ \"status\" : \"failed\", \"reason\" : \"Data model version issue\"  }", null));
-										readyCallback.accept(cRecord);
-										throw e;
-									}
+							// if (e.getCause() instanceof RuntimeException rt) {
+							if (e.getCause()instanceof IOWrappedException we) {
+								if (we.getCause()instanceof FeatureNotFoundException fnfe) {
+									cRecord.setHasError(true);
+									cRecord.setComplete(true);
+									cRecord.setStatus(ResultStatus.from("{ \"status\" : \"failed\", \"reason\" : \"Data model version issue\"  }", null));
+									readyCallback.accept(cRecord);
+									throw e;
 								}
-//							}
-							
-							
+							}
+							// }
+
 							cRecord.setHasError(true);
 							cRecord.setComplete(true);
 							cRecord.setStatus(ResultStatus.from("{ \"status\" : \"failed\", \"reason\" : \"Result load failure\"  }", null));
@@ -316,8 +328,8 @@ class CloudOptimisationDataUpdater {
 
 		}
 
-		private boolean downloadData(final CloudOptimisationDataResultRecord rtd, final File f) {
-			final boolean[] ret = new boolean[1];
+		private IGatewayResponse downloadData(final CloudOptimisationDataResultRecord rtd, final File f) {
+			final IGatewayResponse[] ret = new IGatewayResponse[1];
 			final Job background = new Job("Downloading scenario") {
 
 				@Override
@@ -590,10 +602,10 @@ class CloudOptimisationDataUpdater {
 	}
 
 	/**
-	 * Returns records from the master list of records. Returns null if no record
-	 * found.
+	 * Returns records from the master list of records. Returns null if no record found.
 	 * 
-	 * @param jobId  - jobId if next arg is false
+	 * @param jobId
+	 *            - jobId if next arg is false
 	 * @param isUUID
 	 * @return
 	 */
