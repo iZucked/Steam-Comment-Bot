@@ -140,9 +140,9 @@ public class HeadlessOptimiserOneshotApplication extends HeadlessGenericApplicat
 			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
 				AbstractSolutionSet result = runner.doRun(scenarioDataProvider, userSettings, exportLogs, outputLoggingFolder, json, numThreads, SubMonitor.convert(monitor));
 				
-				final File resultOutput = new File(outputScenarioFileName + ".xmi");
-				HeadlessUtils.saveResult(result, scenarioDataProvider, resultOutput);
-				
+//				final File resultOutput = new File(outputScenarioFileName + ".xmi");
+//				HeadlessUtils.saveResult(result, scenarioDataProvider, resultOutput);
+//				
 				ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, new File(outputScenarioFileName));
 			});
 		} catch (Exception e) {

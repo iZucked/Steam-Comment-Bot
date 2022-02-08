@@ -17,6 +17,7 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.extensions.IComponentHelperExtension;
+import com.mmxlabs.models.ui.impl.DefaultComponentHelper;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.util.importer.registry.impl.AbstractRegistry;
 
@@ -95,12 +96,15 @@ public class ComponentHelperRegistry extends AbstractRegistry<EClass, List<IComp
 
 	@Override
 	protected List<IComponentHelper> match(final EClass key) {
-		final List<IComponentHelper> helpers = new ArrayList<IComponentHelper>();
+		
+//		SOMEWHERE HERE RETURN THE DEFAULT
+		
+		final List<IComponentHelper> helpers = new ArrayList<>();
 		IComponentHelperExtension bestExtension = null;
 		int bestExtensionMatch = Integer.MAX_VALUE;
 		for (final IComponentHelperExtension extension : extensions) {
 			final int closeness = getMinimumGenerations(key, extension.getEClassName());
-			if (Boolean.valueOf(extension.isInheritable()) || closeness == 0) {
+			if ( closeness == 0) {
 				if (closeness < bestExtensionMatch) {
 					bestExtensionMatch = closeness;
 					bestExtension = extension;
@@ -116,9 +120,9 @@ public class ComponentHelperRegistry extends AbstractRegistry<EClass, List<IComp
 		}
 
 		if (bestExtension == null) {
-			if (key.getESuperTypes().isEmpty())
-				return helpers;
-			final IComponentHelper reflector = reflector(key);
+//			if (key.getESuperTypes().isEmpty())
+//				return helpers;
+			final IComponentHelper reflector = new DefaultComponentHelper(key);// reflector(key);
 			if (reflector != null)
 				helpers.add(reflector);
 			return helpers;

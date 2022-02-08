@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.nominations.provider;
 
 
+import com.mmxlabs.models.lng.nominations.ContractNomination;
 import java.util.Collection;
 import java.util.List;
 

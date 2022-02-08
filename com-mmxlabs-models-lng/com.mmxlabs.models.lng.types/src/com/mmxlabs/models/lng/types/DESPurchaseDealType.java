@@ -40,22 +40,22 @@ public enum DESPurchaseDealType implements Enumerator {
 	 */
 	DIVERTIBLE(3, "DIVERTIBLE", "DIVERTIBLE"),
 	/**
-	* The '<em><b>DEST WITH SOURCE</b></em>' literal object.
-	* <!-- begin-user-doc -->
+	 * The '<em><b>DEST WITH SOURCE</b></em>' literal object.
+	 * <!-- begin-user-doc -->
 	* <!-- end-user-doc -->
-	* @see #DEST_WITH_SOURCE_VALUE
-	* @generated
-	* @ordered
-	*/
+	 * @see #DEST_WITH_SOURCE_VALUE
+	 * @generated
+	 * @ordered
+	 */
 	DEST_WITH_SOURCE(1, "DEST_WITH_SOURCE", "DEST_WITH_SOURCE"),
 	/**
-	* The '<em><b>DIVERT FROM SOURCE</b></em>' literal object.
-	* <!-- begin-user-doc -->
+	 * The '<em><b>DIVERT FROM SOURCE</b></em>' literal object.
+	 * <!-- begin-user-doc -->
 	* <!-- end-user-doc -->
-	* @see #DIVERT_FROM_SOURCE_VALUE
-	* @generated
-	* @ordered
-	*/
+	 * @see #DIVERT_FROM_SOURCE_VALUE
+	 * @generated
+	 * @ordered
+	 */
 	DIVERT_FROM_SOURCE(2, "DIVERT_FROM_SOURCE", "DIVERT_FROM_SOURCE");
 
 	/**

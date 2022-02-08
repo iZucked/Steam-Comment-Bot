@@ -23,12 +23,14 @@ public abstract class AbstractFeatureRangeConstraint extends AbstractModelMultiC
 	protected Map<EStructuralFeature, Double> maxValues = new HashMap<>();
 	protected Map<EStructuralFeature, String> featureLabels = new HashMap<>();
 
-	public AbstractFeatureRangeConstraint() {
+	protected AbstractFeatureRangeConstraint() {
 		createConstraints();
 	}
 
 	/**
-	 * Sets the required range for a particular feature. The min and max values may be null for "any". A label string to use when displaying the feature may also be supplied.
+	 * Sets the required range for a particular feature. The min and max values may
+	 * be null for "any". A label string to use when displaying the feature may also
+	 * be supplied.
 	 * 
 	 * @param feature
 	 * @param min
@@ -73,7 +75,8 @@ public abstract class AbstractFeatureRangeConstraint extends AbstractModelMultiC
 	}
 
 	/**
-	 * Implement this method to indicate whether or not a particular object's feature should be validated.
+	 * Implement this method to indicate whether or not a particular object's
+	 * feature should be validated.
 	 * 
 	 * @param object
 	 * @param feature
@@ -87,7 +90,7 @@ public abstract class AbstractFeatureRangeConstraint extends AbstractModelMultiC
 	protected abstract void createConstraints();
 
 	@Override
-	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
+	protected void doValidate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 
 		for (final EStructuralFeature feature : getConstrainedFeatures()) {
@@ -97,8 +100,8 @@ public abstract class AbstractFeatureRangeConstraint extends AbstractModelMultiC
 
 				final Object value = target.eGet(feature);
 
-				if (value instanceof Number) {
-					final Double number = ((Number) value).doubleValue();
+				if (value instanceof Number num) {
+					final Double number = num.doubleValue();
 
 					String comparator = null;
 					Double comparison = null;
@@ -129,15 +132,5 @@ public abstract class AbstractFeatureRangeConstraint extends AbstractModelMultiC
 
 			}
 		}
-
-		return getPluginId();
-
 	}
-
-	/**
-	 * Implementing sub-classes should implement this with the body "return Activator.PLUGIN_ID;" (assuming there is a local Activator class to import).
-	 * 
-	 * @return
-	 */
-	protected abstract String getPluginId();
 }

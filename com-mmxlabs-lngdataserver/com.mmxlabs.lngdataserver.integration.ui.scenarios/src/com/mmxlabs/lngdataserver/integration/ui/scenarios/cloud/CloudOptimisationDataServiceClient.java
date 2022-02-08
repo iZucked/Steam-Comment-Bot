@@ -20,6 +20,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mmxlabs.hub.common.http.IProgressListener;
 import com.mmxlabs.hub.common.http.ProgressRequestBody;
 import com.mmxlabs.hub.common.http.ProgressResponseBody;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.gatewayresponse.GatewayResponseMaker;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.gatewayresponse.IGatewayResponse;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.preferences.CloudOptimiserPreferenceConstants;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.Activator;
 
@@ -126,7 +128,7 @@ public class CloudOptimisationDataServiceClient {
 		}
 	}
 
-	public boolean downloadTo(final String jobid, final File file, final IProgressListener progressListener) throws IOException {
+	public IGatewayResponse downloadTo(final String jobid, final File file, final IProgressListener progressListener) throws IOException {
 		OkHttpClient.Builder clientBuilder = httpClient.newBuilder();
 		if (progressListener != null) {
 			clientBuilder = clientBuilder.addNetworkInterceptor(new Interceptor() {
@@ -143,7 +145,7 @@ public class CloudOptimisationDataServiceClient {
 		final String requestURL = String.format("%s/%s/%s", SCENARIO_RESULT_URL, jobid, this.userid);
 		final Request.Builder requestBuilder = makeRequestBuilder(getGateway(), requestURL);
 		if (requestBuilder == null) {
-			return false;
+			return null;
 		}
 
 		final Request request = requestBuilder //
@@ -152,13 +154,14 @@ public class CloudOptimisationDataServiceClient {
 		try (Response response = localHttpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
 				response.body().close();
-				throw new IOException("Unexpected code: " + response);
+				return GatewayResponseMaker.makeGatewayResponse(response);
+//				throw new IOException("Unexpected code: " + response);
 			}
 			try (BufferedSource bufferedSource = response.body().source()) {
 				final BufferedSink bufferedSink = Okio.buffer(Okio.sink(file));
 				bufferedSink.writeAll(bufferedSource);
 				bufferedSink.close();
-				return true;
+				return GatewayResponseMaker.makeGatewayResponse(response);
 			}
 		}
 	}

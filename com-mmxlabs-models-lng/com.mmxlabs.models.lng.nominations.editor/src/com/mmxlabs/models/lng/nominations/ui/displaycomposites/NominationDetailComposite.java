@@ -11,8 +11,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.nominations.AbstractNomination;
-import com.mmxlabs.models.lng.nominations.presentation.composites.NominatedValueInlineEditor;
-import com.mmxlabs.models.lng.nominations.presentation.composites.NomineeDateInlineEditor;
+import com.mmxlabs.models.lng.nominations.ui.editor.NominatedValueInlineEditor;
+import com.mmxlabs.models.lng.nominations.ui.editor.NomineeDateInlineEditor;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;

@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Stack;
 
 import org.eclipse.emf.common.util.TreeIterator;
@@ -98,12 +99,11 @@ public class DefaultImportContext implements IMMXImportContext {
 		registerObjectWithName(object, typedName);
 
 		// For backward compatibility - register the untyped name if different.
-		if (!Equality.isEqual(typedName, object.getName())) {
+		if (!Objects.equals(typedName, object.getName())) {
 			registerObjectWithName(object, object.getName());
 		}
 
-		if (object instanceof OtherNamesObject) {
-			final OtherNamesObject otherNamesObject = (OtherNamesObject) object;
+		if (object instanceof OtherNamesObject otherNamesObject) {
 			for (final String otherName : otherNamesObject.getOtherNames()) {
 				registerObjectWithName(object, otherName);
 			}

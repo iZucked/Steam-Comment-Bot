@@ -13,6 +13,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.core.runtime.Assert;
@@ -427,7 +428,7 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 					if (!contents.contains(b) && equivalents.containsKey(b)) {
 						b = equivalents.get(b);
 					}
-					return Equality.isEqual(a, b);
+					return Objects.equals(a, b);
 				}
 			});
 		}

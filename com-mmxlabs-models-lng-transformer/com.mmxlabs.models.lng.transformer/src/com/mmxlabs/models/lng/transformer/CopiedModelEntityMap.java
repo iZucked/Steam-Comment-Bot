@@ -8,7 +8,6 @@ import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -99,7 +98,7 @@ public class CopiedModelEntityMap implements ModelEntityMap {
 	@Override
 	public <T extends EObject> Collection<@NonNull T> getAllModelObjects(final Class<? extends T> clz) {
 		final Collection<? extends T> allModelObjects = delegate.getAllModelObjects(clz);
-		return allModelObjects.stream().map(t -> (T) originalToNewCopy.get(t)).collect(Collectors.toList());
+		return allModelObjects.stream().map(t -> (T) originalToNewCopy.get(t)).toList();
 	}
 
 	@Override

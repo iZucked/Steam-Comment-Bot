@@ -82,8 +82,8 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected PricingSwitch<@Nullable Adapter> modelSwitch =
-		new PricingSwitch<@Nullable Adapter>() {
+	protected PricingSwitch<Adapter> modelSwitch =
+		new PricingSwitch<Adapter>() {
 			@Override
 			public Adapter casePricingModel(PricingModel object) {
 				return createPricingModelAdapter();

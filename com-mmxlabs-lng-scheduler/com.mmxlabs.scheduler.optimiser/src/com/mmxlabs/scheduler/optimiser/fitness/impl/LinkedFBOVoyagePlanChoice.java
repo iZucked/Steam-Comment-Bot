@@ -4,7 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
-import com.mmxlabs.common.Equality;
+import java.util.Objects;
+
 import com.mmxlabs.scheduler.optimiser.voyage.TravelFuelChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
@@ -70,7 +71,7 @@ public class LinkedFBOVoyagePlanChoice implements IVoyagePlanChoice {
 
 			final LinkedFBOVoyagePlanChoice other = (LinkedFBOVoyagePlanChoice) obj;
 
-			if (!Equality.isEqual(options, other.options)) {
+			if (!Objects.equals(options, other.options)) {
 				return false;
 			}
 

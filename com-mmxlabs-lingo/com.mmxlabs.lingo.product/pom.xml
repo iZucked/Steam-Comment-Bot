@@ -9,7 +9,6 @@
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>com.mmxlabs.lingo.product</artifactId>
-	<version>5.1.5-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 
 	<build>

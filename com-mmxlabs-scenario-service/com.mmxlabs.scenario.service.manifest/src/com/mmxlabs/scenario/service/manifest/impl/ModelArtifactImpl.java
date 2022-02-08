@@ -295,6 +295,7 @@ public class ModelArtifactImpl extends EObjectImpl implements ModelArtifact {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getDisplayName() {
 		return displayName;
 	}
@@ -304,6 +305,7 @@ public class ModelArtifactImpl extends EObjectImpl implements ModelArtifact {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDisplayName(String newDisplayName) {
 		String oldDisplayName = displayName;
 		displayName = newDisplayName;
@@ -428,7 +430,7 @@ public class ModelArtifactImpl extends EObjectImpl implements ModelArtifact {
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (key: ");
 		result.append(key);
 		result.append(", storageType: ");

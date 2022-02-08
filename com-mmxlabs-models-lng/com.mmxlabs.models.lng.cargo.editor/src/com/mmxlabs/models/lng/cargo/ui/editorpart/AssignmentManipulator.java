@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
@@ -25,7 +26,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterInMarketOverride;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.cargo.presentation.CargoEditorPlugin;
+import com.mmxlabs.models.lng.cargo.editor.CargoEditorPlugin;
 import com.mmxlabs.models.lng.cargo.ui.util.AssignmentLabelProvider;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -127,7 +128,7 @@ public class AssignmentManipulator implements ICellRenderer, ICellManipulator, I
 	public Integer getValue(final Object object) {
 		allowedValues = getAllowedValues((EObject) object, allowedValues);
 		for (int i = 0; i < allowedValues.size(); i++) {
-			if (Equality.isEqual(allowedValues.get(i).getSecond(), ((EObject) object).eGet(reference))) {
+			if (Objects.equals(allowedValues.get(i).getSecond(), ((EObject) object).eGet(reference))) {
 				return i;
 			}
 		}

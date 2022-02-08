@@ -8,13 +8,12 @@ import java.util.Map;
 import java.util.Set;
 
 public interface IFieldMap extends Map<String, String> {
-	public IFieldMap getSubMap(final String keyPrefix);
 
-	public Set<String> getUnreadKeys();
+	IFieldMap getSubMap(String keyPrefix);
 
-	public String getLastAccessedKey();
+	Set<String> getUnreadKeys();
 
-	/**
-	 */
-	public boolean containsPrefix(final String keyPrefix);
+	String getLastAccessedKey();
+
+	boolean containsPrefix(String keyPrefix);
 }

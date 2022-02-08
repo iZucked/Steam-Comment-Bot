@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
@@ -15,7 +16,6 @@ import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.jface.viewers.ViewerComparator;
 
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.actuals.CargoActuals;
 import com.mmxlabs.models.lng.actuals.DischargeActuals;
@@ -57,7 +57,8 @@ public class ActualsModelRowTransformer {
 
 			}
 
-			// Create a row for each pair of load and discharge slots in the cargo. This may lead to a row with only one slot
+			// Create a row for each pair of load and discharge slots in the cargo. This may
+			// lead to a row with only one slot
 			for (int i = 0; i < Math.max(loadSlots.size(), dischargeSlots.size()); ++i) {
 
 				LoadActuals loadSlot = null;
@@ -70,7 +71,8 @@ public class ActualsModelRowTransformer {
 				}
 
 				RowData rowData = new RowData();
-				// Attempt to determine primary record. TODO: Confirm this is correct for LDD case
+				// Attempt to determine primary record. TODO: Confirm this is correct for LDD
+				// case
 				rowData.primaryRecord = i == 0;
 
 				rowData.loadSlot = loadSlot;
@@ -120,7 +122,8 @@ public class ActualsModelRowTransformer {
 		// }
 		// }
 
-		// Construct arrays of data so that index X across all arrays points to the same row
+		// Construct arrays of data so that index X across all arrays points to the same
+		// row
 		for (final RowData rd : root.getRows()) {
 			root.getCargoActuals().add(rd.getCargo());
 			root.getLoadActuals().add(rd.getLoadSlot());
@@ -132,7 +135,8 @@ public class ActualsModelRowTransformer {
 	}
 
 	/**
-	 * The {@link RowData} represents a single row in the trades viewer. It extends EObject for use with {@link EMFPath}, and specifically {@link RowDataEMFPath}
+	 * The {@link RowData} represents a single row in the trades viewer. It extends
+	 * EObject for use with {@link EMFPath}, and specifically {@link RowDataEMFPath}
 	 * 
 	 */
 	public static class RowData extends EObjectImpl {
@@ -145,14 +149,16 @@ public class ActualsModelRowTransformer {
 		boolean primaryRecord;
 
 		/**
-		 * This is used in the {@link EObjectTableViewer} implementation of {@link ViewerComparator} for the fixed sort order.
+		 * This is used in the {@link EObjectTableViewer} implementation of
+		 * {@link ViewerComparator} for the fixed sort order.
 		 */
 		@Override
 		public boolean equals(final Object obj) {
 
-			if (obj instanceof RowData) {
-				final RowData other = (RowData) obj;
-				return Equality.isEqual(cargo, other.cargo) && Equality.isEqual(loadSlot, other.loadSlot) && Equality.isEqual(dischargeSlot, other.dischargeSlot);
+			if (obj instanceof RowData other) {
+				return Objects.equals(cargo, other.cargo) //
+						&& Objects.equals(loadSlot, other.loadSlot) //
+						&& Objects.equals(dischargeSlot, other.dischargeSlot);
 			}
 
 			return false;
@@ -162,7 +168,7 @@ public class ActualsModelRowTransformer {
 		public int hashCode() {
 			return super.hashCode();
 		}
-		
+
 		public void setCargo(final CargoActuals cargo) {
 			this.cargo = cargo;
 		}
@@ -232,8 +238,11 @@ public class ActualsModelRowTransformer {
 	}
 
 	/**
-	 * The {@link RowDataEMFPath} class is used to bridge our custom {@link RowData} objects with our reflective EMF based UI. This permits the step from {@link RowData} -> EObject , then on to the
-	 * normal EMF Path navigation. This can be passed into the normal {@link EObjectTableViewer} and {@link BasicAttributeManipulator} based API's.
+	 * The {@link RowDataEMFPath} class is used to bridge our custom {@link RowData}
+	 * objects with our reflective EMF based UI. This permits the step from
+	 * {@link RowData} -> EObject , then on to the normal EMF Path navigation. This
+	 * can be passed into the normal {@link EObjectTableViewer} and
+	 * {@link BasicAttributeManipulator} based API's.
 	 * 
 	 */
 	public static class RowDataEMFPath extends EMFPath {
@@ -241,7 +250,8 @@ public class ActualsModelRowTransformer {
 		private final Type type;
 
 		/**
-		 * Indicate that we want only the "primary record" - i.e. the row with the cargo defining load.
+		 * Indicate that we want only the "primary record" - i.e. the row with the cargo
+		 * defining load.
 		 */
 		private final boolean primaryRecordOnly;
 

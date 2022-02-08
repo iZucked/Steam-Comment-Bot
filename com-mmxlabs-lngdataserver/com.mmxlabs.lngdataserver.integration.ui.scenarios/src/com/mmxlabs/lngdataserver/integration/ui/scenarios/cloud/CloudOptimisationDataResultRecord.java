@@ -52,6 +52,7 @@ public class CloudOptimisationDataResultRecord {
 
 	private boolean remote;
 	private boolean deleted;
+	private boolean complete;
 
 	private boolean hasError;
 
@@ -61,9 +62,6 @@ public class CloudOptimisationDataResultRecord {
 	private boolean localJob;
 
 	private @NonNull ResultStatus status = ResultStatus.notfound();
-
-	@JsonIgnore
-	private File result;
 	
 	@JsonIgnore
 	private ScenarioInstance scenarioInstance;
@@ -140,14 +138,6 @@ public class CloudOptimisationDataResultRecord {
 		this.status = status;
 	}
 
-	public File getResult() {
-		return result;
-	}
-
-	public void setResult(File result) {
-		this.result = result;
-	}
-
 	public boolean isRemote() {
 		return remote;
 	}
@@ -188,7 +178,7 @@ public class CloudOptimisationDataResultRecord {
 	 */
 	@JsonIgnore
 	public boolean isActive() {
-		return status != null && (status.isSubmitted() || status.isRunning());
+		return !complete && (status != null && (status.isSubmitted() || status.isRunning()));
 	}
 
 	public String getType() {
@@ -253,6 +243,14 @@ public class CloudOptimisationDataResultRecord {
 
 	public void setHasError(boolean hasError) {
 		this.hasError = hasError;
+	}
+
+	public boolean isComplete() {
+		return complete;
+	}
+
+	public void setComplete(boolean complete) {
+		this.complete = complete;
 	}
 
 }

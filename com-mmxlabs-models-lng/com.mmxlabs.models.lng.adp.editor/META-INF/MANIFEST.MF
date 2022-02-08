@@ -1,13 +1,11 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: %pluginName
+Bundle-Name: ADP Editor
 Bundle-SymbolicName: com.mmxlabs.models.lng.adp.editor;singleton:=true
 Automatic-Module-Name: com.mmxlabs.models.lng.adp.editor
 Bundle-Version: 5.1.5.qualifier
 Bundle-ClassPath: .
-Bundle-Activator: com.mmxlabs.models.lng.adp.presentation.ADPEditorPlugin$Implementation
-Bundle-Vendor: %providerName
-Bundle-Localization: plugin
+Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-16
 Export-Package: com.mmxlabs.models.lng.adp.ext,
  com.mmxlabs.models.lng.adp.ext.impl,

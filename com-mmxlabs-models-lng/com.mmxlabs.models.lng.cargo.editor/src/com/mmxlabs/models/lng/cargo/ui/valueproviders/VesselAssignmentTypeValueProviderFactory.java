@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.emf.common.notify.Notifier;
@@ -18,7 +19,6 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -149,7 +149,7 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 
 						// Always show the option if the option is the null option
 						// or the current value for the cargo is set to this vessel-set
-						if (Equality.isEqual(vessel, currentValue) || (currentValue instanceof VesselAvailability && Equality.isEqual(vessel, ((VesselAvailability) currentValue).getVessel()))
+						if (Objects.equals(vessel, currentValue) || (currentValue instanceof VesselAvailability && Objects.equals(vessel, ((VesselAvailability) currentValue).getVessel()))
 								|| vessel == null) {
 							display = true;
 						}
@@ -184,7 +184,7 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 
 							// Always show the option if the option is the null option
 							// or the current value for the cargo is set to this vessel-set
-							if (Equality.isEqual(charterInMarket, currentValue) || charterInMarket == null) {
+							if (Objects.equals(charterInMarket, currentValue) || charterInMarket == null) {
 								display = true;
 							}
 

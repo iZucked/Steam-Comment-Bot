@@ -1,18 +1,15 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: %pluginName
+Bundle-Name: Commercial Editor
 Bundle-SymbolicName: com.mmxlabs.models.lng.commercial.editor;singleton:=true
 Automatic-Module-Name: com.mmxlabs.models.lng.commercial.editor
 Bundle-Version: 5.1.5.qualifier
 Bundle-ClassPath: .
-Bundle-Activator: com.mmxlabs.models.lng.commercial.presentation.CommercialEditorPlugin$Implementation
-Bundle-Vendor: %providerName
-Bundle-Localization: plugin
+Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-16
 Export-Package: com.mmxlabs.models.lng.commercial.editorfactories,
  com.mmxlabs.models.lng.commercial.importer,
  com.mmxlabs.models.lng.commercial.parseutils,
- com.mmxlabs.models.lng.commercial.presentation,
  com.mmxlabs.models.lng.commercial.ui.displaycomposites,
  com.mmxlabs.models.lng.commercial.ui.modelfactories
 Require-Bundle: org.eclipse.jdt.annotation;bundle-version="[2.0.0,3.0.0)",

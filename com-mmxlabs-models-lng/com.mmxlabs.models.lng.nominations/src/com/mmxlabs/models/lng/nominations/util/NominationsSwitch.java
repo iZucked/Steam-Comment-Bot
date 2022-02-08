@@ -31,7 +31,7 @@ import org.eclipse.jdt.annotation.Nullable;
  * @see com.mmxlabs.models.lng.nominations.NominationsPackage
  * @generated
  */
-public class NominationsSwitch<@Nullable T> extends Switch<T> {
+public class NominationsSwitch<T> extends Switch<T> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->

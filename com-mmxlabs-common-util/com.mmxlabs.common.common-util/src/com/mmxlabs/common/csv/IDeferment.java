@@ -7,7 +7,8 @@ package com.mmxlabs.common.csv;
 import org.eclipse.jdt.annotation.NonNull;
 
 /**
- * Instances of this can be used to do things like looking up named references after the bulk of the import has been completed.
+ * Instances of this can be used to do things like looking up named references
+ * after the bulk of the import has been completed.
  * 
  * 
  * @author hinton
@@ -15,17 +16,18 @@ import org.eclipse.jdt.annotation.NonNull;
  */
 public interface IDeferment {
 	/**
-	 * Execute this deferment in the given context. A deferment can legally add another deferment back into the context. If this happens, execution is paused, all deferments are re-sorted, and
-	 * then they are processed again
+	 * Execute this deferment in the given context. A deferment can legally add
+	 * another deferment back into the context. If this happens, execution is
+	 * paused, all deferments are re-sorted, and then they are processed again
 	 * 
 	 * @param context
 	 */
-	public void run(@NonNull final IImportContext context);
+	void run(@NonNull IImportContext context);
 
 	/**
 	 * Deferments are sorted in ascending order by stage.
 	 * 
 	 * @return
 	 */
-	public int getStage();
+	int getStage();
 }

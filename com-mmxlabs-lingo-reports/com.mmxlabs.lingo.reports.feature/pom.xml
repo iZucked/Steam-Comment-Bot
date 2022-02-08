@@ -11,6 +11,5 @@
 
 	<groupId>com.mmxlabs.lingo.reports.feature</groupId>
 	<artifactId>com.mmxlabs.lingo.reports.feature</artifactId>
-	<version>5.1.5-SNAPSHOT</version>
 	<packaging>eclipse-feature</packaging>
 </project>

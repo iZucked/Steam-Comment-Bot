@@ -13,20 +13,14 @@ import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.ui.validation.AbstractFeatureRangeConstraint;
 
 public class PortCVConstraint extends AbstractFeatureRangeConstraint {
+
 	@Override
 	public void createConstraints() {
 		setRange(PortPackage.Literals.PORT__CV_VALUE, 0.0, 40.0, "Port CV");
 	}
 
 	@Override
-	protected String getPluginId() {
-		return Activator.PLUGIN_ID;
-	}
-	
-	@Override
 	protected boolean shouldValidateFeature(EObject target, EStructuralFeature feature) {
-		return (target instanceof Port && ((Port) target).getCapabilities().contains(PortCapability.LOAD));
+		return (target instanceof Port port && port.getCapabilities().contains(PortCapability.LOAD));
 	}
-
-	
 }

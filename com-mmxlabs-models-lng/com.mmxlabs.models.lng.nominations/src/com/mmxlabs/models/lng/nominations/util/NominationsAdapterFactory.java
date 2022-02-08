@@ -74,8 +74,8 @@ public class NominationsAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected NominationsSwitch<@Nullable Adapter> modelSwitch =
-		new NominationsSwitch<@Nullable Adapter>() {
+	protected NominationsSwitch<Adapter> modelSwitch =
+		new NominationsSwitch<Adapter>() {
 			@Override
 			public Adapter caseNominationsModel(NominationsModel object) {
 				return createNominationsModelAdapter();

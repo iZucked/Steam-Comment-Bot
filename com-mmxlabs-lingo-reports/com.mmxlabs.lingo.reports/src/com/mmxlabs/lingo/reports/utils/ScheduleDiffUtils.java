@@ -5,12 +5,12 @@
 package com.mmxlabs.lingo.reports.utils;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
@@ -132,7 +132,7 @@ public class ScheduleDiffUtils {
 						final String caName = caSlot == null ? null : caSlot.getName();
 						final String refName = refSlot == null ? null : refSlot.getName();
 
-						if (!Equality.isEqual(caName, refName)) {
+						if (!Objects.equals(caName, refName)) {
 							return true;
 						}
 					} else {
@@ -146,7 +146,7 @@ public class ScheduleDiffUtils {
 							final String caName = caMarket == null ? null : caMarket.getName();
 							final String refName = refMarket == null ? null : refMarket.getName();
 
-							if (!Equality.isEqual(caName, refName)) {
+							if (!Objects.equals(caName, refName)) {
 								return true;
 							}
 						}
@@ -159,7 +159,7 @@ public class ScheduleDiffUtils {
 					final String caName = caPort == null ? null : caPort.getName();
 					final String refName = refPort == null ? null : refPort.getName();
 
-					if (!Equality.isEqual(caName, refName)) {
+					if (!Objects.equals(caName, refName)) {
 						return true;
 					}
 				}
@@ -170,7 +170,7 @@ public class ScheduleDiffUtils {
 					final String caName = caContract == null ? null : caContract.getName();
 					final String refName = refContract == null ? null : refContract.getName();
 
-					if (!Equality.isEqual(caName, refName)) {
+					if (!Objects.equals(caName, refName)) {
 						return true;
 					}
 				}
@@ -189,7 +189,7 @@ public class ScheduleDiffUtils {
 					final String caName = caPort == null ? null : caPort.getName();
 					final String refName = refPort == null ? null : refPort.getName();
 
-					if (!Equality.isEqual(caName, refName)) {
+					if (!Objects.equals(caName, refName)) {
 						return true;
 					}
 				}
@@ -227,7 +227,7 @@ public class ScheduleDiffUtils {
 					final String caName = caSlot == null ? null : caSlot.getName();
 					final String refName = refSlot == null ? null : refSlot.getName();
 
-					if (!Equality.isEqual(caName, refName)) {
+					if (!Objects.equals(caName, refName)) {
 						return true;
 					}
 				} else {
@@ -241,7 +241,7 @@ public class ScheduleDiffUtils {
 				final String caName = caPort == null ? null : caPort.getName();
 				final String refName = refPort == null ? null : refPort.getName();
 
-				if (!Equality.isEqual(caName, refName)) {
+				if (!Objects.equals(caName, refName)) {
 					return true;
 				}
 			}
@@ -252,7 +252,7 @@ public class ScheduleDiffUtils {
 				final String caName = caContract == null ? null : caContract.getName();
 				final String refName = refContract == null ? null : refContract.getName();
 
-				if (!Equality.isEqual(caName, refName)) {
+				if (!Objects.equals(caName, refName)) {
 					return true;
 				}
 			}
@@ -272,7 +272,7 @@ public class ScheduleDiffUtils {
 					final String caName = caSlot == null ? null : caSlot.getName();
 					final String refName = refSlot == null ? null : refSlot.getName();
 
-					if (!Equality.isEqual(caName, refName)) {
+					if (!Objects.equals(caName, refName)) {
 						return true;
 					}
 				}
@@ -284,7 +284,7 @@ public class ScheduleDiffUtils {
 				final String caName = caPort == null ? null : caPort.getName();
 				final String refName = refPort == null ? null : refPort.getName();
 
-				if (!Equality.isEqual(caName, refName)) {
+				if (!Objects.equals(caName, refName)) {
 					return true;
 				}
 			}
@@ -295,7 +295,7 @@ public class ScheduleDiffUtils {
 				final String caName = caContract == null ? null : caContract.getName();
 				final String refName = refContract == null ? null : refContract.getName();
 
-				if (!Equality.isEqual(caName, refName)) {
+				if (!Objects.equals(caName, refName)) {
 					return true;
 				}
 			}
@@ -322,7 +322,7 @@ public class ScheduleDiffUtils {
 					final String caName = caPort == null ? null : caPort.getName();
 					final String refName = refPort == null ? null : refPort.getName();
 
-					if (!Equality.isEqual(caName, refName)) {
+					if (!Objects.equals(caName, refName)) {
 						return true;
 					}
 				}

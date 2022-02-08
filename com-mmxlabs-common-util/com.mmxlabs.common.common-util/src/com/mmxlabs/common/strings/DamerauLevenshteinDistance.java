@@ -9,10 +9,10 @@ import java.util.Map;
 
 public class DamerauLevenshteinDistance implements StringDistance {
 	
-	private static int INSERT_COST = 1;
-	private static int DELETE_COST = 1;
-	private static int REPLACE_COST = 1;
-	private static int SWAP_COST = 1;
+	private static final int INSERT_COST = 1;
+	private static final int DELETE_COST = 1;
+	private static final int REPLACE_COST = 1;
+	private static final int SWAP_COST = 1;
 	
 	
 	

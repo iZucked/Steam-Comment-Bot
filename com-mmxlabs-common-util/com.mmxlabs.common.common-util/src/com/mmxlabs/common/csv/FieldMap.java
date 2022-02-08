@@ -81,8 +81,8 @@ public class FieldMap implements IFieldMap {
 
 	@Override
 	public String get(final Object key) {
-		if (key instanceof String) {
-			notifyAccess((String) key);
+		if (key instanceof String str) {
+			notifyAccess(str);
 		}
 		return delegate.get(key);
 	}

@@ -138,9 +138,9 @@ public class HeadlessSandboxOneshotApplication extends HeadlessGenericApplicatio
 			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
 				AbstractSolutionSet result = runner.run(options, modelRecord, scenarioDataProvider, null, monitor);
 				
-				final File resultOutput = new File(outputScenarioFileName + ".xmi");
-				HeadlessUtils.saveResult(result, scenarioDataProvider, resultOutput);
-				
+//				final File resultOutput = new File(outputScenarioFileName + ".xmi");
+//				HeadlessUtils.saveResult(result, scenarioDataProvider, resultOutput);
+//				
 				ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, new File(outputScenarioFileName));
 
 			});

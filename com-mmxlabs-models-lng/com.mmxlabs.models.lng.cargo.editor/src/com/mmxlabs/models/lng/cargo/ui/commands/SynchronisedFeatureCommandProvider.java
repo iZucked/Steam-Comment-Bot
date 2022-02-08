@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.ui.commands;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.emf.common.command.Command;
@@ -73,7 +74,7 @@ public abstract class SynchronisedFeatureCommandProvider implements IModelComman
 				final Object value = parameter.getValue();
 				// don't try to synchronise a value which is already synced
 				// (since this is likely to lead to infinite loops)
-				if (Equality.isEqual(syncedObject.eGet(feature), value)) {
+				if (Objects.equals(syncedObject.eGet(feature), value)) {
 					return null;
 				}
 				// create a new command to set the synchronised

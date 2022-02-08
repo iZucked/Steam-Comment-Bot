@@ -17,6 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -87,8 +88,8 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.editor.CargoEditorPlugin;
 import com.mmxlabs.models.lng.cargo.editor.PreferenceConstants;
-import com.mmxlabs.models.lng.cargo.presentation.CargoEditorPlugin;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.GroupData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RootData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowData;
@@ -625,13 +626,12 @@ public class LightTradesWiringViewer extends ScenarioTableViewerPane {
 					return true;
 				}
 
-				return Equality.isEqual(a, b);
+				return Objects.equals(a, b);
 			}
 
 			private Set<Object> getObjectSet(final Object a) {
 				final Set<Object> aSet = new HashSet<>();
-				if (a instanceof RowData) {
-					final RowData rd = (RowData) a;
+				if (a instanceof RowData rd) {
 					aSet.add(rd);
 					aSet.add(rd.cargo);
 					aSet.add(rd.loadSlot);

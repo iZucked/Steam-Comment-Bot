@@ -10,9 +10,6 @@
 	</parent>
 	<artifactId>com.mmxlabs.models.lng.scenario.ui.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
-	<version>5.1.5-SNAPSHOT</version>
-
-	
 	<properties>
 		<sonar.sources></sonar.sources>
 		<sonar.tests>src</sonar.tests>

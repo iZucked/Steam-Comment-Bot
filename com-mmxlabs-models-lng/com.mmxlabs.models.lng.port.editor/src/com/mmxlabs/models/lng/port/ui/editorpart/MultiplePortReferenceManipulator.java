@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.port.ui.editorpart;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.EList;
@@ -77,7 +78,7 @@ public class MultiplePortReferenceManipulator extends DialogFeatureManipulator {
 	@Override
 	public void doSetValue(final Object object, final Object value) {
 		final Object currentValue = getValue(object);
-		if (Equality.isEqual(currentValue, value)) {
+		if (Objects.equals(currentValue, value)) {
 			return;
 		}
 		commandHandler.handleCommand(CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), (EObject) object, field, (Collection) value), (EObject)object, field);

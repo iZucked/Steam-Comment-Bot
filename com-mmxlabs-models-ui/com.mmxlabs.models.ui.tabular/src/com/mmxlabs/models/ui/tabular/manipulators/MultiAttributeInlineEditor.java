@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -67,7 +68,7 @@ public class MultiAttributeInlineEditor extends DialogFeatureManipulator {
 	@Override
 	public void doSetValue(final Object object, final Object value) {
 		final Object currentValue = getValue(object);
-		if (Equality.isEqual(currentValue, value)) {
+		if (Objects.equals(currentValue, value)) {
 			return;
 		}
 		commandHandler.handleCommand(CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), (EObject) object, field, (Collection<?>) value), (EObject) object, field);

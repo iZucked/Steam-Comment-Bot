@@ -4,9 +4,10 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import java.util.Objects;
+
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.IndexedObject;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -60,7 +61,7 @@ public class Port extends IndexedObject implements IPort {
 
 		if (obj instanceof Port) {
 			final Port p = (Port) obj;
-			if (!Equality.isEqual(name, p.getName())) {
+			if (!Objects.equals(name, p.getName())) {
 				return false;
 			}
 

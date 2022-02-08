@@ -68,6 +68,7 @@ public abstract class MMXObjectImpl extends EObjectImpl implements MMXObject {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<EObject> getExtensions() {
 		if (extensions == null) {
 			extensions = new EObjectContainmentEList<EObject>(EObject.class, this, MMXCorePackage.MMX_OBJECT__EXTENSIONS);

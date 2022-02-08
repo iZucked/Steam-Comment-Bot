@@ -54,5 +54,4 @@ Import-Package: com.mmxlabs.models.lng.commercial.parseutils,
  javax.inject;version="1.0.0",
  org.slf4j;version="1.6.4"
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: com.mmxlabs.models.lng.transformer.internal.Activator
 Automatic-Module-Name: com.mmxlabs.models.lng.transformer

@@ -78,6 +78,7 @@ public class MMXCoreFactoryImpl extends EFactoryImpl implements MMXCoreFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public NamedObject createNamedObject() {
 		NamedObjectImpl namedObject = new NamedObjectImpl();
 		return namedObject;
@@ -89,6 +90,7 @@ public class MMXCoreFactoryImpl extends EFactoryImpl implements MMXCoreFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public OtherNamesObject createOtherNamesObject() {
 		OtherNamesObjectImpl otherNamesObject = new OtherNamesObjectImpl();
 		return otherNamesObject;
@@ -99,6 +101,7 @@ public class MMXCoreFactoryImpl extends EFactoryImpl implements MMXCoreFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public UUIDObject createUUIDObject() {
 		UUIDObjectImpl uuidObject = new UUIDObjectImpl();
 		return uuidObject;
@@ -109,6 +112,7 @@ public class MMXCoreFactoryImpl extends EFactoryImpl implements MMXCoreFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MMXRootObject createMMXRootObject() {
 		MMXRootObjectImpl mmxRootObject = new MMXRootObjectImpl();
 		return mmxRootObject;
@@ -119,6 +123,7 @@ public class MMXCoreFactoryImpl extends EFactoryImpl implements MMXCoreFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MMXResultRoot createMMXResultRoot() {
 		MMXResultRootImpl mmxResultRoot = new MMXResultRootImpl();
 		return mmxResultRoot;
@@ -129,6 +134,7 @@ public class MMXCoreFactoryImpl extends EFactoryImpl implements MMXCoreFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public VersionRecord createVersionRecord() {
 		VersionRecordImpl versionRecord = new VersionRecordImpl();
 		return versionRecord;
@@ -139,6 +145,7 @@ public class MMXCoreFactoryImpl extends EFactoryImpl implements MMXCoreFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public MMXCorePackage getMMXCorePackage() {
 		return (MMXCorePackage)getEPackage();
 	}

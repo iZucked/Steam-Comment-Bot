@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.ZonedDateTime;
 
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.common.NonNullPair;
 
@@ -19,32 +19,39 @@ import com.mmxlabs.common.NonNullPair;
  * @author Simon Goodall
  *
  */
+@NonNullByDefault
 public final class Months {
 
+	private Months() {
+
+	}
+
 	/**
-	 * Equivalent to {@link #between(YearMonth, YearMonth)} by ignoring day of month.
+	 * Equivalent to {@link #between(YearMonth, YearMonth)} by ignoring day of
+	 * month.
 	 * 
 	 * @param start
 	 * @param end
 	 * @return
 	 */
-	public static int between(@NonNull final LocalDate start, @NonNull final YearMonth end) {
+	public static int between(final LocalDate start, final YearMonth end) {
 
 		final int endMonths = end.getYear() * 12 + end.getMonthValue();
 		final int startMonths = start.getYear() * 12 + start.getMonthValue();
 		return endMonths - startMonths;
 	}
 
-	public static int between(@NonNull final YearMonth start, @NonNull final YearMonth end) {
+	public static int between(final YearMonth start, final YearMonth end) {
 
 		final int endMonths = end.getYear() * 12 + end.getMonthValue();
 		final int startMonths = start.getYear() * 12 + start.getMonthValue();
 		return endMonths - startMonths;
 	}
 
-	public static int between(@NonNull final LocalDate start, @NonNull final LocalDate end) {
+	public static int between(final LocalDate start, final LocalDate end) {
 
-		// Assume all months are 31 days. This also neatly covers months which are less than 31 days
+		// Assume all months are 31 days. This also neatly covers months which are less
+		// than 31 days
 		final int endDays = (end.getYear() * 12 + end.getMonthValue()) * 31 + end.getDayOfMonth();
 		final int startDays = (start.getYear() * 12 + start.getMonthValue()) * 31 + start.getDayOfMonth();
 		final int daysDiff = endDays - startDays;
@@ -52,11 +59,11 @@ public final class Months {
 		return daysDiff < 0 ? -months : months;
 	}
 
-	public static int in(@NonNull final NonNullPair<ZonedDateTime, ZonedDateTime> interval) {
+	public static int in(final NonNullPair<ZonedDateTime, ZonedDateTime> interval) {
 		return Months.between(interval.getFirst(), interval.getSecond());
 	}
 
-	public static int between(@NonNull final ZonedDateTime start, @NonNull final ZonedDateTime end) {
+	public static int between(final ZonedDateTime start, final ZonedDateTime end) {
 
 		final int endDays = (end.getYear() * 12 + end.getMonthValue()) * 31 + end.getDayOfMonth();
 		final int startDays = (start.getYear() * 12 + start.getMonthValue()) * 31 + start.getDayOfMonth();
@@ -65,7 +72,7 @@ public final class Months {
 		return daysDiff < 0 ? -months : months;
 	}
 
-	public static int between(@NonNull final LocalDateTime start, @NonNull final LocalDateTime end) {
+	public static int between(final LocalDateTime start, final LocalDateTime end) {
 
 		final int endDays = (end.getYear() * 12 + end.getMonthValue()) * 31 + end.getDayOfMonth();
 		final int startDays = (start.getYear() * 12 + start.getMonthValue()) * 31 + start.getDayOfMonth();

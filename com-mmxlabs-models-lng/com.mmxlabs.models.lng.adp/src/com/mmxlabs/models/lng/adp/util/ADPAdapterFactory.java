@@ -75,8 +75,8 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ADPSwitch<@Nullable Adapter> modelSwitch =
-		new ADPSwitch<@Nullable Adapter>() {
+	protected ADPSwitch<Adapter> modelSwitch =
+		new ADPSwitch<Adapter>() {
 			@Override
 			public Adapter caseADPModel(ADPModel object) {
 				return createADPModelAdapter();

@@ -10,60 +10,6 @@ import org.junit.jupiter.api.Test;
 public class EqualityTest {
 
 	@Test
-	public void testIsEqual_null_null() {
-		Assertions.assertTrue(Equality.isEqual(null, null));
-	}
-
-	@Test
-	public void testIsEqual_a_null() {
-		final Object a = new Object();
-		Assertions.assertFalse(Equality.isEqual(a, null));
-	}
-
-	@Test
-	public void testIsEqual_null_a() {
-		final Object a = new Object();
-		Assertions.assertFalse(Equality.isEqual(null, a));
-
-	}
-
-	@Test
-	public void testIsEqual_a_b() {
-		final Object a = new Object();
-		final Object b = new Object();
-
-		Assertions.assertFalse(Equality.isEqual(a, b));
-	}
-
-	@Test
-	public void testIsEqual_b_a() {
-		final Object a = new Object();
-		final Object b = new Object();
-		Assertions.assertFalse(Equality.isEqual(b, a));
-
-	}
-
-	@Test
-	public void testIsEqual_a_a() {
-		final Object a = new Object();
-		Assertions.assertTrue(Equality.isEqual(a, a));
-	}
-
-	@Test
-	public void testIsEqual_s2_s1() {
-		String s1 = "string";
-		String s2 = "string";
-		Assertions.assertTrue(Equality.isEqual(s2, s1));
-	}
-
-	@Test
-	public void testIsEqual_s1_s2() {
-		String s1 = "string";
-		String s2 = "string";
-		Assertions.assertTrue(Equality.isEqual(s1, s2));
-	}
-
-	@Test
 	public void testShallowEquals() {
 
 		// test unequal lengths
@@ -90,7 +36,9 @@ public class EqualityTest {
 	}
 
 	/**
-	 * shallowEquals should fail when testing objects that are different, even if they have identical content. This is because it tests using == rather than the "correct" .equals method.
+	 * shallowEquals should fail when testing objects that are different, even if
+	 * they have identical content. This is because it tests using == rather than
+	 * the "correct" .equals method.
 	 */
 	@Test
 	public void testShallowEqualsStringEquality() {

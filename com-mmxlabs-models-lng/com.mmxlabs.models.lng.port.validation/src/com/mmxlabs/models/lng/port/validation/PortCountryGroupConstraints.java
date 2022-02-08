@@ -30,17 +30,15 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class PortCountryGroupConstraints extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
+	protected void doValidate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 
-		final List<IStatus> failures = new LinkedList<IStatus>();
+		final List<IStatus> failures = new LinkedList<>();
 
-		if (target instanceof PortCountryGroup) {
-			final PortCountryGroup portCountryGroup = (PortCountryGroup) target;
+		if (target instanceof PortCountryGroup portCountryGroup) {
 
 			final MMXRootObject rootObject = extraContext.getRootObject();
-			if (rootObject instanceof LNGScenarioModel) {
-				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+			if (rootObject instanceof LNGScenarioModel lngScenarioModel) {
 				final PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
 
 				final Set<String> countryNames = new HashSet<>();
@@ -78,7 +76,5 @@ public class PortCountryGroupConstraints extends AbstractModelMultiConstraint {
 
 			}
 		}
-
-		return Activator.PLUGIN_ID;
 	}
 }

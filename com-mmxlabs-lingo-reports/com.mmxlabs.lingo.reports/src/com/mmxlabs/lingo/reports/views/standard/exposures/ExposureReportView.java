@@ -333,7 +333,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					final Iterator<IndexExposureData> otherIterator = other.iterator();
 					while (otherIterator.hasNext()) {
 						final IndexExposureData otherData = otherIterator.next();
-						if (Equality.isEqual(refData.date, otherData.date) && Equality.isEqual(refData.type, otherData.type)) { // indexName
+						if (Objects.equals(refData.date, otherData.date) && Objects.equals(refData.type, otherData.type)) { // indexName
 
 							output.add(createDiffData(refData, otherData));
 							otherIterator.remove();

@@ -11,7 +11,7 @@ import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.common.NonNullPair;
 
@@ -21,34 +21,35 @@ import com.mmxlabs.common.NonNullPair;
  * @author Simon Goodall
  *
  */
-public class Hours {
+@NonNullByDefault
+public final class Hours {
 
 	private Hours() {
 
 	}
 
-	public static int between(@NonNull final YearMonth start, @NonNull final YearMonth end) {
+	public static int between(final YearMonth start, final YearMonth end) {
 
 		final ZonedDateTime lStart = start.atDay(1).atStartOfDay(ZoneId.of("UTC"));
 		final ZonedDateTime lEnd = end.atDay(1).atStartOfDay(ZoneId.of("UTC"));
 		return Hours.between(lStart, lEnd);
 	}
 
-	public static int between(@NonNull final LocalDate start, @NonNull final LocalDate end) {
+	public static int between(final LocalDate start, final LocalDate end) {
 		final Duration duration = Duration.between(start.atStartOfDay(), end.atStartOfDay());
 		return (int) duration.toHours();
 	}
 
-	public static int in(@NonNull NonNullPair<ZonedDateTime, ZonedDateTime> interval) {
+	public static int in(NonNullPair<ZonedDateTime, ZonedDateTime> interval) {
 		return Hours.between(interval.getFirst(), interval.getSecond());
 	}
 
-	public static int between(@NonNull final ZonedDateTime start, @NonNull final ZonedDateTime end) {
+	public static int between(final ZonedDateTime start, final ZonedDateTime end) {
 		final Duration duration = Duration.between(start, end);
 		return (int) duration.toHours();
 	}
 
-	public static int between(@NonNull LocalDateTime start, @NonNull LocalDateTime end) {
+	public static int between(LocalDateTime start, LocalDateTime end) {
 		final Duration duration = Duration.between(start, end);
 		return (int) duration.toHours();
 	}

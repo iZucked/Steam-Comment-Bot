@@ -50,6 +50,14 @@ public class VoyageSpecificationImpl extends ScheduleSpecificationEventImpl impl
 	protected RouteOption routeOption = ROUTE_OPTION_EDEFAULT;
 
 	/**
+	 * This is true if the Route Option attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean routeOptionESet;
+	/**
 	 * The default value of the '{@link #getFuelChoice() <em>Fuel Choice</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -67,6 +75,15 @@ public class VoyageSpecificationImpl extends ScheduleSpecificationEventImpl impl
 	 * @ordered
 	 */
 	protected FuelChoice fuelChoice = FUEL_CHOICE_EDEFAULT;
+
+	/**
+	 * This is true if the Fuel Choice attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean fuelChoiceESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -106,8 +123,35 @@ public class VoyageSpecificationImpl extends ScheduleSpecificationEventImpl impl
 	public void setRouteOption(RouteOption newRouteOption) {
 		RouteOption oldRouteOption = routeOption;
 		routeOption = newRouteOption == null ? ROUTE_OPTION_EDEFAULT : newRouteOption;
+		boolean oldRouteOptionESet = routeOptionESet;
+		routeOptionESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VOYAGE_SPECIFICATION__ROUTE_OPTION, oldRouteOption, routeOption));
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VOYAGE_SPECIFICATION__ROUTE_OPTION, oldRouteOption, routeOption, !oldRouteOptionESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetRouteOption() {
+		RouteOption oldRouteOption = routeOption;
+		boolean oldRouteOptionESet = routeOptionESet;
+		routeOption = ROUTE_OPTION_EDEFAULT;
+		routeOptionESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.VOYAGE_SPECIFICATION__ROUTE_OPTION, oldRouteOption, ROUTE_OPTION_EDEFAULT, oldRouteOptionESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetRouteOption() {
+		return routeOptionESet;
 	}
 
 	/**
@@ -129,8 +173,35 @@ public class VoyageSpecificationImpl extends ScheduleSpecificationEventImpl impl
 	public void setFuelChoice(FuelChoice newFuelChoice) {
 		FuelChoice oldFuelChoice = fuelChoice;
 		fuelChoice = newFuelChoice == null ? FUEL_CHOICE_EDEFAULT : newFuelChoice;
+		boolean oldFuelChoiceESet = fuelChoiceESet;
+		fuelChoiceESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VOYAGE_SPECIFICATION__FUEL_CHOICE, oldFuelChoice, fuelChoice));
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VOYAGE_SPECIFICATION__FUEL_CHOICE, oldFuelChoice, fuelChoice, !oldFuelChoiceESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetFuelChoice() {
+		FuelChoice oldFuelChoice = fuelChoice;
+		boolean oldFuelChoiceESet = fuelChoiceESet;
+		fuelChoice = FUEL_CHOICE_EDEFAULT;
+		fuelChoiceESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.VOYAGE_SPECIFICATION__FUEL_CHOICE, oldFuelChoice, FUEL_CHOICE_EDEFAULT, oldFuelChoiceESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetFuelChoice() {
+		return fuelChoiceESet;
 	}
 
 	/**
@@ -176,10 +247,10 @@ public class VoyageSpecificationImpl extends ScheduleSpecificationEventImpl impl
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case CargoPackage.VOYAGE_SPECIFICATION__ROUTE_OPTION:
-				setRouteOption(ROUTE_OPTION_EDEFAULT);
+				unsetRouteOption();
 				return;
 			case CargoPackage.VOYAGE_SPECIFICATION__FUEL_CHOICE:
-				setFuelChoice(FUEL_CHOICE_EDEFAULT);
+				unsetFuelChoice();
 				return;
 		}
 		super.eUnset(featureID);
@@ -194,9 +265,9 @@ public class VoyageSpecificationImpl extends ScheduleSpecificationEventImpl impl
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case CargoPackage.VOYAGE_SPECIFICATION__ROUTE_OPTION:
-				return routeOption != ROUTE_OPTION_EDEFAULT;
+				return isSetRouteOption();
 			case CargoPackage.VOYAGE_SPECIFICATION__FUEL_CHOICE:
-				return fuelChoice != FUEL_CHOICE_EDEFAULT;
+				return isSetFuelChoice();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -212,9 +283,9 @@ public class VoyageSpecificationImpl extends ScheduleSpecificationEventImpl impl
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (routeOption: ");
-		result.append(routeOption);
+		if (routeOptionESet) result.append(routeOption); else result.append("<unset>");
 		result.append(", fuelChoice: ");
-		result.append(fuelChoice);
+		if (fuelChoiceESet) result.append(fuelChoice); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}
