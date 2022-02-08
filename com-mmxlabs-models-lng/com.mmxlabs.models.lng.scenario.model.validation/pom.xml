@@ -10,6 +10,5 @@
 	</parent>
 
 	<artifactId>com.mmxlabs.models.lng.scenario.model.validation</artifactId>
-	<version>5.1.5-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 </project>

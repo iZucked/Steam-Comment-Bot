@@ -9,6 +9,5 @@
 		<version>5.1.5-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.lingo.reports.scheduleview</artifactId>
-	<version>5.1.5-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 </project>
