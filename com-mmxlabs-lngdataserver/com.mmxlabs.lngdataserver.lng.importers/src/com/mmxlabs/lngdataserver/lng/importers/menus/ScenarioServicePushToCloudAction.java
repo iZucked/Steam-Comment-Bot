@@ -136,6 +136,9 @@ public class ScenarioServicePushToCloudAction {
 		final UserSettings userSettings;
 		if (optimisation) {
 			final var p = getOptimisationPlanForOptimisation(scenarioInstance);
+			if (p == null) {
+				return;
+			}
 			userSettings = p.getFirst();
 			resultName = p.getSecond();
 		} else {
