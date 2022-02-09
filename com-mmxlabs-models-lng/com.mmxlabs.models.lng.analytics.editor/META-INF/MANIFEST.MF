@@ -5,7 +5,6 @@ Bundle-SymbolicName: com.mmxlabs.models.lng.analytics.editor;singleton:=true
 Bundle-Version: 5.1.5.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-16
 Export-Package: com.mmxlabs.models.lng.analytics.importer,
  com.mmxlabs.models.lng.analytics.services,
@@ -70,3 +69,4 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
 Bundle-ActivationPolicy: lazy
 Import-Package: org.slf4j;version="1.6.4"
 Automatic-Module-Name: com.mmxlabs.models.lng.analytics.editor
+Bundle-Activator: com.mmxlabs.models.lng.analytics.ui.internal.Activator
