@@ -1509,26 +1509,24 @@ public class AnalyticsBuilder {
 	}
 
 	public static double getCargoCV(final BuyOption option) {
-		if (option instanceof BuyOpportunity) {
-			final BuyOpportunity buyOpportunity = (BuyOpportunity) option;
+		if (option instanceof final BuyOpportunity buyOpportunity) {
 			if (buyOpportunity.getCv() != 0.0) {
 				return buyOpportunity.getCv();
 			}
-			return buyOpportunity.getPort().getCvValue();
-		} else if (option instanceof BuyReference) {
-			final BuyReference buyReference = (BuyReference) option;
+			final Port port = buyOpportunity.getPort();
+			if (port != null) {
+				return port.getCvValue();
+			}
+		} else if (option instanceof final BuyReference buyReference) {
 			final LoadSlot slot = buyReference.getSlot();
 			if (slot != null) {
 				return slot.getSlotOrDelegateCV();
 			}
-		} else if (option instanceof BuyMarket) {
-			final BuyMarket buyMarket = (BuyMarket) option;
+		} else if (option instanceof final BuyMarket buyMarket) {
 			final SpotMarket market = buyMarket.getMarket();
-			if (market instanceof FOBPurchasesMarket) {
-				final FOBPurchasesMarket fobPurchasesMarket = (FOBPurchasesMarket) market;
+			if (market instanceof final FOBPurchasesMarket fobPurchasesMarket) {
 				return fobPurchasesMarket.getCv();
-			} else if (market instanceof DESPurchaseMarket) {
-				final DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) market;
+			} else if (market instanceof final DESPurchaseMarket desPurchaseMarket) {
 				return desPurchaseMarket.getCv();
 			}
 		}

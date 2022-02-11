@@ -132,11 +132,10 @@ public abstract class AbstractModellerComponent<T, U> {
 	}
 
 	protected GridViewerColumn createColumn(final GridTreeViewer viewer, final String name, final ICellRenderer renderer, final boolean isTree, final ETypedElement... pathObjects) {
-		return createColumn(viewer, createLabelProvider(name, renderer, pathObjects), name, renderer, isTree, pathObjects);
+		return createColumn(viewer, createLabelProvider(name, renderer, pathObjects), name, isTree, pathObjects);
 	}
 
-	protected GridViewerColumn createColumn(final GridTreeViewer viewer, final CellFormatterLabelProvider labelProvider, final String name, final ICellRenderer renderer, final boolean isTree,
-			final ETypedElement... pathObjects) {
+	protected GridViewerColumn createColumn(final GridTreeViewer viewer, final CellFormatterLabelProvider labelProvider, final String name, final boolean isTree, final ETypedElement... pathObjects) {
 
 		final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER | SWT.WRAP);
 		gvc.getColumn().setTree(isTree);
@@ -167,7 +166,7 @@ public abstract class AbstractModellerComponent<T, U> {
 				} else if (element instanceof SimpleVesselCharterOption) {
 					return sandboxUIHelper.imgShippingFleet;
 				}
-				return null;
+				return super.getImage(cell, element);
 			}
 
 			@Override
@@ -379,7 +378,8 @@ public abstract class AbstractModellerComponent<T, U> {
 	}
 
 	protected void doSetLocked(final boolean locked) {
-		// Subclasses should override this method to react to new locked state (or use the locked listeners).
+		// Subclasses should override this method to react to new locked state (or use
+		// the locked listeners).
 	}
 
 	protected void addLockedListener(final Consumer<Boolean> l) {

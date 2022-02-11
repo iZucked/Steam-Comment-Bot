@@ -105,7 +105,7 @@ public class SellOptionsComponent extends AbstractSandboxComponent<Object, Abstr
 		sellOptionsViewer.getGrid().setHeaderVisible(false);
 
 		CellFormatterLabelProvider labelProvider = new BuysSellsLabelProvider(sandboxUIHelper, new SellOptionDescriptionFormatter(), validationErrors, "Sell");
-		createColumn(sellOptionsViewer, labelProvider, "Sell", new SellOptionDescriptionFormatter(), false);
+		createColumn(sellOptionsViewer, labelProvider, "Sell",false);
 
 		sellOptionsViewer.setContentProvider(new OptionsViewerContentProvider(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SELLS));
 		hookOpenEditor(sellOptionsViewer);
