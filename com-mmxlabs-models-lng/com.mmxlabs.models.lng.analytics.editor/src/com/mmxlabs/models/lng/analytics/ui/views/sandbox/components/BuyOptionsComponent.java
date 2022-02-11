@@ -99,7 +99,7 @@ public class BuyOptionsComponent extends AbstractSandboxComponent<Object, Abstra
 		GridViewerHelper.configureLookAndFeel(buyOptionsViewer);
 		buyOptionsViewer.getGrid().setHeaderVisible(false);
 		CellFormatterLabelProvider labelProvider = new BuysSellsLabelProvider(sandboxUIHelper, new BuyOptionDescriptionFormatter(), validationErrors, "Buy");
-		createColumn(buyOptionsViewer, labelProvider, "Buy", new BuyOptionDescriptionFormatter(), false);
+		createColumn(buyOptionsViewer, labelProvider, "Buy", false);
 
 		buyOptionsViewer.setContentProvider(new OptionsViewerContentProvider(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__BUYS));
 		hookOpenEditor(buyOptionsViewer);
