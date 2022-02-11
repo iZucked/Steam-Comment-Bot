@@ -39,7 +39,8 @@ import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.ui.ScenarioResultImpl;
 
 /**
- * Helper class to open up a view, set the scenario selection provider to the given instance and adapt the result to a {@link IReportContents} instance.
+ * Helper class to open up a view, set the scenario selection provider to the
+ * given instance and adapt the result to a {@link IReportContents} instance.
  * 
  * @author Simon Goodall
  * 
@@ -89,7 +90,8 @@ public class ReportTester {
 	}
 
 	/**
-	 * New (as of 2021-05-17) way to run report tests with an element. Bug Simon to clean up the old code if this is still here more than a month later.
+	 * New (as of 2021-05-17) way to run report tests with an element. Bug Simon to
+	 * clean up the old code if this is still here more than a month later.
 	 * 
 	 * @param instance
 	 * @param scenarioDataProvider
@@ -209,13 +211,11 @@ public class ReportTester {
 		if (preAction != null) {
 			preAction.accept(modelRecord);
 		}
-		
-		
+
 		final ScenarioResult scenarioResult = new ScenarioResultImpl(modelRecord, ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
 
-		
 		final ReportTesterHelper reportTester = new ReportTesterHelper();
-String[] result = new String[1];
+		String[] result = new String[1];
 		reportTester.runReportTest(reportID, null, null, IReportContentsGenerator.class, (generator) -> {
 			IReportContents reportContents = generator.getReportContents(null, scenarioResult, null);
 			if (type == ReportType.REPORT_HTML) {
@@ -227,26 +227,8 @@ String[] result = new String[1];
 			}
 		});
 
-		final String actualContents =	result[0];
-		
-//
-//		final ReportTesterHelper reportTester = new ReportTesterHelper();
-//		final ScenarioResult scenarioResult = new ScenarioResultImpl(modelRecord, ScenarioModelUtil.getScheduleModel(scenarioDataProvider));
-//		final IReportContents reportContents = reportTester.runReportTest(reportID, null, null, null, null);getReportContents(scenarioResult, reportID);
-//
-//		Assertions.assertNotNull(reportContents);
-//		final String actualContents;
-//
-//		switch (type) {
-//		case REPORT_HTML:
-//			actualContents = reportContents.getHTMLContents();
-//			break;
-//		case REPORT_JSON:
-//			actualContents = reportContents.getJSONContents();
-//			break;
-//		default:
-//			throw new IllegalArgumentException();
-//		}
+		final String actualContents = result[0];
+
 		Assertions.assertNotNull(actualContents);
 		if (TestingModes.ReportTestMode == TestMode.Generate) {
 
@@ -354,13 +336,12 @@ String[] result = new String[1];
 	private static void doValidate(final String actualContents, final StringBuilder expectedOutputBuilder) {
 		final String expectedOutput = expectedOutputBuilder.toString();
 		final boolean valid = stripWhitespace.apply(expectedOutput
-				
+
 				.replaceAll("Sep([^t])", "Sept$1") // Java 16 Compat
 				.replaceAll("\\(EET\\)", "(TRT)") // Java 16 Compat (New turkey timezone)
-				).equals(stripWhitespace.apply(actualContents
-						.replaceAll("Sep([^t])", "Sept$1") // Java 16 Compat
-						.replaceAll("\\(EET\\)", "(TRT)") // Java 16 Compat (New turkey timezone)
-						));
+		).equals(stripWhitespace.apply(actualContents.replaceAll("Sep([^t])", "Sept$1") // Java 16 Compat
+				.replaceAll("\\(EET\\)", "(TRT)") // Java 16 Compat (New turkey timezone)
+		));
 		if (!valid) {
 			LOG.warn("Expected " + expectedOutput);
 			LOG.warn("Actual " + actualContents);
@@ -371,7 +352,7 @@ String[] result = new String[1];
 	public static String generatePinDiffReport(String reportID, ScenarioResult pinResult, ScenarioResult refResult) throws Exception {
 
 		final ReportTesterHelper reportTester = new ReportTesterHelper();
-		final String result[] = new String[1];
+		final String[] result = new String[1];
 
 		reportTester.runReportTest(reportID, null, null, IReportContentsGenerator.class, generator -> result[0] = generator.getReportContents(pinResult, refResult, null).getHTMLContents());
 
