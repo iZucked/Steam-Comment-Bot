@@ -34,14 +34,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -226,10 +224,16 @@ public class ScenarioStorageUtil {
 		}
 	}
 
+
 	public static void storeCopyToFile(final @NonNull IScenarioDataProvider scenarioDataProvider, final @NonNull File file) throws IOException {
 
 		final ScenarioModelRecord tmpRecord = ScenarioStorageUtil.createFromCopyOf(file.getName(), scenarioDataProvider);
 		storeToFile(tmpRecord, file);
+	}
+
+	public static void storeCopyToFile(final @NonNull IScenarioDataProvider scenarioDataProvider, final @NonNull File file, IScenarioCipherProvider scenarioCipherProvider) throws IOException {
+		final ScenarioModelRecord tmpRecord = ScenarioStorageUtil.createFromCopyOf(file.getName(), scenarioDataProvider);
+		storeToFile(tmpRecord, file, scenarioCipherProvider);
 	}
 
 	public static Map<String, EObject> createCopyOfExtraData(final ScenarioModelRecord modelRecord) {
@@ -296,6 +300,7 @@ public class ScenarioStorageUtil {
 		}
 
 	}
+
 
 	public static void storeToURI(final String uuid, final @NonNull URI sourceURI, final Map<String, URI> extraDataURIs, final Manifest manifest, final @NonNull URI archiveURI,
 			final @Nullable IScenarioCipherProvider scenarioCipherProvider) throws IOException {
@@ -451,6 +456,14 @@ public class ScenarioStorageUtil {
 				consumer.accept(modelRecord, scenarioDataProvider);
 			}
 		});
+	}
+
+	public static void withExternalScenarioFromResourceURLConsumer(final URL resourceURL, final CheckedBiConsumer<@NonNull ScenarioModelRecord, @NonNull IScenarioDataProvider, Exception> consumer,
+			IScenarioCipherProvider scenarioCipherProvider) throws Exception {
+		final ScenarioModelRecord modelRecord = loadInstanceFromURI(URI.createURI(resourceURL.toString()), true, false, scenarioCipherProvider);
+		try (IScenarioDataProvider scenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
+			consumer.accept(modelRecord, scenarioDataProvider);
+		}
 	}
 
 	public static <T> T withExternalScenarioFromResourceURL(final URL resourceURL, final CheckedBiFunction<@NonNull ScenarioModelRecord, @NonNull IScenarioDataProvider, T, Exception> consumer)

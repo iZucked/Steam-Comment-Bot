@@ -8,11 +8,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.ByteBuffer;
+import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.KeyStore.Entry.Attribute;
 import java.security.KeyStore.PasswordProtection;
@@ -23,7 +25,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PKCS12Attribute;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
+import java.security.interfaces.RSAPrivateKey;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -32,9 +36,14 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 
+import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.PBEParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
+import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
+import org.bouncycastle.openssl.PEMParser;
+import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
@@ -65,6 +74,9 @@ public final class KeyFileLoader {
 	private static final String KEYSTORE_TYPE = "PKCS12";
 
 	private static final String ENC_KEY_FILE_PROPERTY = "lingo.enc.keyfile";
+	private static final String CLOUD_OPTI_ENC_KEY_FILE_PROPERTY = "lingo.cloud.enc.keyfile";
+	private static final String CLOUD_OPTI_PRIV_KEY_FILE_PROPERTY = "lingo.cloud.priv.keyfile";
+	private static final String CLOUD_OPTI_KEY_UUID = "lingo.cloud.key.uuid";
 
 	// Arbitrary numeric strings to pass PKCS12 parser.
 
@@ -85,8 +97,13 @@ public final class KeyFileLoader {
 
 		// Try to find the key file
 
-		// Look for file specified in system property
-		File keyFileFile = getEncFilePropertyDataKeyFile();
+		// Look for file specified in cloud opti system property
+		File keyFileFile = getCloudOptimisationKeyFromProperty();
+
+		if (keyFileFile == null) {
+			// Look for file specified in system property
+			keyFileFile = getEncFilePropertyDataKeyFile();
+		}
 		if (keyFileFile == null) {
 			// Look in instance area - e.g. workspace folder / runtime folder
 			keyFileFile = getInstanceDataKeyFile();
@@ -181,6 +198,35 @@ public final class KeyFileLoader {
 			}
 		}
 		return cipher;
+	}
+
+	public static KeyFileV2 loadKeyFile(@NonNull File keyFileFile) throws Exception {
+		KeyFileV2 keyFile = null;
+		final KeyStore keyStore = KeyStore.getInstance(KEYSTORE_TYPE);
+		try (final InputStream astream = new FileInputStream(keyFileFile)) {
+			keyStore.load(astream, ppCurrentValue);
+		}
+
+		final Iterator<String> itr = keyStore.aliases().asIterator();
+		while (itr.hasNext()) {
+			final String alias = itr.next();
+			final ProtectionParameter pp = new PasswordProtection(ppCurrentValue);
+			final KeyStore.Entry entry = keyStore.getEntry(alias, pp);
+			if (entry instanceof SecretKeyEntry secretKeyEntry) {
+				final SecretKey secretKey = secretKeyEntry.getSecretKey();
+
+				final byte[] uuid = getBytesFromUUID(alias);
+				if (uuid.length != 16) {
+					continue;
+				}
+				for (final Attribute a : entry.getAttributes()) {
+					if (OID_MMXLABS_KEYFILE_TYPE.equals(a.getName()) && "v2".equals(a.getValue())) {
+						keyFile = new KeyFileV2(uuid, secretKey);
+					}
+				}
+			}
+		}
+		return keyFile;
 	}
 
 	private static void readLegacyKeyFile(final DelegatingEMFCipher cipher, final InputStream is, final boolean makeDefaultKey) throws Exception {
@@ -331,6 +377,80 @@ public final class KeyFileLoader {
 		return null;
 	}
 
+	private static byte[] getKeyUUIDFromProperty() {
+		final String keyUUID = System.getProperty(CLOUD_OPTI_KEY_UUID);
+		if (keyUUID == null) {
+			throw new RuntimeException("KeyUUID is null");
+		}
+		return Base64.getDecoder().decode(keyUUID);
+	}
+
+	public static KeyFileV2 getCloudOptimisationKeyFileV2() throws FileNotFoundException, IOException, GeneralSecurityException {
+		final byte[] keyUUID = getKeyUUIDFromProperty();
+		SecretKey secretKey = getCloudOptimisationSecretKeyFromProperty();
+		KeyFileV2 keyfile = new KeyFileV2(keyUUID, secretKey);
+		return keyfile;
+	}
+
+
+	public static SecretKey getCloudOptimisationSecretKeyFromProperty() throws FileNotFoundException, IOException, GeneralSecurityException {
+		final String secretKeyFilePath = System.getProperty(CLOUD_OPTI_ENC_KEY_FILE_PROPERTY);
+		if (secretKeyFilePath != null) {
+			final File secretKeyFile = new File(secretKeyFilePath);
+			if (secretKeyFile.exists()) {
+				// decrypt secret key
+				RSAPrivateKey privateKey = getCloudOptimisationPrivateKeyFromProperty();
+				SecretKey secretKey = decryptSymmetricKey(privateKey, secretKeyFile);
+				return secretKey;
+			}
+		}
+		return null;
+	}
+
+	public static RSAPrivateKey getCloudOptimisationPrivateKeyFromProperty() throws FileNotFoundException, IOException {
+		final String privateKeyPath = System.getProperty(CLOUD_OPTI_PRIV_KEY_FILE_PROPERTY);
+		if (privateKeyPath != null) {
+			final File privateKeyFile = new File(privateKeyPath);
+			if (privateKeyFile.exists()) {
+				try (FileReader keyReader = new FileReader(privateKeyFile)) {
+					PEMParser pemParser = new PEMParser(keyReader);
+					JcaPEMKeyConverter converter = new JcaPEMKeyConverter();
+					PrivateKeyInfo privateKeyInfo = PrivateKeyInfo.getInstance(pemParser.readObject());
+					return (RSAPrivateKey) converter.getPrivateKey(privateKeyInfo);
+				}
+			}
+		}
+		return null;
+	}
+
+	private static File getCloudOptimisationKeyFromProperty() throws IOException, GeneralSecurityException {
+		final String secretKeyFilePath = System.getProperty(CLOUD_OPTI_ENC_KEY_FILE_PROPERTY);
+		RSAPrivateKey privateKey = getCloudOptimisationPrivateKeyFromProperty();
+		if (secretKeyFilePath != null) {
+			final File secretKeyFile = new File(secretKeyFilePath);
+			if (secretKeyFile.exists()) {
+				SecretKey secretKey = decryptSymmetricKey(privateKey, secretKeyFile);
+				final File keyFile = new File(secretKeyFilePath + ".p12");
+				final byte[] keyUUID = getKeyUUIDFromProperty();
+				KeyFileLoader.initalise(keyFile);
+				KeyFileLoader.addToStore(keyFile, keyUUID, secretKey, KeyFileV2.KEYFILE_TYPE);
+				return keyFile;
+			}
+		}
+		return null;
+	}
+
+	public static SecretKey decryptSymmetricKey(RSAPrivateKey privkey, File encryptedKeyFile) throws IOException, GeneralSecurityException {
+		var cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
+		cipher.init(Cipher.DECRYPT_MODE, privkey);
+		byte[] secretKeyBytes;
+		try (FileInputStream fis = new FileInputStream(encryptedKeyFile)) {
+			secretKeyBytes = cipher.doFinal(fis.readAllBytes());
+		}
+		SecretKey secretKey = new SecretKeySpec(secretKeyBytes, KeyFileV2.ENCRYPTION_KEY_ALGORITHM);
+		return secretKey;
+	}
+
 	private static File getEncFilePropertyDataKeyFile() {
 
 		final String encKeyFile = System.getProperty(ENC_KEY_FILE_PROPERTY);
@@ -478,6 +598,5 @@ public final class KeyFileLoader {
 		try (FileOutputStream os = new FileOutputStream(f)) {
 			keyStore.store(os, ppCurrentValue);
 		}
-
 	}
 }
