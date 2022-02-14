@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud;
 
-import java.io.File;
 import java.time.Instant;
 import java.util.Objects;
 
@@ -62,7 +61,7 @@ public class CloudOptimisationDataResultRecord {
 	private boolean localJob;
 
 	private @NonNull ResultStatus status = ResultStatus.notfound();
-	
+
 	@JsonIgnore
 	private ScenarioInstance scenarioInstance;
 
@@ -173,7 +172,7 @@ public class CloudOptimisationDataResultRecord {
 
 	/**
 	 * Returns true if the tasks has been submitted or is currently running
-	 * 
+	 *
 	 * @return
 	 */
 	@JsonIgnore
