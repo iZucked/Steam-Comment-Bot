@@ -20,9 +20,6 @@ import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeFactory;
  * 
  */
 public class DischargeSlotCompositeFactory extends DefaultDisplayCompositeFactory {
-	public DischargeSlotCompositeFactory() {
-
-	}
 
 	@Override
 	public IDisplayComposite createToplevelComposite(final Composite composite, final EClass eClass, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {

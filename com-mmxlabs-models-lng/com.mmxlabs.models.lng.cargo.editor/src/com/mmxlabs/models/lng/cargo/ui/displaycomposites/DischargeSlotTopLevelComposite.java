@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
 import java.util.Collection;
+
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -41,8 +42,7 @@ public class DischargeSlotTopLevelComposite extends DefaultTopLevelComposite {
 		toolkit.adapt(g);
 
 		String groupName = EditorUtils.unmangle(eClass.getName());
-		if (object instanceof DischargeSlot) {
-			final DischargeSlot dischargeSlot = (DischargeSlot) object;
+		if (object instanceof DischargeSlot dischargeSlot) {
 
 			if (dischargeSlot.getTransferTo() != null) {
 				groupName = "STS: Discharge";
