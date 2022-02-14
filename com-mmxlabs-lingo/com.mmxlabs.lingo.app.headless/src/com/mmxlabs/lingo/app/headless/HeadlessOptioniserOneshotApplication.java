@@ -40,6 +40,9 @@ import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessOptioniserOptions;
 import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessOptioniserRunner;
 import com.mmxlabs.models.lng.transformer.ui.headless.optimiser.WriterFactory;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
+import com.mmxlabs.scenario.service.model.util.encryption.impl.CloudOptimisationSharedCipherProvider;
+import com.mmxlabs.scenario.service.model.util.encryption.impl.KeyFileLoader;
+import com.mmxlabs.scenario.service.model.util.encryption.impl.keyfiles.KeyFileV2;
 import com.mmxlabs.scheduler.optimiser.insertion.SlotInsertionOptimiserLogger;
 
 /**
@@ -145,21 +148,24 @@ public class HeadlessOptioniserOneshotApplication extends HeadlessGenericApplica
 		final SlotInsertionOptimiserLogger logger = exportLogs ? new SlotInsertionOptimiserLogger() : null;
 
 		try {
+			KeyFileV2 keyfile = KeyFileLoader.getCloudOptimisationKeyFileV2();
+			CloudOptimisationSharedCipherProvider scenarioCipherProvider = new CloudOptimisationSharedCipherProvider(keyfile);
+
 			// Get the root object
 			ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
 				final SlotInsertionOptions result = runner.run(logger, options, modelRecord, scenarioDataProvider, null, SubMonitor.convert(monitor));
 
-//				final File resultOutput = new File(outputScenarioFileName + ".xmi");
-//				HeadlessUtils.saveResult(result, scenarioDataProvider, resultOutput);
+				//				final File resultOutput = new File(outputScenarioFileName + ".xmi");
+				//				HeadlessUtils.saveResult(result, scenarioDataProvider, resultOutput);
 
-				ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, new File(outputScenarioFileName));
-			});
+				ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, new File(outputScenarioFileName), scenarioCipherProvider);
+			}, scenarioCipherProvider);
 		} catch (final Exception e) {
 			throw new IOException("Error running optioniser", e);
 
 		}
 
-//		renameInvalidBsonFields(json.getMetrics().getStages());
+		//		renameInvalidBsonFields(json.getMetrics().getStages());
 
 		if (loggingFolder != null) {
 
