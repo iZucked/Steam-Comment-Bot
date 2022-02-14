@@ -25,8 +25,6 @@ import com.google.common.base.Joiner;
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.google.inject.Provides;
-import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.time.Months;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
@@ -36,7 +34,6 @@ import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
-import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
 import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
@@ -277,7 +274,7 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 			@Nullable
 			public List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
 				if (moduleType == ModuleType.Module_LNGTransformerModule) {
-					return Collections.<@NonNull Module> singletonList(new AbstractModule() {
+					return Collections.<@NonNull Module>singletonList(new AbstractModule() {
 
 						@Override
 						protected void configure() {
@@ -285,21 +282,6 @@ public abstract class AbstractAdvancedOptimisationTester extends AbstractOptimis
 							bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VoyagePlanEvaluatorCache)).toInstance(voyageEvaluatorCache);
 							bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_TimeWindowSchedulerCache)).toInstance(timeWindowCache);
 							bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_PNLBasedWindowTrimmerCache)).toInstance(pnlTrimmerCache);
-						}
-					});
-				}
-				if (moduleType == ModuleType.Module_EvaluationParametersModule) {
-					return Collections.<@NonNull Module> singletonList(new AbstractModule() {
-
-						@Override
-						protected void configure() {
-							// Nothing needed here
-						}
-
-						@Provides
-						@Named(LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE)
-						private boolean isOptimiserReevaluating() {
-							return false;
 						}
 					});
 				}

@@ -17,8 +17,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
-import com.google.inject.Provides;
-import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.concurrent.DefaultJobExecutorFactory;
 import com.mmxlabs.common.concurrent.JobExecutorFactory;
@@ -29,7 +27,6 @@ import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
-import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
@@ -222,21 +219,6 @@ public class LNGScenarioRunnerCreator {
 							// Default bindings for caches
 							bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_VoyagePlanEvaluatorCache)).toInstance(CacheMode.On);
 							bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_TimeWindowSchedulerCache)).toInstance(CacheMode.On);
-						}
-					});
-				}
-				if (moduleType == ModuleType.Module_EvaluationParametersModule) {
-					return Collections.<@NonNull Module>singletonList(new AbstractModule() {
-
-						@Override
-						protected void configure() {
-
-						}
-
-						@Provides
-						@Named(LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE)
-						private boolean isOptimiserReevaluating() {
-							return false;
 						}
 					});
 				}
