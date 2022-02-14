@@ -22,7 +22,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Provides;
-import com.google.inject.name.Named;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
@@ -109,8 +108,8 @@ public class BreakEvenSanboxUnit {
 			}
 
 			@Provides
-			private EvaluationHelper provideEvaluationHelper(final Injector injector, @Named(LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE) final boolean isReevaluating) {
-				final EvaluationHelper helper = new EvaluationHelper(isReevaluating);
+			private EvaluationHelper provideEvaluationHelper(final Injector injector) {
+				final EvaluationHelper helper = new EvaluationHelper();
 				injector.injectMembers(helper);
 
 				helper.setFlexibleCapacityViolationCount(Integer.MAX_VALUE);
@@ -138,7 +137,6 @@ public class BreakEvenSanboxUnit {
 
 			@NonNull
 			final ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
-			final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(scenarioModel);
 
 			// Phase 1 : generate basic point-to-point break evens
 			{
