@@ -517,9 +517,6 @@ public class ScenarioServicePushToCloudAction {
 			}
 
 			final List<Pair<String, Object>> filesToZip = new ArrayList<>(4);
-			LOG.info(keyUUID.toString());
-			LOG.info(new String(keyUUID));
-			LOG.info(Base64.getEncoder().encodeToString(keyUUID));
 			// Add the manifest entry
 			filesToZip.add(Pair.of(MANIFEST_NAME, createManifest(MF_SCENARIO_NAME, problemType, Base64.getEncoder().encodeToString(keyUUID))));
 			// Add the scenario
