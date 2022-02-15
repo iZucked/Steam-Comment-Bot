@@ -35,9 +35,9 @@ public class VoyageOptionsDescriptionFormatter extends BaseFormatter implements 
 	private static final String IMG_DATE = "/icons/voyageopts/date.png";
 	private static final String IMG_FUEL = "/icons/voyageopts/fuel.png";
 	private static final String IMG_CANAL_MIXED = "/icons/voyageopts/canal-plain.png";
-	private static final String IMG_CANAL_DIRECT = "/icons/voyageopts/date.png";
-	private static final String IMG_CANAL_SUEZ = "/icons/voyageopts/date.png";
-	private static final String IMG_CANAL_PANAMA = "/icons/voyageopts/date.png";
+	private static final String IMG_CANAL_DIRECT = "/icons/voyageopts/canal-plain.png";
+	private static final String IMG_CANAL_SUEZ = "/icons/voyageopts/canal-suez.png";
+	private static final String IMG_CANAL_PANAMA = "/icons/voyageopts/canal-panama.png";
 
 	@Override
 	public String render(final Object object) {
@@ -211,7 +211,7 @@ public class VoyageOptionsDescriptionFormatter extends BaseFormatter implements 
 		gc.setAntialias(SWT.ON);
 
 		gc.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
-//			gc.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
+		// gc.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 
 		int xpos = 0;
 		boolean first = true;
