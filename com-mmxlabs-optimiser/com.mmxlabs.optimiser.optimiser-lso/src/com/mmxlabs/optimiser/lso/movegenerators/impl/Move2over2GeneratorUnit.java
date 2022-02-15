@@ -14,7 +14,7 @@ import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
-import com.mmxlabs.optimiser.lso.impl.Move2over2;
+import com.mmxlabs.optimiser.lso.moves.impl.Move2over2;
 
 /**
  * Generator for {@link Move2over2} moves. Currently always generates moves which respect the start and end elements of sequences.

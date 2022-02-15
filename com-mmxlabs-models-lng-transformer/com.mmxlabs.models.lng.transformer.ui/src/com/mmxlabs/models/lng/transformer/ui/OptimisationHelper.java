@@ -34,8 +34,6 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
-import com.mmxlabs.license.features.KnownFeatures;
-import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
@@ -45,11 +43,11 @@ import com.mmxlabs.models.lng.parameters.MultipleSolutionSimilarityOptimisationS
 import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
-import com.mmxlabs.models.lng.parameters.ParallelOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.ReduceSequencesStage;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.SimilaritySettings;
+import com.mmxlabs.models.lng.parameters.StrategicLocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper.NameProvider;
@@ -76,13 +74,12 @@ import com.mmxlabs.scheduler.optimiser.fitness.VesselUtilisationFitnessCoreFacto
 import com.mmxlabs.scheduler.optimiser.fitness.components.NonOptionalSlotFitnessCoreFactory;
 
 public final class OptimisationHelper {
+	private static final Logger LOG = LoggerFactory.getLogger(OptimisationHelper.class);
 
 	private OptimisationHelper() {
 	}
 
 	public static final String PARAMETER_MODE_CUSTOM = "Custom";
-
-	private static final Logger log = LoggerFactory.getLogger(OptimisationHelper.class);
 
 	public static final int EPOCH_LENGTH_PERIOD = 10_000;
 	public static final int EPOCH_LENGTH_FULL = 10_000;
@@ -274,23 +271,19 @@ public final class OptimisationHelper {
 				return LNGScenarioRunnerUtils.createExtendedSettings(plan);
 			}
 		}
-		final boolean parallelise = LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MODULE_PARALLELISATION);
 		if (userSettings.getMode() == OptimisationMode.STRATEGIC) { // Strategic optimiser
 			{
 				final int jobCount = 10;// 30
-				final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EMFCopier.copy(baseConstraintAndFitnessSettings), false);
+				final StrategicLocalSearchOptimisationStage stage = ScenarioUtils.createDefaultStrategicLSOParameters(EMFCopier.copy(baseConstraintAndFitnessSettings));
 
 				stage.getAnnealingSettings().setInitialTemperature(5_000_000);
 
 				stage.getAnnealingSettings().setEpochLength(1_000);
 				stage.getAnnealingSettings().setIterations(400_000);
 				stage.getAnnealingSettings().setRestarting(false);
-
-				final ParallelOptimisationStage<LocalSearchOptimisationStage> stage2 = ParametersFactory.eINSTANCE.createParallelOptimisationStage();
-				stage2.setJobCount(jobCount);
-				stage2.setTemplate(stage);
-				stage2.setName("lso");
-				plan.getStages().add(stage2);
+				stage.setCount(jobCount);
+				
+				plan.getStages().add(stage);
 			}
 			{
 				final ReduceSequencesStage stage = ParametersFactory.eINSTANCE.createReduceSequencesStage();
@@ -298,19 +291,19 @@ public final class OptimisationHelper {
 				plan.getStages().add(stage);
 			}
 			{
-				final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EMFCopier.copy(baseConstraintAndFitnessSettings), parallelise);
+				final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EMFCopier.copy(baseConstraintAndFitnessSettings));
 				stage.getAnnealingSettings().setEpochLength(epochLength);
 				stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
 				plan.getStages().add(stage);
 			}
 			// Follow by hill-climb stage
 			{
-				final HillClimbOptimisationStage stage = ScenarioUtils.createDefaultHillClimbingParameters(EMFCopier.copy(baseConstraintAndFitnessSettings), parallelise);
+				final HillClimbOptimisationStage stage = ScenarioUtils.createDefaultHillClimbingParameters(EMFCopier.copy(baseConstraintAndFitnessSettings));
 				stage.getAnnealingSettings().setEpochLength(epochLength);
 				plan.getStages().add(stage);
 			}
 		} else if (userSettings.getMode() == OptimisationMode.ADP) { // ADP optimiser
-			final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EMFCopier.copy(baseConstraintAndFitnessSettings), parallelise);
+			final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EMFCopier.copy(baseConstraintAndFitnessSettings));
 			stage.getAnnealingSettings().setEpochLength(epochLength);
 			stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
 			plan.getStages().add(stage);
@@ -322,8 +315,7 @@ public final class OptimisationHelper {
 			ScenarioUtils.createOrUpdateAllObjectives(plan, NonOptionalSlotFitnessCoreFactory.NAME, true, 24_000_000);
 		} else {
 			if (similarityMode != SimilarityMode.OFF) {
-				final MultipleSolutionSimilarityOptimisationStage stage = ScenarioUtils.createDefaultMultipleSolutionSimilarityParameters(EMFCopier.copy(baseConstraintAndFitnessSettings),
-						parallelise);
+				final MultipleSolutionSimilarityOptimisationStage stage = ScenarioUtils.createDefaultMultipleSolutionSimilarityParameters(EMFCopier.copy(baseConstraintAndFitnessSettings));
 				stage.getAnnealingSettings().setEpochLength(epochLength);
 				stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
 
@@ -336,14 +328,14 @@ public final class OptimisationHelper {
 			} else {
 				// Normal LSO
 				{
-					final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EMFCopier.copy(baseConstraintAndFitnessSettings), parallelise);
+					final LocalSearchOptimisationStage stage = ScenarioUtils.createDefaultLSOParameters(EMFCopier.copy(baseConstraintAndFitnessSettings));
 					stage.getAnnealingSettings().setEpochLength(epochLength);
 					stage.getAnnealingSettings().setRestarting(shouldUseRestartingLSO);
 					plan.getStages().add(stage);
 				}
 				// Follow by hill-climb stage
 				{
-					final HillClimbOptimisationStage stage = ScenarioUtils.createDefaultHillClimbingParameters(EMFCopier.copy(baseConstraintAndFitnessSettings), parallelise);
+					final HillClimbOptimisationStage stage = ScenarioUtils.createDefaultHillClimbingParameters(EMFCopier.copy(baseConstraintAndFitnessSettings));
 					stage.getAnnealingSettings().setEpochLength(epochLength);
 					plan.getStages().add(stage);
 				}

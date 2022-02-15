@@ -81,16 +81,13 @@
     <genClasses image="false" ecoreClass="parameters.ecore#//ConstraintsAndFitnessSettingsStage">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//ConstraintsAndFitnessSettingsStage/constraintAndFitnessSettings"/>
     </genClasses>
-    <genClasses ecoreClass="parameters.ecore#//ParallisableOptimisationStage"/>
-    <genClasses ecoreClass="parameters.ecore#//ParallelOptimisationStage">
-      <genTypeParameters ecoreTypeParameter="parameters.ecore#//ParallelOptimisationStage/T"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//ParallelOptimisationStage/jobCount"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//ParallelOptimisationStage/template"/>
-    </genClasses>
     <genClasses ecoreClass="parameters.ecore#//CleanStateOptimisationStage">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//CleanStateOptimisationStage/seed"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//CleanStateOptimisationStage/annealingSettings"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//CleanStateOptimisationStage/cleanStateSettings"/>
+    </genClasses>
+    <genClasses ecoreClass="parameters.ecore#//StrategicLocalSearchOptimisationStage">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//StrategicLocalSearchOptimisationStage/count"/>
     </genClasses>
     <genClasses ecoreClass="parameters.ecore#//LocalSearchOptimisationStage">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//LocalSearchOptimisationStage/seed"/>
@@ -117,11 +114,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//SolutionBuilderSettings/constraintAndFitnessSettings"/>
     </genClasses>
     <genClasses ecoreClass="parameters.ecore#//MultipleSolutionSimilarityOptimisationStage"/>
-    <genClasses ecoreClass="parameters.ecore#//ParallelMultipleSolutionSimilarityOptimisationStage"/>
-    <genClasses ecoreClass="parameters.ecore#//ParallelHillClimbOptimisationStage"/>
-    <genClasses ecoreClass="parameters.ecore#//ParallelLocalSearchOptimisationStage"/>
     <genClasses ecoreClass="parameters.ecore#//MultiobjectiveSimilarityOptimisationStage"/>
-    <genClasses ecoreClass="parameters.ecore#//ParallelMultiobjectiveSimilarityOptimisationStage"/>
     <genClasses ecoreClass="parameters.ecore#//CleanStateOptimisationSettings">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//CleanStateOptimisationSettings/seed"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//CleanStateOptimisationSettings/globalIterations"/>

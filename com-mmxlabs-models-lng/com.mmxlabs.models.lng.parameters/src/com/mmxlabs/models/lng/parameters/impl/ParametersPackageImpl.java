@@ -9,10 +9,8 @@ package com.mmxlabs.models.lng.parameters.impl;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
-import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import com.mmxlabs.models.datetime.DateTimePackage;
@@ -33,12 +31,6 @@ import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimisationMode;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
-import com.mmxlabs.models.lng.parameters.ParallelHillClimbOptimisationStage;
-import com.mmxlabs.models.lng.parameters.ParallelLocalSearchOptimisationStage;
-import com.mmxlabs.models.lng.parameters.ParallelMultiobjectiveSimilarityOptimisationStage;
-import com.mmxlabs.models.lng.parameters.ParallelMultipleSolutionSimilarityOptimisationStage;
-import com.mmxlabs.models.lng.parameters.ParallelOptimisationStage;
-import com.mmxlabs.models.lng.parameters.ParallisableOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.ReduceSequencesStage;
@@ -47,6 +39,7 @@ import com.mmxlabs.models.lng.parameters.SimilarityInterval;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.SimilaritySettings;
 import com.mmxlabs.models.lng.parameters.SolutionBuilderSettings;
+import com.mmxlabs.models.lng.parameters.StrategicLocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
@@ -118,21 +111,14 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass parallisableOptimisationStageEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass parallelOptimisationStageEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	private EClass cleanStateOptimisationStageEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass strategicLocalSearchOptimisationStageEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -216,35 +202,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass parallelMultipleSolutionSimilarityOptimisationStageEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass parallelHillClimbOptimisationStageEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass parallelLocalSearchOptimisationStageEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	private EClass multiobjectiveSimilarityOptimisationStageEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass parallelMultiobjectiveSimilarityOptimisationStageEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -728,46 +686,6 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * @generated
 	 */
 	@Override
-	public EClass getParallisableOptimisationStage() {
-		return parallisableOptimisationStageEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getParallelOptimisationStage() {
-		return parallelOptimisationStageEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getParallelOptimisationStage_JobCount() {
-		return (EAttribute)parallelOptimisationStageEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getParallelOptimisationStage_Template() {
-		return (EReference)parallelOptimisationStageEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getCleanStateOptimisationStage() {
 		return cleanStateOptimisationStageEClass;
 	}
@@ -800,6 +718,26 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	@Override
 	public EReference getCleanStateOptimisationStage_CleanStateSettings() {
 		return (EReference)cleanStateOptimisationStageEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getStrategicLocalSearchOptimisationStage() {
+		return strategicLocalSearchOptimisationStageEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getStrategicLocalSearchOptimisationStage_Count() {
+		return (EAttribute)strategicLocalSearchOptimisationStageEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -1098,48 +1036,8 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * @generated
 	 */
 	@Override
-	public EClass getParallelMultipleSolutionSimilarityOptimisationStage() {
-		return parallelMultipleSolutionSimilarityOptimisationStageEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getParallelHillClimbOptimisationStage() {
-		return parallelHillClimbOptimisationStageEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getParallelLocalSearchOptimisationStage() {
-		return parallelLocalSearchOptimisationStageEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getMultiobjectiveSimilarityOptimisationStage() {
 		return multiobjectiveSimilarityOptimisationStageEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getParallelMultiobjectiveSimilarityOptimisationStage() {
-		return parallelMultiobjectiveSimilarityOptimisationStageEClass;
 	}
 
 	/**
@@ -1300,16 +1198,13 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		constraintsAndFitnessSettingsStageEClass = createEClass(CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE);
 		createEReference(constraintsAndFitnessSettingsStageEClass, CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS);
 
-		parallisableOptimisationStageEClass = createEClass(PARALLISABLE_OPTIMISATION_STAGE);
-
-		parallelOptimisationStageEClass = createEClass(PARALLEL_OPTIMISATION_STAGE);
-		createEAttribute(parallelOptimisationStageEClass, PARALLEL_OPTIMISATION_STAGE__JOB_COUNT);
-		createEReference(parallelOptimisationStageEClass, PARALLEL_OPTIMISATION_STAGE__TEMPLATE);
-
 		cleanStateOptimisationStageEClass = createEClass(CLEAN_STATE_OPTIMISATION_STAGE);
 		createEAttribute(cleanStateOptimisationStageEClass, CLEAN_STATE_OPTIMISATION_STAGE__SEED);
 		createEReference(cleanStateOptimisationStageEClass, CLEAN_STATE_OPTIMISATION_STAGE__ANNEALING_SETTINGS);
 		createEReference(cleanStateOptimisationStageEClass, CLEAN_STATE_OPTIMISATION_STAGE__CLEAN_STATE_SETTINGS);
+
+		strategicLocalSearchOptimisationStageEClass = createEClass(STRATEGIC_LOCAL_SEARCH_OPTIMISATION_STAGE);
+		createEAttribute(strategicLocalSearchOptimisationStageEClass, STRATEGIC_LOCAL_SEARCH_OPTIMISATION_STAGE__COUNT);
 
 		localSearchOptimisationStageEClass = createEClass(LOCAL_SEARCH_OPTIMISATION_STAGE);
 		createEAttribute(localSearchOptimisationStageEClass, LOCAL_SEARCH_OPTIMISATION_STAGE__SEED);
@@ -1339,15 +1234,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 
 		multipleSolutionSimilarityOptimisationStageEClass = createEClass(MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE);
 
-		parallelMultipleSolutionSimilarityOptimisationStageEClass = createEClass(PARALLEL_MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE);
-
-		parallelHillClimbOptimisationStageEClass = createEClass(PARALLEL_HILL_CLIMB_OPTIMISATION_STAGE);
-
-		parallelLocalSearchOptimisationStageEClass = createEClass(PARALLEL_LOCAL_SEARCH_OPTIMISATION_STAGE);
-
 		multiobjectiveSimilarityOptimisationStageEClass = createEClass(MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE);
-
-		parallelMultiobjectiveSimilarityOptimisationStageEClass = createEClass(PARALLEL_MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE);
 
 		cleanStateOptimisationSettingsEClass = createEClass(CLEAN_STATE_OPTIMISATION_SETTINGS);
 		createEAttribute(cleanStateOptimisationSettingsEClass, CLEAN_STATE_OPTIMISATION_SETTINGS__SEED);
@@ -1388,23 +1275,16 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		MMXCorePackage theMMXCorePackage = (MMXCorePackage)EPackage.Registry.INSTANCE.getEPackage(MMXCorePackage.eNS_URI);
 
 		// Create type parameters
-		ETypeParameter parallelOptimisationStageEClass_T = addETypeParameter(parallelOptimisationStageEClass, "T");
 
 		// Set bounds for type parameters
-		EGenericType g1 = createEGenericType(this.getParallisableOptimisationStage());
-		parallelOptimisationStageEClass_T.getEBounds().add(g1);
 
 		// Add supertypes to classes
 		objectiveEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		constraintEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		constraintsAndFitnessSettingsStageEClass.getESuperTypes().add(this.getOptimisationStage());
-		parallisableOptimisationStageEClass.getESuperTypes().add(this.getOptimisationStage());
-		parallelOptimisationStageEClass.getESuperTypes().add(this.getOptimisationStage());
-		cleanStateOptimisationStageEClass.getESuperTypes().add(this.getParallisableOptimisationStage());
 		cleanStateOptimisationStageEClass.getESuperTypes().add(this.getConstraintsAndFitnessSettingsStage());
-		localSearchOptimisationStageEClass.getESuperTypes().add(this.getParallisableOptimisationStage());
+		strategicLocalSearchOptimisationStageEClass.getESuperTypes().add(this.getLocalSearchOptimisationStage());
 		localSearchOptimisationStageEClass.getESuperTypes().add(this.getConstraintsAndFitnessSettingsStage());
-		hillClimbOptimisationStageEClass.getESuperTypes().add(this.getParallisableOptimisationStage());
 		hillClimbOptimisationStageEClass.getESuperTypes().add(this.getConstraintsAndFitnessSettingsStage());
 		actionPlanOptimisationStageEClass.getESuperTypes().add(this.getConstraintsAndFitnessSettingsStage());
 		resetInitialSequencesStageEClass.getESuperTypes().add(this.getOptimisationStage());
@@ -1412,11 +1292,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		insertionOptimisationStageEClass.getESuperTypes().add(this.getConstraintsAndFitnessSettingsStage());
 		breakEvenOptimisationStageEClass.getESuperTypes().add(this.getOptimisationStage());
 		multipleSolutionSimilarityOptimisationStageEClass.getESuperTypes().add(this.getLocalSearchOptimisationStage());
-		parallelMultipleSolutionSimilarityOptimisationStageEClass.getESuperTypes().add(this.getMultipleSolutionSimilarityOptimisationStage());
-		parallelHillClimbOptimisationStageEClass.getESuperTypes().add(this.getHillClimbOptimisationStage());
-		parallelLocalSearchOptimisationStageEClass.getESuperTypes().add(this.getLocalSearchOptimisationStage());
 		multiobjectiveSimilarityOptimisationStageEClass.getESuperTypes().add(this.getMultipleSolutionSimilarityOptimisationStage());
-		parallelMultiobjectiveSimilarityOptimisationStageEClass.getESuperTypes().add(this.getMultiobjectiveSimilarityOptimisationStage());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(userSettingsEClass, UserSettings.class, "UserSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1478,17 +1354,13 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		initEClass(constraintsAndFitnessSettingsStageEClass, ConstraintsAndFitnessSettingsStage.class, "ConstraintsAndFitnessSettingsStage", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getConstraintsAndFitnessSettingsStage_ConstraintAndFitnessSettings(), this.getConstraintAndFitnessSettings(), null, "constraintAndFitnessSettings", null, 0, 1, ConstraintsAndFitnessSettingsStage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(parallisableOptimisationStageEClass, ParallisableOptimisationStage.class, "ParallisableOptimisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(parallelOptimisationStageEClass, ParallelOptimisationStage.class, "ParallelOptimisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getParallelOptimisationStage_JobCount(), ecorePackage.getEInt(), "jobCount", null, 0, 1, ParallelOptimisationStage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		g1 = createEGenericType(parallelOptimisationStageEClass_T);
-		initEReference(getParallelOptimisationStage_Template(), g1, null, "template", null, 0, 1, ParallelOptimisationStage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
 		initEClass(cleanStateOptimisationStageEClass, CleanStateOptimisationStage.class, "CleanStateOptimisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCleanStateOptimisationStage_Seed(), ecorePackage.getEInt(), "seed", null, 1, 1, CleanStateOptimisationStage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCleanStateOptimisationStage_AnnealingSettings(), this.getAnnealingSettings(), null, "annealingSettings", null, 1, 1, CleanStateOptimisationStage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCleanStateOptimisationStage_CleanStateSettings(), this.getCleanStateOptimisationSettings(), null, "cleanStateSettings", null, 1, 1, CleanStateOptimisationStage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(strategicLocalSearchOptimisationStageEClass, StrategicLocalSearchOptimisationStage.class, "StrategicLocalSearchOptimisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getStrategicLocalSearchOptimisationStage_Count(), ecorePackage.getEInt(), "count", null, 1, 1, StrategicLocalSearchOptimisationStage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(localSearchOptimisationStageEClass, LocalSearchOptimisationStage.class, "LocalSearchOptimisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLocalSearchOptimisationStage_Seed(), ecorePackage.getEInt(), "seed", null, 1, 1, LocalSearchOptimisationStage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1518,15 +1390,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 
 		initEClass(multipleSolutionSimilarityOptimisationStageEClass, MultipleSolutionSimilarityOptimisationStage.class, "MultipleSolutionSimilarityOptimisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(parallelMultipleSolutionSimilarityOptimisationStageEClass, ParallelMultipleSolutionSimilarityOptimisationStage.class, "ParallelMultipleSolutionSimilarityOptimisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(parallelHillClimbOptimisationStageEClass, ParallelHillClimbOptimisationStage.class, "ParallelHillClimbOptimisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(parallelLocalSearchOptimisationStageEClass, ParallelLocalSearchOptimisationStage.class, "ParallelLocalSearchOptimisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
 		initEClass(multiobjectiveSimilarityOptimisationStageEClass, MultiobjectiveSimilarityOptimisationStage.class, "MultiobjectiveSimilarityOptimisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(parallelMultiobjectiveSimilarityOptimisationStageEClass, ParallelMultiobjectiveSimilarityOptimisationStage.class, "ParallelMultiobjectiveSimilarityOptimisationStage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(cleanStateOptimisationSettingsEClass, CleanStateOptimisationSettings.class, "CleanStateOptimisationSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCleanStateOptimisationSettings_Seed(), ecorePackage.getEInt(), "seed", null, 1, 1, CleanStateOptimisationSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

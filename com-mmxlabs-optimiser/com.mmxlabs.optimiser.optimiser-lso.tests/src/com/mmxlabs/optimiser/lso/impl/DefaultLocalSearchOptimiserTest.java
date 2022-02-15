@@ -73,7 +73,7 @@ public class DefaultLocalSearchOptimiserTest {
 
 		final IOptimiserProgressMonitor monitor = new SystemOutProgressMonitor();
 
-		final LocalSearchOptimiser lso = GeneralTestUtils.buildOptimiser(context, data, pData, random, numberOfIterations, 1, monitor);
+		final SingleThreadLocalSearchOptimiser lso = GeneralTestUtils.buildOptimiser(context, data, pData, random, numberOfIterations, 1, monitor);
 		lso.setLookupManager(new ILookupManager() {
 			@Override
 			public void createLookup(@NonNull ISequences sequences) {

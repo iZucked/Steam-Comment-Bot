@@ -25,11 +25,11 @@ import com.mmxlabs.models.lng.parameters.MultipleSolutionSimilarityOptimisationS
 import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.OptimisationStage;
-import com.mmxlabs.models.lng.parameters.ParallelOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityInterval;
 import com.mmxlabs.models.lng.parameters.SimilaritySettings;
 import com.mmxlabs.models.lng.parameters.SolutionBuilderSettings;
+import com.mmxlabs.models.lng.parameters.StrategicLocalSearchOptimisationStage;
 import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
 import com.mmxlabs.models.lng.transformer.extensions.portshipsizeconstraint.PortShipSizeConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintCheckerFactory;
@@ -88,7 +88,7 @@ public class ScenarioUtils {
 		return o;
 	}
 
-	public static Objective createObjective(final String name, final double weight, boolean enabled) {
+	public static Objective createObjective(final String name, final double weight, final boolean enabled) {
 		final Objective o = ParametersFactory.eINSTANCE.createObjective();
 		o.setName(name);
 		o.setWeight(weight);
@@ -98,11 +98,6 @@ public class ScenarioUtils {
 
 	@NonNull
 	public static OptimisationPlan createDefaultOptimisationPlan() {
-		return createDefaultOptimisationPlan(LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MODULE_PARALLELISATION));
-	}
-
-	@NonNull
-	public static OptimisationPlan createDefaultOptimisationPlan(boolean parallelise) {
 
 		final OptimisationPlan plan = ParametersFactory.eINSTANCE.createOptimisationPlan();
 
@@ -113,8 +108,8 @@ public class ScenarioUtils {
 		@NonNull
 		final ConstraintAndFitnessSettings constraintAndFitnessSettings = createDefaultConstraintAndFitnessSettings();
 
-		plan.getStages().add(createDefaultLSOParameters(EMFCopier.copy(constraintAndFitnessSettings), parallelise));
-		plan.getStages().add(createDefaultHillClimbingParameters(EMFCopier.copy(constraintAndFitnessSettings), parallelise));
+		plan.getStages().add(createDefaultLSOParameters(EMFCopier.copy(constraintAndFitnessSettings)));
+		plan.getStages().add(createDefaultHillClimbingParameters(EMFCopier.copy(constraintAndFitnessSettings)));
 
 		return plan;
 	}
@@ -145,7 +140,8 @@ public class ScenarioUtils {
 		return similaritySettings;
 	}
 
-	public static SimilaritySettings createSimilaritySettings(int lowInterval, int lowWeight, int medInterval, int medWeight, int highInterval, int highWeight, int outOfBounds) {
+	public static SimilaritySettings createSimilaritySettings(final int lowInterval, final int lowWeight, final int medInterval, final int medWeight, final int highInterval, final int highWeight,
+			final int outOfBounds) {
 		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
 
 		similaritySettings.setLowInterval(createSimilarityInterval(lowInterval, lowWeight));
@@ -165,9 +161,9 @@ public class ScenarioUtils {
 		return interval;
 	}
 
-	public static @NonNull LocalSearchOptimisationStage createDefaultLSOParameters(@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings, boolean parallelise) {
-		final LocalSearchOptimisationStage params = parallelise ? ParametersFactory.eINSTANCE.createParallelLocalSearchOptimisationStage()
-				: ParametersFactory.eINSTANCE.createLocalSearchOptimisationStage();
+	public static @NonNull LocalSearchOptimisationStage createDefaultLSOParameters(@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings) {
+		final LocalSearchOptimisationStage params = ParametersFactory.eINSTANCE.createLocalSearchOptimisationStage();
+
 		params.setName("lso");
 		final AnnealingSettings annealingSettings = ParametersFactory.eINSTANCE.createAnnealingSettings();
 		annealingSettings.setIterations(1_000_000);
@@ -184,11 +180,28 @@ public class ScenarioUtils {
 
 		return params;
 	}
+	public static @NonNull StrategicLocalSearchOptimisationStage createDefaultStrategicLSOParameters(@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings) {
+		final StrategicLocalSearchOptimisationStage params = ParametersFactory.eINSTANCE.createStrategicLocalSearchOptimisationStage();
+		
+		params.setName("lso");
+		final AnnealingSettings annealingSettings = ParametersFactory.eINSTANCE.createAnnealingSettings();
+		annealingSettings.setIterations(1_000_000);
+		annealingSettings.setCooling(0.96);
+		annealingSettings.setEpochLength(10_000);
+		annealingSettings.setInitialTemperature(1_000_000);
+		// restarts
+		annealingSettings.setRestarting(false);
+		annealingSettings.setRestartIterationsThreshold(500_000);
+		params.setAnnealingSettings(annealingSettings);
+		
+		params.setSeed(0);
+		params.setConstraintAndFitnessSettings(constraintAndFitnessSettings);
+		
+		return params;
+	}
 
-	public static @NonNull MultipleSolutionSimilarityOptimisationStage createDefaultMultipleSolutionSimilarityParameters(@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings,
-			boolean parallelise) {
-		final MultipleSolutionSimilarityOptimisationStage params = parallelise ? ParametersFactory.eINSTANCE.createParallelMultipleSolutionSimilarityOptimisationStage()
-				: ParametersFactory.eINSTANCE.createMultipleSolutionSimilarityOptimisationStage();
+	public static @NonNull MultipleSolutionSimilarityOptimisationStage createDefaultMultipleSolutionSimilarityParameters(@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings) {
+		final MultipleSolutionSimilarityOptimisationStage params = ParametersFactory.eINSTANCE.createMultipleSolutionSimilarityOptimisationStage();
 		params.setName("mo-sim-all");
 		final AnnealingSettings annealingSettings = ParametersFactory.eINSTANCE.createAnnealingSettings();
 		annealingSettings.setIterations(1_000_000);
@@ -206,10 +219,9 @@ public class ScenarioUtils {
 		return params;
 	}
 
-	public static @NonNull HillClimbOptimisationStage createDefaultHillClimbingParameters(@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings, boolean parallelise) {
+	public static @NonNull HillClimbOptimisationStage createDefaultHillClimbingParameters(@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings) {
 
-		final HillClimbOptimisationStage params = (parallelise) ? ParametersFactory.eINSTANCE.createParallelHillClimbOptimisationStage()
-				: ParametersFactory.eINSTANCE.createHillClimbOptimisationStage();
+		final HillClimbOptimisationStage params = ParametersFactory.eINSTANCE.createHillClimbOptimisationStage();
 		params.setName("hill");
 
 		final AnnealingSettings annealingSettings = ParametersFactory.eINSTANCE.createAnnealingSettings();
@@ -248,7 +260,7 @@ public class ScenarioUtils {
 	}
 
 	private static CleanStateOptimisationSettings createDefaultCleanStateOptimisationSettings() {
-		CleanStateOptimisationSettings cleanStateOptimisationSettings = ParametersFactory.eINSTANCE.createCleanStateOptimisationSettings();
+		final CleanStateOptimisationSettings cleanStateOptimisationSettings = ParametersFactory.eINSTANCE.createCleanStateOptimisationSettings();
 		cleanStateOptimisationSettings.setSeed(0);
 		cleanStateOptimisationSettings.setGlobalIterations(10_000);
 		cleanStateOptimisationSettings.setLocalIterations(1_000);
@@ -311,7 +323,7 @@ public class ScenarioUtils {
 			ScenarioUtils.createOrUpdateContraints(LockedUnusedElementsConstraintCheckerFactory.NAME, true, constraintAndFitnessSettings);
 		}
 
-		InsertionOptimisationStage stage = ParametersFactory.eINSTANCE.createInsertionOptimisationStage();
+		final InsertionOptimisationStage stage = ParametersFactory.eINSTANCE.createInsertionOptimisationStage();
 		stage.setConstraintAndFitnessSettings(constraintAndFitnessSettings);
 
 		stage.setIterations(1_000_000);
@@ -332,7 +344,7 @@ public class ScenarioUtils {
 	}
 
 	@NonNull
-	public static ConstraintAndFitnessSettings createDefaultConstraintAndFitnessSettings(boolean includeRoundTrip) {
+	public static ConstraintAndFitnessSettings createDefaultConstraintAndFitnessSettings(final boolean includeRoundTrip) {
 
 		final ConstraintAndFitnessSettings settings = ParametersFactory.eINSTANCE.createConstraintAndFitnessSettings();
 
@@ -455,42 +467,35 @@ public class ScenarioUtils {
 
 	public static void createOrUpdateAllConstraints(OptimisationPlan plan, String name, boolean enabled) {
 		for (OptimisationStage stage : plan.getStages()) {
-			if (stage instanceof ParallelOptimisationStage<?> parallelOptimisationStage) {
-				stage = parallelOptimisationStage.getTemplate();
-			}
-			if (stage instanceof ConstraintsAndFitnessSettingsStage cfss) {
-				ConstraintAndFitnessSettings settings = cfss.getConstraintAndFitnessSettings();
+			if (stage instanceof ConstraintsAndFitnessSettingsStage settingsStage) {
+				ConstraintAndFitnessSettings settings = settingsStage.getConstraintAndFitnessSettings();
 				createOrUpdateContraints(name, enabled, settings);
 			}
 		}
-		SolutionBuilderSettings solutionBuilderSettings = plan.getSolutionBuilderSettings();
+		final SolutionBuilderSettings solutionBuilderSettings = plan.getSolutionBuilderSettings();
 		if (solutionBuilderSettings != null) {
-			ConstraintAndFitnessSettings settings = solutionBuilderSettings.getConstraintAndFitnessSettings();
+			final ConstraintAndFitnessSettings settings = solutionBuilderSettings.getConstraintAndFitnessSettings();
 			createOrUpdateContraints(name, enabled, settings);
 		}
 	}
 
-	public static void removeAllConstraints(OptimisationPlan plan, String name) {
-		for (OptimisationStage stage : plan.getStages()) {
-			if (stage instanceof ParallelOptimisationStage<?>) {
-				ParallelOptimisationStage<?> parallelOptimisationStage = (ParallelOptimisationStage<?>) stage;
-				stage = parallelOptimisationStage.getTemplate();
-			}
-			if (stage instanceof ConstraintsAndFitnessSettingsStage) {
-				ConstraintAndFitnessSettings settings = ((ConstraintsAndFitnessSettingsStage) stage).getConstraintAndFitnessSettings();
+	public static void removeAllConstraints(final OptimisationPlan plan, final String name) {
+		for (final OptimisationStage stage : plan.getStages()) {
+			if (stage instanceof final ConstraintsAndFitnessSettingsStage settingsStage) {
+				final ConstraintAndFitnessSettings settings = settingsStage.getConstraintAndFitnessSettings();
 				removeConstraints(name, settings);
 			}
 		}
-		SolutionBuilderSettings solutionBuilderSettings = plan.getSolutionBuilderSettings();
+		final SolutionBuilderSettings solutionBuilderSettings = plan.getSolutionBuilderSettings();
 		if (solutionBuilderSettings != null) {
-			ConstraintAndFitnessSettings settings = solutionBuilderSettings.getConstraintAndFitnessSettings();
+			final ConstraintAndFitnessSettings settings = solutionBuilderSettings.getConstraintAndFitnessSettings();
 			removeConstraints(name, settings);
 		}
 	}
 
-	public static void createOrUpdateContraints(String name, boolean enabled, ConstraintAndFitnessSettings settings) {
-		List<Constraint> constraints = settings.getConstraints();
-		for (Constraint constraint : constraints) {
+	public static void createOrUpdateContraints(final String name, final boolean enabled, final ConstraintAndFitnessSettings settings) {
+		final List<Constraint> constraints = settings.getConstraints();
+		for (final Constraint constraint : constraints) {
 			if (constraint.getName().equals(name)) {
 				constraint.setEnabled(enabled);
 				return;
@@ -499,13 +504,13 @@ public class ScenarioUtils {
 		constraints.add(createConstraint(name, enabled));
 	}
 
-	public static void removeConstraints(String name, ConstraintAndFitnessSettings settings) {
-		List<Constraint> constraints = settings.getConstraints();
+	public static void removeConstraints(final String name, final ConstraintAndFitnessSettings settings) {
+		final List<Constraint> constraints = settings.getConstraints();
 		constraints.removeIf(constraint -> constraint.getName().equals(name));
 	}
 
-	public static boolean isConstraintInSettings(List<Constraint> constraints, String constraintName) {
-		for (Constraint constraint : constraints) {
+	public static boolean isConstraintInSettings(final List<Constraint> constraints, final String constraintName) {
+		for (final Constraint constraint : constraints) {
 			if (constraint.getName().equals(constraintName)) {
 				return true;
 			}
@@ -513,28 +518,24 @@ public class ScenarioUtils {
 		return false;
 	}
 
-	public static void createOrUpdateAllObjectives(OptimisationPlan plan, String name, boolean enabled, double weight) {
-		for (OptimisationStage stage : plan.getStages()) {
-			if (stage instanceof ParallelOptimisationStage<?>) {
-				ParallelOptimisationStage<?> parallelOptimisationStage = (ParallelOptimisationStage<?>) stage;
-				stage = parallelOptimisationStage.getTemplate();
-			}
-			if (stage instanceof ConstraintsAndFitnessSettingsStage) {
-				ConstraintAndFitnessSettings settings = ((ConstraintsAndFitnessSettingsStage) stage).getConstraintAndFitnessSettings();
+	public static void createOrUpdateAllObjectives(final OptimisationPlan plan, final String name, final boolean enabled, final double weight) {
+		for (final OptimisationStage stage : plan.getStages()) {
+			if (stage instanceof final ConstraintsAndFitnessSettingsStage settingsStage) {
+				final ConstraintAndFitnessSettings settings = settingsStage.getConstraintAndFitnessSettings();
 				createOrUpdateObjective(name, enabled, weight, settings);
 			}
 		}
-		SolutionBuilderSettings solutionBuilderSettings = plan.getSolutionBuilderSettings();
+		final SolutionBuilderSettings solutionBuilderSettings = plan.getSolutionBuilderSettings();
 		if (solutionBuilderSettings != null) {
-			ConstraintAndFitnessSettings settings = solutionBuilderSettings.getConstraintAndFitnessSettings();
+			final ConstraintAndFitnessSettings settings = solutionBuilderSettings.getConstraintAndFitnessSettings();
 			// No fitness (yet)
 			createOrUpdateObjective(name, enabled, weight, settings);
 		}
 	}
 
-	public static void createOrUpdateObjective(String name, boolean enabled, double weight, ConstraintAndFitnessSettings settings) {
-		List<Objective> objectives = settings.getObjectives();
-		for (Objective objective : objectives) {
+	public static void createOrUpdateObjective(final String name, final boolean enabled, final double weight, final ConstraintAndFitnessSettings settings) {
+		final List<Objective> objectives = settings.getObjectives();
+		for (final Objective objective : objectives) {
 			if (objective.getName().equals(name)) {
 				objective.setEnabled(true);
 				objective.setWeight(weight);

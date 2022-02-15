@@ -36,6 +36,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.chain.IChainLink;
 import com.mmxlabs.models.lng.transformer.chain.SequencesContainer;
+import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.config.OptimiserConfigurationOptions;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
@@ -361,8 +362,9 @@ public class HeadlessOptimiserRunner {
 			options.setUserSettings(EcoreUtil.copy(userSettings));
 			final IChainLink link = SolutionSetExporterUnit.exportMultipleSolutions(null, 1, runner.getScenarioToOptimiserBridge(), () -> options, dualModeInsertions, portfolioBreakEvenTarget);
 
-			final SequencesContainer initialSequencesContainer = new SequencesContainer(runner.getScenarioToOptimiserBridge().getDataTransformer().getInitialResult().getBestSolution());
-			link.run(initialSequencesContainer, result, new NullProgressMonitor());
+			LNGDataTransformer dataTransformer = runner.getScenarioToOptimiserBridge().getDataTransformer();
+			final SequencesContainer initialSequencesContainer = new SequencesContainer(dataTransformer.getInitialResult().getBestSolution());
+			link.run(dataTransformer, initialSequencesContainer, result, new NullProgressMonitor());
 
 //			if (outputScenarioFileName != null) {
 //				// TODO: make this work when there is no parent file specified

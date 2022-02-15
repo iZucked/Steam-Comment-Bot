@@ -24,7 +24,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
-import com.mmxlabs.optimiser.lso.impl.NullMove;
+import com.mmxlabs.optimiser.lso.moves.impl.NullMove;
 import com.mmxlabs.scheduler.optimiser.lso.guided.moves.InsertSegmentMove;
 import com.mmxlabs.scheduler.optimiser.moves.util.IBreakPointHelper;
 import com.mmxlabs.scheduler.optimiser.moves.util.IFollowersAndPreceders;

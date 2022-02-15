@@ -25,9 +25,8 @@ public class LNGScenarioRunnerUtils {
 
 	@NonNull
 	public static OptimisationPlan createDefaultOptimisationPlan() {
-		final OptimisationPlan optimisationPlan = ScenarioUtils.createDefaultOptimisationPlan(false);
+		final OptimisationPlan optimisationPlan = ScenarioUtils.createDefaultOptimisationPlan();
 		assert optimisationPlan != null;
-
 		return createExtendedSettings(optimisationPlan);
 	}
 

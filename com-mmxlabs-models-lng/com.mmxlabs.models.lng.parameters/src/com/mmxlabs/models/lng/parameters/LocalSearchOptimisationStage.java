@@ -24,7 +24,7 @@ package com.mmxlabs.models.lng.parameters;
  * @model
  * @generated
  */
-public interface LocalSearchOptimisationStage extends ParallisableOptimisationStage, ConstraintsAndFitnessSettingsStage {
+public interface LocalSearchOptimisationStage extends ConstraintsAndFitnessSettingsStage {
 	/**
 	 * Returns the value of the '<em><b>Seed</b></em>' attribute.
 	 * <!-- begin-user-doc -->

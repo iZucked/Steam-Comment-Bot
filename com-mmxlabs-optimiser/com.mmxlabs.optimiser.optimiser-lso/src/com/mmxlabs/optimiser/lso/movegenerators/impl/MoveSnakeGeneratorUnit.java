@@ -16,7 +16,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
-import com.mmxlabs.optimiser.lso.impl.MoveSnake;
+import com.mmxlabs.optimiser.lso.moves.impl.MoveSnake;
 
 public final class MoveSnakeGeneratorUnit implements IRandomMoveGeneratorUnit {
 

@@ -22,7 +22,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.moves.IMove;
 import com.mmxlabs.optimiser.core.scenario.IPhaseOptimisationData;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
-import com.mmxlabs.optimiser.lso.impl.NullMove;
+import com.mmxlabs.optimiser.lso.moves.impl.NullMove;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;

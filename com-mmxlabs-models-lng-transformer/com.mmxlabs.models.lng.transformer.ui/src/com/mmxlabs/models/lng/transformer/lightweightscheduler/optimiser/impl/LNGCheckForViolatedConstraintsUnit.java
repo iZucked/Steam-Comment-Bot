@@ -50,8 +50,7 @@ public class LNGCheckForViolatedConstraintsUnit implements ILNGStateTransformerU
 		final IChainLink link = new IChainLink() {
 
 			@Override
-			public IMultiStateResult run(final SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
-				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
+			public IMultiStateResult run(final LNGDataTransformer dt, final SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
 				LNGCheckForViolatedConstraintsUnit t = new LNGCheckForViolatedConstraintsUnit(dt, userSettings, initialSequences.getSequences(), inputState.getBestSolution().getFirst(),
 						dt.getHints());
 				return t.run(monitor);

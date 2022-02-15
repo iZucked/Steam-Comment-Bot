@@ -484,26 +484,6 @@ public interface ParametersPackage extends EPackage {
 	int OPTIMISATION_STAGE = 8;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ParallisableOptimisationStageImpl <em>Parallisable Optimisation Stage</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.parameters.impl.ParallisableOptimisationStageImpl
-	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getParallisableOptimisationStage()
-	 * @generated
-	 */
-	int PARALLISABLE_OPTIMISATION_STAGE = 10;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ParallelOptimisationStageImpl <em>Parallel Optimisation Stage</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.parameters.impl.ParallelOptimisationStageImpl
-	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getParallelOptimisationStage()
-	 * @generated
-	 */
-	int PARALLEL_OPTIMISATION_STAGE = 11;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.CleanStateOptimisationStageImpl <em>Clean State Optimisation Stage</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -511,7 +491,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getCleanStateOptimisationStage()
 	 * @generated
 	 */
-	int CLEAN_STATE_OPTIMISATION_STAGE = 12;
+	int CLEAN_STATE_OPTIMISATION_STAGE = 10;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.LocalSearchOptimisationStageImpl <em>Local Search Optimisation Stage</em>}' class.
@@ -521,7 +501,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getLocalSearchOptimisationStage()
 	 * @generated
 	 */
-	int LOCAL_SEARCH_OPTIMISATION_STAGE = 13;
+	int LOCAL_SEARCH_OPTIMISATION_STAGE = 12;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.HillClimbOptimisationStageImpl <em>Hill Climb Optimisation Stage</em>}' class.
@@ -531,7 +511,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getHillClimbOptimisationStage()
 	 * @generated
 	 */
-	int HILL_CLIMB_OPTIMISATION_STAGE = 14;
+	int HILL_CLIMB_OPTIMISATION_STAGE = 13;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ResetInitialSequencesStageImpl <em>Reset Initial Sequences Stage</em>}' class.
@@ -541,7 +521,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getResetInitialSequencesStage()
 	 * @generated
 	 */
-	int RESET_INITIAL_SEQUENCES_STAGE = 16;
+	int RESET_INITIAL_SEQUENCES_STAGE = 15;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ConstraintAndFitnessSettingsImpl <em>Constraint And Fitness Settings</em>}' class.
@@ -715,61 +695,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARALLISABLE_OPTIMISATION_STAGE__NAME = OPTIMISATION_STAGE__NAME;
-
-	/**
-	 * The number of structural features of the '<em>Parallisable Optimisation Stage</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT = OPTIMISATION_STAGE_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARALLEL_OPTIMISATION_STAGE__NAME = OPTIMISATION_STAGE__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Job Count</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARALLEL_OPTIMISATION_STAGE__JOB_COUNT = OPTIMISATION_STAGE_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Template</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARALLEL_OPTIMISATION_STAGE__TEMPLATE = OPTIMISATION_STAGE_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>Parallel Optimisation Stage</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARALLEL_OPTIMISATION_STAGE_FEATURE_COUNT = OPTIMISATION_STAGE_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CLEAN_STATE_OPTIMISATION_STAGE__NAME = PARALLISABLE_OPTIMISATION_STAGE__NAME;
+	int CLEAN_STATE_OPTIMISATION_STAGE__NAME = CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Constraint And Fitness Settings</b></em>' containment reference.
@@ -778,7 +704,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CLEAN_STATE_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 0;
+	int CLEAN_STATE_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS = CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS;
 
 	/**
 	 * The feature id for the '<em><b>Seed</b></em>' attribute.
@@ -787,7 +713,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CLEAN_STATE_OPTIMISATION_STAGE__SEED = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 1;
+	int CLEAN_STATE_OPTIMISATION_STAGE__SEED = CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Annealing Settings</b></em>' containment reference.
@@ -796,7 +722,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CLEAN_STATE_OPTIMISATION_STAGE__ANNEALING_SETTINGS = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 2;
+	int CLEAN_STATE_OPTIMISATION_STAGE__ANNEALING_SETTINGS = CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Clean State Settings</b></em>' containment reference.
@@ -805,7 +731,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CLEAN_STATE_OPTIMISATION_STAGE__CLEAN_STATE_SETTINGS = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 3;
+	int CLEAN_STATE_OPTIMISATION_STAGE__CLEAN_STATE_SETTINGS = CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Clean State Optimisation Stage</em>' class.
@@ -814,7 +740,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CLEAN_STATE_OPTIMISATION_STAGE_FEATURE_COUNT = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 4;
+	int CLEAN_STATE_OPTIMISATION_STAGE_FEATURE_COUNT = CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -823,7 +749,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LOCAL_SEARCH_OPTIMISATION_STAGE__NAME = PARALLISABLE_OPTIMISATION_STAGE__NAME;
+	int LOCAL_SEARCH_OPTIMISATION_STAGE__NAME = CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Constraint And Fitness Settings</b></em>' containment reference.
@@ -832,7 +758,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LOCAL_SEARCH_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 0;
+	int LOCAL_SEARCH_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS = CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS;
 
 	/**
 	 * The feature id for the '<em><b>Seed</b></em>' attribute.
@@ -841,7 +767,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LOCAL_SEARCH_OPTIMISATION_STAGE__SEED = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 1;
+	int LOCAL_SEARCH_OPTIMISATION_STAGE__SEED = CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Annealing Settings</b></em>' containment reference.
@@ -850,7 +776,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LOCAL_SEARCH_OPTIMISATION_STAGE__ANNEALING_SETTINGS = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 2;
+	int LOCAL_SEARCH_OPTIMISATION_STAGE__ANNEALING_SETTINGS = CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Local Search Optimisation Stage</em>' class.
@@ -859,7 +785,17 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LOCAL_SEARCH_OPTIMISATION_STAGE_FEATURE_COUNT = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 3;
+	int LOCAL_SEARCH_OPTIMISATION_STAGE_FEATURE_COUNT = CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE_FEATURE_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.StrategicLocalSearchOptimisationStageImpl <em>Strategic Local Search Optimisation Stage</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.impl.StrategicLocalSearchOptimisationStageImpl
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getStrategicLocalSearchOptimisationStage()
+	 * @generated
+	 */
+	int STRATEGIC_LOCAL_SEARCH_OPTIMISATION_STAGE = 11;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -868,7 +804,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int HILL_CLIMB_OPTIMISATION_STAGE__NAME = PARALLISABLE_OPTIMISATION_STAGE__NAME;
+	int STRATEGIC_LOCAL_SEARCH_OPTIMISATION_STAGE__NAME = LOCAL_SEARCH_OPTIMISATION_STAGE__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Constraint And Fitness Settings</b></em>' containment reference.
@@ -877,7 +813,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int HILL_CLIMB_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 0;
+	int STRATEGIC_LOCAL_SEARCH_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS = LOCAL_SEARCH_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS;
 
 	/**
 	 * The feature id for the '<em><b>Seed</b></em>' attribute.
@@ -886,7 +822,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int HILL_CLIMB_OPTIMISATION_STAGE__SEED = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 1;
+	int STRATEGIC_LOCAL_SEARCH_OPTIMISATION_STAGE__SEED = LOCAL_SEARCH_OPTIMISATION_STAGE__SEED;
 
 	/**
 	 * The feature id for the '<em><b>Annealing Settings</b></em>' containment reference.
@@ -895,7 +831,61 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int HILL_CLIMB_OPTIMISATION_STAGE__ANNEALING_SETTINGS = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 2;
+	int STRATEGIC_LOCAL_SEARCH_OPTIMISATION_STAGE__ANNEALING_SETTINGS = LOCAL_SEARCH_OPTIMISATION_STAGE__ANNEALING_SETTINGS;
+
+	/**
+	 * The feature id for the '<em><b>Count</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRATEGIC_LOCAL_SEARCH_OPTIMISATION_STAGE__COUNT = LOCAL_SEARCH_OPTIMISATION_STAGE_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Strategic Local Search Optimisation Stage</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRATEGIC_LOCAL_SEARCH_OPTIMISATION_STAGE_FEATURE_COUNT = LOCAL_SEARCH_OPTIMISATION_STAGE_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HILL_CLIMB_OPTIMISATION_STAGE__NAME = CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Constraint And Fitness Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HILL_CLIMB_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS = CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS;
+
+	/**
+	 * The feature id for the '<em><b>Seed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HILL_CLIMB_OPTIMISATION_STAGE__SEED = CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Annealing Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HILL_CLIMB_OPTIMISATION_STAGE__ANNEALING_SETTINGS = CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Hill Climb Optimisation Stage</em>' class.
@@ -904,7 +894,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int HILL_CLIMB_OPTIMISATION_STAGE_FEATURE_COUNT = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 3;
+	int HILL_CLIMB_OPTIMISATION_STAGE_FEATURE_COUNT = CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ActionPlanOptimisationStageImpl <em>Action Plan Optimisation Stage</em>}' class.
@@ -914,7 +904,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getActionPlanOptimisationStage()
 	 * @generated
 	 */
-	int ACTION_PLAN_OPTIMISATION_STAGE = 15;
+	int ACTION_PLAN_OPTIMISATION_STAGE = 14;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -996,7 +986,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getReduceSequencesStage()
 	 * @generated
 	 */
-	int REDUCE_SEQUENCES_STAGE = 17;
+	int REDUCE_SEQUENCES_STAGE = 16;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1024,7 +1014,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getInsertionOptimisationStage()
 	 * @generated
 	 */
-	int INSERTION_OPTIMISATION_STAGE = 18;
+	int INSERTION_OPTIMISATION_STAGE = 17;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1070,7 +1060,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getBreakEvenOptimisationStage()
 	 * @generated
 	 */
-	int BREAK_EVEN_OPTIMISATION_STAGE = 19;
+	int BREAK_EVEN_OPTIMISATION_STAGE = 18;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1107,7 +1097,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getSolutionBuilderSettings()
 	 * @generated
 	 */
-	int SOLUTION_BUILDER_SETTINGS = 20;
+	int SOLUTION_BUILDER_SETTINGS = 19;
 
 	/**
 	 * The feature id for the '<em><b>Constraint And Fitness Settings</b></em>' containment reference.
@@ -1135,7 +1125,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getMultipleSolutionSimilarityOptimisationStage()
 	 * @generated
 	 */
-	int MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE = 21;
+	int MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE = 20;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1183,171 +1173,6 @@ public interface ParametersPackage extends EPackage {
 	int MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE_FEATURE_COUNT = LOCAL_SEARCH_OPTIMISATION_STAGE_FEATURE_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ParallelMultipleSolutionSimilarityOptimisationStageImpl <em>Parallel Multiple Solution Similarity Optimisation Stage</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.parameters.impl.ParallelMultipleSolutionSimilarityOptimisationStageImpl
-	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getParallelMultipleSolutionSimilarityOptimisationStage()
-	 * @generated
-	 */
-	int PARALLEL_MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE = 22;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARALLEL_MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE__NAME = MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Constraint And Fitness Settings</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARALLEL_MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS = MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS;
-
-	/**
-	 * The feature id for the '<em><b>Seed</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARALLEL_MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE__SEED = MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE__SEED;
-
-	/**
-	 * The feature id for the '<em><b>Annealing Settings</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARALLEL_MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE__ANNEALING_SETTINGS = MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE__ANNEALING_SETTINGS;
-
-	/**
-	 * The number of structural features of the '<em>Parallel Multiple Solution Similarity Optimisation Stage</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARALLEL_MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE_FEATURE_COUNT = MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE_FEATURE_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ParallelHillClimbOptimisationStageImpl <em>Parallel Hill Climb Optimisation Stage</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.parameters.impl.ParallelHillClimbOptimisationStageImpl
-	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getParallelHillClimbOptimisationStage()
-	 * @generated
-	 */
-	int PARALLEL_HILL_CLIMB_OPTIMISATION_STAGE = 23;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARALLEL_HILL_CLIMB_OPTIMISATION_STAGE__NAME = HILL_CLIMB_OPTIMISATION_STAGE__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Constraint And Fitness Settings</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARALLEL_HILL_CLIMB_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS = HILL_CLIMB_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS;
-
-	/**
-	 * The feature id for the '<em><b>Seed</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARALLEL_HILL_CLIMB_OPTIMISATION_STAGE__SEED = HILL_CLIMB_OPTIMISATION_STAGE__SEED;
-
-	/**
-	 * The feature id for the '<em><b>Annealing Settings</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARALLEL_HILL_CLIMB_OPTIMISATION_STAGE__ANNEALING_SETTINGS = HILL_CLIMB_OPTIMISATION_STAGE__ANNEALING_SETTINGS;
-
-	/**
-	 * The number of structural features of the '<em>Parallel Hill Climb Optimisation Stage</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARALLEL_HILL_CLIMB_OPTIMISATION_STAGE_FEATURE_COUNT = HILL_CLIMB_OPTIMISATION_STAGE_FEATURE_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ParallelLocalSearchOptimisationStageImpl <em>Parallel Local Search Optimisation Stage</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.parameters.impl.ParallelLocalSearchOptimisationStageImpl
-	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getParallelLocalSearchOptimisationStage()
-	 * @generated
-	 */
-	int PARALLEL_LOCAL_SEARCH_OPTIMISATION_STAGE = 24;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARALLEL_LOCAL_SEARCH_OPTIMISATION_STAGE__NAME = LOCAL_SEARCH_OPTIMISATION_STAGE__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Constraint And Fitness Settings</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARALLEL_LOCAL_SEARCH_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS = LOCAL_SEARCH_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS;
-
-	/**
-	 * The feature id for the '<em><b>Seed</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARALLEL_LOCAL_SEARCH_OPTIMISATION_STAGE__SEED = LOCAL_SEARCH_OPTIMISATION_STAGE__SEED;
-
-	/**
-	 * The feature id for the '<em><b>Annealing Settings</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARALLEL_LOCAL_SEARCH_OPTIMISATION_STAGE__ANNEALING_SETTINGS = LOCAL_SEARCH_OPTIMISATION_STAGE__ANNEALING_SETTINGS;
-
-	/**
-	 * The number of structural features of the '<em>Parallel Local Search Optimisation Stage</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARALLEL_LOCAL_SEARCH_OPTIMISATION_STAGE_FEATURE_COUNT = LOCAL_SEARCH_OPTIMISATION_STAGE_FEATURE_COUNT + 0;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.MultiobjectiveSimilarityOptimisationStageImpl <em>Multiobjective Similarity Optimisation Stage</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1355,7 +1180,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getMultiobjectiveSimilarityOptimisationStage()
 	 * @generated
 	 */
-	int MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE = 25;
+	int MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE = 21;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1403,61 +1228,6 @@ public interface ParametersPackage extends EPackage {
 	int MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE_FEATURE_COUNT = MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE_FEATURE_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ParallelMultiobjectiveSimilarityOptimisationStageImpl <em>Parallel Multiobjective Similarity Optimisation Stage</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.parameters.impl.ParallelMultiobjectiveSimilarityOptimisationStageImpl
-	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getParallelMultiobjectiveSimilarityOptimisationStage()
-	 * @generated
-	 */
-	int PARALLEL_MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE = 26;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARALLEL_MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE__NAME = MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Constraint And Fitness Settings</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARALLEL_MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS = MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS;
-
-	/**
-	 * The feature id for the '<em><b>Seed</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARALLEL_MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE__SEED = MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE__SEED;
-
-	/**
-	 * The feature id for the '<em><b>Annealing Settings</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARALLEL_MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE__ANNEALING_SETTINGS = MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE__ANNEALING_SETTINGS;
-
-	/**
-	 * The number of structural features of the '<em>Parallel Multiobjective Similarity Optimisation Stage</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARALLEL_MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE_FEATURE_COUNT = MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE_FEATURE_COUNT + 0;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.CleanStateOptimisationSettingsImpl <em>Clean State Optimisation Settings</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1465,7 +1235,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getCleanStateOptimisationSettings()
 	 * @generated
 	 */
-	int CLEAN_STATE_OPTIMISATION_SETTINGS = 27;
+	int CLEAN_STATE_OPTIMISATION_SETTINGS = 22;
 
 	/**
 	 * The feature id for the '<em><b>Seed</b></em>' attribute.
@@ -1520,7 +1290,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getSimilarityMode()
 	 * @generated
 	 */
-	int SIMILARITY_MODE = 28;
+	int SIMILARITY_MODE = 23;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.OptimisationMode <em>Optimisation Mode</em>}' enum.
@@ -1530,7 +1300,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getOptimisationMode()
 	 * @generated
 	 */
-	int OPTIMISATION_MODE = 29;
+	int OPTIMISATION_MODE = 24;
 
 
 	/**
@@ -1955,48 +1725,6 @@ public interface ParametersPackage extends EPackage {
 	EReference getConstraintsAndFitnessSettingsStage_ConstraintAndFitnessSettings();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.ParallisableOptimisationStage <em>Parallisable Optimisation Stage</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Parallisable Optimisation Stage</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.ParallisableOptimisationStage
-	 * @generated
-	 */
-	EClass getParallisableOptimisationStage();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.ParallelOptimisationStage <em>Parallel Optimisation Stage</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Parallel Optimisation Stage</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.ParallelOptimisationStage
-	 * @generated
-	 */
-	EClass getParallelOptimisationStage();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.ParallelOptimisationStage#getJobCount <em>Job Count</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Job Count</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.ParallelOptimisationStage#getJobCount()
-	 * @see #getParallelOptimisationStage()
-	 * @generated
-	 */
-	EAttribute getParallelOptimisationStage_JobCount();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.parameters.ParallelOptimisationStage#getTemplate <em>Template</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Template</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.ParallelOptimisationStage#getTemplate()
-	 * @see #getParallelOptimisationStage()
-	 * @generated
-	 */
-	EReference getParallelOptimisationStage_Template();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage <em>Clean State Optimisation Stage</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2038,6 +1766,27 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getCleanStateOptimisationStage_CleanStateSettings();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.StrategicLocalSearchOptimisationStage <em>Strategic Local Search Optimisation Stage</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Strategic Local Search Optimisation Stage</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.StrategicLocalSearchOptimisationStage
+	 * @generated
+	 */
+	EClass getStrategicLocalSearchOptimisationStage();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.StrategicLocalSearchOptimisationStage#getCount <em>Count</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Count</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.StrategicLocalSearchOptimisationStage#getCount()
+	 * @see #getStrategicLocalSearchOptimisationStage()
+	 * @generated
+	 */
+	EAttribute getStrategicLocalSearchOptimisationStage_Count();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.LocalSearchOptimisationStage <em>Local Search Optimisation Stage</em>}'.
@@ -2348,36 +2097,6 @@ public interface ParametersPackage extends EPackage {
 	EClass getMultipleSolutionSimilarityOptimisationStage();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.ParallelMultipleSolutionSimilarityOptimisationStage <em>Parallel Multiple Solution Similarity Optimisation Stage</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Parallel Multiple Solution Similarity Optimisation Stage</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.ParallelMultipleSolutionSimilarityOptimisationStage
-	 * @generated
-	 */
-	EClass getParallelMultipleSolutionSimilarityOptimisationStage();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.ParallelHillClimbOptimisationStage <em>Parallel Hill Climb Optimisation Stage</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Parallel Hill Climb Optimisation Stage</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.ParallelHillClimbOptimisationStage
-	 * @generated
-	 */
-	EClass getParallelHillClimbOptimisationStage();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.ParallelLocalSearchOptimisationStage <em>Parallel Local Search Optimisation Stage</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Parallel Local Search Optimisation Stage</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.ParallelLocalSearchOptimisationStage
-	 * @generated
-	 */
-	EClass getParallelLocalSearchOptimisationStage();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.MultiobjectiveSimilarityOptimisationStage <em>Multiobjective Similarity Optimisation Stage</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2386,16 +2105,6 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getMultiobjectiveSimilarityOptimisationStage();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.ParallelMultiobjectiveSimilarityOptimisationStage <em>Parallel Multiobjective Similarity Optimisation Stage</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Parallel Multiobjective Similarity Optimisation Stage</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.ParallelMultiobjectiveSimilarityOptimisationStage
-	 * @generated
-	 */
-	EClass getParallelMultiobjectiveSimilarityOptimisationStage();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.CleanStateOptimisationSettings <em>Clean State Optimisation Settings</em>}'.
@@ -2822,42 +2531,6 @@ public interface ParametersPackage extends EPackage {
 		EReference CONSTRAINTS_AND_FITNESS_SETTINGS_STAGE__CONSTRAINT_AND_FITNESS_SETTINGS = eINSTANCE.getConstraintsAndFitnessSettingsStage_ConstraintAndFitnessSettings();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ParallisableOptimisationStageImpl <em>Parallisable Optimisation Stage</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.parameters.impl.ParallisableOptimisationStageImpl
-		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getParallisableOptimisationStage()
-		 * @generated
-		 */
-		EClass PARALLISABLE_OPTIMISATION_STAGE = eINSTANCE.getParallisableOptimisationStage();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ParallelOptimisationStageImpl <em>Parallel Optimisation Stage</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.parameters.impl.ParallelOptimisationStageImpl
-		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getParallelOptimisationStage()
-		 * @generated
-		 */
-		EClass PARALLEL_OPTIMISATION_STAGE = eINSTANCE.getParallelOptimisationStage();
-
-		/**
-		 * The meta object literal for the '<em><b>Job Count</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PARALLEL_OPTIMISATION_STAGE__JOB_COUNT = eINSTANCE.getParallelOptimisationStage_JobCount();
-
-		/**
-		 * The meta object literal for the '<em><b>Template</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PARALLEL_OPTIMISATION_STAGE__TEMPLATE = eINSTANCE.getParallelOptimisationStage_Template();
-
-		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.CleanStateOptimisationStageImpl <em>Clean State Optimisation Stage</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2890,6 +2563,24 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CLEAN_STATE_OPTIMISATION_STAGE__CLEAN_STATE_SETTINGS = eINSTANCE.getCleanStateOptimisationStage_CleanStateSettings();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.StrategicLocalSearchOptimisationStageImpl <em>Strategic Local Search Optimisation Stage</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.impl.StrategicLocalSearchOptimisationStageImpl
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getStrategicLocalSearchOptimisationStage()
+		 * @generated
+		 */
+		EClass STRATEGIC_LOCAL_SEARCH_OPTIMISATION_STAGE = eINSTANCE.getStrategicLocalSearchOptimisationStage();
+
+		/**
+		 * The meta object literal for the '<em><b>Count</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute STRATEGIC_LOCAL_SEARCH_OPTIMISATION_STAGE__COUNT = eINSTANCE.getStrategicLocalSearchOptimisationStage_Count();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.LocalSearchOptimisationStageImpl <em>Local Search Optimisation Stage</em>}' class.
@@ -3146,36 +2837,6 @@ public interface ParametersPackage extends EPackage {
 		EClass MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE = eINSTANCE.getMultipleSolutionSimilarityOptimisationStage();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ParallelMultipleSolutionSimilarityOptimisationStageImpl <em>Parallel Multiple Solution Similarity Optimisation Stage</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.parameters.impl.ParallelMultipleSolutionSimilarityOptimisationStageImpl
-		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getParallelMultipleSolutionSimilarityOptimisationStage()
-		 * @generated
-		 */
-		EClass PARALLEL_MULTIPLE_SOLUTION_SIMILARITY_OPTIMISATION_STAGE = eINSTANCE.getParallelMultipleSolutionSimilarityOptimisationStage();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ParallelHillClimbOptimisationStageImpl <em>Parallel Hill Climb Optimisation Stage</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.parameters.impl.ParallelHillClimbOptimisationStageImpl
-		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getParallelHillClimbOptimisationStage()
-		 * @generated
-		 */
-		EClass PARALLEL_HILL_CLIMB_OPTIMISATION_STAGE = eINSTANCE.getParallelHillClimbOptimisationStage();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ParallelLocalSearchOptimisationStageImpl <em>Parallel Local Search Optimisation Stage</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.parameters.impl.ParallelLocalSearchOptimisationStageImpl
-		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getParallelLocalSearchOptimisationStage()
-		 * @generated
-		 */
-		EClass PARALLEL_LOCAL_SEARCH_OPTIMISATION_STAGE = eINSTANCE.getParallelLocalSearchOptimisationStage();
-
-		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.MultiobjectiveSimilarityOptimisationStageImpl <em>Multiobjective Similarity Optimisation Stage</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3184,16 +2845,6 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EClass MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE = eINSTANCE.getMultiobjectiveSimilarityOptimisationStage();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ParallelMultiobjectiveSimilarityOptimisationStageImpl <em>Parallel Multiobjective Similarity Optimisation Stage</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.parameters.impl.ParallelMultiobjectiveSimilarityOptimisationStageImpl
-		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getParallelMultiobjectiveSimilarityOptimisationStage()
-		 * @generated
-		 */
-		EClass PARALLEL_MULTIOBJECTIVE_SIMILARITY_OPTIMISATION_STAGE = eINSTANCE.getParallelMultiobjectiveSimilarityOptimisationStage();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.CleanStateOptimisationSettingsImpl <em>Clean State Optimisation Settings</em>}' class.

@@ -17,17 +17,6 @@ import com.mmxlabs.optimiser.lso.IThresholder;
 public class GreedyThresholder implements IThresholder {
 	private static final Logger log = LoggerFactory.getLogger(GreedyThresholder.class);
 
-	/**
-	 * Create a new greedy thresholder
-	 * 
-	 */
-	public GreedyThresholder() {
-	}
-
-	@Override
-	public void init() {
-	}
-
 	@Override
 	public boolean accept(final long delta) {
 		if (delta < 0) {
@@ -36,13 +25,14 @@ public class GreedyThresholder implements IThresholder {
 		return false;
 	}
 
-
 	@Override
 	public void step() {
+
 	}
 
 	@Override
 	public void reset() {
+
 	}
 
 }

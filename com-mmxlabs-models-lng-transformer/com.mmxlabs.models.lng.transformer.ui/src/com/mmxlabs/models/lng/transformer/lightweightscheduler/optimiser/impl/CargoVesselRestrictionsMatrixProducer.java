@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,20 +40,21 @@ public class CargoVesselRestrictionsMatrixProducer implements ICargoVesselRestri
 	/**
 	 * Set of lightweight constraints types considered by this class.
 	 */
-	private static final Set<Class<?>> LIGHTWEIGHT_CONSTRAINTS = Set.of(PortExclusionConstraintChecker.class, ResourceAllocationConstraintChecker.class, AllowedVesselPermissionConstraintChecker.class, PortShipSizeConstraintChecker.class);
-	
+	private static final Set<Class<?>> LIGHTWEIGHT_CONSTRAINTS = Set.of(PortExclusionConstraintChecker.class, ResourceAllocationConstraintChecker.class, AllowedVesselPermissionConstraintChecker.class,
+			PortShipSizeConstraintChecker.class);
+
 	@Inject
 	private IVesselProvider vesselProvider;
-	
+
 	@Inject
 	private IPortSlotProvider portSlotProvider;
 
 	private LinkedList<IConstraintChecker> constraintCheckers;
-	
+
 	@Inject
 	public void injectConstraintChecker(@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) final ISequences initialRawSequences, final List<IConstraintChecker> injectedConstraintCheckers) {
 		this.constraintCheckers = new LinkedList<>();
-		final List<@Nullable String> messages;
+		final List<@NonNull String> messages;
 		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
 			messages = new ArrayList<>();
 			messages.add(String.format("%s: injectConstraintChecker", this.getClass().getName()));
@@ -68,19 +70,20 @@ public class CargoVesselRestrictionsMatrixProducer implements ICargoVesselRestri
 				constraintChecker.checkConstraints(initialRawSequences, null, messages);
 			}
 		}
-		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty()) {
 			messages.stream().forEach(LOG::debug);
+		}
 	}
 
 	@Override
 	public Map<List<IPortSlot>, List<IVesselAvailability>> getCargoVesselRestrictions(List<List<IPortSlot>> cargoes, List<IVesselAvailability> vessels) {
-	
+
 		List<IConstraintChecker> lightWeightConstraintCheckers = getLightWeightConstraintCheckers(constraintCheckers);
 
 		Map<List<IPortSlot>, List<IVesselAvailability>> cargoMap = new HashMap<>();
 		for (List<IPortSlot> cargo : cargoes) {
 			List<IVesselAvailability> restrictedVessels = new LinkedList<>();
-			for (IVesselAvailability vessel : vessels) {				
+			for (IVesselAvailability vessel : vessels) {
 				if (!checkConstraints(lightWeightConstraintCheckers, cargo, vessel)) {
 					restrictedVessels.add(vessel);
 				}
@@ -92,7 +95,7 @@ public class CargoVesselRestrictionsMatrixProducer implements ICargoVesselRestri
 	}
 
 	private boolean checkConstraints(List<IConstraintChecker> constraints, List<IPortSlot> cargo, IVesselAvailability vessel) {
-		final List<@Nullable String> messages;
+		final List<@NonNull String> messages;
 		if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES) {
 			messages = new ArrayList<>();
 			messages.add(String.format("%s: checkConstraints", this.getClass().getName()));
@@ -100,18 +103,15 @@ public class CargoVesselRestrictionsMatrixProducer implements ICargoVesselRestri
 			messages = null;
 		}
 		for (IConstraintChecker con : constraints) {
-			if (con instanceof IResourceElementConstraintChecker) {
-				IResourceElementConstraintChecker c = (IResourceElementConstraintChecker)con;
-				for(IPortSlot slot : cargo) {
+			if (con instanceof IResourceElementConstraintChecker c) {
+				for (IPortSlot slot : cargo) {
 					if (!c.checkElement(portSlotProvider.getElement(slot), vesselProvider.getResource(vessel), messages)) {
 						if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 							messages.stream().forEach(LOG::debug);
 						return false;
 					}
 				}
-			}
-			else if (cargo.size() == 2 && con instanceof IPairwiseConstraintChecker) {
-				IPairwiseConstraintChecker c = (IPairwiseConstraintChecker)con;
+			} else if (cargo.size() == 2 && con instanceof IPairwiseConstraintChecker c) {
 				if (!c.checkPairwiseConstraint(portSlotProvider.getElement(cargo.get(0)), portSlotProvider.getElement(cargo.get(1)), vesselProvider.getResource(vessel), messages)) {
 					if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
 						messages.stream().forEach(LOG::debug);
@@ -120,15 +120,14 @@ public class CargoVesselRestrictionsMatrixProducer implements ICargoVesselRestri
 			}
 		}
 		return true;
-	}	
-	
+	}
+
 	private List<IConstraintChecker> getLightWeightConstraintCheckers(List<IConstraintChecker> constraintCheckers) {
 		List<IConstraintChecker> lightWeightConstraints = new ArrayList<>();
 		Set<Class<?>> lightWeightConstraintTypes = getLightWeightConstraintClasses();
-		constraintCheckers.forEach(c -> 
-		{ 
+		constraintCheckers.forEach(c -> {
 			if (lightWeightConstraintTypes.contains(c.getClass())) {
-				lightWeightConstraints.add(c); 
+				lightWeightConstraints.add(c);
 			}
 		});
 		return lightWeightConstraints;
@@ -144,7 +143,7 @@ public class CargoVesselRestrictionsMatrixProducer implements ICargoVesselRestri
 		for (int i = 0; i < vessels.size(); i++) {
 			vesselMap.put(vessels.get(i), i);
 		}
-		
+
 		ArrayList<Set<Integer>> cargoMap = new ArrayList<>();
 		for (List<IPortSlot> cargo : cargoes) {
 			Set<Integer> set = new LinkedHashSet<Integer>(vessels.size());

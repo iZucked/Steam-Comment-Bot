@@ -6,6 +6,7 @@ package com.mmxlabs.optimiser.core.constraints;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -14,5 +15,5 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 
 @NonNullByDefault
 public interface IResourceElementConstraintChecker {
-	boolean checkElement(ISequenceElement element, IResource resource, @Nullable List<@Nullable String> messages);
+	boolean checkElement(ISequenceElement element, IResource resource, @Nullable List<@NonNull String> messages);
 }

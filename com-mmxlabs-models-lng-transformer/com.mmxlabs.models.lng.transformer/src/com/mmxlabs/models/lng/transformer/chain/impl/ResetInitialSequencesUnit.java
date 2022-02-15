@@ -22,7 +22,7 @@ public class ResetInitialSequencesUnit {
 		final IChainLink link = new IChainLink() {
 
 			@Override
-			public IMultiStateResult run(final SequencesContainer initialSequencesContainer, final IMultiStateResult inputState, final IProgressMonitor monitor) {
+			public IMultiStateResult run(final LNGDataTransformer dataTransformer, final SequencesContainer initialSequencesContainer, final IMultiStateResult inputState, final IProgressMonitor monitor) {
 				monitor.beginTask("Reset initial sequences", 1);
 				try {
 					initialSequencesContainer.setSequencesPair(inputState.getBestSolution());
