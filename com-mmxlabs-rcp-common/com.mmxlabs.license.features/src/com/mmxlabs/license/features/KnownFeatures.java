@@ -128,6 +128,8 @@ public final class KnownFeatures {
 
 	public static final String FEATURE_GROUPED_OPTIONAL_SLOTS_CONSTRAINTS = "features:grouped-optional-slots-constraints";
 
+	public static final String FEATURE_MMX_REFERENCE_VESSELS = "features:mmx-reference-vessels";
+
 	/**
 	 * Scenario repair features
 	 */

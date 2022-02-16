@@ -10,13 +10,18 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
+import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.util.VesselConstants;
 import com.mmxlabs.models.lng.fleet.validation.internal.Activator;
 import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioElementNameHelper;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusFactory;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -31,11 +36,14 @@ public class VesselConstraint extends AbstractModelMultiConstraint {
 	@Override
 	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
-		if (target instanceof Vessel) {
-			final Vessel vessel = (Vessel) target;
+		if (target instanceof Vessel vessel) {
 
 			final DetailConstraintStatusFactory baseFactory = DetailConstraintStatusFactory.makeStatus() //
 					.withTypedName(ScenarioElementNameHelper.getTypeName(vessel), ScenarioElementNameHelper.getNonNullString(vessel.getName()));
+
+			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MMX_REFERENCE_VESSELS)) {
+				validateMmxVesselProperties(vessel, baseFactory, ctx, statuses);
+			}
 
 			final double effectiveCapacity = vessel.getVesselOrDelegateCapacity() * vessel.getVesselOrDelegateFillCapacity();
 			if (vessel.getVesselOrDelegateSafetyHeel() > effectiveCapacity) {
@@ -125,23 +133,36 @@ public class VesselConstraint extends AbstractModelMultiConstraint {
 				}
 				if (routeParameter.getBallastConsumptionRate() > 0 && routeParameter.getBallastConsumptionRate() >= routeParameter.getBallastNBORate()) {
 					baseFactory.copyName() //
-						.withMessage(String.format("%s ballast base fuel rate should be less than ballast NBO rate.", canalName)) //
-						.withObjectAndFeature(routeParameter, FleetPackage.eINSTANCE.getVesselClassRouteParameters_BallastConsumptionRate()) //
-						.withObjectAndFeature(routeParameter, FleetPackage.eINSTANCE.getVesselClassRouteParameters_BallastNBORate()) //
-						.withObjectAndFeature(vessel, FleetPackage.eINSTANCE.getVessel_RouteParameters()) //
-						.make(ctx, statuses);
+							.withMessage(String.format("%s ballast base fuel rate should be less than ballast NBO rate.", canalName)) //
+							.withObjectAndFeature(routeParameter, FleetPackage.eINSTANCE.getVesselClassRouteParameters_BallastConsumptionRate()) //
+							.withObjectAndFeature(routeParameter, FleetPackage.eINSTANCE.getVesselClassRouteParameters_BallastNBORate()) //
+							.withObjectAndFeature(vessel, FleetPackage.eINSTANCE.getVessel_RouteParameters()) //
+							.make(ctx, statuses);
 				}
 				if (routeParameter.getLadenConsumptionRate() > 0 && routeParameter.getLadenConsumptionRate() >= routeParameter.getLadenNBORate()) {
 					baseFactory.copyName() //
-						.withMessage(String.format("%s laden base fuel rate should be less than laden NBO rate.", canalName)) //
-						.withObjectAndFeature(routeParameter, FleetPackage.eINSTANCE.getVesselClassRouteParameters_LadenConsumptionRate()) //
-						.withObjectAndFeature(routeParameter, FleetPackage.eINSTANCE.getVesselClassRouteParameters_LadenNBORate()) //
-						.withObjectAndFeature(vessel, FleetPackage.eINSTANCE.getVessel_RouteParameters()) //
-						.make(ctx, statuses);
+							.withMessage(String.format("%s laden base fuel rate should be less than laden NBO rate.", canalName)) //
+							.withObjectAndFeature(routeParameter, FleetPackage.eINSTANCE.getVesselClassRouteParameters_LadenConsumptionRate()) //
+							.withObjectAndFeature(routeParameter, FleetPackage.eINSTANCE.getVesselClassRouteParameters_LadenNBORate()) //
+							.withObjectAndFeature(vessel, FleetPackage.eINSTANCE.getVessel_RouteParameters()) //
+							.make(ctx, statuses);
 				}
 			}
 		}
 
 		return Activator.PLUGIN_ID;
+	}
+
+	private void validateMmxVesselProperties(Vessel vessel, DetailConstraintStatusFactory baseFactory, @NonNull IValidationContext ctx, @NonNull List<IStatus> statuses) {
+		if (!vessel.isMmxReference()) {
+			final String vesselName = vessel.getName();
+			if (vesselName != null && vesselName.matches(VesselConstants.REGEXP_MMX_PROVIDED_VESSEL_NAME)) {
+				final String message = "'<' and '>' are reserved for LiNGO maintained vessels";
+				baseFactory.copyName() //
+						.withMessage(message) //
+						.withObjectAndFeature(vessel, MMXCorePackage.eINSTANCE.getNamedObject_Name()) //
+						.make(ctx, statuses);
+			}
+		}
 	}
 }
