@@ -208,9 +208,18 @@ class CloudOptimisationDataUpdater {
 								if (cRecord.getType() != null) {
 									final String type = cRecord.getType();
 									switch (type) {
-									case "SANDBOX" -> result = m.getOptionModels().get(0).getResults();
-									case "OPTIMISATION" -> result = m.getOptimisations().get(0);
-									case "OPTIONISER" -> result = m.getOptimisations().get(0);
+									case "SANDBOX" -> {
+										int index = m.getOptionModels().size() - 1;
+										result = m.getOptionModels().get(index).getResults();
+									}
+									case "OPTIMISATION" -> {
+										int index = m.getOptimisations().size() - 1;
+										result = m.getOptimisations().get(index);
+									}
+									case "OPTIONISER" -> {
+										int index = m.getOptimisations().size() - 1;
+										result = m.getOptimisations().get(index);
+									}
 									}
 								}
 							} catch (IndexOutOfBoundsException e) {
