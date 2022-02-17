@@ -115,9 +115,21 @@ public class StrategicScenarioModuleHelper {
 					final IOptimisationData optimisationData, // )
 					@Named(KEY_DEFAULT_MARKET) CharterInMarket market) {
 
-				final IVesselAvailability va = (IVesselAvailability) modelEntityMap.getNamedOptimiserObject(OptimiserConstants.DEFAULT_INTERNAL_VESSEL);
-				if (va != null) {
-					return va;
+				ISpotCharterInMarket o_market = modelEntityMap.getOptimiserObjectNullChecked(market, ISpotCharterInMarket.class);
+
+				for (final IResource o_resource : optimisationData.getResources()) {
+					final IVesselAvailability o_vesselAvailability = vesselProvider.getVesselAvailability(o_resource);
+
+					if (o_vesselAvailability.getSpotCharterInMarket() != o_market) {
+						continue;
+					}
+
+					if (o_vesselAvailability.getSpotIndex() == -1) {
+						modelEntityMap.addNamedOptimiserObject(OptimiserConstants.DEFAULT_INTERNAL_VESSEL, o_vesselAvailability);
+						modelEntityMap.addNamedOptimiserObject(OptimiserConstants.DEFAULT_EXTERNAL_VESSEL, o_vesselAvailability);
+
+						return o_vesselAvailability;
+					}
 				}
 				throw new IllegalStateException();
 			}
