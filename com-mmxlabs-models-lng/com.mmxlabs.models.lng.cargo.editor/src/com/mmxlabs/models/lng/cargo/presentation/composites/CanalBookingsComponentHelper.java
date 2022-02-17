@@ -56,6 +56,12 @@ public class CanalBookingsComponentHelper extends DefaultComponentHelper {
 //		add_panamaSeasonalityRecordsEditor(detailComposite, topClass);
 //		add_arrivalMarginHoursEditor(detailComposite, topClass);
 
+		ignoreFeatures.add(CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_NORTHBOUND);
+		ignoreFeatures.add(CargoPackage.Literals.CANAL_BOOKINGS__FLEXIBLE_BOOKING_AMOUNT_SOUTHBOUND);
+		ignoreFeatures.add(CargoPackage.Literals.CANAL_BOOKINGS__RELAXED_BOUNDARY_OFFSET_DAYS);
+		ignoreFeatures.add(CargoPackage.Literals.CANAL_BOOKINGS__STRICT_BOUNDARY_OFFSET_DAYS);
+		ignoreFeatures.add(CargoPackage.Literals.CANAL_BOOKINGS__BOOKING_EXEMPT_VESSELS);
+
 		addEditor(CargoPackage.Literals.CANAL_BOOKINGS__CANAL_BOOKING_SLOTS, createCanalBookingSlotsEditor());
 		addEditor(CargoPackage.Literals.CANAL_BOOKINGS__VESSEL_GROUP_CANAL_PARAMETERS, createVesselGroupCanalParametersEditor());
 		addEditor(CargoPackage.Literals.CANAL_BOOKINGS__PANAMA_SEASONALITY_RECORDS, createPanamaSeasonalityRecordsEditor());
