@@ -29,6 +29,12 @@
 			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.VesselStateAttributesComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.fleet.VesselStateAttributes" />
+  <componentHelper
+        helperClass="com.mmxlabs.models.ui.impl.DefaultComponentHelper"
+        id="com.mmxlabs.models.lng.fleet.BaseFuel.componentHelper"
+        inheritable="false"
+        modelClass="com.mmxlabs.models.lng.fleet.BaseFuel">
+  </componentHelper>
 	</extension>
  <extension
        point="com.mmxlabs.models.ui.valueproviders">

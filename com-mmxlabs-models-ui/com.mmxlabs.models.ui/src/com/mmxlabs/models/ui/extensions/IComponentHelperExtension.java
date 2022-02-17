@@ -11,8 +11,18 @@ import com.mmxlabs.models.ui.IComponentHelper;
 
 @ExtensionBean("com.mmxlabs.models.ui.componenthelpers")
 public interface IComponentHelperExtension {
-	@MapName("id") public String getID();
-	@MapName("helperClass") public IComponentHelper instantiate();
-	@MapName("modelClass") public String getEClassName();
-	@MapName("inheritable") public String isInheritable();
+	@MapName("id")
+	String getID();
+
+	@MapName("helperClass")
+	IComponentHelper instantiate();
+
+	@MapName("helperClass")
+	String getHelperClass();
+
+	@MapName("modelClass")
+	String getEClassName();
+
+	@MapName("inheritable")
+	String isInheritable();
 }
