@@ -24,8 +24,6 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseTrackAdapter;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
@@ -220,8 +218,8 @@ public class ShippingOptionsComponent extends AbstractSandboxComponent<Object, A
 		GridViewerHelper.configureLookAndFeel(shippingOptionsViewer);
 
 		shippingOptionsViewer.getGrid().setHeaderVisible(false);
-
-		createColumn(shippingOptionsViewer, "Templates", new ShippingOptionDescriptionFormatter(), false);
+		// Temporary pending nebula grid bug fix
+		createColumn_TempForNebulaBugFix(shippingOptionsViewer, "Templates", new ShippingOptionDescriptionFormatter(), false);
 		shippingOptionsViewer.setContentProvider(new ShippingOptionsContentProvider(scenarioEditingLocation));
 		hookOpenEditor(shippingOptionsViewer);
 
