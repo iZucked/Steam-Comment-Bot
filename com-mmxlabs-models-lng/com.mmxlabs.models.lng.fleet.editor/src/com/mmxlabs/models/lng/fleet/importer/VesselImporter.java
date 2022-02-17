@@ -20,9 +20,12 @@ import org.eclipse.emf.ecore.EObject;
 import com.google.common.collect.Sets;
 import com.mmxlabs.common.csv.FieldMap;
 import com.mmxlabs.common.csv.IFieldMap;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.util.VesselConstants;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IMMXExportContext;
@@ -66,6 +69,11 @@ public class VesselImporter extends DefaultClassImporter {
 	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IMMXImportContext context) {
 		final ImportResults result = super.importObject(parent, eClass, row, context);
 		final Vessel vessel = (Vessel) result.importedObject;
+		final String vesselName = vessel.getName();
+		if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MMX_REFERENCE_VESSELS) && vesselName != null && vesselName.matches(VesselConstants.REGEXP_MMX_PROVIDED_VESSEL_NAME)) {
+			// Skip vessels that contain <> in the name since they are reserved characters for MMX reference vessels
+			return new ImportResults(null);
+		}
 		vessel.setMmxReference(false);
 		final HashSet<String> parameterisedCanals = new HashSet<>();
 		for (final String key : row.keySet()) {
