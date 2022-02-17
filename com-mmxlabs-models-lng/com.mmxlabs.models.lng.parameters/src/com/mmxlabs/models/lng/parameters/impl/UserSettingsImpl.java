@@ -31,7 +31,6 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getMode <em>Mode</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isNominalOnly <em>Nominal Only</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isBuildActionSets <em>Build Action Sets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getPeriodStartDate <em>Period Start Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#getPeriodEnd <em>Period End</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl#isDualMode <em>Dual Mode</em>}</li>
@@ -88,26 +87,6 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * @ordered
 	 */
 	protected boolean nominalOnly = NOMINAL_ONLY_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #isBuildActionSets() <em>Build Action Sets</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isBuildActionSets()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean BUILD_ACTION_SETS_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isBuildActionSets() <em>Build Action Sets</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isBuildActionSets()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean buildActionSets = BUILD_ACTION_SETS_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getPeriodStartDate() <em>Period Start Date</em>}' attribute.
@@ -653,29 +632,6 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * @generated
 	 */
 	@Override
-	public boolean isBuildActionSets() {
-		return buildActionSets;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setBuildActionSets(boolean newBuildActionSets) {
-		boolean oldBuildActionSets = buildActionSets;
-		buildActionSets = newBuildActionSets;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.USER_SETTINGS__BUILD_ACTION_SETS, oldBuildActionSets, buildActionSets));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public int getFloatingDaysLimit() {
 		return floatingDaysLimit;
 	}
@@ -797,8 +753,6 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return getMode();
 			case ParametersPackage.USER_SETTINGS__NOMINAL_ONLY:
 				return isNominalOnly();
-			case ParametersPackage.USER_SETTINGS__BUILD_ACTION_SETS:
-				return isBuildActionSets();
 			case ParametersPackage.USER_SETTINGS__PERIOD_START_DATE:
 				return getPeriodStartDate();
 			case ParametersPackage.USER_SETTINGS__PERIOD_END:
@@ -840,9 +794,6 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return;
 			case ParametersPackage.USER_SETTINGS__NOMINAL_ONLY:
 				setNominalOnly((Boolean)newValue);
-				return;
-			case ParametersPackage.USER_SETTINGS__BUILD_ACTION_SETS:
-				setBuildActionSets((Boolean)newValue);
 				return;
 			case ParametersPackage.USER_SETTINGS__PERIOD_START_DATE:
 				setPeriodStartDate((LocalDate)newValue);
@@ -898,9 +849,6 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 			case ParametersPackage.USER_SETTINGS__NOMINAL_ONLY:
 				setNominalOnly(NOMINAL_ONLY_EDEFAULT);
 				return;
-			case ParametersPackage.USER_SETTINGS__BUILD_ACTION_SETS:
-				setBuildActionSets(BUILD_ACTION_SETS_EDEFAULT);
-				return;
 			case ParametersPackage.USER_SETTINGS__PERIOD_START_DATE:
 				unsetPeriodStartDate();
 				return;
@@ -953,8 +901,6 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 				return mode != MODE_EDEFAULT;
 			case ParametersPackage.USER_SETTINGS__NOMINAL_ONLY:
 				return nominalOnly != NOMINAL_ONLY_EDEFAULT;
-			case ParametersPackage.USER_SETTINGS__BUILD_ACTION_SETS:
-				return buildActionSets != BUILD_ACTION_SETS_EDEFAULT;
 			case ParametersPackage.USER_SETTINGS__PERIOD_START_DATE:
 				return isSetPeriodStartDate();
 			case ParametersPackage.USER_SETTINGS__PERIOD_END:
@@ -997,8 +943,6 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 		result.append(mode);
 		result.append(", nominalOnly: ");
 		result.append(nominalOnly);
-		result.append(", buildActionSets: ");
-		result.append(buildActionSets);
 		result.append(", periodStartDate: ");
 		if (periodStartDateESet) result.append(periodStartDate); else result.append("<unset>");
 		result.append(", periodEnd: ");

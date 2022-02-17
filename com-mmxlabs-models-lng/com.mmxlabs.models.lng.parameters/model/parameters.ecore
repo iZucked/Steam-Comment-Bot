@@ -6,12 +6,6 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode" eType="#//OptimisationMode"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="nominalOnly" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         defaultValueLiteral="false"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="buildActionSets" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        defaultValueLiteral="false">
-      <eAnnotations source="http://www.minimaxlabs.com/license/features/required">
-        <details key="module" value="actionplan"/>
-      </eAnnotations>
-    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="periodStartDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="periodEnd" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"
@@ -38,9 +32,6 @@
   <eClassifiers xsi:type="ecore:EEnum" name="SimilarityMode">
     <eLiterals name="ALL" literal="ALL"/>
     <eLiterals name="OFF" value="1" literal="OFF"/>
-    <eLiterals name="LOW" value="2" literal="LOW"/>
-    <eLiterals name="MEDIUM" value="3" literal="MEDIUM"/>
-    <eLiterals name="HIGH" value="4" literal="HIGH"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Objective" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" lowerBound="1"

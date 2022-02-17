@@ -89,22 +89,13 @@ public interface ParametersPackage extends EPackage {
 	int USER_SETTINGS__NOMINAL_ONLY = 1;
 
 	/**
-	 * The feature id for the '<em><b>Build Action Sets</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int USER_SETTINGS__BUILD_ACTION_SETS = 2;
-
-	/**
 	 * The feature id for the '<em><b>Period Start Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__PERIOD_START_DATE = 3;
+	int USER_SETTINGS__PERIOD_START_DATE = 2;
 
 	/**
 	 * The feature id for the '<em><b>Period End</b></em>' attribute.
@@ -113,7 +104,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__PERIOD_END = 4;
+	int USER_SETTINGS__PERIOD_END = 3;
 
 	/**
 	 * The feature id for the '<em><b>Dual Mode</b></em>' attribute.
@@ -122,7 +113,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__DUAL_MODE = 5;
+	int USER_SETTINGS__DUAL_MODE = 4;
 
 	/**
 	 * The feature id for the '<em><b>Similarity Mode</b></em>' attribute.
@@ -131,7 +122,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__SIMILARITY_MODE = 6;
+	int USER_SETTINGS__SIMILARITY_MODE = 5;
 
 	/**
 	 * The feature id for the '<em><b>Shipping Only</b></em>' attribute.
@@ -140,7 +131,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__SHIPPING_ONLY = 7;
+	int USER_SETTINGS__SHIPPING_ONLY = 6;
 
 	/**
 	 * The feature id for the '<em><b>Generate Charter Outs</b></em>' attribute.
@@ -149,7 +140,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__GENERATE_CHARTER_OUTS = 8;
+	int USER_SETTINGS__GENERATE_CHARTER_OUTS = 7;
 
 	/**
 	 * The feature id for the '<em><b>With Charter Length</b></em>' attribute.
@@ -158,7 +149,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__WITH_CHARTER_LENGTH = 9;
+	int USER_SETTINGS__WITH_CHARTER_LENGTH = 8;
 
 	/**
 	 * The feature id for the '<em><b>Charter Length Days</b></em>' attribute.
@@ -167,7 +158,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__CHARTER_LENGTH_DAYS = 10;
+	int USER_SETTINGS__CHARTER_LENGTH_DAYS = 9;
 
 	/**
 	 * The feature id for the '<em><b>With Spot Cargo Markets</b></em>' attribute.
@@ -176,7 +167,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__WITH_SPOT_CARGO_MARKETS = 11;
+	int USER_SETTINGS__WITH_SPOT_CARGO_MARKETS = 10;
 
 	/**
 	 * The feature id for the '<em><b>Floating Days Limit</b></em>' attribute.
@@ -185,7 +176,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__FLOATING_DAYS_LIMIT = 12;
+	int USER_SETTINGS__FLOATING_DAYS_LIMIT = 11;
 
 	/**
 	 * The feature id for the '<em><b>Clean Slate Optimisation</b></em>' attribute.
@@ -194,7 +185,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__CLEAN_SLATE_OPTIMISATION = 13;
+	int USER_SETTINGS__CLEAN_SLATE_OPTIMISATION = 12;
 
 	/**
 	 * The feature id for the '<em><b>Generated Papers In PNL</b></em>' attribute.
@@ -203,7 +194,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS__GENERATED_PAPERS_IN_PNL = 14;
+	int USER_SETTINGS__GENERATED_PAPERS_IN_PNL = 13;
 
 	/**
 	 * The number of structural features of the '<em>User Settings</em>' class.
@@ -212,7 +203,7 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int USER_SETTINGS_FEATURE_COUNT = 15;
+	int USER_SETTINGS_FEATURE_COUNT = 14;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ObjectiveImpl <em>Objective</em>}' class.
@@ -541,16 +532,6 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 */
 	int HILL_CLIMB_OPTIMISATION_STAGE = 14;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ActionPlanOptimisationStageImpl <em>Action Plan Optimisation Stage</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.parameters.impl.ActionPlanOptimisationStageImpl
-	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getActionPlanOptimisationStage()
-	 * @generated
-	 */
-	int ACTION_PLAN_OPTIMISATION_STAGE = 15;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ResetInitialSequencesStageImpl <em>Reset Initial Sequences Stage</em>}' class.
@@ -924,6 +905,16 @@ public interface ParametersPackage extends EPackage {
 	 * @ordered
 	 */
 	int HILL_CLIMB_OPTIMISATION_STAGE_FEATURE_COUNT = PARALLISABLE_OPTIMISATION_STAGE_FEATURE_COUNT + 3;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ActionPlanOptimisationStageImpl <em>Action Plan Optimisation Stage</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.impl.ActionPlanOptimisationStageImpl
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getActionPlanOptimisationStage()
+	 * @generated
+	 */
+	int ACTION_PLAN_OPTIMISATION_STAGE = 15;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1650,17 +1641,6 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getUserSettings_WithSpotCargoMarkets();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#isBuildActionSets <em>Build Action Sets</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Build Action Sets</em>'.
-	 * @see com.mmxlabs.models.lng.parameters.UserSettings#isBuildActionSets()
-	 * @see #getUserSettings()
-	 * @generated
-	 */
-	EAttribute getUserSettings_BuildActionSets();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#getFloatingDaysLimit <em>Floating Days Limit</em>}'.
@@ -2594,14 +2574,6 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute USER_SETTINGS__WITH_SPOT_CARGO_MARKETS = eINSTANCE.getUserSettings_WithSpotCargoMarkets();
-
-		/**
-		 * The meta object literal for the '<em><b>Build Action Sets</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute USER_SETTINGS__BUILD_ACTION_SETS = eINSTANCE.getUserSettings_BuildActionSets();
 
 		/**
 		 * The meta object literal for the '<em><b>Floating Days Limit</b></em>' attribute feature.

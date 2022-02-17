@@ -684,7 +684,6 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 
 		// Create UserSettings
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
@@ -809,7 +808,6 @@ public class PanamaCanalBookingTests extends AbstractMicroTestCase {
 
 		// Create UserSettings
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 

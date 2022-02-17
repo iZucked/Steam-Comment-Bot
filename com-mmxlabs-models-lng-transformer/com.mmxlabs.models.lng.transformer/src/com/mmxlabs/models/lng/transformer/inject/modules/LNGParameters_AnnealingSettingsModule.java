@@ -33,11 +33,6 @@ public class LNGParameters_AnnealingSettingsModule extends AbstractModule {
 		this.settings = settings;
 	}
 
-	@Override
-	protected void configure() {
-
-	}
-
 	@Provides
 	@Singleton
 	private IThresholder provideThresholder(@Named(LocalSearchOptimiserModule.RANDOM_SEED) final long seed) {

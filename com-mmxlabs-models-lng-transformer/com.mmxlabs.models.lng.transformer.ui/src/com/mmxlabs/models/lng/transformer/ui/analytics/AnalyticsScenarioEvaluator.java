@@ -462,7 +462,6 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		}
 		// Reset settings not supplied to the user
 		userSettings.setShippingOnly(false);
-		userSettings.setBuildActionSets(false);
 		userSettings.setCleanSlateOptimisation(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 
@@ -502,7 +501,6 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 		}
 		// Reset settings not supplied to the user
 		userSettings.setShippingOnly(false);
-		userSettings.setBuildActionSets(false);
 		userSettings.setCleanSlateOptimisation(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 

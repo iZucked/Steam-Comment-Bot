@@ -360,7 +360,6 @@ public class PurgeTests extends AbstractMicroTestCase {
 
 		// Create UserSettings
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(withGCO);
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);

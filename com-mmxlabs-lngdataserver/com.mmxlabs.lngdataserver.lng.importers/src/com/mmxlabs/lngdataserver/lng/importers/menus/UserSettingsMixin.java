@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl;
 
-@JsonIgnoreProperties({ "setPeriodEnd", "setPeriodStartDate" })
+@JsonIgnoreProperties({ "setPeriodEnd", "setPeriodStartDate", "buildActionSets" })
 @JsonInclude(Include.NON_NULL)
 @JsonDeserialize(as = UserSettingsImpl.class)
 public class UserSettingsMixin {

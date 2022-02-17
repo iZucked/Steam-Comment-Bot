@@ -33,6 +33,7 @@ import com.mmxlabs.lingo.its.tests.ReportTester;
 import com.mmxlabs.lingo.its.tests.ReportTesterHelper;
 import com.mmxlabs.lingo.its.tests.TestMode;
 import com.mmxlabs.lingo.its.tests.TestingModes;
+import com.mmxlabs.lngdataserver.lng.importers.menus.UserSettingsMixin;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
@@ -132,9 +133,12 @@ public class OptimisationTestRunner {
 			mapper.registerModule(new JavaTimeModule());
 			mapper.registerModule(new Jdk8Module());
 			mapper.enable(Feature.ALLOW_COMMENTS);
+			
+			mapper.addMixIn(UserSettingsImpl.class, UserSettingsMixin.class);
+			mapper.addMixIn(UserSettings.class, UserSettingsMixin.class);
 
 			try {
-				return mapper.readValue(file, UserSettingsImpl.class);
+				return mapper.readValue(file, UserSettings.class);
 			} catch (final IOException e) {
 				Assertions.fail(e.getMessage(), e);
 				return null;

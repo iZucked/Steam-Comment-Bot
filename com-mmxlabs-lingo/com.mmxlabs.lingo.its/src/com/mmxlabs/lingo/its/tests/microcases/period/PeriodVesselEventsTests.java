@@ -80,7 +80,6 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in
 		// period.
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 
 		userSettings.setShippingOnly(false);
@@ -157,7 +156,6 @@ public class PeriodVesselEventsTests extends AbstractMicroTestCase {
 		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in
 		// period.
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 
 		userSettings.setShippingOnly(false);

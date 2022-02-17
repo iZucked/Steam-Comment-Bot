@@ -115,7 +115,6 @@ public class CounterPartyWindowIdleTimeTest extends AbstractIdleTimeTests {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setMode(OptimisationMode.SHORT_TERM);
 
-		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 
 		userSettings.setShippingOnly(false);

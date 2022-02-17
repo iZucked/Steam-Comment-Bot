@@ -341,7 +341,6 @@ public class BreakEvenSandboxEvaluator {
 			final Map<ShippingOption, VesselAssignmentType> shippingMap = buildFullScenario(lngScenarioModel, model, mapper);
 
 			final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-			userSettings.setBuildActionSets(false);
 			userSettings.setGenerateCharterOuts(false);
 			userSettings.setShippingOnly(false);
 			userSettings.setWithSpotCargoMarkets(true);

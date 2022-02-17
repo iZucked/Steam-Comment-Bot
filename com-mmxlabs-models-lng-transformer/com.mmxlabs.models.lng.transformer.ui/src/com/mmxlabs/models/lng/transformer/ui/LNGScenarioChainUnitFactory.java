@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
-import java.time.LocalDate;
-import java.time.YearMonth;
 import java.util.OptionalLong;
 import java.util.function.BiConsumer;
 
@@ -14,13 +12,10 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.concurrent.JobExecutorFactory;
-import com.mmxlabs.common.time.Months;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.models.lng.analytics.ActionableSetPlan;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.OptimisationResult;
-import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.BreakEvenOptimisationStage;
 import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
@@ -36,7 +31,6 @@ import com.mmxlabs.models.lng.parameters.ParallelMultipleSolutionSimilarityOptim
 import com.mmxlabs.models.lng.parameters.ReduceSequencesStage;
 import com.mmxlabs.models.lng.parameters.ResetInitialSequencesStage;
 import com.mmxlabs.models.lng.parameters.UserSettings;
-import com.mmxlabs.models.lng.transformer.actionplan.LNGActionSetTransformerUnit;
 import com.mmxlabs.models.lng.transformer.breakeven.BreakEvenTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGHillClimbOptimiserTransformerUnit;
@@ -57,7 +51,6 @@ public class LNGScenarioChainUnitFactory {
 	private static final int PROGRESS_CLEAN_STATE = 25;
 	private static final int PROGRESS_OPTIMISATION = 100;
 	private static final int PROGRESS_HILLCLIMBING_OPTIMISATION = 10;
-	private static final int PROGRESS_ACTION_SET_OPTIMISATION = 20;
 	private static final int PROGRESS_ACTION_SET_SAVE = 5;
 
 	public static @Nullable BiConsumer<LNGScenarioToOptimiserBridge, String> chainUp(final @NonNull ChainBuilder builder, @NonNull LNGScenarioToOptimiserBridge scenarioToOptimiserBridge,
@@ -136,22 +129,6 @@ public class LNGScenarioChainUnitFactory {
 				}
 			}
 			return null;
-		} else if (template instanceof ActionPlanOptimisationStage) {
-			final ActionPlanOptimisationStage stage = (ActionPlanOptimisationStage) template;
-			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_OPTIMISATION_ACTIONSET)) {
-				if (stage.getTotalEvaluations() > 0) {
-					// Run the action set post optimisation
-						LNGActionSetTransformerUnit.chain(builder, stage.getName(), userSettings, stage, jobExecutorFactory, PROGRESS_ACTION_SET_OPTIMISATION);
-				}
-				return (bridge, name) -> {
-					SolutionSetExporterUnit.exportMultipleSolutions(builder, PROGRESS_ACTION_SET_SAVE, bridge, () -> {
-						ActionableSetPlan options = AnalyticsFactory.eINSTANCE.createActionableSetPlan();
-						options.setUserSettings(EcoreUtil.copy(userSettings));
-						options.setName(name);
-						return options;
-					}, false, OptionalLong.empty());
-				};
-			}
 		} else if (template instanceof ResetInitialSequencesStage) {
 			ResetInitialSequencesStage stageSettings = (ResetInitialSequencesStage) template;
 			ResetInitialSequencesUnit.chain(builder, stageSettings.getName(), userSettings, stageSettings, 1);

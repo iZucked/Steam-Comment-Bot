@@ -369,76 +369,6 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 */
 	@Override
 	public EAttribute getUserSettings_PeriodStartDate() {
-		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getUserSettings_PeriodEnd() {
-		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getUserSettings_ShippingOnly() {
-		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(7);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getUserSettings_GenerateCharterOuts() {
-		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(8);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getUserSettings_WithCharterLength() {
-		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(9);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getUserSettings_CharterLengthDays() {
-		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(10);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getUserSettings_WithSpotCargoMarkets() {
-		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(11);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getUserSettings_BuildActionSets() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -448,8 +378,68 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * @generated
 	 */
 	@Override
+	public EAttribute getUserSettings_PeriodEnd() {
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getUserSettings_ShippingOnly() {
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getUserSettings_GenerateCharterOuts() {
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getUserSettings_WithCharterLength() {
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getUserSettings_CharterLengthDays() {
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getUserSettings_WithSpotCargoMarkets() {
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EAttribute getUserSettings_FloatingDaysLimit() {
-		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(12);
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -459,7 +449,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 */
 	@Override
 	public EAttribute getUserSettings_CleanSlateOptimisation() {
-		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(13);
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(12);
 	}
 
 	/**
@@ -469,7 +459,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 */
 	@Override
 	public EAttribute getUserSettings_GeneratedPapersInPNL() {
-		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(14);
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(13);
 	}
 
 	/**
@@ -479,7 +469,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 */
 	@Override
 	public EAttribute getUserSettings_DualMode() {
-		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(5);
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -489,7 +479,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 */
 	@Override
 	public EAttribute getUserSettings_SimilarityMode() {
-		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(6);
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -1254,7 +1244,6 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		userSettingsEClass = createEClass(USER_SETTINGS);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__MODE);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__NOMINAL_ONLY);
-		createEAttribute(userSettingsEClass, USER_SETTINGS__BUILD_ACTION_SETS);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__PERIOD_START_DATE);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__PERIOD_END);
 		createEAttribute(userSettingsEClass, USER_SETTINGS__DUAL_MODE);
@@ -1433,7 +1422,6 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		initEClass(userSettingsEClass, UserSettings.class, "UserSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getUserSettings_Mode(), this.getOptimisationMode(), "mode", null, 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_NominalOnly(), ecorePackage.getEBoolean(), "nominalOnly", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getUserSettings_BuildActionSets(), ecorePackage.getEBoolean(), "buildActionSets", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_PeriodStartDate(), theDateTimePackage.getLocalDate(), "periodStartDate", null, 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_PeriodEnd(), theDateTimePackage.getYearMonth(), "periodEnd", null, 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUserSettings_DualMode(), ecorePackage.getEBoolean(), "dualMode", null, 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1550,9 +1538,6 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		initEEnum(similarityModeEEnum, SimilarityMode.class, "SimilarityMode");
 		addEEnumLiteral(similarityModeEEnum, SimilarityMode.ALL);
 		addEEnumLiteral(similarityModeEEnum, SimilarityMode.OFF);
-		addEEnumLiteral(similarityModeEEnum, SimilarityMode.LOW);
-		addEEnumLiteral(similarityModeEEnum, SimilarityMode.MEDIUM);
-		addEEnumLiteral(similarityModeEEnum, SimilarityMode.HIGH);
 
 		initEEnum(optimisationModeEEnum, OptimisationMode.class, "OptimisationMode");
 		addEEnumLiteral(optimisationModeEEnum, OptimisationMode.SHORT_TERM);
@@ -1562,26 +1547,6 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 
 		// Create resource
 		createResource(eNS_URI);
-
-		// Create annotations
-		// http://www.minimaxlabs.com/license/features/required
-		createRequiredAnnotations();
-	}
-
-	/**
-	 * Initializes the annotations for <b>http://www.minimaxlabs.com/license/features/required</b>.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void createRequiredAnnotations() {
-		String source = "http://www.minimaxlabs.com/license/features/required";
-		addAnnotation
-		  (getUserSettings_BuildActionSets(),
-		   source,
-		   new String[] {
-			   "module", "actionplan"
-		   });
 	}
 
 } //ParametersPackageImpl

@@ -101,7 +101,6 @@ public class CharterCostCalculatorTests extends AbstractMicroTestCase {
 
 		// Create UserSettings
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);

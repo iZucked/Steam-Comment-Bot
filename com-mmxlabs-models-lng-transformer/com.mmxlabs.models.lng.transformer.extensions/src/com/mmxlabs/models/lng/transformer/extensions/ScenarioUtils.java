@@ -4,18 +4,14 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions;
 
-import java.time.LocalDate;
-import java.time.YearMonth;
 import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.common.time.Months;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
-import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
 import com.mmxlabs.models.lng.parameters.CleanStateOptimisationSettings;
 import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
@@ -32,7 +28,6 @@ import com.mmxlabs.models.lng.parameters.OptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParallelOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityInterval;
-import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.SimilaritySettings;
 import com.mmxlabs.models.lng.parameters.SolutionBuilderSettings;
 import com.mmxlabs.models.lng.parameters.editor.util.UserSettingsHelper;
@@ -233,61 +228,6 @@ public class ScenarioUtils {
 		return params;
 	}
 
-	public static @NonNull ActionPlanOptimisationStage createDefaultActionPlanParameters(@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings) {
-		final ActionPlanOptimisationStage params = ParametersFactory.eINSTANCE.createActionPlanOptimisationStage();
-		params.setName("actionset");
-
-		params.setTotalEvaluations(5_000_000);
-		params.setInRunEvaluations(1_500_000);
-		params.setSearchDepth(5_000);
-
-		params.setConstraintAndFitnessSettings(constraintAndFitnessSettings);
-
-		return params;
-	}
-
-	public static ActionPlanOptimisationStage getActionPlanSettings(@NonNull final SimilarityMode similarityMode, @NonNull final LocalDate start, @NonNull final YearMonth end,
-			@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings) {
-		final int monthsInPeriod = Months.between(start, end);
-		final ActionPlanOptimisationStage actionPlanSettings;
-
-		switch (similarityMode) {
-		case HIGH:
-			actionPlanSettings = ParametersFactory.eINSTANCE.createActionPlanOptimisationStage();
-			actionPlanSettings.setTotalEvaluations(roundToInt(3_000_000 / 3.0 * monthsInPeriod));
-			actionPlanSettings.setInRunEvaluations(roundToInt(1_000_000 / 3.0 * monthsInPeriod));
-			actionPlanSettings.setSearchDepth(5_000);
-			break;
-		case MEDIUM:
-			actionPlanSettings = ParametersFactory.eINSTANCE.createActionPlanOptimisationStage();
-			if (monthsInPeriod < 4) {
-				actionPlanSettings.setTotalEvaluations(roundToInt(5_000_000 / 3.0 * monthsInPeriod));
-				actionPlanSettings.setInRunEvaluations(roundToInt(Math.min(2_000_000, 1_500_000 / 3.0 * monthsInPeriod)));
-				actionPlanSettings.setSearchDepth(5_000);
-			} else {
-				actionPlanSettings.setTotalEvaluations(roundToInt(30_000_000 / 6.0 * monthsInPeriod));
-				actionPlanSettings.setInRunEvaluations(2_000_000);
-				actionPlanSettings.setSearchDepth(5_000);
-			}
-			break;
-		case LOW:
-			actionPlanSettings = ParametersFactory.eINSTANCE.createActionPlanOptimisationStage();
-			actionPlanSettings.setTotalEvaluations(roundToInt(30_000_000 / 3.0 * monthsInPeriod));
-			actionPlanSettings.setInRunEvaluations(roundToInt(Math.min(2_000_000, 2_000_000 / 3.0 * monthsInPeriod)));
-			actionPlanSettings.setSearchDepth(5_000);
-			break;
-		default:
-			actionPlanSettings = ParametersFactory.eINSTANCE.createActionPlanOptimisationStage();
-			actionPlanSettings.setTotalEvaluations(5_000_000);
-			actionPlanSettings.setInRunEvaluations(1_500_000);
-			actionPlanSettings.setSearchDepth(5_000);
-			break;
-		}
-		actionPlanSettings.setConstraintAndFitnessSettings(constraintAndFitnessSettings);
-
-		return actionPlanSettings;
-	}
-
 	public static @NonNull CleanStateOptimisationStage createDefaultCleanStateParameters(@NonNull final ConstraintAndFitnessSettings constraintAndFitnessSettings) {
 		final CleanStateOptimisationStage params = ParametersFactory.eINSTANCE.createCleanStateOptimisationStage();
 		params.setName("cleanstate");
@@ -321,7 +261,8 @@ public class ScenarioUtils {
 		@NonNull
 		final ConstraintAndFitnessSettings constraintAndFitnessSettings = createDefaultConstraintAndFitnessSettings();
 		// Fitness not required.
-		// TODO: Keep fitnesses and evaluate to get initial fitness value rather than having to call evaluate to do so.
+		// TODO: Keep fitnesses and evaluate to get initial fitness value rather than
+		// having to call evaluate to do so.
 		// constraintAndFitnessSettings.getObjectives().clear();
 		{
 			final Iterator<Objective> itr = constraintAndFitnessSettings.getObjectives().iterator();
@@ -417,7 +358,8 @@ public class ScenarioUtils {
 			constraints.add(createConstraint(TimeSortConstraintCheckerFactory.NAME, true));
 
 			// BugzId: 1597 - Disable as this causes problems with optimisation performance.
-			// constraints.add(createConstraint(parametersFactory, SlotGroupCountConstraintCheckerFactory.NAME, true));
+			// constraints.add(createConstraint(parametersFactory,
+			// SlotGroupCountConstraintCheckerFactory.NAME, true));
 
 			constraints.add(createConstraint(RestrictedElementsConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(RestrictedSlotsConstraintCheckerFactory.NAME, true));
@@ -431,7 +373,8 @@ public class ScenarioUtils {
 			constraints.add(createConstraint(ShippingTypeRequirementConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(ShippingHoursRestrictionCheckerFactory.NAME, true));
 			constraints.add(createConstraint(LockedUnusedElementsConstraintCheckerFactory.NAME, true));
-			// constraints.add(createConstraint(PanamaSlotsConstraintCheckerFactory.NAME, true));
+			// constraints.add(createConstraint(PanamaSlotsConstraintCheckerFactory.NAME,
+			// true));
 			if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_GROUPED_OPTIONAL_SLOTS_CONSTRAINTS)) {
 				constraints.add(createConstraint(GroupedSlotsConstraintCheckerFactory.NAME, true));
 			}
@@ -510,25 +453,13 @@ public class ScenarioUtils {
 		}
 	}
 
-	public static void setActionPlanStageParameters(final OptimisationPlan plan, final int totalEvalations, final int inRunEvaluations, final int searchDepth) {
-		for (final OptimisationStage stage : plan.getStages()) {
-			if (stage instanceof ActionPlanOptimisationStage) {
-				final ActionPlanOptimisationStage actionPlanOptimisationStage = (ActionPlanOptimisationStage) stage;
-				actionPlanOptimisationStage.setTotalEvaluations(totalEvalations);
-				actionPlanOptimisationStage.setInRunEvaluations(inRunEvaluations);
-				actionPlanOptimisationStage.setSearchDepth(searchDepth);
-			}
-		}
-	}
-
 	public static void createOrUpdateAllConstraints(OptimisationPlan plan, String name, boolean enabled) {
 		for (OptimisationStage stage : plan.getStages()) {
-			if (stage instanceof ParallelOptimisationStage<?>) {
-				ParallelOptimisationStage<?> parallelOptimisationStage = (ParallelOptimisationStage<?>) stage;
+			if (stage instanceof ParallelOptimisationStage<?> parallelOptimisationStage) {
 				stage = parallelOptimisationStage.getTemplate();
 			}
-			if (stage instanceof ConstraintsAndFitnessSettingsStage) {
-				ConstraintAndFitnessSettings settings = ((ConstraintsAndFitnessSettingsStage) stage).getConstraintAndFitnessSettings();
+			if (stage instanceof ConstraintsAndFitnessSettingsStage cfss) {
+				ConstraintAndFitnessSettings settings = cfss.getConstraintAndFitnessSettings();
 				createOrUpdateContraints(name, enabled, settings);
 			}
 		}

@@ -278,7 +278,7 @@ public class ChangeSetView extends ViewPart {
 	}
 
 	public enum ViewMode {
-		COMPARE, OLD_ACTION_SET, NEW_ACTION_SET, INSERTIONS, GENERIC, SANDBOX
+		COMPARE, NEW_ACTION_SET, INSERTIONS, GENERIC, SANDBOX
 	}
 
 	public static class ViewState {
@@ -1245,15 +1245,6 @@ public class ChangeSetView extends ViewPart {
 		}
 	}
 
-	public void openOldStlyeActionSets(final ScenarioInstance target) {
-		setPartName("Action Sets");
-		setViewMode(ViewMode.OLD_ACTION_SET, false);
-		setNewDataData(target, (monitor, targetSlotId) -> {
-			final ActionSetTransformer transformer = new ActionSetTransformer();
-			return new ViewState(transformer.createDataModel(target, monitor), SortMode.BY_GROUP);
-		}, null);
-	}
-
 	private void openView(final @NonNull String viewId) {
 		// Open, but do not focus the view.
 		// FIXME: If this causes the view to be created the selection will not be
@@ -1552,7 +1543,7 @@ public class ChangeSetView extends ViewPart {
 		}
 
 		private boolean createSandboxMenu(final Set<ChangeSetTableGroup> directSelectedGroups, final Set<ChangeSetTableRow> directSelectedRows, final Set<ChangeSetTableGroup> selectedSets) {
-			if (ChangeSetView.this.viewMode != ViewMode.COMPARE && ChangeSetView.this.viewMode != ViewMode.OLD_ACTION_SET) {
+			if (ChangeSetView.this.viewMode != ViewMode.COMPARE) {
 				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_SANDBOX)) {
 
 					final ChangeSetTableGroup changeSetTableGroup;
@@ -1635,7 +1626,7 @@ public class ChangeSetView extends ViewPart {
 			lastParent = null;
 			lastParentFeature = null;
 
-			this.viewMode = ViewMode.OLD_ACTION_SET;
+			this.viewMode = ViewMode.GENERIC;
 
 			final ScenarioInstance scenarioInstance = solution.getScenarioInstance();
 			final Object target = solution;
@@ -1861,11 +1852,6 @@ public class ChangeSetView extends ViewPart {
 			altPNLToolTipBase = altPNLToolTipBase_Default;
 			altPNLToolTipBaseMode = altPNLToolTipBaseMode_ActionPlan;
 			break;
-		case OLD_ACTION_SET:
-			showToggleAltPNLBaseAction = true;
-			altPNLToolTipBase = altPNLToolTipBase_Default;
-			altPNLToolTipBaseMode = altPNLToolTipBaseMode_ActionPlan;
-			break;
 		case SANDBOX:
 			// Show mini-view by default
 			showAlternativeChangeModel = dualPNLMode;
@@ -1905,7 +1891,7 @@ public class ChangeSetView extends ViewPart {
 
 		if (reEvaluateAction != null) {
 
-			if (viewMode != ViewMode.COMPARE && viewMode != ViewMode.OLD_ACTION_SET) {
+			if (viewMode != ViewMode.COMPARE) {
 				if (!reEvaluateActionItemAdded) {
 					getViewSite().getActionBars().getToolBarManager().add(reEvaluateActionItem);
 					reEvaluateActionItemAdded = true;

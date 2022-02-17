@@ -90,7 +90,7 @@ public class ActionableSetsTransformerUnit implements ILNGStateTransformerUnit {
 		chainBuilder.addLink(link);
 		return link;
 	}
- 
+
 	@NonNull
 	private final LNGDataTransformer dataTransformer;
 
@@ -129,8 +129,10 @@ public class ActionableSetsTransformerUnit implements ILNGStateTransformerUnit {
 		modules.add(new InitialPhaseOptimisationDataModule());
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(userSettings, stageSettings.getConstraintAndFitnessSettings()), services,
 				IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
+		
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_ActionPlanSettingsModule(stageSettings), services,
 				IOptimiserInjectorService.ModuleType.Module_OptimisationParametersModule, hints));
+		
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new CreateActionableSetPlanModule(), services, IOptimiserInjectorService.ModuleType.Module_Optimisation, hints));
 
@@ -176,13 +178,13 @@ public class ActionableSetsTransformerUnit implements ILNGStateTransformerUnit {
 
 	@Override
 	public IMultiStateResult run(@NonNull final IProgressMonitor monitor) {
-		
+
 		final JobExecutorFactory subExecutorFactory = jobExecutorFactory.withDefaultBegin(() -> {
 			final ThreadLocalScopeImpl s = injector.getInstance(ThreadLocalScopeImpl.class);
 			s.enter();
 			return s;
 		});
-		
+
 		try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 			scope.enter();
 

@@ -242,7 +242,6 @@ public abstract class AbstractLegacyMicroTestCase {
 
 		// Create UserSettings
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setShippingOnly(false);
 		userSettings.setWithSpotCargoMarkets(true);
@@ -269,7 +268,6 @@ public abstract class AbstractLegacyMicroTestCase {
 	public void evaluateTestWith(IOptimiserInjectorService s) {
 		// Create UserSettings
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
@@ -288,7 +286,6 @@ public abstract class AbstractLegacyMicroTestCase {
 
 		// Create UserSettings
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
@@ -309,7 +306,6 @@ public abstract class AbstractLegacyMicroTestCase {
 
 		// Create UserSettings
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);

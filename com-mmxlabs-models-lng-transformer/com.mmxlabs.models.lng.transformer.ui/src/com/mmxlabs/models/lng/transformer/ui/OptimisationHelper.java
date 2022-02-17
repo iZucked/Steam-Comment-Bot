@@ -32,13 +32,11 @@ import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.common.time.Months;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.parameters.ActionPlanOptimisationStage;
 import com.mmxlabs.models.lng.parameters.CleanStateOptimisationStage;
 import com.mmxlabs.models.lng.parameters.ConstraintAndFitnessSettings;
 import com.mmxlabs.models.lng.parameters.HillClimbOptimisationStage;
@@ -229,43 +227,18 @@ public final class OptimisationHelper {
 		if (userSettings.getMode() == OptimisationMode.ADP) { // ADP Optimisation
 			baseConstraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.OFF, periodStartOrDefault, periodEndOrDefault));
 			shouldUseRestartingLSO = false;
-			userSettings.setBuildActionSets(false);
 		} else if (userSettings.getMode() == OptimisationMode.STRATEGIC) { // Strategic optimisation
 			baseConstraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.OFF, periodStartOrDefault, periodEndOrDefault));
 			shouldUseRestartingLSO = false;
-			userSettings.setBuildActionSets(false);
 		} else { // Normal optimisation.
 			switch (similarityMode) {
 			case ALL:
 				baseConstraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.LOW, periodStartOrDefault, periodEndOrDefault));
 				shouldUseRestartingLSO = true;
-				userSettings.setBuildActionSets(false);
-				break;
-			case HIGH:
-				baseConstraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.HIGH, periodStartOrDefault, periodEndOrDefault));
-				shouldUseRestartingLSO = true;
-				if (shouldDisableActionSets(SimilarityMode.HIGH, periodStart, periodEnd)) {
-					userSettings.setBuildActionSets(false);
-				}
-				break;
-			case LOW:
-				baseConstraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.LOW, periodStartOrDefault, periodEndOrDefault));
-				shouldUseRestartingLSO = false;
-				if (shouldDisableActionSets(SimilarityMode.LOW, periodStart, periodEnd)) {
-					userSettings.setBuildActionSets(false);
-				}
-				break;
-			case MEDIUM:
-				baseConstraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.MEDIUM, periodStartOrDefault, periodEndOrDefault));
-				shouldUseRestartingLSO = false;
-				if (shouldDisableActionSets(SimilarityMode.MEDIUM, periodStart, periodEnd)) {
-					userSettings.setBuildActionSets(false);
-				}
 				break;
 			case OFF:
 				baseConstraintAndFitnessSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.OFF, periodStartOrDefault, periodEndOrDefault));
 				shouldUseRestartingLSO = false;
-				userSettings.setBuildActionSets(false);
 				break;
 			default:
 				assert false;
@@ -375,34 +348,9 @@ public final class OptimisationHelper {
 					plan.getStages().add(stage);
 				}
 			}
-			if (userSettings.isBuildActionSets()) {
-				if (periodStart != null && periodEnd != null) {
-					final ActionPlanOptimisationStage stage = ScenarioUtils.getActionPlanSettings(similarityMode, periodStart, periodEnd, EMFCopier.copy(baseConstraintAndFitnessSettings));
-					plan.getStages().add(stage);
-				} else {
-					final ActionPlanOptimisationStage stage = ScenarioUtils.createDefaultActionPlanParameters(EMFCopier.copy(baseConstraintAndFitnessSettings));
-					plan.getStages().add(stage);
-				}
-			}
 		}
 
 		return LNGScenarioRunnerUtils.createExtendedSettings(plan);
-	}
-
-	private static boolean shouldDisableActionSets(final SimilarityMode mode, final LocalDate periodStart, final YearMonth periodEnd) {
-		if (periodStart == null || periodEnd == null) {
-			return true;
-		}
-		if (mode == SimilarityMode.LOW && Months.between(periodStart, periodEnd) > 3) {
-			return true;
-		} else if (mode == SimilarityMode.MEDIUM && Months.between(periodStart, periodEnd) > 6) {
-			return true;
-		} else if (mode == SimilarityMode.HIGH && Months.between(periodStart, periodEnd) > 6) {
-			return true;
-		} else if (mode == SimilarityMode.OFF) {
-			return true;
-		}
-		return false;
 	}
 
 	private static Objective findObjective(final String objective, final ConstraintAndFitnessSettings settings) {

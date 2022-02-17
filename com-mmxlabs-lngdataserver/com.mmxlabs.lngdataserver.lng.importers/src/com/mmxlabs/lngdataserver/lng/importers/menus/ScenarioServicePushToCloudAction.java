@@ -258,7 +258,6 @@ public class ScenarioServicePushToCloudAction {
 		if (userSettings != null) {
 			// Reset settings not supplied to the user
 			userSettings.setShippingOnly(false);
-			userSettings.setBuildActionSets(false);
 			userSettings.setCleanSlateOptimisation(false);
 			userSettings.setSimilarityMode(SimilarityMode.OFF);
 		}

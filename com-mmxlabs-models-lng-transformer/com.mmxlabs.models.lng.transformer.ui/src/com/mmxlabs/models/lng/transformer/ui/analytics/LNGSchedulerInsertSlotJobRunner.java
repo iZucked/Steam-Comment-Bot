@@ -130,7 +130,6 @@ public class LNGSchedulerInsertSlotJobRunner {
 
 		// Reset settings not supplied to the user
 		this.userSettings.setShippingOnly(false);
-		this.userSettings.setBuildActionSets(false);
 		this.userSettings.setCleanSlateOptimisation(false);
 		this.userSettings.setSimilarityMode(SimilarityMode.OFF);
 

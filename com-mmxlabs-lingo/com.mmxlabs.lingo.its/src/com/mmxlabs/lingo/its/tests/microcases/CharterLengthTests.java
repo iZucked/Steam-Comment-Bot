@@ -769,7 +769,6 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 	private void evaluate(final boolean withCharterLength, IOptimiserInjectorService s) {
 		// Create UserSettings
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setShippingOnly(false);
 		userSettings.setWithSpotCargoMarkets(true);
@@ -792,7 +791,6 @@ public class CharterLengthTests extends AbstractMicroTestCase {
 	private Schedule optimise(final boolean withCharterLength, LocalDate periodStart, YearMonth periodEnd) {
 		// Create UserSettings
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setShippingOnly(false);
 		userSettings.setWithSpotCargoMarkets(false);

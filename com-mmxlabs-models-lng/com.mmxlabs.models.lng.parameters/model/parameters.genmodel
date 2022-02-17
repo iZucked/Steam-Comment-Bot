@@ -11,9 +11,6 @@
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="parameters.ecore#//SimilarityMode">
       <genEnumLiterals ecoreEnumLiteral="parameters.ecore#//SimilarityMode/ALL"/>
       <genEnumLiterals ecoreEnumLiteral="parameters.ecore#//SimilarityMode/OFF"/>
-      <genEnumLiterals ecoreEnumLiteral="parameters.ecore#//SimilarityMode/LOW"/>
-      <genEnumLiterals ecoreEnumLiteral="parameters.ecore#//SimilarityMode/MEDIUM"/>
-      <genEnumLiterals ecoreEnumLiteral="parameters.ecore#//SimilarityMode/HIGH"/>
     </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="parameters.ecore#//OptimisationMode">
       <genEnumLiterals ecoreEnumLiteral="parameters.ecore#//OptimisationMode/SHORT_TERM"/>
@@ -24,7 +21,6 @@
     <genClasses ecoreClass="parameters.ecore#//UserSettings">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/mode"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/nominalOnly"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/buildActionSets"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/periodStartDate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/periodEnd"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//UserSettings/dualMode"/>

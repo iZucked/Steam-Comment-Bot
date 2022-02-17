@@ -22,7 +22,6 @@ public class OptimisationEMFTestUtils {
 	
 	public static OptimisationPlan setUpBasicADPSettingsWithNoLSOOrHill(LNGScenarioModel lngScenarioModel) {
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
-		userSettings.setBuildActionSets(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setShippingOnly(false);
