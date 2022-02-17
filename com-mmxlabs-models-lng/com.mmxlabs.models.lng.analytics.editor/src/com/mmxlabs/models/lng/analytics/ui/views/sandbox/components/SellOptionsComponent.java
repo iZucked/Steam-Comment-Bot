@@ -25,8 +25,6 @@ import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
@@ -105,7 +103,8 @@ public class SellOptionsComponent extends AbstractSandboxComponent<Object, Abstr
 		sellOptionsViewer.getGrid().setHeaderVisible(false);
 
 		CellFormatterLabelProvider labelProvider = new BuysSellsLabelProvider(sandboxUIHelper, new SellOptionDescriptionFormatter(), validationErrors, "Sell");
-		createColumn(sellOptionsViewer, labelProvider, "Sell",false);
+		// Temporary pending nebula grid bug fix
+		createColumn_TempForNebulaBugFix(sellOptionsViewer, labelProvider, "Sell",false);
 
 		sellOptionsViewer.setContentProvider(new OptionsViewerContentProvider(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SELLS));
 		hookOpenEditor(sellOptionsViewer);

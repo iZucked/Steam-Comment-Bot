@@ -36,7 +36,9 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -55,6 +57,8 @@ import com.mmxlabs.models.ui.editors.dialogs.IDialogController;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.ui.tabular.renderers.CellRenderer;
+import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.rcp.common.dnd.BasicDragSource;
 
 public abstract class AbstractModellerComponent<T, U> {
@@ -135,6 +139,23 @@ public abstract class AbstractModellerComponent<T, U> {
 		return createColumn(viewer, createLabelProvider(name, renderer, pathObjects), name, isTree, pathObjects);
 	}
 
+	/**
+	 * This is a temporary method used by the sandbox options components pending a bug fix in the nebula grid package. The method provides a custom header renderer that always sets the header height
+	 * to 0 to simulate the lack of a header. At time of writing setting headerVisible to false on the viewer is not sufficient.
+	 * 
+	 * @param viewer
+	 * @param name
+	 * @param renderer
+	 * @param isTree
+	 * @param pathObjects
+	 * @return
+	 */
+	protected GridViewerColumn createColumn_TempForNebulaBugFix(final GridTreeViewer viewer, final String name, final ICellRenderer renderer, final boolean isTree,
+			final ETypedElement... pathObjects) {
+		// TODO: revert use of this method to createColumn() after nebula grid has the bug fix.
+		return createColumn_TempForNebulaBugFix(viewer, createLabelProvider(name, renderer, pathObjects), name, isTree, pathObjects);
+	}
+
 	protected GridViewerColumn createColumn(final GridTreeViewer viewer, final CellFormatterLabelProvider labelProvider, final String name, final boolean isTree, final ETypedElement... pathObjects) {
 
 		final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER | SWT.WRAP);
@@ -145,6 +166,42 @@ public abstract class AbstractModellerComponent<T, U> {
 		gvc.getColumn().setDetail(true);
 		gvc.getColumn().setSummary(true);
 		gvc.setLabelProvider(labelProvider);
+		return gvc;
+	}
+
+	/**
+	 * 
+	 * This is a temporary method used by the sandbox options components pending a bug fix in the nebula grid package. The method provides a custom header renderer that always sets the header height
+	 * to 0 to simulate the lack of a header. At time of writing setting headerVisible to false on the viewer is not sufficient.
+	 * 
+	 * @param viewer
+	 * @param labelProvider
+	 * @param name
+	 * @param isTree
+	 * @param pathObjects
+	 * @return
+	 */
+	protected GridViewerColumn createColumn_TempForNebulaBugFix(final GridTreeViewer viewer, final CellFormatterLabelProvider labelProvider, final String name, final boolean isTree,
+			final ETypedElement... pathObjects) {
+		// TODO: revert use of this method to createColumn() after nebula grid has the bug fix.
+		final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.CENTER | SWT.WRAP);
+		gvc.getColumn().setTree(isTree);
+		// Temporary fix pending nebula grid bug fix
+		// GridViewerHelper.configureLookAndFeel(gvc);
+		gvc.getColumn().setHeaderRenderer(new ColumnHeaderRenderer() {
+			@Override
+			public Point computeSize(GC gc, int wHint, int hHint, Object value) {
+				return new Point(wHint, 0);
+			}
+		});
+		gvc.getColumn().setCellRenderer(new CellRenderer());
+		// end of temporary fix
+		gvc.getColumn().setText(name);
+		gvc.getColumn().setWidth(250);
+		gvc.getColumn().setDetail(true);
+		gvc.getColumn().setSummary(true);
+		gvc.setLabelProvider(labelProvider);
+		viewer.getGrid().recalculateHeader();
 		return gvc;
 	}
 
