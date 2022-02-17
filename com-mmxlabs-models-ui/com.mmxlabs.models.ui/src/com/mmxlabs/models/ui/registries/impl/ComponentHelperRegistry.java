@@ -74,7 +74,12 @@ public class ComponentHelperRegistry extends AbstractRegistry<EClass, List<IComp
 					if (factoryExistsForID(extension.getID())) {
 						helpers.addAll(getFactoryForID(extension.getID()));
 					} else {
-						helpers.addAll(cacheFactoryForID(extension.getID(), Collections.singletonList(extension.instantiate())));
+						if (extension.getHelperClass().equals(DefaultComponentHelper.class.getCanonicalName())) {
+							// Note: key may need to be replaced with the extension eclass?
+							helpers.addAll(cacheFactoryForID(extension.getID(), Collections.singletonList(new DefaultComponentHelper(key))));
+						} else {
+							helpers.addAll(cacheFactoryForID(extension.getID(), Collections.singletonList(extension.instantiate())));
+						}
 					}
 				}
 			}
@@ -89,7 +94,12 @@ public class ComponentHelperRegistry extends AbstractRegistry<EClass, List<IComp
 		if (factoryExistsForID(bestExtension.getID())) {
 			helpers.addAll(getFactoryForID(bestExtension.getID()));
 		} else {
-			helpers.addAll(cacheFactoryForID(bestExtension.getID(), Collections.singletonList(bestExtension.instantiate())));
+			if (bestExtension.getHelperClass().equals(DefaultComponentHelper.class.getCanonicalName())) {
+				// Note: key may need to be replaced with the extension eclass?
+				helpers.addAll(cacheFactoryForID(bestExtension.getID(), Collections.singletonList(new DefaultComponentHelper(key))));
+			} else {
+				helpers.addAll(cacheFactoryForID(bestExtension.getID(), Collections.singletonList(bestExtension.instantiate())));
+			}
 		}
 
 		if (helpers.size() > 1) {
