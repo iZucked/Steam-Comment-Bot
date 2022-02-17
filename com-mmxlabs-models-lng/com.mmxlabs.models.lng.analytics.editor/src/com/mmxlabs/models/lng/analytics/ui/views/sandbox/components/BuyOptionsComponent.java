@@ -25,8 +25,6 @@ import org.eclipse.swt.events.MouseTrackAdapter;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.IExpansionListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 
@@ -65,7 +63,6 @@ public class BuyOptionsComponent extends AbstractSandboxComponent<Object, Abstra
 			final Label c = new Label(expandableComposite, SWT.NONE);
 			expandableComposite.setTextClient(c);
 
-			
 			c.setImage(sandboxUIHelper.image_grey_add);
 			c.setLayoutData(GridDataFactory.swtDefaults().align(SWT.LEFT, SWT.TOP).hint(16, 16).grab(true, false).create());
 			c.addMouseTrackListener(new MouseTrackAdapter() {
@@ -99,8 +96,8 @@ public class BuyOptionsComponent extends AbstractSandboxComponent<Object, Abstra
 		GridViewerHelper.configureLookAndFeel(buyOptionsViewer);
 		buyOptionsViewer.getGrid().setHeaderVisible(false);
 		CellFormatterLabelProvider labelProvider = new BuysSellsLabelProvider(sandboxUIHelper, new BuyOptionDescriptionFormatter(), validationErrors, "Buy");
-		createColumn(buyOptionsViewer, labelProvider, "Buy", false);
-
+		// Temporary pending nebula grid bug fix
+		createColumn_TempForNebulaBugFix(buyOptionsViewer, labelProvider, "Buy", false);
 		buyOptionsViewer.setContentProvider(new OptionsViewerContentProvider(AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__BUYS));
 		hookOpenEditor(buyOptionsViewer);
 		{
