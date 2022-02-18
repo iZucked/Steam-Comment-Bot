@@ -133,7 +133,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="sellOption" eType="#//SellOption"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEventOption" eType="#//VesselEventOption"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="shipping" eType="#//ShippingOption"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optionise" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>    
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optionise" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="options" eType="#//BaseCaseRowOptions"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="freeze" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
@@ -163,6 +163,8 @@
         eType="#//ShippingOption"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="options" eType="#//PartialCaseRowOptions"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="commodityCurveOptions"
+        upperBound="-1" eType="#//CommodityCurveOption"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PartialCaseRowOptions">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ladenRoutes" upperBound="-1"
@@ -243,6 +245,8 @@
         eType="#//VesselEventOption" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="shippingTemplates" upperBound="-1"
         eType="#//ShippingOption" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="commodityCurves" upperBound="-1"
+        eType="#//CommodityCurveOption" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OptionAnalysisModel" eSuperTypes="#//AbstractAnalysisModel">
     <eStructuralFeatures xsi:type="ecore:EReference" name="baseCase" eType="#//BaseCase"
@@ -520,5 +524,12 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LocalDateTimeHolder">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="dateTime" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CommodityCurveOption"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CommodityCurveOverlay" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject #//CommodityCurveOption">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referenceCurve" eType="ecore:EClass ../../com.mmxlabs.models.lng.pricing/model/pricing.ecore#//CommodityCurve"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="alternativeCurves" upperBound="-1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.pricing/model/pricing.ecore#//YearMonthPointContainer"
+        containment="true"/>
   </eClassifiers>
 </ecore:EPackage>

@@ -121,6 +121,8 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.BREAK_EVEN_ANALYSIS_RESULT_SET: return createBreakEvenAnalysisResultSet();
 			case AnalyticsPackage.BREAK_EVEN_ANALYSIS_RESULT: return createBreakEvenAnalysisResult();
 			case AnalyticsPackage.LOCAL_DATE_TIME_HOLDER: return createLocalDateTimeHolder();
+			case AnalyticsPackage.COMMODITY_CURVE_OPTION: return createCommodityCurveOption();
+			case AnalyticsPackage.COMMODITY_CURVE_OVERLAY: return createCommodityCurveOverlay();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -763,6 +765,28 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	public LocalDateTimeHolder createLocalDateTimeHolder() {
 		LocalDateTimeHolderImpl localDateTimeHolder = new LocalDateTimeHolderImpl();
 		return localDateTimeHolder;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public CommodityCurveOption createCommodityCurveOption() {
+		CommodityCurveOptionImpl commodityCurveOption = new CommodityCurveOptionImpl();
+		return commodityCurveOption;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public CommodityCurveOverlay createCommodityCurveOverlay() {
+		CommodityCurveOverlayImpl commodityCurveOverlay = new CommodityCurveOverlayImpl();
+		return commodityCurveOverlay;
 	}
 
 	/**

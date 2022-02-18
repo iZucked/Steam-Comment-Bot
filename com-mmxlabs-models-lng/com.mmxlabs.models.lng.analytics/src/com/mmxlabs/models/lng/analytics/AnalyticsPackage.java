@@ -1141,13 +1141,22 @@ s	 * <!-- end-user-doc -->
 	int PARTIAL_CASE_ROW__OPTIONS = 4;
 
 	/**
+	 * The feature id for the '<em><b>Commodity Curve Options</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTIAL_CASE_ROW__COMMODITY_CURVE_OPTIONS = 5;
+
+	/**
 	 * The number of structural features of the '<em>Partial Case Row</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTIAL_CASE_ROW_FEATURE_COUNT = 5;
+	int PARTIAL_CASE_ROW_FEATURE_COUNT = 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowOptionsImpl <em>Partial Case Row Options</em>}' class.
@@ -1810,13 +1819,22 @@ s	 * <!-- end-user-doc -->
 	int ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Commodity Curves</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Abstract Analysis Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int ABSTRACT_ANALYSIS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl <em>Option Analysis Model</em>}' class.
@@ -1890,6 +1908,15 @@ s	 * <!-- end-user-doc -->
 	 * @ordered
 	 */
 	int OPTION_ANALYSIS_MODEL__SHIPPING_TEMPLATES = ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES;
+
+	/**
+	 * The feature id for the '<em><b>Commodity Curves</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTION_ANALYSIS_MODEL__COMMODITY_CURVES = ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES;
 
 	/**
 	 * The feature id for the '<em><b>Base Case</b></em>' containment reference.
@@ -3510,6 +3537,15 @@ s	 * <!-- end-user-doc -->
 	int VIABILITY_MODEL__SHIPPING_TEMPLATES = ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES;
 
 	/**
+	 * The feature id for the '<em><b>Commodity Curves</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIABILITY_MODEL__COMMODITY_CURVES = ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES;
+
+	/**
 	 * The feature id for the '<em><b>Rows</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3801,6 +3837,15 @@ s	 * <!-- end-user-doc -->
 	int MTM_MODEL__SHIPPING_TEMPLATES = ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES;
 
 	/**
+	 * The feature id for the '<em><b>Commodity Curves</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MTM_MODEL__COMMODITY_CURVES = ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES;
+
+	/**
 	 * The feature id for the '<em><b>Rows</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4083,6 +4128,15 @@ s	 * <!-- end-user-doc -->
 	int BREAK_EVEN_ANALYSIS_MODEL__SHIPPING_TEMPLATES = ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES;
 
 	/**
+	 * The feature id for the '<em><b>Commodity Curves</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BREAK_EVEN_ANALYSIS_MODEL__COMMODITY_CURVES = ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES;
+
+	/**
 	 * The feature id for the '<em><b>Rows</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4321,6 +4375,80 @@ s	 * <!-- end-user-doc -->
 	int LOCAL_DATE_TIME_HOLDER_FEATURE_COUNT = 1;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.CommodityCurveOptionImpl <em>Commodity Curve Option</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.CommodityCurveOptionImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCommodityCurveOption()
+	 * @generated
+	 */
+	int COMMODITY_CURVE_OPTION = 65;
+
+	/**
+	 * The number of structural features of the '<em>Commodity Curve Option</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_CURVE_OPTION_FEATURE_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.CommodityCurveOverlayImpl <em>Commodity Curve Overlay</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.CommodityCurveOverlayImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCommodityCurveOverlay()
+	 * @generated
+	 */
+	int COMMODITY_CURVE_OVERLAY = 66;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_CURVE_OVERLAY__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_CURVE_OVERLAY__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Reference Curve</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_CURVE_OVERLAY__REFERENCE_CURVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Alternative Curves</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_CURVE_OVERLAY__ALTERNATIVE_CURVES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Commodity Curve Overlay</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_CURVE_OVERLAY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.VolumeMode <em>Volume Mode</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4328,7 +4456,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getVolumeMode()
 	 * @generated
 	 */
-	int VOLUME_MODE = 65;
+	int VOLUME_MODE = 67;
 
 
 	/**
@@ -4339,7 +4467,7 @@ s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSlotType()
 	 * @generated
 	 */
-	int SLOT_TYPE = 66;
+	int SLOT_TYPE = 68;
 
 
 	/**
@@ -5206,6 +5334,17 @@ s	 * <!-- end-user-doc -->
 	EReference getPartialCaseRow_Options();
 
 	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getCommodityCurveOptions <em>Commodity Curve Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Commodity Curve Options</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.PartialCaseRow#getCommodityCurveOptions()
+	 * @see #getPartialCaseRow()
+	 * @generated
+	 */
+	EReference getPartialCaseRow_CommodityCurveOptions();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.PartialCaseRowOptions <em>Partial Case Row Options</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5654,6 +5793,17 @@ s	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	EReference getAbstractAnalysisModel_ShippingTemplates();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AbstractAnalysisModel#getCommodityCurves <em>Commodity Curves</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Commodity Curves</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AbstractAnalysisModel#getCommodityCurves()
+	 * @see #getAbstractAnalysisModel()
+	 * @generated
+	 */
+	EReference getAbstractAnalysisModel_CommodityCurves();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.OptionAnalysisModel <em>Option Analysis Model</em>}'.
@@ -7011,6 +7161,48 @@ s	 * <!-- end-user-doc -->
 	EAttribute getLocalDateTimeHolder_DateTime();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.CommodityCurveOption <em>Commodity Curve Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Commodity Curve Option</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.CommodityCurveOption
+	 * @generated
+	 */
+	EClass getCommodityCurveOption();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.CommodityCurveOverlay <em>Commodity Curve Overlay</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Commodity Curve Overlay</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.CommodityCurveOverlay
+	 * @generated
+	 */
+	EClass getCommodityCurveOverlay();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.CommodityCurveOverlay#getReferenceCurve <em>Reference Curve</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Reference Curve</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.CommodityCurveOverlay#getReferenceCurve()
+	 * @see #getCommodityCurveOverlay()
+	 * @generated
+	 */
+	EReference getCommodityCurveOverlay_ReferenceCurve();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.CommodityCurveOverlay#getAlternativeCurves <em>Alternative Curves</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Alternative Curves</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.CommodityCurveOverlay#getAlternativeCurves()
+	 * @see #getCommodityCurveOverlay()
+	 * @generated
+	 */
+	EReference getCommodityCurveOverlay_AlternativeCurves();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SolutionOption <em>Solution Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7921,6 +8113,14 @@ s	 * <!-- end-user-doc -->
 		EReference PARTIAL_CASE_ROW__OPTIONS = eINSTANCE.getPartialCaseRow_Options();
 
 		/**
+		 * The meta object literal for the '<em><b>Commodity Curve Options</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARTIAL_CASE_ROW__COMMODITY_CURVE_OPTIONS = eINSTANCE.getPartialCaseRow_CommodityCurveOptions();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowOptionsImpl <em>Partial Case Row Options</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -8279,6 +8479,14 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES = eINSTANCE.getAbstractAnalysisModel_ShippingTemplates();
+
+		/**
+		 * The meta object literal for the '<em><b>Commodity Curves</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES = eINSTANCE.getAbstractAnalysisModel_CommodityCurves();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.OptionAnalysisModelImpl <em>Option Analysis Model</em>}' class.
@@ -9349,6 +9557,42 @@ s	 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute LOCAL_DATE_TIME_HOLDER__DATE_TIME = eINSTANCE.getLocalDateTimeHolder_DateTime();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.CommodityCurveOptionImpl <em>Commodity Curve Option</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.CommodityCurveOptionImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCommodityCurveOption()
+		 * @generated
+		 */
+		EClass COMMODITY_CURVE_OPTION = eINSTANCE.getCommodityCurveOption();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.CommodityCurveOverlayImpl <em>Commodity Curve Overlay</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.CommodityCurveOverlayImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCommodityCurveOverlay()
+		 * @generated
+		 */
+		EClass COMMODITY_CURVE_OVERLAY = eINSTANCE.getCommodityCurveOverlay();
+
+		/**
+		 * The meta object literal for the '<em><b>Reference Curve</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COMMODITY_CURVE_OVERLAY__REFERENCE_CURVE = eINSTANCE.getCommodityCurveOverlay_ReferenceCurve();
+
+		/**
+		 * The meta object literal for the '<em><b>Alternative Curves</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COMMODITY_CURVE_OVERLAY__ALTERNATIVE_CURVES = eINSTANCE.getCommodityCurveOverlay_AlternativeCurves();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SolutionOptionImpl <em>Solution Option</em>}' class.

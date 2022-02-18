@@ -24,6 +24,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.analytics.AbstractAnalysisModel#getSells <em>Sells</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AbstractAnalysisModel#getVesselEvents <em>Vessel Events</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AbstractAnalysisModel#getShippingTemplates <em>Shipping Templates</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.AbstractAnalysisModel#getCommodityCurves <em>Commodity Curves</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAbstractAnalysisModel()
@@ -94,5 +95,17 @@ public interface AbstractAnalysisModel extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	EList<ShippingOption> getShippingTemplates();
+
+	/**
+	 * Returns the value of the '<em><b>Commodity Curves</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.CommodityCurveOption}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Commodity Curves</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAbstractAnalysisModel_CommodityCurves()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<CommodityCurveOption> getCommodityCurves();
 
 } // AbstractAnalysisModel

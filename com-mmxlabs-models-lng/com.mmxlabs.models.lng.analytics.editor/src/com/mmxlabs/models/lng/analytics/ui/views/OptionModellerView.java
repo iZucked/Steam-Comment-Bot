@@ -86,6 +86,7 @@ import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.analytics.ui.views.evaluators.WhatIfEvaluator;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.AbstractSandboxComponent;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.BuyOptionsComponent;
+import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.CommodityCurveOptionsComponent;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.SellOptionsComponent;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.ShippingOptionsComponent;
 import com.mmxlabs.models.lng.analytics.ui.views.sandbox.components.VesselEventOptionsComponent;
@@ -146,6 +147,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	private BuyOptionsComponent buyComponent;
 	private SellOptionsComponent sellComponent;
 	private VesselEventOptionsComponent eventsComponent;
+	private CommodityCurveOptionsComponent commodityCurvesComponent;
 
 	private BaseCaseComponent baseCaseComponent;
 	private PartialCaseCompoment partialCaseComponent;
@@ -240,6 +242,10 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 			{
 				shippingOptionsComponent = new ShippingOptionsComponent(OptionModellerView.this, validationErrors, () -> getModel());
 				hook.accept(shippingOptionsComponent, true);
+			}
+			{
+				commodityCurvesComponent = new CommodityCurveOptionsComponent(OptionModellerView.this, validationErrors, this::getModel);
+				hook.accept(commodityCurvesComponent, true);
 			}
 		}
 
@@ -544,6 +550,8 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 				return new Pair<>(true, EnumSet.of(SectionType.EVENTS));
 			} else if (notification.getFeature() == AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES) {
 				return new Pair<>(true, EnumSet.of(SectionType.VESSEL));
+			} else if (notification.getFeature() == AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES) {
+				return new Pair<>(true, EnumSet.of(SectionType.COMMODITY_CURVES));
 			} else if (notification.getNotifier() instanceof ShippingOption || notification.getNotifier() instanceof VesselAvailability) {
 				return new Pair<>(true, EnumSet.of(SectionType.VESSEL, SectionType.MIDDLE));
 			} else if (notification.getFeature() == AnalyticsPackage.Literals.OPTION_ANALYSIS_MODEL__RESULTS) {
@@ -656,7 +664,7 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 	}
 
 	public enum SectionType {
-		BUYS, MIDDLE, SELLS, VESSEL, EVENTS
+		BUYS, MIDDLE, SELLS, VESSEL, EVENTS, COMMODITY_CURVES
 	};
 
 	public void refreshSections(final boolean layout, final EnumSet<SectionType> sections) {
@@ -664,10 +672,12 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 		RunnerHelper.syncExec(() -> {
 
 			// Coarse grained refresh method..
-			if (sections.contains(SectionType.BUYS) || sections.contains(SectionType.EVENTS) || sections.contains(SectionType.SELLS) || sections.contains(SectionType.VESSEL)) {
+			if (sections.contains(SectionType.BUYS) || sections.contains(SectionType.EVENTS) || sections.contains(SectionType.SELLS) || sections.contains(SectionType.VESSEL)
+					|| sections.contains(SectionType.COMMODITY_CURVES)) {
 				buyComponent.refresh();
 				sellComponent.refresh();
 				eventsComponent.refresh();
+				commodityCurvesComponent.refresh();
 
 				optionsModelComponent.refresh();
 
@@ -852,7 +862,9 @@ public class OptionModellerView extends ScenarioInstanceView implements CommandS
 
 				@Override
 				public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature) {
-					CommandProviderAwareEditingDomain.withAdaptersDisabled(domain, currentModel, () -> superHandler.handleCommand(command, target, feature));
+					CommandProviderAwareEditingDomain.withAdaptersDisabled(domain, currentModel, () -> {
+						superHandler.handleCommand(command, target, feature);
+					});
 				}
 
 				@Override

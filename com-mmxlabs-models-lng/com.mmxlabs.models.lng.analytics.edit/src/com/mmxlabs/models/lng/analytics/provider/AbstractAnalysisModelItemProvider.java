@@ -55,6 +55,7 @@ public class AbstractAnalysisModelItemProvider extends UUIDObjectItemProvider {
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
+			addCommodityCurvesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -77,6 +78,28 @@ public class AbstractAnalysisModelItemProvider extends UUIDObjectItemProvider {
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Commodity Curves feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCommodityCurvesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AbstractAnalysisModel_commodityCurves_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AbstractAnalysisModel_commodityCurves_feature", "_UI_AbstractAnalysisModel_type"),
+				 AnalyticsPackage.Literals.ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

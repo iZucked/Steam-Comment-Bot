@@ -1353,6 +1353,52 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.CommodityCurveOption} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CommodityCurveOptionItemProvider commodityCurveOptionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.CommodityCurveOption}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCommodityCurveOptionAdapter() {
+		if (commodityCurveOptionItemProvider == null) {
+			commodityCurveOptionItemProvider = new CommodityCurveOptionItemProvider(this);
+		}
+
+		return commodityCurveOptionItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.CommodityCurveOverlay} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CommodityCurveOverlayItemProvider commodityCurveOverlayItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.CommodityCurveOverlay}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCommodityCurveOverlayAdapter() {
+		if (commodityCurveOverlayItemProvider == null) {
+			commodityCurveOverlayItemProvider = new CommodityCurveOverlayItemProvider(this);
+		}
+
+		return commodityCurveOverlayItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SolutionOption} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1637,6 +1683,8 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (breakEvenAnalysisResultSetItemProvider != null) breakEvenAnalysisResultSetItemProvider.dispose();
 		if (breakEvenAnalysisResultItemProvider != null) breakEvenAnalysisResultItemProvider.dispose();
 		if (localDateTimeHolderItemProvider != null) localDateTimeHolderItemProvider.dispose();
+		if (commodityCurveOptionItemProvider != null) commodityCurveOptionItemProvider.dispose();
+		if (commodityCurveOverlayItemProvider != null) commodityCurveOverlayItemProvider.dispose();
 	}
 
 }

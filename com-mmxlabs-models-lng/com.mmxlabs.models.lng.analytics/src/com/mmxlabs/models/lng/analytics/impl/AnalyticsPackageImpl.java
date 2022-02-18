@@ -35,6 +35,8 @@ import com.mmxlabs.models.lng.analytics.CargoChange;
 import com.mmxlabs.models.lng.analytics.Change;
 import com.mmxlabs.models.lng.analytics.ChangeDescription;
 import com.mmxlabs.models.lng.analytics.CharterOutOpportunity;
+import com.mmxlabs.models.lng.analytics.CommodityCurveOption;
+import com.mmxlabs.models.lng.analytics.CommodityCurveOverlay;
 import com.mmxlabs.models.lng.analytics.DualModeSolutionOption;
 import com.mmxlabs.models.lng.analytics.ExistingCharterMarketOption;
 import com.mmxlabs.models.lng.analytics.ExistingVesselCharterOption;
@@ -525,6 +527,20 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	private EClass localDateTimeHolderEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass commodityCurveOptionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass commodityCurveOverlayEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1448,6 +1464,16 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
+	public EReference getPartialCaseRow_CommodityCurveOptions() {
+		return (EReference)partialCaseRowEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getPartialCaseRowOptions() {
 		return partialCaseRowOptionsEClass;
 	}
@@ -1860,6 +1886,16 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	@Override
 	public EReference getAbstractAnalysisModel_ShippingTemplates() {
 		return (EReference)abstractAnalysisModelEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getAbstractAnalysisModel_CommodityCurves() {
+		return (EReference)abstractAnalysisModelEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -3128,6 +3164,46 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	@Override
+	public EClass getCommodityCurveOption() {
+		return commodityCurveOptionEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getCommodityCurveOverlay() {
+		return commodityCurveOverlayEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getCommodityCurveOverlay_ReferenceCurve() {
+		return (EReference)commodityCurveOverlayEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getCommodityCurveOverlay_AlternativeCurves() {
+		return (EReference)commodityCurveOverlayEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getSolutionOption() {
 		return solutionOptionEClass;
 	}
@@ -3447,6 +3523,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(partialCaseRowEClass, PARTIAL_CASE_ROW__VESSEL_EVENT_OPTIONS);
 		createEReference(partialCaseRowEClass, PARTIAL_CASE_ROW__SHIPPING);
 		createEReference(partialCaseRowEClass, PARTIAL_CASE_ROW__OPTIONS);
+		createEReference(partialCaseRowEClass, PARTIAL_CASE_ROW__COMMODITY_CURVE_OPTIONS);
 
 		partialCaseRowOptionsEClass = createEClass(PARTIAL_CASE_ROW_OPTIONS);
 		createEAttribute(partialCaseRowOptionsEClass, PARTIAL_CASE_ROW_OPTIONS__LADEN_ROUTES);
@@ -3501,6 +3578,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(abstractAnalysisModelEClass, ABSTRACT_ANALYSIS_MODEL__SELLS);
 		createEReference(abstractAnalysisModelEClass, ABSTRACT_ANALYSIS_MODEL__VESSEL_EVENTS);
 		createEReference(abstractAnalysisModelEClass, ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES);
+		createEReference(abstractAnalysisModelEClass, ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES);
 
 		optionAnalysisModelEClass = createEClass(OPTION_ANALYSIS_MODEL);
 		createEReference(optionAnalysisModelEClass, OPTION_ANALYSIS_MODEL__BASE_CASE);
@@ -3682,6 +3760,12 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		localDateTimeHolderEClass = createEClass(LOCAL_DATE_TIME_HOLDER);
 		createEAttribute(localDateTimeHolderEClass, LOCAL_DATE_TIME_HOLDER__DATE_TIME);
 
+		commodityCurveOptionEClass = createEClass(COMMODITY_CURVE_OPTION);
+
+		commodityCurveOverlayEClass = createEClass(COMMODITY_CURVE_OVERLAY);
+		createEReference(commodityCurveOverlayEClass, COMMODITY_CURVE_OVERLAY__REFERENCE_CURVE);
+		createEReference(commodityCurveOverlayEClass, COMMODITY_CURVE_OVERLAY__ALTERNATIVE_CURVES);
+
 		// Create enums
 		volumeModeEEnum = createEEnum(VOLUME_MODE);
 		slotTypeEEnum = createEEnum(SLOT_TYPE);
@@ -3721,6 +3805,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 		ParametersPackage theParametersPackage = (ParametersPackage)EPackage.Registry.INSTANCE.getEPackage(ParametersPackage.eNS_URI);
 		SchedulePackage theSchedulePackage = (SchedulePackage)EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI);
+		PricingPackage thePricingPackage = (PricingPackage)EPackage.Registry.INSTANCE.getEPackage(PricingPackage.eNS_URI);
 
 		// Create type parameters
 
@@ -3783,6 +3868,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		viabilityModelEClass.getESuperTypes().add(this.getAbstractAnalysisModel());
 		mtmModelEClass.getESuperTypes().add(this.getAbstractAnalysisModel());
 		breakEvenAnalysisModelEClass.getESuperTypes().add(this.getAbstractAnalysisModel());
+		commodityCurveOverlayEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		commodityCurveOverlayEClass.getESuperTypes().add(this.getCommodityCurveOption());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(analyticsModelEClass, AnalyticsModel.class, "AnalyticsModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -3881,6 +3968,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getPartialCaseRow_VesselEventOptions(), this.getVesselEventOption(), null, "vesselEventOptions", null, 0, -1, PartialCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPartialCaseRow_Shipping(), this.getShippingOption(), null, "shipping", null, 0, -1, PartialCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPartialCaseRow_Options(), this.getPartialCaseRowOptions(), null, "options", null, 0, 1, PartialCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPartialCaseRow_CommodityCurveOptions(), this.getCommodityCurveOption(), null, "commodityCurveOptions", null, 0, -1, PartialCaseRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(partialCaseRowOptionsEClass, PartialCaseRowOptions.class, "PartialCaseRowOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPartialCaseRowOptions_LadenRoutes(), thePortPackage.getRouteOption(), "ladenRoutes", null, 0, -1, PartialCaseRowOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3935,6 +4023,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getAbstractAnalysisModel_Sells(), this.getSellOption(), null, "sells", null, 0, -1, AbstractAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAbstractAnalysisModel_VesselEvents(), this.getVesselEventOption(), null, "vesselEvents", null, 0, -1, AbstractAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAbstractAnalysisModel_ShippingTemplates(), this.getShippingOption(), null, "shippingTemplates", null, 0, -1, AbstractAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAbstractAnalysisModel_CommodityCurves(), this.getCommodityCurveOption(), null, "commodityCurves", null, 0, -1, AbstractAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(optionAnalysisModelEClass, OptionAnalysisModel.class, "OptionAnalysisModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getOptionAnalysisModel_BaseCase(), this.getBaseCase(), null, "baseCase", null, 0, 1, OptionAnalysisModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -4115,6 +4204,12 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 
 		initEClass(localDateTimeHolderEClass, LocalDateTimeHolder.class, "LocalDateTimeHolder", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLocalDateTimeHolder_DateTime(), theDateTimePackage.getLocalDateTime(), "dateTime", null, 0, 1, LocalDateTimeHolder.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(commodityCurveOptionEClass, CommodityCurveOption.class, "CommodityCurveOption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(commodityCurveOverlayEClass, CommodityCurveOverlay.class, "CommodityCurveOverlay", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCommodityCurveOverlay_ReferenceCurve(), thePricingPackage.getCommodityCurve(), null, "referenceCurve", null, 0, 1, CommodityCurveOverlay.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCommodityCurveOverlay_AlternativeCurves(), thePricingPackage.getYearMonthPointContainer(), null, "alternativeCurves", null, 0, -1, CommodityCurveOverlay.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(volumeModeEEnum, VolumeMode.class, "VolumeMode");

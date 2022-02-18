@@ -250,7 +250,7 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 		}
 	}
 
-	private GridTableViewer tableViewer;
+	protected GridTableViewer tableViewer;
 	private final Builder builder;
 
 	private IStatus lastStatus = null;
@@ -375,7 +375,7 @@ public class TabularDataInlineEditor extends BasicAttributeInlineEditor {
 
 	}
 
-	final SafeEContentAdapter adapter = new SafeEContentAdapter() {
+	protected final SafeEContentAdapter adapter = new SafeEContentAdapter() {
 
 		@Override
 		protected void safeNotifyChanged(final Notification msg) {

@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getVesselEventOptions <em>Vessel Event Options</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getShipping <em>Shipping</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getOptions <em>Options</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.PartialCaseRow#getCommodityCurveOptions <em>Commodity Curve Options</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getPartialCaseRow()
@@ -116,5 +117,17 @@ public interface PartialCaseRow extends EObject {
 	 * @generated
 	 */
 	void setOptions(PartialCaseRowOptions value);
+
+	/**
+	 * Returns the value of the '<em><b>Commodity Curve Options</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.CommodityCurveOption}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Commodity Curve Options</em>' reference list.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getPartialCaseRow_CommodityCurveOptions()
+	 * @model
+	 * @generated
+	 */
+	EList<CommodityCurveOption> getCommodityCurveOptions();
 
 } // PartialCaseRow

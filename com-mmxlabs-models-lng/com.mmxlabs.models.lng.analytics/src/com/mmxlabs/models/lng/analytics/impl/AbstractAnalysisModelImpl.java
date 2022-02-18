@@ -9,6 +9,7 @@ package com.mmxlabs.models.lng.analytics.impl;
 import com.mmxlabs.models.lng.analytics.AbstractAnalysisModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOption;
+import com.mmxlabs.models.lng.analytics.CommodityCurveOption;
 import com.mmxlabs.models.lng.analytics.SellOption;
 import com.mmxlabs.models.lng.analytics.ShippingOption;
 
@@ -28,6 +29,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
@@ -43,6 +45,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractAnalysisModelImpl#getSells <em>Sells</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractAnalysisModelImpl#getVesselEvents <em>Vessel Events</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractAnalysisModelImpl#getShippingTemplates <em>Shipping Templates</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AbstractAnalysisModelImpl#getCommodityCurves <em>Commodity Curves</em>}</li>
  * </ul>
  *
  * @generated
@@ -107,6 +110,16 @@ public abstract class AbstractAnalysisModelImpl extends UUIDObjectImpl implement
 	 * @ordered
 	 */
 	protected EList<ShippingOption> shippingTemplates;
+
+	/**
+	 * The cached value of the '{@link #getCommodityCurves() <em>Commodity Curves</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCommodityCurves()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<CommodityCurveOption> commodityCurves;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -208,6 +221,19 @@ public abstract class AbstractAnalysisModelImpl extends UUIDObjectImpl implement
 	 * @generated
 	 */
 	@Override
+	public EList<CommodityCurveOption> getCommodityCurves() {
+		if (commodityCurves == null) {
+			commodityCurves = new EObjectContainmentEList<CommodityCurveOption>(CommodityCurveOption.class, this, AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES);
+		}
+		return commodityCurves;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__BUYS:
@@ -218,6 +244,8 @@ public abstract class AbstractAnalysisModelImpl extends UUIDObjectImpl implement
 				return ((InternalEList<?>)getVesselEvents()).basicRemove(otherEnd, msgs);
 			case AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES:
 				return ((InternalEList<?>)getShippingTemplates()).basicRemove(otherEnd, msgs);
+			case AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES:
+				return ((InternalEList<?>)getCommodityCurves()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -240,6 +268,8 @@ public abstract class AbstractAnalysisModelImpl extends UUIDObjectImpl implement
 				return getVesselEvents();
 			case AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES:
 				return getShippingTemplates();
+			case AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES:
+				return getCommodityCurves();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -272,6 +302,10 @@ public abstract class AbstractAnalysisModelImpl extends UUIDObjectImpl implement
 				getShippingTemplates().clear();
 				getShippingTemplates().addAll((Collection<? extends ShippingOption>)newValue);
 				return;
+			case AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES:
+				getCommodityCurves().clear();
+				getCommodityCurves().addAll((Collection<? extends CommodityCurveOption>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -299,6 +333,9 @@ public abstract class AbstractAnalysisModelImpl extends UUIDObjectImpl implement
 			case AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES:
 				getShippingTemplates().clear();
 				return;
+			case AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES:
+				getCommodityCurves().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -321,6 +358,8 @@ public abstract class AbstractAnalysisModelImpl extends UUIDObjectImpl implement
 				return vesselEvents != null && !vesselEvents.isEmpty();
 			case AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__SHIPPING_TEMPLATES:
 				return shippingTemplates != null && !shippingTemplates.isEmpty();
+			case AnalyticsPackage.ABSTRACT_ANALYSIS_MODEL__COMMODITY_CURVES:
+				return commodityCurves != null && !commodityCurves.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

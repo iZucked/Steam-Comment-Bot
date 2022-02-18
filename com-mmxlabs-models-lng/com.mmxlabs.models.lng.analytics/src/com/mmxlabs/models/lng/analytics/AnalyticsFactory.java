@@ -556,6 +556,24 @@ public interface AnalyticsFactory extends EFactory {
 	LocalDateTimeHolder createLocalDateTimeHolder();
 
 	/**
+	 * Returns a new object of class '<em>Commodity Curve Option</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Commodity Curve Option</em>'.
+	 * @generated
+	 */
+	CommodityCurveOption createCommodityCurveOption();
+
+	/**
+	 * Returns a new object of class '<em>Commodity Curve Overlay</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Commodity Curve Overlay</em>'.
+	 * @generated
+	 */
+	CommodityCurveOverlay createCommodityCurveOverlay();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

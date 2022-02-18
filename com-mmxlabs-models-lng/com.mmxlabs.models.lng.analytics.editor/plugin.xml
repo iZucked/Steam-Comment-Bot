@@ -68,7 +68,12 @@
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.analytics.PartialCaseRowOptions">
   </componentHelper>
-  
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.CommodityCurveOverlayComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.CommodityCurveOverlayComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.CommodityCurveOverlay">
+  </componentHelper>
 	</extension>
  <extension
        point="com.mmxlabs.models.util.import.submodels">

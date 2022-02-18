@@ -567,6 +567,21 @@ public class AnalyticsSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case AnalyticsPackage.COMMODITY_CURVE_OPTION: {
+				CommodityCurveOption commodityCurveOption = (CommodityCurveOption)theEObject;
+				T result = caseCommodityCurveOption(commodityCurveOption);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.COMMODITY_CURVE_OVERLAY: {
+				CommodityCurveOverlay commodityCurveOverlay = (CommodityCurveOverlay)theEObject;
+				T result = caseCommodityCurveOverlay(commodityCurveOverlay);
+				if (result == null) result = caseUUIDObject(commodityCurveOverlay);
+				if (result == null) result = caseCommodityCurveOption(commodityCurveOverlay);
+				if (result == null) result = caseMMXObject(commodityCurveOverlay);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -1483,6 +1498,36 @@ public class AnalyticsSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseLocalDateTimeHolder(LocalDateTimeHolder object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Commodity Curve Option</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Commodity Curve Option</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCommodityCurveOption(CommodityCurveOption object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Commodity Curve Overlay</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Commodity Curve Overlay</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCommodityCurveOverlay(CommodityCurveOverlay object) {
 		return null;
 	}
 

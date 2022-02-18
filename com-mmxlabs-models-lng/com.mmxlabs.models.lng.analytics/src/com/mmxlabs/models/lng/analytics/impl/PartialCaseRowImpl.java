@@ -8,6 +8,7 @@ package com.mmxlabs.models.lng.analytics.impl;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOption;
+import com.mmxlabs.models.lng.analytics.CommodityCurveOption;
 import com.mmxlabs.models.lng.analytics.PartialCaseRow;
 import com.mmxlabs.models.lng.analytics.PartialCaseRowOptions;
 import com.mmxlabs.models.lng.analytics.SellOption;
@@ -39,6 +40,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowImpl#getVesselEventOptions <em>Vessel Event Options</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowImpl#getShipping <em>Shipping</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowImpl#getOptions <em>Options</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.PartialCaseRowImpl#getCommodityCurveOptions <em>Commodity Curve Options</em>}</li>
  * </ul>
  *
  * @generated
@@ -93,6 +95,16 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 	 * @ordered
 	 */
 	protected PartialCaseRowOptions options;
+
+	/**
+	 * The cached value of the '{@link #getCommodityCurveOptions() <em>Commodity Curve Options</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCommodityCurveOptions()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<CommodityCurveOption> commodityCurveOptions;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -216,6 +228,19 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 	 * @generated
 	 */
 	@Override
+	public EList<CommodityCurveOption> getCommodityCurveOptions() {
+		if (commodityCurveOptions == null) {
+			commodityCurveOptions = new EObjectResolvingEList<CommodityCurveOption>(CommodityCurveOption.class, this, AnalyticsPackage.PARTIAL_CASE_ROW__COMMODITY_CURVE_OPTIONS);
+		}
+		return commodityCurveOptions;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case AnalyticsPackage.PARTIAL_CASE_ROW__OPTIONS:
@@ -242,6 +267,8 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 				return getShipping();
 			case AnalyticsPackage.PARTIAL_CASE_ROW__OPTIONS:
 				return getOptions();
+			case AnalyticsPackage.PARTIAL_CASE_ROW__COMMODITY_CURVE_OPTIONS:
+				return getCommodityCurveOptions();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -274,6 +301,10 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 			case AnalyticsPackage.PARTIAL_CASE_ROW__OPTIONS:
 				setOptions((PartialCaseRowOptions)newValue);
 				return;
+			case AnalyticsPackage.PARTIAL_CASE_ROW__COMMODITY_CURVE_OPTIONS:
+				getCommodityCurveOptions().clear();
+				getCommodityCurveOptions().addAll((Collection<? extends CommodityCurveOption>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -301,6 +332,9 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 			case AnalyticsPackage.PARTIAL_CASE_ROW__OPTIONS:
 				setOptions((PartialCaseRowOptions)null);
 				return;
+			case AnalyticsPackage.PARTIAL_CASE_ROW__COMMODITY_CURVE_OPTIONS:
+				getCommodityCurveOptions().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -323,6 +357,8 @@ public class PartialCaseRowImpl extends EObjectImpl implements PartialCaseRow {
 				return shipping != null && !shipping.isEmpty();
 			case AnalyticsPackage.PARTIAL_CASE_ROW__OPTIONS:
 				return options != null;
+			case AnalyticsPackage.PARTIAL_CASE_ROW__COMMODITY_CURVE_OPTIONS:
+				return commodityCurveOptions != null && !commodityCurveOptions.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
