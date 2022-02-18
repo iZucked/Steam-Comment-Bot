@@ -52,7 +52,7 @@ public final class CommonImages {
 		ZoomIn("icons/16x16/zoomin.png"), //
 		ZoomOut("icons/16x16/zoomout.png"), //
 		PinnedRow("icons/8x8/PinnedRow.png"), //
-		Console("icons/legacy/16x16/console.gif"), //
+		Console("icons/legacy/16x16/console.png"), //
 		
 
 		Error("icons/legacy/16x16/error.gif"), //
