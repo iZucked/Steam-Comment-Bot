@@ -46,6 +46,8 @@ public final class CommonImages {
 		Edit("icons/16x16/edit.png"), //
 		Pin_8("icons/8x8/PinnedRow.png"), //
 		Pin("icons/16x16/pin.png"), //
+		Scenario("icons/16x16/scenario.png"), //
+		
 		
 		Play_16("icons/16x16/optimise.png", true), //
 		CloudPlay_16("icons/16x16/cloud_run.png", true), //
