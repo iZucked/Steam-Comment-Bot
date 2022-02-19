@@ -92,8 +92,11 @@ import com.mmxlabs.models.ui.tabular.renderers.CenteringColumnGroupHeaderRendere
 import com.mmxlabs.models.ui.tabular.renderers.ColumnGroupHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnHeaderRenderer;
 import com.mmxlabs.models.ui.tabular.renderers.ColumnImageCenterHeaderRenderer;
+import com.mmxlabs.rcp.common.CommonImages;
 import com.mmxlabs.rcp.common.ServiceHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.rcp.common.CommonImages.IconMode;
+import com.mmxlabs.rcp.common.CommonImages.IconPaths;
 import com.mmxlabs.rcp.common.actions.CopyGridToExcelMSClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTransposedGridToJSONUtil;
 import com.mmxlabs.rcp.common.actions.IAdditionalAttributeProvider;
@@ -157,7 +160,8 @@ public class CargoEconsReport extends ViewPart {
 	public void createPartControl(final Composite parent) {
 		scenarioComparisonService = getSite().getService(ScenarioComparisonService.class);
 
-		pinImage = createImage("icons/Pinned.gif");
+		pinImage = CommonImages.getImageDescriptor(IconPaths.Pin, IconMode.Enabled).createImage();
+//		createImage("icons/Pinned.gif");
 
 		viewer = new GridTableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL);
 
