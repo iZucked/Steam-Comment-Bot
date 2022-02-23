@@ -51,6 +51,8 @@ public final class ShippedVoyagePlanCacheKey {
 	private int effectiveLastHeelCV;
 	public final IVesselAvailability vesselAvailability;
 	public final ISequencesAttributesProvider sequencesAttributesProvider;
+	
+	// public final boolean preHeelRollower;
 
 	// Not part of cache
 	public final IResource resource;

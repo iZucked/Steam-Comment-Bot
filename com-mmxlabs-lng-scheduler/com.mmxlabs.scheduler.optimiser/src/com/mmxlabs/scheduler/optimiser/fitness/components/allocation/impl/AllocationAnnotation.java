@@ -65,6 +65,21 @@ public final class AllocationAnnotation extends AbstractWriteLockable implements
 		this.portTimesRecord = portTimesRecord;
 		IWriteLockable.writeLock(portTimesRecord);
 	}
+	
+	public static AllocationAnnotation from(IAllocationAnnotation allocationAnnotation) {
+		AllocationAnnotation result = new AllocationAnnotation(allocationAnnotation);
+		for (final IPortSlot ps : allocationAnnotation.getSlots()) {
+			result.setCommercialSlotVolumeInM3(ps, allocationAnnotation.getCommercialSlotVolumeInM3(ps));
+			result.setCommercialSlotVolumeInMMBTu(ps, allocationAnnotation.getCommercialSlotVolumeInMMBTu(ps));
+			result.setPhysicalSlotVolumeInM3(ps, allocationAnnotation.getPhysicalSlotVolumeInM3(ps));
+			result.setPhysicalSlotVolumeInMMBTu(ps, allocationAnnotation.getPhysicalSlotVolumeInMMBTu(ps));
+			result.setSlotCargoCV(ps, allocationAnnotation.getSlotCargoCV(ps));
+		}
+		result.fuelVolumeInM3 = allocationAnnotation.getFuelVolumeInM3();
+		result.startHeelVolumeInM3 = allocationAnnotation.getStartHeelVolumeInM3();
+		result.remainingHeelVolumeInM3 = allocationAnnotation.getRemainingHeelVolumeInM3();
+		return result;
+	}
 
 	@Override
 	public long getFuelVolumeInM3() {

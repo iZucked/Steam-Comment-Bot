@@ -233,7 +233,7 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(IEntityValueCalculator.class).to(DefaultEntityValueCalculator.class);
 
 		// Default bindings for caches
-		final CacheMode mode = hints.contains(LNGTransformerHelper.HINT_TESTING_IGNORE_CACHE_SETTINGS) ? CacheMode.Off : CacheMode.On;
+		final CacheMode mode = CacheMode.Off;//hints.contains(LNGTransformerHelper.HINT_TESTING_IGNORE_CACHE_SETTINGS) ? CacheMode.Off : CacheMode.On;
 
 		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_TimeWindowSchedulerCache)).toInstance(mode);
 		bind(CacheMode.class).annotatedWith(Names.named(SchedulerConstants.Key_PNLBasedWindowTrimmerCache)).toInstance(mode);
