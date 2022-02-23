@@ -68,11 +68,6 @@ public class DurationPriceBasedConstraintTests extends AbstractMicroTestCase {
 
 		final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioDataProvider);
 
-		canalBookings.setStrictBoundaryOffsetDays(30);
-		canalBookings.setRelaxedBoundaryOffsetDays(90);
-		canalBookings.setFlexibleBookingAmountNorthbound(0);
-		canalBookings.setFlexibleBookingAmountSouthbound(0);
-
 		final LNGScenarioModel scenarioModel = scenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 		scenarioModel.setPromptPeriodStart(LocalDate.of(2017, 6, 1));
 		scenarioModel.setPromptPeriodEnd(LocalDate.of(2017, 9, 1));

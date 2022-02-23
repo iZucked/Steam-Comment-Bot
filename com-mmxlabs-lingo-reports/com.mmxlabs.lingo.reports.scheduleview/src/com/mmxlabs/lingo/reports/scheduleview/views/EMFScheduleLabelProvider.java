@@ -33,7 +33,6 @@ import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.models.lng.cargo.CanalBookingSlot;
-import com.mmxlabs.models.lng.cargo.CanalBookings;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.Inventory;
@@ -523,10 +522,6 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		} else {
 			return null;
 		}
-	}
-
-	private boolean isPanamaExemptVessel(CanalBookings bookings, Journey journey) {
-		return bookings.getBookingExemptVessels().contains(getVessel(journey));
 	}
 
 	/**
