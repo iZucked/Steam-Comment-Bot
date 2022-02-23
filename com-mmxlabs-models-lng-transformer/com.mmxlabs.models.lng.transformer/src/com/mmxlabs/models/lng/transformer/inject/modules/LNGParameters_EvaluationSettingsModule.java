@@ -45,12 +45,13 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.SimilarityComponentPar
 import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
 
 /**
- * The {@link LNGParameters_EvaluationSettingsModule} provides user-definable parameters derived from the {@link OptimiserSettings} object such as the random seed and number of iterations
+ * The {@link LNGParameters_EvaluationSettingsModule} provides user-definable
+ * parameters derived from the {@link OptimiserSettings} object such as the
+ * random seed and number of iterations
  * 
  */
 public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 
-	public static final String OPTIMISER_REEVALUATE = "LNGParameters_EvaluationSettingsModule_OPTIMISER_REEVALUATE";
 	public static final String SIMILARITY_SETTING = "LNGParameters_EvaluationSettingsModule_SIMILARITY_SETTING";
 
 	@NonNull
@@ -63,18 +64,12 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 		this.constraintAndFitnessSettings = constraintAndFitnessSettings;
 	}
 
-	@Override
-	protected void configure() {
-
-	}
-
-	//
-
 	@Provides
 	@Singleton
 	@Named(EvaluatedStateConstraintCheckerInstantiatorModule.ENABLED_EVALUATED_STATE_CONSTRAINT_NAMES)
 	private List<String> provideEnabledEvaluatedStateConstraintNames(final IEvaluatedStateConstraintCheckerRegistry registry) {
-		// settings.getConstraints().stream().filter(c -> c.isEnabled()).map(Constraint::getName()).collect(Collectors.toList());
+		// settings.getConstraints().stream().filter(c ->
+		// c.isEnabled()).map(Constraint::getName()).collect(Collectors.toList());
 
 		final List<String> result = new ArrayList<>();
 		for (final IEvaluatedStateConstraintCheckerFactory f : registry.getConstraintCheckerFactories()) {
@@ -115,7 +110,8 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 	@Singleton
 	@Named(ConstraintCheckerInstantiatorModule.ENABLED_CONSTRAINT_NAMES)
 	private List<String> provideEnabledConstraintNames() {
-		// settings.getConstraints().stream().filter(c -> c.isEnabled()).map(Constraint::getName()).collect(Collectors.toList());
+		// settings.getConstraints().stream().filter(c ->
+		// c.isEnabled()).map(Constraint::getName()).collect(Collectors.toList());
 
 		final List<String> result = new ArrayList<>();
 
@@ -165,8 +161,9 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 	}
 
 	/**
-	 * The objectives to add for multi-objective
-	 * Note: this is additional to the first objective which is always the combined fitness
+	 * The objectives to add for multi-objective Note: this is additional to the
+	 * first objective which is always the combined fitness
+	 * 
 	 * @param enabledFitnessNames
 	 * @return
 	 */
@@ -177,15 +174,14 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 		assert (enabledFitnessNames.containsAll(objectiveNames));
 		return objectiveNames;
 	}
-	
+
 	@Provides
 	@Named(MultiObjectiveOptimiserModule.MULTIOBJECTIVE_OBJECTIVE_EPSILON_DOMINANCE_VALUES)
 	long[] provideMultiObjectiveEpsilonDominanceValues() {
 		long FITNESS_EPSILON_IN_DOLLARS = 200_000;
 		long SIMILARITY_EPSILON_IN_CHANGES = 0;
-		return new long[] {FITNESS_EPSILON_IN_DOLLARS, SIMILARITY_EPSILON_IN_CHANGES};
+		return new long[] { FITNESS_EPSILON_IN_DOLLARS, SIMILARITY_EPSILON_IN_CHANGES };
 	}
-
 
 	@Provides
 	@Singleton
@@ -240,12 +236,6 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 		idleParams.setEndWeight(10_000);
 
 		return idleParams;
-	}
-
-	@Provides
-	@Named(OPTIMISER_REEVALUATE)
-	private boolean isOptimiserReevaluating() {
-		return false;
 	}
 
 	@Provides

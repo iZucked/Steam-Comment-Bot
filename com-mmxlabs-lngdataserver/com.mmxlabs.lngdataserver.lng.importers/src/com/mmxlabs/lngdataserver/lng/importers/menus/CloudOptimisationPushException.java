@@ -21,6 +21,9 @@ public class CloudOptimisationPushException extends RuntimeException {
 		FAILED_TO_UPLOAD, //
 		FAILED_UNSUPPORTED_VERSION, //
 		FAILED_WRONG_CLIENT_CODE, //
+		FAILED_TO_SAVE_ENCRYPTION_KEY, //
+		FAILED_MISSING_KEY_UUID, //
+		FAILED_GETTING_PUB_KEY, //
 	};
 
 	private final Type type;

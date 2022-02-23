@@ -12,8 +12,15 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.GeneralSecurityException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.interfaces.RSAPublicKey;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,7 +31,7 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import javax.crypto.spec.RC2ParameterSpec;
+import javax.crypto.SecretKey;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
@@ -93,6 +100,10 @@ import com.mmxlabs.scenario.service.model.manager.SSDataManager;
 import com.mmxlabs.scenario.service.model.manager.ScenarioModelRecord;
 import com.mmxlabs.scenario.service.model.manager.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.manager.SimpleScenarioDataProvider;
+import com.mmxlabs.scenario.service.model.util.encryption.impl.CloudOptimisationSharedCipherProvider;
+import com.mmxlabs.scenario.service.model.util.encryption.impl.KeyFileLoader;
+import com.mmxlabs.scenario.service.model.util.encryption.impl.KeyFileUtil;
+import com.mmxlabs.scenario.service.model.util.encryption.impl.keyfiles.KeyFileV2;
 
 public class ScenarioServicePushToCloudAction {
 	private static final Logger LOG = LoggerFactory.getLogger(ScenarioServicePushToCloudAction.class);
@@ -100,11 +111,15 @@ public class ScenarioServicePushToCloudAction {
 	private static final String MSG_ERROR_PUSHING = "Error sending the scenario";
 	private static final String MSG_FAILED_PUSHING = "Failed to send the scenario";
 	private static final String MSG_ERROR_SAVING = "Error saving temporary scenario";
+	private static final String MSG_ERROR_SAVING_ANOM_MAP = "Error saving temporary anonymisation map";
 	private static final String MSG_ERROR_UPLOADING = "Error uploading scenario";
 	private static final String MSG_ERROR_EVALUATING = "Error evaluating scenario";
+	private static final String MSG_ERROR_SAVE_ENCRYPTION_KEY = "Error saving the scenario encryption key";
+	private static final String MSG_ERROR_FAILED_GETTING_PUB_KEY = "Error getting the optimisation server's public key";
 
 	private static final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 	private static final String CLOUD_OPTI_PATH = workspaceLocation.toOSString() + IPath.SEPARATOR + "cloud-opti";
+	private static final File OPTI_SERVER_PUB_KEY = new File(CLOUD_OPTI_PATH + IPath.SEPARATOR + "pubkey.pem");
 
 	private static final String MANIFEST_NAME = "manifest.json";
 	private static final String MF_PARAMETERS_NAME = "parameters.json";
@@ -136,6 +151,9 @@ public class ScenarioServicePushToCloudAction {
 		final UserSettings userSettings;
 		if (optimisation) {
 			final var p = getOptimisationPlanForOptimisation(scenarioInstance);
+			if (p == null) {
+				return;
+			}
 			userSettings = p.getFirst();
 			resultName = p.getSecond();
 		} else {
@@ -218,11 +236,11 @@ public class ScenarioServicePushToCloudAction {
 
 	private static UserSettings getOptimisationPlanForInsertion(final ScenarioInstance scenarioInstance, final List<Slot<?>> targetSlots) {
 		UserSettings userSettings = null;
-		final ScenarioModelRecord originalModelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 		String taskName = AnalyticsSolutionHelper.generateInsertionName(true, targetSlots);
 		{
 
-			try (final ModelReference modelReference = originalModelRecord.aquireReference("InsertSlotContextMenuExtension:1")) {
+			try (final ModelReference modelReference = modelRecord.aquireReference("InsertSlotContextMenuExtension:1")) {
 
 				final EObject object = modelReference.getInstance();
 
@@ -341,23 +359,25 @@ public class ScenarioServicePushToCloudAction {
 				case SandboxModeConstants.MODE_OPTIONISE -> cRecord.setSubType("Optionise");
 				}
 			}
-			
+
 			if (originalSandboxModel != null) {
 				cRecord.setComponentUUID(originalSandboxModel.getUuid());
 			}
 			cRecord.setScenarioInstance(scenarioInstance);
-			
-			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+
+			final ScenarioModelRecord originalModelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 
 			IScenarioDataProvider scenarioDataProvider = null;
 			LNGScenarioModel scenarioModel = null;
 			File anonymisationMap = null;
+			File encryptedSymmetricKey = null;
+			File keyStore = null;
 
 			List<Slot<?>> anonymisedTargetSlots = null;
 			final List<VesselEvent> anonymisedEvents = null;
 			OptionAnalysisModel sandboxModelCopy = null;
 
-			try (IScenarioDataProvider originalScenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
+			try (IScenarioDataProvider originalScenarioDataProvider = originalModelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
 				final LNGScenarioModel originalScenarioModel = originalScenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 				scenarioModel = EcoreUtil.copy(originalScenarioModel);
@@ -416,14 +436,14 @@ public class ScenarioServicePushToCloudAction {
 					sandboxModelCopy.setResults(null);
 				}
 
-				scenarioDataProvider = SimpleScenarioDataProvider.make(EcoreUtil.copy(modelRecord.getManifest()), scenarioModel);
+				scenarioDataProvider = SimpleScenarioDataProvider.make(EcoreUtil.copy(originalModelRecord.getManifest()), scenarioModel);
 				final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
 
 				progressMonitor.subTask("Anonymise scenario");
 
 				final String amfName = CLOUD_OPTI_PATH + IPath.SEPARATOR + scenarioInstance.getUuid() + ".amap";
 				cRecord.setAnonyMapFileName(scenarioInstance.getUuid() + ".amap");
-				anonymisationMap = new File(amfName);
+				anonymisationMap = Files.createTempFile(ScenarioStorageUtil.getTempDirectory().toPath(), scenarioInstance.getUuid() + "_", ".amap").toFile();
 
 				final CompoundCommand cmd = AnonymisationUtils.createAnonymisationCommand(scenarioModel, editingDomain, new HashSet<>(), new ArrayList<>(), true, anonymisationMap);
 				if (cmd != null && !cmd.isEmpty()) {
@@ -444,34 +464,63 @@ public class ScenarioServicePushToCloudAction {
 					runnerBuilder.evaluateInitialState();
 					scenarioDataProvider.setLastEvaluationFailed(false);
 				} catch (final Exception e) {
-					deleteAnonyMap(anonymisationMap);
+					cleanup(anonymisationMap, encryptedSymmetricKey, keyStore);
 					throw new CloudOptimisationPushException(MSG_ERROR_EVALUATING, Type.FAILED_TO_EVALUATE);
 				}
 			} catch (final RuntimeException e) {
-				deleteAnonyMap(anonymisationMap);
+				cleanup(anonymisationMap, encryptedSymmetricKey, keyStore);
 				if (e.getCause() instanceof final ScenarioMigrationException ee) {
 					throw new CloudOptimisationPushException(MSG_ERROR_EVALUATING, Type.FAILED_TO_MIGRATE, ee);
 				}
 				throw new CloudOptimisationPushException(MSG_ERROR_EVALUATING, Type.FAILED_UNKNOWN_ERROR, e);
+			} catch (IOException e) {
+				LOG.error("Failed to create temp anonymisation map file");
+				throw new CloudOptimisationPushException(MSG_ERROR_SAVING_ANOM_MAP, Type.FAILED_TO_SAVE, e);
 			}
 
-			// CreateFile
-			final File tmpScenarioFile;
-
+			// create shared symmetric key
+			progressMonitor.subTask("Preparing scenario encryption");
+			final SecretKey tmpKey = KeyFileV2.generateKey(256);
+			final byte[] keyUUID = new byte[KeyFileUtil.UUID_LENGTH];
+			EcoreUtil.generateUUID(keyUUID);
+			KeyFileV2 keyfile = new KeyFileV2(keyUUID, tmpKey);
 			try {
-				tmpScenarioFile = Files.createTempFile(ScenarioStorageUtil.getTempDirectory().toPath(), "archive_", ".lingo").toFile();
-				ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, tmpScenarioFile);
+				RSAPublicKey optiServerPubKey = CloudOptimisationDataService.INSTANCE.getOptimisationServerPublicKey(OPTI_SERVER_PUB_KEY);
+
+				if (optiServerPubKey == null) {
+					throw new CloudOptimisationPushException(MSG_ERROR_FAILED_GETTING_PUB_KEY, Type.FAILED_GETTING_PUB_KEY);
+				}
+
+				// save encrypted symmetric key to a temp file
+				Path cloudOptiDir = new File(CLOUD_OPTI_PATH).toPath();
+				encryptedSymmetricKey = Files.createTempFile(ScenarioStorageUtil.getTempDirectory().toPath(), scenarioInstance.getUuid() + "_", ".key").toFile();
+
+				// encrypt symmetric key with public key (to send to opti server)
+				CloudOptimisationDataService.INSTANCE.encryptSymmetricKey(optiServerPubKey, tmpKey, encryptedSymmetricKey);
+			} catch (IOException | GeneralSecurityException e) {
+				LOG.error(e.getMessage());
+				throw new CloudOptimisationPushException(MSG_ERROR_FAILED_GETTING_PUB_KEY, Type.FAILED_GETTING_PUB_KEY);
+			}
+
+			File tmpEncryptedScenarioFile = null;
+			try {
+				progressMonitor.subTask("Encrypting the scenario");
+				tmpEncryptedScenarioFile = Files.createTempFile(ScenarioStorageUtil.getTempDirectory().toPath(), "archive_", ".lingo").toFile();
+				CloudOptimisationSharedCipherProvider scenarioCipherProvider = new CloudOptimisationSharedCipherProvider(keyfile);
+				ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, tmpEncryptedScenarioFile, scenarioCipherProvider);
 			} catch (final IOException e) {
-				deleteAnonyMap(anonymisationMap);
-				e.printStackTrace();
+				cleanup(anonymisationMap, encryptedSymmetricKey, keyStore);
+				LOG.error(e.getMessage());
 				throw new CloudOptimisationPushException(MSG_ERROR_SAVING, Type.FAILED_TO_SAVE, e);
+			} catch (Exception e) {
+				LOG.error(e.getMessage());
 			}
 
 			final List<Pair<String, Object>> filesToZip = new ArrayList<>(4);
 			// Add the manifest entry
-			filesToZip.add(Pair.of(MANIFEST_NAME, createManifest(MF_SCENARIO_NAME, problemType)));
+			filesToZip.add(Pair.of(MANIFEST_NAME, createManifest(MF_SCENARIO_NAME, problemType, Base64.getEncoder().encodeToString(keyUUID))));
 			// Add the scenario
-			filesToZip.add(Pair.of(MF_SCENARIO_NAME, tmpScenarioFile));
+			filesToZip.add(Pair.of(MF_SCENARIO_NAME, tmpEncryptedScenarioFile));
 			// Add (unused) jvm options
 			filesToZip.add(Pair.of(MF_JVM_OPTS_NAME, createJVMOptions()));
 
@@ -497,7 +546,7 @@ public class ScenarioServicePushToCloudAction {
 				zipToUpload = Files.createTempFile(ScenarioStorageUtil.getTempDirectory().toPath(), "archive_", ".zip").toFile();
 				archive(zipToUpload, filesToZip);
 			} catch (final IOException e) {
-				deleteAnonyMap(anonymisationMap);
+				cleanup(anonymisationMap, encryptedSymmetricKey, keyStore);
 				e.printStackTrace();
 				throw new CloudOptimisationPushException(MSG_ERROR_SAVING, Type.FAILED_TO_SAVE, e);
 			}
@@ -510,9 +559,9 @@ public class ScenarioServicePushToCloudAction {
 			final SubMonitor uploadMonitor = progressMonitor.split(500);
 			try {
 				response = CloudOptimisationDataService.INSTANCE.uploadData(zipToUpload, "checksum", scenarioInstance.getName(), //
-						WrappedProgressMonitor.wrapMonitor(uploadMonitor));
+						WrappedProgressMonitor.wrapMonitor(uploadMonitor), encryptedSymmetricKey);
 			} catch (final Exception e) {
-				deleteAnonyMap(anonymisationMap);
+				cleanup(anonymisationMap, encryptedSymmetricKey, keyStore);
 				System.out.println(MSG_ERROR_UPLOADING);
 				e.printStackTrace();
 				throw new CloudOptimisationPushException(MSG_ERROR_UPLOADING, Type.FAILED_TO_UPLOAD, e);
@@ -521,7 +570,7 @@ public class ScenarioServicePushToCloudAction {
 			}
 
 			if (response == null) {
-				deleteAnonyMap(anonymisationMap);
+				cleanup(anonymisationMap, encryptedSymmetricKey, keyStore);
 				throw new RuntimeException("Error sending the scenario for online optimisation");
 			}
 			final ObjectMapper mapper = new ObjectMapper();
@@ -533,16 +582,33 @@ public class ScenarioServicePushToCloudAction {
 					cRecord.setJobid(jobid);
 					final File temp = new File(CLOUD_OPTI_PATH + IPath.SEPARATOR + jobid + ".amap");
 					anonymisationMap.renameTo(temp);
+
+					// rename encrypted secret key to cloud-opti/<jobid>.key
+					if (encryptedSymmetricKey != null) {
+						encryptedSymmetricKey.renameTo(new File(CLOUD_OPTI_PATH + IPath.SEPARATOR + jobid + ".key"));
+
+						// persist keystore on disk for result decryption
+						keyStore = new File(CLOUD_OPTI_PATH + IPath.SEPARATOR + jobid + ".key" + ".p12");
+						if (!keyStore.exists()) {
+							KeyFileLoader.initalise(keyStore);
+						}
+						KeyFileLoader.addToStore(keyStore, keyUUID, tmpKey, KeyFileV2.KEYFILE_TYPE);
+					}
 				} else {
-					deleteAnonyMap(anonymisationMap);
+					cleanup(anonymisationMap, encryptedSymmetricKey, keyStore);
 					throw new CloudOptimisationPushException(MSG_ERROR_UPLOADING, Type.FAILED_TO_UPLOAD, new IllegalStateException());
 				}
 			} catch (final IOException e) {
-				deleteAnonyMap(anonymisationMap);
-				throw new CloudOptimisationPushException(MSG_ERROR_UPLOADING, Type.FAILED_TO_UPLOAD, new IllegalStateException("Unexpected server response: " + e.getMessage()));
+				cleanup(anonymisationMap, encryptedSymmetricKey, keyStore);
+				throw new CloudOptimisationPushException(MSG_ERROR_UPLOADING, Type.FAILED_TO_SAVE_ENCRYPTION_KEY, new IllegalStateException("Unexpected error: " + e.getMessage()));
+			} catch (KeyStoreException | NoSuchAlgorithmException | CertificateException e) {
+				cleanup(anonymisationMap, encryptedSymmetricKey, keyStore);
+				throw new CloudOptimisationPushException(MSG_ERROR_SAVE_ENCRYPTION_KEY, Type.FAILED_TO_SAVE_ENCRYPTION_KEY, new IllegalStateException("Unexpected error: " + e.getMessage()));
 			}
+
 			// Register the task
 			CloudOptimisationDataService.INSTANCE.addRecord(cRecord);
+
 
 			if (CloudOptimisationConstants.RUN_LOCAL_BENCHMARK && runLocal) {
 				try {
@@ -603,9 +669,15 @@ public class ScenarioServicePushToCloudAction {
 		}
 	}
 
-	private static void deleteAnonyMap(final File anonymisationMap) {
-		if (anonymisationMap != null) {
-			anonymisationMap.delete();
+	private static void cleanup(File anonyMap, File encKey, File keyStore) {
+		deleteFile(anonyMap);
+		deleteFile(encKey);
+		deleteFile(keyStore);
+	}
+
+	private static void deleteFile(final File file) {
+		if (file != null && file.exists()) {
+			file.delete();
 		}
 	}
 
@@ -721,13 +793,14 @@ public class ScenarioServicePushToCloudAction {
 		}
 	}
 
-	private static String createManifest(final String scenarioName, @NonNull final CloudManifestProblemType problemType) {
+	private static String createManifest(final String scenarioName, @NonNull final CloudManifestProblemType problemType, String keyUUID) {
 		final ManifestDescription md = new ManifestDescription();
 		md.scenario = scenarioName;
 		md.type = problemType.getManifestString();
 		md.parameters = MF_PARAMETERS_NAME;
 		md.jvmConfig = MF_PARAMETERS_NAME;
 		md.dev = false;
+		md.keyUUID = keyUUID;
 		final String devVersion = Activator.getDefault().getPreferenceStore().getString(CloudOptimiserPreferenceConstants.P_DEV_VERSION);
 		if (devVersion != null && !devVersion.isBlank()) {
 			md.version = devVersion.trim();
@@ -742,6 +815,9 @@ public class ScenarioServicePushToCloudAction {
 		md.clientCode = VersionHelper.getInstance().getClientCode();
 		if (md.clientCode == null) {
 			throw new CloudOptimisationPushException("Unable to determine version code.", Type.FAILED_WRONG_CLIENT_CODE, new IOException());
+		}
+		if (md.keyUUID == null) {
+			throw new CloudOptimisationPushException("Unable to determine key uuid", Type.FAILED_MISSING_KEY_UUID, new IOException());
 		}
 
 		final ObjectMapper objectMapper = new ObjectMapper();

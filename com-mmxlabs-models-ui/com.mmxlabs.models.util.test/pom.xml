@@ -10,7 +10,6 @@
 	</parent>
 
 	<artifactId>com.mmxlabs.models.util.test</artifactId>
-	<version>5.1.5-SNAPSHOT</version>
 	<packaging>eclipse-test-plugin</packaging>
 	
 	<properties>

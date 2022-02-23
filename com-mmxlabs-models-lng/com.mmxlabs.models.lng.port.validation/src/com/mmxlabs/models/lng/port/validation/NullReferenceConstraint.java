@@ -14,13 +14,15 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
  * A constraint which checks that references which shouldn't be null aren't.
@@ -28,7 +30,7 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
  * @author Tom Hinton
  * 
  */
-public class NullReferenceConstraint extends AbstractModelConstraint {
+public class NullReferenceConstraint extends AbstractModelMultiConstraint {
 	// TODO add any more refs to check here
 	private static final List<EReference> checkedReferences = CollectionsUtil.makeArrayList(PortPackage.eINSTANCE.getRouteLine_From(), PortPackage.eINSTANCE.getRouteLine_To());
 
@@ -46,10 +48,10 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 	}
 
 	@Override
-	public IStatus validate(final IValidationContext ctx) {
+	protected void doValidate(@NonNull IValidationContext ctx, @NonNull IExtraValidationContext extraContext, @NonNull List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 
-		final LinkedList<EReference> errors = new LinkedList<EReference>();
+		final LinkedList<EReference> errors = new LinkedList<>();
 		final Set<EReference> targetRefs = getReferencesToCheck(target.eClass());
 		for (final EReference ref : targetRefs) {
 			if ((target.eGet(ref) == null) && !(ref.isUnsettable() && (target.eIsSet(ref) == false))) {
@@ -57,9 +59,7 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 			}
 		}
 
-		if (errors.isEmpty()) {
-			return ctx.createSuccessStatus();
-		} else {
+		if (!errors.isEmpty()) {
 			final StringBuilder sb = new StringBuilder();
 			boolean first = true;
 			for (final EReference ref : errors) {
@@ -73,7 +73,7 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 			for (final EReference ref : errors) {
 				dcsd.addEObjectAndFeature(target, ref);
 			}
-			return dcsd;
+			statuses.add(dcsd);
 		}
 	}
 }

@@ -24,6 +24,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class SlotContractParamsConstraintHelper {
 
+	private SlotContractParamsConstraintHelper() {
+
+	}
+
 	public static <U extends SlotContractParams> void checkBasicContractParams(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext,
 			@NonNull final List<IStatus> failures, @NonNull final Slot slot, @NonNull final String contractName, @Nullable final Class<U> slotParamsClass, final boolean requireSlotParams,
 			final boolean forbidPricingExpression, final boolean forbidPricingEvent) {
@@ -31,7 +35,7 @@ public class SlotContractParamsConstraintHelper {
 			final SlotContractParams p = findSlotContractExtension(slot, slotParamsClass);
 			if (p == null) {
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-						(IConstraintStatus) ctx.createFailureStatus(String.format("No %s slot params found for slot %s. Try swapping contracts.", contractName, slot.getName())));
+						(IConstraintStatus) ctx.createFailureStatus(String.format("No %s contract params found for slot %s. Try swapping contracts to create them.", contractName, slot.getName())));
 				dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__CONTRACT);
 				failures.add(dsd);
 			}
@@ -77,8 +81,7 @@ public class SlotContractParamsConstraintHelper {
 		final Cargo cargo = loadSlot.getCargo();
 		if (cargo != null) {
 			for (final Slot slot : cargo.getSlots()) {
-				if (slot instanceof DischargeSlot) {
-					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+				if (slot instanceof DischargeSlot dischargeSlot) {
 					if (dischargeSlot.isFOBSale()) {
 						if (dischargeSlot.getNominatedVessel() == null) {
 							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
@@ -95,7 +98,7 @@ public class SlotContractParamsConstraintHelper {
 
 	}
 
-	public static @Nullable <T> T findSlotContractExtension(@NonNull final Slot slot, @NonNull final Class<T> cls) {
+	public static @Nullable <T> T findSlotContractExtension(@NonNull final Slot<?> slot, @NonNull final Class<T> cls) {
 		for (final EObject object : slot.getExtensions()) {
 			if (cls.isInstance(object)) {
 				return cls.cast(object);

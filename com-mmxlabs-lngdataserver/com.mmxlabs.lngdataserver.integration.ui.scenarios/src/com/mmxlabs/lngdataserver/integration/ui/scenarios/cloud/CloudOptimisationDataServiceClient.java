@@ -5,12 +5,22 @@
 package com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bouncycastle.util.io.pem.PemObject;
+import org.bouncycastle.util.io.pem.PemReader;
 import org.eclipse.jdt.annotation.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -20,6 +30,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mmxlabs.hub.common.http.IProgressListener;
 import com.mmxlabs.hub.common.http.ProgressRequestBody;
 import com.mmxlabs.hub.common.http.ProgressResponseBody;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.gatewayresponse.GatewayResponseMaker;
+import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.gatewayresponse.IGatewayResponse;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.cloud.preferences.CloudOptimiserPreferenceConstants;
 import com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.Activator;
 
@@ -37,16 +49,19 @@ import okio.Okio;
 
 public class CloudOptimisationDataServiceClient {
 
-//	public CloudOptimisationDataServiceClient() {
-//		preferences = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.optimisation.service.url");
-//		optimisationServiceURL = preferences.get("URL", OPTI_CLOUD_BASE_URL);
-//	}
+	//	public CloudOptimisationDataServiceClient() {
+	//		preferences = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.optimisation.service.url");
+	//		optimisationServiceURL = preferences.get("URL", OPTI_CLOUD_BASE_URL);
+	//	}
+
+	private static final Logger log = LoggerFactory.getLogger(CloudOptimisationDataServiceClient.class);
 
 	private static final String LIST_SCENARIOS_URL = "/scenarios";
 	private static final String LIST_RESULTS_URL = "/results";
 	private static final String SCENARIO_RESULT_URL = "/result";
 	private static final String JOB_STATUS_URL = "/status";
 	private static final String SCENARIO_CLOUD_UPLOAD_URL = "/scenario"; // for localhost - "/scenarios/v1/cloud/opti/upload"
+	private static final String PUBLIC_KEY_URL = "/publickey";
 	//	private static final String OPTI_CLOUD_BASE_URL = "https://gw.mmxlabs.com"; // "https://wzgy9ex061.execute-api.eu-west-2.amazonaws.com/dev/"
 	//	private final IEclipsePreferences preferences;
 	//	private final String optimisationServiceURL;
@@ -93,14 +108,22 @@ public class CloudOptimisationDataServiceClient {
 		this.userid = userid;
 	}
 
+	public String getUserId() {
+		// if (this.userid == null and CloudOptimisationDataService.INSTANCE.ex) {
+		// CloudOptimisationDataService.INSTANCE.start();
+		// }
+		return this.userid;
+	}
+
 	public String upload(final File scenario, //
 			final String checksum, //
 			final String scenarioName, //
-			final IProgressListener progressListener) throws IOException {
+			final IProgressListener progressListener, final File encryptedSymmetricKey) throws IOException {
 		Builder builder = new MultipartBody.Builder() //
 				.setType(MultipartBody.FORM) //
 				.addFormDataPart("sha256", checksum) //
 				.addFormDataPart("scenario", scenarioName + ".zip", RequestBody.create(mediaType, scenario)) //
+				.addFormDataPart("encryptedsymkey", "aes.key.enc", RequestBody.create(mediaType, encryptedSymmetricKey)) //
 				;
 		RequestBody requestBody = builder.build();
 
@@ -108,7 +131,7 @@ public class CloudOptimisationDataServiceClient {
 			requestBody = new ProgressRequestBody(requestBody, progressListener);
 		}
 
-		final String uploadURL = String.format("%s/%s", SCENARIO_CLOUD_UPLOAD_URL, this.userid);
+		final String uploadURL = String.format("%s/%s", SCENARIO_CLOUD_UPLOAD_URL, getUserId());
 		final Request.Builder requestBuilder = makeRequestBuilder(getGateway(), uploadURL);
 		if (requestBuilder == null) {
 			return null;
@@ -126,7 +149,7 @@ public class CloudOptimisationDataServiceClient {
 		}
 	}
 
-	public boolean downloadTo(final String jobid, final File file, final IProgressListener progressListener) throws IOException {
+	public IGatewayResponse downloadTo(final String jobid, final File file, final IProgressListener progressListener) throws IOException {
 		OkHttpClient.Builder clientBuilder = httpClient.newBuilder();
 		if (progressListener != null) {
 			clientBuilder = clientBuilder.addNetworkInterceptor(new Interceptor() {
@@ -140,10 +163,10 @@ public class CloudOptimisationDataServiceClient {
 		final OkHttpClient localHttpClient = clientBuilder //
 				.build();
 
-		final String requestURL = String.format("%s/%s/%s", SCENARIO_RESULT_URL, jobid, this.userid);
+		final String requestURL = String.format("%s/%s/%s", SCENARIO_RESULT_URL, jobid, getUserId());
 		final Request.Builder requestBuilder = makeRequestBuilder(getGateway(), requestURL);
 		if (requestBuilder == null) {
-			return false;
+			return null;
 		}
 
 		final Request request = requestBuilder //
@@ -152,20 +175,20 @@ public class CloudOptimisationDataServiceClient {
 		try (Response response = localHttpClient.newCall(request).execute()) {
 			if (!response.isSuccessful()) {
 				response.body().close();
-				// Handle 410 Gone (old result)
-				throw new IOException("Unexpected code: " + response);
+				return GatewayResponseMaker.makeGatewayResponse(response);
+//				throw new IOException("Unexpected code: " + response);
 			}
 			try (BufferedSource bufferedSource = response.body().source()) {
 				final BufferedSink bufferedSink = Okio.buffer(Okio.sink(file));
 				bufferedSink.writeAll(bufferedSource);
 				bufferedSink.close();
-				return true;
+				return GatewayResponseMaker.makeGatewayResponse(response);
 			}
 		}
 	}
 
 	public String getJobStatus(final @NonNull String jobid) throws IOException {
-		final String requestURL = String.format("%s/%s/%s", JOB_STATUS_URL, jobid, this.userid);
+		final String requestURL = String.format("%s/%s/%s", JOB_STATUS_URL, jobid, getUserId());
 		final Request.Builder requestBuilder = makeRequestBuilder(getGateway(), requestURL);
 		if (requestBuilder == null) {
 			return null;
@@ -185,7 +208,38 @@ public class CloudOptimisationDataServiceClient {
 		}
 	}
 
- 
+	public RSAPublicKey getOptimisationServerPublicKey(File pubkey) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+		final String requestURL = String.format("%s/%s", PUBLIC_KEY_URL, getUserId());
+		final Request.Builder requestBuilder = makeRequestBuilder(getGateway(), requestURL);
+		if (requestBuilder == null) {
+			return null;
+		}
+
+		final Request request = requestBuilder.build();
+
+		try (Response response = httpClient.newCall(request).execute()) {
+			if (!response.isSuccessful()) {
+				throw new IOException("Unexpected code: " + response);
+			}
+			try (var bufferedSource = response.body().source()) {
+
+				try (var bufferedSink = Okio.buffer(Okio.sink(pubkey))) {
+					bufferedSink.writeAll(bufferedSource);
+				}
+
+				KeyFactory factory = KeyFactory.getInstance("RSA");
+
+				try (FileReader keyReader = new FileReader(pubkey);
+						PemReader pemReader = new PemReader(keyReader)) {
+
+					PemObject pemObject = pemReader.readPemObject();
+					byte[] content = pemObject.getContent();
+					X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(content);
+					return (RSAPublicKey) factory.generatePublic(pubKeySpec);
+				}
+			}
+		}
+	}
 
 	//
 	private static final TypeReference<List<CloudOptimisationDataResultRecord>> TYPE_GDR_LIST = new TypeReference<List<CloudOptimisationDataResultRecord>>() {

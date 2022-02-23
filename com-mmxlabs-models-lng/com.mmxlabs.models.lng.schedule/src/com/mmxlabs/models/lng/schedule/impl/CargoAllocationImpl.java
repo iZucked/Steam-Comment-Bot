@@ -43,6 +43,8 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getSlotAllocations <em>Slot Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getSequence <em>Sequence</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getCargoType <em>Cargo Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getBallastBonusFee <em>Ballast Bonus Fee</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getRepositioningFee <em>Repositioning Fee</em>}</li>
  * </ul>
  *
  * @generated
@@ -125,6 +127,46 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * @ordered
 	 */
 	protected CargoType cargoType = CARGO_TYPE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getBallastBonusFee() <em>Ballast Bonus Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBallastBonusFee()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final long BALLAST_BONUS_FEE_EDEFAULT = 0L;
+
+	/**
+	 * The cached value of the '{@link #getBallastBonusFee() <em>Ballast Bonus Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBallastBonusFee()
+	 * @generated
+	 * @ordered
+	 */
+	protected long ballastBonusFee = BALLAST_BONUS_FEE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getRepositioningFee() <em>Repositioning Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRepositioningFee()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final long REPOSITIONING_FEE_EDEFAULT = 0L;
+
+	/**
+	 * The cached value of the '{@link #getRepositioningFee() <em>Repositioning Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRepositioningFee()
+	 * @generated
+	 * @ordered
+	 */
+	protected long repositioningFee = REPOSITIONING_FEE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -312,6 +354,52 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * @generated
 	 */
 	@Override
+	public long getBallastBonusFee() {
+		return ballastBonusFee;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setBallastBonusFee(long newBallastBonusFee) {
+		long oldBallastBonusFee = ballastBonusFee;
+		ballastBonusFee = newBallastBonusFee;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__BALLAST_BONUS_FEE, oldBallastBonusFee, ballastBonusFee));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public long getRepositioningFee() {
+		return repositioningFee;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRepositioningFee(long newRepositioningFee) {
+		long oldRepositioningFee = repositioningFee;
+		repositioningFee = newRepositioningFee;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.CARGO_ALLOCATION__REPOSITIONING_FEE, oldRepositioningFee, repositioningFee));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EList<SlotAllocation> getSlotAllocations() {
 		if (slotAllocations == null) {
 			slotAllocations = new EObjectWithInverseResolvingEList<SlotAllocation>(SlotAllocation.class, this, SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS, SchedulePackage.SLOT_ALLOCATION__CARGO_ALLOCATION);
@@ -390,6 +478,10 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 				return basicGetSequence();
 			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
 				return getCargoType();
+			case SchedulePackage.CARGO_ALLOCATION__BALLAST_BONUS_FEE:
+				return getBallastBonusFee();
+			case SchedulePackage.CARGO_ALLOCATION__REPOSITIONING_FEE:
+				return getRepositioningFee();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -424,6 +516,12 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
 				setCargoType((CargoType)newValue);
 				return;
+			case SchedulePackage.CARGO_ALLOCATION__BALLAST_BONUS_FEE:
+				setBallastBonusFee((Long)newValue);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__REPOSITIONING_FEE:
+				setRepositioningFee((Long)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -454,6 +552,12 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
 				setCargoType(CARGO_TYPE_EDEFAULT);
 				return;
+			case SchedulePackage.CARGO_ALLOCATION__BALLAST_BONUS_FEE:
+				setBallastBonusFee(BALLAST_BONUS_FEE_EDEFAULT);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__REPOSITIONING_FEE:
+				setRepositioningFee(REPOSITIONING_FEE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -478,6 +582,10 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 				return isSetSequence();
 			case SchedulePackage.CARGO_ALLOCATION__CARGO_TYPE:
 				return cargoType != CARGO_TYPE_EDEFAULT;
+			case SchedulePackage.CARGO_ALLOCATION__BALLAST_BONUS_FEE:
+				return ballastBonusFee != BALLAST_BONUS_FEE_EDEFAULT;
+			case SchedulePackage.CARGO_ALLOCATION__REPOSITIONING_FEE:
+				return repositioningFee != REPOSITIONING_FEE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -555,6 +663,10 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (cargoType: ");
 		result.append(cargoType);
+		result.append(", ballastBonusFee: ");
+		result.append(ballastBonusFee);
+		result.append(", repositioningFee: ");
+		result.append(repositioningFee);
 		result.append(')');
 		return result.toString();
 	}

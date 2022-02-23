@@ -12,4 +12,5 @@ public class ManifestDescription {
 	public String version;
 	public String clientCode;
 	public Boolean dev;
+	public String keyUUID;
 }

@@ -33,9 +33,11 @@ public class CanalCostsView extends ScenarioTableViewerView<CanalCostsPane> {
 	protected void initViewerPane(final CanalCostsPane pane) {
 		final EditingDomain domain = getEditingDomain();
 		if (domain != null) {
-			pane.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getCostModel_RouteCosts() }), getAdapterFactory(), getModelReference());
 			MMXRootObject rootObject = getRootObject();
 			CostModel costModel = ScenarioModelUtil.getCostModel((LNGScenarioModel) rootObject);
+			if (!costModel.getRouteCosts().isEmpty()) {
+				pane.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getCostModel_RouteCosts() }), getAdapterFactory(), getModelReference());
+			}
 			pane.setInput(costModel, costModel.getSuezCanalTariff(), costModel.getPanamaCanalTariff());
 		}
 	}
@@ -47,9 +49,7 @@ public class CanalCostsView extends ScenarioTableViewerView<CanalCostsPane> {
 			openStatus(status.getChildren()[0]);
 		}
 
-		if (status instanceof DetailConstraintStatusDecorator) {
-
-			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
+		if (status instanceof DetailConstraintStatusDecorator dcsd) {
 			final Object target = dcsd.getTarget();
 
 			if (target instanceof RouteCost) {

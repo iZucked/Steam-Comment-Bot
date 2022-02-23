@@ -8,6 +8,5 @@
   </parent>
   <groupId>com.mmxlabs.models.ui</groupId>
   <artifactId>com.mmxlabs.models.ui.validation.views</artifactId>
-  <version>5.1.5-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
 </project>

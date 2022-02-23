@@ -8,7 +8,6 @@
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>com.mmxlabs.models.ui.validation.tests</artifactId>
-	<version>5.1.5-SNAPSHOT</version>
 	<packaging>eclipse-test-plugin</packaging>
 
 	

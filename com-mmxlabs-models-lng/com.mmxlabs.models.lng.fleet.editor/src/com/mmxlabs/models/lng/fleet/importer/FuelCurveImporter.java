@@ -24,10 +24,13 @@ import com.mmxlabs.common.csv.IDeferment;
 import com.mmxlabs.common.csv.IExportContext;
 import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.common.csv.IImportProblem;
+import com.mmxlabs.license.features.KnownFeatures;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.util.VesselConstants;
 import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.impl.NumberAttributeImporter;
 
@@ -38,6 +41,10 @@ import com.mmxlabs.models.util.importer.impl.NumberAttributeImporter;
  * 
  */
 public class FuelCurveImporter {
+
+	private static final String KEY_CLASS = "class";
+	private static final String KEY_STATE = "state";
+
 	public FuelCurveImporter() {
 
 	}
@@ -51,18 +58,22 @@ public class FuelCurveImporter {
 		try {
 			context.pushReader(reader);
 			while (null != (row = reader.readRow(true))) {
-				final String vesselName = row.get("class");
-				final String stateName = row.get("state");
+				final String vesselName = row.get(KEY_CLASS);
+				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_MMX_REFERENCE_VESSELS) && vesselName != null && vesselName.matches(VesselConstants.REGEXP_MMX_PROVIDED_VESSEL_NAME)) {
+					// Skip vessels that contain <> in the name since they are reserved characters for MMX reference vessels
+					continue;
+				}
+				final String stateName = row.get(KEY_STATE);
 
-				final List<FuelConsumption> consumptions = new LinkedList<FuelConsumption>();
+				final List<FuelConsumption> consumptions = new LinkedList<>();
 				for (final Map.Entry<String, String> column : row.entrySet()) {
 					if (column.getKey() == null || column.getKey().isEmpty()) {
 						continue;
 					}
-					if ("class".equals(column.getKey())) {
+					if (KEY_CLASS.equals(column.getKey())) {
 						continue;
 					}
-					if ("state".equals(column.getKey())) {
+					if (KEY_STATE.equals(column.getKey())) {
 						continue;
 					}
 					if (column.getValue() == null || column.getValue().isEmpty()) {
@@ -142,16 +153,16 @@ public class FuelCurveImporter {
 		for (final Vessel vessel : vessels) {
 			final Map<String, String> ladenRow = new LinkedHashMap<>();
 			final Map<String, String> ladenRowValues = new TreeMap<>();
-			ladenRow.put("class", vessel.getName());
-			ladenRow.put("state", "laden");
+			ladenRow.put(KEY_CLASS, vessel.getName());
+			ladenRow.put(KEY_STATE, "laden");
 			exportConsumptions(vessel.getLadenAttributes().getVesselOrDelegateFuelConsumption(), ladenRowValues, nai);
 			ladenRow.putAll(ladenRowValues);
 			rows.add(ladenRow);
 
 			final Map<String, String> ballastRow = new LinkedHashMap<>();
 			final Map<String, String> ballastRowValues = new TreeMap<>();
-			ballastRow.put("class", vessel.getName());
-			ballastRow.put("state", "ballast");
+			ballastRow.put(KEY_CLASS, vessel.getName());
+			ballastRow.put(KEY_STATE, "ballast");
 			exportConsumptions(vessel.getBallastAttributes().getVesselOrDelegateFuelConsumption(), ballastRowValues, nai);
 			ballastRow.putAll(ballastRowValues);
 			rows.add(ballastRow);

@@ -20,7 +20,8 @@ public class OptimiserConstants {
 	/**
 	 * Some optimisation types require a default vessel for initial cargo allocations.
 	 */
-	public static final String DEFAULT_VESSEL = "default-vessel";
+	public static final String DEFAULT_INTERNAL_VESSEL = "default-internal-vessel";
+	public static final String DEFAULT_EXTERNAL_VESSEL = "default-external-vessel";
 
 	public static final String G_AI_fitnessComponents = "general-info-components";
 

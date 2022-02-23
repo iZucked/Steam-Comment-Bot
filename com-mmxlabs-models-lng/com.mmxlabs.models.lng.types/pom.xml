@@ -10,7 +10,6 @@
 	</parent>
 
 	<artifactId>com.mmxlabs.models.lng.types</artifactId>
-	<version>5.1.5-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 	
 	<properties>

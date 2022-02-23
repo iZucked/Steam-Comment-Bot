@@ -4055,8 +4055,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getVesselEventSpecification_ArrivalDate(), theDateTimePackage.getLocalDateTime(), "arrivalDate", null, 0, 1, VesselEventSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(voyageSpecificationEClass, VoyageSpecification.class, "VoyageSpecification", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getVoyageSpecification_RouteOption(), thePortPackage.getRouteOption(), "routeOption", null, 0, 1, VoyageSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVoyageSpecification_FuelChoice(), this.getFuelChoice(), "fuelChoice", null, 0, 1, VoyageSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVoyageSpecification_RouteOption(), thePortPackage.getRouteOption(), "routeOption", null, 0, 1, VoyageSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVoyageSpecification_FuelChoice(), this.getFuelChoice(), "fuelChoice", null, 0, 1, VoyageSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(slotSpecificationEClass, SlotSpecification.class, "SlotSpecification", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSlotSpecification_Slot(), this.getSlot(), null, "slot", null, 0, 1, SlotSpecification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

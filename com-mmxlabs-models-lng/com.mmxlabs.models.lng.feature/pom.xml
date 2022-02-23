@@ -9,7 +9,6 @@
 		<version>5.1.5-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.models.lng.feature</artifactId>
-	<version>5.1.5-SNAPSHOT</version>
 	<packaging>eclipse-feature</packaging>
 
 </project>

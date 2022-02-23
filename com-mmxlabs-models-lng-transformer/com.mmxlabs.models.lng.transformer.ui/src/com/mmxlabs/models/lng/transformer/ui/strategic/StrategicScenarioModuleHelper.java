@@ -109,7 +109,7 @@ public class StrategicScenarioModuleHelper {
 			}
 
 			@Provides
-			@Named(OptimiserConstants.DEFAULT_VESSEL)
+			@Named(OptimiserConstants.DEFAULT_INTERNAL_VESSEL)
 			private IVesselAvailability provideDefaultVessel(final ModelEntityMap modelEntityMap, //
 					final IVesselProvider vesselProvider, //
 					final IOptimisationData optimisationData, // )
@@ -125,6 +125,9 @@ public class StrategicScenarioModuleHelper {
 					}
 
 					if (o_vesselAvailability.getSpotIndex() == -1) {
+						modelEntityMap.addNamedOptimiserObject(OptimiserConstants.DEFAULT_INTERNAL_VESSEL, o_vesselAvailability);
+						modelEntityMap.addNamedOptimiserObject(OptimiserConstants.DEFAULT_EXTERNAL_VESSEL, o_vesselAvailability);
+
 						return o_vesselAvailability;
 					}
 				}
@@ -136,11 +139,6 @@ public class StrategicScenarioModuleHelper {
 			@Singleton
 			private List<CharterInMarket> provideDefaultVessel(@Named(KEY_DEFAULT_MARKET) CharterInMarket market) {
 				return Collections.singletonList(market);
-			}
-
-			@Override
-			protected void configure() {
-				// Nothing to bind by default
 			}
 		};
 	}

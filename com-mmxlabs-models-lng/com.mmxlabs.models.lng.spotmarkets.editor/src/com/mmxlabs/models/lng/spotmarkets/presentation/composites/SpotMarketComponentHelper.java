@@ -4,221 +4,42 @@
  */
 package com.mmxlabs.models.lng.spotmarkets.presentation.composites;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.emf.ecore.EClass;
-
-import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.license.features.KnownFeatures;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.editors.impl.PermissiveRestrictiveInlineEditor;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
+import com.mmxlabs.models.ui.impl.DefaultComponentHelper;
 
 /**
  * A component helper for SpotMarket instances
  *
- * @generated
+ * @generated NOT
  */
-public class SpotMarketComponentHelper extends BaseComponentHelper {
-	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
+public class SpotMarketComponentHelper extends DefaultComponentHelper {
 
-	/**
-	 * Construct a new instance, using the platform adapter manager
-	 *
-	 * @generated
-	 */
 	public SpotMarketComponentHelper() {
-		this(Platform.getAdapterManager());
-	}
+		super(SpotMarketsPackage.Literals.SPOT_MARKET);
 
-	/**
-	 * Construct a new instance of this helper
-	 *
-	 * @generated
-	 */
-	public SpotMarketComponentHelper(IAdapterManager adapterManager) {
-		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.UUID_OBJECT));
-		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.NAMED_OBJECT));
-	}
-	
-	/**
-	 * add editors to a composite, using SpotMarket as the supertype
-	 *
-	 * @generated
-	 */
-	 @Override
-	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, SpotMarketsPackage.Literals.SPOT_MARKET);	
-	}
-	
-	/**
-	 * Create the editors for features on this class directly, and superclass' features.
-	 *
-	 * @generated
-	 */
-	@Override
-	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_enabledEditor(detailComposite, topClass);
-		add_availabilityEditor(detailComposite, topClass);
-		add_minQuantityEditor(detailComposite, topClass);
-		add_maxQuantityEditor(detailComposite, topClass);
-		add_volumeLimitsUnitEditor(detailComposite, topClass);
-		add_priceInfoEditor(detailComposite, topClass);
-		add_entityEditor(detailComposite, topClass);
-		add_pricingEventEditor(detailComposite, topClass);
-		add_restrictedContractsEditor(detailComposite, topClass);
-		add_restrictedContractsArePermissiveEditor(detailComposite, topClass);
-		add_restrictedPortsEditor(detailComposite, topClass);
-		add_restrictedPortsArePermissiveEditor(detailComposite, topClass);
-		add_restrictedVesselsEditor(detailComposite, topClass);
-		add_restrictedVesselsArePermissiveEditor(detailComposite, topClass);
-		add_mtmEditor(detailComposite, topClass);
-	}
-	/**
-	 * Create the editor for the enabled feature on SpotMarket
-	 *
-	 * @generated
-	 */
-	protected void add_enabledEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKET__ENABLED));
-	}
+		addEditor(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_PORTS_ARE_PERMISSIVE,
+				topClass -> new PermissiveRestrictiveInlineEditor(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_PORTS_ARE_PERMISSIVE));
 
-	/**
-	 * Create the editor for the availability feature on SpotMarket
-	 *
-	 * @generated
-	 */
-	protected void add_availabilityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKET__AVAILABILITY));
-	}
-	/**
-	 * Create the editor for the minQuantity feature on SpotMarket
-	 *
-	 * @generated
-	 */
-	protected void add_minQuantityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKET__MIN_QUANTITY));
-	}
-	/**
-	 * Create the editor for the maxQuantity feature on SpotMarket
-	 *
-	 * @generated
-	 */
-	protected void add_maxQuantityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKET__MAX_QUANTITY));
-	}
+		addEditor(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_VESSELS, topClass -> {
+			if (topClass == SpotMarketsPackage.Literals.FOB_PURCHASES_MARKET || topClass == SpotMarketsPackage.Literals.DES_SALES_MARKET) {
+				return ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_VESSELS);
+			}
+			return null;
+		});
 
-	/**
-	 * Create the editor for the volumeLimitsUnit feature on SpotMarket
-	 *
-	 * @generated
-	 */
-	protected void add_volumeLimitsUnitEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKET__VOLUME_LIMITS_UNIT));
-	}
+		addEditor(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_VESSELS_ARE_PERMISSIVE, topClass -> {
+			if (topClass == SpotMarketsPackage.Literals.FOB_PURCHASES_MARKET || topClass == SpotMarketsPackage.Literals.DES_SALES_MARKET) {
+				return new PermissiveRestrictiveInlineEditor(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_VESSELS_ARE_PERMISSIVE);
+			}
+			return null;
+		});
 
-	/**
-	 * Create the editor for the priceInfo feature on SpotMarket
-	 *
-	 * @generated
-	 */
-	protected void add_priceInfoEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKET__PRICE_INFO));
-	}
+		addEditor(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_CONTRACTS_ARE_PERMISSIVE,
+				topClass -> new PermissiveRestrictiveInlineEditor(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_CONTRACTS_ARE_PERMISSIVE));
 
-	/**
-	 * Create the editor for the entity feature on SpotMarket
-	 *
-	 * @generated
-	 */
-	protected void add_entityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKET__ENTITY));
-	}
-
-	/**
-	 * Create the editor for the pricingEvent feature on SpotMarket
-	 *
-	 * @generated
-	 */
-	protected void add_pricingEventEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKET__PRICING_EVENT));
-	}
-
-	/**
-	 * Create the editor for the restrictedPorts feature on SpotMarket
-	 *
-	 * @generated
-	 */
-	protected void add_restrictedPortsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_PORTS));
-	}
-
-	/**
-	 * Create the editor for the restrictedPortsArePermissive feature on SpotMarket
-	 *
-	 * @generated NOT
-	 */
-	protected void add_restrictedPortsArePermissiveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(new PermissiveRestrictiveInlineEditor(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_PORTS_ARE_PERMISSIVE));
-	}
-
-	/**
-	 * Create the editor for the restrictedVessels feature on SpotMarket
-	 *
-	 * @generated NOT
-	 */
-	protected void add_restrictedVesselsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		if (topClass == SpotMarketsPackage.Literals.FOB_PURCHASES_MARKET || topClass == SpotMarketsPackage.Literals.DES_SALES_MARKET) {
-			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_VESSELS));
-		}
-	}
-
-	/**
-	 * Create the editor for the restrictedVesselsArePermissive feature on SpotMarket
-	 *
-	 * @generated NOT
-	 */
-	protected void add_restrictedVesselsArePermissiveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		if (topClass == SpotMarketsPackage.Literals.FOB_PURCHASES_MARKET || topClass == SpotMarketsPackage.Literals.DES_SALES_MARKET) {
-			detailComposite.addInlineEditor(new PermissiveRestrictiveInlineEditor(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_VESSELS_ARE_PERMISSIVE));
-		}
-	}
-
-	/**
-	 * Create the editor for the restrictedContracts feature on SpotMarket
-	 *
-	 * @generated
-	 */
-	protected void add_restrictedContractsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_CONTRACTS));
-	}
-
-	/**
-	 * Create the editor for the restrictedContractsArePermissive feature on SpotMarket
-	 *
-	 * @generated NOT
-	 */
-	protected void add_restrictedContractsArePermissiveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(new PermissiveRestrictiveInlineEditor(SpotMarketsPackage.Literals.SPOT_MARKET__RESTRICTED_CONTRACTS_ARE_PERMISSIVE));
-	}
-
-	/**
-	 * Create the editor for the mtm feature on SpotMarket
-	 *
-	 * @generated NOT
-	 */
-	protected void add_mtmEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		if(LicenseFeatures.isPermitted("features:mtm")) {
-			detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKET__MTM));
-		}
+		addDefaultEditorForLicenseFeature(KnownFeatures.FEATURE_MTM, SpotMarketsPackage.Literals.SPOT_MARKET__MTM);
 	}
 }

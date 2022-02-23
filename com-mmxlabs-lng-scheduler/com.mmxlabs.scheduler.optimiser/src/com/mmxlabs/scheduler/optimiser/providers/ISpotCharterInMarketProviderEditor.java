@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -13,7 +13,8 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
  * Provider for spot charter in markets.
  *
  */
+@NonNullByDefault
 public interface ISpotCharterInMarketProviderEditor extends ISpotCharterInMarketProvider {
 
-	void addSpotMarketAvailability(@NonNull IVesselAvailability vesselAvailability, @NonNull ISpotCharterInMarket market, int spotIndex);
+	void addSpotMarketAvailability(IVesselAvailability vesselAvailability, ISpotCharterInMarket market, int spotIndex);
 }

@@ -9,7 +9,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
-import com.mmxlabs.models.lng.fleet.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractFeatureRangeConstraint;
 
 /**
@@ -20,19 +19,10 @@ import com.mmxlabs.models.ui.validation.AbstractFeatureRangeConstraint;
 public class VesselAttributesRangeConstraint extends AbstractFeatureRangeConstraint {
 	
 	@Override
-	protected String getPluginId() {
-		return Activator.PLUGIN_ID;
-	}
-
-
-
-	@Override
 	protected boolean shouldValidateFeature(EObject object,
 			EStructuralFeature feature) {
 		return (object instanceof VesselStateAttributes);
 	}
-
-
 
 	@Override
 	protected void createConstraints() {

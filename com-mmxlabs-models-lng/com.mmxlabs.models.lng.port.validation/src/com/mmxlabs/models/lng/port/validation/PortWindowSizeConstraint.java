@@ -19,8 +19,7 @@ public class PortWindowSizeConstraint extends AbstractModelConstraint {
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
-		if (target instanceof Port) {
-			final Port port = (Port) target;
+		if (target instanceof Port port) {
 
 			if (port.getDefaultWindowSize() < 1) {
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus());

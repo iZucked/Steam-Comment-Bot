@@ -23,8 +23,7 @@ public class PortTimeZoneConstraint extends AbstractModelConstraint {
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
-		if (target instanceof Location) {
-			final Location location = (Location) target;
+		if (target instanceof Location location) {
 
 			// Check a time zone is specified
 			if (location.getTimeZone() == null || location.getTimeZone().isEmpty()) {

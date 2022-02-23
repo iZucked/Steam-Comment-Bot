@@ -23,12 +23,6 @@
 		point="com.mmxlabs.models.ui.componenthelpers">
 		
 		<componentHelper
-			id="com.mmxlabs.models.lng.commercial.helpers.CommercialModel"
-			helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.CommercialModelComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.commercial.CommercialModel" />
-		
-		<componentHelper
 			id="com.mmxlabs.models.lng.commercial.helpers.LegalEntity"
 			helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.LegalEntityComponentHelper"
 			inheritable="false"
@@ -51,53 +45,14 @@
 			helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.PurchaseContractComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.commercial.PurchaseContract" />
-	<componentHelper
-		id="com.mmxlabs.models.lng.commercial.helpers.ExpressionPriceParameters"
-		helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.ExpressionPriceParametersComponentHelper"
-		inheritable="false"
-		modelClass="com.mmxlabs.models.lng.commercial.ExpressionPriceParameters" />
+	
  <componentHelper
        helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.BaseLegalEntityComponentHelper"
        id="com.mmxlabs.models.lng.commercial.presentation.composites.BaseLegalEntityComponentHelper"
        inheritable="true"
        modelClass="com.mmxlabs.models.lng.commercial.BaseLegalEntity">
  </componentHelper>
- <componentHelper
-       helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.BaseEntityBookComponentHelper"
-       id="com.mmxlabs.models.lng.commercial.presentation.composites.BaseEntityBookComponentHelper"
-       inheritable="true"
-       modelClass="com.mmxlabs.models.lng.commercial.BaseEntityBook">
- </componentHelper>
- <componentHelper
-       helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.SimpleEntityBookComponentHelper"
-       id="com.mmxlabs.models.lng.commercial.presentation.composites.SimpleEntityBookComponentHelper"
-       inheritable="true"
-       modelClass="com.mmxlabs.models.lng.commercial.SimpleEntityBook">
- </componentHelper>
- <componentHelper
-       helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.DateShiftExpressionPriceParametersComponentHelper"
-       id="com.mmxlabs.models.lng.commercial.presentation.composites.DateShiftExpressionPriceParametersComponentHelper"
-       inheritable="true"
-       modelClass="com.mmxlabs.models.lng.commercial.DateShiftExpressionPriceParameters">
- </componentHelper>
- <componentHelper
-       helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.GenericCharterContractComponentHelper"
-       id="com.mmxlabs.models.lng.commercial.presentation.composites.GenericCharterContractComponentHelper"
-       inheritable="true"
-       modelClass="com.mmxlabs.models.lng.commercial.GenericCharterContract">
- </componentHelper>
-          <componentHelper
-               helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.EndHeelOptionsComponentHelper"
-               id="com.mmxlabs.models.lng.commercial.presentation.composites.EndHeelOptionsComponentHelper"
-               inheritable="true"
-               modelClass="com.mmxlabs.models.lng.commercial.EndHeelOptions">
-         </componentHelper>
-         <componentHelper
-               helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.StartHeelOptionsComponentHelper"
-               id="com.mmxlabs.models.lng.commercial.presentation.composites.StartHeelOptionsComponentHelper"
-               inheritable="true"
-               modelClass="com.mmxlabs.models.lng.commercial.StartHeelOptions">
-         </componentHelper>
+
 	</extension>
  <extension
        point="com.mmxlabs.models.ui.valueproviders">
@@ -267,17 +222,6 @@
        </FeatureAnyOf>
     </editorFactory>
  </extension>
-   <extension point="org.eclipse.ui.editors">
-      <!-- @generated commercial -->
-      <editor
-            id="com.mmxlabs.models.lng.commercial.presentation.CommercialEditorID"
-            name="%_UI_CommercialEditor_label"
-            icon="icons/full/obj16/CommercialModelFile.gif"
-            extensions="commercial"
-            class="com.mmxlabs.models.lng.commercial.presentation.CommercialEditor"
-            contributorClass="com.mmxlabs.models.lng.commercial.presentation.CommercialActionBarContributor">
-      </editor>
-   </extension>
    <extension
          point="com.mmxlabs.models.util.import.attributes">
       <attributeImporter

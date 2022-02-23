@@ -56,7 +56,8 @@ import com.mmxlabs.rcp.common.menus.LocalMenuHelper;
 import com.mmxlabs.rcp.common.menus.SubLocalMenuHelper;
 
 /**
- * Class to organise insertion plans and optionally filter out related but "poorer" choices
+ * Class to organise insertion plans and optionally filter out related but
+ * "poorer" choices
  *
  */
 public class InsertionPlanGrouperAndFilter extends ViewerFilter {
@@ -105,8 +106,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 	@Override
 	public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
-		if (element instanceof ChangeSetTableGroup) {
-			final ChangeSetTableGroup group = (ChangeSetTableGroup) element;
+		if (element instanceof ChangeSetTableGroup group) {
 			for (final UserFilter filter : userFilters) {
 				if (!filter.include(group)) {
 					return false;
@@ -125,25 +125,26 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 		if (!insertionModeActive) {
 			return true;
 		}
-		if (element instanceof ChangeSetTableGroup) {
-
-			final ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) element;
+		if (element instanceof ChangeSetTableGroup changeSetTableGroup) {
 			// Filter out no-change solutions. We can get here e.g. because of charter out
 			// generation.
 			if (changeSetTableGroup.getComplexity() == 0) {
-				return false;
+				// Disable this check as sandbox voyage options can yield zero complexity
+				// changes
+//				return false;
 			}
 			// Filter out overly complex solutions
 			if (changeSetTableGroup.getComplexity() > getMaxComplexity()) {
 				return false;
 			}
 		}
-		if (parentElement instanceof ChangeSetTableGroup) {
-			final ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) parentElement;
+		if (parentElement instanceof ChangeSetTableGroup changeSetTableGroup) {
 			// Filter out no-change solutions. We can get here e.g. because of charter out
 			// generation.
 			if (changeSetTableGroup.getComplexity() == 0) {
-				return false;
+				// Disable this check as sandbox voyage options can yield zero complexity
+				// changes
+//				return false;
 			}
 			// Filter out overly complex solutions
 			if (changeSetTableGroup.getComplexity() > getMaxComplexity()) {
@@ -152,13 +153,10 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 		}
 		if (userFilters.isEmpty()) {
 
-			if (element instanceof ChangeSetTableGroup) {
-
-				final ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) element;
+			if (element instanceof ChangeSetTableGroup changeSetTableGroup) {
 				return !changeSetTableGroup.isGroupAlternative() || expandedGroups.contains(changeSetTableGroup.getGroupObject());
 			}
-			if (parentElement instanceof ChangeSetTableGroup) {
-				final ChangeSetTableGroup changeSetTableGroup = (ChangeSetTableGroup) parentElement;
+			if (parentElement instanceof ChangeSetTableGroup changeSetTableGroup) {
 				return !changeSetTableGroup.isGroupAlternative() || expandedGroups.contains(changeSetTableGroup.getGroupObject());
 			}
 		}
@@ -200,8 +198,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 			if (obj == this) {
 				return true;
 			}
-			if (obj instanceof ChangeSetMetadata) {
-				final ChangeSetMetadata other = (ChangeSetMetadata) obj;
+			if (obj instanceof ChangeSetMetadata other) {
 				if (mode == GroupMode.Complexity) {
 					return changeCount == other.changeCount;
 				} else if (mode == GroupMode.Target) {
@@ -442,7 +439,8 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 			}
 			if (!selectedSets.isEmpty() && directSelectedRows.isEmpty()) {
 				// Disabled 2020-02-14 as should be covered by row filter menus
-				// generateInsertionSubMenus_FilterSets(helper, viewer, selectedSets, targetElement);
+				// generateInsertionSubMenus_FilterSets(helper, viewer, selectedSets,
+				// targetElement);
 			}
 			if (directSelectedRows.size() == 1) {
 				generateInsertionSubMenus_FilterOn(helper, viewer, false, directSelectedRows);
@@ -519,8 +517,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 
 							}));
 						}
-						if (discharge instanceof SpotSlot) {
-							final SpotSlot spotSlot = (SpotSlot) discharge;
+						if (discharge instanceof SpotSlot spotSlot) {
 							final SpotMarket market = spotSlot.getMarket();
 							if (market != null) {
 								final String label1 = row.getLhsName() + " to spot";
@@ -652,8 +649,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 								ViewerHelper.refreshThen(viewer, true, viewer::expandAll);
 							}));
 						}
-						if (load instanceof SpotSlot) {
-							final SpotSlot spotSlot = (SpotSlot) load;
+						if (load instanceof SpotSlot spotSlot) {
 							final SpotMarket market = spotSlot.getMarket();
 							if (market != null) {
 								final String label1 = "Spot to " + row.getRhsName();
@@ -770,8 +766,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 						final Slot<?> discharge = row.getRhsAfter() != null ? row.getRhsAfter().getDischargeSlot() : null;
 						final Contract contract = discharge == null ? null : discharge.getContract();
 
-						if (discharge instanceof SpotSlot) {
-							final SpotSlot spotSlot = (SpotSlot) discharge;
+						if (discharge instanceof SpotSlot spotSlot) {
 							final SpotMarket market = spotSlot.getMarket();
 							if (market != null) {
 								final String label1 = row.getLhsName() + " to spot";
@@ -839,8 +834,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 						final Slot<?> load = row.getLhsAfter() != null ? row.getLhsAfter().getLoadSlot() : null;
 						final Contract contract = load == null ? null : load.getContract();
 
-						if (load instanceof SpotSlot) {
-							final SpotSlot spotSlot = (SpotSlot) load;
+						if (load instanceof SpotSlot spotSlot) {
 							final SpotMarket market = spotSlot.getMarket();
 							if (market != null) {
 								final String label1 = "Spot to " + row.getRhsName();
@@ -1204,8 +1198,7 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 		final ChangeSet changeSet = tableGroup.getChangeSet();
 		Object sendTo = null;
 		// TODO: Does this need to check alternative base?
-		LOOP_OUTER:
-		for (final ChangeSetRow row : changeSet.getChangeSetRowsToDefaultBase()) {
+		LOOP_OUTER: for (final ChangeSetRow row : changeSet.getChangeSetRowsToDefaultBase()) {
 			final ChangeSetRowDataGroup afterData = row.getAfterData();
 			if (afterData == null) {
 				continue;
@@ -1215,8 +1208,8 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 					final DischargeSlot dischargeSlot = rowData.getDischargeSlot();
 					if (dischargeSlot == null) {
 						sendTo = "Open";
-					} else if (dischargeSlot instanceof SpotSlot) {
-						sendTo = ((SpotSlot) dischargeSlot).getMarket().eClass();
+					} else if (dischargeSlot instanceof SpotSlot spotSlot) {
+						sendTo = spotSlot.getMarket().eClass();
 					} else if (dischargeSlot.getContract() != null) {
 						sendTo = dischargeSlot.getContract();
 					} else {
@@ -1227,15 +1220,15 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 					final LoadSlot loadSlot = rowData.getLoadSlot();
 					if (loadSlot == null) {
 						sendTo = "Open";
-					} else if (loadSlot instanceof SpotSlot) {
-						sendTo = ((SpotSlot) loadSlot).getMarket().eClass();
+					} else if (loadSlot instanceof SpotSlot spotSlot) {
+						sendTo = spotSlot.getMarket().eClass();
 					} else if (loadSlot.getContract() != null) {
 						sendTo = loadSlot.getContract();
 					} else {
 						sendTo = loadSlot.getName();
 					}
-				} else if (rowData.getLhsEvent() instanceof VesselEventVisit && ((VesselEventVisit) rowData.getLhsEvent()).getVesselEvent() == target) {
-					final VesselEventVisit v = ((VesselEventVisit) rowData.getLhsEvent());
+				} else if (rowData.getLhsEvent() instanceof VesselEventVisit vev && vev.getVesselEvent() == target) {
+					final VesselEventVisit v = vev;
 					sendTo = v.name();
 				}
 				if (sendTo != null) {
@@ -1246,16 +1239,16 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 		if (sendTo == null) {
 			return new Pair<>("?", new Object());
 		}
-		if (sendTo instanceof String) {
-			return new Pair<>((String) sendTo, sendTo);
+		if (sendTo instanceof String str) {
+			return new Pair<>(str, sendTo);
 		}
 		String dest;
-		if (sendTo instanceof Contract) {
-			dest = ((Contract) sendTo).getName();
-		} else if (sendTo instanceof Port) {
-			dest = "Spot at " + ((Port) sendTo).getName();
-		} else if (sendTo instanceof EClass) {
-			final EClass market = (EClass) sendTo;
+		if (sendTo instanceof Contract contract) {
+			dest = contract.getName();
+		} else if (sendTo instanceof Port port) {
+			dest = "Spot at " + port.getName();
+		} else if (sendTo instanceof EClass eClass) {
+			final EClass market = eClass;
 			if (market == SpotMarketsPackage.Literals.FOB_PURCHASES_MARKET) {
 				dest = "Spot FOB market";
 			} else if (market == SpotMarketsPackage.Literals.DES_PURCHASE_MARKET) {
@@ -1268,8 +1261,8 @@ public class InsertionPlanGrouperAndFilter extends ViewerFilter {
 				assert false;
 				throw new IllegalStateException();
 			}
-		} else if (sendTo instanceof NamedObject) {
-			dest = ((NamedObject) sendTo).getName();
+		} else if (sendTo instanceof NamedObject no) {
+			dest = no.getName();
 		} else {
 			dest = sendTo.toString();
 		}

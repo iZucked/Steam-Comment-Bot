@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.util;
 
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -13,9 +14,13 @@ import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper.OrderingHint;
+import com.mmxlabs.models.lng.cargo.util.scheduling.FakeCargo;
 import com.mmxlabs.models.lng.cargo.util.scheduling.WrappedAssignableElement;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.util.ModelDistanceProvider;
@@ -31,7 +36,6 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  */
 public class CollectedAssignment {
 	private final VesselAssignmentType vesselAssignmentType;
-
 
 	private final VesselAvailability vesselAvailability;
 	private final CharterInMarket charterInMarket;
@@ -68,7 +72,7 @@ public class CollectedAssignment {
 	public VesselAssignmentType getVesselAssignmentType() {
 		return vesselAssignmentType;
 	}
-	
+
 	public CharterInMarket getCharterInMarket() {
 		return charterInMarket;
 	}
@@ -93,17 +97,18 @@ public class CollectedAssignment {
 			final WrappedAssignableElement e = new WrappedAssignableElement(ae, portModel, modelDistanceProvider, dateProvider);
 			sortedElements.add(e);
 		}
-		sortWrappedAssignableElements(sortedElements);
+		sortWrappedAssignableElements(sortedElements, portModel, modelDistanceProvider);
+
 		// Unwrap list
 		return sortedElements.stream().map(e -> e.getAssignableElement()).collect(Collectors.toList());
 	}
 
-	public static void sortWrappedAssignableElements(final List<@NonNull WrappedAssignableElement> sortedElements) {
-		Comparator<? super @NonNull WrappedAssignableElement> comparator = createComparator();
+	public static void sortWrappedAssignableElements(final List<@NonNull WrappedAssignableElement> sortedElements, final PortModel portModel, final ModelDistanceProvider modelDistanceProvider) {
+		Comparator<? super @NonNull WrappedAssignableElement> comparator = createComparator(portModel, modelDistanceProvider);
 		Collections.sort(sortedElements, comparator);
 	}
 
-	public static Comparator<@NonNull WrappedAssignableElement> createComparator() {
+	public static Comparator<@NonNull WrappedAssignableElement> createComparator(final PortModel portModel, final ModelDistanceProvider modelDistanceProvider) {
 		Comparator<@NonNull WrappedAssignableElement> comparator = (a, b) -> {
 
 			final OrderingHint hint = AssignmentEditorHelper.checkOrdering(a, b);
@@ -125,6 +130,17 @@ public class CollectedAssignment {
 						return c;
 					}
 				}
+
+				// portModel should only should be null for CollectedAssignmentTest usage
+				if (portModel != null) {
+					final long aToBLateness = calculateHoursLate(a, b, portModel, modelDistanceProvider);
+					final long bToALateness = calculateHoursLate(b, a, portModel, modelDistanceProvider);
+					c = Long.compare(aToBLateness, bToALateness);
+					if (c != 0) {
+						return c;
+					}
+				}
+
 				c = a.getStartWindow().getSecond().compareTo(b.getStartWindow().getSecond());
 				if (c != 0) {
 					return c;
@@ -142,6 +158,25 @@ public class CollectedAssignment {
 
 		};
 		return comparator;
+	}
+
+	private static long calculateHoursLate(@NonNull final WrappedAssignableElement a, @NonNull final WrappedAssignableElement b, final PortModel portModel,
+			final ModelDistanceProvider modelDistanceProvider) {
+		final int bufferTime;
+
+		if (b.getAssignableElement()instanceof Cargo cargo) {
+			bufferTime = cargo.getSlots().get(1).getSlotOrDelegateDaysBuffer();
+		} else if (b.getAssignableElement()instanceof FakeCargo fakeCargo) {
+			final List<Slot<?>> slots = fakeCargo.getSlots();
+			bufferTime = slots.get(slots.size() - 1).getSlotOrDelegateDaysBuffer();
+		} else {
+			bufferTime = 0;
+		}
+
+		final int aToBTravelTime = CargoTravelTimeUtils.getFobMinTimeInHours(a.getEndPort(), b.getStartPort(), a.getAssignableElement().getVesselAssignmentType(), portModel, 0, modelDistanceProvider,
+				bufferTime);
+		final ZonedDateTime bArrivalTime = a.getEndWindow().getFirst().plusHours(aToBTravelTime);
+		return Math.max(0L, Hours.between(b.getStartWindow().getSecond(), bArrivalTime));
 	}
 
 	public void resort(final @Nullable PortModel portModel, @Nullable ModelDistanceProvider modelDistanceProvider, final @Nullable IAssignableElementDateProvider dateProvider) {

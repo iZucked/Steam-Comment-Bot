@@ -61,20 +61,25 @@ public class SingleAddAction extends LockableAction {
 
 			final CompoundCommand add = new CompoundCommand();
 			for (final ISetting setting : settings) {
-				add.append(AddCommand.create(context.getCommandHandler().getEditingDomain(), setting.getContainer(), setting.getContainment(), setting.getInstance(), getInsertionIndex(setting)));
+				if (setting.getContainer() != null) {
+					add.append(AddCommand.create(context.getCommandHandler().getEditingDomain(), setting.getContainer(), setting.getContainment(), setting.getInstance(), getInsertionIndex(setting)));
+				}
 			}
-			final CommandStack commandStack = context.getCommandHandler().getEditingDomain().getCommandStack();
-			commandStack.execute(add);
-			EObject obj = settings.iterator().next().getInstance();
-			int ret = DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(context.getEditorPart(), obj, commandStack.getMostRecentCommand());
-			if (ret == Window.OK && viewer != null) {
-				viewer.setSelection(new StructuredSelection(obj));
+			if (!add.isEmpty()) {
+				final CommandStack commandStack = context.getCommandHandler().getEditingDomain().getCommandStack();
+				commandStack.execute(add);
+				EObject obj = settings.iterator().next().getInstance();
+				int ret = DetailCompositeDialogUtil.editSingleObjectWithUndoOnCancel(context.getEditorPart(), obj, commandStack.getMostRecentCommand());
+				if (ret == Window.OK && viewer != null) {
+					viewer.setSelection(new StructuredSelection(obj));
+				}
 			}
 		}
 	}
 
 	/**
-	 * Overridable method to customise {@link AddCommand} insertion index location. Default is {@link CommandParameter#NO_INDEX}
+	 * Overridable method to customise {@link AddCommand} insertion index location.
+	 * Default is {@link CommandParameter#NO_INDEX}
 	 * 
 	 * @param setting
 	 * @return

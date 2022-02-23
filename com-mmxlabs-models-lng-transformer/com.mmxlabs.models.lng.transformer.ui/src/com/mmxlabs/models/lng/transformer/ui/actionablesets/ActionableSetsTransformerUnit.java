@@ -90,31 +90,7 @@ public class ActionableSetsTransformerUnit implements ILNGStateTransformerUnit {
 		chainBuilder.addLink(link);
 		return link;
 	}
-
-	@NonNull
-	public static IChainLink chainFake(final ChainBuilder chainBuilder, @NonNull final String phase, @NonNull final UserSettings userSettings, @NonNull ActionPlanOptimisationStage stageSettings,
-			@Nullable final JobExecutorFactory jobExecutorFactory, final int progressTicks) {
-		final IChainLink link = new IChainLink() {
-
-			private ActionableSetsTransformerUnit t;
-
-			@Override
-			public IMultiStateResult run(SequencesContainer initialSequences, final IMultiStateResult inputState, final IProgressMonitor monitor) {
-				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
-				t = new ActionableSetsTransformerUnit(dt, phase, userSettings, stageSettings, jobExecutorFactory, initialSequences.getSequences(), inputState, dt.getHints());
-				t.run(monitor);
-				return inputState;
-			}
-
-			@Override
-			public int getProgressTicks() {
-				return progressTicks;
-			}
-		};
-		chainBuilder.addLink(link);
-		return link;
-	}
-
+ 
 	@NonNull
 	private final LNGDataTransformer dataTransformer;
 

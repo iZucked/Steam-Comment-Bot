@@ -15,10 +15,6 @@
 -->
 
 <plugin>
-
-
-
-	
 	<extension
 		point="com.mmxlabs.models.ui.componenthelpers">
 		
@@ -27,36 +23,18 @@
 			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.VesselComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.fleet.Vessel" />
-		
-		<componentHelper
-			id="com.mmxlabs.models.lng.fleet.helpers.FleetModel"
-			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.FleetModelComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.fleet.FleetModel" />
-		
-		<componentHelper
-			id="com.mmxlabs.models.lng.fleet.helpers.BaseFuel"
-			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.BaseFuelComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.fleet.BaseFuel" />
+	 
 		<componentHelper
 			id="com.mmxlabs.models.lng.fleet.helpers.VesselStateAttributes"
 			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.VesselStateAttributesComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.fleet.VesselStateAttributes" />
-		
-		<componentHelper
-			id="com.mmxlabs.models.lng.fleet.helpers.FuelConsumption"
-			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.FuelConsumptionComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.fleet.FuelConsumption" />
- 
-  		<componentHelper
-	        helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.VesselGroupComponentHelper"
-	        id="com.mmxlabs.models.lng.fleet.helpers.VesselGroup"
-	        inheritable="false"
-	        modelClass="com.mmxlabs.models.lng.fleet.VesselGroup"/>
-		
+  <componentHelper
+        helperClass="com.mmxlabs.models.ui.impl.DefaultComponentHelper"
+        id="com.mmxlabs.models.lng.fleet.BaseFuel.componentHelper"
+        inheritable="false"
+        modelClass="com.mmxlabs.models.lng.fleet.BaseFuel">
+  </componentHelper>
 	</extension>
  <extension
        point="com.mmxlabs.models.ui.valueproviders">
@@ -175,17 +153,6 @@
           restorable="true">
     </view>
  </extension>
-   <extension point="org.eclipse.ui.editors">
-      <!-- @generated fleet -->
-      <editor
-            id="com.mmxlabs.models.lng.fleet.presentation.FleetEditorID"
-            name="%_UI_FleetEditor_label"
-            icon="icons/full/obj16/FleetModelFile.gif"
-            extensions="fleet"
-            class="com.mmxlabs.models.lng.fleet.presentation.FleetEditor"
-            contributorClass="com.mmxlabs.models.lng.fleet.presentation.FleetActionBarContributor">
-      </editor>
-   </extension>
    <extension
          point="com.mmxlabs.models.ui.jointmodeleditors">
       <jointModelEditor

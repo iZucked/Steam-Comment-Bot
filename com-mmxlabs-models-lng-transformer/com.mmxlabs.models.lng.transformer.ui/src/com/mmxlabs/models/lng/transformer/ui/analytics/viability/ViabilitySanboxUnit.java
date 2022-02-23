@@ -168,10 +168,9 @@ public class ViabilitySanboxUnit {
 
 			@Provides
 			@ThreadLocalScope
-			private EvaluationHelper provideEvaluationHelper(final Injector injector, @Named(LNGParameters_EvaluationSettingsModule.OPTIMISER_REEVALUATE) final boolean isReevaluating,
-					@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) final ISequences initialRawSequences) {
+			private EvaluationHelper provideEvaluationHelper(final Injector injector, @Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) final ISequences initialRawSequences) {
 
-				EvaluationHelper helper = new EvaluationHelper(isReevaluating);
+				EvaluationHelper helper = new EvaluationHelper();
 				injector.injectMembers(helper);
 
 				final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
@@ -211,21 +210,21 @@ public class ViabilitySanboxUnit {
 			createFutureJobs(model, mapper, shippingMap, monitor, modelEntityMap, futures, jobExecutor);
 //			try (ThreadLocalScopeImpl scope = injector.getInstance(ThreadLocalScopeImpl.class)) {
 //				scope.enter();
-				// Block until all futures completed
-				for (final Future<Runnable> f : futures) {
-					if (monitor.isCanceled()) {
-						return;
-					}
-					try {
-						final Runnable runnable = f.get();
-						if (runnable != null) {
-							runnable.run();
-						}
-					} catch (final Exception e) {
-						e.printStackTrace();
-					}
+			// Block until all futures completed
+			for (final Future<Runnable> f : futures) {
+				if (monitor.isCanceled()) {
+					return;
 				}
-			//}
+				try {
+					final Runnable runnable = f.get();
+					if (runnable != null) {
+						runnable.run();
+					}
+				} catch (final Exception e) {
+					e.printStackTrace();
+				}
+			}
+			// }
 		} finally {
 			monitor.done();
 		}

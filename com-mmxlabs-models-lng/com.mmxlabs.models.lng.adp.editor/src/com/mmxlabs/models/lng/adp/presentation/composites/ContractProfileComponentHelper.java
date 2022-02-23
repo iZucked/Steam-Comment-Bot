@@ -7,144 +7,28 @@
 package com.mmxlabs.models.lng.adp.presentation.composites;
 
 import com.mmxlabs.models.lng.adp.ADPPackage;
-
-import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
-
-import org.eclipse.emf.ecore.EClass;
+import com.mmxlabs.models.ui.impl.DefaultComponentHelper;
 
 /**
  * A component helper for ContractProfile instances
  *
- * @generated
+ * @generated NOT
  */
-public class ContractProfileComponentHelper extends BaseComponentHelper {
-	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
+public class ContractProfileComponentHelper extends DefaultComponentHelper {
 
-	/**
-	 * Construct a new instance, using the platform adapter manager
-	 *
-	 * @generated
-	 */
 	public ContractProfileComponentHelper() {
-		this(Platform.getAdapterManager());
+		super(ADPPackage.Literals.CONTRACT_PROFILE);
+
+		ignoreFeatures.add(ADPPackage.Literals.CONTRACT_PROFILE__CUSTOM);
+
+		addEditor(ADPPackage.Literals.CONTRACT_PROFILE__CONTRACT, topClass -> {
+			IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.CONTRACT_PROFILE__CONTRACT);
+			editor.setEditorLocked(true);
+			editor.setEditorEnabled(false);
+			return editor;
+		});
 	}
 
-	/**
-	 * Construct a new instance of this helper
-	 *
-	 * @generated
-	 */
-	public ContractProfileComponentHelper(IAdapterManager adapterManager) {
-		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-	}
-	
-	/**
-	 * add editors to a composite, using ContractProfile as the supertype
-	 *
-	 * @generated
-	 */
-	 @Override
-	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, ADPPackage.Literals.CONTRACT_PROFILE);	
-	}
-	
-	/**
-	 * Create the editors for features on this class directly, and superclass' features.
-	 *
-	 * @generated
-	 */
-	@Override
-	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_contractEditor(detailComposite, topClass);
-		add_contractCodeEditor(detailComposite, topClass);
-		add_customEditor(detailComposite, topClass);
-		add_enabledEditor(detailComposite, topClass);
-		add_totalVolumeEditor(detailComposite, topClass);
-		add_volumeUnitEditor(detailComposite, topClass);
-		add_subProfilesEditor(detailComposite, topClass);
-		add_constraintsEditor(detailComposite, topClass);
-	}
-	/**
-	 * Create the editor for the contract feature on ContractProfile
-	 *
-	 * @generated NOT
-	 */
-	protected void add_contractEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.CONTRACT_PROFILE__CONTRACT);
-		editor.setEditorLocked(true);
-		editor.setEditorEnabled(false);
-		detailComposite.addInlineEditor(editor);
-	}
-	/**
-	 * Create the editor for the contractCode feature on ContractProfile
-	 *
-	 * @generated
-	 */
-	protected void add_contractCodeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.CONTRACT_PROFILE__CONTRACT_CODE));
-	}
-
-	/**
-	 * Create the editor for the custom feature on ContractProfile
-	 *
-	 * @generated NOT
-	 */
-	protected void add_customEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.CONTRACT_PROFILE__CUSTOM));
-	}
-
-	/**
-	 * Create the editor for the enabled feature on ContractProfile
-	 *
-	 * @generated
-	 */
-	protected void add_enabledEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.CONTRACT_PROFILE__ENABLED));
-	}
-
-	/**
-	 * Create the editor for the totalVolume feature on ContractProfile
-	 *
-	 * @generated
-	 */
-	protected void add_totalVolumeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.CONTRACT_PROFILE__TOTAL_VOLUME));
-	}
-	/**
-	 * Create the editor for the volumeUnit feature on ContractProfile
-	 *
-	 * @generated
-	 */
-	protected void add_volumeUnitEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.CONTRACT_PROFILE__VOLUME_UNIT));
-	}
-	/**
-	 * Create the editor for the subProfiles feature on ContractProfile
-	 *
-	 * @generated
-	 */
-	protected void add_subProfilesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.CONTRACT_PROFILE__SUB_PROFILES));
-	}
-
-	/**
-	 * Create the editor for the constraints feature on ContractProfile
-	 *
-	 * @generated
-	 */
-	protected void add_constraintsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ADPPackage.Literals.CONTRACT_PROFILE__CONSTRAINTS));
-	}
 }

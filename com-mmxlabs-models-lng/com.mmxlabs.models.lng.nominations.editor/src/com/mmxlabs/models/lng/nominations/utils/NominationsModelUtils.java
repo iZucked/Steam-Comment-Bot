@@ -38,7 +38,7 @@ import com.mmxlabs.models.lng.nominations.DatePeriodPrior;
 import com.mmxlabs.models.lng.nominations.NominationsFactory;
 import com.mmxlabs.models.lng.nominations.NominationsModel;
 import com.mmxlabs.models.lng.nominations.Side;
-import com.mmxlabs.models.lng.nominations.presentation.composites.TimeWindowHolder;
+import com.mmxlabs.models.lng.nominations.ui.editor.TimeWindowHolder;
 import com.mmxlabs.models.lng.nominations.util.GeneratedNominationsProvider;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;

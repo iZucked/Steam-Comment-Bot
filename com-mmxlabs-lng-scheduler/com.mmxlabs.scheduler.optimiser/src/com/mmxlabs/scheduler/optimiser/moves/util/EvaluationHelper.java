@@ -73,26 +73,16 @@ public class EvaluationHelper {
 	@Named(SchedulerConstants.GENERATED_PAPERS_IN_PNL)
 	private boolean generatedPapersInPNL;
 
-	private final boolean isReevaluating;
-
 	private boolean strictChecking = false;
 
 	private int flexibleViolationCount;
 
-	public EvaluationHelper() {
-		this.isReevaluating = false;
-	}
-
-	public EvaluationHelper(final boolean isReevaluating) {
-		this.isReevaluating = isReevaluating;
-	}
-
+	 
 	public void setFlexibleCapacityViolationCount(final int flexibleSoftViolations) {
 
 		flexibleViolationCount = flexibleSoftViolations;
 		for (final IEvaluatedStateConstraintChecker checker : evaluatedStateConstraintCheckers) {
-			if (checker instanceof CapacityEvaluatedStateChecker) {
-				final CapacityEvaluatedStateChecker capacityEvaluatedStateChecker = (CapacityEvaluatedStateChecker) checker;
+			if (checker instanceof CapacityEvaluatedStateChecker capacityEvaluatedStateChecker) {
 				capacityEvaluatedStateChecker.setFlexibleSoftViolations(flexibleSoftViolations);
 			}
 		}
@@ -108,8 +98,7 @@ public class EvaluationHelper {
 	public boolean acceptSequences(@NonNull final ISequences currentRawSequences, @NonNull final ISequences currentFullSequences) {
 
 		for (final IConstraintChecker checker : constraintCheckers) {
-			if (checker instanceof IInitialSequencesConstraintChecker) {
-				final IInitialSequencesConstraintChecker initialSequencesConstraintChecker = (IInitialSequencesConstraintChecker) checker;
+			if (checker instanceof IInitialSequencesConstraintChecker initialSequencesConstraintChecker) {
 				initialSequencesConstraintChecker.sequencesAccepted(currentRawSequences, currentFullSequences, new ArrayList<>());
 			}
 		}
@@ -196,8 +185,9 @@ public class EvaluationHelper {
 		// Run through the constraint checkers
 		for (final IConstraintChecker checker : constraintCheckers) {
 			if (!checker.checkConstraints(movedFullSequences, null, messages)) {
-				if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty())
+				if (OptimiserConstants.SHOW_CONSTRAINTS_FAIL_MESSAGES && !messages.isEmpty()) {
 					messages.stream().forEach(LOG::debug);
+				}
 				return false;
 			}
 		}
@@ -361,10 +351,7 @@ public class EvaluationHelper {
 		}
 
 		final Pair<@NonNull ProfitAndLossSequences, @NonNull IEvaluationState> p1 = evaluateSequences(currentRawSequences, currentFullSequences, checkEvaluatedStateCheckers);
-		/*
-		 * This is to increase runtime temporarily
-		 */
-		final Pair<@NonNull ProfitAndLossSequences, @NonNull IEvaluationState> p2 = isReevaluating ? evaluateSequences(currentRawSequences, currentFullSequences, checkEvaluatedStateCheckers) : null;
+	
 		if (p1 == null) {
 			return null;
 		}
@@ -394,10 +381,6 @@ public class EvaluationHelper {
 
 		final ProfitAndLossSequences profitAndLossSequences = evaluateSequences(currentFullSequences, p1);
 		assert profitAndLossSequences != null;
-
-		if (isReevaluating && p2 != null) {
-			evaluateSequences(currentFullSequences, p2);
-		}
 
 		final long thisPNL = calculateSchedulePNL(currentFullSequences, profitAndLossSequences);
 		final long[] metrics = new long[MetricType.values().length];

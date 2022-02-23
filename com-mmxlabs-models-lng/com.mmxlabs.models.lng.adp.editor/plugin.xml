@@ -11,20 +11,6 @@
 -->
 
 <plugin>
-
-   <extension point="org.eclipse.ui.editors">
-      <!-- @generated adp -->
-      <editor
-            id="com.mmxlabs.models.lng.adp.presentation.ADPEditorID"
-            name="%_UI_ADPEditor_label"
-            icon="icons/full/obj16/ADPModelFile.gif"
-            extensions="adp"
-            class="com.mmxlabs.models.lng.adp.presentation.ADPEditor"
-            contributorClass="com.mmxlabs.models.lng.adp.presentation.ADPActionBarContributor">
-      </editor>
-   </extension>
- 
- 
 <extension
       point="com.mmxlabs.models.ui.componenthelpers">
    <componentHelper
@@ -40,18 +26,6 @@
          modelClass="com.mmxlabs.models.lng.adp.CargoNumberDistributionModel">
    </componentHelper>
    <componentHelper
-         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.SalesContractProfileComponentHelper"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.SalesContractProfileComponentHelper"
-         inheritable="true"
-         modelClass="com.mmxlabs.models.lng.adp.SalesContractProfile">
-   </componentHelper>
-   <componentHelper
-         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.PurchaseContractProfileComponentHelper"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.PurchaseContractProfileComponentHelper"
-         inheritable="true"
-         modelClass="com.mmxlabs.models.lng.adp.PurchaseContractProfile">
-   </componentHelper>
-   <componentHelper
          helperClass="com.mmxlabs.models.lng.adp.presentation.composites.SubContractProfileComponentHelper"
          id="com.mmxlabs.models.lng.adp.presentation.composites.SubContractProfileComponentHelper"
          inheritable="true"
@@ -62,12 +36,6 @@
          id="com.mmxlabs.models.lng.adp.presentation.composites.ContractProfileComponentHelper"
          inheritable="true"
          modelClass="com.mmxlabs.models.lng.adp.ContractProfile">
-   </componentHelper>
-   <componentHelper
-         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.CargoByQuarterDistributionModelComponentHelper"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.CargoByQuarterDistributionModelComponentHelper"
-         inheritable="true"
-         modelClass="com.mmxlabs.models.lng.adp.CargoByQuarterDistributionModel">
    </componentHelper>
    <componentHelper
          helperClass="com.mmxlabs.models.lng.adp.presentation.composites.CargoIntervalDistributionModelComponentHelper"
@@ -82,59 +50,13 @@
          modelClass="com.mmxlabs.models.lng.adp.ShippingOption">
    </componentHelper>
    <componentHelper
-         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.MaxCargoConstraintComponentHelper"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.MaxCargoConstraintComponentHelper"
-         inheritable="true"
-         modelClass="com.mmxlabs.models.lng.adp.MaxCargoConstraint">
-   </componentHelper>
-   <componentHelper
          helperClass="com.mmxlabs.models.lng.adp.presentation.composites.PreDefinedDistributionModelComponentHelper"
          id="com.mmxlabs.models.lng.adp.presentation.composites.PreDefinedDistributionModelComponentHelper"
          inheritable="true"
          modelClass="com.mmxlabs.models.lng.adp.PreDefinedDistributionModel">
    </componentHelper>
-   <componentHelper
-         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.FleetProfileComponentHelper"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.FleetProfileComponentHelper"
-         inheritable="true"
-         modelClass="com.mmxlabs.models.lng.adp.FleetProfile">
-   </componentHelper>
-   <componentHelper
-         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.DistributionModelComponentHelper"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.DistributionModelComponentHelper"
-         inheritable="true"
-         modelClass="com.mmxlabs.models.lng.adp.DistributionModel">
-   </componentHelper>
-   <componentHelper
-         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.MinCargoConstraintComponentHelper"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.MinCargoConstraintComponentHelper"
-         inheritable="true"
-         modelClass="com.mmxlabs.models.lng.adp.MinCargoConstraint">
-   </componentHelper>
-   <componentHelper
-         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.ProfileVesselRestrictionComponentHelper"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.ProfileVesselRestrictionComponentHelper"
-         inheritable="true"
-         modelClass="com.mmxlabs.models.lng.adp.ProfileVesselRestriction">
-   </componentHelper>
-   <componentHelper
-         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.TargetCargoesOnVesselConstraintComponentHelper"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.TargetCargoesOnVesselConstraintComponentHelper"
-         inheritable="true"
-         modelClass="com.mmxlabs.models.lng.adp.TargetCargoesOnVesselConstraint">
-   </componentHelper>
-   <componentHelper
-         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.PeriodDistributionComponentHelper"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.PeriodDistributionComponentHelper"
-         inheritable="true"
-         modelClass="com.mmxlabs.models.lng.adp.PeriodDistribution">
-   </componentHelper>
-   <componentHelper
-         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.PeriodDistributionProfileConstraintComponentHelper"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.PeriodDistributionProfileConstraintComponentHelper"
-         inheritable="true"
-         modelClass="com.mmxlabs.models.lng.adp.PeriodDistributionProfileConstraint">
-   </componentHelper>
+     
+    
    <componentHelper
          helperClass="com.mmxlabs.models.lng.adp.presentation.composites.MullProfileComponentHelper"
          id="com.mmxlabs.models.lng.adp.presentation.composites.MullProfileComponentHelper"
@@ -152,18 +74,6 @@
          id="com.mmxlabs.models.lng.adp.presentation.composites.DESSalesMarketAllocationRowComponentHelper"
          inheritable="true"
          modelClass="com.mmxlabs.models.lng.adp.DESSalesMarketAllocationRow">
-   </componentHelper>
-   <componentHelper
-         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.MullAllocationRowComponentHelper"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.MullAllocationRowComponentHelper"
-         inheritable="true"
-         modelClass="com.mmxlabs.models.lng.adp.MullAllocationRow">
-   </componentHelper>
-   <componentHelper
-         helperClass="com.mmxlabs.models.lng.adp.presentation.composites.MullCargoWrapperComponentHelper"
-         id="com.mmxlabs.models.lng.adp.presentation.composites.MullCargoWrapperComponentHelper"
-         inheritable="true"
-         modelClass="com.mmxlabs.models.lng.adp.MullCargoWrapper">
    </componentHelper>
 </extension>
 <extension

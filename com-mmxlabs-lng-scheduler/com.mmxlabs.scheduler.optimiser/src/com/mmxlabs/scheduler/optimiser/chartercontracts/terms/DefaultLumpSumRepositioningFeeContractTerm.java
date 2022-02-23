@@ -16,6 +16,7 @@ import com.mmxlabs.scheduler.optimiser.chartercontracts.termannotations.LumpSumR
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
@@ -34,15 +35,18 @@ public class DefaultLumpSumRepositioningFeeContractTerm extends RepositioningFee
 			// Matches against anything
 			return true;
 		}
-		IPort port = getFirstPort(portTimesRecord);
+		final IPort port = getFirstPort(vesselAvailability, portTimesRecord);
 		if (port != null) {
 			return getStartPorts().contains(port);
 		}
 		return false;
 	}
 
-	protected @Nullable IPort getFirstPort(final IPortTimesRecord portTimesRecord) {
+	protected @Nullable IPort getFirstPort(IVesselAvailability vesselAvailability, final IPortTimesRecord portTimesRecord) {
 		IPortSlot slot = portTimesRecord.getFirstSlot();
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+			return slot.getPort();
+		}
 		if (slot.getPortType() == PortType.Start) {
 			// We may be starting "anywhere", in which case we need to look at the next slot
 			// to get the start port.
@@ -70,7 +74,7 @@ public class DefaultLumpSumRepositioningFeeContractTerm extends RepositioningFee
 	public ICharterContractTermAnnotation annotate(final IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability) {
 		final LumpSumRepositioningFeeTermAnnotation annotation = new LumpSumRepositioningFeeTermAnnotation();
 		annotation.lumpSum = calculateCost(portTimesRecord, vesselAvailability);
-		annotation.matchingPort = getFirstPort(portTimesRecord);
+		annotation.matchingPort = getFirstPort(vesselAvailability, portTimesRecord);
 
 		return annotation;
 	}

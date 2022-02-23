@@ -10,112 +10,37 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.SetCommand;
-import org.eclipse.swt.SWT;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.editor.editors.CargoTypeInlineEditor;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
+import com.mmxlabs.models.ui.impl.DefaultComponentHelper;
 
 /**
  * A component helper for Cargo instances
  * 
- * @generated
+ * @generated NOT
  */
-public class CargoComponentHelper extends BaseComponentHelper {
-	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
+public class CargoComponentHelper extends DefaultComponentHelper {
 
-	/**
-	 * Construct a new instance, using the platform adapter manager
-	 * 
-	 * @generated
-	 */
 	public CargoComponentHelper() {
-		this(Platform.getAdapterManager());
-	}
+		super(CargoPackage.Literals.CARGO);
 
-	/**
-	 * Construct a new instance of this helper
-	 * 
-	 * @generated
-	 */
-	public CargoComponentHelper(IAdapterManager adapterManager) {
-		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.UUID_OBJECT));
-		superClassesHelpers.addAll(registry.getComponentHelpers(CargoPackage.Literals.ASSIGNABLE_ELEMENT));
-	}
+		ignoreFeatures.add(CargoPackage.Literals.CARGO__SLOTS);
 
-	/**
-	 * add editors to a composite, using Cargo as the supertype
-	 * 
-	 * @generated
-	 */
-	@Override
-	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CargoPackage.Literals.CARGO);	
-	}
-
-	/**
-	 * Create the editors for features on this class directly, and superclass' features.
-	 * 
-	 * @generated NOT
-	 */
-	@Override
-	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		for (final IComponentHelper helper : superClassesHelpers)
-			helper.addEditorsToComposite(detailComposite, topClass);
-
-		// This line is not auto-generated
-		// add_cargoTypeEditor(detailComposite, topClass);
-		add_loadSlotEditor(detailComposite, topClass);
-		add_dischargeSlotEditor(detailComposite, topClass);
-		add_allowRewiringEditor(detailComposite, topClass);
-	}
-
-	/**
-	 * Create the editor for the cargoType operation on Cargo
-	 * 
-	 * @generated NO
-	 */
-	protected void add_cargoTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(new CargoTypeInlineEditor(SWT.NONE));
-	}
-
-	/**
-	 * Create the editor for the loadSlot feature on Cargo
-	 * 
-	 * @generated NO
-	 */
-	protected void add_loadSlotEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		// detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO__LOAD_SLOT));
-	}
-
-	/**
-	 * Create the editor for the dischargeSlot feature on Cargo
-	 * 
-	 * @generated NO
-	 */
-	protected void add_dischargeSlotEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		// detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO__DISCHARGE_SLOT));
+		addEditor(CargoPackage.Literals.CARGO__ALLOW_REWIRING, this::createAllowRewiringEditor);
 	}
 
 	/**
@@ -123,13 +48,13 @@ public class CargoComponentHelper extends BaseComponentHelper {
 	 * 
 	 * @generated NOT
 	 */
-	protected void add_allowRewiringEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+	protected IInlineEditor createAllowRewiringEditor(final EClass topClass) {
 
 		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO__ALLOW_REWIRING);
 
 		editor.addNotificationChangedListener(new IInlineEditorExternalNotificationListener() {
 
-			//private IScenarioEditingLocation location;
+			// private IScenarioEditingLocation location;
 			private IDialogEditingContext dialogContext;
 
 			private EObject input;
@@ -154,35 +79,23 @@ public class CargoComponentHelper extends BaseComponentHelper {
 			}
 		});
 
-		detailComposite.addInlineEditor(editor);
-	}
-
-	/**
-	 * Create the editor for the slots feature on Cargo
-	 * 
-	 * @generated
-	 */
-	protected void add_slotsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO__SLOTS));
+		return editor;
 	}
 
 	@Override
 	public List<EObject> getExternalEditingRange(final MMXRootObject root, final EObject value) {
-		final Set<EObject> external = new LinkedHashSet<EObject>(super.getExternalEditingRange(root, value));
+		final Set<EObject> external = new LinkedHashSet<>(super.getExternalEditingRange(root, value));
 
-		if (value instanceof Cargo) {
-			final Cargo cargo = (Cargo) value;
+		if (value instanceof Cargo cargo) {
 
-			final Set<Slot> slots = new LinkedHashSet<Slot>();
-			for (final Slot slot : cargo.getSortedSlots()) {
+			final Set<Slot<?>> slots = new LinkedHashSet<>();
+			for (final Slot<?> slot : cargo.getSortedSlots()) {
 				slots.add(slot);
-				if (slot instanceof LoadSlot) {
-					final LoadSlot loadSlot = (LoadSlot) slot;
+				if (slot instanceof LoadSlot loadSlot) {
 					if (loadSlot.getTransferFrom() != null) {
 						slots.add(loadSlot.getTransferFrom());
 					}
-				} else if (slot instanceof DischargeSlot) {
-					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+				} else if (slot instanceof DischargeSlot dischargeSlot) {
 					if (dischargeSlot.getTransferTo() != null) {
 						slots.add(dischargeSlot.getTransferTo());
 					}
@@ -192,6 +105,6 @@ public class CargoComponentHelper extends BaseComponentHelper {
 			external.addAll(slots);
 		}
 
-		return new ArrayList<EObject>(external);
+		return new ArrayList<>(external);
 	}
 }

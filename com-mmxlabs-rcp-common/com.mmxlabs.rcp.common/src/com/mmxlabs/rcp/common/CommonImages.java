@@ -44,7 +44,10 @@ public final class CommonImages {
 		ExpandAll("icons/16x16/expandall.png"), //
 		Cut("icons/16x16/cut.png"), //
 		Edit("icons/16x16/edit.png"), //
+		Pin_8("icons/8x8/PinnedRow.png"), //
 		Pin("icons/16x16/pin.png"), //
+		Scenario("icons/16x16/scenario.png"), //
+		
 		
 		Play_16("icons/16x16/optimise.png", true), //
 		CloudPlay_16("icons/16x16/cloud_run.png", true), //
@@ -52,7 +55,7 @@ public final class CommonImages {
 		ZoomIn("icons/16x16/zoomin.png"), //
 		ZoomOut("icons/16x16/zoomout.png"), //
 		PinnedRow("icons/8x8/PinnedRow.png"), //
-		Console("icons/legacy/16x16/console.gif"), //
+		Console("icons/16x16/console.png"), //
 		
 
 		Error("icons/legacy/16x16/error.gif"), //

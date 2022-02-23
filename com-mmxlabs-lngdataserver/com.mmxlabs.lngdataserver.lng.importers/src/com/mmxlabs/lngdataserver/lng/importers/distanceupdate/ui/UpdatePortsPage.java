@@ -44,7 +44,6 @@ import com.mmxlabs.lngdataserver.lng.importers.update.UpdateItemLabelProvider;
 import com.mmxlabs.lngdataserver.lng.importers.update.UpdateStep;
 import com.mmxlabs.lngdataserver.lng.importers.update.UpdateWarning;
 import com.mmxlabs.lngdataserver.lng.importers.update.UserUpdateStep;
-import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;

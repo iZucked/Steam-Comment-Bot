@@ -567,7 +567,7 @@ public class ScheduleModelUtils {
 
 	public static StartEvent getStartEvent(final CharterInMarket charterInMarket, final int spotIndex, final Schedule schedule) {
 		final Sequence sequence = schedule.getSequences().stream() //
-				.filter(s -> s.getCharterInMarket().equals(charterInMarket)) //
+				.filter(s -> charterInMarket.equals(s.getCharterInMarket())) //
 				.filter(s -> s.getSpotIndex() == spotIndex) //
 				.findFirst().get();
 		final Event event = sequence.getEvents().get(0);
@@ -577,7 +577,7 @@ public class ScheduleModelUtils {
 
 	public static EndEvent getEndEvent(final CharterInMarket charterInMarket, final int spotIndex, final Schedule schedule) {
 		final Sequence sequence = schedule.getSequences().stream() //
-				.filter(s -> s.getCharterInMarket().equals(charterInMarket)) //
+				.filter(s -> charterInMarket.equals(s.getCharterInMarket())) //
 				.filter(s -> s.getSpotIndex() == spotIndex) //
 				.findFirst().get();
 		final Event event = sequence.getEvents().get(sequence.getEvents().size() - 1);

@@ -8,6 +8,5 @@
 		<version>5.1.5-SNAPSHOT</version>
 	</parent>
 	<artifactId>com.mmxlabs.lingo.app.headless</artifactId>
-	<version>5.1.5-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 </project>

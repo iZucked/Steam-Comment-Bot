@@ -64,6 +64,7 @@ Import-Package: com.fasterxml.jackson.datatype.jdk8;version="2.12.5",
  javax.servlet.annotation;version="4.0.0",
  javax.servlet.descriptor;version="4.0.0",
  javax.servlet.http;version="4.0.0",
+ org.bouncycastle.util.io.pem;version="1.69.0",
  org.slf4j
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.lngdataserver.integration.ui.scenarios.internal.Activator

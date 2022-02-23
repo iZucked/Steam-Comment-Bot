@@ -16,6 +16,7 @@ import com.mmxlabs.scheduler.optimiser.chartercontracts.termannotations.LumpSumB
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
@@ -30,9 +31,21 @@ public class DefaultLumpSumBallastBonusContractTerm extends BallastBonusContract
 
 	@Override
 	public boolean match(IPortTimesRecord portTimesRecord, IVesselAvailability vesselAvailability, int vesselStartTime, IPort vesselStartPort) {
-		IPortSlot slot = portTimesRecord.getFirstSlot();
 
-		return slot.getPortType() == PortType.End && (getRedeliveryPorts().contains(slot.getPort()) || getRedeliveryPorts().isEmpty());
+		final IPort port;
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+			IPortSlot slot = portTimesRecord.getReturnSlot();
+			port = slot.getPort();
+		} else {
+
+			IPortSlot slot = portTimesRecord.getFirstSlot();
+			if (slot.getPortType() != PortType.End) {
+				return false;
+			}
+			port = slot.getPort();
+		}
+
+		return getRedeliveryPorts().isEmpty() || getRedeliveryPorts().contains(port);
 	}
 
 	@Override

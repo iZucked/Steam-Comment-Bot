@@ -49,9 +49,7 @@ public class ShippingCostHelper {
 		final int offset = plan.isIgnoreEnd() ? 1 : 0;
 		for (int i = 0; i < sequence.length - offset; ++i) {
 			final Object obj = sequence[i];
-			if (obj instanceof PortDetails) {
-
-				final PortDetails portDetails = (PortDetails) obj;
+			if (obj instanceof final PortDetails portDetails) {
 				portCosts += portDetails.getPortCosts();
 			}
 
@@ -80,8 +78,7 @@ public class ShippingCostHelper {
 		final int k = sequence.length - offset;
 		for (int i = 0; i < k; i++) {
 			final Object o = sequence[i];
-			if (o instanceof VoyageDetails) {
-				final VoyageDetails voyageDetails = (VoyageDetails) o;
+			if (o instanceof final VoyageDetails voyageDetails) {
 				planDuration += voyageDetails.getTravelTime();
 				planDuration += voyageDetails.getIdleTime();
 				planDuration += voyageDetails.getOptions().getExtraIdleTime(ExplicitIdleTime.PURGE);
@@ -100,8 +97,7 @@ public class ShippingCostHelper {
 	 */
 	public boolean hasGeneratedCharterOut(final @NonNull VoyagePlan plan) {
 		final Object obj = plan.getSequence()[0];
-		if (obj instanceof PortDetails) {
-			final PortDetails portDetails = (PortDetails) obj;
+		if (obj instanceof final PortDetails portDetails) {
 			if (portDetails.getOptions().getPortSlot().getPortType() == PortType.GeneratedCharterOut) {
 				return true;
 			}
@@ -122,9 +118,7 @@ public class ShippingCostHelper {
 		final int offset = plan.isIgnoreEnd() ? 1 : 0;
 		for (int i = 0; i < sequence.length - offset; ++i) {
 			final Object obj = sequence[i];
-			if (obj instanceof PortDetails) {
-
-				final PortDetails portDetails = (PortDetails) obj;
+			if (obj instanceof final PortDetails portDetails) {
 				final @NonNull IPortSlot slot = portDetails.getOptions().getPortSlot();
 				if (actualsDataProvider.hasActuals(slot)) {
 					capacityCosts += actualsDataProvider.getCapacityCosts(slot);
@@ -141,38 +135,78 @@ public class ShippingCostHelper {
 		return shippingCosts + portCosts + hireCosts + capacityCosts + crewBonusCosts + insuranceCosts;
 	}
 
-	public long getShippingCharterContractCost(final IPortTimesRecord portTimesRecord, final @NonNull IPortSlot portSlot, final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, final IPort firstLoadPort,
-			final int vesselEndTime) {
-		if (portSlot.getPortType() == PortType.End || portSlot.getPortType() == PortType.Start) {
-			@Nullable
-			ICharterContract charterContract = vesselAvailability.getCharterContract();
+	public long calculateBBCost(final IPortTimesRecord portTimesRecord, final @NonNull IPortSlot portSlot, final @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime,
+			final IPort firstLoadPort) {
+
+		boolean applyContractCosts;
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+			applyContractCosts = portSlot.getPortType() == PortType.Discharge || portSlot.getPortType() == PortType.Round_Trip_Cargo_End;
+		} else {
+			applyContractCosts = portSlot.getPortType() == PortType.End;
+		}
+
+		if (applyContractCosts) {
+			final @Nullable ICharterContract charterContract = vesselAvailability.getCharterContract();
 			if (charterContract != null) {
-				if (portSlot.getPortType() == PortType.End) {
-					return charterContract.calculateBBCost(portTimesRecord, portSlot, vesselAvailability, vesselStartTime, firstLoadPort);
-				} else {
-					return charterContract.calculateRFRevenue(portTimesRecord, vesselAvailability);
-				}
+				return charterContract.calculateBBCost(portTimesRecord, portSlot, vesselAvailability, vesselStartTime, firstLoadPort);
 			}
 		}
+
 		return 0L;
+
 	}
 
-	public void addCharterContractAnnotation(final IPortTimesRecord portTimesRecord, DetailTree shippingDetails, IPortSlot portSlot, @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime, IPort firstLoadPort,
-			int vesselEndTime) {
-		final boolean bb = portSlot.getPortType() == PortType.End;
-		if (portSlot.getPortType() == PortType.End || portSlot.getPortType() == PortType.Start) {
-			@Nullable
-			ICharterContract charterContract = vesselAvailability.getCharterContract();
+	public long calculateRFRevenue(final IPortTimesRecord portTimesRecord, final @NonNull IPortSlot portSlot, final @NonNull IVesselAvailability vesselAvailability) {
+
+		boolean applyContractCosts;
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+			applyContractCosts = portSlot.getPortType() == PortType.Load;
+		} else {
+			applyContractCosts = portSlot.getPortType() == PortType.Start;
+		}
+
+		if (applyContractCosts) {
+			final @Nullable ICharterContract charterContract = vesselAvailability.getCharterContract();
 			if (charterContract != null) {
-				ICharterContractAnnotation annotation = null;
-				if (portSlot.getPortType() == PortType.End) {
-					annotation = charterContract.annotateBB(portTimesRecord, portSlot, vesselAvailability, vesselStartTime, firstLoadPort);
-				} else {
-					annotation = charterContract.annotateRF(portTimesRecord, vesselAvailability);
-				}
-				if (annotation != null) {
-					shippingDetails.addChild(bb ? CharterContractConstants.BALLAST_BONUS_KEY : CharterContractConstants.REPOSITIONING_FEE_KEY, annotation);
-				}
+				return charterContract.calculateRFRevenue(portTimesRecord, vesselAvailability);
+			}
+		}
+
+		return 0L;
+
+	}
+
+	public void annotateBB(final IPortTimesRecord portTimesRecord, DetailTree shippingDetails, IPortSlot portSlot, @NonNull IVesselAvailability vesselAvailability, final int vesselStartTime,
+			IPort firstLoadPort) {
+		boolean applyContractCosts;
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+			applyContractCosts = portSlot.getPortType() == PortType.Discharge || portSlot.getPortType() == PortType.Round_Trip_Cargo_End;
+		} else {
+			applyContractCosts = portSlot.getPortType() == PortType.End;
+		}
+
+		if (applyContractCosts) {
+			final @Nullable ICharterContract charterContract = vesselAvailability.getCharterContract();
+			if (charterContract != null) {
+				ICharterContractAnnotation annotation = charterContract.annotateBB(portTimesRecord, portSlot, vesselAvailability, vesselStartTime, firstLoadPort);
+				shippingDetails.addChild(CharterContractConstants.BALLAST_BONUS_KEY, annotation);
+			}
+		}
+	}
+
+	public void annotateRF(final IPortTimesRecord portTimesRecord, DetailTree shippingDetails, IPortSlot portSlot, @NonNull IVesselAvailability vesselAvailability) {
+		boolean applyContractCosts;
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.ROUND_TRIP) {
+			applyContractCosts = portSlot.getPortType() == PortType.Load;
+		} else {
+			applyContractCosts = portSlot.getPortType() == PortType.Start;
+		}
+
+		if (applyContractCosts) {
+			final @Nullable ICharterContract charterContract = vesselAvailability.getCharterContract();
+			if (charterContract != null) {
+				ICharterContractAnnotation annotation = charterContract.annotateRF(portTimesRecord, vesselAvailability);
+				shippingDetails.addChild(CharterContractConstants.REPOSITIONING_FEE_KEY, annotation);
 			}
 		}
 	}

@@ -54,6 +54,7 @@ import com.mmxlabs.models.lng.fleet.util.IVesselImportCommandProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
+import com.mmxlabs.models.lng.ui.actions.DuplicateAction;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -237,6 +238,23 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 		final Action[] extraActions = duplicateAction == null ? new Action[] { newVesselFromReferenceAction, importVesselAction }
 				: new Action[] { newVesselFromReferenceAction, duplicateAction, importVesselAction };
 		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment), extraActions);
+	}
+
+	@Override
+	protected @Nullable Action createDuplicateAction() {
+		final DuplicateAction result = new DuplicateAction(getScenarioEditingLocation()) {
+			@Override
+			protected boolean isApplicableToSelection(ISelection selection) {
+				if (super.isApplicableToSelection(selection)) {
+					final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
+					final List<Vessel> list = (List<Vessel>) iStructuredSelection.toList();
+					return list.stream().noneMatch(Vessel::isMmxReference);
+				}
+				return false;
+			}
+		};
+		scenarioViewer.addSelectionChangedListener(result);
+		return result;
 	}
 
 	@Override

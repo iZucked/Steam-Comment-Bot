@@ -47,18 +47,6 @@
 			modelClass="com.mmxlabs.models.lng.cargo.DischargeSlot" />
 		
 		<componentHelper
-			id="com.mmxlabs.models.lng.cargo.helpers.CargoModel"
-			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.CargoModelComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.cargo.CargoModel" />
-		
-		<componentHelper
-			id="com.mmxlabs.models.lng.cargo.helpers.SpotSlot"
-			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.SpotSlotComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.cargo.SpotSlot" />
-		
-		<componentHelper
 			id="com.mmxlabs.models.lng.cargo.helpers.SpotLoadSlot"
 			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.SpotLoadSlotComponentHelper"
 			inheritable="false"
@@ -69,11 +57,7 @@
 			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.SpotDischargeSlotComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.cargo.SpotDischargeSlot" />
-		<componentHelper
-			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.CargoGroupComponentHelper"
-			id="com.mmxlabs.models.lng.cargo.helpers.CargoGroup"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.cargo.CargoGroup"/>
+
 		<componentHelper
 			id="com.mmxlabs.models.lng.cargo.helpers.VesselAvailiability"
 			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.VesselAvailabilityComponentHelper"
@@ -84,89 +68,46 @@
 			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.VesselEventComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.cargo.VesselEvent" />
-			
-		<componentHelper
-			id="com.mmxlabs.models.lng.cargo.helpers.DryDockEvent"
-			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.DryDockEventComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.cargo.DryDockEvent" />
-		
-		<componentHelper
-			id="com.mmxlabs.models.lng.cargo.helpers.CharterOutEvent"
-			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.CharterOutEventComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.cargo.CharterOutEvent" />
-			
-		<componentHelper
-		    helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.MaintenanceEventComponentHelper"
-	        id="com.mmxlabs.models.lng.cargo.helpers.MaintenanceEvent"
-        	inheritable="false"
-        	modelClass="com.mmxlabs.models.lng.cargo.MaintenanceEvent"/>
-  
+ 
 	    <componentHelper
 	        helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.AssignableElementComponentHelper"
 	        id="com.mmxlabs.models.lng.cargo.presentation.composites.AssignableElementComponentHelper"
 	        inheritable="true"
 	        modelClass="com.mmxlabs.models.lng.cargo.AssignableElement"/>
         
-         <componentHelper
-        helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.VesselTypeGroupComponentHelper"
-        id="com.mmxlabs.models.lng.cargo.presentation.composites.VesselTypeGroupComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.cargo.VesselTypeGroup"/>
+       
          <componentHelper
                helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.InventoryEventRowComponentHelper"
                id="com.mmxlabs.models.lng.cargo.presentation.composites.InventoryEventRowComponentHelper"
                inheritable="true"
                modelClass="com.mmxlabs.models.lng.cargo.InventoryEventRow">
          </componentHelper>
-         <componentHelper
-               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.InventoryCapacityRowComponentHelper"
-               id="com.mmxlabs.models.lng.cargo.presentation.composites.InventoryCapacityRowComponentHelper"
-               inheritable="true"
-               modelClass="com.mmxlabs.models.lng.cargo.InventoryCapacityRow">
-         </componentHelper>
+     
          <componentHelper
                helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.CanalBookingSlotComponentHelper"
                id="com.mmxlabs.models.lng.cargo.presentation.composites.CanalBookingSlotComponentHelper"
                inheritable="true"
                modelClass="com.mmxlabs.models.lng.cargo.CanalBookingSlot">
          </componentHelper>
-         <componentHelper
-               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.CharterInMarketOverrideComponentHelper"
-               id="com.mmxlabs.models.lng.cargo.presentation.composites.CharterInMarketOverrideComponentHelper"
-               inheritable="true"
-               modelClass="com.mmxlabs.models.lng.cargo.CharterInMarketOverride">
-         </componentHelper>
-         <componentHelper
-               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.InventoryComponentHelper"
-               id="com.mmxlabs.models.lng.cargo.presentation.composites.InventoryComponentHelper"
-               inheritable="true"
-               modelClass="com.mmxlabs.models.lng.cargo.Inventory">
-         </componentHelper>
+     
          <componentHelper
                helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.PaperDealComponentHelper"
                id="com.mmxlabs.models.lng.cargo.presentation.composites.PaperDealComponentHelper"
                inheritable="true"
                modelClass="com.mmxlabs.models.lng.cargo.PaperDeal">
          </componentHelper>
-         <componentHelper
-               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.BuyPaperDealComponentHelper"
-               id="com.mmxlabs.models.lng.cargo.presentation.composites.BuyPaperDealComponentHelper"
-               inheritable="true"
-               modelClass="com.mmxlabs.models.lng.cargo.BuyPaperDeal">
-         </componentHelper>
-         <componentHelper
-               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.SellPaperDealComponentHelper"
-               id="com.mmxlabs.models.lng.cargo.presentation.composites.SellPaperDealComponentHelper"
-               inheritable="true"
-               modelClass="com.mmxlabs.models.lng.cargo.SellPaperDeal">
-         </componentHelper>
+       
          <componentHelper
                helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.CanalBookingsComponentHelper"
                id="com.mmxlabs.models.lng.cargo.presentation.composites.CanalBookingsComponentHelper"
                inheritable="true"
                modelClass="com.mmxlabs.models.lng.cargo.CanalBookings">
+         </componentHelper>
+         <componentHelper
+               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.CharterOutEventComponentHelper"
+               id="com.mmxlabs.models.lng.cargo.presentation.composites.CharterOutEventComponentHelper"
+               inheritable="true"
+               modelClass="com.mmxlabs.models.lng.cargo.CharterOutEvent">
          </componentHelper>   
 	</extension>
  <extension
@@ -638,17 +579,7 @@
           id="com.mmxlabs.models.lng.cargo.ui.commands.ContractNominationCommandProvider">
     </ModelCommandProvider>-->
  </extension>
-   <extension point="org.eclipse.ui.editors">
-      <!-- @generated cargo -->
-      <editor
-            id="com.mmxlabs.models.lng.cargo.presentation.CargoEditorID"
-            name="%_UI_CargoEditor_label"
-            icon="icons/full/obj16/CargoModelFile.gif"
-            extensions="cargo"
-            class="com.mmxlabs.models.lng.cargo.presentation.CargoEditor"
-            contributorClass="com.mmxlabs.models.lng.cargo.presentation.CargoActionBarContributor">
-      </editor>
-   </extension>
+
    <extension
          point="com.mmxlabs.models.util.import.attributes">
       <attributeImporter

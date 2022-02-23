@@ -36,8 +36,7 @@ public class BasicShippingDetailsProperties extends AbstractDetailPropertyFactor
 	@Override
 	@Nullable
 	public DetailProperty createProperties(@NonNull final EObject eObject) {
-		if (eObject instanceof EventGrouping) {
-			final EventGrouping eventGrouping = (EventGrouping) eObject;
+		if (eObject instanceof EventGrouping eventGrouping) {
 			return createTree(eventGrouping, null);
 		}
 
@@ -47,8 +46,7 @@ public class BasicShippingDetailsProperties extends AbstractDetailPropertyFactor
 	private DetailProperty createTree(@NonNull final EventGrouping eventGrouping, @Nullable final MMXRootObject rootObject) {
 
 		// Check for unshipped cargoes
-		if (eventGrouping instanceof CargoAllocation) {
-			final CargoAllocation cargoAllocation = (CargoAllocation) eventGrouping;
+		if (eventGrouping instanceof CargoAllocation cargoAllocation) {
 			if (cargoAllocation.getSequence().getSequenceType() == SequenceType.FOB_SALE) {
 				return null;
 			}
@@ -69,8 +67,10 @@ public class BasicShippingDetailsProperties extends AbstractDetailPropertyFactor
 			addDetailProperty("Bunkers", "", "$", "", value, new StringFormatLabelProvider("%,d"), details);
 		}
 		// {
-		// long value = ScheduleModelKPIUtils.calculateEventShippingCost(eventGrouping, false, false, ShippingCostType.LNG_COSTS);
-		// addDetailProperty("LNG", "", "$", "", value, new StringFormatLabelProvider("%,d"), details);
+		// long value = ScheduleModelKPIUtils.calculateEventShippingCost(eventGrouping,
+		// false, false, ShippingCostType.LNG_COSTS);
+		// addDetailProperty("LNG", "", "$", "", value, new
+		// StringFormatLabelProvider("%,d"), details);
 		// }
 		{
 			final long value = ScheduleModelKPIUtils.calculateEventShippingCost(eventGrouping, false, false, ShippingCostType.PORT_COSTS);
@@ -113,8 +113,7 @@ public class BasicShippingDetailsProperties extends AbstractDetailPropertyFactor
 			final long value = ScheduleModelKPIUtils.calculateEventShippingCost(eventGrouping, false, false, ShippingCostType.HEEL_REVENUE);
 			final DetailProperty dp = addDetailProperty("Heel revenue", "", "$", "", -value, new StringFormatLabelProvider("%,d"), details);
 			for (final Event event : eventGrouping.getEvents()) {
-				if (event instanceof PortVisit) {
-					final PortVisit portVisit = (PortVisit) event;
+				if (event instanceof PortVisit portVisit) {
 					if (portVisit.getHeelRevenue() != 0.0) {
 						addDetailProperty("Price", "", "$", "/mmBtu", portVisit.getHeelRevenueUnitPrice(), new StringFormatLabelProvider("%.2f"), dp);
 					}
@@ -122,22 +121,19 @@ public class BasicShippingDetailsProperties extends AbstractDetailPropertyFactor
 			}
 		}
 
-		if (eventGrouping instanceof GeneratedCharterOut) {
-			final GeneratedCharterOut event = (GeneratedCharterOut) eventGrouping;
+		if (eventGrouping instanceof GeneratedCharterOut event) {
 			addDetailProperty("Charter revenue", "", "$", "", event.getRevenue(), new StringFormatLabelProvider("%,d"), details);
-		} else if (eventGrouping instanceof VesselEventVisit) {
-			final VesselEventVisit vesselEventVisit = (VesselEventVisit) eventGrouping;
-			if (vesselEventVisit.getVesselEvent() instanceof CharterOutEvent) {
-				final CharterOutEvent charterOutEvent = (CharterOutEvent) vesselEventVisit.getVesselEvent();
+		} else if (eventGrouping instanceof VesselEventVisit vesselEventVisit) {
+			if (vesselEventVisit.getVesselEvent() instanceof CharterOutEvent charterOutEvent) {
 				final long value = charterOutEvent.getDurationInDays() * charterOutEvent.getHireRate();
 				addDetailProperty("Charter revenue", "", "$", "", value, new StringFormatLabelProvider("%,d"), details);
 			}
 		}
 
-		if (eventGrouping instanceof StartEvent) {
-			final StartEvent startEvent = (StartEvent) eventGrouping;
+		if (eventGrouping instanceof StartEvent startEvent) {
 			{
-				// addDetailProperty("Repositioning", "", "$", "", 0, new StringFormatLabelProvider("%,d"), details);
+				// addDetailProperty("Repositioning", "", "$", "", 0, new
+				// StringFormatLabelProvider("%,d"), details);
 			}
 		}
 

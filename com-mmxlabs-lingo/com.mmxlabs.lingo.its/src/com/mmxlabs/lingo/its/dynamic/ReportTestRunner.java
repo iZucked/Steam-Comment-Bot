@@ -47,27 +47,25 @@ public class ReportTestRunner {
 						final List<DynamicNode> scenarioCases = new LinkedList<>();
 
 						for (final ReportRecord t : reportRecords) {
-							final String reportID = t.getReportID();
-							scenarioCases.add(DynamicTest.dynamicTest(t.getFileNameCode(), () -> {
+							final String reportID = t.reportID();
+							scenarioCases.add(DynamicTest.dynamicTest(t.fileNameCode(), () -> {
 								ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
-									final String actual = ReportTester.runReportsTest(modelRecord, scenarioDataProvider, reportID, t.getReportType());
+									final String actual = ReportTester.runReportsTest(modelRecord, scenarioDataProvider, reportID, t.reportType());
 
 									final File resultsFolder = new File(scenarioFile.getParentFile(), "results");
 									resultsFolder.mkdir();
-									final String ext = t.getReportType() == ReportType.REPORT_HTML ? ".html" : ".json";
-									final File reportFile = new File(resultsFolder, t.getFileNameCode() + ext);
+									final String ext = t.reportType() == ReportType.REPORT_HTML ? ".html" : ".json";
+									final File reportFile = new File(resultsFolder, t.fileNameCode() + ext);
 
 									if (TestingModes.ReportTestMode == TestMode.Generate) {
 										Files.writeString(reportFile.toPath(), actual);
 									} else if (TestingModes.ReportTestMode == TestMode.Run) {
 										final String expected = Files.readString(reportFile.toPath());
-										Assertions.assertEquals(expected.replaceAll("\\r\\n", "\n")
-												.replaceAll("Sep([^t])", "Sept$1") // Java 16 Compat
+										Assertions.assertEquals(expected.replaceAll("\\r\\n", "\n").replaceAll("Sep([^t])", "Sept$1") // Java 16 Compat
 												.replaceAll("\\(EET\\)", "(TRT)") // Java 16 Compat (New turkey timezone)
-												, actual.replaceAll("\\r\\n", "\n")
-												.replaceAll("Sep([^t])", "Sept$1") // Java 16 Compat
+										, actual.replaceAll("\\r\\n", "\n").replaceAll("Sep([^t])", "Sept$1") // Java 16 Compat
 												.replaceAll("\\(EET\\)", "(TRT)") // Java 16 Compat (New turkey timezone)
-												, String.format("Mismatching result: %s for %s", reportID, f.getName()));
+										, String.format("Mismatching result: %s for %s", reportID, f.getName()));
 									}
 								});
 							}));
@@ -102,18 +100,18 @@ public class ReportTestRunner {
 							final List<DynamicNode> elementCases = new LinkedList<>();
 
 							for (final ReportRecord t : ReportTesterHelper.createSelectedElementReportTests()) {
-								final String reportID = t.getReportID();
-								elementCases.add(DynamicTest.dynamicTest(t.getFileNameCode(), () -> {
+								final String reportID = t.reportID();
+								elementCases.add(DynamicTest.dynamicTest(t.fileNameCode(), () -> {
 									ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
-										final String actual = ReportTester.runReportsTestWithElement(modelRecord, scenarioDataProvider, reportID, t.getReportType(), elementID);
+										final String actual = ReportTester.runReportsTestWithElement(modelRecord, scenarioDataProvider, reportID, t.reportType(), elementID);
 
 										final File resultsFolder = new File(scenarioFile.getParentFile(), "results");
 										resultsFolder.mkdir();
 
 										final String encodedID = encodeElementID(elementID);
-										final String ext = t.getReportType() == ReportType.REPORT_HTML ? ".html" : ".json";
+										final String ext = t.reportType() == ReportType.REPORT_HTML ? ".html" : ".json";
 
-										final File reportFile = new File(resultsFolder, t.getFileNameCode() + "." + encodedID + ext);
+										final File reportFile = new File(resultsFolder, t.fileNameCode() + "." + encodedID + ext);
 
 										if (TestingModes.ReportTestMode == TestMode.Generate) {
 											Files.writeString(reportFile.toPath(), actual);
@@ -140,7 +138,8 @@ public class ReportTestRunner {
 	}
 
 	/**
-	 * The element id will form part of the filename, so make sure we have safe chars
+	 * The element id will form part of the filename, so make sure we have safe
+	 * chars
 	 * 
 	 * @param id
 	 * @return

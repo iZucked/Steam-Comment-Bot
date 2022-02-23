@@ -15,10 +15,6 @@
 -->
 
 <plugin>
-
-
-
-	
 	<extension
 		point="com.mmxlabs.models.ui.componenthelpers">
 		
@@ -28,58 +24,12 @@
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.port.Port" />
 		
-		<componentHelper
-			id="com.mmxlabs.models.lng.port.helpers.Route"
-			helperClass="com.mmxlabs.models.lng.port.presentation.composites.RouteComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.port.Route" />
 		
-		<componentHelper
-			id="com.mmxlabs.models.lng.port.helpers.PortGroup"
-			helperClass="com.mmxlabs.models.lng.port.presentation.composites.PortGroupComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.port.PortGroup" />
-		
-		<componentHelper
-			id="com.mmxlabs.models.lng.port.helpers.RouteLine"
-			helperClass="com.mmxlabs.models.lng.port.presentation.composites.RouteLineComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.port.RouteLine" />
-		
-		<componentHelper
-			id="com.mmxlabs.models.lng.port.helpers.PortModel"
-			helperClass="com.mmxlabs.models.lng.port.presentation.composites.PortModelComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.port.PortModel" />
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.port.presentation.composites.CapabilityGroupComponentHelper"
-        id="com.mmxlabs.models.lng.port.helpers.CapabilityPortGroup"
-        inheritable="false"
-        modelClass="com.mmxlabs.models.lng.port.CapabilityGroup">
-  </componentHelper>
   <componentHelper
         helperClass="com.mmxlabs.models.lng.port.presentation.composites.LocationComponentHelper"
         id="com.mmxlabs.models.lng.port.helpers.Location"
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.port.Location">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.port.presentation.composites.EntryPointComponentHelper"
-        id="com.mmxlabs.models.lng.port.presentation.composites.EntryPointComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.port.EntryPoint">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.port.presentation.composites.ContingencyMatrixComponentHelper"
-        id="com.mmxlabs.models.lng.port.presentation.composites.ContingencyMatrixComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.port.ContingencyMatrix">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.port.presentation.composites.ContingencyMatrixEntryComponentHelper"
-        id="com.mmxlabs.models.lng.port.presentation.composites.ContingencyMatrixEntryComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.port.ContingencyMatrixEntry">
   </componentHelper>
 		
 	</extension>
@@ -132,6 +82,16 @@
  <extension
        point="com.mmxlabs.models.ui.editorfactories">
     <editorFactory
+          factoryClass="com.mmxlabs.models.lng.port.ui.editors.PortGroupContentsEditorFactory"
+          featureNameEquals="contents"
+          id="com.mmxlabs.models.lng.port.editor.portGroupEditorFactory">
+       <OwnerAnyOf>
+          <EClassExtends
+                EClass="com.mmxlabs.models.lng.port.PortGroup">
+          </EClassExtends>
+       </OwnerAnyOf>
+    </editorFactory>
+    <editorFactory
           factoryClass="com.mmxlabs.models.ui.dates.TimeInlineEditorFactory"
           featureNameEquals="defaultStartTime"
           id="com.mmxlabs.models.lng.port.editor.portTimeEditor">
@@ -140,6 +100,18 @@
                 EClass="com.mmxlabs.models.lng.port.Port">
           </EClassExtends>
        </OwnerAnyOf>
+    </editorFactory>
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.port.ui.editors.PortInlineEditorFactory"
+          id="com.mmxlabs.models.lng.port.ui.editors.PortInlineEditorFactory">
+       <FeatureAnyOf>
+          <EClassExtends
+                EClass="com.mmxlabs.models.lng.port.Port">
+          </EClassExtends>
+          <EClassExtends
+                EClass="com.mmxlabs.models.lng.types.APortSet">
+          </EClassExtends>
+       </FeatureAnyOf>
     </editorFactory>
     <editorFactory
           factoryClass="com.mmxlabs.models.lng.port.ui.editors.RouteOptionInlineEditorFactory"
@@ -172,25 +144,6 @@
     </view>
  </extension>
  <extension
-       point="org.eclipse.help.contexts">
-    <contexts
-          file="contexts.xml">
-    </contexts>
- </extension>
- <extension
-       point="com.mmxlabs.models.ui.editorfactories">
-    <editorFactory
-          factoryClass="com.mmxlabs.models.lng.port.ui.editors.PortGroupContentsEditorFactory"
-          featureNameEquals="contents"
-          id="com.mmxlabs.models.lng.port.editor.portGroupEditorFactory">
-       <OwnerAnyOf>
-          <EClassExtends
-                EClass="com.mmxlabs.models.lng.port.PortGroup">
-          </EClassExtends>
-       </OwnerAnyOf>
-    </editorFactory>
- </extension>
- <extension
        point="com.mmxlabs.models.ui.displaycompositefactories">
     <displayCompositeFactory
           eClass="com.mmxlabs.models.lng.port.PortGroup"
@@ -210,21 +163,12 @@
           id="com.mmxlabs.models.lng.port.ui.editors.ContingencyMatrixDisplayCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
- </extension>
- <extension
-       point="com.mmxlabs.models.ui.editorfactories">
-    <editorFactory
-          factoryClass="com.mmxlabs.models.lng.port.ui.editors.PortInlineEditorFactory"
-          id="com.mmxlabs.models.lng.port.ui.editors.PortInlineEditorFactory">
-       <FeatureAnyOf>
-          <EClassExtends
-                EClass="com.mmxlabs.models.lng.port.Port">
-          </EClassExtends>
-          <EClassExtends
-                EClass="com.mmxlabs.models.lng.types.APortSet">
-          </EClassExtends>
-       </FeatureAnyOf>
-    </editorFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.port.Port"
+          factory="com.mmxlabs.models.lng.port.ui.editors.PortDetailCompositeFactory"
+          id="com.mmxlabs.models.lng.port.ui.editors.PortDetailCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
  </extension>
  <extension
        point="com.mmxlabs.models.common.modelcommandprovider">
@@ -237,17 +181,6 @@
           id="com.mmxlabs.models.lng.port.ui.commands.PortCountryGroupCommandProvider">
     </ModelCommandProvider>
  </extension>
-   <extension point="org.eclipse.ui.editors">
-      <!-- @generated port -->
-      <editor
-            id="com.mmxlabs.models.lng.port.presentation.PortEditorID"
-            name="%_UI_PortEditor_label"
-            icon="icons/full/obj16/PortModelFile.gif"
-            extensions="port"
-            class="com.mmxlabs.models.lng.port.presentation.PortEditor"
-            contributorClass="com.mmxlabs.models.lng.port.presentation.PortActionBarContributor">
-      </editor>
-   </extension>
    <extension
          point="com.mmxlabs.models.util.import.attributes">
       <attributeImporter
@@ -274,15 +207,6 @@
       <WrappedCommandExtension
             class="com.mmxlabs.models.lng.port.ui.commands.PortGroupVersionCommandWrapper">
       </WrappedCommandExtension>
-   </extension>
-   <extension
-         point="com.mmxlabs.models.ui.displaycompositefactories">
-      <displayCompositeFactory
-            eClass="com.mmxlabs.models.lng.port.Port"
-            factory="com.mmxlabs.models.lng.port.presentation.composites.PortDetailCompositeFactory"
-            id="com.mmxlabs.models.lng.port.presentation.composites.PortDetailCompositeFactory"
-            inheritable="true">
-      </displayCompositeFactory>
    </extension>
 
 </plugin>
