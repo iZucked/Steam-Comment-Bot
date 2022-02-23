@@ -236,11 +236,11 @@ public class ScenarioServicePushToCloudAction {
 
 	private static UserSettings getOptimisationPlanForInsertion(final ScenarioInstance scenarioInstance, final List<Slot<?>> targetSlots) {
 		UserSettings userSettings = null;
-		final ScenarioModelRecord originalModelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+		final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 		String taskName = AnalyticsSolutionHelper.generateInsertionName(true, targetSlots);
 		{
 
-			try (final ModelReference modelReference = originalModelRecord.aquireReference("InsertSlotContextMenuExtension:1")) {
+			try (final ModelReference modelReference = modelRecord.aquireReference("InsertSlotContextMenuExtension:1")) {
 
 				final EObject object = modelReference.getInstance();
 
@@ -359,13 +359,13 @@ public class ScenarioServicePushToCloudAction {
 				case SandboxModeConstants.MODE_OPTIONISE -> cRecord.setSubType("Optionise");
 				}
 			}
-			
+
 			if (originalSandboxModel != null) {
 				cRecord.setComponentUUID(originalSandboxModel.getUuid());
 			}
 			cRecord.setScenarioInstance(scenarioInstance);
-			
-			final ScenarioModelRecord modelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
+
+			final ScenarioModelRecord originalModelRecord = SSDataManager.Instance.getModelRecord(scenarioInstance);
 
 			IScenarioDataProvider scenarioDataProvider = null;
 			LNGScenarioModel scenarioModel = null;
@@ -377,7 +377,7 @@ public class ScenarioServicePushToCloudAction {
 			final List<VesselEvent> anonymisedEvents = null;
 			OptionAnalysisModel sandboxModelCopy = null;
 
-			try (IScenarioDataProvider originalScenarioDataProvider = modelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
+			try (IScenarioDataProvider originalScenarioDataProvider = originalModelRecord.aquireScenarioDataProvider("ScenarioStorageUtil:withExternalScenarioFromResourceURL")) {
 				final LNGScenarioModel originalScenarioModel = originalScenarioDataProvider.getTypedScenario(LNGScenarioModel.class);
 
 				scenarioModel = EcoreUtil.copy(originalScenarioModel);
@@ -436,7 +436,7 @@ public class ScenarioServicePushToCloudAction {
 					sandboxModelCopy.setResults(null);
 				}
 
-				scenarioDataProvider = SimpleScenarioDataProvider.make(EcoreUtil.copy(modelRecord.getManifest()), scenarioModel);
+				scenarioDataProvider = SimpleScenarioDataProvider.make(EcoreUtil.copy(originalModelRecord.getManifest()), scenarioModel);
 				final EditingDomain editingDomain = scenarioDataProvider.getEditingDomain();
 
 				progressMonitor.subTask("Anonymise scenario");
@@ -507,7 +507,7 @@ public class ScenarioServicePushToCloudAction {
 				progressMonitor.subTask("Encrypting the scenario");
 				tmpEncryptedScenarioFile = Files.createTempFile(ScenarioStorageUtil.getTempDirectory().toPath(), "archive_", ".lingo").toFile();
 				CloudOptimisationSharedCipherProvider scenarioCipherProvider = new CloudOptimisationSharedCipherProvider(keyfile);
-				ScenarioStorageUtil.storeToFile(modelRecord, tmpEncryptedScenarioFile, scenarioCipherProvider);
+				ScenarioStorageUtil.storeCopyToFile(scenarioDataProvider, tmpEncryptedScenarioFile, scenarioCipherProvider);
 			} catch (final IOException e) {
 				cleanup(anonymisationMap, encryptedSymmetricKey, keyStore);
 				LOG.error(e.getMessage());
