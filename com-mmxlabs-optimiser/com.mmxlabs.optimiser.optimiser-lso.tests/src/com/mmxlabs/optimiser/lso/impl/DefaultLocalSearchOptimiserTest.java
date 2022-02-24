@@ -81,7 +81,7 @@ public class DefaultLocalSearchOptimiserTest {
 			}
 
 			@Override
-			public void updateLookup(@NonNull ISequences sequences, @Nullable Collection<IResource> changedResources) {
+			public void updateLookup(@NonNull ISequences sequences, @Nullable Collection<@NonNull IResource> changedResources) {
 
 			}
 
