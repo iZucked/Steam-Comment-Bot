@@ -24,8 +24,10 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.lingo.its.tests.AbstractReportTester.ReportType;
+import com.mmxlabs.lingo.reports.IAnalyticSolutionGenerator;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IReportContentsGenerator;
+import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -361,5 +363,19 @@ public class ReportTester {
 		Assertions.assertNotNull(actualContents);
 		return actualContents;
 
+	}
+	
+	public static String generateAnalyticsSolutionReport(String reportID, AnalyticsSolution solution) throws Exception {
+		
+		final ReportTesterHelper reportTester = new ReportTesterHelper();
+		final String[] result = new String[1];
+		
+		reportTester.runReportTest(reportID, null, null, IAnalyticSolutionGenerator.class, generator -> result[0] = generator.getReportContents(solution).getHTMLContents());
+		
+		Assertions.assertNotNull(result[0]);
+		final String actualContents = result[0];
+		Assertions.assertNotNull(actualContents);
+		return actualContents;
+		
 	}
 }

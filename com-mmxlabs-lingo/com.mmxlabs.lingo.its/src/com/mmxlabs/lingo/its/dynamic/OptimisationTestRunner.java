@@ -36,6 +36,7 @@ import com.mmxlabs.lingo.its.tests.TestingModes;
 import com.mmxlabs.lngdataserver.lng.importers.menus.UserSettingsMixin;
 import com.mmxlabs.models.lng.analytics.AbstractSolutionSet;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
+import com.mmxlabs.models.lng.analytics.ui.utils.AnalyticsSolution;
 import com.mmxlabs.models.lng.parameters.OptimisationPlan;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl;
@@ -45,6 +46,8 @@ import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGOptimisationBuilder.LNGOptimisationRunnerBuilder;
+import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessSandboxOptions;
+import com.mmxlabs.models.lng.transformer.ui.headless.HeadlessSandboxRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
@@ -123,6 +126,76 @@ public class OptimisationTestRunner {
 		return allCases;
 	}
 
+	public static List<DynamicNode> runSandboxTests(File baseDirectory) {
+
+		final TriConsumer<List<DynamicNode>, File, File> consumer = (cases, scenarioFile, paramsFile) -> {
+			cases.add(DynamicTest.dynamicTest(paramsFile.getName(), () -> {
+				ScenarioStorageUtil.withExternalScenarioFromResourceURLConsumer(scenarioFile.toURI().toURL(), (modelRecord, scenarioDataProvider) -> {
+
+					final HeadlessSandboxOptions userSettings = OptimisationTestRunner.getSandboxOptions(paramsFile);
+					Assertions.assertNotNull(userSettings);
+					assert userSettings != null; // For null analysis
+
+					final File resultsFolder = new File(scenarioFile.getParentFile(), "results");
+					resultsFolder.mkdir();
+
+					final File comparisonFile = new File(resultsFolder, paramsFile.getName() + ".compare.html");
+
+					final String existingCompare = comparisonFile.exists() ? Files.readString(comparisonFile.toPath()) : null;
+					final Consumer<String> saver = comparison -> {
+						try {
+							Files.writeString(comparisonFile.toPath(), comparison, StandardCharsets.UTF_8);
+
+						} catch (final Exception e) {
+							Assertions.fail(e.getMessage(), e);
+						}
+					};
+					OptimisationTestRunner.runSandbox(modelRecord, scenarioDataProvider, userSettings, existingCompare, saver);
+				});
+			}));
+		};
+
+		final List<DynamicNode> allCases = new LinkedList<>();
+		if (baseDirectory.exists() && baseDirectory.isDirectory()) {
+			for (final File f : baseDirectory.listFiles()) {
+				if (f.isDirectory()) {
+					final String name = f.getName();
+					final File scenario = new File(f, "scenario.lingo");
+					if (scenario.exists()) {
+						final List<DynamicNode> cases = new LinkedList<>();
+
+						for (final File params : f.listFiles()) {
+							if (params.getName().startsWith("sandbox-") && params.getName().endsWith(".json")) {
+								consumer.accept(cases, scenario, params);
+							}
+						}
+
+						if (!cases.isEmpty()) {
+							allCases.add(DynamicContainer.dynamicContainer(name, cases));
+						}
+					}
+				}
+			}
+		}
+		return allCases;
+	}
+
+	public static @Nullable HeadlessSandboxOptions getSandboxOptions(final File file) throws IOException {
+
+		if (!file.exists()) {
+			return null;
+		} else {
+
+			final ObjectMapper mapper = new ObjectMapper();
+			mapper.registerModule(new JavaTimeModule());
+			mapper.registerModule(new Jdk8Module());
+			mapper.enable(Feature.ALLOW_COMMENTS);
+
+			return mapper.readValue(file, HeadlessSandboxOptions.class);
+		}
+
+	}
+
 	public static @Nullable UserSettings getUserSettings(final File file) {
 
 		if (!file.exists()) {
@@ -133,7 +206,7 @@ public class OptimisationTestRunner {
 			mapper.registerModule(new JavaTimeModule());
 			mapper.registerModule(new Jdk8Module());
 			mapper.enable(Feature.ALLOW_COMMENTS);
-			
+
 			mapper.addMixIn(UserSettingsImpl.class, UserSettingsMixin.class);
 			mapper.addMixIn(UserSettings.class, UserSettingsMixin.class);
 
@@ -241,6 +314,32 @@ public class OptimisationTestRunner {
 
 		if (saveFitnesses) {
 			saver.accept(currentState, compareViewContent);
+		}
+	}
+
+	public static void runSandbox(final ScenarioModelRecord modelRecord, @NonNull final IScenarioDataProvider sdp, ///
+			@NonNull final HeadlessSandboxOptions options, @Nullable final String existingCompareContent, @Nullable final Consumer<String> saver) throws Exception {
+
+		final boolean checkResults = TestingModes.OptimisationTestMode == TestMode.Run;
+		final boolean saveResults = TestingModes.OptimisationTestMode == TestMode.Generate;
+
+		HeadlessSandboxRunner runner = new HeadlessSandboxRunner();
+
+		AbstractSolutionSet solutionSet = runner.run(options, modelRecord, sdp, null, new NullProgressMonitor(), true);
+
+		AnalyticsSolution solution = new AnalyticsSolution(modelRecord, solutionSet, "sandbox");
+//		final ScenarioResult pinResult = new ScenarioResultImpl(modelRecord, solutionSet.getBaseOption().getScheduleModel());
+//		final ScenarioResult refResult = new ScenarioResultImpl(modelRecord, solutionSet.getOptions().get(solutionSet.getOptions().size() - 1).getScheduleModel());
+
+		final String compareViewContent = ReportTester.generateAnalyticsSolutionReport(ReportTesterHelper.CHANGESET_REPORT_ID, solution);
+		Assertions.assertNotNull(compareViewContent);
+
+		if (checkResults) {
+			Assertions.assertEquals(existingCompareContent.replaceAll("\\r\\n", "\n"), compareViewContent.replaceAll("\\r\\n", "\n"));
+		}
+
+		if (saveResults) {
+			saver.accept(compareViewContent);
 		}
 	}
 
