@@ -719,6 +719,7 @@ public class AnalyticsScenarioEvaluator implements IAnalyticsScenarioEvaluator {
 			sandboxResult.setName("SandboxResult");
 			sandboxResult.setHasDualModeSolutions(dualPNLMode);
 			sandboxResult.setUserSettings(EMFCopier.copy(userSettings));
+			sandboxResult.setPortfolioBreakEvenMode(model.isUseTargetPNL());
 
 			// Request this now one all other parts have run to get correct data.
 			final ExtraDataProvider extraDataProvider = mapper.getExtraDataProvider();

@@ -190,10 +190,8 @@ public class ChangeSetView extends ViewPart {
 			final Object original_e2 = e2;
 
 			// If both rows of the same parent group..
-			if (e1 instanceof ChangeSetTableRow && e2 instanceof ChangeSetTableRow) {
+			if (e1 instanceof ChangeSetTableRow r1 && e2 instanceof ChangeSetTableRow r2) {
 				// Retain original ordering in the datamodel
-				final ChangeSetTableRow r1 = (ChangeSetTableRow) e1;
-				final ChangeSetTableRow r2 = (ChangeSetTableRow) e2;
 				if (r1.eContainer() == r2.eContainer()) {
 					final ChangeSetTableGroup g = (ChangeSetTableGroup) r1.eContainer();
 					if (sortByVesselAndDate) {
@@ -606,7 +604,6 @@ public class ChangeSetView extends ViewPart {
 						columnHelper.setTextualVesselMarkers(true);
 
 						openAnalyticsSolution(solution, false, null);
- 
 
 						final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
 
@@ -1692,7 +1689,13 @@ public class ChangeSetView extends ViewPart {
 					final SandboxResult sandboxResult = (SandboxResult) plan;
 					// Sorting by Group as the label provider uses the provided ordering for
 					// indexing
-					final ViewState viewState = new ViewState(transformer.createDataModel(scenarioInstance, modelRecord, sandboxResult, monitor), SortMode.BY_PNL);
+
+					SortMode sortMode = SortMode.BY_PNL;
+					if (sandboxResult.isPortfolioBreakEvenMode()) {
+						sortMode = SortMode.BY_GROUP;
+					}
+
+					final ViewState viewState = new ViewState(transformer.createDataModel(scenarioInstance, modelRecord, sandboxResult, monitor), sortMode);
 					viewState.lastSolution = solution;
 					viewState.allTargetElements.clear();
 					// viewState.allTargetSlots.addAll(sandboxResult.getExtraSlots());
@@ -1706,8 +1709,7 @@ public class ChangeSetView extends ViewPart {
 					viewState.lastSolution = solution;
 					return viewState;
 				}, runAsync, slotId);
-			} else if (plan instanceof SlotInsertionOptions) {
-				final SlotInsertionOptions slotInsertionOptions = (SlotInsertionOptions) plan;
+			} else if (plan instanceof SlotInsertionOptions slotInsertionOptions) {
 				setViewMode(ViewMode.INSERTIONS, slotInsertionOptions.isHasDualModeSolutions());
 				final int insertedObjects = slotInsertionOptions.getSlotsInserted().size() + slotInsertionOptions.getEventsInserted().size();
 				insertionPlanFilter.setMaxComplexity(2 + 2 * insertedObjects);
