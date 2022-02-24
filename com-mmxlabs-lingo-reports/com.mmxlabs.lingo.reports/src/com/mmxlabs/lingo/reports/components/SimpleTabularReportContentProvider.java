@@ -14,7 +14,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
  * @author Simon McGregor
  * 
  */
-public abstract class AbstractSimpleTabularReportContentProvider<T> implements ITreeContentProvider {
+public class SimpleTabularReportContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object[] getElements(final Object inputElement) {
@@ -23,11 +23,6 @@ public abstract class AbstractSimpleTabularReportContentProvider<T> implements I
 			return collection.toArray();
 		}
 		return new Object[0];
-	}
-
-	@Override
-	public void dispose() {
-
 	}
 
 	@Override

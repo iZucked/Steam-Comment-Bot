@@ -41,7 +41,7 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
+import com.mmxlabs.lingo.reports.components.SimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
 import com.mmxlabs.lingo.reports.components.ColumnManager;
 import com.mmxlabs.lingo.reports.internal.Activator;
@@ -311,7 +311,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	 * 
 	 * @return
 	 */
-	protected abstract AbstractSimpleTabularReportContentProvider<T> createContentProvider();
+	protected abstract SimpleTabularReportContentProvider createContentProvider();
 
 	protected abstract AbstractSimpleTabularReportTransformer<T> createTransformer();
 
