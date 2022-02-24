@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.emf.ecore.EAttribute;
@@ -22,11 +21,13 @@ import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.swt.SWT;
@@ -34,10 +35,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
+import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.IReportContentsGenerator;
+import com.mmxlabs.lingo.reports.ReportContents;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ReentrantSelectionManager;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.lingo.reports.services.SelectedDataProviderImpl;
 import com.mmxlabs.lingo.reports.services.SelectionServiceUtils;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.PaperDeal;
@@ -51,10 +56,11 @@ import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.ui.tabular.GridViewerHelper;
-import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.SelectionHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
+import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
+import com.mmxlabs.rcp.common.actions.CopyTransposedGridToJSONUtil;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.scenario.service.ScenarioResult;
 
@@ -90,35 +96,23 @@ public class ExposureDetailReportView extends ViewPart {
 		createColumn("Unit", currencyGroup, SchedulePackage.Literals.EXPOSURE_DETAIL__CURRENCY_UNIT);
 
 		viewer.setContentProvider(new ITreeContentProvider() {
-
-			@Override
-			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-				// Nothing to do
-			}
-
-			@Override
-			public void dispose() {
-				// Nothing to do
-			}
-
+ 
 			@Override
 			public boolean hasChildren(final Object element) {
 
-				if (element instanceof SlotAllocation) {
-					final SlotAllocation slotAllocation = (SlotAllocation) element;
+				if (element instanceof SlotAllocation slotAllocation) {
 					return !slotAllocation.getExposures().isEmpty();
 				}
-				if (element instanceof PaperDealAllocation) {
-					final PaperDealAllocation slotAllocation = (PaperDealAllocation) element;
-					return !slotAllocation.getEntries().isEmpty();
+				if (element instanceof PaperDealAllocation paperDealAllocation) {
+					return !paperDealAllocation.getEntries().isEmpty();
 				}
 				return false;
 			}
 
 			@Override
 			public Object getParent(final Object element) {
-				if (element instanceof ExposureDetail) {
-					return ((ExposureDetail) element).eContainer();
+				if (element instanceof ExposureDetail detail) {
+					return detail.eContainer();
 				}
 				return null;
 			}
@@ -128,17 +122,14 @@ public class ExposureDetailReportView extends ViewPart {
 				if (inputElement instanceof Object[]) {
 					return (Object[]) inputElement;
 				}
-				if (inputElement instanceof Collection<?>) {
-					final Collection<?> collection = (Collection<?>) inputElement;
+				if (inputElement instanceof Collection<?> collection) {
 					return collection.toArray();
 				}
-				if (inputElement instanceof SlotAllocation) {
-					final SlotAllocation slotAllocation = (SlotAllocation) inputElement;
+				if (inputElement instanceof SlotAllocation slotAllocation) {
 					return slotAllocation.getExposures().toArray();
 				}
-				if (inputElement instanceof PaperDealAllocation) {
-					final PaperDealAllocation slotAllocation = (PaperDealAllocation) inputElement;
-					return slotAllocation.getEntries().stream().flatMap(e -> e.getExposures().stream()).toArray();
+				if (inputElement instanceof PaperDealAllocation paperDealAllocation) {
+					return paperDealAllocation.getEntries().stream().flatMap(e -> e.getExposures().stream()).toArray();
 				}
 				return new Object[0];
 			}
@@ -148,17 +139,14 @@ public class ExposureDetailReportView extends ViewPart {
 				if (parentElement instanceof Object[]) {
 					return (Object[]) parentElement;
 				}
-				if (parentElement instanceof Collection<?>) {
-					final Collection<?> collection = (Collection<?>) parentElement;
+				if (parentElement instanceof Collection<?> collection) {
 					return collection.toArray();
 				}
-				if (parentElement instanceof SlotAllocation) {
-					final SlotAllocation slotAllocation = (SlotAllocation) parentElement;
+				if (parentElement instanceof SlotAllocation slotAllocation) {
 					return slotAllocation.getExposures().toArray();
 				}
-				if (parentElement instanceof PaperDealAllocation) {
-					final PaperDealAllocation slotAllocation = (PaperDealAllocation) parentElement;
-					return slotAllocation.getEntries().stream().flatMap(e -> e.getExposures().stream()).toArray();
+				if (parentElement instanceof PaperDealAllocation paperDealAllocation) {
+					return paperDealAllocation.getEntries().stream().flatMap(e -> e.getExposures().stream()).toArray();
 				}
 				return new Object[0];
 			}
@@ -171,7 +159,7 @@ public class ExposureDetailReportView extends ViewPart {
 				List<Object> selected = (selection == null) ? Collections.emptyList() : SelectionHelper.convertToList(selection, Object.class);
 				selected = selected.stream().filter(
 						s -> s instanceof Slot || s instanceof SlotAllocation || s instanceof Cargo || s instanceof CargoAllocation || s instanceof PaperDealAllocation || s instanceof PaperDeal)
-						.collect(Collectors.toList());
+						.toList();
 				//
 				if (selected.isEmpty()) {
 					return false;
@@ -179,15 +167,12 @@ public class ExposureDetailReportView extends ViewPart {
 				if (element instanceof ExposureDetail) {
 					return true;
 				}
-				if (element instanceof SlotAllocation) {
-					final SlotAllocation slotAllocation = (SlotAllocation) element;
+				if (element instanceof SlotAllocation slotAllocation) {
 					return selected.contains(element) || selected.contains(slotAllocation.getSlot()) || selected.contains(slotAllocation.getCargoAllocation());
 
-				} else if (element instanceof PaperDeal) {
-					final PaperDeal paperDeal = (PaperDeal) element;
+				} else if (element instanceof PaperDeal paperDeal) {
 					return selected.contains(paperDeal);
-				} else if (element instanceof PaperDealAllocation) {
-					final PaperDealAllocation paperDealAllocation = (PaperDealAllocation) element;
+				} else if (element instanceof PaperDealAllocation paperDealAllocation) {
 					return selected.contains(paperDealAllocation) || selected.contains(paperDealAllocation.getPaperDeal());
 				}
 				return true;
@@ -244,11 +229,9 @@ public class ExposureDetailReportView extends ViewPart {
 			public void update(final ViewerCell cell) {
 				cell.setText("");
 				final Object element = cell.getElement();
-				if (element instanceof SlotAllocation) {
-					SlotAllocation slotAllocation = (SlotAllocation) element;
+				if (element instanceof SlotAllocation slotAllocation) {
 					cell.setText(slotAllocation.getName());
-				} else if (element instanceof PaperDealAllocation) {
-					PaperDealAllocation paperDealAllocation = (PaperDealAllocation) element;
+				} else if (element instanceof PaperDealAllocation paperDealAllocation) {
 					cell.setText(paperDealAllocation.getPaperDeal().getName());
 				}
 			}
@@ -273,8 +256,7 @@ public class ExposureDetailReportView extends ViewPart {
 			public void update(final ViewerCell cell) {
 
 				final Object element = cell.getElement();
-				if (element instanceof EObject) {
-					final EObject eObject = (EObject) element;
+				if (element instanceof EObject eObject) {
 					if (reference instanceof EAttribute) {
 						if (eObject.eClass().getEAllAttributes().contains(reference)) {
 							updateCellForEAttributeReference(cell, element, reference);
@@ -298,7 +280,7 @@ public class ExposureDetailReportView extends ViewPart {
 		col.getColumn().setWidth(120);
 		return col;
 	}
-	
+
 	private void updateCellForEAttributeReference(final ViewerCell cell, final Object element, final EStructuralFeature reference) {
 		final Object o = ((EObject) element).eGet(reference);
 		if (o == null) {
@@ -313,34 +295,34 @@ public class ExposureDetailReportView extends ViewPart {
 			} else {
 				cell.setText(o.toString().toUpperCase());
 			}
-		} else if (reference == SchedulePackage.Literals.EXPOSURE_DETAIL__VOLUME_UNIT) { 
-			switch(o.toString().toLowerCase()) {
-			case "mmbtu" :
+		} else if (reference == SchedulePackage.Literals.EXPOSURE_DETAIL__VOLUME_UNIT) {
+			switch (o.toString().toLowerCase()) {
+			case "mmbtu":
 				cell.setText("mmBtu");
 				break;
-			case "mwh" :
+			case "mwh":
 				cell.setText("MWh");
 				break;
-			case "bbl" :
+			case "bbl":
 				cell.setText("bbl");
 				break;
-			case "therm" :
+			case "therm":
 				cell.setText("therm");
 				break;
-			default: cell.setText(o.toString());
+			default:
+				cell.setText(o.toString());
 			}
 		} else {
 			cell.setText(o.toString());
 		}
 	}
-	
+
 	private void updateCellWithEGET(final ViewerCell cell, final Object element, final EStructuralFeature reference) {
 		final Object o = ((EObject) element).eGet(reference);
 		if (o instanceof Slot) {
 			final Slot<?> slot = (Slot<?>) o;
 			cell.setText(slot.getName());
-		} else if (o instanceof AbstractYearMonthCurve) {
-			final AbstractYearMonthCurve idx = (AbstractYearMonthCurve) o;
+		} else if (o instanceof AbstractYearMonthCurve idx) {
 			cell.setText(idx.getName());
 		} else if (element instanceof ExposureDetail) {
 			if (reference == SchedulePackage.Literals.EXPOSURE_DETAIL__UNIT_PRICE) {
@@ -360,38 +342,37 @@ public class ExposureDetailReportView extends ViewPart {
 		@Override
 		public void selectedDataProviderChanged(@NonNull ISelectedDataProvider selectedDataProvider, boolean block) {
 
-			final Runnable r = new Runnable() {
-				@Override
-				public void run() {
+			final Runnable r = () -> {
 
-					final List<EObject> slotAllocations = new LinkedList<>();
-					ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
-					if (pinned != null) {
+				final List<EObject> slotAllocations = new LinkedList<>();
+				ScenarioResult pinned = selectedDataProvider.getPinnedScenarioResult();
+				if (pinned != null) {
 
-						final @Nullable ScheduleModel scheduleModel = pinned.getTypedResult(ScheduleModel.class);
-						if (scheduleModel != null) {
-							final Schedule schedule = scheduleModel.getSchedule();
-							if (schedule != null) {
-								schedule.getCargoAllocations().forEach(ca -> slotAllocations.addAll(ca.getSlotAllocations()));
-								schedule.getPaperDealAllocations().forEach(ca -> slotAllocations.add(ca));
-							}
+					final @Nullable ScheduleModel scheduleModel = pinned.getTypedResult(ScheduleModel.class);
+					if (scheduleModel != null) {
+						final Schedule schedule = scheduleModel.getSchedule();
+						if (schedule != null) {
+							schedule.getCargoAllocations().forEach(ca -> slotAllocations.addAll(ca.getSlotAllocations()));
+							schedule.getPaperDealAllocations().forEach(slotAllocations::add);
 						}
 					}
-					for (final ScenarioResult other : selectedDataProvider.getOtherScenarioResults()) {
-
-						final @Nullable ScheduleModel scheduleModel = other.getTypedResult(ScheduleModel.class);
-						if (scheduleModel != null) {
-							final Schedule schedule = scheduleModel.getSchedule();
-							if (schedule != null) {
-								schedule.getCargoAllocations().forEach(ca -> slotAllocations.addAll(ca.getSlotAllocations()));
-								schedule.getPaperDealAllocations().forEach(ca -> slotAllocations.add(ca));
-
-							}
-						}
-					}
-
-					ViewerHelper.setInput(viewer, true, slotAllocations);
 				}
+				for (final ScenarioResult other : selectedDataProvider.getOtherScenarioResults()) {
+
+					final @Nullable ScheduleModel scheduleModel = other.getTypedResult(ScheduleModel.class);
+					if (scheduleModel != null) {
+						final Schedule schedule = scheduleModel.getSchedule();
+						if (schedule != null) {
+							schedule.getCargoAllocations().forEach(ca -> slotAllocations.addAll(ca.getSlotAllocations()));
+							schedule.getPaperDealAllocations().forEach(slotAllocations::add);
+
+						}
+					}
+				}
+
+				ViewerHelper.setInput(viewer, true, slotAllocations);
+			
+				
 			};
 
 			ViewerHelper.runIfViewerValid(viewer, block, r);
@@ -412,6 +393,49 @@ public class ExposureDetailReportView extends ViewPart {
 	@Override
 	public void setFocus() {
 		ViewerHelper.setFocus(viewer);
+	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> adapter) {
+
+		if (GridTreeViewer.class.isAssignableFrom(adapter)) {
+			return adapter.cast(viewer);
+		}
+		if (Grid.class.isAssignableFrom(adapter)) {
+			return adapter.cast(viewer.getGrid());
+		}
+		if (IReportContentsGenerator.class.isAssignableFrom(adapter)) {
+
+			return adapter.cast(new IReportContentsGenerator() {
+				public IReportContents getReportContents(final ScenarioResult pin, final ScenarioResult other, final @Nullable List<Object> selectedObjects) {
+					final SelectedDataProviderImpl provider = new SelectedDataProviderImpl();
+					if (pin != null) {
+						provider.addScenario(pin);
+						provider.setPinnedScenarioInstance(pin);
+					}
+					if (other != null) {
+						provider.addScenario(other);
+					}
+
+					if (selectedObjects != null) {
+						provider.setSelectedObjects(null, new StructuredSelection(selectedObjects));
+					}
+
+					// Request a blocking update ...
+					selectedScenariosServiceListener.selectedDataProviderChanged(provider, true);
+					
+					ExposureDetailReportView.this.selection = SelectionHelper.adaptSelection(provider.getSelectedObjects());
+					ViewerHelper.refreshThen(viewer, true, () -> viewer.expandAll());
+					
+					// ... so the data is ready to be read here.
+					final CopyGridToHtmlStringUtil jsonUtil = new CopyGridToHtmlStringUtil(viewer.getGrid(), true, true);
+					final String jsonContents = jsonUtil.convert();
+					return ReportContents.makeHTML(jsonContents);
+				}
+			});
+		}
+		 
+		return super.getAdapter(adapter);
 	}
 
 }
