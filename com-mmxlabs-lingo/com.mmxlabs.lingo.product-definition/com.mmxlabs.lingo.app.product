@@ -6,10 +6,13 @@
    <aboutInfo>
       <image path="icons/logo-square-16.png"/>
       <text>
-         LiNGO Platform
+         LiNGO
+Copyright 2010 - 2022
 
 Version: {0}
 Build: {1}
+
+
       </text>
    </aboutInfo>
 
@@ -35,8 +38,6 @@ Build: {1}
          <bmp/>
       </win>
    </launcher>
-
-   <intro introId="com.mmxlabs.shiplingo.platform.app.intro"/>
 
    <vm>
       <linux include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-16</linux>
