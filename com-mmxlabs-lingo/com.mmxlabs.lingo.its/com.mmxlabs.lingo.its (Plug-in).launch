@@ -32,7 +32,7 @@
     <stringAttribute key="org.eclipse.jdt.junit.CONTAINER" value="=com.mmxlabs.lingo.its"/>
     <stringAttribute key="org.eclipse.jdt.junit.EXCLUDE_TAGS" value="com.mmxlabs.lingo.its.tests.category.HubTest"/>
     <booleanAttribute key="org.eclipse.jdt.junit.HAS_EXCLUDE_TAGS" value="false"/>
-    <booleanAttribute key="org.eclipse.jdt.junit.HAS_INCLUDE_TAGS" value="true"/>
+    <booleanAttribute key="org.eclipse.jdt.junit.HAS_INCLUDE_TAGS" value="false"/>
     <stringAttribute key="org.eclipse.jdt.junit.INCLUDE_TAGS" value="com.mmxlabs.lingo.its.tests.category.OptimisationTest"/>
     <booleanAttribute key="org.eclipse.jdt.junit.KEEPRUNNING_ATTR" value="false"/>
     <stringAttribute key="org.eclipse.jdt.junit.TESTNAME" value=""/>
