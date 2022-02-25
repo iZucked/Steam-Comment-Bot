@@ -3,6 +3,7 @@ package com.mmxlabs.models.lng.adp.rateability.input;
 import java.util.Optional;
 import java.util.OptionalInt;
 
+@Deprecated
 public class Contract {
 	public String name;
 	public int contractSpacing;

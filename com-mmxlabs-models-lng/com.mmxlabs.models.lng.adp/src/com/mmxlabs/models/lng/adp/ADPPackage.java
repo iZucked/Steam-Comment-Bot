@@ -146,13 +146,22 @@ public interface ADPPackage extends EPackage {
 	int ADP_MODEL__MULL_PROFILE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Spacing Profile</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADP_MODEL__SPACING_PROFILE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ADP_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int ADP_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -2489,6 +2498,235 @@ public interface ADPPackage extends EPackage {
 	int MULL_CARGO_WRAPPER_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.SpacingProfileImpl <em>Spacing Profile</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.SpacingProfileImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getSpacingProfile()
+	 * @generated
+	 */
+	int SPACING_PROFILE = 38;
+
+	/**
+	 * The feature id for the '<em><b>Default Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPACING_PROFILE__DEFAULT_PORT = 0;
+
+	/**
+	 * The feature id for the '<em><b>Fob Spacing Allocations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPACING_PROFILE__FOB_SPACING_ALLOCATIONS = 1;
+
+	/**
+	 * The feature id for the '<em><b>Des Spacing Allocations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPACING_PROFILE__DES_SPACING_ALLOCATIONS = 2;
+
+	/**
+	 * The number of structural features of the '<em>Spacing Profile</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPACING_PROFILE_FEATURE_COUNT = 3;
+
+	/**
+	 * The number of operations of the '<em>Spacing Profile</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPACING_PROFILE_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.FobSpacingAllocationImpl <em>Fob Spacing Allocation</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.FobSpacingAllocationImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getFobSpacingAllocation()
+	 * @generated
+	 */
+	int FOB_SPACING_ALLOCATION = 39;
+
+	/**
+	 * The feature id for the '<em><b>Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_SPACING_ALLOCATION__CONTRACT = 0;
+
+	/**
+	 * The feature id for the '<em><b>Min Spacing</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_SPACING_ALLOCATION__MIN_SPACING = 1;
+
+	/**
+	 * The feature id for the '<em><b>Max Spacing</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_SPACING_ALLOCATION__MAX_SPACING = 2;
+
+	/**
+	 * The feature id for the '<em><b>Cargo Count</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_SPACING_ALLOCATION__CARGO_COUNT = 3;
+
+	/**
+	 * The number of structural features of the '<em>Fob Spacing Allocation</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_SPACING_ALLOCATION_FEATURE_COUNT = 4;
+
+	/**
+	 * The number of operations of the '<em>Fob Spacing Allocation</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_SPACING_ALLOCATION_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.DesSpacingAllocationImpl <em>Des Spacing Allocation</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.DesSpacingAllocationImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getDesSpacingAllocation()
+	 * @generated
+	 */
+	int DES_SPACING_ALLOCATION = 40;
+
+	/**
+	 * The feature id for the '<em><b>Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SPACING_ALLOCATION__CONTRACT = 0;
+
+	/**
+	 * The feature id for the '<em><b>Vessel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SPACING_ALLOCATION__VESSEL = 1;
+
+	/**
+	 * The feature id for the '<em><b>Des Spacing Rows</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SPACING_ALLOCATION__DES_SPACING_ROWS = 2;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SPACING_ALLOCATION__PORT = 3;
+
+	/**
+	 * The number of structural features of the '<em>Des Spacing Allocation</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SPACING_ALLOCATION_FEATURE_COUNT = 4;
+
+	/**
+	 * The number of operations of the '<em>Des Spacing Allocation</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SPACING_ALLOCATION_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.DesSpacingRowImpl <em>Des Spacing Row</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.DesSpacingRowImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getDesSpacingRow()
+	 * @generated
+	 */
+	int DES_SPACING_ROW = 41;
+
+	/**
+	 * The feature id for the '<em><b>Min Discharge Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SPACING_ROW__MIN_DISCHARGE_DATE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Max Discharge Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SPACING_ROW__MAX_DISCHARGE_DATE = 1;
+
+	/**
+	 * The number of structural features of the '<em>Des Spacing Row</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SPACING_ROW_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Des Spacing Row</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SPACING_ROW_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.IntervalType <em>Interval Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2496,7 +2734,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getIntervalType()
 	 * @generated
 	 */
-	int INTERVAL_TYPE = 38;
+	int INTERVAL_TYPE = 42;
 
 
 	/**
@@ -2507,7 +2745,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getLNGVolumeUnit()
 	 * @generated
 	 */
-	int LNG_VOLUME_UNIT = 39;
+	int LNG_VOLUME_UNIT = 43;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.ADPModel <em>Model</em>}'.
@@ -2584,6 +2822,17 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getADPModel_MullProfile();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.adp.ADPModel#getSpacingProfile <em>Spacing Profile</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Spacing Profile</em>'.
+	 * @see com.mmxlabs.models.lng.adp.ADPModel#getSpacingProfile()
+	 * @see #getADPModel()
+	 * @generated
+	 */
+	EReference getADPModel_SpacingProfile();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.FleetProfile <em>Fleet Profile</em>}'.
@@ -3790,6 +4039,189 @@ public interface ADPPackage extends EPackage {
 	EReference getMullCargoWrapper_DischargeSlot();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.SpacingProfile <em>Spacing Profile</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Spacing Profile</em>'.
+	 * @see com.mmxlabs.models.lng.adp.SpacingProfile
+	 * @generated
+	 */
+	EClass getSpacingProfile();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.adp.SpacingProfile#getDefaultPort <em>Default Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Default Port</em>'.
+	 * @see com.mmxlabs.models.lng.adp.SpacingProfile#getDefaultPort()
+	 * @see #getSpacingProfile()
+	 * @generated
+	 */
+	EReference getSpacingProfile_DefaultPort();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.adp.SpacingProfile#getFobSpacingAllocations <em>Fob Spacing Allocations</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Fob Spacing Allocations</em>'.
+	 * @see com.mmxlabs.models.lng.adp.SpacingProfile#getFobSpacingAllocations()
+	 * @see #getSpacingProfile()
+	 * @generated
+	 */
+	EReference getSpacingProfile_FobSpacingAllocations();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.adp.SpacingProfile#getDesSpacingAllocations <em>Des Spacing Allocations</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Des Spacing Allocations</em>'.
+	 * @see com.mmxlabs.models.lng.adp.SpacingProfile#getDesSpacingAllocations()
+	 * @see #getSpacingProfile()
+	 * @generated
+	 */
+	EReference getSpacingProfile_DesSpacingAllocations();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.FobSpacingAllocation <em>Fob Spacing Allocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Fob Spacing Allocation</em>'.
+	 * @see com.mmxlabs.models.lng.adp.FobSpacingAllocation
+	 * @generated
+	 */
+	EClass getFobSpacingAllocation();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.adp.FobSpacingAllocation#getContract <em>Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Contract</em>'.
+	 * @see com.mmxlabs.models.lng.adp.FobSpacingAllocation#getContract()
+	 * @see #getFobSpacingAllocation()
+	 * @generated
+	 */
+	EReference getFobSpacingAllocation_Contract();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.FobSpacingAllocation#getMinSpacing <em>Min Spacing</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Spacing</em>'.
+	 * @see com.mmxlabs.models.lng.adp.FobSpacingAllocation#getMinSpacing()
+	 * @see #getFobSpacingAllocation()
+	 * @generated
+	 */
+	EAttribute getFobSpacingAllocation_MinSpacing();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.FobSpacingAllocation#getMaxSpacing <em>Max Spacing</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Max Spacing</em>'.
+	 * @see com.mmxlabs.models.lng.adp.FobSpacingAllocation#getMaxSpacing()
+	 * @see #getFobSpacingAllocation()
+	 * @generated
+	 */
+	EAttribute getFobSpacingAllocation_MaxSpacing();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.FobSpacingAllocation#getCargoCount <em>Cargo Count</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cargo Count</em>'.
+	 * @see com.mmxlabs.models.lng.adp.FobSpacingAllocation#getCargoCount()
+	 * @see #getFobSpacingAllocation()
+	 * @generated
+	 */
+	EAttribute getFobSpacingAllocation_CargoCount();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.DesSpacingAllocation <em>Des Spacing Allocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Des Spacing Allocation</em>'.
+	 * @see com.mmxlabs.models.lng.adp.DesSpacingAllocation
+	 * @generated
+	 */
+	EClass getDesSpacingAllocation();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.adp.DesSpacingAllocation#getContract <em>Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Contract</em>'.
+	 * @see com.mmxlabs.models.lng.adp.DesSpacingAllocation#getContract()
+	 * @see #getDesSpacingAllocation()
+	 * @generated
+	 */
+	EReference getDesSpacingAllocation_Contract();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.adp.DesSpacingAllocation#getVessel <em>Vessel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Vessel</em>'.
+	 * @see com.mmxlabs.models.lng.adp.DesSpacingAllocation#getVessel()
+	 * @see #getDesSpacingAllocation()
+	 * @generated
+	 */
+	EReference getDesSpacingAllocation_Vessel();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.adp.DesSpacingAllocation#getDesSpacingRows <em>Des Spacing Rows</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Des Spacing Rows</em>'.
+	 * @see com.mmxlabs.models.lng.adp.DesSpacingAllocation#getDesSpacingRows()
+	 * @see #getDesSpacingAllocation()
+	 * @generated
+	 */
+	EReference getDesSpacingAllocation_DesSpacingRows();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.adp.DesSpacingAllocation#getPort <em>Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Port</em>'.
+	 * @see com.mmxlabs.models.lng.adp.DesSpacingAllocation#getPort()
+	 * @see #getDesSpacingAllocation()
+	 * @generated
+	 */
+	EReference getDesSpacingAllocation_Port();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.DesSpacingRow <em>Des Spacing Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Des Spacing Row</em>'.
+	 * @see com.mmxlabs.models.lng.adp.DesSpacingRow
+	 * @generated
+	 */
+	EClass getDesSpacingRow();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.DesSpacingRow#getMinDischargeDate <em>Min Discharge Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Discharge Date</em>'.
+	 * @see com.mmxlabs.models.lng.adp.DesSpacingRow#getMinDischargeDate()
+	 * @see #getDesSpacingRow()
+	 * @generated
+	 */
+	EAttribute getDesSpacingRow_MinDischargeDate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.DesSpacingRow#getMaxDischargeDate <em>Max Discharge Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Max Discharge Date</em>'.
+	 * @see com.mmxlabs.models.lng.adp.DesSpacingRow#getMaxDischargeDate()
+	 * @see #getDesSpacingRow()
+	 * @generated
+	 */
+	EAttribute getDesSpacingRow_MaxDischargeDate();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.adp.IntervalType <em>Interval Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3889,6 +4321,14 @@ public interface ADPPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ADP_MODEL__MULL_PROFILE = eINSTANCE.getADPModel_MullProfile();
+
+		/**
+		 * The meta object literal for the '<em><b>Spacing Profile</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ADP_MODEL__SPACING_PROFILE = eINSTANCE.getADPModel_SpacingProfile();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.FleetProfileImpl <em>Fleet Profile</em>}' class.
@@ -4867,6 +5307,150 @@ public interface ADPPackage extends EPackage {
 		 * @generated
 		 */
 		EReference MULL_CARGO_WRAPPER__DISCHARGE_SLOT = eINSTANCE.getMullCargoWrapper_DischargeSlot();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.SpacingProfileImpl <em>Spacing Profile</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.adp.impl.SpacingProfileImpl
+		 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getSpacingProfile()
+		 * @generated
+		 */
+		EClass SPACING_PROFILE = eINSTANCE.getSpacingProfile();
+
+		/**
+		 * The meta object literal for the '<em><b>Default Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SPACING_PROFILE__DEFAULT_PORT = eINSTANCE.getSpacingProfile_DefaultPort();
+
+		/**
+		 * The meta object literal for the '<em><b>Fob Spacing Allocations</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SPACING_PROFILE__FOB_SPACING_ALLOCATIONS = eINSTANCE.getSpacingProfile_FobSpacingAllocations();
+
+		/**
+		 * The meta object literal for the '<em><b>Des Spacing Allocations</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SPACING_PROFILE__DES_SPACING_ALLOCATIONS = eINSTANCE.getSpacingProfile_DesSpacingAllocations();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.FobSpacingAllocationImpl <em>Fob Spacing Allocation</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.adp.impl.FobSpacingAllocationImpl
+		 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getFobSpacingAllocation()
+		 * @generated
+		 */
+		EClass FOB_SPACING_ALLOCATION = eINSTANCE.getFobSpacingAllocation();
+
+		/**
+		 * The meta object literal for the '<em><b>Contract</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference FOB_SPACING_ALLOCATION__CONTRACT = eINSTANCE.getFobSpacingAllocation_Contract();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Spacing</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FOB_SPACING_ALLOCATION__MIN_SPACING = eINSTANCE.getFobSpacingAllocation_MinSpacing();
+
+		/**
+		 * The meta object literal for the '<em><b>Max Spacing</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FOB_SPACING_ALLOCATION__MAX_SPACING = eINSTANCE.getFobSpacingAllocation_MaxSpacing();
+
+		/**
+		 * The meta object literal for the '<em><b>Cargo Count</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FOB_SPACING_ALLOCATION__CARGO_COUNT = eINSTANCE.getFobSpacingAllocation_CargoCount();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.DesSpacingAllocationImpl <em>Des Spacing Allocation</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.adp.impl.DesSpacingAllocationImpl
+		 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getDesSpacingAllocation()
+		 * @generated
+		 */
+		EClass DES_SPACING_ALLOCATION = eINSTANCE.getDesSpacingAllocation();
+
+		/**
+		 * The meta object literal for the '<em><b>Contract</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DES_SPACING_ALLOCATION__CONTRACT = eINSTANCE.getDesSpacingAllocation_Contract();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DES_SPACING_ALLOCATION__VESSEL = eINSTANCE.getDesSpacingAllocation_Vessel();
+
+		/**
+		 * The meta object literal for the '<em><b>Des Spacing Rows</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DES_SPACING_ALLOCATION__DES_SPACING_ROWS = eINSTANCE.getDesSpacingAllocation_DesSpacingRows();
+
+		/**
+		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DES_SPACING_ALLOCATION__PORT = eINSTANCE.getDesSpacingAllocation_Port();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.DesSpacingRowImpl <em>Des Spacing Row</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.adp.impl.DesSpacingRowImpl
+		 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getDesSpacingRow()
+		 * @generated
+		 */
+		EClass DES_SPACING_ROW = eINSTANCE.getDesSpacingRow();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Discharge Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DES_SPACING_ROW__MIN_DISCHARGE_DATE = eINSTANCE.getDesSpacingRow_MinDischargeDate();
+
+		/**
+		 * The meta object literal for the '<em><b>Max Discharge Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DES_SPACING_ROW__MAX_DISCHARGE_DATE = eINSTANCE.getDesSpacingRow_MaxDischargeDate();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.IntervalType <em>Interval Type</em>}' enum.

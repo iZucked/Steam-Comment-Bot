@@ -96,6 +96,7 @@ import com.mmxlabs.models.lng.adp.MullSubprofile;
 import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractAllocationRow;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
+import com.mmxlabs.models.lng.adp.SpacingProfile;
 import com.mmxlabs.models.lng.adp.mull.AllocationDropType;
 import com.mmxlabs.models.lng.adp.mull.AllocationTracker;
 import com.mmxlabs.models.lng.adp.mull.CargoBlueprint;
@@ -218,6 +219,8 @@ public class ContractPage extends ADPComposite {
 					public String getText(final Object element) {
 						if (element instanceof MullProfile) {
 							return "MULL Generation";
+						} else if (element instanceof SpacingProfile) {
+							return "Spacing Rateability";
 						} else if (element instanceof PurchaseContract) {
 							final PurchaseContract profile = (PurchaseContract) element;
 							return String.format("%s (Purchase)", profile.getName());
@@ -232,12 +235,19 @@ public class ContractPage extends ADPComposite {
 				objectSelector.addSelectionChangedListener(event -> {
 					final ISelection selection = event.getSelection();
 					EObject target = null;
+					generateButton.setEnabled(false);
+					if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP_SPACING_RATEABILITY)) {
+						cpSolveButton.setEnabled(false);
+					}
 					if (selection instanceof IStructuredSelection) {
 						final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
 						target = (EObject) iStructuredSelection.getFirstElement();
 						generateButton.setEnabled(target instanceof Contract || target instanceof Inventory || target instanceof MullProfile);
+						if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP_SPACING_RATEABILITY)) {
+							cpSolveButton.setEnabled(target instanceof SpacingProfile);
+						}
 					}
-					generateButton.setEnabled(target != null);
+					// generateButton.setEnabled(target != null);
 					updateDetailPaneInput(target);
 				});
 			}
@@ -290,10 +300,12 @@ public class ContractPage extends ADPComposite {
 						@Override
 						public void widgetSelected(final SelectionEvent e) {
 							final CPBasedSolver cpBasedSolver = new CPBasedSolver();
-							try {
-								final SpacingRateabilitySolverResult result = cpBasedSolver.runCpSolver(editorData.scenarioModel, editorData.getEditingDomain(), editorData.getScenarioDataProvider(), getShell());
-								if (result instanceof FeasibleSolverResult) {
-									final FeasibleSolverResult feasibleResult = (FeasibleSolverResult) result;
+
+							final EObject input = detailComposite.getInput();
+							if (input instanceof final SpacingProfile spacingProfile) {
+								final SpacingRateabilitySolverResult result = cpBasedSolver.runCpSolver(spacingProfile, editorData.scenarioModel, editorData.getEditingDomain(),
+										editorData.getScenarioDataProvider());
+								if (result instanceof final FeasibleSolverResult feasibleResult) {
 									final CompoundCommand modelPopulationCommand = (CompoundCommand) feasibleResult.getModelPopulationCommand();
 									if (!modelPopulationCommand.isEmpty()) {
 										editorData.getDefaultCommandHandler().handleCommand(modelPopulationCommand);
@@ -309,9 +321,8 @@ public class ContractPage extends ADPComposite {
 										MessageDialog.openInformation(getShell(), "No solution found", message);
 									}
 								}
-							} catch (IOException ioException) {
-								
 							}
+
 						}
 					});
 				}
@@ -486,7 +497,7 @@ public class ContractPage extends ADPComposite {
 								mullSummaryViewer.expandToLevel(++mullSummaryExpandLevel);
 							}
 						};
-						
+
 						CommonImages.setImageDescriptors(collapseOneLevel, IconPaths.CollapseAll);
 						CommonImages.setImageDescriptors(expandOneLevel, IconPaths.ExpandAll);
 
@@ -3267,6 +3278,16 @@ public class ContractPage extends ADPComposite {
 					cargoModel.eAdapters().remove(cargoModelAdapter);
 					adpModel.eAdapters().remove(mullSummaryAdapter);
 				};
+			} else if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP_SPACING_RATEABILITY)) {
+				SpacingProfile profile = adpModel.getSpacingProfile();
+				if (profile == null) {
+					profile = ADPFactory.eINSTANCE.createSpacingProfile();
+				}
+				objects.add(profile);
+				releaseAdaptersRunnable = () -> {
+					commercialModel.eAdapters().remove(commercialModelAdapter);
+					cargoModel.eAdapters().remove(cargoModelAdapter);
+				};
 			} else {
 				releaseAdaptersRunnable = () -> {
 					commercialModel.eAdapters().remove(commercialModelAdapter);
@@ -3345,6 +3366,11 @@ public class ContractPage extends ADPComposite {
 				editorData.adpModel.setMullProfile((MullProfile) object);
 			}
 
+			target = object;
+		} else if (object instanceof final SpacingProfile spacingProfile) {
+			if (editorData.adpModel.getSpacingProfile() == null) {
+				editorData.adpModel.setSpacingProfile(spacingProfile);
+			}
 			target = object;
 		}
 
@@ -3425,6 +3451,13 @@ public class ContractPage extends ADPComposite {
 					MullProfile profile = editorData.adpModel.getMullProfile();
 					if (profile == null) {
 						profile = ADPFactory.eINSTANCE.createMullProfile();
+					}
+					objects.add(profile);
+				}
+				if (LicenseFeatures.isPermitted(KnownFeatures.FEATURE_ADP_SPACING_RATEABILITY)) {
+					SpacingProfile profile = editorData.adpModel.getSpacingProfile();
+					if (profile == null) {
+						profile = ADPFactory.eINSTANCE.createSpacingProfile();
 					}
 					objects.add(profile);
 				}

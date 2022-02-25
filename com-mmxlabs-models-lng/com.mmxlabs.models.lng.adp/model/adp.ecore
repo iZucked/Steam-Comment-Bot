@@ -12,6 +12,8 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="mullProfile" eType="#//MullProfile"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="spacingProfile" eType="#//SpacingProfile"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FleetProfile">
     <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"
@@ -251,5 +253,33 @@
   <eClassifiers xsi:type="ecore:EClass" name="MullCargoWrapper">
     <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlot" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//LoadSlot"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlot" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//DischargeSlot"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SpacingProfile">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultPort" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fobSpacingAllocations"
+        upperBound="-1" eType="#//FobSpacingAllocation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="desSpacingAllocations"
+        upperBound="-1" eType="#//DesSpacingAllocation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FobSpacingAllocation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contract" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//SalesContract"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minSpacing" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxSpacing" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cargoCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DesSpacingAllocation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contract" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//SalesContract"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselAvailability"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="desSpacingRows" upperBound="-1"
+        eType="#//DesSpacingRow" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="port" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DesSpacingRow">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minDischargeDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxDischargeDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"
+        unsettable="true"/>
   </eClassifiers>
 </ecore:EPackage>

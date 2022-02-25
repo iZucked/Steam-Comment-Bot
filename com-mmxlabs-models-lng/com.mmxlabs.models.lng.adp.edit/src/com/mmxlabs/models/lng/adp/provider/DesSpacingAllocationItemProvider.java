@@ -1,44 +1,54 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2021
- * All rights reserved.
- */
-/**
  */
 package com.mmxlabs.models.lng.adp.provider;
 
 
 import com.mmxlabs.models.lng.adp.ADPFactory;
-import com.mmxlabs.models.lng.adp.ADPModel;
 import com.mmxlabs.models.lng.adp.ADPPackage;
+import com.mmxlabs.models.lng.adp.DesSpacingAllocation;
 
-import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.ResourceLocator;
+
 import org.eclipse.emf.ecore.EStructuralFeature;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+import org.eclipse.emf.edit.provider.IChildCreationExtender;
+import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
+import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.IItemPropertySource;
+import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
+import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.adp.ADPModel} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.adp.DesSpacingAllocation} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class ADPModelItemProvider 
-	extends UUIDObjectItemProvider {
+public class DesSpacingAllocationItemProvider 
+	extends ItemProviderAdapter
+	implements
+		IEditingDomainItemProvider,
+		IStructuredItemContentProvider,
+		ITreeItemContentProvider,
+		IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ADPModelItemProvider(AdapterFactory adapterFactory) {
+	public DesSpacingAllocationItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -53,52 +63,75 @@ public class ADPModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addYearStartPropertyDescriptor(object);
-			addYearEndPropertyDescriptor(object);
+			addContractPropertyDescriptor(object);
+			addVesselPropertyDescriptor(object);
+			addPortPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Year Start feature.
+	 * This adds a property descriptor for the Contract feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addYearStartPropertyDescriptor(Object object) {
+	protected void addContractPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_ADPModel_yearStart_feature"),
-				 getString("_UI_ADPModel_yearStart_description"),
-				 ADPPackage.Literals.ADP_MODEL__YEAR_START,
+				 getString("_UI_DesSpacingAllocation_contract_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DesSpacingAllocation_contract_feature", "_UI_DesSpacingAllocation_type"),
+				 ADPPackage.Literals.DES_SPACING_ALLOCATION__CONTRACT,
 				 true,
 				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 true,
+				 null,
 				 null,
 				 null));
 	}
 
 	/**
-	 * This adds a property descriptor for the Year End feature.
+	 * This adds a property descriptor for the Vessel feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addYearEndPropertyDescriptor(Object object) {
+	protected void addVesselPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_ADPModel_yearEnd_feature"),
-				 getString("_UI_ADPModel_yearEnd_description"),
-				 ADPPackage.Literals.ADP_MODEL__YEAR_END,
+				 getString("_UI_DesSpacingAllocation_vessel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DesSpacingAllocation_vessel_feature", "_UI_DesSpacingAllocation_type"),
+				 ADPPackage.Literals.DES_SPACING_ALLOCATION__VESSEL,
 				 true,
 				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Port feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPortPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DesSpacingAllocation_port_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DesSpacingAllocation_port_feature", "_UI_DesSpacingAllocation_type"),
+				 ADPPackage.Literals.DES_SPACING_ALLOCATION__PORT,
+				 true,
 				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 true,
+				 null,
 				 null,
 				 null));
 	}
@@ -115,11 +148,7 @@ public class ADPModelItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__PURCHASE_CONTRACT_PROFILES);
-			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__SALES_CONTRACT_PROFILES);
-			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__FLEET_PROFILE);
-			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__MULL_PROFILE);
-			childrenFeatures.add(ADPPackage.Literals.ADP_MODEL__SPACING_PROFILE);
+			childrenFeatures.add(ADPPackage.Literals.DES_SPACING_ALLOCATION__DES_SPACING_ROWS);
 		}
 		return childrenFeatures;
 	}
@@ -138,14 +167,14 @@ public class ADPModelItemProvider
 	}
 
 	/**
-	 * This returns ADPModel.gif.
+	 * This returns DesSpacingAllocation.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ADPModel"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/DesSpacingAllocation"));
 	}
 
 	/**
@@ -156,12 +185,9 @@ public class ADPModelItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((ADPModel)object).getUuid();
-		return label == null || label.length() == 0 ?
-			getString("_UI_ADPModel_type") :
-			getString("_UI_ADPModel_type") + " " + label;
+		return getString("_UI_DesSpacingAllocation_type");
 	}
-	
+
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached
@@ -174,16 +200,8 @@ public class ADPModelItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(ADPModel.class)) {
-			case ADPPackage.ADP_MODEL__YEAR_START:
-			case ADPPackage.ADP_MODEL__YEAR_END:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
-			case ADPPackage.ADP_MODEL__PURCHASE_CONTRACT_PROFILES:
-			case ADPPackage.ADP_MODEL__SALES_CONTRACT_PROFILES:
-			case ADPPackage.ADP_MODEL__FLEET_PROFILE:
-			case ADPPackage.ADP_MODEL__MULL_PROFILE:
-			case ADPPackage.ADP_MODEL__SPACING_PROFILE:
+		switch (notification.getFeatureID(DesSpacingAllocation.class)) {
+			case ADPPackage.DES_SPACING_ALLOCATION__DES_SPACING_ROWS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -203,28 +221,19 @@ public class ADPModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(ADPPackage.Literals.ADP_MODEL__PURCHASE_CONTRACT_PROFILES,
-				 ADPFactory.eINSTANCE.createPurchaseContractProfile()));
+				(ADPPackage.Literals.DES_SPACING_ALLOCATION__DES_SPACING_ROWS,
+				 ADPFactory.eINSTANCE.createDesSpacingRow()));
+	}
 
-		newChildDescriptors.add
-			(createChildParameter
-				(ADPPackage.Literals.ADP_MODEL__SALES_CONTRACT_PROFILES,
-				 ADPFactory.eINSTANCE.createSalesContractProfile()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ADPPackage.Literals.ADP_MODEL__FLEET_PROFILE,
-				 ADPFactory.eINSTANCE.createFleetProfile()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ADPPackage.Literals.ADP_MODEL__MULL_PROFILE,
-				 ADPFactory.eINSTANCE.createMullProfile()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(ADPPackage.Literals.ADP_MODEL__SPACING_PROFILE,
-				 ADPFactory.eINSTANCE.createSpacingProfile()));
+	/**
+	 * Return the resource locator for this item provider's resources.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ResourceLocator getResourceLocator() {
+		return ((IChildCreationExtender)adapterFactory).getResourceLocator();
 	}
 
 }

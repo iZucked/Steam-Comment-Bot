@@ -1,18 +1,10 @@
 package com.mmxlabs.models.lng.adp.rateability.spacing;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -30,24 +22,12 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jface.dialogs.InputDialog;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.window.Window;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.PlatformUI;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.ortools.sat.CpModel;
 import com.google.ortools.sat.CpSolver;
 import com.google.ortools.sat.CpSolverStatus;
@@ -56,10 +36,14 @@ import com.google.ortools.sat.IntervalVar;
 import com.google.ortools.sat.LinearExpr;
 import com.google.ortools.sat.Literal;
 import com.google.ortools.sat.ScalProd;
-import com.google.ortools.util.Domain;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
-import com.mmxlabs.common.time.Days;
+import com.mmxlabs.common.time.Hours;
+import com.mmxlabs.models.lng.adp.ADPModel;
+import com.mmxlabs.models.lng.adp.DesSpacingAllocation;
+import com.mmxlabs.models.lng.adp.DesSpacingRow;
+import com.mmxlabs.models.lng.adp.FobSpacingAllocation;
+import com.mmxlabs.models.lng.adp.SpacingProfile;
 import com.mmxlabs.models.lng.adp.rateability.export.Feasible;
 import com.mmxlabs.models.lng.adp.rateability.export.Infeasible;
 import com.mmxlabs.models.lng.adp.rateability.export.InvalidModel;
@@ -67,7 +51,8 @@ import com.mmxlabs.models.lng.adp.rateability.export.Optimal;
 import com.mmxlabs.models.lng.adp.rateability.export.SpacingRateabilitySolverResult;
 import com.mmxlabs.models.lng.adp.rateability.export.Unknown;
 import com.mmxlabs.models.lng.adp.rateability.export.Unrecognised;
-import com.mmxlabs.models.lng.adp.rateability.input.RateabilityInput;
+import com.mmxlabs.models.lng.adp.rateability.spacing.containers.ContainerBuilder;
+import com.mmxlabs.models.lng.adp.rateability.spacing.containers.ShippedCargoModellingContainer;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -100,207 +85,99 @@ import com.mmxlabs.scenario.service.model.manager.IScenarioDataProvider;
  */
 public class CPBasedSolver {
 
-	enum Scenario {
-		Scratch, Current
-	}
-
-	static boolean balanceLegs = false;
-
-	static class RateabilityConstraint {
-		int everyNMonths;
-		int minusDays;
-
-		public RateabilityConstraint(int everyNMonths, int minusDays) {
-			this.everyNMonths = everyNMonths;
-			this.minusDays = minusDays;
-		}
-	}
-
-	static final Scenario scenario = Scenario.Current;
-
-	// static final int NUMBER_OF_VESSELS = 12; // Number of vessels
-
-	static final int SEARCH_RANGE = 80; // Latest vessel start time (exclusive).
-
-	static final int NUMBER_OF_ITERATIONS = 20_000_000;
-
-	static final int INTERVAL_COMPUTE_FUZZ = 3; // Allow -3 days to intervals
-	static final int INTERVAL_FILTER_FUZZ = 5; // +/- fuzz when filtering results
-	static final int LOADING_INTERVAL = 5; // Keep n days between loadings
-
 	@NonNull
 	private static final LocalDate FIRST_DATE = LocalDate.of(2021, 12, 1);
-	static final int firstLoadDate = 31; // 31 = 1/1/2021, 0 = 1/12/2020
-	static final int lastLoadDate = firstLoadDate + 365; // Last load date = 31/12/2021.
 
-	public RateabilityInput loadInputData(final Shell shell) throws IOException {
-		final ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		mapper.registerModule(new JavaTimeModule());
-		mapper.registerModule(new Jdk8Module());
-		final IPath wsPath = ResourcesPlugin.getWorkspace().getRoot().getLocation();
-		final File directory = new File(wsPath.toOSString() + IPath.SEPARATOR + "adp-rateability");
-		boolean dirExists = directory.exists();
-		if (!dirExists) {
-			MessageDialog.openInformation(shell, "", "No directory \"adp-rateability\" found.");
-			return null;
-		}
-		if (!directory.isDirectory()) {
-			MessageDialog.openInformation(shell, "", "\"adp-rateability\" should be a directory.");
-			return null;
-		}
+	public SpacingRateabilitySolverResult runCpSolver(@NonNull final SpacingProfile spacingProfile, final LNGScenarioModel sm, final EditingDomain ed, final IScenarioDataProvider sdp) {
 
-		final Display display = PlatformUI.getWorkbench().getDisplay();
-		final InputDialog dialog = new InputDialog(display.getActiveShell(), "Enter rateability source json", "Enter name of json file", "", null);
-		if (dialog.open() == Window.OK) {
-			final String jsonFilename = dialog.getValue();
-			final String fullJsonFilename;
-			if (jsonFilename.endsWith(".json")) {
-				fullJsonFilename = jsonFilename;
-			} else {
-				fullJsonFilename = String.format("%s.json", jsonFilename);
+		final List<Contract> inputContracts = new ArrayList<>();
+		final List<Vessel> inputVessels = new ArrayList<>();
+		for (final FobSpacingAllocation fobSpacingAllocation : spacingProfile.getFobSpacingAllocations()) {
+			final SalesContract salesContract = fobSpacingAllocation.getContract();
+			final Contract contract = new Contract(salesContract.getName(), 0, true, fobSpacingAllocation.getMinSpacing());
+			if (fobSpacingAllocation.isSetMaxSpacing()) {
+				contract.maxInterval = fobSpacingAllocation.getMaxSpacing();
 			}
-			final String filePath = directory.getAbsolutePath() + File.separator + fullJsonFilename;
-			File file = new File(filePath);
-			if (!file.exists()) {
-				MessageDialog.openInformation(shell, "Input file not found", String.format("Could not find: \"%s\"", filePath));
-				return null;
+			final Cargo[] cargoes = new Cargo[fobSpacingAllocation.getCargoCount()];
+			for (int i = 0; i < fobSpacingAllocation.getCargoCount(); ++i) {
+				cargoes[i] = new Cargo(contract);
 			}
-
-			final RateabilityInput input;
-			try (InputStream inputStream = new FileInputStream(file)) {
-				input = mapper.readValue(inputStream, RateabilityInput.class);
-			}
-			return input;
+			final String vesselName = String.format("Fob-vessel-%s", salesContract.getName());
+			final Vessel vessel = new Vessel(vesselName, "0", cargoes);
+			inputContracts.add(contract);
+			inputVessels.add(vessel);
 		}
 
-		return null;
-	}
-
-	private static List<Pair<LocalDate, LocalDate>> getAvailableDates(final List<List<List<Integer>>> inputDates) {
-		final List<Pair<LocalDate, LocalDate>> availableDates = new ArrayList<>();
-		for (List<List<Integer>> datePair : inputDates) {
-			List<Integer> fromInput = datePair.get(0);
-			List<Integer> toInput = datePair.get(1);
-			LocalDate from = LocalDate.of(fromInput.get(0).intValue(), fromInput.get(1).intValue(), fromInput.get(2).intValue());
-			LocalDate to = LocalDate.of(toInput.get(0).intValue(), toInput.get(1).intValue(), toInput.get(2).intValue());
-			availableDates.add(Pair.of(from, to));
-		}
-		return availableDates;
-	}
-
-	private static @NonNull Contract buildContractFromInput(final com.mmxlabs.models.lng.adp.rateability.input.Contract inputContract) {
-		final Contract contract;
-		if (inputContract.maxInterval.isPresent()) {
-			contract = new Contract(inputContract.name, inputContract.contractSpacing, Integer.MAX_VALUE, inputContract.isFOB, inputContract.interval, inputContract.maxInterval.getAsInt());
-		} else {
-			if (inputContract.port.isPresent()) {
-				contract = new Contract(inputContract.name, inputContract.contractSpacing, inputContract.isFOB, inputContract.interval, inputContract.port.get());
-			} else {
-				contract = new Contract(inputContract.name, inputContract.contractSpacing, inputContract.isFOB, inputContract.interval);
+		for (final DesSpacingAllocation desSpacingAllocation : spacingProfile.getDesSpacingAllocations()) {
+			final SalesContract salesContract = desSpacingAllocation.getContract();
+			final Contract contract = new Contract(salesContract.getName(), 20, false, 20);
+			if (desSpacingAllocation.getPort() != null) {
+				contract.port = desSpacingAllocation.getPort().getName();
 			}
-		}
-		if (inputContract.turnaroundTime.isPresent()) {
-			contract.turnaroundTime = inputContract.turnaroundTime.getAsInt();
-		}
-		return contract;
-	}
-
-	private static @NonNull Vessel buildVessel(final com.mmxlabs.models.lng.adp.rateability.input.Vessel inputVessel, final Map<String, Contract> contractMap) {
-		final String spotIndex = inputVessel.spotIndex.isPresent() ? inputVessel.spotIndex.get() : "";
-		if (inputVessel.contract.isPresent()) {
-			final Contract c = contractMap.get(inputVessel.contract.get());
-			if (inputVessel.availableDates.isPresent()) {
-				final List<Pair<LocalDate, LocalDate>> availableDates = getAvailableDates(inputVessel.availableDates.get());
-				return Vessel.createVessel(inputVessel.name, spotIndex, c, inputVessel.number.getAsInt(), availableDates);
-			} else {
-				return Vessel.createVessel(inputVessel.name, spotIndex, c, inputVessel.number.getAsInt());
-			}
-		} else {
-			final Cargo[] cargoes = new Cargo[inputVessel.cargoes.get().size()];
-			int j = 0;
-			for (com.mmxlabs.models.lng.adp.rateability.input.Cargo cargoInput : inputVessel.cargoes.get()) {
-				final Contract c = contractMap.get(cargoInput.contract);
-				if (cargoInput.minLoadDate.isPresent()) {
-					final LocalDate minLoadDate = LocalDate.of(cargoInput.minLoadDate.get().get(0), cargoInput.minLoadDate.get().get(1), cargoInput.minLoadDate.get().get(2));
-					final LocalDate maxLoadDate = LocalDate.of(cargoInput.maxLoadDate.get().get(0), cargoInput.maxLoadDate.get().get(1), cargoInput.maxLoadDate.get().get(2));
-					cargoes[j] = new Cargo(c, minLoadDate, maxLoadDate, null, null);
-				} else if (cargoInput.minDischargeDate.isPresent()) {
-					final LocalDate minDischargeDate = LocalDate.of(cargoInput.minDischargeDate.get().get(0), cargoInput.minDischargeDate.get().get(1), cargoInput.minDischargeDate.get().get(2));
-					final LocalDate maxDischargeDate = LocalDate.of(cargoInput.maxDischargeDate.get().get(0), cargoInput.maxDischargeDate.get().get(1), cargoInput.maxDischargeDate.get().get(2));
-					cargoes[j] = new Cargo(c, minDischargeDate, maxDischargeDate);
-				} else {
-					cargoes[j] = new Cargo(c);
+			inputContracts.add(contract);
+			final Cargo[] cargoes = new Cargo[desSpacingAllocation.getDesSpacingRows().size()];
+			int i = 0;
+			for (final DesSpacingRow desSpacingRow : desSpacingAllocation.getDesSpacingRows()) {
+				final Cargo cargo = new Cargo(contract);
+				if (desSpacingRow.isSetMinDischargeDate()) {
+					final LocalDateTime minDischargeDate = desSpacingRow.getMinDischargeDate();
+					cargo.minDischargeDate = minDischargeDate.toLocalDate();
 				}
-				++j;
+				if (desSpacingRow.isSetMaxDischargeDate()) {
+					final LocalDateTime maxDischargeDate = desSpacingRow.getMaxDischargeDate();
+					cargo.maxDischargeDate = maxDischargeDate.toLocalDate();
+				}
+				cargoes[i] = cargo;
+				++i;
 			}
-			if (inputVessel.availableDates.isPresent()) {
-				final List<Pair<LocalDate, LocalDate>> availableDates = getAvailableDates(inputVessel.availableDates.get());
-				return new Vessel(inputVessel.name, spotIndex, cargoes, availableDates);
-			} else {
-				return new Vessel(inputVessel.name, spotIndex, cargoes);
-			}
+			final Vessel vessel = new Vessel(desSpacingAllocation.getVessel().getVessel().getName(), "0", cargoes);
+			inputVessels.add(vessel);
 		}
-	}
 
-	private static @NonNull RateabilityConstraint buildRateabilityConstraint(final com.mmxlabs.models.lng.adp.rateability.input.RateabilityConstraint inputRateabilityConstraint) {
-		return new RateabilityConstraint(inputRateabilityConstraint.everyNMonths, 0);
-	}
-
-	public Pair<Map<String, Contract>, Vessel[]> processInput(final RateabilityInput input) {
-		final Map<String, Contract> contractMap = input.contracts.stream().map(CPBasedSolver::buildContractFromInput).collect(Collectors.toMap(Contract::getName, Function.identity()));
-		final Vessel[] vessels = input.vessels.stream().map(v -> buildVessel(v, contractMap)).toArray(Vessel[]::new);
-		return Pair.of(contractMap, vessels);
-	}
-
-	public Map<String, @NonNull RateabilityConstraint> getRateabilityConstraintsFromInput(final RateabilityInput input) {
-		return input.contracts.stream().filter(c -> c.rateabilityConstraint.isPresent()).collect(Collectors.toMap(c -> c.name, c -> buildRateabilityConstraint(c.rateabilityConstraint.get())));
-	}
-
-	public SpacingRateabilitySolverResult runCpSolver(final LNGScenarioModel sm, final EditingDomain ed, final IScenarioDataProvider sdp, Shell shell) throws IOException {
-
-		final RateabilityInput input;
-		try {
-			input = loadInputData(shell);
-		} catch (IOException e) {
-			// System.out.println("Error in reading input json.");
-			return null;
-		}
-		if (input == null) {
-			// System.out.println("Cancelled.");
-			return null;
-		}
+		// This needs to made into user input
+		final String defaultPortName = spacingProfile.getDefaultPort().getName();
 
 		final CpModel model = new CpModel();
+		final ADPModel adpModel = ScenarioModelUtil.getADPModel(sdp);
 
-		int contractIntervalFlex = 0;
+		// Relative date that the solver works against - not necessarily earliest valid UTC time, e.g. a 1 Jan JST datetime may correspond to a 31 Dec UTC datetime
+		final ZoneId utcZoneId = ZoneId.of("UTC");
+		@NonNull
+		final ZonedDateTime dateTimeZero = adpModel.getYearStart().atDay(1).atStartOfDay().atZone(utcZoneId);
+		final ZonedDateTime dateTimeEnd = adpModel.getYearEnd().plusMonths(6).atEndOfMonth().atTime(23, 0).atZone(utcZoneId);
+
+		final int dateTimeEndInt = getHourValue(dateTimeEnd, dateTimeZero);
 
 		@NonNull
 		final ModelDistanceProvider modelDistanceProvider = sdp.getExtraDataProvider(LNGScenarioSharedModelTypes.DISTANCES, ModelDistanceProvider.class);
 
-		Pair<Map<String, Contract>, Vessel[]> inputProcessResult = processInput(input);
+		final Map<String, Contract> processedContracts = new HashMap<>();
+		for (final Contract contract : inputContracts) {
+			processedContracts.put(contract.getName(), contract);
+		}
+		final Vessel[] processedVessels = new Vessel[inputVessels.size()];
+		int ii = 0;
+		for (final Vessel vessel : inputVessels) {
+			processedVessels[ii] = vessel;
+			++ii;
+		}
+
+		Pair<Map<String, Contract>, Vessel[]> inputProcessResult = Pair.of(processedContracts, processedVessels);
 
 		final Map<String, Contract> loadedContracts = inputProcessResult.getFirst();
 		final Vessel[] vessels = inputProcessResult.getSecond();
-		final Map<Contract, @NonNull LocalDate> latestLoadDates = getLatestPreAdpContractLoadDates(sm, loadedContracts);
 		final Map<Contract, @NonNull List<LoadSlot>> usedLoadSlots = getUsedLoadSlots(sm, loadedContracts);
 		final Set<LoadSlot> usedLoadSlotsSet = usedLoadSlots.values().stream().flatMap(List::stream).collect(Collectors.toSet());
 
-		final Map<Contract, @NonNull Pair<@NonNull LocalDate, LocalDate>> latestDatePairs = getLatestPreAdpContractDatePairs(sm, loadedContracts, modelDistanceProvider);
+		final Map<Contract, @NonNull Pair<@NonNull ZonedDateTime, ZonedDateTime>> latestDatePairs = getLatestPreAdpContractDatePairs(sm, loadedContracts, modelDistanceProvider, utcZoneId);
 		final Map<Contract, SalesContract> contractMap = getExpectedContracts(loadedContracts, sm);
 		final Map<SalesContract, Contract> reverseContractMap = new HashMap<>();
 		contractMap.entrySet().stream().forEach(e -> reverseContractMap.put(e.getValue(), e.getKey()));
 		final Set<SalesContract> expectedSalesContracts = new HashSet<>(contractMap.values());
 
-		final Map<Contract, Integer> latestLoadDatesConvertedToInt = latestLoadDates.entrySet().stream().collect(Collectors.toMap(Entry::getKey, e -> getDateValue(e.getValue())));
-
-		final Map<String, @NonNull RateabilityConstraint> contractRateabilityConstraints = getRateabilityConstraintsFromInput(input);
-
 		final YearMonth adpStart = sm.getAdpModel().getYearStart();
 		final List<LoadSlot> adpLoadSlots = sm.getCargoModel().getLoadSlots().stream().filter(slot -> !adpStart.isAfter(YearMonth.from(slot.getWindowStart()))).collect(Collectors.toList());
 		final Set<LoadSlot> adpLoadSlotSet = new HashSet<>(adpLoadSlots);
-		final Map<LocalDate, LoadSlot> dateLoadSlotMap = adpLoadSlots.stream().collect(Collectors.toMap(LoadSlot::getWindowStart, Function.identity()));
-		final List<LocalDate> loadDates = adpLoadSlots.stream().map(LoadSlot::getWindowStart).collect(Collectors.toList());
 
 		final Map<LoadSlot, Contract> loadSlotToContractMap = new HashMap<>();
 		final Map<Contract, @NonNull List<LoadSlot>> usedLoadSlotsToIgnore = new HashMap<>();
@@ -330,8 +207,7 @@ public class CPBasedSolver {
 				continue;
 			}
 			final VesselAssignmentType cargoVA = cargo.getVesselAssignmentType();
-			if (cargoVA instanceof VesselAvailability) {
-				final VesselAvailability va = (VesselAvailability) cargoVA;
+			if (cargoVA instanceof VesselAvailability va) {
 				final com.mmxlabs.models.lng.fleet.Vessel eVessel = va.getVessel();
 				final Vessel vessel = eVesselToVesselMap.get(eVessel);
 				if (vessel != null) {
@@ -367,7 +243,7 @@ public class CPBasedSolver {
 		}
 
 		// Get load slots used by markets
-		final Set<LoadSlot> unusableLoadSlots = Stream.concat(sm.getCargoModel().getCargoes().stream().filter(cargo -> adpLoadSlotSet.contains((LoadSlot) cargo.getSlots().get(0))).filter(cargo -> {
+		final Set<LoadSlot> unusableLoadSlots = Stream.concat(sm.getCargoModel().getCargoes().stream().filter(cargo -> adpLoadSlotSet.contains(cargo.getSlots().get(0))).filter(cargo -> {
 			final DischargeSlot dischargeSlot = (DischargeSlot) cargo.getSlots().get(1);
 			return dischargeSlot instanceof SpotDischargeSlot || !expectedSalesContracts.contains(dischargeSlot.getContract());
 		}).map(c -> (LoadSlot) c.getSlots().get(0)), adpLoadSlots.stream().filter(LoadSlot::isLocked)).collect(Collectors.toSet());
@@ -384,10 +260,8 @@ public class CPBasedSolver {
 
 		final Map<com.mmxlabs.models.lng.fleet.Vessel, List<DryDockEvent>> dryDockEvents = new HashMap<>();
 		for (final VesselEvent event : sm.getCargoModel().getVesselEvents()) {
-			if (event instanceof DryDockEvent) {
-				final DryDockEvent dryDockEvent = (DryDockEvent) event;
-				if (dryDockEvent.getVesselAssignmentType() instanceof VesselAvailability) {
-					final VesselAvailability va = (VesselAvailability) dryDockEvent.getVesselAssignmentType();
+			if (event instanceof final DryDockEvent dryDockEvent) {
+				if (dryDockEvent.getVesselAssignmentType() instanceof final VesselAvailability va) {
 					final com.mmxlabs.models.lng.fleet.Vessel vessel = va.getVessel();
 					if (eVessels.contains(vessel)) {
 						dryDockEvents.computeIfAbsent(vessel, v -> new LinkedList<>()).add(dryDockEvent);
@@ -406,11 +280,7 @@ public class CPBasedSolver {
 		// Get Dry dock events
 
 		IntVar[] loadVarsStart = new IntVar[totalTasks];
-		IntVar[] loadVarsEnd = new IntVar[totalTasks];
-		IntervalVar[] loadVarsIntervals = new IntervalVar[totalTasks];
 		IntVar[] cargoEnd = new IntVar[totalTasks];
-
-		HashMap<String, List<IntervalVar>> contractToSpacingIntervals = new HashMap<>();
 
 		HashMap<String, List<List<IntVar>>> contractToVesselLoadVars = new HashMap<>();
 
@@ -419,66 +289,58 @@ public class CPBasedSolver {
 
 		HashMap<String, Contract> contracts = new HashMap<>();
 
-		// Get possible load dates
-		final Set<LocalDate> possibleLoadDates = sm.getCargoModel().getLoadSlots().stream().filter(s -> !s.getWindowStart().isBefore(adpStart.atDay(1))).flatMap(s -> {
-			if (s.isSetWindowSize() && s.isSetWindowSizeUnits()) {
-				final LocalDate firstInvalidDate;
-				if (s.getWindowSize() > 0) {
-					if (s.getWindowSizeUnits() == TimePeriod.DAYS) {
-						firstInvalidDate = s.getSchedulingTimeWindow().getStart().plusDays(s.getWindowSize()).minusHours(1).toLocalDate().plusDays(1);
-					} else if (s.getWindowSizeUnits() == TimePeriod.HOURS) {
-						firstInvalidDate = s.getSchedulingTimeWindow().getStart().plusHours(s.getWindowSize()).toLocalDate().plusDays(1);
-					} else if (s.getWindowSizeUnits() == TimePeriod.MONTHS) {
-						firstInvalidDate = s.getSchedulingTimeWindow().getStart().plusMonths(s.getWindowSize()).minusHours(1).toLocalDate().plusDays(1);
-					} else {
-						throw new IllegalStateException("Unknown time period");
-					}
-				} else {
-					firstInvalidDate = s.getWindowStart().plusDays(1);
-				}
-				return s.getWindowStart().datesUntil(firstInvalidDate);
+		// New code
+		final Set<ZonedDateTime> possibleLoadZdts = sm.getCargoModel().getLoadSlots().stream().filter(s -> !s.getWindowStart().isBefore(adpStart.atDay(1))).flatMap(s -> {
+			final ZonedDateTime startZdtUtc = s.getSchedulingTimeWindow().getStart().withZoneSameInstant(utcZoneId);
+			final ZonedDateTime endZdtUtc = s.getSchedulingTimeWindow().getEnd().withZoneSameInstant(utcZoneId);
+			if (startZdtUtc.equals(endZdtUtc)) {
+				return Collections.singleton(startZdtUtc).stream();
 			} else {
-				return Collections.singleton(s.getWindowStart()).stream();
+				return Stream.iterate(startZdtUtc, zdt -> !zdt.isAfter(endZdtUtc), zdt -> zdt.plusHours(1L));
 			}
 		}).collect(Collectors.toCollection(TreeSet::new));
-		final List<LocalDate> sortedLoadDates = new ArrayList<>(possibleLoadDates);
+		final List<ZonedDateTime> utcSortedLoadDates = new ArrayList<>(possibleLoadZdts);
+		final ZonedDateTime earliestLoadTime = utcSortedLoadDates.get(0);
+		final ZonedDateTime latestLoadTime = utcSortedLoadDates.get(utcSortedLoadDates.size() - 1);
+
+		final int earliestLoadTimeInt = getHourValue(earliestLoadTime, dateTimeZero);
+		final int latestLoadTimeInt = getHourValue(latestLoadTime, dateTimeZero);
+
 		final List<LoadSlot> sortedLoadSlots = sm.getCargoModel().getLoadSlots().stream().filter(s -> !s.getWindowStart().isBefore(adpStart.atDay(1)))
 				.sorted((s1, s2) -> s1.getWindowStart().compareTo(s2.getWindowStart())).collect(Collectors.toList());
+
+		int minLoadDuration = Integer.MAX_VALUE;
+		int maxLoadDuration = -1;
+		for (final LoadSlot loadSlot : sortedLoadSlots) {
+			final int loadDuration = loadSlot.getSchedulingTimeWindow().getDuration();
+			if (loadDuration < minLoadDuration) {
+				minLoadDuration = loadDuration;
+			}
+			if (loadDuration > maxLoadDuration) {
+				maxLoadDuration = loadDuration;
+			}
+		}
 
 		final int numLoadSlots = sortedLoadSlots.size();
 		final int numCargoes = Arrays.stream(vessels).mapToInt(v -> v.cargoes.length).sum();
 		final IntVar[][] cargoToLoadSlotSelectionVars = new IntVar[numCargoes][numLoadSlots];
-		final LocalDate[][] loadSlotEndPoints = new LocalDate[numLoadSlots][2];
+		final ZonedDateTime[][] loadSlotEndPoints = new ZonedDateTime[numLoadSlots][2];
+		final Set<Port> loadSlotPorts = sortedLoadSlots.stream().map(Slot::getPort).collect(Collectors.toSet());
 
 		final Iterator<LoadSlot> loadSlotIter = sortedLoadSlots.iterator();
 		for (int i = 0; i < numLoadSlots; ++i) {
 			final LoadSlot currentLoadSlot = loadSlotIter.next();
-			final LocalDate startDateInclusive = currentLoadSlot.getWindowStart();
-			final LocalDate endDateExclusive;
-			if (currentLoadSlot.isSetWindowSize() && currentLoadSlot.isSetWindowSizeUnits()) {
-				if (currentLoadSlot.getWindowSize() > 0) {
-					if (currentLoadSlot.getWindowSizeUnits() == TimePeriod.DAYS) {
-						endDateExclusive = currentLoadSlot.getSchedulingTimeWindow().getStart().plusDays(currentLoadSlot.getWindowSize()).minusHours(1).toLocalDate().plusDays(1);
-					} else if (currentLoadSlot.getWindowSizeUnits() == TimePeriod.HOURS) {
-						endDateExclusive = currentLoadSlot.getSchedulingTimeWindow().getStart().plusHours(currentLoadSlot.getWindowSize()).toLocalDate().plusDays(1);
-					} else if (currentLoadSlot.getWindowSizeUnits() == TimePeriod.MONTHS) {
-						endDateExclusive = currentLoadSlot.getSchedulingTimeWindow().getStart().plusMonths(currentLoadSlot.getWindowSize()).minusHours(1).toLocalDate().plusDays(1);
-					} else {
-						throw new IllegalStateException("Unknown time period");
-					}
-				} else {
-					endDateExclusive = currentLoadSlot.getWindowStart().plusDays(1);
-				}
-			} else {
-				endDateExclusive = startDateInclusive.plusDays(1);
-			}
+			final SchedulingTimeWindow schedulingTimeWindow = currentLoadSlot.getSchedulingTimeWindow();
+			final ZonedDateTime startDateInclusive = schedulingTimeWindow.getStart().withZoneSameInstant(utcZoneId);
+			final ZonedDateTime endDateExclusive = schedulingTimeWindow.getEnd().plusHours(1L).withZoneSameInstant(utcZoneId);
 			loadSlotEndPoints[i][0] = startDateInclusive;
 			loadSlotEndPoints[i][1] = endDateExclusive;
 		}
+
 		final int[][] loadTimePoints = new int[numLoadSlots][2];
 		for (int i = 0; i < numLoadSlots; ++i) {
-			loadTimePoints[i][0] = getDateValue(loadSlotEndPoints[i][0]);
-			loadTimePoints[i][1] = getDateValue(loadSlotEndPoints[i][1]);
+			loadTimePoints[i][0] = getHourValue(loadSlotEndPoints[i][0], dateTimeZero);
+			loadTimePoints[i][1] = getHourValue(loadSlotEndPoints[i][1], dateTimeZero);
 		}
 
 		final Map<LoadSlot, Integer> loadIndices = new HashMap<>();
@@ -508,6 +370,87 @@ public class CPBasedSolver {
 			}
 		}
 
+		final Map<Vessel, VesselAssignmentType> vesselToVatMap = new HashMap<>();
+		for (final Cargo cargo : orderedCargoes) {
+			if (cargo.contract.fob || vesselToVatMap.containsKey(cargo.vessel)) {
+				continue;
+			}
+			final com.mmxlabs.models.lng.fleet.Vessel eVessel = vesselToEVesselMap.get(cargo.vessel);
+			final Optional<VesselAvailability> optVa = ScenarioModelUtil.getCargoModel(sm).getVesselAvailabilities().stream().filter(va -> va.getVessel() == eVessel).findAny();
+			if (optVa.isPresent()) {
+				vesselToVatMap.put(cargo.vessel, optVa.get());
+			} else {
+				final Optional<CharterInMarket> optCim = ScenarioModelUtil.getSpotMarketsModel(sm).getCharterInMarkets().stream()
+						.filter(cim -> cim.getName().equalsIgnoreCase(cargo.vessel.name.toLowerCase())).findAny();
+				if (optCim.isPresent()) {
+					vesselToVatMap.put(cargo.vessel, optCim.get());
+				} else {
+					throw new IllegalStateException(String.format("Could not find vessel availability or charter in market: %s", cargo.vessel));
+				}
+			}
+		}
+
+		final Map<Cargo, int[]> minMaxLadenTravelTimes = new HashMap<>();
+		for (final Cargo cargo : orderedCargoes) {
+			if (cargo.contract.fob) {
+				continue;
+			}
+			int minTravelTime = Integer.MAX_VALUE;
+			int maxTravelTime = Integer.MIN_VALUE;
+			for (final Port fromPort : loadSlotPorts) {
+				final String toPortName = cargo.contract.port == null ? defaultPortName : cargo.contract.port;
+				final Optional<Port> optToPort = ScenarioModelUtil.findReferenceModel(sm).getPortModel().getPorts().stream().filter(p -> p.getName().equalsIgnoreCase(toPortName)).findAny();
+				if (optToPort.isEmpty()) {
+					throw new IllegalStateException(String.format("Unknown port: %s", toPortName));
+				}
+				final Port toPort = optToPort.get();
+				final VesselAssignmentType vat = vesselToVatMap.get(cargo.vessel);
+				final int travelTime = CargoTravelTimeUtils.getFobMinTimeInHours(fromPort, toPort, vat, ScenarioModelUtil.getPortModel(sm), 0, modelDistanceProvider, 0);
+				if (travelTime < minTravelTime) {
+					minTravelTime = travelTime;
+				}
+				if (travelTime > maxTravelTime) {
+					maxTravelTime = travelTime;
+				}
+			}
+			minMaxLadenTravelTimes.put(cargo, new int[] { minTravelTime, maxTravelTime });
+		}
+
+		final Map<Triple<Vessel, Port, LoadSlot>, Integer> ballastTravelTimes = new HashMap<>();
+		final Map<Cargo, int[]> minMaxBallastTravelTimes = new HashMap<>();
+		for (final Cargo cargo : orderedCargoes) {
+			if (cargo.contract.fob) {
+				continue;
+			}
+			int minTravelTime = Integer.MAX_VALUE;
+			int maxTravelTime = Integer.MIN_VALUE;
+			for (final LoadSlot toSlot : sortedLoadSlots) {
+				// Minor enhancement skip first load slot
+				final String fromPortName = cargo.contract.port == null ? defaultPortName : cargo.contract.port;
+				final Optional<Port> optFromPort = ScenarioModelUtil.findReferenceModel(sm).getPortModel().getPorts().stream().filter(p -> p.getName().equalsIgnoreCase(fromPortName)).findAny();
+				if (optFromPort.isEmpty()) {
+					throw new IllegalStateException(String.format("Unknown port: %s", fromPortName));
+				}
+				final Port fromPort = optFromPort.get();
+				final Triple<Vessel, Port, LoadSlot> ballastTravelKey = Triple.of(cargo.vessel, fromPort, toSlot);
+				final VesselAssignmentType vat = vesselToVatMap.get(cargo.vessel);
+
+				// Create temporary discharge slot with port set to match CargoTravelTimeUtils#getFobMinTimeInHours type signature
+				final DischargeSlot tempDischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
+				tempDischargeSlot.setPort(fromPort);
+
+				final int travelTime = CargoTravelTimeUtils.getFobMinTimeInHours(tempDischargeSlot, toSlot, FIRST_DATE, vat, ScenarioModelUtil.getPortModel(sm), 0, modelDistanceProvider);
+				ballastTravelTimes.put(ballastTravelKey, travelTime);
+				if (travelTime < minTravelTime) {
+					minTravelTime = travelTime;
+				}
+				if (travelTime > maxTravelTime) {
+					maxTravelTime = travelTime;
+				}
+			}
+			minMaxBallastTravelTimes.put(cargo, new int[] { 0, maxTravelTime });
+		}
+
 		// Each load slot can be associated with at most one cargo
 		for (int loadIndex = 0; loadIndex < numLoadSlots; ++loadIndex) {
 			final IntVar[] cargoes = new IntVar[numCargoes];
@@ -520,10 +463,7 @@ public class CPBasedSolver {
 
 		// Each cargo must be associated with a load slot
 		for (int cargoIndex = 0; cargoIndex < numCargoes; ++cargoIndex) {
-			final IntVar[] loads = new IntVar[numLoadSlots];
-			for (int loadIndex = 0; loadIndex < numLoadSlots; ++loadIndex) {
-				loads[loadIndex] = cargoToLoadSlotSelectionVars[cargoIndex][loadIndex];
-			}
+			final IntVar[] loads = Arrays.copyOf(cargoToLoadSlotSelectionVars[cargoIndex], numLoadSlots);
 			final LinearExpr loadSum = LinearExpr.sum(loads);
 			model.addEquality(loadSum, 1L);
 		}
@@ -563,18 +503,16 @@ public class CPBasedSolver {
 		final Map<DryDockEvent, Triple<IntVar, IntervalVar, IntVar>> dryDockIntervalVarsMap = new HashMap<>();
 
 		final Map<Vessel, List<IntervalVar>> dryDockIntervalVars2 = new HashMap<>();
-		int dryDockCount = 0;
 		for (final Entry<com.mmxlabs.models.lng.fleet.Vessel, List<DryDockEvent>> entry : dryDockEvents.entrySet()) {
 			for (final DryDockEvent event : entry.getValue()) {
-				final int duration = event.getDurationInDays();
-				final LocalDate startBy = event.getStartBy().toLocalDate();
-				final LocalDate startAfter = event.getStartAfter().toLocalDate();
-				final int startByInt = getDateValue(startBy);
-				final int startAfterInt = getDateValue(startAfter);
+				final int durationInHours = event.getDurationInDays() * 24;
+				final ZonedDateTime startByZdt = event.getStartByAsDateTime().withZoneSameInstant(utcZoneId);
+				final ZonedDateTime startAfterZdt = event.getStartAfterAsDateTime().withZoneSameInstant(utcZoneId);
+				final int startByInt = getHourValue(startByZdt, dateTimeZero);
+				final int startAfterInt = getHourValue(startAfterZdt, dateTimeZero);
 				final IntVar dryDockStart = model.newIntVar(startAfterInt, startByInt, String.format("DD-%s-start", event.getName()));
-				final IntVar dryDockEnd = model.newIntVar(startAfterInt + duration, startByInt + duration, String.format("DD-%s-end", event.getName()));
-				final IntervalVar interval = model.newIntervalVar(dryDockStart, duration, dryDockEnd, String.format("DD-%s-interval", event.getName()));
-				++dryDockCount;
+				final IntVar dryDockEnd = model.newIntVar(startAfterInt + durationInHours, startByInt + durationInHours, String.format("DD-%s-end", event.getName()));
+				final IntervalVar interval = model.newIntervalVar(dryDockStart, durationInHours, dryDockEnd, String.format("DD-%s-interval", event.getName()));
 				final com.mmxlabs.models.lng.fleet.Vessel vessel = ((VesselAvailability) event.getVesselAssignmentType()).getVessel();
 				final Triple<IntVar, IntervalVar, IntVar> triple = Triple.of(dryDockStart, interval, dryDockEnd);
 				dryDockIntervalVars.computeIfAbsent(vessel.getName(), v -> new LinkedList<>()).add(triple);
@@ -598,12 +536,11 @@ public class CPBasedSolver {
 				for (final LoadSlot currentLoadSlot : uniquePortFobLoadSlots) {
 					final int minTravelTime = CargoTravelTimeUtils.getFobMinTimeInHours(ghostDryDockLoadSlot, currentLoadSlot, FIRST_DATE, dryDockEvent.getVesselAssignmentType(),
 							sm.getReferenceModel().getPortModel(), entry.getKey().getVesselOrDelegateMaxSpeed(), modelDistanceProvider);
-					final int minTravelDaysRoundedUp = (int) Math.ceil(minTravelTime / 24.0);
-					portTimesMap.put(currentLoadSlot.getPort(), minTravelDaysRoundedUp);
+					portTimesMap.put(currentLoadSlot.getPort(), minTravelTime);
 				}
 			}
 		}
-		final String defaultPortName = "Himeji";
+
 		final Map<String, Map<DryDockEvent, Map<String, Integer>>> toDryDockBallastTravelTimes = new HashMap<>();
 		for (final Entry<com.mmxlabs.models.lng.fleet.Vessel, List<DryDockEvent>> entry : dryDockEvents.entrySet()) {
 			final Vessel v = Arrays.stream(vessels).filter(vess -> vess.name.equalsIgnoreCase(entry.getKey().getName())).findAny().get();
@@ -620,13 +557,34 @@ public class CPBasedSolver {
 					ghostDryDockSlot.setPort(dryDockEvent.getPort());
 					final int minTravelTime = CargoTravelTimeUtils.getFobMinTimeInHours(ghostLoadSlot, ghostDryDockSlot, FIRST_DATE, dryDockEvent.getVesselAssignmentType(),
 							sm.getReferenceModel().getPortModel(), entry.getKey().getVesselOrDelegateMaxSpeed(), modelDistanceProvider);
-					final int minTravelDaysRoundedUp = (int) Math.ceil(minTravelTime / 24.0);
-					portTimesMap.put(currentPort.getName().toLowerCase(), minTravelDaysRoundedUp);
+					portTimesMap.put(currentPort.getName().toLowerCase(), minTravelTime);
 				}
 			}
 		}
+		for (final Cargo cargo : orderedCargoes) {
+			if (cargo.contract.fob) {
+				continue;
+			}
+			final Map<DryDockEvent, Map<String, Integer>> dryDockMap = toDryDockBallastTravelTimes.get(cargo.vessel.name.toLowerCase());
+			if (dryDockMap == null) {
+				continue;
+			}
+			final int[] minMaxTravelTime = minMaxBallastTravelTimes.get(cargo);
+			final String portName = cargo.contract.port == null ? defaultPortName.toLowerCase() : cargo.contract.port.toLowerCase();
+			for (final Map<String, Integer> portTimesMap : dryDockMap.values()) {
+				final int travelTime = portTimesMap.get(portName);
+				if (travelTime < minMaxTravelTime[0]) {
+					minMaxTravelTime[0] = travelTime;
+				}
+				if (travelTime > minMaxTravelTime[1]) {
+					minMaxTravelTime[1] = travelTime;
+				}
+			}
 
-		int loadInterval = 4;
+		}
+
+		final Map<DryDockEvent, Map<Cargo, IntVar>> dryDockCargoSelectionVars = new HashMap<>();
+		final Map<Cargo, ShippedCargoModellingContainer> shippedCargoVars = new HashMap<>();
 		int taskId = 0;
 		IntVar[][] timesVar = new IntVar[vessels.length][];
 		for (int idx = 0; idx < vessels.length; ++idx) {
@@ -638,6 +596,12 @@ public class CPBasedSolver {
 			IntVar[] vesselVarsEnd = new IntVar[v.cargoes.length];
 			// Interval variable bounded by corresponding vesselVarsStart and vesselVarsEnd variables
 			IntervalVar[] vesselVarsInterval = new IntervalVar[v.cargoes.length];
+
+			final List<IntervalVar> nonOverlappingCargoIntervals = new ArrayList<>();
+			dryDockIntervalVars2.getOrDefault(v, Collections.emptyList()).forEach(nonOverlappingCargoIntervals::add);
+
+			final ShippedCargoModellingContainer[] shippedCargoModellingVariables = new ShippedCargoModellingContainer[v.cargoes.length];
+			final Map<com.mmxlabs.models.lng.cargo.Cargo, ShippedCargoModellingContainer> shippedFixedCargoDetails = new HashMap<>();
 
 			// The list that is added to timesVar
 			List<IntVar> vesselLoadVars = new ArrayList<>();
@@ -656,126 +620,236 @@ public class CPBasedSolver {
 					contractLoadVarsPerVessel.add(vesselLoadVars);
 				}
 
-				// FOB-FOB has to be in current year, FOB-DES can load in previous year.
-				int desDeliveryTime = (c.contract.fob ? 0 : (c.contract.interval / 2 + 1));
-				int startTime = firstLoadDate - desDeliveryTime;
-				int endTime = lastLoadDate;
-
-				if (c.minDischargeDate != null) {
-					int minLoadTime = (int) getDateValue(c.minDischargeDate) - desDeliveryTime;
-					startTime = Math.max(minLoadTime, startTime);
-				}
-				if (c.maxDischargeDate != null) {
-					int maxLoadTime = (int) getDateValue(c.maxDischargeDate) - desDeliveryTime;
-					endTime = Math.min(maxLoadTime, endTime);
-				}
-				if (c.minLoadDate != null) {
-					int minLoadTime = (int) getDateValue(c.minLoadDate);
-					startTime = Math.max(minLoadTime, startTime);
-				}
-				if (c.maxLoadDate != null) {
-					int maxLoadTime = (int) getDateValue(c.maxLoadDate);
-					endTime = Math.min(maxLoadTime, endTime);
-				}
-
-				vesselVarsStart[i] = createLoadVar(model, v, c.contract, startTime, endTime, i, desDeliveryTime, sortedLoadDates);
-				vesselVarsEnd[i] = model.newIntVar(startTime, endTime + c.contract.interval, v.name + "-" + c.contract.name + "-end-" + i);
+				vesselVarsStart[i] = createLoadVar(model, v, c.contract, earliestLoadTimeInt, latestLoadTimeInt, i);
+				vesselVarsEnd[i] = model.newIntVar(earliestLoadTimeInt, latestLoadTimeInt + c.contract.interval * 24, v.name + "-" + c.contract.name + "-end-" + i);
 				// Cargo spacing per vessel.
-				vesselVarsInterval[i] = model.newIntervalVar(vesselVarsStart[i], c.contract.interval, vesselVarsEnd[i], v.name + "-interval-" + i);
+				vesselVarsInterval[i] = model.newIntervalVar(vesselVarsStart[i], c.contract.interval * 24, vesselVarsEnd[i], v.name + "-interval-" + i);
 
-				if (c.contract.turnaroundTime != Integer.MAX_VALUE) {
-					final IntVar ballastEnd = model.newIntVar(startTime, endTime + c.contract.turnaroundTime, v.name + "-ballast-end" + i);
-					final IntervalVar roundTripIntervalVar = model.newIntervalVar(vesselVarsStart[i], c.contract.turnaroundTime, ballastEnd, v.name + "-round-trip-interval-" + i);
-					dryDockIntervalVars2.computeIfAbsent(v, vv -> new LinkedList<>()).add(roundTripIntervalVar);
-				}
-
+				// Each cargo load start
 				for (int loadIndex = 0; loadIndex < numLoadSlots; ++loadIndex) {
 					model.addLinearConstraint(vesselVarsStart[i], loadTimePoints[loadIndex][0], loadTimePoints[loadIndex][1] - 1)
 							.onlyEnforceIf(cargoToLoadSlotSelectionVars[cargoIndices.get(c)][loadIndex]);
 				}
 
 				if (c.contract.fob) {
+					// Shipped cargoes use a different load var
+					loadVarsStart[taskId] = vesselVarsStart[i];
 					final List<LoadSlot> localUsedLoadSlots = usedLoadSlots.get(c.contract);
 					if (localUsedLoadSlots != null) {
-						for (final LoadSlot slot : localUsedLoadSlots) {
-							final LocalDate dischargeDate = slot.getCargo().getSlots().get(1).getWindowStart();
-							final int timepoint = getDateValue(dischargeDate);
+						for (final LoadSlot eLoadslot : localUsedLoadSlots) {
+							final DischargeSlot eDischargeSlot = (DischargeSlot) eLoadslot.getCargo().getSlots().get(1);
+							final ZonedDateTime windowStart = eDischargeSlot.getSchedulingTimeWindow().getStart().withZoneSameInstant(utcZoneId);
+							final ZonedDateTime windowEnd = eDischargeSlot.getSchedulingTimeWindow().getEnd().withZoneSameInstant(utcZoneId);
+
+							final int windowStartInt = getHourValue(windowStart, dateTimeZero);
+							final int windowEndInt = getHourValue(windowEnd, dateTimeZero);
 							final int cargoIndex = cargoIndices.get(c);
-							final int loadIndex = loadIndices.get(slot);
-							model.addEquality(vesselVarsStart[i], timepoint).onlyEnforceIf(cargoToLoadSlotSelectionVars[cargoIndex][loadIndex]);
+							final int loadIndex = loadIndices.get(eLoadslot);
+							// Restrict load times if paired with used load slot
+							model.addLinearConstraint(vesselVarsStart[i], windowStartInt, windowEndInt).onlyEnforceIf(cargoToLoadSlotSelectionVars[cargoIndex][loadIndex]);
 						}
 					}
 				} else {
+					final String dischargePortName = c.contract.port == null ? defaultPortName : c.contract.port;
+					final Port dischargeEPort = ScenarioModelUtil.findReferenceModel(sm).getPortModel().getPorts().stream().filter(p -> p.getName().equalsIgnoreCase(dischargePortName)).findAny()
+							.get();
+					final int dischargeDuration = dischargeEPort.getDischargeDuration();
+					@NonNull
+					final ShippedCargoModellingContainer cargoModelVariables = buildShippedCargoModellingVariables(model, earliestLoadTimeInt, latestLoadTimeInt, v, c, i, minLoadDuration,
+							maxLoadDuration, minMaxLadenTravelTimes.get(c), minMaxBallastTravelTimes.get(c), dischargeDuration, dateTimeEndInt);
+					shippedCargoVars.put(c, cargoModelVariables);
+
+					if (c.minDischargeDate != null) {
+						final ZonedDateTime minDischargeZdtPortTz = c.minDischargeDate.atStartOfDay(dischargeEPort.getZoneId());
+						final ZonedDateTime minDischargeZdtUtc = minDischargeZdtPortTz.withZoneSameInstant(utcZoneId);
+						final int minDischargeDateInt = getHourValue(minDischargeZdtUtc, dateTimeZero);
+						model.addGreaterOrEqual(cargoModelVariables.getDischargePortVariables().getStart(), minDischargeDateInt);
+					}
+					if (c.maxDischargeDate != null) {
+						final ZonedDateTime maxDischargeZdtPortTz = c.maxDischargeDate.atStartOfDay(dischargeEPort.getZoneId());
+						final ZonedDateTime maxDischargeZdtUtc = maxDischargeZdtPortTz.withZoneSameInstant(utcZoneId);
+						final int maxDischargeDateInt = getHourValue(maxDischargeZdtUtc, dateTimeZero);
+						model.addLessOrEqual(cargoModelVariables.getDischargePortVariables().getEnd(), maxDischargeDateInt);
+					}
+
+					loadVarsStart[taskId] = cargoModelVariables.getLoadPortVariables().getStart();
+
+					// If paired with load slot, load should be within window
+					for (int loadIndex = 0; loadIndex < numLoadSlots; ++loadIndex) {
+						model.addLinearConstraint(cargoModelVariables.getLoadPortVariables().getStart(), loadTimePoints[loadIndex][0], loadTimePoints[loadIndex][1] - 1)
+								.onlyEnforceIf(cargoToLoadSlotSelectionVars[cargoIndices.get(c)][loadIndex]);
+					}
+
+					shippedCargoModellingVariables[i] = cargoModelVariables;
+					nonOverlappingCargoIntervals.add(cargoModelVariables.getCargoInterval());
+
+					// Current cargo laden should end before discharge starts
+					model.addLessOrEqual(cargoModelVariables.getLadenTravelVariables().getEnd(), cargoModelVariables.getDischargePortVariables().getStart());
+					// Allow at most 3 days laden idle
+					final LinearExpr ladenMaxIdleLinearExpr = LinearExpr
+							.scalProd(new IntVar[] { cargoModelVariables.getDischargePortVariables().getStart(), cargoModelVariables.getLadenTravelVariables().getEnd() }, new int[] { 1, -1 });
+					model.addLessOrEqual(ladenMaxIdleLinearExpr, 72);
+
+					// If assigned to fixed cargo
 					final List<LoadSlot> localUsedLoadSlots = usedLoadSlots.get(c.contract);
 					if (localUsedLoadSlots != null) {
 						for (final LoadSlot loadSlot : localUsedLoadSlots) {
 							final int cargoIndex = cargoIndices.get(c);
 							final int loadIndex = loadIndices.get(loadSlot);
 							final DischargeSlot dischargeSlot = (DischargeSlot) loadSlot.getCargo().getSlots().get(1);
+							final IntVar cargoLoadSelectionVar = cargoToLoadSlotSelectionVars[cargoIndex][loadIndex];
 							// Work out load limits
-							final int minimumTravelTime = getMinimumTravelTime(dischargeSlot, loadSlot, vesselToEVesselMap.get(v), sdp, sm);
-							final ZonedDateTime dischargeEndZdt = dischargeSlot.getSchedulingTimeWindow().getEnd();
-							final ZonedDateTime dischargeTzLatestLoadZdt = dischargeEndZdt.minusHours(minimumTravelTime);
-							final ZonedDateTime loadTzLatestLoadZdt = dischargeTzLatestLoadZdt.withZoneSameInstant(loadSlot.getPort().getZoneId());
-							final LocalDate loadTzLatestLoad = loadTzLatestLoadZdt.toLocalDate();
-							final int loadTzLatestLoadInt = getDateValue(loadTzLatestLoad);
-							final LinearExpr term = LinearExpr.term(vesselVarsStart[i], 1);
-							model.addLessOrEqual(vesselVarsStart[i], loadTzLatestLoadInt).onlyEnforceIf(cargoToLoadSlotSelectionVars[cargoIndex][loadIndex]);
+							final int ladenTravelTime = CargoTravelTimeUtils.getFobMinTimeInHours(loadSlot, dischargeSlot, FIRST_DATE, vesselToVatMap.get(v), ScenarioModelUtil.getPortModel(sm), 0,
+									modelDistanceProvider);
+							// TODO: No need to add constraint if ladenTravelTime is less than or equal to lower laden travel duration bound
+							model.addGreaterOrEqual(cargoModelVariables.getLadenTravelVariables().getDurationVar(), ladenTravelTime).onlyEnforceIf(cargoLoadSelectionVar);
+
+							final ZonedDateTime earliestLoadStartUtc = loadSlot.getSchedulingTimeWindow().getStart().withZoneSameInstant(utcZoneId);
+							final ZonedDateTime dischargeEndZdtUtc = dischargeSlot.getSchedulingTimeWindow().getEnd().withZoneSameInstant(utcZoneId);
+							final ZonedDateTime latestLoadUtc = dischargeEndZdtUtc.minusHours(ladenTravelTime);
+							final ZonedDateTime latestLoadStwStart = loadSlot.getSchedulingTimeWindow().getEnd().withZoneSameInstant(utcZoneId);
+							final ZonedDateTime earliestDischargeStart = earliestLoadStartUtc.plusHours(loadSlot.getSchedulingTimeWindow().getDuration() + ladenTravelTime);
+							final ZonedDateTime earliestDischargeStwStart = dischargeSlot.getSchedulingTimeWindow().getStart().withZoneSameInstant(utcZoneId);
+							final ZonedDateTime actualLatestLoadStart;
+							if (latestLoadUtc.isAfter(latestLoadStwStart)) {
+								actualLatestLoadStart = latestLoadStwStart;
+							} else {
+								actualLatestLoadStart = latestLoadUtc;
+							}
+							final ZonedDateTime actualEarliestDischargeStart;
+							if (earliestDischargeStart.isBefore(earliestDischargeStwStart)) {
+								actualEarliestDischargeStart = earliestDischargeStwStart;
+							} else {
+								actualEarliestDischargeStart = earliestDischargeStart;
+							}
+							final int latestLoadInt = getHourValue(actualLatestLoadStart, dateTimeZero);
+							final int earliestDischargeInt = getHourValue(actualEarliestDischargeStart, dateTimeZero);
+							model.addLessOrEqual(cargoModelVariables.getLoadPortVariables().getEnd(), latestLoadInt).onlyEnforceIf(cargoLoadSelectionVar);
+							model.addGreaterOrEqual(cargoModelVariables.getDischargePortVariables().getStart(), earliestDischargeInt).onlyEnforceIf(cargoLoadSelectionVar);
 						}
 					}
 					// Sequencing around other cargoes
 					final List<com.mmxlabs.models.lng.cargo.Cargo> fixedCargoes = cargoVessels.get(v);
 					if (fixedCargoes != null) {
 						for (final com.mmxlabs.models.lng.cargo.Cargo fixedCargo : fixedCargoes) {
-							// Create cargo sequencing binary
 							final LoadSlot fixedLoadSlot = (LoadSlot) fixedCargo.getSlots().get(0);
 							final DischargeSlot fixedDischargeSlot = (DischargeSlot) fixedCargo.getSlots().get(1);
 							final VesselAssignmentType vat = fixedCargo.getVesselAssignmentType();
+							ShippedCargoModellingContainer fixedCargoModellingVariables = shippedFixedCargoDetails.get(fixedCargo);
+							if (fixedCargoModellingVariables == null) {
+								final int fastestFixedCargoLadenTime = CargoTravelTimeUtils.getFobMinTimeInHours(fixedLoadSlot, fixedDischargeSlot, FIRST_DATE, vat,
+										sm.getReferenceModel().getPortModel(), ((VesselAvailability) vat).getVessel().getVesselOrDelegateMaxSpeed(), modelDistanceProvider);
+								final int[] minMaxLadenTravel = new int[] { fastestFixedCargoLadenTime, fastestFixedCargoLadenTime };
+								fixedCargoModellingVariables = buildFixedCargoShippedCargoModellingVariables(model, earliestLoadTimeInt, latestLoadTimeInt, v, fixedLoadSlot.getName(),
+										fixedDischargeSlot.getName(), fixedLoadSlot.getSchedulingTimeWindow().getDuration(), fixedLoadSlot.getSchedulingTimeWindow().getDuration(), minMaxLadenTravel,
+										minMaxBallastTravelTimes.get(c), fixedDischargeSlot.getSchedulingTimeWindow().getDuration(), dateTimeEndInt);
+								model.addLessOrEqual(fixedCargoModellingVariables.getLadenTravelVariables().getEnd(), fixedCargoModellingVariables.getDischargePortVariables().getStart());
+
+								final ZonedDateTime loadStart = fixedLoadSlot.getSchedulingTimeWindow().getStart().withZoneSameInstant(utcZoneId);
+								final ZonedDateTime loadEnd = fixedLoadSlot.getSchedulingTimeWindow().getEnd().withZoneSameInstant(utcZoneId);
+								model.addGreaterOrEqual(fixedCargoModellingVariables.getLoadPortVariables().getStart(), getHourValue(loadStart, dateTimeZero));
+								model.addLessOrEqual(fixedCargoModellingVariables.getLoadPortVariables().getStart(), getHourValue(loadEnd, dateTimeZero));
+
+								final ZonedDateTime dischargeStart = fixedDischargeSlot.getSchedulingTimeWindow().getStart().withZoneSameInstant(utcZoneId);
+								final ZonedDateTime dischargeEnd = fixedDischargeSlot.getSchedulingTimeWindow().getEnd().withZoneSameInstant(utcZoneId);
+								model.addGreaterOrEqual(fixedCargoModellingVariables.getDischargePortVariables().getStart(), getHourValue(dischargeStart, dateTimeZero));
+								model.addLessOrEqual(fixedCargoModellingVariables.getDischargePortVariables().getStart(), getHourValue(dischargeEnd, dateTimeZero));
+
+								// nonOverlappingCargoIntervals.add(fixedCargoModellingVariables.getCargoInterval());
+							}
+
+							// Create cargo sequencing binary
 							final String selectionVarName = String.format("FC-%s-%s-isAfter-%s-%d", fixedLoadSlot.getName(), fixedDischargeSlot.getName(), v.name, i);
 							final IntVar fixedCargoIsAfterSelection = model.newBoolVar(selectionVarName);
 							// Fixed cargo is after this cargo
 							final ZonedDateTime fixedLoadLatestStart = fixedLoadSlot.getSchedulingTimeWindow().getEnd();
 							final DischargeSlot ghostDischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
-							final String dischargePortName = c.contract.port != null ? c.contract.port : defaultPortName;
-							final Port dischargePort = sm.getReferenceModel().getPortModel().getPorts().stream().filter(p -> p.getName().equalsIgnoreCase(dischargePortName)).findAny().get();
-							ghostDischargeSlot.setPort(dischargePort);
-							final int fastestBallastTravelTime = CargoTravelTimeUtils.getFobMinTimeInHours(ghostDischargeSlot, fixedDischargeSlot, FIRST_DATE, vat,
-									sm.getReferenceModel().getPortModel(), ((VesselAvailability) vat).getVessel().getVesselOrDelegateMaxSpeed(), modelDistanceProvider);
-							final int fastestFixedCargoLadenTime = CargoTravelTimeUtils.getFobMinTimeInHours(fixedLoadSlot, fixedDischargeSlot, FIRST_DATE, vat, sm.getReferenceModel().getPortModel(),
+							// final Port dischargePort = sm.getReferenceModel().getPortModel().getPorts().stream().filter(p -> p.getName().equalsIgnoreCase(dischargePortName)).findAny().get();
+							ghostDischargeSlot.setPort(dischargeEPort);
+							final int fastestBallastTravelTime = CargoTravelTimeUtils.getFobMinTimeInHours(ghostDischargeSlot, fixedLoadSlot, FIRST_DATE, vat, sm.getReferenceModel().getPortModel(),
 									((VesselAvailability) vat).getVessel().getVesselOrDelegateMaxSpeed(), modelDistanceProvider);
-							final ZonedDateTime earliestDischargeStart = fixedLoadSlot.getSchedulingTimeWindow().getStart().plusHours(fixedLoadSlot.getDuration()).plusHours(fastestFixedCargoLadenTime)
-									.withZoneSameInstant(fixedDischargeSlot.getPort().getZoneId());
-							final ZonedDateTime actualEarliestDischargeStart;
-							if (earliestDischargeStart.isBefore(fixedDischargeSlot.getSchedulingTimeWindow().getStart())) {
-								actualEarliestDischargeStart = fixedDischargeSlot.getSchedulingTimeWindow().getStart();
-							} else {
-								actualEarliestDischargeStart = earliestDischargeStart;
-							}
+							final LinearExpr linearExpr = LinearExpr.scalProd(
+									new IntVar[] { cargoModelVariables.getDischargePortVariables().getEnd(), fixedCargoModellingVariables.getLoadPortVariables().getStart() }, new int[] { 1, -1 });
+							model.addLessOrEqual(linearExpr, -fastestBallastTravelTime).onlyEnforceIf(fixedCargoIsAfterSelection);
+
 							for (final LoadSlot potentialLoadSlot : sortedLoadSlots) {
-								final int loadDuration = potentialLoadSlot.getDuration();
-								final int fastestLadenTime = CargoTravelTimeUtils.getFobMinTimeInHours(potentialLoadSlot, fixedDischargeSlot, FIRST_DATE, vat, sm.getReferenceModel().getPortModel(),
-										((VesselAvailability) vat).getVessel().getVesselOrDelegateMaxSpeed(), modelDistanceProvider);
-								final int dischargeDuration = dischargePort.getDischargeDuration();
-								final int totalTravelTimeInHours = loadDuration + fastestLadenTime + dischargeDuration + fastestBallastTravelTime;
-								final ZonedDateTime latestStartTime = fixedLoadLatestStart.minusHours(totalTravelTimeInHours);
-								final ZonedDateTime zonedLatestStartTime = latestStartTime.withZoneSameInstant(potentialLoadSlot.getPort().getZoneId());
-								if (!potentialLoadSlot.getSchedulingTimeWindow().getStart().isBefore(zonedLatestStartTime)) {
-									final int cargoIndex = cargoIndices.get(c);
-									final int loadIndex = loadIndices.get(potentialLoadSlot);
-									final IntVar cargoLoadSelectionVar = cargoToLoadSlotSelectionVars[cargoIndex][loadIndex];
-									model.addEquality(cargoLoadSelectionVar, 0).onlyEnforceIf(fixedCargoIsAfterSelection);
-								}
 								final int fastestBallastToReachTravelTime = CargoTravelTimeUtils.getFobMinTimeInHours(fixedDischargeSlot, potentialLoadSlot, FIRST_DATE, vat,
 										sm.getReferenceModel().getPortModel(), ((VesselAvailability) vat).getVessel().getVesselOrDelegateMaxSpeed(), modelDistanceProvider);
-								final ZonedDateTime earliestLoadTime = actualEarliestDischargeStart.plusHours(fixedDischargeSlot.getPort().getDischargeDuration() + fastestBallastToReachTravelTime)
-										.withZoneSameInstant(potentialLoadSlot.getPort().getZoneId());
-								if (earliestLoadTime.isAfter(potentialLoadSlot.getSchedulingTimeWindow().getEnd())) {
-									final int cargoIndex = cargoIndices.get(c);
-									final int loadIndex = loadIndices.get(potentialLoadSlot);
-									final IntVar cargoLoadSelectionVar = cargoToLoadSlotSelectionVars[cargoIndex][loadIndex];
-									model.addEquality(cargoLoadSelectionVar, 0).onlyEnforceIf(fixedCargoIsAfterSelection.not());
-								}
+
+								final IntVar cargoLoadSlotSelection = cargoToLoadSlotSelectionVars[cargoIndices.get(c)][loadIndices.get(potentialLoadSlot)];
+								final LinearExpr linearExpr2 = LinearExpr.scalProd(
+										new IntVar[] { fixedCargoModellingVariables.getDischargePortVariables().getEnd(), cargoModelVariables.getLoadPortVariables().getStart() }, new int[] { 1, -1 });
+								model.addLessOrEqual(linearExpr2, -fastestBallastToReachTravelTime).onlyEnforceIf(new Literal[] { cargoLoadSlotSelection, fixedCargoIsAfterSelection.not() });
 							}
+						}
+					}
+					final Map<DryDockEvent, Map<Port, Integer>> map = fromDryDockBallastTravelTimes.get(v.name.toLowerCase());
+					if (map != null) {
+
+						final Map<DryDockEvent, IntVar> dryDockSelectionVars = new HashMap<>();
+						for (final Entry<DryDockEvent, Map<Port, Integer>> entry : map.entrySet()) {
+							final DryDockEvent dryDockEvent = entry.getKey();
+
+							final String selectionVarName = String.format("DD-%s-isBefore-%s-%d", dryDockEvent.getName(), v.name, i);
+							final IntVar drydockBeforeCargoSelection = model.newBoolVar(selectionVarName);
+							dryDockSelectionVars.put(dryDockEvent, drydockBeforeCargoSelection);
+							dryDockCargoSelectionVars.computeIfAbsent(dryDockEvent, k -> new HashMap<>()).put(c, drydockBeforeCargoSelection);
+
+							final IntVar dryDockEnd = dryDockIntervalVarsMap.get(dryDockEvent).getThird();
+							for (int loadIndex = 0; loadIndex < numLoadSlots; ++loadIndex) {
+								final Port loadPort = sortedLoadSlots.get(loadIndex).getPort();
+								final IntVar cargoLoadSlotSelection = cargoToLoadSlotSelectionVars[cargoIndices.get(c)][loadIndex];
+								final int travelTime = entry.getValue().get(loadPort);
+								final LinearExpr linearExpr = LinearExpr.scalProd(new IntVar[] { dryDockEnd, cargoModelVariables.getLoadPortVariables().getStart() }, new int[] { 1, -1 });
+								model.addLessOrEqual(linearExpr, -travelTime).onlyEnforceIf(new Literal[] { drydockBeforeCargoSelection, cargoLoadSlotSelection });
+
+							}
+						}
+						final Map<DryDockEvent, Map<String, Integer>> map2 = toDryDockBallastTravelTimes.get(v.name.toLowerCase());
+						for (final Entry<DryDockEvent, Map<String, Integer>> entry : map2.entrySet()) {
+							final DryDockEvent dryDockEvent = entry.getKey();
+							final IntVar beforeAfterSelection = dryDockSelectionVars.get(dryDockEvent);
+							if (beforeAfterSelection == null) {
+								throw new IllegalArgumentException("Sequencing selector not initialised.");
+							}
+							final IntVar dryDockStart = dryDockIntervalVarsMap.get(dryDockEvent).getFirst();
+							String dischargePort = c.contract.port;
+							if (dischargePort == null) {
+								dischargePort = defaultPortName;
+							}
+							final int travelTime = entry.getValue().get(dischargePort.toLowerCase());
+							final LinearExpr linearExpr = LinearExpr.scalProd(new IntVar[] { cargoModelVariables.getDischargePortVariables().getEnd(), dryDockStart }, new int[] { 1, -1 });
+							model.addLessOrEqual(linearExpr, -travelTime).onlyEnforceIf(beforeAfterSelection.not());
+						}
+					}
+
+					if (i > 0) {
+						final ShippedCargoModellingContainer previousCargoModelVariables = shippedCargoModellingVariables[i - 1];
+						// previous ballast should end before current cargo load starts
+						model.addLessOrEqual(previousCargoModelVariables.getBallastTravelVariables().getEnd(), cargoModelVariables.getLoadPortVariables().getStart());
+						// Constrain previous ballast time
+						final Cargo previousCargo = v.cargoes[i - 1];
+						final String previousDischargePortName = previousCargo.contract.port != null ? previousCargo.contract.port : defaultPortName;
+						final Optional<Port> optFromPort = ScenarioModelUtil.findReferenceModel(sm).getPortModel().getPorts().stream()
+								.filter(p -> p.getName().equalsIgnoreCase(previousDischargePortName)).findAny();
+						if (optFromPort.isEmpty()) {
+							throw new IllegalStateException(String.format("Unknown port: %s", previousDischargePortName));
+						}
+						final Port fromPort = optFromPort.get();
+						for (final LoadSlot eLoadSlot : sortedLoadSlots) {
+							final int ballastTravelTime = ballastTravelTimes.get(Triple.of(v, fromPort, eLoadSlot));
+							final IntVar cargoLoadSelection = cargoToLoadSlotSelectionVars[cargoIndices.get(c)][loadIndices.get(eLoadSlot)];
+							final LinearExpr linearExpr = LinearExpr.scalProd(
+									new IntVar[] { previousCargoModelVariables.getDischargePortVariables().getEnd(), shippedCargoModellingVariables[i].getLoadPortVariables().getStart() },
+									new int[] { 1, -1 });
+							model.addLessOrEqual(linearExpr, -ballastTravelTime).onlyEnforceIf(cargoLoadSelection);
+						}
+					} else {
+						final Pair<@NonNull ZonedDateTime, ZonedDateTime> zdtPair = latestDatePairs.get(c.contract);
+						if (zdtPair != null) {
+							final ZonedDateTime earliestDate = zdtPair.getFirst();
+							final int latestLoadDateValue = getHourValue(earliestDate, dateTimeZero);
+							model.addGreaterOrEqual(cargoModelVariables.getLoadPortVariables().getStart(), latestLoadDateValue);
 						}
 					}
 				}
@@ -788,17 +862,17 @@ public class CPBasedSolver {
 
 					if (c.contract.maxInterval != Integer.MAX_VALUE) {
 						// left + offset >= right.
-						model.addGreaterOrEqualWithOffset(vesselVarsStart[i - 1], vesselVarsStart[i], c.contract.maxInterval);
+						model.addGreaterOrEqualWithOffset(vesselVarsStart[i - 1], vesselVarsStart[i], c.contract.maxInterval * 24);
 					}
 				} else {
-					Pair<@NonNull LocalDate, LocalDate> datePair = latestDatePairs.get(c.contract);
-					if (datePair != null) {
-						final LocalDate earliestDate = datePair.getFirst();
-						final int latestLoadDateValue = getDateValue(earliestDate);
+					final Pair<@NonNull ZonedDateTime, ZonedDateTime> zdtPair = latestDatePairs.get(c.contract);
+					if (zdtPair != null) {
+						final ZonedDateTime earliestDate = zdtPair.getFirst();
+						final int latestLoadDateValue = getHourValue(earliestDate, dateTimeZero);
 						if (c.contract.fob) {
-							model.addGreaterOrEqual(vesselVarsStart[i], latestLoadDateValue + c.contract.interval);
+							model.addGreaterOrEqual(vesselVarsStart[i], latestLoadDateValue + c.contract.interval * 24);
 							if (c.contract.maxInterval != Integer.MAX_VALUE) {
-								model.addLessOrEqual(vesselVarsStart[i], latestLoadDateValue + c.contract.maxInterval);
+								model.addLessOrEqual(vesselVarsStart[i], latestLoadDateValue + c.contract.maxInterval * 24);
 							}
 						} else {
 							model.addGreaterOrEqual(vesselVarsStart[i], latestLoadDateValue);
@@ -806,73 +880,16 @@ public class CPBasedSolver {
 					}
 				}
 
-				// Ensure for example, that JERA cargoes are spaced 30 days apart even though same ship.
-				if (c.contract.contractSpacing > 0) {
-					// Instead make sure that the load dates (since we just generated discharge dates relative to these anyway) are the correct distance apart per contract.
-					IntVar endSpacing = model.newIntVar(startTime, lastLoadDate + c.contract.contractSpacing, "end-" + v.name + "-" + c.contract + "-spacing-" + taskId);
-					List<IntervalVar> spacingIntervals = contractToSpacingIntervals.computeIfAbsent(c.contract.name, k -> new ArrayList<IntervalVar>());
-					spacingIntervals.add(model.newIntervalVar(vesselVarsStart[i], c.contract.contractSpacing - contractIntervalFlex, endSpacing,
-							"contract-spacing-interval" + v.name + "-" + c.contract + "-" + spacingIntervals.size()));
-				}
 				contractVesselLoadVars.add(vesselVarsStart[i]);
 				vesselLoadVars.add(vesselVarsStart[i]);
 				contractLoadVars.add(vesselVarsStart[i]);
 
-				final IntVar vesselStart = vesselVarsStart[i];
-
-				final Map<DryDockEvent, Map<Port, Integer>> map = fromDryDockBallastTravelTimes.get(v.name.toLowerCase());
-				if (map != null) {
-					final Map<DryDockEvent, IntVar> dryDockSelectionVars = new HashMap<>();
-					for (final Entry<DryDockEvent, Map<Port, Integer>> entry : map.entrySet()) {
-						final DryDockEvent dryDockEvent = entry.getKey();
-						final String selectionVarName = String.format("DD-%s-isBefore-%s-%d", dryDockEvent.getName(), v.name, i);
-						final IntVar beforeAfterSelection = model.newBoolVar(selectionVarName);
-						dryDockSelectionVars.put(dryDockEvent, beforeAfterSelection);
-
-						final IntVar dryDockEnd = dryDockIntervalVarsMap.get(dryDockEvent).getThird();
-						for (int loadIndex = 0; loadIndex < numLoadSlots; ++loadIndex) {
-							final Port loadPort = sortedLoadSlots.get(loadIndex).getPort();
-							final IntVar cargoLoadSlotSelection = cargoToLoadSlotSelectionVars[cargoIndices.get(c)][loadIndex];
-							final int travelTime = entry.getValue().get(loadPort);
-							// Only add constraint if it's needed
-							if (travelTime > 0) {
-								final LinearExpr linearExpr = LinearExpr.scalProd(new IntVar[] { dryDockEnd, vesselStart }, new int[] { 1, -1 });
-								model.addLessOrEqual(linearExpr, -travelTime).onlyEnforceIf(new Literal[] { beforeAfterSelection, cargoLoadSlotSelection });
-							}
-						}
-					}
-					final Map<DryDockEvent, Map<String, Integer>> map2 = toDryDockBallastTravelTimes.get(v.name.toLowerCase());
-					for (final Entry<DryDockEvent, Map<String, Integer>> entry : map2.entrySet()) {
-						final DryDockEvent dryDockEvent = entry.getKey();
-						final IntVar beforeAfterSelection = dryDockSelectionVars.get(dryDockEvent);
-						if (beforeAfterSelection == null) {
-							throw new IllegalArgumentException("Sequencing selector not initialised.");
-						}
-						final IntVar dryDockStart = dryDockIntervalVarsMap.get(dryDockEvent).getFirst();
-						String dischargePort = c.contract.port;
-						if (dischargePort == null) {
-							dischargePort = defaultPortName;
-						}
-						final int travelTime = entry.getValue().get(dischargePort.toLowerCase());
-						if (travelTime > 0) {
-							final LinearExpr linearExpr = LinearExpr.scalProd(new IntVar[] { vesselVarsEnd[i], dryDockStart }, new int[] { 1, -1 });
-							model.addLessOrEqual(linearExpr, -travelTime).onlyEnforceIf(beforeAfterSelection.not());
-						}
-					}
-				}
-
-				// Load spacing
-				loadVarsStart[taskId] = vesselVarsStart[i]; // Start is same as the cargo.
-				if (scenario == Scenario.Scratch) {
-					loadVarsEnd[taskId] = model.newIntVar(startTime, lastLoadDate, v.name + "-task-end-" + taskId);
-					loadVarsIntervals[taskId] = model.newIntervalVar(loadVarsStart[taskId], loadInterval, loadVarsEnd[taskId], v.name + "-task-interval-" + taskId);
-
-				}
-				// The end of each cargo, so we can minimise the schedule span.
 				cargoEnd[taskId] = vesselVarsEnd[i];
 
 				taskId++;
 			}
+
+			model.addNoOverlap(nonOverlappingCargoIntervals.toArray(new IntervalVar[0]));
 
 			// No overlapping cargoes on the vessel
 			model.addNoOverlap(vesselVarsInterval);
@@ -880,53 +897,14 @@ public class CPBasedSolver {
 			timesVar[idx] = vesselVarsStart;
 		}
 
-		if (scenario == Scenario.Scratch) {
-			// No overlapping loads
-			model.addNoOverlap(loadVarsIntervals);
-		} else {
-			// All load variables must take different start dates.
-			model.addAllDifferent(loadVarsStart);
-		}
+		// All load variables must take different start dates.
+		model.addAllDifferent(loadVarsStart);
 
-		dryDockIntervalVars2.values().stream().filter(l -> l.size() > 1).forEach(l -> model.addNoOverlap(l.toArray(new IntervalVar[l.size()])));
+		IntVar lastLoad = model.newIntVar(0, dateTimeEndInt, "lastLoad");
+		// IntVar firstLoad = model.newIntVar(0, latestLoadTimeInt, "firstLoad");
 
-		// Search for load variable's values first.
-		// model.addDecisionStrategy(loadVarsStart,
-		// VariableSelectionStrategy.CHOOSE_FIRST,
-		// DomainReductionStrategy.SELECT_MIN_VALUE);
-
-		// Add contract spacing intervals
-		for (String contractName : contractToSpacingIntervals.keySet()) {
-			List<IntervalVar> spacingIntervals = contractToSpacingIntervals.get(contractName);
-
-			if (spacingIntervals != null) {
-				model.addNoOverlap(spacingIntervals.toArray(new IntervalVar[spacingIntervals.size()]));
-			}
-
-			Contract contract = contracts.get(contractName);
-
-			if (contract.maxContractSpacing != Integer.MAX_VALUE) {
-
-				// System.out.println("Adding max constraint spacing constraint for " + contract.name + ":");
-
-				List<IntVar> loadVars = contractToLoadVars.get(contractName);
-				HashMap<String, List<IntVar>> contractVesselLoadVars = contractToVesselToLoadVars.get(contractName);
-				try {
-					long[][] allowedTuples = generateAllowedMaxContractSpacingValues(contractVesselLoadVars, loadVars, contract.contractSpacing, contract.maxContractSpacing);
-					IntVar[] loadVarsArray = loadVars.toArray(new IntVar[loadVars.size()]);
-					model.addAllowedAssignments(loadVarsArray, allowedTuples);
-				} catch (Exception ex) {
-					ex.printStackTrace(System.err);
-				}
-			}
-		}
-
-		addRateabilityConstraints(model, contractRateabilityConstraints, contractToVesselLoadVars, firstLoadDate);
-
-		IntVar lastLoad = model.newIntVar(0, lastLoadDate, "lastLoad");
-		IntVar firstLoad = model.newIntVar(0, lastLoadDate, "firstLoad");
-		model.addMaxEquality(lastLoad, loadVarsStart);
-		model.addMinEquality(firstLoad, loadVarsStart);
+		// model.addMaxEquality(lastLoad, loadVarsStart);
+		// model.addMinEquality(firstLoad, loadVarsStart);
 
 		// Objective is to minimise (lastLoadDay - firstLoadDay).
 		// ScalProd objVar = new ScalProd(new IntVar[] { lastLoad, firstLoad }, new long[] { 1, -1 });
@@ -943,14 +921,6 @@ public class CPBasedSolver {
 		// Setting hard solve time of maxTime
 		solver.getParameters().setMaxTimeInSeconds(maxTime);
 		solve = solver.solve(model);
-
-		// do {
-		// solver.getParameters().setMaxTimeInSeconds(maxTime);
-		// solve = solver.solve(model);
-		// System.out.println(solver.wallTime());
-		// maxTime -= solver.wallTime();
-		// // Make sure extra CpSolverStatus are added
-		// } while ((solve != CpSolverStatus.FEASIBLE && solve != CpSolverStatus.OPTIMAL));
 
 		if (solve == CpSolverStatus.FEASIBLE || solve == CpSolverStatus.OPTIMAL) {
 			// System.out.println("Number of days between first load and last load = " + (solver.value(lastLoad) - solver.value(firstLoad)));
@@ -989,9 +959,6 @@ public class CPBasedSolver {
 			cargoAssignments.put(cargoIndex, list);
 		}
 
-		final boolean hasSingleElementLists = cargoAssignments.values().stream().allMatch(l -> l.size() == 1);
-		final Set<Integer> loadElems = cargoAssignments.values().stream().map(l -> l.get(0)).collect(Collectors.toSet());
-		final boolean loadElemsDistinct = loadElems.size() == numCargoes;
 		final Map<Cargo, LoadSlot> cargoToLoadSlotMap = new HashMap<>();
 		for (int cargoIndex = 0; cargoIndex < numCargoes; ++cargoIndex) {
 			int loadIndex = 0;
@@ -1003,15 +970,153 @@ public class CPBasedSolver {
 			cargoToLoadSlotMap.put(orderedCargoes[cargoIndex], sortedLoadSlots.get(loadIndex));
 		}
 
-		// exportToLingoCSVFiles(vessels, loadInterval, timesVar, solver);
 		// dumpSolutionToYaml(vessels, timesVar, latestLoadDates, solver);
-		final Command modelPopulationCommand = createModelPopulationCommands(vessels, timesVar, solver, sm, ed, dateLoadSlotMap, cargoToLoadSlotMap, usedLoadSlotsSet, sdp);
+		final Command modelPopulationCommand = createModelPopulationCommands(vessels, timesVar, solver, sm, ed, cargoToLoadSlotMap, usedLoadSlotsSet, dateTimeZero, defaultPortName, sdp);
 
 		if (solve == CpSolverStatus.OPTIMAL) {
 			return new Optimal(modelPopulationCommand);
 		} else {
 			return new Feasible(modelPopulationCommand);
 		}
+	}
+
+	@NonNull
+	private ShippedCargoModellingContainer buildFixedCargoShippedCargoModellingVariables(@NonNull final CpModel model, final int earliestLoadTimeInt, final int latestLoadTimeInt,
+			@NonNull final Vessel v, @NonNull String loadId, @NonNull String dischargeId, final int minLoadDuration, final int maxLoadDuration, final int[] minMaxLadenTravel,
+			final int[] minMaxBallastTravel, final int dischargeDurationInt, final int lastDateTime) {
+		final ContainerBuilder builder = ShippedCargoModellingContainer.startBuilding();
+		final IntVar loadStart = model.newIntVar(earliestLoadTimeInt, lastDateTime, v.name + "-load-start-" + loadId + "-" + dischargeId);
+		final IntVar loadEnd = model.newIntVar(earliestLoadTimeInt, lastDateTime, v.name + "-load-end-" + loadId + "-" + dischargeId);
+		final IntVar loadDuration;
+		if (minLoadDuration != maxLoadDuration) {
+			loadDuration = model.newIntVar(minLoadDuration, maxLoadDuration, v.name + "-load-duration-" + loadId + "-" + dischargeId);
+		} else {
+			loadDuration = model.newConstant(minLoadDuration);
+		}
+		final IntervalVar loadInterval = model.newIntervalVar(loadStart, loadDuration, loadEnd, v.name + "-load-interval-" + loadId + "-" + dischargeId);
+
+		builder.withLoadStart(loadStart) //
+				.withLoadEnd(loadEnd) //
+				.withLoadDuration(loadDuration)//
+				.withLoadInterval(loadInterval);
+
+		// Laden variables
+		final IntVar ladenEnd = model.newIntVar(earliestLoadTimeInt + minMaxLadenTravel[1], lastDateTime, v.name + "-laden-end-" + loadId + "-" + dischargeId);
+		final IntVar ladenMinDuration;
+		if (minMaxLadenTravel[0] != minMaxLadenTravel[1]) {
+			ladenMinDuration = model.newIntVar(minMaxLadenTravel[0], minMaxLadenTravel[1], v.name + "-laden-duration-" + loadId + "-" + dischargeId);
+		} else {
+			ladenMinDuration = model.newConstant(minMaxLadenTravel[0]);
+		}
+		final IntervalVar ladenInterval = model.newIntervalVar(loadEnd, ladenMinDuration, ladenEnd, v.name + "-laden-interval-" + loadId + "-" + dischargeId);
+
+		builder.withLadenEnd(ladenEnd) //
+				.withLadenDuration(ladenMinDuration) //
+				.withLadenInterval(ladenInterval);
+
+		// Discharge variables
+		final IntVar dischargeStart = model.newIntVar(earliestLoadTimeInt, lastDateTime, v.name + "-discharge-start-" + loadId + "-" + dischargeId);
+		final IntVar dischargeEnd = model.newIntVar(earliestLoadTimeInt + dischargeDurationInt, lastDateTime, v.name + "-discharge-end-" + loadId + "-" + dischargeId);
+		final IntVar dischargeDuration = model.newConstant(dischargeDurationInt);
+		final IntervalVar dischargeInterval = model.newIntervalVar(dischargeStart, dischargeDuration, dischargeEnd, v.name + "-discharge-interval-" + loadId + "-" + dischargeId);
+
+		builder.withDischargeStart(dischargeStart) //
+				.withDischargeEnd(dischargeEnd) //
+				.withDischargeDuration(dischargeDuration) //
+				.withDischargeInterval(dischargeInterval);
+
+		// Ballast variables
+		final IntVar ballastEnd = model.newIntVar(earliestLoadTimeInt + minMaxLadenTravel[1], lastDateTime, v.name + "-ballast-duration-" + loadId + "-" + dischargeId);
+		final IntVar ballastMinDuration;
+		final IntervalVar ballastInterval;
+		if (minMaxBallastTravel[0] != minMaxBallastTravel[1]) {
+			ballastMinDuration = model.newIntVar(minMaxBallastTravel[0], minMaxBallastTravel[1], v.name + "-ballast-duration-" + loadId + "-" + dischargeId);
+		} else {
+			ballastMinDuration = model.newConstant(minMaxBallastTravel[0]);
+		}
+		ballastInterval = model.newIntervalVar(dischargeEnd, ballastMinDuration, ballastEnd, v.name + "-ballast-interval-" + loadId + "-" + dischargeId);
+
+		builder.withBallastEnd(ballastEnd) //
+				.withBallastDuration(ballastMinDuration) //
+				.withBallastInterval(ballastInterval);
+
+		// TODO: Get tighter bounds on trip duration
+		final IntVar cargoTripDuration = model.newIntVar(0, lastDateTime, v.name + "-cargo-trip-duration" + loadId + "-" + dischargeId);
+		final IntervalVar cargoInterval = model.newIntervalVar(loadStart, cargoTripDuration, ballastEnd, v.name + "-cargo-trip-interval" + loadId + "-" + dischargeId);
+
+		builder.withCargoInterval(cargoInterval);
+
+		return builder.build();
+	}
+
+	@NonNull
+	private ShippedCargoModellingContainer buildShippedCargoModellingVariables(@NonNull final CpModel model, final int earliestLoadTimeInt, final int latestLoadTimeInt, @NonNull final Vessel v,
+			@NonNull final Cargo c, final int i, final int minLoadDuration, final int maxLoadDuration, final int[] minMaxLadenTravel, final int[] minMaxBallastTravel, final int dischargeDurationInt,
+			final int lastDateTime) {
+
+		final ContainerBuilder builder = ShippedCargoModellingContainer.startBuilding();
+		final IntVar loadStart = model.newIntVar(earliestLoadTimeInt, lastDateTime, v.name + "-load-start-" + c.contract.name + "-" + i);
+		final IntVar loadEnd = model.newIntVar(earliestLoadTimeInt, lastDateTime, v.name + "-load-end-" + c.contract.name + "-" + i);
+		final IntVar loadDuration;
+		if (minLoadDuration != maxLoadDuration) {
+			loadDuration = model.newIntVar(minLoadDuration, maxLoadDuration, v.name + "-load-duration-" + c.contract.name + "-" + i);
+		} else {
+			loadDuration = model.newConstant(minLoadDuration);
+		}
+		final IntervalVar loadInterval = model.newIntervalVar(loadStart, loadDuration, loadEnd, v.name + "-load-interval-" + i);
+
+		builder.withLoadStart(loadStart) //
+				.withLoadEnd(loadEnd) //
+				.withLoadDuration(loadDuration)//
+				.withLoadInterval(loadInterval);
+
+		// Laden variables
+		final IntVar ladenEnd = model.newIntVar(earliestLoadTimeInt + minMaxLadenTravel[1], lastDateTime, v.name + "-laden-end-" + c.contract.name + "-" + i);
+		final IntVar ladenMinDuration;
+		if (minMaxLadenTravel[0] != minMaxLadenTravel[1]) {
+			ladenMinDuration = model.newIntVar(minMaxLadenTravel[0], minMaxLadenTravel[1], v.name + "-laden-duration-" + c.contract.name + "-" + i);
+		} else {
+			ladenMinDuration = model.newConstant(minMaxLadenTravel[0]);
+		}
+		final IntervalVar ladenInterval = model.newIntervalVar(loadEnd, ladenMinDuration, ladenEnd, v.name + "-laden-interval-" + i);
+
+		builder.withLadenEnd(ladenEnd) //
+				.withLadenDuration(ladenMinDuration) //
+				.withLadenInterval(ladenInterval);
+
+		// Discharge variables
+		final IntVar dischargeStart = model.newIntVar(earliestLoadTimeInt, lastDateTime, v.name + "-discharge-start-" + c.contract.name + "-" + i);
+		final IntVar dischargeEnd = model.newIntVar(earliestLoadTimeInt + dischargeDurationInt, lastDateTime, v.name + "-discharge-end-" + c.contract.name + "-" + i);
+		final IntVar dischargeDuration = model.newConstant(dischargeDurationInt);
+		final IntervalVar dischargeInterval = model.newIntervalVar(dischargeStart, dischargeDuration, dischargeEnd, v.name + "-discharge-interval-" + i);
+
+		builder.withDischargeStart(dischargeStart) //
+				.withDischargeEnd(dischargeEnd) //
+				.withDischargeDuration(dischargeDuration) //
+				.withDischargeInterval(dischargeInterval);
+
+		// Ballast variables
+		final IntVar ballastEnd = model.newIntVar(earliestLoadTimeInt + minMaxLadenTravel[1], lastDateTime, v.name + "-ballast-duration-" + c.contract.name + "-" + i);
+		final IntVar ballastMinDuration;
+		final IntervalVar ballastInterval;
+		if (minMaxBallastTravel[0] != minMaxBallastTravel[1]) {
+			ballastMinDuration = model.newIntVar(minMaxBallastTravel[0], minMaxBallastTravel[1], v.name + "-ballast-duration-" + c.contract.name + "-" + i);
+		} else {
+			ballastMinDuration = model.newConstant(minMaxBallastTravel[0]);
+		}
+		ballastInterval = model.newIntervalVar(dischargeEnd, ballastMinDuration, ballastEnd, v.name + "-ballast-interval-" + i);
+
+		builder.withBallastEnd(ballastEnd) //
+				.withBallastDuration(ballastMinDuration) //
+				.withBallastInterval(ballastInterval);
+
+		// TODO: Get tighter bounds on trip duration
+		final IntVar cargoTripDuration = model.newIntVar(0, lastDateTime, v.name + "-cargo-trip-duration" + i);
+		final IntervalVar cargoInterval = model.newIntervalVar(loadStart, cargoTripDuration, ballastEnd, v.name + "-cargo-trip-interval" + i);
+
+		builder.withCargoInterval(cargoInterval);
+
+		return builder.build();
 	}
 
 	private Map<Contract, SalesContract> getExpectedContracts(Map<String, Contract> loadedContracts, LNGScenarioModel sm) {
@@ -1064,26 +1169,11 @@ public class CPBasedSolver {
 		return usedLoadSlots;
 	}
 
-	private static LocalDate getEndWindowDateInclusive(final Slot<?> slot) {
-		if (slot.isSetWindowSize() && slot.isSetWindowSizeUnits() && slot.getWindowSize() > 0) {
-			if (slot.getWindowSizeUnits() == TimePeriod.DAYS) {
-				return slot.getSchedulingTimeWindow().getStart().plusDays(slot.getWindowSize()).minusHours(1).toLocalDate();
-			} else if (slot.getWindowSizeUnits() == TimePeriod.HOURS) {
-				return slot.getSchedulingTimeWindow().getStart().plusHours(slot.getWindowSize()).toLocalDate();
-			} else if (slot.getWindowSizeUnits() == TimePeriod.MONTHS) {
-				return slot.getSchedulingTimeWindow().getStart().plusMonths(slot.getWindowSize()).minusHours(1).toLocalDate();
-			} else {
-				throw new IllegalStateException("Unknown time period");
-			}
-		}
-		return slot.getWindowStart();
-	}
-
-	private Map<Contract, @NonNull Pair<@NonNull LocalDate, LocalDate>> getLatestPreAdpContractDatePairs(final LNGScenarioModel sm, final Map<String, Contract> expectedContracts,
-			final ModelDistanceProvider modelDistanceProvider) {
+	private Map<Contract, @NonNull Pair<@NonNull ZonedDateTime, ZonedDateTime>> getLatestPreAdpContractDatePairs(final LNGScenarioModel sm, final Map<String, Contract> expectedContracts,
+			final ModelDistanceProvider modelDistanceProvider, @NonNull final ZoneId utcZone) {
 		final LocalDate adpStart = sm.getAdpModel().getYearStart().atDay(1);
 		final Map<String, SalesContract> eContractsMap = sm.getReferenceModel().getCommercialModel().getSalesContracts().stream().collect(Collectors.toMap(NamedObject::getName, Function.identity()));
-		final Map<Contract, @NonNull Pair<@NonNull LocalDate, LocalDate>> datePairs = new HashMap<>();
+		final Map<Contract, @NonNull Pair<@NonNull ZonedDateTime, ZonedDateTime>> datePairs = new HashMap<>();
 		for (final Entry<String, Contract> expectedContractEntry : expectedContracts.entrySet()) {
 			final String expectedContractName = expectedContractEntry.getKey();
 			final SalesContract expectedEmfContract = eContractsMap.get(expectedContractName);
@@ -1095,15 +1185,17 @@ public class CPBasedSolver {
 				if (expectedContractEntry.getValue().fob) {
 					final LoadSlot loadSlot = (LoadSlot) eCargo.getSlots().get(0);
 					final DischargeSlot dischargeSlot = (DischargeSlot) eCargo.getSlots().get(1);
-					final LocalDate earliestLoadDate = loadSlot.getWindowStart();
-					final LocalDate latestLoadDate = getEndWindowDateInclusive(loadSlot);
-					final LocalDate earliestDischargeDate = dischargeSlot.getWindowStart();
-					final LocalDate latestDischargeDate = dischargeSlot.getWindowStart();
+					final ZonedDateTime earliestLoadZdt = loadSlot.getSchedulingTimeWindow().getStart().withZoneSameInstant(utcZone);
+					final ZonedDateTime latestLoadZdt = loadSlot.getSchedulingTimeWindow().getEnd().withZoneSameInstant(utcZone);
+					final ZonedDateTime earliestDischargeZdt = dischargeSlot.getSchedulingTimeWindow().getStart().withZoneSameInstant(utcZone);
+					final ZonedDateTime latestDischargeZdt = dischargeSlot.getSchedulingTimeWindow().getEnd().withZoneSameInstant(utcZone);
 
-					final LocalDate earliestDate = earliestLoadDate.compareTo(earliestDischargeDate) == 1 ? earliestLoadDate : earliestDischargeDate;
-					final LocalDate latestDate = latestLoadDate.compareTo(latestDischargeDate) == -1 ? latestLoadDate : latestDischargeDate;
-					datePairs.put(expectedContractEntry.getValue(), Pair.of(earliestDate, latestDate));
+					final ZonedDateTime earliestZdt = earliestLoadZdt.compareTo(latestLoadZdt) >= 0 ? earliestLoadZdt : earliestDischargeZdt;
+					final ZonedDateTime latestZdt = latestLoadZdt.compareTo(latestDischargeZdt) <= 0 ? latestLoadZdt : latestDischargeZdt;
+
+					datePairs.put(expectedContractEntry.getValue(), Pair.of(earliestZdt, latestZdt));
 				} else {
+					// This calculates on a round trip basis - might not be correct
 					final LoadSlot loadSlot = (LoadSlot) eCargo.getSlots().get(0);
 					final DischargeSlot dischargeSlot = (DischargeSlot) eCargo.getSlots().get(1);
 					final int ladenTravelTime = CargoTravelTimeUtils.getFobMinTimeInHours(loadSlot, dischargeSlot, loadSlot.getWindowStart(), eCargo.getVesselAssignmentType(),
@@ -1111,7 +1203,7 @@ public class CPBasedSolver {
 					final int ballastTravelTime = CargoTravelTimeUtils.getFobMinTimeInHours(dischargeSlot, loadSlot, dischargeSlot.getWindowStart(), eCargo.getVesselAssignmentType(),
 							ScenarioModelUtil.getPortModel(sm), 0.0, modelDistanceProvider);
 					ZonedDateTime travelTimeTracker = loadSlot.getSchedulingTimeWindow().getStart();
-					travelTimeTracker = travelTimeTracker.plusHours(loadSlot.getDuration());
+					travelTimeTracker = travelTimeTracker.plusHours(loadSlot.getSchedulingTimeWindow().getDuration());
 					travelTimeTracker = travelTimeTracker.plusHours(ladenTravelTime);
 
 					final ZonedDateTime dischargeArrivalEarliestTime = travelTimeTracker.withZoneSameInstant(dischargeSlot.getPort().getZoneId());
@@ -1120,416 +1212,86 @@ public class CPBasedSolver {
 					} else {
 						travelTimeTracker = dischargeArrivalEarliestTime;
 					}
-					travelTimeTracker = travelTimeTracker.plusHours(dischargeSlot.getDuration());
+					travelTimeTracker = travelTimeTracker.plusHours(dischargeSlot.getSchedulingTimeWindow().getDuration());
 					travelTimeTracker = travelTimeTracker.plusHours(ballastTravelTime);
-					final ZonedDateTime earliestRoundTripReturnZdt = travelTimeTracker.withZoneSameInstant(loadSlot.getPort().getZoneId());
-					final LocalDateTime earliestRoundTripReturnLdt = earliestRoundTripReturnZdt.toLocalDateTime();
-					final LocalDate earliestRoundTripReturnDate = earliestRoundTripReturnLdt.getHour() > 0 ? earliestRoundTripReturnLdt.plusDays(1).toLocalDate()
-							: earliestRoundTripReturnLdt.toLocalDate();
-					datePairs.put(expectedContractEntry.getValue(), Pair.of(earliestRoundTripReturnDate, null));
+					final ZonedDateTime earliestRoundTripReturnZdt = travelTimeTracker.withZoneSameInstant(utcZone);
+					datePairs.put(expectedContractEntry.getValue(), Pair.of(earliestRoundTripReturnZdt, null));
 				}
 			}
 		}
 		return datePairs;
 	}
 
-	private static long[][] generateAllowedMaxContractSpacingValues(HashMap<String, List<IntVar>> vesselToLoadVars, List<IntVar> loadVars, int minContractSpacing, int maxContractSpacing) {
-		List<List<Long>> tuples = generateAllowedMaxContractSpacingValues(loadVars, new ArrayList<>(loadVars.size()), minContractSpacing, maxContractSpacing);
-
-		List<long[]> distTuples = new ArrayList<>(tuples.size());
-
-		for (int t = 0; t < tuples.size(); t++) {
-			List<Long> tuple = tuples.get(t);
-			// System.out.print(tuple+" -> ");
-			// List<long[]> distTuples2 = generatePermutations(tuple);
-			// List<long[]> distTuples2 = distributeLoads(loadVars, tuple, vesselToLoadVars);
-			List<long[]> distTuples2 = generateVesselPerms(tuple, loadVars, vesselToLoadVars);
-			/*
-			 * System.out.print(distTuples2.size()+" "); for (long[] distTuple : distTuples2) { System.out.print("["); for (int j = 0; j < distTuple.length; j++) { if (j != 0) System.out.print(",");
-			 * System.out.print(" "+distTuple[j]); } System.out.print("] "); } System.out.println();
-			 */
-			distTuples.addAll(distTuples2);
-		}
-
-		// if (distTuples.size() == 0) {
-		// System.out.println("Unsatisfiable contract spacing requirement.");
-		// } else {
-		// System.out.println(distTuples.size() + " allowed " + loadVars.size() + "-tuples added to create constraint.");
-		// }
-		long[][] tuplesArray = new long[distTuples.size()][loadVars.size()];
-		for (int i = 0; i < distTuples.size(); i++) {
-			long[] tuple = distTuples.get(i);
-			for (int j = 0; j < tuple.length; j++) {
-				tuplesArray[i][j] = tuple[j];
-			}
-		}
-		return tuplesArray;
-	}
-
-	private static List<long[]> generateVesselPerms(List<Long> tuple, List<IntVar> loadVars, HashMap<String, List<IntVar>> vesselToLoadVars) {
-		List<Long> perm = new ArrayList<>();
-		HashMap<String, Pair<String, Integer>> loadVarsToVesselIndex = new HashMap<>();
-		HashMap<String, Integer> loadVarsToTupleIndex = new HashMap<>();
-		List<String> vessels = new ArrayList<>();
-		for (String vessel : vesselToLoadVars.keySet()) {
-			List<IntVar> vesselLoadVars = vesselToLoadVars.get(vessel);
-			for (int i = 0; i < vesselLoadVars.size(); i++) {
-				loadVarsToVesselIndex.put(vesselLoadVars.get(i).getName(), Pair.of(vessel, i));
-			}
-			vessels.add(vessel);
-		}
-		for (int i = 0; i < loadVars.size(); i++) {
-			loadVarsToTupleIndex.put(loadVars.get(i).getName(), i);
-		}
-		return generateVesselPerms(tuple, perm, loadVarsToVesselIndex, loadVarsToTupleIndex, vessels, loadVars, vesselToLoadVars);
-	}
-
-	private static List<long[]> generateVesselPerms(List<Long> tuple, List<Long> perm, HashMap<String, Pair<String, Integer>> loadVarsToVesselIndex, HashMap<String, Integer> loadVarsToTupleIndex,
-			List<String> vessels, List<IntVar> loadVars, HashMap<String, List<IntVar>> vesselToLoadVars) {
-		if (perm.size() == tuple.size()) {
-			// Full permutation done.
-			long[] permArr = new long[perm.size()];
-			for (int i = 0; i < perm.size(); i++) {
-				permArr[i] = perm.get(i);
-			}
-			return Collections.singletonList(permArr);
-		} else {
-			List<long[]> tuplePerms = new ArrayList<>();
-
-			for (int i = 0; i < tuple.size(); i++) {
-				long val = tuple.get(i);
-				if (!perm.contains(val)) {
-					List<Long> nextPerm = new ArrayList<>(perm);
-					nextPerm.add(val);
-
-					if (isValidVesselSchedule(nextPerm, loadVars, loadVarsToVesselIndex)) {
-						tuplePerms.addAll(generateVesselPerms(tuple, nextPerm, loadVarsToVesselIndex, loadVarsToTupleIndex, vessels, loadVars, vesselToLoadVars));
-					}
-				}
-			}
-
-			return tuplePerms;
-		}
-	}
-
-	private static boolean isValidVesselSchedule(List<Long> perm, List<IntVar> loadVars, HashMap<String, Pair<String, Integer>> loadVarsToVesselIndex) {
-
-		for (int i = 0; i < perm.size() - 1; i++) {
-			IntVar v1 = loadVars.get(i);
-			IntVar v2 = loadVars.get(i + 1);
-			String v1Vessel = loadVarsToVesselIndex.get(v1.getName()).getFirst();
-			String v2Vessel = loadVarsToVesselIndex.get(v2.getName()).getFirst();
-			if (v1Vessel == v2Vessel) {
-				long value1 = perm.get(i);
-				long value2 = perm.get(i + 1);
-				if (value1 > value2) {
-					return false; // Out of sequence.
-				}
-			}
-		}
-
-		return true;
-	}
-
-	private static List<long[]> generatePermutations(List<Long> tuple) {
-		List<Long> perm = new ArrayList<>();
-		return generatePermutations(tuple, perm);
-	}
-
-	private static List<long[]> generatePermutations(List<Long> tuple, List<Long> perm) {
-		if (perm.size() == tuple.size()) {
-			// Full permutation done.
-			long[] permArr = new long[perm.size()];
-			for (int i = 0; i < perm.size(); i++) {
-				permArr[i] = perm.get(i);
-			}
-			return Collections.singletonList(permArr);
-		} else {
-			List<long[]> tuplePerms = new ArrayList<>();
-
-			for (int i = 0; i < tuple.size(); i++) {
-				long val = tuple.get(i);
-				if (!perm.contains(val)) {
-					List<Long> nextPerm = new ArrayList<>(perm);
-					nextPerm.add(val);
-					tuplePerms.addAll(generatePermutations(tuple, nextPerm));
-				}
-			}
-
-			return tuplePerms;
-		}
-	}
-
-	private static List<long[]> distributeLoads(List<IntVar> loadVars, List<Long> tuple, HashMap<String, List<IntVar>> vesselToLoadVars) {
-		HashMap<String, Pair<String, Integer>> loadVarsToVesselIndex = new HashMap<>();
-		HashMap<String, Integer> loadVarsToTupleIndex = new HashMap<>();
-
-		List<String> vessels = new ArrayList<>();
-		for (String vessel : vesselToLoadVars.keySet()) {
-			List<IntVar> vesselLoadVars = vesselToLoadVars.get(vessel);
-			for (int i = 0; i < vesselLoadVars.size(); i++) {
-				loadVarsToVesselIndex.put(vesselLoadVars.get(i).getName(), Pair.of(vessel, i));
-			}
-			vessels.add(vessel);
-		}
-		for (int i = 0; i < loadVars.size(); i++) {
-			loadVarsToTupleIndex.put(loadVars.get(i).getName(), i);
-		}
-
-		List<long[]> distTuples = new ArrayList<>();
-
-		for (int initVesselIdx = 0; initVesselIdx < vessels.size(); initVesselIdx++) {
-			int vesselIdx = initVesselIdx;
-			int cargoIdxs[] = new int[vessels.size()];
-			long[] distTuple = new long[loadVars.size()];
-
-			for (int i = 0; i < tuple.size(); i++) {
-				String vessel = vessels.get(vesselIdx);
-				List<IntVar> loadsOnVessel = vesselToLoadVars.get(vessel);
-				if (cargoIdxs[vesselIdx] < loadsOnVessel.size()) {
-					IntVar loadVar = vesselToLoadVars.get(vessel).get(cargoIdxs[vesselIdx]);
-					Integer index = loadVarsToTupleIndex.get(loadVar.getName());
-					if (index != null) {
-						distTuple[index] = tuple.get(i);
-						cargoIdxs[vesselIdx]++;
-						vesselIdx = (vesselIdx + 1) % vessels.size();
-					}
-				} else {
-					vesselIdx = (vesselIdx + 1) % vessels.size();
-					i--; // Try again on next vessel.
-				}
-			}
-			distTuples.add(distTuple);
-		}
-
-		return distTuples;
-	}
-
-	private static List<List<Long>> generateAllowedMaxContractSpacingValues(List<IntVar> loadVars, List<Long> tuple, int minContractSpacing, int maxContractSpacing) {
-		if (tuple.size() == loadVars.size()) {
-			return Collections.singletonList(tuple);
-		} else {
-			List<List<Long>> tuples = new ArrayList<>();
-			IntVar loadVar = loadVars.get(tuple.size());
-			List<Long> values = getValues(loadVar);
-			assert values.size() == loadVar.getDomain().size();
-			for (int v = 0; v < values.size(); v++) {
-				long value = values.get(v);
-				if (!tuple.contains(value)) {
-					List<Long> nextTuple = new ArrayList<Long>(tuple);
-					nextTuple.add(value);
-					if (checkSpacingConstraints(nextTuple, minContractSpacing, maxContractSpacing)) {
-						tuples.addAll(generateAllowedMaxContractSpacingValues(loadVars, nextTuple, minContractSpacing, maxContractSpacing));
-					}
-				}
-			}
-			return tuples;
-		}
-	}
-
-	private static boolean checkSpacingConstraints(List<Long> tuple, long minSpacing, long maxSpacing) {
-		for (int i = 0; i < tuple.size() - 1; i++) {
-			long diff = tuple.get(i + 1) - tuple.get(i);
-			if (diff < 0 || diff < minSpacing || diff > maxSpacing) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	private static List<Long> getValues(IntVar v) {
-		Domain d = v.getDomain();
-		long[] intervals = d.flattenedIntervals();
-		List<Long> vals = new ArrayList<>();
-		for (int i = 0; i < intervals.length; i += 2) {
-			long mn = intervals[i];
-			long mx = intervals[i + 1];
-			for (long val = mn; val <= mx; val++) {
-				vals.add(val);
-			}
-		}
-		return vals;
-	}
-
-	private static IntVar createLoadVar(CpModel model, Vessel v, Contract c, int startTime, int endTime, int cargoNo, int desDeliveryTime, final List<LocalDate> loadDates) {
+	private static IntVar createLoadVar(@NonNull final CpModel model, @NonNull final Vessel v, @NonNull final Contract c, int startTime, int endTime, int cargoNo) {
 		String varName = v.name + "-start-" + c.name + "-" + cargoNo;
-		if (scenario == Scenario.Scratch) {
-			return model.newIntVar(startTime, endTime, varName);
-		} else if (scenario == Scenario.Current) {
-			List<Pair<Long, Long>> allowedDateValueRanges = getAllowedVesselLoadDates(v, desDeliveryTime);
-			long[] dateValues = createDatesDomainValues(model, startTime, endTime, allowedDateValueRanges, loadDates);
-			// System.out.println("Creating variable: " + varName + " with values: " + toString(dateValues));
-			return model.newIntVarFromDomain(Domain.fromValues(dateValues), varName);
-		} else {
-			return null;
-		}
+		return model.newIntVar(startTime, endTime, varName);
 	}
 
-	private static List<Pair<Long, Long>> getAllowedVesselLoadDates(Vessel v, int desDeliveryTime) {
-		List<Pair<Long, Long>> allowedDateValueRanges = new ArrayList<>();
-		if (v.allowedDateRanges != null) {
-			for (Pair<LocalDate, LocalDate> range : v.allowedDateRanges) {
-				long from = getDateValue(range.getFirst());
-				long to = getDateValue(range.getSecond()) - desDeliveryTime;
-				if (from < to) {
-					Pair<Long, Long> valuesRange = Pair.of(from, to);
-					allowedDateValueRanges.add(valuesRange);
-				}
-			}
-		}
-		return allowedDateValueRanges;
+	private static int getHourValue(@NonNull final ZonedDateTime date, @NonNull final ZonedDateTime dateZero) {
+		return Hours.between(dateZero, date);
 	}
 
-	private static long[] createDatesDomainValues(CpModel model, int startTime, int endTime, List<Pair<Long, Long>> allowedIntervals, List<LocalDate> loadDates) {
-		long[] dateValues = getDateValues(loadDates);
-		dateValues = filterWithinRange(startTime, endTime, dateValues);
-		if (allowedIntervals != null && !allowedIntervals.isEmpty()) {
-			dateValues = filterWithinRanges(allowedIntervals, dateValues);
-		}
-		return dateValues;
+	@NonNull
+	private static ZonedDateTime getDate(final long hour, @NonNull final ZonedDateTime dateZero) {
+		return dateZero.plusHours(hour);
 	}
 
-	private static String toString(long[] array) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("[");
-		for (int i = 0; i < array.length; i++) {
-			if (i != 0) {
-				sb.append(",");
-			}
-			sb.append(array[i]);
-		}
-		sb.append("]");
-		return sb.toString();
-	}
-
-	private static long[] filterWithinRanges(List<Pair<Long, Long>> allowedIntervals, long[] values) {
-		List<Long> filtered = new ArrayList<>(values.length);
-		for (long v : values) {
-			if (withinIntervals(v, allowedIntervals)) {
-				filtered.add(v);
-			}
-		}
-		values = new long[filtered.size()];
-		for (int i = 0; i < filtered.size(); i++) {
-			values[i] = filtered.get(i);
-		}
-		return values;
-	}
-
-	private static boolean withinIntervals(long value, List<Pair<Long, Long>> allowedIntervals) {
-		// Unbounded case.
-		if (allowedIntervals == null || allowedIntervals.isEmpty()) {
-			return true;
-		}
-		// Restricted case.
-		for (Pair<Long, Long> range : allowedIntervals) {
-			if (value >= range.getFirst() && value <= range.getSecond()) {
-				return true;
-			}
-		}
-		// Not within any allowed interval range.
-		return false;
-	}
-
-	private static long[] filterWithinRange(int startTime, int endTime, long[] values) {
-		List<Long> filtered = new ArrayList<>(values.length);
-		for (long v : values) {
-			if (v >= startTime && v <= endTime) {
-				filtered.add(v);
-			}
-		}
-		values = new long[filtered.size()];
-		for (int i = 0; i < filtered.size(); i++) {
-			values[i] = filtered.get(i);
-		}
-		return values;
-	}
-
-	private static long[] getDateValues(List<LocalDate> dates) {
-		long[] dateValues = new long[dates.size()];
-		for (int i = 0; i < dates.size(); i++) {
-			dateValues[i] = getDateValue(dates.get(i));
-		}
-		return dateValues;
-	}
-
-	private static int getDateValue(@NonNull LocalDate date) {
-		return Days.between(FIRST_DATE, date);
-	}
-
-	private static List<LocalDate> parseDates(String[] dateStrs) {
-		List<LocalDate> dates = new ArrayList<>();
-		for (String dateStr : dateStrs) {
-			LocalDate date = parseDate(dateStr);
-			dates.add(date);
-		}
-		return dates;
-	}
-
-	private static LocalDate parseDate(String dateStr) {
-		if (dateStr.charAt(1) == '-') {
-			dateStr = "0" + dateStr;
-		}
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
-		return LocalDate.parse(dateStr, dtf);
-	}
-
-	private void dumpSolutionToYaml(final Vessel[] vessels, final IntVar[][] timesVar, final Map<Contract, @NonNull LocalDate> latestLoadDates, final CpSolver solver) {
-		final Map<Contract, TreeSet<LocalDate>> contractToLocalDates = new HashMap<>();
-
-		for (int vv = 0; vv < vessels.length; ++vv) {
-			final int vesselIdx = vv;
-			// TreeSet<Cargo> vesselTimes = new TreeSet<>();
-			for (int ii = 0; ii < timesVar[vv].length; ++ii) {
-				long t = solver.value(timesVar[vv][ii]);
-				Cargo c = vessels[vv].cargoes[ii];
-				c.dayOfSchedule = t;
-				final LocalDate loadDate = getDate(c.dayOfSchedule);
-				contractToLocalDates.computeIfAbsent(c.contract, con -> new TreeSet<>()).add(loadDate);
-				// vesselTimes.add(c);
-			}
-		}
-
-		for (final Entry<Contract, @NonNull LocalDate> entry : latestLoadDates.entrySet()) {
-			contractToLocalDates.computeIfAbsent(entry.getKey(), con -> new TreeSet<>()).add(entry.getValue());
-		}
-		final List<Pair<Contract, List<LocalDate>>> sortedPairs = contractToLocalDates.entrySet().stream().map(e -> Pair.of(e.getKey(), (List<LocalDate>) new ArrayList<>(e.getValue())))
-				.sorted((p1, p2) -> p1.getFirst().name.compareTo(p2.getFirst().name)).collect(Collectors.toList());
-		final File outputYml = new File("C:\\Users\\miten\\mmxlabs\\R\\ADP\\spacing_yaml_dumps\\dump.yml");
-		try {
-			final FileWriter writer = new FileWriter("C:\\Users\\miten\\mmxlabs\\R\\ADP\\spacing_yaml_dumps\\dump.yml");
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-			final String tabToSpace = "    ";
-			for (final Pair<Contract, List<LocalDate>> pair : sortedPairs) {
-				writer.write(pair.getFirst().name);
-				writer.write(":\n");
-				writer.write(tabToSpace + "minSpace: ");
-				writer.write(Integer.toString(pair.getFirst().interval));
-				writer.write("\n");
-				writer.write(tabToSpace + "maxSpace: ");
-				writer.write(Integer.toString(pair.getFirst().maxInterval));
-				writer.write("\n");
-				writer.write(tabToSpace + "dates: ");
-				if (pair.getSecond().isEmpty()) {
-					writer.write("[]\n");
-				} else {
-					writer.write("\n");
-					for (final LocalDate date : pair.getSecond()) {
-						writer.write(tabToSpace + tabToSpace + "- \"");
-						writer.write(date.format(formatter));
-						writer.write("\"\n");
-					}
-				}
-
-			}
-			writer.close();
-		} catch (IOException e) {
-			System.out.println("A yaml dumping error occurred.");
-		}
-	}
+	// private void dumpSolutionToYaml(final Vessel[] vessels, final IntVar[][] timesVar, final Map<Contract, @NonNull LocalDate> latestLoadDates, final CpSolver solver) {
+	// final Map<Contract, TreeSet<LocalDate>> contractToLocalDates = new HashMap<>();
+	//
+	// for (int vv = 0; vv < vessels.length; ++vv) {
+	// final int vesselIdx = vv;
+	// // TreeSet<Cargo> vesselTimes = new TreeSet<>();
+	// for (int ii = 0; ii < timesVar[vv].length; ++ii) {
+	// long t = solver.value(timesVar[vv][ii]);
+	// Cargo c = vessels[vv].cargoes[ii];
+	// c.dayOfSchedule = t;
+	// final LocalDate loadDate = getDate(c.dayOfSchedule);
+	// contractToLocalDates.computeIfAbsent(c.contract, con -> new TreeSet<>()).add(loadDate);
+	// // vesselTimes.add(c);
+	// }
+	// }
+	//
+	// for (final Entry<Contract, @NonNull LocalDate> entry : latestLoadDates.entrySet()) {
+	// contractToLocalDates.computeIfAbsent(entry.getKey(), con -> new TreeSet<>()).add(entry.getValue());
+	// }
+	// final List<Pair<Contract, List<LocalDate>>> sortedPairs = contractToLocalDates.entrySet().stream().map(e -> Pair.of(e.getKey(), (List<LocalDate>) new ArrayList<>(e.getValue())))
+	// .sorted((p1, p2) -> p1.getFirst().name.compareTo(p2.getFirst().name)).collect(Collectors.toList());
+	// final File outputYml = new File("C:\\Users\\miten\\mmxlabs\\R\\ADP\\spacing_yaml_dumps\\dump.yml");
+	// try {
+	// final FileWriter writer = new FileWriter("C:\\Users\\miten\\mmxlabs\\R\\ADP\\spacing_yaml_dumps\\dump.yml");
+	// DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	// final String tabToSpace = " ";
+	// for (final Pair<Contract, List<LocalDate>> pair : sortedPairs) {
+	// writer.write(pair.getFirst().name);
+	// writer.write(":\n");
+	// writer.write(tabToSpace + "minSpace: ");
+	// writer.write(Integer.toString(pair.getFirst().interval));
+	// writer.write("\n");
+	// writer.write(tabToSpace + "maxSpace: ");
+	// writer.write(Integer.toString(pair.getFirst().maxInterval));
+	// writer.write("\n");
+	// writer.write(tabToSpace + "dates: ");
+	// if (pair.getSecond().isEmpty()) {
+	// writer.write("[]\n");
+	// } else {
+	// writer.write("\n");
+	// for (final LocalDate date : pair.getSecond()) {
+	// writer.write(tabToSpace + tabToSpace + "- \"");
+	// writer.write(date.format(formatter));
+	// writer.write("\"\n");
+	// }
+	// }
+	//
+	// }
+	// writer.close();
+	// } catch (IOException e) {
+	// System.out.println("A yaml dumping error occurred.");
+	// }
+	// }
 
 	private static @NonNull Command createModelPopulationCommands(Vessel[] vessels, IntVar[][] timesVar, CpSolver solver, final LNGScenarioModel sm, final EditingDomain ed,
-			final Map<LocalDate, LoadSlot> dateToLoadSlotMap, Map<Cargo, LoadSlot> cargoToLoadSlotMap, Set<LoadSlot> usedLoadSlotsSet, final IScenarioDataProvider sdp) {
+			Map<Cargo, LoadSlot> cargoToLoadSlotMap, Set<LoadSlot> usedLoadSlotsSet, final ZonedDateTime timeZero, final String defaultDischargePort, final IScenarioDataProvider sdp) {
 		TreeSet<Long> allTimes = new TreeSet<>();
 		HashMap<String, TreeSet<Long>> contractToTimes = new HashMap<>();
 
@@ -1574,18 +1336,13 @@ public class CPBasedSolver {
 			}
 			boolean first = true;
 
-			Cargo prevCargo = null;
 			ArrayList<Cargo> sortedCargoes = new ArrayList<>(vesselTimes);
 			for (int i = 0; i < sortedCargoes.size(); i++) {
 				Cargo t = sortedCargoes.get(i);
-				String cargoID = String.format("load-%02d", cargoId);
 				if (first) {
 					first = false;
-				} else {
-
 				}
-				LocalDate loadDate = getDate(t.dayOfSchedule);
-				// final LoadSlot loadSlot = dateToLoadSlotMap.get(loadDate);
+				final ZonedDateTime loadZdtUtc = getDate(t.dayOfSchedule, timeZero);
 				final LoadSlot loadSlot = cargoToLoadSlotMap.get(t);
 				if (!usedLoadSlotsSet.contains(loadSlot)) {
 					final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
@@ -1609,21 +1366,10 @@ public class CPBasedSolver {
 									.findAny().get();
 						}
 						cargo.setVesselAssignmentType(va);
-						final String portName = t.contract.port == null ? "Himeji" : t.contract.port;
+						final String portName = t.contract.port == null ? defaultDischargePort : t.contract.port;
 						dischargeSlot.setPort(sm.getReferenceModel().getPortModel().getPorts().stream().filter(p -> p.getName().equalsIgnoreCase(portName)).findAny().get());
 						final com.mmxlabs.models.lng.fleet.Vessel vess = va instanceof VesselAvailability ? ((VesselAvailability) va).getVessel() : ((CharterInMarket) va).getVessel();
 						final LocalDate dischargeDate = calculateDischargeDate(loadSlot, dischargeSlot, vess, sdp, sm);
-						int ladenLegLength = t.contract.interval / 2;
-						if (balanceLegs && i < sortedCargoes.size() - 1) {
-							Cargo nextLoad = sortedCargoes.get(i + 1);
-							long nextLoadDay = nextLoad.dayOfSchedule;
-							long balancedDischargeDay = t.dayOfSchedule + ((nextLoadDay - t.dayOfSchedule) / 2);
-							if (withinIntervals(balancedDischargeDay, getAllowedVesselLoadDates(vessels[vv], ladenLegLength))
-									&& (t.maxDischargeDate == null || balancedDischargeDay <= getDateValue(t.maxDischargeDate))
-									&& (t.minDischargeDate == null || balancedDischargeDay >= getDateValue(t.minDischargeDate))) {
-								ladenLegLength = (int) (nextLoadDay - t.dayOfSchedule) / 2;
-							}
-						}
 						// Create cargo
 						dischargeSlot.setWindowStart(dischargeDate);
 						dischargeSlot.setWindowStartTime(0);
@@ -1632,11 +1378,10 @@ public class CPBasedSolver {
 						dischargeSlot.setWindowSizeUnits(TimePeriod.MONTHS);
 
 					} else {
-						dischargeSlot.setWindowStart(loadDate);
+						dischargeSlot.setWindowStart(loadZdtUtc.withZoneSameInstant(loadSlot.getPort().getZoneId()).toLocalDate());
 						dischargeSlot.setPort(loadSlot.getPort());
 						dischargeSlot.setNominatedVessel(vesselNameMap.get(vessels[vv].name.toLowerCase()));
 					}
-					// loadSlotsToAdd.add(loadSlot);
 					dischargeSlotsToAdd.add(dischargeSlot);
 					cargoesToAdd.add(cargo);
 				}
@@ -1644,291 +1389,10 @@ public class CPBasedSolver {
 			}
 
 		}
-		// cmd.append(AddCommand.create(ed, sm.getCargoModel(), CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS, loadSlotsToAdd));
 		cmd.append(AddCommand.create(ed, sm.getCargoModel(), CargoPackage.Literals.CARGO_MODEL__DISCHARGE_SLOTS, dischargeSlotsToAdd));
 		cmd.append(AddCommand.create(ed, sm.getCargoModel(), CargoPackage.Literals.CARGO_MODEL__CARGOES, cargoesToAdd));
 		return cmd;
 	}
-
-	private static void exportToLingoCSVFiles(Vessel[] vessels, int loadInterval, IntVar[][] timesVar, CpSolver solver) throws FileNotFoundException, IOException {
-		List<String> headers = new LinkedList<>();
-		headers.add("buy.name");
-		headers.add("sell.name");
-		headers.add("buy.date");
-		headers.add("sell.date");
-		headers.add("sell.fob");
-		headers.add("buy.contract");
-		headers.add("sell.contract");
-		headers.add("sell.nominatedvessel");
-
-		headers.add("buy.entity");
-		headers.add("sell.entity");
-
-		// Other defaults
-		headers.add("buy.port");
-		headers.add("sell.port");
-
-		BufferedWriter cargoCSV = new BufferedWriter(new PrintWriter("C:\\temp\\adp\\Cargoes.csv"));
-		cargoCSV.append(String.join(",", headers));
-		cargoCSV.append("\n");
-
-		BufferedWriter assignmentsCSV = new BufferedWriter(new PrintWriter("C:\\temp\\adp\\Assignments.csv"));
-		assignmentsCSV.append("vesselassignment,spotindex,charterindex,assignedobjects\n");
-
-		{
-			// Determine last discharge date
-			TreeSet<Long> allTimes = new TreeSet<>();
-			HashMap<String, TreeSet<Long>> contractToTimes = new HashMap<>();
-
-			for (int vv = 0; vv < vessels.length; ++vv) {
-				for (int ii = 0; ii < timesVar[vv].length; ++ii) {
-					long t = solver.value(timesVar[vv][ii]);
-					allTimes.add(t);
-					TreeSet<Long> contractTimes = contractToTimes.computeIfAbsent(vessels[vv].cargoes[ii].contract.name, k -> new TreeSet<>());
-					contractTimes.add(t);
-					if (!vessels[vv].cargoes[ii].contract.fob) {
-						allTimes.add(t + vessels[vv].cargoes[ii].contract.interval / 2);
-					}
-
-				}
-			}
-
-			allTimes.clear();
-			// System.out.printf("Min %d load interval\n", loadInterval);
-
-			int cargoId = 1;
-			for (int vv = 0; vv < vessels.length; ++vv) {
-				assignmentsCSV.append(vessels[vv].name);
-				assignmentsCSV.append(",");
-				assignmentsCSV.append(vessels[vv].spotIndex);
-				assignmentsCSV.append(",1,\"");
-
-				// objVar
-				// System.out.printf("%s %s (%s - %d avg interval)", vessels[vv].name, getContractsString(vessels[vv]), vessels[vv].cargoes[0].contract.fob ? "FOB" : "DES",
-				// Cargo.getAverageInterval(vessels[vv].cargoes));
-				TreeSet<Cargo> vesselTimes = new TreeSet<>();
-
-				for (int ii = 0; ii < timesVar[vv].length; ++ii) {
-					long t = solver.value(timesVar[vv][ii]);// timesVar[vv][ii].getCoefficient(0);//getvalue();
-					Cargo c = vessels[vv].cargoes[ii];
-					c.dayOfSchedule = t;
-					vesselTimes.add(c);
-					allTimes.add(t);
-				}
-				boolean first = true;
-
-				Cargo prevCargo = null;
-
-				ArrayList<Cargo> sortedCargoes = new ArrayList<>(vesselTimes);
-
-				// for (Cargo t : vesselTimes) {
-				for (int i = 0; i < sortedCargoes.size(); i++) {
-
-					Cargo t = sortedCargoes.get(i);
-					String cargoID = String.format("load-%02d", cargoId);
-					if (first) {
-						first = false;
-					} else {
-						assignmentsCSV.append(",");
-					}
-
-					if (!t.contract.fob) {
-						assignmentsCSV.append(cargoID);
-					}
-
-					LocalDate loadDate = getDate(t.dayOfSchedule);
-					// System.out.printf(", (L) %s", loadDate);
-					if (!t.contract.fob) {
-						int ladenLegLength = t.contract.fob ? 0 : t.contract.interval / 2;
-						if (balanceLegs && i < sortedCargoes.size() - 1) {
-							Cargo nextLoad = sortedCargoes.get(i + 1);
-							long nextLoadDay = nextLoad.dayOfSchedule;
-							long balancedDischargeDay = t.dayOfSchedule + ((nextLoadDay - t.dayOfSchedule) / 2);
-
-							// If within allowed intervals for vessel.
-							if (withinIntervals(balancedDischargeDay, getAllowedVesselLoadDates(vessels[vv], ladenLegLength))
-									&& (t.maxDischargeDate == null || balancedDischargeDay <= getDateValue(t.maxDischargeDate))
-									&& (t.minDischargeDate == null || balancedDischargeDay >= getDateValue(t.minDischargeDate))) {
-								ladenLegLength = (int) (nextLoadDay - t.dayOfSchedule) / 2;
-							}
-						}
-						// System.out.printf(", (D) %s", loadDate.plusDays(ladenLegLength));
-						printRow(cargoId, vessels[vv].name, t.contract.fob, t.contract.name, t.contract.port, loadDate, loadDate.plusDays(ladenLegLength), cargoCSV, headers);
-					} else {
-						printRow(cargoId, vessels[vv].name, t.contract.fob, t.contract.name, t.contract.port, loadDate, loadDate, cargoCSV, headers);
-					}
-					// Assert round trip interval
-					if (prevCargo != null) {
-						assert t.dayOfSchedule - prevCargo.dayOfSchedule >= prevCargo.contract.interval;
-						if (t.dayOfSchedule - prevCargo.dayOfSchedule >= prevCargo.contract.maxInterval) {
-							System.err.println("\nLong discharge interval: " + (t.dayOfSchedule - prevCargo.dayOfSchedule) + " days");
-						}
-					}
-					prevCargo = t;
-
-					++cargoId;
-				}
-				assignmentsCSV.append("\",\n");
-				// System.out.println();
-			}
-
-			long lastT = Long.MIN_VALUE;
-			for (long t : allTimes) {
-				// Assert min load interval
-				if (scenario == Scenario.Scratch && lastT != Long.MIN_VALUE) {
-					assert t - lastT >= loadInterval;
-					if (t - lastT >= loadInterval + 10) {
-						// System.err.println("Long load interval: "+(t-lastT)+" days");
-					}
-				}
-				lastT = t;
-			}
-		}
-
-		assignmentsCSV.close();
-		cargoCSV.close();
-	}
-
-	private static String getContractsString(Vessel vessel) {
-		HashSet<String> contracts = new HashSet<>();
-		for (Cargo c : vessel.cargoes) {
-			contracts.add(c.contract.name);
-		}
-		return contracts.toString();
-	}
-
-	private static void addRateabilityConstraints(final CpModel model, final Map<String, RateabilityConstraint> contractRateabilityConstraints,
-			final HashMap<String, List<List<IntVar>>> contractToLoadVars, final int firstLoadDate) {
-		for (final Entry<String, RateabilityConstraint> entry : contractRateabilityConstraints.entrySet()) {
-			final String contractName = entry.getKey();
-			final RateabilityConstraint rateabilityConstraint = entry.getValue();
-			List<List<IntVar>> loadVarsForContract = contractToLoadVars.get(contractName);
-			int totalCargoes = sumSizes(loadVarsForContract);
-
-			if (totalCargoes > (12 / rateabilityConstraint.everyNMonths) && totalCargoes > 0) {
-				int periodsPerYear = (12 / rateabilityConstraint.everyNMonths);
-				int daysInYear = LocalDate.of(2021, 1, 1).lengthOfYear();
-				double cargoAtLeastEveryNDays = ((double) daysInYear) / ((double) totalCargoes);
-				int maxDaysBetweenCargoes = daysInYear / periodsPerYear;
-				int firstT = firstLoadDate - rateabilityConstraint.minusDays;
-				int c = 1;
-				int startT = firstT;
-				IntVar lastLoadVar = null;
-				for (int i = 0; i < maxSize(loadVarsForContract); i++) {
-					for (int v = 0; v < loadVarsForContract.size(); v++) {
-						List<IntVar> loadVars = loadVarsForContract.get(v);
-
-						if (i < loadVars.size()) {
-							IntVar loadVar = loadVars.get(i);
-							model.addGreaterOrEqual(loadVar, startT);
-							int endT = firstT + (int) Math.floor(c * cargoAtLeastEveryNDays) - 1;
-							model.addLessOrEqual(loadVar, endT);
-
-							// System.out.println("Set " + loadVar.getName() + " [" + getDate(startT) + "," + getDate(endT) + "]");
-							startT = endT + 1;
-							c++;
-							// Ensure at least one cargo delivered every month, by ensuring no more than 1 month apart.
-							if (lastLoadVar != null) {
-								// left + offset >= right
-								// loadVar - lastLoadVar <= maxDaysBetweenCargoes.
-								// => lastLoadVar + maxDaysBetweenCargoes >= loadVar
-								model.addGreaterOrEqualWithOffset(loadVar, lastLoadVar, maxDaysBetweenCargoes);
-							}
-							lastLoadVar = loadVar;
-						}
-					}
-				}
-			} else {
-				int startT = firstLoadDate - rateabilityConstraint.minusDays;
-				int m = rateabilityConstraint.everyNMonths;
-				for (int i = 0; i < maxSize(loadVarsForContract); i++) {
-					for (int v = 0; v < loadVarsForContract.size(); v++) {
-						List<IntVar> loadVars = loadVarsForContract.get(v);
-
-						if (i < loadVars.size() && m <= 12) {
-							int endT = firstLoadDate + computeNMonthsInDays(2021, m) - (1 + rateabilityConstraint.minusDays);
-							IntVar loadVar = loadVars.get(i);
-							model.addGreaterOrEqual(loadVar, startT);
-							model.addLessOrEqual(loadVar, endT);
-							// System.out.println("Set " + loadVar.getName() + " [" + getDate(startT) + "," + getDate(endT) + "]");
-							m += rateabilityConstraint.everyNMonths;
-							startT = endT + 1;
-						}
-					}
-				}
-			}
-		}
-	}
-
-	private static int getMonth(int time) {
-		LocalDate date = getDate(time);
-		return date.getMonthValue();
-	}
-
-	private static int sumSizes(List<List<IntVar>> twoDimList) {
-		return twoDimList.stream().mapToInt(List::size).sum();
-	}
-
-	private static int maxSize(List<List<IntVar>> twoDimList) {
-		return twoDimList.stream().mapToInt(List::size).max().orElse(0);
-	}
-
-	static LocalDate getDate(long t) {
-		return FIRST_DATE.plusDays(t);
-	}
-
-	static int computeNMonthsInDays(int year, int month) {
-		LocalDate date = LocalDate.of(year, month, 1);
-		date = date.plusMonths(1);
-		date = date.minusDays(1);
-		return date.getDayOfYear();
-	}
-
-	static void printRow(int cargoId, String vesselName, boolean fob, String contract, String port, LocalDate loadDate, LocalDate dischargeDate, BufferedWriter writer, List<String> headers)
-			throws IOException {
-		Map<String, String> row = printRow(cargoId, vesselName, fob, contract, port, loadDate, dischargeDate);
-		for (String key : headers) {
-			writer.append(row.getOrDefault(key, ""));
-			writer.append(",");
-		}
-		writer.append("\n");
-
-	}
-
-	static Map<String, String> printRow(int cargoId, String vesselName, boolean fob, String contract, String port, LocalDate loadDate, LocalDate dischargeDate) {
-
-		Map<String, String> map = new HashMap<>();
-		// From data
-		map.put("buy.name", String.format("load-%02d", cargoId));
-		map.put("sell.name", String.format("discharge-%02d", cargoId));
-		map.put("buy.date", String.format("%04d-%02d-%02d", loadDate.getYear(), loadDate.getMonthValue(), loadDate.getDayOfMonth()));
-		map.put("sell.date", String.format("%04d-%02d-%02d", dischargeDate.getYear(), dischargeDate.getMonthValue(), dischargeDate.getDayOfMonth()));
-		map.put("sell.fob", Boolean.toString(fob));
-
-		// Other defaults
-		map.put("buy.port", "Cameron");
-		if (fob) {
-			map.put("sell.port", "Cameron");
-			map.put("sell.nominatedvessel", vesselName);
-		} else {
-			if (port != null) {
-				map.put("sell.port", port);
-			} else {
-				map.put("sell.port", "Himeji");
-			}
-		}
-
-		map.put("buy.contract", "MCGG Cameron Volumes");
-		map.put("sell.contract", contract);
-
-		map.put("buy.entity", "DGI");
-		map.put("sell.entity", "DGI");
-
-		return map;
-	}
-	//
-	//
-	// smae for assingmnet csv
 
 	public static int getMinimumTravelTime(@NonNull final Slot<?> startSlot, @NonNull final Slot<?> endSlot, final com.mmxlabs.models.lng.fleet.Vessel vessel, @NonNull final IScenarioDataProvider sdp,
 			final LNGScenarioModel sm) {

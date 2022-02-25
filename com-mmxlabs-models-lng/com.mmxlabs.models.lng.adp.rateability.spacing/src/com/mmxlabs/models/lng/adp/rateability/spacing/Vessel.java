@@ -11,6 +11,7 @@ public class Vessel {
 	String name; // Vessel name (info only)
 	String spotIndex; // Spot index string for CSV
 	Cargo cargoes[];
+	@Deprecated
 	List<Pair<LocalDate,LocalDate>> allowedDateRanges;
 	
 	public Vessel(String name, String spotIndex, Cargo[] cargoes) {

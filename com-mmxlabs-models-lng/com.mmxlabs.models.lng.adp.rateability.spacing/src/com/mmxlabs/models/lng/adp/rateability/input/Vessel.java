@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
 
+@Deprecated
 public class Vessel {
 	public String name;
 	public Optional<String> contract = Optional.empty();

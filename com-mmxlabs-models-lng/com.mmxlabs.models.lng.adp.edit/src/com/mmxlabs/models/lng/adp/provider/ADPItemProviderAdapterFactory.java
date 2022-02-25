@@ -831,6 +831,98 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.SpacingProfile} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SpacingProfileItemProvider spacingProfileItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.SpacingProfile}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSpacingProfileAdapter() {
+		if (spacingProfileItemProvider == null) {
+			spacingProfileItemProvider = new SpacingProfileItemProvider(this);
+		}
+
+		return spacingProfileItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.FobSpacingAllocation} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected FobSpacingAllocationItemProvider fobSpacingAllocationItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.FobSpacingAllocation}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createFobSpacingAllocationAdapter() {
+		if (fobSpacingAllocationItemProvider == null) {
+			fobSpacingAllocationItemProvider = new FobSpacingAllocationItemProvider(this);
+		}
+
+		return fobSpacingAllocationItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.DesSpacingAllocation} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected DesSpacingAllocationItemProvider desSpacingAllocationItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.DesSpacingAllocation}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createDesSpacingAllocationAdapter() {
+		if (desSpacingAllocationItemProvider == null) {
+			desSpacingAllocationItemProvider = new DesSpacingAllocationItemProvider(this);
+		}
+
+		return desSpacingAllocationItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.DesSpacingRow} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected DesSpacingRowItemProvider desSpacingRowItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.DesSpacingRow}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createDesSpacingRowAdapter() {
+		if (desSpacingRowItemProvider == null) {
+			desSpacingRowItemProvider = new DesSpacingRowItemProvider(this);
+		}
+
+		return desSpacingRowItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -994,6 +1086,10 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 		if (mullProfileItemProvider != null) mullProfileItemProvider.dispose();
 		if (mullSubprofileItemProvider != null) mullSubprofileItemProvider.dispose();
 		if (mullCargoWrapperItemProvider != null) mullCargoWrapperItemProvider.dispose();
+		if (spacingProfileItemProvider != null) spacingProfileItemProvider.dispose();
+		if (fobSpacingAllocationItemProvider != null) fobSpacingAllocationItemProvider.dispose();
+		if (desSpacingAllocationItemProvider != null) desSpacingAllocationItemProvider.dispose();
+		if (desSpacingRowItemProvider != null) desSpacingRowItemProvider.dispose();
 	}
 
 }

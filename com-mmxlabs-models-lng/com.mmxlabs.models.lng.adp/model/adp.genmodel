@@ -3,8 +3,7 @@
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.adp/src" editorDirectory=""
     modelPluginID="com.mmxlabs.models.lng.adp" templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.sdk.template/templates/"
     dynamicTemplates="true" redirection="" modelName="ADP" testsDirectory="" importerID="org.eclipse.emf.importer.ecore"
-    containmentProxies="true" complianceLevel="16.0" copyrightFields="false" runtimeVersion="2.28"
-    usedGenPackages="../../com.mmxlabs.models.lng.cargo/model/cargo.genmodel#//cargo ../../com.mmxlabs.models.lng.commercial/model/commercial.genmodel#//commercial ../../com.mmxlabs.models.datetime/model/datetime.genmodel#//datetime ../../com.mmxlabs.models.lng.fleet/model/fleet.genmodel#//fleet platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore ../../com.mmxlabs.models.lng.port/model/port.genmodel#//port ../../com.mmxlabs.models.lng.pricing/model/pricing.genmodel#//pricing ../../com.mmxlabs.models.lng.schedule/model/schedule.genmodel#//schedule ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.genmodel#//spotmarkets"
+    containmentProxies="true" complianceLevel="16.0" copyrightFields="false" usedGenPackages="../../com.mmxlabs.models.lng.cargo/model/cargo.genmodel#//cargo ../../com.mmxlabs.models.lng.commercial/model/commercial.genmodel#//commercial ../../com.mmxlabs.models.datetime/model/datetime.genmodel#//datetime ../../com.mmxlabs.models.lng.fleet/model/fleet.genmodel#//fleet platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore ../../com.mmxlabs.models.lng.port/model/port.genmodel#//port ../../com.mmxlabs.models.lng.pricing/model/pricing.genmodel#//pricing ../../com.mmxlabs.models.lng.schedule/model/schedule.genmodel#//schedule ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.genmodel#//spotmarkets"
     operationReflection="true">
   <foreignModel>adp.ecore</foreignModel>
   <genPackages prefix="ADP" basePackage="com.mmxlabs.models.lng" disposableProviderFactory="true"
@@ -31,6 +30,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ADPModel/salesContractProfiles"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ADPModel/fleetProfile"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ADPModel/mullProfile"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//ADPModel/spacingProfile"/>
     </genClasses>
     <genClasses ecoreClass="adp.ecore#//FleetProfile">
       <genFeatures property="None" children="true" createChild="true" propertyDescription="Fleet constraints"
@@ -202,6 +202,27 @@
     <genClasses ecoreClass="adp.ecore#//MullCargoWrapper">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//MullCargoWrapper/loadSlot"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//MullCargoWrapper/dischargeSlot"/>
+    </genClasses>
+    <genClasses ecoreClass="adp.ecore#//SpacingProfile">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//SpacingProfile/defaultPort"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//SpacingProfile/fobSpacingAllocations"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//SpacingProfile/desSpacingAllocations"/>
+    </genClasses>
+    <genClasses ecoreClass="adp.ecore#//FobSpacingAllocation">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//FobSpacingAllocation/contract"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//FobSpacingAllocation/minSpacing"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//FobSpacingAllocation/maxSpacing"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//FobSpacingAllocation/cargoCount"/>
+    </genClasses>
+    <genClasses ecoreClass="adp.ecore#//DesSpacingAllocation">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//DesSpacingAllocation/contract"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//DesSpacingAllocation/vessel"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//DesSpacingAllocation/desSpacingRows"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//DesSpacingAllocation/port"/>
+    </genClasses>
+    <genClasses ecoreClass="adp.ecore#//DesSpacingRow">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//DesSpacingRow/minDischargeDate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//DesSpacingRow/maxDischargeDate"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
