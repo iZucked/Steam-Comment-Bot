@@ -243,10 +243,6 @@ public class ScheduleCalculator {
 			this.isShortLoad = load;
 		}
 	}
-	
-	private class RetentionSequence {
-		public final List<Pair<VoyagePlan, IPortTimesRecord>> seq = new LinkedList();
-	}
 
 	// WARNING: at the moment does not consider the in-port boil-off
 	// WARNING: does not consider the custom contracts where price depends on a scheduled load/discharge volume
@@ -268,6 +264,8 @@ public class ScheduleCalculator {
 		final long safetyHeelm3 = vessel.getSafetyHeel();
 		final long cargoCapacitym3 = vessel.getCargoCapacity();
 		
+		// do the last record instead
+		RetentionRecord lastRecord = null;
 		long heelDiffm3 = 0;
 		
 		for (final VoyagePlanRecord vpr: voyagePlans) {
@@ -314,8 +312,6 @@ public class ScheduleCalculator {
 				
 				int loadPriceMMBTU = cva.getSlotPricePerMMBTu(load);
 				int dischargePriceMMBTU = cva.getSlotPricePerMMBTu(discharge);
-				long loadValue = cva.getSlotValue(load);
-				long dischargeValue = cva.getSlotValue(discharge);
 				
 				
 				if (iptr.getReturnSlot() instanceof ILoadSlot) {
@@ -324,7 +320,7 @@ public class ScheduleCalculator {
 					if (cva.getRemainingHeelVolumeInM3() != 0 && realDischargeVolumem3 != dischargeMinm3) {
 						// check that the minimum discharge allows us to 
 						long retVolm3 = realDischargeVolumem3 - dischargeMinm3 - 1;
-						long vm3 = realDischargeVolumem3 - retVolm3;
+						long vm3 = realDischargeVolumem3 - retVolm3; //dischargeMinm3 + 1;
 						if (dischargeMinm3 <= vm3 && retVolm3 > 500*1000) {
 							RetentionRecord rr = new RetentionRecord(pair, cva, load, discharge, cv, true);
 							rr.retainedVolumem3 = retVolm3;
@@ -337,11 +333,12 @@ public class ScheduleCalculator {
 								rr.retainedValue = value;
 							}
 							possibleRetention.add(rr);
+							lastRecord = rr;
 						}
 					}
 				} else {
 					//check that we have anything retained
-					if (heelDiffm3 > 0) {
+					if (lastRecord != null) {
 						long volumeOnBoardm3 = startHeelm3 + realLoadVolumem3;
 						long vm3 = volumeOnBoardm3 - heelDiffm3;
 						if (vm3 >= loadMinm3 && vm3 <= loadMaxm3) {
@@ -357,10 +354,16 @@ public class ScheduleCalculator {
 							// calculate volume and value
 							possibleRetention.add(rr);
 							heelDiffm3 = 0;
+						} else {
+							possibleRetention.remove(lastRecord);
+							heelDiffm3 = 0;
 						}
 					}
 				}
 			
+			} else {
+				possibleRetention.remove(lastRecord);
+				// breaks the possibleRetention
 			}
 		}
 		
@@ -426,97 +429,96 @@ public class ScheduleCalculator {
 			rr.pair.setSecond(temp);
 		}
 		
-//		// re-alloc the volumes here
-//		long heelDiffm3 = 0;
-//		for (final VoyagePlanRecord vpr: voyagePlans) {
-//			final VoyagePlan vp = vpr.getVoyagePlan();
-//			final IPortTimesRecord iptr = vpr.getPortTimesRecord();
-//
-//			Pair<VoyagePlan, IPortTimesRecord> pair = new Pair(vp, iptr);
-//			//otherVoyagePlansAndPortTimeRecords.add(pair);
-//			if (vpr.isCargoRecord()) {
-//				IAllocationAnnotation cva = vpr.getAllocationAnnotation();
-//				int cv = -1;
-//				long dvm3 = 0;
-//				IPortSlot discharge = null;
-//				IPortSlot load = null;
-//				for (IPortSlot ps : cva.getSlots()) {
-//					if (ps instanceof LoadSlot ls) {
-//						load = ls;
-//						cv = ls.getCargoCVValue();
-//					}
-//					if (ps instanceof DischargeSlot ds) {
-//						discharge = ps;
-//						dvm3 = ds.getMinDischargeVolume(cv);
-//					}
-//				}
-//				long cvm3 = 0;
-//				long pvm3 = 0;
-//
-//				assert cv != -1;
-//				assert discharge != null;
-//				assert load != null;
-//				AllocationAnnotation temp = AllocationAnnotation.from(cva);
-//
-////				VoyagePlan vpTemp = VoyagePlan.from(vp);
-//
-//				
-//				if (heelDiffm3 == 0 && iptr.getReturnSlot() instanceof ILoadSlot) {
-//					cvm3 = temp.getCommercialSlotVolumeInM3(discharge);
-//					pvm3 = temp.getPhysicalSlotVolumeInM3(discharge);
-//					long vm3 = Math.max(cvm3, pvm3);
-//					vm3 -= (2500*1000);
-//					if (dvm3 <= vm3 && temp.getRemainingHeelVolumeInM3() != 0) {
-//						heelDiffm3 += (2500*1000);
-//						temp.setCommercialSlotVolumeInM3(discharge, vm3);
-//						temp.setPhysicalSlotVolumeInM3(discharge, vm3);
-//						long vmmbtu = Calculator.convertM3ToMMBTuWithOverflowProtection(vm3, cv);
-//						temp.setCommercialSlotVolumeInMMBTu(discharge, vmmbtu);
-//						temp.setPhysicalSlotVolumeInMMBTu(discharge, vmmbtu);
-//						
-//						temp.setRemainingHeelVolumeInM3(temp.getRemainingHeelVolumeInM3() + (2500*1000));
-//						//vpTemp.setRemainingHeelInM3(temp.getRemainingHeelVolumeInM3());
-//						// add into the list
-////						pair.setBoth(vpTemp, temp);
-//						pair.setSecond(temp);
-//					}
-//				} else if (heelDiffm3 > 0) {
-//					temp.setStartHeelVolumeInM3(temp.getStartHeelVolumeInM3() + heelDiffm3);
-//					//vpTemp.setStartingHeelInM3(temp.getStartHeelVolumeInM3());
-//					
-//					cvm3 = temp.getCommercialSlotVolumeInM3(load);
-//					pvm3 = temp.getPhysicalSlotVolumeInM3(load);
-//					long vm3 = Math.max(cvm3, pvm3);
-//					//short load instead of discharging more
-//					vm3 -= heelDiffm3;
-//					// check the capacity
-//					
-//					temp.setCommercialSlotVolumeInM3(load, vm3);
-//					temp.setPhysicalSlotVolumeInM3(load, vm3);
-//					long vmmbtu = Calculator.convertM3ToMMBTuWithOverflowProtection(vm3, cv);
-//					temp.setCommercialSlotVolumeInMMBTu(load, vmmbtu);
-//					temp.setPhysicalSlotVolumeInMMBTu(load, vmmbtu);
-//					// add into the list
-////					pair.setBoth(vpTemp, temp);
-//					pair.setSecond(temp);
-//					// reset the heel
-//					heelDiffm3 = 0;
-//				}
-//
-//			}
+		voyagePlanEvaluator.evaluateVoyagePlan(resource, vesselAvailability, vesselStartTime, firstLoadPort, new PreviousHeelRecord(), 
+				record, false, true, annotatedSolution, otherResults).accept(otherVoyagePlansAndPortTimeRecords);
 
-			//			if (iptr instanceof AllocationAnnotation aa) {
-			//				
-			//			} else if (iptr instanceof CargoValueAnnotation cva) {
-			//				// 1. Grab slots cva.getSlots();
-			//				// 2. Get the min discharge on the dishcarge slot (max of commercial or physical volume)
-			//				// 3. Compute the max load taking the start heel and vessel capacity in to account
-			//				// 4. Set the discharge slot's discharge volumes
-			//				// 5. Set the end heel
-			//			} else if (iptr instanceof PortTimesRecord ptr) {
-			//				
-			//			}
-//		}
+		voyagePlans.clear();
+		voyagePlans.addAll(otherResults.get(0).voyagePlans);
+	}
+	
+	private void retainHeelPOC(final IResource resource, final IVesselAvailability vesselAvailability, final List<IPortTimesRecord> records, 
+			final @Nullable IAnnotatedSolution annotatedSolution,
+			final int vesselStartTime, final List<VoyagePlanRecord> voyagePlans, @Nullable IPort firstLoadPort) {
+		PortTimesRecord record = new PortTimesRecord();
+		record.setSlotTime(records.get(0).getFirstSlot(), 0);
+		final List<@NonNull ScheduledVoyagePlanResult> otherResults = new LinkedList<>();
+
+		final List<Pair<VoyagePlan, IPortTimesRecord>> otherVoyagePlansAndPortTimeRecords = new LinkedList<>();
+		
+		// re-alloc the volumes here
+		long heelDiffm3 = 0;
+		for (final VoyagePlanRecord vpr: voyagePlans) {
+			final VoyagePlan vp = vpr.getVoyagePlan();
+			final IPortTimesRecord iptr = vpr.getPortTimesRecord();
+
+			Pair<VoyagePlan, IPortTimesRecord> pair = new Pair(vp, iptr);
+			otherVoyagePlansAndPortTimeRecords.add(pair);
+			if (vpr.isCargoRecord()) {
+				IAllocationAnnotation cva = vpr.getAllocationAnnotation();
+				int cv = -1;
+				long dvm3 = 0;
+				IPortSlot discharge = null;
+				IPortSlot load = null;
+				for (IPortSlot ps : cva.getSlots()) {
+					if (ps instanceof LoadSlot ls) {
+						load = ls;
+						cv = ls.getCargoCVValue();
+					}
+					if (ps instanceof DischargeSlot ds) {
+						discharge = ps;
+						dvm3 = ds.getMinDischargeVolume(cv);
+					}
+				}
+				long cvm3 = 0;
+				long pvm3 = 0;
+
+				assert cv != -1;
+				assert discharge != null;
+				assert load != null;
+				AllocationAnnotation temp = AllocationAnnotation.from(cva);
+				
+				if (heelDiffm3 == 0 && iptr.getReturnSlot() instanceof ILoadSlot) {
+					cvm3 = temp.getCommercialSlotVolumeInM3(discharge);
+					pvm3 = temp.getPhysicalSlotVolumeInM3(discharge);
+					long vm3 = Math.max(cvm3, pvm3);
+					vm3 -= (2500*1000);
+					if (dvm3 <= vm3 && temp.getRemainingHeelVolumeInM3() != 0) {
+						heelDiffm3 += (2500*1000);
+						temp.setCommercialSlotVolumeInM3(discharge, vm3);
+						temp.setPhysicalSlotVolumeInM3(discharge, vm3);
+						long vmmbtu = Calculator.convertM3ToMMBTuWithOverflowProtection(vm3, cv);
+						temp.setCommercialSlotVolumeInMMBTu(discharge, vmmbtu);
+						temp.setPhysicalSlotVolumeInMMBTu(discharge, vmmbtu);
+						
+						temp.setRemainingHeelVolumeInM3(temp.getRemainingHeelVolumeInM3() + (2500*1000));
+						//vpTemp.setRemainingHeelInM3(temp.getRemainingHeelVolumeInM3());
+						// add into the list
+						pair.setSecond(temp);
+					}
+				} else if (heelDiffm3 > 0) {
+					temp.setStartHeelVolumeInM3(temp.getStartHeelVolumeInM3() + heelDiffm3);
+					//vpTemp.setStartingHeelInM3(temp.getStartHeelVolumeInM3());
+					
+					cvm3 = temp.getCommercialSlotVolumeInM3(load);
+					pvm3 = temp.getPhysicalSlotVolumeInM3(load);
+					long vm3 = Math.max(cvm3, pvm3);
+					//short load instead of discharging more
+					vm3 -= heelDiffm3;
+					// check the capacity
+					
+					temp.setCommercialSlotVolumeInM3(load, vm3);
+					temp.setPhysicalSlotVolumeInM3(load, vm3);
+					long vmmbtu = Calculator.convertM3ToMMBTuWithOverflowProtection(vm3, cv);
+					temp.setCommercialSlotVolumeInMMBTu(load, vmmbtu);
+					temp.setPhysicalSlotVolumeInMMBTu(load, vmmbtu);
+					// add into the list
+					pair.setSecond(temp);
+					// reset the heel
+					heelDiffm3 = 0;
+				}
+
+			}
+		}
 		
 		voyagePlanEvaluator.evaluateVoyagePlan(resource, vesselAvailability, vesselStartTime, firstLoadPort, new PreviousHeelRecord(), 
 				record, false, true, annotatedSolution, otherResults).accept(otherVoyagePlansAndPortTimeRecords);
