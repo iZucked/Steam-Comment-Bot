@@ -923,6 +923,29 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.adp.SpacingAllocation} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SpacingAllocationItemProvider spacingAllocationItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.adp.SpacingAllocation}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSpacingAllocationAdapter() {
+		if (spacingAllocationItemProvider == null) {
+			spacingAllocationItemProvider = new SpacingAllocationItemProvider(this);
+		}
+
+		return spacingAllocationItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1090,6 +1113,7 @@ public class ADPItemProviderAdapterFactory extends ADPAdapterFactory implements 
 		if (fobSpacingAllocationItemProvider != null) fobSpacingAllocationItemProvider.dispose();
 		if (desSpacingAllocationItemProvider != null) desSpacingAllocationItemProvider.dispose();
 		if (desSpacingRowItemProvider != null) desSpacingRowItemProvider.dispose();
+		if (spacingAllocationItemProvider != null) spacingAllocationItemProvider.dispose();
 	}
 
 }

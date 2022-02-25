@@ -99,6 +99,7 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 			case ADPPackage.FOB_SPACING_ALLOCATION: return createFobSpacingAllocation();
 			case ADPPackage.DES_SPACING_ALLOCATION: return createDesSpacingAllocation();
 			case ADPPackage.DES_SPACING_ROW: return createDesSpacingRow();
+			case ADPPackage.SPACING_ALLOCATION: return createSpacingAllocation();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -532,6 +533,17 @@ public class ADPFactoryImpl extends EFactoryImpl implements ADPFactory {
 	public DesSpacingRow createDesSpacingRow() {
 		DesSpacingRowImpl desSpacingRow = new DesSpacingRowImpl();
 		return desSpacingRow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SpacingAllocation createSpacingAllocation() {
+		SpacingAllocationImpl spacingAllocation = new SpacingAllocationImpl();
+		return spacingAllocation;
 	}
 
 	/**

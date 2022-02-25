@@ -36,7 +36,7 @@ public class FobSpacingAllocationValueProviderFactory implements IReferenceValue
 			return null;
 		}
 		final IReferenceValueProvider delegateFactory = delegate.createReferenceValueProvider(owner, reference, rootObject);
-		if (reference == ADPPackage.eINSTANCE.getFobSpacingAllocation_Contract()) {
+		if (reference == ADPPackage.eINSTANCE.getSpacingAllocation_Contract()) {
 			return new IReferenceValueProvider() {
 				
 				@Override

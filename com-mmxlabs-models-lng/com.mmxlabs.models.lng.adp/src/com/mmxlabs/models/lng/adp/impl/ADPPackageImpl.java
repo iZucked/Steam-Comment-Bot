@@ -56,6 +56,7 @@ import com.mmxlabs.models.lng.adp.PurchaseContractProfile;
 import com.mmxlabs.models.lng.adp.SalesContractAllocationRow;
 import com.mmxlabs.models.lng.adp.SalesContractProfile;
 import com.mmxlabs.models.lng.adp.ShippingOption;
+import com.mmxlabs.models.lng.adp.SpacingAllocation;
 import com.mmxlabs.models.lng.adp.SpacingProfile;
 import com.mmxlabs.models.lng.adp.SubContractProfile;
 import com.mmxlabs.models.lng.adp.SubProfileConstraint;
@@ -373,6 +374,13 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * @generated
 	 */
 	private EClass desSpacingRowEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass spacingAllocationEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1727,18 +1735,8 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getFobSpacingAllocation_Contract() {
-		return (EReference)fobSpacingAllocationEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EAttribute getFobSpacingAllocation_MinSpacing() {
-		return (EAttribute)fobSpacingAllocationEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)fobSpacingAllocationEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -1748,7 +1746,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 */
 	@Override
 	public EAttribute getFobSpacingAllocation_MaxSpacing() {
-		return (EAttribute)fobSpacingAllocationEClass.getEStructuralFeatures().get(2);
+		return (EAttribute)fobSpacingAllocationEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1758,7 +1756,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 */
 	@Override
 	public EAttribute getFobSpacingAllocation_CargoCount() {
-		return (EAttribute)fobSpacingAllocationEClass.getEStructuralFeatures().get(3);
+		return (EAttribute)fobSpacingAllocationEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1777,7 +1775,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getDesSpacingAllocation_Contract() {
+	public EReference getDesSpacingAllocation_Vessel() {
 		return (EReference)desSpacingAllocationEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -1787,7 +1785,7 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getDesSpacingAllocation_Vessel() {
+	public EReference getDesSpacingAllocation_DesSpacingRows() {
 		return (EReference)desSpacingAllocationEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -1797,18 +1795,8 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getDesSpacingAllocation_DesSpacingRows() {
-		return (EReference)desSpacingAllocationEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getDesSpacingAllocation_Port() {
-		return (EReference)desSpacingAllocationEClass.getEStructuralFeatures().get(3);
+		return (EReference)desSpacingAllocationEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1839,6 +1827,26 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 	@Override
 	public EAttribute getDesSpacingRow_MaxDischargeDate() {
 		return (EAttribute)desSpacingRowEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSpacingAllocation() {
+		return spacingAllocationEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSpacingAllocation_Contract() {
+		return (EReference)spacingAllocationEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -2055,13 +2063,11 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		createEReference(spacingProfileEClass, SPACING_PROFILE__DES_SPACING_ALLOCATIONS);
 
 		fobSpacingAllocationEClass = createEClass(FOB_SPACING_ALLOCATION);
-		createEReference(fobSpacingAllocationEClass, FOB_SPACING_ALLOCATION__CONTRACT);
 		createEAttribute(fobSpacingAllocationEClass, FOB_SPACING_ALLOCATION__MIN_SPACING);
 		createEAttribute(fobSpacingAllocationEClass, FOB_SPACING_ALLOCATION__MAX_SPACING);
 		createEAttribute(fobSpacingAllocationEClass, FOB_SPACING_ALLOCATION__CARGO_COUNT);
 
 		desSpacingAllocationEClass = createEClass(DES_SPACING_ALLOCATION);
-		createEReference(desSpacingAllocationEClass, DES_SPACING_ALLOCATION__CONTRACT);
 		createEReference(desSpacingAllocationEClass, DES_SPACING_ALLOCATION__VESSEL);
 		createEReference(desSpacingAllocationEClass, DES_SPACING_ALLOCATION__DES_SPACING_ROWS);
 		createEReference(desSpacingAllocationEClass, DES_SPACING_ALLOCATION__PORT);
@@ -2069,6 +2075,9 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		desSpacingRowEClass = createEClass(DES_SPACING_ROW);
 		createEAttribute(desSpacingRowEClass, DES_SPACING_ROW__MIN_DISCHARGE_DATE);
 		createEAttribute(desSpacingRowEClass, DES_SPACING_ROW__MAX_DISCHARGE_DATE);
+
+		spacingAllocationEClass = createEClass(SPACING_ALLOCATION);
+		createEReference(spacingAllocationEClass, SPACING_ALLOCATION__CONTRACT);
 
 		// Create enums
 		intervalTypeEEnum = createEEnum(INTERVAL_TYPE);
@@ -2163,6 +2172,8 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		targetCargoesOnVesselConstraintEClass.getESuperTypes().add(this.getFleetConstraint());
 		desSalesMarketAllocationRowEClass.getESuperTypes().add(this.getMullAllocationRow());
 		salesContractAllocationRowEClass.getESuperTypes().add(this.getMullAllocationRow());
+		fobSpacingAllocationEClass.getESuperTypes().add(this.getSpacingAllocation());
+		desSpacingAllocationEClass.getESuperTypes().add(this.getSpacingAllocation());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(adpModelEClass, ADPModel.class, "ADPModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2348,13 +2359,11 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		initEReference(getSpacingProfile_DesSpacingAllocations(), this.getDesSpacingAllocation(), null, "desSpacingAllocations", null, 0, -1, SpacingProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fobSpacingAllocationEClass, FobSpacingAllocation.class, "FobSpacingAllocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getFobSpacingAllocation_Contract(), theCommercialPackage.getSalesContract(), null, "contract", null, 0, 1, FobSpacingAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getFobSpacingAllocation_MinSpacing(), ecorePackage.getEInt(), "minSpacing", null, 0, 1, FobSpacingAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getFobSpacingAllocation_MaxSpacing(), ecorePackage.getEInt(), "maxSpacing", null, 0, 1, FobSpacingAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getFobSpacingAllocation_CargoCount(), ecorePackage.getEInt(), "cargoCount", null, 0, 1, FobSpacingAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(desSpacingAllocationEClass, DesSpacingAllocation.class, "DesSpacingAllocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getDesSpacingAllocation_Contract(), theCommercialPackage.getSalesContract(), null, "contract", null, 0, 1, DesSpacingAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDesSpacingAllocation_Vessel(), theCargoPackage.getVesselAvailability(), null, "vessel", null, 0, 1, DesSpacingAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDesSpacingAllocation_DesSpacingRows(), this.getDesSpacingRow(), null, "desSpacingRows", null, 0, -1, DesSpacingAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDesSpacingAllocation_Port(), thePortPackage.getPort(), null, "port", null, 0, 1, DesSpacingAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2362,6 +2371,9 @@ public class ADPPackageImpl extends EPackageImpl implements ADPPackage {
 		initEClass(desSpacingRowEClass, DesSpacingRow.class, "DesSpacingRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getDesSpacingRow_MinDischargeDate(), theDateTimePackage.getLocalDateTime(), "minDischargeDate", null, 0, 1, DesSpacingRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDesSpacingRow_MaxDischargeDate(), theDateTimePackage.getLocalDateTime(), "maxDischargeDate", null, 0, 1, DesSpacingRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(spacingAllocationEClass, SpacingAllocation.class, "SpacingAllocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSpacingAllocation_Contract(), theCommercialPackage.getSalesContract(), null, "contract", null, 0, 1, SpacingAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(intervalTypeEEnum, IntervalType.class, "IntervalType");

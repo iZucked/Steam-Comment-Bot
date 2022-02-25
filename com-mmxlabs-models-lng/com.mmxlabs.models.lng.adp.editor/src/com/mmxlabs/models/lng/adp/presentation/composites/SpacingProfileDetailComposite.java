@@ -54,7 +54,6 @@ import com.mmxlabs.models.lng.adp.DesSpacingRow;
 import com.mmxlabs.models.lng.adp.FobSpacingAllocation;
 import com.mmxlabs.models.lng.adp.SpacingProfile;
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -71,8 +70,6 @@ import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
-import com.mmxlabs.models.ui.tabular.ICellManipulator.IExtraCommandsHook;
-import com.mmxlabs.models.ui.tabular.manipulators.DateTimeAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.LocalDateTimeAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
@@ -234,7 +231,7 @@ public class SpacingProfileDetailComposite extends Composite implements IDisplay
 			@Override
 			public void run() {
 				final List<SalesContract> selectedSalesContracts = openSelectionDialogBox(parent, oldValue, SpacingProfile::getFobSpacingAllocations, FobSpacingAllocation::getContract,
-						ADPPackage.Literals.FOB_SPACING_ALLOCATION, ADPPackage.Literals.FOB_SPACING_ALLOCATION__CONTRACT, "Contract");
+						ADPPackage.Literals.FOB_SPACING_ALLOCATION, ADPPackage.Literals.SPACING_ALLOCATION__CONTRACT, "Contract");
 				updateStateWithSelection(selectedSalesContracts, oldValue, SpacingProfile::getFobSpacingAllocations, FobSpacingAllocation::getContract, "Contracts",
 						ADPPackage.Literals.SPACING_PROFILE__FOB_SPACING_ALLOCATIONS, ADPFactory.eINSTANCE::createFobSpacingAllocation, FobSpacingAllocation::setContract);
 			}
@@ -256,7 +253,7 @@ public class SpacingProfileDetailComposite extends Composite implements IDisplay
 		final IScenarioEditingLocation sel = dialogContext.getScenarioEditingLocation();
 
 		eViewer.addTypicalColumn("Contract", new ReadOnlyManipulatorWrapper<>(
-				new SingleReferenceManipulator(ADPPackage.eINSTANCE.getFobSpacingAllocation_Contract(), sel.getReferenceValueProviderCache(), sel.getDefaultCommandHandler())));
+				new SingleReferenceManipulator(ADPPackage.eINSTANCE.getSpacingAllocation_Contract(), sel.getReferenceValueProviderCache(), sel.getDefaultCommandHandler())));
 		eViewer.addTypicalColumn("Cargo Count", new NumericAttributeManipulator(ADPPackage.eINSTANCE.getFobSpacingAllocation_CargoCount(), sel.getDefaultCommandHandler()));
 		eViewer.addTypicalColumn("Min Spacing", new NumericAttributeManipulator(ADPPackage.eINSTANCE.getFobSpacingAllocation_MinSpacing(), sel.getDefaultCommandHandler()));
 		eViewer.addTypicalColumn("Max Spacing", new NumericAttributeManipulator(ADPPackage.eINSTANCE.getFobSpacingAllocation_MaxSpacing(), sel.getDefaultCommandHandler()));
@@ -293,7 +290,7 @@ public class SpacingProfileDetailComposite extends Composite implements IDisplay
 			@Override
 			public void run() {
 				final List<SalesContract> selectedSalesContracts = openSelectionDialogBox(parent, oldValue, SpacingProfile::getDesSpacingAllocations, DesSpacingAllocation::getContract,
-						ADPPackage.Literals.DES_SPACING_ALLOCATION, ADPPackage.Literals.DES_SPACING_ALLOCATION__CONTRACT, "Contract");
+						ADPPackage.Literals.DES_SPACING_ALLOCATION, ADPPackage.Literals.SPACING_ALLOCATION__CONTRACT, "Contract");
 				updateStateWithSelection(selectedSalesContracts, oldValue, SpacingProfile::getDesSpacingAllocations, DesSpacingAllocation::getContract, "Contracts",
 						ADPPackage.Literals.SPACING_PROFILE__DES_SPACING_ALLOCATIONS, ADPFactory.eINSTANCE::createDesSpacingAllocation, DesSpacingAllocation::setContract);
 			}
@@ -314,7 +311,7 @@ public class SpacingProfileDetailComposite extends Composite implements IDisplay
 
 		final IScenarioEditingLocation sel = dialogContext.getScenarioEditingLocation();
 		eViewer.addTypicalColumn("Contract", new ReadOnlyManipulatorWrapper<>(
-				new SingleReferenceManipulator(ADPPackage.eINSTANCE.getDesSpacingAllocation_Contract(), sel.getReferenceValueProviderCache(), sel.getDefaultCommandHandler())));
+				new SingleReferenceManipulator(ADPPackage.eINSTANCE.getSpacingAllocation_Contract(), sel.getReferenceValueProviderCache(), sel.getDefaultCommandHandler())));
 		eViewer.addTypicalColumn("Vessel", new SingleReferenceManipulator(ADPPackage.eINSTANCE.getDesSpacingAllocation_Vessel(), sel.getReferenceValueProviderCache(), sel.getDefaultCommandHandler()));
 		eViewer.addTypicalColumn("Port", new SingleReferenceManipulator(ADPPackage.eINSTANCE.getDesSpacingAllocation_Port(), sel.getReferenceValueProviderCache(), sel.getDefaultCommandHandler()));
 		eViewer.addColumn("Cargo Count", new ICellRenderer() {

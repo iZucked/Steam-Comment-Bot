@@ -15,7 +15,6 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.adp.FobSpacingAllocation#getContract <em>Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.FobSpacingAllocation#getMinSpacing <em>Min Spacing</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.FobSpacingAllocation#getMaxSpacing <em>Max Spacing</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.FobSpacingAllocation#getCargoCount <em>Cargo Count</em>}</li>
@@ -25,29 +24,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface FobSpacingAllocation extends EObject {
-	/**
-	 * Returns the value of the '<em><b>Contract</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Contract</em>' reference.
-	 * @see #setContract(SalesContract)
-	 * @see com.mmxlabs.models.lng.adp.ADPPackage#getFobSpacingAllocation_Contract()
-	 * @model
-	 * @generated
-	 */
-	SalesContract getContract();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.adp.FobSpacingAllocation#getContract <em>Contract</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Contract</em>' reference.
-	 * @see #getContract()
-	 * @generated
-	 */
-	void setContract(SalesContract value);
-
+public interface FobSpacingAllocation extends SpacingAllocation {
 	/**
 	 * Returns the value of the '<em><b>Min Spacing</b></em>' attribute.
 	 * <!-- begin-user-doc -->

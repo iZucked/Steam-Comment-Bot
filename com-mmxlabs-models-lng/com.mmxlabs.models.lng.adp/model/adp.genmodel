@@ -210,13 +210,11 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//SpacingProfile/desSpacingAllocations"/>
     </genClasses>
     <genClasses ecoreClass="adp.ecore#//FobSpacingAllocation">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//FobSpacingAllocation/contract"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//FobSpacingAllocation/minSpacing"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//FobSpacingAllocation/maxSpacing"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//FobSpacingAllocation/cargoCount"/>
     </genClasses>
     <genClasses ecoreClass="adp.ecore#//DesSpacingAllocation">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//DesSpacingAllocation/contract"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//DesSpacingAllocation/vessel"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adp.ecore#//DesSpacingAllocation/desSpacingRows"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//DesSpacingAllocation/port"/>
@@ -224,6 +222,9 @@
     <genClasses ecoreClass="adp.ecore#//DesSpacingRow">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//DesSpacingRow/minDischargeDate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adp.ecore#//DesSpacingRow/maxDischargeDate"/>
+    </genClasses>
+    <genClasses ecoreClass="adp.ecore#//SpacingAllocation">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adp.ecore#//SpacingAllocation/contract"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

@@ -35,7 +35,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.adp.impl.DesSpacingAllocationImpl#getContract <em>Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.DesSpacingAllocationImpl#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.DesSpacingAllocationImpl#getDesSpacingRows <em>Des Spacing Rows</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.DesSpacingAllocationImpl#getPort <em>Port</em>}</li>
@@ -43,17 +42,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class DesSpacingAllocationImpl extends EObjectImpl implements DesSpacingAllocation {
-	/**
-	 * The cached value of the '{@link #getContract() <em>Contract</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getContract()
-	 * @generated
-	 * @ordered
-	 */
-	protected SalesContract contract;
-
+public class DesSpacingAllocationImpl extends SpacingAllocationImpl implements DesSpacingAllocation {
 	/**
 	 * The cached value of the '{@link #getVessel() <em>Vessel</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -101,46 +90,6 @@ public class DesSpacingAllocationImpl extends EObjectImpl implements DesSpacingA
 	@Override
 	protected EClass eStaticClass() {
 		return ADPPackage.Literals.DES_SPACING_ALLOCATION;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public SalesContract getContract() {
-		if (contract != null && contract.eIsProxy()) {
-			InternalEObject oldContract = (InternalEObject)contract;
-			contract = (SalesContract)eResolveProxy(oldContract);
-			if (contract != oldContract) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ADPPackage.DES_SPACING_ALLOCATION__CONTRACT, oldContract, contract));
-			}
-		}
-		return contract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SalesContract basicGetContract() {
-		return contract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setContract(SalesContract newContract) {
-		SalesContract oldContract = contract;
-		contract = newContract;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.DES_SPACING_ALLOCATION__CONTRACT, oldContract, contract));
 	}
 
 	/**
@@ -258,9 +207,6 @@ public class DesSpacingAllocationImpl extends EObjectImpl implements DesSpacingA
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ADPPackage.DES_SPACING_ALLOCATION__CONTRACT:
-				if (resolve) return getContract();
-				return basicGetContract();
 			case ADPPackage.DES_SPACING_ALLOCATION__VESSEL:
 				if (resolve) return getVessel();
 				return basicGetVessel();
@@ -282,9 +228,6 @@ public class DesSpacingAllocationImpl extends EObjectImpl implements DesSpacingA
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ADPPackage.DES_SPACING_ALLOCATION__CONTRACT:
-				setContract((SalesContract)newValue);
-				return;
 			case ADPPackage.DES_SPACING_ALLOCATION__VESSEL:
 				setVessel((VesselAvailability)newValue);
 				return;
@@ -307,9 +250,6 @@ public class DesSpacingAllocationImpl extends EObjectImpl implements DesSpacingA
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ADPPackage.DES_SPACING_ALLOCATION__CONTRACT:
-				setContract((SalesContract)null);
-				return;
 			case ADPPackage.DES_SPACING_ALLOCATION__VESSEL:
 				setVessel((VesselAvailability)null);
 				return;
@@ -331,8 +271,6 @@ public class DesSpacingAllocationImpl extends EObjectImpl implements DesSpacingA
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ADPPackage.DES_SPACING_ALLOCATION__CONTRACT:
-				return contract != null;
 			case ADPPackage.DES_SPACING_ALLOCATION__VESSEL:
 				return vessel != null;
 			case ADPPackage.DES_SPACING_ALLOCATION__DES_SPACING_ROWS:

@@ -246,6 +246,10 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 				return createDesSpacingRowAdapter();
 			}
 			@Override
+			public Adapter caseSpacingAllocation(SpacingAllocation object) {
+				return createSpacingAllocationAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -858,6 +862,20 @@ public class ADPAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createDesSpacingRowAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.adp.SpacingAllocation <em>Spacing Allocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.adp.SpacingAllocation
+	 * @generated
+	 */
+	public Adapter createSpacingAllocationAdapter() {
 		return null;
 	}
 

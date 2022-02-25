@@ -352,6 +352,15 @@ public interface ADPFactory extends EFactory {
 	DesSpacingRow createDesSpacingRow();
 
 	/**
+	 * Returns a new object of class '<em>Spacing Allocation</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Spacing Allocation</em>'.
+	 * @generated
+	 */
+	SpacingAllocation createSpacingAllocation();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -23,7 +23,6 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.adp.impl.FobSpacingAllocationImpl#getContract <em>Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.FobSpacingAllocationImpl#getMinSpacing <em>Min Spacing</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.FobSpacingAllocationImpl#getMaxSpacing <em>Max Spacing</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.adp.impl.FobSpacingAllocationImpl#getCargoCount <em>Cargo Count</em>}</li>
@@ -31,17 +30,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public class FobSpacingAllocationImpl extends EObjectImpl implements FobSpacingAllocation {
-	/**
-	 * The cached value of the '{@link #getContract() <em>Contract</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getContract()
-	 * @generated
-	 * @ordered
-	 */
-	protected SalesContract contract;
-
+public class FobSpacingAllocationImpl extends SpacingAllocationImpl implements FobSpacingAllocation {
 	/**
 	 * The default value of the '{@link #getMinSpacing() <em>Min Spacing</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -137,46 +126,6 @@ public class FobSpacingAllocationImpl extends EObjectImpl implements FobSpacingA
 	@Override
 	protected EClass eStaticClass() {
 		return ADPPackage.Literals.FOB_SPACING_ALLOCATION;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public SalesContract getContract() {
-		if (contract != null && contract.eIsProxy()) {
-			InternalEObject oldContract = (InternalEObject)contract;
-			contract = (SalesContract)eResolveProxy(oldContract);
-			if (contract != oldContract) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ADPPackage.FOB_SPACING_ALLOCATION__CONTRACT, oldContract, contract));
-			}
-		}
-		return contract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SalesContract basicGetContract() {
-		return contract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setContract(SalesContract newContract) {
-		SalesContract oldContract = contract;
-		contract = newContract;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ADPPackage.FOB_SPACING_ALLOCATION__CONTRACT, oldContract, contract));
 	}
 
 	/**
@@ -310,9 +259,6 @@ public class FobSpacingAllocationImpl extends EObjectImpl implements FobSpacingA
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ADPPackage.FOB_SPACING_ALLOCATION__CONTRACT:
-				if (resolve) return getContract();
-				return basicGetContract();
 			case ADPPackage.FOB_SPACING_ALLOCATION__MIN_SPACING:
 				return getMinSpacing();
 			case ADPPackage.FOB_SPACING_ALLOCATION__MAX_SPACING:
@@ -331,9 +277,6 @@ public class FobSpacingAllocationImpl extends EObjectImpl implements FobSpacingA
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ADPPackage.FOB_SPACING_ALLOCATION__CONTRACT:
-				setContract((SalesContract)newValue);
-				return;
 			case ADPPackage.FOB_SPACING_ALLOCATION__MIN_SPACING:
 				setMinSpacing((Integer)newValue);
 				return;
@@ -355,9 +298,6 @@ public class FobSpacingAllocationImpl extends EObjectImpl implements FobSpacingA
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ADPPackage.FOB_SPACING_ALLOCATION__CONTRACT:
-				setContract((SalesContract)null);
-				return;
 			case ADPPackage.FOB_SPACING_ALLOCATION__MIN_SPACING:
 				unsetMinSpacing();
 				return;
@@ -379,8 +319,6 @@ public class FobSpacingAllocationImpl extends EObjectImpl implements FobSpacingA
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ADPPackage.FOB_SPACING_ALLOCATION__CONTRACT:
-				return contract != null;
 			case ADPPackage.FOB_SPACING_ALLOCATION__MIN_SPACING:
 				return isSetMinSpacing();
 			case ADPPackage.FOB_SPACING_ALLOCATION__MAX_SPACING:

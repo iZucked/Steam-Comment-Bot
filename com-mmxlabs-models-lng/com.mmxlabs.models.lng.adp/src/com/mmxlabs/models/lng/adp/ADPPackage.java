@@ -2553,6 +2553,43 @@ public interface ADPPackage extends EPackage {
 	int SPACING_PROFILE_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.SpacingAllocationImpl <em>Spacing Allocation</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.adp.impl.SpacingAllocationImpl
+	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getSpacingAllocation()
+	 * @generated
+	 */
+	int SPACING_ALLOCATION = 42;
+
+	/**
+	 * The feature id for the '<em><b>Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPACING_ALLOCATION__CONTRACT = 0;
+
+	/**
+	 * The number of structural features of the '<em>Spacing Allocation</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPACING_ALLOCATION_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Spacing Allocation</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPACING_ALLOCATION_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.FobSpacingAllocationImpl <em>Fob Spacing Allocation</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2569,7 +2606,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FOB_SPACING_ALLOCATION__CONTRACT = 0;
+	int FOB_SPACING_ALLOCATION__CONTRACT = SPACING_ALLOCATION__CONTRACT;
 
 	/**
 	 * The feature id for the '<em><b>Min Spacing</b></em>' attribute.
@@ -2578,7 +2615,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FOB_SPACING_ALLOCATION__MIN_SPACING = 1;
+	int FOB_SPACING_ALLOCATION__MIN_SPACING = SPACING_ALLOCATION_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Max Spacing</b></em>' attribute.
@@ -2587,7 +2624,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FOB_SPACING_ALLOCATION__MAX_SPACING = 2;
+	int FOB_SPACING_ALLOCATION__MAX_SPACING = SPACING_ALLOCATION_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Cargo Count</b></em>' attribute.
@@ -2596,7 +2633,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FOB_SPACING_ALLOCATION__CARGO_COUNT = 3;
+	int FOB_SPACING_ALLOCATION__CARGO_COUNT = SPACING_ALLOCATION_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Fob Spacing Allocation</em>' class.
@@ -2605,7 +2642,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FOB_SPACING_ALLOCATION_FEATURE_COUNT = 4;
+	int FOB_SPACING_ALLOCATION_FEATURE_COUNT = SPACING_ALLOCATION_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of operations of the '<em>Fob Spacing Allocation</em>' class.
@@ -2614,7 +2651,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FOB_SPACING_ALLOCATION_OPERATION_COUNT = 0;
+	int FOB_SPACING_ALLOCATION_OPERATION_COUNT = SPACING_ALLOCATION_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.DesSpacingAllocationImpl <em>Des Spacing Allocation</em>}' class.
@@ -2633,7 +2670,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DES_SPACING_ALLOCATION__CONTRACT = 0;
+	int DES_SPACING_ALLOCATION__CONTRACT = SPACING_ALLOCATION__CONTRACT;
 
 	/**
 	 * The feature id for the '<em><b>Vessel</b></em>' reference.
@@ -2642,7 +2679,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DES_SPACING_ALLOCATION__VESSEL = 1;
+	int DES_SPACING_ALLOCATION__VESSEL = SPACING_ALLOCATION_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Des Spacing Rows</b></em>' containment reference list.
@@ -2651,7 +2688,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DES_SPACING_ALLOCATION__DES_SPACING_ROWS = 2;
+	int DES_SPACING_ALLOCATION__DES_SPACING_ROWS = SPACING_ALLOCATION_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -2660,7 +2697,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DES_SPACING_ALLOCATION__PORT = 3;
+	int DES_SPACING_ALLOCATION__PORT = SPACING_ALLOCATION_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Des Spacing Allocation</em>' class.
@@ -2669,7 +2706,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DES_SPACING_ALLOCATION_FEATURE_COUNT = 4;
+	int DES_SPACING_ALLOCATION_FEATURE_COUNT = SPACING_ALLOCATION_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of operations of the '<em>Des Spacing Allocation</em>' class.
@@ -2678,7 +2715,7 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DES_SPACING_ALLOCATION_OPERATION_COUNT = 0;
+	int DES_SPACING_ALLOCATION_OPERATION_COUNT = SPACING_ALLOCATION_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.adp.impl.DesSpacingRowImpl <em>Des Spacing Row</em>}' class.
@@ -2734,7 +2771,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getIntervalType()
 	 * @generated
 	 */
-	int INTERVAL_TYPE = 42;
+	int INTERVAL_TYPE = 43;
 
 
 	/**
@@ -2745,7 +2782,7 @@ public interface ADPPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getLNGVolumeUnit()
 	 * @generated
 	 */
-	int LNG_VOLUME_UNIT = 43;
+	int LNG_VOLUME_UNIT = 44;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.ADPModel <em>Model</em>}'.
@@ -4092,17 +4129,6 @@ public interface ADPPackage extends EPackage {
 	EClass getFobSpacingAllocation();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.adp.FobSpacingAllocation#getContract <em>Contract</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Contract</em>'.
-	 * @see com.mmxlabs.models.lng.adp.FobSpacingAllocation#getContract()
-	 * @see #getFobSpacingAllocation()
-	 * @generated
-	 */
-	EReference getFobSpacingAllocation_Contract();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.adp.FobSpacingAllocation#getMinSpacing <em>Min Spacing</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4144,17 +4170,6 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getDesSpacingAllocation();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.adp.DesSpacingAllocation#getContract <em>Contract</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Contract</em>'.
-	 * @see com.mmxlabs.models.lng.adp.DesSpacingAllocation#getContract()
-	 * @see #getDesSpacingAllocation()
-	 * @generated
-	 */
-	EReference getDesSpacingAllocation_Contract();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.adp.DesSpacingAllocation#getVessel <em>Vessel</em>}'.
@@ -4220,6 +4235,27 @@ public interface ADPPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getDesSpacingRow_MaxDischargeDate();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.adp.SpacingAllocation <em>Spacing Allocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Spacing Allocation</em>'.
+	 * @see com.mmxlabs.models.lng.adp.SpacingAllocation
+	 * @generated
+	 */
+	EClass getSpacingAllocation();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.adp.SpacingAllocation#getContract <em>Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Contract</em>'.
+	 * @see com.mmxlabs.models.lng.adp.SpacingAllocation#getContract()
+	 * @see #getSpacingAllocation()
+	 * @generated
+	 */
+	EReference getSpacingAllocation_Contract();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.adp.IntervalType <em>Interval Type</em>}'.
@@ -5353,14 +5389,6 @@ public interface ADPPackage extends EPackage {
 		EClass FOB_SPACING_ALLOCATION = eINSTANCE.getFobSpacingAllocation();
 
 		/**
-		 * The meta object literal for the '<em><b>Contract</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference FOB_SPACING_ALLOCATION__CONTRACT = eINSTANCE.getFobSpacingAllocation_Contract();
-
-		/**
 		 * The meta object literal for the '<em><b>Min Spacing</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -5393,14 +5421,6 @@ public interface ADPPackage extends EPackage {
 		 * @generated
 		 */
 		EClass DES_SPACING_ALLOCATION = eINSTANCE.getDesSpacingAllocation();
-
-		/**
-		 * The meta object literal for the '<em><b>Contract</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference DES_SPACING_ALLOCATION__CONTRACT = eINSTANCE.getDesSpacingAllocation_Contract();
 
 		/**
 		 * The meta object literal for the '<em><b>Vessel</b></em>' reference feature.
@@ -5451,6 +5471,24 @@ public interface ADPPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DES_SPACING_ROW__MAX_DISCHARGE_DATE = eINSTANCE.getDesSpacingRow_MaxDischargeDate();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.impl.SpacingAllocationImpl <em>Spacing Allocation</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.adp.impl.SpacingAllocationImpl
+		 * @see com.mmxlabs.models.lng.adp.impl.ADPPackageImpl#getSpacingAllocation()
+		 * @generated
+		 */
+		EClass SPACING_ALLOCATION = eINSTANCE.getSpacingAllocation();
+
+		/**
+		 * The meta object literal for the '<em><b>Contract</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SPACING_ALLOCATION__CONTRACT = eINSTANCE.getSpacingAllocation_Contract();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.adp.IntervalType <em>Interval Type</em>}' enum.
